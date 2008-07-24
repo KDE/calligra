@@ -22,6 +22,7 @@
 #ifndef KEXIWEBFORMS_MODEL_DATABASE_H
 #define KEXIWEBFORMS_MODEL_DATABASE_H
 
+#include <QPair>
 #include <QHash>
 
 class QString;
@@ -37,9 +38,19 @@ namespace KexiWebForms {
             /**
              * Get all table names
              * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
-             * @return QHash<QString, QString> a QHash with captions as keys and object names as values
+             * @return QHash with captions as keys and object names as values
              */
             QHash<QString, QString> getNames(KexiDB::ObjectTypes);
+
+            /**
+             * Get the schema of a table
+             * @param QString& table name
+             * @return a QHash with a QPair representing field caption and field name as key and
+             *    a QPair representing the field value (if any) and the type as value 
+             */
+            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > getSchema(const QString&,
+                                                                                     const QString& pkey = "",
+                                                                                     const uint pkeyValue = 0);
             
             /**
              * Create a new record

@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QPair>
 #include <QHash>
 #include <QString>
 #include <QtAlgorithms>
@@ -52,6 +53,40 @@ namespace KexiWebForms {
                     schema.captionOrName(), schema.name() ); //insertMulti() because there can be many objects with the same caption
             }
             return objectNamesForCaptions;
+        }
+
+        QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > Database::getSchema(const QString& table,
+                                                                                           const QString& pkey,
+                                                                                           const uint pkeyValue) {
+            KexiDB::TableSchema tableSchema(*gConnection->tableSchema(table));
+            KexiDB::QuerySchema* query = 0;
+            KexiDB::Cursor* cursor = 0;
+            if (!(pkey == "" && pkeyValue == 0)) {
+                query = new KexiDB::QuerySchema(tableSchema);
+                query->addToWhereExpression(tableSchema.field(pkey), QVariant(pkeyValue));
+                cursor = gConnection->executeQuery(*query);
+                cursor->moveNext(); // we just hope that everything goes well (aka FIXME!)
+            }
+
+            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data;
+            for (uint i = 0; i < tableSchema.fieldCount(); i++) {
+                KexiDB::Field* field = tableSchema.field(i);
+                
+                QPair<QString, QString> captionNamePair(field->captionOrName(), field->name());
+                QPair<QString, KexiDB::Field::Type> valueTypePair;
+                if (cursor)
+                    valueTypePair = QPair<QString, KexiDB::Field::Type>(cursor->value(i).toString(), field->type());
+                else
+                    valueTypePair = QPair<QString, KexiDB::Field::Type>(field->defaultValue().toString(), field->type());
+                data[captionNamePair] = valueTypePair;
+            }
+
+            if (cursor) {
+                cursor->close();
+                gConnection->deleteCursor(cursor);
+            }
+            
+            return data;
         }
         
         bool Database::createRow(const QString& table, const QHash<QString, QVariant> data) {

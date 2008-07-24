@@ -19,6 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QPair>
+#include <QHash>
 #include <QString>
 
 #include <KDebug>
@@ -96,7 +98,35 @@ namespace KexiWebForms {
             QString formData;
             QStringList fieldsList;
 
-            for (uint i = 0; i < tableSchema->fieldCount(); i++) {
+            KexiWebForms::Model::Database db;
+            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data = db.getSchema(requestedTable);
+            QList< QPair<QString, QString> > dataKeys(data.keys());
+            
+            /*for (int i = 0; i < dataKeys.count(); ++i) {
+                QPair<QString, QString> valueTypePair = dataKeys[i];
+                QPair<QString, KexiDB::
+                }*/
+            typedef QPair<QString, QString> QCaptionNamePair;
+            
+            /*foreach(const QPair<QString, QString>& captionNamePair, dataKeys) {
+              }*/
+
+            // FIXME: Regression, no icons, this way
+            foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
+                formData.append("\t<tr>\n");
+                QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
+                formData.append("\t\t<td>").append(captionNamePair.first).append("</td>\n");
+                if (valueTypePair.second == KexiDB::Field::LongText) {
+                    formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
+                } else {
+                    formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
+                                    .arg(captionNamePair.second).arg(valueTypePair.first));
+                }
+                formData.append("\t</tr>\n");
+                fieldsList << captionNamePair.second;
+            }
+
+            /*for (uint i = 0; i < tableSchema->fieldCount(); i++) {
                 KexiDB::Field* currentField = tableSchema->field(i);
                 const KexiDB::Field::Type type = currentField->type();
                 QString fieldName(currentField->name());
@@ -104,7 +134,7 @@ namespace KexiWebForms {
                 formData.append("<tr>");
 
                 formData.append("<td>").append(currentField->captionOrName()).append("</td>");
-                /** @todo Show "upload image" if type is KexiDB::Field::BLOB */
+                /** @todo Show "upload image" if type is KexiDB::Field::BLOB 
                 if (type == KexiDB::Field::LongText) {
                     formData.append("<td>").append("<textarea name=\"");
                     formData.append(fieldName).append("\"></textarea></td>");
@@ -131,8 +161,8 @@ namespace KexiWebForms {
                 formData.append("<td><input type=\"text\" name=\"");
                 formData.append(fieldName).append("\" value=\"\"/></td>");
                 formData.append("</tr>");
-                fieldsList << fieldName;*/
-            }
+                fieldsList << fieldName;
+                }*/
 
             setValue("TABLEFIELDS", fieldsList.join("|:|"));
             setValue("FORMDATA", formData);
