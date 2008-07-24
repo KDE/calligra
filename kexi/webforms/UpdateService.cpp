@@ -126,21 +126,6 @@ namespace KexiWebForms {
                  m_dict->ShowSection("FIRST_DISABLED");
             }
 
-            /*if (current >= cachedPkeys[requestedTable].at(0)) {
-                m_dict->ShowSection("FIRST_ENABLED");
-                m_dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
-            } else {
-                m_dict->ShowSection("FIRST_DISABLED");
-                }*/
-
-
-            /*if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
-                m_dict->ShowSection("LAST_ENABLED");
-                m_dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
-            } else {
-                m_dict->ShowSection("LAST_DISABLED");
-                }*/
-
 
 
             if (!cursor) {
