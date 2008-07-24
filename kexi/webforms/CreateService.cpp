@@ -69,9 +69,6 @@ namespace KexiWebForms {
 
             /* Build the form */
             if (request->getQuery("dataSent") == "true") {
-                //KexiDB::QuerySchema schema(*tableSchema);
-                //KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
-
                 QStringList fieldsList(QUrl::fromPercentEncoding(QString(
                             request->getQuery("tableFields").c_str()).toUtf8()
                 ).split("|:|"));
@@ -92,39 +89,6 @@ namespace KexiWebForms {
                     m_dict->ShowSection("ERROR");
                     setValue("MESSAGE", gConnection->errorMsg());
                 }
-
-                /*QStringListIterator iterator(fieldsList);
-
-                KexiDB::RecordData recordData(tableSchema->fieldCount());
-                KexiDB::RowEditBuffer editBuffer(true);
-
-                int i = 0;
-                while (iterator.hasNext()) {
-                    QString currentFieldName(iterator.next());
-                    QString currentFieldValue(QUrl::fromPercentEncoding(request->getQuery(currentFieldName.toUtf8().constData()).c_str()));
-                    if (!(tableSchema->field(i)->isAutoIncrement() && (currentFieldValue == ""))) {
-                        /*! @note This removes pluses
-                        currentFieldValue.replace("+", " ");
-                        QVariant currentValue(currentFieldValue);
-
-                        kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
-                        editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
-                    }
-                    ++i;
-                }
-
-
-                if (cursor->insertRow(recordData, editBuffer)) {
-                    @note Restore this 
-                    //cachedPkeys[requestedTable].clear();
-                    m_dict->ShowSection("SUCCESS");
-                    setValue("MESSAGE", "Row added successfully");
-                } else {
-                    m_dict->ShowSection("ERROR");
-                    setValue("MESSAGE", gConnection->errorMsg());
-                }*/
-
-                //gConnection->deleteCursor(cursor);
             }
 
             m_dict->ShowSection("FORM");
