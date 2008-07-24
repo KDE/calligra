@@ -23,6 +23,7 @@
 
 #include <pion/net/WebService.hpp>
 
+class Controller;
 class QString;
 class QVariant;
 namespace google {
@@ -57,7 +58,7 @@ namespace KexiWebForms {
              * Constructor
              * @param char* name of a template file
              */
-            WebFormsService(const char*);
+            WebFormsService(Controller*, const char*);
             virtual ~WebFormsService();
 
             /**
@@ -85,6 +86,8 @@ namespace KexiWebForms {
              */
             void setValue(const char*, const char*);
         protected:
+        
+            Controller* m_controller;
             /**
              * A local instance of google::TemplateDictionary, initialized by ctor
              */

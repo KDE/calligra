@@ -35,13 +35,11 @@
 
 #include "ShutdownManager.hpp"
 
-#include "DataProvider.h"
+#include "model/DataProvider.h"
 
+#include "Controller.h"
 #include "FileService.hpp"
-#include "IndexService.h"
-#include "QueryService.h"
 #include "BlobService.h"
-#include "CRUD.h"
 #include "auth/Authenticator.h"
 
 using namespace pion::net;
@@ -84,13 +82,6 @@ int main(int argc, char **argv) {
     google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
-    
-    IndexService indexService("index.tpl");
-    CreateService createService("create.tpl");
-    ReadService readService("read.tpl");
-    UpdateService updateService("update.tpl");
-    DeleteService deleteService("delete.tpl");
-    QueryService queryService("query.tpl");
 
     // Plugins
     pion::plugins::FileService fileService;
@@ -107,17 +98,13 @@ int main(int argc, char **argv) {
     HTTPAuthPtr auth(new HTTPCookieAuth(userMan));
     KexiWebForms::Auth::Authenticator::init(auth);
     
-    // Standard services
-    server.addService("/", &indexService);
-    server.addService("/create", &createService);
-    server.addService("/read", &readService);
-    server.addService("/update", &updateService);
-    server.addService("/delete", &deleteService);
-    server.addService("/query", &queryService);
+    // Bind controller
+    Controller controller;
+    server.addService("/", &controller);
     
     // Restrict CRUD operations (and BlobService) to registered users
     // filtered using our permissions manager
-    auth->addRestrict("/read");
+    /*auth->addRestrict("/read");
     auth->addRestrict("/create");
     auth->addRestrict("/update");
     auth->addRestrict("/delete");
@@ -125,7 +112,7 @@ int main(int argc, char **argv) {
 
     // File and blob service
     server.addService("/f", &fileService);
-    server.addService("/blob", &blobService);
+    server.addService("/blob", &blobService);*/
     
     server.start();
     server.setAuthentication(auth);
