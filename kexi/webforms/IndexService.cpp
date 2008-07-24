@@ -42,15 +42,6 @@ namespace KexiWebForms {
     void IndexService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
         HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
                     boost::bind(&TCPConnection::finish, tcp_conn)));
-                    
-
-        /* Useless, for now */
-        /*QString tables;
-        for (int i = 0; i < gConnection->tableNames().size(); ++i) {
-            tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
-            tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
-        }
-        setValue("TABLES", tables);*/
 
         renderTemplate(m_dict, writer);
     }
