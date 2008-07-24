@@ -51,13 +51,15 @@ namespace KexiWebForms {
             QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > getSchema(const QString&,
                                                                                      const QString& pkey = "",
                                                                                      const uint pkeyValue = 0);
-            
+
             /**
-             * Create a new record
+             * Despite its name, this method is useful when creating new rows, too
+             * Create/Update a row in a given table
              * @param QString& the table name
-             * @param QMap<const QString&, const QString&>& 
+             * @param QHash<QString, QVariant> a Hash with Name/Value pairs
+             * @param create create a new row, instead of trying to update it
              */
-            bool createRow(const QString&, const QHash<QString, QVariant>);
+            bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
         };
         
     }

@@ -89,20 +89,37 @@ namespace KexiWebForms {
             return data;
         }
         
-        bool Database::createRow(const QString& table, const QHash<QString, QVariant> data) {
+        bool Database::updateRow(const QString& table, const QHash<QString, QVariant> data, bool create, int pkeyValue) {
             KexiDB::TableSchema tableSchema(*gConnection->tableSchema(table));
             KexiDB::QuerySchema query(tableSchema);
             KexiDB::Cursor* cursor = gConnection->prepareQuery(query);
-
+            
             KexiDB::RecordData recordData(tableSchema.fieldCount());
+            if (!create && (pkeyValue != -1)) {
+                QVector<int> pkeyFields(query.pkeyFieldsOrder());
+                KexiDB::Field* primaryKeyField = tableSchema.primaryKey()->field(0);
+                for (int i = 0; i < pkeyFields.count(); ++i) {
+                    int fieldId = pkeyFields.at(i);
+                    if (primaryKeyField == query.field(fieldId)) {
+                        recordData.insert(fieldId, pkeyValue);
+                        break;
+                    }
+                }
+            }
+            
             KexiDB::RowEditBuffer editBuffer(true);
             
             QStringList fieldNames(data.keys());
             
             foreach(const QString& name, fieldNames) {
                 QVariant currentValue(data.value(name));
-                if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
-                    kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
+                // FIXME: Regression, we don't encode data...
+                if (create) {
+                    if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
+                        kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
+                        editBuffer.insert(*query.columnInfo(name), currentValue);
+                    }
+                } else {
                     editBuffer.insert(*query.columnInfo(name), currentValue);
                 }
             }
