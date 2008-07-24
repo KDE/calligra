@@ -22,17 +22,17 @@
 
 #include <QtAlgorithms>
 #include <QTextDocument>
-#include <QList>
+
 #include <KDebug>
 
 #include <core/kexipartinfo.h>
 #include <core/kexipartitem.h>
+
 #include <google/template.h>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
 #include "model/Database.h"
-#include "DataProvider.h"
 
 #include "TemplateProvider.h"
 
@@ -72,7 +72,7 @@ namespace KexiWebForms {
         // Add header template
         google::TemplateDictionary* beforeDict = dict->AddIncludeDictionary("beforecontent");
         beforeDict->SetFilename("beforecontent.tpl");
-        beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
+        //beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
 
         // Add footer template (-- note, this includes the left menu with the standard template)
         google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
