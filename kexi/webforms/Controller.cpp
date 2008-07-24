@@ -24,6 +24,7 @@
 
 #include <KDebug>
 
+#include <pion/net/HTTPTypes.hpp>
 #include <pion/net/WebService.hpp>
 #include <pion/net/HTTPResponseWriter.hpp>
 
@@ -68,7 +69,12 @@ namespace KexiWebForms {
 
         QHash<QString, QString> data;
         // Convert all the stuff from hash_multimap and put it in data
-        pion::net::StringDictionary::iterator it(request->getQueryParams());
+        typedef pion::net::HTTPTypes::QueryParams::const_iterator SDIterator;
+        pion::net::HTTPTypes::QueryParams params(request->getQueryParams());
+        for (SDIterator it = params.begin(); it != params.end(); ++it) {
+            kDebug() << "PARAMETER " << it->first.c_str() << "=" << it->second.c_str() << endl;
+            data[it->first.c_str()] = it->second.c_str();
+        }
         
         kDebug() << "ACTION :" << action << endl;
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
