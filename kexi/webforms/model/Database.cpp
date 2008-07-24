@@ -124,7 +124,12 @@ namespace KexiWebForms {
                 }
             }
 
-            bool result = cursor->insertRow(recordData, editBuffer);
+            bool result = false;
+            if (create)
+                result = cursor->insertRow(recordData, editBuffer);
+            else
+                result = cursor->updateRow(recordData, editBuffer);
+            
             cursor->close();
             gConnection->deleteCursor(cursor);
             return result;
