@@ -30,6 +30,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
+#include <kexidb/roweditbuffer.h>
 
 #include "DataProvider.h"
 
@@ -53,9 +54,29 @@ namespace KexiWebForms {
             return objectNamesForCaptions;
         }
         
-        /*bool Database::create(const QString& table, const QMap<const QString&, const QString&> data) {
-            return true;
-            }*/
+        bool Database::createRow(const QString& table, const QHash<QString, QVariant> data) {
+            KexiDB::TableSchema tableSchema(*gConnection->tableSchema(table));
+            KexiDB::QuerySchema query(tableSchema);
+            KexiDB::Cursor* cursor = gConnection->prepareQuery(query);
+
+            KexiDB::RecordData recordData(tableSchema.fieldCount());
+            KexiDB::RowEditBuffer editBuffer(true);
+            
+            QStringList fieldNames(data.keys());
+            
+            foreach(const QString& name, fieldNames) {
+                QVariant currentValue(data.value(name));
+                if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
+                    kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
+                    editBuffer.insert(*query.columnInfo(name), currentValue);
+                }
+            }
+
+            bool result = cursor->insertRow(recordData, editBuffer);
+            cursor->close();
+            gConnection->deleteCursor(cursor);
+            return result;
+        }
 
     }
 }

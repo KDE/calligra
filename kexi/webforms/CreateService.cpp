@@ -33,6 +33,8 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/field.h>
 
+#include "model/Database.h"
+
 #include "auth/Authenticator.h"
 #include "auth/User.h"
 #include "auth/Permission.h"
@@ -67,15 +69,31 @@ namespace KexiWebForms {
 
             /* Build the form */
             if (request->getQuery("dataSent") == "true") {
-                KexiDB::QuerySchema schema(*tableSchema);
-                KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
+                //KexiDB::QuerySchema schema(*tableSchema);
+                //KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
                 QStringList fieldsList(QUrl::fromPercentEncoding(QString(
                             request->getQuery("tableFields").c_str()).toUtf8()
                 ).split("|:|"));
                 kDebug() << "Fields: " << fieldsList;
 
-                QStringListIterator iterator(fieldsList);
+                QHash<QString, QVariant> data;
+                foreach(const QString& field, fieldsList) {
+                    KexiDB::Field* currentField = tableSchema->field(field);
+                    if (currentField)
+                        data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
+                }
+                
+                KexiWebForms::Model::Database db;
+                if (db.createRow(requestedTable, data)) {
+                    m_dict->ShowSection("SUCCESS");
+                    setValue("MESSAGE", "Row added successfully");
+                } else {
+                    m_dict->ShowSection("ERROR");
+                    setValue("MESSAGE", gConnection->errorMsg());
+                }
+
+                /*QStringListIterator iterator(fieldsList);
 
                 KexiDB::RecordData recordData(tableSchema->fieldCount());
                 KexiDB::RowEditBuffer editBuffer(true);
@@ -85,7 +103,7 @@ namespace KexiWebForms {
                     QString currentFieldName(iterator.next());
                     QString currentFieldValue(QUrl::fromPercentEncoding(request->getQuery(currentFieldName.toUtf8().constData()).c_str()));
                     if (!(tableSchema->field(i)->isAutoIncrement() && (currentFieldValue == ""))) {
-                        /*! @note This removes pluses */
+                        /*! @note This removes pluses
                         currentFieldValue.replace("+", " ");
                         QVariant currentValue(currentFieldValue);
 
@@ -97,16 +115,16 @@ namespace KexiWebForms {
 
 
                 if (cursor->insertRow(recordData, editBuffer)) {
-                    /** @note Restore this */
+                    @note Restore this 
                     //cachedPkeys[requestedTable].clear();
                     m_dict->ShowSection("SUCCESS");
                     setValue("MESSAGE", "Row added successfully");
                 } else {
                     m_dict->ShowSection("ERROR");
                     setValue("MESSAGE", gConnection->errorMsg());
-                }
+                }*/
 
-                gConnection->deleteCursor(cursor);
+                //gConnection->deleteCursor(cursor);
             }
 
             m_dict->ShowSection("FORM");
