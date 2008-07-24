@@ -84,7 +84,7 @@ namespace KexiWebForms {
                         data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
                 }
                 
-                if (db.createRow(requestedTable, data)) {
+                if (db.updateRow(requestedTable, data, true)) {
                     m_dict->ShowSection("SUCCESS");
                     setValue("MESSAGE", "Row added successfully");
                 } else {
