@@ -75,7 +75,7 @@ public:
     /// Create an invalid data index
     ChartDataIndex();
     /// Create an index with index @p number and @p userdata
-    ChartDataIndex( int number, int userdata = 0 );
+    explicit ChartDataIndex( int number, int userdata = 0 );
     /// Destructor
     ~ChartDataIndex();
     
@@ -161,9 +161,9 @@ public:
 signals:
     /// Emitted when the model is reset
     void reset();
-    /// Emitted when data in data set @index has changed
+    /// Emitted when data in data set @p index has changed
     void dataSetChanged( const ChartDataIndex &index );
-    /// Emitted when data in axis set @index has changed
+    /// Emitted when data in axis set @p index has changed
     void axisSetChanged( const ChartAxisIndex &index );
 
 protected:

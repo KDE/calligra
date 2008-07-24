@@ -108,7 +108,7 @@ public:
 typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
 
 /**
- * A resource (@ref Resource) can be scheduled to be used at any time, 
+ * A Resource can be scheduled to be used at any time, 
  * this is represented internally with Appointments
  * There is one Appointment per resource-task pair.
  * An appointment can be divided into several intervals, represented with

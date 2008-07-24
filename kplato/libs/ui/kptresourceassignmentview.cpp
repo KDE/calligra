@@ -174,7 +174,7 @@ void ResourceAssignmentView::updateTasks()
 
     QString name = m_selectedItem->text(0);
     QString type = m_selectedItem->text(1);
-    if(type != ""){
+    if(!type.isEmpty()){
         kDebug() <<"Item Selected:" << name <<" / Type:" << type;
     }
     else{
@@ -188,7 +188,7 @@ void ResourceAssignmentView::updateTasks()
     /*Find tasks attributed to the selected item*/
 
     /*The selected item is a resource*/
-    if(type != "")
+    if(!type.isEmpty())
     {
         foreach ( ResourceGroup * gr, m_project->resourceGroups() ) {
             foreach ( Resource * res, gr->resources() ) {

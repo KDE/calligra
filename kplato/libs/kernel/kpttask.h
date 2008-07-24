@@ -136,7 +136,7 @@ public:
     
     explicit Completion( Node *node = 0 );  // review * or &, or at all?
     Completion( const Completion &copy );
-    ~Completion();
+    virtual ~Completion();
     
     bool operator==(const Completion &p);
     bool operator!=(Completion &p) { return !(*this == p); }
@@ -426,7 +426,7 @@ public:
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
     
-    /// Save a workpackage document with schedule identity @id
+    /// Save a workpackage document with schedule identity @p id
     void saveWorkPackageXML( QDomElement &element, long id ) const;
 
     /**

@@ -259,13 +259,13 @@ protected:
     DateTime lateFinish;
     /**  startTime is the scheduled start time.
       *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
-      *  It will always be later or equal to @ref earliestStart
+      *  It will always be later or equal to earliestStart
       */
     DateTime startTime;
     /**
       *  m_endTime is the scheduled finish time.
       *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
-      *  It will always be earlier or equal to @ref latestFinish
+      *  It will always be earlier or equal to latestFinish
       */
     DateTime endTime;
     /**

@@ -318,7 +318,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeDeleteCmd : public NamedCommand
 {
 public:
-    NodeDeleteCmd( Node *node, const QString& name = QString() );
+    explicit NodeDeleteCmd( Node *node, const QString& name = QString() );
     ~NodeDeleteCmd();
     void execute();
     void unexecute();
@@ -486,7 +486,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeIndentCmd : public NamedCommand
 {
 public:
-    NodeIndentCmd( Node &node, const QString& name = QString() );
+    explicit NodeIndentCmd( Node &node, const QString& name = QString() );
     ~NodeIndentCmd();
     void execute();
     void unexecute();
@@ -501,7 +501,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeUnindentCmd : public NamedCommand
 {
 public:
-    NodeUnindentCmd( Node &node, const QString& name = QString() );
+    explicit NodeUnindentCmd( Node &node, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -514,7 +514,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeMoveUpCmd : public NamedCommand
 {
 public:
-    NodeMoveUpCmd( Node &node, const QString& name = QString() );
+    explicit NodeMoveUpCmd( Node &node, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -527,7 +527,7 @@ private:
 class KPLATOKERNEL_EXPORT NodeMoveDownCmd : public NamedCommand
 {
 public:
-    NodeMoveDownCmd( Node &node, const QString& name = QString() );
+    explicit NodeMoveDownCmd( Node &node, const QString& name = QString() );
     void execute();
     void unexecute();
 
@@ -755,7 +755,7 @@ private:
 class KPLATOKERNEL_EXPORT RemoveResourceGroupRequestCmd : public NamedCommand
 {
 public:
-    RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const QString& name = QString() );
+    explicit RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const QString& name = QString() );
     RemoveResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name = QString() );
     void execute();
     void unexecute();
@@ -1457,7 +1457,7 @@ private:
 class KPLATOKERNEL_EXPORT BaselineScheduleCmd : public NamedCommand
 {
 public:
-    BaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
+    explicit BaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
     void execute();
     void unexecute();
 
@@ -1468,7 +1468,7 @@ private:
 class KPLATOKERNEL_EXPORT ResetBaselineScheduleCmd : public NamedCommand
 {
 public:
-    ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
+    explicit ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
     void execute();
     void unexecute();
 

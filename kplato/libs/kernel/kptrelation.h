@@ -50,7 +50,7 @@ public:
     enum Type { FinishStart, FinishFinish, StartStart };
 
     Relation(Node *parent, Node *child, Type type, Duration lag);
-    Relation(Node *parent=0, Node *child=0, Type type=FinishStart);
+    explicit Relation(Node *parent=0, Node *child=0, Type type=FinishStart);
     explicit Relation(Relation *rel);
     
     /** 
@@ -67,7 +67,7 @@ public:
     Type type() const { return m_type; }
     /// Return relation type as a string. Translated if @p trans = true.
     QString typeToString( bool trans = false ) const;
-    /// Convert @type to a valid relation type
+    /// Convert @p type to a valid relation type
     static Type typeFromString( const QString &type );
     /// Return a stringlist of relation types. Translated if @p trans = true
     static QStringList typeList( bool trans = false );

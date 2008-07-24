@@ -607,7 +607,7 @@ void ViewListWidget::setupContextMenus()
     QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
-        // TODO: Make this test safer (possibly add desktopfile to define embedable parts)
+        // TODO: Make this test safer (possibly add desktopfile to define embeddable parts)
         if ( serv->genericName().isEmpty() ||
             serv->serviceTypes().contains( "application/vnd.oasis.opendocument.formula" ) ||
             serv->serviceTypes().contains( "application/x-vnd.kde.kplato" ) ) {

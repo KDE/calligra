@@ -111,7 +111,7 @@ public:
     virtual void save( QDomElement &element ) const;
     
     using Node::saveWorkPackageXML;
-    /// Save a workpackage document containing @node with schedule identity @id
+    /// Save a workpackage document containing @node with schedule identity @p id
     void saveWorkPackageXML( QDomElement &element, const Node *node, long id ) const;
     
     /**
@@ -228,8 +228,6 @@ public:
 
     /**
      * Returns the actually reported cost for this project
-     * @param date The cost is calulated for this date (only)
-     * @param id Identity of the schedule to be used
      */
     virtual double actualCost() const;
     /**
@@ -241,7 +239,6 @@ public:
     /**
      * Actual cost up to and including @p date
      * @param date The cost is calculated from the start of the project upto including date.
-     * @param id Identity of the schedule to be used.
      */
     virtual EffortCost actualCostTo( const QDate &date ) const;
     
@@ -441,13 +438,13 @@ public:
      * Add a relation between the nodes specified in the relation rel.
      * Emits signals relationToBeAdded() before the relation is added,
      * and relationAdded() after it has been added.
-     * @parem rel The relation to be added.
-     * @parem check If true, the relation is checked for validity
-     * @Return true if successful.
+     * @param rel The relation to be added.
+     * @param check If true, the relation is checked for validity
+     * @return true if successful.
      */
     bool addRelation( Relation *rel, bool check=true );
     /**
-     * Removes the relation without deleting it.
+     * Removes the relation @p rel without deleting it.
      * Emits signals relationToBeRemoved() before the relation is removed,
      * and relationRemoved() after it has been removed.
      */

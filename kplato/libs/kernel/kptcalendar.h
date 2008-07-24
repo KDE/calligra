@@ -334,7 +334,7 @@ class KPLATOKERNEL_EXPORT Calendar : public QObject
     Q_OBJECT
 public:
     Calendar();
-    Calendar(const QString& name, Calendar *parent=0);
+    explicit Calendar(const QString& name, Calendar *parent=0);
     //Calendar( const Calendar &c ); QObject doesn't allow a copy constructor
     ~Calendar();
 
@@ -345,7 +345,7 @@ public:
 
     Calendar *parentCal() const { return m_parent; }
     /**
-     * Set parent calendar to @parent.
+     * Set parent calendar to @p parent.
      * Removes myself from current parent and
      * inserts myself as child to new parent.
      */

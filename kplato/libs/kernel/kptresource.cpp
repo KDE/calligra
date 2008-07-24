@@ -690,7 +690,7 @@ void Resource::makeAppointment(Schedule *node) {
     }
     end = availableBefore(end, time);
     if (!end.isValid()) {
-        m_currentSchedule->logWarning( "Resource not available  before=" + node->endTime.toString() + ", " + time.toString() + ")" );
+        m_currentSchedule->logWarning( "Resource not available  before=" + node->endTime.toString() + ", " + time.toString() + ')' );
         node->resourceNotAvailable = true;
         return;
     }
@@ -1230,7 +1230,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
     }
     if ( ! match ) {
-        ns->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        ns->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
         
         logtime = start;
         d = Duration(0, 1, 0); // 1 hour
@@ -1253,7 +1253,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        ns->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        ns->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
         
         logtime = start;
         d = Duration(0, 0, 1); // 1 minute
@@ -1276,7 +1276,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        ns->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        ns->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
         
         logtime = start;
         d = Duration(0, 0, 0, 1); // 1 second
@@ -1298,7 +1298,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
     }
     if ( ! match ) {
-        ns->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        ns->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
         
         d = Duration(0, 0, 0, 0, 1); // 1 millisecond
         for (int i=0; !match && i < 1000; ++i) {

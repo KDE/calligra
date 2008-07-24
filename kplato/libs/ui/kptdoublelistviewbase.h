@@ -116,8 +116,8 @@ public:
 
     class MasterListItem : public QTreeWidgetItem {
     public:
-        MasterListItem(QTreeWidget *parent, bool highlight=false);
-        MasterListItem(QTreeWidget *parent, const QString& text, bool highlight=false);
+        explicit MasterListItem(QTreeWidget *parent, bool highlight=false);
+        explicit MasterListItem(QTreeWidget *parent, const QString& text, bool highlight=false);
         MasterListItem(QTreeWidgetItem *parent, bool highlight=false);
         MasterListItem(QTreeWidgetItem *parent, const QString& text, bool highlight=false);
         ~MasterListItem();

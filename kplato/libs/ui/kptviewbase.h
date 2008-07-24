@@ -154,9 +154,9 @@ public:
     QModelIndex nextColumn( const QModelIndex &current );
     /// Move from @p current to next item
     QModelIndex previousColumn( const QModelIndex &current );
-    /// Move to first editable index in @p row with @parent
+    /// Move to first editable index in @p row with @p parent
     QModelIndex firstEditable( int row, const QModelIndex &parent );
-    /// Move to last editable index in @p row with @parent
+    /// Move to last editable index in @p row with @p parent
     QModelIndex lastEditable( int row, const QModelIndex &parent );
 
     void setAcceptDropsOnView( bool mode ) { m_acceptDropsOnView = mode; }

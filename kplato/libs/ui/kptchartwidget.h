@@ -61,7 +61,7 @@ public:
     static const int BCWS = 1;
     static const int ACWP = 2;
 
-    ChartWidget(QWidget *parent=0, const char *name=0);
+    explicit ChartWidget(QWidget *parent=0, const char *name=0);
   
     void clear();
     void draw( Project &project, ScheduleManager &sm );

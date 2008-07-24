@@ -29,7 +29,6 @@
 
 #include <QList>
 #include <QTreeWidget>
-#include <QTreeWidget>
 #include <QTableWidget>
 #include <QFont>
 

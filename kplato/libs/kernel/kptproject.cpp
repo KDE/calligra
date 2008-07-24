@@ -260,7 +260,7 @@ void Project::calculate()
             calcCriticalPath( false );
         } else {
             cs->setPhaseName( 0, "Init" );
-            cs->logInfo( i18n( "Schedule project backward from: %1", m_constraintEndTime.toString(), 0 ) );
+            cs->logInfo( i18n( "Schedule project backward from: %1", m_constraintEndTime.toString() ), 0 );
             cs->endTime = m_constraintEndTime;
             cs->lateFinish = m_constraintEndTime;
             // Calculate from end time

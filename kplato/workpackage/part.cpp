@@ -189,7 +189,7 @@ bool DocumentChild::editDoc()
         return false;
     }
     if ( ! m_fileinfo.exists() ) {
-        KMessageBox::error( 0, i18n( "File does not exist: %1" ).arg( fileName() ) );
+        KMessageBox::error( 0, i18n( "File does not exist: %1", fileName() )  );
         return false;
     }
     KUrl filename( filePath() );

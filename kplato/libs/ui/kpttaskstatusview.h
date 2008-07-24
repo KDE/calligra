@@ -161,7 +161,7 @@ class TaskStatusViewSettingsDialog : public SplitItemViewSettupDialog
 {
     Q_OBJECT
 public:
-    TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent = 0 );
+    explicit TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent = 0 );
 
 };
 

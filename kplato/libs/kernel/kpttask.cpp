@@ -47,7 +47,7 @@ Task::Task(Node *parent)
       m_resource(),
       m_workPackage( *this )
 {
-    //kDebug()<<"("<<this<<")";
+    //kDebug()<<"("<<this<<')';
     Duration d(1, 0, 0);
     m_estimate = new Estimate();
     m_estimate->setOptimisticRatio(-10);
@@ -65,7 +65,7 @@ Task::Task(const Task &task, Node *parent)
       m_resource(),
       m_workPackage( *this )
 {
-    //kDebug()<<"("<<this<<")";
+    //kDebug()<<"("<<this<<')';
     m_requests = 0;
     
     delete m_estimate;
@@ -2085,7 +2085,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
         }
     }
     if ( ! match ) {
-        m_currentSchedule->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        m_currentSchedule->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ')' );
         
         logtime = start;
         for (int i=0; !match && i < 24; ++i) {
@@ -2102,12 +2102,12 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
                 end = start;
                 break;
             }
-            //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+            //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<')';
         }
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        m_currentSchedule->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        m_currentSchedule->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ')' );
         
         logtime = start;
         for (int i=0; !match && i < 60; ++i) {
@@ -2124,12 +2124,12 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
                 end = start;
                 break;
             }
-            //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+            //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<')';
         }
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" l="<<l.toString()<<" match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        m_currentSchedule->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        m_currentSchedule->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ')' );
         
         logtime = start;
         for (int i=0; !match && i < 60 && sts; ++i) {
@@ -2146,11 +2146,11 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
                 end = start;
                 break;
             }
-            //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+            //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<')';
         }
     }
     if ( ! match ) {
-        m_currentSchedule->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        m_currentSchedule->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ')' );
         
         for (int i=0; !match && i < 1000; ++i) {
             //milliseconds
@@ -2165,7 +2165,7 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
             } else if (l + l1 > duration) {
                 break;
             }
-            //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+            //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<')';
         }
     }
     if (!match) {

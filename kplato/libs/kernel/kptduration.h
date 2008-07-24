@@ -143,7 +143,7 @@ public:
     static QStringList unitList( bool trans = false );
     static QString unitToString( Duration::Unit unit, bool trans = false );
     static Unit unitFromString( const QString &unit );
-    /// Returns value and unit from a <value><unit> coded string in rv and unit.
+    /// Returns value and unit from a <value><unit> coded string in @p rv and @p unit.
     static bool valueFromString( const QString &value, double &rv, Unit &unit );
     /**
      * This is useful for occasions where we need a zero duration.

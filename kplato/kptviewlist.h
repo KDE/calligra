@@ -126,12 +126,12 @@ public:
 
     /// Remove @p item, don't emit signal
     int removeViewListItem( ViewListItem *item );
-    /// Add @p item to @p parent at @index, don't emit signal
+    /// Add @p item to @p parent at @p index, don't emit signal
     void addViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
     
     /// Remove @p item, emit signal
     int takeViewListItem( ViewListItem *item );
-    /// Add @p item to @p parent at @index, emit signal
+    /// Add @p item to @p parent at @ index, emit signal
     void insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
 
     void save( QDomElement &element ) const;

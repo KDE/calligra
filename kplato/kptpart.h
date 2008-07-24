@@ -30,8 +30,8 @@
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
 
-#include <KoDocument.h>
-#include <KoDocumentChild.h>
+#include "KoDocument.h"
+#include "KoDocumentChild.h"
 
 class KoView;
 
@@ -65,7 +65,7 @@ public:
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML( QIODevice *, const KoXmlDocument &document );
     virtual QDomDocument saveXML();
-    /// Save a workpackage file containing @node with schedule identity @id
+    /// Save a workpackage file containing @p node with schedule identity @p id
     QDomDocument saveWorkPackageXML( const Node *node, long id = -1 );
     
     bool saveOdf( SavingContext &documentContext ) { return false; }

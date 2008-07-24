@@ -134,7 +134,7 @@ public:
 class KPLATOUI_EXPORT DependencyNodeItem : public QGraphicsRectItem
 {
 public:
-    DependencyNodeItem( Node *node, DependencyNodeItem *parent = 0 );
+    explicit DependencyNodeItem( Node *node, DependencyNodeItem *parent = 0 );
     ~DependencyNodeItem();
     
     enum  { Type = QGraphicsItem::UserType + 1 };

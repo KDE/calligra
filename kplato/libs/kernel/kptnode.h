@@ -120,7 +120,7 @@ public:
     /// Save me and my childrens relations.
     virtual void saveRelations(QDomElement &element) const;
 
-    /// Save a workpackage document containing @node with schedule identity @id
+    /// Save a workpackage document containing @p node with schedule identity @p id
     virtual void saveWorkPackageXML( QDomElement &element, long id ) const;
 
     // simple child node management
@@ -448,16 +448,16 @@ public:
     void setRunningAccount(Account *acc);
 
     /**
-     * Return schedule with @id
-     * If @id == CURRENTSCHEDULE, return m_currentSchedule
-     * Return 0 if schedule with @id doesn't exist.
+     * Return schedule with @p id
+     * If @p id == CURRENTSCHEDULE, return m_currentSchedule
+     * Return 0 if schedule with @p id doesn't exist.
      */
     Schedule *schedule( long id = CURRENTSCHEDULE ) const;
     /// Return current schedule
     Schedule *currentSchedule() const { return m_currentSchedule; }
-    /// Set current schedule to schedule with identity id, for me and my children
+    /// Set current schedule to schedule with identity @p id, for me and my children
     virtual void setCurrentSchedule(long id);
-    /// Return true if this node has a valid schedule with identity == @id
+    /// Return true if this node has a valid schedule with identity == @p id
     bool isScheduled( long id = CURRENTSCHEDULE ) const;
     /// Return the list of schedules for this node
     QHash<long, Schedule*> &schedules() { return m_schedules; }

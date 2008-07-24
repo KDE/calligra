@@ -236,7 +236,7 @@ void WorkPackageInfoView::draw()
                 if ( ! s.isEmpty() ) {
                     s = '<' + s + '>';
                 }
-                c.insertText( r->name() + " " + s );
+                c.insertText( r->name() + ' ' + s );
                 c.insertText( "\n" );
             }
         }

@@ -24,16 +24,16 @@
 
 #include "kplatoui_export.h"
 
-#include <kptviewbase.h>
-#include <kptpertcpmmodel.h>
-
-#include <QList>
-
-
-#include <kdebug.h>
+#include "kptviewbase.h"
+#include "kptpertcpmmodel.h"
 
 #include "ui_kptpertresult.h"
 #include "ui_kptcpmwidget.h"
+
+#include <QList>
+
+#include <kdebug.h>
+
 
 class KoDocument;
 
@@ -57,7 +57,7 @@ class KPLATOUI_EXPORT PertResult : public ViewBase
 {
     Q_OBJECT
 public:
-    PertResult( KoDocument *part, QWidget *parent = 0 );
+    explicit PertResult( KoDocument *part, QWidget *parent = 0 );
     
     void setupGui();
     void setProject( Project *project );
@@ -115,7 +115,7 @@ class KPLATOUI_EXPORT PertCpmView : public ViewBase
 {
     Q_OBJECT
 public:
-    PertCpmView( KoDocument *part, QWidget *parent = 0 );
+    explicit PertCpmView( KoDocument *part, QWidget *parent = 0 );
     
     void setupGui();
     void setProject( Project *project );
