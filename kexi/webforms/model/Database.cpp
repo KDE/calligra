@@ -37,10 +37,6 @@
 
 namespace KexiWebForms {
     namespace Model {
-
-        static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
-            return s1.toLower() < s2.toLower();
-        }
         
         QHash<QString, QString> Database::getNames(KexiDB::ObjectTypes objectType) {
             QList<int> objectIds(gConnection->objectIds( objectType ));
