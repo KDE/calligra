@@ -54,27 +54,7 @@ namespace KexiWebForms {
                 objectNamesForCaptions.insertMulti( 
                     schema.captionOrName(), schema.name() ); //insertMulti() because there can be many objects with the same caption
             }
-            
-            /*QStringList objectCaptionsSorted( objectNamesForCaptions.uniqueKeys() );
-            kDebug() << objectCaptionsSorted;
-            
-            qSort(objectCaptionsSorted.begin(), objectCaptionsSorted.end(), caseInsensitiveLessThan);
-            kDebug() << objectCaptionsSorted;*/
             return objectNamesForCaptions;
-            
-            
-            /*const QString itemString( QString::fromLatin1("<li><a href=\"/") + objectTypeName + QString::fromLatin1("/%1\">%2</a></li>\n") );
-            QString result;
-            
-            foreach (const QString& caption, objectCaptionsSorted) {
-                QStringList names( objectNamesForCaptions.values( caption ) );
-                qSort(names); // extra sort :)
-                kDebug() << names;
-                foreach (const QString& name, names) {
-                    kDebug() << name << caption;
-                    result.append( itemString.arg(name).arg(Qt::escape(caption)) );
-                }
-                }*/
         }
         
         /*bool Database::create(const QString& table, const QMap<const QString&, const QString&> data) {
