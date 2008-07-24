@@ -18,25 +18,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_QUERYSERVICE_H
-#define KEXIWEBFORMS_QUERYSERVICE_H
+#ifndef KEXIWEBFORMS_VIEW_QUERY_H
+#define KEXIWEBFORMS_VIEW_QUERY_H
 
-#include "WebFormsService.h"
+#include <QHash>
+
+#include <pion/net/HTTPResponseWriter.hpp>
+
+#include "View.h"
+
+class QString;
 
 namespace KexiWebForms {
 
+    class Controller;
+
+namespace View {
+    
     /**
      * @brief WebService handling the query page
      *
      * This service shows the results after running a particular query
      */
-    class QueryService : public WebFormsService {
+    class Query : public View {
     public:
-        QueryService(const char* name) : WebFormsService(name) {}
-        virtual ~QueryService() {}
+        Query(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        virtual ~Query() {}
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
     };
+    
+}
 }
 
-#endif /* KEXIWEBFORMS_QUERYSERVICE_H */
+#endif /* KEXIWEBFORMS_VIEW_QUERY_H */

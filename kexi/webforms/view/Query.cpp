@@ -38,25 +38,22 @@
 #include "auth/User.h"
 #include "auth/Permission.h"
 
-#include "DataProvider.h"
+#include "model/DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "QueryService.h"
+#include "Query.h"
 
 using namespace pion::net;
 
 namespace KexiWebForms {
+namespace View {
     
-    void QueryService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
-        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
-                    boost::bind(&TCPConnection::finish, tcp_conn)));
-
-
-        PionUserPtr userPtr(request->getUser());
+    void Query::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
+        /*PionUserPtr userPtr(request->getUser());
         Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
 
-        if (u.can(Auth::QUERY)) {
-            QString requestedQuery(QString(request->getOriginalResource().c_str()).split('/').at(2));
+        if (u.can(Auth::QUERY)) {*/
+        QString requestedQuery(d["uri-query"]);
 
             QString queryData;
             bool ok = true;
@@ -153,10 +150,11 @@ namespace KexiWebForms {
                 }
             }
             renderTemplate(m_dict, writer);
-        } else {
+            /*} else {
             writer->write("Not Authorized");
             writer->send();
-        }
+            }*/
     }
     
+}
 }

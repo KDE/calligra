@@ -18,16 +18,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_UPDATESERVICE_H
-#define KEXIWEBFORMS_UPDATESERVICE_H
+#ifndef KEXIWEBFORMS_VIEW_UPDATE_H
+#define KEXIWEBFORMS_VIEW_UPDATE_H
 
 #include <QHash>
-#include <QString>
-#include <QList>
 
-#include "WebFormsService.h"
+#include <pion/net/HTTPResponseWriter.hpp>
+
+#include "View.h"
+
+class QString;
 
 namespace KexiWebForms {
+    
+    class Controller;
+    
+namespace View {    
 
     /**
      * @brief WebService handling the update page
@@ -35,15 +41,15 @@ namespace KexiWebForms {
      * This service creates a form out of table fields and allows to update
      * values in a particular row.
      */
-    class UpdateService : public WebFormsService {
+    class Update : public View {
     public:
-        UpdateService(const char* name) : WebFormsService(name) {}
-        virtual ~UpdateService() {}
+        Update(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        virtual ~Update() {}
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
-        QHash< QString, QList<uint> > cachedPkeys;
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
     };
-    
+
+}
 }
 
-#endif /* KEXIWEBFORMS_UPDATESERVICE_H */
+#endif /* KEXIWEBFORMS_VIEW_UPDATE_H */

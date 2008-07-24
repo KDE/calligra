@@ -67,6 +67,8 @@ namespace KexiWebForms {
         requestURI.removeFirst();
 
         QHash<QString, QString> data;
+        // Convert all the stuff from hash_multimap and put it in data
+        pion::net::StringDictionary::iterator it(request->getQueryParams());
         
         kDebug() << "ACTION :" << action << endl;
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;

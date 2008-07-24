@@ -41,31 +41,25 @@
 
 #include "TemplateProvider.h"
 
-#include "UpdateService.h"
-
-using namespace pion::net;
+#include "Update.h"
 
 namespace KexiWebForms {
+namespace View {
+    
+    void Update::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
 
-    void UpdateService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
-        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
-                                                                boost::bind(&TCPConnection::finish, tcp_conn)));
-
-        PionUserPtr userPtr(request->getUser());
+        /*PionUserPtr userPtr(request->getUser());
         Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
 
-        if (u.can(Auth::UPDATE)) {
+        if (u.can(Auth::UPDATE)) {*/
             m_dict = initTemplate("update.tpl");
-
-
-            QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
-            QString requestedTable = queryString.at(2);
-            QString pkeyName = queryString.at(3);
-            QString pkeyValue = queryString.at(4);
+            
+            QString requestedTable(d["uri-table"]);
+            QString pkeyName(d["uri-pkey"]);
+            QString pkeyValue(d["uri-pval"]);
             uint pkeyValueUInt = pkeyValue.toUInt();
             uint current = 0;
-
-
+            
             setValue("TABLENAME", requestedTable);
             setValue("PKEY_NAME", pkeyName);
             setValue("PKEY_VALUE", pkeyValue);
@@ -104,18 +98,17 @@ namespace KexiWebForms {
             }
 
             
-            if (request->getQuery("dataSent") == "true") {
+            if (d["dataSent"] == "true") {
                     
 
-                QStringList fieldsList(QUrl::fromPercentEncoding(QString(
-                                                                     request->getQuery("tableFields").c_str()).toUtf8()
-                                           ).split("|:|"));
+                QString tableFields(d["tableFields"]);
+                QStringList fieldsList(QUrl::fromPercentEncoding(tableFields.toUtf8()));
 
                 QHash<QString, QVariant> data;
                 foreach(const QString& field, fieldsList) {
                     KexiDB::Field* currentField = tableSchema.field(field);
                     if (currentField)
-                        data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
+                        data[field] = QVariant(d[field]);
                 }
 
                 if (db.updateRow(requestedTable, data, false, pkeyValue.toInt())) {
@@ -167,10 +160,11 @@ namespace KexiWebForms {
 
             renderTemplate(m_dict, writer);
             delete m_dict;
-        } else {
+            /*} else {
             writer->write("Not Authorized");
             writer->send();
-        }
+            }*/
     }
     
+}
 }

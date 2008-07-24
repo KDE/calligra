@@ -21,23 +21,34 @@
 #ifndef KEXIWEBFORMS_DELETESERVICE_H
 #define KEXIWEBFORMS_DELETESERVICE_H
 
-#include "WebFormsService.h"
+#include <QHash>
+
+#include <pion/net/HTTPResponseWriter.hpp>
+
+#include "View.h"
+
+class QString;
 
 namespace KexiWebForms {
+
+    class Controller;
+
+namespace View {
 
     /**
      * @brief WebService handling delete operations
      *
      * This service is responsible to delete a particular record
      */
-    class DeleteService : public WebFormsService {
+    class Delete : public View {
     public:
-        DeleteService(const char* name) : WebFormsService(name) {}
-        virtual ~DeleteService() {}
+        Delete(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        virtual ~Delete() {}
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
     };
-    
+
+}
 }
 
 #endif /* KEXIWEBFORMS_DELETESERVICE_H */

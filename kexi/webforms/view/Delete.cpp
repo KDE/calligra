@@ -35,29 +35,26 @@
 #include "auth/User.h"
 #include "auth/Permission.h"
 
-#include "DataProvider.h"
+#include "model/DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "DeleteService.h"
+#include "Delete.h"
 
 using namespace pion::net;
 
 namespace KexiWebForms {
+namespace View {
     
-    void DeleteService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
-        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
-                    boost::bind(&TCPConnection::finish, tcp_conn)));
+    void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
 
-
-        PionUserPtr userPtr(request->getUser());
+        /*PionUserPtr userPtr(request->getUser());
         Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
         
-        if (u.can(Auth::DELETE)) {
+        if (u.can(Auth::DELETE)) {*/
             /// @todo ensure that there's the correct number of parameters
-            QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
-            QString requestedTable = queryString.at(2);
-            QString pkeyName = queryString.at(3);
-            QString pkeyValue = queryString.at(4);
+            QString requestedTable(d["uri-table"]);
+            QString pkeyName(d["uri-pkey"]);
+            QString pkeyValue(d["uri-pval"]);
 
             setValue("TABLENAME", requestedTable);
 
@@ -74,10 +71,11 @@ namespace KexiWebForms {
             
             renderTemplate(m_dict, writer);
             
-        } else {
+            /*} else {
             writer->write("Not Authorized");
             writer->send();
-        }
+            }*/
     }
 
+}
 }
