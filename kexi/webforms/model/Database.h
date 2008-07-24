@@ -47,7 +47,7 @@ namespace KexiWebForms {
              * @param QString& the table name
              * @param QMap<const QString&, const QString&>& 
              */
-            //bool create(const QString&, const QMap<const QString&, const QString&>&);
+            bool create(const QString&, const QMap<const QString&, const QString&>&);
         };
         
     }
