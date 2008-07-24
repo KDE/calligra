@@ -158,5 +158,9 @@ namespace KexiWebForms {
             return cachedPkeys[requestedTable];
         }
 
+        KexiDB::TableSchema* Database::tableSchema(const QString& table) {
+            return gConnection->tableSchema(table);
+        }
+
     }
 }

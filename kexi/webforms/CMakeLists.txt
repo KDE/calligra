@@ -12,10 +12,10 @@ include_directories(
 add_definitions(-fexceptions)
 
 set(webforms_SRCS
-  DataProvider.cpp
   TemplateProvider.cpp
   WebFormsService.cpp
 # Model
+  model/DataProvider.cpp
   model/Database.cpp
 # Index view
   IndexService.cpp

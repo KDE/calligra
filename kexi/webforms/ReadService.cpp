@@ -35,7 +35,8 @@
 #include "auth/User.h"
 #include "auth/Permission.h"
 
-#include "DataProvider.h"
+#include "model/DataProvider.h"
+
 #include "TemplateProvider.h"
 
 #include "ReadService.h"

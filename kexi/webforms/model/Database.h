@@ -26,6 +26,9 @@
 #include <QHash>
 #include <kexidb/field.h>
 
+namespace KexiDB {
+    class TableSchema;
+}
 class QString;
 
 namespace KexiWebForms {
@@ -61,6 +64,8 @@ namespace KexiWebForms {
              * @param create create a new row, instead of trying to update it
              */
             bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
+
+            KexiDB::TableSchema* tableSchema(const QString& name);
 
             bool updateCachedPkeys(const QString&);
             const QList<uint>& getCachedPkeys(const QString&);

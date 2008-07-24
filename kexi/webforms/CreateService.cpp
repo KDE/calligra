@@ -29,19 +29,15 @@
 
 #include <google/template.h>
 
-#include <kexidb/cursor.h>
-#include <kexidb/connection.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/field.h>
+#include <kexidb/tableschema.h>
 
+#include "model/DataProvider.h"
 #include "model/Database.h"
 
 #include "auth/Authenticator.h"
 #include "auth/User.h"
 #include "auth/Permission.h"
 
-#include "DataProvider.h"
 #include "TemplateProvider.h"
 
 #include "CreateService.h"
@@ -65,9 +61,8 @@ namespace KexiWebForms {
             QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
             setValue("TABLENAME", requestedTable);
 
-
-            KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
             KexiWebForms::Model::Database db;
+            KexiDB::TableSchema* tableSchema = db.tableSchema(requestedTable);
 
 
             /* Build the form */

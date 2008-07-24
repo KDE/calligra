@@ -28,20 +28,17 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include <kexidb/roweditbuffer.h>
-#include <kexidb/connection.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/cursor.h>
+#include <kexidb/tableschema.h>
 
 #include <google/template.h>
 
+#include "model/DataProvider.h"
 #include "model/Database.h"
 
 #include "auth/Authenticator.h"
 #include "auth/User.h"
 #include "auth/Permission.h"
 
-#include "DataProvider.h"
 #include "TemplateProvider.h"
 
 #include "UpdateService.h"
@@ -74,9 +71,8 @@ namespace KexiWebForms {
             setValue("PKEY_VALUE", pkeyValue);
 
             // Initialize needed Objects
-            KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
-
             KexiWebForms::Model::Database db;
+            KexiDB::TableSchema tableSchema(*db.tableSchema(requestedTable));
             db.updateCachedPkeys(requestedTable);
 
             // Retrieve current position in cache
