@@ -66,7 +66,7 @@ namespace View {
 
             /* Build the form */
             if (d["dataSent"] == "true") {
-                QString tableFields(d["table-fields"]);
+                QString tableFields(d["tableFields"]);
                 QStringList fieldsList(QUrl::fromPercentEncoding(tableFields.toUtf8()).split("|:|"));
                 kDebug() << "Fields: " << fieldsList;
 

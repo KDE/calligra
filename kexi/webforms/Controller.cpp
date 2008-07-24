@@ -19,7 +19,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QUrl>
 #include <QString>
+#include <QByteArray>
 #include <QStringList>
 
 #include <KDebug>
@@ -72,8 +74,11 @@ namespace KexiWebForms {
         typedef pion::net::HTTPTypes::QueryParams::const_iterator SDIterator;
         pion::net::HTTPTypes::QueryParams params(request->getQueryParams());
         for (SDIterator it = params.begin(); it != params.end(); ++it) {
-            kDebug() << "PARAMETER " << it->first.c_str() << "=" << it->second.c_str() << endl;
-            data[it->first.c_str()] = it->second.c_str();
+            data[QUrl::fromPercentEncoding(QByteArray(it->first.c_str()))] =
+                QUrl::fromPercentEncoding(QByteArray(it->second.c_str()));
+        }
+        foreach(const QString& n, data.keys()) {
+            kDebug() << "PARAMETER " << n << "=" << data[n] << endl;
         }
         
         kDebug() << "ACTION :" << action << endl;
