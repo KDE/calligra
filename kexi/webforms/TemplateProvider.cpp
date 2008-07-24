@@ -31,6 +31,7 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
+#include "model/Database.h"
 #include "DataProvider.h"
 
 #include "TemplateProvider.h"
@@ -47,10 +48,25 @@ namespace KexiWebForms {
     // Step 1: Fill the queryNames stringlist
     // Step 2: Sort it
     // Step 3: Write the links
-    static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, 
-      const QString& objectTypeName, const char* keyName)
+    static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, const char* uri, const char* keyName)
     {
-        QList<int> objectIds(gConnection->objectIds( objectType ));
+        KexiWebForms::Model::Database db;
+        QHash<QString, QString> oNames(db.getNames(objectType));
+        QStringList captions(oNames.uniqueKeys());
+        qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
+        
+        QString HTML;
+        foreach (const QString& caption, captions) {
+            QStringList names(oNames.values(caption));
+            foreach (const QString& name, names) {
+                HTML.append(QString::fromLatin1("\t<li><a href=\"/%1/%2\">%3</a></li>\n").arg(uri).arg(name).arg(caption));
+            }
+        }
+        
+        dict->SetValue(keyName, HTML.toUtf8().constData());
+        
+        
+        /*QList<int> objectIds(gConnection->objectIds( objectType ));
         QMap<QString, QString> objectNamesForCaptions;
         foreach (const int id, objectIds) {
             KexiDB::SchemaData schema;
@@ -75,7 +91,7 @@ namespace KexiWebForms {
                 result.append( itemString.arg(name).arg(Qt::escape(caption)) );
             }
         }
-        dict->SetValue(keyName, result.toUtf8().constData());
+        dict->SetValue(keyName, result.toUtf8().constData());*/
     }
 
     google::TemplateDictionary* initTemplate(const char* filename) {
@@ -91,6 +107,38 @@ namespace KexiWebForms {
         afterDict->SetFilename("aftercontent.tpl");
 
         // Add objects to the left menu
+        //KexiWebForms::Model::Database db;
+        /*QHash<QString, QString> tableNames(db.getNames(KexiDB::TableObjectType));
+        QHash<QString, QString> queryNames(db.getNames(KexiDB::QueryObjectType));
+        //addList(tableNames);
+        //addList(queryNames);
+        QStringList tableCaptions(tableNames.uniqueKeys());
+        QStringList queryCaptions(queryNames.uniqueKeys());
+        qSort(tableCaptions.begin(), tableCaptions.end(), caseInsensitiveLessThan);
+        qSort(queryCaptions.begin(), queryCaptions.end(), caseInsensitiveLessThan);
+
+        QString tablesHTML;
+        foreach (const QString& caption, tableCaptions) {
+            QStringList names(tableNames.values(caption));
+            foreach (const QString& name, names) {
+                tablesHTML.append(QString::fromLatin1("\t<li><a href=\"/read/%1\">%2</a></li>\n").arg(name).arg(caption));
+            }
+        }
+
+        QString queriesHTML;
+        foreach (const QString& caption, queryCaptions) {
+            QStringList names(queryNames.values(caption));
+            foreach (const QString& name, names) {
+                queriesHTML.append(QString::fromLatin1("<li><a href=\"/query/%1\">%2</a></li>").arg(name).arg(caption));
+            }
+            }
+        
+        kDebug() << "TABLES HTML: " << tablesHTML << endl;
+        afterDict->SetValue("TABLE_LIST", tablesHTML.toLatin1().constData());
+        afterDict->SetValue("QUERY_LIST", queriesHTML.toLatin1().constData());*/
+        
+        //qSort(
+        //foreach (
         addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
         addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");
         return dict;
