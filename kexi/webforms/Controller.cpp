@@ -26,6 +26,7 @@
 
 #include <KDebug>
 
+#include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPTypes.hpp>
 #include <pion/net/WebService.hpp>
 #include <pion/net/HTTPResponseWriter.hpp>
@@ -36,6 +37,10 @@
 #include "view/Update.h"
 #include "view/Delete.h"
 #include "view/Query.h"
+
+#include "auth/User.h"
+#include "auth/Permission.h"
+#include "auth/Authenticator.h"
 
 #include "Controller.h"
 
@@ -62,7 +67,16 @@ namespace KexiWebForms {
     void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
         pion::net::HTTPResponseWriterPtr writer(pion::net::HTTPResponseWriter::create(tcp_conn, *request,
                                                                                       boost::bind(&pion::net::TCPConnection::finish, tcp_conn)));
-        
+
+        // Authentication data
+        pion::net::PionUserPtr userPtr;
+        Auth::User u;
+        if (request->getUser()) {
+            userPtr = pion::net::PionUserPtr(request->getUser());
+            u = Auth::Authenticator::getInstance()->authenticate(userPtr);
+        }
+
+        // Request URI handling & dispatch
         QStringList requestURI(QString(request->getOriginalResource().c_str()).split('/'));
         requestURI.removeFirst();
         
@@ -70,13 +84,20 @@ namespace KexiWebForms {
         requestURI.removeFirst();
 
         QHash<QString, QString> data;
+
         // Convert all the stuff from hash_multimap and put it in data
         typedef pion::net::HTTPTypes::QueryParams::const_iterator SDIterator;
         pion::net::HTTPTypes::QueryParams params(request->getQueryParams());
+
+        /**
+         * some nasty things can happen here, for example someone can overwrite
+         * someone can overwrite the data hash, this is not good
+         */
         for (SDIterator it = params.begin(); it != params.end(); ++it) {
             data[QUrl::fromPercentEncoding(QByteArray(it->first.c_str()))] =
                 QUrl::fromPercentEncoding(QByteArray(it->second.c_str()));
         }
+        u.can(Auth::READ);
         
         kDebug() << "ACTION :" << action << endl;
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
@@ -88,26 +109,26 @@ namespace KexiWebForms {
                 m_index->view(data, writer);
             }
         } else if (action == "create") {
-            if (!requestURI.count() != 1) {
+            if (!requestURI.count() != 1 && u.can(Auth::CREATE)) {
                 data["uri-table"] = requestURI.at(0);
                 m_create->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "read") {
-            if (!requestURI.count() != 1) {
+            if (!requestURI.count() != 1 && u.can(Auth::READ)) {
                 data["uri-table"] = requestURI.at(0);
                 m_read->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "update") {
-            if (!requestURI.count() != 3) {
+            if (!requestURI.count() != 3 && u.can(Auth::UPDATE)) {
                 data["uri-table"] = requestURI.at(0);
                 data["uri-pkey"] = requestURI.at(1);
                 data["uri-pval"] = requestURI.at(2);
                 m_update->view(data, writer);
                 malformedRequest = false;
             }
-        } else if (action == "delete") {
+        } else if (action == "delete" && u.can(Auth::DELETE)) {
             if (!requestURI.count() != 3) {
                 data["uri-table"] = requestURI.at(0);
                 data["uri-pkey"] = requestURI.at(1);
@@ -115,7 +136,7 @@ namespace KexiWebForms {
                 m_delete->view(data, writer);
                 malformedRequest = false;
             }
-        } else if (action == "query") {
+        } else if (action == "query" && u.can(Auth::QUERY)) {
             if (!requestURI.count() != 1) {
                 data["uri-query"] = requestURI.at(0);
                 m_query->view(data, writer);
@@ -129,8 +150,6 @@ namespace KexiWebForms {
         writer->writeNoCopy(pion::net::HTTPTypes::STRING_CRLF);
         writer->writeNoCopy(pion::net::HTTPTypes::STRING_CRLF);
         writer->send();
-
-        kDebug() << requestURI << endl;
     }
     
 }

@@ -104,12 +104,12 @@ int main(int argc, char **argv) {
     
     // Restrict CRUD operations (and BlobService) to registered users
     // filtered using our permissions manager
-    /*auth->addRestrict("/read");
+    auth->addRestrict("/read");
     auth->addRestrict("/create");
     auth->addRestrict("/update");
     auth->addRestrict("/delete");
     auth->addRestrict("/blob");
-    */
+    
     // File and blob service
     server.addService("/f", &fileService);
     server.addService("/blob", &blobService);

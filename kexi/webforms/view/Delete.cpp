@@ -18,22 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <string>
-
-#include <google/template.h>
-#include <pion/net/HTTPResponseWriter.hpp>
-
 #include <QString>
 
 #include <KDebug>
 
 #include <kexidb/utils.h>
-#include <kexidb/queryschema.h>
 #include <kexidb/cursor.h>
+#include <kexidb/queryschema.h>
 
-#include "auth/Authenticator.h"
-#include "auth/User.h"
-#include "auth/Permission.h"
+#include <pion/net/HTTPResponseWriter.hpp>
 
 #include "model/DataProvider.h"
 #include "TemplateProvider.h"
@@ -46,35 +39,24 @@ namespace KexiWebForms {
 namespace View {
     
     void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-
-        /*PionUserPtr userPtr(request->getUser());
-        Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
+        /// @todo ensure that there's the correct number of parameters
+        QString requestedTable(d["uri-table"]);
+        QString pkeyName(d["uri-pkey"]);
+        QString pkeyValue(d["uri-pval"]);
         
-        if (u.can(Auth::DELETE)) {*/
-            /// @todo ensure that there's the correct number of parameters
-            QString requestedTable(d["uri-table"]);
-            QString pkeyName(d["uri-pkey"]);
-            QString pkeyValue(d["uri-pval"]);
-
-            setValue("TABLENAME", requestedTable);
-
-            kDebug() << "Trying to delete row..." << endl;
-            if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
-                                pkeyName, pkeyValue)) {
-                m_dict->ShowSection("SUCCESS");
-                setValue("MESSAGE", "Row deleted successfully");
-            } else {
-                m_dict->ShowSection("ERROR");
-                /// @todo retrieve proper error message
-                setValue("MESSAGE", "Error while trying to delete row!");
-            }
-            
-            renderTemplate(m_dict, writer);
-            
-            /*} else {
-            writer->write("Not Authorized");
-            writer->send();
-            }*/
+        setValue("TABLENAME", requestedTable);
+        
+        kDebug() << "Trying to delete row..." << endl;
+        if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
+                              pkeyName, pkeyValue)) {
+            m_dict->ShowSection("SUCCESS");
+            setValue("MESSAGE", "Row deleted successfully");
+        } else {
+            m_dict->ShowSection("ERROR");
+            /// @todo retrieve proper error message
+            setValue("MESSAGE", "Error while trying to delete row!");
+        }
+        renderTemplate(m_dict, writer);
     }
 
 }

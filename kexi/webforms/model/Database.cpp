@@ -129,9 +129,11 @@ namespace KexiWebForms {
                 result = cursor->insertRow(recordData, editBuffer);
             else
                 result = cursor->updateRow(recordData, editBuffer);
-            
-            cursor->close();
-            gConnection->deleteCursor(cursor);
+
+            if (cursor) {
+                cursor->close();
+                gConnection->deleteCursor(cursor);
+            }
             return result;
         }
 
@@ -148,8 +150,10 @@ namespace KexiWebForms {
                     kDebug() << "Appending " << cursor->value(0).toUInt() << " to cache" << endl;
                     cachedPkeys[requestedTable].append(cursor->value(0).toUInt());
                 }
-                cursor->close();
-                gConnection->deleteCursor(cursor);
+                if (cursor) {
+                    cursor->close();
+                    gConnection->deleteCursor(cursor);
+                }
             }
             return true;
         }

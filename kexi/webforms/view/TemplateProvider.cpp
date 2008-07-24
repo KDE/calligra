@@ -59,7 +59,8 @@ namespace KexiWebForms {
         foreach (const QString& caption, captions) {
             QStringList names(oNames.values(caption));
             foreach (const QString& name, names) {
-                HTML.append(QString::fromLatin1("\t<li><a href=\"/%1/%2\">%3</a></li>\n").arg(uri).arg(name).arg(caption));
+                if (!(name == "kexi__users")) //! @note temporary work around
+                    HTML.append(QString::fromLatin1("\t<li><a href=\"/%1/%2\">%3</a></li>\n").arg(uri).arg(name).arg(caption));
             }
         }
         
@@ -86,7 +87,7 @@ namespace KexiWebForms {
     void renderTemplate(google::TemplateDictionary* dict, pion::net::HTTPResponseWriterPtr writer) {
         std::string output;
         google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);
-        writer->write(output);
+        writer->writeNoCopy(output);
     }
 
 }
