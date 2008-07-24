@@ -22,7 +22,7 @@
 #ifndef KEXIWEBFORMS_VIEW_VIEW_H
 #define KEXIWEBFORMS_VIEW_VIEW_H
 
-#include <QList>
+#include <QHash>
 
 #include <google/template.h>
 #include <pion/net/HTTPResponseWriter.hpp>
@@ -41,7 +41,7 @@ namespace View {
         View(KexiWebForms::Controller& c, const char* name);
         virtual ~View();
         
-        virtual void view(const QList<QString>&, pion::net::HTTPResponseWriterPtr);
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
 
         /**
          * A binding to local google::TemplateDictionary::SetValue accepting a

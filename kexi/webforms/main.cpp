@@ -109,10 +109,10 @@ int main(int argc, char **argv) {
     auth->addRestrict("/update");
     auth->addRestrict("/delete");
     auth->addRestrict("/blob");
-
+    */
     // File and blob service
     server.addService("/f", &fileService);
-    server.addService("/blob", &blobService);*/
+    server.addService("/blob", &blobService);
     
     server.start();
     server.setAuthentication(auth);

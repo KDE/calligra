@@ -27,6 +27,7 @@
 namespace KexiWebForms {
     namespace View {
         class Index;
+        class Read;
     }
 
     class Controller : public pion::net::WebService {
@@ -37,6 +38,7 @@ namespace KexiWebForms {
         virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
     private:
         View::Index* m_index;
+        View::Read* m_read;
     };
     
     

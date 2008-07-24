@@ -28,33 +28,20 @@
 #include <pion/net/HTTPResponseWriter.hpp>
 
 #include "view/Index.h"
+#include "view/Read.h"
 
 #include "Controller.h"
-
-/*#include "CreateService.h"
-#include "ReadService.h"
-#include "UpdateService.h"
-#include "DeleteService.h"
-#include "QueryService.h"*/
 
 namespace KexiWebForms {
 
     Controller::Controller() {
-        m_index = new View::Index(*this, "create");
-        /*m_createService = new CreateService(this, "create");
-        m_readService = new ReadService(this, "read");
-        m_updateService = new UpdateService(this, "update");
-        m_deleteService = new DeleteService(this, "delete");
-        m_queryService = new QueryService(this, "query");*/
+        m_index = new View::Index(*this, "index.tpl");
+        m_read = new View::Read(*this, "read.tpl");
     }
 
     Controller::~Controller() {
         delete m_index;
-        /*delete m_createService;
-        delete m_readService;
-        delete m_updateService;
-        delete m_deleteService;
-        delete m_queryService;*/
+        delete m_read;
     }
 
     void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
@@ -62,23 +49,32 @@ namespace KexiWebForms {
                                                                                       boost::bind(&pion::net::TCPConnection::finish, tcp_conn)));
         
         QStringList requestURI(QString(request->getOriginalResource().c_str()).split('/'));
-        /*requestURI.removeFirst();
+        requestURI.removeFirst();
         
         QString action(requestURI.at(0));
-        requestURI.removeFirst();*/
+        requestURI.removeFirst();
 
-        QList<QString> foo;
+        QHash<QString, QString> data;
         
-        //kDebug() << "ACTION :" << action << endl;
+        kDebug() << "ACTION :" << action << endl;
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
 
-        /*if (action == "") {
-            if (requestURI.count() != 0) {
-                writer->writeNoCopy("Malformed request");
-                } else {*/
-                m_index->view(foo, writer);
-                /*    }
-                      }*/
+        bool malformedRequest = true;
+        if (action == "") {
+            if (!requestURI.count() != 0) {
+                malformedRequest = false;
+                m_index->view(data, writer);
+            }
+        } else if (action == "read") {
+            if (!requestURI.count() != 1) {
+                data["uri-table"] = requestURI.at(0);
+                m_read->view(data, writer);
+                malformedRequest = false;
+            }
+        }
+
+        if (malformedRequest)
+            writer->writeNoCopy("<h1>Malformed Request</h1>");
 
         writer->writeNoCopy(pion::net::HTTPTypes::STRING_CRLF);
         writer->writeNoCopy(pion::net::HTTPTypes::STRING_CRLF);

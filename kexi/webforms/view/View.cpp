@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QHash>
 #include <QString>
 #include <QVariant>
 
@@ -41,7 +42,7 @@ namespace KexiWebForms {
             delete m_dict;
         }
 
-        void View::view(const QList<QString>&, pion::net::HTTPResponseWriterPtr ptr) {
+        void View::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr ptr) {
             kError() << "Not implemented" << endl;
         }
         

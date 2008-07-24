@@ -22,6 +22,8 @@
 #ifndef KEXIWEBFORMS_VIEW_INDEX_H
 #define KEXIWEBFORMS_VIEW_INDEX_H
 
+#include <QHash>
+
 #include "View.h"
 
 namespace KexiWebForms {
@@ -34,7 +36,7 @@ namespace View {
         Index(KexiWebForms::Controller& c, const char* name) : View(c, name) {};
         virtual ~Index() {}
 
-        virtual void view(const QList<QString>&, pion::net::HTTPResponseWriterPtr);
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
     };
     
 }

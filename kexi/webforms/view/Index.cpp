@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QList>
+#include <QHash>
 #include <QString>
 
 #include <pion/net/HTTPResponseWriter.hpp>
@@ -31,8 +31,8 @@
 namespace KexiWebForms {
 namespace View {
 
-    void Index::view(const QList<QString>& data, pion::net::HTTPResponseWriterPtr writer) {
-        //renderTemplate(m_dict, writer);
+    void Index::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr writer) {
+        renderTemplate(m_dict, writer);
     }
     
 }
