@@ -79,6 +79,7 @@ namespace KexiWebForms {
             schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
 
             KexiWebForms::Model::Database db;
+            db.updateCachedPkeys(requestedTable);
 
             /*!
              * @note We shouldn't use executeQuery otherwise the corresponding table will
@@ -86,31 +87,19 @@ namespace KexiWebForms {
              */
             KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
-            // Fill the cachedPkeys list
-            if (cachedPkeys[requestedTable].isEmpty()) {
-                kDebug() << "Cached Pkeys is empty, updating" << endl;
-                KexiDB::QuerySchema idSchema;
-                idSchema.addField(tableSchema.primaryKey()->field(0));
-                KexiDB::Cursor* idCursor = gConnection->executeQuery(idSchema);
-                while (idCursor->moveNext()) {
-                    kDebug() << "Appending " << idCursor->value(0).toUInt() << " to cache" << endl;
-                    cachedPkeys[requestedTable].append(idCursor->value(0).toUInt());
-                }
-                gConnection->deleteCursor(idCursor);
-            }
-
             // Retrieve current position in cache
-            for (int i = 0; i < cachedPkeys[requestedTable].size(); i++) {
-                if (cachedPkeys[requestedTable].at(i) == pkeyValueUInt)
+            QList<uint> cachedPkeys(db.getCachedPkeys(requestedTable));
+            for (int i = 0; i < cachedPkeys.size(); i++) {
+                if (cachedPkeys.at(i) == pkeyValueUInt)
                     current = i;
             }
 
             // Compute new primary key values for first, last, previous and next record
-            if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
+            if (current < uint( cachedPkeys.size()-1 )) {
                 m_dict->ShowSection("NEXT_ENABLED");
-                m_dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toUtf8().constData());
+                m_dict->SetValue("NEXT", QVariant(cachedPkeys.at(current+1)).toString().toUtf8().constData());
                 m_dict->ShowSection("LAST_ENABLED");
-                m_dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
+                m_dict->SetValue("LAST", QVariant(cachedPkeys.at(cachedPkeys.size()-1)).toString().toUtf8().constData());
             } else {
                 m_dict->ShowSection("NEXT_DISABLED");
                 m_dict->ShowSection("LAST_DISABLED");
@@ -118,12 +107,12 @@ namespace KexiWebForms {
 
             if (current > 0) {
                 m_dict->ShowSection("PREV_ENABLED");
-                m_dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toUtf8().constData());
+                m_dict->SetValue("PREV", QVariant(cachedPkeys.at(current-1)).toString().toUtf8().constData());
                 m_dict->ShowSection("FIRST_ENABLED");
-                m_dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
+                m_dict->SetValue("FIRST", QVariant(cachedPkeys.at(0)).toString().toUtf8().constData());
             } else {
                 m_dict->ShowSection("PREV_DISABLED");
-                 m_dict->ShowSection("FIRST_DISABLED");
+                m_dict->ShowSection("FIRST_DISABLED");
             }
 
 

@@ -135,5 +135,28 @@ namespace KexiWebForms {
             return result;
         }
 
+
+        bool Database::updateCachedPkeys(const QString& requestedTable) {
+            // FIXME: Check for errors
+            if (cachedPkeys[requestedTable].isEmpty()) {
+                kDebug() << "Cached Pkeys is empty, updating" << endl;
+                KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
+                KexiDB::QuerySchema idSchema;
+                idSchema.addField(tableSchema.primaryKey()->field(0));
+                KexiDB::Cursor* cursor = gConnection->executeQuery(idSchema);
+                while (cursor->moveNext()) {
+                    kDebug() << "Appending " << cursor->value(0).toUInt() << " to cache" << endl;
+                    cachedPkeys[requestedTable].append(cursor->value(0).toUInt());
+                }
+                cursor->close();
+                gConnection->deleteCursor(cursor);
+            }
+            return true;
+        }
+
+        const QList<uint>& Database::getCachedPkeys(const QString& requestedTable) {
+            return cachedPkeys[requestedTable];
+        }
+
     }
 }
