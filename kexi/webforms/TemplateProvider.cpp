@@ -64,34 +64,6 @@ namespace KexiWebForms {
         }
         
         dict->SetValue(keyName, HTML.toUtf8().constData());
-        
-        
-        /*QList<int> objectIds(gConnection->objectIds( objectType ));
-        QMap<QString, QString> objectNamesForCaptions;
-        foreach (const int id, objectIds) {
-            KexiDB::SchemaData schema;
-            tristate res = gConnection->loadObjectSchemaData( id, schema );
-            if (res != true)
-                continue;
-            objectNamesForCaptions.insertMulti( 
-                schema.captionOrName(), schema.name() ); //insertMulti() because there can be many objects with the same caption
-        }
-        QStringList objectCaptionsSorted( objectNamesForCaptions.uniqueKeys() );
-        kDebug() << objectCaptionsSorted;
-        qSort(objectCaptionsSorted.begin(), objectCaptionsSorted.end(), caseInsensitiveLessThan);
-        kDebug() << objectCaptionsSorted;
-        const QString itemString( QString::fromLatin1("<li><a href=\"/") + objectTypeName + QString::fromLatin1("/%1\">%2</a></li>\n") );
-        QString result;
-        foreach (const QString& caption, objectCaptionsSorted) {
-            QStringList names( objectNamesForCaptions.values( caption ) );
-            qSort(names); // extra sort :)
-            kDebug() << names;
-            foreach (const QString& name, names) {
-                kDebug() << name << caption;
-                result.append( itemString.arg(name).arg(Qt::escape(caption)) );
-            }
-        }
-        dict->SetValue(keyName, result.toUtf8().constData());*/
     }
 
     google::TemplateDictionary* initTemplate(const char* filename) {
@@ -105,40 +77,7 @@ namespace KexiWebForms {
         // Add footer template (-- note, this includes the left menu with the standard template)
         google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
         afterDict->SetFilename("aftercontent.tpl");
-
-        // Add objects to the left menu
-        //KexiWebForms::Model::Database db;
-        /*QHash<QString, QString> tableNames(db.getNames(KexiDB::TableObjectType));
-        QHash<QString, QString> queryNames(db.getNames(KexiDB::QueryObjectType));
-        //addList(tableNames);
-        //addList(queryNames);
-        QStringList tableCaptions(tableNames.uniqueKeys());
-        QStringList queryCaptions(queryNames.uniqueKeys());
-        qSort(tableCaptions.begin(), tableCaptions.end(), caseInsensitiveLessThan);
-        qSort(queryCaptions.begin(), queryCaptions.end(), caseInsensitiveLessThan);
-
-        QString tablesHTML;
-        foreach (const QString& caption, tableCaptions) {
-            QStringList names(tableNames.values(caption));
-            foreach (const QString& name, names) {
-                tablesHTML.append(QString::fromLatin1("\t<li><a href=\"/read/%1\">%2</a></li>\n").arg(name).arg(caption));
-            }
-        }
-
-        QString queriesHTML;
-        foreach (const QString& caption, queryCaptions) {
-            QStringList names(queryNames.values(caption));
-            foreach (const QString& name, names) {
-                queriesHTML.append(QString::fromLatin1("<li><a href=\"/query/%1\">%2</a></li>").arg(name).arg(caption));
-            }
-            }
         
-        kDebug() << "TABLES HTML: " << tablesHTML << endl;
-        afterDict->SetValue("TABLE_LIST", tablesHTML.toLatin1().constData());
-        afterDict->SetValue("QUERY_LIST", queriesHTML.toLatin1().constData());*/
-        
-        //qSort(
-        //foreach (
         addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
         addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");
         return dict;
