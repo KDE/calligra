@@ -96,7 +96,7 @@ namespace KexiWebForms {
             QString formData;
             QStringList fieldsList;
             
-            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data = db.getSchema(requestedTable);
+            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable));
             QList< QPair<QString, QString> > dataKeys(data.keys());
 
             // WORK AROUND
