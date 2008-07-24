@@ -1185,12 +1185,15 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             SheetView* const sheetView = this->sheetView(selection()->activeSheet());
 
             // Filter button hit.
+            const double offsetX = m_canvas->canvasController()->canvasOffsetX();
+            const double offsetY = m_canvas->canvasController()->canvasOffsetY();
             const QPointF p1 = QPointF(xpos, ypos) - offset(); // the shape offset, not the scrolling one.
             const QSizeF s1(cell.width(), cell.height());
-            const QRect cellRect = m_canvas->viewConverter()->documentToView(QRectF(p1, s1)).toRect();
-            if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellRect, event->pos())) {
+            const QRectF cellRect = m_canvas->viewConverter()->documentToView(QRectF(p1, s1));
+            const QRect cellViewRect = cellRect.translated(offsetX, offsetY).toRect();
+            if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellViewRect, event->pos())) {
                 Database database = cell.database();
-                database.showPopup(m_canvas->canvasWidget(), cell, cellRect);
+                database.showPopup(m_canvas->canvasWidget(), cell, cellViewRect);
                 return 0; // Act directly; no further strategy needed.
             }
 
