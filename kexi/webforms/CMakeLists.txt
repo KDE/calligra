@@ -20,6 +20,9 @@ set(webforms_SRCS
   view/Index.cpp
   view/Create.cpp
   view/Read.cpp
+  view/Update.cpp
+  view/Delete.cpp
+  view/Query.cpp
   view/TemplateProvider.cpp
 # Controller
   Controller.cpp
