@@ -35,6 +35,8 @@
 
 #include <google/template.h>
 
+#include "model/Database.h"
+
 #include "auth/Authenticator.h"
 #include "auth/User.h"
 #include "auth/Permission.h"
@@ -50,7 +52,7 @@ namespace KexiWebForms {
 
     void UpdateService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
         HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
-                    boost::bind(&TCPConnection::finish, tcp_conn)));
+                                                                boost::bind(&TCPConnection::finish, tcp_conn)));
 
         PionUserPtr userPtr(request->getUser());
         Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
@@ -76,10 +78,12 @@ namespace KexiWebForms {
             KexiDB::QuerySchema schema(tableSchema);
             schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
 
+            KexiWebForms::Model::Database db;
+
             /*!
-            * @note We shouldn't use executeQuery otherwise the corresponding table will
-            * be locked and we won't be able to update it
-            */
+             * @note We shouldn't use executeQuery otherwise the corresponding table will
+             * be locked and we won't be able to update it
+             */
             KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
             // Fill the cachedPkeys list
@@ -141,8 +145,8 @@ namespace KexiWebForms {
                     cursor = gConnection->prepareQuery(schema);
 
                     QStringList fieldsList(QUrl::fromPercentEncoding(QString(
-                            request->getQuery("tableFields").c_str()).toUtf8()
-                    ).split("|:|"));
+                                                                         request->getQuery("tableFields").c_str()).toUtf8()
+                                               ).split("|:|"));
                     kDebug() << "Fields: " << fieldsList;
 
                     QStringListIterator iterator(fieldsList);
@@ -156,10 +160,10 @@ namespace KexiWebForms {
                         if (schema.field(fieldId)->name() == pkeyName) {
                             recordData.insert(fieldId, pkeyValue);
                             /**
-                            * @note No need to fill other primary key values.
-                            * As reported by Jaroslaw KexiDB supports multi pkey
-                            * tables but the table designer not
-                            */
+                             * @note No need to fill other primary key values.
+                             * As reported by Jaroslaw KexiDB supports multi pkey
+                             * tables but the table designer not
+                             */
                             break;
                         }
                     }
@@ -170,8 +174,8 @@ namespace KexiWebForms {
                     while (iterator.hasNext()) {
                         QString currentFieldName(iterator.next());
                         QString currentFieldValue(QUrl::fromPercentEncoding(QString(
-                            request->getQuery(currentFieldName.toUtf8().constData()).c_str()).toUtf8()
-                        ));
+                                                                                request->getQuery(currentFieldName.toUtf8().constData()).c_str()).toUtf8()
+                                                      ));
                         // safeQString currentFieldValue(request->getQuery(currentFieldName.toUtf8().constData()).c_str());
 
                         /*! @fixme This removes pluses */
@@ -205,42 +209,36 @@ namespace KexiWebForms {
 
                 m_dict->ShowSection("FORM");
 
+                
                 QString formData;
                 QStringList formFieldsList;
 
-                while (cursor->moveNext()) {
-                    for (uint i = 0; i < cursor->fieldCount(); i++) {
-                        KexiDB::Field* currentField = schema.field(i);
-                        KexiDB::Field* primaryKey = tableSchema.primaryKey()->field(0);
-                        const KexiDB::Field::Type type = currentField->type();
-                        QString fieldName(currentField->name());
+                QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable,
+                                                                                                       pkeyName, pkeyValue.toInt()));
+                QList< QPair<QString, QString> > dataKeys(data.keys());
 
-                        formData.append("<tr>");
-                        formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
-
-                        if (type == KexiDB::Field::BLOB) {
-                            formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/></td>")
-                                .arg(requestedTable).arg(currentField->name()).arg(primaryKey->name())
-                                .arg(cursor->value(tableSchema.indexOf(primaryKey)).toString()));
-                        } else if (type == KexiDB::Field::LongText) {
-                            formData.append(QString("<td><textarea name=\"%1\">%2</textarea></td>")
-                                .arg(fieldName).arg(cursor->value(i).toString()));
-                        } else {
-                            formData.append(QString("<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>")
-                                .arg(fieldName).arg(cursor->value(i).toString()));
-                        }
-
-                        // Field properties images
-                        formData.append("<td>");
-                        currentField->isAutoIncrement() ? formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
-                        currentField->isPrimaryKey() ? formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
-                        ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
-                        formData.append("</td>");
-
-                        formData.append("</tr>");
-                        formFieldsList << fieldName;
+                // WORK AROUND
+                typedef QPair<QString, QString> QCaptionNamePair;
+                
+                // FIXME: Regression, no icons, this way
+                foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
+                    formData.append("\t<tr>\n");
+                    QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
+                    formData.append("\t\t<td>").append(captionNamePair.first).append("</td>\n");
+                    if (valueTypePair.second == KexiDB::Field::LongText) {
+                        formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
+                    } else if (valueTypePair.second == KexiDB::Field::BLOB) {
+                        formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/></td>")
+                                        .arg(requestedTable).arg(captionNamePair.second).arg(pkeyName)
+                                        .arg(pkeyValue));
+                    } else {
+                        formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
+                                        .arg(captionNamePair.second).arg(valueTypePair.first));
                     }
+                    formData.append("\t</tr>\n");
+                    formFieldsList << captionNamePair.second;
                 }
+                
                 setValue("TABLEFIELDS", formFieldsList.join("|:|"));
                 setValue("FORMDATA", formData);
 
