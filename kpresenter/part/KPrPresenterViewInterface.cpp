@@ -42,13 +42,14 @@
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 
+#include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
 
 /* KPrPresenterViewBaseInterface */
-KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface( KoPADocument *document, QWidget *parent )
+KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
     : QWidget( parent )
-    , m_document( document )
+    , m_pages( pages )
 {
 }
 
@@ -61,8 +62,8 @@ void KPrPresenterViewBaseInterface::setActivePage( KoPAPageBase *page )
  * This widget is the main interface, this widget shows current slide, next slide
  * and the presenter's notes
  */
-KPrPresenterViewInterface::KPrPresenterViewInterface( KoPADocument *document, KoPACanvas *canvas, QWidget *parent )
-    : KPrPresenterViewBaseInterface( document, parent )
+KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
+    : KPrPresenterViewBaseInterface( pages, parent )
     , m_canvas( canvas )
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
@@ -106,15 +107,26 @@ void KPrPresenterViewInterface::setActivePage( KoPAPageBase *page )
 {
     KPrPresenterViewBaseInterface::setActivePage( page );
 
+    int currentIndex = m_pages.indexOf( page );
+    int pageCount = dynamic_cast<KPrEndOfSlideShowPage *>( m_pages.last() ) ?
+            m_pages.count() - 1 : m_pages.count();
+
     // set the thumbnail for next page preview
-    KoPAPageBase *nextPage = m_document->pageByNavigation( page, KoPageApp::PageNext );
-    if ( nextPage ) {
+    KoPAPageBase *nextPage = 0;
+    if ( currentIndex != m_pages.count() - 1 && currentIndex != -1 ) {
+        nextPage = m_pages.at( currentIndex + 1 );
         m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
+    }
+    else { // End of presentation, just a black pixmap for the next slide preview
+        QPixmap pixmap( m_previewSize );
+        pixmap.fill( Qt::black );
+        m_nextSlidePreview->setPixmap( pixmap );
     }
 
     // update the label
-    int slideIndex = m_document->pageIndex( page ) + 1;
-    m_currentSlideLabel->setText( i18n( "Current Slide %1 of %2", slideIndex, m_document->pageCount() )  );
+    m_currentSlideLabel->setText( currentIndex != -1 ? 
+            i18n( "Current Slide %1 of %2", currentIndex + 1, pageCount ) : 
+            i18n( "End of Slide Show" ) );
 
     // set the presentation notes
     KPrPage *prPage = dynamic_cast<KPrPage *>( page );
@@ -132,22 +144,30 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
     m_previewSize = size;
     m_canvas->setFixedSize( size );
 
-    KoPAPageBase *nextPage = m_document->pageByNavigation( m_activePage, KoPageApp::PageNext );
-    if ( nextPage ) {
-        m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
+    // set the thumbnail for next page preview
+    int currentIndex = m_pages.indexOf( m_activePage );
+
+    Q_ASSERT( currentIndex != -1 );
+    KoPAPageBase *nextPage = 0;
+    if ( currentIndex != m_pages.count() - 1 ) {
+        nextPage = m_pages.at( currentIndex + 1 );
     }
+    else {
+        nextPage = m_activePage;
+    }
+    m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
 }
 
 /* KPrPresenterViewSlidesInterface
  * This widget shows all slides in the presentation
  */
-KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( KoPADocument *document, QWidget *parent )
-    : KPrPresenterViewBaseInterface( document, parent )
+KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
+    : KPrPresenterViewBaseInterface( pages, parent )
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
 
     m_listView = new QListView;
-    m_thumbnailModel = new KoPAPageThumbnailModel( m_document->pages( false ), this );
+    m_thumbnailModel = new KoPAPageThumbnailModel( m_pages, this );
     m_listView->setModel( m_thumbnailModel );
     m_listView->setDragDropMode( QListView::NoDragDrop );
     m_listView->setIconSize( QSize( 128, 128 ) );

@@ -42,7 +42,7 @@
 #include "KPrPresenterViewInterface.h"
 #include "KPrViewModePresentation.h"
 
-KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, KoPACanvas *canvas, QWidget *parent )
+KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : QWidget( parent )
     , m_viewMode( viewMode )
     , m_canvas( canvas )
@@ -52,10 +52,10 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
     vLayout->setContentsMargins( 20, 20, 20, 0 );
 
     m_stackedLayout = new QStackedLayout;
-    m_mainWidget = new KPrPresenterViewInterface( m_canvas->document(), m_canvas );
+    m_mainWidget = new KPrPresenterViewInterface( pages, m_canvas );
     m_stackedLayout->addWidget( m_mainWidget );
 
-    m_slidesWidget = new KPrPresenterViewSlidesInterface( m_canvas->document() );
+    m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
     m_stackedLayout->addWidget( m_slidesWidget );
     connect( m_slidesWidget, SIGNAL( selectedPageChanged( KoPAPageBase *, bool ) ), this,
             SLOT( requestChangePage( KoPAPageBase *, bool ) ) );

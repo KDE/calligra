@@ -39,7 +39,7 @@ class KPrPresenterViewBaseInterface : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewBaseInterface( KoPADocument *document, QWidget *parent = 0 );
+    KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
 public slots:
     virtual void setActivePage( KoPAPageBase *page );
@@ -48,7 +48,7 @@ signals:
     void activeSlideChanged( KoPAPageBase *page );
 
 protected:
-    KoPADocument *m_document;
+    QList<KoPAPageBase *> m_pages;
     KoPAPageBase *m_activePage;
 };
 
@@ -56,7 +56,7 @@ class KPrPresenterViewInterface : public KPrPresenterViewBaseInterface
 {
     Q_OBJECT
 public:
-    KPrPresenterViewInterface( KoPADocument *document, KoPACanvas *canvas, QWidget *parent = 0 );
+    KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
 
     void setPreviewSize( const QSize &size );
 
@@ -76,7 +76,7 @@ class KPrPresenterViewSlidesInterface : public KPrPresenterViewBaseInterface
 {
     Q_OBJECT
 public:
-    KPrPresenterViewSlidesInterface( KoPADocument *document, QWidget *parent = 0 );
+    KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
 signals:
     void selectedPageChanged( KoPAPageBase *page, bool doubleClicked );

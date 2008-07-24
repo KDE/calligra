@@ -88,6 +88,7 @@ protected:
     KPrPresenterViewWidget * m_presenterViewWidget;
 
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
+    KPrEndOfSlideShowPage * m_pvEndOfSlideShowPage;
 };
 
 #endif /* KPRVIEWMODEPRESENTATION_H */
