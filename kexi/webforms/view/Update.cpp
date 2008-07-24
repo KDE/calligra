@@ -101,8 +101,7 @@ namespace View {
             if (d["dataSent"] == "true") {
                     
 
-                QString tableFields(d["tableFields"]);
-                QStringList fieldsList(QUrl::fromPercentEncoding(tableFields.toUtf8()));
+                QStringList fieldsList(d["tableFields"].split("|:|"));
 
                 QHash<QString, QVariant> data;
                 foreach(const QString& field, fieldsList) {
