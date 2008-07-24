@@ -12,22 +12,21 @@ include_directories(
 add_definitions(-fexceptions)
 
 set(webforms_SRCS
+  DataProvider.cpp
+  TemplateProvider.cpp
+  WebFormsService.cpp
 # Model
-  model/DataProvider.cpp
   model/Database.cpp
-# View
-  view/View.cpp
-  view/Index.cpp
-  view/Create.cpp
-  view/Read.cpp
-  view/Update.cpp
-  view/Delete.cpp
-  view/Query.cpp
-  view/TemplateProvider.cpp
-# Controller
-  Controller.cpp
+# Index view
+  IndexService.cpp
+# CRUD
+  CreateService.cpp
+  ReadService.cpp
+  UpdateService.cpp
+  DeleteService.cpp
 # Other services
   FileService.cpp
+  QueryService.cpp
   BlobService.cpp
 # Authentication framework
   auth/Authenticator.cpp

@@ -18,38 +18,26 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_VIEW_UPDATE_H
-#define KEXIWEBFORMS_VIEW_UPDATE_H
+#ifndef KEXIWEBFORMS_INDEXSERVICE_H
+#define KEXIWEBFORMS_INDEXSERVICE_H
 
-#include <QHash>
-
-#include <pion/net/HTTPResponseWriter.hpp>
-
-#include "View.h"
-
-class QString;
+#include "WebFormsService.h"
 
 namespace KexiWebForms {
-    
-    class Controller;
-    
-namespace View {    
 
     /**
-     * @brief WebService handling the update page
+     * @brief WebService handling the index page
      *
-     * This service creates a form out of table fields and allows to update
-     * values in a particular row.
+     * This service is responsible to show a the welcome page and a list of
+     * tables and queries in the database
      */
-    class Update : public View {
+    class IndexService : public WebFormsService {
     public:
-        Update(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
-        virtual ~Update() {}
-
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+        IndexService(const char* name) : WebFormsService(name) {}
+        virtual ~IndexService() {}
+        
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
     };
-
-}
 }
 
-#endif /* KEXIWEBFORMS_VIEW_UPDATE_H */
+#endif /* KEXIWEBFORMS_INDEXSERVICE_H */

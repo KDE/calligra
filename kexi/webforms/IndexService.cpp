@@ -18,46 +18,41 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
-
-#include <KDebug>
-
-#include <kexidb/utils.h>
-#include <kexidb/cursor.h>
-#include <kexidb/queryschema.h>
+#include <string>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "model/DataProvider.h"
+#include <google/template.h>
+
+#include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Delete.h"
+#include "IndexService.h"
 
 using namespace pion::net;
 
+/*! @short Kexi Web Forms namespace
+ * This namespace contains code related to Kexi Web Forms daemon
+ *
+ * Kexi Web Forms daemon allows users to modify a Kexi database
+ * even if they don't have Kexi Installed
+ */
 namespace KexiWebForms {
-namespace View {
     
-    void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        /// @todo ensure that there's the correct number of parameters
-        QString requestedTable(d["uri-table"]);
-        QString pkeyName(d["uri-pkey"]);
-        QString pkeyValue(d["uri-pval"]);
-        
-        setValue("TABLENAME", requestedTable);
-        
-        kDebug() << "Trying to delete row..." << endl;
-        if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
-                              pkeyName, pkeyValue)) {
-            m_dict->ShowSection("SUCCESS");
-            setValue("MESSAGE", "Row deleted successfully");
-        } else {
-            m_dict->ShowSection("ERROR");
-            /// @todo retrieve proper error message
-            setValue("MESSAGE", "Error while trying to delete row!");
+    void IndexService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
+                    
+
+        /* Useless, for now */
+        /*QString tables;
+        for (int i = 0; i < gConnection->tableNames().size(); ++i) {
+            tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
+            tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
         }
+        setValue("TABLES", tables);*/
+
         renderTemplate(m_dict, writer);
     }
 
-}
 }

@@ -18,41 +18,26 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
-#include <QVariant>
-
-#include <kexidb/cursor.h>
-
-#include <google/template.h>
-
-#include "DataProvider.h"
-#include "TemplateProvider.h"
+#ifndef KEXIWEBFORMS_READSERVICE_H
+#define KEXIWEBFORMS_READSERVICE_H
 
 #include "WebFormsService.h"
 
 namespace KexiWebForms {
 
-    WebFormsService::WebFormsService() {}
-    
-    WebFormsService::WebFormsService(const char* name) : pion::net::WebService() {
-        m_dict = initTemplate(name);
-    }
+    /**
+     * @brief WebService handling the read page
+     *
+     * This service lists records in a particular database table
+     */
+    class ReadService : public WebFormsService {
+    public:
+        ReadService(const char* name) : WebFormsService(name) {}
+        virtual ~ReadService() {}
 
-    WebFormsService::~WebFormsService() {
-        m_cursor->close();
-        gConnection->deleteCursor(m_cursor);
-        delete m_cursor;
-        delete m_dict;
-    }
-    
-    void WebFormsService::setValue(const char* k, const QVariant& v) {
-        setValue(k, v.toString());
-    }
-    void WebFormsService::setValue(const char* k, const QString& v) {
-        setValue(k, v.toUtf8().constData());
-    }
-    void WebFormsService::setValue(const char* k, const char* v) {
-        m_dict->SetValue(k, v);
-    }
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+    };
     
 }
+
+#endif /* KEXIWEBFORMS_READSERVICE_H */

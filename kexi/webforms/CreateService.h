@@ -19,27 +19,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIWEBFORMS_VIEW_INDEX_H
-#define KEXIWEBFORMS_VIEW_INDEX_H
+#ifndef KEXIWEBFORMS_CREATESERVICE_H
+#define KEXIWEBFORMS_CREATESERVICE_H
 
-#include <QHash>
+#include "WebFormsService.h"
 
-#include "View.h"
+struct RequestData;
 
 namespace KexiWebForms {
-    class Controller;
-    
-namespace View {
 
-    class Index : public View {
+    /**
+     * @brief WebService handling the create page
+     *
+     * This service produces a form out of table fields and allows to create
+     * new records
+     */
+    class CreateService : public WebFormsService {
     public:
-        Index(KexiWebForms::Controller& c, const char* name) : View(c, name) {};
-        virtual ~Index() {}
+        CreateService(const char* name) : WebFormsService(name) {}
+        virtual ~CreateService() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
     };
-    
-}
 }
 
-#endif /* KEXIWEBFORMS_VIEW_INDEX_H */
+#endif /* KEXIWEBFORMS_CREATESERVICE_H */

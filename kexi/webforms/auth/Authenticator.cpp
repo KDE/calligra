@@ -31,7 +31,7 @@
 #include <pion/net/HTTPAuth.hpp>
 
 #include "Permission.h"
-#include "../model/DataProvider.h"
+#include "DataProvider.h"
 
 #include "Authenticator.h"
 

@@ -35,11 +35,13 @@
 
 #include "ShutdownManager.hpp"
 
-#include "model/DataProvider.h"
+#include "DataProvider.h"
 
-#include "Controller.h"
 #include "FileService.hpp"
+#include "IndexService.h"
+#include "QueryService.h"
 #include "BlobService.h"
+#include "CRUD.h"
 #include "auth/Authenticator.h"
 
 using namespace pion::net;
@@ -82,6 +84,13 @@ int main(int argc, char **argv) {
     google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
+    
+    IndexService indexService("index.tpl");
+    CreateService createService("create.tpl");
+    ReadService readService("read.tpl");
+    UpdateService updateService("update.tpl");
+    DeleteService deleteService("delete.tpl");
+    QueryService queryService("query.tpl");
 
     // Plugins
     pion::plugins::FileService fileService;
@@ -98,9 +107,13 @@ int main(int argc, char **argv) {
     HTTPAuthPtr auth(new HTTPCookieAuth(userMan));
     KexiWebForms::Auth::Authenticator::init(auth);
     
-    // Bind controller
-    Controller controller;
-    server.addService("/", &controller);
+    // Standard services
+    server.addService("/", &indexService);
+    server.addService("/create", &createService);
+    server.addService("/read", &readService);
+    server.addService("/update", &updateService);
+    server.addService("/delete", &deleteService);
+    server.addService("/query", &queryService);
     
     // Restrict CRUD operations (and BlobService) to registered users
     // filtered using our permissions manager
@@ -109,7 +122,7 @@ int main(int argc, char **argv) {
     auth->addRestrict("/update");
     auth->addRestrict("/delete");
     auth->addRestrict("/blob");
-    
+
     // File and blob service
     server.addService("/f", &fileService);
     server.addService("/blob", &blobService);

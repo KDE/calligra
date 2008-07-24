@@ -22,14 +22,10 @@
 #ifndef KEXIWEBFORMS_MODEL_DATABASE_H
 #define KEXIWEBFORMS_MODEL_DATABASE_H
 
-#include <QPair>
 #include <QHash>
-#include <kexidb/field.h>
 
-namespace KexiDB {
-    class TableSchema;
-}
 class QString;
+//class QMap;
 
 namespace KexiWebForms {
     namespace Model {
@@ -41,36 +37,15 @@ namespace KexiWebForms {
             
             /**
              * Get all table names
-             * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
-             * @return QHash with captions as keys and object names as values
              */
             QHash<QString, QString> getNames(KexiDB::ObjectTypes);
-
+            
             /**
-             * Get the schema of a table
-             * @param QString& table name
-             * @return a QHash with a QPair representing field caption and field name as key and
-             *    a QPair representing the field value (if any) and the type as value 
-             */
-            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > getSchema(const QString&,
-                                                                                     const QString& pkey = "",
-                                                                                     const uint pkeyValue = 0);
-
-            /**
-             * Despite its name, this method is useful when creating new rows, too
-             * Create/Update a row in a given table
+             * Create a new record
              * @param QString& the table name
-             * @param QHash<QString, QVariant> a Hash with Name/Value pairs
-             * @param create create a new row, instead of trying to update it
+             * @param QMap<const QString&, const QString&>& 
              */
-            bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
-
-            KexiDB::TableSchema* tableSchema(const QString& name);
-
-            bool updateCachedPkeys(const QString&);
-            const QList<uint>& getCachedPkeys(const QString&);
-        private:
-            QHash< QString, QList<uint> > cachedPkeys;
+            //bool create(const QString&, const QMap<const QString&, const QString&>&);
         };
         
     }

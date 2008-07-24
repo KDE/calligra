@@ -39,7 +39,7 @@
 #include "auth/User.h"
 #include "auth/Permission.h"
 
-#include "model/DataProvider.h"
+#include "DataProvider.h"
 
 #include "BlobService.h"
 

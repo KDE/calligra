@@ -22,17 +22,16 @@
 
 #include <QtAlgorithms>
 #include <QTextDocument>
-
+#include <QList>
 #include <KDebug>
 
 #include <core/kexipartinfo.h>
 #include <core/kexipartitem.h>
-
 #include <google/template.h>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "model/Database.h"
+#include "DataProvider.h"
 
 #include "TemplateProvider.h"
 
@@ -48,23 +47,35 @@ namespace KexiWebForms {
     // Step 1: Fill the queryNames stringlist
     // Step 2: Sort it
     // Step 3: Write the links
-    static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, const char* uri, const char* keyName)
+    static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, 
+      const QString& objectTypeName, const char* keyName)
     {
-        KexiWebForms::Model::Database db;
-        QHash<QString, QString> oNames(db.getNames(objectType));
-        QStringList captions(oNames.uniqueKeys());
-        qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
-        
-        QString HTML;
-        foreach (const QString& caption, captions) {
-            QStringList names(oNames.values(caption));
+        QList<int> objectIds(gConnection->objectIds( objectType ));
+        QMap<QString, QString> objectNamesForCaptions;
+        foreach (const int id, objectIds) {
+            KexiDB::SchemaData schema;
+            tristate res = gConnection->loadObjectSchemaData( id, schema );
+            if (res != true)
+                continue;
+            objectNamesForCaptions.insertMulti( 
+                schema.captionOrName(), schema.name() ); //insertMulti() because there can be many objects with the same caption
+        }
+        QStringList objectCaptionsSorted( objectNamesForCaptions.uniqueKeys() );
+        kDebug() << objectCaptionsSorted;
+        qSort(objectCaptionsSorted.begin(), objectCaptionsSorted.end(), caseInsensitiveLessThan);
+        kDebug() << objectCaptionsSorted;
+        const QString itemString( QString::fromLatin1("<li><a href=\"/") + objectTypeName + QString::fromLatin1("/%1\">%2</a></li>\n") );
+        QString result;
+        foreach (const QString& caption, objectCaptionsSorted) {
+            QStringList names( objectNamesForCaptions.values( caption ) );
+            qSort(names); // extra sort :)
+            kDebug() << names;
             foreach (const QString& name, names) {
-                if (!(name == "kexi__users")) //! @note temporary work around
-                    HTML.append(QString::fromLatin1("\t<li><a href=\"/%1/%2\">%3</a></li>\n").arg(uri).arg(name).arg(caption));
+                kDebug() << name << caption;
+                result.append( itemString.arg(name).arg(Qt::escape(caption)) );
             }
         }
-        
-        dict->SetValue(keyName, HTML.toUtf8().constData());
+        dict->SetValue(keyName, result.toUtf8().constData());
     }
 
     google::TemplateDictionary* initTemplate(const char* filename) {
@@ -73,12 +84,13 @@ namespace KexiWebForms {
         // Add header template
         google::TemplateDictionary* beforeDict = dict->AddIncludeDictionary("beforecontent");
         beforeDict->SetFilename("beforecontent.tpl");
-        //beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
+        beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
 
         // Add footer template (-- note, this includes the left menu with the standard template)
         google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
         afterDict->SetFilename("aftercontent.tpl");
-        
+
+        // Add objects to the left menu
         addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
         addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");
         return dict;
@@ -88,6 +100,9 @@ namespace KexiWebForms {
         std::string output;
         google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);
         writer->writeNoCopy(output);
+        writer->writeNoCopy(HTTPTypes::STRING_CRLF);
+        writer->writeNoCopy(HTTPTypes::STRING_CRLF);
+        writer->send();
     }
 
 }

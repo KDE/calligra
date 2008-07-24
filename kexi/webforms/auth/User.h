@@ -31,8 +31,6 @@ namespace Auth {
 
     class User {
     public:
-        User() : m_name("anonymous"), m_password("guest") {}
-        
         User(const char* name, const char* password) :
             m_name(name), m_password(password) {}
         

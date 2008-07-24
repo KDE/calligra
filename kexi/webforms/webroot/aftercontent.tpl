@@ -29,8 +29,8 @@
         </div></div>
         <ul>
             <form action="/login" method="get">
-                <input style="width: 90%" type="text" name="user" value="root"/>
-                <input style="width: 90%" type="text" name="pass" value="root"/>
+                <input style="width: 90%" type="text" name="user" value="User name"/>
+                <input style="width: 90%" type="text" name="pass" value="Password"/>
                 <input type="submit" value="Login"/>
                 <input type="reset" value="Reset"/>
             </form>
