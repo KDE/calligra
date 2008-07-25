@@ -135,6 +135,9 @@ PlotArea::PlotArea( ChartShape *parent )
     : d( new Private )
     , KoShape()
 {
+    Q_ASSERT( parent );
+    
+    setShapeId( ChartShapeId );
     d->shape = parent;
 }
 
@@ -824,7 +827,7 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
         d->kdChart->paint( &pixmapPainter, QRect( QPoint( borderX, borderY ), QSize( plotAreaSize.width() - 2 * borderX, plotAreaSize.height() - 2 * borderY ) ) );
     } else {
         // Paint the background
-        painter.fillRect( paintRect, QColor( 255, 255, 255, 0 ) );
+        // painter.fillRect( paintRect, QColor( 255, 255, 255, 0 ) );
     
         // scale the painter's coordinate system to fit the current zoom level
         applyConversion( painter, converter );

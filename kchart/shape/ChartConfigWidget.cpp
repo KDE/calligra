@@ -332,9 +332,26 @@ ChartConfigWidget::~ChartConfigWidget()
 void ChartConfigWidget::open( KoShape* shape )
 {
     d->shape = dynamic_cast<ChartShape*>( shape );
-    Q_ASSERT( d->shape );
+    
 
-    kDebug() << "Chart has" << d->shape->model() << "as model.";
+    if ( !d->shape )
+    {
+        PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
+        if ( plotArea )
+        {
+            d->shape = plotArea->parent();
+            d->ui.tabWidget->setCurrentIndex( 0 );
+        }
+        else
+        {
+            Legend *legend = dynamic_cast<Legend*>( shape );
+            Q_ASSERT( legend ); // No shape we support
+            d->shape = dynamic_cast<ChartShape*>( legend->parent() );
+            Q_ASSERT( d->shape );
+            d->ui.tabWidget->setCurrentIndex( 2 );
+        }
+    }
+
     KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
     TableModel *tableModel = qobject_cast<TableModel*>( d->shape->model() );
     d->sourceIsSpreadSheet = spreadSheetModel != 0 && tableModel == 0;

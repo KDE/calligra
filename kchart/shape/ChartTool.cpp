@@ -161,17 +161,37 @@ void ChartTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void ChartTool::activate( bool )
 {
+    KoShape *selectedShape = 0;
+    
     // Get the shape that the tool is working on. 
     // Let d->shape point to it.
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape *shape, selection->selectedShapes() ) {
         d->shape = dynamic_cast<ChartShape*>( shape );
-        if ( d->shape ) {
+        if ( !d->shape ) {
+            PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
+            if ( plotArea )
+            {
+                selectedShape = plotArea;
+                d->shape = plotArea->parent();
+            }
+            else
+            {
+                Legend *legend = dynamic_cast<Legend*>( shape );
+                if ( legend )
+                {
+                    selectedShape = legend;
+                    d->shape = dynamic_cast<ChartShape*>( legend->parent() );
+                }
+            }
+        }
+        
+        if ( selectedShape ) {
             foreach (QWidget *w, optionWidgets().values()) {
                 KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
                 Q_ASSERT(widget);
                 if (widget)
-                    widget->open(d->shape);
+                    widget->open( selectedShape );
             }
             break;
         }
