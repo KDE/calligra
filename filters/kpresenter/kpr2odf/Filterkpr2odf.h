@@ -65,6 +65,7 @@ private:
     void appendPoly( KoXmlWriter* content, const KoXmlElement& objectElement, bool polygon );
     void appendPolygon( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendAutoform( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendArrow( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendFreehand( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendBezier( KoXmlWriter* content, const KoXmlElement& objectElement );
 
@@ -85,6 +86,7 @@ private:
     const QString createHatchStyle( int brushStyle, QString fillColor );
     const QString createParagraphStyle( const KoXmlElement& element );
     const QString createTextStyle( const KoXmlElement& element );
+    const QString createListStyle( const KoXmlElement& element );
 
     QString convertBorder( const KoXmlElement& border );
 

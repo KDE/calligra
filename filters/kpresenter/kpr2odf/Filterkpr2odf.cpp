@@ -58,31 +58,41 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     //Check that the type of files are right
     if( from != "application/x-kpresenter"
          || to != "application/vnd.oasis.opendocument.presentation" )
+    {
         return KoFilter::BadMimeType;
+    }
 
     //open the input file file
     KoStore* input = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
     if( !input )
+    {
         return KoFilter::FileNotFound;
+    }
 
     //Load the document
      //Load maindoc.xml
     if( !input->open( "maindoc.xml" ) )
+    {
         return KoFilter::WrongFormat;
+    }
     m_mainDoc.setContent( input->device(), false );
     input->close();
 
      //Load documentinfo.xml
     if( !input->open( "documentinfo.xml" ) )
+    {
         return KoFilter::WrongFormat;
+    }
 
     m_documentInfo.setContent( input->device(), false );
     input->close();
 
      //Load the preview picture
      QByteArray* preview = new QByteArray();
-     if( !input->extractFile("preview.png", *preview) )
+     if( !input->extractFile( "preview.png", *preview ) )
+     {
          return KoFilter::WrongFormat;
+     }
 
     //If we find everything let the saving begin
 
@@ -559,9 +569,16 @@ void Filterkpr2odf::appendTextBox( KoXmlWriter* content, const KoXmlElement& obj
 
 void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
+    KoXmlElement counter = objectElement.namedItem( "COUNTER" ).toElement();
+    if( !counter.isNull() ) //it's part of a list
+    {
+            content->startElement( "text:numbered-paragraph" );
+            content->addAttribute( "text:style-name", createListStyle( objectElement ) );
+            content->addAttribute( "text:level", counter.attribute( "depth", "0" ).toInt() + 1 );
+    }
+
     content->startElement( "text:p", false );//false: we should not indent the inner tags
     content->addAttribute( "text:style-name", createParagraphStyle( objectElement ) );
-
     //convert every text element
     for( KoXmlElement text = objectElement.firstChild().toElement(); !text.isNull();  text = text.nextSibling().toElement() )
     {
@@ -570,8 +587,12 @@ void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& o
             appendText( content, text );
         }
     }
-
     content->endElement();//text:p
+
+    if( !counter.isNull() ) //it's part of a list
+    {
+        content->endElement();//text:numbered-paragraph
+    }
 }
 
 void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& objectElement )
@@ -756,102 +777,27 @@ void Filterkpr2odf::appendPolygon( KoXmlWriter* content, const KoXmlElement& obj
 
 void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
+    QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
+    if( fileName.endsWith( "ArrowUp.atf" )
+        || fileName.endsWith( "ArrowRightUp.atf" )
+        || fileName.endsWith( "ArrowRight.atf" )
+        || fileName.endsWith( "ArrowRightDown.atf" )
+        || fileName.endsWith( "ArrowDown.atf" )
+        || fileName.endsWith( "ArrowLeftDown.atf" )
+        || fileName.endsWith( "ArrowLeft.atf" )
+        || fileName.endsWith( "ArrowLeftUp.atf" ) )
+    {
+        appendArrow( content, objectElement );
+        return;
+    }
+
     QString d;
 
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     double width = size.attribute( "width" ).toDouble();
     double height = size.attribute( "height" ).toDouble();
-    QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
-    if( fileName.endsWith( "ArrowUp.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( width * 0.25 * 100 ) ).arg( (int)( height * 100 ) );//0.25 = 25% percent
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.75 * 100 ) ).arg( (int)( height * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.75 * 100 ) ).arg( (int)( height * 0.48 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.48 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( 0 );
-        d += QString( "L%1 %2" ).arg( 0 ).arg( (int)( height * 0.48 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.25 * 100 ) ).arg( (int)( height * 0.48 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowRightUp.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 2/3 * 100 ) );//66.666...%
-        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowRight.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.25 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.75 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( height * 0.75 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( height * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( 0 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( height * 0.25 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowRightDown.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( 0 ) );
-        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 1/3 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowDown.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( width * 0.20 * 100 ) ).arg( (int)( 0 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.80 * 100 ) ).arg( (int)( 0 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.80 * 100 ) ).arg( (int)( height * 0.55 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.55 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.55 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.20 * 100 ) ).arg( (int)( height * 0.55 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowLeftDown.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.35 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( 0 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowLeft.atf" ) )
-    {
-        //NOTE: changed a bit since it was not centered
-        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.25 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.75 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( height * 0.75 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( height * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( 0 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( height * 0.25 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "ArrowLeftUp.atf" ) )
-    {
-        d += QString( "M%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
-        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
-        d += "Z";
-    }
-    else if( fileName.endsWith( "Connection1.atf" ) )
+
+    if( fileName.endsWith( "Connection1.atf" ) )
     {
         d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
         d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( 0 ) );
@@ -957,6 +903,98 @@ void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& ob
 
     exportAnimation( objectElement, content->indentLevel() );
     content->endElement();//draw:path
+}
+
+void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    //NOTE: we cannot use set2dGeometry neither here
+
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    KoXmlElement name = objectElement.namedItem( "OBJECTNAME" ).toElement();
+
+    content->startElement( "draw:custom-shape" );
+    QString nameStr = name.attribute( "objectName" );
+    if( !nameStr.isEmpty() )
+    {
+        content->addAttribute( "draw:name", nameStr );
+    }
+    content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    content->addAttribute( "svg:x", "0pt" );
+    content->addAttribute( "svg:y", "0pt" );
+    content->addAttributePt( "svg:width", width );
+    content->addAttributePt( "svg:height", height );
+
+    KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
+    double x = orig.attribute( "x" ).toDouble();
+    double y = orig.attribute( "y" ).toDouble();
+    y -= m_pageHeight * ( m_currentPage - 1 );
+    QString matrix = QString( "matrix(1 0 0 1 %1pt %2pt)" ).arg( x ).arg( y );
+
+    double rotateAngle;
+    QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
+    if( fileName.endsWith( "ArrowUp.atf" ) )
+    {
+        rotateAngle = M_PI / 2;
+    }
+    else if ( fileName.endsWith( "ArrowRightUp.atf" ) )
+    {
+        rotateAngle = M_PI / 4;
+    }
+    else if( fileName.endsWith( "ArrowRight.atf" ) )
+    {
+        rotateAngle = 0;
+    }
+    else if( fileName.endsWith( "ArrowRightDown.atf" ) )
+    {
+        rotateAngle = 7 * M_PI / 4;
+    }
+    else if( fileName.endsWith( "ArrowDown.atf" ) )
+    {
+        rotateAngle = 3 * M_PI / 2;
+    }
+    else if( fileName.endsWith( "ArrowLeftDown.atf" ) )
+    {
+        rotateAngle = 5 * M_PI / 4;
+    }
+    else if( fileName.endsWith( "ArrowLeft.atf" ) )
+    {
+        rotateAngle = M_PI;
+    }
+    else if( fileName.endsWith( "ArrowLeftUp.atf" ) )
+    {
+        rotateAngle = 3 * M_PI / 4;
+    }
+    content->addAttribute( "draw:transform", matrix + QString(" rotate(%1)").arg( rotateAngle )  );
+
+    content->startElement( "draw:enhaced-geometry" );
+    content->addAttribute( "svg:viewBox", "0 0 100 100" );
+    content->addAttribute( "draw:modifiers", "60 35" );
+    content->addAttribute( "draw:enhaced-path", "M$0 $1 L$0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1 Z" );
+
+    content->startElement( "draw:equation" );
+    content->addAttribute( "draw:name", "HalfHeight" );
+    content->addAttribute( "draw:formula", "0.5 * height" );
+    content->endElement();//draw:equation
+
+    content->startElement( "draw:equation" );
+    content->addAttribute( "draw:name", "LowerCorner" );
+    content->addAttribute( "draw:formula", "height - $1" );
+    content->endElement();//draw:equation
+
+    content->startElement( "draw:handle" );
+    content->addAttribute( "draw:handle-position", "$0 $1" );
+    content->addAttribute( "draw:handle-range-x-minium", "0" );
+    content->addAttribute( "draw:handle-range-x-maxium", "width" );
+    content->addAttribute( "draw:handle-range-y-minium", "0" );
+    content->addAttribute( "draw:handle-range-y-maxium", "?HalfHeight" );
+    content->endElement();//draw:handle
+
+    content->endElement();//draw:enhaced-geometry
+    content->endElement();//draw:custom-shape
 }
 
 void Filterkpr2odf::appendFreehand( KoXmlWriter* content, const KoXmlElement& objectElement )
@@ -1093,7 +1131,7 @@ void Filterkpr2odf::set2DGeometry( KoXmlWriter* content, const KoXmlElement& obj
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
 
-    float y = orig.attribute( "y" ).toFloat();
+    double y = orig.attribute( "y" ).toDouble();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
     content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );

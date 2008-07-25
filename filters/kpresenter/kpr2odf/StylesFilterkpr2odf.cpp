@@ -21,6 +21,7 @@
 #include <QTime>
 #include <QColor>
 
+#include <kdebug.h>
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
     KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
@@ -286,11 +287,13 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     int type = 1;//we default to 1
     if( gradientElement.nodeName() == "PAGE" )
     {
-        KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
+        KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
         if( !backColor1.isNull() )
+        {
             style.addAttribute( "draw:start-color", backColor1.attribute( "color" ) );
+        }
 
-        KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
+        KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
         if( !backColor2.isNull() )
         {
             style.addAttribute( "draw:end-color", backColor2.attribute( "color" ) );
@@ -1179,4 +1182,95 @@ const QString Filterkpr2odf::createTextStyle( const KoXmlElement& element )
     }
 
     return m_styles.lookup( style, "T" );
+}
+
+const QString Filterkpr2odf::createListStyle( const KoXmlElement& element )
+{
+    KoGenStyle style( KoGenStyle::StyleAutoList );
+
+    static const int s_oasisCounterTypes[] =
+            { '\0', '1', 'a', 'A', 'i', 'I',
+            '\0', '\0', // custombullet, custom
+            0x2022, // circle -> small disc
+            0xE00A, // square
+            0x25CF, // disc -> large disc
+            0x27A2  // box -> right-pointing triangle
+            };
+
+    KoXmlElement counter = element.namedItem( "COUNTER" ).toElement();
+
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer, 3 );
+
+    int type = counter.attribute( "type" ).toInt();
+    bool isBullet = false;
+    if( 6 <= type )
+    {
+        isBullet = true;
+    }
+
+    int depth = counter.attribute( "depth", "0" ).toInt();
+    elementWriter.startElement( ( isBullet )? "text:list-level-style-bullet" : "text:list-level-style-number" );
+    elementWriter.addAttribute( "text:level", depth + 1 );
+
+    if( isBullet )
+    {
+        QChar bulletChar;
+        if( type == 6 ) //STYLE_CUSTOMBULLET
+        {
+            bulletChar = QChar( counter.attribute( "bullet" ).toInt() );
+        }
+        else
+        {
+            bulletChar = s_oasisCounterTypes[ type ];
+        }
+        elementWriter.addAttribute( "text:bullet-char", QString( bulletChar ) );
+    }
+    else
+    {
+        if( type == 7 );//STYLE_CUSTOM in 1.6 was not implemented, I assume it's never used
+        else
+        {
+            elementWriter.addAttribute( "style:number-format", s_oasisCounterTypes[ type ] );
+        }
+        if( counter.attribute( "restart", "0" ) == "1"
+            || counter.attribute( "restart" ) == "true" )
+        {
+            QString start = counter.attribute( "start", "1" );
+            elementWriter.addAttribute( "text:start-value", start ); 
+        }
+    }
+
+    elementWriter.addAttribute( "style:num-prefix", counter.attribute( "lefttext" ) );
+    elementWriter.addAttribute( "style:num-suffix", counter.attribute( "righttext" ) );
+    elementWriter.endElement();// text:list-level-style-bullet or text:list-level-style-number
+
+    QString align;
+    switch( (Qt::AlignmentFlag) element.attribute("align", "0").toInt() )
+    {
+        case Qt::AlignLeft:
+            align = "left";
+            break;
+        case Qt::AlignRight:
+            align = "right";
+            break;
+        case Qt::AlignHCenter:
+            align = "center";
+            break;
+        case Qt::AlignJustify:
+            align = "justify";
+            break;
+        default:
+            align = "start";
+            break;
+    }
+    elementWriter.startElement( "text:list-level-properties" );
+    elementWriter.addAttribute( "fo:text-align", align );
+    elementWriter.endElement();//
+
+    QString elementContent = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    style.addChildElement( "listLevelStyle", elementContent );
+
+    return m_styles.lookup( style, "L" );
 }
