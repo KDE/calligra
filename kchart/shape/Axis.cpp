@@ -248,6 +248,7 @@ void Axis::Private::createLineDiagram()
     if ( kdLineDiagram == 0 )
     {
         kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+        kdLineDiagram->setCenterDataPoints( true );
         kdLineDiagram->setModel( kdLineDiagramModel );
         
         kdLineDiagram->addAxis( kdAxis );
@@ -277,6 +278,7 @@ void Axis::Private::createAreaDiagram()
     if ( kdAreaDiagram == 0 )
     {
         kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+        kdAreaDiagram->setCenterDataPoints( true );
         KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
         // Draw the area under the lines. This makes this diagram an area chart.
         attr.setDisplayArea( true );
