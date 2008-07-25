@@ -1,7 +1,7 @@
 /* This file is part of the KDE libraries
  * Copyright (c) 1998 Stefan Taferner
  *               2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
- *               2007 Jan Hambrecht <jaham@gmx.net> 
+ *               2007-2008 Jan Hambrecht <jaham@gmx.net> 
  * With the help of WMF documentation by Caolan Mc Namara
  *
  * This library is free software; you can redistribute it and/or

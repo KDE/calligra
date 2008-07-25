@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2003 thierry lorthiois <lorthioist@wanadoo.fr>
- * Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
