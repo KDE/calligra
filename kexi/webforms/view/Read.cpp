@@ -39,7 +39,7 @@ namespace KexiWebForms {
 namespace View {
 
     void Read::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        QString requestedTable(d["uri-requested"]);
+        QString requestedTable(d["uri-table"]);
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
