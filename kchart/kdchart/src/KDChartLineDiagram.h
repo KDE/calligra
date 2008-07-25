@@ -77,6 +77,16 @@ public:
 
     void setType( const LineType type );
     LineType type() const;
+    
+    /** If centerDataPoints() is true, all data points are moved by an
+     * offset of 0.5 to the right. This is useful in conjunction with
+     * bar diagrams, since data points are then centered just like bars.
+     * 
+     * \sa centerDataPoints()
+     */
+    void setCenterDataPoints( bool center );
+    /** @return option set by setCenterDataPoints() */
+    bool centerDataPoints() const;
 
     void setLineAttributes( const LineAttributes & a );
     void setLineAttributes( int column, const LineAttributes & a );

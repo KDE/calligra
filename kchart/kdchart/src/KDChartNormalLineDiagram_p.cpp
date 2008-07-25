@@ -52,8 +52,10 @@ const QPair< QPointF, QPointF > NormalLineDiagram::calculateDataBoundaries() con
 {
     const int rowCount = compressor().modelDataRows();
     const int colCount = compressor().modelDataColumns();
-    double xMin = 0.0;
-    double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) - 1 : 0;
+    const double xMin = 0.0;
+    double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) : 0;
+    if ( !diagram()->centerDataPoints() && diagram()->model() )
+       xMax -= 1;
     double yMin = std::numeric_limits< double >::quiet_NaN();
     double yMax = std::numeric_limits< double >::quiet_NaN();
 
@@ -146,10 +148,10 @@ void NormalLineDiagram::paint( PaintContext* ctx )
             }
             
             // area corners, a + b are the line ends:
-            const QPointF a( plane->translate( QPointF( lastPoint.key, lastPoint.value ) ) );
-            const QPointF b( plane->translate( QPointF( point.key, point.value ) ) );
-            const QPointF c( plane->translate( QPointF( lastPoint.key, 0.0 ) ) );
-            const QPointF d( plane->translate( QPointF( point.key, 0.0 ) ) );
+            const QPointF a( plane->translate( QPointF( diagram()->centerDataPoints() ? lastPoint.key + 0.5 : lastPoint.key, lastPoint.value ) ) );
+            const QPointF b( plane->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, point.value ) ) );
+            const QPointF c( plane->translate( QPointF( diagram()->centerDataPoints() ? lastPoint.key + 0.5 : lastPoint.key, 0.0 ) ) );
+            const QPointF d( plane->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, 0.0 ) ) );
             // add the line to the list:
            // add data point labels:
             const PositionPoints pts = PositionPoints( b, a, d, c );

@@ -49,7 +49,9 @@ LineDiagram::LineType PercentLineDiagram::type() const
 const QPair<QPointF, QPointF> PercentLineDiagram::calculateDataBoundaries() const
 {
     const double xMin = 0.0;
-    const double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) - 1 : 0;
+    double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) : 0;
+    if ( !diagram()->centerDataPoints() && diagram()->model() )
+       xMax -= 1;
     const double yMin = 0.0;
     const double yMax = 100.0;
 
@@ -170,14 +172,14 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
             else
                 stackedValues = 0.0;
             //qDebug() << stackedValues << endl;
-            QPointF nextPoint = ctx->coordinatePlane()->translate( QPointF( point.key, stackedValues ) );
+            QPointF nextPoint = ctx->coordinatePlane()->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, stackedValues ) );
             points << nextPoint;
 
             const QPointF ptNorthWest( nextPoint );
             const QPointF ptSouthWest(
                 bDisplayCellArea
                 ? ( bFirstDataset
-                    ? ctx->coordinatePlane()->translate( QPointF( point.key, 0.0 ) )
+                    ? ctx->coordinatePlane()->translate( QPointF( diagram()->centerDataPoints() ? point.key + 0.5 : point.key, 0.0 ) )
                     : bottomPoints.at( row )
                     )
                 : nextPoint );
@@ -189,13 +191,13 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
                      nextValues = nextValues / percentSumValues.at( row + 1 ) * maxValue;
                  else
                      nextValues = 0.0;
-                QPointF toPoint = ctx->coordinatePlane()->translate( QPointF( nextKey, nextValues ) );
+                QPointF toPoint = ctx->coordinatePlane()->translate( QPointF( diagram()->centerDataPoints() ? nextKey + 0.5 : nextKey, nextValues ) );
                 lineList.append( LineAttributesInfo( sourceIndex, nextPoint, toPoint ) );
                 ptNorthEast = toPoint;
                 ptSouthEast =
                     bDisplayCellArea
                     ? ( bFirstDataset
-                        ? ctx->coordinatePlane()->translate( QPointF( nextKey, 0.0 ) )
+                        ? ctx->coordinatePlane()->translate( QPointF( diagram()->centerDataPoints() ? nextKey + 0.5 : nextKey, 0.0 ) )
                         : bottomPoints.at( row + 1 )
                         )
                     : toPoint;

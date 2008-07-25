@@ -69,6 +69,7 @@ void LineDiagram::init()
     d->stackedDiagram = new StackedLineDiagram( this );
     d->percentDiagram = new PercentLineDiagram( this );
     d->implementor = d->normalDiagram;
+    d->centerDataPoints = false;
 }
 
 LineDiagram::~LineDiagram()
@@ -145,6 +146,16 @@ void LineDiagram::setType( const LineType type )
 LineDiagram::LineType LineDiagram::type() const
 {
     return d->implementor->type();
+}
+
+void LineDiagram::setCenterDataPoints( bool center )
+{
+   d->centerDataPoints = center;
+}
+
+bool LineDiagram::centerDataPoints() const
+{
+   return d->centerDataPoints;
 }
 
 /**
