@@ -100,6 +100,8 @@ Legend::Legend( ChartShape *parent )
 {
     Q_ASSERT( parent );
     
+    setShapeId( ChartShapeId );
+    
     d->shape = parent;
     
     d->kdLegend = new KDChart::Legend();
@@ -108,7 +110,7 @@ Legend::Legend( ChartShape *parent )
     setTitle( QString() );
     
     KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
-    attributes.setFontSize( KDChart::Measure( 6, KDChartEnums::MeasureCalculationModeAbsolute ) );
+    attributes.setFontSize( KDChart::Measure( 9, KDChartEnums::MeasureCalculationModeAbsolute ) );
     attributes.setAutoShrink( false );
     d->kdLegend->setTextAttributes( attributes );
     
@@ -246,7 +248,9 @@ void Legend::setFontSize( double size )
 
     // KDChart
     KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
-    attributes.setFontSize( KDChart::Measure( size, KDChartEnums::MeasureCalculationModeAbsolute ) );
+    KDChart::Measure m = attributes.fontSize();
+    m.setValue( size );
+    attributes.setFontSize( m );
     d->kdLegend->setTextAttributes( attributes );
     d->pixmapRepaintRequested = true;
 }
