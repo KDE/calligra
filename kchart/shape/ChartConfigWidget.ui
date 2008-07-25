@@ -63,13 +63,6 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="QPushButton" name="pushButton_5" >
-     <property name="text" >
-      <string>Themes...</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="0" colspan="3" >
     <widget class="QTabWidget" name="tabWidget" >
      <property name="sizePolicy" >
@@ -87,7 +80,7 @@
         <x>0</x>
         <y>0</y>
         <width>251</width>
-        <height>338</height>
+        <height>352</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -242,7 +235,7 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>251</width>
-        <height>338</height>
+        <height>352</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -537,7 +530,7 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>251</width>
-        <height>338</height>
+        <height>352</height>
        </rect>
       </property>
       <attribute name="title" >
