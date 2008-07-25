@@ -132,6 +132,7 @@ private:
     double    mScaleY;
     // current position in WMF coordinate (INT16)
     QPoint    mCurrentPoint;
+    QFont     mFont;
 };
 
 #endif

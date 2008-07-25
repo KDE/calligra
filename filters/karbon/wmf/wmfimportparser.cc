@@ -33,7 +33,7 @@
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <pictureshape/PictureShape.h>
-
+#include <simpletextshape/SimpleTextShape.h>
 #include <kdebug.h>
 
 /*
@@ -125,7 +125,8 @@ void WMFImportParser::restore() {
 }
 
 
-void WMFImportParser::setFont( const QFont & ) {
+void WMFImportParser::setFont( const QFont &font ) {
+    mFont = font;
 }
 
 
@@ -375,8 +376,50 @@ void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int 
 }
 
 
-void WMFImportParser::drawText( int , int , int , int , int , const QString& , double ) {
-    kDebug() << "importing text is not supported";
+void WMFImportParser::drawText( int x, int y, int , int , int flags, const QString& text, double rotation ) {
+    enum TextFlags { CurrentPosition = 0x01, AlignHCenter = 0x06, AlignBottom = 0x08 };
+
+    if ( flags & CurrentPosition ) {
+        // (left, top) position = current logical position
+        x = mCurrentPoint.x();
+        y = mCurrentPoint.y();
+    }
+
+    // adjust font size
+    QFont font = mFont;
+    font.setPointSizeF( coordY( mFont.pointSize() ) );
+
+    SimpleTextShape * textShape = new SimpleTextShape();
+    textShape->setFont( font );
+    textShape->setText( text );
+
+    // determine y-offset from given baseline position
+    qreal yOffset = 0.0;
+    if( flags & AlignBottom )
+        yOffset -= textShape->baselineOffset();
+
+    textShape->setPosition( QPointF( coordX(x), coordY(y)+yOffset ) );
+
+    // set text anchor
+    qreal xOffset = 0.0;
+    if( flags & AlignHCenter ) {
+        textShape->setTextAnchor( SimpleTextShape::AnchorMiddle );
+        xOffset = -0.5 * textShape->size().width();
+    }
+
+    if ( rotation ) {
+        // we rotate around the anchor point
+        QPointF anchor( -xOffset, -yOffset );
+        QMatrix matrix;
+        matrix.translate( anchor.x(), anchor.y() );
+        matrix.rotate ( rotation );
+        matrix.translate( -anchor.x(), -anchor.y() );
+        textShape->applyTransformation( matrix );
+    }
+
+    textShape->setBackground( new KoColorBackground( mPen.color() ) );
+
+    mDoc->add( textShape );
 }
 
 

@@ -675,6 +675,9 @@ void KoWmfReadPrivate::setTextColor( quint32, QDataStream& stream )
 
     stream >> color;
     mTextColor = qtColor( color );
+    // TODO: not sure if that is the right thing to do here
+    // but the actual reader has to get the color somehow (jaham)
+    mReadWmf->setPen( QPen(mTextColor) );
 }
 
 
@@ -684,19 +687,49 @@ void KoWmfReadPrivate::setTextAlign( quint32, QDataStream& stream )
 }
 
 
-void KoWmfReadPrivate::textOut( quint32, QDataStream& )
+void KoWmfReadPrivate::textOut( quint32, QDataStream& stream )
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"textOut : unimplemented";
-    }
+    qint16 textLength;
+
+    stream >> textLength;
+
+    QByteArray text;
+    text.resize( textLength );
+
+    stream.readRawData( text.data(), textLength );
+
+    qint16 x, y;
+
+    stream >> y;
+    stream >> x;
+
+    mReadWmf->drawText( x, y, -1, -1, mTextAlign, text, static_cast<double>( mTextRotation ) );
 }
 
 
-void KoWmfReadPrivate::extTextOut( quint32 , QDataStream&  )
+void KoWmfReadPrivate::extTextOut( quint32 , QDataStream& stream )
 {
-    if ( mNbrFunc ) {
-        kDebug() <<"extTextOut : unimplemented";
+    qint16 parm[8];
+    for( int i = 0; i < 4; ++i )
+        stream >> parm[i];
+
+    quint16 textLength = parm[ 2 ];
+
+    QByteArray text;
+    text.resize( textLength );
+
+    if ( parm[ 3 ] != 0 )       // ETO_CLIPPED flag add 4 parameters
+    {
+        for( int i = 0; i < 4; ++i )
+            stream >> parm[4+i];
+        stream.readRawData( text.data(), textLength );
     }
+    else
+    {
+        stream.readRawData( text.data(), textLength );
+    }
+
+    mReadWmf->drawText( parm[ 1 ], parm[ 0 ], -1, -1, mTextAlign, text, static_cast<double>( mTextRotation ) );
 }
 
 
