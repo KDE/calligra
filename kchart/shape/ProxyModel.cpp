@@ -33,25 +33,6 @@
 
 using namespace KChart;
 
-const int NUM_DEFAULT_DATASET_COLORS = 7;
-
-const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
-{
-    "#7FBB56",
-    "#5F8FCB",
-    "#BA90C0",
-    "#D9AE7E",
-    "#80C39B",
-    "#A49ECD",
-    "#9DA1A6"
-};
-
-static QColor defaultDataSetColor( int dataSetNum )
-{
-    dataSetNum %= NUM_DEFAULT_DATASET_COLORS;
-    return QColor( defaultDataSetColors[ dataSetNum ] );
-}
-
 class ProxyModel::Private {
 public:
     Private();

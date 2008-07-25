@@ -222,6 +222,31 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainSty
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
 
+
+const int NUM_DEFAULT_DATASET_COLORS = 12;
+
+const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
+{
+    "#004586",
+    "#ff420e",
+    "#ffd320",
+    "#579d1c",
+    "#7e0021",
+    "#83caff",
+    "#314004",
+    "#aecf00",
+    "#4b1f6f",
+    "#ff950e",
+    "#c5000b",
+    "#0084d1",
+};
+
+QColor defaultDataSetColor( int dataSetNum )
+{
+    dataSetNum %= NUM_DEFAULT_DATASET_COLORS;
+    return QColor( defaultDataSetColors[ dataSetNum ] );
+}
+
 class ChartShape::Private
 {
 public:

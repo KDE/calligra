@@ -84,6 +84,7 @@ class TableModel;
 extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
+extern QColor defaultDataSetColor( int dataSetNum );
 
 class CHARTSHAPELIB_EXPORT ChartShape : public QObject, public KoChart::ChartInterface, public KoFrameShape, public KoShapeContainer
 {
