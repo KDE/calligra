@@ -87,7 +87,7 @@ namespace KexiWebForms {
     void renderTemplate(google::TemplateDictionary* dict, pion::net::HTTPResponseWriterPtr writer) {
         std::string output;
         google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);
-        writer->writeNoCopy(output);
+        writer->write(output);
     }
 
 }
