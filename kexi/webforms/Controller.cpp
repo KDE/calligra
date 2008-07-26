@@ -91,13 +91,12 @@ namespace KexiWebForms {
 
         /**
          * some nasty things can happen here, for example someone can overwrite
-         * someone can overwrite the data hash, this is not good
+         * the data hash, this is not good
          */
         for (SDIterator it = params.begin(); it != params.end(); ++it) {
             data[QUrl::fromPercentEncoding(QByteArray(it->first.c_str()))] =
                 QUrl::fromPercentEncoding(QByteArray(it->second.c_str()));
         }
-        u.can(Auth::READ);
         
         kDebug() << "ACTION :" << action << endl;
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
