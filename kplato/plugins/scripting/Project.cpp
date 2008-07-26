@@ -37,8 +37,20 @@
 Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project )
     : Node( this, project, module ), m_module( module )
 {
+    kDebug()<<this<<"KPlato::"<<project;
     m_nodeModel.setProject( project );
     m_resourceModel.setProject( project );
+}
+
+Scripting::Project::~Project()
+{
+    kDebug()<<this;
+    qDeleteAll( m_nodes.values() );
+    qDeleteAll( m_groups.values() );
+    qDeleteAll( m_resources.values() );
+    qDeleteAll( m_calendars.values() );
+    qDeleteAll( m_schedules.values() );
+    qDeleteAll( m_accounts.values() );
 }
 
 int Scripting::Project::scheduleCount() const

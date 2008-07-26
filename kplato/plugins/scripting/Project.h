@@ -59,7 +59,7 @@ namespace Scripting {
             Q_OBJECT
         public:
             Project( Module* module, KPlato::Project *project );
-            virtual ~Project() {}
+            virtual ~Project();
 
             KPlato::Project *kplatoProject() const { return static_cast<KPlato::Project*>( m_node ); }
             

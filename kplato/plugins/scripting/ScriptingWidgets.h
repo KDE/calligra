@@ -25,6 +25,8 @@
 #include <QVariant>
 #include <QWidget>
 
+#include <kactionselector.h>
+
 class QTreeView;
 class QStandardItemModel;
 
@@ -63,7 +65,37 @@ class ScriptingScheduleListView : public QWidget
     private:
         Scripting::Module* m_module;
         QTreeView* m_view;
-        QStandardItemModel *m_model;
+};
+
+/**
+ * The ScriptingNodePropertyListView provides a selection listview that displays the nodes
+ * accessible properties and lets the user select a number of them.
+ */
+class ScriptingNodePropertyListView : public KActionSelector
+{
+    Q_OBJECT
+    public:
+
+        /**
+        * Constructor.
+        * \param module The \a ScriptingModule instance that should be used
+        * as datasource for what should be displayed within the listview.
+        * \param parent The parent QWidget this widget should be displayed in.
+         */
+        ScriptingNodePropertyListView(Scripting::Module* module, QWidget* parent);
+
+        /**
+         * Destructor.
+         */
+        virtual ~ScriptingNodePropertyListView();
+
+    public slots:
+        /// Return the selected node properties
+        QVariant selectedProperties() const;
+
+
+    private:
+        Scripting::Module *m_module;
 };
 
 #endif

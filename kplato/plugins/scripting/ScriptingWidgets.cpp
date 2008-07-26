@@ -25,12 +25,15 @@
 
 #include "kptproject.h"
 #include "kptschedule.h"
+#include "kptnodeitemmodel.h"
 
 #include <QVBoxLayout>
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QStringList>
+#include <QListWidget>
+#include <QListWidgetItem>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -53,20 +56,20 @@ ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, 
     m_view->setSortingEnabled(false);
     m_view->setItemsExpandable(false);
 //    m_view->setEditTriggers(QAbstractItemView::AllEditTriggers);
-    QStandardItemModel *m_model = new QStandardItemModel(this);
-    m_model->setHorizontalHeaderLabels( QStringList() << "Schedule Name" );
+    QStandardItemModel *model = new QStandardItemModel(m_view);
+    model->setHorizontalHeaderLabels( QStringList() << "Schedule Name" );
     KPlato::Project *p = static_cast<Scripting::Project*>( m_module->project() )->kplatoProject();
+    kDebug()<<p;
     foreach ( KPlato::ScheduleManager *sm, p->allScheduleManagers() ) {
         if ( sm->isScheduled() ) {
             QStandardItem *i = new QStandardItem( sm->name() );
             i->setData( (qlonglong)sm->id() );
-            m_model->appendRow( i );
-            kDebug()<<i<<m_model->rowCount();
+            model->appendRow( i );
+            kDebug()<<i<<model->rowCount();
         }
     }
     layout->addWidget(m_view);
-    m_view->setModel( m_model );
-    kDebug()<<m_model;
+    m_view->setModel( model );
 }
 
 ScriptingScheduleListView::~ScriptingScheduleListView()
@@ -92,5 +95,42 @@ QVariant ScriptingScheduleListView::currentSchedule() const
     return item->data();
 }
 
+//--------------------------------
+ScriptingNodePropertyListView::ScriptingNodePropertyListView(Scripting::Module* module, QWidget* parent)
+    : KActionSelector(parent), m_module(module)
+{
+    kDebug()<<this<<parent;
+    if ( parent->layout() ) {
+        parent->layout()->addWidget( this );
+    }
+    KPlato::NodeModel m;
+    const QMetaEnum e = m.columnMap();
+    if ( e.keyCount() > 0 ) {
+        QListWidgetItem *item = new QListWidgetItem( m.headerData( 0 ).toString() );
+        item->setToolTip( m.headerData( 0 ).toString() );
+        item->setData( Qt::UserRole, e.key( 0 ) );  // should be name
+        selectedListWidget()->addItem( item );
+        for ( int i = 1; i < e.keyCount(); ++i ) {
+            QListWidgetItem *item = new QListWidgetItem( m.headerData( i ).toString() );
+            item->setToolTip( m.headerData( i ).toString() );
+            item->setData( Qt::UserRole, e.key( i ) );
+            availableListWidget()->addItem( item );
+        }
+    }
+}
+
+ScriptingNodePropertyListView::~ScriptingNodePropertyListView()
+{
+}
+
+QVariant ScriptingNodePropertyListView::selectedProperties() const
+{
+    QStringList lst;
+    QListWidget *s = selectedListWidget();
+    for ( int i = 0; i < s->count(); ++i ) {
+        lst << s->item( i )->data( Qt::UserRole ).toString();
+    }
+    return lst;
+}
 
 #include "ScriptingWidgets.moc"

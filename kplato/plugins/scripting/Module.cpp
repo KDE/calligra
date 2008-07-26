@@ -56,7 +56,6 @@ namespace Scripting {
         public:
             QPointer<KPlato::Part> doc;
             Project *project;
-            Node *node;
             QMap<QString, Module*> modules;
     };
 
@@ -71,16 +70,19 @@ Module::Module(QObject* parent)
 Module::~Module()
 {
     qDeleteAll( d->modules.values() );
+    delete d->project;
     delete d;
 }
 
 KPlato::Part* Module::part()
 {
     if(! d->doc) {
-        if( KPlato::View* v = dynamic_cast< KPlato::View* >(view()) )
+        if( KPlato::View* v = dynamic_cast< KPlato::View* >(view()) ) {
             d->doc = v->getPart();
-        if( ! d->doc )
+        }
+        if( ! d->doc ) {
             d->doc = new KPlato::Part(0, this);
+        }
     }
     return d->doc;
 }
@@ -104,6 +106,11 @@ QObject *Module::openDocument( const QString tag, const QString &url )
 
 QObject *Module::project()
 {
+    if ( d->project != 0 && d->project->kplatoProject() != &( part()->getProject() ) ) {
+        // need to replace the project, happens when new document is loaded
+        delete d->project;
+        d->project = 0;
+    }
     if ( d->project == 0 ) {
         d->project = new Project( this, &(part()->getProject()) );
     }
@@ -114,6 +121,12 @@ QWidget *Module::createScheduleListView( QWidget *parent )
 {
     return new ScriptingScheduleListView( this, parent );
 }
+
+QWidget *Module::createNodePropertyListView( QWidget *parent )
+{
+    return new ScriptingNodePropertyListView( this, parent );
+}
+
 
 QVariant Module::data( QObject *object, const QString &property ) const
 {

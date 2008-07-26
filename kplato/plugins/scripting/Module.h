@@ -72,6 +72,8 @@ namespace Scripting {
             QObject *project();
             /// Return a schedule list view
             QWidget *createScheduleListView( QWidget *parent );
+            /// Return a node property list view
+            QWidget *createNodePropertyListView( QWidget *parent );
             
             /// Return data, default role and schedule
             QVariant data( QObject *object, const QString &property ) const;
