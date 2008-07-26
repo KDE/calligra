@@ -54,6 +54,9 @@
 #include <KoOdfReadStore.h>
 #include <KoQueryTrader.h>
 #include <KoOdfStylesReader.h>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 
 // KDChart
 #include <KDChartChart>
@@ -78,6 +81,7 @@
 
 // Qt
 #include <QPointF>
+#include <QPainter>
 #include <QSizeF>
 #include <QTextDocument>
 #include <QStandardItemModel>
@@ -298,11 +302,13 @@ ChartShape::ChartShape()
     d->plotArea = new PlotArea( this );
     addChild( d->plotArea );
     d->plotArea->init();
+    d->plotArea->setZIndex( 0 );
     
     d->document = new ChartDocument( this );
     
     d->legend = new Legend( this );
     d->legend->setVisible( true );
+    d->legend->setZIndex( 1 );
     
     QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( dataSetCountChanged() ) );
     QObject::connect( d->model, SIGNAL( rowsInserted( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
@@ -328,6 +334,7 @@ ChartShape::ChartShape()
     addChild( d->title );
     titleData()->document()->setPlainText( i18n( "Title" ) );
     d->title->setVisible( false );
+    d->title->setZIndex( 2 );
 
     d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( !d->subTitle )
@@ -342,6 +349,7 @@ ChartShape::ChartShape()
     addChild( d->subTitle );
     subTitleData()->document()->setPlainText( i18n( "Subtitle" ) );
     d->subTitle->setVisible( false );
+    d->subTitle->setZIndex( 3 );
 
     d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( !d->footer )
@@ -356,6 +364,7 @@ ChartShape::ChartShape()
     addChild( d->footer );
     footerData()->document()->setPlainText( i18n( "Footer" ) );
     d->footer->setVisible( false );
+    d->footer->setZIndex( 42 );
     
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );
@@ -603,6 +612,19 @@ void ChartShape::paint( QPainter &painter, const KoViewConverter &converter )
 
 void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &converter )
 {
+}
+
+void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas )
+{
+    // This only is a helper decoration, do nothing if we're already painting handles anyway
+    Q_ASSERT( canvas );
+    if ( canvas->shapeManager()->selection()->selectedShapes().contains( this ) )
+        return;
+    QRectF border = QRectF( QPointF( -1.5, -1.5 ),
+                            converter.documentToView( size() ) + QSizeF( 1.5, 1.5 ) );
+    
+    painter.setPen( QPen( Qt::lightGray, 0 ) );
+    painter.drawRect( border );
 }
 
 bool ChartShape::loadOdfFrame( const KoXmlElement &chartElement, KoShapeLoadingContext &context )

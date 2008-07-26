@@ -134,6 +134,7 @@ public:
     /// reimplemented
     void paint( QPainter &painter, const KoViewConverter &converter );
     void paintComponent( QPainter &painter, const KoViewConverter &converter );
+    void paintDecorations( QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas );
     
     QRectF boundingRect() const;
     
