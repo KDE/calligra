@@ -920,18 +920,6 @@ const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
         style.addProperty( "fo:text-align", textAlign );
     }
 
-    //FIXME: I wasn't able to find this element, rather i found it to be an attribute
-    KoXmlElement shadow = element.namedItem( "SHADOW" ).toElement();
-    if( !shadow.isNull() )
-    {
-        QString distance = QString( "%1pt" ).arg( shadow.attribute( "distance" ) );
-        QString textShadow = distance + ' ' + distance;//KPresenter1.6 didn't allow different distances for the shadow of a text
-        if( !textShadow.isNull() )
-        {
-            style.addProperty( "fo:text-shadow", textShadow );
-        }
-    }
-
     KoXmlElement indents = element.namedItem( "INDENTS" ).toElement();
     if ( !indents.isNull() )
     {
@@ -1175,10 +1163,7 @@ const QString Filterkpr2odf::createTextStyle( const KoXmlElement& element )
     QString shadow = element.attribute( "text-shadow" );
     if( !shadow.isNull() )
     {
-        QStringList components = shadow.split(" ");
-        QString textShadow = QString( "%1 %2" ).arg( components.at( 1 ) ).arg( components.at( 2 ) );
-
-        style.addProperty( "fo:text-shadow", textShadow );
+        style.addProperty( "fo:text-shadow", shadow );
     }
 
     return m_styles.lookup( style, "T" );
