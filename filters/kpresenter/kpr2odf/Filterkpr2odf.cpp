@@ -928,12 +928,6 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     content->addAttributePt( "svg:width", width );
     content->addAttributePt( "svg:height", height );
 
-    KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
-    double x = orig.attribute( "x" ).toDouble();
-    double y = orig.attribute( "y" ).toDouble();
-    y -= m_pageHeight * ( m_currentPage - 1 );
-    QString matrix = QString( "matrix(1 0 0 1 %1pt %2pt)" ).arg( x ).arg( y );
-
     double rotateAngle;
     QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
     if( fileName.endsWith( "ArrowUp.atf" ) )
@@ -968,12 +962,19 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     {
         rotateAngle = 3 * M_PI / 4;
     }
-    content->addAttribute( "draw:transform", matrix + QString(" rotate(%1)").arg( rotateAngle )  );
 
-    content->startElement( "draw:enhaced-geometry" );
+    KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
+    double x = orig.attribute( "x" ).toDouble();
+    double y = orig.attribute( "y" ).toDouble();
+    y -= m_pageHeight * ( m_currentPage - 1 );
+    QString matrix = QString( " matrix(1 0 0 1 %1pt %2pt)" ).arg( x ).arg( y );
+
+    content->addAttribute( "draw:transform",  QString("rotate(%1)").arg( rotateAngle ) + matrix );
+
+    content->startElement( "draw:enhanced-geometry" );
     content->addAttribute( "svg:viewBox", "0 0 100 100" );
     content->addAttribute( "draw:modifiers", "60 35" );
-    content->addAttribute( "draw:enhaced-path", "M$0 $1 L$0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1 Z" );
+    content->addAttribute( "draw:enhanced-path", "M $0 $1 L $0 0 width ?HalfHeight $0 height $0 ?LowerCorner 0 ?LowerCorner 0 $1 Z" );
 
     content->startElement( "draw:equation" );
     content->addAttribute( "draw:name", "HalfHeight" );
@@ -987,13 +988,13 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
 
     content->startElement( "draw:handle" );
     content->addAttribute( "draw:handle-position", "$0 $1" );
-    content->addAttribute( "draw:handle-range-x-minium", "0" );
-    content->addAttribute( "draw:handle-range-x-maxium", "width" );
-    content->addAttribute( "draw:handle-range-y-minium", "0" );
-    content->addAttribute( "draw:handle-range-y-maxium", "?HalfHeight" );
+    content->addAttribute( "draw:handle-range-x-minimum", "0" );
+    content->addAttribute( "draw:handle-range-x-maximum", "width" );
+    content->addAttribute( "draw:handle-range-y-minimum", "0" );
+    content->addAttribute( "draw:handle-range-y-maximum", "?HalfHeight" );
     content->endElement();//draw:handle
 
-    content->endElement();//draw:enhaced-geometry
+    content->endElement();//draw:enhanced-geometry
     content->endElement();//draw:custom-shape
 }
 
