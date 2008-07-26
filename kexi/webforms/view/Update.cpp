@@ -95,6 +95,7 @@ namespace View {
             QHash<QString, QVariant> data;
             foreach(const QString& field, fieldsList) {
                 KexiDB::Field* currentField = tableSchema.field(field);
+                kDebug() << "UPDATING: " << field << "=" << d[field] << endl;
                 if (currentField)
                     data[field] = QVariant(d[field]);
             }

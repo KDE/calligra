@@ -28,16 +28,16 @@ by hand and use org-mode instead.
 ** TODO: Optional but important: refine code where needed
 
 * Post mid-term (and before final)
-** User management [0%]
-   - [ ] Create a draft of the first version of the architecture
-   - [ ] Create a clear API
-   - [ ] Implement and test
+** User management [100%]
+   - [X] Create a draft of the first version of the architecture
+   - [X] Create a clear API
+   - [X] Implement and test
 
 * Medium priority tasks
 ** TODO Switch to new template engine
-** Swich to new embedded HTTP server backend [0%]
-   - [ ] Investigate alternatives
-   - [ ] Migrate old data structure to the new backend
+** Swich to new embedded HTTP server backend [100%]
+   - [X] Investigate alternatives
+   - [X] Migrate old data structure to the new backend
 	 - If the new server backend is better and more OO than SHTTPD,
 	   remove C++ wrappers?
 ** Add connectors to other server types [0%]
