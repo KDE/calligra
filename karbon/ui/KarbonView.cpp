@@ -99,6 +99,7 @@
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoColorBackground.h>
+#include <KoSnapGuideConfigAction.h>
 
 // kde header
 #include <kaction.h>
@@ -1085,6 +1086,8 @@ void KarbonView::initActions()
     actionCollection()->addAction("view_snap_to_grid", m_snapGridAction );
     m_snapGridAction->setToolTip(i18n( "Snaps to grid"));
     connect(m_snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
+
+    actionCollection()->addAction("view_snapguides", new KoSnapGuideConfigAction(this) );
 
     m_groupObjects  = new KAction(KIcon("group"), i18n("&Group Objects"), this);
     actionCollection()->addAction("selection_group", m_groupObjects );
