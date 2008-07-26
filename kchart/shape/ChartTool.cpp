@@ -504,22 +504,25 @@ void ChartTool::setFirstColumnIsLabel( bool b )
 void ChartTool::setLegendTitle( const QString &title )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setTitle( title );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendFont( const QFont &font )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     // There only is a general font, for the legend items and the legend title
     d->shape->legend()->setFont( font );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 void ChartTool::setLegendFontSize( int size )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setFontSize( size );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendOrientation( Qt::Orientation orientation )
@@ -533,41 +536,46 @@ void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 void ChartTool::setLegendAlignment( Qt::Alignment alignment )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setAlignment( alignment );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendFixedPosition( LegendPosition position )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setLegendPosition( position );
 
     foreach (QWidget *w, optionWidgets().values()) {
         ( ( ChartConfigWidget* ) w )->updateFixedPosition( position );
     }
 
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendBackgroundColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setBackgroundColor( color );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendFrameColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setFrameColor( color );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendShowFrame( bool show )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setShowFrame( show );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 
