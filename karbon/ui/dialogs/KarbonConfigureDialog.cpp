@@ -341,8 +341,12 @@ ConfigGridPage::ConfigGridPage( KarbonView* view, char* name )
 void ConfigGridPage::slotUnitChanged( int u )
 {
     KoUnit unit = KoUnit((KoUnit::Unit) u );
+    m_spaceHorizUSpin->blockSignals( true );
+    m_spaceVertUSpin->blockSignals( true );
     m_spaceHorizUSpin->setUnit( unit );
     m_spaceVertUSpin->setUnit( unit );
+    m_spaceHorizUSpin->blockSignals( false );
+    m_spaceVertUSpin->blockSignals( false );
 }
 
 void ConfigGridPage::apply()
