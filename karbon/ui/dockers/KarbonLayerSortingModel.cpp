@@ -35,7 +35,10 @@ bool KarbonLayerSortingModel::lessThan(const QModelIndex &left, const QModelInde
     if( ! leftShape || ! rightShape )
         return false;
 
-    return leftShape->zIndex() < rightShape->zIndex();
+    if( leftShape->zIndex() == rightShape->zIndex() )
+        return leftShape < rightShape;
+    else
+        return leftShape->zIndex() < rightShape->zIndex();
 }
 
 #include "KarbonLayerSortingModel.moc"
