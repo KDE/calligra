@@ -525,8 +525,9 @@ void ChartTool::setLegendFontSize( int size )
 void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 {
     Q_ASSERT( d->shape );
+    Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setExpansion( QtOrientationToLegendExpansion( orientation ) );
-    d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setLegendAlignment( Qt::Alignment alignment )

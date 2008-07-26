@@ -295,6 +295,7 @@ LegendExpansion Legend::expansion() const
 void Legend::setExpansion( LegendExpansion expansion )
 {
     d->expansion = expansion;
+    d->kdLegend->setOrientation( LegendExpansionToQtOrientation( expansion ) );
     d->pixmapRepaintRequested = true;
 }
 
