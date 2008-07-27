@@ -38,6 +38,7 @@ namespace View {
 
     class View {
     public:
+        
         View(KexiWebForms::Controller& c, const char* name);
         virtual ~View();
         

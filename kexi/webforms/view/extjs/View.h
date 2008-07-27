@@ -19,27 +19,25 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIWEBFORMS_CONTROLLER_H
-#define KEXIWEBFORMS_CONTROLLER_H
+#ifndef KEXIWEBFORMS_VIEW_EXTJS_VIEW_H
+#define KEXIWEBFORMS_VIEW_EXTJS_VIEW_H
 
-#include <pion/net/WebService.hpp>
+#include <QHash>
+
+#include <pion/net/HTTPResponseWriter.hpp>
+
+class QString;
 
 namespace KexiWebForms {
-    namespace View {
-        
-    }
+namespace View {
 
-    class Controller : public pion::net::WebService {
+    class View {
     public:
-        Controller();
-        virtual ~Controller();
-
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
-    private:
-        // empty for now
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr) = 0;
     };
     
     
-}
+} // end namespace View
+} // end namespace KexiWebForms
 
-#endif /* KEXIWEBFORMS_CONTROLLER_H */
+#endif /* KEXIWEBFORMS_VIEW_EXTJS_VIEW_H */

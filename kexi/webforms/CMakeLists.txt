@@ -21,7 +21,7 @@ add_definitions(-fexceptions)
 # - Standard HTML based view: this is the standard and most stable view, built by
 #   default.
 if (DEFINED WITH_EXTJS_WEBFORMS)
-  set(webforms_controller_SRCS controller/ExtjsController.cpp)
+  set(webforms_controller_SRCS controller/extjs/Controller.cpp)
   set(webforms_view_SRCS
     view/extjs/Objects.cpp)
   add_definitions(-DEXTJS_VIEW)

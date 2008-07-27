@@ -40,7 +40,7 @@
 #ifndef EXTJS_VIEW
 #include "controller/Controller.h"
 #else
-#include "controller/ExtjsController.h"
+#include "controller/extjs/Controller.h"
 #endif
 
 #include "FileService.hpp"
@@ -118,6 +118,7 @@ int main(int argc, char **argv) {
     // File and blob service
     server.addService("/f", &fileService);
     server.addService("/blob", &blobService);
+    //server.addService("/index.html", &fileService);
     
     server.start();
     server.setAuthentication(auth);

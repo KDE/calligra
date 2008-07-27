@@ -26,25 +26,27 @@
 
 #include <KDebug>
 
-#include <pion/net/PionUser.hpp>
+//#include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPTypes.hpp>
 #include <pion/net/WebService.hpp>
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "auth/User.h"
-#include "auth/Permission.h"
-#include "auth/Authenticator.h"
+//#include "auth/User.h"
+//#include "auth/Permission.h"
+//#include "auth/Authenticator.h"
 
-#include "ExtjsController.h"
+#include "../../view/extjs/Objects.h"
+
+#include "Controller.h"
 
 namespace KexiWebForms {
 
     Controller::Controller() {
-        
+        m_objects = new View::Objects();
     }
 
     Controller::~Controller() {
-        
+        delete m_objects;
     }
 
     void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
@@ -52,12 +54,12 @@ namespace KexiWebForms {
                                                                                       boost::bind(&pion::net::TCPConnection::finish, tcp_conn)));
 
         // Authentication data
-        pion::net::PionUserPtr userPtr;
+        /*pion::net::PionUserPtr userPtr;
         Auth::User u;
         if (request->getUser()) {
             userPtr = pion::net::PionUserPtr(request->getUser());
             u = Auth::Authenticator::getInstance()->authenticate(userPtr);
-        }
+            }*/
 
         // Request URI handling & dispatch
         QStringList requestURI(QString(request->getOriginalResource().c_str()).split('/'));
@@ -85,8 +87,11 @@ namespace KexiWebForms {
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
 
         bool malformedRequest = true;
-        if (action == "") {
-            
+        if (action == "objects") {
+            if (requestURI.count() == 0) {
+                m_objects->view(data, writer);
+                malformedRequest = false;
+            }
         }
 
         if (malformedRequest)
