@@ -86,6 +86,7 @@ private:
     double m_drag;  // from 0.0 to 1.0
 
     KoPathShape *m_selectedPath;
+    QPainterPath m_selectedPathOutline;
     double m_followPathPosition;
     bool m_endOfPath;
     QPointF m_lastMousePos;

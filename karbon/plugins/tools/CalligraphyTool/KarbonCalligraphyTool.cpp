@@ -134,6 +134,8 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 {
     if ( ! m_firstPointAdded ) {
+        if ( !m_usePath || !m_selectedPath )
+            m_selectedPathOutline = m_selectedPath->outline();
         m_firstPointAdded = true;
         m_endOfPath = false;
         m_followPathPosition = 0;
@@ -179,21 +181,20 @@ QPointF KarbonCalligraphyTool::calculateNewPoint( const QPointF &mousePos,
     // follow selected path
     double step = QLineF(QPointF(0,0), sp).length();
     m_followPathPosition += step;
-    // TODO: only calculate once
-    QPainterPath outline = m_selectedPath->outline();
 
     double t;
-    if (m_followPathPosition >= outline.length())
+    if (m_followPathPosition >= m_selectedPathOutline.length())
     {
         t = 1.0;
         m_endOfPath = true; // FIXME: last point never added???
     }
     else
     {
-        t = outline.percentAtLength( m_followPathPosition );
+        t = m_selectedPathOutline.percentAtLength( m_followPathPosition );
     }
 
-    QPointF res = outline.pointAtPercent(t) + m_selectedPath->position();
+    QPointF res = m_selectedPathOutline.pointAtPercent(t)
+                  + m_selectedPath->position();
     *speed = res - m_lastPoint;
     return res;
 }
