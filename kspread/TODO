@@ -21,6 +21,28 @@ S	Involves string changes.  Must be done before the freeze.
 
 
 
+Things to do after the release of KOffice 2.0
+=============================================
+
+Item										Prio	Status
+----------------------------------------------------------------------------------------------
+
+* Databases									1	----
+  Currently Database is used solely for the autofilter functionality.
+  Generalize it: Rewrite the filter code, so that Database carries a data
+  model. Such a generic data providing class will allow to add data imports of
+  any textual kind.
+  The OpenDocument spec urges to implement database queries, sorting and
+  subtotal implementation this way.
+
+* Page View Mode								1	----
+  Add a page view mode. This would be a more intuitive way to see the printing
+  layout. The pages should be based on KoShapeContainer, so that the TableShape
+  becomes a child of it and can rely on its dimension to layout the table
+  pages.
+
+
+
 Things to do before the release of KOffice 2.0
 ==============================================
 
