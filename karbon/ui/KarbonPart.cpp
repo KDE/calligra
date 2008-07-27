@@ -76,25 +76,52 @@
 #include <QtCore/QRectF>
 #include <QtGui/QPainter>
 
-
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
 
+class KarbonPart::Private
+{
+public:
+    Private()
+    : showStatusBar(true), merge(false), maxRecentFiles(10)
+    {}
+
+    double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue)
+    {
+        QString value = element.attribute( attributeName );
+        if( ! value.isEmpty() )
+            return value.toDouble();
+        else
+            return defaultValue;
+    }
+
+    int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue)
+    {
+        QString value = element.attribute( attributeName );
+        if( ! value.isEmpty() )
+            return value.toInt();
+        else
+            return defaultValue;
+    }
+
+
+    KarbonDocument document;  ///< store non-visual doc info
+    bool showStatusBar;       ///< enable/disable status bar in attached view(s)
+    bool merge;
+    uint maxRecentFiles;      ///< max. number of files shown in open recent menu item
+};
+
+
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* parent, const char* name, bool singleViewMode )
-: KoDocument( parentWidget, parent, singleViewMode )
+: KoDocument( parentWidget, parent, singleViewMode ), d( new Private() )
 {
     Q_UNUSED(widgetName)
 
     setObjectName(name);
     setComponentData( KarbonFactory::componentData(), false );
     setTemplateType( "karbon_template" );
-    m_bShowStatusBar = true;
 
     initConfig();
-
-    m_merge = false;
-
-    m_maxRecentFiles = 10;
 
     // set as default paper
     m_pageLayout.format = KoPageFormat::defaultFormat();
@@ -106,61 +133,42 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
 KarbonPart::~KarbonPart()
 {
+    delete d;
 }
 
-void KarbonPart::setPageLayout( const KoPageLayout& layout, KoUnit _unit )
+void KarbonPart::setPageLayout( const KoPageLayout& layout, const KoUnit & unit )
 {
     m_pageLayout = layout;
-    m_doc.setUnit( _unit );
+    d->document.setUnit( unit );
     setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 }
 
 KoView* KarbonPart::createViewInstance( QWidget* parent )
 {
     KarbonView *result = new KarbonView( this, parent );
-    result->canvasWidget()->resourceProvider()->setResource( KoCanvasResource::PageSize, m_doc.pageSize() );
+    result->canvasWidget()->resourceProvider()->setResource( KoCanvasResource::PageSize, d->document.pageSize() );
     return result;
 }
 
-void
-KarbonPart::removeView( KoView *view )
+void KarbonPart::removeView( KoView *view )
 {
     kDebug(38000) <<"KarbonPart::removeView";
     KoDocument::removeView( view );
 }
 
-static double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue)
-{
-    QString value = element.attribute( attributeName );
-    if( ! value.isEmpty() )
-        return value.toDouble();
-    else
-        return defaultValue;
-}
-
-static int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue)
-{
-    QString value = element.attribute( attributeName );
-    if( ! value.isEmpty() )
-        return value.toInt();
-    else
-        return defaultValue;
-}
-
-bool
-KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
+bool KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
 {
     bool success = false;
 
     KoXmlElement doc = document.documentElement();
 
-    if( m_merge )
+    if( d->merge )
     {
-        m_doc.loadDocumentContent( doc );
+        d->document.loadDocumentContent( doc );
         return true;
     }
 
-    success = m_doc.loadXML( doc );
+    success = d->document.loadXML( doc );
 
     //m_pageLayout = KoPageLayout::standardLayout();
 
@@ -168,24 +176,24 @@ KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
     KoXmlElement paper = doc.namedItem( "PAPER" ).toElement();
     if ( !paper.isNull() )
     {
-        m_pageLayout.format = static_cast<KoPageFormat::Format>( getAttribute( paper, "format", 0 ) );
-        m_pageLayout.orientation = static_cast<KoPageFormat::Orientation>( getAttribute( paper, "orientation", 0 ) );
+        m_pageLayout.format = static_cast<KoPageFormat::Format>( d->getAttribute( paper, "format", 0 ) );
+        m_pageLayout.orientation = static_cast<KoPageFormat::Orientation>( d->getAttribute( paper, "orientation", 0 ) );
 
         if( m_pageLayout.format == KoPageFormat::CustomSize )
         {
-            m_pageLayout.width    = m_doc.pageSize().width();
-            m_pageLayout.height    = m_doc.pageSize().height();
+            m_pageLayout.width    = d->document.pageSize().width();
+            m_pageLayout.height    = d->document.pageSize().height();
         }
         else
         {
-            m_pageLayout.width = getAttribute( paper, "width", 0.0 );
-            m_pageLayout.height = getAttribute( paper, "height", 0.0 );
+            m_pageLayout.width = d->getAttribute( paper, "width", 0.0 );
+            m_pageLayout.height = d->getAttribute( paper, "height", 0.0 );
         }
     }
     else
     {
-        m_pageLayout.width = getAttribute( doc, "width", 595.277);
-        m_pageLayout.height = getAttribute( doc, "height", 841.891 );
+        m_pageLayout.width = d->getAttribute( doc, "width", 595.277);
+        m_pageLayout.height = d->getAttribute( doc, "height", 841.891 );
     }
 
     kDebug() <<" width=" << m_pageLayout.width;
@@ -203,33 +211,10 @@ KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
             m_pageLayout.bottom = borders.attribute( "bottom" ).toDouble();
     }
 
-    setUnit( m_doc.unit() );
-    setPageSize( m_doc.pageSize() );
+    setUnit( d->document.unit() );
+    setPageSize( d->document.pageSize() );
 
     return success;
-}
-
-QDomDocument
-KarbonPart::saveXML()
-{
-    QDomDocument doc = m_doc.saveXML();
-    QDomElement me = doc.documentElement();
-    QDomElement paper = doc.createElement( "PAPER" );
-    me.appendChild( paper );
-    paper.setAttribute( "format", static_cast<int>( m_pageLayout.format ) );
-    paper.setAttribute( "pages", pageCount() );
-    paper.setAttribute( "width", m_pageLayout.width );
-    paper.setAttribute( "height", m_pageLayout.height );
-    paper.setAttribute( "orientation", static_cast<int>( m_pageLayout.orientation ) );
-
-    QDomElement paperBorders = doc.createElement( "PAPERBORDERS" );
-    paperBorders.setAttribute( "left", m_pageLayout.left );
-    paperBorders.setAttribute( "top", m_pageLayout.top );
-    paperBorders.setAttribute( "right", m_pageLayout.right );
-    paperBorders.setAttribute( "bottom", m_pageLayout.bottom );
-    paper.appendChild(paperBorders);
-
-    return doc;
 }
 
 bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
@@ -285,11 +270,11 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext shapeContext( context, this );
 
-    m_doc.loadOasis( page, shapeContext );
+    d->document.loadOasis( page, shapeContext );
 
-    if( m_doc.pageSize().isEmpty() )
+    if( d->document.pageSize().isEmpty() )
     {
-        QSizeF pageSize = m_doc.contentRect().united( QRectF(0,0,1,1) ).size();
+        QSizeF pageSize = d->document.contentRect().united( QRectF(0,0,1,1) ).size();
         setPageSize( pageSize );
     }
 
@@ -300,13 +285,12 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
 
 bool KarbonPart::completeLoading( KoStore* store )
 {
-    bool ok=true;
+    bool ok = true;
     foreach(KoDataCenter *dataCenter, dataCenterMap() )
     {
         ok = ok && dataCenter->completeLoading(store);
     }
     return ok;
-
 }
 
 void KarbonPart::loadOasisSettings( const KoXmlDocument & settingsDoc )
@@ -363,7 +347,7 @@ void KarbonPart::saveOasisSettings( KoStore * store )
 
 bool KarbonPart::saveOdf( SavingContext &documentContext )
 {
-    if( ! m_doc.saveOdf( documentContext ) )
+    if( ! d->document.saveOdf( documentContext ) )
         return false;
 
     KoStore * store = documentContext.odfStore.store();
@@ -382,50 +366,43 @@ bool KarbonPart::saveOdf( SavingContext &documentContext )
     return true;
 }
 
-void
-KarbonPart::slotDocumentRestored()
+void KarbonPart::slotDocumentRestored()
 {
     setModified( false );
 }
 
-void
-KarbonPart::repaintAllViews( bool /*repaint*/ )
+void KarbonPart::paintContent( QPainter&, const QRect& )
 {
-// TODO: needs porting
-/*
-    foreach ( KoView* view, views() )
-        static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( repaint );*/
-}
-
-void KarbonPart::paintContent( QPainter& painter, const QRect& rect)
-{
-    Q_UNUSED( painter );
-    Q_UNUSED( rect );
     kDebug(38000) <<"**** part->paintContent()";
-
-    /*
-    QRectF r = rect;
-    double zoomFactorX = double( r.width() ) / double( document().pageSize().width() );
-    double zoomFactorY = double( r.height() ) / double( document().pageSize().height() );
-    double zoomFactor = qMin( zoomFactorX, zoomFactorY );
-    */
 }
 
-void
-KarbonPart::setShowStatusBar( bool b )
+KarbonDocument& KarbonPart::document()
 {
-    m_bShowStatusBar = b;
+    return d->document;
 }
 
-void
-KarbonPart::reorganizeGUI()
+bool KarbonPart::showStatusBar() const
+{
+    return d->showStatusBar;
+}
+
+void KarbonPart::setShowStatusBar( bool b )
+{
+    d->showStatusBar = b;
+}
+
+uint KarbonPart::maxRecentFiles() const
+{
+    return d->maxRecentFiles;
+}
+
+void KarbonPart::reorganizeGUI()
 {
     foreach ( KoView* view, views() )
         static_cast<KarbonView*>( view )->reorganizeGUI();
 }
 
-void
-KarbonPart::initConfig()
+void KarbonPart::initConfig()
 {
     KSharedConfigPtr config = KarbonPart::componentData().config();
 
@@ -436,7 +413,7 @@ KarbonPart::initConfig()
     {
         KConfigGroup interfaceGroup = config->group( "Interface" );
         setAutoSave( interfaceGroup.readEntry( "AutoSave", defaultAutoSave() / 60 ) * 60 );
-        m_maxRecentFiles = interfaceGroup.readEntry( "NbRecentFile", 10 );
+        d->maxRecentFiles = interfaceGroup.readEntry( "NbRecentFile", 10 );
         setShowStatusBar( interfaceGroup.readEntry( "ShowStatusBar" , true ) );
         setBackupFile( interfaceGroup.readEntry( "BackupFile", true ) );
     }
@@ -451,7 +428,7 @@ KarbonPart::initConfig()
             defaultUnit = "in";
 
         setUnit( KoUnit::unit( miscGroup.readEntry( "Units", defaultUnit ) ) );
-        m_doc.setUnit( unit() );
+        d->document.setUnit( unit() );
     }
     if( config->hasGroup( "Grid" ) )
     {
@@ -462,20 +439,19 @@ KarbonPart::initConfig()
         gridData().setGrid( spacingX, spacingY );
         //double snapX = gridGroup.readEntry<double>( "SnapX", defGrid.snapX() );
         //double snapY = gridGroup.readEntry<double>( "SnapY", defGrid.snapY() );
-        //m_doc.grid().setSnap( snapX, snapY );
+        //d->document.grid().setSnap( snapX, snapY );
         QColor color = gridGroup.readEntry( "Color", defGrid.gridColor() );
         gridData().setGridColor( color );
     }
 }
 
-bool
-KarbonPart::mergeNativeFormat( const QString &file )
+bool KarbonPart::mergeNativeFormat( const QString &file )
 {
-    m_merge = true;
+    d->merge = true;
     bool result = loadNativeFormat( file );
     if ( !result )
         showLoadingErrorDialog();
-    m_merge = false;
+    d->merge = false;
     return result;
 }
 
@@ -486,7 +462,7 @@ void KarbonPart::addShape( KoShape* shape )
     KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
     if( layer )
     {
-        m_doc.insertLayer( layer );
+        d->document.insertLayer( layer );
         if( canvasController )
         {
             KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -502,14 +478,14 @@ void KarbonPart::addShape( KoShape* shape )
             KoShapeLayer *activeLayer = 0;
             if( canvasController )
                 activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
-            else if( m_doc.layers().count() )
-                activeLayer = m_doc.layers().first();
+            else if( d->document.layers().count() )
+                activeLayer = d->document.layers().first();
 
             if( activeLayer )
                 activeLayer->addChild( shape );
         }
 
-        m_doc.add( shape );
+        d->document.add( shape );
 
         foreach( KoView *view, views() ) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
@@ -525,11 +501,11 @@ void KarbonPart::removeShape( KoShape* shape )
     KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
     if( layer )
     {
-        m_doc.removeLayer( layer );
+        d->document.removeLayer( layer );
     }
     else
     {
-        m_doc.remove( shape );
+        d->document.remove( shape );
         foreach( KoView *view, views() ) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->remove(shape);
@@ -540,20 +516,12 @@ void KarbonPart::removeShape( KoShape* shape )
 
 QMap<QString, KoDataCenter*> KarbonPart::dataCenterMap()
 {
-    return m_doc.dataCenterMap();
-}
-
-void KarbonPart::updateDocumentSize()
-{
-    KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
-    const KoViewConverter * viewConverter = canvasController->canvas()->viewConverter();
-    QSize documentSize = viewConverter->documentToView( m_doc.boundingRect() ).size().toSize();
-    canvasController->setDocumentSize( documentSize );
+    return d->document.dataCenterMap();
 }
 
 void KarbonPart::setPageSize( const QSizeF &pageSize )
 {
-    m_doc.setPageSize( pageSize );
+    d->document.setPageSize( pageSize );
     foreach( KoView *view, views() )
     {
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();

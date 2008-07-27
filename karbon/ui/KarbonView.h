@@ -74,18 +74,19 @@ public:
     explicit KarbonView( KarbonPart* part, QWidget* parent = 0 );
     virtual ~KarbonView();
 
-    KarbonPart *part() const { return m_part; }
+    /// Returns the view is attached to
+    KarbonPart * part() const;
 
-    void dropEvent( QDropEvent *e );
-
-    KarbonCanvas* canvasWidget() const { return m_canvas; }
+    /// Returns the canvas widget of this view
+    KarbonCanvas * canvasWidget() const;
 
     void reorganizeGUI();
-    void setNumberOfRecentFiles( unsigned int number );
+    void setNumberOfRecentFiles( uint number );
 
-    QLabel* statusMessage() const { return m_status; }
-
-    void setCursor( const QCursor & );
+    /// Reimplemented from QWidget
+    virtual void setCursor( const QCursor & );
+    /// Reimplemented from QWidget
+    virtual void dropEvent( QDropEvent *e );
 
 public slots:
     // editing:
@@ -166,7 +167,6 @@ protected:
     virtual void updateReadWrite( bool readwrite );
     virtual void resizeEvent( QResizeEvent* event );
 
-    void createDocumentTabDock();
     void createLayersTabDock();
     void createStrokeDock();
     void createColorDock();
@@ -186,44 +186,8 @@ private:
     /// Returns a list of all selected path shapes
     QList<KoPathShape*> selectedPathShapes();
 
-    KarbonPart        *m_part;
-    KarbonCanvas        *m_canvas;
-    KoCanvasController    *m_canvasController;
-    KoRuler            *m_horizRuler;
-    KoRuler            *m_vertRuler;
-
-    KarbonStylePreviewDocker * m_stylePreview;
-
-    // actions:
-    KAction * m_groupObjects;
-    KAction * m_ungroupObjects;
-    KAction * m_closePath;
-    KAction * m_combinePath;
-    KAction * m_separatePath;
-    KAction * m_reversePath;
-    KAction * m_intersectPath;
-    KAction * m_subtractPath;
-    KAction * m_unitePath;
-    KAction * m_excludePath;
-    KAction * m_configureAction;
-    KAction * m_deleteSelectionAction;
-
-    KToggleAction * m_viewAction;
-    KToggleAction * m_showRulerAction;
-    KToggleAction * m_showGridAction;
-    KToggleAction * m_snapGridAction;
-    KToggleAction * m_showPageMargins;
-    KToggleAction * m_showGuidesAction;
-
-    //dockers
-    VDocumentTab        *m_DocumentTab;
-    KarbonLayerDocker        *m_layerDocker;
-
-    //Status Bar
-    QLabel                *m_status;       // Ordinary status
-    QLabel                *m_cursorCoords; // Cursor coordinates
-
-    KarbonZoomController * m_zoomController;
+    class Private;
+    Private * const d;
 };
 
 #endif

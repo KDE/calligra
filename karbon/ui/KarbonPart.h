@@ -47,11 +47,8 @@ class KoDataCenter;
 
 /**
  * Keeps track of visual per document properties.
- * It manages actions performed on this object in a command history.
  * It loads initial settings and applies them to the document and its views.
- * Finally a dcop interface is set up here.
  */
-
 class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBase
 {
     Q_OBJECT
@@ -60,60 +57,66 @@ public:
                 QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
     virtual ~KarbonPart();
 
+    /// reimplemented form KoDocument
     virtual void paintContent( QPainter& painter, const QRect& rect);
-
-    /// file-> open calls this method
+    /// reimplemented form KoDocument
     virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
+    /// reimplemented form KoDocument
     virtual bool loadOdf( KoOdfReadStore & odfStore );
+    /// reimplemented form KoDocument
     virtual bool completeLoading( KoStore* store );
-
-    /// file-> save and file-> save as call this method
-    virtual QDomDocument saveXML();
+    /// reimplemented form KoDocument
     virtual bool saveOdf( SavingContext &documentContext );
 
-    // access static document:
-    KarbonDocument& document() { return m_doc; }
+    /// implemented from KoShapeController
+    virtual void addShape( KoShape* shape );
+    /// implemented from KoShapeController
+    virtual void removeShape( KoShape* shape );
+    /// implemented from KoShapeController
+    virtual QMap<QString, KoDataCenter*> dataCenterMap();
 
-    bool showStatusBar() const
-    {
-        return m_bShowStatusBar;
-    }
+    /// Gives access to document content
+    KarbonDocument& document();
 
+    /// Returns if status bar is shown
+    bool showStatusBar() const;
+    /// Shows/hides status bar
     void setShowStatusBar( bool b );
     /// update attached view(s) on the current doc settings
     /// at this time only the status bar is handled
     void reorganizeGUI();
 
-    void initConfig();
-    unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
+    /// Returns maximum number of recent files
+    uint maxRecentFiles() const;
 
-    void setPageLayout( const KoPageLayout& layout, KoUnit _unit );
+    /// Sets page layout and unit of the document
+    void setPageLayout( const KoPageLayout& layout, const KoUnit & unit );
 
     bool mergeNativeFormat( const QString & file );
 
-    // implemented from KoShapeController
-    virtual void addShape( KoShape* shape );
-    virtual void removeShape( KoShape* shape );
-    virtual QMap<QString, KoDataCenter*> dataCenterMap();
-
 public slots:
-    /// repaint all views attached to this koDocument
-    void repaintAllViews( bool repaint = true );
     void slotDocumentRestored();
 
 protected:
+    /// reimplemented form KoDocument
     virtual KoView* createViewInstance( QWidget* parent );
+    /// reimplemented form KoDocument
     virtual void removeView( KoView *view );
-    void loadOasisSettings( const KoXmlDocument&settingsDoc );
+
+    /// Loads settings like grid and guide lines from given xml document
+    void loadOasisSettings( const KoXmlDocument & settingsDoc );
+    /// Saves settings like grid and guide lines to store
     void saveOasisSettings( KoStore * store );
 
-    void updateDocumentSize();
+    /// Sets given page size to all attached views/canvases
     void setPageSize( const QSizeF &pageSize );
+
+    /// Reads settings from config file
+    void initConfig();
+
 private:
-    KarbonDocument m_doc;                    /// store non-visual doc info
-    bool m_bShowStatusBar;                /// enable/disable status bar in attached view(s)
-    bool m_merge;
-    unsigned int m_maxRecentFiles;                /// max. number of files shown in open recent menu item
+    class Private;
+    Private * const d;
 };
 
 #endif // KARBON_PART_H

@@ -52,7 +52,7 @@ public:
 };
 
 KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KActionCollection *actionCollection )
-    : d( new Private() )
+    : QObject(controller), d( new Private() )
 {
     d->canvasController = controller;
     d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), false, 0);
