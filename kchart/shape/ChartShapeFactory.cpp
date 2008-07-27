@@ -127,13 +127,12 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     m_chartData->setData( m_chartData->index( 3, 3 ), 8.6 );
     m_chartData->setData( m_chartData->index( 3, 4 ), 4.3 );
     
-    const QSizeF shapeSize( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) );
+    const QSizeF shapeSize = shape->size();
 
     // We want the chart shape to take over and handle this model itself
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
     shape->setModel( m_chartData, true );
-    shape->setSize( shapeSize );
     
     QPointF plotAreaPos( 0.0, 0.0 );
     QSizeF plotAreaSize( shapeSize );

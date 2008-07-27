@@ -254,8 +254,10 @@ QColor defaultDataSetColor( int dataSetNum )
 class ChartShape::Private
 {
 public:
-    Private();
+    Private( ChartShape *shape );
     ~Private();
+    
+    void showLabel( KoShape *label );
     
     KoShape *title;
     KoShape *subTitle;
@@ -270,10 +272,13 @@ public:
     QList<KoShape*> hiddenChildren;
     
     ChartDocument *document;
+    
+    ChartShape *shape;
 };
 
-ChartShape::Private::Private()
+ChartShape::Private::Private( ChartShape *shape )
 {
+    this->shape = shape;
     title = 0;
     subTitle = 0;
     footer = 0;
@@ -289,11 +294,50 @@ ChartShape::Private::~Private()
 {
 }
 
+void ChartShape::Private::showLabel( KoShape *label )
+{
+    Q_ASSERT( label );
+    
+    const QSizeF plotAreaSize = plotArea->size();
+    if ( label->position().y() + label->size().height() / 2.0 < shape->size().height() / 2.0 )
+    {
+        const double verticalSpaceRemaining = plotArea->position().y();
+        const double spaceToExpand = ( label->position().y() + label->size().height() ) - verticalSpaceRemaining;
+        if ( spaceToExpand > 0.0 )
+        {
+            plotArea->setSize( QSizeF( plotAreaSize.width(), plotAreaSize.height() - spaceToExpand ) ); 
+            plotArea->setPosition( QPointF( plotArea->position().x(), plotArea->position().y() + spaceToExpand ) );
+        }
+    }
+    else
+    {
+        const double verticalSpaceRemaining = plotArea->position().y() + plotArea->size().height() - label->position().y();
+        double spaceToExpand = ( shape->size().height() - label->position().y() - label->size().height() ) - verticalSpaceRemaining;
+        if ( spaceToExpand > 0.0 )
+            spaceToExpand = 0.0;
+        foreach ( Axis *axis, plotArea->axes() )
+        {
+            if ( axis->position() == BottomAxisPosition )
+            {
+                axis->title()->setPosition( axis->title()->position() - QPointF( 0.0, label->size().height() ) );
+                spaceToExpand += label->size().height();
+            }
+        }
+        if ( spaceToExpand > 0.0 )
+        {
+            plotArea->setSize( QSizeF( plotAreaSize.width(), plotAreaSize.height() - spaceToExpand ) );
+        }
+    }
+    
+    label->setVisible( true );
+}
+
 ChartShape::ChartShape()
-    : d ( new Private )
+    : d ( new Private( this ) )
     , KoFrameShape( KoXmlNS::draw, "object" )
 {
     setShapeId( ChartShapeId );
+    KoShape::setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
     
     d->model = new ProxyModel();
     
@@ -332,7 +376,9 @@ ChartShape::ChartShape()
     }
     
     addChild( d->title );
-    titleData()->document()->setPlainText( i18n( "Title" ) );
+    titleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Title" ) + "</div>" );
+    d->title->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    d->title->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, 0.0 ) );
     d->title->setVisible( false );
     d->title->setZIndex( 2 );
 
@@ -347,7 +393,9 @@ ChartShape::ChartShape()
         d->subTitle->setUserData( dataDummy );
     }
     addChild( d->subTitle );
-    subTitleData()->document()->setPlainText( i18n( "Subtitle" ) );
+    subTitleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Subtitle" ) + "</div>" );
+    d->subTitle->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    d->subTitle->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, d->title->size().height() ) );
     d->subTitle->setVisible( false );
     d->subTitle->setZIndex( 3 );
 
@@ -362,9 +410,11 @@ ChartShape::ChartShape()
         d->footer->setUserData( dataDummy );
     }
     addChild( d->footer );
-    footerData()->document()->setPlainText( i18n( "Footer" ) );
+    footerData()->document()->setHtml( "<div align=\"center\">" + i18n( "Footer" ) + "</div>" );
+    d->footer->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    d->footer->setPosition( QPointF( size().width() / 2.0 - d->footer->size().width() / 2.0, size().height() - d->footer->size().height() ) );
     d->footer->setVisible( false );
-    d->footer->setZIndex( 42 );
+    d->footer->setZIndex( 4 );
     
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );
@@ -451,6 +501,21 @@ Surface *ChartShape::floor() const
 }
 
 
+void ChartShape::showTitle()
+{
+    d->showLabel( d->title );
+}
+
+void ChartShape::showSubTitle()
+{
+    d->showLabel( d->subTitle );
+}
+
+void ChartShape::showFooter()
+{
+    d->showLabel( d->footer );
+}
+
 void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )
 {
     Q_ASSERT( model );
@@ -489,17 +554,101 @@ void ChartShape::setPosition( const QPointF &pos )
     KoShape::setPosition( pos );
 }
 
-void ChartShape::setSize( const QSizeF &size )
+static QPointF scalePointCenterLeft( QPointF center, double factorX, double factorY, const QSizeF &size )
+{
+    center.rx() -= size.width() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.rx() += size.width() / 2.0;
+
+    return center;
+}
+
+static QPointF scalePointCenterRight( QPointF center, double factorX, double factorY, const QSizeF &size )
+{
+    center.rx() += size.width() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.rx() -= size.width() / 2.0;
+
+    return center;
+}
+
+static QPointF scalePointCenterTop( QPointF center, double factorX, double factorY, const QSizeF &size )
+{
+    center.ry() -= size.height() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.ry() += size.height() / 2.0;
+
+    return center;
+}
+
+static QPointF scalePointCenterBottom( QPointF center, double factorX, double factorY, const QSizeF &size )
+{
+    center.ry() += size.height() / 2.0;
+    center.rx() *= factorX;
+    center.ry() *= factorY;
+    center.ry() -= size.height() / 2.0;
+
+    return center;
+}
+
+void ChartShape::setSize( const QSizeF &newSize )
 {
     Q_ASSERT( d->plotArea );
     
     // Usually, this is done by signals from the QWidget that we resize.
     // But since a KoShape is not a QWidget, we need to do this manually.
-    d->plotArea->kdChart()->resize( size.toSize() );
+    //d->plotArea->kdChart()->resize( newSize.toSize() );
     
-    KoShape::setSize( size );
+    const double factorX = newSize.width() / size().width();
+    const double factorY = newSize.height() / size().height();
     
-    //updateChildrenPositions();
+    foreach( Axis *axis, d->plotArea->axes() )
+    {
+        KoShape *title = axis->title();
+        switch( axis->position() )
+        {
+        case TopAxisPosition:
+            title->setAbsolutePosition( scalePointCenterTop( title->absolutePosition(), factorX, factorY, title->boundingRect().size() ) );
+            break;
+        case BottomAxisPosition:
+            title->setAbsolutePosition( scalePointCenterBottom( title->absolutePosition(), factorX, factorY, title->boundingRect().size() ) );
+            break;
+        case LeftAxisPosition:
+            title->setAbsolutePosition( scalePointCenterLeft( title->absolutePosition(), factorX, factorY, title->boundingRect().size() ) );
+            break;
+        case RightAxisPosition:
+            title->setAbsolutePosition( scalePointCenterRight( title->absolutePosition(), factorX, factorY, title->boundingRect().size() ) );
+            break;
+        }
+    }
+    
+    switch ( d->legend->legendPosition() )
+    {
+    case TopLegendPosition:
+        d->legend->setAbsolutePosition( scalePointCenterTop( d->legend->absolutePosition(), factorX, factorY, d->legend->boundingRect().size() ) );
+        break;
+    case BottomLegendPosition:
+        d->legend->setAbsolutePosition( scalePointCenterBottom( d->legend->absolutePosition(), factorX, factorY, d->legend->boundingRect().size() ) );
+        break;
+    case StartLegendPosition:
+        d->legend->setAbsolutePosition( scalePointCenterLeft( d->legend->absolutePosition(), factorX, factorY, d->legend->boundingRect().size() ) );
+        break;
+    case EndLegendPosition:
+        d->legend->setAbsolutePosition( scalePointCenterRight( d->legend->absolutePosition(), factorX, factorY, d->legend->boundingRect().size() ) );
+        break;
+    }
+    d->title->setAbsolutePosition( scalePointCenterTop( d->title->absolutePosition(), factorX, factorY, d->title->boundingRect().size() ) );
+    d->subTitle->setAbsolutePosition( scalePointCenterTop( d->subTitle->absolutePosition(), factorX, factorY, d->subTitle->boundingRect().size() ) );
+    d->footer->setAbsolutePosition( scalePointCenterBottom( d->footer->absolutePosition(), factorX, factorY, d->footer->boundingRect().size() ) );
+    
+    
+    const QSizeF plotAreaSize = d->plotArea->size();
+    d->plotArea->setSize( QSizeF( plotAreaSize.width() + newSize.width() - size().width(), plotAreaSize.height() + newSize.height() - size().height() ) );
+    
+    KoShape::setSize( newSize );
 }
 
 void ChartShape::updateChildrenPositions()
@@ -510,14 +659,6 @@ void ChartShape::updateChildrenPositions()
     {
         KoShape *title = axis->title();
         QPointF titlePosition;
-        if ( axis->position() == BottomAxisPosition )
-            titlePosition = QPointF( size().width() / 2.0 - title->size().width() / 2.0, size().height() );
-        else if ( axis->position() == TopAxisPosition )
-            titlePosition = QPointF( size().width() / 2.0, -title->size().height() );
-        else if ( axis->position() == LeftAxisPosition )
-            titlePosition = QPointF( -title->size().width() / 2.0 - title->size().height() / 2.0, size().height() / 2.0 );
-        else if ( axis->position() == RightAxisPosition )
-            titlePosition = QPointF( size().width(), size().height() / 2.0 );
         title->setPosition( titlePosition );
     }
     

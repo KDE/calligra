@@ -453,7 +453,10 @@ void ChartTool::setShowTitle( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
-    d->shape->title()->setVisible( show );
+    if ( show )
+        d->shape->showTitle();
+    else
+        d->shape->title()->setVisible( false );
     d->shape->update();
 }
 
@@ -462,7 +465,10 @@ void ChartTool::setShowSubTitle( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
-    d->shape->subTitle()->setVisible( show );
+    if ( show )
+        d->shape->showSubTitle();
+    else
+        d->shape->subTitle()->setVisible( false );
     d->shape->update();
 }
 
@@ -471,7 +477,10 @@ void ChartTool::setShowFooter( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
-    d->shape->footer()->setVisible( show );
+    if ( show )
+        d->shape->showFooter();
+    else
+        d->shape->footer()->setVisible( false );
     d->shape->update();
 }
 

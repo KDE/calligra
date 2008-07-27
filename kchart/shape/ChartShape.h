@@ -109,6 +109,10 @@ public:
     Surface *wall() const;
     Surface *floor() const;
     
+    void showTitle();
+    void showSubTitle();
+    void showFooter();
+    
     // Setter methods
     void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
     void setModel( QAbstractItemModel *model, const QVector<QRect> &selection );
@@ -161,6 +165,8 @@ public:
 private:
     class Private;
     Private *const d;
+    
+    void showLabel( KoShape *label );
 };
 
 } // Namespace KChart
