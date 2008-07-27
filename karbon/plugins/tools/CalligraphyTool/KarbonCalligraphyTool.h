@@ -65,8 +65,10 @@ private slots:
 private:
     void addPoint( KoPointerEvent *event );
     // auxiliary functions to calculate the dynamic parameters
+    QPointF calculateForce( const QPointF &mousePosition );
     double calculateWidth( double pressure );
     double calculateAngle( const QPointF &oldSpeed, const QPointF &newSpeed);
+    QPointF calculateNewPoint(const QPointF &lastPoint, const QPointF &speed);
 
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
@@ -84,6 +86,9 @@ private:
     double m_drag;  // from 0.0 to 1.0
 
     KoPathShape *m_selectedPath;
+    double m_followPathPosition;
+    bool m_endOfPath;
+    QPointF m_lastMousePos;
 
     bool m_isDrawing;
     bool m_firstPointAdded;

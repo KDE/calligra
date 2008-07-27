@@ -134,12 +134,17 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 {
     if ( ! m_firstPointAdded ) {
-        m_lastPoint = event->point;
         m_firstPointAdded = true;
+        m_endOfPath = false;
+        m_followPathPosition = 0;
+        m_lastPoint = calculateNewPoint( event->point, QPointF(0, 0) );
+        m_lastMousePos = event->point;
         return;
     }
+    if ( m_endOfPath )
+        return;
 
-    QPointF force = event->point - m_lastPoint;
+    QPointF force = calculateForce( event->point );
     QPointF dSpeed = force/m_mass;
     // apply drag and "force"
     QPointF newSpeed = m_speed * (1.0 - m_drag) + dSpeed;
@@ -149,8 +154,22 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
     m_shape->appendPoint( m_lastPoint, angle, width );
 
     m_speed = newSpeed;
-    m_lastPoint = m_lastPoint + m_speed;
+
+    m_lastPoint = calculateNewPoint(m_lastPoint, m_speed);
     m_canvas->updateCanvas( m_shape->lastPieceBoundingRect() );
+}
+
+QPointF KarbonCalligraphyTool::calculateForce(const QPointF &newPoint )
+{
+    if ( !m_usePath || !m_selectedPath )
+        return newPoint - m_lastPoint;
+
+    // flollowing path
+    // FIXME: find a better solution
+    m_speed = QPointF(0, 0);
+    QPointF res = newPoint - m_lastMousePos;
+    m_lastMousePos = newPoint;
+    return res;
 }
 
 double KarbonCalligraphyTool::calculateWidth( double pressure )
@@ -181,8 +200,10 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     // calculate the avarage of the speed (sum of the normalized values)
     double oldLength = QLineF( QPointF(0,0), oldSpeed ).length();
     double newLength = QLineF( QPointF(0,0), newSpeed ).length();
-    QPointF oldSpeedNorm = oldLength ? oldSpeed/oldLength : QPointF(0, 0);
-    QPointF newSpeedNorm = newLength ? newSpeed/newLength : QPointF(0, 0);
+    QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?
+                            oldSpeed/oldLength : QPointF(0, 0);
+    QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ?
+                            newSpeed/newLength : QPointF(0, 0);
     QPointF speed = oldSpeedNorm + newSpeedNorm;
 
     // angle solely based on the speed
@@ -224,6 +245,32 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     double angle = fixedAngle + dAngle*(1.0 - m_fixation);
 
     return angle;
+}
+
+QPointF KarbonCalligraphyTool::calculateNewPoint( const QPointF &lastPoint,
+                                                   const QPointF &speed )
+{
+    if ( !m_usePath || !m_selectedPath )
+        return lastPoint + speed; // don't follow path
+
+    // follow selected path
+    double step = QLineF(QPointF(0,0), speed).length();
+    m_followPathPosition += step;
+    // TODO: only calculate once
+    QPainterPath outline = m_selectedPath->outline();
+
+    double t;
+    if (m_followPathPosition >= outline.length())
+    {
+        t = 1.0;
+        m_endOfPath = true; // FIXME: last point never added???
+    }
+    else
+    {
+        t = outline.percentAtLength( m_followPathPosition );
+    }
+
+    return outline.pointAtPercent(t) + m_selectedPath->position();
 }
 
 void KarbonCalligraphyTool::activate( bool )
