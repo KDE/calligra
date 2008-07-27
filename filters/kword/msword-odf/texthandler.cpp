@@ -973,7 +973,7 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
 	    //TODO look at style->sti()
 	    kDebug(30513) << "found heading: style->sti() = " << style->sti();
 	    if(writeContentTags) {
-		writer->startElement("text:h"); //this element will be closed in paragraphEnd(), since no <text:p> tag is opened
+		writer->startElement("text:h", false); //this element will be closed in paragraphEnd(), since no <text:p> tag is opened
 		writer->addAttribute("text:outline-level", pap.ilvl + 1);
 	    }
 	}
@@ -1006,7 +1006,7 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
 	}
 	//we haven't opened the tag anywhere else, so we need to do it here
 	if(writeContentTags) {
-	    writer->startElement("text:p");
+	    writer->startElement("text:p", false);
 	}
     }
 
