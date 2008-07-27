@@ -567,3 +567,8 @@ int KarbonCalligraphyOptionWidget::profilePosition( const QString &profileName )
     }
     return -1;
 }
+
+void KarbonCalligraphyOptionWidget::setUsePathEnabled( bool enabled )
+{
+    usePath->setEnabled( enabled );
+}

@@ -46,6 +46,8 @@ using std::sqrt;
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoTool( canvas ), m_shape( 0 ), m_isDrawing( false ), m_speed(0, 0)
 {
+    connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
+             SLOT(updateSelectedPath()) );
 }
 
 KarbonCalligraphyTool::~KarbonCalligraphyTool()
@@ -267,6 +269,9 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     connect( widget, SIGNAL(dragChanged(double)),
              this, SLOT(setDrag(double)));
 
+    connect( this, SIGNAL(pathSelectedChanged(bool)),
+             widget, SLOT(setUsePathEnabled(bool)) );
+
     widget->emitAll();
 
     return widget;
@@ -322,3 +327,27 @@ void KarbonCalligraphyTool::setCaps( double caps )
     m_caps = caps;
 }
 
+void KarbonCalligraphyTool::updateSelectedPath()
+{
+    KoPathShape *oldSelectedPath = m_selectedPath; // save old value
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+
+    // null pointer if it the selection isn't a KoPathShape
+    // or if the selection is empty
+    m_selectedPath =
+                dynamic_cast<KoPathShape *>( selection->firstSelectedShape() );
+
+    // or if it's a KoPathShape but with no or more than one subpaths
+    if ( m_selectedPath && m_selectedPath->subpathCount() != 1 )
+        m_selectedPath = 0;
+
+    // or if there ora none or more than 1 shapes selected
+    if ( selection->count() != 1 )
+        m_selectedPath = 0;
+
+    // emit signal it there wasn't a selected path and now there is
+    // or the other way around
+    if ( (m_selectedPath != 0) != (oldSelectedPath != 0) )
+        emit pathSelectedChanged( m_selectedPath != 0 );
+}

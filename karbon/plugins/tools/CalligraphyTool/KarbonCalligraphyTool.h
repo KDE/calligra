@@ -45,6 +45,9 @@ public:
     void activate ( bool temporary=false );
     void deactivate();
 
+signals:
+    void pathSelectedChanged(bool selection);
+
 private slots:
     void setUsePath( bool usePath );
     void setUsePressure( bool usePressure );
@@ -56,6 +59,8 @@ private slots:
     void setCaps( double caps );
     void setMass( double mass );   // set the mass in user friendly format
     void setDrag( double drag );
+
+    void updateSelectedPath();
 
 private:
     void addPoint( KoPointerEvent *event );
@@ -77,6 +82,8 @@ private:
     double m_caps;
     double m_mass;  // in raw format (not user friendly)
     double m_drag;  // from 0.0 to 1.0
+
+    KoPathShape *m_selectedPath;
 
     bool m_isDrawing;
     bool m_firstPointAdded;

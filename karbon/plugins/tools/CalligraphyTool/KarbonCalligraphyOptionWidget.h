@@ -44,6 +44,8 @@ private slots:
     void removeProfile();
     void toggleDetails();
 
+    void setUsePathEnabled( bool enabled );
+
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>
     //       is it needed al all??
