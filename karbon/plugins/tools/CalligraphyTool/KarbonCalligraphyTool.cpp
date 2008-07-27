@@ -234,6 +234,15 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
 {
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
 
+    connect( widget, SIGNAL(usePathChanged(bool)),
+            this, SLOT(setUsePath(bool)));
+
+    connect( widget, SIGNAL(usePressureChanged(bool)),
+            this, SLOT(setUsePressure(bool)));
+
+    connect( widget, SIGNAL(useAngleChanged(bool)),
+            this, SLOT(setUseAngle(bool)));
+
     connect( widget, SIGNAL(widthChanged(double)),
              this, SLOT(setStrokeWidth(double)));
 
@@ -245,6 +254,9 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
 
     connect( widget, SIGNAL(fixationChanged(double)),
              this, SLOT(setFixation(double)));
+
+    connect( widget, SIGNAL(capsChanged(double)),
+             this, SLOT(setCaps(double)));
 
     connect( widget, SIGNAL(massChanged(double)),
              this, SLOT(setMass(double)));
@@ -286,3 +298,24 @@ void KarbonCalligraphyTool::setDrag( double drag )
 {
     m_drag = drag;
 }
+
+void KarbonCalligraphyTool::setUsePath( bool usePath )
+{
+    m_usePath = usePath;
+}
+
+void KarbonCalligraphyTool::setUsePressure( bool usePressure )
+{
+    m_usePressure = usePressure;
+}
+
+void KarbonCalligraphyTool::setUseAngle(bool useAngle )
+{
+    m_useAngle = useAngle;
+}
+
+void KarbonCalligraphyTool::setCaps( double caps )
+{
+    m_caps = caps;
+}
+
