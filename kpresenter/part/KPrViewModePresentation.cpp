@@ -49,7 +49,6 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_presenterViewCanvas( 0 )
 , m_presenterViewWidget( 0 )
 , m_endOfSlideShowPage( 0 )
-, m_pvEndOfSlideShowPage( 0 )
 {
 }
 
@@ -143,27 +142,25 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     bool presenterViewEnabled = document->isPresenterViewEnabled();
     int presentationscreen = document->presentationMonitor();
 
+    // add end off slideshow page
+    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( presentationscreen ) );
+    QList<KoPAPageBase*> pages = document->pages();
+    pages.append( m_endOfSlideShowPage );
+
+    QRect presentationRect = desktop.screenGeometry( presentationscreen );
+
     if ( presenterViewEnabled ) {
         if ( desktop.numScreens() > 1 ) {
             int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
-            QRect rect = desktop.screenGeometry( newscreen );
-
-            const KoPageLayout &layout = document->pages().last()->pageLayout();
-            KoZoomHandler zoomHandler;
-            double ratio = ( zoomHandler.resolutionX() * layout.width ) / ( zoomHandler.resolutionY() * layout.height );
-            QSize size( rect.height() * ratio, rect.height() );
-
-            m_pvEndOfSlideShowPage = new KPrEndOfSlideShowPage( QRect( QPoint( 0, 0 ), size ) );
-            QList<KoPAPageBase*> pages = document->pages();
-            pages.append( m_pvEndOfSlideShowPage );
+            QRect pvRect = desktop.screenGeometry( newscreen );
 
             m_presenterViewCanvas = new KoPACanvas( m_view, document );
             m_presenterViewWidget = new KPrPresenterViewWidget( this, pages, m_presenterViewCanvas );
             m_presenterViewWidget->setParent( ( QWidget* )0, Qt::Window );
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
-            m_presenterViewWidget->move( rect.topLeft() );
-            m_presenterViewWidget->updateWidget( rect.size() ); 
+            m_presenterViewWidget->move( pvRect.topLeft() );
+            m_presenterViewWidget->updateWidget( presentationRect.size() ); 
             m_presenterViewWidget->show();
             m_presenterViewWidget->setFocus();                             // it shown full screen
 
@@ -176,13 +173,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
         }
     }
 
-    // add end off slideshow page
-    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( m_canvas ) );
-    QList<KoPAPageBase*> pages = document->pages();
-    pages.append( m_endOfSlideShowPage );
-
-    QRect rect = desktop.screenGeometry( presentationscreen );
-    m_canvas->move( rect.topLeft() );
+    m_canvas->move( presentationRect.topLeft() );
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
@@ -220,9 +211,6 @@ void KPrViewModePresentation::deactivate()
         delete m_presenterViewWidget;
         m_presenterViewWidget = 0;
         m_presenterViewCanvas = 0;
-
-        delete m_pvEndOfSlideShowPage;
-        m_pvEndOfSlideShowPage = 0;
     }
 }
 

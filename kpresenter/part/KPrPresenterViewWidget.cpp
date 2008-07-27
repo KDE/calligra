@@ -91,13 +91,11 @@ void KPrPresenterViewWidget::setActivePage( KoPAPageBase *page )
 
 void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize )
 {
-    int previewHeight = 0.5 * widgetSize.height();
+    // TODO: better way to calculate preview size, based on current widget size
+    // This is only temporary and rough calculation
+    int previewHeight = 0.4 * widgetSize.height();
 
-    KoPAPageBase *page = m_viewMode->view()->activePage();
-
-    const KoPageLayout &layout = page->pageLayout();
-    KoZoomHandler zoomHandler;
-    double ratio = ( zoomHandler.resolutionX() * layout.width ) / ( zoomHandler.resolutionY() * layout.height );
+    double ratio = (double)widgetSize.width() / widgetSize.height();
     QSize previewSize( previewHeight * ratio, previewHeight );
 
     m_mainWidget->setPreviewSize( previewSize );
