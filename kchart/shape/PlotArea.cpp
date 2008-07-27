@@ -37,6 +37,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
+#include <KoShapeBackground.h>
 
 // Qt
 #include <QPointF>
@@ -805,32 +806,21 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
     const int borderY = 4;
 
     // Only use a pixmap with sane sizes
-    d->paintPixmap = paintRectSize.width() < MAX_PIXMAP_SIZE || paintRectSize.height() < MAX_PIXMAP_SIZE;
+    d->paintPixmap = false;//paintRectSize.width() < MAX_PIXMAP_SIZE || paintRectSize.height() < MAX_PIXMAP_SIZE;
     
     if ( d->paintPixmap ) {
-        d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
+        d->image = QImage( paintRectSize, QImage::Format_RGB32 );
     
         // Copy the painter's render hints, such as antialiasing
         QPainter pixmapPainter( &d->image );
         pixmapPainter.setRenderHints( painter.renderHints() );
         pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
     
-        // Paint the background
-        QBrush bgBrush( Qt::white );
-        if ( d->chartType == CircleChartType || d->chartType == RingChartType )
-            bgBrush = QBrush( QColor( 255, 255, 255, 0 ) );
-        pixmapPainter.fillRect( paintRect, bgBrush );
-    
         // scale the painter's coordinate system to fit the current zoom level
         applyConversion( pixmapPainter, converter );
 
         d->kdChart->paint( &pixmapPainter, QRect( QPoint( borderX, borderY ), QSize( plotAreaSize.width() - 2 * borderX, plotAreaSize.height() - 2 * borderY ) ) );
     } else {
-        // Paint the background
-        // painter.fillRect( paintRect, QColor( 255, 255, 255, 0 ) );
-    
-        // scale the painter's coordinate system to fit the current zoom level
-        applyConversion( painter, converter );
 
         d->kdChart->paint( &painter, QRect( QPoint( borderX, borderY ), QSize( plotAreaSize.width() - 2 * borderX, plotAreaSize.height() - 2 * borderY ) ) );
     }
@@ -838,17 +828,30 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
 
 void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
 {
+    //painter.save();
+
+    // First of all, scale the painter's coordinate system to fit the current zoom level
+    applyConversion( painter, converter );
+    
     // Calculate the clipping rect
     QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
     //clipRect.intersect( paintRect );
-    painter.setClipRect( converter.documentToView( paintRect ) );
+    painter.setClipRect( paintRect );
+    
+    // Paint the background
+    if( background() )
+    {
+        QPainterPath p;
+        p.addRect( paintRect );
+        background()->paint( painter, p );
+    }
 
     // Get the current zoom level
     QPointF zoomLevel;
     converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
 
     // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
-    if (    d->pixmapRepaintRequested
+    /*if (    d->pixmapRepaintRequested
          || d->lastZoomLevel != zoomLevel
          || d->lastSize      != size()
          || !d->paintPixmap ) {
@@ -863,11 +866,14 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
         d->pixmapRepaintRequested = false;
         d->lastZoomLevel = zoomLevel;
         d->lastSize      = size();
-    }
+    }*/
+    painter.setRenderHint( QPainter::Antialiasing, false );
+    d->kdChart->paint( &painter, paintRect.toRect() );
+    //painter.restore();
 
     // Paint the cached pixmap if we got a GO from paintPixmap()
-    if ( d->paintPixmap )
-        painter.drawImage( 0, 0, d->image );
+    //if ( d->paintPixmap )
+    //    painter.drawImage( 0, 0, d->image );
 }
 
 void PlotArea::relayout() const

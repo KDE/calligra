@@ -50,6 +50,7 @@
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
 #include <KoUnit.h>
+#include <KoShapeBackground.h>
 
 using namespace KChart;
 
@@ -339,9 +340,6 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
     pixmapPainter.setRenderHints( painter.renderHints() );
     pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
 
-    // Paint the background
-    pixmapPainter.fillRect( paintRect, Qt::white );
-
     // scale the painter's coordinate system to fit the current zoom level
     applyConversion( pixmapPainter, converter );
     d->kdLegend->paint( &pixmapPainter );
@@ -349,17 +347,22 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 
 void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 {
+    //painter.save();
+
+    // First of all, scale the painter's coordinate system to fit the current zoom level
+    applyConversion( painter, converter );
+    
     // Calculate the clipping rect
     QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
     //clipRect.intersect( paintRect );
-    painter.setClipRect( converter.documentToView( paintRect ) );
+    painter.setClipRect( paintRect );
 
     // Get the current zoom level
     QPointF zoomLevel;
     converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
 
     // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
-    if (    d->pixmapRepaintRequested
+    /*if (    d->pixmapRepaintRequested
          || d->lastZoomLevel != zoomLevel
          || d->lastSize      != size() ) {
         // TODO: What if two zoom levels are constantly being requested?
@@ -374,10 +377,21 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
         d->lastSize      = size();
         
         paintPixmap( painter, converter );
-    }
+    }*/
 
+    // Paint the background
+    if( background() )
+    {
+        QPainterPath p;
+        p.addRect( paintRect );
+        background()->paint( painter, p );
+    }
+    
+    d->kdLegend->paint( &painter );
+    
+    //painter.restore();
     // Paint the cached pixmap
-    painter.drawImage( 0, 0, d->image );
+    //painter.drawImage( 0, 0, d->image );
 }
 
 
