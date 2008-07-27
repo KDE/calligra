@@ -50,41 +50,7 @@ public:
     QString outputFile;
 
     Document* document;
-
-    //void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
-    bool initStyles( KoXmlWriter* stylesWriter );
-    bool createManifest( KoOdfWriteStore* store );
-    //bool createContent( KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter );
 };
-
-bool MSWordOdfImport::Private::initStyles(KoXmlWriter* stylesWriter )
-{
-    //write some default stuff to styles.xml
-    stylesWriter->startDocument( "office:document-styles" );
-    stylesWriter->startElement( "office:document-styles" );
-    stylesWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
-    stylesWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
-    stylesWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
-    stylesWriter->addAttribute( "xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" );
-    stylesWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
-    stylesWriter->addAttribute( "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
-    stylesWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
-    stylesWriter->addAttribute( "office:version","1.1" );
-    stylesWriter->startElement( "office:font-face-decls" );
-    stylesWriter->endElement(); //office:font-face-decls
-    stylesWriter->startElement( "office:automatic-styles" );
-    stylesWriter->endElement(); //office:automatic-styles
-    //need to close office:document-styles & endDocument() below!
-
-    return true;
-}
-
-//bool MSWordOdfImport::Private::createManifest(KoOdfWriteStore* store)
-//{
-//    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-
-//}
-
 
 MSWordOdfImport::MSWordOdfImport( QObject *parent, const QStringList& ) : KoFilter(parent)
 {
@@ -174,8 +140,9 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     
     kDebug(30513) <<"finished parsing.";
 
-    //save the office:automatic-styles in content.xml
-    mainStyles->saveOdfAutomaticStyles( contentWriter, false );
+    //save the office:automatic-styles & and fonts in content.xml
+    mainStyles->saveOdfFontFaceDecls(contentWriter);
+    mainStyles->saveOdfAutomaticStyles(contentWriter, false);
 
     //close tags in bodyWriter
     bodyWriter->endElement();//office:text

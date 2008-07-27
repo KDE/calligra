@@ -62,6 +62,11 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
       m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false),
       m_insideField(false), m_fieldAfterSeparator(false), m_fieldType(0), m_maxColumns(0)
 {
+#ifdef IMAGE_IMPORT
+    kDebug(30513) << "we have image support";
+#else
+    kDebug(30513) << "no image support";
+#endif
     if(bodyWriter) {
         m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
     }
@@ -264,13 +269,13 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
                                      wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
-    kDebug(30513) ;
+    kDebug(30513);
     static unsigned int s_pictureNumber = 0;
     QString pictureName = "pictures/picture";
     pictureName += QString::number( s_pictureNumber ); // filenames start at 0
     // looks better to the user if frame names start at 1
     QString frameName = i18n("Picture %1", ++s_pictureNumber );
-    insertAnchor( frameName );
+    //insertAnchor( frameName );
 
     switch ( picf->mfp.mm ) {
         case 98:
@@ -652,7 +657,8 @@ QString KWordTextHandler::getFont(unsigned fc) const
 
     QConstString fontName( Conversion::string( ffn.xszFfn ) );
     QString font = fontName.string();
-
+    return font;
+/*
 #ifdef FONT_DEBUG
     kDebug(30513) <<"    MS-FONT:" << font;
 #endif
@@ -698,6 +704,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
 #endif
 
     return info.family();
+    */
 }//end getFont()
 
 bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo)
