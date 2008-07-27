@@ -160,6 +160,9 @@ double KarbonCalligraphyTool::calculateWidth( double pressure )
     if ( thinning > 1 )
         thinning = 1;
 
+    if ( ! m_usePressure )
+        pressure = 1.0;
+
     double strokeWidth = m_strokeWidth * pressure * (1 - thinning);
 
     const double MINIMUM_STROKE_WIDTH = 1.0;
