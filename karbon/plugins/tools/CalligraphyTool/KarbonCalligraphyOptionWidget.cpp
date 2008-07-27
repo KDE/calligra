@@ -267,13 +267,13 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
     // propagate changes
     connect( usePath, SIGNAL(toggled(bool)),
-             SIGNAL(usePathChenged(bool)) );
+             SIGNAL(usePathChanged(bool)) );
 
     connect( usePressure, SIGNAL(toggled(bool)),
-             SIGNAL(usePressureChenged(bool)) );
+             SIGNAL(usePressureChanged(bool)) );
 
     connect( useAngle, SIGNAL(toggled(bool)),
-             SIGNAL(useAngleChenged(bool)) );
+             SIGNAL(useAngleChanged(bool)) );
 
     connect( widthBox, SIGNAL(valueChanged(double)),
              SIGNAL(widthChanged(double)) );
@@ -430,7 +430,7 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 
     if ( currentProfile == "" || index < 0 )
     {
-        kError() << "invalid karboncalligraphyrc!!";
+        kDebug() << "invalid karboncalligraphyrc!!" << currentProfile << index;
         return;
     }
 
