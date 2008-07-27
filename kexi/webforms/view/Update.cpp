@@ -133,7 +133,7 @@ namespace View {
                 formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
             } else if (valueTypePair.second == KexiDB::Field::BLOB) {
                 formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/><br/>"
-                                        "<input type=\"file\" name=\"%2\"/></td>")
+                                        "<!-- <input type=\"file\" name=\"%2\"/> --></td>")
                                 .arg(requestedTable).arg(captionNamePair.second).arg(pkeyName)
                                 .arg(pkeyValue));
             } else {

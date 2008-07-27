@@ -31,37 +31,20 @@
 #include <pion/net/WebService.hpp>
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "view/Index.h"
-#include "view/Create.h"
-#include "view/Read.h"
-#include "view/Update.h"
-#include "view/Delete.h"
-#include "view/Query.h"
-
 #include "auth/User.h"
 #include "auth/Permission.h"
 #include "auth/Authenticator.h"
 
-#include "Controller.h"
+#include "ExtjsController.h"
 
 namespace KexiWebForms {
 
     Controller::Controller() {
-        m_index = new View::Index(*this, "index.tpl");
-        m_create = new View::Create(*this, "create.tpl");
-        m_read = new View::Read(*this, "read.tpl");
-        m_update = new View::Update(*this, "update.tpl");
-        m_delete = new View::Delete(*this, "delete.tpl");
-        m_query = new View::Query(*this, "query.tpl");
+        
     }
 
     Controller::~Controller() {
-        delete m_index;
-        delete m_create;
-        delete m_read;
-        delete m_update;
-        delete m_delete;
-        delete m_query;
+        
     }
 
     void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
@@ -103,44 +86,7 @@ namespace KexiWebForms {
 
         bool malformedRequest = true;
         if (action == "") {
-            if (!requestURI.count() != 0) {
-                malformedRequest = false;
-                m_index->view(data, writer);
-            }
-        } else if (action == "create") {
-            if (!requestURI.count() != 1 && u.can(Auth::CREATE)) {
-                data["uri-table"] = requestURI.at(0);
-                m_create->view(data, writer);
-                malformedRequest = false;
-            }
-        } else if (action == "read") {
-            if (!requestURI.count() != 1 && u.can(Auth::READ)) {
-                data["uri-table"] = requestURI.at(0);
-                m_read->view(data, writer);
-                malformedRequest = false;
-            }
-        } else if (action == "update") {
-            if (!requestURI.count() != 3 && u.can(Auth::UPDATE)) {
-                data["uri-table"] = requestURI.at(0);
-                data["uri-pkey"] = requestURI.at(1);
-                data["uri-pval"] = requestURI.at(2);
-                m_update->view(data, writer);
-                malformedRequest = false;
-            }
-        } else if (action == "delete" && u.can(Auth::DELETE)) {
-            if (!requestURI.count() != 3) {
-                data["uri-table"] = requestURI.at(0);
-                data["uri-pkey"] = requestURI.at(1);
-                data["uri-pval"] = requestURI.at(2);
-                m_delete->view(data, writer);
-                malformedRequest = false;
-            }
-        } else if (action == "query" /*&& u.can(Auth::QUERY)*/) {
-            if (!requestURI.count() != 1) {
-                data["uri-query"] = requestURI.at(0);
-                m_query->view(data, writer);
-                malformedRequest = false;
-            }
+            
         }
 
         if (malformedRequest)
