@@ -384,6 +384,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 // Only reimplemneted because pure virtual in KoShape, but not needed
 bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context )
 {
+    loadOdfAttributes( legendElement, context, OdfAllAttributes );
     return loadOdf( legendElement, context.odfLoadingContext().stylesReader() );
 }
 
@@ -394,20 +395,6 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader
     // 2. Advanced legend styling
     //KDChart::Legend  *oldKdchartLegend = d->kdchartLegend;
     //d->kdLegend = new KDChart::Legend( d->diagram, d->chart );
-    
-    if ( legendElement.hasAttributeNS( KoXmlNS::svg, "x" ) && legendElement.hasAttributeNS( KoXmlNS::svg, "y" ) )
-    {
-        const qreal x = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "x" ) );
-        const qreal y = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "y" ) );
-        setPosition( QPointF( x, y ) );
-    }
-    
-    if ( legendElement.hasAttributeNS( KoXmlNS::svg, "width" ) && legendElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
-    {
-        const qreal width = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "width" ) );
-        const qreal height = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "height" ) );
-        setSize( QSizeF( width, height ) );
-    }
 
     if ( !legendElement.isNull() ) {
         QString lp;

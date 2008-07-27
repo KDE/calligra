@@ -291,7 +291,7 @@ ChartShape::Private::~Private()
 
 ChartShape::ChartShape()
     : d ( new Private )
-    , KoFrameShape( "KoXmlNS::draw", "object" )
+    , KoFrameShape( KoXmlNS::draw, "object" )
 {
     setShapeId( ChartShapeId );
     
@@ -627,18 +627,6 @@ void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &con
     painter.drawRect( border );
 }
 
-bool ChartShape::loadOdfFrame( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
-{
-    qDebug() << "loadOdfFrame()";
-    return true;
-}
-
-bool ChartShape::loadOdfFrameElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
-{
-    qDebug() << "loadOdfFrameElement()";
-    return true;
-}
-
 bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument )
 {
     QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString() );
@@ -759,27 +747,19 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
 
 bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
 {
-    // Check if we're loading an embedded document
-    if ( chartElement.tagName() != "frame" )
-        return false;
+    qDebug() << "+++ LOADING" << chartElement.tagName();
+    loadOdfAttributes( chartElement, context, OdfAllAttributes );
     
-    if ( chartElement.hasAttributeNS( KoXmlNS::svg, "x" ) && chartElement.hasAttributeNS( KoXmlNS::svg, "y" ) )
-    {
-        const qreal x = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "x" ) );
-        const qreal y = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "y" ) );
-        setPosition( QPointF( x, y ) );
-    }
+    return loadOdfFrame( chartElement, context );
+}
+
+bool ChartShape::loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context )
+{
+    if ( element.tagName() == "object" )
+        return loadEmbeddedDocument( context.odfLoadingContext().store(), element, context.odfLoadingContext().manifestDocument() );
     
-    if ( chartElement.hasAttributeNS( KoXmlNS::svg, "width" ) && chartElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
-    {
-        const qreal width = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "width" ) );
-        const qreal height = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "height" ) );
-        setSize( QSizeF( width, height ) );
-    }
-    
-    KoXmlElement objectElement = KoXml::namedItemNS( chartElement, KoXmlNS::draw, "object" );
-    
-    return loadEmbeddedDocument( context.odfLoadingContext().store(), objectElement, context.odfLoadingContext().manifestDocument() );
+    qWarning() << "Unknown frame element <" << element.tagName() << ">";
+    return false;
 }
 
 bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader )
