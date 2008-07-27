@@ -27,7 +27,6 @@
 #include <KLocale>
 #include <KIcon>
 
-#include <KoPageLayout.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPAPageBase.h>
@@ -36,7 +35,6 @@
 #include <KoPAViewMode.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>
-#include <KoZoomHandler.h>
 
 #include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"
@@ -89,13 +87,13 @@ void KPrPresenterViewWidget::setActivePage( KoPAPageBase *page )
     m_activeWidget->setActivePage( page );
 }
 
-void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize )
+void KPrPresenterViewWidget::updateWidget( const QSize &canvasSize )
 {
     // TODO: better way to calculate preview size, based on current widget size
     // This is only temporary and rough calculation
-    int previewHeight = 0.4 * widgetSize.height();
+    int previewHeight = 0.4 * canvasSize.height();
 
-    double ratio = (double)widgetSize.width() / widgetSize.height();
+    double ratio = (double)canvasSize.width() / canvasSize.height();
     QSize previewSize( previewHeight * ratio, previewHeight );
 
     m_mainWidget->setPreviewSize( previewSize );
