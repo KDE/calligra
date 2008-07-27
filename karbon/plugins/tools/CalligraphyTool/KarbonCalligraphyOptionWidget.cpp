@@ -245,11 +245,6 @@ void KarbonCalligraphyOptionWidget::toggleDetails()
     detailsShowed = !detailsShowed;
 }
 
-void KarbonCalligraphyOptionWidget::toggleUsePressure( bool checked )
-{
-    thinningBox->setEnabled( ! checked );
-}
-
 void KarbonCalligraphyOptionWidget::toggleUseAngle( bool checked )
 {
     angleBox->setEnabled( ! checked );
@@ -334,7 +329,6 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
     // visualization
     connect( detailsButton, SIGNAL(clicked()), SLOT(toggleDetails()) );
-    connect( usePressure,SIGNAL(toggled(bool)), SLOT(toggleUsePressure(bool)) );
     connect( useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
 }
 

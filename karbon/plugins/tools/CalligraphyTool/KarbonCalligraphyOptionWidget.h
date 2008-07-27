@@ -38,7 +38,6 @@ signals:
 
 private slots:
     void loadProfile( const QString &name );
-    void toggleUsePressure( bool checked );
     void toggleUseAngle( bool checked );
     void updateCurrentProfile();
     void saveProfileAs();
