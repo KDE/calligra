@@ -21,12 +21,12 @@
 #define KPRPRESENTERVIEWINTERFACE
 
 #include <QtGui/QFrame>
+#include <QtCore/QTime>
 
 class QLabel;
 class QListView;
 class QModelIndex;
 class QTextEdit;
-class QTimer;
 class QTime;
 class QToolButton;
 
@@ -113,11 +113,8 @@ private:
     QLabel *m_clockLabel;
     QLabel *m_timerLabel;
 
+    QTime m_currentTime;
     QTimer *m_clockTimer;
-
-    int hour;
-    int min;
-    int sec;
 };
 
 #endif

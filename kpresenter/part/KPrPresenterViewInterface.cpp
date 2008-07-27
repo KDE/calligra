@@ -274,13 +274,10 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     setLayout(mainLayout);
     setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
+    m_currentTime.start();
     m_clockTimer = new QTimer( this );
     connect( m_clockTimer, SIGNAL( timeout() ), this, SLOT( updateClock() ) );
     m_clockTimer->start( 1000 );
-
-    hour = 0;
-    min = 0;
-    sec = 0;
 }
 
 void KPrPresenterViewToolWidget::toggleSlideThumbnails( bool toggle )
@@ -292,16 +289,12 @@ void KPrPresenterViewToolWidget::updateClock()
 {
     QTime time = QTime::currentTime();
     m_clockLabel->setText( time.toString( "hh:mm:ss a" ) );
+    int sec = m_currentTime.elapsed() / 1000;
 
-    sec++;
-    if ( sec == 60 ) {
-        min++;
-        sec = 0;
-    }
-    if ( min == 60 ) {
-        hour++;
-        min = 0;
-    }
+    int hour = sec / 3600;
+    sec -= hour * 3600;
+    int min = sec / 60;
+    sec -= min * 60;
 
     // display the timer, with 0 appended if only 1 digit
     m_timerLabel->setText( QString( "%1:%2:%3").arg( hour, 2, 10, QChar( '0' ) )
