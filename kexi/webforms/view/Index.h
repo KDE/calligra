@@ -27,13 +27,11 @@
 #include "View.h"
 
 namespace KexiWebForms {
-    class Controller;
-    
 namespace View {
 
     class Index : public View {
     public:
-        Index(KexiWebForms::Controller& c, const char* name) : View(c, name) {};
+        Index(const char* name) : View(name) {};
         virtual ~Index() {}
 
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);

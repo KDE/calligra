@@ -28,14 +28,11 @@
 #include "View.h"
 
 namespace KexiWebForms {
-
-    class Controller;
-
 namespace View {
     
     class Create : public View {
     public:
-        Create(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        Create(const char* name) : View(name) {}
         virtual ~Create() {}
         
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);

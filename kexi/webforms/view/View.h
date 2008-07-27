@@ -31,15 +31,12 @@ class QString;
 class QVariant;
 
 namespace KexiWebForms {
-    
-    class Controller;
-    
 namespace View {
 
     class View {
     public:
         
-        View(KexiWebForms::Controller& c, const char* name);
+        View(const char* name);
         virtual ~View();
         
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
@@ -65,7 +62,6 @@ namespace View {
         void setValue(const char*, const char*);
         
     protected:
-        Controller* m_controller;
         google::TemplateDictionary* m_dict;
     };
     

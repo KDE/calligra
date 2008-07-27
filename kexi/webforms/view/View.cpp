@@ -25,17 +25,14 @@
 
 #include <KDebug>
 
-#include "../Controller.h"
-
 #include "TemplateProvider.h"
 #include "View.h"
 
 namespace KexiWebForms {
     namespace View {
 
-        View::View(KexiWebForms::Controller& c, const char* name) {
+        View::View(const char* name) {
             m_dict = initTemplate(name);
-            m_controller = &c;
         }
 
         View::~View() {

@@ -27,9 +27,6 @@
 #include "View.h"
 
 namespace KexiWebForms {
-
-    class Controller;
-    
 namespace View {
 
     /**
@@ -39,7 +36,7 @@ namespace View {
      */
     class Read : public View {
     public:
-        Read(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        Read(const char* name) : View(name) {}
         virtual ~Read() {}
 
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);

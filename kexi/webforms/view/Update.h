@@ -30,9 +30,6 @@
 class QString;
 
 namespace KexiWebForms {
-    
-    class Controller;
-    
 namespace View {    
 
     /**
@@ -43,7 +40,7 @@ namespace View {
      */
     class Update : public View {
     public:
-        Update(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        Update(const char* name) : View(name) {}
         virtual ~Update() {}
 
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);

@@ -20,13 +20,13 @@ add_definitions(-fexceptions)
 #   This experimental view is disabled by default
 # - Standard HTML based view: this is the standard and most stable view, built by
 #   default.
-if (DEFINED WITH_EXTJS_WEBFORMS)
+if (WITH_EXTJS_WEBFORMS)
   set(webforms_controller_SRCS controller/extjs/Controller.cpp)
   set(webforms_view_SRCS
     view/extjs/Objects.cpp)
   add_definitions(-DEXTJS_VIEW)
   message(STATUS "Kexi Web Forms: enabled Extjs view")
-else (DEFINED WITH_EXTJS_WEBFORMS)
+else (WITH_EXTJS_WEBFORMS)
   set(webforms_controller_SRCS controller/Controller.cpp)
   set(webforms_view_SRCS
     view/View.cpp
@@ -38,7 +38,7 @@ else (DEFINED WITH_EXTJS_WEBFORMS)
     view/Query.cpp
     view/TemplateProvider.cpp)
   message(STATUS "Kexi Web Forms: enabled standard view")
-endif (DEFINED WITH_EXTJS_WEBFORMS)
+endif (WITH_EXTJS_WEBFORMS)
 
 kde4_add_executable(kwebforms NOGUI
 # Other

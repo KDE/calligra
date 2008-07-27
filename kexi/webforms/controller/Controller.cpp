@@ -47,12 +47,12 @@
 namespace KexiWebForms {
 
     Controller::Controller() {
-        m_index = new View::Index(*this, "index.tpl");
-        m_create = new View::Create(*this, "create.tpl");
-        m_read = new View::Read(*this, "read.tpl");
-        m_update = new View::Update(*this, "update.tpl");
-        m_delete = new View::Delete(*this, "delete.tpl");
-        m_query = new View::Query(*this, "query.tpl");
+        m_index = new View::Index("index.tpl");
+        m_create = new View::Create("create.tpl");
+        m_read = new View::Read("read.tpl");
+        m_update = new View::Update("update.tpl");
+        m_delete = new View::Delete("delete.tpl");
+        m_query = new View::Query("query.tpl");
     }
 
     Controller::~Controller() {
