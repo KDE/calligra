@@ -57,7 +57,7 @@ bool TableModel::setCellRegion( const QString& regionName )
     const int size = regionName.size();
     for ( int i = 0; i < size; i++ )
     {
-        result += CellRegion::rangeCharToInt( regionName[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
+        result += CellRegion::rangeCharToInt( regionName[i].toAscii() ) * std::pow( 10.0, ( size - i - 1 ) );
     }
     return result;
 }
