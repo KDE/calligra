@@ -38,6 +38,8 @@ public:
 
     virtual void next( const KPrPageEffect::Data &data );
 
+    int findMaxScaling( const KPrPageEffect::Data &data );
+
 protected:
     QPainterPath m_shape;
 };

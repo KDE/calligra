@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QPainter>
+#include <kdebug.h>
 
 KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse )
 : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
@@ -32,19 +33,46 @@ KPrIrisWipeEffectStrategyBase::~KPrIrisWipeEffectStrategyBase()
 {
 }
 
-void KPrIrisWipeEffectStrategyBase::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+int KPrIrisWipeEffectStrategyBase::findMaxScaling( const KPrPageEffect::Data &data )
 {
     const int width = data.m_widget->width();
     const int height = data.m_widget->height();
+    QPainterPath widget;
+    widget.addRect( 0, 0, width, height );
 
+    int pathMaxMeasure;
+    int maxMeasure;
+    //We find wether the screen is taller or wider so that we can start searching
+    //from a closer point
     if( width > height )
     {
-        timeLine.setFrameRange( 0, width );
+        pathMaxMeasure = m_shape.boundingRect().width();
+        maxMeasure = width;
     }
     else
     {
-        timeLine.setFrameRange( 0, height );
+        pathMaxMeasure = m_shape.boundingRect().height();
+        maxMeasure = height;
     }
+
+    //We now search from the previous point and incressing over and over till the shape fills
+    //the widget given
+    QPainterPath path;
+    while( !path.contains( widget ) )
+    {
+        QMatrix matrix;
+        matrix.translate( width/2, height/2 );
+        matrix.scale( (double) maxMeasure / (double) pathMaxMeasure, (double) maxMeasure / (double) pathMaxMeasure );
+        path = matrix.map( m_shape );
+        maxMeasure += 5;//we don't need to be very precise
+    }
+
+    return maxMeasure;
+}
+
+void KPrIrisWipeEffectStrategyBase::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+{
+    timeLine.setFrameRange( 0, findMaxScaling( data ) );
 }
 
 void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
@@ -52,16 +80,14 @@ void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const K
     const int width = data.m_widget->width();
     const int height = data.m_widget->height();
     qreal scaleStep;
-    qreal fullScale;
+    qreal fullScale = findMaxScaling( data );
     if( width > height )
     {
         scaleStep = 1 / m_shape.boundingRect().width();
-        fullScale = width;
     }
     else
     {
         scaleStep = 1 / m_shape.boundingRect().height();
-        fullScale = height;
     }
 
     if( !reverse() )
@@ -96,17 +122,17 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
     const int width = data.m_widget->width();
     const int height = data.m_widget->height();
     const int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
+    const int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
+
     qreal scaleStep;
-    qreal fullScale;
+    qreal fullScale = findMaxScaling( data );
     if( width > height )
     {
         scaleStep = 1 / m_shape.boundingRect().width();
-        fullScale = width;
     }
     else
     {
         scaleStep = 1 / m_shape.boundingRect().height();
-        fullScale = height;
     }
 
     QPainterPath newPath;
@@ -121,7 +147,7 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
     {
         QMatrix matrix;
         matrix.translate( width/2, height/2 );
-        matrix.scale( ( fullScale - currPos )*scaleStep, ( fullScale - currPos )*scaleStep );
+        matrix.scale( ( fullScale - lastPos )*scaleStep, ( fullScale - lastPos )*scaleStep );
         newPath = matrix.map( m_shape );
     }
 
