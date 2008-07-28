@@ -31,6 +31,7 @@
 
 #include <cmath>
 
+using std::pow;
 using namespace KChart;
 
 
@@ -266,8 +267,8 @@ static int rangeStringToInt( const QString &string )
     const int size = string.size();
     for ( int i = 0; i < size; i++ )
     {
-        kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) ) );
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
+        kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) ) );
+        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
     }
     kDebug(350001) << "+++++ result=" << result;
     return result;
@@ -347,7 +348,7 @@ int CellRegion::rangeStringToInt( const QString &string )
     const int size = string.size();     
     for ( int i = 0; i < size; i++ )    
     {     
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );      
+        result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );      
     } 
     return result;      
 }   
