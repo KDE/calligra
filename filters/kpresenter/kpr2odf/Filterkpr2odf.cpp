@@ -43,6 +43,13 @@
 
 #include "Filterkpr2odf.h"
 
+using std::sin;
+using std::cos;
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 typedef KGenericFactory<Filterkpr2odf> Filterkpr2odfFactory;
 K_EXPORT_COMPONENT_FACTORY( libFilterkpr2odf, Filterkpr2odfFactory( "kofficefilters" ) )
 
