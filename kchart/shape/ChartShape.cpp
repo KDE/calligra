@@ -57,6 +57,7 @@
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoShapeBackground.h>
 
 // KDChart
 #include <KDChartChart>
@@ -268,8 +269,6 @@ public:
     Surface *floor;
     
     ProxyModel *model;
-    
-    QList<KoShape*> hiddenChildren;
     
     ChartDocument *document;
     
@@ -666,24 +665,6 @@ void ChartShape::updateChildrenPositions()
     d->legend->setPosition( QPointF( size().width() + legendXOffset, size().height() / 2.0 - d->legend->size().height() / 2.0 ) );
 }
 
-QRectF ChartShape::boundingRect() const
-{
-    QRectF rect = KoShape::boundingRect();
-    
-    foreach( KoShape *shape, iterator() )
-    {
-        // Before we can hide the child, we need to do a repaint
-        // with the old bounding rect, to avoid shapes not being
-        // painted over (i.e. hidden) because of the changed geometry
-        if ( !shape->isVisible() && d->hiddenChildren.contains( shape ) )
-            continue;
-
-        rect = rect.united( shape->boundingRect() );
-    }
-    
-    return rect;
-}
-
 ChartType ChartShape::chartType() const
 {
     Q_ASSERT( d->plotArea );
@@ -740,19 +721,21 @@ void ChartShape::setThreeD( bool threeD )
     d->plotArea->setThreeD( threeD );
 }
 
-void ChartShape::paint( QPainter &painter, const KoViewConverter &converter )
-{
-    foreach( KoShape *shape, iterator() )
-    {
-        if ( !shape->isVisible() && !d->hiddenChildren.contains( shape ) )
-            d->hiddenChildren.append( shape );
-        else if ( d->hiddenChildren.contains( shape ) )
-            d->hiddenChildren.removeAll( shape );
-    }
-}
-
 void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &converter )
 {
+    // Paint the background
+    if( background() )
+    {
+        applyConversion( painter, converter );
+    
+        // Calculate the clipping rect
+        QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
+        //clipRect.intersect( paintRect );
+        painter.setClipRect( paintRect );
+        QPainterPath p;
+        p.addRect( paintRect );
+        background()->paint( painter, p );
+    }
 }
 
 void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas )
