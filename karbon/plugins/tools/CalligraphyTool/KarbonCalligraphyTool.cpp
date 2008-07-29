@@ -48,6 +48,8 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
              SLOT(updateSelectedPath()) );
+
+    updateSelectedPath();
 }
 
 KarbonCalligraphyTool::~KarbonCalligraphyTool()
@@ -134,7 +136,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 {
     if ( ! m_firstPointAdded ) {
-        if ( !m_usePath || !m_selectedPath )
+        if ( m_usePath && m_selectedPath )
             m_selectedPathOutline = m_selectedPath->outline();
         m_firstPointAdded = true;
         m_endOfPath = false;
