@@ -95,12 +95,11 @@ void KarbonCalligraphyTool::mouseMoveEvent( KoPointerEvent *event )
 
 void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event );
-
     if ( ! m_isDrawing )
         return;
 
-    //addPoint( event );
+    m_endOfPath = false; // allow last point being added
+    addPoint( event ); // add last point
     m_isDrawing = false;
 
     if ( m_shape->pointCount() == 0 )
