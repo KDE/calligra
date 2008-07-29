@@ -310,16 +310,19 @@ void ChartShape::Private::showLabel( KoShape *label )
     }
     else
     {
-        const double verticalSpaceRemaining = plotArea->position().y() + plotArea->size().height() - label->position().y();
+        const double verticalSpaceRemaining = label->position().y() - plotArea->position().y() - plotArea->size().height();
         double spaceToExpand = ( shape->size().height() - label->position().y() - label->size().height() ) - verticalSpaceRemaining;
-        if ( spaceToExpand > 0.0 )
+        if ( spaceToExpand < 0.0 )
             spaceToExpand = 0.0;
         foreach ( Axis *axis, plotArea->axes() )
         {
-            if ( axis->position() == BottomAxisPosition )
+            if ( axis->position() != BottomAxisPosition )
+                continue;
+            double _spaceToExpand = label->size().height() - ( shape->size().height() - axis->title()->position().y() - axis->title()->size().height() );
+            if ( _spaceToExpand > 0.0 )
             {
-                axis->title()->setPosition( axis->title()->position() - QPointF( 0.0, label->size().height() ) );
-                spaceToExpand += label->size().height();
+                axis->title()->setPosition( axis->title()->position() - QPointF( 0.0, _spaceToExpand ) );
+                spaceToExpand += _spaceToExpand;
             }
         }
         if ( spaceToExpand > 0.0 )
