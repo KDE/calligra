@@ -28,55 +28,55 @@
 class K3ListViewItem;
 
 namespace KexiDB {
-	class TableOrQuerySchema;
+  class TableOrQuerySchema;
 }
 
 /*! This widget provides a list of fields from a table or query.
 */
 class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		//! Flags used to alter list's behaviour and appearance
-		enum Options { 
-			ShowDataTypes = 1, //!< if set, 'data type' column is added
-			ShowAsterisk = 2, //!< if set, asterisk ('*') item is prepended to the list
-			AllowMultiSelection = 4 //!< if set, multiple selection is allowed
-		};
+  public:
+    //! Flags used to alter list's behaviour and appearance
+    enum Options { 
+      ShowDataTypes = 1, //!< if set, 'data type' column is added
+      ShowAsterisk = 2, //!< if set, asterisk ('*') item is prepended to the list
+      AllowMultiSelection = 4 //!< if set, multiple selection is allowed
+    };
 
-		KexiFieldListView(QWidget *parent, int options = ShowDataTypes | AllowMultiSelection );
-		virtual ~KexiFieldListView();
+    KexiFieldListView(QWidget *parent, int options = ShowDataTypes | AllowMultiSelection );
+    virtual ~KexiFieldListView();
 
-		/*! Sets table or query schema \a schema. 
-		 The schema object will be owned by the KexiFieldListView object. */
-		void setSchema(KexiDB::TableOrQuerySchema* schema);
+    /*! Sets table or query schema \a schema. 
+     The schema object will be owned by the KexiFieldListView object. */
+    void setSchema(KexiDB::TableOrQuerySchema* schema);
 
-		/*! \return table or query schema schema set for this widget. */
-		KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
+    /*! \return table or query schema schema set for this widget. */
+    KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
 
-		/*! \return list of selected field names. */
-		QStringList selectedFieldNames() const;
+    /*! \return list of selected field names. */
+    QStringList selectedFieldNames() const;
 
 //		void setReadOnly(bool);
 //		virtual QSize sizeHint();
 
-	signals:
-		/*! Emitted when a field is double clicked */
-		void fieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
-			const QString& fieldName);
+  signals:
+    /*! Emitted when a field is double clicked */
+    void fieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+      const QString& fieldName);
 
-	protected slots:
-		void slotDoubleClicked(Q3ListViewItem* item);
+  protected slots:
+    void slotDoubleClicked(Q3ListViewItem* item);
 
-	protected:
-		virtual Q3DragObject *dragObject();
+  protected:
+    virtual Q3DragObject *dragObject();
 
-		KexiDB::TableOrQuerySchema* m_schema;
-		QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column
-		QPixmap m_noIcon; //!< blank icon of the same size as m_keyIcon
-		int m_options;
-		K3ListViewItem *m_allColumnsItem;
+    KexiDB::TableOrQuerySchema* m_schema;
+    QPixmap m_keyIcon; //!< a small "primary key" icon for 0-th column
+    QPixmap m_noIcon; //!< blank icon of the same size as m_keyIcon
+    int m_options;
+    K3ListViewItem *m_allColumnsItem;
 };
 
 #endif

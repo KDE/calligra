@@ -28,30 +28,30 @@
 */
 class KEXIGUIUTILS_EXPORT KexiArrowTip : public KexiToolTip
 {
-	Q_OBJECT
-	public:
-		KexiArrowTip(const QString& text, QWidget* parent);
-		virtual ~KexiArrowTip();
+  Q_OBJECT
+  public:
+    KexiArrowTip(const QString& text, QWidget* parent);
+    virtual ~KexiArrowTip();
 
-		inline QString text() const { return m_value.toString(); }
+    inline QString text() const { return m_value.toString(); }
 //2.0 virtual bool close() { return close(false); }
 //2.0	virtual bool close( bool alsoDelete );
 
-	public slots:
-		virtual void show();
-		virtual void hide();
+  public slots:
+    virtual void show();
+    virtual void hide();
 
-	protected slots:
-		void increaseOpacity();
-		void decreaseOpacity();
+  protected slots:
+    void increaseOpacity();
+    void decreaseOpacity();
 
-	protected:
-		virtual void drawFrame(QPainter& p);
-		virtual void drawContents(QPainter& p);
-		virtual void closeEvent( QCloseEvent * event );
+  protected:
+    virtual void drawFrame(QPainter& p);
+    virtual void drawContents(QPainter& p);
+    virtual void closeEvent( QCloseEvent * event );
 
-		int m_arrowHeight;
-		double m_opacity;
+    int m_arrowHeight;
+    double m_opacity;
 };
 
 #endif

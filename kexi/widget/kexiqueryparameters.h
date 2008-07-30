@@ -26,20 +26,20 @@
 //! @short Utilities providing GUI for getting query parameters
 class KEXIEXTWIDGETS_EXPORT KexiQueryParameters
 {
-	public:
-		/*! Asks for query parameters using KInputDialog, one dialog per query parameter 
-		 (see @ref KexiDB::QuerySchema::parameters()). The type of each dialog depends 
-		 on the type of query parameter.
-		 \return list of values obtained from the user
-		 \a ok is set to true on success and to false on failure. */
-	//! @todo do not use KInputDialog - switch to more powerful custom dialog
-	//! @todo offer option to display one dialog (form) with all the parameters
-	//! @todo support more types (using validators)
-	//! @todo support defaults 
-	//! @todo support validation rules, e.g. min/max value, unsigned
-	//! @todo support Enum type (list of strings, need support for keys and user-visible strings)
-		static QList<QVariant> getParameters(QWidget *parent, const KexiDB::Driver &driver, 
-			KexiDB::QuerySchema& querySchema, bool &ok);
+  public:
+    /*! Asks for query parameters using KInputDialog, one dialog per query parameter 
+     (see @ref KexiDB::QuerySchema::parameters()). The type of each dialog depends 
+     on the type of query parameter.
+     \return list of values obtained from the user
+     \a ok is set to true on success and to false on failure. */
+  //! @todo do not use KInputDialog - switch to more powerful custom dialog
+  //! @todo offer option to display one dialog (form) with all the parameters
+  //! @todo support more types (using validators)
+  //! @todo support defaults 
+  //! @todo support validation rules, e.g. min/max value, unsigned
+  //! @todo support Enum type (list of strings, need support for keys and user-visible strings)
+    static QList<QVariant> getParameters(QWidget *parent, const KexiDB::Driver &driver, 
+      KexiDB::QuerySchema& querySchema, bool &ok);
 };
 
 #endif // KEXIDBCONNECTIONWIDGET_H

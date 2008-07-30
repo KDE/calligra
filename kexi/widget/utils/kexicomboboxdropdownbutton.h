@@ -30,24 +30,24 @@ class KComboBox;
 */
 class KEXIGUIUTILS_EXPORT KexiComboBoxDropDownButton : public KPushButton
 {
-	public:
-		KexiComboBoxDropDownButton( QWidget *parent );
-		virtual ~KexiComboBoxDropDownButton();
+  public:
+    KexiComboBoxDropDownButton( QWidget *parent );
+    virtual ~KexiComboBoxDropDownButton();
 
-	protected:
-		/*! Reimplemented after @ref KPushButton to draw drop-down arrow. */
-		virtual void paintEvent(QPaintEvent *pe);
+  protected:
+    /*! Reimplemented after @ref KPushButton to draw drop-down arrow. */
+    virtual void paintEvent(QPaintEvent *pe);
 
-		/*! Reimplemented after @ref KPushButton to adapt size to style changes. */
-		virtual bool event( QEvent *event );
-		
-		/*! Adjusts appearance for current style. */
-		void styleChanged();
+    /*! Reimplemented after @ref KPushButton to adapt size to style changes. */
+    virtual bool event( QEvent *event );
+    
+    /*! Adjusts appearance for current style. */
+    void styleChanged();
 
-		int m_fixForHeight;
-		bool m_drawComplexControl : 1;
-		KComboBox *m_paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle 
-		                           //!< (because styles use \<static_cast\>)
+    int m_fixForHeight;
+    bool m_drawComplexControl : 1;
+    KComboBox *m_paintedCombo; //!< fake combo used only to pass it as 'this' for QStyle 
+                               //!< (because styles use \<static_cast\>)
 };
 
 #endif

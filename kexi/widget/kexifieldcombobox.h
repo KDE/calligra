@@ -24,7 +24,7 @@
 #include <kexi_export.h>
 
 namespace KexiDB {
-	class TableOrQuerySchema;
+  class TableOrQuerySchema;
 }
 class KexiProject;
 
@@ -33,11 +33,11 @@ class KexiProject;
 */
 class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiFieldComboBox(QWidget *parent);
-		virtual ~KexiFieldComboBox();
+  public:
+    KexiFieldComboBox(QWidget *parent);
+    virtual ~KexiFieldComboBox();
 
 //		/*! Sets table or query schema \a schema. 
 //		 The schema object will be owned by the KexiFieldComboBox object. */
@@ -45,38 +45,38 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 
 //		KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
 
-	public slots:
-		//! \return global project that is used to retrieve schema informationm for this combo box.
-		KexiProject* project() const;
+  public slots:
+    //! \return global project that is used to retrieve schema informationm for this combo box.
+    KexiProject* project() const;
 
-		//! Sets global project that is used to retrieve schema informationm for this combo box.
-		void setProject(KexiProject *prj);
+    //! Sets global project that is used to retrieve schema informationm for this combo box.
+    void setProject(KexiProject *prj);
 
-		void setTableOrQuery(const QString& name, bool table);
-		QString tableOrQueryName() const;
-		bool isTableAssigned() const;
-		void setFieldOrExpression(const QString& string);
-		void setFieldOrExpression(int index);
-		QString fieldOrExpression() const;
-		QString fieldOrExpressionCaption() const;
+    void setTableOrQuery(const QString& name, bool table);
+    QString tableOrQueryName() const;
+    bool isTableAssigned() const;
+    void setFieldOrExpression(const QString& string);
+    void setFieldOrExpression(int index);
+    QString fieldOrExpression() const;
+    QString fieldOrExpressionCaption() const;
 
-		/*! \return index of selected table or query field.
-		 -1 is returned if there is nothing selected or expression is selected
-		 of project is not assigned or table or query is not assigned. */
-		int indexOfField() const;
+    /*! \return index of selected table or query field.
+     -1 is returned if there is nothing selected or expression is selected
+     of project is not assigned or table or query is not assigned. */
+    int indexOfField() const;
 
-	signals:
-		void selected();
+  signals:
+    void selected();
 
-	protected slots:
-		void slotActivated(int);
-		void slotReturnPressed(const QString & text);
+  protected slots:
+    void slotActivated(int);
+    void slotReturnPressed(const QString & text);
 
-	protected:
-		virtual void focusOutEvent( QFocusEvent *e );
+  protected:
+    virtual void focusOutEvent( QFocusEvent *e );
 
-		class Private;
-		Private * const d;
+    class Private;
+    Private * const d;
 };
 
 #endif

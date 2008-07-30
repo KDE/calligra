@@ -36,14 +36,14 @@
 KexiDataTableView::KexiDataTableView(QWidget *parent)
  : KexiTableView(0, parent)
 {
-	init();
+  init();
 }
 
 KexiDataTableView::KexiDataTableView(QWidget *parent, KexiDB::Cursor *cursor)
  : KexiTableView(0, parent)
 {
-	init();
-	setData(cursor);
+  init();
+  setData(cursor);
 }
 
 KexiDataTableView::~KexiDataTableView()
@@ -53,7 +53,7 @@ KexiDataTableView::~KexiDataTableView()
 void
 KexiDataTableView::init()
 {
-	m_cursor = 0;
+  m_cursor = 0;
 
 //	m_maxRecord = 0;
 //	m_records = 0;
@@ -65,57 +65,57 @@ KexiDataTableView::init()
 
 /*void KexiDataTableView::initActions(KActionCollection *col)
 {
-	KexiTableView::initActions(col);
-	new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
+  KexiTableView::initActions(col);
+  new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }*/
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 {
 //js	if (!m_first)
 //js		clearColumns();
-	if (!cursor) {
-		clearColumns();
-		m_cursor = 0;
-		return true;
-	}
-	if (cursor!=m_cursor) {
-		clearColumns();
-	}
-	m_cursor = cursor;
+  if (!cursor) {
+    clearColumns();
+    m_cursor = 0;
+    return true;
+  }
+  if (cursor!=m_cursor) {
+    clearColumns();
+  }
+  m_cursor = cursor;
 
-	if (!m_cursor->query()) {
-		kDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
-		m_cursor->debug();
-		clearColumns();
-		return false;
-	}
+  if (!m_cursor->query()) {
+    kDebug() << "KexiDataTableView::setData(): WARNING: cursor should have query schema defined!\n--aborting setData()." << endl;
+    m_cursor->debug();
+    clearColumns();
+    return false;
+  }
 
-	if (m_cursor->fieldCount()<1) {
-		clearColumns();
-		return true;
-	}
+  if (m_cursor->fieldCount()<1) {
+    clearColumns();
+    return true;
+  }
 
-	if (!m_cursor->isOpened() && !m_cursor->open()) {
-		kDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData(). \n" <<
-			m_cursor->serverErrorMsg() << endl;
-		m_cursor->debug();
-		clearColumns();
-		return false;
-	}
+  if (!m_cursor->isOpened() && !m_cursor->open()) {
+    kDebug() << "KexiDataTableView::setData(): WARNING: cannot open cursor\n--aborting setData(). \n" <<
+      m_cursor->serverErrorMsg() << endl;
+    m_cursor->debug();
+    clearColumns();
+    return false;
+  }
 
-	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
+  KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
 
-	QString windowTitle( m_cursor->query()->caption() );
-	if (windowTitle.isEmpty())
-		windowTitle = m_cursor->query()->name();
+  QString windowTitle( m_cursor->query()->caption() );
+  if (windowTitle.isEmpty())
+    windowTitle = m_cursor->query()->name();
 
-	setWindowTitle( windowTitle );
+  setWindowTitle( windowTitle );
 
-	//PRIMITIVE!! data setting:
-	tv_data->preloadAllRows();
+  //PRIMITIVE!! data setting:
+  tv_data->preloadAllRows();
 
-	KexiTableView::setData(tv_data);
-	return true;
+  KexiTableView::setData(tv_data);
+  return true;
 }
 
 #include "kexidatatableview.moc"

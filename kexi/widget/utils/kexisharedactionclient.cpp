@@ -31,8 +31,8 @@ KexiSharedActionClient::~KexiSharedActionClient()
 
 void KexiSharedActionClient::plugSharedAction(QAction* a)
 {
-	if (!a)
-		return;
-	m_sharedActions.insert(a->objectName(), a);
+  if (!a)
+    return;
+  m_sharedActions.insert(a->objectName(), a);
 }
 

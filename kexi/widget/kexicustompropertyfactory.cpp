@@ -30,40 +30,40 @@ using namespace KoProperty;
 //! @internal
 class PixmapIdCustomProperty : public CustomProperty
 {
-	public:
-		PixmapIdCustomProperty(Property *parent)
-			: CustomProperty(parent) {
-		}
-		virtual ~PixmapIdCustomProperty() {}
-		virtual void setValue(const QVariant &value, bool rememberOldValue) { 
-			Q_UNUSED( value );
-			Q_UNUSED( rememberOldValue); 
-		}
-		virtual QVariant value() const { return m_property->value(); }
-		virtual bool handleValue() const {
-			return false; //m_property->type()==KexiCustomPropertyFactory::PixmapData;
-		}
+  public:
+    PixmapIdCustomProperty(Property *parent)
+      : CustomProperty(parent) {
+    }
+    virtual ~PixmapIdCustomProperty() {}
+    virtual void setValue(const QVariant &value, bool rememberOldValue) { 
+      Q_UNUSED( value );
+      Q_UNUSED( rememberOldValue); 
+    }
+    virtual QVariant value() const { return m_property->value(); }
+    virtual bool handleValue() const {
+      return false; //m_property->type()==KexiCustomPropertyFactory::PixmapData;
+    }
 };
 
 //! @internal
 class IdentifierCustomProperty : public CustomProperty
 {
-	public:
-		IdentifierCustomProperty(Property *parent)
-			: CustomProperty(parent) {
-		}
-		virtual ~IdentifierCustomProperty() {}
-		virtual void setValue(const QVariant &value, bool rememberOldValue)
-		{
-			Q_UNUSED(rememberOldValue);
-			if (!value.toString().isEmpty())
-				m_value = KexiUtils::string2Identifier(value.toString()).toLower();
-		}
-		virtual QVariant value() const { return m_value; }
-		virtual bool handleValue() const {
-			return true;
-		}
-		QString m_value;
+  public:
+    IdentifierCustomProperty(Property *parent)
+      : CustomProperty(parent) {
+    }
+    virtual ~IdentifierCustomProperty() {}
+    virtual void setValue(const QVariant &value, bool rememberOldValue)
+    {
+      Q_UNUSED(rememberOldValue);
+      if (!value.toString().isEmpty())
+        m_value = KexiUtils::string2Identifier(value.toString()).toLower();
+    }
+    virtual QVariant value() const { return m_value; }
+    virtual bool handleValue() const {
+      return true;
+    }
+    QString m_value;
 };
 
 //---------------
@@ -79,34 +79,34 @@ KexiCustomPropertyFactory::~KexiCustomPropertyFactory()
 
 CustomProperty* KexiCustomPropertyFactory::createCustomProperty(Property *parent)
 {
-	const int type = parent->type();
-	if (type==(int)KexiCustomPropertyFactory::PixmapId)
-		return new PixmapIdCustomProperty(parent);
-	else if (type==(int)KexiCustomPropertyFactory::Identifier)
-		return new IdentifierCustomProperty(parent);
-	return 0;
+  const int type = parent->type();
+  if (type==(int)KexiCustomPropertyFactory::PixmapId)
+    return new PixmapIdCustomProperty(parent);
+  else if (type==(int)KexiCustomPropertyFactory::Identifier)
+    return new IdentifierCustomProperty(parent);
+  return 0;
 }
 
 Widget* KexiCustomPropertyFactory::createCustomWidget(Property *prop)
 {
-	const int type = prop->type();
-	if (type==(int)KexiCustomPropertyFactory::PixmapId)
-		return new KexiImagePropertyEdit(prop);
-	else if (type==(int)KexiCustomPropertyFactory::Identifier)
-		return new KexiIdentifierPropertyEdit(prop);
+  const int type = prop->type();
+  if (type==(int)KexiCustomPropertyFactory::PixmapId)
+    return new KexiImagePropertyEdit(prop);
+  else if (type==(int)KexiCustomPropertyFactory::Identifier)
+    return new KexiIdentifierPropertyEdit(prop);
 
-	return 0;
+  return 0;
 }
 
 void KexiCustomPropertyFactory::init()
 {
-	if (KoProperty::FactoryManager::self()->factoryForEditorType(KexiCustomPropertyFactory::PixmapId))
-		return; //already registered
+  if (KoProperty::FactoryManager::self()->factoryForEditorType(KexiCustomPropertyFactory::PixmapId))
+    return; //already registered
 
-	// register custom editors and properties
-	KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(KoProperty::FactoryManager::self());
-	Q3ValueList<int> types;
-	types << KexiCustomPropertyFactory::PixmapId << KexiCustomPropertyFactory::Identifier;
-	KoProperty::FactoryManager::self()->registerFactoryForProperties(types, factory);
-	KoProperty::FactoryManager::self()->registerFactoryForEditors(types, factory);
+  // register custom editors and properties
+  KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(KoProperty::FactoryManager::self());
+  Q3ValueList<int> types;
+  types << KexiCustomPropertyFactory::PixmapId << KexiCustomPropertyFactory::Identifier;
+  KoProperty::FactoryManager::self()->registerFactoryForProperties(types, factory);
+  KoProperty::FactoryManager::self()->registerFactoryForEditors(types, factory);
 }

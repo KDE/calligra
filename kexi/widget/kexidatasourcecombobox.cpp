@@ -39,31 +39,31 @@
 //! @internal
 class KexiDataSourceComboBox::Private
 {
-	public:
-		Private()
-		 : tablesCount(0)
-		 , prevIndex(-1)
-		 , showTables(true)
-		 , showQueries(true)
-		{
-		}
-		int firstTableIndex() const {
-			int index = 1; //skip empty row
+  public:
+    Private()
+     : tablesCount(0)
+     , prevIndex(-1)
+     , showTables(true)
+     , showQueries(true)
+    {
+    }
+    int firstTableIndex() const {
+      int index = 1; //skip empty row
 #ifdef ADD_DEFINEQUERY_ROW
-			index++; /*skip 'define query' row*/
+      index++; /*skip 'define query' row*/
 #endif
-			return index;
-		}
-		int firstQueryIndex() const {
-			return firstTableIndex() + tablesCount;
-		}
+      return index;
+    }
+    int firstQueryIndex() const {
+      return firstTableIndex() + tablesCount;
+    }
 
-		QPointer<KexiProject> prj;
-		QPixmap tableIcon, queryIcon;
-		int tablesCount;
-		int prevIndex; //!< Used in slotActivated()
-		bool showTables : 1;
-		bool showQueries : 1;
+    QPointer<KexiProject> prj;
+    QPixmap tableIcon, queryIcon;
+    int tablesCount;
+    int prevIndex; //!< Used in slotActivated()
+    bool showTables : 1;
+    bool showQueries : 1;
 };
 
 //------------------------
@@ -72,259 +72,259 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent)
  : KComboBox(true/*rw*/, parent)
  , d(new Private())
 {
-	setInsertPolicy(NoInsert);
-	setCompletionMode(KGlobalSettings::CompletionPopupAuto);
-	setMaxVisibleItems( 16 );
-	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
-	connect(this, SIGNAL(returnPressed(const QString &)),
-		this, SLOT(slotReturnPressed(const QString &)));
+  setInsertPolicy(NoInsert);
+  setCompletionMode(KGlobalSettings::CompletionPopupAuto);
+  setMaxVisibleItems( 16 );
+  connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
+  connect(this, SIGNAL(returnPressed(const QString &)),
+    this, SLOT(slotReturnPressed(const QString &)));
 
-	d->tableIcon = SmallIcon("table");
-	d->queryIcon = SmallIcon("query");
+  d->tableIcon = SmallIcon("table");
+  d->queryIcon = SmallIcon("query");
 }
 
 KexiDataSourceComboBox::~KexiDataSourceComboBox()
 {
-	delete d;
+  delete d;
 }
 
 KexiProject* KexiDataSourceComboBox::project() const
 {
-	return d->prj;
+  return d->prj;
 }
 
 void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool showQueries)
 {
-	if ((KexiProject*)d->prj == prj)
-		return;
+  if ((KexiProject*)d->prj == prj)
+    return;
 
-	if (d->prj) {
-		disconnect(d->prj, 0, this, 0);
-	}
-	d->prj = prj;
-	d->showTables = showTables;
-	d->showQueries = showQueries;
-	clear();
-	d->tablesCount = 0;
-	if (!d->prj)
-		return;
+  if (d->prj) {
+    disconnect(d->prj, 0, this, 0);
+  }
+  d->prj = prj;
+  d->showTables = showTables;
+  d->showQueries = showQueries;
+  clear();
+  d->tablesCount = 0;
+  if (!d->prj)
+    return;
 
-	//needed for updating contents of the combo box
-	connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)),
-		this, SLOT(slotNewItemStored(KexiPart::Item&)));
-	connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
-		this, SLOT(slotItemRemoved(const KexiPart::Item&)));
-	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
-		this, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
+  //needed for updating contents of the combo box
+  connect(d->prj, SIGNAL(newItemStored(KexiPart::Item&)),
+    this, SLOT(slotNewItemStored(KexiPart::Item&)));
+  connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
+    this, SLOT(slotItemRemoved(const KexiPart::Item&)));
+  connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
+    this, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
 
-	KexiDB::Connection *conn = d->prj->dbConnection();
-	if (!conn)
-		return;
+  KexiDB::Connection *conn = d->prj->dbConnection();
+  if (!conn)
+    return;
 
-	//special item: empty
-	addItem("");
+  //special item: empty
+  addItem("");
 #ifdef ADD_DEFINEQUERY_ROW
-	//special item: define query
-	addItem(i18n("Define Query..."));
+  //special item: define query
+  addItem(i18n("Define Query..."));
 #endif
 
-	KCompletion *comp = completionObject();
+  KCompletion *comp = completionObject();
 
-	if (d->showTables) {
-		//tables
-		KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/table");
-		if (!partInfo)
-			return;
-		KexiPart::ItemList list;
-		prj->getSortedItems(list, partInfo);
-		list.sort();
-		d->tablesCount = 0;
-		foreach (KexiPart::Item *item, list) {
-			addItem(d->tableIcon, item->name()); //or caption()? 
-			comp->addItem(item->name());
-			d->tablesCount++;
-		}
-	}
+  if (d->showTables) {
+    //tables
+    KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/table");
+    if (!partInfo)
+      return;
+    KexiPart::ItemList list;
+    prj->getSortedItems(list, partInfo);
+    list.sort();
+    d->tablesCount = 0;
+    foreach (KexiPart::Item *item, list) {
+      addItem(d->tableIcon, item->name()); //or caption()? 
+      comp->addItem(item->name());
+      d->tablesCount++;
+    }
+  }
 
-	if (d->showQueries) {
-		//queries
-		KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/query");
-		if (!partInfo)
-			return;
-		KexiPart::ItemList list;
-		prj->getSortedItems(list, partInfo);
-		list.sort();
-		foreach (KexiPart::Item *item, list) {
-			addItem(d->queryIcon, item->name()); //or caption()? 
-			comp->addItem(item->name());
-		}
-	}
+  if (d->showQueries) {
+    //queries
+    KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/query");
+    if (!partInfo)
+      return;
+    KexiPart::ItemList list;
+    prj->getSortedItems(list, partInfo);
+    list.sort();
+    foreach (KexiPart::Item *item, list) {
+      addItem(d->queryIcon, item->name()); //or caption()? 
+      comp->addItem(item->name());
+    }
+  }
 //	setCurrentText("");
-	setCurrentIndex(0);
+  setCurrentIndex(0);
 }
 
 void KexiDataSourceComboBox::setDataSource(const QString& mimeType, const QString& name)
 {
-	if (name.isEmpty()) {
-		clearEditText();
-		setCurrentIndex(0);
-		d->prevIndex = -1;
-		emit dataSourceChanged();
-		return;
-	}
+  if (name.isEmpty()) {
+    clearEditText();
+    setCurrentIndex(0);
+    d->prevIndex = -1;
+    emit dataSourceChanged();
+    return;
+  }
 
-	QString mt(mimeType);
-	if (mimeType.isEmpty())
-		mt="kexi/table";
-	int i = findItem(mt, name);
-	if (i==-1) {
-		if (mimeType.isEmpty())
-			i = findItem("kexi/query", name);
-		if (i==-1) {
-			setCurrentIndex(0);
-			return;
-		}
-	}
-	setCurrentIndex(i);
-	slotActivated(i);
+  QString mt(mimeType);
+  if (mimeType.isEmpty())
+    mt="kexi/table";
+  int i = findItem(mt, name);
+  if (i==-1) {
+    if (mimeType.isEmpty())
+      i = findItem("kexi/query", name);
+    if (i==-1) {
+      setCurrentIndex(0);
+      return;
+    }
+  }
+  setCurrentIndex(i);
+  slotActivated(i);
 }
 
 void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 {
-	QString name(item.name());
-	//insert a new item, maintaining sort order and splitting to tables and queries
-	if (item.mimeType()=="kexi/table") {
-		int i = 1; /*skip empty row*/
+  QString name(item.name());
+  //insert a new item, maintaining sort order and splitting to tables and queries
+  if (item.mimeType()=="kexi/table") {
+    int i = 1; /*skip empty row*/
 #ifdef ADD_DEFINEQUERY_ROW
-		i++; /*skip 'define query' row*/
+    i++; /*skip 'define query' row*/
 #endif
-		for (; i < d->firstQueryIndex() && name>=itemText(i); i++)
-			;
-		addItem(d->tableIcon, name, i);
-		completionObject()->addItem(name);
-		d->tablesCount++;
-	}
-	else if (item.mimeType()=="kexi/query") {
-		int i;
-		for (i=d->firstQueryIndex(); i<count() && name>=itemText(i); i++)
-			;
-		addItem(d->queryIcon, name, i);
-		completionObject()->addItem(name);
-	}
+    for (; i < d->firstQueryIndex() && name>=itemText(i); i++)
+      ;
+    addItem(d->tableIcon, name, i);
+    completionObject()->addItem(name);
+    d->tablesCount++;
+  }
+  else if (item.mimeType()=="kexi/query") {
+    int i;
+    for (i=d->firstQueryIndex(); i<count() && name>=itemText(i); i++)
+      ;
+    addItem(d->queryIcon, name, i);
+    completionObject()->addItem(name);
+  }
 }
 
 int KexiDataSourceComboBox::findItem(const QString& mimeType, const QString& name)
 {
-	int i, end;
-	if (mimeType=="kexi/table") {
-		i = 0;
+  int i, end;
+  if (mimeType=="kexi/table") {
+    i = 0;
 #ifdef ADD_DEFINEQUERY_ROW
-		i++; //skip 'define query'
+    i++; //skip 'define query'
 #endif
-		end = d->firstQueryIndex();
-	}
-	else if (mimeType=="kexi/query") {
-		i = d->firstQueryIndex();
-		end = count();
-	}
-	else
-		return -1;
+    end = d->firstQueryIndex();
+  }
+  else if (mimeType=="kexi/query") {
+    i = d->firstQueryIndex();
+    end = count();
+  }
+  else
+    return -1;
 
-	QString nameString(name);
+  QString nameString(name);
 
-	for (; i<end; i++)
-		if (itemText(i)==nameString)
-			return i;
-	
-	return -1;
+  for (; i<end; i++)
+    if (itemText(i)==nameString)
+      return i;
+  
+  return -1;
 }
 
 void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 {
-	const int i = findItem(item.mimeType(), item.name());
-	if (i==-1)
-		return;
-	removeItem(i);
-	completionObject()->removeItem(item.name());
-	if (item.mimeType()=="kexi/table")
-		d->tablesCount--;
+  const int i = findItem(item.mimeType(), item.name());
+  if (i==-1)
+    return;
+  removeItem(i);
+  completionObject()->removeItem(item.name());
+  if (item.mimeType()=="kexi/table")
+    d->tablesCount--;
 #if 0 //disabled because even invalid data source can be set
-	if (currentItem()==i) {
-		if (i==(count()-1))
-			setCurrentItem(i-1);
-		else
-			setCurrentItem(i);
-	}
+  if (currentItem()==i) {
+    if (i==(count()-1))
+      setCurrentItem(i-1);
+    else
+      setCurrentItem(i);
+  }
 #endif
 }
 
 void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
-	const int i = findItem(item.mimeType(), QString(oldName));
-	if (i==-1)
-		return;
-	setItemText(i, item.name());
-	completionObject()->removeItem(oldName);
-	completionObject()->addItem(item.name());
-	setEditText(oldName); //still keep old name
+  const int i = findItem(item.mimeType(), QString(oldName));
+  if (i==-1)
+    return;
+  setItemText(i, item.name());
+  completionObject()->removeItem(oldName);
+  completionObject()->addItem(item.name());
+  setEditText(oldName); //still keep old name
 }
 
 void KexiDataSourceComboBox::slotActivated( int index )
 {
-	if (index >= d->firstTableIndex() && index < count() && d->prevIndex!=currentIndex()) {
-		d->prevIndex = currentIndex();
-		emit dataSourceChanged();
-	}
+  if (index >= d->firstTableIndex() && index < count() && d->prevIndex!=currentIndex()) {
+    d->prevIndex = currentIndex();
+    emit dataSourceChanged();
+  }
 }
 
 QString KexiDataSourceComboBox::selectedMimeType() const
 {
-	if (selectedName().isEmpty())
-		return "";
-	const int index = currentIndex();
-	if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex())
-		return "kexi/table";
-	else if (index >= (int)d->firstQueryIndex() && index < count())
-		return "kexi/query";
-	return "";
+  if (selectedName().isEmpty())
+    return "";
+  const int index = currentIndex();
+  if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex())
+    return "kexi/table";
+  else if (index >= (int)d->firstQueryIndex() && index < count())
+    return "kexi/query";
+  return "";
 }
 
 QString KexiDataSourceComboBox::selectedName() const
 {
-	if (isSelectionValid())
-		return itemText(currentIndex());
-	return currentText();
+  if (isSelectionValid())
+    return itemText(currentIndex());
+  return currentText();
 }
 
 bool KexiDataSourceComboBox::isSelectionValid() const
 {
-	const int index = currentIndex();
-	return index >= d->firstTableIndex() && index < count() && itemText(index)==currentText();
+  const int index = currentIndex();
+  return index >= d->firstTableIndex() && index < count() && itemText(index)==currentText();
 }
 
 void KexiDataSourceComboBox::slotReturnPressed(const QString & text)
 {
-	//text is available: select item for this text:
-	bool changed = false;
-	if (text.isEmpty() && 0!=currentIndex()) {
-		setCurrentIndex(0);
-		changed = true;
-	}
-	else {
-		const int index = findText( text, Qt::MatchExactly );
-		if (index>=0 && index!=currentIndex()) {
-			setCurrentIndex( index );
-			changed = true;
-		}
-	}
-	if (changed)
-		emit dataSourceChanged();
+  //text is available: select item for this text:
+  bool changed = false;
+  if (text.isEmpty() && 0!=currentIndex()) {
+    setCurrentIndex(0);
+    changed = true;
+  }
+  else {
+    const int index = findText( text, Qt::MatchExactly );
+    if (index>=0 && index!=currentIndex()) {
+      setCurrentIndex( index );
+      changed = true;
+    }
+  }
+  if (changed)
+    emit dataSourceChanged();
 }
 
 void KexiDataSourceComboBox::focusOutEvent( QFocusEvent *e )
 {
-	KComboBox::focusOutEvent( e );
-	slotReturnPressed(currentText());
+  KComboBox::focusOutEvent( e );
+  slotReturnPressed(currentText());
 }
 
 #include "kexidatasourcecombobox.moc"

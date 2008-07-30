@@ -38,24 +38,24 @@
 KexiDropDownButton::KexiDropDownButton(QWidget *parent)
  : QToolButton(parent)
 {
-	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
 //! @todo get this from a KStyle
 //	setFixedWidth(QMAX(18, qApp->globalStrut().width()));
-	int fixedWidth;
-	//hack
+  int fixedWidth;
+  //hack
 #ifdef __GNUC__
 #warning TODO use subControlRect
 #else
 #pragma WARNING( TODO use subControlRect )
 #endif
 /*TODO
-	if (style()->objectName().toLower()=="thinkeramik")
-		fixedWidth = 18; //typical width as in "windows" style
-	else
-		fixedWidth = style()->subControlRect( QStyle::CC_ComboBox, 0, 
-			QStyle::SC_ComboBoxArrow ).width();
-	setFixedWidth( fixedWidth );
-	*/
+  if (style()->objectName().toLower()=="thinkeramik")
+    fixedWidth = 18; //typical width as in "windows" style
+  else
+    fixedWidth = style()->subControlRect( QStyle::CC_ComboBox, 0, 
+      QStyle::SC_ComboBoxArrow ).width();
+  setFixedWidth( fixedWidth );
+  */
 #ifdef __GNUC__
 #warning setPopupDelay(10/*ms*/);
 #else
@@ -69,45 +69,45 @@ KexiDropDownButton::~KexiDropDownButton()
 
 QSize KexiDropDownButton::sizeHint () const
 {
-	return QSize( fontMetrics().maxWidth() + 2*2, fontMetrics().height()*2 + 2*2 );
+  return QSize( fontMetrics().maxWidth() + 2*2, fontMetrics().height()*2 + 2*2 );
 }
 
 void KexiDropDownButton::paintEvent( QPaintEvent *e )
 {
-	QToolButton::paintEvent(e);
-	QPainter p(this);
+  QToolButton::paintEvent(e);
+  QPainter p(this);
 /*	QStyle::SFlags arrowFlags = QStyle::Style_Default;
-	if (isDown() || state()==On)
-		arrowFlags |= QStyle::Style_Down;
-	if (isEnabled())
-		arrowFlags |= QStyle::Style_Enabled;*/
-	QStyleOption option;
-	option.initFrom(this);
-	style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &p);
+  if (isDown() || state()==On)
+    arrowFlags |= QStyle::Style_Down;
+  if (isEnabled())
+    arrowFlags |= QStyle::Style_Enabled;*/
+  QStyleOption option;
+  option.initFrom(this);
+  style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &p);
 /*		style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, 0, &p,
-		QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
-		arrowFlags, QStyleOption() );*/
+    QRect((width()-7)/2, height()-9, 7, 7), colorGroup(),
+    arrowFlags, QStyleOption() );*/
 }
 
 void KexiDropDownButton::keyPressEvent( QKeyEvent * e )
 {
-	const int k = e->key();
-	const bool dropDown =
-	 ( e->modifiers() == Qt::NoButton 
-	    && (k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_F2 
-	        || k==Qt::Key_F4)
-	 )
-	 || (e->modifiers() == Qt::AltButton && k==Qt::Key_Down);
-	 
-	if (dropDown) {
-		e->accept();
-		animateClick();
-		QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton,
-			Qt::NoModifier );
-		QApplication::sendEvent( this, &me );
-		return;
-	}
-	QToolButton::keyPressEvent(e);
+  const int k = e->key();
+  const bool dropDown =
+   ( e->modifiers() == Qt::NoButton 
+      && (k==Qt::Key_Space || k==Qt::Key_Enter || k==Qt::Key_Return || k==Qt::Key_F2 
+          || k==Qt::Key_F4)
+   )
+   || (e->modifiers() == Qt::AltButton && k==Qt::Key_Down);
+   
+  if (dropDown) {
+    e->accept();
+    animateClick();
+    QMouseEvent me( QEvent::MouseButtonPress, QPoint(2,2), Qt::LeftButton, Qt::NoButton,
+      Qt::NoModifier );
+    QApplication::sendEvent( this, &me );
+    return;
+  }
+  QToolButton::keyPressEvent(e);
 }
 
 #include "kexidropdownbutton.moc"

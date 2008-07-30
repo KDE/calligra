@@ -44,121 +44,121 @@ typedef QMap<QString, QPair<QString, int> > PixmapMap;
 //! A class that store pixmaps (by path or by name for KDE icons)
 class KEXIEXTWIDGETS_EXPORT PixmapCollection : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		PixmapCollection(const QString &collectionName, QObject *parent = 0, const char *name = 0);
-		~PixmapCollection() {;}
+  public:
+    PixmapCollection(const QString &collectionName, QObject *parent = 0, const char *name = 0);
+    ~PixmapCollection() {;}
 
-		QString addPixmapPath(const KUrl &url);
-		QString addPixmapName(const QString &name, int size = KIconLoader::SizeMedium);
-		void removePixmap(const QString &name);
+    QString addPixmapPath(const KUrl &url);
+    QString addPixmapName(const QString &name, int size = KIconLoader::SizeMedium);
+    void removePixmap(const QString &name);
 
-		bool   contains(const QString &name);
-		QPixmap  getPixmap(const QString &name);
+    bool   contains(const QString &name);
+    QPixmap  getPixmap(const QString &name);
 
-		void save(QDomNode parentNode);
-		void load(QDomNode node);
+    void save(QDomNode parentNode);
+    void load(QDomNode node);
 
-		QString collectionName() {return m_name; }
+    QString collectionName() {return m_name; }
 
-	signals:
-		void itemRenamed(const QString &oldName, const QString &newName);
-		void itemRemoved(const QString &name);
+  signals:
+    void itemRenamed(const QString &oldName, const QString &newName);
+    void itemRemoved(const QString &name);
 
-	protected:
-		QString  m_name;
-		PixmapMap  m_pixmaps;
+  protected:
+    QString  m_name;
+    PixmapMap  m_pixmaps;
 
-	friend class PixmapCollectionEditor;
-	friend class PixmapCollectionChooser;
+  friend class PixmapCollectionEditor;
+  friend class PixmapCollectionChooser;
 };
 
 //! A dialog to edit the contents of a PixmapCollection
 class KEXIEXTWIDGETS_EXPORT PixmapCollectionEditor : public KDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		PixmapCollectionEditor(PixmapCollection *collection, QWidget *parent = 0);
-		~PixmapCollectionEditor() {;}
+  public:
+    PixmapCollectionEditor(PixmapCollection *collection, QWidget *parent = 0);
+    ~PixmapCollectionEditor() {;}
 
-	protected:
-		QPixmap getPixmap(const QString &name);
-		void createIconViewItem(const QString &name);
+  protected:
+    QPixmap getPixmap(const QString &name);
+    void createIconViewItem(const QString &name);
 
-	protected slots:
-		void newItemByPath();
-		void newItemByName();
-		void removeItem();
-		void renameItem();
-		void renameCollectionItem(Q3IconViewItem *item, const QString &name);
-		void displayMenu(Q3IconViewItem *item, const QPoint &p);
+  protected slots:
+    void newItemByPath();
+    void newItemByName();
+    void removeItem();
+    void renameItem();
+    void renameCollectionItem(Q3IconViewItem *item, const QString &name);
+    void displayMenu(Q3IconViewItem *item, const QPoint &p);
 
-	private:
-		enum { BNewItemPath = 101, BNewItemName, BDelItem};
-		K3IconView  *m_iconView;
-		Q3IntDict<QToolButton>  m_buttons;
-		PixmapCollection  *m_collection;
+  private:
+    enum { BNewItemPath = 101, BNewItemName, BDelItem};
+    K3IconView  *m_iconView;
+    Q3IntDict<QToolButton>  m_buttons;
+    PixmapCollection  *m_collection;
 };
 
 //! A dialog to choose an icon in a PixmapCollection
 class KEXIEXTWIDGETS_EXPORT PixmapCollectionChooser : public KDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		PixmapCollectionChooser(PixmapCollection *collection, const QString &selectedItem, QWidget *parent = 0);
-		~PixmapCollectionChooser() {;}
+  public:
+    PixmapCollectionChooser(PixmapCollection *collection, const QString &selectedItem, QWidget *parent = 0);
+    ~PixmapCollectionChooser() {;}
 
-		QPixmap  pixmap();
-		QString  pixmapName();
+    QPixmap  pixmap();
+    QString  pixmapName();
 
-	protected:
-		QPixmap getPixmap(const QString &name);
-	protected slots:
-		virtual void slotUser1();
+  protected:
+    QPixmap getPixmap(const QString &name);
+  protected slots:
+    virtual void slotUser1();
 
-	private:
-		PixmapCollection  *m_collection;
-		K3IconView  *m_iconView;
+  private:
+    PixmapCollection  *m_collection;
+    K3IconView  *m_iconView;
 };
 
 //! A simple dialog to choose a KDE icon
 class KEXIEXTWIDGETS_EXPORT LoadIconDialog : public KDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		LoadIconDialog(QWidget *parent = 0);
-		~LoadIconDialog() {;}
+  public:
+    LoadIconDialog(QWidget *parent = 0);
+    ~LoadIconDialog() {;}
 
-		int iconSize();
-		QString iconName();
+    int iconSize();
+    QString iconName();
 
-	protected slots:
-		void changeIconSize(int);
-		void updateIconName(QString);
-		void setIcon(const QString &);
+  protected slots:
+    void changeIconSize(int);
+    void updateIconName(QString);
+    void setIcon(const QString &);
 
-	private:
-		KLineEdit *m_nameInput;
-		KIconButton *m_button;
+  private:
+    KLineEdit *m_nameInput;
+    KIconButton *m_button;
 };
 
 //! A Special K3IconViewItem that holds the name of its associated pixmap (to allow renaming)
 class KEXIEXTWIDGETS_EXPORT PixmapIconViewItem : public K3IconViewItem
 {
-	public:
-		PixmapIconViewItem(K3IconView *parent, const QString &text, const QPixmap &icon)
-		: K3IconViewItem(parent, text, icon)  { m_name = text; }
-		~PixmapIconViewItem() {;}
+  public:
+    PixmapIconViewItem(K3IconView *parent, const QString &text, const QPixmap &icon)
+    : K3IconViewItem(parent, text, icon)  { m_name = text; }
+    ~PixmapIconViewItem() {;}
 
-		void setName(const QString &name) { m_name = name; }
-		QString name() { return m_name;}
+    void setName(const QString &name) { m_name = name; }
+    QString name() { return m_name;}
 
-	private:
-		QString  m_name;
+  private:
+    QString  m_name;
 };
 
 #endif

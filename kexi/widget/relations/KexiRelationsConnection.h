@@ -32,40 +32,40 @@ struct SourceConnection;
 //! A model for a single connection (relationship) between tables in the relations view
 class KEXIRELATIONSVIEW_EXPORT KexiRelationsConnection
 {
-	public:
-		KexiRelationsConnection(
-			KexiRelationsTableContainer *masterTbl, 
-			KexiRelationsTableContainer *detailsTbl, 
-			SourceConnection &s,
-			KexiRelationsScrollArea *scrollArea);
+  public:
+    KexiRelationsConnection(
+      KexiRelationsTableContainer *masterTbl, 
+      KexiRelationsTableContainer *detailsTbl, 
+      SourceConnection &s,
+      KexiRelationsScrollArea *scrollArea);
 
-		~KexiRelationsConnection();
+    ~KexiRelationsConnection();
 
-		void drawConnection(QPainter *p);
+    void drawConnection(QPainter *p);
 
-		bool selected() const;
-		
-		void setSelected(bool s);
+    bool selected() const;
+    
+    void setSelected(bool s);
 
-		QRect connectionRect();
+    QRect connectionRect();
 
-		QRect oldRect() const;
+    QRect oldRect() const;
 
-		KexiRelationsTableContainer *masterTable() const;
+    KexiRelationsTableContainer *masterTable() const;
 
-		KexiRelationsTableContainer *detailsTable() const;
+    KexiRelationsTableContainer *detailsTable() const;
 
-		QString masterField() const;
+    QString masterField() const;
 
-		QString detailsField() const;
+    QString detailsField() const;
 
-		bool matchesPoint(const QPoint &p, int tolerance = 3);
+    bool matchesPoint(const QPoint &p, int tolerance = 3);
 
-		QString toString() const;
+    QString toString() const;
 
-	private:
-		class Private;
-		Private* const d;
+  private:
+    class Private;
+    Private* const d;
 };
 
 #endif

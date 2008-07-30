@@ -33,47 +33,47 @@
 */
 class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiTableViewHeader(QWidget * parent = 0);
+  public:
+    KexiTableViewHeader(QWidget * parent = 0);
 
-		virtual ~KexiTableViewHeader();
+    virtual ~KexiTableViewHeader();
 
-		int addLabel( const QString & s, int size = -1 );
+    int addLabel( const QString & s, int size = -1 );
 
-		int addLabel( const QIcon & icon, const QString & s, int size = -1 );
+    int addLabel( const QIcon & icon, const QString & s, int size = -1 );
 
-		void removeLabel( int section );
+    void removeLabel( int section );
 
-		/*! Sets \a toolTip for \a section. */
-		void setToolTip( int section, const QString & toolTip );
+    /*! Sets \a toolTip for \a section. */
+    void setToolTip( int section, const QString & toolTip );
 
-		virtual bool eventFilter(QObject * watched, QEvent * e);
+    virtual bool eventFilter(QObject * watched, QEvent * e);
 
-		void setSelectedSection(int section);
-		int selectedSection() const;
+    void setSelectedSection(int section);
+    int selectedSection() const;
 
 //! @todo Qt4: support entire QBrush here?
-		QColor selectionBackgroundColor() const;
-		void setSelectionBackgroundColor(const QColor &color);
+    QColor selectionBackgroundColor() const;
+    void setSelectionBackgroundColor(const QColor &color);
 
-	protected slots:
-		void slotSizeChange(int section, int oldSize, int newSize );
+  protected slots:
+    void slotSizeChange(int section, int oldSize, int newSize );
 
-	protected:
-		virtual bool event( QEvent *event );
-		virtual void paintSection( QPainter * p, int index, const QRect & fr );
-		virtual void styleChanged();
+  protected:
+    virtual bool event( QEvent *event );
+    virtual void paintSection( QPainter * p, int index, const QRect & fr );
+    virtual void styleChanged();
 
-		int m_lastToolTipSection;
-		QRect m_toolTipRect;
+    int m_lastToolTipSection;
+    QRect m_toolTipRect;
 
-		QStringList m_toolTips;
-		QColor m_selectionBackgroundColor;
-		QPointer<QStyle> m_privateStyle;
-		int m_selectedSection;
-		bool m_styleChangeEnabled : 1;
+    QStringList m_toolTips;
+    QColor m_selectionBackgroundColor;
+    QPointer<QStyle> m_privateStyle;
+    int m_selectedSection;
+    bool m_styleChangeEnabled : 1;
 };
 
 #endif

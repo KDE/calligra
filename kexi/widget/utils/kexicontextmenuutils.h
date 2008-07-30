@@ -32,11 +32,11 @@ class KActionCollection;
 */
 class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 {
-	public:
-		/*! Updates title for context menu.
-		 \return true if the title has been updated. */
-		static bool updateTitle(QMenu *menu, const QString& objectName, 
-			const QString& objectTypeName, const QString& iconName);
+  public:
+    /*! Updates title for context menu.
+     \return true if the title has been updated. */
+    static bool updateTitle(QMenu *menu, const QString& objectName, 
+      const QString& objectTypeName, const QString& iconName);
 };
 
 //! @short A context menu used for images within form and table views
@@ -49,65 +49,65 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 */
 class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiImageContextMenu(QWidget *parent);
-		virtual ~KexiImageContextMenu();
+  public:
+    KexiImageContextMenu(QWidget *parent);
+    virtual ~KexiImageContextMenu();
 
-		KActionCollection* actionCollection() const;
+    KActionCollection* actionCollection() const;
 
-		/*! Updates title for context menu.
-		 Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
-		 \return true if the title has been updated. */
-		static bool updateTitle(QMenu *menu, const QString& title, 
-			const QString& iconName = QString());
+    /*! Updates title for context menu.
+     Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
+     \return true if the title has been updated. */
+    static bool updateTitle(QMenu *menu, const QString& title, 
+      const QString& iconName = QString());
 
-	public slots:
-		void updateActionsAvailability();
+  public slots:
+    void updateActionsAvailability();
 
-		virtual void insertFromFile();
-		virtual void saveAs();
-		virtual void cut();
-		virtual void copy();
-		virtual void paste();
-		virtual void clear();
-		virtual void showProperties();
+    virtual void insertFromFile();
+    virtual void saveAs();
+    virtual void cut();
+    virtual void copy();
+    virtual void paste();
+    virtual void clear();
+    virtual void showProperties();
 
-	signals:
-		//! Emitted when actions availability should be performed. Just connect this signal
-		//! to a slot and set \a valueIsNull and \a valueIsReadOnly.
-		void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
+  signals:
+    //! Emitted when actions availability should be performed. Just connect this signal
+    //! to a slot and set \a valueIsNull and \a valueIsReadOnly.
+    void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
-		/*! Emitted before "insertFromFile" action was requested. */
-		void insertFromFileRequested(const KUrl &url);
+    /*! Emitted before "insertFromFile" action was requested. */
+    void insertFromFileRequested(const KUrl &url);
 
-		/*! Emitted before "saveAs" action was requested. 
-		 You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.
-		 If \a dataIsEmpty is false, saving will be cancelled. */
-		void aboutToSaveAsRequested(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
+    /*! Emitted before "saveAs" action was requested. 
+     You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.
+     If \a dataIsEmpty is false, saving will be cancelled. */
+    void aboutToSaveAsRequested(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
 
-		//! Emitted when "saveAs" action was requested
-		void saveAsRequested(const QString& fileName);
+    //! Emitted when "saveAs" action was requested
+    void saveAsRequested(const QString& fileName);
 
-		//! Emitted when "cut" action was requested
-		void cutRequested();
+    //! Emitted when "cut" action was requested
+    void cutRequested();
 
-		//! Emitted when "copy" action was requested
-		void copyRequested();
+    //! Emitted when "copy" action was requested
+    void copyRequested();
 
-		//! Emitted when "paste" action was requested
-		void pasteRequested();
+    //! Emitted when "paste" action was requested
+    void pasteRequested();
 
-		//! Emitted when "clear" action was requested
-		void clearRequested();
+    //! Emitted when "clear" action was requested
+    void clearRequested();
 
-		//! Emitted when "showProperties" action was requested
-		void showPropertiesRequested();
+    //! Emitted when "showProperties" action was requested
+    void showPropertiesRequested();
 
-	protected:
-		class Private;
-		Private *d;
+  protected:
+    class Private;
+    Private *d;
 };
 
 #endif

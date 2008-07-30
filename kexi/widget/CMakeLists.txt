@@ -32,15 +32,15 @@ set(kexiextendedwidgets_LIB_SRCS
 
 
 kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
-	kexiprjtypeselector.ui
-	kexidbconnectionwidget.ui
-	kexidbconnectionwidgetdetails.ui
+  kexiprjtypeselector.ui
+  kexidbconnectionwidget.ui
+  kexidbconnectionwidgetdetails.ui
 )
 
 kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
 target_link_libraries(kexiextendedwidgets ${KDE4_KDEUI_LIBS}
-	kexiutils kexiguiutils kexidatatable kexicore ktexteditor )
+  kexiutils kexiguiutils kexidatatable kexicore ktexteditor )
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_VERSION} )
 install(TARGETS kexiextendedwidgets  DESTINATION ${LIB_INSTALL_DIR})

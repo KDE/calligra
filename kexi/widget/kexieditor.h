@@ -32,89 +32,89 @@ class Document;
 /*! It is used for SQL and script editor. */
 class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
+  public:
 
-		/**
-		* Constructor.
-		* 
-		* \param parent The parent \a QWidget this KexiEditor is child
-		*        of.  You don't need to free the KexiEditor cause Qt 
-		*        will handle that for us.
-		* \param name The name this KexiEditor has. Used only for debugging.
-		*/
-		KexiEditor(QWidget *parent);
+    /**
+    * Constructor.
+    * 
+    * \param parent The parent \a QWidget this KexiEditor is child
+    *        of.  You don't need to free the KexiEditor cause Qt 
+    *        will handle that for us.
+    * \param name The name this KexiEditor has. Used only for debugging.
+    */
+    KexiEditor(QWidget *parent);
 
-		/**
-		* Destructor.
-		*/
-		virtual ~KexiEditor();
+    /**
+    * Destructor.
+    */
+    virtual ~KexiEditor();
 
-		/**
-		* \return true if internally the KTextEditor::EditorChooser got
-		* used else, if a simple KTextEdit is used, false is returned.
-		*/
-		static bool isAdvancedEditor();
+    /**
+    * \return true if internally the KTextEditor::EditorChooser got
+    * used else, if a simple KTextEdit is used, false is returned.
+    */
+    static bool isAdvancedEditor();
 
-		/**
-		* \return the text displayed in the editor-widget.
-		*/
-		QString text();
+    /**
+    * \return the text displayed in the editor-widget.
+    */
+    QString text();
 
-		/**
-		* Set the highlight-mode to \p highlightmodename . If
-		* \a isAdvancedEditor returns false (KTextEdit is used
-		* rather then KTextEditor), then the method just does
-		* nothing. The \p highlightmodename could be any kind
-		* of string like e.g. "python", "kjs" or "sql" 
-		* KTextEditor supports.
-		*/
-		void setHighlightMode(const QString& highlightmodename);
+    /**
+    * Set the highlight-mode to \p highlightmodename . If
+    * \a isAdvancedEditor returns false (KTextEdit is used
+    * rather then KTextEditor), then the method just does
+    * nothing. The \p highlightmodename could be any kind
+    * of string like e.g. "python", "kjs" or "sql" 
+    * KTextEditor supports.
+    */
+    void setHighlightMode(const QString& highlightmodename);
 
-		/**
-		* Find row and column for this \p character and jump to the
-		* position.
-		*/
-		void jump(int character);
-		
-		/**
-		* Set the cursor position to \p line and \p col .
-		*/
-		void setCursorPosition(int line, int col);
-		
-		/**
-		* Clear all remembered undo/redo-actions. Only
-		* avaiable if \a isAdvancedEditor returns true.
-		*/
-		void clearUndoRedo();
+    /**
+    * Find row and column for this \p character and jump to the
+    * position.
+    */
+    void jump(int character);
+    
+    /**
+    * Set the cursor position to \p line and \p col .
+    */
+    void setCursorPosition(int line, int col);
+    
+    /**
+    * Clear all remembered undo/redo-actions. Only
+    * avaiable if \a isAdvancedEditor returns true.
+    */
+    void clearUndoRedo();
 
         /**
         * \return a default context menu implementation.
         */
         virtual QMenu* defaultContextMenu();
 
-	public slots:
-		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
-		void setText(const QString &text);
-		/*! Display the configuration-dialog. Only avaiable if isAdvancedEditor() returns true. */
-		void slotConfigureEditor();
+  public slots:
+    /*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
+    void setText(const QString &text);
+    /*! Display the configuration-dialog. Only avaiable if isAdvancedEditor() returns true. */
+    void slotConfigureEditor();
 
-	protected slots:
-		void slotTextChanged(KTextEditor::Document *);
+  protected slots:
+    void slotTextChanged(KTextEditor::Document *);
 
-	protected:
-		/*! Update the actions. This call is redirected to \a KexiView::updateActions */
-		virtual void updateActions(bool activated);
+  protected:
+    /*! Update the actions. This call is redirected to \a KexiView::updateActions */
+    virtual void updateActions(bool activated);
 
-	signals:
-		/*! Emitted if the text displayed in the editor changed. */
-		void textChanged();
+  signals:
+    /*! Emitted if the text displayed in the editor changed. */
+    void textChanged();
 
-	private:
-		/*! Private d-pointer class. */
-		class Private;
-		Private * const d;
+  private:
+    /*! Private d-pointer class. */
+    class Private;
+    Private * const d;
 };
 
 #endif

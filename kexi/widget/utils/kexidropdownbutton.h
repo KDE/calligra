@@ -29,17 +29,17 @@
  F2, F4 and alt+down buttons. */
 class KEXIGUIUTILS_EXPORT KexiDropDownButton : public QToolButton
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiDropDownButton(QWidget *parent);
-		virtual ~KexiDropDownButton();
+  public:
+    KexiDropDownButton(QWidget *parent);
+    virtual ~KexiDropDownButton();
 
-		virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
-	protected:
-		virtual void paintEvent( QPaintEvent *e );
-		virtual void keyPressEvent( QKeyEvent * e );
+  protected:
+    virtual void paintEvent( QPaintEvent *e );
+    virtual void keyPressEvent( QKeyEvent * e );
 };
 
 #endif

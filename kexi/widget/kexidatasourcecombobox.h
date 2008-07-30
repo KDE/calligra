@@ -25,7 +25,7 @@
 
 class KexiProject;
 namespace KexiPart {
-	class Item;
+  class Item;
 }
 
 /**
@@ -34,56 +34,56 @@ namespace KexiPart {
  */
 class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiDataSourceComboBox(QWidget *parent);
-		virtual ~KexiDataSourceComboBox();
+  public:
+    KexiDataSourceComboBox(QWidget *parent);
+    virtual ~KexiDataSourceComboBox();
 
-		//! \return global project that is used to retrieve schema informationm for this combo box.
-		KexiProject* project() const;
+    //! \return global project that is used to retrieve schema informationm for this combo box.
+    KexiProject* project() const;
 
-		//! \return name of selected table or query. Can return null string.
-		//! You should use isSelectionValid() to check validity of the input.
-		QString selectedMimeType() const;
+    //! \return name of selected table or query. Can return null string.
+    //! You should use isSelectionValid() to check validity of the input.
+    QString selectedMimeType() const;
 
-		//! \return name of selected table or query. Can return null string or nonexisting name,
-		//! so you should use isSelectionValid() to check validity of the input.
-		QString selectedName() const;
+    //! \return name of selected table or query. Can return null string or nonexisting name,
+    //! so you should use isSelectionValid() to check validity of the input.
+    QString selectedName() const;
 
-		//! \return true if current selection is valid
-		bool isSelectionValid() const;
+    //! \return true if current selection is valid
+    bool isSelectionValid() const;
 
-		/*! \return index of item of mime type \a mimeType and name \a name.
-		 Returs -1 of no such item exists. */
-		int findItem(const QString& mimeType, const QString& name);
+    /*! \return index of item of mime type \a mimeType and name \a name.
+     Returs -1 of no such item exists. */
+    int findItem(const QString& mimeType, const QString& name);
 
-	public slots:
-		//! Sets global project that is used to retrieve schema informationm for this combo box.
-		//! Tables visibility can be set using \a showTables queries visibility using \a showQueries.
-		void setProject(KexiProject *prj, bool showTables = true, bool showQueries = true);
+  public slots:
+    //! Sets global project that is used to retrieve schema informationm for this combo box.
+    //! Tables visibility can be set using \a showTables queries visibility using \a showQueries.
+    void setProject(KexiProject *prj, bool showTables = true, bool showQueries = true);
 
-		/*! Sets item for data source described by \a mimeType and \a name.
-		 If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */
-		void setDataSource(const QString& mimeType, const QString& name);
+    /*! Sets item for data source described by \a mimeType and \a name.
+     If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */
+    void setDataSource(const QString& mimeType, const QString& name);
 
-	signals:
-		//! Emitted whenever data source changes. 
-		//! Even setting invalid data source or clearing it will emit this signal.
-		void dataSourceChanged();
+  signals:
+    //! Emitted whenever data source changes. 
+    //! Even setting invalid data source or clearing it will emit this signal.
+    void dataSourceChanged();
 
-	protected slots:
-		void slotNewItemStored(KexiPart::Item& item);
-		void slotItemRemoved(const KexiPart::Item& item);
-		void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
-		void slotActivated( int index );
-		void slotReturnPressed(const QString & text);
+  protected slots:
+    void slotNewItemStored(KexiPart::Item& item);
+    void slotItemRemoved(const KexiPart::Item& item);
+    void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
+    void slotActivated( int index );
+    void slotReturnPressed(const QString & text);
 
-	protected:
-		virtual void focusOutEvent( QFocusEvent *e );
+  protected:
+    virtual void focusOutEvent( QFocusEvent *e );
 
-		class Private;
-		Private * const d;
+    class Private;
+    Private * const d;
 };
 
 #endif

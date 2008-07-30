@@ -33,35 +33,35 @@
 */
 class KexiDateTimeTableEdit : public KexiInputTableEdit
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiDateTimeTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
-		virtual ~KexiDateTimeTableEdit();
-		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
-		virtual QVariant value();
-		virtual bool valueIsNull();
-		virtual bool valueIsEmpty();
-		virtual bool valueIsValid();
+  public:
+    KexiDateTimeTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+    virtual ~KexiDateTimeTableEdit();
+    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
+      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual QVariant value();
+    virtual bool valueIsNull();
+    virtual bool valueIsEmpty();
+    virtual bool valueIsValid();
 
-		/*! Reimplemented after KexiInputTableEdit. */
-		virtual void handleAction(const QString& actionName);
+    /*! Reimplemented after KexiInputTableEdit. */
+    virtual void handleAction(const QString& actionName);
 
-		/*! Reimplemented after KexiInputTableEdit. */
-		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    /*! Reimplemented after KexiInputTableEdit. */
+    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-	protected:
-		//! helper
-		void setValueInInternalEditor(const QVariant &value);
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		bool textIsEmpty() const;
+  protected:
+    //! helper
+    void setValueInInternalEditor(const QVariant &value);
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    bool textIsEmpty() const;
 
-		//! Used to format and convert date values
-		KexiDateFormatter m_dateFormatter;
+    //! Used to format and convert date values
+    KexiDateFormatter m_dateFormatter;
 
-		//! Used to format and convert time values
-		KexiTimeFormatter m_timeFormatter;
+    //! Used to format and convert time values
+    KexiTimeFormatter m_timeFormatter;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiDateTimeEditorFactoryItem)

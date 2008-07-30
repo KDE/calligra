@@ -34,11 +34,11 @@
 KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
  : KexiTableEdit(column, parent)
 {
-	kDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-	kDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
-	m_hasFocusableWidget = false;
-	m_acceptEditorAfterDeleteContents = true;
-	m_usesSelectedTextColor = false;
+  kDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
+  kDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
+  m_hasFocusableWidget = false;
+  m_acceptEditorAfterDeleteContents = true;
+  m_usesSelectedTextColor = false;
 }
 
 KexiBoolTableEdit::~KexiBoolTableEdit()
@@ -47,128 +47,128 @@ KexiBoolTableEdit::~KexiBoolTableEdit()
 
 void KexiBoolTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
 {
-	m_currentValue = m_origValue;
-	//nothing to do more...
+  m_currentValue = m_origValue;
+  //nothing to do more...
 }
 
 bool KexiBoolTableEdit::valueIsNull()
 {
-	return m_currentValue.isNull();
+  return m_currentValue.isNull();
 }
 
 bool KexiBoolTableEdit::valueIsEmpty()
 {
-	return m_currentValue.isNull();
+  return m_currentValue.isNull();
 }
 
 QVariant KexiBoolTableEdit::value()
 {
 //	ok = true;
-	return m_currentValue;
+  return m_currentValue;
 }
 
 void KexiBoolTableEdit::clear()
 {
-	if (field()->isNotNull())
-		m_currentValue = QVariant(false);
-	else
-		m_currentValue = QVariant();
+  if (field()->isNotNull())
+    m_currentValue = QVariant(false);
+  else
+    m_currentValue = QVariant();
 }
 
 bool KexiBoolTableEdit::cursorAtStart()
 {
-	return true;
+  return true;
 }
 
 bool KexiBoolTableEdit::cursorAtEnd()
 {
-	return true;
+  return true;
 }
 
 void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
-	QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
+  QString &txt, int &align, int &x, int &y_offset, int &w, int &h  )
 {
-	Q_UNUSED(focused);
-	Q_UNUSED(txt);
-	Q_UNUSED(align);
-	Q_UNUSED(x);
+  Q_UNUSED(focused);
+  Q_UNUSED(txt);
+  Q_UNUSED(align);
+  Q_UNUSED(x);
 #ifdef Q_WS_WIN
 //	x = 1;
-	y_offset = -1;
+  y_offset = -1;
 #else
 //	x = 1;
-	y_offset = 0;
+  y_offset = 0;
 #endif
-	if (p) {
-		int s = qMax(h - 5, 12);
-		s = qMin( h-3, s );
-		s = qMin( w-3, s );//avoid too large box
-		QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s - 1, s - 1);
+  if (p) {
+    int s = qMax(h - 5, 12);
+    s = qMin( h-3, s );
+    s = qMin( w-3, s );//avoid too large box
+    QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s - 1, s - 1);
 //already set ouotside:		p->setPen(QPen(colorGroup().text(), 1));
-		p->drawRect(r);
-		if (val.isNull()) { // && !field()->isNotNull()) {
-			p->drawText( r, Qt::AlignCenter, "?" );
-		}
-		else if (val.toBool()) {
-			p->drawLine(r.x(), r.y(), r.right(), r.bottom());
-			p->drawLine(r.x(), r.bottom() + 1, r.right(), r.y() + 1);
-		}
-	}
+    p->drawRect(r);
+    if (val.isNull()) { // && !field()->isNotNull()) {
+      p->drawText( r, Qt::AlignCenter, "?" );
+    }
+    else if (val.toBool()) {
+      p->drawLine(r.x(), r.y(), r.right(), r.bottom());
+      p->drawLine(r.x(), r.bottom() + 1, r.right(), r.y() + 1);
+    }
+  }
 }
 
 void KexiBoolTableEdit::clickedOnContents()
 {
-	if (field()->isNotNull())
-		m_currentValue = QVariant( !m_currentValue.toBool() );
-	else {
-		// null allowed: use the cycle: true -> false -> null
-		if (m_currentValue.isNull())
-			m_currentValue = QVariant( true );
-		else
-			m_currentValue = m_currentValue.toBool() ? QVariant( false ) : QVariant();
-	}
+  if (field()->isNotNull())
+    m_currentValue = QVariant( !m_currentValue.toBool() );
+  else {
+    // null allowed: use the cycle: true -> false -> null
+    if (m_currentValue.isNull())
+      m_currentValue = QVariant( true );
+    else
+      m_currentValue = m_currentValue.toBool() ? QVariant( false ) : QVariant();
+  }
 }
 
 void KexiBoolTableEdit::handleAction(const QString& actionName)
 {
-	if (actionName=="edit_paste") {
-		emit editRequested();
-		bool ok;
-		const int value = qApp->clipboard()->text( QClipboard::Clipboard ).toInt(&ok);
-		if (ok) {
-			m_currentValue = (value==0) ? QVariant(false) : QVariant(true);
-		}
-		else {
-			m_currentValue = field()->isNotNull() 
-				? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
-				: QVariant();
-		}
-		repaintRelatedCell();
-	}
-	else if (actionName=="edit_cut") {
-		emit editRequested();
+  if (actionName=="edit_paste") {
+    emit editRequested();
+    bool ok;
+    const int value = qApp->clipboard()->text( QClipboard::Clipboard ).toInt(&ok);
+    if (ok) {
+      m_currentValue = (value==0) ? QVariant(false) : QVariant(true);
+    }
+    else {
+      m_currentValue = field()->isNotNull() 
+        ? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
+        : QVariant();
+    }
+    repaintRelatedCell();
+  }
+  else if (actionName=="edit_cut") {
+    emit editRequested();
 //! @todo handle defaultValue...
-		m_currentValue = field()->isNotNull() 
-			? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
-			: QVariant();
-		handleCopyAction(m_origValue, QVariant());
-		repaintRelatedCell();
-	}
+    m_currentValue = field()->isNotNull() 
+      ? QVariant(0)/*0 instead of NULL - handle case when null is not allowed*/
+      : QVariant();
+    handleCopyAction(m_origValue, QVariant());
+    repaintRelatedCell();
+  }
 }
 
 void KexiBoolTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
-	Q_UNUSED(visibleValue);
-	if (value.type()==QVariant::Bool)
-		qApp->clipboard()->setText(value.toBool() ? "1" : "0");
-	else
-		qApp->clipboard()->setText(QString());
+  Q_UNUSED(visibleValue);
+  if (value.type()==QVariant::Bool)
+    qApp->clipboard()->setText(value.toBool() ? "1" : "0");
+  else
+    qApp->clipboard()->setText(QString());
 }
 
 int KexiBoolTableEdit::widthForValue( const QVariant &val, const QFontMetrics &fm )
 {
-	Q_UNUSED(fm);
-	return val.value<QPixmap>().width();
+  Q_UNUSED(fm);
+  return val.value<QPixmap>().width();
 }
 
 //======================================================

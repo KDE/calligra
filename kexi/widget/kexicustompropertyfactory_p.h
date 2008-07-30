@@ -27,23 +27,23 @@
 //! Kexi-specific image editor for property editor's item
 class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiImagePropertyEdit(KoProperty::Property *property, 
-			QWidget *parent = 0);
-		virtual ~KexiImagePropertyEdit();
+  public:
+    KexiImagePropertyEdit(KoProperty::Property *property, 
+      QWidget *parent = 0);
+    virtual ~KexiImagePropertyEdit();
 
-		virtual QVariant value() const;
-		virtual void setValue(const QVariant &value, bool emitChange=true);
-		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, 
-			const QVariant &value);
+    virtual QVariant value() const;
+    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, 
+      const QVariant &value);
 
-	public slots:
-		virtual void selectPixmap();
+  public slots:
+    virtual void selectPixmap();
 
-	protected:
-		KexiBLOBBuffer::Id_t m_id;
+  protected:
+    KexiBLOBBuffer::Id_t m_id;
 };
 
 /*! Identifier editor based on ordinary string editor but always keeps a valid identifier 
@@ -55,17 +55,17 @@ class KexiImagePropertyEdit : public KoProperty::PixmapEdit
  */
 class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiIdentifierPropertyEdit(KoProperty::Property *property, 
-			QWidget *parent = 0);
-		virtual ~KexiIdentifierPropertyEdit();
+  public:
+    KexiIdentifierPropertyEdit(KoProperty::Property *property, 
+      QWidget *parent = 0);
+    virtual ~KexiIdentifierPropertyEdit();
 
-		/*! Reimplemented: sets \a value but it is converted to identifier
-		 using KexiUtils::string2Identifier(). 
-		 If \a value is null or empty string, this method has no effect. */
-		virtual void setValue(const QVariant &value, bool emitChange=true);
+    /*! Reimplemented: sets \a value but it is converted to identifier
+     using KexiUtils::string2Identifier(). 
+     If \a value is null or empty string, this method has no effect. */
+    virtual void setValue(const QVariant &value, bool emitChange=true);
 };
 
 #endif

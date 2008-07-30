@@ -30,20 +30,20 @@
 */
 class KEXIGUIUTILS_EXPORT KexiSharedActionClient
 {
-	public:
-		KexiSharedActionClient();
-		virtual ~KexiSharedActionClient();
+  public:
+    KexiSharedActionClient();
+    virtual ~KexiSharedActionClient();
 
-		/*! Plugs action \a a for a widget. The action will be later looked up (by name) 
-		 on key press event, to get proper shortcut. If found, we know that the action is already 
-		 performed at main window's level, so we should give up. Otherwise - default shortcut 
-		 will be used (example: Shift+Enter key for "data_save_row" action). \sa KexiTableView::shortCutPressed()
-		*/
-		void plugSharedAction(QAction* a);
+    /*! Plugs action \a a for a widget. The action will be later looked up (by name) 
+     on key press event, to get proper shortcut. If found, we know that the action is already 
+     performed at main window's level, so we should give up. Otherwise - default shortcut 
+     will be used (example: Shift+Enter key for "data_save_row" action). \sa KexiTableView::shortCutPressed()
+    */
+    void plugSharedAction(QAction* a);
 
-	protected:
-		//! Actions pluged for this widget using plugSharedAction(), available by name.
-		QHash<QString,QAction*> m_sharedActions;
+  protected:
+    //! Actions pluged for this widget using plugSharedAction(), available by name.
+    QHash<QString,QAction*> m_sharedActions;
 };
 
 #endif

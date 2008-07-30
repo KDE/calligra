@@ -29,53 +29,53 @@
 /*! @internal */
 class KexiBrowserListView : public K3ListView
 {
-	Q_OBJECT
-	public:
-		KexiBrowserListView(QWidget *parent);
-		virtual ~KexiBrowserListView();
-		
-		virtual bool isExecuteArea( const QPoint& point );
+  Q_OBJECT
+  public:
+    KexiBrowserListView(QWidget *parent);
+    virtual ~KexiBrowserListView();
+    
+    virtual bool isExecuteArea( const QPoint& point );
 
-		bool nameEndsWithAsterisk : 1;
-		bool enableExecuteArea : 1; //!< used in isExecuteArea()
-	public slots:
-		virtual void rename(Q3ListViewItem *item, int c);
-	protected:
+    bool nameEndsWithAsterisk : 1;
+    bool enableExecuteArea : 1; //!< used in isExecuteArea()
+  public slots:
+    virtual void rename(Q3ListViewItem *item, int c);
+  protected:
 };
 
 /*! @internal */
 class KexiMenuBase : public KMenu
 {
-	public:
-		KexiMenuBase(QWidget *parent, KActionCollection *collection);
-		~KexiMenuBase();
+  public:
+    KexiMenuBase(QWidget *parent, KActionCollection *collection);
+    ~KexiMenuBase();
 
-		QAction* addAction(const QString& actionName);
+    QAction* addAction(const QString& actionName);
 
-	protected:
-		QPointer<KActionCollection> m_actionCollection;
+  protected:
+    QPointer<KActionCollection> m_actionCollection;
 };
 
 /*! @internal */
 class KexiItemMenu : public KexiMenuBase
 {
-	public:
-		KexiItemMenu(QWidget *parent, KActionCollection *collection);
-		~KexiItemMenu();
+  public:
+    KexiItemMenu(QWidget *parent, KActionCollection *collection);
+    ~KexiItemMenu();
 
-		//! Rebuilds the menu entirely using infromation obtained from \a partInfo 
-		//! and \a partItem.
-		void update(KexiPart::Info* partInfo, KexiPart::Item* partItem);
+    //! Rebuilds the menu entirely using infromation obtained from \a partInfo 
+    //! and \a partItem.
+    void update(KexiPart::Info* partInfo, KexiPart::Item* partItem);
 };
 
 /*! @internal */
 class KexiGroupMenu : public KexiMenuBase
 {
-	public:
-		KexiGroupMenu(QWidget *parent, KActionCollection *collection);
-		~KexiGroupMenu();
-	
-		//! Rebuilds the menu entirely using infromation obtained from \a partInfo.
+  public:
+    KexiGroupMenu(QWidget *parent, KActionCollection *collection);
+    ~KexiGroupMenu();
+  
+    //! Rebuilds the menu entirely using infromation obtained from \a partInfo.
 //unused		void update(KexiPart::Info* partInfo);
 };
 

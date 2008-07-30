@@ -43,56 +43,56 @@ A more complete example can be found in
 */
 class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		enum Options {
-			ShowFileDrivers = 1,
-			ShowServerDrivers = 2,
-			ShowAll = ShowFileDrivers|ShowServerDrivers
-		};
+  public:
+    enum Options {
+      ShowFileDrivers = 1,
+      ShowServerDrivers = 2,
+      ShowAll = ShowFileDrivers|ShowServerDrivers
+    };
 
-		/*! Constructs a KexiDBDriverComboBox object.
+    /*! Constructs a KexiDBDriverComboBox object.
 
-		    The combobox is populated with the names of the drivers in 
-		    \a driversInfo.  A suitable value for \a driversInfo can be obtained
-		    from KexiDB::DriverManager::driversInfo().
+        The combobox is populated with the names of the drivers in 
+        \a driversInfo.  A suitable value for \a driversInfo can be obtained
+        from KexiDB::DriverManager::driversInfo().
 
-		    If \a includeFileBasedDrivers is set to false, then only those drivers
-		    that are for database servers (those which have X-Kexi-DriverType=Network
-		    in their .desktop file) are shown. */
-		KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoHash& driversInfo, 
-			Options options = ShowAll );
+        If \a includeFileBasedDrivers is set to false, then only those drivers
+        that are for database servers (those which have X-Kexi-DriverType=Network
+        in their .desktop file) are shown. */
+    KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoHash& driversInfo, 
+      Options options = ShowAll );
 
-		~KexiDBDriverComboBox();
+    ~KexiDBDriverComboBox();
 
-		/*! Gets a list of the names of all drivers.
+    /*! Gets a list of the names of all drivers.
 
-		    Note that this returns just the names of those drivers that are in the
-		    combobox: if the includeFileBasedDrivers argument to the constructor
-		    was false, this won't include the file based drivers either.
+        Note that this returns just the names of those drivers that are in the
+        combobox: if the includeFileBasedDrivers argument to the constructor
+        was false, this won't include the file based drivers either.
 
-		    \return a list of names of drivers that were found */
-		QStringList driverNames() const { return m_driverNames; }
+        \return a list of names of drivers that were found */
+    QStringList driverNames() const { return m_driverNames; }
 
-		/*! Get the name of the currrently selected driver.  If the combobox is empty,
-		    QString() will be returned.
+    /*! Get the name of the currrently selected driver.  If the combobox is empty,
+        QString() will be returned.
 
-		    \return the name of the currently selected driver */
-		QString selectedDriverName() const;
+        \return the name of the currently selected driver */
+    QString selectedDriverName() const;
 
-		/*! Set the currrently selected driver.
+    /*! Set the currrently selected driver.
 
-		    The combobox entry for \a driverName is selected.  If \a driverName
-		    is not listed in the combobox then there is no change.  The search
-		    is case insensitive.
+        The combobox entry for \a driverName is selected.  If \a driverName
+        is not listed in the combobox then there is no change.  The search
+        is case insensitive.
 
-		    */
-		void setDriverName(const QString& driverName);
+        */
+    void setDriverName(const QString& driverName);
 
-	protected:
-		QHash<QString,QString> m_drivers; //!< a map: driver caption -> driver name
-		QStringList m_driverNames;
+  protected:
+    QHash<QString,QString> m_drivers; //!< a map: driver caption -> driver name
+    QStringList m_driverNames;
 };
 
 #endif

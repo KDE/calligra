@@ -30,7 +30,7 @@ class KexiTableViewData;
 
 namespace KexiDB
 {
-	class Cursor;
+  class Cursor;
 }
 
 /*! @short Provides a data-driven (record-based) tabular view.
@@ -41,36 +41,36 @@ namespace KexiDB
 */
 class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		/*! CTOR1: Creates, empty table view that can be initialized later 
-		 with setData(). 
-		 If \a dbAware is true, table will be db-aware, 
-		  and KexiDataTableView is used internally.
-		 Otherwise, table will be not-db-aware, 
-		  and KexiTableView is used internally. In the latter case,
-		  data can be set by calling tableView()->setData(KexiTableViewData* data). */
-		KexiDataTable(QWidget *parent, bool dbAware = true);
+  public:
+    /*! CTOR1: Creates, empty table view that can be initialized later 
+     with setData(). 
+     If \a dbAware is true, table will be db-aware, 
+      and KexiDataTableView is used internally.
+     Otherwise, table will be not-db-aware, 
+      and KexiTableView is used internally. In the latter case,
+      data can be set by calling tableView()->setData(KexiTableViewData* data). */
+    KexiDataTable(QWidget *parent, bool dbAware = true);
 
-		/*! CTOR2: Creates db-aware, table view initialized with \a cursor. 
-		 KexiDataTableView is used internally. */
-		KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor);
+    /*! CTOR2: Creates db-aware, table view initialized with \a cursor. 
+     KexiDataTableView is used internally. */
+    KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor);
 
-		virtual ~KexiDataTable();
+    virtual ~KexiDataTable();
 
-		KexiTableView* tableView() const;
+    KexiTableView* tableView() const;
 
-	public slots:
-		/*! Sets data. Only works for db-aware table. */
-		void setData(KexiDB::Cursor *cursor);
+  public slots:
+    /*! Sets data. Only works for db-aware table. */
+    void setData(KexiDB::Cursor *cursor);
 
-	protected slots:
+  protected slots:
 //! @todo
-		void filter();
+    void filter();
 
-	protected:
-		void init();
+  protected:
+    void init();
 };
 
 #endif

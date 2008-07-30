@@ -28,31 +28,31 @@ class QWidget;
 //! \brief A set of utilities related to displaying common elements in Kexi, like e.g. (autonumber) sign
 class KEXIGUIUTILS_EXPORT KexiDisplayUtils
 {
-	public:
-		//! Stores set of display parameters used in utility functions
-		class KEXIGUIUTILS_EXPORT DisplayParameters
-		{
-			public:
-				//! Creates uninitialized parameters
-				DisplayParameters();
+  public:
+    //! Stores set of display parameters used in utility functions
+    class KEXIGUIUTILS_EXPORT DisplayParameters
+    {
+      public:
+        //! Creates uninitialized parameters
+        DisplayParameters();
 
-				//! Copies properties from \a w.
-				DisplayParameters(QWidget *w);
+        //! Copies properties from \a w.
+        DisplayParameters(QWidget *w);
 
-				QColor textColor, selectedTextColor;
-				QFont font;
-				int textWidth, textHeight; //!< used for "(autonumber)" text only
-		};
+        QColor textColor, selectedTextColor;
+        QFont font;
+        int textWidth, textHeight; //!< used for "(autonumber)" text only
+    };
 
-		//! Initializes display parameters for autonumber sign
-		static void initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget);
+    //! Initializes display parameters for autonumber sign
+    static void initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget);
 
-		//! Paints autonumber sign using \a par parameters
-		static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
-			int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor = false);
+    //! Paints autonumber sign using \a par parameters
+    static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
+      int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor = false);
 
-		//! Initializes display parameters for default value
-		static void initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget);
+    //! Initializes display parameters for default value
+    static void initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget);
 };
 
 #endif

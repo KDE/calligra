@@ -27,8 +27,8 @@
 class QLabel;
 
 namespace KoProperty {
-	class Editor;
-	class Set;
+  class Editor;
+  class Set;
 }
 
 //! @short Helper class displaying small icon with class name and object name
@@ -45,23 +45,23 @@ namespace KoProperty {
 */
 class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 {
-	public:
-		KexiObjectInfoLabel(QWidget* parent);
-		~KexiObjectInfoLabel();
+  public:
+    KexiObjectInfoLabel(QWidget* parent);
+    ~KexiObjectInfoLabel();
 
-		void setObjectClassIcon(const QString& name);
-		QString objectClassIcon() const { return m_classIcon; }
-		void setObjectClassName(const QString& name);
-		QString objectClassName() const { return m_className; }
-		void setObjectName(const QString& name);
-		QString objectName() const { return m_objectName; }
-		void setBuddy( QWidget * buddy );
-	protected:
-		void updateName();
+    void setObjectClassIcon(const QString& name);
+    QString objectClassIcon() const { return m_classIcon; }
+    void setObjectClassName(const QString& name);
+    QString objectClassName() const { return m_className; }
+    void setObjectName(const QString& name);
+    QString objectName() const { return m_objectName; }
+    void setBuddy( QWidget * buddy );
+  protected:
+    void updateName();
 
-		QString m_className;
-		QString m_classIcon, m_objectName;
-		QLabel *m_objectIconLabel, *m_objectNameLabel;
+    QString m_className;
+    QString m_classIcon, m_objectName;
+    QLabel *m_objectIconLabel, *m_objectNameLabel;
 };
 
 //! @short The container (acts as a dock window) for KexiPropertyEditor.
@@ -80,37 +80,37 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 */
 class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiPropertyEditorView(QWidget* parent);
-		virtual ~KexiPropertyEditorView();
+  public:
+    KexiPropertyEditorView(QWidget* parent);
+    virtual ~KexiPropertyEditorView();
 
-		/*! Helper function. Updates \a infoLabel widget by reusing properties provided 
-		 by property set \a set.
-		 Read documentation of KexiPropertyEditorView class for information about accepted properties.
-		 If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed 
-		 (without icon or any other additional part). 
-		 If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes 
-		 hidden. */
-		static void updateInfoLabelForPropertySet(
-			KexiObjectInfoLabel *infoLabel, KoProperty::Set* set, 
-			const QString& textToDisplayForNullSet = QString());
+    /*! Helper function. Updates \a infoLabel widget by reusing properties provided 
+     by property set \a set.
+     Read documentation of KexiPropertyEditorView class for information about accepted properties.
+     If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed 
+     (without icon or any other additional part). 
+     If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes 
+     hidden. */
+    static void updateInfoLabelForPropertySet(
+      KexiObjectInfoLabel *infoLabel, KoProperty::Set* set, 
+      const QString& textToDisplayForNullSet = QString());
 
-		virtual QSize sizeHint() const;
-		virtual QSize minimumSizeHint() const;
-		KoProperty::Editor *editor() const;
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    KoProperty::Editor *editor() const;
 
 //	public slots:
 //		virtual void setGeometry( const QRect &r );
 //		virtual void resize( int w, int h );
 
-	protected slots:
-		void slotPropertySetChanged(KoProperty::Set* );
+  protected slots:
+    void slotPropertySetChanged(KoProperty::Set* );
 
-	protected:
-		class Private;
-		Private * const d;
+  protected:
+    class Private;
+    Private * const d;
 };
 
 #endif

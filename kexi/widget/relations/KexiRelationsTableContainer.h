@@ -37,58 +37,58 @@ class KexiRelationViewTableContainerHeader;
 
 namespace KexiDB
 {
-	class TableOrQuerySchema;
+  class TableOrQuerySchema;
 }
 
 //! @short Provides a frame displaying single table or query in relation view.
 class KEXIRELATIONSVIEW_EXPORT KexiRelationsTableContainer : public QFrame
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiRelationsTableContainer(
-			QWidget* parent, 
-			KexiRelationsScrollArea *scrollArea, 
-			KexiDB::TableOrQuerySchema *schema);
+  public:
+    KexiRelationsTableContainer(
+      QWidget* parent, 
+      KexiRelationsScrollArea *scrollArea, 
+      KexiDB::TableOrQuerySchema *schema);
 
-		virtual ~KexiRelationsTableContainer();
+    virtual ~KexiRelationsTableContainer();
 
-		int globalY(const QString &field);
+    int globalY(const QString &field);
 
-		KexiDB::TableOrQuerySchema* schema() const;
-		
-		int right() const { return x() + width() - 1; }
+    KexiDB::TableOrQuerySchema* schema() const;
+    
+    int right() const { return x() + width() - 1; }
 
-		int bottom() const { return y() + height() - 1; }
+    int bottom() const { return y() + height() - 1; }
 
-		/*! \return list of selected field names. */
-		QStringList selectedFieldNames() const;
+    /*! \return list of selected field names. */
+    QStringList selectedFieldNames() const;
 
-	signals:
-		void moved(KexiRelationsTableContainer *);
-		void endDrag();
-		void gotFocus();
-		void contextMenuRequest(const QPoint& pos);
-		void fieldsDoubleClicked( KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames );
+  signals:
+    void moved(KexiRelationsTableContainer *);
+    void endDrag();
+    void gotFocus();
+    void contextMenuRequest(const QPoint& pos);
+    void fieldsDoubleClicked( KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames );
 
-	public slots:
-		void setFocus();
-		void unsetFocus();
+  public slots:
+    void setFocus();
+    void unsetFocus();
 
-	protected slots:
-		void moved();
-		void slotContextMenu(K3ListView *lv, Q3ListViewItem *i, const QPoint& p);
-		void slotFieldsDoubleClicked(Q3ListViewItem *i,const QPoint&,int);
+  protected slots:
+    void moved();
+    void slotContextMenu(K3ListView *lv, Q3ListViewItem *i, const QPoint& p);
+    void slotFieldsDoubleClicked(Q3ListViewItem *i,const QPoint&,int);
 
-		friend class KexiRelationViewTableContainerHeader;
+    friend class KexiRelationViewTableContainerHeader;
 
-	protected:
-		virtual void focusInEvent(QFocusEvent* event);
-		virtual void focusOutEvent(QFocusEvent* event);
+  protected:
+    virtual void focusInEvent(QFocusEvent* event);
+    virtual void focusOutEvent(QFocusEvent* event);
 
-	private:
-		class Private;
-		Private* const d;
+  private:
+    class Private;
+    Private* const d;
 };
 
 #endif

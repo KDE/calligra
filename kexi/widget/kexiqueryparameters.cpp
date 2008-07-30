@@ -35,134 +35,134 @@
 
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, 
-	const KexiDB::Driver &driver, KexiDB::QuerySchema& querySchema, bool &ok)
+  const KexiDB::Driver &driver, KexiDB::QuerySchema& querySchema, bool &ok)
 {
-	Q_UNUSED(driver);
-	ok = false;
-	const KexiDB::QuerySchemaParameterList params( querySchema.parameters() );
-	QList<QVariant> values;
-	const QString caption( i18nc("Enter Query Parameter Value", "Enter Parameter Value") );
-	for(KexiDB::QuerySchemaParameterListConstIterator it = params.constBegin();
-		it!=params.constEnd(); ++it)
-	{
-		switch ((*it).type) {
-		case KexiDB::Field::Byte:
-		case KexiDB::Field::ShortInteger:
-		case KexiDB::Field::Integer:
-		case KexiDB::Field::BigInteger: {
+  Q_UNUSED(driver);
+  ok = false;
+  const KexiDB::QuerySchemaParameterList params( querySchema.parameters() );
+  QList<QVariant> values;
+  const QString caption( i18nc("Enter Query Parameter Value", "Enter Parameter Value") );
+  for(KexiDB::QuerySchemaParameterListConstIterator it = params.constBegin();
+    it!=params.constEnd(); ++it)
+  {
+    switch ((*it).type) {
+    case KexiDB::Field::Byte:
+    case KexiDB::Field::ShortInteger:
+    case KexiDB::Field::Integer:
+    case KexiDB::Field::BigInteger: {
 //! @todo problem for ranges in case of BigInteger - will disappear when we remove use of KInputDialog
-			int minValue, maxValue;
+      int minValue, maxValue;
 //! @todo add support for unsigned parameter here
-			KexiDB::getLimitsForType((*it).type, minValue, maxValue);
-			const int result = KInputDialog::getInteger(
-				caption, (*it).message, 0, minValue, maxValue, 1/*step*/, 10/*base*/, &ok, parent);
-			if (!ok)
-				return QList<QVariant>(); //cancelled
-			values.append(result);
-			break;
-		}
-		case KexiDB::Field::Boolean: {
-			QStringList list;
-			list << i18nc("Boolean True - Yes", "Yes") << i18nc("Boolean False - No", "No");
-			const QString result = KInputDialog::getItem(
-				caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
-			if (!ok || result.isEmpty())
-				return QList<QVariant>(); //cancelled
-			values.append( QVariant( result==list.first(), 1 ) );
-			break;
-		}
-		case KexiDB::Field::Date: {
+      KexiDB::getLimitsForType((*it).type, minValue, maxValue);
+      const int result = KInputDialog::getInteger(
+        caption, (*it).message, 0, minValue, maxValue, 1/*step*/, 10/*base*/, &ok, parent);
+      if (!ok)
+        return QList<QVariant>(); //cancelled
+      values.append(result);
+      break;
+    }
+    case KexiDB::Field::Boolean: {
+      QStringList list;
+      list << i18nc("Boolean True - Yes", "Yes") << i18nc("Boolean False - No", "No");
+      const QString result = KInputDialog::getItem(
+        caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
+      if (!ok || result.isEmpty())
+        return QList<QVariant>(); //cancelled
+      values.append( QVariant( result==list.first(), 1 ) );
+      break;
+    }
+    case KexiDB::Field::Date: {
 #ifdef __GNUC__
 #warning TODO reenable when formatter is ported: case KexiDB::Field::Date:
 #else
 #pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::Date: )
 #endif
 #if 0
-			KexiDateFormatter df;
-			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
+      KexiDateFormatter df;
+      const QString result = KInputDialog::getText( 
+        caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
 //! @todo add validator
-				0/*validator*/, df.inputMask() );
-			if (!ok)
-				return QList<QVariant>(); //cancelled
-			values.append( df.stringToDate(result) );
+        0/*validator*/, df.inputMask() );
+      if (!ok)
+        return QList<QVariant>(); //cancelled
+      values.append( df.stringToDate(result) );
 #endif
-			break;
-		}
-		case KexiDB::Field::DateTime: {
+      break;
+    }
+    case KexiDB::Field::DateTime: {
 #ifdef __GNUC__
 #warning TODO reenable when formatter is ported: case KexiDB::Field::DateTime:
 #else
 #pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::DateTime: )
 #endif
 #if 0
-			KexiDateFormatter df;
-			KexiTimeFormatter tf;
-			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
+      KexiDateFormatter df;
+      KexiTimeFormatter tf;
+      const QString result = KInputDialog::getText( 
+        caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
 //! @todo add validator
-				0/*validator*/, dateTimeInputMask(df, tf) );
-			if (!ok)
-				return QList<QVariant>(); //cancelled
-			values.append( stringToDateTime(df, tf, result) );
+        0/*validator*/, dateTimeInputMask(df, tf) );
+      if (!ok)
+        return QList<QVariant>(); //cancelled
+      values.append( stringToDateTime(df, tf, result) );
 #endif
-			break;
-		}
-		case KexiDB::Field::Time: {
+      break;
+    }
+    case KexiDB::Field::Time: {
 #ifdef __GNUC__
 #warning TODO reenable when formatter is ported: case KexiDB::Field::Time:
 #else
 #pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::Time: )
 #endif
 #if 0
-			KexiTimeFormatter tf;
-			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
+      KexiTimeFormatter tf;
+      const QString result = KInputDialog::getText( 
+        caption, (*it).message, QString(), &ok, parent, 0/*name*/, 
 //! @todo add validator
-				0/*validator*/, tf.inputMask() );
-			if (!ok)
-				return QList<QVariant>(); //cancelled
-			values.append( tf.stringToTime(result) );
+        0/*validator*/, tf.inputMask() );
+      if (!ok)
+        return QList<QVariant>(); //cancelled
+      values.append( tf.stringToTime(result) );
 #endif
-			break;
-		}
-		case KexiDB::Field::Float:
-		case KexiDB::Field::Double: {
-			// KInputDialog::getDouble() does not work well, use getText and double validator
-			KDoubleValidator validator(0);
-			const QString textResult(
-				KInputDialog::getText( caption, (*it).message, QString(),
-					&ok, parent, &validator) );
-			if (!ok || textResult.isEmpty())
-				return QList<QVariant>(); //cancelled
+      break;
+    }
+    case KexiDB::Field::Float:
+    case KexiDB::Field::Double: {
+      // KInputDialog::getDouble() does not work well, use getText and double validator
+      KDoubleValidator validator(0);
+      const QString textResult(
+        KInputDialog::getText( caption, (*it).message, QString(),
+          &ok, parent, &validator) );
+      if (!ok || textResult.isEmpty())
+        return QList<QVariant>(); //cancelled
 //! @todo this value will be still rounded: consider storing them as a decimal type 
 //! 			(e.g. using a special qint64+decimalplace class)
-			const double result = textResult.toDouble(&ok); //this is also good for float (to avoid rounding)
-			if (!ok)
-				return QList<QVariant>();
-			values.append( result );
-			break;
-		}
-		case KexiDB::Field::Text:
-		case KexiDB::Field::LongText: {
-			const QString result = KInputDialog::getText( 
-				caption, (*it).message, QString(), &ok, parent);
-			if (!ok)
-				return QList<QVariant>(); //cancelled
-			values.append( result );
-			break;
-		}
-		case KexiDB::Field::BLOB: {
+      const double result = textResult.toDouble(&ok); //this is also good for float (to avoid rounding)
+      if (!ok)
+        return QList<QVariant>();
+      values.append( result );
+      break;
+    }
+    case KexiDB::Field::Text:
+    case KexiDB::Field::LongText: {
+      const QString result = KInputDialog::getText( 
+        caption, (*it).message, QString(), &ok, parent);
+      if (!ok)
+        return QList<QVariant>(); //cancelled
+      values.append( result );
+      break;
+    }
+    case KexiDB::Field::BLOB: {
 //! @todo BLOB input unsupported
-			values.append( QByteArray() );
-		}
-		default:
-			kexiwarn << "KexiQueryParameters::getParameters() unsupported type " << KexiDB::Field::typeName((*it).type)
-			<< " for parameter \"" << (*it).message << "\" - aborting query execution!" << endl;
-			return QList<QVariant>();
-		}
-	}
-	ok = true;
-	return values;
+      values.append( QByteArray() );
+    }
+    default:
+      kexiwarn << "KexiQueryParameters::getParameters() unsupported type " << KexiDB::Field::typeName((*it).type)
+      << " for parameter \"" << (*it).message << "\" - aborting query execution!" << endl;
+      return QList<QVariant>();
+    }
+  }
+  ok = true;
+  return values;
 }
 

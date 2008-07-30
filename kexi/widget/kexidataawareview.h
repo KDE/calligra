@@ -40,81 +40,81 @@ class KexiSharedActionClient;
  used by shared KexiFindDialog.
 */
 class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView, 
-	public KexiSearchAndReplaceViewInterface
+  public KexiSearchAndReplaceViewInterface
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiDataAwareView(QWidget *parent);
-		
-		virtual ~KexiDataAwareView();
+  public:
+    KexiDataAwareView(QWidget *parent);
+    
+    virtual ~KexiDataAwareView();
 
-		QWidget* mainWidget() const;
+    QWidget* mainWidget() const;
 
-		virtual QSize minimumSizeHint() const;
-		
-		virtual QSize sizeHint() const;
-		
-		KexiDataAwareObjectInterface* dataAwareObject() const { return m_dataAwareObject; }
+    virtual QSize minimumSizeHint() const;
+    
+    virtual QSize sizeHint() const;
+    
+    KexiDataAwareObjectInterface* dataAwareObject() const { return m_dataAwareObject; }
 
-		/*! Sets up data for find/replace dialog, based on view's data model. 
-		 Implemented for KexiSearchAndReplaceViewInterface. */
-		virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
-			QString& currentColumnName);
+    /*! Sets up data for find/replace dialog, based on view's data model. 
+     Implemented for KexiSearchAndReplaceViewInterface. */
+    virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
+      QString& currentColumnName);
 
-		/*! Finds \a valueToFind within the view. 
-		 Implemented for KexiSearchAndReplaceViewInterface. */
-		virtual tristate find(const QVariant& valueToFind, 
-			const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+    /*! Finds \a valueToFind within the view. 
+     Implemented for KexiSearchAndReplaceViewInterface. */
+    virtual tristate find(const QVariant& valueToFind, 
+      const KexiSearchAndReplaceViewInterface::Options& options, bool next);
 
-		/*! Finds \a valueToFind within the view and replaces with \a replacement. 
-		 Implemented for KexiSearchAndReplaceViewInterface. */
-		virtual tristate findNextAndReplace(const QVariant& valueToFind, 
-			const QVariant& replacement, 
-			const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
+    /*! Finds \a valueToFind within the view and replaces with \a replacement. 
+     Implemented for KexiSearchAndReplaceViewInterface. */
+    virtual tristate findNextAndReplace(const QVariant& valueToFind, 
+      const QVariant& replacement, 
+      const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
 
-	public slots:
-		void deleteAllRows();
-		void deleteCurrentRow();
-		void deleteAndStartEditCurrentCell();
-		void startEditOrToggleValue();
-		bool acceptRowEdit();
-		void cancelRowEdit();
-		void sortAscending();
-		void sortDescending();
-		void copySelection();
-		void cutSelection();
-		void paste();
-		void slotGoToFirstRow();
-		void slotGoToPreviusRow();
-		void slotGoToNextRow();
-		void slotGoToLastRow();
-		void slotGoToNewRow();
+  public slots:
+    void deleteAllRows();
+    void deleteCurrentRow();
+    void deleteAndStartEditCurrentCell();
+    void startEditOrToggleValue();
+    bool acceptRowEdit();
+    void cancelRowEdit();
+    void sortAscending();
+    void sortDescending();
+    void copySelection();
+    void cutSelection();
+    void paste();
+    void slotGoToFirstRow();
+    void slotGoToPreviusRow();
+    void slotGoToNextRow();
+    void slotGoToLastRow();
+    void slotGoToNewRow();
 /*		void editFind();
-		void slotFind();
-		void editFindNext();
-		void editFindPrevious();
-		void editReplace();*/
+    void slotFind();
+    void editFindNext();
+    void editFindPrevious();
+    void editReplace();*/
 
-	protected slots:
+  protected slots:
 //		void slotCellSelected(const QVariant& v); //!< @internal
-		void slotCellSelected(int col, int row);
-		void reloadActions();
-		void slotUpdateRowActions(int row);
-		void slotClosing(bool& cancel);
+    void slotCellSelected(int col, int row);
+    void reloadActions();
+    void slotUpdateRowActions(int row);
+    void slotClosing(bool& cancel);
 
-	protected:
-		void init( QWidget* viewWidget, KexiSharedActionClient* actionClient,
-			KexiDataAwareObjectInterface* dataAwareObject, 
-		// temporary, for KexiFormView in design mode 
-			bool noDataAware = false
-		);
-		void initActions();
-		virtual void updateActions(bool activated);
+  protected:
+    void init( QWidget* viewWidget, KexiSharedActionClient* actionClient,
+      KexiDataAwareObjectInterface* dataAwareObject, 
+    // temporary, for KexiFormView in design mode 
+      bool noDataAware = false
+    );
+    void initActions();
+    virtual void updateActions(bool activated);
 
-		QWidget* m_internalView;
-		KexiSharedActionClient* m_actionClient;
-		KexiDataAwareObjectInterface* m_dataAwareObject;
+    QWidget* m_internalView;
+    KexiSharedActionClient* m_actionClient;
+    KexiDataAwareObjectInterface* m_dataAwareObject;
 };
 
 #endif

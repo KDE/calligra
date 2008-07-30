@@ -28,22 +28,22 @@
 //! \brief A tooltip that can display rich content
 class KEXIGUIUTILS_EXPORT KexiToolTip : public QWidget
 {
-	Q_OBJECT
-	public:
-		KexiToolTip(const QVariant& value, QWidget* parent);
-		virtual ~KexiToolTip();
+  Q_OBJECT
+  public:
+    KexiToolTip(const QVariant& value, QWidget* parent);
+    virtual ~KexiToolTip();
 
-		virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
-	public slots:
-		virtual void show();
+  public slots:
+    virtual void show();
 
-	protected:
-		virtual void paintEvent( QPaintEvent *pev );
-		virtual void drawFrame(QPainter& p);
-		virtual void drawContents(QPainter& p);
+  protected:
+    virtual void paintEvent( QPaintEvent *pev );
+    virtual void drawFrame(QPainter& p);
+    virtual void drawContents(QPainter& p);
 
-		QVariant m_value;
+    QVariant m_value;
 };
 
 #endif

@@ -69,7 +69,7 @@ static struct Embed {
 static void initDisplayUtilsImages()
 {
 /*! @warning not reentrant! */
-	KexiDisplayUtils_autonum->loadFromData( embed_vec[0].data, embed_vec[0].size );
+  KexiDisplayUtils_autonum->loadFromData( embed_vec[0].data, embed_vec[0].size );
 }
 
 //-----------------
@@ -80,81 +80,81 @@ KexiDisplayUtils::DisplayParameters::DisplayParameters()
 
 KexiDisplayUtils::DisplayParameters::DisplayParameters(QWidget *w)
 {
-	textColor = w->palette().active().foreground();
-	selectedTextColor = w->palette().active().highlightedText();
-	font = w->font();
+  textColor = w->palette().active().foreground();
+  selectedTextColor = w->palette().active().highlightedText();
+  font = w->font();
 }
 
 void KexiDisplayUtils::initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget)
 {
-	initDisplayUtilsImages();
+  initDisplayUtilsImages();
 
-	par.textColor = SPECIAL_TEXT_COLOR;
-	par.selectedTextColor = SPECIAL_TEXT_COLOR; //hmm, unused anyway
-	par.font = widget->font();
-	par.font.setItalic(true);
-	QFontMetrics fm(par.font);
-	par.textWidth = fm.width(i18n("(autonumber)"));
-	par.textHeight = fm.height();
+  par.textColor = SPECIAL_TEXT_COLOR;
+  par.selectedTextColor = SPECIAL_TEXT_COLOR; //hmm, unused anyway
+  par.font = widget->font();
+  par.font.setItalic(true);
+  QFontMetrics fm(par.font);
+  par.textWidth = fm.width(i18n("(autonumber)"));
+  par.textHeight = fm.height();
 }
 
 void KexiDisplayUtils::initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget)
 {
-	par.textColor = SPECIAL_TEXT_COLOR;
-	par.selectedTextColor = widget->palette().active().highlightedText();
-	par.font = widget->font();
-	par.font.setItalic(true);
+  par.textColor = SPECIAL_TEXT_COLOR;
+  par.selectedTextColor = widget->palette().active().highlightedText();
+  par.font = widget->font();
+  par.font.setItalic(true);
 }
 
 void KexiDisplayUtils::paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
-	int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor)
+  int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor)
 {
-	painter->save();
-	
-	painter->setFont(par.font);
-	if (!overrideColor)
-		painter->setPen(par.textColor);
+  painter->save();
+  
+  painter->setFont(par.font);
+  if (!overrideColor)
+    painter->setPen(par.textColor);
 
 //	int text_x = x;
-	if (!(alignment & Qt::AlignVertical_Mask))
-		alignment |= Qt::AlignVCenter;
-	if (!(alignment & Qt::AlignHorizontal_Mask))
-		alignment |= Qt::AlignLeft;
+  if (!(alignment & Qt::AlignVertical_Mask))
+    alignment |= Qt::AlignVCenter;
+  if (!(alignment & Qt::AlignHorizontal_Mask))
+    alignment |= Qt::AlignLeft;
 
-	int y_pixmap_pos = 0;
-	if (alignment & Qt::AlignVCenter) {
-		y_pixmap_pos = qMax(0, y+1 + (height - KexiDisplayUtils_autonum->height())/2);
-	}
-	else if (alignment & Qt::AlignTop) {
-		y_pixmap_pos = y + qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
-	}
-	else if (alignment & Qt::AlignBottom) {
-		y_pixmap_pos = y+1 + height - KexiDisplayUtils_autonum->height() 
-			- qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
-	}
+  int y_pixmap_pos = 0;
+  if (alignment & Qt::AlignVCenter) {
+    y_pixmap_pos = qMax(0, y+1 + (height - KexiDisplayUtils_autonum->height())/2);
+  }
+  else if (alignment & Qt::AlignTop) {
+    y_pixmap_pos = y + qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
+  }
+  else if (alignment & Qt::AlignBottom) {
+    y_pixmap_pos = y+1 + height - KexiDisplayUtils_autonum->height() 
+      - qMax(0, (par.textHeight - KexiDisplayUtils_autonum->height())/2);
+  }
 
-	if (alignment & (Qt::AlignLeft | Qt::AlignJustify)) {
+  if (alignment & (Qt::AlignLeft | Qt::AlignJustify)) {
 //		text_x = x + KexiDisplayUtils_autonum->width() + 2;
-		if (!overrideColor) {
-			painter->drawPixmap( x, y_pixmap_pos, *KexiDisplayUtils_autonum );
-			x += (KexiDisplayUtils_autonum->width() + 4);
-		}
-	}
-	else if (alignment & Qt::AlignRight) {
-		if (!overrideColor) {
-			painter->drawPixmap( x + width - par.textWidth - KexiDisplayUtils_autonum->width() - 4,
-				y_pixmap_pos, *KexiDisplayUtils_autonum );
-		}
-	}
-	else if (alignment & Qt::AlignCenter) {
-		//! @todo
-		if (!overrideColor)
-			painter->drawPixmap( x + (width - par.textWidth)/2 - KexiDisplayUtils_autonum->width() - 4,
-				y_pixmap_pos, *KexiDisplayUtils_autonum );
-	}
+    if (!overrideColor) {
+      painter->drawPixmap( x, y_pixmap_pos, *KexiDisplayUtils_autonum );
+      x += (KexiDisplayUtils_autonum->width() + 4);
+    }
+  }
+  else if (alignment & Qt::AlignRight) {
+    if (!overrideColor) {
+      painter->drawPixmap( x + width - par.textWidth - KexiDisplayUtils_autonum->width() - 4,
+        y_pixmap_pos, *KexiDisplayUtils_autonum );
+    }
+  }
+  else if (alignment & Qt::AlignCenter) {
+    //! @todo
+    if (!overrideColor)
+      painter->drawPixmap( x + (width - par.textWidth)/2 - KexiDisplayUtils_autonum->width() - 4,
+        y_pixmap_pos, *KexiDisplayUtils_autonum );
+  }
 
-	painter->drawText(x, y, width, height, alignment, i18n("(autonumber)"));
+  painter->drawText(x, y, width, height, alignment, i18n("(autonumber)"));
 
-	painter->restore();
+  painter->restore();
 }
 

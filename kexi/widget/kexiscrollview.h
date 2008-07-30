@@ -39,60 +39,60 @@ class KexiRecordNavigator;
  Its contents is resized so the widget can always be resized. */
 class KEXIEXTWIDGETS_EXPORT KexiScrollView : public Q3ScrollView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiScrollView(QWidget *parent, bool preview);
-		virtual ~KexiScrollView();
+  public:
+    KexiScrollView(QWidget *parent, bool preview);
+    virtual ~KexiScrollView();
 
-		void setWidget(QWidget *w);
-		void setSnapToGrid(bool enable, int gridSize=10);
+    void setWidget(QWidget *w);
+    void setSnapToGrid(bool enable, int gridSize=10);
 
-		void setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
-		void setRecordNavigatorVisible(bool visible);
+    void setResizingEnabled(bool enabled) { m_enableResizing = enabled; }
+    void setRecordNavigatorVisible(bool visible);
 
-		void setOuterAreaIndicatorVisible(bool visible)  { m_outerAreaVisible = visible; }
+    void setOuterAreaIndicatorVisible(bool visible)  { m_outerAreaVisible = visible; }
 
-		void refreshContentsSizeLater(bool horizontal, bool vertical);
-		void updateNavPanelGeometry();
+    void refreshContentsSizeLater(bool horizontal, bool vertical);
+    void updateNavPanelGeometry();
 
-		KexiRecordNavigator* recordNavigator() const;
+    KexiRecordNavigator* recordNavigator() const;
 
-		inline bool preview() const { return m_preview; }
+    inline bool preview() const { return m_preview; }
 
-	public slots:
-		/*! Make sure there is a 300px margin around the form contents to allow resizing. */
-		virtual void refreshContentsSize();
+  public slots:
+    /*! Make sure there is a 300px margin around the form contents to allow resizing. */
+    virtual void refreshContentsSize();
 
-	signals:
-		void outerAreaClicked();
-		void resizingStarted();
-		void resizingEnded();
+  signals:
+    void outerAreaClicked();
+    void resizingStarted();
+    void resizingEnded();
 
-	protected:
-		virtual void contentsMousePressEvent(QMouseEvent * ev);
-		virtual void contentsMouseReleaseEvent(QMouseEvent * ev);
-		virtual void contentsMouseMoveEvent(QMouseEvent * ev);
-		virtual void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
-		virtual void leaveEvent( QEvent *e );
-		virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
-		void setupPixmapBuffer(QPixmap& pixmap, const QString& text, int lines);
+  protected:
+    virtual void contentsMousePressEvent(QMouseEvent * ev);
+    virtual void contentsMouseReleaseEvent(QMouseEvent * ev);
+    virtual void contentsMouseMoveEvent(QMouseEvent * ev);
+    virtual void drawContents( QPainter * p, int clipx, int clipy, int clipw, int cliph );
+    virtual void leaveEvent( QEvent *e );
+    virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
+    void setupPixmapBuffer(QPixmap& pixmap, const QString& text, int lines);
 
-		bool m_resizing;
-		bool m_enableResizing;
-		QWidget *m_widget;
+    bool m_resizing;
+    bool m_enableResizing;
+    QWidget *m_widget;
 
-		int m_gridSize;
-		QFont m_helpFont;
-		QColor m_helpColor;
-		QTimer m_delayedResize;
-		//! for refreshContentsSizeLater()
-		Q3ScrollView::ScrollBarMode m_vsmode, m_hsmode;
-		bool m_snapToGrid : 1;
-		bool m_preview : 1;
-		bool m_smodeSet : 1;
-		bool m_outerAreaVisible : 1;
-		KexiRecordNavigator* m_scrollViewNavPanel;
+    int m_gridSize;
+    QFont m_helpFont;
+    QColor m_helpColor;
+    QTimer m_delayedResize;
+    //! for refreshContentsSizeLater()
+    Q3ScrollView::ScrollBarMode m_vsmode, m_hsmode;
+    bool m_snapToGrid : 1;
+    bool m_preview : 1;
+    bool m_smodeSet : 1;
+    bool m_outerAreaVisible : 1;
+    KexiRecordNavigator* m_scrollViewNavPanel;
 };
 
 #endif

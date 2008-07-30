@@ -29,57 +29,57 @@
 */
 class KexiBoolTableEdit : public KexiTableEdit
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+  public:
+    KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
 
-		virtual ~KexiBoolTableEdit();
+    virtual ~KexiBoolTableEdit();
 
-		//! \return true if editor's value is null (not empty)
-		virtual bool valueIsNull();
+    //! \return true if editor's value is null (not empty)
+    virtual bool valueIsNull();
 
-		//! \return true if editor's value is empty (not null). 
-		//! Only few field types can accept "EMPTY" property 
-		//! (check this with KexiDB::Field::hasEmptyProperty()), 
-		virtual bool valueIsEmpty();
+    //! \return true if editor's value is empty (not null). 
+    //! Only few field types can accept "EMPTY" property 
+    //! (check this with KexiDB::Field::hasEmptyProperty()), 
+    virtual bool valueIsEmpty();
 
-		virtual QVariant value();
+    virtual QVariant value();
 
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
 
-		virtual void clear();
+    virtual void clear();
 
-		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
+      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 
-		virtual void clickedOnContents();
+    virtual void clickedOnContents();
 
-		/*! Handles action having standard name \a actionName. 
-		 Action could be: "edit_cut", "edit_paste", etc. */
-		virtual void handleAction(const QString& actionName);
+    /*! Handles action having standard name \a actionName. 
+     Action could be: "edit_cut", "edit_paste", etc. */
+    virtual void handleAction(const QString& actionName);
 
-		/*! Handles copy action for value. Copies empty string for null, "1" for true, "0" for false.
-		 \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
-		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    /*! Handles copy action for value. Copies empty string for null, "1" for true, "0" for false.
+     \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
+    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-		/*! \return width of \a value. Reimplemented  after KexiTableEdit. */
-		virtual int widthForValue( const QVariant &val, const QFontMetrics &fm );
+    /*! \return width of \a value. Reimplemented  after KexiTableEdit. */
+    virtual int widthForValue( const QVariant &val, const QFontMetrics &fm );
 
-	protected slots:
+  protected slots:
 
-	protected:
-		//! initializes this editor with \a add value
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
+  protected:
+    //! initializes this editor with \a add value
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-		void showHintButton();
+    void showHintButton();
 
-		//! We've no editor widget that would store current value, so we do this here
-		QVariant m_currentValue;
+    //! We've no editor widget that would store current value, so we do this here
+    QVariant m_currentValue;
 
-	signals:
-		void hintClicked();
+  signals:
+    void hintClicked();
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBoolEditorFactoryItem)

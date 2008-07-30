@@ -27,66 +27,66 @@ class KexiTableView;
 class KexiTableViewData;
 class KexiTableViewColumn;
 namespace KexiDB {
-	class Field;
-	class RecordData;
+  class Field;
+  class RecordData;
 }
 class QEvent;
 
 //! Internal class for displaying popup table view 
 class KexiComboBoxPopup : public QFrame
 {
-	Q_OBJECT
-	public:
+  Q_OBJECT
+  public:
 //! @todo js: more ctors!
-		/*! Constructor for creating a popup using definition from \a column. 
-		 If the column is lookup column, it's definition is used to display
-		 one or more column within the popup. Otherwise column.field() is used
-		 to display single-column data. */
-		KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column);
+    /*! Constructor for creating a popup using definition from \a column. 
+     If the column is lookup column, it's definition is used to display
+     one or more column within the popup. Otherwise column.field() is used
+     to display single-column data. */
+    KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column);
 
-		/*! Alternative constructor supporting lookup fields and enum hints. */
-		KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field);
+    /*! Alternative constructor supporting lookup fields and enum hints. */
+    KexiComboBoxPopup(QWidget* parent, KexiDB::Field &field);
 
-		virtual ~KexiComboBoxPopup();
+    virtual ~KexiComboBoxPopup();
 
-		KexiTableView* tableView();
+    KexiTableView* tableView();
 
-		/*! Sets maximum number of rows for this popup. */
-		void setMaxRows(int r);
+    /*! Sets maximum number of rows for this popup. */
+    void setMaxRows(int r);
 
-		/*! \return maximum number of rows for this popup. */
-		int maxRows() const;
+    /*! \return maximum number of rows for this popup. */
+    int maxRows() const;
 
-		/*! Default maximum number of rows for KexiComboBoxPopup objects. */
-		static const int defaultMaxRows;
+    /*! Default maximum number of rows for KexiComboBoxPopup objects. */
+    static const int defaultMaxRows;
 
-		virtual bool eventFilter( QObject *o, QEvent *e );
+    virtual bool eventFilter( QObject *o, QEvent *e );
 
-	signals:
-		void rowAccepted(KexiDB::RecordData *record, int row);
-		void cancelled();
-		void hidden();
+  signals:
+    void rowAccepted(KexiDB::RecordData *record, int row);
+    void cancelled();
+    void hidden();
 
-	public slots:
-		virtual void resize( int w, int h );
-		void updateSize(int minWidth = 0);
+  public slots:
+    virtual void resize( int w, int h );
+    void updateSize(int minWidth = 0);
 
-	protected slots:
-		void slotTVItemAccepted(KexiDB::RecordData *record, int row, int col);
-		void slotDataReloadRequested();
+  protected slots:
+    void slotTVItemAccepted(KexiDB::RecordData *record, int row, int col);
+    void slotDataReloadRequested();
 
-	protected:
-		void init();
-		//! The main function for setting data; data can be set either by passing \a column or \a field.
-		//! The second case is used for lookup
-		void setData(KexiTableViewColumn *column, KexiDB::Field *field);
+  protected:
+    void init();
+    //! The main function for setting data; data can be set either by passing \a column or \a field.
+    //! The second case is used for lookup
+    void setData(KexiTableViewColumn *column, KexiDB::Field *field);
 
-		//! used by setData()
-		void setDataInternal( KexiTableViewData *data, bool owner = true ); //!< helper
+    //! used by setData()
+    void setDataInternal( KexiTableViewData *data, bool owner = true ); //!< helper
 
-		KexiComboBoxPopupPrivate *d;
+    KexiComboBoxPopupPrivate *d;
 
-		friend class KexiComboBoxTableEdit;
+    friend class KexiComboBoxTableEdit;
 };
 
 #endif

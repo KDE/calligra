@@ -33,51 +33,51 @@
 KexiDSWelcome::KexiDSWelcome(KexiDataSourceWizard *parent)
  : QWidget(parent)
 {
-	m_wiz = parent;
-	KexiDSPixmap *pic = new KexiDSPixmap(this);
+  m_wiz = parent;
+  KexiDSPixmap *pic = new KexiDSPixmap(this);
 
-	QLabel *lText = new QLabel(i18n("Kexi can help you with creation of %2 using data sources in almost no time with the \"%1 Wizard\""), this);
-	lText->setAlignment(AlignTop | AlignLeft | WordBreak);
-	QCheckBox *useWizard = new QCheckBox(i18n("Create %1 using the \"%1 Wizard\""), this);
-	connect(useWizard, SIGNAL(toggled(bool)), this, SLOT(setUseWizard(bool)));
-	useWizard->setChecked(true);
+  QLabel *lText = new QLabel(i18n("Kexi can help you with creation of %2 using data sources in almost no time with the \"%1 Wizard\""), this);
+  lText->setAlignment(AlignTop | AlignLeft | WordBreak);
+  QCheckBox *useWizard = new QCheckBox(i18n("Create %1 using the \"%1 Wizard\""), this);
+  connect(useWizard, SIGNAL(toggled(bool)), this, SLOT(setUseWizard(bool)));
+  useWizard->setChecked(true);
 
-	QSpacerItem *spacer = new QSpacerItem(320, 220);
-	QCheckBox *dontShow = new QCheckBox(i18n("Do not show this wizard again"), this);
+  QSpacerItem *spacer = new QSpacerItem(320, 220);
+  QCheckBox *dontShow = new QCheckBox(i18n("Do not show this wizard again"), this);
 
-	QGridLayout *g = new QGridLayout(this);
+  QGridLayout *g = new QGridLayout(this);
 
-	g->addMultiCellWidget(pic, 0, 4, 0, 0);
-	g->addWidget(lText, 0, 1);
-	g->addWidget(useWizard, 2, 1);
-	g->addItem(spacer, 3, 1);
-	g->addWidget(dontShow, 4, 1);
+  g->addMultiCellWidget(pic, 0, 4, 0, 0);
+  g->addWidget(lText, 0, 1);
+  g->addWidget(useWizard, 2, 1);
+  g->addItem(spacer, 3, 1);
+  g->addWidget(dontShow, 4, 1);
 }
 
 void
 KexiDSWelcome::setUseWizard(bool use)
 {
 #if !defined(Q_WS_WIN)
-	bool useIcons = KGlobalSettings::showIconsOnPushButtons();
+  bool useIcons = KGlobalSettings::showIconsOnPushButtons();
 #endif
-	if(use)
-	{
-		KGuiItem forward = KStandardGuiItem::forward(KStandardGuiItem::UseRTL);
+  if(use)
+  {
+    KGuiItem forward = KStandardGuiItem::forward(KStandardGuiItem::UseRTL);
 
-		if(useIcons)
-			m_wiz->nextButton()->setIconSet( forward.iconSet() );
+    if(useIcons)
+      m_wiz->nextButton()->setIconSet( forward.iconSet() );
 
-		m_wiz->nextButton()->setText(i18n("&Next"));
-	}
-	else
-	{
-		if(useIcons)
-			m_wiz->nextButton()->setIconSet(KIcon("dialog-ok"));
+    m_wiz->nextButton()->setText(i18n("&Next"));
+  }
+  else
+  {
+    if(useIcons)
+      m_wiz->nextButton()->setIconSet(KIcon("dialog-ok"));
 
-		m_wiz->nextButton()->setText(i18n("&Finish"));
-	}
+    m_wiz->nextButton()->setText(i18n("&Finish"));
+  }
 
-	m_wiz->finishNext(!use);
+  m_wiz->finishNext(!use);
 }
 
 KexiDSWelcome::~KexiDSWelcome()

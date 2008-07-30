@@ -53,103 +53,103 @@ class QLabel;
 /*! @internal */
 class KexiTableViewCellToolTip : public QToolTip
 {
-	public:
-		KexiTableViewCellToolTip( KexiTableView * tableView );
-		virtual ~KexiTableViewCellToolTip();
-	protected:
-		virtual void maybeTip( const QPoint & p );
+  public:
+    KexiTableViewCellToolTip( KexiTableView * tableView );
+    virtual ~KexiTableViewCellToolTip();
+  protected:
+    virtual void maybeTip( const QPoint & p );
 
-		KexiTableView *m_tableView;
+    KexiTableView *m_tableView;
 };
 
 /*! KexiTableView's internal structures
  @internal */
 class KexiTableViewPrivate 
 {
-	public:
+  public:
 
-	KexiTableViewPrivate(KexiTableView* t);
-	~KexiTableViewPrivate();
+  KexiTableViewPrivate(KexiTableView* t);
+  ~KexiTableViewPrivate();
 
-	void clearVariables();
+  void clearVariables();
 
-	KexiTableView *tv;
+  KexiTableView *tv;
 
-	//! editors: one for each column (indexed by KexiTableViewColumn)
-	QHash<KexiTableViewColumn*, KexiTableEdit*> editors;
+  //! editors: one for each column (indexed by KexiTableViewColumn)
+  QHash<KexiTableViewColumn*, KexiTableEdit*> editors;
 
-	int rowHeight;
+  int rowHeight;
 
 //Qt4	QPixmap *pBufferPm;
-	QTimer *pUpdateTimer;
-	int menu_id_addRecord;
-	int menu_id_removeRecord;
+  QTimer *pUpdateTimer;
+  int menu_id_addRecord;
+  int menu_id_removeRecord;
 
 #if 0//(js) doesn't work!
-	QTimer *scrollTimer;
+  QTimer *scrollTimer;
 #endif
-	
-	KexiTableView::ScrollDirection scrollDirection;
+  
+  KexiTableView::ScrollDirection scrollDirection;
 
-	bool editOnDoubleClick : 1;
+  bool editOnDoubleClick : 1;
 
-	bool needAutoScroll : 1;
+  bool needAutoScroll : 1;
 
-	bool disableDrawContents : 1;
+  bool disableDrawContents : 1;
 
-	/*! true if the navigation panel is enabled (visible) for the view.
-	 True by default. */
-	bool navigatorEnabled : 1;
+  /*! true if the navigation panel is enabled (visible) for the view.
+   True by default. */
+  bool navigatorEnabled : 1;
 
-	/*! true if the context menu is enabled (visible) for the view.
-	 True by default. */
-	bool contextMenuEnabled : 1;
+  /*! true if the context menu is enabled (visible) for the view.
+   True by default. */
+  bool contextMenuEnabled : 1;
 
-	/*! used to force single skip keyPress event. */
-	bool skipKeyPress : 1;
-	
-	/*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
-	bool horizontalHeaderVisible : 1;
+  /*! used to force single skip keyPress event. */
+  bool skipKeyPress : 1;
+  
+  /*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
+  bool horizontalHeaderVisible : 1;
 
-	/*! true if cursor should be moved on mouse release evenr rather than mouse press 
-	 in handleContentsMousePressOrRelease().
-	 False by default. Used by KeixComboBoxPopup. */
-	bool moveCursorOnMouseRelease : 1;
+  /*! true if cursor should be moved on mouse release evenr rather than mouse press 
+   in handleContentsMousePressOrRelease().
+   False by default. Used by KeixComboBoxPopup. */
+  bool moveCursorOnMouseRelease : 1;
 
-	KexiTableView::Appearance appearance;
-	
-	//! brushes, fonts
-	QBrush diagonalGrayPattern;
+  KexiTableView::Appearance appearance;
+  
+  //! brushes, fonts
+  QBrush diagonalGrayPattern;
 
-	//! Parameters for displaying autonumbers
-	KexiDisplayUtils::DisplayParameters autonumberSignDisplayParameters;
+  //! Parameters for displaying autonumbers
+  KexiDisplayUtils::DisplayParameters autonumberSignDisplayParameters;
 
-	//! Parameters for displaying default values
-	KexiDisplayUtils::DisplayParameters defaultValueDisplayParameters;
+  //! Parameters for displaying default values
+  KexiDisplayUtils::DisplayParameters defaultValueDisplayParameters;
 
-	//! Used by delayed mode of maximizeColumnsWidth() 
-	QList<int> maximizeColumnsWidthOnShow;
+  //! Used by delayed mode of maximizeColumnsWidth() 
+  QList<int> maximizeColumnsWidthOnShow;
 
-	/*! Used for delayed call of ensureCellVisible() after show().
-	 It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */
-	QPoint ensureCellVisibleOnShow;
+  /*! Used for delayed call of ensureCellVisible() after show().
+   It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */
+  QPoint ensureCellVisibleOnShow;
 
-	/*! @internal Changes bottom margin settings, in pixels. 
-	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
-	int internal_bottomMargin;
+  /*! @internal Changes bottom margin settings, in pixels. 
+   At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
+  int internal_bottomMargin;
 
-	/*! Helper for "highlighted row" effect. */
-	int highlightedRow;
+  /*! Helper for "highlighted row" effect. */
+  int highlightedRow;
 
-	/*! Id of context menu key (cached). */
-	int contextMenuKey;
+  /*! Id of context menu key (cached). */
+  int contextMenuKey;
 
-	/*! Specifies currently displayed cell tooltip. 
-	 Value of QPoint(-1,-1) means "no tooltip". */
-	QPoint recentCellWithToolTip;
+  /*! Specifies currently displayed cell tooltip. 
+   Value of QPoint(-1,-1) means "no tooltip". */
+  QPoint recentCellWithToolTip;
 
-	/*! Table cell tooltip */
-	KexiTableViewCellToolTip *cellToolTip;
+  /*! Table cell tooltip */
+  KexiTableViewCellToolTip *cellToolTip;
 };
 
 #endif

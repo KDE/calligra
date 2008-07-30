@@ -32,43 +32,43 @@ class QImage;
 //! \brief Record marker, usually displayed at the left side of a table view or a continuous form.
 class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiRecordMarker(QWidget *parent);
-		virtual ~KexiRecordMarker();
+  public:
+    KexiRecordMarker(QWidget *parent);
+    virtual ~KexiRecordMarker();
 
-		int rows() const;
+    int rows() const;
 
-		static QImage* penImage();
-		static QImage* plusImage();
+    static QImage* penImage();
+    static QImage* plusImage();
 
-	public slots:
-		void setOffset(int offset);
-		void setCellHeight(int cellHeight);
-		void setCurrentRow(int row);
-		void setHighlightedRow(int row);
+  public slots:
+    void setOffset(int offset);
+    void setCellHeight(int cellHeight);
+    void setCurrentRow(int row);
+    void setHighlightedRow(int row);
 
-		/*! Sets 'edit row' flag for \a row. Use row==-1 if you want to switch the flag off. */
-		void setEditRow(int row);
-		void showInsertRow(bool show);
+    /*! Sets 'edit row' flag for \a row. Use row==-1 if you want to switch the flag off. */
+    void setEditRow(int row);
+    void showInsertRow(bool show);
 
-		QColor selectionBackgroundColor() const;
-		void setSelectionBackgroundColor(const QColor &color);
+    QColor selectionBackgroundColor() const;
+    void setSelectionBackgroundColor(const QColor &color);
 
-		void addLabel(bool upd=true);
-		void removeLabel(bool upd=true);
+    void addLabel(bool upd=true);
+    void removeLabel(bool upd=true);
 
-		/*! Adds \a num labels */
-		void addLabels(int num, bool upd=true);
+    /*! Adds \a num labels */
+    void addLabels(int num, bool upd=true);
 
-		void clear(bool upd=true);
+    void clear(bool upd=true);
 
-	protected:
-		virtual void paintEvent(QPaintEvent *e);
-		
-		class Private;
-		Private * const d;
+  protected:
+    virtual void paintEvent(QPaintEvent *e);
+    
+    class Private;
+    Private * const d;
 };
 
 #endif

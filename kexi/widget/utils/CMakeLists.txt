@@ -22,7 +22,7 @@ set(kexiguiutils_LIB_SRCS
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 
 target_link_libraries(kexiguiutils
-	kexiutils ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+  kexiutils ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY}
 )
 
 set_target_properties(kexiguiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

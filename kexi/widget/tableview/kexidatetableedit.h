@@ -33,32 +33,32 @@
 */
 class KexiDateTableEdit : public KexiInputTableEdit
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
-		virtual ~KexiDateTableEdit();
-		virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
-		virtual QVariant value();
-		virtual bool valueIsNull();
-		virtual bool valueIsEmpty();
-		virtual bool valueIsValid();
+  public:
+    KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+    virtual ~KexiDateTableEdit();
+    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
+      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual QVariant value();
+    virtual bool valueIsNull();
+    virtual bool valueIsEmpty();
+    virtual bool valueIsValid();
 
-		/*! Reimplemented after KexiInputTableEdit. */
-		virtual void handleAction(const QString& actionName);
+    /*! Reimplemented after KexiInputTableEdit. */
+    virtual void handleAction(const QString& actionName);
 
-		/*! Reimplemented after KexiInputTableEdit. */
-		virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
+    /*! Reimplemented after KexiInputTableEdit. */
+    virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-	protected:
-		//! helper
-		void setValueInInternalEditor(const QVariant &value);
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		QDate dateValue() const;
+  protected:
+    //! helper
+    void setValueInInternalEditor(const QVariant &value);
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    QDate dateValue() const;
 
-		//! Used to format and convert date values
-		KexiDateFormatter m_formatter;
+    //! Used to format and convert date values
+    KexiDateFormatter m_formatter;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiDateEditorFactoryItem)
