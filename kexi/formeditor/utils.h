@@ -40,25 +40,25 @@ class Form;
 template<class type>
 type* findParent(QObject* o, const char* className, QObject* &prevPrev)
 {
-	if (!o || !className || className[0]=='\0')
-		return 0;
-	QObject *prev = o;
-	while ( ((o=o->parent())) && !o->inherits(className) ) {
-		prevPrev = prev;
-		prev = o;
-	}
-	return static_cast<type*>(o);
+  if (!o || !className || className[0]=='\0')
+    return 0;
+  QObject *prev = o;
+  while ( ((o=o->parent())) && !o->inherits(className) ) {
+    prevPrev = prev;
+    prev = o;
+  }
+  return static_cast<type*>(o);
 }
 
 //! A tab widget providing information about height of the tab bar.
 class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
 {
-	Q_OBJECT
-	public:
-		TabWidget(QWidget *parent) 
-		 : TabWidgetBase(parent) {}
-		virtual ~TabWidget() {}
-		int tabBarHeight() const { return tabBar()->height(); }
+  Q_OBJECT
+  public:
+    TabWidget(QWidget *parent) 
+     : TabWidgetBase(parent) {}
+    virtual ~TabWidget() {}
+    int tabBarHeight() const { return tabBar()->height(); }
 };
 
 //! @short A list of widget pointers.
@@ -70,23 +70,23 @@ typedef Q3PtrListIterator<QWidget> WidgetListIterator;
 //! @short A helper for sorting widgets horizontally
 class HorWidgetList : public WidgetList
 {
-	public:
-		HorWidgetList(QWidget *topLevelWidget);
-		virtual ~HorWidgetList();
-	protected:
-		virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
-		QWidget *m_topLevelWidget;
+  public:
+    HorWidgetList(QWidget *topLevelWidget);
+    virtual ~HorWidgetList();
+  protected:
+    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    QWidget *m_topLevelWidget;
 };
 
 //! @short A helper for sorting widgets vertically
 class VerWidgetList : public WidgetList
 {
-	public:
-		VerWidgetList(QWidget *topLevelWidget);
-		virtual ~VerWidgetList();
-	protected:
-		virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
-		QWidget *m_topLevelWidget;
+  public:
+    VerWidgetList(QWidget *topLevelWidget);
+    virtual ~VerWidgetList();
+  protected:
+    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    QWidget *m_topLevelWidget;
 };
 
 /*! This function is used to remove all the child widgets from a list, and

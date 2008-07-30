@@ -39,18 +39,18 @@ KFDPixmapEdit::~KFDPixmapEdit()
 void
 KFDPixmapEdit::selectPixmap()
 {
-	KoProperty::PixmapEdit::selectPixmap();
+  KoProperty::PixmapEdit::selectPixmap();
 #if 0 //will be reenabled for new image collection
-	if(!m_manager->activeForm() || !property())
-		return;
+  if(!m_manager->activeForm() || !property())
+    return;
 
-	ObjectTreeItem *item = m_manager->activeForm()->objectTree()->lookup(m_manager->activeForm()->selectedWidget()->name());
-	QString name = item ? item->pixmapName(property()->name()) : "";
-	PixmapCollectionChooser dialog( m_manager->activeForm()->pixmapCollection(), name, topLevelWidget() );
-	if(dialog.exec() == QDialog::Accepted) {
-		setValue(dialog.pixmap(), true);
-		item->setPixmapName(property()->name(), dialog.pixmapName());
-	}
+  ObjectTreeItem *item = m_manager->activeForm()->objectTree()->lookup(m_manager->activeForm()->selectedWidget()->name());
+  QString name = item ? item->pixmapName(property()->name()) : "";
+  PixmapCollectionChooser dialog( m_manager->activeForm()->pixmapCollection(), name, topLevelWidget() );
+  if(dialog.exec() == QDialog::Accepted) {
+    setValue(dialog.pixmap(), true);
+    item->setPixmapName(property()->name(), dialog.pixmapName());
+  }
 #endif
 }
 

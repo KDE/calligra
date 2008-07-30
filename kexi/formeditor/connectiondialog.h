@@ -32,8 +32,8 @@
 #define KEXI_NO_TABLEVIEW
 
 namespace KexiDB {
-	class ResultInfo;
-	class RecordData;
+  class ResultInfo;
+  class RecordData;
 }
 
 class QLabel;
@@ -51,73 +51,73 @@ class Connection;
   of current connection.  */
 class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		ConnectionDialog(QWidget *parent);
-		~ConnectionDialog() {;}
+  public:
+    ConnectionDialog(QWidget *parent);
+    ~ConnectionDialog() {;}
 
-		/*! Displays as modal dialog, to edit connections in Form::connectionBuffer(). */
-		void exec(Form *form);
+    /*! Displays as modal dialog, to edit connections in Form::connectionBuffer(). */
+    void exec(Form *form);
 
-	protected:
-		/*! Used when connection is ok. Displays a message in details widget and changes icon in 'OK?' column. */
-		void setStatusOk(KexiDB::RecordData *record = 0);
-		/*! Used when connection is wrong. Displays a message in details widget and changes icon in 'OK?' column. \a msg is
-		  the message explaining what's wrong. */
-		void setStatusError(const QString &msg, KexiDB::RecordData *record = 0);
-		//! Inits table data, columns, etc.
-		void initTable();
-		/*! Updates the widget list (shown in receiver and sender columns). Then fill in the table with the connections in m_buffer. */
-		void updateTableData();
-		/*! Updates the slot list, according to the receiver name, and only shows those who are compatible with signal args. */
-		void updateSlotList(KexiDB::RecordData *record);
-		//! Updates the signal list, according to the sender name.
-		void updateSignalList(KexiDB::RecordData *record);
+  protected:
+    /*! Used when connection is ok. Displays a message in details widget and changes icon in 'OK?' column. */
+    void setStatusOk(KexiDB::RecordData *record = 0);
+    /*! Used when connection is wrong. Displays a message in details widget and changes icon in 'OK?' column. \a msg is
+      the message explaining what's wrong. */
+    void setStatusError(const QString &msg, KexiDB::RecordData *record = 0);
+    //! Inits table data, columns, etc.
+    void initTable();
+    /*! Updates the widget list (shown in receiver and sender columns). Then fill in the table with the connections in m_buffer. */
+    void updateTableData();
+    /*! Updates the slot list, according to the receiver name, and only shows those who are compatible with signal args. */
+    void updateSlotList(KexiDB::RecordData *record);
+    //! Updates the signal list, according to the sender name.
+    void updateSignalList(KexiDB::RecordData *record);
 
-	protected slots:
-		/*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
-		void slotCellChanged(KexiDB::RecordData *, int, QVariant&, KexiDB::ResultInfo*);
-		/*! This function checks if the connection represented by \a record is valid. It checks if all args (sender, receiver, signal and slot)
-		 are given, and then if signal/slot args are compatible (should be always true, as we don't show non-compatible slots). It calls \ref setStatusOk()
-		 or \ref setStatusError() following the result of checks. */
-		void checkConnection(KexiDB::RecordData *record);
+  protected slots:
+    /*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
+    void slotCellChanged(KexiDB::RecordData *, int, QVariant&, KexiDB::ResultInfo*);
+    /*! This function checks if the connection represented by \a record is valid. It checks if all args (sender, receiver, signal and slot)
+     are given, and then if signal/slot args are compatible (should be always true, as we don't show non-compatible slots). It calls \ref setStatusOk()
+     or \ref setStatusError() following the result of checks. */
+    void checkConnection(KexiDB::RecordData *record);
 
-		/*! Hides the dialog and allow the user to create the Connection by drag-and-drop in the Form itself. Currently disabled in the GUI.
-		 \sa FormManager::startCreatingConnection()  */
-		void newItemByDragnDrop();
-		/*! Creates a new item. It just moves the cursor to the last empty row. */
-		void newItem();
-		void removeItem();
+    /*! Hides the dialog and allow the user to create the Connection by drag-and-drop in the Form itself. Currently disabled in the GUI.
+     \sa FormManager::startCreatingConnection()  */
+    void newItemByDragnDrop();
+    /*! Creates a new item. It just moves the cursor to the last empty row. */
+    void newItem();
+    void removeItem();
 
-		/*! This slot is called when the user ends connection creation (when in drag-and-drop mode). The dialog is restored,
-		  and the created connection is added to the list. */
-		void slotConnectionCreated(KFormDesigner::Form *form, KFormDesigner::Connection &connection);
-		/*! This slot is called when the user aborts connection creation (when in drag-and-drop mode). The dialog is restored,
-		  and an empty connection is created. */
-		void slotConnectionAborted(KFormDesigner::Form *form);
+    /*! This slot is called when the user ends connection creation (when in drag-and-drop mode). The dialog is restored,
+      and the created connection is added to the list. */
+    void slotConnectionCreated(KFormDesigner::Form *form, KFormDesigner::Connection &connection);
+    /*! This slot is called when the user aborts connection creation (when in drag-and-drop mode). The dialog is restored,
+      and an empty connection is created. */
+    void slotConnectionAborted(KFormDesigner::Form *form);
 
-		void slotCellSelected(int col, int row);
-		void slotRowInserted(KexiDB::RecordData*,bool);
+    void slotCellSelected(int col, int row);
+    void slotRowInserted(KexiDB::RecordData*,bool);
 
-		/*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.
-		 If the user presses 'Cancel', nothing happens. */
-		virtual void slotOk();
+    /*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.
+     If the user presses 'Cancel', nothing happens. */
+    virtual void slotOk();
 
-	protected:
-		Form *m_form;
-		ConnectionBuffer *m_buffer;
+  protected:
+    Form *m_form;
+    ConnectionBuffer *m_buffer;
 #ifdef __GNUC__
 #warning "Port Kexi Table View!"
 #endif
 #ifndef KEXI_NO_TABLEVIEW
-		KexiTableView  *m_table;
-		KexiTableViewData  *m_data;
-		KexiTableViewData *m_widgetsColumnData, 
-			*m_slotsColumnData, *m_signalsColumnData;
+    KexiTableView  *m_table;
+    KexiTableViewData  *m_data;
+    KexiTableViewData *m_widgetsColumnData, 
+      *m_slotsColumnData, *m_signalsColumnData;
 #endif
-		QLabel  *m_pixmapLabel, *m_textLabel;
-		KPushButton *m_addButton, *m_removeButton;
+    QLabel  *m_pixmapLabel, *m_textLabel;
+    KPushButton *m_addButton, *m_removeButton;
 };
 
 }

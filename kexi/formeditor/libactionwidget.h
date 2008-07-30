@@ -38,25 +38,25 @@ class WidgetInfo;
  */
 class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 {
-	Q_OBJECT
-	public:
-		/** LibActionWidget object is initialized to be mutually
-			exclusive with all other LibActionWidget objects */
-		LibActionWidget(WidgetInfo *, KActionCollection *collection);
-		virtual ~LibActionWidget();
+  Q_OBJECT
+  public:
+    /** LibActionWidget object is initialized to be mutually
+      exclusive with all other LibActionWidget objects */
+    LibActionWidget(WidgetInfo *, KActionCollection *collection);
+    virtual ~LibActionWidget();
 
-	signals:
-		/**
-		 * emits a signal containing the class name
-		 */
-		void prepareInsert(const Q3CString &className);
+  signals:
+    /**
+     * emits a signal containing the class name
+     */
+    void prepareInsert(const Q3CString &className);
 
-	protected slots:
-		/** reimplemented from KToggleAction */
-		virtual void slotToggled(bool checked);
+  protected slots:
+    /** reimplemented from KToggleAction */
+    virtual void slotToggled(bool checked);
 
-	private:
-		Q3CString m_className;
+  private:
+    Q3CString m_className;
 };
 
 }

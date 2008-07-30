@@ -30,59 +30,59 @@
 KFDMainWindow::KFDMainWindow()
  : KParts::MainWindow()
 {
-	setXMLFile("kfd_mainwindow.rc");
+  setXMLFile("kfd_mainwindow.rc");
 
-	setupActions();
-	//statusBar()->show();
+  setupActions();
+  //statusBar()->show();
 
-	KLibFactory *factory = KLibLoader::self()->factory("libkformdesigner_part");
-	if (factory)
-	{
-		QStringList list;
-		list << "shell" << "multipleMode";
-		m_part = static_cast<KParts::ReadWritePart *>( factory->create(this, "kformdesigner_part", "KParts::ReadWritePart", list) );
+  KLibFactory *factory = KLibLoader::self()->factory("libkformdesigner_part");
+  if (factory)
+  {
+    QStringList list;
+    list << "shell" << "multipleMode";
+    m_part = static_cast<KParts::ReadWritePart *>( factory->create(this, "kformdesigner_part", "KParts::ReadWritePart", list) );
 
-		if(m_part)
-		{
-			setCentralWidget(m_part->widget());
-			createGUI(m_part);
-		}
-	}
-	else
-	{
-		KMessageBox::error(this, i18n("Could not find the KFormDesigner part. Please check your installation."));
-		kapp->quit();
-		return;
-	}
+    if(m_part)
+    {
+      setCentralWidget(m_part->widget());
+      createGUI(m_part);
+    }
+  }
+  else
+  {
+    KMessageBox::error(this, i18n("Could not find the KFormDesigner part. Please check your installation."));
+    kapp->quit();
+    return;
+  }
 
-	setAutoSaveSettings();
+  setAutoSaveSettings();
 }
 
 void
 KFDMainWindow::loadUIFile(const QString &filename)
 {
-	loadUIFile(KUrl::fromPathOrURL(filename));
+  loadUIFile(KUrl::fromPathOrURL(filename));
 }
 
 void
 KFDMainWindow::loadUIFile(const KUrl &url)
 {
-	m_part->openUrl(url);
+  m_part->openUrl(url);
 }
 
 void
 KFDMainWindow::setupActions()
 {
-	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+  KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 }
 
 bool
 KFDMainWindow::queryClose()
 {
-	if(!m_part)
-		return true;
+  if(!m_part)
+    return true;
 
-	return m_part->closeUrl();
+  return m_part->closeUrl();
 }
 
 #include "kfd_mainwindow.moc"

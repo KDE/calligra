@@ -34,9 +34,9 @@ class K3ListBox;
 class Q3ListBoxItem;
 
 namespace KoProperty {
-	class Property;
-	class Set;
-	class Editor;
+  class Property;
+  class Set;
+  class Editor;
 }
 
 namespace KFormDesigner {
@@ -49,44 +49,44 @@ namespace KFormDesigner {
  using K3ListViewItem::setRenameable(). Pixmaps are not yet supported. */
 class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		EditListViewDialog(QWidget *parent);
-		~EditListViewDialog() {}
+  public:
+    EditListViewDialog(QWidget *parent);
+    ~EditListViewDialog() {}
 
-		int exec(Q3ListView *listview);
+    int exec(Q3ListView *listview);
 
-	public slots:
-		// Columns page
-		void updateItemProperties(Q3ListBoxItem*);
-		void newItem();
-		void removeItem();
-		void MoveItemUp();
-		void MoveItemDown();
-		void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
+  public slots:
+    // Columns page
+    void updateItemProperties(Q3ListBoxItem*);
+    void newItem();
+    void removeItem();
+    void MoveItemUp();
+    void MoveItemDown();
+    void changeProperty(KoProperty::Set& set, KoProperty::Property& property);
 
-		// Contents page
-		void updateButtons(Q3ListViewItem*);
-		void newRow();
-		void newChildRow();
-		void removeRow();
-		void MoveRowUp();
-		void MoveRowDown();
+    // Contents page
+    void updateButtons(Q3ListViewItem*);
+    void newRow();
+    void newChildRow();
+    void removeRow();
+    void MoveRowUp();
+    void MoveRowDown();
 
-	protected:
-		/*! Loads all child items of \a item into \a listview (may be different from the \a items 's listview) as child of \a parent item.
-		This is used to copy the contents of a listview into another listview. */
-		void loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent);
+  protected:
+    /*! Loads all child items of \a item into \a listview (may be different from the \a items 's listview) as child of \a parent item.
+    This is used to copy the contents of a listview into another listview. */
+    void loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent);
 
-	protected:
-		enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
-		KoProperty::Editor  *m_editor;
-		KoProperty::Set  *m_propSet;
-		KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
-		K3ListBox  *m_listbox;
-		K3ListView  *m_listview;
-		Q3IntDict<QToolButton>  m_buttons;
+  protected:
+    enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
+    KoProperty::Editor  *m_editor;
+    KoProperty::Set  *m_propSet;
+    KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
+    K3ListBox  *m_listbox;
+    K3ListView  *m_listview;
+    Q3IntDict<QToolButton>  m_buttons;
 };
 
 }

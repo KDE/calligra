@@ -28,16 +28,16 @@ namespace KFormDesigner {
 
 class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KFDPixmapEdit(KoProperty::Property *property, QWidget *parent=0);
-		virtual ~KFDPixmapEdit();
+  public:
+    KFDPixmapEdit(KoProperty::Property *property, QWidget *parent=0);
+    virtual ~KFDPixmapEdit();
 
-	public slots:
-		virtual void selectPixmap();
+  public slots:
+    virtual void selectPixmap();
 
-	private:
+  private:
 //		FormManager  *m_manager;
 };
 

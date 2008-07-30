@@ -30,8 +30,8 @@ using KFormDesigner::Form;
 ScriptManager::ScriptManager(QObject *parent, const char *name)
  : QObject(parent, name)
 {
-	m_manager = Kross::Api::Manager::scriptManager();
-	m_dict.setAutoDelete(true);
+  m_manager = Kross::Api::Manager::scriptManager();
+  m_dict.setAutoDelete(true);
 }
 
 ScriptManager::~ScriptManager()
@@ -41,29 +41,29 @@ ScriptManager::~ScriptManager()
 FormScript*
 ScriptManager::newFormScript(Form *form)
 {
-	FormScript *script = new FormScript(form, this);
-	m_dict.insert(form, script);
-	return script;
+  FormScript *script = new FormScript(form, this);
+  m_dict.insert(form, script);
+  return script;
 }
 
 FormScript*
 ScriptManager::scriptForForm(Form *form)
 {
-	return m_dict[form];
+  return m_dict[form];
 }
 
 void
 ScriptManager::setFormManager(FormManager *manager)
 {
-	m_formManager = manager;
-	connect(m_formManager, SIGNAL(aboutToDeleteForm(KFormDesigner::Form*)), this, SLOT(slotFormDeleted(KFormDesigner::Form*)));
-	connect(m_formManager, SIGNAL(formCreated(KFormDesigner::Form*)), this, SLOT(newFormScript(KFormDesigner::Form*)));
+  m_formManager = manager;
+  connect(m_formManager, SIGNAL(aboutToDeleteForm(KFormDesigner::Form*)), this, SLOT(slotFormDeleted(KFormDesigner::Form*)));
+  connect(m_formManager, SIGNAL(formCreated(KFormDesigner::Form*)), this, SLOT(newFormScript(KFormDesigner::Form*)));
 }
 
 void
 ScriptManager::slotFormDeleted(KFormDesigner::Form *form)
 {
-	m_dict.remove(form);
+  m_dict.remove(form);
 }
 
 #include "scriptmanager.moc"

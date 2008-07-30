@@ -38,41 +38,41 @@ class ResizeHandleSet;
 */
 class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		enum HandlePos {
-			TopLeftCorner = 0,
-			TopCenter = 2,
-			TopRightCorner = 4,
-			LeftCenter = 8,
-			RightCenter = 16,
-			BottomLeftCorner = 32,
-			BottomCenter = 64,
-			BottomRightCorner = 128
-		};
-		ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing=false);
-		virtual ~ResizeHandle();
-		void setEditingMode(bool editing);
+  public:
+    enum HandlePos {
+      TopLeftCorner = 0,
+      TopCenter = 2,
+      TopRightCorner = 4,
+      LeftCenter = 8,
+      RightCenter = 16,
+      BottomLeftCorner = 32,
+      BottomCenter = 64,
+      BottomRightCorner = 128
+    };
+    ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing=false);
+    virtual ~ResizeHandle();
+    void setEditingMode(bool editing);
 
-	protected:
-		virtual void mousePressEvent(QMouseEvent *ev);
-		virtual void mouseMoveEvent(QMouseEvent *ev);
-		virtual void mouseReleaseEvent(QMouseEvent *ev);
-		virtual void paintEvent( QPaintEvent *ev );
+  protected:
+    virtual void mousePressEvent(QMouseEvent *ev);
+    virtual void mouseMoveEvent(QMouseEvent *ev);
+    virtual void mouseReleaseEvent(QMouseEvent *ev);
+    virtual void paintEvent( QPaintEvent *ev );
 
-	protected slots:
-		bool eventFilter(QObject *obj, QEvent *ev);
-		void updatePos();
+  protected slots:
+    bool eventFilter(QObject *obj, QEvent *ev);
+    void updatePos();
 
-	private:
-		ResizeHandleSet *m_set;
-		HandlePos m_pos;
-		//QWidget *m_buddy;
-		bool m_dragging;
-		//bool m_editing;
-		int m_x;
-		int m_y;
+  private:
+    ResizeHandleSet *m_set;
+    HandlePos m_pos;
+    //QWidget *m_buddy;
+    bool m_dragging;
+    //bool m_editing;
+    int m_x;
+    int m_y;
 };
 
 /**
@@ -81,26 +81,26 @@ class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 */
 class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		typedef Q3Dict<ResizeHandleSet> Dict;
+  public:
+    typedef Q3Dict<ResizeHandleSet> Dict;
 
-		ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
-		~ResizeHandleSet();
+    ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
+    ~ResizeHandleSet();
 
-		void setWidget(QWidget *modify, bool editing = false);
-		QWidget *widget() const { return m_widget; }
-		void raise();
-		void setEditingMode(bool editing);
+    void setWidget(QWidget *modify, bool editing = false);
+    QWidget *widget() const { return m_widget; }
+    void raise();
+    void setEditingMode(bool editing);
 
-	private:
-		QPointer<ResizeHandle> m_handles[8];
-		QPointer<QWidget> m_widget;
-		QPointer<Form>   m_form;
-		bool  m_editing;
+  private:
+    QPointer<ResizeHandle> m_handles[8];
+    QPointer<QWidget> m_widget;
+    QPointer<Form>   m_form;
+    bool  m_editing;
 
-	friend class ResizeHandle;
+  friend class ResizeHandle;
 };
 
 }

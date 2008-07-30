@@ -26,43 +26,43 @@
 class FormScript;
 
 namespace Kross {
-	namespace Api  {
-		class Manager;
-	}
+  namespace Api  {
+    class Manager;
+  }
 }
 
 namespace KFormDesigner {
-	class FormManager;
-	class Form;
+  class FormManager;
+  class Form;
 }
 
 using namespace KFormDesigner;
 
 class ScriptManager : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		ScriptManager(QObject *parent=0, const char *name=0);
-		~ScriptManager();
+  public:
+    ScriptManager(QObject *parent=0, const char *name=0);
+    ~ScriptManager();
 
-		/*! \return The FormScript object associated to this Form. */
-		FormScript*  scriptForForm(Form *form);
+    /*! \return The FormScript object associated to this Form. */
+    FormScript*  scriptForForm(Form *form);
 
-		void  setFormManager(FormManager *manager);
-		FormManager*  formManager() { return m_formManager; }
-		Kross::Api::Manager*  krossManager() { return m_manager; }
+    void  setFormManager(FormManager *manager);
+    FormManager*  formManager() { return m_formManager; }
+    Kross::Api::Manager*  krossManager() { return m_manager; }
 
-	public slots:
-		/*! Called when a form is deleted. It is removed from the dict. */
-		void slotFormDeleted(KFormDesigner::Form *form);
-		/*! \return A new FormScript object associated to the Form \a form.  */
-		FormScript*  newFormScript(KFormDesigner::Form *form);
+  public slots:
+    /*! Called when a form is deleted. It is removed from the dict. */
+    void slotFormDeleted(KFormDesigner::Form *form);
+    /*! \return A new FormScript object associated to the Form \a form.  */
+    FormScript*  newFormScript(KFormDesigner::Form *form);
 
-	private:
-		Kross::Api::Manager  *m_manager;
-		KFormDesigner::FormManager *m_formManager;
-		Q3PtrDict<FormScript>  m_dict;
+  private:
+    Kross::Api::Manager  *m_manager;
+    KFormDesigner::FormManager *m_formManager;
+    Q3PtrDict<FormScript>  m_dict;
 };
 
 #endif

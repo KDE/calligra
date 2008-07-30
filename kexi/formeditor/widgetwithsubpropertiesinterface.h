@@ -37,36 +37,36 @@ namespace KFormDesigner {
  Such properties are provided by the parent KexiDBAutoField object as subproperties. */
 class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 {
-	public:
-		WidgetWithSubpropertiesInterface();
-		virtual ~WidgetWithSubpropertiesInterface();
+  public:
+    WidgetWithSubpropertiesInterface();
+    virtual ~WidgetWithSubpropertiesInterface();
 
-		//! Sets \a widget subwidget handling subproperties. Setting 0 clears subwidget.
+    //! Sets \a widget subwidget handling subproperties. Setting 0 clears subwidget.
 //! @todo maybe someone wants to add more than one widget here?
-		void setSubwidget(QWidget *widget);
+    void setSubwidget(QWidget *widget);
 
-		//! \return the assigned subwidget.
-		QWidget* subwidget() const;
+    //! \return the assigned subwidget.
+    QWidget* subwidget() const;
 
-		//! \return a set of subproperties avaliable for this widget.
-		QSet<Q3CString> subproperies() const;
+    //! \return a set of subproperties avaliable for this widget.
+    QSet<Q3CString> subproperies() const;
 
-		//! \return a metaproperty for a widget's subproperty 
-		//! or invalid metaproperty if there is no such subproperty.
-		QMetaProperty findMetaSubproperty(const char * name) const;
+    //! \return a metaproperty for a widget's subproperty 
+    //! or invalid metaproperty if there is no such subproperty.
+    QMetaProperty findMetaSubproperty(const char * name) const;
 
-		//! \return a value of widget's subproperty. \a ok is set to true on success
-		//! and to false on failure.
-		QVariant subproperty( const char * name, bool &ok  ) const;
+    //! \return a value of widget's subproperty. \a ok is set to true on success
+    //! and to false on failure.
+    QVariant subproperty( const char * name, bool &ok  ) const;
 
-		//! Sets a subproperty value \a value for a subproperty \a name
-		//! \return true on successful setting and false when there 
-		//! is no such a subproperty in the subwidget or QObject::setProperty() failed.
-		bool setSubproperty( const char * name, const QVariant & value );
+    //! Sets a subproperty value \a value for a subproperty \a name
+    //! \return true on successful setting and false when there 
+    //! is no such a subproperty in the subwidget or QObject::setProperty() failed.
+    bool setSubproperty( const char * name, const QVariant & value );
 
-	protected:
-		QPointer<QWidget> m_subwidget;
-		QSet<Q3CString> m_subproperies;
+  protected:
+    QPointer<QWidget> m_subwidget;
+    QSet<Q3CString> m_subproperies;
 };
 }
 

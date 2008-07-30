@@ -33,33 +33,33 @@ class Form;
 //! @short An item in ObjectTreeView associated with an ObjectTreeItem.
 class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
 {
-	public:
-		ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
-		ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item=0);
-		virtual ~ObjectTreeViewItem();
+  public:
+    ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
+    ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item=0);
+    virtual ~ObjectTreeViewItem();
 
-		//! \return the item name, ie the ObjectTreeItem name
-		QString name() const;
+    //! \return the item name, ie the ObjectTreeItem name
+    QString name() const;
 
-		//! \return the ObjectTreeItem associated to this item.
-		ObjectTreeItem* objectTree() const { return m_item; }
+    //! \return the ObjectTreeItem associated to this item.
+    ObjectTreeItem* objectTree() const { return m_item; }
 
-		virtual void setOpen( bool o );
+    virtual void setOpen( bool o );
 
-	protected:
-		//! Reimplemented to draw custom contents (copied from Property Editor)
-		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
+  protected:
+    //! Reimplemented to draw custom contents (copied from Property Editor)
+    virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
-		//! Reimplemented to draw custom contents (copied from Property Editor)
-		virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
+    //! Reimplemented to draw custom contents (copied from Property Editor)
+    virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
 
-		//! Reimplemented to draw custom contents (copied from Property Editor)
-		virtual void setup();
+    //! Reimplemented to draw custom contents (copied from Property Editor)
+    virtual void setup();
 
-	private:
-		ObjectTreeItem *m_item;
+  private:
+    ObjectTreeItem *m_item;
 
-	friend class ObjectTreeView;
+  friend class ObjectTreeView;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
@@ -69,62 +69,62 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
  */
 class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		ObjectTreeView(QWidget *parent=0, const char *name=0, bool tabStop = false);
-		virtual ~ObjectTreeView();
+  public:
+    ObjectTreeView(QWidget *parent=0, const char *name=0, bool tabStop = false);
+    virtual ~ObjectTreeView();
 
-		virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
-		/*! Sets \a form as the current Form in the list. The list will automatically 
-		 be filled with an item for each widget in the Form, and selection will be synced. 
-		 Nothing happens if \a form is already the current Form.
-		 */
-		void setForm(Form *form);
+    /*! Sets \a form as the current Form in the list. The list will automatically 
+     be filled with an item for each widget in the Form, and selection will be synced. 
+     Nothing happens if \a form is already the current Form.
+     */
+    void setForm(Form *form);
 
-		//! \return the pixmap name for a given class, to be shown next to the widget name.
-		QString iconNameForClass(const Q3CString &classname);
+    //! \return the pixmap name for a given class, to be shown next to the widget name.
+    QString iconNameForClass(const Q3CString &classname);
 
-	public slots:
-		/*! Sets the widget \a w as selected item, so it will be written bold. 
-		 It is added to current selection if \a add is true. */
-		void setSelectedWidget(QWidget *w, bool add=false);
+  public slots:
+    /*! Sets the widget \a w as selected item, so it will be written bold. 
+     It is added to current selection if \a add is true. */
+    void setSelectedWidget(QWidget *w, bool add=false);
 
-		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
-		void addItem(ObjectTreeItem *item);
+    /*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
+    void addItem(ObjectTreeItem *item);
 
-		/*! Removess the ObjectTreeItem \a item from the list. */
-		void removeItem(ObjectTreeItem *item);
+    /*! Removess the ObjectTreeItem \a item from the list. */
+    void removeItem(ObjectTreeItem *item);
 
-		/*! Just renames the list item from \a oldname to \a newname. */
-		void renameItem(const Q3CString &oldname, const Q3CString &newname);
+    /*! Just renames the list item from \a oldname to \a newname. */
+    void renameItem(const Q3CString &oldname, const Q3CString &newname);
 
-	protected slots:
-		/*! This slot is called when the user right-click a list item. 
-		 The widget context menu is shown, as inisde the Form. */
-		void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
+  protected slots:
+    /*! This slot is called when the user right-click a list item. 
+     The widget context menu is shown, as inisde the Form. */
+    void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
 
-		void slotColumnSizeChanged(int);
+    void slotColumnSizeChanged(int);
 
-		/*! The selected list item has changed, so we emit a signal to update the Form. */
-		void slotSelectionChanged();
+    /*! The selected list item has changed, so we emit a signal to update the Form. */
+    void slotSelectionChanged();
 
-		/*! Called before Form object is destroyed. */
-		void slotBeforeFormDestroyed();
+    /*! Called before Form object is destroyed. */
+    void slotBeforeFormDestroyed();
 
-	protected:
-		//! Internal function to fill the list.
-		ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
+  protected:
+    //! Internal function to fill the list.
+    ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
 
-		//! \return The item whose name is \a name.
-		ObjectTreeViewItem* findItem(const QString &name);
+    //! \return The item whose name is \a name.
+    ObjectTreeViewItem* findItem(const QString &name);
 
-	private:
-		Form *m_form;
-		ObjectTreeViewItem *m_topItem;
+  private:
+    Form *m_form;
+    ObjectTreeViewItem *m_topItem;
 
-	friend class TabStopDialog;
+  friend class TabStopDialog;
 };
 
 }

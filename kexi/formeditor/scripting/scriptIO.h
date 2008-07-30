@@ -29,7 +29,7 @@ class ScriptManager;
 class FormScript;
 
 namespace KFormDesigner {
-	class Form;
+  class Form;
 }
 
 using namespace KFormDesigner;
@@ -37,26 +37,26 @@ using namespace KFormDesigner;
 //! A static class to deal with loading/saving events from/to XML
 class ScriptIO
 {
-	public:
-		/*! Save the evnts of a form.
-		 Creates an \<events\> tag, and then one \<event\> tag for each event.
-		 Each event contains \<sender\> and \<receiver\> tags, with attributes depending on event type. */
-		static bool  saveFormEvents(QDomNode &parentNode, FormScript *script);
-		/*! Reads the \<events\> tag (\a parentNode), then creates and fills a FormScript object linked to this \a form.
-		 The new FormScript object is then added  to ScriptManager list.*/
-		static bool  loadFormEvents(QDomNode &parentNode, Form *form, ScriptManager *manager);
+  public:
+    /*! Save the evnts of a form.
+     Creates an \<events\> tag, and then one \<event\> tag for each event.
+     Each event contains \<sender\> and \<receiver\> tags, with attributes depending on event type. */
+    static bool  saveFormEvents(QDomNode &parentNode, FormScript *script);
+    /*! Reads the \<events\> tag (\a parentNode), then creates and fills a FormScript object linked to this \a form.
+     The new FormScript object is then added  to ScriptManager list.*/
+    static bool  loadFormEvents(QDomNode &parentNode, Form *form, ScriptManager *manager);
 
-		/*! Save only the events related to widget \a name in the FormScript \a fscript.
-		 Used eg when copying/pasting widgets to keep also events related to it.*/
-		static bool  saveAllEventsForWidget(QObject *widget, FormScript *fscript, QDomNode &node);
+    /*! Save only the events related to widget \a name in the FormScript \a fscript.
+     Used eg when copying/pasting widgets to keep also events related to it.*/
+    static bool  saveAllEventsForWidget(QObject *widget, FormScript *fscript, QDomNode &node);
 
-		static void  saveEvent(Event *event, QDomNode &parentNode);
-		static void  saveEventList(EventList *list, QDomNode &parentNode);
-		static void  loadEvent(QDomNode &node, EventList *list, Form *form);
+    static void  saveEvent(Event *event, QDomNode &parentNode);
+    static void  saveEventList(EventList *list, QDomNode &parentNode);
+    static void  loadEvent(QDomNode &node, EventList *list, Form *form);
 
-	protected:
-		ScriptIO() {;}
-		~ScriptIO() {;}
+  protected:
+    ScriptIO() {;}
+    ~ScriptIO() {;}
 };
 
 #endif

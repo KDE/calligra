@@ -47,29 +47,29 @@ int main(int argc, char **argv)
    KGlobal::iconLoader()->addAppDir("kexi");
 
     KFDMainWindow *v = new KFDMainWindow();
-		if (!v->centralWidget()) { //KFD part could be not found
-			delete v;
-			return 1;
-		}
+    if (!v->centralWidget()) { //KFD part could be not found
+      delete v;
+      return 1;
+    }
     app.setMainWidget(v);
     v->show();
 
 
 
     // see if we are starting with session management
-	if (app.isSessionRestored())
-	{
-		RESTORE(KFDMainWindow);
-	}
-	else
-	{
-	// no session.. just start up normally
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	if (args->count() >= 1)
-	{
+  if (app.isSessionRestored())
+  {
+    RESTORE(KFDMainWindow);
+  }
+  else
+  {
+  // no session.. just start up normally
+  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+  if (args->count() >= 1)
+  {
             for (int i = 0; i < args->count(); i++)
-		/** @todo report loading errors here */
-		v->loadUIFile(args->url(i));
+    /** @todo report loading errors here */
+    v->loadUIFile(args->url(i));
         }
         args->clear();
     }

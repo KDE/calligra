@@ -24,23 +24,23 @@
 
 class KFDMainWindow : public KParts::MainWindow
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KFDMainWindow();
-		~KFDMainWindow() {;}
+  public:
+    KFDMainWindow();
+    ~KFDMainWindow() {;}
 
-		/** @todo change it to bool */
-		void loadUIFile(const QString &filename);
-		/** @todo change it to bool */
-		void loadUIFile(const KUrl &url);
-		virtual bool queryClose();
+    /** @todo change it to bool */
+    void loadUIFile(const QString &filename);
+    /** @todo change it to bool */
+    void loadUIFile(const KUrl &url);
+    virtual bool queryClose();
 
-	private:
-		void setupActions();
+  private:
+    void setupActions();
 
-	private:
-		KParts::ReadWritePart  *m_part;
+  private:
+    KParts::ReadWritePart  *m_part;
 };
 
 #endif
