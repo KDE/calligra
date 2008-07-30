@@ -1,13 +1,13 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core
-	${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
-	${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_BINARY_DIR}/kexi/main
-	${KDE4_INCLUDES}
+  ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_BINARY_DIR}/kexi/widget
+  ${CMAKE_SOURCE_DIR}/kexi/main/startup ${CMAKE_BINARY_DIR}/kexi/main
+  ${KDE4_INCLUDES}
 )
 
 macro_optional_find_package(MySQL)
 macro_log_feature(MYSQL_FOUND "MySQL library" "Kexi MySQL Migration driver requires MySQL library. The driver will not be built" "http://www.mysql.com" FALSE "")
 IF (MYSQL_FOUND)
-	macro_optional_add_subdirectory( mysql )
+  macro_optional_add_subdirectory( mysql )
 ENDIF (MYSQL_FOUND)
 
 macro_optional_find_package(PostgreSQL)
@@ -15,13 +15,13 @@ macro_log_feature(POSTGRESQL_FOUND "libpq library" "Kexi PostgreSQL Migration dr
 macro_optional_find_package(Pqxx)
 macro_log_feature(PQXX_FOUND "libpqxx library" "Kexi PostgreSQL Migration driver requires libpqxx library. The driver will not be built" "http://pqxx.org/development/libpqxx/" FALSE "")
 IF (POSTGRESQL_FOUND AND PQXX_FOUND)
-	macro_optional_add_subdirectory( pqxx )
+  macro_optional_add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
 macro_optional_find_package(FreeTDS)
 macro_log_feature(FREETDS_FOUND "FreeTDS library" "Kexi Sybase Migration driver requires FreeTDS library. The driver will not be built" "http://www.freetds.org" FALSE "")
 IF(FREETDS_FOUND)
-	macro_optional_add_subdirectory( sybase )
+  macro_optional_add_subdirectory( sybase )
 ENDIF(FREETDS_FOUND)
 
 macro_optional_find_package(XBase)

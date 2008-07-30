@@ -32,20 +32,20 @@ namespace KexiMigration {
 //! @todo Hardcoded. Move such code to KexiMigrate drivers.
 class OptionsDialog : public KDialog
 {
-	Q_OBJECT
-	public:
-		OptionsDialog( const QString& databaseFile, const QString& selectedEncoding,
-			QWidget* parent = 0 );
-		virtual ~OptionsDialog();
+  Q_OBJECT
+  public:
+    OptionsDialog( const QString& databaseFile, const QString& selectedEncoding,
+      QWidget* parent = 0 );
+    virtual ~OptionsDialog();
 
-		KexiCharacterEncodingComboBox* encodingComboBox() const;
+    KexiCharacterEncodingComboBox* encodingComboBox() const;
 
-	protected slots:
-		virtual void accept();
+  protected slots:
+    virtual void accept();
 
-	protected:
-		KexiCharacterEncodingComboBox *m_encodingComboBox;
-		QCheckBox *m_chkAlwaysUseThisEncoding;
+  protected:
+    KexiCharacterEncodingComboBox *m_encodingComboBox;
+    QCheckBox *m_chkAlwaysUseThisEncoding;
 };
 }
 

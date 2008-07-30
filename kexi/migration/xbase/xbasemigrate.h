@@ -30,28 +30,28 @@ namespace KexiMigration
 
 class xBaseMigrate : public KexiMigrate, protected xbXBase
 {
-	Q_OBJECT
-	KEXIMIGRATION_DRIVER
+  Q_OBJECT
+  KEXIMIGRATION_DRIVER
 
-	public:
-		xBaseMigrate(QObject *parent, const QStringList& args = QStringList());
-		virtual ~xBaseMigrate();
-		
-	protected:
-		//! Driver specific function to return table names
-		virtual bool drv_tableNames(QStringList& tablenames);
-		
-		//! Driver specific implementation to read a table schema
-		virtual bool drv_readTableSchema(
-			const QString& originalName, KexiDB::TableSchema& tableSchema);
-		
-		//! Driver specific connection implementation
-		virtual bool drv_connect();
-		
-		virtual bool drv_disconnect();
+  public:
+    xBaseMigrate(QObject *parent, const QStringList& args = QStringList());
+    virtual ~xBaseMigrate();
+    
+  protected:
+    //! Driver specific function to return table names
+    virtual bool drv_tableNames(QStringList& tablenames);
+    
+    //! Driver specific implementation to read a table schema
+    virtual bool drv_readTableSchema(
+      const QString& originalName, KexiDB::TableSchema& tableSchema);
+    
+    //! Driver specific connection implementation
+    virtual bool drv_connect();
+    
+    virtual bool drv_disconnect();
 
-		virtual bool drv_copyTable(const QString& srcTable, 
-			KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+    virtual bool drv_copyTable(const QString& srcTable, 
+      KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 //			virtual bool drv_getTablesList( QStringList &list );
@@ -59,19 +59,19 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
 //			virtual bool drv_containsTable( const QString &tableName );
 
 
-	private:
-		KexiDB::Field::Type type(char xBaseColumnType);
+  private:
+    KexiDB::Field::Type type(char xBaseColumnType);
 
-		//! Sets and existing constraints on the field
-		void getConstraints(const QString& tableName, KexiDB::Field* fld);
+    //! Sets and existing constraints on the field
+    void getConstraints(const QString& tableName, KexiDB::Field* fld);
 
-		//! Returns a list of index files corresponding to the specific fieldName
-		QStringList getIndexFileNames(const QString& tableName, const QString& fieldName);
+    //! Returns a list of index files corresponding to the specific fieldName
+    QStringList getIndexFileNames(const QString& tableName, const QString& fieldName);
 
-		//! Mapping tableNames to actual absoolute file name paths
-		//  XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
-		QHash<QString,QString> m_tableNamePathMap;
-		
+    //! Mapping tableNames to actual absoolute file name paths
+    //  XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
+    QHash<QString,QString> m_tableNamePathMap;
+    
 };
 }
 

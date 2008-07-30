@@ -29,56 +29,56 @@ namespace KexiMigration {
 */
 class MigrateManagerInternal : public QObject, public KexiDB::Object
 {
-	Q_OBJECT
-	public:
-		~MigrateManagerInternal();
+  Q_OBJECT
+  public:
+    ~MigrateManagerInternal();
 
-		/*! Tries to load db driver \a name.
-			\return db driver, or 0 if error (then error message is also set) */
-		KexiMigrate* driver(const QString& name);
+    /*! Tries to load db driver \a name.
+      \return db driver, or 0 if error (then error message is also set) */
+    KexiMigrate* driver(const QString& name);
 
-		static MigrateManagerInternal *self();
+    static MigrateManagerInternal *self();
 
-		/*! increments the refcount for the manager */
-		void incRefCount();
+    /*! increments the refcount for the manager */
+    void incRefCount();
 
-		/*! decrements the refcount for the manager
-			if the refcount reaches a value less than 1 the manager is freed */
-		void decRefCount();
+    /*! decrements the refcount for the manager
+      if the refcount reaches a value less than 1 the manager is freed */
+    void decRefCount();
 
-	protected slots:
-		/*! Used to destroy all drivers on QApplication quit, so even if there are 
-		 DriverManager's static instances that are destroyed on program 
-		 "static destruction", drivers are not kept after QApplication death.
-		*/
-		void slotAppQuits();
+  protected slots:
+    /*! Used to destroy all drivers on QApplication quit, so even if there are 
+     DriverManager's static instances that are destroyed on program 
+     "static destruction", drivers are not kept after QApplication death.
+    */
+    void slotAppQuits();
 
-	protected:
-		/*! Used by self() */
-		MigrateManagerInternal();
+  protected:
+    /*! Used by self() */
+    MigrateManagerInternal();
 
-		bool lookupDrivers();
+    bool lookupDrivers();
 
-		static MigrateManagerInternal* s_self;
+    static MigrateManagerInternal* s_self;
 
-		MigrateManager::ServicesMap m_services; //! services map
-		MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
-		MigrateManager::ServicesMap m_services_by_mimetype;
-		
-		Q3AsciiDict<KexiMigrate> m_drivers;
-		ulong m_refCount;
+    MigrateManager::ServicesMap m_services; //! services map
+    MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
+    MigrateManager::ServicesMap m_services_by_mimetype;
+    
+    Q3AsciiDict<KexiMigrate> m_drivers;
+    ulong m_refCount;
 
-		QString m_serverErrMsg;
-		int m_serverResultNum;
-		QString m_serverResultName;
-		//! result names for KParts::ComponentFactory::ComponentLoadingError
-		QMap<int,QString> m_componentLoadingErrors;
+    QString m_serverErrMsg;
+    int m_serverResultNum;
+    QString m_serverResultName;
+    //! result names for KParts::ComponentFactory::ComponentLoadingError
+    QMap<int,QString> m_componentLoadingErrors;
 
-		bool lookupDriversNeeded : 1;
+    bool lookupDriversNeeded : 1;
 
-		QStringList possibleProblems;
+    QStringList possibleProblems;
 
-	friend class MigrateManager;
+  friend class MigrateManager;
 };
 }
 

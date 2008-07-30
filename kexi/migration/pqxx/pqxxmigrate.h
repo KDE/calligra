@@ -34,86 +34,86 @@ namespace KexiMigration
 
 class PqxxMigrate : public KexiMigrate
 {
-	Q_OBJECT
-	KEXIMIGRATION_DRIVER
+  Q_OBJECT
+  KEXIMIGRATION_DRIVER
 
-	public:
-		PqxxMigrate(QObject *parent, const QStringList &args = QStringList());
-		virtual ~PqxxMigrate();
-		
-	protected:
-		//Driver specific function to return table names
-		virtual bool drv_tableNames(QStringList& tablenames);
-		
-		//Driver specific implementation to read a table schema
-		virtual bool drv_readTableSchema(
-			const QString& originalName, KexiDB::TableSchema& tableSchema);
-		
-		//Driver specific connection implementation
-		virtual bool drv_connect();
-		virtual bool drv_disconnect();
+  public:
+    PqxxMigrate(QObject *parent, const QStringList &args = QStringList());
+    virtual ~PqxxMigrate();
+    
+  protected:
+    //Driver specific function to return table names
+    virtual bool drv_tableNames(QStringList& tablenames);
+    
+    //Driver specific implementation to read a table schema
+    virtual bool drv_readTableSchema(
+      const QString& originalName, KexiDB::TableSchema& tableSchema);
+    
+    //Driver specific connection implementation
+    virtual bool drv_connect();
+    virtual bool drv_disconnect();
 
-		virtual tristate drv_queryStringListFromSQL(
-			const QString& sqlStatement, uint columnNumber, QStringList& stringList, 
-			int numRecords = -1);
+    virtual tristate drv_queryStringListFromSQL(
+      const QString& sqlStatement, uint columnNumber, QStringList& stringList, 
+      int numRecords = -1);
 
-		/*! Fetches single record from result obtained 
-		by running \a sqlStatement.
-		\a firstRecord should be first initialized to true, so the method can run
-		the query at first call and then set it will set \a firstRecord to false,
-		so subsequent calls will only fetch records.
-		On success the result is stored in \a data and true is returned,
-		\a data is resized to appropriate size. cancelled is returned on EOF. */
+    /*! Fetches single record from result obtained 
+    by running \a sqlStatement.
+    \a firstRecord should be first initialized to true, so the method can run
+    the query at first call and then set it will set \a firstRecord to false,
+    so subsequent calls will only fetch records.
+    On success the result is stored in \a data and true is returned,
+    \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
-		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
-			KexiDB::RecordData& data, bool &firstRecord);
+    virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
+      KexiDB::RecordData& data, bool &firstRecord);
 
-		virtual bool drv_copyTable(const QString& srcTable, 
-			KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
-	
-	private:
-		//lowlevel functions/objects
-		//database connection
-		pqxx::connection* m_conn;
+    virtual bool drv_copyTable(const QString& srcTable, 
+      KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+  
+  private:
+    //lowlevel functions/objects
+    //database connection
+    pqxx::connection* m_conn;
 
-		//transaction
-		pqxx::nontransaction* m_trans;
+    //transaction
+    pqxx::nontransaction* m_trans;
 
-		//lowlevel result
-		pqxx::result* m_res;
+    //lowlevel result
+    pqxx::result* m_res;
 
-		//! Used in drv_fetchRecordFromSQL
-		pqxx::result::const_iterator m_fetchRecordFromSQL_iter;
+    //! Used in drv_fetchRecordFromSQL
+    pqxx::result::const_iterator m_fetchRecordFromSQL_iter;
 
-		//perform a query on the database
-		bool query(const QString& statement);
+    //perform a query on the database
+    bool query(const QString& statement);
 
-		//Clear the result info
-		void clearResultInfo ();
-		
-		pqxx::oid tableOid(const QString& tablename);
-		
-		//Convert the pqxx type to a kexi type
-		KexiDB::Field::Type type(int t, const QString& fname);
-		
-		//Find out the field constraints
-		//Return whether or not the field is a pkey
-		bool primaryKey(pqxx::oid table, int col) const;
-		
-		//Return whether or not the field is unique
-		bool uniqueKey(pqxx::oid table, int col) const;
-		
-		//Return whether or not the field is a foreign key
-		bool foreignKey(pqxx::oid table, int col) const;
-		
-		//Return whether or not the field is not null
-		bool notNull(pqxx::oid table, int col) const;
-		
-		//Return whether or not the field is not empty
-		bool notEmpty(pqxx::oid table, int col) const;
-		
-		//Return whether or not the field is auto incrementing
-		bool autoInc(pqxx::oid table, int col) const;
+    //Clear the result info
+    void clearResultInfo ();
+    
+    pqxx::oid tableOid(const QString& tablename);
+    
+    //Convert the pqxx type to a kexi type
+    KexiDB::Field::Type type(int t, const QString& fname);
+    
+    //Find out the field constraints
+    //Return whether or not the field is a pkey
+    bool primaryKey(pqxx::oid table, int col) const;
+    
+    //Return whether or not the field is unique
+    bool uniqueKey(pqxx::oid table, int col) const;
+    
+    //Return whether or not the field is a foreign key
+    bool foreignKey(pqxx::oid table, int col) const;
+    
+    //Return whether or not the field is not null
+    bool notNull(pqxx::oid table, int col) const;
+    
+    //Return whether or not the field is not empty
+    bool notEmpty(pqxx::oid table, int col) const;
+    
+    //Return whether or not the field is auto incrementing
+    bool autoInc(pqxx::oid table, int col) const;
 };
 }
 

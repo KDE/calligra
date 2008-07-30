@@ -1,7 +1,0 @@
-# KexiMDB isn't built as part of Kexi right now.
-#AC_ARG_ENABLE(keximdb,
-#    AC_HELP_STRING([--enable-keximdb],
-#                   [build KexiMDB (MS Access) plugin [default=no]]),
-#    compile_keximdb_plugin=$enableval, compile_keximdb_plugin=no)
-#
-#AM_CONDITIONAL(compile_keximdb_plugin, test "x$compile_keximdb_plugin" != "xno")

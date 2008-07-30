@@ -28,59 +28,59 @@ namespace KexiMigration
 
 class SybaseMigrate : public KexiMigrate
 {
-	Q_OBJECT
-	KEXIMIGRATION_DRIVER
+  Q_OBJECT
+  KEXIMIGRATION_DRIVER
 
-	public:
-		SybaseMigrate(QObject *parent, const QStringList& args = QStringList());
-		virtual ~SybaseMigrate();
-		
-	protected:
-		//! Driver specific function to return table names
-		virtual bool drv_tableNames(QStringList& tablenames);
-		
-		//! Driver specific implementation to read a table schema
-		virtual bool drv_readTableSchema(
-			const QString& originalName, KexiDB::TableSchema& tableSchema);
-		
-		//! Driver specific connection implementation
-		virtual bool drv_connect();
-		
-		virtual bool drv_disconnect();
+  public:
+    SybaseMigrate(QObject *parent, const QStringList& args = QStringList());
+    virtual ~SybaseMigrate();
+    
+  protected:
+    //! Driver specific function to return table names
+    virtual bool drv_tableNames(QStringList& tablenames);
+    
+    //! Driver specific implementation to read a table schema
+    virtual bool drv_readTableSchema(
+      const QString& originalName, KexiDB::TableSchema& tableSchema);
+    
+    //! Driver specific connection implementation
+    virtual bool drv_connect();
+    
+    virtual bool drv_disconnect();
 
-		virtual tristate drv_queryStringListFromSQL(
-			const QString& sqlStatement, uint columnNumber, 
-			QStringList& stringList, int numRecords = -1);
+    virtual tristate drv_queryStringListFromSQL(
+      const QString& sqlStatement, uint columnNumber, 
+      QStringList& stringList, int numRecords = -1);
 
-		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
-			KexiDB::RecordData& data, bool &firstRecord);
+    virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
+      KexiDB::RecordData& data, bool &firstRecord);
 
-		virtual bool drv_copyTable(const QString& srcTable, 
-			KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
+    virtual bool drv_copyTable(const QString& srcTable, 
+      KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
-		virtual bool drv_progressSupported() { return true; }
-		
-		virtual bool drv_getTableSize(const QString& table, quint64& size);
+    virtual bool drv_progressSupported() { return true; }
+    
+    virtual bool drv_getTableSize(const QString& table, quint64& size);
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 //			virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)
 //			virtual bool drv_containsTable( const QString &tableName );
 
-	private:
+  private:
 
-		bool query(const QString& sqlStatement) const ;
-		bool primaryKey( const QString& tableName, const QString& fieldName) const ;
-		bool uniqueKey( const QString& tableName, const QString& fieldName) const ;
+    bool query(const QString& sqlStatement) const ;
+    bool primaryKey( const QString& tableName, const QString& fieldName) const ;
+    bool uniqueKey( const QString& tableName, const QString& fieldName) const ;
 
                 // returns value of a column at position pos as a QString
-		QString value(int pos) const ; 
+    QString value(int pos) const ; 
 
-		KexiDB::Field::Type type(const QString& table, int columnType);
+    KexiDB::Field::Type type(const QString& table, int columnType);
 
-		QList<KexiDB::IndexSchema*> readIndexes(const QString& tableName, KexiDB::TableSchema& tableSchema);
+    QList<KexiDB::IndexSchema*> readIndexes(const QString& tableName, KexiDB::TableSchema& tableSchema);
 
-		SybaseConnectionInternal * const d;
+    SybaseConnectionInternal * const d;
 };
 }
 
