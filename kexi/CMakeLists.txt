@@ -3,17 +3,17 @@ project(kexi)
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 
 IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-	INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+  INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 
 ADD_DEFINITIONS(
-	-DKEXI_NO_CURSOR_PROPERTY 
-	-DKEXI_NO_CTXT_HELP
-	-DKEXI_NO_SUBFORM
-	-DKEXI_DB_COMBOBOX_WIDGET
-	-DDB_TEMPLATES
-	-DKEXI_NO_UNFINISHED
-	-DKEXI_SCRIPTS_SUPPORT
+  -DKEXI_NO_CURSOR_PROPERTY 
+  -DKEXI_NO_CTXT_HELP
+  -DKEXI_NO_SUBFORM
+  -DKEXI_DB_COMBOBOX_WIDGET
+  -DDB_TEMPLATES
+  -DKEXI_NO_UNFINISHED
+  -DKEXI_SCRIPTS_SUPPORT
 )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
@@ -21,7 +21,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} 
-	${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ )
+  ${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ )
 
 add_subdirectory( 3rdparty )
 add_subdirectory( kexiutils )
@@ -66,10 +66,10 @@ add_subdirectory( tests )
 set(kexi_SRCS main.cpp )
 kde4_add_executable(kexi ${kexi_SRCS})
 target_link_libraries(kexi 
-	${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} 
-	kexidb
-	keximain
-	
+  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} 
+  kexidb
+  keximain
+  
 )
 install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 
