@@ -36,47 +36,47 @@ class xBaseConnectionInternal;
 */
 class xBaseConnection : public Connection
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		virtual ~xBaseConnection();
+  public:
+    virtual ~xBaseConnection();
 
-		virtual Cursor* prepareQuery( const QString& statement = QString(), uint cursor_options = 0 );
-		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
+    virtual Cursor* prepareQuery( const QString& statement = QString(), uint cursor_options = 0 );
+    virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
 
-		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			FieldList& fields);
+    virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
+      FieldList& fields);
 
-	protected:
+  protected:
 
-		/*! Used by driver */
-		xBaseConnection( Driver *driver, Driver* internalDriver, ConnectionData &conn_data );
+    /*! Used by driver */
+    xBaseConnection( Driver *driver, Driver* internalDriver, ConnectionData &conn_data );
 
-		virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
-		virtual bool drv_disconnect();
-		virtual bool drv_getDatabasesList( QStringList &list );
-		virtual bool drv_createDatabase( const QString &dbName = QString() );
-		virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
-			MessageHandler* msgHandler = 0 );
-		virtual bool drv_closeDatabase();
-		virtual bool drv_dropDatabase( const QString &dbName = QString() );
-		virtual bool drv_executeSQL( const QString& statement );
-		virtual quint64 drv_lastInsertRowID();
+    virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
+    virtual bool drv_disconnect();
+    virtual bool drv_getDatabasesList( QStringList &list );
+    virtual bool drv_createDatabase( const QString &dbName = QString() );
+    virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
+      MessageHandler* msgHandler = 0 );
+    virtual bool drv_closeDatabase();
+    virtual bool drv_dropDatabase( const QString &dbName = QString() );
+    virtual bool drv_executeSQL( const QString& statement );
+    virtual quint64 drv_lastInsertRowID();
 
-		virtual int serverResult();
-		virtual QString serverResultName();
-		virtual QString serverErrorMsg();
-		virtual void drv_clearServerResult();
+    virtual int serverResult();
+    virtual QString serverResultName();
+    virtual QString serverErrorMsg();
+    virtual void drv_clearServerResult();
 
 //TODO: move this somewhere to low level class (MIGRATION?)
-		virtual bool drv_getTablesList( QStringList &list );
+    virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)
-		virtual bool drv_containsTable( const QString &tableName );
+    virtual bool drv_containsTable( const QString &tableName );
 
-		xBaseConnectionInternal* d;
+    xBaseConnectionInternal* d;
 
-		friend class xBaseDriver;
-		friend class xBaseCursor;
+    friend class xBaseDriver;
+    friend class xBaseCursor;
 };
 
 }

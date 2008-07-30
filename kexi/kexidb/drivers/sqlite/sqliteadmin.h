@@ -25,12 +25,12 @@
 //! @short An interface containing a set of tools for SQLite database administration.
 class SQLiteAdminTools : public KexiDB::AdminTools
 {
-	public:
-		SQLiteAdminTools();
-		virtual ~SQLiteAdminTools();
+  public:
+    SQLiteAdminTools();
+    virtual ~SQLiteAdminTools();
 
-		/*! Performs vacuum (compacting) for connection \a conn. */
-		virtual bool vacuum(const KexiDB::ConnectionData& data, const QString& databaseName);
+    /*! Performs vacuum (compacting) for connection \a conn. */
+    virtual bool vacuum(const KexiDB::ConnectionData& data, const QString& databaseName);
 };
 
 #endif

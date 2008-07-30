@@ -32,25 +32,25 @@ namespace KexiDB
 /*! Implementation of prepared statements for MySQL driver. */
 class MySqlPreparedStatement : public PreparedStatement, public MySqlConnectionInternal
 {
-	public:
-		MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
+  public:
+    MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
-		virtual ~MySqlPreparedStatement();
+    virtual ~MySqlPreparedStatement();
 
-		virtual bool execute();
+    virtual bool execute();
 
-		QByteArray m_tempStatementString;
+    QByteArray m_tempStatementString;
 
 #ifdef KEXI_USE_MYSQL_STMT
-		int m_realParamCount;
-		MYSQL_STMT *m_statement;
-		MYSQL_BIND *m_mysqlBind;
+    int m_realParamCount;
+    MYSQL_STMT *m_statement;
+    MYSQL_BIND *m_mysqlBind;
 #endif
-		bool m_resetRequired : 1;
+    bool m_resetRequired : 1;
 
-	protected:
-		bool init();
-		void done();
+  protected:
+    bool init();
+    void done();
 };
 }
 #endif

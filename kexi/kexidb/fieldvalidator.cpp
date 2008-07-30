@@ -32,66 +32,66 @@ FieldValidator::FieldValidator( const Field &field, QWidget * parent )
 //! @todo merge this code with KexiTableEdit code!
 //! @todo set maximum length validator
 //! @todo handle input mask (via QLineEdit::setInputMask()
-	const Field::Type t = field.type();
-	if (field.isIntegerType()) {
-		QValidator *validator = 0;
-		const bool u = field.isUnsigned();
-		int bottom = 0, top = 0;
-		if (t==Field::Byte) {
-			bottom = u ? 0 : -0x80;
-			top = u ? 0xff : 0x7f;
-		}
-		else if (t==Field::ShortInteger) {
-			bottom = u ? 0 : -0x8000;
-			top = u ? 0xffff : 0x7fff;
-		}
-		else if (t==Field::Integer) {
-			bottom = u ? 0 : -0x7fffffff-1;
-			top = u ? 0xffffffff : 0x7fffffff;
-		}
-		else if (t==Field::BigInteger) {
+  const Field::Type t = field.type();
+  if (field.isIntegerType()) {
+    QValidator *validator = 0;
+    const bool u = field.isUnsigned();
+    int bottom = 0, top = 0;
+    if (t==Field::Byte) {
+      bottom = u ? 0 : -0x80;
+      top = u ? 0xff : 0x7f;
+    }
+    else if (t==Field::ShortInteger) {
+      bottom = u ? 0 : -0x8000;
+      top = u ? 0xffff : 0x7fff;
+    }
+    else if (t==Field::Integer) {
+      bottom = u ? 0 : -0x7fffffff-1;
+      top = u ? 0xffffffff : 0x7fffffff;
+    }
+    else if (t==Field::BigInteger) {
 //! @todo handle unsigned (using ULongLongValidator)
-			validator = new KexiUtils::LongLongValidator(0);
-		}
+      validator = new KexiUtils::LongLongValidator(0);
+    }
 
-		if (!validator)
-			validator = new KIntValidator(bottom, top, 0); //the default
-		addSubvalidator( validator );
-	}
-	else if (field.isFPNumericType()) {
-		QValidator *validator;
-		if (t==Field::Float) {
-			if (field.isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 3.4e+38, field.scale(), 0);
-			else
-				validator = new KDoubleValidator(this);
-		}
-		else {//double
-			if (field.isUnsigned()) //ok?
-				validator = new KDoubleValidator(0, 1.7e+308, field.scale(), 0);
-			else
-				validator = new KDoubleValidator(this);
-		}
-		addSubvalidator( validator );
-	}
-	else if (t==Field::Date) {
+    if (!validator)
+      validator = new KIntValidator(bottom, top, 0); //the default
+    addSubvalidator( validator );
+  }
+  else if (field.isFPNumericType()) {
+    QValidator *validator;
+    if (t==Field::Float) {
+      if (field.isUnsigned()) //ok?
+        validator = new KDoubleValidator(0, 3.4e+38, field.scale(), 0);
+      else
+        validator = new KDoubleValidator(this);
+    }
+    else {//double
+      if (field.isUnsigned()) //ok?
+        validator = new KDoubleValidator(0, 1.7e+308, field.scale(), 0);
+      else
+        validator = new KDoubleValidator(this);
+    }
+    addSubvalidator( validator );
+  }
+  else if (t==Field::Date) {
 //! @todo add validator
 //		QValidator *validator = new KDateValidator(this);
 //		setValidator( validator );
 //moved		setInputMask( dateFormatter()->inputMask() );
-	}
-	else if (t==Field::Time) {
+  }
+  else if (t==Field::Time) {
 //! @todo add validator
 //moved		setInputMask( timeFormatter()->inputMask() );
-	}
-	else if (t==Field::DateTime) {
+  }
+  else if (t==Field::DateTime) {
 //moved		setInputMask( 
 //moved			dateTimeInputMask( *dateFormatter(), *timeFormatter() ) );
-	}
-	else if (t==Field::Boolean) {
+  }
+  else if (t==Field::Boolean) {
 //! @todo add BooleanValidator
-		addSubvalidator( new KIntValidator(0, 1) );
-	}
+    addSubvalidator( new KIntValidator(0, 1) );
+  }
 }
 
 FieldValidator::~FieldValidator()

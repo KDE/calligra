@@ -28,22 +28,22 @@
 #include <kexidb/connection_p.h>
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+  @author Adam Pigg <adam@piggz.co.uk>
 */
 namespace KexiDB 
 {
 class pqxxPreparedStatement : public PreparedStatement
 {
-	public:
-		pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
+  public:
+    pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
-		virtual ~pqxxPreparedStatement();
+    virtual ~pqxxPreparedStatement();
 
-		virtual bool execute();
-		bool m_resetRequired : 1;
+    virtual bool execute();
+    bool m_resetRequired : 1;
 
-	private:
-		Connection* m_conn;
+  private:
+    Connection* m_conn;
 };
 }
 #endif

@@ -47,5 +47,5 @@ pqxxSqlConnectionInternal::~pqxxSqlConnectionInternal()
 
 void pqxxSqlConnectionInternal::storeResult()
 {
-	errmsg = "";
+  errmsg = "";
 }

@@ -27,12 +27,12 @@ namespace KexiDB {
 //! Interface for connection's internals, implemented within drivers
 class KEXI_DB_EXPORT ConnectionInternal
 {
-	public:
-		ConnectionInternal(Connection *conn);
-		virtual ~ConnectionInternal();
-		virtual void storeResult() = 0;
+  public:
+    ConnectionInternal(Connection *conn);
+    virtual ~ConnectionInternal();
+    virtual void storeResult() = 0;
 
-		Connection* connection;
+    Connection* connection;
 };
 
 } //namespace KexiDB

@@ -34,28 +34,28 @@
 #include <pqxx/pqxx>
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+  @author Adam Pigg <adam@piggz.co.uk>
 */
 namespace KexiDB
 {
 class pqxxSqlConnectionInternal : public ConnectionInternal
 {
-	public:
-		pqxxSqlConnectionInternal(Connection *conn);
+  public:
+    pqxxSqlConnectionInternal(Connection *conn);
 
-		virtual ~pqxxSqlConnectionInternal();
+    virtual ~pqxxSqlConnectionInternal();
 
-		//! stores last result's message
-		virtual void storeResult();
+    //! stores last result's message
+    virtual void storeResult();
 
-		pqxx::connection* pqxxsql;
-		pqxx::result* res;
+    pqxx::connection* pqxxsql;
+    pqxx::result* res;
 
-		KexiDB::ServerVersionInfo *version; //!< this is set in drv_connect(), so we can use it in drv_useDatabase()
-		                                    //!< because pgsql really connects after "USE".
+    KexiDB::ServerVersionInfo *version; //!< this is set in drv_connect(), so we can use it in drv_useDatabase()
+                                        //!< because pgsql really connects after "USE".
 
-		QString errmsg; //!< server-specific message of last operation
-		int resultCode; //!< result code of last operation on server
+    QString errmsg; //!< server-specific message of last operation
+    int resultCode; //!< result code of last operation on server
 };
 }
 #endif

@@ -30,16 +30,16 @@ using namespace KexiDB;
 
 QString RecordData::debugString() const
 {
-	QString s( QString("RECORD DATA (%1 columns)").arg(size()) );
-	int i = 0;
-	foreach (const QVariant& value, *this) {
-		i++;
-		s.append( QString::number(i)+":["+value.typeName()+"]"+value.toString()+" " );
-	}
-	return s;
+  QString s( QString("RECORD DATA (%1 columns)").arg(size()) );
+  int i = 0;
+  foreach (const QVariant& value, *this) {
+    i++;
+    s.append( QString::number(i)+":["+value.typeName()+"]"+value.toString()+" " );
+  }
+  return s;
 }
 
 void RecordData::debug() const
 {
-	KexiDBDbg << debugString();
+  KexiDBDbg << debugString();
 }

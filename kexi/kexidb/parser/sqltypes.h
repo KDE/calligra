@@ -28,54 +28,54 @@ extern QByteArray ctoken;
 
 struct dateType
 {
-		int year;
-		int month;
-		int day;
+    int year;
+    int month;
+    int day;
 };
 
 struct realType
 {
-	int integer;
-	int fractional;
+  int integer;
+  int fractional;
 };
 
 //! @internal
 struct OrderByColumnInternal
 {
-	typedef QList<OrderByColumnInternal> List;
-	typedef QList<OrderByColumnInternal>::ConstIterator ListConstIterator;
-	OrderByColumnInternal()
-	 : columnNumber(-1)
-	 , ascending(true)
-	{
-	}
-	
-	void setColumnByNameOrNumber(const QVariant& nameOrNumber) {
-		if (nameOrNumber.type()==QVariant::String) {
-			aliasOrName = nameOrNumber.toString();
-			columnNumber = -1;
-		}
-		else {
-			columnNumber = nameOrNumber.toInt();
-			aliasOrName.clear();
-		}
-	}
-	
-	QString aliasOrName; //!< Can include a "tablename." prefix
-	int columnNumber; //!< Optional, used instead of aliasOrName to refer to column 
-	                  //!< by its number rather than name.
-	bool ascending : 1;
+  typedef QList<OrderByColumnInternal> List;
+  typedef QList<OrderByColumnInternal>::ConstIterator ListConstIterator;
+  OrderByColumnInternal()
+   : columnNumber(-1)
+   , ascending(true)
+  {
+  }
+  
+  void setColumnByNameOrNumber(const QVariant& nameOrNumber) {
+    if (nameOrNumber.type()==QVariant::String) {
+      aliasOrName = nameOrNumber.toString();
+      columnNumber = -1;
+    }
+    else {
+      columnNumber = nameOrNumber.toInt();
+      aliasOrName.clear();
+    }
+  }
+  
+  QString aliasOrName; //!< Can include a "tablename." prefix
+  int columnNumber; //!< Optional, used instead of aliasOrName to refer to column 
+                    //!< by its number rather than name.
+  bool ascending : 1;
 };
 
 //! @internal
 struct SelectOptionsInternal
 {
-	SelectOptionsInternal() : whereExpr(0), orderByColumns(0) {}
-	~SelectOptionsInternal() { 
-		delete orderByColumns; // delete because this is internal temp. structure
-	}
-	KexiDB::BaseExpr* whereExpr;
-	OrderByColumnInternal::List* orderByColumns;
+  SelectOptionsInternal() : whereExpr(0), orderByColumns(0) {}
+  ~SelectOptionsInternal() { 
+    delete orderByColumns; // delete because this is internal temp. structure
+  }
+  KexiDB::BaseExpr* whereExpr;
+  OrderByColumnInternal::List* orderByColumns;
 };
 
 #endif

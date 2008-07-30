@@ -739,19 +739,19 @@ bool parseData(KexiDB::Parser *p, const char *data);
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
 #line 511 "sqlparser.y"
 typedef union YYSTYPE {
-	QString* stringValue;
-	qint64 integerValue;
-	bool booleanValue;
-	struct realType realValue;
-	KexiDB::Field::Type colType;
-	KexiDB::Field *field;
-	KexiDB::BaseExpr *expr;
-	KexiDB::NArgExpr *exprList;
-	KexiDB::ConstExpr *constExpr;
-	KexiDB::QuerySchema *querySchema;
-	SelectOptionsInternal *selectOptions;
-	OrderByColumnInternal::List *orderByColumns;
-	QVariant *variantValue;
+  QString* stringValue;
+  qint64 integerValue;
+  bool booleanValue;
+  struct realType realValue;
+  KexiDB::Field::Type colType;
+  KexiDB::Field *field;
+  KexiDB::BaseExpr *expr;
+  KexiDB::NArgExpr *exprList;
+  KexiDB::ConstExpr *constExpr;
+  KexiDB::QuerySchema *querySchema;
+  SelectOptionsInternal *selectOptions;
+  OrderByColumnInternal::List *orderByColumns;
+  QVariant *variantValue;
 } YYSTYPE;
 /* Line 1252 of yacc.c.  */
 #line 751 "sqlparser.tab.h"

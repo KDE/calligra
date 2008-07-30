@@ -34,115 +34,115 @@ DatabaseProperties::~DatabaseProperties()
 
 bool DatabaseProperties::setValue( const QString& _name, const QVariant& value )
 {
-	QString name(_name.trimmed());
-	bool ok;
-	//we need to know whether update or insert
-	bool exists = m_conn->resultExists(
-		QString::fromLatin1("SELECT 1 FROM kexi__db WHERE db_property=%1")
-			.arg(m_conn->driver()->escapeString(name)), ok);
-	if (!ok) {
-		setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
-		return false;
-	}
+  QString name(_name.trimmed());
+  bool ok;
+  //we need to know whether update or insert
+  bool exists = m_conn->resultExists(
+    QString::fromLatin1("SELECT 1 FROM kexi__db WHERE db_property=%1")
+      .arg(m_conn->driver()->escapeString(name)), ok);
+  if (!ok) {
+    setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
+    return false;
+  }
 
-	if (exists) {
-		if (!m_conn->executeSQL(
-			QString::fromLatin1("UPDATE kexi__db SET db_value=%1 WHERE db_property=%2")
-			.arg(m_conn->driver()->escapeString(value.toString()))
-			.arg(m_conn->driver()->escapeString(name))))
-		{
-			setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
-			return false;
-		}
-		return true;
-	}
+  if (exists) {
+    if (!m_conn->executeSQL(
+      QString::fromLatin1("UPDATE kexi__db SET db_value=%1 WHERE db_property=%2")
+      .arg(m_conn->driver()->escapeString(value.toString()))
+      .arg(m_conn->driver()->escapeString(name))))
+    {
+      setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
+      return false;
+    }
+    return true;
+  }
 
-	if (!m_conn->executeSQL(
-		QString::fromLatin1("INSERT INTO kexi__db (db_property, db_value) VALUES (%1, %2)")
-		.arg(m_conn->driver()->escapeString(name))
-		.arg(m_conn->driver()->escapeString(value.toString()))))
-	{
-		setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
-		return false;
-	}
-	return true;
+  if (!m_conn->executeSQL(
+    QString::fromLatin1("INSERT INTO kexi__db (db_property, db_value) VALUES (%1, %2)")
+    .arg(m_conn->driver()->escapeString(name))
+    .arg(m_conn->driver()->escapeString(value.toString()))))
+  {
+    setError(m_conn, i18n("Could not set value of database property \"%1\".", name));
+    return false;
+  }
+  return true;
 }
 
 bool DatabaseProperties::setCaption( const QString& _name, const QString& caption )
 {
-	QString name(_name.trimmed());
-	//captions have ' ' prefix
-	name.prepend(" ");
-	bool ok;
-	//we need to know whether update or insert
-	bool exists = m_conn->resultExists(
-		QString::fromLatin1("SELECT 1 FROM kexi__db WHERE db_property=%1")
-			.arg(m_conn->driver()->escapeString(name)), ok);
-	if (!ok) {
-		setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
-		return false;
-	}
+  QString name(_name.trimmed());
+  //captions have ' ' prefix
+  name.prepend(" ");
+  bool ok;
+  //we need to know whether update or insert
+  bool exists = m_conn->resultExists(
+    QString::fromLatin1("SELECT 1 FROM kexi__db WHERE db_property=%1")
+      .arg(m_conn->driver()->escapeString(name)), ok);
+  if (!ok) {
+    setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
+    return false;
+  }
 
-	if (exists) {
-		if (!m_conn->executeSQL(
-			QString::fromLatin1("UPDATE kexi__db SET db_value=%1 WHERE db_property=%2")
-			.arg(m_conn->driver()->escapeString(caption))
-			.arg(m_conn->driver()->escapeString(name))))
-		{
-			setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
-			return false;
-		}
-		return true;
-	}
+  if (exists) {
+    if (!m_conn->executeSQL(
+      QString::fromLatin1("UPDATE kexi__db SET db_value=%1 WHERE db_property=%2")
+      .arg(m_conn->driver()->escapeString(caption))
+      .arg(m_conn->driver()->escapeString(name))))
+    {
+      setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
+      return false;
+    }
+    return true;
+  }
 
-	if (!m_conn->executeSQL(
-		QString::fromLatin1("INSERT INTO kexi__db (db_property, db_value) VALUES (%1, %2)")
-		.arg(m_conn->driver()->escapeString(name))
-		.arg(m_conn->driver()->escapeString(caption))))
-	{
-		setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
-		return false;
-	}
-	return true;
+  if (!m_conn->executeSQL(
+    QString::fromLatin1("INSERT INTO kexi__db (db_property, db_value) VALUES (%1, %2)")
+    .arg(m_conn->driver()->escapeString(name))
+    .arg(m_conn->driver()->escapeString(caption))))
+  {
+    setError(m_conn, i18n("Could not set caption for database property \"%1\".", name));
+    return false;
+  }
+  return true;
 }
 
 QVariant DatabaseProperties::value( const QString& _name )
 {
-	QString result;
-	QString name(_name.trimmed());
-	if (true!=m_conn->querySingleString(
-		QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property=")
-		+ m_conn->driver()->escapeString(name), result)) {
-		m_conn->setError(ERR_NO_DB_PROPERTY, i18n("Could not read database property \"%1\".", name));
-		return QVariant();
-	}
-	return result;
+  QString result;
+  QString name(_name.trimmed());
+  if (true!=m_conn->querySingleString(
+    QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property=")
+    + m_conn->driver()->escapeString(name), result)) {
+    m_conn->setError(ERR_NO_DB_PROPERTY, i18n("Could not read database property \"%1\".", name));
+    return QVariant();
+  }
+  return result;
 }
 
 QString DatabaseProperties::caption( const QString& _name )
 {
-	QString result;
-	QString name(_name.trimmed());
-	//captions have ' ' prefix
-	name.prepend(" ");
-	if (true!=m_conn->querySingleString(
-		QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property=")
-		+ m_conn->driver()->escapeString(name), result)) {
-		setError(m_conn, i18n("Could not read database property \"%1\".", name));
-		return QString();
-	}
-	return result;
+  QString result;
+  QString name(_name.trimmed());
+  //captions have ' ' prefix
+  name.prepend(" ");
+  if (true!=m_conn->querySingleString(
+    QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property=")
+    + m_conn->driver()->escapeString(name), result)) {
+    setError(m_conn, i18n("Could not read database property \"%1\".", name));
+    return QString();
+  }
+  return result;
 }
 
 QStringList DatabaseProperties::names()
 {
-	QStringList result;
-	if (true!=m_conn->queryStringList(
-		QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property NOT LIKE ")
-		    + m_conn->driver()->escapeString(QString::fromLatin1(" %%")), result, 0 /*0-th*/)) {
-		//                                                        ^^ exclude captions
-		setError(m_conn, i18n("Could not read database properties."));
-		return QStringList();
-	}
-	return result;
+  QStringList result;
+  if (true!=m_conn->queryStringList(
+    QString::fromLatin1("SELECT db_value FROM kexi__db WHERE db_property NOT LIKE ")
+        + m_conn->driver()->escapeString(QString::fromLatin1(" %%")), result, 0 /*0-th*/)) {
+    //                                                        ^^ exclude captions
+    setError(m_conn, i18n("Could not read database properties."));
+    return QStringList();
+  }
+  return result;
 }

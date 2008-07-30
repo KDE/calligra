@@ -68,102 +68,102 @@ class QuerySchemaParameterValueListIterator;
 class KEXI_DB_EXPORT BaseExpr
 {
 public:
-	typedef QList<BaseExpr*> List;
-	typedef QList<BaseExpr*>::ConstIterator ListIterator;
+  typedef QList<BaseExpr*> List;
+  typedef QList<BaseExpr*>::ConstIterator ListIterator;
 
-	BaseExpr(int token);
-	virtual ~BaseExpr();
+  BaseExpr(int token);
+  virtual ~BaseExpr();
 
-	//! \return a deep copy of this object.
+  //! \return a deep copy of this object.
 //! @todo a nonpointer will be returned here when we move to implicit data sharing
-	virtual BaseExpr* copy() const = 0;
+  virtual BaseExpr* copy() const = 0;
 
-	int token() const { return m_token; }
-	
-	virtual Field::Type type();
-	
-	BaseExpr* parent() const { return m_par; }
-	
-	virtual void setParent(BaseExpr *p) { m_par = p; }
-	
-	virtual bool validate(ParseInfo& parseInfo);
+  int token() const { return m_token; }
+  
+  virtual Field::Type type();
+  
+  BaseExpr* parent() const { return m_par; }
+  
+  virtual void setParent(BaseExpr *p) { m_par = p; }
+  
+  virtual bool validate(ParseInfo& parseInfo);
 
-	/*! \return string as a representation of this expression element by running recursive calls. 
-	 \a param, if not 0, points to a list item containing value of a query parameter
-	 (used in QueryParameterExpr). */
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0) = 0;
+  /*! \return string as a representation of this expression element by running recursive calls. 
+   \a param, if not 0, points to a list item containing value of a query parameter
+   (used in QueryParameterExpr). */
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0) = 0;
 
-	/*! Collects query parameters (messages and types) reculsively and saves them to params.
-	 The leaf nodes are objects of QueryParameterExpr class. */
-	virtual void getQueryParameters(QuerySchemaParameterList& params) = 0;
-	
-	inline void debug() { KexiDBDbg << debugString() << endl; }
-	
-	virtual QString debugString();
-	
-	/*! \return single character if the token is < 256 
-	 or token name, e.g. LESS_OR_EQUAL (for debugging). */
-	inline QString tokenToDebugString() { return tokenToDebugString(m_token); }
+  /*! Collects query parameters (messages and types) reculsively and saves them to params.
+   The leaf nodes are objects of QueryParameterExpr class. */
+  virtual void getQueryParameters(QuerySchemaParameterList& params) = 0;
+  
+  inline void debug() { KexiDBDbg << debugString() << endl; }
+  
+  virtual QString debugString();
+  
+  /*! \return single character if the token is < 256 
+   or token name, e.g. LESS_OR_EQUAL (for debugging). */
+  inline QString tokenToDebugString() { return tokenToDebugString(m_token); }
 
-	static QString tokenToDebugString(int token);
+  static QString tokenToDebugString(int token);
 
-	/*! \return string for token, like "<=" or ">" */
-	virtual QString tokenToString();
+  /*! \return string for token, like "<=" or ">" */
+  virtual QString tokenToString();
 
-	int exprClass() const { return m_cl; }
+  int exprClass() const { return m_cl; }
 
-	/*! Convenience type casts. */
-	NArgExpr* toNArg();
-	UnaryExpr* toUnary();
-	BinaryExpr* toBinary();
-	ConstExpr* toConst();
-	VariableExpr* toVariable();
-	FunctionExpr* toFunction();
-	QueryParameterExpr* toQueryParameter();
+  /*! Convenience type casts. */
+  NArgExpr* toNArg();
+  UnaryExpr* toUnary();
+  BinaryExpr* toBinary();
+  ConstExpr* toConst();
+  VariableExpr* toVariable();
+  FunctionExpr* toFunction();
+  QueryParameterExpr* toQueryParameter();
 
 protected:
-	int m_cl; //!< class
-	BaseExpr *m_par; //!< parent expression
-	int m_token;
+  int m_cl; //!< class
+  BaseExpr *m_par; //!< parent expression
+  int m_token;
 };
 
 //! A base class N-argument operation
 class KEXI_DB_EXPORT NArgExpr : public BaseExpr
 {
 public:
-	NArgExpr(int aClass, int token);
-	NArgExpr(const NArgExpr& expr);
-	virtual ~NArgExpr();
-	//! \return a deep copy of this object.
-	virtual NArgExpr* copy() const;
-	void add(BaseExpr *expr);
-	void prepend(BaseExpr *expr);
-	BaseExpr *arg(int n);
-	int args();
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
-	virtual bool validate(ParseInfo& parseInfo);
-	BaseExpr::List list;
+  NArgExpr(int aClass, int token);
+  NArgExpr(const NArgExpr& expr);
+  virtual ~NArgExpr();
+  //! \return a deep copy of this object.
+  virtual NArgExpr* copy() const;
+  void add(BaseExpr *expr);
+  void prepend(BaseExpr *expr);
+  BaseExpr *arg(int n);
+  int args();
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
+  virtual bool validate(ParseInfo& parseInfo);
+  BaseExpr::List list;
 };
 
 //! An unary argument operation: + - NOT (or !) ~ "IS NULL" "IS NOT NULL" 
 class KEXI_DB_EXPORT UnaryExpr : public BaseExpr
 {
 public:
-	UnaryExpr(int token, BaseExpr *arg);
-	UnaryExpr(const UnaryExpr& expr);
-	virtual ~UnaryExpr();
-	//! \return a deep copy of this object.
-	virtual UnaryExpr* copy() const;
-	virtual Field::Type type();
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
-	BaseExpr *arg() const { return m_arg; }
-	virtual bool validate(ParseInfo& parseInfo);
+  UnaryExpr(int token, BaseExpr *arg);
+  UnaryExpr(const UnaryExpr& expr);
+  virtual ~UnaryExpr();
+  //! \return a deep copy of this object.
+  virtual UnaryExpr* copy() const;
+  virtual Field::Type type();
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
+  BaseExpr *arg() const { return m_arg; }
+  virtual bool validate(ParseInfo& parseInfo);
 
-	BaseExpr *m_arg;
+  BaseExpr *m_arg;
 };
 
 /*! A base class for binary operation
@@ -177,22 +177,22 @@ public:
 class KEXI_DB_EXPORT BinaryExpr : public BaseExpr
 {
 public:
-	BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr);
-	BinaryExpr(const BinaryExpr& expr);
-	virtual ~BinaryExpr();
-	//! \return a deep copy of this object.
-	virtual BinaryExpr* copy() const;
-	virtual Field::Type type();
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
-	BaseExpr *left() const { return m_larg; }
-	BaseExpr *right() const { return m_rarg; }
-	virtual bool validate(ParseInfo& parseInfo);
-	virtual QString tokenToString();
+  BinaryExpr(int aClass, BaseExpr *left_expr, int token, BaseExpr *right_expr);
+  BinaryExpr(const BinaryExpr& expr);
+  virtual ~BinaryExpr();
+  //! \return a deep copy of this object.
+  virtual BinaryExpr* copy() const;
+  virtual Field::Type type();
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
+  BaseExpr *left() const { return m_larg; }
+  BaseExpr *right() const { return m_rarg; }
+  virtual bool validate(ParseInfo& parseInfo);
+  virtual QString tokenToString();
 
-	BaseExpr *m_larg;
-	BaseExpr *m_rarg;
+  BaseExpr *m_larg;
+  BaseExpr *m_rarg;
 };
 
 /*! String, integer, float constants also includes NULL value.
@@ -201,17 +201,17 @@ public:
 class KEXI_DB_EXPORT ConstExpr : public BaseExpr
 {
 public:
-	ConstExpr(int token, const QVariant& val);
-	ConstExpr(const ConstExpr& expr);
-	virtual ~ConstExpr();
-	//! \return a deep copy of this object.
-	virtual ConstExpr* copy() const;
-	virtual Field::Type type();
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
-	virtual bool validate(ParseInfo& parseInfo);
-	QVariant value;
+  ConstExpr(int token, const QVariant& val);
+  ConstExpr(const ConstExpr& expr);
+  virtual ~ConstExpr();
+  //! \return a deep copy of this object.
+  virtual ConstExpr* copy() const;
+  virtual Field::Type type();
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
+  virtual bool validate(ParseInfo& parseInfo);
+  QVariant value;
 };
 
 //! Query parameter used to getting user input of constant values.
@@ -219,69 +219,69 @@ public:
 class KEXI_DB_EXPORT QueryParameterExpr : public ConstExpr
 {
 public:
-	QueryParameterExpr(const QString& message);
-	QueryParameterExpr(const QueryParameterExpr& expr);
-	virtual ~QueryParameterExpr();
-	//! \return a deep copy of this object.
-	virtual QueryParameterExpr* copy() const;
-	virtual Field::Type type();
-	/*! Sets expected type of the parameter. The default is String.
-	 This method is called from parent's expression validate().
-	 This depends on the type of the related expression.
-	 For instance: query "SELECT * FROM cars WHERE name=[enter name]",
-	 "[enter name]" has parameter of the same type as "name" field.
-	 "=" binary expression's validate() will be called for the left side
-	 of the expression and then the right side will have type set to String.
-	*/
-	void setType(Field::Type type);
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
-	virtual bool validate(ParseInfo& parseInfo);
+  QueryParameterExpr(const QString& message);
+  QueryParameterExpr(const QueryParameterExpr& expr);
+  virtual ~QueryParameterExpr();
+  //! \return a deep copy of this object.
+  virtual QueryParameterExpr* copy() const;
+  virtual Field::Type type();
+  /*! Sets expected type of the parameter. The default is String.
+   This method is called from parent's expression validate().
+   This depends on the type of the related expression.
+   For instance: query "SELECT * FROM cars WHERE name=[enter name]",
+   "[enter name]" has parameter of the same type as "name" field.
+   "=" binary expression's validate() will be called for the left side
+   of the expression and then the right side will have type set to String.
+  */
+  void setType(Field::Type type);
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
+  virtual bool validate(ParseInfo& parseInfo);
 protected:
-	Field::Type m_type;
+  Field::Type m_type;
 };
 
 //! Variables like <i>fieldname</i> or <i>tablename</i>.<i>fieldname</i>
 class KEXI_DB_EXPORT VariableExpr : public BaseExpr
 {
 public:
-	VariableExpr(const QString& _name);
-	VariableExpr(const VariableExpr& expr);
-	virtual ~VariableExpr();
-	//! \return a deep copy of this object.
-	virtual VariableExpr* copy() const;
-	virtual Field::Type type();
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
+  VariableExpr(const QString& _name);
+  VariableExpr(const VariableExpr& expr);
+  virtual ~VariableExpr();
+  //! \return a deep copy of this object.
+  virtual VariableExpr* copy() const;
+  virtual Field::Type type();
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
 
-	/*! Validation. Sets field, tablePositionForField 
-	 and tableForQueryAsterisk members. 
-	 See addColumn() in parse.y to see how it's used on column adding. */
-	virtual bool validate(ParseInfo& parseInfo);
+  /*! Validation. Sets field, tablePositionForField 
+   and tableForQueryAsterisk members. 
+   See addColumn() in parse.y to see how it's used on column adding. */
+  virtual bool validate(ParseInfo& parseInfo);
 
-	/*! Verbatim name as returned by scanner. */
-	QString name;
+  /*! Verbatim name as returned by scanner. */
+  QString name;
 
-	/* NULL by default. After successful validate() it will point to a field,
-	 if the variable is of a form "tablename.fieldname" or "fieldname", 
-	 otherwise (eg. for asterisks) -still NULL.
-	 Only meaningful for column expressions within a query. */
-	Field *field;
+  /* NULL by default. After successful validate() it will point to a field,
+   if the variable is of a form "tablename.fieldname" or "fieldname", 
+   otherwise (eg. for asterisks) -still NULL.
+   Only meaningful for column expressions within a query. */
+  Field *field;
 
-	/* -1 by default. After successful validate() it will contain a position of a table
-	 within query that needs to be bound to the field. 
-	 This value can be either be -1 if no binding is needed.
-	 This value is used in the Parser to call 
-	  QuerySchema::addField(Field* field, int bindToTable);
-	 Only meaningful for column expressions within a query. */
-	int tablePositionForField;
+  /* -1 by default. After successful validate() it will contain a position of a table
+   within query that needs to be bound to the field. 
+   This value can be either be -1 if no binding is needed.
+   This value is used in the Parser to call 
+    QuerySchema::addField(Field* field, int bindToTable);
+   Only meaningful for column expressions within a query. */
+  int tablePositionForField;
 
-	/*! NULL by default. After successful validate() it will point to a table
-	 that is referenced by asterisk, i.e. "*.tablename". 
-	 This is set to NULL if this variable is not an asterisk of that form. */
-	TableSchema *tableForQueryAsterisk;
+  /*! NULL by default. After successful validate() it will point to a table
+   that is referenced by asterisk, i.e. "*.tablename". 
+   This is set to NULL if this variable is not an asterisk of that form. */
+  TableSchema *tableForQueryAsterisk;
 };
 
 //! - aggregation functions like SUM, COUNT, MAX, ...
@@ -290,22 +290,22 @@ public:
 class KEXI_DB_EXPORT FunctionExpr : public BaseExpr
 {
 public:
-	FunctionExpr(const QString& _name, NArgExpr* args_ = 0);
-	FunctionExpr(const FunctionExpr& expr);
-	virtual ~FunctionExpr();
-	//! \return a deep copy of this object.
-	virtual FunctionExpr* copy() const;
-	virtual Field::Type type();
-	virtual QString debugString();
-	virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
-	virtual void getQueryParameters(QuerySchemaParameterList& params);
-	virtual bool validate(ParseInfo& parseInfo);
+  FunctionExpr(const QString& _name, NArgExpr* args_ = 0);
+  FunctionExpr(const FunctionExpr& expr);
+  virtual ~FunctionExpr();
+  //! \return a deep copy of this object.
+  virtual FunctionExpr* copy() const;
+  virtual Field::Type type();
+  virtual QString debugString();
+  virtual QString toString(QuerySchemaParameterValueListIterator* params = 0);
+  virtual void getQueryParameters(QuerySchemaParameterList& params);
+  virtual bool validate(ParseInfo& parseInfo);
 
-	static QList<QByteArray> builtInAggregates();
-	static bool isBuiltInAggregate(const QByteArray& fname);
+  static QList<QByteArray> builtInAggregates();
+  static bool isBuiltInAggregate(const QByteArray& fname);
 
-	QString name;
-	NArgExpr* args;
+  QString name;
+  NArgExpr* args;
 };
 
 } //namespace KexiDB

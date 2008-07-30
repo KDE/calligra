@@ -29,20 +29,20 @@ namespace KexiDB {
 /*! Implementation of prepared statements for SQLite driver. */
 class SQLitePreparedStatement : public PreparedStatement, SQLiteConnectionInternal
 {
-	public:
-		SQLitePreparedStatement(StatementType type, ConnectionInternal& conn, 
-			FieldList& fields);
+  public:
+    SQLitePreparedStatement(StatementType type, ConnectionInternal& conn, 
+      FieldList& fields);
 
-		virtual ~SQLitePreparedStatement();
+    virtual ~SQLitePreparedStatement();
 
-		virtual bool execute();
+    virtual bool execute();
 
 #ifdef SQLITE2
-		sqlite_vm *prepared_st_handle;
+    sqlite_vm *prepared_st_handle;
 #else //SQLITE3
-		sqlite3_stmt *prepared_st_handle;
+    sqlite3_stmt *prepared_st_handle;
 #endif
-		bool m_resetRequired : 1;
+    bool m_resetRequired : 1;
 };
 
 }

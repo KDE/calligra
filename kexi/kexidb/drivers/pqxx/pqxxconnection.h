@@ -36,10 +36,10 @@ class pqxxSqlConnectionInternal;
 //! @internal
 class pqxxTransactionData : public TransactionData
 {
-	public:
-		pqxxTransactionData(Connection *conn, bool nontransaction);
-		~pqxxTransactionData();
-		pqxx::transaction_base *data;
+  public:
+    pqxxTransactionData(Connection *conn, bool nontransaction);
+    ~pqxxTransactionData();
+    pqxx::transaction_base *data;
 };
 
 /**
@@ -47,58 +47,58 @@ class pqxxTransactionData : public TransactionData
 */
 class pqxxSqlConnection : public Connection
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		virtual ~pqxxSqlConnection();
+  public:
+    virtual ~pqxxSqlConnection();
 
-		virtual Cursor* prepareQuery( const QString& statement = QString(), uint cursor_options = 0 );
-		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
-		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			FieldList& fields);
-	protected:
+    virtual Cursor* prepareQuery( const QString& statement = QString(), uint cursor_options = 0 );
+    virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
+    virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
+      FieldList& fields);
+  protected:
 
-		pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
+    pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
 
-		virtual bool drv_isDatabaseUsed() const;
-		virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
-		virtual bool drv_disconnect();
-		virtual bool drv_getDatabasesList( QStringList &list );
-		virtual bool drv_createDatabase( const QString &dbName = QString() );
-		virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
-		  MessageHandler* msgHandler = 0 );
-		virtual bool drv_closeDatabase();
-		virtual bool drv_dropDatabase( const QString &dbName = QString() );
-		virtual bool drv_executeSQL( const QString& statement );
-		virtual quint64 drv_lastInsertRowID();
+    virtual bool drv_isDatabaseUsed() const;
+    virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
+    virtual bool drv_disconnect();
+    virtual bool drv_getDatabasesList( QStringList &list );
+    virtual bool drv_createDatabase( const QString &dbName = QString() );
+    virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
+      MessageHandler* msgHandler = 0 );
+    virtual bool drv_closeDatabase();
+    virtual bool drv_dropDatabase( const QString &dbName = QString() );
+    virtual bool drv_executeSQL( const QString& statement );
+    virtual quint64 drv_lastInsertRowID();
 
 //TODO: move this somewhere to low level class (MIGRATION?)
-		virtual bool drv_getTablesList( QStringList &list );
+    virtual bool drv_getTablesList( QStringList &list );
 //TODO: move this somewhere to low level class (MIGRATION?)
-		virtual bool drv_containsTable( const QString &tableName );
+    virtual bool drv_containsTable( const QString &tableName );
 
-		virtual TransactionData* drv_beginTransaction();
-		virtual bool drv_commitTransaction(TransactionData *);
-		virtual bool drv_rollbackTransaction(TransactionData *);
+    virtual TransactionData* drv_beginTransaction();
+    virtual bool drv_commitTransaction(TransactionData *);
+    virtual bool drv_rollbackTransaction(TransactionData *);
 
-		//Error reporting
-		virtual int serverResult();
-		virtual QString serverResultName();
-		virtual void drv_clearServerResult();
-		virtual QString serverErrorMsg();
-		
-		pqxxSqlConnectionInternal *d;
-	private:
-		QString escapeName(const QString &tn) const;
-		//  	pqxx::transaction_base* m_trans;
-		//! temporary solution for executeSQL()...
-		pqxxTransactionData *m_trans;
+    //Error reporting
+    virtual int serverResult();
+    virtual QString serverResultName();
+    virtual void drv_clearServerResult();
+    virtual QString serverErrorMsg();
+    
+    pqxxSqlConnectionInternal *d;
+  private:
+    QString escapeName(const QString &tn) const;
+    //  	pqxx::transaction_base* m_trans;
+    //! temporary solution for executeSQL()...
+    pqxxTransactionData *m_trans;
 
-		
+    
 
-	friend class pqxxSqlDriver;
-	friend class pqxxSqlCursor;
-	friend class pqxxTransactionData;
+  friend class pqxxSqlDriver;
+  friend class pqxxSqlCursor;
+  friend class pqxxTransactionData;
 };
 }
 #endif

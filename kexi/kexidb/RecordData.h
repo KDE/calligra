@@ -35,28 +35,28 @@ namespace KexiDB {
 //! @todo consider using something like QVector<QVariant*> ?
 class KEXI_DB_EXPORT RecordData : public QVector<QVariant>
 {
-	public:
-		/*! Creates a new record data with no columns. */
-		inline RecordData() : QVector<QVariant>() {}
+  public:
+    /*! Creates a new record data with no columns. */
+    inline RecordData() : QVector<QVariant>() {}
 
-		/*! Creates a new record data with \a numCols columns. */
-		inline RecordData(int numCols) : QVector<QVariant>(numCols) {}
+    /*! Creates a new record data with \a numCols columns. */
+    inline RecordData(int numCols) : QVector<QVariant>(numCols) {}
 
-		/*! Clears existing column values and inits new \a numCols 
-		 columns with empty values. The vector is resized to \a numCols. */
-		inline void init(int numCols) {
-			clear();
-			resize(numCols);
-		}
+    /*! Clears existing column values and inits new \a numCols 
+     columns with empty values. The vector is resized to \a numCols. */
+    inline void init(int numCols) {
+      clear();
+      resize(numCols);
+    }
 
-		/*! Clears existing column values, current number of columns is preserved. */
-		inline void clearValues() { init(count()); }
+    /*! Clears existing column values, current number of columns is preserved. */
+    inline void clearValues() { init(count()); }
 
-		/*! @return debug string for this record. */
-		QString debugString() const;
+    /*! @return debug string for this record. */
+    QString debugString() const;
 
-		/*! Prints debug string for this record. */
-		void debug() const;
+    /*! Prints debug string for this record. */
+    void debug() const;
 };
 }
 

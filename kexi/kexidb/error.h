@@ -109,27 +109,27 @@ namespace KexiDB {
  for various data manipulation operations, like cell/row updating/inserting. */
 class KEXI_DB_EXPORT ResultInfo
 {
-	public:
-		ResultInfo()
-		{
-			success = true;
-			allowToDiscardChanges = false;
-			column = -1;
-		}
-		/*! Sets information to default values. */
-		void clear() {
-			success = true;
-			allowToDiscardChanges = false;
-			column = -1;
-			msg.clear();
-			desc.clear();
-		}
-	bool success : 1; //!< result of the operation, true by default
-	bool allowToDiscardChanges : 1; //!< True if changes can be discarded, false by default
-	                                //!< If true, additional "Discard changes" messagebox 
-	                                //!< button can be displayed.
-	QString msg, desc; //!< error message and detailed description, both empty by default
-	int column; //!< faulty column, -1 (the default) means: there is no faulty column
+  public:
+    ResultInfo()
+    {
+      success = true;
+      allowToDiscardChanges = false;
+      column = -1;
+    }
+    /*! Sets information to default values. */
+    void clear() {
+      success = true;
+      allowToDiscardChanges = false;
+      column = -1;
+      msg.clear();
+      desc.clear();
+    }
+  bool success : 1; //!< result of the operation, true by default
+  bool allowToDiscardChanges : 1; //!< True if changes can be discarded, false by default
+                                  //!< If true, additional "Discard changes" messagebox 
+                                  //!< button can be displayed.
+  QString msg, desc; //!< error message and detailed description, both empty by default
+  int column; //!< faulty column, -1 (the default) means: there is no faulty column
 };
 
 }//namespace

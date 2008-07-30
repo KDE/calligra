@@ -54,42 +54,42 @@ KEXIDB_DRIVER_INFO( MySqlDriver, mysql )
  * See: http://dev.mysql.com/doc/mysql/en/Column_types.html
  */
 MySqlDriver::MySqlDriver(QObject *parent, const QStringList &args) :
-	Driver(parent, args)
+  Driver(parent, args)
 {
 //	KexiDBDrvDbg << "MySqlDriver::MySqlDriver()" << endl;
 
-	d->isFileDriver=false;
-	d->features=IgnoreTransactions | CursorForward;
+  d->isFileDriver=false;
+  d->features=IgnoreTransactions | CursorForward;
 
-	beh->ROW_ID_FIELD_NAME="LAST_INSERT_ID()";
-	beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true;
-	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
-	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
-	beh->QUOTATION_MARKS_FOR_IDENTIFIER='`';
-	initDriverSpecificKeywords(keywords);
-	
-	//predefined properties
+  beh->ROW_ID_FIELD_NAME="LAST_INSERT_ID()";
+  beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true;
+  beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
+  beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
+  beh->QUOTATION_MARKS_FOR_IDENTIFIER='`';
+  initDriverSpecificKeywords(keywords);
+  
+  //predefined properties
 #if MYSQL_VERSION_ID < 40000
-	d->properties["client_library_version"] = MYSQL_SERVER_VERSION; //nothing better
-	d->properties["default_server_encoding"] = MYSQL_CHARSET; //nothing better
+  d->properties["client_library_version"] = MYSQL_SERVER_VERSION; //nothing better
+  d->properties["default_server_encoding"] = MYSQL_CHARSET; //nothing better
 #elif MYSQL_VERSION_ID < 50000
 //OK?	d->properties["client_library_version"] = mysql_get_client_version();
 #endif
 
-	d->typeNames[Field::Byte]="TINYINT";
-	d->typeNames[Field::ShortInteger]="SMALLINT";
-	d->typeNames[Field::Integer]="INT";
-	d->typeNames[Field::BigInteger]="BIGINT";
-	// Can use BOOLEAN here, but BOOL has been in MySQL longer
-	d->typeNames[Field::Boolean]="BOOL";
-	d->typeNames[Field::Date]="DATE";
-	d->typeNames[Field::DateTime]="DATETIME";
-	d->typeNames[Field::Time]="TIME";
-	d->typeNames[Field::Float]="FLOAT";
-	d->typeNames[Field::Double]="DOUBLE";
-	d->typeNames[Field::Text]="VARCHAR";
-	d->typeNames[Field::LongText]="LONGTEXT";
-	d->typeNames[Field::BLOB]="BLOB";
+  d->typeNames[Field::Byte]="TINYINT";
+  d->typeNames[Field::ShortInteger]="SMALLINT";
+  d->typeNames[Field::Integer]="INT";
+  d->typeNames[Field::BigInteger]="BIGINT";
+  // Can use BOOLEAN here, but BOOL has been in MySQL longer
+  d->typeNames[Field::Boolean]="BOOL";
+  d->typeNames[Field::Date]="DATE";
+  d->typeNames[Field::DateTime]="DATETIME";
+  d->typeNames[Field::Time]="TIME";
+  d->typeNames[Field::Float]="FLOAT";
+  d->typeNames[Field::Double]="DOUBLE";
+  d->typeNames[Field::Text]="VARCHAR";
+  d->typeNames[Field::LongText]="LONGTEXT";
+  d->typeNames[Field::BLOB]="BLOB";
 }
 
 MySqlDriver::~MySqlDriver()
@@ -99,89 +99,89 @@ MySqlDriver::~MySqlDriver()
 KexiDB::Connection*
 MySqlDriver::drv_createConnection( ConnectionData &conn_data )
 {
-	return new MySqlConnection( this, conn_data );
+  return new MySqlConnection( this, conn_data );
 }
 
 bool MySqlDriver::isSystemDatabaseName(const QString &n) const
 {
-	return n.toLower()=="mysql" || Driver::isSystemObjectName(n);
+  return n.toLower()=="mysql" || Driver::isSystemObjectName(n);
 }
 
 bool MySqlDriver::drv_isSystemFieldName(const QString&) const {
-	return false;
+  return false;
 }
 
 QString MySqlDriver::escapeString(const QString& str) const
 {
-	//escape as in http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
+  //escape as in http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
 //! @todo support more characters, like %, _
 
-	const int old_length = str.length();
-	int i;
-	for ( i = 0; i < old_length; i++ ) { //anything to escape?
-		const unsigned int ch = str[i].unicode();
-		if (ch == '\\' || ch == '\'' || ch == '"' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\b' || ch == '\0')
-			break;
-	}
-	if (i >= old_length) { //no characters to escape
-		return QString::fromLatin1("'") + str + QString::fromLatin1("'");
-	}
+  const int old_length = str.length();
+  int i;
+  for ( i = 0; i < old_length; i++ ) { //anything to escape?
+    const unsigned int ch = str[i].unicode();
+    if (ch == '\\' || ch == '\'' || ch == '"' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\b' || ch == '\0')
+      break;
+  }
+  if (i >= old_length) { //no characters to escape
+    return QString::fromLatin1("'") + str + QString::fromLatin1("'");
+  }
 
-	QChar *new_string = new QChar[ old_length * 3 + 1 ]; // a worst case approximation
+  QChar *new_string = new QChar[ old_length * 3 + 1 ]; // a worst case approximation
 //! @todo move new_string to Driver::m_new_string or so...
-	int new_length = 0;
-	new_string[new_length++] = '\''; //prepend '
-	for ( i = 0; i < old_length; i++, new_length++ ) {
-		const unsigned int ch = str[i].unicode();
-		if (ch == '\\') {
-			new_string[new_length++] = '\\';
-			new_string[new_length] = '\\';
-		}
-		else if (ch <= '\'') {//check for speedup
-			if (ch == '\'') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = '\'';
-			}
-			else if (ch == '"') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = '"';
-			}
-			else if (ch == '\n') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = 'n';
-			}
-			else if (ch == '\r') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = 'r';
-			}
-			else if (ch == '\t') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = 't';
-			}
-			else if (ch == '\b') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = 'b';
-			}
-			else if (ch == '\0') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = '0';
-			}
-			else
-				new_string[new_length] = str[i];
-		}
-		else
-			new_string[new_length] = str[i];
-	}
+  int new_length = 0;
+  new_string[new_length++] = '\''; //prepend '
+  for ( i = 0; i < old_length; i++, new_length++ ) {
+    const unsigned int ch = str[i].unicode();
+    if (ch == '\\') {
+      new_string[new_length++] = '\\';
+      new_string[new_length] = '\\';
+    }
+    else if (ch <= '\'') {//check for speedup
+      if (ch == '\'') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = '\'';
+      }
+      else if (ch == '"') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = '"';
+      }
+      else if (ch == '\n') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = 'n';
+      }
+      else if (ch == '\r') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = 'r';
+      }
+      else if (ch == '\t') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = 't';
+      }
+      else if (ch == '\b') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = 'b';
+      }
+      else if (ch == '\0') {
+        new_string[new_length++] = '\\';
+        new_string[new_length] = '0';
+      }
+      else
+        new_string[new_length] = str[i];
+    }
+    else
+      new_string[new_length] = str[i];
+  }
 
-	new_string[new_length++] = '\''; //append '
-	QString result(new_string, new_length);
-	delete [] new_string;
-	return result;
+  new_string[new_length++] = '\''; //append '
+  QString result(new_string, new_length);
+  delete [] new_string;
+  return result;
 }
 
 QString MySqlDriver::escapeBLOB(const QByteArray& array) const
 {
-	return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
+  return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }
 
 QByteArray MySqlDriver::escapeString(const QByteArray& str) const
@@ -189,11 +189,11 @@ QByteArray MySqlDriver::escapeString(const QByteArray& str) const
 //! @todo optimize using mysql_real_escape_string()?
 //! see http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
 
-	return QByteArray("'")+QByteArray(str)
-		.replace( '\\', "\\\\" )
-		.replace( '\'', "\\''" )
-		.replace( '"', "\\\"" )
-		+ QByteArray("'");
+  return QByteArray("'")+QByteArray(str)
+    .replace( '\\', "\\\\" )
+    .replace( '\'', "\\''" )
+    .replace( '"', "\\\"" )
+    + QByteArray("'");
 }
 
 /*! Add back-ticks to an identifier, and replace any back-ticks within
@@ -201,12 +201,12 @@ QByteArray MySqlDriver::escapeString(const QByteArray& str) const
  */
 QString MySqlDriver::drv_escapeIdentifier(const QString& str) const
 {
-	return QString(str).replace('`', "'");
+  return QString(str).replace('`', "'");
 }
 
 QByteArray MySqlDriver::drv_escapeIdentifier(const QByteArray& str) const
 {
-	return QByteArray(str).replace('`', "'");
+  return QByteArray(str).replace('`', "'");
 }
 
 #include "mysqldriver.moc"

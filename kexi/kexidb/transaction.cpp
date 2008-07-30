@@ -41,16 +41,16 @@ TransactionData::TransactionData(Connection *conn)
  , m_active(true)
  , refcount(1)
 {
-	assert(conn);
-	Transaction::globalcount++; //because refcount(1) init.
-	TransactionData::globalcount++;
-	KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
+  assert(conn);
+  Transaction::globalcount++; //because refcount(1) init.
+  TransactionData::globalcount++;
+  KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
 }
 
 TransactionData::~TransactionData()
 {
-	TransactionData::globalcount--;
-	KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
+  TransactionData::globalcount--;
+  KexiDBDbg << "-- TransactionData::globalcount == " << TransactionData::globalcount << endl;
 }
 
 //---------------------------------------------------
@@ -58,73 +58,73 @@ TransactionData::~TransactionData()
 // not needed // const Transaction Transaction::null;
 
 Transaction::Transaction()
-	: QObject(0)
-	, m_data(0)
+  : QObject(0)
+  , m_data(0)
 {
 //	setObjectName("kexidb_transaction");
 }
 
 Transaction::Transaction( const Transaction& trans )
-	: QObject(0)
-	, m_data(trans.m_data)
+  : QObject(0)
+  , m_data(trans.m_data)
 {
 //	setObjectName("kexidb_transaction");
-	if (m_data) {
-		m_data->refcount++;
-		Transaction::globalcount++;
-	}
+  if (m_data) {
+    m_data->refcount++;
+    Transaction::globalcount++;
+  }
 }
 
 Transaction::~Transaction()
 {
-	if (m_data) {
-		m_data->refcount--;
-		Transaction::globalcount--;
-		KexiDBDbg << "~Transaction(): m_data->refcount==" << m_data->refcount << endl;
-		if (m_data->refcount==0)
-			delete m_data;
-	}
-	else {
-		KexiDBDbg << "~Transaction(): null" << endl;
-	}
-	KexiDBDbg << "-- Transaction::globalcount == " << Transaction::globalcount << endl;
+  if (m_data) {
+    m_data->refcount--;
+    Transaction::globalcount--;
+    KexiDBDbg << "~Transaction(): m_data->refcount==" << m_data->refcount << endl;
+    if (m_data->refcount==0)
+      delete m_data;
+  }
+  else {
+    KexiDBDbg << "~Transaction(): null" << endl;
+  }
+  KexiDBDbg << "-- Transaction::globalcount == " << Transaction::globalcount << endl;
 }
 
 Transaction& Transaction::operator=(const Transaction& trans)
 {
-	if (m_data) {
-		m_data->refcount--;
-		Transaction::globalcount--;
-		KexiDBDbg << "Transaction::operator=: m_data->refcount==" << m_data->refcount << endl;
-		if (m_data->refcount==0)
-			delete m_data;
-	}
-	m_data = trans.m_data;
-	if (m_data) {
-		m_data->refcount++;
-		Transaction::globalcount++;
-	}
-	return *this;
+  if (m_data) {
+    m_data->refcount--;
+    Transaction::globalcount--;
+    KexiDBDbg << "Transaction::operator=: m_data->refcount==" << m_data->refcount << endl;
+    if (m_data->refcount==0)
+      delete m_data;
+  }
+  m_data = trans.m_data;
+  if (m_data) {
+    m_data->refcount++;
+    Transaction::globalcount++;
+  }
+  return *this;
 }
 
 bool Transaction::operator==(const Transaction& trans) const
 {
-	return m_data==trans.m_data;
+  return m_data==trans.m_data;
 }
 
 Connection* Transaction::connection() const
 {
-	return m_data ? m_data->m_conn : 0;
+  return m_data ? m_data->m_conn : 0;
 }
 
 bool Transaction::active() const
 {
-	return m_data && m_data->m_active;
+  return m_data && m_data->m_active;
 }
 
 bool Transaction::isNull() const
 {
-	return m_data==0;
+  return m_data==0;
 }
 
 //---------------------------------------------------
@@ -148,20 +148,20 @@ TransactionGuard::TransactionGuard()
 
 TransactionGuard::~TransactionGuard()
 {
-	if (!m_doNothing && m_trans.active() && m_trans.connection())
-		m_trans.connection()->rollbackTransaction(m_trans);
+  if (!m_doNothing && m_trans.active() && m_trans.connection())
+    m_trans.connection()->rollbackTransaction(m_trans);
 }
 
 bool TransactionGuard::commit()
 {
-	if (m_trans.active() && m_trans.connection()) {
-		return m_trans.connection()->commitTransaction(m_trans);
-	}
-	return false;
+  if (m_trans.active() && m_trans.connection()) {
+    return m_trans.connection()->commitTransaction(m_trans);
+  }
+  return false;
 }
 
 void TransactionGuard::doNothing()
 {
-	m_doNothing = true;
+  m_doNothing = true;
 }
 

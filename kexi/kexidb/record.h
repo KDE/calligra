@@ -32,33 +32,33 @@ namespace KexiDB {
 
 class KEXI_DB_EXPORT Record {
 public:
-	Record(const QString & name);
+  Record(const QString & name);
 
 //TODO.............
-	Table();
-	~Table();
-	const QString& name() const;
-	void setName(const QString& name);
-	unsigned int fieldCount() const;
-	KexiDB::Field field(unsigned int id) const;
-	QStringList primaryKeys() const;
-	bool hasPrimaryKeys() const;
+  Table();
+  ~Table();
+  const QString& name() const;
+  void setName(const QString& name);
+  unsigned int fieldCount() const;
+  KexiDB::Field field(unsigned int id) const;
+  QStringList primaryKeys() const;
+  bool hasPrimaryKeys() const;
 //js	void addField(KexiDB::Field field);
 //js	void addPrimaryKey(const QString& key);
 private:
 //js	QStringList m_primaryKeys;
-	Q3ValueList<Field> m_fields;
-	QString m_name;
-	Connection* m_conn;
+  Q3ValueList<Field> m_fields;
+  QString m_name;
+  Connection* m_conn;
 };
 
 
 /*
 class KexiDBTableFields: public QValueList<KexiDBField> {
 public:
-	KexiDBTable(const QString & name);
-	~KexiDBTable();
-	void addField(KexiDBField);
+  KexiDBTable(const QString & name);
+  ~KexiDBTable();
+  void addField(KexiDBField);
 //	const QString& tableName() const;
 
 private:

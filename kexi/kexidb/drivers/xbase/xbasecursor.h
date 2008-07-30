@@ -28,34 +28,34 @@ namespace KexiDB {
 class xBaseCursorData;
 
 class xBaseCursor: public Cursor {
-	public:
+  public:
         	xBaseCursor(Connection* conn, Cursor* internalCursor, const QString& statement = QString(), 
-			uint cursor_options = NoOptions );
-		xBaseCursor(Connection* conn, Cursor* internalCursor, QuerySchema& query, uint options = 	NoOptions );
-		virtual ~xBaseCursor();
+      uint cursor_options = NoOptions );
+    xBaseCursor(Connection* conn, Cursor* internalCursor, QuerySchema& query, uint options = 	NoOptions );
+    virtual ~xBaseCursor();
 
-		virtual bool drv_open();
-		virtual bool drv_close();
-		virtual void drv_getNextRecord();
-		virtual QVariant value(uint);
+    virtual bool drv_open();
+    virtual bool drv_close();
+    virtual void drv_getNextRecord();
+    virtual QVariant value(uint);
 
-		virtual void drv_clearServerResult();
-		virtual void drv_appendCurrentRecordToBuffer();
-		virtual void drv_bufferMovePointerNext();
-		virtual void drv_bufferMovePointerPrev();
-		virtual void drv_bufferMovePointerTo(qint64 to);
-		virtual const char** rowData() const;
-		virtual bool drv_storeCurrentRow(RecordData &data) const;
-		
-		virtual int serverResult();
-		virtual QString serverResultName();
-		virtual QString serverErrorMsg();
+    virtual void drv_clearServerResult();
+    virtual void drv_appendCurrentRecordToBuffer();
+    virtual void drv_bufferMovePointerNext();
+    virtual void drv_bufferMovePointerPrev();
+    virtual void drv_bufferMovePointerTo(qint64 to);
+    virtual const char** rowData() const;
+    virtual bool drv_storeCurrentRow(RecordData &data) const;
+    
+    virtual int serverResult();
+    virtual QString serverResultName();
+    virtual QString serverErrorMsg();
 
-	protected:
-		xBaseCursorData *d;
-	
-	private:
-		void init();
+  protected:
+    xBaseCursorData *d;
+  
+  private:
+    void init();
 
 
 };

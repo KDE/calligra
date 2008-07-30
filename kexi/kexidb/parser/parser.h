@@ -39,48 +39,48 @@ class TableSchema;
  */
 class KEXI_DB_EXPORT ParserError
 {
-	public:
+  public:
 
-		/**
-		 * Empty constructor.
-		 */
-		ParserError();
+    /**
+     * Empty constructor.
+     */
+    ParserError();
 
-		/**
-		 * Constructor.
-		 *
-		 * \param type The errortype.
-		 * \param error A description of the error.
-		 * \param hint Token where the error happend.
-		 * \param at The position where the error happend.
-		 */
-		ParserError(const QString &type, const QString &error, const QString &hint, int at);
+    /**
+     * Constructor.
+     *
+     * \param type The errortype.
+     * \param error A description of the error.
+     * \param hint Token where the error happend.
+     * \param at The position where the error happend.
+     */
+    ParserError(const QString &type, const QString &error, const QString &hint, int at);
 
-		/**
-		 * Destructor.
-		 */
-		~ParserError();
+    /**
+     * Destructor.
+     */
+    ~ParserError();
 
-		/**
-		 * \return the errortype.
-		 */
-		QString	type() { return m_type; }
+    /**
+     * \return the errortype.
+     */
+    QString	type() { return m_type; }
 
-		/**
-		 * \return a descriping error message.
-		 */
-		QString	error() { return m_error; }
+    /**
+     * \return a descriping error message.
+     */
+    QString	error() { return m_error; }
 
-		/**
-		 * \return position where the error happend.
-		 */
-		int	at() { return m_at; }
+    /**
+     * \return position where the error happend.
+     */
+    int	at() { return m_at; }
 
-	private:
-		QString m_type;
-		QString m_error;
-		QString m_hint;
-		int m_at;
+  private:
+    QString m_type;
+    QString m_error;
+    QString m_hint;
+    int m_at;
 //		bool	m_isNull;
 };
 
@@ -107,128 +107,128 @@ class KEXI_DB_EXPORT ParserError
  */
 class KEXI_DB_EXPORT Parser
 {
-	public:
+  public:
 
-		/**
-		 * The operation-code of the statement.
-		 */
-		enum OPCode
-		{
-			OP_None = 0, /// No statement parsed or reseted.
-			OP_Error, /// Error while parsing.
-			OP_CreateTable, /// Create a table.
-			OP_AlterTable, /// Alter an existing table
-			OP_Select, /// Query-statement.
-			OP_Insert, /// Insert new content.
-			OP_Update, /// Update existing content.
-			OP_Delete  /// Delete existing content.
-		};
+    /**
+     * The operation-code of the statement.
+     */
+    enum OPCode
+    {
+      OP_None = 0, /// No statement parsed or reseted.
+      OP_Error, /// Error while parsing.
+      OP_CreateTable, /// Create a table.
+      OP_AlterTable, /// Alter an existing table
+      OP_Select, /// Query-statement.
+      OP_Insert, /// Insert new content.
+      OP_Update, /// Update existing content.
+      OP_Delete  /// Delete existing content.
+    };
 
-		/**
-		 * constructs an empty object of the parser
-		 * \param connection is used for things like wildcard resolution. If 0 parser works in "pure mode"
-		 */
-		Parser(Connection *connection);
-		~Parser();
+    /**
+     * constructs an empty object of the parser
+     * \param connection is used for things like wildcard resolution. If 0 parser works in "pure mode"
+     */
+    Parser(Connection *connection);
+    ~Parser();
 
-		/**
-		 * clears previous results and runs the parser
-		 */
-		bool parse(const QString &statement);
+    /**
+     * clears previous results and runs the parser
+     */
+    bool parse(const QString &statement);
 
-		/**
-		 * rests results
-		 */
-		void clear();
+    /**
+     * rests results
+     */
+    void clear();
 
-		/**
-		 * \return the resulting operation or OP_Error if failed
-		 */
-		OPCode operation() const;
+    /**
+     * \return the resulting operation or OP_Error if failed
+     */
+    OPCode operation() const;
 
-		/**
-		 * \return the resulting operation as string.
-		 */
-		QString operationString() const;
+    /**
+     * \return the resulting operation as string.
+     */
+    QString operationString() const;
 
-		/**
-		 * \return a pointer to a KexiDBTable on CREATE TABLE
-		 * or 0 on any other operation or error. Returned object is owned by you.
-		 * You can call this method only once every time after doing parse().
-		 * Next time, the call will return 0.
-		 */
-		TableSchema *table();
+    /**
+     * \return a pointer to a KexiDBTable on CREATE TABLE
+     * or 0 on any other operation or error. Returned object is owned by you.
+     * You can call this method only once every time after doing parse().
+     * Next time, the call will return 0.
+     */
+    TableSchema *table();
 
-		/**
-		 * \return a pointer to KexiDBSelect if 'SELECT ...' was called
-		 * or 0 on any other operation or error. Returned object is owned by you.
-		 * You can call this method only once every time after doing parse().
-		 * Next time, the call will return 0.
-		 */
-		QuerySchema *query();
+    /**
+     * \return a pointer to KexiDBSelect if 'SELECT ...' was called
+     * or 0 on any other operation or error. Returned object is owned by you.
+     * You can call this method only once every time after doing parse().
+     * Next time, the call will return 0.
+     */
+    QuerySchema *query();
 
-		/**
-		 * \return a pointer to the used database connection or 0 if not set
-		 * You can call this method only once every time after doing parse().
-		 * Next time, the call will return 0.
-		 */
-		Connection	*db() const;
+    /**
+     * \return a pointer to the used database connection or 0 if not set
+     * You can call this method only once every time after doing parse().
+     * Next time, the call will return 0.
+     */
+    Connection	*db() const;
 
-		/**
-		 * \return detailed information about last error.
-		 * If no error occurred ParserError isNull()
-		 */
-		ParserError error() const;
+    /**
+     * \return detailed information about last error.
+     * If no error occurred ParserError isNull()
+     */
+    ParserError error() const;
 
-		/**
-		 * \return the statement passed on the last \a parse method-call.
-		 */
-		QString statement() const;
+    /**
+     * \return the statement passed on the last \a parse method-call.
+     */
+    QString statement() const;
 
-		/**
-		 * \internal
-		 * sets the operation (only parser will need to call this)
-		 */
-		void setOperation(OPCode op);
+    /**
+     * \internal
+     * sets the operation (only parser will need to call this)
+     */
+    void setOperation(OPCode op);
 
-		/**
-		 * \internal
-		 * creates a new table (only parser will need to call this)
-		 */
-		void createTable(const char *t);
+    /**
+     * \internal
+     * creates a new table (only parser will need to call this)
+     */
+    void createTable(const char *t);
 
-		/**
-		 * \internal
-		 * sets \a query schema object (only parser will need to call this)
-		 */
+    /**
+     * \internal
+     * sets \a query schema object (only parser will need to call this)
+     */
 //todo: other query types
-		void setQuerySchema(QuerySchema *query);
+    void setQuerySchema(QuerySchema *query);
 
-		/**
-		 * \internal
-		 * \return query schema
-		 */
-		QuerySchema *select() const;
+    /**
+     * \internal
+     * \return query schema
+     */
+    QuerySchema *select() const;
 
-		/**
-		 * \internal
-		 * INTERNAL use only: sets a error
-		 */
-		void setError(const ParserError &err);
+    /**
+     * \internal
+     * INTERNAL use only: sets a error
+     */
+    void setError(const ParserError &err);
 
-		/**
-		 * \return true if the \param str is an reserved
-		 * keyword (see tokens.cpp for a list of reserved
-		 * keywords).
-		 */
-		bool isReservedKeyword(const QByteArray& str);
+    /**
+     * \return true if the \param str is an reserved
+     * keyword (see tokens.cpp for a list of reserved
+     * keywords).
+     */
+    bool isReservedKeyword(const QByteArray& str);
 
-	protected:
-		void init();
+  protected:
+    void init();
 
-		ParserError m_error; //!< detailed information about last error.
-		class Private;
-		Private * const d; //!< \internal d-pointer class.
+    ParserError m_error; //!< detailed information about last error.
+    class Private;
+    Private * const d; //!< \internal d-pointer class.
 };
 
 }

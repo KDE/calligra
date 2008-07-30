@@ -31,62 +31,62 @@ namespace KexiDB {
 */
 class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Object
 {
-	Q_OBJECT
-	public:
-		~DriverManagerInternal();
+  Q_OBJECT
+  public:
+    ~DriverManagerInternal();
 
-		/*! Tries to load db driver \a name.
-			\return db driver, or 0 if error (then error message is also set) */
-		KexiDB::Driver* driver(const QString& name);
+    /*! Tries to load db driver \a name.
+      \return db driver, or 0 if error (then error message is also set) */
+    KexiDB::Driver* driver(const QString& name);
 
-		KexiDB::Driver::Info driverInfo(const QString &name);
+    KexiDB::Driver::Info driverInfo(const QString &name);
 
-		static DriverManagerInternal *self();
+    static DriverManagerInternal *self();
 
-		/*! increments the refcount for the manager */
-		void incRefCount();
+    /*! increments the refcount for the manager */
+    void incRefCount();
 
-		/*! decrements the refcount for the manager
-			if the refcount reaches a value less than 1 the manager is freed */
-		void decRefCount();
+    /*! decrements the refcount for the manager
+      if the refcount reaches a value less than 1 the manager is freed */
+    void decRefCount();
 
-		/*! Called from Driver dtor (because sometimes KLibrary (used by Driver) 
-		 is destroyed before DriverManagerInternal) */
-		void aboutDelete( Driver* drv );
+    /*! Called from Driver dtor (because sometimes KLibrary (used by Driver) 
+     is destroyed before DriverManagerInternal) */
+    void aboutDelete( Driver* drv );
 
-	protected slots:
-		/*! Used to destroy all drivers on QApplication quit, so even if there are 
-		 DriverManager's static instances that are destroyed on program 
-		 "static destruction", drivers are not kept after QApplication death.
-		*/
-		void slotAppQuits();
+  protected slots:
+    /*! Used to destroy all drivers on QApplication quit, so even if there are 
+     DriverManager's static instances that are destroyed on program 
+     "static destruction", drivers are not kept after QApplication death.
+    */
+    void slotAppQuits();
 
-	protected:
-		/*! Used by self() */
-		DriverManagerInternal();
+  protected:
+    /*! Used by self() */
+    DriverManagerInternal();
 
-		bool lookupDrivers();
+    bool lookupDrivers();
 
-		static KexiDB::DriverManagerInternal* s_self;
+    static KexiDB::DriverManagerInternal* s_self;
 
-		DriverManager::ServicesHash m_services; //! services map
-		DriverManager::ServicesHash m_services_lcase; //! as above but service names in lowercase
-		DriverManager::ServicesHash m_services_by_mimetype;
-		Driver::InfoHash m_driversInfo; //! used to store drivers information
-		QHash<QString, KexiDB::Driver*> m_drivers;
-		ulong m_refCount;
+    DriverManager::ServicesHash m_services; //! services map
+    DriverManager::ServicesHash m_services_lcase; //! as above but service names in lowercase
+    DriverManager::ServicesHash m_services_by_mimetype;
+    Driver::InfoHash m_driversInfo; //! used to store drivers information
+    QHash<QString, KexiDB::Driver*> m_drivers;
+    ulong m_refCount;
 
-		QString m_serverErrMsg;
-		int m_serverResultNum;
-		QString m_serverResultName;
-		//! result names for KParts::ComponentFactory::ComponentLoadingError
-		QHash<int,QString> m_componentLoadingErrors;
+    QString m_serverErrMsg;
+    int m_serverResultNum;
+    QString m_serverResultName;
+    //! result names for KParts::ComponentFactory::ComponentLoadingError
+    QHash<int,QString> m_componentLoadingErrors;
 
-		QStringList possibleProblems;
+    QStringList possibleProblems;
 
-		bool lookupDriversNeeded : 1;
+    bool lookupDriversNeeded : 1;
 
-	friend class DriverManager;
+  friend class DriverManager;
 };
 }
 

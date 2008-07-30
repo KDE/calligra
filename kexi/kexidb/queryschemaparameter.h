@@ -28,14 +28,14 @@ namespace KexiDB
 //! @short A single parameter of a query schema
 class KEXI_DB_EXPORT QuerySchemaParameter
 {
-	public:
-		QuerySchemaParameter();
-		~QuerySchemaParameter();
+  public:
+    QuerySchemaParameter();
+    ~QuerySchemaParameter();
 
-		QString debugString() const;
+    QString debugString() const;
 
-		Field::Type type; //!< A datatype of the parameter
-		QString message; //!< A user-visible message that will be displayed to ask for value of the parameter
+    Field::Type type; //!< A datatype of the parameter
+    QString message; //!< A user-visible message that will be displayed to ask for value of the parameter
 };
 
 typedef QList<QuerySchemaParameter>::Iterator QuerySchemaParameterListIterator;
@@ -49,19 +49,19 @@ KEXI_DB_EXPORT void debug(const QuerySchemaParameterList& list);
 //! The iterator is initially set to the last item because of the parser requirements
 class KEXI_DB_EXPORT QuerySchemaParameterValueListIterator
 {
-	public:
-		QuerySchemaParameterValueListIterator(
-			Driver& driver, const QList<QVariant>& params);
-		~QuerySchemaParameterValueListIterator();
+  public:
+    QuerySchemaParameterValueListIterator(
+      Driver& driver, const QList<QVariant>& params);
+    ~QuerySchemaParameterValueListIterator();
 
-		//! \return previous value
-		QVariant getPreviousValue();
+    //! \return previous value
+    QVariant getPreviousValue();
 
-		//! \return previous value as string formatted using driver's escaping
-		QString getPreviousValueAsString(Field::Type type);
-	protected:
-		class Private;
-		Private * const d;
+    //! \return previous value as string formatted using driver's escaping
+    QString getPreviousValueAsString(Field::Type type);
+  protected:
+    class Private;
+    Private * const d;
 };
 
 } //namespace KexiDB

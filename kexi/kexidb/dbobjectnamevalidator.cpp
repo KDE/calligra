@@ -25,7 +25,7 @@ using namespace KexiDB;
 using namespace KexiUtils;
 
 ObjectNameValidator::ObjectNameValidator(
-	KexiDB::Driver *drv, QObject * parent)
+  KexiDB::Driver *drv, QObject * parent)
 : Validator(parent)
 ,	m_drv(drv)
 {
@@ -36,16 +36,16 @@ ObjectNameValidator::~ObjectNameValidator()
 }
 
 Validator::Result ObjectNameValidator::internalCheck(
-	const QString & /*valueName*/, const QVariant& v, 
-	QString &message, QString &details)
+  const QString & /*valueName*/, const QVariant& v, 
+  QString &message, QString &details)
 {
 
-	if (m_drv.isNull() ? !KexiDB::Driver::isKexiDBSystemObjectName(v.toString())
-		 : !m_drv->isSystemObjectName(v.toString()))
-		return Validator::Ok;
-	message = i18n("You cannot use name \"%1\" for your object.\n"
-		"It is reserved for internal Kexi objects. Please choose another name.",
-		v.toString());
-	details = i18n("Names of internal Kexi objects are starting with \"kexi__\".");
-	return Validator::Error;
+  if (m_drv.isNull() ? !KexiDB::Driver::isKexiDBSystemObjectName(v.toString())
+     : !m_drv->isSystemObjectName(v.toString()))
+    return Validator::Ok;
+  message = i18n("You cannot use name \"%1\" for your object.\n"
+    "It is reserved for internal Kexi objects. Please choose another name.",
+    v.toString());
+  details = i18n("Names of internal Kexi objects are starting with \"kexi__\".");
+  return Validator::Error;
 }

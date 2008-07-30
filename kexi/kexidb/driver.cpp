@@ -37,35 +37,35 @@ using namespace KexiDB;
 /*! @internal Used in Driver::defaultSQLTypeName(int) 
  when we do not have Driver instance yet, or when we cannot get one */
 static const char* KexiDB_defaultSQLTypeNames[] = {
-	"InvalidType",
-	"Byte",
-	"ShortInteger",
-	"Integer",
-	"BigInteger",
-	"Boolean",
-	"Date",
-	"DateTime",
-	"Time",
-	"Float",
-	"Double",
-	"Text",
-	"LongText",
-	"BLOB"
+  "InvalidType",
+  "Byte",
+  "ShortInteger",
+  "Integer",
+  "BigInteger",
+  "Boolean",
+  "Date",
+  "DateTime",
+  "Time",
+  "Float",
+  "Double",
+  "Text",
+  "LongText",
+  "BLOB"
 };
 
 //---------------------------------------------
 
 DriverBehaviour::DriverBehaviour()
-	: UNSIGNED_TYPE_KEYWORD("UNSIGNED")
-	, AUTO_INCREMENT_FIELD_OPTION("AUTO_INCREMENT")
-	, AUTO_INCREMENT_PK_FIELD_OPTION("AUTO_INCREMENT PRIMARY KEY")
-	, SPECIAL_AUTO_INCREMENT_DEF(false)
-	, AUTO_INCREMENT_REQUIRES_PK(false)
-	, ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE(false)
-	, QUOTATION_MARKS_FOR_IDENTIFIER('"')
-	, USING_DATABASE_REQUIRED_TO_CONNECT(true)
-	, _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY(false)
-	, SELECT_1_SUBQUERY_SUPPORTED(false)
+  : UNSIGNED_TYPE_KEYWORD("UNSIGNED")
+  , AUTO_INCREMENT_FIELD_OPTION("AUTO_INCREMENT")
+  , AUTO_INCREMENT_PK_FIELD_OPTION("AUTO_INCREMENT PRIMARY KEY")
+  , SPECIAL_AUTO_INCREMENT_DEF(false)
+  , AUTO_INCREMENT_REQUIRES_PK(false)
+  , ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE(false)
+  , QUOTATION_MARKS_FOR_IDENTIFIER('"')
+  , USING_DATABASE_REQUIRED_TO_CONNECT(true)
+  , _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY(false)
+  , SELECT_1_SUBQUERY_SUPPORTED(false)
 {
 }
 
@@ -80,56 +80,56 @@ Driver::Info::Info()
 //---------------------------------------------
 
 Driver::Driver( QObject *parent, const QStringList & )
-	: QObject( parent )
-	, Object()
-	, beh( new DriverBehaviour() )
-	, d( new DriverPrivate() )
+  : QObject( parent )
+  , Object()
+  , beh( new DriverBehaviour() )
+  , d( new DriverPrivate() )
 {
-	d->typeNames.resize(Field::LastType + 1);
+  d->typeNames.resize(Field::LastType + 1);
 }
 
 Driver::~Driver()
 {
-	DriverManagerInternal::self()->aboutDelete( this );
+  DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
-	// make a copy because d->connections will be touched by ~Connection
-	QSet<Connection*> connections(d->connections); 
-	qDeleteAll( connections );
-	d->connections.clear();
-	delete beh;
-	delete d;
+  // make a copy because d->connections will be touched by ~Connection
+  QSet<Connection*> connections(d->connections); 
+  qDeleteAll( connections );
+  d->connections.clear();
+  delete beh;
+  delete d;
 //	KexiDBDbg << "Driver::~Driver() ok" << endl;
 }
 
 bool Driver::isValid()
 {
-	clearError();
-	if (KexiDB::version().major != version().major
-		|| KexiDB::version().minor != version().minor)
-	{
-		setError(ERR_INCOMPAT_DRIVER_VERSION,
-			i18n(
-				"Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
-				objectName(),
-				QString("%1.%2").arg(version().major).arg(version().minor),
-				QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
-		return false;
-	}
+  clearError();
+  if (KexiDB::version().major != version().major
+    || KexiDB::version().minor != version().minor)
+  {
+    setError(ERR_INCOMPAT_DRIVER_VERSION,
+      i18n(
+        "Incompatible database driver's \"%1\" version: found version %2, expected version %3.",
+        objectName(),
+        QString("%1.%2").arg(version().major).arg(version().minor),
+        QString("%1.%2").arg(KexiDB::version().major).arg(KexiDB::version().minor)));
+    return false;
+  }
 
-	QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n", name());
-	KLocalizedString not_init = ki18n("Value of \"%1\" is not initialized for the driver.");
-	if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
-		setError(ERR_INVALID_DRIVER_IMPL, 
-			inv_impl + not_init.subs("DriverBehaviour::ROW_ID_FIELD_NAME").toString());
-		return false;
-	}
+  QString inv_impl = i18n("Invalid database driver's \"%1\" implementation:\n", name());
+  KLocalizedString not_init = ki18n("Value of \"%1\" is not initialized for the driver.");
+  if (beh->ROW_ID_FIELD_NAME.isEmpty()) {
+    setError(ERR_INVALID_DRIVER_IMPL, 
+      inv_impl + not_init.subs("DriverBehaviour::ROW_ID_FIELD_NAME").toString());
+    return false;
+  }
 
-	return true;
+  return true;
 }
 
 const QSet<Connection*> Driver::connections() const
 {
-	return d->connections;
+  return d->connections;
 }
 
 QString Driver::fileDBDriverMimeType() const
@@ -149,199 +149,199 @@ bool Driver::transactionsSupported() const
 
 AdminTools& Driver::adminTools() const
 {
-	if (!d->adminTools)
-		d->adminTools = drv_createAdminTools();
-	return *d->adminTools;
+  if (!d->adminTools)
+    d->adminTools = drv_createAdminTools();
+  return *d->adminTools;
 }
 
 AdminTools* Driver::drv_createAdminTools() const
 {
-	return new AdminTools(); //empty impl.
+  return new AdminTools(); //empty impl.
 }
 
 QString Driver::sqlTypeName(int id_t, int /*p*/) const
 {
-	if (id_t > Field::InvalidType && id_t <= Field::LastType)
-		return d->typeNames[(id_t>0 && id_t<=Field::LastType) ? id_t : Field::InvalidType /*sanity*/];
+  if (id_t > Field::InvalidType && id_t <= Field::LastType)
+    return d->typeNames[(id_t>0 && id_t<=Field::LastType) ? id_t : Field::InvalidType /*sanity*/];
 
-	return d->typeNames[Field::InvalidType];
+  return d->typeNames[Field::InvalidType];
 }
 
 Connection *Driver::createConnection( ConnectionData &conn_data, int options )
 {
-	clearError();
-	if (!isValid())
-		return 0;
-	if (d->isFileDriver) {
-		if (conn_data.fileName().isEmpty()) {
-			setError(ERR_MISSING_DB_LOCATION, 
-			         i18n("File name expected for file-based database driver.") );
-			return 0;
-		}
-	}
+  clearError();
+  if (!isValid())
+    return 0;
+  if (d->isFileDriver) {
+    if (conn_data.fileName().isEmpty()) {
+      setError(ERR_MISSING_DB_LOCATION, 
+               i18n("File name expected for file-based database driver.") );
+      return 0;
+    }
+  }
 //	Connection *conn = new Connection( this, conn_data );
-	Connection *conn = drv_createConnection( conn_data );
+  Connection *conn = drv_createConnection( conn_data );
 
-	conn->setReadOnly(options & ReadOnlyConnection);
+  conn->setReadOnly(options & ReadOnlyConnection);
 
-	conn_data.driverName = name();
-	d->connections.insert( conn );
-	return conn;
+  conn_data.driverName = name();
+  d->connections.insert( conn );
+  return conn;
 }
 
 Connection* Driver::removeConnection( Connection *conn )
 {
-	clearError();
-	if (d->connections.remove( conn ))
-		return conn;
-	return 0;
+  clearError();
+  if (d->connections.remove( conn ))
+    return conn;
+  return 0;
 }
 
 QString Driver::defaultSQLTypeName(int id_t)
 {
-	if (id_t < 0 || id_t > (Field::LastType + 1))
-		return QString::fromLatin1("Null");
-	return QString::fromLatin1( KexiDB_defaultSQLTypeNames[id_t] );
+  if (id_t < 0 || id_t > (Field::LastType + 1))
+    return QString::fromLatin1("Null");
+  return QString::fromLatin1( KexiDB_defaultSQLTypeNames[id_t] );
 }
 
 bool Driver::isSystemObjectName( const QString& n ) const
 {
-	return Driver::isKexiDBSystemObjectName(n);
+  return Driver::isKexiDBSystemObjectName(n);
 }
 
 bool Driver::isKexiDBSystemObjectName( const QString& n )
 {
-	QString lcName = n.toLower();
-	if (!lcName.startsWith("kexi__"))
-		return false;
-	const QStringList list( Connection::kexiDBSystemTableNames() );
-	return list.indexOf( lcName ) != -1;
+  QString lcName = n.toLower();
+  if (!lcName.startsWith("kexi__"))
+    return false;
+  const QStringList list( Connection::kexiDBSystemTableNames() );
+  return list.indexOf( lcName ) != -1;
 }
 
 bool Driver::isSystemFieldName( const QString& n ) const
 {
-	if (!beh->ROW_ID_FIELD_NAME.isEmpty() && n.toLower()==beh->ROW_ID_FIELD_NAME.toLower())
-		return true;
-	return drv_isSystemFieldName(n);
+  if (!beh->ROW_ID_FIELD_NAME.isEmpty() && n.toLower()==beh->ROW_ID_FIELD_NAME.toLower())
+    return true;
+  return drv_isSystemFieldName(n);
 }
 
 QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 {
-	if (v.isNull())
-		return "NULL";
-	switch (ftype) {
-		case Field::Text:
-		case Field::LongText: {
-			QString s = v.toString();
-			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
-		}
-		case Field::Byte:
-		case Field::ShortInteger:
-		case Field::Integer:
-		case Field::BigInteger:
-			return v.toString();
-		case Field::Float:
-		case Field::Double: {
-			if (v.type()==QVariant::String) {
-				//workaround for values stored as string that should be casted to floating-point
-				QString s(v.toString());
-				return s.replace(',', ".");
-			}
-			return v.toString();
-		}
+  if (v.isNull())
+    return "NULL";
+  switch (ftype) {
+    case Field::Text:
+    case Field::LongText: {
+      QString s = v.toString();
+      return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
+    }
+    case Field::Byte:
+    case Field::ShortInteger:
+    case Field::Integer:
+    case Field::BigInteger:
+      return v.toString();
+    case Field::Float:
+    case Field::Double: {
+      if (v.type()==QVariant::String) {
+        //workaround for values stored as string that should be casted to floating-point
+        QString s(v.toString());
+        return s.replace(',', ".");
+      }
+      return v.toString();
+    }
 //TODO: here special encoding method needed
-		case Field::Boolean:
-			return QString::number(v.toInt()?1:0); //0 or 1
-		case Field::Time:
-			return QString("\'")+v.toTime().toString(Qt::ISODate)+"\'";
-		case Field::Date:
-			return QString("\'")+v.toDate().toString(Qt::ISODate)+"\'";
-		case Field::DateTime:
-			return dateTimeToSQL( v.toDateTime() );
-		case Field::BLOB: {
-			if (v.toByteArray().isEmpty())
-				return QString::fromLatin1("NULL");
-			if (v.type()==QVariant::String)
-				return escapeBLOB( v.toString().toUtf8() );
-			return escapeBLOB(v.toByteArray());
-		}
-		case Field::InvalidType:
-			return "!INVALIDTYPE!";
-		default:
-			KexiDBDbg << "Driver::valueToSQL(): UNKNOWN!" << endl;
-			return QString();
-	}
-	return QString();
+    case Field::Boolean:
+      return QString::number(v.toInt()?1:0); //0 or 1
+    case Field::Time:
+      return QString("\'")+v.toTime().toString(Qt::ISODate)+"\'";
+    case Field::Date:
+      return QString("\'")+v.toDate().toString(Qt::ISODate)+"\'";
+    case Field::DateTime:
+      return dateTimeToSQL( v.toDateTime() );
+    case Field::BLOB: {
+      if (v.toByteArray().isEmpty())
+        return QString::fromLatin1("NULL");
+      if (v.type()==QVariant::String)
+        return escapeBLOB( v.toString().toUtf8() );
+      return escapeBLOB(v.toByteArray());
+    }
+    case Field::InvalidType:
+      return "!INVALIDTYPE!";
+    default:
+      KexiDBDbg << "Driver::valueToSQL(): UNKNOWN!" << endl;
+      return QString();
+  }
+  return QString();
 }
 
 QVariant Driver::propertyValue( const QByteArray& propName ) const
 {
-	return d->properties.value(propName.toLower());
+  return d->properties.value(propName.toLower());
 }
 
 QString Driver::propertyCaption( const QByteArray& propName ) const
 {
-	return d->propertyCaptions.value(propName.toLower());
+  return d->propertyCaptions.value(propName.toLower());
 }
 
 QList<QByteArray> Driver::propertyNames() const
 {
-	QList<QByteArray> names( d->properties.keys() );
-	qSort(names);
-	return names;
+  QList<QByteArray> names( d->properties.keys() );
+  qSort(names);
+  return names;
 }
 
 QString Driver::escapeIdentifier(const QString& str, int options) const
 {
-	QByteArray cstr( str.toLatin1() );
-	return QString(escapeIdentifier(cstr, options));
+  QByteArray cstr( str.toLatin1() );
+  return QString(escapeIdentifier(cstr, options));
 }
 
 QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
 {
-	bool needOuterQuotes = false;
+  bool needOuterQuotes = false;
 
 // Need to use quotes if ...
 // ... we have been told to, or ...
-	if(options & EscapeAlways)
-		needOuterQuotes = true;
+  if(options & EscapeAlways)
+    needOuterQuotes = true;
 
 // ... or if the driver does not have a list of keywords,
-	else if(d->driverSpecificSQLKeywords.isEmpty())
-		needOuterQuotes = true;
+  else if(d->driverSpecificSQLKeywords.isEmpty())
+    needOuterQuotes = true;
 
 // ... or if it's a keyword in Kexi's SQL dialect,
-	else if(KexiDB::isKexiSQLKeyword(str))
-		needOuterQuotes = true;
+  else if(KexiDB::isKexiSQLKeyword(str))
+    needOuterQuotes = true;
 
 // ... or if it's a keyword in the backends SQL dialect,
-	else if((options & EscapeDriver) && d->driverSpecificSQLKeywords.contains(str))
-		needOuterQuotes = true;
+  else if((options & EscapeDriver) && d->driverSpecificSQLKeywords.contains(str))
+    needOuterQuotes = true;
 
 // ... or if the identifier has a space in it...
   else if(str.indexOf(' ') != -1)
-		needOuterQuotes = true;
+    needOuterQuotes = true;
 
-	if(needOuterQuotes && (options & EscapeKexi)) {
-		const char quote = '"';
-		return quote + QByteArray(str).replace( quote, "\"\"" ) + quote;
-	}
-	else if (needOuterQuotes) {
-		const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.toLatin1();
-		return quote + drv_escapeIdentifier(str) + quote;
-	} else {
-		return drv_escapeIdentifier(str);
-	}
+  if(needOuterQuotes && (options & EscapeKexi)) {
+    const char quote = '"';
+    return quote + QByteArray(str).replace( quote, "\"\"" ) + quote;
+  }
+  else if (needOuterQuotes) {
+    const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.toLatin1();
+    return quote + drv_escapeIdentifier(str) + quote;
+  } else {
+    return drv_escapeIdentifier(str);
+  }
 }
 
 void Driver::initDriverSpecificKeywords(const char** keywords)
 {
-	d->driverSpecificSQLKeywords.setStrings(keywords);
+  d->driverSpecificSQLKeywords.setStrings(keywords);
 }
 
 bool Driver::isDriverSpecificKeyword( const QByteArray& word ) const
 {
-	return d->driverSpecificSQLKeywords.contains( word );
+  return d->driverSpecificSQLKeywords.contains( word );
 }
 
 //---------------
@@ -350,7 +350,7 @@ K_GLOBAL_STATIC_WITH_ARGS(KexiUtils::StaticSetOfStrings, KexiDB_kexiSQLKeywords,
 
 KEXI_DB_EXPORT bool KexiDB::isKexiSQLKeyword( const QByteArray& word )
 {
-	return KexiDB_kexiSQLKeywords->contains( word );
+  return KexiDB_kexiSQLKeywords->contains( word );
 }
 
 #include "driver.moc"

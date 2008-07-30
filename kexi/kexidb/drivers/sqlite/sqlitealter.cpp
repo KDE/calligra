@@ -27,29 +27,29 @@
 using namespace KexiDB;
 
 enum SQLiteTypeAffinity { //as defined here: 2.1 Determination Of Column Affinity (http://sqlite.org/datatype3.html)
-	NoAffinity = 0, IntAffinity = 1, TextAffinity = 2, BLOBAffinity = 3
+  NoAffinity = 0, IntAffinity = 1, TextAffinity = 2, BLOBAffinity = 3
 };
 
 //! @internal
 struct SQLiteTypeAffinityInternal
 {
-	SQLiteTypeAffinityInternal()
-	{
-		affinity.insert(Field::Byte, IntAffinity);
-		affinity.insert(Field::ShortInteger, IntAffinity);
-		affinity.insert(Field::Integer, IntAffinity);
-		affinity.insert(Field::BigInteger, IntAffinity);
-		affinity.insert(Field::Boolean, IntAffinity);
-		affinity.insert(Field::Date, TextAffinity);
-		affinity.insert(Field::DateTime, TextAffinity);
-		affinity.insert(Field::Time, TextAffinity);
-		affinity.insert(Field::Float, IntAffinity);
-		affinity.insert(Field::Double, IntAffinity);
-		affinity.insert(Field::Text, TextAffinity);
-		affinity.insert(Field::LongText, TextAffinity);
-		affinity.insert(Field::BLOB, BLOBAffinity);
-	}
-	QHash<Field::Type, SQLiteTypeAffinity> affinity;
+  SQLiteTypeAffinityInternal()
+  {
+    affinity.insert(Field::Byte, IntAffinity);
+    affinity.insert(Field::ShortInteger, IntAffinity);
+    affinity.insert(Field::Integer, IntAffinity);
+    affinity.insert(Field::BigInteger, IntAffinity);
+    affinity.insert(Field::Boolean, IntAffinity);
+    affinity.insert(Field::Date, TextAffinity);
+    affinity.insert(Field::DateTime, TextAffinity);
+    affinity.insert(Field::Time, TextAffinity);
+    affinity.insert(Field::Float, IntAffinity);
+    affinity.insert(Field::Double, IntAffinity);
+    affinity.insert(Field::Text, TextAffinity);
+    affinity.insert(Field::LongText, TextAffinity);
+    affinity.insert(Field::BLOB, BLOBAffinity);
+  }
+  QHash<Field::Type, SQLiteTypeAffinity> affinity;
 };
 
 K_GLOBAL_STATIC(SQLiteTypeAffinityInternal, KexiDB_SQLite_affinityForType)
@@ -58,26 +58,26 @@ K_GLOBAL_STATIC(SQLiteTypeAffinityInternal, KexiDB_SQLite_affinityForType)
 //! See doc/dev/alter_table_type_conversions.ods, page 2 for more info
 static SQLiteTypeAffinity affinityForType(Field::Type type)
 {
-	return KexiDB_SQLite_affinityForType->affinity[type];
+  return KexiDB_SQLite_affinityForType->affinity[type];
 }
 
 tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& field, 
-	const QString& propertyName, const QVariant& value)
+  const QString& propertyName, const QVariant& value)
 {
 /*	if (propertyName=="name") {
-		
-	}*/
-	if (propertyName=="type") {
-		bool ok;
-		Field::Type type = KexiDB::intToFieldType( value.toUInt(&ok) );
-		if (!ok || Field::InvalidType == type) {
-			//! @todo msg
-			return false;
-		}
-		return changeFieldType(table, field, type);
-	}
-	// not found
-	return cancelled;
+    
+  }*/
+  if (propertyName=="type") {
+    bool ok;
+    Field::Type type = KexiDB::intToFieldType( value.toUInt(&ok) );
+    if (!ok || Field::InvalidType == type) {
+      //! @todo msg
+      return false;
+    }
+    return changeFieldType(table, field, type);
+  }
+  // not found
+  return cancelled;
 }
 
 /*! 
@@ -102,15 +102,15 @@ tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& fi
  See alter_table_type_conversions.ods for details.
 */
 tristate SQLiteConnection::changeFieldType(TableSchema &table, Field& field, 
-	Field::Type type)
+  Field::Type type)
 {
-	Q_UNUSED(table);
-	const Field::Type oldType = field.type();
-	const SQLiteTypeAffinity oldAffinity = affinityForType(oldType);
-	const SQLiteTypeAffinity newAffinity = affinityForType(type);
-	if (oldAffinity!=newAffinity) {
-		//type affinity will be changed
-	}
+  Q_UNUSED(table);
+  const Field::Type oldType = field.type();
+  const SQLiteTypeAffinity oldAffinity = affinityForType(oldType);
+  const SQLiteTypeAffinity newAffinity = affinityForType(type);
+  if (oldAffinity!=newAffinity) {
+    //type affinity will be changed
+  }
 
-	return cancelled;
+  return cancelled;
 }

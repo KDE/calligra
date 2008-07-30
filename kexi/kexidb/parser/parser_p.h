@@ -38,34 +38,34 @@ namespace KexiDB {
 //! @internal
 class Parser::Private
 {
-	public:
-		Private();
-		~Private();
+  public:
+    Private();
+    ~Private();
 
-		void clear();
+    void clear();
 
-		int operation;
-		TableSchema *table;
-		QuerySchema *select;
-		Connection *db;
-		QString statement;
-		ParserError error;
-		bool initialized : 1;
+    int operation;
+    TableSchema *table;
+    QuerySchema *select;
+    Connection *db;
+    QString statement;
+    ParserError error;
+    bool initialized : 1;
 };
 
 
 /*! Data used on parsing. @internal */
 class ParseInfo
 {
-	public:
-		ParseInfo(QuerySchema *query);
-		~ParseInfo();
+  public:
+    ParseInfo(QuerySchema *query);
+    ~ParseInfo();
 
-		//! collects positions of tables/aliases with the same names
-		QHash< QString, QList<int> > repeatedTablesAndAliases;
+    //! collects positions of tables/aliases with the same names
+    QHash< QString, QList<int> > repeatedTablesAndAliases;
 
-		QString errMsg, errDescr; //helpers
-		QuerySchema *querySchema;
+    QString errMsg, errDescr; //helpers
+    QuerySchema *querySchema;
 };
 
 }
@@ -76,8 +76,8 @@ void setError(const QString& errDesc);
 //bool parseData(KexiDB::Parser *p, const char *data);
 bool addColumn( KexiDB::ParseInfo& parseInfo, KexiDB::BaseExpr* columnExpr );
 KexiDB::QuerySchema* buildSelectQuery( 
-	KexiDB::QuerySchema* querySchema, KexiDB::NArgExpr* colViews, 
-	KexiDB::NArgExpr* tablesList = 0, SelectOptionsInternal* options = 0 ); //KexiDB::BaseExpr* whereExpr = 0 );
+  KexiDB::QuerySchema* querySchema, KexiDB::NArgExpr* colViews, 
+  KexiDB::NArgExpr* tablesList = 0, SelectOptionsInternal* options = 0 ); //KexiDB::BaseExpr* whereExpr = 0 );
 
 extern KexiDB::Parser *parser;
 extern KexiDB::Field *field;

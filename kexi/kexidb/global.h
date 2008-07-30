@@ -105,15 +105,15 @@ namespace KexiDB {
  The version is stored as internal database properties. */
 class KEXI_DB_EXPORT DatabaseVersionInfo
 {
-	public:
-		DatabaseVersionInfo();
-		DatabaseVersionInfo(uint majorVersion, uint minorVersion);
+  public:
+    DatabaseVersionInfo();
+    DatabaseVersionInfo(uint majorVersion, uint minorVersion);
 
-		//! Major version number, e.g. 1 for 1.8
-		uint major;
+    //! Major version number, e.g. 1 for 1.8
+    uint major;
 
-		//! Minor version number, e.g. 8 for 1.8
-		uint minor;
+    //! Minor version number, e.g. 8 for 1.8
+    uint minor;
 };
 
 //! \return KexiDB version info
@@ -122,37 +122,37 @@ KEXI_DB_EXPORT DatabaseVersionInfo version();
 /*! @short Contains version information about a database backend. */
 class KEXI_DB_EXPORT ServerVersionInfo
 {
-	public:
-		ServerVersionInfo();
+  public:
+    ServerVersionInfo();
 
-		//! Clears the information - integers will be set to 0 and string to null
-		void clear();
+    //! Clears the information - integers will be set to 0 and string to null
+    void clear();
 
-		//! Major version number, e.g. 1 for 1.2.3
-		uint major;
+    //! Major version number, e.g. 1 for 1.2.3
+    uint major;
 
-		//! Minor version number, e.g. 2 for 1.2.3
-		uint minor;
+    //! Minor version number, e.g. 2 for 1.2.3
+    uint minor;
 
-		//! Release version number, e.g. 3 for 1.2.3
-		uint release;
+    //! Release version number, e.g. 3 for 1.2.3
+    uint release;
 
-		//! Version string, as returned by the server
-		QString string;
+    //! Version string, as returned by the server
+    QString string;
 };
 
 /*! Object types set like table or query. */
 enum ObjectTypes {
-	UnknownObjectType = -1, //!< helper
-	AnyObjectType = 0,      //!< helper
-	TableObjectType = 1,
-	QueryObjectType = 2,
-	LastObjectType = 2, //ALWAYS UPDATE THIS
+  UnknownObjectType = -1, //!< helper
+  AnyObjectType = 0,      //!< helper
+  TableObjectType = 1,
+  QueryObjectType = 2,
+  LastObjectType = 2, //ALWAYS UPDATE THIS
 
-	KexiDBSystemTableObjectType = 128,//!< helper, not used in storage 
-	                                  //!< (allows to select kexidb system tables
-	                                  //!< may be or'd with TableObjectType)
-	IndexObjectType = 256 //!< special
+  KexiDBSystemTableObjectType = 128,//!< helper, not used in storage 
+                                    //!< (allows to select kexidb system tables
+                                    //!< may be or'd with TableObjectType)
+  IndexObjectType = 256 //!< special
 };
 
 }
@@ -161,7 +161,7 @@ enum ObjectTypes {
 #if 0 //Qt4: remove
 /*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
 #define foreach_list(_class, _variable, _list) \
-	        for (_class _variable(_list); _variable.current(); ++_variable)
+          for (_class _variable(_list); _variable.current(); ++_variable)
 
 #define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
 #endif

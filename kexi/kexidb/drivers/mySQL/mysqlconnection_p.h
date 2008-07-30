@@ -50,32 +50,32 @@ namespace NAMESPACE {
  */
 class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 {
-	public:
-		MySqlConnectionInternal(KexiDB::Connection* connection);
-		virtual ~MySqlConnectionInternal();
+  public:
+    MySqlConnectionInternal(KexiDB::Connection* connection);
+    virtual ~MySqlConnectionInternal();
 
-		//! Connects to a MySQL database
-		bool db_connect(const KexiDB::ConnectionData& data);
+    //! Connects to a MySQL database
+    bool db_connect(const KexiDB::ConnectionData& data);
 
-		//! Disconnects from the database
-		bool db_disconnect();
+    //! Disconnects from the database
+    bool db_disconnect();
 
-		//! Selects a database that is about to be used
-		bool useDatabase(const QString &dbName = QString());
-		
-		//! Execute SQL statement on the database
-		bool executeSQL( const QString& statement );
+    //! Selects a database that is about to be used
+    bool useDatabase(const QString &dbName = QString());
+    
+    //! Execute SQL statement on the database
+    bool executeSQL( const QString& statement );
 
-		//! Stores last operation's result
-		virtual void storeResult();
+    //! Stores last operation's result
+    virtual void storeResult();
 
-		//! Escapes a table, database or column name
-		QString escapeIdentifier(const QString& str) const;
+    //! Escapes a table, database or column name
+    QString escapeIdentifier(const QString& str) const;
 
-		MYSQL *mysql;
-		bool mysql_owned; //!< true if mysql pointer should be freed on destruction
-		QString errmsg; //!< server-specific message of last operation
-		int res; //!< result code of last operation on server
+    MYSQL *mysql;
+    bool mysql_owned; //!< true if mysql pointer should be freed on destruction
+    QString errmsg; //!< server-specific message of last operation
+    int res; //!< result code of last operation on server
 };
 
 
@@ -83,14 +83,14 @@ class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 /*! Provides a low-level abstraction for iterating over MySql result sets. */
 class MySqlCursorData : public MySqlConnectionInternal
 {
-	public:
-		MySqlCursorData(KexiDB::Connection* connection);
-		virtual ~MySqlCursorData();
+  public:
+    MySqlCursorData(KexiDB::Connection* connection);
+    virtual ~MySqlCursorData();
 
-		MYSQL_RES *mysqlres;
-		MYSQL_ROW mysqlrow;
-		unsigned long *lengths;
-		unsigned long numRows;
+    MYSQL_RES *mysqlres;
+    MYSQL_ROW mysqlrow;
+    unsigned long *lengths;
+    unsigned long numRows;
 };
 
 }

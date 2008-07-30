@@ -37,129 +37,129 @@ KEXIDB_DRIVER_INFO( xBaseDriver , xbase )
 class KexiDB::xBaseDriverPrivate {
 
 public:
-	xBaseDriverPrivate()
-		: internalDriver(0)
-	{
-	}
+  xBaseDriverPrivate()
+    : internalDriver(0)
+  {
+  }
 
-	KexiDB::Driver* internalDriver;
+  KexiDB::Driver* internalDriver;
 
 };
 
 xBaseDriver::xBaseDriver( QObject *parent, const QStringList &args )
-	: Driver( parent, args )
-	,dp( new xBaseDriverPrivate() )
+  : Driver( parent, args )
+  ,dp( new xBaseDriverPrivate() )
 {
-	KexiDB::DriverManager manager;
-	dp->internalDriver = manager.driver(KexiDB::defaultFileBasedDriverName());
+  KexiDB::DriverManager manager;
+  dp->internalDriver = manager.driver(KexiDB::defaultFileBasedDriverName());
 
-	d->isFileDriver = true ;
-	d->isDBOpenedAfterCreate = true;
-	d->features = SingleTransactions | CursorForward;
+  d->isFileDriver = true ;
+  d->isDBOpenedAfterCreate = true;
+  d->features = SingleTransactions | CursorForward;
 
-	// Everything below is for the SQLite (default file based) driver
+  // Everything below is for the SQLite (default file based) driver
 
-	//special method for autoincrement definition
-	beh->SPECIAL_AUTO_INCREMENT_DEF = true;
-	beh->AUTO_INCREMENT_FIELD_OPTION = ""; //not available
-	beh->AUTO_INCREMENT_TYPE = "INTEGER";
-	beh->AUTO_INCREMENT_PK_FIELD_OPTION = "PRIMARY KEY";
-	beh->AUTO_INCREMENT_REQUIRES_PK = true;
-	beh->ROW_ID_FIELD_NAME = "OID";
+  //special method for autoincrement definition
+  beh->SPECIAL_AUTO_INCREMENT_DEF = true;
+  beh->AUTO_INCREMENT_FIELD_OPTION = ""; //not available
+  beh->AUTO_INCREMENT_TYPE = "INTEGER";
+  beh->AUTO_INCREMENT_PK_FIELD_OPTION = "PRIMARY KEY";
+  beh->AUTO_INCREMENT_REQUIRES_PK = true;
+  beh->ROW_ID_FIELD_NAME = "OID";
 
-	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
-	beh->SELECT_1_SUBQUERY_SUPPORTED = true;
+  beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
+  beh->SELECT_1_SUBQUERY_SUPPORTED = true;
 
-	// As we provide a wrapper over SQLite, this aspect will be hidden by SQLite to us.
-	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
+  // As we provide a wrapper over SQLite, this aspect will be hidden by SQLite to us.
+  beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 
-	initDriverSpecificKeywords(keywords);
+  initDriverSpecificKeywords(keywords);
 
-	// Ditto like SQLite , as it won't matter
-	d->typeNames[Field::Byte]="Byte";
-	d->typeNames[Field::ShortInteger]="ShortInteger";
-	d->typeNames[Field::Integer]="Integer";
-	d->typeNames[Field::BigInteger]="BigInteger";
-	d->typeNames[Field::Boolean]="Boolean";
-	d->typeNames[Field::Date]="Date";
-	d->typeNames[Field::DateTime]="DateTime";
-	d->typeNames[Field::Time]="Time";
-	d->typeNames[Field::Float]="Float";
-	d->typeNames[Field::Double]="Double";
-	d->typeNames[Field::Text]="Text";
-	d->typeNames[Field::LongText]="CLOB";
-	d->typeNames[Field::BLOB]="BLOB";
+  // Ditto like SQLite , as it won't matter
+  d->typeNames[Field::Byte]="Byte";
+  d->typeNames[Field::ShortInteger]="ShortInteger";
+  d->typeNames[Field::Integer]="Integer";
+  d->typeNames[Field::BigInteger]="BigInteger";
+  d->typeNames[Field::Boolean]="Boolean";
+  d->typeNames[Field::Date]="Date";
+  d->typeNames[Field::DateTime]="DateTime";
+  d->typeNames[Field::Time]="Time";
+  d->typeNames[Field::Float]="Float";
+  d->typeNames[Field::Double]="Double";
+  d->typeNames[Field::Text]="Text";
+  d->typeNames[Field::LongText]="CLOB";
+  d->typeNames[Field::BLOB]="BLOB";
 }
 
 xBaseDriver::~xBaseDriver()
 {
-	delete dp;
+  delete dp;
 }
 
 KexiDB::Connection*
 xBaseDriver::drv_createConnection( ConnectionData &conn_data )
 {
-	if ( !dp->internalDriver ) {
-		return 0;
-	}
+  if ( !dp->internalDriver ) {
+    return 0;
+  }
 
-	return new xBaseConnection( this, dp->internalDriver, conn_data );
+  return new xBaseConnection( this, dp->internalDriver, conn_data );
 }
 
 bool xBaseDriver::isSystemObjectName( const QString& n ) const
 {
-	if ( !dp->internalDriver ) {
-		return false;
-	}
-	return Driver::isSystemObjectName(n) || dp->internalDriver->isSystemObjectName(n);
+  if ( !dp->internalDriver ) {
+    return false;
+  }
+  return Driver::isSystemObjectName(n) || dp->internalDriver->isSystemObjectName(n);
 }
 
 bool xBaseDriver::drv_isSystemFieldName( const QString& n ) const
 {
-	if ( !dp->internalDriver ) {
-		return false;
-	}
-	return dp->internalDriver->isSystemFieldName(n);
+  if ( !dp->internalDriver ) {
+    return false;
+  }
+  return dp->internalDriver->isSystemFieldName(n);
 }
 
 QString xBaseDriver::escapeString(const QString& str) const
 {
-	if ( !dp->internalDriver ) {
-		return str;
-	}
-	return dp->internalDriver->escapeString(str);
+  if ( !dp->internalDriver ) {
+    return str;
+  }
+  return dp->internalDriver->escapeString(str);
 }
 
 QByteArray xBaseDriver::escapeString(const QByteArray& str) const
 {
-	if ( !dp->internalDriver ) {
-		return str;
-	}
-	return dp->internalDriver->escapeString(str);
+  if ( !dp->internalDriver ) {
+    return str;
+  }
+  return dp->internalDriver->escapeString(str);
 }
 
 QString xBaseDriver::escapeBLOB(const QByteArray& array) const
 {
-	if ( !dp->internalDriver ) {
-		return array;
-	}
-	return dp->internalDriver->escapeBLOB(array);
+  if ( !dp->internalDriver ) {
+    return array;
+  }
+  return dp->internalDriver->escapeBLOB(array);
 }
 
 QString xBaseDriver::drv_escapeIdentifier( const QString& str) const
 {
-	if ( !dp->internalDriver ) {
-		return str;
-	}
-	return dp->internalDriver->escapeIdentifier(str);
+  if ( !dp->internalDriver ) {
+    return str;
+  }
+  return dp->internalDriver->escapeIdentifier(str);
 }
 
 QByteArray xBaseDriver::drv_escapeIdentifier( const QByteArray& str) const
 {
-	if ( !dp->internalDriver ) {
-		return str;
-	}
-	return dp->internalDriver->escapeIdentifier(str);
+  if ( !dp->internalDriver ) {
+    return str;
+  }
+  return dp->internalDriver->escapeIdentifier(str);
 }
 
 #include "xbasedriver.moc"

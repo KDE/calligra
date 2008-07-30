@@ -38,25 +38,25 @@ using namespace NAMESPACE;
 
 /* ************************************************************************** */
 MySqlConnectionInternal::MySqlConnectionInternal(KexiDB::Connection* connection)
-	: ConnectionInternal(connection)
-	, mysql(0)
-	, mysql_owned(true)
-	, res(0)
+  : ConnectionInternal(connection)
+  , mysql(0)
+  , mysql_owned(true)
+  , res(0)
 {
 }
 
 MySqlConnectionInternal::~MySqlConnectionInternal()
 {
-	if (mysql_owned && mysql) {
-		mysql_close(mysql);
-		mysql = 0;
-	}
+  if (mysql_owned && mysql) {
+    mysql_close(mysql);
+    mysql = 0;
+  }
 }
 
 void MySqlConnectionInternal::storeResult()
 {
-	res = mysql_errno(mysql);
-	errmsg = mysql_error(mysql);
+  res = mysql_errno(mysql);
+  errmsg = mysql_error(mysql);
 }
 
 /* ************************************************************************** */
@@ -70,60 +70,60 @@ void MySqlConnectionInternal::storeResult()
 //  QCString password, unsigned short int port, QString socket)
 bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 {
-	if (!(mysql = mysql_init(mysql)))
-		return false;
+  if (!(mysql = mysql_init(mysql)))
+    return false;
 
-	KexiDBDrvDbg << "MySqlConnectionInternal::connect()" << endl;
-	QByteArray localSocket;
-	QString hostName = data.hostName;
-	if (hostName.isEmpty() || hostName.toLower()=="localhost") {
-		if (data.useLocalSocketFile) {
-			if (data.localSocketFileName.isEmpty()) {
-	//! @todo move the list of default sockets to a generic method
-				QStringList sockets;
-	#ifndef Q_WS_WIN
-				sockets.append("/var/lib/mysql/mysql.sock");
-				sockets.append("/var/run/mysqld/mysqld.sock");
-				sockets.append("/tmp/mysql.sock");
-		
-				foreach (const QString& socket, sockets) {
-					if (QFile(socket).exists()) {
-						localSocket = socket.toLatin1();
-						break;
-					}
-				}
-	#endif
-			}
-			else
-				localSocket = QFile::encodeName(data.localSocketFileName);
-		}
-		else {
-			//we're not using local socket
-			hostName = "127.0.0.1"; //this will force mysql to connect to localhost
-		}
-	}
+  KexiDBDrvDbg << "MySqlConnectionInternal::connect()" << endl;
+  QByteArray localSocket;
+  QString hostName = data.hostName;
+  if (hostName.isEmpty() || hostName.toLower()=="localhost") {
+    if (data.useLocalSocketFile) {
+      if (data.localSocketFileName.isEmpty()) {
+  //! @todo move the list of default sockets to a generic method
+        QStringList sockets;
+  #ifndef Q_WS_WIN
+        sockets.append("/var/lib/mysql/mysql.sock");
+        sockets.append("/var/run/mysqld/mysqld.sock");
+        sockets.append("/tmp/mysql.sock");
+    
+        foreach (const QString& socket, sockets) {
+          if (QFile(socket).exists()) {
+            localSocket = socket.toLatin1();
+            break;
+          }
+        }
+  #endif
+      }
+      else
+        localSocket = QFile::encodeName(data.localSocketFileName);
+    }
+    else {
+      //we're not using local socket
+      hostName = "127.0.0.1"; //this will force mysql to connect to localhost
+    }
+  }
 
 /*! @todo is latin1() encoding here valid? what about using UTF for passwords? */
-	QByteArray pwd( data.password.isNull() ? QByteArray() : data.password.toLatin1() );
-	mysql_real_connect(mysql, hostName.toLatin1(), data.userName.toLatin1(), 
-		pwd.constData(), 0, data.port, localSocket, 0);
-	if(mysql_errno(mysql) == 0)
-		return true;
+  QByteArray pwd( data.password.isNull() ? QByteArray() : data.password.toLatin1() );
+  mysql_real_connect(mysql, hostName.toLatin1(), data.userName.toLatin1(), 
+    pwd.constData(), 0, data.port, localSocket, 0);
+  if(mysql_errno(mysql) == 0)
+    return true;
 
-	storeResult(); //store error msg, if any - can be destroyed after disconnect()
-	db_disconnect();
+  storeResult(); //store error msg, if any - can be destroyed after disconnect()
+  db_disconnect();
 //	setError(ERR_DB_SPECIFIC,err);
-	return false;
+  return false;
 }
 
 /*! Disconnects from the database.
  */
 bool MySqlConnectionInternal::db_disconnect()
 {
-	mysql_close(mysql);
-	mysql = 0;
-	KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
-	return true;
+  mysql_close(mysql);
+  mysql = 0;
+  KexiDBDrvDbg << "MySqlConnection::disconnect()" << endl;
+  return true;
 }
 
 /* ************************************************************************** */
@@ -132,7 +132,7 @@ bool MySqlConnectionInternal::db_disconnect()
 bool MySqlConnectionInternal::useDatabase(const QString &dbName)
 {
 //TODO is here escaping needed?
-	return executeSQL("USE " + dbName);
+  return executeSQL("USE " + dbName);
 }
 
 /*! Executes the given SQL statement on the server.
@@ -141,19 +141,19 @@ bool MySqlConnectionInternal::executeSQL(const QString& statement)
 {
 //	KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
 //	             << statement << endl;
-	QByteArray queryStr( statement.toUtf8() );
-	const char *query = queryStr.constData();
-	if (mysql_real_query(mysql, query, qstrlen(query)) == 0)
-		return true;
+  QByteArray queryStr( statement.toUtf8() );
+  const char *query = queryStr.constData();
+  if (mysql_real_query(mysql, query, qstrlen(query)) == 0)
+    return true;
 
-	storeResult();
+  storeResult();
 //	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
-	return false;
+  return false;
 }
 
 QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const
 {
-	return QString(str).replace('`', "'");
+  return QString(str).replace('`', "'");
 }
 
 //--------------------------------------
@@ -165,7 +165,7 @@ MySqlCursorData::MySqlCursorData(KexiDB::Connection* connection)
 , lengths(0)
 , numRows(0)
 {
-	mysql_owned = false;
+  mysql_owned = false;
 }
 
 MySqlCursorData::~MySqlCursorData()

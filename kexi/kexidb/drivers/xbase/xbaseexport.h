@@ -23,11 +23,11 @@
 #include <kexidb/tableschema.h>
 
 namespace Kexi {
-	class ObjectStatus;
+  class ObjectStatus;
 }
 
 namespace KexiMigration {
-	class Data;
+  class Data;
 }
 
 namespace KexiDB {
@@ -37,39 +37,39 @@ class xBaseExportPrivate;
 
 class xBaseExport : public KexiDB::Object 
 {
-	public:
-		
-		void setData(KexiMigration::Data* migrateData);
+  public:
+    
+    void setData(KexiMigration::Data* migrateData);
 
-		//! Exports data 
-		bool performExport(Kexi::ObjectStatus* result = 0);
+    //! Exports data 
+    bool performExport(Kexi::ObjectStatus* result = 0);
 
-	protected:
-		
-		xBaseExport();
+  protected:
+    
+    xBaseExport();
 
-		//! Connect to destination database
-		bool dest_connect();
+    //! Connect to destination database
+    bool dest_connect();
 
-		//! Disconnect from destination database
-		bool dest_disconnect();
+    //! Disconnect from destination database
+    bool dest_disconnect();
 
-		//! Create a table in the destination database
-		bool dest_createTable(const QString& originalName, KexiDB::TableSchema* tableSchema);
+    //! Create a table in the destination database
+    bool dest_createTable(const QString& originalName, KexiDB::TableSchema* tableSchema);
 
-		//! Copy table data from source to destination
-		bool dest_copyTable(const QString& srcTableName, KexiDB::Connection *srcConn, 
-			KexiDB::TableSchema* srcTable);
+    //! Copy table data from source to destination
+    bool dest_copyTable(const QString& srcTableName, KexiDB::Connection *srcConn, 
+      KexiDB::TableSchema* srcTable);
 
-		//! Checks whether objectName is a system object name
-		bool dest_isSystemObjectName(const QString& objectName);
+    //! Checks whether objectName is a system object name
+    bool dest_isSystemObjectName(const QString& objectName);
 
-		KexiMigration::Data* m_migrateData;
+    KexiMigration::Data* m_migrateData;
 
-	private:
-		xBaseExportPrivate* d;
+  private:
+    xBaseExportPrivate* d;
 
-	friend class KexiDB::xBaseConnectionInternal;
+  friend class KexiDB::xBaseConnectionInternal;
 };
 
 }

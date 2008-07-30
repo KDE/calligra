@@ -29,34 +29,34 @@ class SybaseCursorData;
 
 class SybaseCursor: public Cursor {
 public:
-	SybaseCursor(Connection* conn, const QString& statement = QString(), 
-		uint cursor_options = NoOptions );
-	SybaseCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
-	virtual ~SybaseCursor();
-	virtual bool drv_open();
-	virtual bool drv_close();
+  SybaseCursor(Connection* conn, const QString& statement = QString(), 
+    uint cursor_options = NoOptions );
+  SybaseCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
+  virtual ~SybaseCursor();
+  virtual bool drv_open();
+  virtual bool drv_close();
 //	  virtual bool drv_moveFirst();
-	virtual void drv_getNextRecord();
-	//virtual bool drv_getPrevRecord();
-	virtual QVariant value(uint);
+  virtual void drv_getNextRecord();
+  //virtual bool drv_getPrevRecord();
+  virtual QVariant value(uint);
 
-	virtual void drv_clearServerResult();
-	virtual void drv_appendCurrentRecordToBuffer();
-	virtual void drv_bufferMovePointerNext();
-	virtual void drv_bufferMovePointerPrev();
-	virtual void drv_bufferMovePointerTo(qint64 to);
-	virtual const char** rowData() const;
-	virtual bool drv_storeCurrentRow(RecordData &data) const;
+  virtual void drv_clearServerResult();
+  virtual void drv_appendCurrentRecordToBuffer();
+  virtual void drv_bufferMovePointerNext();
+  virtual void drv_bufferMovePointerPrev();
+  virtual void drv_bufferMovePointerTo(qint64 to);
+  virtual const char** rowData() const;
+  virtual bool drv_storeCurrentRow(RecordData &data) const;
 //	  virtual bool save(RecordData& data, RowEditBuffer& buf);
 
-	virtual int serverResult();
-	virtual QString serverResultName();
-	virtual QString serverErrorMsg();
+  virtual int serverResult();
+  virtual QString serverResultName();
+  virtual QString serverErrorMsg();
 
 protected:
-	QVariant pValue(uint pos) const;
+  QVariant pValue(uint pos) const;
 
-	SybaseCursorData *d;
+  SybaseCursorData *d;
 };
 
 }

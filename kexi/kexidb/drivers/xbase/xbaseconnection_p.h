@@ -43,33 +43,33 @@ database.  Used by the KexiDB drivers.
 */
 class xBaseConnectionInternal : public KexiDB::ConnectionInternal
 {
-	public:
-		xBaseConnectionInternal(KexiDB::Connection* connection, KexiDB::Driver* internalDriver);
-		virtual ~xBaseConnectionInternal();
+  public:
+    xBaseConnectionInternal(KexiDB::Connection* connection, KexiDB::Driver* internalDriver);
+    virtual ~xBaseConnectionInternal();
 
-		//! Connects to a xBase database
-		bool db_connect(const KexiDB::ConnectionData& data);
+    //! Connects to a xBase database
+    bool db_connect(const KexiDB::ConnectionData& data);
 
-		//! Disconnects from the database
-		bool db_disconnect(const KexiDB::ConnectionData& data);
+    //! Disconnects from the database
+    bool db_disconnect(const KexiDB::ConnectionData& data);
 
-		//! Selects a database that is about to be used
-		bool useDatabase(const QString &dbName = QString());
-		
-		//! Execute SQL statement on the database
-		bool executeSQL( const QString& statement );
+    //! Selects a database that is about to be used
+    bool useDatabase(const QString &dbName = QString());
+    
+    //! Execute SQL statement on the database
+    bool executeSQL( const QString& statement );
 
-		//! Stores last operation's result
-		virtual void storeResult();
+    //! Stores last operation's result
+    virtual void storeResult();
 
-		QPointer<KexiDB::Driver> internalDriver;
-		QPointer<KexiDB::Connection> internalConn;
-		QString tempDatabase;
+    QPointer<KexiDB::Driver> internalDriver;
+    QPointer<KexiDB::Connection> internalConn;
+    QString tempDatabase;
 
-		QHash<QString,QString> dbMap;
+    QHash<QString,QString> dbMap;
 
-		QString errmsg; //!< server-specific message of last operation
-		int res; //!< result code of last operation on server
+    QString errmsg; //!< server-specific message of last operation
+    int res; //!< result code of last operation on server
 };
 
 }

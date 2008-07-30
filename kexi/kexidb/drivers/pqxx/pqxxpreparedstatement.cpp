@@ -31,7 +31,7 @@
 using namespace KexiDB;
 
 pqxxPreparedStatement::pqxxPreparedStatement(
-	StatementType type, ConnectionInternal& conn, FieldList& fields) 
+  StatementType type, ConnectionInternal& conn, FieldList& fields) 
  : KexiDB::PreparedStatement(type, conn, fields)
  , m_conn(conn.connection)
 {
@@ -46,11 +46,11 @@ pqxxPreparedStatement::~pqxxPreparedStatement()
 bool pqxxPreparedStatement::execute()
 {
 //	KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
-	m_resetRequired = true;
-	if (m_conn->insertRecord(*m_fields, m_args)) {
-		return true;
-	}
-	return false;
+  m_resetRequired = true;
+  if (m_conn->insertRecord(*m_fields, m_args)) {
+    return true;
+  }
+  return false;
 }
 
 

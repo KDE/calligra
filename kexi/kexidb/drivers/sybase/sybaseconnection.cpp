@@ -37,194 +37,194 @@ using namespace KexiDB;
 //--------------------------------------------------------------------------
 
 SybaseConnection::SybaseConnection( Driver *driver, ConnectionData &conn_data )
-	:Connection(driver,conn_data)
-	,d(new SybaseConnectionInternal(this))
+  :Connection(driver,conn_data)
+  ,d(new SybaseConnectionInternal(this))
 {
 }
 
 SybaseConnection::~SybaseConnection() {
-	destroy();
+  destroy();
 }
 
 bool SybaseConnection::drv_connect(KexiDB::ServerVersionInfo& version)
 {
-	const bool ok = d->db_connect(*data());
-	if (!ok)
-		return false;
+  const bool ok = d->db_connect(*data());
+  if (!ok)
+    return false;
 
-	// we can retrieve the server name and the server version using global variables
-	// @@servername
-	// @@version
+  // we can retrieve the server name and the server version using global variables
+  // @@servername
+  // @@version
 
-	QString serverVersionString;
+  QString serverVersionString;
 
-	if ( !querySingleString( "Select @@servername" , version.string ) ) {
-	      KexiDBDrvDbg << "Couldn't fetch server name" << endl;
-	}
+  if ( !querySingleString( "Select @@servername" , version.string ) ) {
+        KexiDBDrvDbg << "Couldn't fetch server name" << endl;
+  }
 
-	if ( !querySingleString( "Select @@version", serverVersionString ) ) {
-	      KexiDBDrvDbg << "Couldn't fetch server version" << endl;
-	}
+  if ( !querySingleString( "Select @@version", serverVersionString ) ) {
+        KexiDBDrvDbg << "Couldn't fetch server version" << endl;
+  }
 
-	QRegExp versionRe("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)");
-	if ( versionRe.exactMatch(serverVersionString)) {
-		version.major = versionRe.cap(1).toInt();
-		version.minor = versionRe.cap(2).toInt();
-		version.release = versionRe.cap(3).toInt();
-	}
+  QRegExp versionRe("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)");
+  if ( versionRe.exactMatch(serverVersionString)) {
+    version.major = versionRe.cap(1).toInt();
+    version.minor = versionRe.cap(2).toInt();
+    version.release = versionRe.cap(3).toInt();
+  }
 
-	return true;
+  return true;
 }
 
 bool SybaseConnection::drv_disconnect() {
-	return d->db_disconnect();
+  return d->db_disconnect();
 }
 
 Cursor* SybaseConnection::prepareQuery(const QString& statement, uint cursor_options) {
-	return new SybaseCursor(this,statement,cursor_options);
+  return new SybaseCursor(this,statement,cursor_options);
 }
 
 Cursor* SybaseConnection::prepareQuery( QuerySchema& query, uint cursor_options ) {
-	return new SybaseCursor( this, query, cursor_options );
+  return new SybaseCursor( this, query, cursor_options );
 }
 
 bool SybaseConnection::drv_getDatabasesList( QStringList &list ) {
-	KexiDBDrvDbg << "SybaseConnection::drv_getDatabasesList()" << endl;
+  KexiDBDrvDbg << "SybaseConnection::drv_getDatabasesList()" << endl;
 
-	// select * from master..sysdatabases ?
-	// todo: verify.
-	return queryStringList( "Select name from master..sysdatabases", list ) ;
+  // select * from master..sysdatabases ?
+  // todo: verify.
+  return queryStringList( "Select name from master..sysdatabases", list ) ;
 }
 
 bool SybaseConnection::drv_createDatabase( const QString &dbName)
 {
-	KexiDBDrvDbg << "SybaseConnection::drv_createDatabase: " << dbName << endl;
-	// mysql_create_db deprecated, use SQL here.
-	if (drv_executeSQL("CREATE DATABASE " + dbName)) {
-	    // set allow_nulls_by_default option to true
-	    QString allowNullsQuery = QString( "sp_dboption %1, allow_nulls_by_default, true" ).arg( dbName );
-	    if ( drv_executeSQL( allowNullsQuery.toLatin1().data() ) )
-		  return true;
-	}
-	d->storeResult();
-	return false;
+  KexiDBDrvDbg << "SybaseConnection::drv_createDatabase: " << dbName << endl;
+  // mysql_create_db deprecated, use SQL here.
+  if (drv_executeSQL("CREATE DATABASE " + dbName)) {
+      // set allow_nulls_by_default option to true
+      QString allowNullsQuery = QString( "sp_dboption %1, allow_nulls_by_default, true" ).arg( dbName );
+      if ( drv_executeSQL( allowNullsQuery.toLatin1().data() ) )
+      return true;
+  }
+  d->storeResult();
+  return false;
 }
 
 bool SybaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, MessageHandler* msgHandler)
 {
-	Q_UNUSED(cancelled);
-	Q_UNUSED(msgHandler);
+  Q_UNUSED(cancelled);
+  Q_UNUSED(msgHandler);
 
 //TODO is here escaping needed?
-	return	d->useDatabase( dbName ) ;
+  return	d->useDatabase( dbName ) ;
 }
 
 bool SybaseConnection::drv_closeDatabase() {
 // here we disconenct the connection
-	return true;
+  return true;
 }
 
 bool SybaseConnection::drv_dropDatabase( const QString &dbName) {
 
-	return drv_executeSQL("drop database "+ driver()->escapeString( dbName ) );
+  return drv_executeSQL("drop database "+ driver()->escapeString( dbName ) );
 }
 
 bool SybaseConnection::drv_executeSQL( const QString& statement ) {
-	return d->executeSQL(statement);
+  return d->executeSQL(statement);
 }
 
 quint64 SybaseConnection::drv_lastInsertRowID()
 {
-	int rowId;
-	querySingleNumber( "Select @@IDENTITY", rowId );
+  int rowId;
+  querySingleNumber( "Select @@IDENTITY", rowId );
 
-	return ( qint64 )rowId;
+  return ( qint64 )rowId;
 }
 
 int SybaseConnection::serverResult()
 {
-	return d->res;
+  return d->res;
 }
 
 QString SybaseConnection::serverResultName()
 {
 
-	return QString();
+  return QString();
 }
 
 void SybaseConnection::drv_clearServerResult()
 {
-	if (!d)
-		return;
-	d->res = 0;
+  if (!d)
+    return;
+  d->res = 0;
 }
 
 QString SybaseConnection::serverErrorMsg()
 {
-	return d->errmsg;
+  return d->errmsg;
 }
 
 bool SybaseConnection::drv_containsTable( const QString &tableName )
 {
-	bool success;
-	return resultExists(QString("select name from sysobjects where type='U' and name=%1")
-		.arg(driver()->escapeString(tableName)), success) && success;
+  bool success;
+  return resultExists(QString("select name from sysobjects where type='U' and name=%1")
+    .arg(driver()->escapeString(tableName)), success) && success;
 }
 
 bool SybaseConnection::drv_getTablesList( QStringList &list )
 {
-	return queryStringList( "Select name from sysobjects where type='U'", list );
+  return queryStringList( "Select name from sysobjects where type='U'", list );
 }
 
 PreparedStatement::Ptr SybaseConnection::prepareStatement(PreparedStatement::StatementType type,
-	FieldList& fields)
+  FieldList& fields)
 {
-	return KSharedPtr<PreparedStatement>( new SybasePreparedStatement(type, *d, fields) );
+  return KSharedPtr<PreparedStatement>( new SybasePreparedStatement(type, *d, fields) );
 }
 
 bool KexiDB::SybaseConnection::drv_beforeInsert( const QString& table, FieldList& fields )
 {
 
-	if (  fields.autoIncrementFields()->isEmpty() )
-	    return true;
+  if (  fields.autoIncrementFields()->isEmpty() )
+      return true;
 
-	// explicit insertion into IDENTITY fields !!
-	return drv_executeSQL( QString( "SET IDENTITY_INSERT %1 ON" ).arg( escapeIdentifier( table ) ) );
+  // explicit insertion into IDENTITY fields !!
+  return drv_executeSQL( QString( "SET IDENTITY_INSERT %1 ON" ).arg( escapeIdentifier( table ) ) );
 
 }
 
 bool KexiDB::SybaseConnection::drv_afterInsert( const QString& table, FieldList& fields )
 {
-	// should we instead just set a flag when an identity_insert has taken place and only check for that
-	// flag here ?
+  // should we instead just set a flag when an identity_insert has taken place and only check for that
+  // flag here ?
 
-	if ( fields.autoIncrementFields()->isEmpty() )
-	    return true;
+  if ( fields.autoIncrementFields()->isEmpty() )
+      return true;
 
-	// explicit insertion into IDENTITY fields has taken place. Turn off IDENTITY_INSERT
-	return drv_executeSQL( QString( "SET IDENTITY_INSERT %1 OFF" ).arg( escapeIdentifier( table ) ) );
+  // explicit insertion into IDENTITY fields has taken place. Turn off IDENTITY_INSERT
+  return drv_executeSQL( QString( "SET IDENTITY_INSERT %1 OFF" ).arg( escapeIdentifier( table ) ) );
 
 }
 
 bool KexiDB::SybaseConnection::drv_beforeUpdate( const QString& table, FieldList& fields )
 {
-	if ( fields.autoIncrementFields()->isEmpty() )
-	    return true;
+  if ( fields.autoIncrementFields()->isEmpty() )
+      return true;
 
-	// explicit update of IDENTITY fields has taken place.
-	return	drv_executeSQL( QString( "SET IDENTITY_UPDATE %1 ON" ).arg( escapeIdentifier(  table ) ) );
+  // explicit update of IDENTITY fields has taken place.
+  return	drv_executeSQL( QString( "SET IDENTITY_UPDATE %1 ON" ).arg( escapeIdentifier(  table ) ) );
 }
 
 bool KexiDB::SybaseConnection::drv_afterUpdate( const QString& table, FieldList& fields )
 {
-	// should we instead just set a flag when an identity_update has taken place and only check for that
-	// flag here ?
+  // should we instead just set a flag when an identity_update has taken place and only check for that
+  // flag here ?
 
-	if ( fields.autoIncrementFields()->isEmpty() )
-	    return true;
+  if ( fields.autoIncrementFields()->isEmpty() )
+      return true;
 
-	// explicit insertion into IDENTITY fields has taken place. Turn off IDENTITY_INSERT
-	return	drv_executeSQL( QString( "SET IDENTITY_UPDATE %1 OFF" ).arg( escapeIdentifier( table ) ) );
+  // explicit insertion into IDENTITY fields has taken place. Turn off IDENTITY_INSERT
+  return	drv_executeSQL( QString( "SET IDENTITY_UPDATE %1 OFF" ).arg( escapeIdentifier( table ) ) );
 
 }
 

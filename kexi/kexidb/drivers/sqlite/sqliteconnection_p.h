@@ -49,22 +49,22 @@ namespace KexiDB
 /*! Internal SQLite connection data. Also used inside SQLiteCursor. */
 class SQLiteConnectionInternal : public ConnectionInternal
 {
-	public:
-		SQLiteConnectionInternal(Connection* connection);
-		virtual ~SQLiteConnectionInternal();
+  public:
+    SQLiteConnectionInternal(Connection* connection);
+    virtual ~SQLiteConnectionInternal();
 
-		//! stores last result's message
-		virtual void storeResult();
+    //! stores last result's message
+    virtual void storeResult();
 
-		sqlite_struct *data;
-		bool data_owned; //!< true if data pointer should be freed on destruction
-		QString errmsg; //<! server-specific message of last operation
-		char *errmsg_p; //<! temporary: server-specific message of last operation
-		int res; //<! result code of last operation on server
+    sqlite_struct *data;
+    bool data_owned; //!< true if data pointer should be freed on destruction
+    QString errmsg; //<! server-specific message of last operation
+    char *errmsg_p; //<! temporary: server-specific message of last operation
+    int res; //<! result code of last operation on server
 
-		QByteArray temp_st;
+    QByteArray temp_st;
 #ifdef SQLITE3
-		const char *result_name;
+    const char *result_name;
 #endif
 };
 

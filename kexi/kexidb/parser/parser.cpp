@@ -36,12 +36,12 @@ using namespace KexiDB;
 Parser::Parser(Connection *db)
  : d(new Private)
 {
-	d->db = db;
+  d->db = db;
 }
 
 Parser::~Parser()
 {
-	delete d;
+  delete d;
 }
 
 Parser::OPCode Parser::operation() const { return (OPCode)d->operation; }
@@ -49,24 +49,24 @@ Parser::OPCode Parser::operation() const { return (OPCode)d->operation; }
 QString
 Parser::operationString() const
 {
-	switch((OPCode)d->operation) {
-		case OP_Error:
-			return "Error";
-		case OP_CreateTable:
-			return "CreateTable";
-		case OP_AlterTable:
-			return "AlterTable";
-		case OP_Select:
-			return "Select";
-		case OP_Insert:
-			return "Insert";
-		case OP_Update:
-			return "Update";
-		case OP_Delete:
-			return "Delete";
-		default: //OP_None
-			return "None";
-	}
+  switch((OPCode)d->operation) {
+    case OP_Error:
+      return "Error";
+    case OP_CreateTable:
+      return "CreateTable";
+    case OP_AlterTable:
+      return "AlterTable";
+    case OP_Select:
+      return "Select";
+    case OP_Insert:
+      return "Insert";
+    case OP_Update:
+      return "Update";
+    case OP_Delete:
+      return "Delete";
+    default: //OP_None
+      return "None";
+  }
 }
 
 TableSchema *Parser::table() { TableSchema *t = d->table; d->table=0; return t; }
@@ -88,54 +88,54 @@ void Parser::setError(const ParserError &err) { d->error = err; }
 void
 Parser::createTable(const char *t)
 {
-	if (d->table)
-		return;
+  if (d->table)
+    return;
 
-	d->table = new KexiDB::TableSchema(t);
+  d->table = new KexiDB::TableSchema(t);
 }
 
 void
 Parser::setQuerySchema(QuerySchema *query)
 {
-	if (d->select)
-		delete d->select;
+  if (d->select)
+    delete d->select;
 
-	d->select = query;
+  d->select = query;
 }
 
 void Parser::init()
 {
-	if (d->initialized)
-		return;
-	// nothing to do
-	d->initialized = true;
+  if (d->initialized)
+    return;
+  // nothing to do
+  d->initialized = true;
 }
 
 /*moved to Driver 
 bool Parser::isReservedKeyword(const QByteArray& str)
 {
-	return _reservedKeywords->contains(str.toUpper());
+  return _reservedKeywords->contains(str.toUpper());
 }*/
 
 bool
 Parser::parse(const QString &statement)
 {
-	init();
-	clear();
-	d->statement = statement;
+  init();
+  clear();
+  d->statement = statement;
 
-	KexiDB::Parser *oldParser = parser;
-	KexiDB::Field *oldField = field;
-	bool res = parseData(this, statement.toUtf8());
-	parser = oldParser;
-	field = oldField;
-	return res;
+  KexiDB::Parser *oldParser = parser;
+  KexiDB::Field *oldField = field;
+  bool res = parseData(this, statement.toUtf8());
+  parser = oldParser;
+  field = oldField;
+  return res;
 }
 
 void
 Parser::clear()
 {
-	d->clear();
+  d->clear();
 }
 
 //-------------------------------------
@@ -148,10 +148,10 @@ ParserError::ParserError()
 
 ParserError::ParserError(const QString &type, const QString &error, const QString &hint, int at)
 {
-	m_type = type;
-	m_error = error;
-	m_hint = hint;
-	m_at = at;
+  m_type = type;
+  m_error = error;
+  m_hint = hint;
+  m_at = at;
 }
 
 ParserError::~ParserError()

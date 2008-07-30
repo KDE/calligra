@@ -34,31 +34,31 @@ class Connection;
  */
 class ODBCDriver : public Driver
 {
-	Q_OBJECT
-	KEXIDB_DRIVER
+  Q_OBJECT
+  KEXIDB_DRIVER
 
-	public:
-		ODBCDriver( QObject *parent, const char *name, const QStringList &args = QStringList() );
-		~ODBCDriver();
+  public:
+    ODBCDriver( QObject *parent, const char *name, const QStringList &args = QStringList() );
+    ~ODBCDriver();
 
-		virtual bool isSystemDatabaseName( const QString& name ) const;
-		/** \return true if n is a system object name; 
-		 * \todo Find out what is a system object name and what isn't  
-		 */
-		virtual bool isSystemObjectName( const QString& name );
+    virtual bool isSystemDatabaseName( const QString& name ) const;
+    /** \return true if n is a system object name; 
+     * \todo Find out what is a system object name and what isn't  
+     */
+    virtual bool isSystemObjectName( const QString& name );
 
-		/** 
-		 * \return true if \a n is a system field name; 
-		 * There aren't any system fields per tables, unless the table
-		 * is a system table
-		 */
-		virtual bool isSystemFieldName( const QString& name ) const;
-		
-		virtual QString escapeString( const QString& str ) const;
-		virtual QByteArray escapeString( const QByteArray& str ) const;
+    /** 
+     * \return true if \a n is a system field name; 
+     * There aren't any system fields per tables, unless the table
+     * is a system table
+     */
+    virtual bool isSystemFieldName( const QString& name ) const;
+    
+    virtual QString escapeString( const QString& str ) const;
+    virtual QByteArray escapeString( const QByteArray& str ) const;
 
-	protected:
-		virtual Connection *drv_createConnection( ConnectionData &conn_data );
+  protected:
+    virtual Connection *drv_createConnection( ConnectionData &conn_data );
 };
 
 }

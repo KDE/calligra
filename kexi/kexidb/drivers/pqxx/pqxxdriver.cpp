@@ -34,62 +34,62 @@ KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql )
 //==================================================================================
 //
 pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const QStringList &args )
-	: Driver( parent, args )
+  : Driver( parent, args )
 {
-	d->isFileDriver = false;
-	d->features = SingleTransactions | CursorForward | CursorBackward;
+  d->isFileDriver = false;
+  d->features = SingleTransactions | CursorForward | CursorBackward;
 //! @todo enable this when kexidb supports multiple: d->features = MultipleTransactions | CursorForward | CursorBackward;
 
-	beh->UNSIGNED_TYPE_KEYWORD = "";
-	beh->ROW_ID_FIELD_NAME = "oid";
-	beh->SPECIAL_AUTO_INCREMENT_DEF = false;
-	beh->AUTO_INCREMENT_TYPE = "SERIAL";
-	beh->AUTO_INCREMENT_FIELD_OPTION = "";
-	beh->AUTO_INCREMENT_PK_FIELD_OPTION = "PRIMARY KEY";
-	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
-	beh->QUOTATION_MARKS_FOR_IDENTIFIER = '"';
-	initDriverSpecificKeywords(keywords);
+  beh->UNSIGNED_TYPE_KEYWORD = "";
+  beh->ROW_ID_FIELD_NAME = "oid";
+  beh->SPECIAL_AUTO_INCREMENT_DEF = false;
+  beh->AUTO_INCREMENT_TYPE = "SERIAL";
+  beh->AUTO_INCREMENT_FIELD_OPTION = "";
+  beh->AUTO_INCREMENT_PK_FIELD_OPTION = "PRIMARY KEY";
+  beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
+  beh->QUOTATION_MARKS_FOR_IDENTIFIER = '"';
+  initDriverSpecificKeywords(keywords);
 
-	//predefined properties
-	d->properties["client_library_version"] = "";//TODO
-	d->properties["default_server_encoding"] = ""; //TODO
+  //predefined properties
+  d->properties["client_library_version"] = "";//TODO
+  d->properties["default_server_encoding"] = ""; //TODO
 
-	d->typeNames[Field::Byte]="SMALLINT";
-	d->typeNames[Field::ShortInteger]="SMALLINT";
-	d->typeNames[Field::Integer]="INTEGER";
-	d->typeNames[Field::BigInteger]="BIGINT";
-	d->typeNames[Field::Boolean]="BOOLEAN";
-	d->typeNames[Field::Date]="DATE";
-	d->typeNames[Field::DateTime]="TIMESTAMP";
-	d->typeNames[Field::Time]="TIME";
-	d->typeNames[Field::Float]="REAL";
-	d->typeNames[Field::Double]="DOUBLE PRECISION";
-	d->typeNames[Field::Text]="CHARACTER VARYING";
-	d->typeNames[Field::LongText]="TEXT";
-	d->typeNames[Field::BLOB]="BYTEA";
+  d->typeNames[Field::Byte]="SMALLINT";
+  d->typeNames[Field::ShortInteger]="SMALLINT";
+  d->typeNames[Field::Integer]="INTEGER";
+  d->typeNames[Field::BigInteger]="BIGINT";
+  d->typeNames[Field::Boolean]="BOOLEAN";
+  d->typeNames[Field::Date]="DATE";
+  d->typeNames[Field::DateTime]="TIMESTAMP";
+  d->typeNames[Field::Time]="TIME";
+  d->typeNames[Field::Float]="REAL";
+  d->typeNames[Field::Double]="DOUBLE PRECISION";
+  d->typeNames[Field::Text]="CHARACTER VARYING";
+  d->typeNames[Field::LongText]="TEXT";
+  d->typeNames[Field::BLOB]="BYTEA";
 }
 
 //==================================================================================
 //Override the default implementation to allow for NUMERIC type natively
 QString pqxxSqlDriver::sqlTypeName(int id_t, int p) const
 { 
-	if (id_t==Field::Null)
-		return "NULL";
-	if (id_t==Field::Float || id_t==Field::Double)
-	{
-		if (p>0)
-		{
-			return "NUMERIC";
-		}
-		else
-		{
-			return d->typeNames[id_t];
-		}
-	}
-	else
-	{
-		return d->typeNames[id_t];
-	}
+  if (id_t==Field::Null)
+    return "NULL";
+  if (id_t==Field::Float || id_t==Field::Double)
+  {
+    if (p>0)
+    {
+      return "NUMERIC";
+    }
+    else
+    {
+      return d->typeNames[id_t];
+    }
+  }
+  else
+  {
+    return d->typeNames[id_t];
+  }
 }
 
 //==================================================================================
@@ -104,28 +104,28 @@ pqxxSqlDriver::~pqxxSqlDriver()
 KexiDB::Connection*
 pqxxSqlDriver::drv_createConnection( ConnectionData &conn_data )
 {
-	return new pqxxSqlConnection( this, conn_data );
+  return new pqxxSqlConnection( this, conn_data );
 }
 
 //==================================================================================
 //
 bool pqxxSqlDriver::isSystemObjectName( const QString& n ) const
 {
-	return Driver::isSystemObjectName(n);
+  return Driver::isSystemObjectName(n);
 }
 
 //==================================================================================
 //
 bool pqxxSqlDriver::drv_isSystemFieldName( const QString& ) const
 {
-	return false;
+  return false;
 }
 
 //==================================================================================
 //
 bool pqxxSqlDriver::isSystemDatabaseName( const QString& n ) const
 {
-	return n.toLower()=="template1" || n.toLower()=="template0";
+  return n.toLower()=="template1" || n.toLower()=="template0";
 }
 
 //==================================================================================
@@ -142,7 +142,7 @@ QString pqxxSqlDriver::escapeString( const QString& str) const
 QByteArray pqxxSqlDriver::escapeString( const QByteArray& str) const
 {
     return QByteArray("'")
-		+ QByteArray( pqxx::sqlesc(str).c_str() )
+    + QByteArray( pqxx::sqlesc(str).c_str() )
     	+ QByteArray("'");
 }
 
@@ -150,32 +150,32 @@ QByteArray pqxxSqlDriver::escapeString( const QByteArray& str) const
 //
 QString pqxxSqlDriver::drv_escapeIdentifier( const QString& str) const
 {
-	return QByteArray(str.toLatin1()).replace( '"', "\"\"" );
+  return QByteArray(str.toLatin1()).replace( '"', "\"\"" );
 }
 
 //==================================================================================
 //
 QByteArray pqxxSqlDriver::drv_escapeIdentifier( const QByteArray& str) const
 {
-	return QByteArray(str).replace( '"', "\"\"" );
+  return QByteArray(str).replace( '"', "\"\"" );
 }
 
 //==================================================================================
 //
 QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
 {
-	return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeOctal);
+  return KexiDB::escapeBLOB(array, KexiDB::BLOBEscapeOctal);
 }
 
 QString pqxxSqlDriver::valueToSQL( uint ftype, const QVariant& v ) const
 {
-	if (ftype==Field::Boolean) {
-		// use SQL compliant TRUE or FALSE as described here
-		// http://www.postgresql.org/docs/8.0/interactive/datatype-boolean.html
-		// 1 or 0 does not work
-		return v.toInt()==0 ? QString::fromLatin1("FALSE") : QString::fromLatin1("TRUE");
-	}
-	return Driver::valueToSQL(ftype, v);
+  if (ftype==Field::Boolean) {
+    // use SQL compliant TRUE or FALSE as described here
+    // http://www.postgresql.org/docs/8.0/interactive/datatype-boolean.html
+    // 1 or 0 does not work
+    return v.toInt()==0 ? QString::fromLatin1("FALSE") : QString::fromLatin1("TRUE");
+  }
+  return Driver::valueToSQL(ftype, v);
 }
 
 

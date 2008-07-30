@@ -809,21 +809,21 @@ using namespace KexiDB;
 #define YYSTACK_USE_ALLOCA 1
 #define YYMAXDEPTH 255
 
-	extern "C"
-	{
-		int yywrap()
-		{
-			return 1;
-		}
-	}
+  extern "C"
+  {
+    int yywrap()
+    {
+      return 1;
+    }
+  }
 
 #if 0
-	struct yyval
-	{
-		QString parserUserName;
-		int integerValue;
-		KexiDBField::ColumnType coltype;
-	}
+  struct yyval
+  {
+    QString parserUserName;
+    int integerValue;
+    KexiDBField::ColumnType coltype;
+  }
 #endif
 
 
@@ -844,19 +844,19 @@ using namespace KexiDB;
 #if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
 #line 511 "sqlparser.y"
 typedef union YYSTYPE {
-	QString* stringValue;
-	qint64 integerValue;
-	bool booleanValue;
-	struct realType realValue;
-	KexiDB::Field::Type colType;
-	KexiDB::Field *field;
-	KexiDB::BaseExpr *expr;
-	KexiDB::NArgExpr *exprList;
-	KexiDB::ConstExpr *constExpr;
-	KexiDB::QuerySchema *querySchema;
-	SelectOptionsInternal *selectOptions;
-	OrderByColumnInternal::List *orderByColumns;
-	QVariant *variantValue;
+  QString* stringValue;
+  qint64 integerValue;
+  bool booleanValue;
+  struct realType realValue;
+  KexiDB::Field::Type colType;
+  KexiDB::Field *field;
+  KexiDB::BaseExpr *expr;
+  KexiDB::NArgExpr *exprList;
+  KexiDB::ConstExpr *constExpr;
+  KexiDB::QuerySchema *querySchema;
+  SelectOptionsInternal *selectOptions;
+  OrderByColumnInternal::List *orderByColumns;
+  QVariant *variantValue;
 } YYSTYPE;
 /* Line 191 of yacc.c.  */
 #line 863 "sqlparser.tab.c"
@@ -907,7 +907,7 @@ typedef union YYSTYPE {
 
 #if (! defined (yyoverflow) \
      && (! defined (__cplusplus) \
-	 || (YYSTYPE_IS_TRIVIAL)))
+   || (YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -934,11 +934,11 @@ union yyalloc
 #  else
 #   define YYCOPY(To, From, Count)		\
       do					\
-	{					\
-	  register YYSIZE_T yyi;		\
-	  for (yyi = 0; yyi < (Count); yyi++)	\
-	    (To)[yyi] = (From)[yyi];		\
-	}					\
+  {					\
+    register YYSIZE_T yyi;		\
+    for (yyi = 0; yyi < (Count); yyi++)	\
+      (To)[yyi] = (From)[yyi];		\
+  }					\
       while (0)
 #  endif
 # endif
@@ -951,11 +951,11 @@ union yyalloc
 # define YYSTACK_RELOCATE(Stack)					\
     do									\
       {									\
-	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack, Stack, yysize);				\
-	Stack = &yyptr->Stack;						\
-	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
-	yyptr += yynewbytes / sizeof (*yyptr);				\
+  YYSIZE_T yynewbytes;						\
+  YYCOPY (&yyptr->Stack, Stack, yysize);				\
+  Stack = &yyptr->Stack;						\
+  yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
+  yyptr += yynewbytes / sizeof (*yyptr);				\
       }									\
     while (0)
 
@@ -1899,25 +1899,25 @@ yyparse ()
 
 #ifdef yyoverflow
       {
-	/* Give user a chance to reallocate the stack. Use copies of
-	   these so that the &'s don't force the real ones into
-	   memory.  */
-	YYSTYPE *yyvs1 = yyvs;
-	short *yyss1 = yyss;
+  /* Give user a chance to reallocate the stack. Use copies of
+     these so that the &'s don't force the real ones into
+     memory.  */
+  YYSTYPE *yyvs1 = yyvs;
+  short *yyss1 = yyss;
 
 
-	/* Each stack pointer address is followed by the size of the
-	   data in use in that stack, in bytes.  This used to be a
-	   conditional around just the two extra args, but that might
-	   be undefined if yyoverflow is a macro.  */
-	yyoverflow ("parser stack overflow",
-		    &yyss1, yysize * sizeof (*yyssp),
-		    &yyvs1, yysize * sizeof (*yyvsp),
+  /* Each stack pointer address is followed by the size of the
+     data in use in that stack, in bytes.  This used to be a
+     conditional around just the two extra args, but that might
+     be undefined if yyoverflow is a macro.  */
+  yyoverflow ("parser stack overflow",
+        &yyss1, yysize * sizeof (*yyssp),
+        &yyvs1, yysize * sizeof (*yyvsp),
 
-		    &yystacksize);
+        &yystacksize);
 
-	yyss = yyss1;
-	yyvs = yyvs1;
+  yyss = yyss1;
+  yyvs = yyvs1;
       }
 #else /* no yyoverflow */
 # ifndef YYSTACK_RELOCATE
@@ -1925,23 +1925,23 @@ yyparse ()
 # else
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
-	goto yyoverflowlab;
+  goto yyoverflowlab;
       yystacksize *= 2;
       if (YYMAXDEPTH < yystacksize)
-	yystacksize = YYMAXDEPTH;
+  yystacksize = YYMAXDEPTH;
 
       {
-	short *yyss1 = yyss;
-	union yyalloc *yyptr =
-	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
-	if (! yyptr)
-	  goto yyoverflowlab;
-	YYSTACK_RELOCATE (yyss);
-	YYSTACK_RELOCATE (yyvs);
+  short *yyss1 = yyss;
+  union yyalloc *yyptr =
+    (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+  if (! yyptr)
+    goto yyoverflowlab;
+  YYSTACK_RELOCATE (yyss);
+  YYSTACK_RELOCATE (yyvs);
 
 #  undef YYSTACK_RELOCATE
-	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+  if (yyss1 != yyssa)
+    YYSTACK_FREE (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -1951,10 +1951,10 @@ yyparse ()
 
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-		  (unsigned long int) yystacksize));
+      (unsigned long int) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
-	YYABORT;
+  YYABORT;
     }
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
@@ -2005,7 +2005,7 @@ yybackup:
   if (yyn <= 0)
     {
       if (yyn == 0 || yyn == YYTABLE_NINF)
-	goto yyerrlab;
+  goto yyerrlab;
       yyn = -yyn;
       goto yyreduce;
     }
@@ -2068,8 +2068,8 @@ yyreduce:
     {
 //todo: multiple statements
 //todo: not only "select" statements
-	parser->setOperation(Parser::OP_Select);
-	parser->setQuerySchema(yyvsp[0].querySchema);
+  parser->setOperation(Parser::OP_Select);
+  parser->setQuerySchema(yyvsp[0].querySchema);
 ;}
     break;
 
@@ -2083,7 +2083,7 @@ yyreduce:
   case 5:
 #line 596 "sqlparser.y"
     {
-	yyval.querySchema = yyvsp[-1].querySchema;
+  yyval.querySchema = yyvsp[-1].querySchema;
 ;}
     break;
 
@@ -2097,16 +2097,16 @@ YYACCEPT;
   case 7:
 #line 610 "sqlparser.y"
     {
-	yyval.querySchema = yyvsp[0].querySchema;
+  yyval.querySchema = yyvsp[0].querySchema;
 ;}
     break;
 
   case 8:
 #line 617 "sqlparser.y"
     {
-	parser->setOperation(Parser::OP_CreateTable);
-	parser->createTable(yyvsp[0].stringValue->toLatin1());
-	delete yyvsp[0].stringValue;
+  parser->setOperation(Parser::OP_CreateTable);
+  parser->createTable(yyvsp[0].stringValue->toLatin1());
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
@@ -2119,21 +2119,21 @@ YYACCEPT;
   case 12:
 #line 633 "sqlparser.y"
     {
-	KexiDBDbg << "adding field " << *yyvsp[-1].stringValue << endl;
-	field->setName(yyvsp[-1].stringValue->toLatin1());
-	parser->table()->addField(field);
-	field = 0;
-	delete yyvsp[-1].stringValue;
+  KexiDBDbg << "adding field " << *yyvsp[-1].stringValue << endl;
+  field->setName(yyvsp[-1].stringValue->toLatin1());
+  parser->table()->addField(field);
+  field = 0;
+  delete yyvsp[-1].stringValue;
 ;}
     break;
 
   case 13:
 #line 641 "sqlparser.y"
     {
-	KexiDBDbg << "adding field " << *yyvsp[-2].stringValue << endl;
-	field->setName(*yyvsp[-2].stringValue);
-	delete yyvsp[-2].stringValue;
-	parser->table()->addField(field);
+  KexiDBDbg << "adding field " << *yyvsp[-2].stringValue << endl;
+  field->setName(*yyvsp[-2].stringValue);
+  delete yyvsp[-2].stringValue;
+  parser->table()->addField(field);
 
 //	if(field->isPrimaryKey())
 //		parser->table()->addPrimaryKey(field->name());
@@ -2152,249 +2152,249 @@ YYACCEPT;
   case 16:
 #line 663 "sqlparser.y"
     {
-	field->setPrimaryKey(true);
-	KexiDBDbg << "primary" << endl;
+  field->setPrimaryKey(true);
+  KexiDBDbg << "primary" << endl;
 ;}
     break;
 
   case 17:
 #line 668 "sqlparser.y"
     {
-	field->setNotNull(true);
-	KexiDBDbg << "not_null" << endl;
+  field->setNotNull(true);
+  KexiDBDbg << "not_null" << endl;
 ;}
     break;
 
   case 18:
 #line 673 "sqlparser.y"
     {
-	field->setAutoIncrement(true);
-	KexiDBDbg << "ainc" << endl;
+  field->setAutoIncrement(true);
+  KexiDBDbg << "ainc" << endl;
 ;}
     break;
 
   case 19:
 #line 681 "sqlparser.y"
     {
-	field = new Field();
-	field->setType(yyvsp[0].colType);
+  field = new Field();
+  field->setType(yyvsp[0].colType);
 ;}
     break;
 
   case 20:
 #line 686 "sqlparser.y"
     {
-	KexiDBDbg << "sql + length" << endl;
-	field = new Field();
-	field->setPrecision(yyvsp[-1].integerValue);
-	field->setType(yyvsp[-3].colType);
+  KexiDBDbg << "sql + length" << endl;
+  field = new Field();
+  field->setPrecision(yyvsp[-1].integerValue);
+  field->setType(yyvsp[-3].colType);
 ;}
     break;
 
   case 21:
 #line 693 "sqlparser.y"
     {
-	field = new Field();
-	field->setPrecision(yyvsp[-1].integerValue);
-	field->setType(Field::Text);
+  field = new Field();
+  field->setPrecision(yyvsp[-1].integerValue);
+  field->setType(Field::Text);
 ;}
     break;
 
   case 22:
 #line 699 "sqlparser.y"
     {
-	// SQLITE compatibillity
-	field = new Field();
-	field->setType(Field::InvalidType);
+  // SQLITE compatibillity
+  field = new Field();
+  field->setType(Field::InvalidType);
 ;}
     break;
 
   case 23:
 #line 708 "sqlparser.y"
     {
-	KexiDBDbg << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
+  KexiDBDbg << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
 
-	if (!(yyval.querySchema = buildSelectQuery( yyvsp[-1].querySchema, yyvsp[0].exprList )))
-		return 0;
+  if (!(yyval.querySchema = buildSelectQuery( yyvsp[-1].querySchema, yyvsp[0].exprList )))
+    return 0;
 ;}
     break;
 
   case 24:
 #line 715 "sqlparser.y"
     {
-	if (!(yyval.querySchema = buildSelectQuery( yyvsp[-2].querySchema, yyvsp[-1].exprList, yyvsp[0].exprList )))
-		return 0;
+  if (!(yyval.querySchema = buildSelectQuery( yyvsp[-2].querySchema, yyvsp[-1].exprList, yyvsp[0].exprList )))
+    return 0;
 ;}
     break;
 
   case 25:
 #line 720 "sqlparser.y"
     {
-	KexiDBDbg << "Select ColViews Tables" << endl;
-	if (!(yyval.querySchema = buildSelectQuery( yyvsp[-1].querySchema, 0, yyvsp[0].exprList )))
-		return 0;
+  KexiDBDbg << "Select ColViews Tables" << endl;
+  if (!(yyval.querySchema = buildSelectQuery( yyvsp[-1].querySchema, 0, yyvsp[0].exprList )))
+    return 0;
 ;}
     break;
 
   case 26:
 #line 726 "sqlparser.y"
     {
-	KexiDBDbg << "Select ColViews Conditions" << endl;
-	if (!(yyval.querySchema = buildSelectQuery( yyvsp[-2].querySchema, yyvsp[-1].exprList, 0, yyvsp[0].selectOptions )))
-		return 0;
+  KexiDBDbg << "Select ColViews Conditions" << endl;
+  if (!(yyval.querySchema = buildSelectQuery( yyvsp[-2].querySchema, yyvsp[-1].exprList, 0, yyvsp[0].selectOptions )))
+    return 0;
 ;}
     break;
 
   case 27:
 #line 732 "sqlparser.y"
     {
-	KexiDBDbg << "Select ColViews Tables SelectOptions" << endl;
-	if (!(yyval.querySchema = buildSelectQuery( yyvsp[-3].querySchema, yyvsp[-2].exprList, yyvsp[-1].exprList, yyvsp[0].selectOptions )))
-		return 0;
+  KexiDBDbg << "Select ColViews Tables SelectOptions" << endl;
+  if (!(yyval.querySchema = buildSelectQuery( yyvsp[-3].querySchema, yyvsp[-2].exprList, yyvsp[-1].exprList, yyvsp[0].selectOptions )))
+    return 0;
 ;}
     break;
 
   case 28:
 #line 741 "sqlparser.y"
     {
-	KexiDBDbg << "SELECT" << endl;
+  KexiDBDbg << "SELECT" << endl;
 //	parser->createSelect();
 //	parser->setOperation(Parser::OP_Select);
-	yyval.querySchema = new QuerySchema();
+  yyval.querySchema = new QuerySchema();
 ;}
     break;
 
   case 29:
 #line 751 "sqlparser.y"
     {
-	KexiDBDbg << "WhereClause" << endl;
-	yyval.selectOptions = new SelectOptionsInternal;
-	yyval.selectOptions->whereExpr = yyvsp[0].expr;
+  KexiDBDbg << "WhereClause" << endl;
+  yyval.selectOptions = new SelectOptionsInternal;
+  yyval.selectOptions->whereExpr = yyvsp[0].expr;
 ;}
     break;
 
   case 30:
 #line 757 "sqlparser.y"
     {
-	KexiDBDbg << "OrderByClause" << endl;
-	yyval.selectOptions = new SelectOptionsInternal;
-	yyval.selectOptions->orderByColumns = yyvsp[0].orderByColumns;
+  KexiDBDbg << "OrderByClause" << endl;
+  yyval.selectOptions = new SelectOptionsInternal;
+  yyval.selectOptions->orderByColumns = yyvsp[0].orderByColumns;
 ;}
     break;
 
   case 31:
 #line 763 "sqlparser.y"
     {
-	KexiDBDbg << "WhereClause ORDER BY OrderByClause" << endl;
-	yyval.selectOptions = new SelectOptionsInternal;
-	yyval.selectOptions->whereExpr = yyvsp[-3].expr;
-	yyval.selectOptions->orderByColumns = yyvsp[0].orderByColumns;
+  KexiDBDbg << "WhereClause ORDER BY OrderByClause" << endl;
+  yyval.selectOptions = new SelectOptionsInternal;
+  yyval.selectOptions->whereExpr = yyvsp[-3].expr;
+  yyval.selectOptions->orderByColumns = yyvsp[0].orderByColumns;
 ;}
     break;
 
   case 32:
 #line 770 "sqlparser.y"
     {
-	KexiDBDbg << "OrderByClause WhereClause" << endl;
-	yyval.selectOptions = new SelectOptionsInternal;
-	yyval.selectOptions->whereExpr = yyvsp[0].expr;
-	yyval.selectOptions->orderByColumns = yyvsp[-1].orderByColumns;
+  KexiDBDbg << "OrderByClause WhereClause" << endl;
+  yyval.selectOptions = new SelectOptionsInternal;
+  yyval.selectOptions->whereExpr = yyvsp[0].expr;
+  yyval.selectOptions->orderByColumns = yyvsp[-1].orderByColumns;
 ;}
     break;
 
   case 33:
 #line 780 "sqlparser.y"
     {
-	yyval.expr = yyvsp[0].expr;
+  yyval.expr = yyvsp[0].expr;
 ;}
     break;
 
   case 34:
 #line 789 "sqlparser.y"
     {
-	KexiDBDbg << "ORDER BY IDENTIFIER" << endl;
-	yyval.orderByColumns = new OrderByColumnInternal::List;
-	OrderByColumnInternal orderByColumn;
-	orderByColumn.setColumnByNameOrNumber( *yyvsp[0].variantValue );
-	yyval.orderByColumns->append( orderByColumn );
-	delete yyvsp[0].variantValue;
+  KexiDBDbg << "ORDER BY IDENTIFIER" << endl;
+  yyval.orderByColumns = new OrderByColumnInternal::List;
+  OrderByColumnInternal orderByColumn;
+  orderByColumn.setColumnByNameOrNumber( *yyvsp[0].variantValue );
+  yyval.orderByColumns->append( orderByColumn );
+  delete yyvsp[0].variantValue;
 ;}
     break;
 
   case 35:
 #line 798 "sqlparser.y"
     {
-	KexiDBDbg << "ORDER BY IDENTIFIER OrderByOption" << endl;
-	yyval.orderByColumns = new OrderByColumnInternal::List;
-	OrderByColumnInternal orderByColumn;
-	orderByColumn.setColumnByNameOrNumber( *yyvsp[-1].variantValue );
-	orderByColumn.ascending = yyvsp[0].booleanValue;
-	yyval.orderByColumns->append( orderByColumn );
-	delete yyvsp[-1].variantValue;
+  KexiDBDbg << "ORDER BY IDENTIFIER OrderByOption" << endl;
+  yyval.orderByColumns = new OrderByColumnInternal::List;
+  OrderByColumnInternal orderByColumn;
+  orderByColumn.setColumnByNameOrNumber( *yyvsp[-1].variantValue );
+  orderByColumn.ascending = yyvsp[0].booleanValue;
+  yyval.orderByColumns->append( orderByColumn );
+  delete yyvsp[-1].variantValue;
 ;}
     break;
 
   case 36:
 #line 808 "sqlparser.y"
     {
-	yyval.orderByColumns = yyvsp[0].orderByColumns;
-	OrderByColumnInternal orderByColumn;
-	orderByColumn.setColumnByNameOrNumber( *yyvsp[-2].variantValue );
-	yyval.orderByColumns->append( orderByColumn );
-	delete yyvsp[-2].variantValue;
+  yyval.orderByColumns = yyvsp[0].orderByColumns;
+  OrderByColumnInternal orderByColumn;
+  orderByColumn.setColumnByNameOrNumber( *yyvsp[-2].variantValue );
+  yyval.orderByColumns->append( orderByColumn );
+  delete yyvsp[-2].variantValue;
 ;}
     break;
 
   case 37:
 #line 816 "sqlparser.y"
     {
-	yyval.orderByColumns = yyvsp[0].orderByColumns;
-	OrderByColumnInternal orderByColumn;
-	orderByColumn.setColumnByNameOrNumber( *yyvsp[-3].variantValue );
-	orderByColumn.ascending = yyvsp[-2].booleanValue;
-	yyval.orderByColumns->append( orderByColumn );
-	delete yyvsp[-3].variantValue;
+  yyval.orderByColumns = yyvsp[0].orderByColumns;
+  OrderByColumnInternal orderByColumn;
+  orderByColumn.setColumnByNameOrNumber( *yyvsp[-3].variantValue );
+  orderByColumn.ascending = yyvsp[-2].booleanValue;
+  yyval.orderByColumns->append( orderByColumn );
+  delete yyvsp[-3].variantValue;
 ;}
     break;
 
   case 38:
 #line 828 "sqlparser.y"
     {
-	yyval.variantValue = new QVariant( *yyvsp[0].stringValue );
-	KexiDBDbg << "OrderByColumnId: " << *yyval.variantValue << endl;
-	delete yyvsp[0].stringValue;
+  yyval.variantValue = new QVariant( *yyvsp[0].stringValue );
+  KexiDBDbg << "OrderByColumnId: " << *yyval.variantValue << endl;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 39:
 #line 834 "sqlparser.y"
     {
-	yyval.variantValue = new QVariant( *yyvsp[-2].stringValue + "." + *yyvsp[0].stringValue );
-	KexiDBDbg << "OrderByColumnId: " << *yyval.variantValue << endl;
-	delete yyvsp[-2].stringValue;
-	delete yyvsp[0].stringValue;
+  yyval.variantValue = new QVariant( *yyvsp[-2].stringValue + "." + *yyvsp[0].stringValue );
+  KexiDBDbg << "OrderByColumnId: " << *yyval.variantValue << endl;
+  delete yyvsp[-2].stringValue;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 40:
 #line 841 "sqlparser.y"
     {
-	yyval.variantValue = new QVariant(yyvsp[0].integerValue);
-	KexiDBDbg << "OrderByColumnId: " << *yyval.variantValue << endl;
+  yyval.variantValue = new QVariant(yyvsp[0].integerValue);
+  KexiDBDbg << "OrderByColumnId: " << *yyval.variantValue << endl;
 ;}
     break;
 
   case 41:
 #line 848 "sqlparser.y"
     {
-	yyval.booleanValue = true;
+  yyval.booleanValue = true;
 ;}
     break;
 
   case 42:
 #line 852 "sqlparser.y"
     {
-	yyval.booleanValue = false;
+  yyval.booleanValue = false;
 ;}
     break;
 
@@ -2402,298 +2402,298 @@ YYACCEPT;
 #line 864 "sqlparser.y"
     {
 //	KexiDBDbg << "AND " << $3.debugString() << endl;
-	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
+  yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
 ;}
     break;
 
   case 45:
 #line 869 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, OR, yyvsp[0].expr );
+  yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, OR, yyvsp[0].expr );
 ;}
     break;
 
   case 46:
 #line 873 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr( KexiDBExpr_Arithm, yyvsp[-2].expr, XOR, yyvsp[0].expr );
+  yyval.expr = new BinaryExpr( KexiDBExpr_Arithm, yyvsp[-2].expr, XOR, yyvsp[0].expr );
 ;}
     break;
 
   case 48:
 #line 883 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '>', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '>', yyvsp[0].expr);
 ;}
     break;
 
   case 49:
 #line 887 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_OR_EQUAL, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, GREATER_OR_EQUAL, yyvsp[0].expr);
 ;}
     break;
 
   case 50:
 #line 891 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '<', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '<', yyvsp[0].expr);
 ;}
     break;
 
   case 51:
 #line 895 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_OR_EQUAL, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LESS_OR_EQUAL, yyvsp[0].expr);
 ;}
     break;
 
   case 52:
 #line 899 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '=', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, '=', yyvsp[0].expr);
 ;}
     break;
 
   case 54:
 #line 909 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL, yyvsp[0].expr);
 ;}
     break;
 
   case 55:
 #line 914 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL2, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_EQUAL2, yyvsp[0].expr);
 ;}
     break;
 
   case 56:
 #line 918 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LIKE, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, LIKE, yyvsp[0].expr);
 ;}
     break;
 
   case 57:
 #line 922 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SQL_IN, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SQL_IN, yyvsp[0].expr);
 ;}
     break;
 
   case 58:
 #line 926 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SIMILAR_TO, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, SIMILAR_TO, yyvsp[0].expr);
 ;}
     break;
 
   case 59:
 #line 930 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_SIMILAR_TO, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Relational, yyvsp[-2].expr, NOT_SIMILAR_TO, yyvsp[0].expr);
 ;}
     break;
 
   case 61:
 #line 940 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( SQL_IS_NULL, yyvsp[-1].expr );
+  yyval.expr = new UnaryExpr( SQL_IS_NULL, yyvsp[-1].expr );
 ;}
     break;
 
   case 62:
 #line 944 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( SQL_IS_NOT_NULL, yyvsp[-1].expr );
+  yyval.expr = new UnaryExpr( SQL_IS_NOT_NULL, yyvsp[-1].expr );
 ;}
     break;
 
   case 64:
 #line 954 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_LEFT, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_LEFT, yyvsp[0].expr);
 ;}
     break;
 
   case 65:
 #line 958 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_RIGHT, yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, BITWISE_SHIFT_RIGHT, yyvsp[0].expr);
 ;}
     break;
 
   case 67:
 #line 968 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '+', yyvsp[0].expr);
-	yyval.expr->debug();
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '+', yyvsp[0].expr);
+  yyval.expr->debug();
 ;}
     break;
 
   case 68:
 #line 973 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '-', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '-', yyvsp[0].expr);
 ;}
     break;
 
   case 69:
 #line 977 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '&', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '&', yyvsp[0].expr);
 ;}
     break;
 
   case 70:
 #line 981 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '|', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '|', yyvsp[0].expr);
 ;}
     break;
 
   case 72:
 #line 991 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '/', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '/', yyvsp[0].expr);
 ;}
     break;
 
   case 73:
 #line 995 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '*', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '*', yyvsp[0].expr);
 ;}
     break;
 
   case 74:
 #line 999 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '%', yyvsp[0].expr);
+  yyval.expr = new BinaryExpr(KexiDBExpr_Arithm, yyvsp[-2].expr, '%', yyvsp[0].expr);
 ;}
     break;
 
   case 76:
 #line 1010 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( '-', yyvsp[0].expr );
+  yyval.expr = new UnaryExpr( '-', yyvsp[0].expr );
 ;}
     break;
 
   case 77:
 #line 1014 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( '+', yyvsp[0].expr );
+  yyval.expr = new UnaryExpr( '+', yyvsp[0].expr );
 ;}
     break;
 
   case 78:
 #line 1018 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( '~', yyvsp[0].expr );
+  yyval.expr = new UnaryExpr( '~', yyvsp[0].expr );
 ;}
     break;
 
   case 79:
 #line 1022 "sqlparser.y"
     {
-	yyval.expr = new UnaryExpr( NOT, yyvsp[0].expr );
+  yyval.expr = new UnaryExpr( NOT, yyvsp[0].expr );
 ;}
     break;
 
   case 80:
 #line 1026 "sqlparser.y"
     {
-	yyval.expr = new VariableExpr( *yyvsp[0].stringValue );
-	
+  yyval.expr = new VariableExpr( *yyvsp[0].stringValue );
+  
 //TODO: simplify this later if that's 'only one field name' expression
-	KexiDBDbg << "  + identifier: " << *yyvsp[0].stringValue << endl;
-	delete yyvsp[0].stringValue;
+  KexiDBDbg << "  + identifier: " << *yyvsp[0].stringValue << endl;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 81:
 #line 1034 "sqlparser.y"
     {
-	yyval.expr = new QueryParameterExpr( *yyvsp[0].stringValue );
-	KexiDBDbg << "  + query parameter: " << yyval.expr->debugString() << endl;
-	delete yyvsp[0].stringValue;
+  yyval.expr = new QueryParameterExpr( *yyvsp[0].stringValue );
+  KexiDBDbg << "  + query parameter: " << yyval.expr->debugString() << endl;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 82:
 #line 1040 "sqlparser.y"
     {
-	KexiDBDbg << "  + function: " << *yyvsp[-1].stringValue << "(" << yyvsp[0].exprList->debugString() << ")" << endl;
-	yyval.expr = new FunctionExpr(*yyvsp[-1].stringValue, yyvsp[0].exprList);
-	delete yyvsp[-1].stringValue;
+  KexiDBDbg << "  + function: " << *yyvsp[-1].stringValue << "(" << yyvsp[0].exprList->debugString() << ")" << endl;
+  yyval.expr = new FunctionExpr(*yyvsp[-1].stringValue, yyvsp[0].exprList);
+  delete yyvsp[-1].stringValue;
 ;}
     break;
 
   case 83:
 #line 1047 "sqlparser.y"
     {
-	yyval.expr = new VariableExpr( *yyvsp[-2].stringValue + "." + *yyvsp[0].stringValue );
-	KexiDBDbg << "  + identifier.identifier: " << *yyvsp[-2].stringValue << "." << *yyvsp[0].stringValue << endl;
-	delete yyvsp[-2].stringValue;
-	delete yyvsp[0].stringValue;
+  yyval.expr = new VariableExpr( *yyvsp[-2].stringValue + "." + *yyvsp[0].stringValue );
+  KexiDBDbg << "  + identifier.identifier: " << *yyvsp[-2].stringValue << "." << *yyvsp[0].stringValue << endl;
+  delete yyvsp[-2].stringValue;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 84:
 #line 1054 "sqlparser.y"
     {
-	yyval.expr = new ConstExpr( SQL_NULL, QVariant() );
-	KexiDBDbg << "  + NULL" << endl;
+  yyval.expr = new ConstExpr( SQL_NULL, QVariant() );
+  KexiDBDbg << "  + NULL" << endl;
 //	$$ = new Field();
-	//$$->setName(QString::null);
+  //$$->setName(QString::null);
 ;}
     break;
 
   case 85:
 #line 1061 "sqlparser.y"
     {
-	yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, *yyvsp[0].stringValue );
-	KexiDBDbg << "  + constant " << yyvsp[0].stringValue << endl;
-	delete yyvsp[0].stringValue;
+  yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, *yyvsp[0].stringValue );
+  KexiDBDbg << "  + constant " << yyvsp[0].stringValue << endl;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 86:
 #line 1067 "sqlparser.y"
     {
-	QVariant val;
-	if (yyvsp[0].integerValue <= INT_MAX && yyvsp[0].integerValue >= INT_MIN)
-		val = (int)yyvsp[0].integerValue;
-	else if (yyvsp[0].integerValue <= UINT_MAX && yyvsp[0].integerValue >= 0)
-		val = (uint)yyvsp[0].integerValue;
-	else if (yyvsp[0].integerValue <= LLONG_MAX && yyvsp[0].integerValue >= LLONG_MIN)
-		val = (qint64)yyvsp[0].integerValue;
+  QVariant val;
+  if (yyvsp[0].integerValue <= INT_MAX && yyvsp[0].integerValue >= INT_MIN)
+    val = (int)yyvsp[0].integerValue;
+  else if (yyvsp[0].integerValue <= UINT_MAX && yyvsp[0].integerValue >= 0)
+    val = (uint)yyvsp[0].integerValue;
+  else if (yyvsp[0].integerValue <= LLONG_MAX && yyvsp[0].integerValue >= LLONG_MIN)
+    val = (qint64)yyvsp[0].integerValue;
 
 //	if ($1 < ULLONG_MAX)
 //		val = (quint64)$1;
 //TODO ok?
 
-	yyval.expr = new ConstExpr( INTEGER_CONST, val );
-	KexiDBDbg << "  + int constant: " << val.toString() << endl;
+  yyval.expr = new ConstExpr( INTEGER_CONST, val );
+  KexiDBDbg << "  + int constant: " << val.toString() << endl;
 ;}
     break;
 
   case 87:
 #line 1084 "sqlparser.y"
     {
-	yyval.expr = new ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
-	KexiDBDbg << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
+  yyval.expr = new ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
+  KexiDBDbg << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
 ;}
     break;
 
   case 89:
 #line 1095 "sqlparser.y"
     {
-	KexiDBDbg << "(expr)" << endl;
-	yyval.expr = new UnaryExpr('(', yyvsp[-1].expr);
+  KexiDBDbg << "(expr)" << endl;
+  yyval.expr = new UnaryExpr('(', yyvsp[-1].expr);
 ;}
     break;
 
@@ -2703,124 +2703,124 @@ YYACCEPT;
 //	$$ = new NArgExpr(0, 0);
 //	$$->add( $1 );
 //	$$->add( $3 );
-	yyval.exprList = yyvsp[-1].exprList;
+  yyval.exprList = yyvsp[-1].exprList;
 ;}
     break;
 
   case 91:
 #line 1113 "sqlparser.y"
     {
-	yyval.exprList = yyvsp[0].exprList;
-	yyval.exprList->prepend( yyvsp[-2].expr );
+  yyval.exprList = yyvsp[0].exprList;
+  yyval.exprList->prepend( yyvsp[-2].expr );
 ;}
     break;
 
   case 92:
 #line 1118 "sqlparser.y"
     {
-	yyval.exprList = new NArgExpr(0, 0);
-	yyval.exprList->add( yyvsp[-2].expr );
-	yyval.exprList->add( yyvsp[0].expr );
+  yyval.exprList = new NArgExpr(0, 0);
+  yyval.exprList->add( yyvsp[-2].expr );
+  yyval.exprList->add( yyvsp[0].expr );
 ;}
     break;
 
   case 93:
 #line 1127 "sqlparser.y"
     {
-	yyval.exprList = yyvsp[0].exprList;
+  yyval.exprList = yyvsp[0].exprList;
 ;}
     break;
 
   case 94:
 #line 1172 "sqlparser.y"
     {
-	yyval.exprList = yyvsp[-2].exprList;
-	yyval.exprList->add(yyvsp[0].expr);
+  yyval.exprList = yyvsp[-2].exprList;
+  yyval.exprList->add(yyvsp[0].expr);
 ;}
     break;
 
   case 95:
 #line 1177 "sqlparser.y"
     {
-	yyval.exprList = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
-	yyval.exprList->add(yyvsp[0].expr);
+  yyval.exprList = new NArgExpr(KexiDBExpr_TableList, IDENTIFIER); //ok?
+  yyval.exprList->add(yyvsp[0].expr);
 ;}
     break;
 
   case 96:
 #line 1185 "sqlparser.y"
     {
-	KexiDBDbg << "FROM: '" << *yyvsp[0].stringValue << "'" << endl;
-	yyval.expr = new VariableExpr(*yyvsp[0].stringValue);
+  KexiDBDbg << "FROM: '" << *yyvsp[0].stringValue << "'" << endl;
+  yyval.expr = new VariableExpr(*yyvsp[0].stringValue);
 
-	/*
+  /*
 //TODO: this isn't ok for more tables:
-	Field::ListIterator it = parser->select()->fieldsIterator();
-	for(Field *item; (item = it.current()); ++it)
-	{
-		if(item->table() == dummy)
-		{
-			item->setTable(schema);
-		}
+  Field::ListIterator it = parser->select()->fieldsIterator();
+  for(Field *item; (item = it.current()); ++it)
+  {
+    if(item->table() == dummy)
+    {
+      item->setTable(schema);
+    }
 
-		if(item->table() && !item->isQueryAsterisk())
-		{
-			Field *f = item->table()->field(item->name());
-			if(!f)
-			{
-				ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
-				parser->setError(err);
-				yyerror("fieldlisterror");
-			}	
-		}
-	}*/
-	delete yyvsp[0].stringValue;
+    if(item->table() && !item->isQueryAsterisk())
+    {
+      Field *f = item->table()->field(item->name());
+      if(!f)
+      {
+        ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+        parser->setError(err);
+        yyerror("fieldlisterror");
+      }	
+    }
+  }*/
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 97:
 #line 1213 "sqlparser.y"
     {
-	//table + alias
-	yyval.expr = new BinaryExpr(
-		KexiDBExpr_SpecialBinary, 
-		new VariableExpr(*yyvsp[-1].stringValue), 0,
-		new VariableExpr(*yyvsp[0].stringValue)
-	);
-	delete yyvsp[-1].stringValue;
-	delete yyvsp[0].stringValue;
+  //table + alias
+  yyval.expr = new BinaryExpr(
+    KexiDBExpr_SpecialBinary, 
+    new VariableExpr(*yyvsp[-1].stringValue), 0,
+    new VariableExpr(*yyvsp[0].stringValue)
+  );
+  delete yyvsp[-1].stringValue;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 98:
 #line 1224 "sqlparser.y"
     {
-	//table + alias
-	yyval.expr = new BinaryExpr(
-		KexiDBExpr_SpecialBinary,
-		new VariableExpr(*yyvsp[-2].stringValue), AS,
-		new VariableExpr(*yyvsp[0].stringValue)
-	);
-	delete yyvsp[-2].stringValue;
-	delete yyvsp[0].stringValue;
+  //table + alias
+  yyval.expr = new BinaryExpr(
+    KexiDBExpr_SpecialBinary,
+    new VariableExpr(*yyvsp[-2].stringValue), AS,
+    new VariableExpr(*yyvsp[0].stringValue)
+  );
+  delete yyvsp[-2].stringValue;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 99:
 #line 1240 "sqlparser.y"
     {
-	yyval.exprList = yyvsp[-2].exprList;
-	yyval.exprList->add( yyvsp[0].expr );
-	KexiDBDbg << "ColViews: ColViews , ColItem" << endl;
+  yyval.exprList = yyvsp[-2].exprList;
+  yyval.exprList->add( yyvsp[0].expr );
+  KexiDBDbg << "ColViews: ColViews , ColItem" << endl;
 ;}
     break;
 
   case 100:
 #line 1246 "sqlparser.y"
     {
-	yyval.exprList = new NArgExpr(0,0);
-	yyval.exprList->add( yyvsp[0].expr );
-	KexiDBDbg << "ColViews: ColItem" << endl;
+  yyval.exprList = new NArgExpr(0,0);
+  yyval.exprList->add( yyvsp[0].expr );
+  KexiDBDbg << "ColViews: ColItem" << endl;
 ;}
     break;
 
@@ -2831,54 +2831,54 @@ YYACCEPT;
 //	dummy->addField($$);
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
-	yyval.expr = yyvsp[0].expr;
-	KexiDBDbg << " added column expr: '" << yyvsp[0].expr->debugString() << "'" << endl;
+  yyval.expr = yyvsp[0].expr;
+  KexiDBDbg << " added column expr: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;}
     break;
 
   case 102:
 #line 1264 "sqlparser.y"
     {
-	yyval.expr = yyvsp[0].expr;
-	KexiDBDbg << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
+  yyval.expr = yyvsp[0].expr;
+  KexiDBDbg << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;}
     break;
 
   case 103:
 #line 1269 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(
-		KexiDBExpr_SpecialBinary, yyvsp[-2].expr, AS,
-		new VariableExpr(*yyvsp[0].stringValue)
-	);
-	KexiDBDbg << " added column expr: " << yyval.expr->debugString() << endl;
-	delete yyvsp[0].stringValue;
+  yyval.expr = new BinaryExpr(
+    KexiDBExpr_SpecialBinary, yyvsp[-2].expr, AS,
+    new VariableExpr(*yyvsp[0].stringValue)
+  );
+  KexiDBDbg << " added column expr: " << yyval.expr->debugString() << endl;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 104:
 #line 1278 "sqlparser.y"
     {
-	yyval.expr = new BinaryExpr(
-		KexiDBExpr_SpecialBinary, yyvsp[-1].expr, 0, 
-		new VariableExpr(*yyvsp[0].stringValue)
-	);
-	KexiDBDbg << " added column expr: " << yyval.expr->debugString() << endl;
-	delete yyvsp[0].stringValue;
+  yyval.expr = new BinaryExpr(
+    KexiDBExpr_SpecialBinary, yyvsp[-1].expr, 0, 
+    new VariableExpr(*yyvsp[0].stringValue)
+  );
+  KexiDBDbg << " added column expr: " << yyval.expr->debugString() << endl;
+  delete yyvsp[0].stringValue;
 ;}
     break;
 
   case 105:
 #line 1290 "sqlparser.y"
     {
-	yyval.expr = yyvsp[0].expr;
+  yyval.expr = yyvsp[0].expr;
 ;}
     break;
 
   case 106:
 #line 1334 "sqlparser.y"
     {
-	yyval.expr = yyvsp[-1].expr;
+  yyval.expr = yyvsp[-1].expr;
 //TODO
 //	$$->setName("DISTINCT(" + $3->name() + ")");
 ;}
@@ -2887,8 +2887,8 @@ YYACCEPT;
   case 107:
 #line 1343 "sqlparser.y"
     {
-	yyval.expr = new VariableExpr("*");
-	KexiDBDbg << "all columns" << endl;
+  yyval.expr = new VariableExpr("*");
+  KexiDBDbg << "all columns" << endl;
 
 //	QueryAsterisk *ast = new QueryAsterisk(parser->select(), dummy);
 //	parser->select()->addAsterisk(ast);
@@ -2899,11 +2899,11 @@ YYACCEPT;
   case 108:
 #line 1352 "sqlparser.y"
     {
-	QString s( *yyvsp[-2].stringValue );
-	s += ".*";
-	yyval.expr = new VariableExpr(s);
-	KexiDBDbg << "  + all columns from " << s << endl;
-	delete yyvsp[-2].stringValue;
+  QString s( *yyvsp[-2].stringValue );
+  s += ".*";
+  yyval.expr = new VariableExpr(s);
+  KexiDBDbg << "  + all columns from " << s << endl;
+  delete yyvsp[-2].stringValue;
 ;}
     break;
 
@@ -2949,62 +2949,62 @@ yyerrlab:
       yyn = yypact[yystate];
 
       if (YYPACT_NINF < yyn && yyn < YYLAST)
-	{
-	  YYSIZE_T yysize = 0;
-	  int yytype = YYTRANSLATE (yychar);
-	  const char* yyprefix;
-	  char *yymsg;
-	  int yyx;
+  {
+    YYSIZE_T yysize = 0;
+    int yytype = YYTRANSLATE (yychar);
+    const char* yyprefix;
+    char *yymsg;
+    int yyx;
 
-	  /* Start YYX at -YYN if negative to avoid negative indexes in
-	     YYCHECK.  */
-	  int yyxbegin = yyn < 0 ? -yyn : 0;
+    /* Start YYX at -YYN if negative to avoid negative indexes in
+       YYCHECK.  */
+    int yyxbegin = yyn < 0 ? -yyn : 0;
 
-	  /* Stay within bounds of both yycheck and yytname.  */
-	  int yychecklim = YYLAST - yyn;
-	  int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
-	  int yycount = 0;
+    /* Stay within bounds of both yycheck and yytname.  */
+    int yychecklim = YYLAST - yyn;
+    int yyxend = yychecklim < YYNTOKENS ? yychecklim : YYNTOKENS;
+    int yycount = 0;
 
-	  yyprefix = ", expecting ";
-	  for (yyx = yyxbegin; yyx < yyxend; ++yyx)
-	    if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-	      {
-		yysize += yystrlen (yyprefix) + yystrlen (yytname [yyx]);
-		yycount += 1;
-		if (yycount == 5)
-		  {
-		    yysize = 0;
-		    break;
-		  }
-	      }
-	  yysize += (sizeof ("syntax error, unexpected ")
-		     + yystrlen (yytname[yytype]));
-	  yymsg = (char *) YYSTACK_ALLOC (yysize);
-	  if (yymsg != 0)
-	    {
-	      char *yyp = yystpcpy (yymsg, "syntax error, unexpected ");
-	      yyp = yystpcpy (yyp, yytname[yytype]);
+    yyprefix = ", expecting ";
+    for (yyx = yyxbegin; yyx < yyxend; ++yyx)
+      if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
+        {
+    yysize += yystrlen (yyprefix) + yystrlen (yytname [yyx]);
+    yycount += 1;
+    if (yycount == 5)
+      {
+        yysize = 0;
+        break;
+      }
+        }
+    yysize += (sizeof ("syntax error, unexpected ")
+         + yystrlen (yytname[yytype]));
+    yymsg = (char *) YYSTACK_ALLOC (yysize);
+    if (yymsg != 0)
+      {
+        char *yyp = yystpcpy (yymsg, "syntax error, unexpected ");
+        yyp = yystpcpy (yyp, yytname[yytype]);
 
-	      if (yycount < 5)
-		{
-		  yyprefix = ", expecting ";
-		  for (yyx = yyxbegin; yyx < yyxend; ++yyx)
-		    if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
-		      {
-			yyp = yystpcpy (yyp, yyprefix);
-			yyp = yystpcpy (yyp, yytname[yyx]);
-			yyprefix = " or ";
-		      }
-		}
-	      yyerror (yymsg);
-	      YYSTACK_FREE (yymsg);
-	    }
-	  else
-	    yyerror ("syntax error; also virtual memory exhausted");
-	}
+        if (yycount < 5)
+    {
+      yyprefix = ", expecting ";
+      for (yyx = yyxbegin; yyx < yyxend; ++yyx)
+        if (yycheck[yyx + yyn] == yyx && yyx != YYTERROR)
+          {
+      yyp = yystpcpy (yyp, yyprefix);
+      yyp = yystpcpy (yyp, yytname[yyx]);
+      yyprefix = " or ";
+          }
+    }
+        yyerror (yymsg);
+        YYSTACK_FREE (yymsg);
+      }
+    else
+      yyerror ("syntax error; also virtual memory exhausted");
+  }
       else
 #endif /* YYERROR_VERBOSE */
-	yyerror ("syntax error");
+  yyerror ("syntax error");
     }
 
 
@@ -3012,21 +3012,21 @@ yyerrlab:
   if (yyerrstatus == 3)
     {
       /* If just tried and failed to reuse lookahead token after an
-	 error, discard it.  */
+   error, discard it.  */
 
       /* Return failure if at end of input.  */
       if (yychar == YYEOF)
         {
-	  /* Pop the error token.  */
+    /* Pop the error token.  */
           YYPOPSTACK;
-	  /* Pop the rest of the stack.  */
-	  while (yyss < yyssp)
-	    {
-	      YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
-	      yydestruct (yystos[*yyssp], yyvsp);
-	      YYPOPSTACK;
-	    }
-	  YYABORT;
+    /* Pop the rest of the stack.  */
+    while (yyss < yyssp)
+      {
+        YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
+        yydestruct (yystos[*yyssp], yyvsp);
+        YYPOPSTACK;
+      }
+    YYABORT;
         }
 
       YYDSYMPRINTF ("Error: discarding", yytoken, &yylval, &yylloc);
@@ -3050,19 +3050,19 @@ yyerrlab1:
     {
       yyn = yypact[yystate];
       if (yyn != YYPACT_NINF)
-	{
-	  yyn += YYTERROR;
-	  if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
-	    {
-	      yyn = yytable[yyn];
-	      if (0 < yyn)
-		break;
-	    }
-	}
+  {
+    yyn += YYTERROR;
+    if (0 <= yyn && yyn <= YYLAST && yycheck[yyn] == YYTERROR)
+      {
+        yyn = yytable[yyn];
+        if (0 < yyn)
+    break;
+      }
+  }
 
       /* Pop the current state because it cannot handle the error token.  */
       if (yyssp == yyss)
-	YYABORT;
+  YYABORT;
 
       YYDSYMPRINTF ("Error: popping", yystos[*yyssp], yyvsp, yylsp);
       yydestruct (yystos[yystate], yyvsp);

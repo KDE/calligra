@@ -30,101 +30,101 @@
 using namespace KexiDB;
 
 class KexiDB::xBaseCursorData {
-	public:
-		explicit xBaseCursorData(KexiDB::Cursor* cursor = 0)
-			: internalCursor(cursor)
-		{
-		}
+  public:
+    explicit xBaseCursorData(KexiDB::Cursor* cursor = 0)
+      : internalCursor(cursor)
+    {
+    }
 
-		KexiDB::Cursor* internalCursor;
+    KexiDB::Cursor* internalCursor;
 
 };
 
 xBaseCursor::xBaseCursor(KexiDB::Connection* conn, KexiDB::Cursor* internalCursor, const QString& statement, uint cursor_options)
-	: Cursor(conn,statement,cursor_options)
-	, d( new xBaseCursorData(internalCursor) )
+  : Cursor(conn,statement,cursor_options)
+  , d( new xBaseCursorData(internalCursor) )
 {
-	init();
+  init();
 }
 
 xBaseCursor::xBaseCursor(Connection* conn, KexiDB::Cursor* internalCursor, QuerySchema& query, uint options )
-	: Cursor( conn, query, options )
-	, d( new xBaseCursorData(internalCursor) )
+  : Cursor( conn, query, options )
+  , d( new xBaseCursorData(internalCursor) )
 {
-	init();
+  init();
 }
 
 xBaseCursor::~xBaseCursor() {
-	close();
+  close();
 }
 
 void xBaseCursor::init() {
-	
-	if (d->internalCursor) {
-		m_options |= d->internalCursor->options();
-	}
-	// SQLite does buffering. So all calls to moving the cursor to SQLite will read from the buffer
-	// ( if the rows are already buffered ) inside. Any point in double buffering ?
-	setBuffered(false);
+  
+  if (d->internalCursor) {
+    m_options |= d->internalCursor->options();
+  }
+  // SQLite does buffering. So all calls to moving the cursor to SQLite will read from the buffer
+  // ( if the rows are already buffered ) inside. Any point in double buffering ?
+  setBuffered(false);
 }
 
 bool xBaseCursor::drv_open() {
 //	KexiDBDrvDbg << "xBaseCursor::drv_open:" << m_sql << endl;
-	if (!d->internalCursor) {
-		return false;
-	}
-	return d->internalCursor->open();
+  if (!d->internalCursor) {
+    return false;
+  }
+  return d->internalCursor->open();
 }
 
 bool xBaseCursor::drv_close() {
-	if (!d->internalCursor) {
-		return false;
-	}
-	m_opened = false;
-	Connection* internalConn = d->internalCursor->connection();
-	internalConn->deleteCursor( d->internalCursor );
-	return true;
+  if (!d->internalCursor) {
+    return false;
+  }
+  m_opened = false;
+  Connection* internalConn = d->internalCursor->connection();
+  internalConn->deleteCursor( d->internalCursor );
+  return true;
 }
 
 void xBaseCursor::drv_getNextRecord() {
-	if (!d->internalCursor) {
-		m_result = FetchError;
-		return;
-	}
+  if (!d->internalCursor) {
+    m_result = FetchError;
+    return;
+  }
 
-	if ( !d->internalCursor->moveNext() ) {
-		if ( d->internalCursor->eof() )
-			m_result = FetchEnd;
-		else
-			m_result = FetchError;
-	} else {
-		m_result = FetchOK;
-		m_fieldCount = d->internalCursor->fieldCount();
-		m_fieldsToStoreInRow = m_fieldCount;
-	}
+  if ( !d->internalCursor->moveNext() ) {
+    if ( d->internalCursor->eof() )
+      m_result = FetchEnd;
+    else
+      m_result = FetchError;
+  } else {
+    m_result = FetchOK;
+    m_fieldCount = d->internalCursor->fieldCount();
+    m_fieldsToStoreInRow = m_fieldCount;
+  }
 }
 
 QVariant xBaseCursor::value(uint pos) {
-	if (!d->internalCursor) {
-		// Construct an invalid QVariant
-		return QVariant();
-	}
-	return d->internalCursor->value(pos);
+  if (!d->internalCursor) {
+    // Construct an invalid QVariant
+    return QVariant();
+  }
+  return d->internalCursor->value(pos);
 }
 
 
 bool xBaseCursor::drv_storeCurrentRow(RecordData& data) const
 {
-	if (!d->internalCursor) {
-		return false;
-	}
+  if (!d->internalCursor) {
+    return false;
+  }
 
-	RecordData* rData = d->internalCursor->storeCurrentRow();
-	if (!rData) {
-		return false;
-	}
-	data = *rData;
-	return true;
+  RecordData* rData = d->internalCursor->storeCurrentRow();
+  if (!rData) {
+    return false;
+  }
+  data = *rData;
+  return true;
 }
 
 void xBaseCursor::drv_appendCurrentRecordToBuffer() {
@@ -142,38 +142,38 @@ void xBaseCursor::drv_bufferMovePointerTo(qint64 to) {
 }
 
 const char** xBaseCursor::rowData() const {
-	if (!d->internalCursor) {
-		return 0;
-	}
-	return d->internalCursor->rowData();
+  if (!d->internalCursor) {
+    return 0;
+  }
+  return d->internalCursor->rowData();
 }
 
 int xBaseCursor::serverResult()
 {
-	if (!d->internalCursor) {
-		// Any better value to return ?
-		return -1;
-	}
-	return d->internalCursor->serverResult();
+  if (!d->internalCursor) {
+    // Any better value to return ?
+    return -1;
+  }
+  return d->internalCursor->serverResult();
 }
 
 QString xBaseCursor::serverResultName()
 {
-	if (!d->internalCursor) {
-		return QString();
-	}
-	return d->internalCursor->serverResultName();
+  if (!d->internalCursor) {
+    return QString();
+  }
+  return d->internalCursor->serverResultName();
 }
 
 void xBaseCursor::drv_clearServerResult()
 {
-	//! TODO
+  //! TODO
 }
 
 QString xBaseCursor::serverErrorMsg()
 {
-	if (!d->internalCursor) {
-		return QString();
-	}
-	return d->internalCursor->serverErrorMsg();
+  if (!d->internalCursor) {
+    return QString();
+  }
+  return d->internalCursor->serverErrorMsg();
 }

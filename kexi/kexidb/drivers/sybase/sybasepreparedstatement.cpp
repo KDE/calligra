@@ -23,7 +23,7 @@
 using namespace KexiDB;
 
 SybasePreparedStatement::SybasePreparedStatement(StatementType type, ConnectionInternal& conn,
-	FieldList& fields)
+  FieldList& fields)
  : KexiDB::PreparedStatement(type, conn, fields)
  , m_resetRequired(false)
  , m_conn( conn.connection )
@@ -37,10 +37,10 @@ SybasePreparedStatement::~SybasePreparedStatement()
 
 bool SybasePreparedStatement::execute()
 {
-	m_resetRequired = true;
-	if (m_conn->insertRecord(*m_fields, m_args)) {
-		return true;
-	}
+  m_resetRequired = true;
+  if (m_conn->insertRecord(*m_fields, m_args)) {
+    return true;
+  }
 
-	return false;
+  return false;
 }

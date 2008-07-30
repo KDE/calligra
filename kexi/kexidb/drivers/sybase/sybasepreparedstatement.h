@@ -28,19 +28,19 @@ namespace KexiDB
 
 class SybasePreparedStatement : public PreparedStatement
 {
-	public:
-		SybasePreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
+  public:
+    SybasePreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
-		virtual ~SybasePreparedStatement();
+    virtual ~SybasePreparedStatement();
 
-		virtual bool execute();
+    virtual bool execute();
 
-		QByteArray m_tempStatementString;
+    QByteArray m_tempStatementString;
 
-		bool m_resetRequired : 1;
+    bool m_resetRequired : 1;
 
-	private:
-		Connection* m_conn;
+  private:
+    Connection* m_conn;
 
 };
 }

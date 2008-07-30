@@ -36,7 +36,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #endif
 
 namespace KexiDB {
-	class ConnectionData;
+  class ConnectionData;
 }
 
 namespace NAMESPACE {
@@ -49,41 +49,41 @@ namespace NAMESPACE {
 class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 {
 
-	public:
-		SybaseConnectionInternal(KexiDB::Connection* connection);
-		virtual ~SybaseConnectionInternal();
+  public:
+    SybaseConnectionInternal(KexiDB::Connection* connection);
+    virtual ~SybaseConnectionInternal();
 
-		//! Connects to a Sybase database
-		bool db_connect(const KexiDB::ConnectionData& data);
+    //! Connects to a Sybase database
+    bool db_connect(const KexiDB::ConnectionData& data);
 
-		//! Disconnects from the database
-		bool db_disconnect();
+    //! Disconnects from the database
+    bool db_disconnect();
 
-		//! Selects a database that is about to be used
-		bool useDatabase(const QString &dbName = QString());
-		
-		//! Execute SQL statement on the database
-		bool executeSQL( const QString& statement );
+    //! Selects a database that is about to be used
+    bool useDatabase(const QString &dbName = QString());
+    
+    //! Execute SQL statement on the database
+    bool executeSQL( const QString& statement );
 
-		//! Stores last operation's result
-		virtual void storeResult();
+    //! Stores last operation's result
+    virtual void storeResult();
 
-		//! Escapes a table, database or column name
-		QString escapeIdentifier(const QString& str) const;
+    //! Escapes a table, database or column name
+    QString escapeIdentifier(const QString& str) const;
 
-		// message handler called by call back function
-		void messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext
-				   , char* srvname, char* procname, int line);
-	     
-		// dbProcess-Connection map
-		static QMap<DBPROCESS*,SybaseConnectionInternal*> dbProcessConnectionMap;
+    // message handler called by call back function
+    void messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext
+           , char* srvname, char* procname, int line);
+       
+    // dbProcess-Connection map
+    static QMap<DBPROCESS*,SybaseConnectionInternal*> dbProcessConnectionMap;
 
-		// Server specific stuff
-		DBPROCESS *dbProcess;
+    // Server specific stuff
+    DBPROCESS *dbProcess;
 
-		bool sybase_owned; //!< true if dbprocess should be closed on destruction
-		QString errmsg; //!< server-specific message of last operation
-		int res; //!< result code of last operation on server
+    bool sybase_owned; //!< true if dbprocess should be closed on destruction
+    QString errmsg; //!< server-specific message of last operation
+    int res; //!< result code of last operation on server
 
 };
 
@@ -92,12 +92,12 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 /*! Provides a low-level abstraction for iterating over Sybase result sets. */
 class SybaseCursorData : public SybaseConnectionInternal
 {
-	public:
-		SybaseCursorData(KexiDB::Connection* connection);
-		virtual ~SybaseCursorData();
+  public:
+    SybaseCursorData(KexiDB::Connection* connection);
+    virtual ~SybaseCursorData();
 
-		//unsigned long *lengths;
-		unsigned long numRows;
+    //unsigned long *lengths;
+    unsigned long numRows;
 };
 
 }

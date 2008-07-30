@@ -43,27 +43,27 @@ class KProgressDialog;
 */
 class SQLiteVacuum : public QObject
 {
-	Q_OBJECT
-	public:
-		SQLiteVacuum(const QString& filePath);
-		~SQLiteVacuum();
+  Q_OBJECT
+  public:
+    SQLiteVacuum(const QString& filePath);
+    ~SQLiteVacuum();
 
-		/*! Performs compacting procedure.
-		 \return true on success, false on failure and cancelled if user 
-		 clicked "Cancel" button in the progress dialog. */
-		tristate run();
+    /*! Performs compacting procedure.
+     \return true on success, false on failure and cancelled if user 
+     clicked "Cancel" button in the progress dialog. */
+    tristate run();
 
-	public slots:
-		void readFromStdout();
-		void processExited();
-		void cancelClicked();
+  public slots:
+    void readFromStdout();
+    void processExited();
+    void cancelClicked();
 
-	protected:
-		QString m_filePath;
-		Q3Process *m_process;
-		KProgressDialog* m_dlg;
-		int m_percent;
-		tristate m_result;
+  protected:
+    QString m_filePath;
+    Q3Process *m_process;
+    KProgressDialog* m_dlg;
+    int m_percent;
+    tristate m_result;
 };
 
 #endif

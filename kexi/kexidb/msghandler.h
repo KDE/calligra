@@ -37,13 +37,13 @@ namespace KexiDB {
 */
 class KEXI_DB_EXPORT MessageTitle
 {
-	public:
-		MessageTitle(KexiDB::Object* o, const QString& msg = QString());
-		~MessageTitle();
-	
-	protected:
-		Object* m_obj;
-		QString m_prevMsgTitle;
+  public:
+    MessageTitle(KexiDB::Object* o, const QString& msg = QString());
+    ~MessageTitle();
+  
+  protected:
+    Object* m_obj;
+    QString m_prevMsgTitle;
 };
 
 /*! A prototype for Message Handler usable 
@@ -51,46 +51,46 @@ class KEXI_DB_EXPORT MessageTitle
 */
 class KEXI_DB_EXPORT MessageHandler
 {
-	public:
-		enum MessageType { Error, Sorry, Warning };
+  public:
+    enum MessageType { Error, Sorry, Warning };
 
-		/*! Constructs mesage handler, \a parent is a widget that will be a parent 
-		 for displaying gui elements (e.g. message boxes). Can be 0 for non-gui usage. */
-		MessageHandler(QWidget *parent = 0);
-		virtual ~MessageHandler();
+    /*! Constructs mesage handler, \a parent is a widget that will be a parent 
+     for displaying gui elements (e.g. message boxes). Can be 0 for non-gui usage. */
+    MessageHandler(QWidget *parent = 0);
+    virtual ~MessageHandler();
 
-		/*! This method can be used to block/unblock messages.
-		 Sometimes you are receiving both lower- and higher-level messages,
-		 but you do not need to display two message boxes but only one (higher level with details).
-		 All you need is to call enableMessages(false) before action that can fail
-		 and restore messages by enableMessages(true) after the action. 
-		 See KexiMainWindow::renameObject() implementation for example. */
-		inline void enableMessages(bool enable) { m_enableMessages = enable; }
+    /*! This method can be used to block/unblock messages.
+     Sometimes you are receiving both lower- and higher-level messages,
+     but you do not need to display two message boxes but only one (higher level with details).
+     All you need is to call enableMessages(false) before action that can fail
+     and restore messages by enableMessages(true) after the action. 
+     See KexiMainWindow::renameObject() implementation for example. */
+    inline void enableMessages(bool enable) { m_enableMessages = enable; }
 
-		/*! Shows error message with \a title (it is not caption) and details. */
-		virtual void showErrorMessage(const QString &title, 
-			const QString &details = QString()) = 0;
-		
-		/*! Shows error message with \a msg text. Existing error message from \a obj object
-		 is also copied, if present. */
-		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString()) = 0;
+    /*! Shows error message with \a title (it is not caption) and details. */
+    virtual void showErrorMessage(const QString &title, 
+      const QString &details = QString()) = 0;
+    
+    /*! Shows error message with \a msg text. Existing error message from \a obj object
+     is also copied, if present. */
+    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString()) = 0;
 
-		/*! Interactively asks a question. For GUI version, KMessageBox class is used.
-		 See KMessageBox documentation for explanation of the parameters.
-		 \a defaultResult is returned in case when no message handler is installed. 
-		 \a message should be i18n's string. 
-		 Value from KMessageBox::ButtonCode enum is returned.
-		 Reimplement this. This implementation does nothing, just returns \a defaultResult. */
-		virtual int askQuestion( const QString& message, 
-			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-			const KGuiItem &buttonYes=KStandardGuiItem::yes(), 
-			const KGuiItem &buttonNo=KStandardGuiItem::no(),
-			const QString &dontShowAskAgainName = QString(),
-			int options = KMessageBox::Notify );
+    /*! Interactively asks a question. For GUI version, KMessageBox class is used.
+     See KMessageBox documentation for explanation of the parameters.
+     \a defaultResult is returned in case when no message handler is installed. 
+     \a message should be i18n's string. 
+     Value from KMessageBox::ButtonCode enum is returned.
+     Reimplement this. This implementation does nothing, just returns \a defaultResult. */
+    virtual int askQuestion( const QString& message, 
+      KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+      const KGuiItem &buttonYes=KStandardGuiItem::yes(), 
+      const KGuiItem &buttonNo=KStandardGuiItem::no(),
+      const QString &dontShowAskAgainName = QString(),
+      int options = KMessageBox::Notify );
 
-	protected:
-		QPointer<QWidget> m_messageHandlerParentWidget;
-		bool m_enableMessages : 1;
+  protected:
+    QPointer<QWidget> m_messageHandlerParentWidget;
+    bool m_enableMessages : 1;
 };
 
 }

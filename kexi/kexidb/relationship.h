@@ -58,16 +58,16 @@ namespace KexiDB {
  If Relationship object is not attached to IndexSchema object, 
  you should care about destroying it by hand.
 
-	Example:
-	<pre>
-	          ----------
-	 ---r1--<|          |
-	         | Table A [uk]----r3---<
-	 ---r2--<|          |
-	          ----------
-	</pre>
-	Table A has two relationships (r1, r2) at details side and one (r3) at master side.
-	[uk] stands for unique key.
+  Example:
+  <pre>
+            ----------
+   ---r1--<|          |
+           | Table A [uk]----r3---<
+   ---r2--<|          |
+            ----------
+  </pre>
+  Table A has two relationships (r1, r2) at details side and one (r3) at master side.
+  [uk] stands for unique key.
 */
 
 class IndexSchema;
@@ -76,79 +76,79 @@ class QuerySchema;
 
 class KEXI_DB_EXPORT Relationship
 {
-	public:
-		typedef KexiUtils::AutodeletedList<Relationship*> List;
-		typedef QList<Relationship*>::ConstIterator ListIterator;
+  public:
+    typedef KexiUtils::AutodeletedList<Relationship*> List;
+    typedef QList<Relationship*>::ConstIterator ListIterator;
 
-		/*! Creates uninitialized Relationship object. 
-			setIndices() will be required to call.
-		*/
-		Relationship();
+    /*! Creates uninitialized Relationship object. 
+      setIndices() will be required to call.
+    */
+    Relationship();
 
-		/*! Creates Relationship object and initialises it just by 
-		 calling setIndices(). If setIndices() failed, object is still uninitialised.
-		*/
-		Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex);
+    /*! Creates Relationship object and initialises it just by 
+     calling setIndices(). If setIndices() failed, object is still uninitialised.
+    */
+    Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex);
 
-		virtual ~Relationship();
+    virtual ~Relationship();
 
-		/*! \return index defining master side of this relationship
-		 or null if there is no information defined. */
-		IndexSchema* masterIndex() const { return m_masterIndex; }
+    /*! \return index defining master side of this relationship
+     or null if there is no information defined. */
+    IndexSchema* masterIndex() const { return m_masterIndex; }
 
-		/*! \return index defining referenced side of this relationship.
-		 or null if there is no information defined. */
-		IndexSchema* detailsIndex() const { return m_detailsIndex; }
+    /*! \return index defining referenced side of this relationship.
+     or null if there is no information defined. */
+    IndexSchema* detailsIndex() const { return m_detailsIndex; }
 
-		/*! \return ordered list of field pairs -- alternative form 
-		 for representation of relationship or null if there is no information defined.
-		 Each pair has a form of <master-side-field, details-side-field>. */
-		Field::PairList* fieldPairs() { return &m_pairs; }
+    /*! \return ordered list of field pairs -- alternative form 
+     for representation of relationship or null if there is no information defined.
+     Each pair has a form of <master-side-field, details-side-field>. */
+    Field::PairList* fieldPairs() { return &m_pairs; }
 
-		bool isEmpty() const { return m_pairs.isEmpty(); }
+    bool isEmpty() const { return m_pairs.isEmpty(); }
 
-		/*! \return table assigned at "master / one" side of this relationship.
-		 or null if there is no information defined. */
-		TableSchema* masterTable() const;
+    /*! \return table assigned at "master / one" side of this relationship.
+     or null if there is no information defined. */
+    TableSchema* masterTable() const;
 
-		/*! \return table assigned at "details / many / foreign" side of this relationship.
-		 or null if there is no information defined. */
-		TableSchema* detailsTable() const;
+    /*! \return table assigned at "details / many / foreign" side of this relationship.
+     or null if there is no information defined. */
+    TableSchema* detailsTable() const;
 
-		/*! Sets \a masterIndex and \a detailsIndex indices for this relationship.
-		 This also sets information about tables for master- and details- sides.
-		 Notes: 
-		 - both indices must contain the same number of fields
-		 - both indices must not be owned by the same table, and table (owner) must be not null.
-		 - corresponding field types must be the same
-		 - corresponding field types' signedness must be the same
-		 If above rules are not fulfilled, information about this relationship is cleared. 
-		 On success, this Relationship object is detached from previous IndexSchema objects that were
-		 assigned before, and new are attached.
-		 */
-		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex);
+    /*! Sets \a masterIndex and \a detailsIndex indices for this relationship.
+     This also sets information about tables for master- and details- sides.
+     Notes: 
+     - both indices must contain the same number of fields
+     - both indices must not be owned by the same table, and table (owner) must be not null.
+     - corresponding field types must be the same
+     - corresponding field types' signedness must be the same
+     If above rules are not fulfilled, information about this relationship is cleared. 
+     On success, this Relationship object is detached from previous IndexSchema objects that were
+     assigned before, and new are attached.
+     */
+    void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex);
 
-	protected:
-		Relationship( QuerySchema *query, Field *field1, Field *field2 );
+  protected:
+    Relationship( QuerySchema *query, Field *field1, Field *field2 );
 
-		void createIndices( QuerySchema *query, Field *field1, Field *field2 );
+    void createIndices( QuerySchema *query, Field *field1, Field *field2 );
 
-		/*! Internal version of setIndices(). \a ownedByMaster parameter is passed 
-		 to IndexSchema::attachRelationship() */
-		void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex, bool ownedByMaster);
+    /*! Internal version of setIndices(). \a ownedByMaster parameter is passed 
+     to IndexSchema::attachRelationship() */
+    void setIndices(IndexSchema* masterIndex, IndexSchema* detailsIndex, bool ownedByMaster);
 
-		IndexSchema *m_masterIndex;
-		IndexSchema *m_detailsIndex;
+    IndexSchema *m_masterIndex;
+    IndexSchema *m_detailsIndex;
 
-		Field::PairList m_pairs;
+    Field::PairList m_pairs;
 
-		bool m_masterIndexOwned : 1;
-		bool m_detailsIndexOwned : 1;
+    bool m_masterIndexOwned : 1;
+    bool m_detailsIndexOwned : 1;
 
-	friend class Connection;
-	friend class TableSchema;
-	friend class QuerySchema;
-	friend class IndexSchema;
+  friend class Connection;
+  friend class TableSchema;
+  friend class QuerySchema;
+  friend class IndexSchema;
 };
 
 } //namespace KexiDB

@@ -29,30 +29,30 @@ namespace KexiDB {
 //! MySQL database driver.
 class MySqlDriver : public Driver
 {
-	Q_OBJECT
-	KEXIDB_DRIVER
+  Q_OBJECT
+  KEXIDB_DRIVER
 
-	public:
-		MySqlDriver(QObject *parent, const QStringList &args=QStringList());
-		virtual ~MySqlDriver();
-		
-		virtual bool isSystemDatabaseName( const QString &n ) const;
+  public:
+    MySqlDriver(QObject *parent, const QStringList &args=QStringList());
+    virtual ~MySqlDriver();
+    
+    virtual bool isSystemDatabaseName( const QString &n ) const;
 
-		//! Escape a string for use as a value
-		virtual QString escapeString(const QString& str) const;
-		virtual QByteArray escapeString(const QByteArray& str) const;
+    //! Escape a string for use as a value
+    virtual QString escapeString(const QString& str) const;
+    virtual QByteArray escapeString(const QByteArray& str) const;
 
-		//! Escape BLOB value \a array
-		virtual QString escapeBLOB(const QByteArray& array) const;
+    //! Escape BLOB value \a array
+    virtual QString escapeBLOB(const QByteArray& array) const;
 
-	protected:
-		virtual QString drv_escapeIdentifier(const QString& str) const;
-		virtual QByteArray drv_escapeIdentifier(const QByteArray& str) const;
-		virtual Connection *drv_createConnection( ConnectionData &conn_data );
-		virtual bool drv_isSystemFieldName( const QString& n ) const;
-	
-	private:
-		static const char *keywords[];
+  protected:
+    virtual QString drv_escapeIdentifier(const QString& str) const;
+    virtual QByteArray drv_escapeIdentifier(const QByteArray& str) const;
+    virtual Connection *drv_createConnection( ConnectionData &conn_data );
+    virtual bool drv_isSystemFieldName( const QString& n ) const;
+  
+  private:
+    static const char *keywords[];
 };
 }
 

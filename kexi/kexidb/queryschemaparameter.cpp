@@ -36,69 +36,69 @@ QuerySchemaParameter::~QuerySchemaParameter()
 
 QString QuerySchemaParameter::debugString() const
 {
-	return QString("msg=\"%1\" type=\"%2\"").arg(Field::typeName(type)).arg(message);
+  return QString("msg=\"%1\" type=\"%2\"").arg(Field::typeName(type)).arg(message);
 }
 
 void KexiDB::debug(const QuerySchemaParameterList& list)
 {
-	KexiDBDbg << QString("Query parameters (%1):").arg(list.count()) << endl;
-	foreach (const QuerySchemaParameter& parameter, list)
-		KexiDBDbg << " - " << parameter.debugString() << endl;
+  KexiDBDbg << QString("Query parameters (%1):").arg(list.count()) << endl;
+  foreach (const QuerySchemaParameter& parameter, list)
+    KexiDBDbg << " - " << parameter.debugString() << endl;
 }
 
 //================================================
 
 class QuerySchemaParameterValueListIterator::Private
 {
-	public:
-		Private(Driver& aDriver, const QList<QVariant>& aParams)
-		 : driver(&aDriver)
-		 , params(aParams)
-		{
-			//move to last item, as the order is reversed due to parser's internals
-			paramsIt = params.constEnd(); //fromLast();
-			--paramsIt;
-			paramsItPosition = params.count();
-		}
-		QPointer<Driver> driver;
-		const QList<QVariant> params;
-		QList<QVariant>::ConstIterator paramsIt;
-		uint paramsItPosition;
+  public:
+    Private(Driver& aDriver, const QList<QVariant>& aParams)
+     : driver(&aDriver)
+     , params(aParams)
+    {
+      //move to last item, as the order is reversed due to parser's internals
+      paramsIt = params.constEnd(); //fromLast();
+      --paramsIt;
+      paramsItPosition = params.count();
+    }
+    QPointer<Driver> driver;
+    const QList<QVariant> params;
+    QList<QVariant>::ConstIterator paramsIt;
+    uint paramsItPosition;
 };
 
 QuerySchemaParameterValueListIterator::QuerySchemaParameterValueListIterator(
-	Driver& driver, const QList<QVariant>& params)
+  Driver& driver, const QList<QVariant>& params)
  : d( new Private(driver, params) )
 {
 }
 
 QuerySchemaParameterValueListIterator::~QuerySchemaParameterValueListIterator()
 {
-	delete d;
+  delete d;
 }
 
 QVariant QuerySchemaParameterValueListIterator::getPreviousValue()
 {
-	if (d->paramsItPosition == 0) { //d->params.constEnd()) {
-		KexiDBWarn << "QuerySchemaParameterValues::getPreviousValue() no prev value" << endl;
-		return QVariant();
-	}
-	QVariant res( *d->paramsIt );
-	--d->paramsItPosition;
-	--d->paramsIt;
+  if (d->paramsItPosition == 0) { //d->params.constEnd()) {
+    KexiDBWarn << "QuerySchemaParameterValues::getPreviousValue() no prev value" << endl;
+    return QVariant();
+  }
+  QVariant res( *d->paramsIt );
+  --d->paramsItPosition;
+  --d->paramsIt;
 //	++d->paramsIt;
-	return res;
+  return res;
 }
 
 QString QuerySchemaParameterValueListIterator::getPreviousValueAsString(Field::Type type)
 {
-	if (d->paramsItPosition == 0) { //d->params.constEnd()) {
-		KexiDBWarn << "QuerySchemaParameterValues::getPreviousValueAsString() no prev value" << endl;
-		return d->driver->valueToSQL(type, QVariant()); //"NULL"
-	}
-	QString res( d->driver->valueToSQL(type, *d->paramsIt) );
-	--d->paramsItPosition;
-	--d->paramsIt;
+  if (d->paramsItPosition == 0) { //d->params.constEnd()) {
+    KexiDBWarn << "QuerySchemaParameterValues::getPreviousValueAsString() no prev value" << endl;
+    return d->driver->valueToSQL(type, QVariant()); //"NULL"
+  }
+  QString res( d->driver->valueToSQL(type, *d->paramsIt) );
+  --d->paramsItPosition;
+  --d->paramsIt;
 //	++d->paramsIt;
-	return res;
+  return res;
 }

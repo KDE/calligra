@@ -38,27 +38,27 @@ SQLiteAdminTools::~SQLiteAdminTools()
 
 bool SQLiteAdminTools::vacuum(const KexiDB::ConnectionData& data, const QString& databaseName)
 {
-	clearError();
+  clearError();
 #ifdef SQLITE2
-	Q_UNUSED(data);
-	Q_UNUSED(databaseName);
-	return false;
+  Q_UNUSED(data);
+  Q_UNUSED(databaseName);
+  return false;
 #else
-	KexiDB::DriverManager manager;
-	KexiDB::Driver *drv = manager.driver(data.driverName);
-	QString title( i18n("Could not compact database \"%1\".", QDir::convertSeparators(databaseName)) );
-	if (!drv) {
-		setError(&manager, title);
-		return false;
-	}
-	SQLiteVacuum vacuum(data.dbPath()+QDir::separator()+databaseName);
-	tristate result = vacuum.run();
-	if (!result) {
-		setError(title);
-		return false;
-	}
-	else //success or cancelled
-		return true;
+  KexiDB::DriverManager manager;
+  KexiDB::Driver *drv = manager.driver(data.driverName);
+  QString title( i18n("Could not compact database \"%1\".", QDir::convertSeparators(databaseName)) );
+  if (!drv) {
+    setError(&manager, title);
+    return false;
+  }
+  SQLiteVacuum vacuum(data.dbPath()+QDir::separator()+databaseName);
+  tristate result = vacuum.run();
+  if (!result) {
+    setError(title);
+    return false;
+  }
+  else //success or cancelled
+    return true;
 #endif
 }
 

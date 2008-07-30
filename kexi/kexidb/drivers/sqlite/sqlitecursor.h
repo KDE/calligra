@@ -34,55 +34,55 @@ class SQLiteCursorData;
 */
 class SQLiteCursor : public Cursor
 {
-	public:
-		virtual ~SQLiteCursor();
-		virtual QVariant value(uint i);
+  public:
+    virtual ~SQLiteCursor();
+    virtual QVariant value(uint i);
 
-		/*! [PROTOTYPE] \return internal buffer data. */
+    /*! [PROTOTYPE] \return internal buffer data. */
 //TODO		virtual const char *** bufferData()
-		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
-		virtual const char ** rowData() const;
+    /*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
+    virtual const char ** rowData() const;
 
-		virtual bool drv_storeCurrentRow(RecordData &data) const;
+    virtual bool drv_storeCurrentRow(RecordData &data) const;
 
 //		virtual bool save(RecordData& data, RowEditBuffer& buf);
 
-		virtual int serverResult();
-		virtual QString serverResultName();
-		virtual QString serverErrorMsg();
+    virtual int serverResult();
+    virtual QString serverResultName();
+    virtual QString serverErrorMsg();
 
-	protected:
-		/*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
-		SQLiteCursor(Connection* conn, const QString& statement, uint options = NoOptions );
+  protected:
+    /*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
+    SQLiteCursor(Connection* conn, const QString& statement, uint options = NoOptions );
 
-		/*! Cursor will operate on \a conn, \a query schema will be used to execute query. */
-		SQLiteCursor(Connection* conn, QuerySchema& query, 
-			uint options = NoOptions );
+    /*! Cursor will operate on \a conn, \a query schema will be used to execute query. */
+    SQLiteCursor(Connection* conn, QuerySchema& query, 
+      uint options = NoOptions );
 
-		virtual bool drv_open();
+    virtual bool drv_open();
 
-		virtual bool drv_close();
+    virtual bool drv_close();
 //		virtual bool drv_moveFirst();
-		virtual void drv_getNextRecord();
+    virtual void drv_getNextRecord();
 //unused		virtual bool drv_getPrevRecord();
 
-		virtual void drv_appendCurrentRecordToBuffer();
-		virtual void drv_bufferMovePointerNext();
-		virtual void drv_bufferMovePointerPrev();
-		virtual void drv_bufferMovePointerTo(qint64 at);
+    virtual void drv_appendCurrentRecordToBuffer();
+    virtual void drv_bufferMovePointerNext();
+    virtual void drv_bufferMovePointerPrev();
+    virtual void drv_bufferMovePointerTo(qint64 at);
 
 //TODO		virtual void drv_storeCurrentRecord();
 
-		//PROTOTYPE:
-		/*! Method called when cursor's buffer need to be cleared
-			(only for buffered cursor type), eg. in close(). */
-		virtual void drv_clearBuffer();
-		
-		virtual void drv_clearServerResult();
+    //PROTOTYPE:
+    /*! Method called when cursor's buffer need to be cleared
+      (only for buffered cursor type), eg. in close(). */
+    virtual void drv_clearBuffer();
+    
+    virtual void drv_clearServerResult();
 
-		SQLiteCursorData *d;
+    SQLiteCursorData *d;
 
-	friend class SQLiteConnection;
+  friend class SQLiteConnection;
 };
 
 } //namespace KexiDB
