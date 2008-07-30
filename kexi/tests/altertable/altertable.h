@@ -30,34 +30,34 @@ class KexiWindow;
 
 class AlterTableTester : public QObject
 {
-	Q_OBJECT
-	public:
-		AlterTableTester();
-		~AlterTableTester();
+  Q_OBJECT
+  public:
+    AlterTableTester();
+    ~AlterTableTester();
 
-		tristate run(bool &closeAppRequested);
+    tristate run(bool &closeAppRequested);
 
-	protected slots:
-		void slotFinishedCopying(QNetworkOperation*);
+  protected slots:
+    void slotFinishedCopying(QNetworkOperation*);
 
-	private:
-		bool changeFieldProperty(KexiTableDesignerInterface* designerIface);
-		bool getSchemaDump(KexiWindow* window, QString& schemaDebugString);
-		bool showSchema(KexiWindow* window, bool copyToClipboard);
-		bool checkSchema(KexiWindow* window);
-		bool getActionsDump(KexiWindow* window, QString& actionsDebugString);
-		bool showActions(KexiWindow* window, bool copyToClipboard);
-		bool checkActions(KexiWindow* window);
-		bool checkInternal(KexiWindow* window, QString& debugString, 
-			const QString& endCommand, bool skipColons);
-		bool saveTableDesign(KexiWindow* window);
-		bool getTableDataDump(KexiWindow* window, QString& dataString);
-		bool showTableData(KexiWindow* window, bool copyToClipboard);
-		bool checkTableData(KexiWindow* window);
-		bool closeWindow(KexiWindow* window);
+  private:
+    bool changeFieldProperty(KexiTableDesignerInterface* designerIface);
+    bool getSchemaDump(KexiWindow* window, QString& schemaDebugString);
+    bool showSchema(KexiWindow* window, bool copyToClipboard);
+    bool checkSchema(KexiWindow* window);
+    bool getActionsDump(KexiWindow* window, QString& actionsDebugString);
+    bool showActions(KexiWindow* window, bool copyToClipboard);
+    bool checkActions(KexiWindow* window);
+    bool checkInternal(KexiWindow* window, QString& debugString, 
+      const QString& endCommand, bool skipColons);
+    bool saveTableDesign(KexiWindow* window);
+    bool getTableDataDump(KexiWindow* window, QString& dataString);
+    bool showTableData(KexiWindow* window, bool copyToClipboard);
+    bool checkTableData(KexiWindow* window);
+    bool closeWindow(KexiWindow* window);
 
-		QUrlOperator m_copyOperator;
-		bool m_finishedCopying;
+    QUrlOperator m_copyOperator;
+    bool m_finishedCopying;
 };
 
 #endif

@@ -37,36 +37,36 @@ namespace KexiUtils {
 */
 class KEXIUTILS_EXPORT LongLongValidator : public QValidator
 {
-	public:
-		LongLongValidator( QWidget * parent, int base = 10 );
-		LongLongValidator( qint64 bottom, qint64 top, QWidget * parent, int base = 10 );
-		virtual ~LongLongValidator();
+  public:
+    LongLongValidator( QWidget * parent, int base = 10 );
+    LongLongValidator( qint64 bottom, qint64 top, QWidget * parent, int base = 10 );
+    virtual ~LongLongValidator();
 
-		//! Validates the text, and returns the result.  Does not modify the parameters.
-		virtual State validate( QString &, int & ) const;
+    //! Validates the text, and returns the result.  Does not modify the parameters.
+    virtual State validate( QString &, int & ) const;
 
-		//! Fixes the text if possible, providing a valid string.  The parameter may be modified.
-		virtual void fixup( QString & ) const;
+    //! Fixes the text if possible, providing a valid string.  The parameter may be modified.
+    virtual void fixup( QString & ) const;
 
-		//! Sets the minimum and maximum values allowed.
-		 virtual void setRange( qint64 bottom, qint64 top );
+    //! Sets the minimum and maximum values allowed.
+     virtual void setRange( qint64 bottom, qint64 top );
 
-		//! Sets the numeric base value.
-		virtual void setBase( int base );
+    //! Sets the numeric base value.
+    virtual void setBase( int base );
 
-		//! \return the current minimum value allowed
-		virtual qint64 bottom() const;
+    //! \return the current minimum value allowed
+    virtual qint64 bottom() const;
 
-		//! \return the current maximum value allowed
-		virtual qint64 top() const;
+    //! \return the current maximum value allowed
+    virtual qint64 top() const;
 
-		//! \return the current numeric base
-		virtual int base () const;
+    //! \return the current numeric base
+    virtual int base () const;
 
-	private:
-		qint64 m_base;
-		qint64 m_min;
-		qint64 m_max;
+  private:
+    qint64 m_base;
+    qint64 m_min;
+    qint64 m_max;
 };
 
 }

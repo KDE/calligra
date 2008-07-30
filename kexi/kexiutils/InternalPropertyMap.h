@@ -35,23 +35,23 @@ namespace KexiUtils {
 */
 class KEXIUTILS_EXPORT InternalPropertyMap
 {
-	public:
-		InternalPropertyMap();
-		~InternalPropertyMap();
+  public:
+    InternalPropertyMap();
+    ~InternalPropertyMap();
 
-		/*! \returns property value for name \a name. 
-		 If \a defaultValue is provided and there is no property with 
-		 specified name, \a defaultValue is returned. */
-		QVariant internalPropertyValue(const QByteArray& name, 
-			const QVariant& defaultValue = QVariant()) const;
+    /*! \returns property value for name \a name. 
+     If \a defaultValue is provided and there is no property with 
+     specified name, \a defaultValue is returned. */
+    QVariant internalPropertyValue(const QByteArray& name, 
+      const QVariant& defaultValue = QVariant()) const;
 
-		/*! Sets property value \a value for propety \a name. 
-		 If \a value is null, the property is deleted. */
-		void setInternalPropertyValue(const QByteArray& name, const QVariant& value);
+    /*! Sets property value \a value for propety \a name. 
+     If \a value is null, the property is deleted. */
+    void setInternalPropertyValue(const QByteArray& name, const QVariant& value);
 
-	private:
-		class Private;
-		Private * const d;
+  private:
+    class Private;
+    Private * const d;
 };
 
 }

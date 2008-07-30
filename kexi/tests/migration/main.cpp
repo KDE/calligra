@@ -44,80 +44,80 @@
 
 int main(int argc, char** argv)
 {
-	// first the formalities
-	KComponentData *instance = 0;
-	QByteArray prgname;
-	
-	//! TODO use KCmdLineArguments with options
-	// first argument should be xbase source directory
-	QString xBaseSourceDirectory = QString::fromLatin1( argv[1] );
-	
-	// second argument should be kexi file ( destination )
-	QString destinationDatabase = QString::fromLatin1( argv[2] );
-	
-	QFileInfo info=QFileInfo(argv[0]);
-	prgname = info.baseName().toLatin1();
-	
-	instance = new KComponentData(prgname);
-	
-	// write the code for testing migration here
-	// Start with a driver manager
-	KexiDB::DriverManager manager;
-	KexiMigration::MigrateManager migrateManager;
-	
-	kDebug() << "Creating destination driver..." << endl;
-	
-	// Get a driver to the destination database
-	KexiDB::Driver *destDriver = manager.driver(KexiDB::defaultFileBasedDriverName() //file based
-		);
-	if (!destDriver || manager.error())
-	{
-		kDebug() << "Manager error..." << endl;
-		manager.debugError();
-	}
-	
-	KexiDB::ConnectionData *cdata;
-	QString dbname;
-	
-	cdata = new KexiDB::ConnectionData();
-	
-	// set destination file name here.
-	//! TODO User should be able to specify this
-	cdata->driverName = KexiDB::defaultFileBasedDriverName();
-	
-	//! TODO User should be able to specify this
-	dbname = destinationDatabase;
-	cdata->setFileName( dbname );
-	kDebug() << "Current file name: " << dbname << endl;
-	
-	
-	QString sourceDriverName = "xbase";
-	// get the source migration driver
-	KexiMigration::KexiMigrate* sourceDriver = 0;
-	sourceDriver = migrateManager.driver( sourceDriverName );
-	if(!sourceDriver || migrateManager.error()) {
-		kDebug() << "Import migrate driver error..." << endl;
-		return -1;
-	}
-	
-	KexiMigration::Data* md = new KexiMigration::Data();
-	md->keepData = true;
-	//	delete md->destination;
-	md->destination = new KexiProjectData(*cdata, dbname);
-	
-	// Setup XBase connection data
-	KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
-	conn_data->setFileName(xBaseSourceDirectory);
-	
-	md->source = conn_data;
-	md->sourceName = "";
-	
-	sourceDriver->setData(md);
-	
-	if ( !sourceDriver->performImport() ) {
-		kDebug()<<"Import failed";
-		return -1;
-	}
-	
-	return 0;
+  // first the formalities
+  KComponentData *instance = 0;
+  QByteArray prgname;
+  
+  //! TODO use KCmdLineArguments with options
+  // first argument should be xbase source directory
+  QString xBaseSourceDirectory = QString::fromLatin1( argv[1] );
+  
+  // second argument should be kexi file ( destination )
+  QString destinationDatabase = QString::fromLatin1( argv[2] );
+  
+  QFileInfo info=QFileInfo(argv[0]);
+  prgname = info.baseName().toLatin1();
+  
+  instance = new KComponentData(prgname);
+  
+  // write the code for testing migration here
+  // Start with a driver manager
+  KexiDB::DriverManager manager;
+  KexiMigration::MigrateManager migrateManager;
+  
+  kDebug() << "Creating destination driver..." << endl;
+  
+  // Get a driver to the destination database
+  KexiDB::Driver *destDriver = manager.driver(KexiDB::defaultFileBasedDriverName() //file based
+    );
+  if (!destDriver || manager.error())
+  {
+    kDebug() << "Manager error..." << endl;
+    manager.debugError();
+  }
+  
+  KexiDB::ConnectionData *cdata;
+  QString dbname;
+  
+  cdata = new KexiDB::ConnectionData();
+  
+  // set destination file name here.
+  //! TODO User should be able to specify this
+  cdata->driverName = KexiDB::defaultFileBasedDriverName();
+  
+  //! TODO User should be able to specify this
+  dbname = destinationDatabase;
+  cdata->setFileName( dbname );
+  kDebug() << "Current file name: " << dbname << endl;
+  
+  
+  QString sourceDriverName = "xbase";
+  // get the source migration driver
+  KexiMigration::KexiMigrate* sourceDriver = 0;
+  sourceDriver = migrateManager.driver( sourceDriverName );
+  if(!sourceDriver || migrateManager.error()) {
+    kDebug() << "Import migrate driver error..." << endl;
+    return -1;
+  }
+  
+  KexiMigration::Data* md = new KexiMigration::Data();
+  md->keepData = true;
+  //	delete md->destination;
+  md->destination = new KexiProjectData(*cdata, dbname);
+  
+  // Setup XBase connection data
+  KexiDB::ConnectionData* conn_data = new KexiDB::ConnectionData();
+  conn_data->setFileName(xBaseSourceDirectory);
+  
+  md->source = conn_data;
+  md->sourceName = "";
+  
+  sourceDriver->setData(md);
+  
+  if ( !sourceDriver->performImport() ) {
+    kDebug()<<"Import failed";
+    return -1;
+  }
+  
+  return 0;
 }

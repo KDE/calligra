@@ -99,91 +99,91 @@ static const char dontKnow = cancelled;
 class tristate
 {
 public:
-	/**
-	 * Default constructor, object has \e cancelled value set. 
-	 */
-	tristate()
-	 : m_value(Cancelled)
-	{
-	}
+  /**
+   * Default constructor, object has \e cancelled value set. 
+   */
+  tristate()
+   : m_value(Cancelled)
+  {
+  }
 
-	/**
-	 * Constructor accepting a boolean value. 
-	 */
-	tristate(bool boolValue)
-	 : m_value(boolValue ? True : False)
-	{
-	}
+  /**
+   * Constructor accepting a boolean value. 
+   */
+  tristate(bool boolValue)
+   : m_value(boolValue ? True : False)
+  {
+  }
 
-	/**
-	 * Constructor accepting a char value.
-	 * It is converted in the following way:
-	 * - 2 -> cancelled
-	 * - 1 -> true
-	 * - other -> false 
-	 */
-	tristate(char c)
-	 : m_value(c==cancelled ? tristate::Cancelled : (c==1 ? True : False))
-	{
-	}
+  /**
+   * Constructor accepting a char value.
+   * It is converted in the following way:
+   * - 2 -> cancelled
+   * - 1 -> true
+   * - other -> false 
+   */
+  tristate(char c)
+   : m_value(c==cancelled ? tristate::Cancelled : (c==1 ? True : False))
+  {
+  }
 
-	/** Constructor accepting an integer value. 
-	 * It is converted in the following way:
-	 * - 2 -> cancelled
-	 * - 1 -> true
-	 * - other -> false
-	 */
-	tristate(int intValue)
-	 : m_value(intValue==(int)cancelled ? tristate::Cancelled : (intValue==1 ? True : False))
-	{
-	}
+  /** Constructor accepting an integer value. 
+   * It is converted in the following way:
+   * - 2 -> cancelled
+   * - 1 -> true
+   * - other -> false
+   */
+  tristate(int intValue)
+   : m_value(intValue==(int)cancelled ? tristate::Cancelled : (intValue==1 ? True : False))
+  {
+  }
 
-	/**
-	 * Casting to bool type with negation: true is only returned 
-	 * if the original tristate value is equal to false. 
-	 */
-	bool operator!() const { return m_value==False; }
+  /**
+   * Casting to bool type with negation: true is only returned 
+   * if the original tristate value is equal to false. 
+   */
+  bool operator!() const { return m_value==False; }
 
-	/**
-	 * Special casting to bool type: true is only returned 
-	 * if the original tristate value is equal to \e cancelled. 
-	 */
-	bool operator~() const { return m_value==Cancelled; }
+  /**
+   * Special casting to bool type: true is only returned 
+   * if the original tristate value is equal to \e cancelled. 
+   */
+  bool operator~() const { return m_value==Cancelled; }
 
-	tristate& operator=(const tristate& tsValue) { m_value = tsValue.m_value; return *this; }
+  tristate& operator=(const tristate& tsValue) { m_value = tsValue.m_value; return *this; }
 
-	friend inline bool operator==(bool boolValue, tristate tsValue);
+  friend inline bool operator==(bool boolValue, tristate tsValue);
 
-	friend inline bool operator==(tristate tsValue, bool boolValue);
+  friend inline bool operator==(tristate tsValue, bool boolValue);
 
-	friend inline bool operator!=(bool boolValue, tristate tsValue);
+  friend inline bool operator!=(bool boolValue, tristate tsValue);
 
-	friend inline bool operator!=(tristate tsValue, bool boolValue);
+  friend inline bool operator!=(tristate tsValue, bool boolValue);
 
-	/**
-	 * \return text representation of the value: "true", "false" or "cancelled".
-	 */
-	QString toString() const {
-		if (m_value==False)
-			return QString::fromLatin1("false");
-		return m_value==True ? QString::fromLatin1("true") : QString::fromLatin1("cancelled");
-	}
+  /**
+   * \return text representation of the value: "true", "false" or "cancelled".
+   */
+  QString toString() const {
+    if (m_value==False)
+      return QString::fromLatin1("false");
+    return m_value==True ? QString::fromLatin1("true") : QString::fromLatin1("cancelled");
+  }
 
 private:
-	/**
-	 * @internal
-	 * States used internally.
-	 */
-	enum Value {
-		False = 0,
-		True = 1,
-		Cancelled = 2
-	};
+  /**
+   * @internal
+   * States used internally.
+   */
+  enum Value {
+    False = 0,
+    True = 1,
+    Cancelled = 2
+  };
 
-	/**
-	 * @internal
-	 */
-	Value m_value;
+  /**
+   * @internal
+   */
+  Value m_value;
 };
 
 /**
@@ -195,8 +195,8 @@ private:
 */
 inline bool operator!=(bool boolValue, tristate tsValue) 
 {
-	return !( (tsValue.m_value==tristate::True && boolValue) 
-	|| (tsValue.m_value==tristate::False && !boolValue) );
+  return !( (tsValue.m_value==tristate::True && boolValue) 
+  || (tsValue.m_value==tristate::False && !boolValue) );
 }
 
 /**
@@ -205,34 +205,34 @@ inline bool operator!=(bool boolValue, tristate tsValue)
 */
 inline bool operator!=(tristate tsValue, bool boolValue) 
 {
-	return !( (tsValue.m_value==tristate::True && boolValue) 
-	|| (tsValue.m_value==tristate::False && !boolValue) );
+  return !( (tsValue.m_value==tristate::True && boolValue) 
+  || (tsValue.m_value==tristate::False && !boolValue) );
 }
 
 /**
-	* Equality operator comparing a tristate value @p tsValue and a bool value @p boolValue.
-	* \return true if both 
-	* - both @p tsValue value and @p boolValue are true, or
-	* - both @p tsValue value and @p boolValue are false
-	* If the tristate value has value of cancelled, false is returned.
-	*/
+  * Equality operator comparing a tristate value @p tsValue and a bool value @p boolValue.
+  * \return true if both 
+  * - both @p tsValue value and @p boolValue are true, or
+  * - both @p tsValue value and @p boolValue are false
+  * If the tristate value has value of cancelled, false is returned.
+  */
 inline bool operator==(tristate tsValue, bool boolValue)
 {
-	return (tsValue.m_value==tristate::True && boolValue) 
-	|| (tsValue.m_value==tristate::False && !boolValue);
+  return (tsValue.m_value==tristate::True && boolValue) 
+  || (tsValue.m_value==tristate::False && !boolValue);
 }
 
 /**
-	* Equality operator comparing a bool value @p boolValue and a tristate value @p tsValue.
-	* \return true if both 
-	* - both @p tsValue value and @p boolValue are true, or
-	* - both @p tsValue value and @p boolValue are false
-	* If the tristate value has value of cancelled, false is returned.
-	*/
+  * Equality operator comparing a bool value @p boolValue and a tristate value @p tsValue.
+  * \return true if both 
+  * - both @p tsValue value and @p boolValue are true, or
+  * - both @p tsValue value and @p boolValue are false
+  * If the tristate value has value of cancelled, false is returned.
+  */
 inline bool operator==(bool boolValue, tristate tsValue)
 {
-	return (tsValue.m_value==tristate::True && boolValue) 
-	|| (tsValue.m_value==tristate::False && !boolValue);
+  return (tsValue.m_value==tristate::True && boolValue) 
+  || (tsValue.m_value==tristate::False && !boolValue);
 }
 
 #endif

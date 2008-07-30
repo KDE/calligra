@@ -24,43 +24,43 @@
 
 /*! @brief A Kexi-specific "Find text" dialog.
 
-	Also used for replace.
+  Also used for replace.
 */
 class KexiFindDialog : public KexiFindDialogBase
 {
-	Q_OBJECT
-	public:
-		KexiFindDialog( bool replaceMode, QWidget* parent = 0, const char* name = 0, bool modal = FALSE );
-		virtual ~KexiFindDialog();
+  Q_OBJECT
+  public:
+    KexiFindDialog( bool replaceMode, QWidget* parent = 0, const char* name = 0, bool modal = FALSE );
+    virtual ~KexiFindDialog();
 
 #if 0
 TODO TODO TODO TODO TODO TODO 
-	/*! Sets \a columnNames list for 'look in column' combo box. 
-	 "(All columns)" item is also prepended. */
-	void setLookInColumnList(const QStringList& columnNames);
+  /*! Sets \a columnNames list for 'look in column' combo box. 
+   "(All columns)" item is also prepended. */
+  void setLookInColumnList(const QStringList& columnNames);
 
-	/*! \return a list for 'look in column' combo box. 
-	 "(All columns)" item is also prepended. */
-	QStringList* lookInColumnList() const;
+  /*! \return a list for 'look in column' combo box. 
+   "(All columns)" item is also prepended. */
+  QStringList* lookInColumnList() const;
 
-	/*! \return column name selected in 'look in column' combo box.
-	 If "(All columns)" item is selected, "*" is returned. */
-	QString lookInColumn() const;
+  /*! \return column name selected in 'look in column' combo box.
+   If "(All columns)" item is selected, "*" is returned. */
+  QString lookInColumn() const;
 
-	/*! Selects \a columnName to be selected 'look in column'.
-	 By default "(All columns)" item is selected. To select this item, pass "*". */
-	void setLookInColumn(const QString& columnName);
+  /*! Selects \a columnName to be selected 'look in column'.
+   By default "(All columns)" item is selected. To select this item, pass "*". */
+  void setLookInColumn(const QString& columnName);
 
 #endif
 
-	public slots:
-		/*! Sets or clears replace mode. 
-		 For replace mode 'prompt or replace' option is visible.
-		*/
-		void setReplaceMode(bool set);
+  public slots:
+    /*! Sets or clears replace mode. 
+     For replace mode 'prompt or replace' option is visible.
+    */
+    void setReplaceMode(bool set);
 
-	protected:
-		bool m_replaceMode : 1;
+  protected:
+    bool m_replaceMode : 1;
 };
 
 #endif

@@ -22,40 +22,40 @@
 
 int parserTest(const QString &st, const QStringList &params)
 {
-	int r = 0;
+  int r = 0;
 
-	if (!conn->useDatabase( db_name )) {
-		conn->debugError();
-		return 1;
-	}
-	
-	KexiDB::Parser parser(conn);
+  if (!conn->useDatabase( db_name )) {
+    conn->debugError();
+    return 1;
+  }
+  
+  KexiDB::Parser parser(conn);
 
-	const bool ok = parser.parse( st );
-	KexiDB::QuerySchema *q = parser.query();
-	QList<QVariant> variantParams;
-	foreach( const QString param, params )
-		variantParams.append(param.toLocal8Bit());
-	if (ok && q) {
-		cout << q->debugString().toLatin1().constData() << '\n';
-		cout << "-STATEMENT:\n" << conn->selectStatement( *q, variantParams ).toLatin1().data() << '\n';
-	}
-	else {
-		KexiDB::ParserError	err = parser.error();
-		kDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
-			.arg(err.type()).arg(err.at()) << endl;
-		r = 1;
-	}
-	delete q;
-	q=0;
+  const bool ok = parser.parse( st );
+  KexiDB::QuerySchema *q = parser.query();
+  QList<QVariant> variantParams;
+  foreach( const QString param, params )
+    variantParams.append(param.toLocal8Bit());
+  if (ok && q) {
+    cout << q->debugString().toLatin1().constData() << '\n';
+    cout << "-STATEMENT:\n" << conn->selectStatement( *q, variantParams ).toLatin1().data() << '\n';
+  }
+  else {
+    KexiDB::ParserError	err = parser.error();
+    kDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
+      .arg(err.type()).arg(err.at()) << endl;
+    r = 1;
+  }
+  delete q;
+  q=0;
 
-	
-	if (!conn->closeDatabase()) {
-		conn->debugError();
-		return 1;
-	}
-	
-	return r;
+  
+  if (!conn->closeDatabase()) {
+    conn->debugError();
+    return 1;
+  }
+  
+  return r;
 }
 
 #endif

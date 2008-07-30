@@ -47,52 +47,52 @@ namespace KexiUtils {
  */
 class KEXIUTILS_EXPORT Validator : public QValidator
 {
-	public:
-		enum Result { Error = 0, Ok = 1, Warning = 2 };
+  public:
+    enum Result { Error = 0, Ok = 1, Warning = 2 };
 
-		Validator(QObject * parent = 0);
+    Validator(QObject * parent = 0);
 
-		virtual ~Validator();
+    virtual ~Validator();
 
-		/*! Sets accepting empty values on (true) or off (false). 
-		 By default the validator does not accepts empty values. */
-		void setAcceptsEmptyValue( bool set );
+    /*! Sets accepting empty values on (true) or off (false). 
+     By default the validator does not accepts empty values. */
+    void setAcceptsEmptyValue( bool set );
 
-		/*! \return true if the validator accepts empty values
-			@see setAcceptsEmptyValue() */
-		bool acceptsEmptyValue() const;
+    /*! \return true if the validator accepts empty values
+      @see setAcceptsEmptyValue() */
+    bool acceptsEmptyValue() const;
 
-		/*! Checks if value \a v is ok and returns one of \a Result value:
-		 - \a Error is returned on error;
-		 - \a Ok on success;
-		 - \a Warning if there is something to warn about.
-		 In any case except \a Ok, i18n'ed message will be set in \a message 
-		 and (optionally) datails are set in \a details, e.g. for use in a message box.
-		 \a valueName can be used to contruct \a message as well, for example:
-		 "[valueName] is not a valid login name". 
-		 Depending on acceptsEmptyValue(), immediately accepts empty values or not. */
-		Result check(const QString &valueName, const QVariant& v, QString &message,
-			QString &details);
+    /*! Checks if value \a v is ok and returns one of \a Result value:
+     - \a Error is returned on error;
+     - \a Ok on success;
+     - \a Warning if there is something to warn about.
+     In any case except \a Ok, i18n'ed message will be set in \a message 
+     and (optionally) datails are set in \a details, e.g. for use in a message box.
+     \a valueName can be used to contruct \a message as well, for example:
+     "[valueName] is not a valid login name". 
+     Depending on acceptsEmptyValue(), immediately accepts empty values or not. */
+    Result check(const QString &valueName, const QVariant& v, QString &message,
+      QString &details);
 
-		/*! This implementation always returns value QValidator::Acceptable. */
-		virtual QValidator::State validate ( QString & input, int & pos ) const;
+    /*! This implementation always returns value QValidator::Acceptable. */
+    virtual QValidator::State validate ( QString & input, int & pos ) const;
 
-		//! A generic error/warning message "... value has to be entered."
-		static const QString msgColumnNotEmpty();
+    //! A generic error/warning message "... value has to be entered."
+    static const QString msgColumnNotEmpty();
 
-		//! Adds a child validator \a v
-		void addChildValidator( Validator* v );
+    //! Adds a child validator \a v
+    void addChildValidator( Validator* v );
 
-	protected:
-		/* Used by check(), for reimplementation, by default returns \a Error.*/
-		virtual Result internalCheck(const QString &valueName, const QVariant& v, 
-			QString &message, QString &details);
+  protected:
+    /* Used by check(), for reimplementation, by default returns \a Error.*/
+    virtual Result internalCheck(const QString &valueName, const QVariant& v, 
+      QString &message, QString &details);
 
-	friend class MultiValidator;
+  friend class MultiValidator;
 
-	private:
-		class Private;
-		Private* const d;
+  private:
+    class Private;
+    Private* const d;
 };
 
 //! @short A validator groupping multiple QValidators
@@ -123,38 +123,38 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 */
 class KEXIUTILS_EXPORT MultiValidator : public Validator
 {
-	public:
-		/*! Constructs multivalidator with no subvalidators defined.
-		 You can add more validators with addSubvalidator(). */
-		MultiValidator(QObject * parent = 0);
+  public:
+    /*! Constructs multivalidator with no subvalidators defined.
+     You can add more validators with addSubvalidator(). */
+    MultiValidator(QObject * parent = 0);
 
-		/*! Constructs multivalidator with one validator \a validator.
-		 It will be owned if has no parent defined.
-		 You can add more validators with addSubvalidator(). */
-		MultiValidator(QValidator *validator, QObject * parent = 0);
+    /*! Constructs multivalidator with one validator \a validator.
+     It will be owned if has no parent defined.
+     You can add more validators with addSubvalidator(). */
+    MultiValidator(QValidator *validator, QObject * parent = 0);
 
-		~MultiValidator();
+    ~MultiValidator();
 
-		/*! Adds validator \a validator as another subvalidator.
-		 Subvalidator will be owned by this multivalidator if \a owned is true
-		 and its parent is NULL. */
-		void addSubvalidator( QValidator* validator, bool owned = true );
+    /*! Adds validator \a validator as another subvalidator.
+     Subvalidator will be owned by this multivalidator if \a owned is true
+     and its parent is NULL. */
+    void addSubvalidator( QValidator* validator, bool owned = true );
 
-		/*! Reimplemented to call validate() on subvalidators. */
-		virtual QValidator::State validate ( QString & input, int & pos ) const;
+    /*! Reimplemented to call validate() on subvalidators. */
+    virtual QValidator::State validate ( QString & input, int & pos ) const;
 
-		/*! Calls QValidator::fixup() on every subvalidator. 
-		 This may be senseless to use this methog in certain cases 
-		 (can return weir results), so think twice before.. */
-		virtual void fixup ( QString & input ) const;
+    /*! Calls QValidator::fixup() on every subvalidator. 
+     This may be senseless to use this methog in certain cases 
+     (can return weir results), so think twice before.. */
+    virtual void fixup ( QString & input ) const;
 
-	private:
-		virtual Validator::Result internalCheck(
-			const QString &valueName, const QVariant& v, 
-			QString &message, QString &details);
+  private:
+    virtual Validator::Result internalCheck(
+      const QString &valueName, const QVariant& v, 
+      QString &message, QString &details);
 
-		class Private;
-		Private* const d;
+    class Private;
+    Private* const d;
 };
 
 }

@@ -28,56 +28,56 @@
 //! @short a special "flow" layout
 class KEXIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
-	public:
-		KexiFlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
-		KexiFlowLayout(QLayout* parent, int margin = 0, int spacing = -1);
-		KexiFlowLayout(int margin = 0, int spacing=-1);
+  public:
+    KexiFlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
+    KexiFlowLayout(QLayout* parent, int margin = 0, int spacing = -1);
+    KexiFlowLayout(int margin = 0, int spacing=-1);
 
-		virtual ~KexiFlowLayout();
+    virtual ~KexiFlowLayout();
 
-		/*! \return the widgets in the order of the layout,
-		 ie as it is stored in m_list. You must delete the list after using it. */
-		QList<QWidget*>* widgetList() const;
-		
-		/*! Sets layout's orientation to \a orientation. Default orientation is Vertical. */
-		void  setOrientation(Qt::Orientation orientation) { m_orientation = orientation; }
+    /*! \return the widgets in the order of the layout,
+     ie as it is stored in m_list. You must delete the list after using it. */
+    QList<QWidget*>* widgetList() const;
+    
+    /*! Sets layout's orientation to \a orientation. Default orientation is Vertical. */
+    void  setOrientation(Qt::Orientation orientation) { m_orientation = orientation; }
 
-		/*! \return layout's orientation. */
-		Qt::Orientation orientation() const { return m_orientation; }
+    /*! \return layout's orientation. */
+    Qt::Orientation orientation() const { return m_orientation; }
 
-		void setJustified(bool justify) { m_justify = justify; }
-		bool isJustified() const { return m_justify; }
+    void setJustified(bool justify) { m_justify = justify; }
+    bool isJustified() const { return m_justify; }
 
-		virtual void addItem(QLayoutItem *item);
-		virtual void addSpacing(int size);
+    virtual void addItem(QLayoutItem *item);
+    virtual void addSpacing(int size);
 //2.0: removed		virtual QLayoutIterator iterator();
-		virtual void invalidate();
+    virtual void invalidate();
 
-		virtual bool hasHeightForWidth() const;
-		virtual int heightForWidth(int width) const;
-		virtual QSize sizeHint() const;
-		virtual QSize minimumSize() const;
-		//virtual QSizePolicy::ExpandData expanding() const;
-		virtual Qt::Orientations expandingDirections() const;
-		virtual int count() const;
-		virtual bool isEmpty() const;
-		virtual void setGeometry(const QRect&);
-		virtual QLayoutItem *itemAt(int index) const;
-		virtual QLayoutItem *takeAt(int index);
-	
-	protected:
-		int simulateLayout(const QRect &r);
-		int doHorizontalLayout(const QRect&, bool testonly = false);
-		int doVerticalLayout(const QRect&, bool testonly = false);
+    virtual bool hasHeightForWidth() const;
+    virtual int heightForWidth(int width) const;
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSize() const;
+    //virtual QSizePolicy::ExpandData expanding() const;
+    virtual Qt::Orientations expandingDirections() const;
+    virtual int count() const;
+    virtual bool isEmpty() const;
+    virtual void setGeometry(const QRect&);
+    virtual QLayoutItem *itemAt(int index) const;
+    virtual QLayoutItem *takeAt(int index);
+  
+  protected:
+    int simulateLayout(const QRect &r);
+    int doHorizontalLayout(const QRect&, bool testonly = false);
+    int doVerticalLayout(const QRect&, bool testonly = false);
 
-	private:
-		QList<QLayoutItem*> m_list;
-		int m_cached_width;
-		int m_cached_hfw;
-		bool m_justify;
-		Qt::Orientation m_orientation;
-		QSize m_cached_sizeHint;
-		QSize m_cached_minSize;
+  private:
+    QList<QLayoutItem*> m_list;
+    int m_cached_width;
+    int m_cached_hfw;
+    bool m_justify;
+    Qt::Orientation m_orientation;
+    QSize m_cached_sizeHint;
+    QSize m_cached_minSize;
 };
 
 #endif
