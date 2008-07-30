@@ -26,20 +26,20 @@ class KexiRelationsView;
 
 class KexiRelationMainDlg : public KexiView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiRelationMainDlg(QWidget *parent);
-		virtual ~KexiRelationMainDlg();
+  public:
+    KexiRelationMainDlg(QWidget *parent);
+    virtual ~KexiRelationMainDlg();
 
-		virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
-		virtual QWidget* mainWidget();
+    virtual QWidget* mainWidget();
 
-		virtual QString itemIcon();
+    virtual QString itemIcon();
 
-	private:
-		KexiRelationsView *m_rel;
+  private:
+    KexiRelationsView *m_rel;
 };
 
 #endif

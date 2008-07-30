@@ -31,32 +31,32 @@
 //! The report top widget
 class KEXIREPORTUTILS_EXPORT KexiReportForm : public QWidget, public KFormDesigner::FormWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiReportForm(QWidget *parent);
-		virtual ~KexiReportForm();
+  public:
+    KexiReportForm(QWidget *parent);
+    virtual ~KexiReportForm();
 
-		/*QString datasource() const { return m_ds; }
-		bool navigatorShown() const { return m_nav; }
-		void setDatasource(const QString &s) { m_ds = s; }
-		void showRecordNavigator(bool s) { m_nav = s; }*/
+    /*QString datasource() const { return m_ds; }
+    bool navigatorShown() const { return m_nav; }
+    void setDatasource(const QString &s) { m_ds = s; }
+    void showRecordNavigator(bool s) { m_nav = s; }*/
 
-		virtual void drawRect(const QRect& r, int type);
-		virtual void drawRects(const Q3ValueList<QRect> &list, int type);
-		virtual void initBuffer();
-		virtual void clearForm();
-		virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
+    virtual void drawRect(const QRect& r, int type);
+    virtual void drawRects(const Q3ValueList<QRect> &list, int type);
+    virtual void initBuffer();
+    virtual void clearForm();
+    virtual void highlightWidgets(QWidget *from, QWidget *to/*, const QPoint &p*/);
 
-		virtual QSize sizeHint() const;
+    virtual QSize sizeHint() const;
 
-	private:
-		/*QString m_ds;
-		bool m_nav;
-		KexiDB::Connection *m_conn;*/
+  private:
+    /*QString m_ds;
+    bool m_nav;
+    KexiDB::Connection *m_conn;*/
 
-		QPixmap buffer; //!< stores grabbed entire form's area for redraw
-		QRect prev_rect; //!< previously selected rectangle
+    QPixmap buffer; //!< stores grabbed entire form's area for redraw
+    QRect prev_rect; //!< previously selected rectangle
 };
 
 #endif

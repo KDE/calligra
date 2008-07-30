@@ -30,57 +30,57 @@
 //! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBIntSpinBox : public KIntSpinBox, public KexiFormDataItemInterface
 {
-	Q_OBJECT
-	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
+  Q_OBJECT
+  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+  Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
-	public:
-		KexiDBIntSpinBox(QWidget *parent);
-		virtual ~KexiDBIntSpinBox();
+  public:
+    KexiDBIntSpinBox(QWidget *parent);
+    virtual ~KexiDBIntSpinBox();
 
-		inline QString dataSource() const
-			{ return KexiFormDataItemInterface::dataSource(); }
-		inline QString dataSourceMimeType() const
-			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
-		virtual QVariant value();
-		virtual void setInvalidState( const QString& displayText );
+    inline QString dataSource() const
+      { return KexiFormDataItemInterface::dataSource(); }
+    inline QString dataSourceMimeType() const
+      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    virtual QVariant value();
+    virtual void setInvalidState( const QString& displayText );
 
-		//! \return true if editor's value is null (not empty)
-		//! Used for checking if a given constraint within table of form is met.
-		virtual bool valueIsNull();
+    //! \return true if editor's value is null (not empty)
+    //! Used for checking if a given constraint within table of form is met.
+    virtual bool valueIsNull();
 
-		//! \return true if editor's value is empty (not necessary null).
-		//! Only few data types can accept "EMPTY" property
-		//! (use KexiDB::Field::hasEmptyProperty() to check this).
-		//! Used for checking if a given constraint within table or form is met.
-		virtual bool valueIsEmpty();
+    //! \return true if editor's value is empty (not necessary null).
+    //! Only few data types can accept "EMPTY" property
+    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! Used for checking if a given constraint within table or form is met.
+    virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this widget. */
-		virtual bool isReadOnly() const;
+    /*! \return 'readOnly' flag for this widget. */
+    virtual bool isReadOnly() const;
 
-		/*! \return the view widget of this item, e.g. line edit widget. */
-		virtual QWidget* widget();
+    /*! \return the view widget of this item, e.g. line edit widget. */
+    virtual QWidget* widget();
 
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-		virtual void clear();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
+    virtual void clear();
 
-		virtual void  setEnabled(bool enabled);
+    virtual void  setEnabled(bool enabled);
 
-	public slots:
-		inline void setDataSource(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		void slotValueChanged();
-		virtual void setReadOnly(bool set);
+  public slots:
+    inline void setDataSource(const QString &ds)
+      { KexiFormDataItemInterface::setDataSource(ds); }
+    inline void setDataSourceMimeType(const QString &ds)
+      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    void slotValueChanged();
+    virtual void setReadOnly(bool set);
 
-	protected:
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
+  protected:
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-	private:
-		bool m_invalidState : 1;
+  private:
+    bool m_invalidState : 1;
 };
 
 #endif

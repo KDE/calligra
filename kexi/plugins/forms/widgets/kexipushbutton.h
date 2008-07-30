@@ -27,32 +27,32 @@
 //! @short Push Button widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 {
-	Q_OBJECT
-	Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
-	Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption DESIGNABLE true)
+  Q_OBJECT
+  Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
+  Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption DESIGNABLE true)
 
-	public:
-		KexiPushButton( const QString & text, QWidget * parent );
-		~KexiPushButton();
+  public:
+    KexiPushButton( const QString & text, QWidget * parent );
+    ~KexiPushButton();
 
-	public slots:
-		//! action string for "on click" event
-		//! @see KexiFormPart::slotAssignAction()
-		//! @see KexiFormEventAction::ActionData
-		QString onClickAction() const { return m_onClickActionData.string; }
-		void setOnClickAction(const QString& actionString)
-			{ m_onClickActionData.string = actionString; }
+  public slots:
+    //! action string for "on click" event
+    //! @see KexiFormPart::slotAssignAction()
+    //! @see KexiFormEventAction::ActionData
+    QString onClickAction() const { return m_onClickActionData.string; }
+    void setOnClickAction(const QString& actionString)
+      { m_onClickActionData.string = actionString; }
 
-		/*! action option allowing to select whether the object should be opened 
-		 data view mode or printed, etc.
-		 @see KexiFormPart::slotAssignAction()
-		 @see KexiFormEventAction::ActionData */
-		QString onClickActionOption() const { return m_onClickActionData.option; }
-		void setOnClickActionOption(const QString& option)
-			{ m_onClickActionData.option = option; }
+    /*! action option allowing to select whether the object should be opened 
+     data view mode or printed, etc.
+     @see KexiFormPart::slotAssignAction()
+     @see KexiFormEventAction::ActionData */
+    QString onClickActionOption() const { return m_onClickActionData.option; }
+    void setOnClickActionOption(const QString& option)
+      { m_onClickActionData.option = option; }
 
-	protected:
-		KexiFormEventAction::ActionData m_onClickActionData;
+  protected:
+    KexiFormEventAction::ActionData m_onClickActionData;
 };
 
 #endif

@@ -25,26 +25,26 @@
 //! @internal
 class ActionsListViewBase : public K3ListView
 {
-	public:
-		ActionsListViewBase(QWidget* parent);
-		virtual ~ActionsListViewBase();
+  public:
+    ActionsListViewBase(QWidget* parent);
+    virtual ~ActionsListViewBase();
 
-		//! \return item for action \a actionName
-		virtual Q3ListViewItem *itemForAction(const QString& actionName);
-		void selectAction(const QString& actionName);
+    //! \return item for action \a actionName
+    virtual Q3ListViewItem *itemForAction(const QString& actionName);
+    void selectAction(const QString& actionName);
 };
 
 //! @internal Used by KActionsListView and CurrentFormActionsListView (in column 2)
 class KActionsListViewBase : public ActionsListViewBase
 {
-	Q_OBJECT
-	public:
-		KActionsListViewBase(QWidget* parent);
-		virtual ~KActionsListViewBase();
-		void init();
-		virtual bool isActionVisible(const char* actionName, int actionCategories) const = 0;
+  Q_OBJECT
+  public:
+    KActionsListViewBase(QWidget* parent);
+    virtual ~KActionsListViewBase();
+    void init();
+    virtual bool isActionVisible(const char* actionName, int actionCategories) const = 0;
 
-	protected:
+  protected:
 };
 
 #endif

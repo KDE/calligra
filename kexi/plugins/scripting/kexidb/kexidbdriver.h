@@ -104,7 +104,7 @@ namespace Scripting {
 #pragma WARNING( TODO QSet<Connection*> is available now )
 #endif
 /* TODO
-		QObject* connection(uint index);*/
+    QObject* connection(uint index);*/
 
         private:
             ::KexiDB::Driver* m_driver;

@@ -34,92 +34,92 @@ class QDateTimeEditor;
 //! @short A db-aware date editor
 class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataItemInterface
 {
-	Q_OBJECT
-	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-	// properties copied from QDateEdit
-	Q_ENUMS( Order )
-	Q_PROPERTY( Order order READ order WRITE setOrder DESIGNABLE true)
-	Q_PROPERTY( QDate date READ date WRITE setDate DESIGNABLE true)
-	Q_PROPERTY( bool autoAdvance READ autoAdvance WRITE setAutoAdvance DESIGNABLE true)
-	Q_PROPERTY( QDate maxValue READ maxValue WRITE setMaxValue DESIGNABLE true)
-	Q_PROPERTY( QDate minValue READ minValue WRITE setMinValue DESIGNABLE true)
-	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
+  Q_OBJECT
+  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+  // properties copied from QDateEdit
+  Q_ENUMS( Order )
+  Q_PROPERTY( Order order READ order WRITE setOrder DESIGNABLE true)
+  Q_PROPERTY( QDate date READ date WRITE setDate DESIGNABLE true)
+  Q_PROPERTY( bool autoAdvance READ autoAdvance WRITE setAutoAdvance DESIGNABLE true)
+  Q_PROPERTY( QDate maxValue READ maxValue WRITE setMaxValue DESIGNABLE true)
+  Q_PROPERTY( QDate minValue READ minValue WRITE setMinValue DESIGNABLE true)
+  Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
-	public:
-		enum Order { DMY = Q3DateEdit::DMY, MDY = Q3DateEdit::MDY, YMD = Q3DateEdit::YMD,  YDM = Q3DateEdit::YDM };
+  public:
+    enum Order { DMY = Q3DateEdit::DMY, MDY = Q3DateEdit::MDY, YMD = Q3DateEdit::YMD,  YDM = Q3DateEdit::YDM };
 
-		KexiDBDateEdit(const QDate &date, QWidget *parent);
-		virtual ~KexiDBDateEdit();
+    KexiDBDateEdit(const QDate &date, QWidget *parent);
+    virtual ~KexiDBDateEdit();
 
-		inline QString dataSource() const
-			{ return KexiFormDataItemInterface::dataSource(); }
-		inline QString dataSourceMimeType() const
-			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
-		virtual QVariant value();
-		virtual void setInvalidState( const QString& displayText );
+    inline QString dataSource() const
+      { return KexiFormDataItemInterface::dataSource(); }
+    inline QString dataSourceMimeType() const
+      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    virtual QVariant value();
+    virtual void setInvalidState( const QString& displayText );
 
-		//! \return true if editor's value is null (not empty)
-		//! Used for checking if a given constraint within table of form is met.
-		virtual bool valueIsNull();
+    //! \return true if editor's value is null (not empty)
+    //! Used for checking if a given constraint within table of form is met.
+    virtual bool valueIsNull();
 
-		//! \return true if editor's value is empty (not necessary null).
-		//! Only few data types can accept "EMPTY" property
-		//! (use KexiDB::Field::hasEmptyProperty() to check this).
-		//! Used for checking if a given constraint within table or form is met.
-		virtual bool valueIsEmpty();
+    //! \return true if editor's value is empty (not necessary null).
+    //! Only few data types can accept "EMPTY" property
+    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! Used for checking if a given constraint within table or form is met.
+    virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this widget. */
-		virtual bool isReadOnly() const;
+    /*! \return 'readOnly' flag for this widget. */
+    virtual bool isReadOnly() const;
 
-		/*! \return the view widget of this item, e.g. line edit widget. */
-		virtual QWidget* widget();
+    /*! \return the view widget of this item, e.g. line edit widget. */
+    virtual QWidget* widget();
 
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-		virtual void clear();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
+    virtual void clear();
 
-		virtual void  setEnabled(bool enabled);
+    virtual void  setEnabled(bool enabled);
 
-		// property functions
-		inline QDate date() const { return m_edit->date(); }
-		inline void setOrder(Order order) { m_edit->setOrder( (Q3DateEdit::Order) order); }
-		inline Order order() const { return (Order)m_edit->order(); }
-		inline void setAutoAdvance( bool advance ) { m_edit->setAutoAdvance(advance); }
-		inline bool autoAdvance() const { return m_edit->autoAdvance(); }
-		inline void setMinValue(const QDate& d) { m_edit->setMinValue(d); }
-		inline QDate minValue() const { return m_edit->minValue(); }
-		inline void setMaxValue(const QDate& d) { m_edit->setMaxValue(d); }
-		inline QDate maxValue() const { return m_edit->maxValue(); }
+    // property functions
+    inline QDate date() const { return m_edit->date(); }
+    inline void setOrder(Order order) { m_edit->setOrder( (Q3DateEdit::Order) order); }
+    inline Order order() const { return (Order)m_edit->order(); }
+    inline void setAutoAdvance( bool advance ) { m_edit->setAutoAdvance(advance); }
+    inline bool autoAdvance() const { return m_edit->autoAdvance(); }
+    inline void setMinValue(const QDate& d) { m_edit->setMinValue(d); }
+    inline QDate minValue() const { return m_edit->minValue(); }
+    inline void setMaxValue(const QDate& d) { m_edit->setMaxValue(d); }
+    inline QDate maxValue() const { return m_edit->maxValue(); }
 
-	signals:
-		void  dateChanged(const QDate &date);
+  signals:
+    void  dateChanged(const QDate &date);
 
-	public slots:
-		inline void setDataSource(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		inline void setDate(const QDate& date)  { m_edit->setDate(date); }
-		virtual void setReadOnly(bool set);
+  public slots:
+    inline void setDataSource(const QString &ds)
+      { KexiFormDataItemInterface::setDataSource(ds); }
+    inline void setDataSourceMimeType(const QString &ds)
+      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    inline void setDate(const QDate& date)  { m_edit->setDate(date); }
+    virtual void setReadOnly(bool set);
 
-	protected slots:
-		void slotValueChanged(const QDate&);
-		void  slotShowDatePicker();
-		void  acceptDate();
+  protected slots:
+    void slotValueChanged(const QDate&);
+    void  slotShowDatePicker();
+    void  acceptDate();
 
-	protected:
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		virtual bool  eventFilter(QObject *o, QEvent *e);
+  protected:
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual bool  eventFilter(QObject *o, QEvent *e);
 
-	private:
-		KDatePicker *m_datePicker;
-		Q3DateEdit *m_edit;
-		KMenu *m_datePickerPopupMenu;
-		QDateTimeEditor *m_dte_date;
-		bool m_invalidState : 1;
-		bool m_cleared : 1;
-		bool m_readOnly : 1;
+  private:
+    KDatePicker *m_datePicker;
+    Q3DateEdit *m_edit;
+    KMenu *m_datePickerPopupMenu;
+    QDateTimeEditor *m_dte_date;
+    bool m_invalidState : 1;
+    bool m_cleared : 1;
+    bool m_readOnly : 1;
 };
 
 #endif

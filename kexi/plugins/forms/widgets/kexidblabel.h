@@ -43,108 +43,108 @@ class QPainter;
  @author Christian Nitschkowski, Jaroslaw Staniek
 */
 class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface {
-		Q_OBJECT
-		Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
-		Q_PROPERTY( QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
-		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
-		Q_OVERRIDE( QPixmap pixmap DESIGNABLE false )
-		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
+    Q_OBJECT
+    Q_PROPERTY( QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true )
+    Q_PROPERTY( QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true )
+    Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
+    Q_OVERRIDE( QPixmap pixmap DESIGNABLE false )
+    Q_OVERRIDE( bool scaledContents DESIGNABLE false )
 //		Q_OVERRIDE( QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor DESIGNABLE true )
-		Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )
+    Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )
 
-	public:
-		KexiDBLabel( QWidget *parent, Qt::WFlags f = 0 );
-		KexiDBLabel( const QString& text, QWidget *parent, Qt::WFlags f = 0 );
-		virtual ~KexiDBLabel();
+  public:
+    KexiDBLabel( QWidget *parent, Qt::WFlags f = 0 );
+    KexiDBLabel( const QString& text, QWidget *parent, Qt::WFlags f = 0 );
+    virtual ~KexiDBLabel();
 
-		inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-		inline QString dataSourceMimeType() const {
-			return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
+    inline QString dataSourceMimeType() const {
+      return KexiFormDataItemInterface::dataSourceMimeType(); }
 
-		virtual QVariant value();
+    virtual QVariant value();
 
-		bool shadowEnabled() const;
+    bool shadowEnabled() const;
 
-		virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState( const QString& displayText );
 
-		virtual bool valueIsNull();
+    virtual bool valueIsNull();
 
-		virtual bool valueIsEmpty();
+    virtual bool valueIsEmpty();
 
-		//! always true
-		virtual bool isReadOnly() const;
+    //! always true
+    virtual bool isReadOnly() const;
 
-		virtual QWidget* widget();
+    virtual QWidget* widget();
 
-		//! always false
-		virtual bool cursorAtStart();
+    //! always false
+    virtual bool cursorAtStart();
 
-		//! always false
-		virtual bool cursorAtEnd();
+    //! always false
+    virtual bool cursorAtEnd();
 
-		virtual void clear();
+    virtual void clear();
 
-		//! used to catch setIndent(), etc.
-		virtual bool setProperty ( const char * name, const QVariant & value );
+    //! used to catch setIndent(), etc.
+    virtual bool setProperty ( const char * name, const QVariant & value );
 
-		virtual const QColor& frameColor() const;
+    virtual const QColor& frameColor() const;
 
 //		const QColor & paletteForegroundColor() const;
 
-	public slots:
-		//! Sets the datasource to \a ds
-		inline void setDataSource( const QString &ds )
-			{ KexiFormDataItemInterface::setDataSource( ds ); }
+  public slots:
+    //! Sets the datasource to \a ds
+    inline void setDataSource( const QString &ds )
+      { KexiFormDataItemInterface::setDataSource( ds ); }
 
-		inline void setDataSourceMimeType(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    inline void setDataSourceMimeType(const QString &ds)
+      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
 
-		virtual void setText( const QString& text );
+    virtual void setText( const QString& text );
 
-		/*! Enable/Disable the shadow effect.
-		 KexiDBLabel acts just like a normal QLabel when shadow is disabled. */
-		void setShadowEnabled( bool state );
+    /*! Enable/Disable the shadow effect.
+     KexiDBLabel acts just like a normal QLabel when shadow is disabled. */
+    void setShadowEnabled( bool state );
 
-		virtual void setPalette( const QPalette &pal );
+    virtual void setPalette( const QPalette &pal );
 
-		virtual void setFrameColor(const QColor& color);
+    virtual void setFrameColor(const QColor& color);
 
 //		void setPaletteForegroundColor( const QColor& color );
 
-	protected slots:
-		//! empty
-		virtual void setReadOnly( bool readOnly );
-		void updatePixmap();
+  protected slots:
+    //! empty
+    virtual void setReadOnly( bool readOnly );
+    void updatePixmap();
 
-	protected:
-		void init();
-		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
-		virtual void paintEvent( QPaintEvent* );
-		virtual void resizeEvent( QResizeEvent* e );
+  protected:
+    void init();
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void paintEvent( QPaintEvent* );
+    virtual void resizeEvent( QResizeEvent* e );
 
-		//! Sets value \a value for a widget.
-		virtual void setValueInternal( const QVariant& add, bool removeOld );
+    //! Sets value \a value for a widget.
+    virtual void setValueInternal( const QVariant& add, bool removeOld );
 
-		virtual void fontChange( const QFont& font );
-		virtual void styleChange( QStyle& style );
-		virtual void enabledChange( bool enabled );
+    virtual void fontChange( const QFont& font );
+    virtual void styleChange( QStyle& style );
+    virtual void enabledChange( bool enabled );
 
-		virtual void paletteChange( const QPalette& oldPal );
+    virtual void paletteChange( const QPalette& oldPal );
 #ifdef __GNUC__
 #warning TODO virtual void frameChanged();
 #else
 #pragma WARNING( TODO virtual void frameChanged(); )
 #endif
-		virtual void showEvent( QShowEvent* e );
+    virtual void showEvent( QShowEvent* e );
 
-		//! Reimplemented to paint using real frame color instead of froeground. 
-		//! Also allows to paint more types of frame.
-		virtual void drawFrame( QPainter * );
+    //! Reimplemented to paint using real frame color instead of froeground. 
+    //! Also allows to paint more types of frame.
+    virtual void drawFrame( QPainter * );
 
-		void updatePixmapLater();
+    void updatePixmapLater();
 
-		class Private;
-		Private *d;
+    class Private;
+    Private *d;
 };
 
 #endif

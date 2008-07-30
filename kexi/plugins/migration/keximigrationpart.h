@@ -25,14 +25,14 @@
 /*! @short Internal part for data/project migration wizard. */
 class KexiMigrationPart : public KexiInternalPart
 {
-	public:
-		KexiMigrationPart(QObject *parent, const QStringList &args);
-		virtual ~KexiMigrationPart();
+  public:
+    KexiMigrationPart(QObject *parent, const QStringList &args);
+    virtual ~KexiMigrationPart();
 
-		/*! Reimplement this if your internal part has to return widgets 
-		 or QDialog objects. */
-		virtual QWidget *createWidget(const char* /*widgetClass*/,
-		 QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0);
+    /*! Reimplement this if your internal part has to return widgets 
+     or QDialog objects. */
+    virtual QWidget *createWidget(const char* /*widgetClass*/,
+     QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0);
 };
 
 #endif

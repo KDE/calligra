@@ -28,17 +28,17 @@ class Q3VBox;
 
 class KexiDynamicQueryParameterDialog : public KDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 public:
-	KexiDynamicQueryParameterDialog(QWidget *parent,KexiDataProvider::Parameters *, const KexiDataProvider::ParameterList &);
-	virtual ~KexiDynamicQueryParameterDialog();
+  KexiDynamicQueryParameterDialog(QWidget *parent,KexiDataProvider::Parameters *, const KexiDataProvider::ParameterList &);
+  virtual ~KexiDynamicQueryParameterDialog();
 
 protected:
-	virtual void slotOk();
+  virtual void slotOk();
 private:
 //temporary only. Later a different widget will be used
-	Q3VBox *m_mainView;
-	KexiDataProvider::Parameters *m_values;
+  Q3VBox *m_mainView;
+  KexiDataProvider::Parameters *m_values;
 
 };
 

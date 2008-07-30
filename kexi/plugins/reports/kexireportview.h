@@ -34,23 +34,23 @@ class KexiReportForm;
 
 class KEXIREPORTUTILS_EXPORT KexiReportScrollView : public KexiScrollView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiReportScrollView(QWidget *parent, bool preview);
-		virtual ~KexiReportScrollView();
+  public:
+    KexiReportScrollView(QWidget *parent, bool preview);
+    virtual ~KexiReportScrollView();
 
-		void setForm(KFormDesigner::Form *form) { m_form = form; }
+    void setForm(KFormDesigner::Form *form) { m_form = form; }
 
-	public slots:
-		/*! Reimplemented to update resize policy. */
-		virtual void show();
+  public slots:
+    /*! Reimplemented to update resize policy. */
+    virtual void show();
 
-	protected slots:
-		void slotResizingStarted();
+  protected slots:
+    void slotResizingStarted();
 
-	private:
-		KFormDesigner::Form *m_form;
+  private:
+    KFormDesigner::Form *m_form;
 };
 
 
@@ -62,70 +62,70 @@ class KEXIREPORTUTILS_EXPORT KexiReportScrollView : public KexiScrollView
  (preview == false in constructor). */
 class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		enum ResizeMode {
-			ResizeAuto = 0,
-			ResizeDefault = ResizeAuto,
-			ResizeFixed = 1,
-			NoResize = 2 /*! @todo */
-		};
+  public:
+    enum ResizeMode {
+      ResizeAuto = 0,
+      ResizeDefault = ResizeAuto,
+      ResizeFixed = 1,
+      NoResize = 2 /*! @todo */
+    };
 
-		KexiReportView(KexiMainWindow *win, QWidget *parent, KexiDB::Connection *conn);
-		virtual ~KexiReportView();
+    KexiReportView(KexiMainWindow *win, QWidget *parent, KexiDB::Connection *conn);
+    virtual ~KexiReportView();
 
-		KexiDB::Connection* connection() { return m_conn; }
+    KexiDB::Connection* connection() { return m_conn; }
 
-		virtual QSize preferredSizeHint(const QSize& otherSize);
+    virtual QSize preferredSizeHint(const QSize& otherSize);
 
-		int resizeMode() const { return m_resizeMode; }
+    int resizeMode() const { return m_resizeMode; }
 
-	public slots:
-		/*! Reimplemented to update resize policy. */
-		virtual void show();
+  public slots:
+    /*! Reimplemented to update resize policy. */
+    virtual void show();
 
-	protected slots:
-		void slotPropertySetSwitched(KoProperty::Set *set, bool forceReload = false);
-		void slotDirty(KFormDesigner::Form *f, bool isDirty);
-		void slotFocus(bool in);
+  protected slots:
+    void slotPropertySetSwitched(KoProperty::Set *set, bool forceReload = false);
+    void slotDirty(KFormDesigner::Form *f, bool isDirty);
+    void slotFocus(bool in);
 
-		/*void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
-		void slotFormWidgetSelected(KFormDesigner::Form *form);
-		void slotNoFormSelected();
+    /*void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+    void slotFormWidgetSelected(KFormDesigner::Form *form);
+    void slotNoFormSelected();
 
-		void setUndoEnabled(bool enabled);
-		void setRedoEnabled(bool enabled); */
+    void setUndoEnabled(bool enabled);
+    void setRedoEnabled(bool enabled); */
 
-	protected:
-		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-		virtual KoProperty::Set* propertySet() { return m_propertySet; }
+  protected:
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
+    virtual KoProperty::Set* propertySet() { return m_propertySet; }
 
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual tristate storeData(bool dontAsk = false);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual tristate storeData(bool dontAsk = false);
 
-		KexiReportPart::TempData* tempData() const {
-			return static_cast<KexiReportPart::TempData*>(parentWindow()->tempData()); }
-		KexiReportPart* reportPart() const { return static_cast<KexiReportPart*>(part()); }
+    KexiReportPart::TempData* tempData() const {
+      return static_cast<KexiReportPart::TempData*>(parentWindow()->tempData()); }
+    KexiReportPart* reportPart() const { return static_cast<KexiReportPart*>(part()); }
 
-		void disableWidgetActions();
-		void enableFormActions();
+    void disableWidgetActions();
+    void enableFormActions();
 
-		KFormDesigner::Form* form() const;
-		void setForm(KFormDesigner::Form *f);
+    KFormDesigner::Form* form() const;
+    void setForm(KFormDesigner::Form *f);
 
-		void initForm();
-		void loadForm();
+    void initForm();
+    void loadForm();
 
-		virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent ( QResizeEvent * );
 
-	private:
-		KexiReportForm *m_reportform;
-		KexiReportScrollView *m_scrollView;
-		KoProperty::Set *m_propertySet;
-		KexiDB::Connection *m_conn;
-		int m_resizeMode;
+  private:
+    KexiReportForm *m_reportform;
+    KexiReportScrollView *m_scrollView;
+    KoProperty::Set *m_propertySet;
+    KexiDB::Connection *m_conn;
+    int m_resizeMode;
 };
 
 #endif

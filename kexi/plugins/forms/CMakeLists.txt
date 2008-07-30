@@ -41,18 +41,18 @@ set(kexiformutils_LIB_SRCS
    kexiformpart.cpp 
    kexiformview.cpp
 
-	widgets/kexidbutils.cpp
-	widgets/kexidbautofield.cpp
-	widgets/kexidbform.cpp
-	widgets/kexidbsubform.cpp
-	widgets/kexidblabel.cpp
-	widgets/kexidbimagebox.cpp
-	widgets/kexipushbutton.cpp
-	widgets/kexiframe.cpp
-	widgets/kexidblineedit.cpp
-	widgets/kexidbcheckbox.cpp
-	widgets/kexidbtextedit.cpp
-	widgets/kexidbcombobox.cpp
+  widgets/kexidbutils.cpp
+  widgets/kexidbautofield.cpp
+  widgets/kexidbform.cpp
+  widgets/kexidbsubform.cpp
+  widgets/kexidblabel.cpp
+  widgets/kexidbimagebox.cpp
+  widgets/kexipushbutton.cpp
+  widgets/kexiframe.cpp
+  widgets/kexidblineedit.cpp
+  widgets/kexidbcheckbox.cpp
+  widgets/kexidbtextedit.cpp
+  widgets/kexidbcombobox.cpp
 )
 
 #obsolete	widgets/kexidbdoublespinbox.cpp

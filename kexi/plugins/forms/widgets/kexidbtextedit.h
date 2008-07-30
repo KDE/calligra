@@ -31,90 +31,90 @@
 
 //! @short Multiline edit widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
-	public KTextEdit,
-	protected KexiDBTextWidgetInterface,
-	public KexiFormDataItemInterface
+  public KTextEdit,
+  protected KexiDBTextWidgetInterface,
+  public KexiFormDataItemInterface
 {
-	Q_OBJECT
-	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+  Q_OBJECT
+  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
-	public:
-		KexiDBTextEdit(QWidget *parent);
-		virtual ~KexiDBTextEdit();
+  public:
+    KexiDBTextEdit(QWidget *parent);
+    virtual ~KexiDBTextEdit();
 
-		inline QString dataSource() const
-			{ return KexiFormDataItemInterface::dataSource(); }
-		inline QString dataSourceMimeType() const
-			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
-		virtual QVariant value();
-		virtual void setInvalidState( const QString& displayText );
+    inline QString dataSource() const
+      { return KexiFormDataItemInterface::dataSource(); }
+    inline QString dataSourceMimeType() const
+      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    virtual QVariant value();
+    virtual void setInvalidState( const QString& displayText );
 
-		//! \return true if editor's value is null (not empty)
-		//! Used for checking if a given constraint within table of form is met.
-		virtual bool valueIsNull();
+    //! \return true if editor's value is null (not empty)
+    //! Used for checking if a given constraint within table of form is met.
+    virtual bool valueIsNull();
 
-		//! \return true if editor's value is empty (not necessary null).
-		//! Only few data types can accept "EMPTY" property
-		//! (use KexiDB::Field::hasEmptyProperty() to check this).
-		//! Used for checking if a given constraint within table or form is met.
-		virtual bool valueIsEmpty();
+    //! \return true if editor's value is empty (not necessary null).
+    //! Only few data types can accept "EMPTY" property
+    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! Used for checking if a given constraint within table or form is met.
+    virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this widget. */
-		virtual bool isReadOnly() const;
+    /*! \return 'readOnly' flag for this widget. */
+    virtual bool isReadOnly() const;
 
-		/*! \return the view widget of this item, e.g. line edit widget. */
-		virtual QWidget* widget();
+    /*! \return the view widget of this item, e.g. line edit widget. */
+    virtual QWidget* widget();
 
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-		virtual void clear();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
+    virtual void clear();
 
-		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
+    virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
-		/*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
-		 is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
-		 \a widget is equal to 'this'.
-		 Reimplemented after KexiFormDataItemInterface. */
-		virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
+    /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
+     is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+     \a widget is equal to 'this'.
+     Reimplemented after KexiFormDataItemInterface. */
+    virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
 
-		//! Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
-		virtual void keyPressEvent( QKeyEvent *ke );
+    //! Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
+    virtual void keyPressEvent( QKeyEvent *ke );
 
-	public slots:
-		inline void setDataSource(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		virtual void setReadOnly( bool readOnly );
+  public slots:
+    inline void setDataSource(const QString &ds)
+      { KexiFormDataItemInterface::setDataSource(ds); }
+    inline void setDataSourceMimeType(const QString &ds)
+      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    virtual void setReadOnly( bool readOnly );
 //Qt4		virtual void setText( const QString & text, const QString & context );
 
-		//! Reimplemented, so "undo" means the same as "cancelEditor" action
+    //! Reimplemented, so "undo" means the same as "cancelEditor" action
 //! @todo enable "real" undo internally so user can use ctrl+z while editing
-		virtual void undo();
+    virtual void undo();
 
-		//! Implemented for KexiDataItemInterface
-		virtual void moveCursorToEnd();
+    //! Implemented for KexiDataItemInterface
+    virtual void moveCursorToEnd();
 
-		//! Implemented for KexiDataItemInterface
-		virtual void moveCursorToStart();
+    //! Implemented for KexiDataItemInterface
+    virtual void moveCursorToStart();
 
-		//! Implemented for KexiDataItemInterface
-		virtual void selectAll();
+    //! Implemented for KexiDataItemInterface
+    virtual void selectAll();
 
-	protected slots:
-		void slotTextChanged();
+  protected slots:
+    void slotTextChanged();
 
-	protected:
-		virtual void paintEvent ( QPaintEvent * );
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		QMenu * createPopupMenu(const QPoint & pos);
+  protected:
+    virtual void paintEvent ( QPaintEvent * );
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    QMenu * createPopupMenu(const QPoint & pos);
 
-		//! Used for extending context menu
-		KexiDBWidgetContextMenuExtender m_menuExtender;
+    //! Used for extending context menu
+    KexiDBWidgetContextMenuExtender m_menuExtender;
 
-		//! Used to disable slotTextChanged()
-		bool m_slotTextChanged_enabled : 1;
+    //! Used to disable slotTextChanged()
+    bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

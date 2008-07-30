@@ -25,7 +25,7 @@
 
 class Q3ListViewItem;
 namespace KexiPart {
-	class Item;
+  class Item;
 }
 
 //! @short A dialog for selecting an action to be executed for a form's command button
@@ -35,33 +35,33 @@ namespace KexiPart {
 */
 class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialog
 {
-	Q_OBJECT
-	public:
-		KexiActionSelectionDialog(QWidget *parent, 
-			const KexiFormEventAction::ActionData& action, const QString& actionWidgetName);
-		~KexiActionSelectionDialog();
+  Q_OBJECT
+  public:
+    KexiActionSelectionDialog(QWidget *parent, 
+      const KexiFormEventAction::ActionData& action, const QString& actionWidgetName);
+    ~KexiActionSelectionDialog();
 
-		/*! \return selected action data or empty action if dialog has been rejected 
-		 or "No action" has been selected. */
-		KexiFormEventAction::ActionData currentAction() const;
+    /*! \return selected action data or empty action if dialog has been rejected 
+     or "No action" has been selected. */
+    KexiFormEventAction::ActionData currentAction() const;
 
-		virtual bool eventFilter(QObject *o, QEvent *e);
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
-	protected slots:
-		void slotActionCategorySelected(Q3ListViewItem* item);
-		void slotKActionItemExecuted(Q3ListViewItem*);
-		void slotKActionItemSelected(Q3ListViewItem*);
-		void slotActionToExecuteItemExecuted(Q3ListViewItem* item);
-		void slotActionToExecuteItemSelected(Q3ListViewItem*);
-		void slotCurrentFormActionItemExecuted(Q3ListViewItem*);
-		void slotCurrentFormActionItemSelected(Q3ListViewItem*);
-		void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
+  protected slots:
+    void slotActionCategorySelected(Q3ListViewItem* item);
+    void slotKActionItemExecuted(Q3ListViewItem*);
+    void slotKActionItemSelected(Q3ListViewItem*);
+    void slotActionToExecuteItemExecuted(Q3ListViewItem* item);
+    void slotActionToExecuteItemSelected(Q3ListViewItem*);
+    void slotCurrentFormActionItemExecuted(Q3ListViewItem*);
+    void slotCurrentFormActionItemSelected(Q3ListViewItem*);
+    void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
-	protected:
-		void updateOKButtonStatus();
+  protected:
+    void updateOKButtonStatus();
 
-		class Private;
-		Private* const d;
+    class Private;
+    Private* const d;
 };
 
 #endif

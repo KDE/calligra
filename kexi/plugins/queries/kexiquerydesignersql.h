@@ -36,49 +36,49 @@ class KexiQueryDesignerSQLEditor;
  mode or in "sql status" mode. */
 class KexiQueryDesignerSQLView : public KexiView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiQueryDesignerSQLView(QWidget *parent);
-		virtual ~KexiQueryDesignerSQLView();
+  public:
+    KexiQueryDesignerSQLView(QWidget *parent);
+    virtual ~KexiQueryDesignerSQLView();
 
-		QString sqlText() const;
-		KexiQueryDesignerSQLEditor *editor() const;
+    QString sqlText() const;
+    KexiQueryDesignerSQLEditor *editor() const;
 
 //		virtual bool eventFilter ( QObject *o, QEvent *e );
 
-	protected:
-		KexiQueryPart::TempData * tempData() const;
+  protected:
+    KexiQueryPart::TempData * tempData() const;
 
-		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual tristate storeData(bool dontAsk = false);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    virtual tristate storeData(bool dontAsk = false);
 
-		void setStatusOk();
-		void setStatusError(const QString& msg);
-		void setStatusEmpty();
-		void setStatusText(const QString& text);
+    void setStatusOk();
+    void setStatusError(const QString& msg);
+    void setStatusEmpty();
+    void setStatusText(const QString& text);
 
-		virtual void updateActions(bool activated);
+    virtual void updateActions(bool activated);
 
-	protected slots:
-		/*! Performs query checking (by text parsing). \return true and sets d->parsedQuery 
-		 to the new query schema object on success. */
-		bool slotCheckQuery();
-		void slotUpdateMode();
-		void slotTextChanged();
+  protected slots:
+    /*! Performs query checking (by text parsing). \return true and sets d->parsedQuery 
+     to the new query schema object on success. */
+    bool slotCheckQuery();
+    void slotUpdateMode();
+    void slotTextChanged();
 //		void slotHistoryHeaderButtonClicked(const QString& buttonIdentifier);
-		void slotSelectQuery();
+    void slotSelectQuery();
 
-	signals:
-		void queryShortcut();
+  signals:
+    void queryShortcut();
 
-	private:
-		class Private;
-		Private * const d;
+  private:
+    class Private;
+    Private * const d;
 
-		friend class KexiQueryView; // for storeNewData() and storeData() only
+    friend class KexiQueryView; // for storeNewData() and storeData() only
 };
 
 #endif

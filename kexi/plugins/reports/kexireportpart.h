@@ -27,61 +27,61 @@
 
 namespace KFormDesigner
 {
-	class FormManager;
-	class WidgetLibrary;
-	class Form;
+  class FormManager;
+  class WidgetLibrary;
+  class Form;
 }
 
 namespace KexiDB
 {
-	class FieldList;
+  class FieldList;
 }
 
 /*! @short Kexi Report Plugin
  It just creates a \ref KexiReportView. See there for most of code. */
 class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiReportPart(QObject *parent, const QStringList &);
-		virtual ~KexiReportPart();
+  public:
+    KexiReportPart(QObject *parent, const QStringList &);
+    virtual ~KexiReportPart();
 
-		//! \return a pointer to Reports Widget Library.
-		static KFormDesigner::WidgetLibrary* library();
+    //! \return a pointer to Reports Widget Library.
+    static KFormDesigner::WidgetLibrary* library();
 
 //		KFormDesigner::FormManager *manager() { return m_manager; }
 
-		void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
+    void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
-		class TempData : public KexiWindowData
-		{
-			public:
-				TempData(QObject* parent);
-				~TempData();
-				QPointer<KFormDesigner::Form> form;
-				QPointer<KFormDesigner::Form> previewForm;
-				QString tempForm;
-				QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
-				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
-		};
+    class TempData : public KexiWindowData
+    {
+      public:
+        TempData(QObject* parent);
+        ~TempData();
+        QPointer<KFormDesigner::Form> form;
+        QPointer<KFormDesigner::Form> previewForm;
+        QString tempForm;
+        QPoint scrollViewContentsPos; //!< to preserve contents pos after switching to other view
+        int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
+    };
 
-		virtual KLocalizedString i18nMessage(const QString& englishMessage, 
-			KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString& englishMessage, 
+      KexiWindow* window) const;
 
-	protected:
-		virtual KexiWindowData* createWindowData(KexiWindow* window);
-		
-		virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-			KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
-			QMap<QString,QVariant>* staticObjectArgs = 0);
+  protected:
+    virtual KexiWindowData* createWindowData(KexiWindow* window);
+    
+    virtual KexiView* createView(QWidget *parent, KexiWindow* window,
+      KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
+      QMap<QString,QVariant>* staticObjectArgs = 0);
 
-		virtual void initPartActions();
-		virtual void initInstanceActions();
+    virtual void initPartActions();
+    virtual void initInstanceActions();
 
-		static KFormDesigner::WidgetLibrary* static_reportsLibrary;
+    static KFormDesigner::WidgetLibrary* static_reportsLibrary;
 
-	private:
+  private:
 //		QPointer<KFormDesigner::FormManager> m_manager;
 };
 

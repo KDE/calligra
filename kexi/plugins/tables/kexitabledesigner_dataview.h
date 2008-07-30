@@ -25,24 +25,24 @@
 
 class KexiTableDesigner_DataView : public KexiDataTable
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiTableDesigner_DataView(QWidget *parent);
+  public:
+    KexiTableDesigner_DataView(QWidget *parent);
 
-		virtual ~KexiTableDesigner_DataView();
+    virtual ~KexiTableDesigner_DataView();
 
-		KexiTablePart::TempData* tempData() const;
+    KexiTablePart::TempData* tempData() const;
 
-	protected:
+  protected:
 //		//! called just once from ctor
 //		void init();
 //		void initActions();
 //		//! called whenever data should be reloaded (on switching to this view mode)
 //		void initData();
 
-		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+    virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
 };
 

@@ -34,54 +34,54 @@
 KexiDBDateTimeEdit::KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent)
  : QWidget(parent), KexiFormDataItemInterface()
 {
-	m_invalidState = false;
-	m_cleared = false;
-	m_readOnly = false;
+  m_invalidState = false;
+  m_cleared = false;
+  m_readOnly = false;
 
-	m_dateEdit = new Q3DateEdit(datetime.date(), this);
-	m_dateEdit->setAutoAdvance(true);
-	m_dateEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+  m_dateEdit = new Q3DateEdit(datetime.date(), this);
+  m_dateEdit->setAutoAdvance(true);
+  m_dateEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
 //	m_dateEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("8888-88-88___") );
-	connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged()));
-	connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SIGNAL(dateTimeChanged()));
+  connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SLOT(slotValueChanged()));
+  connect(m_dateEdit, SIGNAL(valueChanged(const QDate&)), this, SIGNAL(dateTimeChanged()));
 
-	QToolButton* btn = new QToolButton(this);
-	btn->setText("...");
-	btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
-	btn->setPopupDelay(1); //1 ms
+  QToolButton* btn = new QToolButton(this);
+  btn->setText("...");
+  btn->setFixedWidth( QFontMetrics(btn->font()).width(" ... ") );
+  btn->setPopupDelay(1); //1 ms
 
-	m_timeEdit = new Q3TimeEdit(datetime.time(), this);;
-	m_timeEdit->setAutoAdvance(true);
-	m_timeEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
-	connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged()));
-	connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SIGNAL(dateTimeChanged()));
+  m_timeEdit = new Q3TimeEdit(datetime.time(), this);;
+  m_timeEdit->setAutoAdvance(true);
+  m_timeEdit->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+  connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged()));
+  connect(m_timeEdit, SIGNAL(valueChanged(const QTime&)), this, SIGNAL(dateTimeChanged()));
 
 #ifdef QDateTimeEditor_HACK
-	m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
-	m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
+  m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
+  m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
 #else
-	m_dte_date = 0;
+  m_dte_date = 0;
 #endif
 
-	m_datePickerPopupMenu = new KMenu(0, "date_popup");
-	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
-	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
+  m_datePickerPopupMenu = new KMenu(0, "date_popup");
+  connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
+  m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
 
-	KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
-	if (dt)
-		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
-	m_datePicker->setCloseButton(true);
-	m_datePicker->installEventFilter(this);
-	m_datePickerPopupMenu->insertItem(m_datePicker);
-	btn->setPopup(m_datePickerPopupMenu);
+  KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
+  if (dt)
+    connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
+  m_datePicker->setCloseButton(true);
+  m_datePicker->installEventFilter(this);
+  m_datePickerPopupMenu->insertItem(m_datePicker);
+  btn->setPopup(m_datePickerPopupMenu);
 
-	Q3HBoxLayout* layout = new Q3HBoxLayout(this);
-	layout->addWidget(m_dateEdit, 0);
-	layout->addWidget(btn, 0);
-	layout->addWidget(m_timeEdit, 0);
-	//layout->addStretch(1);
+  Q3HBoxLayout* layout = new Q3HBoxLayout(this);
+  layout->addWidget(m_dateEdit, 0);
+  layout->addWidget(btn, 0);
+  layout->addWidget(m_timeEdit, 0);
+  //layout->addStretch(1);
 
-	setFocusProxy(m_dateEdit);
+  setFocusProxy(m_dateEdit);
 }
 
 KexiDBDateTimeEdit::~KexiDBDateTimeEdit()
@@ -90,158 +90,158 @@ KexiDBDateTimeEdit::~KexiDBDateTimeEdit()
 
 void KexiDBDateTimeEdit::setInvalidState(const QString & /*! @todo paint this text: text*/)
 {
-	setEnabled(false);
-	setReadOnly(true);
-	m_invalidState = true;
+  setEnabled(false);
+  setReadOnly(true);
+  m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & Qt::TabFocus)
-		setFocusPolicy(Qt::ClickFocus);
+  if (focusPolicy() & Qt::TabFocus)
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 void
 KexiDBDateTimeEdit::setEnabled(bool enabled)
 {
-	 // prevent the user from reenabling the widget when it is in invalid state
-	if(enabled && m_invalidState)
-		return;
-	QWidget::setEnabled(enabled);
+   // prevent the user from reenabling the widget when it is in invalid state
+  if(enabled && m_invalidState)
+    return;
+  QWidget::setEnabled(enabled);
 }
 
 void KexiDBDateTimeEdit::setValueInternal(const QVariant &, bool )
 {
-	m_dateEdit->setDate(m_origValue.toDate());
-	m_timeEdit->setTime(m_origValue.toTime());
+  m_dateEdit->setDate(m_origValue.toDate());
+  m_timeEdit->setTime(m_origValue.toTime());
 }
 
 QVariant
 KexiDBDateTimeEdit::value()
 {
-	return QDateTime(m_dateEdit->date(), m_timeEdit->time());
+  return QDateTime(m_dateEdit->date(), m_timeEdit->time());
 }
 
 bool KexiDBDateTimeEdit::valueIsNull()
 {
-	return !m_dateEdit->date().isValid() || m_dateEdit->date().isNull()
-		|| !m_timeEdit->time().isValid() || m_timeEdit->time().isNull();
+  return !m_dateEdit->date().isValid() || m_dateEdit->date().isNull()
+    || !m_timeEdit->time().isValid() || m_timeEdit->time().isNull();
 }
 
 bool KexiDBDateTimeEdit::valueIsEmpty()
 {
-	return m_cleared;
+  return m_cleared;
 }
 
 bool KexiDBDateTimeEdit::isReadOnly() const
 {
-	//! @todo: data/time edit API has no readonly flag, 
-	//!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
-	return m_readOnly; //!isEnabled();
+  //! @todo: data/time edit API has no readonly flag, 
+  //!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
+  return m_readOnly; //!isEnabled();
 }
 
 void KexiDBDateTimeEdit::setReadOnly(bool set)
 {
-	m_readOnly = set;
+  m_readOnly = set;
 }
 
 QWidget*
 KexiDBDateTimeEdit::widget()
 {
-	return m_dateEdit;
+  return m_dateEdit;
 }
 
 bool KexiDBDateTimeEdit::cursorAtStart()
 {
 #ifdef QDateTimeEditor_HACK
-	return m_dte_date && m_dateEdit->hasFocus() && m_dte_date->focusSection()==0;
+  return m_dte_date && m_dateEdit->hasFocus() && m_dte_date->focusSection()==0;
 #else
-	return false;
+  return false;
 #endif
 }
 
 bool KexiDBDateTimeEdit::cursorAtEnd()
 {
 #ifdef QDateTimeEditor_HACK
-	return m_dte_time && m_timeEdit->hasFocus()
-		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
+  return m_dte_time && m_timeEdit->hasFocus()
+    && m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
 #else
-	return false;
+  return false;
 #endif
 }
 
 void KexiDBDateTimeEdit::clear()
 {
-	m_dateEdit->setDate(QDate());
-	m_timeEdit->setTime(QTime());
-	m_cleared = true;
+  m_dateEdit->setDate(QDate());
+  m_timeEdit->setTime(QTime());
+  m_cleared = true;
 }
 
 void
 KexiDBDateTimeEdit::slotValueChanged()
 {
-	m_cleared = false;
+  m_cleared = false;
 }
 
 void
 KexiDBDateTimeEdit::slotShowDatePicker()
 {
-	QDate date = m_dateEdit->date();
+  QDate date = m_dateEdit->date();
 
-	m_datePicker->setDate(date);
-	m_datePicker->setFocus();
-	m_datePicker->show();
-	m_datePicker->setFocus();
+  m_datePicker->setDate(date);
+  m_datePicker->setFocus();
+  m_datePicker->show();
+  m_datePicker->setFocus();
 }
 
 void
 KexiDBDateTimeEdit::acceptDate()
 {
-	m_dateEdit->setDate(m_datePicker->date());
-	m_datePickerPopupMenu->hide();
+  m_dateEdit->setDate(m_datePicker->date());
+  m_datePickerPopupMenu->hide();
 }
 
 bool
 KexiDBDateTimeEdit::eventFilter(QObject *o, QEvent *e)
 {
-	if (o != m_datePicker)
-		return false;
+  if (o != m_datePicker)
+    return false;
 
-	switch (e->type()) {
-		case QEvent::Hide:
-			m_datePickerPopupMenu->hide();
-			break;
-		case QEvent::KeyPress:
-		case QEvent::KeyRelease: {
-			QKeyEvent *ke = (QKeyEvent *)e;
-			if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
-				//accepting picker
-				acceptDate();
-				return true;
-			}
-			else if (ke->key()==Qt::Key_Escape) {
-				//canceling picker
-				m_datePickerPopupMenu->hide();
-				return true;
-			}
-			else
-				 m_datePickerPopupMenu->setFocus();
-			break;
-		}
-		default:
-			break;
-	}
-	return false;
+  switch (e->type()) {
+    case QEvent::Hide:
+      m_datePickerPopupMenu->hide();
+      break;
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease: {
+      QKeyEvent *ke = (QKeyEvent *)e;
+      if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
+        //accepting picker
+        acceptDate();
+        return true;
+      }
+      else if (ke->key()==Qt::Key_Escape) {
+        //canceling picker
+        m_datePickerPopupMenu->hide();
+        return true;
+      }
+      else
+         m_datePickerPopupMenu->setFocus();
+      break;
+    }
+    default:
+      break;
+  }
+  return false;
 }
 
 QDateTime
 KexiDBDateTimeEdit::dateTime() const
 {
-	return QDateTime(m_dateEdit->date(), m_timeEdit->time());
+  return QDateTime(m_dateEdit->date(), m_timeEdit->time());
 }
 
 void
 KexiDBDateTimeEdit::setDateTime(const QDateTime &dt)
 {
-	m_dateEdit->setDate(dt.date());
-	m_timeEdit->setTime(dt.time());
+  m_dateEdit->setDate(dt.date());
+  m_timeEdit->setTime(dt.time());
 }
 
 #include "kexidbdatetimeedit.moc"

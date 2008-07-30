@@ -72,7 +72,7 @@ class KexiScriptDesignViewPrivate
 };
 
 KexiScriptDesignView::KexiScriptDesignView(
-	QWidget *parent, Kross::Action* scriptaction)
+  QWidget *parent, Kross::Action* scriptaction)
     : KexiView(parent)
     , d( new KexiScriptDesignViewPrivate() )
 {

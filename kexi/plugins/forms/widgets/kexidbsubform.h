@@ -27,26 +27,26 @@
 //! @short A form embedded as a widget inside other form
 class KEXIFORMUTILS_EXPORT KexiDBSubForm : public Q3ScrollView
 {
-	Q_OBJECT
-	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
+  Q_OBJECT
+  Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
-	public:
-		KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent);
-		~KexiDBSubForm() {}
+  public:
+    KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent);
+    ~KexiDBSubForm() {}
 
-		//! \return the name of the subform to display inside this widget
-		QString formName() const { return m_formName; }
+    //! \return the name of the subform to display inside this widget
+    QString formName() const { return m_formName; }
 
-		//! Sets the name of the subform to display inside this widget
-		void setFormName(const QString &name);
+    //! Sets the name of the subform to display inside this widget
+    void setFormName(const QString &name);
 
-		//void  paintEvent(QPaintEvent *ev);
+    //void  paintEvent(QPaintEvent *ev);
 
-	private:
-		KFormDesigner::Form *m_parentForm;
-		KFormDesigner::Form *m_form;
-		QWidget *m_widget;
-		QString m_formName;
+  private:
+    KFormDesigner::Form *m_parentForm;
+    KFormDesigner::Form *m_form;
+    QWidget *m_widget;
+    QString m_formName;
 };
 
 #endif

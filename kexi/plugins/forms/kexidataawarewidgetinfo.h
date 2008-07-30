@@ -29,16 +29,16 @@
 */
 class KEXIFORMUTILS_EXPORT KexiDataAwareWidgetInfo : public KFormDesigner::WidgetInfo
 {
-	public:
-		KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f);
-		
-		KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f, 
-			const char* parentFactoryName, const char* inheritedClassName = 0);
+  public:
+    KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f);
+    
+    KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f, 
+      const char* parentFactoryName, const char* inheritedClassName = 0);
 
-		virtual ~KexiDataAwareWidgetInfo();
+    virtual ~KexiDataAwareWidgetInfo();
 
-	protected:
-		void init();
+  protected:
+    void init();
 };
 
 #endif

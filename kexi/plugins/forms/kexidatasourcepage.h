@@ -36,75 +36,75 @@ class QLabel;
 //! A page within form designer's property tabbed pane, providing data source editor
 class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiDataSourcePage(QWidget *parent);
-		virtual ~KexiDataSourcePage();
+  public:
+    KexiDataSourcePage(QWidget *parent);
+    virtual ~KexiDataSourcePage();
 
-		KexiDataSourceComboBox* dataSourceCombo() const { return m_dataSourceCombo; }
-		KexiObjectInfoLabel* objectInfoLabel() const { return m_objectInfoLabel; }
+    KexiDataSourceComboBox* dataSourceCombo() const { return m_dataSourceCombo; }
+    KexiObjectInfoLabel* objectInfoLabel() const { return m_objectInfoLabel; }
 
-	public slots:
-		void setProject(KexiProject *prj);
-		void clearDataSourceSelection(bool alsoClearComboBox = true);
-		void clearWidgetDataSourceSelection();
+  public slots:
+    void setProject(KexiProject *prj);
+    void clearDataSourceSelection(bool alsoClearComboBox = true);
+    void clearWidgetDataSourceSelection();
 
-		//! Sets data source of a currently selected form. 
-		//! This is performed on form initialization and on activating.
-		void setDataSource(const QString& mimeType, const QString& name);
+    //! Sets data source of a currently selected form. 
+    //! This is performed on form initialization and on activating.
+    void setDataSource(const QString& mimeType, const QString& name);
 
-		//! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
-		void assignPropertySet(KoProperty::Set* propertySet);
+    //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
+    void assignPropertySet(KoProperty::Set* propertySet);
 
-	signals:
-		//! Signal emitted when helper button 'go to selected data source' is clicked.
-		void jumpToObjectRequested(const QString& mime, const QString& name);
+  signals:
+    //! Signal emitted when helper button 'go to selected data source' is clicked.
+    void jumpToObjectRequested(const QString& mime, const QString& name);
 
-		//! Signal emitted when form's data source has been changed. It's connected to the Form Manager.
-		void formDataSourceChanged(const QString& mime, const QString& name);
+    //! Signal emitted when form's data source has been changed. It's connected to the Form Manager.
+    void formDataSourceChanged(const QString& mime, const QString& name);
 
-		/*! Signal emitted when current widget's data source (field/expression)
-		 has been changed. It's connected to the Form Manager. 
-		 \a caption for this field is also provided (e.g. AutoField form widget use it) */
-		void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption,
-			KexiDB::Field::Type type);
+    /*! Signal emitted when current widget's data source (field/expression)
+     has been changed. It's connected to the Form Manager. 
+     \a caption for this field is also provided (e.g. AutoField form widget use it) */
+    void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption,
+      KexiDB::Field::Type type);
 
-		/*! Signal emitted when 'insert fields' button has been clicked */
-		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-			const QStringList& fields);
+    /*! Signal emitted when 'insert fields' button has been clicked */
+    void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+      const QStringList& fields);
 
-	protected slots:
-		void slotDataSourceTextChanged(const QString & string);
-		void slotDataSourceChanged();
-		void slotFieldSelected();
-		void slotGotoSelected();
-		void slotInsertSelectedFields();
-		void slotFieldListViewSelectionChanged();
-		void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
-			const QString& fieldName);
+  protected slots:
+    void slotDataSourceTextChanged(const QString & string);
+    void slotDataSourceChanged();
+    void slotFieldSelected();
+    void slotGotoSelected();
+    void slotInsertSelectedFields();
+    void slotFieldListViewSelectionChanged();
+    void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+      const QString& fieldName);
 
-	protected:
-		void updateSourceFieldWidgetsAvailability();
+  protected:
+    void updateSourceFieldWidgetsAvailability();
 
-		KexiFieldComboBox *m_sourceFieldCombo;
-		KexiObjectInfoLabel *m_objectInfoLabel;
-		KexiDataSourceComboBox* m_dataSourceCombo;
-		QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel, 
-			*m_widgetDSLabel, *m_availableFieldsLabel,
-			*m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
-		QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
+    KexiFieldComboBox *m_sourceFieldCombo;
+    KexiObjectInfoLabel *m_objectInfoLabel;
+    KexiDataSourceComboBox* m_dataSourceCombo;
+    QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel, 
+      *m_widgetDSLabel, *m_availableFieldsLabel,
+      *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
+    QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
 //		QFrame *m_dataSourceSeparator;
-		QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;
-		bool m_insideClearDataSourceSelection : 1;
+    QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;
+    bool m_insideClearDataSourceSelection : 1;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
-		KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
+    KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else
-		KexiFieldListView* m_fieldListView;
+    KexiFieldListView* m_fieldListView;
 #endif
 
-		//! Used only in assignPropertySet() to check whether we already have the set assigned
-		QString m_currentObjectName;
+    //! Used only in assignPropertySet() to check whether we already have the set assigned
+    QString m_currentObjectName;
 };
 
 #endif

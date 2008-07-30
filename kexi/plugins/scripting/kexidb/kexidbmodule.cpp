@@ -128,7 +128,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
             return 0;
         }
 
-	KConfigGroup config(&_config, groupkey);
+  KConfigGroup config(&_config, groupkey);
         //QString type( config.readEntry("type", "database").toLower() );
         //bool isDatabaseShortcut = (type == "database");
 

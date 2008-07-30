@@ -29,37 +29,37 @@
 //! Kexi Factory (DB widgets + subform)
 class KexiReportFactory : public KFormDesigner::WidgetFactory
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiReportFactory(QObject *parent, const char *name, const QStringList &args);
-		virtual ~KexiReportFactory();
+  public:
+    KexiReportFactory(QObject *parent, const char *name, const QStringList &args);
+    virtual ~KexiReportFactory();
 
-		virtual QString  name();
-		virtual QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
-			int options = DefaultOptions);
+    virtual QString  name();
+    virtual QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
+      int options = DefaultOptions);
 
-		virtual bool createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
-		   KFormDesigner::Container *container);
-		virtual bool startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container);
-		virtual bool previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *);
+    virtual bool createMenuActions(const Q3CString &classname, QWidget *w, Q3PopupMenu *menu,
+       KFormDesigner::Container *container);
+    virtual bool startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container);
+    virtual bool previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *);
 
-		//virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
-		         //QDomElement &parentNode, QDomDocument &parent) {}
-		//virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
-		virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
+    //virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+             //QDomElement &parentNode, QDomDocument &parent) {}
+    //virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
+    virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
 
-	public slots:
-		void editText();
+  public slots:
+    void editText();
 
-	protected:
-		virtual bool isPropertyVisibleInternal(const Q3CString &, QWidget *, const Q3CString &, bool isTopLevel);
+  protected:
+    virtual bool isPropertyVisibleInternal(const Q3CString &, QWidget *, const Q3CString &, bool isTopLevel);
 //		virtual void changeText(const QString &newText);
 //		virtual void resizeEditor(QWidget *widget, const QCString &classname);
 
-	private:
-		QWidget *m_widget;
-		KFormDesigner::Container *m_container;
+  private:
+    QWidget *m_widget;
+    KFormDesigner::Container *m_container;
 };
 
 #endif

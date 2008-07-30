@@ -34,80 +34,80 @@ class KMenu;
 //! @short A db-aware datetime editor
 class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
 {
-	Q_OBJECT
-	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-	Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-	// properties copied from QDateTimeEdit
-	Q_PROPERTY( QDateTime dateTime READ dateTime WRITE setDateTime )
-	Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
+  Q_OBJECT
+  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+  // properties copied from QDateTimeEdit
+  Q_PROPERTY( QDateTime dateTime READ dateTime WRITE setDateTime )
+  Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
 
-	public:
-		enum Order { DMY, MDY, YMD, YDM };
+  public:
+    enum Order { DMY, MDY, YMD, YDM };
 
-		KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent);
-		virtual ~KexiDBDateTimeEdit();
+    KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent);
+    virtual ~KexiDBDateTimeEdit();
 
-		inline QString dataSource() const
-			{ return KexiFormDataItemInterface::dataSource(); }
-		inline QString dataSourceMimeType() const
-			{ return KexiFormDataItemInterface::dataSourceMimeType(); }
-		virtual QVariant value();
-		virtual void setInvalidState( const QString& displayText );
+    inline QString dataSource() const
+      { return KexiFormDataItemInterface::dataSource(); }
+    inline QString dataSourceMimeType() const
+      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    virtual QVariant value();
+    virtual void setInvalidState( const QString& displayText );
 
-		//! \return true if editor's value is null (not empty)
-		//! Used for checking if a given constraint within table of form is met.
-		virtual bool valueIsNull();
+    //! \return true if editor's value is null (not empty)
+    //! Used for checking if a given constraint within table of form is met.
+    virtual bool valueIsNull();
 
-		//! \return true if editor's value is empty (not necessary null).
-		//! Only few data types can accept "EMPTY" property
-		//! (use KexiDB::Field::hasEmptyProperty() to check this).
-		//! Used for checking if a given constraint within table or form is met.
-		virtual bool valueIsEmpty();
+    //! \return true if editor's value is empty (not necessary null).
+    //! Only few data types can accept "EMPTY" property
+    //! (use KexiDB::Field::hasEmptyProperty() to check this).
+    //! Used for checking if a given constraint within table or form is met.
+    virtual bool valueIsEmpty();
 
-		/*! \return 'readOnly' flag for this widget. */
-		virtual bool isReadOnly() const;
+    /*! \return 'readOnly' flag for this widget. */
+    virtual bool isReadOnly() const;
 
-		/*! \return the view widget of this item, e.g. line edit widget. */
-		virtual QWidget* widget();
+    /*! \return the view widget of this item, e.g. line edit widget. */
+    virtual QWidget* widget();
 
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-		virtual void clear();
+    virtual bool cursorAtStart();
+    virtual bool cursorAtEnd();
+    virtual void clear();
 
-		virtual void  setEnabled(bool enabled);
+    virtual void  setEnabled(bool enabled);
 
-		// property functions
-		QDateTime dateTime() const;
+    // property functions
+    QDateTime dateTime() const;
 
-	signals:
-		void  dateTimeChanged();
+  signals:
+    void  dateTimeChanged();
 
-	public slots:
-		inline void setDataSource(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSource(ds); }
-		inline void setDataSourceMimeType(const QString &ds)
-			{ KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-		void setDateTime(const QDateTime &dt);
-		virtual void setReadOnly(bool set);
+  public slots:
+    inline void setDataSource(const QString &ds)
+      { KexiFormDataItemInterface::setDataSource(ds); }
+    inline void setDataSourceMimeType(const QString &ds)
+      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    void setDateTime(const QDateTime &dt);
+    virtual void setReadOnly(bool set);
 
-	protected:
-		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		virtual bool eventFilter(QObject *o, QEvent *e);
+  protected:
+    virtual void setValueInternal(const QVariant& add, bool removeOld);
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
-	protected slots:
-		void slotValueChanged();
-		void slotShowDatePicker();
-		void acceptDate();
+  protected slots:
+    void slotValueChanged();
+    void slotShowDatePicker();
+    void acceptDate();
 
-	private:
-		KDatePicker *m_datePicker;
-		Q3DateEdit* m_dateEdit;
-		Q3TimeEdit* m_timeEdit;
-		QDateTimeEditor *m_dte_date, *m_dte_time;
-		KMenu *m_datePickerPopupMenu;
-		bool m_invalidState : 1;
-		bool m_cleared : 1;
-		bool m_readOnly : 1;
+  private:
+    KDatePicker *m_datePicker;
+    Q3DateEdit* m_dateEdit;
+    Q3TimeEdit* m_timeEdit;
+    QDateTimeEditor *m_dte_date, *m_dte_time;
+    KMenu *m_datePickerPopupMenu;
+    bool m_invalidState : 1;
+    bool m_cleared : 1;
+    bool m_readOnly : 1;
 };
 
 #endif

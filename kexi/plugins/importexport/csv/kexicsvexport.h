@@ -32,19 +32,19 @@ enum Mode { Clipboard, File };
 
 //! Options used in KexiCSVExportWizard contructor.
 class Options {
-	public:
-		Options();
-	
-		//! Assigns \a args. \return false on failure.
-		bool assign( QMap<QString,QString>& args );
+  public:
+    Options();
+  
+    //! Assigns \a args. \return false on failure.
+    bool assign( QMap<QString,QString>& args );
 
-		Mode mode;
-		int itemId; //!< Table or query ID
-		QString fileName;
-		QString delimiter;
-		QString forceDelimiter; //!< Used for "clipboard" mode
-		QString textQuote;
-		bool addColumnNames : 1;
+    Mode mode;
+    int itemId; //!< Table or query ID
+    QString fileName;
+    QString delimiter;
+    QString forceDelimiter; //!< Used for "clipboard" mode
+    QString textQuote;
+    bool addColumnNames : 1;
 };
 
 /*! Exports data. \return false on failure.
@@ -53,7 +53,7 @@ class Options {
  @param predefinedTextStream text stream that should be used instead of writing to a file
 */
 bool exportData(KexiDB::TableOrQuerySchema& tableOrQuery, const Options& options, 
-	int rowCount = -1,  QTextStream *predefinedTextStream = 0);
+  int rowCount = -1,  QTextStream *predefinedTextStream = 0);
 
 }
 

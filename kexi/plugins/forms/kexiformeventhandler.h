@@ -25,7 +25,7 @@
 #include <kexi_export.h>
 
 namespace KexiPart {
-	class Info;
+  class Info;
 }
 
 //! The KexiFormEventHandler class handles events defined within Kexi Forms
@@ -38,62 +38,62 @@ namespace KexiPart {
  */
 class KEXIFORMUTILS_EXPORT KexiFormEventHandler
 {
-	public:
-		KexiFormEventHandler();
-		virtual ~KexiFormEventHandler();
+  public:
+    KexiFormEventHandler();
+    virtual ~KexiFormEventHandler();
 
-		/*! Sets \a mainWidget to be a main widget for this handler.
-		 Also find widgets having action assigned and connects them 
-		 to appropriate actions. 
-		 For now, all of them must be KexiPushButton). */
-		void setMainWidgetForEventHandling(QWidget* mainWidget);
+    /*! Sets \a mainWidget to be a main widget for this handler.
+     Also find widgets having action assigned and connects them 
+     to appropriate actions. 
+     For now, all of them must be KexiPushButton). */
+    void setMainWidgetForEventHandling(QWidget* mainWidget);
 
-	protected:
-		QWidget *m_mainWidget;
+  protected:
+    QWidget *m_mainWidget;
 };
 
 //! @internal form-level action for handling "on click" actions
 class KEXIFORMUTILS_EXPORT KexiFormEventAction : public KAction
 {
-	public:
-		//! A structure used in currentActionName()
-		class KEXIFORMUTILS_EXPORT ActionData
-		{
-			public:
-				ActionData();
+  public:
+    //! A structure used in currentActionName()
+    class KEXIFORMUTILS_EXPORT ActionData
+    {
+      public:
+        ActionData();
 
-				/*! Decodes action string into action type/action argument parts.
-				 Action string has to be in a form of "actiontype:actionarg"
-				 - Action type is passed to \a actionType on success. Action type can be "kaction"
-					or any of the part names (see KexiPart::Info::objectName()), e.g. "table", "query", etc.
-				 - Action argument can be an action name in case of "kaction" type or object name 
-					in case of action of type "table", "query", etc.
-				 \a ok is set to true on success and to false on failure. On failure no other
-				 values are passed. 
-				 \return part info if action type is "table", "query", etc., or 0 for "kaction" type. */
-				KexiPart::Info* decodeString(QString& actionType, QString& actionArg, bool& ok) const;
+        /*! Decodes action string into action type/action argument parts.
+         Action string has to be in a form of "actiontype:actionarg"
+         - Action type is passed to \a actionType on success. Action type can be "kaction"
+          or any of the part names (see KexiPart::Info::objectName()), e.g. "table", "query", etc.
+         - Action argument can be an action name in case of "kaction" type or object name 
+          in case of action of type "table", "query", etc.
+         \a ok is set to true on success and to false on failure. On failure no other
+         values are passed. 
+         \return part info if action type is "table", "query", etc., or 0 for "kaction" type. */
+        KexiPart::Info* decodeString(QString& actionType, QString& actionArg, bool& ok) const;
 
-				//! \return true if the action is empty
-				bool isEmpty() const;
+        //! \return true if the action is empty
+        bool isEmpty() const;
 
-				QString string; //!< action string with prefix, like "kaction:edit_copy" or "table:<tableName>"
+        QString string; //!< action string with prefix, like "kaction:edit_copy" or "table:<tableName>"
 
-				QString option; //!< option used when name is "table/query/etc.:\<objectName\>" is set;
-				                //!< can be set to "open", "design", "editText", etc. 
-				                //!< @see ActionToExecuteListView::showActionsForMimeType()
-		};
+        QString option; //!< option used when name is "table/query/etc.:\<objectName\>" is set;
+                        //!< can be set to "open", "design", "editText", etc. 
+                        //!< @see ActionToExecuteListView::showActionsForMimeType()
+    };
 
-		KexiFormEventAction(QObject* parent, const QString& actionName, 
-			const QString& objectName, const QString& actionOption);
-		virtual ~KexiFormEventAction();
+    KexiFormEventAction(QObject* parent, const QString& actionName, 
+      const QString& objectName, const QString& actionOption);
+    virtual ~KexiFormEventAction();
 
-	public slots:
-		//! Activates the action. If the object supports executing (macro, script), 
-		//! it is executed; otherwise (table, query, form,...) it is opened in its data view.
-		virtual void activate();
+  public slots:
+    //! Activates the action. If the object supports executing (macro, script), 
+    //! it is executed; otherwise (table, query, form,...) it is opened in its data view.
+    virtual void activate();
 
-	private:
-		QString m_actionName, m_objectName, m_actionOption;
+  private:
+    QString m_actionName, m_objectName, m_actionOption;
 };
 
 #endif

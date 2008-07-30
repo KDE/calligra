@@ -26,49 +26,49 @@
 //! @internal
 class KexiFrame::Private
 {
-	public:
-		Private()
-		{
-		}
-		~Private()
-		{
-		}
-		QColor frameColor;
+  public:
+    Private()
+    {
+    }
+    ~Private()
+    {
+    }
+    QColor frameColor;
 #if 0
 //todo
-		KexiFrame::Shape frameShape;
-		KexiFrame::Shadow frameShadow;
+    KexiFrame::Shape frameShape;
+    KexiFrame::Shadow frameShadow;
 #endif
 };
 
 //=========================================================
 
 KexiFrame::KexiFrame( QWidget * parent, Qt::WindowFlags f )
-	: QFrame(parent, f)
-	, d( new Private() )
+  : QFrame(parent, f)
+  , d( new Private() )
 {
-	//defaults
-	d->frameColor = palette().active().foreground();
+  //defaults
+  d->frameColor = palette().active().foreground();
 //! @todo obtain these defaults from current template's style...
-	setLineWidth(2);
-	setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
+  setLineWidth(2);
+  setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 }
 
 KexiFrame::~KexiFrame()
 {
-	delete d;
+  delete d;
 }
 
 void KexiFrame::dragMoveEvent( QDragMoveEvent *e )
 {
-	QFrame::dragMoveEvent(e);
-	emit handleDragMoveEvent(e);
+  QFrame::dragMoveEvent(e);
+  emit handleDragMoveEvent(e);
 }
 
 void KexiFrame::dropEvent( QDropEvent *e )
 {
-	QFrame::dropEvent(e);
-	emit handleDropEvent(e);
+  QFrame::dropEvent(e);
+  emit handleDropEvent(e);
 }
 
 #define ClassName KexiFrame

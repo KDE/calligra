@@ -40,74 +40,74 @@ QStringList csvMimeTypes();
  Used by CSV import and export dialogs. */
 class KexiCSVInfoLabel : public QWidget
 {
-	public:
-		/* Sets up a new info label \a labelText label with text like "Preview of data from file:".
-		 setFileName() can be used to display filename and setCommentAfterFileName() to display 
-		 additional comment.
+  public:
+    /* Sets up a new info label \a labelText label with text like "Preview of data from file:".
+     setFileName() can be used to display filename and setCommentAfterFileName() to display 
+     additional comment.
 
-		 The widget's layout can look like this:
+     The widget's layout can look like this:
 
-		 \pre [icon] [labeltext] [filename] [comment]
-		*/
-		KexiCSVInfoLabel( const QString& labelText, QWidget* parent );
+     \pre [icon] [labeltext] [filename] [comment]
+    */
+    KexiCSVInfoLabel( const QString& labelText, QWidget* parent );
 
-		void setFileName( const QString& fileName );
-		void setLabelText( const QString& text );
-		void setCommentText( const QString& text );
+    void setFileName( const QString& fileName );
+    void setLabelText( const QString& text );
+    void setCommentText( const QString& text );
 //		void setIconForFileName();
 
-		//! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
-		void setIcon(const QString& iconName);
+    //! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
+    void setIcon(const QString& iconName);
 
-		QLabel* leftLabel() const { return m_leftLabel; }
-		QLabel* fileNameLabel() const { return m_fnameLbl; }
-		QLabel* commentLabel() const { return m_commentLbl; }
-		QFrame* separator() const { return m_separator; }
+    QLabel* leftLabel() const { return m_leftLabel; }
+    QLabel* fileNameLabel() const { return m_fnameLbl; }
+    QLabel* commentLabel() const { return m_commentLbl; }
+    QFrame* separator() const { return m_separator; }
 
-	protected:
-		QLabel *m_leftLabel, *m_iconLbl, *m_fnameLbl, *m_commentLbl;
-		QFrame* m_separator;
+  protected:
+    QLabel *m_leftLabel, *m_iconLbl, *m_fnameLbl, *m_commentLbl;
+    QFrame* m_separator;
 };
 
 //! @short A combo box widget providing a list of possible delimiters
 //! Used by CSV import and export dialogs
 class KexiCSVDelimiterWidget : public QWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent = 0 );
-		~KexiCSVDelimiterWidget();
+  public:
+    KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent = 0 );
+    ~KexiCSVDelimiterWidget();
 
-		QString delimiter() const;
-		void setDelimiter(const QString& delimiter);
+    QString delimiter() const;
+    void setDelimiter(const QString& delimiter);
 
-	signals:
-		void delimiterChanged(const QString& delimiter);
+  signals:
+    void delimiterChanged(const QString& delimiter);
 
-	protected slots:
-		//! only called when a delimiter was set by user directly
-		void slotDelimiterChanged(int idx);
-		void slotDelimiterChangedInternal(int idx);
-		void slotDelimiterLineEditTextChanged( const QString & );
-		void slotDelimiterLineEditReturnPressed();
+  protected slots:
+    //! only called when a delimiter was set by user directly
+    void slotDelimiterChanged(int idx);
+    void slotDelimiterChangedInternal(int idx);
+    void slotDelimiterLineEditTextChanged( const QString & );
+    void slotDelimiterLineEditReturnPressed();
 
-	protected:
-		class Private;
-		Private * const d;
+  protected:
+    class Private;
+    Private * const d;
 };
 
 //! @short A combo box widget providing a list of possible quote characters
 //! Used by CSV import and export dialogs
 class KexiCSVTextQuoteComboBox : public KComboBox
 {
-	public:
-		KexiCSVTextQuoteComboBox( QWidget * parent = 0 );
+  public:
+    KexiCSVTextQuoteComboBox( QWidget * parent = 0 );
 
-		QString textQuote() const;
+    QString textQuote() const;
 
-		//! Sets text quote. Only available are: ", ', and empty string.
-		void setTextQuote(const QString& textQuote);
+    //! Sets text quote. Only available are: ", ', and empty string.
+    void setTextQuote(const QString& textQuote);
 };
 
 #endif

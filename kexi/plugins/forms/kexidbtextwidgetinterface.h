@@ -25,7 +25,7 @@
 #include <QEvent>
 
 namespace KexiDB {
-	class QueryColumnInfo;
+  class QueryColumnInfo;
 }
 
 //! @short An interface providing common text editor's functionality
@@ -33,23 +33,23 @@ namespace KexiDB {
  use this interface to customize painting and data handling. */
 class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 {
-	public:
-		KexiDBTextWidgetInterface();
-		~KexiDBTextWidgetInterface();
+  public:
+    KexiDBTextWidgetInterface();
+    ~KexiDBTextWidgetInterface();
 
-		//! Called from KexiFormDataItemInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo) implementation.
-		void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
+    //! Called from KexiFormDataItemInterface::setColumnInfo(KexiDB::QueryColumnInfo* cinfo) implementation.
+    void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
 
-		//! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
-		void paint( QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment, 
-			bool hasFocus );
+    //! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
+    void paint( QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment, 
+      bool hasFocus );
 
-		//! Called from event( QEvent * e ) method of the data aware widget.
-		void event( QEvent * e, QWidget *w, bool textIsEmpty );
+    //! Called from event( QEvent * e ) method of the data aware widget.
+    void event( QEvent * e, QWidget *w, bool textIsEmpty );
 
-	protected:
-		//! parameters for displaying autonumber sign
-		KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
+  protected:
+    //! parameters for displaying autonumber sign
+    KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
 };
 
 #endif

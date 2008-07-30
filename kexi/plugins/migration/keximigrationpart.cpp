@@ -35,10 +35,10 @@ KexiMigrationPart::~KexiMigrationPart()
 QWidget *KexiMigrationPart::createWidget(const char* /*widgetClass*/, 
  QWidget *parent, const char *objName, QMap<QString,QString>* args )
 {
-	KexiMigration::ImportWizard *w = new KexiMigration::ImportWizard(parent, args);
-	w->setName(objName);
-	return w;
+  KexiMigration::ImportWizard *w = new KexiMigration::ImportWizard(parent, args);
+  w->setName(objName);
+  return w;
 }
 
 K_EXPORT_COMPONENT_FACTORY( kexihandler_migration, 
-	KGenericFactory<KexiMigrationPart>("kexihandler_migration") )
+  KGenericFactory<KexiMigrationPart>("kexihandler_migration") )

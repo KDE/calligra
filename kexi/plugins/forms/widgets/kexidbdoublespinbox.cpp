@@ -25,7 +25,7 @@
 KexiDBDoubleSpinBox::KexiDBDoubleSpinBox(QWidget *parent)
  : KDoubleSpinBox(parent) , KexiFormDataItemInterface()
 {
-	connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged()));
+  connect(this, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged()));
 }
 
 KexiDBDoubleSpinBox::~KexiDBDoubleSpinBox()
@@ -34,80 +34,80 @@ KexiDBDoubleSpinBox::~KexiDBDoubleSpinBox()
 
 void KexiDBDoubleSpinBox::setInvalidState( const QString& displayText )
 {
-	m_invalidState = true;
-	setEnabled(false);
-	setReadOnly(true);
+  m_invalidState = true;
+  setEnabled(false);
+  setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-	if (focusPolicy() & Qt::TabFocus)
-		setFocusPolicy(Qt::ClickFocus);
-	setSpecialValueText(displayText);
-	KDoubleSpinBox::setValue(minimum());
+  if (focusPolicy() & Qt::TabFocus)
+    setFocusPolicy(Qt::ClickFocus);
+  setSpecialValueText(displayText);
+  KDoubleSpinBox::setValue(minimum());
 }
 
 void
 KexiDBDoubleSpinBox::setEnabled(bool enabled)
 {
-	 // prevent the user from reenabling the widget when it is in invalid state
-	if(enabled && m_invalidState)
-		return;
-	KDoubleSpinBox::setEnabled(enabled);
+   // prevent the user from reenabling the widget when it is in invalid state
+  if(enabled && m_invalidState)
+    return;
+  KDoubleSpinBox::setEnabled(enabled);
 }
 
 void KexiDBDoubleSpinBox::setValueInternal(const QVariant&, bool )
 {
-	KDoubleSpinBox::setValue(m_origValue.toDouble());
+  KDoubleSpinBox::setValue(m_origValue.toDouble());
 }
 
 QVariant
 KexiDBDoubleSpinBox::value()
 {
-	return KDoubleSpinBox::value();
+  return KDoubleSpinBox::value();
 }
 
 void KexiDBDoubleSpinBox::slotValueChanged()
 {
-	signalValueChanged();
+  signalValueChanged();
 }
 
 bool KexiDBDoubleSpinBox::valueIsNull()
 {
-	return cleanText().isEmpty();
+  return cleanText().isEmpty();
 }
 
 bool KexiDBDoubleSpinBox::valueIsEmpty()
 {
-	return false;
+  return false;
 }
 
 bool KexiDBDoubleSpinBox::isReadOnly() const
 {
-	return editor()->isReadOnly();
+  return editor()->isReadOnly();
 }
 
 void KexiDBDoubleSpinBox::setReadOnly(bool set)
 {
-	editor()->setReadOnly(set);
+  editor()->setReadOnly(set);
 }
 
 QWidget*
 KexiDBDoubleSpinBox::widget()
 {
-	return this;
+  return this;
 }
 
 bool KexiDBDoubleSpinBox::cursorAtStart()
 {
-	return false; //! \todo ?
+  return false; //! \todo ?
 }
 
 bool KexiDBDoubleSpinBox::cursorAtEnd()
 {
-	return false; //! \todo ?
+  return false; //! \todo ?
 }
 
 void KexiDBDoubleSpinBox::clear()
 {
-	KDoubleSpinBox::setValue(minValue());
+  KDoubleSpinBox::setValue(minValue());
 }
 
 #include "kexidbdoublespinbox.moc"
