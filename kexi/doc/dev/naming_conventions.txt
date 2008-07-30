@@ -95,21 +95,22 @@ use \param tag, e.g.:
 to recognise who marked given fragment.
 
 4. Indentation
-4.1 We can use the rule as in the rest of KDE code.
+4.1 We use 2-spaces indentation. Do not use tabs.
 example:
 	QString		objectName(); //wrong
-	QString objectName(); //ok
-rule: dont use tabs between words.
+  QString objectName(); //ok
+
+Rule: don't use many spaces or tabs between words.
 
 4.2 To avoid many indentation levels, we can use:
 
 void mymethod()
 {
-	if (!something)
-		return;
-	if(!something_else && .....)
-		return
-	do_something();
+  if (!something)
+    return;
+  if (!something_else && .....)
+    return;
+  do_something();
 }
 
  instead of:
@@ -127,11 +128,13 @@ This is good, because made qt and kde sources readable.
 
 4.3 Indentation within classes declaration
 
+namespace MyNamespace {
+
 class MyClass {
-	public:
-		MyClass();
-		void method();
-	protected:
+  public:
+    MyClass();
+    void method();
+  protected:
 };
 
-ANYWAY: we use indentation.
+}
