@@ -727,7 +727,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 	//open <text:list> in the body
 	writer->startElement( "text:list" );
 	//we create a style & add it to m_mainStyles, then get a pointer to it
-	KoGenStyle listStyle(KoGenStyle::StyleAutoList);
+	KoGenStyle listStyle(KoGenStyle::StyleListAuto);
 	//if we're writing to styles.xml, the list style needs to go there as well
 	if(m_writingHeader)
 	    listStyle.setAutoStyleInStylesDotXml(true);

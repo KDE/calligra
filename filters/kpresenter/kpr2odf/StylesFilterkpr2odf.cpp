@@ -1171,7 +1171,7 @@ const QString Filterkpr2odf::createTextStyle( const KoXmlElement& element )
 
 const QString Filterkpr2odf::createListStyle( const KoXmlElement& element )
 {
-    KoGenStyle style( KoGenStyle::StyleAutoList );
+    KoGenStyle style( KoGenStyle::StyleListAuto );
 
     static const int s_oasisCounterTypes[] =
             { '\0', '1', 'a', 'A', 'i', 'I',
