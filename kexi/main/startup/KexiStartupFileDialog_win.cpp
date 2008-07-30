@@ -38,38 +38,38 @@
 //! @internal
 class KexiStartupFileDialogBasePrivate
 {
-	public:
-		KexiStartupFileDialogBasePrivate()
-		{}
-		KFile::Mode mode;
-		QString kde_filters;
-		QStringList mimetypes;
+  public:
+    KexiStartupFileDialogBasePrivate()
+    {}
+    KFile::Mode mode;
+    QString kde_filters;
+    QStringList mimetypes;
 };
 
 KexiStartupFileDialogBase::KexiStartupFileDialogBase(
-	const QString & dirName, const QString & filter, 
-	QWidget * parent, const char * name, bool modal )
+  const QString & dirName, const QString & filter, 
+  QWidget * parent, const char * name, bool modal )
  : Q3FileDialog( realStartDir(dirName), filter, parent, name, modal )
  , d(new KexiStartupFileDialogBasePrivate())
 {
 //	QString _dirName = dirName;
-	QString _dirName = dirPath();
-	//make default 'My Documents' folder
+  QString _dirName = dirPath();
+  //make default 'My Documents' folder
 //TODO: store changes in the app's config file?
-	if (_dirName.isEmpty())
-		_dirName = KGlobalSettings::documentPath();
+  if (_dirName.isEmpty())
+    _dirName = KGlobalSettings::documentPath();
 
-	init(_dirName, filter, parent);
+  init(_dirName, filter, parent);
 
-	//find "OK" button
-	QObjectList *l = queryList( "QPushButton", "OK", false );
-	m_okBtn = dynamic_cast<QPushButton*>(l->first());
-	delete l;
-	l = queryList( "QLineEdit", "name/filter editor", false );
-	m_lineEdit = dynamic_cast<QLineEdit*>(l->first());
-	delete l;
+  //find "OK" button
+  QObjectList *l = queryList( "QPushButton", "OK", false );
+  m_okBtn = dynamic_cast<QPushButton*>(l->first());
+  delete l;
+  l = queryList( "QLineEdit", "name/filter editor", false );
+  m_lineEdit = dynamic_cast<QLineEdit*>(l->first());
+  delete l;
 
-	adjustSize();
+  adjustSize();
 }
 
 KexiStartupFileDialogBase::~KexiStartupFileDialogBase()
@@ -86,7 +86,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //TODO    d->operationMode = Opening;
     setMode(KFile::File | KFile::ExistingOnly); //(js) default: open action
     setIcon( KGlobal::iconLoader()->loadIcon("document-open", KIconLoader::Desktop) );
-		setDir(QDir(startDir));
+    setDir(QDir(startDir));
 //TODO    d->hasDefaultFilter = false;
 //TODO    d->hasView = false;
 //(js)    d->mainWidget = new QWidget( this, "KFileDialog::mainWidget");
@@ -337,22 +337,22 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     readConfig( config, ConfigGroup );
     setSelection(d->selection);
     d->completionLock = false;
-	*/
+  */
 }
 
 void KexiStartupFileDialogBase::clearFilter()
 {
-	d->kde_filters = "";//(js)
-	Q3FileDialog::setFilter(""); //(js);
+  d->kde_filters = "";//(js)
+  Q3FileDialog::setFilter(""); //(js);
 //todo    d->mimetypes.clear();
 //todo    d->hasDefaultFilter = false;
 
-	updateAutoSelectExtension ();
+  updateAutoSelectExtension ();
 }
 
 KFile::Mode KexiStartupFileDialogBase::mode() const
 {
-	return d->mode;
+  return d->mode;
 }
 
 void KexiStartupFileDialogBase::setMode( KFile::Mode m )
@@ -398,25 +398,25 @@ void KexiStartupFileDialogBase::setOperationMode( KFileDialog::OperationMode mod
 
 QString KexiStartupFileDialogBase::currentFilter() const
 {
-	//(js)filterWidget->currentFilter();
+  //(js)filterWidget->currentFilter();
 
-	//we need to convert Qt filter format to KDE format
-	//Qt format: "some text (*.first *.second)" or "All (*)"
-	//KDE format: "*.first *.second" or "*"
-	QString f = selectedFilter();
-	if (f.find('(')!=-1)
-		f = f.mid(f.find('(')+1);
-	if (f.mid(f.find(')')!=-1))
-		f = f.left(f.find(')'));
-	return f;
+  //we need to convert Qt filter format to KDE format
+  //Qt format: "some text (*.first *.second)" or "All (*)"
+  //KDE format: "*.first *.second" or "*"
+  QString f = selectedFilter();
+  if (f.find('(')!=-1)
+    f = f.mid(f.find('(')+1);
+  if (f.mid(f.find(')')!=-1))
+    f = f.left(f.find(')'));
+  return f;
 }
 
 void KexiStartupFileDialogBase::setFilter(const QString& filter)
 {
-	d->kde_filters = filter;
+  d->kde_filters = filter;
     int pos = d->kde_filters.find('/');
 
-	// Check for an un-escaped '/', if found
+  // Check for an un-escaped '/', if found
     // interpret as a MIME filter.
 
     if (pos > 0 && filter[pos - 1] != '\\') {
@@ -424,8 +424,8 @@ void KexiStartupFileDialogBase::setFilter(const QString& filter)
         setMimeFilter( filters );
         return;
     }
-	Q3FileDialog::setFilters( convertKFileDialogFilterToQFileDialogFilter(filter) );
-	//</js>
+  Q3FileDialog::setFilters( convertKFileDialogFilterToQFileDialogFilter(filter) );
+  //</js>
 //(js)    ops->clearFilter();
 //(js)    filterWidget->setFilter(copy);
 //(js)    ops->setNameFilter(filterWidget->currentFilter());
@@ -454,24 +454,24 @@ void KexiStartupFileDialogBase::setMimeFilter( const QStringList& mimeTypes,
 
 QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
 {
-	if (!startDir.startsWith(":"))
-		return startDir;
-	QString recentDir; //dummy
-	QString path( KFileDialog::getStartURL(startDir, recentDir).path() );
-	if (path.isEmpty())
-		return QString();
-	QFileInfo fi(path);
-	return fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath();
+  if (!startDir.startsWith(":"))
+    return startDir;
+  QString recentDir; //dummy
+  QString path( KFileDialog::getStartURL(startDir, recentDir).path() );
+  if (path.isEmpty())
+    return QString();
+  QFileInfo fi(path);
+  return fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath();
 }
 
 void KexiStartupFileDialogBase::saveLastVisitedPath(const QString& path)
 {
-	if (!m_lastVisitedPathsVariable.isEmpty()) {
-		//save last visited dir path
+  if (!m_lastVisitedPathsVariable.isEmpty()) {
+    //save last visited dir path
 //		QString dir = QDir(path).absolutePath();
-		QFileInfo fi(path);
-		QString dir( fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath() );
-		if (!dir.isEmpty())
-			KRecentDirs::add(m_lastVisitedPathsVariable, dir);
-	}
+    QFileInfo fi(path);
+    QString dir( fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath() );
+    if (!dir.isEmpty())
+      KRecentDirs::add(m_lastVisitedPathsVariable, dir);
+  }
 }

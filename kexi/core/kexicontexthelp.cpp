@@ -28,18 +28,18 @@
 #include <kiconloader.h>
 
 KexiContextHelp::KexiContextHelp(KexiMainWindow *view, QWidget *parent)
-	:KoContextHelpWidget(parent,"kexi_contexthelp")
+  :KoContextHelpWidget(parent,"kexi_contexthelp")
 {
-	kDebug()<<"KexiContextHelp::KexiContextHelp()"<<endl;
-	setCaption(i18n("Context Help"));
-	setIcon(SmallIcon("help-contents"));
-	connect(this,SIGNAL(linkClicked( const QString& )),
-		this,SLOT(linkClickedInternal( const QString& )));
+  kDebug()<<"KexiContextHelp::KexiContextHelp()"<<endl;
+  setCaption(i18n("Context Help"));
+  setIcon(SmallIcon("help-contents"));
+  connect(this,SIGNAL(linkClicked( const QString& )),
+    this,SLOT(linkClickedInternal( const QString& )));
 }
 
 void KexiContextHelp::linkClickedInternal(const QString& link) {
-	kDebug()<<"KexiContextHelp: Link: "<<link<<endl;
-	unhandledLink(link);
+  kDebug()<<"KexiContextHelp: Link: "<<link<<endl;
+  unhandledLink(link);
 }
 
 KexiContextHelp::~KexiContextHelp()

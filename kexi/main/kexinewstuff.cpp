@@ -32,14 +32,14 @@
 
 KexiNewStuff::KexiNewStuff(QWidget *parent)
  : KNewStuff( "kexi/template"
-	, "http://download.kde.org/khotnewstuff/kexi-providers.xml"
-	, parent)
+  , "http://download.kde.org/khotnewstuff/kexi-providers.xml"
+  , parent)
 {
-	// Prevent GHNS to deny downloading a second time. If GHNS
-	// fails to download something, it still marks the thing as
-	// successfully downloaded and therefore we arn't able to
-	// download it again :-/
-	KGlobal::config()->deleteGroup("KNewStuffStatus");
+  // Prevent GHNS to deny downloading a second time. If GHNS
+  // fails to download something, it still marks the thing as
+  // successfully downloaded and therefore we arn't able to
+  // download it again :-/
+  KGlobal::config()->deleteGroup("KNewStuffStatus");
 }
 
 KexiNewStuff::~KexiNewStuff()
@@ -49,31 +49,31 @@ KexiNewStuff::~KexiNewStuff()
 bool
 KexiNewStuff::install(const QString &fileName)
 {
-	kDebug() << "KexiNewStuff::install(): " << fileName << endl;
+  kDebug() << "KexiNewStuff::install(): " << fileName << endl;
 
-	KTar archive( fileName );
-	if ( !archive.open( QIODevice::ReadOnly ) ) {
-		kDebug() << QString("KexiNewStuff::install: Failed to open archivefile \"%1\"").arg(fileName) << endl;
-		return false;
-	}
-	const KArchiveDirectory *archiveDir = archive.directory();
-	const QString destDir = KFileDialog::getExistingDirectory(
-		"kfiledialog:///DownloadExampleDatabases", parentWidget(),
-		i18n("Choose Directory Where to Install Example Database"));
-	if (destDir.isEmpty()) {
-		kDebug() << QString("KexiNewStuff::install: Destination-directory is empty.") << endl;
-		return false;
-	}
-	archiveDir->copyTo(destDir);
-	archive.close();
+  KTar archive( fileName );
+  if ( !archive.open( QIODevice::ReadOnly ) ) {
+    kDebug() << QString("KexiNewStuff::install: Failed to open archivefile \"%1\"").arg(fileName) << endl;
+    return false;
+  }
+  const KArchiveDirectory *archiveDir = archive.directory();
+  const QString destDir = KFileDialog::getExistingDirectory(
+    "kfiledialog:///DownloadExampleDatabases", parentWidget(),
+    i18n("Choose Directory Where to Install Example Database"));
+  if (destDir.isEmpty()) {
+    kDebug() << QString("KexiNewStuff::install: Destination-directory is empty.") << endl;
+    return false;
+  }
+  archiveDir->copyTo(destDir);
+  archive.close();
 
-	return true;
+  return true;
 }
 
 bool
 KexiNewStuff::createUploadFile(const QString &)
 {
-	return true;
+  return true;
 }
 
 #endif

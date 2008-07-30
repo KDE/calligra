@@ -24,9 +24,9 @@
 KexiDBTitlePage::KexiDBTitlePage( const QString& labelText, QWidget* parent )
  : QWidget( parent )
 {
-	setupUi(this);
-	if (!labelText.isEmpty())
-		label->setText(labelText);
+  setupUi(this);
+  if (!labelText.isEmpty())
+    label->setText(labelText);
 }
 
 KexiDBTitlePage::~KexiDBTitlePage()

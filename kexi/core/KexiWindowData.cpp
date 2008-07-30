@@ -23,7 +23,7 @@ KexiWindowData::KexiWindowData(QObject* parent)
 : QObject(parent)
 , proposeOpeningInTextViewModeBecauseOfProblems(false)
 {
-	setObjectName("KexiWindowData");
+  setObjectName("KexiWindowData");
 }
 
 KexiWindowData::~KexiWindowData()

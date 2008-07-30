@@ -28,15 +28,15 @@
 //! @short Internal Kexi Simple Printing Plugin.
 class KexiSimplePrintingPart : public KexiPart::StaticPart
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiSimplePrintingPart();
-		virtual ~KexiSimplePrintingPart();
+  public:
+    KexiSimplePrintingPart();
+    virtual ~KexiSimplePrintingPart();
 
-	protected:
-		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
-			KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>* staticObjectArgs);
+  protected:
+    virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
+      KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>* staticObjectArgs);
 };
 
 #endif

@@ -46,53 +46,53 @@ using namespace Kexi;
 //! @internal
 class KexiInternal
 {
-	public:
-		KexiInternal()
-		 : connset(0)
-		{
-		}
-		~KexiInternal()
-		{
-			delete connset;
-		}
-		KexiDBConnectionSet* connset;
-		KexiProjectSet recentProjects;
-		KexiDBConnectionSet recentConnections;
-		KexiDB::DriverManager driverManager;
-		KexiPart::Manager partManager;
+  public:
+    KexiInternal()
+     : connset(0)
+    {
+    }
+    ~KexiInternal()
+    {
+      delete connset;
+    }
+    KexiDBConnectionSet* connset;
+    KexiProjectSet recentProjects;
+    KexiDBConnectionSet recentConnections;
+    KexiDB::DriverManager driverManager;
+    KexiPart::Manager partManager;
 };
 
 K_GLOBAL_STATIC(KexiInternal, _int)
 
 KexiDBConnectionSet& Kexi::connset()
 {
-	//delayed
-	if (!_int->connset) {
-		//load stored set data, OK?
-		_int->connset = new KexiDBConnectionSet();
-		_int->connset->load();
-	}
-	return *_int->connset;
+  //delayed
+  if (!_int->connset) {
+    //load stored set data, OK?
+    _int->connset = new KexiDBConnectionSet();
+    _int->connset->load();
+  }
+  return *_int->connset;
 }
 
 KexiProjectSet& Kexi::recentProjects()
 {
-	return _int->recentProjects;
+  return _int->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()
 {
-	return _int->driverManager;
+  return _int->driverManager;
 }
 
 KexiPart::Manager& Kexi::partManager()
 {
-	return _int->partManager;
+  return _int->partManager;
 }
 
 void Kexi::deleteGlobalObjects()
 {
-	delete _int;
+  delete _int;
 }
 
 //temp
@@ -100,61 +100,61 @@ void Kexi::deleteGlobalObjects()
 bool _tempShowReports = true;
 bool& Kexi::tempShowReports() { 
 #ifndef KEXI_REPORTS_SUPPORT
-	_tempShowReports = false; 
+  _tempShowReports = false; 
 #endif
-	return _tempShowReports;
+  return _tempShowReports;
 }
 
 bool _tempShowMacros = true;
 bool& Kexi::tempShowMacros() {
 #ifndef KEXI_MACROS_SUPPORT
-	_tempShowMacros = false; 
+  _tempShowMacros = false; 
 #endif
-	return _tempShowMacros;
+  return _tempShowMacros;
 }
 
 bool _tempShowScripts = true;
 bool& Kexi::tempShowScripts() { 
 #ifndef KEXI_SCRIPTS_SUPPORT
-	_tempShowScripts = false; 
+  _tempShowScripts = false; 
 #endif
-	return _tempShowScripts;
+  return _tempShowScripts;
 }
 
 //--------------------------------------------------------------------------------
 QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 {
-	if (!withAmpersand)
-		return Kexi::nameForViewMode(mode, true).replace("&","");
+  if (!withAmpersand)
+    return Kexi::nameForViewMode(mode, true).replace("&","");
 
-	if (mode==NoViewMode)
-		return i18n("&No View");
-	else if (mode==DataViewMode)
-		return i18n("&Data View");
-	else if (mode==DesignViewMode)
-		return i18n("D&esign View");
-	else if (mode==TextViewMode)
-		return i18n("&Text View");
+  if (mode==NoViewMode)
+    return i18n("&No View");
+  else if (mode==DataViewMode)
+    return i18n("&Data View");
+  else if (mode==DesignViewMode)
+    return i18n("D&esign View");
+  else if (mode==TextViewMode)
+    return i18n("&Text View");
 
-	return i18n("&Unknown");
+  return i18n("&Unknown");
 }
 
 //--------------------------------------------------------------------------------
 QString Kexi::iconNameForViewMode(ViewMode mode)
 {
-	if (mode==DataViewMode)
-		return i18n("state_data");
-	else if (mode==DesignViewMode)
-		return i18n("state_edit");
-	else if (mode==TextViewMode)
-		return i18n("state_sql");
-	return QString();
+  if (mode==DataViewMode)
+    return i18n("state_data");
+  else if (mode==DesignViewMode)
+    return i18n("state_edit");
+  else if (mode==TextViewMode)
+    return i18n("state_sql");
+  return QString();
 }
 
 //--------------------------------------------------------------------------------
 
 QString Kexi::msgYouCanImproveData() {
-	return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
+  return i18n("You can correct data in this row or use \"Cancel row changes\" function.");
 }
 
 //--------------------------------------------------------------------------------
@@ -167,172 +167,172 @@ ObjectStatus::ObjectStatus()
 ObjectStatus::ObjectStatus(const QString& message, const QString& description)
 : msgHandler(0)
 {
-	setStatus(message, description);
+  setStatus(message, description);
 }
 
 ObjectStatus::ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
 : msgHandler(0)
 {
-	setStatus(dbObject, message, description);
+  setStatus(dbObject, message, description);
 }
 
 ObjectStatus::~ObjectStatus()
 {
-	delete msgHandler;
+  delete msgHandler;
 }
 
 const ObjectStatus& ObjectStatus::status() const
 {
-	return *this;
+  return *this;
 }
 
 bool ObjectStatus::error() const
 {
-	return !message.isEmpty() 
-		|| (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
+  return !message.isEmpty() 
+    || (dynamic_cast<KexiDB::Object*>((QObject*)dbObj) && dynamic_cast<KexiDB::Object*>((QObject*)dbObj)->error());
 }
 
 void ObjectStatus::setStatus(const QString& message, const QString& description)
 {
-	this->dbObj=0;
-	this->message=message;
-	this->description=description;
+  this->dbObj=0;
+  this->message=message;
+  this->description=description;
 }
 
 void ObjectStatus::setStatus(KexiDB::Object* dbObject, const QString& message, const QString& description)
 {
-	if (dynamic_cast<QObject*>(dbObject)) {
-		dbObj = dynamic_cast<QObject*>(dbObject);
-	}
-	this->message=message;
-	this->description=description;
+  if (dynamic_cast<QObject*>(dbObject)) {
+    dbObj = dynamic_cast<QObject*>(dbObject);
+  }
+  this->message=message;
+  this->description=description;
 }
 
 void ObjectStatus::setStatus(KexiDB::ResultInfo* result, const QString& message, const QString& description)
 {
-	if (result) {
-		if (message.isEmpty())
-			this->message = result->msg;
-		else
-			this->message = message + " " + result->msg;
+  if (result) {
+    if (message.isEmpty())
+      this->message = result->msg;
+    else
+      this->message = message + " " + result->msg;
 
-		if (description.isEmpty())
-			this->description = result->desc;
-		else
-			this->description = description + " " + result->desc;
-	}
-	else
-		clearStatus();
+    if (description.isEmpty())
+      this->description = result->desc;
+    else
+      this->description = description + " " + result->desc;
+  }
+  else
+    clearStatus();
 }
 
 void ObjectStatus::setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result, 
-	const QString& message, const QString& description)
+  const QString& message, const QString& description)
 {
-	if (!dbObject)
-		setStatus(result, message, description);
-	else if (!result)
-		setStatus(dbObject, message, description);
-	else {
-		setStatus(dbObject, message, description);
-		setStatus(result, this->message, this->description);
-	}
+  if (!dbObject)
+    setStatus(result, message, description);
+  else if (!result)
+    setStatus(dbObject, message, description);
+  else {
+    setStatus(dbObject, message, description);
+    setStatus(result, this->message, this->description);
+  }
 }
 
 void ObjectStatus::clearStatus()
 {
-	message.clear();
-	description.clear();
+  message.clear();
+  description.clear();
 }
 
 QString ObjectStatus::singleStatusString() const { 
-	if (message.isEmpty() || description.isEmpty())
-		return message;
-	return message + " " + description;
+  if (message.isEmpty() || description.isEmpty())
+    return message;
+  return message + " " + description;
 }
 
 void ObjectStatus::append( const ObjectStatus& otherStatus ) {
-	if (message.isEmpty()) {
-		message = otherStatus.message;
-		description = otherStatus.description;
-		return;
-	}
-	const QString s( otherStatus.singleStatusString() );
-	if (s.isEmpty())
-		return;
-	if (description.isEmpty()) {
-		description = s;
-		return;
-	}
-	description = description + " " + s;
+  if (message.isEmpty()) {
+    message = otherStatus.message;
+    description = otherStatus.description;
+    return;
+  }
+  const QString s( otherStatus.singleStatusString() );
+  if (s.isEmpty())
+    return;
+  if (description.isEmpty()) {
+    description = s;
+    return;
+  }
+  description = description + " " + s;
 }
 
 //! @internal
 class ObjectStatusMessageHandler : public KexiDB::MessageHandler
 {
-	public:
-		ObjectStatusMessageHandler(ObjectStatus *status) 
-			: KexiDB::MessageHandler()
-			, m_status(status)
-		{
-		}
-		virtual ~ObjectStatusMessageHandler()
-		{
-		}
+  public:
+    ObjectStatusMessageHandler(ObjectStatus *status) 
+      : KexiDB::MessageHandler()
+      , m_status(status)
+    {
+    }
+    virtual ~ObjectStatusMessageHandler()
+    {
+    }
 
-		virtual void showErrorMessage(const QString &title, 
-			const QString &details = QString())
-		{
-			m_status->setStatus(title, details);
-		}
-		
-		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString())
-		{
-			m_status->setStatus(obj, msg);
-		}
+    virtual void showErrorMessage(const QString &title, 
+      const QString &details = QString())
+    {
+      m_status->setStatus(title, details);
+    }
+    
+    virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString())
+    {
+      m_status->setStatus(obj, msg);
+    }
 
-		ObjectStatus *m_status;
+    ObjectStatus *m_status;
 };
 
 ObjectStatus::operator KexiDB::MessageHandler*()
 {
-	if (!msgHandler)
-		msgHandler = new ObjectStatusMessageHandler(this);
-	return msgHandler;
+  if (!msgHandler)
+    msgHandler = new ObjectStatusMessageHandler(this);
+  return msgHandler;
 }
 
 void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
 {
-	KAboutData *about = aboutData;
-	if (!about) {
+  KAboutData *about = aboutData;
+  if (!about) {
 #if 1 //sebsauer 20061123
-		about = Kexi::createAboutData();
+    about = Kexi::createAboutData();
 #else
-		about = 0;
+    about = 0;
 #endif
-	}
+  }
 #ifdef CUSTOM_VERSION
 # include "../custom_startup.h"
 #endif
-	KCmdLineArgs::init( argc, argv, about );
-	KCmdLineArgs::addCmdLineOptions( kexi_options() );
+  KCmdLineArgs::init( argc, argv, about );
+  KCmdLineArgs::addCmdLineOptions( kexi_options() );
 }
 
 void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text) 
 {
-	QString msg;
-	if (feature_name.isEmpty())
-		msg = i18n("This function is not available for version %1 of %2 application.",
-			QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME)); 
-	else {
-		QString feature_name_(feature_name);
-		msg = i18n(
-			"\"%1\" function is not available for version %2 of %3 application.",
-			feature_name_.replace("&",""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
-	}
+  QString msg;
+  if (feature_name.isEmpty())
+    msg = i18n("This function is not available for version %1 of %2 application.",
+      QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME)); 
+  else {
+    QString feature_name_(feature_name);
+    msg = i18n(
+      "\"%1\" function is not available for version %2 of %3 application.",
+      feature_name_.replace("&",""), QString(KEXI_VERSION_STRING), QString(KEXI_APP_NAME));
+  }
 
-	QString extra_text_(extra_text);
-	if (!extra_text_.isEmpty())
-		extra_text_.prepend("\n");
+  QString extra_text_(extra_text);
+  if (!extra_text_.isEmpty())
+    extra_text_.prepend("\n");
 
-	KMessageBox::sorry(0, msg + extra_text_);
+  KMessageBox::sorry(0, msg + extra_text_);
 }

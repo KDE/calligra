@@ -33,10 +33,10 @@
 class KexiProjectSetPrivate
 {
 public:
-	KexiProjectSetPrivate()
-	{
-	}
-	KexiProjectData::List list;
+  KexiProjectSetPrivate()
+  {
+  }
+  KexiProjectData::List list;
 //	KexiDB::MessageHandler* msgHandler;
 };
 
@@ -47,64 +47,64 @@ KexiProjectSet::KexiProjectSet(KexiDB::MessageHandler* handler)
 }
 
 KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata,
-	KexiDB::MessageHandler* handler)
+  KexiDB::MessageHandler* handler)
 : KexiDB::Object(handler) 
 , d(new KexiProjectSetPrivate())
 {
-	KexiDB::Driver *drv = Kexi::driverManager().driver(conndata.driverName);
-	if (!drv) {
-		setError(&Kexi::driverManager());
-		return;
-	}
-	KexiDB::Connection *conn = drv->createConnection(conndata);
-	if (!conn) {
-		setError(drv);
-		return;
-	}
-	if (!conn->connect()) {
-		setError(conn);
-		delete conn;
-		return;
-	}
-	QStringList dbnames = conn->databaseNames(false/*skip system*/);
+  KexiDB::Driver *drv = Kexi::driverManager().driver(conndata.driverName);
+  if (!drv) {
+    setError(&Kexi::driverManager());
+    return;
+  }
+  KexiDB::Connection *conn = drv->createConnection(conndata);
+  if (!conn) {
+    setError(drv);
+    return;
+  }
+  if (!conn->connect()) {
+    setError(conn);
+    delete conn;
+    return;
+  }
+  QStringList dbnames = conn->databaseNames(false/*skip system*/);
 //	kexidbg << dbnames.count() << endl;
-	if (conn->error()) {
-		setError(conn);
-		delete conn;
-		return;
-	}
-	delete conn;
-	conn = 0;
-	for (QStringList::ConstIterator it = dbnames.constBegin(); it!=dbnames.constEnd(); ++it) {
-		// project's caption is just the same as database name - nothing better is available
-		KexiProjectData *pdata = new KexiProjectData(conndata, *it, *it);
-		d->list.append( pdata );
-	}
-	clearError();
+  if (conn->error()) {
+    setError(conn);
+    delete conn;
+    return;
+  }
+  delete conn;
+  conn = 0;
+  for (QStringList::ConstIterator it = dbnames.constBegin(); it!=dbnames.constEnd(); ++it) {
+    // project's caption is just the same as database name - nothing better is available
+    KexiProjectData *pdata = new KexiProjectData(conndata, *it, *it);
+    d->list.append( pdata );
+  }
+  clearError();
 }
 
 
 KexiProjectSet::~KexiProjectSet()
 {
-	delete d;
+  delete d;
 }
 
 void KexiProjectSet::addProjectData(KexiProjectData *data)
 {
-	d->list.append(data);
+  d->list.append(data);
 }
 
 KexiProjectData::List KexiProjectSet::list() const
 {
-	return d->list;
+  return d->list;
 }
 
 KexiProjectData* KexiProjectSet::findProject(const QString &dbName) const
 {
-	const QString _dbName( dbName.toLower() );
-	foreach (KexiProjectData* data, d->list) {
-		if (data->databaseName().toLower() == _dbName)
-			return data;
-	}
-	return 0;
+  const QString _dbName( dbName.toLower() );
+  foreach (KexiProjectData* data, d->list) {
+    if (data->databaseName().toLower() == _dbName)
+      return data;
+  }
+  return 0;
 }

@@ -38,127 +38,127 @@ KexiGUIMessageHandler::~KexiGUIMessageHandler()
 /*virtual*/
 void
 KexiGUIMessageHandler::showErrorMessage(KexiDB::Object *obj, 
-	const QString& msg)
+  const QString& msg)
 {
-	QString _msg(msg);
-	if (!obj) {
-		showErrorMessage(_msg);
-		return;
-	}
-	QString details;
-	KexiDB::getHTMLErrorMesage(obj, _msg, details);
-	showErrorMessage(_msg, details);
+  QString _msg(msg);
+  if (!obj) {
+    showErrorMessage(_msg);
+    return;
+  }
+  QString details;
+  KexiDB::getHTMLErrorMesage(obj, _msg, details);
+  showErrorMessage(_msg, details);
 }
 
 /*virtual*/
 void
 KexiGUIMessageHandler::showErrorMessage(const QString &title, const QString &details)
 {
-	showMessage(Error, title, details);
+  showMessage(Error, title, details);
 }
 
 void
 KexiGUIMessageHandler::showSorryMessage(const QString &title, const QString &details)
 {
-	showMessage(Sorry, title, details);
+  showMessage(Sorry, title, details);
 }
 
 void KexiGUIMessageHandler::showErrorMessage(const QString &msg, const QString &details, 
-	KexiDB::Object *obj)
+  KexiDB::Object *obj)
 {
-	QString _msg(msg);
-	if (!obj) {
-		showErrorMessage(_msg, details);
-		return;
-	}
-	QString _details(details);
-	KexiDB::getHTMLErrorMesage(obj, _msg, _details);
-	showErrorMessage(_msg, _details);
+  QString _msg(msg);
+  if (!obj) {
+    showErrorMessage(_msg, details);
+    return;
+  }
+  QString _details(details);
+  KexiDB::getHTMLErrorMesage(obj, _msg, _details);
+  showErrorMessage(_msg, _details);
 }
 
 void
 KexiGUIMessageHandler::showErrorMessage(Kexi::ObjectStatus *status)
 {
-	showErrorMessage("", status);
+  showErrorMessage("", status);
 }
 
 void
 KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStatus *status)
 {
-	if (status && status->error()) {
-		QString msg(message);
-		if (msg.isEmpty() || msg==status->message) {
-			msg = status->message;
-			status->message = status->description;
-			status->description = "";
-		}
-		QString desc;
-		if (!status->message.isEmpty()) {
-			if (status->description.isEmpty()) {
-				desc = status->message;
-			} else {
-				msg += (QString("<br><br>") + status->message);
-				desc = status->description;
-			}
-		}
-		showErrorMessage(msg, desc, status->dbObject());
-	}
-	else {
-		showErrorMessage(message);
-	}
-	status->clearStatus();
+  if (status && status->error()) {
+    QString msg(message);
+    if (msg.isEmpty() || msg==status->message) {
+      msg = status->message;
+      status->message = status->description;
+      status->description = "";
+    }
+    QString desc;
+    if (!status->message.isEmpty()) {
+      if (status->description.isEmpty()) {
+        desc = status->message;
+      } else {
+        msg += (QString("<br><br>") + status->message);
+        desc = status->description;
+      }
+    }
+    showErrorMessage(msg, desc, status->dbObject());
+  }
+  else {
+    showErrorMessage(message);
+  }
+  status->clearStatus();
 }
 
 void
 KexiGUIMessageHandler::showMessage(MessageType type,
-	const QString &title, const QString &details, const QString& dontShowAgainName)
+  const QString &title, const QString &details, const QString& dontShowAgainName)
 {
-	if (!m_enableMessages)
-		return;
+  if (!m_enableMessages)
+    return;
 
-	//'wait' cursor is a nonsense now
-	KexiUtils::removeWaitCursor();
+  //'wait' cursor is a nonsense now
+  KexiUtils::removeWaitCursor();
 
-	QString msg(title);
-	if (title.isEmpty())
-		msg = i18n("Unknown error");
-	msg = "<qt><p>"+msg+"</p>";
-	if (!details.isEmpty()) {
-		switch (type) {
-		case Error:
-			KMessageBox::detailedError(m_messageHandlerParentWidget, msg, details);
-			break;
-		case Warning:
-			showWarningContinueMessage(title, details, dontShowAgainName);
-			break;
-		default: //Sorry
-			KMessageBox::detailedSorry(m_messageHandlerParentWidget, msg, details);
-		}
-	}
-	else {
-		KMessageBox::messageBox(m_messageHandlerParentWidget, 
-			type==Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
-	}
+  QString msg(title);
+  if (title.isEmpty())
+    msg = i18n("Unknown error");
+  msg = "<qt><p>"+msg+"</p>";
+  if (!details.isEmpty()) {
+    switch (type) {
+    case Error:
+      KMessageBox::detailedError(m_messageHandlerParentWidget, msg, details);
+      break;
+    case Warning:
+      showWarningContinueMessage(title, details, dontShowAgainName);
+      break;
+    default: //Sorry
+      KMessageBox::detailedSorry(m_messageHandlerParentWidget, msg, details);
+    }
+  }
+  else {
+    KMessageBox::messageBox(m_messageHandlerParentWidget, 
+      type==Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
+  }
 }
 
 void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, const QString &details,
-	const QString& dontShowAgainName)
+  const QString& dontShowAgainName)
 {
-	if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
-		return;
+  if (!KMessageBox::shouldBeShownContinue(dontShowAgainName))
+    return;
 #if 0 //sebsauer 20061123
-	KDialogBase *dialog = new KDialogBase(
-		i18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
-		m_messageHandlerParentWidget, "warningContinue", true, true, KStandardGuiItem::cont() );
-	bool checkboxResult = false;
-	KMessageBox::createKMessageBox(dialog, QMessageBox::Warning, 
-		title + (details.isEmpty() ? QString() : (QString("\n")+details)), QStringList(),
-		dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
-		&checkboxResult, 0);
-	if (checkboxResult)
-		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
+  KDialogBase *dialog = new KDialogBase(
+    i18n("Warning"), KDialogBase::Yes, KDialogBase::Yes, KDialogBase::No,
+    m_messageHandlerParentWidget, "warningContinue", true, true, KStandardGuiItem::cont() );
+  bool checkboxResult = false;
+  KMessageBox::createKMessageBox(dialog, QMessageBox::Warning, 
+    title + (details.isEmpty() ? QString() : (QString("\n")+details)), QStringList(),
+    dontShowAgainName.isEmpty() ? QString() : i18n("Do not show this message again"),
+    &checkboxResult, 0);
+  if (checkboxResult)
+    KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
 #else
-	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, 
+  KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, 
     title + (details.isEmpty() ? QString() : (QString("\n")+details)),
     QString(),
     KStandardGuiItem::cont(),
@@ -169,20 +169,20 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 }
 
 int KexiGUIMessageHandler::askQuestion( const QString& message, 
-	KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-	const KGuiItem &buttonYes, 
-	const KGuiItem &buttonNo,
-	const QString &dontShowAskAgainName,
-	KMessageBox::Options options )
+  KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+  const KGuiItem &buttonYes, 
+  const KGuiItem &buttonNo,
+  const QString &dontShowAskAgainName,
+  KMessageBox::Options options )
 {
-	Q_UNUSED(defaultResult);
-	if (KMessageBox::WarningContinueCancel == dlgType)
-		return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
-			message, QString(), buttonYes, KStandardGuiItem::cancel(),
-			dontShowAskAgainName, options);
-	else
-		return KMessageBox::messageBox(m_messageHandlerParentWidget,
-			dlgType, message, QString(), buttonYes, buttonNo, KStandardGuiItem::cancel(),
-			dontShowAskAgainName, options);
+  Q_UNUSED(defaultResult);
+  if (KMessageBox::WarningContinueCancel == dlgType)
+    return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
+      message, QString(), buttonYes, KStandardGuiItem::cancel(),
+      dontShowAskAgainName, options);
+  else
+    return KMessageBox::messageBox(m_messageHandlerParentWidget,
+      dlgType, message, QString(), buttonYes, buttonNo, KStandardGuiItem::cancel(),
+      dontShowAskAgainName, options);
 }
 

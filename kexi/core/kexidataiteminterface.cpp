@@ -46,40 +46,40 @@ KexiDataItemInterface::~KexiDataItemInterface()
 }
 
 void KexiDataItemInterface::setValue(const QVariant& value, const QVariant& add, 
-	bool removeOld, const QVariant* visibleValue)
+  bool removeOld, const QVariant* visibleValue)
 {
-	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
+  m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
 //needed?	clear();
-	if (dynamic_cast<QObject*>(this)) {
-		kDebug() << "KexiDataItemInterface::setValue(): " <<
-			dynamic_cast<QObject*>(this)->metaObject()->className() << " " 
-			<< dynamic_cast<QWidget*>(this)->objectName()
-			<< " value=" << value << " add=" << add << endl;
-	}
-	m_origValue = value;
-	setValueInternal(add, removeOld);
-	if (visibleValue)
-		setVisibleValueInternal(*visibleValue);
-	m_disable_signalValueChanged = false;
+  if (dynamic_cast<QObject*>(this)) {
+    kDebug() << "KexiDataItemInterface::setValue(): " <<
+      dynamic_cast<QObject*>(this)->metaObject()->className() << " " 
+      << dynamic_cast<QWidget*>(this)->objectName()
+      << " value=" << value << " add=" << add << endl;
+  }
+  m_origValue = value;
+  setValueInternal(add, removeOld);
+  if (visibleValue)
+    setVisibleValueInternal(*visibleValue);
+  m_disable_signalValueChanged = false;
 }
 
 void KexiDataItemInterface::setVisibleValueInternal(const QVariant& value)
 {
-	Q_UNUSED(value);
+  Q_UNUSED(value);
 }
 
 void KexiDataItemInterface::signalValueChanged()
 {
-	if (m_disable_signalValueChanged || isReadOnly())
-		return;
-	if (m_parentDataItemInterface) {
-		m_parentDataItemInterface->signalValueChanged();
-		return;
-	}
-	if (m_listener) {
-		beforeSignalValueChanged();
-		m_listener->valueChanged(this);
-	}
+  if (m_disable_signalValueChanged || isReadOnly())
+    return;
+  if (m_parentDataItemInterface) {
+    m_parentDataItemInterface->signalValueChanged();
+    return;
+  }
+  if (m_listener) {
+    beforeSignalValueChanged();
+    m_listener->valueChanged(this);
+  }
 }
 
 bool KexiDataItemInterface::valueChanged()
@@ -87,39 +87,39 @@ bool KexiDataItemInterface::valueChanged()
 //	bool ok;
 //	kDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
 //	return (m_origValue != value(ok)) && ok;
-	kDebug() << "KexiDataItemInterface::valueChanged(): " << m_origValue.toString() << " ? " << value().toString() << endl;
-	return m_origValue != value();
+  kDebug() << "KexiDataItemInterface::valueChanged(): " << m_origValue.toString() << " ? " << value().toString() << endl;
+  return m_origValue != value();
 }
 
 /*
 void KexiDataItemInterface::setValue(const QVariant& value)
 {
-	m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
-	setValueInternal( value );
-	m_disable_signalValueChanged = false;
+  m_disable_signalValueChanged = true; //to prevent emmiting valueChanged()
+  setValueInternal( value );
+  m_disable_signalValueChanged = false;
 }*/
 
 KexiDataItemChangesListener* KexiDataItemInterface::listener()
 {
-	if (!m_listener || !m_listenerIsQObject)
-		return m_listener;
-	if (!m_listenerObject)
-		m_listener = 0; //destroyed, update pointer
-	return m_listener;
+  if (!m_listener || !m_listenerIsQObject)
+    return m_listener;
+  if (!m_listenerObject)
+    m_listener = 0; //destroyed, update pointer
+  return m_listener;
 }
 
 void KexiDataItemInterface::installListener(KexiDataItemChangesListener* listener)
 {
-	m_listener = listener;
-	m_listenerIsQObject = dynamic_cast<QObject*>(listener);
-	if (m_listenerIsQObject)
-		m_listenerObject = dynamic_cast<QObject*>(listener);
+  m_listener = listener;
+  m_listenerIsQObject = dynamic_cast<QObject*>(listener);
+  if (m_listenerIsQObject)
+    m_listenerObject = dynamic_cast<QObject*>(listener);
 }
 
 void KexiDataItemInterface::showFocus( const QRect& r, bool readOnly )
 {
-	Q_UNUSED(r);
-	Q_UNUSED(readOnly);
+  Q_UNUSED(r);
+  Q_UNUSED(readOnly);
 }
 
 void KexiDataItemInterface::hideFocus()
@@ -132,15 +132,15 @@ void KexiDataItemInterface::clickedOnContents()
 
 bool KexiDataItemInterface::valueIsValid()
 {
-	return true;
+  return true;
 }
 
 void KexiDataItemInterface::setParentDataItemInterface(KexiDataItemInterface* parentDataItemInterface)
 {
-	m_parentDataItemInterface = parentDataItemInterface;
+  m_parentDataItemInterface = parentDataItemInterface;
 }
 
 bool KexiDataItemInterface::cursorAtNewRow()
 {
-	return listener() ? listener()->cursorAtNewRow() : false;
+  return listener() ? listener()->cursorAtNewRow() : false;
 }

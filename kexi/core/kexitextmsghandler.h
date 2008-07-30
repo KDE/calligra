@@ -26,12 +26,12 @@
 //! See KexiTextMessageHandler constructor for details.
 class KEXICORE_EXPORT KexiTextMessageHandler : public KexiGUIMessageHandler
 {
-	public:
-		KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget);
-		virtual ~KexiTextMessageHandler();
-		virtual void showMessage(MessageType type, const QString &title, const QString &details);
+  public:
+    KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget);
+    virtual ~KexiTextMessageHandler();
+    virtual void showMessage(MessageType type, const QString &title, const QString &details);
 
-		QString *m_messageTarget, *m_detailsTarget;
+    QString *m_messageTarget, *m_detailsTarget;
 };
 
 #endif

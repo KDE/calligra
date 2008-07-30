@@ -42,106 +42,106 @@ KexiProjectConnectionData::KexiProjectConnectionData(): KexiDB::ConnectionData()
 }
 
 KexiProjectConnectionData::KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &host, 
-		unsigned short int rport, const QString& user, const QString &pass, const QString& file):KexiDB::ConnectionData()
+    unsigned short int rport, const QString& user, const QString &pass, const QString& file):KexiDB::ConnectionData()
 {
-	m_driverName=driverName;
-	m_databaseName=databaseName;
-	hostName=host;
-	port=rport;
-	userName=user;
-	password=pass;
-	setFileName(file);
+  m_driverName=driverName;
+  m_databaseName=databaseName;
+  hostName=host;
+  port=rport;
+  userName=user;
+  password=pass;
+  setFileName(file);
 }
 
 KexiProjectConnectionData::KexiProjectConnectionData(const QString &driverName, const QString &fileName)
  : KexiDB::ConnectionData()
 {
-	m_driverName=driverName;
-	setFileName(fileName);
+  m_driverName=driverName;
+  setFileName(fileName);
 }
 
 const QString &
 KexiProjectConnectionData::generateTmpName()
 {
-	return QString();
+  return QString();
 }
 
 KexiProjectConnectionData*
 KexiProjectConnectionData::loadInfo(QDomElement &rootElement)
 {
-	QDomElement engineElement = rootElement.namedItem("engine").toElement();
-	QDomElement hostElement = rootElement.namedItem("host").toElement();
-	QDomElement portElement = rootElement.namedItem("port").toElement();
-	QDomElement nameElement = rootElement.namedItem("name").toElement();
-	QDomElement userElement = rootElement.namedItem("user").toElement();
-	QDomElement passElement = rootElement.namedItem("password").toElement();
-	QDomElement persElement = rootElement.namedItem("persistant").toElement();
-	QDomElement encodingElement = rootElement.namedItem("encoding").toElement();
+  QDomElement engineElement = rootElement.namedItem("engine").toElement();
+  QDomElement hostElement = rootElement.namedItem("host").toElement();
+  QDomElement portElement = rootElement.namedItem("port").toElement();
+  QDomElement nameElement = rootElement.namedItem("name").toElement();
+  QDomElement userElement = rootElement.namedItem("user").toElement();
+  QDomElement passElement = rootElement.namedItem("password").toElement();
+  QDomElement persElement = rootElement.namedItem("persistant").toElement();
+  QDomElement encodingElement = rootElement.namedItem("encoding").toElement();
 
-	KexiProjectConnectionData *tmp=new KexiProjectConnectionData(
-		engineElement.text(), nameElement.text(),hostElement.text(),portElement.text().toInt(),
-		userElement.text(),passElement.text(),"");	
+  KexiProjectConnectionData *tmp=new KexiProjectConnectionData(
+    engineElement.text(), nameElement.text(),hostElement.text(),portElement.text().toInt(),
+    userElement.text(),passElement.text(),"");	
 
-	return tmp;
+  return tmp;
 }
 
 void    KexiProjectConnectionData::setDriverName(const QString &driverName) {
-	m_driverName=driverName;
+  m_driverName=driverName;
 }
 
 void KexiProjectConnectionData::setDatabaseName(const QString &databaseName) {
-	m_databaseName=databaseName;
+  m_databaseName=databaseName;
 }
 
 QString KexiProjectConnectionData::driverName() const {
-	return m_driverName;
+  return m_driverName;
 }
 
 QString KexiProjectConnectionData::databaseName() const {
-	return m_databaseName;
+  return m_databaseName;
 }
 
 
 void
 KexiProjectConnectionData::writeInfo(QDomDocument &domDoc)
 {
-	QDomElement connectionElement = domDoc.createElement("KexiDBConnection");
-	domDoc.documentElement().appendChild(connectionElement);
+  QDomElement connectionElement = domDoc.createElement("KexiDBConnection");
+  domDoc.documentElement().appendChild(connectionElement);
 
 //DB ENGINE
-	QDomElement engineElement = domDoc.createElement("engine");
-	connectionElement.appendChild(engineElement);
+  QDomElement engineElement = domDoc.createElement("engine");
+  connectionElement.appendChild(engineElement);
 
-	QDomText tEngine = domDoc.createTextNode(m_driverName);
-	engineElement.appendChild(tEngine);
+  QDomText tEngine = domDoc.createTextNode(m_driverName);
+  engineElement.appendChild(tEngine);
 
 //HOST
-	QDomElement hostElement = domDoc.createElement("host");
-	connectionElement.appendChild(hostElement);
+  QDomElement hostElement = domDoc.createElement("host");
+  connectionElement.appendChild(hostElement);
 
-	QDomText tHost = domDoc.createTextNode(hostName);
-	hostElement.appendChild(tHost);
+  QDomText tHost = domDoc.createTextNode(hostName);
+  hostElement.appendChild(tHost);
 
 //DATABASE NAME
-	QDomElement nameElement = domDoc.createElement("name");
-	connectionElement.appendChild(nameElement);
+  QDomElement nameElement = domDoc.createElement("name");
+  connectionElement.appendChild(nameElement);
 
-	QDomText tName = domDoc.createTextNode(m_databaseName);
-	nameElement.appendChild(tName);
+  QDomText tName = domDoc.createTextNode(m_databaseName);
+  nameElement.appendChild(tName);
 
 //USER
-	QDomElement userElement = domDoc.createElement("user");
-	connectionElement.appendChild(userElement);
+  QDomElement userElement = domDoc.createElement("user");
+  connectionElement.appendChild(userElement);
 
-	QDomText tUser = domDoc.createTextNode(userName);
-	userElement.appendChild(tUser);
+  QDomText tUser = domDoc.createTextNode(userName);
+  userElement.appendChild(tUser);
 
 //PASSWORD STUFF
-	QDomElement passElement = domDoc.createElement("password");
-	connectionElement.appendChild(passElement);
+  QDomElement passElement = domDoc.createElement("password");
+  connectionElement.appendChild(passElement);
 
-	QDomText tPass=domDoc.createTextNode(password);
-	passElement.appendChild(tPass);
+  QDomText tPass=domDoc.createTextNode(password);
+  passElement.appendChild(tPass);
 
 }
 

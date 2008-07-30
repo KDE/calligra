@@ -34,35 +34,35 @@ class QDomDocument;
 
 class KEXICORE_EXPORT KexiProjectConnectionData:public KexiDB::ConnectionData
 {
-	public:
-		
-		KexiProjectConnectionData();
+  public:
+    
+    KexiProjectConnectionData();
 
-		KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
-			 const QString& userName, const QString &password, const QString& fileName);
+    KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
+       const QString& userName, const QString &password, const QString& fileName);
 
-		/**
-		 * connect to a embedded database
-		 */
-		KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString());
+    /**
+     * connect to a embedded database
+     */
+    KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString());
 
-		~KexiProjectConnectionData();
+    ~KexiProjectConnectionData();
 
-		static const QString &generateTmpName();
+    static const QString &generateTmpName();
 
-		static KexiProjectConnectionData* loadInfo(QDomElement &e);
-		void	writeInfo(QDomDocument &doc);
+    static KexiProjectConnectionData* loadInfo(QDomElement &e);
+    void	writeInfo(QDomDocument &doc);
 
-		void    setDriverName(const QString &driverName);
+    void    setDriverName(const QString &driverName);
  		void    setDatabaseName(const QString &databaseName);
 
-		QString driverName() const;
-		QString databaseName() const;
+    QString driverName() const;
+    QString databaseName() const;
 
-	private:
-		QString  m_driverName;
-		QString  m_databaseName;
-		
+  private:
+    QString  m_driverName;
+    QString  m_databaseName;
+    
 };
 
 #endif

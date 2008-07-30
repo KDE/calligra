@@ -35,28 +35,28 @@
 
 namespace KexiDB
 {
-	class Connection;
+  class Connection;
 }
 
 namespace KexiPart
 {
-	class Info;
-	class Part;
-	class StaticPart;
+  class Info;
+  class Part;
+  class StaticPart;
 
-	struct Missing
-	{
-		QString name;
-		QString mime;
-		QString url;
-	};
+  struct Missing
+  {
+    QString name;
+    QString mime;
+    QString url;
+  };
 
-	typedef QHash<QString, Info*> PartInfoDict;
-	typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
-	typedef QList<Missing> MissingList;
-	typedef QList<Info*> PartInfoList;
-	typedef QList<Info*>::iterator PartInfoListIterator;
-	typedef QHash<int, Part*> PartDict;
+  typedef QHash<QString, Info*> PartInfoDict;
+  typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
+  typedef QList<Missing> MissingList;
+  typedef QList<Info*> PartInfoList;
+  typedef QList<Info*>::iterator PartInfoListIterator;
+  typedef QHash<int, Part*> PartDict;
 
 /**
  * @short KexiPart's manager: looks up and instantiates them
@@ -65,74 +65,74 @@ namespace KexiPart
  */
 class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		/**
-		 * creates an empty instance
-		 */
-		Manager(QObject *parent = 0);
-		~Manager();
+  public:
+    /**
+     * creates an empty instance
+     */
+    Manager(QObject *parent = 0);
+    ~Manager();
 
-		/**
-		 * Queries ktrader and creates a list of available parts.
-		 * \return false is required servicetype was not found (what means the installation is broken).
-		 */
-		bool lookup();
+    /**
+     * Queries ktrader and creates a list of available parts.
+     * \return false is required servicetype was not found (what means the installation is broken).
+     */
+    bool lookup();
 
-		/**
-		 * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
-		 * if needed. Return 0 if loading failed.
-		 */
-		Part *partForMimeType(const QString& mimeTypt);
+    /**
+     * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
+     * if needed. Return 0 if loading failed.
+     */
+    Part *partForMimeType(const QString& mimeTypt);
 
-		/**
-		 * \return a part object for specified info. Dlopens a part using KexiPart::Info
-		 * if needed. Return 0 if loading failed.
-		 */
-		Part *part(Info *);
+    /**
+     * \return a part object for specified info. Dlopens a part using KexiPart::Info
+     * if needed. Return 0 if loading failed.
+     */
+    Part *part(Info *);
 
-		/**
-		 * \return the info for a corresponding internal mime
-		 */
-		Info *infoForMimeType(const QString& mimeType);
+    /**
+     * \return the info for a corresponding internal mime
+     */
+    Info *infoForMimeType(const QString& mimeType);
 
-		/**
-		 * checks project's kexi__part table
-		 * and checks if all parts used in a project are available locally
-		 *
-		 * use @ref missingParts() to get a list of missing parts
-		 */
-		bool checkProject(KexiDB::Connection *conn);
+    /**
+     * checks project's kexi__part table
+     * and checks if all parts used in a project are available locally
+     *
+     * use @ref missingParts() to get a list of missing parts
+     */
+    bool checkProject(KexiDB::Connection *conn);
 
-		/**
-		 * @returns parts metioned in the project meta tables but not available locally
-		 */
-		MissingList missingParts() const { return m_missing; }
+    /**
+     * @returns parts metioned in the project meta tables but not available locally
+     */
+    MissingList missingParts() const { return m_missing; }
 
 
-		/**
-		 * @returns a list of the available KexiParts in well-defined order
-		 */
-		PartInfoList *partInfoList() { return &m_partlist; }
+    /**
+     * @returns a list of the available KexiParts in well-defined order
+     */
+    PartInfoList *partInfoList() { return &m_partlist; }
 
-	signals:
-		void partLoaded(KexiPart::Part*);
+  signals:
+    void partLoaded(KexiPart::Part*);
 
-	protected:
-		//! Used by StaticPart
-		void insertStaticPart(KexiPart::StaticPart* part);
+  protected:
+    //! Used by StaticPart
+    void insertStaticPart(KexiPart::StaticPart* part);
 
-	private:
-		PartDict m_parts;
-		PartInfoList m_partlist;
-		PartInfoDict m_partsByMime;
-		MissingList m_missing;
-		int m_nextTempProjectPartID;
-		bool m_lookupDone : 1;
-		bool m_lookupResult : 1;
+  private:
+    PartDict m_parts;
+    PartInfoList m_partlist;
+    PartInfoDict m_partsByMime;
+    MissingList m_missing;
+    int m_nextTempProjectPartID;
+    bool m_lookupDone : 1;
+    bool m_lookupResult : 1;
 
-		friend class StaticPart;
+    friend class StaticPart;
 };
 
 }

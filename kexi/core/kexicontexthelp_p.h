@@ -22,14 +22,14 @@
 
 class KexiContextHelpInfo {
 public:
-	KexiContextHelpInfo() {
-		caption=""; 
-		text="";
-		iconName="";
-	}
-	QString caption;
-	QString text;
-	QString iconName;
-	
+  KexiContextHelpInfo() {
+    caption=""; 
+    text="";
+    iconName="";
+  }
+  QString caption;
+  QString text;
+  QString iconName;
+  
 };
 #endif

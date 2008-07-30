@@ -29,63 +29,63 @@ class KexiProjectData;
 //! @see KexiStartupHandler
 class KEXICORE_EXPORT KexiStartupData
 {
-	public:
-		typedef enum Action {
-			DoNothing,
-			CreateBlankProject,
-			CreateFromTemplate,
-			OpenProject,
-			ImportProject,
-			Exit
-		};
+  public:
+    typedef enum Action {
+      DoNothing,
+      CreateBlankProject,
+      CreateFromTemplate,
+      OpenProject,
+      ImportProject,
+      Exit
+    };
 
-		/*! Data required to perform import action. 
-		 It is set by KexiStartupHandler::detectActionForFile() 
-		 if a need for project/data importing has been detected. */
-		class KEXICORE_EXPORT Import
-		{
-			public:
-				Import();
-				operator bool() const;
-				QString fileName;
-				QString mimeType;
-		};
+    /*! Data required to perform import action. 
+     It is set by KexiStartupHandler::detectActionForFile() 
+     if a need for project/data importing has been detected. */
+    class KEXICORE_EXPORT Import
+    {
+      public:
+        Import();
+        operator bool() const;
+        QString fileName;
+        QString mimeType;
+    };
 
-		KexiStartupData();
-		virtual ~KexiStartupData();
-		
-		virtual bool init() { return true; }
+    KexiStartupData();
+    virtual ~KexiStartupData();
+    
+    virtual bool init() { return true; }
 
-		Action action() const;
+    Action action() const;
 
-		//! \return project data of a project that should be opened (for action()==OpenProject)
-		KexiProjectData *projectData() const;
+    //! \return project data of a project that should be opened (for action()==OpenProject)
+    KexiProjectData *projectData() const;
 
-		//! \return import action's data needed to perform import (for action()==ImportProject)
-		KexiStartupData::Import importActionData() const;
+    //! \return import action's data needed to perform import (for action()==ImportProject)
+    KexiStartupData::Import importActionData() const;
 
-		/*! \return true is the Design Mode is forced for this project. 
-			Used on startup (by --design-mode comman line switch). */
-		bool forcedDesignMode() const;
-	
-		/*! \return true is the User Mode is forced for this project. 
-			Used on startup (by --user-mode comman line switch). 
-			By default this is false. */
-		bool forcedUserMode() const;
+    /*! \return true is the Design Mode is forced for this project. 
+      Used on startup (by --design-mode comman line switch). */
+    bool forcedDesignMode() const;
+  
+    /*! \return true is the User Mode is forced for this project. 
+      Used on startup (by --user-mode comman line switch). 
+      By default this is false. */
+    bool forcedUserMode() const;
 
-		/*! \return true if the Project Navigator should be visible even if User Mode is on. */
-		bool isProjectNavigatorVisible() const;
-		
-	protected:
-		KexiProjectData *m_projectData;
-		Action m_action;
-		KexiStartupData::Import m_importActionData;
-		bool m_forcedUserMode : 1;
-		bool m_forcedDesignMode : 1;
-		bool m_isProjectNavigatorVisible : 1;
-		bool m_createDB : 1;
-		bool m_dropDB : 1;
-		bool m_alsoOpenDB : 1;
+    /*! \return true if the Project Navigator should be visible even if User Mode is on. */
+    bool isProjectNavigatorVisible() const;
+    
+  protected:
+    KexiProjectData *m_projectData;
+    Action m_action;
+    KexiStartupData::Import m_importActionData;
+    bool m_forcedUserMode : 1;
+    bool m_forcedDesignMode : 1;
+    bool m_isProjectNavigatorVisible : 1;
+    bool m_createDB : 1;
+    bool m_dropDB : 1;
+    bool m_alsoOpenDB : 1;
 };
 
 #endif

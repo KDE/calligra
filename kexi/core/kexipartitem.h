@@ -33,65 +33,65 @@ class Info;
  @short Information about a single object that can be instantiated using Kexi Part
 
  KexiPart::Item stores:
-	- identifier ident (low-level name, for example: table name)
-	- mime type name, eg. "kexi/table"
-	- caption (visible, i18n'd hight level name, eg. table or query title)
+  - identifier ident (low-level name, for example: table name)
+  - mime type name, eg. "kexi/table"
+  - caption (visible, i18n'd hight level name, eg. table or query title)
 */
 class KEXICORE_EXPORT Item
 {
-	public:
-		Item();
-		~Item();
+  public:
+    Item();
+    ~Item();
 
-		int identifier() const { return m_id; }
-		void setIdentifier(int id) { m_id = id; }
+    int identifier() const { return m_id; }
+    void setIdentifier(int id) { m_id = id; }
 
-		QString mimeType() const { return m_mime; }
-		void setMimeType(const QString &mime) { m_mime = mime; }
+    QString mimeType() const { return m_mime; }
+    void setMimeType(const QString &mime) { m_mime = mime; }
 
-		QString name() const { return m_name; }
-		void setName(const QString &name) { m_name = name; }
+    QString name() const { return m_name; }
+    void setName(const QString &name) { m_name = name; }
 
-		QString caption() const { return m_caption; }
-		void setCaption(const QString &c) { m_caption = c; }
+    QString caption() const { return m_caption; }
+    void setCaption(const QString &c) { m_caption = c; }
 
-		QString description() const { return m_desc; }
-		void setDescription(const QString &d) { m_desc = d; }
+    QString description() const { return m_desc; }
+    void setDescription(const QString &d) { m_desc = d; }
 
-		/*! \return "neverSaved" flag for this item what mean 
-		 that is used when new item is created in-memory-only,
-		 so we need to indicate for KexiProject about that state. 
-		 By default this flag is false. 
-		 Used by KexiMainWindow::newObject(). */
-		bool neverSaved() const { return m_neverSaved; }
+    /*! \return "neverSaved" flag for this item what mean 
+     that is used when new item is created in-memory-only,
+     so we need to indicate for KexiProject about that state. 
+     By default this flag is false. 
+     Used by KexiMainWindow::newObject(). */
+    bool neverSaved() const { return m_neverSaved; }
 
-		/*! \sa neverSaved().
-		 Used by KexiMainWindow::newObject(). */
-		void setNeverSaved(bool set) { m_neverSaved = set; }
+    /*! \sa neverSaved().
+     Used by KexiMainWindow::newObject(). */
+    void setNeverSaved(bool set) { m_neverSaved = set; }
 
-		bool isNull() const { return m_id==0; }
+    bool isNull() const { return m_id==0; }
 
-		//! \return caption if not empty, else returns name.
-		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
+    //! \return caption if not empty, else returns name.
+    inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
 
-	private:
-		QString m_mime;
-		QString m_name;
-		QString m_caption;
-		QString m_desc;
-		int m_id;
-		bool m_neverSaved : 1;
+  private:
+    QString m_mime;
+    QString m_name;
+    QString m_caption;
+    QString m_desc;
+    int m_id;
+    bool m_neverSaved : 1;
 
-		class Private;
-		Private * const d;
+    class Private;
+    Private * const d;
 };
 
 //! Item dict which destroys KexiPart::Item items on destruction.
 class KEXICORE_EXPORT ItemDict : public QHash<int, KexiPart::Item*>
 {
-	public:
-		ItemDict();
-		~ItemDict();
+  public:
+    ItemDict();
+    ~ItemDict();
 };
 
 //typedef QHash<int, KexiPart::Item*>::iterator ItemDictIterator;
@@ -105,11 +105,11 @@ typedef QList<KexiPart::Item*>::iterator ItemListIterator;
 */
 class KEXICORE_EXPORT ItemList : public QList<KexiPart::Item*>
 {
-	public:
-		ItemList();
-		
-		//! Sorts the list by item names.
-		void sort();
+  public:
+    ItemList();
+    
+    //! Sorts the list by item names.
+    void sort();
 };
 
 }

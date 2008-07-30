@@ -24,24 +24,24 @@
 #include <QLabel>
 
 KexiNameDialog::KexiNameDialog(
-	const QString& message, QWidget * parent)
+  const QString& message, QWidget * parent)
  : KDialog(parent)
 {
-	setMainWidget(new QWidget(this));
-	m_widget = new KexiNameWidget(message, mainWidget());
-	init();
+  setMainWidget(new QWidget(this));
+  m_widget = new KexiNameWidget(message, mainWidget());
+  init();
 }
 
 KexiNameDialog::KexiNameDialog(const QString& message, 
-	const QString& nameLabel, const QString& nameText, 
-	const QString& captionLabel, const QString& captionText, 
-	QWidget * parent)
+  const QString& nameLabel, const QString& nameText, 
+  const QString& captionLabel, const QString& captionText, 
+  QWidget * parent)
  : KDialog(parent)
 {
-	setMainWidget(new QWidget(this));
-	m_widget = new KexiNameWidget(message, nameLabel, nameText,
-		captionLabel, captionText, mainWidget());
-	init();
+  setMainWidget(new QWidget(this));
+  m_widget = new KexiNameWidget(message, nameLabel, nameText,
+    captionLabel, captionText, mainWidget());
+  init();
 }
 
 KexiNameDialog::~KexiNameDialog()
@@ -50,65 +50,65 @@ KexiNameDialog::~KexiNameDialog()
 
 void KexiNameDialog::init()
 {
-	setButtons(Ok|Cancel|Help);
-	Q3GridLayout *lyr = new Q3GridLayout(mainWidget(), 2, 3);
-	m_icon = new QLabel( mainWidget() );
-	m_icon->setAlignment( Qt::AlignTop | Qt::AlignLeft );
-	QSizePolicy sp(QSizePolicy::Fixed, QSizePolicy::Preferred);
-	sp.setHorizontalStretch(1);
-	m_icon->setSizePolicy(sp);
-	m_icon->setFixedWidth(50);
-	lyr->addWidget(m_icon,0,0);
+  setButtons(Ok|Cancel|Help);
+  Q3GridLayout *lyr = new Q3GridLayout(mainWidget(), 2, 3);
+  m_icon = new QLabel( mainWidget() );
+  m_icon->setAlignment( Qt::AlignTop | Qt::AlignLeft );
+  QSizePolicy sp(QSizePolicy::Fixed, QSizePolicy::Preferred);
+  sp.setHorizontalStretch(1);
+  m_icon->setSizePolicy(sp);
+  m_icon->setFixedWidth(50);
+  lyr->addWidget(m_icon,0,0);
 
-	sp = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-	sp.setHorizontalStretch(1);
-	m_widget->setSizePolicy(sp);
-	lyr->addWidget(m_widget,0,1);
-	lyr->addItem(new QSpacerItem( 25, 10, QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2);
-	lyr->addItem(new QSpacerItem( 5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ), 1, 1);
+  sp = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+  sp.setHorizontalStretch(1);
+  m_widget->setSizePolicy(sp);
+  lyr->addWidget(m_widget,0,1);
+  lyr->addItem(new QSpacerItem( 25, 10, QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2);
+  lyr->addItem(new QSpacerItem( 5, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ), 1, 1);
 //	m_widget->captionLineEdit()->selectAll();
 //	m_widget->captionLineEdit()->setFocus();
-	connect(m_widget,SIGNAL(messageChanged()),this, SLOT(updateSize()));
-	updateSize();
-	enableButtonOk( true );
-	slotTextChanged();
-	connect(m_widget, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+  connect(m_widget,SIGNAL(messageChanged()),this, SLOT(updateSize()));
+  updateSize();
+  enableButtonOk( true );
+  slotTextChanged();
+  connect(m_widget, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
 
 void KexiNameDialog::updateSize()
 {
 //	resize( QSize(400, 140 + (m_widget->lbl_message->isVisible()?m_widget->lbl_message->height():0) )
-	resize( QSize(400, 140 + (!m_widget->lbl_message->text().isEmpty()?m_widget->lbl_message->height():0) )
-		.expandedTo(minimumSizeHint()) );
+  resize( QSize(400, 140 + (!m_widget->lbl_message->text().isEmpty()?m_widget->lbl_message->height():0) )
+    .expandedTo(minimumSizeHint()) );
 //	updateGeometry();
 }
 
 void KexiNameDialog::slotTextChanged()
 {
-	bool enable = true;
-	if (m_widget->isNameRequired() && m_widget->nameText().isEmpty()
-		|| m_widget->isCaptionRequired() && m_widget->captionText().isEmpty())
-		enable = false;
-	enableButtonOk( enable );
+  bool enable = true;
+  if (m_widget->isNameRequired() && m_widget->nameText().isEmpty()
+    || m_widget->isCaptionRequired() && m_widget->captionText().isEmpty())
+    enable = false;
+  enableButtonOk( enable );
 }
 
 void KexiNameDialog::accept()
 {
-	if (!m_widget->checkValidity())
-		return;
-	KDialog::accept();
+  if (!m_widget->checkValidity())
+    return;
+  KDialog::accept();
 }
 
 void KexiNameDialog::setDialogIcon(const QPixmap& icon)
 {
-	m_icon->setPixmap(icon);
+  m_icon->setPixmap(icon);
 }
 
 void KexiNameDialog::showEvent( QShowEvent * event )
 {
-	m_widget->captionLineEdit()->selectAll();
-	m_widget->captionLineEdit()->setFocus();
-	KDialog::showEvent(event);
+  m_widget->captionLineEdit()->selectAll();
+  m_widget->captionLineEdit()->setFocus();
+  KDialog::showEvent(event);
 }
 
 #include "kexinamedialog.moc"

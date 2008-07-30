@@ -26,16 +26,16 @@
 
 class KEXICORE_EXPORT KexiContextHelp : public KoContextHelpWidget
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiContextHelp(KexiMainWindow *view, QWidget *parent=0);
-		~KexiContextHelp();
-	private slots:
-		void linkClickedInternal(const QString &link);
+  public:
+    KexiContextHelp(KexiMainWindow *view, QWidget *parent=0);
+    ~KexiContextHelp();
+  private slots:
+    void linkClickedInternal(const QString &link);
 
-	signals:
-		void unhandledLink( const QString& link );
+  signals:
+    void unhandledLink( const QString& link );
 };
 
 #endif

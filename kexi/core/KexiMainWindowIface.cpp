@@ -33,7 +33,7 @@ KexiMainWindowIface* kexiMainWindow = 0;
 KexiMainWindowIface::KexiMainWindowIface()
  : KexiSharedActionHost(this)
 {
-	kexiMainWindow = this; //for singleton
+  kexiMainWindow = this; //for singleton
 }
 
 KexiMainWindowIface::~KexiMainWindowIface()
@@ -42,5 +42,5 @@ KexiMainWindowIface::~KexiMainWindowIface()
 
 KexiMainWindowIface* KexiMainWindowIface::global()
 {
-	return kexiMainWindow;
+  return kexiMainWindow;
 }

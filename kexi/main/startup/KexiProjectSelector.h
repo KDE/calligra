@@ -31,101 +31,101 @@
 */
 class KEXIMAIN_EXPORT KexiProjectSelectorWidget : public QWidget, private Ui_KexiProjectSelector
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
+  public:
 //	enum ConnType { FileBased=1, ServerBased=2 };
 
-		/*! Constructs a project selector widget.  
-		If \a showProjectNameColumn is true (the default)
-		project names' column is visible. If \a showConnectionColumns is true (the default)
-		information about database driver and connection columns are added.
-		\a prj_set may be NULL - you can assign a set later with setProjectSet().
-		*/
-		KexiProjectSelectorWidget( QWidget* parent = 0, 
-			KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
-			bool showConnectionColumns = true );
-		
-		virtual ~KexiProjectSelectorWidget();
-		
-		/*! \return data of selected project. Returns NULL if no selection has been made.
-		*/
-		KexiProjectData* selectedProjectData() const;
-	
-		/*! Assigns a new project set \a prj_set. Old project set is not destoyed 
-		- it is just left unassigned. 
-		If new project set is in error state (Object::error() == true), nothing is displayed. */
-		void setProjectSet( KexiProjectSet* prj_set );
-		
-		/*! \return currently assigned project set or NULL if no project set is assigned. */
-		inline KexiProjectSet *projectSet() { return m_prj_set; }
-	
-		/*! Sets selectable state on or off. In this state one project item can be selected
-		and executed by mouse double clicking or return key pressing. 
-		The property is true by default. */
-		void setSelectable(bool set);
-		
-		/*! \return  if a witget has selectable state set. */
-		bool isSelectable() const;
-	
-		QLabel *label() const;
-		
-	signals:
-		void projectExecuted(KexiProjectData*);
-		void selectionChanged(KexiProjectData*);
-	
-	protected slots:
-		void slotItemExecuted(Q3ListViewItem*);
-		void slotItemSelected();
-	
-	protected:
-		KexiProjectSet *m_prj_set;
-		
-		class Private;
-		Private * const d;
-		
-		friend class ProjectDataLVItem;
+    /*! Constructs a project selector widget.  
+    If \a showProjectNameColumn is true (the default)
+    project names' column is visible. If \a showConnectionColumns is true (the default)
+    information about database driver and connection columns are added.
+    \a prj_set may be NULL - you can assign a set later with setProjectSet().
+    */
+    KexiProjectSelectorWidget( QWidget* parent = 0, 
+      KexiProjectSet* prj_set = 0, bool showProjectNameColumn = true,
+      bool showConnectionColumns = true );
+    
+    virtual ~KexiProjectSelectorWidget();
+    
+    /*! \return data of selected project. Returns NULL if no selection has been made.
+    */
+    KexiProjectData* selectedProjectData() const;
+  
+    /*! Assigns a new project set \a prj_set. Old project set is not destoyed 
+    - it is just left unassigned. 
+    If new project set is in error state (Object::error() == true), nothing is displayed. */
+    void setProjectSet( KexiProjectSet* prj_set );
+    
+    /*! \return currently assigned project set or NULL if no project set is assigned. */
+    inline KexiProjectSet *projectSet() { return m_prj_set; }
+  
+    /*! Sets selectable state on or off. In this state one project item can be selected
+    and executed by mouse double clicking or return key pressing. 
+    The property is true by default. */
+    void setSelectable(bool set);
+    
+    /*! \return  if a witget has selectable state set. */
+    bool isSelectable() const;
+  
+    QLabel *label() const;
+    
+  signals:
+    void projectExecuted(KexiProjectData*);
+    void selectionChanged(KexiProjectData*);
+  
+  protected slots:
+    void slotItemExecuted(Q3ListViewItem*);
+    void slotItemSelected();
+  
+  protected:
+    KexiProjectSet *m_prj_set;
+    
+    class Private;
+    Private * const d;
+    
+    friend class ProjectDataLVItem;
 };
 
 /*! Dialog container for KexiProjectSelectorWidget */
 class KexiProjectSelectorDialog : public KPageDialog
 {
-	Q_OBJECT
+  Q_OBJECT
 public:
-	/*! Constructor 1, used for displaying recent projects list
-	 Label "there are recently opened projects" is displayed automatically
-	*/
-	KexiProjectSelectorDialog( QWidget *parent, 
-		KexiProjectSet* prj_set, 
-		bool showProjectNameColumn = true, bool showConnectionColumns = true);
+  /*! Constructor 1, used for displaying recent projects list
+   Label "there are recently opened projects" is displayed automatically
+  */
+  KexiProjectSelectorDialog( QWidget *parent, 
+    KexiProjectSet* prj_set, 
+    bool showProjectNameColumn = true, bool showConnectionColumns = true);
 
-	/*! Constructor 2, used for displaying projects list for given connection
-	 Label "Select one of these existing projects on server" is displayed automatically
-	 You should test if project set was properly loaded using projectSet()->error().
-	*/
-	KexiProjectSelectorDialog( QWidget *parent, 
-		const KexiDB::ConnectionData& cdata, 
-		bool showProjectNameColumn = true, bool showConnectionColumns = true);
-	
-	virtual ~KexiProjectSelectorDialog();
-	
-	/*! \return data of selected project. Returns NULL if no selection has been made.
-	*/
-	KexiProjectData* selectedProjectData() const;
+  /*! Constructor 2, used for displaying projects list for given connection
+   Label "Select one of these existing projects on server" is displayed automatically
+   You should test if project set was properly loaded using projectSet()->error().
+  */
+  KexiProjectSelectorDialog( QWidget *parent, 
+    const KexiDB::ConnectionData& cdata, 
+    bool showProjectNameColumn = true, bool showConnectionColumns = true);
+  
+  virtual ~KexiProjectSelectorDialog();
+  
+  /*! \return data of selected project. Returns NULL if no selection has been made.
+  */
+  KexiProjectData* selectedProjectData() const;
 
-	/*! \return currently assigned project set or NULL if no project set is assigned. */
-	inline KexiProjectSet *projectSet() const { return m_sel->projectSet(); }
+  /*! \return currently assigned project set or NULL if no project set is assigned. */
+  inline KexiProjectSet *projectSet() const { return m_sel->projectSet(); }
 
-	virtual void showEvent( QShowEvent * event );
+  virtual void showEvent( QShowEvent * event );
 
 protected slots:
-	void slotProjectExecuted(KexiProjectData*);
-	void slotProjectSelectionChanged(KexiProjectData*);
+  void slotProjectExecuted(KexiProjectData*);
+  void slotProjectSelectionChanged(KexiProjectData*);
 
 protected:
-	void init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns);
-	
-	KexiProjectSelectorWidget* m_sel;
+  void init(KexiProjectSet* prj_set, bool showProjectNameColumn, bool showConnectionColumns);
+  
+  KexiProjectSelectorWidget* m_sel;
 };
 
 #endif

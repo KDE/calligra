@@ -24,10 +24,10 @@ namespace KexiPart {
 
 class DataSourcePrivate
 {
-	public:
-		DataSourcePrivate() {}
-		~DataSourcePrivate() {}
-		Part *part;
+  public:
+    DataSourcePrivate() {}
+    ~DataSourcePrivate() {}
+    Part *part;
 };
 
 }
@@ -37,12 +37,12 @@ using namespace KexiPart;
 DataSource::DataSource(Part *part)
  : d(new DataSourcePrivate())
 {
-	d->part = part;
+  d->part = part;
 }
 
 DataSource::~DataSource()
 {
-	delete d;
+  delete d;
 }
 
 Part* DataSource::part() const { return d->part; }

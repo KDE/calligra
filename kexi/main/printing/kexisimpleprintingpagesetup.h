@@ -37,80 +37,80 @@ class KexiSimplePrintPreviewWindow;
 */
 class KexiSimplePrintingCommand : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiSimplePrintingCommand(KexiMainWindow* mainWin, int objectId, 
-			QObject* parent = 0);
-		~KexiSimplePrintingCommand();
+  public:
+    KexiSimplePrintingCommand(KexiMainWindow* mainWin, int objectId, 
+      QObject* parent = 0);
+    ~KexiSimplePrintingCommand();
 
-	public slots:
-		bool print(const KexiSimplePrintingSettings& settings, 
-			const QString& aTitleText = QString());
-		bool print(const QString& aTitleText = QString());
-		bool showPrintPreview(const KexiSimplePrintingSettings& settings, 
-			const QString& aTitleText = QString(), bool reload = false);
+  public slots:
+    bool print(const KexiSimplePrintingSettings& settings, 
+      const QString& aTitleText = QString());
+    bool print(const QString& aTitleText = QString());
+    bool showPrintPreview(const KexiSimplePrintingSettings& settings, 
+      const QString& aTitleText = QString(), bool reload = false);
 //		void setPrintPreviewNeedsReloading();
 
-	signals:
-		//! connected to Kexi Main Window
-		void showPageSetupRequested(KexiPart::Item* item);
+  signals:
+    //! connected to Kexi Main Window
+    void showPageSetupRequested(KexiPart::Item* item);
 
-	protected slots:
-		void slotShowPageSetupRequested();
+  protected slots:
+    void slotShowPageSetupRequested();
 
-	protected:
-		KexiSimplePrintingEngine* m_previewEngine;
-		KexiMainWindow* m_mainWin;
-		int m_objectId;
-		KexiSimplePrintingSettings m_settings;
-		KexiSimplePrintPreviewWindow *m_previewWindow;
-		bool m_printPreviewNeedsReloading : 1;
+  protected:
+    KexiSimplePrintingEngine* m_previewEngine;
+    KexiMainWindow* m_mainWin;
+    int m_objectId;
+    KexiSimplePrintingSettings m_settings;
+    KexiSimplePrintPreviewWindow *m_previewWindow;
+    bool m_printPreviewNeedsReloading : 1;
 };
 
 //! @short A window for displaying settings for simple printing.
 class KexiSimplePrintingPageSetup : public KexiView
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, QMap<QString,QVariant>* args );
-		~KexiSimplePrintingPageSetup();
+  public:
+    KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, QMap<QString,QVariant>* args );
+    ~KexiSimplePrintingPageSetup();
 
-	public slots:
-		void print();
-		void printPreview();
+  public slots:
+    void print();
+    void printPreview();
 
-	signals:
-		void printItemRequested(KexiPart::Item* item, 
-			const KexiSimplePrintingSettings& settings, const QString& titleText);
-		void printPreviewForItemRequested(KexiPart::Item* item, 
-			const KexiSimplePrintingSettings& settings, const QString& titleText, bool reload);
+  signals:
+    void printItemRequested(KexiPart::Item* item, 
+      const KexiSimplePrintingSettings& settings, const QString& titleText);
+    void printPreviewForItemRequested(KexiPart::Item* item, 
+      const KexiSimplePrintingSettings& settings, const QString& titleText, bool reload);
 
-	protected slots:
-		void slotOpenData();
-		void slotSaveSetup();
-		void slotChangeTitleFont();
-		void slotChangePageSizeAndMargins();
-		void slotAddPageNumbersCheckboxToggled(bool set);
-		void slotAddDateTimeCheckboxToggled(bool set);
-		void slotAddTableBordersCheckboxToggled(bool set);
-		void slotTitleTextChanged(const QString&);
+  protected slots:
+    void slotOpenData();
+    void slotSaveSetup();
+    void slotChangeTitleFont();
+    void slotChangePageSizeAndMargins();
+    void slotAddPageNumbersCheckboxToggled(bool set);
+    void slotAddDateTimeCheckboxToggled(bool set);
+    void slotAddTableBordersCheckboxToggled(bool set);
+    void slotTitleTextChanged(const QString&);
 
-	protected:
-		void setupPrintingCommand();
-		void updatePageLayoutAndUnitInfo();
-		void setDirty(bool set);
+  protected:
+    void setupPrintingCommand();
+    void updatePageLayoutAndUnitInfo();
+    void setDirty(bool set);
 
-		KexiSimplePrintingSettings m_settings;
+    KexiSimplePrintingSettings m_settings;
 //		KexiSimplePrintingEngine *m_engine;
-		KoUnit m_unit;
-		KexiSimplePrintingPageSetupBase *m_contents;
-		KoPageLayoutSize *m_pageLayoutWidget;
-		KexiPart::Item *m_item;
+    KoUnit m_unit;
+    KexiSimplePrintingPageSetupBase *m_contents;
+    KoPageLayoutSize *m_pageLayoutWidget;
+    KexiPart::Item *m_item;
 //		KexiSimplePrintingCommand *m_command;
-		QString m_origCaptionLabelText;
-		bool m_printPreviewNeedsReloading : 1;
+    QString m_origCaptionLabelText;
+    bool m_printPreviewNeedsReloading : 1;
 
 };
 

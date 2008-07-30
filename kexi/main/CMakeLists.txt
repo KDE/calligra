@@ -35,13 +35,13 @@ startup/KexiStartupDialogTemplatesPage.cpp
 
 
 kde4_add_ui_files(keximain_LIB_SRCS
-	kexifinddialog.ui
-	startup/KexiConnSelector.ui
-	startup/KexiDBTitlePage.ui
-	startup/KexiNewPrjTypeSelector.ui
-	startup/KexiOpenExistingFile.ui
-	startup/KexiProjectSelector.ui
-	startup/KexiServerDBNamePage.ui
+  kexifinddialog.ui
+  startup/KexiConnSelector.ui
+  startup/KexiDBTitlePage.ui
+  startup/KexiNewPrjTypeSelector.ui
+  startup/KexiOpenExistingFile.ui
+  startup/KexiProjectSelector.ui
+  startup/KexiServerDBNamePage.ui
 )
 
 kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})

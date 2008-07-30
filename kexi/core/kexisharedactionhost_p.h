@@ -32,33 +32,33 @@ class KexiSharedActionHost;
 
 class KexiVolatileActionData
 {
-	public:
-		KexiVolatileActionData() { plugged=false; }
+  public:
+    KexiVolatileActionData() { plugged=false; }
 //		KAction *kaction;
-		bool plugged : 1;
+    bool plugged : 1;
 };
 
 //! @internal
 class KexiSharedActionHostPrivate : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiSharedActionHostPrivate(KexiSharedActionHost *h);
+  public:
+    KexiSharedActionHostPrivate(KexiSharedActionHost *h);
 
-		~KexiSharedActionHostPrivate();
+    ~KexiSharedActionHostPrivate();
 
-	public slots:
-		void slotAction(const QString& act_id);
+  public slots:
+    void slotAction(const QString& act_id);
 
-	public:
-		QHash<QObject*, KexiActionProxy*> actionProxies;
-		KexiMainWindowIface *mainWin;
-		QList<KAction*> sharedActions;
-		QSignalMapper actionMapper;
-		QHash<KAction*, KexiVolatileActionData*> volatileActions;
-		QHash<QString, QWidget*> enablers;
-		KexiSharedActionHost *host;
+  public:
+    QHash<QObject*, KexiActionProxy*> actionProxies;
+    KexiMainWindowIface *mainWin;
+    QList<KAction*> sharedActions;
+    QSignalMapper actionMapper;
+    QHash<KAction*, KexiVolatileActionData*> volatileActions;
+    QHash<QString, QWidget*> enablers;
+    KexiSharedActionHost *host;
 };
 
 #endif

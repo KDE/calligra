@@ -35,18 +35,18 @@ Info::Private::Private(const KService::Ptr& aPtr)
  , broken(false)
  , idStoredInPartDatabase(false)
 {
-	QVariant val = ptr->property("X-Kexi-NoObject");
-	isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
+  QVariant val = ptr->property("X-Kexi-NoObject");
+  isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
 
 //! @todo (js)..... now it's hardcoded!
-	if(objectName == "table")
-		projectPartID = KexiDB::TableObjectType;
-	else if(objectName == "query")
-		projectPartID = KexiDB::QueryObjectType;
+  if(objectName == "table")
+    projectPartID = KexiDB::TableObjectType;
+  else if(objectName == "query")
+    projectPartID = KexiDB::QueryObjectType;
 //	else if(objectName == "html")
 //		m_projectPartID = KexiDB::WebObjectType;
-	else
-		projectPartID = -1; //TODO!!
+  else
+    projectPartID = -1; //TODO!!
 }
 
 Info::Private::Private()
@@ -71,7 +71,7 @@ Info::Info()
 
 Info::~Info()
 {
-	delete d;
+  delete d;
 }
 
 QString Info::groupName() const { return d->groupName; }
@@ -101,35 +101,35 @@ QString Info::errorMessage() const { return d->errorMessage; }
 
 void Info::setIdStoredInPartDatabase(bool set)
 {
-	d->idStoredInPartDatabase = set;
+  d->idStoredInPartDatabase = set;
 }
 
 bool Info::isIdStoredInPartDatabase() const
 {
-	return d->idStoredInPartDatabase;
+  return d->idStoredInPartDatabase;
 }
 
 bool Info::isDataExportSupported() const
 {
-	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
-	return val.isValid() ? val.toBool() : false;
+  QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
+  return val.isValid() ? val.toBool() : false;
 }
 
 bool Info::isPrintingSupported() const
 {
-	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
-	return val.isValid() ? val.toBool() : false;
+  QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
+  return val.isValid() ? val.toBool() : false;
 }
 
 bool Info::isExecuteSupported() const
 {
-	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
-	return val.isValid() ? val.toBool() : false;
+  QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
+  return val.isValid() ? val.toBool() : false;
 }
 
 //--------------
 
 QString KexiPart::nameForCreateAction(const Info& info)
 {
-	return info.objectName() + "part_create";
+  return info.objectName() + "part_create";
 }

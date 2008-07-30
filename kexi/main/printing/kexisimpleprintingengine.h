@@ -38,19 +38,19 @@ class KexiSimplePrintingSettings;
 //! @short Settings data for simple printing engine.
 class KexiSimplePrintingSettings
 {
-	public:
-		KexiSimplePrintingSettings();
-		~KexiSimplePrintingSettings();
+  public:
+    KexiSimplePrintingSettings();
+    ~KexiSimplePrintingSettings();
 
-		static KexiSimplePrintingSettings load();
-		void save();
+    static KexiSimplePrintingSettings load();
+    void save();
 
-		KoPageLayout pageLayout;
-		KoUnit unit;
-		QFont pageTitleFont;
-		bool addPageNumbers : 1;
-		bool addDateAndTime : 1;
-		bool addTableBorders : 1;
+    KoPageLayout pageLayout;
+    KoUnit unit;
+    QFont pageTitleFont;
+    bool addPageNumbers : 1;
+    bool addDateAndTime : 1;
+    bool addTableBorders : 1;
 };
 
 //! @short An engine painting data on pages using QPainter.
@@ -64,91 +64,91 @@ class KexiSimplePrintingSettings
 */
 class KexiSimplePrintingEngine : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		KexiSimplePrintingEngine( const KexiSimplePrintingSettings& settings, QObject* parent );
-		~KexiSimplePrintingEngine();
+  public:
+    KexiSimplePrintingEngine( const KexiSimplePrintingSettings& settings, QObject* parent );
+    ~KexiSimplePrintingEngine();
 
-		bool init(KexiDB::Connection& conn, KexiDB::TableOrQuerySchema& tableOrQuery,
-			const QString& titleText, QString& errorMessage);
+    bool init(KexiDB::Connection& conn, KexiDB::TableOrQuerySchema& tableOrQuery,
+      const QString& titleText, QString& errorMessage);
 
-		void setTitleText(const QString& titleText);
+    void setTitleText(const QString& titleText);
 
-		//! Calculates pafe count that can be later obtained using pagesCount().
-		//! Page count can depend on \a painter (printer/screen) and on printing settings.
-		void calculatePagesCount(QPainter& painter);
+    //! Calculates pafe count that can be later obtained using pagesCount().
+    //! Page count can depend on \a painter (printer/screen) and on printing settings.
+    void calculatePagesCount(QPainter& painter);
 
-		bool done();
-		void clear();
-		const KexiSimplePrintingSettings* settings() const { return m_settings; }
+    bool done();
+    void clear();
+    const KexiSimplePrintingSettings* settings() const { return m_settings; }
 
-		//! \return true when all records has been painted
-		bool eof() const { return m_eof; }
+    //! \return true when all records has been painted
+    bool eof() const { return m_eof; }
 
-		//! \return number of pages. Can be used after calculatePagesCount().
-		uint pagesCount() const { return m_pagesCount; }
+    //! \return number of pages. Can be used after calculatePagesCount().
+    uint pagesCount() const { return m_pagesCount; }
 
-		//! \return number of painted pages so far. 
-		//! If eof() is true, this number is equal to total page count.
-		uint paintedPages() const { return m_dataOffsets.count(); }
+    //! \return number of painted pages so far. 
+    //! If eof() is true, this number is equal to total page count.
+    uint paintedPages() const { return m_dataOffsets.count(); }
 
-	public slots:
-		/*! Paints a page number \a pageNumber (counted from 0) on \a painter.
-		 If \a paint is false, drawings are only computed but not painted, 
-		 so this can be used for calculating page number before printing or previewing. */
-		void paintPage(int pageNumber, QPainter& painter, bool paint = true);
+  public slots:
+    /*! Paints a page number \a pageNumber (counted from 0) on \a painter.
+     If \a paint is false, drawings are only computed but not painted, 
+     so this can be used for calculating page number before printing or previewing. */
+    void paintPage(int pageNumber, QPainter& painter, bool paint = true);
 
-	protected:
-		struct DataOffset;
-		void paintRecord(QPainter& painter, const DataOffset& offset,
-			int cellMargin, double &y, uint paintedRecords, bool paint, 
-			bool continuedRecord, bool printing, DataOffset& newOffset);
+  protected:
+    struct DataOffset;
+    void paintRecord(QPainter& painter, const DataOffset& offset,
+      int cellMargin, double &y, uint paintedRecords, bool paint, 
+      bool continuedRecord, bool printing, DataOffset& newOffset);
 
-		uint cutTextIfTooLarge(const QFontMetrics& fontMetrics,
-			QRect& rect, int alignFlags, const QString& text);
+    uint cutTextIfTooLarge(const QFontMetrics& fontMetrics,
+      QRect& rect, int alignFlags, const QString& text);
 
-		const KexiSimplePrintingSettings* m_settings;
+    const KexiSimplePrintingSettings* m_settings;
 
-		QFont m_mainFont, m_headerFont;
-		Q3PaintDeviceMetrics m_pdm;
-		double m_dpiX, m_dpiY;
-		uint m_pageWidth, m_pageHeight;
-		uint m_SCALE;
-		KexiDB::Cursor *m_cursor;
-		KexiTableViewData *m_data;
+    QFont m_mainFont, m_headerFont;
+    Q3PaintDeviceMetrics m_pdm;
+    double m_dpiX, m_dpiY;
+    uint m_pageWidth, m_pageHeight;
+    uint m_SCALE;
+    KexiDB::Cursor *m_cursor;
+    KexiTableViewData *m_data;
 
-		//! Information about record/field/place-in-text offset for a given page
-		//! Needed because large text values can be splitted between pages
-		struct DataOffset {
-			DataOffset() : record(-1), field(0), textOffset(0) {}
-			DataOffset(const DataOffset& other) { *this = other; }
-			//! first record number for this page
-			int record;
-			//! first field number for this page
-			uint field;
-			//! text offset within the first field of a first record on this page
-			uint textOffset;
-		};
-		//! offsets for records
-		QList<DataOffset*> m_dataOffsets;
-		QString m_headerText;
-		QString m_dateTimeText;
-		uint m_dateTimeWidth;
-		QRect m_headerTextRect;
-		int m_maxFieldNameWidth;
-		int m_mainLineSpacing;
-		int m_footerHeight;
-		KexiDB::QueryColumnInfo::Vector m_fieldsExpanded;
-		uint m_visibleFieldsCount;
-		uint m_pagesCount;
-		bool m_eof;
-		bool m_paintInitialized; //!< used by paintPage()
-		double m_leftMargin;
-		double m_rightMargin;
-		double m_topMargin;
-		double m_bottomMargin;
-		double m_fx, m_fy;
+    //! Information about record/field/place-in-text offset for a given page
+    //! Needed because large text values can be splitted between pages
+    struct DataOffset {
+      DataOffset() : record(-1), field(0), textOffset(0) {}
+      DataOffset(const DataOffset& other) { *this = other; }
+      //! first record number for this page
+      int record;
+      //! first field number for this page
+      uint field;
+      //! text offset within the first field of a first record on this page
+      uint textOffset;
+    };
+    //! offsets for records
+    QList<DataOffset*> m_dataOffsets;
+    QString m_headerText;
+    QString m_dateTimeText;
+    uint m_dateTimeWidth;
+    QRect m_headerTextRect;
+    int m_maxFieldNameWidth;
+    int m_mainLineSpacing;
+    int m_footerHeight;
+    KexiDB::QueryColumnInfo::Vector m_fieldsExpanded;
+    uint m_visibleFieldsCount;
+    uint m_pagesCount;
+    bool m_eof;
+    bool m_paintInitialized; //!< used by paintPage()
+    double m_leftMargin;
+    double m_rightMargin;
+    double m_topMargin;
+    double m_bottomMargin;
+    double m_fx, m_fy;
 };
 
 #endif

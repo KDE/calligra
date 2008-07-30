@@ -26,31 +26,31 @@
 /*! Helper class for displaying templates set with description. */
 class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public K3ListView
 {
-	Q_OBJECT
-	
-	public:
-		KexiStartupDialogTemplatesPage( QWidget * parent = 0 );
-		~KexiStartupDialogTemplatesPage(); 
+  Q_OBJECT
+  
+  public:
+    KexiStartupDialogTemplatesPage( QWidget * parent = 0 );
+    ~KexiStartupDialogTemplatesPage(); 
 //		void addItem(const QString& key, const QString& name, 
 //			const QString& description, const QPixmap& icon);
 
-		QString selectedFileName() const;
+    QString selectedFileName() const;
 
-		const KexiProjectData::AutoOpenObjects& autoopenObjectsForSelectedTemplate() const;
+    const KexiProjectData::AutoOpenObjects& autoopenObjectsForSelectedTemplate() const;
 
-		void populate();
+    void populate();
 
-	signals:
-		void selected(const QString& filename);
+  signals:
+    void selected(const QString& filename);
 
-	protected slots:
-		void slotExecuted(Q3ListViewItem* item);
+  protected slots:
+    void slotExecuted(Q3ListViewItem* item);
 
 //		void itemClicked(QIconViewItem *item);
-	
-	private:
-		class Private;
-		Private* const d;
+  
+  private:
+    class Private;
+    Private* const d;
 //		KIconView *templates;
 //		KTextBrowser *info;
 };

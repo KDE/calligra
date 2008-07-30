@@ -27,23 +27,23 @@
 //! A structure providing information about single kexi database template file
 class KEXICORE_EXPORT KexiTemplateInfo
 {
-	public:
-		typedef QList<KexiTemplateInfo> List;
+  public:
+    typedef QList<KexiTemplateInfo> List;
 
-		KexiTemplateInfo();
-		~KexiTemplateInfo();
+    KexiTemplateInfo();
+    ~KexiTemplateInfo();
 
-		QString filename, name, description;
-		QPixmap icon;
-		KexiProjectData::AutoOpenObjects autoopenObjects;
+    QString filename, name, description;
+    QPixmap icon;
+    KexiProjectData::AutoOpenObjects autoopenObjects;
 };
 
 //! Handles retrieving information about templates
 class KEXICORE_EXPORT KexiTemplateLoader
 {
-	public:
-		static KexiTemplateInfo::List loadListInfo();
-		static KexiTemplateInfo loadInfo(const QString& directory);
+  public:
+    static KexiTemplateInfo::List loadListInfo();
+    static KexiTemplateInfo loadInfo(const QString& directory);
 };
 
 #endif

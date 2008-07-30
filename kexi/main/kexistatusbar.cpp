@@ -41,24 +41,24 @@
 KexiStatusBar::KexiStatusBar(QWidget *parent)
     : KStatusBar(parent)
 #if KexiStatusBar_KTEXTEDITOR_USED
-	, m_cursorIface(0)
+  , m_cursorIface(0)
 #endif
-	, m_activePart(0)
+  , m_activePart(0)
 {
-	setObjectName("KexiStatusBar");
-	int id = 0;
-	m_msgID = id++;
-	insertPermanentItem("", m_msgID, 1 /*stretch*/);
+  setObjectName("KexiStatusBar");
+  int id = 0;
+  m_msgID = id++;
+  insertPermanentItem("", m_msgID, 1 /*stretch*/);
 
-	m_readOnlyID = id++;
-	insertPermanentItem(i18n("Read only"), m_readOnlyID);
-	setReadOnlyFlag(false);
+  m_readOnlyID = id++;
+  insertPermanentItem(i18n("Read only"), m_readOnlyID);
+  setReadOnlyFlag(false);
 
 // @todo
 //	connect(PartController::getInstance(), SIGNAL(activePartChanged(KParts::Part*)),
 //		this, SLOT(activePartChanged(KParts::Part*)));
 
-	/// @todo remove parts from the map on PartRemoved() ?
+  /// @todo remove parts from the map on PartRemoved() ?
 }
 
 
@@ -68,28 +68,28 @@ KexiStatusBar::~KexiStatusBar()
 
 void KexiStatusBar::activePartChanged(KParts::Part *part)
 {
-	if ( m_activePart && m_activePart->widget() )
-		disconnect( m_activePart->widget(), 0, this, 0 );
+  if ( m_activePart && m_activePart->widget() )
+    disconnect( m_activePart->widget(), 0, this, 0 );
 
-	m_activePart = part;
+  m_activePart = part;
 #if KexiStatusBar_KTEXTEDITOR_USED
-	m_cursorIface = 0;
-	m_viewmsgIface = 0;
+  m_cursorIface = 0;
+  m_viewmsgIface = 0;
 // @todo
-	if (part && part->widget()) {
-		if ((m_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()))) {
-			connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
-				this, SLOT( setStatus( const QString & ) ) );
-		}
-		else if ((m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()))) {
-			connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
-			cursorPositionChanged();
-	    }
-		else {
-			// we can't produce any status data, hide the status box
-			changeItem("", m_msgID);
-		}
-	}
+  if (part && part->widget()) {
+    if ((m_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()))) {
+      connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
+        this, SLOT( setStatus( const QString & ) ) );
+    }
+    else if ((m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()))) {
+      connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
+      cursorPositionChanged();
+      }
+    else {
+      // we can't produce any status data, hide the status box
+      changeItem("", m_msgID);
+    }
+  }
 #endif
 }
 
@@ -108,28 +108,28 @@ void KexiStatusBar::cursorPositionChanged()
 
 void KexiStatusBar::setStatus(const QString &str)
 {
-	kDebug() << "KexiStatusBar::setStatus(" << str << ")" << endl;
+  kDebug() << "KexiStatusBar::setStatus(" << str << ")" << endl;
 //	m_status->setText(str);
-	changeItem(str, m_msgID);
+  changeItem(str, m_msgID);
 }
 
 void KexiStatusBar::setCursorPosition(int line, int col)
 {
 //	m_status->setText(i18n(" Line: %1 Col: %2 ").arg(line+1).arg(col));
-	changeItem(i18n(" Line: %1 Col: %2 ", line+1, col), m_msgID);
+  changeItem(i18n(" Line: %1 Col: %2 ", line+1, col), m_msgID);
 }
 
 /*void KexiStatusBar::addWidget ( QWidget *widget, int stretch, bool permanent)
 {
-	KStatusBar::addWidget(widget,stretch,permanent);
+  KStatusBar::addWidget(widget,stretch,permanent);
 
-	if(widget->sizeHint().height() + 4 > height())
-		setFixedHeight(widget->sizeHint().height() + 4);
+  if(widget->sizeHint().height() + 4 > height())
+    setFixedHeight(widget->sizeHint().height() + 4);
 }*/
 
 void KexiStatusBar::setReadOnlyFlag(bool readOnly)
 {
-	changeItem(readOnly ? i18n("Read only") : QString(), m_readOnlyID);
+  changeItem(readOnly ? i18n("Read only") : QString(), m_readOnlyID);
 }
 
 #include "kexistatusbar.moc"

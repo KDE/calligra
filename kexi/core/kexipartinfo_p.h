@@ -29,22 +29,22 @@ namespace KexiPart
 //! @internal
 class Info::Private
 {
-	public:
-		Private(const KService::Ptr& aPtr);
+  public:
+    Private(const KService::Ptr& aPtr);
 
-		//! used in StaticItem class
-		Private();
+    //! used in StaticItem class
+    Private();
 
-		KService::Ptr ptr;
-		QString errorMessage;
-		QString groupName;
-		QString mimeType;
-		QString itemIcon;
-		QString objectName;
-		int projectPartID;
-		bool broken : 1;
-		bool isVisibleInNavigator : 1;
-		bool idStoredInPartDatabase : 1;
+    KService::Ptr ptr;
+    QString errorMessage;
+    QString groupName;
+    QString mimeType;
+    QString itemIcon;
+    QString objectName;
+    int projectPartID;
+    bool broken : 1;
+    bool isVisibleInNavigator : 1;
+    bool idStoredInPartDatabase : 1;
 };
 }
 

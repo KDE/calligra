@@ -37,102 +37,102 @@ class KAboutData;
 
 namespace Kexi
 {
-	KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
+  KEXICORE_EXPORT void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
 
-	/*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
-	enum ViewMode { 
-		AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
-		NoViewMode = 0, //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo() 
-		                //!< means that parent dialog of the view has not yet view defined.
-		DataViewMode = 1,
-		DesignViewMode = 2,
-		TextViewMode = 4 //!< Also known as SQL View Mode
-	};
-	Q_DECLARE_FLAGS(ViewModes, ViewMode)
-	
-	/*! @return i18n'ed name of view mode @a mode. If @a withAmpersand is true, 
-	 ampersands used for accelerators are included, e.g. "&Data View".*/
-	KEXICORE_EXPORT QString nameForViewMode(ViewMode mode, bool withAmpersand = false);
+  /*! Modes of view for the dialogs. Used mostly for parts and KexiWindow. */
+  enum ViewMode { 
+    AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()
+    NoViewMode = 0, //!< In KexiView::afterSwitchFrom() and KexiView::beforeSwitchTo() 
+                    //!< means that parent dialog of the view has not yet view defined.
+    DataViewMode = 1,
+    DesignViewMode = 2,
+    TextViewMode = 4 //!< Also known as SQL View Mode
+  };
+  Q_DECLARE_FLAGS(ViewModes, ViewMode)
+  
+  /*! @return i18n'ed name of view mode @a mode. If @a withAmpersand is true, 
+   ampersands used for accelerators are included, e.g. "&Data View".*/
+  KEXICORE_EXPORT QString nameForViewMode(ViewMode mode, bool withAmpersand = false);
 
-	/*! @return icon name of view mode @a mode. */
-	KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
+  /*! @return icon name of view mode @a mode. */
+  KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 
-	//! A set of known connections
-	KEXICORE_EXPORT KexiDBConnectionSet& connset();
-	
-	//! A set avaiulable of project infos
-	KEXICORE_EXPORT KexiProjectSet& recentProjects();
-	
-	//! shared driver manager
-	KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
-	
-	//! shared part manager
-	KEXICORE_EXPORT KexiPart::Manager& partManager();
-	
-	//! can be called to delete global objects like driverManager and partManager
-	//! (and thus, all loaded factories/plugins)
-	//! before KLibrary::~KLibrary() do this for us
-	KEXICORE_EXPORT void deleteGlobalObjects();
+  //! A set of known connections
+  KEXICORE_EXPORT KexiDBConnectionSet& connset();
+  
+  //! A set avaiulable of project infos
+  KEXICORE_EXPORT KexiProjectSet& recentProjects();
+  
+  //! shared driver manager
+  KEXICORE_EXPORT KexiDB::DriverManager& driverManager();
+  
+  //! shared part manager
+  KEXICORE_EXPORT KexiPart::Manager& partManager();
+  
+  //! can be called to delete global objects like driverManager and partManager
+  //! (and thus, all loaded factories/plugins)
+  //! before KLibrary::~KLibrary() do this for us
+  KEXICORE_EXPORT void deleteGlobalObjects();
 
-	//some temporary flags
+  //some temporary flags
 
-	//! false by default, flag loaded on main window startup
-	KEXICORE_EXPORT bool& tempShowReports(); 
+  //! false by default, flag loaded on main window startup
+  KEXICORE_EXPORT bool& tempShowReports(); 
 
-	//! false by default, flag loaded on main window startup
-	KEXICORE_EXPORT bool& tempShowMacros();
+  //! false by default, flag loaded on main window startup
+  KEXICORE_EXPORT bool& tempShowMacros();
 
-	//! false by default, flag loaded on main window startup
-	KEXICORE_EXPORT bool& tempShowScripts(); 
+  //! false by default, flag loaded on main window startup
+  KEXICORE_EXPORT bool& tempShowScripts(); 
 
-	/*! Helper class for storing object status. */
-	class KEXICORE_EXPORT ObjectStatus
-	{
-		public:
-			ObjectStatus();
+  /*! Helper class for storing object status. */
+  class KEXICORE_EXPORT ObjectStatus
+  {
+    public:
+      ObjectStatus();
 
-			ObjectStatus(const QString& message, const QString& description);
+      ObjectStatus(const QString& message, const QString& description);
 
-			ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
+      ObjectStatus(KexiDB::Object* dbObject, const QString& message, const QString& description);
 
-			~ObjectStatus();
+      ~ObjectStatus();
 
-			const ObjectStatus& status() const;
+      const ObjectStatus& status() const;
 
-			bool error() const;
+      bool error() const;
 
-			void setStatus(const QString& message, const QString& description);
+      void setStatus(const QString& message, const QString& description);
 
-			//! Note: for safety, \a dbObject needs to be derived from QObject, 
-			//! otherwise it won't be assigned
-			void setStatus(KexiDB::Object* dbObject, 
-				const QString& message = QString(), const QString& description = QString());
+      //! Note: for safety, \a dbObject needs to be derived from QObject, 
+      //! otherwise it won't be assigned
+      void setStatus(KexiDB::Object* dbObject, 
+        const QString& message = QString(), const QString& description = QString());
 
-			void setStatus(KexiDB::ResultInfo* result, 
-				const QString& message = QString(), const QString& description = QString());
+      void setStatus(KexiDB::ResultInfo* result, 
+        const QString& message = QString(), const QString& description = QString());
 
-			void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result, 
-				const QString& message = QString(), const QString& description = QString());
+      void setStatus(KexiDB::Object* dbObject, KexiDB::ResultInfo* result, 
+        const QString& message = QString(), const QString& description = QString());
 
-			void clearStatus();
+      void clearStatus();
 
-			QString singleStatusString() const;
+      QString singleStatusString() const;
 
-			void append( const ObjectStatus& otherStatus );
+      void append( const ObjectStatus& otherStatus );
 
-			KexiDB::Object *dbObject() const { return dynamic_cast<KexiDB::Object*>((QObject*)dbObj); }
+      KexiDB::Object *dbObject() const { return dynamic_cast<KexiDB::Object*>((QObject*)dbObj); }
 
-			//! Helper returning pseudo handler that just updates this ObjectStatus object 
-			//! by receiving a message
-			operator KexiDB::MessageHandler*();
+      //! Helper returning pseudo handler that just updates this ObjectStatus object 
+      //! by receiving a message
+      operator KexiDB::MessageHandler*();
 
-			QString message, description;
-		protected:
-			QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
-			KexiDB::MessageHandler* msgHandler;
-	};
+      QString message, description;
+    protected:
+      QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
+      KexiDB::MessageHandler* msgHandler;
+  };
 
-	KEXICORE_EXPORT QString msgYouCanImproveData();
+  KEXICORE_EXPORT QString msgYouCanImproveData();
 
 }//namespace Kexi
 
@@ -143,10 +143,10 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
 //! Displays information that feature "feature_name" is not availabe in the current application version
 KEXICORE_EXPORT void KEXI_UNFINISHED(
-	const QString& feature_name, const QString& extra_text = QString());
+  const QString& feature_name, const QString& extra_text = QString());
 
 //! Like above - for use inside KexiActionProxy subclass - reuses feature name from shared action's text
 #define KEXI_UNFINISHED_SHARED_ACTION(action_name) \
-	KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString())
+  KEXI_UNFINISHED(sharedAction(action_name) ? sharedAction(action_name)->text() : QString())
 
 #endif

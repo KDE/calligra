@@ -26,11 +26,11 @@
 #include <qfileinfo.h>
 
 KexiStartupData::KexiStartupData()
-	: m_projectData(0)
-	, m_action(KexiStartupData::DoNothing)
-	, m_forcedUserMode(false)
-	, m_forcedDesignMode(false)
-	, m_isProjectNavigatorVisible(false)
+  : m_projectData(0)
+  , m_action(KexiStartupData::DoNothing)
+  , m_forcedUserMode(false)
+  , m_forcedDesignMode(false)
+  , m_isProjectNavigatorVisible(false)
 //	, m_createDB(false)
 //	, m_dropDB(false)
 //	, m_alsoOpenDB(false)
@@ -43,34 +43,34 @@ KexiStartupData::~KexiStartupData()
 
 KexiProjectData *KexiStartupData::projectData() const
 {
-	return m_projectData;
+  return m_projectData;
 }
 
 KexiStartupData::Action KexiStartupData::action() const
 {
-	return m_action;
+  return m_action;
 }
 
 bool KexiStartupData::forcedUserMode() const
 {
-	return m_forcedUserMode;
+  return m_forcedUserMode;
 }
 
 bool KexiStartupData::forcedDesignMode() const
 {
-	return m_forcedDesignMode;
+  return m_forcedDesignMode;
 }
 
 bool KexiStartupData::isProjectNavigatorVisible() const
 {
-	if (m_forcedUserMode && !m_forcedDesignMode)
-		return m_isProjectNavigatorVisible;
-	return true;
+  if (m_forcedUserMode && !m_forcedDesignMode)
+    return m_isProjectNavigatorVisible;
+  return true;
 }
 
 KexiStartupData::Import KexiStartupData::importActionData() const
 {
-	return m_importActionData;
+  return m_importActionData;
 }
 
 KexiStartupData::Import::Import()
@@ -79,5 +79,5 @@ KexiStartupData::Import::Import()
 
 KexiStartupData::Import::operator bool() const
 {
-	return !fileName.isEmpty() && !mimeType.isEmpty();
+  return !fileName.isEmpty() && !mimeType.isEmpty();
 }

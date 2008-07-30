@@ -23,16 +23,16 @@
 class KexiProject;
 namespace KexiDB
 {
-	class FieldList;
-	class Cursor;
+  class FieldList;
+  class Cursor;
 }
 
 namespace KexiPart
 {
-	class DataSourcePrivate;
-	class Item;
-	class Part;
-	
+  class DataSourcePrivate;
+  class Item;
+  class Part;
+  
 /**
  * this class provides a datasource framework for e.g. tables and queries
  * using this framework one can query for
@@ -42,28 +42,28 @@ namespace KexiPart
  */
 class KEXICORE_EXPORT DataSource
 {
-	public:
-		DataSource(Part *part);
-		virtual ~DataSource();
+  public:
+    DataSource(Part *part);
+    virtual ~DataSource();
 
-		/**
-		 * @returns a list of fileds for the datasource
-		 * @arg id is the document id for the source
-		 */
-		virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &i)=0;
+    /**
+     * @returns a list of fileds for the datasource
+     * @arg id is the document id for the source
+     */
+    virtual KexiDB::FieldList *fields(KexiProject *project, const KexiPart::Item &i)=0;
 
-		/**
-		 * @returns the cursor
-		 */
-		virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &i, bool buffer)=0;
+    /**
+     * @returns the cursor
+     */
+    virtual KexiDB::Cursor *cursor(KexiProject *project, const KexiPart::Item &i, bool buffer)=0;
 
-		/**
-		 * @returns the part providing this datasource
-		 */
-		Part *part() const;
+    /**
+     * @returns the part providing this datasource
+     */
+    Part *part() const;
 
-	private:
-		DataSourcePrivate *d;
+  private:
+    DataSourcePrivate *d;
 };
 
 }

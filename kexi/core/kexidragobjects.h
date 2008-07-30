@@ -35,52 +35,52 @@ class QWidget;
 //! Drag object containing information about field(s).
 class KEXICORE_EXPORT KexiFieldDrag : public Q3StoredDrag
 {
-	public:
-		/*! Creates drag object for a single field \a field. */
-		KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
-			const QString& field, QWidget *parent, const char *name);
+  public:
+    /*! Creates drag object for a single field \a field. */
+    KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
+      const QString& field, QWidget *parent, const char *name);
 
-		/*! Creates drag object for multiple fields \a fields. 
-		 If there's less than two elements in the list, data is set up as for above ctor. */
-		KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
-			const QStringList& field, QWidget *parent=0, const char *name=0);
+    /*! Creates drag object for multiple fields \a fields. 
+     If there's less than two elements in the list, data is set up as for above ctor. */
+    KexiFieldDrag(const QString& sourceMimeType, const QString& sourceName, 
+      const QStringList& field, QWidget *parent=0, const char *name=0);
 
-		~KexiFieldDrag();
+    ~KexiFieldDrag();
 
-		void addField(const QString& field);
+    void addField(const QString& field);
 
-		/*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
-		 can be decoded as "kexi/field" data */
-		static bool canDecodeSingle( QMimeSource* e );
+    /*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
+     can be decoded as "kexi/field" data */
+    static bool canDecodeSingle( QMimeSource* e );
 
-		/*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
-		 can be decoded as "kexi/fields" data. If decoding of "kexi/field" 
-		 type is supported, decoding of "kexi/fields" is always supported. 
-		 */
-		static bool canDecodeMultiple( QMimeSource* e );
+    /*! \return true if event \a e (of class QDragMoveEvent or QDropEvent)
+     can be decoded as "kexi/fields" data. If decoding of "kexi/field" 
+     type is supported, decoding of "kexi/fields" is always supported. 
+     */
+    static bool canDecodeMultiple( QMimeSource* e );
 
-		/*! Decodes data of single-field drag ("kexi/field" mime type) coming with event \a e. 
-		 Sets \a sourceMimeType, \a sourceName and \a field. 
-		 \return true on successful decoding (\a e will be accepted in such case). */
-		static bool decodeSingle( QDropEvent* e, QString& sourceMimeType, 
-			QString& sourceName, QString& field );
+    /*! Decodes data of single-field drag ("kexi/field" mime type) coming with event \a e. 
+     Sets \a sourceMimeType, \a sourceName and \a field. 
+     \return true on successful decoding (\a e will be accepted in such case). */
+    static bool decodeSingle( QDropEvent* e, QString& sourceMimeType, 
+      QString& sourceName, QString& field );
 
-		/*! Decodes data of multiple-field drag ("kexi/fields" mime type) coming with event \a e. 
-		 Sets \a sourceMimeType, \a sourceName and \a fields. Also works with "kexi/field" data.
-		 \return true on successful decoding (\a e will be accepted in such case). */
-		static bool decodeMultiple( QDropEvent* e, QString& sourceMimeType, 
-			QString& sourceName, QStringList& fields );
+    /*! Decodes data of multiple-field drag ("kexi/fields" mime type) coming with event \a e. 
+     Sets \a sourceMimeType, \a sourceName and \a fields. Also works with "kexi/field" data.
+     \return true on successful decoding (\a e will be accepted in such case). */
+    static bool decodeMultiple( QDropEvent* e, QString& sourceMimeType, 
+      QString& sourceName, QStringList& fields );
 };
 
 class KEXICORE_EXPORT KexiDataProviderDrag : public Q3StoredDrag
 {
-	public:
-		KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName, 
-		QWidget *parent=0, const char *name=0);
-		~KexiDataProviderDrag() { }
+  public:
+    KexiDataProviderDrag(const QString& sourceMimeType, const QString& sourceName, 
+    QWidget *parent=0, const char *name=0);
+    ~KexiDataProviderDrag() { }
 
-		static bool canDecode( QDragMoveEvent* e);
-		static bool decode( QDropEvent* e, QString& sourceMimeType, QString& sourceName);
+    static bool canDecode( QDragMoveEvent* e);
+    static bool decode( QDropEvent* e, QString& sourceMimeType, QString& sourceName);
 
 };
 

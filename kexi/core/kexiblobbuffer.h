@@ -31,7 +31,7 @@
 
 namespace KexiDB
 {
-	class Connection;
+  class Connection;
 }
 
 //! Application-wide buffer for local BLOB data like pixmaps.
@@ -81,145 +81,145 @@ namespace KexiDB
 */
 class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	private:
-		class Item;
-	public:
-		//! long integer for unique identifying blobs
+  private:
+    class Item;
+  public:
+    //! long integer for unique identifying blobs
 //! @todo Qt4: will be changed
-		typedef long Id_t;
+    typedef long Id_t;
 
-		//! Access to KexiBLOBBuffer singleton
-		static KexiBLOBBuffer* self();
+    //! Access to KexiBLOBBuffer singleton
+    static KexiBLOBBuffer* self();
 
-		static void setConnection(KexiDB::Connection *conn);
+    static void setConnection(KexiDB::Connection *conn);
 
-		//! Object handle used by KexiBLOBBuffer
-		class KEXICORE_EXPORT Handle {
-			public:
-				//! Constructs a null handle. 
-				//! Null handles have empty pixap and data members, id == 0 and cast to boolean false.
-				Handle();
+    //! Object handle used by KexiBLOBBuffer
+    class KEXICORE_EXPORT Handle {
+      public:
+        //! Constructs a null handle. 
+        //! Null handles have empty pixap and data members, id == 0 and cast to boolean false.
+        Handle();
 
-				//! Constructs a copy of \a handle.
-				Handle(const Handle& handle);
+        //! Constructs a copy of \a handle.
+        Handle(const Handle& handle);
 
-				~Handle();
+        ~Handle();
 
-				Id_t id() const { return m_item ? m_item->id : 0; }
+        Id_t id() const { return m_item ? m_item->id : 0; }
 
-				/*! \return true if this BLOB data pointed by this handle is stored at the db backend
-				 or false if it is kept in memory. Null handles return false. */
-				bool stored() const { return m_item ? m_item->stored : false; }
+        /*! \return true if this BLOB data pointed by this handle is stored at the db backend
+         or false if it is kept in memory. Null handles return false. */
+        bool stored() const { return m_item ? m_item->stored : false; }
 
-				//! \return true if this is null handle (i.e. one not pointing to any data)
-				operator bool() const { return m_item; }
+        //! \return true if this is null handle (i.e. one not pointing to any data)
+        operator bool() const { return m_item; }
 
-				Handle& operator=(const Handle& handle);
+        Handle& operator=(const Handle& handle);
 
-				QByteArray data() const { return m_item ? m_item->data() : QByteArray(); }
+        QByteArray data() const { return m_item ? m_item->data() : QByteArray(); }
 
-				QPixmap pixmap() const { return m_item ? m_item->pixmap() : QPixmap(); }
+        QPixmap pixmap() const { return m_item ? m_item->pixmap() : QPixmap(); }
 
-				/*! Sets "stored" flag to true by setting non-temporary identifier.
-				 Only call this method for unstored (in memory) BLOBs */
-				void setStoredWidthID(Id_t id);
+        /*! Sets "stored" flag to true by setting non-temporary identifier.
+         Only call this method for unstored (in memory) BLOBs */
+        void setStoredWidthID(Id_t id);
 
-				QString originalFileName() const { return m_item ? m_item->name: QString(); }
+        QString originalFileName() const { return m_item ? m_item->name: QString(); }
 
-				QString mimeType() const { return m_item ? m_item->mimeType : QString(); }
+        QString mimeType() const { return m_item ? m_item->mimeType : QString(); }
 
-				Id_t folderId() const { return m_item ? m_item->folderId : 0; }
+        Id_t folderId() const { return m_item ? m_item->folderId : 0; }
 
-			protected:
-				//! Constructs a handle based on \a item. Null handle is constructed for null \a item.
-				Handle(Item* item);
-			private:
-				Item* m_item;
-			friend class KexiBLOBBuffer;
-		};
+      protected:
+        //! Constructs a handle based on \a item. Null handle is constructed for null \a item.
+        Handle(Item* item);
+      private:
+        Item* m_item;
+      friend class KexiBLOBBuffer;
+    };
 
-		//! @internal
-		KexiBLOBBuffer();
+    //! @internal
+    KexiBLOBBuffer();
 
-		~KexiBLOBBuffer();
+    ~KexiBLOBBuffer();
 
-		/*! Inserts a new pixmap loaded from a file at \a url. 
-		 If the same file has already been loaded before, it can be found in cache 
-		 and returned instantly. It is assumed that the BLOB is unstored, because it is loaded from 
-		 external source, so stored() will be equal to false for returned handle.
-		 \return handle to the pixmap data or a null handle if such pixmap could not be loaded. */
-		Handle insertPixmap(const KUrl& url);
+    /*! Inserts a new pixmap loaded from a file at \a url. 
+     If the same file has already been loaded before, it can be found in cache 
+     and returned instantly. It is assumed that the BLOB is unstored, because it is loaded from 
+     external source, so stored() will be equal to false for returned handle.
+     \return handle to the pixmap data or a null handle if such pixmap could not be loaded. */
+    Handle insertPixmap(const KUrl& url);
 
-		/*! Inserts a new BLOB data. 
-		 @param data The data for BLOB object.
-		 @param name The name for the object, usually a file name or empty
-		 @param caption The more friendly than name, can be based on file name or empty or
-		        defined by a user (this case is not yet used)
-		 @param mimeType The mimeType for the object for easier and mor accurate decoding.
-		 @param identifier Object's identifier. If positive, the "stored" flag for the data 
-		 will be set to true with \a identifer, otherwise (the default) the BLOB data will 
-		 have "stored" flag set to false, and a new temporary identifier will be assigned. */
-		Handle insertObject(const QByteArray& data, const QString& name, 
-			const QString& caption, const QString& mimeType, Id_t identifier = 0);
+    /*! Inserts a new BLOB data. 
+     @param data The data for BLOB object.
+     @param name The name for the object, usually a file name or empty
+     @param caption The more friendly than name, can be based on file name or empty or
+            defined by a user (this case is not yet used)
+     @param mimeType The mimeType for the object for easier and mor accurate decoding.
+     @param identifier Object's identifier. If positive, the "stored" flag for the data 
+     will be set to true with \a identifer, otherwise (the default) the BLOB data will 
+     have "stored" flag set to false, and a new temporary identifier will be assigned. */
+    Handle insertObject(const QByteArray& data, const QString& name, 
+      const QString& caption, const QString& mimeType, Id_t identifier = 0);
 
-		/*! Inserts a new pixmap available in memory, e.g. coming from clipboard. */
-		Handle insertPixmap(const QPixmap& pixmap);
+    /*! Inserts a new pixmap available in memory, e.g. coming from clipboard. */
+    Handle insertPixmap(const QPixmap& pixmap);
 
-		/*! \return an object for a given \a id. If \a stored is true, stored BLOBs buffer 
-		 is browsed, otherwise unstored (in memory) BLOBs buffer is browsed.
-		 If no object is cached for this id, null handle is returned. */
-		Handle objectForId(Id_t id, bool stored);
+    /*! \return an object for a given \a id. If \a stored is true, stored BLOBs buffer 
+     is browsed, otherwise unstored (in memory) BLOBs buffer is browsed.
+     If no object is cached for this id, null handle is returned. */
+    Handle objectForId(Id_t id, bool stored);
 
-		/*! \return an object for a given \a id. First, unstored object is checked, then unstored, 
-		 if stored was not found. */
-		Handle objectForId(Id_t id);
+    /*! \return an object for a given \a id. First, unstored object is checked, then unstored, 
+     if stored was not found. */
+    Handle objectForId(Id_t id);
 
-	protected:
-		/*! Removes an object for a given \a id. If \a stored is true, stored BLOB is removed,
-		 otherwise unstored (in memory) BLOB is removed. */
-		void removeItem(Id_t id, bool stored);
+  protected:
+    /*! Removes an object for a given \a id. If \a stored is true, stored BLOB is removed,
+     otherwise unstored (in memory) BLOB is removed. */
+    void removeItem(Id_t id, bool stored);
 
-		/*! Takes an object for a \a item out of the buffer. */
-		void takeItem(Item* item);
+    /*! Takes an object for a \a item out of the buffer. */
+    void takeItem(Item* item);
 
-		/*! Inserts an object for a given \a id into the buffer. */
-		void insertItem(Item* item);
+    /*! Inserts an object for a given \a id into the buffer. */
+    void insertItem(Item* item);
 
-	private:
-		class KEXICORE_EXPORT Item {
-			public:
-				Item(const QByteArray& data, Id_t ident,
-					bool stored,
-					const QString& name = QString(),
-					const QString& caption = QString(),
-					const QString& mimeType = QString(),
-					Id_t folderId = 0,
-					const QPixmap& pixmap = QPixmap());
-				~Item();
-				QPixmap pixmap() const;
-				QByteArray data() const;
+  private:
+    class KEXICORE_EXPORT Item {
+      public:
+        Item(const QByteArray& data, Id_t ident,
+          bool stored,
+          const QString& name = QString(),
+          const QString& caption = QString(),
+          const QString& mimeType = QString(),
+          Id_t folderId = 0,
+          const QPixmap& pixmap = QPixmap());
+        ~Item();
+        QPixmap pixmap() const;
+        QByteArray data() const;
 //				KexiBLOBBuffer* buf;
 //				KUrl url;
-				QString name;
-				QString caption; //!< @todo for future use within image gallery
-				QString mimeType;
-				uint refs;
-				Id_t id;
-				Id_t folderId;
-				bool stored : 1;
-				QString prettyURL; //!< helper
-			private:
-				QByteArray *m_data;
-				QPixmap *m_pixmap;
-				bool *m_pixmapLoaded; //!< *m_pixmapLoaded will be set in Info::pixmap(), 
-				                      //!< to avoid multiple pixmap decoding when it previously failed
-			friend class KexiBLOBBuffer;
-		};
-		class Private;
-		Private *d;
-		friend class Handle;
+        QString name;
+        QString caption; //!< @todo for future use within image gallery
+        QString mimeType;
+        uint refs;
+        Id_t id;
+        Id_t folderId;
+        bool stored : 1;
+        QString prettyURL; //!< helper
+      private:
+        QByteArray *m_data;
+        QPixmap *m_pixmap;
+        bool *m_pixmapLoaded; //!< *m_pixmapLoaded will be set in Info::pixmap(), 
+                              //!< to avoid multiple pixmap decoding when it previously failed
+      friend class KexiBLOBBuffer;
+    };
+    class Private;
+    Private *d;
+    friend class Handle;
 };
 
 #endif

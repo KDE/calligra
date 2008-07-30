@@ -23,12 +23,12 @@
 namespace KexiPart {
 class Item::Private
 {
-	public:
-		Private()
-		{
-		}
-		int dummy;
-	// unused for now
+  public:
+    Private()
+    {
+    }
+    int dummy;
+  // unused for now
 };
 }
 
@@ -45,7 +45,7 @@ Item::Item()
 
 Item::~Item()
 {
-	delete d;
+  delete d;
 }
 
 //-----------------------
@@ -68,10 +68,10 @@ ItemList::ItemList()
 
 bool lessThan( KexiPart::Item* item1, KexiPart::Item* item2 )
 {
-	return item1->name() < item2->name();
+  return item1->name() < item2->name();
 }
 
 void ItemList::sort()
 {
-	qSort(begin(), end(), lessThan);
+  qSort(begin(), end(), lessThan);
 }
