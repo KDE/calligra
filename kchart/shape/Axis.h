@@ -53,6 +53,8 @@ public:
     bool scalingIsLogarithmic() const;
     bool showGrid() const;
     Qt::Orientation orientation();
+    
+    void setCategoryDataRegionString( const QString &region );
 	
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
@@ -69,7 +71,7 @@ public:
     void setShowGrid( bool showGrid );
     void setThreeD( bool threeD );
     
-    bool loadOdf( const KoXmlElement &axisElement, const KoOdfStylesReader &stylesReader );
+    bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles );
     
     KDChart::CartesianAxis *kdAxis() const;
