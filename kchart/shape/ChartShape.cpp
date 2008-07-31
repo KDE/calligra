@@ -58,6 +58,8 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoShapeBackground.h>
+#include <KoInsets.h>
+#include <KoShapeBorderModel.h>
 
 // KDChart
 #include <KDChartChart>
@@ -747,6 +749,15 @@ void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &con
     Q_ASSERT( canvas );
     if ( canvas->shapeManager()->selection()->selectedShapes().contains( this ) )
         return;
+    if ( border() )
+    {
+        KoInsets insets;
+        border()->borderInsets( this, insets );
+        if ( insets.top > 0.0 || insets.bottom > 0.0
+             || insets.left > 0.0 || insets.right > 0.0 )
+            return;
+    }
+    
     QRectF border = QRectF( QPointF( -1.5, -1.5 ),
                             converter.documentToView( size() ) + QSizeF( 1.5, 1.5 ) );
     
@@ -872,12 +883,10 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
     return res;
 }
 
-bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
+bool ChartShape::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
-    qDebug() << "+++ LOADING" << chartElement.tagName();
-    loadOdfAttributes( chartElement, context, OdfAllAttributes );
-    
-    return loadOdfFrame( chartElement, context );
+    loadOdfAttributes( element, context, OdfTransformation | OdfSize );
+    return loadOdfFrame( element, context );
 }
 
 bool ChartShape::loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context )
@@ -889,8 +898,11 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadin
     return false;
 }
 
-bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader )
+bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
 {
+    loadOdfAttributes( chartElement, context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements );
+    
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
         qDebug() << "Error: Embedded document has no chart:class attribute.";
@@ -951,7 +963,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfS
     KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
                           "legend" );
     if ( !legendElem.isNull() ) {
-    if ( !d->legend->loadOdf( legendElem, stylesReader ) )
+    if ( !d->legend->loadOdf( legendElem, context ) )
         return false;
     }
     d->legend->update();
@@ -968,7 +980,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfS
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                              KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
-    if ( !d->plotArea->loadOdf( plotareaElem, stylesReader ) )
+    if ( !d->plotArea->loadOdf( plotareaElem, context ) )
         return false;
     }
     

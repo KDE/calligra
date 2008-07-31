@@ -140,14 +140,12 @@ public:
     void paintDecorations( QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas );
     
     /// reimplemented
-    bool loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     bool loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context );
     bool loadOdfData( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
     
     bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
-    
-    // FIXME: loadOdfFrame() should be called by KoLibs, not loadOdf()
-    bool loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader );
+    bool loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
