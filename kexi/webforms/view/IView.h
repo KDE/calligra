@@ -33,6 +33,7 @@ namespace View {
 
     class IView {
     public:
+        virtual ~IView() {}
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr) = 0;
     };
     
