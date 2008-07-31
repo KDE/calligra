@@ -42,7 +42,7 @@ public:
     void setBrush( const QBrush &brush );
     void setFramePen( const QPen &pen );
     
-    bool loadOdf( const KoXmlElement &surfaceElement, const KoOdfStylesReader &stylesReader );
+    bool loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext &context );
 
 private:
     class Private;

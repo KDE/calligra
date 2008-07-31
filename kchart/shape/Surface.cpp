@@ -33,6 +33,15 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
+#include <KoStyleStack.h>
+#include <KoOdfGraphicStyles.h>
+
+// KDChart
+#include <KDChartAbstractCoordinatePlane>
+#include <KDChartBackgroundAttributes>
+#include <KDChartFrameAttributes>
 
 using namespace KChart;
 
@@ -43,6 +52,8 @@ public:
     ~Private();
 
     PlotArea *plotArea;
+    
+    KDChart::AbstractCoordinatePlane *kdPlane;
 
     QPointF position;
     int width;
@@ -62,7 +73,11 @@ Surface::Private::~Private()
 Surface::Surface( PlotArea *parent )
     : d( new Private )
 {
+    Q_ASSERT( parent );
+    
     d->plotArea = parent;
+    d->kdPlane = d->plotArea->kdPlane();
+    Q_ASSERT( d->kdPlane );
 }
 
 Surface::~Surface()
@@ -110,8 +125,51 @@ void Surface::setFramePen( const QPen &pen )
     d->framePen = pen;
 }
 
-bool Surface::loadOdf( const KoXmlElement &surfaceElement, const KoOdfStylesReader &stylesReader )
+bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext &context )
 {
-    qDebug() << "Surface::loadOdf()";
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.save();
+    
+    if ( surfaceElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+    {
+        KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
+        KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
+        
+        context.odfLoadingContext().fillStyleStack( surfaceElement, KoXmlNS::chart, "style-name", "chart" );
+        
+        styleStack.setTypeProperties( "graphic" );
+        
+        if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) )
+        {
+            frameAttributes.setVisible( true );
+            QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
+            if( stroke == "solid" || stroke == "dash" )
+            {
+                QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+                frameAttributes.setPen( pen );
+            }
+        }
+        
+        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
+        {
+            backgroundAttributes.setVisible( true );
+            QBrush brush;
+            QString fill = styleStack.property( KoXmlNS::draw, "fill" );
+            if ( fill == "solid" || fill == "hatch" )
+                brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
+            else if ( fill == "gradient" )
+            {
+                brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
+                qDebug() << brush;
+            }
+            else if ( fill == "bitmap" )
+                brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
+            backgroundAttributes.setBrush( brush );
+        }
+        
+        d->kdPlane->setBackgroundAttributes( backgroundAttributes );
+        d->kdPlane->setFrameAttributes( frameAttributes );
+    }
+    
     return true;
 }
