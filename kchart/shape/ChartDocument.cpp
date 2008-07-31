@@ -34,6 +34,8 @@
 #include <KoView.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfLoadingContext.h>
 
 namespace KChart {
 
@@ -78,8 +80,10 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
     KoXmlElement chartElement = chartElementParentNode.namedItemNS( KoXmlNS::chart, "chart" ).toElement();
     if ( chartElement.isNull() )
         return false;
+    KoOdfLoadingContext odfLoadingContext( odfStore.styles(), odfStore.store() );
+    KoShapeLoadingContext context( odfLoadingContext, 0 );
 
-    return d->parent->loadOdfEmbedded( chartElement, odfStore.styles() );
+    return d->parent->loadOdfEmbedded( chartElement, context );
 }
 
 bool ChartDocument::loadXML( QIODevice *, const KoXmlDocument &doc )
