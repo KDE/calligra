@@ -17,41 +17,42 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPRESENTERVIEWINTERFACE
-#define KPRPRESENTERVIEWINTERFACE
+#ifndef KPRPRESENTERVIEWTOOLWIDGET
+#define KPRPRESENTERVIEWTOOLWIDGET
 
-#include "KPrPresenterViewBaseInterface.h"
-
+#include <QtCore/QTime>
 #include <QtGui/QFrame>
 
 class QLabel;
-class QTextEdit;
+class QTimer;
+class QToolButton;
 
-class KoPACanvas;
-class KoPAPageBase;
-
-/* KPrPresenterViewInterface
- * This widget is the main interface, this widget shows current slide, next slide
- * and the presenter's notes
+/* KPrPresenterViewToolWidget
+ * This widget shows all navigation functions (previous and next slide) together
+ * with clock and timer
  */
-class KPrPresenterViewInterface : public KPrPresenterViewBaseInterface
+class KPrPresenterViewToolWidget : public QFrame
 {
     Q_OBJECT
 public:
-    KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
+    KPrPresenterViewToolWidget( QWidget *parent = 0 );
+    void toggleSlideThumbnails( bool toggle );
 
-    void setPreviewSize( const QSize &size );
+signals:
+    void slideThumbnailsToggled( bool toggle );
+    void previousSlideClicked();
+    void nextSlideClicked();
 
-public slots:
-    virtual void setActivePage( KoPAPageBase *page );
+private slots:
+    void updateClock();
 
 private:
-    KoPACanvas *m_canvas;
-    QLabel *m_currentSlideLabel;
-    QLabel *m_nextSlideLabel;
-    QLabel *m_nextSlidePreview;
-    QTextEdit *m_notesTextEdit;
-    QSize m_previewSize;
+    QToolButton *m_slidesToolButton;
+    QLabel *m_clockLabel;
+    QLabel *m_timerLabel;
+
+    QTime m_currentTime;
+    QTimer *m_clockTimer;
 };
 
 #endif

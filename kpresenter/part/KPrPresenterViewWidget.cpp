@@ -38,6 +38,8 @@
 
 #include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"
+#include "KPrPresenterViewSlidesInterface.h"
+#include "KPrPresenterViewToolWidget.h"
 #include "KPrViewModePresentation.h"
 
 KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )

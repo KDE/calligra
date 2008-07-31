@@ -19,11 +19,9 @@
 
 #include "KPrPresenterViewInterface.h"
 
-#include <QtCore/QTimer>
 #include <QtGui/QBoxLayout>
 #include <QtGui/QFrame>
 #include <QtGui/QLabel>
-#include <QtGui/QListView>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QTextEdit>
@@ -46,22 +44,6 @@
 #include "KPrNotes.h"
 #include "KPrPage.h"
 
-/* KPrPresenterViewBaseInterface */
-KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
-    : QWidget( parent )
-    , m_pages( pages )
-{
-}
-
-void KPrPresenterViewBaseInterface::setActivePage( KoPAPageBase *page )
-{
-    m_activePage = page;
-}
-
-/* KPrPresenterViewInterface
- * This widget is the main interface, this widget shows current slide, next slide
- * and the presenter's notes
- */
 KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )
     , m_canvas( canvas )
@@ -156,149 +138,6 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
         nextPage = m_activePage;
     }
     m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
-}
-
-/* KPrPresenterViewSlidesInterface
- * This widget shows all slides in the presentation
- */
-KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent )
-    : KPrPresenterViewBaseInterface( pages, parent )
-{
-    QVBoxLayout *vLayout = new QVBoxLayout;
-
-    m_listView = new QListView;
-    m_thumbnailModel = new KoPAPageThumbnailModel( m_pages, this );
-    m_listView->setModel( m_thumbnailModel );
-    m_listView->setDragDropMode( QListView::NoDragDrop );
-    m_listView->setIconSize( QSize( 128, 128 ) );
-    m_listView->setViewMode( QListView::IconMode );
-    m_listView->setFlow( QListView::LeftToRight );
-    m_listView->setWrapping( true );
-    m_listView->setResizeMode( QListView::Adjust );
-    m_listView->setSelectionMode( QAbstractItemView::SingleSelection );
-    m_listView->setMovement( QListView::Static );
-
-    connect( m_listView, SIGNAL( clicked( const QModelIndex & ) ), this,
-            SLOT( itemClicked( const QModelIndex & ) ) );
-    connect( m_listView, SIGNAL( doubleClicked( const QModelIndex & ) ), this,
-            SLOT( itemDoubleClicked( const QModelIndex & ) ) );
-
-    vLayout->addWidget( m_listView );
-
-    setLayout( vLayout );
-}
-
-void KPrPresenterViewSlidesInterface::setActivePage( KoPAPageBase *page )
-{
-    KPrPresenterViewBaseInterface::setActivePage( page );
-}
-
-void KPrPresenterViewSlidesInterface::itemClicked( const QModelIndex &index )
-{
-    KoPAPageBase *page = static_cast<KoPAPageBase *>( index.internalPointer() );
-    emit selectedPageChanged( page, false );
-}
-
-void KPrPresenterViewSlidesInterface::itemDoubleClicked( const QModelIndex &index )
-{
-    KoPAPageBase *page = static_cast<KoPAPageBase *>( index.internalPointer() );
-    emit selectedPageChanged( page, true );
-}
-
-/* KPrPresenterViewToolWidget
- * This widget shows all navigation functions (previous and next slide) together
- * with clock and timer
- */
-KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
-    : QFrame(parent)
-{
-    QSize iconSize( 32, 32 );
-    QHBoxLayout *mainLayout = new QHBoxLayout;
-
-    QHBoxLayout *hLayout = new QHBoxLayout;
-    QToolButton *toolButton = new QToolButton;
-    toolButton->setIcon( KIcon( "go-previous" ) );
-    toolButton->setIconSize( iconSize );
-    connect( toolButton, SIGNAL( clicked() ), this, SIGNAL( previousSlideClicked() ) );
-    hLayout->addWidget(toolButton);
-    toolButton = new QToolButton;
-    toolButton->setIcon( KIcon( "go-next" ) );
-    toolButton->setIconSize( iconSize );
-    connect( toolButton, SIGNAL( clicked() ), this, SIGNAL( nextSlideClicked() ) );
-    hLayout->addWidget( toolButton );
-
-    mainLayout->addLayout(hLayout);
-    mainLayout->addSpacing( 5 );
-    QFrame *frame = new QFrame;
-    frame->setFrameStyle(QFrame::VLine | QFrame::Sunken);
-    mainLayout->addWidget(frame);
-    mainLayout->addSpacing( 5 );
-
-    m_slidesToolButton = new QToolButton;
-    m_slidesToolButton->setCheckable( true );
-    m_slidesToolButton->setIcon( KIcon( "view-list-icons.png" ) );
-    m_slidesToolButton->setIconSize( iconSize );
-    connect( m_slidesToolButton, SIGNAL( toggled( bool ) ), this, SIGNAL( slideThumbnailsToggled( bool ) ) );
-    mainLayout->addWidget( m_slidesToolButton );
-
-    mainLayout->addSpacing( 5 );
-    frame = new QFrame;
-    frame->setFrameStyle( QFrame::VLine | QFrame::Raised );
-    mainLayout->addWidget( frame );
-    mainLayout->addSpacing( 5 );
-
-    hLayout = new QHBoxLayout;
-    QLabel *iconLabel = new QLabel;
-    iconLabel->setPixmap( KIcon( "user-away").pixmap( iconSize ) );
-    hLayout->addWidget( iconLabel );
-    m_clockLabel = new QLabel( QTime::currentTime().toString( "hh:mm:ss ap" ) );
-    m_clockLabel->setStyleSheet("QLabel { font-size: 24px }");
-    hLayout->addWidget( m_clockLabel );
-    mainLayout->addLayout( hLayout );
-
-    mainLayout->addSpacing( 5 );
-    frame = new QFrame;
-    frame->setFrameStyle( QFrame::VLine | QFrame::Plain );
-    mainLayout->addWidget(frame);
-    mainLayout->addSpacing(5);
-
-    hLayout = new QHBoxLayout;
-    iconLabel = new QLabel;
-    iconLabel->setPixmap( KIcon( "chronometer" ).pixmap( iconSize ) );
-    hLayout->addWidget(iconLabel);
-    m_timerLabel = new QLabel( "00:00:00");
-    m_timerLabel->setStyleSheet("QLabel { font-size: 24px }");
-    hLayout->addWidget( m_timerLabel );
-    mainLayout->addLayout(hLayout);
-
-    setLayout(mainLayout);
-    setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
-
-    m_currentTime.start();
-    m_clockTimer = new QTimer( this );
-    connect( m_clockTimer, SIGNAL( timeout() ), this, SLOT( updateClock() ) );
-    m_clockTimer->start( 1000 );
-}
-
-void KPrPresenterViewToolWidget::toggleSlideThumbnails( bool toggle )
-{
-    m_slidesToolButton->setChecked( toggle );
-}
-
-void KPrPresenterViewToolWidget::updateClock()
-{
-    QTime time = QTime::currentTime();
-    m_clockLabel->setText( time.toString( "hh:mm:ss a" ) );
-    int sec = m_currentTime.elapsed() / 1000;
-
-    int hour = sec / 3600;
-    sec -= hour * 3600;
-    int min = sec / 60;
-    sec -= min * 60;
-
-    // display the timer, with 0 appended if only 1 digit
-    m_timerLabel->setText( QString( "%1:%2:%3").arg( hour, 2, 10, QChar( '0' ) )
-            .arg( min, 2, 10, QChar( '0' ) ).arg( sec, 2, 10, QChar( '0' ) ) );
 }
 
 #include "KPrPresenterViewInterface.moc"

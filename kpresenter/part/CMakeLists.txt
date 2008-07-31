@@ -31,7 +31,10 @@ set( kpresenterprivate_LIB_SRCS
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
      KPrCustomSlideShows.cpp
+     KPrPresenterViewBaseInterface.cpp
      KPrPresenterViewInterface.cpp
+     KPrPresenterViewSlidesInterface.cpp
+     KPrPresenterViewToolWidget.cpp
      KPrPresenterViewWidget.cpp
      KPrEndOfSlideShowPage.cpp
 

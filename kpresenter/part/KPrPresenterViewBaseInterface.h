@@ -17,41 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPRESENTERVIEWINTERFACE
-#define KPRPRESENTERVIEWINTERFACE
+#ifndef KPRPRESENTERVIEWBASEINTERFACE
+#define KPRPRESENTERVIEWBASEINTERFACE
 
-#include "KPrPresenterViewBaseInterface.h"
+#include <QtGui/QWidget>
 
-#include <QtGui/QFrame>
-
-class QLabel;
-class QTextEdit;
-
-class KoPACanvas;
 class KoPAPageBase;
 
-/* KPrPresenterViewInterface
- * This widget is the main interface, this widget shows current slide, next slide
- * and the presenter's notes
- */
-class KPrPresenterViewInterface : public KPrPresenterViewBaseInterface
+class KPrPresenterViewBaseInterface : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
-
-    void setPreviewSize( const QSize &size );
+    KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
 public slots:
     virtual void setActivePage( KoPAPageBase *page );
 
-private:
-    KoPACanvas *m_canvas;
-    QLabel *m_currentSlideLabel;
-    QLabel *m_nextSlideLabel;
-    QLabel *m_nextSlidePreview;
-    QTextEdit *m_notesTextEdit;
-    QSize m_previewSize;
+signals:
+    void activeSlideChanged( KoPAPageBase *page );
+
+protected:
+    QList<KoPAPageBase *> m_pages;
+    KoPAPageBase *m_activePage;
 };
 
 #endif

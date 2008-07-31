@@ -17,41 +17,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPRESENTERVIEWINTERFACE
-#define KPRPRESENTERVIEWINTERFACE
+#ifndef KPRPRESENTERVIEWSLIDESINTERFACE
+#define KPRPRESENTERVIEWSLIDESINTERFACE
 
 #include "KPrPresenterViewBaseInterface.h"
 
-#include <QtGui/QFrame>
-
-class QLabel;
-class QTextEdit;
-
-class KoPACanvas;
 class KoPAPageBase;
+class KoPAPageThumbnailModel;
 
-/* KPrPresenterViewInterface
- * This widget is the main interface, this widget shows current slide, next slide
- * and the presenter's notes
+class QListView;
+class QModelIndex;
+
+/* KPrPresenterViewSlidesInterface
+ * This widget shows all slides in the presentation
  */
-class KPrPresenterViewInterface : public KPrPresenterViewBaseInterface
+class KPrPresenterViewSlidesInterface : public KPrPresenterViewBaseInterface
 {
     Q_OBJECT
 public:
-    KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
+    KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
-    void setPreviewSize( const QSize &size );
+signals:
+    void selectedPageChanged( KoPAPageBase *page, bool doubleClicked );
 
-public slots:
-    virtual void setActivePage( KoPAPageBase *page );
+private slots:
+    void itemClicked( const QModelIndex &index );
+    void itemDoubleClicked( const QModelIndex &index );
 
 private:
-    KoPACanvas *m_canvas;
-    QLabel *m_currentSlideLabel;
-    QLabel *m_nextSlideLabel;
-    QLabel *m_nextSlidePreview;
-    QTextEdit *m_notesTextEdit;
-    QSize m_previewSize;
+    KoPAPageThumbnailModel *m_thumbnailModel;
+    QListView *m_listView;
 };
 
 #endif
