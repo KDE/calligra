@@ -85,7 +85,7 @@ namespace View {
                 setValue("ERROR", "This table has no primary key!");
             } else {
                 kDebug() << "Showing query results..." << endl;
-                KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
+                //KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
                 KexiDB::QueryColumnInfo::Vector expandedFields = querySchema->fieldsExpanded();
                 
                 

@@ -78,6 +78,7 @@ namespace KexiWebForms {
         // Add footer template (-- note, this includes the left menu with the standard template)
         google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
         afterDict->SetFilename("aftercontent.tpl");
+        afterDict->ShowSection("LOGIN");
         
         addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
         addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");

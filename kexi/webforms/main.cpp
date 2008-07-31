@@ -87,7 +87,6 @@ int main(int argc, char **argv) {
     // Plugins
     pion::plugins::FileService fileService;
     fileService.setOption("directory", args->getOption("webroot").toLatin1().constData());
-    fileService.setOption("file", args->getOption("webroot").append("/index.html").toLatin1().constData());
     fileService.setOption("cache", "0");
     fileService.setOption("scan", "0");
 
@@ -115,7 +114,6 @@ int main(int argc, char **argv) {
     server.addService("/f", &fileService);
     server.addService("/blob", &blobService);
     //server.addService("/index.html", &fileService);
-    server.addRedirect("/", "/f/index.html");
     
     server.start();
     server.setAuthentication(auth);
