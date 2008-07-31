@@ -21,24 +21,17 @@ add_definitions(-fexceptions)
 # - Standard HTML based view: this is the standard and most stable view, built by
 #   default.
 if (WITH_EXTJS_WEBFORMS)
-  set(webforms_controller_SRCS controller/extjs/Controller.cpp)
-  set(webforms_view_SRCS
-    view/extjs/Objects.cpp)
-  add_definitions(-DEXTJS_VIEW)
-  message(STATUS "Kexi Web Forms: enabled Extjs view")
+  set(USED_VIEW extjs)
+  message(STATUS "Kexi Web Forms: enabled ExtJS view")
+  message(STATUS "ExtJS-based view CANNOT be used in commercial environment without paying the license")
+  message(STATUS "For more informations: http://www.extjs.com/products/license.php")
 else (WITH_EXTJS_WEBFORMS)
-  set(webforms_controller_SRCS controller/Controller.cpp)
-  set(webforms_view_SRCS
-    view/View.cpp
-    view/Index.cpp
-    view/Create.cpp
-    view/Read.cpp
-    view/Update.cpp
-    view/Delete.cpp
-    view/Query.cpp
-    view/TemplateProvider.cpp)
-  message(STATUS "Kexi Web Forms: enabled standard view")
+  set(USED_VIEW default)
+  message(STATUS "Kexi Web Forms: enabled default view")
 endif (WITH_EXTJS_WEBFORMS)
+
+file(GLOB webforms_view_SRCS view/${USED_VIEW}/*.cpp)
+file(GLOB webforms_controller_SRCS controller/${USED_VIEW}/*.cpp)
 
 kde4_add_executable(kwebforms NOGUI
 # Other
