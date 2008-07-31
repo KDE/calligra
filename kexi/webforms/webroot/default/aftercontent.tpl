@@ -2,8 +2,26 @@
 		</div>
 	      </div>
 	    </div>
-	    <div id="left">
-	      <div class="menu_box">
+	
+	<div id="left">
+
+	    {LOGIN}
+	    <div class="menutitle"><div>
+		    <h2 id="cp-menu-login">Login</h2>
+		    <a href="#cp-skip-login" class="cp-doNotDisplay">Skip menu "Login"</a>
+            </div></div>
+            <ul>
+		<form action="/login" method="get">
+                    <input style="width: 90%;" type="text" name="user" value="root"/>
+                    <input style="width: 90%;" type="text" name="pass" value="root"/>
+                    <input type="submit" value="Login"/>
+                    <input type="reset" value="Reset"/>
+		</form>
+            </ul>
+            <a name="cp-skip-login"/>
+	    {/LOGIN}
+	    
+	    <div class="menu_box">
 		<a name="cp-menu" />
 		<div class="menutitle"><div>
 		  <h2 id="cp-menu-tables">Tables</h2>
@@ -20,20 +38,6 @@
         </div></div>
         <ul>
             {{QUERY_LIST}}
-        </ul>
-        <a name="cp-skip-queries"/>
-        
-        <div class="menutitle"><div>
-            <h2 id="cp-menu-login">Login</h2>
-            <a href="#cp-skip-login" class="cp-doNotDisplay">Skip menu "Login"</a>
-        </div></div>
-        <ul>
-            <form action="/login" method="get">
-                <input style="width: 90%" type="text" name="user" value="root"/>
-                <input style="width: 90%" type="text" name="pass" value="root"/>
-                <input type="submit" value="Login"/>
-                <input type="reset" value="Reset"/>
-            </form>
         </ul>
         <a name="cp-skip-queries"/>
 
