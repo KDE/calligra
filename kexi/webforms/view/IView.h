@@ -31,7 +31,7 @@ class QString;
 namespace KexiWebForms {
 namespace View {
 
-    class View {
+    class IView {
     public:
         virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr) = 0;
     };

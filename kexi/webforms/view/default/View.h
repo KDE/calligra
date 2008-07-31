@@ -27,13 +27,15 @@
 #include <google/template.h>
 #include <pion/net/HTTPResponseWriter.hpp>
 
+#include "../IView.h"
+
 class QString;
 class QVariant;
 
 namespace KexiWebForms {
 namespace View {
 
-    class View {
+    class View : public IView {
     public:
         
         View(const char* name);
