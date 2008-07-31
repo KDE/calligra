@@ -31,16 +31,16 @@
 #include <pion/net/WebService.hpp>
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "../view/Index.h"
-#include "../view/Create.h"
-#include "../view/Read.h"
-#include "../view/Update.h"
-#include "../view/Delete.h"
-#include "../view/Query.h"
+#include "../../view/default/Index.h"
+#include "../../view/default/Create.h"
+#include "../../view/default/Read.h"
+#include "../../view/default/Update.h"
+#include "../../view/default/Delete.h"
+#include "../../view/default/Query.h"
 
-#include "../auth/User.h"
-#include "../auth/Permission.h"
-#include "../auth/Authenticator.h"
+#include "../../auth/User.h"
+#include "../../auth/Permission.h"
+#include "../../auth/Authenticator.h"
 
 #include "Controller.h"
 

@@ -32,6 +32,7 @@ endif (WITH_EXTJS_WEBFORMS)
 
 file(GLOB webforms_view_SRCS view/${USED_VIEW}/*.cpp)
 file(GLOB webforms_controller_SRCS controller/${USED_VIEW}/*.cpp)
+file(WRITE controller.h.in "#include \"controller/${USED_VIEW}/Controller.h\"")
 
 kde4_add_executable(kwebforms NOGUI
 # Other

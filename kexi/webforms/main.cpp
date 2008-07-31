@@ -37,11 +37,7 @@
 
 #include "model/DataProvider.h"
 
-#ifndef EXTJS_VIEW
-#include "controller/Controller.h"
-#else
-#include "controller/extjs/Controller.h"
-#endif
+#include "controller.h.in"
 
 #include "FileService.hpp"
 #include "BlobService.h"
