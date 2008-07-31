@@ -135,7 +135,7 @@ namespace KexiWebForms {
                 m_delete->view(data, writer);
                 malformedRequest = false;
             }
-        } else if (action == "query" /*&& u.can(Auth::QUERY)*/) {
+        } else if (action == "query" && u.can(Auth::QUERY)) {
             if (!requestURI.count() != 1) {
                 data["uri-query"] = requestURI.at(0);
                 m_query->view(data, writer);
