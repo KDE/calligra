@@ -321,11 +321,11 @@ void Legend::setLegendPosition( LegendPosition position )
     d->pixmapRepaintRequested = true;
 }
 
-void Legend::setSize( const QSizeF &size )
+void Legend::setSize( const QSizeF &newSize )
 {
-    d->kdLegend->resize( size.toSize() );
-    d->kdLegend->resizeLayout( size.toSize() );
-    KoShape::setSize( size );
+    d->kdLegend->resize( newSize.toSize() );
+    d->kdLegend->resizeLayout( newSize.toSize() );
+    KoShape::setSize( newSize );
 }
 
 
@@ -398,12 +398,11 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 // Only reimplemneted because pure virtual in KoShape, but not needed
 bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context )
 {
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.save();
+    
     loadOdfAttributes( legendElement, context, OdfAllAttributes );
-    return loadOdf( legendElement, context.odfLoadingContext().stylesReader() );
-}
-
-bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader &stylesReader )
-{
+    
     // TODO: Read optional attributes
     // 1. Legend expansion
     // 2. Advanced legend styling
@@ -471,37 +470,13 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader
         }
         
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-            QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
-            const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
-            if ( styleElement ) {
-                KoXmlElement graphicsPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" ).toElement();
-                if ( !graphicsPropertiesElement.isNull() ) {
-                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "stroke" ) ) {
-                        // TODO (Johannes): set stroke type of legend border
-                        QString stroke = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "stroke", QString() );
-                        QString strokeColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "stroke-color", QString() );
-                        // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
-                        setFrameColor( strokeColor );
-                    }
-                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "fill" ) ) {
-                        QString fill = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill", QString() );
-                        if ( fill == "solid" ) {
-                            QString fillColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill-color", QString() );
-                            // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
-                            setBackgroundColor( fillColor );
-                        }
-                    }
-                }
-
-                KoXmlElement textPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "text-properties" ).toElement();
-                if ( !textPropertiesElement.isNull() )
-                {
-                    if ( textPropertiesElement.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
-                    {
-                        const qreal fontSize = KoUnit::parseValue( textPropertiesElement.attributeNS( KoXmlNS::fo, "font-size" ) );
-                        setFontSize( fontSize );
-                    }
-                }
+            context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
+            
+            styleStack.setTypeProperties( "text" );
+            
+            if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
+            {
+                setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
             }
         }
     }
