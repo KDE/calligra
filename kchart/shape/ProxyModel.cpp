@@ -412,10 +412,8 @@ DataSet *ProxyModel::createDataSet()
     if ( !d->spreadSheetModel )
         return 0;
     
-    beginInsertRows( QModelIndex(), d->dataSets.size(), d->dataSets.size() );
     DataSet *dataSet = new CellDataSet( this );
     d->dataSets.append( dataSet );
-    endInsertRows();
     
     dataSet->setColor( defaultDataSetColor( d->dataSets.size() - 1 ) );
     dataSet->setNumber( d->dataSets.size() - 1 );
