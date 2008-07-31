@@ -67,8 +67,7 @@ public:
     void setPieExplodeFactor( DataSet *dataSet, int percent );
 
     bool loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context );
-    bool loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesReader &stylesReader );
-    bool loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStylesReader &stylesReader );
+    bool loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingContext &context );
     
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
