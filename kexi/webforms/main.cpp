@@ -115,6 +115,7 @@ int main(int argc, char **argv) {
     server.addService("/f", &fileService);
     server.addService("/blob", &blobService);
     //server.addService("/index.html", &fileService);
+    server.addRedirect("/", "/f/index.html");
     
     server.start();
     server.setAuthentication(auth);
