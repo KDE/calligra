@@ -31,6 +31,29 @@ namespace KPlato
 class Project;
 class Account;
 
+
+class KPLATOMODELS_EXPORT AccountModel : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS( Properties )
+public:
+    AccountModel();
+    ~AccountModel() {}
+
+    enum Properties {
+        Name = 0,
+        Description
+    };
+    const QMetaEnum columnMap() const;
+    
+    virtual QVariant data( const Account *a, int property, int role = Qt::DisplayRole ) const; 
+    virtual QVariant headerData( int property, int role = Qt::DisplayRole ) const; 
+    
+protected:
+    QVariant name( const Account *account, int role ) const;
+    QVariant description( const Account *account, int role ) const;
+};
+
 class KPLATOMODELS_EXPORT AccountItemModel : public ItemModelBase
 {
     Q_OBJECT
@@ -67,13 +90,12 @@ protected slots:
     void slotAccountRemoved( const Account *account );
 
 protected:
-    QVariant name( const Account *account, int role ) const;
     bool setName( Account *account, const QVariant &value, int role );
     
-    QVariant description( const Account *account, int role ) const;
     bool setDescription( Account *account, const QVariant &value, int role );
 
 private:
+    AccountModel m_model;
     Account *m_account; // test for sane operation
 };
 

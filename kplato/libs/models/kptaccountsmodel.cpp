@@ -40,6 +40,100 @@
 namespace KPlato
 {
 
+//--------------------------------------
+AccountModel::AccountModel()
+    : QObject()
+{
+}
+
+const QMetaEnum AccountModel::columnMap() const
+{
+    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
+}
+
+QVariant AccountModel::data( const Account *a, int property, int role ) const
+{
+    QVariant result;
+    if ( a == 0 ) {
+        return QVariant();
+    }
+    switch ( property ) {
+        case AccountModel::Name: result = name( a, role ); break;
+        case AccountModel::Description: result = description( a, role ); break;
+        default:
+            kDebug()<<"data: invalid display value column"<<property;
+            return QVariant();
+    }
+    if ( result.isValid() ) {
+        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
+            // HACK to show focus in empty cells
+            result = " ";
+        }
+        return result;
+    }
+    // define default action
+
+    return QVariant();
+}
+
+QVariant AccountModel::name( const Account *a, int role ) const
+{
+    //kDebug()<<res->name()<<","<<role;
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return a->name();
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant AccountModel::description( const Account *a, int role ) const
+{
+    //kDebug()<<res->name()<<","<<role;
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return a->description();
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant AccountModel::headerData( int property, int role ) const
+{
+    if ( role == Qt::DisplayRole ) {
+        switch ( property ) {
+            case AccountModel::Name: return i18n( "Name" );
+            case AccountModel::Description: return i18n( "Description" );
+            default: return QVariant();
+        }
+    }
+    if ( role == Qt::TextAlignmentRole ) {
+        switch (property) {
+            case AccountModel::Description: return Qt::AlignLeft;
+            default: return QVariant();
+        }
+    }
+    if ( role == Qt::ToolTipRole ) {
+        switch ( property ) {
+            case AccountModel::Name: return ToolTip::accountName();
+            case AccountModel::Description: return ToolTip::accountDescription();
+            default: return QVariant();
+        }
+    }
+    return QVariant();
+}
+
+//----------------------------------------
 AccountItemModel::AccountItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_account( 0 )
@@ -211,22 +305,6 @@ int AccountItemModel::rowCount( const QModelIndex &parent ) const
     return par->accountList().count();
 }
 
-QVariant AccountItemModel::name( const Account *a, int role ) const
-{
-    //kDebug()<<res->name()<<","<<role;
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return a->name();
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -237,22 +315,6 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
             return true;
     }
     return false;
-}
-
-QVariant AccountItemModel::description( const Account *a, int role ) const
-{
-    //kDebug()<<res->name()<<","<<role;
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return a->description();
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
 }
 
 bool AccountItemModel::setDescription( Account *a, const QVariant &value, int role )
@@ -274,23 +336,14 @@ QVariant AccountItemModel::data( const QModelIndex &index, int role ) const
     if ( a == 0 ) {
         return QVariant();
     }
-    switch ( index.column() ) {
-        case 0: result = name( a, role ); break;
-        case 1: result = description( a, role ); break;
-        default:
-            kDebug()<<"data: invalid display value column"<<index.column();;
-            return QVariant();
-    }
+    result = m_model.data( a, index.column(), role );
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
             result = " ";
         }
-        return result;
     }
-    // define default action
-
-    return QVariant();
+    return result;
 }
 
 bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
@@ -300,8 +353,8 @@ bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value,
     }
     Account *a = account( index );
     switch (index.column()) {
-        case 0: return setName( a, value, role );
-        case 1: return setDescription( a, value, role );
+        case AccountModel::Name: return setName( a, value, role );
+        case AccountModel::Description: return setDescription( a, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -312,25 +365,7 @@ bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value,
 QVariant AccountItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
-            switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Description" );
-                default: return QVariant();
-            }
-        } else if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                case 1: return Qt::AlignLeft;
-                default: return QVariant();
-            }
-        }
-    }
-    if ( role == Qt::ToolTipRole ) {
-        switch ( section ) {
-            case 0: return ToolTip::accountName();
-            case 1: return ToolTip::accountDescription();
-            default: return QVariant();
-        }
+        return m_model.headerData( section, role );
     }
     return ItemModelBase::headerData(section, orientation, role);
 }
