@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "oracledriver.h"
 #include "oracleconnection.h"
 #include <kexidb/driver_p.h>
-#include <occi.h>
+//#include <occiCommon.h>
 #include <kdebug.h>
 using namespace KexiDB;
 
@@ -116,7 +116,12 @@ bool OracleDriver::drv_isSystemFieldName(const QString&) const {
  */
 QString OracleDriver::escapeString(const QString& str) const
 {
-	return QString(str);
+ //KexiDBDrvDbg <<str<<endl;
+  if (str[0]!='\''){
+	  return QString("\'"+str+"\'");
+	}else{
+	  return QString(str);
+	}
 }
 
 /**
@@ -124,7 +129,12 @@ QString OracleDriver::escapeString(const QString& str) const
  */
 QByteArray OracleDriver::escapeString(const QByteArray& str) const
 {
-	return QByteArray(str);
+//KexiDBDrvDbg<<str<<endl;
+  if (str[0]!='\''){
+    return QByteArray("\'"+str+"\'");
+  }else{
+	  return QByteArray(str);
+	}
 }
 
 /**

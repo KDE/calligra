@@ -18,7 +18,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <kexidb/error.h>
@@ -28,6 +28,7 @@
 #include <limits.h>
 #include "oraclecursor.h"
 #include <vector>
+//#include <occi.h>
 
 #define BOOL bool
 using namespace std;
@@ -71,35 +72,36 @@ OracleCursor::~OracleCursor() {
 
 bool OracleCursor::drv_open() {
 //Done, but there are thigs I dunno understand (yet ^^)
-   KexiDBDrvDbg << "OracleCursor::drv_open()" << endl;
    QString count="select count(*) from("+m_sql+")";
-   KexiDBDrvDbg <<count;
+   KexiDBDrvDbg <<m_sql;
    try{
-      d->stmt=d->oraconn->createStatement();
+      //d->stmt=d->oraconn->createStatement();
       d->rs=d->stmt->executeQuery(count.latin1());
       if(d->rs->next()) d->numRows=d->rs->getInt(1);//Numer of rows
       //Oracle doesnt provide a method to count ¬¬
       d->stmt->closeResultSet(d->rs);
-      
       d->rs=d->stmt->executeQuery(m_sql.latin1());
-      
-      m_fieldCount=d->rs->getColumnListMetaData().size(); //Number of columns
-      d->lengths=vector<unsigned long>(m_fieldCount);   
+      d->lengths=vector<unsigned long>(m_fieldCount); 
+        
       vector<MetaData> md = d->rs->getColumnListMetaData();
-      for(uint i=0; i<m_fieldCount;i++){
-         m_lengths[i]=md[i].getInt(MetaData::ATTR_DATA_SIZE);
+      m_fieldCount=md.size();//Number of columns
+      //m_lengths=vector<int>v(m_fieldCount);
+      
+      for(int i=0; i<m_fieldCount;i++){
+         d->lengths[i]=md[i].getInt(MetaData::ATTR_DATA_SIZE);
       }
-         
+          
       m_at=0;
       m_opened=true;
-      m_records_in_buf = d->numRows;
+      m_records_in_buf = d->numRows; 
       m_buffering_completed = true;
       m_afterLast=false;
+      KexiDBDrvDbg <<"DRV OPENED"<<endl;
       return true;
       
-   }catch(ea){
-      //cout<<ea.what();
-      setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
+   }catch (ea){
+      KexiDBDrvDbg << ea.what()<<endl;
+      setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.getMessage().c_str()));
       return false;
    }
 
@@ -219,7 +221,7 @@ void OracleCursor::drv_bufferMovePointerNext() {
 //Done   
    try{
       d->rs->next();
-   }catch(ea){
+   }catch ( ea){
       //cout<<ea.what();
       m_result = FetchError;
    }   

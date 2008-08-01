@@ -17,11 +17,12 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #ifndef _ORACLECURSOR_H_
 #define _ORACLECURSOR_H_
-
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
 #include "oracleconnection.h"
 #include <occi.h>
+//#include <vector>
+
 namespace KexiDB {
 
 class OracleCursorData;
@@ -56,13 +57,14 @@ protected:
 //	MYSQL_RES *m_res;	
 //	MYSQL_ROW m_row;
 //	MYSQL *my_conn;
-	int* m_lengths;
-        int m_numFields;
+	//stl::vector<int> m_lengths;
+  int m_numFields;
 	unsigned long m_numRows;
 	OracleCursorData *d;
 
 private:
 	oracle::occi::SQLException ea;
+
 };
 
 }

@@ -4,22 +4,21 @@
 *        Miguel Angel Aragüez-Rey		<fizban87@gmail.com>
 */
 
-
-#include <qstringlist.h>
-#include <qfile.h>
-#include <kdebug.h>
-#include "oracleconnection_p.h"
-#include <kexidb/connectiondata.h>
-
 #ifdef ORACLEMIGRATE_H
 #define NAMESPACE KexiMigration
 #else
 #define NAMESPACE KexiDB
 #endif
 
+#include <qstringlist.h>
+#include <qfile.h>
+#include <kdebug.h>
+#include "oracleconnection_p.h"
+#include <kexidb/connectiondata.h>
+//#include <occi.h>
+
 using namespace NAMESPACE;
-using namespace oracle;
-using namespace occi;
+using namespace oracle::occi;
 
 /* ************************************************************************** */
 OracleConnectionInternal::OracleConnectionInternal(KexiDB::Connection*
@@ -32,7 +31,7 @@ connection)
 	KexiDBDrvDbg << "OracleConnectionInternal::Constructor: "<< endl;
    try{
       env = Environment::createEnvironment();
-   }catch(ea){
+   }catch (ea){
       errno=ea.getErrorCode();
       errmsg=strdup(ea.what());
       KexiDBDrvDbg <<errmsg;
@@ -48,7 +47,7 @@ OracleConnectionInternal::~OracleConnectionInternal()
 	 	env=0;
 	 	KexiDBDrvDbg <<endl;
 	}
-	catch(ea){
+	catch (ea){
       errno=ea.getErrorCode();
       errmsg=strdup(ea.what());
       KexiDBDrvDbg <<errmsg;
@@ -89,7 +88,7 @@ bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 			//KexiDBDrvDbg << "Server version: "
 			//							<<oraconn->getServerVersion().c_str()<<endl; 
 	return true;
-    }catch(ea){
+    }catch (ea){
        errno=ea.getErrorCode();
       //free(errmsg)??
        errmsg=strdup(ea.what());
@@ -132,7 +131,7 @@ bool OracleConnectionInternal::useDatabase(const QString &dbName)
 		stmt->closeResultSet(rs);
 		return !user.compare(dbName);
 	}
-	catch(ea)
+	catch (ea)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.getMessage().c_str());
@@ -152,7 +151,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
       rs=stmt->getResultSet();
       return(true);
     }
-    catch(ea)
+    catch (ea)
     {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.getMessage().c_str());
@@ -170,7 +169,7 @@ QString OracleConnectionInternal::getServerVersion()
 	{ 
 		return QString(oraconn->getServerVersion().c_str());
 	}
-	catch(ea)
+	catch (ea)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.getMessage().c_str());

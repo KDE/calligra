@@ -15,7 +15,7 @@ Library General Public License for more details.
 You should have received a copy of the GNU Library General Public License
 along with this program; see the file COPYING.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ Boston, MA 02110-1301, USA.
 */
 
 #include "oracleconnection.h"
@@ -23,6 +23,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "oraclepreparedstatement.h"
 #include <kgenericfactory.h>
 #include <kdebug.h>
+//#include <oci.h>
+//#include <occi.h>
 
 using namespace KexiDB;
 
@@ -55,7 +57,7 @@ bool OracleConnection::drv_connect(ServerVersionInfo& version)
 	  version.release = versionRe.cap(3).toInt();
 	  return true;
 	 }
-	 catch (ea)
+	 catch ( ea)
 	 {
 	  KexiDBDrvDbg <<ea.getMessage().c_str();
 	  return false;
@@ -96,7 +98,7 @@ Cursor* OracleConnection::prepareQuery( QuerySchema& query, uint cursor_options 
 		d->stmt->closeResultSet(d->rs);
 		return true;
 	}
-	catch(ea)
+	catch ( ea)
   {
        //d->errno=ea.getErrorCode();
        KexiDBDrvDbg << "OracleConnection::drv_getDatabasesList error: "
@@ -126,7 +128,7 @@ bool OracleConnection::drv_createDatabase( const QString &dbName) {
     //              << "USER:"<<user<<"DBNAME:"<<dbName<<"("<<res<<")"<<endl;
     return res;
 	}
-	catch(ea)
+	catch ( ea)
 	{
 	  KexiDBDrvDbg << "OracleConnection::drv_createDatabase: "<< ea.what()<< endl;
 	  return(false);
@@ -147,7 +149,7 @@ bool OracleConnection::drv_databaseExists( const QString &dbName, bool /*ignoreE
     //              << "USER:"<<user<<"DBNAME:"<<dbName<<"("<<res<<")"<<endl;
     return res;
 	}
-	catch(ea)
+	catch ( ea)
 	{
 	  KexiDBDrvDbg << "OracleConnection::drv_dataBaseExists: "<< ea.what()<< endl;
 	  return(false);
@@ -241,7 +243,7 @@ bool OracleConnection::drv_setAutoCommit(bool on)
 	try{
 	  d->stmt->setAutoCommit(on);
 	  return true;
-	}catch (ea){
+	}catch ( ea){
 	  KexiDBDrvDbg <<ea.what();
 	  return false;
 	}

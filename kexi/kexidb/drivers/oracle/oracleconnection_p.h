@@ -17,22 +17,18 @@ along with this program; see the file COPYING.  If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
 #ifndef KEXIDB_ORACLECLIENT_P_H
-#define KEXIDB_ORACLECLIENT_P_H
+#define KEXIDB_ORACLECLIENT_P_H  
+	#include <occi.h>
 	#include <qstring.h>
 	#include <kexidb/connection_p.h>
-	#include <oci.h>
-	#include <occi.h>
 	#include <vector>
-//typedef struct st_mysql MYSQL;
 	#undef bool
-
 #ifdef ORACLEMIGRATE_H
-#define NAMESPACE KexiMigration
-	#else
-#define NAMESPACE KexiDB
-	#endif
+  #define NAMESPACE KexiMigration
+#else
+  #define NAMESPACE KexiDB
+#endif
 
 namespace KexiDB {
     class ConnectionData;

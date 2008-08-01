@@ -19,11 +19,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 */
 #ifndef ORACLECONNECTION_H
 #define ORACLECONNECTION_H
-
 #include <kexidb/connection.h>
 #include <qstringlist.h>
 #include "oraclecursor.h"
 #include "oracleconnection_p.h"
+
 namespace KexiDB {
 
 //! Oracle database connection
@@ -81,6 +81,7 @@ class OracleConnection : public Connection
 		friend class OracleCursor;
 	private:
 		oracle::occi::SQLException ea;
+	
 }; // class OracleConnection
 
 } // namespace KexiDB
