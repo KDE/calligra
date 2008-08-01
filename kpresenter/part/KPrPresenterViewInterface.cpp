@@ -52,25 +52,24 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     QHBoxLayout *hLayout = new QHBoxLayout;
 
     QFrame *frame = new QFrame;
-    QVBoxLayout *frameLayout1 = new QVBoxLayout;
+    QVBoxLayout *frameLayout = new QVBoxLayout;
     m_currentSlideLabel = new QLabel;
-    frameLayout1->addWidget( m_currentSlideLabel );
-    frameLayout1->addWidget( m_canvas );
-    frame->setLayout( frameLayout1 );
+    frameLayout->addWidget( m_currentSlideLabel );
+    frameLayout->addWidget( m_canvas );
+    frameLayout->addStretch();
+    frame->setLayout( frameLayout );
     // frame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 
     hLayout->addWidget( frame );
-    // I don't know why this always messes up the canvas position inside layout
-    // hLayout->addStretch();
 
     frame = new QFrame;
-    QVBoxLayout *frameLayout2 = new QVBoxLayout;
+    frameLayout = new QVBoxLayout;
     m_nextSlideLabel = new QLabel( i18n( "Next Slide" ) );
     m_nextSlidePreview = new QLabel;
-    frameLayout2->addWidget( m_nextSlideLabel );
-    frameLayout2->addWidget( m_nextSlidePreview );
-    frameLayout2->addStretch();
-    frame->setLayout( frameLayout2 );
+    frameLayout->addWidget( m_nextSlideLabel );
+    frameLayout->addWidget( m_nextSlidePreview );
+    frameLayout->addStretch();
+    frame->setLayout( frameLayout );
     // frame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     hLayout->addWidget( frame );
 
