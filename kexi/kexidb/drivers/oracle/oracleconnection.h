@@ -67,8 +67,7 @@ class OracleConnection : public Connection
 		virtual bool drv_databaseExists(const QString &dbName,bool ignoreErrors=true);
 		virtual TransactionData* drv_beginTransaction();
 		virtual bool drv_setAutoCommit(bool on);
-		//virtual bool drv_getDatabasesList( QStringList &list );
-		//virtual bool createDatabase( const QString &dbName );
+		virtual bool drv_getDatabasesList( QStringList &list );
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_getTablesList( QStringList &list );
@@ -81,6 +80,7 @@ class OracleConnection : public Connection
 		friend class OracleCursor;
 	private:
 		oracle::occi::SQLException ea;
+		bool active;
 	
 }; // class OracleConnection
 
