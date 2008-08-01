@@ -80,11 +80,11 @@ public:
 
 protected:
     KoPAViewMode * m_savedViewMode;
-    KoPACanvas * m_presenterViewCanvas;
     QWidget * m_savedParent;
     KPrPresentationTool * m_tool;
     KPrAnimationDirector * m_animationDirector;
     KPrAnimationDirector * m_pvAnimationDirector;
+    KoPACanvas * m_presenterViewCanvas;
     KPrPresenterViewWidget * m_presenterViewWidget;
 
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
