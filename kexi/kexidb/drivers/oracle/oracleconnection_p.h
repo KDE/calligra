@@ -87,6 +87,7 @@ class OracleCursorData : public OracleConnectionInternal
 		OracleCursorData(KexiDB::Connection* connection);
 		virtual ~OracleCursorData();
 		std::vector<unsigned long> lengths;
+		std::vector<int> types;
 		unsigned long numRows;
       
 };

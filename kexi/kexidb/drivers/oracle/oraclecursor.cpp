@@ -73,25 +73,29 @@ OracleCursor::~OracleCursor() {
 bool OracleCursor::drv_open() {
 //Done, but there are thigs I dunno understand (yet ^^)
    QString count="select count(*) from("+m_sql+")";
-   KexiDBDrvDbg <<m_sql;
+KexiDBDrvDbg <<m_sql<<endl;
    try{
-      //d->stmt=d->oraconn->createStatement();
       d->rs=d->stmt->executeQuery(count.latin1());
       if(d->rs->next()) d->numRows=d->rs->getInt(1);//Numer of rows
       //Oracle doesnt provide a method to count ¬¬
       d->stmt->closeResultSet(d->rs);
       d->rs=d->stmt->executeQuery(m_sql.latin1());
-      d->lengths=vector<unsigned long>(m_fieldCount); 
-        
+      
       vector<MetaData> md = d->rs->getColumnListMetaData();
       m_fieldCount=md.size();//Number of columns
-      //m_lengths=vector<int>v(m_fieldCount);
-      
+      d->types=vector<int>(m_fieldCount);
+      d->lengths=vector<unsigned long>(m_fieldCount); 
+   
+ //KexiDBDrvDbg <<"Iniciatig Metadata"<<endl;   
       for(int i=0; i<m_fieldCount;i++){
          d->lengths[i]=md[i].getInt(MetaData::ATTR_DATA_SIZE);
+         d->types[i]=md[i].getInt(MetaData::ATTR_DATA_TYPE);
+         if(d->types[i]==8) d->rs->setMaxColumnSize(i+1,2000);//Long
       }
-          
+ //KexiDBDrvDbg <<"(2)"<<endl;
       m_at=0;
+      d->rs->next();
+ //KexiDBDrvDbg <<"(3)"<<endl;
       m_opened=true;
       m_records_in_buf = d->numRows; 
       m_buffering_completed = true;
@@ -109,25 +113,27 @@ bool OracleCursor::drv_open() {
 
 bool OracleCursor::drv_close() {
 //Done! 
+   KexiDBDrvDbg <<endl;
    if(d->rs){
       d->stmt->closeResultSet(d->rs);
       d->rs=0;
    }
    d->lengths.~vector<unsigned long>();
+   d->types.~vector<int>();
    m_opened=false;
    d->numRows=0;
    return true;
 }
 
 bool OracleCursor::moveFirst() {
-//Done?   
+//Done?  
+    KexiDBDrvDbg <<endl; 
    if(d->rs->next()) return true;
    return false;
 }
 
 void OracleCursor::drv_getNextRecord() {
-//Done
-//	KexiDBDrvDbg << "OracleCursor::drv_getNextRecord" << endl;
+      KexiDBDrvDbg <<endl;
       if(d->rs->status()){
          m_result=FetchOK;
       }
@@ -143,22 +149,26 @@ void OracleCursor::drv_getNextRecord() {
 QVariant OracleCursor::value(uint pos) {
 //Done?   
 //whats a QVariant?
-   //-->QVariant makes to types what Ditto makes to pokemon (cool)
+   //-->QVariant makes to types what Ditto makes to pokemon
       //so... QVariant=types*pokemon/Ditto
 //What is this function supposed to do?
    //-->Returns the value stored in the column number i (counting from 0)
-            
+   
+KexiDBDrvDbg <<"(1)"<<endl;          
 	if (!d->rs->status() || pos>=m_fieldCount)
 		return QVariant();
-    MetaData md=(d->rs->getColumnListMetaData())[pos+1];
-    int t=md.getInt(MetaData::ATTR_DATA_TYPE);
-    
+    //MetaData md=(d->rs->getColumnListMetaData())[pos+1];
+    int t=d->types[pos];
+  
+KexiDBDrvDbg <<"(2)"<<endl;       
    KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldsExpanded->count())
 		? m_fieldsExpanded->at(pos)->field : 0;	
 //! @todo js: use MYSQL_FIELD::type here!
    //Oracle ResultSet counts from 1
    //return KexiDB::cstringToVariant(d->rs[pos+1], f, d->lengths[pos]);
-   if (t==1||t==5||t==9||t==94||t==96||t==104){//text
+   
+KexiDBDrvDbg <<"(3)"<<endl;
+   if (t==1||t==5||t==8||t==9||t==94||t==96||t==104){//text
       return QVariant( d->rs->getString(pos+1).c_str());
    }else if (t==3||t==6||t==2){//Numeric
       return QVariant(d->rs->getDouble(pos+1));
@@ -166,7 +176,7 @@ QVariant OracleCursor::value(uint pos) {
    }else if (t==113) {//blob
       return QByteArray((const char*)&d->rs->getBlob(pos+1),d->lengths[pos]);
    }
-
+KexiDBDrvDbg <<"(4)"<<endl;
 //! @todo date/time?
 	//default
    return QVariant(d->rs->getString(pos+1).c_str());
@@ -177,7 +187,7 @@ QVariant OracleCursor::value(uint pos) {
  */
 bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 {
-//	KexiDBDrvDbg << "OracleCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
+	KexiDBDrvDbg << ": Position is " << (long)m_at<< endl;
 	if (d->numRows<=0)
 		return false;
 
@@ -214,11 +224,11 @@ bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 	return true;
 }
 
-void OracleCursor::drv_appendCurrentRecordToBuffer() {}
+void OracleCursor::drv_appendCurrentRecordToBuffer() {KexiDBDrvDbg <<endl;}
 
 
 void OracleCursor::drv_bufferMovePointerNext() {
-//Done   
+  KexiDBDrvDbg <<endl;  
    try{
       d->rs->next();
    }catch ( ea){
@@ -228,13 +238,13 @@ void OracleCursor::drv_bufferMovePointerNext() {
 }
 
 void OracleCursor::drv_bufferMovePointerPrev() {
-   KexiDBDrvDbg << "Oracle::drv_bufferMovePointerPrev: NOT AVAILABLE" << endl;
+   KexiDBDrvDbg << "Operation NOT AVAILABLE" << endl;
 }
 
 
 void OracleCursor::drv_bufferMovePointerTo(Q_LLONG to) {
-//Done?
-    Q_LLONG pos=to-m_at-1;
+    KexiDBDrvDbg <<"("<<to<<"/"<<d->numRows<<")"<<endl;
+    Q_LLONG pos=to-m_at;
     for(int i=0; i<pos;i++){
        d->rs->next();
     }
@@ -274,11 +284,14 @@ QString OracleCursor::serverResultName()
 
 void OracleCursor::drv_clearServerResult()
 {
- //Done
-	if (d && d->rs){
+  KexiDBDrvDbg <<endl;
+ d->errno=0;
+ d->errmsg="";
+	/*if (d && d->rs){
         d->stmt->closeResultSet(d->rs);
         d->rs=0;
     }
+    */
 }
 
 QString OracleCursor::serverErrorMsg()

@@ -155,7 +155,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
     {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.getMessage().c_str());
-       KexiDBDrvDbg<<ea.what();
+       KexiDBDrvDbg<<errmsg;
        return(false);
     }
 }

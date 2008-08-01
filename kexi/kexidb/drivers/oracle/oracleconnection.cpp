@@ -90,7 +90,7 @@ Cursor* OracleConnection::prepareQuery( QuerySchema& query, uint cursor_options 
 
 /*bool OracleConnection::drv_getDatabasesList( QStringList &list )
 {
-	KexiDBDrvDbg << "OracleConnection::drv_getDatabasesList:";
+	KexiDBDrvDbg <<endl;
 	try{
 		d->rs=d->stmt->executeQuery("SELECT user FROM DUAL");
 		if(d->rs->next()) list.append(d->rs->getString(1).c_str());
@@ -116,7 +116,7 @@ Cursor* OracleConnection::prepareQuery( QuerySchema& query, uint cursor_options 
  * Choices are: return true, return false or default to parent behaviour
  */
 bool OracleConnection::drv_createDatabase( const QString &dbName) {
-	KexiDBDrvDbg << "OracleConnection::drv_createDatabase: " << dbName << endl;
+	KexiDBDrvDbg << dbName << endl;
 	QString user;
 	int res;
 	try{
@@ -137,7 +137,7 @@ bool OracleConnection::drv_createDatabase( const QString &dbName) {
 
 bool OracleConnection::drv_databaseExists( const QString &dbName, bool /*ignoreErrors*/ )
 {
-  KexiDBDrvDbg << "OracleConnection::drv_dataBaseExists: " << dbName << endl;
+  KexiDBDrvDbg << dbName << endl;
 	QString user;
 	int res;
 	try{
@@ -156,35 +156,6 @@ bool OracleConnection::drv_databaseExists( const QString &dbName, bool /*ignoreE
 	}
 }
 
-/*bool OracleConnection::createDatabase( const QString &dbName )
-{
-	if (!checkConnected())
-		return false;
-	//-create system tables schema objects
-	if (!setupKexiDBSystemSchema())
-		return false;
-
-	//-physically create system tables
-	foreach (TableSchema* t, d->kexiDBSystemTables()) {
-		if (!drv_createTable( t->name() ))
-			createDatabase_ERROR;
-	}
-
-	TableSchema *t_db = d->table("kexi__db");
-	if (!t_db)
-		createDatabase_ERROR;
-	if ( !insertRecord(*t_db, "kexidb_major_ver", KexiDB::version().major)
-		|| !insertRecord(*t_db, "kexidb_minor_ver", KexiDB::version().minor))
-		createDatabase_ERROR;
-
-	if (trans.active() && !commitTransaction(trans))
-		createDatabase_ERROR;
-
-	createDatabase_CLOSE;
-	return true;
-}*/
-
-
 
 // TODO: How should we use this?
 /**
@@ -195,7 +166,7 @@ bool OracleConnection::drv_databaseExists( const QString &dbName, bool /*ignoreE
 bool OracleConnection::drv_useDatabase(const QString &dbName,
 																	 bool *cancelled, MessageHandler* msgHandler)
 {
-KexiDBDrvDbg << "OracleConnection::drv_useDatabase"<<endl;
+KexiDBDrvDbg <<endl;
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
 //TODO is here escaping needed?
@@ -208,7 +179,7 @@ KexiDBDrvDbg << "OracleConnection::drv_useDatabase"<<endl;
  */
 bool OracleConnection::drv_closeDatabase()
 {
-//TODO free resources 
+  KexiDBDrvDbg <<endl;
 	return true;
 }
 
@@ -244,7 +215,7 @@ bool OracleConnection::drv_setAutoCommit(bool on)
 	  d->stmt->setAutoCommit(on);
 	  return true;
 	}catch ( ea){
-	  KexiDBDrvDbg <<ea.what();
+	  KexiDBDrvDbg <<ea.getMessage().c_str();
 	  return false;
 	}
 }
@@ -264,6 +235,7 @@ bool OracleConnection::drv_executeSQL( const QString& statement )
  */
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
 {
+  KexiDBDrvDbg <<endl;
 	return false;
 }
 
