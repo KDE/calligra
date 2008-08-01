@@ -31,6 +31,7 @@ using namespace KexiDB;
 OracleConnection::OracleConnection(Driver *driver, ConnectionData &conn_data)
 	: Connection(driver,conn_data)
 	, d(new OracleConnectionInternal(this))
+	,active(false)
 {
 }
 
@@ -88,14 +89,29 @@ Cursor* OracleConnection::prepareQuery( QuerySchema& query, uint cursor_options 
 
 // TODO: See below (this piece of code should be removed)
 
-/*bool OracleConnection::drv_getDatabasesList( QStringList &list )
+bool OracleConnection::drv_getDatabasesList( QStringList &list )
+/*
+ As databases doesnt exist in Oracle we should redefine the concept
+ on purpose of cheating kexi.
+ The only database wich can exist is the current user.
+ That database exists if it contains kexi tables.
+*/
 {
 	KexiDBDrvDbg <<endl;
+	QString user;
 	try{
 		d->rs=d->stmt->executeQuery("SELECT user FROM DUAL");
-		if(d->rs->next()) list.append(d->rs->getString(1).c_str());
-		KexiDBDrvDbg <<list<<endl;
+		d->rs->next();
+		user=QString(d->rs->getString(1).c_str());
 		d->stmt->closeResultSet(d->rs);
+		
+		d->rs=d->stmt->executeQuery("select COUNT(*) from user_tables where table_name like \'KEXI__%\'");
+	  d->rs->next();
+	  
+	  if (d->rs->getInt(1)>0) list.append(user);
+		d->stmt->closeResultSet(d->rs);
+		
+		KexiDBDrvDbg <<list<<endl;
 		return true;
 	}
 	catch ( ea)
@@ -106,7 +122,7 @@ Cursor* OracleConnection::prepareQuery( QuerySchema& query, uint cursor_options 
        return(false);
   }
   
-}*/
+}
 
 // TODO: Understand this
 /**
@@ -124,29 +140,32 @@ bool OracleConnection::drv_createDatabase( const QString &dbName) {
 		if(d->rs->next()) user=QString(d->rs->getString(1).c_str());
 		d->stmt->closeResultSet(d->rs);
 		res=!user.compare(dbName);
-		//KexiDBDrvDbg << "OracleConnection::drv_createDatabase: " 
-    //              << "USER:"<<user<<"DBNAME:"<<dbName<<"("<<res<<")"<<endl;
     return res;
 	}
-	catch ( ea)
+	catch (ea)
 	{
-	  KexiDBDrvDbg << "OracleConnection::drv_createDatabase: "<< ea.what()<< endl;
+	  KexiDBDrvDbg << ea.getMessage().c_str()<< endl;
 	  return(false);
 	}
 }
 
 bool OracleConnection::drv_databaseExists( const QString &dbName, bool /*ignoreErrors*/ )
 {
-  KexiDBDrvDbg << dbName << endl;
 	QString user;
 	int res;
 	try{
+	  if(active) return true;
+	  
 		d->rs=d->stmt->executeQuery("SELECT user FROM DUAL");
 		if(d->rs->next()) user=QString(d->rs->getString(1).c_str());
 		d->stmt->closeResultSet(d->rs);
 		res=!user.compare(dbName);
-		//KexiDBDrvDbg << "OracleConnection::drv_dataBaseExists: " 
-    //              << "USER:"<<user<<"DBNAME:"<<dbName<<"("<<res<<")"<<endl;
+	  
+	  /*d->rs=d->stmt->executeQuery("select COUNT(*) from user_tables where table_name like \'KEXI__%\'");
+	  d->rs->next();
+	  res=res && (d->rs->getInt(1)>0);
+	  d->stmt->closeResultSet(d->rs);*/
+	  KexiDBDrvDbg << dbName <<":"<<res<< endl;
     return res;
 	}
 	catch ( ea)
@@ -170,7 +189,12 @@ KexiDBDrvDbg <<endl;
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
 //TODO is here escaping needed?
-	return d->useDatabase(dbName);
+	if( d->useDatabase(dbName))
+	{
+	  active=true;
+	  return true;
+	}
+	return false;
 }
 
 /**
@@ -180,6 +204,7 @@ KexiDBDrvDbg <<endl;
 bool OracleConnection::drv_closeDatabase()
 {
   KexiDBDrvDbg <<endl;
+  active=false;
 	return true;
 }
 
@@ -187,8 +212,11 @@ bool OracleConnection::drv_closeDatabase()
  * We cannot do that unless we mean users.
  */
 bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
+/*
+TODO
+Drop the database acording our refeinition should be droping all KEXI__ tables
+*/
 {
-// TODO: should we set up an error message somewhere?
 	KexiDBDrvDbg <<"Oracle does not provide such functionality";
 	return true;
 }
@@ -219,19 +247,15 @@ bool OracleConnection::drv_setAutoCommit(bool on)
 	  return false;
 	}
 }
-
-/**
- * Execute a SQL statement. If it was a query, results must be
- * retrieved elsewhere.
- */                
+            
 bool OracleConnection::drv_executeSQL( const QString& statement )
 {
     return d->executeSQL(statement);
 }
 
 /**
- * RowID must be stored somewhere (read OracleConnectionInternal) or there must be
- * a way to get it, else, return false
+ * RowID must be stored somewhere (read OracleConnectionInternal) or there must 
+ * be a way to get it, else, return false
  */
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
 {
@@ -281,7 +305,7 @@ bool OracleConnection::drv_containsTable( const QString &tableName )
 {
   KexiDBDrvDbg<<endl;
 	bool success;
-	return resultExists(QString("SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE ':1'")
+	return resultExists(QString("SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE \'"+tableName.upper()+"\'")
 		.arg(driver()->escapeString(tableName)), success) && success;
 }
 
