@@ -44,7 +44,7 @@ using std::sqrt;
 
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
-    : KoTool( canvas ), m_shape( 0 ), m_isDrawing( false ), m_speed(0, 0)
+    : KoTool( canvas ), m_shape( 0 ), m_isDrawing( false ), m_speed(0, 0), m_selectedPath(0)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
              SLOT(updateSelectedPath()) );
