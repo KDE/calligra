@@ -160,7 +160,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
             m_presenterViewWidget->move( pvRect.topLeft() );
-            m_presenterViewWidget->updateWidget( presentationRect.size() ); 
+            m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() ); 
             m_presenterViewWidget->show();
             m_presenterViewWidget->setFocus();                             // it shown full screen
 

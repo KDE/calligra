@@ -95,7 +95,7 @@ void KPrPresenterViewInterface::setActivePage( KoPAPageBase *page )
 
     // set the thumbnail for next page preview
     KoPAPageBase *nextPage = 0;
-    if ( currentIndex != m_pages.count() - 1 && currentIndex != -1 ) {
+    if ( currentIndex != pageCount ) {
         nextPage = m_pages.at( currentIndex + 1 );
         m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
     }
@@ -106,7 +106,7 @@ void KPrPresenterViewInterface::setActivePage( KoPAPageBase *page )
     }
 
     // update the label
-    m_currentSlideLabel->setText( currentIndex != -1 ? 
+    m_currentSlideLabel->setText( currentIndex != pageCount ? 
             i18n( "Current Slide %1 of %2", currentIndex + 1, pageCount ) : 
             i18n( "End of Slide Show" ) );
 

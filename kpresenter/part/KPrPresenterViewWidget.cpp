@@ -89,13 +89,21 @@ void KPrPresenterViewWidget::setActivePage( KoPAPageBase *page )
     m_activeWidget->setActivePage( page );
 }
 
-void KPrPresenterViewWidget::updateWidget( const QSize &canvasSize )
+void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize, const QSize &canvasSize )
 {
-    // TODO: better way to calculate preview size, based on current widget size
-    // This is only temporary and rough calculation
-    int previewHeight = 0.4 * canvasSize.height();
+    // a better way to resize the canvas, still need to find optimum value
 
+    // try to make the height 40% of the widget height
+    int previewHeight = 0.4 * canvasSize.height();
     double ratio = (double)canvasSize.width() / canvasSize.height();
+    int previewWidth = ratio * previewHeight;
+
+    // if it doesn't fit, make the width 40% of the widget width
+    if ( previewWidth * 2 > 0.8 * widgetSize.width() ) {
+        previewWidth = 0.4 * widgetSize.width();
+        previewHeight = previewWidth / ratio;
+    }
+
     QSize previewSize( previewHeight * ratio, previewHeight );
 
     m_mainWidget->setPreviewSize( previewSize );
