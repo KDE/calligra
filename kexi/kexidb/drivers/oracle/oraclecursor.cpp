@@ -33,8 +33,7 @@
 #define BOOL bool
 using namespace std;
 using namespace KexiDB;
-using namespace oracle;
-using namespace occi;
+using namespace oracle::occi;
 
 //Cursor can be defined in two ways:
 OracleCursor::OracleCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
@@ -42,7 +41,7 @@ OracleCursor::OracleCursor(KexiDB::Connection* conn, const QString& statement, u
 	, d( new OracleCursorData(conn) )
 {
 //Done
-	m_options |= Buffered;
+	m_options &= !Buffered;
   //Description of different conn vars :p
   //Stolen                                  Param ConnectionInternal
 	d->oraconn 	= static_cast<OracleConnection*>(conn)->d->oraconn;
@@ -115,9 +114,15 @@ bool OracleCursor::drv_close() {
 //Done! 
    KexiDBDrvDbg <<endl;
    if(d->rs){
-      d->stmt->closeResultSet(d->rs);
-      d->rs=0;
+      try{
+        d->stmt->closeResultSet(d->rs);
+        d->rs=0;
+      }catch (SQLException ea){
+        KexiDBDrvDbg <<ea.getMessage().c_str()<<endl;
+        return false;
+      }
    }
+   //KexiDBDrvDbg <<"(1)"<<endl;
    d->lengths.~vector<unsigned long>();
    d->types.~vector<int>();
    m_opened=false;

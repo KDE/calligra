@@ -106,7 +106,6 @@ bool OracleConnectionInternal::db_disconnect()
 	  oraconn->terminateStatement(stmt);
 	  env->terminateConnection(oraconn);
     oraconn=0;
-	  KexiDBDrvDbg << "OracleConnection::disconnect()" << endl;
 	  return true;
 	  }
 	 catch (ea)
