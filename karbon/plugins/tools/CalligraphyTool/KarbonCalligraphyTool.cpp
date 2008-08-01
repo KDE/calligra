@@ -59,6 +59,18 @@ KarbonCalligraphyTool::~KarbonCalligraphyTool()
 void KarbonCalligraphyTool::paint( QPainter &painter,
                                    const KoViewConverter &converter )
 {
+    if ( m_usePath && m_selectedPath )
+    {
+        painter.save();
+        painter.setRenderHints( QPainter::Antialiasing, false );
+        painter.setPen( Qt::red ); // TODO make configurable
+        QRectF rect = m_selectedPath->boundingRect();
+        QPointF p1 = converter.documentToView( rect.topLeft() );
+        QPointF p2 = converter.documentToView( rect.bottomRight() );
+        painter.drawRect( QRectF(p1, p2) );
+        painter.restore();
+    }
+
     if ( ! m_shape )
         return;
 
@@ -98,8 +110,8 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     if ( ! m_isDrawing )
         return;
 
-    m_endOfPath = false; // allow last point being added
-    addPoint( event ); // add last point
+    m_endOfPath = false;    // allow last point being added
+    addPoint( event );      // add last point
     m_isDrawing = false;
 
     if ( m_shape->pointCount() == 0 )
@@ -359,6 +371,8 @@ void KarbonCalligraphyTool::setDrag( double drag )
 void KarbonCalligraphyTool::setUsePath( bool usePath )
 {
     m_usePath = usePath;
+    if ( m_selectedPath )
+        m_canvas->updateCanvas( m_selectedPath->boundingRect() );
 }
 
 void KarbonCalligraphyTool::setUsePressure( bool usePressure )
@@ -399,4 +413,7 @@ void KarbonCalligraphyTool::updateSelectedPath()
     // or the other way around
     if ( (m_selectedPath != 0) != (oldSelectedPath != 0) )
         emit pathSelectedChanged( m_selectedPath != 0 );
+
+    //if ( m_usePath )
+    //    m_canvas->updateCanvas();
 }
