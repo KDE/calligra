@@ -73,13 +73,14 @@ namespace Scripting {
             /// Return a schedule list view
             QWidget *createScheduleListView( QWidget *parent );
             /// Return a node property list view
-            QWidget *createNodePropertyListView( QWidget *parent );
+            QWidget *createDataQueryView( QWidget *parent );
             
             /// Return data, default role and schedule
-            QVariant data( QObject *object, const QString &property ) const;
+            QVariant data( QObject *object, const QString &property );
             /// Return data
-            QVariant data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId ) const;
-            
+            QVariant data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId );
+            /// Return header text
+            QVariant headerData( int objectType, const QString &property );
         private:
             /// \internal d-pointer class.
             class Private;

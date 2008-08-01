@@ -338,32 +338,21 @@ QObject *Scripting::Project::account( KPlato::Account *account )
     return m_accounts[ account ];
 }
 
-int Scripting::Project::accountProperty( const QString &property ) const
-{
-    if ( property == "AccountName" ) {
-        return 0;
-    }
-    if ( property == "AccountDescription" ) {
-        return 1;
-    }
-    return -1;
-}
-
 QVariant Scripting::Project::accountHeaderData( const QString &property )
 {
-    return m_accountModel.headerData( accountProperty( property ), Qt::Horizontal );
+    int col = accountColumnNumber( property );
+    return m_accountModel.headerData( col );
 }
 
-QVariant Scripting::Project::accountData( const KPlato::Account *account, const QString &property, const QString &, long )
+int Scripting::Project::accountColumnNumber( const QString &property ) const
 {
-    // Fake this atm
-    switch ( accountProperty( property ) ) {
-        case 0: return account->name();
-        case 1: return account->description();
-        default:
-            break;
-    }
-    return QVariant();
+    return m_accountModel.columnMap().keyToValue( property.toUtf8() );
+}
+
+
+QVariant Scripting::Project::accountData( const KPlato::Account *account, const QString &property, const QString &role, long /*schedule*/ )
+{
+    return m_accountModel.data( account, accountColumnNumber( property ), stringToRole( role ) ).toString();
 }
 
 int Scripting::Project::stringToRole( const QString &role ) const

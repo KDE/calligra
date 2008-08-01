@@ -117,44 +117,69 @@ QObject *Module::project()
     return d->project;
 }
 
+
 QWidget *Module::createScheduleListView( QWidget *parent )
 {
-    return new ScriptingScheduleListView( this, parent );
+    ScriptingScheduleListView *v = new ScriptingScheduleListView( this, parent );
+    if ( parent && parent->layout() ) {
+        parent->layout()->addWidget( v );
+    }
+    return v;
 }
 
-QWidget *Module::createNodePropertyListView( QWidget *parent )
+QWidget *Module::createDataQueryView( QWidget *parent )
 {
-    return new ScriptingNodePropertyListView( this, parent );
+    ScriptingDataQueryView *v = new ScriptingDataQueryView( this, parent );
+    if ( parent && parent->layout() ) {
+        parent->layout()->addWidget( v );
+    }
+    return v;
 }
 
 
-QVariant Module::data( QObject *object, const QString &property ) const
+QVariant Module::data( QObject *object, const QString &property )
 {
     return data( object, property, "DisplayRole", -1 );
 }
 
-QVariant Module::data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId ) const
+QVariant Module::data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId )
 {
-    if ( object == 0 ) {
+    Project *p = qobject_cast<Project*>( project() );
+    if ( object == 0 || p == 0) {
         return QVariant();
     }
     Node *n = qobject_cast<Node*>( object );
     if ( n ) {
-        return d->project->nodeData( n->kplatoNode(), property, role, scheduleId );
+        return p->nodeData( n->kplatoNode(), property, role, scheduleId );
     }
     Resource *r = qobject_cast<Resource*>( object );
     if ( r ) {
-        return d->project->resourceData( r->kplatoResource(), property, role, scheduleId );
+        return p->resourceData( r->kplatoResource(), property, role, scheduleId );
     }
     ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
     if ( g ) {
-        return d->project->resourceGroupData( g->kplatoResourceGroup(), property, role );
+        return p->resourceGroupData( g->kplatoResourceGroup(), property, role );
     }
     Account *a = qobject_cast<Account*>( object );
     if ( a ) {
-        return d->project->accountData( a->kplatoAccount(), property, role );
+        return p->accountData( a->kplatoAccount(), property, role );
     }
     // TODO Schedule (if needed)
+    return QVariant();
+}
+
+QVariant Module::headerData( int objectType, const QString &property )
+{
+    Project *p = qobject_cast<Project*>( project() );
+    if ( p == 0 ) {
+        return QVariant();
+    }
+    switch ( objectType ) {
+        case 0: return p->nodeHeaderData( property );
+        case 1: return p->resourceHeaderData( property );
+        case 2: return p->accountHeaderData( property );
+        default: break;
+    }
     return QVariant();
 }
 

@@ -80,4 +80,14 @@ void Scripting::Resource::clearExternalAppointments( const QString &id )
     m_resource->clearExternalAppointments( id );
 }
 
+int Scripting::Resource::childCount() const
+{
+    return 0;
+}
+
+QObject *Scripting::Resource::childAt( int /*index*/ ) const
+{
+    return 0;
+}
+
 #include "Resource.moc"

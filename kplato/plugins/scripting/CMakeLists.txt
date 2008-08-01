@@ -21,6 +21,11 @@ set(krossmodulekplato_PART_SRCS
     ScriptingWidgets.cpp
 )
 
+kde4_add_ui_files(krossmodulekplato_PART_SRCS
+    ScriptingDataQueryView.ui
+)
+
+
 qt4_wrap_cpp(krossmodulekplato_PART_SRCS
 )
 

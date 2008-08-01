@@ -56,6 +56,11 @@ namespace Scripting {
             /// Return resource at @index
             QObject *resourceAt( int index ) const;
             
+            /// Number of resources in this group
+            int childCount() const;
+            /// Return resource at @index
+            QObject *childAt( int index ) const;
+
         private:
             Project *m_project;
             KPlato::ResourceGroup *m_group;

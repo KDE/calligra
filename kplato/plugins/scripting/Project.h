@@ -154,9 +154,10 @@ namespace Scripting {
             
             int resourceColumnNumber( const QString &property ) const;
             
+            int accountColumnNumber( const QString &property ) const;
+
         private:
             int stringToRole( const QString &role ) const;
-            int accountProperty( const QString &property ) const;
             
         private:
             Module *m_module;
@@ -170,7 +171,7 @@ namespace Scripting {
             QMap<KPlato::Calendar*, Calendar*> m_calendars;
             QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
             
-            KPlato::AccountItemModel m_accountModel;
+            KPlato::AccountModel m_accountModel;
             QMap<KPlato::Account*, Account*> m_accounts;
     };
 

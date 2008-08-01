@@ -27,8 +27,11 @@
 
 #include <kactionselector.h>
 
+#include "ui_ScriptingDataQueryView.h"
+
 class QTreeView;
 class QStandardItemModel;
+class QListWidget;
 
 namespace Scripting {
     class Module;
@@ -94,6 +97,47 @@ class ScriptingNodePropertyListView : public KActionSelector
         QVariant selectedProperties() const;
 
 
+    private:
+        Scripting::Module *m_module;
+};
+
+/**
+ * The ScriptingDataQueryView provides a selection listview that displays
+ */
+class ScriptingDataQueryView : public QWidget, Ui::ScriptingDataQueryView
+{
+    Q_OBJECT
+    public:
+
+        /**
+     * Constructor.
+     * \param module The \a ScriptingModule instance that should be used
+     * as datasource for what should be displayed within the listview.
+     * \param parent The parent QWidget this widget should be displayed in.
+         */
+        ScriptingDataQueryView(Scripting::Module* module, QWidget* parent);
+
+        /**
+         * Destructor.
+         */
+        virtual ~ScriptingDataQueryView();
+
+    public slots:
+        /// If true, include header texts
+        QVariant includeHeaders() const;
+        /// The type of object (Node, Resource, Account)
+        QVariant objectType() const;
+        /// Return the selected properties
+        QVariant selectedProperties() const;
+
+
+    private slots:
+        void slotObjectTypeChanged( int index );
+        
+    private:
+        void setup();
+        void setupLists( QListWidget *list, const QString &tag, const QString &property, const QString &tooltip );
+        
     private:
         Scripting::Module *m_module;
 };

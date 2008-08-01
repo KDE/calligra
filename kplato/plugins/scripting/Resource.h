@@ -68,6 +68,11 @@ namespace Scripting {
             /// Clear appointments with identity @p id
             void clearExternalAppointments( const QString &id );
 
+            /// Number of child resources. Child resources is not supported. Always returns 0.
+            int childCount() const;
+            /// Return resource at @index. Child resources is not supported. Always returns 0.
+            QObject *childAt( int index ) const;
+            
         private:
             Project *m_project;
             KPlato::Resource *m_resource;
