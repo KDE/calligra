@@ -24,12 +24,13 @@
 #include <KoPageLayout.h>
 
 class KoShape;
+class KPrDocument;
 class KPrPage;
 
 class KPrNotes : public KoShapeContainer
 {
 public:
-    explicit KPrNotes(KPrPage *page);
+    KPrNotes( KPrPage * page, KPrDocument * document );
     ~KPrNotes();
 
     KoShape *textShape();

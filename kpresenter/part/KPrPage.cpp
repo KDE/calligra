@@ -28,6 +28,7 @@
 #include <KoGenStyle.h>
 #include <KoPALoadingContext.h>
 
+#include "KPrDocument.h"
 #include "KPrPageApplicationData.h"
 #include "KPrNotes.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
@@ -38,8 +39,8 @@
 class KPrPage::Private
 {
 public:
-    Private( KPrPage * page )
-    : pageNotes( new KPrNotes( page ) )
+    Private( KPrPage * page, KPrDocument * document )
+    : pageNotes( new KPrNotes( page, document ) )
     {}
 
     ~Private()
@@ -50,9 +51,9 @@ public:
     KPrNotes * pageNotes;
 };
 
-KPrPage::KPrPage( KoPAMasterPage * masterPage )
+KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
 : KoPAPage( masterPage )
-, d( new Private( this ) )
+, d( new Private( this, document ) )
 {
     setApplicationData( new KPrPageApplicationData() );
 }

@@ -20,6 +20,8 @@
 #ifndef KPRENDOFSLIDESHOWPAGE_H
 #define KPRENDOFSLIDESHOWPAGE_H
 
+class KPrDocument;
+
 #include "KPrPage.h"
 
 /**
@@ -32,7 +34,7 @@
 class KPrEndOfSlideShowPage : public KPrPage
 {
 public:
-    KPrEndOfSlideShowPage( const QRectF & screenRect );
+    KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocument * document );
     ~KPrEndOfSlideShowPage();
 };
 

@@ -28,12 +28,13 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
+#include "KPrDocument.h"
 #include "KPrMasterPage.h"
 
 #include <kdebug.h>
 
-KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect )
-: KPrPage( new KPrMasterPage() )
+KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocument * document )
+: KPrPage( new KPrMasterPage(), document )
 {
     qreal ratio = screenRect.width() / screenRect.height();
     KoPageLayout pageLayout;

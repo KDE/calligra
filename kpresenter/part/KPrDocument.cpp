@@ -71,7 +71,7 @@ const char * KPrDocument::odfTagName( bool withNamespace )
 
 KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 {
-    return new KPrPage( masterPage );
+    return new KPrPage( masterPage, this );
 }
 
 KoPAMasterPage * KPrDocument::newMasterPage()

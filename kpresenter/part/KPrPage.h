@@ -24,13 +24,14 @@
 
 #include "KPrAnimationController.h"
 
+class KPrDocument;
 class KPrPageApplicationData;
 class KPrNotes;
 
 class KPrPage : public KoPAPage, public KPrAnimationController
 {
 public:
-    explicit KPrPage( KoPAMasterPage * masterPage );
+    KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );
     virtual ~KPrPage();
 
     /**
