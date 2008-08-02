@@ -62,6 +62,10 @@ set( kpresenterprivate_LIB_SRCS
      shapeanimations/KPrShapeAnimationFactory.cpp
      shapeanimations/KPrShapeAnimationRegistry.cpp
 
+     pagelayout/KPrPlaceholder.cpp
+     pagelayout/KPrPageLayout.cpp
+     pagelayout/KPrPageLayouts.cpp
+
      ui/KPrCustomSlideShowsDialog.cpp
      ui/KPrConfigureSlideShowDialog.cpp
    )
