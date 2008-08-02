@@ -767,40 +767,47 @@ void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &con
 
 bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument )
 {
-    QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString() );
-    QString m_tmpURL;
+    if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) )
+    {
+        kError() << "Object element has no valid xlink:href attribute";
+        return false;
+    }
+    
+    QString url = objectElement.attributeNS( KoXmlNS::xlink, "href" );
+    
+    QString tmpURL;
     if ( url[0] == '#' )
         url = url.mid( 1 );
     if ( url.startsWith( "./" ) )
-        m_tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
+        tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
     else
-        m_tmpURL = url;
-    qDebug() << m_tmpURL;
-    ////////////////////////////
-    QString path = m_tmpURL;
-    if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
+        tmpURL = url;
+
+    QString path = tmpURL;
+    if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
         path = store->currentDirectory();
         if ( !path.isEmpty() )
             path += '/';
-        QString relPath = KUrl( m_tmpURL ).path();
+        QString relPath = KUrl( tmpURL ).path();
         path += relPath.mid( 1 ); // remove leading '/'
     }
     if ( !path.endsWith( '/' ) )
         path += '/';
+    
     const QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
-    qDebug() <<"path for manifest file=" << path <<" mimeType=" << mimeType;
+    //kDebug() << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
-        qDebug() << "Manifest doesn't have media-type for " << path << endl;
+        //kDebug() << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
     const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
     if ( !oasis ) {
-        m_tmpURL += "/maindoc.xml";
-        kDebug(30003) <<" m_tmpURL adjusted to" << m_tmpURL;
+        tmpURL += "/maindoc.xml";
+        //kDebug() << "tmpURL adjusted to" << tmpURL;
     }
-    ///////////////////////////
-    qDebug() <<"KoDocumentChild::loadDocumentInternal m_tmpURL=" << m_tmpURL;
+
+    //kDebug() << "tmpURL=" << tmpURL;
     QString errorMsg;
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() )
@@ -808,22 +815,21 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
         return false;
     }
 
-    //////////////////////////////
     bool res = true;
     bool internalURL = false;
-    if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeUrl( m_tmpURL ) )
+    if ( tmpURL.startsWith( STORE_PROTOCOL ) || tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeUrl( tmpURL ) )
     {
         if ( oasis ) {
             store->pushDirectory();
-            Q_ASSERT( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) );
-            QString relPath = KUrl( m_tmpURL ).path().mid( 1 );
+            Q_ASSERT( tmpURL.startsWith( INTERNAL_PROTOCOL ) );
+            QString relPath = KUrl( tmpURL ).path().mid( 1 );
             store->enterDirectory( relPath );
             res = d->document->loadOasisFromStore( store );
             store->popDirectory();
         } else {
-            if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) )
-                m_tmpURL = KUrl( m_tmpURL ).path().mid( 1 );
-            res = d->document->loadFromStore( store, m_tmpURL );
+            if ( tmpURL.startsWith( INTERNAL_PROTOCOL ) )
+                tmpURL = KUrl( tmpURL ).path().mid( 1 );
+            res = d->document->loadFromStore( store, tmpURL );
         }
         internalURL = true;
         d->document->setStoreInternal( true );
@@ -832,14 +838,14 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
     {
         // Reference to an external document. Hmmm...
         d->document->setStoreInternal( false );
-        KUrl url( m_tmpURL );
+        KUrl url( tmpURL );
         if ( !url.isLocalFile() )
         {
             //QApplication::restoreOverrideCursor();
             // For security reasons we need to ask confirmation if the url is remote
             int result = KMessageBox::warningYesNoCancel(
-                0, i18n( "This document contains an external link to a remote document\n%1", m_tmpURL),
-                i18n( "Confirmation Required" ), KGuiItem(i18n( "Download" )), KGuiItem(i18n( "Skip" ) ));
+                0, i18n( "This document contains an external link to a remote document\n%1", tmpURL ),
+                i18n( "Confirmation Required" ), KGuiItem( i18n( "Download" ) ), KGuiItem( i18n( "Skip" ) ) );
 
             if ( result == KMessageBox::Cancel )
             {
@@ -861,7 +867,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
         // Still waiting...
         //QApplication::setOverrideCursor( Qt::WaitCursor );
 
-    m_tmpURL = QString();
+    tmpURL = QString();
 
     // see KoDocument::insertChild for an explanation what's going on
     // now :-)
