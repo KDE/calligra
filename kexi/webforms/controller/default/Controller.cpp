@@ -103,40 +103,40 @@ namespace KexiWebForms {
 
         bool malformedRequest = true;
         if (action == "") {
-            if (!requestURI.count() != 0) {
+            if (requestURI.count() == 0) {
                 malformedRequest = false;
                 m_index->view(data, writer);
             }
         } else if (action == "create") {
-            if (!requestURI.count() != 1 && u.can(Auth::CREATE)) {
+            if ((requestURI.count() == 1) && u.can(Auth::CREATE)) {
                 data["uri-table"] = requestURI.at(0);
                 m_create->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "read") {
-            if (!requestURI.count() != 1 && u.can(Auth::READ)) {
+            if ((requestURI.count() == 1) && u.can(Auth::READ)) {
                 data["uri-table"] = requestURI.at(0);
                 m_read->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "update") {
-            if (!requestURI.count() != 3 && u.can(Auth::UPDATE)) {
+            if ((requestURI.count() == 3) && u.can(Auth::UPDATE)) {
                 data["uri-table"] = requestURI.at(0);
                 data["uri-pkey"] = requestURI.at(1);
                 data["uri-pval"] = requestURI.at(2);
                 m_update->view(data, writer);
                 malformedRequest = false;
             }
-        } else if (action == "delete" && u.can(Auth::DELETE)) {
-            if (!requestURI.count() != 3) {
+        } else if (action == "delete") {
+            if ((requestURI.count() == 3) && u.can(Auth::DELETE)) {
                 data["uri-table"] = requestURI.at(0);
                 data["uri-pkey"] = requestURI.at(1);
                 data["uri-pval"] = requestURI.at(2);
                 m_delete->view(data, writer);
                 malformedRequest = false;
             }
-        } else if (action == "query" && u.can(Auth::QUERY)) {
-            if (!requestURI.count() != 1) {
+        } else if (action == "query") {
+            if ((requestURI.count() == 1) && u.can(Auth::QUERY)) {
                 data["uri-query"] = requestURI.at(0);
                 m_query->view(data, writer);
                 malformedRequest = false;
