@@ -27,6 +27,7 @@
 namespace KexiWebForms {
     namespace View {
         class Objects;
+        class XMLTable;
     }
 
     class Controller : public pion::net::WebService {
@@ -37,6 +38,7 @@ namespace KexiWebForms {
         virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
     private:
         View::Objects* m_objects;
+        View::XMLTable* m_xmlTable;
     };
     
     

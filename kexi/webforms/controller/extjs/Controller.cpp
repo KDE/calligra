@@ -36,6 +36,7 @@
 //#include "auth/Authenticator.h"
 
 #include "../../view/extjs/Objects.h"
+#include "../../view/extjs/XMLTable.h"
 
 #include "Controller.h"
 
@@ -43,10 +44,12 @@ namespace KexiWebForms {
 
     Controller::Controller() {
         m_objects = new View::Objects();
+        m_xmlTable = new View::XMLTable();
     }
 
     Controller::~Controller() {
         delete m_objects;
+        delete m_xmlTable;
     }
 
     void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
@@ -92,7 +95,13 @@ namespace KexiWebForms {
                 m_objects->view(data, writer);
                 malformedRequest = false;
             }
-        }
+        } else if (action == "xmltable") {
+            if (requestURI.count() == 1) {
+                data["uri-table"] = requestURI.at(0);
+                m_xmlTable->view(data, writer);
+                malformedRequest = false;
+            }
+        }        
 
         if (malformedRequest)
             writer->writeNoCopy("<h1>Malformed Request</h1>");
