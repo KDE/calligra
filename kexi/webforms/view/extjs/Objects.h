@@ -25,7 +25,7 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "View.h"
+#include "../IView.h"
 
 class QString;
 
@@ -38,7 +38,7 @@ namespace View {
      *
      * This service is responsible to delete a particular record
      */
-    class Objects : public View {
+    class Objects : public IView {
     public:
         Objects() {}
         virtual ~Objects() {}
