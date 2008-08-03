@@ -5,7 +5,7 @@
 	
 	<div id="left">
 
-	    {LOGIN}
+	    {{LOGIN}}
 	    <div class="menutitle"><div>
 		    <h2 id="cp-menu-login">Login</h2>
 		    <a href="#cp-skip-login" class="cp-doNotDisplay">Skip menu "Login"</a>
@@ -19,7 +19,7 @@
 		</form>
             </ul>
             <a name="cp-skip-login"/>
-	    {/LOGIN}
+	    {{/LOGIN}}
 	    
 	    <div class="menu_box">
 		<a name="cp-menu" />
