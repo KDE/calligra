@@ -56,6 +56,7 @@ namespace View {
             /// @todo retrieve proper error message
             setValue("MESSAGE", "Error while trying to delete row!");
         }
+        
         renderTemplate(m_dict, writer);
     }
 
