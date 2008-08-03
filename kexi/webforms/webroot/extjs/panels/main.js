@@ -1,10 +1,13 @@
 Ext.onReady(function() {
 
+    // Refresh objects button
     var refreshObjectsButton = new Ext.Toolbar.Button({
         text: 'Refresh',
-        handler: refreshObjectsButton_handler
+        handler: function() {
+        }
     });
 
+    // Objects tree
     var objectsTree = new Ext.tree.TreePanel({
         autoScroll: true,
         border: false,
@@ -19,10 +22,12 @@ Ext.onReady(function() {
     objectsTree.on('click', function(n) {
         var sn = this.selModel.selNode || {}; // selNode is null on initial selection
         if(n.leaf && n.id != sn.id){  // ignore clicks on folders and currently selected node
-            alert(n.id);
+            
         }
     });
 
+
+    // The main panel
     var mainPanel = new Ext.Panel({
         renderTo: 'main',
         layout: 'border',
@@ -43,10 +48,5 @@ Ext.onReady(function() {
             margins: '5 5 5 0'
         }]
     });
-
-    /*********
-     * HANDLERS
-     **********/
-    function refreshObjectsButton_handler() {}
     
 });
