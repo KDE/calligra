@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,29 +23,29 @@
 #include <klocalizedstring.h>
 
 ReportEntitySelector::ReportEntitySelector(QWidget *parent)
- : QWidget(parent)
+        : QWidget(parent)
 {
-	layout = new QVBoxLayout(this);
-	itemLabel = new KPushButton ( KIcon ( "feed-subscribe" ),i18n ( "Label" ), this );
-	itemField = new KPushButton ( KIcon ( "edit-rename" ),i18n ( "Field" ), this );
-	itemText = new KPushButton ( KIcon ( "insert-text" ),i18n ( "Text" ), this );
-	itemLine = new KPushButton ( KIcon ( "draw-freehand" ),i18n ( "Line" ), this );
-	itemBarcode = new KPushButton ( KIcon ( "insert-barcode" ),i18n ( "Barcode" ), this );
-	itemImage = new KPushButton ( KIcon ( "insert-image" ),i18n ( "Image" ), this );
-	itemChart = new KPushButton ( KIcon ( "view-statistics" ),i18n ( "Chart" ), this );
-	itemShape = new KPushButton ( KIcon ( "view-statistics" ),i18n ( "Shape" ), this );
+    layout = new QVBoxLayout(this);
+    itemLabel = new KPushButton(KIcon("feed-subscribe"), i18n("Label"), this);
+    itemField = new KPushButton(KIcon("edit-rename"), i18n("Field"), this);
+    itemText = new KPushButton(KIcon("insert-text"), i18n("Text"), this);
+    itemLine = new KPushButton(KIcon("draw-freehand"), i18n("Line"), this);
+    itemBarcode = new KPushButton(KIcon("insert-barcode"), i18n("Barcode"), this);
+    itemImage = new KPushButton(KIcon("insert-image"), i18n("Image"), this);
+    itemChart = new KPushButton(KIcon("view-statistics"), i18n("Chart"), this);
+    itemShape = new KPushButton(KIcon("view-statistics"), i18n("Shape"), this);
 
-	itemLabel->setFlat(true);
-	layout->addWidget(itemLabel);
-	layout->addWidget(itemField);
-	layout->addWidget(itemText);
-	layout->addWidget(itemLine);
-	layout->addWidget(itemBarcode);
-	layout->addWidget(itemImage);
-	layout->addWidget(itemChart);
-	layout->addWidget(itemShape);
-	layout->addStretch();
-	setLayout(layout);
+    itemLabel->setFlat(true);
+    layout->addWidget(itemLabel);
+    layout->addWidget(itemField);
+    layout->addWidget(itemText);
+    layout->addWidget(itemLine);
+    layout->addWidget(itemBarcode);
+    layout->addWidget(itemImage);
+    layout->addWidget(itemChart);
+    layout->addWidget(itemShape);
+    layout->addStretch();
+    setLayout(layout);
 }
 
 ReportEntitySelector::~ReportEntitySelector()

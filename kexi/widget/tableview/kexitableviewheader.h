@@ -33,21 +33,21 @@
 */
 class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiTableViewHeader(QWidget * parent = 0);
 
     virtual ~KexiTableViewHeader();
 
-    int addLabel( const QString & s, int size = -1 );
+    int addLabel(const QString & s, int size = -1);
 
-    int addLabel( const QIcon & icon, const QString & s, int size = -1 );
+    int addLabel(const QIcon & icon, const QString & s, int size = -1);
 
-    void removeLabel( int section );
+    void removeLabel(int section);
 
     /*! Sets \a toolTip for \a section. */
-    void setToolTip( int section, const QString & toolTip );
+    void setToolTip(int section, const QString & toolTip);
 
     virtual bool eventFilter(QObject * watched, QEvent * e);
 
@@ -58,12 +58,12 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
     QColor selectionBackgroundColor() const;
     void setSelectionBackgroundColor(const QColor &color);
 
-  protected slots:
-    void slotSizeChange(int section, int oldSize, int newSize );
+protected slots:
+    void slotSizeChange(int section, int oldSize, int newSize);
 
-  protected:
-    virtual bool event( QEvent *event );
-    virtual void paintSection( QPainter * p, int index, const QRect & fr );
+protected:
+    virtual bool event(QEvent *event);
+    virtual void paintSection(QPainter * p, int index, const QRect & fr);
     virtual void styleChanged();
 
     int m_lastToolTipSection;
@@ -73,7 +73,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
     QColor m_selectionBackgroundColor;
     QPointer<QStyle> m_privateStyle;
     int m_selectedSection;
-    bool m_styleChangeEnabled : 1;
+bool m_styleChangeEnabled : 1;
 };
 
 #endif

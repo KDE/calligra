@@ -34,7 +34,7 @@ class KexiTableViewColumn;
 */
 class KEXIDATATABLE_EXPORT KexiComboBoxBase
 {
-  public:
+public:
     KexiComboBoxBase();
     virtual ~KexiComboBoxBase();
 
@@ -59,16 +59,16 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
 
-  public:
+public:
     virtual void hide();
 
     void createPopup(bool show);
 
     void showPopup();
-    
+
     //! Call this from slot
     virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
-    
+
     //! Call this from slot
     virtual void slotItemSelected(KexiDB::RecordData*);
 
@@ -78,7 +78,7 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
     //! Implement this to return the internal editor
     virtual QWidget *internalEditor() const = 0;
 
-  protected:
+protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
     //! Used to select row item for an user-entered value \a v.
@@ -86,14 +86,14 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
     KexiDB::RecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
 
     /*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
-     If \a allowNulls is true, NULL is returend if no matched column found, else: 
+     If \a allowNulls is true, NULL is returend if no matched column found, else:
      \a str is returned.
-     Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string 
+     Example: lookInColumn=0, returnFromColumn=1 --returns user-visible string
      for column #1 for id-column #0 */
-    QString valueForString(const QString& str, int* row, uint lookInColumn, 
-      uint returnFromColumn, bool allowNulls = false);
+    QString valueForString(const QString& str, int* row, uint lookInColumn,
+                           uint returnFromColumn, bool allowNulls = false);
 
-    //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that 
+    //! sets \a value for the line edit without setting a flag (m_userEnteredValue) that indicates that
     //! the text has been entered by hand (by a user)
     void setValueOrTextInInternalEditor(const QVariant& value); //QString& text);
 
@@ -120,14 +120,14 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
     //! Implement this as signal
     virtual void acceptRequested() = 0;
 
-    //! Implement this to return a position \a pos mapped from parent (e.g. viewport) 
+    //! Implement this to return a position \a pos mapped from parent (e.g. viewport)
     //! to global coordinates. QPoint(-1, -1) should be returned if this cannot be computed.
     virtual QPoint mapFromParentToGlobal(const QPoint& pos) const = 0;
 
     //! Implement this to return a hint for popup width.
     virtual int popupWidthHint() const = 0;
 
-    //! Implement this to update button state. Table view just updates on/off state 
+    //! Implement this to update button state. Table view just updates on/off state
     //! for the button depending on visibility of the popup
     virtual void updateButton() {}
 
@@ -138,7 +138,7 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 
     void updateTextForHighlightedRow();
 
-    bool handleKeyPressForPopup( QKeyEvent *ke );
+    bool handleKeyPressForPopup(QKeyEvent *ke);
 
     void acceptPopupSelection();
 
@@ -148,21 +148,21 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
     QVariant m_visibleValue;
 
     QVariant m_userEnteredValue; //!< value (usually a text) entered by hand (by the user)
-  
-    bool m_internalEditorValueChanged : 1; //!< true if user has text or other value inside editor
-    bool m_slotInternalEditorValueChanged_enabled : 1; //!< Used in slotInternalEditorValueChanged()
-    bool m_setValueOrTextInInternalEditor_enabled : 1; //!< Used in setValueOrTextInInternalEditor() and slotItemSelected()
-    bool m_mouseBtnPressedWhenPopupVisible : 1; //!< Used only by KexiComboBoxTableEdit
-    bool m_insideCreatePopup : 1; //!< true if we're inside createPopup(); used in slotItemSelected()
-    bool m_updatePopupSelectionOnShow : 1; //!< Set to false as soon as the item corresponding with the current 
-                                           //!< value is selected in the popup table. This avoids selecting item 
-                                           //!< for origValue() and thus loosing the recent choice.
-    bool m_moveCursorToEndInInternalEditor_enabled : 1;
-    bool m_selectAllInInternalEditor_enabled : 1;
-    bool m_setValueInInternalEditor_enabled : 1;
-    bool m_setVisibleValueOnSetValueInternal : 1; //!< Used in setValueInternal() to control whether 
-                                                  //!< we want to set visible value on setValueInternal() 
-                                                  //!< - true for table view's combo box
+
+bool m_internalEditorValueChanged : 1; //!< true if user has text or other value inside editor
+bool m_slotInternalEditorValueChanged_enabled : 1; //!< Used in slotInternalEditorValueChanged()
+bool m_setValueOrTextInInternalEditor_enabled : 1; //!< Used in setValueOrTextInInternalEditor() and slotItemSelected()
+bool m_mouseBtnPressedWhenPopupVisible : 1; //!< Used only by KexiComboBoxTableEdit
+bool m_insideCreatePopup : 1; //!< true if we're inside createPopup(); used in slotItemSelected()
+bool m_updatePopupSelectionOnShow : 1; //!< Set to false as soon as the item corresponding with the current
+    //!< value is selected in the popup table. This avoids selecting item
+    //!< for origValue() and thus loosing the recent choice.
+bool m_moveCursorToEndInInternalEditor_enabled : 1;
+bool m_selectAllInInternalEditor_enabled : 1;
+bool m_setValueInInternalEditor_enabled : 1;
+bool m_setVisibleValueOnSetValueInternal : 1; //!< Used in setValueInternal() to control whether
+    //!< we want to set visible value on setValueInternal()
+    //!< - true for table view's combo box
 };
 
 #endif

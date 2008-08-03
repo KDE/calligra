@@ -28,16 +28,17 @@
 
 #include <kexi_export.h>
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 //! An interface for declaring form widgets to have subproperties.
-/*! Currently used in KexiDBAutoField to allow editing specific properties 
+/*! Currently used in KexiDBAutoField to allow editing specific properties
  of its internal editor. For example, if the autofield is of type Image Box,
- the Image Box widget has some specific properties like "lineWidth". 
+ the Image Box widget has some specific properties like "lineWidth".
  Such properties are provided by the parent KexiDBAutoField object as subproperties. */
 class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
 {
-  public:
+public:
     WidgetWithSubpropertiesInterface();
     virtual ~WidgetWithSubpropertiesInterface();
 
@@ -51,20 +52,20 @@ class KFORMEDITOR_EXPORT WidgetWithSubpropertiesInterface
     //! \return a set of subproperties avaliable for this widget.
     QSet<Q3CString> subproperies() const;
 
-    //! \return a metaproperty for a widget's subproperty 
+    //! \return a metaproperty for a widget's subproperty
     //! or invalid metaproperty if there is no such subproperty.
     QMetaProperty findMetaSubproperty(const char * name) const;
 
     //! \return a value of widget's subproperty. \a ok is set to true on success
     //! and to false on failure.
-    QVariant subproperty( const char * name, bool &ok  ) const;
+    QVariant subproperty(const char * name, bool &ok) const;
 
     //! Sets a subproperty value \a value for a subproperty \a name
-    //! \return true on successful setting and false when there 
+    //! \return true on successful setting and false when there
     //! is no such a subproperty in the subwidget or QObject::setProperty() failed.
-    bool setSubproperty( const char * name, const QVariant & value );
+    bool setSubproperty(const char * name, const QVariant & value);
 
-  protected:
+protected:
     QPointer<QWidget> m_subwidget;
     QSet<Q3CString> m_subproperies;
 };

@@ -24,20 +24,20 @@
 
 //! A widget info for data-aware widgets
 /*! Used within factories just like KFormDesigner::WidgetInfo,
- but also predefines specific behaviour, 
+ but also predefines specific behaviour,
  e.g. sets autoSync flag to false for "dataSource" property.
 */
 class KEXIFORMUTILS_EXPORT KexiDataAwareWidgetInfo : public KFormDesigner::WidgetInfo
 {
-  public:
+public:
     KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f);
-    
-    KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f, 
-      const char* parentFactoryName, const char* inheritedClassName = 0);
+
+    KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f,
+                            const char* parentFactoryName, const char* inheritedClassName = 0);
 
     virtual ~KexiDataAwareWidgetInfo();
 
-  protected:
+protected:
     void init();
 };
 

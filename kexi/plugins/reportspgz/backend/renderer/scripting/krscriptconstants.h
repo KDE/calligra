@@ -1,5 +1,5 @@
 /*
- * Kexi Report Plugin 
+ * Kexi Report Plugin
  * Copyright (C) 2001-2007 by OpenMFG, LLC
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
@@ -18,26 +18,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
- 
+
 #ifndef KRSCRIPTCONSTANTS_H
 #define KRSCRIPTCONSTANTS_H
 
 #include <QObject>
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KRScriptConstants : public QObject
 {
-		Q_OBJECT
-	public:
-		KRScriptConstants ( QObject *parent = 0 );
+    Q_OBJECT
+public:
+    KRScriptConstants(QObject *parent = 0);
 
-		~KRScriptConstants();
+    ~KRScriptConstants();
 
-		Q_ENUMS ( PenStyle )
-		
-		enum PenStyle{QtNoPen = 0, QtSolidLine, QtDashLine, QtDotLine, QtDashDotLine, QtDashDotDotLine};
+    Q_ENUMS(PenStyle)
+
+    enum PenStyle {QtNoPen = 0, QtSolidLine, QtDashLine, QtDotLine, QtDashDotLine, QtDashDotDotLine};
 };
 
 #endif

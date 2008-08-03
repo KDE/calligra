@@ -23,20 +23,20 @@
 using namespace KexiDB;
 
 AdminTools::AdminTools()
- : Object()
- , d( new Private() )
+        : Object()
+        , d(new Private())
 {
 }
 
 AdminTools::~AdminTools()
 {
-	delete d;
+    delete d;
 }
 
 bool AdminTools::vacuum(const ConnectionData& data, const QString& databaseName)
 {
-	Q_UNUSED(data);
-	Q_UNUSED(databaseName);
-	clearError();
-	return false;
+    Q_UNUSED(data);
+    Q_UNUSED(databaseName);
+    clearError();
+    return false;
 }

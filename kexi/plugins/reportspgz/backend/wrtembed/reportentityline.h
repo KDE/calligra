@@ -36,29 +36,29 @@ class ReportDesigner;
 //
 class ReportEntityLine : public QObject, public KRLineData, public QGraphicsLineItem, public ReportEntity
 {
-		Q_OBJECT
-	public:
-		ReportEntityLine ( ReportDesigner *, QGraphicsScene * scene );
-		ReportEntityLine ( QDomNode & element, ReportDesigner *, QGraphicsScene * scene );
+    Q_OBJECT
+public:
+    ReportEntityLine(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityLine(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
 
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
-		virtual void paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget=0 );
-		virtual ReportEntityLine* clone(); 
-	private:
-		ReportDesigner* _rd;
-		void init(QGraphicsScene*, ReportDesigner *);
-		int grabHandle ( QPointF pos );
-		
-		int _grabAction;
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
+    virtual ReportEntityLine* clone();
+private:
+    ReportDesigner* _rd;
+    void init(QGraphicsScene*, ReportDesigner *);
+    int grabHandle(QPointF pos);
 
-	protected:
-		virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
-		virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * event );
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-		
-		virtual QVariant itemChange ( GraphicsItemChange change, const QVariant &value );
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
+    int _grabAction;
+
+protected:
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

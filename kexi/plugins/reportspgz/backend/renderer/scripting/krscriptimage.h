@@ -29,74 +29,74 @@ class KRImageData;
 namespace Scripting
 {
 
-	/**
-		@author Adam Pigg <adam@piggz.co.uk>
-	*/
-	class Image : public QObject
-	{
-			Q_OBJECT
-		public:
-			Image ( KRImageData * );
+/**
+ @author Adam Pigg <adam@piggz.co.uk>
+*/
+class Image : public QObject
+{
+    Q_OBJECT
+public:
+    Image(KRImageData *);
 
-			~Image();
-		public slots:
-
-
-			/**
-			* Get the position of the barcode
-			* @return position in points
-			 */
-			QPointF position();
+    ~Image();
+public slots:
 
 
-			/**
-			 * Sets the position of the barcode in points
-			 * @param Position
-			 */
-			void setPosition ( const QPointF& );
+    /**
+    * Get the position of the barcode
+    * @return position in points
+     */
+    QPointF position();
 
-			/**
-			 * Get the size of the barcode
-			 * @return size in points
-			 */
-			QSizeF size();
 
-			/**
-			 * Set the size of the barcode in points
-			 * @param Size
-			 */
-			void setSize ( const QSizeF& );
-			
-			/**
-			 * Get the resize mode for the image
-			 * @return resizeMode Clip or Stretch
-			 */
-			QString resizeMode();
-			
-			/**
-			 * Sets the resize mode for the image
-			 * @param ResizeMode "Stretch" or "Clip" default is to clip 
-			 */
-			void setResizeMode(const QString &);
-			
-			/**
-			 * Sets the data for the static image
-			 * the data should be base64 encoded
-			 * @param RawImageData 
-			 */
-			void setInlineImage(const QByteArray&);
-				
-			/**
-			 * Get the data from a file (expected to be an image)
-			 * the returned data will be base64 encoded
-			 * @param Path location of file
-			 * @return File data enoded in base64
-			 */
-			void loadFromFile(const QVariant &);
-		private:
-			KRImageData *_image;
+    /**
+     * Sets the position of the barcode in points
+     * @param Position
+     */
+    void setPosition(const QPointF&);
 
-	};
+    /**
+     * Get the size of the barcode
+     * @return size in points
+     */
+    QSizeF size();
+
+    /**
+     * Set the size of the barcode in points
+     * @param Size
+     */
+    void setSize(const QSizeF&);
+
+    /**
+     * Get the resize mode for the image
+     * @return resizeMode Clip or Stretch
+     */
+    QString resizeMode();
+
+    /**
+     * Sets the resize mode for the image
+     * @param ResizeMode "Stretch" or "Clip" default is to clip
+     */
+    void setResizeMode(const QString &);
+
+    /**
+     * Sets the data for the static image
+     * the data should be base64 encoded
+     * @param RawImageData
+     */
+    void setInlineImage(const QByteArray&);
+
+    /**
+     * Get the data from a file (expected to be an image)
+     * the returned data will be base64 encoded
+     * @param Path location of file
+     * @return File data enoded in base64
+     */
+    void loadFromFile(const QVariant &);
+private:
+    KRImageData *_image;
+
+};
 
 }
 

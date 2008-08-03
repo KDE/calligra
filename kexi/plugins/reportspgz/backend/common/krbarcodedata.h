@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,51 +29,55 @@
 
 namespace Scripting
 {
-	class Barcode;
+class Barcode;
 }
 /**
-	@author 
+ @author
 */
 class KRBarcodeData : public KRObjectData
 {
-	public:
-		KRBarcodeData(){createProperties();}
-		KRBarcodeData ( QDomNode & element);
-		~KRBarcodeData();
-		virtual KRBarcodeData * toBarcode();
-		virtual int type() const;
-		
-		QString column();
-		int alignment();
-		void setAlignment(int);
-		int maxLength();
-		void setMaxLength ( int i );
-		QString format();
-		void setFormat(const QString&);
-		
-		ORDataData data() {return ORDataData("Data Source", _controlSource->value().toString());}
+public:
+    KRBarcodeData() {
+        createProperties();
+    }
+    KRBarcodeData(QDomNode & element);
+    ~KRBarcodeData();
+    virtual KRBarcodeData * toBarcode();
+    virtual int type() const;
 
-	protected:
-		QRect _rect();
-		KRSize _size;	
-		
-		KoProperty::Property * _controlSource;
-		KoProperty::Property * _hAlignment;
-		KoProperty::Property * _format;
-		KoProperty::Property * _maxLength;
-		
-		// all these values are in inches and
-		// are for internal use only
-		qreal min_width_data;
-		qreal min_width_total;
-		qreal min_height;
-		
-	private:
-		virtual void createProperties();
-		static int RTTI;
-		
-		friend class ORPreRenderPrivate;
-		friend class Scripting::Barcode;
+    QString column();
+    int alignment();
+    void setAlignment(int);
+    int maxLength();
+    void setMaxLength(int i);
+    QString format();
+    void setFormat(const QString&);
+
+    ORDataData data() {
+        return ORDataData("Data Source", _controlSource->value().toString());
+    }
+
+protected:
+    QRect _rect();
+    KRSize _size;
+
+    KoProperty::Property * _controlSource;
+    KoProperty::Property * _hAlignment;
+    KoProperty::Property * _format;
+    KoProperty::Property * _maxLength;
+
+    // all these values are in inches and
+    // are for internal use only
+    qreal min_width_data;
+    qreal min_width_total;
+    qreal min_height;
+
+private:
+    virtual void createProperties();
+    static int RTTI;
+
+    friend class ORPreRenderPrivate;
+    friend class Scripting::Barcode;
 };
 
 #endif

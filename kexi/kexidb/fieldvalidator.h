@@ -25,7 +25,8 @@
 
 class QWidget;
 
-namespace KexiDB {
+namespace KexiDB
+{
 class Field;
 
 //! @short A validator for KexiDB data types
@@ -38,9 +39,9 @@ class Field;
 */
 class KEXI_DB_EXPORT FieldValidator : public KexiUtils::MultiValidator
 {
-  public:
+public:
     //! Setups the validator for \a field. Does not keep a pointer to \a field.
-    FieldValidator( const Field &field, QWidget * parent );
+    FieldValidator(const Field &field, QWidget * parent);
     ~FieldValidator();
 };
 

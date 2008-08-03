@@ -27,13 +27,13 @@
 
 int main(int argc, char *argv[])
 {
-  int result = KexiMainWindow::create(argc, argv);
-  if (!qApp)
-    return result;
+    int result = KexiMainWindow::create(argc, argv);
+    if (!qApp)
+        return result;
 
-  result = qApp->exec();
-//Qt4	K3StaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
-  delete qApp->mainWidget();
-  delete qApp;
-  return result;
+    result = qApp->exec();
+//Qt4 K3StaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
+    delete qApp->mainWidget();
+    delete qApp;
+    return result;
 }

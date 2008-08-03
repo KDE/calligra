@@ -55,9 +55,9 @@ class KexiDataAwareObjectInterface;
 */
 class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /*! You can instantiate KexiDataAwarePropertySet object
      for existing \a tableView and \a view. \a tableView can have data assigned
      (KexiDataAwareObjectInterface::setData()) now but it can be done later as well
@@ -73,7 +73,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 
     uint currentRow() const;
 
-    inline KoProperty::Set* at(uint row) const { return m_sets[row]; }
+    inline KoProperty::Set* at(uint row) const {
+        return m_sets[row];
+    }
 
     /*! \return a pointer to property set assigned for \a record or null if \a item has no
      property set assigned or it's not owned by assigned table view or
@@ -81,11 +83,11 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
     KoProperty::Set* findPropertySetForItem(KexiDB::RecordData& record);
 
     /*! \return number of the first row containing \a propertyName property equal to \a value.
-     This is used e.g. in the Table Designer to find a row by field name. 
+     This is used e.g. in the Table Designer to find a row by field name.
      If no such row has been found, -1 is returned. */
     int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
-  signals:
+signals:
     /*! Emmited when row is deleted.
      KexiDataAwareObjectInterface::rowDeleted() signal is usually used but when you're using
      KexiDataAwarePropertySet, you never know if currentPropertySet() is updated.
@@ -96,7 +98,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
      Purpose of this signal is similar to rowDeleted() signal. */
     void rowInserted();
 
-  public slots:
+public slots:
     void eraseCurrentPropertySet();
 
     void clear(uint minimumSize = 0);
@@ -118,15 +120,15 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
     /*! Erases a property set at \a row position. */
     void eraseAt(uint row);
 
-  protected slots:
+protected slots:
     /*! Handles table view's data source changes. */
-    void slotDataSet( KexiTableViewData *data );
+    void slotDataSet(KexiTableViewData *data);
 
     //! Called on row delete in a tableview.
     void slotRowDeleted();
 
     //! Called on multiple rows delete in a tableview.
-    void slotRowsDeleted( const QList<int> &rows );
+    void slotRowsDeleted(const QList<int> &rows);
 
     //! Called on \a row insertion in a tableview.
     void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
@@ -137,7 +139,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
     //! Called on clearing tableview's data: just clears all property sets.
     void slotReloadRequested();
 
-  protected:
+protected:
     SetVector m_sets; //!< prop. sets vector
 
     QPointer<KexiView> m_view;

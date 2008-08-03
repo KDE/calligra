@@ -20,16 +20,16 @@
 #include "kexidataawarewidgetinfo.h"
 
 KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f)
- : KFormDesigner::WidgetInfo(f)
+        : KFormDesigner::WidgetInfo(f)
 {
-  init();
+    init();
 }
 
-KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f, 
-  const char* parentFactoryName, const char* inheritedClassName)
- : KFormDesigner::WidgetInfo(f, parentFactoryName, inheritedClassName)
+KexiDataAwareWidgetInfo::KexiDataAwareWidgetInfo(KFormDesigner::WidgetFactory *f,
+        const char* parentFactoryName, const char* inheritedClassName)
+        : KFormDesigner::WidgetInfo(f, parentFactoryName, inheritedClassName)
 {
-  init();
+    init();
 }
 
 KexiDataAwareWidgetInfo::~KexiDataAwareWidgetInfo()
@@ -38,6 +38,6 @@ KexiDataAwareWidgetInfo::~KexiDataAwareWidgetInfo()
 
 void KexiDataAwareWidgetInfo::init()
 {
-  setAutoSyncForProperty( "dataSource", false );
-  setAutoSyncForProperty( "dataSourceMimeType", false );
+    setAutoSyncForProperty("dataSource", false);
+    setAutoSyncForProperty("dataSourceMimeType", false);
 }

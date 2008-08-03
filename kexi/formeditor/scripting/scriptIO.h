@@ -28,8 +28,9 @@ class EventList;
 class ScriptManager;
 class FormScript;
 
-namespace KFormDesigner {
-  class Form;
+namespace KFormDesigner
+{
+class Form;
 }
 
 using namespace KFormDesigner;
@@ -37,7 +38,7 @@ using namespace KFormDesigner;
 //! A static class to deal with loading/saving events from/to XML
 class ScriptIO
 {
-  public:
+public:
     /*! Save the evnts of a form.
      Creates an \<events\> tag, and then one \<event\> tag for each event.
      Each event contains \<sender\> and \<receiver\> tags, with attributes depending on event type. */
@@ -54,9 +55,13 @@ class ScriptIO
     static void  saveEventList(EventList *list, QDomNode &parentNode);
     static void  loadEvent(QDomNode &node, EventList *list, Form *form);
 
-  protected:
-    ScriptIO() {;}
-    ~ScriptIO() {;}
+protected:
+    ScriptIO() {
+        ;
+    }
+    ~ScriptIO() {
+        ;
+    }
 };
 
 #endif

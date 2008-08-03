@@ -33,12 +33,13 @@
 #include "sqltypes.h"
 #include "parser.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 //! @internal
 class Parser::Private
 {
-  public:
+public:
     Private();
     ~Private();
 
@@ -50,14 +51,14 @@ class Parser::Private
     Connection *db;
     QString statement;
     ParserError error;
-    bool initialized : 1;
+bool initialized : 1;
 };
 
 
 /*! Data used on parsing. @internal */
 class ParseInfo
 {
-  public:
+public:
     ParseInfo(QuerySchema *query);
     ~ParseInfo();
 
@@ -74,10 +75,10 @@ void yyerror(const char *str);
 void setError(const QString& errName, const QString& errDesc);
 void setError(const QString& errDesc);
 //bool parseData(KexiDB::Parser *p, const char *data);
-bool addColumn( KexiDB::ParseInfo& parseInfo, KexiDB::BaseExpr* columnExpr );
-KexiDB::QuerySchema* buildSelectQuery( 
-  KexiDB::QuerySchema* querySchema, KexiDB::NArgExpr* colViews, 
-  KexiDB::NArgExpr* tablesList = 0, SelectOptionsInternal* options = 0 ); //KexiDB::BaseExpr* whereExpr = 0 );
+bool addColumn(KexiDB::ParseInfo& parseInfo, KexiDB::BaseExpr* columnExpr);
+KexiDB::QuerySchema* buildSelectQuery(
+    KexiDB::QuerySchema* querySchema, KexiDB::NArgExpr* colViews,
+    KexiDB::NArgExpr* tablesList = 0, SelectOptionsInternal * options = 0); //KexiDB::BaseExpr* whereExpr = 0 );
 
 extern KexiDB::Parser *parser;
 extern KexiDB::Field *field;

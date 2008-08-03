@@ -35,7 +35,7 @@
 #include <widget/kexidbdrivercombobox.h>
 
 /*
-   This is an example of the KexiDBDriverComboBox class, used to 
+   This is an example of the KexiDBDriverComboBox class, used to
    allow the user to pick a database driver.
 
    When run it shows two comboboxes. The top one allows the user to
@@ -46,33 +46,33 @@
 
 int main(int argc, char** argv)
 {
-  // Initialise the program
-  KCmdLineArgs::init(argc, argv, "kexidbcomboboxtest", 0, KLocalizedString(), "", KLocalizedString(), true);
-  KApplication* app = new KApplication(true, true);
+    // Initialise the program
+    KCmdLineArgs::init(argc, argv, "kexidbcomboboxtest", 0, KLocalizedString(), "", KLocalizedString(), true);
+    KApplication* app = new KApplication(true, true);
 
-  // Look for installed database drivers
-  KexiDB::DriverManager manager;
-  KexiDB::Driver::InfoHash drvs = manager.driversInfo();
+    // Look for installed database drivers
+    KexiDB::DriverManager manager;
+    KexiDB::Driver::InfoHash drvs = manager.driversInfo();
 
-  // Set up a combo box and a quit widget in a new container
-  QWidget* vbox = new QWidget();
-  Q3VBoxLayout* vbLayout = new Q3VBoxLayout(vbox);
+    // Set up a combo box and a quit widget in a new container
+    QWidget* vbox = new QWidget();
+    Q3VBoxLayout* vbLayout = new Q3VBoxLayout(vbox);
 
-  KexiDBDriverComboBox* all = new KexiDBDriverComboBox(vbox, drvs);
-  KexiDBDriverComboBox* srvOnly = new KexiDBDriverComboBox(vbox, drvs,
-  	KexiDBDriverComboBox::ShowServerDrivers);
+    KexiDBDriverComboBox* all = new KexiDBDriverComboBox(vbox, drvs);
+    KexiDBDriverComboBox* srvOnly = new KexiDBDriverComboBox(vbox, drvs,
+            KexiDBDriverComboBox::ShowServerDrivers);
 
-  QPushButton* quit = new QPushButton("Quit", vbox);
+    QPushButton* quit = new QPushButton("Quit", vbox);
 
-  vbLayout->addWidget(all);     // Combobox listing all drivers
-  vbLayout->addWidget(srvOnly); // Combobox only drivers for DB servers
-  vbLayout->addWidget(quit);
+    vbLayout->addWidget(all);     // Combobox listing all drivers
+    vbLayout->addWidget(srvOnly); // Combobox only drivers for DB servers
+    vbLayout->addWidget(quit);
 
-  // Show the whole lot
-  QObject::connect(quit, SIGNAL(clicked()), app, SLOT(quit()));
-  vbox->show();
-  app->exec();
+    // Show the whole lot
+    QObject::connect(quit, SIGNAL(clicked()), app, SLOT(quit()));
+    vbox->show();
+    app->exec();
 
-  delete app;
+    delete app;
 }
 

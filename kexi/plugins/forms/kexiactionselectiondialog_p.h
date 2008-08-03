@@ -25,7 +25,7 @@
 //! @internal
 class ActionsListViewBase : public K3ListView
 {
-  public:
+public:
     ActionsListViewBase(QWidget* parent);
     virtual ~ActionsListViewBase();
 
@@ -37,14 +37,14 @@ class ActionsListViewBase : public K3ListView
 //! @internal Used by KActionsListView and CurrentFormActionsListView (in column 2)
 class KActionsListViewBase : public ActionsListViewBase
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     KActionsListViewBase(QWidget* parent);
     virtual ~KActionsListViewBase();
     void init();
     virtual bool isActionVisible(const char* actionName, int actionCategories) const = 0;
 
-  protected:
+protected:
 };
 
 #endif

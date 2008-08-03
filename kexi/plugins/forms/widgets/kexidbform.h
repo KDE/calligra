@@ -41,32 +41,36 @@ class KexiDataAwareObjectInterface;
 class KexiFormScrollView;
 
 //! @short A DB-aware form widget, acting as form's toplevel widget
-class KEXIFORMUTILS_EXPORT KexiDBForm : 
-  public KexiDBFormBase,
-  public KFormDesigner::FormWidget,
-  public KexiFormDataItemInterface
+class KEXIFORMUTILS_EXPORT KexiDBForm :
+            public KexiDBFormBase,
+            public KFormDesigner::FormWidget,
+            public KexiFormDataItemInterface
 {
-  Q_OBJECT
-  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-  Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
-  //original "size" property is not designable, so here's a custom (not storable) replacement
-  Q_PROPERTY( QSize sizeInternal READ sizeInternal WRITE resizeInternal DESIGNABLE true STORED false )
-  public:
+    Q_OBJECT
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
+    //original "size" property is not designable, so here's a custom (not storable) replacement
+    Q_PROPERTY(QSize sizeInternal READ sizeInternal WRITE resizeInternal DESIGNABLE true STORED false)
+public:
     KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject);
     virtual ~KexiDBForm();
 
     KexiDataAwareObjectInterface* dataAwareObject() const;
 
-    inline QString dataSource() const
-      { return KexiFormDataItemInterface::dataSource(); }
-    inline QString dataSourceMimeType() const
-      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourceMimeType() const {
+        return KexiFormDataItemInterface::dataSourceMimeType();
+    }
 
     //! no effect
-    QVariant value() { return QVariant(); }
+    QVariant value() {
+        return QVariant();
+    }
 
-    virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState(const QString& displayText);
 
     virtual void drawRect(const QRect& r, int type);
     virtual void drawRects(const QList<QRect> &list, int type);
@@ -81,12 +85,12 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
     QList<QWidget*>* orderedFocusWidgets() const;
 
     QList<QWidget*>* orderedDataAwareWidgets() const;
-    
+
     void updateTabStopsOrder(KFormDesigner::Form* form);
 
     void updateTabStopsOrder();
 
-    virtual bool eventFilter ( QObject * watched, QEvent * e );
+    virtual bool eventFilter(QObject * watched, QEvent * e);
 
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
@@ -98,44 +102,50 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 
     bool preview() const;
 
-    virtual void setCursor( const QCursor & cursor );
+    virtual void setCursor(const QCursor & cursor);
 
-  public slots:
+public slots:
     void setAutoTabStops(bool set);
-    inline void setDataSource(const QString &ds)
-      { KexiFormDataItemInterface::setDataSource(ds); }
-    inline void setDataSourceMimeType(const QString &ds)
-      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
+    }
+    inline void setDataSourceMimeType(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    }
 
     //! This implementation just disables read only widget
-    virtual void setReadOnly( bool readOnly );
+    virtual void setReadOnly(bool readOnly);
 
     //! @internal for sizeInternal property
-    QSize sizeInternal() const { return KexiDBFormBase::size(); }
+    QSize sizeInternal() const {
+        return KexiDBFormBase::size();
+    }
 
     //! @internal for sizeInternal property
-    void resizeInternal(const QSize& s) { KexiDBFormBase::resize(s); }
+    void resizeInternal(const QSize& s) {
+        KexiDBFormBase::resize(s);
+    }
 
-  signals:
+signals:
     void handleDragMoveEvent(QDragMoveEvent *e);
     void handleDropEvent(QDropEvent *e);
 
-  protected:
+protected:
     //! no effect
     virtual void setValueInternal(const QVariant&, bool) {}
 
     //! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
-    virtual void dragMoveEvent( QDragMoveEvent *e );
+    virtual void dragMoveEvent(QDragMoveEvent *e);
 
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
-    virtual void dropEvent( QDropEvent *e );
+    virtual void dropEvent(QDropEvent *e);
 
     //! called from KexiFormScrollView::initDataContents()
     void updateReadOnlyFlags();
-//		virtual void paintEvent( QPaintEvent * );
+//  virtual void paintEvent( QPaintEvent * );
 
-    //! Points to a currently edited data item. 
-    //! It is cleared when the focus is moved to other 
+    //! Points to a currently edited data item.
+    //! It is cleared when the focus is moved to other
     KexiFormDataItemInterface *editedItem;
 
     class Private;

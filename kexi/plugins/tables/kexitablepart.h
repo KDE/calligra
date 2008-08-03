@@ -33,43 +33,43 @@ class KexiLookupColumnPage;
 
 class KexiTablePart : public KexiPart::Part
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiTablePart(QObject *parent, const QStringList &);
     virtual ~KexiTablePart();
 
     virtual bool remove(KexiPart::Item &item);
 
-    virtual tristate rename(KexiPart::Item &item, 
-      const QString& newName);
+    virtual tristate rename(KexiPart::Item &item,
+                            const QString& newName);
 
-//		virtual KexiPart::DataSource *dataSource();
+//  virtual KexiPart::DataSource *dataSource();
 
     class TempData : public KexiWindowData
     {
-      public:
+    public:
         TempData(QObject* parent);
         KexiDB::TableSchema *table;
         /*! true, if \a table member has changed in previous view. Used on view switching.
          We're checking this flag to see if we should refresh data for DataViewMode. */
-        bool tableSchemaChangedInPreviousView : 1;
+    bool tableSchemaChangedInPreviousView : 1;
     };
 
     static tristate askForClosingObjectsUsingTableSchema(
-      QWidget *parent, KexiDB::Connection& conn, 
-      KexiDB::TableSchema& table, const QString& msg);
+        QWidget *parent, KexiDB::Connection& conn,
+        KexiDB::TableSchema& table, const QString& msg);
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage, 
-      KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString& englishMessage,
+                                         KexiWindow* window) const;
 
     KexiLookupColumnPage* lookupColumnPage() const;
 
-  protected:
+protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
-    virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
-      KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QVariant>* staticObjectArgs = 0);
+    virtual KexiView* createView(QWidget *parent, KexiWindow* window,
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
@@ -77,9 +77,9 @@ class KexiTablePart : public KexiPart::Part
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
     virtual KexiDB::SchemaData* loadSchemaData(KexiWindow *window, const KexiDB::SchemaData& sdata,
-      Kexi::ViewMode viewMode);
+            Kexi::ViewMode viewMode);
 
-  private:
+private:
     class Private;
     Private* const d;
 };
@@ -87,7 +87,7 @@ class KexiTablePart : public KexiPart::Part
 #if 0
 class KexiTableDataSource : public KexiPart::DataSource
 {
-  public:
+public:
     KexiTableDataSource(KexiPart::Part *part);
     ~KexiTableDataSource();
 

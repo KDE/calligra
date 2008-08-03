@@ -28,138 +28,125 @@
 
 KRScreenRender::KRScreenRender()
 {
-	_painter = 0;
+    _painter = 0;
 }
 
 KRScreenRender::~KRScreenRender()
 {
 }
 
-void KRScreenRender::setPainter ( QPainter * pPainter )
+void KRScreenRender::setPainter(QPainter * pPainter)
 {
-	_painter = pPainter;
+    _painter = pPainter;
 }
 
-bool KRScreenRender::render ( ORODocument * pDocument , int page )
+bool KRScreenRender::render(ORODocument * pDocument , int page)
 {
-	if ( pDocument == 0 )
-		return false;
+    if (pDocument == 0)
+        return false;
 
-	qreal xDpi = KoGlobal::dpiX();
-	qreal yDpi = KoGlobal::dpiY();
+    qreal xDpi = KoGlobal::dpiX();
+    qreal yDpi = KoGlobal::dpiY();
 
-	OROPage * p = pDocument->page ( page );
-						 
-	// Render Page Objects
-	for ( int i = 0; i < p->primitives(); i++ )
-	{
-		OROPrimitive * prim = p->primitive ( i );
-		
-		if ( prim->type() == OROTextBox::TextBox )
-		{
-			OROTextBox * tb = ( OROTextBox* ) prim;
+    OROPage * p = pDocument->page(page);
 
-			QPointF ps = tb->position();
-			QSizeF sz = tb->size();
-			QRectF rc = QRectF (ps.x(),ps.y(), sz.width(),sz.height());
+    // Render Page Objects
+    for (int i = 0; i < p->primitives(); i++) {
+        OROPrimitive * prim = p->primitive(i);
 
-			_painter->save();
-			//Background
-			
-			QColor bg = tb->textStyle().bgColor;
-			bg.setAlpha(tb->textStyle().bgOpacity );
-			
-			//_painter->setBackgroundMode(Qt::OpaqueMode);
-			_painter->setBackground(bg);
-			_painter->fillRect( rc, bg);
-	
-			//Text
-			_painter->setBackgroundMode(Qt::TransparentMode);
-			_painter->setFont ( tb->textStyle().font );
-			_painter->setPen(tb->textStyle().fgColor);
-			_painter->drawText ( rc, tb->flags(), tb->text() );
+        if (prim->type() == OROTextBox::TextBox) {
+            OROTextBox * tb = (OROTextBox*) prim;
 
-			//outer line
-			_painter->setPen ( QPen (tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style) );
-			_painter->drawRect ( rc );
+            QPointF ps = tb->position();
+            QSizeF sz = tb->size();
+            QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-			//Reset back to defaults for next element
-			_painter->restore();
+            _painter->save();
+            //Background
 
-		}
-		else if ( prim->type() == OROLine::Line )
-		{
-			OROLine * ln = ( OROLine* ) prim;
-			QPointF s = ln->startPoint();
-			QPointF e = ln->endPoint();
-			//QPen pen ( _painter->pen() );
-			QPen pen( ln->lineStyle().lnColor, ln->lineStyle().weight, ln->lineStyle().style);
-			
-			_painter->save();
-			_painter->setRenderHint(QPainter::Antialiasing, true);
-			_painter->setPen ( pen );
-			_painter->drawLine ( QLineF ( s.x(), s.y(), e.x(), e.y() ) );
-			_painter->setRenderHint(QPainter::Antialiasing, false);
-			_painter->restore();
-		}
-		
-		else if ( prim->type() == ORORect::Rect )
-		{
-			ORORect * re = ( ORORect* ) prim;
+            QColor bg = tb->textStyle().bgColor;
+            bg.setAlpha(tb->textStyle().bgOpacity);
 
-			QPointF ps = re->position();
-			QSizeF sz = re->size();
-			QRectF rc = QRectF ( ps.x(), ps.y(), sz.width(), sz.height() );
+            //_painter->setBackgroundMode(Qt::OpaqueMode);
+            _painter->setBackground(bg);
+            _painter->fillRect(rc, bg);
 
-			_painter->save();
-			_painter->setPen ( re->pen() );
-			_painter->setBrush ( re->brush() );
-			_painter->drawRect ( rc );
-			_painter->restore();
-		}
-		else if ( prim->type() == OROEllipse::Ellipse )
-		{
-			OROEllipse * re = ( OROEllipse* ) prim;
+            //Text
+            _painter->setBackgroundMode(Qt::TransparentMode);
+            _painter->setFont(tb->textStyle().font);
+            _painter->setPen(tb->textStyle().fgColor);
+            _painter->drawText(rc, tb->flags(), tb->text());
 
-			QPointF ps = re->position();
-			QSizeF sz = re->size();
-			QRectF rc = QRectF ( ps.x(), ps.y(), sz.width(), sz.height() );
+            //outer line
+            _painter->setPen(QPen(tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style));
+            _painter->drawRect(rc);
 
-			_painter->save();
-			_painter->setPen ( re->pen() );
-			_painter->setBrush ( re->brush() );
-			_painter->drawEllipse ( rc );
-			_painter->restore();
-		}
-		else if ( prim->type() == OROImage::Image )
-		{
-			OROImage * im = ( OROImage* ) prim;
-			QPointF ps = im->position();
-			QSizeF sz = im->size();
-			QRectF rc = QRectF (ps.x(),ps.y(), sz.width(),sz.height());
+            //Reset back to defaults for next element
+            _painter->restore();
 
-			QImage img = im->image();
-			if ( im->scaled() )
-				img = img.scaled ( rc.size().toSize(), ( Qt::AspectRatioMode ) im->aspectRatioMode(), ( Qt::TransformationMode ) im->transformationMode() );
+        } else if (prim->type() == OROLine::Line) {
+            OROLine * ln = (OROLine*) prim;
+            QPointF s = ln->startPoint();
+            QPointF e = ln->endPoint();
+            //QPen pen ( _painter->pen() );
+            QPen pen(ln->lineStyle().lnColor, ln->lineStyle().weight, ln->lineStyle().style);
 
-			QRectF sr = QRectF ( QPointF ( 0.0, 0.0 ), rc.size().boundedTo ( img.size() ) );
-			_painter->drawImage ( rc.topLeft(), img, sr );
-		}
-		else if ( prim->type() == OROPicture::Picture )
-		{
-			OROPicture * im = ( OROPicture* ) prim;
-			QPointF ps = im->position();
-			QSizeF sz = im->size();
-			QRectF rc = QRectF (ps.x(),ps.y(), sz.width(),sz.height());
-			_painter->drawPicture ( rc.topLeft(), *(im->picture()) );
-		}
-		else
-		{
-			kDebug() << "unrecognized primitive type" << endl;
-		}
-	}
+            _painter->save();
+            _painter->setRenderHint(QPainter::Antialiasing, true);
+            _painter->setPen(pen);
+            _painter->drawLine(QLineF(s.x(), s.y(), e.x(), e.y()));
+            _painter->setRenderHint(QPainter::Antialiasing, false);
+            _painter->restore();
+        }
+
+        else if (prim->type() == ORORect::Rect) {
+            ORORect * re = (ORORect*) prim;
+
+            QPointF ps = re->position();
+            QSizeF sz = re->size();
+            QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+
+            _painter->save();
+            _painter->setPen(re->pen());
+            _painter->setBrush(re->brush());
+            _painter->drawRect(rc);
+            _painter->restore();
+        } else if (prim->type() == OROEllipse::Ellipse) {
+            OROEllipse * re = (OROEllipse*) prim;
+
+            QPointF ps = re->position();
+            QSizeF sz = re->size();
+            QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+
+            _painter->save();
+            _painter->setPen(re->pen());
+            _painter->setBrush(re->brush());
+            _painter->drawEllipse(rc);
+            _painter->restore();
+        } else if (prim->type() == OROImage::Image) {
+            OROImage * im = (OROImage*) prim;
+            QPointF ps = im->position();
+            QSizeF sz = im->size();
+            QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+
+            QImage img = im->image();
+            if (im->scaled())
+                img = img.scaled(rc.size().toSize(), (Qt::AspectRatioMode) im->aspectRatioMode(), (Qt::TransformationMode) im->transformationMode());
+
+            QRectF sr = QRectF(QPointF(0.0, 0.0), rc.size().boundedTo(img.size()));
+            _painter->drawImage(rc.topLeft(), img, sr);
+        } else if (prim->type() == OROPicture::Picture) {
+            OROPicture * im = (OROPicture*) prim;
+            QPointF ps = im->position();
+            QSizeF sz = im->size();
+            QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+            _painter->drawPicture(rc.topLeft(), *(im->picture()));
+        } else {
+            kDebug() << "unrecognized primitive type" << endl;
+        }
+    }
 
 
-	return true;
+    return true;
 }
 

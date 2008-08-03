@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,101 +24,101 @@
 namespace Scripting
 {
 
-	Chart::Chart ( KRChartData *c )
-	{
-		_chart = c;
-	}
+Chart::Chart(KRChartData *c)
+{
+    _chart = c;
+}
 
 
-	Chart::~Chart()
-	{
-	}
+Chart::~Chart()
+{
+}
 
-	QPointF Chart::position()
-	{
-		return _chart->_pos.toPoint();
-	}
-	void Chart::setPosition ( const QPointF& p )
-	{
-		_chart->_pos.setPointPos ( p );
-	}
+QPointF Chart::position()
+{
+    return _chart->_pos.toPoint();
+}
+void Chart::setPosition(const QPointF& p)
+{
+    _chart->_pos.setPointPos(p);
+}
 
-	QSizeF Chart::size()
-	{
-		return _chart->_size.toPoint();
-	}
-	void Chart::setSize ( const QSizeF& s )
-	{
-		_chart->_size.setPointSize ( s );
-	}
+QSizeF Chart::size()
+{
+    return _chart->_size.toPoint();
+}
+void Chart::setSize(const QSizeF& s)
+{
+    _chart->_size.setPointSize(s);
+}
 
-	QString Chart::dataSource()
-	{
-		return _chart->_dataSource->value().toString();
-	}
+QString Chart::dataSource()
+{
+    return _chart->_dataSource->value().toString();
+}
 
-	void Chart::setDataSource ( const QString &ds )
-	{
-		_chart->_dataSource->setValue ( ds );
-	}
+void Chart::setDataSource(const QString &ds)
+{
+    _chart->_dataSource->setValue(ds);
+}
 
-	bool Chart::threeD()
-	{
-		return _chart->_threeD->value().toBool();
-	}
+bool Chart::threeD()
+{
+    return _chart->_threeD->value().toBool();
+}
 
-	void Chart::setThreeD ( bool td )
-	{
-		_chart->_threeD->setValue ( td );
-	}
+void Chart::setThreeD(bool td)
+{
+    _chart->_threeD->setValue(td);
+}
 
-	bool Chart::legendVisible()
-	{
-		return _chart->_displayLegend->value().toBool();
-	}
+bool Chart::legendVisible()
+{
+    return _chart->_displayLegend->value().toBool();
+}
 
-	void Chart::setLegendVisible ( bool v )
-	{
-		_chart->_displayLegend->setValue ( v );
-	}
+void Chart::setLegendVisible(bool v)
+{
+    _chart->_displayLegend->setValue(v);
+}
 
-	int Chart::colorScheme()
-	{
-		return _chart->_colorScheme->value().toInt();
-	}
+int Chart::colorScheme()
+{
+    return _chart->_colorScheme->value().toInt();
+}
 
-	void Chart::setColorScheme ( int cs )
-	{
-		_chart->_colorScheme->setValue ( cs );
-	}
+void Chart::setColorScheme(int cs)
+{
+    _chart->_colorScheme->setValue(cs);
+}
 
-	QColor Chart::backgroundColor()
-	{
-		return _chart->_bgColor->value().value<QColor>();
-	}
+QColor Chart::backgroundColor()
+{
+    return _chart->_bgColor->value().value<QColor>();
+}
 
-	void Chart::setBackgroundColor ( const QColor &bc )
-	{
-		_chart->_bgColor->setValue(bc);
-	}
+void Chart::setBackgroundColor(const QColor &bc)
+{
+    _chart->_bgColor->setValue(bc);
+}
 
-	QString Chart::xAxisTitle()
-	{
-		return _chart->_xTitle->value().toString();
-	}
+QString Chart::xAxisTitle()
+{
+    return _chart->_xTitle->value().toString();
+}
 
-	void Chart::setXAxisTitle ( const QString &t )
-	{
-		_chart->_xTitle->setValue(t);
-	}
+void Chart::setXAxisTitle(const QString &t)
+{
+    _chart->_xTitle->setValue(t);
+}
 
-	QString Chart::yAxisTitle()
-	{
-		return _chart->_yTitle->value().toString();
-	}
+QString Chart::yAxisTitle()
+{
+    return _chart->_yTitle->value().toString();
+}
 
-	void Chart::setYAxisTitle ( const QString &t )
-	{
-		_chart->_yTitle->setValue(t);
-	}
+void Chart::setYAxisTitle(const QString &t)
+{
+    _chart->_yTitle->setValue(t);
+}
 }

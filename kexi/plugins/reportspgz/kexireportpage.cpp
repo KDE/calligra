@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,55 +32,52 @@
 #include <krscreenrender.h>
 
 KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r)
-	: QWidget(parent, name, Qt::WNoAutoErase)
+        : QWidget(parent, name, Qt::WNoAutoErase)
 {
-	kDebug() << "CREATED PAGE" << endl;
-	rpt = r;
-	page = 1;
-	
-	QString pageSize = r->pageOptions().getPageSize();
-	int pageWidth = 0;
-	int pageHeight = 0;
-	if ( pageSize == "Custom" )
-	{
-		// if this is custom sized sheet of paper we will just use those values
-		pageWidth = ( int ) ( r->pageOptions().getCustomWidth());
-		pageHeight = ( int ) ( r->pageOptions().getCustomHeight());
-	}
-	else
-	{
-		// lookup the correct size information for the specified size paper
-		pageWidth = r->pageOptions().widthPx();
-		pageHeight = r->pageOptions().heightPx();
-	}
-	
+    kDebug() << "CREATED PAGE" << endl;
+    rpt = r;
+    page = 1;
 
-	setFixedSize(pageWidth,pageHeight);
-	
-	kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight << endl;
-	_repaint = true;
-	_pm = new QPixmap(pageWidth, pageHeight);
-	setAutoFillBackground(true);
-	renderPage(1);
+    QString pageSize = r->pageOptions().getPageSize();
+    int pageWidth = 0;
+    int pageHeight = 0;
+    if (pageSize == "Custom") {
+        // if this is custom sized sheet of paper we will just use those values
+        pageWidth = (int)(r->pageOptions().getCustomWidth());
+        pageHeight = (int)(r->pageOptions().getCustomHeight());
+    } else {
+        // lookup the correct size information for the specified size paper
+        pageWidth = r->pageOptions().widthPx();
+        pageHeight = r->pageOptions().heightPx();
+    }
+
+
+    setFixedSize(pageWidth, pageHeight);
+
+    kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight << endl;
+    _repaint = true;
+    _pm = new QPixmap(pageWidth, pageHeight);
+    setAutoFillBackground(true);
+    renderPage(1);
 }
 
 void KexiReportPage::paintEvent(QPaintEvent*)
 {
-	QPainter painter(this);
-	painter.drawPixmap(QPoint(0, 0), *_pm);
+    QPainter painter(this);
+    painter.drawPixmap(QPoint(0, 0), *_pm);
 }
 
 void KexiReportPage::renderPage(int p)
 {
-	kDebug() << "KexiReportPage::renderPage " << p << endl;
-	page = p;
-	_pm->fill();
-	QPainter qp(_pm);
-	KRScreenRender sr;
-	sr.setPainter(&qp);
-	sr.render(rpt, p-1);
-	_repaint = true;
-	repaint();
+    kDebug() << "KexiReportPage::renderPage " << p << endl;
+    page = p;
+    _pm->fill();
+    QPainter qp(_pm);
+    KRScreenRender sr;
+    sr.setPainter(&qp);
+    sr.render(rpt, p - 1);
+    _repaint = true;
+    repaint();
 }
 
 KexiReportPage::~KexiReportPage()

@@ -26,104 +26,104 @@ using namespace KexiDB;
 
 
 RowEditBuffer::RowEditBuffer(bool dbAwareBuffer)
-: m_simpleBuffer(dbAwareBuffer ? 0 : new SimpleMap())
-, m_simpleBufferIt(dbAwareBuffer ? 0 : new SimpleMap::ConstIterator())
-, m_dbBuffer(dbAwareBuffer ? new DBMap() : 0)
-, m_dbBufferIt(dbAwareBuffer ? new DBMap::Iterator() : 0)
-, m_defaultValuesDbBuffer(dbAwareBuffer ? new QMap<QueryColumnInfo*,bool>() : 0)
-, m_defaultValuesDbBufferIt(dbAwareBuffer ? new QMap<QueryColumnInfo*,bool>::ConstIterator() : 0)
+        : m_simpleBuffer(dbAwareBuffer ? 0 : new SimpleMap())
+        , m_simpleBufferIt(dbAwareBuffer ? 0 : new SimpleMap::ConstIterator())
+        , m_dbBuffer(dbAwareBuffer ? new DBMap() : 0)
+        , m_dbBufferIt(dbAwareBuffer ? new DBMap::Iterator() : 0)
+        , m_defaultValuesDbBuffer(dbAwareBuffer ? new QMap<QueryColumnInfo*, bool>() : 0)
+        , m_defaultValuesDbBufferIt(dbAwareBuffer ? new QMap<QueryColumnInfo*, bool>::ConstIterator() : 0)
 {
 }
 
 RowEditBuffer::~RowEditBuffer()
 {
-  delete m_simpleBuffer;
-  delete m_simpleBufferIt;
-  delete m_dbBuffer;
-  delete m_defaultValuesDbBuffer;
-  delete m_dbBufferIt;
+    delete m_simpleBuffer;
+    delete m_simpleBufferIt;
+    delete m_dbBuffer;
+    delete m_defaultValuesDbBuffer;
+    delete m_dbBufferIt;
 }
 
-const QVariant* RowEditBuffer::at( QueryColumnInfo& ci, bool useDefaultValueIfPossible ) const
+const QVariant* RowEditBuffer::at(QueryColumnInfo& ci, bool useDefaultValueIfPossible) const
 {
-  if (!m_dbBuffer) {
-    KexiDBWarn << "RowEditBuffer::at(QueryColumnInfo&): not db-aware buffer!" << endl;
-    return 0;
-  }
-  *m_dbBufferIt = m_dbBuffer->find( &ci );
-  QVariant* result = 0;
-  if (*m_dbBufferIt!=m_dbBuffer->end())
-    result = &(*m_dbBufferIt).value();
-  if ( useDefaultValueIfPossible 
-    && (!result || result->isNull()) 
-    && ci.field && !ci.field->defaultValue().isNull() && KexiDB::isDefaultValueAllowed(ci.field)
-    && !hasDefaultValueAt(ci) )
-  {
-    //no buffered or stored value: try to get a default value declared in a field, so user can modify it
-    if (!result)
-      m_dbBuffer->insert(&ci, ci.field->defaultValue() );
-    result = &(*m_dbBuffer)[ &ci ];
-    m_defaultValuesDbBuffer->insert(&ci, true);
-  }
-  return (const QVariant*)result;
+    if (!m_dbBuffer) {
+        KexiDBWarn << "RowEditBuffer::at(QueryColumnInfo&): not db-aware buffer!" << endl;
+        return 0;
+    }
+    *m_dbBufferIt = m_dbBuffer->find(&ci);
+    QVariant* result = 0;
+    if (*m_dbBufferIt != m_dbBuffer->end())
+        result = &(*m_dbBufferIt).value();
+    if (useDefaultValueIfPossible
+            && (!result || result->isNull())
+            && ci.field && !ci.field->defaultValue().isNull() && KexiDB::isDefaultValueAllowed(ci.field)
+            && !hasDefaultValueAt(ci)) {
+        //no buffered or stored value: try to get a default value declared in a field, so user can modify it
+        if (!result)
+            m_dbBuffer->insert(&ci, ci.field->defaultValue());
+        result = &(*m_dbBuffer)[ &ci ];
+        m_defaultValuesDbBuffer->insert(&ci, true);
+    }
+    return (const QVariant*)result;
 }
 
-const QVariant* RowEditBuffer::at( Field& f ) const
+const QVariant* RowEditBuffer::at(Field& f) const
 {
-  if (!m_simpleBuffer) {
-    KexiDBWarn << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
-    return 0;
-  }
-  *m_simpleBufferIt = m_simpleBuffer->find( f.name() );
-  if (*m_simpleBufferIt==m_simpleBuffer->constEnd())
-    return 0;
-  return &(*m_simpleBufferIt).value();
+    if (!m_simpleBuffer) {
+        KexiDBWarn << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
+        return 0;
+    }
+    *m_simpleBufferIt = m_simpleBuffer->find(f.name());
+    if (*m_simpleBufferIt == m_simpleBuffer->constEnd())
+        return 0;
+    return &(*m_simpleBufferIt).value();
 }
 
-const QVariant* RowEditBuffer::at( const QString& fname ) const
+const QVariant* RowEditBuffer::at(const QString& fname) const
 {
-  if (!m_simpleBuffer) {
-    KexiDBWarn << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
-    return 0;
-  }
-  *m_simpleBufferIt = m_simpleBuffer->find( fname );
-  if (*m_simpleBufferIt==m_simpleBuffer->constEnd())
-    return 0;
-  return &(*m_simpleBufferIt).value();
+    if (!m_simpleBuffer) {
+        KexiDBWarn << "RowEditBuffer::at(Field&): this is db-aware buffer!" << endl;
+        return 0;
+    }
+    *m_simpleBufferIt = m_simpleBuffer->find(fname);
+    if (*m_simpleBufferIt == m_simpleBuffer->constEnd())
+        return 0;
+    return &(*m_simpleBufferIt).value();
 }
 
-void RowEditBuffer::clear() {
-  if (m_dbBuffer) {
-    m_dbBuffer->clear(); 
-    m_defaultValuesDbBuffer->clear();
-  }
-  if (m_simpleBuffer)
-    m_simpleBuffer->clear();
+void RowEditBuffer::clear()
+{
+    if (m_dbBuffer) {
+        m_dbBuffer->clear();
+        m_defaultValuesDbBuffer->clear();
+    }
+    if (m_simpleBuffer)
+        m_simpleBuffer->clear();
 }
 
 bool RowEditBuffer::isEmpty() const
 {
-  if (m_dbBuffer)
-    return m_dbBuffer->isEmpty(); 
-  if (m_simpleBuffer)
-    return m_simpleBuffer->isEmpty();
-  return true;
+    if (m_dbBuffer)
+        return m_dbBuffer->isEmpty();
+    if (m_simpleBuffer)
+        return m_simpleBuffer->isEmpty();
+    return true;
 }
 
 void RowEditBuffer::debug()
 {
-  if (isDBAware()) {
-    KexiDBDbg << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() <<" items"<< endl;
-    for (DBMap::ConstIterator it = m_dbBuffer->constBegin(); it!=m_dbBuffer->constEnd(); ++it) {
-      KexiDBDbg << "* field name=" <<it.key()->field->name()<<" val="
-        << (it.value().isNull() ? QString("<NULL>") : it.value().toString()) 
-        << (hasDefaultValueAt(*it.key()) ? " DEFAULT" : "") <<endl;
+    if (isDBAware()) {
+        KexiDBDbg << "RowEditBuffer type=DB-AWARE, " << m_dbBuffer->count() << " items" << endl;
+        for (DBMap::ConstIterator it = m_dbBuffer->constBegin(); it != m_dbBuffer->constEnd(); ++it) {
+            KexiDBDbg << "* field name=" << it.key()->field->name() << " val="
+            << (it.value().isNull() ? QString("<NULL>") : it.value().toString())
+            << (hasDefaultValueAt(*it.key()) ? " DEFAULT" : "") << endl;
+        }
+        return;
     }
-    return;
-  }
-  KexiDBDbg << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() <<" items"<< endl;
-  for (SimpleMap::ConstIterator it = m_simpleBuffer->constBegin(); it!=m_simpleBuffer->constEnd(); ++it) {
-    KexiDBDbg << "* field name=" <<it.key()<<" val="
-      << (it.value().isNull() ? QString("<NULL>") : it.value().toString()) <<endl;
-  }
+    KexiDBDbg << "RowEditBuffer type=SIMPLE, " << m_simpleBuffer->count() << " items" << endl;
+    for (SimpleMap::ConstIterator it = m_simpleBuffer->constBegin(); it != m_simpleBuffer->constEnd(); ++it) {
+        KexiDBDbg << "* field name=" << it.key() << " val="
+        << (it.value().isNull() ? QString("<NULL>") : it.value().toString()) << endl;
+    }
 }

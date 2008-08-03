@@ -1,14 +1,15 @@
- /*
- * This file has been automatically generated from
- * koffice/kexi/tools/sql_keywords/sql_keywords.sh and
- * postgresql-7.4.6/src/backend/parser/keywords.c.
- *
- * Please edit the sql_keywords.sh, not this file!
- */
+/*
+* This file has been automatically generated from
+* koffice/kexi/tools/sql_keywords/sql_keywords.sh and
+* postgresql-7.4.6/src/backend/parser/keywords.c.
+*
+* Please edit the sql_keywords.sh, not this file!
+*/
 #include <pqxxdriver.h>
 
-namespace KexiDB {
-  const char* pqxxSqlDriver::keywords[] = {
+namespace KexiDB
+{
+const char* pqxxSqlDriver::keywords[] = {
     "ABORT",
     "ABSOLUTE",
     "ACCESS",
@@ -240,5 +241,5 @@ namespace KexiDB {
     "YEAR",
     "ZONE",
     0
-  };
+};
 }

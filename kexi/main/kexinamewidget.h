@@ -27,32 +27,43 @@
 #include <Q3GridLayout>
 #include <klineedit.h>
 
-namespace KexiUtils {
+namespace KexiUtils
+{
 class Validator;
 class MultiValidator;
 }
 
 class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiNameWidget(const QString& message, QWidget * parent = 0);
 
-    KexiNameWidget(const QString& message, 
-      const QString& nameLabel, const QString& nameText, 
-      const QString& captionLabel, const QString& captionText, 
-      QWidget * parent = 0);
+    KexiNameWidget(const QString& message,
+                   const QString& nameLabel, const QString& nameText,
+                   const QString& captionLabel, const QString& captionText,
+                   QWidget * parent = 0);
 
-    virtual ~KexiNameWidget(); 
+    virtual ~KexiNameWidget();
 
-    QLabel* captionLabel() const { return lbl_caption; }
-    QLabel* nameLabel() const { return lbl_name; }
-    KLineEdit* captionLineEdit() const { return le_caption; }
-    KLineEdit* nameLineEdit() const { return le_name; }
+    QLabel* captionLabel() const {
+        return lbl_caption;
+    }
+    QLabel* nameLabel() const {
+        return lbl_name;
+    }
+    KLineEdit* captionLineEdit() const {
+        return le_caption;
+    }
+    KLineEdit* nameLineEdit() const {
+        return le_name;
+    }
 
-    QString messageText() const { return lbl_message->text(); }
-    
+    QString messageText() const {
+        return lbl_message->text();
+    }
+
     void setMessageText(const QString& msg);
 
     //! \return entered caption text
@@ -66,45 +77,53 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
     void setNameText(const QString& name);
 
     /*! Sets i18n'ed warning message displayed when user leaves 'name' field
-     without filling it (if acceptsEmptyValue() is false). 
+     without filling it (if acceptsEmptyValue() is false).
      By default the message is equal "Please enter the name.". */
-    void setWarningForName( const QString& txt ) { m_nameWarning = txt; }
+    void setWarningForName(const QString& txt) {
+        m_nameWarning = txt;
+    }
 
     /*! Sets i18n'ed warning message displayed when user leaves 'name' field
-     without filling it (if acceptsEmptyValue() is false). 
+     without filling it (if acceptsEmptyValue() is false).
      By default the message is equal "Please enter the caption." */
-    void setWarningForCaption( const QString& txt ) { m_captionWarning = txt; }
+    void setWarningForCaption(const QString& txt) {
+        m_captionWarning = txt;
+    }
 
     /*! \return true if name or caption is empty. */
     bool empty() const;
 
     KexiUtils::Validator *nameValidator() const;
 
-    /*! Adds subvalidator for name field. In fact it's is added to internal 
+    /*! Adds subvalidator for name field. In fact it's is added to internal
      multivalidator. If \a owned is true, \a validator will be owned by the object.
      \sa MultiValidator::addSubvalidator(). */
-    void addNameSubvalidator( KexiUtils::Validator* validator, bool owned = true );
+    void addNameSubvalidator(KexiUtils::Validator* validator, bool owned = true);
 
     /*! \return true if name text cannot be empty (true by default). */
     bool isNameRequired() const;
 
-    void setNameRequired( bool set );
+    void setNameRequired(bool set);
 
     /*! \return true if caption text cannot be empty (false by default). */
-    bool isCaptionRequired() const { return m_caption_required; }
+    bool isCaptionRequired() const {
+        return m_caption_required;
+    }
 
-    void setCaptionRequired(bool set) { m_caption_required = set; }
+    void setCaptionRequired(bool set) {
+        m_caption_required = set;
+    }
 
-  public slots:
+public slots:
     /*! Clears both name and caption. */
     virtual void clear();
 
-    /*! Checks if both fields have valid values 
+    /*! Checks if both fields have valid values
      (i.e. not empty if acceptsEmptyValue() is false).
      If not, warning message is shown and false is returned. */
     bool checkValidity();
 
-  signals:
+signals:
     /*! Emitted whenever return key is pressed on name or caption label. */
     void returnPressed();
 
@@ -114,16 +133,16 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
     /*! Emitted whenever the message changes */
     void messageChanged();
 
-  protected slots:
+protected slots:
     void slotNameTxtChanged(const QString&);
     void slotCaptionTxtChanged(const QString&);
-//		bool eventFilter( QObject *obj, QEvent *ev );
-  
-  protected:
+//  bool eventFilter( QObject *obj, QEvent *ev );
+
+protected:
     void init(
-      const QString& message, 
-      const QString& nameLabel, const QString& nameText, 
-      const QString& captionLabel, const QString& captionText);
+        const QString& message,
+        const QString& nameLabel, const QString& nameText,
+        const QString& captionLabel, const QString& captionText);
 
     QLabel* lbl_message;
     QLabel* lbl_caption;
@@ -134,9 +153,9 @@ class KEXIMAIN_EXPORT KexiNameWidget : public QWidget
     KexiUtils::MultiValidator *m_validator;
     QString m_nameWarning, m_captionWarning;
 
-    bool m_le_name_txtchanged_disable : 1;
-    bool m_le_name_autofill : 1;
-    bool m_caption_required : 1;
+bool m_le_name_txtchanged_disable : 1;
+bool m_le_name_autofill : 1;
+bool m_caption_required : 1;
 
     friend class KexiNameDialog;
 };

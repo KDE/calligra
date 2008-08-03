@@ -28,16 +28,16 @@
  KexiDBLineEdit (forms), etc. */
 class KEXIDATATABLE_EXPORT KexiTextFormatter
 {
-  public:
+public:
     KexiTextFormatter();
     ~KexiTextFormatter();
 
     //! Assigns \a field to the formatter. This affects its behaviour.
-    void setField( KexiDB::Field* field );
+    void setField(KexiDB::Field* field);
 
-    /*! \return text for \a value. 
+    /*! \return text for \a value.
      A field schema set using setField() is used to perform the formatting.
-     \a add is a text that should be added to the value if possible. 
+     \a add is a text that should be added to the value if possible.
      Used in KexiInputTableEdit::setValueInternal(), by form widgets and for reporting/printing. */
     QString valueToText(const QVariant& value, const QString& add) const;
 
@@ -46,15 +46,15 @@ class KEXIDATATABLE_EXPORT KexiTextFormatter
      Used in KexiInputTableEdit::setValueInternal(), by form widgets and for reporting/printing. */
     QVariant textToValue(const QString& text) const;
 
-    /*! \return true if value formatted as \a text is empty. 
+    /*! \return true if value formatted as \a text is empty.
      A field schema set using setField() is used to perform the calculation. */
     bool valueIsEmpty(const QString& text) const;
 
-    /*! \return true if value formatted as \a text is valid. 
+    /*! \return true if value formatted as \a text is valid.
      A field schema set using setField() is used to perform the calculation. */
     bool valueIsValid(const QString& text) const;
 
-    /*! \return input mask for intering values related to a field schema 
+    /*! \return input mask for intering values related to a field schema
      which has been set using setField(). */
     QString inputMask() const;
 

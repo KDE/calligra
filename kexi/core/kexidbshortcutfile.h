@@ -25,100 +25,105 @@
 #include <kexi_export.h>
 
 class KexiProjectData;
-namespace KexiDB { class ConnectionData; }
+namespace KexiDB
+{
+class ConnectionData;
+}
 
-/*! Loads and saves information for a "shortcut to a connection" file containing 
- connection information with database name (i.e. ProjectData). 
- This is implementation for handling .KEXIS files. 
+/*! Loads and saves information for a "shortcut to a connection" file containing
+ connection information with database name (i.e. ProjectData).
+ This is implementation for handling .KEXIS files.
  See http://www.kexi-project.org/wiki/wikiview/index.php?KexiMimeTypes_DataSaving_Loading
 */
 class KEXICORE_EXPORT KexiDBShortcutFile
 {
-  public:
+public:
     /*! Creates a new object for \a fileName. */
-    KexiDBShortcutFile( const QString& fileName );
+    KexiDBShortcutFile(const QString& fileName);
 
     ~KexiDBShortcutFile();
 
     /*! Loads project data (with connection data) into \a data.
-     Database name and caption can be set there but these are optional. 
+     Database name and caption can be set there but these are optional.
      \a groupKey, if provided will be set to a group key,
-     so you can later use it in saveConnectionData(). 
+     so you can later use it in saveConnectionData().
      \return true on success. */
     bool loadProjectData(KexiProjectData& data, QString* groupKey = 0);
 
-    /*! Saves project data \a data (with connection data) to a shortcut file. 
+    /*! Saves project data \a data (with connection data) to a shortcut file.
      If \a storePassword is true, password will be saved in the file,
-     even if data.connectionData()->savePassword is false. 
-     Existing data is merged with new data. \a groupKey is reused, if specified. 
-     If \a overwriteFirstGroup is true (the default) first found group will be overwritten 
-     instead of creating of a new unique group. This mode is usable for updating .kexic files 
-     containing single connection data, what's used for storing connections repository. 
+     even if data.connectionData()->savePassword is false.
+     Existing data is merged with new data. \a groupKey is reused, if specified.
+     If \a overwriteFirstGroup is true (the default) first found group will be overwritten
+     instead of creating of a new unique group. This mode is usable for updating .kexic files
+     containing single connection data, what's used for storing connections repository.
      \return true on success. */
-    bool saveProjectData(const KexiProjectData& data, bool savePassword, 
-      QString* groupKey = 0, bool overwriteFirstGroup = true);
+    bool saveProjectData(const KexiProjectData& data, bool savePassword,
+                         QString* groupKey = 0, bool overwriteFirstGroup = true);
 
     //! \return filename provided on this object's construction. */
     QString fileName() const;
 
-  protected:
+protected:
     class Private;
     Private *d;
 };
 
-/*! Loads and saves information for a "shortcut" file containing 
- connection information (i.e. KexiDB::ConnectionData). 
+/*! Loads and saves information for a "shortcut" file containing
+ connection information (i.e. KexiDB::ConnectionData).
  This is implementation for handling .KEXIC files.
  See http://www.kexi-project.org/wiki/wikiview/index.php?KexiMimeTypes_DataSaving_Loading
 */
 class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 {
-  public:
+public:
     /*! Creates a new object for \a fileName. */
-    KexiDBConnShortcutFile( const QString& fileName );
+    KexiDBConnShortcutFile(const QString& fileName);
 
     ~KexiDBConnShortcutFile();
 
     /*! Loads connection data into \a data.
      \a groupKey, if provided will be set to a group key,
-     so you can later use it in saveConnectionData(). 
+     so you can later use it in saveConnectionData().
      \return true on success. */
     bool loadConnectionData(KexiDB::ConnectionData& data, QString* groupKey = 0);
 
-    /*! Saves connection data \a data to a shortcut file. 
+    /*! Saves connection data \a data to a shortcut file.
      If \a storePassword is true, password will be saved in the file,
-     even if data.savePassword is false. 
-     Existing data is merged with new data. \a groupKey is reused, if specified. 
-     If \a overwriteFirstGroup is true (the default) first found group will be overwritten 
-     instead of creating of a new unique group. This mode is usable for updating .kexic files 
+     even if data.savePassword is false.
+     Existing data is merged with new data. \a groupKey is reused, if specified.
+     If \a overwriteFirstGroup is true (the default) first found group will be overwritten
+     instead of creating of a new unique group. This mode is usable for updating .kexic files
      containing single connection data, what's used for storing connections repository.
      \return true on success. */
-    bool saveConnectionData(const KexiDB::ConnectionData& data, 
-      bool savePassword, QString* groupKey = 0, bool overwriteFirstGroup = true);
+    bool saveConnectionData(const KexiDB::ConnectionData& data,
+                            bool savePassword, QString* groupKey = 0, bool overwriteFirstGroup = true);
 
     //! \return filename provided on this object's construction. */
-    QString fileName() const { return KexiDBShortcutFile::fileName(); }
+    QString fileName() const {
+        return KexiDBShortcutFile::fileName();
+    }
 
-  protected:
+protected:
 };
 
 #if 0
-//! Loads and saves information for a sef of "shortcut to a connection" file containing 
-//! connection information (i.e. KexiDBConnectionSet). 
+//! Loads and saves information for a sef of "shortcut to a connection" file containing
+//! connection information (i.e. KexiDBConnectionSet).
 //! This is implementation for handling .KEXIC files.
-//! The set is loaded from files found using 
+//! The set is loaded from files found using
 //! KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic").
 class KexiDBConnSetShortcutFiles
 {
-  public:
+public:
     KexiDBConnSetShortcutFiles();
 
-    /*! Loads connection data into \a set. The set is cleared before loading. 
+    /*! Loads connection data into \a set. The set is cleared before loading.
      \retuirn true on successful loading. */
     static bool loadConnectionDataSet(KexiDBConnectionSet& set);
 
-    /*! Saves a set of connection data \a set to a shortcut files. 
-     Existing files are overwritten with a new data. 
+    /*! Saves a set of connection data \a set to a shortcut files.
+     Existing files are overwritten with a new data.
      \retuirn true on successful saving. */
     static bool saveConnectionDataSet(const KexiDBConnectionSet& set);
 }

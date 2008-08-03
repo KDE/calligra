@@ -24,91 +24,91 @@
 #include <knumvalidator.h>
 
 KexiDBIntSpinBox::KexiDBIntSpinBox(QWidget *parent)
- : KIntSpinBox(parent) , KexiFormDataItemInterface()
+        : KIntSpinBox(parent) , KexiFormDataItemInterface()
 {
-  connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged()));
+    connect(this, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged()));
 }
 
 KexiDBIntSpinBox::~KexiDBIntSpinBox()
 {
 }
 
-void KexiDBIntSpinBox::setInvalidState( const QString& displayText )
+void KexiDBIntSpinBox::setInvalidState(const QString& displayText)
 {
-  m_invalidState = true;
-  setEnabled(false);
-  setReadOnly(true);
+    m_invalidState = true;
+    setEnabled(false);
+    setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-  if (focusPolicy() & Qt::TabFocus)
-    setFocusPolicy(Qt::ClickFocus);
-  setSpecialValueText(displayText);
-  KIntSpinBox::setValue(minValue());
+    if (focusPolicy() & Qt::TabFocus)
+        setFocusPolicy(Qt::ClickFocus);
+    setSpecialValueText(displayText);
+    KIntSpinBox::setValue(minValue());
 }
 
 void
 KexiDBIntSpinBox::setEnabled(bool enabled)
 {
-   // prevent the user from reenabling the widget when it is in invalid state
-  if(enabled && m_invalidState)
-    return;
-  KIntSpinBox::setEnabled(enabled);
+    // prevent the user from reenabling the widget when it is in invalid state
+    if (enabled && m_invalidState)
+        return;
+    KIntSpinBox::setEnabled(enabled);
 }
 
 void KexiDBIntSpinBox::setValueInternal(const QVariant&, bool)
 {
-  KIntSpinBox::setValue(m_origValue.toInt());
+    KIntSpinBox::setValue(m_origValue.toInt());
 }
 
 QVariant
 KexiDBIntSpinBox::value()
 {
-  return KIntSpinBox::value();
+    return KIntSpinBox::value();
 }
 
 void KexiDBIntSpinBox::slotValueChanged()
 {
-  signalValueChanged();
+    signalValueChanged();
 }
 
 bool KexiDBIntSpinBox::valueIsNull()
 {
-  return cleanText().isEmpty();
+    return cleanText().isEmpty();
 }
 
 bool KexiDBIntSpinBox::valueIsEmpty()
 {
-  return false;
+    return false;
 }
 
 bool KexiDBIntSpinBox::isReadOnly() const
 {
-  return editor()->isReadOnly();
+    return editor()->isReadOnly();
 }
 
 void KexiDBIntSpinBox::setReadOnly(bool set)
 {
-  editor()->setReadOnly(set);
+    editor()->setReadOnly(set);
 }
 
 QWidget*
 KexiDBIntSpinBox::widget()
 {
-  return this;
+    return this;
 }
 
 bool KexiDBIntSpinBox::cursorAtStart()
 {
-  return false; //! \todo ?
+    return false; //! \todo ?
 }
 
 bool KexiDBIntSpinBox::cursorAtEnd()
 {
-  return false; //! \todo ?
+    return false; //! \todo ?
 }
 
 void KexiDBIntSpinBox::clear()
 {
-  KIntSpinBox::setValue(minValue()); //! \todo ?
+    KIntSpinBox::setValue(minValue()); //! \todo ?
 }
 
 #include "kexidbintspinbox.moc"

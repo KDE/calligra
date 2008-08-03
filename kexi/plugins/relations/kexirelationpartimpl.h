@@ -24,18 +24,18 @@
 
 class KexiRelationPartImpl : public KexiInternalPart
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiRelationPartImpl(QObject *parent, const QStringList &args);
     virtual ~KexiRelationPartImpl();
-  
-  protected:
-//		virtual QWidget *createWidget(const char* widgetClass, KexiMainWindow* mainWin, 
-//		 QWidget *parent, const char *objName=0);
-    
+
+protected:
+//  virtual QWidget *createWidget(const char* widgetClass, KexiMainWindow* mainWin,
+//   QWidget *parent, const char *objName=0);
+
     virtual KexiView *createView(QWidget *parent,
-     const char *objName=0);
+                                 const char *objName = 0);
 
     //virtual KexiDialogBase *createWindow(KexiMainWindow *parent);
     //virtual QWidget *createWidget(QWidget *parent, KexiMainWindow *win);

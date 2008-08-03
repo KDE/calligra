@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,18 +23,18 @@
 #include <QObject>
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KRScriptDebug : public QObject
 {
-		Q_OBJECT
-	public:
-		KRScriptDebug ( QObject *parent = 0 );
+    Q_OBJECT
+public:
+    KRScriptDebug(QObject *parent = 0);
 
-		~KRScriptDebug();
-		
-	public slots:
-		void print(const QString&);
+    ~KRScriptDebug();
+
+public slots:
+    void print(const QString&);
 
 };
 

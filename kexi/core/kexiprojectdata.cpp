@@ -42,166 +42,165 @@
 class KexiProjectDataPrivate
 {
 public:
-  KexiProjectDataPrivate()
-   : userMode(false)
-   , readOnly(false)
-  {}
-  
-  KexiDB::ConnectionData connData;
-  QDateTime lastOpened;
-  bool userMode : 1;
-  bool readOnly : 1;
+    KexiProjectDataPrivate()
+            : userMode(false)
+            , readOnly(false) {}
+
+    KexiDB::ConnectionData connData;
+    QDateTime lastOpened;
+bool userMode : 1;
+bool readOnly : 1;
 };
 
 //---------------------------------------
 
 KexiProjectData::AutoOpenObjects::AutoOpenObjects()
- : QList<ObjectInfo*>()
+        : QList<ObjectInfo*>()
 {
 }
 
 KexiProjectData::AutoOpenObjects::AutoOpenObjects(const KexiProjectData::AutoOpenObjects& other)
- : QList<ObjectInfo*>()
+        : QList<ObjectInfo*>()
 {
-  *this = other;
+    *this = other;
 }
 
 KexiProjectData::AutoOpenObjects::~AutoOpenObjects()
 {
-  qDeleteAll(*this);
+    qDeleteAll(*this);
 }
 
 KexiProjectData::AutoOpenObjects& KexiProjectData::AutoOpenObjects::operator=(
-  const KexiProjectData::AutoOpenObjects& other)
+    const KexiProjectData::AutoOpenObjects & other)
 {
-  clear();
-  for (QListIterator<ObjectInfo*> it(other);it.hasNext();) //deep copy
-    append( new ObjectInfo(*it.next()) );
-  return *this;
+    clear();
+    for (QListIterator<ObjectInfo*> it(other);it.hasNext();) //deep copy
+        append(new ObjectInfo(*it.next()));
+    return *this;
 }
 
 //---------------------------------------
 
 KexiProjectData::KexiProjectData()
- : QObject(0)
- , KexiDB::SchemaData()
- , formatVersion(0)
- , d( new KexiProjectDataPrivate() )
+        : QObject(0)
+        , KexiDB::SchemaData()
+        , formatVersion(0)
+        , d(new KexiProjectDataPrivate())
 {
-  setObjectName("KexiProjectData");
+    setObjectName("KexiProjectData");
 }
 
-KexiProjectData::KexiProjectData( 
-  const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
- : QObject(0)
- , KexiDB::SchemaData()
- , formatVersion(0)
- , d( new KexiProjectDataPrivate() )
+KexiProjectData::KexiProjectData(
+    const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption)
+        : QObject(0)
+        , KexiDB::SchemaData()
+        , formatVersion(0)
+        , d(new KexiProjectDataPrivate())
 {
-  setObjectName("KexiProjectData");
-  d->connData = cdata;
-  setDatabaseName(dbname);
-  setCaption(caption);
+    setObjectName("KexiProjectData");
+    d->connData = cdata;
+    setDatabaseName(dbname);
+    setCaption(caption);
 }
 
-KexiProjectData::KexiProjectData( const KexiProjectData& pdata )
- : QObject(0)
- , KexiDB::SchemaData()
- , d( 0 )
+KexiProjectData::KexiProjectData(const KexiProjectData& pdata)
+        : QObject(0)
+        , KexiDB::SchemaData()
+        , d(0)
 {
-  setObjectName("KexiProjectData");
-  *this = pdata;
-  autoopenObjects = pdata.autoopenObjects;
-/*
-  d->connData = *pdata.connectionData();
-  setDatabaseName(pdata.databaseName());
-  setCaption(pdata.caption());*/
+    setObjectName("KexiProjectData");
+    *this = pdata;
+    autoopenObjects = pdata.autoopenObjects;
+    /*
+      d->connData = *pdata.connectionData();
+      setDatabaseName(pdata.databaseName());
+      setCaption(pdata.caption());*/
 }
 
 KexiProjectData::~KexiProjectData()
 {
-  delete d;
+    delete d;
 }
 
-KexiProjectData& KexiProjectData::operator=(const KexiProjectData& pdata)
+KexiProjectData& KexiProjectData::operator=(const KexiProjectData & pdata)
 {
-  delete d; //this is old
-  static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
-  //deep copy
-  d = new KexiProjectDataPrivate();
-  *d = *pdata.d;
-//	d->connData = *pdata.constConnectionData();
-//	setDatabaseName(pdata.databaseName());
-//	setCaption(pdata.caption());
-//	setDescription(pdata.description());
-  return *this;
+    delete d; //this is old
+    static_cast<KexiDB::SchemaData&>(*this) = static_cast<const KexiDB::SchemaData&>(pdata);
+    //deep copy
+    d = new KexiProjectDataPrivate();
+    *d = *pdata.d;
+// d->connData = *pdata.constConnectionData();
+// setDatabaseName(pdata.databaseName());
+// setCaption(pdata.caption());
+// setDescription(pdata.description());
+    return *this;
 }
 
 KexiDB::ConnectionData* KexiProjectData::connectionData()
 {
-  return &d->connData;
+    return &d->connData;
 }
 
 const KexiDB::ConnectionData* KexiProjectData::constConnectionData() const
 {
-  return &d->connData;
+    return &d->connData;
 }
 
 QString KexiProjectData::databaseName() const
 {
-  return KexiDB::SchemaData::name();
+    return KexiDB::SchemaData::name();
 }
 
 void KexiProjectData::setDatabaseName(const QString& dbName)
 {
-  KexiDB::SchemaData::setName(dbName);
+    KexiDB::SchemaData::setName(dbName);
 }
 
 bool KexiProjectData::userMode() const
 {
-  return d->userMode;
+    return d->userMode;
 }
 
 QDateTime KexiProjectData::lastOpened() const
 {
-  return d->lastOpened;
+    return d->lastOpened;
 }
 
 void KexiProjectData::setLastOpened(const QDateTime& lastOpened)
 {
-  d->lastOpened=lastOpened;
+    d->lastOpened = lastOpened;
 
 }
 QString KexiProjectData::description() const
 {
-  return KexiDB::SchemaData::description();
+    return KexiDB::SchemaData::description();
 }
 
 void KexiProjectData::setDescription(const QString& desc)
 {
-  return KexiDB::SchemaData::setDescription(desc);
+    return KexiDB::SchemaData::setDescription(desc);
 }
 
 QString KexiProjectData::infoString(bool nobr) const
 {
-  if (constConnectionData()->fileName().isEmpty()) {
-    //server-based
-    return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
-      + (nobr ? " <nobr>" : " ") + i18nc("database connection", "(connection %1)",
-        constConnectionData()->serverInfoString()) + (nobr ? "</nobr>" : "");
-  }
-  //file-based
-  return QString(nobr ? "<nobr>" : "") 
-    + QString("\"%1\"").arg(constConnectionData()->fileName()) + (nobr ? "</nobr>" : "");
+    if (constConnectionData()->fileName().isEmpty()) {
+        //server-based
+        return QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(databaseName()) + (nobr ? "</nobr>" : "")
+               + (nobr ? " <nobr>" : " ") + i18nc("database connection", "(connection %1)",
+                                                  constConnectionData()->serverInfoString()) + (nobr ? "</nobr>" : "");
+    }
+    //file-based
+    return QString(nobr ? "<nobr>" : "")
+           + QString("\"%1\"").arg(constConnectionData()->fileName()) + (nobr ? "</nobr>" : "");
 }
 
 void KexiProjectData::setReadOnly(bool set)
 {
-  d->readOnly = set;
+    d->readOnly = set;
 }
 
 bool KexiProjectData::isReadOnly() const
 {
-  return d->readOnly;
+    return d->readOnly;
 }
 

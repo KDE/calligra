@@ -43,7 +43,7 @@ class ReportDesigner;
 
 namespace KoProperty
 {
-	class Editor;
+class Editor;
 }
 
 //
@@ -51,32 +51,36 @@ namespace KoProperty
 //
 class ReportEntity
 {
-	public:
-		static void buildXML ( QGraphicsItem * item, QDomDocument & doc, QDomElement & parent );
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent ) = 0;
+public:
+    static void buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElement & parent);
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent) = 0;
 
-		static void buildXMLRect ( QDomDocument & doc, QDomElement & entity, QRectF rect );
-		static void buildXMLFont ( QDomDocument & doc, QDomElement & entity, QFont font );
-		static void buildXMLTextStyle ( QDomDocument & doc, QDomElement & entity, ORTextStyleData ts );
-		static void buildXMLLineStyle ( QDomDocument & doc, QDomElement & entity, ORLineStyleData ls );
-		
-		static QFont getDefaultEntityFont();
-		static void  setDefaultEntityFont ( const QFont & );
+    static void buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect);
+    static void buildXMLFont(QDomDocument & doc, QDomElement & entity, QFont font);
+    static void buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, ORTextStyleData ts);
+    static void buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, ORLineStyleData ls);
 
-		virtual ReportEntity* clone()=0; 
-		ReportDesigner* designer() const {return _rd;}
-		void setDesigner(ReportDesigner* rd){_rd = rd;}
-		virtual ~ReportEntity() {};
-	protected:
-		ReportEntity(ReportDesigner*);
-		
-		ReportDesigner* _rd;
-		
-		
-		
-	private:
-		static bool _readDefaultFont;
-		static QFont _defaultFont;
+    static QFont getDefaultEntityFont();
+    static void  setDefaultEntityFont(const QFont &);
+
+    virtual ReportEntity* clone() = 0;
+    ReportDesigner* designer() const {
+        return _rd;
+    }
+    void setDesigner(ReportDesigner* rd) {
+        _rd = rd;
+    }
+    virtual ~ReportEntity() {};
+protected:
+    ReportEntity(ReportDesigner*);
+
+    ReportDesigner* _rd;
+
+
+
+private:
+    static bool _readDefaultFont;
+    static QFont _defaultFont;
 };
 
 #if 0
@@ -85,29 +89,29 @@ class ReportEntity
 //
 class ReportEntityGraph : public Q3CanvasRectangle, public ReportEntity
 {
-	public:
-		ReportEntityGraph ( ReportWindow *, Q3Canvas * canvas );
-		ReportEntityGraph ( QDomNode & element, ReportWindow *, Q3Canvas * canvas );
-		ReportEntityGraph ( ORGraphData &, ReportWindow *, Q3Canvas * );
+public:
+    ReportEntityGraph(ReportWindow *, Q3Canvas * canvas);
+    ReportEntityGraph(QDomNode & element, ReportWindow *, Q3Canvas * canvas);
+    ReportEntityGraph(ORGraphData &, ReportWindow *, Q3Canvas *);
 
-		virtual ~ReportEntityGraph();
+    virtual ~ReportEntityGraph();
 
-		void copyData ( ORGraphData & );
+    void copyData(ORGraphData &);
 
-		void setQuery ( const QString & );
-		QString query();
+    void setQuery(const QString &);
+    QString query();
 
-		virtual void propertyDialog ( QMap<QString,QColor>*, QuerySourceList * qsl, QWidget * parent );
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
+    virtual void propertyDialog(QMap<QString, QColor>*, QuerySourceList * qsl, QWidget * parent);
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
 
-		virtual int rtti() const;
-		static int RTTI;
-	protected:
-		virtual void drawShape ( QPainter& );
+    virtual int rtti() const;
+    static int RTTI;
+protected:
+    virtual void drawShape(QPainter&);
 
-	private:
-		ReportWindow * _rw;
-		ORGraphData _graphData;
+private:
+    ReportWindow * _rw;
+    ORGraphData _graphData;
 
 };
 #endif

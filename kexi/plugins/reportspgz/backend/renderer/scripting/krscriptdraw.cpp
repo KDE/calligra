@@ -1,5 +1,5 @@
 /*
- * Kexi Report Plugin 
+ * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@
 #include <QFontMetrics>
 
 KRScriptDraw::KRScriptDraw(QObject *parent)
- : QObject(parent)
+        : QObject(parent)
 {
-	_curPage = 0;
+    _curPage = 0;
 }
 
 
@@ -37,118 +37,114 @@ KRScriptDraw::~KRScriptDraw()
 
 void KRScriptDraw::setPage(OROPage *p)
 {
-	_curPage = p;
+    _curPage = p;
 }
 
 void KRScriptDraw::setOffset(QPointF off)
 {
-	_curOffset = off;
+    _curOffset = off;
 }
 
 void KRScriptDraw::rectangle(qreal x, qreal y, qreal w, qreal h, const QString& lc, const QString& fc, qreal lw, int a)
 {
-	if (_curPage)
-	{
-		ORORect *r = new ORORect();
-		KRPos p;
-		KRSize s;
-		
-		p.setPointPos(QPointF(x, y));
-		s.setPointSize(QSizeF(w, h));
-		r->setRect(QRectF(p.toScene() + _curOffset, s.toScene()));
-		
-		QPen pen(QColor(lc), lw);
-		QColor c(fc);
-		c.setAlpha(a);
-		QBrush bru(c);
-		
-		r->setBrush(bru);
-		r->setPen(pen);
-		_curPage->addPrimitive(r);
-	}
+    if (_curPage) {
+        ORORect *r = new ORORect();
+        KRPos p;
+        KRSize s;
+
+        p.setPointPos(QPointF(x, y));
+        s.setPointSize(QSizeF(w, h));
+        r->setRect(QRectF(p.toScene() + _curOffset, s.toScene()));
+
+        QPen pen(QColor(lc), lw);
+        QColor c(fc);
+        c.setAlpha(a);
+        QBrush bru(c);
+
+        r->setBrush(bru);
+        r->setPen(pen);
+        _curPage->addPrimitive(r);
+    }
 }
 
 void KRScriptDraw::ellipse(qreal x, qreal y, qreal w, qreal h, const QString& lc, const QString& fc, qreal lw, int a)
 {
-	if (_curPage)
-	{
-		OROEllipse *e = new OROEllipse();
-		KRPos p;
-		KRSize s;
-		
-		p.setPointPos(QPointF(x, y));
-		s.setPointSize(QSizeF(w, h));
-		e->setRect(QRectF(p.toScene() + _curOffset, s.toScene()));
-		
-		QPen pen(QColor(lc), lw);
-		QColor c(fc);
-		c.setAlpha(a);
-		QBrush bru(c);
-		
-		e->setBrush(bru);
-		e->setPen(pen);
-		_curPage->addPrimitive(e);
-	}
+    if (_curPage) {
+        OROEllipse *e = new OROEllipse();
+        KRPos p;
+        KRSize s;
+
+        p.setPointPos(QPointF(x, y));
+        s.setPointSize(QSizeF(w, h));
+        e->setRect(QRectF(p.toScene() + _curOffset, s.toScene()));
+
+        QPen pen(QColor(lc), lw);
+        QColor c(fc);
+        c.setAlpha(a);
+        QBrush bru(c);
+
+        e->setBrush(bru);
+        e->setPen(pen);
+        _curPage->addPrimitive(e);
+    }
 }
 
 void KRScriptDraw::line(qreal x1, qreal y1, qreal x2, qreal y2, const QString& lc)
 {
-	if (_curPage)
-	{
-		OROLine *ln = new OROLine();
-		KRPos s;
-		KRPos e;
-		
-		s.setPointPos(QPointF(x1, y1));
-		e.setPointPos(QPointF(x2, y2));
-		
-		ln->setStartPoint(s.toScene()+ _curOffset);
-		ln->setEndPoint(e.toScene()+ _curOffset);
-		
-		ORLineStyleData ls;
-		ls.lnColor = QColor(lc);
-		ls.weight = 1;
-		if (ls.weight <= 0)
-			ls.style = Qt::NoPen;
-		else
-			ls.style = Qt::SolidLine;
-		
-		ln->setLineStyle(ls);
-		_curPage->addPrimitive(ln);
-	}
+    if (_curPage) {
+        OROLine *ln = new OROLine();
+        KRPos s;
+        KRPos e;
+
+        s.setPointPos(QPointF(x1, y1));
+        e.setPointPos(QPointF(x2, y2));
+
+        ln->setStartPoint(s.toScene() + _curOffset);
+        ln->setEndPoint(e.toScene() + _curOffset);
+
+        ORLineStyleData ls;
+        ls.lnColor = QColor(lc);
+        ls.weight = 1;
+        if (ls.weight <= 0)
+            ls.style = Qt::NoPen;
+        else
+            ls.style = Qt::SolidLine;
+
+        ln->setLineStyle(ls);
+        _curPage->addPrimitive(ln);
+    }
 }
 
 void KRScriptDraw::text(qreal x, qreal y, const QString &txt, const QString &fnt, int pt, const QString &fc, const QString&bc, const QString &lc, qreal lw, int o)
 {
-	if (_curPage)
-	{
-		QFont f(fnt, pt);
-		QRectF r = QFontMetrics(f).boundingRect( txt );
-		
-		ORTextStyleData ts;
-		ts.font = f;
-		ts.bgColor = QColor(bc);
-		ts.fgColor = QColor(fc);
-		ts.bgOpacity = o;
-		
-		ORLineStyleData ls;
-		ls.lnColor = QColor(lc);
-		ls.weight = lw;
-		if (lw <= 0)
-			ls.style = Qt::NoPen;
-		else
-			ls.style = Qt::SolidLine;
-			
-		
-		OROTextBox *tb = new OROTextBox();
-		tb->setPosition(QPointF(x,y)+ _curOffset);
-		tb->setSize(r.size());
-		tb->setTextStyle(ts);
-		tb->setLineStyle(ls);
-		
-		tb->setText(txt);
-		
-		_curPage->addPrimitive(tb);
-		
-	}
+    if (_curPage) {
+        QFont f(fnt, pt);
+        QRectF r = QFontMetrics(f).boundingRect(txt);
+
+        ORTextStyleData ts;
+        ts.font = f;
+        ts.bgColor = QColor(bc);
+        ts.fgColor = QColor(fc);
+        ts.bgOpacity = o;
+
+        ORLineStyleData ls;
+        ls.lnColor = QColor(lc);
+        ls.weight = lw;
+        if (lw <= 0)
+            ls.style = Qt::NoPen;
+        else
+            ls.style = Qt::SolidLine;
+
+
+        OROTextBox *tb = new OROTextBox();
+        tb->setPosition(QPointF(x, y) + _curOffset);
+        tb->setSize(r.size());
+        tb->setTextStyle(ts);
+        tb->setLineStyle(ls);
+
+        tb->setText(txt);
+
+        _curPage->addPrimitive(tb);
+
+    }
 }

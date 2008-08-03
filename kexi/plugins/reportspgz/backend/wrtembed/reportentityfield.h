@@ -33,28 +33,28 @@
 //
 class ReportEntityField : public QObject, public ReportRectEntity, public KRFieldData
 {
-		Q_OBJECT
-	public:
-		//Used when creating new basic field
-		ReportEntityField ( ReportDesigner *, QGraphicsScene * scene );
-		//Used when loading from file
-		ReportEntityField ( QDomNode & element, ReportDesigner *, QGraphicsScene * scene );
-		virtual ~ReportEntityField();
-		
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
+    Q_OBJECT
+public:
+    //Used when creating new basic field
+    ReportEntityField(ReportDesigner *, QGraphicsScene * scene);
+    //Used when loading from file
+    ReportEntityField(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
+    virtual ~ReportEntityField();
 
-		virtual void paint ( QPainter* painter, const QStyleOptionGraphicsItem* option,QWidget *widget=0 );
-		virtual ReportEntityField* clone(); 
-		
-	protected:
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-		
-	private:
-		void init(QGraphicsScene*);
-		QRect getTextRect();
-		
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
+
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
+    virtual ReportEntityField* clone();
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+private:
+    void init(QGraphicsScene*);
+    QRect getTextRect();
+
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

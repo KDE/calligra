@@ -28,30 +28,32 @@
 
 class KexiWindow;
 
-namespace KoProperty {
-  class Set;
+namespace KoProperty
+{
+class Set;
 }
 
-namespace KexiDB {
-  class SchemaData;
+namespace KexiDB
+{
+class SchemaData;
 }
 
 //! @short action for toggling view mode
 class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
 {
-  //Q_OBJECT
-  public:
-    //! Creates action for toggling to view mode @a mode. @a slot should have signature 
+    //Q_OBJECT
+public:
+    //! Creates action for toggling to view mode @a mode. @a slot should have signature
     //! matching switchedTo(Kexi::ViewMode mode) signal.
     KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent);//, QObject* receiver, const char* slot);
-/*	signals:
-    void switchedTo(Kexi::ViewMode mode);
-  private slots:
-    void slotToggled(bool);
+    /* signals:
+        void switchedTo(Kexi::ViewMode mode);
+      private slots:
+        void slotToggled(bool);
 
-  private:
-    class Private;
-    Private * const d;*/
+      private:
+        class Private;
+        Private * const d;*/
 };
 
 //! Base class for single view embeddable in KexiWindow.
@@ -70,16 +72,16 @@ class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
 */
 class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiView(QWidget *parent);
     virtual ~KexiView();
 
-//		//! \return kexi main window that contain this view
-//kde4 not needed		inline KexiMainWindow *mainWin() const { return m_mainWin; }
+//  //! \return kexi main window that contain this view
+//kde4 not needed  inline KexiMainWindow *mainWin() const { return m_mainWin; }
 
-    //! \return parent KexiWindow that containing this view, 
+    //! \return parent KexiWindow that containing this view,
     //! or 0 if no window contain this view
     KexiWindow* window() const;
 
@@ -95,9 +97,9 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      yoursize.boundedTo( KexiView::preferredSizeHint(otherSize) ). */
     virtual QSize preferredSizeHint(const QSize& otherSize);
 
-    virtual bool eventFilter( QObject *o, QEvent *e );
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
-    void addChildView( KexiView* childView );
+    void addChildView(KexiView* childView);
 
     /*! True if contents (data) of the view is dirty and need to be saved
      This may or not be used, depending if changes in the window
@@ -116,13 +118,13 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      \return shared action with name \a action_name for this view.
      If there's no such action declared in Kexi Part (part()),
      global shared action is returned (if exists). */
-    virtual QAction* sharedAction( const char *action_name );
+    virtual QAction* sharedAction(const char *action_name);
 
     /*! Enables or disables shared action declared in Kexi Part (part()).
      If there's no such action, global shared action is enabled or disabled (if exists). */
     virtual void setAvailable(const char* action_name, bool set);
 
-  public slots:
+public slots:
     virtual void setFocus();
 
     /*! Call this in your view's implementation whenever current property set
@@ -138,15 +140,17 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
     void setDirty(bool set);
 
     /*! Equal to setDirty(true). */
-    void setDirty() { setDirty(true); }
+    void setDirty() {
+        setDirty(true);
+    }
 
-  signals:
+signals:
     //! emitted when the view is about to close
     void closing(bool& cancel);
 
     void focus(bool in);
 
-  protected:
+protected:
     /*! called by KexiWindow::switchToViewMode() right before window is switched to new mode
      By default does nothing. Reimplement this if you need to do something
      before switching to this view.
@@ -165,7 +169,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      (probably after showing some info messages), you need to return cancelled. */
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
-    virtual void closeEvent( QCloseEvent * e );
+    virtual void closeEvent(QCloseEvent * e);
 
     /*! \return a property set for this view. For reimplementation. By default returns NULL. */
     virtual KoProperty::Set *propertySet();
@@ -176,8 +180,8 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      If \a preservePrevSelection is true and there was a property set
      assigned before call, previously selected item will be preselected
      in the editor (if found). */
-    void propertySetReloaded(bool preservePrevSelection = false, 
-      const QByteArray& propertyToSelect = QByteArray());
+    void propertySetReloaded(bool preservePrevSelection = false,
+                             const QByteArray& propertyToSelect = QByteArray());
 
     /*! Tells this view to create and store data of the new object
      pointed by \a sdata on the backend.
@@ -201,13 +205,13 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
     /*! Loads large string data \a dataString block (e.g. xml form's representation),
-     indexed with optional \a dataID, from the database backend. 
+     indexed with optional \a dataID, from the database backend.
      If \a canBeEmpty is true and there is no data block for dataID, true is returned
      and \a dataString is set to null string. The default is false.
      \return true on success
      \sa storeDataBlock(). */
-    bool loadDataBlock( QString &dataString, const QString& dataID = QString(), 
-      bool canBeEmpty = false );
+    bool loadDataBlock(QString &dataString, const QString& dataID = QString(),
+                       bool canBeEmpty = false);
 
     /*! Tells this view to store data changes on the backend.
      Called by KexiWindow::storeData().
@@ -215,10 +219,10 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      - makes a deep copy of \a sdata
      - stores object schema data \a sdata in 'kexi__objects' internal table
        using Connection::storeObjectSchemaData().
-     If \a dontAsk is true, no question dialog will 
+     If \a dontAsk is true, no question dialog will
      be shown to the user. The default is false.
 
-     Reimpelment this for your needs. Should return true on success 
+     Reimpelment this for your needs. Should return true on success
      or cancelled when the task should be cancelled.
      \sa storeNewData() */
     virtual tristate storeData(bool dontAsk = false);
@@ -233,14 +237,14 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      If there is already such record in the table, it's simply overwritten.
      \return true on success
     */
-    bool storeDataBlock( const QString &dataString, const QString &dataID = QString() );
+    bool storeDataBlock(const QString &dataString, const QString &dataID = QString());
 
     /*! Removes (potentially large) string data (e.g. xml form's representation),
      pointed by optional \a dataID, from the database backend.
      \return true on success. Does not fail if the block doe not exists.
      Note that if \a dataID is not specified, all data blocks for this view will be removed.
      \sa storeDataBlock(). */
-    bool removeDataBlock( const QString& dataID = QString());
+    bool removeDataBlock(const QString& dataID = QString());
 
     void setViewWidget(QWidget* w, bool focusProxy = false);
 
@@ -252,7 +256,9 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
      or deactivation. */
     virtual void updateActions(bool activated);
 
-    virtual void setFocusInternal() { QWidget::setFocus(); }
+    virtual void setFocusInternal() {
+        QWidget::setFocus();
+    }
 
     /*! Allows to react on parent window's detaching (only for KMDI's ChildFrame mode)
      - it is called by KexiWindow::youAreDetached().
@@ -267,7 +273,7 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
     virtual void windowAttached() {}
 
     /*! Assigns a list of view-level actions. Used by KexiView ctor. */
-    void setViewActions( const QList<QAction*>& actions );
+    void setViewActions(const QList<QAction*>& actions);
 
     /*! @return a list of view-level actions. */
     QList<QAction*> viewActions() const;
@@ -286,46 +292,46 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 #else
 #pragma WARNING( todo: add some protected access methods )
 #endif
-/*
+    /*
 
-    KexiMainWindow *m_mainWin;
+        KexiMainWindow *m_mainWin;
 
-    KexiWindow *m_dialog;
+        KexiWindow *m_dialog;
 
-    QWidget *m_viewWidget;
+        QWidget *m_viewWidget;
 
-    KexiView *m_parentView;
+        KexiView *m_parentView;
 
-    QPointer<QWidget> m_lastFocusedChildBeforeFocusOut;
+        QPointer<QWidget> m_lastFocusedChildBeforeFocusOut;
 
-  private:*/
+      private:*/
     /*! Member set to newly assigned object's ID in storeNewData()
      and used in storeDataBlock(). This is needed because usually,
      storeDataBlock() can be called from storeNewData() and in this case
      dialog has not yet assigned valid identifier (it has just negative temp. number).
      \sa KexiWindow::id()
      */
-/*		int m_newlyAssignedID;
+    /*  int m_newlyAssignedID;
 
-    //! Mode for this view. Initialized by KexiWindow::switchToViewMode().
-    //! Can be useful when single class is used for more than one view (e.g. KexiDBForm). 
-    int m_viewMode;
+        //! Mode for this view. Initialized by KexiWindow::switchToViewMode().
+        //! Can be useful when single class is used for more than one view (e.g. KexiDBForm).
+        int m_viewMode;
 
-    Q3PtrList<KexiView> m_children;
+        Q3PtrList<KexiView> m_children;
 
-    bool m_dirty : 1; */
-  private slots:
+        bool m_dirty : 1; */
+private slots:
     void slotSwitchToViewModeInternal(Kexi::ViewMode mode);
     void slotSwitchToDataViewModeInternal(bool);
     void slotSwitchToDesignViewModeInternal(bool);
     void slotSwitchToTextViewModeInternal(bool);
 
-  private:
+private:
     void createViewModeToggleButtons();
 
-  class Private;
-  Private * const d;
-  friend class KexiWindow;
+    class Private;
+    Private * const d;
+    friend class KexiWindow;
 };
 
 #endif

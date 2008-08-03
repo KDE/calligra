@@ -25,23 +25,32 @@
 using namespace Scripting;
 
 KexiDBParser::KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner)
-    : QObject(connection)
-    , m_connection(connection)
-    , m_parser(parser)
-    , m_owner(owner)
+        : QObject(connection)
+        , m_connection(connection)
+        , m_parser(parser)
+        , m_owner(owner)
 {
     setObjectName("KexiDBParser");
 }
 
 KexiDBParser::~KexiDBParser()
 {
-    if( m_owner )
+    if (m_owner)
         delete m_parser;
 }
 
-bool KexiDBParser::parse(const QString& sql) { return m_parser->parse(sql); }
-void KexiDBParser::clear() { m_parser->clear(); }
-const QString KexiDBParser::operation() { return m_parser->operationString(); }
+bool KexiDBParser::parse(const QString& sql)
+{
+    return m_parser->parse(sql);
+}
+void KexiDBParser::clear()
+{
+    m_parser->clear();
+}
+const QString KexiDBParser::operation()
+{
+    return m_parser->operationString();
+}
 
 QObject* KexiDBParser::table()
 {
@@ -55,11 +64,26 @@ QObject* KexiDBParser::query()
     return q ? new KexiDBQuerySchema(this, q, false) : 0;
 }
 
-QObject* KexiDBParser::connection() { return m_connection; }
-const QString KexiDBParser::statement() { return m_parser->statement(); }
+QObject* KexiDBParser::connection()
+{
+    return m_connection;
+}
+const QString KexiDBParser::statement()
+{
+    return m_parser->statement();
+}
 
-const QString KexiDBParser::errorType() { return m_parser->error().type(); }
-const QString KexiDBParser::errorMsg() { return m_parser->error().error(); }
-int KexiDBParser::errorAt() { return m_parser->error().at(); }
+const QString KexiDBParser::errorType()
+{
+    return m_parser->error().type();
+}
+const QString KexiDBParser::errorMsg()
+{
+    return m_parser->error().error();
+}
+int KexiDBParser::errorAt()
+{
+    return m_parser->error().at();
+}
 
 #include "kexidbparser.moc"

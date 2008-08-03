@@ -31,9 +31,9 @@
 //! The report top widget
 class KEXIREPORTUTILS_EXPORT KexiReportForm : public QWidget, public KFormDesigner::FormWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiReportForm(QWidget *parent);
     virtual ~KexiReportForm();
 
@@ -50,7 +50,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportForm : public QWidget, public KFormDesign
 
     virtual QSize sizeHint() const;
 
-  private:
+private:
     /*QString m_ds;
     bool m_nav;
     KexiDB::Connection *m_conn;*/

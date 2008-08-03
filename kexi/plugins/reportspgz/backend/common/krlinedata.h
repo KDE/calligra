@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,37 +29,39 @@
 
 namespace Scripting
 {
-	class Line;
+class Line;
 }
 
 /**
-	@author 
+ @author
 */
 class KRLineData : public KRObjectData
 {
-	public:
-		KRLineData(){createProperties();}
-		KRLineData ( QDomNode & element );
-		~KRLineData(){};
-		virtual int type() const;
-		virtual KRLineData * toLine();
-		ORLineStyleData lineStyle();
-		unsigned int weight() const;
-		void setWeight ( int w );
+public:
+    KRLineData() {
+        createProperties();
+    }
+    KRLineData(QDomNode & element);
+    ~KRLineData() {};
+    virtual int type() const;
+    virtual KRLineData * toLine();
+    ORLineStyleData lineStyle();
+    unsigned int weight() const;
+    void setWeight(int w);
 
-	protected:
-		KRPos _start;
-		KRPos _end;
-		KoProperty::Property* _lnColor;
-		KoProperty::Property* _lnWeight;
-		KoProperty::Property* _lnStyle;
-		virtual void createProperties();
-	private:
-		
-		static int RTTI;
-		
-		friend class ORPreRenderPrivate;
-		friend class Scripting::Line;
+protected:
+    KRPos _start;
+    KRPos _end;
+    KoProperty::Property* _lnColor;
+    KoProperty::Property* _lnWeight;
+    KoProperty::Property* _lnStyle;
+    virtual void createProperties();
+private:
+
+    static int RTTI;
+
+    friend class ORPreRenderPrivate;
+    friend class Scripting::Line;
 };
 
 #endif

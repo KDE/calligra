@@ -35,28 +35,32 @@ class KexiSimplePrintingEngine;
 //! @short A window for displaying print preview for simple printing.
 class KexiSimplePrintPreviewWindow : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiSimplePrintPreviewWindow(KexiSimplePrintingEngine &engine,
-      const QString& previewName, QWidget *parent, Qt::WFlags f = 0);
+                                 const QString& previewName, QWidget *parent, Qt::WFlags f = 0);
     ~KexiSimplePrintPreviewWindow();
 
-    int currentPage() const { return m_pageNumber; }
+    int currentPage() const {
+        return m_pageNumber;
+    }
 
-    const KexiSimplePrintingSettings& settings() const { return m_settings; }
+    const KexiSimplePrintingSettings& settings() const {
+        return m_settings;
+    }
 
-  public slots:
+public slots:
     void updatePagesCount();
-//		void setPagesCount(int pagesCount);
+//  void setPagesCount(int pagesCount);
     void goToPage(int pageNumber);
     void setFullWidth();
 
-  signals:
+signals:
     void printRequested();
     void pageSetupRequested();
 
-  protected slots:
+protected slots:
     void slotPageSetup();
     void slotPrintClicked();
     void slotZoomInClicked();
@@ -67,8 +71,8 @@ class KexiSimplePrintPreviewWindow : public QWidget
     void slotLastClicked();
     void initLater();
 
-  protected:
-    virtual bool event( QEvent * e );
+protected:
+    virtual bool event(QEvent * e);
 
     KexiSimplePrintingEngine &m_engine;
     const KexiSimplePrintingSettings& m_settings;

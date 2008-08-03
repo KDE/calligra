@@ -26,16 +26,17 @@
 
 class QLabel;
 
-namespace KoProperty {
-  class Editor;
-  class Set;
+namespace KoProperty
+{
+class Editor;
+class Set;
 }
 
 //! @short Helper class displaying small icon with class name and object name
 /*! The info label is displayed in a form:
  <i>[ObjectClassIcon] ClassName "ObjectName"</i>
 
- The <i>ObjectClassIcon</i> is optional. If "ClassName" is empty, the information 
+ The <i>ObjectClassIcon</i> is optional. If "ClassName" is empty, the information
  is displayed as:
  <i>[ObjectClassIcon] ObjectName</i>
 
@@ -45,18 +46,24 @@ namespace KoProperty {
 */
 class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 {
-  public:
+public:
     KexiObjectInfoLabel(QWidget* parent);
     ~KexiObjectInfoLabel();
 
     void setObjectClassIcon(const QString& name);
-    QString objectClassIcon() const { return m_classIcon; }
+    QString objectClassIcon() const {
+        return m_classIcon;
+    }
     void setObjectClassName(const QString& name);
-    QString objectClassName() const { return m_className; }
+    QString objectClassName() const {
+        return m_className;
+    }
     void setObjectName(const QString& name);
-    QString objectName() const { return m_objectName; }
-    void setBuddy( QWidget * buddy );
-  protected:
+    QString objectName() const {
+        return m_objectName;
+    }
+    void setBuddy(QWidget * buddy);
+protected:
     void updateName();
 
     QString m_className;
@@ -66,10 +73,10 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 
 //! @short The container (acts as a dock window) for KexiPropertyEditor.
 /*! The widget displays KexiObjectInfoLabel on its top, to show user what
- object the properties belong to. Read KexiObjectInfoLabel documentation for 
+ object the properties belong to. Read KexiObjectInfoLabel documentation for
  the description what information is displayed.
 
- There are properties obtained from KexiMainWindow's current property set 
+ There are properties obtained from KexiMainWindow's current property set
  that help to customize displaying this information:
  - "this:classString property" of type string describes object's class name
  - "this:iconName" property of type string describes class name
@@ -80,35 +87,35 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 */
 class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiPropertyEditorView(QWidget* parent);
     virtual ~KexiPropertyEditorView();
 
-    /*! Helper function. Updates \a infoLabel widget by reusing properties provided 
+    /*! Helper function. Updates \a infoLabel widget by reusing properties provided
      by property set \a set.
      Read documentation of KexiPropertyEditorView class for information about accepted properties.
-     If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed 
-     (without icon or any other additional part). 
-     If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes 
+     If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed
+     (without icon or any other additional part).
+     If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes
      hidden. */
     static void updateInfoLabelForPropertySet(
-      KexiObjectInfoLabel *infoLabel, KoProperty::Set* set, 
-      const QString& textToDisplayForNullSet = QString());
+        KexiObjectInfoLabel *infoLabel, KoProperty::Set* set,
+        const QString& textToDisplayForNullSet = QString());
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
     KoProperty::Editor *editor() const;
 
-//	public slots:
-//		virtual void setGeometry( const QRect &r );
-//		virtual void resize( int w, int h );
+// public slots:
+//  virtual void setGeometry( const QRect &r );
+//  virtual void resize( int w, int h );
 
-  protected slots:
-    void slotPropertySetChanged(KoProperty::Set* );
+protected slots:
+    void slotPropertySetChanged(KoProperty::Set*);
 
-  protected:
+protected:
     class Private;
     Private * const d;
 };

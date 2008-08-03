@@ -30,151 +30,150 @@
 class KexiDBConnectionSetPrivate
 {
 public:
-  KexiDBConnectionSetPrivate()
-   : maxid(-1)
-  {
-  }
-  KexiDB::ConnectionData::List list;
-  QHash<KexiDB::ConnectionData*, QString> filenamesForData;
-  QHash<QString, KexiDB::ConnectionData*> dataForFilenames;
-  int maxid;
+    KexiDBConnectionSetPrivate()
+            : maxid(-1) {
+    }
+    KexiDB::ConnectionData::List list;
+    QHash<KexiDB::ConnectionData*, QString> filenamesForData;
+    QHash<QString, KexiDB::ConnectionData*> dataForFilenames;
+    int maxid;
 };
 
 KexiDBConnectionSet::KexiDBConnectionSet()
-: QObject()
-, d(new KexiDBConnectionSetPrivate())
+        : QObject()
+        , d(new KexiDBConnectionSetPrivate())
 {
 }
 
 KexiDBConnectionSet::~KexiDBConnectionSet()
 {
-  delete d;
+    delete d;
 }
 
 bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const QString& _filename)
 {
-  if (!data)
-    return false;
-  if (data->id<0)
-    data->id = d->maxid+1;
-  //TODO: 	check for id-duplicates
-  
-  d->maxid = qMax(d->maxid,data->id);
-//	d->list.append(data);
-
-  QString filename( _filename );
-  bool generateUniqueFilename = filename.isEmpty() 
-    || !filename.isEmpty() && data==d->dataForFilenames.value(filename);
-
-  if (generateUniqueFilename) {
-    QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
-    if (dir.isEmpty())
-      return false;
-    QString baseFilename( dir + (data->hostName.isEmpty() ? "localhost" : data->hostName) );
-    int i = 0;
-    while (KStandardDirs::exists(baseFilename+(i>0 ? QString::number(i) : QString())+".kexic"))
-      i++;
-    if (!KStandardDirs::exists(dir)) {
-      //make 'connections' dir and protect it
-      if (!KStandardDirs::makeDir(dir, 0700))
+    if (!data)
         return false;
+    if (data->id < 0)
+        data->id = d->maxid + 1;
+    //TODO:  check for id-duplicates
+
+    d->maxid = qMax(d->maxid, data->id);
+// d->list.append(data);
+
+    QString filename(_filename);
+    bool generateUniqueFilename = filename.isEmpty()
+                                  || !filename.isEmpty() && data == d->dataForFilenames.value(filename);
+
+    if (generateUniqueFilename) {
+        QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
+        if (dir.isEmpty())
+            return false;
+        QString baseFilename(dir + (data->hostName.isEmpty() ? "localhost" : data->hostName));
+        int i = 0;
+        while (KStandardDirs::exists(baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic"))
+            i++;
+        if (!KStandardDirs::exists(dir)) {
+            //make 'connections' dir and protect it
+            if (!KStandardDirs::makeDir(dir, 0700))
+                return false;
+        }
+        filename = baseFilename + (i > 0 ? QString::number(i) : QString()) + ".kexic";
     }
-    filename = baseFilename+(i>0 ? QString::number(i) : QString())+".kexic";
-  }
-  addConnectionDataInternal(data, filename);
-  bool result = saveConnectionData(data, data);
-  if (!result)
-    removeConnectionDataInternal(data);
-  return result;
+    addConnectionDataInternal(data, filename);
+    bool result = saveConnectionData(data, data);
+    if (!result)
+        removeConnectionDataInternal(data);
+    return result;
 }
 
 void KexiDBConnectionSet::addConnectionDataInternal(KexiDB::ConnectionData *data, const QString& filename)
 {
-  d->filenamesForData.insert(data, filename);
-  d->dataForFilenames.insert(filename, data);
-  d->list.append(data);
+    d->filenamesForData.insert(data, filename);
+    d->dataForFilenames.insert(filename, data);
+    d->list.append(data);
 }
 
-bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData, 
-  KexiDB::ConnectionData *newData)
+bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
+        KexiDB::ConnectionData *newData)
 {
-  if (!oldData || !newData)
-    return false;
-  const QString filename( d->filenamesForData.value( oldData ) );
-  if (filename.isEmpty())
-    return false;
-  KexiDBConnShortcutFile shortcutFile(filename);
-  if (!shortcutFile.saveConnectionData(*newData, newData->savePassword)) // true/*savePassword*/))
-    return false;
-  if (oldData!=newData)
-    *oldData = *newData;
-  return true;
+    if (!oldData || !newData)
+        return false;
+    const QString filename(d->filenamesForData.value(oldData));
+    if (filename.isEmpty())
+        return false;
+    KexiDBConnShortcutFile shortcutFile(filename);
+    if (!shortcutFile.saveConnectionData(*newData, newData->savePassword)) // true/*savePassword*/))
+        return false;
+    if (oldData != newData)
+        *oldData = *newData;
+    return true;
 }
 
 void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *data)
 {
-  const QString filename( d->filenamesForData.value( data ) );
-  d->filenamesForData.remove(data);
-  d->dataForFilenames.remove(filename);
-  d->list.removeAt( d->list.indexOf(data) );
-  delete data;
+    const QString filename(d->filenamesForData.value(data));
+    d->filenamesForData.remove(data);
+    d->dataForFilenames.remove(filename);
+    d->list.removeAt(d->list.indexOf(data));
+    delete data;
 }
 
 bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
 {
-  if (!data)
-    return false;
-  const QString filename( d->filenamesForData.value( data ) );
-  if (filename.isEmpty())
-    return false;
-  QFile file( filename );
-  if (!file.remove())
-    return false;
-  removeConnectionDataInternal(data);
-  return true;
+    if (!data)
+        return false;
+    const QString filename(d->filenamesForData.value(data));
+    if (filename.isEmpty())
+        return false;
+    QFile file(filename);
+    if (!file.remove())
+        return false;
+    removeConnectionDataInternal(data);
+    return true;
 }
 
 const KexiDB::ConnectionData::List& KexiDBConnectionSet::list() const
 {
-  return d->list;
+    return d->list;
 }
 
 void KexiDBConnectionSet::clear()
 {
-  d->list.clear();
-  d->filenamesForData.clear();
-  d->dataForFilenames.clear();
+    d->list.clear();
+    d->filenamesForData.clear();
+    d->dataForFilenames.clear();
 }
 
 void KexiDBConnectionSet::load()
 {
-  clear();
-//	QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-//	kexidbg << dirs << endl;
-  QStringList files( KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic") );
-//	//also try for capital file extension
-//	files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-//	kexidbg << files << endl;
+    clear();
+// QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
+// kexidbg << dirs << endl;
+    QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
+// //also try for capital file extension
+// files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
+// kexidbg << files << endl;
 
-  foreach(QString file, files) {
-    KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
-    KexiDBConnShortcutFile shortcutFile(file);
-    if (!shortcutFile.loadConnectionData(*data)) {
-      delete data;
-      continue;
+    foreach(QString file, files) {
+        KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
+        KexiDBConnShortcutFile shortcutFile(file);
+        if (!shortcutFile.loadConnectionData(*data)) {
+            delete data;
+            continue;
+        }
+        addConnectionDataInternal(data, file);
     }
-    addConnectionDataInternal(data, file);
-  }
 }
 
 QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *data) const
 {
-  if (!data)
-    return QString();
-  return d->filenamesForData.value( data );
+    if (!data)
+        return QString();
+    return d->filenamesForData.value(data);
 }
 
 KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
 {
-  return d->dataForFilenames.value(fileName);
+    return d->dataForFilenames.value(fileName);
 }

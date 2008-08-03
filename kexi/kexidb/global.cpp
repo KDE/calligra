@@ -23,33 +23,36 @@ using namespace KexiDB;
 
 DatabaseVersionInfo::DatabaseVersionInfo()
 {
-  major = 0;
-  minor = 0;
+    major = 0;
+    minor = 0;
 }
 
 DatabaseVersionInfo::DatabaseVersionInfo(uint majorVersion, uint minorVersion)
 {
-  major = majorVersion;
-  minor = minorVersion;
+    major = majorVersion;
+    minor = minorVersion;
 }
 
 //------------------------
 
 ServerVersionInfo::ServerVersionInfo()
 {
-  major = 0;
-  minor = 0;
-  release = 0;
+    major = 0;
+    minor = 0;
+    release = 0;
 }
 
 void ServerVersionInfo::clear()
 {
-  major = 0;
-  minor = 0;
-  release = 0;
-  string.clear();
+    major = 0;
+    minor = 0;
+    release = 0;
+    string.clear();
 }
 
 //------------------------
 
-DatabaseVersionInfo KexiDB::version() { return KEXIDB_VERSION; }
+DatabaseVersionInfo KexiDB::version()
+{
+    return KEXIDB_VERSION;
+}

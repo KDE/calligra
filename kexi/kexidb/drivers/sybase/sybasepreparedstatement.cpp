@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -23,10 +23,10 @@
 using namespace KexiDB;
 
 SybasePreparedStatement::SybasePreparedStatement(StatementType type, ConnectionInternal& conn,
-  FieldList& fields)
- : KexiDB::PreparedStatement(type, conn, fields)
- , m_resetRequired(false)
- , m_conn( conn.connection )
+        FieldList& fields)
+        : KexiDB::PreparedStatement(type, conn, fields)
+        , m_resetRequired(false)
+        , m_conn(conn.connection)
 {
 }
 
@@ -37,10 +37,10 @@ SybasePreparedStatement::~SybasePreparedStatement()
 
 bool SybasePreparedStatement::execute()
 {
-  m_resetRequired = true;
-  if (m_conn->insertRecord(*m_fields, m_args)) {
-    return true;
-  }
+    m_resetRequired = true;
+    if (m_conn->insertRecord(*m_fields, m_args)) {
+        return true;
+    }
 
-  return false;
+    return false;
 }

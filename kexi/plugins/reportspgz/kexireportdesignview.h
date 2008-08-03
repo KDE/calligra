@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,44 +29,44 @@ class QScrollArea;
 class ReportEntitySelector;
 
 /**
-	@author
+ @author
 */
 class KexiReportDesignView : public KexiView
 {
-		Q_OBJECT
-	public:
-		KexiReportDesignView ( QWidget *parent, ReportEntitySelector* );
+    Q_OBJECT
+public:
+    KexiReportDesignView(QWidget *parent, ReportEntitySelector*);
 
-		~KexiReportDesignView();
-		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-		virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-	private:
-		ReportDesigner *_rd;
-		KoProperty::Set *_set;
-		KexiReportPart::TempData* tempData() const;
-		QScrollArea * scr;
-		
-		//Actions
-		KAction *editCutAction;
-		KAction *editCopyAction;
-		KAction *editPasteAction;
-		KAction *editDeleteAction;
-		KAction *sectionEdit;
-		KAction *parameterEdit;
-		KAction *itemRaiseAction;
-		KAction *itemLowerAction;
-		
-		ReportEntitySelector* res;
-	protected:
-		virtual KoProperty::Set *propertySet();
-		virtual tristate storeData(bool dontAsk = false);
-		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		
-	private slots:
-		void slotDesignerPropertySetChanged();
-		
-		
-		
+    ~KexiReportDesignView();
+    virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
+    virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
+private:
+    ReportDesigner *_rd;
+    KoProperty::Set *_set;
+    KexiReportPart::TempData* tempData() const;
+    QScrollArea * scr;
+
+    //Actions
+    KAction *editCutAction;
+    KAction *editCopyAction;
+    KAction *editPasteAction;
+    KAction *editDeleteAction;
+    KAction *sectionEdit;
+    KAction *parameterEdit;
+    KAction *itemRaiseAction;
+    KAction *itemLowerAction;
+
+    ReportEntitySelector* res;
+protected:
+    virtual KoProperty::Set *propertySet();
+    virtual tristate storeData(bool dontAsk = false);
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+
+private slots:
+    void slotDesignerPropertySetChanged();
+
+
+
 };
 
 #endif

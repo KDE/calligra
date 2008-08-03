@@ -29,20 +29,24 @@
 //! @short A db-aware check box
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
 {
-  Q_OBJECT
-  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-  Q_OVERRIDE( Tristate tristate READ isTristate WRITE setTristate )
-  Q_ENUMS( Tristate )
+    Q_OBJECT
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_OVERRIDE(Tristate tristate READ isTristate WRITE setTristate)
+    Q_ENUMS(Tristate)
 
-  public:
+public:
     KexiDBCheckBox(const QString &text, QWidget *parent);
     virtual ~KexiDBCheckBox();
 
-    inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-    inline QString dataSourceMimeType() const { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourceMimeType() const {
+        return KexiFormDataItemInterface::dataSourceMimeType();
+    }
     virtual QVariant value();
-    virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState(const QString& displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -74,16 +78,17 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
     /*! Reimplemented after KexiFormDataItemInterface. */
     virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
 
-  public slots:
+public slots:
     void setDataSource(const QString &ds);
-    inline void setDataSourceMimeType(const QString &ds)
-      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    inline void setDataSourceMimeType(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    }
     void slotStateChanged(int state);
 
     //! This implementation just disables read only widget
-    virtual void setReadOnly( bool readOnly );
+    virtual void setReadOnly(bool readOnly);
 
-  protected:
+protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
     //! \return true in isTristate() == TristateDefault and the widget has bound data source
@@ -93,9 +98,9 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
     //! Updates tristate in QCheckBox itself according to m_tristate.
     void updateTristate();
 
-  private:
-    bool m_invalidState : 1;
-    bool m_tristateChanged : 1; //!< used in setTristate()
+private:
+bool m_invalidState : 1;
+bool m_tristateChanged : 1; //!< used in setTristate()
     Tristate m_tristate; //!< used in isTristate() and setTristate()
 };
 

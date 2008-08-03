@@ -41,7 +41,8 @@ class QVariant;
 class QDomDocument;
 class QDomElement;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class Container;
 class ObjectTreeItem;
@@ -58,9 +59,9 @@ typedef Q3PtrList<KAction> ActionList;
  */
 class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /*! Constructs WidgetLibrary object.
      In \a supportedFactoryGroups you can provide
      factory group list to be supported. Factory groups are defined by
@@ -68,42 +69,42 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
      By default (when supportedFactoryGroups is empty) only factories having empty
      "X-KFormDesigner-FactoryGroup" field will be loaded.
      Factory group names are case-insensitive. */
-    WidgetLibrary(QObject *parent=0, const QStringList& supportedFactoryGroups = QStringList());
+    WidgetLibrary(QObject *parent = 0, const QStringList& supportedFactoryGroups = QStringList());
 
     virtual ~WidgetLibrary();
 
     /**
      * creates actions for widget creating
      */
-    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent, 
-      QObject *receiver, const char *slot);
+    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
+                                   QObject *receiver, const char *slot);
 
     void addCustomWidgetActions(KActionCollection *col);
 
-//old		/**
-//old		 * creates the XML for widget actions
-//old		 */
-//old		QString createXML();
+//old  /**
+//old   * creates the XML for widget actions
+//old   */
+//old  QString createXML();
 
     /**
      * searches the right factory and creates a widget.
      * \return the widget or 0 if something falid
      */
     QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, Container *c,
-      int options = WidgetFactory::DefaultOptions);
+                          int options = WidgetFactory::DefaultOptions);
 
     bool createMenuActions(const Q3CString &c, QWidget *w, QMenu *menu,
-      KFormDesigner::Container *container);
+                           KFormDesigner::Container *container);
 
-    /** 
-     * Shows orientation selection popup. 
-     * \return one of the following values: 
+    /**
+     * Shows orientation selection popup.
+     * \return one of the following values:
      * - WidgetFactory::AnyOrientation (means no selection has been made, i.e. it was cancelled)
      * - WidgetFactory::HorizontalOrientation
      * - WidgetFactory::VerticalOrientation
      */
     WidgetFactory::CreateWidgetOptions showOrientationSelectionPopup(
-      const Q3CString &classname, QWidget* parent, const QPoint& pos);
+        const Q3CString &classname, QWidget* parent, const QPoint& pos);
 
     QString internalProperty(const Q3CString& classname, const Q3CString& property);
 
@@ -112,7 +113,7 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
     QString textForWidgetName(const Q3CString &name, const Q3CString &className);
 
     /*! Checks if the \a classname is an alternate classname,
-     and returns the good classname. 
+     and returns the good classname.
      If \a classname is not alternate, \a classname is returned. */
     Q3CString classNameForAlternate(const Q3CString &classname);
     QString iconName(const Q3CString &classname);
@@ -124,11 +125,11 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
     bool clearWidgetContent(const Q3CString &classname, QWidget *w);
 
     bool saveSpecialProperty(const Q3CString &classname, const QString &name,
-      const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
+                             const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
     bool readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w,
-      ObjectTreeItem *item);
+                             ObjectTreeItem *item);
     bool isPropertyVisible(const Q3CString &classname, QWidget *w,
-      const Q3CString &property, bool multiple = false, bool isTopLevel = false);
+                           const Q3CString &property, bool multiple = false, bool isTopLevel = false);
 
     Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
 
@@ -166,21 +167,21 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
     QString propertyDescForValue(WidgetInfo *winfo, const Q3CString& name);
 
     /*! Used by WidgetPropertySet::setWidget() after creating properties. */
-    void setPropertyOptions( WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w );
+    void setPropertyOptions(WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w);
 
-    /*! \return true if property sets should be reloaded for \a property property, 
+    /*! \return true if property sets should be reloaded for \a property property,
      \a classname class and widget \a w when a given property value changed. */
-    bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
-      const Q3CString& property);
+    bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w,
+            const Q3CString& property);
 
-  signals:
+signals:
     void prepareInsert(const Q3CString &c);
 
-    //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop 
+    //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop
     //! connection for the new widget
     void widgetCreated(QWidget *widget);
 
-  protected:
+protected:
     /**
      * Adds a factory to the library, creates actions for widgets in the added factory.
      * This function is not called directly but by the factory locater.

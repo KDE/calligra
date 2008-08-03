@@ -26,18 +26,18 @@
 /*! Internal part for CSV data import/export dialogs. */
 class KexiCSVImportExportPart : public KexiInternalPart
 {
-  public:
+public:
     KexiCSVImportExportPart(QObject *parent, const QStringList &args);
     virtual ~KexiCSVImportExportPart();
 
     /*! Reimplemented to return wizard object. */
-    virtual QWidget *createWidget(const char* widgetClass, 
-     QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0);
+    virtual QWidget *createWidget(const char* widgetClass,
+                                  QWidget *parent, const char *objName = 0, QMap<QString, QString>* args = 0);
 
     /*! Reimplemented to execute a command \a commandName (nonvisual). The result are put into the \a args. */
-    virtual bool executeCommand(const char* commandName, QMap<QString,QString>* args = 0);
+    virtual bool executeCommand(const char* commandName, QMap<QString, QString>* args = 0);
 
-  protected:
+protected:
 };
 
 #endif

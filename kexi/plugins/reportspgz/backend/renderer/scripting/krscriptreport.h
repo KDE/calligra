@@ -1,5 +1,5 @@
 /*
- * Kexi Report Plugin 
+ * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
@@ -26,26 +26,26 @@ class KRObjectData;
 namespace Scripting
 {
 
-	/**
-		@author Adam Pigg <adam@piggz.co.uk>
-	*/
-	class Report : public QObject
-	{
-			Q_OBJECT
-		public:
-			Report ( KRReportData* );
+/**
+ @author Adam Pigg <adam@piggz.co.uk>
+*/
+class Report : public QObject
+{
+    Q_OBJECT
+public:
+    Report(KRReportData*);
 
-			~Report();
+    ~Report();
 
-		public slots:
-			QString title();
-			QString recordSource();
-			QObject* objectByName(const QString &);
-			QObject* sectionByName(const QString &);
-			
-		private:
-			KRReportData *_reportdata;
-	};
+public slots:
+    QString title();
+    QString recordSource();
+    QObject* objectByName(const QString &);
+    QObject* sectionByName(const QString &);
+
+private:
+    KRReportData *_reportdata;
+};
 
 }
 

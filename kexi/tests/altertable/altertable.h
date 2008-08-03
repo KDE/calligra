@@ -30,17 +30,17 @@ class KexiWindow;
 
 class AlterTableTester : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     AlterTableTester();
     ~AlterTableTester();
 
     tristate run(bool &closeAppRequested);
 
-  protected slots:
+protected slots:
     void slotFinishedCopying(QNetworkOperation*);
 
-  private:
+private:
     bool changeFieldProperty(KexiTableDesignerInterface* designerIface);
     bool getSchemaDump(KexiWindow* window, QString& schemaDebugString);
     bool showSchema(KexiWindow* window, bool copyToClipboard);
@@ -48,8 +48,8 @@ class AlterTableTester : public QObject
     bool getActionsDump(KexiWindow* window, QString& actionsDebugString);
     bool showActions(KexiWindow* window, bool copyToClipboard);
     bool checkActions(KexiWindow* window);
-    bool checkInternal(KexiWindow* window, QString& debugString, 
-      const QString& endCommand, bool skipColons);
+    bool checkInternal(KexiWindow* window, QString& debugString,
+                       const QString& endCommand, bool skipColons);
     bool saveTableDesign(KexiWindow* window);
     bool getTableDataDump(KexiWindow* window, QString& dataString);
     bool showTableData(KexiWindow* window, bool copyToClipboard);

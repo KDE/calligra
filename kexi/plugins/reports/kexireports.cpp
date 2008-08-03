@@ -21,4 +21,4 @@
 
 #include "kexireportpart.h"
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_report, KGenericFactory<KexiReportPart>("kexihandler_report") )
+K_EXPORT_COMPONENT_FACTORY(kexihandler_report, KGenericFactory<KexiReportPart>("kexihandler_report"))

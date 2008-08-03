@@ -33,22 +33,26 @@ class KexiQueryDesignerSQLHistory;
 
 class HistoryEntry
 {
-  public:
-    HistoryEntry(KexiQueryDesignerSQLHistory *parent, bool success, const QTime &time, 
-      const QString &statement, /*int y,*/ const QString &error = QString());
+public:
+    HistoryEntry(KexiQueryDesignerSQLHistory *parent, bool success, const QTime &time,
+                 const QString &statement, /*int y,*/ const QString &error = QString());
     ~HistoryEntry();
 
     QRect geometry(int y, int width, const QFontMetrics& f);
     void drawItem(QPainter *p, int width);
 
     void setSelected(bool selected);
-    bool isSelected() const { return m_selected; }
+    bool isSelected() const {
+        return m_selected;
+    }
     void highlight();
 
-    QString statement() const { return m_statement; }
+    QString statement() const {
+        return m_statement;
+    }
     void setTime(const QTime &execTime);
 
-  private:
+private:
     QTime m_execTime;
     QString m_execTimeString;
     QString m_statement;
@@ -57,29 +61,29 @@ class HistoryEntry
     KexiQueryDesignerSQLHistory *m_parent;
 
     int m_y;
-    bool m_succeeded : 1;
-    bool m_selected : 1;
+bool m_succeeded : 1;
+bool m_selected : 1;
 };
 
 typedef QList<HistoryEntry*> History;
 
 class KexiQueryDesignerSQLHistory : public Q3ScrollView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiQueryDesignerSQLHistory(QWidget *parent);
     virtual ~KexiQueryDesignerSQLHistory();
 
     KMenu* popupMenu() const;
 
-//		void		contextMenu(const QPoint &pos, HistoryEntry *e);
+//  void  contextMenu(const QPoint &pos, HistoryEntry *e);
 
     void setHistory(History *h);
 
     QString selectedStatement() const;
 
-  public slots:
+public slots:
     void addEvent(const QString& q, bool s, const QString &error);
 
     void slotToClipboard();
@@ -87,20 +91,20 @@ class KexiQueryDesignerSQLHistory : public Q3ScrollView
 
     void clear();
 
-//		HistoryItem	itemAt(int y);
+//  HistoryItem itemAt(int y);
 
-  protected:
+protected:
     void addEntry(HistoryEntry *e);
     virtual void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
     virtual void contentsMousePressEvent(QMouseEvent * e);
     virtual void contentsMouseDoubleClickEvent(QMouseEvent * e);
     virtual bool eventFilter(QObject *obj, QEvent *event);
 
-  signals:
+signals:
     void editRequested(const QString &text);
     void currentItemDoubleClicked();
 
-  private:
+private:
     History *m_history;
     HistoryEntry *m_selected;
     QPalette::ColorGroup m_prevColorGroup;

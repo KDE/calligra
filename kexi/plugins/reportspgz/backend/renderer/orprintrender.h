@@ -28,20 +28,24 @@ class ORODocument;
 
 class ORPrintRender
 {
-  public:
+public:
     ORPrintRender();
     virtual ~ORPrintRender();
 
     void setPrinter(QPrinter *);
-    QPrinter * printer() { return _printer; }
+    QPrinter * printer() {
+        return _printer;
+    }
 
     void setPainter(QPainter *);
-    QPainter * painter() { return _painter; }
+    QPainter * painter() {
+        return _painter;
+    }
 
     bool setupPrinter(ORODocument *, QPrinter *);
     bool render(ORODocument *);
 
-  protected:
+protected:
     QPrinter* _printer;
     QPainter* _painter;
 };

@@ -1,11 +1,12 @@
- /*
- * Currently copied from Mysql
- * Keywords. Pending.
- */
+/*
+* Currently copied from Mysql
+* Keywords. Pending.
+*/
 #include <sybasedriver.h>
 
-namespace KexiDB {
-  const char* SybaseDriver::keywords[] = {
+namespace KexiDB
+{
+const char* SybaseDriver::keywords[] = {
     "ACTION",
     "ADD",
     "AGAINST",
@@ -331,5 +332,5 @@ namespace KexiDB {
     "YEAR_MONTH",
     "ZEROFILL",
     0
-  };
+};
 }

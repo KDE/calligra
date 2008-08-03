@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,31 +30,33 @@
 
 namespace Scripting
 {
-	class Shape;
+class Shape;
 }
 /**
-	@author 
+ @author
 */
 class KRShapeData : public KRObjectData
 {
-	public:
-	  KRShapeData(){createProperties();};
-	  KRShapeData ( QDomNode & element );
-	  ~KRShapeData(){};
-		virtual int type() const;
-		virtual KRShapeData * toShape();
-		
-	protected:
-		QRectF _rect();
-				
-		KRSize _size;
-		KoProperty::Property *_shapeType;
+public:
+    KRShapeData() {
+        createProperties();
+    };
+    KRShapeData(QDomNode & element);
+    ~KRShapeData() {};
+    virtual int type() const;
+    virtual KRShapeData * toShape();
 
-	private:
-		virtual void createProperties();
-		static int RTTI;
-		
-		friend class Scripting::Shape;
-		friend class ORPreRenderPrivate;
+protected:
+    QRectF _rect();
+
+    KRSize _size;
+    KoProperty::Property *_shapeType;
+
+private:
+    virtual void createProperties();
+    static int RTTI;
+
+    friend class Scripting::Shape;
+    friend class ORPreRenderPrivate;
 };
 #endif

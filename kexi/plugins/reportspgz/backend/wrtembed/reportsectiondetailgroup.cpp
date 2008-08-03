@@ -29,82 +29,94 @@
 //
 // ReportSectionDetailGroup
 //
-ReportSectionDetailGroup::ReportSectionDetailGroup ( const QString & column, ReportSectionDetail * rsd, QWidget * parent, const char * name )
-	: QObject ( parent )
+ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, ReportSectionDetail * rsd, QWidget * parent, const char * name)
+        : QObject(parent)
 {
-	_pagebreak = BreakNone;
-	ReportDesigner * rd = 0;
-	_rsd = rsd;
-	if ( _rsd )
-	{
-		rd = rsd->reportDesigner();
-	}
-	else
-	{
-		kDebug () << "Error RSD is null" <<endl;
-	}
-	_head = new ReportSection ( rd /*, _rsd*/ );
-	_foot = new ReportSection ( rd /*, _rsd*/ );
-	showGroupHead ( false );
-	showGroupFoot ( false );
+    _pagebreak = BreakNone;
+    ReportDesigner * rd = 0;
+    _rsd = rsd;
+    if (_rsd) {
+        rd = rsd->reportDesigner();
+    } else {
+        kDebug() << "Error RSD is null" << endl;
+    }
+    _head = new ReportSection(rd /*, _rsd*/);
+    _foot = new ReportSection(rd /*, _rsd*/);
+    showGroupHead(false);
+    showGroupFoot(false);
 
-	setColumn ( column );
+    setColumn(column);
 }
 
 ReportSectionDetailGroup::~ReportSectionDetailGroup()
 {
-	// I delete these here so that there are no widgets 
-	//left floating around
-	delete _head;
-	delete _foot;
+    // I delete these here so that there are no widgets
+    //left floating around
+    delete _head;
+    delete _foot;
 }
 
-void ReportSectionDetailGroup::showGroupHead ( bool yes )
+void ReportSectionDetailGroup::showGroupHead(bool yes)
 {
-	if ( isGroupHeadShowing() != yes )
-	{
-		if ( _rsd && _rsd->reportDesigner() ) _rsd->reportDesigner()->setModified ( true );
-	}
-	if ( yes ) _head->show();
-	else _head->hide();
-	_rsd->adjustSize();
+    if (isGroupHeadShowing() != yes) {
+        if (_rsd && _rsd->reportDesigner()) _rsd->reportDesigner()->setModified(true);
+    }
+    if (yes) _head->show();
+    else _head->hide();
+    _rsd->adjustSize();
 }
 
-void ReportSectionDetailGroup::showGroupFoot ( bool yes )
+void ReportSectionDetailGroup::showGroupFoot(bool yes)
 {
-	if ( isGroupFootShowing() != yes )
-	{
-		if ( _rsd && _rsd->reportDesigner() ) _rsd->reportDesigner()->setModified ( true );
-	}
-	if ( yes ) _foot->show();
-	else _foot->hide();
-	_rsd->adjustSize();
+    if (isGroupFootShowing() != yes) {
+        if (_rsd && _rsd->reportDesigner()) _rsd->reportDesigner()->setModified(true);
+    }
+    if (yes) _foot->show();
+    else _foot->hide();
+    _rsd->adjustSize();
 }
 
-void ReportSectionDetailGroup::setPageBreak ( int pb )
+void ReportSectionDetailGroup::setPageBreak(int pb)
 {
-	_pagebreak = pb;
+    _pagebreak = pb;
 }
 
-bool ReportSectionDetailGroup::isGroupHeadShowing() { return _head->isVisible(); }
-bool ReportSectionDetailGroup::isGroupFootShowing() { return _foot->isVisible(); }
-int ReportSectionDetailGroup::pageBreak() const { return _pagebreak; }
-
-QString ReportSectionDetailGroup::column() { return _column; }
-void ReportSectionDetailGroup::setColumn ( const QString & s )
+bool ReportSectionDetailGroup::isGroupHeadShowing()
 {
-	if ( _column != s )
-	{
-		_column = s;
-		if ( _rsd && _rsd->reportDesigner() ) _rsd->reportDesigner()->setModified ( true );
-	}
-	
-	_head->setTitle ( _column + " Group Header" );
-	_foot->setTitle ( _column + " Group Footer" );
+    return _head->isVisible();
+}
+bool ReportSectionDetailGroup::isGroupFootShowing()
+{
+    return _foot->isVisible();
+}
+int ReportSectionDetailGroup::pageBreak() const
+{
+    return _pagebreak;
 }
 
-ReportSection * ReportSectionDetailGroup::getGroupHead() { return _head; }
-ReportSection * ReportSectionDetailGroup::getGroupFoot() { return _foot; }
+QString ReportSectionDetailGroup::column()
+{
+    return _column;
+}
+void ReportSectionDetailGroup::setColumn(const QString & s)
+{
+    if (_column != s) {
+        _column = s;
+        if (_rsd && _rsd->reportDesigner()) _rsd->reportDesigner()->setModified(true);
+    }
+
+    _head->setTitle(_column + " Group Header");
+    _foot->setTitle(_column + " Group Footer");
+}
+
+ReportSection * ReportSectionDetailGroup::getGroupHead()
+{
+    return _head;
+}
+ReportSection * ReportSectionDetailGroup::getGroupFoot()
+{
+    return _foot;
+}
 
 
 

@@ -29,16 +29,16 @@ class KexiFormView;
 //! Used to customize KFormDesigner::FormManager behaviour.
 class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiFormManager(KexiPart::Part *parent, const char* name = 0);
     virtual ~KexiFormManager();
 
-    virtual QAction* action( const char* name );
-    virtual void enableAction( const char* name, bool enable );
+    virtual QAction* action(const char* name);
+    virtual void enableAction(const char* name, bool enable);
 
-  public slots:
+public slots:
     //! Receives signal from KexiDataSourcePage about changed form's data source
     void setFormDataSource(const QString& mime, const QString& name);
 
@@ -48,39 +48,38 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
      Also sets following things in KexiDBAutoField:
      - caption related to the data source
      - data type related to the data source */
-    void setDataSourceFieldOrExpression(const QString& string, const QString& caption, 
-      KexiDB::Field::Type type);
+    void setDataSourceFieldOrExpression(const QString& string, const QString& caption,
+                                        KexiDB::Field::Type type);
 
     /*! Receives signal from KexiDataSourcePage and inserts autofields onto the current form. */
     void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-      const QStringList& fields);
+                          const QStringList& fields);
 
-  protected slots:
+protected slots:
     void slotHistoryCommandExecuted();
 
-  protected:
-    inline QString translateName( const char* name ) const;
+protected:
+    inline QString translateName(const char* name) const;
 
-  private:
+private:
     //! Helper: return active form's view widget or 0 if there's no active form having such widget
     KexiFormView* activeFormViewWidget() const;
 
-//		virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
-//		virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
+//  virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
+//  virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
 
     KexiPart::Part* m_part;
 };
 
-QString KexiFormManager::translateName( const char* name ) const
+QString KexiFormManager::translateName(const char* name) const
 {
-  QString n( QString::fromLatin1( name ) );
-  //translate to our name space:
-  if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
-    || n=="format_raise" || n=="format_raise" || n=="taborder" | n=="break_layout")
-  {
-    n.prepend("formpart_");
-  }
-  return n;
+    QString n(QString::fromLatin1(name));
+    //translate to our name space:
+    if (n.startsWith("align_") || n.startsWith("adjust_") || n.startsWith("layout_")
+            || n == "format_raise" || n == "format_raise" || n == "taborder" | n == "break_layout") {
+        n.prepend("formpart_");
+    }
+    return n;
 }
 
 #endif

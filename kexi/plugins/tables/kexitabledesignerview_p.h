@@ -38,12 +38,13 @@ class KexiDataAwarePropertySet;
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
 class CommandGroup : public K3MacroCommand
 {
-  public:
-    CommandGroup( const QString & name )
-      : K3MacroCommand(name)
-    {}
-    virtual ~CommandGroup() {} 
-    const QList<K3Command*> commands() const { return K3MacroCommand::commands(); }
+public:
+    CommandGroup(const QString & name)
+            : K3MacroCommand(name) {}
+    virtual ~CommandGroup() {}
+    const QList<K3Command*> commands() const {
+        return K3MacroCommand::commands();
+    }
 };
 
 /*! @internal
@@ -51,21 +52,23 @@ class CommandGroup : public K3MacroCommand
  We need it to iterate through commands so we can perform a set of ALTER TABLE atomic actions. */
 class CommandHistory : public K3CommandHistory
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     CommandHistory(KActionCollection *actionCollection, bool withMenus = true);
 
-    const QList<K3Command*>& commands() const { return m_commandsToUndo; }
+    const QList<K3Command*>& commands() const {
+        return m_commandsToUndo;
+    }
 
     void addCommand(K3Command *command, bool execute = true);
 
     void clear();
 
-  public slots:
+public slots:
     virtual void undo();
     virtual void redo();
 
-  protected:
+protected:
     QList<K3Command*> m_commandsToUndo, m_commandsToRedo;
 };
 
@@ -74,7 +77,7 @@ class CommandHistory : public K3CommandHistory
 //! @internal
 class KexiTableDesignerViewPrivate
 {
-  public:
+public:
     KexiTableDesignerViewPrivate(KexiTableDesignerView* aDesignerView);
     ~KexiTableDesignerViewPrivate();
 
@@ -82,10 +85,10 @@ class KexiTableDesignerViewPrivate
 
     /*! @internal
      Sets property \a propertyName in property set \a set to \a newValue.
-     If \a commandGroup is not 0, a new ChangeFieldPropertyCommand object is added there as well. 
+     If \a commandGroup is not 0, a new ChangeFieldPropertyCommand object is added there as well.
      While setting the new value, addHistoryCommand_in_slotPropertyChanged_enabled is set to false,
-     so addHistoryCommand() wont be executed in slotPropertyChanged() as an answer to setting 
-     the property. 
+     so addHistoryCommand() wont be executed in slotPropertyChanged() as an answer to setting
+     the property.
 
      If \a forceAddCommand is false (the default) and \a newValue does not differ from curent property value
      (set[propertyName].value()), ChangeFieldPropertyCommand command is not added to the \a commandGroup.
@@ -98,37 +101,37 @@ class KexiTableDesignerViewPrivate
 
      addHistoryCommand_in_slotPropertyChanged_enabled is then set back to the original state.
      */
-    void setPropertyValueIfNeeded( const KoProperty::Set& set, const Q3CString& propertyName, 
-      const QVariant& newValue, CommandGroup* commandGroup, 
-      bool forceAddCommand = false, bool rememberOldValue = true,
-      QStringList* const slist = 0, QStringList* const nlist = 0);
+    void setPropertyValueIfNeeded(const KoProperty::Set& set, const Q3CString& propertyName,
+                                  const QVariant& newValue, CommandGroup* commandGroup,
+                                  bool forceAddCommand = false, bool rememberOldValue = true,
+                                  QStringList* const slist = 0, QStringList* const nlist = 0);
 
     /*! Like above but allows to specify \a oldValue. */
-    void setPropertyValueIfNeeded( 
-      const KoProperty::Set& set, const Q3CString& propertyName, 
-      const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup, 
-      bool forceAddCommand = false, bool rememberOldValue = true,
-      QStringList* const slist = 0, QStringList* const nlist = 0);
+    void setPropertyValueIfNeeded(
+        const KoProperty::Set& set, const Q3CString& propertyName,
+        const QVariant& newValue, const QVariant& oldValue, CommandGroup* commandGroup,
+        bool forceAddCommand = false, bool rememberOldValue = true,
+        QStringList* const slist = 0, QStringList* const nlist = 0);
 
     /*! @internal
      Used in updatePropertiesVisibility().
      Does nothing if visibility should not be changed, i.e. when prop->isVisible()==visible,
      otherwise sets changed to true and sets visibility of property \a prop to \a visible.
     */
-    void setVisibilityIfNeeded( const KoProperty::Set& set, KoProperty::Property* prop, 
-      bool visible, bool &changed, CommandGroup *commandGroup );
+    void setVisibilityIfNeeded(const KoProperty::Set& set, KoProperty::Property* prop,
+                               bool visible, bool &changed, CommandGroup *commandGroup);
 
     bool updatePropertiesVisibility(KexiDB::Field::Type fieldType, KoProperty::Set &set,
-      CommandGroup *commandGroup = 0);
+                                    CommandGroup *commandGroup = 0);
 
-    /*! \return message used to ask user for accepting saving the design. 
+    /*! \return message used to ask user for accepting saving the design.
      \a emptyTable is set to true if the table designed contains no rows.
-     If \a skipWarning is true, no warning about data loss is appended (useful when 
+     If \a skipWarning is true, no warning about data loss is appended (useful when
      only non-physical altering actions will be performed). */
     QString messageForSavingChanges(bool &emptyTable, bool skipWarning = false);
 
     /*! Updates icon in the first column, depending on property set \a set.
-     For example, when "rowSource" and "rowSourceType" propertiesa are not empty, 
+     For example, when "rowSource" and "rowSourceType" propertiesa are not empty,
      "combo" icon appears. */
     void updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set);
 
@@ -151,31 +154,31 @@ class KexiTableDesignerViewPrivate
     //! internal
     int maxTypeNameTextWidth;
     //! Set to true in beforeSwitchTo() to avoid asking again in storeData()
-    bool dontAskOnStoreData : 1;
+bool dontAskOnStoreData : 1;
 
-    bool slotTogglePrimaryKeyCalled : 1;
+bool slotTogglePrimaryKeyCalled : 1;
 
-    bool primaryKeyExists : 1;
+bool primaryKeyExists : 1;
     //! Used in slotPropertyChanged() to avoid infinite recursion
-    bool slotPropertyChanged_primaryKey_enabled : 1;
+bool slotPropertyChanged_primaryKey_enabled : 1;
     //! Used in slotPropertyChanged() to avoid infinite recursion
-    bool slotPropertyChanged_subType_enabled : 1;
+bool slotPropertyChanged_subType_enabled : 1;
     //! used in slotPropertyChanged() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
+bool addHistoryCommand_in_slotPropertyChanged_enabled : 1;
     //! used in slotRowUpdated() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
+bool addHistoryCommand_in_slotRowUpdated_enabled : 1;
     //! used in slotAboutToDeleteRow() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotAboutToDeleteRow_enabled : 1;
+bool addHistoryCommand_in_slotAboutToDeleteRow_enabled : 1;
     //! used in slotRowInserted() to disable addHistoryCommand()
-    bool addHistoryCommand_in_slotRowInserted_enabled : 1;
+bool addHistoryCommand_in_slotRowInserted_enabled : 1;
 
     //! used to disable slotBeforeCellChanged()
-    bool slotBeforeCellChanged_enabled : 1;
+bool slotBeforeCellChanged_enabled : 1;
 
 //! @tood temp; remove this:
     //! Temporary flag, used for testingu the Alter Table machinery. Affects storeData()
     //! Used in slotExecuteRealAlterTable() to switch on real alter table for a while.
-    bool tempStoreDataUsingRealAlterTable : 1;
+bool tempStoreDataUsingRealAlterTable : 1;
 
     /*! Set to a recent result of calling \ref tristate KexiTableDesignerView::storeData(bool dontAsk).
      Then, it is used in \ref void KexiTableDesignerView::executeRealAlterTable()
@@ -185,7 +188,7 @@ class KexiTableDesignerViewPrivate
     KActionCollection* historyActionCollection;
     CommandHistory* history;
 
-    //! A set used in KexiTableDesignerView::buildField() to quickly identify 
+    //! A set used in KexiTableDesignerView::buildField() to quickly identify
     //! properties internal to the designer
     QSet<QByteArray> internalPropertyNames;
 };

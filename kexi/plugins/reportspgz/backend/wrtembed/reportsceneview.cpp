@@ -33,7 +33,7 @@ ReportSceneView::ReportSceneView(ReportDesigner * rw, QGraphicsScene *scene, QWi
 
     viewport()->setMouseTracking(true);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    
+
     setCacheMode(QGraphicsView::CacheBackground);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -44,27 +44,31 @@ ReportSceneView::ReportSceneView(ReportDesigner * rw, QGraphicsScene *scene, QWi
 
 }
 
-ReportSceneView::~ReportSceneView() {
+ReportSceneView::~ReportSceneView()
+{
     viewport()->setMouseTracking(false);
 }
 
 //TODO check
-void ReportSceneView::resizeContents(QSize s) 
+void ReportSceneView::resizeContents(QSize s)
 {
     setMinimumSize(s);
     setMaximumSize(s);
 }
 
-ReportDesigner * ReportSceneView::document() { return _rw; }
-
-void ReportSceneView::mouseReleaseEvent ( QMouseEvent * e )
+ReportDesigner * ReportSceneView::document()
 {
-	_rw->sectionMouseReleaseEvent ( this, e );
-	QGraphicsView::mouseReleaseEvent (e);
+    return _rw;
+}
+
+void ReportSceneView::mouseReleaseEvent(QMouseEvent * e)
+{
+    _rw->sectionMouseReleaseEvent(this, e);
+    QGraphicsView::mouseReleaseEvent(e);
 }
 
 QSize ReportSceneView::sizeHint() const
 {
-	//kDebug() <<  scene()->width() << "x" << scene()->height() << endl;
-	return QSize(scene()->width(), scene()->height());
+    //kDebug() <<  scene()->width() << "x" << scene()->height() << endl;
+    return QSize(scene()->width(), scene()->height());
 }

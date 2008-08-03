@@ -38,7 +38,7 @@ class KexiRelationViewTable;
 
 namespace KexiDB
 {
-  class Connection;
+class Connection;
 }
 
 typedef QHash<QString, KexiRelationsTableContainer*> TablesHash;
@@ -49,12 +49,11 @@ typedef QMutableSetIterator<KexiRelationsConnection*> ConnectionSetMutableIterat
 typedef QSet<KexiRelationsConnection*>::ConstIterator ConnectionSetIterator;
 
 //! A data structure describing connection
-struct SourceConnection
-{
-  QString masterTable;
-  QString detailsTable;
-  QString masterField;
-  QString detailsField;
+struct SourceConnection {
+    QString masterTable;
+    QString detailsTable;
+    QString masterField;
+    QString detailsField;
 };
 
 /*! @short Provides a view for displaying relations between database tables.
@@ -68,9 +67,9 @@ struct SourceConnection
 */
 class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiRelationsScrollArea(QWidget *parent);
     virtual ~KexiRelationsScrollArea();
 
@@ -82,7 +81,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
      \return added table container or 0 on failure.
      */
     KexiRelationsTableContainer* addTableContainer(KexiDB::TableSchema *t,
-      const QRect &rect = QRect());
+            const QRect &rect = QRect());
 
     /*! \return table container for table \a t. */
     KexiRelationsTableContainer * tableContainer(KexiDB::TableSchema *t) const;
@@ -104,12 +103,12 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
     void handleMousePressEvent(QMouseEvent *ev);
 
     //! @internal Handles paint event for area widget
-    void handlePaintEvent( QPaintEvent *event );
+    void handlePaintEvent(QPaintEvent *event);
 
-  signals:
-    void tableContextMenuRequest( const QPoint& pos );
-    void connectionContextMenuRequest( const QPoint& pos );
-    void emptyAreaContextMenuRequest( const QPoint& pos );
+signals:
+    void tableContextMenuRequest(const QPoint& pos);
+    void connectionContextMenuRequest(const QPoint& pos);
+    void emptyAreaContextMenuRequest(const QPoint& pos);
     void tableViewGotFocus();
     void connectionViewGotFocus();
     void emptyAreaGotFocus();
@@ -117,7 +116,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
     void tablePositionChanged(KexiRelationsTableContainer*);
     void aboutConnectionRemove(KexiRelationsConnection*);
 
-  public slots:
+public slots:
     //! Clears current selection - table/query or connection
     void clearSelection();
 
@@ -129,30 +128,30 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
     void removeAllConnections();
 
     /*! Hides all tables except \a tables. */
-    void hideAllTablesExcept( KexiDB::TableSchema::List* tables );
+    void hideAllTablesExcept(KexiDB::TableSchema::List* tables);
 
-//unused		void slotTableScrolling(const QString&);
+//unused  void slotTableScrolling(const QString&);
 
     //! removes selected table or connection
     void removeSelectedObject();
 
-  protected slots:
+protected slots:
     void containerMoved(KexiRelationsTableContainer *c);
     void slotListUpdate(QObject *s);
     void slotTableViewEndDrag();
     void slotTableViewGotFocus();
     void slotAutoScrollTimeout();
 
-  protected:
+protected:
     //! Reimplemented to draw connections.
-  //	virtual void paintEvent( QPaintEvent *event );
-//Qt 4		void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+    // virtual void paintEvent( QPaintEvent *event );
+//Qt 4  void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
     void contentsMousePressEvent(QMouseEvent *ev);
     virtual void keyPressEvent(QKeyEvent *ev);
     virtual void contextMenuEvent(QContextMenuEvent* event);
 
-//unused		void recalculateSize(int width, int height);
-//unused		void stretchExpandSize();
+//unused  void recalculateSize(int width, int height);
+//unused  void stretchExpandSize();
 
     void hideTable(KexiRelationsTableContainer* tableView);
     void removeConnection(KexiRelationsConnection *conn);
@@ -163,7 +162,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
     //! Removes current value of iterator \a it, also deleted the connection object.
     void removeConnectionInternal(ConnectionSetMutableIterator& it);
 
-  private:
+private:
     class Private;
     Private* const d;
 };

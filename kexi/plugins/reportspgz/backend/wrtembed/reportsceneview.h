@@ -27,21 +27,21 @@ class ReportDesigner;
 
 class ReportSceneView : public QGraphicsView
 {
-		Q_OBJECT
-	public:
-		ReportSceneView ( ReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0, const char * name = 0 );
-		virtual ~ReportSceneView();
+    Q_OBJECT
+public:
+    ReportSceneView(ReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0, const char * name = 0);
+    virtual ~ReportSceneView();
 
-		ReportDesigner * document();
-		virtual QSize sizeHint() const;
-	public slots:
-		void resizeContents ( QSize );
-	
-	protected:
-		void mouseReleaseEvent ( QMouseEvent * e );
+    ReportDesigner * document();
+    virtual QSize sizeHint() const;
+public slots:
+    void resizeContents(QSize);
 
-	private:
-		ReportDesigner* _rw;
+protected:
+    void mouseReleaseEvent(QMouseEvent * e);
+
+private:
+    ReportDesigner* _rw;
 };
 
 #endif

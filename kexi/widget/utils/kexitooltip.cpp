@@ -35,14 +35,14 @@
 #endif
 
 KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
- : QWidget(parent)
- , m_value(value)
+        : QWidget(parent)
+        , m_value(value)
 {
-  setWindowFlags( Qt::ToolTip | Qt::FramelessWindowHint 
-    | Qt::X11BypassWindowManagerHint );
-  setAttribute( Qt::WA_DeleteOnClose, true );
-  setPalette( QToolTip::palette() );
-  setFocusPolicy(Qt::NoFocus);
+    setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint
+                   | Qt::X11BypassWindowManagerHint);
+    setAttribute(Qt::WA_DeleteOnClose, true);
+    setPalette(QToolTip::palette());
+    setFocusPolicy(Qt::NoFocus);
 }
 
 KexiToolTip::~KexiToolTip()
@@ -51,33 +51,33 @@ KexiToolTip::~KexiToolTip()
 
 QSize KexiToolTip::sizeHint() const
 {
-  QSize sz(fontMetrics().boundingRect(m_value.toString()).size());
-  return sz;
+    QSize sz(fontMetrics().boundingRect(m_value.toString()).size());
+    return sz;
 }
 
 void KexiToolTip::show()
 {
-  updateGeometry();
-  QWidget::show();
+    updateGeometry();
+    QWidget::show();
 }
 
-void KexiToolTip::paintEvent( QPaintEvent *pev )
+void KexiToolTip::paintEvent(QPaintEvent *pev)
 {
-  QWidget::paintEvent(pev);
-  QPainter p(this);
-  drawFrame(p);
-  drawContents(p);
+    QWidget::paintEvent(pev);
+    QPainter p(this);
+    drawFrame(p);
+    drawContents(p);
 }
 
 void KexiToolTip::drawFrame(QPainter& p)
 {
-  p.setPen( QPen(palette().active().foreground(), 1) );
-  p.drawRect(rect());
+    p.setPen(QPen(palette().active().foreground(), 1));
+    p.drawRect(rect());
 }
 
 void KexiToolTip::drawContents(QPainter& p)
 {
-  p.drawText(rect(), Qt::AlignCenter, m_value.toString());
+    p.drawText(rect(), Qt::AlignCenter, m_value.toString());
 }
 
 #include "kexitooltip.moc"

@@ -26,7 +26,7 @@
 //! See KexiTextMessageHandler constructor for details.
 class KEXICORE_EXPORT KexiTextMessageHandler : public KexiGUIMessageHandler
 {
-  public:
+public:
     KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget);
     virtual ~KexiTextMessageHandler();
     virtual void showMessage(MessageType type, const QString &title, const QString &details);

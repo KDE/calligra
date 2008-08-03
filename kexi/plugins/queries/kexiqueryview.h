@@ -25,18 +25,18 @@
 
 namespace KexiDB
 {
-  class QuerySchema;
+class QuerySchema;
 }
 
 class KexiQueryView : public KexiDataTable
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiQueryView(QWidget *parent);
     virtual ~KexiQueryView();
 
-  protected:
+protected:
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
@@ -44,8 +44,8 @@ class KexiQueryView : public KexiDataTable
     virtual tristate storeData(bool dontAsk = false);
 
     /*! Executes query \a query, filling the table view with query results.
-     \return true on success, false on failure and cancelled when user has 
-     cancelled execution (for example when she pressed the Cancel button 
+     \return true on success, false on failure and cancelled when user has
+     cancelled execution (for example when she pressed the Cancel button
      of the "Enter Query Parameter" input dialog. */
     tristate executeQuery(KexiDB::QuerySchema *query);
 

@@ -38,117 +38,109 @@
 
 void ReportEntityShape::init(QGraphicsScene * scene)
 {
-	setFlags(ItemIsSelectable|ItemIsMovable);
-	
-	if (scene) 
-		scene->addItem ( this );	
-	
-	ReportRectEntity::init(&_pos, &_size, _set);
-	
-	connect ( properties(), SIGNAL ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ), this, SLOT ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ) );
-	
-	setZValue(Z);
+    setFlags(ItemIsSelectable | ItemIsMovable);
+
+    if (scene)
+        scene->addItem(this);
+
+    ReportRectEntity::init(&_pos, &_size, _set);
+
+    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+
+    setZValue(Z);
 }
 
 // methods (constructors)
-ReportEntityShape::ReportEntityShape ( ReportDesigner* d, QGraphicsScene * scene )
-	: ReportRectEntity(d)
+ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene)
+        : ReportRectEntity(d)
 {
-	
-    
-    init(scene);	
-setSceneRect(QPointF(0,0),QSizeF(100,100));    
-_name->setValue(_rd->suggestEntityName("Shape"));
-	
+
+
+    init(scene);
+    setSceneRect(QPointF(0, 0), QSizeF(100, 100));
+    _name->setValue(_rd->suggestEntityName("Shape"));
+
 }
 
-ReportEntityShape::ReportEntityShape ( QDomNode & element, ReportDesigner * d, QGraphicsScene * s )
-	: ReportRectEntity(d), KRShapeData(element)
+ReportEntityShape::ReportEntityShape(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+        : ReportRectEntity(d), KRShapeData(element)
 {
-	init(s);
-	setSceneRect(_pos.toScene(), _size.toScene());
+    init(s);
+    setSceneRect(_pos.toScene(), _size.toScene());
 }
 
 ReportEntityShape* ReportEntityShape::clone()
 {
-	QDomDocument d;
-	QDomElement e = d.createElement("clone");;
-	QDomNode n;
-	buildXML(d,e);
-	n = e.firstChild();
-	return new ReportEntityShape(n, designer(), 0);
+    QDomDocument d;
+    QDomElement e = d.createElement("clone");;
+    QDomNode n;
+    buildXML(d, e);
+    n = e.firstChild();
+    return new ReportEntityShape(n, designer(), 0);
 }
 
 // methods (deconstructor)
 ReportEntityShape::~ReportEntityShape()
 {}
 
-void ReportEntityShape::paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-	QList<KoShape*> shapes;
-	painter->setRenderHint(QPainter::Antialiasing);
+    QList<KoShape*> shapes;
+    painter->setRenderHint(QPainter::Antialiasing);
 
-	mShape = ( KoShape* )( KoShapeRegistry::instance()->value(_shapeType->value().toString()) )->createDefaultShapeAndInit( 0 );
-	mShape->setSize(_size.toScene());
-	shapes << mShape;
-	
-	sp.setShapes(shapes);
-      
-	sp.paintShapes(*painter, z);
-	//mShape->paint(*painter, z);
+    mShape = (KoShape*)(KoShapeRegistry::instance()->value(_shapeType->value().toString()))->createDefaultShapeAndInit(0);
+    mShape->setSize(_size.toScene());
+    shapes << mShape;
 
-	drawHandles(painter);
+    sp.setShapes(shapes);
+
+    sp.paintShapes(*painter, z);
+    //mShape->paint(*painter, z);
+
+    drawHandles(painter);
 }
 
-void ReportEntityShape::buildXML ( QDomDocument & doc, QDomElement & parent )
+void ReportEntityShape::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-	kDebug() << endl;
-	//kdDebug() << "ReportEntityLabel::buildXML()");
-	QDomElement entity = doc.createElement ( "shape" );
+    kDebug() << endl;
+    //kdDebug() << "ReportEntityLabel::buildXML()");
+    QDomElement entity = doc.createElement("shape");
 
-	// bounding rect
-	buildXMLRect ( doc,entity, pointRect() );
-	
-	// name
-	QDomElement n = doc.createElement ( "name" );
-	n.appendChild ( doc.createTextNode ( entityName() ) );
-	entity.appendChild ( n );
-	
-	// z
-	QDomElement z = doc.createElement ( "zvalue" );
-	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
-	entity.appendChild ( z );
+    // bounding rect
+    buildXMLRect(doc, entity, pointRect());
 
-	parent.appendChild ( entity );
+    // name
+    QDomElement n = doc.createElement("name");
+    n.appendChild(doc.createTextNode(entityName()));
+    entity.appendChild(n);
+
+    // z
+    QDomElement z = doc.createElement("zvalue");
+    z.appendChild(doc.createTextNode(QString::number(zValue())));
+    entity.appendChild(z);
+
+    parent.appendChild(entity);
 }
 
-void ReportEntityShape::propertyChanged ( KoProperty::Set &s, KoProperty::Property &p )
+void ReportEntityShape::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-	kDebug() << endl;
-	//TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
-	if ( p.name() == "Position" )
-	{
-		//_pos.setUnitPos(p.value().value<QPointF>(), false);
-	}
-	else if ( p.name() == "Size" )
-	{
-		//_size.setUnitSize(p.value().value<QSizeF>());
-	}
-	else if (p.name() == "Name")
-	{
-		//For some reason p.oldValue returns an empty string
-		if (!_rd->isEntityNameUnique(p.value().toString(), this))
-		{
-			p.setValue(_oldName);
-		}
-		else
-		{
-			_oldName =p.value().toString();	
-		}
-	}
-		
-	if ( _rd ) _rd->setModified ( true );
-	if (scene()) scene()->update();
+    kDebug() << endl;
+    //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
+    if (p.name() == "Position") {
+        //_pos.setUnitPos(p.value().value<QPointF>(), false);
+    } else if (p.name() == "Size") {
+        //_size.setUnitSize(p.value().value<QSizeF>());
+    } else if (p.name() == "Name") {
+        //For some reason p.oldValue returns an empty string
+        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(_oldName);
+        } else {
+            _oldName = p.value().toString();
+        }
+    }
+
+    if (_rd) _rd->setModified(true);
+    if (scene()) scene()->update();
 }
 
 

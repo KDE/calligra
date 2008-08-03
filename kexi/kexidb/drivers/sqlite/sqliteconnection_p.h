@@ -27,7 +27,7 @@
 //for compatibility
 #ifdef _SQLITE3_H_
 # define SQLITE3
-  typedef sqlite3 sqlite_struct;
+typedef sqlite3 sqlite_struct;
 # define sqlite_free sqlite3_free
 # define sqlite_close sqlite3_close
 # define sqlite_exec sqlite3_exec
@@ -39,7 +39,7 @@
 # ifndef SQLITE2
 #  define SQLITE2
 # endif
-  typedef struct sqlite sqlite_struct;
+typedef struct sqlite sqlite_struct;
 # define sqlite_free sqlite_freemem
 #endif
 
@@ -49,7 +49,7 @@ namespace KexiDB
 /*! Internal SQLite connection data. Also used inside SQLiteCursor. */
 class SQLiteConnectionInternal : public ConnectionInternal
 {
-  public:
+public:
     SQLiteConnectionInternal(Connection* connection);
     virtual ~SQLiteConnectionInternal();
 

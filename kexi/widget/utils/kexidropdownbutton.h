@@ -25,21 +25,21 @@
 
 //! @short A button for drop-down "Image" menu
 /*! Used in KexiDBImageBox and KexiBlobTableEdit.
- Additionally, the button reacts on pressing space, return, enter, 
+ Additionally, the button reacts on pressing space, return, enter,
  F2, F4 and alt+down buttons. */
 class KEXIGUIUTILS_EXPORT KexiDropDownButton : public QToolButton
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiDropDownButton(QWidget *parent);
     virtual ~KexiDropDownButton();
 
     virtual QSize sizeHint() const;
 
-  protected:
-    virtual void paintEvent( QPaintEvent *e );
-    virtual void keyPressEvent( QKeyEvent * e );
+protected:
+    virtual void paintEvent(QPaintEvent *e);
+    virtual void keyPressEvent(QKeyEvent * e);
 };
 
 #endif

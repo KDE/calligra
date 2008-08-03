@@ -22,45 +22,46 @@
 
 #include "connection.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 //! @todo implement KConfigBase interface here?
 
 //! A set of storable database properties.
-/*! This is a convenience class that allows to store global dabatase properties without a need 
- for creating and maintain custom table. 
+/*! This is a convenience class that allows to store global dabatase properties without a need
+ for creating and maintain custom table.
  DatabaseProperties object is accessible only using KexiDB::Connection::databaseProperties() method.
  */
 class KEXI_DB_EXPORT DatabaseProperties : public KexiDB::Object
 {
-  public:
+public:
     /*! Sets \a value for property \a name. Optional caption can be also set.
      If there's no such property defined, it will be added. Existing value will be overwritten.
-     Note that to execute this method, database must be opened in read-write mode. 
+     Note that to execute this method, database must be opened in read-write mode.
      \return true on successful data. Connection */
-    bool setValue( const QString& name, const QVariant& value );
+    bool setValue(const QString& name, const QVariant& value);
 
-    /*! Sets \a caption for for property \a name. 
+    /*! Sets \a caption for for property \a name.
      Usually it shouldn't be translated: trnaslation can be performed before displaying. */
-    bool setCaption( const QString& name, const QString& caption );
+    bool setCaption(const QString& name, const QString& caption);
 
-    //! \return property value for \a propeName available for this driver. 
+    //! \return property value for \a propeName available for this driver.
     //! If there's no such property defined for driver, Null QVariant value is returned.
-    QVariant value( const QString& name );
+    QVariant value(const QString& name);
 
-    //! \return translated property caption for \a name. 
+    //! \return translated property caption for \a name.
     //! If there's no such property defined for driver, empty string value is returned.
-    QString caption( const QString& name );
+    QString caption(const QString& name);
 
     //! \return a list of available property names.
     QStringList names();
 
-  protected:
+protected:
     DatabaseProperties(Connection *conn);
     ~DatabaseProperties();
 
     QPointer<Connection> m_conn;
-  friend class Connection;
+    friend class Connection;
 };
 }
 

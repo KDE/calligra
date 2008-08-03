@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,40 +35,40 @@ class KRScriptDraw;
 
 class KRScriptHandler : public QObject
 {
-	Q_OBJECT
-	public:
-		KRScriptHandler(const KexiDB::Cursor *, KRReportData*);
-		~KRScriptHandler();
-		void setSource(const QString &s);
-		QVariant evaluate(const QString&);
-		void displayErrors();
-		
-	public slots:
-		
-		void slotEnteredSection(KRSectionData*, OROPage*, QPointF);
-		void slotEnteredGroup(const QString&, const QVariant&);
-		void slotExitedGroup(const QString&, const QVariant&);
-		void populateEngineParameters(KexiDB::Cursor *q);
-		void setPageNumber(int){};
-		void setPageTotal(int){};
-	private:
-		KRScriptFunctions *_functions;
-		KRScriptConstants *_constants;
-		KRScriptDebug *_debug;
-		KRScriptDraw *_draw;
-		
-		QString fieldFunctions();
-		
-		KexiDB::Connection *_conn;
-		const KexiDB::Cursor *_curs;
-		
-		QString _source;
-		KRReportData  *_data;
-		
-		Kross::Action* _action;
-		
-		QMap<QString, QVariant> _groups;
-		QString where();
+    Q_OBJECT
+public:
+    KRScriptHandler(const KexiDB::Cursor *, KRReportData*);
+    ~KRScriptHandler();
+    void setSource(const QString &s);
+    QVariant evaluate(const QString&);
+    void displayErrors();
+
+public slots:
+
+    void slotEnteredSection(KRSectionData*, OROPage*, QPointF);
+    void slotEnteredGroup(const QString&, const QVariant&);
+    void slotExitedGroup(const QString&, const QVariant&);
+    void populateEngineParameters(KexiDB::Cursor *q);
+    void setPageNumber(int) {};
+    void setPageTotal(int) {};
+private:
+    KRScriptFunctions *_functions;
+    KRScriptConstants *_constants;
+    KRScriptDebug *_debug;
+    KRScriptDraw *_draw;
+
+    QString fieldFunctions();
+
+    KexiDB::Connection *_conn;
+    const KexiDB::Cursor *_curs;
+
+    QString _source;
+    KRReportData  *_data;
+
+    Kross::Action* _action;
+
+    QMap<QString, QVariant> _groups;
+    QString where();
 };
 
 #endif

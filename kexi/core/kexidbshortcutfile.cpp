@@ -35,32 +35,31 @@
 #define KexiDBShortcutFile_version 2
 /* CHANGELOG:
  v1: initial version
- v2: "encryptedPassword" field added. 
-     For backward compatibility, it is not used if the connection data has been loaded from 
+ v2: "encryptedPassword" field added.
+     For backward compatibility, it is not used if the connection data has been loaded from
      a file saved with version 1. In such cases unencrypted "password" field is used.
 */
 
 //! @internal
 class KexiDBShortcutFile::Private
 {
-  public:
+public:
     Private()
-     : isDatabaseShortcut(true)
-    {
+            : isDatabaseShortcut(true) {
     }
-  QString fileName;
-  bool isDatabaseShortcut : 1;
+    QString fileName;
+bool isDatabaseShortcut : 1;
 };
 
-KexiDBShortcutFile::KexiDBShortcutFile( const QString& fileName )
- : d( new KexiDBShortcutFile::Private() )
+KexiDBShortcutFile::KexiDBShortcutFile(const QString& fileName)
+        : d(new KexiDBShortcutFile::Private())
 {
-  d->fileName = QDir(fileName).absolutePath();
+    d->fileName = QDir(fileName).absolutePath();
 }
 
 KexiDBShortcutFile::~KexiDBShortcutFile()
 {
-  delete d;
+    delete d;
 }
 
 bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupKey)
@@ -70,205 +69,199 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 #else
 #pragma WARNING( KexiDBShortcutFile::loadProjectData: how about readOnly arg? )
 #endif
-  KConfig config(d->fileName, KConfig::SimpleConfig );
-  KConfigGroup cg = config.group("File Information");
-  data.formatVersion = cg.readEntry("version", KexiDBShortcutFile_version);
+    KConfig config(d->fileName, KConfig::SimpleConfig);
+    KConfigGroup cg = config.group("File Information");
+    data.formatVersion = cg.readEntry("version", KexiDBShortcutFile_version);
 
-  QString groupKey;
-  if (!_groupKey || _groupKey->isEmpty()) {
-    QStringList groups(config.groupList());
-    foreach(QString s, groups) {
-      if (s.toLower()!="file information") {
-        groupKey = s;
-        break;
-      }
+    QString groupKey;
+    if (!_groupKey || _groupKey->isEmpty()) {
+        QStringList groups(config.groupList());
+        foreach(QString s, groups) {
+            if (s.toLower() != "file information") {
+                groupKey = s;
+                break;
+            }
+        }
+        if (groupKey.isEmpty()) {
+            //ERR: "File %1 contains no connection information"
+            return false;
+        }
+        if (_groupKey)
+            *_groupKey = groupKey;
+    } else {
+        if (!config.hasGroup(*_groupKey))
+            return false;
+        groupKey = *_groupKey;
     }
-    if (groupKey.isEmpty()) {
-      //ERR: "File %1 contains no connection information"
-      return false;
+
+    cg = config.group(groupKey);
+    QString type(cg.readEntry("type", "database").toLower());
+
+    if (type == "database") {
+        d->isDatabaseShortcut = true;
+    } else if (type == "connection") {
+        d->isDatabaseShortcut = false;
+    } else {
+        //ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
+        return false;
     }
-    if (_groupKey)
-      *_groupKey = groupKey;
-  }
-  else {
-    if (!config.hasGroup(*_groupKey))
-      return false;
-    groupKey = *_groupKey;
-  }
 
-  cg = config.group(groupKey);
-  QString type( cg.readEntry("type", "database").toLower() );
+    /* kexidbg << "version=" << version
+        << " using group key=" << groupKey
+        << " type=" << type
+        << " caption=" << cg.readEntry("caption")
+        << " name=" << cg.readEntry("name")
+        << " engine=" << cg.readEntry("engine")
+        << " server=" << cg.readEntry("server")
+        << " user=" << cg.readEntry("user")
+        << " password=" << QString().fill('*', cg.readEntry("password").length())
+        << " comment=" << cg.readEntry("comment")
+        << endl;*/
 
-  if (type=="database") {
-    d->isDatabaseShortcut = true;
-  } else if (type=="connection") {
-    d->isDatabaseShortcut = false;
-  }
-  else {
-    //ERR: i18n("No valid "type" field specified for section \"%1\": unknown value \"%2\".").arg(group).arg(type)
-    return false;
-  }
+    //no filename by default
+    data.connectionData()->setFileName(QString());
 
-/*	kexidbg << "version=" << version 
-    << " using group key=" << groupKey 
-    << " type=" << type
-    << " caption=" << cg.readEntry("caption")
-    << " name=" << cg.readEntry("name")
-    << " engine=" << cg.readEntry("engine")
-    << " server=" << cg.readEntry("server")
-    << " user=" << cg.readEntry("user")
-    << " password=" << QString().fill('*', cg.readEntry("password").length())
-    << " comment=" << cg.readEntry("comment")
-    << endl;*/
-
-  //no filename by default
-  data.connectionData()->setFileName(QString());
-
-  if (d->isDatabaseShortcut) {
-    data.setCaption( cg.readEntry("caption") );
-    data.setDescription( cg.readEntry("comment") );
-    data.connectionData()->description.clear();
-    data.connectionData()->caption.clear(); /* connection name is not specified... */
-    data.setDatabaseName( cg.readEntry("name") );
-  }
-  else {
-    data.setCaption( QString() );
-    data.connectionData()->caption = cg.readEntry("caption");
-    data.setDescription( QString() );
-    data.connectionData()->description = cg.readEntry("comment");
-    data.setDatabaseName( QString() ); /* db name is not specified... */
-  }
-  data.connectionData()->driverName = cg.readEntry("engine");
-  if (data.connectionData()->driverName.isEmpty()) {
-    //ERR: "No valid "engine" field specified for %1 section" group
-    return false;
-  }
-  data.connectionData()->hostName = cg.readEntry("server"); //empty allowed
-  data.connectionData()->port = cg.readEntry("port", 0);
-  data.connectionData()->useLocalSocketFile = cg.readEntry("useLocalSocketFile", false);
-  data.connectionData()->localSocketFileName = cg.readEntry("localSocketFile");
-  data.connectionData()->savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
-  if (data.formatVersion >= 2) {
-    kDebug() << cg.hasKey("encryptedPassword") << endl;
-    data.connectionData()->password = cg.readEntry("encryptedPassword");
-    KexiUtils::simpleDecrypt(data.connectionData()->password);
-  }
-  if (data.connectionData()->password.isEmpty()) {//no "encryptedPassword", for compatibility
-    //UNSAFE
-    data.connectionData()->password = cg.readEntry("password");
-  }
-//	data.connectionData()->savePassword = !data.connectionData()->password.isEmpty();
-  data.connectionData()->userName = cg.readEntry("user");
-/* @todo add "options=", eg. as string list? */
-  return true;
+    if (d->isDatabaseShortcut) {
+        data.setCaption(cg.readEntry("caption"));
+        data.setDescription(cg.readEntry("comment"));
+        data.connectionData()->description.clear();
+        data.connectionData()->caption.clear(); /* connection name is not specified... */
+        data.setDatabaseName(cg.readEntry("name"));
+    } else {
+        data.setCaption(QString());
+        data.connectionData()->caption = cg.readEntry("caption");
+        data.setDescription(QString());
+        data.connectionData()->description = cg.readEntry("comment");
+        data.setDatabaseName(QString());   /* db name is not specified... */
+    }
+    data.connectionData()->driverName = cg.readEntry("engine");
+    if (data.connectionData()->driverName.isEmpty()) {
+        //ERR: "No valid "engine" field specified for %1 section" group
+        return false;
+    }
+    data.connectionData()->hostName = cg.readEntry("server"); //empty allowed
+    data.connectionData()->port = cg.readEntry("port", 0);
+    data.connectionData()->useLocalSocketFile = cg.readEntry("useLocalSocketFile", false);
+    data.connectionData()->localSocketFileName = cg.readEntry("localSocketFile");
+    data.connectionData()->savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
+    if (data.formatVersion >= 2) {
+        kDebug() << cg.hasKey("encryptedPassword") << endl;
+        data.connectionData()->password = cg.readEntry("encryptedPassword");
+        KexiUtils::simpleDecrypt(data.connectionData()->password);
+    }
+    if (data.connectionData()->password.isEmpty()) {//no "encryptedPassword", for compatibility
+        //UNSAFE
+        data.connectionData()->password = cg.readEntry("password");
+    }
+// data.connectionData()->savePassword = !data.connectionData()->password.isEmpty();
+    data.connectionData()->userName = cg.readEntry("user");
+    /* @todo add "options=", eg. as string list? */
+    return true;
 }
 
-bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data, 
-  bool savePassword, QString* _groupKey, bool overwriteFirstGroup)
+bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data,
+        bool savePassword, QString* _groupKey, bool overwriteFirstGroup)
 {
 #ifdef __GNUC__
 #warning KexiDBShortcutFile::saveProjectData: how about readOnly arg?
 #else
 #pragma WARNING( KexiDBShortcutFile::saveProjectData: how about readOnly arg? )
 #endif
-  KConfig config(d->fileName, KConfig::SimpleConfig );
-  KConfigGroup cg = config.group("File Information");
+    KConfig config(d->fileName, KConfig::SimpleConfig);
+    KConfigGroup cg = config.group("File Information");
 
-  uint realFormatVersion = data.formatVersion;
-  if (realFormatVersion == 0) /* 0 means "default version"*/
-    realFormatVersion = KexiDBShortcutFile_version;
-  cg.writeEntry("version", realFormatVersion);
+    uint realFormatVersion = data.formatVersion;
+    if (realFormatVersion == 0) /* 0 means "default version"*/
+        realFormatVersion = KexiDBShortcutFile_version;
+    cg.writeEntry("version", realFormatVersion);
 
-  const bool thisIsConnectionData = data.databaseName().isEmpty();
+    const bool thisIsConnectionData = data.databaseName().isEmpty();
 
-  //use or find a nonempty group key
-  QString groupKey;
-  if (_groupKey && !_groupKey->isEmpty()) {
-    groupKey = *_groupKey;
-  }
-  else {
-    QString groupPrefix;
-    const QStringList groups(config.groupList());
-    if (overwriteFirstGroup && !groups.isEmpty()) {
-//			groupKey = groups.first(); //found
-      foreach(QString s, groups) {
-        if (s.toLower()!="file information") {
-          groupKey = s;
-          break;
+    //use or find a nonempty group key
+    QString groupKey;
+    if (_groupKey && !_groupKey->isEmpty()) {
+        groupKey = *_groupKey;
+    } else {
+        QString groupPrefix;
+        const QStringList groups(config.groupList());
+        if (overwriteFirstGroup && !groups.isEmpty()) {
+//   groupKey = groups.first(); //found
+            foreach(QString s, groups) {
+                if (s.toLower() != "file information") {
+                    groupKey = s;
+                    break;
+                }
+            }
         }
-      }
+
+        if (groupKey.isEmpty()) {
+            //find a new unique name
+            if (thisIsConnectionData)
+                groupPrefix = "Connection%1"; //do not i18n!
+            else
+                groupPrefix = "Database%1"; //do not i18n!
+
+            int number = 1;
+            while (config.hasGroup(groupPrefix.arg(number))) //a new group key couldn't exist
+                number++;
+            groupKey = groupPrefix.arg(number);
+        }
+        if (_groupKey) //return this one (generated or found)
+            *_groupKey = groupKey;
     }
 
-    if (groupKey.isEmpty()) {
-      //find a new unique name
-      if (thisIsConnectionData)
-        groupPrefix = "Connection%1"; //do not i18n!
-      else
-        groupPrefix = "Database%1"; //do not i18n!
-
-      int number = 1;
-      while (config.hasGroup(groupPrefix.arg(number))) //a new group key couldn't exist
-        number++;
-      groupKey = groupPrefix.arg(number);
+    config.group(groupKey).deleteGroup();
+    cg = config.group(groupKey);
+    if (thisIsConnectionData) {
+        cg.writeEntry("type", "connection");
+        cg.writeEntry("caption", data.constConnectionData()->caption);
+        if (!data.constConnectionData()->description.isEmpty())
+            cg.writeEntry("comment", data.constConnectionData()->description);
+    } else {//database
+        cg.writeEntry("type", "database");
+        cg.writeEntry("caption", data.caption());
+        cg.writeEntry("name", data.databaseName());
+        if (!data.description().isEmpty())
+            cg.writeEntry("comment", data.description());
     }
-    if (_groupKey) //return this one (generated or found)
-      *_groupKey = groupKey;
-  }
 
-  config.group(groupKey).deleteGroup();
-  cg = config.group(groupKey);
-  if (thisIsConnectionData) {
-    cg.writeEntry("type", "connection");
-    cg.writeEntry("caption", data.constConnectionData()->caption);
-    if (!data.constConnectionData()->description.isEmpty())
-      cg.writeEntry("comment", data.constConnectionData()->description);
-  }
-  else {//database
-    cg.writeEntry("type", "database");
-    cg.writeEntry("caption", data.caption());
-    cg.writeEntry("name", data.databaseName());
-    if (!data.description().isEmpty())
-      cg.writeEntry("comment", data.description());
-  }
+    cg.writeEntry("engine", data.constConnectionData()->driverName);
+    if (!data.constConnectionData()->hostName.isEmpty())
+        cg.writeEntry("server", data.constConnectionData()->hostName);
 
-  cg.writeEntry("engine", data.constConnectionData()->driverName);
-  if (!data.constConnectionData()->hostName.isEmpty())
-    cg.writeEntry("server", data.constConnectionData()->hostName);
+    if (data.constConnectionData()->port != 0)
+        cg.writeEntry("port", int(data.constConnectionData()->port));
+    cg.writeEntry("useLocalSocketFile", data.constConnectionData()->useLocalSocketFile);
+    if (!data.constConnectionData()->localSocketFileName.isEmpty())
+        cg.writeEntry("localSocketFile", data.constConnectionData()->localSocketFileName);
 
-  if (data.constConnectionData()->port!=0)
-    cg.writeEntry("port", int(data.constConnectionData()->port));
-  cg.writeEntry("useLocalSocketFile", data.constConnectionData()->useLocalSocketFile);
-  if (!data.constConnectionData()->localSocketFileName.isEmpty())
-    cg.writeEntry("localSocketFile", data.constConnectionData()->localSocketFileName);
-
-  if (savePassword || data.constConnectionData()->savePassword) {
-    if (realFormatVersion < 2) {
-      cg.writeEntry("password", data.constConnectionData()->password);
+    if (savePassword || data.constConnectionData()->savePassword) {
+        if (realFormatVersion < 2) {
+            cg.writeEntry("password", data.constConnectionData()->password);
+        } else {
+            QString encryptedPassword = data.constConnectionData()->password;
+            KexiUtils::simpleCrypt(encryptedPassword);
+            cg.writeEntry("encryptedPassword", encryptedPassword);
+            encryptedPassword.fill(' '); //for security
+        }
     }
-    else {
-      QString encryptedPassword = data.constConnectionData()->password;
-      KexiUtils::simpleCrypt(encryptedPassword);
-      cg.writeEntry("encryptedPassword", encryptedPassword);
-      encryptedPassword.fill(' '); //for security
-    }
-  }
 
-  if (!data.constConnectionData()->userName.isEmpty())
-    cg.writeEntry("user", data.constConnectionData()->userName);
-/* @todo add "options=", eg. as string list? */
-  cg.sync();
-  return true;
+    if (!data.constConnectionData()->userName.isEmpty())
+        cg.writeEntry("user", data.constConnectionData()->userName);
+    /* @todo add "options=", eg. as string list? */
+    cg.sync();
+    return true;
 }
 
 QString KexiDBShortcutFile::fileName() const
 {
-  return d->fileName;
+    return d->fileName;
 }
 
 //---------------------------------------------
 
-KexiDBConnShortcutFile::KexiDBConnShortcutFile( const QString& fileName )
- : KexiDBShortcutFile( fileName )
+KexiDBConnShortcutFile::KexiDBConnShortcutFile(const QString& fileName)
+        : KexiDBShortcutFile(fileName)
 {
 }
 
@@ -278,18 +271,18 @@ KexiDBConnShortcutFile::~KexiDBConnShortcutFile()
 
 bool KexiDBConnShortcutFile::loadConnectionData(KexiDB::ConnectionData& data, QString* _groupKey)
 {
-  KexiProjectData pdata(data);
-  if (!loadProjectData(pdata, _groupKey))
-    return false;
-  data = *pdata.connectionData();
-  return true;
+    KexiProjectData pdata(data);
+    if (!loadProjectData(pdata, _groupKey))
+        return false;
+    data = *pdata.connectionData();
+    return true;
 }
 
-bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& data, 
-  bool savePassword, QString* groupKey, bool overwriteFirstGroup)
+bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& data,
+        bool savePassword, QString* groupKey, bool overwriteFirstGroup)
 {
-  KexiProjectData pdata(data);
-  return saveProjectData(pdata, savePassword, groupKey, overwriteFirstGroup);
+    KexiProjectData pdata(data);
+    return saveProjectData(pdata, savePassword, groupKey, overwriteFirstGroup);
 }
 
 //---------------------------------------------
@@ -298,27 +291,27 @@ bool KexiDBConnShortcutFile::saveConnectionData(const KexiDB::ConnectionData& da
 /*! Loads connection data into \a data. */
 bool KexiDBConnSetShortcutFiles::loadConnectionDataSet(KexiDBConnectionSet& set)
 {
-  set.clear();
-//	QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-//	kexidbg << dirs << endl;
-  QStringList files( KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic") );
-//	//also try for capital file extension
-//	files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-  kexidbg << files << endl;
+    set.clear();
+// QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
+// kexidbg << dirs << endl;
+    QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
+// //also try for capital file extension
+// files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
+    kexidbg << files << endl;
 
-  foreach(QStringList::ConstIterator, it, files) {
-    KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
-    KexiDBConnShortcutFile shortcutFile( *it );
-    if (!shortcutFile.loadConnectionData(*data)) {
-      delete data;
-      continue;
+    foreach(QStringList::ConstIterator, it, files) {
+        KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
+        KexiDBConnShortcutFile shortcutFile(*it);
+        if (!shortcutFile.loadConnectionData(*data)) {
+            delete data;
+            continue;
+        }
+        set.addConnectionData(data);
     }
-    set.addConnectionData(data);
-  }
 }
 
 
-/*! Saves a set of connection data \a set to a shortcut files. 
+/*! Saves a set of connection data \a set to a shortcut files.
  Existing files are overwritten with a new data. */
 bool KexiDBConnSetShortcutFiles::saveConnectionDataSet(const KexiDBConnectionSet& set)
 {

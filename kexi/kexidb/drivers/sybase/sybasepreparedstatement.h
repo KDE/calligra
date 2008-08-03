@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -23,12 +23,12 @@
 #include <kexidb/preparedstatement.h>
 #include <kexidb/connection_p.h>
 
-namespace KexiDB 
+namespace KexiDB
 {
 
 class SybasePreparedStatement : public PreparedStatement
 {
-  public:
+public:
     SybasePreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
     virtual ~SybasePreparedStatement();
@@ -37,9 +37,9 @@ class SybasePreparedStatement : public PreparedStatement
 
     QByteArray m_tempStatementString;
 
-    bool m_resetRequired : 1;
+bool m_resetRequired : 1;
 
-  private:
+private:
     Connection* m_conn;
 
 };

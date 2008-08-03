@@ -31,23 +31,23 @@
 
 int main(int argc, char* argv[])
 {
-  KApplication app(argc, argv, "tv_test");
-  KGlobal::iconLoader()->addAppDir("kexi");
+    KApplication app(argc, argv, "tv_test");
+    KGlobal::iconLoader()->addAppDir("kexi");
 
-  KexiTableView tv;
+    KexiTableView tv;
 
-  KexiTableViewData data;
-  KexiDB::Field f1("id",KexiDB::Field::Integer),
-    f2("name",KexiDB::Field::Text),
-    f3("age",KexiDB::Field::Integer);
-  data.addColumn( new KexiTableViewColumn(f1) );
-  data.addColumn( new KexiTableViewColumn(f2) );
-  data.addColumn( new KexiTableViewColumn(f3) );
+    KexiTableViewData data;
+    KexiDB::Field f1("id", KexiDB::Field::Integer),
+    f2("name", KexiDB::Field::Text),
+    f3("age", KexiDB::Field::Integer);
+    data.addColumn(new KexiTableViewColumn(f1));
+    data.addColumn(new KexiTableViewColumn(f2));
+    data.addColumn(new KexiTableViewColumn(f3));
 
-  tv.setData(&data, false);
+    tv.setData(&data, false);
 
-  app.setMainWidget(&tv);
-  tv.show();
+    app.setMainWidget(&tv);
+    tv.show();
 
-  return app.exec();
+    return app.exec();
 }

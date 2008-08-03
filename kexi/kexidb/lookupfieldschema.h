@@ -27,7 +27,8 @@ class QDomElement;
 class QDomDocument;
 class QVariant;
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 //! default value for LookupFieldSchema::columnHeadersVisible()
 #define KEXIDB_LOOKUP_FIELD_DEFAULT_HEADERS_VISIBLE false
@@ -46,7 +47,7 @@ namespace KexiDB {
 
 
 //! @short Provides information about lookup field's setup.
-/*! 
+/*!
  LookupFieldSchema object is owned by TableSchema and created upon creating or retrieving the table schema
  from the database metadata.
 
@@ -54,26 +55,27 @@ namespace KexiDB {
 */
 class KEXI_DB_EXPORT LookupFieldSchema
 {
-  public:
+public:
 
     //! Row source information that can be specified for the lookup field schema
-    class KEXI_DB_EXPORT RowSource {
-      public:
+    class KEXI_DB_EXPORT RowSource
+    {
+    public:
         //! Row source type
         enum Type {
-          NoType,         //!< used for invalid schema
-          Table,        //!< table as lookup row source
-          Query,        //!< named query as lookup row source
-          SQLStatement, //!< anonymous query as lookup row source
-          ValueList,    //!< a fixed list of values as lookup row source
-          FieldList     //!< a list of column names from a table/query will be displayed
+            NoType,         //!< used for invalid schema
+            Table,        //!< table as lookup row source
+            Query,        //!< named query as lookup row source
+            SQLStatement, //!< anonymous query as lookup row source
+            ValueList,    //!< a fixed list of values as lookup row source
+            FieldList     //!< a list of column names from a table/query will be displayed
         };
 
         RowSource();
         ~RowSource();
 
-        /*! @return row source type: table, query, anonymous; in the future it will 
-         be also fixed value list and field list. The latter is basically a list 
+        /*! @return row source type: table, query, anonymous; in the future it will
+         be also fixed value list and field list. The latter is basically a list
          of column names of a table/query, "Field List" in MSA. */
         Type type() const;
 
@@ -83,13 +85,13 @@ class KEXI_DB_EXPORT LookupFieldSchema
         /*! @return row source type name. @see setTypeByName() */
         QString typeName() const;
 
-        /*! Sets row source type by name using \a typeName. Accepted (cast sensitive) 
+        /*! Sets row source type by name using \a typeName. Accepted (cast sensitive)
          names are "table", "query", "sql", "valuelist", "fieldlist".
          For other value NoType type is set. */
-        void setTypeByName( const QString& typeName );
+        void setTypeByName(const QString& typeName);
 
-        /*! @return a string for row source: table name, query name or anonymous query 
-         provided as KEXISQL string. If rowSourceType() is a ValueList, 
+        /*! @return a string for row source: table name, query name or anonymous query
+         provided as KEXISQL string. If rowSourceType() is a ValueList,
          rowSourceValues() should be used instead. If rowSourceType() is a FieldList,
          rowSource() should return table or query name. */
         QString name() const;
@@ -100,7 +102,7 @@ class KEXI_DB_EXPORT LookupFieldSchema
         /*! @return row source values specified if type() is ValueList. */
         QStringList values() const;
 
-        /*! Sets row source values used if type() is ValueList. 
+        /*! Sets row source values used if type() is ValueList.
          Using it clears name (see name()). */
         void setValues(const QStringList& values);
 
@@ -110,9 +112,9 @@ class KEXI_DB_EXPORT LookupFieldSchema
         /*! \return String for debugging purposes. */
         QString debugString() const;
 
-        /*! Shows debug information. */ 
+        /*! Shows debug information. */
         void debug() const;
-      private:
+    private:
         class Private;
         Private * const d;
     };
@@ -127,7 +129,7 @@ class KEXI_DB_EXPORT LookupFieldSchema
     /*! Sets row source for the lookup field schema */
     void setRowSource(const RowSource& rowSource);
 
-    /*! @return bound column: an integer specifying a column that is bound 
+    /*! @return bound column: an integer specifying a column that is bound
      (counted from 0). -1 means unspecified value. */
 //! @todo in later implementation there can be more columns
     int boundColumn() const;
@@ -135,12 +137,12 @@ class KEXI_DB_EXPORT LookupFieldSchema
     /*! Sets bound column number to \a column. @see boundColumn() */
     void setBoundColumn(int column);
 
-    /*! @return a list of visible column: a list of integers specifying a column that has 
-     to be visible in the combo box (counted from 0). 
+    /*! @return a list of visible column: a list of integers specifying a column that has
+     to be visible in the combo box (counted from 0).
      Empty list means unspecified value. */
     QList<uint> visibleColumns() const;
 
-    /*! Sets a list of visible columns to \a list. 
+    /*! Sets a list of visible columns to \a list.
      Columns will be separated with a single space character when displayed. */
     void setVisibleColumns(const QList<uint>& list);
 
@@ -157,21 +159,21 @@ class KEXI_DB_EXPORT LookupFieldSchema
     /*! Sets column widths. @see columnWidths */
     void setColumnWidths(const QList<int>& widths);
 
-    /*! @return true if column headers are visible in the associated 
+    /*! @return true if column headers are visible in the associated
      combo box popup or the list view. The default is false. */
     bool columnHeadersVisible() const;
 
     /*! Sets "column headers visibility" flag. @see columnHeadersVisible() */
     void setColumnHeadersVisible(bool set);
 
-    /*! @return integer property specifying a maximum number of rows 
-     that can be displayed in a combo box popup or a list box. The default is 
+    /*! @return integer property specifying a maximum number of rows
+     that can be displayed in a combo box popup or a list box. The default is
      equal to KEXIDB_LOOKUP_FIELD_DEFAULT_LIST_ROWS constant. */
     uint maximumListRows() const;
 
-    /*! Sets maximum number of rows that can be displayed in a combo box popup 
+    /*! Sets maximum number of rows that can be displayed in a combo box popup
      or a list box. If \a rows is 0, KEXIDB_LOOKUP_FIELD_DEFAULT_LIST_ROWS is set.
-     If \a rows is greater than KEXIDB_LOOKUP_FIELD_MAX_LIST_ROWS, 
+     If \a rows is greater than KEXIDB_LOOKUP_FIELD_MAX_LIST_ROWS,
      KEXIDB_LOOKUP_FIELD_MAX_LIST_ROWS is set. */
     void setMaximumListRows(uint rows);
 
@@ -184,12 +186,12 @@ class KEXI_DB_EXPORT LookupFieldSchema
 
     //! used in displayWidget()
     enum DisplayWidget {
-      ComboBox = 0, //!< (the default) combobox widget should be displayed in forms for this lookup field
-      ListBox = 1   //!< listbox widget should be displayed in forms for this lookup field
+        ComboBox = 0, //!< (the default) combobox widget should be displayed in forms for this lookup field
+        ListBox = 1   //!< listbox widget should be displayed in forms for this lookup field
     };
 
-    /*! @return the widget type that should be displayed within 
-     the forms for this lookup field. The default is ComboBox. 
+    /*! @return the widget type that should be displayed within
+     the forms for this lookup field. The default is ComboBox.
      For the Table View, combo box is always displayed. */
     DisplayWidget displayWidget() const;
 
@@ -199,10 +201,10 @@ class KEXI_DB_EXPORT LookupFieldSchema
     /*! \return String for debugging purposes. */
     QString debugString() const;
 
-    /*! Shows debug information. */ 
+    /*! Shows debug information. */
     void debug() const;
 
-    /*! Loads data of lookup column schema from DOM tree. 
+    /*! Loads data of lookup column schema from DOM tree.
      The data can be outdated or invalid, so the app should handle such cases.
      @return a new LookupFieldSchema object even if lookupEl contains no valid contents. */
     static LookupFieldSchema* loadFromDom(const QDomElement& lookupEl);
@@ -212,11 +214,11 @@ class KEXI_DB_EXPORT LookupFieldSchema
 
     /*! Sets property of name \a propertyName and value \a value for the lookup schema \a lookup
      \return true on successful set and false on failure because of invalid value or invalid property name. */
-    static bool setProperty( 
-      LookupFieldSchema& lookup, const QByteArray& propertyName, 
-      const QVariant& value );
+    static bool setProperty(
+        LookupFieldSchema& lookup, const QByteArray& propertyName,
+        const QVariant& value);
 
-  protected:
+protected:
     class Private;
     Private * const d;
 };

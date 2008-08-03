@@ -28,9 +28,9 @@
 using namespace Scripting;
 
 KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner)
-    : QObject(parent)
-    , m_cursor(cursor)
-    , m_owner(owner)
+        : QObject(parent)
+        , m_cursor(cursor)
+        , m_owner(owner)
 {
     setObjectName("KexiDBCursor");
 }
@@ -38,7 +38,7 @@ KexiDBCursor::KexiDBCursor(QObject* parent, ::KexiDB::Cursor* cursor, bool owner
 KexiDBCursor::~KexiDBCursor()
 {
     clearBuffers();
-    if( m_owner ) {
+    if (m_owner) {
         m_cursor->close();
         delete m_cursor;
     }
@@ -47,27 +47,63 @@ KexiDBCursor::~KexiDBCursor()
 void KexiDBCursor::clearBuffers()
 {
     QMap<Q_LLONG, Record*>::ConstIterator
-        it( m_modifiedrecords.constBegin() ), end( m_modifiedrecords.constEnd() );
-    for( ; it != end; ++it)
+    it(m_modifiedrecords.constBegin()), end(m_modifiedrecords.constEnd());
+    for (; it != end; ++it)
         delete it.value();
     m_modifiedrecords.clear();
 }
 
-bool KexiDBCursor::open() { return m_cursor->open(); }
-bool KexiDBCursor::isOpened() { return m_cursor->isOpened(); }
-bool KexiDBCursor::reopen() { return m_cursor->reopen(); }
-bool KexiDBCursor::close() { return m_cursor->close(); }
+bool KexiDBCursor::open()
+{
+    return m_cursor->open();
+}
+bool KexiDBCursor::isOpened()
+{
+    return m_cursor->isOpened();
+}
+bool KexiDBCursor::reopen()
+{
+    return m_cursor->reopen();
+}
+bool KexiDBCursor::close()
+{
+    return m_cursor->close();
+}
 
-bool KexiDBCursor::moveFirst() { return m_cursor->moveFirst(); }
-bool KexiDBCursor::moveLast() { return m_cursor->moveLast(); }
-bool KexiDBCursor::movePrev() { return m_cursor->movePrev(); }
-bool KexiDBCursor::moveNext() { return m_cursor->moveNext(); }
+bool KexiDBCursor::moveFirst()
+{
+    return m_cursor->moveFirst();
+}
+bool KexiDBCursor::moveLast()
+{
+    return m_cursor->moveLast();
+}
+bool KexiDBCursor::movePrev()
+{
+    return m_cursor->movePrev();
+}
+bool KexiDBCursor::moveNext()
+{
+    return m_cursor->moveNext();
+}
 
-bool KexiDBCursor::bof() { return m_cursor->bof(); }
-bool KexiDBCursor::eof() { return m_cursor->eof(); }
+bool KexiDBCursor::bof()
+{
+    return m_cursor->bof();
+}
+bool KexiDBCursor::eof()
+{
+    return m_cursor->eof();
+}
 
-int KexiDBCursor::at() { return m_cursor->at(); }
-uint KexiDBCursor::fieldCount() { return m_cursor->fieldCount(); }
+int KexiDBCursor::at()
+{
+    return m_cursor->at();
+}
+uint KexiDBCursor::fieldCount()
+{
+    return m_cursor->fieldCount();
+}
 
 QVariant KexiDBCursor::value(uint index)
 {
@@ -77,19 +113,19 @@ QVariant KexiDBCursor::value(uint index)
 bool KexiDBCursor::setValue(uint index, QVariant value)
 {
     ::KexiDB::QuerySchema* query = m_cursor->query();
-    if(! query) {
+    if (! query) {
         kDebug() << "Invalid query in KexiDBCursor::setValue index=" << index << " value=" << value << endl;
         return false;
     }
 
     ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
-    if(! column) {
+    if (! column) {
         kDebug() << "Invalid column in KexiDBCursor::setValue index=" << index << " value=" << value << endl;
         return false;
     }
 
     const Q_LLONG position = m_cursor->at();
-    if(! m_modifiedrecords.contains(position))
+    if (! m_modifiedrecords.contains(position))
         m_modifiedrecords.insert(position, new Record(m_cursor));
     m_modifiedrecords[position]->buffer->insert(*column, value);
     return true;
@@ -97,7 +133,7 @@ bool KexiDBCursor::setValue(uint index, QVariant value)
 
 bool KexiDBCursor::save()
 {
-    if(m_modifiedrecords.count() < 1)
+    if (m_modifiedrecords.count() < 1)
         return true;
 
     //It is needed to close the cursor before we are able to update the rows
@@ -108,10 +144,10 @@ bool KexiDBCursor::save()
 
     bool ok = true;
     QMap<Q_LLONG, Record*>::ConstIterator
-        it( m_modifiedrecords.constBegin() ), end( m_modifiedrecords.constEnd() );
-    for( ; it != end; ++it) {
+    it(m_modifiedrecords.constBegin()), end(m_modifiedrecords.constEnd());
+    for (; it != end; ++it) {
         bool b = m_cursor->updateRow(it.value()->rowdata, * it.value()->buffer, m_cursor->isBuffered());
-        if(ok) {
+        if (ok) {
             ok = b;
             //break;
         }

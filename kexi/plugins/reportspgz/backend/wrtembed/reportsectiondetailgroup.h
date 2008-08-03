@@ -28,43 +28,42 @@ class ReportSection;
 class ReportSectionDetail;
 
 /**
-	@author 
+ @author
 */
 class ReportSectionDetailGroup : public QObject
 {
-	Q_OBJECT
-	public:
-		ReportSectionDetailGroup ( const QString &, ReportSectionDetail *, QWidget * parent, const char * name = 0 );
-		~ReportSectionDetailGroup();
+    Q_OBJECT
+public:
+    ReportSectionDetailGroup(const QString &, ReportSectionDetail *, QWidget * parent, const char * name = 0);
+    ~ReportSectionDetailGroup();
 
-		enum PageBreak
-		{
-			BreakNone = 0,
-   BreakAfterGroupFooter = 1
-		};
+    enum PageBreak {
+        BreakNone = 0,
+        BreakAfterGroupFooter = 1
+    };
 
-		void setColumn ( const QString & );
-		QString column();
+    void setColumn(const QString &);
+    QString column();
 
-		void showGroupHead ( bool yes = TRUE );
-		bool isGroupHeadShowing();
-		void showGroupFoot ( bool yes = TRUE );
-		bool isGroupFootShowing();
-		void setPageBreak ( int );
-		int  pageBreak() const;
+    void showGroupHead(bool yes = TRUE);
+    bool isGroupHeadShowing();
+    void showGroupFoot(bool yes = TRUE);
+    bool isGroupFootShowing();
+    void setPageBreak(int);
+    int  pageBreak() const;
 
-		ReportSection * getGroupHead();
-		ReportSection * getGroupFoot();
+    ReportSection * getGroupHead();
+    ReportSection * getGroupFoot();
 
-	protected:
-		QString _column;
+protected:
+    QString _column;
 
-		ReportSection * _head;
-		ReportSection * _foot;
+    ReportSection * _head;
+    ReportSection * _foot;
 
-		ReportSectionDetail * _rsd;
+    ReportSectionDetail * _rsd;
 
-		int _pagebreak;
+    int _pagebreak;
 };
 
 

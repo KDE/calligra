@@ -26,93 +26,96 @@
 #include <kexidb/connection.h>
 #include <kexidb/connectiondata.h>
 
-namespace Scripting {
+namespace Scripting
+{
 
-    /**
-     * A KexiDBConnectionData is used to store the details needed for
-     * a connection with a database.
-     */
-    class KexiDBConnectionData : public QObject
-    {
-            Q_OBJECT
-        public:
-            KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
-            virtual ~KexiDBConnectionData();
-            ::KexiDB::ConnectionData* data() { return m_data; }
+/**
+ * A KexiDBConnectionData is used to store the details needed for
+ * a connection with a database.
+ */
+class KexiDBConnectionData : public QObject
+{
+    Q_OBJECT
+public:
+    KexiDBConnectionData(QObject* parent, ::KexiDB::ConnectionData* data, bool owner);
+    virtual ~KexiDBConnectionData();
+    ::KexiDB::ConnectionData* data() {
+        return m_data;
+    }
 
-        public slots:
+public slots:
 
-            /** Return the connection name. */
-            const QString caption() const;
-            /** Set the connection name. */
-            void setCaption(const QString& name);
+    /** Return the connection name. */
+    const QString caption() const;
+    /** Set the connection name. */
+    void setCaption(const QString& name);
 
-            /** Return the description. */
-            const QString description() const;
-            /** Set the description. */
-            void setDescription(const QString& desc);
+    /** Return the description. */
+    const QString description() const;
+    /** Set the description. */
+    void setDescription(const QString& desc);
 
-            /** Return drivername. */
-            const QString driverName() const;
-            /** Set the drivername. */
-            void setDriverName(const QString& driver);
+    /** Return drivername. */
+    const QString driverName() const;
+    /** Set the drivername. */
+    void setDriverName(const QString& driver);
 
-            /** Return true if a local socket file is used else false. */
-            bool localSocketFileUsed() const;
-            /** Set if the local socket file should be used. */
-            void setLocalSocketFileUsed(bool used);
-            /** Return the local socket filename. */
-            const QString localSocketFileName() const;
-            /** Set the local socket filename. */
-            void setLocalSocketFileName(const QString& socketfilename);
+    /** Return true if a local socket file is used else false. */
+    bool localSocketFileUsed() const;
+    /** Set if the local socket file should be used. */
+    void setLocalSocketFileUsed(bool used);
+    /** Return the local socket filename. */
+    const QString localSocketFileName() const;
+    /** Set the local socket filename. */
+    void setLocalSocketFileName(const QString& socketfilename);
 
-            // For serverbased drivers
+    // For serverbased drivers
 
-            /** Return the database name. */
-            const QString databaseName() const;
-            /** Set the database name. */
-            void setDatabaseName(const QString& dbname);
+    /** Return the database name. */
+    const QString databaseName() const;
+    /** Set the database name. */
+    void setDatabaseName(const QString& dbname);
 
-            /** Return the hostname. */
-            const QString hostName() const;
-            /** Set the hostname. */
-            void setHostName(const QString& hostname);
+    /** Return the hostname. */
+    const QString hostName() const;
+    /** Set the hostname. */
+    void setHostName(const QString& hostname);
 
-            /** Return the port number. */
-            int port() const;
-            /** Set the port number. */
-            void setPort(int p);
+    /** Return the port number. */
+    int port() const;
+    /** Set the port number. */
+    void setPort(int p);
 
-            /** Return the password. */
-            const QString password() const;
-            /** Set the password. */
-            void setPassword(const QString& passwd);
+    /** Return the password. */
+    const QString password() const;
+    /** Set the password. */
+    void setPassword(const QString& passwd);
 
-            /** Return the username. */
-            const QString userName() const;
-            /** Set the username. */
-            void setUserName(const QString& username);
+    /** Return the username. */
+    const QString userName() const;
+    /** Set the username. */
+    void setUserName(const QString& username);
 
-            // For filebased drivers
+    // For filebased drivers
 
-            /** Return the filename. */
-            const QString fileName() const;
-            /** Set the filename. */
-            void setFileName(const QString& filename);
+    /** Return the filename. */
+    const QString fileName() const;
+    /** Set the filename. */
+    void setFileName(const QString& filename);
 
-            /** Return the database path. */
-            const QString dbPath() const;
-            /** Return the database filename. */
-            const QString dbFileName() const;
+    /** Return the database path. */
+    const QString dbPath() const;
+    /** Return the database filename. */
+    const QString dbFileName() const;
 
-            /** Return a user-friendly string representation. */
-            const QString serverInfoString() const;
+    /** Return a user-friendly string representation. */
+    const QString serverInfoString() const;
 
-        private:
-            ::KexiDB::ConnectionData* m_data;
-            QString m_dbname;
-            bool m_owner;
-    };
+private:
+    ::KexiDB::ConnectionData* m_data;
+    QString m_dbname;
+    bool m_owner;
+};
 
 }
 

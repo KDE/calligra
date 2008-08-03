@@ -34,7 +34,7 @@ class KexiStartupFileWidget;
 
 class KexiConnSelectorBase : public QWidget, public Ui_KexiConnSelector
 {
-  public:
+public:
     KexiConnSelectorBase(QWidget* parent);
     ~KexiConnSelectorBase();
 };
@@ -42,15 +42,17 @@ class KexiConnSelectorBase : public QWidget, public Ui_KexiConnSelector
 //! helper class
 class ConnectionDataLVItem : public Q3ListViewItem
 {
-  public:
-    ConnectionDataLVItem(KexiDB::ConnectionData *data, 
-      const KexiDB::Driver::Info& info, Q3ListView *list);
+public:
+    ConnectionDataLVItem(KexiDB::ConnectionData *data,
+                         const KexiDB::Driver::Info& info, Q3ListView *list);
     ~ConnectionDataLVItem();
 
     void update(const KexiDB::Driver::Info& info);
-    KexiDB::ConnectionData *data() const { return m_data; }
-  
-  protected:
+    KexiDB::ConnectionData *data() const {
+        return m_data;
+    }
+
+protected:
     KexiDB::ConnectionData *m_data;
 };
 
@@ -59,72 +61,72 @@ class ConnectionDataLVItem : public Q3ListViewItem
 */
 class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     //! Defines connection type
     enum ConnType {
-      FileBased = 1, //!< the widget displays file-based connection
-      ServerBased = 2 //!< the widget displays server-based connection
+        FileBased = 1, //!< the widget displays file-based connection
+        ServerBased = 2 //!< the widget displays server-based connection
     };
 
-    /*! Constructs a KexiConnSelector which contains \a conn_set as connection set. 
-     \a conn_set can be altered, because Add/Edit/Remove buttons are available 
+    /*! Constructs a KexiConnSelector which contains \a conn_set as connection set.
+     \a conn_set can be altered, because Add/Edit/Remove buttons are available
      to users. \a startDirOrVariable can be provided to specify a start dir for file browser
-     (it can also contain a configuration variable name with "kfiledialog:///" prefix 
+     (it can also contain a configuration variable name with "kfiledialog:///" prefix
      as described in KRecentDirs documentation). */
-    KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
-      const QString& startDirOrVariable,
-      KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0 );
+    KexiConnSelectorWidget(KexiDBConnectionSet& conn_set,
+                           const QString& startDirOrVariable,
+                           KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0);
 
     virtual ~KexiConnSelectorWidget();
-    
+
     /*! After accepting this dialog this method returns wherher user selected
      file- or server- based connection (ConnType enum). */
     int selectedConnectionType() const;
 
     /*! \return data of selected connection, if server-based connection was selected.
-     Returns NULL if no selection has been made or file-based connection 
-     has been selected. 
+     Returns NULL if no selection has been made or file-based connection
+     has been selected.
      @see selectedConnectionType()
     */
     KexiDB::ConnectionData* selectedConnectionData() const;
 
     /*! \return the name of database file, if file-based connection was selected.
-     Returns null string if no selection has been made or server-based connection 
+     Returns null string if no selection has been made or server-based connection
      has been selected.
      @see selectedConnectionType()
     */
     QString selectedFileName();
 
-    /*! Sets selected filename to \a fileName. 
+    /*! Sets selected filename to \a fileName.
      Only works when selectedConnectionType()==FileBased. */
     void setSelectedFileName(const QString& fileName);
 
-//		//! Usable when we want to do other things for "back" button
-//		void disconnectShowSimpleConnButton();
+//  //! Usable when we want to do other things for "back" button
+//  void disconnectShowSimpleConnButton();
 
     Q3ListView* connectionsList() const;
-    
+
     KexiConnSelectorBase *m_remote;
-//		KexiOpenExistingFile *m_file;
+//  KexiOpenExistingFile *m_file;
     KexiStartupFileWidget *fileWidget;
 
-    /*! If true, user will be asked to accept overwriting existing project. 
+    /*! If true, user will be asked to accept overwriting existing project.
      This is true by default. */
     void setConfirmOverwrites(bool set);
 
     bool confirmOverwrites() const;
 
-  signals:
+signals:
     void connectionItemExecuted(ConnectionDataLVItem *item);
     void connectionItemHighlighted(ConnectionDataLVItem *item);
 
-  public slots:
+public slots:
     void showSimpleConn();
     void showAdvancedConn();
     virtual void setFocus();
-    
+
     /*! Hides helpers on the server based connection page
       (sometimes it's convenient not to have these):
     - "Select existing database server's connection..." (label at the top)
@@ -133,7 +135,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
     void hideHelpers();
     void hideConnectonIcon();
 
-  protected slots:
+protected slots:
     void slotConnectionItemExecuted(Q3ListViewItem *item);
     void slotRemoteAddBtnClicked();
     void slotRemoteEditBtnClicked();
@@ -141,10 +143,10 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
     void slotConnectionSelectionChanged();
     void slotPrjTypeSelected(int id);
 
-  private:
-    ConnectionDataLVItem* addConnectionData( KexiDB::ConnectionData* data );
+private:
+    ConnectionDataLVItem* addConnectionData(KexiDB::ConnectionData* data);
     ConnectionDataLVItem* selectedConnectionDataItem() const;
-    
+
     class Private;
     Private * const d;
 };

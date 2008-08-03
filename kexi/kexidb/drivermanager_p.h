@@ -25,14 +25,15 @@
 #include <qobject.h>
 #include <q3asciidict.h>
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 /*! Internal class of driver manager.
 */
 class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Object
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     ~DriverManagerInternal();
 
     /*! Tries to load db driver \a name.
@@ -50,18 +51,18 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
       if the refcount reaches a value less than 1 the manager is freed */
     void decRefCount();
 
-    /*! Called from Driver dtor (because sometimes KLibrary (used by Driver) 
+    /*! Called from Driver dtor (because sometimes KLibrary (used by Driver)
      is destroyed before DriverManagerInternal) */
-    void aboutDelete( Driver* drv );
+    void aboutDelete(Driver* drv);
 
-  protected slots:
-    /*! Used to destroy all drivers on QApplication quit, so even if there are 
-     DriverManager's static instances that are destroyed on program 
+protected slots:
+    /*! Used to destroy all drivers on QApplication quit, so even if there are
+     DriverManager's static instances that are destroyed on program
      "static destruction", drivers are not kept after QApplication death.
     */
     void slotAppQuits();
 
-  protected:
+protected:
     /*! Used by self() */
     DriverManagerInternal();
 
@@ -80,13 +81,13 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
     int m_serverResultNum;
     QString m_serverResultName;
     //! result names for KParts::ComponentFactory::ComponentLoadingError
-    QHash<int,QString> m_componentLoadingErrors;
+    QHash<int, QString> m_componentLoadingErrors;
 
     QStringList possibleProblems;
 
-    bool lookupDriversNeeded : 1;
+bool lookupDriversNeeded : 1;
 
-  friend class DriverManager;
+    friend class DriverManager;
 };
 }
 

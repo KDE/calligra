@@ -1,15 +1,16 @@
- /*
- * This file has been automatically generated from
- * koffice/kexi/tools/sql_keywords/sql_keywords.sh and
- * koffice/kexi/kexidb/parser/sqlscanner.l
- * and koffice/kexi/tools/sql_keywords/kexi__reserved.
- *
- * Please edit the sql_keywords.sh, not this file!
- */
+/*
+* This file has been automatically generated from
+* koffice/kexi/tools/sql_keywords/sql_keywords.sh and
+* koffice/kexi/kexidb/parser/sqlscanner.l
+* and koffice/kexi/tools/sql_keywords/kexi__reserved.
+*
+* Please edit the sql_keywords.sh, not this file!
+*/
 #include <driver_p.h>
 
-namespace KexiDB {
-  const char* DriverPrivate::kexiSQLKeywords[] = {
+namespace KexiDB
+{
+const char* DriverPrivate::kexiSQLKeywords[] = {
     "AND",
     "AS",
     "CREATE",
@@ -88,5 +89,5 @@ namespace KexiDB {
     "VALUES",
     "WHEN",
     0
-  };
+};
 }

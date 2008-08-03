@@ -13,18 +13,24 @@ typedef Q3ValueVector<QString> ArgNames;
 /*! describes a UserActionCommand */
 class KEXICORE_EXPORT KexiUserActionMethod
 {
-  public:
+public:
     /*! constructs a UserActionCommand describtion */
     KexiUserActionMethod(int method, ArgTypes types, ArgNames names);
 
     /*! \return method id of this method */
-    int method() { return m_method; }
+    int method() {
+        return m_method;
+    }
 
     /*! \return argument type information of this method */
-    ArgTypes types() { return m_types; }
+    ArgTypes types() {
+        return m_types;
+    }
 
     /*! \return i18n argument names of this method */
-    ArgNames names() { return m_names; }
+    ArgNames names() {
+        return m_names;
+    }
 
 
 
@@ -34,7 +40,7 @@ class KEXICORE_EXPORT KexiUserActionMethod
     /*! \return an i18n string for \a type */
     static QString typeName(int type);
 
-  private:
+private:
     int m_method;
     ArgTypes m_types;
     ArgNames m_names;

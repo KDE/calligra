@@ -30,24 +30,24 @@
 class KexiQueryDesignerSQLEditor;
 
 //! The KexiQueryDesignerSQLView class for editing Queries in text mode.
-/*! It is a view containing SQL text editor 
- and SQL history/status widget splitted vertically. 
- Depending on user's will, the widget can be in "sql history" 
+/*! It is a view containing SQL text editor
+ and SQL history/status widget splitted vertically.
+ Depending on user's will, the widget can be in "sql history"
  mode or in "sql status" mode. */
 class KexiQueryDesignerSQLView : public KexiView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiQueryDesignerSQLView(QWidget *parent);
     virtual ~KexiQueryDesignerSQLView();
 
     QString sqlText() const;
     KexiQueryDesignerSQLEditor *editor() const;
 
-//		virtual bool eventFilter ( QObject *o, QEvent *e );
+//  virtual bool eventFilter ( QObject *o, QEvent *e );
 
-  protected:
+protected:
     KexiQueryPart::TempData * tempData() const;
 
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
@@ -62,19 +62,19 @@ class KexiQueryDesignerSQLView : public KexiView
 
     virtual void updateActions(bool activated);
 
-  protected slots:
-    /*! Performs query checking (by text parsing). \return true and sets d->parsedQuery 
+protected slots:
+    /*! Performs query checking (by text parsing). \return true and sets d->parsedQuery
      to the new query schema object on success. */
     bool slotCheckQuery();
     void slotUpdateMode();
     void slotTextChanged();
-//		void slotHistoryHeaderButtonClicked(const QString& buttonIdentifier);
+//  void slotHistoryHeaderButtonClicked(const QString& buttonIdentifier);
     void slotSelectQuery();
 
-  signals:
+signals:
     void queryShortcut();
 
-  private:
+private:
     class Private;
     Private * const d;
 

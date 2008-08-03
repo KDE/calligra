@@ -37,56 +37,56 @@ class KexiRelationViewTableContainerHeader;
 
 namespace KexiDB
 {
-  class TableOrQuerySchema;
+class TableOrQuerySchema;
 }
 
 //! @internal A field list widget used in table container to show fields
 class KexiRelationsTableFieldList : public KexiFieldListView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiRelationsTableFieldList(KexiDB::TableOrQuerySchema* tableOrQuerySchema, 
-      KexiRelationsScrollArea *scrollArea, QWidget *parent);
+public:
+    KexiRelationsTableFieldList(KexiDB::TableOrQuerySchema* tableOrQuerySchema,
+                                KexiRelationsScrollArea *scrollArea, QWidget *parent);
     virtual ~KexiRelationsTableFieldList();
 
     int globalY(const QString &item);
 
     virtual QSize sizeHint() const;
 
-  signals:
+signals:
     void tableScrolling();
 
-  protected slots:
+protected slots:
     void slotDropped(QDropEvent *e);
     void slotContentsMoving(int, int);
 
-  protected:
-    virtual void contentsMousePressEvent( QMouseEvent * e );
+protected:
+    virtual void contentsMousePressEvent(QMouseEvent * e);
     virtual bool acceptDrag(QDropEvent *e) const;
-    virtual QRect drawItemHighlighter(QPainter *painter, Q3ListViewItem *item); 
+    virtual QRect drawItemHighlighter(QPainter *painter, Q3ListViewItem *item);
     virtual bool eventFilter(QObject *o, QEvent *ev);
 
-  private:
+private:
     KexiRelationsScrollArea *m_scrollArea;
 };
 
 //! @internal A header widget used in table container
 class KexiRelationViewTableContainerHeader : public QLabel
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     KexiRelationViewTableContainerHeader(const QString& text, QWidget *parent);
     virtual ~KexiRelationViewTableContainerHeader();
 
     virtual void setFocus();
     virtual void unsetFocus();
 
-  signals:
+signals:
     void moved();
     void endDrag();
 
-  protected:
+protected:
     bool eventFilter(QObject *obj, QEvent *ev);
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);

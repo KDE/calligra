@@ -59,162 +59,174 @@ class KexiView;
 //
 class ReportDesigner : public QWidget
 {
-		Q_OBJECT
-	public:
-		
-		
-		ReportDesigner ( QWidget *, KexiDB::Connection * );
-		ReportDesigner ( QWidget *, KexiDB::Connection *, const QString& );
-		~ReportDesigner();
+    Q_OBJECT
+public:
 
-		ReportSection* getSection ( KRSectionData::Section ) const;
-		void removeSection ( KRSectionData::Section );
-		void insertSection ( KRSectionData::Section );
-		
-		ReportSectionDetail* detailSection() {return detail;}
-		void setDetail ( ReportSectionDetail *rsd );
-		void deleteDetail();
 
-		void setReportTitle ( const QString & );
-		void setReportDataSource ( const QString & );
-		void setGridOptions ( bool, int );
-		QString reportTitle();
-		QString reportDataSource();
+    ReportDesigner(QWidget *, KexiDB::Connection *);
+    ReportDesigner(QWidget *, KexiDB::Connection *, const QString&);
+    ~ReportDesigner();
 
-		QDomDocument document();
+    ReportSection* getSection(KRSectionData::Section) const;
+    void removeSection(KRSectionData::Section);
+    void insertSection(KRSectionData::Section);
 
-		bool isModified();
+    ReportSectionDetail* detailSection() {
+        return detail;
+    }
+    void setDetail(ReportSectionDetail *rsd);
+    void deleteDetail();
 
-		void setConn ( KexiDB::Connection *c ) {conn = c;}
-		KexiDB::Connection *theConn() {return conn;}
-		bool isConnected() {return conn &&  conn->isConnected();}
-		
-		/**
-		\return a list of queries that the report can be based on
-		*/
-		QStringList queryList();
-		
-		/**
-		\return a list of fields in the selected query
-		*/
-		QStringList fieldList();
-		
-		/**
-		\return the page width in pixels for the current paper size
-		*/
-		int pageWidthPx() const;
+    void setReportTitle(const QString &);
+    void setReportDataSource(const QString &);
+    void setGridOptions(bool, int);
+    QString reportTitle();
+    QString reportDataSource();
 
-		QGraphicsScene* activeScene();
-		void setActiveScene ( QGraphicsScene* a );
-		KoProperty::Set* propertySet() {kDebug() << endl; return set;}
-		
-		virtual QSize sizeHint() const;
+    QDomDocument document();
 
-		KoZoomHandler* zoomHandler();
-		
-		KoUnit pageUnit() const;
+    bool isModified();
 
-		void sectionContextMenuEvent ( ReportScene *, QGraphicsSceneContextMenuEvent * e );
-		void sectionMouseReleaseEvent ( ReportSceneView *, QMouseEvent * e );
+    void setConn(KexiDB::Connection *c) {
+        conn = c;
+    }
+    KexiDB::Connection *theConn() {
+        return conn;
+    }
+    bool isConnected() {
+        return conn &&  conn->isConnected();
+    }
 
-		void changeSet ( KoProperty::Set * );
-		KoProperty::Set* itemPropertySet() {kDebug() << endl; return _itmset;}
+    /**
+    \return a list of queries that the report can be based on
+    */
+    QStringList queryList();
 
-		void setModified ( bool = true );
-		
-		void showScriptEditor();
-		
-		/**Return a unique name that can be used by the entity*/
-		QString suggestEntityName(const QString &) const;
-		
-		/**Checks if the supplied name is unique among all entities*/
-		bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
-	public slots:
-		
-		void slotEditDelete();
-		void slotEditCut();
-		void slotEditCopy();
-		void slotEditPaste();
-		void slotEditPaste ( QGraphicsScene *, const QPointF & );
+    /**
+    \return a list of fields in the selected query
+    */
+    QStringList fieldList();
 
-		void slotItemLabel();
-		void slotItemField();
-		void slotItemText();
-		void slotItemLine();
-		void slotItemBarcode();
-		void slotItemImage();
-		void slotItemChart();
-		void slotItemShape();
+    /**
+    \return the page width in pixels for the current paper size
+    */
+    int pageWidthPx() const;
 
-		void slotSectionEditor();
+    QGraphicsScene* activeScene();
+    void setActiveScene(QGraphicsScene* a);
+    KoProperty::Set* propertySet() {
+        kDebug() << endl; return set;
+    }
 
-		void slotRaiseSelected();
-		void slotLowerSelected();
-		
-	protected:
-		virtual void closeEvent ( QCloseEvent * e );
+    virtual QSize sizeHint() const;
 
-		ReportSection * reportHead;
-		ReportSection * pageHeadFirst;
-		ReportSection * pageHeadOdd;
-		ReportSection * pageHeadEven;
-		ReportSection * pageHeadLast;
-		ReportSection * pageHeadAny;
+    KoZoomHandler* zoomHandler();
 
-		ReportSection * pageFootFirst;
-		ReportSection * pageFootOdd;
-		ReportSection * pageFootEven;
-		ReportSection * pageFootLast;
-		ReportSection * pageFootAny;
-		ReportSection * reportFoot;
-		ReportSectionDetail * detail;
+    KoUnit pageUnit() const;
 
-	private:
-		class Private;
-		Private * const d;
-		
-		void init();
-		bool _modified; // true if this document has been modified, false otherwise
-		KexiDB::Connection *conn;
-		QStringList pageFormats();
+    void sectionContextMenuEvent(ReportScene *, QGraphicsSceneContextMenuEvent * e);
+    void sectionMouseReleaseEvent(ReportSceneView *, QMouseEvent * e);
 
-		virtual void resizeEvent ( QResizeEvent * event );
+    void changeSet(KoProperty::Set *);
+    KoProperty::Set* itemPropertySet() {
+        kDebug() << endl; return _itmset;
+    }
 
-		//Properties
-		void createProperties();
-		KoProperty::Set* set;
-		KoProperty::Set* _itmset;
-		KoProperty::Property* _title;
-		KoProperty::Property* _dataSource;
-		KoProperty::Property* _pageSize;
-		KoProperty::Property* _orientation;
-		KoProperty::Property* _unit;
-		KoProperty::Property* _customHeight;
-		KoProperty::Property* _customWidth;
-		KoProperty::Property* _leftMargin;
-		KoProperty::Property* _rightMargin;
-		KoProperty::Property* _topMargin;
-		KoProperty::Property* _bottomMargin;
-		KoProperty::Property* _showGrid;
-		KoProperty::Property* _gridDivisions;
-		KoProperty::Property* _gridSnap;
-		KoProperty::Property* _labelType;
-		KoProperty::Property* _interpreter;
+    void setModified(bool = true);
 
-		QString editorText(const QString&);
-		QString _script;
-		
-		ReportWriterSectionData * sectionData;
-		unsigned int selectionCount();
+    void showScriptEditor();
 
-	private slots:
-		void slotPropertyChanged ( KoProperty::Set &s, KoProperty::Property &p );
-		void slotPageButton_Pressed();
+    /**Return a unique name that can be used by the entity*/
+    QString suggestEntityName(const QString &) const;
 
-	signals:
-		void pagePropertyChanged ( KoProperty::Set &s );
-		void propertySetChanged();
-		void dirty();
+    /**Checks if the supplied name is unique among all entities*/
+    bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
+public slots:
+
+    void slotEditDelete();
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
+    void slotEditPaste(QGraphicsScene *, const QPointF &);
+
+    void slotItemLabel();
+    void slotItemField();
+    void slotItemText();
+    void slotItemLine();
+    void slotItemBarcode();
+    void slotItemImage();
+    void slotItemChart();
+    void slotItemShape();
+
+    void slotSectionEditor();
+
+    void slotRaiseSelected();
+    void slotLowerSelected();
+
+protected:
+    virtual void closeEvent(QCloseEvent * e);
+
+    ReportSection * reportHead;
+    ReportSection * pageHeadFirst;
+    ReportSection * pageHeadOdd;
+    ReportSection * pageHeadEven;
+    ReportSection * pageHeadLast;
+    ReportSection * pageHeadAny;
+
+    ReportSection * pageFootFirst;
+    ReportSection * pageFootOdd;
+    ReportSection * pageFootEven;
+    ReportSection * pageFootLast;
+    ReportSection * pageFootAny;
+    ReportSection * reportFoot;
+    ReportSectionDetail * detail;
+
+private:
+    class Private;
+    Private * const d;
+
+    void init();
+    bool _modified; // true if this document has been modified, false otherwise
+    KexiDB::Connection *conn;
+    QStringList pageFormats();
+
+    virtual void resizeEvent(QResizeEvent * event);
+
+    //Properties
+    void createProperties();
+    KoProperty::Set* set;
+    KoProperty::Set* _itmset;
+    KoProperty::Property* _title;
+    KoProperty::Property* _dataSource;
+    KoProperty::Property* _pageSize;
+    KoProperty::Property* _orientation;
+    KoProperty::Property* _unit;
+    KoProperty::Property* _customHeight;
+    KoProperty::Property* _customWidth;
+    KoProperty::Property* _leftMargin;
+    KoProperty::Property* _rightMargin;
+    KoProperty::Property* _topMargin;
+    KoProperty::Property* _bottomMargin;
+    KoProperty::Property* _showGrid;
+    KoProperty::Property* _gridDivisions;
+    KoProperty::Property* _gridSnap;
+    KoProperty::Property* _labelType;
+    KoProperty::Property* _interpreter;
+
+    QString editorText(const QString&);
+    QString _script;
+
+    ReportWriterSectionData * sectionData;
+    unsigned int selectionCount();
+
+private slots:
+    void slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p);
+    void slotPageButton_Pressed();
+
+signals:
+    void pagePropertyChanged(KoProperty::Set &s);
+    void propertySetChanged();
+    void dirty();
 };
 
 #endif

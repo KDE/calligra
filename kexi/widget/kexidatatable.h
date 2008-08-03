@@ -30,30 +30,30 @@ class KexiTableViewData;
 
 namespace KexiDB
 {
-  class Cursor;
+class Cursor;
 }
 
 /*! @short Provides a data-driven (record-based) tabular view.
 
- The KexiDataTable can display data provided "by hand" 
+ The KexiDataTable can display data provided "by hand"
  or from KexiDB-compatible database source.
  @see KexiFormView
 */
 class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    /*! CTOR1: Creates, empty table view that can be initialized later 
-     with setData(). 
-     If \a dbAware is true, table will be db-aware, 
+public:
+    /*! CTOR1: Creates, empty table view that can be initialized later
+     with setData().
+     If \a dbAware is true, table will be db-aware,
       and KexiDataTableView is used internally.
-     Otherwise, table will be not-db-aware, 
+     Otherwise, table will be not-db-aware,
       and KexiTableView is used internally. In the latter case,
       data can be set by calling tableView()->setData(KexiTableViewData* data). */
     KexiDataTable(QWidget *parent, bool dbAware = true);
 
-    /*! CTOR2: Creates db-aware, table view initialized with \a cursor. 
+    /*! CTOR2: Creates db-aware, table view initialized with \a cursor.
      KexiDataTableView is used internally. */
     KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor);
 
@@ -61,15 +61,15 @@ class KEXIEXTWIDGETS_EXPORT KexiDataTable : public KexiDataAwareView
 
     KexiTableView* tableView() const;
 
-  public slots:
+public slots:
     /*! Sets data. Only works for db-aware table. */
     void setData(KexiDB::Cursor *cursor);
 
-  protected slots:
+protected slots:
 //! @todo
     void filter();
 
-  protected:
+protected:
     void init();
 };
 

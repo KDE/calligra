@@ -26,100 +26,101 @@
 #include <QString>
 #include <QList>
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 /*! ConnectionDataBase is a helper class for ConnectionData.  It
  is not intended to be instantiated explicitly.  Instead, use the
  ConnectionData class. */
 /*! @internal
- Used by ConnectionData. 
- It is easier to internally operate on non-QObject-derived object, 
+ Used by ConnectionData.
+ It is easier to internally operate on non-QObject-derived object,
  e.g.: to copy data members in ConnectionData ctor. */
 class ConnectionDataBase
 {
-  public:
+public:
     ConnectionDataBase();
 
-    /*! 
+    /*!
     \brief The caption of the connection.
-    
+
     Captions are optional for identyfying given connection
-    by name eg. for users. 
+    by name eg. for users.
     */
     QString caption;
 
-    /*! 
+    /*!
     \brief The additional description for the connection
     */
     QString description;
 
     /*!
     \brief Used for identifying a single piece of data in a set
-    
+
     Optional ID used for identifying a single piece data in a set.
     ConnectionData::ConstList for example) This is set automatically
     when needed. By default: -1.
      */
     int id;
 
-    /*! 
+    /*!
     \brief the name of the driver that should be used to create a connection
-    
-    Name (unique, not i18n'd) of driver that is used (or should be used) to 
+
+    Name (unique, not i18n'd) of driver that is used (or should be used) to
     create a connection. If you pass this ConnectionData object to
     KexiDB::Driver::createConnection() to create connection, the @a driverName member
     will be updated with a valid KexiDB driver name.
-    In other situations the @a driverName member may be used to store information what 
-    driver should be used to perform connection, before we get an appropriate 
+    In other situations the @a driverName member may be used to store information what
+    driver should be used to perform connection, before we get an appropriate
     driver object from DriverManager.
     */
     QString driverName;
 
-    /*! 
+    /*!
     \brief Host name used for the remote connection.
-     
+
     Can be empty if the connection is not remote. If it is empty "localhost" is used.
     */
     QString hostName;
 
 
-                /*!
-                \brief Server name of the server to be connected to
-                
-                */
-                QString serverName;
- 
     /*!
-    \brief Port used for the remote connection. 
-    
+    \brief Server name of the server to be connected to
+
+    */
+    QString serverName;
+
+    /*!
+    \brief Port used for the remote connection.
+
     The default is 0, what means we use don't change the database engine's default port.
     */
     unsigned short int port;
 
-    /*! 
+    /*!
     \brief True if local socket file should be used instead of TCP/IP port.
-    
+
     Only meaningful for connections with localhost as server.
-    True by default, so local communication can be optimized, and users can avoid problems 
+    True by default, so local communication can be optimized, and users can avoid problems
     with TCP/IP connections disabled by firewalls.
-    
+
     If true, @a hostName and @a port will be ignored and @a localSocketFileName will be used.
     On MS Windows this option is often ignored and TCP/IP connection to the localhost is performed.
     */
     bool useLocalSocketFile;
 
-    /*! 
-    \brief Name of local (named) socket file. 
-    
+    /*!
+    \brief Name of local (named) socket file.
+
     For local connections only. If empty, it's driver will try to locate existing local socket
     file. Empty by default.
     */
     QString localSocketFileName;
-    
+
     /*!
     \brief Password used for the connection.
 
-    Can be empty string or null. If it is empty (equal to ""), empty password is passed 
+    Can be empty string or null. If it is empty (equal to ""), empty password is passed
     to the driver. If it is empty, no password is passed to the driver.
     In this case, applications using KexiDB should ask for the password. */
     QString password;
@@ -127,22 +128,22 @@ class ConnectionDataBase
     /*!
     \brief True if password should be saved to a file for the connection.
 
-    False by default, in most cases can be set to true when nonempty 
-    password has been loaded from a file. 
+    False by default, in most cases can be set to true when nonempty
+    password has been loaded from a file.
     For instance, this flag can be then shown for a user as a checkbox.
     */
     bool savePassword;
 
     /*!
     \brief Username used for the connection.
-    
+
     Can be empty. */
     QString userName;
 
-  protected:
+protected:
     /*!
     \brief The filename for file-based databases
-     
+
     For file-based database engines like SQLite, \a fileName is used
     instead hostName and port
     */
@@ -150,14 +151,14 @@ class ConnectionDataBase
 
     /*!
     \brief Absolute path to the database file
-      
+
     Will be empty if database is not file-based
     */
     QString m_dbPath;
-    
+
     /*!
-    \brief  Filename of the database file 
-    
+    \brief  Filename of the database file
+
     Will be empty if database is not file-based
     */
     QString m_dbFileName;
@@ -168,7 +169,7 @@ class ConnectionDataBase
 */
 class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 {
-  public:
+public:
     typedef QList<ConnectionData*> List;
     typedef QListIterator<ConnectionData*> ListIterator;
 
@@ -182,47 +183,53 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 
     /*!
     \brief Set the filename used by the connection
-    
-    For file-based database engines, like SQLite, you should use this 
-    function to set the file name of the database to use. 
+
+    For file-based database engines, like SQLite, you should use this
+    function to set the file name of the database to use.
     \a fn can be either absolute or relative path to the file.
     */
-    void setFileName( const QString& fn );
+    void setFileName(const QString& fn);
 
-    /*! 
+    /*!
     \brief Get the filename used by the connection
-    
+
     For file-based database engines like SQLite, \a fileName is used
-    instead hostName and port. 
+    instead hostName and port.
     @return An absolute path to the database file being used
     */
-    QString fileName() const { return m_fileName; }
+    QString fileName() const {
+        return m_fileName;
+    }
 
     /*!
     \brief The directory the database file is in
-    
+
     \return file path (for file-based engines) but without a file name
     */
-    QString dbPath() const { return m_dbPath; }
-    
-    /*! 
+    QString dbPath() const {
+        return m_dbPath;
+    }
+
+    /*!
     \brief The file name (without path) of the database file
-    
+
     \return The file name (for file-based engines) but without a full path
     */
-    QString dbFileName() const { return m_dbFileName; }
+    QString dbFileName() const {
+        return m_dbFileName;
+    }
 
     /*!
      \brief  A user-friendly string for the server
-     
+
      \return a user-friendly string like:
      - "myhost.org:12345" if a host and port is specified;
-     - "localhost:12345" of only port is specified; 
+     - "localhost:12345" of only port is specified;
      - "user@myhost.org:12345" if also user is specified
      - "<file>" if file-based driver is assigned but no filename is assigned
-     - "file: pathto/mydb.kexi" if file-based driver is assigned and 
+     - "file: pathto/mydb.kexi" if file-based driver is assigned and
       filename is assigned
-     
+
      User's name is added if \a addUser is true (the default).
     */
     QString serverInfoString(bool addUser = true) const;
@@ -234,11 +241,11 @@ class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
      the version information is be retrieved from the file. */
     uint formatVersion;
 
-  protected:
+protected:
     class Private;
     Private *priv;
 
-  friend class Connection;
+    friend class Connection;
 };
 
 } //namespace KexiDB

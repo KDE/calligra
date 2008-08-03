@@ -27,7 +27,7 @@
 //! A structure providing information about single kexi database template file
 class KEXICORE_EXPORT KexiTemplateInfo
 {
-  public:
+public:
     typedef QList<KexiTemplateInfo> List;
 
     KexiTemplateInfo();
@@ -41,7 +41,7 @@ class KEXICORE_EXPORT KexiTemplateInfo
 //! Handles retrieving information about templates
 class KEXICORE_EXPORT KexiTemplateLoader
 {
-  public:
+public:
     static KexiTemplateInfo::List loadListInfo();
     static KexiTemplateInfo loadInfo(const QString& directory);
 };

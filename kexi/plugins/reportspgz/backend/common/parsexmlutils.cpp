@@ -35,11 +35,11 @@
 
 ORDetailGroupSectionData::ORDetailGroupSectionData()
 {
-	column = QString::null;
-	pagebreak = BreakNone;
-	_subtotCheckPoints.clear();
-	head = 0;
-	foot = 0;
+    column = QString::null;
+    pagebreak = BreakNone;
+    _subtotCheckPoints.clear();
+    head = 0;
+    foot = 0;
 }
 
 
@@ -47,226 +47,172 @@ ORDetailGroupSectionData::ORDetailGroupSectionData()
 // functions
 //
 
-bool parseReportTextStyleData ( const QDomElement & elemSource, ORTextStyleData & ts )
+bool parseReportTextStyleData(const QDomElement & elemSource, ORTextStyleData & ts)
 {
-	if ( elemSource.tagName() == "textstyle" )
-	{
-		QDomNode  nodeCursor = elemSource.firstChild();
-		ts.bgOpacity = 255;
-		while ( !nodeCursor.isNull() )
-		{
-			
-			if ( nodeCursor.isElement() )
-			{
-				QDomElement elemThis = nodeCursor.toElement();
-				if ( elemThis.tagName() == "bgcolor" )
-				{
-					ts.bgColor = elemThis.text();
-				}
-				else if ( elemThis.tagName() == "fgcolor" )
-				{
-					ts.fgColor = elemThis.text();
-				}
-				else if ( elemThis.tagName() == "bgopacity" )
-				{
-					ts.bgOpacity = elemThis.text().toInt();
-				}
-				else if ( elemThis.tagName() == "font" )
-				{
-					parseReportFont(elemThis, ts.font);
-				}
-				else
-				{
-					// we have encountered a tag that we don't understand.
-					// for now we will just inform a debugger about it
-					kDebug() << "Tag not Parsed at <textstle>:" << elemThis.tagName() << endl;
-				}
-			}
-			
-			nodeCursor = nodeCursor.nextSibling();
-		}
-		return TRUE;
-	}
-	return FALSE;
+    if (elemSource.tagName() == "textstyle") {
+        QDomNode  nodeCursor = elemSource.firstChild();
+        ts.bgOpacity = 255;
+        while (!nodeCursor.isNull()) {
+
+            if (nodeCursor.isElement()) {
+                QDomElement elemThis = nodeCursor.toElement();
+                if (elemThis.tagName() == "bgcolor") {
+                    ts.bgColor = elemThis.text();
+                } else if (elemThis.tagName() == "fgcolor") {
+                    ts.fgColor = elemThis.text();
+                } else if (elemThis.tagName() == "bgopacity") {
+                    ts.bgOpacity = elemThis.text().toInt();
+                } else if (elemThis.tagName() == "font") {
+                    parseReportFont(elemThis, ts.font);
+                } else {
+                    // we have encountered a tag that we don't understand.
+                    // for now we will just inform a debugger about it
+                    kDebug() << "Tag not Parsed at <textstle>:" << elemThis.tagName() << endl;
+                }
+            }
+
+            nodeCursor = nodeCursor.nextSibling();
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
-bool parseReportLineStyleData ( const QDomElement & elemSource, ORLineStyleData & ls )
+bool parseReportLineStyleData(const QDomElement & elemSource, ORLineStyleData & ls)
 {
-	if ( elemSource.tagName() == "linestyle" )
-	{
-		QDomNode  nodeCursor = elemSource.firstChild();
+    if (elemSource.tagName() == "linestyle") {
+        QDomNode  nodeCursor = elemSource.firstChild();
 
-		while ( !nodeCursor.isNull() )
-		{
-			
-			if ( nodeCursor.isElement() )
-			{
-				QDomElement elemThis = nodeCursor.toElement();
-				if ( elemThis.tagName() == "color" )
-				{
-					ls.lnColor = elemThis.text();
-				}
-				else if ( elemThis.tagName() == "weight" )
-				{
-					ls.weight = elemThis.text().toInt();
-				}
-				else if ( elemThis.tagName() == "style" )
-				{
-					QString l = elemThis.text();
-					if (l == "nopen")
-					{
-						ls.style = Qt::NoPen;
-					}
-					else if (l == "solid")
-					{
-						ls.style = Qt::SolidLine;
-					}
-					else if (l == "dash")
-					{
-						ls.style = Qt::DashLine;
-					}
-					else if (l == "dot")
-					{
-						ls.style = Qt::DotLine;
-					}
-					else if (l == "dashdot")
-					{
-						ls.style = Qt::DashDotLine;
-					}
-					else if (l == "dashdotdot")
-					{
-						ls.style = Qt::DashDotDotLine;
-					}
-					else 
-					{
-						ls.style = Qt::SolidLine;
-					}
-				}
-				else
-				{
-					// we have encountered a tag that we don't understand.
-					// for now we will just inform a debugger about it
-					kDebug() << "Tag not Parsed at <linestle>:" << elemThis.tagName() << endl;
-				}
-			}
-			
-			nodeCursor = nodeCursor.nextSibling();
-		}
-		return TRUE;
-	}
-	return FALSE;
+        while (!nodeCursor.isNull()) {
+
+            if (nodeCursor.isElement()) {
+                QDomElement elemThis = nodeCursor.toElement();
+                if (elemThis.tagName() == "color") {
+                    ls.lnColor = elemThis.text();
+                } else if (elemThis.tagName() == "weight") {
+                    ls.weight = elemThis.text().toInt();
+                } else if (elemThis.tagName() == "style") {
+                    QString l = elemThis.text();
+                    if (l == "nopen") {
+                        ls.style = Qt::NoPen;
+                    } else if (l == "solid") {
+                        ls.style = Qt::SolidLine;
+                    } else if (l == "dash") {
+                        ls.style = Qt::DashLine;
+                    } else if (l == "dot") {
+                        ls.style = Qt::DotLine;
+                    } else if (l == "dashdot") {
+                        ls.style = Qt::DashDotLine;
+                    } else if (l == "dashdotdot") {
+                        ls.style = Qt::DashDotDotLine;
+                    } else {
+                        ls.style = Qt::SolidLine;
+                    }
+                } else {
+                    // we have encountered a tag that we don't understand.
+                    // for now we will just inform a debugger about it
+                    kDebug() << "Tag not Parsed at <linestle>:" << elemThis.tagName() << endl;
+                }
+            }
+
+            nodeCursor = nodeCursor.nextSibling();
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
 
-bool parseReportRect ( const QDomElement & elemSource, QRectF & rectTarget )
+bool parseReportRect(const QDomElement & elemSource, QRectF & rectTarget)
 {
-	if ( elemSource.tagName() == "rect" )
-	{
-		QDomNode  nodeCursor = elemSource.firstChild();
+    if (elemSource.tagName() == "rect") {
+        QDomNode  nodeCursor = elemSource.firstChild();
 
-		while ( !nodeCursor.isNull() )
-		{
-			if ( nodeCursor.isElement() )
-			{
-				QDomElement elemThis = nodeCursor.toElement();
-				int         intTemp;
-				bool        valid;
+        while (!nodeCursor.isNull()) {
+            if (nodeCursor.isElement()) {
+                QDomElement elemThis = nodeCursor.toElement();
+                int         intTemp;
+                bool        valid;
 
-				if ( elemThis.tagName() == "x" )
-				{
-					intTemp = elemThis.text().toFloat ( &valid );
-					if ( valid )
-						rectTarget.setX ( intTemp );
-					else
-						return FALSE;
-				}
-				else if ( elemThis.tagName() == "y" )
-				{
-					intTemp = elemThis.text().toFloat ( &valid );
-					if ( valid )
-						rectTarget.setY ( intTemp );
-					else
-						return FALSE;
-				}
-				else if ( elemThis.tagName() == "width" )
-				{
-					intTemp = elemThis.text().toFloat ( &valid );
-					if ( valid )
-						rectTarget.setWidth ( intTemp );
-					else
-						return FALSE;
-				}
-				else if ( elemThis.tagName() == "height" )
-				{
-					intTemp = elemThis.text().toFloat ( &valid );
-					if ( valid )
-						rectTarget.setHeight ( intTemp );
-					else
-						return FALSE;
-				}
-			}
-			nodeCursor = nodeCursor.nextSibling();
-		}
-		return TRUE;
-	}
-	return FALSE;
+                if (elemThis.tagName() == "x") {
+                    intTemp = elemThis.text().toFloat(&valid);
+                    if (valid)
+                        rectTarget.setX(intTemp);
+                    else
+                        return FALSE;
+                } else if (elemThis.tagName() == "y") {
+                    intTemp = elemThis.text().toFloat(&valid);
+                    if (valid)
+                        rectTarget.setY(intTemp);
+                    else
+                        return FALSE;
+                } else if (elemThis.tagName() == "width") {
+                    intTemp = elemThis.text().toFloat(&valid);
+                    if (valid)
+                        rectTarget.setWidth(intTemp);
+                    else
+                        return FALSE;
+                } else if (elemThis.tagName() == "height") {
+                    intTemp = elemThis.text().toFloat(&valid);
+                    if (valid)
+                        rectTarget.setHeight(intTemp);
+                    else
+                        return FALSE;
+                }
+            }
+            nodeCursor = nodeCursor.nextSibling();
+        }
+        return TRUE;
+    }
+    return FALSE;
 }
 
-bool parseReportFont ( const QDomElement & elemSource, QFont & fontTarget )
+bool parseReportFont(const QDomElement & elemSource, QFont & fontTarget)
 {
-	if ( elemSource.tagName() == "font" )
-	{
-		fontTarget.fromString(elemSource.text());
+    if (elemSource.tagName() == "font") {
+        fontTarget.fromString(elemSource.text());
 #if 0
-		QDomNode  nodeCursor = elemSource.firstChild();
+        QDomNode  nodeCursor = elemSource.firstChild();
 
-		while ( !nodeCursor.isNull() )
-		{
-			if ( nodeCursor.isElement() )
-			{
-				QDomElement elemThis = nodeCursor.toElement();
-				int intTemp;
-				bool valid;
+        while (!nodeCursor.isNull()) {
+            if (nodeCursor.isElement()) {
+                QDomElement elemThis = nodeCursor.toElement();
+                int intTemp;
+                bool valid;
 
-				if ( elemThis.tagName() == "face" )
-					fontTarget.setFamily ( elemThis.text() );
-				else if ( elemThis.tagName() == "size" )
-				{
-					intTemp = elemThis.text().toInt ( &valid );
-					if ( valid )
-						fontTarget.setPointSize ( intTemp );
-					else
-						kDebug() << "Text not Parsed at <font>:" << elemThis.text() << endl;
-				}
-				else if ( elemThis.tagName() == "weight" )
-				{
-					if ( elemThis.text() == "normal" )
-						fontTarget.setWeight ( 50 );
-					else if ( elemThis.text() == "bold" )
-						fontTarget.setWeight ( 75 );
-					else
-					{
-						// This is where we want to convert the string to an int value
-						// that should be between 1 and 100
-						intTemp = elemThis.text().toInt ( &valid );
-						if ( valid && intTemp >= 1 && intTemp <= 100 )
-							fontTarget.setWeight ( intTemp );
-						else
-							kDebug() << "Text not Parsed at <font>:" << elemThis.text() << endl;
-					}
-				}
-				else
-				{
-					// we have encountered a tag that we don't understand.
-					// for now we will just inform a debugger about it
-					kDebug() << "Tag not Parsed at <font>:" << elemThis.tagName() << endl;
-				}
-			}
-			nodeCursor = nodeCursor.nextSibling();
-		}
+                if (elemThis.tagName() == "face")
+                    fontTarget.setFamily(elemThis.text());
+                else if (elemThis.tagName() == "size") {
+                    intTemp = elemThis.text().toInt(&valid);
+                    if (valid)
+                        fontTarget.setPointSize(intTemp);
+                    else
+                        kDebug() << "Text not Parsed at <font>:" << elemThis.text() << endl;
+                } else if (elemThis.tagName() == "weight") {
+                    if (elemThis.text() == "normal")
+                        fontTarget.setWeight(50);
+                    else if (elemThis.text() == "bold")
+                        fontTarget.setWeight(75);
+                    else {
+                        // This is where we want to convert the string to an int value
+                        // that should be between 1 and 100
+                        intTemp = elemThis.text().toInt(&valid);
+                        if (valid && intTemp >= 1 && intTemp <= 100)
+                            fontTarget.setWeight(intTemp);
+                        else
+                            kDebug() << "Text not Parsed at <font>:" << elemThis.text() << endl;
+                    }
+                } else {
+                    // we have encountered a tag that we don't understand.
+                    // for now we will just inform a debugger about it
+                    kDebug() << "Tag not Parsed at <font>:" << elemThis.tagName() << endl;
+                }
+            }
+            nodeCursor = nodeCursor.nextSibling();
+        }
 #endif
-		return TRUE;
-	}
-	return FALSE;
+        return TRUE;
+    }
+    return FALSE;
 }
 

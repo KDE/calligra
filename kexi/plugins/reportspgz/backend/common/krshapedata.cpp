@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,48 +26,50 @@
 #include <kglobalsettings.h>
 #include <KoShapeRegistry.h>
 
-KRShapeData::KRShapeData ( QDomNode & element )
+KRShapeData::KRShapeData(QDomNode & element)
 {
-	createProperties();
-	QDomNodeList nl = element.childNodes();
-	QString n;
-	QDomNode node;
-	for ( int i = 0; i < nl.count(); i++ )
-	{
-		node = nl.item ( i );
-		n = node.nodeName();
-		if ( n == "name" )
-		{
-			_name->setValue(node.firstChild().nodeValue());
-		}
-		else
-		{
-			kDebug() << "while parsing label element encountered unknow element: " << n << endl;
-		}
-	}
+    createProperties();
+    QDomNodeList nl = element.childNodes();
+    QString n;
+    QDomNode node;
+    for (int i = 0; i < nl.count(); i++) {
+        node = nl.item(i);
+        n = node.nodeName();
+        if (n == "name") {
+            _name->setValue(node.firstChild().nodeValue());
+        } else {
+            kDebug() << "while parsing label element encountered unknow element: " << n << endl;
+        }
+    }
 }
 
 void KRShapeData::createProperties()
 {
-	_set = new KoProperty::Set ( 0, "Shape" );
+    _set = new KoProperty::Set(0, "Shape");
 
-	QStringList keys;
+    QStringList keys;
 
-	keys << KoShapeRegistry::instance()->keys();
-	_shapeType = new KoProperty::Property ( "ShapeType", keys, keys, "KoStarShape", "Shape Type" );
+    keys << KoShapeRegistry::instance()->keys();
+    _shapeType = new KoProperty::Property("ShapeType", keys, keys, "KoStarShape", "Shape Type");
 
-	_set->addProperty ( _name );
-	_set->addProperty ( _shapeType );
+    _set->addProperty(_name);
+    _set->addProperty(_shapeType);
 }
 
 QRectF KRShapeData::_rect()
 {
-	QRectF r;
-	r.setRect(_pos.toScene().x(),_pos.toScene().y(), _size.toScene().width(), _size.toScene().height());	
-	return r;
+    QRectF r;
+    r.setRect(_pos.toScene().x(), _pos.toScene().y(), _size.toScene().width(), _size.toScene().height());
+    return r;
 }
 
 // RTTI
-int KRShapeData::type() const { return RTTI; }
+int KRShapeData::type() const
+{
+    return RTTI;
+}
 int KRShapeData::RTTI = KRObjectData::EntityShape;
-KRShapeData * KRShapeData::toShape() { return this; }
+KRShapeData * KRShapeData::toShape()
+{
+    return this;
+}

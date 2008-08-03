@@ -34,28 +34,28 @@
 #include <widget/relations/KexiRelationsView.h>
 
 KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
- : KexiView(parent)
+        : KexiView(parent)
 {
-  kDebug() << "KexiRelationMainDlg()" << endl;
-//	setIcon(SmallIcon("relation"));
-  m_defaultIconName = "relation";
-  setCaption( i18n("Relationships") );
-//	setDocID( win->generatePrivateDocID() );
+    kDebug() << "KexiRelationMainDlg()" << endl;
+// setIcon(SmallIcon("relation"));
+    m_defaultIconName = "relation";
+    setCaption(i18n("Relationships"));
+// setDocID( win->generatePrivateDocID() );
 
-  m_rel = new KexiRelationsView(this);
-  //the view can receive some our actions
-  addActionProxyChild( m_rel );
-//	addActionProxyChild( m_view->relationsView() );
-  
-  Q3VBoxLayout *g = new Q3VBoxLayout(this);
-  g->addWidget(m_rel);
+    m_rel = new KexiRelationsView(this);
+    //the view can receive some our actions
+    addActionProxyChild(m_rel);
+// addActionProxyChild( m_view->relationsView() );
 
-  //show all tables
-  KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
-  QStringList tables = conn->tableNames();
-  for (QStringList::ConstIterator it = tables.constBegin(); it!=tables.constEnd(); ++it) {
-    m_rel->addTable( *it );
-  }
+    Q3VBoxLayout *g = new Q3VBoxLayout(this);
+    g->addWidget(m_rel);
+
+    //show all tables
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    QStringList tables = conn->tableNames();
+    for (QStringList::ConstIterator it = tables.constBegin(); it != tables.constEnd(); ++it) {
+        m_rel->addTable(*it);
+    }
 }
 
 KexiRelationMainDlg::~KexiRelationMainDlg()
@@ -63,19 +63,19 @@ KexiRelationMainDlg::~KexiRelationMainDlg()
 }
 
 QSize KexiRelationMainDlg::sizeHint() const
-{	
-  return QSize(600,300);
+{
+    return QSize(600, 300);
 }
 
 QWidget*
 KexiRelationMainDlg::mainWidget()
 {
-  return m_rel;
+    return m_rel;
 }
 
 QString KexiRelationMainDlg::itemIcon()
 {
-  return "relation";
+    return "relation";
 }
 
 #include "kexirelationmaindlg.moc"

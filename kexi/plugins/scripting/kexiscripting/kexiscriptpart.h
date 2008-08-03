@@ -36,77 +36,77 @@ class KexiScriptPart : public KexiPart::Part
 {
     Q_OBJECT
 
-    public:
+public:
 
-        /**
-         * Constructor.
-         *
-         * \param parent The parent QObject this part is child of.
-         * \param name The name this part has.
-         * \param args Optional list of arguments passed to this part.
-         */
-        KexiScriptPart(QObject *parent, const QStringList& args);
+    /**
+     * Constructor.
+     *
+     * \param parent The parent QObject this part is child of.
+     * \param name The name this part has.
+     * \param args Optional list of arguments passed to this part.
+     */
+    KexiScriptPart(QObject *parent, const QStringList& args);
 
-        /**
-         * Destructor.
-         */
-        virtual ~KexiScriptPart();
+    /**
+     * Destructor.
+     */
+    virtual ~KexiScriptPart();
 
-        /**
-         * Implementation of the \a KexiPart::Part::execute method used to
-         * execute the passed \p item instance.
-         */
-        virtual bool execute(KexiPart::Item* item, QObject* sender = 0);
+    /**
+     * Implementation of the \a KexiPart::Part::execute method used to
+     * execute the passed \p item instance.
+     */
+    virtual bool execute(KexiPart::Item* item, QObject* sender = 0);
 
-        /**
-         * \return the i18n message for the passed \p englishMessage string.
-         */
-        virtual KLocalizedString i18nMessage(const QString& englishMessage,
-        	KexiWindow* window) const;
+    /**
+     * \return the i18n message for the passed \p englishMessage string.
+     */
+    virtual KLocalizedString i18nMessage(const QString& englishMessage,
+                                         KexiWindow* window) const;
 
-    protected:
+protected:
 
-        /**
-         * Create a new view.
-         *
-         * \param parent The parent QWidget the new view is displayed in.
-         * \param window The \a KexiWindow the view is child of.
-         * \param item The \a KexiPart::Item this view is for.
-         * \param viewMode The viewmode we like to have a view for.
-         * \param staticObjectArgs Optional list of arguments.
-         */
-        virtual KexiView* createView(QWidget *parent, 
-                                     KexiWindow *window, 
-                                     KexiPart::Item &item,
-                                     Kexi::ViewMode viewMode = Kexi::DataViewMode,
-                                     QMap<QString,QVariant>* staticObjectArgs = 0);
-/*
-         * \param parent The parent QWidget the new view is displayed in.
-         * \param dialog The \a KexiDialogBase the view is child of.
-         * \param item The \a KexiPart::Item this view is for.
-         * \param viewMode The viewmode we like to have a view for.
-                                         QWidget *parent,
-                                         KexiDialogBase* dialog,
-                                         KexiPart::Item& item,
-                                         Kexi::ViewMode viewMode = Kexi::DesignViewMode,
-                                         QMap<QString,QVariant>* staticObjectArgs = 0);
-*/
+    /**
+     * Create a new view.
+     *
+     * \param parent The parent QWidget the new view is displayed in.
+     * \param window The \a KexiWindow the view is child of.
+     * \param item The \a KexiPart::Item this view is for.
+     * \param viewMode The viewmode we like to have a view for.
+     * \param staticObjectArgs Optional list of arguments.
+     */
+    virtual KexiView* createView(QWidget *parent,
+                                 KexiWindow *window,
+                                 KexiPart::Item &item,
+                                 Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant>* staticObjectArgs = 0);
+    /*
+             * \param parent The parent QWidget the new view is displayed in.
+             * \param dialog The \a KexiDialogBase the view is child of.
+             * \param item The \a KexiPart::Item this view is for.
+             * \param viewMode The viewmode we like to have a view for.
+                                             QWidget *parent,
+                                             KexiDialogBase* dialog,
+                                             KexiPart::Item& item,
+                                             Kexi::ViewMode viewMode = Kexi::DesignViewMode,
+                                             QMap<QString,QVariant>* staticObjectArgs = 0);
+    */
 
-        /**
-         * Initialize the part's actions.
-         */
-        virtual void initPartActions();
+    /**
+     * Initialize the part's actions.
+     */
+    virtual void initPartActions();
 
-        /**
-         * Initialize the instance actions.
-         */
-        virtual void initInstanceActions();
+    /**
+     * Initialize the instance actions.
+     */
+    virtual void initInstanceActions();
 
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

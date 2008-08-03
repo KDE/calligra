@@ -28,36 +28,37 @@
 #include <qobject.h>
 
 KexiDynamicQueryParameterDialog::KexiDynamicQueryParameterDialog(QWidget *parent,
-  KexiDataProvider::Parameters *values, const KexiDataProvider::ParameterList &list):
-    KDialog(parent, "paramddialog", true, i18n("Query Parameters"),
-    KDialog::Ok|KDialog::Cancel, KDialog::Ok, true )
+        KexiDataProvider::Parameters *values, const KexiDataProvider::ParameterList &list):
+        KDialog(parent, "paramddialog", true, i18n("Query Parameters"),
+                KDialog::Ok | KDialog::Cancel, KDialog::Ok, true)
 {
-  m_values=values;
-  int y;
-  m_mainView=new Q3VBox(this);
+    m_values = values;
+    int y;
+    m_mainView = new Q3VBox(this);
 
-  for (KexiDataProvider::ParameterList::const_iterator it=list.begin();
-    it!=list.end();++it) {
-    QLineEdit *le=new QLineEdit(m_mainView,(*it).name.toUtf8());
-    le->setText((*values)[(*it).name]);
-  }
+    for (KexiDataProvider::ParameterList::const_iterator it = list.begin();
+            it != list.end();++it) {
+        QLineEdit *le = new QLineEdit(m_mainView, (*it).name.toUtf8());
+        le->setText((*values)[(*it).name]);
+    }
 
-  setMainWidget(m_mainView);
+    setMainWidget(m_mainView);
 }
 
 KexiDynamicQueryParameterDialog::~KexiDynamicQueryParameterDialog() {}
 
-void KexiDynamicQueryParameterDialog::slotOk() {
-  QObjectList *l=queryList(0,"kexi_.*",true,true);
-  QObjectListIt it(*l);
-  QObject *obj;
-  kDebug()<<"KexiDynamicQueryParameterDialog::slotOk()"<<endl;
-  while ((obj=it.current())!=0) {
-    kDebug()<<"KexiDynamicQueryParameterDialog::slotOk()::loop"<<endl;
-    (*m_values)[QString().fromUtf8(obj->name())]=
-      (dynamic_cast<QLineEdit*>(obj))->text();
-    ++it;
-  }
-  delete l;
-  KDialogBase::slotOk();
+void KexiDynamicQueryParameterDialog::slotOk()
+{
+    QObjectList *l = queryList(0, "kexi_.*", true, true);
+    QObjectListIt it(*l);
+    QObject *obj;
+    kDebug() << "KexiDynamicQueryParameterDialog::slotOk()" << endl;
+    while ((obj = it.current()) != 0) {
+        kDebug() << "KexiDynamicQueryParameterDialog::slotOk()::loop" << endl;
+        (*m_values)[QString().fromUtf8(obj->name())] =
+            (dynamic_cast<QLineEdit*>(obj))->text();
+        ++it;
+    }
+    delete l;
+    KDialogBase::slotOk();
 }

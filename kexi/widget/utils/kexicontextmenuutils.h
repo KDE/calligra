@@ -32,11 +32,11 @@ class KActionCollection;
 */
 class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
 {
-  public:
+public:
     /*! Updates title for context menu.
      \return true if the title has been updated. */
-    static bool updateTitle(QMenu *menu, const QString& objectName, 
-      const QString& objectTypeName, const QString& iconName);
+    static bool updateTitle(QMenu *menu, const QString& objectName,
+                            const QString& objectTypeName, const QString& iconName);
 };
 
 //! @short A context menu used for images within form and table views
@@ -44,14 +44,14 @@ class KEXIGUIUTILS_EXPORT KexiContextMenuUtils
  Contains actions like insert, save, copy, paste, clear.
 
  Signals like insertFromFileRequested() are all connected to
- handlers in KexiDBImageBox and KexiBlobTableEdit so these objects can 
+ handlers in KexiDBImageBox and KexiBlobTableEdit so these objects can
  respond on requests for data handling.
 */
 class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiImageContextMenu(QWidget *parent);
     virtual ~KexiImageContextMenu();
 
@@ -60,10 +60,10 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
     /*! Updates title for context menu.
      Used in KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu) and KexiDBImageBox.
      \return true if the title has been updated. */
-    static bool updateTitle(QMenu *menu, const QString& title, 
-      const QString& iconName = QString());
+    static bool updateTitle(QMenu *menu, const QString& title,
+                            const QString& iconName = QString());
 
-  public slots:
+public slots:
     void updateActionsAvailability();
 
     virtual void insertFromFile();
@@ -74,7 +74,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
     virtual void clear();
     virtual void showProperties();
 
-  signals:
+signals:
     //! Emitted when actions availability should be performed. Just connect this signal
     //! to a slot and set \a valueIsNull and \a valueIsReadOnly.
     void updateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
@@ -82,7 +82,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
     /*! Emitted before "insertFromFile" action was requested. */
     void insertFromFileRequested(const KUrl &url);
 
-    /*! Emitted before "saveAs" action was requested. 
+    /*! Emitted before "saveAs" action was requested.
      You should fill \a origFilename, \a fileExtension and \a dataIsEmpty values.
      If \a dataIsEmpty is false, saving will be cancelled. */
     void aboutToSaveAsRequested(QString& origFilename, QString& fileExtension, bool& dataIsEmpty);
@@ -105,7 +105,7 @@ class KEXIGUIUTILS_EXPORT KexiImageContextMenu : public KMenu
     //! Emitted when "showProperties" action was requested
     void showPropertiesRequested();
 
-  protected:
+protected:
     class Private;
     Private *d;
 };

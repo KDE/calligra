@@ -33,7 +33,7 @@
 // KRHtmlRender
 //
 
-KRHtmlRender::KRHtmlRender ()
+KRHtmlRender::KRHtmlRender()
 {
 
 }
@@ -44,278 +44,252 @@ KRHtmlRender::~KRHtmlRender()
 
 bool KRHtmlRender::render(ORODocument *document, const KUrl& toUrl, bool css)
 {
-	KTemporaryFile tempHtmlFile; // auto removed by default on destruction
-	if (!tempHtmlFile.open()) {
-		kDebug()<<"Couldn't create temporary file to write into";
-		return false;
-	}
+    KTemporaryFile tempHtmlFile; // auto removed by default on destruction
+    if (!tempHtmlFile.open()) {
+        kDebug() << "Couldn't create temporary file to write into";
+        return false;
+    }
 
-	QTextStream out(&tempHtmlFile);
+    QTextStream out(&tempHtmlFile);
 
-	QString dirSuffix = ".files";
-	QDir tempDir;
-	QFileInfo fi( tempHtmlFile );
+    QString dirSuffix = ".files";
+    QDir tempDir;
+    QFileInfo fi(tempHtmlFile);
 
-	QString tempFileName = fi.absoluteFilePath();
-	tempDirName = tempFileName + dirSuffix;
-	actualDirName = toUrl.fileName() + dirSuffix;
+    QString tempFileName = fi.absoluteFilePath();
+    tempDirName = tempFileName + dirSuffix;
+    actualDirName = toUrl.fileName() + dirSuffix;
 
-	if (!tempDir.mkpath(tempDirName))
-		return false;
+    if (!tempDir.mkpath(tempDirName))
+        return false;
 
-	if (css)
-		out<<renderCSS(document);
-	else
-		out<<renderTable(document);
+    if (css)
+        out << renderCSS(document);
+    else
+        out << renderTable(document);
 
-	out.flush();
-	tempHtmlFile.close();
+    out.flush();
+    tempHtmlFile.close();
 
-	bool status = false;
-	if (KIO::NetAccess::upload(tempFileName, toUrl, 0) && KIO::NetAccess::dircopy(KUrl(tempDirName), 	KUrl(toUrl.url() + dirSuffix), 0)) {
-		status = true;
-	}
+    bool status = false;
+    if (KIO::NetAccess::upload(tempFileName, toUrl, 0) && KIO::NetAccess::dircopy(KUrl(tempDirName),  KUrl(toUrl.url() + dirSuffix), 0)) {
+        status = true;
+    }
 
-	// cleanup the temporary directory
-	tempDir.setPath(tempDirName);
-	QStringList fileList = tempDir.entryList();
-	foreach(const QString& fileName, fileList) {
-		tempDir.remove(fileName);
-	}
-	tempDir.rmdir(tempDirName);
+    // cleanup the temporary directory
+    tempDir.setPath(tempDirName);
+    QStringList fileList = tempDir.entryList();
+    foreach(const QString& fileName, fileList) {
+        tempDir.remove(fileName);
+    }
+    tempDir.rmdir(tempDirName);
 
-	return status;
+    return status;
 }
 
 QString KRHtmlRender::renderCSS(ORODocument *document)
 {
-	QString html;
-	QString body;
-	QString style;
-	QStringList styles;
-	int styleindex;
-	bool renderedPageHead = false;
-	bool renderedPageFoot = false;
+    QString html;
+    QString body;
+    QString style;
+    QStringList styles;
+    int styleindex;
+    bool renderedPageHead = false;
+    bool renderedPageFoot = false;
 
-	kDebug() << "4" << endl;
+    kDebug() << "4" << endl;
 
-	QDir d(tempDirName);
-	// Render Each Section
-	for (long s = 0; s < document->sections(); s++ )
-	{
-		OROSection *section = document->section(s);
-	  
-		if (section->type() == KRSectionData::GroupHead || 
-			section->type() == KRSectionData::GroupFoot || 
-			section->type() == KRSectionData::Detail || 
-			section->type() == KRSectionData::ReportHead || 
-			section->type() == KRSectionData::ReportFoot || 
-			(section->type() == KRSectionData::PageHeadAny && !renderedPageHead) || 
-			(section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2 )) //render the page foot right at the end, it will either be the last or second last section if there is a report footer
-		{
-			if ( section->type() == KRSectionData::PageHeadAny )
-			  renderedPageHead = true;
+    QDir d(tempDirName);
+    // Render Each Section
+    for (long s = 0; s < document->sections(); s++) {
+        OROSection *section = document->section(s);
 
-			if ( section->type() == KRSectionData::PageFootAny )
-			  renderedPageFoot = true;
+        if (section->type() == KRSectionData::GroupHead ||
+                section->type() == KRSectionData::GroupFoot ||
+                section->type() == KRSectionData::Detail ||
+                section->type() == KRSectionData::ReportHead ||
+                section->type() == KRSectionData::ReportFoot ||
+                (section->type() == KRSectionData::PageHeadAny && !renderedPageHead) ||
+                (section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
+            if (section->type() == KRSectionData::PageHeadAny)
+                renderedPageHead = true;
 
-			style = "position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;";
+            if (section->type() == KRSectionData::PageFootAny)
+                renderedPageFoot = true;
 
-			if (!styles.contains(style))
-			{
-				    styles << style;
-			}
-			styleindex = styles.indexOf(style);
+            style = "position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;";
 
-			body += "<div class=\"style" + QString::number(styleindex) + "\">\n";
-			//Render the objects in each section
-			for ( int i = 0; i < section->primitives(); i++ )
-			{
-				OROPrimitive * prim = section->primitive ( i );
-				kDebug() << "Got object type" << prim->type() << endl;
-				if ( prim->type() == OROTextBox::TextBox )
-				{
-					OROTextBox * tb = ( OROTextBox* ) prim;
-					
-					style = "position: absolute; ";
-					style += "background-color: " + (tb->textStyle().bgOpacity == 0 ? "transparent" : tb->textStyle().bgColor.name()) + "; ";
-					style += "top: " + QString::number(tb->position().y()) + "pt; ";
-					style += "left: " + QString::number(tb->position().x()) + "pt; ";
-					style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
-					style += "color: " + tb->textStyle().fgColor.name() + "; ";
-					//TODO opaque text + translucent background
-					//it looks a pain to implement
-					//http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
-					//style += "filter:alpha(opacity=" + QString::number((tb->textStyle().bgOpacity / 255) * 100) + ");"; //ie opacity
-					//style += "opacity: " + QString::number(tb->textStyle().bgOpacity / 255.0) + ";";
-					
-					if (!styles.contains(style))
-					{
-					  styles << style;
-					}
-					styleindex = styles.indexOf(style);
-					
-					body += "<div class=\"style" + QString::number(styleindex) + "\">";
-					body += tb->text();
-					body += "</div>\n";
-				}
-				else if (prim->type() == OROImage::Image)
-				{
-					kDebug() << "Saving an image" << endl;
-					OROImage * im = ( OROImage* ) prim;
-					style = "position: absolute; ";
-					style += "top: " + QString::number(im->position().y()) + "pt; ";
-					style += "left: " + QString::number(im->position().x()) + "pt; ";
-					if (!styles.contains(style))
-					{
-					  styles << style;
-					}
-					styleindex = styles.indexOf(style);
-					
-					body += "<div class=\"style" + QString::number(styleindex) + "\">";
-					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-					body += "</div>\n";
+            if (!styles.contains(style)) {
+                styles << style;
+            }
+            styleindex = styles.indexOf(style);
 
-					
-					im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
-				}
-				else if (prim->type() == OROPicture::Picture)
-				{
-					kDebug() << "Saving a picture" << endl;
-					OROPicture * im = ( OROPicture* ) prim;
-					style = "position: absolute; ";
-					style += "top: " + QString::number(im->position().y()) + "pt; ";
-					style += "left: " + QString::number(im->position().x()) + "pt; ";
-					if (!styles.contains(style))
-					{
-					  styles << style;
-					}
-					styleindex = styles.indexOf(style);
-					
-					body += "<div class=\"style" + QString::number(styleindex) + "\">";
-					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-					body += "</div>\n";
-					
-					QImage image(im->size().toSize(), QImage::Format_RGB32);
-					QPainter painter(&image);
-					im->picture()->play(&painter);
-					image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
-				}
-				else
-				{
-					kDebug() << "unrecognized primitive type" << prim->type() << endl;
-				}
-			}
-			body += "</div>\n";
-		}
-	}
+            body += "<div class=\"style" + QString::number(styleindex) + "\">\n";
+            //Render the objects in each section
+            for (int i = 0; i < section->primitives(); i++) {
+                OROPrimitive * prim = section->primitive(i);
+                kDebug() << "Got object type" << prim->type() << endl;
+                if (prim->type() == OROTextBox::TextBox) {
+                    OROTextBox * tb = (OROTextBox*) prim;
 
-	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
-	html += "<style type=\"text/css\">";
+                    style = "position: absolute; ";
+                    style += "background-color: " + (tb->textStyle().bgOpacity == 0 ? "transparent" : tb->textStyle().bgColor.name()) + "; ";
+                    style += "top: " + QString::number(tb->position().y()) + "pt; ";
+                    style += "left: " + QString::number(tb->position().x()) + "pt; ";
+                    style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
+                    style += "color: " + tb->textStyle().fgColor.name() + "; ";
+                    //TODO opaque text + translucent background
+                    //it looks a pain to implement
+                    //http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
+                    //style += "filter:alpha(opacity=" + QString::number((tb->textStyle().bgOpacity / 255) * 100) + ");"; //ie opacity
+                    //style += "opacity: " + QString::number(tb->textStyle().bgOpacity / 255.0) + ";";
 
-	for (int i = 0; i < styles.count(); ++i)
-	{
-		html += ".style" + QString::number(i) + "{" + styles[i] + "}\n";
-	}
-	
-	html += "</style>";
-	html += "<title>" + document->title() + "</title>";
-	html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
-	html += "</head><body>";
-	html += body;
-	html += "</body></html>";
+                    if (!styles.contains(style)) {
+                        styles << style;
+                    }
+                    styleindex = styles.indexOf(style);
 
-	return html;
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
+                    body += tb->text();
+                    body += "</div>\n";
+                } else if (prim->type() == OROImage::Image) {
+                    kDebug() << "Saving an image" << endl;
+                    OROImage * im = (OROImage*) prim;
+                    style = "position: absolute; ";
+                    style += "top: " + QString::number(im->position().y()) + "pt; ";
+                    style += "left: " + QString::number(im->position().x()) + "pt; ";
+                    if (!styles.contains(style)) {
+                        styles << style;
+                    }
+                    styleindex = styles.indexOf(style);
+
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
+                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    body += "</div>\n";
+
+
+                    im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                } else if (prim->type() == OROPicture::Picture) {
+                    kDebug() << "Saving a picture" << endl;
+                    OROPicture * im = (OROPicture*) prim;
+                    style = "position: absolute; ";
+                    style += "top: " + QString::number(im->position().y()) + "pt; ";
+                    style += "left: " + QString::number(im->position().x()) + "pt; ";
+                    if (!styles.contains(style)) {
+                        styles << style;
+                    }
+                    styleindex = styles.indexOf(style);
+
+                    body += "<div class=\"style" + QString::number(styleindex) + "\">";
+                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    body += "</div>\n";
+
+                    QImage image(im->size().toSize(), QImage::Format_RGB32);
+                    QPainter painter(&image);
+                    im->picture()->play(&painter);
+                    image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                } else {
+                    kDebug() << "unrecognized primitive type" << prim->type() << endl;
+                }
+            }
+            body += "</div>\n";
+        }
+    }
+
+    html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
+    html += "<style type=\"text/css\">";
+
+    for (int i = 0; i < styles.count(); ++i) {
+        html += ".style" + QString::number(i) + "{" + styles[i] + "}\n";
+    }
+
+    html += "</style>";
+    html += "<title>" + document->title() + "</title>";
+    html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
+    html += "</head><body>";
+    html += body;
+    html += "</body></html>";
+
+    return html;
 }
 
 QString KRHtmlRender::renderTable(ORODocument *document)
 {
-	QString html;
-	QString body;
-	QString tr;
+    QString html;
+    QString body;
+    QString tr;
 
-	bool renderedPageHead = false;
-	bool renderedPageFoot = false;
-	
-	QDir d(tempDirName);
-	
-	// Render Each Section
-	body = "<table>\n";
-	for (long s = 0; s < document->sections(); s++ )
-	{
-		OROSection *section = document->section(s);
-		section->sortPrimatives(OROSection::SortX);
+    bool renderedPageHead = false;
+    bool renderedPageFoot = false;
 
-		if (section->type() == KRSectionData::GroupHead || 
-			section->type() == KRSectionData::GroupFoot || 
-			section->type() == KRSectionData::Detail || 
-			section->type() == KRSectionData::ReportHead || 
-			section->type() == KRSectionData::ReportFoot || 
-			(section->type() == KRSectionData::PageHeadAny && !renderedPageHead) || 
-			(section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2 )) //render the page foot right at the end, it will either be the last or second last section if there is a report footer
-		{
-			if ( section->type() == KRSectionData::PageHeadAny )
-			  renderedPageHead = true;
+    QDir d(tempDirName);
 
-			if ( section->type() == KRSectionData::PageFootAny )
-			  renderedPageFoot = true;
+    // Render Each Section
+    body = "<table>\n";
+    for (long s = 0; s < document->sections(); s++) {
+        OROSection *section = document->section(s);
+        section->sortPrimatives(OROSection::SortX);
 
-			tr = "<tr style=\"background-color: " + section->backgroundColor().name() + "\">\n";
-			//Render the objects in each section
-			for ( int i = 0; i < section->primitives(); i++ )
-			{
-				OROPrimitive * prim = section->primitive ( i );
-				
-				if ( prim->type() == OROTextBox::TextBox )
-				{
-					OROTextBox * tb = ( OROTextBox* ) prim;
-					
-					tr += "<td>";
-					tr += tb->text();
-					tr += "</td>\n";
-				}
-				else if (prim->type() == OROImage::Image)
-				{
-					kDebug() << "Saving an image" << endl;
-					OROImage * im = ( OROImage* ) prim;
-					tr += "<td>";
-					tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-					tr += "</td>\n";
-					im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
-				}
-				else if (prim->type() == OROPicture::Picture)
-				{
-					kDebug() << "Saving a picture" << endl;
-					OROPicture * im = ( OROPicture* ) prim;
-					
-					tr += "<td>";
-					tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
-					tr += "</td>\n";
-					QImage image(im->size().toSize(), QImage::Format_RGB32);
-					QPainter painter(&image);
-					im->picture()->play(&painter);
-					image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
-				}
-				else
-				{
-					kDebug() << "unhandled primitive type" << endl;
-				}
-			}
-			tr += "</tr>\n";
+        if (section->type() == KRSectionData::GroupHead ||
+                section->type() == KRSectionData::GroupFoot ||
+                section->type() == KRSectionData::Detail ||
+                section->type() == KRSectionData::ReportHead ||
+                section->type() == KRSectionData::ReportFoot ||
+                (section->type() == KRSectionData::PageHeadAny && !renderedPageHead) ||
+                (section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2)) { //render the page foot right at the end, it will either be the last or second last section if there is a report footer
+            if (section->type() == KRSectionData::PageHeadAny)
+                renderedPageHead = true;
 
-			if (tr.contains("<td>"))
-			{
-				body += tr;
-			}
-		}
-	}
-	body += "</table>\n";
-	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
-	html += "<title>" + document->title() + "</title>";
-	html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
-	html += "</head><body>";
-	html += body;
-	html += "</body></html>";
+            if (section->type() == KRSectionData::PageFootAny)
+                renderedPageFoot = true;
 
-	return html;
+            tr = "<tr style=\"background-color: " + section->backgroundColor().name() + "\">\n";
+            //Render the objects in each section
+            for (int i = 0; i < section->primitives(); i++) {
+                OROPrimitive * prim = section->primitive(i);
+
+                if (prim->type() == OROTextBox::TextBox) {
+                    OROTextBox * tb = (OROTextBox*) prim;
+
+                    tr += "<td>";
+                    tr += tb->text();
+                    tr += "</td>\n";
+                } else if (prim->type() == OROImage::Image) {
+                    kDebug() << "Saving an image" << endl;
+                    OROImage * im = (OROImage*) prim;
+                    tr += "<td>";
+                    tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    tr += "</td>\n";
+                    im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                } else if (prim->type() == OROPicture::Picture) {
+                    kDebug() << "Saving a picture" << endl;
+                    OROPicture * im = (OROPicture*) prim;
+
+                    tr += "<td>";
+                    tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    tr += "</td>\n";
+                    QImage image(im->size().toSize(), QImage::Format_RGB32);
+                    QPainter painter(&image);
+                    im->picture()->play(&painter);
+                    image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                } else {
+                    kDebug() << "unhandled primitive type" << endl;
+                }
+            }
+            tr += "</tr>\n";
+
+            if (tr.contains("<td>")) {
+                body += tr;
+            }
+        }
+    }
+    body += "</table>\n";
+    html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
+    html += "<title>" + document->title() + "</title>";
+    html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
+    html += "</head><body>";
+    html += body;
+    html += "</body></html>";
+
+    return html;
 }

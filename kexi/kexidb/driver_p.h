@@ -39,119 +39,120 @@
 
 class KService;
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 /*! Detailed definition of driver's default behaviour.
- Note for driver developers: 
+ Note for driver developers:
  Change these defaults in you Driver subclass
  constructor, if needed.
 */
 class KEXI_DB_EXPORT DriverBehaviour
 {
-  public:
+public:
     DriverBehaviour();
-      
-  //! "UNSIGNED" by default
-  QString UNSIGNED_TYPE_KEYWORD;
-  
-  //! "AUTO_INCREMENT" by default, used as add-in word to field definition
-  //! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
-  QString AUTO_INCREMENT_FIELD_OPTION;
 
-  //! "AUTO_INCREMENT PRIMARY KEY" by default, used as add-in word to field definition
-  //! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
-  QString AUTO_INCREMENT_PK_FIELD_OPTION;
+    //! "UNSIGNED" by default
+    QString UNSIGNED_TYPE_KEYWORD;
 
-  //! "" by default, used as type string for autoinc. field definition
-  //! pgsql defines it as "SERIAL", sqlite defines it as "INTEGER"
-  QString AUTO_INCREMENT_TYPE;
+    //! "AUTO_INCREMENT" by default, used as add-in word to field definition
+    //! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
+    QString AUTO_INCREMENT_FIELD_OPTION;
 
-  /*! True if autoincrement field has special definition 
-   e.g. like "INTEGER PRIMARY KEY" for SQLite.
-   Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
-   False by default. */
-  bool SPECIAL_AUTO_INCREMENT_DEF : 1;
+    //! "AUTO_INCREMENT PRIMARY KEY" by default, used as add-in word to field definition
+    //! May be also used as full definition if SPECIAL_AUTO_INCREMENT_DEF is true.
+    QString AUTO_INCREMENT_PK_FIELD_OPTION;
 
-  /*! True if autoincrement requires field to be declared as primary key.
-   This is true for SQLite. False by default. */
-  bool AUTO_INCREMENT_REQUIRES_PK : 1;
+    //! "" by default, used as type string for autoinc. field definition
+    //! pgsql defines it as "SERIAL", sqlite defines it as "INTEGER"
+    QString AUTO_INCREMENT_TYPE;
 
-  /*! Name of a field (or built-in function) with autoincremented unique value,
-   typically returned by Connection::drv_lastInsertRowID().
+    /*! True if autoincrement field has special definition
+     e.g. like "INTEGER PRIMARY KEY" for SQLite.
+     Special definition string should be stored in AUTO_INCREMENT_FIELD_OPTION.
+     False by default. */
+bool SPECIAL_AUTO_INCREMENT_DEF : 1;
 
-   Examples:
-   - PostgreSQL and SQLite engines use 'OID' field 
-   - MySQL uses LAST_INSERT_ID() built-in function
-  */
-  QString ROW_ID_FIELD_NAME;
-  
-  /*! True if the value (fetched from field or function,
-   defined by ROW_ID_FIELD_NAME member) is EXACTLY the value of autoincremented field,
-   not an implicit (internal) row number. Default value is false.
-   
-   Examples:
-   - PostgreSQL and SQLite engines have this flag set to false ('OID' field has 
-      it's own implicit value)
-   - MySQL engine has this flag set to true (LAST_INSERT_ID() returns real value 
-   of last autoincremented field). 
+    /*! True if autoincrement requires field to be declared as primary key.
+     This is true for SQLite. False by default. */
+bool AUTO_INCREMENT_REQUIRES_PK : 1;
 
-   Notes:
-   If it's false, we have a convenient way for identifying row even when there's 
-   no primary key defined. So, as '_ROWID' column in MySQL is really 
-   just a synonym for the primary key, this engine needs to have primary keys always 
-   defined if we want to use interactive editing features like row updating and deleting.
-  */
-  bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
+    /*! Name of a field (or built-in function) with autoincremented unique value,
+     typically returned by Connection::drv_lastInsertRowID().
 
-  /*! Name of any (e.g. first found) database for this connection that 
-   typically always exists. This can be not set if we want to do some magic checking
-   what database name is availabe by reimplementing
-   Connection::anyAvailableDatabaseName().
-   Example: for PostgreSQL this is "template1".
-   
-   \sa Connection::SetAvailableDatabaseName()
-  */
-  QString ALWAYS_AVAILABLE_DATABASE_NAME;
-  
-  /*! Quotation marks used for escaping identifier (see Driver::escapeIdentifier()).
-   Default value is '"'. Change it for your driver.
-  */
-  QChar QUOTATION_MARKS_FOR_IDENTIFIER;
-  
-  /*! True if using database is requied to perform real connection.
-   This is true for may engines, e.g. for PostgreSQL, where connections 
-   string should contain a database name.
-   This flag is unused for file-based db drivers,
-   by default set to true and used for all other db drivers.
-  */
-  bool USING_DATABASE_REQUIRED_TO_CONNECT : 1;
+     Examples:
+     - PostgreSQL and SQLite engines use 'OID' field
+     - MySQL uses LAST_INSERT_ID() built-in function
+    */
+    QString ROW_ID_FIELD_NAME;
 
-  /*! True if before we know whether the fetched result of executed query
-   is empty or not, we need to fetch first record. Particularly, it's true for SQLite.
-   The flag is used in Cursor::open(). By default this flag is false. */
-  bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
+    /*! True if the value (fetched from field or function,
+     defined by ROW_ID_FIELD_NAME member) is EXACTLY the value of autoincremented field,
+     not an implicit (internal) row number. Default value is false.
 
-  /*! True if "SELECT 1 from (subquery)" is supported. False by default.
-   Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
-  bool SELECT_1_SUBQUERY_SUPPORTED : 1;
+     Examples:
+     - PostgreSQL and SQLite engines have this flag set to false ('OID' field has
+        it's own implicit value)
+     - MySQL engine has this flag set to true (LAST_INSERT_ID() returns real value
+     of last autoincremented field).
+
+     Notes:
+     If it's false, we have a convenient way for identifying row even when there's
+     no primary key defined. So, as '_ROWID' column in MySQL is really
+     just a synonym for the primary key, this engine needs to have primary keys always
+     defined if we want to use interactive editing features like row updating and deleting.
+    */
+bool ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE : 1;
+
+    /*! Name of any (e.g. first found) database for this connection that
+     typically always exists. This can be not set if we want to do some magic checking
+     what database name is availabe by reimplementing
+     Connection::anyAvailableDatabaseName().
+     Example: for PostgreSQL this is "template1".
+
+     \sa Connection::SetAvailableDatabaseName()
+    */
+    QString ALWAYS_AVAILABLE_DATABASE_NAME;
+
+    /*! Quotation marks used for escaping identifier (see Driver::escapeIdentifier()).
+     Default value is '"'. Change it for your driver.
+    */
+    QChar QUOTATION_MARKS_FOR_IDENTIFIER;
+
+    /*! True if using database is requied to perform real connection.
+     This is true for may engines, e.g. for PostgreSQL, where connections
+     string should contain a database name.
+     This flag is unused for file-based db drivers,
+     by default set to true and used for all other db drivers.
+    */
+bool USING_DATABASE_REQUIRED_TO_CONNECT : 1;
+
+    /*! True if before we know whether the fetched result of executed query
+     is empty or not, we need to fetch first record. Particularly, it's true for SQLite.
+     The flag is used in Cursor::open(). By default this flag is false. */
+bool _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY : 1;
+
+    /*! True if "SELECT 1 from (subquery)" is supported. False by default.
+     Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
+bool SELECT_1_SUBQUERY_SUPPORTED : 1;
 };
 
 /*! Private driver's data members. Available for implementation. */
 class DriverPrivate
 {
-  public:
+public:
     DriverPrivate();
     virtual ~DriverPrivate();
 
     QSet<Connection*> connections;
 
 //(js)now QObject::name() is reused:
-//		/*! The name equal to the service name (X-Kexi-DriverName) 
-//		 stored in given service .desktop file. Set this in subclasses. */
-//		QString m_driverName;
-    
-    /*! Name of MIME type of files handled by this driver 
-     if it is a file-based database's driver 
+//  /*! The name equal to the service name (X-Kexi-DriverName)
+//   stored in given service .desktop file. Set this in subclasses. */
+//  QString m_driverName;
+
+    /*! Name of MIME type of files handled by this driver
+     if it is a file-based database's driver
      (equal X-Kexi-FileDBDriverMime service property) */
     QString fileDBDriverMimeType;
 
@@ -159,40 +160,40 @@ class DriverPrivate
     KService *service;
 
     /*! Internal constant flag: Set this in subclass if driver is a file driver */
-    bool isFileDriver : 1;
+bool isFileDriver : 1;
 
     /*! Internal constant flag: Set this in subclass if after successful
-     drv_createDatabased() database is in opened state (as after useDatabase()). 
+     drv_createDatabased() database is in opened state (as after useDatabase()).
      For most engines this is not true. */
-    bool isDBOpenedAfterCreate : 1;
+bool isDBOpenedAfterCreate : 1;
 
-    /*! List of system objects names, eg. build-in system tables that 
+    /*! List of system objects names, eg. build-in system tables that
      cannot be used by user, and in most cases user even shouldn't see these.
-     The list contents is driver dependent (by default is empty) 
+     The list contents is driver dependent (by default is empty)
      - fill this in subclass ctor. */
-//		QStringList m_systemObjectNames;
+//  QStringList m_systemObjectNames;
 
     /*! List of system fields names, build-in system fields that cannot be used by user,
      and in most cases user even shouldn't see these.
      The list contents is driver dependent (by default is empty) - fill this in subclass ctor. */
-//		QStringList m_systemFieldNames;
+//  QStringList m_systemFieldNames;
 
     /*! Features (like transactions, etc.) supported by this driver
-     (sum of selected  Features enum items). 
-     This member should be filled in driver implementation's constructor 
+     (sum of selected  Features enum items).
+     This member should be filled in driver implementation's constructor
      (by default m_features==NoFeatures). */
     int features;
 
     //! real type names for this engine
     QVector<QString> typeNames;
 
-    /*! Driver properties dictionary (indexed by name), 
-     useful for presenting properties to the user. 
+    /*! Driver properties dictionary (indexed by name),
+     useful for presenting properties to the user.
      Set available properties here in driver implementation. */
     QHash<QByteArray, QVariant> properties;
 
-    /*! i18n'd captions for properties. You do not need 
-     to set predefined properties' caption in driver implementation 
+    /*! i18n'd captions for properties. You do not need
+     to set predefined properties' caption in driver implementation
      -it's done automatically. */
     QHash<QByteArray, QString> propertyCaptions;
 
@@ -200,12 +201,12 @@ class DriverPrivate
     AdminTools *adminTools;
 
     /*! Driver-specific SQL keywords that need to be escaped if used as an
-      identifier (e.g. for a table or column name) that aren't also Kexi SQL 
+      identifier (e.g. for a table or column name) that aren't also Kexi SQL
       keywords.  These don't neccesarily need to be escaped when displayed by
       the front-end, because they won't confuse the parser.  However, they do
       need to be escaped before sending to the DB-backend which will have
-      it's own parser. 
-    */	
+      it's own parser.
+    */
     KexiUtils::StaticSetOfStrings driverSpecificSQLKeywords;
 
     /*! Kexi SQL keywords that need to be escaped if used as an identifier (e.g.
@@ -215,12 +216,12 @@ class DriverPrivate
     */
     static const char* kexiSQLKeywords[];
 
-  protected:
+protected:
     /*! Used by driver manager to initialize properties taken using internal
         driver flags. */
     void initInternalProperties();
-  
-  friend class DriverManagerInternal;
+
+    friend class DriverManagerInternal;
 };
 
 // escaping types for Driver::escapeBLOBInternal()
@@ -230,17 +231,17 @@ class DriverPrivate
 
 class KEXI_DB_EXPORT AdminTools::Private
 {
-  public:
+public:
     Private();
     ~Private();
 };
 
 }
 
-//! Driver's static version information (implementation), 
+//! Driver's static version information (implementation),
 //! with KLibFactory symbol declaration.
 #define KEXIDB_DRIVER_INFO( class_name, internal_name ) \
-  DatabaseVersionInfo class_name::version() const { return KEXIDB_VERSION; } \
-  K_EXPORT_COMPONENT_FACTORY(kexidb_ ## internal_name ## driver, KGenericFactory<KexiDB::class_name>( "kexidb_" #internal_name ))
+    DatabaseVersionInfo class_name::version() const { return KEXIDB_VERSION; } \
+    K_EXPORT_COMPONENT_FACTORY(kexidb_ ## internal_name ## driver, KGenericFactory<KexiDB::class_name>( "kexidb_" #internal_name ))
 
 #endif

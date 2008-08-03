@@ -1,7 +1,7 @@
 //
 // C++ Implementation: txtmigrate
 //
-// Description: 
+// Description:
 //
 //
 // Author: Adam Pigg <adam@piggz.co.uk>, (C) 2004
@@ -11,10 +11,11 @@
 //
 #include "txtmigrate.h"
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 TxtMigrate::TxtMigrate()
- : KexiMigrate()
+        : KexiMigrate()
 {
 }
 

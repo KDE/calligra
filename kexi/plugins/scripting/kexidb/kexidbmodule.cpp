@@ -43,8 +43,7 @@ extern "C"
      * Exported an loadable function as entry point to use
      * the \a KexiDBModule.
      */
-    KDE_EXPORT QObject* krossmodule()
-    {
+    KDE_EXPORT QObject* krossmodule() {
         return new Scripting::KexiDBModule();
     }
 }
@@ -52,7 +51,7 @@ extern "C"
 using namespace Scripting;
 
 KexiDBModule::KexiDBModule(QObject* parent)
-    : QObject(parent)
+        : QObject(parent)
 {
     kDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
     setObjectName("KexiDB");
@@ -76,11 +75,11 @@ const QStringList KexiDBModule::driverNames()
 QObject* KexiDBModule::driver(const QString& drivername)
 {
     QPointer< ::KexiDB::Driver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
-    if(! driver) {
+    if (! driver) {
         kDebug() << QString("KexiDB::Driver No such driver '%1'").arg(drivername) << endl;
         return 0;
     }
-    if(driver->error()) {
+    if (driver->error()) {
         kDebug() << QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()) << endl;
         return 0;
     }
@@ -94,8 +93,8 @@ const QString KexiDBModule::lookupByMime(const QString& mimetype)
 
 const QString KexiDBModule::mimeForFile(const QString& filename)
 {
-    QString mimename = KMimeType::findByFileContent( filename )->name();
-    if(mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain")
+    QString mimename = KMimeType::findByFileContent(filename)->name();
+    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain")
         mimename = KMimeType::findByUrl(filename)->name();
     return mimename;
 }
@@ -110,25 +109,25 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
     //! @todo reuse the original code!
 
     QString mimename = KMimeType::findByFileContent(filename)->name();
-    if(mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain")
+    if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain")
         mimename = KMimeType::findByUrl(filename)->name();
 
-    if(mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
+    if (mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
         KConfig _config(filename, KConfig::NoGlobals);
 
         QString groupkey;
         foreach(QString s, _config.groupList()) {
-            if(s.toLower()!="file information") {
+            if (s.toLower() != "file information") {
                 groupkey = s;
                 break;
             }
         }
-        if(groupkey.isNull()) {
+        if (groupkey.isNull()) {
             kDebug() << "No groupkey in KexiDBModule::createConnectionDataByFile filename=" << filename << endl;
             return 0;
         }
 
-  KConfigGroup config(&_config, groupkey);
+        KConfigGroup config(&_config, groupkey);
         //QString type( config.readEntry("type", "database").toLower() );
         //bool isDatabaseShortcut = (type == "database");
 
@@ -144,13 +143,13 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         data->useLocalSocketFile = config.readEntry("useLocalSocketFile", false);
         data->localSocketFileName = config.readEntry("localSocketFile");
 
-        if(version >= 2 && config.hasKey("encryptedPassword")) {
+        if (version >= 2 && config.hasKey("encryptedPassword")) {
             data->password = config.readEntry("encryptedPassword");
             uint len = data->password.length();
-            for (uint i=0; i<len; i++)
-                data->password[i] = QChar( data->password[i].unicode() - 47 - i );
+            for (uint i = 0; i < len; i++)
+                data->password[i] = QChar(data->password[i].unicode() - 47 - i);
         }
-        if(data->password.isEmpty())
+        if (data->password.isEmpty())
             data->password = config.readEntry("password");
 
         data->savePassword = ! data->password.isEmpty();
@@ -162,7 +161,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
     }
 
     QString const drivername = m_drivermanager.lookupByMime(mimename);
-    if(drivername.isEmpty()) {
+    if (drivername.isEmpty()) {
         kDebug() << "No driver in KexiDBModule::createConnectionDataByFile filename=" << filename << " mimename=" << mimename << endl;
         return 0;
     }

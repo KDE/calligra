@@ -26,24 +26,24 @@
 #include <kexi_export.h>
 
 //! The KexiSharedActionClient is an interface using application-wide (shared) actions.
-/** See KexiTableView and KexiFormScrollView for example usage. 
+/** See KexiTableView and KexiFormScrollView for example usage.
 */
 class KEXIGUIUTILS_EXPORT KexiSharedActionClient
 {
-  public:
+public:
     KexiSharedActionClient();
     virtual ~KexiSharedActionClient();
 
-    /*! Plugs action \a a for a widget. The action will be later looked up (by name) 
-     on key press event, to get proper shortcut. If found, we know that the action is already 
-     performed at main window's level, so we should give up. Otherwise - default shortcut 
+    /*! Plugs action \a a for a widget. The action will be later looked up (by name)
+     on key press event, to get proper shortcut. If found, we know that the action is already
+     performed at main window's level, so we should give up. Otherwise - default shortcut
      will be used (example: Shift+Enter key for "data_save_row" action). \sa KexiTableView::shortCutPressed()
     */
     void plugSharedAction(QAction* a);
 
-  protected:
+protected:
     //! Actions pluged for this widget using plugSharedAction(), available by name.
-    QHash<QString,QAction*> m_sharedActions;
+    QHash<QString, QAction*> m_sharedActions;
 };
 
 #endif

@@ -29,31 +29,31 @@ class KIcon;
 /*! see KexiQueryDesignerGuiEditor for example use. */
 class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
-  Q_OBJECT
-  public:
-    KexiSectionHeader(const QString &caption, Qt::Orientation o, 
-      QWidget* parent = 0 );
+    Q_OBJECT
+public:
+    KexiSectionHeader(const QString &caption, Qt::Orientation o,
+                      QWidget* parent = 0);
 
     virtual ~KexiSectionHeader();
 
     //! Sets child widget wisible below (or on the right hand) of the section header.
     //! A widget previously set is removed from the layout.
-    void setWidget( QWidget * widget );
-    
-    void addButton(const KIcon& icon, const QString& toolTip,
-      const QObject * receiver, const char * member);
+    void setWidget(QWidget * widget);
 
-    virtual bool eventFilter( QObject *o, QEvent *e );
+    void addButton(const KIcon& icon, const QString& toolTip,
+                   const QObject * receiver, const char * member);
+
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
     virtual QSize sizeHint() const;
 
     void setCaption(const QString& caption);
     QString caption() const;
 
-  public slots:
+public slots:
     void slotFocus(bool in);
 
-  private:
+private:
     class Private;
     Private * const d;
 };

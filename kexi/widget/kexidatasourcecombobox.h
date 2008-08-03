@@ -24,8 +24,9 @@
 #include <kexi_export.h>
 
 class KexiProject;
-namespace KexiPart {
-  class Item;
+namespace KexiPart
+{
+class Item;
 }
 
 /**
@@ -34,9 +35,9 @@ namespace KexiPart {
  */
 class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiDataSourceComboBox(QWidget *parent);
     virtual ~KexiDataSourceComboBox();
 
@@ -58,7 +59,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
      Returs -1 of no such item exists. */
     int findItem(const QString& mimeType, const QString& name);
 
-  public slots:
+public slots:
     //! Sets global project that is used to retrieve schema informationm for this combo box.
     //! Tables visibility can be set using \a showTables queries visibility using \a showQueries.
     void setProject(KexiProject *prj, bool showTables = true, bool showQueries = true);
@@ -67,20 +68,20 @@ class KEXIEXTWIDGETS_EXPORT KexiDataSourceComboBox : public KComboBox
      If \a mimeType is empty, either "kexi/table" and "kexi/query" are tried. */
     void setDataSource(const QString& mimeType, const QString& name);
 
-  signals:
-    //! Emitted whenever data source changes. 
+signals:
+    //! Emitted whenever data source changes.
     //! Even setting invalid data source or clearing it will emit this signal.
     void dataSourceChanged();
 
-  protected slots:
+protected slots:
     void slotNewItemStored(KexiPart::Item& item);
     void slotItemRemoved(const KexiPart::Item& item);
     void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
-    void slotActivated( int index );
+    void slotActivated(int index);
     void slotReturnPressed(const QString & text);
 
-  protected:
-    virtual void focusOutEvent( QFocusEvent *e );
+protected:
+    virtual void focusOutEvent(QFocusEvent *e);
 
     class Private;
     Private * const d;

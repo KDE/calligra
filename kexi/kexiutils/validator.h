@@ -31,32 +31,33 @@
 
 #include <klocale.h>
 
-namespace KexiUtils {
+namespace KexiUtils
+{
 
 //! @short A validator extending QValidator with offline-checking for value's validity
-/*! 
+/*!
  The offline-checking for value's validity is provided by \ref Validator::check() method.
  The validator groups two purposes into one container:
  - string validator for line editors (online checking, "on typing");
  - offline-checking for QVariant values, reimplementing validate().
 
- It also offers error and warning messages for check() method. 
- You may need to reimplement: 
+ It also offers error and warning messages for check() method.
+ You may need to reimplement:
  -  QValidator::State IdentifierValidator::validate( QString& input, int& pos ) const;
  -  Result check(const QString &valueName, QVariant v, QString &message, QString &details);
  */
 class KEXIUTILS_EXPORT Validator : public QValidator
 {
-  public:
+public:
     enum Result { Error = 0, Ok = 1, Warning = 2 };
 
     Validator(QObject * parent = 0);
 
     virtual ~Validator();
 
-    /*! Sets accepting empty values on (true) or off (false). 
+    /*! Sets accepting empty values on (true) or off (false).
      By default the validator does not accepts empty values. */
-    void setAcceptsEmptyValue( bool set );
+    void setAcceptsEmptyValue(bool set);
 
     /*! \return true if the validator accepts empty values
       @see setAcceptsEmptyValue() */
@@ -66,31 +67,31 @@ class KEXIUTILS_EXPORT Validator : public QValidator
      - \a Error is returned on error;
      - \a Ok on success;
      - \a Warning if there is something to warn about.
-     In any case except \a Ok, i18n'ed message will be set in \a message 
+     In any case except \a Ok, i18n'ed message will be set in \a message
      and (optionally) datails are set in \a details, e.g. for use in a message box.
      \a valueName can be used to contruct \a message as well, for example:
-     "[valueName] is not a valid login name". 
+     "[valueName] is not a valid login name".
      Depending on acceptsEmptyValue(), immediately accepts empty values or not. */
     Result check(const QString &valueName, const QVariant& v, QString &message,
-      QString &details);
+                 QString &details);
 
     /*! This implementation always returns value QValidator::Acceptable. */
-    virtual QValidator::State validate ( QString & input, int & pos ) const;
+    virtual QValidator::State validate(QString & input, int & pos) const;
 
     //! A generic error/warning message "... value has to be entered."
     static const QString msgColumnNotEmpty();
 
     //! Adds a child validator \a v
-    void addChildValidator( Validator* v );
+    void addChildValidator(Validator* v);
 
-  protected:
+protected:
     /* Used by check(), for reimplementation, by default returns \a Error.*/
-    virtual Result internalCheck(const QString &valueName, const QVariant& v, 
-      QString &message, QString &details);
+    virtual Result internalCheck(const QString &valueName, const QVariant& v,
+                                 QString &message, QString &details);
 
-  friend class MultiValidator;
+    friend class MultiValidator;
 
-  private:
+private:
     class Private;
     Private* const d;
 };
@@ -100,12 +101,12 @@ class KEXIUTILS_EXPORT Validator : public QValidator
  but it allows to add define more than one different validator.
  Given validation is successful if every subvalidator accepted given value.
 
- - acceptsEmptyValue() is used globally here 
+ - acceptsEmptyValue() is used globally here
    (no matter what is defined in subvalidators).
 
  - result of calling check() depends on value of check() returned by subvalidators:
    - Error is returned if at least one subvalidator returned Error;
-   - Warning is returned if at least one subvalidator returned Warning and 
+   - Warning is returned if at least one subvalidator returned Warning and
      no validator returned error;
    - Ok is returned only if exactly all subvalidators returned Ok.
    - If there is no subvalidators defined, Error is always returned.
@@ -123,7 +124,7 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 */
 class KEXIUTILS_EXPORT MultiValidator : public Validator
 {
-  public:
+public:
     /*! Constructs multivalidator with no subvalidators defined.
      You can add more validators with addSubvalidator(). */
     MultiValidator(QObject * parent = 0);
@@ -138,20 +139,20 @@ class KEXIUTILS_EXPORT MultiValidator : public Validator
     /*! Adds validator \a validator as another subvalidator.
      Subvalidator will be owned by this multivalidator if \a owned is true
      and its parent is NULL. */
-    void addSubvalidator( QValidator* validator, bool owned = true );
+    void addSubvalidator(QValidator* validator, bool owned = true);
 
     /*! Reimplemented to call validate() on subvalidators. */
-    virtual QValidator::State validate ( QString & input, int & pos ) const;
+    virtual QValidator::State validate(QString & input, int & pos) const;
 
-    /*! Calls QValidator::fixup() on every subvalidator. 
-     This may be senseless to use this methog in certain cases 
+    /*! Calls QValidator::fixup() on every subvalidator.
+     This may be senseless to use this methog in certain cases
      (can return weir results), so think twice before.. */
-    virtual void fixup ( QString & input ) const;
+    virtual void fixup(QString & input) const;
 
-  private:
+private:
     virtual Validator::Result internalCheck(
-      const QString &valueName, const QVariant& v, 
-      QString &message, QString &details);
+        const QString &valueName, const QVariant& v,
+        QString &message, QString &details);
 
     class Private;
     Private* const d;

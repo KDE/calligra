@@ -26,20 +26,20 @@
 #include <widget/utils/kexidatetimeformatter.h>
 
 /*! @short Editor class for Date type.
- It is a replacement QDateEdit due to usability problems: 
+ It is a replacement QDateEdit due to usability problems:
  people are accustomed to use single-character cursor.
  Date format is retrieved from the KDE global settings.
  and input/output is performed using KLineEdit (from KexiInputTableEdit).
 */
 class KexiDateTableEdit : public KexiInputTableEdit
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+public:
+    KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiDateTableEdit();
-    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+                               QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
     virtual QVariant value();
     virtual bool valueIsNull();
     virtual bool valueIsEmpty();
@@ -51,7 +51,7 @@ class KexiDateTableEdit : public KexiInputTableEdit
     /*! Reimplemented after KexiInputTableEdit. */
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-  protected:
+protected:
     //! helper
     void setValueInInternalEditor(const QVariant &value);
     virtual void setValueInternal(const QVariant& add, bool removeOld);

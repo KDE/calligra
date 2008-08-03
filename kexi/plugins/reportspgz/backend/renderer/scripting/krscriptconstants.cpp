@@ -1,5 +1,5 @@
 /*
- * Kexi Report Plugin 
+ * Kexi Report Plugin
  * Copyright (C) 2001-2007 by OpenMFG, LLC
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
@@ -18,11 +18,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
- 
+
 #include "krscriptconstants.h"
 
 KRScriptConstants::KRScriptConstants(QObject *parent)
- : QObject(parent)
+        : QObject(parent)
 {
 }
 

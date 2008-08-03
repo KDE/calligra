@@ -37,19 +37,19 @@ public:
     ~SectionEditor();
 
 public slots:
-    virtual void cbReportHeader_toggled( bool yes );
-    virtual void cbReportFooter_toggled( bool yes );
-    virtual void cbHeadFirst_toggled( bool yes );
-    virtual void cbHeadLast_toggled( bool yes );
-    virtual void cbHeadEven_toggled( bool yes );
-    virtual void cbHeadOdd_toggled( bool yes );
-    virtual void cbFootFirst_toggled( bool yes );
-    virtual void cbFootLast_toggled( bool yes );
-    virtual void cbFootEven_toggled( bool yes );
-    virtual void cbFootOdd_toggled( bool yes );
-    virtual void init( ReportDesigner * rd );
-    virtual void cbHeadAny_toggled( bool yes );
-    virtual void cbFootAny_toggled( bool yes );
+    virtual void cbReportHeader_toggled(bool yes);
+    virtual void cbReportFooter_toggled(bool yes);
+    virtual void cbHeadFirst_toggled(bool yes);
+    virtual void cbHeadLast_toggled(bool yes);
+    virtual void cbHeadEven_toggled(bool yes);
+    virtual void cbHeadOdd_toggled(bool yes);
+    virtual void cbFootFirst_toggled(bool yes);
+    virtual void cbFootLast_toggled(bool yes);
+    virtual void cbFootEven_toggled(bool yes);
+    virtual void cbFootOdd_toggled(bool yes);
+    virtual void init(ReportDesigner * rd);
+    virtual void cbHeadAny_toggled(bool yes);
+    virtual void cbFootAny_toggled(bool yes);
 
     virtual void btnAdd_clicked();
     virtual void btnEdit_clicked();

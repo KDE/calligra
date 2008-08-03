@@ -31,13 +31,13 @@
 
 namespace KFormDesigner
 {
-  class WidgetLibrary;
-  class Form;
+class WidgetLibrary;
+class Form;
 }
 
 namespace KexiDB
 {
-  class FieldList;
+class FieldList;
 }
 
 class Q3CString;
@@ -47,9 +47,9 @@ class KexiDataSourcePage;
 /*! It just creates a \ref KexiFormView. See there for most of code. */
 class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiFormPart(QObject *parent, const QStringList &);
     virtual ~KexiFormPart();
 
@@ -62,30 +62,30 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 
     class TempData : public KexiWindowData
     {
-      public:
+    public:
         TempData(QObject* parent);
         ~TempData();
         QPointer<KFormDesigner::Form> form;
         QPointer<KFormDesigner::Form> previewForm;
         QString tempForm;
-        QPoint scrollViewContentsPos; //!< to preserve contents pos after switching 
-                                      //!< to other view
+        QPoint scrollViewContentsPos; //!< to preserve contents pos after switching
+        //!< to other view
         int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
         //! Used in KexiFormView::setUnsavedLocalBLOBs()
         QHash<QWidget*, KexiBLOBBuffer::Id_t> unsavedLocalBLOBs;
-        //! Used when loading a form from (temporary) XML in Data View 
+        //! Used when loading a form from (temporary) XML in Data View
         //! to get unsaved blobs collected at design mode.
         QHash<QByteArray, KexiBLOBBuffer::Id_t> unsavedLocalBLOBsByName;
     };
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage, 
-      KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString& englishMessage,
+                                         KexiWindow* window) const;
 
-  protected:
+protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-      KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QVariant>* staticObjectArgs = 0);
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
@@ -93,13 +93,13 @@ class KEXIFORMUTILS_EXPORT KexiFormPart : public KexiPart::Part
 
     static KFormDesigner::WidgetLibrary* static_formsLibrary;
 
-  protected slots:
+protected slots:
     void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
     void slotAssignAction();
     void slotPropertyChanged(QWidget *widget, const Q3CString &name, const QVariant &value);
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
 
-  private:
+private:
     class Private;
     Private* d;
 };

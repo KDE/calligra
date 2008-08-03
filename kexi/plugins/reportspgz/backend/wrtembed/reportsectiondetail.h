@@ -28,51 +28,50 @@
 class QDomNode;
 class ReportSectionDetailGroup;
 /**
-	@author 
+ @author
 */
 class ReportSectionDetail : public QWidget
 {
-	Q_OBJECT
-	public:
-		ReportSectionDetail ( ReportDesigner * rptdes, const char * name = 0 );
-		virtual ~ReportSectionDetail();
+    Q_OBJECT
+public:
+    ReportSectionDetail(ReportDesigner * rptdes, const char * name = 0);
+    virtual ~ReportSectionDetail();
 
-		enum PageBreak
-		{
-			BreakNone = 0,
-   			BreakAtEnd = 1
-		};
+    enum PageBreak {
+        BreakNone = 0,
+        BreakAtEnd = 1
+    };
 
-		void setPageBreak ( int );
-		int pageBreak() const;
+    void setPageBreak(int);
+    int pageBreak() const;
 
-		ReportSection * getDetail();
+    ReportSection * getDetail();
 
-		void buildXML ( QDomDocument & doc, QDomElement & section );
-		void initFromXML ( QDomNode & node );
+    void buildXML(QDomDocument & doc, QDomElement & section);
+    void initFromXML(QDomNode & node);
 
-		ReportDesigner * reportDesigner();
+    ReportDesigner * reportDesigner();
 
-		int groupSectionCount();
-		ReportSectionDetailGroup * getSection ( int i );
-		void insertSection ( int idx, ReportSectionDetailGroup * rsd );
-		int findSection ( const QString & name );
-		void removeSection ( int idx, bool del = FALSE );
+    int groupSectionCount();
+    ReportSectionDetailGroup * getSection(int i);
+    void insertSection(int idx, ReportSectionDetailGroup * rsd);
+    int findSection(const QString & name);
+    void removeSection(int idx, bool del = FALSE);
 
-		void adjustSize();
-		virtual QSize sizeHint() const;
-	protected:
-		QString _query;
+    void adjustSize();
+    virtual QSize sizeHint() const;
+protected:
+    QString _query;
 
-		QString _name;
-		ReportSection * _detail;
-		ReportDesigner * _rd;
+    QString _name;
+    ReportSection * _detail;
+    ReportDesigner * _rd;
 
-		QList<ReportSectionDetailGroup*> groupList;
+    QList<ReportSectionDetailGroup*> groupList;
 
-		QVBoxLayout * vboxlayout;
+    QVBoxLayout * vboxlayout;
 
-		int _pagebreak;
+    int _pagebreak;
 };
 
 #endif

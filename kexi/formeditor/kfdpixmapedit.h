@@ -24,21 +24,22 @@
 
 #include <kexi_export.h>
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class KFORMEDITOR_EXPORT KFDPixmapEdit : public KoProperty::PixmapEdit
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KFDPixmapEdit(KoProperty::Property *property, QWidget *parent=0);
+public:
+    KFDPixmapEdit(KoProperty::Property *property, QWidget *parent = 0);
     virtual ~KFDPixmapEdit();
 
-  public slots:
+public slots:
     virtual void selectPixmap();
 
-  private:
-//		FormManager  *m_manager;
+private:
+//  FormManager  *m_manager;
 };
 
 }

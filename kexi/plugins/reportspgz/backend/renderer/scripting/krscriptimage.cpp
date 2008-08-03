@@ -26,61 +26,58 @@
 namespace Scripting
 {
 
-	Image::Image ( KRImageData *i )
-	{
-		_image = i;
-	}
+Image::Image(KRImageData *i)
+{
+    _image = i;
+}
 
 
-	Image::~Image()
-	{
-	}
+Image::~Image()
+{
+}
 
-	QPointF Image::position()
-	{
-		return _image->_pos.toPoint();
-	}
-	void Image::setPosition ( const QPointF& p )
-	{
-		_image->_pos.setPointPos ( p );
-	}
+QPointF Image::position()
+{
+    return _image->_pos.toPoint();
+}
+void Image::setPosition(const QPointF& p)
+{
+    _image->_pos.setPointPos(p);
+}
 
-	QSizeF Image::size()
-	{
-		return _image->_size.toPoint();
-	}
-	void Image::setSize ( const QSizeF& s )
-	{
-		_image->_size.setPointSize ( s );
-	}
+QSizeF Image::size()
+{
+    return _image->_size.toPoint();
+}
+void Image::setSize(const QSizeF& s)
+{
+    _image->_size.setPointSize(s);
+}
 
-	QString Image::resizeMode()
-	{
-		return _image->_resizeMode->value().toString();
-	}
+QString Image::resizeMode()
+{
+    return _image->_resizeMode->value().toString();
+}
 
-	void Image::setResizeMode ( const QString &rm )
-	{
-		if ( rm == "Stretch" )
-		{
-			_image->_resizeMode->setValue ( "Stretch" );
-		}
-		else
-		{
-			_image->_resizeMode->setValue ( "Clip" );
-		}
-	}
+void Image::setResizeMode(const QString &rm)
+{
+    if (rm == "Stretch") {
+        _image->_resizeMode->setValue("Stretch");
+    } else {
+        _image->_resizeMode->setValue("Clip");
+    }
+}
 
-	void Image::setInlineImage( const QByteArray &ba )
-	{
-		_image->setInlineImageData(ba);
-	}
-	
-	void Image::loadFromFile( const QVariant &pth )
-	{
-		QPixmap img;
+void Image::setInlineImage(const QByteArray &ba)
+{
+    _image->setInlineImageData(ba);
+}
 
-		QString str = pth.toString();
-		_image->setInlineImageData(QByteArray(), str);
-	}
+void Image::loadFromFile(const QVariant &pth)
+{
+    QPixmap img;
+
+    QString str = pth.toString();
+    _image->setInlineImageData(QByteArray(), str);
+}
 }

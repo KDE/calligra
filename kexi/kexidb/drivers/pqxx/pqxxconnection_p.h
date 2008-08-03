@@ -19,7 +19,7 @@
 //
 // C++ Interface: pqxxsqlconnectioninternal
 //
-// Description: 
+// Description:
 //
 //
 // Author: Adam Pigg <adam@piggz.co.uk>, (C) 2005
@@ -40,7 +40,7 @@ namespace KexiDB
 {
 class pqxxSqlConnectionInternal : public ConnectionInternal
 {
-  public:
+public:
     pqxxSqlConnectionInternal(Connection *conn);
 
     virtual ~pqxxSqlConnectionInternal();
@@ -52,7 +52,7 @@ class pqxxSqlConnectionInternal : public ConnectionInternal
     pqxx::result* res;
 
     KexiDB::ServerVersionInfo *version; //!< this is set in drv_connect(), so we can use it in drv_useDatabase()
-                                        //!< because pgsql really connects after "USE".
+    //!< because pgsql really connects after "USE".
 
     QString errmsg; //!< server-specific message of last operation
     int resultCode; //!< result code of last operation on server

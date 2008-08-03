@@ -35,71 +35,71 @@
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( ODBCDriver, odbc )
+KEXIDB_DRIVER_INFO(ODBCDriver, odbc)
 
-ODBCDriver::ODBCDriver( QObject *parent, const char *name, const QStringList &args )
-  : Driver( parent, name, args )
+ODBCDriver::ODBCDriver(QObject *parent, const char *name, const QStringList &args)
+        : Driver(parent, name, args)
 {
-  d->isFileDriver = false;
-  d->isDBOpenedAfterCreate = true;
-  d->features = SingleTransactions | CursorForward;
+    d->isFileDriver = false;
+    d->isDBOpenedAfterCreate = true;
+    d->features = SingleTransactions | CursorForward;
 
-  //predefined properties
-  d->properties["client_library_version"] = "";//TODO
-  d->properties["default_server_encoding"] = ""; //TODO
+    //predefined properties
+    d->properties["client_library_version"] = "";//TODO
+    d->properties["default_server_encoding"] = ""; //TODO
 
-  d->typeNames[ Field::Byte ] = "Byte";
-  d->typeNames[ Field::ShortInteger ] = "ShortInteger";
-  d->typeNames[ Field::Integer ] = "Integer";
-  d->typeNames[ Field::BigInteger ] = "BigInteger";
-  d->typeNames[ Field::Boolean ] = "Boolean";
-  d->typeNames[ Field::Date ] = "Date";
-  d->typeNames[ Field::DateTime ] = "DateTime";
-  d->typeNames[ Field::Time ] = "Time";
-  d->typeNames[ Field::Float ] = "Float";
-  d->typeNames[ Field::Double ] = "Double";
-  d->typeNames[ Field::Text ] = "Text";
-  d->typeNames[ Field::LongText ] = "CLOB";
-  d->typeNames[ Field::BLOB ] = "BLOB";
+    d->typeNames[ Field::Byte ] = "Byte";
+    d->typeNames[ Field::ShortInteger ] = "ShortInteger";
+    d->typeNames[ Field::Integer ] = "Integer";
+    d->typeNames[ Field::BigInteger ] = "BigInteger";
+    d->typeNames[ Field::Boolean ] = "Boolean";
+    d->typeNames[ Field::Date ] = "Date";
+    d->typeNames[ Field::DateTime ] = "DateTime";
+    d->typeNames[ Field::Time ] = "Time";
+    d->typeNames[ Field::Float ] = "Float";
+    d->typeNames[ Field::Double ] = "Double";
+    d->typeNames[ Field::Text ] = "Text";
+    d->typeNames[ Field::LongText ] = "CLOB";
+    d->typeNames[ Field::BLOB ] = "BLOB";
 }
 
 ODBCDriver::~ODBCDriver()
 {
 }
 
-KexiDB::Connection* ODBCDriver::drv_createConnection( ConnectionData &conn_data )
+KexiDB::Connection* ODBCDriver::drv_createConnection(ConnectionData &conn_data)
 {
-  Q_UNUSED( conn_data );
-  return 0L;
-  //return new ODBCConnection( this, conn_data );
+    Q_UNUSED(conn_data);
+    return 0L;
+    //return new ODBCConnection( this, conn_data );
 }
 
-bool ODBCDriver::isSystemDatabaseName( const QString& name ) const
+bool ODBCDriver::isSystemDatabaseName(const QString& name) const
 {
-  Q_UNUSED( name );
-  return false;
+    Q_UNUSED(name);
+    return false;
 }
 
-bool ODBCDriver::isSystemObjectName( const QString& name )
+bool ODBCDriver::isSystemObjectName(const QString& name)
 {
-  Q_UNUSED( name );
-  return false;
+    Q_UNUSED(name);
+    return false;
 }
 
-bool ODBCDriver::isSystemFieldName( const QString& name ) const
+bool ODBCDriver::isSystemFieldName(const QString& name) const
 {
-  Q_UNUSED( name );
-  return false;
+    Q_UNUSED(name);
+    return false;
 }
 
-QString ODBCDriver::escapeString( const QString& str ) const
+QString ODBCDriver::escapeString(const QString& str) const
 {
-  return str;
+    return str;
 }
 
-QByteArray ODBCDriver::escapeString( const QByteArray& str ) const
+QByteArray ODBCDriver::escapeString(const QByteArray& str) const
 {
-  return str;
+    return str;
 }
 
 #include "odbcdriver.moc"

@@ -27,15 +27,15 @@
 using namespace KexiDB;
 
 #define ERRMSG(a) \
-  { if (m_msgHandler) m_msgHandler->showErrorMessage(a); }
+    { if (m_msgHandler) m_msgHandler->showErrorMessage(a); }
 
 Object::Object(MessageHandler* handler)
-: m_previousServerResultNum(0)
-, m_previousServerResultNum2(0)
-, m_msgHandler(handler)
-, d(0) //empty
+        : m_previousServerResultNum(0)
+        , m_previousServerResultNum2(0)
+        , m_msgHandler(handler)
+        , d(0) //empty
 {
-  clearError();
+    clearError();
 }
 
 Object::~Object()
@@ -43,149 +43,148 @@ Object::~Object()
 }
 
 #define STORE_PREV_ERR \
-  m_previousServerResultNum = m_previousServerResultNum2; \
-  m_previousServerResultName = m_previousServerResultName2; \
-  m_previousServerResultNum2 = serverResult(); \
-  m_previousServerResultName2 = serverResultName(); \
-  KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " \
+    m_previousServerResultNum = m_previousServerResultNum2; \
+    m_previousServerResultName = m_previousServerResultName2; \
+    m_previousServerResultNum2 = serverResult(); \
+    m_previousServerResultName2 = serverResultName(); \
+    KexiDBDbg << "Object ERROR: " << m_previousServerResultNum2 << ": " \
     << m_previousServerResultName2 <<endl
 
-void Object::setError( int code, const QString &msg )
+void Object::setError(int code, const QString &msg)
 {
-  STORE_PREV_ERR;
-
-  m_errno=code;
-  m_errorSql = m_sql;
-  if (m_errno==ERR_OTHER && msg.isEmpty())
-    m_errMsg = i18n("Unspecified error encountered");
-  else
-    m_errMsg = msg;
-  m_hasError = code!=ERR_NONE;
-
-  if (m_hasError)
-    ERRMSG(this);
-}
-
-void Object::setError( const QString &msg )
-{
-  setError( ERR_OTHER, msg );
-}
-
-void Object::setError( const QString& title, const QString &msg )
-{
-  STORE_PREV_ERR;
-
-  m_errno=ERR_OTHER;
-  QString origMsgTitle( m_msgTitle ); //store
-  
-  m_msgTitle += title;
-  m_errMsg = msg;
-  m_errorSql = m_sql;
-  m_hasError = true;
-  if (m_hasError)
-    ERRMSG(this);
-    
-  m_msgTitle = origMsgTitle; //revert 
-}
-
-void Object::setError( KexiDB::Object *obj, const QString& prependMessage )
-{
-  setError( obj, obj ? obj->errorNum() : ERR_OTHER, prependMessage );
-}
-
-void Object::setError( KexiDB::Object *obj, int code, const QString& prependMessage )
-{
-  if (obj && (obj->errorNum()!=0 || !obj->serverErrorMsg().isEmpty())) {
     STORE_PREV_ERR;
 
-    m_errno = obj->errorNum();
-    m_hasError = obj->error();
-    if (m_errno==0) {
-      m_errno = code;
-      m_hasError = true;
-    }
-    m_errMsg = (prependMessage.isEmpty() ? QString() : (prependMessage + " ")) 
-      + obj->errorMsg();
-    m_sql = obj->m_sql;
-    m_errorSql = obj->m_errorSql;
-    m_serverResult = obj->serverResult();
-    if (m_serverResult==0) //try copied
-      m_serverResult = obj->m_serverResult;
-    m_serverResultName = obj->serverResultName();
-    if (m_serverResultName.isEmpty()) //try copied
-      m_serverResultName = obj->m_serverResultName;
-    m_serverErrorMsg = obj->serverErrorMsg();
-    if (m_serverErrorMsg.isEmpty()) //try copied
-      m_serverErrorMsg = obj->m_serverErrorMsg;
-    //override
-    if (code!=0 && code!=ERR_OTHER)
-      m_errno = code;
+    m_errno = code;
+    m_errorSql = m_sql;
+    if (m_errno == ERR_OTHER && msg.isEmpty())
+        m_errMsg = i18n("Unspecified error encountered");
+    else
+        m_errMsg = msg;
+    m_hasError = code != ERR_NONE;
+
     if (m_hasError)
-      ERRMSG(this);
-  }
-  else {
-    setError( code!=0 ? code : ERR_OTHER, prependMessage );
-  }
+        ERRMSG(this);
+}
+
+void Object::setError(const QString &msg)
+{
+    setError(ERR_OTHER, msg);
+}
+
+void Object::setError(const QString& title, const QString &msg)
+{
+    STORE_PREV_ERR;
+
+    m_errno = ERR_OTHER;
+    QString origMsgTitle(m_msgTitle);   //store
+
+    m_msgTitle += title;
+    m_errMsg = msg;
+    m_errorSql = m_sql;
+    m_hasError = true;
+    if (m_hasError)
+        ERRMSG(this);
+
+    m_msgTitle = origMsgTitle; //revert
+}
+
+void Object::setError(KexiDB::Object *obj, const QString& prependMessage)
+{
+    setError(obj, obj ? obj->errorNum() : ERR_OTHER, prependMessage);
+}
+
+void Object::setError(KexiDB::Object *obj, int code, const QString& prependMessage)
+{
+    if (obj && (obj->errorNum() != 0 || !obj->serverErrorMsg().isEmpty())) {
+        STORE_PREV_ERR;
+
+        m_errno = obj->errorNum();
+        m_hasError = obj->error();
+        if (m_errno == 0) {
+            m_errno = code;
+            m_hasError = true;
+        }
+        m_errMsg = (prependMessage.isEmpty() ? QString() : (prependMessage + " "))
+                   + obj->errorMsg();
+        m_sql = obj->m_sql;
+        m_errorSql = obj->m_errorSql;
+        m_serverResult = obj->serverResult();
+        if (m_serverResult == 0) //try copied
+            m_serverResult = obj->m_serverResult;
+        m_serverResultName = obj->serverResultName();
+        if (m_serverResultName.isEmpty()) //try copied
+            m_serverResultName = obj->m_serverResultName;
+        m_serverErrorMsg = obj->serverErrorMsg();
+        if (m_serverErrorMsg.isEmpty()) //try copied
+            m_serverErrorMsg = obj->m_serverErrorMsg;
+        //override
+        if (code != 0 && code != ERR_OTHER)
+            m_errno = code;
+        if (m_hasError)
+            ERRMSG(this);
+    } else {
+        setError(code != 0 ? code : ERR_OTHER, prependMessage);
+    }
 }
 
 void Object::clearError()
-{ 
-  m_errno = 0;
-  m_hasError = false;
-  m_errMsg.clear();
-  m_sql.clear();
-  m_errorSql.clear();
-  m_serverResult = 0;
-  m_serverResultName.clear();
-  m_serverErrorMsg.clear();
-  drv_clearServerResult();
+{
+    m_errno = 0;
+    m_hasError = false;
+    m_errMsg.clear();
+    m_sql.clear();
+    m_errorSql.clear();
+    m_serverResult = 0;
+    m_serverResultName.clear();
+    m_serverErrorMsg.clear();
+    drv_clearServerResult();
 }
 
 QString Object::serverErrorMsg()
 {
-  return m_serverErrorMsg;
+    return m_serverErrorMsg;
 }
 
 int Object::serverResult()
 {
-  return m_serverResult;
+    return m_serverResult;
 }
 
 QString Object::serverResultName()
 {
-  return m_serverResultName;
+    return m_serverResultName;
 }
 
 void Object::debugError()
 {
-  if (error()) {
-    KexiDBDbg << "KEXIDB ERROR: " << errorMsg() << endl;
-    QString s = serverErrorMsg(), sn = serverResultName();
-    if (!s.isEmpty())
-      KexiDBDbg << "KEXIDB SERVER ERRMSG: " << s << endl;
-    if (!sn.isEmpty())
-      KexiDBDbg << "KEXIDB SERVER RESULT NAME: " << sn << endl;
-    if (serverResult()!=0)
-      KexiDBDbg << "KEXIDB SERVER RESULT #: " << serverResult() << endl;
-  } else
-    KexiDBDbg << "KEXIDB OK." << endl;
+    if (error()) {
+        KexiDBDbg << "KEXIDB ERROR: " << errorMsg() << endl;
+        QString s = serverErrorMsg(), sn = serverResultName();
+        if (!s.isEmpty())
+            KexiDBDbg << "KEXIDB SERVER ERRMSG: " << s << endl;
+        if (!sn.isEmpty())
+            KexiDBDbg << "KEXIDB SERVER RESULT NAME: " << sn << endl;
+        if (serverResult() != 0)
+            KexiDBDbg << "KEXIDB SERVER RESULT #: " << serverResult() << endl;
+    } else
+        KexiDBDbg << "KEXIDB OK." << endl;
 }
 
-int Object::askQuestion( const QString& message, 
-  KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-  const KGuiItem &buttonYes, 
-  const KGuiItem &buttonNo,
-  const QString &dontShowAskAgainName,
-  int options, 
-  MessageHandler* msgHandler )
+int Object::askQuestion(const QString& message,
+                        KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                        const KGuiItem &buttonYes,
+                        const KGuiItem &buttonNo,
+                        const QString &dontShowAskAgainName,
+                        int options,
+                        MessageHandler* msgHandler)
 {
-  if (msgHandler)
-    return msgHandler->askQuestion(message, dlgType, defaultResult, buttonYes, buttonNo, 
-      dontShowAskAgainName, options);
+    if (msgHandler)
+        return msgHandler->askQuestion(message, dlgType, defaultResult, buttonYes, buttonNo,
+                                       dontShowAskAgainName, options);
 
-  if (m_msgHandler)
-    return m_msgHandler->askQuestion(message, dlgType, defaultResult, buttonYes, buttonNo, 
-      dontShowAskAgainName, options);
+    if (m_msgHandler)
+        return m_msgHandler->askQuestion(message, dlgType, defaultResult, buttonYes, buttonNo,
+                                         dontShowAskAgainName, options);
 
-  return defaultResult;
+    return defaultResult;
 }

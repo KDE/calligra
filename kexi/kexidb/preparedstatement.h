@@ -26,7 +26,8 @@
 
 #include "field.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class ConnectionInternal;
 class TableSchema;
@@ -35,19 +36,19 @@ class FieldList;
 /*! @short Prepared database command for optimizing sequences of multiple database actions
 
   Currently INSERT and SELECT statements are supported.
-  For example, wher using PreparedStatement for INSERTs, 
-  you can gain about 30% speedup compared to using multiple 
+  For example, wher using PreparedStatement for INSERTs,
+  you can gain about 30% speedup compared to using multiple
   connection.insertRecord(*tabelSchema, dbRowBuffer).
 
   To use PreparedStatement, create is using KexiDB::Connection:prepareStatement(),
   providing table schema; set up arguments using operator << ( const QVariant& value );
-  and call execute() when ready. PreparedStatement objects are accessed 
-  using KDE shared pointers, i.e KexiDB::PreparedStatement::Ptr, so you do not need 
-  to remember about destroying them. However, when underlying Connection object 
+  and call execute() when ready. PreparedStatement objects are accessed
+  using KDE shared pointers, i.e KexiDB::PreparedStatement::Ptr, so you do not need
+  to remember about destroying them. However, when underlying Connection object
   is destroyed, PreparedStatement should not be used.
 
   Let's assume tableSchema contains two columns NUMBER integer and TEXT text.
-  Following code inserts 10000 records with random numbers and text strings 
+  Following code inserts 10000 records with random numbers and text strings
   obtained elsewhere using getText(i).
   \code
   bool insertMultiple(KexiDB::Connection &conn, KexiDB::TableSchema& tableSchema)
@@ -64,45 +65,45 @@ class FieldList;
   }
   \endcode
 
-  If you do not call clearArguments() after every insert, you can insert 
+  If you do not call clearArguments() after every insert, you can insert
   the same value multiple times using execute() what increases efficiency even more.
 
-  Another use case is inserting large objects (BLOBs or CLOBs). 
-  Depending on database backend, you can avoid escaping BLOBs. 
+  Another use case is inserting large objects (BLOBs or CLOBs).
+  Depending on database backend, you can avoid escaping BLOBs.
   See KexiFormView::storeData() for example use.
 */
 class KEXI_DB_EXPORT PreparedStatement : public KShared
 {
-  public:
+public:
     typedef KSharedPtr<PreparedStatement> Ptr;
 
     //! Defines type of the prepared statement.
     enum StatementType {
-      SelectStatement, //!< SELECT statement will be prepared end executed
-      InsertStatement  //!< INSERT statement will be prepared end executed
+        SelectStatement, //!< SELECT statement will be prepared end executed
+        InsertStatement  //!< INSERT statement will be prepared end executed
     };
 
     //! Creates Prepared statement. In your code use KexiDB::Connection:prepareStatement() instead.
     PreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields,
-      const QStringList& where = QStringList());
+                      const QStringList& where = QStringList());
 
     virtual ~PreparedStatement();
 
     //! Appends argument \a value to the statement.
-    PreparedStatement& operator<< ( const QVariant& value );
+    PreparedStatement& operator<< (const QVariant& value);
 
     //! Clears arguments of the prepared statement. Usually used after execute()
     void clearArguments();
 
-    /*! Executes the prepared statement. In most cases you will need to clear 
-     arguments after executing, using clearArguments(). 
-     A number arguments set up for the statement must be the same as a number of fields 
+    /*! Executes the prepared statement. In most cases you will need to clear
+     arguments after executing, using clearArguments().
+     A number arguments set up for the statement must be the same as a number of fields
      defined in the underlying database table.
-     \return false on failure. Detailed error status can be obtained 
+     \return false on failure. Detailed error status can be obtained
      from KexiDB::Connection object used to create this statement. */
     virtual bool execute() = 0;
 
-  protected:
+protected:
 //! @todo is this portable across backends?
     QByteArray generateStatementString();
 

@@ -27,14 +27,14 @@ class KexiActionProxy;
 //! Helper class for KexiActionProxy::plugSharedActionToExternalGUI() method.
 class KAction_setEnabled_Helper : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     KAction_setEnabled_Helper(KexiActionProxy* proxy);
 
-  public slots:
+public slots:
     void slotSetEnabled(bool enabled);
 
-  protected:
+protected:
     KexiActionProxy *m_proxy;
 };
 

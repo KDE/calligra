@@ -46,13 +46,13 @@
 #include <kexiutils/utils.h>
 
 KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QWidget *parent)
- : KexiInputTableEdit(column, parent)
+        : KexiInputTableEdit(column, parent)
 {
-  setName("KexiTimeTableEdit");
+    setName("KexiTimeTableEdit");
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-  m_lineedit->setInputMask( m_formatter.inputMask() );
+    m_lineedit->setInputMask(m_formatter.inputMask());
 }
 
 KexiTimeTableEdit::~KexiTimeTableEdit()
@@ -61,96 +61,95 @@ KexiTimeTableEdit::~KexiTimeTableEdit()
 
 void KexiTimeTableEdit::setValueInInternalEditor(const QVariant &value)
 {
-  if (value.isValid() && value.toTime().isValid()) 
-    m_lineedit->setText( m_formatter.timeToString( value.toTime() ) );
-  else
-    m_lineedit->setText( QString() );
+    if (value.isValid() && value.toTime().isValid())
+        m_lineedit->setText(m_formatter.timeToString(value.toTime()));
+    else
+        m_lineedit->setText(QString());
 }
 
 void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
-  if (removeOld) {
-    //new time entering... just fill the line edit
+    if (removeOld) {
+        //new time entering... just fill the line edit
 //! @todo cut string if too long..
-    QString add(add_.toString());
-    m_lineedit->setText(add);
-    m_lineedit->setCursorPosition(add.length());
-    return;
-  }
-  setValueInInternalEditor( m_origValue );
-  m_lineedit->setCursorPosition(0); //ok?
+        QString add(add_.toString());
+        m_lineedit->setText(add);
+        m_lineedit->setCursorPosition(add.length());
+        return;
+    }
+    setValueInInternalEditor(m_origValue);
+    m_lineedit->setCursorPosition(0); //ok?
 }
 
-void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val,  
-  QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+void KexiTimeTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+                                      QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
-  Q_UNUSED(p);
-  Q_UNUSED(focused);
-  Q_UNUSED(x);
-  Q_UNUSED(w);
-  Q_UNUSED(h);
+    Q_UNUSED(p);
+    Q_UNUSED(focused);
+    Q_UNUSED(x);
+    Q_UNUSED(w);
+    Q_UNUSED(h);
 #ifdef Q_WS_WIN
-  y_offset = -1;
+    y_offset = -1;
 #else
-  y_offset = 0;
+    y_offset = 0;
 #endif
-  if (!val.isNull() && val.canConvert(QVariant::Time))
-    txt = m_formatter.timeToString(val.toTime());
-  align |= Qt::AlignLeft;
+    if (!val.isNull() && val.canConvert(QVariant::Time))
+        txt = m_formatter.timeToString(val.toTime());
+    align |= Qt::AlignLeft;
 }
 
 bool KexiTimeTableEdit::valueIsNull()
 {
-  if (m_formatter.isEmpty( m_lineedit->text() )) //empty time is null
-    return true;
-  return !timeValue().isValid();
+    if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is null
+        return true;
+    return !timeValue().isValid();
 }
 
 bool KexiTimeTableEdit::valueIsEmpty()
 {
-  return valueIsNull();// OK? TODO (nonsense?)
+    return valueIsNull();// OK? TODO (nonsense?)
 }
 
 QTime KexiTimeTableEdit::timeValue()
 {
-  return m_formatter.stringToTime( m_lineedit->text() );
+    return m_formatter.stringToTime(m_lineedit->text());
 }
 
 QVariant KexiTimeTableEdit::value()
 {
-  return m_formatter.stringToVariant( m_lineedit->text() );
+    return m_formatter.stringToVariant(m_lineedit->text());
 }
 
 bool KexiTimeTableEdit::valueIsValid()
 {
-  if (m_formatter.isEmpty( m_lineedit->text() )) //empty time is valid
-    return true;
-  return m_formatter.stringToTime( m_lineedit->text() ).isValid();
+    if (m_formatter.isEmpty(m_lineedit->text()))   //empty time is valid
+        return true;
+    return m_formatter.stringToTime(m_lineedit->text()).isValid();
 }
 
 void KexiTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
-  Q_UNUSED(visibleValue);
-  if (!value.isNull() && value.toTime().isValid())
-    qApp->clipboard()->setText( m_formatter.timeToString(value.toTime()) );
-  else
-    qApp->clipboard()->setText( QString() );
+    Q_UNUSED(visibleValue);
+    if (!value.isNull() && value.toTime().isValid())
+        qApp->clipboard()->setText(m_formatter.timeToString(value.toTime()));
+    else
+        qApp->clipboard()->setText(QString());
 }
 
 void KexiTimeTableEdit::handleAction(const QString& actionName)
 {
-  const bool alreadyVisible = m_lineedit->isVisible();
+    const bool alreadyVisible = m_lineedit->isVisible();
 
-  if (actionName=="edit_paste") {
-    const QVariant newValue( m_formatter.stringToTime( qApp->clipboard()->text() ) );
-    if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
-      emit editRequested();
-      m_lineedit->clear();
-    }
-    setValueInInternalEditor( newValue );
-  }
-  else
-    KexiInputTableEdit::handleAction(actionName);
+    if (actionName == "edit_paste") {
+        const QVariant newValue(m_formatter.stringToTime(qApp->clipboard()->text()));
+        if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+            emit editRequested();
+            m_lineedit->clear();
+        }
+        setValueInInternalEditor(newValue);
+    } else
+        KexiInputTableEdit::handleAction(actionName);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiTimeEditorFactoryItem, KexiTimeTableEdit)

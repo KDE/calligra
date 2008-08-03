@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,45 +35,49 @@
 
 namespace Scripting
 {
-	class Image;
+class Image;
 }
 
 /**
-	@author 
+ @author
 */
 class KRImageData : public KRObjectData
 {
-	public:
-		KRImageData(){createProperties();}
-		KRImageData(QDomNode & element);
-		~KRImageData(){};
-		virtual KRImageData * toImage();
-		virtual int type() const;
-		
-		void setMode ( QString );
+public:
+    KRImageData() {
+        createProperties();
+    }
+    KRImageData(QDomNode & element);
+    ~KRImageData() {};
+    virtual KRImageData * toImage();
+    virtual int type() const;
 
-		void setInlineImageData ( QByteArray, const QString& = QString());
-		void setColumn( QString );
-		QString mode();
-		bool isInline();
-		QString inlineImageData();
-		QString column();
-		
-		ORDataData data() {return ORDataData("Data Source", _controlSource->value().toString());}
-	protected:
-		QRect _rect();
-		KRSize _size;
-		KoProperty::Property * _controlSource;
-		KoProperty::Property* _resizeMode;
-		KoProperty::Property* _staticImage;
-		
-		QString _format;
+    void setMode(QString);
 
-	private:
-		static int RTTI;
-		virtual void createProperties();
-		friend class ORPreRenderPrivate;
-		friend class Scripting::Image;
+    void setInlineImageData(QByteArray, const QString& = QString());
+    void setColumn(QString);
+    QString mode();
+    bool isInline();
+    QString inlineImageData();
+    QString column();
+
+    ORDataData data() {
+        return ORDataData("Data Source", _controlSource->value().toString());
+    }
+protected:
+    QRect _rect();
+    KRSize _size;
+    KoProperty::Property * _controlSource;
+    KoProperty::Property* _resizeMode;
+    KoProperty::Property* _staticImage;
+
+    QString _format;
+
+private:
+    static int RTTI;
+    virtual void createProperties();
+    friend class ORPreRenderPrivate;
+    friend class Scripting::Image;
 };
 
 #endif

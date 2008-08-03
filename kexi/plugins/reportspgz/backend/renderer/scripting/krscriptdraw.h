@@ -26,72 +26,72 @@
 class OROPage;
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KRScriptDraw : public QObject
 {
-		Q_OBJECT
-	public:
-		KRScriptDraw ( QObject *parent = 0 );
+    Q_OBJECT
+public:
+    KRScriptDraw(QObject *parent = 0);
 
-		~KRScriptDraw();
-		void setPage(OROPage*);
-		void setOffset(QPointF);
-	public slots:
-		/**
-		Draw a rectangle
-		\param x X posistion
-		\param y Y position
-		\param w Width
-		\param h Height
-		\param lc Line Color
-		\param fc Fill Color
-		\param lw Line Width
-		\param o Opacity (0=transparent, 255=opaque)
-		*/
-		void rectangle(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
+    ~KRScriptDraw();
+    void setPage(OROPage*);
+    void setOffset(QPointF);
+public slots:
+    /**
+    Draw a rectangle
+    \param x X posistion
+    \param y Y position
+    \param w Width
+    \param h Height
+    \param lc Line Color
+    \param fc Fill Color
+    \param lw Line Width
+    \param o Opacity (0=transparent, 255=opaque)
+    */
+    void rectangle(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 
-		/**
-		Draw an ellipse
-		\param x X posistion
-		\param y Y position
-		\param w Width
-		\param h Height
-		\param lc Line Color
-		\param fc Fill Color
-		\param lw Line Width
-		\param o Opacity (0=transparent, 255=opaque)
-		 */
-		void ellipse(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
-		
-		/**
-		Draw a line
-		\param x1 Start X position
-		\param y1 Start Y Position
-		\param x2 End X position
-		\param y2 End Y position
-		\param lc Line Color
-		*/
-		void line(qreal, qreal, qreal, qreal, const QString&);
-		
-		/**
-		Draw some text
-		\param x X Position
-		\param y Y Position
-		\param txt The text
-		\param fnt The font
-		\param pt Point size
-		\param fc Foreground color
-		\param bc Background color
-		\param lc Line color
-		\param lw Line width
-		\param o Opacity (0=transparent, 255=opaque)
-		*/
-		void text(qreal, qreal, const QString &, const QString &fnt="Helvetica", int pt= 12, const QString &fc="#000000", const QString &bc="#ffffff", const QString &lc="#ffffff", qreal lw=0, int o=0);
-	private:
-		OROPage *_curPage;
-		QPointF _curOffset;
-		
+    /**
+    Draw an ellipse
+    \param x X posistion
+    \param y Y position
+    \param w Width
+    \param h Height
+    \param lc Line Color
+    \param fc Fill Color
+    \param lw Line Width
+    \param o Opacity (0=transparent, 255=opaque)
+     */
+    void ellipse(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
+
+    /**
+    Draw a line
+    \param x1 Start X position
+    \param y1 Start Y Position
+    \param x2 End X position
+    \param y2 End Y position
+    \param lc Line Color
+    */
+    void line(qreal, qreal, qreal, qreal, const QString&);
+
+    /**
+    Draw some text
+    \param x X Position
+    \param y Y Position
+    \param txt The text
+    \param fnt The font
+    \param pt Point size
+    \param fc Foreground color
+    \param bc Background color
+    \param lc Line color
+    \param lw Line width
+    \param o Opacity (0=transparent, 255=opaque)
+    */
+    void text(qreal, qreal, const QString &, const QString &fnt = "Helvetica", int pt = 12, const QString &fc = "#000000", const QString &bc = "#ffffff", const QString &lc = "#ffffff", qreal lw = 0, int o = 0);
+private:
+    OROPage *_curPage;
+    QPointF _curOffset;
+
 };
 
 #endif

@@ -28,9 +28,9 @@
 #include <kexi_global.h>
 
 KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
- : KexiDataTable(parent, true/*db-aware*/)
+        : KexiDataTable(parent, true/*db-aware*/)
 {
-  setObjectName("KexiTableDesigner_DataView");
+    setObjectName("KexiTableDesigner_DataView");
 }
 
 KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
@@ -40,50 +40,50 @@ KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 #else
 #pragma WARNING( TODO crash )
 #endif
-/*TODO
-  if (dynamic_cast<KexiDataTableView*>(tableView()) 
-    && dynamic_cast<KexiDataTableView*>(tableView())->cursor())
-  {
-    KexiMainWindowIface::global()->project()->dbConnection()->deleteCursor( 
-      dynamic_cast<KexiDataTableView*>(tableView())->cursor() );
-  }*/
+    /*TODO
+      if (dynamic_cast<KexiDataTableView*>(tableView())
+        && dynamic_cast<KexiDataTableView*>(tableView())->cursor())
+      {
+        KexiMainWindowIface::global()->project()->dbConnection()->deleteCursor(
+          dynamic_cast<KexiDataTableView*>(tableView())->cursor() );
+      }*/
 }
 
 tristate KexiTableDesigner_DataView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-  Q_UNUSED( dontStore );
+    Q_UNUSED(dontStore);
 
-  if (mode != Kexi::DataViewMode) {
-    //accept editing before switching
-//		if (!m_view->acceptRowEdit()) {
-    if (!acceptRowEdit()) {
-      return cancelled;
+    if (mode != Kexi::DataViewMode) {
+        //accept editing before switching
+//  if (!m_view->acceptRowEdit()) {
+        if (!acceptRowEdit()) {
+            return cancelled;
+        }
     }
-  }
 
-  return true;
+    return true;
 }
 
 tristate KexiTableDesigner_DataView::afterSwitchFrom(Kexi::ViewMode mode)
 {
-  Q_UNUSED( mode );
+    Q_UNUSED(mode);
 
-  if (tempData()->tableSchemaChangedInPreviousView) {
-    KexiUtils::WaitCursor wait;
-    KexiDB::Cursor *c 
-      = KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
-        *tempData()->table);
-    if (!c)
-      return false;
-    setData(c);
-    tempData()->tableSchemaChangedInPreviousView = false;
-  }
-  return true;
+    if (tempData()->tableSchemaChangedInPreviousView) {
+        KexiUtils::WaitCursor wait;
+        KexiDB::Cursor *c
+        = KexiMainWindowIface::global()->project()->dbConnection()->prepareQuery(
+              *tempData()->table);
+        if (!c)
+            return false;
+        setData(c);
+        tempData()->tableSchemaChangedInPreviousView = false;
+    }
+    return true;
 }
 
 KexiTablePart::TempData* KexiTableDesigner_DataView::tempData() const
 {
-  return static_cast<KexiTablePart::TempData*>(window()->data());
+    return static_cast<KexiTablePart::TempData*>(window()->data());
 }
 
 #include "kexitabledesigner_dataview.moc"

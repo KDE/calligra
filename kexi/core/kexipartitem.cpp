@@ -20,15 +20,15 @@
 
 #include "kexipartitem.h"
 
-namespace KexiPart {
+namespace KexiPart
+{
 class Item::Private
 {
-  public:
-    Private()
-    {
+public:
+    Private() {
     }
     int dummy;
-  // unused for now
+    // unused for now
 };
 }
 
@@ -37,21 +37,21 @@ class Item::Private
 using namespace KexiPart;
 
 Item::Item()
- : m_id(0) //- null
- , m_neverSaved(false)
- , d( new Private() )
+        : m_id(0) //- null
+        , m_neverSaved(false)
+        , d(new Private())
 {
 }
 
 Item::~Item()
 {
-  delete d;
+    delete d;
 }
 
 //-----------------------
 
 ItemDict::ItemDict()
-: QHash<int, KexiPart::Item*>()
+        : QHash<int, KexiPart::Item*>()
 {
 }
 
@@ -62,16 +62,16 @@ ItemDict::~ItemDict()
 //-----------------------
 
 ItemList::ItemList()
- : QList<KexiPart::Item*>()
+        : QList<KexiPart::Item*>()
 {
 }
 
-bool lessThan( KexiPart::Item* item1, KexiPart::Item* item2 )
+bool lessThan(KexiPart::Item* item1, KexiPart::Item* item2)
 {
-  return item1->name() < item2->name();
+    return item1->name() < item2->name();
 }
 
 void ItemList::sort()
 {
-  qSort(begin(), end(), lessThan);
+    qSort(begin(), end(), lessThan);
 }

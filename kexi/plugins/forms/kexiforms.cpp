@@ -21,5 +21,5 @@
 
 #include "kexiformpart.h"
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_form, KGenericFactory<KexiFormPart>("kexihandler_form") )
+K_EXPORT_COMPONENT_FACTORY(kexihandler_form, KGenericFactory<KexiFormPart>("kexihandler_form"))
 

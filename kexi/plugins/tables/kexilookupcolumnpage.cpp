@@ -45,22 +45,22 @@
 
 QString mimeTypeToType(const QString& mimeType)
 {
-  if (mimeType=="kexi/table")
-    return "table";
-  else if (mimeType=="kexi/query")
-    return "query";
+    if (mimeType == "kexi/table")
+        return "table";
+    else if (mimeType == "kexi/query")
+        return "query";
 //! @todo more types
-  return mimeType;
+    return mimeType;
 }
 
 QString typeToMimeType(const QString& type)
 {
-  if (type=="table")
-    return "kexi/table";
-  else if (type=="query")
-    return "kexi/query";
+    if (type == "table")
+        return "kexi/table";
+    else if (type == "query")
+        return "kexi/query";
 //! @todo more types
-  return type;
+    return type;
 }
 
 //----------------------------------------------
@@ -68,39 +68,36 @@ QString typeToMimeType(const QString& type)
 //! @internal
 class KexiLookupColumnPage::Private
 {
-  public:
+public:
     Private()
-     : currentFieldUid(-1)
-     , insideClearRowSourceSelection(false)
-     , propertySetEnabled(true)
-    {
+            : currentFieldUid(-1)
+            , insideClearRowSourceSelection(false)
+            , propertySetEnabled(true) {
     }
-    ~Private()
-    {
+    ~Private() {
     }
 
     bool hasPropertySet() const {
-      return propertySet;
+        return propertySet;
     }
 
     void setPropertySet(KoProperty::Set* aPropertySet) {
-      propertySet = aPropertySet;
+        propertySet = aPropertySet;
     }
 
     QVariant propertyValue(const Q3CString& propertyName) const {
-      return propertySet ? propertySet->property(propertyName).value() : QVariant();
+        return propertySet ? propertySet->property(propertyName).value() : QVariant();
     }
 
-    void changeProperty(const Q3CString &property, const QVariant &value)
-    {
-      if (!propertySetEnabled)
-        return;
-      propertySet->changeProperty(property, value);
+    void changeProperty(const Q3CString &property, const QVariant &value) {
+        if (!propertySetEnabled)
+            return;
+        propertySet->changeProperty(property, value);
     }
 
     void updateInfoLabelForPropertySet(const QString& textToDisplayForNullSet) {
-      KexiPropertyEditorView::updateInfoLabelForPropertySet(
-        objectInfoLabel, propertySet, textToDisplayForNullSet);
+        KexiPropertyEditorView::updateInfoLabelForPropertySet(
+            objectInfoLabel, propertySet, textToDisplayForNullSet);
     }
 
     KexiDataSourceComboBox *rowSourceCombo;
@@ -108,16 +105,16 @@ class KexiLookupColumnPage::Private
     KexiObjectInfoLabel *objectInfoLabel;
     QLabel *rowSourceLabel, *boundColumnLabel, *visibleColumnLabel;
     QToolButton *clearRowSourceButton, *gotoRowSourceButton, *clearBoundColumnButton,
-      *clearVisibleColumnButton;
+    *clearVisibleColumnButton;
     //! Used only in assignPropertySet() to check whether we already have the set assigned
     int currentFieldUid;
 
-    bool insideClearRowSourceSelection : 1;
+bool insideClearRowSourceSelection : 1;
     //! True is changeProperty() works. Used to block updating properties when within assignPropertySet().
-    bool propertySetEnabled : 1;
+bool propertySetEnabled : 1;
 
-  private:
-    //! A property set that is displayed on the page. 
+private:
+    //! A property set that is displayed on the page.
     //! The set is also updated after any change in this page's data.
     QPointer<KoProperty::Set> propertySet;
 };
@@ -125,306 +122,305 @@ class KexiLookupColumnPage::Private
 //----------------------------------------------
 
 KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
- : QWidget(parent)
- , d(new Private())
+        : QWidget(parent)
+        , d(new Private())
 {
-  setObjectName("KexiLookupColumnPage");
+    setObjectName("KexiLookupColumnPage");
 
-  Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
-  d->objectInfoLabel = new KexiObjectInfoLabel(this);
-  d->objectInfoLabel->setObjectName("KexiObjectInfoLabel");
-  vlyr->addWidget(d->objectInfoLabel);
+    Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
+    d->objectInfoLabel = new KexiObjectInfoLabel(this);
+    d->objectInfoLabel->setObjectName("KexiObjectInfoLabel");
+    vlyr->addWidget(d->objectInfoLabel);
 
-//todo	d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
-//todo	d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
+//todo d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
+//todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 
-  //-Row Source
-  QWidget *contents = new QWidget(this);
-  vlyr->addWidget(contents);
-  Q3VBoxLayout *contentsVlyr = new Q3VBoxLayout(contents);
+    //-Row Source
+    QWidget *contents = new QWidget(this);
+    vlyr->addWidget(contents);
+    Q3VBoxLayout *contentsVlyr = new Q3VBoxLayout(contents);
 
-  Q3HBoxLayout *hlyr = new Q3HBoxLayout(contentsVlyr);
-  d->rowSourceLabel = new QLabel(i18n("Row source:"), contents);
-  d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  d->rowSourceLabel->setMargin(2);
-  d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
-  d->rowSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
-  hlyr->addWidget(d->rowSourceLabel);
+    Q3HBoxLayout *hlyr = new Q3HBoxLayout(contentsVlyr);
+    d->rowSourceLabel = new QLabel(i18n("Row source:"), contents);
+    d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    d->rowSourceLabel->setMargin(2);
+    d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
+    d->rowSourceLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    hlyr->addWidget(d->rowSourceLabel);
 
-  d->gotoRowSourceButton = new KexiSmallToolButton(
-    KIcon("goto-page"), QString(), contents);
-  d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
-  d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
-  d->gotoRowSourceButton->setToolTip(i18n("Go to selected row source"));
-  hlyr->addWidget(d->gotoRowSourceButton);
-  connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
+    d->gotoRowSourceButton = new KexiSmallToolButton(
+        KIcon("goto-page"), QString(), contents);
+    d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
+    d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
+    d->gotoRowSourceButton->setToolTip(i18n("Go to selected row source"));
+    hlyr->addWidget(d->gotoRowSourceButton);
+    connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
 
-  d->clearRowSourceButton = new KexiSmallToolButton(
-    KIcon("edit-clear-locationbar-rtl"), QString(), contents);
-  d->clearRowSourceButton->setObjectName("clearRowSourceButton");
-  d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
-  d->clearRowSourceButton->setToolTip(i18n("Clear row source"));
-  hlyr->addWidget(d->clearRowSourceButton);
-  connect(d->clearRowSourceButton, SIGNAL(clicked()), this, SLOT(clearRowSourceSelection()));
+    d->clearRowSourceButton = new KexiSmallToolButton(
+        KIcon("edit-clear-locationbar-rtl"), QString(), contents);
+    d->clearRowSourceButton->setObjectName("clearRowSourceButton");
+    d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
+    d->clearRowSourceButton->setToolTip(i18n("Clear row source"));
+    hlyr->addWidget(d->clearRowSourceButton);
+    connect(d->clearRowSourceButton, SIGNAL(clicked()), this, SLOT(clearRowSourceSelection()));
 
-  d->rowSourceCombo = new KexiDataSourceComboBox(contents);
-  d->rowSourceCombo->setObjectName("rowSourceCombo");
-  d->rowSourceLabel->setBuddy(d->rowSourceCombo);
-  contentsVlyr->addWidget(d->rowSourceCombo);
+    d->rowSourceCombo = new KexiDataSourceComboBox(contents);
+    d->rowSourceCombo->setObjectName("rowSourceCombo");
+    d->rowSourceLabel->setBuddy(d->rowSourceCombo);
+    contentsVlyr->addWidget(d->rowSourceCombo);
 
-  contentsVlyr->addSpacing(8);
+    contentsVlyr->addSpacing(8);
 
-  //- Bound Column
-  hlyr = new Q3HBoxLayout(contentsVlyr);
-  d->boundColumnLabel = new QLabel(i18n("Bound column:"), contents);
-  d->boundColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  d->boundColumnLabel->setMargin(2);
-  d->boundColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
-  d->boundColumnLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
-  hlyr->addWidget(d->boundColumnLabel);
+    //- Bound Column
+    hlyr = new Q3HBoxLayout(contentsVlyr);
+    d->boundColumnLabel = new QLabel(i18n("Bound column:"), contents);
+    d->boundColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    d->boundColumnLabel->setMargin(2);
+    d->boundColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
+    d->boundColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    hlyr->addWidget(d->boundColumnLabel);
 
-  d->clearBoundColumnButton = new KexiSmallToolButton(
-    KIcon("edit-clear-locationbar-rtl"), QString(), contents);
-  d->clearBoundColumnButton->setObjectName("clearBoundColumnButton");
-  d->clearBoundColumnButton->setMinimumHeight(d->boundColumnLabel->minimumHeight());
-  d->clearBoundColumnButton->setToolTip(i18n("Clear bound column"));
-  hlyr->addWidget(d->clearBoundColumnButton);
-  connect(d->clearBoundColumnButton, SIGNAL(clicked()), this, SLOT(clearBoundColumnSelection()));
+    d->clearBoundColumnButton = new KexiSmallToolButton(
+        KIcon("edit-clear-locationbar-rtl"), QString(), contents);
+    d->clearBoundColumnButton->setObjectName("clearBoundColumnButton");
+    d->clearBoundColumnButton->setMinimumHeight(d->boundColumnLabel->minimumHeight());
+    d->clearBoundColumnButton->setToolTip(i18n("Clear bound column"));
+    hlyr->addWidget(d->clearBoundColumnButton);
+    connect(d->clearBoundColumnButton, SIGNAL(clicked()), this, SLOT(clearBoundColumnSelection()));
 
-  d->boundColumnCombo = new KexiFieldComboBox(contents);
-  d->boundColumnCombo->setObjectName("boundColumnCombo");
-  d->boundColumnLabel->setBuddy(d->boundColumnCombo);
-  contentsVlyr->addWidget(d->boundColumnCombo);
+    d->boundColumnCombo = new KexiFieldComboBox(contents);
+    d->boundColumnCombo->setObjectName("boundColumnCombo");
+    d->boundColumnLabel->setBuddy(d->boundColumnCombo);
+    contentsVlyr->addWidget(d->boundColumnCombo);
 
-  contentsVlyr->addSpacing(8);
+    contentsVlyr->addSpacing(8);
 
-  //- Visible Column
-  hlyr = new Q3HBoxLayout(contentsVlyr);
-  d->visibleColumnLabel = new QLabel(i18n("Visible column:"), contents);
-  d->visibleColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-  d->visibleColumnLabel->setMargin(2);
-  d->visibleColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
-  d->visibleColumnLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
-  hlyr->addWidget(d->visibleColumnLabel);
+    //- Visible Column
+    hlyr = new Q3HBoxLayout(contentsVlyr);
+    d->visibleColumnLabel = new QLabel(i18n("Visible column:"), contents);
+    d->visibleColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    d->visibleColumnLabel->setMargin(2);
+    d->visibleColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
+    d->visibleColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    hlyr->addWidget(d->visibleColumnLabel);
 
-  d->clearVisibleColumnButton = new KexiSmallToolButton(
-    KIcon("edit-clear-locationbar-rtl"), QString(), contents);
-  d->clearVisibleColumnButton->setObjectName("clearVisibleColumnButton");
-  d->clearVisibleColumnButton->setMinimumHeight(d->visibleColumnLabel->minimumHeight());
-  d->clearVisibleColumnButton->setToolTip(i18n("Clear visible column"));
-  hlyr->addWidget(d->clearVisibleColumnButton);
-  connect(d->clearVisibleColumnButton, SIGNAL(clicked()), this, SLOT(clearVisibleColumnSelection()));
+    d->clearVisibleColumnButton = new KexiSmallToolButton(
+        KIcon("edit-clear-locationbar-rtl"), QString(), contents);
+    d->clearVisibleColumnButton->setObjectName("clearVisibleColumnButton");
+    d->clearVisibleColumnButton->setMinimumHeight(d->visibleColumnLabel->minimumHeight());
+    d->clearVisibleColumnButton->setToolTip(i18n("Clear visible column"));
+    hlyr->addWidget(d->clearVisibleColumnButton);
+    connect(d->clearVisibleColumnButton, SIGNAL(clicked()), this, SLOT(clearVisibleColumnSelection()));
 
-  d->visibleColumnCombo = new KexiFieldComboBox(contents);
-  d->visibleColumnCombo->setObjectName("visibleColumnCombo");
-  d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
-  contentsVlyr->addWidget(d->visibleColumnCombo);
+    d->visibleColumnCombo = new KexiFieldComboBox(contents);
+    d->visibleColumnCombo->setObjectName("visibleColumnCombo");
+    d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
+    contentsVlyr->addWidget(d->visibleColumnCombo);
 
-  vlyr->addStretch(1);
+    vlyr->addStretch(1);
 
-  connect(d->rowSourceCombo, SIGNAL(textChanged(const QString &)), 
-    this, SLOT(slotRowSourceTextChanged(const QString &)));
-  connect(d->rowSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotRowSourceChanged()));
-  connect(d->boundColumnCombo, SIGNAL(selected()), this, SLOT(slotBoundColumnSelected()));
-  connect(d->visibleColumnCombo, SIGNAL(selected()), this, SLOT(slotVisibleColumnSelected()));
+    connect(d->rowSourceCombo, SIGNAL(textChanged(const QString &)),
+            this, SLOT(slotRowSourceTextChanged(const QString &)));
+    connect(d->rowSourceCombo, SIGNAL(dataSourceChanged()), this, SLOT(slotRowSourceChanged()));
+    connect(d->boundColumnCombo, SIGNAL(selected()), this, SLOT(slotBoundColumnSelected()));
+    connect(d->visibleColumnCombo, SIGNAL(selected()), this, SLOT(slotVisibleColumnSelected()));
 
-  clearBoundColumnSelection();
-  clearVisibleColumnSelection();
+    clearBoundColumnSelection();
+    clearVisibleColumnSelection();
 }
 
 KexiLookupColumnPage::~KexiLookupColumnPage()
 {
-  delete d;
+    delete d;
 }
 
 void KexiLookupColumnPage::setProject(KexiProject *prj)
 {
-  d->rowSourceCombo->setProject(prj,
-    true/*showTables*/, true/*showQueries*/
-  );
-  d->boundColumnCombo->setProject(prj);
-  d->visibleColumnCombo->setProject(prj);
+    d->rowSourceCombo->setProject(prj,
+                                  true/*showTables*/, true/*showQueries*/
+                                 );
+    d->boundColumnCombo->setProject(prj);
+    d->visibleColumnCombo->setProject(prj);
 }
 
 void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 {
-  if (!d->hasPropertySet() && !propertySet)
-    return;
-  if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt())
-    return; //already assigned
+    if (!d->hasPropertySet() && !propertySet)
+        return;
+    if (propertySet && d->currentFieldUid == (*propertySet)["uid"].value().toInt())
+        return; //already assigned
 
-  d->propertySetEnabled = false;
-  d->setPropertySet( propertySet );
-  d->updateInfoLabelForPropertySet( i18n("No field selected") );
-  
-  const bool hasRowSource = d->hasPropertySet() && !d->propertyValue("rowSourceType").isNull()
-    && !d->propertyValue("rowSource").isNull();
+    d->propertySetEnabled = false;
+    d->setPropertySet(propertySet);
+    d->updateInfoLabelForPropertySet(i18n("No field selected"));
 
-  QString rowSource, rowSourceType;
-  if (hasRowSource) {
-    rowSourceType = typeToMimeType( d->propertyValue("rowSourceType").toString() );
-    rowSource = d->propertyValue("rowSource").toString();
-  }
-  d->rowSourceCombo->setDataSource( rowSourceType, rowSource );
-  d->rowSourceLabel->setEnabled( d->hasPropertySet() );
-  d->rowSourceCombo->setEnabled( d->hasPropertySet() );
-  if (!d->hasPropertySet())
-    d->clearRowSourceButton->setEnabled( false );
+    const bool hasRowSource = d->hasPropertySet() && !d->propertyValue("rowSourceType").isNull()
+                              && !d->propertyValue("rowSource").isNull();
 
-  int boundColumn = -1, visibleColumn = -1;
-  if (d->rowSourceCombo->isSelectionValid()) {
-    boundColumn = d->propertyValue("boundColumn").toInt();
-    visibleColumn = d->propertyValue("visibleColumn").toInt();
-  }
-  d->boundColumnCombo->setFieldOrExpression(boundColumn);
-  d->visibleColumnCombo->setFieldOrExpression(visibleColumn);
-  updateBoundColumnWidgetsAvailability();
-  d->propertySetEnabled = true;
+    QString rowSource, rowSourceType;
+    if (hasRowSource) {
+        rowSourceType = typeToMimeType(d->propertyValue("rowSourceType").toString());
+        rowSource = d->propertyValue("rowSource").toString();
+    }
+    d->rowSourceCombo->setDataSource(rowSourceType, rowSource);
+    d->rowSourceLabel->setEnabled(d->hasPropertySet());
+    d->rowSourceCombo->setEnabled(d->hasPropertySet());
+    if (!d->hasPropertySet())
+        d->clearRowSourceButton->setEnabled(false);
+
+    int boundColumn = -1, visibleColumn = -1;
+    if (d->rowSourceCombo->isSelectionValid()) {
+        boundColumn = d->propertyValue("boundColumn").toInt();
+        visibleColumn = d->propertyValue("visibleColumn").toInt();
+    }
+    d->boundColumnCombo->setFieldOrExpression(boundColumn);
+    d->visibleColumnCombo->setFieldOrExpression(visibleColumn);
+    updateBoundColumnWidgetsAvailability();
+    d->propertySetEnabled = true;
 }
 
 void KexiLookupColumnPage::clearBoundColumnSelection()
 {
-  d->boundColumnCombo->setEditText("");
-  d->boundColumnCombo->setFieldOrExpression(QString());
-  slotBoundColumnSelected();
-  d->clearBoundColumnButton->setEnabled(false);
+    d->boundColumnCombo->setEditText("");
+    d->boundColumnCombo->setFieldOrExpression(QString());
+    slotBoundColumnSelected();
+    d->clearBoundColumnButton->setEnabled(false);
 }
 
 void KexiLookupColumnPage::slotBoundColumnSelected()
 {
-//	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+// KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
 //! @todo this should also work for expressions
-/*disabled	KexiDB::Field *field = d->fieldListView->schema()->field( d->boundColumnCombo->fieldOrExpression() );
-  if (field)
-    dataType = field->type();
-*/
-  d->clearBoundColumnButton->setEnabled( !d->boundColumnCombo->fieldOrExpression().isEmpty() );
-  if (!d->boundColumnCombo->fieldOrExpression().isEmpty()) {
-    kDebug() << endl;
-  }
+    /*disabled KexiDB::Field *field = d->fieldListView->schema()->field( d->boundColumnCombo->fieldOrExpression() );
+      if (field)
+        dataType = field->type();
+    */
+    d->clearBoundColumnButton->setEnabled(!d->boundColumnCombo->fieldOrExpression().isEmpty());
+    if (!d->boundColumnCombo->fieldOrExpression().isEmpty()) {
+        kDebug() << endl;
+    }
 
-  // update property set
-  if (d->hasPropertySet()) {
-    d->changeProperty("boundColumn", d->boundColumnCombo->indexOfField());
-  }
-/*
-  emit boundColumnChanged(
-    d->boundColumnCombo->fieldOrExpression(),
-    d->boundColumnCombo->fieldOrExpressionCaption(),
-    dataType
-  );*/
+    // update property set
+    if (d->hasPropertySet()) {
+        d->changeProperty("boundColumn", d->boundColumnCombo->indexOfField());
+    }
+    /*
+      emit boundColumnChanged(
+        d->boundColumnCombo->fieldOrExpression(),
+        d->boundColumnCombo->fieldOrExpressionCaption(),
+        dataType
+      );*/
 }
 
 void KexiLookupColumnPage::clearVisibleColumnSelection()
 {
-  d->visibleColumnCombo->setEditText("");
-  d->visibleColumnCombo->setFieldOrExpression(QString());
-  slotVisibleColumnSelected();
-  d->clearVisibleColumnButton->setEnabled(false);
+    d->visibleColumnCombo->setEditText("");
+    d->visibleColumnCombo->setFieldOrExpression(QString());
+    slotVisibleColumnSelected();
+    d->clearVisibleColumnButton->setEnabled(false);
 }
 
 void KexiLookupColumnPage::slotVisibleColumnSelected()
 {
-//	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+// KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
 //! @todo this should also work for expressions
-  d->clearVisibleColumnButton->setEnabled( !d->visibleColumnCombo->fieldOrExpression().isEmpty() );
+    d->clearVisibleColumnButton->setEnabled(!d->visibleColumnCombo->fieldOrExpression().isEmpty());
 
-  // update property set
-  if (d->hasPropertySet()) {
+    // update property set
+    if (d->hasPropertySet()) {
 //! @todo support expression in special "visibleExpression"
-    d->changeProperty("visibleColumn", d->visibleColumnCombo->indexOfField());
-  }
+        d->changeProperty("visibleColumn", d->visibleColumnCombo->indexOfField());
+    }
 }
 
 void KexiLookupColumnPage::slotRowSourceChanged()
 {
-  if (!d->rowSourceCombo->project())
-    return;
-  QString mime( d->rowSourceCombo->selectedMimeType() );
-  bool rowSourceFound = false;
-  QString name = d->rowSourceCombo->selectedName();
-  if ((mime=="kexi/table" || mime=="kexi/query") && d->rowSourceCombo->isSelectionValid()) {
-    KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
-      d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), mime=="kexi/table");
-    if (tableOrQuery->table() || tableOrQuery->query()) {
-//disabled			d->fieldListView->setSchema( tableOrQuery );
-/*tmp*/			delete tableOrQuery;
-      rowSourceFound = true;
-      d->boundColumnCombo->setTableOrQuery(name, mime=="kexi/table");
-      d->visibleColumnCombo->setTableOrQuery(name, mime=="kexi/table");
+    if (!d->rowSourceCombo->project())
+        return;
+    QString mime(d->rowSourceCombo->selectedMimeType());
+    bool rowSourceFound = false;
+    QString name = d->rowSourceCombo->selectedName();
+    if ((mime == "kexi/table" || mime == "kexi/query") && d->rowSourceCombo->isSelectionValid()) {
+        KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
+            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), mime == "kexi/table");
+        if (tableOrQuery->table() || tableOrQuery->query()) {
+//disabled   d->fieldListView->setSchema( tableOrQuery );
+            /*tmp*/
+            delete tableOrQuery;
+            rowSourceFound = true;
+            d->boundColumnCombo->setTableOrQuery(name, mime == "kexi/table");
+            d->visibleColumnCombo->setTableOrQuery(name, mime == "kexi/table");
+        } else {
+            delete tableOrQuery;
+        }
     }
-    else {
-      delete tableOrQuery;
+    if (!rowSourceFound) {
+        d->boundColumnCombo->setTableOrQuery("", true);
+        d->visibleColumnCombo->setTableOrQuery("", true);
     }
-  }
-  if (!rowSourceFound) {
-    d->boundColumnCombo->setTableOrQuery("", true);
-    d->visibleColumnCombo->setTableOrQuery("", true);
-  }
-  clearBoundColumnSelection();
-  clearVisibleColumnSelection();
-  d->clearRowSourceButton->setEnabled(rowSourceFound);
-  d->gotoRowSourceButton->setEnabled(rowSourceFound);
-/* disabled
-  if (dataSourceFound) {
-    slotFieldListViewSelectionChanged();
-  } else {
-    d->addField->setEnabled(false);
-  }*/
-  updateBoundColumnWidgetsAvailability();
+    clearBoundColumnSelection();
+    clearVisibleColumnSelection();
+    d->clearRowSourceButton->setEnabled(rowSourceFound);
+    d->gotoRowSourceButton->setEnabled(rowSourceFound);
+    /* disabled
+      if (dataSourceFound) {
+        slotFieldListViewSelectionChanged();
+      } else {
+        d->addField->setEnabled(false);
+      }*/
+    updateBoundColumnWidgetsAvailability();
 
-  //update property set
-  if (d->hasPropertySet()) {
-    d->changeProperty("rowSourceType", mimeTypeToType(mime));
-    d->changeProperty("rowSource", name);
-  }
+    //update property set
+    if (d->hasPropertySet()) {
+        d->changeProperty("rowSourceType", mimeTypeToType(mime));
+        d->changeProperty("rowSource", name);
+    }
 
-//disabled	emit formDataSourceChanged(mime, name);
+//disabled emit formDataSourceChanged(mime, name);
 //! @todo update d->propertySet ^^
 }
 
 void KexiLookupColumnPage::slotRowSourceTextChanged(const QString & string)
 {
-  Q_UNUSED(string);
-  const bool enable = d->rowSourceCombo->isSelectionValid();
-  if (enable) {
-    updateBoundColumnWidgetsAvailability();
-  }
-  else {
-    clearRowSourceSelection( d->rowSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/ );
-  }
+    Q_UNUSED(string);
+    const bool enable = d->rowSourceCombo->isSelectionValid();
+    if (enable) {
+        updateBoundColumnWidgetsAvailability();
+    } else {
+        clearRowSourceSelection(d->rowSourceCombo->selectedName().isEmpty()/*alsoClearComboBox*/);
+    }
 }
 
 void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 {
-  if (d->insideClearRowSourceSelection)
-    return;
-  d->insideClearRowSourceSelection = true;
-  if (alsoClearComboBox && !d->rowSourceCombo->selectedName().isEmpty())
-    d->rowSourceCombo->setDataSource("", "");
-  d->clearRowSourceButton->setEnabled(false);
-  d->gotoRowSourceButton->setEnabled(false);
-  d->insideClearRowSourceSelection = false;
+    if (d->insideClearRowSourceSelection)
+        return;
+    d->insideClearRowSourceSelection = true;
+    if (alsoClearComboBox && !d->rowSourceCombo->selectedName().isEmpty())
+        d->rowSourceCombo->setDataSource("", "");
+    d->clearRowSourceButton->setEnabled(false);
+    d->gotoRowSourceButton->setEnabled(false);
+    d->insideClearRowSourceSelection = false;
 }
 
 void KexiLookupColumnPage::slotGotoSelectedRowSource()
 {
-  QString mime = d->rowSourceCombo->selectedMimeType();
-  if (mime=="kexi/table" || mime=="kexi/query") {
-    if (d->rowSourceCombo->isSelectionValid())
-      emit jumpToObjectRequested(mime.toLatin1(), d->rowSourceCombo->selectedName().toLatin1());
-  }
+    QString mime = d->rowSourceCombo->selectedMimeType();
+    if (mime == "kexi/table" || mime == "kexi/query") {
+        if (d->rowSourceCombo->isSelectionValid())
+            emit jumpToObjectRequested(mime.toLatin1(), d->rowSourceCombo->selectedName().toLatin1());
+    }
 }
 
 void KexiLookupColumnPage::updateBoundColumnWidgetsAvailability()
 {
-  const bool hasRowSource = d->rowSourceCombo->isSelectionValid();
-  d->boundColumnCombo->setEnabled( hasRowSource );
-  d->boundColumnLabel->setEnabled( hasRowSource );
-  d->clearBoundColumnButton->setEnabled( hasRowSource && !d->boundColumnCombo->fieldOrExpression().isEmpty() );
-  d->visibleColumnCombo->setEnabled( hasRowSource );
-  d->visibleColumnLabel->setEnabled( hasRowSource );
-  d->clearVisibleColumnButton->setEnabled( hasRowSource && !d->visibleColumnCombo->fieldOrExpression().isEmpty() );
+    const bool hasRowSource = d->rowSourceCombo->isSelectionValid();
+    d->boundColumnCombo->setEnabled(hasRowSource);
+    d->boundColumnLabel->setEnabled(hasRowSource);
+    d->clearBoundColumnButton->setEnabled(hasRowSource && !d->boundColumnCombo->fieldOrExpression().isEmpty());
+    d->visibleColumnCombo->setEnabled(hasRowSource);
+    d->visibleColumnLabel->setEnabled(hasRowSource);
+    d->clearVisibleColumnButton->setEnabled(hasRowSource && !d->visibleColumnCombo->fieldOrExpression().isEmpty());
 }
 
 #include "kexilookupcolumnpage.moc"

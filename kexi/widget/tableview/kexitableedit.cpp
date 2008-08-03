@@ -34,44 +34,42 @@
 #include <kdebug.h>
 
 KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
-: QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
- ,m_column(&column)
+        : QWidget(dynamic_cast<Q3ScrollView*>(parent) ? dynamic_cast<Q3ScrollView*>(parent)->viewport() : parent)
+        , m_column(&column)
 // ,m_field(&f)
 // ,m_type(f.type()) //copied because the rest of code uses m_type
- ,m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
- ,m_usesSelectedTextColor(true)
- ,m_view(0)
+        , m_scrollView(dynamic_cast<Q3ScrollView*>(parent))
+        , m_usesSelectedTextColor(true)
+        , m_view(0)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
 {
-  setPaletteBackgroundColor( palette().color(QPalette::Active, QColorGroup::Base) );
-  installEventFilter(this);
+    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
+    installEventFilter(this);
 
-  //margins
-  if (displayedField()->isFPNumericType()) {
+    //margins
+    if (displayedField()->isFPNumericType()) {
 #ifdef Q_WS_WIN
-    m_leftMargin = 0;
+        m_leftMargin = 0;
 #else
-    m_leftMargin = 0;
+        m_leftMargin = 0;
 #endif
-  }
-  else if (displayedField()->isIntegerType()) {
+    } else if (displayedField()->isIntegerType()) {
 #ifdef Q_WS_WIN
-    m_leftMargin = 1;
+        m_leftMargin = 1;
 #else
-    m_leftMargin = 0;
+        m_leftMargin = 0;
 #endif
-  }
-  else {//default
+    } else {//default
 #ifdef Q_WS_WIN
-    m_leftMargin = 5;
+        m_leftMargin = 5;
 #else
-    m_leftMargin = 5;
+        m_leftMargin = 5;
 #endif
-  }
+    }
 
-  m_rightMargin = 0;
-  m_rightMarginWhenFocused = 0;
+    m_rightMargin = 0;
+    m_rightMarginWhenFocused = 0;
 }
 
 KexiTableEdit::~KexiTableEdit()
@@ -80,161 +78,152 @@ KexiTableEdit::~KexiTableEdit()
 
 KexiDB::Field *KexiTableEdit::displayedField() const
 {
-  if (m_column->visibleLookupColumnInfo())
-    return m_column->visibleLookupColumnInfo()->field; //mainly for lookup field in KexiComboBoxTableEdit:
+    if (m_column->visibleLookupColumnInfo())
+        return m_column->visibleLookupColumnInfo()->field; //mainly for lookup field in KexiComboBoxTableEdit:
 
-  return m_column->field(); //typical case
+    return m_column->field(); //typical case
 }
 
 void KexiTableEdit::setViewWidget(QWidget *v)
 {
-  m_view = v;
-  m_view->move(0,0);
-  m_view->installEventFilter(this);
-  setFocusProxy(m_view);
+    m_view = v;
+    m_view->move(0, 0);
+    m_view->installEventFilter(this);
+    setFocusProxy(m_view);
 }
 
-void KexiTableEdit::moveChild( QWidget * child, int x, int y )
+void KexiTableEdit::moveChild(QWidget * child, int x, int y)
 {
-  if (m_scrollView)
-    m_scrollView->moveChild(child, x, y);
+    if (m_scrollView)
+        m_scrollView->moveChild(child, x, y);
 }
 
 void KexiTableEdit::resize(int w, int h)
 {
-  QWidget::resize(w, h);
-  if (m_view) {
-    if (!layout()) { //if there is layout (eg. KexiInputTableEdit), resize is automatic
-      m_view->move(0,0);
-      m_view->resize(w, h);
+    QWidget::resize(w, h);
+    if (m_view) {
+        if (!layout()) { //if there is layout (eg. KexiInputTableEdit), resize is automatic
+            m_view->move(0, 0);
+            m_view->resize(w, h);
+        }
     }
-  }
 }
 
 bool
 KexiTableEdit::eventFilter(QObject* watched, QEvent* e)
 {
-/*	if (watched == m_view) {
-    if(e->type() == QEvent::KeyPress) {
-      QKeyEvent* ev = static_cast<QKeyEvent*>(e);
-//			if (ev->key()==Qt::Key_Tab) {
+    /* if (watched == m_view) {
+        if(e->type() == QEvent::KeyPress) {
+          QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+    //   if (ev->key()==Qt::Key_Tab) {
 
-//			}
-    }
-  }*/
+    //   }
+        }
+      }*/
 
-  if(watched == this)
-  {
-    if(e->type() == QEvent::KeyPress)
-    {
-      QKeyEvent* ev = static_cast<QKeyEvent*>(e);
+    if (watched == this) {
+        if (e->type() == QEvent::KeyPress) {
+            QKeyEvent* ev = static_cast<QKeyEvent*>(e);
 
-      if(ev->key() == Qt::Key_Escape)
-      {
-        return false;
-      }
+            if (ev->key() == Qt::Key_Escape) {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
-    else
-    {
-      return false;
-    }
-  }
-  return false;
-//	return QWidget::eventFilter(watched, e);
+    return false;
+// return QWidget::eventFilter(watched, e);
 }
 
-void KexiTableEdit::paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h )
+void KexiTableEdit::paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h)
 {
-  p->drawRect(x, y, w, h);
+    p->drawRect(x, y, w, h);
 }
 
-void KexiTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
-  QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &h  )
+void KexiTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+                                  QString &txt, int &align, int &/*x*/, int &y_offset, int &w, int &h)
 {
-  Q_UNUSED(p);
-  Q_UNUSED(focused);
-  Q_UNUSED(h);
-  KexiDB::Field *realField = displayedField();
+    Q_UNUSED(p);
+    Q_UNUSED(focused);
+    Q_UNUSED(h);
+    KexiDB::Field *realField = displayedField();
 
 #ifdef Q_WS_WIN
-//	x = 1;
-  y_offset = -1;
+// x = 1;
+    y_offset = -1;
 #else
-//	x = 1;
-  y_offset = 0;
+// x = 1;
+    y_offset = 0;
 #endif
 
-  if (realField->isFPNumericType()) {
+    if (realField->isFPNumericType()) {
 //! @todo ADD OPTION to displaying NULL VALUES as e.g. "(null)"
-    if (!val.isNull()) {
-      txt = KexiDB::formatNumberForVisibleDecimalPlaces(
-        val.toDouble(), realField->visibleDecimalPlaces());
+        if (!val.isNull()) {
+            txt = KexiDB::formatNumberForVisibleDecimalPlaces(
+                      val.toDouble(), realField->visibleDecimalPlaces());
+        }
+        w -= 6;
+        align |= Qt::AlignRight;
+    } else if (realField->isIntegerType()) {
+        qint64 num = val.toLongLong();
+        w -= 6;
+        align |= Qt::AlignRight;
+        if (!val.isNull())
+            txt = QString::number(num);
+    } else {//default:
+        if (!val.isNull()) {
+            txt = val.toString();
+        }
+        align |= Qt::AlignLeft;
     }
-    w -= 6;
-    align |= Qt::AlignRight;
-  }
-  else if (realField->isIntegerType()) {
-    qint64 num = val.toLongLong();
-    w -= 6;
-    align |= Qt::AlignRight;
-    if (!val.isNull())
-      txt = QString::number(num);
-  }
-  else {//default:
-    if (!val.isNull()) {
-      txt = val.toString();
-    }
-    align |= Qt::AlignLeft;
-  }
 }
 
-void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/, 
-  const QString& txt, int align, int x, int y_offset, int w, int h, const QColor& fillColor,
-  const QFontMetrics &fm, bool readOnly, bool fullRowSelection )
+void KexiTableEdit::paintSelectionBackground(QPainter *p, bool /*focused*/,
+        const QString& txt, int align, int x, int y_offset, int w, int h, const QColor& fillColor,
+        const QFontMetrics &fm, bool readOnly, bool fullRowSelection)
 {
-  if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
-    QRect bound=fm.boundingRect(x, y_offset, w - (x+x), h, align, txt);
-    bound.setY(0);
-    bound.setWidth( qMin( bound.width()+2, w - (x+x)+1 ) );
-    if (align & Qt::AlignLeft) {
-      bound.setX(bound.x()-1);
-    }
-    else if (align & Qt::AlignRight) {
-      bound.moveLeft( w - bound.width() ); //move to left, if too wide
-    }
+    if (!readOnly && !fullRowSelection && !txt.isEmpty()) {
+        QRect bound = fm.boundingRect(x, y_offset, w - (x + x), h, align, txt);
+        bound.setY(0);
+        bound.setWidth(qMin(bound.width() + 2, w - (x + x) + 1));
+        if (align & Qt::AlignLeft) {
+            bound.setX(bound.x() - 1);
+        } else if (align & Qt::AlignRight) {
+            bound.moveLeft(w - bound.width());   //move to left, if too wide
+        }
 //TODO align center
-    bound.setHeight(h-1);
-    p->fillRect(bound, fillColor);
-  }
-  else if (fullRowSelection) {
-    p->fillRect(0, 0, w, h, fillColor);
-  }
+        bound.setHeight(h - 1);
+        p->fillRect(bound, fillColor);
+    } else if (fullRowSelection) {
+        p->fillRect(0, 0, w, h, fillColor);
+    }
 }
 
-int KexiTableEdit::widthForValue( const QVariant &val, const QFontMetrics &fm )
+int KexiTableEdit::widthForValue(const QVariant &val, const QFontMetrics &fm)
 {
-  return fm.width( val.toString() );
+    return fm.width(val.toString());
 }
 
 void KexiTableEdit::repaintRelatedCell()
 {
-  if (dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView))
-    dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
+    if (dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView))
+        dynamic_cast<KexiDataAwareObjectInterface*>(m_scrollView)->updateCurrentCell();
 }
 
 bool KexiTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect, const QFontMetrics& fm,
-  bool focused)
+                                        bool focused)
 {
-  Q_UNUSED(value);
-  Q_UNUSED(rect);
-  Q_UNUSED(fm);
-  Q_UNUSED(focused);
-  return false;
+    Q_UNUSED(value);
+    Q_UNUSED(rect);
+    Q_UNUSED(fm);
+    Q_UNUSED(focused);
+    return false;
 }
 
 int KexiTableEdit::rightMargin(bool focused) const
 {
-  return focused ? m_rightMarginWhenFocused : m_rightMargin;
+    return focused ? m_rightMarginWhenFocused : m_rightMargin;
 }
 
 #include "kexitableedit.moc"

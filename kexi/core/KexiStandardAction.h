@@ -27,35 +27,35 @@
 class KAction;
 
 //! @short Convenience methods to access all standard Kexi actions
-/*! These actions should be used instead of hardcoding actions. 
+/*! These actions should be used instead of hardcoding actions.
 
  Note that calling any of these methods automatically adds the action
  to the action collection if the 'parent' parameter is of type KActionCollection.
 */
 namespace KexiStandardAction
 {
-  /**
-  * The standard menubar and toolbar actions.
-  */
-  enum StandardAction {
+/**
+* The standard menubar and toolbar actions.
+*/
+enum StandardAction {
     ActionNone,
 
     // Data
     SortAscending, SortDescending
-  };
+};
 
-  //! Creates an action corresponding to the KexiStandardAction::StandardAction enum.
-  KEXICORE_EXPORT KAction* create(
+//! Creates an action corresponding to the KexiStandardAction::StandardAction enum.
+KEXICORE_EXPORT KAction* create(
     StandardAction id, const QObject *recvr, const char *slot, QObject *parent);
 
-  //! @return the internal name of a given standard action
-  KEXICORE_EXPORT const char* name( StandardAction id );
+//! @return the internal name of a given standard action
+KEXICORE_EXPORT const char* name(StandardAction id);
 
-  //! Sorts data in ascending order
-  KEXICORE_EXPORT KAction *sortAscending(const QObject *recvr, const char *slot, QObject *parent);
+//! Sorts data in ascending order
+KEXICORE_EXPORT KAction *sortAscending(const QObject *recvr, const char *slot, QObject *parent);
 
-  //! Sorts data in descending order
-  KEXICORE_EXPORT KAction *sortDescending(const QObject *recvr, const char *slot, QObject *parent);
+//! Sorts data in descending order
+KEXICORE_EXPORT KAction *sortDescending(const QObject *recvr, const char *slot, QObject *parent);
 }
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,11 +26,11 @@ class QVBoxLayout;
 
 //This is a temporary solution until something better is found
 /**
-	@author 
+ @author
 */
 class ReportEntitySelector : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     ReportEntitySelector(QWidget *parent = 0);
 

@@ -29,24 +29,24 @@
 using namespace KFormDesigner;
 
 LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
- : KToggleAction(KIcon(w->pixmap()), w->name(), c)
+        : KToggleAction(KIcon(w->pixmap()), w->name(), c)
 {
-  setObjectName( QString("library_widget_" + w->className()) );
-  FormManager::self()->widgetActionGroup()->addAction( this );
-//	kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).toLatin1() << endl;
-  m_className = w->className();
-//kde4 not needed	setExclusiveGroup("LibActionWidgets");
-  setToolTip(w->name());
-  setWhatsThis(w->description());
-//	connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
+    setObjectName(QString("library_widget_" + w->className()));
+    FormManager::self()->widgetActionGroup()->addAction(this);
+// kDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).toLatin1() << endl;
+    m_className = w->className();
+//kde4 not needed setExclusiveGroup("LibActionWidgets");
+    setToolTip(w->name());
+    setWhatsThis(w->description());
+// connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
 }
 
 void
 LibActionWidget::slotToggled(bool checked)
 {
-  KToggleAction::slotToggled(checked);
-  if (checked)
-    emit prepareInsert(m_className);
+    KToggleAction::slotToggled(checked);
+    if (checked)
+        emit prepareInsert(m_className);
 }
 
 LibActionWidget::~LibActionWidget()

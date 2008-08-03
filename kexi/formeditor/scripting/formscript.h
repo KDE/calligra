@@ -28,14 +28,16 @@
 
 class ScriptManager;
 
-namespace KFormDesigner {
-  class Form;
+namespace KFormDesigner
+{
+class Form;
 }
 
-namespace Kross {
-  namespace Api  {
-    class ScriptContainer;
-  }
+namespace Kross
+{
+namespace Api  {
+class ScriptContainer;
+}
 }
 
 using namespace KFormDesigner;
@@ -43,17 +45,21 @@ using namespace KFormDesigner;
 //! A class that stores the code and events related to a single form
 class FormScript : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    FormScript(Form *form, ScriptManager *manager, const char *name=0);
+public:
+    FormScript(Form *form, ScriptManager *manager, const char *name = 0);
     ~FormScript();
 
-    EventList*  eventList()  { return  &m_list; }
-    Kross::Api::ScriptContainer*   scriptContainer()  { return m_script; }
+    EventList*  eventList()  {
+        return  &m_list;
+    }
+    Kross::Api::ScriptContainer*   scriptContainer()  {
+        return m_script;
+    }
 
     /*! \return The code of funtionName. If parameter is empty, it returns the full code of this form.*/
-    QString  getCode(const QString &functionName=QString());
+    QString  getCode(const QString &functionName = QString());
     /*! Replaces the actual form code with the string \a code.
      Called eg by (future) script editor. */
     void  setCode(const QString &code);
@@ -68,10 +74,10 @@ class FormScript : public QObject
      use these widgets in the script.  */
     void  connectEvents();
 
-  private:
+private:
     ScriptManager  *m_manager;
     Form  *m_form;
-                KSharedPtr<Kross::Api::ScriptContainer> m_script;
+    KSharedPtr<Kross::Api::ScriptContainer> m_script;
     EventList  m_list;
 };
 

@@ -29,22 +29,22 @@ class KexiProject;
 
 class KEXIEXTWIDGETS_EXPORT KexiFilterDlg : public QDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiFilterDlg(KexiProject *p, QWidget *parent=0, const char *name=0);
+public:
+    KexiFilterDlg(KexiProject *p, QWidget *parent = 0, const char *name = 0);
     ~KexiFilterDlg();
 
-    QPushButton	*createMiniButton(const QString &text);
-    void		setupCatalog(const QStringList &mimes);
-    void		setupCatalog(const QString &mime);
+    QPushButton *createMiniButton(const QString &text);
+    void  setupCatalog(const QStringList &mimes);
+    void  setupCatalog(const QString &mime);
 
-  protected slots:
-    void		insert(Q3ListViewItem *);
+protected slots:
+    void  insert(Q3ListViewItem *);
 
-  protected:
-    Q3ListView	*m_catalog;
-    KexiProject	*m_project;
+protected:
+    Q3ListView *m_catalog;
+    KexiProject *m_project;
 };
 
 #endif

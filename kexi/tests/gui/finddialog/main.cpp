@@ -24,13 +24,13 @@
 
 #include "kexifinddialog.h"
 
-int main( int argc, char ** argv )
+int main(int argc, char ** argv)
 {
-  KAboutData aboutData( "test", 0, ki18n("KFind"), "0", KLocalizedString(), KAboutData::License_LGPL );
-  KCmdLineArgs::init( argc, argv, &aboutData );
-  KApplication app;
+    KAboutData aboutData("test", 0, ki18n("KFind"), "0", KLocalizedString(), KAboutData::License_LGPL);
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
 
-  KexiFindDialog dlg(true, 0, "dialog");
+    KexiFindDialog dlg(true, 0, "dialog");
 
-  return dlg.exec();
+    return dlg.exec();
 }

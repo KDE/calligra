@@ -32,10 +32,10 @@
 using namespace Scripting;
 
 KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver, KexiDBConnectionData* connectiondata)
-    : QObject()
-    , m_connection(connection)
-    , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(this, connection->data(), false))
-    , m_driver(driver ? driver : new KexiDBDriver(this, connection->driver()))
+        : QObject()
+        , m_connection(connection)
+        , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(this, connection->data(), false))
+        , m_driver(driver ? driver : new KexiDBDriver(this, connection->driver()))
 {
     setObjectName("KexiDBConnection");
 }
@@ -44,33 +44,81 @@ KexiDBConnection::~KexiDBConnection()
 {
 }
 
-bool KexiDBConnection::hadError() const { return m_connection->error(); }
-const QString KexiDBConnection::lastError() const { return m_connection->errorMsg(); }
+bool KexiDBConnection::hadError() const
+{
+    return m_connection->error();
+}
+const QString KexiDBConnection::lastError() const
+{
+    return m_connection->errorMsg();
+}
 
-QObject* KexiDBConnection::data() { return m_connectiondata; }
-QObject* KexiDBConnection::driver() { return m_driver; }
+QObject* KexiDBConnection::data()
+{
+    return m_connectiondata;
+}
+QObject* KexiDBConnection::driver()
+{
+    return m_driver;
+}
 
-bool KexiDBConnection::connect() { return m_connection->connect(); }
-bool KexiDBConnection::isConnected() { return m_connection->isConnected(); }
-bool KexiDBConnection::disconnect() { return m_connection->disconnect(); }
+bool KexiDBConnection::connect()
+{
+    return m_connection->connect();
+}
+bool KexiDBConnection::isConnected()
+{
+    return m_connection->isConnected();
+}
+bool KexiDBConnection::disconnect()
+{
+    return m_connection->disconnect();
+}
 
-bool KexiDBConnection::isReadOnly() const { return m_connection->isReadOnly(); }
+bool KexiDBConnection::isReadOnly() const
+{
+    return m_connection->isReadOnly();
+}
 
-bool KexiDBConnection::databaseExists(const QString& dbname) { return m_connection->databaseExists(dbname); }
-const QString KexiDBConnection::currentDatabase() const { return m_connection->currentDatabase(); }
-const QStringList KexiDBConnection::databaseNames() const { return m_connection->databaseNames(); }
-bool KexiDBConnection::isDatabaseUsed() const { return m_connection->isDatabaseUsed(); }
-bool KexiDBConnection::useDatabase(const QString& dbname) { return m_connection->databaseExists(dbname) && m_connection->useDatabase(dbname); }
-bool KexiDBConnection::closeDatabase() { return m_connection->closeDatabase(); }
+bool KexiDBConnection::databaseExists(const QString& dbname)
+{
+    return m_connection->databaseExists(dbname);
+}
+const QString KexiDBConnection::currentDatabase() const
+{
+    return m_connection->currentDatabase();
+}
+const QStringList KexiDBConnection::databaseNames() const
+{
+    return m_connection->databaseNames();
+}
+bool KexiDBConnection::isDatabaseUsed() const
+{
+    return m_connection->isDatabaseUsed();
+}
+bool KexiDBConnection::useDatabase(const QString& dbname)
+{
+    return m_connection->databaseExists(dbname) && m_connection->useDatabase(dbname);
+}
+bool KexiDBConnection::closeDatabase()
+{
+    return m_connection->closeDatabase();
+}
 
-const QStringList KexiDBConnection::allTableNames() const { return m_connection->tableNames(true); }
-const QStringList KexiDBConnection::tableNames() const { return m_connection->tableNames(false); }
+const QStringList KexiDBConnection::allTableNames() const
+{
+    return m_connection->tableNames(true);
+}
+const QStringList KexiDBConnection::tableNames() const
+{
+    return m_connection->tableNames(false);
+}
 
 const QStringList KexiDBConnection::queryNames() const
 {
     bool ok = true;
     QStringList queries = m_connection->objectNames(::KexiDB::QueryObjectType, &ok);
-    if(! ok) {
+    if (! ok) {
         kDebug() << QString("Failed to determinate querynames.") << endl;
         return QStringList();
     }
@@ -81,12 +129,12 @@ QObject* KexiDBConnection::executeQueryString(const QString& sqlquery)
 {
     // The ::KexiDB::Connection::executeQuery() method does not check if we pass a valid SELECT-statement
     // or e.g. a DROP TABLE operation. So, let's check for such dangerous operations right now.
-    ::KexiDB::Parser parser( m_connection );
-    if(! parser.parse(sqlquery)) {
+    ::KexiDB::Parser parser(m_connection);
+    if (! parser.parse(sqlquery)) {
         kDebug() << QString("Failed to parse query: %1 %2").arg(parser.error().type()).arg(parser.error().error()) << endl;
         return 0;
     }
-    if( parser.query() == 0 || parser.operation() != ::KexiDB::Parser::OP_Select ) {
+    if (parser.query() == 0 || parser.operation() != ::KexiDB::Parser::OP_Select) {
         kDebug() << QString("Invalid query operation \"%1\"").arg(parser.operationString()) << endl;
         return 0;
     }
@@ -96,28 +144,46 @@ QObject* KexiDBConnection::executeQueryString(const QString& sqlquery)
 
 QObject* KexiDBConnection::executeQuerySchema(KexiDBQuerySchema* queryschema)
 {
-    ::KexiDB::Cursor* cursor = m_connection->executeQuery( *queryschema->queryschema() );
+    ::KexiDB::Cursor* cursor = m_connection->executeQuery(*queryschema->queryschema());
     return cursor ? new KexiDBCursor(this, cursor, true) : 0;
 }
 
 bool KexiDBConnection::insertRecord(QObject* obj, const QVariantList& values)
 {
     KexiDBFieldList* fieldlist = dynamic_cast< KexiDBFieldList* >(obj);
-    if( fieldlist )
+    if (fieldlist)
         return m_connection->insertRecord(*fieldlist->fieldlist(), values);
     KexiDBTableSchema* tableschema = dynamic_cast< KexiDBTableSchema* >(obj);
-    if( tableschema )
+    if (tableschema)
         return m_connection->insertRecord(*tableschema->tableschema(), values);
     return false;
 }
 
-bool KexiDBConnection::createDatabase(const QString& dbname) { return m_connection->createDatabase(dbname); }
-bool KexiDBConnection::dropDatabase(const QString& dbname) { return m_connection->dropDatabase(dbname); }
+bool KexiDBConnection::createDatabase(const QString& dbname)
+{
+    return m_connection->createDatabase(dbname);
+}
+bool KexiDBConnection::dropDatabase(const QString& dbname)
+{
+    return m_connection->dropDatabase(dbname);
+}
 
-bool KexiDBConnection::createTable(KexiDBTableSchema* tableschema) { return m_connection->createTable(tableschema->tableschema(), false); }
-bool KexiDBConnection::dropTable(const QString& tablename) { return true == m_connection->dropTable(tablename); }
-bool KexiDBConnection::alterTable(KexiDBTableSchema* fromschema, KexiDBTableSchema* toschema) { return true == m_connection->alterTable(*fromschema->tableschema(), *toschema->tableschema()); }
-bool KexiDBConnection::alterTableName(KexiDBTableSchema* tableschema, const QString& newtablename) { return m_connection->alterTableName(*tableschema->tableschema(), newtablename); }
+bool KexiDBConnection::createTable(KexiDBTableSchema* tableschema)
+{
+    return m_connection->createTable(tableschema->tableschema(), false);
+}
+bool KexiDBConnection::dropTable(const QString& tablename)
+{
+    return true == m_connection->dropTable(tablename);
+}
+bool KexiDBConnection::alterTable(KexiDBTableSchema* fromschema, KexiDBTableSchema* toschema)
+{
+    return true == m_connection->alterTable(*fromschema->tableschema(), *toschema->tableschema());
+}
+bool KexiDBConnection::alterTableName(KexiDBTableSchema* tableschema, const QString& newtablename)
+{
+    return m_connection->alterTableName(*tableschema->tableschema(), newtablename);
+}
 
 QObject* KexiDBConnection::tableSchema(const QString& tablename)
 {
@@ -129,7 +195,7 @@ bool KexiDBConnection::isEmptyTable(KexiDBTableSchema* tableschema) const
 {
     bool success;
     bool notempty = m_connection->isEmpty(*tableschema->tableschema(), success);
-    return (! (success && notempty));
+    return (!(success && notempty));
 }
 
 QObject* KexiDBConnection::querySchema(const QString& queryname)
@@ -138,22 +204,42 @@ QObject* KexiDBConnection::querySchema(const QString& queryname)
     return queryschema ? new KexiDBQuerySchema(this, queryschema, false) : 0;
 }
 
-bool KexiDBConnection::autoCommit() const { return m_connection->autoCommit(); }
-bool KexiDBConnection::setAutoCommit(bool enabled) { return m_connection->setAutoCommit(enabled); }
+bool KexiDBConnection::autoCommit() const
+{
+    return m_connection->autoCommit();
+}
+bool KexiDBConnection::setAutoCommit(bool enabled)
+{
+    return m_connection->setAutoCommit(enabled);
+}
 
 #if 0
-KexiDBTransaction* KexiDBConnection::beginTransaction() {
+KexiDBTransaction* KexiDBConnection::beginTransaction()
+{
     ::KexiDB::Transaction t = m_connection->beginTransaction();
     return new KexiDBTransaction(t);
 }
 
-bool KexiDBConnection::commitTransaction(KexiDBTransaction* transaction) { return m_connection->commitTransaction( transaction->transaction() ); }
-bool KexiDBConnection::rollbackTransaction(KexiDBTransaction* transaction) { return m_connection->rollbackTransaction( transaction->transaction() ); }
-KexiDBTransaction* KexiDBConnection::defaultTransaction() { return new KexiDBTransaction( m_connection->defaultTransaction() ); }
-void KexiDBConnection::setDefaultTransaction(KexiDBTransaction* transaction) { m_connection->setDefaultTransaction( transaction->transaction() ); }
+bool KexiDBConnection::commitTransaction(KexiDBTransaction* transaction)
+{
+    return m_connection->commitTransaction(transaction->transaction());
+}
+bool KexiDBConnection::rollbackTransaction(KexiDBTransaction* transaction)
+{
+    return m_connection->rollbackTransaction(transaction->transaction());
+}
+KexiDBTransaction* KexiDBConnection::defaultTransaction()
+{
+    return new KexiDBTransaction(m_connection->defaultTransaction());
+}
+void KexiDBConnection::setDefaultTransaction(KexiDBTransaction* transaction)
+{
+    m_connection->setDefaultTransaction(transaction->transaction());
+}
 
-Kross::Api::List* KexiDBConnection::transactions() {
-    return new Kross::Api::ListT<KexiDBTransaction>( m_connection->transactions() );
+Kross::Api::List* KexiDBConnection::transactions()
+{
+    return new Kross::Api::ListT<KexiDBTransaction>(m_connection->transactions());
 }
 #endif
 

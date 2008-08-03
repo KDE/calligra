@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,55 +33,62 @@ class KRShapeData;
 
 namespace KoProperty
 {
-	class Set;
-	class Property;
+class Set;
+class Property;
 }
 /**
-	@author 
+ @author
 */
 class KRObjectData
 {
-	public:
-		enum EntityTypes
-		{
-			EntityLine  = 65537,
-			EntityLabel = 65550,
-			EntityField = 65551,
-			EntityText  = 65552,
-			EntityBarcode = 65553,
-			EntityImage = 65554,
-			EntityChart = 65555,
-			EntityShape = 65556
-		};
-		
-		KRObjectData();
-		virtual ~KRObjectData();
+public:
+    enum EntityTypes {
+        EntityLine  = 65537,
+        EntityLabel = 65550,
+        EntityField = 65551,
+        EntityText  = 65552,
+        EntityBarcode = 65553,
+        EntityImage = 65554,
+        EntityChart = 65555,
+        EntityShape = 65556
+    };
 
-		virtual int type() const = 0;
-		virtual KRLineData * toLine();
-		virtual KRLabelData * toLabel();
-		virtual KRFieldData * toField();
-		virtual KRTextData * toText();
-		virtual KRBarcodeData * toBarcode();
-		virtual KRImageData * toImage();
-		virtual KRChartData * toChart();
-		virtual KRShapeData * toShape();
-		
-		KoProperty::Set* properties(){return _set;}
-		virtual void createProperties() =0;
-		
-		qreal Z;
-		KRPos position(){return _pos;}
+    KRObjectData();
+    virtual ~KRObjectData();
 
-		void setEntityName(const QString& n){_name->setValue(n);}
-		QString entityName(){return _name->value().toString();}
-	protected:
-		KoProperty::Set *_set;
-		KoProperty::Property *_name;
-		KRPos _pos;
+    virtual int type() const = 0;
+    virtual KRLineData * toLine();
+    virtual KRLabelData * toLabel();
+    virtual KRFieldData * toField();
+    virtual KRTextData * toText();
+    virtual KRBarcodeData * toBarcode();
+    virtual KRImageData * toImage();
+    virtual KRChartData * toChart();
+    virtual KRShapeData * toShape();
 
-		QString _oldName;
-		
+    KoProperty::Set* properties() {
+        return _set;
+    }
+    virtual void createProperties() = 0;
+
+    qreal Z;
+    KRPos position() {
+        return _pos;
+    }
+
+    void setEntityName(const QString& n) {
+        _name->setValue(n);
+    }
+    QString entityName() {
+        return _name->value().toString();
+    }
+protected:
+    KoProperty::Set *_set;
+    KoProperty::Property *_name;
+    KRPos _pos;
+
+    QString _oldName;
+
 };
 
 #endif

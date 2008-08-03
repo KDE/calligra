@@ -33,39 +33,39 @@ class KRPos;
 class KRSize;
 
 /**
-	@author
+ @author
 */
 class ReportRectEntity : public QGraphicsRectItem, public ReportEntity
 {
-	public:
-		ReportRectEntity ( ReportDesigner*);
+public:
+    ReportRectEntity(ReportDesigner*);
 
-		virtual ~ReportRectEntity();
-		void setUnit(KoUnit u);
-	protected:
-		void init(KRPos*, KRSize*, KoProperty::Set*);
-		int dpiX;
-		int dpiY;
+    virtual ~ReportRectEntity();
+    void setUnit(KoUnit u);
+protected:
+    void init(KRPos*, KRSize*, KoProperty::Set*);
+    int dpiX;
+    int dpiY;
 
-		void setSceneRect ( QPointF, QSizeF );
-		void setSceneRect ( QRectF );
-		
-		void drawHandles(QPainter*);
-		QRectF pointRect();
-		QRectF sceneRect();
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-		virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
-		virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * event );
-		virtual void hoverMoveEvent ( QGraphicsSceneHoverEvent * event );
-		virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-		
-	private:
-		int grabHandle(QPointF);
-		int _grabAction;
-		
-		KRPos* ppos;
-		KRSize* psize;
-		KoProperty::Set* pset;
+    void setSceneRect(QPointF, QSizeF);
+    void setSceneRect(QRectF);
+
+    void drawHandles(QPainter*);
+    QRectF pointRect();
+    QRectF sceneRect();
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * event);
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+private:
+    int grabHandle(QPointF);
+    int _grabAction;
+
+    KRPos* ppos;
+    KRSize* psize;
+    KoProperty::Set* pset;
 
 };
 

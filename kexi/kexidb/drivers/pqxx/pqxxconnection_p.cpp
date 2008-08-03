@@ -19,7 +19,7 @@
 //
 // C++ Implementation: pqxxsqlconnectioninternal
 //
-// Description: 
+// Description:
 //
 //
 // Author: Adam Pigg <adam@piggz.co.uk>, (C) 2005
@@ -32,10 +32,10 @@
 
 using namespace KexiDB;
 pqxxSqlConnectionInternal::pqxxSqlConnectionInternal(Connection *conn)
- : ConnectionInternal(conn)
- , pqxxsql(0)
- , res(0)
- , version(0)
+        : ConnectionInternal(conn)
+        , pqxxsql(0)
+        , res(0)
+        , version(0)
 {
 }
 
@@ -47,5 +47,5 @@ pqxxSqlConnectionInternal::~pqxxSqlConnectionInternal()
 
 void pqxxSqlConnectionInternal::storeResult()
 {
-  errmsg = "";
+    errmsg = "";
 }

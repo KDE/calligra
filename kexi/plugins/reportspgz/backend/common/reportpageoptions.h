@@ -27,16 +27,16 @@
 
 class ReportPageOptions : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     ReportPageOptions();
     ReportPageOptions(const ReportPageOptions &);
 
     ReportPageOptions & operator=(const ReportPageOptions &);
 
     enum PageOrientation {
-      Landscape = 0, // essentially false
-      Portrait = 1   // and true
+        Landscape = 0, // essentially false
+        Portrait = 1   // and true
     };
 
     qreal getMarginTop();
@@ -50,7 +50,7 @@ class ReportPageOptions : public QObject
 
     qreal widthPx();
     qreal heightPx();
-    
+
     const QString & getPageSize();
     void setPageSize(const QString & s);
     qreal getCustomWidth();
@@ -66,10 +66,10 @@ class ReportPageOptions : public QObject
     void setLabelType(const QString &);
     const QString & getLabelType();
 
-  signals:
+signals:
     void pageOptionsChanged();
 
-  private:
+private:
     qreal _marginTop;
     qreal _marginBottom;
     qreal _marginLeft;

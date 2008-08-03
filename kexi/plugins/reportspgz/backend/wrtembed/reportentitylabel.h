@@ -32,24 +32,24 @@
 //
 class ReportEntityLabel : public QObject, public ReportRectEntity, public KRLabelData
 {
-		Q_OBJECT
-	public:
-		ReportEntityLabel ( ReportDesigner *, QGraphicsScene * scene );
-		ReportEntityLabel ( QDomNode & element, ReportDesigner *, QGraphicsScene * scene );
+    Q_OBJECT
+public:
+    ReportEntityLabel(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityLabel(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
 
-		virtual ~ReportEntityLabel();
+    virtual ~ReportEntityLabel();
 
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
 
-		virtual void paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0);
-		
-		virtual ReportEntityLabel* clone(); 
-	private:
-		void init(QGraphicsScene*);
-		QRectF getTextRect();
-		
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+
+    virtual ReportEntityLabel* clone();
+private:
+    void init(QGraphicsScene*);
+    QRectF getTextRect();
+
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

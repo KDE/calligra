@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,31 +26,31 @@
 #include <kexidb/cursor.h>
 
 /**
-	@author
+ @author
 */
 class KRScriptFunctions : public QObject
 {
-	Q_OBJECT
-	public:
-		KRScriptFunctions(const KexiDB::Cursor*);
+    Q_OBJECT
+public:
+    KRScriptFunctions(const KexiDB::Cursor*);
 
-		~KRScriptFunctions();
-		void setWhere(const QString&);
-		void setSource(const QString&);
-	private:
-		KexiDB::Connection *_conn;
-		const KexiDB::Cursor *_curs;
-		QString _source;
-		qreal math(const QString &, const QString &);
-		
-		QString _where;
-	public slots:
-		qreal sum(const QString &);
-		qreal avg(const QString &);
-		qreal min(const QString &);
-		qreal max(const QString &);
-		qreal count(const QString &);
-		QVariant value(const QString &);
+    ~KRScriptFunctions();
+    void setWhere(const QString&);
+    void setSource(const QString&);
+private:
+    KexiDB::Connection *_conn;
+    const KexiDB::Cursor *_curs;
+    QString _source;
+    qreal math(const QString &, const QString &);
+
+    QString _where;
+public slots:
+    qreal sum(const QString &);
+    qreal avg(const QString &);
+    qreal min(const QString &);
+    qreal max(const QString &);
+    qreal count(const QString &);
+    QVariant value(const QString &);
 };
 
 #endif

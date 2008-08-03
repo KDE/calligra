@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.	If not, write to
+along with this program; see the file COPYING. If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -35,11 +35,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define NAMESPACE KexiDB
 #endif
 
-namespace KexiDB {
-  class ConnectionData;
+namespace KexiDB
+{
+class ConnectionData;
 }
 
-namespace NAMESPACE {
+namespace NAMESPACE
+{
 
 //! Internal Sybase connection data.
 /*! Provides a low-level API for accessing Sybase databases, that can
@@ -49,7 +51,7 @@ namespace NAMESPACE {
 class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 {
 
-  public:
+public:
     SybaseConnectionInternal(KexiDB::Connection* connection);
     virtual ~SybaseConnectionInternal();
 
@@ -61,9 +63,9 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 
     //! Selects a database that is about to be used
     bool useDatabase(const QString &dbName = QString());
-    
+
     //! Execute SQL statement on the database
-    bool executeSQL( const QString& statement );
+    bool executeSQL(const QString& statement);
 
     //! Stores last operation's result
     virtual void storeResult();
@@ -73,10 +75,10 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 
     // message handler called by call back function
     void messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext
-           , char* srvname, char* procname, int line);
-       
+                        , char* srvname, char* procname, int line);
+
     // dbProcess-Connection map
-    static QMap<DBPROCESS*,SybaseConnectionInternal*> dbProcessConnectionMap;
+    static QMap<DBPROCESS*, SybaseConnectionInternal*> dbProcessConnectionMap;
 
     // Server specific stuff
     DBPROCESS *dbProcess;
@@ -92,7 +94,7 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 /*! Provides a low-level abstraction for iterating over Sybase result sets. */
 class SybaseCursorData : public SybaseConnectionInternal
 {
-  public:
+public:
     SybaseCursorData(KexiDB::Connection* connection);
     virtual ~SybaseCursorData();
 

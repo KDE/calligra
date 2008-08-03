@@ -23,29 +23,30 @@
 #include <KComboBox>
 #include <kexi_export.h>
 
-namespace KexiDB {
-  class TableOrQuerySchema;
+namespace KexiDB
+{
+class TableOrQuerySchema;
 }
 class KexiProject;
 
-/*! This widget provides a list of fields from a table or query 
+/*! This widget provides a list of fields from a table or query
  within a combobox, so user can pick one of them.
 */
 class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiFieldComboBox(QWidget *parent);
     virtual ~KexiFieldComboBox();
 
-//		/*! Sets table or query schema \a schema. 
-//		 The schema object will be owned by the KexiFieldComboBox object. */
-//		void setSchema(KexiDB::TableOrQuerySchema* schema);
+//  /*! Sets table or query schema \a schema.
+//   The schema object will be owned by the KexiFieldComboBox object. */
+//  void setSchema(KexiDB::TableOrQuerySchema* schema);
 
-//		KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
+//  KexiDB::TableOrQuerySchema* schema() const { return m_schema; }
 
-  public slots:
+public slots:
     //! \return global project that is used to retrieve schema informationm for this combo box.
     KexiProject* project() const;
 
@@ -65,15 +66,15 @@ class KEXIEXTWIDGETS_EXPORT KexiFieldComboBox : public KComboBox
      of project is not assigned or table or query is not assigned. */
     int indexOfField() const;
 
-  signals:
+signals:
     void selected();
 
-  protected slots:
+protected slots:
     void slotActivated(int);
     void slotReturnPressed(const QString & text);
 
-  protected:
-    virtual void focusOutEvent( QFocusEvent *e );
+protected:
+    virtual void focusOutEvent(QFocusEvent *e);
 
     class Private;
     Private * const d;

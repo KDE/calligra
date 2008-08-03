@@ -36,28 +36,32 @@ class QLabel;
 //! A page within form designer's property tabbed pane, providing data source editor
 class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiDataSourcePage(QWidget *parent);
     virtual ~KexiDataSourcePage();
 
-    KexiDataSourceComboBox* dataSourceCombo() const { return m_dataSourceCombo; }
-    KexiObjectInfoLabel* objectInfoLabel() const { return m_objectInfoLabel; }
+    KexiDataSourceComboBox* dataSourceCombo() const {
+        return m_dataSourceCombo;
+    }
+    KexiObjectInfoLabel* objectInfoLabel() const {
+        return m_objectInfoLabel;
+    }
 
-  public slots:
+public slots:
     void setProject(KexiProject *prj);
     void clearDataSourceSelection(bool alsoClearComboBox = true);
     void clearWidgetDataSourceSelection();
 
-    //! Sets data source of a currently selected form. 
+    //! Sets data source of a currently selected form.
     //! This is performed on form initialization and on activating.
     void setDataSource(const QString& mimeType, const QString& name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
 
-  signals:
+signals:
     //! Signal emitted when helper button 'go to selected data source' is clicked.
     void jumpToObjectRequested(const QString& mime, const QString& name);
 
@@ -65,16 +69,16 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
     void formDataSourceChanged(const QString& mime, const QString& name);
 
     /*! Signal emitted when current widget's data source (field/expression)
-     has been changed. It's connected to the Form Manager. 
+     has been changed. It's connected to the Form Manager.
      \a caption for this field is also provided (e.g. AutoField form widget use it) */
     void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption,
-      KexiDB::Field::Type type);
+                                            KexiDB::Field::Type type);
 
     /*! Signal emitted when 'insert fields' button has been clicked */
     void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-      const QStringList& fields);
+                          const QStringList& fields);
 
-  protected slots:
+protected slots:
     void slotDataSourceTextChanged(const QString & string);
     void slotDataSourceChanged();
     void slotFieldSelected();
@@ -82,21 +86,21 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
     void slotInsertSelectedFields();
     void slotFieldListViewSelectionChanged();
     void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
-      const QString& fieldName);
+                                const QString& fieldName);
 
-  protected:
+protected:
     void updateSourceFieldWidgetsAvailability();
 
     KexiFieldComboBox *m_sourceFieldCombo;
     KexiObjectInfoLabel *m_objectInfoLabel;
     KexiDataSourceComboBox* m_dataSourceCombo;
-    QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel, 
-      *m_widgetDSLabel, *m_availableFieldsLabel,
-      *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
+    QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
+    *m_widgetDSLabel, *m_availableFieldsLabel,
+    *m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
     QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
-//		QFrame *m_dataSourceSeparator;
+//  QFrame *m_dataSourceSeparator;
     QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;
-    bool m_insideClearDataSourceSelection : 1;
+bool m_insideClearDataSourceSelection : 1;
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
     KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
 #else

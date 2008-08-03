@@ -30,21 +30,23 @@
 //! @short A db-aware int spin box
 class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public KexiFormDataItemInterface
 {
-  Q_OBJECT
-  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-  Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
+    Q_OBJECT
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 
-  public:
+public:
     KexiDBDoubleSpinBox(QWidget *parent);
     virtual ~KexiDBDoubleSpinBox();
 
-    inline QString dataSource() const
-      { return KexiFormDataItemInterface::dataSource(); }
-    inline QString dataSourceMimeType() const
-      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourceMimeType() const {
+        return KexiFormDataItemInterface::dataSourceMimeType();
+    }
     virtual QVariant value();
-    virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState(const QString& displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -66,20 +68,22 @@ class KEXIFORMUTILS_EXPORT KexiDBDoubleSpinBox : public KDoubleSpinBox, public K
     virtual bool cursorAtEnd();
     virtual void clear();
 
-  public slots:
+public slots:
     virtual void setEnabled(bool enabled);
-    inline void setDataSource(const QString &ds)
-      { KexiFormDataItemInterface::setDataSource(ds); }
-    inline void setDataSourceMimeType(const QString &ds)
-      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
+    }
+    inline void setDataSourceMimeType(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    }
     void slotValueChanged();
     virtual void setReadOnly(bool set);
 
-  protected:
+protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
-  private:
-    bool m_invalidState : 1;
+private:
+bool m_invalidState : 1;
 };
 
 #endif

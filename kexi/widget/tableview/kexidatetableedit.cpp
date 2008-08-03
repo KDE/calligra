@@ -48,13 +48,13 @@
 
 
 KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent)
- : KexiInputTableEdit(column, parent)
+        : KexiInputTableEdit(column, parent)
 {
-  setName("KexiDateTableEdit");
+    setName("KexiDateTableEdit");
 
 //! @todo add QValidator so date like "2006-59-67" cannot be even entered
 
-  m_lineedit->setInputMask( m_formatter.inputMask() );
+    m_lineedit->setInputMask(m_formatter.inputMask());
 }
 
 KexiDateTableEdit::~KexiDateTableEdit()
@@ -63,98 +63,97 @@ KexiDateTableEdit::~KexiDateTableEdit()
 
 void KexiDateTableEdit::setValueInInternalEditor(const QVariant &value)
 {
-  if (value.isValid() && value.toDate().isValid()) 
-    m_lineedit->setText( m_formatter.dateToString( value.toDate() ) );
-  else
-    m_lineedit->setText( QString() );
+    if (value.isValid() && value.toDate().isValid())
+        m_lineedit->setText(m_formatter.dateToString(value.toDate()));
+    else
+        m_lineedit->setText(QString());
 }
 
 void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
-  if (removeOld) {
-    //new date entering... just fill the line edit
+    if (removeOld) {
+        //new date entering... just fill the line edit
 //! @todo cut string if too long..
-    QString add(add_.toString());
-    m_lineedit->setText(add);
-    m_lineedit->setCursorPosition(add.length());
-    return;
-  }
-  setValueInInternalEditor( m_origValue );
-  m_lineedit->setCursorPosition(0); //ok?
+        QString add(add_.toString());
+        m_lineedit->setText(add);
+        m_lineedit->setCursorPosition(add.length());
+        return;
+    }
+    setValueInInternalEditor(m_origValue);
+    m_lineedit->setCursorPosition(0); //ok?
 }
 
-void KexiDateTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
-  QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+void KexiDateTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+                                      QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
-  Q_UNUSED(p);
-  Q_UNUSED(focused);
-  Q_UNUSED(x);
-  Q_UNUSED(w);
-  Q_UNUSED(h);
+    Q_UNUSED(p);
+    Q_UNUSED(focused);
+    Q_UNUSED(x);
+    Q_UNUSED(w);
+    Q_UNUSED(h);
 #ifdef Q_WS_WIN
-  y_offset = -1;
+    y_offset = -1;
 #else
-  y_offset = 0;
+    y_offset = 0;
 #endif
-  if (val.toDate().isValid())
-    txt = m_formatter.dateToString(val.toDate());
-//		txt = val.toDate().toString(Qt::LocalDate);
-  align |= Qt::AlignLeft;
+    if (val.toDate().isValid())
+        txt = m_formatter.dateToString(val.toDate());
+//  txt = val.toDate().toString(Qt::LocalDate);
+    align |= Qt::AlignLeft;
 }
 
 bool KexiDateTableEdit::valueIsNull()
 {
-//	if (m_lineedit->text().replace(m_formatter.separator(),"").trimmed().isEmpty())
-  if (m_formatter.isEmpty(m_lineedit->text())) //empty date is null
-    return true;
-  return dateValue().isNull();
+// if (m_lineedit->text().replace(m_formatter.separator(),"").trimmed().isEmpty())
+    if (m_formatter.isEmpty(m_lineedit->text())) //empty date is null
+        return true;
+    return dateValue().isNull();
 }
 
 bool KexiDateTableEdit::valueIsEmpty()
 {
-  return valueIsNull();//js OK? TODO (nonsense?)
+    return valueIsNull();//js OK? TODO (nonsense?)
 }
 
 QDate KexiDateTableEdit::dateValue() const
 {
-  return m_formatter.stringToDate( m_lineedit->text() );
+    return m_formatter.stringToDate(m_lineedit->text());
 }
 
 QVariant KexiDateTableEdit::value()
 {
-  return m_formatter.stringToVariant( m_lineedit->text() );
+    return m_formatter.stringToVariant(m_lineedit->text());
 }
 
 bool KexiDateTableEdit::valueIsValid()
 {
-  if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
-    return true;
-  return m_formatter.stringToDate( m_lineedit->text() ).isValid();
+    if (m_formatter.isEmpty(m_lineedit->text())) //empty date is valid
+        return true;
+    return m_formatter.stringToDate(m_lineedit->text()).isValid();
 }
 
 void KexiDateTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
-  Q_UNUSED(visibleValue);
-  if (!value.isNull() && value.toDate().isValid())
-    qApp->clipboard()->setText( m_formatter.dateToString(value.toDate()) );
-  else
-    qApp->clipboard()->setText( QString() );
+    Q_UNUSED(visibleValue);
+    if (!value.isNull() && value.toDate().isValid())
+        qApp->clipboard()->setText(m_formatter.dateToString(value.toDate()));
+    else
+        qApp->clipboard()->setText(QString());
 }
 
 void KexiDateTableEdit::handleAction(const QString& actionName)
 {
-  const bool alreadyVisible = m_lineedit->isVisible();
+    const bool alreadyVisible = m_lineedit->isVisible();
 
-  if (actionName=="edit_paste") {
-    const QVariant newValue( m_formatter.stringToDate(qApp->clipboard()->text()) );
-    if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
-      emit editRequested();
-      m_lineedit->clear();
-    }
-    setValueInInternalEditor( newValue );
-  }
-  else
-    KexiInputTableEdit::handleAction(actionName);
+    if (actionName == "edit_paste") {
+        const QVariant newValue(m_formatter.stringToDate(qApp->clipboard()->text()));
+        if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+            emit editRequested();
+            m_lineedit->clear();
+        }
+        setValueInInternalEditor(newValue);
+    } else
+        KexiInputTableEdit::handleAction(actionName);
 }
 
 /*
@@ -229,7 +228,7 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
   {
     // there was a number character passed as 'add' parameter in init():
     moveToFirstSection();
-    QKeyEvent ke(QEvent::KeyPress, int(Qt::Key_0)+m_setNumberOnFocus, 
+    QKeyEvent ke(QEvent::KeyPress, int(Qt::Key_0)+m_setNumberOnFocus,
       '0'+m_setNumberOnFocus, 0, QString::number(m_setNumberOnFocus));
     QApplication::sendEvent( m_dte_date_obj, &ke );
     m_setNumberOnFocus = -1;
@@ -272,7 +271,7 @@ bool KexiDateTableEdit::cursorAtStart()
 bool KexiDateTableEdit::cursorAtEnd()
 {
 #ifdef QDateTimeEditor_HACK
-  return m_dte_date && m_edit->hasFocus() 
+  return m_dte_date && m_edit->hasFocus()
     && m_dte_date->focusSection()==int(m_dte_date->sectionCount()-1);
 #else
   return false;

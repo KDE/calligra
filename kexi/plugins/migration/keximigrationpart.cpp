@@ -24,7 +24,7 @@
 #include <kgenericfactory.h>
 
 KexiMigrationPart::KexiMigrationPart(QObject *parent, const QStringList &args)
- : KexiInternalPart(parent, args)
+        : KexiInternalPart(parent, args)
 {
 }
 
@@ -32,13 +32,13 @@ KexiMigrationPart::~KexiMigrationPart()
 {
 }
 
-QWidget *KexiMigrationPart::createWidget(const char* /*widgetClass*/, 
- QWidget *parent, const char *objName, QMap<QString,QString>* args )
+QWidget *KexiMigrationPart::createWidget(const char* /*widgetClass*/,
+        QWidget *parent, const char *objName, QMap<QString, QString>* args)
 {
-  KexiMigration::ImportWizard *w = new KexiMigration::ImportWizard(parent, args);
-  w->setName(objName);
-  return w;
+    KexiMigration::ImportWizard *w = new KexiMigration::ImportWizard(parent, args);
+    w->setName(objName);
+    return w;
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_migration, 
-  KGenericFactory<KexiMigrationPart>("kexihandler_migration") )
+K_EXPORT_COMPONENT_FACTORY(kexihandler_migration,
+                           KGenericFactory<KexiMigrationPart>("kexihandler_migration"))

@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,80 +25,86 @@
 #include "krsize.h"
 #include <parsexmlutils.h>
 /**
-	@author 
+ @author
 */
 
 namespace Scripting
 {
-	class Field;
+class Field;
 }
 
 class KRFieldData : public KRObjectData
 {
-	public:
-		KRFieldData(){createProperties();};
-		KRFieldData ( QDomNode & element);
-		~KRFieldData();
-		virtual KRFieldData * toField();
-		virtual int type() const;
+public:
+    KRFieldData() {
+        createProperties();
+    };
+    KRFieldData(QDomNode & element);
+    ~KRFieldData();
+    virtual KRFieldData * toField();
+    virtual int type() const;
 
-		Qt::Alignment textFlags() const;
-		void setTextFlags ( Qt::Alignment );
-		QFont font() const {return _font->value().value<QFont>();}
-		
-		ORDataData data() {return ORDataData("Data Source", _controlSource->value().toString());}
-		
-		void setColumn ( const QString& );
-		void setTrackTotal ( bool );
-		void setTrackTotalFormat ( const QString &, bool=FALSE );
-		void setUseSubTotal ( bool );
+    Qt::Alignment textFlags() const;
+    void setTextFlags(Qt::Alignment);
+    QFont font() const {
+        return _font->value().value<QFont>();
+    }
 
-		QString column() const;
-		//bool trackTotal();
-		//bool trackBuiltinFormat();
-		//bool useSubTotal();
-		//QString trackTotalFormat();
-		
-		ORLineStyleData lineStyle();
-		ORTextStyleData textStyle();
-	protected:
-		
-		QRect _rect;
-		KRSize _size;	
-		KoProperty::Property * _controlSource;
-		KoProperty::Property * _hAlignment;
-		KoProperty::Property * _vAlignment;
-		KoProperty::Property * _font;
-		KoProperty::Property * _trackTotal;
-		KoProperty::Property * _trackBuiltinFormat;
-		KoProperty::Property * _useSubTotal;
-		KoProperty::Property * _trackTotalFormat;
-		KoProperty::Property * _fgColor;
-		KoProperty::Property * _bgColor;
-		KoProperty::Property* _bgOpacity;
-		KoProperty::Property* _lnColor;
-		KoProperty::Property* _lnWeight;
-		KoProperty::Property* _lnStyle;
-		
-		
-		//QFont font;
-		//int align;
-		//ORDataData data;
-		//ORTextStyleData textStyle;
+    ORDataData data() {
+        return ORDataData("Data Source", _controlSource->value().toString());
+    }
 
-		//bool trackTotal;
-		//bool sub_total;
-		//bool builtinFormat;
-		//QString format;
-		
-		QStringList fieldNames(const QString &);
-		
-	private:
-		virtual void createProperties();
-		static int RTTI;
-		
-		friend class ORPreRenderPrivate;
-		friend class Scripting::Field;
+    void setColumn(const QString&);
+    void setTrackTotal(bool);
+    void setTrackTotalFormat(const QString &, bool = FALSE);
+    void setUseSubTotal(bool);
+
+    QString column() const;
+    //bool trackTotal();
+    //bool trackBuiltinFormat();
+    //bool useSubTotal();
+    //QString trackTotalFormat();
+
+    ORLineStyleData lineStyle();
+    ORTextStyleData textStyle();
+protected:
+
+    QRect _rect;
+    KRSize _size;
+    KoProperty::Property * _controlSource;
+    KoProperty::Property * _hAlignment;
+    KoProperty::Property * _vAlignment;
+    KoProperty::Property * _font;
+    KoProperty::Property * _trackTotal;
+    KoProperty::Property * _trackBuiltinFormat;
+    KoProperty::Property * _useSubTotal;
+    KoProperty::Property * _trackTotalFormat;
+    KoProperty::Property * _fgColor;
+    KoProperty::Property * _bgColor;
+    KoProperty::Property* _bgOpacity;
+    KoProperty::Property* _lnColor;
+    KoProperty::Property* _lnWeight;
+    KoProperty::Property* _lnStyle;
+
+
+    //QFont font;
+    //int align;
+    //ORDataData data;
+    //ORTextStyleData textStyle;
+
+    //bool trackTotal;
+    //bool sub_total;
+    //bool builtinFormat;
+    //QString format;
+
+    QStringList fieldNames(const QString &);
+
+private:
+    virtual void createProperties();
+    static int RTTI;
+
+    friend class ORPreRenderPrivate;
+    friend class Scripting::Field;
 };
 
 #endif

@@ -25,8 +25,9 @@
 
 #include <kexieditor.h>
 
-namespace Kross {
-  class Action;
+namespace Kross
+{
+class Action;
 }
 
 /**
@@ -35,43 +36,43 @@ namespace Kross {
  */
 class KexiScriptEditor : public KexiEditor
 {
-        Q_OBJECT
+    Q_OBJECT
 
-    public:
+public:
 
-        /**
-         * Constructor.
-         */
-        KexiScriptEditor(QWidget *parent);
+    /**
+     * Constructor.
+     */
+    KexiScriptEditor(QWidget *parent);
 
-        /**
-         * Destructor.
-         */
-        virtual ~KexiScriptEditor();
+    /**
+     * Destructor.
+     */
+    virtual ~KexiScriptEditor();
 
-        /**
-         * \returns true if this editor is already initialized (\a initialize was
-         * called) else false is returned.
-         */
-        bool isInitialized() const;
+    /**
+     * \returns true if this editor is already initialized (\a initialize was
+     * called) else false is returned.
+     */
+    bool isInitialized() const;
 
-        /**
-         * Initializes the editor. Call this if you like to start
-         * with a clear editor instance. Thinks like the language
-         * highlighter will be reset, undo/redo are cleared and
-         * setDirty(false) is set.
-         */
-        void initialize(Kross::Action* scriptaction);
+    /**
+     * Initializes the editor. Call this if you like to start
+     * with a clear editor instance. Thinks like the language
+     * highlighter will be reset, undo/redo are cleared and
+     * setDirty(false) is set.
+     */
+    void initialize(Kross::Action* scriptaction);
 
-    public slots:
-        void slotTextChanged();
-        void setLineNo(long);
+public slots:
+    void slotTextChanged();
+    void setLineNo(long);
 
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

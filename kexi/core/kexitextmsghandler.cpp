@@ -24,12 +24,12 @@
 #include <kexiutils/utils.h>
 
 KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget)
-  : KexiGUIMessageHandler(0)
-  , m_messageTarget(&messageTarget)
-  , m_detailsTarget(&detailsTarget)
+        : KexiGUIMessageHandler(0)
+        , m_messageTarget(&messageTarget)
+        , m_detailsTarget(&detailsTarget)
 {
-  m_messageTarget->clear();
-  m_detailsTarget->clear();
+    m_messageTarget->clear();
+    m_detailsTarget->clear();
 }
 
 KexiTextMessageHandler::~KexiTextMessageHandler()
@@ -38,20 +38,20 @@ KexiTextMessageHandler::~KexiTextMessageHandler()
 
 void
 KexiTextMessageHandler::showMessage(MessageType type,
-  const QString &title, const QString &details)
+                                    const QString &title, const QString &details)
 {
-  Q_UNUSED(type);
-  if (!m_enableMessages)
-    return;
+    Q_UNUSED(type);
+    if (!m_enableMessages)
+        return;
 
-  //'wait' cursor is a nonsense now
-  KexiUtils::removeWaitCursor();
+    //'wait' cursor is a nonsense now
+    KexiUtils::removeWaitCursor();
 
-  QString msg(title);
-  if (title.isEmpty())
-    msg = i18n("Unknown error");
-  msg = "<qt><p>"+msg+"</p>";
-  *m_messageTarget = msg;
-  *m_detailsTarget = details;
+    QString msg(title);
+    if (title.isEmpty())
+        msg = i18n("Unknown error");
+    msg = "<qt><p>" + msg + "</p>";
+    *m_messageTarget = msg;
+    *m_detailsTarget = details;
 }
 

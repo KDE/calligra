@@ -32,20 +32,20 @@ class ConnectionTestThread;
 class ConnectionTestDialog : protected KProgressDialog
 {
     Q_OBJECT
-  public:
-    ConnectionTestDialog(QWidget* parent, 
-      const KexiDB::ConnectionData& data, KexiDB::MessageHandler& msgHandler);
+public:
+    ConnectionTestDialog(QWidget* parent,
+                         const KexiDB::ConnectionData& data, KexiDB::MessageHandler& msgHandler);
     virtual ~ConnectionTestDialog();
 
     int exec();
 
     void error(KexiDB::Object *obj);
 
-  protected slots:
+protected slots:
     void slotTimeout();
     virtual void reject();
 
-  protected:
+protected:
     ConnectionTestThread* m_thread;
     KexiDB::ConnectionData m_connData;
     QTimer m_timer;
@@ -53,7 +53,7 @@ class ConnectionTestDialog : protected KProgressDialog
     uint m_elapsedTime;
     KexiDB::Object *m_errorObj;
     QWaitCondition m_wait;
-    bool m_stopWaiting : 1;
+bool m_stopWaiting : 1;
 };
 
 #endif

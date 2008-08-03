@@ -33,35 +33,35 @@
 
 
 KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
- : appearance(t)
+        : appearance(t)
 {
-  clearVariables();
-  tv = t;
-  editOnDoubleClick = true;
-//Qt4	pBufferPm = 0;
-  disableDrawContents = false;
-  navigatorEnabled = true;
-  contextMenuEnabled = true;
-  skipKeyPress = false;
-//moved	vScrollBarValueChanged_enabled = true;
-//moved	scrollbarToolTipsEnabled = true;
-//moved	scrollBarTipTimerCnt = 0;
-//moved	scrollBarTip = 0;
-  ensureCellVisibleOnShow = QPoint(-1,-1);
-  internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height()/2;
-  highlightedRow = -1;
-  moveCursorOnMouseRelease = false;
-  horizontalHeaderVisible = true;
-  recentCellWithToolTip = QPoint(-1,-1);
+    clearVariables();
+    tv = t;
+    editOnDoubleClick = true;
+//Qt4 pBufferPm = 0;
+    disableDrawContents = false;
+    navigatorEnabled = true;
+    contextMenuEnabled = true;
+    skipKeyPress = false;
+//moved vScrollBarValueChanged_enabled = true;
+//moved scrollbarToolTipsEnabled = true;
+//moved scrollBarTipTimerCnt = 0;
+//moved scrollBarTip = 0;
+    ensureCellVisibleOnShow = QPoint(-1, -1);
+    internal_bottomMargin = tv->horizontalScrollBar()->sizeHint().height() / 2;
+    highlightedRow = -1;
+    moveCursorOnMouseRelease = false;
+    horizontalHeaderVisible = true;
+    recentCellWithToolTip = QPoint(-1, -1);
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
-//Qt4	delete pBufferPm;
-//moved	delete scrollBarTip;
+//Qt4 delete pBufferPm;
+//moved delete scrollBarTip;
 }
 
 void KexiTableViewPrivate::clearVariables()
 {
-  // Initialize variables
+    // Initialize variables
 }

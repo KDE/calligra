@@ -27,21 +27,23 @@
 #include "kexiaddparamwidget.h"
 
 KexiAddParamDialog::KexiAddParamDialog(QWidget *parent)
- : KDialog(parent, "kexiaddparamdialog", true, i18n("Add Parameter"), KDialog::Ok|KDialog::Cancel, KDialog::Ok, true)
+        : KDialog(parent, "kexiaddparamdialog", true, i18n("Add Parameter"), KDialog::Ok | KDialog::Cancel, KDialog::Ok, true)
 {
-  m_wid=new KexiAddParamWidget(makeVBoxMainWidget());
-  for (int i=1;i<=KexiDataProvider::Parameter::maxType;i++)
-    m_wid->typecombo->insertItem(KexiDataProvider::Parameter::typeDescription[i]);
+    m_wid = new KexiAddParamWidget(makeVBoxMainWidget());
+    for (int i = 1;i <= KexiDataProvider::Parameter::maxType;i++)
+        m_wid->typecombo->insertItem(KexiDataProvider::Parameter::typeDescription[i]);
 }
 
 KexiAddParamDialog::~KexiAddParamDialog()
 {
 }
 
-QString KexiAddParamDialog::parameterName() {
-  return m_wid->paramname->text();
+QString KexiAddParamDialog::parameterName()
+{
+    return m_wid->paramname->text();
 }
 
-int KexiAddParamDialog::parameterType() {
-  return m_wid->typecombo->currentItem()+1;
+int KexiAddParamDialog::parameterType()
+{
+    return m_wid->typecombo->currentItem() + 1;
 }

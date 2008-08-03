@@ -27,66 +27,67 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/parser/parser.h>
 
-namespace Scripting {
+namespace Scripting
+{
 
-    // Forward declaration.
-    class KexiDBConnection;
-    class KexiDBTableSchema;
-    class KexiDBQuerySchema;
+// Forward declaration.
+class KexiDBConnection;
+class KexiDBTableSchema;
+class KexiDBQuerySchema;
 
-    /**
-    * The KexiDBParser could be used to parse SQL-statements.
-    *
-    * Example (in Python) ;
-    * @code
-    * # First we need a parser object.
-    * parser = connection.parser()
-    * # Parse a SQL-statement.
-    * parser.parse("SELECT * from table1")
-    * # The operation could be e.g. SELECT or INSERT.
-    * if parser.operation() == 'Error':
-    *     raise parser.errorMsg()
-    * # Print some feedback.
-    * print "Successfully parsed the SQL-statement %s" % parser.statement()
-    * @endcode
-    */
-    class KexiDBParser : public QObject
-    {
-            Q_OBJECT
-        public:
-            KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner);
-            virtual ~KexiDBParser();
+/**
+* The KexiDBParser could be used to parse SQL-statements.
+*
+* Example (in Python) ;
+* @code
+* # First we need a parser object.
+* parser = connection.parser()
+* # Parse a SQL-statement.
+* parser.parse("SELECT * from table1")
+* # The operation could be e.g. SELECT or INSERT.
+* if parser.operation() == 'Error':
+*     raise parser.errorMsg()
+* # Print some feedback.
+* print "Successfully parsed the SQL-statement %s" % parser.statement()
+* @endcode
+*/
+class KexiDBParser : public QObject
+{
+    Q_OBJECT
+public:
+    KexiDBParser(KexiDBConnection* connection, ::KexiDB::Parser* parser, bool owner);
+    virtual ~KexiDBParser();
 
-        public slots:
+public slots:
 
-            /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
-            bool parse(const QString& sql);
-            /** Clears parsing results. */
-            void clear();
-            /** Returns the resulting operation. */
-            const QString operation();
+    /** Clears previous results and runs the parser on the SQL statement passed as an argument. */
+    bool parse(const QString& sql);
+    /** Clears parsing results. */
+    void clear();
+    /** Returns the resulting operation. */
+    const QString operation();
 
-            /** Returns the \a KexiDBTableSchema object on a CREATE TABLE operation. */
-            QObject* table();
-            /** Returns the \a KexiDBQuerySchema object on a SELECT operation. */
-            QObject* query();
-            /** Returns the \a KexiDBConnection object pointing to the used database connection. */
-            QObject* connection();
-            /** Returns the SQL query statement. */
-            const QString statement();
+    /** Returns the \a KexiDBTableSchema object on a CREATE TABLE operation. */
+    QObject* table();
+    /** Returns the \a KexiDBQuerySchema object on a SELECT operation. */
+    QObject* query();
+    /** Returns the \a KexiDBConnection object pointing to the used database connection. */
+    QObject* connection();
+    /** Returns the SQL query statement. */
+    const QString statement();
 
-            /** Returns the type string of the last error. */
-            const QString errorType();
-            /** Returns the message of the last error. */
-            const QString errorMsg();
-            /** Returns the position where the last error occurred. */
-            int errorAt();
+    /** Returns the type string of the last error. */
+    const QString errorType();
+    /** Returns the message of the last error. */
+    const QString errorMsg();
+    /** Returns the position where the last error occurred. */
+    int errorAt();
 
-        private:
-            QPointer<KexiDBConnection> m_connection;
-            ::KexiDB::Parser* m_parser;
-            bool m_owner;
-    };
+private:
+    QPointer<KexiDBConnection> m_connection;
+    ::KexiDB::Parser* m_parser;
+    bool m_owner;
+};
 
 }
 

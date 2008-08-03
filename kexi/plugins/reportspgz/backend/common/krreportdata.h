@@ -33,81 +33,89 @@ class KRDetailSectionData;
 
 namespace Scripting
 {
-	class Report;
+class Report;
 }
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KRReportData : public QObject
 {
-		Q_OBJECT
+    Q_OBJECT
 
-	public:
-		KRReportData ( const QDomElement & elemSource );
-		KRReportData ();
-		~KRReportData();
+public:
+    KRReportData(const QDomElement & elemSource);
+    KRReportData();
+    ~KRReportData();
 
-		/**
-		\return a list of all objects in the report
-		*/
-		QList<KRObjectData*> objects();
+    /**
+    \return a list of all objects in the report
+    */
+    QList<KRObjectData*> objects();
 
-		/**
-		\return a report object given its name
-		*/
-		KRObjectData* object( const QString& );
+    /**
+    \return a report object given its name
+    */
+    KRObjectData* object(const QString&);
 
-		/**
-		\return all the sections, including groups and detail
-		*/
-		QList<KRSectionData*> sections();
-		
-		/**
-		\return a sectiondata given a section enum
-		*/
-		KRSectionData* section(KRSectionData::Section);
-		
-		/**
-		\return a sectiondata given its name
-		*/
-		KRSectionData* section(const QString&);
-		
-		QString query(){return _query;}
-		QString script(){return _script;};
-		QString interpreter(){return _interpreter;}
-		KRDetailSectionData* detail(){return detailsection;}
-	protected:
-		QString title;
-		QString _query;
-		QString _script;
-		QString _interpreter;
-		
-		ReportPageOptions page;
+    /**
+    \return all the sections, including groups and detail
+    */
+    QList<KRSectionData*> sections();
 
-		KRSectionData * pghead_first;
-		KRSectionData * pghead_odd;
-		KRSectionData * pghead_even;
-		KRSectionData * pghead_last;
-		KRSectionData * pghead_any;
+    /**
+    \return a sectiondata given a section enum
+    */
+    KRSectionData* section(KRSectionData::Section);
 
-		KRSectionData * rpthead;
-		KRSectionData * rptfoot;
+    /**
+    \return a sectiondata given its name
+    */
+    KRSectionData* section(const QString&);
 
-		KRSectionData * pgfoot_first;
-		KRSectionData * pgfoot_odd;
-		KRSectionData * pgfoot_even;
-		KRSectionData * pgfoot_last;
-		KRSectionData * pgfoot_any;
+    QString query() {
+        return _query;
+    }
+    QString script() {
+        return _script;
+    };
+    QString interpreter() {
+        return _interpreter;
+    }
+    KRDetailSectionData* detail() {
+        return detailsection;
+    }
+protected:
+    QString title;
+    QString _query;
+    QString _script;
+    QString _interpreter;
 
-		KRDetailSectionData* detailsection;
-	private:
-		bool _valid;
-		void init();
+    ReportPageOptions page;
 
-		friend class ORPreRenderPrivate;
-		friend class ORPreRender;
-		friend class KRScriptHandler;
-		friend class Scripting::Report;
+    KRSectionData * pghead_first;
+    KRSectionData * pghead_odd;
+    KRSectionData * pghead_even;
+    KRSectionData * pghead_last;
+    KRSectionData * pghead_any;
+
+    KRSectionData * rpthead;
+    KRSectionData * rptfoot;
+
+    KRSectionData * pgfoot_first;
+    KRSectionData * pgfoot_odd;
+    KRSectionData * pgfoot_even;
+    KRSectionData * pgfoot_last;
+    KRSectionData * pgfoot_any;
+
+    KRDetailSectionData* detailsection;
+private:
+    bool _valid;
+    void init();
+
+    friend class ORPreRenderPrivate;
+    friend class ORPreRender;
+    friend class KRScriptHandler;
+    friend class Scripting::Report;
 //    QList<ORDataData> trackTotal;
 };
 

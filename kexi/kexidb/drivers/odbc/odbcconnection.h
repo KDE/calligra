@@ -38,50 +38,50 @@ class Driver;
 
 class ODBCConnection : public Connection
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     ~ODBCConnection();
 
-    virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
+    virtual Cursor* prepareQuery(const QString& statement = QString::null, uint cursor_options = 0);
     virtual QString escapeString(const QString& str) const;
     virtual QByteArray escapeString(const QByteArray& str) const;
 
-  protected:
+protected:
     /*! Used by driver */
-    ODBCConnection( Driver *driver,  ConnectionData &conn_data );
+    ODBCConnection(Driver *driver,  ConnectionData &conn_data);
 
     virtual bool drv_connect();
-    
+
     virtual bool drv_disconnect();
-    
-    virtual bool drv_getDatabasesList( QStringList &list );
-    
-    /*! Creates new database using connection. Note: Do not pass \a dbName 
+
+    virtual bool drv_getDatabasesList(QStringList &list);
+
+    /*! Creates new database using connection. Note: Do not pass \a dbName
       arg because for file-based engine (that has one database per connection)
       it is defined during connection. */
-    virtual bool drv_createDatabase( const QString &dbName = QString::null );
-    
-    /*! Opens existing database using connection. Do not pass \a dbName 
+    virtual bool drv_createDatabase(const QString &dbName = QString::null);
+
+    /*! Opens existing database using connection. Do not pass \a dbName
       arg because for file-based engine (that has one database per connection)
-      it is defined during connection. If you pass it, 
+      it is defined during connection. If you pass it,
       database file name will be changed. */
-    virtual bool drv_useDatabase( const QString &dbName = QString::null );
-    
+    virtual bool drv_useDatabase(const QString &dbName = QString::null);
+
     virtual bool drv_closeDatabase();
-    
+
     /*! Drops database from the server using connection.
-      After drop, database shouldn't be accessible 
+      After drop, database shouldn't be accessible
       anymore, so database file is just removed. See note from drv_useDatabase(). */
-    virtual bool drv_dropDatabase( const QString &dbName = QString::null );
+    virtual bool drv_dropDatabase(const QString &dbName = QString::null);
 
     //virtual bool drv_createTable( const KexiDB::Table& table );
 
-    virtual bool drv_executeSQL( const QString& statement );
+    virtual bool drv_executeSQL(const QString& statement);
 
     friend class ODBCDriver;
-  
-  private:
+
+private:
     ODBCConnectionPrivate *d;
 };
 

@@ -25,7 +25,8 @@
 #include <qvalidator.h>
 class QWidget;
 
-namespace KexiUtils {
+namespace KexiUtils
+{
 
 //! @short A validator for longlong data type.
 /*!
@@ -37,22 +38,22 @@ namespace KexiUtils {
 */
 class KEXIUTILS_EXPORT LongLongValidator : public QValidator
 {
-  public:
-    LongLongValidator( QWidget * parent, int base = 10 );
-    LongLongValidator( qint64 bottom, qint64 top, QWidget * parent, int base = 10 );
+public:
+    LongLongValidator(QWidget * parent, int base = 10);
+    LongLongValidator(qint64 bottom, qint64 top, QWidget * parent, int base = 10);
     virtual ~LongLongValidator();
 
     //! Validates the text, and returns the result.  Does not modify the parameters.
-    virtual State validate( QString &, int & ) const;
+    virtual State validate(QString &, int &) const;
 
     //! Fixes the text if possible, providing a valid string.  The parameter may be modified.
-    virtual void fixup( QString & ) const;
+    virtual void fixup(QString &) const;
 
     //! Sets the minimum and maximum values allowed.
-     virtual void setRange( qint64 bottom, qint64 top );
+    virtual void setRange(qint64 bottom, qint64 top);
 
     //! Sets the numeric base value.
-    virtual void setBase( int base );
+    virtual void setBase(int base);
 
     //! \return the current minimum value allowed
     virtual qint64 bottom() const;
@@ -61,9 +62,9 @@ class KEXIUTILS_EXPORT LongLongValidator : public QValidator
     virtual qint64 top() const;
 
     //! \return the current numeric base
-    virtual int base () const;
+    virtual int base() const;
 
-  private:
+private:
     qint64 m_base;
     qint64 m_min;
     qint64 m_max;

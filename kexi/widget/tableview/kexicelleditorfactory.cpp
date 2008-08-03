@@ -62,62 +62,57 @@ KexiCellEditorFactoryItem::~KexiCellEditorFactoryItem()
 //! @internal
 class KexiCellEditorFactoryPrivate
 {
-  public:
-    KexiCellEditorFactoryPrivate()
-    {
-      // Initialize standard editor cell editor factories
-      registerItem( *new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB );
+public:
+    KexiCellEditorFactoryPrivate() {
+        // Initialize standard editor cell editor factories
+        registerItem(*new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB);
 #ifdef __GNUC__
-#warning TODO reenable 	registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
+#warning TODO reenable  registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
 #else
-#pragma WARNING( TODO reenable 	registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date ); )
+#pragma WARNING( TODO reenable  registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date ); )
 #endif
 #ifdef __GNUC__
-  #warning TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
+#warning TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
 #else
-  #pragma WARNING( TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time ); )
+#pragma WARNING( TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time ); )
 #endif
 #ifdef __GNUC__
-#warning TODO reenable 	registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
+#warning TODO reenable  registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
 #else
-#pragma WARNING( TODO reenable 	registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime ); )
+#pragma WARNING( TODO reenable  registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime ); )
 #endif
-      registerItem( *new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum );
-      registerItem( *new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean );
-      registerItem( *new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon" );
-      //default type
-      registerItem( *new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType );
+        registerItem(*new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum);
+        registerItem(*new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean);
+        registerItem(*new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon");
+        //default type
+        registerItem(*new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType);
     }
-    ~KexiCellEditorFactoryPrivate()
-    {
-      qDeleteAll(items);
-    }
-
-    QString key(uint type, const QString& subType) const
-    {
-      QString key = QString::number(type);
-      if (!subType.isEmpty())
-        key += (QString(" ") + subType);
-      return key;
+    ~KexiCellEditorFactoryPrivate() {
+        qDeleteAll(items);
     }
 
-    void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString() )
-    {
-      if (!items.contains( &item ))
-        items.insert( &item );
-
-      items_by_type.insert( key(type, subType), &item );
+    QString key(uint type, const QString& subType) const {
+        QString key = QString::number(type);
+        if (!subType.isEmpty())
+            key += (QString(" ") + subType);
+        return key;
     }
-    
-    KexiCellEditorFactoryItem *findItem(uint type, const QString& subType)
-    {
-      KexiCellEditorFactoryItem *item = items_by_type.value( key(type, subType) );
-      if (item)
-        return item;
-      item = items_by_type.value( key(type, QString()) );
-      if (item)
-        return item;
-      return items_by_type.value( key( KexiDB::Field::InvalidType, QString() ) );
+
+    void registerItem(KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString()) {
+        if (!items.contains(&item))
+            items.insert(&item);
+
+        items_by_type.insert(key(type, subType), &item);
+    }
+
+    KexiCellEditorFactoryItem *findItem(uint type, const QString& subType) {
+        KexiCellEditorFactoryItem *item = items_by_type.value(key(type, subType));
+        if (item)
+            return item;
+        item = items_by_type.value(key(type, QString()));
+        if (item)
+            return item;
+        return items_by_type.value(key(KexiDB::Field::InvalidType, QString()));
     }
 
     QSet<KexiCellEditorFactoryItem*> items; //!< list of editor factory items (for later destroy)
@@ -137,72 +132,70 @@ KexiCellEditorFactory::~KexiCellEditorFactory()
 {
 }
 
-void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
+void KexiCellEditorFactory::registerItem(KexiCellEditorFactoryItem& item, uint type, const QString& subType)
 {
-  KexiCellEditorFactory_static->registerItem( item, type, subType );
+    KexiCellEditorFactory_static->registerItem(item, type, subType);
 }
 
-static bool hasEnumType( const KexiTableViewColumn &column )
+static bool hasEnumType(const KexiTableViewColumn &column)
 {
-  /*not db-aware case*/
-  if (column.relatedData())
+    /*not db-aware case*/
+    if (column.relatedData())
+        return true;
+    /*db-aware case*/
+    if (!column.field() || !column.field()->table())
+        return false;
+    KexiDB::LookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema(*column.field());
+    if (!lookupFieldSchema)
+        return false;
+    if (lookupFieldSchema->rowSource().name().isEmpty())
+        return false;
     return true;
-  /*db-aware case*/
-  if (!column.field() || !column.field()->table())
-    return false;
-  KexiDB::LookupFieldSchema *lookupFieldSchema = column.field()->table()->lookupFieldSchema( *column.field() );
-  if (!lookupFieldSchema)
-    return false;
-  if (lookupFieldSchema->rowSource().name().isEmpty())
-    return false;
-  return true;
 }
 
 KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QWidget* parent)
 {
-  KexiDB::Field *realField;
-  if (column.visibleLookupColumnInfo()) {
-    realField = column.visibleLookupColumnInfo()->field;
-  }
-  else {
-    realField = column.field();
-  }
-
-  KexiCellEditorFactoryItem *item = 0;
-
-  if (hasEnumType(column)) {
-    //--we need to create combo box because of relationship:
-    item = KexiCellEditorFactory::item( KexiDB::Field::Enum );
-  }
-  else {
-    item = KexiCellEditorFactory::item( realField->type(), realField->subType() );
-  }
-  
-#if 0 //js: TODO LATER
-  //--check if we need to create combo box because of relationship:
-  //WARNING: it's assumed that indices are one-field long
-  KexiDB::TableSchema *table = f.table();
-  if (table) {
-    //find index that contain this field
-    KexiDB::IndexSchema::ListIterator it = table->indicesIterator();
-    for (;it.current();++it) {
-      KexiDB::IndexSchema *idx = it.current();
-      if (idx->fields()->contains(&f)) {
-        //find details-side rel. for this index
-        KexiDB::Relationship *rel = idx->detailsRelationships()->first();
-        if (rel) {
-          
-        }
-      }
+    KexiDB::Field *realField;
+    if (column.visibleLookupColumnInfo()) {
+        realField = column.visibleLookupColumnInfo()->field;
+    } else {
+        realField = column.field();
     }
-  }
+
+    KexiCellEditorFactoryItem *item = 0;
+
+    if (hasEnumType(column)) {
+        //--we need to create combo box because of relationship:
+        item = KexiCellEditorFactory::item(KexiDB::Field::Enum);
+    } else {
+        item = KexiCellEditorFactory::item(realField->type(), realField->subType());
+    }
+
+#if 0 //js: TODO LATER
+    //--check if we need to create combo box because of relationship:
+    //WARNING: it's assumed that indices are one-field long
+    KexiDB::TableSchema *table = f.table();
+    if (table) {
+        //find index that contain this field
+        KexiDB::IndexSchema::ListIterator it = table->indicesIterator();
+        for (;it.current();++it) {
+            KexiDB::IndexSchema *idx = it.current();
+            if (idx->fields()->contains(&f)) {
+                //find details-side rel. for this index
+                KexiDB::Relationship *rel = idx->detailsRelationships()->first();
+                if (rel) {
+
+                }
+            }
+        }
+    }
 #endif
 
-  return item->createEditor(column, parent);
+    return item->createEditor(column, parent);
 }
 
-KexiCellEditorFactoryItem* KexiCellEditorFactory::item( uint type, const QString& subType )
+KexiCellEditorFactoryItem* KexiCellEditorFactory::item(uint type, const QString& subType)
 {
-  return KexiCellEditorFactory_static->findItem(type, subType);
+    return KexiCellEditorFactory_static->findItem(type, subType);
 }
 

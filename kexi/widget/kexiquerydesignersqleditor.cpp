@@ -22,9 +22,9 @@
 #include "kexiquerydesignersqleditor.h"
 
 KexiQueryDesignerSQLEditor::KexiQueryDesignerSQLEditor(QWidget *parent)
-  : KexiEditor(parent)
+        : KexiEditor(parent)
 {
-  setHighlightMode("sql");
+    setHighlightMode("sql");
 }
 
 KexiQueryDesignerSQLEditor::~KexiQueryDesignerSQLEditor()

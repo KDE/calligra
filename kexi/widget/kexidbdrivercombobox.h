@@ -38,31 +38,31 @@
   KexiDBDriverComboBox* combo = new KexiDBDriverComboBox(drvs, true, 0);
 \endcode
 
-A more complete example can be found in 
+A more complete example can be found in
 <a href="http://websvn.kde.org/trunk/koffice/kexi/tests/widgets/kexidbdrivercombotest.cpp?&view=auto">koffice/kexi/tests/widgets/</a>.
 */
 class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     enum Options {
-      ShowFileDrivers = 1,
-      ShowServerDrivers = 2,
-      ShowAll = ShowFileDrivers|ShowServerDrivers
+        ShowFileDrivers = 1,
+        ShowServerDrivers = 2,
+        ShowAll = ShowFileDrivers | ShowServerDrivers
     };
 
     /*! Constructs a KexiDBDriverComboBox object.
 
-        The combobox is populated with the names of the drivers in 
+        The combobox is populated with the names of the drivers in
         \a driversInfo.  A suitable value for \a driversInfo can be obtained
         from KexiDB::DriverManager::driversInfo().
 
         If \a includeFileBasedDrivers is set to false, then only those drivers
         that are for database servers (those which have X-Kexi-DriverType=Network
         in their .desktop file) are shown. */
-    KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoHash& driversInfo, 
-      Options options = ShowAll );
+    KexiDBDriverComboBox(QWidget* parent, const KexiDB::Driver::InfoHash& driversInfo,
+                         Options options = ShowAll);
 
     ~KexiDBDriverComboBox();
 
@@ -73,7 +73,9 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
         was false, this won't include the file based drivers either.
 
         \return a list of names of drivers that were found */
-    QStringList driverNames() const { return m_driverNames; }
+    QStringList driverNames() const {
+        return m_driverNames;
+    }
 
     /*! Get the name of the currrently selected driver.  If the combobox is empty,
         QString() will be returned.
@@ -90,8 +92,8 @@ class KEXIEXTWIDGETS_EXPORT KexiDBDriverComboBox : public KComboBox
         */
     void setDriverName(const QString& driverName);
 
-  protected:
-    QHash<QString,QString> m_drivers; //!< a map: driver caption -> driver name
+protected:
+    QHash<QString, QString> m_drivers; //!< a map: driver caption -> driver name
     QStringList m_driverNames;
 };
 

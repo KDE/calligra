@@ -31,23 +31,23 @@
 #include <krpos.h>
 #include <krsize.h>
 #include "reportscene.h"
-ReportRectEntity::ReportRectEntity ( ReportDesigner *r)
-		: QGraphicsRectItem(), ReportEntity(r)
+ReportRectEntity::ReportRectEntity(ReportDesigner *r)
+        : QGraphicsRectItem(), ReportEntity(r)
 {
-	dpiX = KoGlobal::dpiX();
-	dpiY = KoGlobal::dpiY();
-	
-	ppos = 0;
-	psize = 0;
-	
-	setAcceptsHoverEvents(true);
+    dpiX = KoGlobal::dpiX();
+    dpiY = KoGlobal::dpiY();
+
+    ppos = 0;
+    psize = 0;
+
+    setAcceptsHoverEvents(true);
 }
 
 void ReportRectEntity::init(KRPos* p, KRSize* s, KoProperty::Set* se)
 {
-	ppos = p;
-	psize = s;
-	pset = se;
+    ppos = p;
+    psize = s;
+    pset = se;
 }
 
 ReportRectEntity::~ReportRectEntity()
@@ -56,270 +56,246 @@ ReportRectEntity::~ReportRectEntity()
 
 void ReportRectEntity::setUnit(KoUnit u)
 {
-	ppos->setUnit(u);
-	psize->setUnit(u);
+    ppos->setUnit(u);
+    psize->setUnit(u);
 }
 
 QRectF ReportRectEntity::sceneRect()
 {
-	return QRectF ( ppos->toScene(), psize->toScene() );
+    return QRectF(ppos->toScene(), psize->toScene());
 }
 
 QRectF ReportRectEntity::pointRect()
 {
-	if (ppos && psize)
-		return QRectF ( ppos->toPoint(), psize->toPoint() );
-	else
-		return QRectF(0,0,0,0);
+    if (ppos && psize)
+        return QRectF(ppos->toPoint(), psize->toPoint());
+    else
+        return QRectF(0, 0, 0, 0);
 }
 
-void ReportRectEntity::setSceneRect ( QPointF p, QSizeF s )
+void ReportRectEntity::setSceneRect(QPointF p, QSizeF s)
 {
-	setSceneRect(QRectF(p,s));
+    setSceneRect(QRectF(p, s));
 }
 
-void ReportRectEntity::setSceneRect ( QRectF r )
+void ReportRectEntity::setSceneRect(QRectF r)
 {
-	QGraphicsRectItem::setPos ( r.x(), r.y() );
-	setRect ( 0,0,r.width(), r.height() );
-	ppos->setScenePos ( QPointF(r.x(), r.y()) );
-	psize->setSceneSize( QSizeF(r.width(), r.height()));
-	update();
+    QGraphicsRectItem::setPos(r.x(), r.y());
+    setRect(0, 0, r.width(), r.height());
+    ppos->setScenePos(QPointF(r.x(), r.y()));
+    psize->setSceneSize(QSizeF(r.width(), r.height()));
+    update();
 }
 
-void ReportRectEntity::mousePressEvent ( QGraphicsSceneMouseEvent * event )
+void ReportRectEntity::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-	//Update and show properties
-	ppos->setScenePos ( QPointF(sceneRect().x(), sceneRect().y()) );
-	_rd->changeSet ( pset );
-	setSelected( true );
-	scene()->update();
+    //Update and show properties
+    ppos->setScenePos(QPointF(sceneRect().x(), sceneRect().y()));
+    _rd->changeSet(pset);
+    setSelected(true);
+    scene()->update();
 }
 
-void ReportRectEntity::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
+void ReportRectEntity::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
-	//Keep the size and position in sync
-	ppos->setScenePos ( pos() );
-	psize->setSceneSize(QSizeF(rect().width(), rect().height()));
-	_rd->changeSet ( pset );
-	QGraphicsItem::mouseReleaseEvent ( event );
+    //Keep the size and position in sync
+    ppos->setScenePos(pos());
+    psize->setSceneSize(QSizeF(rect().width(), rect().height()));
+    _rd->changeSet(pset);
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 
-void ReportRectEntity::mouseMoveEvent ( QGraphicsSceneMouseEvent * event )
+void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 {
-	qreal w,h;
+    qreal w, h;
 
-	QPointF p  = dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos());
-	w = p.x() - scenePos().x();
-	h = p.y() - scenePos().y();
-	
-	//TODO use an enum for the directions
+    QPointF p  = dynamic_cast<ReportScene*>(scene())->gridPoint(event->scenePos());
+    w = p.x() - scenePos().x();
+    h = p.y() - scenePos().y();
 
-	switch(_grabAction)
-	{
-		case 1:
-			if (sceneRect().y() - p.y() + rect().height() > 0 && sceneRect().x() - p.x() + rect().width() > 0)
-			setSceneRect(QPointF(p.x(), p.y()), QSizeF(sceneRect().x() - p.x() + rect().width(), sceneRect().y() - p.y() + rect().height()));
-			break;
-		case 2:
-			if (sceneRect().y() - p.y() + rect().height() > 0)
-			setSceneRect(QPointF(sceneRect().x(), p.y()), QSizeF(rect().width(), sceneRect().y() - p.y() + rect().height()));
-			break;
-		case 3:
-			if (sceneRect().y() - p.y() + rect().height() > 0 && w > 0)
-			setSceneRect(QPointF(sceneRect().x(), p.y()), QSizeF(w, sceneRect().y() - p.y() + rect().height()));
-			break;
-		case 4:
-			if (w > 0)
-			setSceneRect (QPointF(sceneRect().x(), sceneRect().y()), QSizeF(w, (rect().height())));
-			break;
-		case 5:
-			if ( h> 0 && w > 0)
-			setSceneRect ( QPointF(sceneRect().x(), sceneRect().y()), QSizeF(w,h) );
-			break;
-		case 6:
-			if (h > 0)
-			setSceneRect (QPointF(sceneRect().x(), sceneRect().y()),QSizeF((rect().width()), h));
-			break;
-		case 7:
-			if (sceneRect().x() - p.x() + rect().width() > 0 && h > 0)
-			setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), h));
-			break;
-			break;
-		case 8:
-			if (sceneRect().x() - p.x() + rect().width() > 0 )
-			setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), rect().height()));
-			break;	
-		default:
-			QGraphicsItem::mouseMoveEvent(event);
-	}
+    //TODO use an enum for the directions
+
+    switch (_grabAction) {
+    case 1:
+        if (sceneRect().y() - p.y() + rect().height() > 0 && sceneRect().x() - p.x() + rect().width() > 0)
+            setSceneRect(QPointF(p.x(), p.y()), QSizeF(sceneRect().x() - p.x() + rect().width(), sceneRect().y() - p.y() + rect().height()));
+        break;
+    case 2:
+        if (sceneRect().y() - p.y() + rect().height() > 0)
+            setSceneRect(QPointF(sceneRect().x(), p.y()), QSizeF(rect().width(), sceneRect().y() - p.y() + rect().height()));
+        break;
+    case 3:
+        if (sceneRect().y() - p.y() + rect().height() > 0 && w > 0)
+            setSceneRect(QPointF(sceneRect().x(), p.y()), QSizeF(w, sceneRect().y() - p.y() + rect().height()));
+        break;
+    case 4:
+        if (w > 0)
+            setSceneRect(QPointF(sceneRect().x(), sceneRect().y()), QSizeF(w, (rect().height())));
+        break;
+    case 5:
+        if (h > 0 && w > 0)
+            setSceneRect(QPointF(sceneRect().x(), sceneRect().y()), QSizeF(w, h));
+        break;
+    case 6:
+        if (h > 0)
+            setSceneRect(QPointF(sceneRect().x(), sceneRect().y()), QSizeF((rect().width()), h));
+        break;
+    case 7:
+        if (sceneRect().x() - p.x() + rect().width() > 0 && h > 0)
+            setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), h));
+        break;
+        break;
+    case 8:
+        if (sceneRect().x() - p.x() + rect().width() > 0)
+            setSceneRect(QPointF(p.x(), sceneRect().y()), QSizeF(sceneRect().x() - p.x() + rect().width(), rect().height()));
+        break;
+    default:
+        QGraphicsItem::mouseMoveEvent(event);
+    }
 }
 
-void ReportRectEntity::hoverMoveEvent ( QGraphicsSceneHoverEvent * event )
+void ReportRectEntity::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
-	_grabAction = 0;
-	
-	if (isSelected())
-	{
-	_grabAction = grabHandle(event->pos());
-	switch(_grabAction)
-	{
-		case 1:
-			setCursor ( Qt::SizeFDiagCursor );
-			break;
-		case 2:
-			setCursor ( Qt::SizeVerCursor );
-			break;
-		case 3:
-			setCursor ( Qt::SizeBDiagCursor );
-			break;
-		case 4:
-			setCursor ( Qt::SizeHorCursor );
-			break;
-		case 5:
-			setCursor ( Qt::SizeFDiagCursor );
-			break;
-		case 6:
-			setCursor ( Qt::SizeVerCursor );
-			break;
-		case 7:
-			setCursor ( Qt::SizeBDiagCursor );
-			break;
-		case 8:
-			setCursor ( Qt::SizeHorCursor );
-			break;	
-		default:
-			unsetCursor();
-	}
-	}
+    _grabAction = 0;
+
+    if (isSelected()) {
+        _grabAction = grabHandle(event->pos());
+        switch (_grabAction) {
+        case 1:
+            setCursor(Qt::SizeFDiagCursor);
+            break;
+        case 2:
+            setCursor(Qt::SizeVerCursor);
+            break;
+        case 3:
+            setCursor(Qt::SizeBDiagCursor);
+            break;
+        case 4:
+            setCursor(Qt::SizeHorCursor);
+            break;
+        case 5:
+            setCursor(Qt::SizeFDiagCursor);
+            break;
+        case 6:
+            setCursor(Qt::SizeVerCursor);
+            break;
+        case 7:
+            setCursor(Qt::SizeBDiagCursor);
+            break;
+        case 8:
+            setCursor(Qt::SizeHorCursor);
+            break;
+        default:
+            unsetCursor();
+        }
+    }
 }
 
-void ReportRectEntity::drawHandles ( QPainter *painter )
+void ReportRectEntity::drawHandles(QPainter *painter)
 {
-	if ( isSelected() )
-	{
-		// draw a selected border for visual purposes
-		painter->setPen ( QPen ( QColor ( 128,128,255 ), 0, Qt::DotLine ) );
+    if (isSelected()) {
+        // draw a selected border for visual purposes
+        painter->setPen(QPen(QColor(128, 128, 255), 0, Qt::DotLine));
 
-		painter->drawRect ( rect() );
+        painter->drawRect(rect());
 
-		const QRectF r = rect();
-		int halfW = ( int ) ( r.width() / 2 );
-		int halfH = ( int ) ( r.height() / 2 );
-		QPointF center = r.center();
+        const QRectF r = rect();
+        int halfW = (int)(r.width() / 2);
+        int halfH = (int)(r.height() / 2);
+        QPointF center = r.center();
 
-		painter->fillRect ( center.x()- halfW, center.y()- halfH ,5, 5, QColor ( 128, 128, 255 ) );
-		painter->fillRect ( center.x() - 2, center.y()- halfH ,5, 5, QColor ( 128, 128, 255 ) );
-		painter->fillRect ( center.x() + halfW - 4, center.y()- halfH,5, 5, QColor ( 128, 128, 255 ) );
+        painter->fillRect(center.x() - halfW, center.y() - halfH , 5, 5, QColor(128, 128, 255));
+        painter->fillRect(center.x() - 2, center.y() - halfH , 5, 5, QColor(128, 128, 255));
+        painter->fillRect(center.x() + halfW - 4, center.y() - halfH, 5, 5, QColor(128, 128, 255));
 
-		painter->fillRect ( center.x() + ( halfW - 4 ), center.y() - 2,5, 5, QColor ( 128, 128, 255 ) );
+        painter->fillRect(center.x() + (halfW - 4), center.y() - 2, 5, 5, QColor(128, 128, 255));
 
-		painter->fillRect ( center.x() +  halfW - 4 , center.y() + halfH - 4 , 5, 5, QColor ( 128, 128, 255 ) );
-		painter->fillRect ( center.x()-2, center.y() + halfH-4, 5, 5, QColor ( 128, 128, 255 ) );
-		painter->fillRect ( center.x()- halfW, center.y() + halfH-4 ,5, 5, QColor ( 128, 128, 255 ) );
+        painter->fillRect(center.x() +  halfW - 4 , center.y() + halfH - 4 , 5, 5, QColor(128, 128, 255));
+        painter->fillRect(center.x() - 2, center.y() + halfH - 4, 5, 5, QColor(128, 128, 255));
+        painter->fillRect(center.x() - halfW, center.y() + halfH - 4 , 5, 5, QColor(128, 128, 255));
 
-		painter->fillRect ( center.x()- halfW, center.y()-2,5, 5, QColor ( 128, 128, 255 ) );
+        painter->fillRect(center.x() - halfW, center.y() - 2, 5, 5, QColor(128, 128, 255));
 
-	}
+    }
 }
 
 /**
-	@return	1 2 3
-		8 0 4
-		7 6 5
+ @return 1 2 3
+  8 0 4
+  7 6 5
 */
-int ReportRectEntity::grabHandle ( QPointF pos )
-{	
-	QRectF r = boundingRect();
-	int halfW = ( int ) ( r.width() / 2 );
-	int halfH = ( int ) ( r.height() / 2 );
-	QPointF center = r.center();
-	
-	if ( QRectF ( center.x()- ( halfW ),center.y()- ( halfH ),5,5 ).contains ( pos ) )
-	{
-		// we are over the top-left handle
-		return 1;
-	}
-	else if ( QRectF ( center.x()-2,center.y()- ( halfH ),5,5 ).contains ( pos ) )
-	{
-		// top-middle handle
-		return 2;
-	}
-	else if ( QRectF ( center.x() + ( halfW-4 ),center.y()- ( halfH ),5,5 ).contains ( pos ) )
-	{
-		// top-right
-		return 3;
-	}
-	else if ( QRectF ( center.x() + ( halfW-4 ),center.y()-2,5,5 ).contains ( pos ) )
-	{
-		// middle-right
-		return 4;
-	}
-	else if ( QRectF ( center.x() + ( halfW-4 ),center.y() + ( halfH-4 ),5,5 ).contains ( pos ) )
-	{
-		// bottom-left
-		return 5;
-	}
-	else if ( QRectF ( center.x()-2,center.y() + ( halfH-4 ),5,5 ).contains ( pos ) )
-	{
-		// bottom-middle
-		return 6;
-	}
-	else if ( QRectF ( center.x()- ( halfW ),center.y() + ( halfH-4 ),5,5 ).contains ( pos ) )
-	{
-		// bottom-right
-		return 7;
-	}
-	else if ( QRectF ( center.x()- ( halfW ),center.y()-2,5,5 ).contains ( pos ) )
-	{
-		// middle-right
-		return 8;
-	}
-	return 0;
+int ReportRectEntity::grabHandle(QPointF pos)
+{
+    QRectF r = boundingRect();
+    int halfW = (int)(r.width() / 2);
+    int halfH = (int)(r.height() / 2);
+    QPointF center = r.center();
+
+    if (QRectF(center.x() - (halfW), center.y() - (halfH), 5, 5).contains(pos)) {
+        // we are over the top-left handle
+        return 1;
+    } else if (QRectF(center.x() - 2, center.y() - (halfH), 5, 5).contains(pos)) {
+        // top-middle handle
+        return 2;
+    } else if (QRectF(center.x() + (halfW - 4), center.y() - (halfH), 5, 5).contains(pos)) {
+        // top-right
+        return 3;
+    } else if (QRectF(center.x() + (halfW - 4), center.y() - 2, 5, 5).contains(pos)) {
+        // middle-right
+        return 4;
+    } else if (QRectF(center.x() + (halfW - 4), center.y() + (halfH - 4), 5, 5).contains(pos)) {
+        // bottom-left
+        return 5;
+    } else if (QRectF(center.x() - 2, center.y() + (halfH - 4), 5, 5).contains(pos)) {
+        // bottom-middle
+        return 6;
+    } else if (QRectF(center.x() - (halfW), center.y() + (halfH - 4), 5, 5).contains(pos)) {
+        // bottom-right
+        return 7;
+    } else if (QRectF(center.x() - (halfW), center.y() - 2, 5, 5).contains(pos)) {
+        // middle-right
+        return 8;
+    }
+    return 0;
 }
 
 QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-	kDebug() << change << value;
-	if (change == ItemPositionChange && scene()) 
-	{
-		QPointF newPos = value.toPointF();
-			
-		newPos = dynamic_cast<ReportScene*>(scene())->gridPoint(newPos);
-		if (newPos.x() < 0)
-			newPos.setX(0);
-		else if (newPos.x() > (scene()->width() - rect().width()))
-			newPos.setX(scene()->width() - rect().width());
-		
-		if (newPos.y() < 0)
-			newPos.setY(0);
-		else if (newPos.y() > (scene()->height() - rect().height()))
-			newPos.setY(scene()->height() - rect().height());
-		
-		return newPos;
-	}
-	else if (change == ItemPositionHasChanged && scene()) 
-	{
-		ppos->setScenePos(value.toPointF());
-	}
-	else if (change == ItemSceneHasChanged && scene() && psize)
-	{
-		kDebug() << pos();
-		QPointF newPos = pos();
-			
-		newPos = dynamic_cast<ReportScene*>(scene())->gridPoint(newPos);
-		if (newPos.x() < 0)
-			newPos.setX(0);
-		else if (newPos.x() > (scene()->width() - rect().width()))
-			newPos.setX(scene()->width() - rect().width());
-		
-		if (newPos.y() < 0)
-			newPos.setY(0);
-		else if (newPos.y() > (scene()->height() - rect().height()))
-			newPos.setY(scene()->height() - rect().height());
-		
-		setSceneRect(newPos, psize->toScene());
-	}
-	
-	return QGraphicsItem::itemChange(change, value);
+    kDebug() << change << value;
+    if (change == ItemPositionChange && scene()) {
+        QPointF newPos = value.toPointF();
+
+        newPos = dynamic_cast<ReportScene*>(scene())->gridPoint(newPos);
+        if (newPos.x() < 0)
+            newPos.setX(0);
+        else if (newPos.x() > (scene()->width() - rect().width()))
+            newPos.setX(scene()->width() - rect().width());
+
+        if (newPos.y() < 0)
+            newPos.setY(0);
+        else if (newPos.y() > (scene()->height() - rect().height()))
+            newPos.setY(scene()->height() - rect().height());
+
+        return newPos;
+    } else if (change == ItemPositionHasChanged && scene()) {
+        ppos->setScenePos(value.toPointF());
+    } else if (change == ItemSceneHasChanged && scene() && psize) {
+        kDebug() << pos();
+        QPointF newPos = pos();
+
+        newPos = dynamic_cast<ReportScene*>(scene())->gridPoint(newPos);
+        if (newPos.x() < 0)
+            newPos.setX(0);
+        else if (newPos.x() > (scene()->width() - rect().width()))
+            newPos.setX(scene()->width() - rect().width());
+
+        if (newPos.y() < 0)
+            newPos.setY(0);
+        else if (newPos.y() > (scene()->height() - rect().height()))
+            newPos.setY(scene()->height() - rect().height());
+
+        setSceneRect(newPos, psize->toScene());
+    }
+
+    return QGraphicsItem::itemChange(change, value);
 }

@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,48 +30,52 @@
 
 namespace Scripting
 {
-	class Label;
+class Label;
 }
 /**
-	@author 
+ @author
 */
 class KRLabelData : public KRObjectData
 {
-	public:
-		KRLabelData(){createProperties();};
-		KRLabelData ( QDomNode & element );
-		~KRLabelData(){};
-		virtual int type() const;
-		virtual KRLabelData * toLabel();
-	
-		QString text() const;
-		QFont font() const{return _font->value().value<QFont>();}
-		Qt::Alignment textFlags() const;
-		void setTextFlags ( Qt::Alignment );
-		void setText ( const QString& );
-		ORTextStyleData textStyle();
-		ORLineStyleData lineStyle();
-		
-	protected:
-		QRectF _rect();
-				
-		KRSize _size;
-		KoProperty::Property *_text;
-		KoProperty::Property* _hAlignment;
-		KoProperty::Property* _vAlignment;
-		KoProperty::Property* _font;
-		KoProperty::Property* _fgColor;
-		KoProperty::Property* _bgColor;
-		KoProperty::Property* _bgOpacity;
-		KoProperty::Property* _lnColor;
-		KoProperty::Property* _lnWeight;
-		KoProperty::Property* _lnStyle;
+public:
+    KRLabelData() {
+        createProperties();
+    };
+    KRLabelData(QDomNode & element);
+    ~KRLabelData() {};
+    virtual int type() const;
+    virtual KRLabelData * toLabel();
 
-	private:
-		virtual void createProperties();
-		static int RTTI;
-		
-		friend class Scripting::Label;
-		friend class ORPreRenderPrivate;
+    QString text() const;
+    QFont font() const {
+        return _font->value().value<QFont>();
+    }
+    Qt::Alignment textFlags() const;
+    void setTextFlags(Qt::Alignment);
+    void setText(const QString&);
+    ORTextStyleData textStyle();
+    ORLineStyleData lineStyle();
+
+protected:
+    QRectF _rect();
+
+    KRSize _size;
+    KoProperty::Property *_text;
+    KoProperty::Property* _hAlignment;
+    KoProperty::Property* _vAlignment;
+    KoProperty::Property* _font;
+    KoProperty::Property* _fgColor;
+    KoProperty::Property* _bgColor;
+    KoProperty::Property* _bgOpacity;
+    KoProperty::Property* _lnColor;
+    KoProperty::Property* _lnWeight;
+    KoProperty::Property* _lnStyle;
+
+private:
+    virtual void createProperties();
+    static int RTTI;
+
+    friend class Scripting::Label;
+    friend class ORPreRenderPrivate;
 };
 #endif

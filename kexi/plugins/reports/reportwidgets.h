@@ -26,9 +26,10 @@
 #include <QPixmap>
 #include <QPaintEvent>
 
-namespace KFormDesigner {
-  class Form;
-  class FormManager;
+namespace KFormDesigner
+{
+class Form;
+class FormManager;
 }
 
 using KFormDesigner::Form;
@@ -36,19 +37,21 @@ using KFormDesigner::Form;
 //! A form embedded as a widget inside other form
 class KexiSubReport : public Q3ScrollView
 {
-  Q_OBJECT
-  Q_PROPERTY(QString reportName READ reportName WRITE setReportName DESIGNABLE true);
+    Q_OBJECT
+    Q_PROPERTY(QString reportName READ reportName WRITE setReportName DESIGNABLE true);
 
-  public:
+public:
     KexiSubReport(QWidget *parent);
     ~KexiSubReport() {}
 
     //! \return the name of the subreport inside the db
-    QString reportName() const { return m_reportName; }
+    QString reportName() const {
+        return m_reportName;
+    }
     void setReportName(const QString &name);
 
-  private:
-//		KFormDesigner::FormManager *m_manager;
+private:
+//  KFormDesigner::FormManager *m_manager;
     Form   *m_form;
     QWidget  *m_widget;
     QString   m_reportName;
@@ -57,9 +60,9 @@ class KexiSubReport : public Q3ScrollView
 //! A simple label inside a report
 class Label : public QLabel
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     Label(const QString &text, QWidget *parent);
     ~Label() {}
 };
@@ -67,9 +70,9 @@ class Label : public QLabel
 //! A simple picture label inside a report
 class PicLabel : public QLabel
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     PicLabel(const QPixmap &pix, QWidget *parent);
     ~PicLabel() {}
 
@@ -79,19 +82,22 @@ class PicLabel : public QLabel
 //! A line
 class ReportLine : public QWidget
 {
-  Q_OBJECT
-  Q_PROPERTY(ReportLineStyle lineStyle READ lineStyle WRITE setLineStyle)
-  Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
-  Q_PROPERTY(QColor color READ color WRITE setColor)
-  Q_PROPERTY(CapStyle capStyle READ capStyle WRITE setCapStyle)
+    Q_OBJECT
+    Q_PROPERTY(ReportLineStyle lineStyle READ lineStyle WRITE setLineStyle)
+    Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
+    Q_PROPERTY(QColor color READ color WRITE setColor)
+    Q_PROPERTY(CapStyle capStyle READ capStyle WRITE setCapStyle)
 
-  public:
+public:
     enum ReportLineStyle { NoLine = Qt::NoPen, Solid = Qt::SolidLine, Dash = Qt::DashLine,  Dot = Qt::DotLine,
-      DashDot = Qt::DashDotLine, DashDotDot =  Qt::DashDotDotLine };
+                           DashDot = Qt::DashDotLine, DashDotDot =  Qt::DashDotDotLine
+                         };
     enum CapStyle { Flat = Qt::FlatCap, Square = Qt::SquareCap, Round = Qt::RoundCap };
 
     ReportLine(QWidget *parent);
-    ~ReportLine(){;}
+    ~ReportLine() {
+        ;
+    }
 
     ReportLineStyle lineStyle() const;
     void setLineStyle(ReportLineStyle style);
@@ -105,10 +111,10 @@ class ReportLine : public QWidget
     CapStyle capStyle() const;
     void setCapStyle(CapStyle capStyle);
 
-  protected:
-    virtual void paintEvent (QPaintEvent *ev);
+protected:
+    virtual void paintEvent(QPaintEvent *ev);
 
-  private:
+private:
     ReportLineStyle m_lineStyle;
     int m_lineWidth;
     CapStyle m_capStyle;

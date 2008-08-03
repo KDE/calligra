@@ -34,27 +34,27 @@
 //
 class ReportEntityBarcode : public QObject, public KRBarcodeData, public ReportRectEntity
 {
-	Q_OBJECT
-	public:
-		ReportEntityBarcode ( ReportDesigner *, QGraphicsScene* scene );
-		ReportEntityBarcode ( QDomNode & element, ReportDesigner *, QGraphicsScene* scene );
+    Q_OBJECT
+public:
+    ReportEntityBarcode(ReportDesigner *, QGraphicsScene* scene);
+    ReportEntityBarcode(QDomNode & element, ReportDesigner *, QGraphicsScene* scene);
 
-		virtual ~ReportEntityBarcode();
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
-		virtual void paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0 );
-		
-		virtual ReportEntityBarcode* clone(); 
-		
-	protected:
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-		
-	private:
-		void init(QGraphicsScene*);
-		
-		QRect getTextRect();
+    virtual ~ReportEntityBarcode();
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
+    virtual ReportEntityBarcode* clone();
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+private:
+    void init(QGraphicsScene*);
+
+    QRect getTextRect();
+
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

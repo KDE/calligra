@@ -40,29 +40,53 @@ class QObject;
  */
 class KEXICORE_EXPORT Event
 {
-  public:
+public:
     Event(QObject *sender, const Q3CString &signal,
-      QObject *receiver, const Q3CString &slot);
+          QObject *receiver, const Q3CString &slot);
     Event(QObject *sender, const Q3CString &signal,
-      const Q3CString &functionName);
-    Event() : m_type(Slot) {;}
-    ~Event() {;}
+          const Q3CString &functionName);
+    Event() : m_type(Slot) {
+        ;
+    }
+    ~Event() {
+        ;
+    }
 
-    enum { Slot=1000, UserFunction, Action }; //! Event types
-    int  type() {return  m_type; }
-    void  setType(int type) { m_type = type; }
+    enum { Slot = 1000, UserFunction, Action }; //! Event types
+    int  type() {
+        return  m_type;
+    }
+    void  setType(int type) {
+        m_type = type;
+    }
 
-    QObject*  sender() const { return m_sender; }
-    QObject*  receiver() const { return m_receiver; }
-    Q3CString  signal() const { return m_signal; }
-    Q3CString  slot() const { return m_slot; }
+    QObject*  sender() const {
+        return m_sender;
+    }
+    QObject*  receiver() const {
+        return m_receiver;
+    }
+    Q3CString  signal() const {
+        return m_signal;
+    }
+    Q3CString  slot() const {
+        return m_slot;
+    }
 
-    void  setSender(QObject *o) { m_sender = o; }
-    void  setReceiver(QObject *o) { m_receiver = o; }
-    void  setSignal(const Q3CString &s) { m_signal = s; }
-    void  setSlot(const Q3CString &s) { m_slot = s; }
+    void  setSender(QObject *o) {
+        m_sender = o;
+    }
+    void  setReceiver(QObject *o) {
+        m_receiver = o;
+    }
+    void  setSignal(const Q3CString &s) {
+        m_signal = s;
+    }
+    void  setSlot(const Q3CString &s) {
+        m_slot = s;
+    }
 
-  protected:
+protected:
     QPointer<QObject> m_sender;
     Q3CString m_signal;
     QPointer<QObject> m_receiver;
@@ -72,9 +96,13 @@ class KEXICORE_EXPORT Event
 
 class KEXICORE_EXPORT EventList : protected Q3ValueList<Event*>
 {
-  public:
-    EventList() {;}
-    ~EventList() {;}
+public:
+    EventList() {
+        ;
+    }
+    ~EventList() {
+        ;
+    }
 
     /*! Adds an event in list. Other overload are available, so that
      other classes don't have to use Event class in simple cases. */
@@ -93,9 +121,15 @@ class KEXICORE_EXPORT EventList : protected Q3ValueList<Event*>
     void  removeAllEventsForObject(QObject *object);
 
     // make some QValueList function accessible by other classes
-    Q3ValueListConstIterator<Event*>  constBegin() const { return Q3ValueList<Event*>::constBegin(); } 
-    Q3ValueListConstIterator<Event*>  constEnd() const { return Q3ValueList<Event*>::constEnd(); } 
-    bool  isEmpty() const { return Q3ValueList<Event*>::isEmpty(); }
+    Q3ValueListConstIterator<Event*>  constBegin() const {
+        return Q3ValueList<Event*>::constBegin();
+    }
+    Q3ValueListConstIterator<Event*>  constEnd() const {
+        return Q3ValueList<Event*>::constEnd();
+    }
+    bool  isEmpty() const {
+        return Q3ValueList<Event*>::isEmpty();
+    }
 };
 
 

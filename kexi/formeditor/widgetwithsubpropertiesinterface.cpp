@@ -36,62 +36,60 @@ WidgetWithSubpropertiesInterface::~WidgetWithSubpropertiesInterface()
 
 void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
 {
-  m_subwidget = widget;
-  m_subproperies.clear();
-  QSet<QByteArray> addedSubproperies;
-  if (m_subwidget) {
-    //remember properties in the subwidget that are not present in the parent
-    for( const QMetaObject *metaObject = m_subwidget->metaObject(); metaObject; 
-      metaObject = metaObject->superClass())
-    {
-      QList<QMetaProperty> properties( 
-        KexiUtils::propertiesForMetaObjectWithInherited(metaObject) );
-      foreach (QMetaProperty property, properties) {
-        if (-1!=KexiUtils::indexOfPropertyWithSuperclasses(
-          dynamic_cast<QObject*>(this), property.name())
-          && !addedSubproperies.contains( property.name() ) )
-        {
-          m_subproperies.insert( property.name() );
-          addedSubproperies.insert( property.name() );
-          kDebug() << "WidgetWithSubpropertiesInterface::setSubwidget(): "
-            "added subwidget's property that is not present in the parent: " 
-            << property.name() << endl;
+    m_subwidget = widget;
+    m_subproperies.clear();
+    QSet<QByteArray> addedSubproperies;
+    if (m_subwidget) {
+        //remember properties in the subwidget that are not present in the parent
+        for (const QMetaObject *metaObject = m_subwidget->metaObject(); metaObject;
+                metaObject = metaObject->superClass()) {
+            QList<QMetaProperty> properties(
+                KexiUtils::propertiesForMetaObjectWithInherited(metaObject));
+            foreach(QMetaProperty property, properties) {
+                if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(
+                            dynamic_cast<QObject*>(this), property.name())
+                        && !addedSubproperies.contains(property.name())) {
+                    m_subproperies.insert(property.name());
+                    addedSubproperies.insert(property.name());
+                    kDebug() << "WidgetWithSubpropertiesInterface::setSubwidget(): "
+                    "added subwidget's property that is not present in the parent: "
+                    << property.name() << endl;
+                }
+            }
         }
-      }
     }
-  }
 }
 
 QWidget* WidgetWithSubpropertiesInterface::subwidget() const
 {
-  return m_subwidget;
+    return m_subwidget;
 }
 
 QSet<Q3CString> WidgetWithSubpropertiesInterface::subproperies() const
 {
-  return m_subproperies;
+    return m_subproperies;
 }
 
 QMetaProperty WidgetWithSubpropertiesInterface::findMetaSubproperty(const char * name) const
 {
-  if (!m_subwidget || m_subproperies.contains(name))
-    return QMetaProperty();
-  return KexiUtils::findPropertyWithSuperclasses(m_subwidget, name);
+    if (!m_subwidget || m_subproperies.contains(name))
+        return QMetaProperty();
+    return KexiUtils::findPropertyWithSuperclasses(m_subwidget, name);
 }
 
-QVariant WidgetWithSubpropertiesInterface::subproperty( const char * name, bool &ok ) const
+QVariant WidgetWithSubpropertiesInterface::subproperty(const char * name, bool &ok) const
 {
-  if (!m_subwidget || m_subproperies.contains(name)) {
-    ok = false;
-    return QVariant();
-  }
-  ok = true;
-  return m_subwidget->property( name );
+    if (!m_subwidget || m_subproperies.contains(name)) {
+        ok = false;
+        return QVariant();
+    }
+    ok = true;
+    return m_subwidget->property(name);
 }
 
-bool WidgetWithSubpropertiesInterface::setSubproperty( const char * name, const QVariant & value )
+bool WidgetWithSubpropertiesInterface::setSubproperty(const char * name, const QVariant & value)
 {
-  if (!m_subwidget || m_subproperies.contains(name))
-    return false;
-  return m_subwidget->setProperty( name, value );
+    if (!m_subwidget || m_subproperies.contains(name))
+        return false;
+    return m_subwidget->setProperty(name, value);
 }

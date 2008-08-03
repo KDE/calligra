@@ -32,33 +32,33 @@ class KProgressDialog;
 /*! Proved SQLite database filename in the constructor.
  Then execute run() should be executed.
 
- KProgressDialog will be displayed. Its progress bar will be updated whenever another 
- table's data compacting is performed. User can click "Cancel" button in any time 
- (except the final committing) to cancel the operation. In this case, 
- it's guaranteed that the original file remains unchanged. 
+ KProgressDialog will be displayed. Its progress bar will be updated whenever another
+ table's data compacting is performed. User can click "Cancel" button in any time
+ (except the final committing) to cancel the operation. In this case,
+ it's guaranteed that the original file remains unchanged.
 
- This is possible because we rely on SQLite's VACUUM SQL command, which itself temporarily 
- creates a copy of the original database file, and replaces the orginal with the new only 
+ This is possible because we rely on SQLite's VACUUM SQL command, which itself temporarily
+ creates a copy of the original database file, and replaces the orginal with the new only
  on success.
 */
 class SQLiteVacuum : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     SQLiteVacuum(const QString& filePath);
     ~SQLiteVacuum();
 
     /*! Performs compacting procedure.
-     \return true on success, false on failure and cancelled if user 
+     \return true on success, false on failure and cancelled if user
      clicked "Cancel" button in the progress dialog. */
     tristate run();
 
-  public slots:
+public slots:
     void readFromStdout();
     void processExited();
     void cancelClicked();
 
-  protected:
+protected:
     QString m_filePath;
     Q3Process *m_process;
     KProgressDialog* m_dlg;

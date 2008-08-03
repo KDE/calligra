@@ -174,21 +174,23 @@ static const struct code128 _128codes[] = {
 
 // STOP CHARACTER { 2 3 3 1 1 1 2 }
 
-int code128IndexP(QChar code, int set) {
-    for(int idx = 0; _128codes[idx]._null == false; idx++) {
-        if(set == SETA && _128codes[idx].codea == code.toAscii()) return idx;
-        if(set == SETB && _128codes[idx].codeb == code.toAscii()) return idx;
-        if(set == SETC && _128codes[idx].codec == code.toAscii()) return idx;
+int code128IndexP(QChar code, int set)
+{
+    for (int idx = 0; _128codes[idx]._null == false; idx++) {
+        if (set == SETA && _128codes[idx].codea == code.toAscii()) return idx;
+        if (set == SETB && _128codes[idx].codeb == code.toAscii()) return idx;
+        if (set == SETC && _128codes[idx].codec == code.toAscii()) return idx;
     }
     return -1;  // couldn't find it
 }
 
-void renderCode128(const QRect & r, const QString & _str, int align, QPainter * pPainter) {
+void renderCode128(const QRect & r, const QString & _str, int align, QPainter * pPainter)
+{
     Q3ValueVector<int> str;
     int i = 0;
 
     // create the list.. if the list is empty then just set a start code and move on
-    if(_str.isEmpty()) {
+    if (_str.isEmpty()) {
         str.push_back(104);
     } else {
         int rank_a = 0;
@@ -196,17 +198,17 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
         int rank_c = 0;
 
         QChar c;
-        for(i = 0; i < _str.length(); i++) {
+        for (i = 0; i < _str.length(); i++) {
             c = _str.at(i);
             rank_a += (code128IndexP(c, SETA) != -1 ? 1 : 0);
             rank_b += (code128IndexP(c, SETB) != -1 ? 1 : 0);
             rank_c += (c >= '0' && c <= '9' ? 1 : 0);
         }
-        if(rank_c == _str.length() && ((rank_c % 2) == 0 || rank_c > 4)) {
+        if (rank_c == _str.length() && ((rank_c % 2) == 0 || rank_c > 4)) {
             // every value in the is a digit so we are going to go with mode C
             // and we have an even number or we have more than 4 values
             i = 0;
-            if((rank_c % 2) == 1) {
+            if ((rank_c % 2) == 1) {
                 str.push_back(104); // START B
                 c = _str.at(0);
                 str.push_back(code128IndexP(c, SETB));
@@ -215,12 +217,12 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
             } else {
                 str.push_back(105); // START C
             }
-            for(i = i; i < _str.length(); i+=2) {
+            for (i = i; i < _str.length(); i += 2) {
                 char a, b;
                 c = _str.at(i);
                 a = c.toAscii();
                 a -= 48;
-                c = _str.at(i+1);
+                c = _str.at(i + 1);
                 b = c.toAscii();
                 b -= 48;
                 str.push_back(int((a * 10) + b));
@@ -228,15 +230,15 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
         } else {
             // start in the mode that had the higher number of hits and then
             // just shift into the opposite mode as needed
-            int set = ( rank_a > rank_b ? SETA : SETB );
-            str.push_back(( rank_a > rank_b ? 103 : 104 ));
+            int set = (rank_a > rank_b ? SETA : SETB);
+            str.push_back((rank_a > rank_b ? 103 : 104));
             int v = -1;
-            for(i = 0; i < _str.length(); i++) {
+            for (i = 0; i < _str.length(); i++) {
                 c = _str.at(i);
                 v = code128IndexP(c, set);
-                if(v == -1) {
+                if (v == -1) {
                     v = code128IndexP(c, (set == SETA ? SETB : SETA));
-                    if(v != -1) {
+                    if (v != -1) {
                         str.push_back(98); // SHIFT
                         str.push_back(v);
                     }
@@ -249,7 +251,7 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
 
     // calculate and append the checksum value to the list
     int checksum = str.at(0);
-    for(i = 1; i < str.size(); i++) {
+    for (i = 1; i < str.size(); i++) {
         checksum += (str.at(i) * i);
     }
     checksum = checksum % 103;
@@ -260,7 +262,7 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
 
     // this is are mandatory minimum quiet zone
     int quiet_zone = bar_width * 10;
-    if(quiet_zone < 10) quiet_zone = 10;
+    if (quiet_zone < 10) quiet_zone = 10;
 
     // what kind of area do we have to work with
     int draw_width = r.width();
@@ -268,9 +270,9 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
 
     // how long is the value we need to encode?
     int val_length = str.size() - 2; // we include start and checksum in are list so
-                                     // subtract them out for our calculations
+    // subtract them out for our calculations
 
-    // L = (11C + 35)X 
+    // L = (11C + 35)X
     // L length of barcode (excluding quite zone) in units same as X and I
     // C the number of characters in the value excluding the start/stop and checksum characters
     // X the width of a bar (pixels in our case)
@@ -290,17 +292,17 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
     //
     // calculate the starting position based on the alignment option
     // for left align we don't need to do anything as the values are already setup for it
-    if(align == 1) { // center
+    if (align == 1) { // center
         int nqz = (draw_width - L) / 2;
-        if(nqz > quiet_zone) quiet_zone = nqz;
-    } else if(align > 1) { // right
+        if (nqz > quiet_zone) quiet_zone = nqz;
+    } else if (align > 1) { // right
         quiet_zone = draw_width - (L + quiet_zone);
     } // else if(align < 1) {} // left : do nothing
 
     int pos = r.left() + quiet_zone;
     int top = r.top();
 
-    if(pPainter != 0) {
+    if (pPainter != 0) {
         pPainter->save();
 
         QPen oneWide(pPainter->pen());
@@ -315,18 +317,18 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
 
     bool space = false;
     int idx = 0, b = 0, w = 0;
-    for(i = 0; i < str.size(); i++) {
+    for (i = 0; i < str.size(); i++) {
         // loop through each value and render the barcode
         idx = str.at(i);
-        if(idx < 0 || idx > 105) {
+        if (idx < 0 || idx > 105) {
             qDebug("Encountered a non-compliant element while rendering a 3of9 barcode -- skipping");
             continue;
         }
         space = false;
-        for(b = 0; b < 6; b++, space = !space) {
+        for (b = 0; b < 6; b++, space = !space) {
             w = _128codes[idx].values[b] * bar_width;
-            if(!space && pPainter != 0) {
-                pPainter->fillRect(pos,top, w,draw_height, pPainter->pen().color());
+            if (!space && pPainter != 0) {
+                pPainter->fillRect(pos, top, w, draw_height, pPainter->pen().color());
             }
             pos += w;
         }
@@ -334,18 +336,18 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
 
     // we have to do the stop character seperatly like this because it has
     // 7 elements in it's bar sequence rather than 6 like the others
-    int STOP_CHARACTER[]={ 2, 3, 3, 1, 1, 1, 2 };
+    int STOP_CHARACTER[] = { 2, 3, 3, 1, 1, 1, 2 };
     space = false;
-    for(b = 0; b < 7; b++, space = !space) {
+    for (b = 0; b < 7; b++, space = !space) {
         w = STOP_CHARACTER[b] * bar_width;
-        if(!space && pPainter != 0) {
-            pPainter->fillRect(pos,top, w,draw_height, pPainter->pen().color());
+        if (!space && pPainter != 0) {
+            pPainter->fillRect(pos, top, w, draw_height, pPainter->pen().color());
         }
         pos += w;
     }
 
-    if(pPainter != 0) {
+    if (pPainter != 0) {
         pPainter->restore();
     }
     return;
-} 
+}

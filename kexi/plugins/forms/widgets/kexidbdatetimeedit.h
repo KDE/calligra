@@ -34,25 +34,27 @@ class KMenu;
 //! @short A db-aware datetime editor
 class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormDataItemInterface
 {
-  Q_OBJECT
-  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-  // properties copied from QDateTimeEdit
-  Q_PROPERTY( QDateTime dateTime READ dateTime WRITE setDateTime )
-  Q_PROPERTY( bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true )
+    Q_OBJECT
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    // properties copied from QDateTimeEdit
+    Q_PROPERTY(QDateTime dateTime READ dateTime WRITE setDateTime)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 
-  public:
+public:
     enum Order { DMY, MDY, YMD, YDM };
 
     KexiDBDateTimeEdit(const QDateTime &datetime, QWidget *parent);
     virtual ~KexiDBDateTimeEdit();
 
-    inline QString dataSource() const
-      { return KexiFormDataItemInterface::dataSource(); }
-    inline QString dataSourceMimeType() const
-      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourceMimeType() const {
+        return KexiFormDataItemInterface::dataSourceMimeType();
+    }
     virtual QVariant value();
-    virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState(const QString& displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -79,35 +81,37 @@ class KEXIFORMUTILS_EXPORT KexiDBDateTimeEdit : public QWidget, public KexiFormD
     // property functions
     QDateTime dateTime() const;
 
-  signals:
+signals:
     void  dateTimeChanged();
 
-  public slots:
-    inline void setDataSource(const QString &ds)
-      { KexiFormDataItemInterface::setDataSource(ds); }
-    inline void setDataSourceMimeType(const QString &ds)
-      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
+public slots:
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
+    }
+    inline void setDataSourceMimeType(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    }
     void setDateTime(const QDateTime &dt);
     virtual void setReadOnly(bool set);
 
-  protected:
+protected:
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-  protected slots:
+protected slots:
     void slotValueChanged();
     void slotShowDatePicker();
     void acceptDate();
 
-  private:
+private:
     KDatePicker *m_datePicker;
     Q3DateEdit* m_dateEdit;
     Q3TimeEdit* m_timeEdit;
     QDateTimeEditor *m_dte_date, *m_dte_time;
     KMenu *m_datePickerPopupMenu;
-    bool m_invalidState : 1;
-    bool m_cleared : 1;
-    bool m_readOnly : 1;
+bool m_invalidState : 1;
+bool m_cleared : 1;
+bool m_readOnly : 1;
 };
 
 #endif

@@ -32,12 +32,12 @@ namespace KexiPart
  */
 class KEXICORE_EXPORT StaticInfo : public Info
 {
-  public:
-    StaticInfo(const QString& mimeType, const QString& itemIcon, 
-      const QString& objectName);
+public:
+    StaticInfo(const QString& mimeType, const QString& itemIcon,
+               const QString& objectName);
     ~StaticInfo();
 
-  protected:
+protected:
 };
 
 /**
@@ -45,20 +45,20 @@ class KEXICORE_EXPORT StaticInfo : public Info
  */
 class KEXICORE_EXPORT StaticPart : public Part
 {
-  public:
-    StaticPart(const QString& mimeType, const QString& itemIcon, 
-      const QString& objectName);
+public:
+    StaticPart(const QString& mimeType, const QString& itemIcon,
+               const QString& objectName);
     virtual ~StaticPart();
 
-    /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
+    /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a window. \a args arguments can be passed. */
-    virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
-      KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>* args) = 0;
+    virtual KexiView* createView(QWidget *parent, KexiWindow* window,
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>* args) = 0;
 
-  protected:
+protected:
     //! unused by static parts
-    KexiView* createView(QWidget *parent, KexiWindow* window, 
-      KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode);
+    KexiView* createView(QWidget *parent, KexiWindow* window,
+                         KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 };
 
 }

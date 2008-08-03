@@ -26,16 +26,16 @@
 
 //! @short A simple widget with radio buttons with "show file/server-based projects" options
 class KEXIEXTWIDGETS_EXPORT KexiPrjTypeSelector
-  : public QWidget, public Ui_KexiPrjTypeSelector
+            : public QWidget, public Ui_KexiPrjTypeSelector
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiPrjTypeSelector( QWidget* parent = 0 );
+public:
+    KexiPrjTypeSelector(QWidget* parent = 0);
     ~KexiPrjTypeSelector();
 
-  public slots:
-    void slotSelectionChanged( int id );
+public slots:
+    void slotSelectionChanged(int id);
 };
 
 #endif // KEXIPRJTYPESELECTOR_H

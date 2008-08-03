@@ -27,45 +27,45 @@
 //! Kexi-specific image editor for property editor's item
 class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiImagePropertyEdit(KoProperty::Property *property, 
-      QWidget *parent = 0);
+public:
+    KexiImagePropertyEdit(KoProperty::Property *property,
+                          QWidget *parent = 0);
     virtual ~KexiImagePropertyEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange=true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, 
-      const QVariant &value);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r,
+                            const QVariant &value);
 
-  public slots:
+public slots:
     virtual void selectPixmap();
 
-  protected:
+protected:
     KexiBLOBBuffer::Id_t m_id;
 };
 
-/*! Identifier editor based on ordinary string editor but always keeps a valid identifier 
- or empty value. It's line edit has IdentifierValidator::IdentifierValidator set, so user 
- is unable to enter invalid characters. Any chages to a null value or empty string, 
- have no effect. 
+/*! Identifier editor based on ordinary string editor but always keeps a valid identifier
+ or empty value. It's line edit has IdentifierValidator::IdentifierValidator set, so user
+ is unable to enter invalid characters. Any chages to a null value or empty string,
+ have no effect.
 
  @todo move this to koproperty library (when KexiUtils is moves to kofficecore)
  */
 class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiIdentifierPropertyEdit(KoProperty::Property *property, 
-      QWidget *parent = 0);
+public:
+    KexiIdentifierPropertyEdit(KoProperty::Property *property,
+                               QWidget *parent = 0);
     virtual ~KexiIdentifierPropertyEdit();
 
     /*! Reimplemented: sets \a value but it is converted to identifier
-     using KexiUtils::string2Identifier(). 
+     using KexiUtils::string2Identifier().
      If \a value is null or empty string, this method has no effect. */
-    virtual void setValue(const QVariant &value, bool emitChange=true);
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 };
 
 #endif

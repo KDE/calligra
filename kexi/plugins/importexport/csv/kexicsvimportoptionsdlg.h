@@ -29,41 +29,41 @@ class QComboBox;
 //! @short CSV Options
 class KexiCSVImportOptions
 {
-  public:
+public:
     KexiCSVImportOptions();
     ~KexiCSVImportOptions();
 
     //! Date format values
     enum DateFormat {
-      AutoDateFormat = 0, //!< auto
-      DMY = 1, //!< day-month-year
-      YMD = 2, //!< year-month-day
-      MDY = 3  //!< month-day-year
+        AutoDateFormat = 0, //!< auto
+        DMY = 1, //!< day-month-year
+        YMD = 2, //!< year-month-day
+        MDY = 3  //!< month-day-year
     };
 
-    bool operator== ( const KexiCSVImportOptions & opt ) const;
-    bool operator!= ( const KexiCSVImportOptions & opt ) const;
+    bool operator== (const KexiCSVImportOptions & opt) const;
+    bool operator!= (const KexiCSVImportOptions & opt) const;
 
     QString encoding;
     DateFormat dateFormat;
-    bool defaultEncodingExplicitySet : 1;
-    bool trimmedInTextValuesChecked : 1;
+bool defaultEncodingExplicitySet : 1;
+bool trimmedInTextValuesChecked : 1;
 };
 
 //! @short CSV Options dialog
 class KexiCSVImportOptionsDialog : public KDialog
 {
-  Q_OBJECT
-  public:
-    KexiCSVImportOptionsDialog( const KexiCSVImportOptions& options, QWidget* parent = 0 );
+    Q_OBJECT
+public:
+    KexiCSVImportOptionsDialog(const KexiCSVImportOptions& options, QWidget* parent = 0);
     virtual ~KexiCSVImportOptionsDialog();
 
     KexiCSVImportOptions options() const;
 
-  protected slots:
+protected slots:
     virtual void accept();
 
-  protected:
+protected:
     KexiCharacterEncodingComboBox *m_encodingComboBox;
     QCheckBox *m_chkAlwaysUseThisEncoding;
     QCheckBox *m_chkStripWhiteSpaceInTextValues;

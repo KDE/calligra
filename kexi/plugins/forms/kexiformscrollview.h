@@ -38,34 +38,36 @@
 
     @see KexiTableView
 */
-class KEXIFORMUTILS_EXPORT KexiFormScrollView : 
-  public KexiScrollView,
-  public KexiRecordNavigatorHandler,
-  public KexiSharedActionClient,
-  public KexiDataAwareObjectInterface,
-  public KexiFormDataProvider,
-  public KexiFormEventHandler
+class KEXIFORMUTILS_EXPORT KexiFormScrollView :
+            public KexiScrollView,
+            public KexiRecordNavigatorHandler,
+            public KexiSharedActionClient,
+            public KexiDataAwareObjectInterface,
+            public KexiFormDataProvider,
+            public KexiFormEventHandler
 {
-  Q_OBJECT
-  KEXI_DATAAWAREOBJECTINTERFACE
+    Q_OBJECT
+    KEXI_DATAAWAREOBJECTINTERFACE
 
-  public:
+public:
     KexiFormScrollView(QWidget *parent, bool preview);
     virtual ~KexiFormScrollView();
 
-    void setForm(KFormDesigner::Form *form) { m_form = form; }
+    void setForm(KFormDesigner::Form *form) {
+        m_form = form;
+    }
 
     /*! Reimplemented from KexiDataAwareObjectInterface
      for checking 'readOnly' flag from a widget
      ('readOnly' flag from data member is still checked though). */
     virtual bool columnEditable(int col);
 
-    /*! \return number of visible columns in this view. 
+    /*! \return number of visible columns in this view.
      There can be a number of duplicated columns defined,
      so columns() can return greater or smaller number than dataColumns(). */
     virtual int columns() const;
 
-    /*! \return column information for column number \a col. 
+    /*! \return column information for column number \a col.
      Reimplemented for KexiDataAwareObjectInterface:
      column data corresponding to widget number is used here
      (see fieldNumberForColumn()). */
@@ -74,28 +76,30 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. */
     virtual int fieldNumberForColumn(int col) {
-      KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
-        dbFormWidget()->orderedDataAwareWidgets()->at( col ));
-      if (!item)
-        return -1;
-      KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find( item ));
-      return it!=m_fieldNumbersForDataItems.constEnd() ? (int)it.value() : -1;
+        KexiFormDataItemInterface *item = dynamic_cast<KexiFormDataItemInterface*>(
+                                              dbFormWidget()->orderedDataAwareWidgets()->at(col));
+        if (!item)
+            return -1;
+        KexiFormDataItemInterfaceToIntMap::ConstIterator it(m_fieldNumbersForDataItems.find(item));
+        return it != m_fieldNumbersForDataItems.constEnd() ? (int)it.value() : -1;
     }
 
     /*! @internal Used by KexiFormView in view switching. */
     void beforeSwitchView();
 
-    /*! \return last row visible on the screen (counting from 0). 
-     The returned value is guaranteed to be smaller or equal to currentRow() or -1 
-     if there are no rows. 
+    /*! \return last row visible on the screen (counting from 0).
+     The returned value is guaranteed to be smaller or equal to currentRow() or -1
+     if there are no rows.
      Implemented for KexiDataAwareObjectInterface. */
 //! @todo unimplemented for now, this will be used for continuous forms
     virtual int lastVisibleRow() const;
 
     /*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
-    virtual QScrollBar* verticalScrollBar() const { return KexiScrollView::verticalScrollBar(); }
+    virtual QScrollBar* verticalScrollBar() const {
+        return KexiScrollView::verticalScrollBar();
+    }
 
-  public slots:
+public slots:
     /*! Reimplemented to update resize policy. */
     virtual void show();
 
@@ -113,40 +117,48 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     virtual void moveToPreviousRecordRequested();
     virtual void moveToNextRecordRequested();
     virtual void moveToFirstRecordRequested();
-    virtual void addNewRecordRequested() { KexiDataAwareObjectInterface::addNewRecordRequested(); }
+    virtual void addNewRecordRequested() {
+        KexiDataAwareObjectInterface::addNewRecordRequested();
+    }
 
-    /*! Cancels changes made to the currently active editor. 
-     Reverts the editor's value to old one. 
+    /*! Cancels changes made to the currently active editor.
+     Reverts the editor's value to old one.
      \return true on success or false on failure (e.g. when editor does not exist) */
     virtual bool cancelEditor();
 
-  public slots:
+public slots:
     /*! Reimplemented to also clear command history right after final resize. */
     virtual void refreshContentsSize();
 
-    /*! Handles verticalScrollBar()'s valueChanged(int) signal. 
+    /*! Handles verticalScrollBar()'s valueChanged(int) signal.
      Called when vscrollbar's value has been changed. */
 //! @todo unused for now, will be used for continuous forms
-    virtual void vScrollBarValueChanged(int v) { KexiDataAwareObjectInterface::vScrollBarValueChanged(v); }
+    virtual void vScrollBarValueChanged(int v) {
+        KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
+    }
 
     /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
 //! @todo unused for now, will be used for continuous forms
-    virtual void vScrollBarSliderReleased() { KexiDataAwareObjectInterface::vScrollBarSliderReleased(); }
+    virtual void vScrollBarSliderReleased() {
+        KexiDataAwareObjectInterface::vScrollBarSliderReleased();
+    }
 
-    /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible, 
-     m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted; 
+    /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
+     m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
      else the m_scrollBarTipTimerCnt is just set to 0.*/
 //! @todo unused for now, will be used for continuous forms
-    virtual void scrollBarTipTimeout() { KexiDataAwareObjectInterface::scrollBarTipTimeout(); }
+    virtual void scrollBarTipTimeout() {
+        KexiDataAwareObjectInterface::scrollBarTipTimeout();
+    }
 
-  signals:
+signals:
     virtual void itemChanged(KexiDB::RecordData*, int row, int col);
     virtual void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
     virtual void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
     virtual void currentItemDeleteRequest();
     virtual void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
     virtual void dataRefreshed();
-    virtual void dataSet( KexiTableViewData *data );
+    virtual void dataSet(KexiTableViewData *data);
     virtual void itemSelected(KexiDB::RecordData*);
     virtual void cellSelected(int col, int row);
     virtual void sortedColumnChanged(int col);
@@ -154,18 +166,21 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     virtual void rowEditTerminated(int row);
     virtual void reloadActions();
 
-  protected slots:
+protected slots:
     void slotResizingStarted();
 
     //! Handles KexiTableViewData::rowRepaintRequested() signal
     virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
     //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint)
-    { KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint); }
+    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint) {
+        KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint);
+    }
 
     //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
-    virtual void slotRowDeleted() { KexiDataAwareObjectInterface::slotRowDeleted(); }
+    virtual void slotRowDeleted() {
+        KexiDataAwareObjectInterface::slotRowDeleted();
+    }
 
     //! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
     virtual void slotRowInserted(KexiDB::RecordData* record, bool repaint);
@@ -173,13 +188,17 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     //! Like above, not db-aware version
     virtual void slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint);
 
-    virtual void slotRowsDeleted( const QList<int>& );
+    virtual void slotRowsDeleted(const QList<int>&);
 
-    virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
+    virtual void slotDataDestroying() {
+        KexiDataAwareObjectInterface::slotDataDestroying();
+    }
 
     /*! Reloads data for this widget.
      Handles KexiTableViewData::reloadRequested() signal. */
-    virtual void reloadData() { KexiDataAwareObjectInterface::reloadData(); }
+    virtual void reloadData() {
+        KexiDataAwareObjectInterface::reloadData();
+    }
 
     //! Copy current selection to a clipboard (e.g. cell)
     virtual void copySelection();
@@ -190,13 +209,13 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     //! Paste current clipboard contents (e.g. to a cell)
     virtual void paste();
 
-  protected:
+protected:
     //! Implementation for KexiDataAwareObjectInterface
     virtual void clearColumnsInternal(bool repaint);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void addHeaderColumn(const QString& caption, const QString& description, 
-      const QIconSet& icon, int width);
+    virtual void addHeaderColumn(const QString& caption, const QString& description,
+                                 const QIconSet& icon, int width);
 
     //! Implementation for KexiDataAwareObjectInterface
     virtual int currentLocalSortingOrder() const;
@@ -214,14 +233,14 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     virtual void updateGUIAfterSorting();
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void createEditor(int row, int col, const QString& addText = QString(), 
-      bool removeOld = false);
+    virtual void createEditor(int row, int col, const QString& addText = QString(),
+                              bool removeOld = false);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );
+    virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false);
 
     //! Implementation for KexiDataAwareObjectInterface
-    virtual void editorShowFocus( int row, int col );
+    virtual void editorShowFocus(int row, int col);
 
     /*! Implementation for KexiDataAwareObjectInterface
      Redraws specified cell. */
@@ -244,7 +263,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     virtual void updateWidgetContentsSize();
 
     /*! Implementation for KexiDataAwareObjectInterface
-     Updates scrollbars of the widget. 
+     Updates scrollbars of the widget.
      QScrollView::updateScrollbars() will be usually called here. */
     virtual void updateWidgetScrollBars();
 
@@ -253,14 +272,14 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     //! Reimplemented from KexiFormDataProvider. Reaction for change of \a item.
     virtual void valueChanged(KexiDataItemInterface* item);
 
-    /*! Reimplemented from KexiFormDataProvider. 
+    /*! Reimplemented from KexiFormDataProvider.
      \return information whether we're currently at new row or now.
-     This can be used e.g. by data-aware widgets to determine if "(autonumber)" 
+     This can be used e.g. by data-aware widgets to determine if "(autonumber)"
      label should be displayed. */
     virtual bool cursorAtNewRow() const;
 
     //! Implementation for KexiDataAwareObjectInterface
-    //! Called by KexiDataAwareObjectInterface::setCursorPosition() 
+    //! Called by KexiDataAwareObjectInterface::setCursorPosition()
     //! if cursor's position is really changed.
     inline virtual void selectCellInternal();
 
@@ -268,13 +287,13 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
     virtual void initDataContents();
 
     /*! @internal
-     Updates row appearance after canceling row edit. 
+     Updates row appearance after canceling row edit.
      Reimplemented from KexiDataAwareObjectInterface: just undoes changes for every data item.
      Used by cancelRowEdit(). */
     virtual void updateAfterCancelRowEdit();
 
     /*! @internal
-     Updates row appearance after accepting row edit. 
+     Updates row appearance after accepting row edit.
      Reimplemented from KexiDataAwareObjectInterface: just clears 'edit' indicator.
      Used by cancelRowEdit(). */
     virtual void updateAfterAcceptRowEdit();

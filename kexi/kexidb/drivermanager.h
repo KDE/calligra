@@ -27,7 +27,8 @@
 
 #include "driver.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class DriverManagerInternal;
 class Connection;
@@ -35,7 +36,7 @@ class Connection;
 //! Database driver management, e.g. finding and loading drivers.
 class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 {
-  public:
+public:
     typedef QHash<QString, KService::Ptr> ServicesHash;
 
     DriverManager();
@@ -46,22 +47,22 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
       \return db driver, or 0 if error (then error message is also set) */
     Driver* driver(const QString& name);
 
-    /*! returns list of available drivers names. 
+    /*! returns list of available drivers names.
       That drivers can be loaded by first use of driver() method. */
     const QStringList driverNames();
 
-    /*! returns information list of available drivers. 
+    /*! returns information list of available drivers.
       That drivers can be loaded by first use of driver() method. */
     const KexiDB::Driver::InfoHash driversInfo();
 
     /*! \return information about driver's named with \a name.
-      The name is case insensitive. 
-      You can check if driver information is not found calling 
+      The name is case insensitive.
+      You can check if driver information is not found calling
       Info::name.isEmpty() (then error message is also set). */
     KexiDB::Driver::Info driverInfo(const QString &name);
 
     /*! \return service information about driver's named with \a name.
-      The name is case insensitive. 
+      The name is case insensitive.
       In most cases you can use driverInfo() instead. */
     KService::Ptr serviceInfo(const QString &name);
 
@@ -81,15 +82,15 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
     virtual QString serverResultName();
 
     /*! HTML information about possible problems encountered.
-     It's displayed in 'details' section, if an error encountered. 
-     Currently it contains a list of incompatible db drivers. 
+     It's displayed in 'details' section, if an error encountered.
+     Currently it contains a list of incompatible db drivers.
      Used in KexiStartupHandler::detectDriverForFile(). */
     QString possibleProblemsInfoMsg() const;
 
-  protected:
+protected:
     virtual void drv_clearServerResult();
 
-  private:
+private:
     DriverManagerInternal *d_int;
 };
 

@@ -19,7 +19,7 @@
 //
 // C++ Interface: pqxxpreparedstatement
 //
-// Description: 
+// Description:
 //
 //
 #ifndef PQXXPREPAREDSTATEMENT_H
@@ -30,19 +30,19 @@
 /**
   @author Adam Pigg <adam@piggz.co.uk>
 */
-namespace KexiDB 
+namespace KexiDB
 {
 class pqxxPreparedStatement : public PreparedStatement
 {
-  public:
+public:
     pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
     virtual ~pqxxPreparedStatement();
 
     virtual bool execute();
-    bool m_resetRequired : 1;
+bool m_resetRequired : 1;
 
-  private:
+private:
     Connection* m_conn;
 };
 }

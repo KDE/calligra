@@ -27,27 +27,48 @@
 
 class QDomNode;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class KFORMEDITOR_EXPORT Connection
 {
-  public:
+public:
     Connection(const QString &sender, const QString &signal,
-      const QString &receiver, const QString &slot);
-    Connection() {;}
-    ~Connection() {;}
+               const QString &receiver, const QString &slot);
+    Connection() {
+        ;
+    }
+    ~Connection() {
+        ;
+    }
 
-    QString	sender() const { return m_sender; }
-    QString	receiver() const { return m_receiver; }
-    QString	signal() const { return m_signal; }
-    QString	slot() const { return m_slot; }
+    QString sender() const {
+        return m_sender;
+    }
+    QString receiver() const {
+        return m_receiver;
+    }
+    QString signal() const {
+        return m_signal;
+    }
+    QString slot() const {
+        return m_slot;
+    }
 
-    void	setSender(const QString &v) { m_sender = v; }
-    void	setReceiver(const QString &v) { m_receiver = v; }
-    void	setSignal(const QString &v) { m_signal = v; }
-    void	setSlot(const QString &v) { m_slot = v; }
+    void setSender(const QString &v) {
+        m_sender = v;
+    }
+    void setReceiver(const QString &v) {
+        m_receiver = v;
+    }
+    void setSignal(const QString &v) {
+        m_signal = v;
+    }
+    void setSlot(const QString &v) {
+        m_slot = v;
+    }
 
-  protected:
+protected:
     QString m_sender;
     QString m_signal;
     QString m_receiver;
@@ -58,9 +79,11 @@ typedef Q3PtrList<Connection> ConnectionList;
 
 class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
 {
-  public:
+public:
     ConnectionBuffer();
-    ~ConnectionBuffer() {;}
+    ~ConnectionBuffer() {
+        ;
+    }
 
     void save(QDomNode &parentNode);
     void load(QDomNode parentNode);

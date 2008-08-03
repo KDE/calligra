@@ -25,9 +25,9 @@
 using namespace KexiDB;
 
 SchemaData::SchemaData(int obj_type)
-  : m_type(obj_type)
-  , m_id(-1)
-  , m_native(false)
+        : m_type(obj_type)
+        , m_id(-1)
+        , m_native(false)
 {
 }
 
@@ -37,19 +37,19 @@ SchemaData::~SchemaData()
 
 void SchemaData::clear()
 {
-  m_id = -1;
-  m_name.clear();
-  m_caption.clear();
-  m_desc.clear();
+    m_id = -1;
+    m_name.clear();
+    m_caption.clear();
+    m_desc.clear();
 }
 
 QString SchemaData::schemaDataDebugString() const
 {
-  QString desc = m_desc;
-  if (desc.length()>40) {
-    desc.truncate(40);
-    desc+="...";
-  }
-  return QString("id=%1 name='%2' caption='%3' desc='%4'")
-    .arg(m_id).arg(m_name).arg(m_caption).arg(desc);
+    QString desc = m_desc;
+    if (desc.length() > 40) {
+        desc.truncate(40);
+        desc += "...";
+    }
+    return QString("id=%1 name='%2' caption='%3' desc='%4'")
+           .arg(m_id).arg(m_name).arg(m_caption).arg(desc);
 }

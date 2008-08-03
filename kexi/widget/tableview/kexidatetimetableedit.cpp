@@ -47,14 +47,14 @@
 #include <kexiutils/utils.h>
 
 KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QWidget *parent)
- : KexiInputTableEdit(column, parent)
+        : KexiInputTableEdit(column, parent)
 {
-  setName("KexiDateTimeTableEdit");
+    setName("KexiDateTimeTableEdit");
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-  m_lineedit->setInputMask( 
-    dateTimeInputMask( m_dateFormatter, m_timeFormatter ) );
+    m_lineedit->setInputMask(
+        dateTimeInputMask(m_dateFormatter, m_timeFormatter));
 }
 
 KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
@@ -63,100 +63,99 @@ KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
 
 void KexiDateTimeTableEdit::setValueInInternalEditor(const QVariant &value)
 {
-  if (value.isValid() && value.toDateTime().isValid()) 
-    m_lineedit->setText( 
-      m_dateFormatter.dateToString( value.toDateTime().date() ) + " " +
-      m_timeFormatter.timeToString( value.toDateTime().time() ) );
-  else
-    m_lineedit->setText( QString() );
+    if (value.isValid() && value.toDateTime().isValid())
+        m_lineedit->setText(
+            m_dateFormatter.dateToString(value.toDateTime().date()) + " " +
+            m_timeFormatter.timeToString(value.toDateTime().time()));
+    else
+        m_lineedit->setText(QString());
 }
 
 void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
-  if (removeOld) {
-    //new time entering... just fill the line edit
+    if (removeOld) {
+        //new time entering... just fill the line edit
 //! @todo cut string if too long..
-    QString add(add_.toString());
-    m_lineedit->setText(add);
-    m_lineedit->setCursorPosition(add.length());
-    return;
-  }
-  setValueInInternalEditor( m_origValue );
-  m_lineedit->setCursorPosition(0); //ok?
+        QString add(add_.toString());
+        m_lineedit->setText(add);
+        m_lineedit->setCursorPosition(add.length());
+        return;
+    }
+    setValueInInternalEditor(m_origValue);
+    m_lineedit->setCursorPosition(0); //ok?
 }
 
-void KexiDateTimeTableEdit::setupContents( QPainter *p, bool focused, const QVariant& val, 
-  QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+void KexiDateTimeTableEdit::setupContents(QPainter *p, bool focused, const QVariant& val,
+        QString &txt, int &align, int &x, int &y_offset, int &w, int &h)
 {
-  Q_UNUSED(p);
-  Q_UNUSED(focused);
-  Q_UNUSED(x);
-  Q_UNUSED(w);
-  Q_UNUSED(h);
+    Q_UNUSED(p);
+    Q_UNUSED(focused);
+    Q_UNUSED(x);
+    Q_UNUSED(w);
+    Q_UNUSED(h);
 #ifdef Q_WS_WIN
-  y_offset = -1;
+    y_offset = -1;
 #else
-  y_offset = 0;
+    y_offset = 0;
 #endif
-  if (val.toDateTime().isValid())
-    txt = m_dateFormatter.dateToString(val.toDateTime().date()) + " " 
-      + m_timeFormatter.timeToString(val.toDateTime().time());
-  align |= Qt::AlignLeft;
+    if (val.toDateTime().isValid())
+        txt = m_dateFormatter.dateToString(val.toDateTime().date()) + " "
+              + m_timeFormatter.timeToString(val.toDateTime().time());
+    align |= Qt::AlignLeft;
 }
 
 bool KexiDateTimeTableEdit::valueIsNull()
 {
-  if (textIsEmpty())
-    return true;
-  return !stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text()).isValid();
+    if (textIsEmpty())
+        return true;
+    return !stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text()).isValid();
 }
 
 bool KexiDateTimeTableEdit::valueIsEmpty()
 {
-  return valueIsNull();//js OK? TODO (nonsense?)
+    return valueIsNull();//js OK? TODO (nonsense?)
 }
 
 QVariant KexiDateTimeTableEdit::value()
 {
-  if (textIsEmpty())
-    return QVariant();
-  return stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text());
+    if (textIsEmpty())
+        return QVariant();
+    return stringToDateTime(m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 bool KexiDateTimeTableEdit::valueIsValid()
 {
-  return dateTimeIsValid( m_dateFormatter, m_timeFormatter, m_lineedit->text() );
+    return dateTimeIsValid(m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 bool KexiDateTimeTableEdit::textIsEmpty() const
 {
-  return dateTimeIsEmpty( m_dateFormatter, m_timeFormatter, m_lineedit->text() );
+    return dateTimeIsEmpty(m_dateFormatter, m_timeFormatter, m_lineedit->text());
 }
 
 void KexiDateTimeTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)
 {
-  Q_UNUSED(visibleValue);
-  if (!value.isNull() && value.toDateTime().isValid())
-    qApp->clipboard()->setText( m_dateFormatter.dateToString(value.toDateTime().date()) + " " 
-      + m_timeFormatter.timeToString(value.toDateTime().time()) );
-  else
-    qApp->clipboard()->setText( QString() );
+    Q_UNUSED(visibleValue);
+    if (!value.isNull() && value.toDateTime().isValid())
+        qApp->clipboard()->setText(m_dateFormatter.dateToString(value.toDateTime().date()) + " "
+                                   + m_timeFormatter.timeToString(value.toDateTime().time()));
+    else
+        qApp->clipboard()->setText(QString());
 }
 
 void KexiDateTimeTableEdit::handleAction(const QString& actionName)
 {
-  const bool alreadyVisible = m_lineedit->isVisible();
+    const bool alreadyVisible = m_lineedit->isVisible();
 
-  if (actionName=="edit_paste") {
-    const QVariant newValue( stringToDateTime(m_dateFormatter, m_timeFormatter, qApp->clipboard()->text()) );
-    if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
-      emit editRequested();
-      m_lineedit->clear();
-    }
-    setValueInInternalEditor( newValue );
-  }
-  else
-    KexiInputTableEdit::handleAction(actionName);
+    if (actionName == "edit_paste") {
+        const QVariant newValue(stringToDateTime(m_dateFormatter, m_timeFormatter, qApp->clipboard()->text()));
+        if (!alreadyVisible) { //paste as the entire text if the cell was not in edit mode
+            emit editRequested();
+            m_lineedit->clear();
+        }
+        setValueInInternalEditor(newValue);
+    } else
+        KexiInputTableEdit::handleAction(actionName);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateTimeEditorFactoryItem, KexiDateTimeTableEdit)

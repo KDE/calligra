@@ -30,32 +30,33 @@ class KFontRequester;
 class KColorCombo;
 class QActionGroup;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 //! A simple dialog to edit rich text
 /*! It allows to change font name, style and color, alignment. */
 class KFORMEDITOR_EXPORT RichTextDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     RichTextDialog(QWidget *parent, const QString &text);
     ~RichTextDialog();
 
     QString text() const;
 
-  public slots:
+public slots:
     void changeFont(const QString &);
     void changeColor(const QColor&);
     void slotActionTriggered(QAction* action);
     //void cursorPositionChanged();
     void slotCurrentCharFormatChanged(const QTextCharFormat& f);
-    
-  private:
+
+private:
     QAction *m_fontComboAction, *m_colorComboAction, *m_boldTextAction,
-      *m_italicTextAction, *m_underlineTextAction,
-      *m_subscriptTextAction, *m_superscriptTextAction,
-      *m_alignLeftAction, *m_alignRightAction, *m_alignCenterAction, *m_alignJustifyAction;
+    *m_italicTextAction, *m_underlineTextAction,
+    *m_subscriptTextAction, *m_superscriptTextAction,
+    *m_alignLeftAction, *m_alignRightAction, *m_alignCenterAction, *m_alignJustifyAction;
     QActionGroup* m_alignActionGroup;
     KToolBar  *m_toolbar;
     KTextEdit  *m_edit;

@@ -24,32 +24,33 @@
 #include <QVariant>
 #include <QByteArray>
 
-namespace KexiUtils {
+namespace KexiUtils
+{
 
 //! @short A simple property map
 /*!
-  Some classes may need internal property system, not defined as Qt propety 
+  Some classes may need internal property system, not defined as Qt propety
   system and not publically available (e.g. KexiPart class).
   Property names are not case-sensitive.
-  This class is for use by other classes by inheriting. 
+  This class is for use by other classes by inheriting.
 */
 class KEXIUTILS_EXPORT InternalPropertyMap
 {
-  public:
+public:
     InternalPropertyMap();
     ~InternalPropertyMap();
 
-    /*! \returns property value for name \a name. 
-     If \a defaultValue is provided and there is no property with 
+    /*! \returns property value for name \a name.
+     If \a defaultValue is provided and there is no property with
      specified name, \a defaultValue is returned. */
-    QVariant internalPropertyValue(const QByteArray& name, 
-      const QVariant& defaultValue = QVariant()) const;
+    QVariant internalPropertyValue(const QByteArray& name,
+                                   const QVariant& defaultValue = QVariant()) const;
 
-    /*! Sets property value \a value for propety \a name. 
+    /*! Sets property value \a value for propety \a name.
      If \a value is null, the property is deleted. */
     void setInternalPropertyValue(const QByteArray& name, const QVariant& value);
 
-  private:
+private:
     class Private;
     Private * const d;
 };

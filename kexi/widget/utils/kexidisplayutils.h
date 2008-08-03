@@ -28,11 +28,11 @@ class QWidget;
 //! \brief A set of utilities related to displaying common elements in Kexi, like e.g. (autonumber) sign
 class KEXIGUIUTILS_EXPORT KexiDisplayUtils
 {
-  public:
+public:
     //! Stores set of display parameters used in utility functions
     class KEXIGUIUTILS_EXPORT DisplayParameters
     {
-      public:
+    public:
         //! Creates uninitialized parameters
         DisplayParameters();
 
@@ -48,8 +48,8 @@ class KEXIGUIUTILS_EXPORT KexiDisplayUtils
     static void initDisplayForAutonumberSign(DisplayParameters& par, QWidget *widget);
 
     //! Paints autonumber sign using \a par parameters
-    static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter, 
-      int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor = false);
+    static void paintAutonumberSign(const DisplayParameters& par, QPainter* painter,
+                                    int x, int y, int width, int height, Qt::Alignment alignment, bool overrideColor = false);
 
     //! Initializes display parameters for default value
     static void initDisplayForDefaultValue(DisplayParameters& par, QWidget *widget);

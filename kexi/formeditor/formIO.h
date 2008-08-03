@@ -43,19 +43,20 @@ class QLabel;
 //! A blank widget displayed when class is not supported
 class KFORMEDITOR_EXPORT CustomWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     CustomWidget(const Q3CString &className, QWidget *parent);
     virtual ~CustomWidget();
 
     virtual void paintEvent(QPaintEvent *ev);
 
-  private:
+private:
     Q3CString m_className;
 };
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class Form;
 class ObjectTreeItem;
@@ -74,12 +75,12 @@ KFORMEDITOR_EXPORT uint version();
     This class is able to read and write Forms to .ui files, and to save each type of properties, including set and enum
     properties, and pixmaps(pixmap-related code was taken from Qt Designer).
  **/
- //! A class to save/load forms from .ui files
+//! A class to save/load forms from .ui files
 class KFORMEDITOR_EXPORT FormIO : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     FormIO();
     ~FormIO();
 
@@ -116,10 +117,10 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
         \return true if loading succeeded.
      */
     static bool loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src,
-      bool preview=false);
+                                      bool preview = false);
 
-    static bool loadFormFromString(Form *form, QWidget *container, QString &src, 
-      bool preview=false);
+    static bool loadFormFromString(Form *form, QWidget *container, QString &src,
+                                   bool preview = false);
 
     /*! Loads the .ui file \a filename in the Form \a form. If \a filename is null or not given,
         a Open File dialog will be shown to select the file to open.
@@ -127,8 +128,8 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
         \return true if loading succeeded.
         \todo Add errors code and error dialog
     */
-    static bool loadFormFromFile(Form *form, QWidget *container, 
-      const QString &filename = QString());
+    static bool loadFormFromFile(Form *form, QWidget *container,
+                                 const QString &filename = QString());
 
     /*! Saves the widget associated to the ObjectTreeItem \a item into DOM document \a domDoc,
         with \a parent as parent node.
@@ -138,7 +139,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
         This is used to copy/paste widgets.
     */
     static void saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc,
-      bool insideGridLayout=false);
+                           bool insideGridLayout = false);
 
     /*! Cleans the "UI" QDomElement after saving widget. It deletes the "includes" element
      not needed when pasting, and make sure all the "widget" elements are at the beginning.
@@ -151,7 +152,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
         This is used to copy/paste widgets.
     */
     static void loadWidget(Container *container,
-      const QDomElement &el, QWidget *parent=0);
+                           const QDomElement &el, QWidget *parent = 0);
 
     /*! Save an element in the \a domDoc as child of \a parentNode.
       The element will be saved like this :
@@ -159,7 +160,7 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
       \endcode
     */
     static void savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName,
-      const QString &property, const QVariant &value);
+                                    const QString &property, const QVariant &value);
 
     /*! Read an object property in the DOM doc.
        \param node   the QDomNode of the property
@@ -175,13 +176,13 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
        \param w      the widget whose property is being saved
        \param lib    the widget library for which the property is being saved
 
-       Properties of subwidget are saved with subwidget="true" arribute added 
+       Properties of subwidget are saved with subwidget="true" arribute added
        to 'property' XML element.
     */
     static void savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const char *name,
-      const QVariant &value, QWidget *w, WidgetLibrary *lib=0);
+                                  const QVariant &value, QWidget *w, WidgetLibrary *lib = 0);
 
-  protected:
+protected:
     /*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
     static void writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value);
 
@@ -205,14 +206,14 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
     static QPixmap loadImage(QDomDocument domDoc, const QString& name);
 
     /*! Reads the child nodes of a "widget" element. */
-    static void readChildNodes(ObjectTreeItem *tree, Container *container, 
-      const QDomElement &el, QWidget *w);
+    static void readChildNodes(ObjectTreeItem *tree, Container *container,
+                               const QDomElement &el, QWidget *w);
 
     /*! Adds an include file name to be saved in the "includehints" part of .ui file,
      which is needed by uic. */
     static void addIncludeFileName(const QString &include, QDomDocument &domDoc);
 
-  private:
+private:
     // This dict stores buddies associations until the Form is completely loaded.
     static Q3Dict<QLabel>  *m_buddies;
 

@@ -23,68 +23,71 @@
 #include <ksharedptr.h>
 #include "kexipart.h"
 
-namespace Kexi {
-
-enum ActionCategory
+namespace Kexi
 {
-  NoActionCategory = 0,      //!< no category at all
-  GlobalActionCategory = 1,  //!< global application action like editcopy; 
-                             //!< can be applied to focused widget (of many types)
-  PartItemActionCategory = 2,//!< action related to part item, e.g. data_execute; 
-                             //!< requires context, used only in the navigator
-  WindowActionCategory = 4   //!< action related to active window, which can display 
-                             //!< table, query, form, report...
+
+enum ActionCategory {
+    NoActionCategory = 0,      //!< no category at all
+    GlobalActionCategory = 1,  //!< global application action like editcopy;
+    //!< can be applied to focused widget (of many types)
+    PartItemActionCategory = 2,//!< action related to part item, e.g. data_execute;
+    //!< requires context, used only in the navigator
+    WindowActionCategory = 4   //!< action related to active window, which can display
+    //!< table, query, form, report...
 };
 
 //! @short A set of functions used to declare action categories
-/*! Note: we do not declare actions used in design/text view modes, 
- because the categories are used in the data view, 
+/*! Note: we do not declare actions used in design/text view modes,
+ because the categories are used in the data view,
  for now in the 'assign action to a push button' function. */
 class KEXICORE_EXPORT ActionCategories : public KShared
 {
-  public:
+public:
     ActionCategories();
     ~ActionCategories();
 
-    /*! Declares action \a name for categories \a category (a combination of ActionCategory enum values). 
+    /*! Declares action \a name for categories \a category (a combination of ActionCategory enum values).
      The categories is merged with the previous declaration (if any).
      \a supportedObjectTypes can be specified for ActionCategory::WindowAction to declare what object types
      the action allows, it is a combination of KexiPart::ObjectTypes enum values. */
     void addAction(const char* name, int categories,
-      KexiPart::ObjectTypes supportedObjectType1 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType2 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType3 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType4 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType5 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType6 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType7 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType8 = (KexiPart::ObjectTypes)0);
+                   KexiPart::ObjectTypes supportedObjectType1 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType2 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType3 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType4 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType5 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType6 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType7 = (KexiPart::ObjectTypes)0,
+                   KexiPart::ObjectTypes supportedObjectType8 = (KexiPart::ObjectTypes)0);
 
-    void addGlobalAction(const char* name)
-      { addAction(name, Kexi::GlobalActionCategory); }
+    void addGlobalAction(const char* name) {
+        addAction(name, Kexi::GlobalActionCategory);
+    }
 
     //! Convenience function for adding action of category "part item", uses \ref addAction().
-    void addPartItemAction(const char* name)
-      { addAction(name, Kexi::PartItemActionCategory); }
+    void addPartItemAction(const char* name) {
+        addAction(name, Kexi::PartItemActionCategory);
+    }
 
     /*! Convenience function for adding action of category "window", uses \ref addAction().
-     \a supportedObjectTypes is a combination of KexiPart::ObjectTypes enum values describing 
+     \a supportedObjectTypes is a combination of KexiPart::ObjectTypes enum values describing
      object types supported by the action. */
     void addWindowAction(const char* name,
-      KexiPart::ObjectTypes supportedObjectType1 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType2 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType3 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType4 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType5 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType6 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType7 = (KexiPart::ObjectTypes)0,
-      KexiPart::ObjectTypes supportedObjectType8 = (KexiPart::ObjectTypes)0)
-      { addAction(name, Kexi::WindowActionCategory, supportedObjectType1, supportedObjectType2,
-        supportedObjectType3, supportedObjectType4, supportedObjectType5, supportedObjectType6,
-        supportedObjectType7, supportedObjectType8); }
+                         KexiPart::ObjectTypes supportedObjectType1 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType2 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType3 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType4 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType5 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType6 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType7 = (KexiPart::ObjectTypes)0,
+                         KexiPart::ObjectTypes supportedObjectType8 = (KexiPart::ObjectTypes)0) {
+        addAction(name, Kexi::WindowActionCategory, supportedObjectType1, supportedObjectType2,
+                  supportedObjectType3, supportedObjectType4, supportedObjectType5, supportedObjectType6,
+                  supportedObjectType7, supportedObjectType8);
+    }
 
     /*! If \a set is true, action with name \a name will support any possible object type
-     that can be checked by actionSupportsObjectType(). 
+     that can be checked by actionSupportsObjectType().
      Makes sense for action of category Kexi::WindowActionCategory. */
     void setAllObjectTypesSupported(const char* name, bool set);
 
@@ -95,7 +98,7 @@ class KEXICORE_EXPORT ActionCategories : public KShared
     /*! \return true if action \a name supports \a objectType.
      Only works for actions of WindowAction category. */
     bool actionSupportsObjectType(const char* name, KexiPart::ObjectTypes objectType) const;
-  protected:
+protected:
     class Private;
     Private *d;
 };

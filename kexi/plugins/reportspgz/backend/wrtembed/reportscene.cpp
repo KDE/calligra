@@ -39,192 +39,174 @@
 #include "reportrectentity.h"
 #include <QGraphicsSceneMouseEvent>
 
-ReportScene::ReportScene ( qreal w, qreal h, ReportDesigner *rd )
-		: QGraphicsScene ( 0,0,w, h )
+ReportScene::ReportScene(qreal w, qreal h, ReportDesigner *rd)
+        : QGraphicsScene(0, 0, w, h)
 {
-	_rd = rd;
+    _rd = rd;
 }
 ReportScene::~ReportScene()
 {
-	// Qt should be handling everything for us
+    // Qt should be handling everything for us
 }
 
-void ReportScene::drawBackground ( QPainter* painter, const QRectF & clip )
+void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
 {
-	//Draw the default background colour
-	QGraphicsScene::drawBackground ( painter, clip );
-	painter->setRenderHint ( QPainter::Antialiasing, true );
+    //Draw the default background colour
+    QGraphicsScene::drawBackground(painter, clip);
+    painter->setRenderHint(QPainter::Antialiasing, true);
 
-	if ( _rd->propertySet()->property ( "ShowGrid" ).value().toBool() )
-	{
-		if ( KoUnit::unitName ( u ) != KoUnit::unitName ( _rd->pageUnit() ) )
-		{
-			u = _rd->pageUnit();
-			if ( KoUnit::unitName ( u ) == "cc" || KoUnit::unitName ( u ) == "pi" || KoUnit::unitName ( u ) == "mm" )
-				major = POINT_TO_INCH ( u.fromUserValue ( 10 ) ) * KoGlobal::dpiX();
-			else if ( KoUnit::unitName ( u ) == "pt" )
-				major = POINT_TO_INCH ( u.fromUserValue ( 100 ) ) * KoGlobal::dpiX();
-			else
-				major = POINT_TO_INCH ( u.fromUserValue ( 1 ) ) * KoGlobal::dpiX();
+    if (_rd->propertySet()->property("ShowGrid").value().toBool()) {
+        if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
+            u = _rd->pageUnit();
+            if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm")
+                major = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
+            else if (KoUnit::unitName(u) == "pt")
+                major = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
+            else
+                major = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
 
-		}
-		minor = _rd->propertySet()->property ( "GridDivisions" ).value().toInt();
-		pixel_increment = ( major/minor );
+        }
+        minor = _rd->propertySet()->property("GridDivisions").value().toInt();
+        pixel_increment = (major / minor);
 
-		QPen pen = painter->pen();
-		painter->setPen ( QColor ( 212,212,212 ) );
+        QPen pen = painter->pen();
+        painter->setPen(QColor(212, 212, 212));
 
-		if ( pixel_increment > 2 ) // dont bother painting points if increments are so small
-		{
-			int wpoints = qRound ( sceneRect().width() / pixel_increment );
-			int hpoints = qRound ( sceneRect().height() / pixel_increment );
-			for ( int i = 0; i < wpoints; ++i )
-			{
-				for ( int j = 0; j < hpoints; ++j )
-				{
-					if ( i % minor == 0 && j % minor == 0 )
-					{
-						painter->drawLine ( QPointF ( i * pixel_increment, j * pixel_increment ),QPointF ( i * pixel_increment, j * pixel_increment  + major ) );
-						painter->drawLine ( QPointF ( i * pixel_increment, j * pixel_increment ),QPointF ( i * pixel_increment + major, j * pixel_increment ) );
-					}
-					else
-					{
-						painter->drawPoint ( QPointF ( i * pixel_increment, j * pixel_increment ) );
-					}
-				}
-			}
+        if (pixel_increment > 2) { // dont bother painting points if increments are so small
+            int wpoints = qRound(sceneRect().width() / pixel_increment);
+            int hpoints = qRound(sceneRect().height() / pixel_increment);
+            for (int i = 0; i < wpoints; ++i) {
+                for (int j = 0; j < hpoints; ++j) {
+                    if (i % minor == 0 && j % minor == 0) {
+                        painter->drawLine(QPointF(i * pixel_increment, j * pixel_increment), QPointF(i * pixel_increment, j * pixel_increment  + major));
+                        painter->drawLine(QPointF(i * pixel_increment, j * pixel_increment), QPointF(i * pixel_increment + major, j * pixel_increment));
+                    } else {
+                        painter->drawPoint(QPointF(i * pixel_increment, j * pixel_increment));
+                    }
+                }
+            }
 
-		}
+        }
 
-		pen.setWidth ( 1 );
-		//update ( clip );
-	}
+        pen.setWidth(1);
+        //update ( clip );
+    }
 }
 
-void ReportScene::mousePressEvent ( QGraphicsSceneMouseEvent * e )
+void ReportScene::mousePressEvent(QGraphicsSceneMouseEvent * e)
 {
-	_rd->setActiveScene ( this );
+    _rd->setActiveScene(this);
 
-	// clear the selection if Shift Key has not been pressed and it's a left mouse button   and
-	// if the right mouse button has been pressed over an item which is not part of selected items
-	if (((e->modifiers() & Qt::ShiftModifier) == 0 && e->button() == Qt::LeftButton ) 		||
-		( !(selectedItems().contains(itemAt(e->scenePos()))) && e->button() == Qt::RightButton )
-	)
-		clearSelection();
+    // clear the selection if Shift Key has not been pressed and it's a left mouse button   and
+    // if the right mouse button has been pressed over an item which is not part of selected items
+    if (((e->modifiers() & Qt::ShiftModifier) == 0 && e->button() == Qt::LeftButton)   ||
+            (!(selectedItems().contains(itemAt(e->scenePos()))) && e->button() == Qt::RightButton)
+       )
+        clearSelection();
 
-	//This will be caught by the section to display its properties, if an item is under the cursor then they will diplay their properties
-	emit ( clicked() );
+    //This will be caught by the section to display its properties, if an item is under the cursor then they will diplay their properties
+    emit(clicked());
 
-	QGraphicsScene::mousePressEvent ( e );
+    QGraphicsScene::mousePressEvent(e);
 
 }
 
-void ReportScene::contextMenuEvent( QGraphicsSceneContextMenuEvent * e )
+void ReportScene::contextMenuEvent(QGraphicsSceneContextMenuEvent * e)
 {
-	_rd->sectionContextMenuEvent ( this, e );
+    _rd->sectionContextMenuEvent(this, e);
 }
 
-QPointF ReportScene::gridPoint ( const QPointF& p )
+QPointF ReportScene::gridPoint(const QPointF& p)
 {
-	if ( !_rd->propertySet()->property ( "GridSnap" ).value().toBool() )
-	{
-		return p;
-	}
+    if (!_rd->propertySet()->property("GridSnap").value().toBool()) {
+        return p;
+    }
 
-	if ( KoUnit::unitName ( u ) != KoUnit::unitName ( _rd->pageUnit() ) )
-	{
-		u = _rd->pageUnit();
-		if ( KoUnit::unitName ( u ) == "cc" || KoUnit::unitName ( u ) == "pi" || KoUnit::unitName ( u ) == "mm" )
-			major = POINT_TO_INCH ( u.fromUserValue ( 10 ) ) * KoGlobal::dpiX();
-		else if ( KoUnit::unitName ( u ) == "pt" )
-			major = POINT_TO_INCH ( u.fromUserValue ( 100 ) ) * KoGlobal::dpiX();
-		else
-			major = POINT_TO_INCH ( u.fromUserValue ( 1 ) ) * KoGlobal::dpiX();
+    if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
+        u = _rd->pageUnit();
+        if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm")
+            major = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
+        else if (KoUnit::unitName(u) == "pt")
+            major = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
+        else
+            major = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
 
 
-	}
-	minor = _rd->propertySet()->property ( "GridDivisions" ).value().toInt();
-	pixel_increment = ( major/minor );
+    }
+    minor = _rd->propertySet()->property("GridDivisions").value().toInt();
+    pixel_increment = (major / minor);
 
-	return QPointF ( qRound ( ( p.x() / pixel_increment ) ) * pixel_increment, qRound ( ( p.y() / pixel_increment ) ) * pixel_increment );
+    return QPointF(qRound((p.x() / pixel_increment)) * pixel_increment, qRound((p.y() / pixel_increment)) * pixel_increment);
 }
 
-void ReportScene::focusOutEvent ( QFocusEvent * focusEvent )
+void ReportScene::focusOutEvent(QFocusEvent * focusEvent)
 {
-	emit ( lostFocus() );
-	QGraphicsScene::focusOutEvent ( focusEvent );
+    emit(lostFocus());
+    QGraphicsScene::focusOutEvent(focusEvent);
 }
 
 qreal ReportScene::lowestZValue()
 {
-	qreal z;
-	qreal zz;
-	z = 0;
-	QGraphicsItemList list = items();
-	for ( QGraphicsItemList::iterator it = list.begin();it != list.end(); it++ )
-	{
-		zz = (*it)->zValue();
-		if (zz < z)
-		{
-			z = zz;
-		}
-			
-	}
-	return z;
+    qreal z;
+    qreal zz;
+    z = 0;
+    QGraphicsItemList list = items();
+    for (QGraphicsItemList::iterator it = list.begin();it != list.end(); it++) {
+        zz = (*it)->zValue();
+        if (zz < z) {
+            z = zz;
+        }
+
+    }
+    return z;
 }
 
 qreal ReportScene::highestZValue()
 {
-	qreal z;
-	qreal zz;
-	z = 0;
-	QGraphicsItemList list = items();
-	for ( QGraphicsItemList::iterator it = list.begin();it != list.end(); it++ )
-	{
-		zz = (*it)->zValue();
-		if (zz > z)
-		{
-			z = zz;
-		}
-			
-	}
-	return z;
+    qreal z;
+    qreal zz;
+    z = 0;
+    QGraphicsItemList list = items();
+    for (QGraphicsItemList::iterator it = list.begin();it != list.end(); it++) {
+        zz = (*it)->zValue();
+        if (zz > z) {
+            z = zz;
+        }
+
+    }
+    return z;
 }
 
 void ReportScene::lowerSelected()
 {
-	QGraphicsItemList list = selectedItems();
-	for ( QGraphicsItemList::iterator it = list.begin();
-		     it != list.end(); it++ )
-	{
-		(*it)->setZValue(lowestZValue() - 1);
-	}
+    QGraphicsItemList list = selectedItems();
+    for (QGraphicsItemList::iterator it = list.begin();
+            it != list.end(); it++) {
+        (*it)->setZValue(lowestZValue() - 1);
+    }
 }
 
 void ReportScene::raiseSelected()
 {
-	QGraphicsItemList list = selectedItems();
-	for ( QGraphicsItemList::iterator it = list.begin();
-		     it != list.end(); it++ )
-	{
-		(*it)->setZValue(highestZValue() + 1);
-	}
+    QGraphicsItemList list = selectedItems();
+    for (QGraphicsItemList::iterator it = list.begin();
+            it != list.end(); it++) {
+        (*it)->setZValue(highestZValue() + 1);
+    }
 }
 
 QGraphicsItemList ReportScene::itemsOrdered()
 {
-	QGraphicsItemList r;
-	QGraphicsItemList list = items();
-	for ( QGraphicsItemList::iterator it = list.begin();it != list.end(); it++ )
-	{
-		for ( QGraphicsItemList::iterator rit = r.begin();rit != r.end(); rit++ )
-		{
-		
-			
-		}
-			
-	}
+    QGraphicsItemList r;
+    QGraphicsItemList list = items();
+    for (QGraphicsItemList::iterator it = list.begin();it != list.end(); it++) {
+        for (QGraphicsItemList::iterator rit = r.begin();rit != r.end(); rit++) {
 
-	
-	return r;
+
+        }
+
+    }
+
+
+    return r;
 }

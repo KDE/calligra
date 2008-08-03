@@ -32,19 +32,19 @@ struct SourceConnection;
 //! A model for a single connection (relationship) between tables in the relations view
 class KEXIRELATIONSVIEW_EXPORT KexiRelationsConnection
 {
-  public:
+public:
     KexiRelationsConnection(
-      KexiRelationsTableContainer *masterTbl, 
-      KexiRelationsTableContainer *detailsTbl, 
-      SourceConnection &s,
-      KexiRelationsScrollArea *scrollArea);
+        KexiRelationsTableContainer *masterTbl,
+        KexiRelationsTableContainer *detailsTbl,
+        SourceConnection &s,
+        KexiRelationsScrollArea *scrollArea);
 
     ~KexiRelationsConnection();
 
     void drawConnection(QPainter *p);
 
     bool selected() const;
-    
+
     void setSelected(bool s);
 
     QRect connectionRect();
@@ -63,7 +63,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsConnection
 
     QString toString() const;
 
-  private:
+private:
     class Private;
     Private* const d;
 };

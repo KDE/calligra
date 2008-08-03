@@ -35,28 +35,27 @@
 
 namespace KexiDB
 {
-  class Connection;
+class Connection;
 }
 
 namespace KexiPart
 {
-  class Info;
-  class Part;
-  class StaticPart;
+class Info;
+class Part;
+class StaticPart;
 
-  struct Missing
-  {
+struct Missing {
     QString name;
     QString mime;
     QString url;
-  };
+};
 
-  typedef QHash<QString, Info*> PartInfoDict;
-  typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
-  typedef QList<Missing> MissingList;
-  typedef QList<Info*> PartInfoList;
-  typedef QList<Info*>::iterator PartInfoListIterator;
-  typedef QHash<int, Part*> PartDict;
+typedef QHash<QString, Info*> PartInfoDict;
+typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
+typedef QList<Missing> MissingList;
+typedef QList<Info*> PartInfoList;
+typedef QList<Info*>::iterator PartInfoListIterator;
+typedef QHash<int, Part*> PartDict;
 
 /**
  * @short KexiPart's manager: looks up and instantiates them
@@ -65,9 +64,9 @@ namespace KexiPart
  */
 class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /**
      * creates an empty instance
      */
@@ -108,29 +107,33 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
     /**
      * @returns parts metioned in the project meta tables but not available locally
      */
-    MissingList missingParts() const { return m_missing; }
+    MissingList missingParts() const {
+        return m_missing;
+    }
 
 
     /**
      * @returns a list of the available KexiParts in well-defined order
      */
-    PartInfoList *partInfoList() { return &m_partlist; }
+    PartInfoList *partInfoList() {
+        return &m_partlist;
+    }
 
-  signals:
+signals:
     void partLoaded(KexiPart::Part*);
 
-  protected:
+protected:
     //! Used by StaticPart
     void insertStaticPart(KexiPart::StaticPart* part);
 
-  private:
+private:
     PartDict m_parts;
     PartInfoList m_partlist;
     PartInfoDict m_partsByMime;
     MissingList m_missing;
     int m_nextTempProjectPartID;
-    bool m_lookupDone : 1;
-    bool m_lookupResult : 1;
+bool m_lookupDone : 1;
+bool m_lookupResult : 1;
 
     friend class StaticPart;
 };

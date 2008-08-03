@@ -30,35 +30,38 @@
 #define TabWidgetBase QTabWidget
 //#define USE_KTabWidget //todo: uncomment
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class Form;
 
 /*! \return parent object of \a o that inherits \a className or NULL if no such parent
- If the parent is found, \a prevPrev is set to a child of child of the parent, 
+ If the parent is found, \a prevPrev is set to a child of child of the parent,
  what for TabWidget means the page widget. */
 template<class type>
 type* findParent(QObject* o, const char* className, QObject* &prevPrev)
 {
-  if (!o || !className || className[0]=='\0')
-    return 0;
-  QObject *prev = o;
-  while ( ((o=o->parent())) && !o->inherits(className) ) {
-    prevPrev = prev;
-    prev = o;
-  }
-  return static_cast<type*>(o);
+    if (!o || !className || className[0] == '\0')
+        return 0;
+    QObject *prev = o;
+    while (((o = o->parent())) && !o->inherits(className)) {
+        prevPrev = prev;
+        prev = o;
+    }
+    return static_cast<type*>(o);
 }
 
 //! A tab widget providing information about height of the tab bar.
 class KFORMEDITOR_EXPORT TabWidget : public TabWidgetBase
 {
-  Q_OBJECT
-  public:
-    TabWidget(QWidget *parent) 
-     : TabWidgetBase(parent) {}
+    Q_OBJECT
+public:
+    TabWidget(QWidget *parent)
+            : TabWidgetBase(parent) {}
     virtual ~TabWidget() {}
-    int tabBarHeight() const { return tabBar()->height(); }
+    int tabBarHeight() const {
+        return tabBar()->height();
+    }
 };
 
 //! @short A list of widget pointers.
@@ -70,10 +73,10 @@ typedef Q3PtrListIterator<QWidget> WidgetListIterator;
 //! @short A helper for sorting widgets horizontally
 class HorWidgetList : public WidgetList
 {
-  public:
+public:
     HorWidgetList(QWidget *topLevelWidget);
     virtual ~HorWidgetList();
-  protected:
+protected:
     virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
     QWidget *m_topLevelWidget;
 };
@@ -81,10 +84,10 @@ class HorWidgetList : public WidgetList
 //! @short A helper for sorting widgets vertically
 class VerWidgetList : public WidgetList
 {
-  public:
+public:
     VerWidgetList(QWidget *topLevelWidget);
     virtual ~VerWidgetList();
-  protected:
+protected:
     virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
     QWidget *m_topLevelWidget;
 };
@@ -106,7 +109,7 @@ KFORMEDITOR_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *con
 KFORMEDITOR_EXPORT void setRecursiveCursor(QWidget *w, Form *form);
 
 /*! \return the size of \a w children. This can be used eg to get widget's sizeHint. */
-KFORMEDITOR_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheritClass="QWidget");
+KFORMEDITOR_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheritClass = "QWidget");
 
 }
 

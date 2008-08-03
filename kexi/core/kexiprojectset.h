@@ -26,40 +26,41 @@
 #include "kexiprojectdata.h"
 
 class KexiProjectSetPrivate;
-namespace KexiDB {
-  class MessageHandler;
+namespace KexiDB
+{
+class MessageHandler;
 }
 
 /*! @short Stores information about multiple kexi project-data items */
 class KEXICORE_EXPORT KexiProjectSet : public KexiDB::Object
 {
-  public:
-  
+public:
+
     /*! Creates empty project set. Use addProjectData to add a project data.
       \a handler can be provided to receive error messages. */
     KexiProjectSet(KexiDB::MessageHandler* handler = 0);
-      
-    /*! Creates project set filled with all projects found using \a conndata. 
-    There may be error during project list retrieving - use appropriate 
+
+    /*! Creates project set filled with all projects found using \a conndata.
+    There may be error during project list retrieving - use appropriate
     KexiDB::Object::error(), and similar methods to get error message.
     \a handler can be provided to receive error messages. */
-    KexiProjectSet(KexiDB::ConnectionData &conndata, 
-      KexiDB::MessageHandler* handler = 0);
-    
+    KexiProjectSet(KexiDB::ConnectionData &conndata,
+                   KexiDB::MessageHandler* handler = 0);
+
     ~KexiProjectSet();
-  
-    /*! Adds \a data as project data. 
+
+    /*! Adds \a data as project data.
     \a data will be owned by this object. */
     void addProjectData(KexiProjectData *data);
-    
+
     //! \return list object
     KexiProjectData::List list() const;
-  
+
     //! Case insensitive lookup.
     //! \return project data for databased \a dbName or NULL if not found
     KexiProjectData* findProject(const QString &dbName) const;
-  
-  private:
+
+private:
     KexiProjectSetPrivate *d;
 };
 

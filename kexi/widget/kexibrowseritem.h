@@ -28,21 +28,21 @@
 
 namespace KexiPart
 {
-  class Info;
+class Info;
 }
 
 //! @short List view item for the navigator widget (KexiBrowser)
-//! Used for creating group items as well as object items 
+//! Used for creating group items as well as object items
 class KEXIEXTWIDGETS_EXPORT KexiBrowserItem : public K3ListViewItem
 {
-  public:
+public:
     //! Creates group item for part \a i
     KexiBrowserItem(K3ListView *parent, KexiPart::Info *i);
 
     //! Creates item for object \a item defined by part \a i for \a parent
     KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
 
-    //! Creates item for object \a item defined by part \a i, without parent 
+    //! Creates item for object \a item defined by part \a i, without parent
     //! (used in a case when KexiBrowser::itemsMimeType() is not empty)
     KexiBrowserItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item);
 
@@ -51,20 +51,24 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowserItem : public K3ListViewItem
     void clearChildren();
 
     //! \return part info; should not be null.
-    KexiPart::Info *partInfo() const { return m_info; }
+    KexiPart::Info *partInfo() const {
+        return m_info;
+    }
 
     //! \return part item. Can be null if the browser item is a "folder/group", i.e. a parent node.
-    KexiPart::Item* partItem() const { return m_item; }
+    KexiPart::Item* partItem() const {
+        return m_item;
+    }
 
-  protected:
+protected:
     void initItem();
-    virtual QString key( int column, bool ascending ) const;
-    
+    virtual QString key(int column, bool ascending) const;
+
     KexiPart::Info *m_info;
     KexiPart::Item *m_item;
 
     QString m_sortKey;
-    bool m_fifoSorting : 1;
+bool m_fifoSorting : 1;
 };
 
 #endif

@@ -25,7 +25,7 @@
 //! @short An interface containing a set of tools for SQLite database administration.
 class SQLiteAdminTools : public KexiDB::AdminTools
 {
-  public:
+public:
     SQLiteAdminTools();
     virtual ~SQLiteAdminTools();
 

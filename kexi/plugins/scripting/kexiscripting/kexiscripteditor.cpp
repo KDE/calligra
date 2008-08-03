@@ -36,14 +36,14 @@
 /// \internal d-pointer class
 class KexiScriptEditor::Private
 {
-    public:
-        Kross::Action* scriptaction;
-        Private() : scriptaction(0) {}
+public:
+    Kross::Action* scriptaction;
+    Private() : scriptaction(0) {}
 };
 
 KexiScriptEditor::KexiScriptEditor(QWidget *parent)
-    : KexiEditor(parent)
-    , d( new Private() )
+        : KexiEditor(parent)
+        , d(new Private())
 {
 }
 
@@ -65,25 +65,25 @@ void KexiScriptEditor::initialize(Kross::Action* scriptaction)
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
     QString code = d->scriptaction->code();
-    if(code.isNull()) {
+    if (code.isNull()) {
         // If there is no code we just add some information.
 ///@todo remove after release
 #if 0
         code = "# " + QStringList::split("\n", i18n(
-            "This note will appear for a user in the script's source code "
-            "as a comment. Keep every row not longer than 60 characters and use '\n.'",
+                                             "This note will appear for a user in the script's source code "
+                                             "as a comment. Keep every row not longer than 60 characters and use '\n.'",
 
-            "This is Technology Preview (BETA) version of scripting\n"
-            "support in Kexi. The scripting API may change in details\n"
-            "in the next Kexi version.\n"
-            "For more information and documentation see\n%1"
-        ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ") + "\n";
+                                             "This is Technology Preview (BETA) version of scripting\n"
+                                             "support in Kexi. The scripting API may change in details\n"
+                                             "in the next Kexi version.\n"
+                                             "For more information and documentation see\n%1"
+                                         ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ") + "\n";
 #endif
     }
     KexiEditor::setText(code);
     // We assume Kross and the HighlightingInterface are using same
     // names for the support languages...
-    setHighlightMode( d->scriptaction->interpreter() );
+    setHighlightMode(d->scriptaction->interpreter());
 
     clearUndoRedo();
     KexiEditor::setDirty(false);
@@ -93,8 +93,8 @@ void KexiScriptEditor::initialize(Kross::Action* scriptaction)
 void KexiScriptEditor::slotTextChanged()
 {
     KexiEditor::setDirty(true);
-    if(d->scriptaction) {
-        d->scriptaction->setCode( KexiEditor::text().toUtf8() );
+    if (d->scriptaction) {
+        d->scriptaction->setCode(KexiEditor::text().toUtf8());
     }
 }
 

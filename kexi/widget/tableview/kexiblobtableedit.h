@@ -30,9 +30,9 @@ class KTemporaryFile;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {
-  Q_OBJECT
-  public:
-    KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+    Q_OBJECT
+public:
+    KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
     virtual ~KexiBlobTableEdit();
 
     bool valueIsNull();
@@ -46,36 +46,36 @@ class KexiBlobTableEdit : public KexiTableEdit
     /*! Reimplemented: resizes a view(). */
     virtual void resize(int w, int h);
 
-    virtual void showFocus( const QRect& r, bool readOnly );
+    virtual void showFocus(const QRect& r, bool readOnly);
 
     virtual void hideFocus();
 
     /*! \return total size of this editor, including popup button. */
     virtual QSize totalSize() const;
 
-    virtual void paintFocusBorders( QPainter *p, QVariant &, int x, int y, int w, int h );
+    virtual void paintFocusBorders(QPainter *p, QVariant &, int x, int y, int w, int h);
 
     /*! Reimplemented to handle the key events. */
-    virtual bool handleKeyPress( QKeyEvent* ke, bool editorActive );
+    virtual bool handleKeyPress(QKeyEvent* ke, bool editorActive);
 
-    /*! Handles double click request coming from the table view. 
-     \return true if it has been consumed. 
+    /*! Handles double click request coming from the table view.
+     \return true if it has been consumed.
      Reimplemented in KexiBlobTableEdit (to execute "insert file" action. */
     virtual bool handleDoubleClick();
 
-    /*! Handles action having standard name \a actionName. 
+    /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc. */
     virtual void handleAction(const QString& actionName);
 
-    /*! Handles copy action for value. The \a value is copied to clipboard in format appropriate 
-     for the editor's impementation, e.g. for image cell it can be a pixmap. 
+    /*! Handles copy action for value. The \a value is copied to clipboard in format appropriate
+     for the editor's impementation, e.g. for image cell it can be a pixmap.
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+                               QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
-  protected slots:
+protected slots:
     void slotUpdateActionsAvailabilityRequested(bool& valueIsNull, bool& valueIsReadOnly);
 
     void handleInsertFromFileAction(const KUrl& url);
@@ -87,32 +87,32 @@ class KexiBlobTableEdit : public KexiTableEdit
     virtual void clear();
     void handleShowPropertiesAction();
 
-  protected:
+protected:
     //! initializes this editor with \a add value
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
     //todo QString openWithDlg(const QString& file);
     //todo void execute(const QString& app, const QString& file);
 
-//todo		QString openWithDlg(const QString& file);
+//todo  QString openWithDlg(const QString& file);
 
-//todo		void execute(const QString& app, const QString& file);
+//todo  void execute(const QString& app, const QString& file);
 
     //! @internal
-    void updateFocus( const QRect& r );
+    void updateFocus(const QRect& r);
 
     void signalEditRequested();
 
     //! @internal
     void executeCopyAction(const QByteArray& data);
 
-    virtual bool eventFilter( QObject *o, QEvent *e );
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
     class Private;
     Private *d;
-//todo		KTemporaryFile* m_tempFile;
-//todo		KProcess* m_proc;
-//todo		QTextEdit *m_content;
+//todo  KTemporaryFile* m_tempFile;
+//todo  KProcess* m_proc;
+//todo  QTextEdit *m_content;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
@@ -126,17 +126,17 @@ KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 */
 class KexiKIconTableEdit : public KexiTableEdit
 {
-  public:
-    KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+public:
+    KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiKIconTableEdit();
 
     //! \return true if editor's value is null (not empty)
     virtual bool valueIsNull();
 
-    //! \return true if editor's value is empty (not null). 
-    //! Only few field types can accept "EMPTY" property 
-    //! (check this with KexiDB::Field::hasEmptyProperty()), 
+    //! \return true if editor's value is empty (not null).
+    //! Only few field types can accept "EMPTY" property
+    //! (check this with KexiDB::Field::hasEmptyProperty()),
     virtual bool valueIsEmpty();
 
     virtual QVariant value();
@@ -146,14 +146,14 @@ class KexiKIconTableEdit : public KexiTableEdit
 
     virtual void clear();
 
-    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+                               QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
     /*! Handles copy action for value. Does nothing.
      \a visibleValue is unused here. Reimplemented after KexiTableEdit. */
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
-  protected:
+protected:
     //! initializes this editor with \a add value
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 

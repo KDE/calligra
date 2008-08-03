@@ -27,7 +27,7 @@
 #include <kgenericfactory.h>
 
 KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const QStringList &args)
- : KexiInternalPart(parent, args)
+        : KexiInternalPart(parent, args)
 {
 }
 
@@ -36,54 +36,53 @@ KexiCSVImportExportPart::~KexiCSVImportExportPart()
 }
 
 QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass,
-  QWidget *parent, const char *objName, QMap<QString,QString>* args )
+        QWidget *parent, const char *objName, QMap<QString, QString>* args)
 {
-  if (0==qstrcmp(widgetClass, "KexiCSVImportDialog")) {
-    KexiCSVImportDialog::Mode mode = (args && (*args)["sourceType"]=="file")
-      ? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard;
-    KexiCSVImportDialog *dlg = new KexiCSVImportDialog( mode, parent );
-    dlg->setObjectName(objName);
-    m_cancelled = dlg->cancelled();
-    if (m_cancelled) {
-      delete dlg;
-      return 0;
+    if (0 == qstrcmp(widgetClass, "KexiCSVImportDialog")) {
+        KexiCSVImportDialog::Mode mode = (args && (*args)["sourceType"] == "file")
+                                         ? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard;
+        KexiCSVImportDialog *dlg = new KexiCSVImportDialog(mode, parent);
+        dlg->setObjectName(objName);
+        m_cancelled = dlg->cancelled();
+        if (m_cancelled) {
+            delete dlg;
+            return 0;
+        }
+        return dlg;
+    } else if (0 == qstrcmp(widgetClass, "KexiCSVExportWizard")) {
+        if (!args)
+            return 0;
+        KexiCSVExport::Options options;
+        if (!options.assign(*args))
+            return 0;
+        KexiCSVExportWizard *dlg = new KexiCSVExportWizard(options, parent);
+        dlg->setObjectName(objName);
+        m_cancelled = dlg->cancelled();
+        if (m_cancelled) {
+            delete dlg;
+            return 0;
+        }
+        return dlg;
     }
-    return dlg;
-  }
-  else if (0==qstrcmp(widgetClass, "KexiCSVExportWizard")) {
-    if (!args)
-      return 0;
-    KexiCSVExport::Options options;
-    if (!options.assign( *args ))
-      return 0;
-    KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, parent );
-    dlg->setObjectName(objName);
-    m_cancelled = dlg->cancelled();
-    if (m_cancelled) {
-      delete dlg;
-      return 0;
-    }
-    return dlg;
-  }
-  return 0;
+    return 0;
 }
 
-bool KexiCSVImportExportPart::executeCommand(const char* commandName, 
-  QMap<QString,QString>* args)
+bool KexiCSVImportExportPart::executeCommand(const char* commandName,
+        QMap<QString, QString>* args)
 {
-  if (0==qstrcmp(commandName, "KexiCSVExport")) {
-    KexiCSVExport::Options options;
-    if (!options.assign( *args ))
-      return false;
-    KexiDB::TableOrQuerySchema tableOrQuery(
-      KexiMainWindowIface::global()->project()->dbConnection(), options.itemId);
-    QTextStream *stream = 0;
-    if (args->contains("textStream"))
-      stream = KexiUtils::stringToPtr<QTextStream>( (*args)["textStream"] );
-    return KexiCSVExport::exportData(tableOrQuery, options, -1, stream);
-  }
-  return false;
+    if (0 == qstrcmp(commandName, "KexiCSVExport")) {
+        KexiCSVExport::Options options;
+        if (!options.assign(*args))
+            return false;
+        KexiDB::TableOrQuerySchema tableOrQuery(
+            KexiMainWindowIface::global()->project()->dbConnection(), options.itemId);
+        QTextStream *stream = 0;
+        if (args->contains("textStream"))
+            stream = KexiUtils::stringToPtr<QTextStream>((*args)["textStream"]);
+        return KexiCSVExport::exportData(tableOrQuery, options, -1, stream);
+    }
+    return false;
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_csv_importexport, 
-  KGenericFactory<KexiCSVImportExportPart>("kexihandler_csv_importexport") )
+K_EXPORT_COMPONENT_FACTORY(kexihandler_csv_importexport,
+                           KGenericFactory<KexiCSVImportExportPart>("kexihandler_csv_importexport"))

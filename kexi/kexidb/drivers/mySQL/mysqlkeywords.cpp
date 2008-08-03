@@ -1,14 +1,15 @@
- /*
- * This file has been automatically generated from
- * koffice/kexi/tools/sql_keywords/sql_keywords.sh and
- * mysql-4.1.7/sql/lex.h.
- *
- * Please edit the sql_keywords.sh, not this file!
- */
+/*
+* This file has been automatically generated from
+* koffice/kexi/tools/sql_keywords/sql_keywords.sh and
+* mysql-4.1.7/sql/lex.h.
+*
+* Please edit the sql_keywords.sh, not this file!
+*/
 #include <mysqldriver.h>
 
-namespace KexiDB {
-  const char* MySqlDriver::keywords[] = {
+namespace KexiDB
+{
+const char* MySqlDriver::keywords[] = {
     "ACTION",
     "ADD",
     "AGAINST",
@@ -334,5 +335,5 @@ namespace KexiDB {
     "YEAR_MONTH",
     "ZEROFILL",
     0
-  };
+};
 }

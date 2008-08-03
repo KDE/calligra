@@ -28,7 +28,8 @@ class Q3ListViewItem;
 class QCheckBox;
 class KPushButton;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class Form;
 class ObjectTreeView;
@@ -38,13 +39,13 @@ class ObjectTreeView;
   The tab stops can be arranged automatically (see \ref Form::autoAssignTabStops()). */
 class KFORMEDITOR_EXPORT TabStopDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     TabStopDialog(QWidget *parent);
     virtual ~TabStopDialog();
 
-  public slots:
+public slots:
     int exec(KFormDesigner::Form *form);
     void moveItemUp();
     void moveItemDown();
@@ -53,7 +54,7 @@ class KFORMEDITOR_EXPORT TabStopDialog : public KDialog
 
     bool autoTabStops() const;
 
-  protected:
+protected:
     ObjectTreeView   *m_treeview;
     KPushButton *m_btnUp, *m_btnDown;
     QCheckBox *m_check;

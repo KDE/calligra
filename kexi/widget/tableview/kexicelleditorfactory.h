@@ -33,46 +33,48 @@ class KexiTableViewColumn;
 //! A singleton class providing access to cell editor factories
 class KEXIDATATABLE_EXPORT KexiCellEditorFactory
 {
-  public:
+public:
     KexiCellEditorFactory();
     virtual ~KexiCellEditorFactory();
 
-    /*! Registers factory item for \a type and (optional) \a subType. 
+    /*! Registers factory item for \a type and (optional) \a subType.
      \a subType is usually obtained (e.g. in KexiTableView) from KexiDB::Field::subType().
-     Passing KexiDB::Field::Invalid as type will set default item, 
-     i.e. the one that will be used when no other item is defined for given data type. 
+     Passing KexiDB::Field::Invalid as type will set default item,
+     i.e. the one that will be used when no other item is defined for given data type.
      You can register the same \a item many times for different types and subtypes.
      Once registered, \a item object will be owned by the factory, so you shouldn't
      care about deleting it. */
-    static void registerItem( KexiCellEditorFactoryItem& item, uint type, 
-      const QString& subType = QString() );
+    static void registerItem(KexiCellEditorFactoryItem& item, uint type,
+                             const QString& subType = QString());
 
-    /*! \return item for \a type and (optional) \a subType. 
+    /*! \return item for \a type and (optional) \a subType.
      If no item found, the one with empty subtype is tried.
      If still no item found, the default is tried. Eventually, may return NULL. */
-    static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString() );
+    static KexiCellEditorFactoryItem* item(uint type, const QString& subType = QString());
 
     /*! Creates a new editor for \a column. If \a parent is of QScrollArea, the new editor
      will be created inside parent->viewport() instead. */
     static KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0);
 
-  protected:
+protected:
     static void init();
 };
 
 //! A base class for implementing cell editor factories
 class KEXIDATATABLE_EXPORT KexiCellEditorFactoryItem
 {
-  public:
+public:
     KexiCellEditorFactoryItem();
     virtual ~KexiCellEditorFactoryItem();
-    QString className() { return m_className; }
+    QString className() {
+        return m_className;
+    }
 
-  protected:
+protected:
     virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0) = 0;
 
     QString m_className;
-  friend class KexiCellEditorFactory;
+    friend class KexiCellEditorFactory;
 };
 
 #endif

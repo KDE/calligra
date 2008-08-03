@@ -27,109 +27,144 @@
 using namespace KexiPart;
 
 Info::Private::Private(const KService::Ptr& aPtr)
- : ptr(aPtr)
- , groupName(aPtr->name())
- , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
- , itemIcon(aPtr->property("X-Kexi-ItemIcon").toString())
- , objectName(aPtr->property("X-Kexi-TypeName").toString())
- , broken(false)
- , idStoredInPartDatabase(false)
+        : ptr(aPtr)
+        , groupName(aPtr->name())
+        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
+        , itemIcon(aPtr->property("X-Kexi-ItemIcon").toString())
+        , objectName(aPtr->property("X-Kexi-TypeName").toString())
+        , broken(false)
+        , idStoredInPartDatabase(false)
 {
-  QVariant val = ptr->property("X-Kexi-NoObject");
-  isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
+    QVariant val = ptr->property("X-Kexi-NoObject");
+    isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
 
 //! @todo (js)..... now it's hardcoded!
-  if(objectName == "table")
-    projectPartID = KexiDB::TableObjectType;
-  else if(objectName == "query")
-    projectPartID = KexiDB::QueryObjectType;
-//	else if(objectName == "html")
-//		m_projectPartID = KexiDB::WebObjectType;
-  else
-    projectPartID = -1; //TODO!!
+    if (objectName == "table")
+        projectPartID = KexiDB::TableObjectType;
+    else if (objectName == "query")
+        projectPartID = KexiDB::QueryObjectType;
+// else if(objectName == "html")
+//  m_projectPartID = KexiDB::WebObjectType;
+    else
+        projectPartID = -1; //TODO!!
 }
 
 Info::Private::Private()
- : projectPartID(-1) //OK?
- , broken(false)
- , isVisibleInNavigator(false)
- , idStoredInPartDatabase(false)
+        : projectPartID(-1) //OK?
+        , broken(false)
+        , isVisibleInNavigator(false)
+        , idStoredInPartDatabase(false)
 {
 }
 
 //------------------------------
 
 Info::Info(KService::Ptr ptr)
- : d(new Private(ptr))
+        : d(new Private(ptr))
 {
 }
 
 Info::Info()
- : d(new Private())
+        : d(new Private())
 {
 }
 
 Info::~Info()
 {
-  delete d;
+    delete d;
 }
 
-QString Info::groupName() const { return d->groupName; }
+QString Info::groupName() const
+{
+    return d->groupName;
+}
 
-QString Info::mimeType() const { return d->mimeType; }
+QString Info::mimeType() const
+{
+    return d->mimeType;
+}
 
-QString Info::itemIcon() const { return d->itemIcon; }
+QString Info::itemIcon() const
+{
+    return d->itemIcon;
+}
 
-QString Info::createItemIcon() const { return d->itemIcon+"_newobj"; }
+QString Info::createItemIcon() const
+{
+    return d->itemIcon + "_newobj";
+}
 
-QString Info::objectName() const { return d->objectName; }
+QString Info::objectName() const
+{
+    return d->objectName;
+}
 
-KService::Ptr Info::ptr() const { return d->ptr; }
+KService::Ptr Info::ptr() const
+{
+    return d->ptr;
+}
 
-bool Info::isBroken() const { return d->broken; }
+bool Info::isBroken() const
+{
+    return d->broken;
+}
 
-bool Info::isVisibleInNavigator() const { return d->isVisibleInNavigator; }
+bool Info::isVisibleInNavigator() const
+{
+    return d->isVisibleInNavigator;
+}
 
-int Info::projectPartID() const { return d->projectPartID; }
+int Info::projectPartID() const
+{
+    return d->projectPartID;
+}
 
-void Info::setProjectPartID(int id) { d->projectPartID=id; }
+void Info::setProjectPartID(int id)
+{
+    d->projectPartID = id;
+}
 
-void Info::setBroken(bool broken, const QString& errorMessage) 
-{ d->broken = broken; d->errorMessage = errorMessage; }
+void Info::setBroken(bool broken, const QString& errorMessage)
+{
+    d->broken = broken; d->errorMessage = errorMessage;
+}
 
-QString Info::errorMessage() const { return d->errorMessage; }
+QString Info::errorMessage() const
+{
+    return d->errorMessage;
+}
 
 void Info::setIdStoredInPartDatabase(bool set)
 {
-  d->idStoredInPartDatabase = set;
+    d->idStoredInPartDatabase = set;
 }
 
 bool Info::isIdStoredInPartDatabase() const
 {
-  return d->idStoredInPartDatabase;
+    return d->idStoredInPartDatabase;
 }
 
 bool Info::isDataExportSupported() const
 {
-  QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
-  return val.isValid() ? val.toBool() : false;
+    QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
+    return val.isValid() ? val.toBool() : false;
 }
 
 bool Info::isPrintingSupported() const
 {
-  QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
-  return val.isValid() ? val.toBool() : false;
+    QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
+    return val.isValid() ? val.toBool() : false;
 }
 
 bool Info::isExecuteSupported() const
 {
-  QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
-  return val.isValid() ? val.toBool() : false;
+    QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
+    return val.isValid() ? val.toBool() : false;
 }
 
 //--------------
 
 QString KexiPart::nameForCreateAction(const Info& info)
 {
-  return info.objectName() + "part_create";
+    return info.objectName() + "part_create";
 }

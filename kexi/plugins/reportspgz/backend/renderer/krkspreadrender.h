@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,19 +25,19 @@
 #include <kurl.h>
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KRKSpreadRender
 {
-	public:
-		KRKSpreadRender();
+public:
+    KRKSpreadRender();
 
-		~KRKSpreadRender();
+    ~KRKSpreadRender();
 
-		bool render (ORODocument *, const KUrl&);
-		
-	private:
-		
+    bool render(ORODocument *, const KUrl&);
+
+private:
+
 };
 
 #endif

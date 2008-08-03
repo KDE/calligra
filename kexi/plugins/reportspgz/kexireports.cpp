@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,4 +21,4 @@
 
 #include "kexireportpart.h"
 
-K_EXPORT_COMPONENT_FACTORY( pgzkexireportpart2, KGenericFactory<KexiReportPart>("pgzkexireportpart2") )
+K_EXPORT_COMPONENT_FACTORY(pgzkexireportpart2, KGenericFactory<KexiReportPart>("pgzkexireportpart2"))

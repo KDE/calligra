@@ -26,14 +26,14 @@
 //! @short Frame widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame
 {
-  Q_OBJECT
-//todo	Q_ENUMS( Shape Shadow )
-  Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )
-//todo	Q_OVERRIDE( Shape frameShape READ frameShape WRITE setFrameShape )
-//todo	Q_OVERRIDE( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
+    Q_OBJECT
+//todo Q_ENUMS( Shape Shadow )
+    Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true)
+//todo Q_OVERRIDE( Shape frameShape READ frameShape WRITE setFrameShape )
+//todo Q_OVERRIDE( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
 
-  public:
-    KexiFrame( QWidget * parent, Qt::WindowFlags f = 0 );
+public:
+    KexiFrame(QWidget * parent, Qt::WindowFlags f = 0);
     virtual ~KexiFrame();
 
     virtual const QColor& frameColor() const;
@@ -41,42 +41,42 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame
 #if 0
 //! @todo more options
     enum Shadow {
-      NoShadow = QFrame::Plain,
-      Raised = QFrame::Raised,
-      Sunken = QFrame::Sunken
+        NoShadow = QFrame::Plain,
+        Raised = QFrame::Raised,
+        Sunken = QFrame::Sunken
     };
 //! @todo more options
     enum Shape { NoFrame = QFrame::NoFrame, //!< no frame
-      Box = QFrame::Box,                  //!< rectangular box
-      Panel = QFrame::Panel,              //!< rectangular panel
-      StyledPanel = QFrame::StyledPanel,  //!< rectangular panel depending on the GUI style
-      GroupBoxPanel = QFrame::GroupBoxPanel //!< rectangular group-box-like panel depending on the GUI style
-    };
+                 Box = QFrame::Box,                  //!< rectangular box
+                 Panel = QFrame::Panel,              //!< rectangular panel
+                 StyledPanel = QFrame::StyledPanel,  //!< rectangular panel depending on the GUI style
+                 GroupBoxPanel = QFrame::GroupBoxPanel //!< rectangular group-box-like panel depending on the GUI style
+               };
     Shape frameShape() const;
-    void setFrameShape( KexiFrame::Shape shape );
+    void setFrameShape(KexiFrame::Shape shape);
     Shadow frameShadow() const;
-    void setFrameShadow( KexiFrame::Shadow shadow );
+    void setFrameShadow(KexiFrame::Shadow shadow);
 #endif
 
     //! Used to emit handleDragMoveEvent() signal needed to control dragging over the container's surface
-    virtual void dragMoveEvent( QDragMoveEvent *e );
+    virtual void dragMoveEvent(QDragMoveEvent *e);
 
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
-    virtual void dropEvent( QDropEvent *e );
+    virtual void dropEvent(QDropEvent *e);
 
-  public slots:
-    virtual void setPalette( const QPalette &pal );
+public slots:
+    virtual void setPalette(const QPalette &pal);
     virtual void setFrameColor(const QColor& color);
 
-  signals:
+signals:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
 
     //! Needed to control dropping on the container's surface
     void handleDropEvent(QDropEvent *e);
 
-  protected:
-    virtual void drawFrame( QPainter * );
+protected:
+    virtual void drawFrame(QPainter *);
 
     class Private;
     Private * const d;

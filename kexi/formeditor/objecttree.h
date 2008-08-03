@@ -38,7 +38,8 @@
 class QWidget;
 class QDomElement;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class ObjectTreeItem;
 
@@ -60,33 +61,53 @@ typedef QMap<QString, QVariant> QVariantMap;
 //! @short A const iterator for QVariantMap.
 typedef QMap<QString, QVariant>::ConstIterator QVariantMapConstIterator;
 
-/*! 
+/*!
  @short An item representing a widget
  Holds the properties of a widget (classname, name, parent, children ..).
  @author Lucijan Busch <lucijan@kde.org>
  */
 class KFORMEDITOR_EXPORT ObjectTreeItem
 {
-  public:
-    ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container=0);
+public:
+    ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container = 0);
     virtual ~ObjectTreeItem();
 
-    QString name() const { return m_name; }
-    QString className() const { return m_className; }
-    QWidget* widget() const { return m_widget; }
-    EventEater* eventEater() const { return m_eater; }
-    ObjectTreeItem* parent() const { return m_parent; }
-    ObjectTreeList* children() { return &m_children; }
+    QString name() const {
+        return m_name;
+    }
+    QString className() const {
+        return m_className;
+    }
+    QWidget* widget() const {
+        return m_widget;
+    }
+    EventEater* eventEater() const {
+        return m_eater;
+    }
+    ObjectTreeItem* parent() const {
+        return m_parent;
+    }
+    ObjectTreeList* children() {
+        return &m_children;
+    }
 
     /*! \return a QMap<QString, QVariant> of all modified properties for this widget.
       The QVariant is the old value (ie first value) of the property whose name is the QString. */
-    const QVariantMap* modifiedProperties() const { return &m_props;}
+    const QVariantMap* modifiedProperties() const {
+        return &m_props;
+    }
 
     //! \return the widget's Container, or 0 if the widget is not a Container.
-    Container* container() const { return m_container;}
+    Container* container() const {
+        return m_container;
+    }
 
-    void setWidget(QWidget *w) { m_widget = w; }
-    void setParent(ObjectTreeItem *parent)  { m_parent = parent;}
+    void setWidget(QWidget *w) {
+        m_widget = w;
+    }
+    void setParent(ObjectTreeItem *parent)  {
+        m_parent = parent;
+    }
 
     void debug(int ident);
     void rename(const QString &name);
@@ -101,31 +122,47 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
     void storeUnknownProperty(QDomElement &el);
 
     /*! Adds subproperty \a property value \a value (a property of subwidget).
-     Remembering it for delayed setting is needed because on loading 
+     Remembering it for delayed setting is needed because on loading
      the subwidget could be not created yet (true e.g. for KexiDBAutoField). */
     void addSubproperty(const Q3CString &property, const QVariant& value);
 
-    /*! \return subproperties for this item, added by addSubproperty() 
+    /*! \return subproperties for this item, added by addSubproperty()
      or 0 is there are no subproperties. */
-    QMap<QString, QVariant>* subproperties() const { return m_subprops; }
+    QMap<QString, QVariant>* subproperties() const {
+        return m_subprops;
+    }
 
     void setPixmapName(const Q3CString &property, const QString &name);
     QString pixmapName(const Q3CString &property);
 
-    void setEnabled(bool enabled)  { m_enabled = enabled; }
-    bool isEnabled() const { return m_enabled; }
+    void setEnabled(bool enabled)  {
+        m_enabled = enabled;
+    }
+    bool isEnabled() const {
+        return m_enabled;
+    }
 
-    int gridRow() const { return m_row; }
-    int gridCol() const { return m_col; }
-    int gridRowSpan() const { return m_rowspan; }
-    int gridColSpan() const { return m_colspan; }
-    bool spanMultipleCells() const { return m_span; }
+    int gridRow() const {
+        return m_row;
+    }
+    int gridCol() const {
+        return m_col;
+    }
+    int gridRowSpan() const {
+        return m_rowspan;
+    }
+    int gridColSpan() const {
+        return m_colspan;
+    }
+    bool spanMultipleCells() const {
+        return m_span;
+    }
     void setGridPos(int row, int col, int rowspan, int colspan);
 
-  protected:
+protected:
     QString m_className;
     QString m_name;
-    ObjectTreeList	m_children;
+    ObjectTreeList m_children;
     QPointer<Container> m_container;
     QMap<QString, QVariant> m_props;
     QMap<QString, QVariant> *m_subprops;
@@ -148,14 +185,14 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
  This class holds ObjectTreeItem for each widget in a Form. */
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
-  public:
+public:
     ObjectTree(const QString &className = QString(), const QString &name = QString(),
-      QWidget *widget=0, Container *container=0);
+               QWidget *widget = 0, Container *container = 0);
     virtual ~ObjectTree();
 
     /*! Renames the item named \a oldname to \a newname. \return false if widget named \a newname
      already exists and renaming failed. */
-    bool rename(const QString &oldname, const QString &newname );
+    bool rename(const QString &oldname, const QString &newname);
     /*! Sets \a newparent as new parent for the item whose name is \a name. */
     bool reparent(const QString &name, const QString &newparent);
 
@@ -164,14 +201,16 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 
     /*! \return a dict containing all ObjectTreeItem in this ObjectTree. If you want to iterate on
     this dict, use ObjectTreeDictIterator. */
-    ObjectTreeDict* dict() { return &m_treeDict; }
+    ObjectTreeDict* dict() {
+        return &m_treeDict;
+    }
 
     void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
     void removeItem(const QString &name);
     void removeItem(ObjectTreeItem *c);
 
-    /*! Generates a new, unique name for a new widget using prefix \a prefix 
-     (e.g. if \a prefix is "lineEdit", "lineEdit1" is returned). 
+    /*! Generates a new, unique name for a new widget using prefix \a prefix
+     (e.g. if \a prefix is "lineEdit", "lineEdit1" is returned).
      \a prefix must be a valid identifier.
      If \a numberSuffixRequired is true (the default) a number suffix is mandatory.
      If \a numberSuffixRequired is false and there's a widget prefix \a prefix,
@@ -179,7 +218,7 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
      "lineEdit" is returned). */
     Q3CString generateUniqueName(const Q3CString &prefix, bool numberSuffixRequired = true);
 
-  private:
+private:
     ObjectTreeDict m_treeDict;
 };
 

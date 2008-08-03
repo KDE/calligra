@@ -39,7 +39,7 @@ class TableSchema;
  */
 class KEXI_DB_EXPORT ParserError
 {
-  public:
+public:
 
     /**
      * Empty constructor.
@@ -64,32 +64,38 @@ class KEXI_DB_EXPORT ParserError
     /**
      * \return the errortype.
      */
-    QString	type() { return m_type; }
+    QString type() {
+        return m_type;
+    }
 
     /**
      * \return a descriping error message.
      */
-    QString	error() { return m_error; }
+    QString error() {
+        return m_error;
+    }
 
     /**
      * \return position where the error happend.
      */
-    int	at() { return m_at; }
+    int at() {
+        return m_at;
+    }
 
-  private:
+private:
     QString m_type;
     QString m_error;
     QString m_hint;
     int m_at;
-//		bool	m_isNull;
+//  bool m_isNull;
 };
 
 /**
  * Parser for SQL statements.
  *
  * The best and prefeerred way to run queries is using the KexiDB::Parser functionality
- * and use the resulting QuerySchema object since this offers a database-backend-independent 
- * way to deal with SQL statements on the one hand and offers high level 
+ * and use the resulting QuerySchema object since this offers a database-backend-independent
+ * way to deal with SQL statements on the one hand and offers high level
  * functionality on the other. Also BLOBs like images are handled that way.
  *
  * For example if we like to use the SELECT statement
@@ -101,27 +107,26 @@ class KEXI_DB_EXPORT ParserError
  * the SQL statement could be extended with relationships and WHERE expressions.
  *
  * For more, see \a KexiDB::PreparedStatement and \a Connection::selectStatement() . A more
- * complex example that looks at what the user has defined and carefully builds 
- * \a KexiDB::QuerySchema object, including the WHERE expression can be found in 
+ * complex example that looks at what the user has defined and carefully builds
+ * \a KexiDB::QuerySchema object, including the WHERE expression can be found in
  * the Query Designer's source code in the method \a KexiQueryDesignerGuiEditor::buildSchema().
  */
 class KEXI_DB_EXPORT Parser
 {
-  public:
+public:
 
     /**
      * The operation-code of the statement.
      */
-    enum OPCode
-    {
-      OP_None = 0, /// No statement parsed or reseted.
-      OP_Error, /// Error while parsing.
-      OP_CreateTable, /// Create a table.
-      OP_AlterTable, /// Alter an existing table
-      OP_Select, /// Query-statement.
-      OP_Insert, /// Insert new content.
-      OP_Update, /// Update existing content.
-      OP_Delete  /// Delete existing content.
+    enum OPCode {
+        OP_None = 0, /// No statement parsed or reseted.
+        OP_Error, /// Error while parsing.
+        OP_CreateTable, /// Create a table.
+        OP_AlterTable, /// Alter an existing table
+        OP_Select, /// Query-statement.
+        OP_Insert, /// Insert new content.
+        OP_Update, /// Update existing content.
+        OP_Delete  /// Delete existing content.
     };
 
     /**
@@ -172,7 +177,7 @@ class KEXI_DB_EXPORT Parser
      * You can call this method only once every time after doing parse().
      * Next time, the call will return 0.
      */
-    Connection	*db() const;
+    Connection *db() const;
 
     /**
      * \return detailed information about last error.
@@ -223,7 +228,7 @@ class KEXI_DB_EXPORT Parser
      */
     bool isReservedKeyword(const QByteArray& str);
 
-  protected:
+protected:
     void init();
 
     ParserError m_error; //!< detailed information about last error.

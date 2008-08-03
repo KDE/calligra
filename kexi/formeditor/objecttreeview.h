@@ -25,7 +25,8 @@
 
 #include <kexi_export.h>
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class ObjectTreeItem;
 class Form;
@@ -33,20 +34,22 @@ class Form;
 //! @short An item in ObjectTreeView associated with an ObjectTreeItem.
 class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
 {
-  public:
+public:
     ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
-    ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item=0);
+    ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item = 0);
     virtual ~ObjectTreeViewItem();
 
     //! \return the item name, ie the ObjectTreeItem name
     QString name() const;
 
     //! \return the ObjectTreeItem associated to this item.
-    ObjectTreeItem* objectTree() const { return m_item; }
+    ObjectTreeItem* objectTree() const {
+        return m_item;
+    }
 
-    virtual void setOpen( bool o );
+    virtual void setOpen(bool o);
 
-  protected:
+protected:
     //! Reimplemented to draw custom contents (copied from Property Editor)
     virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
@@ -56,29 +59,29 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
     //! Reimplemented to draw custom contents (copied from Property Editor)
     virtual void setup();
 
-  private:
+private:
     ObjectTreeItem *m_item;
 
-  friend class ObjectTreeView;
+    friend class ObjectTreeView;
 };
 
 /*! @short A graphical view of Form's ObjectTree.
- This is a K3ListView which represents an item for each widget in the form. 
+ This is a K3ListView which represents an item for each widget in the form.
  The actually selected widget is written bold
  and selected. Clicking on a list item selects the corresponding widget in the Form.
  */
 class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    ObjectTreeView(QWidget *parent=0, const char *name=0, bool tabStop = false);
+public:
+    ObjectTreeView(QWidget *parent = 0, const char *name = 0, bool tabStop = false);
     virtual ~ObjectTreeView();
 
     virtual QSize sizeHint() const;
 
-    /*! Sets \a form as the current Form in the list. The list will automatically 
-     be filled with an item for each widget in the Form, and selection will be synced. 
+    /*! Sets \a form as the current Form in the list. The list will automatically
+     be filled with an item for each widget in the Form, and selection will be synced.
      Nothing happens if \a form is already the current Form.
      */
     void setForm(Form *form);
@@ -86,10 +89,10 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
     //! \return the pixmap name for a given class, to be shown next to the widget name.
     QString iconNameForClass(const Q3CString &classname);
 
-  public slots:
-    /*! Sets the widget \a w as selected item, so it will be written bold. 
+public slots:
+    /*! Sets the widget \a w as selected item, so it will be written bold.
      It is added to current selection if \a add is true. */
-    void setSelectedWidget(QWidget *w, bool add=false);
+    void setSelectedWidget(QWidget *w, bool add = false);
 
     /*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
     void addItem(ObjectTreeItem *item);
@@ -100,8 +103,8 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
     /*! Just renames the list item from \a oldname to \a newname. */
     void renameItem(const Q3CString &oldname, const Q3CString &newname);
 
-  protected slots:
-    /*! This slot is called when the user right-click a list item. 
+protected slots:
+    /*! This slot is called when the user right-click a list item.
      The widget context menu is shown, as inisde the Form. */
     void displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &p);
 
@@ -113,18 +116,18 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
     /*! Called before Form object is destroyed. */
     void slotBeforeFormDestroyed();
 
-  protected:
+protected:
     //! Internal function to fill the list.
     ObjectTreeViewItem* loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent);
 
     //! \return The item whose name is \a name.
     ObjectTreeViewItem* findItem(const QString &name);
 
-  private:
+private:
     Form *m_form;
     ObjectTreeViewItem *m_topItem;
 
-  friend class TabStopDialog;
+    friend class TabStopDialog;
 };
 
 }

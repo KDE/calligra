@@ -29,9 +29,9 @@
  for entering query statements. */
 class KEXIEXTWIDGETS_EXPORT KexiQueryDesignerSQLEditor : public KexiEditor
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiQueryDesignerSQLEditor(QWidget *parent);
     virtual ~KexiQueryDesignerSQLEditor();
 };

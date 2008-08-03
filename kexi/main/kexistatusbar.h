@@ -35,37 +35,46 @@
 class QLabel;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
-namespace KTextEditor { class ViewStatusMsgInterface; }
-namespace KTextEditor { class ViewCursorInterface; }
+namespace KTextEditor
+{
+class ViewStatusMsgInterface;
+}
+namespace KTextEditor
+{
+class ViewCursorInterface;
+}
 #endif
-namespace KParts { class Part; }
+namespace KParts
+{
+class Part;
+}
 
 class KexiStatusBar : public KStatusBar
 {
-  Q_OBJECT
-  public:
-    KexiStatusBar( QWidget *parent=0 );
+    Q_OBJECT
+public:
+    KexiStatusBar(QWidget *parent = 0);
     virtual ~KexiStatusBar();
-//		virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
+//  virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 
-  public slots:
+public slots:
     virtual void setStatus(const QString &str);
     virtual void setReadOnlyFlag(bool readOnly);
 
-  protected slots:
+protected slots:
     virtual void cursorPositionChanged();
     virtual void activePartChanged(KParts::Part *part);
     virtual void setCursorPosition(int line, int col);
 
-  protected:
+protected:
     int m_msgID, m_readOnlyID;
-//		QLabel *m_status, *m_readOnlyStatus;
+//  QLabel *m_status, *m_readOnlyStatus;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
-  KTextEditor::ViewCursorInterface * m_cursorIface;
-  KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
+    KTextEditor::ViewCursorInterface * m_cursorIface;
+    KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
-  KParts::Part *m_activePart;
+    KParts::Part *m_activePart;
 };
 
 #endif

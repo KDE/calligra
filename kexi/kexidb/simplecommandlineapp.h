@@ -30,39 +30,39 @@ class KComponentData;
 
 namespace KexiDB
 {
-  //! @short A skeleton for creating a simple command line database application.
-  /*! This class creates a KComponentData object and automatically handles the following 
-   command line options:
-   - --driver \<name\> (Database driver name) or -drv
-   - --user \<name\> (Database user name) or -u
-   - --password (Prompt for password) or -p
-   - --host \<name\> (Server (host) name) or -h
-   - --port \<number\> (Server's port number)
-   - --local-socket \<filename\> (Server's local socket filename, if needed) or -s
+//! @short A skeleton for creating a simple command line database application.
+/*! This class creates a KComponentData object and automatically handles the following
+ command line options:
+ - --driver \<name\> (Database driver name) or -drv
+ - --user \<name\> (Database user name) or -u
+ - --password (Prompt for password) or -p
+ - --host \<name\> (Server (host) name) or -h
+ - --port \<number\> (Server's port number)
+ - --local-socket \<filename\> (Server's local socket filename, if needed) or -s
 
-   You can use this helper class to create test applications or small tools that open 
-   a KexiDB-compatible database using command line arguments, do some data processing
-   and close the database.
-  */
-  class KEXI_DB_EXPORT SimpleCommandLineApp : public KexiDB::Object
-  {
-    public:
-      SimpleCommandLineApp(
+ You can use this helper class to create test applications or small tools that open
+ a KexiDB-compatible database using command line arguments, do some data processing
+ and close the database.
+*/
+class KEXI_DB_EXPORT SimpleCommandLineApp : public KexiDB::Object
+{
+public:
+    SimpleCommandLineApp(
         int argc, char** argv,
-        const KCmdLineOptions &options, const char *programName, 
-        const char *version, const char *shortDescription=0, 
-        KAboutData::LicenseKey licenseType=KAboutData::License_Unknown, 
-        const char *copyrightStatement=0, const char *text=0, 
-        const char *homePageAddress=0, const char *bugsEmailAddress="submit@bugs.kde.org");
+        const KCmdLineOptions &options, const char *programName,
+        const char *version, const char *shortDescription = 0,
+        KAboutData::LicenseKey licenseType = KAboutData::License_Unknown,
+        const char *copyrightStatement = 0, const char *text = 0,
+        const char *homePageAddress = 0, const char *bugsEmailAddress = "submit@bugs.kde.org");
 
     ~SimpleCommandLineApp();
 
     //! \return program instance
     const KComponentData &componentData() const;
 
-    /*! Opens database \a databaseName for connection data 
+    /*! Opens database \a databaseName for connection data
      specified via the command line. \return true in success.
-     In details: the database driver is loaded, the connection is opened 
+     In details: the database driver is loaded, the connection is opened
      and the database is used.
      Use KexiDB::Object methods to get status of the operation on failure. */
     bool openDatabase(const QString& databaseName);
@@ -75,14 +75,14 @@ namespace KexiDB
     /*! \return connection data for this application. */
     KexiDB::ConnectionData* connectionData() const;
 
-    /*! \return connection object for this application or 0 if there is no properly 
+    /*! \return connection object for this application or 0 if there is no properly
      opened connection. */
     KexiDB::Connection* connection() const;
 
-    protected:
-      class Private;
-      Private * const d;
-  };
+protected:
+    class Private;
+    Private * const d;
+};
 }
 
 #endif

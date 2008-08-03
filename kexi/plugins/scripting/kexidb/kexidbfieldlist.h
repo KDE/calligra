@@ -26,75 +26,78 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/fieldlist.h>
 
-namespace Scripting {
+namespace Scripting
+{
 
-    // Forward declarations.
-    class KexiDBField;
-    class KexiDBFieldList;
+// Forward declarations.
+class KexiDBField;
+class KexiDBFieldList;
 
-    /**
-    * A list of fields. The KexiDBFieldList can be used to handle KexiDBField objects
-    * in a backend-independent way.
-    *
-    * Example (in Python) ;
-    * @code
-    * # Get the tableschema for the "dept" table.
-    * table = connection.tableSchema("dept")
-    * # Create a KexiDBFieldList based on the table and filled with the selected fields.
-    * subfields = ["deptno","name","loc"]
-    * fieldlist = table.fieldlist().subList(subfields)
-    * # Create the "SELECT * from dept;" queryschema.
-    * query = table.query()
-    * # We change the queryschema to "SELECT deptno,name,loc FROM dept;" now.
-    * query.fieldlist().setFields(fieldlist)
-    * # and change the query to "SELECT deptno,name,loc FROM dept WHERE deptno=5;"
-    * query.setWhereExpression("deptno=5")
-    * # Execute the query and get a KexiDBCursor object as result which could be used to iterate through the result.
-    * cursor = connection.executeQuerySchema(query)
-    * @endcode
-    */
-    class KexiDBFieldList : public QObject
-    {
-            Q_OBJECT
-        public:
-            KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner);
-            virtual ~KexiDBFieldList();
-            ::KexiDB::FieldList* fieldlist() { return m_fieldlist; }
+/**
+* A list of fields. The KexiDBFieldList can be used to handle KexiDBField objects
+* in a backend-independent way.
+*
+* Example (in Python) ;
+* @code
+* # Get the tableschema for the "dept" table.
+* table = connection.tableSchema("dept")
+* # Create a KexiDBFieldList based on the table and filled with the selected fields.
+* subfields = ["deptno","name","loc"]
+* fieldlist = table.fieldlist().subList(subfields)
+* # Create the "SELECT * from dept;" queryschema.
+* query = table.query()
+* # We change the queryschema to "SELECT deptno,name,loc FROM dept;" now.
+* query.fieldlist().setFields(fieldlist)
+* # and change the query to "SELECT deptno,name,loc FROM dept WHERE deptno=5;"
+* query.setWhereExpression("deptno=5")
+* # Execute the query and get a KexiDBCursor object as result which could be used to iterate through the result.
+* cursor = connection.executeQuerySchema(query)
+* @endcode
+*/
+class KexiDBFieldList : public QObject
+{
+    Q_OBJECT
+public:
+    KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner);
+    virtual ~KexiDBFieldList();
+    ::KexiDB::FieldList* fieldlist() {
+        return m_fieldlist;
+    }
 
-        public slots:
+public slots:
 
-            /** Returns the number of fields. */
-            uint fieldCount();
-            /** Return the \a KexiDBField specified by the index-number passed as an argument. */
-            QObject* field(uint index);
-            /** Return the \a KexiDBField specified by the as an argument passed fieldname. */
-            QObject* fieldByName(const QString& name);
+    /** Returns the number of fields. */
+    uint fieldCount();
+    /** Return the \a KexiDBField specified by the index-number passed as an argument. */
+    QObject* field(uint index);
+    /** Return the \a KexiDBField specified by the as an argument passed fieldname. */
+    QObject* fieldByName(const QString& name);
 
-            /** Returns true if the passed \a KexiDBField \p field object is in the field list. */
-            bool hasField(QObject* field);
-            /** Return a list of field names. */
-            const QStringList names() const;
+    /** Returns true if the passed \a KexiDBField \p field object is in the field list. */
+    bool hasField(QObject* field);
+    /** Return a list of field names. */
+    const QStringList names() const;
 
-            /** Adds the \a KexiDBField object passed as an argument to the field list. */
-            bool addField(QObject* field);
-            /** Inserts the \a KexiDBField object passed as the second argument
-            into the field list at the position defined by the first argument. */
-            bool insertField(uint index, QObject* field);
-            /** Removes the \a KexiDBField object passed as an argument from the field list. */
-            bool removeField(QObject* field);
-            /** Removes all KexiDBField objects from the fieldlist. */
-            void clear();
+    /** Adds the \a KexiDBField object passed as an argument to the field list. */
+    bool addField(QObject* field);
+    /** Inserts the \a KexiDBField object passed as the second argument
+    into the field list at the position defined by the first argument. */
+    bool insertField(uint index, QObject* field);
+    /** Removes the \a KexiDBField object passed as an argument from the field list. */
+    bool removeField(QObject* field);
+    /** Removes all KexiDBField objects from the fieldlist. */
+    void clear();
 
-            /** Set the list of field to the as argument passed \a KexiDBFieldList \p fieldlist . */
-            bool setFields(QObject* fieldlist);
+    /** Set the list of field to the as argument passed \a KexiDBFieldList \p fieldlist . */
+    bool setFields(QObject* fieldlist);
 
-            /** Creates and returns a \a KexiDBFieldList object that contain fields selected by name. */
-            QObject* subList(QVariantList list);
+    /** Creates and returns a \a KexiDBFieldList object that contain fields selected by name. */
+    QObject* subList(QVariantList list);
 
-        private:
-            ::KexiDB::FieldList* m_fieldlist;
-            bool m_owner;
-    };
+private:
+    ::KexiDB::FieldList* m_fieldlist;
+    bool m_owner;
+};
 
 }
 

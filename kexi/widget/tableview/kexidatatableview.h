@@ -24,8 +24,9 @@
 
 #include "kexitableview.h"
 
-namespace KexiDB {
-  class Cursor;
+namespace KexiDB
+{
+class Cursor;
 }
 
 /**
@@ -33,9 +34,9 @@ namespace KexiDB {
  */
 class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /**
      * creates a blank widget
      */
@@ -51,40 +52,44 @@ class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 
     ~KexiDataTableView();
 
-//		virtual void initActions(KActionCollection *col);
+//  virtual void initActions(KActionCollection *col);
 
     /*! Fills table view with data using \a cursor. \return true on success.
      Cursor \a cursor will not be owned by this object. */
     bool setData(KexiDB::Cursor *cursor);
 
-    /*! \return cursor used as data source for this table view, 
+    /*! \return cursor used as data source for this table view,
      or NULL if no valid cursor is defined. */
-    KexiDB::Cursor *cursor() { return m_cursor; }
+    KexiDB::Cursor *cursor() {
+        return m_cursor;
+    }
 
     /**
      * @returns the number of records in the data set, (if data set is present)
      * @note not all of the records have to be processed
      */
-    int recordCount() { return m_data->count(); }
+    int recordCount() {
+        return m_data->count();
+    }
 
-    #ifndef KEXI_NO_PRINT
-//		virtual void print(KPrinter &printer);
-    #endif
+#ifndef KEXI_NO_PRINT
+//  virtual void print(KPrinter &printer);
+#endif
 
-  protected:
+protected:
     void init();
 
     /*! Reimplemented: called by deleteItem() - we are deleting data associated with \a item. */
-//		virtual bool beforeDeleteItem(KexiDB::RecordData *record);
+//  virtual bool beforeDeleteItem(KexiDB::RecordData *record);
 
-  protected slots:
-//		void slotClearData();
+protected slots:
+//  void slotClearData();
 
-  private:
+private:
     //db stuff
-    KexiDB::Cursor	*m_cursor;
+    KexiDB::Cursor *m_cursor;
 
-//		QMap<KexiDBUpdateRecord*,KexiDB::RecordData*> m_insertMapping;
+//  QMap<KexiDBUpdateRecord*,KexiDB::RecordData*> m_insertMapping;
 };
 
 #endif

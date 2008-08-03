@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,72 +30,76 @@
 
 namespace KexiDB
 {
-	class Connection;
-	class Cursor;
+class Connection;
+class Cursor;
 }
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 
 namespace Scripting
 {
-	class Chart;
+class Chart;
 }
 
 class KRChartData : public KRObjectData
 {
-	public:
-		KRChartData ( ){_conn = 0; createProperties();}
-		KRChartData ( QDomNode & element );
-		~KRChartData();
-		virtual KRChartData * toChart();
-		virtual int type() const;
-		KDChart::Widget *widget(){return _chartWidget;}
-		void populateData();
-		void setConnection(KexiDB::Connection*);
-	protected:
-		KRSize _size;	
-		KoProperty::Property * _dataSource;
-		KoProperty::Property * _font;
-		KoProperty::Property * _chartType;
-		KoProperty::Property * _chartSubType;
-		KoProperty::Property * _threeD;
-		KoProperty::Property * _colorScheme;
-		KoProperty::Property * _aa;
-		KoProperty::Property * _xTitle;
-		KoProperty::Property * _yTitle;
-		
-		KoProperty::Property *_bgColor;
-		KoProperty::Property* _displayLegend;
-		
-		//KoProperty::Property* _lnWeight;
-		//KoProperty::Property* _lnStyle;
-		
-		//ORLineStyleData lineStyle();
-		
-		KDChart::Widget *_chartWidget;
-		
-		void set3D ( bool );
-		void setAA ( bool );
-		void setColorScheme ( const QString & );
-		void setAxis( const QString&, const QString& );
-		void setBackgroundColor(const QColor&);
-		void setLegend ( bool );
-			
-		QStringList fieldNames(const QString &);
-		QStringList fieldNamesHackUntilImprovedParser(const QString &);
-		
-		
-	private:
-		virtual void createProperties();
-		static int RTTI;
-		KexiDB::Connection* _conn;
-		
-		friend class ORPreRenderPrivate;
-		friend class Scripting::Chart;
-		
-		KexiDB::Cursor *dataSet();
+public:
+    KRChartData() {
+        _conn = 0; createProperties();
+    }
+    KRChartData(QDomNode & element);
+    ~KRChartData();
+    virtual KRChartData * toChart();
+    virtual int type() const;
+    KDChart::Widget *widget() {
+        return _chartWidget;
+    }
+    void populateData();
+    void setConnection(KexiDB::Connection*);
+protected:
+    KRSize _size;
+    KoProperty::Property * _dataSource;
+    KoProperty::Property * _font;
+    KoProperty::Property * _chartType;
+    KoProperty::Property * _chartSubType;
+    KoProperty::Property * _threeD;
+    KoProperty::Property * _colorScheme;
+    KoProperty::Property * _aa;
+    KoProperty::Property * _xTitle;
+    KoProperty::Property * _yTitle;
+
+    KoProperty::Property *_bgColor;
+    KoProperty::Property* _displayLegend;
+
+    //KoProperty::Property* _lnWeight;
+    //KoProperty::Property* _lnStyle;
+
+    //ORLineStyleData lineStyle();
+
+    KDChart::Widget *_chartWidget;
+
+    void set3D(bool);
+    void setAA(bool);
+    void setColorScheme(const QString &);
+    void setAxis(const QString&, const QString&);
+    void setBackgroundColor(const QColor&);
+    void setLegend(bool);
+
+    QStringList fieldNames(const QString &);
+    QStringList fieldNamesHackUntilImprovedParser(const QString &);
+
+
+private:
+    virtual void createProperties();
+    static int RTTI;
+    KexiDB::Connection* _conn;
+
+    friend class ORPreRenderPrivate;
+    friend class Scripting::Chart;
+
+    KexiDB::Cursor *dataSet();
 
 };
 

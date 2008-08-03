@@ -28,7 +28,7 @@ namespace KexiDB
 //! @short A single parameter of a query schema
 class KEXI_DB_EXPORT QuerySchemaParameter
 {
-  public:
+public:
     QuerySchemaParameter();
     ~QuerySchemaParameter();
 
@@ -44,14 +44,14 @@ typedef QList<QuerySchemaParameter>::ConstIterator QuerySchemaParameterListConst
 //! Shows debug information for \a list
 KEXI_DB_EXPORT void debug(const QuerySchemaParameterList& list);
 
-//! @short An iteratof for a list of values of query schema parameters providing 
+//! @short An iteratof for a list of values of query schema parameters providing
 //! Allows to iterate over parameters and return QVariant value or well-formatted string.
 //! The iterator is initially set to the last item because of the parser requirements
 class KEXI_DB_EXPORT QuerySchemaParameterValueListIterator
 {
-  public:
+public:
     QuerySchemaParameterValueListIterator(
-      Driver& driver, const QList<QVariant>& params);
+        Driver& driver, const QList<QVariant>& params);
     ~QuerySchemaParameterValueListIterator();
 
     //! \return previous value
@@ -59,7 +59,7 @@ class KEXI_DB_EXPORT QuerySchemaParameterValueListIterator
 
     //! \return previous value as string formatted using driver's escaping
     QString getPreviousValueAsString(Field::Type type);
-  protected:
+protected:
     class Private;
     Private * const d;
 };

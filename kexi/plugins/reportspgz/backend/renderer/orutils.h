@@ -42,53 +42,63 @@
 //  Query Class
 class orQuery
 {
-	private:
-		QString         qstrName;
+private:
+    QString         qstrName;
 
-		QString         qstrQuery;
-		KexiDB::Cursor   *qryQuery;
+    QString         qstrQuery;
+    KexiDB::Cursor   *qryQuery;
 
-		KexiDB::Connection   *_database;
-		KexiDB::TableOrQuerySchema *_schema;
+    KexiDB::Connection   *_database;
+    KexiDB::TableOrQuerySchema *_schema;
 
-	public:
-		orQuery();
-		orQuery ( const QString &, const QString &, bool doexec, KexiDB::Connection *conn = 0 );
+public:
+    orQuery();
+    orQuery(const QString &, const QString &, bool doexec, KexiDB::Connection *conn = 0);
 
-		virtual ~orQuery();
+    virtual ~orQuery();
 
-		inline bool queryExecuted() const { return ( qryQuery != 0 ); }
-		bool execute();
+    inline bool queryExecuted() const {
+        return (qryQuery != 0);
+    }
+    bool execute();
 
-		inline KexiDB::Cursor *getQuery() { return qryQuery; }
-		inline const QString &getSql() const { return qstrQuery; }
-		inline const QString &getName() const { return qstrName; }
-		
-		uint fieldNumber ( const QString &fld );
-		KexiDB::TableOrQuerySchema &schema();
+    inline KexiDB::Cursor *getQuery() {
+        return qryQuery;
+    }
+    inline const QString &getSql() const {
+        return qstrQuery;
+    }
+    inline const QString &getName() const {
+        return qstrName;
+    }
+
+    uint fieldNumber(const QString &fld);
+    KexiDB::TableOrQuerySchema &schema();
 };
 
 
 // Data class
 class orData
 {
-	private:
-		orQuery *qryThis;
-		QString qstrField;
-		QString qstrValue;
-		bool    _valid;
-		QByteArray rawValue;
-		
-	public:
-		orData();
+private:
+    orQuery *qryThis;
+    QString qstrField;
+    QString qstrValue;
+    bool    _valid;
+    QByteArray rawValue;
 
-		void  setQuery ( orQuery *qryPassed );
-		void  setField ( const QString &qstrPPassed );
+public:
+    orData();
 
-		inline bool  isValid() const { return _valid; }
+    void  setQuery(orQuery *qryPassed);
+    void  setField(const QString &qstrPPassed);
 
-		const QString &getValue();
-		const QByteArray &getRawValue();
+    inline bool  isValid() const {
+        return _valid;
+    }
+
+    const QString &getValue();
+    const QByteArray &getRawValue();
 };
 
 #endif // __ORUTILS_H__

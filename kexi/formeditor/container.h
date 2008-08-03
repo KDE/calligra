@@ -34,7 +34,8 @@ class QEvent;
 class QWidget;
 class QLayout;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class Container;
 class ObjectTreeItem;
@@ -47,9 +48,9 @@ class Form;
 //! A class for redirecting events
 class KFORMEDITOR_EXPORT EventEater : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /*! Constructs eater object. All events for \a widget and it's subwidgets
     will be redirected to \a container. \a container will be also parent of eater object,
     so you don't need to care about deleting it. */
@@ -57,10 +58,12 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
     ~EventEater();
 
     //! Sets the object which will receive the events
-    void setContainer(QObject *container)  { m_container = container; }
+    void setContainer(QObject *container)  {
+        m_container = container;
+    }
     bool eventFilter(QObject *o, QEvent *ev);
 
-  private:
+private:
     QPointer<QWidget>  m_widget;
     QPointer<QObject>  m_container;
 };
@@ -72,15 +75,15 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 //! A class to make a container from any widget
 class KFORMEDITOR_EXPORT Container : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    enum LayoutType { NoLayout=0, HBox, VBox, Grid, HFlow, VFlow, /* special types */ HSplitter, VSplitter };
+public:
+    enum LayoutType { NoLayout = 0, HBox, VBox, Grid, HFlow, VFlow, /* special types */ HSplitter, VSplitter };
 
     /**
      * Creates a Container from the widget \a container, which have
      \a toplevel as parent Container. */
-    Container(Container *toplevel, QWidget *container, QObject *parent=0);
+    Container(Container *toplevel, QWidget *container, QObject *parent = 0);
     virtual ~Container();
 
     //! \return a pointer to the toplevel Container, or 0 if this Container is toplevel
@@ -90,29 +93,43 @@ class KFORMEDITOR_EXPORT Container : public QObject
     Form* form() const;
 
     //! \return The watched widget.
-    QWidget* widget() const { return m_container; }
+    QWidget* widget() const {
+        return m_container;
+    }
 
     //! \return The ObjectTreeItem associated with this Container's widget.
-    ObjectTreeItem* objectTree() const { return m_tree; }
+    ObjectTreeItem* objectTree() const {
+        return m_tree;
+    }
 
     //! Sets the Form which this Container belongs to.
     void setForm(Form *form);
 
     /*! Sets the ObjectTree of this Container.\n
      * NOTE: this is needed only if we are toplevel. */
-    void setObjectTree(ObjectTreeItem *t) { m_tree = t; }
+    void setObjectTree(ObjectTreeItem *t) {
+        m_tree = t;
+    }
 
     //! \return a pointer to the QLayout of this Container, or 0 if there is not.
-    QLayout* layout() const { return m_layout; }
+    QLayout* layout() const {
+        return m_layout;
+    }
 
     //! \return the type of the layout associated to this Container's widget (see LayoutType enum).
-    LayoutType layoutType() const { return m_layType; }
+    LayoutType layoutType() const {
+        return m_layType;
+    }
 
     //! \return the margin of this Container.
-    int layoutMargin() { return m_margin; }
+    int layoutMargin() {
+        return m_margin;
+    }
 
     //! \return the spacing of this Container.
-    int layoutSpacing() { return m_spacing; }
+    int layoutSpacing() {
+        return m_spacing;
+    }
 
     /*! Sets this Container to use \a type of layout. The widget are inserted
      automatically in the layout following their positions.
@@ -120,10 +137,14 @@ class KFORMEDITOR_EXPORT Container : public QObject
     void setLayout(LayoutType type);
 
     //! Sets the spacing of this Container.
-    void setLayoutSpacing(int spacing) { m_spacing = spacing;}
+    void setLayoutSpacing(int spacing) {
+        m_spacing = spacing;
+    }
 
     //! Sets the margin of this Container.
-    void setLayoutMargin(int margin) { m_margin = margin;}
+    void setLayoutMargin(int margin) {
+        m_margin = margin;
+    }
 
     //! \return the string representing the layoutType \a type.
     static QString layoutTypeToString(int type);
@@ -133,7 +154,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
     /*! Stops the inline editing of the current widget (as when you click
      on another widget or press Esc). */
-    void stopInlineEditing() { m_state = DoingNothing; }
+    void stopInlineEditing() {
+        m_state = DoingNothing;
+    }
 
     /*! This is the main function of Container, which filters the event sent
        to the watched widget.\n It takes care of drawing the background and
@@ -141,7 +164,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
         and pop up a menu when right-clicking. */
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-  public slots:
+public slots:
     /*! Sets \a selected to be the selected widget of this container
       (and so of the Form). If \a add is true, the formerly selected widget
       is still selected, and the new one is just added. If false, \a selected
@@ -149,8 +172,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
       the widget \a selected (and its parent) won't be raised (eg when you
        select widget in ObjectTreeView).
       \sa Form::setSelectedWidget() */
-    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise=false,
-      bool moreWillBeSelected = false);
+    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise = false,
+                           bool moreWillBeSelected = false);
 
     /*! Unselects the widget \a w. The widget is removed from the Form's list
      and its resizeHandles are removed. */
@@ -164,11 +187,11 @@ class KFORMEDITOR_EXPORT Container : public QObject
      or added to update the layout. */
     void reloadLayout();
 
-  protected slots:
+protected slots:
     /*! This slot is called when the watched widget is deleted. Deletes the Container too. */
     void widgetDeleted();
 
-  protected:
+protected:
     /*! Internal function to create a HBoxLayout or VBoxLayout for this container.
      \a list is a subclass of QObjectList that can sort widgets
        following their position (such as HorWidgetList or VerWidgetList). */
@@ -179,16 +202,16 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
     /*! Internal function to create a GridLayout. if \a testOnly is true, the layout
       is simulated, and only the widget's grid info aris filled. */
-    void createGridLayout(bool testOnly=false);
+    void createGridLayout(bool testOnly = false);
 
     void drawConnection(QMouseEvent *mev);
     void drawSelectionRect(QMouseEvent *mev);
     void drawInsertRect(QMouseEvent *mev, QObject *s);
     void drawCopiedWidgetRect(QMouseEvent *mev);
 
-    void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev=0);
+    void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev = 0);
 
-  private:
+private:
     bool handleMouseReleaseEvent(QObject *s, QMouseEvent *mev);
 
     // the watched container and it's toplevel one...
@@ -197,7 +220,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
     int m_state;
     enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget,
-      MovingWidget, InlineEditing };
+           MovingWidget, InlineEditing
+         };
 
     // Layout
     QLayout *m_layout;
@@ -206,9 +230,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 
     // moving etc.
     QPoint m_grab;
-    //QPoint		m_initialPos;
+    //QPoint  m_initialPos;
     QPointer<QWidget> m_moving;
-    //QRect		m_copyRect;
+    //QRect  m_copyRect;
 
     //inserting
     QPoint m_insertBegin;
@@ -231,15 +255,17 @@ class KFORMEDITOR_EXPORT Container : public QObject
 /*! This is currently used by KexiDBFieldEdit from Kexi forms. */
 class KFORMEDITOR_EXPORT DesignTimeDynamicChildWidgetHandler
 {
-  public:
+public:
     DesignTimeDynamicChildWidgetHandler();
     ~DesignTimeDynamicChildWidgetHandler();
 
-  protected:
+protected:
     void childWidgetAdded(QWidget* w);
-    void assignItem(ObjectTreeItem* item) { m_item = item; }
+    void assignItem(ObjectTreeItem* item) {
+        m_item = item;
+    }
 
-  private:
+private:
     ObjectTreeItem* m_item;
     friend class InsertWidgetCommand;
     friend class FormIO;

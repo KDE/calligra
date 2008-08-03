@@ -31,12 +31,13 @@ namespace KexiCSVExport
 enum Mode { Clipboard, File };
 
 //! Options used in KexiCSVExportWizard contructor.
-class Options {
-  public:
+class Options
+{
+public:
     Options();
-  
+
     //! Assigns \a args. \return false on failure.
-    bool assign( QMap<QString,QString>& args );
+    bool assign(QMap<QString, QString>& args);
 
     Mode mode;
     int itemId; //!< Table or query ID
@@ -44,7 +45,7 @@ class Options {
     QString delimiter;
     QString forceDelimiter; //!< Used for "clipboard" mode
     QString textQuote;
-    bool addColumnNames : 1;
+bool addColumnNames : 1;
 };
 
 /*! Exports data. \return false on failure.
@@ -52,8 +53,8 @@ class Options {
  @param rowCount row count of the input data or -1 if the row cound has not yet been computed
  @param predefinedTextStream text stream that should be used instead of writing to a file
 */
-bool exportData(KexiDB::TableOrQuerySchema& tableOrQuery, const Options& options, 
-  int rowCount = -1,  QTextStream *predefinedTextStream = 0);
+bool exportData(KexiDB::TableOrQuerySchema& tableOrQuery, const Options& options,
+                int rowCount = -1,  QTextStream *predefinedTextStream = 0);
 
 }
 

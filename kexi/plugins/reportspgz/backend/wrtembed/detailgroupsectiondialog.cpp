@@ -29,7 +29,7 @@
  *  true to construct a modal dialog.
  */
 DetailGroupSectionDialog::DetailGroupSectionDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
-    : QDialog(parent, fl)
+        : QDialog(parent, fl)
 {
     setupUi(this);
 

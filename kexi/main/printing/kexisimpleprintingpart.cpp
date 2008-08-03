@@ -29,36 +29,36 @@
 #include <core/kexipartinfo.h>
 
 KexiSimplePrintingPart::KexiSimplePrintingPart()
- : KexiPart::StaticPart("kexi/simpleprinting", "document-print", i18n("Printing"))
+        : KexiPart::StaticPart("kexi/simpleprinting", "document-print", i18n("Printing"))
 {
-  // REGISTERED ID:
-//??	m_registeredPartID = (int)KexiPart::QueryObjectType;
+    // REGISTERED ID:
+//?? m_registeredPartID = (int)KexiPart::QueryObjectType;
 
-/*	m_names["componentName"] 
-    = i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-    "Use '_' character instead of spaces. First character should be a..z character. "
-    "If you cannot use latin characters in your language, use english word.", 
-    "query");*/
-  m_names["instanceCaption"] = i18n("Printing");
-  m_supportedViewModes = Kexi::DesignViewMode;
-  m_supportedUserViewModes = Kexi::DesignViewMode;
+    /* m_names["componentName"]
+        = i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+        "Use '_' character instead of spaces. First character should be a..z character. "
+        "If you cannot use latin characters in your language, use english word.",
+        "query");*/
+    m_names["instanceCaption"] = i18n("Printing");
+    m_supportedViewModes = Kexi::DesignViewMode;
+    m_supportedUserViewModes = Kexi::DesignViewMode;
 }
 
 KexiSimplePrintingPart::~KexiSimplePrintingPart()
 {
 }
 
-KexiView* KexiSimplePrintingPart::createView(QWidget *parent, KexiWindow* window, 
-      KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>* args)
+KexiView* KexiSimplePrintingPart::createView(QWidget *parent, KexiWindow* window,
+        KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>* args)
 {
-  Q_UNUSED( item );
-  if (viewMode == Kexi::DesignViewMode) {
-    KexiSimplePrintingPageSetup *w = new KexiSimplePrintingPageSetup( 
-      KexiMainWindow::self(), parent, args );
-    return w;
-  }
+    Q_UNUSED(item);
+    if (viewMode == Kexi::DesignViewMode) {
+        KexiSimplePrintingPageSetup *w = new KexiSimplePrintingPageSetup(
+            KexiMainWindow::self(), parent, args);
+        return w;
+    }
 
-  return 0;
+    return 0;
 }
 
 #include "kexisimpleprintingpart.moc"

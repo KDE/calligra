@@ -22,22 +22,22 @@
 using namespace KexiDB;
 
 MessageTitle::MessageTitle(Object* o, const QString& msg)
-  : m_obj(o)
-  , m_prevMsgTitle(o->m_msgTitle)
-{ 
-  m_obj->m_msgTitle = msg;
+        : m_obj(o)
+        , m_prevMsgTitle(o->m_msgTitle)
+{
+    m_obj->m_msgTitle = msg;
 }
 
 MessageTitle::~MessageTitle()
 {
-  m_obj->m_msgTitle = m_prevMsgTitle;
+    m_obj->m_msgTitle = m_prevMsgTitle;
 }
 
 //------------------------------------------------
 
 MessageHandler::MessageHandler(QWidget *parent)
- : m_messageHandlerParentWidget(parent)
- , m_enableMessages(true)
+        : m_messageHandlerParentWidget(parent)
+        , m_enableMessages(true)
 {
 }
 
@@ -45,18 +45,18 @@ MessageHandler::~MessageHandler()
 {
 }
 
-int MessageHandler::askQuestion( const QString& message, 
-  KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
-  const KGuiItem &buttonYes, 
-  const KGuiItem &buttonNo,
-  const QString &dontShowAskAgainName,
-  int options )
+int MessageHandler::askQuestion(const QString& message,
+                                KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+                                const KGuiItem &buttonYes,
+                                const KGuiItem &buttonNo,
+                                const QString &dontShowAskAgainName,
+                                int options)
 {
-  Q_UNUSED(message);
-  Q_UNUSED(dlgType);
-  Q_UNUSED(buttonYes);
-  Q_UNUSED(buttonNo);
-  Q_UNUSED(dontShowAskAgainName);
-  Q_UNUSED(options);
-  return defaultResult;
+    Q_UNUSED(message);
+    Q_UNUSED(dlgType);
+    Q_UNUSED(buttonYes);
+    Q_UNUSED(buttonNo);
+    Q_UNUSED(dontShowAskAgainName);
+    Q_UNUSED(options);
+    return defaultResult;
 }

@@ -32,9 +32,9 @@ class QImage;
 //! \brief Record marker, usually displayed at the left side of a table view or a continuous form.
 class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiRecordMarker(QWidget *parent);
     virtual ~KexiRecordMarker();
 
@@ -43,7 +43,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
     static QImage* penImage();
     static QImage* plusImage();
 
-  public slots:
+public slots:
     void setOffset(int offset);
     void setCellHeight(int cellHeight);
     void setCurrentRow(int row);
@@ -56,17 +56,17 @@ class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
     QColor selectionBackgroundColor() const;
     void setSelectionBackgroundColor(const QColor &color);
 
-    void addLabel(bool upd=true);
-    void removeLabel(bool upd=true);
+    void addLabel(bool upd = true);
+    void removeLabel(bool upd = true);
 
     /*! Adds \a num labels */
-    void addLabels(int num, bool upd=true);
+    void addLabels(int num, bool upd = true);
 
-    void clear(bool upd=true);
+    void clear(bool upd = true);
 
-  protected:
+protected:
     virtual void paintEvent(QPaintEvent *e);
-    
+
     class Private;
     Private * const d;
 };

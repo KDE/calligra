@@ -34,23 +34,23 @@
 #include "kexidatatable.h"
 
 KexiDataTable::KexiDataTable(QWidget *parent, bool dbAware)
- : KexiDataAwareView( parent )
+        : KexiDataAwareView(parent)
 {
-  KexiTableView *view;
-  if (dbAware)
-    view = new KexiDataTableView(this);
-  else
-    view = new KexiTableView(0, this);
-  view->setObjectName( "datatableview" );
+    KexiTableView *view;
+    if (dbAware)
+        view = new KexiDataTableView(this);
+    else
+        view = new KexiTableView(0, this);
+    view->setObjectName("datatableview");
 
-  KexiDataAwareView::init( view, view, view );
+    KexiDataAwareView::init(view, view, view);
 }
 
 KexiDataTable::KexiDataTable(QWidget *parent, KexiDB::Cursor *cursor)
- : KexiDataAwareView( parent )
+        : KexiDataAwareView(parent)
 {
-  KexiTableView *view = new KexiDataTableView(this, cursor);
-  KexiDataAwareView::init( view, view, view );
+    KexiTableView *view = new KexiDataTableView(this, cursor);
+    KexiDataAwareView::init(view, view, view);
 }
 
 KexiDataTable::~KexiDataTable()
@@ -60,9 +60,9 @@ KexiDataTable::~KexiDataTable()
 void
 KexiDataTable::setData(KexiDB::Cursor *c)
 {
-  if (!dynamic_cast<KexiDataTableView*>(mainWidget()))
-    return;
-  dynamic_cast<KexiDataTableView*>(mainWidget())->setData(c);
+    if (!dynamic_cast<KexiDataTableView*>(mainWidget()))
+        return;
+    dynamic_cast<KexiDataTableView*>(mainWidget())->setData(c);
 }
 
 void KexiDataTable::filter()
@@ -71,7 +71,7 @@ void KexiDataTable::filter()
 
 KexiTableView* KexiDataTable::tableView() const
 {
-  return dynamic_cast<KexiTableView*>(m_internalView);
+    return dynamic_cast<KexiTableView*>(m_internalView);
 }
 
 #include "kexidatatable.moc"

@@ -56,93 +56,86 @@ class KRImageData;
 //
 class ORDataData
 {
-	public:
-		ORDataData()
-		{
-			query = QString::null;
-			column = QString::null;
-		}
-		ORDataData ( const QString & q, const QString & c )
-		{
-			query = q;
-			column = c;
-		}
-		ORDataData ( const ORDataData & d )
-		{
-			query = d.query;
-			column = d.column;
-		}
+public:
+    ORDataData() {
+        query = QString::null;
+        column = QString::null;
+    }
+    ORDataData(const QString & q, const QString & c) {
+        query = q;
+        column = c;
+    }
+    ORDataData(const ORDataData & d) {
+        query = d.query;
+        column = d.column;
+    }
 
-		ORDataData & operator= ( const ORDataData & d )
-		{
-			query = d.query;
-			column = d.column;
-			return *this;
-		}
+    ORDataData & operator= (const ORDataData & d) {
+        query = d.query;
+        column = d.column;
+        return *this;
+    }
 
-		bool operator== ( const ORDataData & d ) const
-		{
-			return ( ( query == d.query ) && ( column == d.column ) );
-		}
+    bool operator== (const ORDataData & d) const {
+        return ((query == d.query) && (column == d.column));
+    }
 
-		bool operator< ( const ORDataData & d ) const
-		{
-			if ( ( query < d.query ) || ( query == d.query && column < d.column ) )
-				return true;
-			return false;
-		}
+    bool operator< (const ORDataData & d) const {
+        if ((query < d.query) || (query == d.query && column < d.column))
+            return true;
+        return false;
+    }
 
-		QString query;
-		QString column;
+    QString query;
+    QString column;
 };
 
 class ORTextStyleData
 {
-	public:
-		QFont font;
-		Qt::Alignment textFlags;
-		QColor bgColor;
-		QColor fgColor;
-		int bgOpacity;
+public:
+    QFont font;
+    Qt::Alignment textFlags;
+    QColor bgColor;
+    QColor fgColor;
+    int bgOpacity;
 
 };
 
 class ORLineStyleData
 {
-	public:
-		int weight;
-		QColor lnColor;
-		Qt::PenStyle style;
+public:
+    int weight;
+    QColor lnColor;
+    Qt::PenStyle style;
 };
 
 
 class ORDetailGroupSectionData
 {
-	public:
-		ORDetailGroupSectionData();
+public:
+    ORDetailGroupSectionData();
 
-		enum PageBreak
-		{
-			BreakNone = 0,
-			BreakAfterGroupFoot = 1
-		};
+    enum PageBreak {
+        BreakNone = 0,
+        BreakAfterGroupFoot = 1
+    };
 
-		//QString name;
-		QString column;
-		int pagebreak;
+    //QString name;
+    QString column;
+    int pagebreak;
 
-		QMap<ORDataData,qreal> _subtotCheckPoints;
+    QMap<ORDataData, qreal> _subtotCheckPoints;
 
-		KRSectionData * head;
-		KRSectionData * foot;
+    KRSectionData * head;
+    KRSectionData * foot;
 };
 
 
 
-bool parseReportRect ( const QDomElement &, QRectF & );
-bool parseReportFont ( const QDomElement &, QFont & );
+bool parseReportRect(const QDomElement &, QRectF &);
+bool parseReportFont(const QDomElement &, QFont &);
 
-bool parseReportTextStyleData ( const QDomElement &, ORTextStyleData & );
-bool parseReportLineStyleData ( const QDomElement &, ORLineStyleData & );
+bool parseReportTextStyleData(const QDomElement &, ORTextStyleData &);
+bool parseReportLineStyleData(const QDomElement &, ORLineStyleData &);
 
 #endif

@@ -28,31 +28,33 @@
 
 class KEXIMAIN_EXPORT KexiNameDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiNameDialog(const QString& message, QWidget * parent = 0);
 
-    KexiNameDialog(const QString& message, 
-      const QString& nameLabel, const QString& nameText, 
-      const QString& captionLabel, const QString& captionText, 
-      QWidget * parent = 0);
-    
+    KexiNameDialog(const QString& message,
+                   const QString& nameLabel, const QString& nameText,
+                   const QString& captionLabel, const QString& captionText,
+                   QWidget * parent = 0);
+
     virtual ~KexiNameDialog();
 
-    KexiNameWidget* widget() const { return m_widget; }
+    KexiNameWidget* widget() const {
+        return m_widget;
+    }
 
-  public slots:
+public slots:
     virtual void setDialogIcon(const QPixmap& icon);
 
-  protected slots:
+protected slots:
     void slotTextChanged();
     virtual void accept();
     void updateSize();
-  
-  protected:
+
+protected:
     void init();
-    virtual void showEvent( QShowEvent * event );
+    virtual void showEvent(QShowEvent * event);
 
     QLabel *m_icon;
     KexiNameWidget* m_widget;

@@ -27,67 +27,67 @@ class KexiSimplePrintingPageSetupBase;
 class KoPageLayoutSize;
 class KexiSimplePrintPreviewWindow;
 
-/*! @short A command for simple printing and print preview. 
+/*! @short A command for simple printing and print preview.
  This class is instantiated in KexiMainWindow so there's:
  - a single print preview window per part item regardless of a way how user invoked
-    the 'print preview' command (using 'File->Print Preview' command or 'Print Preview' button 
+    the 'print preview' command (using 'File->Print Preview' command or 'Print Preview' button
     of the 'Page Setup' dialog)
  - a single printing engine per part item regardless of a way how user started
    (using 'File->Print' command or 'Print' button of the 'Page Setup' dialog)
 */
 class KexiSimplePrintingCommand : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiSimplePrintingCommand(KexiMainWindow* mainWin, int objectId, 
-      QObject* parent = 0);
+public:
+    KexiSimplePrintingCommand(KexiMainWindow* mainWin, int objectId,
+                              QObject* parent = 0);
     ~KexiSimplePrintingCommand();
 
-  public slots:
-    bool print(const KexiSimplePrintingSettings& settings, 
-      const QString& aTitleText = QString());
+public slots:
+    bool print(const KexiSimplePrintingSettings& settings,
+               const QString& aTitleText = QString());
     bool print(const QString& aTitleText = QString());
-    bool showPrintPreview(const KexiSimplePrintingSettings& settings, 
-      const QString& aTitleText = QString(), bool reload = false);
-//		void setPrintPreviewNeedsReloading();
+    bool showPrintPreview(const KexiSimplePrintingSettings& settings,
+                          const QString& aTitleText = QString(), bool reload = false);
+//  void setPrintPreviewNeedsReloading();
 
-  signals:
+signals:
     //! connected to Kexi Main Window
     void showPageSetupRequested(KexiPart::Item* item);
 
-  protected slots:
+protected slots:
     void slotShowPageSetupRequested();
 
-  protected:
+protected:
     KexiSimplePrintingEngine* m_previewEngine;
     KexiMainWindow* m_mainWin;
     int m_objectId;
     KexiSimplePrintingSettings m_settings;
     KexiSimplePrintPreviewWindow *m_previewWindow;
-    bool m_printPreviewNeedsReloading : 1;
+bool m_printPreviewNeedsReloading : 1;
 };
 
 //! @short A window for displaying settings for simple printing.
 class KexiSimplePrintingPageSetup : public KexiView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, QMap<QString,QVariant>* args );
+public:
+    KexiSimplePrintingPageSetup(KexiMainWindow *mainWin, QWidget *parent, QMap<QString, QVariant>* args);
     ~KexiSimplePrintingPageSetup();
 
-  public slots:
+public slots:
     void print();
     void printPreview();
 
-  signals:
-    void printItemRequested(KexiPart::Item* item, 
-      const KexiSimplePrintingSettings& settings, const QString& titleText);
-    void printPreviewForItemRequested(KexiPart::Item* item, 
-      const KexiSimplePrintingSettings& settings, const QString& titleText, bool reload);
+signals:
+    void printItemRequested(KexiPart::Item* item,
+                            const KexiSimplePrintingSettings& settings, const QString& titleText);
+    void printPreviewForItemRequested(KexiPart::Item* item,
+                                      const KexiSimplePrintingSettings& settings, const QString& titleText, bool reload);
 
-  protected slots:
+protected slots:
     void slotOpenData();
     void slotSaveSetup();
     void slotChangeTitleFont();
@@ -97,20 +97,20 @@ class KexiSimplePrintingPageSetup : public KexiView
     void slotAddTableBordersCheckboxToggled(bool set);
     void slotTitleTextChanged(const QString&);
 
-  protected:
+protected:
     void setupPrintingCommand();
     void updatePageLayoutAndUnitInfo();
     void setDirty(bool set);
 
     KexiSimplePrintingSettings m_settings;
-//		KexiSimplePrintingEngine *m_engine;
+//  KexiSimplePrintingEngine *m_engine;
     KoUnit m_unit;
     KexiSimplePrintingPageSetupBase *m_contents;
     KoPageLayoutSize *m_pageLayoutWidget;
     KexiPart::Item *m_item;
-//		KexiSimplePrintingCommand *m_command;
+//  KexiSimplePrintingCommand *m_command;
     QString m_origCaptionLabelText;
-    bool m_printPreviewNeedsReloading : 1;
+bool m_printPreviewNeedsReloading : 1;
 
 };
 

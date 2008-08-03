@@ -40,34 +40,37 @@
 
 class KexiDBWidgetContextMenuExtender;
 
-/*! @internal Utility: alter background color to be a blended color 
+/*! @internal Utility: alter background color to be a blended color
  of the background and base (usually lighter gray). Used for read-only mode. */
 void setLighterGrayBackgroundColor(QWidget* widget);
 
 //! @short Line edit widget for Kexi forms
-/*! Handles many data types. User input is validated by using validators 
+/*! Handles many data types. User input is validated by using validators
  and/or input masks.
 */
 class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
-  public KLineEdit,
-  protected KexiDBTextWidgetInterface,
-  public KexiFormDataItemInterface,
-  public KexiSubwidgetInterface
+            public KLineEdit,
+            protected KexiDBTextWidgetInterface,
+            public KexiFormDataItemInterface,
+            public KexiSubwidgetInterface
 {
-  Q_OBJECT
-  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
-  Q_OVERRIDE(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
+    Q_OBJECT
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_OVERRIDE(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 
-  public:
+public:
     KexiDBLineEdit(QWidget *parent);
     virtual ~KexiDBLineEdit();
 
-    inline QString dataSource() const { return KexiFormDataItemInterface::dataSource(); }
-    inline QString dataSourceMimeType() const
-      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourceMimeType() const {
+        return KexiFormDataItemInterface::dataSourceMimeType();
+    }
     virtual QVariant value();
-    virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState(const QString& displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -85,8 +88,8 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
     /*! \return 'readOnly' flag for this widget. */
     virtual bool isReadOnly() const;
 
-    /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
-     is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+    /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue()
+     is displayed in a special way. Used by KexiFormDataProvider::fillDataItems().
      \a widget is equal to 'this'.
      Reimplemented after KexiFormDataItemInterface. */
     virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
@@ -100,7 +103,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 
     virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
-    /*! Handles action having standard name \a actionName. 
+    /*! Handles action having standard name \a actionName.
      Action could be: "edit_copy", "edit_paste", etc.
      Reimplemented after KexiDataItemChangesListener. */
     virtual void handleAction(const QString& actionName);
@@ -108,12 +111,14 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
     /*! Called by top-level form on key press event to consume widget-specific shortcuts. */
     virtual bool keyPressed(QKeyEvent *ke);
 
-  public slots:
-    inline void setDataSource(const QString &ds)
-      { KexiFormDataItemInterface::setDataSource(ds); }
-    inline void setDataSourceMimeType(const QString &ds)
-      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-    virtual void setReadOnly( bool readOnly );
+public slots:
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
+    }
+    inline void setDataSourceMimeType(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    }
+    virtual void setReadOnly(bool readOnly);
 
     //! Reimplemented, so "undo" means the same as "cancelEditor" action
     virtual void undo();
@@ -127,16 +132,16 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
-  protected slots:
+protected slots:
     void slotTextChanged(const QString&);
-    
+
     //! Used to protecte m_readWriteValidator against after validator is destroyed
     void slotReadWriteValidatorDestroyed(QObject*);
 
-  protected:
-    virtual void paintEvent ( QPaintEvent * );
+protected:
+    virtual void paintEvent(QPaintEvent *);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
-    virtual bool event ( QEvent * );
+    virtual bool event(QEvent *);
 
     virtual QMenu * createPopupMenu();
 
@@ -145,9 +150,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 
     //! Used to format text
 #ifdef __GNUC__
-#warning reenable when formatter is ported		KexiTextFormatter m_textFormatter;
+#warning reenable when formatter is ported  KexiTextFormatter m_textFormatter;
 #else
-#pragma WARNING( reenable when formatter is ported		KexiTextFormatter m_textFormatter; )
+#pragma WARNING( reenable when formatter is ported  KexiTextFormatter m_textFormatter; )
 #endif
 
     //! Used for read only flag to disable editing
@@ -160,12 +165,12 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
     //! Used for extending context menu
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
-    //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly 
+    //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly
     //! is still false.
-    bool m_internalReadOnly : 1;
+bool m_internalReadOnly : 1;
 
     //! Used in slotTextChanged()
-    bool m_slotTextChanged_enabled : 1;
+bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

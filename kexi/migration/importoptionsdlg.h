@@ -25,25 +25,26 @@
 class QCheckBox;
 class KexiCharacterEncodingComboBox;
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 //! @short Import Options dialog.
 //! It is currently used for MDB driver only
 //! @todo Hardcoded. Move such code to KexiMigrate drivers.
 class OptionsDialog : public KDialog
 {
-  Q_OBJECT
-  public:
-    OptionsDialog( const QString& databaseFile, const QString& selectedEncoding,
-      QWidget* parent = 0 );
+    Q_OBJECT
+public:
+    OptionsDialog(const QString& databaseFile, const QString& selectedEncoding,
+                  QWidget* parent = 0);
     virtual ~OptionsDialog();
 
     KexiCharacterEncodingComboBox* encodingComboBox() const;
 
-  protected slots:
+protected slots:
     virtual void accept();
 
-  protected:
+protected:
     KexiCharacterEncodingComboBox *m_encodingComboBox;
     QCheckBox *m_chkAlwaysUseThisEncoding;
 };

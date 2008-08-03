@@ -42,61 +42,62 @@
 //! @internal A validator used for read only flag to disable editing
 class KexiDBLineEdit_ReadOnlyValidator : public QValidator
 {
-  public:
-    KexiDBLineEdit_ReadOnlyValidator( QObject * parent ) 
-     : QValidator(parent)
-    {
+public:
+    KexiDBLineEdit_ReadOnlyValidator(QObject * parent)
+            : QValidator(parent) {
     }
     ~KexiDBLineEdit_ReadOnlyValidator() {}
-    virtual State validate( QString &, int & ) const { return Invalid; }
+    virtual State validate(QString &, int &) const {
+        return Invalid;
+    }
 };
 
 //-----
 
 KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
- : KLineEdit(parent)
- , KexiDBTextWidgetInterface()
- , KexiFormDataItemInterface()
- , m_menuExtender(this, this)
- , m_internalReadOnly(false)
- , m_slotTextChanged_enabled(true)
+        : KLineEdit(parent)
+        , KexiDBTextWidgetInterface()
+        , KexiFormDataItemInterface()
+        , m_menuExtender(this, this)
+        , m_internalReadOnly(false)
+        , m_slotTextChanged_enabled(true)
 {
 #ifdef USE_KLineEdit_setReadOnly
 //! @todo reenable as an app aption
-  QPalette p(widget->palette());
-  p.setColor( lighterGrayBackgroundColor(palette()) );
-  widget->setPalette(p);
+    QPalette p(widget->palette());
+    p.setColor(lighterGrayBackgroundColor(palette()));
+    widget->setPalette(p);
 #endif
 
-  QFont tmpFont;
-  tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
-  setMinimumHeight(QFontMetrics(tmpFont).height() +6);
-  connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
+    QFont tmpFont;
+    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+    setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 
 KexiDBLineEdit::~KexiDBLineEdit()
 {
 }
 
-void KexiDBLineEdit::setInvalidState( const QString& displayText )
+void KexiDBLineEdit::setInvalidState(const QString& displayText)
 {
-  KLineEdit::setReadOnly(true);
+    KLineEdit::setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-  if (focusPolicy() & Qt::TabFocus)
-    setFocusPolicy(Qt::ClickFocus);
-  setText(displayText);
+    if (focusPolicy() & Qt::TabFocus)
+        setFocusPolicy(Qt::ClickFocus);
+    setText(displayText);
 }
 
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-  m_slotTextChanged_enabled = false;
+    m_slotTextChanged_enabled = false;
 #ifdef __GNUC__
-#warning reenable when formatter is ported	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+#warning reenable when formatter is ported setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
 #else
-#pragma WARNING( reenable when formatter is ported	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) ); )
+#pragma WARNING( reenable when formatter is ported setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) ); )
 #endif
-  setCursorPosition(0); //ok?
-  m_slotTextChanged_enabled = true;
+    setCursorPosition(0); //ok?
+    m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
@@ -106,134 +107,133 @@ QVariant KexiDBLineEdit::value()
 #else
 #pragma WARNING( reenable when formatter is ported return m_textFormatter.textToValue( text() ); )
 #endif
-  return "";
+    return "";
 }
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
 {
-  if (!m_slotTextChanged_enabled)
-    return;
-  signalValueChanged();
+    if (!m_slotTextChanged_enabled)
+        return;
+    signalValueChanged();
 }
 
 bool KexiDBLineEdit::valueIsNull()
 {
-  return valueIsEmpty(); //ok??? text().isNull();
+    return valueIsEmpty(); //ok??? text().isNull();
 }
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
 #ifdef __GNUC__
-#warning reenable when formatter is ported	return m_textFormatter.valueIsEmpty( text() );
+#warning reenable when formatter is ported return m_textFormatter.valueIsEmpty( text() );
 #else
-#pragma WARNING( reenable when formatter is ported	return m_textFormatter.valueIsEmpty( text() ); )
+#pragma WARNING( reenable when formatter is ported return m_textFormatter.valueIsEmpty( text() ); )
 #endif
-  return true;
+    return true;
 }
 
 bool KexiDBLineEdit::valueIsValid()
 {
 #ifdef __GNUC__
-#warning reenable when formatter is ported	return m_textFormatter.valueIsValid( text() );
+#warning reenable when formatter is ported return m_textFormatter.valueIsValid( text() );
 #else
-#pragma WARNING( reenable when formatter is ported	return m_textFormatter.valueIsValid( text() ); )
+#pragma WARNING( reenable when formatter is ported return m_textFormatter.valueIsValid( text() ); )
 #endif
-  return true;
+    return true;
 }
 
 bool KexiDBLineEdit::isReadOnly() const
 {
-  return m_internalReadOnly;
+    return m_internalReadOnly;
 }
 
-void KexiDBLineEdit::setReadOnly( bool readOnly )
+void KexiDBLineEdit::setReadOnly(bool readOnly)
 {
 #ifdef USE_KLineEdit_setReadOnly
 //! @todo reenable as an app aption
-  return KLineEdit::setReadOnly( readOnly );
+    return KLineEdit::setReadOnly(readOnly);
 #else
-  m_internalReadOnly = readOnly;
-  if (m_internalReadOnly) {
-    if (m_readWriteValidator)
-      disconnect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
-        this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
-    m_readWriteValidator = validator();
-    if (m_readWriteValidator)
-      connect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
-        this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
-    if (!m_readOnlyValidator)
-      m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
-    setValidator( m_readOnlyValidator );
-  }
-  else {
-    //revert to r/w validator
-    setValidator( m_readWriteValidator );
-  }
-  m_menuExtender.updatePopupMenuActions();
+    m_internalReadOnly = readOnly;
+    if (m_internalReadOnly) {
+        if (m_readWriteValidator)
+            disconnect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
+                       this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
+        m_readWriteValidator = validator();
+        if (m_readWriteValidator)
+            connect(m_readWriteValidator, SIGNAL(destroyed(QObject*)),
+                    this, SLOT(slotReadWriteValidatorDestroyed(QObject*)));
+        if (!m_readOnlyValidator)
+            m_readOnlyValidator = new KexiDBLineEdit_ReadOnlyValidator(this);
+        setValidator(m_readOnlyValidator);
+    } else {
+        //revert to r/w validator
+        setValidator(m_readWriteValidator);
+    }
+    m_menuExtender.updatePopupMenuActions();
 #endif
 }
 
 void KexiDBLineEdit::slotReadWriteValidatorDestroyed(QObject*)
 {
-  m_readWriteValidator = 0;
+    m_readWriteValidator = 0;
 }
 
 QMenu * KexiDBLineEdit::createPopupMenu()
 {
-  QMenu *contextMenu = KLineEdit::createStandardContextMenu();
-  m_menuExtender.createTitle(contextMenu);
-  return contextMenu;
+    QMenu *contextMenu = KLineEdit::createStandardContextMenu();
+    m_menuExtender.createTitle(contextMenu);
+    return contextMenu;
 }
 
 
 QWidget* KexiDBLineEdit::widget()
 {
-  return this;
+    return this;
 }
 
 bool KexiDBLineEdit::cursorAtStart()
 {
-  return cursorPosition()==0;
+    return cursorPosition() == 0;
 }
 
 bool KexiDBLineEdit::cursorAtEnd()
 {
-  return cursorPosition()==(int)text().length();
+    return cursorPosition() == (int)text().length();
 }
 
 void KexiDBLineEdit::clear()
 {
-  if (!m_internalReadOnly)
-    KLineEdit::clear();
+    if (!m_internalReadOnly)
+        KLineEdit::clear();
 }
 
 
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
-  KexiFormDataItemInterface::setColumnInfo(cinfo);
+    KexiFormDataItemInterface::setColumnInfo(cinfo);
 #ifdef __GNUC__
-#warning reenable when formatter is ported	m_textFormatter.setField( cinfo ? cinfo->field : 0 );
+#warning reenable when formatter is ported m_textFormatter.setField( cinfo ? cinfo->field : 0 );
 #else
-#pragma WARNING( reenable when formatter is ported	m_textFormatter.setField( cinfo ? cinfo->field : 0 ); )
+#pragma WARNING( reenable when formatter is ported m_textFormatter.setField( cinfo ? cinfo->field : 0 ); )
 #endif
 
-  if (!cinfo)
-    return;
+    if (!cinfo)
+        return;
 
 //! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
-  setValidator( new KexiDB::FieldValidator(*cinfo->field, this) );
+    setValidator(new KexiDB::FieldValidator(*cinfo->field, this));
 
-  const QString inputMask
+    const QString inputMask
 #ifdef __GNUC__
-#warning reenable when formatter is ported:	(m_textFormatter.inputMask())
+#warning reenable when formatter is ported: (m_textFormatter.inputMask())
 #else
-#pragma WARNING( reenable when formatter is ported:	(m_textFormatter.inputMask()) )
+#pragma WARNING( reenable when formatter is ported: (m_textFormatter.inputMask()) )
 #endif
-  ;
-  if (!inputMask.isEmpty())
-    setInputMask( inputMask );
+    ;
+    if (!inputMask.isEmpty())
+        setInputMask(inputMask);
 
-  KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
+    KexiDBTextWidgetInterface::setColumnInfo(cinfo, this);
 }
 
 /*todo
@@ -242,83 +242,81 @@ void KexiDBLineEdit::paint( QPainter *p )
   KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
 }*/
 
-void KexiDBLineEdit::paintEvent ( QPaintEvent *pe )
+void KexiDBLineEdit::paintEvent(QPaintEvent *pe)
 {
-  KLineEdit::paintEvent( pe );
-  QPainter p(this);
-  KexiDBTextWidgetInterface::paint( this, &p, text().isEmpty(), alignment(), hasFocus() );
+    KLineEdit::paintEvent(pe);
+    QPainter p(this);
+    KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), hasFocus());
 }
 
-bool KexiDBLineEdit::event( QEvent * e )
+bool KexiDBLineEdit::event(QEvent * e)
 {
-  const bool ret = KLineEdit::event( e );
-  KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
-  if (e->type()==QEvent::FocusOut) {
-    QFocusEvent *fe = static_cast<QFocusEvent *>(e);
-    if (fe->reason()==Qt::TabFocusReason || fe->reason()==Qt::BacktabFocusReason) {
-    //display aligned to left after loosing the focus (only if this is tab/backtab event)
+    const bool ret = KLineEdit::event(e);
+    KexiDBTextWidgetInterface::event(e, this, text().isEmpty());
+    if (e->type() == QEvent::FocusOut) {
+        QFocusEvent *fe = static_cast<QFocusEvent *>(e);
+        if (fe->reason() == Qt::TabFocusReason || fe->reason() == Qt::BacktabFocusReason) {
+            //display aligned to left after loosing the focus (only if this is tab/backtab event)
 //! @todo add option to set cursor at the beginning
-      setCursorPosition(0); //ok?
+            setCursorPosition(0); //ok?
+        }
     }
-  }
-  return ret;
+    return ret;
 }
 
 bool KexiDBLineEdit::appendStretchRequired(KexiDBAutoField* autoField) const
 {
-  return KexiDBAutoField::Top == autoField->labelPosition();
+    return KexiDBAutoField::Top == autoField->labelPosition();
 }
 
 void KexiDBLineEdit::handleAction(const QString& actionName)
 {
-  if (actionName=="edit_copy") {
-    copy();
-  }
-  else if (actionName=="edit_paste") {
-    paste();
-  }
-  else if (actionName=="edit_cut") {
-    cut();
-  }
-  //! @todo ?
+    if (actionName == "edit_copy") {
+        copy();
+    } else if (actionName == "edit_paste") {
+        paste();
+    } else if (actionName == "edit_cut") {
+        cut();
+    }
+    //! @todo ?
 }
 
 void KexiDBLineEdit::setDisplayDefaultValue(QWidget *widget, bool displayDefaultValue)
 {
-  KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
-  // initialize display parameters for default / entered value
-  KexiDisplayUtils::DisplayParameters * const params 
+    KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
+    // initialize display parameters for default / entered value
+    KexiDisplayUtils::DisplayParameters * const params
     = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
-  setFont(params->font);
-  QPalette pal(palette());
-  pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
-  setPalette(pal);
+    setFont(params->font);
+    QPalette pal(palette());
+    pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+    setPalette(pal);
 }
 
 void KexiDBLineEdit::undo()
 {
-  cancelEditor();
+    cancelEditor();
 }
 
 void KexiDBLineEdit::moveCursorToEnd()
 {
-  KLineEdit::end(false/*!mark*/);
+    KLineEdit::end(false/*!mark*/);
 }
 
 void KexiDBLineEdit::moveCursorToStart()
 {
-  KLineEdit::home(false/*!mark*/);
+    KLineEdit::home(false/*!mark*/);
 }
 
 void KexiDBLineEdit::selectAll()
 {
-  KLineEdit::selectAll();
+    KLineEdit::selectAll();
 }
 
 bool KexiDBLineEdit::keyPressed(QKeyEvent *ke)
 {
-  Q_UNUSED(ke);
-  return false;
+    Q_UNUSED(ke);
+    return false;
 }
 
 #include "kexidblineedit.moc"

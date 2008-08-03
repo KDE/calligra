@@ -25,30 +25,30 @@
 #include <kexidb/utils.h>
 #include <core/kexi.h>
 
-KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
-  : QWidget( parent )
+KexiPrjTypeSelector::KexiPrjTypeSelector(QWidget* parent)
+        : QWidget(parent)
 {
-  setupUi(this);
-  setObjectName("KexiPrjTypeSelector");
-  QString none;
-  icon_file->setPixmap( DesktopIcon(KexiDB::defaultFileBasedDriverIcon(), 48) );
-  icon_file->setFixedSize(icon_file->pixmap()->size()/2);
-  icon_server->setPixmap( DesktopIcon(KEXI_ICON_DATABASE_SERVER, 48) );
-  icon_server->setFixedSize(icon_server->pixmap()->size()/2);
+    setupUi(this);
+    setObjectName("KexiPrjTypeSelector");
+    QString none;
+    icon_file->setPixmap(DesktopIcon(KexiDB::defaultFileBasedDriverIcon(), 48));
+    icon_file->setFixedSize(icon_file->pixmap()->size() / 2);
+    icon_server->setPixmap(DesktopIcon(KEXI_ICON_DATABASE_SERVER, 48));
+    icon_server->setFixedSize(icon_server->pixmap()->size() / 2);
 
-  connect( buttonGroup, SIGNAL( clicked(int) ),
-    this, SLOT( slotSelectionChanged(int) ) );
-  
-  slotSelectionChanged( 1 );
+    connect(buttonGroup, SIGNAL(clicked(int)),
+            this, SLOT(slotSelectionChanged(int)));
+
+    slotSelectionChanged(1);
 }
 
 KexiPrjTypeSelector::~KexiPrjTypeSelector()
 {
 }
 
-void KexiPrjTypeSelector::slotSelectionChanged( int id )
+void KexiPrjTypeSelector::slotSelectionChanged(int id)
 {
-  frame_server->setEnabled(id==2);
+    frame_server->setEnabled(id == 2);
 }
 
 #include "kexiprjtypeselector.moc"

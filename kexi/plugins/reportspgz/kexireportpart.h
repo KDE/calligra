@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,38 +37,38 @@
  */
 class KexiReportPart : public KexiPart::Part
 {
-	Q_OBJECT
-	public:
-		/**
-		 * Default Constructor
-		 */
-		KexiReportPart(QObject *parent, const QStringList &l);
+    Q_OBJECT
+public:
+    /**
+     * Default Constructor
+     */
+    KexiReportPart(QObject *parent, const QStringList &l);
 
-		/**
-		 * Default Destructor
-		 */
-		virtual ~KexiReportPart();
-		virtual KexiView* createView(QWidget *parent, KexiWindow* win, 
-				KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString,QVariant>* staticObjectArgs = 0);
-		virtual KexiWindowData* createWindowData(KexiWindow* window);
-		
-		virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
-		
-		class TempData : public KexiWindowData
-		{
-			public:
-				TempData(QObject* parent);
-				QString document;
-				/*! true, if \a document member has changed in previous view. Used on view switching.
-				Check this flag to see if we should refresh data for DataViewMode. */
-				bool reportSchemaChangedInPreviousView : 1;
-				QString name;
-		};
-		
-	private:
-		QString loadReport(const QString&);
-		class Private;
-		Private* d;
+    /**
+     * Default Destructor
+     */
+    virtual ~KexiReportPart();
+    virtual KexiView* createView(QWidget *parent, KexiWindow* win,
+                                 KexiPart::Item &item, Kexi::ViewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+    virtual KexiWindowData* createWindowData(KexiWindow* window);
+
+    virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
+
+    class TempData : public KexiWindowData
+    {
+    public:
+        TempData(QObject* parent);
+        QString document;
+        /*! true, if \a document member has changed in previous view. Used on view switching.
+        Check this flag to see if we should refresh data for DataViewMode. */
+    bool reportSchemaChangedInPreviousView : 1;
+        QString name;
+    };
+
+private:
+    QString loadReport(const QString&);
+    class Private;
+    Private* d;
 };
 
 #endif // _KEXIREPORTPART_H_

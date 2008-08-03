@@ -30,127 +30,126 @@
 #include <kexiutils/utils.h>
 
 KexiDBTimeEdit::KexiDBTimeEdit(const QTime &time, QWidget *parent)
- : Q3TimeEdit(time, parent), KexiFormDataItemInterface()
+        : Q3TimeEdit(time, parent), KexiFormDataItemInterface()
 {
-  m_invalidState = false;
-  setAutoAdvance(true);
-  m_cleared = false;
+    m_invalidState = false;
+    setAutoAdvance(true);
+    m_cleared = false;
 
 #ifdef QDateTimeEditor_HACK
-  m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(this, "QDateTimeEditor");
+    m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(this, "QDateTimeEditor");
 #else
-  m_dte_time = 0;
+    m_dte_time = 0;
 #endif
 
-  connect(this, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
+    connect(this, SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
 }
 
 KexiDBTimeEdit::~KexiDBTimeEdit()
 {
 }
 
-void KexiDBTimeEdit::setInvalidState( const QString&)
+void KexiDBTimeEdit::setInvalidState(const QString&)
 {
-  setEnabled(false);
-  setReadOnly(true);
-  m_invalidState = true;
+    setEnabled(false);
+    setReadOnly(true);
+    m_invalidState = true;
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-  if (focusPolicy() & Qt::TabFocus)
-    setFocusPolicy(Qt::ClickFocus);
+    if (focusPolicy() & Qt::TabFocus)
+        setFocusPolicy(Qt::ClickFocus);
 }
 
 void
 KexiDBTimeEdit::setEnabled(bool enabled)
 {
-   // prevent the user from reenabling the widget when it is in invalid state
-  if(enabled && m_invalidState)
-    return;
-  Q3TimeEdit::setEnabled(enabled);
+    // prevent the user from reenabling the widget when it is in invalid state
+    if (enabled && m_invalidState)
+        return;
+    Q3TimeEdit::setEnabled(enabled);
 }
 
 void KexiDBTimeEdit::setValueInternal(const QVariant &add, bool removeOld)
 {
-  m_cleared = !m_origValue.isValid();
+    m_cleared = !m_origValue.isValid();
 
-  int setNumberOnFocus = -1;
-  QTime t;
-  QString addString(add.toString());
-  if (removeOld) {
-    if (!addString.isEmpty() && addString[0].toLatin1()>='0' && addString[0].toLatin1() <='9') {
-      setNumberOnFocus = addString[0].toLatin1()-'0';
-      t = QTime(setNumberOnFocus, 0, 0);
-    }
-  }
-  else
-    t = m_origValue.toTime();
+    int setNumberOnFocus = -1;
+    QTime t;
+    QString addString(add.toString());
+    if (removeOld) {
+        if (!addString.isEmpty() && addString[0].toLatin1() >= '0' && addString[0].toLatin1() <= '9') {
+            setNumberOnFocus = addString[0].toLatin1() - '0';
+            t = QTime(setNumberOnFocus, 0, 0);
+        }
+    } else
+        t = m_origValue.toTime();
 
-  setTime(t);
+    setTime(t);
 }
 
 QVariant
 KexiDBTimeEdit::value()
 {
-  //QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-  return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, time()));
+    //QDateTime - a hack needed because QVariant(QTime) has broken isNull()
+    return QVariant(QDateTime(m_cleared ? QDate() : QDate(0, 1, 2)/*nevermind*/, time()));
 }
 
 bool KexiDBTimeEdit::valueIsNull()
 {
-  return !time().isValid() || time().isNull();
+    return !time().isValid() || time().isNull();
 }
 
 bool KexiDBTimeEdit::valueIsEmpty()
 {
-  return m_cleared;
+    return m_cleared;
 }
 
 bool KexiDBTimeEdit::isReadOnly() const
 {
-  //! @todo: data/time edit API has no readonly flag, 
-  //!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
-  return m_readOnly; //!isEnabled();
+    //! @todo: data/time edit API has no readonly flag,
+    //!        so use event filter to avoid changes made by keyboard or mouse when m_readOnly==true
+    return m_readOnly; //!isEnabled();
 }
 
 void KexiDBTimeEdit::setReadOnly(bool set)
 {
-  m_readOnly = set;
+    m_readOnly = set;
 }
 
 QWidget*
 KexiDBTimeEdit::widget()
 {
-  return this;
+    return this;
 }
 
 bool KexiDBTimeEdit::cursorAtStart()
 {
 #ifdef QDateTimeEditor_HACK
-  return m_dte_time && hasFocus() && m_dte_time->focusSection()==0;
+    return m_dte_time && hasFocus() && m_dte_time->focusSection() == 0;
 #else
-  return false;
+    return false;
 #endif
 }
 
 bool KexiDBTimeEdit::cursorAtEnd()
 {
 #ifdef QDateTimeEditor_HACK
-  return m_dte_time && hasFocus()
-    && m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
+    return m_dte_time && hasFocus()
+           && m_dte_time->focusSection() == int(m_dte_time->sectionCount() - 1);
 #else
-  return false;
+    return false;
 #endif
 }
 
 void KexiDBTimeEdit::clear()
 {
-  setTime(QTime());
-  m_cleared = true;
+    setTime(QTime());
+    m_cleared = true;
 }
 
 void
 KexiDBTimeEdit::slotValueChanged(const QTime&)
 {
-  m_cleared = false;
+    m_cleared = false;
 }
 
 #include "kexidbtimeedit.moc"

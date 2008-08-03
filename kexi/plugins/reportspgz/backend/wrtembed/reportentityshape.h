@@ -35,26 +35,26 @@
 //
 class ReportEntityShape : public QObject, public ReportRectEntity, public KRShapeData
 {
-		Q_OBJECT
-	public:
-		ReportEntityShape ( ReportDesigner *, QGraphicsScene * scene );
-		ReportEntityShape ( QDomNode & element, ReportDesigner *, QGraphicsScene * scene );
+    Q_OBJECT
+public:
+    ReportEntityShape(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityShape(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
 
-		virtual ~ReportEntityShape();
+    virtual ~ReportEntityShape();
 
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
 
-		virtual void paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0);
-		
-		virtual ReportEntityShape* clone(); 
-	private:
-		void init(QGraphicsScene*);
-		KoShape* mShape;
-		KoShapePainter sp;
-		KoZoomHandler z;
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
+    virtual ReportEntityShape* clone();
+private:
+    void init(QGraphicsScene*);
+    KoShape* mShape;
+    KoShapePainter sp;
+    KoZoomHandler z;
+
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

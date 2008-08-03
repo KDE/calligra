@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,27 +25,29 @@
 #include <koproperty/property.h>
 
 /**
-	@author 
+ @author
 */
 class KRSize
 {
-	public:
-		KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
+public:
+    KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
 
-		~KRSize();
-		QSizeF toUnit();
-		QSizeF toPoint();
-		QSizeF toScene();
-		void setSceneSize(const QSizeF&);
-		void setUnitSize(const QSizeF&);
-		void setPointSize(const QSizeF&);
-		void setUnit(KoUnit);
-		
-		KoProperty::Property* property(){return _property;}
-	private:
-		QSizeF _pointSize;
-		KoUnit _unit;
-		KoProperty::Property* _property;
+    ~KRSize();
+    QSizeF toUnit();
+    QSizeF toPoint();
+    QSizeF toScene();
+    void setSceneSize(const QSizeF&);
+    void setUnitSize(const QSizeF&);
+    void setPointSize(const QSizeF&);
+    void setUnit(KoUnit);
+
+    KoProperty::Property* property() {
+        return _property;
+    }
+private:
+    QSizeF _pointSize;
+    KoUnit _unit;
+    KoProperty::Property* _property;
 };
 
 #endif

@@ -23,32 +23,34 @@
 #include "kexitooltip.h"
 
 //! \brief A tooltip-like widget with additional arrow
-/*! The widget also suppors fade in and fade out effect, 
+/*! The widget also suppors fade in and fade out effect,
  if the underlying display system supports this.
 */
 class KEXIGUIUTILS_EXPORT KexiArrowTip : public KexiToolTip
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     KexiArrowTip(const QString& text, QWidget* parent);
     virtual ~KexiArrowTip();
 
-    inline QString text() const { return m_value.toString(); }
+    inline QString text() const {
+        return m_value.toString();
+    }
 //2.0 virtual bool close() { return close(false); }
-//2.0	virtual bool close( bool alsoDelete );
+//2.0 virtual bool close( bool alsoDelete );
 
-  public slots:
+public slots:
     virtual void show();
     virtual void hide();
 
-  protected slots:
+protected slots:
     void increaseOpacity();
     void decreaseOpacity();
 
-  protected:
+protected:
     virtual void drawFrame(QPainter& p);
     virtual void drawContents(QPainter& p);
-    virtual void closeEvent( QCloseEvent * event );
+    virtual void closeEvent(QCloseEvent * event);
 
     int m_arrowHeight;
     double m_opacity;

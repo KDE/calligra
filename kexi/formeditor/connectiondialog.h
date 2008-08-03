@@ -31,16 +31,18 @@
 #endif
 #define KEXI_NO_TABLEVIEW
 
-namespace KexiDB {
-  class ResultInfo;
-  class RecordData;
+namespace KexiDB
+{
+class ResultInfo;
+class RecordData;
 }
 
 class QLabel;
 class KexiTableView;
 class KexiTableViewData;
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class Form;
 class ConnectionBuffer;
@@ -51,16 +53,18 @@ class Connection;
   of current connection.  */
 class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     ConnectionDialog(QWidget *parent);
-    ~ConnectionDialog() {;}
+    ~ConnectionDialog() {
+        ;
+    }
 
     /*! Displays as modal dialog, to edit connections in Form::connectionBuffer(). */
     void exec(Form *form);
 
-  protected:
+protected:
     /*! Used when connection is ok. Displays a message in details widget and changes icon in 'OK?' column. */
     void setStatusOk(KexiDB::RecordData *record = 0);
     /*! Used when connection is wrong. Displays a message in details widget and changes icon in 'OK?' column. \a msg is
@@ -75,7 +79,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
     //! Updates the signal list, according to the sender name.
     void updateSignalList(KexiDB::RecordData *record);
 
-  protected slots:
+protected slots:
     /*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
     void slotCellChanged(KexiDB::RecordData *, int, QVariant&, KexiDB::ResultInfo*);
     /*! This function checks if the connection represented by \a record is valid. It checks if all args (sender, receiver, signal and slot)
@@ -98,13 +102,13 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
     void slotConnectionAborted(KFormDesigner::Form *form);
 
     void slotCellSelected(int col, int row);
-    void slotRowInserted(KexiDB::RecordData*,bool);
+    void slotRowInserted(KexiDB::RecordData*, bool);
 
     /*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.
      If the user presses 'Cancel', nothing happens. */
     virtual void slotOk();
 
-  protected:
+protected:
     Form *m_form;
     ConnectionBuffer *m_buffer;
 #ifdef __GNUC__
@@ -113,8 +117,8 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 #ifndef KEXI_NO_TABLEVIEW
     KexiTableView  *m_table;
     KexiTableViewData  *m_data;
-    KexiTableViewData *m_widgetsColumnData, 
-      *m_slotsColumnData, *m_signalsColumnData;
+    KexiTableViewData *m_widgetsColumnData,
+    *m_slotsColumnData, *m_signalsColumnData;
 #endif
     QLabel  *m_pixmapLabel, *m_textLabel;
     KPushButton *m_addButton, *m_removeButton;

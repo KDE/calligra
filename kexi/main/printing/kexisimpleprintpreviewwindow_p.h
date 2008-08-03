@@ -27,31 +27,31 @@
 
 class KexiSimplePrintPreviewView : public QWidget
 {
-  public:
+public:
     KexiSimplePrintPreviewView(QWidget *parent, KexiSimplePrintPreviewWindow *window);
 
-    virtual void paintEvent( QPaintEvent *pe );
+    virtual void paintEvent(QPaintEvent *pe);
 
     bool enablePainting;
-  protected:
+protected:
     KexiSimplePrintPreviewWindow *m_window;
 };
 
 class KexiSimplePrintPreviewScrollView : public Q3ScrollView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiSimplePrintPreviewScrollView(KexiSimplePrintPreviewWindow *window);
 
     KexiSimplePrintPreviewView *widget;
 
-  public slots:
+public slots:
     void setFullWidth();
     void setContentsPos(int x, int y);
 
-  protected:
-    virtual void resizeEvent( QResizeEvent *re );
+protected:
+    virtual void resizeEvent(QResizeEvent *re);
     KexiSimplePrintPreviewWindow *m_window;
 };
 

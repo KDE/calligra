@@ -21,31 +21,30 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-namespace KexiUtils {
+namespace KexiUtils
+{
 class Validator::Private
 {
-  public:
+public:
     Private()
-     : acceptsEmptyValue(false)
-    {
+            : acceptsEmptyValue(false) {
     }
-    bool acceptsEmptyValue : 1;
+bool acceptsEmptyValue : 1;
 };
 }
 
 //-----------------------------------------------------------
 
-namespace KexiUtils {
+namespace KexiUtils
+{
 class MultiValidator::Private
 {
-  public:
-    Private()
-    {
+public:
+    Private() {
     }
-    ~Private()
-    {
-      qDeleteAll(ownedSubValidators);
-      ownedSubValidators.clear();
+    ~Private() {
+        qDeleteAll(ownedSubValidators);
+        ownedSubValidators.clear();
     }
 
     QList<QValidator*> ownedSubValidators;
@@ -58,111 +57,117 @@ class MultiValidator::Private
 using namespace KexiUtils;
 
 Validator::Validator(QObject * parent)
- : QValidator(parent)
- , d( new Private )
+        : QValidator(parent)
+        , d(new Private)
 {
 }
 
 Validator::~Validator()
 {
-  delete d;
+    delete d;
 }
 
-Validator::Result Validator::check(const QString &valueName, const QVariant& v, 
-  QString &message, QString &details)
+Validator::Result Validator::check(const QString &valueName, const QVariant& v,
+                                   QString &message, QString &details)
 {
-  if (v.isNull() || v.type()==QVariant::String && v.toString().isEmpty()) {
-    if (!d->acceptsEmptyValue) {
-      message = Validator::msgColumnNotEmpty().arg(valueName);
-      return Error;
+    if (v.isNull() || v.type() == QVariant::String && v.toString().isEmpty()) {
+        if (!d->acceptsEmptyValue) {
+            message = Validator::msgColumnNotEmpty().arg(valueName);
+            return Error;
+        }
+        return Ok;
     }
-    return Ok;
-  }
-  return internalCheck(valueName, v, message, details);
+    return internalCheck(valueName, v, message, details);
 }
 
-Validator::Result Validator::internalCheck(const QString & /*valueName*/, 
-  const QVariant& /*v*/, QString & /*message*/, QString & /*details*/)
+Validator::Result Validator::internalCheck(const QString & /*valueName*/,
+        const QVariant& /*v*/, QString & /*message*/, QString & /*details*/)
 {
-  return Error;
+    return Error;
 }
 
-QValidator::State Validator::validate ( QString & , int & ) const
+QValidator::State Validator::validate(QString & , int &) const
 {
-  return QValidator::Acceptable;
+    return QValidator::Acceptable;
 }
 
-void Validator::setAcceptsEmptyValue( bool set ) { d->acceptsEmptyValue = set; }
+void Validator::setAcceptsEmptyValue(bool set)
+{
+    d->acceptsEmptyValue = set;
+}
 
-bool Validator::acceptsEmptyValue() const { return d->acceptsEmptyValue; }
+bool Validator::acceptsEmptyValue() const
+{
+    return d->acceptsEmptyValue;
+}
 
 const QString Validator::msgColumnNotEmpty()
 {
-  return I18N_NOOP("\"%1\" value has to be entered.");
+    return I18N_NOOP("\"%1\" value has to be entered.");
 }
 
 //-----------------------------------------------------------
 
 MultiValidator::MultiValidator(QObject* parent)
- : Validator(parent)
- , d( new Private )
+        : Validator(parent)
+        , d(new Private)
 {
 }
 
 MultiValidator::MultiValidator(QValidator *validator, QObject * parent)
- : Validator(parent)
- , d( new Private )
+        : Validator(parent)
+        , d(new Private)
 {
-  addSubvalidator(validator);
+    addSubvalidator(validator);
 }
 
 MultiValidator::~MultiValidator()
 {
-  delete d;
+    delete d;
 }
 
-void MultiValidator::addSubvalidator( QValidator* validator, bool owned )
+void MultiValidator::addSubvalidator(QValidator* validator, bool owned)
 {
-  if (!validator)
-    return;
-  d->subValidators.append(validator);
-  if (owned && !validator->parent())
-    d->ownedSubValidators.append(validator);
+    if (!validator)
+        return;
+    d->subValidators.append(validator);
+    if (owned && !validator->parent())
+        d->ownedSubValidators.append(validator);
 }
 
-QValidator::State MultiValidator::validate( QString & input, int & pos ) const
+QValidator::State MultiValidator::validate(QString & input, int & pos) const
 {
-  State s;
-  foreach ( QValidator* validator, d->subValidators ) {
-    s = validator->validate(input, pos);
-    if (s==Intermediate || s==Invalid)
-      return s;
-  }
-  return Acceptable;
+    State s;
+    foreach(QValidator* validator, d->subValidators) {
+        s = validator->validate(input, pos);
+        if (s == Intermediate || s == Invalid)
+            return s;
+    }
+    return Acceptable;
 }
 
-void MultiValidator::fixup ( QString & input ) const
+void MultiValidator::fixup(QString & input) const
 {
-  foreach ( QValidator* validator, d->subValidators )
+    foreach(QValidator* validator, d->subValidators)
     validator->fixup(input);
 }
 
 Validator::Result MultiValidator::internalCheck(
-  const QString &valueName, const QVariant& v, 
-  QString &message, QString &details)
+    const QString &valueName, const QVariant& v,
+    QString &message, QString &details)
 {
-  Result r;
-  bool warning = false;
-  foreach ( QValidator* validator, d->subValidators ) {
-    if (dynamic_cast<Validator*>(validator))
-      r = dynamic_cast<Validator*>(validator)->internalCheck(valueName, v, message, details);
-    else
-      r = Ok; //ignore
-    if (r==Error)
-      return Error;
-    else if (r==Warning)
-      warning = true;
-  }
-  return warning ? Warning : Ok;
+    Result r;
+    bool warning = false;
+    foreach(QValidator* validator, d->subValidators) {
+        if (dynamic_cast<Validator*>(validator))
+            r = dynamic_cast<Validator*>(validator)->internalCheck(valueName, v, message, details);
+        else
+            r = Ok; //ignore
+        if (r == Error)
+            return Error;
+        else if (r == Warning)
+            warning = true;
+    }
+    return warning ? Warning : Ok;
 }
 

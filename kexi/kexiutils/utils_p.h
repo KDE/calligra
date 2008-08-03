@@ -27,26 +27,25 @@
 /*! @internal */
 class DelayedCursorHandler : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     DelayedCursorHandler();
     void start(bool noDelay);
     void stop();
-    bool startedOrActive : 1; //! true if ounting started or the cursor is active
-  protected slots:
+bool startedOrActive : 1; //! true if ounting started or the cursor is active
+protected slots:
     void show();
-  protected:
+protected:
     QTimer timer;
 };
 
 /*! @internal */
 class DebugWindowDialog : public QDialog
 {
-  public:
-    explicit DebugWindowDialog( QWidget * parent )
-     : QDialog(parent, Qt::Dialog|Qt::WindowMinMaxButtonsHint|Qt::WindowStaysOnTopHint)
-    {
-      setWindowState( Qt::WindowMinimized );
+public:
+    explicit DebugWindowDialog(QWidget * parent)
+            : QDialog(parent, Qt::Dialog | Qt::WindowMinMaxButtonsHint | Qt::WindowStaysOnTopHint) {
+        setWindowState(Qt::WindowMinimized);
     }
 };
 

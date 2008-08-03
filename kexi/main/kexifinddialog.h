@@ -27,40 +27,40 @@
 class KAction;
 
 //! @short A Kexi-specific "Find" dialog.
-/*! Also used for as replace dialog. 
+/*! Also used for as replace dialog.
 
  @todo replace m_textToFind and m_textToReplace KComboBoxes with Kexi's db-aware comboboxes,
        so we ca adapt to datatype being searched, e.g. date, time and numbers
 */
 class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     //! Creates a new find dialog. Replace mode is off by default.
     KexiFindDialog(QWidget* parent);
     virtual ~KexiFindDialog();
 
     //! Sets actions that receive button clicks and shortcuts within the dialog. Should be called once.
-    void setActions( KAction *findnext, KAction *findprev,
-      KAction *replace, KAction *replaceall );
+    void setActions(KAction *findnext, KAction *findprev,
+                    KAction *replace, KAction *replaceall);
 
-    //! Shows the dialog as a modal dialog. 
+    //! Shows the dialog as a modal dialog.
     virtual void show();
 
     //! \return current find and replace options set within the dialog
 //! @todo should we have setOptions() too?
     KexiSearchAndReplaceViewInterface::Options options() const;
 
-    /*! \return a list of column names for 'look in column' combo box. 
+    /*! \return a list of column names for 'look in column' combo box.
      Neither "(All fields)" nor "(Current field)" items are prepended. */
     QStringList lookInColumnNames() const;
 
-    /*! \return a list of column captions (i.e. visible values) for 'look in column' combo box. 
+    /*! \return a list of column captions (i.e. visible values) for 'look in column' combo box.
      Neither "(All fields)" nor "(Current field)" items are prepended. */
     QStringList lookInColumnCaptions() const;
 
     /*! \return column name selected in "look in column" combo box.
-     If "(All fields)" item is selected, empty string is returned. 
+     If "(All fields)" item is selected, empty string is returned.
      If "(Current field)" item is selected, "(field)" string is returned. */
     QString currentLookInColumnName() const;
 
@@ -70,32 +70,32 @@ class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
     //! \return value that to be used as a replacement
     QVariant valueToReplaceWith() const;
 
-  public slots:
-    /*! Sets \a columnNames list and \a columnCaptions for 'look in column' combo box. 
+public slots:
+    /*! Sets \a columnNames list and \a columnCaptions for 'look in column' combo box.
      \a columnCaptions are visible values, while \a columnNames are used for returning
      in currentLookInColumn().
      "(All fields)" and "(Current field)" items are also prepended. */
-    void setLookInColumnList(const QStringList& columnNames, 
-      const QStringList& columnCaptions);
+    void setLookInColumnList(const QStringList& columnNames,
+                             const QStringList& columnCaptions);
 
     /*! Selects \a columnName to be selected 'look in column'.
-     By default "(All fields)" item is selected. To select this item, 
+     By default "(All fields)" item is selected. To select this item,
      pass empty string as \a columnName.
-     To select "(Current field)" item, "(field)" string should be passed 
+     To select "(Current field)" item, "(field)" string should be passed
      as \a columnName. */
     void setCurrentLookInColumnName(const QString& columnName);
 
-    /*! Sets or clears replace mode. 
+    /*! Sets or clears replace mode.
      For replace mode 'prompt or replace' option is visible. */
     void setReplaceMode(bool set);
 
-    /*! Sets object name for caption, so for example it will be set 
+    /*! Sets object name for caption, so for example it will be set
      to i18n("Find \"Persons\"")). */
     void setObjectNameForCaption(const QString& name);
 
-    /*! Enables of disables the find/replace/replace all buttons. 
-     This is used if for the current context the dialog could not be used. 
-     If \a enable is false, object name for caption is cleared 
+    /*! Enables of disables the find/replace/replace all buttons.
+     This is used if for the current context the dialog could not be used.
+     If \a enable is false, object name for caption is cleared
      using setObjectNameForCaption() too. */
     void setButtonsEnabled(bool enable);
 
@@ -105,12 +105,12 @@ class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
     /*! Updates message at the bottom; "The search item was not found" is set if \a found is true,
      else the message is cleared. */
 //! @todo add "Search again" hyperlink
-    void updateMessage( bool found = true );
+    void updateMessage(bool found = true);
 
-  signals:
+signals:
     //! Emitted after clicking "Find next" button or pressing appropriate shortcut set by setActions()
     void findNext();
-    
+
     //! Emitted after pressing appropriate shortcut set by setActions()
     void findPrevious();
 
@@ -120,11 +120,13 @@ class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
     //! Emitted after clicking "Replace All" button or pressing appropriate shortcut set by setActions()
     void replaceAll();
 
-  protected slots:
+protected slots:
     void slotCloseClicked();
-    void updateMessage(const QString&) { updateMessage(); }
+    void updateMessage(const QString&) {
+        updateMessage();
+    }
 
-  protected:
+protected:
     class Private;
     Private * const d;
 };

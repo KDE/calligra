@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,56 +28,62 @@
 #include <parsexmlutils.h>
 namespace Scripting
 {
-	class Text;
-	
+class Text;
+
 }
 /**
-	@author 
+ @author
 */
 class KRTextData : public KRObjectData
 {
-	public:
-		KRTextData(){createProperties();};
-		KRTextData ( QDomNode & element);
-		~KRTextData();
-		virtual KRTextData * toText();
-		virtual int type() const;
-		
-		void setTextFlags ( Qt::Alignment );
-		Qt::Alignment textFlags() const;
-		QFont font() const {return _font->value().value<QFont>();}
-		ORDataData data() {return ORDataData("Data Source"/*_query->value().toString()*/, _controlSource->value().toString());}
-		
-		void setBottomPadding ( qreal bp );
-		qreal bottomPadding() const;
+public:
+    KRTextData() {
+        createProperties();
+    };
+    KRTextData(QDomNode & element);
+    ~KRTextData();
+    virtual KRTextData * toText();
+    virtual int type() const;
 
-		QString column() const;
-		ORTextStyleData textStyle();
-		ORLineStyleData lineStyle();
-		
-	protected:
-		QRect _rect();
+    void setTextFlags(Qt::Alignment);
+    Qt::Alignment textFlags() const;
+    QFont font() const {
+        return _font->value().value<QFont>();
+    }
+    ORDataData data() {
+        return ORDataData("Data Source"/*_query->value().toString()*/, _controlSource->value().toString());
+    }
 
-		KRSize _size;
-		KoProperty::Property * _controlSource;
-		KoProperty::Property* _hAlignment;
-		KoProperty::Property* _vAlignment;
-		KoProperty::Property* _font;
-		KoProperty::Property* _fgColor;
-		KoProperty::Property* _bgColor;
-		KoProperty::Property* _bgOpacity;
-		KoProperty::Property* _lnColor;
-		KoProperty::Property* _lnWeight;
-		KoProperty::Property* _lnStyle;
-		
-		qreal bpad;
-		
-	private:
-		virtual void createProperties();
-		static int RTTI;
-		
-		friend class ORPreRenderPrivate;
-		friend class Scripting::Text;
+    void setBottomPadding(qreal bp);
+    qreal bottomPadding() const;
+
+    QString column() const;
+    ORTextStyleData textStyle();
+    ORLineStyleData lineStyle();
+
+protected:
+    QRect _rect();
+
+    KRSize _size;
+    KoProperty::Property * _controlSource;
+    KoProperty::Property* _hAlignment;
+    KoProperty::Property* _vAlignment;
+    KoProperty::Property* _font;
+    KoProperty::Property* _fgColor;
+    KoProperty::Property* _bgColor;
+    KoProperty::Property* _bgOpacity;
+    KoProperty::Property* _lnColor;
+    KoProperty::Property* _lnWeight;
+    KoProperty::Property* _lnStyle;
+
+    qreal bpad;
+
+private:
+    virtual void createProperties();
+    static int RTTI;
+
+    friend class ORPreRenderPrivate;
+    friend class Scripting::Text;
 };
 
 #endif

@@ -27,16 +27,18 @@ class ORODocument;
 
 class KRScreenRender
 {
-  public:
-	  KRScreenRender();
-	  virtual ~KRScreenRender();
+public:
+    KRScreenRender();
+    virtual ~KRScreenRender();
 
     void setPainter(QPainter *);
-    QPainter * painter() { return _painter; }
+    QPainter * painter() {
+        return _painter;
+    }
 
     bool render(ORODocument *, int);
 
-  protected:
+protected:
     QPainter* _painter;
 };
 

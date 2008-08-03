@@ -27,36 +27,36 @@
 
 namespace KFormDesigner
 {
-  class FormManager;
-  class WidgetLibrary;
-  class Form;
+class FormManager;
+class WidgetLibrary;
+class Form;
 }
 
 namespace KexiDB
 {
-  class FieldList;
+class FieldList;
 }
 
 /*! @short Kexi Report Plugin
  It just creates a \ref KexiReportView. See there for most of code. */
 class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiReportPart(QObject *parent, const QStringList &);
     virtual ~KexiReportPart();
 
     //! \return a pointer to Reports Widget Library.
     static KFormDesigner::WidgetLibrary* library();
 
-//		KFormDesigner::FormManager *manager() { return m_manager; }
+//  KFormDesigner::FormManager *manager() { return m_manager; }
 
     void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
 
     class TempData : public KexiWindowData
     {
-      public:
+    public:
         TempData(QObject* parent);
         ~TempData();
         QPointer<KFormDesigner::Form> form;
@@ -66,23 +66,23 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
         int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
     };
 
-    virtual KLocalizedString i18nMessage(const QString& englishMessage, 
-      KexiWindow* window) const;
+    virtual KLocalizedString i18nMessage(const QString& englishMessage,
+                                         KexiWindow* window) const;
 
-  protected:
+protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
-    
+
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-      KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
-      QMap<QString,QVariant>* staticObjectArgs = 0);
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
+                                 QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
 
     static KFormDesigner::WidgetLibrary* static_reportsLibrary;
 
-  private:
-//		QPointer<KFormDesigner::FormManager> m_manager;
+private:
+//  QPointer<KFormDesigner::FormManager> m_manager;
 };
 
 #endif

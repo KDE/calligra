@@ -23,71 +23,179 @@
 using namespace Scripting;
 
 KexiDBField::KexiDBField(QObject* parent, ::KexiDB::Field* field, bool owner)
-    : QObject(parent)
-    , m_field(field)
-    , m_owner(owner)
+        : QObject(parent)
+        , m_field(field)
+        , m_owner(owner)
 {
     setObjectName("KexiDBField");
 }
 
 KexiDBField::~KexiDBField()
 {
-    if( m_owner )
+    if (m_owner)
         delete m_field;
 }
 
-const QString KexiDBField::type() { return m_field->typeString(); }
-void KexiDBField::setType(const QString type) { m_field->setType( ::KexiDB::Field::typeForString(type) ); }
+const QString KexiDBField::type()
+{
+    return m_field->typeString();
+}
+void KexiDBField::setType(const QString type)
+{
+    m_field->setType(::KexiDB::Field::typeForString(type));
+}
 
-const QString KexiDBField::subType() { return m_field->subType(); }
-void KexiDBField::setSubType(const QString& subtype) { m_field->setSubType(subtype); }
+const QString KexiDBField::subType()
+{
+    return m_field->subType();
+}
+void KexiDBField::setSubType(const QString& subtype)
+{
+    m_field->setSubType(subtype);
+}
 
-const QString KexiDBField::variantType() { return QVariant::typeToName( m_field->variantType() ); }
-const QString KexiDBField::typeGroup() { return m_field->typeGroupString(); }
+const QString KexiDBField::variantType()
+{
+    return QVariant::typeToName(m_field->variantType());
+}
+const QString KexiDBField::typeGroup()
+{
+    return m_field->typeGroupString();
+}
 
-bool KexiDBField::isAutoInc() { return m_field->isAutoIncrement(); }
-void KexiDBField::setAutoInc(bool autoinc) { m_field->setAutoIncrement(autoinc); }
+bool KexiDBField::isAutoInc()
+{
+    return m_field->isAutoIncrement();
+}
+void KexiDBField::setAutoInc(bool autoinc)
+{
+    m_field->setAutoIncrement(autoinc);
+}
 
-bool KexiDBField::isUniqueKey() { return m_field->isUniqueKey(); }
-void KexiDBField::setUniqueKey(bool unique) { m_field->setUniqueKey(unique); }
+bool KexiDBField::isUniqueKey()
+{
+    return m_field->isUniqueKey();
+}
+void KexiDBField::setUniqueKey(bool unique)
+{
+    m_field->setUniqueKey(unique);
+}
 
-bool KexiDBField::isPrimaryKey() { return m_field->isPrimaryKey(); }
-void KexiDBField::setPrimaryKey(bool primary) { m_field->setPrimaryKey(primary); }
+bool KexiDBField::isPrimaryKey()
+{
+    return m_field->isPrimaryKey();
+}
+void KexiDBField::setPrimaryKey(bool primary)
+{
+    m_field->setPrimaryKey(primary);
+}
 
-bool KexiDBField::isForeignKey() { return m_field->isForeignKey(); }
-void KexiDBField::setForeignKey(bool foreign) { m_field->setForeignKey(foreign); }
+bool KexiDBField::isForeignKey()
+{
+    return m_field->isForeignKey();
+}
+void KexiDBField::setForeignKey(bool foreign)
+{
+    m_field->setForeignKey(foreign);
+}
 
-bool KexiDBField::isNotNull() { return m_field->isNotNull(); }
-void KexiDBField::setNotNull(bool notnull) { m_field->setNotNull(notnull); }
+bool KexiDBField::isNotNull()
+{
+    return m_field->isNotNull();
+}
+void KexiDBField::setNotNull(bool notnull)
+{
+    m_field->setNotNull(notnull);
+}
 
-bool KexiDBField::isNotEmpty() { return m_field->isNotEmpty(); }
-void KexiDBField::setNotEmpty(bool notempty) { m_field->setNotEmpty(notempty); }
+bool KexiDBField::isNotEmpty()
+{
+    return m_field->isNotEmpty();
+}
+void KexiDBField::setNotEmpty(bool notempty)
+{
+    m_field->setNotEmpty(notempty);
+}
 
-bool KexiDBField::isIndexed() { return m_field->isIndexed(); }
-void KexiDBField::setIndexed(bool indexed) { m_field->setIndexed(indexed); }
+bool KexiDBField::isIndexed()
+{
+    return m_field->isIndexed();
+}
+void KexiDBField::setIndexed(bool indexed)
+{
+    m_field->setIndexed(indexed);
+}
 
-bool KexiDBField::isUnsigned() { return m_field->isUnsigned(); }
-void KexiDBField::setUnsigned(bool isunsigned) { m_field->setUnsigned(isunsigned); }
+bool KexiDBField::isUnsigned()
+{
+    return m_field->isUnsigned();
+}
+void KexiDBField::setUnsigned(bool isunsigned)
+{
+    m_field->setUnsigned(isunsigned);
+}
 
-const QString KexiDBField::name() { return m_field->name(); }
-void KexiDBField::setName(const QString& name) { m_field->setName(name); }
+const QString KexiDBField::name()
+{
+    return m_field->name();
+}
+void KexiDBField::setName(const QString& name)
+{
+    m_field->setName(name);
+}
 
-const QString KexiDBField::caption() { return m_field->caption(); }
-void KexiDBField::setCaption(const QString& caption) { m_field->setCaption(caption); }
+const QString KexiDBField::caption()
+{
+    return m_field->caption();
+}
+void KexiDBField::setCaption(const QString& caption)
+{
+    m_field->setCaption(caption);
+}
 
-const QString KexiDBField::description() { return m_field->description(); }
-void KexiDBField::setDescription(const QString& desc) { m_field->setDescription(desc); }
+const QString KexiDBField::description()
+{
+    return m_field->description();
+}
+void KexiDBField::setDescription(const QString& desc)
+{
+    m_field->setDescription(desc);
+}
 
-uint KexiDBField::length() { return m_field->length(); }
-void KexiDBField::setLength(uint length) { m_field->setLength(length); }
+uint KexiDBField::length()
+{
+    return m_field->length();
+}
+void KexiDBField::setLength(uint length)
+{
+    m_field->setLength(length);
+}
 
-uint KexiDBField::precision() { return m_field->precision(); }
-void KexiDBField::setPrecision(uint precision) { m_field->setPrecision(precision); }
+uint KexiDBField::precision()
+{
+    return m_field->precision();
+}
+void KexiDBField::setPrecision(uint precision)
+{
+    m_field->setPrecision(precision);
+}
 
-uint KexiDBField::width() { return m_field->width(); }
-void KexiDBField::setWidth(uint width) { m_field->setWidth(width); }
+uint KexiDBField::width()
+{
+    return m_field->width();
+}
+void KexiDBField::setWidth(uint width)
+{
+    m_field->setWidth(width);
+}
 
-QVariant KexiDBField::defaultValue() { return m_field->defaultValue(); }
-void KexiDBField::setDefaultValue(const QVariant& defaultvalue) { m_field->setDefaultValue(defaultvalue); }
+QVariant KexiDBField::defaultValue()
+{
+    return m_field->defaultValue();
+}
+void KexiDBField::setDefaultValue(const QVariant& defaultvalue)
+{
+    m_field->setDefaultValue(defaultvalue);
+}
 
 #include "kexidbfield.moc"

@@ -25,81 +25,92 @@
 using namespace Scripting;
 
 KexiDBFieldList::KexiDBFieldList(QObject* parent, ::KexiDB::FieldList* fieldlist, bool owner)
-    : QObject(parent)
-    , m_fieldlist(fieldlist)
-    , m_owner(owner)
+        : QObject(parent)
+        , m_fieldlist(fieldlist)
+        , m_owner(owner)
 {
     setObjectName("KexiDBFieldList");
 }
 
 KexiDBFieldList::~KexiDBFieldList()
 {
-    if( m_owner )
+    if (m_owner)
         delete m_fieldlist;
 }
 
-uint KexiDBFieldList::fieldCount() {
+uint KexiDBFieldList::fieldCount()
+{
     return m_fieldlist->fieldCount();
 }
 
-QObject* KexiDBFieldList::field(uint index) {
+QObject* KexiDBFieldList::field(uint index)
+{
     ::KexiDB::Field* field = m_fieldlist->field(index);
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
-QObject* KexiDBFieldList::fieldByName(const QString& name) {
+QObject* KexiDBFieldList::fieldByName(const QString& name)
+{
     ::KexiDB::Field* field = m_fieldlist->field(name);
     return field ? new KexiDBField(this, field, false) : 0;
 }
 
-bool KexiDBFieldList::hasField(QObject* field) {
+bool KexiDBFieldList::hasField(QObject* field)
+{
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
-    return f ? m_fieldlist->hasField( f->field() ) : false;
+    return f ? m_fieldlist->hasField(f->field()) : false;
 }
 
-const QStringList KexiDBFieldList::names() const {
+const QStringList KexiDBFieldList::names() const
+{
     return m_fieldlist->names();
 }
 
-bool KexiDBFieldList::addField(QObject* field) {
+bool KexiDBFieldList::addField(QObject* field)
+{
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
-    if( ! f ) return false;
-    m_fieldlist->addField( f->field() );
+    if (! f) return false;
+    m_fieldlist->addField(f->field());
     return true;
 }
 
-bool KexiDBFieldList::insertField(uint index, QObject* field) {
+bool KexiDBFieldList::insertField(uint index, QObject* field)
+{
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
-    if( ! f ) return false;
+    if (! f) return false;
     m_fieldlist->insertField(index, f->field());
     return true;
 }
 
-bool KexiDBFieldList::removeField(QObject* field) {
+bool KexiDBFieldList::removeField(QObject* field)
+{
     KexiDBField* f = dynamic_cast<KexiDBField*>(field);
-    if( ! f ) return false;
-    m_fieldlist->removeField( f->field() );
+    if (! f) return false;
+    m_fieldlist->removeField(f->field());
     return true; // (! m_fieldlist->hasField( f->field() ));
 }
 
-void KexiDBFieldList::clear() {
+void KexiDBFieldList::clear()
+{
     m_fieldlist->clear();
 }
 
-bool KexiDBFieldList::setFields(QObject* fieldlist) {
+bool KexiDBFieldList::setFields(QObject* fieldlist)
+{
     KexiDBFieldList* list = dynamic_cast<KexiDBFieldList*>(fieldlist);
-    if( ! list ) return false;
+    if (! list) return false;
     list->clear();
     ::KexiDB::FieldList* fl = list->fieldlist();
-    foreach( ::KexiDB::Field *field, *fl->fields())
-        m_fieldlist->addField( field );
+    foreach(::KexiDB::Field *field, *fl->fields())
+    m_fieldlist->addField(field);
     return true;
 }
 
-QObject* KexiDBFieldList::subList(QVariantList list) {
+QObject* KexiDBFieldList::subList(QVariantList list)
+{
     QStringList sl;
     foreach(QVariant v, list)
-        sl.append(v.toString());
+    sl.append(v.toString());
     ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
     return fl ? new KexiDBFieldList(this, fl, false) : 0;
 }

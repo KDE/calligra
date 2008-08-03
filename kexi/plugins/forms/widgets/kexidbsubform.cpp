@@ -35,10 +35,10 @@
 #include <QSet>
 
 KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent)
-: Q3ScrollView(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
+        : Q3ScrollView(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
-  setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-  viewport()->setPaletteBackgroundColor(colorGroup().mid());
+    setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
+    viewport()->setPaletteBackgroundColor(colorGroup().mid());
 }
 /*
 void
@@ -67,71 +67,70 @@ KexiDBSubForm::paintEvent(QPaintEvent *ev)
 void
 KexiDBSubForm::setFormName(const QString &name)
 {
-  if(m_formName==name)
-    return;
+    if (m_formName == name)
+        return;
 
-  m_formName = name; //assign, even if the name points to nowhere
+    m_formName = name; //assign, even if the name points to nowhere
 
-  if(name.isEmpty()) {
-    delete m_widget;
-    m_widget = 0;
-    updateScrollBars();
-    return;
-  }
+    if (name.isEmpty()) {
+        delete m_widget;
+        m_widget = 0;
+        updateScrollBars();
+        return;
+    }
 
-  QWidget *pw = parentWidget();
-  KexiFormView *view = 0;
-  QSet<QString> names;
-  while (pw) {
-    if (KexiUtils::objectIsA(pw, "KexiDBSubForm")) {
-      if (names.contains(pw->objectName())) {
+    QWidget *pw = parentWidget();
+    KexiFormView *view = 0;
+    QSet<QString> names;
+    while (pw) {
+        if (KexiUtils::objectIsA(pw, "KexiDBSubForm")) {
+            if (names.contains(pw->objectName())) {
 //! @todo error message
-        return; // Be sure to don't run into a endless-loop cause of recursive subforms.
-      }
-      names.insert(pw->objectName());
+                return; // Be sure to don't run into a endless-loop cause of recursive subforms.
+            }
+            names.insert(pw->objectName());
+        } else if (! view && KexiUtils::objectIsA(pw, "KexiFormView")) {
+            view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
+        }
+        pw = pw->parentWidget();
     }
-    else if (! view && KexiUtils::objectIsA(pw, "KexiFormView")) {
-      view = static_cast<KexiFormView*>(pw); // we need a KexiFormView*
-    }
-    pw = pw->parentWidget();
-  }
 
-  if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection())
-    return;
+    if (!view || !view->window() || !KexiMainWindowIface::global()->project()->dbConnection())
+        return;
 
-  KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
-  // we check if there is a form with this name
-  int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
-  if((id == 0) || (id == view->window()->id())) // == our form
-    return; // because of recursion when loading
+    // we check if there is a form with this name
+    int id = KexiDB::idForObjectName(*conn, name, KexiPart::FormObjectType);
+    if ((id == 0) || (id == view->window()->id())) // == our form
+        return; // because of recursion when loading
 
-  // we create the container widget
-  delete m_widget;
-  m_widget = new KexiDBFormBase(viewport(), "KexiDBSubForm_widget");
-  m_widget->show();
-  addChild(m_widget);
-  m_form = new KFormDesigner::Form(KexiFormPart::library());
-  m_form->setObjectName(QString("KFormDesigner::Form_")+objectName());
-  m_form->createToplevel(m_widget);
-
-  // and load the sub form
-  QString data;
-  tristate res = conn->loadDataBlock(id, data, QString());
-  if (res == true)
-    res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
-  if(res != true) {
+    // we create the container widget
     delete m_widget;
-    m_widget = 0;
-    updateScrollBars();
-    m_formName.clear();
-    return;
-  }
-  m_form->setDesignMode(false);
+    m_widget = new KexiDBFormBase(viewport(), "KexiDBSubForm_widget");
+    m_widget->show();
+    addChild(m_widget);
+    m_form = new KFormDesigner::Form(KexiFormPart::library());
+    m_form->setObjectName(QString("KFormDesigner::Form_") + objectName());
+    m_form->createToplevel(m_widget);
 
-  // Install event filters on the whole newly created form
-  KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::objectName());
-  KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
+    // and load the sub form
+    QString data;
+    tristate res = conn->loadDataBlock(id, data, QString());
+    if (res == true)
+        res = KFormDesigner::FormIO::loadFormFromString(m_form, m_widget, data);
+    if (res != true) {
+        delete m_widget;
+        m_widget = 0;
+        updateScrollBars();
+        m_formName.clear();
+        return;
+    }
+    m_form->setDesignMode(false);
+
+    // Install event filters on the whole newly created form
+    KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::objectName());
+    KFormDesigner::installRecursiveEventFilter(this, tree->eventEater());
 }
 
 #include "kexidbsubform.moc"

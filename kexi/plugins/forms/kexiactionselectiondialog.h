@@ -24,8 +24,9 @@
 #include "kexiformeventhandler.h"
 
 class Q3ListViewItem;
-namespace KexiPart {
-  class Item;
+namespace KexiPart
+{
+class Item;
 }
 
 //! @short A dialog for selecting an action to be executed for a form's command button
@@ -35,19 +36,19 @@ namespace KexiPart {
 */
 class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialog
 {
-  Q_OBJECT
-  public:
-    KexiActionSelectionDialog(QWidget *parent, 
-      const KexiFormEventAction::ActionData& action, const QString& actionWidgetName);
+    Q_OBJECT
+public:
+    KexiActionSelectionDialog(QWidget *parent,
+                              const KexiFormEventAction::ActionData& action, const QString& actionWidgetName);
     ~KexiActionSelectionDialog();
 
-    /*! \return selected action data or empty action if dialog has been rejected 
+    /*! \return selected action data or empty action if dialog has been rejected
      or "No action" has been selected. */
     KexiFormEventAction::ActionData currentAction() const;
 
     virtual bool eventFilter(QObject *o, QEvent *e);
 
-  protected slots:
+protected slots:
     void slotActionCategorySelected(Q3ListViewItem* item);
     void slotKActionItemExecuted(Q3ListViewItem*);
     void slotKActionItemSelected(Q3ListViewItem*);
@@ -57,7 +58,7 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialog
     void slotCurrentFormActionItemSelected(Q3ListViewItem*);
     void slotItemForOpeningOrExecutingSelected(KexiPart::Item* item);
 
-  protected:
+protected:
     void updateOKButtonStatus();
 
     class Private;

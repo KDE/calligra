@@ -27,24 +27,24 @@
 /*! Designed for reimplementation, if needed. */
 class KEXICORE_EXPORT KexiWindowData : public QObject
 {
-  public:
+public:
     KexiWindowData(QObject* parent);
-    
+
     ~KexiWindowData();
-    
+
     /*! Initially false, KexiPart::Part implementation can set this to true
     on data loading (e.g. in loadSchemaData()), to indicate that TextView mode
     could be used instead of DataView or DesignView, because there are problems
     with opening object.
-  
+
     For example, in KexiQueryPart::loadSchemaData() query statement can be invalid,
     and thus could not be displayed in DesignView mode or executed for DataView.
     So, this flag is set to true and user is asked for confirmation for switching
     to TextView (SQL Editor).
-  
+
     After switching to TextView, this flag is cleared.
     */
-    bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
+bool proposeOpeningInTextViewModeBecauseOfProblems : 1;
 };
 
 #endif

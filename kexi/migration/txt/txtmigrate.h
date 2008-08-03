@@ -1,7 +1,7 @@
 //
 // C++ Interface: txtmigrate
 //
-// Description: 
+// Description:
 //
 //
 // Author: Adam Pigg <adam@piggz.co.uk>, (C) 2004
@@ -14,7 +14,8 @@
 
 #include <keximigrate.h>
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 /**
 @author Adam Pigg

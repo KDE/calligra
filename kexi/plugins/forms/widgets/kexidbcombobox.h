@@ -25,42 +25,50 @@
 #include <widget/tableview/kexicomboboxbase.h>
 
 //! @short Combo box widget for Kexi forms
-/*! This widget is implemented on top of KexiDBAutoField, 
+/*! This widget is implemented on top of KexiDBAutoField,
  so as it uses KexiDBAutoField's ability of embedding subwidgets,
  it can display not only a line edit but also text edit or image box
- (more can be added in the future). 
+ (more can be added in the future).
  A drop-down button is added to mimic native combo box widget's functionality.
 */
-class KEXIFORMUTILS_EXPORT KexiDBComboBox : 
-  public KexiDBAutoField, public KexiComboBoxBase
+class KEXIFORMUTILS_EXPORT KexiDBComboBox :
+            public KexiDBAutoField, public KexiComboBoxBase
 {
-  Q_OBJECT
-  Q_PROPERTY( bool editable READ isEditable WRITE setEditable )
-  //properties from KexiDBAutoField that should not be visible:
-  Q_OVERRIDE(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor DESIGNABLE true RESET unsetPalette)
-  Q_OVERRIDE(QColor foregroundLabelColor DESIGNABLE false)
-  Q_OVERRIDE(QColor backgroundLabelColor DESIGNABLE false)
-  Q_OVERRIDE(bool autoCaption DESIGNABLE false)
+    Q_OBJECT
+    Q_PROPERTY(bool editable READ isEditable WRITE setEditable)
+    //properties from KexiDBAutoField that should not be visible:
+    Q_OVERRIDE(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor DESIGNABLE true RESET unsetPalette)
+    Q_OVERRIDE(QColor foregroundLabelColor DESIGNABLE false)
+    Q_OVERRIDE(QColor backgroundLabelColor DESIGNABLE false)
+    Q_OVERRIDE(bool autoCaption DESIGNABLE false)
 
-  public:
+public:
     KexiDBComboBox(QWidget *parent, bool designMode = true);
     virtual ~KexiDBComboBox();
 
     //! Implemented for KexiComboBoxBase: form has no 'related data' model (only the full database model)
-    virtual KexiTableViewColumn *column() const { return 0; }
+    virtual KexiTableViewColumn *column() const {
+        return 0;
+    }
 
     //! Implemented for KexiComboBoxBase
-    virtual KexiDB::Field *field() const { return KexiDBAutoField::field(); }
+    virtual KexiDB::Field *field() const {
+        return KexiDBAutoField::field();
+    }
 
     //! Implemented for KexiComboBoxBase
-    virtual QVariant origValue() const { return m_origValue; }
+    virtual QVariant origValue() const {
+        return m_origValue;
+    }
 
     void setEditable(bool set);
     bool isEditable() const;
 
     virtual void setLabelPosition(LabelPosition position);
 
-    virtual QVariant value() { return KexiComboBoxBase::value(); }
+    virtual QVariant value() {
+        return KexiComboBoxBase::value();
+    }
 
     virtual QVariant visibleValue();
 
@@ -81,52 +89,59 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
      Reimplemented. */
     virtual KexiDB::QueryColumnInfo* visibleColumnInfo() const;
 
-    const QColor & paletteBackgroundColor() const { return KexiDBAutoField::paletteBackgroundColor(); }
+    const QColor & paletteBackgroundColor() const {
+        return KexiDBAutoField::paletteBackgroundColor();
+    }
 
     //! Reimplemented to also set 'this' widget's background color, not only subwidget's.
-    virtual void setPaletteBackgroundColor( const QColor & color );
+    virtual void setPaletteBackgroundColor(const QColor & color);
 
-    /*! Undoes changes made to this item - just resets the widget to original value. 
-     Reimplemented after KexiFormDataItemInterface to also revert the visible value 
+    /*! Undoes changes made to this item - just resets the widget to original value.
+     Reimplemented after KexiFormDataItemInterface to also revert the visible value
      (i.e. text) to the original state. */
     virtual void undoChanges();
 
-  public slots:
+public slots:
     void slotRowAccepted(KexiDB::RecordData *record, int row);
-    void slotItemSelected(KexiDB::RecordData *record) { KexiComboBoxBase::slotItemSelected(record); }
+    void slotItemSelected(KexiDB::RecordData *record) {
+        KexiComboBoxBase::slotItemSelected(record);
+    }
 
-  protected slots:
-    void slotInternalEditorValueChanged(const QVariant& v)
-      { KexiComboBoxBase::slotInternalEditorValueChanged(v); }
+protected slots:
+    void slotInternalEditorValueChanged(const QVariant& v) {
+        KexiComboBoxBase::slotInternalEditorValueChanged(v);
+    }
 
-  protected:
+protected:
     QRect buttonGeometry() const;
 
-    virtual void paintEvent( QPaintEvent * );
+    virtual void paintEvent(QPaintEvent *);
 
-    virtual void mousePressEvent( QMouseEvent *e );
+    virtual void mousePressEvent(QMouseEvent *e);
 
-    void mouseDoubleClickEvent( QMouseEvent *e );
+    void mouseDoubleClickEvent(QMouseEvent *e);
 
-    virtual bool eventFilter( QObject *o, QEvent *e );
+    virtual bool eventFilter(QObject *o, QEvent *e);
 
     //! \return internal editor's geometry
     QRect editorGeometry() const;
 
-    //! Creates editor. Reimplemented, because if the combo box is not editable, 
+    //! Creates editor. Reimplemented, because if the combo box is not editable,
     //! editor should not be created.
     virtual void createEditor();
 
     /*! Reimplemented */
-    virtual void styleChange( QStyle& oldStyle );
+    virtual void styleChange(QStyle& oldStyle);
 
     /*! Reimplemented */
-    virtual void fontChange( const QFont & oldFont );
+    virtual void fontChange(const QFont & oldFont);
 
     virtual bool subwidgetStretchRequired(KexiDBAutoField* autoField) const;
 
     //! Implemented for KexiComboBoxBase
-    virtual QWidget *internalEditor() const { return /*WidgetWithSubpropertiesInterface*/m_subwidget; }
+    virtual QWidget *internalEditor() const {
+        return /*WidgetWithSubpropertiesInterface*/m_subwidget;
+    }
 
     //! Implemented for KexiComboBoxBase. Does nothing if the widget is not editable.
     virtual void moveCursorToEndInInternalEditor();
@@ -146,7 +161,7 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
     //! Implemented for KexiComboBoxBase
     virtual void acceptRequested();
 
-    //! Implement this to return a position \a pos mapped from parent (e.g. viewport) 
+    //! Implement this to return a position \a pos mapped from parent (e.g. viewport)
     //! to global coordinates. QPoint(-1, -1) should be returned if this cannot be computed.
     virtual QPoint mapFromParentToGlobal(const QPoint& pos) const;
 
@@ -170,7 +185,7 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 
     /*! Called by top-level form on key press event.
      Used for Key_Escape to if the popup is visible,
-     so the key press won't be consumed to perform "cancel editing". 
+     so the key press won't be consumed to perform "cancel editing".
      Also used for grabbing page down/up keys. */
     virtual bool keyPressed(QKeyEvent *ke);
 

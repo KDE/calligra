@@ -26,9 +26,9 @@ class KexiRelationsView;
 
 class KexiRelationMainDlg : public KexiView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiRelationMainDlg(QWidget *parent);
     virtual ~KexiRelationMainDlg();
 
@@ -38,7 +38,7 @@ class KexiRelationMainDlg : public KexiView
 
     virtual QString itemIcon();
 
-  private:
+private:
     KexiRelationsView *m_rel;
 };
 

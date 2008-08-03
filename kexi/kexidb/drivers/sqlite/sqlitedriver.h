@@ -31,21 +31,23 @@ class SQLiteDriverPrivate;
 //! SQLite database driver.
 class SQLiteDriver : public Driver
 {
-  Q_OBJECT
-  KEXIDB_DRIVER
+    Q_OBJECT
+    KEXIDB_DRIVER
 
-  public:
-    SQLiteDriver( QObject *parent, const QStringList &args = QStringList() );
+public:
+    SQLiteDriver(QObject *parent, const QStringList &args = QStringList());
     virtual ~SQLiteDriver();
 
-    /*! \return true if \a n is a system object name; 
-      for this driver any object with name prefixed with "sqlite_" 
+    /*! \return true if \a n is a system object name;
+      for this driver any object with name prefixed with "sqlite_"
       is considered as system object.
     */
-    virtual bool isSystemObjectName( const QString& n ) const;
+    virtual bool isSystemObjectName(const QString& n) const;
 
     /*! \return false for this driver. */
-    virtual bool isSystemDatabaseName( const QString& ) const { return false; }
+    virtual bool isSystemDatabaseName(const QString&) const {
+        return false;
+    }
 
     //! Escape a string for use as a value
     virtual QString escapeString(const QString& str) const;
@@ -54,21 +56,21 @@ class SQLiteDriver : public Driver
     //! Escape BLOB value \a array
     virtual QString escapeBLOB(const QByteArray& array) const;
 
-  protected:
-    virtual QString drv_escapeIdentifier( const QString& str) const;
-    virtual QByteArray drv_escapeIdentifier( const QByteArray& str) const;
-    virtual Connection *drv_createConnection( ConnectionData &conn_data );
+protected:
+    virtual QString drv_escapeIdentifier(const QString& str) const;
+    virtual QByteArray drv_escapeIdentifier(const QByteArray& str) const;
+    virtual Connection *drv_createConnection(ConnectionData &conn_data);
     virtual AdminTools* drv_createAdminTools() const;
 
-    /*! \return true if \a n is a system field name; 
-      for this driver fields with name equal "_ROWID_" 
+    /*! \return true if \a n is a system field name;
+      for this driver fields with name equal "_ROWID_"
       is considered as system field.
     */
-    virtual bool drv_isSystemFieldName( const QString& n ) const;
+    virtual bool drv_isSystemFieldName(const QString& n) const;
 
-  SQLiteDriverPrivate *dp;
-  
-  private:
+    SQLiteDriverPrivate *dp;
+
+private:
     static const char *keywords[];
 
 };

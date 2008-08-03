@@ -46,33 +46,33 @@
 KFormDesigner::WidgetLibrary* KexiReportPart::static_reportsLibrary = 0L;
 
 KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
- : KexiPart::Part((int)KexiPart::ReportObjectType, parent, l)
+        : KexiPart::Part((int)KexiPart::ReportObjectType, parent, l)
 {
-  kexipluginsdbg << "KexiReportPart::KexiReportPart()" << endl;
-  setInternalPropertyValue("instanceName",
-    i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
-    "Use '_' character instead of spaces. First character should be a..z character. "
-    "If you cannot use latin characters in your language, use english word.", 
-    "report"));
-  setInternalPropertyValue("instanceCaption", i18n("Report"));
-  setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new report"));
-  setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
-  setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
-  setInternalPropertyValue("newObjectsAreDirty", true);
-  
-  // Only create form manager if it's not yet created.
-  // KexiFormPart could have created is already.
-  KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
-  if (!formManager) 
-    formManager = new KexiFormManager(this, "kexi_form_and_report_manager");
+    kexipluginsdbg << "KexiReportPart::KexiReportPart()" << endl;
+    setInternalPropertyValue("instanceName",
+                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                                   "Use '_' character instead of spaces. First character should be a..z character. "
+                                   "If you cannot use latin characters in your language, use english word.",
+                                   "report"));
+    setInternalPropertyValue("instanceCaption", i18n("Report"));
+    setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new report"));
+    setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
+    setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
+    setInternalPropertyValue("newObjectsAreDirty", true);
 
-  // Create and store a handle to report' library. Forms will have their own library too.
-/* @todo add configuration for supported factory groups */
-  QStringList supportedFactoryGroups;
-  supportedFactoryGroups += "kexi-report";
-  static_reportsLibrary = KFormDesigner::FormManager::createWidgetLibrary(
-    formManager, supportedFactoryGroups);
-  static_reportsLibrary->setAdvancedPropertiesVisible(false);
+    // Only create form manager if it's not yet created.
+    // KexiFormPart could have created is already.
+    KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
+    if (!formManager)
+        formManager = new KexiFormManager(this, "kexi_form_and_report_manager");
+
+    // Create and store a handle to report' library. Forms will have their own library too.
+    /* @todo add configuration for supported factory groups */
+    QStringList supportedFactoryGroups;
+    supportedFactoryGroups += "kexi-report";
+    static_reportsLibrary = KFormDesigner::FormManager::createWidgetLibrary(
+                                formManager, supportedFactoryGroups);
+    static_reportsLibrary->setAdvancedPropertiesVisible(false);
 }
 
 KexiReportPart::~KexiReportPart()
@@ -81,7 +81,7 @@ KexiReportPart::~KexiReportPart()
 
 KFormDesigner::WidgetLibrary* KexiReportPart::library()
 {
-  return static_reportsLibrary;
+    return static_reportsLibrary;
 }
 
 void
@@ -92,46 +92,46 @@ KexiReportPart::initPartActions()
 void
 KexiReportPart::initInstanceActions()
 {
-  KFormDesigner::FormManager::self()->createActions(
-    library(), actionCollectionForMode(Kexi::DesignViewMode), guiClient());
+    KFormDesigner::FormManager::self()->createActions(
+        library(), actionCollectionForMode(Kexi::DesignViewMode), guiClient());
 }
 
 KexiWindowData*
 KexiReportPart::createWindowData(KexiWindow* window)
 {
-  return new KexiReportPart::TempData(window);
+    return new KexiReportPart::TempData(window);
 }
 
 KexiView*
 KexiReportPart::createView(QWidget *parent, KexiWindow* window,
-  KexiPart::Item &item, Kexi::ViewMode mode, QMap<QString,QVariant>*)
+                           KexiPart::Item &item, Kexi::ViewMode mode, QMap<QString, QVariant>*)
 {
-  kexipluginsdbg << "KexiReportPart::createView()" << endl;
-  KexiMainWindow *win = KexiMainWindowIface::global();
-  if (!win || !win->project() || !win->project()->dbConnection())
-    return 0;
+    kexipluginsdbg << "KexiReportPart::createView()" << endl;
+    KexiMainWindow *win = KexiMainWindowIface::global();
+    if (!win || !win->project() || !win->project()->dbConnection())
+        return 0;
 
-  KexiReportView *view = new KexiReportView(win, parent, item.name().toLatin1(),
-    win->project()->dbConnection() );
+    KexiReportView *view = new KexiReportView(win, parent, item.name().toLatin1(),
+            win->project()->dbConnection());
 
-  return view;
+    return view;
 }
 
 KLocalizedString KexiReportPart::i18nMessage(
-  const QString& englishMessage, KexiWindow* window) const
+    const QString& englishMessage, KexiWindow* window) const
 {
-  Q_UNUSED(window);
-  if (englishMessage=="Design of object \"%1\" has been modified.")
-    return ki18n(I18N_NOOP("Design of report \"%1\" has been modified."));
-  if (englishMessage=="Object \"%1\" already exists.")
-    return ki18n(I18N_NOOP("Report \"%1\" already exists."));
-  return Part::i18nMessage(englishMessage, window);
+    Q_UNUSED(window);
+    if (englishMessage == "Design of object \"%1\" has been modified.")
+        return ki18n(I18N_NOOP("Design of report \"%1\" has been modified."));
+    if (englishMessage == "Object \"%1\" already exists.")
+        return ki18n(I18N_NOOP("Report \"%1\" already exists."));
+    return Part::i18nMessage(englishMessage, window);
 }
 
 //---------------
 
 KexiReportPart::TempData::TempData(QObject* parent)
- : KexiWindowData(parent)
+        : KexiWindowData(parent)
 {
 }
 

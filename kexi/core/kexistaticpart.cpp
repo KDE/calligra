@@ -28,12 +28,12 @@ using namespace KexiPart;
 //------------------------------
 
 StaticInfo::StaticInfo(const QString& mimeType, const QString& itemIcon,
-  const QString& objectName)
- : Info()
+                       const QString& objectName)
+        : Info()
 {
-  d->mimeType = mimeType;
-  d->itemIcon = itemIcon;
-  d->objectName = objectName;
+    d->mimeType = mimeType;
+    d->itemIcon = itemIcon;
+    d->objectName = objectName;
 }
 
 StaticInfo::~StaticInfo()
@@ -42,24 +42,24 @@ StaticInfo::~StaticInfo()
 
 //------------------------------
 
-StaticPart::StaticPart(const QString& mimeType, const QString& itemIcon, 
-  const QString& objectName)
- : Part(&Kexi::partManager(), new StaticInfo(mimeType, itemIcon, objectName))
+StaticPart::StaticPart(const QString& mimeType, const QString& itemIcon,
+                       const QString& objectName)
+        : Part(&Kexi::partManager(), new StaticInfo(mimeType, itemIcon, objectName))
 {
-  Kexi::partManager().insertStaticPart(this);
+    Kexi::partManager().insertStaticPart(this);
 }
 
 StaticPart::~StaticPart()
 {
 }
 
-KexiView* StaticPart::createView(QWidget *parent, KexiWindow* window, 
-  KexiPart::Item &item, Kexi::ViewMode viewMode)
+KexiView* StaticPart::createView(QWidget *parent, KexiWindow* window,
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode)
 {
-  Q_UNUSED(parent);
-  Q_UNUSED(window);
-  Q_UNUSED(item);
-  Q_UNUSED(viewMode);
-  //unused
-  return 0;
+    Q_UNUSED(parent);
+    Q_UNUSED(window);
+    Q_UNUSED(item);
+    Q_UNUSED(viewMode);
+    //unused
+    return 0;
 }

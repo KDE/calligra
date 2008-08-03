@@ -21,7 +21,7 @@
 
 //
 // KRSectionData is used to store the information about a specific
-// section. 
+// section.
 // A section has a name and optionally extra data. `name'
 // rpthead, rptfoot, pghead, pgfoot, grphead, grpfoot or detail.
 // In the case of pghead and pgfoot extra would contain the page
@@ -41,78 +41,95 @@ class KRObjectData;
 
 namespace Scripting
 {
-	class Section;
+class Section;
 }
 class KRSectionData : public QObject
 {
-	Q_OBJECT
-	public:
-		enum Section
-		{
-		  None = 0,
-		  PageHeadFirst = 1,
-		  PageHeadOdd,
-		  PageHeadEven,
-		  PageHeadLast,
-		  PageHeadAny,
-		  ReportHead,
-		  ReportFoot,
-		  PageFootFirst,
-		  PageFootOdd,
-		  PageFootEven,
-		  PageFootLast,
-		  PageFootAny,
-		  GroupHead,
-		  GroupFoot,
-		  Detail
-		};
-	  
-		KRSectionData();
-		KRSectionData(const QDomElement &);
-		~KRSectionData();
-		KoProperty::Set* properties(){return _set;}
-	
-		bool isValid() const {return _valid;}
-		
-		/**
-		set the 'extra' info for the section.  This is used
-		to uniquely identity the section, eg, odd/even footers,
-		or multiple group heads
-		*/
-		void setExtra(const QString &e){_extra = e;}
-		
-		QString extra() const {return _extra;}
-		qreal height() const {return _height->value().toDouble();}
-		QList<KRObjectData*> objects() const {return _objects;};
-		QString name() const;
-		QColor bgColor() const { return _bgColor->value().value<QColor>();}
-		Section type() const {return _type;}
-		
-	protected:
-		KoProperty::Set *_set;
-		KoProperty::Property *_height;
-		KoProperty::Property *_bgColor;
-		
-	public slots:
-		KoProperty::Set& propertySet(){return *_set;}
-		
-	private:
-		void createProperties();
-		
-		QList<KRObjectData*> _objects;
-		//QList<ORDataData> trackTotal;
-		
-		QString _name;
-		QString _extra;
-		Section _type;
-		
-		static bool zLessThan(KRObjectData* s1, KRObjectData* s2);
-		static bool xLessThan(KRObjectData* s1, KRObjectData* s2);
-		
-		bool _valid;
-		
-	friend class Scripting::Section;
-	friend class ReportSection;
+    Q_OBJECT
+public:
+    enum Section {
+        None = 0,
+        PageHeadFirst = 1,
+        PageHeadOdd,
+        PageHeadEven,
+        PageHeadLast,
+        PageHeadAny,
+        ReportHead,
+        ReportFoot,
+        PageFootFirst,
+        PageFootOdd,
+        PageFootEven,
+        PageFootLast,
+        PageFootAny,
+        GroupHead,
+        GroupFoot,
+        Detail
+    };
+
+    KRSectionData();
+    KRSectionData(const QDomElement &);
+    ~KRSectionData();
+    KoProperty::Set* properties() {
+        return _set;
+    }
+
+    bool isValid() const {
+        return _valid;
+    }
+
+    /**
+    set the 'extra' info for the section.  This is used
+    to uniquely identity the section, eg, odd/even footers,
+    or multiple group heads
+    */
+    void setExtra(const QString &e) {
+        _extra = e;
+    }
+
+    QString extra() const {
+        return _extra;
+    }
+    qreal height() const {
+        return _height->value().toDouble();
+    }
+    QList<KRObjectData*> objects() const {
+        return _objects;
+    };
+    QString name() const;
+    QColor bgColor() const {
+        return _bgColor->value().value<QColor>();
+    }
+    Section type() const {
+        return _type;
+    }
+
+protected:
+    KoProperty::Set *_set;
+    KoProperty::Property *_height;
+    KoProperty::Property *_bgColor;
+
+public slots:
+    KoProperty::Set& propertySet() {
+        return *_set;
+    }
+
+private:
+    void createProperties();
+
+    QList<KRObjectData*> _objects;
+    //QList<ORDataData> trackTotal;
+
+    QString _name;
+    QString _extra;
+    Section _type;
+
+    static bool zLessThan(KRObjectData* s1, KRObjectData* s2);
+    static bool xLessThan(KRObjectData* s1, KRObjectData* s2);
+
+    bool _valid;
+
+    friend class Scripting::Section;
+    friend class ReportSection;
 };
 
 #endif

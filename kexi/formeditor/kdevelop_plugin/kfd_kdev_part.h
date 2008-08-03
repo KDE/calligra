@@ -41,35 +41,39 @@ using namespace KInterfaceDesigner;
 
 class KFORMEDITOR_EXPORT KFDFactory : public KParts::Factory
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KFDFactory();
     virtual ~KFDFactory();
 
-    virtual KParts::Part* createPartObject(QWidget *parentWidget=0, const char *widgetName=0, QObject *parent=0, const char *name=0,
-      const char *classname="KParts::Part", const QStringList &args=QStringList());
+    virtual KParts::Part* createPartObject(QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0,
+                                           const char *classname = "KParts::Part", const QStringList &args = QStringList());
 
     static const KComponentData &componentData();
     static KAboutData *aboutData();
 
-  private:
+private:
     static KComponentData *m_componentData;
 };
 
 class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KFormDesignerKDevPart(QWidget *parent, const char *name, bool readOnly=true, const QStringList &args=QStringList());
+public:
+    KFormDesignerKDevPart(QWidget *parent, const char *name, bool readOnly = true, const QStringList &args = QStringList());
     virtual ~KFormDesignerKDevPart();
 
-    virtual DesignerType designerType() { return QtDesigner; }
+    virtual DesignerType designerType() {
+        return QtDesigner;
+    }
     virtual void openProject(const QString &) {}
 
-//		KFormDesigner::FormManager*   manager()  { return m_manager; }
-    void      setUniqueFormMode(bool enable)  { m_uniqueFormMode = enable; }
+//  KFormDesigner::FormManager*   manager()  { return m_manager; }
+    void      setUniqueFormMode(bool enable)  {
+        m_uniqueFormMode = enable;
+    }
 
     bool   closeForm(Form *form);
     bool   closeForms();
@@ -78,7 +82,7 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
 
     static KFormDesigner::WidgetLibrary* formsLibrary();
 
-  public slots:
+public slots:
     /*! Creates a new blank Form. The new Form is shown and become the active Form. */
     void createBlankForm();
     /*! Loads a Form from a UI file. A "Open File" dialog is shown to select the file. The loaded Form is shown and becomes
@@ -88,7 +92,7 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
     void saveAs();
     void slotCreateFormSlot(KFormDesigner::Form *form, const QString &widget, const QString &signal);
 
-  protected slots:
+protected slots:
     void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
     void slotFormWidgetSelected(KFormDesigner::Form *form);
     void slotNoFormSelected();
@@ -96,16 +100,16 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
     void setUndoEnabled(bool enabled, const QString &text);
     void setRedoEnabled(bool enabled, const QString &text);
 
-  protected:
+protected:
     virtual bool openFile();
     virtual bool saveFile();
     void disableWidgetActions();
     void enableFormActions();
     void setupActions();
 
-  private:
+private:
     static KFormDesigner::WidgetLibrary* static_formsLibrary;
-//		KFormDesigner::FormManager  *m_manager;
+//  KFormDesigner::FormManager  *m_manager;
     QWorkspace  *m_workspace;
     int  m_count;
     bool   m_uniqueFormMode;
@@ -116,12 +120,14 @@ class KFORMEDITOR_EXPORT KFormDesignerKDevPart : public Designer
 //! Helper: this widget is used to create form's surface
 class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public KFormDesigner::FormWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     FormWidgetBase(KFormDesignerKDevPart *part, QWidget *parent = 0, const char *name = 0, int WFlags = Qt::WDestructiveClose)
-    : QWidget(parent, name, Qt::WFlags), m_part(part) {}
-    ~FormWidgetBase() {;}
+            : QWidget(parent, name, Qt::WFlags), m_part(part) {}
+    ~FormWidgetBase() {
+        ;
+    }
 
     void drawRect(const QRect& r, int type);
     void drawRects(const QList<QRect> &list, int type);
@@ -129,10 +135,10 @@ class KFORMEDITOR_EXPORT FormWidgetBase : public QWidget, public KFormDesigner::
     void clearRect();
     void highlightWidgets(QWidget *from, QWidget *to);//, const QPoint &p);
 
-  protected:
+protected:
     void closeEvent(QCloseEvent *ev);
 
-  private:
+private:
     QPixmap buffer; //!< stores grabbed entire form's area for redraw
     QRect prev_rect; //!< previously selected rectangle
     KFormDesignerKDevPart  *m_part;

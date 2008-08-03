@@ -2,7 +2,7 @@
  * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -27,7 +27,7 @@
 
 class LabelSizeInfo
 {
-  public:
+public:
     LabelSizeInfo(const QString&, const QString&, int, int, int, int, int, int, int, int);
     LabelSizeInfo();
     virtual ~LabelSizeInfo();
@@ -52,7 +52,7 @@ class LabelSizeInfo
     static const LabelSizeInfo & getByName(const QString &);
     static QStringList getLabelNames();
 
-  protected:
+protected:
     QString _name;
     QString _paper;
 

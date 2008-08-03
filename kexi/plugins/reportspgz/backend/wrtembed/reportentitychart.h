@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,27 +24,27 @@
 #include <krchartdata.h>
 #include "reportrectentity.h"
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class ReportEntityChart : public QObject, public ReportRectEntity, public KRChartData
 {
-		Q_OBJECT
-	public:
-		ReportEntityChart ( ReportDesigner *, QGraphicsScene* scene );
-		ReportEntityChart ( QDomNode & element, ReportDesigner *, QGraphicsScene* scene );
-		
-		virtual ~ReportEntityChart();
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
-		virtual void paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0 );
-		virtual ReportEntityChart* clone();
-	
-	protected:
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-		
-	private:
-		void init(QGraphicsScene*, ReportDesigner *r);
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );	
+    Q_OBJECT
+public:
+    ReportEntityChart(ReportDesigner *, QGraphicsScene* scene);
+    ReportEntityChart(QDomNode & element, ReportDesigner *, QGraphicsScene* scene);
+
+    virtual ~ReportEntityChart();
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual ReportEntityChart* clone();
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+private:
+    void init(QGraphicsScene*, ReportDesigner *r);
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 
 };
 

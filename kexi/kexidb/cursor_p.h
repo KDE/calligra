@@ -24,12 +24,13 @@
 
 #include "connection.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 #if 0
 /*PRIVATE*/ class /*KEXI_DB_EXPORT*/ CursorData
 {
-  public:
+public:
     CursorData() {};
     ~CursorData() {};
 };

@@ -38,7 +38,7 @@ class KexiSimplePrintingSettings;
 //! @short Settings data for simple printing engine.
 class KexiSimplePrintingSettings
 {
-  public:
+public:
     KexiSimplePrintingSettings();
     ~KexiSimplePrintingSettings();
 
@@ -48,13 +48,13 @@ class KexiSimplePrintingSettings
     KoPageLayout pageLayout;
     KoUnit unit;
     QFont pageTitleFont;
-    bool addPageNumbers : 1;
-    bool addDateAndTime : 1;
-    bool addTableBorders : 1;
+bool addPageNumbers : 1;
+bool addDateAndTime : 1;
+bool addTableBorders : 1;
 };
 
 //! @short An engine painting data on pages using QPainter.
-/*! The engine allows for random access to any page. 
+/*! The engine allows for random access to any page.
  Features:
  - page numbers in the footer
  - date and time in the header
@@ -64,14 +64,14 @@ class KexiSimplePrintingSettings
 */
 class KexiSimplePrintingEngine : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiSimplePrintingEngine( const KexiSimplePrintingSettings& settings, QObject* parent );
+public:
+    KexiSimplePrintingEngine(const KexiSimplePrintingSettings& settings, QObject* parent);
     ~KexiSimplePrintingEngine();
 
     bool init(KexiDB::Connection& conn, KexiDB::TableOrQuerySchema& tableOrQuery,
-      const QString& titleText, QString& errorMessage);
+              const QString& titleText, QString& errorMessage);
 
     void setTitleText(const QString& titleText);
 
@@ -81,32 +81,40 @@ class KexiSimplePrintingEngine : public QObject
 
     bool done();
     void clear();
-    const KexiSimplePrintingSettings* settings() const { return m_settings; }
+    const KexiSimplePrintingSettings* settings() const {
+        return m_settings;
+    }
 
     //! \return true when all records has been painted
-    bool eof() const { return m_eof; }
+    bool eof() const {
+        return m_eof;
+    }
 
     //! \return number of pages. Can be used after calculatePagesCount().
-    uint pagesCount() const { return m_pagesCount; }
+    uint pagesCount() const {
+        return m_pagesCount;
+    }
 
-    //! \return number of painted pages so far. 
+    //! \return number of painted pages so far.
     //! If eof() is true, this number is equal to total page count.
-    uint paintedPages() const { return m_dataOffsets.count(); }
+    uint paintedPages() const {
+        return m_dataOffsets.count();
+    }
 
-  public slots:
+public slots:
     /*! Paints a page number \a pageNumber (counted from 0) on \a painter.
-     If \a paint is false, drawings are only computed but not painted, 
+     If \a paint is false, drawings are only computed but not painted,
      so this can be used for calculating page number before printing or previewing. */
     void paintPage(int pageNumber, QPainter& painter, bool paint = true);
 
-  protected:
+protected:
     struct DataOffset;
     void paintRecord(QPainter& painter, const DataOffset& offset,
-      int cellMargin, double &y, uint paintedRecords, bool paint, 
-      bool continuedRecord, bool printing, DataOffset& newOffset);
+                     int cellMargin, double &y, uint paintedRecords, bool paint,
+                     bool continuedRecord, bool printing, DataOffset& newOffset);
 
     uint cutTextIfTooLarge(const QFontMetrics& fontMetrics,
-      QRect& rect, int alignFlags, const QString& text);
+                           QRect& rect, int alignFlags, const QString& text);
 
     const KexiSimplePrintingSettings* m_settings;
 
@@ -121,14 +129,16 @@ class KexiSimplePrintingEngine : public QObject
     //! Information about record/field/place-in-text offset for a given page
     //! Needed because large text values can be splitted between pages
     struct DataOffset {
-      DataOffset() : record(-1), field(0), textOffset(0) {}
-      DataOffset(const DataOffset& other) { *this = other; }
-      //! first record number for this page
-      int record;
-      //! first field number for this page
-      uint field;
-      //! text offset within the first field of a first record on this page
-      uint textOffset;
+        DataOffset() : record(-1), field(0), textOffset(0) {}
+        DataOffset(const DataOffset& other) {
+            *this = other;
+        }
+        //! first record number for this page
+        int record;
+        //! first field number for this page
+        uint field;
+        //! text offset within the first field of a first record on this page
+        uint textOffset;
     };
     //! offsets for records
     QList<DataOffset*> m_dataOffsets;

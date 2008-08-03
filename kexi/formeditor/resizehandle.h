@@ -38,34 +38,34 @@ class ResizeHandleSet;
 */
 class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     enum HandlePos {
-      TopLeftCorner = 0,
-      TopCenter = 2,
-      TopRightCorner = 4,
-      LeftCenter = 8,
-      RightCenter = 16,
-      BottomLeftCorner = 32,
-      BottomCenter = 64,
-      BottomRightCorner = 128
+        TopLeftCorner = 0,
+        TopCenter = 2,
+        TopRightCorner = 4,
+        LeftCenter = 8,
+        RightCenter = 16,
+        BottomLeftCorner = 32,
+        BottomCenter = 64,
+        BottomRightCorner = 128
     };
-    ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing=false);
+    ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing = false);
     virtual ~ResizeHandle();
     void setEditingMode(bool editing);
 
-  protected:
+protected:
     virtual void mousePressEvent(QMouseEvent *ev);
     virtual void mouseMoveEvent(QMouseEvent *ev);
     virtual void mouseReleaseEvent(QMouseEvent *ev);
-    virtual void paintEvent( QPaintEvent *ev );
+    virtual void paintEvent(QPaintEvent *ev);
 
-  protected slots:
+protected slots:
     bool eventFilter(QObject *obj, QEvent *ev);
     void updatePos();
 
-  private:
+private:
     ResizeHandleSet *m_set;
     HandlePos m_pos;
     //QWidget *m_buddy;
@@ -81,26 +81,28 @@ class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 */
 class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     typedef Q3Dict<ResizeHandleSet> Dict;
 
     ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
     ~ResizeHandleSet();
 
     void setWidget(QWidget *modify, bool editing = false);
-    QWidget *widget() const { return m_widget; }
+    QWidget *widget() const {
+        return m_widget;
+    }
     void raise();
     void setEditingMode(bool editing);
 
-  private:
+private:
     QPointer<ResizeHandle> m_handles[8];
     QPointer<QWidget> m_widget;
     QPointer<Form>   m_form;
     bool  m_editing;
 
-  friend class ResizeHandle;
+    friend class ResizeHandle;
 };
 
 }

@@ -37,39 +37,43 @@ class QGraphicsSceneMouseEvent;
 
 class ReportScene : public QGraphicsScene
 {
-	Q_OBJECT
-	public:
-		ReportScene ( qreal w, qreal h, ReportDesigner* );
-		virtual ~ReportScene();
-		ReportDesigner* document(){return _rd;}
-		QPointF gridPoint(const QPointF&);
-		void raiseSelected();
-		void lowerSelected();
-		QGraphicsItemList itemsOrdered();
-		qreal gridSize(){return pixel_increment;}
-		
-	protected:
-		virtual void drawBackground ( QPainter* painter, const QRectF & clip );
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * e );
-		virtual void focusOutEvent ( QFocusEvent * focusEvent );
-		virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * contextMenuEvent );
+    Q_OBJECT
+public:
+    ReportScene(qreal w, qreal h, ReportDesigner*);
+    virtual ~ReportScene();
+    ReportDesigner* document() {
+        return _rd;
+    }
+    QPointF gridPoint(const QPointF&);
+    void raiseSelected();
+    void lowerSelected();
+    QGraphicsItemList itemsOrdered();
+    qreal gridSize() {
+        return pixel_increment;
+    }
 
-	signals:
-		void clicked();
-		void lostFocus();
-		
-	private:
-		qreal lowestZValue();
-		qreal highestZValue();
-		
-		ReportDesigner * _rd;
-		
-		KoUnit u;
-		int minor;
-		qreal major;
-		qreal pixel_increment;
-		
-		
+protected:
+    virtual void drawBackground(QPainter* painter, const QRectF & clip);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * e);
+    virtual void focusOutEvent(QFocusEvent * focusEvent);
+    virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * contextMenuEvent);
+
+signals:
+    void clicked();
+    void lostFocus();
+
+private:
+    qreal lowestZValue();
+    qreal highestZValue();
+
+    ReportDesigner * _rd;
+
+    KoUnit u;
+    int minor;
+    qreal major;
+    qreal pixel_increment;
+
+
 };
 
 #endif

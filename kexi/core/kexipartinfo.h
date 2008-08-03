@@ -28,16 +28,16 @@ class KexiWindow;
 
 namespace KexiPart
 {
-  class Manager;
-  class Item;
-  class Part;
+class Manager;
+class Item;
+class Part;
 
 /**
  * @short Information about a Kexi Part (plugin).
  */
 class KEXICORE_EXPORT Info
 {
-  public:
+public:
     Info(KService::Ptr service);
     ~Info();
 
@@ -51,10 +51,10 @@ class KEXICORE_EXPORT Info
      */
     QString mimeType() const;
 
-//		/**
-//		 * @return the icon for groups
-//		 */
-//		inline QString groupIcon() const { return m_groupIcon; }
+//  /**
+//   * @return the icon for groups
+//   */
+//  inline QString groupIcon() const { return m_groupIcon; }
 
     /**
      * @return the icon for a item
@@ -107,7 +107,7 @@ class KEXICORE_EXPORT Info
      */
     bool isExecuteSupported() const;
 
-  protected:
+protected:
     /**
      * Used in StaticInfo
      */
@@ -123,7 +123,7 @@ class KEXICORE_EXPORT Info
     void setProjectPartID(int id);
 
     /**
-     * Sets the broken flag and error message. 
+     * Sets the broken flag and error message.
      * Most likely to be called by @ref KexiPart::Manager
      */
     void setBroken(bool broken, const QString& errorMessage);
@@ -147,8 +147,8 @@ class KEXICORE_EXPORT Info
     Private * const d;
 };
 
-/*! \return "create" KAction's name for part defined by \a info. 
- The result is like "tablepart_create". Used in Part::createGUIClients() 
+/*! \return "create" KAction's name for part defined by \a info.
+ The result is like "tablepart_create". Used in Part::createGUIClients()
  and KexiBrowser. */
 KEXICORE_EXPORT QString nameForCreateAction(const Info& info);
 

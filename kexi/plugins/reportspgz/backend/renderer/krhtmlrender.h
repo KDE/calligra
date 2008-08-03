@@ -31,28 +31,29 @@
 class ORODocument;
 namespace KexiDB
 {
-	class Connection;
+class Connection;
 }
 //
 // KRHtmlRender
-// 
-class KRHtmlRender {
-  public:
+//
+class KRHtmlRender
+{
+public:
     KRHtmlRender();
 
     virtual ~KRHtmlRender();
 
     bool render(ORODocument * document, const KUrl& toUrl,  bool css = true);
-    
-    private:
-      QString renderCSS(ORODocument*);
-      QString renderTable(ORODocument*);
 
-      //! This is the directory name that will go inside the HTML files
-      QString actualDirName;
+private:
+    QString renderCSS(ORODocument*);
+    QString renderTable(ORODocument*);
 
-      //! This is the directory where the image and other files will be temporarily stored
-      QString tempDirName;
+    //! This is the directory name that will go inside the HTML files
+    QString actualDirName;
+
+    //! This is the directory where the image and other files will be temporarily stored
+    QString tempDirName;
 };
 
 

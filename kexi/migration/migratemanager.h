@@ -28,16 +28,17 @@
 
 #include "keximigrate.h"
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 class MigrateManagerInternal;
 
 //! @short Migration library management, for finding and loading mogration drivers.
 class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 {
-  public:
+public:
     typedef QMap<QString, KService::Ptr> ServicesMap;
-    
+
     MigrateManager();
     virtual ~MigrateManager();
 
@@ -46,7 +47,7 @@ class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
       \return db driver, or 0 if error (then error message is also set) */
     KexiMigrate* driver(const QString& name);
 
-    /*! returns list of available drivers names. 
+    /*! returns list of available drivers names.
       That drivers can be loaded by first use of driver() method. */
     const QStringList driverNames();
 
@@ -64,14 +65,14 @@ class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 
 //! @todo copied from KexiDB::DriverManager, merge it.
     /*! HTML information about possible problems encountered.
-     It's displayed in 'details' section, if an error encountered. 
+     It's displayed in 'details' section, if an error encountered.
      Currently it contains a list of incompatible migration drivers. */
     QString possibleProblemsInfoMsg() const;
 
-  protected:
+protected:
     virtual void drv_clearServerResult();
 
-  private:
+private:
     MigrateManagerInternal *d_int;
 };
 

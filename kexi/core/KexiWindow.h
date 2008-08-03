@@ -39,25 +39,27 @@
 class KexiMainWindow;
 class KexiWindowData;
 class KexiView;
-namespace KexiPart {
-  class Part;
+namespace KexiPart
+{
+class Part;
 }
 
-namespace KoProperty {
-  class Set;
+namespace KoProperty
+{
+class Set;
 }
 
 //! Base class for child window of Kexi's main application window.
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions. */
 class KEXICORE_EXPORT KexiWindow
-  : public QWidget
-  , public KexiActionProxy
-  , public Kexi::ObjectStatus
+            : public QWidget
+            , public KexiActionProxy
+            , public Kexi::ObjectStatus
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     virtual ~KexiWindow();
 
     //! \return true if the window is registered.
@@ -75,7 +77,7 @@ class KEXICORE_EXPORT KexiWindow
 
     /*! \return main (top level) widget inside this dialog.
      This widget is used for e.g. determining minimum size hint and size hint. */
-//		virtual QWidget* mainWidget() = 0;
+//  virtual QWidget* mainWidget() = 0;
 
     /*! reimplemented: minimum size hint is inherited from currently visible view. */
     virtual QSize minimumSizeHint() const;
@@ -84,7 +86,9 @@ class KEXICORE_EXPORT KexiWindow
     virtual QSize sizeHint() const;
 
 #if 0 //main window moved to a singleton
-    KexiMainWindow *mainWin() const { return m_parentWindow; }
+    KexiMainWindow *mainWin() const {
+        return m_parentWindow;
+    }
 #endif
 
     //js todo: maybe remove this since it's often the same as partItem()->identifier()?:
@@ -117,7 +121,7 @@ class KEXICORE_EXPORT KexiWindow
     /*! Tries to close the dialog. \return true if closing is accepted
      (sometimes, user may not want to close the dialog by pressing cancel).
      If \a dontSaveChanges if true, changes are not saved even if this dialog is dirty. */
-//js removed		bool tryClose(bool dontSaveChanges);
+//js removed  bool tryClose(bool dontSaveChanges);
 
     /*! \return name of icon provided by part that created this dialog.
      The name is used by KexiMainWindow to set/reset icon for this dialog. */
@@ -153,7 +157,9 @@ class KEXICORE_EXPORT KexiWindow
 #else
 #pragma WARNING( TODO isAttached() )
 #endif
-    bool isAttached() const { return true; }
+    bool isAttached() const {
+        return true;
+    }
 
     /*! True if contents (data) of the dialog is dirty and need to be saved
      This may or not be used, depending if changes in the dialog
@@ -183,7 +189,7 @@ class KEXICORE_EXPORT KexiWindow
     void setSchemaData(KexiDB::SchemaData* schemaData);
 
     /*! Reimpelmented: "*" is added if for 'dirty' dialog's data. */
-//		QString caption() const;
+//  QString caption() const;
 
     /*! Used by KexiView subclasses. \return temporary data shared between
      views */
@@ -197,7 +203,7 @@ class KEXICORE_EXPORT KexiWindow
      Selected view (if present) is also informed about deactivation. */
     void deactivate();
 
-  public slots:
+public slots:
     virtual void setFocus();
 
     void updateCaption();
@@ -233,7 +239,7 @@ class KEXICORE_EXPORT KexiWindow
      reimplement it). */
     void sendAttachedStateToCurrentView();
 
-  signals:
+signals:
     void updateContextHelp();
 
     //! emitted when the window is about to close
@@ -243,7 +249,7 @@ class KEXICORE_EXPORT KexiWindow
      Activated by KexiView::setDirty(). */
     void dirtyChanged(KexiWindow*);
 
-  protected slots:
+protected slots:
     /*!  Sets 'dirty' flag on every dialog's view. */
     void setDirty(bool dirty);
 
@@ -254,10 +260,10 @@ class KEXICORE_EXPORT KexiWindow
      (rarely, but for any reason) - cancelled is returned. */
     tristate switchToViewMode(Kexi::ViewMode newViewMode);
 
-  protected:
+protected:
     //! Used by KexiPart::Part
     KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part& part,
-      KexiPart::Item& item);
+               KexiPart::Item& item);
 
     //! Used by KexiInternalPart
     KexiWindow();
@@ -266,12 +272,12 @@ class KEXICORE_EXPORT KexiWindow
      like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
      Only used for parts of class KexiPart::StaticPart. */
     tristate switchToViewMode(Kexi::ViewMode newViewMode,
-      QMap<QString,QVariant>* staticObjectArgs,
-      bool& proposeOpeningInTextViewModeBecauseOfProblems);
+                              QMap<QString, QVariant>* staticObjectArgs,
+                              bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
     void registerWindow();
 
-    virtual void closeEvent( QCloseEvent * e );
+    virtual void closeEvent(QCloseEvent * e);
 
     //! \internal
     void addView(KexiView *view, Kexi::ViewMode mode);
@@ -291,29 +297,29 @@ class KEXICORE_EXPORT KexiWindow
     /*! Sets temporary data shared between views. */
     void setData(KexiWindowData* data);
 
-    /*! @return action for name @a name, shared between views. 
+    /*! @return action for name @a name, shared between views.
      @since 2.0 */
-//		KAction* sharedViewAction(const char* name) const;
+//  KAction* sharedViewAction(const char* name) const;
 
     //! Used by KexiView
-    QVariant internalPropertyValue(const QByteArray& name, 
-      const QVariant& defaultValue = QVariant()) const;
+    QVariant internalPropertyValue(const QByteArray& name,
+                                   const QVariant& defaultValue = QVariant()) const;
 
-  private slots:
+private slots:
     /*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()
      to get error handling and reporting as well on main window level. */
     tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);
 
-  private:
+private:
     void createSubwidgets();
-//moved to KexiView		void createViewModeToggleButtons();
+//moved to KexiView  void createViewModeToggleButtons();
     void showSaveDesignButton(bool show);
-//moved to KexiView		void initViewActions(KexiView* view, Kexi::ViewMode mode);
+//moved to KexiView  void initViewActions(KexiView* view, Kexi::ViewMode mode);
 
     class Private;
     Private * d;
 
-    bool m_destroying : 1; //!< true after entering to the dctor
+bool m_destroying : 1; //!< true after entering to the dctor
 
     friend class KexiMainWindow;
     friend class KexiPart::Part;

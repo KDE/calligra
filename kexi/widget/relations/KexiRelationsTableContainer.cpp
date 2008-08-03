@@ -49,9 +49,8 @@
 
 class KexiRelationsTableContainer::Private
 {
-  public:
-    Private()
-    {
+public:
+    Private() {
     }
     KexiRelationViewTableContainerHeader *tableHeader;
     KexiRelationsTableFieldList *fieldList;
@@ -61,151 +60,151 @@ class KexiRelationsTableContainer::Private
 //----------------------
 
 KexiRelationsTableContainer::KexiRelationsTableContainer(
-  QWidget* parent, 
-  KexiRelationsScrollArea *scrollArea, 
-  KexiDB::TableOrQuerySchema *schema)
- : QFrame(parent)
- , d( new Private )
+    QWidget* parent,
+    KexiRelationsScrollArea *scrollArea,
+    KexiDB::TableOrQuerySchema *schema)
+        : QFrame(parent)
+        , d(new Private)
 {
-  d->scrollArea = scrollArea;
-  setObjectName("KexiRelationsTableContainer");
-  setVisible(false); // scroll area will show it later
-  setAutoFillBackground(true);
-  setBackgroundRole(QPalette::Window);
+    d->scrollArea = scrollArea;
+    setObjectName("KexiRelationsTableContainer");
+    setVisible(false); // scroll area will show it later
+    setAutoFillBackground(true);
+    setBackgroundRole(QPalette::Window);
 
-//	setFixedSize(100, 150);
-//js:	resize(100, 150);
-  //setMouseTracking(true);
+// setFixedSize(100, 150);
+//js: resize(100, 150);
+    //setMouseTracking(true);
 
-  setFrameStyle( QFrame::WinPanel | QFrame::Raised );
+    setFrameStyle(QFrame::WinPanel | QFrame::Raised);
 
-  QVBoxLayout *lyr = new QVBoxLayout(this);
-  lyr->setContentsMargins(2,2,2,2);
-  lyr->setSpacing(1);
+    QVBoxLayout *lyr = new QVBoxLayout(this);
+    lyr->setContentsMargins(2, 2, 2, 2);
+    lyr->setSpacing(1);
 
-  d->tableHeader = new KexiRelationViewTableContainerHeader(schema->name(), this);
+    d->tableHeader = new KexiRelationViewTableContainerHeader(schema->name(), this);
 
-  d->tableHeader->unsetFocus();
-  d->tableHeader->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
-  lyr->addWidget(d->tableHeader);
-  connect(d->tableHeader,SIGNAL(moved()),this,SLOT(moved()));
-  connect(d->tableHeader, SIGNAL(endDrag()), this, SIGNAL(endDrag()));
+    d->tableHeader->unsetFocus();
+    d->tableHeader->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
+    lyr->addWidget(d->tableHeader);
+    connect(d->tableHeader, SIGNAL(moved()), this, SLOT(moved()));
+    connect(d->tableHeader, SIGNAL(endDrag()), this, SIGNAL(endDrag()));
 
-  d->fieldList = new KexiRelationsTableFieldList(schema, d->scrollArea, this);
-  d->fieldList->setObjectName("KexiRelationsTableFieldList");
-  //d->tableHeader->setFocusProxy( d->fieldList );
-  d->fieldList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-  
-  d->fieldList->setMaximumSize( d->fieldList->sizeHint() );
-  
-//	d->fieldList->resize( d->fieldList->sizeHint() );
-  lyr->addWidget(d->fieldList);
-  connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
-  connect(d->fieldList, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
-    this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
-  connect(d->fieldList, SIGNAL(doubleClicked(Q3ListViewItem*,const QPoint&,int)),
-    this, SLOT(slotFieldsDoubleClicked(Q3ListViewItem*,const QPoint&,int)));
+    d->fieldList = new KexiRelationsTableFieldList(schema, d->scrollArea, this);
+    d->fieldList->setObjectName("KexiRelationsTableFieldList");
+    //d->tableHeader->setFocusProxy( d->fieldList );
+    d->fieldList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+
+    d->fieldList->setMaximumSize(d->fieldList->sizeHint());
+
+// d->fieldList->resize( d->fieldList->sizeHint() );
+    lyr->addWidget(d->fieldList);
+    connect(d->fieldList, SIGNAL(tableScrolling()), this, SLOT(moved()));
+    connect(d->fieldList, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
+            this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
+    connect(d->fieldList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)),
+            this, SLOT(slotFieldsDoubleClicked(Q3ListViewItem*, const QPoint&, int)));
 }
 
 KexiRelationsTableContainer::~KexiRelationsTableContainer()
 {
-  delete d;
+    delete d;
 }
 
 KexiDB::TableOrQuerySchema* KexiRelationsTableContainer::schema() const
 {
-  return d->fieldList->schema();
+    return d->fieldList->schema();
 }
 
-void KexiRelationsTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *, 
-  const QPoint &p)
+void KexiRelationsTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *,
+        const QPoint &p)
 {
-//	d->parent->executePopup(p);
-  emit contextMenuRequest( p );
+// d->parent->executePopup(p);
+    emit contextMenuRequest(p);
 }
 
 void KexiRelationsTableContainer::moved()
 {
-//	kDebug()<<"finally emitting moved"<<endl;
-  emit moved(this);
+// kDebug()<<"finally emitting moved"<<endl;
+    emit moved(this);
 }
 
 int KexiRelationsTableContainer::globalY(const QString &field)
 {
-//	kDebug() << "KexiRelationsTableContainer::globalY()" << endl;
-//	QPoint o = mapFromGlobal(QPoint(0, (d->fieldList->globalY(field))/*+d->parent->contentsY()*/));
+// kDebug() << "KexiRelationsTableContainer::globalY()" << endl;
+// QPoint o = mapFromGlobal(QPoint(0, (d->fieldList->globalY(field))/*+d->parent->contentsY()*/));
 
-  QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
-//	kDebug() << "KexiRelationsTableContainer::globalY() db2" << endl;
-//Qt 4	return d->scrollArea->viewport()->mapFromGlobal(o).y();
-  return d->scrollArea->widget()->mapFromGlobal(o).y();
+    QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
+// kDebug() << "KexiRelationsTableContainer::globalY() db2" << endl;
+//Qt 4 return d->scrollArea->viewport()->mapFromGlobal(o).y();
+    return d->scrollArea->widget()->mapFromGlobal(o).y();
 }
 
 #if 0//js
 QSize KexiRelationsTableContainer::sizeHint()
 {
 #ifdef Q_WS_WIN
-  QSize s = d->fieldList->sizeHint()
-    + QSize(  2 * 5 , d->tableHeader->height() + 2 * 5 );
+    QSize s = d->fieldList->sizeHint()
+              + QSize(2 * 5 , d->tableHeader->height() + 2 * 5);
 #else
-  QSize s = d->fieldList->sizeHint();
-  s.setWidth(s.width() + 4);
-  s.setHeight(d->tableHeader->height() + s.height());
+    QSize s = d->fieldList->sizeHint();
+    s.setWidth(s.width() + 4);
+    s.setHeight(d->tableHeader->height() + s.height());
 #endif
-  return s;
+    return s;
 }
 #endif
 
 void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
 {
-  QFrame::focusInEvent(event);
-  setFocus();
+    QFrame::focusInEvent(event);
+    setFocus();
 }
 
 void KexiRelationsTableContainer::setFocus()
 {
-  kDebug() << "SET FOCUS" << endl;
-  //select 1st:
-  if (d->fieldList->firstChild()) {
-    if (d->fieldList->selectedItems().isEmpty())
-      d->fieldList->setSelected( d->fieldList->firstChild(), true );
-  }
-  d->tableHeader->setFocus();
-  d->fieldList->setFocus();
+    kDebug() << "SET FOCUS" << endl;
+    //select 1st:
+    if (d->fieldList->firstChild()) {
+        if (d->fieldList->selectedItems().isEmpty())
+            d->fieldList->setSelected(d->fieldList->firstChild(), true);
+    }
+    d->tableHeader->setFocus();
+    d->fieldList->setFocus();
 
-  raise();
-  repaint();
-  emit gotFocus();
+    raise();
+    repaint();
+    emit gotFocus();
 }
 
 void KexiRelationsTableContainer::focusOutEvent(QFocusEvent* event)
 {
-  QFrame::focusOutEvent(event);
-  if (!d->fieldList->hasFocus())
-    unsetFocus();
+    QFrame::focusOutEvent(event);
+    if (!d->fieldList->hasFocus())
+        unsetFocus();
 }
 
 void KexiRelationsTableContainer::unsetFocus()
 {
-  kDebug() << "UNSET FOCUS" << endl;
-  d->tableHeader->unsetFocus();
-  d->fieldList->clearSelection();
-  
-  clearFocus();
-  repaint();
+    kDebug() << "UNSET FOCUS" << endl;
+    d->tableHeader->unsetFocus();
+    d->fieldList->clearSelection();
+
+    clearFocus();
+    repaint();
 }
 
-void KexiRelationsTableContainer::slotFieldsDoubleClicked(Q3ListViewItem *i,const QPoint&,int)
+void KexiRelationsTableContainer::slotFieldsDoubleClicked(Q3ListViewItem *i, const QPoint&, int)
 {
-  if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
-    return;
-  const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());
-  emit fieldsDoubleClicked( *t->schema(), t->selectedFieldNames() );
+    if (!KexiUtils::objectIsA(sender(), "KexiRelationsTableFieldList"))
+        return;
+    const KexiRelationsTableFieldList* t = static_cast<const KexiRelationsTableFieldList*>(sender());
+    emit fieldsDoubleClicked(*t->schema(), t->selectedFieldNames());
 }
 
 QStringList KexiRelationsTableContainer::selectedFieldNames() const
 {
-  return d->fieldList->selectedFieldNames();
+    return d->fieldList->selectedFieldNames();
 }
 
 #include "KexiRelationsTableContainer.moc"

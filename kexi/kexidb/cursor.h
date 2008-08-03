@@ -26,7 +26,8 @@
 #include "connection.h"
 #include "object.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class RowEditBuffer;
 
@@ -43,14 +44,14 @@ class RowEditBuffer;
      know that the query statement is syntactically and logically ok in our context.
 
   You can move cursor to next record with moveNext() and move back with movePrev().
-  The cursor is always positioned on record, not between records, with exception that 
+  The cursor is always positioned on record, not between records, with exception that
   ofter open() it is positioned before first record (if any) -- then bof() equals true,
   and can be positioned after the last record (if any) with moveNext() -- then eof() equals true,
-  For example, if you have four records 1, 2, 3, 4, then after calling moveNext(), 
+  For example, if you have four records 1, 2, 3, 4, then after calling moveNext(),
   moveNext(), moveNext(), movePrev() you are going through records: 1, 2, 3, 2.
 
   Cursor can be buffered or unbuferred.
-  Buffering in this class is not related to any SQL engine capatibilities for server-side cursors 
+  Buffering in this class is not related to any SQL engine capatibilities for server-side cursors
   (eg. like 'DECLARE CURSOR' statement) - buffered data is at client (application) side.
   Any record retrieved in buffered cursor will be stored inside an internal buffer
   and reused when needed. Unbuffered cursor always requires one record fetching from
@@ -63,42 +64,46 @@ class RowEditBuffer;
 */
 class KEXI_DB_EXPORT Cursor: public QObject, public Object
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     //! Cursor options that describes its behaviour
     enum Options {
-      NoOptions = 0,
-      Buffered = 1
+        NoOptions = 0,
+        Buffered = 1
     };
 
     virtual ~Cursor();
 
     /*! \return connection used for the cursor */
-    inline Connection* connection() const { return m_conn; }
+    inline Connection* connection() const {
+        return m_conn;
+    }
 
-    /*! Opens the cursor using data provided on creation. 
+    /*! Opens the cursor using data provided on creation.
      The data might be either QuerySchema or raw sql statement. */
     bool open();
 
-    /*! Closes and then opens again the same cursor. 
+    /*! Closes and then opens again the same cursor.
      If the cursor is not opened it is just opened and result of this open is returned.
      Otherwise, true is returned if cursor is successfully closed and then opened. */
     bool reopen();
 
-//		/*! Opens the cursor using \a statement. 
-//		 Omit \a statement if cursor is already initialized with statement 
-//		 at creation time. If \a statement is not empty, existing statement
-//		 (if any) is overwritten. */
-//		bool open( const QString& statement = QString() );
+//  /*! Opens the cursor using \a statement.
+//   Omit \a statement if cursor is already initialized with statement
+//   at creation time. If \a statement is not empty, existing statement
+//   (if any) is overwritten. */
+//  bool open( const QString& statement = QString() );
 
-    /*! Closes previously opened cursor. 
+    /*! Closes previously opened cursor.
       If the cursor is closed, nothing happens. */
     virtual bool close();
 
     /*! \return query schema used to define this cursor
      or NULL if the cursor is not defined by a query schema but by a raw statement. */
-    inline QuerySchema *query() const { return m_query; }
+    inline QuerySchema *query() const {
+        return m_query;
+    }
 
     //! \return query parameters assigned to this cursor
     QList<QVariant> queryParameters() const;
@@ -108,19 +113,25 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 
     /*! \return raw query statement used to define this cursor
      or null string if raw statement instead (but QuerySchema is defined instead). */
-    inline QString rawStatement() const { return m_rawStatement; }
+    inline QString rawStatement() const {
+        return m_rawStatement;
+    }
 
-    /*! \return logically or'd cursor's options, 
+    /*! \return logically or'd cursor's options,
       selected from Cursor::Options enum. */
-    inline uint options() const { return m_options; }
+    inline uint options() const {
+        return m_options;
+    }
 
     /*! \return true if the cursor is opened. */
-    inline bool isOpened() const { return m_opened; }
+    inline bool isOpened() const {
+        return m_opened;
+    }
 
     /*! \return true if the cursor is buffered. */
     bool isBuffered() const;
 
-    /*! Sets this cursor to buffered type or not. See description 
+    /*! Sets this cursor to buffered type or not. See description
       of buffered and nonbuffered cursors in class description.
       This method only works if cursor is not opened (isOpened()==false).
       You can close already opened cursor and then switch this option on/off.
@@ -132,7 +143,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
       False could mean that there was an error or there is no record available. */
     bool moveFirst();
 
-    /*! Moves current position to the last record and retrieves it. 
+    /*! Moves current position to the last record and retrieves it.
       \return true if the last record was retrieved.
       False could mean that there was an error or there is no record available. */
     virtual bool moveLast();
@@ -140,89 +151,99 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
     /*! Moves current position to the next record and retrieves it. */
     virtual bool moveNext();
 
-    /*! Moves current position to the next record and retrieves it. 
+    /*! Moves current position to the next record and retrieves it.
      Currently it's only supported for buffered cursors. */
     virtual bool movePrev();
 
     /*! \return true if current position is after last record. */
-    inline bool eof() const { return m_afterLast; }
+    inline bool eof() const {
+        return m_afterLast;
+    }
 
     /*! \return true if current position is before first record. */
-    inline bool bof() const { return m_at==0; }
+    inline bool bof() const {
+        return m_at == 0;
+    }
 
-    /*! \return current internal position of the cursor's query. 
+    /*! \return current internal position of the cursor's query.
      We are counting records from 0.
      Value -1 means that cursor does not point to any valid record
-     (this happens eg. after open(), close(), 
+     (this happens eg. after open(), close(),
      and after moving after last record or before first one. */
-    inline qint64 at() const { return m_readAhead ? 0 : (m_at - 1); }
+    inline qint64 at() const {
+        return m_readAhead ? 0 : (m_at - 1);
+    }
 
-    /*! \return number of fields available for this cursor. 
+    /*! \return number of fields available for this cursor.
      This never includes ROWID column or other internal coluns (e.g. lookup). */
-    inline uint fieldCount() const { return m_query ? m_logicalFieldCount : m_fieldCount; }
+    inline uint fieldCount() const {
+        return m_query ? m_logicalFieldCount : m_fieldCount;
+    }
 
     /*! \return true if ROWID information is appended with every row.
-     ROWID information is available 
+     ROWID information is available
      if DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false
-     for a KexiDB database driver and the master table has no primary key defined. 
+     for a KexiDB database driver and the master table has no primary key defined.
      Phisically, ROWID value is returned after last returned field,
      so data vector's length is expanded by one. */
-    inline bool containsROWIDInfo() const { return m_containsROWIDInfo; }
+    inline bool containsROWIDInfo() const {
+        return m_containsROWIDInfo;
+    }
 
     /*! \return a value stored in column number \a i (counting from 0).
      Is has unspecified behaviour if the cursor is not at valid record.
-     Note for driver developers: 
-     If \a i is >= than m_fieldCount, null QVariant value should be returned. 
-     To return a value typically you can use a pointer to internal structure 
+     Note for driver developers:
+     If \a i is >= than m_fieldCount, null QVariant value should be returned.
+     To return a value typically you can use a pointer to internal structure
      that contain current row data (buffered or unbuffered). */
     virtual QVariant value(uint i) = 0;
 
     /*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
     virtual const char ** rowData() const = 0;
 
-    /*! Sets a list of columns for ORDER BY section of the query. 
-     Only works when the cursor has been created using QuerySchema object 
+    /*! Sets a list of columns for ORDER BY section of the query.
+     Only works when the cursor has been created using QuerySchema object
      (i.e. when query()!=0; does not work with raw statements).
-     Each name on the list must be a field or alias present within the query 
-     and must not be covered by aliases. If one or more names cannot be found within 
-     the query, the method will have no effect. Any previous ORDER BY settings will be removed. 
+     Each name on the list must be a field or alias present within the query
+     and must not be covered by aliases. If one or more names cannot be found within
+     the query, the method will have no effect. Any previous ORDER BY settings will be removed.
 
      The order list provided here has priority over a list defined in the QuerySchema
      object itseld (using QuerySchema::setOrderByColumnList()).
-     The QuerySchema object itself is not modifed by this method: only order of records retrieved 
-     by this cursor is affected. 
-    
-     Use this method before calling open(). You can also call reopen() after calling this method 
+     The QuerySchema object itself is not modifed by this method: only order of records retrieved
+     by this cursor is affected.
+
+     Use this method before calling open(). You can also call reopen() after calling this method
      to see effects of applying records order. */
     void setOrderByColumnList(const QStringList& columnNames);
 
     /*! Convenience method, similar to setOrderByColumnList(const QStringList&). */
-    void setOrderByColumnList(const QString& column1, const QString& column2 = QString(), 
-      const QString& column3 = QString(), const QString& column4 = QString(), 
-      const QString& column5 = QString());
+    void setOrderByColumnList(const QString& column1, const QString& column2 = QString(),
+                              const QString& column3 = QString(), const QString& column4 = QString(),
+                              const QString& column5 = QString());
 
-    /*! \return a list of fields contained in ORDER BY section of the query. 
+    /*! \return a list of fields contained in ORDER BY section of the query.
      @see setOrderBy(const QStringList&) */
     QueryColumnInfo::Vector orderByColumnList() const;
 
     /*! Allocates a new RecordData and stores data in it (makes a deep copy of each field).
-     If the cursor is not at valid record, the result is undefined. 
+     If the cursor is not at valid record, the result is undefined.
      \return newly created record data object or 0 on error. */
     inline RecordData* storeCurrentRow() const {
-      RecordData* data = new RecordData(m_fieldsToStoreInRow);
-      if (!drv_storeCurrentRow(*data)) {
-        delete data;
-        return 0;
-      }
-      return data;
+        RecordData* data = new RecordData(m_fieldsToStoreInRow);
+        if (!drv_storeCurrentRow(*data)) {
+            delete data;
+            return 0;
+        }
+        return data;
     }
 
     /*! Puts current record's data into \a data (makes a deep copy of each field).
-     If the cursor is not at valid record, the result is undefined. 
+     If the cursor is not at valid record, the result is undefined.
      \return true on success. */
     inline bool storeCurrentRow(RecordData& data) const {
-      data.resize(m_fieldsToStoreInRow);
-      return drv_storeCurrentRow(data);
+        data.resize(m_fieldsToStoreInRow);
+        return drv_storeCurrentRow(data);
     }
 
     bool updateRow(RecordData& data, RowEditBuffer& buf, bool useROWID = false);
@@ -236,41 +257,47 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
     /*! \return a code of last executed operation's result at the server side.
      This code is engine dependent and may be even engine-version dependent.
      It can be visible in applications mainly after clicking a "Details>>" button
-     or something like that -- this just can be useful for advanced users and 
-     for testing. 
-     Note for driver developers: Return here the value you usually store as result 
+     or something like that -- this just can be useful for advanced users and
+     for testing.
+     Note for driver developers: Return here the value you usually store as result
      of most lower-level operations. By default this method returns 0. */
-    virtual int serverResult() { return 0; }
-    
+    virtual int serverResult() {
+        return 0;
+    }
+
     /*! \return (not i18n'd) name of last executed operation's result at the server side.
-     Sometimes engines have predefined its result names that can be used e.g. 
-     to refer a documentation. SQLite is one of such engines. 
-     Note for driver developers: Leave the default implementation (null 
+     Sometimes engines have predefined its result names that can be used e.g.
+     to refer a documentation. SQLite is one of such engines.
+     Note for driver developers: Leave the default implementation (null
      string is returned ) if your engine has no such capability. */
-    virtual QString serverResultName() { return QString(); }
+    virtual QString serverResultName() {
+        return QString();
+    }
 
     /*! \return (not i18n'd) description text (message) of last operation's error/result.
      In most cases engines do return such a messages, any user can then use this
      to refer a documentation.
-     Note for driver developers: Leave the default implementation (null 
+     Note for driver developers: Leave the default implementation (null
      string is returned ) if your engine has no such capability. */
-    virtual QString serverErrorMsg() { return QString(); }
-  
+    virtual QString serverErrorMsg() {
+        return QString();
+    }
+
     /*! \return Debug information. */
     QString debugString() const;
-    
+
     //! Outputs debug information.
     void debug() const;
 
-  protected:
+protected:
     //! possible results of row fetching, used for m_result
-    enum FetchResult { FetchError=0, FetchOK=1, FetchEnd=2 };
+    enum FetchResult { FetchError = 0, FetchOK = 1, FetchEnd = 2 };
 
     /*! Cursor will operate on \a conn, raw \a statement will be used to execute query. */
-    Cursor(Connection* conn, const QString& statement, uint options = NoOptions );
+    Cursor(Connection* conn, const QString& statement, uint options = NoOptions);
 
     /*! Cursor will operate on \a conn, \a query schema will be used to execute query. */
-    Cursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
+    Cursor(Connection* conn, QuerySchema& query, uint options = NoOptions);
 
     void init();
 
@@ -280,20 +307,20 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 
     /* Note for driver developers: this method should initialize engine-specific cursor's
      resources using m_sql statement. It is not required to store \a statement somewhere
-     in your Cursor subclass (it is already stored in m_query or m_rawStatement, 
+     in your Cursor subclass (it is already stored in m_query or m_rawStatement,
      depending query type) - only pass it to proper engine's function. */
     virtual bool drv_open() = 0;
 
     virtual bool drv_close() = 0;
-//		virtual bool drv_moveFirst() = 0;
+//  virtual bool drv_moveFirst() = 0;
     virtual void drv_getNextRecord() = 0;
-//unused		virtual bool drv_getPrevRecord() = 0;
+//unused  virtual bool drv_getPrevRecord() = 0;
 
     /*! Stores currently fetched record's values in appropriate place of the buffer.
-     Note for driver developers: 
+     Note for driver developers:
      This place can be computed using m_at. Do not change value of m_at or any other
-     Cursor members, only change your internal structures like pointer to current 
-     row, etc. If your database engine's API function (for record fetching) 
+     Cursor members, only change your internal structures like pointer to current
+     row, etc. If your database engine's API function (for record fetching)
      do not allocates such a space, you want to allocate a space for current
      record. Otherwise, reuse existing structure, what could be more efficient.
      All functions like drv_appendCurrentRecordToBuffer() operates on the buffer,
@@ -325,7 +352,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
     //! @internal clears buffer with reimplemented drv_clearBuffer(). */
     void clearBuffer();
 
-    /*! Clears an internal member that is used to storing last result code, 
+    /*! Clears an internal member that is used to storing last result code,
      the same that is returend by serverResult(). */
     virtual void drv_clearServerResult() = 0;
 
@@ -339,27 +366,27 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 
     QPointer<Connection> m_conn;
     QuerySchema *m_query;
-//		CursorData *m_data;
+//  CursorData *m_data;
     QString m_rawStatement;
-    bool m_opened : 1;
-//js (m_at==0 is enough)		bool m_beforeFirst : 1;
-    bool m_atLast : 1;
-    bool m_afterLast : 1;
-//		bool m_atLast;
-    bool m_validRecord : 1; //!< true if valid record is currently retrieved @ current position
-    bool m_containsROWIDInfo : 1;
+bool m_opened : 1;
+//js (m_at==0 is enough)  bool m_beforeFirst : 1;
+bool m_atLast : 1;
+bool m_afterLast : 1;
+//  bool m_atLast;
+bool m_validRecord : 1; //!< true if valid record is currently retrieved @ current position
+bool m_containsROWIDInfo : 1;
     qint64 m_at;
     uint m_fieldCount; //!< cached field count information
-    uint m_fieldsToStoreInRow; //!< Used by storeCurrentRow(), reimplement if needed 
-                               //!< (e.g. PostgreSQL driver, when m_containsROWIDInfo==true 
-                               //!< sets m_fieldCount+1 here)
+    uint m_fieldsToStoreInRow; //!< Used by storeCurrentRow(), reimplement if needed
+    //!< (e.g. PostgreSQL driver, when m_containsROWIDInfo==true
+    //!< sets m_fieldCount+1 here)
     uint m_logicalFieldCount;  //!< logical field count, i.e. without intrernal values like ROWID or lookup
     uint m_options; //!< cursor options that describes its behaviour
     char m_result; //!< result of a row fetching
-    
+
     //<members related to buffering>
     int m_records_in_buf;          //!< number of records currently stored in the buffer
-    bool m_buffering_completed : 1;   //!< true if we already have all records stored in the buffer
+bool m_buffering_completed : 1;   //!< true if we already have all records stored in the buffer
     //</members related to buffering>
 
     //! Useful e.g. for value(int) method when we need access to schema def.
@@ -370,12 +397,12 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 
     QList<QVariant>* m_queryParameters;
 
-  private:
+private:
 
-    bool m_readAhead : 1;
-    
+bool m_readAhead : 1;
+
     //<members related to buffering>
-    bool m_at_buffer : 1;             //!< true if we already point to the buffer with curr_coldata
+bool m_at_buffer : 1;             //!< true if we already point to the buffer with curr_coldata
     //</members related to buffering>
 
 

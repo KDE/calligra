@@ -34,26 +34,26 @@ class ReportEntity;
 //
 class ReportEntityText : public QObject, public KRTextData, public ReportRectEntity
 {
-	public:
-		ReportEntityText ( ReportDesigner *, QGraphicsScene * scene );
-		ReportEntityText ( QDomNode & element, ReportDesigner *, QGraphicsScene * scene );
+public:
+    ReportEntityText(ReportDesigner *, QGraphicsScene * scene);
+    ReportEntityText(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
 
-		virtual ~ReportEntityText();
-		
-		virtual void buildXML ( QDomDocument & doc, QDomElement & parent );
+    virtual ~ReportEntityText();
 
-		virtual void paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget=0 );
-		virtual ReportEntityText* clone(); 
-		
-	protected:
-		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * event );
-		
-	private:
-		QRect getTextRect();
-		void init(QGraphicsScene*);
-		
-	private slots:
-		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
+    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
+
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    virtual ReportEntityText* clone();
+
+protected:
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
+
+private:
+    QRect getTextRect();
+    void init(QGraphicsScene*);
+
+private slots:
+    void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };
 
 #endif

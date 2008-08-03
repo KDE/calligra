@@ -26,13 +26,13 @@
 //todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT
 // for 1.0 we're using unoptimized version
 
-namespace KexiDB 
+namespace KexiDB
 {
 
 /*! Implementation of prepared statements for MySQL driver. */
 class MySqlPreparedStatement : public PreparedStatement, public MySqlConnectionInternal
 {
-  public:
+public:
     MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
     virtual ~MySqlPreparedStatement();
@@ -46,9 +46,9 @@ class MySqlPreparedStatement : public PreparedStatement, public MySqlConnectionI
     MYSQL_STMT *m_statement;
     MYSQL_BIND *m_mysqlBind;
 #endif
-    bool m_resetRequired : 1;
+bool m_resetRequired : 1;
 
-  protected:
+protected:
     bool init();
     void done();
 };

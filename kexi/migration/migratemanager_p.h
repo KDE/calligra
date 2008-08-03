@@ -23,14 +23,15 @@
 #include <qobject.h>
 #include <q3asciidict.h>
 
-namespace KexiMigration {
+namespace KexiMigration
+{
 
 /*! Internal class of driver manager.
 */
 class MigrateManagerInternal : public QObject, public KexiDB::Object
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     ~MigrateManagerInternal();
 
     /*! Tries to load db driver \a name.
@@ -46,14 +47,14 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
       if the refcount reaches a value less than 1 the manager is freed */
     void decRefCount();
 
-  protected slots:
-    /*! Used to destroy all drivers on QApplication quit, so even if there are 
-     DriverManager's static instances that are destroyed on program 
+protected slots:
+    /*! Used to destroy all drivers on QApplication quit, so even if there are
+     DriverManager's static instances that are destroyed on program
      "static destruction", drivers are not kept after QApplication death.
     */
     void slotAppQuits();
 
-  protected:
+protected:
     /*! Used by self() */
     MigrateManagerInternal();
 
@@ -64,7 +65,7 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
     MigrateManager::ServicesMap m_services; //! services map
     MigrateManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
     MigrateManager::ServicesMap m_services_by_mimetype;
-    
+
     Q3AsciiDict<KexiMigrate> m_drivers;
     ulong m_refCount;
 
@@ -72,13 +73,13 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
     int m_serverResultNum;
     QString m_serverResultName;
     //! result names for KParts::ComponentFactory::ComponentLoadingError
-    QMap<int,QString> m_componentLoadingErrors;
+    QMap<int, QString> m_componentLoadingErrors;
 
-    bool lookupDriversNeeded : 1;
+bool lookupDriversNeeded : 1;
 
     QStringList possibleProblems;
 
-  friend class MigrateManager;
+    friend class MigrateManager;
 };
 }
 

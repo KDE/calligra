@@ -36,35 +36,36 @@ class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 class KexiCSVInfoLabel;
 class KexiCharacterEncodingComboBox;
-namespace KexiDB {
-  class TableOrQuerySchema;
+namespace KexiDB
+{
+class TableOrQuerySchema;
 }
 
 /*! @short Kexi CSV export wizard
  Supports exporting to a file and to a clipboard. */
 class KexiCSVExportWizard : public K3Wizard
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiCSVExportWizard( const KexiCSVExport::Options& options, 
-      QWidget * parent = 0 );
+public:
+    KexiCSVExportWizard(const KexiCSVExport::Options& options,
+                        QWidget * parent = 0);
 
     virtual ~KexiCSVExportWizard();
 
     bool cancelled() const;
 
-    virtual void showPage ( QWidget * page );
+    virtual void showPage(QWidget * page);
 
-  protected slots:
+protected slots:
     virtual void next();
     virtual void done(int result);
     void slotShowOptionsButtonClicked();
     void slotDefaultsButtonClicked();
 
-  protected:
+protected:
     //! reimplemented to add "Defaults" button on the left hand
-    virtual void layOutButtonRow( QHBoxLayout * layout );
+    virtual void layOutButtonRow(QHBoxLayout * layout);
 
     //! \return default delimiter depending on mode.
     QString defaultDelimiter() const;
@@ -73,7 +74,7 @@ class KexiCSVExportWizard : public K3Wizard
     QString defaultTextQuote() const;
 
     //! Helper, works like KGlobal::config()->readBoolEntry(const char*, bool) but if mode is Clipboard,
-    //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 
+    //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
     //! and "CSVFiles" is replaced with "CSVToClipboard"
     //! in \a key, to keep the setting separate.
     bool readBoolEntry(const char *key, bool defaultValue);
@@ -82,7 +83,7 @@ class KexiCSVExportWizard : public K3Wizard
     QString readEntry(const char *key, const QString& defaultValue = QString());
 
     //! Helper, works like KGlobal::config()->writeEntry(const char*,bool) but if mode is Clipboard,
-    //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 
+    //! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy"
     //! and "CSVFiles" is replaced with "CSVToClipboard"
     //! in \a key, to keep the setting separate.
     void writeEntry(const char *key, bool value);
@@ -94,8 +95,8 @@ class KexiCSVExportWizard : public K3Wizard
     void deleteEntry(const char *key);
 
     KexiCSVExport::Options m_options;
-//		Mode m_mode;
-//		int m_itemId;
+//  Mode m_mode;
+//  int m_itemId;
     KexiStartupFileWidget* m_fileSavePage;
     QWidget* m_exportOptionsPage;
     KPushButton *m_showOptionsButton;
@@ -109,8 +110,8 @@ class KexiCSVExportWizard : public K3Wizard
     KexiDB::TableOrQuerySchema* m_tableOrQuery;
     KConfigGroup m_importExportGroup;
     int m_rowCount; //!< Cached row count for a table/query.
-    bool m_rowCountDetermined : 1;
-    bool m_cancelled : 1;
+bool m_rowCountDetermined : 1;
+bool m_cancelled : 1;
 };
 
 #endif

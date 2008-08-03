@@ -30,95 +30,94 @@
 #include <qpainter.h>
 
 KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
- : KTextEdit(parent)
- , KexiDBTextWidgetInterface()
- , KexiFormDataItemInterface()
- , m_menuExtender(this, this)
- , m_slotTextChanged_enabled(true)
+        : KTextEdit(parent)
+        , KexiDBTextWidgetInterface()
+        , KexiFormDataItemInterface()
+        , m_menuExtender(this, this)
+        , m_slotTextChanged_enabled(true)
 {
-  QFont tmpFont;
-  tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
-  setMinimumHeight(QFontMetrics(tmpFont).height() +6);
-  connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-  installEventFilter(this);
+    QFont tmpFont;
+    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+    setMinimumHeight(QFontMetrics(tmpFont).height() + 6);
+    connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+    installEventFilter(this);
 }
 
 KexiDBTextEdit::~KexiDBTextEdit()
 {
 }
 
-void KexiDBTextEdit::setInvalidState( const QString& displayText )
+void KexiDBTextEdit::setInvalidState(const QString& displayText)
 {
-  setReadOnly(true);
+    setReadOnly(true);
 //! @todo move this to KexiDataItemInterface::setInvalidStateInternal() ?
-  if (focusPolicy() & Qt::TabFocus)
-    setFocusPolicy(Qt::ClickFocus);
-  KTextEdit::setPlainText(displayText);
+    if (focusPolicy() & Qt::TabFocus)
+        setFocusPolicy(Qt::ClickFocus);
+    KTextEdit::setPlainText(displayText);
 }
 
 void KexiDBTextEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 //! @todo how about rich text?
-  if (m_columnInfo && m_columnInfo->field->type()==KexiDB::Field::Boolean) {
+    if (m_columnInfo && m_columnInfo->field->type() == KexiDB::Field::Boolean) {
 //! @todo temporary solution for booleans!
-    KTextEdit::setPlainText( add.toBool() ? "1" : "0" );
-  }
-  else {
-    if (removeOld)
-      KTextEdit::setPlainText( add.toString() );
-    else
-      KTextEdit::setPlainText( m_origValue.toString() + add.toString() );
-  }
+        KTextEdit::setPlainText(add.toBool() ? "1" : "0");
+    } else {
+        if (removeOld)
+            KTextEdit::setPlainText(add.toString());
+        else
+            KTextEdit::setPlainText(m_origValue.toString() + add.toString());
+    }
 }
 
 QVariant KexiDBTextEdit::value()
 {
 //! @todo how about rich text?
-  return toPlainText();
+    return toPlainText();
 }
 
 void KexiDBTextEdit::slotTextChanged()
 {
-  if (!m_slotTextChanged_enabled)
-    return;
-  signalValueChanged();
+    if (!m_slotTextChanged_enabled)
+        return;
+    signalValueChanged();
 }
 
 bool KexiDBTextEdit::valueIsNull()
 {
-  return toPlainText().isNull();
+    return toPlainText().isNull();
 }
 
 bool KexiDBTextEdit::valueIsEmpty()
 {
-  return toPlainText().isEmpty();
+    return toPlainText().isEmpty();
 }
 
 bool KexiDBTextEdit::isReadOnly() const
 {
-  return KTextEdit::isReadOnly();
+    return KTextEdit::isReadOnly();
 }
 
-void KexiDBTextEdit::setReadOnly( bool readOnly )
+void KexiDBTextEdit::setReadOnly(bool readOnly)
 {
-  KTextEdit::setReadOnly( readOnly );
+    KTextEdit::setReadOnly(readOnly);
 #ifdef __GNUC__
 #warning TODO KexiDBTextEdit::setReadOnly() - bg color
 #else
 #pragma WARNING( TODO KexiDBTextEdit::setReadOnly() - bg color )
 #endif
 #if 0//TODO
-  QPalette p = palette();
-  QColor c(readOnly 
-    ? lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
-  setPaper( c );
-  p.setColor(QColorGroup::Base, c);
-  p.setColor(QColorGroup::Background, c);
-  setPalette( p );
+    QPalette p = palette();
+    QColor c(readOnly
+             ? lighterGrayBackgroundColor(kapp->palette()) : p.color(QPalette::Normal, QColorGroup::Base));
+    setPaper(c);
+    p.setColor(QColorGroup::Base, c);
+    p.setColor(QColorGroup::Background, c);
+    setPalette(p);
 #endif
 }
 
-/* Qt4 
+/* Qt4
 void KexiDBTextEdit::setText( const QString & text, const QString & context )
 {
   KTextEdit::setText(text, context);
@@ -126,98 +125,97 @@ void KexiDBTextEdit::setText( const QString & text, const QString & context )
 
 QWidget* KexiDBTextEdit::widget()
 {
-  return this;
+    return this;
 }
 
 bool KexiDBTextEdit::cursorAtStart()
 {
-  return textCursor().atStart();
+    return textCursor().atStart();
 }
 
 bool KexiDBTextEdit::cursorAtEnd()
 {
-  return textCursor().atEnd();
+    return textCursor().atEnd();
 }
 
 void KexiDBTextEdit::clear()
 {
-  document()->clear();
+    document()->clear();
 }
 
 void KexiDBTextEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
-  KexiFormDataItemInterface::setColumnInfo(cinfo);
-  if (!cinfo)
-    return;
-  KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
+    KexiFormDataItemInterface::setColumnInfo(cinfo);
+    if (!cinfo)
+        return;
+    KexiDBTextWidgetInterface::setColumnInfo(m_columnInfo, this);
 }
 
-void KexiDBTextEdit::paintEvent ( QPaintEvent *pe )
+void KexiDBTextEdit::paintEvent(QPaintEvent *pe)
 {
-  KTextEdit::paintEvent( pe );
-  QPainter p(this);
-  KexiDBTextWidgetInterface::paint( this, &p, toPlainText().isEmpty(), alignment(), hasFocus() );
+    KTextEdit::paintEvent(pe);
+    QPainter p(this);
+    KexiDBTextWidgetInterface::paint(this, &p, toPlainText().isEmpty(), alignment(), hasFocus());
 }
 
 QMenu * KexiDBTextEdit::createPopupMenu(const QPoint & pos)
 {
-  Q_UNUSED(pos);
-  QMenu *contextMenu = KTextEdit::createStandardContextMenu();//pos);
-  m_menuExtender.createTitle(contextMenu);
-  return contextMenu;
+    Q_UNUSED(pos);
+    QMenu *contextMenu = KTextEdit::createStandardContextMenu();//pos);
+    m_menuExtender.createTitle(contextMenu);
+    return contextMenu;
 }
 
 void KexiDBTextEdit::undo()
 {
-  cancelEditor();
+    cancelEditor();
 }
 
 void KexiDBTextEdit::setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue)
 {
-  KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
-  // initialize display parameters for default / entered value
-  KexiDisplayUtils::DisplayParameters * const params 
+    KexiFormDataItemInterface::setDisplayDefaultValue(widget, displayDefaultValue);
+    // initialize display parameters for default / entered value
+    KexiDisplayUtils::DisplayParameters * const params
     = displayDefaultValue ? m_displayParametersForDefaultValue : m_displayParametersForEnteredValue;
-  QPalette pal(palette());
-  pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
-  setPalette(pal);
-  setFont(params->font);
+    QPalette pal(palette());
+    pal.setColor(QPalette::Active, QColorGroup::Text, params->textColor);
+    setPalette(pal);
+    setFont(params->font);
 //! @todo support rich text...
-/*	m_slotTextChanged_enabled = false;
-    //for rich text...
-    const QString origText( text() );
-    KTextEdit::setText(QString());
-    setCurrentFont(params->font);
-    setColor(params->textColor);
-    KTextEdit::setText(origText);
-  m_slotTextChanged_enabled = true;*/
+    /* m_slotTextChanged_enabled = false;
+        //for rich text...
+        const QString origText( text() );
+        KTextEdit::setText(QString());
+        setCurrentFont(params->font);
+        setColor(params->textColor);
+        KTextEdit::setText(origText);
+      m_slotTextChanged_enabled = true;*/
 }
 
 void KexiDBTextEdit::moveCursorToEnd()
 {
-  moveCursor( QTextCursor::End );
+    moveCursor(QTextCursor::End);
 }
 
 void KexiDBTextEdit::moveCursorToStart()
 {
-  moveCursor( QTextCursor::Start );
+    moveCursor(QTextCursor::Start);
 }
 
 void KexiDBTextEdit::selectAll()
 {
-  KTextEdit::selectAll();
+    KTextEdit::selectAll();
 }
 
-void KexiDBTextEdit::keyPressEvent( QKeyEvent *ke )
+void KexiDBTextEdit::keyPressEvent(QKeyEvent *ke)
 {
-  // for instance, Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
-  if (KStandardShortcut::tabNext().contains( QKeySequence(ke->key()|ke->modifiers()) )
-    || KStandardShortcut::tabPrev().contains( QKeySequence(ke->key()|ke->modifiers()) ) )
-  {
-    ke->ignore();
-    return;
-  }
-  KTextEdit::keyPressEvent(ke);
+    // for instance, Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
+    if (KStandardShortcut::tabNext().contains(QKeySequence(ke->key() | ke->modifiers()))
+            || KStandardShortcut::tabPrev().contains(QKeySequence(ke->key() | ke->modifiers()))) {
+        ke->ignore();
+        return;
+    }
+    KTextEdit::keyPressEvent(ke);
 }
 
 #include "kexidbtextedit.moc"

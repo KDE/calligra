@@ -27,42 +27,42 @@ class QDomDocument;
 /**
  * This class aims to provide
  * methods to store/load database settings
- * especially for file based engines. Extends KexiDB::ConnectionData with 
- * additional information (selected driver name and database name) 
- * that allows fully-automatic reconnect eg. on next application startup. 
+ * especially for file based engines. Extends KexiDB::ConnectionData with
+ * additional information (selected driver name and database name)
+ * that allows fully-automatic reconnect eg. on next application startup.
  */
 
-class KEXICORE_EXPORT KexiProjectConnectionData:public KexiDB::ConnectionData
+class KEXICORE_EXPORT KexiProjectConnectionData: public KexiDB::ConnectionData
 {
-  public:
-    
+public:
+
     KexiProjectConnectionData();
 
     KexiProjectConnectionData(const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
-       const QString& userName, const QString &password, const QString& fileName);
+                              const QString& userName, const QString &password, const QString& fileName);
 
     /**
      * connect to a embedded database
      */
-    KexiProjectConnectionData(const QString &driverName, const QString &fileName=QString());
+    KexiProjectConnectionData(const QString &driverName, const QString &fileName = QString());
 
     ~KexiProjectConnectionData();
 
     static const QString &generateTmpName();
 
     static KexiProjectConnectionData* loadInfo(QDomElement &e);
-    void	writeInfo(QDomDocument &doc);
+    void writeInfo(QDomDocument &doc);
 
     void    setDriverName(const QString &driverName);
- 		void    setDatabaseName(const QString &databaseName);
+    void    setDatabaseName(const QString &databaseName);
 
     QString driverName() const;
     QString databaseName() const;
 
-  private:
+private:
     QString  m_driverName;
     QString  m_databaseName;
-    
+
 };
 
 #endif

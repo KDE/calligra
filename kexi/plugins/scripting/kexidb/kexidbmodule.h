@@ -26,68 +26,69 @@
 
 #include <kexidb/drivermanager.h>
 
-namespace Scripting {
+namespace Scripting
+{
 
-    // Forward declarations.
-    class KexiDBDriver;
-    class KexiDBConnectionData;
-    class KexiDBField;
-    class KexiDBTableSchema;
-    class KexiDBQuerySchema;
+// Forward declarations.
+class KexiDBDriver;
+class KexiDBConnectionData;
+class KexiDBField;
+class KexiDBTableSchema;
+class KexiDBQuerySchema;
 
-    /**
-     * The KexiDBModule class provides the main entry point to deal with
-     * the KexiDB functionality.
-     */
-    class KexiDBModule : public QObject
-    {
-            Q_OBJECT
-        public:
-            explicit KexiDBModule(QObject* parent = 0);
-            virtual ~KexiDBModule();
+/**
+ * The KexiDBModule class provides the main entry point to deal with
+ * the KexiDB functionality.
+ */
+class KexiDBModule : public QObject
+{
+    Q_OBJECT
+public:
+    explicit KexiDBModule(QObject* parent = 0);
+    virtual ~KexiDBModule();
 
-        public slots:
+public slots:
 
-            /** Returns the version number the KexiDB module defines. */
-            int version();
+    /** Returns the version number the KexiDB module defines. */
+    int version();
 
-            /** Returns a list with avaible drivernames. */
-            const QStringList driverNames();
+    /** Returns a list with avaible drivernames. */
+    const QStringList driverNames();
 
-            /** Return the to the defined \p drivername matching \a KexiDBDriver object. */
-            QObject* driver(const QString& drivername);
+    /** Return the to the defined \p drivername matching \a KexiDBDriver object. */
+    QObject* driver(const QString& drivername);
 
-            /** Return the to the defined mimetype-string matching drivername. */
-            const QString lookupByMime(const QString& mimetype);
+    /** Return the to the defined mimetype-string matching drivername. */
+    const QString lookupByMime(const QString& mimetype);
 
-            /** Return the matching mimetype for the defined file. */
-            const QString mimeForFile(const QString& filename);
+    /** Return the matching mimetype for the defined file. */
+    const QString mimeForFile(const QString& filename);
 
-            /** Return a new \a KexiDBConnectionData object. */
-            QObject* createConnectionData();
+    /** Return a new \a KexiDBConnectionData object. */
+    QObject* createConnectionData();
 
-            /** Create and return a \a KexiDBConnectionData object. Fill the content of the
-            KexiDBConnectionData object with the defined file as. The file could be e.g.
-            a *.kexi file or a *.kexis file. */
-            QObject* createConnectionDataByFile(const QString& filename);
+    /** Create and return a \a KexiDBConnectionData object. Fill the content of the
+    KexiDBConnectionData object with the defined file as. The file could be e.g.
+    a *.kexi file or a *.kexis file. */
+    QObject* createConnectionDataByFile(const QString& filename);
 
-            /** Return a new \a KexiDBField object. */
-            QObject* field();
+    /** Return a new \a KexiDBField object. */
+    QObject* field();
 
-            /** Return a new \a KexiDBTableSchema object. */
-            QObject* tableSchema(const QString& tablename);
+    /** Return a new \a KexiDBTableSchema object. */
+    QObject* tableSchema(const QString& tablename);
 
-            /** Return a new \a KexiDBQuerySchema object. */
-            QObject* querySchema();
+    /** Return a new \a KexiDBQuerySchema object. */
+    QObject* querySchema();
 
-        private Q_SLOTS:
+private Q_SLOTS:
 
-            // Wraps a KexiDB::Connection into a KexiDBConnection
-            QObject* connectionWrapper(QObject* connection);
+    // Wraps a KexiDB::Connection into a KexiDBConnection
+    QObject* connectionWrapper(QObject* connection);
 
-        private:
-            ::KexiDB::DriverManager m_drivermanager;
-    };
+private:
+    ::KexiDB::DriverManager m_drivermanager;
+};
 
 }
 

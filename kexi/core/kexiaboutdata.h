@@ -25,7 +25,8 @@
 #include <KAboutData>
 #include <kexi_export.h>
 
-namespace Kexi {
+namespace Kexi
+{
 
 KEXICORE_EXPORT KAboutData* createAboutData();
 

@@ -22,73 +22,73 @@
 #include <Q3CString>
 
 Event::Event(QObject *sender, const Q3CString &signal,
-  QObject *receiver, const Q3CString &slot)
+             QObject *receiver, const Q3CString &slot)
 {
-  m_sender = sender;
-  m_receiver = receiver;
-  m_slot = slot;
-  m_signal = signal;
+    m_sender = sender;
+    m_receiver = receiver;
+    m_slot = slot;
+    m_signal = signal;
 }
 
 Event::Event(QObject *sender, const Q3CString &signal,
-  const Q3CString &functionName)
+             const Q3CString &functionName)
 {
-  m_sender = sender;
-  m_signal = signal;
-  m_slot = functionName;
+    m_sender = sender;
+    m_signal = signal;
+    m_slot = functionName;
 }
 
 void
 EventList::addEvent(Event *event)
 {
-  if(event)
-    append(event);
+    if (event)
+        append(event);
 }
 
 void
 EventList::addEvent(QObject *sender, const Q3CString &signal, QObject *receiver, const Q3CString &slot)
 {
-  Event *ev = new Event(sender, signal, receiver, slot);
-  append(ev);
+    Event *ev = new Event(sender, signal, receiver, slot);
+    append(ev);
 }
 
 void
 EventList::addEvent(QObject *sender, const Q3CString &signal, const Q3CString &function)
 {
-  Event *ev = new Event(sender, signal, function);
-  append(ev);
+    Event *ev = new Event(sender, signal, function);
+    append(ev);
 }
 
 void
 EventList::removeEvent(Event *event)
 {
-  if(!event)  return;
-  remove(event);
-  delete event;
+    if (!event)  return;
+    remove(event);
+    delete event;
 }
 
 EventList*
 EventList::allEventsForObject(QObject *widget)
 {
-  if(!widget)  return 0;
+    if (!widget)  return 0;
 
-  EventList *l = new EventList();
-  EventList::ConstIterator endIt = constEnd();
-  for(EventList::ConstIterator it = constBegin(); it != endIt; ++it) {
-    if( ((*it)->sender() == widget) || ( (*it)->receiver() == widget) )
-      l->addEvent(*it);
-  }
+    EventList *l = new EventList();
+    EventList::ConstIterator endIt = constEnd();
+    for (EventList::ConstIterator it = constBegin(); it != endIt; ++it) {
+        if (((*it)->sender() == widget) || ((*it)->receiver() == widget))
+            l->addEvent(*it);
+    }
 
-  return l;
+    return l;
 }
 
 void
 EventList::removeAllEventsForObject(QObject *widget)
 {
-  EventList::ConstIterator endIt = constEnd();
-  for(EventList::ConstIterator it = constBegin(); it != endIt; ++it) {
-    if( ((*it)->sender() == widget) || ( (*it)->receiver() == widget) )
-      removeEvent(*it);
-  }
+    EventList::ConstIterator endIt = constEnd();
+    for (EventList::ConstIterator it = constBegin(); it != endIt; ++it) {
+        if (((*it)->sender() == widget) || ((*it)->receiver() == widget))
+            removeEvent(*it);
+    }
 }
 

@@ -33,21 +33,21 @@ class QLabel;
 class Q3Frame;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
-/*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does 
- not create it directly but instead updates a property set that defines 
- the field currently selected in the designer. 
- 
+/*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does
+ not create it directly but instead updates a property set that defines
+ the field currently selected in the designer.
+
  @todo not all features of KexiDB::LookupFieldSchema class are displayed on this page yet
  */
 class KexiLookupColumnPage : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiLookupColumnPage(QWidget *parent);
     virtual ~KexiLookupColumnPage();
 
-  public slots:
+public slots:
     void setProject(KexiProject *prj);
     void clearRowSourceSelection(bool alsoClearComboBox = true);
     void clearBoundColumnSelection();
@@ -56,28 +56,28 @@ class KexiLookupColumnPage : public QWidget
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
 
-  signals:
+signals:
     //! Signal emitted when helper button 'Go to selected row sourcesource' is clicked.
     void jumpToObjectRequested(const Q3CString& mime, const Q3CString& name);
 
-//		/*! Signal emitted when current bound column has been changed. */
-//		void boundColumnChanged(const QString& string, const QString& caption,
-  //		KexiDB::Field::Type type);
+//  /*! Signal emitted when current bound column has been changed. */
+//  void boundColumnChanged(const QString& string, const QString& caption,
+    //  KexiDB::Field::Type type);
 
-  protected slots:
+protected slots:
     void slotRowSourceTextChanged(const QString & string);
     void slotRowSourceChanged();
     void slotGotoSelectedRowSource();
     void slotBoundColumnSelected();
     void slotVisibleColumnSelected();
 
-  protected:
+protected:
     void updateBoundColumnWidgetsAvailability();
 
     //! Used instead of m_propertySet->changeProperty() to honor m_propertySetEnabled
     void changeProperty(const Q3CString &property, const QVariant &value);
 
-  private:
+private:
     class Private;
     Private* const d;
 };

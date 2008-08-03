@@ -29,19 +29,19 @@
 */
 class KexiBoolTableEdit : public KexiTableEdit
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent=0);
+public:
+    KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiBoolTableEdit();
 
     //! \return true if editor's value is null (not empty)
     virtual bool valueIsNull();
 
-    //! \return true if editor's value is empty (not null). 
-    //! Only few field types can accept "EMPTY" property 
-    //! (check this with KexiDB::Field::hasEmptyProperty()), 
+    //! \return true if editor's value is empty (not null).
+    //! Only few field types can accept "EMPTY" property
+    //! (check this with KexiDB::Field::hasEmptyProperty()),
     virtual bool valueIsEmpty();
 
     virtual QVariant value();
@@ -51,12 +51,12 @@ class KexiBoolTableEdit : public KexiTableEdit
 
     virtual void clear();
 
-    virtual void setupContents( QPainter *p, bool focused, const QVariant& val, 
-      QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
+    virtual void setupContents(QPainter *p, bool focused, const QVariant& val,
+                               QString &txt, int &align, int &x, int &y_offset, int &w, int &h);
 
     virtual void clickedOnContents();
 
-    /*! Handles action having standard name \a actionName. 
+    /*! Handles action having standard name \a actionName.
      Action could be: "edit_cut", "edit_paste", etc. */
     virtual void handleAction(const QString& actionName);
 
@@ -65,11 +65,11 @@ class KexiBoolTableEdit : public KexiTableEdit
     virtual void handleCopyAction(const QVariant& value, const QVariant& visibleValue);
 
     /*! \return width of \a value. Reimplemented  after KexiTableEdit. */
-    virtual int widthForValue( const QVariant &val, const QFontMetrics &fm );
+    virtual int widthForValue(const QVariant &val, const QFontMetrics &fm);
 
-  protected slots:
+protected slots:
 
-  protected:
+protected:
     //! initializes this editor with \a add value
     virtual void setValueInternal(const QVariant& add, bool removeOld);
 
@@ -78,7 +78,7 @@ class KexiBoolTableEdit : public KexiTableEdit
     //! We've no editor widget that would store current value, so we do this here
     QVariant m_currentValue;
 
-  signals:
+signals:
     void hintClicked();
 };
 

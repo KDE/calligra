@@ -22,12 +22,13 @@
 
 #include "connection.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 //! Interface for connection's internals, implemented within drivers
 class KEXI_DB_EXPORT ConnectionInternal
 {
-  public:
+public:
     ConnectionInternal(Connection *conn);
     virtual ~ConnectionInternal();
     virtual void storeResult() = 0;

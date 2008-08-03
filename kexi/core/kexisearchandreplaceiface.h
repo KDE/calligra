@@ -29,20 +29,21 @@ class QStringList;
 //! @short An interface used by Kexi views (KexiView) supporting search/replace features
 class KEXICORE_EXPORT KexiSearchAndReplaceViewInterface
 {
-  public:
+public:
     KexiSearchAndReplaceViewInterface();
     virtual ~KexiSearchAndReplaceViewInterface();
 
     //! @short Specifies options for find and replace operations.
     /*! A GUI for setting these options is provided by KexiFindDialog class. */
-    class KEXICORE_EXPORT Options {
-      public:
+    class KEXICORE_EXPORT Options
+    {
+    public:
         Options();
 
         //! Special values for columnNumber.
         enum SpecialLookInValue {
-          AllColumns = -1,   //!< "all columns" (the default)
-          CurrentColumn = -2 //!< "current column"
+            AllColumns = -1,   //!< "all columns" (the default)
+            CurrentColumn = -2 //!< "current column"
         };
         //! Column number to look in, AllColumns means "all columns" (the default)
         //! and CurrentColumn means "current column".
@@ -50,9 +51,9 @@ class KEXICORE_EXPORT KexiSearchAndReplaceViewInterface
 
         //! Specifies possible options for text matching
         enum TextMatching {
-          MatchAnyPartOfField = 0, //!< Matched text can be any part of field (the default)
-          MatchWholeField = 1,     //!< Matched text must be the whole field
-          MatchStartOfField = 2    //!< Matched text must be at the start of field
+            MatchAnyPartOfField = 0, //!< Matched text can be any part of field (the default)
+            MatchWholeField = 1,     //!< Matched text must be the whole field
+            MatchStartOfField = 2    //!< Matched text must be at the start of field
         };
 
         //! Specifies possible options for text matching
@@ -60,23 +61,23 @@ class KEXICORE_EXPORT KexiSearchAndReplaceViewInterface
 
         //! Specifies search direction
         enum SearchDirection {
-          SearchUp = 0,      //!< Search up (previous) from the current position
-          SearchDown = 1,    //!< Search down (next) from the current position (the default)
-          SearchAllRows = 2, //!< Search from the first to the last row
-          DefaultSearchDirection = SearchDown //! Used to mark the default
+            SearchUp = 0,      //!< Search up (previous) from the current position
+            SearchDown = 1,    //!< Search down (next) from the current position (the default)
+            SearchAllRows = 2, //!< Search from the first to the last row
+            DefaultSearchDirection = SearchDown //! Used to mark the default
         };
 
         //! Specifies search direction
         SearchDirection searchDirection;
 
         //! True for searching is case-sensitive (false by default)
-        bool caseSensitive : 1;
+    bool caseSensitive : 1;
 
         //! True for searching for whole words only (false by default)
-        bool wholeWordsOnly : 1;
+    bool wholeWordsOnly : 1;
 
         //! True if question should be displayed before every replacement made (true by default)
-        bool promptOnReplace : 1;
+    bool promptOnReplace : 1;
     };
 
     /*! Sets up data for find/replace dialog, based on view's data model.
@@ -84,24 +85,24 @@ class KEXICORE_EXPORT KexiSearchAndReplaceViewInterface
      and \a currentColumnName should beset to current column's name.
      Implementation should set up values and return true if find/replace dialog should be filled. */
     virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
-      QString& currentColumnName) = 0;
+                                     QString& currentColumnName) = 0;
 
     /*! Finds \a valueToFind within the view.
      \a options are used to control the process. Selection is moved to found value.
      \return true if value has been found, false if value has not been found,
-     and cancelled if there is nothing to find or there is no data to search in. 
+     and cancelled if there is nothing to find or there is no data to search in.
      If \a next is true, "find next" is performed, else "find previous" is performed. */
-    virtual tristate find(const QVariant& valueToFind, 
-      const KexiSearchAndReplaceViewInterface::Options& options, bool next) = 0;
+    virtual tristate find(const QVariant& valueToFind,
+                          const KexiSearchAndReplaceViewInterface::Options& options, bool next) = 0;
 
     /*! Finds \a valueToFind within the view and replaces with \a replacement
      \a options are used to control the process.
-     \return true if value has been found and replaced, false if value 
-     has not been found and replaced, and cancelled if there is nothing 
-     to find or there is no data to search in or the data is read only. 
+     \return true if value has been found and replaced, false if value
+     has not been found and replaced, and cancelled if there is nothing
+     to find or there is no data to search in or the data is read only.
      If \a replaceAll is true, all found values are replaced. */
-    virtual tristate findNextAndReplace(const QVariant& valueToFind, const QVariant& replacement, 
-      const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll) = 0;
+    virtual tristate findNextAndReplace(const QVariant& valueToFind, const QVariant& replacement,
+                                        const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll) = 0;
 };
 
 #endif

@@ -26,15 +26,15 @@ class KexiAddParamWidget;
 
 class KexiAddParamDialog : public KDialog
 {
-  Q_OBJECT
-  
-  public:
+    Q_OBJECT
+
+public:
     KexiAddParamDialog(QWidget *parent);
     virtual ~KexiAddParamDialog();
     QString parameterName();
     int parameterType();
-  private:
+private:
     KexiAddParamWidget *m_wid;
-}; 
+};
 
 #endif

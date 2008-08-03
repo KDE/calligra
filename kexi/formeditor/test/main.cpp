@@ -33,23 +33,23 @@ int main(int argc, char **argv)
 {
     KAboutData about("kformdesigner", 0, ki18n("KFormDesigner"), version, ki18n(description),
                      KAboutData::License_LGPL, ki18n("(C) 2003-2005 Kexi Team"));
-    about.addCredit( ki18n("Lucijan Busch"), ki18n("Original author"), 0, "lucijan@kde.org" );
-    about.addAuthor( ki18n("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
-    about.addCredit( ki18n("Jarosław Staniek"), ki18n("Win32 version, some icons, many fixes, ideas and bug reports"), "js@iidea.pl");
-    about.addCredit( ki18n("Kristof Borrey "), ki18n("Icons"), 0, "kristof.borrey@skynet.be" );
+    about.addCredit(ki18n("Lucijan Busch"), ki18n("Original author"), 0, "lucijan@kde.org");
+    about.addAuthor(ki18n("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
+    about.addCredit(ki18n("Jarosław Staniek"), ki18n("Win32 version, some icons, many fixes, ideas and bug reports"), "js@iidea.pl");
+    about.addCredit(ki18n("Kristof Borrey "), ki18n("Icons"), 0, "kristof.borrey@skynet.be");
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
-    options.add("+[URL]", ki18n( "Document to open" ));
+    options.add("+[URL]", ki18n("Document to open"));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 
-   KGlobal::iconLoader()->addAppDir("kexi");
+    KGlobal::iconLoader()->addAppDir("kexi");
 
     KFDMainWindow *v = new KFDMainWindow();
     if (!v->centralWidget()) { //KFD part could be not found
-      delete v;
-      return 1;
+        delete v;
+        return 1;
     }
     app.setMainWidget(v);
     v->show();
@@ -57,19 +57,15 @@ int main(int argc, char **argv)
 
 
     // see if we are starting with session management
-  if (app.isSessionRestored())
-  {
-    RESTORE(KFDMainWindow);
-  }
-  else
-  {
-  // no session.. just start up normally
-  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-  if (args->count() >= 1)
-  {
+    if (app.isSessionRestored()) {
+        RESTORE(KFDMainWindow);
+    } else {
+        // no session.. just start up normally
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        if (args->count() >= 1) {
             for (int i = 0; i < args->count(); i++)
-    /** @todo report loading errors here */
-    v->loadUIFile(args->url(i));
+                /** @todo report loading errors here */
+                v->loadUIFile(args->url(i));
         }
         args->clear();
     }

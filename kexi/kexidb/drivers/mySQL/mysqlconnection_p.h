@@ -37,11 +37,13 @@ typedef struct st_mysql MYSQL;
 #define NAMESPACE KexiDB
 #endif
 
-namespace KexiDB {
-    class ConnectionData;
+namespace KexiDB
+{
+class ConnectionData;
 }
 
-namespace NAMESPACE {
+namespace NAMESPACE
+{
 
 //! Internal MySQL connection data.
 /*! Provides a low-level API for accessing MySQL databases, that can
@@ -50,7 +52,7 @@ namespace NAMESPACE {
  */
 class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 {
-  public:
+public:
     MySqlConnectionInternal(KexiDB::Connection* connection);
     virtual ~MySqlConnectionInternal();
 
@@ -62,9 +64,9 @@ class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 
     //! Selects a database that is about to be used
     bool useDatabase(const QString &dbName = QString());
-    
+
     //! Execute SQL statement on the database
-    bool executeSQL( const QString& statement );
+    bool executeSQL(const QString& statement);
 
     //! Stores last operation's result
     virtual void storeResult();
@@ -83,7 +85,7 @@ class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 /*! Provides a low-level abstraction for iterating over MySql result sets. */
 class MySqlCursorData : public MySqlConnectionInternal
 {
-  public:
+public:
     MySqlCursorData(KexiDB::Connection* connection);
     virtual ~MySqlCursorData();
 

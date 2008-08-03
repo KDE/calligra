@@ -31,16 +31,16 @@ class KexiDataSourceWizard;
  */
 class KEXIEXTWIDGETS_EXPORT KexiDSWelcome : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiDSWelcome(KexiDataSourceWizard *parent);
     ~KexiDSWelcome();
 
-  protected slots:
+protected slots:
     void setUseWizard(bool use);
 
-  private:
+private:
     KexiDataSourceWizard *m_wiz;
 };
 

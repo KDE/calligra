@@ -26,206 +26,188 @@
 
 ORPrintRender::ORPrintRender()
 {
-	_printer = 0;
-	_painter = 0;
+    _printer = 0;
+    _painter = 0;
 }
 
 ORPrintRender::~ORPrintRender()
 {
 }
 
-void ORPrintRender::setPrinter ( QPrinter * pPrinter )
+void ORPrintRender::setPrinter(QPrinter * pPrinter)
 {
-	_printer = pPrinter;
+    _printer = pPrinter;
 }
 
-void ORPrintRender::setPainter ( QPainter * pPainter )
+void ORPrintRender::setPainter(QPainter * pPainter)
 {
-	_painter = pPainter;
+    _painter = pPainter;
 }
 
-bool ORPrintRender::setupPrinter ( ORODocument * pDocument, QPrinter * pPrinter )
+bool ORPrintRender::setupPrinter(ORODocument * pDocument, QPrinter * pPrinter)
 {
-	if ( pDocument == 0 || pPrinter == 0 )
-		return false;
+    if (pDocument == 0 || pPrinter == 0)
+        return false;
 
-	pPrinter->setCreator ( "OpenRPT Print Renderer" );
-	pPrinter->setDocName ( pDocument->title() );
-	pPrinter->setFullPage ( true );
-	pPrinter->setOrientation ( ( pDocument->pageOptions().isPortrait() ? QPrinter::Portrait : QPrinter::Landscape ) );
-	pPrinter->setPageOrder ( QPrinter::FirstPageFirst );
+    pPrinter->setCreator("OpenRPT Print Renderer");
+    pPrinter->setDocName(pDocument->title());
+    pPrinter->setFullPage(true);
+    pPrinter->setOrientation((pDocument->pageOptions().isPortrait() ? QPrinter::Portrait : QPrinter::Landscape));
+    pPrinter->setPageOrder(QPrinter::FirstPageFirst);
 
-	if ( pDocument->pageOptions().getPageSize().isEmpty() )
-		pPrinter->setPageSize ( QPrinter::Custom );
-	else
-		pPrinter->setPageSize ( KoPageFormat::printerPageSize ( KoPageFormat::formatFromString ( pDocument->pageOptions().getPageSize() ) ) );
+    if (pDocument->pageOptions().getPageSize().isEmpty())
+        pPrinter->setPageSize(QPrinter::Custom);
+    else
+        pPrinter->setPageSize(KoPageFormat::printerPageSize(KoPageFormat::formatFromString(pDocument->pageOptions().getPageSize())));
 
-	return true;
+    return true;
 }
 
-bool ORPrintRender::render ( ORODocument * pDocument )
+bool ORPrintRender::render(ORODocument * pDocument)
 {
-	if ( pDocument == 0 || _printer == 0 )
-		return false;
+    if (pDocument == 0 || _printer == 0)
+        return false;
 
-	_printer->setFullPage ( true );
+    _printer->setFullPage(true);
 
-	bool deleteWhenComplete = false;
-	bool endWhenComplete = false;
+    bool deleteWhenComplete = false;
+    bool endWhenComplete = false;
 
-	QPainter localPainter;
-	if ( _painter == 0 )
-	{
-		deleteWhenComplete = true;
-		_painter = &localPainter;
-	}
+    QPainter localPainter;
+    if (_painter == 0) {
+        deleteWhenComplete = true;
+        _painter = &localPainter;
+    }
 
-	if ( !_painter->isActive() )
-	{
-		endWhenComplete = true;
-		if ( !_painter->begin ( _printer ) )
-			return false;
-	}
+    if (!_painter->isActive()) {
+        endWhenComplete = true;
+        if (!_painter->begin(_printer))
+            return false;
+    }
 
-	int fromPage = _printer->fromPage();
-	if ( fromPage > 0 )
-		fromPage -= 1;
-	int toPage = _printer->toPage();
-	if ( toPage == 0 || toPage > pDocument->pages() )
-		toPage = pDocument->pages();
-	for ( int copy = 0; copy < _printer->numCopies(); copy++ )
-	{
-		for ( int page = fromPage; page < toPage; page++ )
-		{
-			if ( page > 0 )
-				_printer->newPage();
+    int fromPage = _printer->fromPage();
+    if (fromPage > 0)
+        fromPage -= 1;
+    int toPage = _printer->toPage();
+    if (toPage == 0 || toPage > pDocument->pages())
+        toPage = pDocument->pages();
+    for (int copy = 0; copy < _printer->numCopies(); copy++) {
+        for (int page = fromPage; page < toPage; page++) {
+            if (page > 0)
+                _printer->newPage();
 
-			OROPage * p = pDocument->page ( page );
-			if ( _printer->pageOrder() == QPrinter::LastPageFirst )
-				p = pDocument->page ( toPage - 1 - page );
+            OROPage * p = pDocument->page(page);
+            if (_printer->pageOrder() == QPrinter::LastPageFirst)
+                p = pDocument->page(toPage - 1 - page);
 
 
-			// Render Page Objects
-			for ( int i = 0; i < p->primitives(); i++ )
-			{
-				OROPrimitive * prim = p->primitive ( i );
-				kDebug() << "Rendering object" << i << "type" << prim->type() << endl;
-				if ( prim->type() == OROTextBox::TextBox )
-				{
-					kDebug() << "Text Box" << endl;
-					OROTextBox * tb = ( OROTextBox* ) prim;
+            // Render Page Objects
+            for (int i = 0; i < p->primitives(); i++) {
+                OROPrimitive * prim = p->primitive(i);
+                kDebug() << "Rendering object" << i << "type" << prim->type() << endl;
+                if (prim->type() == OROTextBox::TextBox) {
+                    kDebug() << "Text Box" << endl;
+                    OROTextBox * tb = (OROTextBox*) prim;
 
-					QPointF ps = tb->position();
-					QSizeF sz = tb->size();
-					QRectF rc = QRectF (ps.x(),ps.y(), sz.width(),sz.height());
+                    QPointF ps = tb->position();
+                    QSizeF sz = tb->size();
+                    QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-					_painter->save();
-			//Background
-			
-					QColor bg = tb->textStyle().bgColor;
-					bg.setAlpha(tb->textStyle().bgOpacity );
-			
-			//_painter->setBackgroundMode(Qt::OpaqueMode);
-					_painter->setBackground(bg);
-					_painter->fillRect( rc, bg);
-	
-			//Text
-					_painter->setBackgroundMode(Qt::TransparentMode);
-					_painter->setFont ( tb->textStyle().font );
-					_painter->setPen(tb->textStyle().fgColor);
-					_painter->drawText ( rc, tb->flags(), tb->text() );
+                    _painter->save();
+                    //Background
 
-			//outer line
-					_painter->setPen ( QPen (tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style) );
-					_painter->drawRect ( rc );
+                    QColor bg = tb->textStyle().bgColor;
+                    bg.setAlpha(tb->textStyle().bgOpacity);
 
-			//Reset back to defaults for next element
-					_painter->restore();
+                    //_painter->setBackgroundMode(Qt::OpaqueMode);
+                    _painter->setBackground(bg);
+                    _painter->fillRect(rc, bg);
 
-				}
-				else if ( prim->type() == OROLine::Line )
-				{
-					kDebug() << "Line" << endl;
-					OROLine * ln = ( OROLine* ) prim;
-					QPointF s = ln->startPoint();
-					QPointF e = ln->endPoint();
-			//QPen pen ( _painter->pen() );
-					QPen pen( ln->lineStyle().lnColor, ln->lineStyle().weight, ln->lineStyle().style);
-			
-					_painter->save();
-					_painter->setRenderHint(QPainter::Antialiasing, true);
-					_painter->setPen ( pen );
-					_painter->drawLine ( QLineF ( s.x(), s.y(), e.x(), e.y() ) );
-					_painter->setRenderHint(QPainter::Antialiasing, false);
-					_painter->restore();
-				}
-				else if ( prim->type() == OROImage::Image )
-				{
-					kDebug() << "Image" << endl;
-					OROImage * im = ( OROImage* ) prim;
-					QPointF ps = im->position();
-					QSizeF sz = im->size();
-					QRectF rc = QRectF (ps.x(),ps.y(), sz.width(),sz.height());
+                    //Text
+                    _painter->setBackgroundMode(Qt::TransparentMode);
+                    _painter->setFont(tb->textStyle().font);
+                    _painter->setPen(tb->textStyle().fgColor);
+                    _painter->drawText(rc, tb->flags(), tb->text());
 
-					QImage img = im->image();
-					if ( im->scaled() )
-						img = img.scaled ( rc.size().toSize(), ( Qt::AspectRatioMode ) im->aspectRatioMode(), ( Qt::TransformationMode ) im->transformationMode() );
+                    //outer line
+                    _painter->setPen(QPen(tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style));
+                    _painter->drawRect(rc);
 
-					QRectF sr = QRectF ( QPointF ( 0.0, 0.0 ), rc.size().boundedTo ( img.size() ) );
-					_painter->drawImage ( rc.topLeft(), img, sr );
-				}
-				else if ( prim->type() == ORORect::Rect )
-				{
-					kDebug() << "Rect" << endl;
-					ORORect * re = ( ORORect* ) prim;
+                    //Reset back to defaults for next element
+                    _painter->restore();
 
-					QPointF ps = re->position();
-					QSizeF sz = re->size();
-					QRectF rc = QRectF ( ps.x(), ps.y(), sz.width(), sz.height() );
+                } else if (prim->type() == OROLine::Line) {
+                    kDebug() << "Line" << endl;
+                    OROLine * ln = (OROLine*) prim;
+                    QPointF s = ln->startPoint();
+                    QPointF e = ln->endPoint();
+                    //QPen pen ( _painter->pen() );
+                    QPen pen(ln->lineStyle().lnColor, ln->lineStyle().weight, ln->lineStyle().style);
 
-					_painter->save();
-					_painter->setPen ( re->pen() );
-					_painter->setBrush ( re->brush() );
-					_painter->drawRect ( rc );
-					_painter->restore();
-				}
-				else if ( prim->type() == OROEllipse::Ellipse )
-				{
-					OROEllipse * re = ( OROEllipse* ) prim;
+                    _painter->save();
+                    _painter->setRenderHint(QPainter::Antialiasing, true);
+                    _painter->setPen(pen);
+                    _painter->drawLine(QLineF(s.x(), s.y(), e.x(), e.y()));
+                    _painter->setRenderHint(QPainter::Antialiasing, false);
+                    _painter->restore();
+                } else if (prim->type() == OROImage::Image) {
+                    kDebug() << "Image" << endl;
+                    OROImage * im = (OROImage*) prim;
+                    QPointF ps = im->position();
+                    QSizeF sz = im->size();
+                    QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-					QPointF ps = re->position();
-					QSizeF sz = re->size();
-					QRectF rc = QRectF ( ps.x(), ps.y(), sz.width(), sz.height() );
+                    QImage img = im->image();
+                    if (im->scaled())
+                        img = img.scaled(rc.size().toSize(), (Qt::AspectRatioMode) im->aspectRatioMode(), (Qt::TransformationMode) im->transformationMode());
 
-					_painter->save();
-					_painter->setPen ( re->pen() );
-					_painter->setBrush ( re->brush() );
-					_painter->drawEllipse ( rc );
-					_painter->restore();
-				}
-				else if ( prim->type() == OROPicture::Picture )
-				{
-					OROPicture * im = ( OROPicture* ) prim;
-					QPointF ps = im->position();
-					QSizeF sz = im->size();
-					QRectF rc = QRectF (ps.x(),ps.y(), sz.width(),sz.height());
-					_painter->drawPicture ( rc.topLeft(), *(im->picture()) );
-				}
-				else
-				{
-					qDebug ( "unrecognized primitive type" );
-				}
-			}
-		}
-	}
+                    QRectF sr = QRectF(QPointF(0.0, 0.0), rc.size().boundedTo(img.size()));
+                    _painter->drawImage(rc.topLeft(), img, sr);
+                } else if (prim->type() == ORORect::Rect) {
+                    kDebug() << "Rect" << endl;
+                    ORORect * re = (ORORect*) prim;
 
-	if ( endWhenComplete )
-		_painter->end();
+                    QPointF ps = re->position();
+                    QSizeF sz = re->size();
+                    QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-	if ( deleteWhenComplete )
-		_painter = 0;
+                    _painter->save();
+                    _painter->setPen(re->pen());
+                    _painter->setBrush(re->brush());
+                    _painter->drawRect(rc);
+                    _painter->restore();
+                } else if (prim->type() == OROEllipse::Ellipse) {
+                    OROEllipse * re = (OROEllipse*) prim;
 
-	return true;
+                    QPointF ps = re->position();
+                    QSizeF sz = re->size();
+                    QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+
+                    _painter->save();
+                    _painter->setPen(re->pen());
+                    _painter->setBrush(re->brush());
+                    _painter->drawEllipse(rc);
+                    _painter->restore();
+                } else if (prim->type() == OROPicture::Picture) {
+                    OROPicture * im = (OROPicture*) prim;
+                    QPointF ps = im->position();
+                    QSizeF sz = im->size();
+                    QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+                    _painter->drawPicture(rc.topLeft(), *(im->picture()));
+                } else {
+                    qDebug("unrecognized primitive type");
+                }
+            }
+        }
+    }
+
+    if (endWhenComplete)
+        _painter->end();
+
+    if (deleteWhenComplete)
+        _painter = 0;
+
+    return true;
 }
 
 

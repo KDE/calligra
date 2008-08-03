@@ -24,16 +24,17 @@
 #include <QFrame>
 #include <QEvent>
 
-namespace KexiDB {
-  class QueryColumnInfo;
+namespace KexiDB
+{
+class QueryColumnInfo;
 }
 
 //! @short An interface providing common text editor's functionality
-/*! Widgets (e.g. KexiDBLineEdit, KexiDBTextEdit) implementing KexiFormDataItemInterface 
+/*! Widgets (e.g. KexiDBLineEdit, KexiDBTextEdit) implementing KexiFormDataItemInterface
  use this interface to customize painting and data handling. */
 class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
 {
-  public:
+public:
     KexiDBTextWidgetInterface();
     ~KexiDBTextWidgetInterface();
 
@@ -41,13 +42,13 @@ class KEXIFORMUTILS_EXPORT KexiDBTextWidgetInterface
     void setColumnInfo(KexiDB::QueryColumnInfo* cinfo, QWidget *w);
 
     //! Called from paintEvent( QPaintEvent *pe ) method of the data aware widget.
-    void paint( QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment, 
-      bool hasFocus );
+    void paint(QWidget *w, QPainter *p, bool textIsEmpty, Qt::Alignment alignment,
+               bool hasFocus);
 
     //! Called from event( QEvent * e ) method of the data aware widget.
-    void event( QEvent * e, QWidget *w, bool textIsEmpty );
+    void event(QEvent * e, QWidget *w, bool textIsEmpty);
 
-  protected:
+protected:
     //! parameters for displaying autonumber sign
     KexiDisplayUtils::DisplayParameters *m_autonumberDisplayParameters;
 };

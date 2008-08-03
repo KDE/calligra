@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,27 +25,29 @@
 #include <koproperty/property.h>
 
 /**
-	@author
+ @author
 */
 class KRPos
 {
-	public:
-		KRPos(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
+public:
+    KRPos(const KoUnit& unit = KoUnit(KoUnit::Centimeter));
 
-		~KRPos();
-		QPointF toUnit();
-		QPointF toPoint();
-		QPointF toScene();
-		void setScenePos(const QPointF&, bool = true);
-		void setUnitPos(const QPointF&, bool = true);
-		void setPointPos(const QPointF&, bool = true);
-		void setUnit(KoUnit);
-		void setName(const QString&);
-		KoProperty::Property* property(){return _property;}
-	private:
-		QPointF _pointPos;
-		KoUnit _unit;
-		KoProperty::Property* _property;
+    ~KRPos();
+    QPointF toUnit();
+    QPointF toPoint();
+    QPointF toScene();
+    void setScenePos(const QPointF&, bool = true);
+    void setUnitPos(const QPointF&, bool = true);
+    void setPointPos(const QPointF&, bool = true);
+    void setUnit(KoUnit);
+    void setName(const QString&);
+    KoProperty::Property* property() {
+        return _property;
+    }
+private:
+    QPointF _pointPos;
+    KoUnit _unit;
+    KoProperty::Property* _property;
 };
 
 #endif

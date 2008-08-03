@@ -57,67 +57,69 @@ class ReportSectionTitle;
 //
 class ReportSection : public QWidget
 {
-		Q_OBJECT
-	public:
-		ReportSection ( ReportDesigner * rptdes, const char * name = 0 );
-		virtual ~ReportSection();
+    Q_OBJECT
+public:
+    ReportSection(ReportDesigner * rptdes, const char * name = 0);
+    virtual ~ReportSection();
 
-		void setTitle ( const QString & s );
+    void setTitle(const QString & s);
 
-		void buildXML ( QDomDocument & doc, QDomElement & section );
-		void initFromXML ( QDomNode & section );
-		virtual QSize sizeHint() const;
-		
-		const QGraphicsItemList items(){return scene->items();};
-	protected slots:
-		void slotResizeBarDragged ( int delta );
-		
-	private slots:
-		void slotPageOptionsChanged(KoProperty::Set & );
-		void slotSceneClicked();
-		void slotPropertyChanged ( KoProperty::Set &, KoProperty::Property & );
-		void slotSceneLostFocus();
-		void slotTitleDoubleClicked();
-		
-	protected:
-		ReportSectionTitle * title;
-		ReportScene * scene;
-		ReportResizeBar * rb;
-		ReportSceneView * sceneview;
-		ReportDesigner* _rd;
-		KoRuler* sectionRuler;
-		
-	private:
-		KRSectionData *_data;
-		
+    void buildXML(QDomDocument & doc, QDomElement & section);
+    void initFromXML(QDomNode & section);
+    virtual QSize sizeHint() const;
+
+    const QGraphicsItemList items() {
+        return scene->items();
+    };
+protected slots:
+    void slotResizeBarDragged(int delta);
+
+private slots:
+    void slotPageOptionsChanged(KoProperty::Set &);
+    void slotSceneClicked();
+    void slotPropertyChanged(KoProperty::Set &, KoProperty::Property &);
+    void slotSceneLostFocus();
+    void slotTitleDoubleClicked();
+
+protected:
+    ReportSectionTitle * title;
+    ReportScene * scene;
+    ReportResizeBar * rb;
+    ReportSceneView * sceneview;
+    ReportDesigner* _rd;
+    KoRuler* sectionRuler;
+
+private:
+    KRSectionData *_data;
+
 };
 
 class ReportResizeBar : public QFrame
 {
-		Q_OBJECT
-	public:
-		ReportResizeBar ( QWidget * parent = 0, Qt::WFlags f = 0 );
+    Q_OBJECT
+public:
+    ReportResizeBar(QWidget * parent = 0, Qt::WFlags f = 0);
 
-	signals:
-		void barDragged ( int delta );
-		void barPress();
-		void barRelease();
-	protected:
-		void mouseMoveEvent ( QMouseEvent * e );
+signals:
+    void barDragged(int delta);
+    void barPress();
+    void barRelease();
+protected:
+    void mouseMoveEvent(QMouseEvent * e);
 };
 
 class ReportSectionTitle : public QLabel
 {
-	Q_OBJECT
-	public:
-		ReportSectionTitle ( QWidget *parent = 0);
-		~ReportSectionTitle();
-		
-	protected:
-		virtual void mouseDoubleClickEvent( QMouseEvent * event );
+    Q_OBJECT
+public:
+    ReportSectionTitle(QWidget *parent = 0);
+    ~ReportSectionTitle();
 
-	signals:
-		void doubleClicked();
+protected:
+    virtual void mouseDoubleClickEvent(QMouseEvent * event);
+
+signals:
+    void doubleClicked();
 };
 
 #endif

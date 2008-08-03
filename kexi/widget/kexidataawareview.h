@@ -29,7 +29,7 @@ class KexiSharedActionClient;
 
 /*! @short Provides a view displaying record-based data.
 
- The KexiDataAwareView is used to implement differently-looking views 
+ The KexiDataAwareView is used to implement differently-looking views
  for displaying record-based data in a consistent way:
  - tabular data views
  - form data view
@@ -39,41 +39,43 @@ class KexiSharedActionClient;
  The view also implements KexiSearchAndReplaceViewInterface to support search/replace features
  used by shared KexiFindDialog.
 */
-class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView, 
-  public KexiSearchAndReplaceViewInterface
+class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView,
+            public KexiSearchAndReplaceViewInterface
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiDataAwareView(QWidget *parent);
-    
+
     virtual ~KexiDataAwareView();
 
     QWidget* mainWidget() const;
 
     virtual QSize minimumSizeHint() const;
-    
-    virtual QSize sizeHint() const;
-    
-    KexiDataAwareObjectInterface* dataAwareObject() const { return m_dataAwareObject; }
 
-    /*! Sets up data for find/replace dialog, based on view's data model. 
+    virtual QSize sizeHint() const;
+
+    KexiDataAwareObjectInterface* dataAwareObject() const {
+        return m_dataAwareObject;
+    }
+
+    /*! Sets up data for find/replace dialog, based on view's data model.
      Implemented for KexiSearchAndReplaceViewInterface. */
     virtual bool setupFindAndReplace(QStringList& columnNames, QStringList& columnCaptions,
-      QString& currentColumnName);
+                                     QString& currentColumnName);
 
-    /*! Finds \a valueToFind within the view. 
+    /*! Finds \a valueToFind within the view.
      Implemented for KexiSearchAndReplaceViewInterface. */
-    virtual tristate find(const QVariant& valueToFind, 
-      const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+    virtual tristate find(const QVariant& valueToFind,
+                          const KexiSearchAndReplaceViewInterface::Options& options, bool next);
 
-    /*! Finds \a valueToFind within the view and replaces with \a replacement. 
+    /*! Finds \a valueToFind within the view and replaces with \a replacement.
      Implemented for KexiSearchAndReplaceViewInterface. */
-    virtual tristate findNextAndReplace(const QVariant& valueToFind, 
-      const QVariant& replacement, 
-      const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
+    virtual tristate findNextAndReplace(const QVariant& valueToFind,
+                                        const QVariant& replacement,
+                                        const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
 
-  public slots:
+public slots:
     void deleteAllRows();
     void deleteCurrentRow();
     void deleteAndStartEditCurrentCell();
@@ -90,25 +92,25 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiView,
     void slotGoToNextRow();
     void slotGoToLastRow();
     void slotGoToNewRow();
-/*		void editFind();
-    void slotFind();
-    void editFindNext();
-    void editFindPrevious();
-    void editReplace();*/
+    /*  void editFind();
+        void slotFind();
+        void editFindNext();
+        void editFindPrevious();
+        void editReplace();*/
 
-  protected slots:
-//		void slotCellSelected(const QVariant& v); //!< @internal
+protected slots:
+//  void slotCellSelected(const QVariant& v); //!< @internal
     void slotCellSelected(int col, int row);
     void reloadActions();
     void slotUpdateRowActions(int row);
     void slotClosing(bool& cancel);
 
-  protected:
-    void init( QWidget* viewWidget, KexiSharedActionClient* actionClient,
-      KexiDataAwareObjectInterface* dataAwareObject, 
-    // temporary, for KexiFormView in design mode 
-      bool noDataAware = false
-    );
+protected:
+    void init(QWidget* viewWidget, KexiSharedActionClient* actionClient,
+              KexiDataAwareObjectInterface* dataAwareObject,
+              // temporary, for KexiFormView in design mode
+              bool noDataAware = false
+             );
     void initActions();
     virtual void updateActions(bool activated);
 

@@ -24,25 +24,25 @@
 
 using namespace KexiUtils;
 
-StyleProxy::StyleProxy(QStyle* parentStyle) 
- : QStyle()
+StyleProxy::StyleProxy(QStyle* parentStyle)
+        : QStyle()
 {
-  setParentStyle(parentStyle);
+    setParentStyle(parentStyle);
 }
 
 StyleProxy::~StyleProxy()
 {
-  delete m_style;
+    delete m_style;
 }
 
 void StyleProxy::setParentStyle(QStyle* style)
 {
-  m_style = QStyleFactory::create(style->objectName());
+    m_style = QStyleFactory::create(style->objectName());
 }
 
 QStyle* StyleProxy::parentStyle() const
 {
-  if (m_style)
-    return m_style;
-  return QApplication::style();
+    if (m_style)
+        return m_style;
+    return QApplication::style();
 }

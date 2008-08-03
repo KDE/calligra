@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 #include <widget/utils/kexiarrowtip.h>
-#include <kexisearchandreplaceiface.h> 
+#include <kexisearchandreplaceiface.h>
 #include "kexitableviewdata.h"
 
 class QObject;
@@ -45,75 +45,86 @@ class KexiTableViewHeader;
 class KexiRecordNavigator;
 #include <kexidataiteminterface.h>
 
-namespace KexiDB {
-  class RowEditBuffer;
-  class RecordData;
+namespace KexiDB
+{
+class RowEditBuffer;
+class RecordData;
 }
 
 //! default column width in pixels
 #define KEXI_DEFAULT_DATA_COLUMN_WIDTH 120
 
 //! \brief The KexiDataAwareObjectInterface is an interface for record-based data object.
-/** This interface is implemented by KexiTableView and KexiFormView 
- and used by KexiDataAwareView. If yu're implementing this interface, 
+/** This interface is implemented by KexiTableView and KexiFormView
+ and used by KexiDataAwareView. If yu're implementing this interface,
  add KEXI_DATAAWAREOBJECTINTERFACE convenience macro just after Q_OBJECT.
 
  You should add following code to your destructor so data is deleted:
  \code
- 	if (m_owner)
+  if (m_owner)
     delete m_data;
   m_data = 0;
  \endcode
- This is not performed in KexiDataAwareObjectInterface because you may need 
+ This is not performed in KexiDataAwareObjectInterface because you may need
  to access m_data in your desctructor.
 */
 class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 {
-  public:
+public:
     KexiDataAwareObjectInterface();
     virtual ~KexiDataAwareObjectInterface();
 
-    /*! Sets data for this object. if \a owner is true, the object will own 
+    /*! Sets data for this object. if \a owner is true, the object will own
      \a data and therefore will be destroyed when needed, else: \a data is (possibly) shared and
-     not owned by the widget. 
+     not owned by the widget.
      If widget already has _different_ data object assigned (and owns this data),
      old data is destroyed before new assignment.
      */
-    void setData( KexiTableViewData *data, bool owner = true );
+    void setData(KexiTableViewData *data, bool owner = true);
 
     /*! \return data structure displayed for this object */
-    inline KexiTableViewData *data() const { return m_data; }
+    inline KexiTableViewData *data() const {
+        return m_data;
+    }
 
     /*! \return currently selected column number or -1. */
-    inline int currentColumn() const { return m_curCol; }
+    inline int currentColumn() const {
+        return m_curCol;
+    }
 
     /*! \return currently selected row number or -1. */
-    inline int currentRow() const { return m_curRow; }
+    inline int currentRow() const {
+        return m_curRow;
+    }
 
-    /*! \return last row visible on the screen (counting from 0). 
-     The returned value is guaranteed to be smaller or equal to currentRow() or -1 
+    /*! \return last row visible on the screen (counting from 0).
+     The returned value is guaranteed to be smaller or equal to currentRow() or -1
      if there are no rows. */
     virtual int lastVisibleRow() const = 0;
 
     /*! \return currently selected record data or null. */
-    KexiDB::RecordData *selectedItem() const { return m_currentItem; }
+    KexiDB::RecordData *selectedItem() const {
+        return m_currentItem;
+    }
 
     /*! \return number of rows in this view. */
     int rows() const;
 
-    /*! \return number of visible columns in this view. 
-     By default returns dataColumns(), what is proper table view. 
+    /*! \return number of visible columns in this view.
+     By default returns dataColumns(), what is proper table view.
      In case of form view, there can be a number of duplicated columns defined
      (data-aware widgets, see KexiFormScrollView::columns()),
      so columns() can return greater number than dataColumns(). */
-    virtual int columns() const { return dataColumns(); }
+    virtual int columns() const {
+        return dataColumns();
+    }
 
     /*! Helper function.
      \return number of columns of data. */
     int dataColumns() const;
 
     /*! \return true if data represented by this object
-     is not editable (it can be editable with other ways although, 
+     is not editable (it can be editable with other ways although,
      outside of this object). */
     virtual bool isReadOnly() const;
 
@@ -121,7 +132,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
      Unless the flag is set, the widget inherits readOnly flag from it's data
      structure assigned with setData(). The default value if false.
 
-     This method is useful when you need to switch on the flag indepentently 
+     This method is useful when you need to switch on the flag indepentently
      from the data structure.
      Note: it is not allowed to force readOnly off
      when internal data is readOnly - in that case the method does nothing.
@@ -133,11 +144,13 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     void setReadOnly(bool set);
 
     /*! \return true if sorting is enabled. */
-    inline bool isSortingEnabled() const { return m_isSortingEnabled; }
+    inline bool isSortingEnabled() const {
+        return m_isSortingEnabled;
+    }
 
     /*! Sets sorting on column \a col, or (when \a col == -1) sets rows unsorted
      this will do not work if sorting is disabled with setSortingEnabled() */
-    virtual void setSorting(int col, bool ascending=true);
+    virtual void setSorting(int col, bool ascending = true);
 
     /*! Enables or disables sorting for this object
       This method is different that setSorting() because it prevents both user
@@ -151,20 +164,20 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
      because the data could be changed in the meantime outside of this GUI object. */
     int dataSortedColumn() const;
 
-    /*! \return 1 if ascending order for data sorting data is set, -1 for descending, 
-     0 for no sorting. 
+    /*! \return 1 if ascending order for data sorting data is set, -1 for descending,
+     0 for no sorting.
      This does not mean that any sorting has been performed within GUI of this objetct,
-     because the data could be changed in the meantime outside of this GUI object. 
+     because the data could be changed in the meantime outside of this GUI object.
     */
     int dataSortingOrder() const;
 
     /*! Sorts all rows by column selected with setSorting().
-     If there is currently row edited, it is accepted. 
+     If there is currently row edited, it is accepted.
      If acception failed, sort() will return false.
      \return true on success. */
     virtual bool sort();
 
-    /*! Sorts currently selected column in ascending order. 
+    /*! Sorts currently selected column in ascending order.
      This slot is used typically for "data_sort_az" action. */
     void sortAscending();
 
@@ -175,31 +188,33 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     /*! \return true if data inserting is enabled (the default). */
     virtual bool isInsertingEnabled() const;
 
-    /*! Sets insertingEnabled flag. If true, empty row is available 
-     at the end of this widget for new entering new data. 
+    /*! Sets insertingEnabled flag. If true, empty row is available
+     at the end of this widget for new entering new data.
      Unless the flag is set, the widget inherits insertingEnabled flag from it's data
      structure assigned with setData(). The default value if false.
 
-     Note: it is not allowed to force insertingEnabled on when internal data 
+     Note: it is not allowed to force insertingEnabled on when internal data
      has insertingEnabled set off - in that case the method does nothing.
      You can check internal data flag calling data()->insertingEnabled().
-     
+
      Setting this flag to true will have no effect if read-only flag is true.
      \sa setReadOnly()
     */
     void setInsertingEnabled(bool set);
 
-    /*! \return true if row deleting is enabled. 
+    /*! \return true if row deleting is enabled.
      Equal to deletionPolicy() != NoDelete && !isReadOnly()). */
     bool isDeleteEnabled() const;
 
     /*! \return true if inserting empty rows are enabled (false by default).
-     Mostly usable for not db-aware objects (e.g. used in Kexi Alter Table). 
-     Note, that if inserting is disabled, or the data set is read-only, 
+     Mostly usable for not db-aware objects (e.g. used in Kexi Alter Table).
+     Note, that if inserting is disabled, or the data set is read-only,
      this flag will be ignored. */
-    bool isEmptyRowInsertingEnabled() const { return m_emptyRowInsertingEnabled; }
+    bool isEmptyRowInsertingEnabled() const {
+        return m_emptyRowInsertingEnabled;
+    }
 
-    /*! Sets emptyRowInserting flag. 
+    /*! Sets emptyRowInserting flag.
      Note, that if inserting is disabled, this flag is ignored. */
     void setEmptyRowInsertingEnabled(bool set);
 
@@ -207,9 +222,11 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     virtual void setFilteringEnabled(bool set);
 
     /*! \return true if filtering is enabled. */
-    inline bool isFilteringEnabled() const { return m_isFilteringEnabled; }
+    inline bool isFilteringEnabled() const {
+        return m_isFilteringEnabled;
+    }
 
-    /*! Added for convenience: configure this object 
+    /*! Added for convenience: configure this object
      to behave more like spreadsheet (it's used for things like alter-table view).
      - hides navigator
      - disables sorting, inserting and filtering
@@ -218,27 +235,32 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     virtual void setSpreadSheetMode();
 
     /*! \return true id "spreadSheetMode" is enabled. It's false by default. */
-    bool spreadSheetMode() const { return m_spreadSheetMode; }
+    bool spreadSheetMode() const {
+        return m_spreadSheetMode;
+    }
 
     /*! \return true if currently selected row is edited. */
-    inline bool rowEditing() const { return m_rowEditing; }
+    inline bool rowEditing() const {
+        return m_rowEditing;
+    }
 
-    enum DeletionPolicy
-    {
-      NoDelete = 0,
-      AskDelete = 1,
-      ImmediateDelete = 2,
-      SignalDelete = 3
+    enum DeletionPolicy {
+        NoDelete = 0,
+        AskDelete = 1,
+        ImmediateDelete = 2,
+        SignalDelete = 3
     };
 
-    /*! \return deletion policy for this object. 
+    /*! \return deletion policy for this object.
      The default (after allocating) is AskDelete. */
-    DeletionPolicy deletionPolicy() const { return m_deletionPolicy; }
+    DeletionPolicy deletionPolicy() const {
+        return m_deletionPolicy;
+    }
 
     virtual void setDeletionPolicy(DeletionPolicy policy);
 
-    /*! Deletes currently selected record; does nothing if no record 
-     is currently selected. If record is in edit mode, editing 
+    /*! Deletes currently selected record; does nothing if no record
+     is currently selected. If record is in edit mode, editing
      is cancelled before deleting.  */
     virtual void deleteCurrentRow();
 
@@ -256,29 +278,29 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
      Default implementation just returns true. */
     virtual bool beforeDeleteItem(KexiDB::RecordData *record);
 
-    /*! Deletes \a record. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
-     to double-check if deleting is allowed. 
+    /*! Deletes \a record. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting,
+     to double-check if deleting is allowed.
      \return true on success. */
     bool deleteItem(KexiDB::RecordData *record);//, bool moveCursor=true);
 
     /*! Inserts newRecord at position \a pos. -1 means current record. Used by insertEmptyRow(). */
     void insertItem(KexiDB::RecordData *newRecord, int pos = -1);
 
-    /*! Clears entire table data, its visible representation 
-     and deletes data at database backend (if this is db-aware object). 
+    /*! Clears entire table data, its visible representation
+     and deletes data at database backend (if this is db-aware object).
      Does not clear columns information.
      Does not destroy KexiTableViewData object (if present) but only clears its contents.
      Displays confirmation dialog if \a ask is true (the default is false).
-     Repaints widget if \a repaint is true (the default). 
+     Repaints widget if \a repaint is true (the default).
      For empty tables, true is returned immediately.
      If isDeleteEnabled() is false, false is returned.
      For spreadsheet mode all current rows are just replaced by empty rows.
-     \return true on success, false on failure, and cancelled if user cancelled deletion 
+     \return true on success, false on failure, and cancelled if user cancelled deletion
      (only possible if \a ask is true).
      */
     tristate deleteAllRows(bool ask = false, bool repaint = true);
 
-    /*! \return maximum number of rows that can be displayed per one "page" 
+    /*! \return maximum number of rows that can be displayed per one "page"
      for current view's size. */
     virtual int rowsPerPage() const = 0;
 
@@ -296,35 +318,39 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     virtual void clearSelection();
 
     /*! Moves cursor to \a row and \a col. If \a col is -1, current column number is used.
-     If forceSet is true, cursor position is updated even if \a row and \a col doesn't 
+     If forceSet is true, cursor position is updated even if \a row and \a col doesn't
      differ from actual position. */
     virtual void setCursorPosition(int row, int col = -1, bool forceSet = false);
 
-    /*! Ensures that cell at \a row and \a col is visible. 
-     If \a col is -1, current column number is used. \a row and \a col (if not -1) must 
+    /*! Ensures that cell at \a row and \a col is visible.
+     If \a col is -1, current column number is used. \a row and \a col (if not -1) must
      be between 0 and rows() (or cols() accordingly). */
     virtual void ensureCellVisible(int row, int col/*=-1*/) = 0;
 
-    /*! Specifies, if this object automatically accepts 
-     row editing (using acceptRowEdit()) on accepting any cell's edit 
+    /*! Specifies, if this object automatically accepts
+     row editing (using acceptRowEdit()) on accepting any cell's edit
      (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
     virtual void setAcceptsRowEditAfterCellAccepting(bool set);
 
-    /*! \return true, if this object automatically accepts 
-     row editing (using acceptRowEdit()) on accepting any cell's edit 
-     (i.e. after acceptEditor()). 
+    /*! \return true, if this object automatically accepts
+     row editing (using acceptRowEdit()) on accepting any cell's edit
+     (i.e. after acceptEditor()).
      By default this flag is set to false.
      Not that if the query for this table has given constraints defined,
-     like NOT NULL / NOT EMPTY for more than one field - editing a record would 
+     like NOT NULL / NOT EMPTY for more than one field - editing a record would
      be impossible for the flag set to true, because of constraints violation.
      However, setting this flag to true can be useful especially for not-db-aware
      data set (it's used e.g. in Kexi Alter Table's field editor). */
-    bool acceptsRowEditAfterCellAccepting() const { return m_acceptsRowEditAfterCellAccepting; }
+    bool acceptsRowEditAfterCellAccepting() const {
+        return m_acceptsRowEditAfterCellAccepting;
+    }
 
     /*! \return true, if this table accepts dropping data on the rows. */
-    bool dropsAtRowEnabled() const { return m_dropsAtRowEnabled; }
+    bool dropsAtRowEnabled() const {
+        return m_dropsAtRowEnabled;
+    }
 
-    /*! Specifies, if this table accepts dropping data on the rows. 
+    /*! Specifies, if this table accepts dropping data on the rows.
      If enabled:
      - dragging over row is indicated by drawing a line at bottom side of this row
      - dragOverRow() signal will be emitted on dragging,
@@ -333,33 +359,35 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     virtual void setDropsAtRowEnabled(bool set);
 
     /*! \return currently used data (field/cell) editor or 0 if there is no data editing. */
-    inline KexiDataItemInterface *editor() const { return m_editor; }
+    inline KexiDataItemInterface *editor() const {
+        return m_editor;
+    }
 
-    /*! Cancels row editing All changes made to the editing 
-     row during this current session will be undone. 
+    /*! Cancels row editing All changes made to the editing
+     row during this current session will be undone.
      \return true on success or false on failure (e.g. when editor does not exist) */
     virtual bool cancelRowEdit();
 
-    /*! Accepts row editing. All changes made to the editing 
-     row during this current session will be accepted (saved). 
-     \return true if accepting was successful, false otherwise 
+    /*! Accepts row editing. All changes made to the editing
+     row during this current session will be accepted (saved).
+     \return true if accepting was successful, false otherwise
      (e.g. when current row contain data that does not meet given constraints). */
     virtual bool acceptRowEdit();
 
     virtual void removeEditor();
 
-    /*! Cancels changes made to the currently active editor. 
-     Reverts the editor's value to old one. 
+    /*! Cancels changes made to the currently active editor.
+     Reverts the editor's value to old one.
      \return true on success or false on failure (e.g. when editor does not exist) */
     virtual bool cancelEditor();
 
-    //! Accepst changes made to the currently active editor. 
+    //! Accepst changes made to the currently active editor.
     //! \return true on success or false on failure (e.g. when editor does not exist or there is data validation error)
     virtual bool acceptEditor();
 
     //! Creates editors and shows it, what usually means the beginning of a cell editing
-    virtual void createEditor(int row, int col, const QString& addText = QString(), 
-      bool removeOld = false) = 0;
+    virtual void createEditor(int row, int col, const QString& addText = QString(),
+                              bool removeOld = false) = 0;
 
     /*! Used when Return key is pressed on cell, the cell has been double clicked
      or "+" navigator's button is clicked.
@@ -369,13 +397,13 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     */
     virtual void startEditCurrentCell(const QString& setText = QString());
 
-    /*! Deletes currently selected cell's contents, if allowed. 
+    /*! Deletes currently selected cell's contents, if allowed.
      In most cases delete is not accepted immediately but "row editing" mode is just started. */
     virtual void deleteAndStartEditCurrentCell();
 
     inline KexiDB::RecordData *itemAt(int pos) const;
 
-    /*! \return column information for column number \a col. 
+    /*! \return column information for column number \a col.
      Default implementation just returns column # col,
      but for Kexi Forms column data
      corresponding to widget number is used here
@@ -384,7 +412,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
     /*! \return field number within data model connected to a data-aware
      widget at column \a col. Can return -1 if there's no such column. */
-    virtual int fieldNumberForColumn(int col) { return col; }
+    virtual int fieldNumberForColumn(int col) {
+        return col;
+    }
 
     bool hasDefaultValueAt(const KexiTableViewColumn& tvcol);
 
@@ -406,7 +436,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     /*! Redraws the current cell. To be implemented. */
     virtual void updateCurrentCell() = 0;
 
-    inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
+    inline KexiRecordMarker* verticalHeader() const {
+        return m_verticalHeader;
+    }
 
     //! signals
     virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
@@ -418,29 +450,39 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
     /*! Data has been refreshed on-screen - emitted from initDataContents(). */
     virtual void dataRefreshed() = 0;
-    virtual void dataSet( KexiTableViewData *data ) = 0;
+    virtual void dataSet(KexiTableViewData *data) = 0;
 
     /*! \return a pointer to context menu. This can be used to plug some actions there. */
-    KMenu* contextMenu() const { return m_contextMenu; }
+    KMenu* contextMenu() const {
+        return m_contextMenu;
+    }
 
     /*! \return true if the context menu is enabled (visible) for the view.
       True by default. */
-    bool contextMenuEnabled() const { return m_contextMenuEnabled; }
+    bool contextMenuEnabled() const {
+        return m_contextMenuEnabled;
+    }
 
     /*! Enables or disables the context menu for the view. */
-    void setContextMenuEnabled(bool set) { m_contextMenuEnabled = set; }
+    void setContextMenuEnabled(bool set) {
+        m_contextMenuEnabled = set;
+    }
 
-    /*! Sets a title with icon for the context menu. 
+    /*! Sets a title with icon for the context menu.
      Set empty icon and text to remove the title item.
-     This method should be called before customizing the menu 
+     This method should be called before customizing the menu
      because it will be recreated by the method. */
     void setContextMenuTitle(const QIcon &icon, const QString &text);
 
     /*! \return title text of the context menu. */
-    QString contextMenuTitleText() const { return m_contextMenuTitleText; }
+    QString contextMenuTitleText() const {
+        return m_contextMenuTitleText;
+    }
 
     /*! \return title icon of the context menu. */
-    QIcon contextMenuTitleIcon() const { return m_contextMenuTitleIcon; }
+    QIcon contextMenuTitleIcon() const {
+        return m_contextMenuTitleIcon;
+    }
 
     /*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
     bool scrollbarToolTipsEnabled() const;
@@ -448,35 +490,37 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     /*! Enables or disables vertical scrollbar's tooltip. */
     void setScrollbarToolTipsEnabled(bool set);
 
-    /*! Typically handles pressing Enter or F2 key: 
-     if current cell has boolean type, toggles it's value, 
+    /*! Typically handles pressing Enter or F2 key:
+     if current cell has boolean type, toggles it's value,
      otherwise starts editing (startEditCurrentCell()). */
     void startEditOrToggleValue();
 
     /*! \return true if new row is edited; implies: rowEditing==true. */
-    inline bool newRowEditing() const { return m_newRowEditing; }
+    inline bool newRowEditing() const {
+        return m_newRowEditing;
+    }
 
-    /*! Reaction on toggling a boolean value of a cell: 
+    /*! Reaction on toggling a boolean value of a cell:
      we're starting to edit the cell and inverting it's state. */
     virtual void boolToggled();
 
-    virtual void connectCellSelectedSignal(const QObject* receiver, 
-      const char* intIntMember) = 0;
+    virtual void connectCellSelectedSignal(const QObject* receiver,
+                                           const char* intIntMember) = 0;
 
-    virtual void connectRowEditStartedSignal(const QObject* receiver, 
-      const char* intMember) = 0;
+    virtual void connectRowEditStartedSignal(const QObject* receiver,
+            const char* intMember) = 0;
 
-    virtual void connectRowEditTerminatedSignal(const QObject* receiver, 
-      const char* voidMember) = 0;
+    virtual void connectRowEditTerminatedSignal(const QObject* receiver,
+            const char* voidMember) = 0;
 
-    virtual void connectReloadActionsSignal(const QObject* receiver, 
-      const char* voidMember) = 0;
+    virtual void connectReloadActionsSignal(const QObject* receiver,
+                                            const char* voidMember) = 0;
 
-    virtual void connectDataSetSignal(const QObject* receiver, 
-      const char* kexiTableViewDataMember) = 0;
+    virtual void connectDataSetSignal(const QObject* receiver,
+                                      const char* kexiTableViewDataMember) = 0;
 
-    virtual void connectToReloadDataSlot(const QObject* sender, 
-      const char* voidSignal) = 0;
+    virtual void connectToReloadDataSlot(const QObject* sender,
+                                         const char* voidSignal) = 0;
 
     virtual void slotDataDestroying();
 
@@ -491,66 +535,66 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
     /*! Finds \a valueToFind within the data items
      \a options are used to control the process. Selection is moved to found value.
-     If \a next is true, "find next" is performed, else "find previous" is performed. 
+     If \a next is true, "find next" is performed, else "find previous" is performed.
 
      Searching behaviour also depends on status of the previous search: for every search,
-     position of the cells containing the found value is stored internally 
-     by the data-aware interface (not in options). 
+     position of the cells containing the found value is stored internally
+     by the data-aware interface (not in options).
      Moreover, position (start, end) of the found value is also stored.
-     Thus, the subsequent search will reuse this information to be able to start 
+     Thus, the subsequent search will reuse this information to be able to start
      searching exactly after the previously found value (or before for "find previous" option).
-     The flags can be zeroed, what will lead to seaching from the first character 
+     The flags can be zeroed, what will lead to seaching from the first character
      of the current item (cell).
 
      \return true if value has been found, false if value has not been found,
      and cancelled if there is nothing to find or there is no data to search in. */
-    virtual tristate find(const QVariant& valueToFind, 
-      const KexiSearchAndReplaceViewInterface::Options& options, bool next);
+    virtual tristate find(const QVariant& valueToFind,
+                          const KexiSearchAndReplaceViewInterface::Options& options, bool next);
 
     /*! Finds \a valueToFind within the data items and replaces with \a replacement
      \a options are used to control the process.
-     \return true if value has been found and replaced, false if value 
-     has not been found and replaced, and cancelled if there is nothing 
+     \return true if value has been found and replaced, false if value
+     has not been found and replaced, and cancelled if there is nothing
      to find or there is no data to search in or the data is read only.
      If \a replaceAll is true, all found values are replaced. */
-    virtual tristate findNextAndReplace(const QVariant& valueToFind, 
-      const QVariant& replacement, 
-      const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
+    virtual tristate findNextAndReplace(const QVariant& valueToFind,
+                                        const QVariant& replacement,
+                                        const KexiSearchAndReplaceViewInterface::Options& options, bool replaceAll);
 
     /*! \return vertical scrollbar */
     virtual QScrollBar* verticalScrollBar() const = 0;
 
-    /*! Used in KexiTableView::keyPressEvent() (and in continuous forms). 
-     \return true when the key press event \e was consumed. 
-     You should also check e->isAccepted(), if it's true, nothing should be done; 
-     if it is false, you should call setCursorPosition() for the altered \a curCol 
-     and \c curRow variables. 
+    /*! Used in KexiTableView::keyPressEvent() (and in continuous forms).
+     \return true when the key press event \e was consumed.
+     You should also check e->isAccepted(), if it's true, nothing should be done;
+     if it is false, you should call setCursorPosition() for the altered \a curCol
+     and \c curRow variables.
 
      If \a moveToFirstField is not 0, *moveToFirstField will be set to true
      when the cursor should be moved to the first field (in tab order) and to false otherwise.
      If \a moveToLastField is not 0, *moveToLastField will be set to true
      when the cursor should be moved to the last field (in tab order) and to false otherwise.
-     Note for forms: if moveToFirstField and moveToLastField are not 0, 
+     Note for forms: if moveToFirstField and moveToLastField are not 0,
      \a curCol is altered after calling this method, so setCursorPosition() will set to
-     the index of an appropriate column (field). This is needed because field widgets can be 
-     inserted and ordered in custom tab order, so the very first field in the data source 
+     the index of an appropriate column (field). This is needed because field widgets can be
+     inserted and ordered in custom tab order, so the very first field in the data source
      can be other than the very first field in the form.
 
      Used by KexiTableView::keyPressEvent() and KexiTableView::keyPressEvent(). */
     virtual bool handleKeyPress(QKeyEvent *e, int &curRow, int &curCol, bool fullRowSelection,
-      bool *moveToFirstField = 0, bool *moveToLastField = 0);
+                                bool *moveToFirstField = 0, bool *moveToLastField = 0);
 
-  protected:
+protected:
     /*! Reimplementation for KexiDataAwareObjectInterface.
      Initializes data contents (resizes it, sets cursor at 1st row).
      Sets record count for record navigator.
-     Sets cursor positin (using setCursorPosition()) to first row or sets 
+     Sets cursor positin (using setCursorPosition()) to first row or sets
      (-1, -1) position if no rows are available.
      Called on setData(). Also called once on show event after
      refreshRequested() signal was received from KexiTableViewData object. */
     virtual void initDataContents();
 
-    /*! Clears columns information and thus all internal table data 
+    /*! Clears columns information and thus all internal table data
      and its visible representation. Repaints widget if \a repaint is true. */
     virtual void clearColumns(bool repaint = true);
 
@@ -561,46 +605,46 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     /*! @internal for implementation
      This should append another section within horizontal header or any sort of caption
      for a field using provided names. \a width is a hint for new field's width. */
-    virtual void addHeaderColumn(const QString& caption, const QString& description, 
-      const QIconSet& icon, int size) = 0;
+    virtual void addHeaderColumn(const QString& caption, const QString& description,
+                                 const QIconSet& icon, int size) = 0;
 
     /*! @internal for implementation
      \return sorting order (within GUI): -1: descending, 1: ascending, 0: no sorting.
      This does not mean that any sorting has been performed within GUI of this object,
-     because the data could be changed in the meantime outside of this GUI object. 
+     because the data could be changed in the meantime outside of this GUI object.
      @see dataSortingOrder()*/
     virtual int currentLocalSortingOrder() const = 0;
 
     /*! @internal for implementation
-     \return sorted column number for this widget or -1 if no column 
-     is sorted witin GUI. 
-     This does not mean that the same sorting is performed within data member 
-     which is used by this widget, because the data could be changed in the meantime 
-     outside of this GUI widget. 
+     \return sorted column number for this widget or -1 if no column
+     is sorted witin GUI.
+     This does not mean that the same sorting is performed within data member
+     which is used by this widget, because the data could be changed in the meantime
+     outside of this GUI widget.
      @see dataSortedColumn() */
     virtual int currentLocalSortColumn() const = 0;
 
     /*! @internal for implementation
-     Shows sorting indicator order within GUI: -1: descending, 1: ascending, 
-     0: no sorting. This should not perform any sorting within data member 
-     which is used by this object. 
+     Shows sorting indicator order within GUI: -1: descending, 1: ascending,
+     0: no sorting. This should not perform any sorting within data member
+     which is used by this object.
      col = -1 should mean "no sorting" as well. */
     virtual void setLocalSortingOrder(int col, int order) = 0;
 
-    /*! @internal Sets order for \a column: -1: descending, 1: ascending, 
+    /*! @internal Sets order for \a column: -1: descending, 1: ascending,
      0: invert order */
     virtual void sortColumnInternal(int col, int order = 0);
 
     /*! @internal for implementation
-     Updates GUI after sorting. 
-     After sorting you need to ensure current row and column 
-     is visible to avoid user confusion. For exaple, in KexiTableView 
-     implementation, current cell is centered (if possible) 
+     Updates GUI after sorting.
+     After sorting you need to ensure current row and column
+     is visible to avoid user confusion. For exaple, in KexiTableView
+     implementation, current cell is centered (if possible)
      and updateContents() is called. */
     virtual void updateGUIAfterSorting() = 0;
 
     /*! Emitted in initActions() to force reload actions
-     You should remove existing actions and add them again. 
+     You should remove existing actions and add them again.
      Define and emit reloadActions() signal here. */
     virtual void reloadActions() = 0;
 
@@ -623,17 +667,17 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
      If you reimplement this method, don't forget to call this one. */
     virtual void clearVariables();
 
-    /*! @internal 
+    /*! @internal
      Creates editor structure without filling it with data.
-     Used in createEditor() and few places to be able to display cell contents 
+     Used in createEditor() and few places to be able to display cell contents
      dependending on its type. If \a ignoreMissingEditor is false (the default),
      and editor cannot be instantiated, current row editing (if present) is cancelled.
      */
-    virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false ) = 0;
+    virtual KexiDataItemInterface *editor(int col, bool ignoreMissingEditor = false) = 0;
 
-    /*! Updates editor's position, size and shows its focus (not the editor!) 
+    /*! Updates editor's position, size and shows its focus (not the editor!)
      for \a row and \a col, using editor(). Does nothing if editor not found. */
-    virtual void editorShowFocus( int row, int col ) = 0;
+    virtual void editorShowFocus(int row, int col) = 0;
 
     /*! Redraws specified cell. */
     virtual void updateCell(int row, int col) = 0;
@@ -647,28 +691,30 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     /*! Updates widget's contents size e.g. using QScrollView::resizeContents(). */
     virtual void updateWidgetContentsSize() = 0;
 
-    /*! Updates scrollbars of the widget. 
+    /*! Updates scrollbars of the widget.
      QScrollView::updateScrollbars() will be usually called here. */
     virtual void updateWidgetScrollBars() = 0;
 
     /*! @internal
-     Updates row appearance after canceling row edit. 
+     Updates row appearance after canceling row edit.
      Used by cancelRowEdit(). By default just calls updateRow(m_curRow).
      Reimplemented by KexiFormScrollView. */
     virtual void updateAfterCancelRowEdit();
 
     /*! @internal
-     Updates row appearance after accepting row edit. 
+     Updates row appearance after accepting row edit.
      Used by acceptRowEdit(). By default just calls updateRow(m_curRow).
      Reimplemented by KexiFormScrollView. */
     virtual void updateAfterAcceptRowEdit();
 
     //! Handles KexiTableViewData::rowRepaintRequested() signal
-    virtual void slotRowRepaintRequested(KexiDB::RecordData& record) { Q_UNUSED( record ); }
+    virtual void slotRowRepaintRequested(KexiDB::RecordData& record) {
+        Q_UNUSED(record);
+    }
 
     //! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, 
-      bool repaint);
+    virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result,
+                                      bool repaint);
 
     //! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
     virtual void slotRowDeleted();
@@ -679,45 +725,47 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     //! Like above, not db-aware version
     virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint);
 
-    virtual void slotRowsDeleted( const QList<int> & ) {}
+    virtual void slotRowsDeleted(const QList<int> &) {}
 
     //! for sanity checks (return true if m_data is present; else: outputs warning)
     inline bool hasData() const;
 
-    /*! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition() 
+    /*! Only needed for forms: called by KexiDataAwareObjectInterface::setCursorPosition()
      if cursor's position is really changed. */
     virtual void selectCellInternal() {}
 
-    /*! Used in KexiDataAwareObjectInterface::slotRowDeleted() 
-     to repaint tow \a row and all visible below. 
+    /*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
+     to repaint tow \a row and all visible below.
      Implemented if there is more than one row displayed, i.e. currently for KexiTableView. */
-    virtual void updateAllVisibleRowsBelow(int row) { Q_UNUSED( row ); }
+    virtual void updateAllVisibleRowsBelow(int row) {
+        Q_UNUSED(row);
+    }
 
     //! Call this from the subclass. */
     virtual void focusOutEvent(QFocusEvent* e);
 
-    /*! Handles verticalScrollBar()'s valueChanged(int) signal. 
-     Called when vscrollbar's value has been changed. 
+    /*! Handles verticalScrollBar()'s valueChanged(int) signal.
+     Called when vscrollbar's value has been changed.
      Call this method from the subclass. */
     virtual void vScrollBarValueChanged(int v);
 
     /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
     virtual void vScrollBarSliderReleased();
 
-    /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible, 
-     m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted; 
+    /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
+     m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
      else the m_scrollBarTipTimerCnt is just set to 0.*/
     virtual void scrollBarTipTimeout();
 
     /*! Shows error message box suitable for \a resultInfo. This can be "sorry" or "detailedSorry"
-     message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true. 
+     message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true.
      \return code of button clicked: KMessageBox::Ok in case of "sorry" or "detailedSorry" messages
      and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
     int showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo);
 
     /*! Prepares array of indices of visible values to search within.
-     This is per-interface global cache. 
-     Needed for faster lookup because there could be lookup values. 
+     This is per-interface global cache.
+     Needed for faster lookup because there could be lookup values.
      Called whenever columns definition changes, i.e. in setData() and clearColumns().
      @see find() */
     void updateIndicesForVisibleValues();
@@ -726,12 +774,12 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     KexiTableViewData *m_data;
 
     //! true if m_data member is owned by this object
-    bool m_owner : 1;
+bool m_owner : 1;
 
     //! cursor position
     int m_curRow, m_curCol;
 
-    //! current record's data 
+    //! current record's data
     KexiDB::RecordData *m_currentItem;
 
     //! data iterator
@@ -741,69 +789,69 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     KexiDB::RecordData *m_insertItem;
 
     //! when (current or new) row is edited - changed field values are temporary stored here
-//		KexiDB::RowEditBuffer *m_rowEditBuffer; 
+//  KexiDB::RowEditBuffer *m_rowEditBuffer;
 
     /*! true if currently selected row is edited */
-    bool m_rowEditing : 1;
+bool m_rowEditing : 1;
 
     /*! true if new row is edited; implies: rowEditing==true. */
-    bool m_newRowEditing : 1;
+bool m_newRowEditing : 1;
 
     /*! 'sorting by column' availability flag for widget */
-    bool m_isSortingEnabled : 1;
+bool m_isSortingEnabled : 1;
 
     /*! true if filtering is enabled for the view. */
-    bool m_isFilteringEnabled : 1;
+bool m_isFilteringEnabled : 1;
 
     /*! Public version of 'acceptsRowEditAfterCellAcceptin' flag (available for a user).
      It's OR'es together with above flag.
     */
-    bool m_acceptsRowEditAfterCellAccepting : 1;
+bool m_acceptsRowEditAfterCellAccepting : 1;
 
-    /*! Used in acceptEditor() to avoid infinite recursion, 
+    /*! Used in acceptEditor() to avoid infinite recursion,
      eg. when we're calling acceptRowEdit() during cell accepting phase. */
-    bool m_inside_acceptEditor : 1;
+bool m_inside_acceptEditor : 1;
 
-    /*! @internal if true, this object automatically accepts 
-     row editing (using acceptRowEdit()) on accepting any cell's edit 
+    /*! @internal if true, this object automatically accepts
+     row editing (using acceptRowEdit()) on accepting any cell's edit
      (i.e. after acceptEditor()). */
-    bool m_internal_acceptsRowEditAfterCellAccepting : 1;
+bool m_internal_acceptsRowEditAfterCellAccepting : 1;
 
     /*! true, if inserting empty rows are enabled (false by default) */
-    bool m_emptyRowInsertingEnabled : 1;
+bool m_emptyRowInsertingEnabled : 1;
 
-    /*! Contains 1 if the object is readOnly, 0 if not; 
-     otherwise (-1 means "do not know") the 'readOnly' flag from object's 
-     internal data structure (KexiTableViewData *KexiTableView::m_data) is reused. 
+    /*! Contains 1 if the object is readOnly, 0 if not;
+     otherwise (-1 means "do not know") the 'readOnly' flag from object's
+     internal data structure (KexiTableViewData *KexiTableView::m_data) is reused.
      */
     int m_readOnly;
 
 //! @todo really keep this here and not in KexiTableView?
-    /*! true if currently double click action was is performed 
+    /*! true if currently double click action was is performed
     (so accept/cancel editor shoudn't be executed) */
-    bool m_contentsMousePressEvent_dblClick : 1;
+bool m_contentsMousePressEvent_dblClick : 1;
 
     /*! like for readOnly: 1 if inserting is enabled */
     int m_insertingEnabled;
 
     /*! true, if initDataContents() should be called on show event. */
-    bool m_initDataContentsOnShow : 1;
+bool m_initDataContentsOnShow : 1;
 
     /*! Set to true in setCursorPosition() to indicate that cursor position was set
-     before show() and it shouldn't be changed on show(). 
+     before show() and it shouldn't be changed on show().
      Only used if initDataContentsOnShow is true. */
-    bool m_cursorPositionSetExplicityBeforeShow : 1;
+bool m_cursorPositionSetExplicityBeforeShow : 1;
 
     /*! true if spreadSheetMode is enabled. False by default.
      @see KexiTableView::setSpreadSheetMode() */
-    bool m_spreadSheetMode : 1;
+bool m_spreadSheetMode : 1;
 
     /*! true, if this table accepts dropping data on the rows (false by default). */
-    bool m_dropsAtRowEnabled : 1;
+bool m_dropsAtRowEnabled : 1;
 
     /*! true, if this entire (visible) row should be updated when boving to other row.
      False by default. For table view with 'row highlighting' flag enabled, it is true. */
-    bool m_updateEntireRowWhenMovingToOtherRow : 1;
+bool m_updateEntireRowWhenMovingToOtherRow : 1;
 
     DeletionPolicy m_deletionPolicy;
 
@@ -814,20 +862,20 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     KexiTableViewHeader *m_horizontalHeader;
 
     KexiDataItemInterface *m_editor;
-//		KexiTableEdit *m_editor;
+//  KexiTableEdit *m_editor;
 
     /*! Navigation panel, used if navigationPanelEnabled is true. */
     KexiRecordNavigator *m_navPanel; //!< main navigation widget
 
-    bool m_navPanelEnabled : 1;
+bool m_navPanelEnabled : 1;
 
     /*! true, if certical header shouldn't be increased in
-     KexiTableView::slotRowInserted() because it was already done 
+     KexiTableView::slotRowInserted() because it was already done
      in KexiTableView::createEditor(). */
-    bool m_verticalHeaderAlreadyAdded : 1;
+bool m_verticalHeaderAlreadyAdded : 1;
 
     /*! Row number that over which user drags a mouse pointer.
-     Used to indicate dropping possibility for that row. 
+     Used to indicate dropping possibility for that row.
      Equal -1 if no indication is needed. */
     int m_dragIndicatorLine;
 
@@ -841,15 +889,15 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
     QIcon m_contextMenuTitleIcon;
 
     /*! True if context menu is enabled. */
-    bool m_contextMenuEnabled : 1;
+bool m_contextMenuEnabled : 1;
 
     //! Used by updateAfterCancelRowEdit()
-    bool m_alsoUpdateNextRow : 1;
+bool m_alsoUpdateNextRow : 1;
 
     /*! Row number (>=0 or -1 == no row) that will be deleted in deleteRow().
      It is set in slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)) slot
-     received from KexiTableViewData member. 
-     This value will be used in slotRowDeleted() after rowDeleted() signal 
+     received from KexiTableViewData member.
+     This value will be used in slotRowDeleted() after rowDeleted() signal
      is received from KexiTableViewData member and then cleared (set to -1). */
     int m_rowWillBeDeleted;
 
@@ -858,27 +906,27 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
     /*! Used to enable/disable execution of vScrollBarValueChanged()
      when users navigate through rows using keyboard, so vscrollbar tooltips are not visible. */
-    bool m_vScrollBarValueChanged_enabled : 1;
+bool m_vScrollBarValueChanged_enabled : 1;
 
     /*! True, if vscrollbar tooltips are enabled (true by default). */
-    bool m_scrollbarToolTipsEnabled : 1;
+bool m_scrollbarToolTipsEnabled : 1;
 
     QLabel* m_scrollBarTip; //!< scrollbar tooltip
     QTimer m_scrollBarTipTimer; //!< scrollbar tooltip's timer
     uint m_scrollBarTipTimerCnt; //!< helper for timeout counting (scrollbar tooltip)
 
     //! Used to mark recently found value
-    class PositionOfValue {
-      public:
-        PositionOfValue() : firstCharacter(0), lastCharacter(0), exists(false)
-        {}
-      uint firstCharacter;
-      uint lastCharacter;
-      bool exists : 1;
+    class PositionOfValue
+    {
+    public:
+        PositionOfValue() : firstCharacter(0), lastCharacter(0), exists(false) {}
+        uint firstCharacter;
+        uint lastCharacter;
+    bool exists : 1;
     };
 
     /*! Used to mark recently found value. Updated on succesful execution of find().
-     If the current cursor's position changes, or data in the current cell changes, 
+     If the current cursor's position changes, or data in the current cell changes,
      positionOfRecentlyFoundValue.exists is set to false. */
     PositionOfValue m_positionOfRecentlyFoundValue;
 
@@ -894,46 +942,46 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
-  if (!m_data)
-    kDebug() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
-  return m_data!=0;
+    if (!m_data)
+        kDebug() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
+    return m_data != 0;
 }
 
 inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
 {
-  KexiDB::RecordData *record = m_data->at(pos);
-  if (!record)
-    kDebug() << "KexiTableView::itemAt(" << pos << "): NO ITEM!!" << endl;
-  else {
-/*		kDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
-    int i=1;
-    for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
-      kDebug() << i<<": " << (*it).toString()<< endl;*/
-  }
-  return record;
+    KexiDB::RecordData *record = m_data->at(pos);
+    if (!record)
+        kDebug() << "KexiTableView::itemAt(" << pos << "): NO ITEM!!" << endl;
+    else {
+        /*  kDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
+            int i=1;
+            for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
+              kDebug() << i<<": " << (*it).toString()<< endl;*/
+    }
+    return record;
 }
 
 //! Convenience macro used for KexiDataAwareObjectInterface implementations.
 #define KEXI_DATAAWAREOBJECTINTERFACE \
-public: \
-  void connectCellSelectedSignal(const QObject* receiver, const char* intIntMember) { \
-    connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember); \
-  } \
-  void connectRowEditStartedSignal(const QObject* receiver, const char* intMember) { \
-    connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember); \
-  } \
-  void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
-    connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
-  } \
-  void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \
-    connect(this, SIGNAL(reloadActions()), receiver, voidMember); \
-  } \
-  void connectDataSetSignal(const QObject* receiver, \
-    const char* kexiTableViewDataMember) { \
-    connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember); \
-  } \
-  void connectToReloadDataSlot(const QObject* sender, const char* voidSignal) { \
-    connect(sender, voidSignal, this, SLOT(reloadData())); \
-  }
+    public: \
+    void connectCellSelectedSignal(const QObject* receiver, const char* intIntMember) { \
+        connect(this, SIGNAL(cellSelected(int,int)), receiver, intIntMember); \
+    } \
+    void connectRowEditStartedSignal(const QObject* receiver, const char* intMember) { \
+        connect(this, SIGNAL(rowEditStarted(int)), receiver, intMember); \
+    } \
+    void connectRowEditTerminatedSignal(const QObject* receiver, const char* voidMember) { \
+        connect(this, SIGNAL(rowEditTerminated(int)), receiver, voidMember); \
+    } \
+    void connectReloadActionsSignal(const QObject* receiver, const char* voidMember) { \
+        connect(this, SIGNAL(reloadActions()), receiver, voidMember); \
+    } \
+    void connectDataSetSignal(const QObject* receiver, \
+                              const char* kexiTableViewDataMember) { \
+        connect(this, SIGNAL(dataSet(KexiTableViewData*)), receiver, kexiTableViewDataMember); \
+    } \
+    void connectToReloadDataSlot(const QObject* sender, const char* voidSignal) { \
+        connect(sender, voidSignal, this, SLOT(reloadData())); \
+    }
 
 #endif

@@ -27,35 +27,35 @@
 
 int tableViewTest()
 {
-  if (!conn->useDatabase( db_name )) {
-    conn->debugError();
-    return 1;
-  }
-  
-  KexiDB::TableSchema *persons = conn->tableSchema( "persons" );
-  if (!persons) {
-    conn->debugError();
-    kDebug() << "tableViewTest(): !persons" <<endl;
-    return 1;
-  }
+    if (!conn->useDatabase(db_name)) {
+        conn->debugError();
+        return 1;
+    }
 
-//	KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
-//	KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
-  KexiDB::Cursor *cursor = conn->prepareQuery( *persons , cursor_options );//KexiDB::Cursor::Buffered );
-  if (!cursor) {
-    conn->debugError();
-    kDebug() << "tableViewTest(): !cursor" <<endl;
-    return 1;
-  }
+    KexiDB::TableSchema *persons = conn->tableSchema("persons");
+    if (!persons) {
+        conn->debugError();
+        kDebug() << "tableViewTest(): !persons" << endl;
+        return 1;
+    }
 
-  KexiDataTableView *tv = new KexiDataTableView(0, cursor);
+// KexiTableView *tv = new KexiTableView(0, "tv", /*KexiTableList *contents=*/0);
+// KexiDB::Cursor *cursor = conn->executeQuery( "select * from persons", KexiDB::Cursor::Buffered );
+    KexiDB::Cursor *cursor = conn->prepareQuery(*persons , cursor_options);  //KexiDB::Cursor::Buffered );
+    if (!cursor) {
+        conn->debugError();
+        kDebug() << "tableViewTest(): !cursor" << endl;
+        return 1;
+    }
 
-  app->setMainWidget(tv);
-  tv->move((qApp->desktop()->width() - tv->width())/2, (qApp->desktop()->height() - tv->height())/2);
-  tv->show();
-  tv->setFocus();
+    KexiDataTableView *tv = new KexiDataTableView(0, cursor);
 
-  return 0;
+    app->setMainWidget(tv);
+    tv->move((qApp->desktop()->width() - tv->width()) / 2, (qApp->desktop()->height() - tv->height()) / 2);
+    tv->show();
+    tv->setFocus();
+
+    return 0;
 }
 
 #endif

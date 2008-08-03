@@ -31,17 +31,18 @@ class ParameterList;
 class ORODocument;
 namespace KexiDB
 {
-	class Connection;
+class Connection;
 }
 //
 // ORPreRender
 // This class takes a report definition and prerenders the result to
 // an ORODocument that can be used to pass to any number of renderers.
 //
-class ORPreRender {
-  public:
-    ORPreRender(KexiDB::Connection*c=0);
-    ORPreRender(const QString &, KexiDB::Connection*c=0);
+class ORPreRender
+{
+public:
+    ORPreRender(KexiDB::Connection*c = 0);
+    ORPreRender(const QString &, KexiDB::Connection*c = 0);
 
     virtual ~ORPreRender();
 
@@ -54,11 +55,11 @@ class ORPreRender {
 
     bool isValid() const;
 
-  protected:
+protected:
 
-  private:
+private:
     ORPreRenderPrivate* _internal;
-    
+
 };
 
 

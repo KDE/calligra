@@ -39,48 +39,76 @@ class Info;
 */
 class KEXICORE_EXPORT Item
 {
-  public:
+public:
     Item();
     ~Item();
 
-    int identifier() const { return m_id; }
-    void setIdentifier(int id) { m_id = id; }
+    int identifier() const {
+        return m_id;
+    }
+    void setIdentifier(int id) {
+        m_id = id;
+    }
 
-    QString mimeType() const { return m_mime; }
-    void setMimeType(const QString &mime) { m_mime = mime; }
+    QString mimeType() const {
+        return m_mime;
+    }
+    void setMimeType(const QString &mime) {
+        m_mime = mime;
+    }
 
-    QString name() const { return m_name; }
-    void setName(const QString &name) { m_name = name; }
+    QString name() const {
+        return m_name;
+    }
+    void setName(const QString &name) {
+        m_name = name;
+    }
 
-    QString caption() const { return m_caption; }
-    void setCaption(const QString &c) { m_caption = c; }
+    QString caption() const {
+        return m_caption;
+    }
+    void setCaption(const QString &c) {
+        m_caption = c;
+    }
 
-    QString description() const { return m_desc; }
-    void setDescription(const QString &d) { m_desc = d; }
+    QString description() const {
+        return m_desc;
+    }
+    void setDescription(const QString &d) {
+        m_desc = d;
+    }
 
-    /*! \return "neverSaved" flag for this item what mean 
+    /*! \return "neverSaved" flag for this item what mean
      that is used when new item is created in-memory-only,
-     so we need to indicate for KexiProject about that state. 
-     By default this flag is false. 
+     so we need to indicate for KexiProject about that state.
+     By default this flag is false.
      Used by KexiMainWindow::newObject(). */
-    bool neverSaved() const { return m_neverSaved; }
+    bool neverSaved() const {
+        return m_neverSaved;
+    }
 
     /*! \sa neverSaved().
      Used by KexiMainWindow::newObject(). */
-    void setNeverSaved(bool set) { m_neverSaved = set; }
+    void setNeverSaved(bool set) {
+        m_neverSaved = set;
+    }
 
-    bool isNull() const { return m_id==0; }
+    bool isNull() const {
+        return m_id == 0;
+    }
 
     //! \return caption if not empty, else returns name.
-    inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
+    inline QString captionOrName() const {
+        return m_caption.isEmpty() ? m_name : m_caption;
+    }
 
-  private:
+private:
     QString m_mime;
     QString m_name;
     QString m_caption;
     QString m_desc;
     int m_id;
-    bool m_neverSaved : 1;
+bool m_neverSaved : 1;
 
     class Private;
     Private * const d;
@@ -89,7 +117,7 @@ class KEXICORE_EXPORT Item
 //! Item dict which destroys KexiPart::Item items on destruction.
 class KEXICORE_EXPORT ItemDict : public QHash<int, KexiPart::Item*>
 {
-  public:
+public:
     ItemDict();
     ~ItemDict();
 };
@@ -97,17 +125,17 @@ class KEXICORE_EXPORT ItemDict : public QHash<int, KexiPart::Item*>
 //typedef QHash<int, KexiPart::Item*>::iterator ItemDictIterator;
 typedef QList<KexiPart::Item*>::iterator ItemListIterator;
 
-/*! 
+/*!
  @short Part item list with special sorting method (by item name).
 
  Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
- so you can call sort() on the list to sort it by item name. 
+ so you can call sort() on the list to sort it by item name.
 */
 class KEXICORE_EXPORT ItemList : public QList<KexiPart::Item*>
 {
-  public:
+public:
     ItemList();
-    
+
     //! Sorts the list by item names.
     void sort();
 };

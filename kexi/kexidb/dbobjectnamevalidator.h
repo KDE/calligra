@@ -25,26 +25,27 @@
 #include <qstring.h>
 #include <qpointer.h>
 
-namespace KexiDB {
+namespace KexiDB
+{
 
-  class Driver;
+class Driver;
 
-  /*! Validates input: 
-   accepts if the name is not reserved for internal kexi objects. */
-  class KEXI_DB_EXPORT ObjectNameValidator : public KexiUtils::Validator
-  {
-    public:
-      /*! \a drv is a KexiDB driver on which isSystemObjectName() will be 
-       called inside check(). If \a drv is 0, KexiDB::Driver::isKexiDBSystemObjectName()
-       static function is called instead. */
-      ObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0);
-      virtual ~ObjectNameValidator();
+/*! Validates input:
+ accepts if the name is not reserved for internal kexi objects. */
+class KEXI_DB_EXPORT ObjectNameValidator : public KexiUtils::Validator
+{
+public:
+    /*! \a drv is a KexiDB driver on which isSystemObjectName() will be
+     called inside check(). If \a drv is 0, KexiDB::Driver::isKexiDBSystemObjectName()
+     static function is called instead. */
+    ObjectNameValidator(KexiDB::Driver *drv, QObject * parent = 0);
+    virtual ~ObjectNameValidator();
 
-    protected:
-      virtual KexiUtils::Validator::Result internalCheck(const QString &valueName, const QVariant& v, 
-        QString &message, QString &details);
-      QPointer<KexiDB::Driver> m_drv;
-  };
+protected:
+    virtual KexiUtils::Validator::Result internalCheck(const QString &valueName, const QVariant& v,
+            QString &message, QString &details);
+    QPointer<KexiDB::Driver> m_drv;
+};
 }
 
 #endif

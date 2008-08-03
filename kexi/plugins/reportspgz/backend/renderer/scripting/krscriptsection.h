@@ -1,5 +1,5 @@
 /*
- * Kexi Report Plugin 
+ * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
@@ -24,41 +24,41 @@
 #include <krsectiondata.h>
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 namespace Scripting
 {
-	class Section : public QObject
-	{
-		Q_OBJECT
-		public:
-			Section ( KRSectionData* );
+class Section : public QObject
+{
+    Q_OBJECT
+public:
+    Section(KRSectionData*);
 
-			~Section();
+    ~Section();
 
-		public slots:
-			/**Returns the background color of the section*/
-			QColor backgroundColor();
-		
-			/**Sets the background color of the section to the given color 
-			*/
-			void setBackgroundColor(const QColor&);
-		
-			/**Returns the section height as a real number, in points*/
-			qreal height();
-			/**Sets the section height to the given value in points*/
-			void setHeight(qreal);
-				
-			/**Returns the name of the section*/
-			QString name();
-		
-			/**Returns an object in the section, by number*/
-			QObject* objectByNumber(int);
-			/**Returns an object in the section, by name*/
-			QObject* objectByName(const QString&);
-		
-		private:
-			KRSectionData *_section;
-	};
+public slots:
+    /**Returns the background color of the section*/
+    QColor backgroundColor();
+
+    /**Sets the background color of the section to the given color
+    */
+    void setBackgroundColor(const QColor&);
+
+    /**Returns the section height as a real number, in points*/
+    qreal height();
+    /**Sets the section height to the given value in points*/
+    void setHeight(qreal);
+
+    /**Returns the name of the section*/
+    QString name();
+
+    /**Returns an object in the section, by number*/
+    QObject* objectByNumber(int);
+    /**Returns an object in the section, by name*/
+    QObject* objectByName(const QString&);
+
+private:
+    KRSectionData *_section;
+};
 }
 #endif

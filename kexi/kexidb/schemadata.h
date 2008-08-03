@@ -23,7 +23,8 @@
 #include "global.h"
 #include "field.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 /*! Container class that stores common kexi object schema's properties like
  id, name, caption, help text.
@@ -32,46 +33,70 @@ namespace KexiDB {
 
 class KEXI_DB_EXPORT SchemaData
 {
-  public:
+public:
     SchemaData(int obj_type = KexiDB::UnknownObjectType);
     virtual ~SchemaData();
 
-    int type() const { return m_type; }
-    int id() const { return m_id; }
-    QString name() const { return m_name; }
+    int type() const {
+        return m_type;
+    }
+    int id() const {
+        return m_id;
+    }
+    QString name() const {
+        return m_name;
+    }
     /*! The same as name(). Added to avoid conflict with QObject::name() */
-    QString objectName() const { return m_name; }
-    void setName(const QString& n) { m_name=n; }
-    QString caption() const { return m_caption; }
-    void setCaption(const QString& c) { m_caption=c; }
-    QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
-    QString description() const { return m_desc; }
-    void setDescription(const QString& desc) { m_desc=desc; }
+    QString objectName() const {
+        return m_name;
+    }
+    void setName(const QString& n) {
+        m_name = n;
+    }
+    QString caption() const {
+        return m_caption;
+    }
+    void setCaption(const QString& c) {
+        m_caption = c;
+    }
+    QString captionOrName() const {
+        return m_caption.isEmpty() ? m_name : m_caption;
+    }
+    QString description() const {
+        return m_desc;
+    }
+    void setDescription(const QString& desc) {
+        m_desc = desc;
+    }
 
     /*! \return debug string useful for debugging */
     virtual QString schemaDataDebugString() const;
-    
+
     /*! \return true if this is schema of native database object,
-     like, for example like, native table. This flag 
-     is set when object schema (currently -- database table) 
+     like, for example like, native table. This flag
+     is set when object schema (currently -- database table)
      is not retrieved using kexi__* schema storage system,
      but just based on the information about native table.
-     
+
      By native object we mean the one that has no additional
      data like caption, description, etc. properties (no kexidb extensions).
-     
-     Native objects schemas are used mostly for representing 
+
+     Native objects schemas are used mostly for representing
      kexi system (kexi__*) tables in memory for later reference;
      see Connection::tableNames().
-     
+
      By default (on allocation) SchemaData objects are not native.
     */
-    virtual bool isNative() const { return m_native; }
-    
-    /* Sets native flag */
-    virtual void setNative(bool set) { m_native=set; }
+    virtual bool isNative() const {
+        return m_native;
+    }
 
-  protected:
+    /* Sets native flag */
+    virtual void setNative(bool set) {
+        m_native = set;
+    }
+
+protected:
     //! Clears all properties except 'type'.
     void clear();
 
@@ -80,9 +105,9 @@ class KEXI_DB_EXPORT SchemaData
     QString m_name;
     QString m_caption;
     QString m_desc;
-    bool m_native : 1;
+bool m_native : 1;
 
-  friend class Connection;
+    friend class Connection;
 };
 
 } //namespace KexiDB

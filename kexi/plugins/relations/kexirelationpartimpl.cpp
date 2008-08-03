@@ -29,9 +29,9 @@
 #include <kdebug.h>
 
 KexiRelationPartImpl::KexiRelationPartImpl(QObject *parent, const QStringList &args)
- : KexiInternalPart(parent, args)
+        : KexiInternalPart(parent, args)
 {
-  kDebug() << "KexiRelationPartImpl()" << endl;
+    kDebug() << "KexiRelationPartImpl()" << endl;
 }
 
 KexiRelationPartImpl::~KexiRelationPartImpl()
@@ -39,7 +39,7 @@ KexiRelationPartImpl::~KexiRelationPartImpl()
 }
 
 /*QWidget *
-KexiRelationPartImpl::createWidget(const char* , KexiMainWindow* mainWin, 
+KexiRelationPartImpl::createWidget(const char* , KexiMainWindow* mainWin,
  QWidget *parent, const char *objName)
 {
   return new KexiRelationWidget(mainWin, parent, objName);
@@ -55,8 +55,8 @@ KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 
   KexiRelationMainDlg *view = new KexiRelationMainDlg(mainWin, 0, "relations");
   dlg->addView(view);
-//	dlg->show();
-//	dlg->registerDialog();
+// dlg->show();
+// dlg->registerDialog();
 
   return dlg;
 }*/
@@ -64,22 +64,22 @@ KexiRelationPartImpl::createDialog(KexiMainWindow* mainWin, const char *)
 KexiView *
 KexiRelationPartImpl::createView(QWidget *parent, const char *)
 {
-//	kDebug() << "KexiRelationPartImpl::createDialog()" << endl;
-//	KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
-//	dlg->setIcon(SmallIcon("relation"));
-//	dlg->setDocID( mainWin->generatePrivateDocID() );
+// kDebug() << "KexiRelationPartImpl::createDialog()" << endl;
+// KexiDialogBase * dlg = new KexiDialogBase(mainWin, i18n("Relations"));
+// dlg->setIcon(SmallIcon("relation"));
+// dlg->setDocID( mainWin->generatePrivateDocID() );
 
-  KexiRelationMainDlg *view = new KexiRelationMainDlg(parent);
-  view->setObjectName("relations");
-//	dlg->addView(view);
-//	dlg->show();
-//	dlg->registerDialog();
+    KexiRelationMainDlg *view = new KexiRelationMainDlg(parent);
+    view->setObjectName("relations");
+// dlg->addView(view);
+// dlg->show();
+// dlg->registerDialog();
 
-  return view;
+    return view;
 }
 
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_relation, 
-  KGenericFactory<KexiRelationPartImpl>("kexihandler_relation") )
+K_EXPORT_COMPONENT_FACTORY(kexihandler_relation,
+                           KGenericFactory<KexiRelationPartImpl>("kexihandler_relation"))
 
 #include "kexirelationpartimpl.moc"

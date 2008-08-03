@@ -19,7 +19,7 @@
 //
 // C++ Implementation: pqxxpreparedstatement
 //
-// Description: 
+// Description:
 //
 //
 // Author: Adam Pigg <adam@piggz.co.uk>, (C) 2005
@@ -31,11 +31,11 @@
 using namespace KexiDB;
 
 pqxxPreparedStatement::pqxxPreparedStatement(
-  StatementType type, ConnectionInternal& conn, FieldList& fields) 
- : KexiDB::PreparedStatement(type, conn, fields)
- , m_conn(conn.connection)
+    StatementType type, ConnectionInternal& conn, FieldList& fields)
+        : KexiDB::PreparedStatement(type, conn, fields)
+        , m_conn(conn.connection)
 {
-//	KexiDBDrvDbg << "pqxxPreparedStatement: Construction" << endl;
+// KexiDBDrvDbg << "pqxxPreparedStatement: Construction" << endl;
 }
 
 
@@ -45,12 +45,12 @@ pqxxPreparedStatement::~pqxxPreparedStatement()
 
 bool pqxxPreparedStatement::execute()
 {
-//	KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
-  m_resetRequired = true;
-  if (m_conn->insertRecord(*m_fields, m_args)) {
-    return true;
-  }
-  return false;
+// KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
+    m_resetRequired = true;
+    if (m_conn->insertRecord(*m_fields, m_args)) {
+        return true;
+    }
+    return false;
 }
 
 

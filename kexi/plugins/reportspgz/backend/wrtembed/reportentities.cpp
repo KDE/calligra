@@ -54,160 +54,157 @@
 //
 // ReportEntity
 //
-ReportEntity::ReportEntity ( ReportDesigner* r )
+ReportEntity::ReportEntity(ReportDesigner* r)
 {
-	_rd=r;
+    _rd = r;
 }
 
-void ReportEntity::buildXML ( QGraphicsItem * item, QDomDocument & doc, QDomElement & parent )
+void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElement & parent)
 {
-	ReportEntity * re = NULL;
-	switch ( dynamic_cast<KRObjectData*> ( item )->type() )
-	{
-		case KRObjectData::EntityLabel:
-			re = ( ReportEntityLabel* ) item;
-			break;
-		case KRObjectData::EntityField:
-			re = ( ReportEntityField* ) item;
-			break;
-		case KRObjectData::EntityText:
-			re = ( ReportEntityText* ) item;
-			break;
-		case KRObjectData::EntityLine:
-			re = ( ReportEntityLine* ) item;
-			break;
-		case KRObjectData::EntityBarcode:
-			re = ( ReportEntityBarcode* ) item;
-			break;
-		case KRObjectData::EntityImage:
-			re = ( ReportEntityImage* ) item;
-			break;
-		case KRObjectData::EntityChart:
-			re = (ReportEntityChart*)item;
-			break;
-		default:
-			kDebug() << "ReportEntity::buildXML(): unrecognized rtti type" << item->type() << endl;
-	};
+    ReportEntity * re = NULL;
+    switch (dynamic_cast<KRObjectData*>(item)->type()) {
+    case KRObjectData::EntityLabel:
+        re = (ReportEntityLabel*) item;
+        break;
+    case KRObjectData::EntityField:
+        re = (ReportEntityField*) item;
+        break;
+    case KRObjectData::EntityText:
+        re = (ReportEntityText*) item;
+        break;
+    case KRObjectData::EntityLine:
+        re = (ReportEntityLine*) item;
+        break;
+    case KRObjectData::EntityBarcode:
+        re = (ReportEntityBarcode*) item;
+        break;
+    case KRObjectData::EntityImage:
+        re = (ReportEntityImage*) item;
+        break;
+    case KRObjectData::EntityChart:
+        re = (ReportEntityChart*)item;
+        break;
+    default:
+        kDebug() << "ReportEntity::buildXML(): unrecognized rtti type" << item->type() << endl;
+    };
 
-	if ( re != NULL )
-	{
-		re->buildXML ( doc,parent );
-	}
+    if (re != NULL) {
+        re->buildXML(doc, parent);
+    }
 }
 
-void ReportEntity::buildXMLRect ( QDomDocument & doc, QDomElement & entity, QRectF rect )
+void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect)
 {
-	kDebug() << "Saving Rect " << rect << endl;
-	QDomElement element = doc.createElement ( "rect" );
+    kDebug() << "Saving Rect " << rect << endl;
+    QDomElement element = doc.createElement("rect");
 
-	QDomElement x = doc.createElement ( "x" );
-	x.appendChild ( doc.createTextNode ( QString::number ( rect.x() ) ) );
-	element.appendChild ( x );
+    QDomElement x = doc.createElement("x");
+    x.appendChild(doc.createTextNode(QString::number(rect.x())));
+    element.appendChild(x);
 
-	QDomElement y = doc.createElement ( "y" );
-	y.appendChild ( doc.createTextNode ( QString::number ( rect.y() ) ) );
-	element.appendChild ( y );
+    QDomElement y = doc.createElement("y");
+    y.appendChild(doc.createTextNode(QString::number(rect.y())));
+    element.appendChild(y);
 
-	QDomElement w = doc.createElement ( "width" );
-	w.appendChild ( doc.createTextNode ( QString::number ( rect.width() ) ) );
-	element.appendChild ( w );
+    QDomElement w = doc.createElement("width");
+    w.appendChild(doc.createTextNode(QString::number(rect.width())));
+    element.appendChild(w);
 
-	QDomElement h = doc.createElement ( "height" );
-	h.appendChild ( doc.createTextNode ( QString::number ( rect.height() ) ) );
-	element.appendChild ( h );
+    QDomElement h = doc.createElement("height");
+    h.appendChild(doc.createTextNode(QString::number(rect.height())));
+    element.appendChild(h);
 
-	entity.appendChild ( element );
+    entity.appendChild(element);
 }
 
-void ReportEntity::buildXMLFont ( QDomDocument & doc, QDomElement & entity, QFont font )
+void ReportEntity::buildXMLFont(QDomDocument & doc, QDomElement & entity, QFont font)
 {
-	QDomElement element = doc.createElement ( "font" );
-	element.appendChild ( doc.createTextNode ( font.toString() ) );
+    QDomElement element = doc.createElement("font");
+    element.appendChild(doc.createTextNode(font.toString()));
 #if 0
-	QDomElement face = doc.createElement ( "face" );
-	face.appendChild ( doc.createTextNode ( font.family() ) );
-	element.appendChild ( face );
+    QDomElement face = doc.createElement("face");
+    face.appendChild(doc.createTextNode(font.family()));
+    element.appendChild(face);
 
-	QDomElement size = doc.createElement ( "size" );
-	size.appendChild ( doc.createTextNode ( QString::number ( font.pointSize() ) ) );
-	element.appendChild ( size );
+    QDomElement size = doc.createElement("size");
+    size.appendChild(doc.createTextNode(QString::number(font.pointSize())));
+    element.appendChild(size);
 
-	QDomElement weight = doc.createElement ( "weight" );
-	int w = font.weight();
-	if ( w == QFont::Normal )
-		weight.appendChild ( doc.createTextNode ( "normal" ) );
-	else if ( w == QFont::Bold )
-		weight.appendChild ( doc.createTextNode ( "bold" ) );
-	else
-		weight.appendChild ( doc.createTextNode ( QString::number ( w ) ) );
-	element.appendChild ( weight );
+    QDomElement weight = doc.createElement("weight");
+    int w = font.weight();
+    if (w == QFont::Normal)
+        weight.appendChild(doc.createTextNode("normal"));
+    else if (w == QFont::Bold)
+        weight.appendChild(doc.createTextNode("bold"));
+    else
+        weight.appendChild(doc.createTextNode(QString::number(w)));
+    element.appendChild(weight);
 #endif
-	entity.appendChild ( element );
+    entity.appendChild(element);
 }
 
-void ReportEntity::buildXMLTextStyle ( QDomDocument & doc, QDomElement & entity, ORTextStyleData ts )
+void ReportEntity::buildXMLTextStyle(QDomDocument & doc, QDomElement & entity, ORTextStyleData ts)
 {
-	QDomElement element = doc.createElement ( "textstyle" );
+    QDomElement element = doc.createElement("textstyle");
 
-	QDomElement bgcolor = doc.createElement ( "bgcolor" );
-	bgcolor.appendChild ( doc.createTextNode ( ts.bgColor.name() ) );
-	element.appendChild ( bgcolor );
+    QDomElement bgcolor = doc.createElement("bgcolor");
+    bgcolor.appendChild(doc.createTextNode(ts.bgColor.name()));
+    element.appendChild(bgcolor);
 
-	QDomElement fgcolor = doc.createElement ( "fgcolor" );
-	fgcolor.appendChild ( doc.createTextNode ( ts.fgColor.name() ) );
-	element.appendChild ( fgcolor );
+    QDomElement fgcolor = doc.createElement("fgcolor");
+    fgcolor.appendChild(doc.createTextNode(ts.fgColor.name()));
+    element.appendChild(fgcolor);
 
-	QDomElement bgopacity = doc.createElement ( "bgopacity" );
-	bgopacity.appendChild ( doc.createTextNode ( QString::number(ts.bgOpacity) ) );
-	element.appendChild ( bgopacity );
-	
-	buildXMLFont ( doc, element, ts.font );
+    QDomElement bgopacity = doc.createElement("bgopacity");
+    bgopacity.appendChild(doc.createTextNode(QString::number(ts.bgOpacity)));
+    element.appendChild(bgopacity);
 
-	entity.appendChild ( element );
+    buildXMLFont(doc, element, ts.font);
+
+    entity.appendChild(element);
 }
 
-void ReportEntity::buildXMLLineStyle ( QDomDocument & doc, QDomElement & entity, ORLineStyleData ls )
+void ReportEntity::buildXMLLineStyle(QDomDocument & doc, QDomElement & entity, ORLineStyleData ls)
 {
-	QDomElement element = doc.createElement ( "linestyle" );
+    QDomElement element = doc.createElement("linestyle");
 
-	QDomElement color = doc.createElement ( "color" );
-	color.appendChild ( doc.createTextNode ( ls.lnColor.name() ) );
-	element.appendChild ( color );
+    QDomElement color = doc.createElement("color");
+    color.appendChild(doc.createTextNode(ls.lnColor.name()));
+    element.appendChild(color);
 
-	QDomElement weight = doc.createElement ( "weight" );
-	weight.appendChild ( doc.createTextNode ( QString::number ( ls.weight ) ) );
-	element.appendChild ( weight );
+    QDomElement weight = doc.createElement("weight");
+    weight.appendChild(doc.createTextNode(QString::number(ls.weight)));
+    element.appendChild(weight);
 
-	QDomElement style = doc.createElement ( "style" );
-	QString l;
-	switch ( ls.style )
-	{
-		case Qt::NoPen:
-			l = "nopen";
-			break;
-		case Qt::SolidLine:
-			l = "solid";
-			break;
-		case Qt::DashLine:
-			l = "dash";
-			break;
-		case Qt::DotLine:
-			l = "dot";
-			break;
-		case Qt::DashDotLine:
-			l = "dashdot";
-			break;
-		case Qt::DashDotDotLine:
-			l = "dashdotdot";
-			break;
-		default:
-			l = "solid";
+    QDomElement style = doc.createElement("style");
+    QString l;
+    switch (ls.style) {
+    case Qt::NoPen:
+        l = "nopen";
+        break;
+    case Qt::SolidLine:
+        l = "solid";
+        break;
+    case Qt::DashLine:
+        l = "dash";
+        break;
+    case Qt::DotLine:
+        l = "dot";
+        break;
+    case Qt::DashDotLine:
+        l = "dashdot";
+        break;
+    case Qt::DashDotDotLine:
+        l = "dashdotdot";
+        break;
+    default:
+        l = "solid";
 
-	}
-	style.appendChild ( doc.createTextNode ( l ) );
-	element.appendChild ( style );
+    }
+    style.appendChild(doc.createTextNode(l));
+    element.appendChild(style);
 
-	entity.appendChild ( element );
+    entity.appendChild(element);
 }
 
 

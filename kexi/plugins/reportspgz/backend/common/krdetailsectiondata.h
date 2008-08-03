@@ -28,33 +28,34 @@
 class KRSectionData;
 class ORDetailGroupSectionData;
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KRDetailSectionData : public QObject
 {
-		Q_OBJECT
-	public:
-		KRDetailSectionData();
-		KRDetailSectionData(const QDomElement &);
-		~KRDetailSectionData();
+    Q_OBJECT
+public:
+    KRDetailSectionData();
+    KRDetailSectionData(const QDomElement &);
+    ~KRDetailSectionData();
 
-		enum PageBreak
-		{
-			BreakNone = 0,
-			BreakAtEnd = 1
-		};
+    enum PageBreak {
+        BreakNone = 0,
+        BreakAtEnd = 1
+    };
 
-		QString name;
-		int pagebreak;
+    QString name;
+    int pagebreak;
 
-		KRSectionData * detail;
+    KRSectionData * detail;
 
-		QList<ORDetailGroupSectionData*> groupList;
-		// QList<ORDataData> trackTotal;
-		bool isValid(){return _valid;}
-		
-	private:
-		bool _valid;
+    QList<ORDetailGroupSectionData*> groupList;
+    // QList<ORDataData> trackTotal;
+    bool isValid() {
+        return _valid;
+    }
+
+private:
+    bool _valid;
 
 };
 

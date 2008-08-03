@@ -23,45 +23,47 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class MySqlCursorData;
 
-class MySqlCursor: public Cursor {
+class MySqlCursor: public Cursor
+{
 public:
-  MySqlCursor(Connection* conn, const QString& statement = QString(), 
-    uint cursor_options = NoOptions );
-  MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
-  virtual ~MySqlCursor();
-  virtual bool drv_open();
-  virtual bool drv_close();
+    MySqlCursor(Connection* conn, const QString& statement = QString(),
+                uint cursor_options = NoOptions);
+    MySqlCursor(Connection* conn, QuerySchema& query, uint options = NoOptions);
+    virtual ~MySqlCursor();
+    virtual bool drv_open();
+    virtual bool drv_close();
 //        virtual bool drv_moveFirst();
-  virtual void drv_getNextRecord();
-        //virtual bool drv_getPrevRecord();
-  virtual QVariant value(uint);
+    virtual void drv_getNextRecord();
+    //virtual bool drv_getPrevRecord();
+    virtual QVariant value(uint);
 
-  virtual void drv_clearServerResult();
-  virtual void drv_appendCurrentRecordToBuffer();
-  virtual void drv_bufferMovePointerNext();
-  virtual void drv_bufferMovePointerPrev();
-  virtual void drv_bufferMovePointerTo(qint64 to);
-  virtual const char** rowData() const;
-  virtual bool drv_storeCurrentRow(RecordData &data) const;
+    virtual void drv_clearServerResult();
+    virtual void drv_appendCurrentRecordToBuffer();
+    virtual void drv_bufferMovePointerNext();
+    virtual void drv_bufferMovePointerPrev();
+    virtual void drv_bufferMovePointerTo(qint64 to);
+    virtual const char** rowData() const;
+    virtual bool drv_storeCurrentRow(RecordData &data) const;
 //        virtual bool save(RecordData& data, RowEditBuffer& buf);
 
-  virtual int serverResult();
-  virtual QString serverResultName();
-  virtual QString serverErrorMsg();
+    virtual int serverResult();
+    virtual QString serverResultName();
+    virtual QString serverErrorMsg();
 
 protected:
-  QVariant pValue(uint pos) const;
-//	MYSQL_RES *m_res;	
-//	MYSQL_ROW m_row;
-//	MYSQL *my_conn;
-//	unsigned long *m_lengths;
+    QVariant pValue(uint pos) const;
+// MYSQL_RES *m_res;
+// MYSQL_ROW m_row;
+// MYSQL *my_conn;
+// unsigned long *m_lengths;
 //js: int m_numFields;
-//	unsigned long m_numRows;
-  MySqlCursorData *d;
+// unsigned long m_numRows;
+    MySqlCursorData *d;
 };
 
 }

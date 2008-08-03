@@ -31,24 +31,26 @@
 
 //! @short Multiline edit widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
-  public KTextEdit,
-  protected KexiDBTextWidgetInterface,
-  public KexiFormDataItemInterface
+            public KTextEdit,
+            protected KexiDBTextWidgetInterface,
+            public KexiFormDataItemInterface
 {
-  Q_OBJECT
-  Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-  Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_OBJECT
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
+    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 
-  public:
+public:
     KexiDBTextEdit(QWidget *parent);
     virtual ~KexiDBTextEdit();
 
-    inline QString dataSource() const
-      { return KexiFormDataItemInterface::dataSource(); }
-    inline QString dataSourceMimeType() const
-      { return KexiFormDataItemInterface::dataSourceMimeType(); }
+    inline QString dataSource() const {
+        return KexiFormDataItemInterface::dataSource();
+    }
+    inline QString dataSourceMimeType() const {
+        return KexiFormDataItemInterface::dataSourceMimeType();
+    }
     virtual QVariant value();
-    virtual void setInvalidState( const QString& displayText );
+    virtual void setInvalidState(const QString& displayText);
 
     //! \return true if editor's value is null (not empty)
     //! Used for checking if a given constraint within table of form is met.
@@ -72,22 +74,24 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
 
     virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 
-    /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue() 
-     is displayed in a special way. Used by KexiFormDataProvider::fillDataItems(). 
+    /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue()
+     is displayed in a special way. Used by KexiFormDataProvider::fillDataItems().
      \a widget is equal to 'this'.
      Reimplemented after KexiFormDataItemInterface. */
     virtual void setDisplayDefaultValue(QWidget* widget, bool displayDefaultValue);
 
     //! Windows uses Ctrl+Tab for moving between tabs, so do not steal this shortcut
-    virtual void keyPressEvent( QKeyEvent *ke );
+    virtual void keyPressEvent(QKeyEvent *ke);
 
-  public slots:
-    inline void setDataSource(const QString &ds)
-      { KexiFormDataItemInterface::setDataSource(ds); }
-    inline void setDataSourceMimeType(const QString &ds)
-      { KexiFormDataItemInterface::setDataSourceMimeType(ds); }
-    virtual void setReadOnly( bool readOnly );
-//Qt4		virtual void setText( const QString & text, const QString & context );
+public slots:
+    inline void setDataSource(const QString &ds) {
+        KexiFormDataItemInterface::setDataSource(ds);
+    }
+    inline void setDataSourceMimeType(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    }
+    virtual void setReadOnly(bool readOnly);
+//Qt4  virtual void setText( const QString & text, const QString & context );
 
     //! Reimplemented, so "undo" means the same as "cancelEditor" action
 //! @todo enable "real" undo internally so user can use ctrl+z while editing
@@ -102,11 +106,11 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
     //! Implemented for KexiDataItemInterface
     virtual void selectAll();
 
-  protected slots:
+protected slots:
     void slotTextChanged();
 
-  protected:
-    virtual void paintEvent ( QPaintEvent * );
+protected:
+    virtual void paintEvent(QPaintEvent *);
     virtual void setValueInternal(const QVariant& add, bool removeOld);
     QMenu * createPopupMenu(const QPoint & pos);
 
@@ -114,7 +118,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
     KexiDBWidgetContextMenuExtender m_menuExtender;
 
     //! Used to disable slotTextChanged()
-    bool m_slotTextChanged_enabled : 1;
+bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

@@ -40,42 +40,42 @@
 
 void ReportEntityText::init(QGraphicsScene * scene)
 {
-	setFlags(ItemIsSelectable|ItemIsMovable);
-	if (scene)
-	scene->addItem ( this );
-	
-	connect ( properties(), SIGNAL ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ), this, SLOT ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ) );
-	
-	ReportRectEntity::init(&_pos, &_size, _set);
+    setFlags(ItemIsSelectable | ItemIsMovable);
+    if (scene)
+        scene->addItem(this);
 
-	_controlSource->setListData(_rd->fieldList(), _rd->fieldList());
-	setZValue(Z);
+    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+
+    ReportRectEntity::init(&_pos, &_size, _set);
+
+    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    setZValue(Z);
 }
 
-ReportEntityText::ReportEntityText ( ReportDesigner * rw, QGraphicsScene * scene )
-	: ReportRectEntity(rw)
+ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene)
+        : ReportRectEntity(rw)
 {
-	init(scene);
-	setSceneRect ( getTextRect() );
-	
-	_name->setValue(_rd->suggestEntityName("Text"));
+    init(scene);
+    setSceneRect(getTextRect());
+
+    _name->setValue(_rd->suggestEntityName("Text"));
 }
 
-ReportEntityText::ReportEntityText ( QDomNode & element, ReportDesigner * d, QGraphicsScene * s )
-	: ReportRectEntity(d), KRTextData(element)
+ReportEntityText::ReportEntityText(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
+        : ReportRectEntity(d), KRTextData(element)
 {
-	init(s);
-	setSceneRect(_pos.toScene(), _size.toScene());
+    init(s);
+    setSceneRect(_pos.toScene(), _size.toScene());
 }
 
 ReportEntityText* ReportEntityText::clone()
 {
-	QDomDocument d;
-	QDomElement e = d.createElement("clone");;
-	QDomNode n;
-	buildXML(d,e);
-	n = e.firstChild();
-	return new ReportEntityText(n, designer(), 0);
+    QDomDocument d;
+    QDomElement e = d.createElement("clone");;
+    QDomNode n;
+    buildXML(d, e);
+    n = e.firstChild();
+    return new ReportEntityText(n, designer(), 0);
 }
 
 ReportEntityText::~ReportEntityText()
@@ -83,136 +83,125 @@ ReportEntityText::~ReportEntityText()
 
 QRect ReportEntityText::getTextRect()
 {
-	return QFontMetrics ( font() ).boundingRect ( int ( x() ), int ( y() ), 0, 0, textFlags(), column()+QObject::tr ( ":" ) + QObject::tr ( " textarea" ) );
+    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
 }
 
 
 
-void ReportEntityText::paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
-	// store any values we plan on changing so we can restore them
-	QFont f = painter->font();
-	QPen  p = painter->pen();
+    // store any values we plan on changing so we can restore them
+    QFont f = painter->font();
+    QPen  p = painter->pen();
 
-	painter->setFont ( font() );
-	painter->setBackgroundMode ( Qt::OpaqueMode );
-	painter->setBackground ( _bgColor->value().value<QColor>() );
-	painter->setPen ( _fgColor->value().value<QColor>() );
-	painter->fillRect ( rect(),  _bgColor->value().value<QColor>() );
-	painter->drawText ( rect(), textFlags(), column()+QObject::tr ( ":" ) + QObject::tr ( " textarea" ) );
-	
-	if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0)
-	{
-		painter->setPen ( QPen ( QColor ( 224,224,224 )));
-	}
-	else
-	{
-		painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt() ) );
-	}
-	painter->drawRect ( rect() );
-	
-	painter->setBackgroundMode ( Qt::TransparentMode );
-	painter->setPen ( _fgColor->value().value<QColor>() );
-	
-	drawHandles(painter);
+    painter->setFont(font());
+    painter->setBackgroundMode(Qt::OpaqueMode);
+    painter->setBackground(_bgColor->value().value<QColor>());
+    painter->setPen(_fgColor->value().value<QColor>());
+    painter->fillRect(rect(),  _bgColor->value().value<QColor>());
+    painter->drawText(rect(), textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
 
-	// restore an values before we started just in case
-	painter->setFont ( f );
-	painter->setPen ( p );
+    if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0) {
+        painter->setPen(QPen(QColor(224, 224, 224)));
+    } else {
+        painter->setPen(QPen(_lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt()));
+    }
+    painter->drawRect(rect());
+
+    painter->setBackgroundMode(Qt::TransparentMode);
+    painter->setPen(_fgColor->value().value<QColor>());
+
+    drawHandles(painter);
+
+    // restore an values before we started just in case
+    painter->setFont(f);
+    painter->setPen(p);
 }
 
-void ReportEntityText::buildXML ( QDomDocument & doc, QDomElement & parent )
+void ReportEntityText::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-	//kdDebug() << "ReportEntityText::buildXML()");
-	QDomElement entity = doc.createElement ( "text" );
+    //kdDebug() << "ReportEntityText::buildXML()");
+    QDomElement entity = doc.createElement("text");
 
-	// bounding rect
-	buildXMLRect ( doc,entity,pointRect() );
-	
-	// name
-	QDomElement n = doc.createElement ( "name" );
-	n.appendChild ( doc.createTextNode ( entityName() ) );
-	entity.appendChild ( n );
-	
-	// z
-	QDomElement z = doc.createElement ( "zvalue" );
-	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
-	entity.appendChild ( z );
-	
-	// bottompad
-	QDomElement bottompad = doc.createElement ( "bottompad" );
-	qreal h = bpad * 100.0;
-	bottompad.appendChild ( doc.createTextNode ( QString::number ( ( int ) h ) ) );
-	entity.appendChild ( bottompad );
-	
-	//text style info
-	buildXMLTextStyle ( doc, entity, textStyle() );
+    // bounding rect
+    buildXMLRect(doc, entity, pointRect());
 
-	//Line Style
-	buildXMLLineStyle(doc, entity, lineStyle());
-	
-	// text alignment
-	int align = textFlags();
-	// horizontal
-	if ( ( align & Qt::AlignRight ) == Qt::AlignRight )
-		entity.appendChild ( doc.createElement ( "right" ) );
-	else if ( ( align & Qt::AlignHCenter ) == Qt::AlignHCenter )
-		entity.appendChild ( doc.createElement ( "hcenter" ) );
-	else // Qt::AlignLeft
-		entity.appendChild ( doc.createElement ( "left" ) );
-	// vertical
-	if ( ( align & Qt::AlignBottom ) == Qt::AlignBottom )
-		entity.appendChild ( doc.createElement ( "bottom" ) );
-	else if ( ( align & Qt::AlignVCenter ) == Qt::AlignVCenter )
-		entity.appendChild ( doc.createElement ( "vcenter" ) );
-	else // Qt::AlignTop
-		entity.appendChild ( doc.createElement ( "top" ) );
+    // name
+    QDomElement n = doc.createElement("name");
+    n.appendChild(doc.createTextNode(entityName()));
+    entity.appendChild(n);
 
-	// the field data
-	QDomElement data = doc.createElement ( "data" );
+    // z
+    QDomElement z = doc.createElement("zvalue");
+    z.appendChild(doc.createTextNode(QString::number(zValue())));
+    entity.appendChild(z);
 
-	QDomElement dcolumn = doc.createElement ( "controlsource" );
-	dcolumn.appendChild ( doc.createTextNode ( column() ) );
-	data.appendChild ( dcolumn );
-	entity.appendChild ( data );
+    // bottompad
+    QDomElement bottompad = doc.createElement("bottompad");
+    qreal h = bpad * 100.0;
+    bottompad.appendChild(doc.createTextNode(QString::number((int) h)));
+    entity.appendChild(bottompad);
 
-	parent.appendChild ( entity );
+    //text style info
+    buildXMLTextStyle(doc, entity, textStyle());
+
+    //Line Style
+    buildXMLLineStyle(doc, entity, lineStyle());
+
+    // text alignment
+    int align = textFlags();
+    // horizontal
+    if ((align & Qt::AlignRight) == Qt::AlignRight)
+        entity.appendChild(doc.createElement("right"));
+    else if ((align & Qt::AlignHCenter) == Qt::AlignHCenter)
+        entity.appendChild(doc.createElement("hcenter"));
+    else // Qt::AlignLeft
+        entity.appendChild(doc.createElement("left"));
+    // vertical
+    if ((align & Qt::AlignBottom) == Qt::AlignBottom)
+        entity.appendChild(doc.createElement("bottom"));
+    else if ((align & Qt::AlignVCenter) == Qt::AlignVCenter)
+        entity.appendChild(doc.createElement("vcenter"));
+    else // Qt::AlignTop
+        entity.appendChild(doc.createElement("top"));
+
+    // the field data
+    QDomElement data = doc.createElement("data");
+
+    QDomElement dcolumn = doc.createElement("controlsource");
+    dcolumn.appendChild(doc.createTextNode(column()));
+    data.appendChild(dcolumn);
+    entity.appendChild(data);
+
+    parent.appendChild(entity);
 }
 
-void ReportEntityText::mousePressEvent ( QGraphicsSceneMouseEvent * event )
+void ReportEntityText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-	_controlSource->setListData(_rd->fieldList(), _rd->fieldList());
-	ReportRectEntity::mousePressEvent(event);
+    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    ReportRectEntity::mousePressEvent(event);
 }
 
 
-void ReportEntityText::propertyChanged ( KoProperty::Set &s, KoProperty::Property &p )
+void ReportEntityText::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-	kDebug() << endl;
-	//TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
-	if ( p.name() == "Position" )
-	{
-		//_pos.setUnitPos(p.value().value<QPointF>(), false);
-	}
-	else if ( p.name() == "Size" )
-	{
-		//_size.setUnitSize(p.value().value<QSizeF>());
-	}
-	else if (p.name() == "Name")
-	{
-		//For some reason p.oldValue returns an empty string
-		if (!_rd->isEntityNameUnique(p.value().toString(), this))
-		{
-			p.setValue(_oldName);
-		}
-		else
-		{
-			_oldName =p.value().toString();	
-		}
-	}
-	
-	//setSceneRect(_pos.toScene(), _size.toScene());
-	
-	if ( _rd ) _rd->setModified ( true );
-	if (scene()) scene()->update();
+    kDebug() << endl;
+    //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
+    if (p.name() == "Position") {
+        //_pos.setUnitPos(p.value().value<QPointF>(), false);
+    } else if (p.name() == "Size") {
+        //_size.setUnitSize(p.value().value<QSizeF>());
+    } else if (p.name() == "Name") {
+        //For some reason p.oldValue returns an empty string
+        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(_oldName);
+        } else {
+            _oldName = p.value().toString();
+        }
+    }
+
+    //setSceneRect(_pos.toScene(), _size.toScene());
+
+    if (_rd) _rd->setModified(true);
+    if (scene()) scene()->update();
 }

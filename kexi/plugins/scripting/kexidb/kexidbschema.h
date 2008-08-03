@@ -28,100 +28,101 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
 
-namespace Scripting {
+namespace Scripting
+{
 
-    // Forward-declarations.
-    class KexiDBFieldList;
-    class KexiDBQuerySchema;
+// Forward-declarations.
+class KexiDBFieldList;
+class KexiDBQuerySchema;
 
-    /**
-     * The KexiDBSchema object provides common functionality for schemas
-     * like KexiDBTableSchema or KexiDBQuerySchema.
-     *
-     * Example (in Python) ;
-     * @code
-     * # Get the tableschema from a KexiDBConnection object.
-     * tableschema = connection.tableSchema("dept")
-     * # Print some information.
-     * print "table=%s description=%s" % (tableschema.name(), tableschema.description())
-     * # Get the "SELECT * FROM dept;" queryschema for the table.
-     * queryschema = tableschema.query()
-     * # Walk through the fields/columns the queryschema has and print the fieldnames.
-     * for field in queryschema.fieldlist().fields():
-     *     print "fieldname=%s" % field.name()
-     * # Execute the query. The returned KexiDBCursor object could be used then to iterate through the result.
-     * cursor = connection.executeQuerySchema(queryschema)
-     * @endcode
-     */
-    class KexiDBSchema : public QObject
-    {
-            Q_OBJECT
-        public:
-            KexiDBSchema(QObject* parent, const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist, bool owner);
-            virtual ~KexiDBSchema();
+/**
+ * The KexiDBSchema object provides common functionality for schemas
+ * like KexiDBTableSchema or KexiDBQuerySchema.
+ *
+ * Example (in Python) ;
+ * @code
+ * # Get the tableschema from a KexiDBConnection object.
+ * tableschema = connection.tableSchema("dept")
+ * # Print some information.
+ * print "table=%s description=%s" % (tableschema.name(), tableschema.description())
+ * # Get the "SELECT * FROM dept;" queryschema for the table.
+ * queryschema = tableschema.query()
+ * # Walk through the fields/columns the queryschema has and print the fieldnames.
+ * for field in queryschema.fieldlist().fields():
+ *     print "fieldname=%s" % field.name()
+ * # Execute the query. The returned KexiDBCursor object could be used then to iterate through the result.
+ * cursor = connection.executeQuerySchema(queryschema)
+ * @endcode
+ */
+class KexiDBSchema : public QObject
+{
+    Q_OBJECT
+public:
+    KexiDBSchema(QObject* parent, const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist, bool owner);
+    virtual ~KexiDBSchema();
 
-        public slots:
+public slots:
 
-            /** Returns the name of the schema. */
-            const QString name() const;
-            /** Set the name of the schema. */
-            void setName(const QString& name);
+    /** Returns the name of the schema. */
+    const QString name() const;
+    /** Set the name of the schema. */
+    void setName(const QString& name);
 
-            /** Returns the caption of the schema. */
-            const QString caption() const;
-            /** Set the caption of the schema. */
-            void setCaption(const QString& caption);
+    /** Returns the caption of the schema. */
+    const QString caption() const;
+    /** Set the caption of the schema. */
+    void setCaption(const QString& caption);
 
-            /** Returns a description of the schema. */
-            const QString description() const;
-            /** Set a description of the schema. */
-            void setDescription(const QString& description);
+    /** Returns a description of the schema. */
+    const QString description() const;
+    /** Set a description of the schema. */
+    void setDescription(const QString& description);
 
-            /** Returns the \a KexiDBFieldList object this schema has. */
-            QObject* fieldlist();
+    /** Returns the \a KexiDBFieldList object this schema has. */
+    QObject* fieldlist();
 
-        protected:
-            ::KexiDB::SchemaData* m_schema;
-            ::KexiDB::FieldList* m_fieldlist;
-            bool m_owner;
-    };
+protected:
+    ::KexiDB::SchemaData* m_schema;
+    ::KexiDB::FieldList* m_fieldlist;
+    bool m_owner;
+};
 
-    /**
-     * The KexiDBTableSchema object implements a KexiDBSchema for tables.
-     */
-    class KexiDBTableSchema : public KexiDBSchema
-    {
-            Q_OBJECT
-        public:
-            KexiDBTableSchema(QObject* parent, ::KexiDB::TableSchema* tableschema, bool owner);
-            virtual ~KexiDBTableSchema();
-            ::KexiDB::TableSchema* tableschema();
+/**
+ * The KexiDBTableSchema object implements a KexiDBSchema for tables.
+ */
+class KexiDBTableSchema : public KexiDBSchema
+{
+    Q_OBJECT
+public:
+    KexiDBTableSchema(QObject* parent, ::KexiDB::TableSchema* tableschema, bool owner);
+    virtual ~KexiDBTableSchema();
+    ::KexiDB::TableSchema* tableschema();
 
-        public slots:
-            /** Return the \a KexiDBQuerySchema object that represents a
-            "SELECT * FROM this_KexiDBTableSchema_object" SQL-statement. */
-            QObject* query();
-    };
+public slots:
+    /** Return the \a KexiDBQuerySchema object that represents a
+    "SELECT * FROM this_KexiDBTableSchema_object" SQL-statement. */
+    QObject* query();
+};
 
-    /**
-     * The KexiDBTableSchema object implements a KexiDBSchema for queries.
-     */
-    class KexiDBQuerySchema : public KexiDBSchema
-    {
-            Q_OBJECT
-        public:
-            KexiDBQuerySchema(QObject* parent, ::KexiDB::QuerySchema* queryschema, bool owner);
-            virtual ~KexiDBQuerySchema();
-            ::KexiDB::QuerySchema* queryschema();
+/**
+ * The KexiDBTableSchema object implements a KexiDBSchema for queries.
+ */
+class KexiDBQuerySchema : public KexiDBSchema
+{
+    Q_OBJECT
+public:
+    KexiDBQuerySchema(QObject* parent, ::KexiDB::QuerySchema* queryschema, bool owner);
+    virtual ~KexiDBQuerySchema();
+    ::KexiDB::QuerySchema* queryschema();
 
-        private:
-            /** Returns the SQL-statement of this query schema. */
-            const QString statement() const;
-            /** Set the SQL-statement of this query schema. */
-            void setStatement(const QString& statement);
-            /** Set the where-expression. */
-            bool setWhereExpression(const QString& whereexpression);
-    };
+private:
+    /** Returns the SQL-statement of this query schema. */
+    const QString statement() const;
+    /** Set the SQL-statement of this query schema. */
+    void setStatement(const QString& statement);
+    /** Set the where-expression. */
+    bool setWhereExpression(const QString& whereexpression);
+};
 
 }
 

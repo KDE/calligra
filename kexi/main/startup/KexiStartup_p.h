@@ -32,28 +32,28 @@ class KProgressDialog;
 
 class SQLite2ToSQLite3Migration : public QObject
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     SQLite2ToSQLite3Migration(const QString& filePath);
     ~SQLite2ToSQLite3Migration();
 
     tristate run();
 
-  public slots:
+public slots:
     void processExited(KProcess*);
-    void receivedStderr(KProcess*,char*,int);
+    void receivedStderr(KProcess*, char*, int);
     void cancelClicked();
 
-  protected:
-  QString m_filePath;
-  KProcess *m_process;
-  KProgressDialog* m_dlg;
-  
-  struct stat m_st;
-  bool m_restoreStat : 1;
-  bool m_run : 1;
+protected:
+    QString m_filePath;
+    KProcess *m_process;
+    KProgressDialog* m_dlg;
 
-  tristate result;
+    struct stat m_st;
+bool m_restoreStat : 1;
+bool m_run : 1;
+
+    tristate result;
 };
 
 #endif

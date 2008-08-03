@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.	If not, write to
+along with this program; see the file COPYING. If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -25,7 +25,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kexidb/connection.h>
 #include "sybasecursor.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class SybaseConnectionInternal;
 
@@ -36,31 +37,31 @@ class SybaseConnectionInternal;
  */
 class SybaseConnection : public Connection
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     virtual ~SybaseConnection();
 
-    virtual Cursor* prepareQuery( const QString& statement = QString(), uint cursor_options = 0 );
-    virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
+    virtual Cursor* prepareQuery(const QString& statement = QString(), uint cursor_options = 0);
+    virtual Cursor* prepareQuery(QuerySchema& query, uint cursor_options = 0);
 
-    virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-      FieldList& fields);
+    virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type,
+            FieldList& fields);
 
-  protected:
+protected:
 
     /*! Used by driver */
-    SybaseConnection( Driver *driver, ConnectionData &conn_data );
+    SybaseConnection(Driver *driver, ConnectionData &conn_data);
 
     virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
     virtual bool drv_disconnect();
-    virtual bool drv_getDatabasesList( QStringList &list );
-    virtual bool drv_createDatabase( const QString &dbName = QString() );
-    virtual bool drv_useDatabase( const QString &dbName = QString(), bool *cancelled = 0, 
-      MessageHandler* msgHandler = 0 );
+    virtual bool drv_getDatabasesList(QStringList &list);
+    virtual bool drv_createDatabase(const QString &dbName = QString());
+    virtual bool drv_useDatabase(const QString &dbName = QString(), bool *cancelled = 0,
+                                 MessageHandler* msgHandler = 0);
     virtual bool drv_closeDatabase();
-    virtual bool drv_dropDatabase( const QString &dbName = QString() );
-    virtual bool drv_executeSQL( const QString& statement );
+    virtual bool drv_dropDatabase(const QString &dbName = QString());
+    virtual bool drv_executeSQL(const QString& statement);
     virtual quint64 drv_lastInsertRowID();
 
     virtual int serverResult();
@@ -69,15 +70,15 @@ class SybaseConnection : public Connection
     virtual void drv_clearServerResult();
 
 //TODO: move this somewhere to low level class (MIGRATION?)
-    virtual bool drv_getTablesList( QStringList &list );
+    virtual bool drv_getTablesList(QStringList &list);
 //TODO: move this somewhere to low level class (MIGRATION?)
-    virtual bool drv_containsTable( const QString &tableName );
+    virtual bool drv_containsTable(const QString &tableName);
 
-    virtual bool drv_beforeInsert( const QString& table, FieldList& fields );
-    virtual bool drv_afterInsert( const QString& table, FieldList& fields );
-    
-    virtual bool drv_beforeUpdate( const QString& table, FieldList& fields );
-    virtual bool drv_afterUpdate( const QString& table, FieldList& fields );
+    virtual bool drv_beforeInsert(const QString& table, FieldList& fields);
+    virtual bool drv_afterInsert(const QString& table, FieldList& fields);
+
+    virtual bool drv_beforeUpdate(const QString& table, FieldList& fields);
+    virtual bool drv_afterUpdate(const QString& table, FieldList& fields);
 
     SybaseConnectionInternal* d;
 

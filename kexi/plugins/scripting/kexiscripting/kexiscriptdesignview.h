@@ -32,8 +32,9 @@
 class KexiScriptEditor;
 class KexiScriptDesignViewPrivate;
 
-namespace Kross {
-  class Action;
+namespace Kross
+{
+class Action;
 }
 
 /**
@@ -44,84 +45,84 @@ namespace Kross {
  */
 class KexiScriptDesignView : public KexiView
 {
-        Q_OBJECT
+    Q_OBJECT
 
-    public:
+public:
 
-        /**
-         * Constructor.
-         */
-        KexiScriptDesignView(QWidget *parent, Kross::Action* scriptaction);
+    /**
+     * Constructor.
+     */
+    KexiScriptDesignView(QWidget *parent, Kross::Action* scriptaction);
 
-        /**
-         * Destructor.
-         */
-        virtual ~KexiScriptDesignView();
+    /**
+     * Destructor.
+     */
+    virtual ~KexiScriptDesignView();
 
-        /**
-         * \return the \a Kross::Action this \a KexiScriptDesignView
-         * is responsible for.
-         */
-        Kross::Action* scriptAction() const;
+    /**
+     * \return the \a Kross::Action this \a KexiScriptDesignView
+     * is responsible for.
+     */
+    Kross::Action* scriptAction() const;
 
-        /**
-         * \return a property set for this view.
-         */
-        virtual KoProperty::Set* propertySet();
+    /**
+     * \return a property set for this view.
+     */
+    virtual KoProperty::Set* propertySet();
 
-        /**
-         * Try to call \a storeData with new data we like to store. On
-         * success the matching \a KexiDB::SchemaData is returned.
-         *
-         * \param sdata The source \a KexiDB::SchemaData instance.
-         * \param cancel Cancel on failure and don't try to clean
-         *       possible temporary created data up.
-         * \return The matching \a KexiDB::SchemaData instance or NULL
-         *        if storing failed.
-         */
-        virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
+    /**
+     * Try to call \a storeData with new data we like to store. On
+     * success the matching \a KexiDB::SchemaData is returned.
+     *
+     * \param sdata The source \a KexiDB::SchemaData instance.
+     * \param cancel Cancel on failure and don't try to clean
+     *       possible temporary created data up.
+     * \return The matching \a KexiDB::SchemaData instance or NULL
+     *        if storing failed.
+     */
+    virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
-        /**
-         * Try to store the modified data in the already opened and
-         * currently used \a KexiDB::SchemaData instance.
-         */
-        virtual tristate storeData(bool dontAsk = false);
+    /**
+     * Try to store the modified data in the already opened and
+     * currently used \a KexiDB::SchemaData instance.
+     */
+    virtual tristate storeData(bool dontAsk = false);
 
-    private slots:
+private slots:
 
-        /**
-         * Deferred initialization.
-         */
-        void initialize();
+    /**
+     * Deferred initialization.
+     */
+    void initialize();
 
-        void slotFileNew();
-        void slotFileOpen();
-        void slotFileSave();
+    void slotFileNew();
+    void slotFileOpen();
+    void slotFileSave();
 
-        /**
-         * Handle changes in the property editor.
-         */
-        void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    /**
+     * Handle changes in the property editor.
+     */
+    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-        /**
-         * Update the \a KoProperty::Property::Dict propertymap of the
-         * interpreter-dependent options.
-         */
-        void updateProperties();
+    /**
+     * Update the \a KoProperty::Property::Dict propertymap of the
+     * interpreter-dependent options.
+     */
+    void updateProperties();
 
-        /**
-         * Execute the scripting code.
-         */
-        void execute();
+    /**
+     * Execute the scripting code.
+     */
+    void execute();
 
-    private:
-        KexiScriptDesignViewPrivate* d;
+private:
+    KexiScriptDesignViewPrivate* d;
 
-        /**
-         * Load the data from XML source and fill the internally
-         * used \a Kross::Action instance.
-         */
-        bool loadData();
+    /**
+     * Load the data from XML source and fill the internally
+     * used \a Kross::Action instance.
+     */
+    bool loadData();
 };
 
 #endif

@@ -32,24 +32,24 @@ class ConnectionData;
 */
 class KEXI_DB_EXPORT AdminTools : public Object
 {
-	public:
-		AdminTools();
-		virtual ~AdminTools();
+public:
+    AdminTools();
+    virtual ~AdminTools();
 
-		/*! Performs vacuum (compacting) for connection \a data. 
-		 Can be implemented for your driver.
-		 Note: in most cases the database should not be opened.
+    /*! Performs vacuum (compacting) for connection \a data.
+     Can be implemented for your driver.
+     Note: in most cases the database should not be opened.
 
-		 Currently it is implemented for SQLite drivers.
+     Currently it is implemented for SQLite drivers.
 
-		 \return true on success, false on failure 
-		 (then you can get error status from the AdminTools object). */
-		virtual bool vacuum(const ConnectionData& data, const QString& databaseName);
-		//virtual bool vacuum(Connection& conn);
+     \return true on success, false on failure
+     (then you can get error status from the AdminTools object). */
+    virtual bool vacuum(const ConnectionData& data, const QString& databaseName);
+    //virtual bool vacuum(Connection& conn);
 
-	protected:
-		class Private;
-		Private *d;
+protected:
+    class Private;
+    Private *d;
 };
 }
 

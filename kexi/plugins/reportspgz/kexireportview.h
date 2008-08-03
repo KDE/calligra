@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,37 +33,37 @@ class KexiReportViewPageSelect;
 class KexiRecordNavigator;
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KexiReportView : public KexiView
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	KexiReportView(QWidget *parent);
+    KexiReportView(QWidget *parent);
 
     ~KexiReportView();
 
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
-    
-	private:
-		ORPreRender *rpt;
-		ORODocument *doc;
-		QScrollArea *scr;
-		KexiReportPage *rptwid;
-		KexiRecordNavigator *pageSelector;
-		int curPage;
-		int pageCount;
-		KexiReportPart::TempData* tempData() const;
-				
-	private slots:
-		void nextPage();
-		void prevPage();
-		void firstPage();
-		void lastPage();
-		void slotPrintReport();
-		void slotRenderKSpread();
-		void slotExportHTML();
+
+private:
+    ORPreRender *rpt;
+    ORODocument *doc;
+    QScrollArea *scr;
+    KexiReportPage *rptwid;
+    KexiRecordNavigator *pageSelector;
+    int curPage;
+    int pageCount;
+    KexiReportPart::TempData* tempData() const;
+
+private slots:
+    void nextPage();
+    void prevPage();
+    void firstPage();
+    void lastPage();
+    void slotPrintReport();
+    void slotRenderKSpread();
+    void slotExportHTML();
 
 };
 

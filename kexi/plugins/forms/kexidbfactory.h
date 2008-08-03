@@ -29,47 +29,48 @@
 
 class KAction;
 
-namespace KFormDesigner {
-  class Form;
-  }
+namespace KFormDesigner
+{
+class Form;
+}
 
 //! Kexi Factory (DB widgets + subform)
 class KexiDBFactory : public KFormDesigner::WidgetFactory
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KexiDBFactory(QObject *parent, const QStringList &args);
     virtual ~KexiDBFactory();
 
-    virtual QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, 
-      KFormDesigner::Container *container, int options = DefaultOptions );
+    virtual QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name,
+                                  KFormDesigner::Container *container, int options = DefaultOptions);
 
     virtual void createCustomActions(KActionCollection* col);
     virtual bool createMenuActions(const Q3CString &classname, QWidget *w, QMenu *menu,
-       KFormDesigner::Container *container);
+                                   KFormDesigner::Container *container);
     virtual bool startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container);
     virtual bool previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *);
     virtual bool clearWidgetContent(const Q3CString &classname, QWidget *w);
 
-    //virtual void		saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
-             //QDomElement &parentNode, QDomDocument &parent) {}
+    //virtual void  saveSpecialProperty(const QString &classname, const QString &name, const QVariant &value, QWidget *w,
+    //QDomElement &parentNode, QDomDocument &parent) {}
     //virtual void            readSpecialProperty(const QCString &classname, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item) {}
     virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
 
-  protected slots:
+protected slots:
     void slotImageBoxIdChanged(long id); /*KexiBLOBBuffer::Id_t*/
 
-  protected:
+protected:
     virtual bool changeText(const QString &newText);
     virtual void resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname);
 
     virtual bool isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
-      const Q3CString& property, bool isTopLevel);
+                                           const Q3CString& property, bool isTopLevel);
 
     //! Sometimes property sets should be reloaded when a given property value changed.
-    virtual bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w, 
-      const Q3CString& property);
+    virtual bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w,
+            const Q3CString& property);
 
     KAction* m_assignAction;
 };

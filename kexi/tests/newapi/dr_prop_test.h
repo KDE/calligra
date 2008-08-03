@@ -22,19 +22,19 @@
 
 int drPropTest()
 {
-  QList<QByteArray> names = driver->propertyNames();
-  kDebug() << QString("%1 properties found:").arg(names.count()) << endl;
-  foreach (const QByteArray& propertyName, names) {
-    kDebug() << " - " << propertyName << ":" 
-      << " caption=\"" << driver->propertyCaption(propertyName) << "\""
-      << " type=" << driver->propertyValue(propertyName).typeName() 
-      << " value=\""<<driver->propertyValue(propertyName).toString()<<"\"" << endl;
-  }
-//		QVariant propertyValue( const QCString& propName ) const;
+    QList<QByteArray> names = driver->propertyNames();
+    kDebug() << QString("%1 properties found:").arg(names.count()) << endl;
+    foreach(const QByteArray& propertyName, names) {
+        kDebug() << " - " << propertyName << ":"
+        << " caption=\"" << driver->propertyCaption(propertyName) << "\""
+        << " type=" << driver->propertyValue(propertyName).typeName()
+        << " value=\"" << driver->propertyValue(propertyName).toString() << "\"" << endl;
+    }
+//  QVariant propertyValue( const QCString& propName ) const;
 
-//		QVariant propertyCaption( const QCString& propName ) const;
+//  QVariant propertyCaption( const QCString& propName ) const;
 
-  return 0;
+    return 0;
 }
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,26 +26,26 @@ class QPixmap;
 class ORODocument;
 
 /**
-	@author Adam Pigg <adam@piggz.co.uk>
+ @author Adam Pigg <adam@piggz.co.uk>
 */
 class KexiReportPage : public QWidget
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	KexiReportPage(QWidget *parent, const char *name, ORODocument *r);
+    KexiReportPage(QWidget *parent, const char *name, ORODocument *r);
 
-    	~KexiReportPage();
+    ~KexiReportPage();
 
-	void renderPage(int);
-	
-	public slots:
-		virtual void paintEvent(QPaintEvent*);
-		
-	private:
-		ORODocument *rpt;
-		int page;
-		bool _repaint;
-		QPixmap *_pm;
+    void renderPage(int);
+
+public slots:
+    virtual void paintEvent(QPaintEvent*);
+
+private:
+    ORODocument *rpt;
+    int page;
+    bool _repaint;
+    QPixmap *_pm;
 };
 
 #endif

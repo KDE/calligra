@@ -40,14 +40,14 @@ class KexiProjectDataPrivate;
 */
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
-  public:
+public:
     typedef QList<KexiProjectData*> List;
-    typedef QHash<QByteArray,QString> ObjectInfo;
+    typedef QHash<QByteArray, QString> ObjectInfo;
 
     //! A list of autoopen objects allowing deep copies
     class KEXICORE_EXPORT AutoOpenObjects : public QList<ObjectInfo*>
     {
-      public:
+    public:
         AutoOpenObjects();
 
         ~AutoOpenObjects();
@@ -61,33 +61,33 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
     KexiProjectData();
 
-    KexiProjectData( const KexiDB::ConnectionData &cdata, 
-      const QString& dbname = QString(), const QString& caption = QString() );
-      
+    KexiProjectData(const KexiDB::ConnectionData &cdata,
+                    const QString& dbname = QString(), const QString& caption = QString());
+
     /*! Constructs a copy of \a pdata */
-    KexiProjectData( const KexiProjectData& pdata );
+    KexiProjectData(const KexiProjectData& pdata);
 
     ~KexiProjectData();
 
     KexiProjectData& operator=(const KexiProjectData& pdata);
 
-    /*! \return true if there is the User Mode set in internal 
+    /*! \return true if there is the User Mode set in internal
      project settings. */
     bool userMode() const;
-    
+
     KexiDB::ConnectionData* connectionData();
 
     const KexiDB::ConnectionData* constConnectionData() const;
 
-    /*! \return database name. 
+    /*! \return database name.
      In fact, this is the same as KexiDB::SchemaData::name() */
     QString databaseName() const;
     void setDatabaseName(const QString& dbName);
 
-    /*! \return user-visible string better describing the project than just databaseName(). 
-     For server-based projects returns i18n'd string: 
+    /*! \return user-visible string better describing the project than just databaseName().
+     For server-based projects returns i18n'd string:
      "<project name>" (connection: user\@server:port).
-     For file-based projects returns project's filename. 
+     For file-based projects returns project's filename.
      If \a nobr is true, \<nobr\> tags are added around '(connection: user\@server:port)'
      (useful for displaying in message boxes). */
     QString infoString(bool nobr = true) const;
@@ -99,8 +99,8 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
     QString description() const;
     void setDescription(const QString& desc);
 
-    /*! If \a set is true, sets readonly flag for this data, so any connection opened for the project will 
-     be readonly. Change this flag before using this data in KexiProject instance, 
+    /*! If \a set is true, sets readonly flag for this data, so any connection opened for the project will
+     be readonly. Change this flag before using this data in KexiProject instance,
      otherwise you will need to reopen the project. */
     void setReadOnly(bool set);
 
@@ -119,7 +119,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
      the version information is be retrieved from the file. */
     uint formatVersion;
 
-  private:
+private:
     KexiProjectDataPrivate *d;
 };
 

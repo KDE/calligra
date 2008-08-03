@@ -30,9 +30,9 @@
 #include "kexipartitem.h"
 #include "kexi.h"
 
-/*! KexiProject implementation version. 
- It is altered after every change: 
- - major number is increased after KexiProject storage format change, 
+/*! KexiProject implementation version.
+ It is altered after every change:
+ - major number is increased after KexiProject storage format change,
  - minor is increased after adding binary-incompatible change.
  Use KexiProject::versionMajor() and KexiProject::versionMinor() to get real project's version.
 */
@@ -42,65 +42,65 @@
 
 namespace KexiDB
 {
-  class Connection;
-  class Parser;
+class Connection;
+class Parser;
 }
 
 namespace KexiPart
 {
-  class Part;
-  class Info;
+class Part;
+class Info;
 }
 
 class KexiMainWindow;
 class KexiWindow;
 
 /**
- * @short A project's main controller. 
+ * @short A project's main controller.
  * It also contains connection data,
  * current file state, etc.
  */
 class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    /*! Constructor 1. Creates a new object using \a pdata. 
+public:
+    /*! Constructor 1. Creates a new object using \a pdata.
      \a pdata which will be then owned by KexiProject object.
-     \a handler can be provided to receive error messages during 
+     \a handler can be provided to receive error messages during
      entire KexiProject object's lifetime. */
     KexiProject(KexiProjectData* pdata, KexiDB::MessageHandler* handler = 0);
 
-    /*! Constructor 2. Like above but sets predefined connections \a conn. 
-     The connection should be created using the same connection data 
+    /*! Constructor 2. Like above but sets predefined connections \a conn.
+     The connection should be created using the same connection data
      as pdata->connectionData(). The connection will become owned by created KexiProject
      object, so do not destroy it. */
-    KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler, 
-      KexiDB::Connection* conn);
+    KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler,
+                KexiDB::Connection* conn);
 
-//		KexiProject(KexiDB::ConnectionData *cdata);
+//  KexiProject(KexiDB::ConnectionData *cdata);
 
     ~KexiProject();
 
-    /*! \return major version of KexiProject object. 
+    /*! \return major version of KexiProject object.
      This information is retrieved from database when existing project is opened. */
     int versionMajor() const;
 
-    /*! \return minor version of KexiProject object. 
+    /*! \return minor version of KexiProject object.
      @see versionMajor() */
     int versionMinor() const;
 
-    /*! Opens existing project using project data. 
+    /*! Opens existing project using project data.
      \return true on success */
     tristate open();
 
-    /*! Like open(). 
+    /*! Like open().
      \return true on success.
      Additional \a incompatibleWithKexi, is set to false on failure when
-     connection for the project was successfully started bu the project 
-     is probably not compatible with Kexi - no valid "kexidb_major_ver" 
-     value in "kexi__db" table. 
-     This is often the case for native server-based databases. 
+     connection for the project was successfully started bu the project
+     is probably not compatible with Kexi - no valid "kexidb_major_ver"
+     value in "kexi__db" table.
+     This is often the case for native server-based databases.
      If so, Kexi application can propose importing the database
      or linking it to parent project (the latter isn't yet implemented).
      For other types of errors the variable is set to true. */
@@ -110,15 +110,17 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
      If \a forceOverwrite is true, existing database project is silently overwritten.
      Connection is created (accessible then with KexiProject::dbConnection()).
 
-     Since KexiProject inherits KexiDB::Object, it is possible to get error message 
+     Since KexiProject inherits KexiDB::Object, it is possible to get error message
      and other information on error.
 
-     \return true on success, false on failure, and cancelled when database exists 
+     \return true on success, false on failure, and cancelled when database exists
      but \a forceOverwrite is false. */
     tristate create(bool forceOverwrite = false);
 
     /*! \return true if there was error during last operation on the object. */
-    bool error() const { return KexiDB::Object::error(); }
+    bool error() const {
+        return KexiDB::Object::error();
+    }
 
     /**
      * @return true if a we are connected to a database
@@ -174,15 +176,15 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
     KexiProjectData *data() const;
 
     /*! Opens object pointed by \a item in a view \a viewMode.
-     \a staticObjectArgs can be passed for static object 
+     \a staticObjectArgs can be passed for static object
      (only works when part for this item is of type KexiPart::StaticPart).
      The new widget will be a child of \a parent. */
-    KexiWindow* openObject(QWidget* parent, KexiPart::Item& item, 
-      Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QVariant>* staticObjectArgs = 0);
+    KexiWindow* openObject(QWidget* parent, KexiPart::Item& item,
+                           Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
 
     //! For convenience
-    KexiWindow* openObject(QWidget* parent, const QString &mimeType, 
-      const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
+    KexiWindow* openObject(QWidget* parent, const QString &mimeType,
+                           const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 
     /*! Remove a part instance pointed by \a item.
      \return true on success. */
@@ -192,44 +194,44 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
      \return true on success. */
     bool renameObject(KexiPart::Item& item, const QString& newName);
 
-    /*! Creates part item for given part \a info. 
+    /*! Creates part item for given part \a info.
      Newly item will not be saved to the backend but stored in memory only
      (owned by project), and marked as "neverSaved" (see KexiPart::Item::neverSaved()).
      The item will have assigned a new unique caption like e.g. "Table15",
-     and unique name like "table15", but no specific identifier 
+     and unique name like "table15", but no specific identifier
      (because id will be assigned on creation at the backend side).
 
-     If \a suggestedCaption is not empty, it will be set as a caption 
-     (with number suffix, to avoid duplicated, e.g. "employees7" 
-     for "employees" sugested name). Name will be then built based 
+     If \a suggestedCaption is not empty, it will be set as a caption
+     (with number suffix, to avoid duplicated, e.g. "employees7"
+     for "employees" sugested name). Name will be then built based
      on this caption using KexiUtils::string2Identifier().
 
      This method is used before creating new object.
      \return newly created part item or NULL on any error. */
-    KexiPart::Item* createPartItem(KexiPart::Info *info, 
-      const QString& suggestedCaption = QString() );
+    KexiPart::Item* createPartItem(KexiPart::Info *info,
+                                   const QString& suggestedCaption = QString());
 
     //! Added for convenience.
-    KexiPart::Item* createPartItem(KexiPart::Part *part, 
-      const QString& suggestedCaption = QString());
+    KexiPart::Item* createPartItem(KexiPart::Part *part,
+                                   const QString& suggestedCaption = QString());
 
     /*! Adds item \a item after it is succesfully stored as an instance of part
      pointed by \a info. Also clears 'neverSaved' flag if \a item.
-     Used by KexiWindow::storeNewData(). 
+     Used by KexiWindow::storeNewData().
      @internal */
     void addStoredItem(KexiPart::Info *info, KexiPart::Item *item);
 
-    /*! removes \a item from internal dictionaries. The item is destroyed 
-     after successful removal. 
+    /*! removes \a item from internal dictionaries. The item is destroyed
+     after successful removal.
      Used to delete an unstored part item previusly created with createPartItem(). */
     void deleteUnstoredItem(KexiPart::Item *item);
 
 #if 0 //remove?
-    /*! Creates object using data provided by \a dlg dialog. 
-     Dialog's \a item (KexiDialog::partItem()) must not be stored 
-     (KexiPart::Item::neverStored()==false) and created 
+    /*! Creates object using data provided by \a dlg dialog.
+     Dialog's \a item (KexiDialog::partItem()) must not be stored
+     (KexiPart::Item::neverStored()==false) and created
      by KexiProject::createPartItem().
-     Identifier of the item will be updated to a final value 
+     Identifier of the item will be updated to a final value
      (stored in the backend), because previously there was temporary one set.
      \return true for successfully created object or false on any error. */
     bool createObject(KexiWindow *window);
@@ -238,25 +240,25 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
     KexiDB::Parser* sqlParser();
 
     /*! Shows dialog for creating new blank project,
-     ans creates one. Dialog is not shown if option for automatic creation 
+     ans creates one. Dialog is not shown if option for automatic creation
      is checked or Kexi::startupHandler().projectData() was provided from command line.
-     \a cancelled is set to true if creation has been cancelled (e.g. user answered 
+     \a cancelled is set to true if creation has been cancelled (e.g. user answered
      no when asked for database overwriting, etc.
      \return true if database was created, false on error or when cancel was pressed */
     static KexiProject* createBlankProject(bool &cancelled, KexiProjectData* data,
-      KexiDB::MessageHandler* handler = 0);
+                                           KexiDB::MessageHandler* handler = 0);
 
-    /*! Drops project described by \a data. \return true on success. 
+    /*! Drops project described by \a data. \return true on success.
      Use with care: Any KexiProject objects allocated for this project will become invalid! */
-    static tristate dropProject(KexiProjectData* data, 
-      KexiDB::MessageHandler* handler, bool dontAsk = false);
+    static tristate dropProject(KexiProjectData* data,
+                                KexiDB::MessageHandler* handler, bool dontAsk = false);
 
     /*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */
-//		void setQuerySchemaObsolete( const QString& queryName );
+//  void setQuerySchemaObsolete( const QString& queryName );
 
-//		/** used to emit objectCreated() signal */
-//		void emitObjectCreated(const QCString &mime, const QCString& name) { emit objectCreated(mime, name); }
-//		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
+//  /** used to emit objectCreated() signal */
+//  void emitObjectCreated(const QCString &mime, const QCString& name) { emit objectCreated(mime, name); }
+//  void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
 
     /*! Generates ID for private "document" like Relations window.
      Private IDs are negative numbers (while ID regular part instance's IDs are >0)
@@ -265,12 +267,12 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
      To generate this ID, just app-wide internal counter is used. */
     virtual int generatePrivateID();
 
-  protected:
-    /*! Creates connection using project data. 
+protected:
+    /*! Creates connection using project data.
      The connection will be readonly if data()->isReadOnly().
      \return true on success, otherwise false and appropriate error is set. */
     bool createConnection();
-    
+
     bool closeConnection();
 
     bool initProject();
@@ -278,21 +280,21 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
     //! Used in open() and open(bool&).
     tristate openInternal(bool *incompatibleWithKexi);
 
-    /*! Kexi itself can define a number of internal database objects (mostly data structures), 
+    /*! Kexi itself can define a number of internal database objects (mostly data structures),
      usually tables for it's own purposes.
      Even while at KexiDB library level, such "system" tables, like "kexi__objects", "kexi__objectdata"
      are created automatically on database project creation, this is not enough: there are objects
      needed specifically for Kexi but not for other applications utilizing KexiDB library.
-     Example table created here for now is "kexi__blobs". 
+     Example table created here for now is "kexi__blobs".
 
-     This method is called on create() and open(): creates necessary objects 
+     This method is called on create() and open(): creates necessary objects
      if they are not yet existing. This especially allows to create to create these objects
-     (on open) within a project made with previous Kexi version not supporting 
+     (on open) within a project made with previous Kexi version not supporting
      all currently defined structurtes. We're trying to be here as much backward compatible as possible.
      For this purpose, here's the complete list of currently created objects:
      - "kexi__blobs" - a table containing BLOBs data that can be accessed globally at Kexi projects
        from within any database-aware view (table views, forms, reports, etc.)
-     
+
      @param insideTransaction Embed entire creation process inside a transaction
 
      \return true on successful object's creation. Objects are created only once, they are not overwritten.
@@ -302,7 +304,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
     /*! \return Kexi part for \a item. */
     KexiPart::Part *findPartFor(KexiPart::Item& item);
 
-  signals:
+signals:
     /** signal emitted on error */
     void error(const QString &title, KexiDB::Object *obj);
 
@@ -318,13 +320,13 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
     /** instance pointed by \a item is renamed */
     void itemRenamed(const KexiPart::Item &item, const QString& oldName);
 
-//		/** new table \a schema created */
-//		void tableCreated(KexiDB::TableSchema& schema);
-//		/** New object of mimetype \a mime and \a name has been created. */
-//		void objectCreated(const QCString &mime, const QCString& name);
+//  /** new table \a schema created */
+//  void tableCreated(KexiDB::TableSchema& schema);
+//  /** New object of mimetype \a mime and \a name has been created. */
+//  void objectCreated(const QCString &mime, const QCString& name);
 
-  protected:
-    /*! Checks whether the project's connection is read-only. 
+protected:
+    /*! Checks whether the project's connection is read-only.
      If so, error message is set and false is returned. */
     bool checkWritable();
 

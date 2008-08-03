@@ -32,36 +32,38 @@ class KexiStartupFileDialogBasePrivate;
 class KexiStartupFileDialogBase : public Q3FileDialog
 {
 public:
-  KexiStartupFileDialogBase(const QString & dirName, const QString & filter = QString(), 
-    QWidget * parent = 0, const char * name = 0, bool modal = false );
-  ~KexiStartupFileDialogBase();
+    KexiStartupFileDialogBase(const QString & dirName, const QString & filter = QString(),
+                              QWidget * parent = 0, const char * name = 0, bool modal = false);
+    ~KexiStartupFileDialogBase();
 
-  QPushButton * okButton() const { return m_okBtn; }
+    QPushButton * okButton() const {
+        return m_okBtn;
+    }
 
-  void clearFilter();
-  void setFilter(const QString& filter);
-  void setOperationMode( KFileDialog::OperationMode mode );
-  void setMode( KFile::Mode m );
-  void setMode( unsigned int m );
-  QString currentFilter() const;
-  void setMimeFilter( const QStringList& mimeTypes, const QString& defaultType = QString() );
+    void clearFilter();
+    void setFilter(const QString& filter);
+    void setOperationMode(KFileDialog::OperationMode mode);
+    void setMode(KFile::Mode m);
+    void setMode(unsigned int m);
+    QString currentFilter() const;
+    void setMimeFilter(const QStringList& mimeTypes, const QString& defaultType = QString());
 
-  KFile::Mode mode() const;
+    KFile::Mode mode() const;
 
 protected:
-  void init(const QString& startDir, const QString& filter, QWidget* widget);
-  void updateAutoSelectExtension() {};
+    void init(const QString& startDir, const QString& filter, QWidget* widget);
+    void updateAutoSelectExtension() {};
 
-  //! Helper added because QFileDialog on win32 doesn't support ":" prefixes 
-  //! for recent dir's storage. 
-  QString realStartDir(const QString& startDir);
+    //! Helper added because QFileDialog on win32 doesn't support ":" prefixes
+    //! for recent dir's storage.
+    QString realStartDir(const QString& startDir);
 
-  void saveLastVisitedPath(const QString& path);
+    void saveLastVisitedPath(const QString& path);
 
-  QPushButton* m_okBtn;
-  QLineEdit* m_lineEdit;
-  QString m_lastVisitedPathsVariable; //!< Used by win32; @see realStartDir()
-  KexiStartupFileDialogBasePrivate* d;
+    QPushButton* m_okBtn;
+    QLineEdit* m_lineEdit;
+    QString m_lastVisitedPathsVariable; //!< Used by win32; @see realStartDir()
+    KexiStartupFileDialogBasePrivate* d;
 };
 
 #endif

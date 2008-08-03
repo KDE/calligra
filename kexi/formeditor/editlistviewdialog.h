@@ -33,31 +33,33 @@ class K3ListView;
 class K3ListBox;
 class Q3ListBoxItem;
 
-namespace KoProperty {
-  class Property;
-  class Set;
-  class Editor;
+namespace KoProperty
+{
+class Property;
+class Set;
+class Editor;
 }
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 //! A dialog to edit the contents of a listview (K3ListView or QListView)
-/*! The dialog contains two pages, one to edit columns and one to edit ist items. 
+/*! The dialog contains two pages, one to edit columns and one to edit ist items.
  KoProperty::Editor is used in columns to edit column properties
- (there are two properties not supported by Qt Designer: 'width' and 'resizable'). 
+ (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
  using K3ListViewItem::setRenameable(). Pixmaps are not yet supported. */
 class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     EditListViewDialog(QWidget *parent);
     ~EditListViewDialog() {}
 
     int exec(Q3ListView *listview);
 
-  public slots:
+public slots:
     // Columns page
     void updateItemProperties(Q3ListBoxItem*);
     void newItem();
@@ -74,12 +76,12 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KPageDialog
     void MoveRowUp();
     void MoveRowDown();
 
-  protected:
+protected:
     /*! Loads all child items of \a item into \a listview (may be different from the \a items 's listview) as child of \a parent item.
     This is used to copy the contents of a listview into another listview. */
     void loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent);
 
-  protected:
+protected:
     enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
     KoProperty::Editor  *m_editor;
     KoProperty::Set  *m_propSet;

@@ -24,37 +24,37 @@ using namespace KexiUtils;
 
 class InternalPropertyMap::Private
 {
-  public:
+public:
     Private() {}
 
-  QHash<QByteArray, QVariant> map;
+    QHash<QByteArray, QVariant> map;
 };
 
 //---------------------------------
 
 InternalPropertyMap::InternalPropertyMap()
- : d( new Private )
+        : d(new Private)
 {
 }
 
 InternalPropertyMap::~InternalPropertyMap()
 {
-  delete d;
+    delete d;
 }
 
 QVariant InternalPropertyMap::internalPropertyValue(
-  const QByteArray& name, 
-  const QVariant& defaultValue) const
+    const QByteArray& name,
+    const QVariant& defaultValue) const
 {
-  const QVariant result( d->map.value(name.toLower()) );
-  return result.isNull() ? defaultValue : result;
+    const QVariant result(d->map.value(name.toLower()));
+    return result.isNull() ? defaultValue : result;
 }
 
 void InternalPropertyMap::setInternalPropertyValue(
-  const QByteArray& name, const QVariant& value)
+    const QByteArray& name, const QVariant& value)
 {
-  if (value.isNull())
-    d->map.remove(name.toLower());
-  else
-    d->map.insert(name.toLower(), value);
+    if (value.isNull())
+        d->map.remove(name.toLower());
+    else
+        d->map.insert(name.toLower(), value);
 }

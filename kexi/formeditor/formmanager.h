@@ -43,14 +43,16 @@ class KPageDialog;
 class KTextEdit;
 class KXMLGUIClient;
 
-namespace KoProperty {
-  class Editor;
-  class Set;
-  class Property;
-  class Widget;
+namespace KoProperty
+{
+class Editor;
+class Set;
+class Property;
+class Widget;
 }
 
-namespace KFormDesigner {
+namespace KFormDesigner
+{
 
 class WidgetPropertySet;
 class Container;
@@ -74,9 +76,9 @@ typedef Q3PtrList<KAction> ActionList;
  **/
 class KFORMEDITOR_EXPORT FormManager : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /*! Constructs FormManager object.
      Using \a options you can control manager's behaviour, see Options. */
     FormManager(QObject *parent = 0, int options = 0, const char *name = 0);
@@ -86,7 +88,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     //! Creates widget library for supportedFactoryGroups
     //! and initializes FormManager singleton. \a m should be always the same for every call.
     static WidgetLibrary* createWidgetLibrary(FormManager* m,
-      const QStringList& supportedFactoryGroups);
+            const QStringList& supportedFactoryGroups);
 
     //! Access to FormManager singleton
     static FormManager* self();
@@ -95,7 +97,8 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     *   These are really bit-flags and may be or-ed together.
     */
     enum Options { HideEventsInPopupMenu = 1, SkipFileActions = 2,
-      HideSignalSlotConnections = 4 }; //todo
+                   HideSignalSlotConnections = 4
+                 }; //todo
 
     /*! Creates all the KActions related to widget insertion, and plug them
       into the \a collection. \a client XML GUI client is used to call
@@ -104,40 +107,50 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
       \return a QPtrList of the created actions.
      */
     ActionList createActions(WidgetLibrary *lib, KActionCollection* collection,
-      KXMLGUIClient *client);
+                             KXMLGUIClient *client);
 
     /*! Enables or disables actions \a name.
      KFD uses KPart's, action collection here.
      Kexi implements this to get (shared) actions defined elsewhere. */
-    virtual void enableAction( const char* name, bool enable ) = 0;
+    virtual void enableAction(const char* name, bool enable) = 0;
 
     /*! \return action for \a name. @see enableAction() */
     virtual QAction* action(const char* name) = 0;
 
     bool isPasteEnabled();
 
-//		//! \return A pointer to the WidgetLibrary owned by this Manager.
-//		WidgetLibrary* lib() const { return m_lib; }
+//  //! \return A pointer to the WidgetLibrary owned by this Manager.
+//  WidgetLibrary* lib() const { return m_lib; }
 
     //! \return A pointer to the WidgetPropertySet owned by this Manager.
-    WidgetPropertySet* propertySet() const { return m_propSet; }
+    WidgetPropertySet* propertySet() const {
+        return m_propSet;
+    }
 
     /*! \return true if one of the insert buttons was pressed and the forms
      are ready to create a widget. */
-    bool isInserting() const { return m_inserting; }
+    bool isInserting() const {
+        return m_inserting;
+    }
 
     /*! \return The name of the class being inserted, corresponding
      to the menu item or the toolbar button clicked. */
-    Q3CString selectedClass() const { return m_selectedClass; }
+    Q3CString selectedClass() const {
+        return m_selectedClass;
+    }
 
     /*! Sets the point where the pasted widget should be moved to. */
     void setInsertPoint(const QPoint &p);
 
     //! \return If we are creating a Connection by drag-and-drop or not.
-    bool isCreatingConnection() { return m_drawingSlot; }
+    bool isCreatingConnection() {
+        return m_drawingSlot;
+    }
 
     //! \return the Connection being created.
-    Connection* createdConnection() { return m_connection; }
+    Connection* createdConnection() {
+        return m_connection;
+    }
 
     /*! Resets the Connection being created. We stay in Connection creation mode,
       but we start a new connection (when the user clicks
@@ -151,8 +164,9 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     void createSlotMenu(QWidget *w);
 
     //! Emits the signal \ref createFormSlot(). Used by WidgetPropertySet.
-    void emitCreateSlot(const QString &widget, const QString &value)
-      { emit createFormSlot(m_active, widget, value); }
+    void emitCreateSlot(const QString &widget, const QString &value) {
+        emit createFormSlot(m_active, widget, value);
+    }
 
     /*! \return The Form actually active and focused.
      */
@@ -177,7 +191,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
      If \a propertyToSelect is not empty, an item for this name will be selected
      (usable when previously there was no set visible). */
     virtual void showPropertySet(WidgetPropertySet *set, bool forceReload = false,
-      const QByteArray& propertyToSelect = QByteArray());
+                                 const QByteArray& propertyToSelect = QByteArray());
 
     void blockPropertyEditorUpdating(void *blockingObject);
 
@@ -192,10 +206,10 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     void setObjectTreeView(ObjectTreeView *treeview);
 
     /*! Previews the Form \a form using the widget \a w as toplevel container for this Form. */
-    void previewForm(Form *form, QWidget *w, Form *toForm=0);
+    void previewForm(Form *form, QWidget *w, Form *toForm = 0);
 
     /*! Adds a existing form w and changes it to a container */
-    void importForm(Form *form=0, bool preview=false);
+    void importForm(Form *form = 0, bool preview = false);
 
     /*! Deletes the Form \a form and removes it from our list. */
     void deleteForm(Form *form);
@@ -209,21 +223,25 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     bool  snapWidgetsToGrid();
 
     //! @internal used by Container
-    int contextMenuKey() const { return m_contextMenuKey; }
+    int contextMenuKey() const {
+        return m_contextMenuKey;
+    }
 
     //! @internal
-    void emitWidgetSelected( KFormDesigner::Form* form, bool multiple );
+    void emitWidgetSelected(KFormDesigner::Form* form, bool multiple);
     //! @internal
-    void emitFormWidgetSelected( KFormDesigner::Form* form );
+    void emitFormWidgetSelected(KFormDesigner::Form* form);
     //! @internal
     void emitNoFormSelected();
 
     /*! @internal
      \return true is redo action is being executed.
      Used in WidgetPropertySet::slotPropertyChanged() */
-    bool isRedoing() const { return m_isRedoing; }
+    bool isRedoing() const {
+        return m_isRedoing;
+    }
 
-  public slots:
+public slots:
     /*! Deletes the selected widget in active Form and all of its children. */
     void deleteWidget();
 
@@ -327,7 +345,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     void windowChanged(QWidget *w);
 
     //! Used to delayed widgets' deletion (in Container::deleteItem())
-    void deleteWidgetLater( QWidget *w );
+    void deleteWidgetLater(QWidget *w);
 
     /*! For debugging purposes only:
      shows a text window containing contents of .ui XML definition of the current form. */
@@ -336,16 +354,16 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     /*! Executes font dialog and changes it for currently selected widget(s). */
     void changeFont();
 
-  signals:
+signals:
     /*! This signal is emitted as the property set switched.
      If \a forceReload is true, the set needs to be reloaded even
      if it's the same as previous one. */
     void propertySetSwitched(KoProperty::Set *set, bool forceReload = false,
-      const QByteArray& propertyToSelect = QByteArray());
+                             const QByteArray& propertyToSelect = QByteArray());
 
     /*! This signal is emitted when any change is made to the Form \a form,
      so it will need to be saved. */
-    void dirty(KFormDesigner::Form *form, bool isDirty=true);
+    void dirty(KFormDesigner::Form *form, bool isDirty = true);
 
     /*! Signal emitted when a normal widget is selected inside \a form
      (ie not form widget). If \a multiple is true,
@@ -391,7 +409,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
     /*! Signal emitted when new form gets created.  */
     void formCreated(KFormDesigner::Form *form);
 
-  protected slots:
+protected slots:
     void deleteWidgetLaterTimeout();
 
     /*! Slot called when a buddy is chosen in the buddy list. Sets the label buddy. */
@@ -409,12 +427,14 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
     void slotSettingsChanged(int category);
 
-  protected:
+protected:
     /*! Inits the Form, adds it to m_forms, and conects slots. */
     void initForm(Form *form);
 
     /*! \return action group containing "insert widget" actions for each widget. */
-    QActionGroup* widgetActionGroup() const { return m_widgetActionGroup; }
+    QActionGroup* widgetActionGroup() const {
+        return m_widgetActionGroup;
+    }
 
 #if 0
     /*! Default implementation just calls FormIO::loadFormFromDom().
@@ -440,17 +460,18 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
     /*! True if emitSelectionSignals() updates property set so showPropertySet() will
      not be needed in windowChanged(). False by default. Set to true in KexiFormManager. */
-    bool m_emitSelectionSignalsUpdatesPropertySet : 1;
+bool m_emitSelectionSignalsUpdatesPropertySet : 1;
 
-  private:
+private:
     static FormManager* _self;
 
     //! Enum for menu items indexes
     enum { MenuTitle = 200, MenuCopy, MenuCut, MenuPaste, MenuDelete, MenuHBox = 301,
-      MenuVBox, MenuGrid, MenuHSplitter, MenuVSplitter, MenuNoBuddy = 501 };
+           MenuVBox, MenuGrid, MenuHSplitter, MenuVSplitter, MenuNoBuddy = 501
+         };
 
     WidgetPropertySet *m_propSet;
-//		WidgetLibrary *m_lib;
+//  WidgetLibrary *m_lib;
     QPointer<KoProperty::Editor>  m_editor;
     QPointer<ObjectTreeView>  m_treeview;
     // Forms
@@ -494,7 +515,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
     void *m_objectBlockingPropertyEditorUpdating;
     QStyle *m_style;
-    bool m_isRedoing : 1;
+bool m_isRedoing : 1;
 
     friend class PropertyCommand;
     friend class GeometryPropertyCommand;

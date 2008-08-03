@@ -25,9 +25,9 @@
 
 //global public definitions
 
-/*! KexiDB implementation version. 
- It is altered after every API change: 
- - major number is increased after KexiDB storage format change, 
+/*! KexiDB implementation version.
+ It is altered after every API change:
+ - major number is increased after KexiDB storage format change,
  - minor is increased after adding binary-incompatible change.
  In external code: do not use this to get library version information:
  use KexiDB::versionMajor() and KexiDB::versionMinor() instead to get real version.
@@ -38,16 +38,16 @@
 /*! KexiDB implementation version. @see KEXIDB_VERSION_MAJOR, KEXIDB_VERSION_MINOR */
 #define KEXIDB_VERSION KexiDB::DatabaseVersionInfo(KEXIDB_VERSION_MAJOR, KEXIDB_VERSION_MINOR)
 
-/*! \namespace KexiDB 
+/*! \namespace KexiDB
 \brief High-level database connectivity library with database backend drivers
 
 \section Framework
-DriverManager 
+DriverManager
 
 Database access
  - Connection
  - ConnectionData
- 
+
 Database structure
  - Schema
   - tableschema
@@ -61,7 +61,7 @@ Data representation
  - Record
  - Field
 
- 
+
 \section Drivers
 
 Drivers are loaded using DriverManager::driver(const QString& name).  The names
@@ -93,7 +93,8 @@ The cursor classes subclass Cursor, and implement cursor functionality specific
 to the database backend.
 
 */
-namespace KexiDB {
+namespace KexiDB
+{
 
 #define KexiDBDbg  kDebug(44000)   //! Debug area for core KexiDB code
 #define KexiDBDrvDbg kDebug(44001) //! Debug area for KexiDB's drivers implementation code
@@ -101,11 +102,11 @@ namespace KexiDB {
 #define KexiDBDrvWarn kWarning(44001)
 #define KexiDBFatal kFatal(44000)
 
-/*! @short Contains database version information about a Kexi-compatible database. 
+/*! @short Contains database version information about a Kexi-compatible database.
  The version is stored as internal database properties. */
 class KEXI_DB_EXPORT DatabaseVersionInfo
 {
-  public:
+public:
     DatabaseVersionInfo();
     DatabaseVersionInfo(uint majorVersion, uint minorVersion);
 
@@ -122,7 +123,7 @@ KEXI_DB_EXPORT DatabaseVersionInfo version();
 /*! @short Contains version information about a database backend. */
 class KEXI_DB_EXPORT ServerVersionInfo
 {
-  public:
+public:
     ServerVersionInfo();
 
     //! Clears the information - integers will be set to 0 and string to null
@@ -143,16 +144,16 @@ class KEXI_DB_EXPORT ServerVersionInfo
 
 /*! Object types set like table or query. */
 enum ObjectTypes {
-  UnknownObjectType = -1, //!< helper
-  AnyObjectType = 0,      //!< helper
-  TableObjectType = 1,
-  QueryObjectType = 2,
-  LastObjectType = 2, //ALWAYS UPDATE THIS
+    UnknownObjectType = -1, //!< helper
+    AnyObjectType = 0,      //!< helper
+    TableObjectType = 1,
+    QueryObjectType = 2,
+    LastObjectType = 2, //ALWAYS UPDATE THIS
 
-  KexiDBSystemTableObjectType = 128,//!< helper, not used in storage 
-                                    //!< (allows to select kexidb system tables
-                                    //!< may be or'd with TableObjectType)
-  IndexObjectType = 256 //!< special
+    KexiDBSystemTableObjectType = 128,//!< helper, not used in storage
+    //!< (allows to select kexidb system tables
+    //!< may be or'd with TableObjectType)
+    IndexObjectType = 256 //!< special
 };
 
 }
@@ -161,7 +162,7 @@ enum ObjectTypes {
 #if 0 //Qt4: remove
 /*! a shortcut for iterating over lists or maps, eg. QMap, QValueList */
 #define foreach_list(_class, _variable, _list) \
-          for (_class _variable(_list); _variable.current(); ++_variable)
+    for (_class _variable(_list); _variable.current(); ++_variable)
 
 #define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
 #endif

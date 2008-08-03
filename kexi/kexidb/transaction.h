@@ -24,7 +24,8 @@
 
 #include "kexidb_export.h"
 
-namespace KexiDB {
+namespace KexiDB
+{
 
 class Connection;
 
@@ -34,7 +35,7 @@ class Connection;
 */
 class KEXI_DB_EXPORT TransactionData
 {
-  public:
+public:
     TransactionData(Connection *conn);
     ~TransactionData();
 
@@ -42,59 +43,59 @@ class KEXI_DB_EXPORT TransactionData
     static int globalcount;
     //helper for debugging
     static int globalCount();
-    
+
     Connection *m_conn;
-    bool m_active : 1;
+bool m_active : 1;
     uint refcount;
 };
 
 //! This class encapsulates transaction handle.
 /*! Transaction handle is sql driver-dependent,
-  but outside Transaction is visible as universal container 
+  but outside Transaction is visible as universal container
   for any handler implementation.
-  
+
   Transaction object is value-based, internal data (handle) structure,
   reference-counted.
 */
 class KEXI_DB_EXPORT Transaction : public QObject
 {
-  public:
+public:
     /*! Constructs uninitialised (null) transaction.
      Only in Conenction code it can be initialised */
     Transaction();
-    
+
     //! Copy ctor.
-    Transaction( const Transaction& trans );
-    
+    Transaction(const Transaction& trans);
+
     virtual ~Transaction();
 
     Transaction& operator=(const Transaction& trans);
 
-    bool operator==(const Transaction& trans ) const;
-    
+    bool operator==(const Transaction& trans) const;
+
     Connection* connection() const;
-    
+
     /*! \return true if transaction is avtive (ie. started)
      Returns false also if transaction is uninitialised (null). */
     bool active() const;
-    
+
     /*! \return true if transaction is uinitialised (null). */
     bool isNull() const;
-    
+
     /*! shortcut that offers uinitialised (null) transaction */
     //static const Transaction null;
 
     //helper for debugging
     static int globalCount();
     static int globalcount;
-  protected:
-    
+protected:
+
     TransactionData *m_data;
-    
-  friend class Connection;
+
+    friend class Connection;
 };
 
-//! Helper class for using inside methods for given connection. 
+//! Helper class for using inside methods for given connection.
 /*! It can be used in two ways:
   - start new transaction in constructor and rollback on destruction (1st constructor),
   - use already started transaction and rollback on destruction (2nd constructor).
@@ -118,26 +119,28 @@ class KEXI_DB_EXPORT Transaction : public QObject
 */
 class KEXI_DB_EXPORT TransactionGuard
 {
-  public:
+public:
     /*! Constructor #1: Starts new transaction constructor for \a connection.
      Started transaction handle is available via transaction().*/
-    TransactionGuard( Connection& conn );
-    
-    /*! Constructor #2: Uses already started transaction. */
-    TransactionGuard( const Transaction& trans );
+    TransactionGuard(Connection& conn);
 
-    /*! Constructor #3: Creates TransactionGuard without transaction assinged. 
+    /*! Constructor #2: Uses already started transaction. */
+    TransactionGuard(const Transaction& trans);
+
+    /*! Constructor #3: Creates TransactionGuard without transaction assinged.
      setTransaction() can be used later to do so. */
     TransactionGuard();
 
     /*! Rollbacks not committed transaction. */
     ~TransactionGuard();
 
-    /*! Assigns transaction \a trans to this guard. 
+    /*! Assigns transaction \a trans to this guard.
      Previously assigned transaction will be unassigned from this guard. */
-    void setTransaction( const Transaction& trans ) { m_trans = trans; }
+    void setTransaction(const Transaction& trans) {
+        m_trans = trans;
+    }
 
-    /*! Comits the guarded transaction. 
+    /*! Comits the guarded transaction.
      It is convenient shortcut to connection->commitTransaction(this->transaction()) */
     bool commit();
 
@@ -145,11 +148,13 @@ class KEXI_DB_EXPORT TransactionGuard
     void doNothing();
 
     /*! Transaction that are controlled by this guard. */
-    const Transaction transaction() const { return m_trans; }
+    const Transaction transaction() const {
+        return m_trans;
+    }
 
-  protected:
+protected:
     Transaction m_trans;
-    bool m_doNothing : 1;
+bool m_doNothing : 1;
 };
 
 } //namespace KexiDB

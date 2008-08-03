@@ -40,31 +40,39 @@ QStringList csvMimeTypes();
  Used by CSV import and export dialogs. */
 class KexiCSVInfoLabel : public QWidget
 {
-  public:
+public:
     /* Sets up a new info label \a labelText label with text like "Preview of data from file:".
-     setFileName() can be used to display filename and setCommentAfterFileName() to display 
+     setFileName() can be used to display filename and setCommentAfterFileName() to display
      additional comment.
 
      The widget's layout can look like this:
 
      \pre [icon] [labeltext] [filename] [comment]
     */
-    KexiCSVInfoLabel( const QString& labelText, QWidget* parent );
+    KexiCSVInfoLabel(const QString& labelText, QWidget* parent);
 
-    void setFileName( const QString& fileName );
-    void setLabelText( const QString& text );
-    void setCommentText( const QString& text );
-//		void setIconForFileName();
+    void setFileName(const QString& fileName);
+    void setLabelText(const QString& text);
+    void setCommentText(const QString& text);
+//  void setIconForFileName();
 
     //! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
     void setIcon(const QString& iconName);
 
-    QLabel* leftLabel() const { return m_leftLabel; }
-    QLabel* fileNameLabel() const { return m_fnameLbl; }
-    QLabel* commentLabel() const { return m_commentLbl; }
-    QFrame* separator() const { return m_separator; }
+    QLabel* leftLabel() const {
+        return m_leftLabel;
+    }
+    QLabel* fileNameLabel() const {
+        return m_fnameLbl;
+    }
+    QLabel* commentLabel() const {
+        return m_commentLbl;
+    }
+    QFrame* separator() const {
+        return m_separator;
+    }
 
-  protected:
+protected:
     QLabel *m_leftLabel, *m_iconLbl, *m_fnameLbl, *m_commentLbl;
     QFrame* m_separator;
 };
@@ -73,26 +81,26 @@ class KexiCSVInfoLabel : public QWidget
 //! Used by CSV import and export dialogs
 class KexiCSVDelimiterWidget : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent = 0 );
+public:
+    KexiCSVDelimiterWidget(bool lineEditOnBottom, QWidget * parent = 0);
     ~KexiCSVDelimiterWidget();
 
     QString delimiter() const;
     void setDelimiter(const QString& delimiter);
 
-  signals:
+signals:
     void delimiterChanged(const QString& delimiter);
 
-  protected slots:
+protected slots:
     //! only called when a delimiter was set by user directly
     void slotDelimiterChanged(int idx);
     void slotDelimiterChangedInternal(int idx);
-    void slotDelimiterLineEditTextChanged( const QString & );
+    void slotDelimiterLineEditTextChanged(const QString &);
     void slotDelimiterLineEditReturnPressed();
 
-  protected:
+protected:
     class Private;
     Private * const d;
 };
@@ -101,8 +109,8 @@ class KexiCSVDelimiterWidget : public QWidget
 //! Used by CSV import and export dialogs
 class KexiCSVTextQuoteComboBox : public KComboBox
 {
-  public:
-    KexiCSVTextQuoteComboBox( QWidget * parent = 0 );
+public:
+    KexiCSVTextQuoteComboBox(QWidget * parent = 0);
 
     QString textQuote() const;
 

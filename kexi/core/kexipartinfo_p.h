@@ -29,7 +29,7 @@ namespace KexiPart
 //! @internal
 class Info::Private
 {
-  public:
+public:
     Private(const KService::Ptr& aPtr);
 
     //! used in StaticItem class
@@ -42,9 +42,9 @@ class Info::Private
     QString itemIcon;
     QString objectName;
     int projectPartID;
-    bool broken : 1;
-    bool isVisibleInNavigator : 1;
-    bool idStoredInPartDatabase : 1;
+bool broken : 1;
+bool isVisibleInNavigator : 1;
+bool idStoredInPartDatabase : 1;
 };
 }
 

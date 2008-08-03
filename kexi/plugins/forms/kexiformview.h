@@ -36,10 +36,13 @@
 class KexiFormPart;
 class KexiDBForm;
 class KexiFormScrollView;
-namespace KexiDB { class Cursor; }
+namespace KexiDB
+{
+class Cursor;
+}
 namespace KFormDesigner
 {
-  class Container;
+class Container;
 }
 
 //! The KexiFormView lass provides a data-driven (record-based) form view .
@@ -55,66 +58,68 @@ namespace KFormDesigner
 */
 class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     enum ResizeMode {
-      ResizeAuto = 0,
-      ResizeDefault = ResizeAuto,
-      ResizeFixed = 1,
-      NoResize = 2 /*! @todo */
+        ResizeAuto = 0,
+        ResizeDefault = ResizeAuto,
+        ResizeFixed = 1,
+        NoResize = 2 /*! @todo */
     };
 
     KexiFormView(QWidget *parent, bool dbAware = true);
     virtual ~KexiFormView();
 
-//		KexiDB::Connection* connection() { return m_conn; }
+//  KexiDB::Connection* connection() { return m_conn; }
 
     virtual QSize preferredSizeHint(const QSize& otherSize);
 
-    int resizeMode() const { return m_resizeMode; }
+    int resizeMode() const {
+        return m_resizeMode;
+    }
 
     KFormDesigner::Form* form() const;
 
     /*! Assigns \a id local (static) BLOB's identifier for \a widget widget.
-     Previously assigned BLOB will be usassigned. 
-     If \a id is 0, BLOB is unassigned and no new is assigned. 
+     Previously assigned BLOB will be usassigned.
+     If \a id is 0, BLOB is unassigned and no new is assigned.
 
-     This method is called when a widget supporting BLOB data 
+     This method is called when a widget supporting BLOB data
      (currently, images from KexiDBImageBox, within KexiDBFactory) has BLOB assigned by identifier \a id.
      BLOB identifiers are defined by KexiBLOBBuffer (KexiBLOBBuffer::self() instance).
-    
-     The data collected by this method is used on form's design saving (in design mode). 
+
+     The data collected by this method is used on form's design saving (in design mode).
      Local BLOBs are retrieved KexiBLOBBuffer::self() and stored in "kexi__blobs" 'system' table.
      Note that db-aware BLOBs (non local) are not handled this way.
     */
     void setUnsavedLocalBLOB(QWidget *widget, KexiBLOBBuffer::Id_t id);
 
-  public slots:
+public slots:
     /*! Reimplemented to update resize policy. */
     virtual void show();
 
     /*! Inserts autofields onto the form at \a pos position.
-     \a sourceMimeType can be "kexi/table" or "kexi/query", 
+     \a sourceMimeType can be "kexi/table" or "kexi/query",
      \a sourceName is a name of a table or query, \a fields is a list of fields to insert (one or more)
-     Fields are inserted using standard KFormDesigner::InsertWidgetCommand framework, 
+     Fields are inserted using standard KFormDesigner::InsertWidgetCommand framework,
      so undo/redo is available for this operation.
 
      If multiple fields are provided, they will be aligned vertically.
      If \a pos is QPoint(-1,-1) (the default), position is computed automatically
-     based on a position last inserted field using this method. 
+     based on a position last inserted field using this method.
      If this method has not been called yet, position of QPoint(40, 40) will be set.
 
      Called by:
      - slotHandleDropEvent() when field(s) are dropped from the data source pane onto the form
      - KexiFormManager is a used clicked "Insert fields" button on the data source pane. */
     void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
-      const QStringList& fields, KFormDesigner::Container* targetContainerWidget, 
-      const QPoint& pos = QPoint(-1,-1));
+                          const QStringList& fields, KFormDesigner::Container* targetContainerWidget,
+                          const QPoint& pos = QPoint(-1, -1));
 
-  protected slots:
-    void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false, 
-      const QByteArray& propertyToSelect = QByteArray());
+protected slots:
+    void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false,
+                                 const QByteArray& propertyToSelect = QByteArray());
     void slotDirty(KFormDesigner::Form *f, bool isDirty);
     void slotFocus(bool in);
     void slotHandleDragMoveEvent(QDragMoveEvent* e);
@@ -123,27 +128,32 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
     //! @see insertAutoFields()
     void slotHandleDropEvent(QDropEvent* e);
 
-//moved to formmanager		void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
-//moved to formmanager		void slotFormWidgetSelected(KFormDesigner::Form *form);
-//moved to formmanager		void slotNoFormSelected();
+//moved to formmanager  void slotWidgetSelected(KFormDesigner::Form *form, bool multiple);
+//moved to formmanager  void slotFormWidgetSelected(KFormDesigner::Form *form);
+//moved to formmanager  void slotNoFormSelected();
 
-//moved to formmanager		void setUndoEnabled(bool enabled);
-//moved to formmanager		void setRedoEnabled(bool enabled);
+//moved to formmanager  void setUndoEnabled(bool enabled);
+//moved to formmanager  void setRedoEnabled(bool enabled);
 
-  protected:
+protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
-    virtual KoProperty::Set* propertySet() { return m_propertySet; }
+    virtual KoProperty::Set* propertySet() {
+        return m_propertySet;
+    }
 
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
     virtual tristate storeData(bool dontAsk = false);
 
     KexiFormPart::TempData* tempData() const {
-      return dynamic_cast<KexiFormPart::TempData*>(window()->data()); }
-    KexiFormPart* formPart() const { return dynamic_cast<KexiFormPart*>(part()); }
+        return dynamic_cast<KexiFormPart::TempData*>(window()->data());
+    }
+    KexiFormPart* formPart() const {
+        return dynamic_cast<KexiFormPart*>(part());
+    }
 
-//moved to formmanager		void disableWidgetActions();
-//moved to formmanager		void enableFormActions();
+//moved to formmanager  void disableWidgetActions();
+//moved to formmanager  void enableFormActions();
 
     void setForm(KFormDesigner::Form *f);
 
@@ -157,19 +167,19 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
     //! Used in loadForm()
     void updateValuesForSubproperties();
 
-    virtual void resizeEvent ( QResizeEvent * );
+    virtual void resizeEvent(QResizeEvent *);
 
     void initDataSource();
 
     virtual void setFocusInternal();
 
-/*		// for navigator
-    virtual void moveToRecordRequested(uint r);
-    virtual void moveToLastRecordRequested();
-    virtual void moveToPreviousRecordRequested();
-    virtual void moveToNextRecordRequested();
-    virtual void moveToFirstRecordRequested();
-    virtual void addNewRecordRequested();*/
+    /*  // for navigator
+        virtual void moveToRecordRequested(uint r);
+        virtual void moveToLastRecordRequested();
+        virtual void moveToPreviousRecordRequested();
+        virtual void moveToNextRecordRequested();
+        virtual void moveToFirstRecordRequested();
+        virtual void addNewRecordRequested();*/
 
     /*! Called after loading the form contents (before showing it).
      Also called when the form window (KexiWindow) is detached
@@ -184,7 +194,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 
     /*! Reimplemented after KexiView.
      Updates actions (e.g. availability). */
-// todo		virtual void updateActions(bool activated);
+// todo  virtual void updateActions(bool activated);
 
     KexiDBForm *m_dbform;
     KexiFormScrollView *m_scrollView;
@@ -214,9 +224,9 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 
     //! Used in setFocusInternal()
     QPointer<QWidget> m_setFocusInternalOnce;
-  
+
     /*! Stores geometry of widget recently inserted using insertAutoFields() method.
-     having this information, we'r eable to compute position for a newly 
+     having this information, we'r eable to compute position for a newly
      inserted widget in insertAutoFields() is such position has not been specified.
      (the position is specified when a widget is inserted with mouse drag & dropping
      but not with clicking of 'Insert fields' button from Data Source pane) */

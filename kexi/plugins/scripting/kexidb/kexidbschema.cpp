@@ -30,37 +30,59 @@ using namespace Scripting;
  */
 
 KexiDBSchema::KexiDBSchema(QObject* parent, const QString& name, ::KexiDB::SchemaData* schema, ::KexiDB::FieldList* fieldlist, bool owner)
-    : QObject(parent)
-    , m_schema(schema)
-    , m_fieldlist(fieldlist)
-    , m_owner(owner)
+        : QObject(parent)
+        , m_schema(schema)
+        , m_fieldlist(fieldlist)
+        , m_owner(owner)
 {
     setObjectName(name);
 }
 
-KexiDBSchema::~KexiDBSchema() {
+KexiDBSchema::~KexiDBSchema()
+{
 }
 
-const QString KexiDBSchema::name() const { return m_schema->name(); }
-void KexiDBSchema::setName(const QString& name) { m_schema->setName(name); }
-const QString KexiDBSchema::caption() const { return m_schema->caption(); }
-void KexiDBSchema::setCaption(const QString& caption) { m_schema->setCaption(caption); }
-const QString KexiDBSchema::description() const { return m_schema->description(); }
-void KexiDBSchema::setDescription(const QString& description) { m_schema->setDescription(description); }
-QObject* KexiDBSchema::fieldlist() { return new KexiDBFieldList(this, m_fieldlist, false); }
+const QString KexiDBSchema::name() const
+{
+    return m_schema->name();
+}
+void KexiDBSchema::setName(const QString& name)
+{
+    m_schema->setName(name);
+}
+const QString KexiDBSchema::caption() const
+{
+    return m_schema->caption();
+}
+void KexiDBSchema::setCaption(const QString& caption)
+{
+    m_schema->setCaption(caption);
+}
+const QString KexiDBSchema::description() const
+{
+    return m_schema->description();
+}
+void KexiDBSchema::setDescription(const QString& description)
+{
+    m_schema->setDescription(description);
+}
+QObject* KexiDBSchema::fieldlist()
+{
+    return new KexiDBFieldList(this, m_fieldlist, false);
+}
 
 /***************************************************************************
  * KexiDBTableSchema
  */
 
 KexiDBTableSchema::KexiDBTableSchema(QObject* parent, ::KexiDB::TableSchema* tableschema, bool owner)
-    : KexiDBSchema(parent, "KexiDBTableSchema", tableschema, tableschema, owner)
+        : KexiDBSchema(parent, "KexiDBTableSchema", tableschema, tableschema, owner)
 {
 }
 
 KexiDBTableSchema::~KexiDBTableSchema()
 {
-    if( m_owner )
+    if (m_owner)
         delete tableschema();
 }
 
@@ -79,13 +101,13 @@ QObject* KexiDBTableSchema::query()
  */
 
 KexiDBQuerySchema::KexiDBQuerySchema(QObject* parent, ::KexiDB::QuerySchema* queryschema, bool owner)
-    : KexiDBSchema(parent, "KexiDBQuerySchema", queryschema, queryschema, owner)
+        : KexiDBSchema(parent, "KexiDBQuerySchema", queryschema, queryschema, owner)
 {
 }
 
 KexiDBQuerySchema::~KexiDBQuerySchema()
 {
-    if( m_owner )
+    if (m_owner)
         delete queryschema();
 }
 
@@ -112,44 +134,42 @@ bool KexiDBQuerySchema::setWhereExpression(const QString& whereexpression)
     ///@todo use ::KexiDB::Parser for such kind of parser-functionality.
     QString s = whereexpression;
     QRegExp re("[\"',]{1,1}");
-    while(true) {
+    while (true) {
         s.remove(QRegExp("^[\\s,]+"));
         int pos = s.indexOf('=');
-        if(pos < 0) break;
+        if (pos < 0) break;
         QString key = s.left(pos).trimmed();
         s = s.mid(pos + 1).trimmed();
 
         QString value;
         int sp = s.indexOf(re);
-        if(sp >= 0) {
-            if(re.cap(0) == ",") {
+        if (sp >= 0) {
+            if (re.cap(0) == ",") {
                 value = s.left(sp).trimmed();
-                s = s.mid(sp+1).trimmed();
-            }
-            else {
-                int ep = s.indexOf(re.cap(0),sp+1);
-                value = s.mid(sp+1,ep-1);
+                s = s.mid(sp + 1).trimmed();
+            } else {
+                int ep = s.indexOf(re.cap(0), sp + 1);
+                value = s.mid(sp + 1, ep - 1);
                 s = s.mid(ep + 1);
             }
-        }
-        else {
+        } else {
             value = s;
             s.clear();
         }
 
         ::KexiDB::Field* field = static_cast< ::KexiDB::QuerySchema* >(m_schema)->field(key);
-        if(! field) {
+        if (! field) {
             kWarning() << QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(key).arg(m_schema->name());
             return false;
         }
 
         QVariant v(value);
-        if(! v.convert(field->variantType())) {
+        if (! v.convert(field->variantType())) {
             kWarning() << QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(key).arg(v.typeName()).arg(field->variantType());
             return false;
         }
 
-        static_cast< ::KexiDB::QuerySchema* >(m_schema)->addToWhereExpression(field,v);
+        static_cast< ::KexiDB::QuerySchema* >(m_schema)->addToWhereExpression(field, v);
     }
     return true;
 }

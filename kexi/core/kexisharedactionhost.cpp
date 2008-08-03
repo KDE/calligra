@@ -36,224 +36,221 @@
 #include <kicon.h>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
-: QObject()
-, actionMapper( this )
-, host(h)
+        : QObject()
+        , actionMapper(this)
+        , host(h)
 {
-  setObjectName("KexiSharedActionHostPrivate");
-  connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
+    setObjectName("KexiSharedActionHostPrivate");
+    connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
 }
 
 KexiSharedActionHostPrivate::~KexiSharedActionHostPrivate()
 {
-  qDeleteAll(volatileActions);
-  volatileActions.clear();
+    qDeleteAll(volatileActions);
+    volatileActions.clear();
 }
 
 void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 {
-  QWidget *w = host->focusWindow(); //focusWidget();
-//	while (w && !w->inherits("KexiWindow") && !w->inherits("KexiDockBase"))
-//		w = w->parentWidget();
+    QWidget *w = host->focusWindow(); //focusWidget();
+// while (w && !w->inherits("KexiWindow") && !w->inherits("KexiDockBase"))
+//  w = w->parentWidget();
 
-  KexiActionProxy *proxy = w ? actionProxies.value( w ) : 0;
+    KexiActionProxy *proxy = w ? actionProxies.value(w) : 0;
 
-  if (!proxy || !proxy->activateSharedAction(act_id.toLatin1())) {
-    //also try to find previous enabler
-    w = enablers.contains(act_id) ? enablers.value(act_id) : 0;
-    if (!w)
-      return;
-    proxy = actionProxies.value( w );
-    if (!proxy)
-      return;
-    proxy->activateSharedAction(act_id.toLatin1());
-  }
+    if (!proxy || !proxy->activateSharedAction(act_id.toLatin1())) {
+        //also try to find previous enabler
+        w = enablers.contains(act_id) ? enablers.value(act_id) : 0;
+        if (!w)
+            return;
+        proxy = actionProxies.value(w);
+        if (!proxy)
+            return;
+        proxy->activateSharedAction(act_id.toLatin1());
+    }
 }
 
 //--------------------------------------------------
 
 //! dummy host to avoid crashes
-K_GLOBAL_STATIC_WITH_ARGS( KexiSharedActionHost, KexiSharedActionHost_dummy, (0) )
+K_GLOBAL_STATIC_WITH_ARGS(KexiSharedActionHost, KexiSharedActionHost_dummy, (0))
 
 //! default host
 KexiSharedActionHost* KexiSharedActionHost_defaultHost = 0;//KexiSharedActionHost_dummy;
 
 KexiSharedActionHost* KexiSharedActionHost::defaultHost()
 {
-  if (!KexiSharedActionHost_defaultHost)
-    return KexiSharedActionHost_dummy;
-//		KexiSharedActionHost_defaultHost = KexiSharedActionHost_dummy;
-  return KexiSharedActionHost_defaultHost;
+    if (!KexiSharedActionHost_defaultHost)
+        return KexiSharedActionHost_dummy;
+//  KexiSharedActionHost_defaultHost = KexiSharedActionHost_dummy;
+    return KexiSharedActionHost_defaultHost;
 }
 
 void KexiSharedActionHost::setAsDefaultHost()
 {
-  KexiSharedActionHost_defaultHost = this;
+    KexiSharedActionHost_defaultHost = this;
 }
 
 //--------------------------------------------------
 
 KexiSharedActionHost::KexiSharedActionHost(KexiMainWindowIface* mainWin)
-: d( new KexiSharedActionHostPrivate(this) )
+        : d(new KexiSharedActionHostPrivate(this))
 {
-  d->mainWin = mainWin;
+    d->mainWin = mainWin;
 }
 
 KexiSharedActionHost::~KexiSharedActionHost()
 {
-  if (KexiSharedActionHost_defaultHost == this) {
-    //default host is destroyed! - restore dummy
-    KexiSharedActionHost_defaultHost = 0;// KexiSharedActionHost_dummy;
-  }
-  delete d;
-  d=0; //! to let takeActionProxyFor() know that we are almost dead :)
+    if (KexiSharedActionHost_defaultHost == this) {
+        //default host is destroyed! - restore dummy
+        KexiSharedActionHost_defaultHost = 0;// KexiSharedActionHost_dummy;
+    }
+    delete d;
+    d = 0; //! to let takeActionProxyFor() know that we are almost dead :)
 }
 
 void KexiSharedActionHost::setActionAvailable(const QString& action_name, bool avail)
 {
-  QAction *act = d->mainWin->actionCollection()->action(action_name);
-  if (act) {
-    act->setEnabled(avail);
-  }
+    QAction *act = d->mainWin->actionCollection()->action(action_name);
+    if (act) {
+        act->setEnabled(avail);
+    }
 }
 
 void KexiSharedActionHost::updateActionAvailable(const QString& action_name, bool avail, QObject *obj)
 {
-/*test	if (qstrcmp(action_name, "tablepart_toggle_pkey")==0) {
-    kDebug() << "tablepart_toggle_pkey" << endl;
-  }*/
-  if (!d)
-    return; //sanity
-  QWidget *fw = d->mainWin->focusWidget();
-  while (fw && obj!=fw)
-    fw = fw->parentWidget();
-  if (!fw)
-    return;
+    /*test if (qstrcmp(action_name, "tablepart_toggle_pkey")==0) {
+        kDebug() << "tablepart_toggle_pkey" << endl;
+      }*/
+    if (!d)
+        return; //sanity
+    QWidget *fw = d->mainWin->focusWidget();
+    while (fw && obj != fw)
+        fw = fw->parentWidget();
+    if (!fw)
+        return;
 
-  setActionAvailable(action_name, avail);
-  if (avail) {
-    d->enablers.insert(action_name, fw);
-  }
-  else {
-    d->enablers.take(action_name);
-  }
+    setActionAvailable(action_name, avail);
+    if (avail) {
+        d->enablers.insert(action_name, fw);
+    } else {
+        d->enablers.take(action_name);
+    }
 }
 
 void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
 {
-//	kDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
-  d->actionProxies.insert( proxy->receiver(), proxy );
+// kDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
+    d->actionProxies.insert(proxy->receiver(), proxy);
 }
 
 KexiMainWindowIface* KexiSharedActionHost::mainWindow() const
 {
-  return d->mainWin;
+    return d->mainWin;
 }
 
 void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 {
-  if (!d)
-    return;
-  //KDE3: bool insideWindow = o && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow>(o, "KexiWindow"));
-  bool insideKexiWindow = o 
-    && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
+    if (!d)
+        return;
+    //KDE3: bool insideWindow = o && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow>(o, "KexiWindow"));
+    bool insideKexiWindow = o
+                            && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
 
-  KexiActionProxy *p = o ? d->actionProxies.value( o ) : 0;
-  foreach(KAction* a, d->sharedActions) {
-    //setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
+    KexiActionProxy *p = o ? d->actionProxies.value(o) : 0;
+    foreach(KAction* a, d->sharedActions) {
+        //setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 #ifdef __GNUC__
-#warning TODO:		if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) {
+#warning TODO:  if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) {
 #else
-#pragma WARNING( TODO:		if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) { )
+#pragma WARNING( TODO:  if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) { )
 #endif
-      //o is not KexiKexiWindow or its child:
-      // only invalidate action if it comes from mainwindow's KActionCollection
-      // (thus part-actions are untouched when the focus is e.g. in the Property Editor)
+        //o is not KexiKexiWindow or its child:
+        // only invalidate action if it comes from mainwindow's KActionCollection
+        // (thus part-actions are untouched when the focus is e.g. in the Property Editor)
 #ifdef __GNUC__
-#warning TODO			continue;
+#warning TODO   continue;
 #else
-#pragma WARNING( TODO			continue; )
+#pragma WARNING( TODO   continue; )
 #endif
-//todo		}
-    const bool avail = p && p->isAvailable(a->objectName());
-    KexiVolatileActionData *va = d->volatileActions.value( a );
-    if (va != 0) {
-      if (p && p->isSupported(a->objectName())) {
-        QList<KAction*> actions_list;
-        actions_list.append( a );
-        if (!va->plugged) {
-          va->plugged=true;
-          //d->mainWin->unplugActionList( a->objectName() );
-          d->mainWin->plugActionList( a->objectName(), actions_list );
+//todo  }
+        const bool avail = p && p->isAvailable(a->objectName());
+        KexiVolatileActionData *va = d->volatileActions.value(a);
+        if (va != 0) {
+            if (p && p->isSupported(a->objectName())) {
+                QList<KAction*> actions_list;
+                actions_list.append(a);
+                if (!va->plugged) {
+                    va->plugged = true;
+                    //d->mainWin->unplugActionList( a->objectName() );
+                    d->mainWin->plugActionList(a->objectName(), actions_list);
+                }
+            } else {
+                if (va->plugged) {
+                    va->plugged = false;
+                    d->mainWin->unplugActionList(a->objectName());
+                }
+            }
         }
-      }
-      else {
-        if (va->plugged) {
-          va->plugged=false;
-          d->mainWin->unplugActionList( a->objectName() );
-        }
-      }
+//  a->setEnabled(p && p->isAvailable(a->name()));
+        a->setEnabled(avail);
+//  kDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
     }
-//		a->setEnabled(p && p->isAvailable(a->name()));
-    a->setEnabled(avail);
-//		kDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
-  }
 }
 
 KexiActionProxy* KexiSharedActionHost::actionProxyFor(QObject *o) const
 {
-  return d->actionProxies.value( o );
+    return d->actionProxies.value(o);
 }
 
 KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
 {
-  if (d)
-    return d->actionProxies.take( o );
-  return 0;
+    if (d)
+        return d->actionProxies.take(o);
+    return 0;
 }
 
 bool KexiSharedActionHost::acceptsSharedActions(QObject *)
 {
-  return false;
+    return false;
 }
 
 QWidget* KexiSharedActionHost::focusWindow()
 {
 #if 0 //sebsauer 20061120: KDE3
-  if (dynamic_cast<KMdiMainFrm*>(d->mainWin)) {
-    fw = dynamic_cast<KMdiMainFrm*>(d->mainWin)->activeWindow();
-  }
-  else {
-    QWidget *aw = qApp->activeWindow();
-    if (!aw)
-      aw = d->mainWin;
-    fw = aw->focusWidget();
-  }
-  while (fw && !acceptsSharedActions(fw))
-    fw = fw->parentWidget();
-  return fw;
+    if (dynamic_cast<KMdiMainFrm*>(d->mainWin)) {
+        fw = dynamic_cast<KMdiMainFrm*>(d->mainWin)->activeWindow();
+    } else {
+        QWidget *aw = qApp->activeWindow();
+        if (!aw)
+            aw = d->mainWin;
+        fw = aw->focusWidget();
+    }
+    while (fw && !acceptsSharedActions(fw))
+        fw = fw->parentWidget();
+    return fw;
 #else
-  QWidget *aw = QApplication::activeWindow();
-  if (!aw)
-    aw = dynamic_cast<QWidget*>(d->mainWin);
-  QWidget *fw = aw->focusWidget();
-  while (fw && !acceptsSharedActions(fw))
-    fw = fw->parentWidget();
-  return fw;
+    QWidget *aw = QApplication::activeWindow();
+    if (!aw)
+        aw = dynamic_cast<QWidget*>(d->mainWin);
+    QWidget *fw = aw->focusWidget();
+    while (fw && !acceptsSharedActions(fw))
+        fw = fw->parentWidget();
+    return fw;
 #endif
 }
 
-KAction* KexiSharedActionHost::createSharedActionInternal( KAction *action )
+KAction* KexiSharedActionHost::createSharedActionInternal(KAction *action)
 {
-  QObject::connect(action,SIGNAL(activated()), &d->actionMapper, SLOT(map()));
-  d->actionMapper.setMapping(action, action->objectName());
-  d->sharedActions.append( action );
-  return action;
+    QObject::connect(action, SIGNAL(activated()), &d->actionMapper, SLOT(map()));
+    d->actionMapper.setMapping(action, action->objectName());
+    d->sharedActions.append(action);
+    return action;
 }
 
 QList<KAction*> KexiSharedActionHost::sharedActions() const
 {
-  return d->sharedActions;
+    return d->sharedActions;
 }
 
 /*class KexiAction : public KAction
@@ -270,73 +267,71 @@ QList<KAction*> KexiSharedActionHost::sharedActions() const
 };*/
 
 KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QString &pix_name,
-  const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
+        const KShortcut &cut, const char *name, KActionCollection* col, const char *subclassName)
 {
-  if (!col)
-    col = d->mainWin->actionCollection();
-    
-  if (subclassName==0) {
-    KAction* action = new KAction(KIcon(pix_name), text, col);
-    action->setObjectName(name);
-    action->setShortcut(cut);
-    col->addAction(name, action);
-    return createSharedActionInternal(action);
-  }
-  else if (qstricmp(subclassName,"KToggleAction")==0) {
-    KToggleAction* action = new KToggleAction(KIcon(pix_name), text, col);
-    action->setObjectName(name);
-    action->setShortcut(cut);
-    col->addAction(name, action);
-    return createSharedActionInternal(action);
-  }
-  else if (qstricmp(subclassName,"KActionMenu")==0) {
-    KActionMenu* action = new KActionMenu(KIcon(pix_name), text, col);
-    action->setObjectName(name);
-    action->setShortcut(cut);
-    col->addAction(name, action);
-    return createSharedActionInternal(action);
-  }
-  //TODO: more KAction subclasses
-  return 0;
+    if (!col)
+        col = d->mainWin->actionCollection();
+
+    if (subclassName == 0) {
+        KAction* action = new KAction(KIcon(pix_name), text, col);
+        action->setObjectName(name);
+        action->setShortcut(cut);
+        col->addAction(name, action);
+        return createSharedActionInternal(action);
+    } else if (qstricmp(subclassName, "KToggleAction") == 0) {
+        KToggleAction* action = new KToggleAction(KIcon(pix_name), text, col);
+        action->setObjectName(name);
+        action->setShortcut(cut);
+        col->addAction(name, action);
+        return createSharedActionInternal(action);
+    } else if (qstricmp(subclassName, "KActionMenu") == 0) {
+        KActionMenu* action = new KActionMenu(KIcon(pix_name), text, col);
+        action->setObjectName(name);
+        action->setShortcut(cut);
+        col->addAction(name, action);
+        return createSharedActionInternal(action);
+    }
+    //TODO: more KAction subclasses
+    return 0;
 }
 
-KAction* KexiSharedActionHost::createSharedAction( KStandardAction::StandardAction id,
-  const char *name, KActionCollection* col)
+KAction* KexiSharedActionHost::createSharedAction(KStandardAction::StandardAction id,
+        const char *name, KActionCollection* col)
 {
-  if (!col)
-    col = d->mainWin->actionCollection();
-  
-  KAction* action = createSharedActionInternal(
-    KStandardAction::create( id, 0/*receiver*/, 0/*slot*/, col )
-  );
-  action->setObjectName(name);
-  return action;
+    if (!col)
+        col = d->mainWin->actionCollection();
+
+    KAction* action = createSharedActionInternal(
+                          KStandardAction::create(id, 0/*receiver*/, 0/*slot*/, col)
+                      );
+    action->setObjectName(name);
+    return action;
 }
 
-KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut, 
-  const char *name, KActionCollection* col)
+KAction* KexiSharedActionHost::createSharedAction(const KGuiItem& guiItem, const KShortcut &cut,
+        const char *name, KActionCollection* col)
 {
-  if (!col)
-    col = d->mainWin->actionCollection();
-  KAction* action = new KAction(guiItem.icon(), guiItem.text(), col);
-  action->setObjectName(name);
-  action->setShortcut(cut);
-  action->setEnabled( guiItem.isEnabled() ); //TODO how to update enable/disable? is it needed anyway?
-  action->setToolTip( guiItem.toolTip() );
-  action->setWhatsThis( guiItem.whatsThis() );
-  return createSharedActionInternal(action);
+    if (!col)
+        col = d->mainWin->actionCollection();
+    KAction* action = new KAction(guiItem.icon(), guiItem.text(), col);
+    action->setObjectName(name);
+    action->setShortcut(cut);
+    action->setEnabled(guiItem.isEnabled());   //TODO how to update enable/disable? is it needed anyway?
+    action->setToolTip(guiItem.toolTip());
+    action->setWhatsThis(guiItem.whatsThis());
+    return createSharedActionInternal(action);
 }
 
-void KexiSharedActionHost::setActionVolatile( KAction *a, bool set )
+void KexiSharedActionHost::setActionVolatile(KAction *a, bool set)
 {
-  if (!set) {
-    d->volatileActions.remove( a );
-    delete a;
-    return;
-  }
-  if (d->volatileActions.value( a ))
-    return;
-  d->volatileActions.insert( a, new KexiVolatileActionData() );
+    if (!set) {
+        d->volatileActions.remove(a);
+        delete a;
+        return;
+    }
+    if (d->volatileActions.value(a))
+        return;
+    d->volatileActions.insert(a, new KexiVolatileActionData());
 }
 
 #include "kexisharedactionhost_p.moc"

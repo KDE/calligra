@@ -30,12 +30,12 @@ KexiSearchAndReplaceViewInterface::~KexiSearchAndReplaceViewInterface()
 //-----------------------------------------------------------------------
 
 KexiSearchAndReplaceViewInterface::Options::Options()
- : columnNumber(AllColumns)
- , textMatching(MatchAnyPartOfField)
- , searchDirection(DefaultSearchDirection)
- , caseSensitive(false)
- , wholeWordsOnly(false)
- , promptOnReplace(true)
+        : columnNumber(AllColumns)
+        , textMatching(MatchAnyPartOfField)
+        , searchDirection(DefaultSearchDirection)
+        , caseSensitive(false)
+        , wholeWordsOnly(false)
+        , promptOnReplace(true)
 {
 }
 
