@@ -79,7 +79,7 @@ void KarbonCalligraphicShape::
     }
     // pointCount > 0
 
-    bool flip = (pointCount() = 2) ? flipDetected(p1, p2) : false;
+    bool flip = (pointCount() >= 2) ? flipDetected(p1, p2) : false;
 
     // if there was a flip add additional points
     if ( flip ) {
