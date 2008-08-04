@@ -94,7 +94,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
 
     m_isDrawing = true;
     m_pointCount = 0;
-    m_shape = new KarbonCalligraphicShape;
+    m_shape = new KarbonCalligraphicShape( m_caps );
     //addPoint( event );
 }
 

@@ -70,7 +70,7 @@ private:
 class KarbonCalligraphicShape : public KoParameterShape
 {
 public:
-    KarbonCalligraphicShape();
+    KarbonCalligraphicShape( double caps=0.0 );
     ~KarbonCalligraphicShape();
 
     void appendPoint( const QPointF &p1, double angle, double width );
@@ -116,9 +116,13 @@ private:
     // and 0 if they form a degenerate triangle
     static int ccw( const QPointF &p1, const QPointF &p2, const QPointF &p3 );
 
+    // 
+    void addCap( int index1, int index2, int pointIndex, bool inverted=false );
+
     // the actual data then determines it's shape
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
+    double m_caps;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

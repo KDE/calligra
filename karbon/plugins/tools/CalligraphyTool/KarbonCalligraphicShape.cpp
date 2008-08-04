@@ -30,7 +30,11 @@
 #include <cmath>
 #include <cstdlib>
 
-KarbonCalligraphicShape::KarbonCalligraphicShape()
+#undef M_PI
+const double M_PI = 3.1415927;
+
+KarbonCalligraphicShape::KarbonCalligraphicShape( double caps )
+    : m_caps( caps )
 {
     setShapeId( KoPathShapeId );
     setFillRule( Qt::WindingFill );
@@ -75,14 +79,10 @@ void KarbonCalligraphicShape::
     }
     // pointCount > 0
 
-    bool flip = (pointCount() > 2) ? flipDetected(p1, p2) : false;
+    bool flip = (pointCount() = 2) ? flipDetected(p1, p2) : false;
 
     // if there was a flip add additional points
     if ( flip ) {
-        int index = pointCount() / 2;
-        // find the last two points
-        KoPathPoint *last1 = pointByIndex( KoPathPointIndex(0, index-1) );
-        KoPathPoint *last2 = pointByIndex( KoPathPointIndex(0, index) );
         appendPointsToPathAux( p2, p1 );
         if ( pointCount() > 4 )
             smoothLastPoints();
@@ -304,9 +304,42 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
 
 void KarbonCalligraphicShape::simplifyPath()
 {
+    if ( m_points.count() < 2 )
+        return;
+
+    // add final cap
+    addCap( m_points.count()-2, m_points.count()-1, pointCount()/2 );
+
+        // add initial cap
+    addCap( 1, 0, pointCount(), true );
+
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
-    //karbonSimplifyPath( this, 0.3 );
+    karbonSimplifyPath( this, 0.3 );
+}
+
+void KarbonCalligraphicShape::addCap( int index1, int index2, int pointIndex,
+                                      bool inverted )
+{
+    QPointF p1 = m_points[index1]->point();
+    QPointF p2 = m_points[index2]->point();
+    double width = m_points[index2]->width();
+
+    QPointF direction = QLineF( QPointF(0, 0), p2 - p1 ).unitVector().p2();
+    QPointF p = p2 + direction * m_caps * width;
+
+    KoPathPoint * newPoint = new KoPathPoint(this, p);
+    
+    double angle = m_points[index2]->angle();
+    if ( inverted )
+        angle += M_PI;
+    
+    double dx = std::cos( angle ) * width;
+    double dy = std::sin( angle ) * width;
+    newPoint->setControlPoint1( QPointF(p.x()-dx/2, p.y()-dy/2) );
+    newPoint->setControlPoint2( QPointF(p.x()+dx/2, p.y()+dy/2) );
+
+    insertPoint( newPoint, KoPathPointIndex(0, pointIndex) );
 }
 
 QString KarbonCalligraphicShape::pathShapeId() const
