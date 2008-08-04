@@ -159,6 +159,9 @@ void KarbonCalligraphyOptionWidget::emitAll()
 
 void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
 {
+    if ( changingProfile )
+        return;
+    kDebug() << "trying profile" << name;
     // write the new profile in the config file
     KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
     KConfigGroup generalGroup( &config, "General" );
@@ -418,7 +421,7 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
     KConfigGroup generalGroup( &config, "General" );
     QString currentProfile = generalGroup.readEntry( "profile", QString() );
-
+    kDebug() << currentProfile;
     // find the index needed by the comboBox
     int index = profilePosition( currentProfile );
 
@@ -449,7 +452,7 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 
 void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
 {
-
+    kDebug() << name;
     Profile *profile = new Profile;
     profile->name = name;
     profile->usePath = usePath->isChecked();
@@ -463,19 +466,33 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
     profile->mass = massBox->value();
     profile->drag = dragBox->value();
 
-    if ( profiles.contains(name) ) {
+    if ( profiles.contains(name) )
+    {
         // there is already a profile with the same name, overwrite
         profile->index = profiles[name]->index;
         profiles.insert( name, profile );
-    } else {
+    }
+    else
+    {
         // it is a new profile
         profile->index = profiles.count();
         profiles.insert( name, profile );
-        // ad the profile to the combobox
-        comboBox->insertItem( profilePosition(name), name );
+        // add the profile to the combobox
+        kDebug() << "BEFORE:";
+        QString dbg;
+        for ( int i = 0; i < comboBox->count(); ++i )
+            dbg += comboBox->itemText(i) + " ";
+        kDebug() << dbg;
+        int pos = profilePosition(name);
+        changingProfile = true;
+        comboBox->insertItem( pos, name );
+        changingProfile = false;
+         kDebug() << "AFTER:";
+        for ( int i = 0; i < comboBox->count(); ++i )
+            dbg += comboBox->itemText(i) + " ";
+        kDebug() << dbg;
+        kDebug() << "new at" << pos << comboBox->itemText(pos) << name;
     }
-
-    comboBox->setCurrentIndex( profilePosition(name) );
 
     KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
     QString str = "Profile" + QString::number( profile->index );
@@ -497,6 +514,12 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
     generalGroup.writeEntry( "profile", name );
 
     config.sync();
+    kDebug() << name;
+
+    int pos = profilePosition(name);
+    kDebug() << "adding in" << pos << comboBox->itemText(pos);
+    comboBox->setCurrentIndex( profilePosition(name) );
+    kDebug() << comboBox->currentText();
 }
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
