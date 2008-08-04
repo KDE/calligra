@@ -167,7 +167,7 @@ void KarbonGradientWidget::paintEvent( QPaintEvent* )
     QGradientStops colorStops = m_gradient.stops();
     if( colorStops.count() > 1 )
     {
-        foreach( QGradientStop stop, colorStops )
+        foreach( const QGradientStop & stop, colorStops )
             paintColorStop( painter, (int)( stop.first * m_pntArea.width() ), stop.second );
     }
 }

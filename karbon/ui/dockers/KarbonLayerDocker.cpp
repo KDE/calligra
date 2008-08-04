@@ -339,7 +339,7 @@ void KarbonLayerDocker::extractSelectedLayersAndShapes(
         return;
 
     // separate selected layers and selected shapes
-    foreach( QModelIndex index, selectedItems )
+    foreach( const QModelIndex & index, selectedItems )
     {
         KoShape *shape = shapeFromIndex( index );
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );

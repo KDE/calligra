@@ -62,7 +62,7 @@ public:
     , unit( KoUnit::Millimeter )
     {
         // Ask every shapefactory to populate the dataCenterMap
-        foreach(QString id, KoShapeRegistry::instance()->keys())
+        foreach( const QString & id, KoShapeRegistry::instance()->keys())
         {
             KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
             shapeFactory->populateDataCenterMap( dataCenterMap );

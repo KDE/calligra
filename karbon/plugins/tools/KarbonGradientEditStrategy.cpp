@@ -96,7 +96,7 @@ bool GradientStrategy::hitHandle( const QPointF &mousePos, const KoViewConverter
     QRectF hr = handleRect( converter );
 
     int handleIndex = 0;
-    foreach( QPointF handle, m_handles )
+    foreach( const QPointF & handle, m_handles )
     {
         hr.moveCenter( m_matrix.map( handle ) );
         if( hr.contains( mousePos ) )
@@ -213,7 +213,7 @@ void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converte
         paintStops( painter, converter );
 
     // draw the gradient handles
-    foreach( QPointF handle, m_handles )
+    foreach( const QPointF & handle, m_handles )
         paintHandle( painter, converter, m_matrix.map( handle ) );
 }
 
@@ -299,7 +299,7 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
         QGradientStop prevStop( -1.0, QColor() );
         QGradientStop nextStop( 2.0, QColor() );
         // find framing gradient stops
-        foreach( QGradientStop stop, m_stops )
+        foreach( const QGradientStop & stop, m_stops )
         {
             if( stop.first > prevStop.first && stop.first < scalar )
                 prevStop = stop;
@@ -411,7 +411,7 @@ QRectF GradientStrategy::boundingRect( const KoViewConverter &converter ) const
         bbox.setBottom( qMax( handle.y(), bbox.bottom() ) );
     }
     QList<StopHandle> handles = stopHandles( converter );
-    foreach( StopHandle stopHandle, handles )
+    foreach( const StopHandle & stopHandle, handles )
     {
         QPointF handle = stopHandle.second;
         bbox.setLeft( qMin( handle.x(), bbox.left() ) );
@@ -555,7 +555,7 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles( const KoViewC
     ortho = converter.viewToDocument( ortho );
 
     QList<StopHandle> handles;
-    foreach( QGradientStop stop, m_stops )
+    foreach( const QGradientStop & stop, m_stops )
     {
         QPointF base = start + stop.first * diff;
         handles.append( StopHandle( base, base + ortho ) );

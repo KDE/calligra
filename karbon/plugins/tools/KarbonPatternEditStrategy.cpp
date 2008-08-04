@@ -160,7 +160,7 @@ void KarbonPatternEditStrategy::paint( QPainter &painter, const KoViewConverter 
 bool KarbonPatternEditStrategy::selectHandle( const QPointF &mousePos )
 {
     int handleIndex = 0;
-    foreach( QPointF handle, m_handles )
+    foreach( const QPointF & handle, m_handles )
     {
         if( mouseInsideHandle( mousePos, m_matrix.map( m_origin + handle ) ) )
         {
