@@ -23,9 +23,11 @@
 #include <KoResourceItemChooser.h>
 #include <KoCheckerBoardPainter.h>
 
+#include <karbonui_export.h>
+
 class KoAbstractGradient;
 
-class KarbonGradientItem : public KoResourceItem
+class KARBONUI_EXPORT KarbonGradientItem : public KoResourceItem
 {
 public:
     KarbonGradientItem( KoAbstractGradient * gradient, KoCheckerBoardPainter * checkerPainter );

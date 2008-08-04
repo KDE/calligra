@@ -17,11 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONSTYLEPREVIEWDOCKER_H_
-#define _KARBONSTYLEPREVIEWDOCKER_H_
+#ifndef KARBONSTYLEDOCKER_H
+#define KARBONSTYLEDOCKER_H
 
 #include <QDockWidget>
-#include <KoDockFactory.h>
 #include <KoCanvasObserver.h>
 
 class KarbonStylePreview;
@@ -38,12 +37,12 @@ class QBrush;
 class QStackedWidget;
 class QTableWidgetItem;
 
-class KarbonStylePreviewDocker : public QDockWidget, public KoCanvasObserver
+class KarbonStyleDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
-    explicit KarbonStylePreviewDocker( QWidget * parent = 0L );
-    ~KarbonStylePreviewDocker();
+    explicit KarbonStyleDocker( QWidget * parent = 0L );
+    ~KarbonStyleDocker();
 
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
@@ -74,16 +73,4 @@ private:
     KoColorSlider * m_opacitySlider;
 };
 
-class KarbonStylePreviewDockerFactory : public KoDockFactory
-{
-public:
-    KarbonStylePreviewDockerFactory();
-
-    virtual QString id() const;
-    virtual KoDockFactory::DockPosition defaultDockPosition() const;
-    virtual QDockWidget* createDockWidget();
-    virtual bool isCollapsable() const { return false; }
-};
-
-
-#endif // _KARBONSTYLEPREVIEWDOCKER_H_
+#endif // KARBONSTYLEDOCKER_H

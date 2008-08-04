@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,22 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonDockersPlugin.h"
 #include "KarbonStyleDockerFactory.h"
+#include "KarbonStyleDocker.h"
 
-#include <KoDockRegistry.h>
-
-#include <KPluginFactory>
-#include <KPluginLoader>
-
-K_PLUGIN_FACTORY( KarbonDockersPluginFactory, registerPlugin<KarbonDockersPlugin>(); )
-K_EXPORT_PLUGIN( KarbonDockersPluginFactory("KarbonDockersPlugin") )
-
-KarbonDockersPlugin::KarbonDockersPlugin( QObject *parent, const QVariantList& )
-    : QObject(parent)
+KarbonStyleDockerFactory::KarbonStyleDockerFactory()
 {
-    KoDockRegistry::instance()->add( new KarbonStyleDockerFactory() );
 }
 
-#include "KarbonDockersPlugin.moc"
+QString KarbonStyleDockerFactory::id() const
+{
+    return QString("StyleDocker");
+}
 
+KoDockFactory::DockPosition KarbonStyleDockerFactory::defaultDockPosition() const
+{
+    return DockRight;
+}
+
+QDockWidget* KarbonStyleDockerFactory::createDockWidget()
+{
+    KarbonStyleDocker * widget = new KarbonStyleDocker();
+    widget->setObjectName(id());
+
+    return widget;
+}
+
+bool KarbonStyleDockerFactory::isCollapsable() const
+{
+    return false;
+}

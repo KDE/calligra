@@ -26,6 +26,8 @@
 #include <KoCheckerBoardPainter.h>
 #include <QFrame>
 
+#include <karbonui_export.h>
+
 class QEvent;
 class QPaintEvent;
 class QBrush;
@@ -33,7 +35,7 @@ class KoShapeBorderModel;
 class KoShapeBackground;
 
 /// A widget to preview stroke and fill of a shape
-class KarbonStylePreview : public QFrame
+class KARBONUI_EXPORT KarbonStylePreview : public QFrame
 {
     Q_OBJECT
 

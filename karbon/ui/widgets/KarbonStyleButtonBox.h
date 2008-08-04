@@ -23,9 +23,11 @@
 
 #include <QtGui/QWidget>
 
+#include <karbonui_export.h>
+
 class QButtonGroup;
 
-class KarbonStyleButtonBox : public QWidget
+class KARBONUI_EXPORT KarbonStyleButtonBox : public QWidget
 {
     Q_OBJECT
 

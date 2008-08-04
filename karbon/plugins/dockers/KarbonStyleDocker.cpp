@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonStylePreviewDocker.h"
+#include "KarbonStyleDocker.h"
 #include "KarbonStylePreview.h"
 #include "KarbonStyleButtonBox.h"
 #include "Karbon.h"
@@ -52,7 +52,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QStackedWidget>
 
-KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
+KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     : QDockWidget( parent ), m_canvas(0)
 {
     setWindowTitle( i18n( "Styles" ) );
@@ -103,15 +103,13 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     connect(m_opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)));
 
     setWidget( mainWidget );
-
-    setCanvas( KoToolManager::instance()->activeCanvasController()->canvas() );
 }
 
-KarbonStylePreviewDocker::~KarbonStylePreviewDocker()
+KarbonStyleDocker::~KarbonStyleDocker()
 {
 }
 
-void KarbonStylePreviewDocker::setCanvas( KoCanvasBase * canvas )
+void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
 {
     m_canvas = canvas;
     if( ! m_canvas )
@@ -133,7 +131,7 @@ void KarbonStylePreviewDocker::setCanvas( KoCanvasBase * canvas )
         updateStyle( 0, 0 );
 }
 
-void KarbonStylePreviewDocker::selectionChanged()
+void KarbonStyleDocker::selectionChanged()
 {
     if( ! m_canvas )
         return;
@@ -145,12 +143,12 @@ void KarbonStylePreviewDocker::selectionChanged()
         updateStyle( 0, 0 );
 }
 
-bool KarbonStylePreviewDocker::strokeIsSelected() const
+bool KarbonStyleDocker::strokeIsSelected() const
 {
     return m_preview->strokeIsSelected();
 }
 
-void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill )
+void KarbonStyleDocker::updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill )
 {
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
@@ -186,7 +184,7 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
     m_preview->update( stroke, fill );
 }
 
-void KarbonStylePreviewDocker::fillSelected()
+void KarbonStyleDocker::fillSelected()
 {
     if( ! m_canvas )
         return;
@@ -195,7 +193,7 @@ void KarbonStylePreviewDocker::fillSelected()
     m_buttons->setFill();
 }
 
-void KarbonStylePreviewDocker::strokeSelected()
+void KarbonStyleDocker::strokeSelected()
 {
     if( ! m_canvas )
         return;
@@ -204,7 +202,7 @@ void KarbonStylePreviewDocker::strokeSelected()
     m_buttons->setStroke();
 }
 
-void KarbonStylePreviewDocker::resourceChanged( int key, const QVariant& )
+void KarbonStyleDocker::resourceChanged( int key, const QVariant& )
 {
     switch( key )
     {
@@ -215,7 +213,7 @@ void KarbonStylePreviewDocker::resourceChanged( int key, const QVariant& )
     }
 }
 
-void KarbonStylePreviewDocker::styleButtonPressed( int buttonId )
+void KarbonStyleDocker::styleButtonPressed( int buttonId )
 {
     switch( buttonId )
     {
@@ -252,14 +250,14 @@ void KarbonStylePreviewDocker::styleButtonPressed( int buttonId )
     }
 }
 
-void KarbonStylePreviewDocker::opacityChanged( int opacity )
+void KarbonStyleDocker::opacityChanged( int opacity )
 {
     QColor currentColor = m_colorChooser->color();
     currentColor.setAlpha( opacity);
     updateColor( currentColor );
 }
 
-void KarbonStylePreviewDocker::colorChanged( const QColor &c )
+void KarbonStyleDocker::colorChanged( const QColor &c )
 {
     QColor currentColor = c;
     int opacity = m_opacitySlider->value();
@@ -275,7 +273,7 @@ void KarbonStylePreviewDocker::colorChanged( const QColor &c )
     updateColor( currentColor );
 }
 
-void KarbonStylePreviewDocker::updateColor( const QColor &c )
+void KarbonStyleDocker::updateColor( const QColor &c )
 {
     if( ! m_canvas )
         return;
@@ -324,7 +322,7 @@ void KarbonStylePreviewDocker::updateColor( const QColor &c )
     selectionChanged();
 }
 
-void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
+void KarbonStyleDocker::updateGradient( QTableWidgetItem * item )
 {
     if( ! item )
         return;
@@ -386,7 +384,7 @@ void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
     selectionChanged();
 }
 
-void KarbonStylePreviewDocker::updatePattern( QTableWidgetItem * item )
+void KarbonStyleDocker::updatePattern( QTableWidgetItem * item )
 {
     KarbonPatternItem * currentPattern = dynamic_cast<KarbonPatternItem*>(item);
     if( ! currentPattern || ! currentPattern->pattern()->valid() )
@@ -407,7 +405,7 @@ void KarbonStylePreviewDocker::updatePattern( QTableWidgetItem * item )
     }
 }
 
-void KarbonStylePreviewDocker::updateFillRule( Qt::FillRule fillRule )
+void KarbonStyleDocker::updateFillRule( Qt::FillRule fillRule )
 {
     if( ! m_canvas )
         return;
@@ -427,27 +425,4 @@ void KarbonStylePreviewDocker::updateFillRule( Qt::FillRule fillRule )
         m_canvas->addCommand( new KoPathFillRuleCommand( shapes, fillRule ) );
 }
 
-
-KarbonStylePreviewDockerFactory::KarbonStylePreviewDockerFactory()
-{
-}
-
-QString KarbonStylePreviewDockerFactory::id() const
-{
-    return QString("Style Preview");
-}
-
-KoDockFactory::DockPosition KarbonStylePreviewDockerFactory::defaultDockPosition() const
-{
-    return DockRight;
-}
-
-QDockWidget* KarbonStylePreviewDockerFactory::createDockWidget()
-{
-    KarbonStylePreviewDocker * widget = new KarbonStylePreviewDocker();
-    widget->setObjectName(id());
-
-    return widget;
-}
-
-#include "KarbonStylePreviewDocker.moc"
+#include "KarbonStyleDocker.moc"

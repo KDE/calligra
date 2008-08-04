@@ -1,16 +1,20 @@
 project(karbondockersplugin)
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+include_directories( 
+    ${KDE4_INCLUDE_DIR} 
+    ${QT_INCLUDES} 
+    ${KOGUIUTILS_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/karbon/ui/widgets )
 
 set(karbondockers_SRCS
     KarbonDockersPlugin.cpp
-    KarbonStrokeDocker.cpp
-    KarbonStrokeDockerFactory.cpp
+    KarbonStyleDocker.cpp
+    KarbonStyleDockerFactory.cpp
 )
 
 kde4_add_plugin(karbondockersplugin ${karbondockers_SRCS})
 
-target_link_libraries(karbondockersplugin koguiutils komain)
+target_link_libraries(karbondockersplugin koguiutils komain karbonui )
 
 install(TARGETS karbondockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 

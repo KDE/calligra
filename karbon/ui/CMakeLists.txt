@@ -21,7 +21,6 @@ set(karbonui_SRCS
     dockers/KarbonLayerDocker.cpp
     dockers/KarbonLayerModel.cpp
     dockers/KarbonLayerSortingModel.cpp
-    dockers/KarbonStylePreviewDocker.cpp
 
     widgets/KarbonCanvas.cpp
     widgets/KarbonGradientWidget.cpp

@@ -51,9 +51,9 @@
 // Dockers.
 #include "vdocumentdocker.h"
 #include "KarbonLayerDocker.h"
-#include "KarbonStylePreviewDocker.h"
 
 // The rest.
+#include "Karbon.h"
 #include "KarbonFactory.h"
 #include "KarbonPart.h"
 #include "KarbonCanvas.h"
@@ -154,7 +154,7 @@ class KarbonView::Private
 {
 public:
     Private( KarbonPart * p)
-        : part(p), canvas( 0 ), stylePreview(0)
+        : part(p), canvas( 0 )
     {}
 
     KarbonPart * part;
@@ -162,8 +162,6 @@ public:
     KoCanvasController * canvasController;
     KoRuler * horizRuler;
     KoRuler * vertRuler;
-
-    KarbonStylePreviewDocker * stylePreview;
 
     // actions:
     KAction * groupObjects;
@@ -291,9 +289,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         KoToolBoxFactory toolBoxFactory(d->canvasController, i18n( "Tools" ) );
         createDockWidget( &toolBoxFactory );
 
-        KarbonStylePreviewDockerFactory styleFactory;
-        d->stylePreview = dynamic_cast<KarbonStylePreviewDocker*>( createDockWidget( &styleFactory ) );
-
         KoDockerManager *dockerManager = new KoDockerManager(this);
         connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
              dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
@@ -359,7 +354,7 @@ void KarbonView::dropEvent( QDropEvent *e )
         if( ! part() )
             return;
 
-        if( d->stylePreview->strokeIsSelected() )
+        if( d->canvas->resourceProvider()->intResource( Karbon::ActiveStyle ) == Karbon::Foreground )
         {
             QList<KoShapeBorderModel*> borders;
             QList<KoShape*> selectedShapes = selection->selectedShapes();

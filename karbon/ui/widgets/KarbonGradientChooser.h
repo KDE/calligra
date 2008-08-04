@@ -25,9 +25,11 @@
 #include <KoResourceServerAdapter.h>
 #include <KoCheckerBoardPainter.h>
 
+#include <karbonui_export.h>
+
 class QResizeEvent;
 
-class KarbonGradientChooser : public KoResourceItemChooser
+class KARBONUI_EXPORT KarbonGradientChooser : public KoResourceItemChooser
 {
     Q_OBJECT
 public:
