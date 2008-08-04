@@ -2,6 +2,7 @@
 Type=Service
 Name=Oracle
 Comment=Kexi database driver for accessing Oracle servers
+Comment[it]=Driver per banche dati Kexi per accedere ai server Oracle
 Comment[uk]=Драйвер бази даних Kexi для доступу до серверів Oracle
 X-KDE-Library=kexidb_oracledriver
 X-KDE-ServiceTypes=Kexi/DBDriver
