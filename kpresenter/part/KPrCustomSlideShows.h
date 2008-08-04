@@ -19,13 +19,18 @@
 #ifndef KPRCUSTOMSLIDESHOWS_H
 #define KPRCUSTOMSLIDESHOWS_H
 
+//Qt includes
 #include<QMap>
 #include<QList>
 #include<QString>
 
-#include "kpresenter_export.h"
-
+//Forward declarations
+class KoXmlWriter;
 class KoPAPageBase;
+class KoXmlElement;
+class KPrDocument;
+
+#include "kpresenter_export.h"
 
 class KPRESENTER_TEST_EXPORT KPrCustomSlideShows
 {
@@ -112,6 +117,13 @@ public:
      * @param slideShow list of slides to be removed
      */
     void removeSlidesFromAll( const QList<KoPAPageBase*> &slideShow );
+
+    /**
+    * @brief saves the slideShows into the given writer
+    */
+    void saveOdf( KoXmlWriter* writer );
+
+    void loadOdf( KoXmlElement* presentationSettings, KPrDocument* kprDocument );
 
 private:
     QMap< QString, QList<KoPAPageBase*> > m_customSlideShows;

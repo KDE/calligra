@@ -17,8 +17,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include"KPrCustomSlideShows.h"
-#include <QDebug>
+//KOffice includes
+#include <KoXmlWriter.h>
+#include <KoPAPageBase.h>
+#include <KoXmlWriter.h>
+
+//KPresenter includes
+#include <KPrDocument.h>
+
+#include "KPrCustomSlideShows.h"
 
 KPrCustomSlideShows::KPrCustomSlideShows()
 {
@@ -69,7 +76,6 @@ QList<KoPAPageBase*> KPrCustomSlideShows::getByName( const QString &name ) const
 //     if( it == m_customSlideShows.constEnd() ) {
 //         return QList<KoPAPageBase*>();
 //     }
-    qDebug()<<"Found by getByName:"<<it.value();
     return it.value();
 }
 
@@ -108,4 +114,62 @@ void KPrCustomSlideShows::removeSlidesFromAll( const QList<KoPAPageBase*> &slide
     for( int i=0; i < slideShow.size(); ++i ) {
         removeSlideFromAll( slideShow[i] );
     }
+}
+
+void KPrCustomSlideShows::saveOdf( KoXmlWriter* writer )
+{
+    foreach( QString name, m_customSlideShows.keys() )
+    {
+        QList<KoPAPageBase*> slideList = m_customSlideShows.value( name );
+        if( slideList.isEmpty() )
+        {
+            continue;
+        }
+        writer->startElement( "presentation:show" );
+        writer->addAttribute( "presentation:name", name );
+        QString pages;
+        foreach( KoPAPageBase* pageName, slideList )
+        {
+            pages += pageName->name() + ",";
+        }
+        pages.truncate( pages.size() - 2 );//remove the last comma
+        writer->addAttribute( "presentation:pages", pages );
+        writer->endElement();//presentation:show
+    }
+}
+
+void KPrCustomSlideShows::loadOdf( KoXmlElement* presentationSettings, KPrDocument* kprDocument )
+{
+    m_customSlideShows.clear();
+
+    //Create a map of Name-Address so that we can look for the names much faster
+    QMap<QString,KoPAPageBase*> pageNames;
+    foreach( KoPAPageBase* page, kprDocument->pages() )
+    {
+        pageNames.insert( page->name(), page );
+    }
+
+    //Now load the customSlidesShows
+    QList<QString> usedNames;//used to avoid duplicates, shouldn't happen but we cannot assert it
+    KoXmlElement presentationShow = presentationSettings->firstChild().toElement();
+    for( ; !presentationShow.isNull(); presentationShow = presentationShow.nextSibling().toElement() )
+    {
+        QString name = presentationShow.attribute( "name" );
+        QString pages = presentationShow.attribute( "pages" );
+        QStringList splitedPages = pages.split( "," );
+        QList<KoPAPageBase*> slideShow;
+        foreach( QString pageName, splitedPages )
+        {
+            slideShow.append( pageNames.value( pageName ) );
+        }
+        if( usedNames.contains( name ) )
+        {
+            insert( name, slideShow );
+        }
+        else
+        {
+            //The item is repeated, just update
+            update( name, slideShow );
+        }
+    }//for
 }
