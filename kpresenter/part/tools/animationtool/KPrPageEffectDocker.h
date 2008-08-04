@@ -20,7 +20,7 @@
 #ifndef KPRPAGEEFFECTDOCKER_H
 #define KPRPAGEEFFECTDOCKER_H
 
-#include <QDockWidget>
+#include <QWidget>
 #include <QPixmap>
 
 class QLabel;
@@ -30,20 +30,20 @@ class QTimer;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrPageEffectFactory;
-class KPrView;
+class KoPAView;
 class KPrPreviewWidget;
 
 /**
  * This is the page effect docker widget that let's you choose a page animation.
  */
-class KPrPageEffectDocker : public QDockWidget
+class KPrPageEffectDocker : public QWidget
 {
 
     Q_OBJECT
 public:
     KPrPageEffectDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
-    void setView( KPrView* view );
+    void setView( KoPAView* view );
 
 public slots:
     void slotActivePageChanged();
@@ -65,7 +65,7 @@ protected slots:
 
 private:
     KPrPageEffectRunner* m_runner;
-    KPrView* m_view;
+    KoPAView* m_view;
     QComboBox* m_effectCombo;
     QComboBox* m_subTypeCombo;
     QDoubleSpinBox* m_durationSpinBox;

@@ -37,8 +37,6 @@
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "commands/KPrAnimationCreateCommand.h"
-#include "dockers/KPrPageEffectDocker.h"
-#include "dockers/KPrPageEffectDockerFactory.h"
 #include "dockers/KPrClickActionDocker.h"
 #include "dockers/KPrClickActionDockerFactory.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
@@ -80,11 +78,6 @@ void KPrView::updateActivePage(KoPAPageBase *page)
 
 void KPrView::initGUI()
 {
-    // add page effect docker to the main window
-    KPrPageEffectDockerFactory factory;
-    KPrPageEffectDocker *docker = qobject_cast<KPrPageEffectDocker*>( createDockWidget( &factory ) );
-    docker->setView( this );
-
     // add action event docker to the main window
     KPrClickActionDockerFactory clickActionFactory;
     KPrClickActionDocker *clickActionDocker = qobject_cast<KPrClickActionDocker*>( createDockWidget( &clickActionFactory ) );

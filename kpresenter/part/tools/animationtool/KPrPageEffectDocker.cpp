@@ -32,29 +32,25 @@
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoShapeManager.h>
-#include "KPrView.h"
+#include "KoPAView.h"
 #include "KPrPage.h"
 #include "KPrPageApplicationData.h"
-#include "KPrPreviewWidget.h"
+#include "dockers/KPrPreviewWidget.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffectFactory.h"
 #include "commands/KPrPageEffectSetCommand.h"
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
-: QDockWidget( parent, flags )
+: QWidget( parent, flags )
 , m_view( 0 )
 {
-    setWindowTitle( i18n( "Page effects" ) );
-
-    QWidget* base = new QWidget( this );
-
     // setup the effect preview
-    m_preview = new KPrPreviewWidget( base );
+    m_preview = new KPrPreviewWidget( this );
     m_preview->setToolTip( i18n( "Click to preview the page effect." ) );
    // m_preview->installEventFilter( this );
    // m_preview->setFrameShape( QFrame::Box );
 
-    m_effectCombo = new QComboBox( base );
+    m_effectCombo = new QComboBox( this );
     m_effectCombo->addItem( i18n( "No Effect" ), QString( "" ) );
 
     QList<KPrPageEffectFactory*> factories = KPrPageEffectRegistry::instance()->values();
@@ -67,7 +63,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     connect( m_effectCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotEffectChanged( int ) ) );
 
-    m_subTypeCombo = new QComboBox( base );
+    m_subTypeCombo = new QComboBox( this );
 
     connect( m_subTypeCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotSubTypeChanged( int ) ) );
@@ -93,8 +89,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     layout->addWidget( m_subTypeCombo );
     layout->addLayout( optionLayout);
     layout->addWidget( m_preview);
-    base->setLayout( layout );
-    setWidget( base );
+    setLayout( layout );
 
     m_updateTimer = new QTimer( this );
     m_updateTimer->setInterval( 100 );
@@ -238,7 +233,7 @@ KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactor
     return factory->createPageEffect( properties );
 }
 
-void KPrPageEffectDocker::setView( KPrView* view )
+void KPrPageEffectDocker::setView( KoPAView* view )
 {
     Q_ASSERT( view );
     m_view = view;

@@ -20,12 +20,14 @@
 #ifndef KPRPAGEEFFECTSETCOMMAND_H
 #define KPRPAGEEFFECTSETCOMMAND_H
 
+#include "kpresenter_export.h"
+
 #include <QUndoCommand>
 
 class KoPAPageBase;
 class KPrPageEffect;
 
-class KPrPageEffectSetCommand : public QUndoCommand
+class KPRESENTER_EXPORT KPrPageEffectSetCommand : public QUndoCommand
 {
 public:
     KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect );

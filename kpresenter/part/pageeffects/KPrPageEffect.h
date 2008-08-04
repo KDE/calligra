@@ -23,6 +23,8 @@
 #include <QPixmap>
 #include <QTimeLine>
 
+#include "kpresenter_export.h"
+
 class QPainter;
 class KoXmlElement;
 class KoXmlWriter;
@@ -34,7 +36,7 @@ class KPrPageEffectStrategy;
  * It uses an internaly a QTimeLine for calulating the position. The timeline is
  * feed by the time of an external timeline.
  */
-class KPrPageEffect
+class KPRESENTER_EXPORT KPrPageEffect
 {
 public:
     /**

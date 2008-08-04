@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Animation Tool
+X-KDE-ServiceTypes=KOffice/Tool
+Type=Service
+X-KDE-Library=kpresentertoolanimation
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
+

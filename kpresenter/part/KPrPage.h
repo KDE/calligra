@@ -24,11 +24,13 @@
 
 #include "KPrAnimationController.h"
 
+#include "kpresenter_export.h"
+
 class KPrDocument;
 class KPrPageApplicationData;
 class KPrNotes;
 
-class KPrPage : public KoPAPage, public KPrAnimationController
+class KPRESENTER_EXPORT KPrPage : public KoPAPage, public KPrAnimationController
 {
 public:
     KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );

@@ -9,6 +9,7 @@ endif(KDE4_BUILD_TESTS)
 
 
 add_subdirectory(tests)
+add_subdirectory(tools)
 
 ### kpresenterprivate ###
 set( kpresenterprivate_LIB_SRCS
@@ -41,8 +42,6 @@ set( kpresenterprivate_LIB_SRCS
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
 
-     dockers/KPrPageEffectDockerFactory.cpp
-     dockers/KPrPageEffectDocker.cpp
      dockers/KPrPreviewWidget.cpp
      dockers/KPrClickActionDockerFactory.cpp
      dockers/KPrClickActionDocker.cpp
