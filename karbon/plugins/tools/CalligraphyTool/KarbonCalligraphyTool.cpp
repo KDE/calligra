@@ -44,7 +44,8 @@ using std::sqrt;
 
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
-    : KoTool( canvas ), m_shape( 0 ), m_isDrawing( false ), m_speed(0, 0), m_selectedPath(0)
+    : KoTool( canvas ), m_shape( 0 ), m_selectedPath(0),
+      m_isDrawing( false ), m_speed(0, 0)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
              SLOT(updateSelectedPath()) );
@@ -92,7 +93,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
     m_speed = QPointF(0, 0);
 
     m_isDrawing = true;
-    m_firstPointAdded = false;
+    m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape;
     //addPoint( event );
 }
@@ -110,15 +111,30 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     if ( ! m_isDrawing )
         return;
 
-    m_endOfPath = false;    // allow last point being added
-    addPoint( event );      // add last point
-    m_isDrawing = false;
-
-    if ( m_shape->pointCount() == 0 )
+    if ( m_pointCount == 0 )
     {
+        // handle click: select shape (if any)
+        if ( event->point == m_lastPoint )
+        {
+            KoShapeManager *shapeManager = m_canvas->shapeManager();
+            KoShape *selectedShape = shapeManager->shapeAt( event->point );
+            if ( selectedShape != 0 )
+            {
+                shapeManager->selection()->deselectAll();
+                shapeManager->selection()->select( selectedShape );
+            }
+        }
+
         delete m_shape;
         m_shape = 0;
+        m_isDrawing = false;
         return;
+    }
+    else
+    {
+        m_endOfPath = false;    // allow last point being added
+        addPoint( event );      // add last point
+        m_isDrawing = false;
     }
 
     m_shape->simplifyPath();
@@ -146,10 +162,10 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 {
-    if ( ! m_firstPointAdded ) {
+    if ( m_pointCount == 0 ) {
         if ( m_usePath && m_selectedPath )
             m_selectedPathOutline = m_selectedPath->outline();
-        m_firstPointAdded = true;
+        m_pointCount = 1;
         m_endOfPath = false;
         m_followPathPosition = 0;
         m_lastMousePos = event->point;
@@ -158,6 +174,8 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
     }
     if ( m_endOfPath )
         return;
+
+    ++m_pointCount;
 
     QPointF newSpeed;
     QPointF newPoint= calculateNewPoint( event->point, &newSpeed );

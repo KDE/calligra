@@ -92,7 +92,7 @@ private:
     QPointF m_lastMousePos;
 
     bool m_isDrawing;
-    bool m_firstPointAdded;
+    int m_pointCount;
 
     // dynamic parameters
     QPointF m_speed; // used as a vector
