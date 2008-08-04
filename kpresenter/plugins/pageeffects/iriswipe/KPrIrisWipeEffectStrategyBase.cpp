@@ -57,12 +57,15 @@ int KPrIrisWipeEffectStrategyBase::findMaxScaling( const KPrPageEffect::Data &da
 
     //We now search from the previous point and incressing over and over till the shape fills
     //the widget given
+    int halfWidth = width / 2;
+    int halfHeight = height / 2;
     QPainterPath path;
     while( !path.contains( widget ) )
     {
         QMatrix matrix;
-        matrix.translate( width/2, height/2 );
-        matrix.scale( (double) maxMeasure / (double) pathMaxMeasure, (double) maxMeasure / (double) pathMaxMeasure );
+        matrix.translate( halfWidth, halfWidth );
+        double maxScaling = (double) maxMeasure / (double) pathMaxMeasure;
+        matrix.scale( maxScaling, maxScaling );
         path = matrix.map( m_shape );
         maxMeasure += 5;//we don't need to be very precise
     }
