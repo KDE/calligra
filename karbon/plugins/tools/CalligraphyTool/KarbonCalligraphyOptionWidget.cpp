@@ -31,6 +31,9 @@ set to true
 TODO: add a reset defaults option?
 */
 
+// name of the configuration file
+const QString RCFILENAME = "karboncalligraphyrc";
+
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     : changingProfile(false), detailsShowed(true)
 {
@@ -163,7 +166,7 @@ void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
         return;
     kDebug() << "trying profile" << name;
     // write the new profile in the config file
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfig config( KGlobal::mainComponent(), RCFILENAME );
     KConfigGroup generalGroup( &config, "General" );
     generalGroup.writeEntry( "profile", name );
     config.sync();
@@ -338,7 +341,7 @@ void KarbonCalligraphyOptionWidget::createConnections()
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
 {
     // check if the profiles where already added
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfig config( KGlobal::mainComponent(), RCFILENAME );
     KConfigGroup generalGroup( &config, "General" );
 
     if ( generalGroup.readEntry( "defaultProfilesAdded", false ) )
@@ -379,7 +382,7 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
 
 void KarbonCalligraphyOptionWidget::loadProfiles()
 {
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfig config( KGlobal::mainComponent(), RCFILENAME );
 
     // load profiles as long as they are present
     int i = 0;
@@ -418,7 +421,7 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
 
 void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 {
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfig config( KGlobal::mainComponent(), RCFILENAME );
     KConfigGroup generalGroup( &config, "General" );
     QString currentProfile = generalGroup.readEntry( "profile", QString() );
     kDebug() << currentProfile;
@@ -494,7 +497,7 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
         kDebug() << "new at" << pos << comboBox->itemText(pos) << name;
     }
 
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfig config( KGlobal::mainComponent(), RCFILENAME );
     QString str = "Profile" + QString::number( profile->index );
     KConfigGroup profileGroup( &config, str );
 
@@ -528,7 +531,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     if ( index < 0 ) return; // no such profile
 
     // remove the file from the config file
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfig config( KGlobal::mainComponent(), RCFILENAME );
     int deletedIndex = profiles[name]->index;
     QString deletedGroup = "Profile" + QString::number( deletedIndex );
     config.deleteGroup( deletedGroup );
