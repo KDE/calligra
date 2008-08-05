@@ -60,7 +60,7 @@ private:
         double thinning;
         int angle;
         double fixation;
-        bool caps;
+        double caps;
         double mass;
         double drag;
     };

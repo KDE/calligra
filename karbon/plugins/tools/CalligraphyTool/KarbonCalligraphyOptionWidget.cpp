@@ -96,7 +96,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QHBoxLayout *capsLayout = new QHBoxLayout( this );
     QLabel *capsLabel = new QLabel( i18n( "Caps" ), this );
     capsBox = new QDoubleSpinBox;
-    capsBox->setRange( 0.0, 3.0 );
+    capsBox->setRange( 0.0, 2.0 );
     capsBox->setSingleStep( 0.1 );
     capsLayout->addWidget( capsLabel );
     capsLayout->addWidget( capsBox );
