@@ -58,6 +58,24 @@ void KarbonCalligraphicShape::appendPoint( const QPointF &point,
     m_handles.append( p );
     m_points.append(calligraphicPoint);
     appendPointToPath(*calligraphicPoint);
+
+    // add initial cap if it's the third point
+    // add initial cap
+
+    // use the third point instead of second when possible, the first
+    // points are generally to close together to generate correct results
+    //int index = (m_points.count() > 3) ? 3 : 1;
+    if ( m_points.count() > 3 )
+    {
+        addCap( 3, 0, 0, true );
+        // duplicate the last point to make the points remain "balanced"
+        // needed to keep all indexes code (else I would need to change
+        // everything in the code...)
+        KoPathPoint *last = pointByIndex( KoPathPointIndex(0, pointCount()-1) );
+        KoPathPoint *newPoint = new KoPathPoint( this, last->point() );
+        insertPoint( newPoint, KoPathPointIndex(0, pointCount()) );
+        close();
+    }
 }
 
 void KarbonCalligraphicShape::
@@ -311,13 +329,6 @@ void KarbonCalligraphicShape::simplifyPath()
 
     // add final cap
     addCap( m_points.count()-2, m_points.count()-1, pointCount()/2 );
-
-    // add initial cap
-
-    // use the third point instead of second when possible, the first
-    // points are generally to close together to generate correct results
-    int index = (m_points.count() > 3) ? 3 : 1;
-    addCap( index, 0, pointCount(), true );
 
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
