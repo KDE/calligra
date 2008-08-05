@@ -141,6 +141,17 @@ PlotArea::PlotArea( ChartShape *parent )
     
     setShapeId( ChartShapeId );
     d->shape = parent;
+    
+    Q_ASSERT( d->shape->proxyModel() );
+    
+    connect( d->shape->proxyModel(), SIGNAL( modelReset() ),
+             this, SLOT( dataSetCountChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( rowsInserted( const QModelIndex, int, int ) ),
+             this, SLOT( dataSetCountChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( rowsRemoved( const QModelIndex, int, int ) ),
+             this, SLOT( dataSetCountChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( dataChanged() ),
+             this, SLOT( update() ) );
 }
 
 PlotArea::~PlotArea()
@@ -150,7 +161,6 @@ PlotArea::~PlotArea()
 
 void PlotArea::init()
 {
-    
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdPlane );
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
@@ -509,6 +519,8 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingC
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
     
+    d->shape->proxyModel()->blockSignals( true );
+    
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     DataSet *dataSet = d->shape->proxyModel()->createDataSet();
     Q_ASSERT( dataSet );
@@ -575,6 +587,8 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingC
 
     xAxis()->attachDataSet( dataSet );
     yAxis()->attachDataSet( dataSet );
+    
+    d->shape->proxyModel()->blockSignals( false );
 
     styleStack.restore();
     return true;
