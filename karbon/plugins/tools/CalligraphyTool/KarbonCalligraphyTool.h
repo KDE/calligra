@@ -96,6 +96,9 @@ private:
 
     // dynamic parameters
     QPointF m_speed; // used as a vector
+
+    // last calligraphic shape drawn, if any
+    KarbonCalligraphicShape *m_lastShape;
 };
 
 #endif // KARBONCALLIGRAPHYTOOL_H

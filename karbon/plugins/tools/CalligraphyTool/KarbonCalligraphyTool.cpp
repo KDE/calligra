@@ -45,7 +45,7 @@ using std::sqrt;
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoTool( canvas ), m_shape( 0 ), m_selectedPath(0),
-      m_isDrawing( false ), m_speed(0, 0)
+      m_isDrawing( false ), m_speed(0, 0), m_lastShape(0)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
              SLOT(updateSelectedPath()) );
@@ -142,9 +142,10 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_shape );
     if( cmd )
     {
-        KoSelection *selection = m_canvas->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select( m_shape );
+//         KoSelection *selection = m_canvas->shapeManager()->selection();
+//         selection->deselectAll();
+//         selection->select( m_shape );
+        m_lastShape = m_shape;
         m_canvas->addCommand( cmd );
     }
     else
@@ -306,10 +307,17 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
 void KarbonCalligraphyTool::activate( bool )
 {
     useCursor(Qt::ArrowCursor, true);
+    m_lastShape = 0;
 }
 
 void KarbonCalligraphyTool::deactivate()
 {
+    if ( m_lastShape )
+    {
+        KoSelection *selection = m_canvas->shapeManager()->selection();
+        selection->deselectAll();
+        selection->select( m_lastShape );
+    }
 }
 
 QWidget *KarbonCalligraphyTool::createOptionWidget()
