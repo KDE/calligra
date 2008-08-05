@@ -34,8 +34,6 @@ namespace KexiWebForms {
      * @fixme That's a bit awful, isn't it?
      */
     extern KexiDB::Connection* gConnection;
-    extern KexiProjectData* gProjectData;
-    extern KexiProject* gProject;
 
     /*!
      * Essentially, initialize the KexiDB::Connection object

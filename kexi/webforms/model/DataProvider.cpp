@@ -26,19 +26,9 @@
 
 #include <main/startup/KexiStartup.h>
 
-#include <core/kexidbshortcutfile.h>
-#include <core/kexiproject.h>
-#include <core/kexiprojectdata.h>
-#include <core/kexistartupdata.h>
-
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/indexschema.h>
 
 namespace KexiWebForms {
 
@@ -119,9 +109,6 @@ namespace KexiWebForms {
                 } else {
                     status = true;
                 }
-
-                gProjectData = new KexiProjectData(*connData);
-                gProject = new KexiProject(gProjectData);
             }
         }
         return status;
