@@ -20,6 +20,8 @@
 
 #include "KPrAnimationToolFactory.h"
 #include "KPrAnimationTool.h"
+#include "KPrView.h"
+#include <KoPACanvas.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -30,13 +32,21 @@ KPrAnimationToolFactory::KPrAnimationToolFactory(QObject *parent)
     setToolTip(i18n("Animation tool"));
     setToolType(mainToolType());
     setPriority(40);
-    setIcon("select");
+    setIcon("animation-kpresenter");
     setActivationShapeId("flake/always");
 }
 
-KPrAnimationToolFactory::~KPrAnimationToolFactory() {
+KPrAnimationToolFactory::~KPrAnimationToolFactory()
+{
 }
 
-KoTool* KPrAnimationToolFactory::createTool(KoCanvasBase *canvas) {
+bool KPrAnimationToolFactory::canCreateTool(KoCanvasBase *canvas) const
+{
+    KoPACanvas *paCanvas =dynamic_cast<KoPACanvas *>(canvas);
+    return paCanvas!=0; // we only work in KPresenter
+}
+
+KoTool* KPrAnimationToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new KPrAnimationTool(canvas);
 }

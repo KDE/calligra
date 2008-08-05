@@ -24,4 +24,5 @@ install(TARGETS kpresentertoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kpresentertoolanimation.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
+kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
 
