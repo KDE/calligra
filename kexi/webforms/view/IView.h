@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIWEBFORMS_VIEW_EXTJS_VIEW_H
-#define KEXIWEBFORMS_VIEW_EXTJS_VIEW_H
+#ifndef KEXIWEBFORMS_VIEW_IVIEW_H
+#define KEXIWEBFORMS_VIEW_IVIEW_H
 
 #include <QHash>
 
@@ -41,4 +41,4 @@ namespace View {
 } // end namespace View
 } // end namespace KexiWebForms
 
-#endif /* KEXIWEBFORMS_VIEW_EXTJS_VIEW_H */
+#endif /* KEXIWEBFORMS_VIEW_IVIEW_H */
