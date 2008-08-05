@@ -60,7 +60,7 @@ KarbonCalligraphyTool::~KarbonCalligraphyTool()
 void KarbonCalligraphyTool::paint( QPainter &painter,
                                    const KoViewConverter &converter )
 {
-    if ( m_usePath && m_selectedPath )
+    if ( m_selectedPath )
     {
         painter.save();
         painter.setRenderHints( QPainter::Antialiasing, false );
@@ -389,8 +389,8 @@ void KarbonCalligraphyTool::setDrag( double drag )
 void KarbonCalligraphyTool::setUsePath( bool usePath )
 {
     m_usePath = usePath;
-    if ( m_selectedPath )
-        m_canvas->updateCanvas( m_selectedPath->boundingRect() );
+    //if ( m_selectedPath )
+    //    m_canvas->updateCanvas( m_selectedPath->boundingRect() );
 }
 
 void KarbonCalligraphyTool::setUsePressure( bool usePressure )
@@ -431,7 +431,4 @@ void KarbonCalligraphyTool::updateSelectedPath()
     // or the other way around
     if ( (m_selectedPath != 0) != (oldSelectedPath != 0) )
         emit pathSelectedChanged( m_selectedPath != 0 );
-
-    //if ( m_usePath )
-    //    m_canvas->updateCanvas();
 }
