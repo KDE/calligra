@@ -42,7 +42,6 @@ kde4_add_executable(kwebforms NOGUI
   model/DataProvider.cpp
   model/Database.cpp
 # Other services
-  FileService.cpp
   BlobService.cpp
 # Authentication framework
   auth/Authenticator.cpp

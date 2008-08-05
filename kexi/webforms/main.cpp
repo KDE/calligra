@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     }
 
     // Set template root directory equal to root directory
-    google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
+    //google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
 

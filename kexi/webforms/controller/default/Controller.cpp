@@ -19,12 +19,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
+
 #include <QUrl>
+#include <QFile>
 #include <QString>
 #include <QByteArray>
 #include <QStringList>
 
 #include <KDebug>
+#include <KCmdLineArgs>
 
 #include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPTypes.hpp>
@@ -53,6 +56,11 @@ namespace KexiWebForms {
         m_update = new View::Update("update.tpl");
         m_delete = new View::Delete("delete.tpl");
         m_query = new View::Query("query.tpl");
+
+        // Template directory
+        KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+        // Set template root directory equal to root directory
+        google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
     }
 
     Controller::~Controller() {
