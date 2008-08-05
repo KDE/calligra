@@ -80,14 +80,14 @@
         <x>0</x>
         <y>0</y>
         <width>251</width>
-        <height>352</height>
+        <height>355</height>
        </rect>
       </property>
       <attribute name="title" >
        <string>Plot Area</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="10" column="0" >
+       <item row="8" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -143,21 +143,14 @@
          </item>
         </layout>
        </item>
-       <item row="3" column="0" colspan="5" >
-        <widget class="QPushButton" name="pushButton_4" >
-         <property name="text" >
-          <string>Background...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="5" >
+       <item row="2" column="0" colspan="5" >
         <widget class="Line" name="line_2" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" >
+       <item row="3" column="0" >
         <widget class="QLabel" name="label_2" >
          <property name="text" >
           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
@@ -168,34 +161,27 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="3" >
+       <item row="4" column="0" colspan="3" >
         <widget class="QComboBox" name="axes" />
        </item>
-       <item row="9" column="0" colspan="5" >
+       <item row="7" column="0" colspan="5" >
         <widget class="QPushButton" name="axisScalingButton" >
          <property name="text" >
           <string>Scaling...</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="3" >
+       <item row="4" column="3" >
         <widget class="QToolButton" name="addAxis" >
          <property name="text" >
           <string/>
          </property>
         </widget>
        </item>
-       <item row="6" column="4" >
+       <item row="4" column="4" >
         <widget class="QToolButton" name="removeAxis" >
          <property name="text" >
           <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="5" >
-        <widget class="Line" name="line_3" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
@@ -210,17 +196,17 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="7" column="1" colspan="4" >
+       <item row="5" column="1" colspan="4" >
         <widget class="QLineEdit" name="axisTitle" />
        </item>
-       <item row="7" column="0" >
+       <item row="5" column="0" >
         <widget class="QCheckBox" name="axisShowTitle" >
          <property name="text" >
           <string>Label</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="5" >
+       <item row="6" column="0" colspan="5" >
         <widget class="QCheckBox" name="axisShowGridLines" >
          <property name="text" >
           <string>Show Grid Lines</string>
