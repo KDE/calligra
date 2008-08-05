@@ -50,8 +50,7 @@ namespace KexiWebForms {
     // Step 3: Write the links
     static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, const char* uri, const char* keyName)
     {
-        KexiWebForms::Model::Database db;
-        QHash<QString, QString> oNames(db.getNames(objectType));
+        QHash<QString, QString> oNames(KexiWebForms::Model::Database::getNames(objectType));
         QStringList captions(oNames.uniqueKeys());
         qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
         

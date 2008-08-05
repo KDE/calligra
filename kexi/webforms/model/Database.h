@@ -34,48 +34,42 @@ namespace KexiDB {
 }
 class QString;
 
-namespace KexiWebForms {
-    namespace Model {
-
-        class Database {
-        public:
-            Database() {}
-            virtual ~Database() {}
+namespace KexiWebForms { // begin namespace KexiWebForms
+namespace Model {        // begin namespace Model
+namespace Database {     // begin namespace Database
             
-            /**
-             * Get all table names
-             * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
-             * @return QHash with captions as keys and object names as values
-             */
-            QHash<QString, QString> getNames(KexiDB::ObjectTypes);
+    /**
+     * Get all table names
+     * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
+     * @return QHash with captions as keys and object names as values
+     */
+    QHash<QString, QString> getNames(KexiDB::ObjectTypes);
+    
+    /**
+     * Get the schema of a table
+     * @param QString& table name
+     * @return a QHash with a QPair representing field caption and field name as key and
+     *    a QPair representing the field value (if any) and the type as value 
+     */
+    KexiDB::TableSchema* getSchema(const QString&);
+    QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString& pkey, const uint pkeyValue);
+    
+    /**
+     * Despite its name, this method is useful when creating new rows, too
+     * Create/Update a row in a given table
+     * @param QString& the table name
+     * @param QHash<QString, QVariant> a Hash with Name/Value pairs
+     * @param create create a new row, instead of trying to update it
+     */
+    bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
+    
+    // @todo move this stuff to a separate class
+    bool updateCachedPkeys(const QString&);
+    const QList<uint>& getCachedPkeys(const QString&);
+    int getCurrentCachePosition(const QString&, uint);
 
-            /**
-             * Get the schema of a table
-             * @param QString& table name
-             * @return a QHash with a QPair representing field caption and field name as key and
-             *    a QPair representing the field value (if any) and the type as value 
-             */
-            KexiDB::TableSchema* getSchema(const QString&);
-            QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString& pkey, const uint pkeyValue);
-
-            /**
-             * Despite its name, this method is useful when creating new rows, too
-             * Create/Update a row in a given table
-             * @param QString& the table name
-             * @param QHash<QString, QVariant> a Hash with Name/Value pairs
-             * @param create create a new row, instead of trying to update it
-             */
-            bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
-
-            // @todo move this stuff to a separate class
-            bool updateCachedPkeys(const QString&);
-            const QList<uint>& getCachedPkeys(const QString&);
-            int getCurrentCachePosition(const QString&, uint);
-        private:
-            QHash< QString, QList<uint> > cachedPkeys;
-        };
-        
-    }
-}
+} // end namespace Database
+} // end namespace Model
+} // end namespace KexiWebForms
 
 #endif /* KEXIWEBFORMS_MODEL_DATABASE_H */

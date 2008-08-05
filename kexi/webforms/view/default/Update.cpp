@@ -30,8 +30,9 @@
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "model/DataProvider.h"
-#include "model/Database.h"
+#include "../../model/DataProvider.h"
+#include "../../model/Database.h"
+#include "../../model/Cache.h"
 
 #include "TemplateProvider.h"
 
@@ -53,14 +54,16 @@ namespace View {
         setValue("PKEY_NAME", pkeyName);
         setValue("PKEY_VALUE", pkeyValue);
         
-        // Initialize needed Objects
-        KexiWebForms::Model::Database db;
-        QPair<KexiDB::TableSchema, QList<QVariant> > pair(db.getSchema(requestedTable, pkeyName, pkeyValueUInt));
+        // Initialize needed objects
+        KexiWebForms::Model::Cache* cache = KexiWebForms::Model::Cache::getInstance();
+        QPair<KexiDB::TableSchema, QList<QVariant> > pair(
+            KexiWebForms::Model::Database::getSchema(requestedTable, pkeyName, pkeyValueUInt));
         
         KexiDB::TableSchema tableSchema(pair.first);
-        db.updateCachedPkeys(requestedTable);
-        QList<uint> cachedPkeys(db.getCachedPkeys(requestedTable));
-        current = db.getCurrentCachePosition(requestedTable, pkeyValueUInt);
+        
+        cache->updateCachedPkeys(requestedTable);
+        QList<uint> cachedPkeys(cache->getCachedPkeys(requestedTable));
+        current = cache->getCurrentCachePosition(requestedTable, pkeyValueUInt);
         
         // Compute new primary key values for first, last, previous and next record
         if (current < uint( cachedPkeys.size()-1 )) {
@@ -95,7 +98,7 @@ namespace View {
                     data[field] = QVariant(d[field]);
             }
             
-            if (db.updateRow(requestedTable, data, false, pkeyValue.toInt())) {
+            if (KexiWebForms::Model::Database::updateRow(requestedTable, data, false, pkeyValue.toInt())) {
                 m_dict->ShowSection("SUCCESS");
                 setValue("MESSAGE", "Updated");
             } else {

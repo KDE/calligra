@@ -49,8 +49,7 @@ namespace View {
         QString requestedTable(d["uri-table"]);
         setValue("TABLENAME", requestedTable);
         
-        KexiWebForms::Model::Database db;
-        KexiDB::TableSchema* tableSchema = db.getSchema(requestedTable);
+        KexiDB::TableSchema* tableSchema = KexiWebForms::Model::Database::getSchema(requestedTable);
         
         
         /* send form data */
@@ -66,7 +65,7 @@ namespace View {
                     data[field] = QVariant(d[field]);
             }
             
-            if (db.updateRow(requestedTable, data, true)) {
+            if (KexiWebForms::Model::Database::updateRow(requestedTable, data, true)) {
                 m_dict->ShowSection("SUCCESS");
                 setValue("MESSAGE", "Row added successfully");
             } else {

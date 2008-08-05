@@ -39,6 +39,7 @@ kde4_add_executable(kwebforms NOGUI
   ${webforms_controller_SRCS}
   ${webforms_view_SRCS}
 # Model
+  model/Cache.cpp
   model/DataProvider.cpp
   model/Database.cpp
 # Other services
