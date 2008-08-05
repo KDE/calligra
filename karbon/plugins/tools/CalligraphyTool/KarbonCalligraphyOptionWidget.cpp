@@ -394,7 +394,7 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
             break;
 
         Profile *profile = new Profile;
-        profile->index = 1;
+        profile->index = i;
         profile->name =         profileGroup.readEntry( "name", QString() );
         profile->usePath =      profileGroup.readEntry( "usePath", false );
         profile->usePressure =  profileGroup.readEntry( "usePressure", false );
@@ -411,10 +411,12 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
         ++i;
     }
 
+    changingProfile = true;
     foreach (const QString &name, profiles.keys())
     {
         comboBox->addItem( name );
     }
+    changingProfile = false;
 
     loadCurrentProfile();
 }
@@ -527,6 +529,11 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 {
+    kDebug() << "removing profile" << name;
+    QString dbg;
+    foreach (const QString &n, profiles.keys())
+            dbg += n + " ";
+    kDebug() << dbg;
     int index = profilePosition(name);
     if ( index < 0 ) return; // no such profile
 
@@ -534,6 +541,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
     int deletedIndex = profiles[name]->index;
     QString deletedGroup = "Profile" + QString::number( deletedIndex );
+    kDebug() << deletedGroup;
     config.deleteGroup( deletedGroup );
     config.sync();
 
