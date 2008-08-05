@@ -44,6 +44,8 @@ public:
     
     void enableWidgets();
     
+    void setYear( int year );
+    
 signals:
     void changed();
     
@@ -61,7 +63,8 @@ public slots:
     
 protected slots:
     void slotCalculateEffort();
-
+    void slotFillWeekNumbers( int year );
+    
 protected:
     Task &m_task;
     Completion &m_original;
@@ -71,6 +74,9 @@ protected:
     Duration scheduledEffort;
     int m_weekOffset;
     int m_year;
+    bool m_firstIsPrevYear;
+    bool m_lastIsNextYear;
+
 };
 
 class KPLATOUI_EXPORT TaskProgressPanel : public TaskProgressPanelImpl {

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
+    <width>454</width>
     <height>306</height>
    </rect>
   </property>
@@ -14,24 +14,23 @@
    <string>TaskProgressPanelBase</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>0</number>
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="completionTab" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>446</width>
+        <height>275</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Completion</string>
       </attribute>
@@ -76,7 +75,7 @@
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>40</width>
            <height>20</height>
@@ -93,16 +92,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" >
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
+          <property name="margin" >
            <number>0</number>
           </property>
           <item row="0" column="0" >
@@ -128,7 +118,7 @@
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>40</width>
               <height>20</height>
@@ -145,6 +135,14 @@
       </layout>
      </widget>
      <widget class="QWidget" name="usedEffortTab" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>446</width>
+        <height>275</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Per Resource</string>
       </attribute>
@@ -166,18 +164,19 @@
          <property name="spacing" >
           <number>6</number>
          </property>
-         <property name="leftMargin" >
+         <property name="margin" >
           <number>0</number>
          </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
+         <item>
+          <widget class="QSpinBox" name="ui_year" >
+           <property name="minimum" >
+            <number>1900</number>
+           </property>
+           <property name="maximum" >
+            <number>2999</number>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QPushButton" name="prevWeekBtn" >
            <property name="text" >
@@ -186,7 +185,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="weekNumber" />
+          <widget class="KComboBox" name="weekNumber" />
          </item>
          <item>
           <widget class="QPushButton" name="nextWeekBtn" >
@@ -200,7 +199,7 @@
            <property name="orientation" >
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>16</width>
              <height>25</height>
@@ -223,6 +222,14 @@
       </layout>
      </widget>
      <widget class="QWidget" name="optionsTab" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>446</width>
+        <height>275</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>Mode</string>
       </attribute>
@@ -253,7 +260,7 @@
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0" >
           <size>
            <width>20</width>
            <height>40</height>
@@ -270,6 +277,11 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>UsedEffortEditor</class>
    <extends>QTableView</extends>
    <header>kptusedefforteditor.h</header>
@@ -282,7 +294,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>prevWeekBtn</tabstop>
-  <tabstop>weekNumber</tabstop>
   <tabstop>nextWeekBtn</tabstop>
   <tabstop>addResource</tabstop>
   <tabstop>resourceTable</tabstop>

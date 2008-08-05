@@ -64,35 +64,8 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     
     scheduledEffort = task.estimate()->expectedValue();
     
-    m_year = QDate::currentDate().year();
-    m_weekOffset = 1;
-    int year = 0;
-    QDate date( m_year, 1, 1 );
-    int wn = date.weekNumber( &year );
-    if ( year < date.year() ) {
-        weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, year ) );
-        m_weekOffset = 0;
-    }
-    for ( int i=1; i <= 52; ++i ) {
-        weekNumber->addItem( i18nc( "Week number", "Week %1", i ) );
-    }
-    date = QDate( m_year, 12, 31 );
-    wn = date.weekNumber( &year );
-    kDebug()<<date<<","<<wn<<","<<year;
-    if ( wn == 53 ) {
-        weekNumber->addItem( i18nc( "Week number", "Week %1", wn ) );
-    } else if ( wn == 1 ) {
-        weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, year ) );
-    }
-    date = QDate::currentDate();
-    wn = date.weekNumber( &year );
-    if ( wn == 53 && year < m_year ) {
-        weekNumber->setCurrentIndex( 0 );
-    } else if ( wn == 1 && year > m_year ) {
-        weekNumber->setCurrentIndex( weekNumber->count() - 1 );
-    } else {
-        weekNumber->setCurrentIndex( wn - m_weekOffset );
-    }
+    setYear( QDate::currentDate().year() );
+    
     if ( m_completion.usedEffortMap().isEmpty() && m_task.requests() ) {
         foreach ( ResourceGroupRequest *g, m_task.requests()->requests() ) {
             foreach ( ResourceRequest *r, g->resourceRequests() ) {
@@ -255,7 +228,9 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
       m_task(task),
       m_original( task.completion() ),
       m_completion( m_original ),
-      m_dayLength(24)
+      m_dayLength(24),
+      m_firstIsPrevYear( false ),
+      m_lastIsNextYear( false )
 {
     setupUi(this);
     
@@ -277,6 +252,12 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     connect( prevWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotPrevWeekBtnClicked() ) );
     connect( nextWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotNextWeekBtnClicked() ) );
     
+    connect ( ui_year, SIGNAL( valueChanged( int ) ), SLOT( slotFillWeekNumbers( int ) ) );
+
+    int y = 0;
+    int wn = QDate::currentDate().weekNumber( &y );
+    setYear( y );
+    weekNumber->setCurrentIndex( wn - m_weekOffset );
 }
 
 void TaskProgressPanelImpl::slotChanged() {
@@ -347,20 +328,73 @@ void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 {
     kDebug();
     int i = weekNumber->currentIndex();
-    if ( i > 0 && i < weekNumber->count() - 1 ) {
+    if ( i == 0 ) {
+        kDebug()<<i;
+        int decr = m_firstIsPrevYear ? 2 : 1;
+        setYear( ui_year->value() - 1 );
+        if ( m_lastIsNextYear ) {
+            decr = 2;
+        }
+        weekNumber->setCurrentIndex( weekNumber->count() - decr );
+    } else  {
         weekNumber->setCurrentIndex( i - 1 );
     }
 }
 
 void TaskProgressPanelImpl::slotNextWeekBtnClicked()
 {
-    kDebug();
     int i = weekNumber->currentIndex();
-    if ( i > 0 && i < weekNumber->count() - 1 ) {
+    kDebug()<<i<<weekNumber->count();
+    if ( i == weekNumber->count() - 1 ) {
+        kDebug()<<i;
+        int index = m_lastIsNextYear ? 1 : 0;
+        setYear( ui_year->value() + 1 );
+        if ( m_firstIsPrevYear ) {
+            index = 1;
+        }
+        weekNumber->setCurrentIndex( index );
+    } else {
         weekNumber->setCurrentIndex( i + 1 );
     }
 }
 
+void TaskProgressPanelImpl::setYear( int year )
+{
+    kDebug();
+    ui_year->setValue( year );
+}
+
+void TaskProgressPanelImpl::slotFillWeekNumbers( int year )
+{
+    kDebug();
+    weekNumber->clear();
+    m_year = year;
+    m_weekOffset = 1;
+    int y = 0;
+    QDate date( year, 1, 1 );
+    int wn = date.weekNumber( &y );
+    m_firstIsPrevYear = false;
+    kDebug()<<date<<wn<<y<<year;
+    if ( y < year ) {
+        weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, y ) );
+        m_weekOffset = 0;
+        m_firstIsPrevYear = true;
+        kDebug()<<"Added last week of prev year";
+    }
+    for ( int i=1; i <= 52; ++i ) {
+        weekNumber->addItem( i18nc( "Week number", "Week %1", i ) );
+    }
+    date = QDate( year, 12, 31 );
+    wn = date.weekNumber( &y );
+    kDebug()<<date<<wn<<y<<year;
+    m_lastIsNextYear = false;
+    if ( wn == 53 ) {
+        weekNumber->addItem( i18nc( "Week number", "Week %1", wn ) );
+    } else if ( wn == 1 ) {
+        weekNumber->addItem( i18nc( "Week number (year)", "Week %1 (%2)", wn, y ) );
+        m_lastIsNextYear = true;
+    }
+}
 
 }  //KPlato namespace
 
