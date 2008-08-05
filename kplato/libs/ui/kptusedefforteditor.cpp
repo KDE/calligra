@@ -311,11 +311,7 @@ QModelIndex UsedEffortItemModel::addRow()
         return QModelIndex();
     }
     m_editlist.clear();
-    foreach ( Resource *r, m_project->resourceList() ) {
-        if ( ! m_resourcelist.contains( r ) ) {
-            m_editlist.insertMulti( r->name(), r );
-        }
-    }
+    m_editlist = freeResources();
     if ( m_editlist.isEmpty() ) {
         return QModelIndex();
     }
@@ -324,6 +320,17 @@ QModelIndex UsedEffortItemModel::addRow()
     m_resourcelist.append( m_editlist.values().first() );
     endInsertRows();
     return createIndex( row, 0, const_cast<Resource*>( m_editlist.values().first() ) );
+}
+
+QMap<QString, const Resource*> UsedEffortItemModel::freeResources() const
+{
+    QMap<QString, const Resource*> map;
+    foreach ( Resource *r, m_project->resourceList() ) {
+        if ( ! m_resourcelist.contains( r ) ) {
+            map.insertMulti( r->name(), r );
+        }
+    }
+    return map;
 }
 
 //-----------
@@ -346,6 +353,11 @@ UsedEffortEditor::UsedEffortEditor( QWidget *parent )
     connect ( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
     
     connect ( m, SIGNAL( rowInserted( const QModelIndex& ) ), SIGNAL( resourceAdded() ) );
+}
+
+bool UsedEffortEditor::hasFreeResources() const
+{
+    return ! static_cast<UsedEffortItemModel*>( model() )->freeResources().isEmpty();
 }
 
 void UsedEffortEditor::setProject( Project *p )

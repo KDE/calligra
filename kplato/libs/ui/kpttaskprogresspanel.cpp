@@ -92,6 +92,8 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     resourceTable->setProject( static_cast<Project*>( task.projectNode() ) );
     resourceTable->setCompletion( &m_completion );
     slotWeekNumberChanged( weekNumber->currentIndex() );
+    addResource->setEnabled( resourceTable->hasFreeResources() );
+
     //resourceTable->resizeColumnsToContents();
 
     connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
@@ -214,6 +216,7 @@ void TaskProgressPanel::slotAddResource()
 {
     kDebug();
     resourceTable->addResource();
+    addResource->setEnabled( resourceTable->hasFreeResources() );
 }
 
 void TaskProgressPanel::slotEntryAdded( const QDate date )

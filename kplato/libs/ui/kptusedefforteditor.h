@@ -56,6 +56,7 @@ public:
     void setCurrentMonday( const QDate &date );
 
     QModelIndex addRow();
+    QMap<QString, const Resource*> freeResources() const;
     
 signals:
     void rowInserted( const QModelIndex& );
@@ -83,6 +84,8 @@ public:
     void setCompletion( Completion *completion );
     void setCurrentMonday( const QDate &date );
     void addResource();
+    
+    bool hasFreeResources() const;
     
 signals:
     void changed();
