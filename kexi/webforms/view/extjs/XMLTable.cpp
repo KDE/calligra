@@ -46,24 +46,29 @@ namespace View {
         KexiDB::QuerySchema querySchema(*tableSchema);
         KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
 
+        // XML Preamble and Content Type
+        writer->getResponse().setContentType("text/xml");
+        writer->write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+        writer->write("<table>");
+
         // Metadata
         KexiWebForms::Model::Database db;
         QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable));
         QList< QPair<QString, QString> > dataKeys(data.keys());
         typedef QPair<QString, QString> QCaptionNamePair;
         
-        writer->write("<metadata>\n");
+        writer->write("\t<metadata>\n");
         foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
-            writer->write("\t<field>\n");
+            writer->write("\t\t<field>\n");
             
             QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
-            writer->write("\t\t<name>");
+            writer->write("\t\t\t<name>");
                 writer->write(captionNamePair.second.toUtf8().constData());
             writer->write("</name>\n");
-            writer->write("\t\t<caption>");
+            writer->write("\t\t\t<caption>");
                 writer->write(captionNamePair.first.toUtf8().constData());
             writer->write("</caption>\n");
-            writer->write("\t\t<type>");
+            writer->write("\t\t\t<type>");
                 if (valueTypePair.second == KexiDB::Field::BLOB) {
                     writer->write("blob");
                 } else if (valueTypePair.second == KexiDB::Field::Boolean) {
@@ -71,12 +76,12 @@ namespace View {
                 }
             writer->write("</type>\n");
 
-            writer->write("\t</field>\n");
+            writer->write("\t\t</field>\n");
         }
-        writer->write("</metadata>\n\n");
+        writer->write("\t</metadata>\n\n");
 
         // Data
-        writer->write("<data>\n");
+        writer->write("\t<data>\n");
         if (!cursor) {
             //setValue("ERROR", "Unable to execute the query (" __FILE__ ")");
         } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
@@ -85,12 +90,12 @@ namespace View {
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
             while (cursor->moveNext()) {
                 QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
-                writer->write("\t<record>\n");
+                writer->write("\t\t<record>\n");
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     KexiDB::Field* field = querySchema.field(i);
                     const KexiDB::Field::Type type = field->type();
                     
-                    writer->write("\t\t<"); writer->write(field->name().toUtf8().constData()); writer->write(">");
+                    writer->write("\t\t\t<"); writer->write(field->name().toUtf8().constData()); writer->write(">");
                     if (type == KexiDB::Field::BLOB) {
                         /*valueString = QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
                             .arg(requestedTable).arg(field->name()).arg(primaryKey->name())
@@ -100,11 +105,13 @@ namespace View {
                     }
                     writer->write("</"); writer->write(field->name().toUtf8().constData()); writer->write(">\n");
                 }
-                writer->write("\t</record>\n");
+                writer->write("\t\t</record>\n");
             }
             gConnection->deleteCursor(cursor);
         }
-        writer->write("</data>");
+        writer->write("\t</data>");
+        
+        writer->write("</table>");
 
     }
     
