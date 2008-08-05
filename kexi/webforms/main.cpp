@@ -27,8 +27,6 @@
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
 
-#include <google/template.h>
-
 #include <pion/PionConfig.hpp>
 #include <pion/PionPlugin.hpp>
 
@@ -82,9 +80,6 @@ int main(int argc, char **argv) {
         kError() << "You must specifiy a Kexi file path";
         return 1;
     }
-
-    // Set template root directory equal to root directory
-    //google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
 
