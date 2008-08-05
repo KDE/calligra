@@ -138,24 +138,22 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     }
 
     m_shape->simplifyPath();
-    KoPathShape *finalPath = m_shape;
 
-    QUndoCommand * cmd = m_canvas->shapeController()->addShape( finalPath );
+    QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_shape );
     if( cmd )
     {
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
-        selection->select( finalPath );
+        selection->select( m_shape );
         m_canvas->addCommand( cmd );
     }
     else
     {
         // TODO: when may this happen????
-        delete finalPath;
+        delete m_shape;
     }
 
     m_canvas->updateCanvas( m_shape->boundingRect() );
-    m_canvas->updateCanvas( finalPath->boundingRect() );
 
     m_shape = 0;
 }
