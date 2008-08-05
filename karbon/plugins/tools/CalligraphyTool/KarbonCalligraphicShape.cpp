@@ -307,15 +307,17 @@ void KarbonCalligraphicShape::simplifyPath()
     if ( m_points.count() < 2 )
         return;
 
+    close();
+
     // add final cap
     addCap( m_points.count()-2, m_points.count()-1, pointCount()/2 );
 
-        // add initial cap
+    // add initial cap
     addCap( 1, 0, pointCount(), true );
 
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
-    karbonSimplifyPath( this, 0.3 );
+    //karbonSimplifyPath( this, 0.3 );
 }
 
 void KarbonCalligraphicShape::addCap( int index1, int index2, int pointIndex,
