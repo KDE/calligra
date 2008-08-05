@@ -60,6 +60,8 @@
 #include <KoShapeBackground.h>
 #include <KoInsets.h>
 #include <KoShapeBorderModel.h>
+#include <KoColorBackground.h>
+#include <KoLineBorder.h>
 
 // KDChart
 #include <KDChartChart>
@@ -358,11 +360,6 @@ ChartShape::ChartShape()
     d->legend->setVisible( true );
     d->legend->setZIndex( 1 );
     
-    QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( dataSetCountChanged() ) );
-    QObject::connect( d->model, SIGNAL( rowsInserted( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
-    QObject::connect( d->model, SIGNAL( rowsRemoved( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
-    QObject::connect( d->model, SIGNAL( dataChanged() ), d->plotArea, SLOT( update() ) );
-    
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
     
@@ -422,6 +419,12 @@ ChartShape::ChartShape()
     
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );
+    
+    KoColorBackground *background = new KoColorBackground( Qt::white );
+    setBackground( background );
+    
+    KoLineBorder *border = new KoLineBorder( 0, Qt::black );
+    setBorder( border );
     
     requestRepaint();
 }
@@ -750,13 +753,7 @@ void ChartShape::paintDecorations( QPainter &painter, const KoViewConverter &con
     if ( canvas->shapeManager()->selection()->selectedShapes().contains( this ) )
         return;
     if ( border() )
-    {
-        KoInsets insets;
-        border()->borderInsets( this, insets );
-        if ( insets.top > 0.0 || insets.bottom > 0.0
-             || insets.left > 0.0 || insets.right > 0.0 )
-            return;
-    }
+        return;
     
     QRectF border = QRectF( QPointF( -1.5, -1.5 ),
                             converter.documentToView( size() ) + QSizeF( 1.5, 1.5 ) );
