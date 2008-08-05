@@ -55,15 +55,12 @@ namespace View {
         
         // Initialize needed Objects
         KexiWebForms::Model::Database db;
-        KexiDB::TableSchema tableSchema(*db.tableSchema(requestedTable));
-        db.updateCachedPkeys(requestedTable);
+        QPair<KexiDB::TableSchema, QList<QVariant> > pair(db.getSchema(requestedTable, pkeyName, pkeyValueUInt));
         
-        // Retrieve current position in cache
+        KexiDB::TableSchema tableSchema(pair.first);
+        db.updateCachedPkeys(requestedTable);
         QList<uint> cachedPkeys(db.getCachedPkeys(requestedTable));
-        for (int i = 0; i < cachedPkeys.size(); i++) {
-            if (cachedPkeys.at(i) == pkeyValueUInt)
-                current = i;
-        }
+        current = db.getCurrentCachePosition(requestedTable, pkeyValueUInt);
         
         // Compute new primary key values for first, last, previous and next record
         if (current < uint( cachedPkeys.size()-1 )) {
@@ -88,8 +85,6 @@ namespace View {
         
         
         if (d["dataSent"] == "true") {
-            
-            
             QStringList fieldsList(d["tableFields"].split("|:|"));
             
             QHash<QString, QVariant> data;
@@ -116,8 +111,27 @@ namespace View {
         
         QString formData;
         QStringList formFieldsList;
+
+        for (uint i = 0; i < tableSchema.fieldCount(); i++) {
+            KexiDB::Field* field = tableSchema.field(i);
+            
+            formData.append("\t<tr>\n");
+            formData.append(QString("\t\t<td>%1</td>\n").arg(field->captionOrName()));
+            if (field->type() == KexiDB::Field::LongText) {
+                formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(field->name()));
+            } else if (field->type() == KexiDB::Field::BLOB) {
+                formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/><br/>"
+                                        "<!-- <input type=\"file\" name=\"%2\"/> --></td>")
+                                .arg(requestedTable).arg(field->name()).arg(pkeyName).arg(pkeyValue));
+            } else {
+                formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
+                                .arg(field->name()).arg(pair.second.at(i).toString()));
+            }
+            formData.append("\t</tr>\n");
+            formFieldsList << field->name();
+        }
         
-        QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable,
+        /*QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable,
                                                                                                pkeyName, pkeyValue.toInt()));
         QList< QPair<QString, QString> > dataKeys(data.keys());
         
@@ -142,7 +156,7 @@ namespace View {
             }
             formData.append("\t</tr>\n");
             formFieldsList << captionNamePair.second;
-        }
+            }*/
         
         setValue("TABLEFIELDS", formFieldsList.join("|:|"));
         setValue("FORMDATA", formData);

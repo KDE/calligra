@@ -50,10 +50,10 @@ namespace View {
         setValue("TABLENAME", requestedTable);
         
         KexiWebForms::Model::Database db;
-        KexiDB::TableSchema* tableSchema = db.tableSchema(requestedTable);
+        KexiDB::TableSchema* tableSchema = db.getSchema(requestedTable);
         
         
-        /* Build the form */
+        /* send form data */
         if (d["dataSent"] == "true") {
             QString tableFields(d["tableFields"]);
             QStringList fieldsList(QUrl::fromPercentEncoding(tableFields.toUtf8()).split("|:|"));
@@ -77,26 +77,17 @@ namespace View {
         
         QString formData;
         QStringList fieldsList;
-        
-        QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable));
-        QList< QPair<QString, QString> > dataKeys(data.keys());
-        
-        // WORK AROUND
-        typedef QPair<QString, QString> QCaptionNamePair;
-        
-        // FIXME: Regression, no icons, this way
-        foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
+
+        foreach(const KexiDB::Field* f, *tableSchema->fields()) {
             formData.append("\t<tr>\n");
-            QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
-            formData.append("\t\t<td>").append(captionNamePair.first).append("</td>\n");
-            if (valueTypePair.second == KexiDB::Field::LongText) {
-                formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
+            formData.append(QString("\t\t<td>%1</td>\n").arg(f->captionOrName()));
+            if (f->type() == KexiDB::Field::LongText) {
+                formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(f->name()));
             } else {
-                formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
-                                .arg(captionNamePair.second).arg(valueTypePair.first));
+                formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\"/></td>\n").arg(f->name()));
             }
             formData.append("\t</tr>\n");
-            fieldsList << captionNamePair.second;
+            fieldsList << f->name();
         }
         
         setValue("TABLEFIELDS", fieldsList.join("|:|"));

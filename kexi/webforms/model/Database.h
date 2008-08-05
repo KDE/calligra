@@ -24,7 +24,10 @@
 
 #include <QPair>
 #include <QHash>
+
 #include <kexidb/field.h>
+
+#include <boost/tuple/tuple.hpp>
 
 namespace KexiDB {
     class TableSchema;
@@ -52,9 +55,8 @@ namespace KexiWebForms {
              * @return a QHash with a QPair representing field caption and field name as key and
              *    a QPair representing the field value (if any) and the type as value 
              */
-            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > getSchema(const QString&,
-                                                                                     const QString& pkey = "",
-                                                                                     const uint pkeyValue = 0);
+            KexiDB::TableSchema* getSchema(const QString&);
+            QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString& pkey, const uint pkeyValue);
 
             /**
              * Despite its name, this method is useful when creating new rows, too
@@ -65,10 +67,10 @@ namespace KexiWebForms {
              */
             bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
 
-            KexiDB::TableSchema* tableSchema(const QString& name);
-
+            // @todo move this stuff to a separate class
             bool updateCachedPkeys(const QString&);
             const QList<uint>& getCachedPkeys(const QString&);
+            int getCurrentCachePosition(const QString&, uint);
         private:
             QHash< QString, QList<uint> > cachedPkeys;
         };
