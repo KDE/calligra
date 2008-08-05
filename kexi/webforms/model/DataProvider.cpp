@@ -53,33 +53,9 @@ namespace KexiWebForms {
 
         if (true == res) {
             if (driverName == "shortcut") {
-                //
-                // TODO: Finish implementing this stuff
-                //
-                /*kDebug() << "Loading Kexi shortcut file..." << endl;
-                KexiDBShortcutFile shortcut(fileName);
-                gProjectData = new KexiProjectData();
-                if (!shortcut.loadProjectData(*projectData)) {
-                    delete projectData; projectData = NULL;
-                    return false;
-                    } */
+                //! @todo Implement
             } else if (driverName == "connection") {
-                //
-                // FIXME: This piece of code does NOT work, ouch!
-                //
-                /*
-                kDebug() << "Loading connection file..." << endl;
-                KexiDBConnShortcutFile connFile(fileName);
-                if (!connFile.loadConnectionData(*connData)) {
-                    kDebug() << "Failed to load connection data from .kexic file..." << endl;
-                    return false;
-                } else {
-                    kDebug() << "Data loaded successfully, create project object..." << endl;
-                    // FIXME: as noticed by jstaniek I should ask the user which
-                    // database has to be opened
-                    /* commented out until i find a better solution to display project data */
-                    //projectData = new KexiProjectData(*connData);
-                /*}*/
+                //! @todo Implement
             } else {
                 kDebug() << "This should be a file-based database... now loading it" << endl;
 
