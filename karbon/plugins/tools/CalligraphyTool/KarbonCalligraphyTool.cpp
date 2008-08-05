@@ -142,9 +142,6 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_shape );
     if( cmd )
     {
-//         KoSelection *selection = m_canvas->shapeManager()->selection();
-//         selection->deselectAll();
-//         selection->select( m_shape );
         m_lastShape = m_shape;
         m_canvas->addCommand( cmd );
     }
