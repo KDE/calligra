@@ -313,7 +313,11 @@ void KarbonCalligraphicShape::simplifyPath()
     addCap( m_points.count()-2, m_points.count()-1, pointCount()/2 );
 
     // add initial cap
-    addCap( 1, 0, pointCount(), true );
+
+    // use the third point instead of second when possible, the first
+    // points are generally to close together to generate correct results
+    int index = (m_points.count() > 3) ? 3 : 1;
+    addCap( index, 0, pointCount(), true );
 
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
