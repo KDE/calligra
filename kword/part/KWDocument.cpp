@@ -441,6 +441,12 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     KWPage *last = pageManager()->page(lastPage());
     double docHeight = last?(last->offsetInDocument() + last->height()):0.0;
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
+    // My dear reader, please listen carefully
+    // Else your failure will be miserably
+    // Don't trust what your eyes see
+    // This while you should not see
+    // Only one page is created
+    // 'Cause layout is not finished
     while(docHeight <= maxBottom) {
         kDebug(32001) <<"KWDocument::endOfLoading appends a page";
         last = m_pageManager.insertPage(m_pageManager.lastPageNumber());
