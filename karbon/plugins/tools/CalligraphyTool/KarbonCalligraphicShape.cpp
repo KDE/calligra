@@ -321,7 +321,7 @@ void KarbonCalligraphicShape::simplifyPath()
 
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
-    //karbonSimplifyPath( this, 0.3 );
+    karbonSimplifyPath( this, 0.3 );
 }
 
 void KarbonCalligraphicShape::addCap( int index1, int index2, int pointIndex,

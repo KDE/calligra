@@ -67,12 +67,22 @@ namespace KarbonSimplifyPath {
 
 using namespace KarbonSimplifyPath;
 
+// TODO: rename to simplify subpath
 void karbonSimplifyPath( KoPathShape *path, double error )
 {
     if ( path->pointCount() == 0 )
         return;
 
     removeDuplicates( path );
+
+    bool isClosed = path->isClosedSubpath(0);
+    if ( isClosed )
+    {
+        // insert a copy of the first point at the end
+        KoPathPoint *firstPoint = path->pointByIndex( KoPathPointIndex(0, 0) );
+        KoPathPointIndex end( 0, path->pointCount() );
+        path->insertPoint( new KoPathPoint(*firstPoint), end );
+    }
 
     QList<KoSubpath *> subpaths = split( *path );
     foreach ( KoSubpath *subpath, subpaths )
@@ -87,6 +97,9 @@ void karbonSimplifyPath( KoPathShape *path, double error )
         qDeleteAll( *subpath );
         delete subpath;
     }
+
+    if ( isClosed )
+        path->closeMerge();
 }
 
 void KarbonSimplifyPath::removeDuplicates( KoPathShape *path )
