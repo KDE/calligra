@@ -28,10 +28,15 @@
 #include <KUniqueApplication>
 
 #include <google/template.h>
+
+#include <pion/PionConfig.hpp>
+#include <pion/PionPlugin.hpp>
+
+#include <pion/net/PionUser.hpp>
 #include <pion/net/WebServer.hpp>
 #include <pion/net/HTTPBasicAuth.hpp>
 #include <pion/net/HTTPCookieAuth.hpp>
-#include <pion/net/PionUser.hpp>
+
 
 #include "ShutdownManager.hpp"
 
@@ -39,7 +44,6 @@
 
 #include "controller.h.in"
 
-#include "FileService.hpp"
 #include "BlobService.h"
 #include "auth/Authenticator.h"
 
@@ -85,10 +89,19 @@ int main(int argc, char **argv) {
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
 
     // Plugins
-    pion::plugins::FileService fileService;
-    fileService.setOption("directory", args->getOption("webroot").toLatin1().constData());
-    fileService.setOption("cache", "0");
-    fileService.setOption("scan", "0");
+    try {
+        pion::PionPlugin::addPluginDirectory(PION_PLUGINS_DIRECTORY);
+        server.loadService("/f", "FileService");
+        server.setServiceOption("/f", "directory", args->getOption("webroot").toLatin1().constData());
+        server.setServiceOption("/f", "cache", "0");
+        server.setServiceOption("/f", "scan", "0");
+    } catch (pion::PionPlugin::DirectoryNotFoundException&) {
+        kError() << "Default plug-ins directory does not exist!" << endl;
+        return 1;
+    } catch (pion::net::WebServer::ServiceNotFoundException&) {
+        kError() << "Could not find FileService, are you have the right plugins in " PION_PLUGINS_DIRECTORY << endl;
+        return 1;
+    }
 
     // Other Services
     BlobService blobService;
@@ -111,7 +124,7 @@ int main(int argc, char **argv) {
     auth->addRestrict("/blob");
     
     // File and blob service
-    server.addService("/f", &fileService);
+    //server.addService("/f", &fileService);
     server.addService("/blob", &blobService);
     //server.addService("/index.html", &fileService);
     
