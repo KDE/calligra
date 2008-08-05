@@ -53,7 +53,7 @@ AbstractSelectionStrategy::~AbstractSelectionStrategy()
 
 void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
 {
-    if (!modifiers & Qt::ShiftModifier)
+    if (!(modifiers & Qt::ShiftModifier))
         return;
     const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
