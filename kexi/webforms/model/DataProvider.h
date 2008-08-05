@@ -22,8 +22,8 @@
 #define KEXIWEBFORMS_DATAPROVIDER_H
 
 #include <kexidb/connection.h>
-#include <core/kexiprojectdata.h>
-#include <core/kexiproject.h>
+//#include <core/kexiprojectdata.h>
+//#include <core/kexiproject.h>
 
 class QString;
 

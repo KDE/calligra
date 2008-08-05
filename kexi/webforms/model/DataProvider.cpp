@@ -33,8 +33,6 @@
 namespace KexiWebForms {
 
     KexiDB::Connection* gConnection;
-    KexiProjectData* gProjectData;
-    KexiProject* gProject;
     
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
