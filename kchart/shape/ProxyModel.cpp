@@ -365,7 +365,7 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection )
 {
     connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-                            this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+             this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
     d->selection = selection;
     
@@ -602,8 +602,8 @@ QMap<int, QVariant> ProxyModel::itemData( const QModelIndex &index ) const
 }
 
 QModelIndex ProxyModel::index( int row,
-                                    int column,
-                                    const QModelIndex &parent /* = QModelIndex() */ ) const
+                               int column,
+                               const QModelIndex &parent /* = QModelIndex() */ ) const
 {
     Q_UNUSED( parent );
 

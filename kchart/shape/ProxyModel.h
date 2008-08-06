@@ -37,8 +37,6 @@ namespace KoChart
 
 namespace KChart {
 
-class PlotArea;
-
 class CHARTSHAPELIB_EXPORT ProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
