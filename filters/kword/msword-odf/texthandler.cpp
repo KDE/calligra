@@ -357,6 +357,8 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
 	KoGenStyle paragraphStyle(KoGenStyle::StyleAuto, "paragraph");
 	writeLayout(*paragraphProperties, &paragraphStyle, m_currentStyle, true, QString("P"), namedStyleName);
     }
+    else
+        kWarning() << "paragraphProperties was NOT set";
 }
 
 void KWordTextHandler::paragraphEnd()
@@ -370,15 +372,13 @@ void KWordTextHandler::paragraphEnd()
         m_currentTable = 0L;
     }*/
     //close the <text:p> tag we opened in writeLayout()
-    if(m_paragraphProperties)
-    {
-	if ( !m_writingHeader)
-	    m_bodyWriter->endElement();
-	else
-	    m_headerWriter->endElement();
-	//reset m_paragraphProperties
-	m_paragraphProperties = 0;
-    }
+    //Note: problem if writeLayout wasn't called & text:p/h wasn't opened!
+    if ( !m_writingHeader)
+        m_bodyWriter->endElement();
+    else
+        m_headerWriter->endElement();
+    //reset m_paragraphProperties
+    m_paragraphProperties = 0;
     //clear our paragraph flag
     //m_bInParagraph = false;
 }//end paragraphEnd()
