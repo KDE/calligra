@@ -183,7 +183,7 @@ QString saveOdfFont( KoGenStyles& mainStyles,
     return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
 }
 
-bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, const KoOdfStylesReader &stylesReader )
+bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
 {   
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
@@ -905,7 +905,6 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
 {
     loadOdfAttributes( chartElement, context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements );
     
-    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
         qDebug() << "Error: Embedded document has no chart:class attribute.";
@@ -942,7 +941,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement, 
                                                  KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
-        if ( !loadOdfLabel( d->title, titleElem, stylesReader) )
+        if ( !loadOdfLabel( d->title, titleElem, context) )
             return false;
     }
 
@@ -950,7 +949,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement, 
                                                     KoXmlNS::chart, "subtitle" );
     if ( !subTitleElem.isNull() ) {
-        if ( !loadOdfLabel( d->subTitle, subTitleElem, stylesReader) )
+        if ( !loadOdfLabel( d->subTitle, subTitleElem, context) )
             return false;
     }
 
@@ -958,7 +957,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     KoXmlElement footerElem = KoXml::namedItemNS( chartElement, 
                                                   KoXmlNS::chart, "footer" );
     if ( !footerElem.isNull() ) {
-        if ( !loadOdfLabel( d->footer, footerElem, stylesReader) )
+        if ( !loadOdfLabel( d->footer, footerElem, context ) )
             return false;
     }
 
@@ -975,7 +974,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                          KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
-    if ( !loadOdfData( dataElem, stylesReader ) )
+    if ( !loadOdfData( dataElem, context ) )
         return false;
     }
 
@@ -992,14 +991,14 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     return true;
 }
 
-bool ChartShape::loadOdfData( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
+bool ChartShape::loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context )
 {
     // There is no table element to load
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
     
     TableModel *model = new TableModel( 0 );
-    model->loadOdf( tableElement, stylesReader );    
+    model->loadOdf( tableElement, context );    
     
     setModel( model, QVector<QRect>() );
     

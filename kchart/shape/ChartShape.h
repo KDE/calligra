@@ -142,7 +142,7 @@ public:
     /// reimplemented
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
     bool loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context );
-    bool loadOdfData( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
+    bool loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
     
     bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
     bool loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context );

@@ -68,7 +68,7 @@ bool TableModel::isCellRegionValid( const QString& regionName ) const
     return true;
 }
 
-void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
+void TableModel::loadOdf( const KoXmlElement &tableElement, KoShapeLoadingContext &context )
 {
     setRowCount( 0 );
     setColumnCount( 0 );
