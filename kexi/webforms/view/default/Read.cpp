@@ -77,6 +77,7 @@ namespace View {
         }
 
         setValue("TABLEDATA", tableData);
+        setValue("TABLENAME", requestedTable);
         renderTemplate(m_dict, writer);
     }
     

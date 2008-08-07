@@ -1,0 +1,15 @@
+This files is a list of known bugs, soon-to-be-fixed.
+When a bug/regression disappears it means that it has been (hopefully) fixed
+
+== KNOWN BUGS ==
+- After opening a table for the first time, the kexi__users table is created and filled with two example
+  accounts (root and guest) but none of the is usable
+  WORK AROUND: restart kwebforms
+
+== REGRESSIONS ==
+- No field type icons
+  Comment by Lorenzo Villani: this was impossible with the first version of getSchema in Database.cpp
+    But now it should be easier to get icons back.
+  
+- After creating rows in a table, it gets locked so it is impossible to delete tables afterwards
+  WORK AROUND: restart kwebforms
