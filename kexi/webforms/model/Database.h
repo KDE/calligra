@@ -47,12 +47,18 @@ namespace Database {     // begin namespace Database
     
     /**
      * Get the schema of a table
-     * @param QString& table name
-     * @return a QHash with a QPair representing field caption and field name as key and
-     *    a QPair representing the field value (if any) and the type as value 
+     * @param QString& the table name
+     * @return a pointer to KexiDB::TableSchema
      */
     KexiDB::TableSchema* getSchema(const QString&);
-    QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString& pkey, const uint pkeyValue);
+
+    /**
+     * Get the schema of a table and specific field value
+     * @param QString& the table name
+     * @param QString& the primary key name
+     * @param uint the primary key (numeric) value
+     */
+    QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString&, const uint);
     
     /**
      * Despite its name, this method is useful when creating new rows, too
@@ -62,11 +68,6 @@ namespace Database {     // begin namespace Database
      * @param create create a new row, instead of trying to update it
      */
     bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
-    
-    // @todo move this stuff to a separate class
-    bool updateCachedPkeys(const QString&);
-    const QList<uint>& getCachedPkeys(const QString&);
-    int getCurrentCachePosition(const QString&, uint);
 
 } // end namespace Database
 } // end namespace Model

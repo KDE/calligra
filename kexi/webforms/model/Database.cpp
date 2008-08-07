@@ -55,10 +55,12 @@ namespace Database {     // begin namespace Database
         }
         return objectNamesForCaptions;
     }
+
     
     KexiDB::TableSchema* getSchema(const QString& table) {
         return gConnection->tableSchema(table);
     }
+
     
     QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString& table, const QString& pkey, const uint pkeyValue) {
         KexiDB::TableSchema tableSchema(*getSchema(table));
