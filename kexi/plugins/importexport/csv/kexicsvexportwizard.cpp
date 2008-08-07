@@ -78,18 +78,18 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
         KexiMainWindowIface::global()->project()->dbConnection(), m_options.itemId);
     if (m_tableOrQuery->table()) {
         if (m_options.mode == KexiCSVExport::Clipboard) {
-            setCaption(i18n("Copy Data From Table to Clipboard"));
+            setWindowTitle(i18n("Copy Data From Table to Clipboard"));
             infoLblFromText = i18n("Copying data from table:");
         } else {
-            setCaption(i18n("Export Data From Table to CSV File"));
+            setWindowTitle(i18n("Export Data From Table to CSV File"));
             infoLblFromText = i18n("Exporting data from table:");
         }
     } else if (m_tableOrQuery->query()) {
         if (m_options.mode == KexiCSVExport::Clipboard) {
-            setCaption(i18n("Copy Data From Query to Clipboard"));
+            setWindowTitle(i18n("Copy Data From Query to Clipboard"));
             infoLblFromText = i18n("Copying data from table:");
         } else {
-            setCaption(i18n("Export Data From Query to CSV File"));
+            setWindowTitle(i18n("Export Data From Query to CSV File"));
             infoLblFromText = i18n("Exporting data from query:");
         }
     } else {
@@ -128,7 +128,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     if (partInfo)
         m_infoLblFrom->setIcon(partInfo->itemIcon());
     m_infoLblFrom->separator()->hide();
-    exportOptionsLyr->addMultiCellWidget(m_infoLblFrom, 0, 0, 0, 2);
+    exportOptionsLyr->addWidget(m_infoLblFrom, 0, 0, 0, 2);
 
     m_infoLblTo = new KexiCSVInfoLabel(
         (m_options.mode == KexiCSVExport::File) ? i18n("To CSV file:") : i18n("To clipboard:"),
@@ -141,14 +141,14 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"),
                                           m_exportOptionsPage);
     connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
-    exportOptionsLyr->addMultiCellWidget(m_showOptionsButton, 2, 2, 0, 0);
+    exportOptionsLyr->addWidget(m_showOptionsButton, 2, 2, 0, 0);
     m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // -<options section>
     m_exportOptionsSection = new Q3GroupBox(1, Qt::Vertical, i18n("Options"), m_exportOptionsPage);
     m_exportOptionsSection->setObjectName("m_exportOptionsSection");
     m_exportOptionsSection->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    exportOptionsLyr->addMultiCellWidget(m_exportOptionsSection, 3, 3, 0, 1);
+    exportOptionsLyr->addWidget(m_exportOptionsSection, 3, 3, 0, 1);
     QWidget *exportOptionsSectionWidget
     = new QWidget(m_exportOptionsSection);
     exportOptionsSectionWidget->setObjectName("exportOptionsSectionWidget");
@@ -191,7 +191,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
 //! @todo 1.1: for copying use "Always use above options for copying" string
     m_alwaysUseCheckBox = new QCheckBox(i18n("Always use above options for exporting"),
                                         m_exportOptionsPage);
-    exportOptionsLyr->addMultiCellWidget(m_alwaysUseCheckBox, 4, 4, 0, 1);
+    exportOptionsLyr->addWidget(m_alwaysUseCheckBox, 4, 4, 0, 1);
 // exportOptionsSectionLyr->addWidget( m_alwaysUseCheckBox, 4, 1 );
     m_exportOptionsSection->hide();
     m_alwaysUseCheckBox->hide();
