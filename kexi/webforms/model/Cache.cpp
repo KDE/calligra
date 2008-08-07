@@ -67,7 +67,7 @@ namespace Model {        // begin namespace Model
             return cachedPkeys[requestedTable];
         }
 
-        int Cache::getCurrentCachePosition(const QString& requestedTable, uint pkeyValueUInt) {
+        uint Cache::getCurrentCachePosition(const QString& requestedTable, uint pkeyValueUInt) {
             for (int i = 0; i < cachedPkeys[requestedTable].size(); i++) {
                 if (cachedPkeys[requestedTable].at(i) == pkeyValueUInt)
                     return i;

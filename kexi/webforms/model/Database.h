@@ -38,21 +38,21 @@ namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
 namespace Database {     // begin namespace Database
             
-    /**
+    /*!
      * Get all table names
      * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
      * @return QHash with captions as keys and object names as values
      */
     QHash<QString, QString> getNames(KexiDB::ObjectTypes);
     
-    /**
+    /*!
      * Get the schema of a table
      * @param QString& the table name
      * @return a pointer to KexiDB::TableSchema
      */
     KexiDB::TableSchema* getSchema(const QString&);
 
-    /**
+    /*!
      * Get the schema of a table and specific field value
      * @param QString& the table name
      * @param QString& the primary key name
@@ -60,7 +60,7 @@ namespace Database {     // begin namespace Database
      */
     QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString&, const uint);
     
-    /**
+    /*!
      * Despite its name, this method is useful when creating new rows, too
      * Create/Update a row in a given table
      * @param QString& the table name
