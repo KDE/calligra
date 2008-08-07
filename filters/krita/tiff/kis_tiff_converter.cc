@@ -252,7 +252,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Read image profile
     dbgFile <<"Reading profile";
     KoColorProfile* profile = 0;
-    DWORD EmbedLen;
+    quint32 EmbedLen;
     LPBYTE EmbedBuffer;
 
     if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer)) {
