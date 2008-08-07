@@ -270,7 +270,13 @@ int DataSet::number() const
 
 void DataSet::setNumber( int num )
 {
+    if ( m_attachedAxis )
+        m_attachedAxis->detachDataSet( this );
+    
     m_num = num;
+    
+    if ( m_attachedAxis )
+        m_attachedAxis->attachDataSet( this );
 }
 
 void DataSet::setShowMeanValue( bool show )
