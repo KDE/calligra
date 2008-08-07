@@ -203,13 +203,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     if (TIFFGetField(image, TIFFTAG_XRESOLUTION, &xres) == 0) {
         dbgFile << "Image does not define x resolution";
         // but we don't stop
-        xres = 100; 
+        xres = 100;
     }
     float yres;
     if (TIFFGetField(image, TIFFTAG_YRESOLUTION, &yres) == 0) {
         dbgFile << "Image does not define y resolution";
         // but we don't stop
-        yres = 100; 
+        yres = 100;
     }
 
     uint16 depth;
@@ -579,7 +579,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         }
     }
     tiffReader->finalize();
-    delete lineSizeCoeffs;
+    delete[] lineSizeCoeffs;
     delete tiffReader;
     delete tiffstream;
     if( planarconfig == PLANARCONFIG_CONTIG )
