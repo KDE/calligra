@@ -6,6 +6,7 @@ add_subdirectory( shape )
 add_subdirectory( toolbar )
 add_subdirectory( pics )
 add_subdirectory( templates )
+add_subdirectory( tests )
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/include
