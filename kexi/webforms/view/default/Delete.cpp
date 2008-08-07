@@ -35,8 +35,8 @@
 
 using namespace pion::net;
 
-namespace KexiWebForms {
-namespace View {
+namespace KexiWebForms { // begin namespace KexiWebForms
+namespace View {         // begin namespace View
     
     void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
         /// @todo ensure that there's the correct number of parameters
@@ -60,5 +60,5 @@ namespace View {
         renderTemplate(m_dict, writer);
     }
 
-}
-}
+} // end namespace View
+} // end namespace KexiWebForms
