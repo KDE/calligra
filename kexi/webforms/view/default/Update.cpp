@@ -134,33 +134,6 @@ namespace View {
             formFieldsList << field->name();
         }
         
-        /*QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable,
-                                                                                               pkeyName, pkeyValue.toInt()));
-        QList< QPair<QString, QString> > dataKeys(data.keys());
-        
-        // WORK AROUND
-        typedef QPair<QString, QString> QCaptionNamePair;
-        
-        // FIXME: Regression, no icons, this way
-        foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
-            formData.append("\t<tr>\n");
-            QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
-            formData.append("\t\t<td>").append(captionNamePair.first).append("</td>\n");
-            if (valueTypePair.second == KexiDB::Field::LongText) {
-                formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
-            } else if (valueTypePair.second == KexiDB::Field::BLOB) {
-                formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/><br/>"
-                                        "<!-- <input type=\"file\" name=\"%2\"/> --></td>")
-                                .arg(requestedTable).arg(captionNamePair.second).arg(pkeyName)
-                                .arg(pkeyValue));
-            } else {
-                formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
-                                .arg(captionNamePair.second).arg(valueTypePair.first));
-            }
-            formData.append("\t</tr>\n");
-            formFieldsList << captionNamePair.second;
-            }*/
-        
         setValue("TABLEFIELDS", formFieldsList.join("|:|"));
         setValue("FORMDATA", formData);
             
