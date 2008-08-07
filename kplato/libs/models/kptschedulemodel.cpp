@@ -169,6 +169,7 @@ void ScheduleItemModel::setProject( Project *project )
         
         connect( m_project, SIGNAL( scheduleRemoved( const MainSchedule* ) ), this, SLOT( slotScheduleRemoved( const MainSchedule* ) ) );
     }
+    reset();
 }
 
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
