@@ -26,6 +26,7 @@
 #include <QString>
 #include <QTime>
 #include <QtAlgorithms>
+#include <QMatrix>
 
 //KDE includes
 #include <kgenericfactory.h>
@@ -202,13 +203,16 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
 
         //generate manifest entry
         QString mediaType;
-        if( odfName.endsWith( "png" ) ) {
+        if( odfName.endsWith( "png" ) )
+        {
             mediaType = "image/png";
         }
-        else if( odfName.endsWith( "jpg" ) ) {
+        else if( odfName.endsWith( "jpg" ) )
+        {
             mediaType = "image/jpg";
         }
-        else if( odfName.endsWith( "jpeg" ) ){
+        else if( odfName.endsWith( "jpeg" ) )
+        {
             mediaType = "image/jpeg";
         }
         manifest->addManifestEntry( name, mediaType );
@@ -246,10 +250,12 @@ void Filterkpr2odf::createSoundList( KoStore* output, KoStore* input, KoXmlWrite
 
         //generate manifest entry
         QString mediaType;
-        if( odfName.endsWith( "wav" ) ) {
+        if( odfName.endsWith( "wav" ) )
+        {
             mediaType = "audio/wav";
         }
-        else if( odfName.endsWith( "mp3" ) ) {
+        else if( odfName.endsWith( "mp3" ) )
+        {
             mediaType = "audio/mp3";
         }
         manifest->addManifestEntry( name, mediaType );
@@ -301,7 +307,8 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->startElement( "draw:text-box" );
         QStringList noteTextList = note.toElement().attribute( "note" ).split("\n");
 
-        foreach( QString string, noteTextList ) {
+        foreach( QString string, noteTextList )
+        {
             content->startElement( "text:p" );
             content->addTextNode( string );
             content->endElement();
@@ -543,7 +550,6 @@ void Filterkpr2odf::appendRectangle( KoXmlWriter* content, const KoXmlElement& o
 
 void Filterkpr2odf::appendEllipse( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
-    //TODO: fix the size
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     double width = size.attribute( "width" ).toDouble();
     double height = size.attribute( "height" ).toDouble();
@@ -603,8 +609,8 @@ void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& o
 }
 
 void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& objectElement )
-{
-    //Avoid the creation of so many unneded text:span
+{ 
+   //Avoid the creation of so many unneded text:span
     static QString lastStyle;
     static QString textChain;
     bool lastSpan = objectElement.nextSibling().isNull();
@@ -644,34 +650,12 @@ void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& object
 
 void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
+    //NOTE: we cannot use set2dGeometry becuse we have to convert the 
+    //given size and origen into the real ones before saving them
+
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     double width = size.attribute( "width" ).toDouble();
     double height = size.attribute( "height" ).toDouble();
-
-    content->startElement( ( width == height ) ? "draw:circle" : "draw:ellipse" );
-    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
-    set2DGeometry( content, objectElement );
-
-    //Type of the enclosure of the circle/ellipse
-    KoXmlElement pie = objectElement.namedItem( "PIETYPE" ).toElement();
-    QString kind = "section";//We didn't find the type, we set "section" by default
-    if( !pie.isNull() )
-    {
-        int typePie = pie.attribute( "value" ).toInt();
-        switch( typePie )
-        {
-        case 0:
-            kind = "section";
-            break;
-        case 1:
-            kind = "arc";
-            break;
-        case 2:
-            kind = "cut";
-            break;
-        }
-    }
-    content->addAttribute( "draw:kind", kind );
 
     KoXmlElement pieAngle = objectElement.namedItem( "PIEANGLE" ).toElement();
     int startAngle = 45; //default value take it into kppieobject
@@ -679,7 +663,6 @@ void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectE
     {
         startAngle = ( pieAngle.attribute( "value" ).toInt() ) / 16;
     }
-    content->addAttribute( "draw:start-angle", startAngle );
 
     KoXmlElement pieLength = objectElement.namedItem( "PIELENGTH" ).toElement();
     int endAngle = 90 + startAngle; //default
@@ -687,9 +670,376 @@ void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectE
     {
         endAngle = pieLength.attribute( "value" ).toInt() / 16 + startAngle;
     }
+
+    //rotation
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
+    int rotationAngleValue = angle.attribute( "value" ).toDouble() / 16.0;
+
+    //Type of the enclosure of the circle/ellipse
+    KoXmlElement pie = objectElement.namedItem( "PIETYPE" ).toElement();
+    QString kind;
+    //Enum: PieType
+    int pieType = pie.attribute( "value", "0" ).toInt();//We didn't find the type, we set "section" by default
+    switch( pieType )
+    {
+    case 0:
+        kind = "section";
+        break;
+    case 1:
+        kind = "arc";
+        break;
+    case 2:
+        kind = "cut";
+        break;
+    }
+
+    KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
+    double x = orig.attribute( "x" ).toDouble();
+    double y = orig.attribute( "y" ).toDouble();
+    y -= m_pageHeight * ( m_currentPage - 1 );
+    QPointF realOrig( x, y );
+    QSizeF realSize( width, height );
+
+    getRealSizeAndOrig( realSize, realOrig, startAngle, endAngle, rotationAngleValue, pieType );
+
+    content->startElement( ( width == height ) ? "draw:circle" : "draw:ellipse" );
+    KoXmlElement name = objectElement.namedItem( "OBJECTNAME" ).toElement();
+    QString nameStr = name.attribute( "objectName" );
+    if( !nameStr.isEmpty() )
+    {
+        content->addAttribute( "draw:name", nameStr );
+    }
+    content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
+    content->addAttributePt( "svg:x", realOrig.x() );
+    content->addAttributePt( "svg:y",  realOrig.y() );
+    content->addAttributePt( "svg:width", realSize.width() );
+    content->addAttributePt( "svg:height", realSize.height() );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    content->addAttribute( "draw:kind", kind );
+    content->addAttribute( "draw:start-angle", startAngle );
     content->addAttribute( "draw:end-angle", endAngle );
 
     content->endElement();//draw:circle or draw:ellipse
+}
+
+void Filterkpr2odf::setEndPoints( QPointF points[], const QSizeF& size, int startAngle, int endAngle )
+{
+    //NOTE: this code is ported from the 1.6 series from the KPrPieObject.cpp file
+
+    int angles[] = { startAngle, endAngle };
+    double anglesInRad[] = { angles[0] * M_PI / 180, angles[1] * M_PI / 180 };
+
+    double radius1 = size.width() / 2.0;
+    double radius2 = size.height() / 2.0;
+
+    double prop = radius2 / radius1;
+
+    for( int i = 0; i < 2; i++ )
+    {
+        double x = 0;
+        double y = 0;
+
+        // be carefull
+        if ( angles[i] == 90 )
+        {
+            y = radius2;
+        }
+        else if ( angles[i] == 270 )
+        {
+            y = -radius2;
+        }
+        else
+        {
+            // The real angle is not what was given. It is only ok if radius1 == radius2,
+            // otherwise it is arctan ( radius2 / radius1 tan ( angle ) )
+            double tanalpha = tan( anglesInRad[i] ) * prop;
+            x = sqrt( 1 / ( pow ( 1 / radius1, 2 ) + pow( tanalpha / radius2, 2 ) ) );
+            if ( angles[i] > 90 && angles[i] < 270 )
+              x = -x;
+            y = tanalpha * x;
+        }
+        points[i].setX( x );
+        points[i].setY( y );
+    }
+}
+
+void Filterkpr2odf::getRealSizeAndOrig( QSizeF &size, QPointF &realOrig, int startAngle, int endAngle, int angle, int pieType )
+{
+    //NOTE: this code is ported from the 1.6 series from the KPrPieObject.cpp file
+
+    int len;
+    if( endAngle < startAngle )
+    {
+        len = ( 360 - startAngle + endAngle );
+    }
+    else
+    {
+        len = ( endAngle - startAngle );
+    }
+
+    double radius1 = size.width() / 2.0;
+    double radius2 = size.height() / 2.0;
+
+    // the rotation angle
+    double angInRad = angle * M_PI / 180;
+
+    // 1. calulate position of end points
+    QPointF points[2];
+    setEndPoints( points, size, startAngle, endAngle );
+
+    // rotate point
+    for( int i = 0; i < 2; ++i )
+    {
+        if( angle != 0 )
+        {
+            double sinus = sin( angInRad );
+            double cosinus = cos( angInRad );
+
+            double tmp_x = points[i].x();
+            double tmp_y = points[i].y();
+
+            double x = tmp_x * cosinus + tmp_y * sinus;
+            double y = - tmp_x * sinus + tmp_y * cosinus;
+            points[i].setX( x );
+            points[i].setY( y );
+        }
+    }
+
+    QPointF firstPoint( points[0] );
+    QPointF secondPoint( points[1] );
+
+    // 2. calulate maximal points
+    QPointF maxPoints[4];
+    if( angle == 0 )
+    {
+        maxPoints[0].setX( 0 );
+        maxPoints[0].setY( radius2 );
+
+        maxPoints[1].setX( radius1 );
+        maxPoints[1].setY( 0 );
+
+        maxPoints[2].setX( 0 );
+        maxPoints[2].setY( -radius2 );
+
+        maxPoints[3].setX( -radius1 );
+        maxPoints[3].setY( 0 );
+    }
+    else
+    {
+        double sinus = sin( angInRad );
+        double cosinus = cos( angInRad );
+
+        double x = sqrt( pow( radius1 * cosinus , 2 ) + pow(radius2 * sinus, 2));
+        double y = ( pow( radius2, 2 ) - pow( radius1, 2) ) * sinus * cosinus / x;
+        maxPoints[0].setX( x );
+        maxPoints[0].setY( y );
+        maxPoints[1].setX( -x );
+        maxPoints[1].setY( -y );
+
+        y = sqrt( pow( radius1 * sinus , 2 ) + pow(radius2 * cosinus, 2));
+        x = ( pow( radius1, 2 ) - pow( radius2, 2) ) * sinus * cosinus / y;
+        maxPoints[2].setX( x );
+        maxPoints[2].setY( y );
+        maxPoints[3].setX( -x );
+        maxPoints[3].setY( -y );
+    }
+
+    // 3. find minimal and maximal points
+    double min_x = firstPoint.x();
+    double min_y = firstPoint.y();
+    double max_x = firstPoint.x();
+    double max_y = firstPoint.y();
+
+    if( pieType == 0 )//PT_PIE
+    {
+        QPointF zero(0,0);
+        setMinMax( min_x, min_y, max_x, max_y, zero );
+    }
+    setMinMax( min_x, min_y, max_x, max_y, secondPoint );
+
+    /* 4. check if maximal points lie on the arc.
+     * There are three posibilities how many sections have to
+     * been checked.
+     * 1. the arc is only once on one side of the x axis
+     * 2. the arc is on both sides of the x axis
+     * 3. the arc is twice on one one side of the x axis
+     *
+     * 1)                 2)              3)
+     *      y                  y               y
+     *    ex|xx              xx|xs           s |
+     *      |  x            x  |            x  |  e
+     *      |   s          x   |           x   |   x
+     *  ----+----  x       ----+----  x    ----+----  x
+     *      |              x   |           x   |   x
+     *      |               x  |            x  |  x
+     *      |                e |             xx|xx
+     *
+     */
+    if( firstPoint.y() >= 0 )
+    {
+        if( secondPoint.y() >= 0 )
+        {
+            if( firstPoint.x() > secondPoint.x() || len == 0 )
+            {
+                // 1 section
+                // f.x() <= x <= s.x() && y >= 0
+                for( int i = 0; i < 4; ++i )
+                {
+                    if( maxPoints[i].y() >= 0
+                         && maxPoints[i].x() <= firstPoint.x()
+                         && maxPoints[i].x() >= secondPoint.x() )
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }//for
+            }
+            else
+            {
+                // 3 sections
+                // x <= f.x() && y >= 0
+                // y < 0
+                // x >= s.x() && y >= 0
+                for( int i = 0; i < 4 ; ++i )
+                {
+                    if( maxPoints[i].y() >= 0 )
+                    {
+                        if ( maxPoints[i].x() <= firstPoint.x()
+                             || maxPoints[i].x() >= secondPoint.x() )
+                        {
+                            setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                        }
+                    }
+                    else
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }//for
+            }//else
+        }
+        else
+        {
+            // 2 sections
+            // x <= f.x() && y >= 0
+            // x <= s.x() && y < 0
+            for( int i = 0; i < 4 ; ++i )
+            {
+                if( maxPoints[i].y() >= 0 )
+                {
+                    if( maxPoints[i].x() <= firstPoint.x() )
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }
+                else
+                {
+                    if( maxPoints[i].x() <= secondPoint.x() )
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }
+            }//for
+        }//else
+    }
+    else
+    {
+        if( secondPoint.y() >= 0 )
+        {
+            // 2 sections
+            // x >= f.x() && y < 0
+            // x >= s.x() && y >= 0
+            for( int i = 0 ; i < 4 ; ++i )
+            {
+                if( maxPoints[i].y() < 0 )
+                {
+                    if( maxPoints[i].x() >= firstPoint.x() )
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }
+                else
+                {
+                    if( maxPoints[i].x() >= secondPoint.x() )
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }
+            }//for
+        }
+        else
+        {
+            if( firstPoint.x() < secondPoint.x() || len == 0 )
+            {
+                // 1 section
+                // f.x() <= x <= s.x() && y < 0
+                for( int i = 0; i < 4; ++i )
+                {
+                    if ( maxPoints[i].y() < 0
+                         && maxPoints[i].x() >= firstPoint.x()
+                         && maxPoints[i].x() <= secondPoint.x() )
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }
+            }
+            else
+            {
+                // 3 sections
+                // x >= f.x() && y < 0
+                // y >= 0
+                // x <= s.x() && y < 0
+                for( int i = 0; i < 4; ++i )
+                {
+                    if( maxPoints[i].y() < 0 )
+                    {
+                        if( maxPoints[i].x() >= firstPoint.x() || maxPoints[i].x() <= secondPoint.x() )
+                        {
+                            setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                        }
+                    }
+                    else
+                    {
+                        setMinMax( min_x, min_y, max_x, max_y, maxPoints[i] );
+                    }
+                }//for
+            }//else
+        }//else
+    }
+
+    double mid_x = size.width() / 2;
+    double mid_y = size.height() / 2;
+
+    size.setWidth( max_x - min_x );
+    size.setHeight( max_y - min_y );
+
+    realOrig.setX( realOrig.x() + mid_x + min_x );
+    realOrig.setY( realOrig.y() + mid_y - max_y );
+}
+
+void Filterkpr2odf::setMinMax( double &min_x, double &min_y,
+                               double &max_x, double &max_y, QPointF point )
+{
+    //NOTE: this code is ported from the 1.6 series from the KPrPieObject.cpp file
+
+    double tmp_x = point.x();
+    double tmp_y = point.y();
+
+    if( tmp_x < min_x )
+    {
+        min_x = tmp_x;
+    }
+    else if( tmp_x > max_x )
+    {
+        max_x = tmp_x;
+    }
+
+    if( tmp_y < min_y )
+    {
+        min_y = tmp_y;
+    }
+    else if( tmp_y > max_y )
+    {
+        max_y = tmp_y;
+    }
 }
 
 void Filterkpr2odf::appendGroupObject( KoXmlWriter* content, const KoXmlElement& objectElement )
@@ -732,7 +1082,8 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
 
         point = point.nextSibling().toElement();
 
-        while( !point.isNull() ) {
+        while( !point.isNull() )
+        {
             tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
             tmpY = (int) ( point.attribute( "point_y", "0" ).toDouble() * 10000 );
             //For some reason the last point is saved twice for some polygons, so we need to ignore the last one of them if they are equal
@@ -785,14 +1136,7 @@ void Filterkpr2odf::appendPolygon( KoXmlWriter* content, const KoXmlElement& obj
 void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
     QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
-    if( fileName.endsWith( "ArrowUp.atf" )
-        || fileName.endsWith( "ArrowRightUp.atf" )
-        || fileName.endsWith( "ArrowRight.atf" )
-        || fileName.endsWith( "ArrowRightDown.atf" )
-        || fileName.endsWith( "ArrowDown.atf" )
-        || fileName.endsWith( "ArrowLeftDown.atf" )
-        || fileName.endsWith( "ArrowLeft.atf" )
-        || fileName.endsWith( "ArrowLeftUp.atf" ) )
+    if( fileName.contains( "Arrow" ) )
     {
         appendArrow( content, objectElement );
         return;
@@ -916,12 +1260,7 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
 {
     //NOTE: we cannot use set2dGeometry neither here
 
-    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
-    double width = size.attribute( "width" ).toDouble();
-    double height = size.attribute( "height" ).toDouble();
-
     KoXmlElement name = objectElement.namedItem( "OBJECTNAME" ).toElement();
-
     content->startElement( "draw:custom-shape" );
     QString nameStr = name.attribute( "objectName" );
     if( !nameStr.isEmpty() )
@@ -932,6 +1271,10 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
     content->addAttribute( "svg:x", "0pt" );
     content->addAttribute( "svg:y", "0pt" );
+
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
     content->addAttributePt( "svg:width", width );
     content->addAttributePt( "svg:height", height );
 
@@ -939,11 +1282,11 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
     if( fileName.endsWith( "ArrowUp.atf" ) )
     {
-        rotateAngle = M_PI / 2;
+        rotateAngle = 90;
     }
-    else if ( fileName.endsWith( "ArrowRightUp.atf" ) )
+    else if( fileName.endsWith( "ArrowRightUp.atf" ) )
     {
-        rotateAngle = M_PI / 4;
+        rotateAngle = 45;
     }
     else if( fileName.endsWith( "ArrowRight.atf" ) )
     {
@@ -951,32 +1294,43 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     }
     else if( fileName.endsWith( "ArrowRightDown.atf" ) )
     {
-        rotateAngle = 7 * M_PI / 4;
+        rotateAngle = 315;
     }
     else if( fileName.endsWith( "ArrowDown.atf" ) )
     {
-        rotateAngle = 3 * M_PI / 2;
+        rotateAngle = 270;
     }
     else if( fileName.endsWith( "ArrowLeftDown.atf" ) )
     {
-        rotateAngle = 5 * M_PI / 4;
+        rotateAngle = 225;
     }
     else if( fileName.endsWith( "ArrowLeft.atf" ) )
     {
-        rotateAngle = M_PI;
+        rotateAngle = 180;
     }
     else if( fileName.endsWith( "ArrowLeftUp.atf" ) )
     {
-        rotateAngle = 3 * M_PI / 4;
+        rotateAngle = 135;
     }
 
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
     double x = orig.attribute( "x" ).toDouble();
     double y = orig.attribute( "y" ).toDouble();
     y -= m_pageHeight * ( m_currentPage - 1 );
-    QString matrix = QString( " matrix(1 0 0 1 %1pt %2pt)" ).arg( x ).arg( y );
 
-    content->addAttribute( "draw:transform",  QString("rotate(%1)").arg( rotateAngle ) + matrix );
+    QMatrix matrix;
+    matrix.translate( x, y );
+    //TODO
+//     matrix.translate( -width/2, -height/2 );
+//     QMatrix matrix2;
+//     matrix2.rotate( rotateAngle );
+
+    QString matrixString = QString( "matrix(%1 %2 %3 %4 %5pt %6pt)" )
+                        .arg( matrix.m11() ).arg( matrix.m12() )
+                        .arg( matrix.m21() ).arg( matrix.m22() )
+                        .arg( matrix.dx() ) .arg( matrix.dy() );
+
+    content->addAttribute( "draw:transform", matrixString );
 
     content->startElement( "draw:enhanced-geometry" );
     content->addAttribute( "svg:viewBox", "0 0 100 100" );
@@ -1026,7 +1380,8 @@ void Filterkpr2odf::appendFreehand( KoXmlWriter* content, const KoXmlElement& ob
         point = point.nextSibling().toElement();
 
         d += QString( "M%1 %2" ).arg( tmpX ).arg( tmpY );
-        while( !point.isNull() ) {
+        while( !point.isNull() )
+        {
             tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
             tmpY = (int) ( point.attribute( "point_y", "0" ).toDouble() * 10000 );
 
@@ -1427,7 +1782,7 @@ void Filterkpr2odf::saveAnimations( KoXmlWriter* content )
 {
     content->startElement( "presentation:animations" );
     QList<int> keys = m_pageAnimations.keys();
-    qSort( keys );//we need to store the effect in the order of its keys
+    qSort( keys );//we need to store the effects in the order of their keys
     foreach( int key, keys )
     {
         QList<QString> effectList = m_pageAnimations.value( key );

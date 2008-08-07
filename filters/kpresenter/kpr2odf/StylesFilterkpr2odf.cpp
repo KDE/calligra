@@ -1214,8 +1214,7 @@ const QString Filterkpr2odf::createListStyle( const KoXmlElement& element )
     }
     else
     {
-        if( type == 7 );//STYLE_CUSTOM in 1.6 was not implemented, I assume it's never used
-        else
+        if( type != 7 )//STYLE_CUSTOM in 1.6 was not implemented, I assume it's never used
         {
             elementWriter.addAttribute( "style:number-format", s_oasisCounterTypes[ type ] );
         }
@@ -1223,7 +1222,7 @@ const QString Filterkpr2odf::createListStyle( const KoXmlElement& element )
             || counter.attribute( "restart" ) == "true" )
         {
             QString start = counter.attribute( "start", "1" );
-            elementWriter.addAttribute( "text:start-value", start ); 
+            elementWriter.addAttribute( "text:start-value", start );
         }
     }
 
