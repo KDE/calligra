@@ -119,9 +119,7 @@ int main(int argc, char **argv) {
     auth->addRestrict("/blob");
     
     // File and blob service
-    //server.addService("/f", &fileService);
     server.addService("/blob", &blobService);
-    //server.addService("/index.html", &fileService);
     
     server.start();
     server.setAuthentication(auth);
