@@ -35,45 +35,45 @@ namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
 
     Cache* Cache::m_instance = 0;
-
-        Cache* Cache::getInstance() {
-            if (!m_instance)
-                m_instance = new Cache();
-            return m_instance;
-        }
-
-        // Following stuff is ugly
-        bool Cache::updateCachedPkeys(const QString& requestedTable) {
-            // FIXME: Check for errors
-            if (cachedPkeys[requestedTable].isEmpty()) {
-                kDebug() << "Cached Pkeys is empty, updating" << endl;
-                KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
-                KexiDB::QuerySchema idSchema;
-                idSchema.addField(tableSchema.primaryKey()->field(0));
-                KexiDB::Cursor* cursor = gConnection->executeQuery(idSchema);
-                while (cursor->moveNext()) {
-                    kDebug() << "Appending " << cursor->value(0).toUInt() << " to cache" << endl;
-                    cachedPkeys[requestedTable].append(cursor->value(0).toUInt());
-                }
-                if (cursor) {
-                    cursor->close();
-                    gConnection->deleteCursor(cursor);
-                }
+    
+    Cache* Cache::getInstance() {
+        if (!m_instance)
+            m_instance = new Cache();
+        return m_instance;
+    }
+    
+    // Following stuff is ugly
+    bool Cache::updateCachedPkeys(const QString& requestedTable) {
+        // FIXME: Check for errors
+        if (cachedPkeys[requestedTable].isEmpty()) {
+            kDebug() << "Cached Pkeys is empty, updating" << endl;
+            KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
+            KexiDB::QuerySchema idSchema;
+            idSchema.addField(tableSchema.primaryKey()->field(0));
+            KexiDB::Cursor* cursor = gConnection->executeQuery(idSchema);
+            while (cursor->moveNext()) {
+                kDebug() << "Appending " << cursor->value(0).toUInt() << " to cache" << endl;
+                cachedPkeys[requestedTable].append(cursor->value(0).toUInt());
             }
-            return true;
-        }
-
-        const QList<uint>& Cache::getCachedPkeys(const QString& requestedTable) {
-            return cachedPkeys[requestedTable];
-        }
-
-        uint Cache::getCurrentCachePosition(const QString& requestedTable, uint pkeyValueUInt) {
-            for (int i = 0; i < cachedPkeys[requestedTable].size(); i++) {
-                if (cachedPkeys[requestedTable].at(i) == pkeyValueUInt)
-                    return i;
+            if (cursor) {
+                cursor->close();
+                gConnection->deleteCursor(cursor);
             }
-            return 0;
         }
-
+        return true;
+    }
+    
+    const QList<uint>& Cache::getCachedPkeys(const QString& requestedTable) {
+        return cachedPkeys[requestedTable];
+    }
+    
+    uint Cache::getCurrentCachePosition(const QString& requestedTable, uint pkeyValueUInt) {
+        for (int i = 0; i < cachedPkeys[requestedTable].size(); i++) {
+            if (cachedPkeys[requestedTable].at(i) == pkeyValueUInt)
+                return i;
+        }
+        return 0;
+    }
+    
 } // end namespace Model
 } // end namespace KexiWebForms
