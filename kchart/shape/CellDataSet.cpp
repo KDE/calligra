@@ -53,74 +53,32 @@ CellDataSet::~CellDataSet()
 
 QVariant CellDataSet::xData( int index ) const
 {
-    if ( !m_xDataRegion.isValid() )
-            return QVariant();
-    QAbstractItemModel *model = m_model->sourceModel();
-    if ( !model )
-        return QVariant();
-        
-    QPoint dataPoint = m_xDataRegion.pointAtIndex( index );
-    if ( dataPoint.x() <= 0 || dataPoint.y() <= 0 )
-        return QVariant();
-    return model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
+    return data( m_xDataRegion, index );
 }
 
 QVariant CellDataSet::yData( int index ) const
 {
-    if ( !m_yDataRegion.isValid() )
-        return QVariant(); 
-    QAbstractItemModel *model = m_model->sourceModel();
-    if ( !model )
-        return QVariant();
-        
-    QPoint dataPoint = m_yDataRegion.pointAtIndex( index );
-    if ( dataPoint.x() <= 0 || dataPoint.y() <= 0 )
-        return QVariant();
-    return model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
+    return data( m_yDataRegion, index );
 }
 
 QVariant CellDataSet::customData( int index ) const
 {
-    if ( !m_customDataRegion.isValid() )
-            return QVariant();
-    QAbstractItemModel *model = m_model->sourceModel();
-    if ( !model )
-        return QVariant();
-        
-    QPoint dataPoint = m_customDataRegion.pointAtIndex( index );
-    if ( dataPoint.x() <= 0 || dataPoint.y() <= 0 )
-        return QVariant();
-    return model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
+    return data( m_customDataRegion, index );
 }
 
 QVariant CellDataSet::categoryData( int index ) const
 {
-    if ( !m_categoryDataRegion.isValid() )
-            return QVariant();
-        
-    QPoint dataPoint = m_categoryDataRegion.pointAtIndex( index );
-    return m_model->sourceModel()->data( m_model->index( dataPoint.y(), dataPoint.x() ) );
+    return data( m_categoryDataRegion, index );
 }
 
 QVariant CellDataSet::labelData() const
 {
-    if ( !m_labelDataRegion.isValid() )
-            return QVariant();
-
     QString label;
     
-    int cellCount = m_labelDataRegion.cellCount();
+    const int cellCount = m_labelDataRegion.cellCount();
     for ( int i = 0; i < cellCount; i++ )
-    {
-        QPoint dataPoint = m_labelDataRegion.pointAtIndex( i );
-        if ( dataPoint.x() < 1 )
-            continue;
-        if ( dataPoint.y() > 0 )
-        	label += m_model->sourceModel()->data( m_model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) ).toString();
-        else if ( dataPoint.y() == 0 )
-            label += m_model->sourceModel()->headerData( dataPoint.x() - 1, Qt::Horizontal ).toString();
-    }
-    
+        label += data( m_labelDataRegion, i ).toString();
+
     return QVariant( label );
 }
 
@@ -324,7 +282,6 @@ void CellDataSet::setLabelDataRegionString( const QString &string )
 
 int CellDataSet::size() const
 {
-    qDebug() << "m_size=" << m_size;
     return m_size > 0 ? m_size : 1;
 }
 
@@ -413,3 +370,29 @@ void CellDataSet::categoryDataChanged( const QRect &region ) const
 {
 }
 
+QVariant CellDataSet::data( const CellRegion &region, int index ) const
+{
+    if ( !region.isValid() )
+        return QVariant(); 
+    QAbstractItemModel *model = m_model->sourceModel();
+    if ( !model )
+        return QVariant();
+    
+    QVariant data;
+        
+    QPoint dataPoint = region.pointAtIndex( index );
+    if ( dataPoint.x() > 0 )
+    {
+        if ( dataPoint.y() > 0 )
+            data = model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
+        else if ( dataPoint.y() == 0 )
+            data = model->headerData( dataPoint.x() - 1, Qt::Horizontal );
+    }
+    else if ( dataPoint.x() == 0 )
+    {
+        if ( dataPoint.y() > 0 )
+            data = model->headerData( dataPoint.y() - 1, Qt::Vertical );
+    }
+    
+    return data;
+}

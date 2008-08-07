@@ -72,6 +72,9 @@ public:
     void categoryDataChanged( const QRect &region ) const;
 
     int size() const;
+    
+private:
+    QVariant data( const CellRegion &region, int index ) const;
 };
 
 } // Namespace KChart
