@@ -110,7 +110,7 @@ namespace {
                 dbgFile <<"Unsupported inkset (right now, only CMYK is supported)";
                 char** ink_names;
                 uint16 numberofinks;
-                if( TIFFGetField(image, TIFFTAG_INKNAMES, &ink_names) && TIFFGetField(image, TIFFTAG_NUMBEROFINKS, &numberofinks) )
+                if( TIFFGetField(image, TIFFTAG_INKNAMES, &ink_names)  == 1 && TIFFGetField(image, TIFFTAG_NUMBEROFINKS, &numberofinks)  == 1 )
                 {
                     dbgFile <<"Inks are :";
                     for(uint i = 0; i < numberofinks; i++)
@@ -255,7 +255,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     quint32 EmbedLen;
     LPBYTE EmbedBuffer;
 
-    if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer)) {
+    if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer) == 1) {
         dbgFile <<"Profile found";
         QByteArray rawdata;
         rawdata.resize(EmbedLen);
@@ -322,13 +322,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Read META Information
     KoDocumentInfo * info = m_doc->documentInfo();
     char* text;
-    if (TIFFGetField(image, TIFFTAG_ARTIST, &text)) {
+    if (TIFFGetField(image, TIFFTAG_ARTIST, &text) == 1) {
         info->setAuthorInfo("creator", text);
     }
-    if (TIFFGetField(image, TIFFTAG_DOCUMENTNAME, &text)) {
+    if (TIFFGetField(image, TIFFTAG_DOCUMENTNAME, &text) == 1) {
         info->setAboutInfo("title", text);
     }
-    if (TIFFGetField(image,TIFFTAG_IMAGEDESCRIPTION,&text) ) {
+    if (TIFFGetField(image,TIFFTAG_IMAGEDESCRIPTION,&text)  == 1 ) {
         info->setAboutInfo("description", text);
     }
 
