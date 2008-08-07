@@ -69,6 +69,14 @@ namespace Database {     // begin namespace Database
      */
     bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
 
+    /*!
+     * Read the contents of a table
+     * @param QString& the table name
+     * @return QPair whose first value is a KexiDB::TableSchema and the second is a QMap \
+     *   with record number as key and a QList<QString> as value (representing data in the row)
+     */
+    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString&);
+
 } // end namespace Database
 } // end namespace Model
 } // end namespace KexiWebForms

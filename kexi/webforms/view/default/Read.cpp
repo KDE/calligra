@@ -20,7 +20,6 @@
 
 #include <QHash>
 #include <QString>
-#include <QTextDocument>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
@@ -30,7 +29,9 @@
 #include <kexidb/connection.h>
 #include <kexidb/indexschema.h>
 
-#include "model/DataProvider.h"
+#include "../../model/Database.h"
+#include "../../model/DataProvider.h"
+
 #include "TemplateProvider.h"
 
 #include "Read.h"
@@ -42,24 +43,56 @@ namespace View {
         QString requestedTable(d["uri-table"]);
 
         QString tableData;
-        KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
-        KexiDB::QuerySchema querySchema(*tableSchema);
-        KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
 
-        bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
+        QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > pair = KexiWebForms::Model::Database::readTable(requestedTable);
+
+        uint totalRecords = pair.second.count();
+        QString primaryKey(pair.first.primaryKey()->field(0)->name());
+
+        // Table header
+        tableData.append("<tr>\t<th scope=\"col\">Record</th>\n");
+        foreach(const KexiDB::Field* f, *pair.first.fields()) {
+            tableData.append(QString("\t<th scope=\"col\">%1</th>\n").arg(f->captionOrName()));
+        }
+        tableData.append("</tr>\n");
+
+        // Table contents
+        foreach(const uint record, pair.second.keys()) {
+            tableData.append("<tr>");
+            tableData.append(QString("<td>%1 of %2</td>").arg(record).arg(totalRecords));
+            QString pkeyVal(pair.second[record].at(pair.first.primaryKey()->field(0)->order()));
+            
+            foreach(const QString& value, pair.second[record]) {
+                tableData.append(QString("\t<td>%1</td>\n").arg(value));
+            }
+            // Toolbox
+            // Edit
+            tableData.append(QString("<td><a href=\"/update/%1/%2/%3\">"
+                                     "<img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>")
+                             .arg(requestedTable).arg(primaryKey).arg(pkeyVal));
+            // Delete
+            tableData.append(QString("<td><a href=\"/delete/%1/%2/%3\">"
+                                     "<img src=\"/f/toolbox/draw-eraser.png\" alt=\"Edit\"/></a></td>")
+                             .arg(requestedTable).arg(primaryKey).arg(pkeyVal));
+            tableData.append("</tr>\n");
+        }
+
+        setValue("TABLEDATA", tableData);
+
+        /*bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
         if (readOnly) {
             setValue("TABLENAME", requestedTable.append(" (read only)"));
         } else {
             setValue("TABLENAME", requestedTable);
         }
 
-        /* awful */
+        /* awful 
         int recordsTotal = 0;
         while (cursor->moveNext())
             recordsTotal++;
         gConnection->deleteCursor(cursor);
 
-        /* even more awful */
+        /* even more awful 
         cursor = gConnection->executeQuery(querySchema);
 
         if (!cursor) {
@@ -132,7 +165,7 @@ namespace View {
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
-        }
+        }*/
 
         renderTemplate(m_dict, writer);
 

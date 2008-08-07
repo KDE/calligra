@@ -23,6 +23,7 @@
 #include <QHash>
 #include <QString>
 #include <QtAlgorithms>
+#include <QTextDocument>
 
 #include <KDebug>
 
@@ -42,12 +43,12 @@ namespace Model {        // begin namespace Model
 namespace Database {     // begin namespace Database
         
     QHash<QString, QString> getNames(KexiDB::ObjectTypes objectType) {
-        QList<int> objectIds(gConnection->objectIds( objectType ));
+        QList<int> objectIds(gConnection->objectIds(objectType));
         QHash<QString, QString> objectNamesForCaptions;
         
         foreach (const int id, objectIds) {
             KexiDB::SchemaData schema;
-            tristate res = gConnection->loadObjectSchemaData( id, schema );
+            tristate res = gConnection->loadObjectSchemaData(id, schema);
             if (res != true)
                 continue;
             objectNamesForCaptions.insertMulti( 
@@ -125,6 +126,39 @@ namespace Database {     // begin namespace Database
             gConnection->deleteCursor(cursor);
         }
         return result;
+    }
+
+    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString& tableName) {
+        KexiDB::TableSchema table(*getSchema(tableName));
+        KexiDB::QuerySchema query(table);
+        KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+
+        QMap<uint, QList<QString> > tableContents;
+        if (cursor) {
+            uint record = 1;
+            uint pkeyVal = 0;
+            while (cursor->moveNext()) {
+                for (uint i = 0; i < query.fieldCount(); i++) {
+                    if (query.field(i) == table.primaryKey()->field(0)) {
+                        pkeyVal = cursor->value(i).toUInt();
+                    }
+
+                    if (query.field(i)->type() == KexiDB::Field::BLOB) {
+                        tableContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
+                                                     .arg(tableName).arg(query.field(i)->name()).arg(table.primaryKey()->field(0)->name())
+                                                     .arg(QString(pkeyVal)));
+                    } else {
+                        tableContents[record].append(Qt::escape(cursor->value(i).toString()));
+                    }
+                }
+                record++;
+            }
+
+            cursor->close();
+            gConnection->deleteCursor(cursor);
+        }
+        
+        return QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > >(table, tableContents);
     }
 
 } // end namespace Database
