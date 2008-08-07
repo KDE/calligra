@@ -21,6 +21,8 @@
 #ifndef KCHART_CELLREGION_H
 #define KCHART_CELLREGION_H
 
+#include "ChartShape.h"
+
 #include <Qt>
 #include <QVector>
 #include <QRect>
@@ -30,12 +32,13 @@ class QPoint;
 
 namespace KChart {
 
-class CellRegion
+class CHARTSHAPELIB_EXPORT CellRegion
 {
 public:
     CellRegion();
     CellRegion( const QPoint &point );
     CellRegion( const QRect &rect );
+    CellRegion( const QPoint &point, const QSize &size );
     CellRegion( const QVector<QRect> &rects );
     ~CellRegion();
     
@@ -68,6 +71,8 @@ public:
     static int rangeCharToInt( char c );
     static int rangeStringToInt( const QString &string );
     static QString rangeIntToString( int i );
+    
+    bool operator == ( const CellRegion &other ) const;
 
 private:
     QVector<QRect> m_rects;

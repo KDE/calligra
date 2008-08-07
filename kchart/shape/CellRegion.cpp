@@ -49,6 +49,11 @@ CellRegion::CellRegion( const QRect &rect )
     add( rect );
 }
 
+CellRegion::CellRegion( const QPoint &point, const QSize &size )
+{
+    add( QRect( point, size ) );
+}
+
 CellRegion::CellRegion( const QVector<QRect> &rects )
 {
     add( rects );
@@ -402,4 +407,9 @@ QString CellRegion::regionToString( const QVector<QRect> &region )
         }
     }
     return result;
+}
+
+bool CellRegion::operator == ( const CellRegion &other ) const
+{
+    return m_rects == other.rects();
 }
