@@ -86,7 +86,7 @@ void ProxyModel::rebuildDataMap()
 {
 	if ( d->spreadSheetModel )
 	{
-        int k = 0;
+	    int createdDataSetCount = 0;
 	    if ( d->dataDirection == Qt::Horizontal )
 	    {
 	        QMap<int, QVector<QRect> > rows;
@@ -130,17 +130,18 @@ void ProxyModel::rebuildDataMap()
 	        
 	        QMapIterator<int, QVector<QRect> > j( sortedRows );
 	        
-	        CellRegion categoryRegion;
+	        CellRegion categoryDataRegion;
 	        
 	        if ( d->firstRowIsLabel && j.hasNext() )
 	        {
 	            j.next();
 	            
-	            categoryRegion = CellRegion( j.value() );
+	            categoryDataRegion = CellRegion( j.value() );
 	            if ( d->firstColumnIsLabel )
-	                categoryRegion.subtract( categoryRegion.pointAtIndex( 0 ) );
+	                categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
 	        }
 	        
+	        int k = 0;
 	        while ( j.hasNext() )
 	        {
 	            j.next();
@@ -159,21 +160,25 @@ void ProxyModel::rebuildDataMap()
 	            dataSet->blockSignals( true );
 	            
 	            CellRegion yDataRegion( j.value() );
+	            CellRegion labelDataRegion;
 	    
-	            qDebug() << "Creating data set with region " << j.value();
+	            //qDebug() << "Creating data set with region" << j.value();
 	            if ( d->firstColumnIsLabel )
 	            {
 	                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
-	                dataSet->setLabelDataRegion( CellRegion( labelDataPoint ) );
-	                dataSet->setCategoryDataRegion( categoryRegion );
+	                labelDataRegion = CellRegion( labelDataPoint );
 	                
 	                yDataRegion.subtract( labelDataPoint );
 	            }
 	            
 	            dataSet->setYDataRegion( yDataRegion );
+	            dataSet->setCategoryDataRegion( categoryDataRegion );
+	            dataSet->setLabelDataRegion( labelDataRegion );
 	            k++;
 	            dataSet->blockSignals( false );
 	        }
+	        
+	        createdDataSetCount = k;
 	    }
 	    else
 	    {
@@ -218,17 +223,18 @@ void ProxyModel::rebuildDataMap()
             
             QMapIterator<int, QVector<QRect> > j( sortedColumns );
             
-            CellRegion categoryRegion;
+            CellRegion categoryDataRegion;
             
             if ( d->firstColumnIsLabel && j.hasNext() )
             {
                 j.next();
                 
-                categoryRegion = CellRegion( j.value() );
+                categoryDataRegion = CellRegion( j.value() );
                 if ( d->firstRowIsLabel )
-                    categoryRegion.subtract( categoryRegion.pointAtIndex( 0 ) );
+                    categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
             }
             
+            int k = 0;
             while ( j.hasNext() )
             {
                 j.next();
@@ -247,24 +253,28 @@ void ProxyModel::rebuildDataMap()
                 dataSet->blockSignals( true );
                 
                 CellRegion yDataRegion( j.value() );
+                CellRegion labelDataRegion;
         
-                qDebug() << "Creating data set with region " << j.value();
+                //qDebug() << "Creating data set with region " << j.value();
                 if ( d->firstRowIsLabel )
                 {
                     QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
-                    dataSet->setLabelDataRegion( CellRegion( labelDataPoint ) );
-                    dataSet->setCategoryDataRegion( categoryRegion );
+                    labelDataRegion = CellRegion( labelDataPoint );
                     
                     yDataRegion.subtract( labelDataPoint );
                 }
                 
                 dataSet->setYDataRegion( yDataRegion );
+                dataSet->setLabelDataRegion( labelDataRegion );
+                dataSet->setCategoryDataRegion( categoryDataRegion );
                 k++;
                 dataSet->blockSignals( false );
             }
+            
+            createdDataSetCount = k;
 	    }
 	    
-	    while ( d->dataSets.size() > k + 1 )
+	    while ( d->dataSets.size() > createdDataSetCount )
 	    {
 	    	DataSet *dataSet = d->dataSets.takeLast();
 	    	dataSet->setKdChartModel( 0 );
