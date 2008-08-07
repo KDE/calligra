@@ -73,7 +73,7 @@ BOOL WINAPI console_ctrl_handler(DWORD ctrl_type)
     }
 }
 #else
-void handle_signal(int sig)
+void handle_signal(int)
 {
     main_shutdown_manager.shutdown();
 }
