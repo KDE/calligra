@@ -2,6 +2,8 @@
 Name=Animation Tool
 Name[ga]=Uirlis Bheochana
 Name[it]=Strumento di animazione
+Name[pt]=Ferramenta de Animação
+Name[pt_BR]=Ferramenta de Animação
 Name[uk]=Засіб для анімації
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service
