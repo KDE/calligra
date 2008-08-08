@@ -58,10 +58,7 @@ int main(int argc, char **argv) {
     KCmdLineOptions options;
     options.add("port <port>", ki18n("Listen port"), "8080");
     options.add("webroot <directory>", ki18n("Web Root (used also as template root directory)"), "./");
-    options.add("https <port>", ki18n("HTTPS listen port"));
-    options.add("cert <path>", ki18n("Path to SSL certificate file"));
-    options.add("key <path>", ki18n("Path to SSL key file"));
-    options.add("dirlist", ki18n("Enable directory listing"));
+    options.add("ssl <file>", ki18n("Path to SSL certificate file (PEM encoded)"));
     options.add("file <file>", ki18n("Path to Kexi database file"));
     
     KCmdLineArgs::addCmdLineOptions(options);
@@ -82,6 +79,10 @@ int main(int argc, char **argv) {
     }
 
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
+
+    if (args->isSet("ssl")) {
+        server.setSSLKeyFile(args->getOption("ssl").toLatin1().constData());
+    }
 
     // Plugins
     try {
