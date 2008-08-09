@@ -143,11 +143,13 @@ bool OracleConnectionInternal::useDatabase(const QString &dbName)
 }
 
 bool OracleConnectionInternal::executeSQL(const QString& statement) {
-  KexiDBDrvDbg<<statement<<endl;
-    const char *query=statement.utf8();
+    //QString stat=QString(statement);
+    //stat.replace("VALUES (", "VALUES ( KEXI__SEQ__ROW_ID.NEXTVAL, ");
+    KexiDBDrvDbg<<statement<<endl;
+    //const char *query=statement.utf8();
     try
     {
-      stmt->execute(query);
+      stmt->execute(statement.latin1());
       rs=stmt->getResultSet();
       return(true);
     }
@@ -179,23 +181,21 @@ void OracleConnectionInternal::createSequences(){
   KexiDBDrvDbg<<endl; 
   string sq[5]={"ROW_ID", "BLOBS","OBJECTDATA","OBJECTS","PARTS"};
  
+  KexiDBDrvDbg<<endl; 
   for(int i=0;i<5;i++)
   {
     try
     {
-      //rs=stmt->executeQuery
-      //("SELECT 1 FROM USER_OBJECTS WHERE OBJECT_NAME LIKE 'KEXI__SEQ__'"/*+sq[i]+"'"*/);
-      //if(!rs->next())
-      //{
-        KexiDBDrvDbg<<endl; 
         stmt->execute("CREATE SEQUENCE KEXI__SEQ__"+sq[i]);
-      //}
     }
     catch (&ea)
 	  {
 	    KexiDBDrvDbg << ea.what()<< endl;
+	    return;
 	  }
   }
+  //Needed to retrieve last generated number
+  executeSQL("ALTER SEQUENCE KEXI__SEQ__ROW_ID NOCACHE");
 }
 	
 void OracleConnectionInternal::createTriggers()

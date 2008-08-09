@@ -143,7 +143,7 @@ bool OracleConnection::drv_createDatabase( const QString &dbName) {
 		if(res)
 		{
 		  //d->stmt->execute
-		  //    ("CREATE TABLE KEXI__AUX (ID NUMBER PRIMARY KEY,CREATION TIMESTAMP)");
+		  //  ("CREATE TABLE KEXI__AUX (ID NUMBER PRIMARY KEY,CREATION TIMESTAMP)");
 		  d->createSequences();  
 		}
     return res;
@@ -190,7 +190,7 @@ bool OracleConnection::drv_useDatabase(const QString &dbName,
   KexiDBDrvDbg <<endl;
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
-	bool createtg, createsq;
+	bool createtg;
 //TODO is here escaping needed?
 	if( d->useDatabase(dbName))
 	{
@@ -198,7 +198,7 @@ bool OracleConnection::drv_useDatabase(const QString &dbName,
 	  {
 	    //KexiDBDrvDbg<<"Counting triggers"<<endl; 
 	    d->rs=d->stmt->executeQuery
-	    ("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME LIKE 'KEXI__TG__%'");
+	   ("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME LIKE 'KEXI__TG__%'");
 	    createtg=!d->rs->next() || d->rs->getInt(1)<(SYSTABLES +1);
 	    d->stmt->closeResultSet(d->rs);
 	    d->rs=0;
@@ -216,7 +216,9 @@ bool OracleConnection::drv_useDatabase(const QString &dbName,
 	    return false;
 	  }
 	  //if(createsq)  d->createSequences();
-	  if(createtg)  d->createTriggers();
+	  if(createtg){
+	    d->createTriggers();
+	  }
 
 	  active=true;
 	  return true;
@@ -314,16 +316,55 @@ bool OracleConnection::drv_executeSQL( const QString& statement )
     return d->executeSQL(statement);
 }
 
+bool OracleConnection::drv_createTable( const TableSchema& tableSchema )
+{
+	m_sql = createTableStatement(tableSchema);
+	KexiDBDbg<<"******** "<<m_sql<<endl;
+  //KexiDBDrvDbg << tableSchema.name() << endl;
+	return (executeSQL(m_sql) &&
+	        executeSQL("ALTER TABLE "+tableSchema.name()+" ADD ROW_ID NUMBER"));
+}
+
+bool OracleConnection::drv_afterInsert(const QString& table, FieldList& fields)
+{
+   //Q_UNUSED(table);
+   Q_UNUSED(fields);
+   /*Field* row_id=new Field("ROW_ID", 
+                            Field::BigInteger,
+                            Field::Unique,
+                            Field::Unsigned,
+                            0,
+                            0,
+                            "KEXI__SEQ__ROW_ID.NEXTVAL",
+                            QString(),
+                            QString(),
+                            0
+                          );
+   fields.insertField(0, row_id);
+   */
+   QString stat=QString("UPDATE "+table
+             +" SET ROW_ID=KEXI__SEQ__ROW_ID.NEXTVAL WHERE ROWID=NULL");
+             
+   return (d->executeSQL(stat)/*&&d->executeSQL("COMMIT")*/);
+
+}
+
 /**
  * RowID in Oracle is not a number, is an alphanumeric string
  */
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
 {
   KexiDBDrvDbg << endl;
+  int res;
   try
   {
-    d->rs=d->stmt->executeQuery("SELECT KEXI__SEQ__.CURRVAL FROM DUAL");
-    if(d->rs->next()) return d->rs->getInt(1);
+    d->rs=d->stmt->executeQuery
+    ("SELECT LAST_NUMBER from user_sequences WHERE SEQUENCE_NAME='KEXI__SEQ__ROW_ID'");
+    if(d->rs->next()) res=d->rs->getInt(1);
+    d->stmt->closeResultSet(d->rs);
+    d->rs=0;
+    return res;
+    
   }
   catch(&ea)
   {

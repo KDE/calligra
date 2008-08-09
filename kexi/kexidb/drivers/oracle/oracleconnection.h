@@ -50,7 +50,7 @@ class OracleConnection : public Connection
 // TODO: Check these
 		virtual bool drv_createDatabase( const QString &dbName = QString::null );
 		virtual bool drv_useDatabase( const QString &dbName = QString::null, 
-                          bool *cancelled = 0, MessageHandler* msgHandler = 0 );
+            bool *cancelled = 0, MessageHandler* msgHandler = 0 );
 		virtual bool drv_closeDatabase();
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null );
 // End check
@@ -68,6 +68,8 @@ class OracleConnection : public Connection
 		virtual TransactionData* drv_beginTransaction();
 		virtual bool drv_setAutoCommit(bool on);
 		virtual bool drv_getDatabasesList( QStringList &list );
+		virtual bool drv_createTable(const TableSchema& tableSchema);
+		virtual bool drv_afterInsert(const QString& table, FieldList& fields);
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_getTablesList( QStringList &list );
