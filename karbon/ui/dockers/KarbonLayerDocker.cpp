@@ -198,7 +198,7 @@ void KarbonLayerDocker::itemClicked( const QModelIndex &index )
     {
         if( shape )
         {
-            selection->select( shape );
+            selection->select( shape, false );
             shape->update();
         }
     }
