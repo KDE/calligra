@@ -80,6 +80,7 @@ class OracleConnection : public Connection
 		friend class OracleCursor;
 	private:
 		oracle::occi::SQLException ea;
+		//exception ea;
 		bool active;
 	
 }; // class OracleConnection

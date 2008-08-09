@@ -29,7 +29,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #else
   #define NAMESPACE KexiDB
 #endif
-
+#define SYSTABLES 4
 namespace KexiDB {
     class ConnectionData;
 }
@@ -64,6 +64,11 @@ class OracleConnectionInternal : public KexiDB::ConnectionInternal
 		QString escapeIdentifier(const QString& str) const;
 		QString getServerVersion();
 		
+		//This two are to solve the AUTO_INCREMENT_PK issue 
+		//(nothing similar to that or postgre "SERIAL" in oracle)
+		void createSequences();
+	  void createTriggers();
+		
     oracle::occi::Environment *env;
 		oracle::occi::ResultSet  	*rs;
   	oracle::occi::Connection  *oraconn;
@@ -72,10 +77,7 @@ class OracleConnectionInternal : public KexiDB::ConnectionInternal
 		int errno; //!< result code of last operation on server
 
 		private:
-		oracle::occi::SQLException ea;
-		
-		
-        
+		oracle::occi::SQLException ea;      
 };
 
 

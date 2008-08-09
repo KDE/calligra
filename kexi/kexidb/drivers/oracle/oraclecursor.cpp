@@ -90,10 +90,11 @@ KexiDBDrvDbg <<m_sql<<endl;
          d->lengths[i]=md[i].getInt(MetaData::ATTR_DATA_SIZE);
          d->types[i]=md[i].getInt(MetaData::ATTR_DATA_TYPE);
          if(d->types[i]==8) d->rs->setMaxColumnSize(i+1,2000);//Long
+         //It could be any other number, I hope 2000 to be enough :S
       }
  //KexiDBDrvDbg <<"(2)"<<endl;
       m_at=0;
-      d->rs->next();
+      //d->rs->next();
  //KexiDBDrvDbg <<"(3)"<<endl;
       m_opened=true;
       m_records_in_buf = d->numRows; 
@@ -102,9 +103,9 @@ KexiDBDrvDbg <<m_sql<<endl;
       KexiDBDrvDbg <<"DRV OPENED"<<endl;
       return true;
       
-   }catch (ea){
+   }catch (&ea){
       KexiDBDrvDbg << ea.what()<<endl;
-      setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.getMessage().c_str()));
+      setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
       return false;
    }
 
@@ -117,14 +118,13 @@ bool OracleCursor::drv_close() {
       try{
         d->stmt->closeResultSet(d->rs);
         d->rs=0;
-      }catch (SQLException ea){
-        KexiDBDrvDbg <<ea.getMessage().c_str()<<endl;
+      }
+      catch (&ea)
+      {
+        KexiDBDrvDbg <<ea.what()<<endl;
         return false;
       }
    }
-   //KexiDBDrvDbg <<"(1)"<<endl;
-   d->lengths.~vector<unsigned long>();
-   d->types.~vector<int>();
    m_opened=false;
    d->numRows=0;
    return true;
@@ -138,16 +138,28 @@ bool OracleCursor::moveFirst() {
 }
 
 void OracleCursor::drv_getNextRecord() {
-      KexiDBDrvDbg <<endl;
-      if(d->rs->status()){
-         m_result=FetchOK;
-      }
-      else if(at()>=d->numRows){
-         m_result = FetchEnd;
-      }
-      else {
-         m_result = FetchError;
-      } 
+  try{
+    d->rs->next();
+    if(d->rs->status()==ResultSet::DATA_AVAILABLE){
+      m_result=FetchOK;
+      KexiDBDrvDbg<<"("<<m_at<<"/"<<d->numRows<<") OK"<<endl;
+    }
+    else if(d->rs->status()==ResultSet::END_OF_FETCH)
+    {
+      m_result = FetchEnd;
+      KexiDBDrvDbg<<"("<<m_at<<"/"<<d->numRows<<") FetchEnd"<<endl;
+    }
+    else
+    {
+      m_result = FetchError;
+      KexiDBDrvDbg<<"Error"<<endl;
+    }
+  }
+  catch (&ea)
+  {
+    KexiDBDrvDbg <<ea.what()<<endl;
+    m_result = FetchError;
+  }
    
 }
 
@@ -159,20 +171,18 @@ QVariant OracleCursor::value(uint pos) {
 //What is this function supposed to do?
    //-->Returns the value stored in the column number i (counting from 0)
    
-KexiDBDrvDbg <<"(1)"<<endl;          
+KexiDBDrvDbg <<endl;          
 	if (!d->rs->status() || pos>=m_fieldCount)
 		return QVariant();
     //MetaData md=(d->rs->getColumnListMetaData())[pos+1];
     int t=d->types[pos];
-  
-KexiDBDrvDbg <<"(2)"<<endl;       
+        
    KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldsExpanded->count())
 		? m_fieldsExpanded->at(pos)->field : 0;	
 //! @todo js: use MYSQL_FIELD::type here!
    //Oracle ResultSet counts from 1
    //return KexiDB::cstringToVariant(d->rs[pos+1], f, d->lengths[pos]);
    
-KexiDBDrvDbg <<"(3)"<<endl;
    if (t==1||t==5||t==8||t==9||t==94||t==96||t==104){//text
       return QVariant( d->rs->getString(pos+1).c_str());
    }else if (t==3||t==6||t==2){//Numeric
@@ -207,8 +217,7 @@ bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 	
 	for( uint i=0; i<realCount; i++) 
 	{
-		//md=d->rs->getColumnListMetaData()[i+1];
-		t=md[i+1].getInt(MetaData::ATTR_DATA_TYPE);
+		t=md[i].getInt(MetaData::ATTR_DATA_TYPE);
 		
 		Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
 		if (m_fieldsExpanded && !f)
@@ -231,15 +240,15 @@ bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 
 void OracleCursor::drv_appendCurrentRecordToBuffer() {KexiDBDrvDbg <<endl;}
 
-
+//Is this for buffered drivers?
 void OracleCursor::drv_bufferMovePointerNext() {
-  KexiDBDrvDbg <<endl;  
    try{
       d->rs->next();
-   }catch ( ea){
+   }catch (&ea){
       //cout<<ea.what();
       m_result = FetchError;
    }   
+   KexiDBDrvDbg <<"("<<at()<<")"<<endl;  
 }
 
 void OracleCursor::drv_bufferMovePointerPrev() {

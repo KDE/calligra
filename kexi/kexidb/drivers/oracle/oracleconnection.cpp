@@ -23,15 +23,18 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "oraclepreparedstatement.h"
 #include <kgenericfactory.h>
 #include <kdebug.h>
+#include <string>
 //#include <oci.h>
 //#include <occi.h>
 
 using namespace KexiDB;
+//using namespace oracle::occi;
+using namespace std;
 
 OracleConnection::OracleConnection(Driver *driver, ConnectionData &conn_data)
 	: Connection(driver,conn_data)
 	, d(new OracleConnectionInternal(this))
-	,active(false)
+	, active(false)
 {
 }
 
@@ -58,9 +61,9 @@ bool OracleConnection::drv_connect(ServerVersionInfo& version)
 	  version.release = versionRe.cap(3).toInt();
 	  return true;
 	 }
-	 catch ( ea)
+	 catch ( &ea)
 	 {
-	  KexiDBDrvDbg <<ea.getMessage().c_str();
+	  KexiDBDrvDbg <<ea.what();
 	  return false;
 	 }
 }
@@ -70,32 +73,26 @@ bool OracleConnection::drv_disconnect()
   return d->db_disconnect();
 }
 
-//////////////////////////////////////////////////////////
-// Down here is incomplete code, so it won't work (surely)
-
-
 // TODO: Do we need this?
-Cursor* OracleConnection::prepareQuery(const QString& statement, uint cursor_options)
+Cursor* OracleConnection::prepareQuery
+                                 (const QString& statement, uint cursor_options)
 {
 	return new OracleCursor(this,statement,cursor_options);
 }
 
 // TODO: Do we need this?
-Cursor* OracleConnection::prepareQuery( QuerySchema& query, uint cursor_options )
+Cursor* OracleConnection::prepareQuery(QuerySchema& query, uint cursor_options )
 {
 	return new OracleCursor( this, query, cursor_options );
 }
 
-
-// TODO: See below (this piece of code should be removed)
-
-bool OracleConnection::drv_getDatabasesList( QStringList &list )
 /*
  As databases doesnt exist in Oracle we should redefine the concept
  on purpose of cheating kexi.
  The only database wich can exist is the current user.
  That database exists if it contains kexi tables.
 */
+bool OracleConnection::drv_getDatabasesList( QStringList &list )
 {
 	KexiDBDrvDbg <<endl;
 	QString user;
@@ -104,21 +101,23 @@ bool OracleConnection::drv_getDatabasesList( QStringList &list )
 		d->rs->next();
 		user=QString(d->rs->getString(1).c_str());
 		d->stmt->closeResultSet(d->rs);
+		d->rs=0;
 		
-		d->rs=d->stmt->executeQuery("select COUNT(*) from user_tables where table_name like \'KEXI__%\'");
+		d->rs=d->stmt->executeQuery
+		     ("select COUNT(*) from user_tables where table_name like \'KEXI__%\'");
 	  d->rs->next();
 	  
 	  if (d->rs->getInt(1)>0) list.append(user);
 		d->stmt->closeResultSet(d->rs);
+		d->rs=0;
 		
-		KexiDBDrvDbg <<list<<endl;
+		//KexiDBDrvDbg <<list<<endl;
 		return true;
 	}
-	catch ( ea)
+	catch (&ea)
   {
        //d->errno=ea.getErrorCode();
-       KexiDBDrvDbg << "OracleConnection::drv_getDatabasesList error: "
-       							<<ea.what()<<"\n";
+       KexiDBDrvDbg << "error: "<<ea.what()<<"\n";
        return(false);
   }
   
@@ -126,71 +125,99 @@ bool OracleConnection::drv_getDatabasesList( QStringList &list )
 
 // TODO: Understand this
 /**
- * Our server does not offer a list of databases (as just only one exists)
- * So, I am not sure about the semantics of this, should every database exist?
- * Or should not exist any at all?
- * Choices are: return true, return false or default to parent behaviour
+ * Oracle doesnt offer a list of db (the equivalent would be user schemas)
+ * So,it returns true if dbName is the current Schema
  */
 bool OracleConnection::drv_createDatabase( const QString &dbName) {
 	KexiDBDrvDbg << dbName << endl;
 	QString user;
 	int res;
-	try{
+
+	try
+	{
 		d->rs=d->stmt->executeQuery("SELECT user FROM DUAL");
 		if(d->rs->next()) user=QString(d->rs->getString(1).c_str());
 		d->stmt->closeResultSet(d->rs);
+		d->rs=0;
 		res=!user.compare(dbName);
+		if(res)
+		{
+		  //d->stmt->execute
+		  //    ("CREATE TABLE KEXI__AUX (ID NUMBER PRIMARY KEY,CREATION TIMESTAMP)");
+		  d->createSequences();  
+		}
     return res;
 	}
-	catch (ea)
+	catch (&ea)
 	{
 	  KexiDBDrvDbg << ea.getMessage().c_str()<< endl;
 	  return(false);
 	}
 }
 
-bool OracleConnection::drv_databaseExists( const QString &dbName, bool /*ignoreErrors*/ )
+bool OracleConnection::drv_databaseExists
+                                 ( const QString &dbName, bool /*ignoreErrors*/)
 {
 	QString user;
 	int res;
-	try{
+	try
+	{
 	  if(active) return true;
 	  
 		d->rs=d->stmt->executeQuery("SELECT user FROM DUAL");
 		if(d->rs->next()) user=QString(d->rs->getString(1).c_str());
 		d->stmt->closeResultSet(d->rs);
+		d->rs=0;
 		res=!user.compare(dbName);
-	  
-	  /*d->rs=d->stmt->executeQuery("select COUNT(*) from user_tables where table_name like \'KEXI__%\'");
-	  d->rs->next();
-	  res=res && (d->rs->getInt(1)>0);
-	  d->stmt->closeResultSet(d->rs);*/
-	  KexiDBDrvDbg << dbName <<":"<<res<< endl;
+	  //KexiDBDrvDbg << dbName <<":"<<res<< endl;
     return res;
 	}
-	catch ( ea)
+	catch ( &ea)
 	{
-	  KexiDBDrvDbg << "OracleConnection::drv_dataBaseExists: "<< ea.what()<< endl;
+	  KexiDBDrvDbg << ea.what()<< endl;
 	  return(false);
 	}
 }
 
-
-// TODO: How should we use this?
-/**
- * Since there is just one big database with many schemas,
- * this could be used for user switching
- * or even disconnecting and connecting to other servers.
- */
+/*
+Checks if we have all the needed triggers. This is not checked in 
+drv_createdatabase because createdatabase from connection calls the drv before
+creating the tables of the project.
+*/
 bool OracleConnection::drv_useDatabase(const QString &dbName,
 																	 bool *cancelled, MessageHandler* msgHandler)
 {
-KexiDBDrvDbg <<endl;
+  KexiDBDrvDbg <<endl;
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
+	bool createtg, createsq;
 //TODO is here escaping needed?
 	if( d->useDatabase(dbName))
 	{
+	  try
+	  {
+	    //KexiDBDrvDbg<<"Counting triggers"<<endl; 
+	    d->rs=d->stmt->executeQuery
+	    ("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME LIKE 'KEXI__TG__%'");
+	    createtg=!d->rs->next() || d->rs->getInt(1)<(SYSTABLES +1);
+	    d->stmt->closeResultSet(d->rs);
+	    d->rs=0;
+	    
+	    /*d->rs=d->stmt->executeQuery
+	    ("SELECT COUNT(*) FROM USER_OBJECTS WHERE OBJECT_NAME LIKE 'KEXI__SEQ%'");
+	    createsq=!d->rs->next() || d->rs->getInt(1)<SYSTABLES;
+	    d->stmt->closeResultSet(d->rs);
+	    d->rs=0;
+	    */
+	  }
+	  catch(&ea)
+	  {
+	    KexiDBDrvDbg <<ea.what()<<endl;
+	    return false;
+	  }
+	  //if(createsq)  d->createSequences();
+	  if(createtg)  d->createTriggers();
+
 	  active=true;
 	  return true;
 	}
@@ -198,8 +225,8 @@ KexiDBDrvDbg <<endl;
 }
 
 /**
- * Closing means disconnecting
- * By now, this does nothing
+ * As there are no databases inside an oracle database you cannot close it 
+ * (aka: close the session) without disconnecting.
  */
 bool OracleConnection::drv_closeDatabase()
 {
@@ -208,42 +235,76 @@ bool OracleConnection::drv_closeDatabase()
 	return true;
 }
 
-/**
- * We cannot do that unless we mean users.
- */
-bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
 /*
-TODO
-Drop the database acording our refeinition should be droping all KEXI__ tables
+Drops the database acording our refeinition is droping all KEXI__ tables,
+secuences and triggers
 */
+bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
 {
-	KexiDBDrvDbg <<"Oracle does not provide such functionality";
-	return true;
+	KexiDBDrvDbg <<endl;
+	string dropkexi ="DECLARE\n";
+	string droptg="DECLARE\n";
+	string dropsq="DECLARE\n";
+	dropkexi=dropkexi+"CURSOR C_KEXI IS SELECT * FROM USER_TABLES\n"              
+	                 +"WHERE TABLE_NAME LIKE 'KEXI__%';\n"                        
+	                 +"BEGIN\n"                                                   
+	                 +"FOR V_KEXI IN C_KEXI LOOP\n"                               
+	                 +"EXECUTE IMMEDIATE 'DROP TABLE ' || V_KEXI.TABLE_NAME;\n"   
+                   +"END LOOP;\n"                                                   
+                   +"END;\n"; 
+                   
+  droptg=droptg    +"CURSOR C_KEXI IS SELECT * FROM USER_OBJECTS\n"              
+	                 +"WHERE OBJECT_NAME LIKE 'KEXI__TG__%';\n"                        
+	                 +"BEGIN\n"                                                   
+	                 +"FOR V_KEXI IN C_KEXI LOOP\n"                               
+	                 +"EXECUTE IMMEDIATE 'DROP TRIGGER ' || V_KEXI.OBJECT_NAME;\n"   
+                   +"END LOOP;\n"                                                   
+                   +"END;\n";   
+                   
+  dropsq=dropsq   +"CURSOR C_KEXI IS SELECT * FROM USER_OBJECTS\n"              
+	                +"WHERE OBJECT_NAME LIKE 'KEXI__SEQ%';\n"                        
+	                +"BEGIN\n"                                                   
+	                +"FOR V_KEXI IN C_KEXI LOOP\n"                               
+	                +"EXECUTE IMMEDIATE 'DROP SEQUENCE ' || V_KEXI.OBJECT_NAME;\n"   
+                  +"END LOOP;\n"                                                   
+                  +"END;\n";                   
+	try{
+		d->stmt->execute(dropkexi);
+		d->stmt->execute(droptg);
+		d->stmt->execute(dropsq);
+	  return true;
+	}
+	catch (&ea)
+	{
+	  KexiDBDrvDbg <<ea.what()<<endl;
+	  return false;
+	}
 }
+/*
+  Extract from Oracle documentation:
+	As soon as you connect to the oralce database, a transaction begins.
+	Once the transaction begins, every SQL DML statement you issue subsequently 
+	becomes a part of this transaction (DDL are autocommited).
+	A transaction ends when you disconnect from the database,
+	or when you issue a COMMIT or ROLLBACK command. 
 
+	Autonomus transactions must be defined in PL/SQL blocks and 
+	has no link to the calling transaction,
+	so only commited data can be shared by both transactions.
+*/
 TransactionData* OracleConnection::drv_beginTransaction()
 {
-	/*Extract from Oracle documentation:
-	 As soon as you connect to the oralce database, a transaction begins.
-	 Once the transaction begins, every SQL DML statement you issue subsequently 
-	 becomes a part of this transaction (DDL are autocommited).
-	 A transaction ends when you disconnect from the database,
-	 or when you issue a COMMIT or ROLLBACK command. 
-	*/
-	/*
-	 Autonomus transactions must be defined in PL/SQL blocks and 
-	 has no link to the calling transaction,
-	 so only commited data can be shared by both transactions.
-	 */
 	return new TransactionData(this);
 }
 bool OracleConnection::drv_setAutoCommit(bool on)
 {
 	try{
 	  d->stmt->setAutoCommit(on);
+	  KexiDBDrvDbg <<":true"<<endl;
 	  return true;
-	}catch ( ea){
+	}catch ( &ea){
 	  KexiDBDrvDbg <<ea.getMessage().c_str();
+	  KexiDBDrvDbg <<":false"<<endl;
 	  return false;
 	}
 }
@@ -254,59 +315,55 @@ bool OracleConnection::drv_executeSQL( const QString& statement )
 }
 
 /**
- * RowID must be stored somewhere (read OracleConnectionInternal) or there must 
- * be a way to get it, else, return false
+ * RowID in Oracle is not a number, is an alphanumeric string
  */
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
 {
-  KexiDBDrvDbg <<endl;
-	return false;
+  KexiDBDrvDbg << endl;
+  try
+  {
+    d->rs=d->stmt->executeQuery("SELECT KEXI__SEQ__.CURRVAL FROM DUAL");
+    if(d->rs->next()) return d->rs->getInt(1);
+  }
+  catch(&ea)
+  {
+    KexiDBDrvDbg<<ea.what()<<endl;
+  }
+  return -1;
 }
 
-/**
- * Return result from server.
- */
+
 int OracleConnection::serverResult()
 {
 	return d->errno;
 }
 
-/**
- * Returns an empty string.
- */
 QString OracleConnection::serverResultName()
 {
 	return QString::null;
 }
 
-/**
- * Clears result from server.
- */
 void OracleConnection::drv_clearServerResult()
 {
-	if (!d)
-		return;
+	if (!d) return;
 	d->errno = 0;
 	d->errmsg="";
 }
 
-/**
- * Returns error message from server.
- */
 QString OracleConnection::serverErrorMsg()
 {
 	return d->errmsg;
 }
 
-/**
+/*
  * Finds out if a given table exists
  */
 bool OracleConnection::drv_containsTable( const QString &tableName )
 {
   KexiDBDrvDbg<<endl;
 	bool success;
-	return resultExists(QString("SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE \'"+tableName.upper()+"\'")
-		.arg(driver()->escapeString(tableName)), success) && success;
+	return resultExists(QString("SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE %1")
+		.arg(driver()->escapeString(tableName).upper()), success) && success;
 }
 
 /**
@@ -316,16 +373,20 @@ bool OracleConnection::drv_getTablesList( QStringList &list )
 {
   KexiDBDrvDbg<<endl;
 	KexiDB::Cursor *cursor;
-	if (!(cursor = executeQuery( "SELECT TABLE_NAME FROM ALL_TABLES" ))) {
-		return false;
-	}
+	if (!(cursor = executeQuery( "SELECT TABLE_NAME FROM ALL_TABLES" ))) 
+	{
+	  return false;
+  }
 	list.clear();
 	cursor->moveFirst();
-	while (!cursor->eof() && !cursor->error()) {
+	
+	while (!cursor->eof() && !cursor->error()) 
+	{
 		list += cursor->value(0).toString();
 		cursor->moveNext();
 	}
-	if (cursor->error()) {
+	if (cursor->error()) 
+	{
 		deleteCursor(cursor);
 		return false;
 	}
@@ -335,10 +396,11 @@ bool OracleConnection::drv_getTablesList( QStringList &list )
 /**
  * What is this?
  */
-PreparedStatement::Ptr OracleConnection::prepareStatement(PreparedStatement::StatementType type,
-	FieldList& fields)
+PreparedStatement::Ptr OracleConnection::prepareStatement
+                      (PreparedStatement::StatementType type, FieldList& fields)
 {
     KexiDBDrvDbg<<endl;
-		return KSharedPtr<PreparedStatement>(new OraclePreparedStatement(type, *d, fields) );
-	//return KSharedPtr<PreparedStatement>( new OraclePreparedStatement(type, *d, fields) );
+		return KSharedPtr<PreparedStatement>
+		                              (new OraclePreparedStatement(type,*d,fields));
 }
+

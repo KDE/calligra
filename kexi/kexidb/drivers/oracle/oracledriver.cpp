@@ -60,15 +60,17 @@ OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 	d->typeNames[Field::BLOB]="BLOB";
 
 	// Custom behaviour
-	beh->ROW_ID_FIELD_NAME="ROWID";
+	beh->ROW_ID_FIELD_NAME="O_ID";
 	// beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true; I don't think so
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER='\'';
 	beh->UNSIGNED_TYPE_KEYWORD="";
+	//Autoincrement
 	beh->SPECIAL_AUTO_INCREMENT_DEF = false;
 	beh->AUTO_INCREMENT_FIELD_OPTION="";
 	beh->AUTO_INCREMENT_PK_FIELD_OPTION="PRIMARY KEY";
+	beh->AUTO_INCREMENT_TYPE = "";
 
 	initDriverSpecificKeywords(keywords);
 	//beh->SQL_KEYWORDS = keywords;
