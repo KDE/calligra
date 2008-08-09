@@ -241,21 +241,24 @@ void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
     }
 }
 
-QWidget * KarbonPatternTool::createOptionWidget()
+QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
 {
-    QTabWidget * tabWidget = new QTabWidget();
+    QMap<QString, QWidget *> widgets;
+
     m_optionsWidget = new KarbonPatternOptionsWidget();
+    connect( m_optionsWidget, SIGNAL(patternChanged()),
+             this, SLOT(patternChanged()) );
+
     KarbonPatternChooser * chooser = new KarbonPatternChooser();
     connect( chooser, SIGNAL( itemDoubleClicked(QTableWidgetItem*)),
              this, SLOT(patternSelected(QTableWidgetItem*)));
-    connect( m_optionsWidget, SIGNAL(patternChanged()),
-             this, SLOT(patternChanged()) );
-    tabWidget->addTab( m_optionsWidget, i18n( "Edit Pattern" ) );
-    tabWidget->addTab( chooser, i18n( "Choose Pattern" ) );
+
+    widgets.insert( "Pattern Options", m_optionsWidget );
+    widgets.insert( "Patterns", chooser );
 
     updateOptionsWidget();
 
-    return tabWidget;
+    return widgets;
 }
 
 void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
