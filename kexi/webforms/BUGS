@@ -13,3 +13,5 @@ When a bug/regression disappears it means that it has been (hopefully) fixed
   
 - After creating rows in a table, it gets locked so it is impossible to delete tables afterwards
   WORK AROUND: restart kwebforms
+
+- Data is not %-decoded when inserted in the database
