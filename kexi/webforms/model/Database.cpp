@@ -77,6 +77,11 @@ namespace Database {     // begin namespace Database
         for (uint i = 0; i < tableSchema.fieldCount(); i++) {
             values.append(cursor->value(i));
         }
+
+        if (cursor) {
+            cursor->close();
+            gConnection->deleteCursor(cursor);
+        }
         
         return QPair< KexiDB::TableSchema, QList<QVariant> >(tableSchema, values);
     }
