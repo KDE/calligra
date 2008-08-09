@@ -70,7 +70,7 @@ namespace View {
                 setValue("MESSAGE", "Row added successfully");
             } else {
                 m_dict->ShowSection("ERROR");
-                setValue("MESSAGE", gConnection->errorMsg());
+                setValue("MESSAGE", KexiWebForms::Model::gConnection->errorMsg());
             }
         }
         

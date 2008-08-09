@@ -20,15 +20,10 @@
 
 #include <QString>
 
-#include <KDebug>
-
-#include <kexidb/utils.h>
-#include <kexidb/cursor.h>
-#include <kexidb/queryschema.h>
-
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "model/DataProvider.h"
+
+#include "../../model/Database.h"
 #include "TemplateProvider.h"
 
 #include "Delete.h"
@@ -39,16 +34,13 @@ namespace KexiWebForms { // begin namespace KexiWebForms
 namespace View {         // begin namespace View
     
     void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        /// @todo ensure that there's the correct number of parameters
         QString requestedTable(d["uri-table"]);
         QString pkeyName(d["uri-pkey"]);
         QString pkeyValue(d["uri-pval"]);
         
         setValue("TABLENAME", requestedTable);
-        
-        kDebug() << "Trying to delete row..." << endl;
-        if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
-                              pkeyName, pkeyValue)) {
+
+        if (KexiWebForms::Model::Database::deleteRow(requestedTable, pkeyName, pkeyValue)) {
             m_dict->ShowSection("SUCCESS");
             setValue("MESSAGE", "Row deleted successfully");
         } else {

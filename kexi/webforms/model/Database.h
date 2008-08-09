@@ -25,9 +25,9 @@
 #include <QPair>
 #include <QHash>
 
+#include <kexidb/global.h>
 #include <kexidb/field.h>
 
-#include <boost/tuple/tuple.hpp>
 
 namespace KexiDB {
     class TableSchema;
@@ -68,6 +68,14 @@ namespace Database {     // begin namespace Database
      * @param create create a new row, instead of trying to update it
      */
     bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
+
+    /*!
+     * Deletes a row from the database
+     * @param KexiDB::TableSchema* the table schema
+     * @param QString& primary key name
+     * @param QString& primary key value
+     */
+    bool deleteRow(const QString&, const QString&, const QString&);
 
     /*!
      * Read the contents of a table

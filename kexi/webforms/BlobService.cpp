@@ -61,14 +61,14 @@ namespace KexiWebForms {
             QString pkey(queryString.at(4));
             QString pkeyVal(queryString.at(5));
 
-            KexiDB::TableSchema* tableSchema = gConnection->tableSchema(table);
+            KexiDB::TableSchema* tableSchema = KexiWebForms::Model::gConnection->tableSchema(table);
             KexiDB::Field* field = tableSchema->field(fieldName);
 
             if (field->type() == KexiDB::Field::BLOB) {
                 // Perform the rest of the query
                 KexiDB::QuerySchema query(*tableSchema);
                 query.addToWhereExpression(tableSchema->field(pkey), QVariant(pkeyVal));
-                KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+                KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->executeQuery(query);
 
                 QByteArray blobData;
                 // There should be only one record
@@ -91,7 +91,7 @@ namespace KexiWebForms {
                     writer->send();
                 }
 
-                gConnection->deleteCursor(cursor);
+                KexiWebForms::Model::gConnection->deleteCursor(cursor);
             }
         } else {
             writer->write("Not Authorized");

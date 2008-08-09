@@ -31,6 +31,7 @@
 #include <kexidb/connection.h>
 
 namespace KexiWebForms {
+namespace Model {    
 
     KexiDB::Connection* gConnection;
     
@@ -87,5 +88,6 @@ namespace KexiWebForms {
         }
         return status;
     }
-
+    
+}
 }

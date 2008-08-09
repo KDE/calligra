@@ -27,6 +27,7 @@
 
 #include <KDebug>
 
+#include <kexidb/utils.h>
 #include <kexidb/field.h>
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
@@ -126,6 +127,10 @@ namespace Database {     // begin namespace Database
             gConnection->deleteCursor(cursor);
         }
         return result;
+    }
+
+    bool deleteRow(const QString& table, const QString& pkeyName, const QString& pkeyValue) {
+        return KexiDB::deleteRow(*gConnection, gConnection->tableSchema(table), pkeyName, pkeyValue);
     }
 
     QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString& tableName) {

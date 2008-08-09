@@ -26,6 +26,8 @@
 class QString;
 
 namespace KexiWebForms {
+namespace Model {
+    
     /*!
      * Global connection object
      *
@@ -42,6 +44,8 @@ namespace KexiWebForms {
      * @return boolean false when error occurs, true if everything went well
      */
     bool initDatabase(const QString& fileName);
+    
+}
 }
 
 #endif /* KEXIWEBFORMS_DATAPROVIDER_H */

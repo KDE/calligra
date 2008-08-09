@@ -46,7 +46,7 @@ namespace View {
         
         QString queryData;
         bool ok = true;
-        KexiDB::QuerySchema* querySchema = gConnection->querySchema(requestedQuery);
+        KexiDB::QuerySchema* querySchema = KexiWebForms::Model::gConnection->querySchema(requestedQuery);
         if (!querySchema) {
             setValue("ERROR", QString("Could not find query \"%1\"").arg(requestedQuery));
             ok = false;
@@ -61,15 +61,15 @@ namespace View {
         }
         if (ok) {
             //! @todo more checks
-            KexiDB::Cursor* cursor = gConnection->executeQuery(*querySchema);
+            KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->executeQuery(*querySchema);
             
             /* awful */
             int recordsTotal = 0;
             while (cursor->moveNext())
                 recordsTotal++;
-            gConnection->deleteCursor(cursor);
+            KexiWebForms::Model::gConnection->deleteCursor(cursor);
             
-            cursor = gConnection->executeQuery(*querySchema);
+            cursor = KexiWebForms::Model::gConnection->executeQuery(*querySchema);
             
             setValue("QUERYNAME", querySchema->caption());
             
@@ -132,7 +132,7 @@ namespace View {
                     // End row
                     queryData.append("</tr>\n");
                     
-                    gConnection->deleteCursor(cursor);
+                    KexiWebForms::Model::gConnection->deleteCursor(cursor);
                     setValue("QUERYDATA", queryData);
                 }
                 

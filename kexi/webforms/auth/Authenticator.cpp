@@ -54,7 +54,7 @@ namespace Auth {
 
     // fictional loadStore, returns a fixed list of users
     bool Authenticator::loadStore() {
-        KexiDB::TableSchema* table = gConnection->tableSchema("kexi__users");
+        KexiDB::TableSchema* table = KexiWebForms::Model::gConnection->tableSchema("kexi__users");
         
         if (!table) {
             // the table doesn't exist, create it
@@ -80,16 +80,16 @@ namespace Auth {
             KexiDB::Field* fquery = new KexiDB::Field("u_query", KexiDB::Field::Boolean);
             kexi__users->insertField(7, fquery);
 
-            if (!gConnection->createTable(kexi__users)) {
+            if (!KexiWebForms::Model::gConnection->createTable(kexi__users)) {
                 // Table was not created, fatal error
                 kError() << "Failed to create system table kexi__users" << endl;
-                kError() << "Error string: " << gConnection->errorMsg() << endl;
+                kError() << "Error string: " << KexiWebForms::Model::gConnection->errorMsg() << endl;
                 delete kexi__users;
                 return false;
             } else {
                 // Table was created, create two standard accounts
                 KexiDB::QuerySchema query(*kexi__users);
-                KexiDB::Cursor* cursor = gConnection->prepareQuery(query);
+                KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->prepareQuery(query);
                 KexiDB::RecordData recordData(kexi__users->fieldCount());
                 KexiDB::RowEditBuffer editBuffer(true);
                 // root
@@ -136,13 +136,13 @@ namespace Auth {
                     kError() << "An error occurred" << endl;
                     return false;
                 }
-                gConnection->deleteCursor(cursor);
+                KexiWebForms::Model::gConnection->deleteCursor(cursor);
             }
         } else {
             // load stuff from the store, create appropriated User objects, store them within
             // Authenticator
             KexiDB::QuerySchema query(*table);
-            KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+            KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->executeQuery(query);
             while (cursor->moveNext()) {
                 // Skip id
                 QString* username = new QString(cursor->value(1).toString());
