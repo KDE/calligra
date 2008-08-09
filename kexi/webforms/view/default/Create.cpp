@@ -85,7 +85,17 @@ namespace View {
             } else {
                 formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\"/></td>\n").arg(f->name()));
             }
-            formData.append("\t</tr>\n");
+            // Field icons
+            formData.append("\t\t<td>\n");
+            if (f->isPrimaryKey())
+                formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>");
+            
+            if (f->isNotEmpty() && f->isAutoIncrement()) {
+                formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto Increment\"/>");
+            } else if (f->isNotEmpty()) {
+                formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>");
+            }
+            formData.append("\n</td>\n\t</tr>\n");
             fieldsList << f->name();
         }
         

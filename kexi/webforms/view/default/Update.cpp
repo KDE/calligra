@@ -130,7 +130,17 @@ namespace View {
                 formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
                                 .arg(field->name()).arg(pair.second.at(i).toString()));
             }
-            formData.append("\t</tr>\n");
+            // Field icons
+            formData.append("\t\t<td>\n");
+            if (field->isPrimaryKey())
+                formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>");
+            
+            if (field->isNotEmpty() && field->isAutoIncrement()) {
+                formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto Increment\"/>");
+            } else if (field->isNotEmpty()) {
+                formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>");
+            }
+            formData.append("\n</td>\n\t</tr>\n");
             formFieldsList << field->name();
         }
         

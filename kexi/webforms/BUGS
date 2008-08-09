@@ -7,8 +7,4 @@ When a bug/regression disappears it means that it has been (hopefully) fixed
   WORK AROUND: restart kwebforms
 
 == REGRESSIONS ==
-- No field type icons
-  Comment by Lorenzo Villani: this was impossible with the first version of getSchema in Database.cpp
-    But now it should be easier to get icons back.
-
 - Data is not %-decoded when inserted in the database
