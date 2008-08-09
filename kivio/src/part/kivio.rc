@@ -38,7 +38,6 @@
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
             <Action name="view_show_guides"/>
-            <Action name="view_snapguides"/>
         </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
