@@ -28,7 +28,8 @@ class KoPAPageThumbnailModel;
 class QListView;
 class QModelIndex;
 
-/* KPrPresenterViewSlidesInterface
+/**
+ * KPrPresenterViewSlidesInterface
  * This widget shows all slides in the presentation
  */
 class KPrPresenterViewSlidesInterface : public KPrPresenterViewBaseInterface

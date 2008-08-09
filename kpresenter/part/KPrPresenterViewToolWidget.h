@@ -27,7 +27,8 @@ class QLabel;
 class QTimer;
 class QToolButton;
 
-/* KPrPresenterViewToolWidget
+/**
+ * KPrPresenterViewToolWidget
  * This widget shows all navigation functions (previous and next slide) together
  * with clock and timer
  */

@@ -24,6 +24,12 @@
 
 class KoPAPageBase;
 
+/**
+ * KPrPresenterViewBaseInterface
+ * This widget is the base interface for all widget used as user interface in the
+ * presenter view feature. This class can be subclassed to provide different kind
+ * of user interface.
+ */
 class KPrPresenterViewBaseInterface : public QWidget
 {
     Q_OBJECT
@@ -31,6 +37,7 @@ public:
     KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
 public slots:
+    /// set the active page to @p page
     virtual void setActivePage( KoPAPageBase *page );
 
 signals:

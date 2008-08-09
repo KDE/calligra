@@ -30,7 +30,8 @@ class QTextEdit;
 class KoPACanvas;
 class KoPAPageBase;
 
-/* KPrPresenterViewInterface
+/**
+ * KPrPresenterViewInterface
  * This widget is the main interface, this widget shows current slide, next slide
  * and the presenter's notes
  */
@@ -43,6 +44,7 @@ public:
     void setPreviewSize( const QSize &size );
 
 public slots:
+    /// reimplemented
     virtual void setActivePage( KoPAPageBase *page );
 
 private:

@@ -65,10 +65,32 @@ public:
     KPrCustomSlideShows* customSlideShows();
     void setCustomSlideShows( KPrCustomSlideShows* replacement );
 
+    /**
+     * Get the presentation monitor (screen) used for presentation
+     *
+     * @return the screen used for presentation, starting from screen 0
+     */
     int presentationMonitor();
+
+    /**
+     * Set the presentation monitor (screen) used for presentation
+     *
+     * @param monitor the new screen number used for presentation
+     */
     void setPresentationMonitor( int monitor );
 
+    /**
+     * Check whether the presenter view feature is enabled for presentation
+     *
+     * @return true if presenter view is enabled, false otherwise
+     */
     bool isPresenterViewEnabled();
+
+    /**
+     * Enable / disable the presenter view features
+     *
+     * @param enabled whether the presenter view should be enabled or disabled
+     */
     void setPresenterViewEnabled( bool enabled );
 
 protected:
