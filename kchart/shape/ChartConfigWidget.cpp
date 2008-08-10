@@ -682,7 +682,6 @@ void ChartConfigWidget::datasetColorSelected( const QColor& color )
 
 void ChartConfigWidget::ui_dataSetsInRowsChanged( bool b )
 {
-    qDebug() << "ui_dataSetsInRowsChanged" << b;
     emit dataDirectionChanged( b ? Qt::Horizontal : Qt::Vertical );
 }
 

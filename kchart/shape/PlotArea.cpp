@@ -556,9 +556,7 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingC
                 brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
             else if ( fill == "gradient" )
             {
-                qDebug() << "LOADING GRADIENT" << dataSet->number();
                 brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
-                qDebug() << brush;
             }
             else if ( fill == "bitmap" )
                 brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );

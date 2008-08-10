@@ -160,7 +160,6 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext
             else if ( fill == "gradient" )
             {
                 brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
-                qDebug() << brush;
             }
             else if ( fill == "bitmap" )
                 brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
