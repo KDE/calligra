@@ -152,34 +152,16 @@ QString CellDataSet::labelDataRegionString() const
 void CellDataSet::setXDataRegion( const CellRegion &region )
 {
     m_xDataRegion = region;
-    int newSize = 0;
-    
-    QRect boundingRect;
-    foreach ( const QRect &rect, region.rects() )
-    {
-        newSize += qMax( rect.width(), rect.height() );
-        boundingRect |= rect;
-    }
-    
-    if ( boundingRect.height() > 1 )
-        m_xDataDirection = Qt::Vertical;
-    else
-        m_xDataDirection = Qt::Horizontal;
-
-    m_size = qMax( m_size, newSize );
+    updateSize();
 }
 
 void CellDataSet::setYDataRegion( const CellRegion &region )
 {
     m_yDataRegion = region;
-    m_yDataDirection = region.orientation();
-    const int oldSize = m_size;
-    m_size = region.cellCount();
+    updateSize();
     
     if ( !m_blockSignals && m_kdChartModel )
     {
-        if ( oldSize != m_size )
-            m_kdChartModel->dataSetSizeChanged( this, m_size );
         m_kdChartModel->dataChanged( m_kdChartModel->index( 0,          m_kdDataSetNumber ),
                                      m_kdChartModel->index( m_size - 1, m_kdDataSetNumber ) );
     }
@@ -188,55 +170,19 @@ void CellDataSet::setYDataRegion( const CellRegion &region )
 void CellDataSet::setCustomDataRegion( const CellRegion &region )
 {
     m_customDataRegion = region;
-    int newSize = 0;
-    
-    QRect boundingRect;
-    foreach ( const QRect &rect, region.rects() )
-    {
-        newSize += qMax( rect.width(), rect.height() );
-        boundingRect |= rect;
-    }
-    
-    if ( boundingRect.height() > 1 )
-        m_customDataDirection = Qt::Vertical;
-    else
-        m_customDataDirection = Qt::Horizontal;
-
-    m_size = qMax( m_size, newSize );
+    updateSize();
 }
 
 void CellDataSet::setCategoryDataRegion( const CellRegion &region )
 {
     m_categoryDataRegion = region;
-    int newSize = 0;
-    
-    QRect boundingRect;
-    foreach ( const QRect &rect, region.rects() )
-    {
-        newSize += qMax( rect.width(), rect.height() );
-        boundingRect |= rect;
-    }
-    
-    if ( boundingRect.height() > 1 )
-        m_categoryDataDirection = Qt::Vertical;
-    else
-        m_categoryDataDirection = Qt::Horizontal;
-    
-    m_size = qMax( m_size, newSize );
+    updateSize();
 }
 
 void CellDataSet::setLabelDataRegion( const CellRegion &region )
 {
     m_labelDataRegion = region;
-    
-    QRect boundingRect;
-    foreach ( const QRect &rect, region.rects() )
-        boundingRect |= rect;
-    
-    if ( boundingRect.height() > 1 )
-        m_labelDataDirection = Qt::Vertical;
-    else
-        m_labelDataDirection = Qt::Horizontal;
+    updateSize();
 }
 
 void CellDataSet::setXDataRegionString( const QString &string )
@@ -291,7 +237,7 @@ void CellDataSet::yDataChanged( const QRect &rect ) const
     
     QVector<QRect> yDataRegionRects = m_yDataRegion.rects();
     
-    if ( m_yDataDirection == Qt::Horizontal )
+    if ( m_yDataRegion.orientation() == Qt::Horizontal )
     {
         QPoint topLeft = rect.topLeft();
         QPoint topRight = rect.topRight();
