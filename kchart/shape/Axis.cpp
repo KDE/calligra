@@ -967,7 +967,7 @@ void Axis::update() const
         d->kdLineDiagram->doItemsLayout();
         d->kdLineDiagram->update();
     }
-    d->plotArea->parent()->relayout();
+    d->plotArea->parent()->requestRepaint();
 }
 
 KDChart::CartesianAxis *Axis::kdAxis() const

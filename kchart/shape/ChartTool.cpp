@@ -490,7 +490,7 @@ void ChartTool::setDataDirection( Qt::Orientation direction )
     if ( !d->shape )
         return;
     d->shape->proxyModel()->setDataDirection( direction );
-    d->shape->update();
+    d->shape->relayout();
 }
 
 void ChartTool::setFirstRowIsLabel( bool b )
@@ -498,7 +498,7 @@ void ChartTool::setFirstRowIsLabel( bool b )
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->proxyModel()->setFirstRowIsLabel( b );
-    d->shape->update();
+    d->shape->relayout();
 }
 
 void ChartTool::setFirstColumnIsLabel( bool b )
@@ -506,7 +506,7 @@ void ChartTool::setFirstColumnIsLabel( bool b )
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->proxyModel()->setFirstColumnIsLabel( b );
-    d->shape->update();
+    d->shape->relayout();
 }
 
 

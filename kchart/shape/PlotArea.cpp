@@ -781,9 +781,10 @@ bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
 
 void PlotArea::update() const
 {
+    requestRepaint();
     foreach( Axis* axis, d->axes )
         axis->update();
-    relayout();
+    KoShape::update();
 }
 
 void PlotArea::requestRepaint() const
@@ -873,8 +874,9 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
 
 void PlotArea::relayout() const
 {
-    d->pixmapRepaintRequested = true;
-    KoShape::update();
+    Q_ASSERT( d->kdPlane );
+    d->kdPlane->relayout();
+    update();
 }
 
 #include "PlotArea.moc"
