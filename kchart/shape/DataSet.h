@@ -153,6 +153,8 @@ public:
     void blockSignals( bool block );
 
 protected:
+    void updateSize();
+    
     ChartType m_chartType;
     ChartSubtype m_chartSubType;
     ChartType m_globalChartType;
@@ -179,12 +181,6 @@ protected:
     CellRegion m_customDataRegion;
     CellRegion m_labelDataRegion;
     CellRegion m_categoryDataRegion;
-    
-    Qt::Orientation m_xDataDirection;
-    Qt::Orientation m_yDataDirection;
-    Qt::Orientation m_customDataDirection;
-    Qt::Orientation m_labelDataDirection;
-    Qt::Orientation m_categoryDataDirection;
     
     ProxyModel *m_model;
     KDChart::AbstractDiagram *m_kdDiagram;

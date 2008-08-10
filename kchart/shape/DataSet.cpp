@@ -236,18 +236,18 @@ QBrush DataSet::brush() const
 void DataSet::setPen( const QPen &pen )
 {
     m_pen = pen;
-    if ( m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
+    if ( !m_blockSignals && m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
         m_kdDiagram->setPen( m_kdDataSetNumber, pen );
-    if ( m_attachedAxis )
+    if ( !m_blockSignals && m_attachedAxis )
         m_attachedAxis->update();
 }
 
 void DataSet::setBrush( const QBrush &brush )
 {
     m_brush = brush;
-    if ( m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
+    if ( !m_blockSignals && m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
         m_kdDiagram->setBrush( m_kdDataSetNumber, brush );
-    if ( m_attachedAxis )
+    if ( !m_blockSignals && m_attachedAxis )
         m_attachedAxis->update();
 }
 
@@ -270,12 +270,12 @@ int DataSet::number() const
 
 void DataSet::setNumber( int num )
 {
-    if ( m_attachedAxis )
+    if ( !m_blockSignals && m_attachedAxis )
         m_attachedAxis->detachDataSet( this );
     
     m_num = num;
     
-    if ( m_attachedAxis )
+    if ( !m_blockSignals && m_attachedAxis )
         m_attachedAxis->attachDataSet( this );
 }
 
@@ -459,4 +459,19 @@ void DataSet::categoryDataChanged( int start, int end ) const
 void DataSet::blockSignals( bool block )
 {
 	m_blockSignals = block;
+}
+
+void DataSet::updateSize()
+{
+    int newSize = 0;
+    newSize = qMax( newSize, m_xDataRegion.cellCount() );
+    newSize = qMax( newSize, m_yDataRegion.cellCount() );
+    newSize = qMax( newSize, m_customDataRegion.cellCount() );
+    newSize = qMax( newSize, m_categoryDataRegion.cellCount() );
+    
+    if ( newSize != m_size && !m_blockSignals && m_kdChartModel )
+    {
+        m_size = newSize;
+        m_kdChartModel->dataSetSizeChanged( this, m_size );
+    }
 }
