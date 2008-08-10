@@ -1123,11 +1123,6 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         dataSet->setGlobalChartType( chartType );
     }
     
-    if ( *oldModel )
-    	(*oldModel)->emitReset();
-    if ( newModel )
-    	newModel->emitReset();
-    
     d->plotAreaChartType = chartType;
     
     d->kdPlane->layoutPlanes();
