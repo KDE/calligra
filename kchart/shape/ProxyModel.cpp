@@ -346,11 +346,11 @@ QVariant ProxyModel::data( const QModelIndex &index,
 
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
-    QPoint topLeftPoint( topLeft.column(), topLeft.row() );
+    QPoint topLeftPoint( topLeft.column() + 1, topLeft.row() + 1 );
     // Excerpt from the Qt reference for QRect::bottomRight() which is used for calculating bottomRight
     // Note that for historical reasons this function returns QPoint(left() + width() -1, top() + height() - 1).
     QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
-    QRect dataChangedRect = QRect( topLeftPoint, QSize( bottomRightPoint.x() - topLeftPoint.x(), bottomRightPoint.y() - topLeftPoint.y() ) );
+    QRect dataChangedRect = QRect( topLeftPoint, QSize( bottomRightPoint.x() - topLeftPoint.x() + 1, bottomRightPoint.y() - topLeftPoint.y() + 1 ) );
     
     foreach ( DataSet *dataSet, d->dataSets )
     {
