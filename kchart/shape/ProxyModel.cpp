@@ -272,7 +272,9 @@ void ProxyModel::rebuildDataMap()
     while ( d->dataSets.size() > createdDataSetCount )
     {
     	DataSet *dataSet = d->dataSets.takeLast();
-    	dataSet->setKdChartModel( 0 );
+    	// TODO: Restore attached axis when dataset is re-inserted?
+    	if ( dataSet->attachedAxis() )
+    	    dataSet->attachedAxis()->detachDataSet( dataSet, true );
         d->removedDataSets.append( dataSet );
     }
 }
