@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>771</width>
-    <height>409</height>
+    <height>507</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -82,16 +82,19 @@
       <bool>true</bool>
      </property>
      <property name="dragDropMode" >
-      <enum>QAbstractItemView::NoDragDrop</enum>
+      <enum>QAbstractItemView::DropOnly</enum>
      </property>
      <property name="selectionMode" >
       <enum>QAbstractItemView::ExtendedSelection</enum>
+     </property>
+     <property name="movement" >
+      <enum>QListView::Static</enum>
      </property>
      <property name="flow" >
       <enum>QListView::LeftToRight</enum>
      </property>
      <property name="viewMode" >
-      <enum>QListView::ListMode</enum>
+      <enum>QListView::IconMode</enum>
      </property>
     </widget>
    </item>
@@ -109,7 +112,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
@@ -145,13 +148,16 @@
       <bool>true</bool>
      </property>
      <property name="dragDropMode" >
-      <enum>QAbstractItemView::DragDrop</enum>
+      <enum>QAbstractItemView::DropOnly</enum>
      </property>
      <property name="movement" >
-      <enum>QListView::Snap</enum>
+      <enum>QListView::Static</enum>
      </property>
      <property name="flow" >
       <enum>QListView::LeftToRight</enum>
+     </property>
+     <property name="viewMode" >
+      <enum>QListView::IconMode</enum>
      </property>
     </widget>
    </item>
@@ -162,7 +168,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>20</height>
