@@ -30,7 +30,7 @@
 
 namespace KChart {
 
-class DataSet
+class CHARTSHAPELIB_EXPORT DataSet
 {
 public:
     DataSet( ProxyModel *model );
