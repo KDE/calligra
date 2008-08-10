@@ -31,6 +31,9 @@
 #include <QPen>
 #include <QColor>
 
+// KDE
+#include <KLocale>
+
 // KDChart
 #include <KDChartDataValueAttributes>
 #include <KDChartAbstractDiagram>
@@ -461,6 +464,9 @@ QVariant DataSet::labelData() const
     const int cellCount = d->labelDataRegion.cellCount();
     for ( int i = 0; i < cellCount; i++ )
         label += d->data( d->labelDataRegion, i ).toString();
+    
+    if ( label.isEmpty() )
+        label = i18n( "Series %1", number() );
 
     return QVariant( label );
 }
