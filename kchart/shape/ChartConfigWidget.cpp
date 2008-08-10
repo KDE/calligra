@@ -254,8 +254,15 @@ ChartConfigWidget::ChartConfigWidget()
     d->tableEditorDialog = new QDialog( this );
     d->tableEditor.setupUi( d->tableEditorDialog );
     d->tableView = new ChartTableView;
-    d->tableEditor.gridLayout->addWidget( d->tableView );
+    d->tableEditor.tableViewContainer->addWidget( d->tableView );
     d->tableEditorDialog->hide();
+    
+    connect( d->tableEditor.firstRowIsLabel, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( firstRowIsLabelChanged( bool ) ) );
+    connect( d->tableEditor.firstColumnIsLabel, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( firstColumnIsLabelChanged( bool ) ) );
+    connect( d->tableEditor.dataSetsInRows, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_dataSetsInRowsChanged( bool ) ) );
     
     connect( d->ui.showTitle, SIGNAL( toggled( bool ) ),
              this, SIGNAL( showTitleChanged( bool ) ) );
@@ -654,6 +661,12 @@ void ChartConfigWidget::datasetColorSelected( const QColor& color )
     emit datasetColorChanged( d->dataSets[ d->selectedDataSet ], color );
 }
 
+void ChartConfigWidget::ui_dataSetsInRowsChanged( bool b )
+{
+    qDebug() << "ui_dataSetsInRowsChanged" << b;
+    emit dataDirectionChanged( b ? Qt::Horizontal : Qt::Vertical );
+}
+
 void ChartConfigWidget::setThreeDMode( bool threeD )
 {
     d->threeDMode = threeD;
@@ -841,6 +854,29 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->setText( d->shape->legend()->title() );
         d->ui.legendTitle->blockSignals( false );
     }
+    
+    
+    if ( d->shape->proxyModel()->dataDirection() == Qt::Horizontal )
+    {
+        d->tableEditor.dataSetsInRows->blockSignals( true );
+        d->tableEditor.dataSetsInRows->setChecked( true );
+        d->tableEditor.dataSetsInRows->blockSignals( false );
+    }
+    else
+    {
+        d->tableEditor.dataSetsInColumns->blockSignals( true );
+        d->tableEditor.dataSetsInColumns->setChecked( true );
+        d->tableEditor.dataSetsInColumns->blockSignals( false );
+    }
+
+    d->tableEditor.firstColumnIsLabel->blockSignals( true );
+    d->tableEditor.firstColumnIsLabel->blockSignals( true );
+    
+    d->tableEditor.firstRowIsLabel->setChecked( d->shape->proxyModel()->firstRowIsLabel() );
+    d->tableEditor.firstColumnIsLabel->setChecked( d->shape->proxyModel()->firstColumnIsLabel() );
+    
+    d->tableEditor.firstColumnIsLabel->blockSignals( false );
+    d->tableEditor.firstColumnIsLabel->blockSignals( false );
     
     blockSignals( false );
 }
