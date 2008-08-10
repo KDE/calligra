@@ -63,15 +63,6 @@ ProxyModel::Private::Private()
     spreadSheetModel = 0;
 }
 
-void ProxyModel::Private::resetDefaultDataSetProperties()
-{
-    for ( int i = 0; i < dataSets.size(); i++ )
-    {
-        dataSets[ i ]->setNumber( i );
-        dataSets[ i ]->setColor( defaultDataSetColor( i ) );
-    }
-}
-
 ProxyModel::ProxyModel()
     : QAbstractProxyModel( 0 ),
       d( new Private )
@@ -158,6 +149,9 @@ void ProxyModel::rebuildDataMap()
 	            else
 	                dataSet = d->dataSets[k];
 	            dataSet->blockSignals( true );
+                
+                dataSet->setNumber( createdDataSetCount );
+                dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
 	            
 	            CellRegion yDataRegion( j.value() );
 	            CellRegion labelDataRegion;
@@ -252,6 +246,9 @@ void ProxyModel::rebuildDataMap()
                     dataSet = d->dataSets[k];
                 dataSet->blockSignals( true );
                 
+                dataSet->setNumber( createdDataSetCount );
+                dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
+                
                 CellRegion yDataRegion( j.value() );
                 CellRegion labelDataRegion;
         
@@ -303,14 +300,25 @@ void ProxyModel::rebuildDataMap()
 	    for ( int i = 0; i < numRows; i += d->dataDimensions )
 	    {
 	        dataSetCount++;
+	        
+	        DataSet *dataSet = 0;
 	        // Only insert a new data set if we don't already have it
 	        if ( dataSetCount > d->dataSets.count() )
 	        {
 	        	if ( !d->removedDataSets.isEmpty() )
-	        		d->dataSets.append( d->removedDataSets.takeLast() );
+	        	    dataSet = d->removedDataSets.takeLast();
 	        	else
-	        		d->dataSets.append( new DataSet( this ) );
+	        		dataSet = new DataSet( this );
+	            
+	            d->dataSets.append( dataSet );
 	        }
+	        else
+	            dataSet = d->dataSets[ dataSetCount - 1 ];
+            
+	        dataSet->blockSignals( true );
+            dataSet->setNumber( dataSetCount - 1 );
+            dataSet->setColor( defaultDataSetColor( dataSetCount - 1 ) );
+            dataSet->blockSignals( false );
 	        
 	        if ( d->dataDimensions == 1 )
 	        {
@@ -336,8 +344,6 @@ void ProxyModel::rebuildDataMap()
 	        d->removedDataSets.append( dataSet );
 	    }
 	}
-	
-	d->resetDefaultDataSetProperties();
 }
 
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
