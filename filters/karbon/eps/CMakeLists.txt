@@ -1,5 +1,4 @@
 
-
 ########### next target ###############
 
 #set(karbonepsexport_PART_SRCS epsexport.cc epsexportdlg.cc )
@@ -15,16 +14,17 @@
 
 ########### next target ###############
 
+macro_optional_find_package(Pstoedit)
+
+if (PSTOEDIT_SVG_PLUGIN_FOUND)
+
 set(karbonepsimport_PART_SRCS epsimport.cc pscommentlexer.cc )
 
 kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 
-
-
 target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} koguiutils )
 
 install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
 
 ########### install files ###############
 
@@ -35,46 +35,6 @@ FILES
 #  	karbon_ps_import.desktop
 DESTINATION ${SERVICES_INSTALL_DIR})
 
+endif (PSTOEDIT_SVG_PLUGIN_FOUND)
 
-
-
-
-#original Makefile.am contents follow:
-
-#kde_module_LTLIBRARIES = \
-#	libkarbonepsexport.la \
-#	libkarbonepsimport.la
-#
-#libkarbonepsexport_la_SOURCES = \
-#	epsexport.cc \
-#	epsexportdlg.cc
-#
-#libkarbonepsexport_la_LDFLAGS = $(KDE_PLUGIN)
-#libkarbonepsexport_la_LIBADD  = $(LIB_KOGUIUTILS) ../../../karbon/libkarboncommon.la
-#
-#libkarbonepsimport_la_SOURCES = epsimport.cc pscommentlexer.cc
-#libkarbonepsimport_la_LDFLAGS = $(KDE_PLUGIN)
-#libkarbonepsimport_la_LIBADD  = $(LIB_KOGUIUTILS)
-#
-#INCLUDES = \
-#	$(KOFFICE_INCLUDES) \
-#	$(KOPAINTER_INCLUDES) \
-#	-I$(top_srcdir)/karbon \
-#	-I$(top_srcdir)/karbon/core \
-#	-I$(top_srcdir)/karbon/visitors \
-#	$(all_includes)
-#
-#service_DATA = \
-#	karbon_eps_export.desktop \
-#	karbon_eps_import.desktop \
-#	karbon_ps_import.desktop
-#
-#servicedir = $(kde_servicesdir)
-#
-#noinst_HEADERS = \
-#	epsexport.h \
-#	epsexportdlg.h \
-#	epsimport.h \
-#	pscommentlexer.h
-#
-#METASOURCES = AUTO
+macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit" "The Karbon eps import filter will not be built." "http://www.pstoedit.net/" FALSE "")
