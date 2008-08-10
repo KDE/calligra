@@ -47,8 +47,7 @@ public:
 
 public slots:
     virtual void setSourceModel( QAbstractItemModel *sourceModel );
-    virtual void setSourceModel( QAbstractItemModel *model, const QVector<QRect> &selection );
-    QAbstractItemModel *spreadSheetModel() const;
+    virtual void setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection );
 
     void setSelection( const QVector<QRect> &selection );
     DataSet *createDataSet();

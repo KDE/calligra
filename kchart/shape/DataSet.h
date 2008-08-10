@@ -34,7 +34,7 @@ class DataSet
 {
 public:
     DataSet( ProxyModel *model );
-    virtual ~DataSet();
+    ~DataSet();
 
     // Getter methods
     QString title() const;
@@ -94,39 +94,39 @@ public:
     void setLowerErrorLimit( double limit );
     void setUpperErrorLimit( double limit );
 
-    virtual QVariant xData( int index ) const;
-    virtual QVariant yData( int index ) const;
-    virtual QVariant customData( int index ) const;
-    virtual QVariant categoryData( int index ) const;
-    virtual QVariant labelData() const;
+    QVariant xData( int index ) const;
+    QVariant yData( int index ) const;
+    QVariant customData( int index ) const;
+    QVariant categoryData( int index ) const;
+    QVariant labelData() const;
 
-    virtual CellRegion xDataRegion() const { return CellRegion(); };
-    virtual CellRegion yDataRegion() const { return CellRegion(); };
-    virtual CellRegion customDataRegion() const { return CellRegion(); };
-    virtual CellRegion categoryDataRegion() const { return CellRegion(); };
-    virtual CellRegion labelDataRegion() const { return CellRegion(); };
+    CellRegion xDataRegion() const;
+    CellRegion yDataRegion() const;
+    CellRegion customDataRegion() const;
+    CellRegion categoryDataRegion() const;
+    CellRegion labelDataRegion() const;
     // TODO: Region for custom colors
 
-    virtual QString xDataRegionString() const { return QString(); };
-    virtual QString yDataRegionString() const { return QString(); };
-    virtual QString customDataRegionString() const { return QString(); };
-    virtual QString categoryDataRegionString() const { return QString(); };
-    virtual QString labelDataRegionString() const { return QString(); };
+    QString xDataRegionString() const;
+    QString yDataRegionString() const;
+    QString customDataRegionString() const;
+    QString categoryDataRegionString() const;
+    QString labelDataRegionString() const;
 
-    virtual void setXDataRegion( const CellRegion &region ) {};
-    virtual void setYDataRegion( const CellRegion &region ) {};
-    virtual void setCustomDataRegion( const CellRegion &region ) {};
-    virtual void setCategoryDataRegion( const CellRegion &region ) {};
-    virtual void setLabelDataRegion( const CellRegion &region ) {};
+    void setXDataRegion( const CellRegion &region );
+    void setYDataRegion( const CellRegion &region );
+    void setCustomDataRegion( const CellRegion &region );
+    void setCategoryDataRegion( const CellRegion &region );
+    void setLabelDataRegion( const CellRegion &region );
 
-    virtual void setXDataRegionString( const QString &region ) {};
-    virtual void setYDataRegionString( const QString &region ) {};
-    virtual void setCustomDataRegionString( const QString &region ) {};
-    virtual void setCategoryDataRegionString( const QString &region ) {};
-    virtual void setLabelDataRegionString( const QString &region ) {};
+    void setXDataRegionString( const QString &region );
+    void setYDataRegionString( const QString &region );
+    void setCustomDataRegionString( const QString &region );
+    void setCategoryDataRegionString( const QString &region );
+    void setLabelDataRegionString( const QString &region );
 
-    virtual int size() const;
-    virtual int dimension() const;
+    int size() const;
+    int dimension() const;
 
     void setKdDiagram( KDChart::AbstractDiagram *diagram );
     void setKdDataSetNumber( int number );
@@ -135,63 +135,26 @@ public:
     int kdDataSetNumber() const;
 
     // Called by the proxy model
-    virtual void yDataChanged( int start, int end ) const;
-    virtual void xDataChanged( int start, int end ) const;
-    virtual void customDataChanged( int start, int end ) const;
-    virtual void labelDataChanged() const;
-    virtual void categoryDataChanged( int start, int end ) const;
+    void yDataChanged( int start, int end ) const;
+    void xDataChanged( int start, int end ) const;
+    void customDataChanged( int start, int end ) const;
+    void labelDataChanged() const;
+    void categoryDataChanged( int start, int end ) const;
 
-    virtual void yDataChanged( const QRect &region ) const {};
-    virtual void xDataChanged( const QRect &region ) const {};
-    virtual void customDataChanged( const QRect &region ) const {};
-    virtual void labelDataChanged( const QRect &region ) const {};
-    virtual void categoryDataChanged( const QRect &region ) const {};
+    void yDataChanged( const QRect &region ) const;
+    void xDataChanged( const QRect &region ) const;
+    void customDataChanged( const QRect &region ) const;
+    void labelDataChanged( const QRect &region ) const;
+    void categoryDataChanged( const QRect &region ) const;
 
     void setKdChartModel( KDChartModel *model );
     KDChartModel *kdChartModel() const;
     
     void blockSignals( bool block );
 
-protected:
-    void updateSize();
-    
-    ChartType m_chartType;
-    ChartSubtype m_chartSubType;
-    ChartType m_globalChartType;
-    ChartSubtype m_globalChartSubType;
-    Axis *m_attachedAxis;
-    bool m_showMeanValue;
-    QPen m_meanValuePen;
-    bool m_showValues;
-    bool m_showLabels;
-    bool m_showLowerErrorIndicator;
-    bool m_showUpperErrorIndicator;
-    QPen m_errorIndicatorPen;
-    ErrorCategory m_errorCategory;
-    double m_errorPercentage;
-    double m_errorMargin;
-    double m_lowerErrorLimit;
-    double m_upperErrorLimit;
-    QPen m_pen;
-    QBrush m_brush;
-    int m_num;
-    
-    CellRegion m_xDataRegion;
-    CellRegion m_yDataRegion;
-    CellRegion m_customDataRegion;
-    CellRegion m_labelDataRegion;
-    CellRegion m_categoryDataRegion;
-    
-    ProxyModel *m_model;
-    KDChart::AbstractDiagram *m_kdDiagram;
-    int m_kdDataSetNumber;
-    
-    bool m_sourceIsSpreadSheet;
-    
-    KDChartModel *m_kdChartModel;
-    
-    int m_size;
-    bool m_blockSignals;
+private:
+    class Private;
+    Private *const d;
 };
 
 } // Namespace KChart

@@ -21,7 +21,7 @@
 // Local
 #include "PlotArea.h"
 #include "Axis.h"
-#include "CellDataSet.h"
+#include "DataSet.h"
 #include "Surface.h"
 #include "ThreeDScene.h"
 #include "ProxyModel.h"

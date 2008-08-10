@@ -11,7 +11,6 @@ SET (chartshape_LIB_SRCS
     KDChartConvertions.cpp
     Axis.cpp
     DataSet.cpp
-    CellDataSet.cpp
     CellRegion.cpp
     CellRegionStringValidator.cpp
     TableModel.cpp

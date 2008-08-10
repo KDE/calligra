@@ -70,7 +70,6 @@ typedef KoTextShapeData TextLabelData;
 namespace KChart {
 
 class DataSet;
-class CellDataSet;
 class ProxyModel;
 class Legend;
 class PlotArea;

@@ -22,7 +22,6 @@
 #include "ProxyModel.h"
 #include "Axis.h"
 #include "DataSet.h"
-#include "CellDataSet.h"
 #include <interfaces/KoChartModel.h>
 
 // Qt
@@ -50,7 +49,6 @@ public:
     QList<DataSet*> removedDataSets;
     
     QVector<QRect> selection;
-    QAbstractItemModel *spreadSheetModel;
 };
 
 ProxyModel::Private::Private()
@@ -60,7 +58,6 @@ ProxyModel::Private::Private()
     dataDimensions = 1;
 
     dataDirection = Qt::Horizontal;
-    spreadSheetModel = 0;
 }
 
 ProxyModel::ProxyModel()
@@ -75,300 +72,215 @@ ProxyModel::~ProxyModel()
 
 void ProxyModel::rebuildDataMap()
 {
-	if ( d->spreadSheetModel )
-	{
-	    int createdDataSetCount = 0;
-	    if ( d->dataDirection == Qt::Horizontal )
-	    {
-	        QMap<int, QVector<QRect> > rows;
-	        QMap<int, QVector<QRect> > sortedRows;
-	        // Split up region in horizontal rectangles
-	        // that are sorted from top to bottom
-	        foreach ( const QRect &rect, d->selection )
-	        {
-	            int x = rect.topLeft().x();
-	            for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ )
-	            {
-	                QRect dataRect = QRect( QPoint( x, y ), QSize( rect.width(), 1 ) );
-	                if ( !rows.contains( y ) )
-	                    rows.insert( y, QVector<QRect>() );
-	                rows[y].append( dataRect );
-	            }
-	        }
-	        
-	        // Sort rectangles in each row from left to right
-	        QMapIterator<int, QVector<QRect> > i( rows );
-	        while ( i.hasNext() )
-	        {
-	            i.next();
-	            int row = i.key();
-	            QVector<QRect> unsortedRects = i.value();
-	            QVector<QRect> sortedRects;
-	            
-	            foreach ( const QRect &rect, unsortedRects )
-	            {
-	                int index;
-	                
-	                for ( index = 0; index < sortedRects.size(); index++ )
-	                    if ( rect.topLeft().x() <= sortedRects[ index ].topLeft().x() )
-	                        break;
-	                
-	                sortedRects.insert( index, rect );
-	            }
-	            
-	            sortedRows.insert( row, sortedRects );
-	        }
-	        
-	        QMapIterator<int, QVector<QRect> > j( sortedRows );
-	        
-	        CellRegion categoryDataRegion;
-	        
-	        if ( d->firstRowIsLabel && j.hasNext() )
-	        {
-	            j.next();
-	            
-	            categoryDataRegion = CellRegion( j.value() );
-	            if ( d->firstColumnIsLabel )
-	                categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
-	        }
-	        
-	        int k = 0;
-	        while ( j.hasNext() )
-	        {
-	            j.next();
-	            
-	            DataSet *dataSet;
-	            if ( k >= d->dataSets.size() )
-	            {
-	                if ( !d->removedDataSets.isEmpty() )
-	                    dataSet = d->removedDataSets.takeLast();
-	                else
-	                    dataSet = new CellDataSet( this );
-	                d->dataSets.append( dataSet );
-	            }
-	            else
-	                dataSet = d->dataSets[k];
-	            dataSet->blockSignals( true );
-                
-                dataSet->setNumber( createdDataSetCount );
-                dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
-	            
-	            CellRegion yDataRegion( j.value() );
-	            CellRegion labelDataRegion;
-	    
-	            //qDebug() << "Creating data set with region" << j.value();
-	            if ( d->firstColumnIsLabel )
-	            {
-	                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
-	                labelDataRegion = CellRegion( labelDataPoint );
-	                
-	                yDataRegion.subtract( labelDataPoint );
-	            }
-	            
-	            dataSet->setYDataRegion( yDataRegion );
-	            dataSet->setCategoryDataRegion( categoryDataRegion );
-	            dataSet->setLabelDataRegion( labelDataRegion );
-	            k++;
-	            dataSet->blockSignals( false );
-	        }
-	        
-	        createdDataSetCount = k;
-	    }
-	    else
-	    {
-            QMap<int, QVector<QRect> > columns;
-            QMap<int, QVector<QRect> > sortedColumns;
-            // Split up region in horizontal rectangles
-            // that are sorted from top to bottom
-            foreach ( const QRect &rect, d->selection )
+    QVector<QRect> dataRegions;
+    if ( d->selection.isEmpty() )
+    {
+        const QRect dataBoundingRect( QPoint( 1, 1 ), QSize( sourceModel()->columnCount(), sourceModel()->rowCount() ) );
+        dataRegions.append( dataBoundingRect );
+    }
+    else
+        dataRegions = d->selection;
+    
+    int createdDataSetCount = 0;
+    if ( d->dataDirection == Qt::Horizontal )
+    {
+        QMap<int, QVector<QRect> > rows;
+        QMap<int, QVector<QRect> > sortedRows;
+        // Split up region in horizontal rectangles
+        // that are sorted from top to bottom
+        foreach ( const QRect &rect, dataRegions )
+        {
+            int x = rect.topLeft().x();
+            for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ )
             {
-                int y = rect.topLeft().y();
-                for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ )
-                {
-                    QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
-                    if ( !columns.contains( x ) )
-                        columns.insert( x, QVector<QRect>() );
-                    columns[x].append( dataRect );
-                }
+                QRect dataRect = QRect( QPoint( x, y ), QSize( rect.width(), 1 ) );
+                if ( !rows.contains( y ) )
+                    rows.insert( y, QVector<QRect>() );
+                rows[y].append( dataRect );
             }
-            
-            // Sort rectangles in each column from top to bottom
-            QMapIterator<int, QVector<QRect> > i( columns );
-            while ( i.hasNext() )
-            {
-                i.next();
-                int row = i.key();
-                QVector<QRect> unsortedRects = i.value();
-                QVector<QRect> sortedRects;
-                
-                foreach ( const QRect &rect, unsortedRects )
-                {
-                    int index;
-                    
-                    for ( index = 0; index < sortedRects.size(); index++ )
-                        if ( rect.topLeft().y() <= sortedRects[ index ].topLeft().y() )
-                            break;
-                    
-                    sortedRects.insert( index, rect );
-                }
-                
-                sortedColumns.insert( row, sortedRects );
-            }
-            
-            QMapIterator<int, QVector<QRect> > j( sortedColumns );
-            
-            CellRegion categoryDataRegion;
-            
-            if ( d->firstColumnIsLabel && j.hasNext() )
-            {
-                j.next();
-                
-                categoryDataRegion = CellRegion( j.value() );
-                if ( d->firstRowIsLabel )
-                    categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
-            }
-            
-            int k = 0;
-            while ( j.hasNext() )
-            {
-                j.next();
-                
-                DataSet *dataSet;
-                if ( k >= d->dataSets.size() )
-                {
-                    if ( !d->removedDataSets.isEmpty() )
-                        dataSet = d->removedDataSets.takeLast();
-                    else
-                        dataSet = new CellDataSet( this );
-                    d->dataSets.append( dataSet );
-                }
-                else
-                    dataSet = d->dataSets[k];
-                dataSet->blockSignals( true );
-                
-                dataSet->setNumber( createdDataSetCount );
-                dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
-                
-                CellRegion yDataRegion( j.value() );
-                CellRegion labelDataRegion;
+        }
         
-                //qDebug() << "Creating data set with region " << j.value();
-                if ( d->firstRowIsLabel )
-                {
-                    QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
-                    labelDataRegion = CellRegion( labelDataPoint );
-                    
-                    yDataRegion.subtract( labelDataPoint );
-                }
+        // Sort rectangles in each row from left to right
+        QMapIterator<int, QVector<QRect> > i( rows );
+        while ( i.hasNext() )
+        {
+            i.next();
+            int row = i.key();
+            QVector<QRect> unsortedRects = i.value();
+            QVector<QRect> sortedRects;
+            
+            foreach ( const QRect &rect, unsortedRects )
+            {
+                int index;
                 
-                dataSet->setYDataRegion( yDataRegion );
-                dataSet->setLabelDataRegion( labelDataRegion );
-                dataSet->setCategoryDataRegion( categoryDataRegion );
-                k++;
-                dataSet->blockSignals( false );
+                for ( index = 0; index < sortedRects.size(); index++ )
+                    if ( rect.topLeft().x() <= sortedRects[ index ].topLeft().x() )
+                        break;
+                
+                sortedRects.insert( index, rect );
             }
             
-            createdDataSetCount = k;
-	    }
-	    
-	    while ( d->dataSets.size() > createdDataSetCount )
-	    {
-	    	DataSet *dataSet = d->dataSets.takeLast();
-	    	dataSet->setKdChartModel( 0 );
-	        d->removedDataSets.append( dataSet );
-	    }
-	}
-	else
-	{
-		int numRows = rowCount();
-	    int dataSetCount = 0;
-	    
-	    // If we have 2 dimensions or more, the x data comes from
-	    // the first row by default
-	    int xDataRowInSourceModel = 0;
-	    int yDataRowInSourceModel = 0;
-	    
-	    if ( d->dataDimensions > 1 )
-	    {
-	        // Since first row is for x values,
-	        // move the first y value one row down
-	        yDataRowInSourceModel++;
-	    }
-	    
-	    d->dataMap.clear();
-	    
-	    for ( int i = 0; i < numRows; i += d->dataDimensions )
-	    {
-	        dataSetCount++;
-	        
-	        DataSet *dataSet = 0;
-	        // Only insert a new data set if we don't already have it
-	        if ( dataSetCount > d->dataSets.count() )
-	        {
-	        	if ( !d->removedDataSets.isEmpty() )
-	        	    dataSet = d->removedDataSets.takeLast();
-	        	else
-	        		dataSet = new DataSet( this );
-	            
-	            d->dataSets.append( dataSet );
-	        }
-	        else
-	            dataSet = d->dataSets[ dataSetCount - 1 ];
+            sortedRows.insert( row, sortedRects );
+        }
+        
+        QMapIterator<int, QVector<QRect> > j( sortedRows );
+        
+        CellRegion categoryDataRegion;
+        
+        if ( d->firstRowIsLabel && j.hasNext() )
+        {
+            j.next();
             
-	        dataSet->blockSignals( true );
-            dataSet->setNumber( dataSetCount - 1 );
-            dataSet->setColor( defaultDataSetColor( dataSetCount - 1 ) );
+            categoryDataRegion = CellRegion( j.value() );
+            if ( d->firstColumnIsLabel )
+                categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
+        }
+        
+        while ( j.hasNext() )
+        {
+            j.next();
+            
+            DataSet *dataSet;
+            if ( createdDataSetCount >= d->dataSets.size() )
+            {
+                if ( !d->removedDataSets.isEmpty() )
+                    dataSet = d->removedDataSets.takeLast();
+                else
+                    dataSet = new DataSet( this );
+                d->dataSets.append( dataSet );
+            }
+            else
+                dataSet = d->dataSets[createdDataSetCount];
+            dataSet->blockSignals( true );
+            
+            dataSet->setNumber( createdDataSetCount );
+            dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
+            
+            CellRegion yDataRegion( j.value() );
+            CellRegion labelDataRegion;
+    
+            //qDebug() << "Creating data set with region" << j.value();
+            if ( d->firstColumnIsLabel )
+            {
+                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
+                labelDataRegion = CellRegion( labelDataPoint );
+                
+                yDataRegion.subtract( labelDataPoint );
+            }
+            
+            dataSet->setYDataRegion( yDataRegion );
+            dataSet->setCategoryDataRegion( categoryDataRegion );
+            dataSet->setLabelDataRegion( labelDataRegion );
+            createdDataSetCount++;
             dataSet->blockSignals( false );
-	        
-	        if ( d->dataDimensions == 1 )
-	        {
-	            d->dataMap.insert( i, yDataRowInSourceModel );
-	        }
-	        else if ( d->dataDimensions == 2 )
-	        {
-	            d->dataMap.insert( i    , yDataRowInSourceModel );
-	            d->dataMap.insert( i + 1, xDataRowInSourceModel );
-	        }
-	        else if ( d->dataDimensions == 3 )
-	        {
-	            // TODO (Johannes): Handle third data dimension
-	        }
-	        yDataRowInSourceModel++;
-	    }
-	    
-	    while ( d->dataSets.size() > dataSetCount )
-	    {
-	    	DataSet *dataSet = d->dataSets.takeLast();
-	    	if ( dataSet->attachedAxis() )
-	    		dataSet->attachedAxis()->detachDataSet( dataSet );
-	        d->removedDataSets.append( dataSet );
-	    }
-	}
+        }
+    }
+    else
+    {
+        QMap<int, QVector<QRect> > columns;
+        QMap<int, QVector<QRect> > sortedColumns;
+        // Split up region in horizontal rectangles
+        // that are sorted from top to bottom
+        foreach ( const QRect &rect, dataRegions )
+        {
+            int y = rect.topLeft().y();
+            for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ )
+            {
+                QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
+                if ( !columns.contains( x ) )
+                    columns.insert( x, QVector<QRect>() );
+                columns[x].append( dataRect );
+            }
+        }
+        
+        // Sort rectangles in each column from top to bottom
+        QMapIterator<int, QVector<QRect> > i( columns );
+        while ( i.hasNext() )
+        {
+            i.next();
+            int row = i.key();
+            QVector<QRect> unsortedRects = i.value();
+            QVector<QRect> sortedRects;
+            
+            foreach ( const QRect &rect, unsortedRects )
+            {
+                int index;
+                
+                for ( index = 0; index < sortedRects.size(); index++ )
+                    if ( rect.topLeft().y() <= sortedRects[ index ].topLeft().y() )
+                        break;
+                
+                sortedRects.insert( index, rect );
+            }
+            
+            sortedColumns.insert( row, sortedRects );
+        }
+        
+        QMapIterator<int, QVector<QRect> > j( sortedColumns );
+        
+        CellRegion categoryDataRegion;
+        
+        if ( d->firstColumnIsLabel && j.hasNext() )
+        {
+            j.next();
+            
+            categoryDataRegion = CellRegion( j.value() );
+            if ( d->firstRowIsLabel )
+                categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
+        }
+        
+        while ( j.hasNext() )
+        {
+            j.next();
+            
+            DataSet *dataSet;
+            if ( createdDataSetCount >= d->dataSets.size() )
+            {
+                if ( !d->removedDataSets.isEmpty() )
+                    dataSet = d->removedDataSets.takeLast();
+                else
+                    dataSet = new DataSet( this );
+                d->dataSets.append( dataSet );
+            }
+            else
+                dataSet = d->dataSets[createdDataSetCount];
+            dataSet->blockSignals( true );
+            
+            dataSet->setNumber( createdDataSetCount );
+            dataSet->setColor( defaultDataSetColor( createdDataSetCount ) );
+            
+            CellRegion yDataRegion( j.value() );
+            CellRegion labelDataRegion;
+    
+            //qDebug() << "Creating data set with region " << j.value();
+            if ( d->firstRowIsLabel )
+            {
+                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
+                labelDataRegion = CellRegion( labelDataPoint );
+                
+                yDataRegion.subtract( labelDataPoint );
+            }
+            
+            dataSet->setYDataRegion( yDataRegion );
+            dataSet->setLabelDataRegion( labelDataRegion );
+            dataSet->setCategoryDataRegion( categoryDataRegion );
+            createdDataSetCount++;
+            dataSet->blockSignals( false );
+        }
+    }
+    
+    while ( d->dataSets.size() > createdDataSetCount )
+    {
+    	DataSet *dataSet = d->dataSets.takeLast();
+    	dataSet->setKdChartModel( 0 );
+        d->removedDataSets.append( dataSet );
+    }
 }
 
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 {
     connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
              this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
-    
-    // We now need DataSets instead of CellDataSets
-    if ( d->spreadSheetModel )
-    {
-    	while ( !d->dataSets.isEmpty() )
-    	{
-    		DataSet *dataSet = d->dataSets.takeLast();
-    		if ( dataSet )
-    			delete dataSet;
-    	}
-    	while ( !d->removedDataSets.isEmpty() )
-    	{
-    		DataSet *dataSet = d->removedDataSets.takeLast();
-    		if ( dataSet )
-    			delete dataSet;
-    	}
-    }
-    
-    d->spreadSheetModel = 0;
 
     QAbstractProxyModel::setSourceModel( sourceModel );
     
@@ -384,37 +296,13 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<
              this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
     d->selection = selection;
-    
-    // We now need CellDataSets instead of DataSets
-    if ( !d->spreadSheetModel )
-    {
-    	while ( !d->dataSets.isEmpty() )
-    	{
-    		DataSet *dataSet = d->dataSets.takeLast();
-    		if ( dataSet )
-    			delete dataSet;
-    	}
-    	while ( !d->removedDataSets.isEmpty() )
-    	{
-    		DataSet *dataSet = d->removedDataSets.takeLast();
-    		if ( dataSet )
-    			delete dataSet;
-    	}
-    }
 
     QAbstractProxyModel::setSourceModel( sourceModel );
-    
-    d->spreadSheetModel = sourceModel;
     
     rebuildDataMap();
 
     // Update the entire data set
     reset();
-}
-
-QAbstractItemModel *ProxyModel::spreadSheetModel() const
-{
-    return d->spreadSheetModel;
 }
 
 void ProxyModel::setSelection( const QVector<QRect> &selection )
@@ -425,11 +313,8 @@ void ProxyModel::setSelection( const QVector<QRect> &selection )
 
 DataSet *ProxyModel::createDataSet()
 {
-    if ( !d->spreadSheetModel )
-        return 0;
-    
     beginInsertRows( QModelIndex(), d->dataSets.size(), d->dataSets.size() );
-    DataSet *dataSet = new CellDataSet( this );
+    DataSet *dataSet = new DataSet( this );
     d->dataSets.append( dataSet );
     
     dataSet->setColor( defaultDataSetColor( d->dataSets.size() - 1 ) );
@@ -459,104 +344,31 @@ QVariant ProxyModel::data( const QModelIndex &index,
 
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
-	if ( d->spreadSheetModel )
-	{
-	    QPoint topLeftPoint( topLeft.column(), topLeft.row() );
-	    // Excerpt from the Qt reference for QRect::bottomRight() which is used for calculating bottomRight
-	    // Note that for historical reasons this function returns QPoint(left() + width() -1, top() + height() - 1).
-	    QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
-	    QRect dataChangedRect = QRect( topLeftPoint, QSize( bottomRightPoint.x() - topLeftPoint.x(), bottomRightPoint.y() - topLeftPoint.y() ) );
-	    
-	    foreach ( DataSet *dataSet, d->dataSets )
-	    {
-	        bool intersects = false;
-	        QRect changedRect;
-	        foreach ( const QRect &rect, dataSet->yDataRegion().rects() )
-	        {
-	            if ( rect.intersects( dataChangedRect ) )
-	            {
-	                changedRect |= rect.intersected( dataChangedRect );
-	                intersects = true;
-	                break;
-	            }
-	        }
-	        if ( intersects )
-	        {
-	            dataSet->yDataChanged( changedRect );
-	        }
-	    }
-	}
-	else
-	{
-	    int firstRow, lastRow;
-	    int firstCol, lastCol;
-	    int numRows;
-	    if ( d->dataDirection == Qt::Horizontal )
-	    {
-	        numRows = rowCount();
-	        firstRow = qMin( topLeft.row(), bottomRight.row() );
-	        lastRow  = qMax( topLeft.row(), bottomRight.row() );
-	        
-	        firstCol = qMin( topLeft.column(), bottomRight.column() );
-	        lastCol  = qMax( topLeft.column(), bottomRight.column() );
-	        
-	        if ( d->firstRowIsLabel )
-	        {
-	            firstRow--;
-	            lastRow--;
-	        }
-	        if ( d->firstColumnIsLabel )
-	        {
-	            firstCol--;
-	            lastCol--;
-	        }
-	    }
-	    else
-	    {
-	        numRows = columnCount();
-	        firstRow = qMin( topLeft.column(), bottomRight.column() );
-	        lastRow  = qMax( topLeft.column(), bottomRight.column() );
-	        
-	        firstCol = qMin( topLeft.row(), bottomRight.row() );
-	        lastCol  = qMax( topLeft.row(), bottomRight.row() );
+    QPoint topLeftPoint( topLeft.column(), topLeft.row() );
+    // Excerpt from the Qt reference for QRect::bottomRight() which is used for calculating bottomRight
+    // Note that for historical reasons this function returns QPoint(left() + width() -1, top() + height() - 1).
+    QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
+    QRect dataChangedRect = QRect( topLeftPoint, QSize( bottomRightPoint.x() - topLeftPoint.x(), bottomRightPoint.y() - topLeftPoint.y() ) );
+    
+    foreach ( DataSet *dataSet, d->dataSets )
+    {
+        bool intersects = false;
+        QRect changedRect;
+        foreach ( const QRect &rect, dataSet->yDataRegion().rects() )
+        {
+            if ( rect.intersects( dataChangedRect ) )
+            {
+                changedRect |= rect.intersected( dataChangedRect );
+                intersects = true;
+                break;
+            }
+        }
+        if ( intersects )
+        {
+            dataSet->yDataChanged( changedRect );
+        }
+    }
 	
-	        if ( d->firstRowIsLabel )
-	        {
-	            firstCol--;
-	            lastCol--;
-	        }
-	        if ( d->firstColumnIsLabel )
-	        {
-	            firstRow--;
-	            lastRow--;
-	        }
-	    }
-	    
-	    for ( int i = 0; i < numRows; i++ )
-	    {
-	        if ( d->dataMap[ i ] >= firstRow && d->dataMap[ i ] <= lastRow )
-	        {
-	            if ( d->dataDimensions == 1 )
-	            {
-    	            Q_ASSERT( i < d->dataSets.size() );
-    	            d->dataSets[ i ]->yDataChanged( firstCol, lastCol );
-	            }
-	            else if ( d->dataDimensions == 2 )
-                {
-                    int dataSet = int( i / 2 );
-                    Q_ASSERT( dataSet < d->dataSets.size() );
-                    if ( i % 2 == 0 )
-                        d->dataSets[ dataSet ]->yDataChanged( firstCol, lastCol );
-                    else
-                        d->dataSets[ dataSet ]->xDataChanged( firstCol, lastCol );
-                }
-	            else
-	            {
-	                Q_ASSERT_X( false, "ProxyModel::dataChanged", "No more than one data direction supported" );
-	            }
-	        }
-	    }
-	}
     emit dataChanged();
 }
 
