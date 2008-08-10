@@ -54,6 +54,7 @@ public:
     
     Qt::Orientation orientation() const;
     
+    void add( const CellRegion &other );
     void add( const QPoint &point );
     void add( const QRect &rect );
     void add( const QVector<QRect> &rects );

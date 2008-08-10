@@ -131,6 +131,11 @@ int CellRegion::cellCount() const
     return count;
 }
 
+void CellRegion::add( const CellRegion &other )
+{
+    add( other.rects() );
+}
+
 void CellRegion::add( const QPoint &point )
 {
     add( QRect( point, QSize( 1, 1 ) ) );
@@ -293,10 +298,10 @@ static QString rangeIntToString( int i )
 // static
 QVector<QRect> CellRegion::stringToRegion( const QString &string )
 {
-    const bool isPoint = !string.contains( ":" );
+    const bool isPoint = !string.contains( ':' );
     kDebug(350001) << "CellRegion::stringToRegion():" << string;
     QString s = string;
-    QStringList regionStrings = isPoint ? s.split( "." ) : s.remove( QChar(':') ).split( "." );
+    QStringList regionStrings = isPoint ? s.split( '.' ) : s.remove( ':' ).split( '.' );
     QPoint topLeftPoint;
     QPoint bottomRightPoint;
 
@@ -309,7 +314,7 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     const QString tableName = regionStrings[0];
 
     const QString topLeft = regionStrings[1];
-    QStringList l = topLeft.split( "$" );
+    QStringList l = topLeft.split( '$' );
     if ( l.size() < 3 )
     {
         kDebug(350001) << topLeft;
@@ -327,7 +332,7 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     }
 
     const QString bottomRight = regionStrings[2];
-    l = bottomRight.split( "$" );
+    l = bottomRight.split( '$' );
     if ( l.size() < 3 )
     {
         qWarning() << "CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
@@ -372,7 +377,7 @@ QString CellRegion::rangeIntToString( int i )
 static QString columnName( uint column )
 {
     if ( column < 1 || column > 32767 )
-        return QString("@@@");
+        return QString( "@@@" );
 
     QString   str;
     unsigned  digits = 1;
@@ -380,11 +385,11 @@ static QString columnName( uint column )
 
     column--;
 
-    for( unsigned limit = 26; column >= limit+offset; limit *= 26, digits++ )
+    for( unsigned limit = 26; column >= limit + offset; limit *= 26, digits++ )
         offset += limit;
 
-    for( unsigned col = column - offset; digits; --digits, col/=26 )
-        str.prepend( QChar( 'A' + (col%26) ) );
+    for( unsigned col = column - offset; digits; --digits, col /= 26 )
+        str.prepend( QChar( 'A' + ( col % 26 ) ) );
 
     return str;
 }
@@ -393,17 +398,17 @@ static QString columnName( uint column )
 QString CellRegion::regionToString( const QVector<QRect> &region )
 {
     QString result;
-    for (int i = 0; i < region.count(); ++i) {
+    for ( int i = 0; i < region.count(); ++i ) {
         const QRect range = region[i];
-        result.append(columnName(range.left()));
-        result.append(QString::number(range.top()));
-        if (range.topLeft() != range.bottomRight()) {
-            result.append(':');
-            result.append(columnName(range.right()));
-            result.append(QString::number(range.bottom()));
+        result.append( columnName( range.left() ) );
+        result.append( QString::number( range.top() ) );
+        if ( range.topLeft() != range.bottomRight() ) {
+            result.append( ':' );
+            result.append( columnName(range.right() ) );
+            result.append( QString::number( range.bottom() ) );
         }
-        if (i < region.count() - 1) {
-            result.append(';');
+        if ( i < region.count() - 1 ) {
+            result.append( ';' );
         }
     }
     return result;
