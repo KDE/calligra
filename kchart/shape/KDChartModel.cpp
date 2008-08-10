@@ -217,12 +217,6 @@ QVariant KDChartModel::headerData( int section,
         return QVariant();
     }
     
-    if ( section >= ( orientation == d->dataDirection ? rowCount() : columnCount() ) )
-    {
-        qWarning() << "KDChartModel::headerData(): Attempting to request header data for non-existant data set!";
-        return QVariant();
-    }
-    
     if ( orientation != d->dataDirection )
     {
         Q_ASSERT( section / d->dataDimensions < d->dataSets.count() );
