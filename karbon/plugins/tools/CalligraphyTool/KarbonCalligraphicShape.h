@@ -86,7 +86,9 @@ public:
     QPointF normalize();
 
     void simplifyPath();
-    
+
+    void simplifyGuidePath();
+
     // reimplemented
     virtual QString pathShapeId() const;
     
@@ -119,7 +121,7 @@ private:
     // 
     void addCap( int index1, int index2, int pointIndex, bool inverted=false );
 
-    // the actual data then determines it's shape
+    // the actual data then determines it's shape (guide path + data for points)
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
     double m_caps;

@@ -282,7 +282,7 @@ QPointF KarbonCalligraphicShape::normalize()
     QMatrix matrix;
     matrix.translate( -offset.x(), -offset.y() );
 
-    for( int i = 0; i < m_handles.size(); ++i )
+    for( int i = 0; i < m_points.size(); ++i )
     {
         m_points[i]->setPoint( matrix.map( m_points[i]->point() ) );
     }
@@ -300,7 +300,6 @@ void KarbonCalligraphicShape::moveHandleAction( int handleId,
 
 void KarbonCalligraphicShape::updatePath( const QSizeF &size )
 {
-    kDebug() << "updatePath";
     Q_UNUSED(size);
 
     QPointF pos = position();
@@ -309,13 +308,14 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
     clear();
     setPosition( QPoint(0, 0) );
 
-    foreach(KarbonCalligraphicPoint *p, m_points)
+    foreach ( KarbonCalligraphicPoint *p, m_points )
         appendPointToPath(*p);
 
     simplifyPath();
 
-    for (int i = 0; i < m_points.size(); ++i)
-        m_handles[i] = m_points[i]->point();
+    m_handles.clear();
+    foreach( KarbonCalligraphicPoint *p, m_points )
+        m_handles.append( p->point() );
 
     setPosition( pos );
 }
@@ -362,4 +362,34 @@ void KarbonCalligraphicShape::addCap( int index1, int index2, int pointIndex,
 QString KarbonCalligraphicShape::pathShapeId() const
 {
     return KarbonCalligraphicShapeId;
+}
+
+void KarbonCalligraphicShape::simplifyGuidePath()
+{
+    QList<QPointF> points;
+    foreach( KarbonCalligraphicPoint *p, m_points )
+        points.append( p->point() );
+
+    KoPathShape *simplified = bezierFit( points, 0.1 );
+
+    int index = 0; // index of simplified
+    QMutableListIterator<KarbonCalligraphicPoint *> i(m_points);
+    while ( i.hasNext() && index != simplified->pointCount() )
+    {
+        KoPathPoint *simplifiedPoint =
+                simplified->pointByIndex( KoPathPointIndex( 0, index ) );
+        KarbonCalligraphicPoint *point = i.next();
+        if ( point->point() != simplifiedPoint->point() )
+        {
+            delete point;
+            i.remove();
+        }
+        else
+        {
+            ++index;
+        }
+    }
+
+    updatePath( QSizeF() );
+    kDebug() << m_handles.size() << m_points.size();
 }
