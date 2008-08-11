@@ -191,7 +191,7 @@ void KarbonCalligraphicShape::smoothPoint( const int index )
     // normalize the vector (make it's size equal to 1)
     if ( ! qFuzzyCompare(dist + 1, 1) )
         vector /= dist;
-    double mult = 0.35; // found by trial and error, might not be perfect...
+    double mult = 0.5; // found by trial and error, might not be perfect...
     // distance of the control points from the point
     double dist1 = ( QLineF( point, prev ) ).length() * mult;
     double dist2 = ( QLineF( point, next ) ).length() * mult;
@@ -391,5 +391,4 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     }
 
     updatePath( QSizeF() );
-    kDebug() << m_handles.size() << m_points.size();
 }

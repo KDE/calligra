@@ -214,7 +214,7 @@ QPointF KarbonCalligraphyTool::calculateNewPoint( const QPointF &mousePos,
     if (m_followPathPosition >= m_selectedPathOutline.length())
     {
         t = 1.0;
-        m_endOfPath = true; // FIXME: last point never added???
+        m_endOfPath = true;
     }
     else
     {
@@ -261,16 +261,23 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
                             newSpeed/newLength : QPointF(0, 0);
     QPointF speed = oldSpeedNorm + newSpeedNorm;
 
+    kDebug() << speed;
+
     // angle solely based on the speed
     double speedAngle = 0;
     if ( speed.x() != 0 ) // avoid division by zero
     {
         speedAngle = std::atan( speed.y() / speed.x() );
     }
-    else if ( speed.y() != 0 )
+    else if ( speed.y() > 0 )
     {
         // x == 0 && y != 0
-        speedAngle = M_PI;
+        speedAngle = M_PI/2;
+    }
+    else if ( speed.y() < 0 )
+    {
+        // x == 0 && y != 0
+        speedAngle = -M_PI/2;
     }
     if ( speed.x() < 0 )
         speedAngle += M_PI;
