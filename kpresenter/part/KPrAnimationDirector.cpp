@@ -32,6 +32,8 @@
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
 #include <KoPAUtil.h>
+
+#include "KPrEndOfSlideShowPage.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
@@ -283,6 +285,9 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
             break;
         case LastPage:
             m_pageIndex = m_pages.size() - 1;
+            if ( dynamic_cast<KPrEndOfSlideShowPage *>( m_pages[m_pageIndex] ) && m_pageIndex > 0 ) {
+                m_pageIndex--;
+            }
             break;
         case PreviousStep:
         case NextStep:
