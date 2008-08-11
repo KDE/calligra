@@ -60,7 +60,7 @@ OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 	d->typeNames[Field::BLOB]="BLOB";
 
 	// Custom behaviour
-	beh->ROW_ID_FIELD_NAME="O_ID";
+	beh->ROW_ID_FIELD_NAME="ROW_ID";
 	// beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE=true; I don't think so
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;

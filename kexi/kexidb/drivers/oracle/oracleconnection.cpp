@@ -343,7 +343,7 @@ bool OracleConnection::drv_afterInsert(const QString& table, FieldList& fields)
    fields.insertField(0, row_id);
    */
    QString stat=QString("UPDATE "+table
-             +" SET ROW_ID=KEXI__SEQ__ROW_ID.NEXTVAL WHERE ROWID=NULL");
+             +" SET ROW_ID=KEXI__SEQ__ROW_ID.NEXTVAL WHERE ROW_ID IS NULL");
              
    return (d->executeSQL(stat)/*&&d->executeSQL("COMMIT")*/);
 
@@ -359,7 +359,7 @@ Q_ULLONG OracleConnection::drv_lastInsertRowID()
   try
   {
     d->rs=d->stmt->executeQuery
-    ("SELECT LAST_NUMBER from user_sequences WHERE SEQUENCE_NAME='KEXI__SEQ__ROW_ID'");
+    ("SELECT LAST_NUMBER-1 from user_sequences WHERE SEQUENCE_NAME='KEXI__SEQ__ROW_ID'");
     if(d->rs->next()) res=d->rs->getInt(1);
     d->stmt->closeResultSet(d->rs);
     d->rs=0;
