@@ -311,7 +311,7 @@ bool KWOdfLoader::loadPageLayout(KoOdfLoadingContext& context, const QString& ma
             else if ( style == "dotted" ) m_footNoteSeparatorLineType = SLT_DOT;
             else if ( style == "dot-dash" ) m_footNoteSeparatorLineType = SLT_DASH_DOT;
             else if ( style == "dot-dot-dash" ) m_footNoteSeparatorLineType = SLT_DASH_DOT_DOT;
-            else kdDebug() << "Unknown value for m_footNoteSeparatorLineType: " << style << endl;
+            else kDebug() << "Unknown value for m_footNoteSeparatorLineType: " << style;
             const QString pos = footnoteSep.attributeNS( KoXmlNS::style, "adjustment", QString::null );
             if ( pos == "centered" ) m_footNoteSeparatorLinePos = SLP_CENTERED;
             else if ( pos == "right") m_footNoteSeparatorLinePos = SLP_RIGHT;
