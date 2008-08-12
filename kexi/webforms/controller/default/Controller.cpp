@@ -129,9 +129,9 @@ namespace KexiWebForms {
             }
         } else if (action == "update") {
             if ((requestURI.count() == 3) && u.can(Auth::UPDATE)) {
-                data["uri-table"] = requestURI.at(0);
-                data["uri-pkey"] = requestURI.at(1);
-                data["uri-pval"] = requestURI.at(2);
+                data["table"] = requestURI.at(0);
+                data["pkey"] = requestURI.at(1);
+                data["pkeyValue"] = requestURI.at(2);
                 m_update->view(data, writer);
                 malformedRequest = false;
             }

@@ -111,13 +111,9 @@ namespace Database {     // begin namespace Database
         foreach(const QString& name, fieldNames) {
             QVariant currentValue(data.value(name));
             // FIXME: Regression, we don't encode data...
-            if (create) {
-                if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
-                    kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
-                    editBuffer.insert(*query.columnInfo(name), currentValue);
-                }
-            } else {
-                    editBuffer.insert(*query.columnInfo(name), currentValue);
+            if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
+                kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
+                editBuffer.insert(*query.columnInfo(name), currentValue);
             }
         }
         
@@ -158,6 +154,10 @@ namespace Database {     // begin namespace Database
                                                      .arg(tableName).arg(query.field(i)->name()).arg(table.primaryKey()->field(0)->name())
                                                      .arg(QString(pkeyVal)));
                     } else {
+                        QString escapedValue(cursor->value(i).toString());
+                        // the browser usally encodes spaces as pluses.
+                        escapedValue.replace("++", "+");
+                        
                         tableContents[record].append(Qt::escape(cursor->value(i).toString()));
                     }
                 }

@@ -63,6 +63,7 @@ namespace Database {     // begin namespace Database
     /*!
      * Despite its name, this method is useful when creating new rows, too
      * Create/Update a row in a given table
+     * Data is automatically percent-encoded
      * @param QString& the table name
      * @param QHash<QString, QVariant> a Hash with Name/Value pairs
      * @param create create a new row, instead of trying to update it
