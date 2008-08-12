@@ -58,24 +58,6 @@ void KarbonCalligraphicShape::appendPoint( const QPointF &point,
     m_handles.append( p );
     m_points.append(calligraphicPoint);
     appendPointToPath(*calligraphicPoint);
-
-    // add initial cap if it's the third point
-    // add initial cap
-
-    // use the third point instead of second when possible, the first
-    // points are generally to close together to generate correct results
-    //int index = (m_points.count() > 3) ? 3 : 1;
-    if ( m_points.count() > 3 )
-    {
-        addCap( 3, 0, 0, true );
-        // duplicate the last point to make the points remain "balanced"
-        // needed to keep all indexes code (else I would need to change
-        // everything in the code...)
-        KoPathPoint *last = pointByIndex( KoPathPointIndex(0, pointCount()-1) );
-        KoPathPoint *newPoint = new KoPathPoint( this, last->point() );
-        insertPoint( newPoint, KoPathPointIndex(0, pointCount()) );
-        close();
-    }
 }
 
 void KarbonCalligraphicShape::
@@ -143,6 +125,21 @@ void KarbonCalligraphicShape::
         }
     }
     normalize();
+
+    // add initial cap if it's the fourth point
+
+    if ( pointCount() == 8 )
+    {
+        kDebug() << "Adding caps!!!!!!!!!!!!!!!!";
+        addCap( 3, 0, 0, true );
+        // duplicate the last point to make the points remain "balanced"
+        // needed to keep all indexes code (else I would need to change
+        // everything in the code...)
+        KoPathPoint *last = pointByIndex( KoPathPointIndex(0, pointCount()-1) );
+        KoPathPoint *newPoint = new KoPathPoint( this, last->point() );
+        insertPoint( newPoint, KoPathPointIndex(0, pointCount()) );
+        close();
+    }
 }
 
 void KarbonCalligraphicShape::appendPointsToPathAux( const QPointF &p1,
@@ -370,37 +367,37 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     foreach( KarbonCalligraphicPoint *p, m_points )
         points.append( p->point() );
 
-    double angle = 0;   // cumulative angle used to determine if points
-                        // should be removed
-    QList<KarbonCalligraphicPoint *>::iterator i = m_points.begin() + 1;
+    // cumulative data used to determine if the point can be removed
+    //double angle = 0;
+    //double width = 0;
+    double direction = 0;
+    QList<KarbonCalligraphicPoint *>::iterator i = m_points.begin() + 2;
 
     while ( i != m_points.end()-1 )
     {
         QPointF point = (*i)->point();
 
-        double newAngle = 0;
+        double newDirection = 0;
         if ( i != m_points.begin() && (i+1) != m_points.end() )
         {
             QPointF prev = (*(i-1))->point();
             QPointF next = (*(i+1))->point();
-            newAngle = QLineF(prev, point).angleTo( QLineF(point, next) );
-            if ( newAngle > 180 )
-                newAngle -= 360;
+            newDirection = QLineF(prev, point).angleTo( QLineF(point, next) );
+            if ( newDirection > 180 )
+                newDirection -= 360;
         }
 
-        kDebug() << "angle:" << angle << newAngle << angle + newAngle;
-        if ( angle * newAngle >= 0 && qAbs(angle + newAngle) < 20 )
+        if ( direction * newDirection >= 0 &&
+             qAbs(direction + newDirection) < 20 )
         {
             // point deleted
-            kDebug() << "Point Deleted";
             delete *i;
             i = m_points.erase(i);
-            angle += newAngle;
+            direction += newDirection;
         }
         else
         {
-            kDebug() << "Keep Point";
-            angle = 0;
+            direction = 0;
             ++i;
         }
     }

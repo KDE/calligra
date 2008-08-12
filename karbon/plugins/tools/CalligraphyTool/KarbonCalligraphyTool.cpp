@@ -138,7 +138,6 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     }
 
     m_shape->simplifyGuidePath();
-    m_shape->simplifyPath();
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_shape );
     if( cmd )
@@ -260,8 +259,6 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ?
                             newSpeed/newLength : QPointF(0, 0);
     QPointF speed = oldSpeedNorm + newSpeedNorm;
-
-    kDebug() << speed;
 
     // angle solely based on the speed
     double speedAngle = 0;

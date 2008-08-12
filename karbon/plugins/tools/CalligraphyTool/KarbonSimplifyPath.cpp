@@ -42,7 +42,7 @@ FIXME: bezier fit seems to crash when getting to many points in input,
 
 namespace KarbonSimplifyPath {
     const double SUBDIVISION_COEFF = 100; // use error instead?
-    const int MAX_RECURSIVE_DEPTH = 512;
+    const int MAX_RECURSIVE_DEPTH = 1024;
     int recursiveDepth;
 
     void removeDuplicates( KoPathShape *path );
