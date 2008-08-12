@@ -56,6 +56,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &lo
 #endif
         }
     }
+    return true;
 }
 
 void KPrPageLayout::saveOdf( KoPASavingContext & context )

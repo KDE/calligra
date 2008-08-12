@@ -61,10 +61,12 @@ void KPrPlaceholder::saveOdf( KoPASavingContext & context )
 
 QString KPrPlaceholder::presentationObject()
 {
+  return QString();
 }
 
 QRectF KPrPlaceholder::position( const QRectF & pageSize )
 {
+  return QRectF();
 }
 
 qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, qreal absolute )

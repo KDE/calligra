@@ -31,6 +31,7 @@ KPrPageLayouts::~KPrPageLayouts()
 
 bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
 {
+  return false;
 }
 
 void KPrPageLayouts::loadOdf( KoPALoadingContext &loadingContext )
@@ -39,4 +40,5 @@ void KPrPageLayouts::loadOdf( KoPALoadingContext &loadingContext )
 
 KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name )
 {
+  return 0;
 }
