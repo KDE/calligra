@@ -681,7 +681,6 @@ void Document::slotPictureFound( const QString& frameName, const QString& pictur
     SubDocument subdoc( pictureFunctor, 0, frameName, pictureName );
     (*subdoc.functorPtr)();
     delete subdoc.functorPtr;
-    //m_subdocQueue.push( subdoc );
 }
 
 //process through all the subDocs and the tables

@@ -42,6 +42,11 @@ void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Wo
 
 }
 
+void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> )
+{
+    kDebug(30513) << "Escher data found";
+}
+
 void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf )
 {
     kDebug(30513) <<"wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size();

@@ -47,6 +47,7 @@ public:
 #ifdef IMAGE_IMPORT
     //////// PictureHandler interface
     virtual void bitmapData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+    virtual void escherData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void tiffData( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 #endif // IMAGE_IMPORT
