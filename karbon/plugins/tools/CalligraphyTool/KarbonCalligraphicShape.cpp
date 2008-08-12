@@ -370,23 +370,38 @@ void KarbonCalligraphicShape::simplifyGuidePath()
     foreach( KarbonCalligraphicPoint *p, m_points )
         points.append( p->point() );
 
-    KoPathShape *simplified = bezierFit( points, 0.1 );
+    double angle = 0;   // cumulative angle used to determine if points
+                        // should be removed
+    QList<KarbonCalligraphicPoint *>::iterator i = m_points.begin() + 1;
 
-    int index = 0; // index of simplified
-    QMutableListIterator<KarbonCalligraphicPoint *> i(m_points);
-    while ( i.hasNext() && index != simplified->pointCount() )
+    while ( i != m_points.end()-1 )
     {
-        KoPathPoint *simplifiedPoint =
-                simplified->pointByIndex( KoPathPointIndex( 0, index ) );
-        KarbonCalligraphicPoint *point = i.next();
-        if ( point->point() != simplifiedPoint->point() )
+        QPointF point = (*i)->point();
+
+        double newAngle = 0;
+        if ( i != m_points.begin() && (i+1) != m_points.end() )
         {
-            delete point;
-            i.remove();
+            QPointF prev = (*(i-1))->point();
+            QPointF next = (*(i+1))->point();
+            newAngle = QLineF(prev, point).angleTo( QLineF(point, next) );
+            if ( newAngle > 180 )
+                newAngle -= 360;
+        }
+
+        kDebug() << "angle:" << angle << newAngle << angle + newAngle;
+        if ( angle * newAngle >= 0 && qAbs(angle + newAngle) < 20 )
+        {
+            // point deleted
+            kDebug() << "Point Deleted";
+            delete *i;
+            i = m_points.erase(i);
+            angle += newAngle;
         }
         else
         {
-            ++index;
+            kDebug() << "Keep Point";
+            angle = 0;
+            ++i;
         }
     }
 
