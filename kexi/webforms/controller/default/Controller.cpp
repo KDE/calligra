@@ -97,9 +97,12 @@ namespace KexiWebForms {
         typedef pion::net::HTTPTypes::QueryParams::const_iterator SDIterator;
         pion::net::HTTPTypes::QueryParams params(request->getQueryParams());
 
-        /**
-         * some nasty things can happen here, for example someone can overwrite
-         * the data hash, this is not good
+        /*
+         * The request hash is filled before we fill the needed value for
+         * dispatched requests, this ensures that no forms values overwrites
+         * our needed data but it's not good, in fact you can't use
+         * kwebforms__table kwebforms__pkey kwebforms__pkeyValue kwebforms__query
+         * as field names
          */
         for (SDIterator it = params.begin(); it != params.end(); ++it) {
             data[QUrl::fromPercentEncoding(QByteArray(it->first.c_str()))] =
@@ -117,35 +120,35 @@ namespace KexiWebForms {
             }
         } else if (action == "create") {
             if ((requestURI.count() == 1) && u.can(Auth::CREATE)) {
-                data["uri-table"] = requestURI.at(0);
+                data["kwebforms__table"] = requestURI.at(0);
                 m_create->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "read") {
             if ((requestURI.count() == 1) && u.can(Auth::READ)) {
-                data["uri-table"] = requestURI.at(0);
+                data["kwebforms__table"] = requestURI.at(0);
                 m_read->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "update") {
             if ((requestURI.count() == 3) && u.can(Auth::UPDATE)) {
-                data["table"] = requestURI.at(0);
-                data["pkey"] = requestURI.at(1);
-                data["pkeyValue"] = requestURI.at(2);
+                data["kwebforms__table"] = requestURI.at(0);
+                data["kwebforms__pkey"] = requestURI.at(1);
+                data["kwebforms__pkeyValue"] = requestURI.at(2);
                 m_update->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "delete") {
             if ((requestURI.count() == 3) && u.can(Auth::DELETE)) {
-                data["uri-table"] = requestURI.at(0);
-                data["uri-pkey"] = requestURI.at(1);
-                data["uri-pval"] = requestURI.at(2);
+                data["kwebforms__table"] = requestURI.at(0);
+                data["kwebforms__pkey"] = requestURI.at(1);
+                data["kwebforms__pkeyValue"] = requestURI.at(2);
                 m_delete->view(data, writer);
                 malformedRequest = false;
             }
         } else if (action == "query") {
-            if ((requestURI.count() == 1) && u.can(Auth::QUERY)) {
-                data["uri-query"] = requestURI.at(0);
+            if ((requestURI.count() == 1) /*&& u.can(Auth::QUERY)*/) {
+                data["kwebforms__query"] = requestURI.at(0);
                 m_query->view(data, writer);
                 malformedRequest = false;
             }

@@ -46,7 +46,7 @@ namespace View {
         m_dict = initTemplate("create.tpl");
 
         /* Retrieve the requested table name */
-        QString requestedTable(d["uri-table"]);
+        QString requestedTable(d["kwebforms__table"]);
         setValue("TABLENAME", requestedTable);
         
         KexiDB::TableSchema* tableSchema = KexiWebForms::Model::Database::getSchema(requestedTable);

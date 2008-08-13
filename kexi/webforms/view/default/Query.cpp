@@ -24,13 +24,12 @@
 
 #include <KDebug>
 
-#include <kexidb/utils.h>
-#include <kexidb/cursor.h>
 #include <kexidb/queryschema.h>
 
 #include <pion/net/HTTPResponseWriter.hpp>
 
-#include "model/DataProvider.h"
+#include "../../model/Database.h"
+//#include "../../model/DataProvider.h"
 #include "TemplateProvider.h"
 
 #include "Query.h"
@@ -41,10 +40,36 @@ namespace KexiWebForms {
 namespace View {
     
     void Query::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        
-        QString requestedQuery(d["uri-query"]);
-        
+        QString requestedQuery(d["kwebforms__query"]);
+
+        QPair< KexiDB::QuerySchema, QMap<uint, QList<QString> > > pair = KexiWebForms::Model::Database::readQuery(requestedQuery);
+
         QString queryData;
+        uint totalRecords = pair.second.count();
+
+        // Query header
+        queryData.append("<tr>\t<th scope=\"col\">Record</th>\n");
+        foreach(const KexiDB::Field* f, *pair.first.fields()) {
+            queryData.append(QString("\t<th scope=\"col\">%1</th>\n").arg(f->captionOrName()));
+        }
+        queryData.append("</tr>\n");
+
+        // Query contents
+        foreach(const uint record, pair.second.keys()) {
+            queryData.append("<tr>");
+            queryData.append(QString("<td>%1 of %2</td>").arg(record).arg(totalRecords));
+            
+            foreach(const QString& value, pair.second[record]) {
+                queryData.append(QString("\t<td>%1</td>\n").arg(value));
+            }
+            queryData.append("</tr>\n");
+        }
+
+        setValue("QUERYDATA", queryData);
+        setValue("QUERYNAME", requestedQuery);
+        renderTemplate(m_dict, writer);
+        
+        /*QString queryData;
         bool ok = true;
         KexiDB::QuerySchema* querySchema = KexiWebForms::Model::gConnection->querySchema(requestedQuery);
         if (!querySchema) {
@@ -63,7 +88,7 @@ namespace View {
             //! @todo more checks
             KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->executeQuery(*querySchema);
             
-            /* awful */
+            /* awful 
             int recordsTotal = 0;
             while (cursor->moveNext())
                 recordsTotal++;
@@ -73,12 +98,12 @@ namespace View {
             
             setValue("QUERYNAME", querySchema->caption());
             
-            /**
+            
              * @note: the code is very very similar to the one available in Read.cpp
              * do some refactoring and avoid copy&paste programming
              * Situation should become better when I switch to the new OO server
              * backend
-             */
+             
             if (!cursor) {
                 setValue("ERROR", "Unable to execute the query (" __FILE__ ")");
             } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
@@ -138,7 +163,7 @@ namespace View {
                 
             }
         }
-        renderTemplate(m_dict, writer);
+        renderTemplate(m_dict, writer);*/
     }
     
 }

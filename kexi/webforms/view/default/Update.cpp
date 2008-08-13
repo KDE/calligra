@@ -1,22 +1,23 @@
-/* This file is part of the KDE project
-
-   (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-
-   This program is free software; you can red["table"]stribute it and/or
-   mod["table"]fy it und["table"]r the terms of the GNU Library General Public
-   License as published by the Free Software Found["table"]tion; either
-   version 2 of the License, or (at your option) any later version.
-
-   This program is d["table"]stributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more d["table"]tails.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Found["table"]tion, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+/*
+ * This file is part of the KDE project
+ *
+ * (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 #include <QUrl>
 #include <QHash>
@@ -44,20 +45,20 @@ namespace View {
     void Update::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
         m_dict = initTemplate("update.tpl");
         
-        setValue("TABLENAME", d["table"]);
-        setValue("PKEY_NAME", d["pkey"]);
-        setValue("PKEY_VALUE", d["pkeyValue"]);
+        setValue("TABLENAME", d["kwebforms__table"]);
+        setValue("PKEY_NAME", d["kwebforms__pkey"]);
+        setValue("PKEY_VALUE", d["kwebforms__pkeyValue"]);
         
         // Initialize neeed objects
         KexiWebForms::Model::Cache* cache = KexiWebForms::Model::Cache::getInstance();
 
-        if (cache->getCachedPkeys(d["table"]).isEmpty())
-            cache->updateCachedPkeys(d["table"]);
+        if (cache->getCachedPkeys(d["kwebforms__table"]).isEmpty())
+            cache->updateCachedPkeys(d["kwebforms__table"]);
         
         if (d["dataSent"] == "true") {
             bool error = false;
-            KexiDB::TableSchema* schema = KexiWebForms::Model::Database::getSchema(d["table"]);
-            QStringList fieleList(d["tableFiele"].split("|:|"));
+            KexiDB::TableSchema* schema = KexiWebForms::Model::Database::getSchema(d["kwebforms__table"]);
+            QStringList fieleList(d["tableFields"].split("|:|"));
             
             QHash<QString, QVariant> data;
             foreach(const QString& field, fieleList) {
@@ -69,18 +70,18 @@ namespace View {
                 }
             }
             
-            if (KexiWebForms::Model::Database::updateRow(d["table"], data, false, d["pkeyValue"].toInt()) && !error) {
+            if (KexiWebForms::Model::Database::updateRow(d["kwebforms__table"], data, false, d["kwebforms__pkeyValue"].toInt()) && !error) {
                 m_dict->ShowSection("SUCCESS");
-                setValue("MESSAGE", "Update");
-                cache->updateCachedPkeys(d["table"]);
+                setValue("MESSAGE", "Updated");
+                cache->updateCachedPkeys(d["kwebforms__table"]);
             } else {
                 m_dict->ShowSection("ERROR");
                 setValue("MESSAGE", KexiWebForms::Model::gConnection->errorMsg());
             }
         }
 
-        uint current = cache->getCurrentCachePosition(d["table"], d["pkeyValue"].toUInt());
-        QList<uint> cachedPkeys(cache->getCachedPkeys(d["table"]));
+        uint current = cache->getCurrentCachePosition(d["kwebforms__table"], d["kwebforms__pkeyValue"].toUInt());
+        QList<uint> cachedPkeys(cache->getCachedPkeys(d["kwebforms__table"]));
         // Compute new primary key values for first, last, previous and next record
         if (current < uint( cachedPkeys.size()-1 )) {
             m_dict->ShowSection("NEXT_ENABLED");
@@ -106,7 +107,7 @@ namespace View {
         QStringList formFieleList;
 
         QPair<KexiDB::TableSchema, QList<QVariant> > pair(
-            KexiWebForms::Model::Database::getSchema(d["table"], d["pkey"], d["pkeyValue"].toUInt()));
+            KexiWebForms::Model::Database::getSchema(d["kwebforms__table"], d["kwebforms__pkey"], d["kwebforms__pkeyValue"].toUInt()));
 
         for (uint i = 0; i < pair.first.fieldCount(); i++) {
             KexiDB::Field* field = pair.first.field(i);
@@ -118,7 +119,7 @@ namespace View {
             } else if (field->type() == KexiDB::Field::BLOB) {
                 formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/><br/>"
                                         "<!-- <input type=\"file\" name=\"%2\"/> --></td>")
-                                .arg(d["table"]).arg(field->name()).arg(d["pkey"]).arg(d["pkeyValue"]));
+                                .arg(d["kwebforms__table"]).arg(field->name()).arg(d["kwebforms__pkey"]).arg(d["kwebforms__pkeyValue"]));
             } else {
                 formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
                                 .arg(field->name()).arg(pair.second.at(i).toString()));

@@ -171,6 +171,45 @@ namespace Database {     // begin namespace Database
         return QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > >(table, tableContents);
     }
 
+    QPair< KexiDB::QuerySchema, QMap<uint, QList<QString> > > readQuery(const QString& queryName) {
+        KexiDB::QuerySchema* query = gConnection->querySchema(queryName);
+        KexiDB::TableSchema* table = 0;
+        QMap<uint, QList<QString> > queryContents;
+        if (query) {
+            table = query->masterTable();
+            if (table) {
+                KexiDB::Cursor* cursor = gConnection->executeQuery(*query);
+                if (cursor) {
+                    uint record = 1;
+                    uint pkeyVal = 0;
+                    while (cursor->moveNext()) {
+                        for (uint i = 0; i < query->fieldCount(); i++) {
+                            if (query->field(i) == table->primaryKey()->field(0)) {
+                                pkeyVal = cursor->value(i).toUInt();
+                            }
+                            
+                            if (query->field(i)->type() == KexiDB::Field::BLOB) {
+                                queryContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
+                                                             .arg(table->name()).arg(query->field(i)->name())
+                                                             .arg(table->primaryKey()->field(0)->name())
+                                                             .arg(QString(pkeyVal)));
+                            } else {
+                                QString escapedValue(cursor->value(i).toString());
+                                // the browser usally encodes spaces as pluses.
+                                escapedValue.replace("++", "+");
+                                
+                                queryContents[record].append(Qt::escape(cursor->value(i).toString()));
+                            }
+                        }
+                        record++;
+                    }
+                }
+            }
+        }
+        return QPair< KexiDB::QuerySchema, QMap<uint, QList<QString> > >(*query, queryContents);
+    }
+
+
 } // end namespace Database
 } // end namespace Model
 } // end namespace KexiWebForms

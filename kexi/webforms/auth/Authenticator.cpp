@@ -52,7 +52,7 @@ namespace Auth {
             return NULL;
     }
 
-    // fictional loadStore, returns a fixed list of users
+    
     bool Authenticator::loadStore() {
         KexiDB::TableSchema* table = KexiWebForms::Model::gConnection->tableSchema("kexi__users");
         

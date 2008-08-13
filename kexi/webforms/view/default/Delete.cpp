@@ -34,9 +34,9 @@ namespace KexiWebForms { // begin namespace KexiWebForms
 namespace View {         // begin namespace View
     
     void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        QString requestedTable(d["uri-table"]);
-        QString pkeyName(d["uri-pkey"]);
-        QString pkeyValue(d["uri-pval"]);
+        QString requestedTable(d["kwebforms__table"]);
+        QString pkeyName(d["kwebforms__pkey"]);
+        QString pkeyValue(d["kwebforms__pkeyValue"]);
         
         setValue("TABLENAME", requestedTable);
 

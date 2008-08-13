@@ -86,6 +86,11 @@ namespace Database {     // begin namespace Database
      */
     QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString&);
 
+    /*!
+     * Run query and show result
+     */
+    QPair< KexiDB::QuerySchema, QMap<uint, QList<QString> > > readQuery(const QString&);
+
 } // end namespace Database
 } // end namespace Model
 } // end namespace KexiWebForms
