@@ -44,13 +44,15 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     comboBox = new KComboBox( this );
     layout->addWidget( comboBox );
 
-    QHBoxLayout *widthLayout = new QHBoxLayout( this );
-    QLabel *widthLabel = new QLabel( i18n( "Width" ), this );
+    QHBoxLayout *widthLayout = new QHBoxLayout();
+    QLabel *widthLabel = new QLabel( i18n( "Width:" ), this );
+    widthLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     widthBox = new QDoubleSpinBox;
     widthBox->setRange( 0.0, 1000.0 );
     widthLayout->addWidget( widthLabel );
     widthLayout->addWidget( widthBox );
     layout->addLayout( widthLayout );
+    widthLabel->setBuddy( widthBox );
 
     usePath = new QCheckBox( i18n("&Follow selected path"), this );
     layout->addWidget( usePath );
@@ -64,61 +66,73 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     usePressure = new QCheckBox( i18n("Use tablet &pressure"), this );
     detailsLayout->addWidget( usePressure );
 
-    QHBoxLayout *thinningLayout = new QHBoxLayout( this );
-    QLabel *thinningLabel = new QLabel( i18n( "Thinning" ), this );
+    QHBoxLayout *thinningLayout = new QHBoxLayout();
+    QLabel *thinningLabel = new QLabel( i18n( "Thinning:" ), this );
+    thinningLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     thinningBox = new QDoubleSpinBox;
     thinningBox->setRange( -1.0, 1.0 );
     thinningBox->setSingleStep( 0.1 );
     thinningLayout->addWidget( thinningLabel );
     thinningLayout->addWidget( thinningBox );
     detailsLayout->addLayout( thinningLayout );
+    thinningLabel->setBuddy( thinningBox );
 
     useAngle = new QCheckBox( i18n("Use tablet &angle"), this );
     detailsLayout->addWidget( useAngle );
 
-    QHBoxLayout *angleLayout = new QHBoxLayout( this );
-    QLabel *angleLabel = new QLabel( i18n( "Angle" ), this );
+    QHBoxLayout *angleLayout = new QHBoxLayout();
+    QLabel *angleLabel = new QLabel( i18n( "Angle:" ), this );
+    angleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     angleBox = new QSpinBox;
     angleBox->setRange( 0, 180 );
     angleLayout->addWidget( angleLabel );
     angleLayout->addWidget( angleBox );
     detailsLayout->addLayout( angleLayout );
+    angleLabel->setBuddy( angleBox );
 
-    QHBoxLayout *fixationLayout = new QHBoxLayout( this );
-    QLabel *fixationLabel = new QLabel( i18n( "Fixation" ), this );
+    QHBoxLayout *fixationLayout = new QHBoxLayout();
+    QLabel *fixationLabel = new QLabel( i18n( "Fixation:" ), this );
+    fixationLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     fixationBox = new QDoubleSpinBox;
     fixationBox->setRange( 0.0, 1.0 );
     fixationBox->setSingleStep( 0.1 );
     fixationLayout->addWidget( fixationLabel );
     fixationLayout->addWidget( fixationBox );
     detailsLayout->addLayout( fixationLayout );
+    fixationLabel->setBuddy( fixationBox );
 
-    QHBoxLayout *capsLayout = new QHBoxLayout( this );
-    QLabel *capsLabel = new QLabel( i18n( "Caps" ), this );
+    QHBoxLayout *capsLayout = new QHBoxLayout();
+    QLabel *capsLabel = new QLabel( i18n( "Caps:" ), this );
+    capsLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     capsBox = new QDoubleSpinBox;
     capsBox->setRange( 0.0, 2.0 );
     capsBox->setSingleStep( 0.03 );
     capsLayout->addWidget( capsLabel );
     capsLayout->addWidget( capsBox );
     detailsLayout->addLayout( capsLayout );
+    capsLabel->setBuddy( capsBox );
 
-    QHBoxLayout *massLayout = new QHBoxLayout( this );
-    QLabel *massLabel = new QLabel( i18n( "Mass" ), this );
+    QHBoxLayout *massLayout = new QHBoxLayout();
+    QLabel *massLabel = new QLabel( i18n( "Mass:" ), this );
+    massLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     massBox = new QDoubleSpinBox;
     massBox->setRange( 0.0, 20.0 );
     massBox->setDecimals( 1 );
     massLayout->addWidget( massLabel );
     massLayout->addWidget( massBox );
     detailsLayout->addLayout( massLayout );
+    massLabel->setBuddy( massBox );
 
-    QHBoxLayout *dragLayout = new QHBoxLayout( this );
-    QLabel *dragLabel = new QLabel( i18n( "Drag" ), this );
+    QHBoxLayout *dragLayout = new QHBoxLayout();
+    QLabel *dragLabel = new QLabel( i18n( "Drag:" ), this );
+    dragLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     dragBox = new QDoubleSpinBox;
     dragBox->setRange( 0.0, 1.0 );
     dragBox->setSingleStep( 0.1 );
     dragLayout->addWidget( dragLabel );
     dragLayout->addWidget( dragBox );
     detailsLayout->addLayout( dragLayout );
+    dragLabel->setBuddy( dragBox );
 
     saveButton = new QPushButton( i18n("Save profile as..."), this );
     detailsLayout->addWidget( saveButton );
