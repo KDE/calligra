@@ -135,8 +135,7 @@ void KarbonCalligraphicShape::
     }
     normalize();
 
-    // add initial cap if it's the fourth point
-
+    // add initial cap if it's the fourth added point
     if ( pointCount() == 8 )
     {
         kDebug() << "Adding caps!!!!!!!!!!!!!!!!";
@@ -377,37 +376,46 @@ void KarbonCalligraphicShape::simplifyGuidePath()
         points.append( p->point() );
 
     // cumulative data used to determine if the point can be removed
-    //double angle = 0;
-    //double width = 0;
-    double direction = 0;
+    double widthChange = 0;
+    double directionChange = 0;
     QList<KarbonCalligraphicPoint *>::iterator i = m_points.begin() + 2;
 
     while ( i != m_points.end()-1 )
     {
         QPointF point = (*i)->point();
 
-        double newDirection = 0;
-        if ( i != m_points.begin() && (i+1) != m_points.end() )
+        double width = (*i)->width();
+        double prevWidth = (*(i-1))->width();
+        double widthDiff = width - prevWidth;
+        widthDiff /= qMax(width, prevWidth);
+        
+        double directionDiff = 0;
+        if ( (i+1) != m_points.end() )
         {
             QPointF prev = (*(i-1))->point();
             QPointF next = (*(i+1))->point();
-            newDirection = QLineF(prev, point).angleTo( QLineF(point, next) );
-            if ( newDirection > 180 )
-                newDirection -= 360;
+
+            directionDiff = QLineF(prev, point).angleTo( QLineF(point, next) );
+            if ( directionDiff > 180 )
+                directionDiff -= 360;
         }
 
-        if ( direction * newDirection >= 0 &&
-             qAbs(direction + newDirection) < 20 )
+        if ( directionChange * directionDiff >= 0 &&
+             qAbs(directionChange + directionDiff) < 20 &&
+             widthChange * widthDiff >= 0 &&
+             qAbs(widthChange + widthDiff) < 0.1 )
         {
             // deleted point
             delete *i;
             i = m_points.erase(i);
-            direction += newDirection;
+            directionChange += directionDiff;
+            widthChange += widthDiff;
         }
         else
         {
             // keep point
-            direction = 0;
+            directionChange = 0;
+            widthChange = 0;
             ++i;
         }
     }
