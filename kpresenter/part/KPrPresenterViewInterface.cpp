@@ -54,28 +54,26 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     QFrame *frame = new QFrame;
     QVBoxLayout *frameLayout = new QVBoxLayout;
     m_currentSlideLabel = new QLabel;
-    frameLayout->addWidget( m_currentSlideLabel );
+    frameLayout->addWidget( m_currentSlideLabel, 0, Qt::AlignHCenter );
     frameLayout->addWidget( m_canvas );
     frameLayout->addStretch();
     frame->setLayout( frameLayout );
-    // frame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
 
     hLayout->addWidget( frame );
+    hLayout->addStretch();
 
     frame = new QFrame;
     frameLayout = new QVBoxLayout;
     m_nextSlideLabel = new QLabel( i18n( "Next Slide" ) );
     m_nextSlidePreview = new QLabel;
-    frameLayout->addWidget( m_nextSlideLabel );
+    frameLayout->addWidget( m_nextSlideLabel, 0, Qt::AlignHCenter );
     frameLayout->addWidget( m_nextSlidePreview );
     frameLayout->addStretch();
     frame->setLayout( frameLayout );
-    // frame->setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     hLayout->addWidget( frame );
 
     vLayout->addLayout( hLayout );
 
-    // vLayout->addSpacing( 20 );
     vLayout->addWidget( new QLabel( i18n( "Speaker Notes") ) );
     m_notesTextEdit = new QTextEdit;
     m_notesTextEdit->setReadOnly( true );
