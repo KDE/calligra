@@ -289,6 +289,11 @@ void AccountsEditor::slotAccountsOk()
      
 }
 
+KoPrintJob *AccountsEditor::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
 } // namespace KPlato
 
 #include "kptaccountseditor.moc"

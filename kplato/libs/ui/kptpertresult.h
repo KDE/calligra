@@ -82,6 +82,8 @@ public:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
+    KoPrintJob *createPrintJob();
+    
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
@@ -132,6 +134,8 @@ public:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
+    KoPrintJob *createPrintJob();
+    
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     

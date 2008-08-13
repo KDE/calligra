@@ -346,6 +346,12 @@ void TaskStatusView::saveContext( QDomElement &context ) const
     m_view->saveContext( model()->columnMap(), context );
 }
 
+KoPrintJob *TaskStatusView::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
+
 //------------------------------------------------
 TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *view, QWidget *parent )
     : QWidget( parent ),

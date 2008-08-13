@@ -86,6 +86,8 @@ public:
 
     virtual Account *currentAccount() const;
     
+    KoPrintJob *createPrintJob();
+    
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
     void addAccount( Account *account );

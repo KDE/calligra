@@ -353,6 +353,11 @@ void ResourceEditor::saveContext( QDomElement &context ) const
     m_view->saveContext( model()->columnMap(), context );
 }
 
+KoPrintJob *ResourceEditor::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
 
 } // namespace KPlato
 

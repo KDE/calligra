@@ -78,6 +78,8 @@ set(kplatoui_LIB_SRCS
     kptplotwidget.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
+    kptprintingheaderfooter.ui
+    
     kptworkpackagecontrolpanel.ui
     
     kptdocumentspanel.ui

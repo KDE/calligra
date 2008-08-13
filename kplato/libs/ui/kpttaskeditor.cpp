@@ -467,6 +467,12 @@ void TaskEditor::saveContext( QDomElement &context ) const
     m_view->saveContext( model()->columnMap(), context );
 }
 
+KoPrintJob *TaskEditor::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
+
 //-----------------------------------
 TaskView::TaskView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
@@ -682,6 +688,10 @@ void TaskView::saveContext( QDomElement &context ) const
     m_view->saveContext( m_view->model()->columnMap(), context );
 }
 
+KoPrintJob *TaskView::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
 
 } // namespace KPlato
 

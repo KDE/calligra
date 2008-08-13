@@ -23,11 +23,17 @@
 #include "kplatoui_export.h"
 #include "kptitemmodelbase.h"
 
+#include "ui_kptprintingheaderfooter.h"
+
+
 #include <KoView.h>
+#include <KoPrintingDialog.h>
 
 #include <QMap>
 #include <QTreeView>
 #include <QSplitter>
+#include <QList>
+#include <QPointer>
 
 class KAction;
 
@@ -35,6 +41,7 @@ class QWidget;
 class QMetaEnum;
 
 class KoDocument;
+class KoPrintJob;
 
 /// The main namespace
 namespace KPlato
@@ -49,6 +56,86 @@ class Calendar;
 class Context;
 
 class ItemModelBase;
+class ViewBase;
+class TreeViewBase;
+class DoubleTreeViewBase;
+
+
+//------------------
+class KPLATOUI_EXPORT PrintingOptions
+{
+public:
+    PrintingOptions() {
+        headerOptions.group = true;
+        headerOptions.project = Qt::Checked;
+        headerOptions.date = Qt::Checked;
+        headerOptions.manager = Qt::Checked;
+        headerOptions.page = Qt::Checked;
+        
+        footerOptions.group = false;
+        footerOptions.project = Qt::Checked;
+        footerOptions.date = Qt::Checked;
+        footerOptions.manager = Qt::Checked;
+        footerOptions.page = Qt::Checked;
+    }
+    ~PrintingOptions() {}
+
+    struct Data {
+        bool group;
+        Qt::CheckState project;
+        Qt::CheckState date;
+        Qt::CheckState manager;
+        Qt::CheckState page;
+    };
+    struct Data headerOptions;
+    struct Data footerOptions;
+};
+
+//------------------
+class KPLATOUI_EXPORT PrintingHeaderFooter : public QWidget, public Ui::PrintingHeaderFooter
+{
+    Q_OBJECT
+public:
+    explicit PrintingHeaderFooter( const PrintingOptions &opt, QWidget *parent = 0 );
+    ~PrintingHeaderFooter();
+    
+    void setOptions( const PrintingOptions &options );
+    PrintingOptions options() const;
+
+private:
+    PrintingOptions m_options;
+};
+
+//------------------
+class KPLATOUI_EXPORT PrintingDialog : public KoPrintingDialog
+{
+    Q_OBJECT
+public:
+    PrintingDialog(ViewBase *view);
+    ~PrintingDialog() {}
+
+    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QList<KoShape*> shapesOnPage(int);
+
+    QRect headerRect() const;
+    QRect footerRect() const;
+    void paintHeaderFooter( QPainter &p, const PrintingOptions &options, int pageNumber, const Project &project );
+    
+signals:
+    void changed ( const PrintingOptions &opt );
+    
+public slots:
+    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+
+protected:
+    virtual void paint( QPainter &p, const PrintingOptions::Data &options, const QRect &rect,  int pageNumber, const Project &project );
+    int headerFooterHeight( const PrintingOptions::Data &options ) const;
+    void drawBottomRect( QPainter &p, const QRect &r );
+
+protected:
+    ViewBase *m_view;
+    QPointer<PrintingHeaderFooter> m_widget;
+};
 
 /** 
  ViewBase is the baseclass of all sub-views to View.
@@ -112,6 +199,10 @@ public:
     
     virtual ViewBase *hitView( const QPoint &pos );
 
+    virtual KoPrintJob *createPrintJob();
+    PrintingOptions printingOptions() const { return m_printingOptions; }
+    void setPrintingOptions( const PrintingOptions &opt ) { m_printingOptions = opt; }
+    
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -122,6 +213,7 @@ signals:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );
     
+
 protected:
     /// List of all menu/toolbar actions (used for plug/unplug)
     QMap<QString, QList<QAction*> > m_actionListMap;
@@ -133,8 +225,32 @@ protected:
     QList<QAction*> m_contextActionList;
     
     bool m_readWrite;
+    
+    PrintingOptions m_printingOptions;
 };
 
+//------------------
+class KPLATOUI_EXPORT TreeViewPrintingDialog : public PrintingDialog
+{
+    Q_OBJECT
+public:
+    TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview );
+    ~TreeViewPrintingDialog() {}
+
+    virtual int documentFirstPage() const { return 1; }
+    virtual int documentLastPage() const;
+
+protected:
+    virtual void printPage( int pageNumber, QPainter &painter );
+
+    int firstRow( int page ) const;
+
+private:
+    TreeViewBase *m_tree;
+    int m_firstRow;
+};
+
+//-----------------
 class KPLATOUI_EXPORT TreeViewBase : public QTreeView
 {
     Q_OBJECT
@@ -193,6 +309,8 @@ public:
     void setDefaultColumns( const QList<int> lst ) { m_defaultColumns = lst; }
     QList<int> defaultColumns() const { return m_defaultColumns; }
     
+    KoPrintJob *createPrintJob( ViewBase *parent );
+    
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );
@@ -249,6 +367,26 @@ protected:
     QList<int> m_defaultColumns;
 };
 
+//------------------
+class KPLATOUI_EXPORT DoubleTreeViewPrintingDialog : public PrintingDialog
+{
+    Q_OBJECT
+public:
+    DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview );
+    ~DoubleTreeViewPrintingDialog() {}
+
+    virtual int documentFirstPage() const { return 1; }
+    virtual int documentLastPage() const;
+
+protected:
+    virtual void printPage( int pageNumber, QPainter &painter );
+    
+    int firstRow( int page ) const;
+    
+private:
+    DoubleTreeViewBase *m_tree;
+    int m_firstRow;
+};
 
 class KPLATOUI_EXPORT DoubleTreeViewBase : public QSplitter
 {
@@ -312,6 +450,8 @@ public:
     KAction *actionSplitView() const { return m_actionSplitView; }
     
     void setRootIsDecorated ( bool show );
+
+    KoPrintJob *createPrintJob( ViewBase *parent );
 
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos

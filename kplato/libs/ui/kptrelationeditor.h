@@ -85,6 +85,8 @@ public:
     virtual bool loadContext( const KoXmlElement &/*context*/ );
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
+    
+    KoPrintJob *createPrintJob();
 
 signals:
     void requestPopupMenu( const QString&, const QPoint & );

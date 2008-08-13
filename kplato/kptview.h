@@ -132,6 +132,8 @@ public:
     ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
 
+    KoPrintJob * createPrintJob();
+    
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     

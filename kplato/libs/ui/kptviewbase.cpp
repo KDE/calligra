@@ -25,18 +25,237 @@
 #include <kicon.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
+#include <kmessagebox.h>
 
 #include <KoDocument.h>
+#include <KoShape.h>
 
 #include <QHeaderView>
 #include <QPoint>
 #include <QScrollBar>
 #include <QAbstractScrollArea>
 #include <QMetaEnum>
+#include <QStyleOption>
+#include <QPainter>
 
 namespace KPlato
 {
     
+PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget *parent )
+    : QWidget( parent )
+{
+    setupUi( this );
+    setWindowTitle( "Header and Footer" );
+    setOptions( opt );
+}
+
+PrintingHeaderFooter::~PrintingHeaderFooter()
+{
+    //kDebug();
+}
+    
+void PrintingHeaderFooter::setOptions( const PrintingOptions &options )
+{
+    m_options = options;
+    ui_header->setChecked( m_options.headerOptions.group );
+    ui_headerProject->setCheckState( m_options.headerOptions.project );
+    ui_headerDate->setCheckState( m_options.headerOptions.date );
+    ui_headerManager->setCheckState( m_options.headerOptions.manager );
+    ui_headerPage->setCheckState( m_options.headerOptions.page );
+    
+    ui_footer->setChecked( m_options.footerOptions.group );
+    ui_footerProject->setCheckState( m_options.footerOptions.project );
+    ui_footerDate->setCheckState( m_options.footerOptions.date );
+    ui_footerManager->setCheckState( m_options.footerOptions.manager );
+    ui_footerPage->setCheckState( m_options.footerOptions.page );
+    
+}
+
+PrintingOptions PrintingHeaderFooter::options() const
+{
+    //kDebug();
+    PrintingOptions opt;
+    opt.headerOptions.group = ui_header->isChecked();
+    opt.headerOptions.project = ui_headerProject->checkState();
+    opt.headerOptions.date = ui_headerDate->checkState();
+    opt.headerOptions.manager = ui_headerManager->checkState();
+    opt.headerOptions.page = ui_headerPage->checkState();
+    
+    opt.footerOptions.group = ui_footer->isChecked();
+    opt.footerOptions.project = ui_footerProject->checkState();
+    opt.footerOptions.date = ui_footerDate->checkState( );
+    opt.footerOptions.manager = ui_footerManager->checkState();
+    opt.footerOptions.page = ui_footerPage->checkState();
+    return opt;
+}
+
+PrintingDialog::PrintingDialog( ViewBase *view )
+    : KoPrintingDialog( view ),
+    m_view( view ),
+    m_widget( 0 )
+{
+}
+
+void PrintingDialog::startPrinting(RemovePolicy removePolicy )
+{
+    PrintingOptions opt = m_widget->options();
+    m_view->setPrintingOptions( opt );
+    KoPrintingDialog::startPrinting( removePolicy );
+}
+
+QList<QWidget*> PrintingDialog::createOptionWidgets() const
+{
+    //kDebug();
+    PrintingHeaderFooter *w = new PrintingHeaderFooter( m_view->printingOptions() );
+    const_cast<PrintingDialog*>( this )->m_widget = w;
+    
+    return QList<QWidget*>() << m_widget;
+}
+
+QList<KoShape*> PrintingDialog::shapesOnPage(int)
+{
+    return QList<KoShape*>();
+}
+
+void PrintingDialog::drawBottomRect( QPainter &p, const QRect &r )
+{
+    p.drawLine( r.topLeft(), r.bottomLeft() );
+    p.drawLine( r.bottomLeft(), r.bottomRight() );
+    p.drawLine( r.topRight(), r.bottomRight() );
+}
+
+QRect PrintingDialog::headerRect() const
+{
+    PrintingOptions options =  m_view->printingOptions();
+    if ( options.headerOptions.group == false ) {
+        return QRect();
+    }
+    int height = headerFooterHeight( options.footerOptions );
+    return QRect( 0, 0, const_cast<PrintingDialog*>( this )->printer().pageRect().width(), height );
+}
+
+QRect PrintingDialog::footerRect() const
+{
+    PrintingOptions options =  m_view->printingOptions();
+    if ( options.footerOptions.group == false ) {
+        return QRect();
+    }
+    int height = headerFooterHeight( options.footerOptions );
+    QRect r = const_cast<PrintingDialog*>( this )->printer().pageRect();
+    return QRect( 0, r.height() - height, r.width(), height );
+}
+
+int PrintingDialog::headerFooterHeight( const PrintingOptions::Data &options ) const
+{
+    int height = 0;
+    if ( options.page == Qt::Checked || options.project == Qt::Checked )
+    {
+        height += painter().boundingRect( const_cast<PrintingDialog*>( this )->printer().pageRect(), Qt::AlignTop, "Aj" ).height();
+        height *= 1.5;
+    }
+    if ( options.manager == Qt::Checked || options.date == Qt::Checked ) {
+        int h = painter().boundingRect( const_cast<PrintingDialog*>( this )->printer().pageRect(), Qt::AlignTop, "Aj" ).height();
+        h *= 1.5;
+        height += h;
+    }
+    return height;
+}
+
+void PrintingDialog::paintHeaderFooter( QPainter &p, const PrintingOptions &options, int pageNumber, const Project &project )
+{
+    if ( options.headerOptions.group == true ) {
+        paint( p, options.headerOptions, headerRect(), pageNumber, project );
+    }
+    if ( options.footerOptions.group == true ) {
+        paint( p, options.footerOptions, footerRect(), pageNumber, project );
+    }
+}
+
+void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, const QRect &rect,  int pageNumber, const Project &project )
+{
+    p.save();
+    
+    p.setPen( Qt::black );
+    p.drawRect( rect );
+    QRect projectRect;
+    QString projectName;
+    QRect pageRect;
+    QString page;
+    QRect managerRect;
+    QString manager;
+    QRect dateRect;
+    QString date;
+    
+    QRect rect_1 = rect;
+    QRect rect_2 = rect;
+    if ( options.page == Qt::Checked || options.project == Qt::Checked ) {
+        rect_2.setHeight( rect.height() / 2 );
+        rect_2.translate( 0, rect_2.height() );
+    }
+    if ( options.manager == Qt::Checked || options.date == Qt::Checked ) {
+        rect_1.setHeight( rect.height() / 2 );
+    }
+
+    if ( options.page == Qt::Checked ) {
+        page = i18n( "%1 of %2", pageNumber, documentLastPage() );
+        pageRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, page );
+        pageRect.setHeight( rect_1.height() );
+    }
+    if ( options.project == Qt::Checked ) {
+        projectName = project.name();
+        projectRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, projectName );
+        projectRect.setRight( pageRect.isValid() ? pageRect.left() : rect.right() );
+        projectRect.setHeight( rect_1.height() );
+    }
+    if ( options.date == Qt::Checked ) {
+        date = KGlobal::locale()->formatDate( QDate::currentDate() );
+        dateRect = p.boundingRect( rect_2, Qt::AlignRight|Qt::AlignTop, date );
+        dateRect.setHeight( rect_2.height() );
+    }
+    if ( options.manager == Qt::Checked ) {
+        manager = project.leader();
+        managerRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, manager );
+        managerRect.setRight( dateRect.isValid() ? dateRect.left() : rect.right() );
+        managerRect.setHeight( rect_2.height() );
+    }
+    
+    p.drawRect( rect );
+    if ( options.page == Qt::Checked ) {
+        p.drawLine( pageRect.topLeft(), pageRect.bottomLeft() );
+        p.drawLine( pageRect.bottomLeft(), pageRect.bottomRight() );
+        p.drawText( pageRect, Qt::AlignHCenter|Qt::AlignBottom, page );
+    }
+    if ( options.project == Qt::Checked ) {
+        p.drawLine( projectRect.bottomLeft(), projectRect.bottomRight() );
+        p.drawText( projectRect, Qt::AlignLeft|Qt::AlignBottom, projectName );
+    }
+    if ( options.date == Qt::Checked ) {
+        p.drawLine( dateRect.topLeft(), dateRect.bottomLeft() );
+        p.drawLine( dateRect.topLeft(), pageRect.bottomLeft() );
+        p.drawText( dateRect, Qt::AlignHCenter|Qt::AlignBottom, date );
+    }
+    if ( options.manager == Qt::Checked ) {
+        p.drawLine( managerRect.topLeft(), managerRect.topRight() );
+        p.drawText( managerRect, Qt::AlignLeft|Qt::AlignBottom, manager );
+    }
+    QFont f = p.font();
+    f.setPointSize( f.pointSize() * 0.5 );
+    p.setFont( f );
+    if ( options.page == Qt::Checked ) {
+        p.drawText( pageRect, Qt::AlignTop|Qt::AlignLeft, i18n( "Page:" ) );
+    }
+    if ( options.project == Qt::Checked ) {
+        p.drawText( projectRect, Qt::AlignTop|Qt::AlignLeft, i18n( "Project:" ) );
+    }
+    if ( options.date == Qt::Checked ) {
+        p.drawText( dateRect, Qt::AlignTop|Qt::AlignLeft, i18n( "Date:" ) );
+    }
+    if ( options.manager == Qt::Checked ) {
+        p.drawText( managerRect, Qt::AlignTop|Qt::AlignLeft, i18n( "Manager:" ) );
+    }
+    p.restore();
+}
+
 //--------------
 ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
     : KoView( doc, parent ),
@@ -71,6 +290,168 @@ void ViewBase::slotUpdateReadWrite( bool rw )
     updateReadWrite( rw );
 }
 
+KoPrintJob *ViewBase::createPrintJob()
+{
+    KMessageBox::sorry(this, i18n("This view does not support printing."));
+
+    return 0;
+}
+
+//----------------------
+TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview )
+    : PrintingDialog( view ),
+    m_tree( treeview ),
+    m_firstRow( -1 )
+{
+}
+
+int TreeViewPrintingDialog::documentLastPage() const
+{
+    int page = documentFirstPage();
+    while ( firstRow( page ) != -1 ) { ++page; }
+    if ( page > documentFirstPage() ) {
+        --page;
+    }
+    return page;
+}
+
+int TreeViewPrintingDialog::firstRow( int page ) const
+{
+    kDebug()<<page;
+    int pageNumber = page - documentFirstPage();
+    QHeaderView *mh = m_tree->header();
+    int height = mh->height();
+    int hHeight = headerRect().height();
+    int fHeight = footerRect().height();
+    QRect pageRect = const_cast<TreeViewPrintingDialog*>( this )->printer().pageRect();
+    
+    int gap = 8;
+    int pageHeight = pageRect.height() - height;
+    if ( hHeight > 0 ) {
+        pageHeight -= ( hHeight + gap );
+    }
+    if ( fHeight > 0 ) {
+        pageHeight -= ( fHeight + gap );
+    }
+    int rowsPrPage = pageHeight / height;
+    
+    int rows = m_tree->model()->rowCount();
+    int row = -1;
+    for ( int i = 0; i < rows; ++i ) {
+        if ( ! m_tree->isRowHidden( i, QModelIndex() ) ) {
+            row = i;
+            break;
+        }
+    }
+    if ( row != -1 ) {
+        QModelIndex idx = m_tree->model()->index( row, 0, QModelIndex() );
+        row = 0;
+        while ( idx.isValid() ) {
+            if ( row >= rowsPrPage * pageNumber ) {
+                kDebug()<<page<<pageNumber;
+                break;
+            }
+            ++row;
+            idx = m_tree->indexBelow( idx );
+        }
+        if ( ! idx.isValid() ) {
+            row = -1;
+        }
+    }
+    kDebug()<<row<<rowsPrPage;
+    return row;
+}
+
+void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
+{
+    painter.save();
+    
+    painter.scale( 0.95, 0.95 ); //FIXME pageRect seems to be (partially) outside the actual page!!
+    
+    m_firstRow = firstRow( page );
+    
+    QHeaderView *mh = m_tree->header();
+    int length = mh->length();;
+    int height = mh->height();
+    QRect hRect = headerRect();
+    QRect fRect = footerRect();
+    QRect pageRect = printer().pageRect();
+    QRect paperRect = printer().paperRect();
+    
+    ItemModelBase *model = m_tree->model();
+    
+    kDebug()<<pageRect<<paperRect;
+
+    painter.translate( pageRect.topLeft() );
+
+    painter.setClipping( true );
+    
+    paintHeaderFooter( painter, m_view->printingOptions(), page, *(model->project()) );
+    
+    int gap = 8;
+    int pageHeight = pageRect.height() - height;
+    if ( hRect.isValid() ) {
+        pageHeight -= ( hRect.height() + gap );
+    }
+    if ( fRect.isValid() ) {
+        pageHeight -= ( fRect.height() + gap );
+    }
+    int rowsPrPage = pageHeight / height;
+    
+    double sx = pageRect.width() > length ? 1.0 : (double)pageRect.width() / (double)length;
+    double sy = 1.0;
+    painter.scale( sx, sy );
+    
+    int h = 0;
+
+    painter.translate( 0, hRect.height() + gap );
+    h = hRect.height() + gap;
+
+    painter.setPen(Qt::black);
+    painter.setBrush( Qt::lightGray );
+    for ( int i = 0; i < mh->count(); ++i ) {
+        QString text = model->headerData( i, Qt::Horizontal ).toString();
+        QVariant a = model->headerData( i, Qt::Horizontal, Qt::TextAlignmentRole );
+        int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
+        if ( ! mh->isSectionHidden( i ) ) {
+            QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
+            painter.drawRect( r );
+            painter.drawText( r, align, text );
+            //kDebug()<<text<<r<<r.left() * sx<<align;
+        }
+        //kDebug()<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
+    }
+    if ( m_firstRow == -1 ) {
+        kDebug()<<"No data";
+        painter.restore();
+        return;
+    }
+    painter.setBrush( QBrush() );
+    QModelIndex idx = model->index( m_firstRow, 0, QModelIndex() );
+    int numRows = 0;
+    //kDebug()<<page<<rowsPrPage;
+    while ( idx.isValid() && numRows < rowsPrPage ) {
+        painter.translate( 0, height );
+        h += height;
+        for ( int i = 0; i < mh->count(); ++i ) {
+            if ( mh->isSectionHidden( i ) ) {
+                continue;
+            }
+            QModelIndex index = model->index( idx.row(), i, idx.parent() );
+            QString text = model->data( index ).toString();
+            QVariant a = model->data( index, Qt::TextAlignmentRole );
+            int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
+            QRect r( mh->sectionPosition( i ),  0, mh->sectionSize( i ), height );
+            drawBottomRect( painter, r );
+            painter.drawText( r, align, text );
+        }
+        ++numRows;
+        idx = m_tree->indexBelow( idx );
+    }
+    painter.restore();
+}
+
+
 //------------------------------------------------
 
 TreeViewBase::TreeViewBase( QWidget *parent )
@@ -86,6 +467,14 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
 
     connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
+{
+    TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this );
+    dia->printer().setCreator("KPlato 0.7");
+//    dia->printer().setFullPage(true); // ignore printer margins
+    return dia;
 }
 
 void TreeViewBase::setReadWrite( bool rw )
@@ -652,6 +1041,174 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
 }
 
 
+//----------------------
+DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview )
+    : PrintingDialog( view ),
+    m_tree( treeview ),
+    m_firstRow( -1 )
+{
+}
+
+int DoubleTreeViewPrintingDialog::documentLastPage() const
+{
+    int page = documentFirstPage();
+    while ( firstRow( page ) != -1 ) { ++page; }
+    if ( page > documentFirstPage() ) {
+        --page;
+    }
+    return page;
+}
+
+int DoubleTreeViewPrintingDialog::firstRow( int page ) const
+{
+    kDebug()<<page;
+    int pageNumber = page - documentFirstPage();
+    QHeaderView *mh = m_tree->masterView()->header();
+    QHeaderView *sh = m_tree->slaveView()->header();
+    int height = mh->height() > sh->height() ? mh->height() : sh->height();
+    int hHeight = headerRect().height();
+    int fHeight = footerRect().height();
+    QRect pageRect = const_cast<DoubleTreeViewPrintingDialog*>( this )->printer().pageRect();
+    
+    int gap = 8;
+    int pageHeight = pageRect.height() - height;
+    if ( hHeight > 0 ) {
+        pageHeight -= ( hHeight + gap );
+    }
+    if ( fHeight > 0 ) {
+        pageHeight -= ( fHeight + gap );
+    }
+    int rowsPrPage = pageHeight / height;
+    
+    int rows = m_tree->model()->rowCount();
+    int row = -1;
+    for ( int i = 0; i < rows; ++i ) {
+        if ( ! m_tree->masterView()->isRowHidden( i, QModelIndex() ) ) {
+            row = i;
+            break;
+        }
+    }
+    if ( row != -1 ) {
+        QModelIndex idx = m_tree->model()->index( row, 0, QModelIndex() );
+        row = 0;
+        while ( idx.isValid() ) {
+            if ( row >= rowsPrPage * pageNumber ) {
+                kDebug()<<page<<pageNumber;
+                break;
+            }
+            ++row;
+            idx = m_tree->masterView()->indexBelow( idx );
+        }
+        if ( ! idx.isValid() ) {
+            row = -1;
+        }
+    }
+    kDebug()<<row<<rowsPrPage;
+    return row;
+}
+
+void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
+{
+    painter.save();
+    
+    painter.scale( 0.95, 0.95 ); //FIXME pageRect seems to be (partially) outside the actual page!!
+    
+    m_firstRow = firstRow( page );
+    
+    QHeaderView *mh = m_tree->masterView()->header();
+    QHeaderView *sh = m_tree->slaveView()->header();
+    int length = mh->length() + sh->length();
+    int height = mh->height() > sh->height() ? mh->height() : sh->height();
+    QRect hRect = headerRect();
+    QRect fRect = footerRect();
+    QRect pageRect = printer().pageRect();
+    QRect paperRect = printer().paperRect();
+    
+    ItemModelBase *model = m_tree->model();
+    
+    kDebug()<<pageRect<<paperRect;
+
+    painter.translate( pageRect.topLeft() );
+
+    painter.setClipping( true );
+    
+    paintHeaderFooter( painter, m_view->printingOptions(), page, *(model->project()) );
+    
+    int gap = 8;
+    int pageHeight = pageRect.height() - height;
+    if ( hRect.isValid() ) {
+        pageHeight -= ( hRect.height() + gap );
+    }
+    if ( fRect.isValid() ) {
+        pageHeight -= ( fRect.height() + gap );
+    }
+    int rowsPrPage = pageHeight / height;
+    
+    double sx = pageRect.width() > length ? 1.0 : (double)pageRect.width() / (double)length;
+    double sy = 1.0;
+    painter.scale( sx, sy );
+    
+    int h = 0;
+
+    painter.translate( 0, hRect.height() + gap );
+    h = hRect.height() + gap;
+
+    painter.setPen(Qt::black);
+    painter.setBrush( Qt::lightGray );
+    for ( int i = 0; i < mh->count(); ++i ) {
+        QString text = model->headerData( i, Qt::Horizontal ).toString();
+        QVariant a = model->headerData( i, Qt::Horizontal, Qt::TextAlignmentRole );
+        int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
+        if ( ! mh->isSectionHidden( i ) ) {
+            QRect r( mh->sectionPosition( i ), 0, mh->sectionSize( i ), height );
+            painter.drawRect( r );
+            painter.drawText( r, align, text );
+        }
+        if ( ! sh->isSectionHidden( i ) ) {
+            QRect r( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height );
+            painter.drawRect( r );
+            painter.drawText( r, align, text );
+        }
+        //kDebug()<<text<<"hidden="<<h->isSectionHidden( i )<<h->sectionPosition( i );
+    }
+    if ( m_firstRow == -1 ) {
+        kDebug()<<"No data";
+        painter.restore();
+        return;
+    }
+    painter.setBrush( QBrush() );
+    QModelIndex idx = model->index( m_firstRow, 0, QModelIndex() );
+    int numRows = 0;
+    //kDebug()<<page<<rowsPrPage;
+    while ( idx.isValid() && numRows < rowsPrPage ) {
+        painter.translate( 0, height );
+        h += height;
+        for ( int i = 0; i < mh->count(); ++i ) {
+            if ( mh->isSectionHidden( i ) &&  sh->isSectionHidden( i ) ) {
+                continue;
+            }
+            QModelIndex index = model->index( idx.row(), i, idx.parent() );
+            QString text = model->data( index ).toString();
+            QVariant a = model->data( index, Qt::TextAlignmentRole );
+            int align = a.isValid() ? a.toInt() : (int)(Qt::AlignLeft|Qt::AlignVCenter);
+            if ( ! mh->isSectionHidden( i ) ) {
+                QRect r( mh->sectionPosition( i ),  0, mh->sectionSize( i ), height );
+                drawBottomRect( painter, r );
+                painter.drawText( r, align, text );
+            }
+            if ( ! sh->isSectionHidden( i ) ) {
+                QRect r( sh->sectionPosition( i ) + mh->length(), 0, sh->sectionSize( i ), height );
+                drawBottomRect( painter, r );
+                painter.drawText( r, align, text );
+            }
+        }
+        ++numRows;
+        idx = m_tree->masterView()->indexBelow( idx );
+    }
+    painter.restore();
+}
+
+
 //--------------------------------
 DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
     : QSplitter( parent ),
@@ -676,6 +1233,14 @@ DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
 
 DoubleTreeViewBase::~DoubleTreeViewBase()
 {
+}
+
+KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
+{
+    DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this );
+    dia->printer().setCreator("KPlato 0.7");
+//    dia->printer().setFullPage(true); // ignore printer margins
+    return dia;
 }
 
 void DoubleTreeViewBase::init()
@@ -1025,6 +1590,7 @@ void DoubleTreeViewBase::setRootIsDecorated ( bool show )
     m_leftview->setRootIsDecorated( show );
     m_rightview->setRootIsDecorated( show );
 }
+
 
 } // namespace KPlato
 

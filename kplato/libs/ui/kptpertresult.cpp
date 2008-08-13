@@ -409,6 +409,10 @@ void PertResult::saveContext( QDomElement &context ) const
     widget.treeWidgetTaskResult->saveContext( model()->columnMap(), context );
 }
 
+KoPrintJob *PertResult::createPrintJob()
+{
+    return widget.treeWidgetTaskResult->createPrintJob( this );
+}
 
 //--------------------
 PertCpmView::PertCpmView( KoDocument *part, QWidget *parent ) 
@@ -653,6 +657,11 @@ bool PertCpmView::loadContext( const KoXmlElement &context )
 void PertCpmView::saveContext( QDomElement &context ) const
 {
     widget.cpmTable->saveContext( model()->columnMap(), context );
+}
+
+KoPrintJob *PertCpmView::createPrintJob()
+{
+    return widget.cpmTable->createPrintJob( this );
 }
 
 } // namespace KPlato

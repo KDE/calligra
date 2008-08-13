@@ -1,0 +1,100 @@
+<ui version="4.0" >
+ <class>KPlato::PrintingHeaderFooter</class>
+ <widget class="QWidget" name="KPlato::PrintingHeaderFooter" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>254</width>
+    <height>194</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>PrintingHeaderFooter</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <widget class="QGroupBox" name="ui_header" >
+     <property name="title" >
+      <string>Header</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2" >
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="ui_headerProject" >
+        <property name="text" >
+         <string>Project name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QCheckBox" name="ui_headerPage" >
+        <property name="text" >
+         <string>Page number</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="ui_headerManager" >
+        <property name="text" >
+         <string>Project manager</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="ui_headerDate" >
+        <property name="text" >
+         <string>Date</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="ui_footer" >
+     <property name="title" >
+      <string>Footer</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout" >
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="ui_footerProject" >
+        <property name="text" >
+         <string>Project name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QCheckBox" name="ui_footerPage" >
+        <property name="text" >
+         <string>Page number</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="ui_footerManager" >
+        <property name="text" >
+         <string>Project manager</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="ui_footerDate" >
+        <property name="text" >
+         <string>Date</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

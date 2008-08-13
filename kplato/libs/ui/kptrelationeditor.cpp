@@ -224,6 +224,11 @@ void RelationEditor::saveContext( QDomElement &context ) const
     m_view->saveContext( m_view->model()->columnMap(), context );
 }
 
+KoPrintJob *RelationEditor::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
 } // namespace KPlato
 
 #include "kptrelationeditor.moc"

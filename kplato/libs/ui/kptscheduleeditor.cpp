@@ -358,6 +358,11 @@ void ScheduleEditor::saveContext( QDomElement &context ) const
     m_view->saveContext( model()->columnMap(), context );
 }
 
+KoPrintJob *ScheduleEditor::createPrintJob()
+{
+    return m_view->createPrintJob( this );
+}
+
 //-----------------------------------------
 ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     : QTreeView( parent )

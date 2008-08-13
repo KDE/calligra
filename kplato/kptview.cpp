@@ -858,18 +858,14 @@ void View::setZoom( double )
     //TODO
 }
 
-/* TODO
-void View::print( QPrinter &printer, QPrintDialog &printDialog )
+KoPrintJob * View::createPrintJob()
 {
-    if ( m_tab->currentWidget() == ganttview ) {
-        ganttview->print( printer );
-    } else if ( m_tab->currentWidget() == m_resourceview ) {
-        m_resourceview->print( printer );
-    } else if ( m_tab->currentWidget() == m_accountsview ) {
-        m_accountsview->print( printer );
+    KoView *v = qobject_cast<KoView*>( canvas() );
+    if ( v == 0 ) {
+        return 0;
     }
+    return v->createPrintJob();
 }
-*/
 
 void View::slotEditCut()
 {
