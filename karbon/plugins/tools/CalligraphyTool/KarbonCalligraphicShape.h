@@ -35,6 +35,7 @@ public:
     double width() const {return m_width;}
 
     void setPoint(const QPointF &point) {m_point = point;}
+    void setAngle(double angle) {m_angle = angle;}
 
 private:
     QPointF m_point; // in shape coordinates

@@ -58,6 +58,15 @@ void KarbonCalligraphicShape::appendPoint( const QPointF &point,
     m_handles.append( p );
     m_points.append(calligraphicPoint);
     appendPointToPath(*calligraphicPoint);
+
+    // make the angle of the first point more in line with the actual
+    // direction
+    if ( m_points.count() == 4 )
+    {
+        m_points[0]->setAngle(angle);
+        m_points[1]->setAngle(angle);
+        m_points[2]->setAngle(angle);
+    }
 }
 
 void KarbonCalligraphicShape::
@@ -390,13 +399,14 @@ void KarbonCalligraphicShape::simplifyGuidePath()
         if ( direction * newDirection >= 0 &&
              qAbs(direction + newDirection) < 20 )
         {
-            // point deleted
+            // deleted point
             delete *i;
             i = m_points.erase(i);
             direction += newDirection;
         }
         else
         {
+            // keep point
             direction = 0;
             ++i;
         }
