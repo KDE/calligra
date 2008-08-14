@@ -34,6 +34,8 @@ class QPoint;
 class QSplitter;
 class QModelIndex;
 
+class KoPrintJob;
+
 namespace KPlato
 {
 
@@ -46,6 +48,22 @@ class Task;
 class Project;
 class Relation;
 class ScheduleManager;
+class MyKDGanttView;
+
+class GanttPrintingDialog : public PrintingDialog
+{
+    Q_OBJECT
+public:
+    GanttPrintingDialog( ViewBase *view, KDGantt::View *view );
+    
+    int documentLastPage() const { return documentFirstPage(); }
+    void startPrinting( RemovePolicy removePolicy );
+    QList<QWidget*> createOptionWidgets() const;
+    void printPage( int page, QPainter &painter );
+    
+protected:
+    KDGantt::View *m_gantt;
+};
 
 class GanttTreeView : public TreeViewBase
 {
@@ -111,6 +129,8 @@ public:
 
     bool showNoInformation() const { return m_showNoInformation; }
 
+    KoPrintJob *createPrintJob();
+    
 signals:
     void modifyRelation( Relation *rel ) ;
     void addRelation( Node *par, Node *child );
@@ -218,6 +238,8 @@ public:
     void updateReadWrite( bool on );
 
     bool showNoInformation() const { return m_showNoInformation; }
+
+    KoPrintJob *createPrintJob();
 
 signals:
     void itemDoubleClicked();

@@ -48,6 +48,7 @@
 #include <QDateTime>
 #include <QMenu>
 #include <QModelIndex>
+#include <QPainter>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -57,6 +58,31 @@
 namespace KPlato
 {
 
+GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
+    : PrintingDialog( view ),
+    m_gantt( gantt )
+{
+}
+
+void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
+{
+    KoPrintingDialog::startPrinting( removePolicy );
+}
+
+QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
+{
+    //kDebug();
+    return QList<QWidget*>();
+}
+
+void GanttPrintingDialog::printPage( int page, QPainter &painter )
+{
+    painter.scale( 0.95, 0.95 ); // FIXME printer().pageRect() is outside paper!!
+    m_gantt->print( &painter, printer().pageRect(), false );
+}
+
+
+//---------------------
 class HeaderView : public QHeaderView
 {
 public:
@@ -274,6 +300,11 @@ GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
     connect( m_gantt->treeView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
 
     connect( m_gantt->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+KoPrintJob *GanttView::createPrintJob()
+{
+    return new GanttPrintingDialog( this, m_gantt );
 }
 
 void GanttView::setZoom( double )
@@ -662,6 +693,12 @@ void MilestoneGanttView::updateReadWrite( bool on )
 void MilestoneGanttView::update()
 {
 }
+
+KoPrintJob *MilestoneGanttView::createPrintJob()
+{
+    return new GanttPrintingDialog( this, m_gantt );
+}
+
 
 }  //KPlato namespace
 
