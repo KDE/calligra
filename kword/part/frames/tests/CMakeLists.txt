@@ -4,8 +4,8 @@ if(KDE4_BUILD_TESTS)
 
 add_definitions(-DCOMPILING_TESTS)
 
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDES}
-    ${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kword/part/frames
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES}
+    ${KDE4_INCLUDES} ${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/kword/part ${CMAKE_SOURCE_DIR}/kword/part/frames
     ${CMAKE_SOURCE_DIR}/libs/flake/tests
 )
 
