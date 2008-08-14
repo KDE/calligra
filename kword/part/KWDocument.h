@@ -2,6 +2,7 @@
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,7 +23,6 @@
 #ifndef KWDOCUMENT_H
 #define KWDOCUMENT_H
 
-#include "KWPageSettings.h"
 #include "KWPageManager.h"
 #include "KWApplicationConfig.h"
 #include "frames/KWFrameLayout.h"
@@ -84,23 +84,15 @@ public:
      */
     const KWPageManager *pageManager() const { return &m_pageManager; }
     /**
-     * Return the settings for page-layouts used in this document.
+     * Return the pageManager used in this document.
      */
-    const KWPageSettings& pageSettings() const { return m_pageSettings; }
-    /**
-     * Return (a copy of) the settings for page-layouts used in this document.
-     */
-    KWPageSettings& pageSettings() { return m_pageSettings; }
-    /**
-     * Set new pageSettings for this document, triggering a layout change.
-     */
-    void setPageSettings(const KWPageSettings &newPageSettings);
+    KWPageManager *pageManager() { return &m_pageManager; }
 
     /// @return the data center map for this document.
-   QMap<QString, KoDataCenter *>  dataCenterMap()  { return m_dataCenterMap; }
+    QMap<QString, KoDataCenter *>  dataCenterMap()  { return m_dataCenterMap; }
 
     /// @return the data center map for this document.
-   const QMap<QString, KoDataCenter *>  dataCenterMap() const { return m_dataCenterMap; }
+    const QMap<QString, KoDataCenter *>  dataCenterMap() const { return m_dataCenterMap; }
 
     /**
      * Insert a new page after another,
@@ -109,13 +101,15 @@ public:
      * If afterPageNum is 0, a page is inserted before page 1.
      * In all cases, the new page will have the number afterPageNum+1.
      * Use appendPage in WP mode, insertPage in DTP mode.
+     * @param masterPageName the name of the master page to use for this new page.
      */
-    KWPage* insertPage( int afterPageNum );
+    KWPage* insertPage( int afterPageNum, const QString &masterPageName = QString() );
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
+     * @param masterPageName the name of the master page to use for this new page.
      */
-    KWPage* appendPage();
+    KWPage* appendPage(const QString &masterPageName = QString());
 
     /**
      * remove a page from the document.
@@ -155,12 +149,6 @@ public:
      */
     void setStartPage(int pageNumber);
 
-    /**
-     * Alters the page layout of all pages that have not explicitly been changed individually.
-     * This will cause all auto-generated frames to be re-layouted if needed.
-     */
-    void setDefaultPageLayout(const KoPageLayout &layout);
-
     /// return the amount of framesets this document holds
     int frameSetCount() const { return m_frameSets.count(); }
     /// return a list of all the framesets this document holds
@@ -189,17 +177,14 @@ public:
 #endif
 
 public slots:
+    /// Relayout the pages
+    void relayout();
     /// Register new frameset
     void addFrameSet( KWFrameSet *f );
 
 signals:
     /// signal emitted when a page has been added
     void pageSetupChanged();
-
-    /// signal emitted when a frameSet has been added
-    void frameSetAdded(KWFrameSet*);
-    /// signal emitted when a frameSet has been removed
-    void frameSetRemoved(KWFrameSet*);
 
 private slots:
     /// Frame maintenance on already registered framesets
@@ -240,14 +225,10 @@ private:
     void saveConfig();
 
 private:
-    bool m_hasTOC;
-    double m_tabStop;   ///< pt distance for auto-tabstops
-
     QList<KWFrameSet*> m_frameSets;
     QString m_viewMode;
 
     KWPageManager m_pageManager;
-    KWPageSettings m_pageSettings;
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
 

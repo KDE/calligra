@@ -11,9 +11,11 @@
 
 void TestClipToPage::testClipToPage() {
     KWDocument doc;
-    KWPage *page1 = doc.appendPage();
-    page1->setWidth(300);
-    page1->setHeight(410);
+    KWPage *page1 = doc.appendPage("Standard");
+    KoPageLayout layout = page1->pageSettings()->pageLayout();
+    layout.width = 300;
+    layout.height = 410;
+    page1->pageSettings()->setPageLayout(layout);
     KWCanvas canvas("bla", &doc, 0, 0);
 
     MockShape shape;

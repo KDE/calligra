@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,8 +37,9 @@ public:
      * @param document the document that gets a new page.
      * @param afterPageNum we will insert a new page after the page indicated with pagenumber afterPageNum
      * @param parent the parent for command macros
+     * @param masterPageName the master page name for the new page
      */
-    explicit KWPageInsertCommand( KWDocument *document, int afterPageNum, QUndoCommand *parent = 0 );
+    explicit KWPageInsertCommand( KWDocument *document, int afterPageNum, QUndoCommand *parent = 0, const QString &masterPageName = QString() );
     ~KWPageInsertCommand();
 
     /// redo the command
@@ -53,6 +55,7 @@ private:
     KWPage *m_page;
     bool m_deletePage;
     int m_afterPageNum;
+    QString m_masterPageName;
     KoShapeMoveCommand *m_shapeMoveCommand;
 };
 

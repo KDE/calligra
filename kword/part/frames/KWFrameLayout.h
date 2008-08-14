@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,9 +52,8 @@ public:
      * Create a new frameLayout instance
      * @param pageManager the manager of pages
      * @param frameSets all the framesets registered in the document.
-     * @param pageSettings the settings used for auto-layout of frames.
      */
-    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets, const KWPageSettings *pageSettings);
+    KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets);
     ~KWFrameLayout() {}
     /**
      * As soon as a new page is created you should call this method to auto-create all frames
@@ -103,7 +103,7 @@ signals:
 private:
     friend class TestBasicLayout;
     KoShape *createTextShape(KWPage *page);
-    KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type);
+    KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, KWPage *page);
     QList<KWFrame *> framesInPage(QRectF page);
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
@@ -113,11 +113,9 @@ private:
 
 private:
     const KWPageManager *m_pageManager;
-    const KWPageSettings *m_pageSettings;
     const QList<KWFrameSet *> &m_frameSets;
 
-    KWTextFrameSet *m_oddHeaders, *m_evenHeaders, *m_oddFooters, *m_evenFooters;
-    KWTextFrameSet *m_firstHeader, *m_firstFooter, *m_maintext;
+    KWTextFrameSet *m_maintext;
 
     const KWDocument *m_document;
 

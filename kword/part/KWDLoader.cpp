@@ -45,7 +45,7 @@
 
 KWDLoader::KWDLoader(KWDocument *parent)
     : m_document(parent),
-    m_pageSettings(&parent->m_pageSettings),
+    m_pageSettings(parent->m_pageManager.defaultPageSettings()),
     m_pageManager(&parent->m_pageManager),
     m_foundMainFS(false)
 {
@@ -103,13 +103,13 @@ bool KWDLoader::load(KoXmlElement &root) {
             }
         }
 
-        m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeUniform);
+        //m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeUniform);
         switch(paper.attribute("hType").toInt()) {
             // assume its on; will turn it off in the next section.
-            case 0:
+/*            case 0:
                 m_pageSettings->setHeaderPolicy(KWord::HFTypeSameAsFirst);
                 m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
-                break;
+                break;*/
             case 1:
                 m_pageSettings->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
             case 2:
@@ -117,13 +117,13 @@ bool KWDLoader::load(KoXmlElement &root) {
             case 3:
                 m_pageSettings->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
         }
-        m_pageSettings->setFirstFooterPolicy(KWord::HFTypeUniform);
+        //m_pageSettings->setFirstFooterPolicy(KWord::HFTypeUniform);
         switch(paper.attribute("fType").toInt()) {
             // assume its on; will turn it off in the next section.
-            case 0:
+        /*    case 0:
                 m_pageSettings->setFooterPolicy(KWord::HFTypeSameAsFirst);
                 m_pageSettings->setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-                break;
+                break;*/
             case 1:
                 m_pageSettings->setFooterPolicy(KWord::HFTypeEvenOdd); break;
             case 2:
@@ -201,7 +201,7 @@ bool KWDLoader::load(KoXmlElement &root) {
     else
         kWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
 
-    m_pageManager->setDefaultPage(pgLayout);
+    m_pageManager->pageSettings("Standard")->setPageLayout(pgLayout);
 
     // <ATTRIBUTES>
     KoXmlElement attributes = root.namedItem("ATTRIBUTES").toElement();
@@ -214,18 +214,18 @@ bool KWDLoader::load(KoXmlElement &root) {
 
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         if(attributes.attribute("hasHeader") != "1") {
-            m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeNone);
+//            m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeNone);
             m_pageSettings->setHeaderPolicy(KWord::HFTypeNone);
         }
         if(attributes.attribute("hasFooter") != "1") {
-            m_pageSettings->setFirstFooterPolicy(KWord::HFTypeNone);
+//            m_pageSettings->setFirstFooterPolicy(KWord::HFTypeNone);
             m_pageSettings->setFooterPolicy(KWord::HFTypeNone);
         }
         if ( attributes.hasAttribute( "unit" ) )
             m_document->setUnit( KoUnit::unit( attributes.attribute( "unit" ) ) );
-        m_document->m_hasTOC = attributes.attribute("hasTOC") == "1";
-        if(attributes.hasAttribute("tabStopValue"))
-            m_document->m_tabStop = attributes.attribute("tabStopValue").toDouble();
+        //m_document->m_hasTOC = attributes.attribute("hasTOC") == "1";
+        //if(attributes.hasAttribute("tabStopValue"))
+        //    m_document->m_tabStop = attributes.attribute("tabStopValue").toDouble();
 /* TODO
         m_initialEditing = new InitialEditing();
         m_initialEditing->m_initialFrameSet = attributes.attribute( "activeFrameset" );
@@ -431,14 +431,14 @@ KWFrameSet *KWDLoader::loadFrameSet( const KoXmlElement &framesetElem, bool load
                         type = m_foundMainFS?KWord::OtherTextFrameSet:KWord::MainTextFrameSet;
                         m_foundMainFS = true;
                         break;
-                    case 1: // first header
-                        type = KWord::FirstPageHeaderTextFrameSet; break;
+/*                    case 1: // first header
+                        type = KWord::FirstPageHeaderTextFrameSet; break;*/
                     case 2: // even header
                         type = KWord::EvenPagesHeaderTextFrameSet; break;
                     case 3: // odd header
                         type = KWord::OddPagesHeaderTextFrameSet; break;
-                    case 4: // first footer
-                        type = KWord::FirstPageFooterTextFrameSet; break;
+                    /*case 4: // first footer
+                        type = KWord::FirstPageFooterTextFrameSet; break;*/
                     case 5: // even footer
                         type = KWord::EvenPagesFooterTextFrameSet; break;
                     case 6: // odd footer
@@ -988,7 +988,7 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
             frameElem.attribute("bottom").toDouble() - origin.y() );
 
     // increase offset of each frame to account for the padding.
-    double pageHeight = m_pageManager->defaultPage()->height;
+    double pageHeight = m_pageManager->defaultPageSettings()->pageLayout().height;
     Q_ASSERT(pageHeight); // can not be 0
     double offset =  (int) (origin.y() / pageHeight) * (m_pageManager->padding().top + m_pageManager->padding().bottom);
     origin.setY(origin.y() + offset);

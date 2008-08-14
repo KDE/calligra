@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,26 +19,13 @@
  */
 
 #include "KWPageSettings.h"
+#include <kdebug.h>
 
-
-KWPageSettings::KWPageSettings() {
+KWPageSettings::KWPageSettings(const QString& mastername)
+    : QObject()
+    , m_masterName(mastername)
+{
     clear();
-}
-KWPageSettings::KWPageSettings(const KWPageSettings &other) {
-    m_columns = other.m_columns;
-    m_mainFrame = other.m_mainFrame;
-    m_headerDistance = other.m_headerDistance;
-    m_footerDistance = other.m_footerDistance;
-    m_footNoteDistance = other.m_footNoteDistance;
-    m_endNoteDistance = other.m_endNoteDistance;
-    m_firstHeader = other.m_firstHeader;
-    m_firstFooter = other.m_firstFooter;
-    m_headers = other.m_headers;
-    m_footers = other.m_footers;
-    m_footNoteSeparatorLineWidth = other.m_footNoteSeparatorLineWidth;
-    m_footNoteSeparatorLineLength = other.m_footNoteSeparatorLineLength;
-    m_footNoteSeparatorLineType = other.m_footNoteSeparatorLineType;
-    m_footNoteSeparatorLinePos = other.m_footNoteSeparatorLinePos;
 }
 
 void KWPageSettings::clear() {
@@ -51,10 +39,30 @@ void KWPageSettings::clear() {
     m_footerDistance = 10;
     m_footNoteDistance = 10;
     m_endNoteDistance = 10;
-    m_firstHeader = KWord::HFTypeNone;
-    m_firstFooter = KWord::HFTypeNone;
     m_headers = KWord::HFTypeNone;
     m_footers = KWord::HFTypeNone;
     m_columns.columns = 1;
     m_columns.columnSpacing = 17; // ~ 6mm
+    m_hfFrameSets.clear();
+    m_pageLayout = KoPageLayout::standardLayout();
 }
+
+void KWPageSettings::setFooterPolicy(KWord::HeaderFooterType p) {
+    m_footers = p;
+    emit relayout();
+}
+
+void KWPageSettings::setHeaderPolicy(KWord::HeaderFooterType p) {
+    m_headers = p;
+    emit relayout();
+}
+
+const KoPageLayout KWPageSettings::pageLayout() const {
+    return m_pageLayout;
+}
+
+void KWPageSettings::setPageLayout (const KoPageLayout &pageLayout) {
+    m_pageLayout = pageLayout;
+}
+
+#include "KWPageSettings.moc"

@@ -32,9 +32,11 @@ KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QU
     Q_ASSERT(page);
     Q_ASSERT(document);
     m_pageNumber = page->pageNumber();
+    Q_ASSERT(page->pageSettings());
+    m_masterPageName = page->pageSettings()->masterName();
     Q_ASSERT(document->pageManager()->page(m_pageNumber) == page);
     m_pageSide = page->pageSide();
-    m_pageLayout = page->pageLayout();
+    m_pageLayout = page->pageSettings()->pageLayout();
     m_orientation = page->orientationHint();
     m_direction = page->directionHint();
 }
@@ -49,9 +51,14 @@ void KWPageRemoveCommand::redo() {
     m_document->m_pageManager.removePage(page);
     m_document->firePageSetupChanged();
 
+#ifdef __GNUC__
+    #warning implement logic to delete pages
+#endif
     // TODO move all frames that follow this page up the height of this page.
     // TODO remove all frames on this page
     // Alter frame properties to not auto-create a frame again.
+
+    m_document->relayout();
 }
 
 void KWPageRemoveCommand::undo() {
@@ -59,9 +66,12 @@ void KWPageRemoveCommand::undo() {
 
     KWPage *page = m_document->m_pageManager.insertPage(m_pageNumber);
     page->setPageSide(m_pageSide);
-    page->setOrientationHint(m_orientation);
-    page->setPageLayout(m_pageLayout);
+    m_pageLayout.orientation = m_orientation;
+    page->pageSettings()->setPageLayout(m_pageLayout);
     page->setDirectionHint(m_direction);
+    KWPageSettings *pageSettings = m_document->pageManager()->pageSettings(m_masterPageName);
+    if (pageSettings)
+        page->setPageSettings(pageSettings);
     m_document->firePageSetupChanged();
 }
 

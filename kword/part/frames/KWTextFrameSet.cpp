@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,10 +28,12 @@
 
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 #include <QTextDocument>
+#include <QTextBlock>
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     : m_document( new QTextDocument() ),
@@ -71,17 +74,11 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
     switch(m_textFrameSetType) {
-        case KWord::FirstPageHeaderTextFrameSet:
-            setName(i18n("First Page Header"));
-            break;
         case KWord::OddPagesHeaderTextFrameSet:
             setName(i18n("Odd Pages Header"));
             break;
         case KWord::EvenPagesHeaderTextFrameSet:
             setName(i18n("Even Pages Header"));
-            break;
-        case KWord::FirstPageFooterTextFrameSet:
-            setName(i18n("First Page Footer"));
             break;
         case KWord::OddPagesFooterTextFrameSet:
             setName(i18n("Odd Pages Footer"));
@@ -139,10 +136,11 @@ void KWTextFrameSet::updateTextLayout() {
 }
 
 void KWTextFrameSet::requestMoreFrames(double textHeight) {
-//kDebug() <<"KWTextFrameSet::requestMoreFrames" << textHeight;
+    //kDebug() <<"KWTextFrameSet::requestMoreFrames" << textHeight;
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*> (frames()[frameCount()-1]);
+
     if(textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
         if(lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);

@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
  */
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWDocument.h"
 
 #include <KoShape.h>
 #include <KoUnit.h>
@@ -26,15 +28,17 @@
 
 //#define DEBUG_PAGES
 
-KWPageManager::KWPageManager()
-    : m_firstPage(-1),
+KWPageManager::KWPageManager(KWDocument* document)
+    : m_document(document),
+    m_firstPage(-1),
     m_onlyAllowAppend(false),
     m_preferPageSpread(false)
 {
-    m_defaultPageLayout = KoPageLayout::standardLayout();
+    clearPageSettings(); // creates also a new default style.
 }
 
 KWPageManager::~KWPageManager() {
+    qDeleteAll(m_pageSettings);
     qDeleteAll(m_pageList);
 }
 
@@ -67,7 +71,7 @@ int KWPageManager::pageCount() const {
 KWPage* KWPageManager::page(int pageNum) const {
     foreach(KWPage *page, m_pageList) {
         if(page->pageNumber() == pageNum ||
-                page->pageSide() == KWPage::PageSpread && page->pageNumber()+1 == pageNum)
+                (page->pageSide() == KWPage::PageSpread && page->pageNumber()+1 == pageNum))
             return page;
     }
 #ifdef DEBUG_PAGES
@@ -101,7 +105,7 @@ int KWPageManager::lastPageNumber() const {
     return pageCount() + m_firstPage - 1;
 }
 
-KWPage* KWPageManager::insertPage(int pageNumber) {
+KWPage* KWPageManager::insertPage(int pageNumber, KWPageSettings *pageSettings) {
     if(m_onlyAllowAppend)
         return appendPage();
     // increase the pagenumbers of pages following the pageNumber
@@ -109,7 +113,12 @@ KWPage* KWPageManager::insertPage(int pageNumber) {
         if(page->pageNumber() >= pageNumber)
             page->m_pageNum++;
     }
-    KWPage *page = new KWPage(this, qMin( qMax(pageNumber, m_firstPage), lastPageNumber()+1 ));
+    if (! pageSettings) {
+        pageSettings = ((pageNumber > 0) && (this->page(pageNumber - 1))) ? this->page(pageNumber - 1)->pageSettings() : this->defaultPageSettings();
+    }
+    KWPage *page = new KWPage(this,
+                              qMin( qMax(pageNumber, m_firstPage), lastPageNumber()+1 ),
+                              pageSettings);
     m_pageList.append(page);
     qSort(m_pageList.begin(), m_pageList.end(), compareItems);
     return page;
@@ -126,35 +135,14 @@ KWPage* KWPageManager::insertPage(KWPage *page) {
     return page;
 }
 
-KWPage* KWPageManager::appendPage() {
-    KWPage *page = new KWPage(this, lastPageNumber() + 1);
+KWPage* KWPageManager::appendPage(KWPageSettings *pageSettings) {
+    if (! pageSettings) {
+        KWPage *p = this->page(lastPageNumber());
+        pageSettings = p ? p->pageSettings() : defaultPageSettings();
+    }
+    KWPage *page = new KWPage(this, lastPageNumber() + 1, pageSettings);
     m_pageList.append(page);
     return page;
-}
-
-const KoPageLayout KWPageManager::pageLayout(int pageNumber) const {
-    KoPageLayout lay = m_defaultPageLayout;
-    if(pageNumber >= m_firstPage && pageNumber <= lastPageNumber()) {
-        KWPage *page = this->page(pageNumber);
-        lay.height = page->height();
-        lay.width = page->width();
-        lay.top = page->topMargin();
-        lay.left = page->leftMargin();
-        lay.bottom = page->bottomMargin();
-        lay.right = page->rightMargin();
-        lay.bindingSide = page->marginClosestBinding();
-        lay.pageEdge = page->pageEdgeMargin();
-
-        lay.orientation = page->orientationHint();
-        double w = lay.width;
-        if(page->pageSide() == KWPage::PageSpread)
-            w /= 2.0;
-        double h = lay.height;
-        if(lay.orientation == KoPageFormat::Landscape)
-            qSwap(w, h);
-        lay.format = KoPageFormat::guessFormat(POINT_TO_MM(w), POINT_TO_MM(h));
-    }
-    return lay;
 }
 
 double KWPageManager::topOfPage(int pageNum) const {
@@ -195,21 +183,6 @@ void KWPageManager::removePage(KWPage *page) {
     delete page;
 }
 
-void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
-    m_defaultPageLayout = layout;
-    // make sure we have 1 default, either pageBound or left/right bound.
-    if(m_defaultPageLayout.left < 0 || m_defaultPageLayout.right < 0) {
-        m_defaultPageLayout.left = -1;
-        m_defaultPageLayout.right = -1;
-    } else {
-        m_defaultPageLayout.pageEdge = -1;
-        m_defaultPageLayout.bindingSide = -1;
-        m_defaultPageLayout.left = qMax(m_defaultPageLayout.left, 0.0);
-        m_defaultPageLayout.right = qMax(m_defaultPageLayout.right, 0.0);
-    }
-    //kDebug(32001) <<"setDefaultPage l:" << m_defaultPageLayout.left <<", r:" << m_defaultPageLayout.right <<", a:" << m_defaultPageLayout.pageEdge <<", b:" << m_defaultPageLayout.bindingSide;
-}
-
 QPointF KWPageManager::clipToDocument(const QPointF &point) {
     int page=m_firstPage;
     double startOfpage = 0.0;
@@ -246,4 +219,37 @@ QList<KWPage*> KWPageManager::pages() const {
 int KWPageManager::compareItems(KWPage *a, KWPage *b)
 {
     return b->pageNumber() - a->pageNumber() > 0;
+}
+
+QHash<QString, KWPageSettings *> KWPageManager::pageSettings() const
+{
+    return m_pageSettings;
+}
+
+KWPageSettings *KWPageManager::pageSettings(const QString &name) const {
+    if (m_pageSettings.contains(name))
+        return m_pageSettings[name];
+    return 0;
+}
+
+void KWPageManager::addPageSettings(KWPageSettings *pageSettings) {
+    const QString masterpagename = pageSettings->masterName();
+    Q_ASSERT(! masterpagename.isEmpty());
+    Q_ASSERT(! m_pageSettings.contains(masterpagename)); // This should never occur...
+    m_pageSettings[masterpagename] = pageSettings;
+    QObject::connect(pageSettings, SIGNAL(relayout()), m_document, SLOT(relayout()));
+}
+
+KWPageSettings* KWPageManager::defaultPageSettings() const {
+    Q_ASSERT(m_pageSettings.contains("Standard"));
+    return m_pageSettings["Standard"];
+}
+
+void KWPageManager::clearPageSettings() {
+    qDeleteAll(m_pageSettings);
+    m_pageSettings.clear();
+
+    KWPageSettings* defaultpagesettings = new KWPageSettings("Standard");
+    defaultpagesettings->setPageLayout(KoPageLayout::standardLayout());
+    addPageSettings(defaultpagesettings);
 }

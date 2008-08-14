@@ -35,6 +35,7 @@ class KoOdfLoadingContext;
 class KoTextAnchor;
 class KoXmlDocument;
 class KoXmlElement;
+class KWPageSettings;
 
 class QTextCursor;
 
@@ -54,7 +55,6 @@ public:
 
     KWDocument* document() const;
     KWPageManager* pageManager();
-    QString currentMasterPage() const;
     QString currentFramesetName() const;
     KWTextFrame* currentFrame() const;
 
@@ -74,13 +74,10 @@ signals:
 
 protected:
     virtual void loadSettings( const KoXmlDocument& settings );
-    virtual bool loadPageLayout( KoOdfLoadingContext& context, const QString& masterPageName );
-    virtual bool loadMasterPageStyle(KoOdfLoadingContext& context, const QString& masterPageName);
-
-    virtual void loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+    virtual void loadMasterPageStyles(KoOdfLoadingContext& context);
 
 private:
-    void loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
+    void loadHeaderFooter(KoOdfLoadingContext& context, KWPageSettings *pageSettings, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
     void loadFinished(KoOdfLoadingContext& context, QTextCursor& cursor);
 
 private:

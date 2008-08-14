@@ -114,7 +114,6 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const {
     Q_ASSERT(shape);
     const QPointF absPos = shape->absolutePosition();
     const QPointF destination = absPos + move;
-
     double bottomOfPage = 0.0;
     KWPage *page = 0;
     foreach(KWPage *p, m_document->pageManager()->pages()) {

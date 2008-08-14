@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,123 +23,48 @@
 
 #include <QRect>
 
-KWPage::KWPage(KWPageManager *parent, int pageNum) {
+KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageSettings *pageSettings) {
     m_parent = parent;
     m_pageNum = pageNum;
-    m_pageLayout.width = -1.0;
-    m_pageLayout.height = -1.0;
-    m_pageLayout.left = -1.0;
-    m_pageLayout.right = -1.0;
-    m_pageLayout.bottom = -1.0;
-    m_pageLayout.top = -1.0;
-    m_pageLayout.pageEdge = -1.0;
-    m_pageLayout.bindingSide = -1.0;
-    m_pageLayout.orientation = parent->m_defaultPageLayout.orientation;
+    m_pageSettings = pageSettings;
     m_pageSide = pageNum%2==0 ? Left : Right;
 
     m_textDirectionHint = KoText::AutoDirection;
 }
 
 double KWPage::width() const {
-    if(m_pageLayout.width != -1)
-        return m_pageLayout.width;
-    return m_parent->m_defaultPageLayout.width * (m_pageSide==PageSpread?2:1);
+    return m_pageSettings->pageLayout().width * (m_pageSide==PageSpread ? 2:1);
 }
 
 double KWPage::height() const {
-    if(m_pageLayout.height != -1)
-        return m_pageLayout.height;
-    return m_parent->m_defaultPageLayout.height;
-}
-
-void KWPage::setWidth(const double &x) {
-    m_pageLayout.width = x == m_parent->m_defaultPageLayout.width ? -1 : x;
-}
-void KWPage::setHeight(const double &y) {
-    m_pageLayout.height = y == m_parent->m_defaultPageLayout.height ? -1 : y;
-}
-void KWPage::setTopMargin(const double &t) {
-    m_pageLayout.top = t == m_parent->m_defaultPageLayout.top ? -1 : t;
-}
-void KWPage::setBottomMargin(const double &b) {
-    m_pageLayout.bottom = b == m_parent->m_defaultPageLayout.bottom ? -1 : b;
-}
-void KWPage::setPageEdgeMargin(const double &m) {
-    m_pageLayout.pageEdge = m == m_parent->m_defaultPageLayout.pageEdge ? -1 : m;
-    if(m != -1) {
-        m_pageLayout.left = -1;
-        m_pageLayout.right = -1;
-        if(marginClosestBinding() == -1)
-            m_pageLayout.bindingSide = 0; // never leave this object in an illegal state
-    }
-}
-void KWPage::setMarginClosestBinding(const double &m) {
-    m_pageLayout.bindingSide = m == m_parent->m_defaultPageLayout.bindingSide ? -1 : m;
-    if(m != -1) {
-        m_pageLayout.left = -1;
-        m_pageLayout.right = -1;
-        if(pageEdgeMargin() == -1)
-            m_pageLayout.pageEdge = 0; // never leave this object in an illegal state
-    }
-}
-void KWPage::setLeftMargin(const double &l) {
-    m_pageLayout.left = l == m_parent->m_defaultPageLayout.left ? -1 : l;
-    if(l != -1) {
-        m_pageLayout.bindingSide = -1;
-        m_pageLayout.pageEdge = -1;
-        if(rightMargin() == -1)
-            m_pageLayout.right = 0; // never leave this object in an illegal state
-    }
-}
-void KWPage::setRightMargin(const double &r) {
-    m_pageLayout.right = r == m_parent->m_defaultPageLayout.right ? -1 : r;
-    if(r != -1) {
-        m_pageLayout.bindingSide = -1;
-        m_pageLayout.pageEdge = -1;
-        if(leftMargin() == -1)
-            m_pageLayout.left = 0; // never leave this object in an illegal state
-    }
+    return m_pageSettings->pageLayout().height;
 }
 
 double KWPage::topMargin() const {
-    if(m_pageLayout.top != -1)
-        return m_pageLayout.top;
-    return m_parent->m_defaultPageLayout.top;
+    return m_pageSettings->pageLayout().top;
 }
 double KWPage::bottomMargin() const {
-    if(m_pageLayout.bottom != -1)
-        return m_pageLayout.bottom;
-    return m_parent->m_defaultPageLayout.bottom;
+    return m_pageSettings->pageLayout().bottom;
 }
-double KWPage::leftMargin() const {
-    // first try local left.
-    if(m_pageLayout.left != -1)
-        return m_pageLayout.left;
 
-    // then see if the margin is in use.
-    double answer = m_pageSide == Right ? marginClosestBinding() : pageEdgeMargin();
+double KWPage::leftMargin() const {
+    double answer = m_pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
     if(answer != -1)
         return answer;
-    return m_parent->m_defaultPageLayout.left;
+    return m_pageSettings->pageLayout().left;
 }
-double KWPage::rightMargin() const {
-    if(m_pageLayout.right != -1)
-        return m_pageLayout.right;
 
+double KWPage::rightMargin() const {
     double answer = m_pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
     if(answer != -1)
         return answer;
-    return m_parent->m_defaultPageLayout.right;
+    return m_pageSettings->pageLayout().right;
 }
 double KWPage::pageEdgeMargin() const {
-    if(m_pageLayout.pageEdge != -1)
-        return m_pageLayout.pageEdge;
-    return m_parent->m_defaultPageLayout.pageEdge;
+    return m_pageSettings->pageLayout().pageEdge;
 }
 double KWPage::marginClosestBinding() const {
-    if(m_pageLayout.bindingSide != -1)
-        return m_pageLayout.bindingSide;
-    return m_parent->m_defaultPageLayout.bindingSide;
+    return m_pageSettings->pageLayout().bindingSide;
 }
 
 double KWPage::offsetInDocument() const { // the y coordinate
@@ -153,27 +79,8 @@ QRectF KWPage::rect(int pageNumber) const {
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
-const KoPageLayout KWPage::pageLayout() const {
-    return m_parent->pageLayout(pageNumber());
-}
-
-void KWPage::setOrientationHint(KoPageFormat::Orientation orientation) {
-    m_pageLayout.orientation = orientation;
-}
-
 KoPageFormat::Orientation KWPage::orientationHint() const {
-    return m_pageLayout.orientation;
-}
-
-void KWPage::setPageLayout(const KoPageLayout &layout) {
-    setHeight(layout.height);
-    setWidth(layout.width);
-    setTopMargin(layout.top);
-    setBottomMargin(layout.bottom);
-    setLeftMargin(layout.left);
-    setRightMargin(layout.right);
-    setMarginClosestBinding(layout.bindingSide);
-    setPageEdgeMargin(layout.pageEdge);
+    return m_pageSettings->pageLayout().orientation;
 }
 
 KWPage *KWPage::next() {

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -298,8 +299,9 @@ void KWTextDocumentLayout::layout() {
     QList<Outline*> outlines;
     class End {
     public:
-        End(KoTextDocumentLayout::LayoutState *state, QList<Outline*> *outlines) { m_state = state; m_outlines = outlines; }
-        ~End() { m_state->end(); qDeleteAll(*m_outlines); }
+        End(KoTextDocumentLayout::LayoutState *state, QList<Outline*> *outlines) { m_state = state; m_outlines = outlines;}
+        ~End() {
+            m_state->end(); qDeleteAll(*m_outlines); }
     private:
         KoTextDocumentLayout::LayoutState *m_state;
         QList<Outline*> *m_outlines;
@@ -369,6 +371,7 @@ void KWTextDocumentLayout::layout() {
                 // refresh the outlines cache.
                 qDeleteAll(outlines);
                 outlines.clear();
+
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
@@ -403,9 +406,9 @@ void KWTextDocumentLayout::layout() {
                     }
                 }
                 // set the page number of the shape.
+                KWPage *page = m_frameSet->pageManager()->page(currentShape);
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (currentShape->userData());
                 Q_ASSERT(data);
-                KWPage *page = m_frameSet->pageManager()->page(currentShape);
                 if(page) {
                     data->setPageNumber( page->pageNumber() );
                     data->setPageDirection( page->directionHint() );

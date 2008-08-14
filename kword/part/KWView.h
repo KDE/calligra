@@ -92,10 +92,11 @@ private:
     virtual KoPrintJob * createPrintJob();
 
 private slots:
+    /// displays the KWFrameDialog that allows to alter the frameset properties
     void editFrameProperties();
-
+    /// called if another shape got selected
     void selectionChanged();
-
+    /// force the remainder of the text into the next page
     void insertFrameBreak();
     /// insert a bookmark on current text cursor location or selection
     void addBookmark();
@@ -103,9 +104,13 @@ private slots:
     void selectBookmark();
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
+    /// delete the currently selected frame(s)
     void editDeleteFrame();
+    /// enable/disable document headers
     void toggleHeader();
+    /// enable/disable document footers
     void toggleFooter();
+    /// snap to grid
     void toggleSnapToGrid();
     /** Move the selected frame above maximum 1 frame that is in front of it. */
     void raiseFrame() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::RaiseShape); }
@@ -115,17 +120,29 @@ private slots:
     void bringToFront() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::BringToFront); }
     /** Move the selected frame(s) to be behind all other frames */
     void sendToBack() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack); }
+    /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
+    /// displays the KWPageSettingsDialog that allows to change properties of the entire page
     void formatPage();
+    /// convert current frame to an inline frame
     void inlineFrame();
+    /// called if the zoom changed
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
+    /// displays the KWStatisticsDialog
     void showStatisticsDialog();
+    /// shows or hides the rulers
     void showRulers(bool visible);
+    /// creates a copy of the current frame
     void createLinkedFrame();
+    /// shows or hides the status bar
     void showStatusBar(bool);
+    /// delete the current page
     void deletePage();
+    /// toggle the display of non-printing characters
     void setShowFormattingChars(bool on);
+    /// selects all frames
     void editSelectAllFrames();
+    /// show or hide the grid
     void viewGrid(bool);
     /// create a KWOutlineShape for the selected frame(s).
     void createCustomOutline();

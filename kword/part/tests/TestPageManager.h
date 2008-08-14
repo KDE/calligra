@@ -21,9 +21,10 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
+#include <qtest_kde.h>
 
 #include <KoShape.h>
-
+#include <KWDocument.h>
 
 class TestPageManager : public QObject {
     Q_OBJECT
@@ -37,6 +38,7 @@ private slots: // tests
     void testClipToDocument();
 
 private:
+    KWDocument m_doc;
     class MockShape : public KoShape {
         public:
             MockShape() : KoShape() {}

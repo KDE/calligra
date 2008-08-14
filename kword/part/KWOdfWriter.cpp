@@ -54,10 +54,8 @@ class KWOdfWriter::Private
         {
             QByteArray tag;
             switch (fs->textFrameSetType()) {
-                case KWord::FirstPageHeaderTextFrameSet: tag = "style:header-first"; break;
                 case KWord::OddPagesHeaderTextFrameSet:  tag = "style:header";       break;
                 case KWord::EvenPagesHeaderTextFrameSet: tag = "style:header-left";  break;
-                case KWord::FirstPageFooterTextFrameSet: tag = "style:footer-first"; break;
                 case KWord::OddPagesFooterTextFrameSet:  tag = "style:footer";       break;
                 case KWord::EvenPagesFooterTextFrameSet: tag = "style:footer-left";  break;
                 default: return QByteArray();
@@ -69,11 +67,12 @@ class KWOdfWriter::Private
             KoXmlWriter writer(&buffer);
             KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
 
+            Q_ASSERT(fs->frames().count() > 0);
             KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>( fs->frames().first()->shape()->userData() );
             Q_ASSERT(shapedata);
 
             writer.startElement(tag);
-            shapedata->saveOdf(context);
+            shapedata->saveOdf(context, 0, -1, false);
             writer.endElement();
 
             return content;
@@ -81,35 +80,52 @@ class KWOdfWriter::Private
 
         void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
         {
-            QMap<KWord::TextFrameSetType, KWTextFrameSet*> framesets;
-            foreach(KWFrameSet *fs, document->frameSets()) {
-                if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs)) {
-                    framesets.insert(tfs->textFrameSetType(), tfs);
-                }
-            }
+kDebug()<<"START saveHeaderFooter ############################################";
 
+            // We need to flush them out ordered as defined in the specs.
             QList<KWord::TextFrameSetType> order;
-            order << KWord::FirstPageHeaderTextFrameSet << KWord::OddPagesHeaderTextFrameSet << KWord::EvenPagesHeaderTextFrameSet
-                  << KWord::FirstPageFooterTextFrameSet << KWord::OddPagesFooterTextFrameSet << KWord::EvenPagesFooterTextFrameSet;
+            order << KWord::OddPagesHeaderTextFrameSet << KWord::EvenPagesHeaderTextFrameSet
+                  << KWord::OddPagesFooterTextFrameSet << KWord::EvenPagesFooterTextFrameSet;
 
-            KoGenStyle style(KoGenStyle::StyleMaster);
-            //style.setAutoStyleInStylesDotXml(true);
+            // Iterate over all pagestyles and write them out.
+            QHash<QString, KWPageSettings *> pagesettings = document->pageManager()->pageSettings();
+            QHashIterator<QString, KWPageSettings *> it(pagesettings);
+            
+            while (it.hasNext()) {
+                it.next();
 
-            for(int i = 0; i < order.count(); ++i) {
-                if (! framesets.contains(order[i]))
-                    continue;
-                QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, framesets[order[i]]);
-                if (content.isNull())
-                    continue;
-                style.addChildElement(QString::number(i), content);
+                KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+                //masterStyle.setAutoStyleInStylesDotXml(true);
+                KoGenStyle layoutStyle = it.value()->pageLayout().saveOasis();
+                layoutStyle.setAutoStyleInStylesDotXml(true);
+                masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
+
+                for(int i = 0; i < order.count(); ++i) {
+                    KWTextFrameSet *fs = it.value()->getFrameSet(order[i]);
+                    if (! fs)
+                        continue;
+
+                    if (fs->frames().count() < 1) { //FIXME should not happen but it does :-/
+                        kWarning()<<"Frameset with ZERO frames what should not happen!!!";
+                        continue;
+                    }
+
+                    QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
+                    if (content.isNull())
+                        continue;
+
+                    masterStyle.addChildElement(QString::number(i), content);
+                }
+
+                // append the headerfooter-style to the main-style
+                if(! masterStyle.isEmpty())
+                    mainStyles.lookup(masterStyle, it.key(), KoGenStyles::DontForceNumbering);
             }
-
-            // append the headerfooter-style to the main-style
-            if(! style.isEmpty())
-                mainStyles.lookup(style, "Standard", KoGenStyles::DontForceNumbering); //FIXME "Standard" needs to be replaced with the page-style name.
 
             //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
             //    mainStyles.markStyleForStylesXml( s.name );
+
+kDebug()<<"END saveHeaderFooter ############################################";
         }
 };
 

@@ -224,19 +224,6 @@ QObject* Module::standardPageLayout()
     return new PageLayout(this, KoPageLayout::standardLayout());
 }
 
-QObject* Module::defaultPageLayout()
-{
-    const KoPageLayout *pagelayout = kwDoc()->pageManager()->defaultPage();
-    return pagelayout ? new PageLayout(this, *pagelayout) : 0;
-}
-
-void Module::setDefaultPageLayout(QObject* pagelayout)
-{
-    PageLayout* l = dynamic_cast<PageLayout*>( pagelayout );
-    if( l )
-        kwDoc()->setDefaultPageLayout( l->pageLayout() );
-}
-
 QObject* Module::defaultParagraphStyle()
 {
     KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );

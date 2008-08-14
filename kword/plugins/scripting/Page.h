@@ -68,33 +68,21 @@ namespace Scripting {
 
             /** Return the width of this page in pt. */
             double width() const { return m_page->width(); }
-            /** Set the width of the page in pt. */
-            void setWidth(double x) { m_page->setWidth(x); }
 
             /** Return the height of this page in pt. */
             double height() const { return m_page->height(); }
-            /** Set the height of the page in pt. */
-            void setHeight(double y) { m_page->setHeight(y); }
 
             /** Return the height of the margin at top in pt. */
             double topMargin() const { return m_page->topMargin(); }
-            /** Set height of the top margin in pt. */
-            void setTopMargin(double x) { m_page->setTopMargin(x); }
 
             /** Return the height of the margin at bottom in pt. */
             double bottomMargin() const { return m_page->bottomMargin(); }
-            /** Set height of the bottom margin in pt. */
-            void setBottomMargin(double y) { m_page->setBottomMargin(y); }
 
             /** Return the width of the margin at left in pt. */
             double leftMargin() const { return m_page->leftMargin(); }
-            /** Set width of the left margin in pt. */
-            void setLeftMargin(double l) { m_page->setLeftMargin(l); }
 
             /** Return the width of the margin at right in pt. */
             double rightMargin() const { return m_page->rightMargin(); }
-            /** Set width of the right margin in pt. */
-            void setRightMargin(double r) { m_page->setRightMargin(r); }
 
         private:
             KWPage* m_page;

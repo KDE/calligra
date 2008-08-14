@@ -24,19 +24,30 @@
 #include "kword_export.h"
 
 #include <KoPageLayout.h>
+#include "frames/KWTextFrameSet.h"
 
 /**
  * This class holds all the settings for one document used in automatic placing of frames.
+ *
  * For documents that have a main text auto generated we have a lot of little options
  * to do that. This class wraps all these options.
- * Note that the margins are per page and stored in a KWPage instance, not here.
+ *
+ * \note that the margins are stored in a \a KoPageLayout instance.
+ *
+ * \note once you created an instance of \a KWPageSettings you may like to use the
+ * KWPageManager::addPageSettings() method to let KWord handle the ownership else
+ * you are responsible for deleting the instance and taking care that no \a KWPage
+ * instance or something else still keeps a (then dangling) pointer to it.
  */
-class KWORD_TEST_EXPORT KWPageSettings {
+class KWORD_TEST_EXPORT KWPageSettings : public QObject {
+    Q_OBJECT
 public:
-    /// constructor, initializing the data to some default values.
-    KWPageSettings();
-    /// copy constructor
-    KWPageSettings(const KWPageSettings &other);
+    /**
+     * constructor, initializing the data to some default values.
+     *
+     * \p masterPageName The name of the masterpage for this page settings.
+     */
+    explicit KWPageSettings(const QString& mastername);
 
     /**
      * Return the current columns settings.
@@ -47,31 +58,15 @@ public:
      */
     void setColumns(const KoColumns &columns) { m_columns = columns; }
 
-    /// Return the type of header the first page will get.
-    KWord::HeaderFooterType firstHeader() const { return m_firstHeader; }
-    /**
-     * Set the type of header the first page will get.
-     * @param p There are 2 ways to 'enable' the header, KWord::HFTypeEvenOdd will
-     *   use the OddHeaders frameSet for the text and KWord::HFTypeUniform will use
-     *   the FirstHeader frameset for the text.
-     * This distinction is useful when reconfiguring a document without moving text
-     */
-    void setFirstHeaderPolicy(KWord::HeaderFooterType p) { m_firstHeader = p; }
-
-    /// Return the type of footer the first page will get.
-    KWord::HeaderFooterType firstFooter() const { return m_firstFooter; }
-    /// Set the type of footer the first page will get.
-    void setFirstFooterPolicy(KWord::HeaderFooterType p) { m_firstFooter = p; }
-
-    /// Return the type of header all the pages, except the first page will get.
+    /// Return the type of header the pages will get.
     KWord::HeaderFooterType headers() const { return m_headers; }
-    /// set the type of header all the pages, except the first page will get.
-    void setHeaderPolicy(KWord::HeaderFooterType p) { m_headers = p; }
+    /// set the type of header the pages will get.
+    void setHeaderPolicy(KWord::HeaderFooterType p);
 
-    /// Return the type of footers all the pages, except the first page will get.
+    /// Return the type of footers the pages will get.
     KWord::HeaderFooterType footers() const { return m_footers; }
-    /// Set the type of footers all the pages, except the first page will get.
-    void setFooterPolicy(KWord::HeaderFooterType p) { m_footers = p; }
+    /// Set the type of footers the pages will get.
+    void setFooterPolicy(KWord::HeaderFooterType p);
 
     /**
      * This is the main toggle for all automatically generated frames.
@@ -142,17 +137,62 @@ public:
     /// initialize to default settings
     void clear();
 
+    /// return the pageLayout applied for these pages
+    const KoPageLayout pageLayout() const;
+
+    /// set the pageLayout applied for these pages
+    void setPageLayout(const KoPageLayout &layout);
+
+    /**
+     * Get a frameset that is stored in this page settings.
+     * Example of framesets stored : the headers, footers...
+     * @param hfType the type of the frameset that must be returned
+     * @returns the required frameSet, 0 if none found.
+     */
+    KWTextFrameSet *getFrameSet (KWord::TextFrameSetType hfType) { return m_hfFrameSets[hfType]; }
+    /**
+     * Add a frameset in this page settings.
+     * Example of framesets stored : the headers, footers...
+     * @param hfType the type of the frameset
+     * @param fSet the frameset
+     * This frameset will be destroyed when the page settings is destroyed.
+     */
+    void addFrameSet (KWord::TextFrameSetType hfType, KWTextFrameSet *fSet) { m_hfFrameSets[hfType] = fSet; }
+
+    /// set the master page name for this page settings.
+    //void setMasterName (const QString &name) { m_masterName = name; }
+    /// get the master page name for this page settings.
+    QString masterName () const { return m_masterName; }
+
+Q_SIGNALS:
+
+    /**
+     * This signal is emitted if a relayout is requested cause for
+     * example the state of the header/footer changed.
+     *
+     * The KWPageManager does redirect the signal to the
+     * KWDocument::relayout() function which will update all
+     * pages.
+     */
+    void relayout();
+
 private:
     KoColumns m_columns;
-
+    KoPageLayout m_pageLayout;
+    QString m_masterName;
     bool m_mainFrame;
     double m_headerDistance, m_footerDistance, m_footNoteDistance, m_endNoteDistance;
-    KWord::HeaderFooterType m_firstHeader, m_firstFooter, m_headers, m_footers;
+    KWord::HeaderFooterType m_headers, m_footers;
+    // These framesets are deleted by KWDocument.
+    QMap<KWord::TextFrameSetType, KWTextFrameSet *> m_hfFrameSets;
 
     double m_footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
     int m_footNoteSeparatorLineLength; ///< It's a percentage of page.
     Qt::PenStyle m_footNoteSeparatorLineType; ///< foot note separate type
     KWord::FootNoteSeparatorLinePos m_footNoteSeparatorLinePos; ///< alignment in page
+
+    /// disable copy constructor and assignment operator
+    Q_DISABLE_COPY(KWPageSettings)
 };
 
 #endif

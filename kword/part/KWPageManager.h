@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,8 @@
 #define KW_PAGEMANAGER_H
 
 #include "kword_export.h"
+#include "KWPageSettings.h"
+
 #include <KoPageLayout.h>
 #include <KoInsets.h>
 
@@ -36,7 +39,7 @@ class KoShape;
  */
 class KWORD_EXPORT KWPageManager {
 public:
-    KWPageManager();
+    explicit KWPageManager(KWDocument* document);
     ~KWPageManager();
 
     /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
@@ -99,25 +102,27 @@ public:
      * if onlyAllowAppend is set to true the pagenumber will be ignored and the new page
      * will always be appended.
      * @param pageNumber page number of the new page
+     * @param pageSettings the page settings to use for the new page
      */
-    KWPage* insertPage(int pageNumber);
+    KWPage* insertPage(int pageNumber, KWPageSettings *pageSettings = 0);
     /**
      * Insert the page instance at the specified position in the document. Note that it is preferred
      * to use the insertPage(int) method which creates a new page.
      * @param page the page that will be inserted.
      */
     KWPage* insertPage(KWPage *page);
-    /// Append a new page at the end of the document
-    KWPage* appendPage();
+    /**
+     * Append a new page at the end of the document
+     * @param pageSettings the page settings to use for the new page
+     */
+    KWPage* appendPage(KWPageSettings *pageSettings = 0);
 
     /// Remove the page with @p pageNumber renumbering all pages after pages already added
     void removePage(int pageNumber);
     /// Remove @p page renumbering all pages after pages already added
     void removePage(KWPage *page);
 
-    /// return the effective pageLayout of @p pageNumber combining the default and the page specific ones
-    const KoPageLayout pageLayout(int pageNumber) const;
-
+#if 0
     /**
      * Set the page size and layout of all pages that are not altered to specifically
      * have sizes different from the default size.
@@ -126,11 +131,7 @@ public:
      * @param layout the new layout.
      */
     void setDefaultPage(const KoPageLayout &layout);
-
-    /**
-     * Return the default page layout.
-     */
-    const KoPageLayout *defaultPage() const { return &m_defaultPageLayout; }
+#endif
 
     /**
      * Returns the argument point, with altered coordinats if the point happens to be
@@ -173,6 +174,40 @@ public:
      */
     void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
 
+    /**
+     * Add a new \a KWPageSettings instance to this document.
+     *
+     * \note that you need to make sure that you only add pagesettings with a
+     * masterpage-name that are NOT already registered cause those names need
+     * to be unique.
+     *
+     * \param pageSettings The \a KWPageSettings instance that should be added. The
+     * document will take over ownership and takes care of deleting the instance
+     * one the document itself got deleted.
+     */
+    void addPageSettings(KWPageSettings *pageSettings);
+
+    /**
+     * Returns all pagesettings.
+     */
+    QHash<QString, KWPageSettings *> pageSettings() const;
+
+    /**
+     * Returns the \a KWPageSettings known under the name \p name or NULL if the
+     * document has no such pagesettings.
+     */
+    KWPageSettings *pageSettings(const QString &name) const;
+
+    /**
+     * Return the default page settings. This equals to pageSettings("Standard").
+     */
+    KWPageSettings* defaultPageSettings() const;
+
+    /**
+     * Remove all page settings and clears the default one.
+     */
+    void clearPageSettings();
+
 private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
@@ -180,12 +215,13 @@ private:
     static int compareItems(KWPage* a, KWPage *b);
 
 private:
+    KWDocument* m_document;
     QList<KWPage*> m_pageList;
     int m_firstPage;
     bool m_onlyAllowAppend; // true for WP style documents.
     bool m_preferPageSpread;
 
-    KoPageLayout m_defaultPageLayout;
+    QHash <QString, KWPageSettings *> m_pageSettings;
     KoInsets m_padding;
 };
 

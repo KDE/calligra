@@ -34,7 +34,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
     : QUndoCommand(i18n("Page Properties"), parent),
     m_document(document),
     m_page(page),
-    m_oldLayout( page->pageLayout() ),
+    m_oldLayout( page->pageSettings()->pageLayout() ),
     m_newLayout(newLayout),
     m_oldDirection(page->directionHint()),
     m_newDirection(direction)
@@ -99,16 +99,7 @@ void KWPagePropertiesCommand::undo() {
 }
 
 void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
-    m_page->setWidth(layout.width);
-    m_page->setHeight(layout.height);
-    m_page->setTopMargin(layout.top);
-    m_page->setBottomMargin(layout.bottom);
-    m_page->setPageEdgeMargin(layout.pageEdge);
-    m_page->setMarginClosestBinding(layout.bindingSide);
-    m_page->setLeftMargin(layout.left);
-    m_page->setRightMargin(layout.right);
-    m_page->setOrientationHint(layout.orientation);
-
+    m_page->pageSettings()->setPageLayout(layout);
     if(layout.pageEdge >= 0.0 &&    // assumption based on the KWPageLayout widget.
             m_page->pageNumber() % 2 == 0)
         m_page->setPageSide(KWPage::PageSpread);

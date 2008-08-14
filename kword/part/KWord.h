@@ -60,10 +60,8 @@ public:
 
     /// Each text frame set can be catogorized in one of these items
     enum TextFrameSetType {
-        FirstPageHeaderTextFrameSet, ///< The frameSet that holds the header for the first page
         OddPagesHeaderTextFrameSet,  ///< The frameSet that holds the headers for the odd pages
         EvenPagesHeaderTextFrameSet, ///< The frameSet that holds the headers for the even pages
-        FirstPageFooterTextFrameSet, ///< The frameSet that holds the footer for the first page
         OddPagesFooterTextFrameSet,  ///< The frameSet that holds the footers for the odd pages
         EvenPagesFooterTextFrameSet, ///< The frameSet that holds the footers for the even pages
         MainTextFrameSet,   ///< The frameset that holds all the frames for the main text area
@@ -76,7 +74,6 @@ public:
         HFTypeNone,       ///< Don't show the frames
         HFTypeEvenOdd,    ///< Show different content for even and odd pages
         HFTypeUniform,    ///< Show the same content for each page
-        HFTypeSameAsFirst ///< Show the same content for each page, including the first page
     };
 
     /// Specifies the horizontal position of the line that separates main text and foot note

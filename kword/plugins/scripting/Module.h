@@ -124,14 +124,10 @@ namespace Scripting {
             /** Return the \a FrameSet object which has the name \p name . */
             QObject* frameSetByName(const QString& name);
 
-            /** Return the \a FrameSet that holds the header for the first page */
-            QObject* firstPageHeaderFrameSet() { return findFrameSet(KWord::FirstPageHeaderTextFrameSet); }
             /** Return the \a FrameSet that holds the headers for the odd pages */
             QObject* oddPagesHeaderFrameSet() { return findFrameSet(KWord::OddPagesHeaderTextFrameSet); }
             /** Return the \a FrameSet that holds the headers for the even pages */
             QObject* evenPagesHeaderFrameSet() { return findFrameSet(KWord::EvenPagesHeaderTextFrameSet); }
-            /** Return the \a FrameSet that holds the footer for the first page */
-            QObject* firstPageFooterFrameSet() { return findFrameSet(KWord::FirstPageFooterTextFrameSet); }
             /** Return the \a FrameSet that holds the footers for the odd pages */
             QObject* oddPagesFooterFrameSet() { return findFrameSet(KWord::OddPagesFooterTextFrameSet); }
             /** Return the \a FrameSet that holds the footers for the even pages */
@@ -178,10 +174,6 @@ namespace Scripting {
 
             /** Return the standard page layout. */
             QObject* standardPageLayout();
-            /** Return the default page layout. */
-            QObject* defaultPageLayout();
-            /** Set the default page layout. */
-            void setDefaultPageLayout(QObject* pagelayout);
 
             /***** Style *****/
 

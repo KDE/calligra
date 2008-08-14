@@ -3,6 +3,7 @@
 #include "KWPage.h"
 #include "KWTextFrameSet.h"
 #include "KWTextFrame.h"
+#include "KWDocument.h"
 
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
@@ -33,16 +34,20 @@ void TestTextFrameSorting::testSortingOnPagespread() {
     KWFrame * frame4 = createFrame(QPointF(340, 10), tfs);
     KWFrame * frame5 = createFrame(QPointF(230, 10), tfs);
 
-    KWPageManager pm;
+    KWDocument doc;
+    KWPageManager pm(&doc);
     pm.setStartPage(2);
     KWPage *page = pm.appendPage();
-    page->setWidth(450);
-    page->setHeight(150);
+    KoPageLayout layout = page->pageSettings()->pageLayout();
+    layout.width = 450;
+    layout.height = 150;
     page->setDirectionHint(KoText::LeftRightTopBottom);
     page->setPageSide(KWPage::PageSpread);
+    page->pageSettings()->setPageLayout(layout);
     page = pm.appendPage();
     page->setDirectionHint(KoText::LeftRightTopBottom);
-    page->setWidth(200);
+    layout.width = 200;
+    page->pageSettings()->setPageLayout(layout);
     tfs.setPageManager(&pm);
 
     // test KWPageManager::pageNumber first
@@ -68,11 +73,14 @@ void TestTextFrameSorting::testRtlSorting() {
     KWFrame * frame1 = createFrame(QPointF(10, 10), tfs);
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
 
-    KWPageManager pm;
+    KWDocument doc;
+    KWPageManager pm(&doc);
     KWPage *page = pm.appendPage();
     page->setDirectionHint(KoText::RightLeftTopBottom);
     QCOMPARE(page->directionHint(), KoText::RightLeftTopBottom);
-    page->setWidth(200);
+    KoPageLayout layout = page->pageSettings()->pageLayout();
+    layout.width = 200;
+    page->pageSettings()->setPageLayout(layout);
     tfs.setPageManager(&pm);
 
     qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
@@ -108,5 +116,6 @@ KWTextFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextF
 }
 
 
-QTEST_MAIN(TestTextFrameSorting)
+QTEST_KDEMAIN(TestTextFrameSorting, GUI)
+
 #include "TestTextFrameSorting.moc"

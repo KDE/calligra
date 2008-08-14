@@ -20,6 +20,7 @@
 #define kw_page_h
 
 #include "KWPageManager.h"
+#include "KWPageSettings.h"
 #include "KoPageLayout.h"
 #include "kword_export.h"
 
@@ -31,8 +32,8 @@ class KoZoomHandler;
  * This class represents a printed page of the document.  Each page is either left, right or
  * a pageSpread. See the PageSide for details.
  * The KWPage is created and maintained by the KWPageManager so you won't find a constructor
- * on this class.  Margins and sizes are inherited from the page managers default, setting the
- * size to the same size as the default will from then on update the size automatically.
+ * on this class.  
+ * Each KWPage is attached to a KWPageSettings representing the page master.
  */
 class KWORD_EXPORT KWPage {
 public:
@@ -42,40 +43,6 @@ public:
         Right,      ///< A right page. Used for odd numbered pages
         PageSpread  ///< A page spread which is one KWPage instance, but represents 2 pagenumbers
     };
-
-    /// set the width of the page in pt
-    void setWidth(const double &x);
-    /// set the height of the page in pt
-    void setHeight(const double &y);
-    /// set height of the top margin in pt
-    void setTopMargin(const double &x);
-    /// set height of the bottom margin in pt
-    void setBottomMargin(const double &y);
-
-    /**
-     * set width of the margin that is the closest to the page edge, i.e. left for even pages.
-     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
-     * setting this one will remove the left/right ones.
-     */
-    void setPageEdgeMargin(const double &x);
-    /**
-     * set width of the margin that is the closest to the binding, i.e. right for even pages.
-     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
-     * setting this one will remove the left/right ones.
-     */
-    void setMarginClosestBinding(const double &x);
-    /**
-     * set width of the left margin.
-     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
-     * setting this one will remove the pageedge/closest-binding ones.
-     */
-    void setLeftMargin(const double &l);
-    /**
-     * set width of the right margin.
-     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
-     * setting this one will remove the pageedge/closest-binding ones.
-     */
-    void setRightMargin(const double &r);
 
     /// return the width of this page (in pt)
     double width() const;
@@ -124,11 +91,12 @@ public:
     /// returns the number of this page as it will be shown to the user.
     int pageNumber() const { return m_pageNum; }
 
-    /// return the effective pageLayout combining the default and the page specific ones
-    const KoPageLayout pageLayout() const;
+    /// returns the page settings applied on this page
+    KWPageSettings *pageSettings() { return m_pageSettings; }
+    /// set the page settings to apply on this page
+    void setPageSettings (KWPageSettings *settings) { m_pageSettings = settings; }
 
-    void setPageLayout(const KoPageLayout &layout);
-
+#if 0
     /**
      * Mark this page to be in landscape or portrait mode.
      * Note that the orientation has no influence on the actual page or its size in any way. Its
@@ -137,6 +105,7 @@ public:
      * @param orientation the new orientation.
      */
     void setOrientationHint(KoPageFormat::Orientation orientation);
+#endif
     /**
      * Return the orientation property of the page.
      * Note that the orientation has no influence on the actual page or its size in any way. Its
@@ -167,15 +136,16 @@ private:
     /** private constructor, only for our friends
      * @param parent the KWPageManager that we belong to.
      * @param pageNum the number of the page as the user will see it.
+     * @param pageSettings the page settings to use for the page
      */
-    KWPage(KWPageManager *parent, int pageNum);
+    KWPage(KWPageManager *parent, int pageNum, KWPageSettings *pageSettings);
 
     int m_pageNum;
     PageSide m_pageSide;
-    KoPageLayout m_pageLayout;
     KoText::Direction m_textDirectionHint;
 
     KWPageManager *m_parent;
+    KWPageSettings *m_pageSettings;
 
     friend class KWPageManager;
 };
