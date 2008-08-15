@@ -136,9 +136,12 @@ void KarbonCalligraphicShape::
     normalize();
 
     // add initial cap if it's the fourth added point
-    if ( pointCount() == 8 )
+    // this code is here because this function is called from different places
+    // pointCount() == 8 may causes crashes because it doesn't take possible
+    // flips into account
+    if ( m_points.count() >= 4 && &p == m_points[3] )
     {
-        kDebug() << "Adding caps!!!!!!!!!!!!!!!!";
+        kDebug() << "Adding caps!!!!!!!!!!!!!!!!" << m_points.count();
         addCap( 3, 0, 0, true );
         // duplicate the last point to make the points remain "balanced"
         // needed to keep all indexes code (else I would need to change
