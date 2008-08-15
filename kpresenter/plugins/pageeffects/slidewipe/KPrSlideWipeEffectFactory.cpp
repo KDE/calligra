@@ -33,7 +33,7 @@
 #define SlideWipeEffectId "SlideWipeEffect"
 
 KPrSlideWipeEffectFactory::KPrSlideWipeEffectFactory()
-: KPrPageEffectFactory( SlideWipeEffectId, i18n( "Slide Wipe Effect" ) )
+: KPrPageEffectFactory( SlideWipeEffectId, i18n( "Slide" ) )
 {
     addStrategy( new KPrSlideWipeFromTopStrategy() );
     addStrategy( new KPrSlideWipeFromBottomStrategy() );

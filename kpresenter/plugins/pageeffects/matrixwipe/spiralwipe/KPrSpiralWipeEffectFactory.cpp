@@ -26,7 +26,7 @@
 #define SpiralWipeEffectId "SpiralWipeEffect"
 
 KPrSpiralWipeEffectFactory::KPrSpiralWipeEffectFactory()
-: KPrPageEffectFactory( SpiralWipeEffectId, i18n( "Spiral Wipe Effect" ) )
+: KPrPageEffectFactory( SpiralWipeEffectId, i18n( "Spiral" ) )
 {
     addStrategy( new KPrSpiralWipeStrategy(0, true, false) );
     addStrategy( new KPrSpiralWipeStrategy(1, true, false) );

@@ -26,7 +26,7 @@
 #define BoxSnakesWipeEffectId "BoxSnakesWipeEffect"
 
 KPrBoxSnakesWipeEffectFactory::KPrBoxSnakesWipeEffectFactory()
-: KPrPageEffectFactory( BoxSnakesWipeEffectId, i18n( "Box Snakes Wipe Effect" ) )
+: KPrPageEffectFactory( BoxSnakesWipeEffectId, i18n( "Box Snakes" ) )
 {
     addStrategy( new KPrBoxSnakesWipeStrategy(2, 1, true, false) );
     addStrategy( new KPrBoxSnakesWipeStrategy(2, 1, false, false) );

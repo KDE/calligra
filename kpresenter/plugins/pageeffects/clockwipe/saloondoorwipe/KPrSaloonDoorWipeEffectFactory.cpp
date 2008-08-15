@@ -25,7 +25,7 @@
 #define SaloonDoorWipeEffectId  "SaloonDoorWipeEffect"
 
 KPrSaloonDoorWipeEffectFactory::KPrSaloonDoorWipeEffectFactory()
-: KPrPageEffectFactory( SaloonDoorWipeEffectId, i18n( "Saloon Door Wipe Effect" ) )
+: KPrPageEffectFactory( SaloonDoorWipeEffectId, i18n( "Saloon Door" ) )
 {
     addStrategy( new KPrSaloonDoorWipeStrategy( FromTop, "saloonDoorWipe", "top", false ) );
     addStrategy( new KPrSaloonDoorWipeStrategy( FromLeft, "saloonDoorWipe", "left", false ) );

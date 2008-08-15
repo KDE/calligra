@@ -25,7 +25,7 @@
 #define DoubleSweepWipeEffectId  "DoubleSweepWipeEffect"
 
 KPrDoubleSweepWipeEffectFactory::KPrDoubleSweepWipeEffectFactory()
-: KPrPageEffectFactory( DoubleSweepWipeEffectId, i18n( "Double Sweep Wipe Effect" ) )
+: KPrPageEffectFactory( DoubleSweepWipeEffectId, i18n( "Double Sweep" ) )
 {
     addStrategy( new KPrDoubleSweepWipeStrategy( ParallelVertical, "doubleSweepWipe", "parallelVertical", false ) );
     addStrategy( new KPrDoubleSweepWipeStrategy( ParallelDiagonal, "doubleSweepWipe", "parallelDiagonal", false ) );

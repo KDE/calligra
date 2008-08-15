@@ -6,7 +6,7 @@
 #define IrisWipeEffectId "IrisWipeEffect"
 
 KPrIrisWipeEffectFactory::KPrIrisWipeEffectFactory()
-: KPrPageEffectFactory( IrisWipeEffectId, i18n("Iris Wipe Effect") )
+: KPrPageEffectFactory( IrisWipeEffectId, i18n("Iris") )
 {
 
      QPainterPath shape;

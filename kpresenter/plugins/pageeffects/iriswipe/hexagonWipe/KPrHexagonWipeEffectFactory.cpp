@@ -34,7 +34,7 @@ using std::cos;
 #define HexagonWipeEffectId "HexagonWipeEffect"
 
 KPrHexagonWipeEffectFactory::KPrHexagonWipeEffectFactory()
-: KPrPageEffectFactory( HexagonWipeEffectId, i18n("Hexagon Wipe Effect") )
+: KPrPageEffectFactory( HexagonWipeEffectId, i18n("Hexagon") )
 {
 
      QPainterPath shape;

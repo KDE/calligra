@@ -28,7 +28,7 @@
 #define BarWipeEffectId "BarWipeEffect"
 
 KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
-: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar Wipe Effect" ) )
+: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar" ) )
 {
     addStrategy( new KPrBarWipeFromTopStrategy() );
     addStrategy( new KPrBarWipeFromLeftStrategy() );

@@ -28,7 +28,7 @@
 #define ArrowHeadEffectFactoryId "ArrowHeadEffectFactory"
 
 KPrArrowHeadWipeEffectFactory::KPrArrowHeadWipeEffectFactory()
-: KPrPageEffectFactory( ArrowHeadEffectFactoryId, i18n("ArrowHead Wipe Effect") )
+: KPrPageEffectFactory( ArrowHeadEffectFactoryId, i18n("ArrowHead") )
 {
     QPainterPath shape;
 

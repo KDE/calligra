@@ -25,7 +25,7 @@
 #define PinWheelWipeEffectId  "PinWheelWipeEffect"
 
 KPrPinWheelWipeEffectFactory::KPrPinWheelWipeEffectFactory()
-: KPrPageEffectFactory( PinWheelWipeEffectId, i18n( "Pin Wheel Wipe Effect" ) )
+: KPrPageEffectFactory( PinWheelWipeEffectId, i18n( "Pin Wheel" ) )
 {
     addStrategy( new KPrClockWipeStrategy( 270, 2, TwoBladeVerticalClockwise, "pinWheelWipe", "twoBladeVertical", false ) );
     addStrategy( new KPrClockWipeStrategy( 0, 2, TwoBladeHorizontalClockwise, "pinWheelWipe", "twoBladeHorizontal", false ) );

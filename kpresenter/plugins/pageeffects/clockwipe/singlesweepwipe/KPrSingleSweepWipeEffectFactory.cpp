@@ -25,7 +25,7 @@
 #define SingleSweepWipeEffectId  "SingleSweepWipeEffect"
 
 KPrSingleSweepWipeEffectFactory::KPrSingleSweepWipeEffectFactory()
-: KPrPageEffectFactory( SingleSweepWipeEffectId, i18n( "Single Sweep Wipe Effect" ) )
+: KPrPageEffectFactory( SingleSweepWipeEffectId, i18n( "Single Sweep" ) )
 {
     addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 0, -180,
                                                  ClockwiseTop, "singleSweepWipe", "clockwiseTop", false ) );

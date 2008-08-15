@@ -28,7 +28,7 @@
 #define RoundRectWipeEffectFactoryId "RoundRectWipeEffectFactory"
 
 KPrRoundRectWipeEffectFactory::KPrRoundRectWipeEffectFactory()
-: KPrPageEffectFactory( RoundRectWipeEffectFactoryId, i18n("RoundRect Wipe Effect") )
+: KPrPageEffectFactory( RoundRectWipeEffectFactoryId, i18n("RoundRect") )
 {
     QPainterPath shape;
 

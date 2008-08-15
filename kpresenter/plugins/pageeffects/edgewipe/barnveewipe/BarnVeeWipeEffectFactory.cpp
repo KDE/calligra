@@ -25,7 +25,7 @@
 #define BarnVeeWipeEffectId "BarnVeeWipeEffect"
 
 BarnVeeWipeEffectFactory::BarnVeeWipeEffectFactory()
-: KPrPageEffectFactory( BarnVeeWipeEffectId, i18n( "Barn Vee Wipe Effect" ) )
+: KPrPageEffectFactory( BarnVeeWipeEffectId, i18n( "Barn Vee" ) )
 {
     addStrategy( new BarnVeeWipeStrategy( FromTop, "down", false ) );
     addStrategy( new BarnVeeWipeStrategy( FromRight, "left", false ) );

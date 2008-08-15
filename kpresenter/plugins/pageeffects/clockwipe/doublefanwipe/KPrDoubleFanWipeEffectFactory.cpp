@@ -26,7 +26,7 @@
 #define DoubleFanWipeEffectId  "DoubleFanWipeEffect"
 
 KPrDoubleFanWipeEffectFactory::KPrDoubleFanWipeEffectFactory()
-: KPrPageEffectFactory( DoubleFanWipeEffectId, i18n( "Double Fan Wipe Effect" ) )
+: KPrPageEffectFactory( DoubleFanWipeEffectId, i18n( "Double Fan" ) )
 {
     addStrategy( new KPrCenterFanWipeStrategy( 90, 2, FanOutVertical, "doubleFanWipe", "fanOutVertical", false ) );
     addStrategy( new KPrCenterFanWipeStrategy( 0, 2, FanOutHorizontal, "doubleFanWipe", "fanOutHorizontal", false ) );

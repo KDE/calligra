@@ -25,7 +25,7 @@
 #define WindShieldWipeEffectId  "WindShieldWipeEffect"
 
 KPrWindShieldWipeEffectFactory::KPrWindShieldWipeEffectFactory()
-: KPrPageEffectFactory( WindShieldWipeEffectId, i18n( "Windshield Wipe Effect" ) )
+: KPrPageEffectFactory( WindShieldWipeEffectId, i18n( "Windshield" ) )
 {
     addStrategy( new KPrWindShieldWipeStrategy( Right, "windshieldWipe", "right", false ) );
     addStrategy( new KPrWindShieldWipeStrategy( Up, "windshieldWipe", "up", false ) );

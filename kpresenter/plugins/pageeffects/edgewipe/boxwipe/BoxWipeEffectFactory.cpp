@@ -25,7 +25,7 @@
 #define BoxWipeEffectId "BoxWipeEffect"
 
 BoxWipeEffectFactory::BoxWipeEffectFactory()
-: KPrPageEffectFactory( BoxWipeEffectId, i18n( "Box Wipe Effect" ) )
+: KPrPageEffectFactory( BoxWipeEffectId, i18n( "Box" ) )
 {
     addStrategy( new BoxWipeStrategy( FromTopLeft, "topLeft", false ) );
     addStrategy( new BoxWipeStrategy( FromTopRight, "topRight", false ) );

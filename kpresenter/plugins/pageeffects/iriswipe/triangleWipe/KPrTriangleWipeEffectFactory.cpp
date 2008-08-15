@@ -27,7 +27,7 @@
 #define TriangleWipeEffectFactoryId "TriangleWipeEffectFactory"
 
 KPrTriangleWipeEffectFactory::KPrTriangleWipeEffectFactory()
-: KPrPageEffectFactory( TriangleWipeEffectFactoryId, i18n("Triangle Wipe Effect") )
+: KPrPageEffectFactory( TriangleWipeEffectFactoryId, i18n("Triangle") )
 {
     QPainterPath shape;
 

@@ -26,7 +26,7 @@
 #define FanWipeEffectId  "FanWipeEffect"
 
 KPrFanWipeEffectFactory::KPrFanWipeEffectFactory()
-: KPrPageEffectFactory( FanWipeEffectId, i18n( "Fan Wipe Effect" ) )
+: KPrPageEffectFactory( FanWipeEffectId, i18n( "Fan" ) )
 {
     addStrategy( new KPrCenterFanWipeStrategy( 0, 1, CenterRight, "fanWipe", "centerRight", false ) );
     addStrategy( new KPrCenterFanWipeStrategy( 90, 1, CenterTop, "fanWipe", "centerTop", false ) );

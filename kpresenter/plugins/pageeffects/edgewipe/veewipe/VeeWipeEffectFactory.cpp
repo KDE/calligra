@@ -25,7 +25,7 @@
 #define VeeWipeEffectId "VeeWipeEffect"
 
 VeeWipeEffectFactory::VeeWipeEffectFactory()
-: KPrPageEffectFactory( VeeWipeEffectId, i18n( "Vee Wipe Effect" ) )
+: KPrPageEffectFactory( VeeWipeEffectId, i18n( "Vee" ) )
 {
     addStrategy( new VeeWipeStrategy( FromTop, "down", false ) );
     addStrategy( new VeeWipeStrategy( FromRight, "left", false ) );

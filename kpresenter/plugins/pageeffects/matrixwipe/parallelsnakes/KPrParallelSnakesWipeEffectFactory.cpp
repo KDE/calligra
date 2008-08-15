@@ -28,7 +28,7 @@
 #define ParallelSnakesWipeEffectId "ParallelSnakesWipeEffect"
 
 KPrParallelSnakesWipeEffectFactory::KPrParallelSnakesWipeEffectFactory()
-    : KPrPageEffectFactory( ParallelSnakesWipeEffectId, i18n( "Parallel Snakes Wipe Effect" ) )
+    : KPrPageEffectFactory( ParallelSnakesWipeEffectId, i18n( "Parallel Snakes" ) )
 {
     addStrategy( new KPrParallelSnakesWipeVerticalStrategy(false, false, false) );
     addStrategy( new KPrParallelSnakesWipeVerticalStrategy(true, true, false) );

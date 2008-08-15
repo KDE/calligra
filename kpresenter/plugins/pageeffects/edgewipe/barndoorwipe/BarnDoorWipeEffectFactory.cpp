@@ -25,7 +25,7 @@
 #define BarnDoorWipeEffectId "BarnDoorWipeEffect"
 
 BarnDoorWipeEffectFactory::BarnDoorWipeEffectFactory()
-: KPrPageEffectFactory( BarnDoorWipeEffectId, i18n( "Barn Door Wipe Effect" ) )
+: KPrPageEffectFactory( BarnDoorWipeEffectId, i18n( "Barn Door" ) )
 {
     addStrategy( new BarnDoorWipeStrategy( Vertical, "vertical", false ) );
     addStrategy( new BarnDoorWipeStrategy( VerticalReverse, "vertical", true ) );

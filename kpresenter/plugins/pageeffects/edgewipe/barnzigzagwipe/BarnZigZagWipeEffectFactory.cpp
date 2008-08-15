@@ -25,7 +25,7 @@
 #define BarnZigZagWipeEffectId "BarnZigZagWipeEffect"
 
 BarnZigZagWipeEffectFactory::BarnZigZagWipeEffectFactory()
-: KPrPageEffectFactory( BarnZigZagWipeEffectId, i18n( "Barn Zig Zag Wipe Effect" ) )
+: KPrPageEffectFactory( BarnZigZagWipeEffectId, i18n( "Barn Zig Zag" ) )
 {
     addStrategy( new BarnZigZagWipeStrategy( Vertical, "vertical", false ) );
     addStrategy( new BarnZigZagWipeStrategy( Horizontal, "horizontal", false ) );

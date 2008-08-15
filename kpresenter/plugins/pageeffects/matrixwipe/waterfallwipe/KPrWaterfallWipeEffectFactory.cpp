@@ -29,7 +29,7 @@
 #define WaterfallWipeEffectId "WaterfallWipeEffect"
 
 KPrWaterfallWipeEffectFactory::KPrWaterfallWipeEffectFactory()
-    : KPrPageEffectFactory( WaterfallWipeEffectId, i18n( "Waterfall Wipe Effect" ) )
+    : KPrPageEffectFactory( WaterfallWipeEffectId, i18n( "Waterfall" ) )
 {
     addStrategy( new KPrWaterfallWipeTopLeftStrategy(KPrMatrixWipeStrategy::TopToBottom) );
     addStrategy( new KPrWaterfallWipeTopLeftStrategy(KPrMatrixWipeStrategy::LeftToRight) );

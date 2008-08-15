@@ -25,7 +25,7 @@
 #define ClockWipeEffectId "ClockWipeEffect"
 
 KPrClockWipeEffectFactory::KPrClockWipeEffectFactory()
-: KPrPageEffectFactory( ClockWipeEffectId, i18n( "Clock Wipe Effect" ) )
+: KPrPageEffectFactory( ClockWipeEffectId, i18n( "Clock" ) )
 {
     addStrategy( new KPrClockWipeStrategy( 90, 1, FromTwelveClockwise, "clockWipe", "clockwiseTwelve", false ) );
     addStrategy( new KPrClockWipeStrategy( 0, 1, FromThreeClockwise, "clockWipe", "clockwiseThree", false ) );

@@ -28,7 +28,7 @@
 #define EyeWipeEffectId "EyeWipeEffect"
 
 KPrEyeWipeEffectFactory::KPrEyeWipeEffectFactory()
-: KPrPageEffectFactory( EyeWipeEffectId, i18n("Eye Wipe Effect") )
+: KPrPageEffectFactory( EyeWipeEffectId, i18n("Eye") )
 {
      QPainterPath shape;
 

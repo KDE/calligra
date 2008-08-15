@@ -27,7 +27,7 @@
 #define EllipseWipeEffectFactoryId "EllipseWipeEffectFactory"
 
 KPrEllipseWipeEffectFactory::KPrEllipseWipeEffectFactory()
-: KPrPageEffectFactory( EllipseWipeEffectFactoryId, i18n("Ellipse Wipe Effect") )
+: KPrPageEffectFactory( EllipseWipeEffectFactoryId, i18n("Ellipse") )
 {
     QPainterPath shape;
 

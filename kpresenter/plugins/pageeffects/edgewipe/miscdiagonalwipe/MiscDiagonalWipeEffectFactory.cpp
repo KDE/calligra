@@ -26,7 +26,7 @@
 #define MiscDiagonalWipeEffectId "MiscDiagonalWipeEffect"
 
 MiscDiagonalWipeEffectFactory::MiscDiagonalWipeEffectFactory()
-: KPrPageEffectFactory( MiscDiagonalWipeEffectId, i18n( "Misc Diagonal Wipe Effect" ) )
+: KPrPageEffectFactory( MiscDiagonalWipeEffectId, i18n( "Misc Diagonal" ) )
 {
     addStrategy( new DoubleBarnDoorWipeStrategy() );
     addStrategy( new DoubleDiamondWipeStrategy() );

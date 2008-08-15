@@ -26,7 +26,7 @@
 #define MiscShapeWipeEffectFactoryId "MiscShapeWipeEffect"
 
 KPrMiscShapeWipeEffectFactory::KPrMiscShapeWipeEffectFactory()
-: KPrPageEffectFactory( MiscShapeWipeEffectFactoryId, i18n("Misc Wipe Effect") )
+: KPrPageEffectFactory( MiscShapeWipeEffectFactoryId, i18n("Misc") )
 {
      QPainterPath shape;
 

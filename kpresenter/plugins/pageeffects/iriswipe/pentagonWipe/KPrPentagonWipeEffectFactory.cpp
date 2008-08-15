@@ -28,7 +28,7 @@
 #define PentagonEffectFactoryId "PentagonEffectFactory"
 
 KPrPentagonWipeEffectFactory::KPrPentagonWipeEffectFactory()
-: KPrPageEffectFactory( PentagonEffectFactoryId, i18n("Pentagon Wipe Effect") )
+: KPrPageEffectFactory( PentagonEffectFactoryId, i18n("Pentagon") )
 {
     QPainterPath shape;
 

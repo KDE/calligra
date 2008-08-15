@@ -33,7 +33,7 @@
 #define SnakeWipeEffectId "SnakeWipeEffect"
 
 KPrSnakeWipeEffectFactory::KPrSnakeWipeEffectFactory()
-: KPrPageEffectFactory( SnakeWipeEffectId, i18n( "Snake Wipe Effect" ) )
+: KPrPageEffectFactory( SnakeWipeEffectId, i18n( "Snake" ) )
 {
     addStrategy( new KPrSnakeWipeTopLeftHorizontalStrategy() );
     addStrategy( new KPrSnakeWipeBottomRightHorizontalStrategy() );

@@ -35,7 +35,7 @@ using std::cos;
 #define StarWipeEffectId "StarWipeEffect"
 
 KPrStarWipeEffectFactory::KPrStarWipeEffectFactory()
-: KPrPageEffectFactory( StarWipeEffectId, i18n("Star Wipe Effect") )
+: KPrPageEffectFactory( StarWipeEffectId, i18n("Star") )
 {
 
      QPainterPath shape;
