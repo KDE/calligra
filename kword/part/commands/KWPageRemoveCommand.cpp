@@ -20,6 +20,7 @@
 #include "KWPageRemoveCommand.h"
 #include "KWDocument.h"
 #include "KWPage.h"
+#include "frames/KWFrame.h"
 
 #include <KoShapeMoveCommand.h>
 
@@ -48,16 +49,36 @@ void KWPageRemoveCommand::redo() {
     QUndoCommand::redo();
     KWPage *page = m_document->pageManager()->page(m_pageNumber);
     Q_ASSERT(page);
+
+    const QRectF pagerect = page->rect();
+    const double pageheight = page->height();
+    const double pageoffset = page->offsetInDocument();
+
+#idef __GNUC__
+    #warning the logic to delete pages is still broken
+#endif
+
+    foreach(KWFrameSet* fs, m_document->frameSets()) {
+        foreach(KWFrame *f, fs->frames()) {
+            QPointF pos = f->shape()->absolutePosition();
+            if (pagerect.contains(pos)) {
+                // remove all frames on the page
+                fs->removeFrame(f);
+            }
+            else if (pos.y() > pagerect.top()) { //> pageoffset) {
+                // move all frames that follow this page up the height of this page.
+
+//disabled for now for better testing
+                //pos.setY(pos.y() - pageheight);
+                //f->shape()->setAbsolutePosition(pos);
+            }
+        }
+    }
+
+    //TODO Alter frame properties to not auto-create a frame again.
+
     m_document->m_pageManager.removePage(page);
     m_document->firePageSetupChanged();
-
-#ifdef __GNUC__
-    #warning implement logic to delete pages
-#endif
-    // TODO move all frames that follow this page up the height of this page.
-    // TODO remove all frames on this page
-    // Alter frame properties to not auto-create a frame again.
-
     m_document->relayout();
 }
 
