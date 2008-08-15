@@ -268,6 +268,8 @@ void KWView::setupActions() {
     action = new QAction( i18n( "Delete Page" ), this);
     actionCollection()->addAction("delete_page", action);
     connect(action, SIGNAL(triggered()), this, SLOT( deletePage() ));
+    handleDeletePageAction(); //decide if we enable or disable this action
+    connect(m_document, SIGNAL( pageSetupChanged() ), this, SLOT( handleDeletePageAction() ));
 
     action = new QAction( i18n( "Formatting Characters" ), this);
     action->setCheckable(true);
@@ -1065,6 +1067,16 @@ void KWView::deletePage()
 {
     Q_ASSERT(m_currentPage);
     m_document->removePage( m_currentPage->pageNumber() );
+}
+
+void KWView::handleDeletePageAction()
+{
+    Q_ASSERT(m_document);
+    
+    QAction *action = actionCollection()->action("delete_page");
+    if( action ) {
+        action->setEnabled( m_document->pageCount() > 1 );
+    }
 }
 
 void KWView::setShowFormattingChars(bool on) {

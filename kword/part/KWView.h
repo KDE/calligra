@@ -146,6 +146,8 @@ private slots:
     void viewGrid(bool);
     /// create a KWOutlineShape for the selected frame(s).
     void createCustomOutline();
+    /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
+    void handleDeletePageAction();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
