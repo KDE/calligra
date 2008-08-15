@@ -36,6 +36,13 @@ signals:
     void massChanged(double);
     void dragChanged(double);
 
+public slots:
+    // needed for the shortcuts
+    void increaseWidth();
+    void decreaseWidth();
+    void increaseAngle();
+    void decreaseAngle();
+
 private slots:
     void loadProfile( const QString &name );
     void toggleUseAngle( bool checked );

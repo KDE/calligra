@@ -271,6 +271,26 @@ void KarbonCalligraphyOptionWidget::toggleUseAngle( bool checked )
     angleBox->setEnabled( ! checked );
 }
 
+void KarbonCalligraphyOptionWidget::increaseWidth()
+{
+    widthBox->setValue( widthBox->value() + 1 );
+}
+
+void KarbonCalligraphyOptionWidget::decreaseWidth()
+{
+    widthBox->setValue( widthBox->value() - 1 );
+}
+
+void KarbonCalligraphyOptionWidget::increaseAngle()
+{
+    angleBox->setValue( angleBox->value() + 3 );
+}
+
+void KarbonCalligraphyOptionWidget::decreaseAngle()
+{
+    angleBox->setValue( angleBox->value() - 3 );
+}
+
 /******************************************************************************
  ************************* Convenience Functions ******************************
  ******************************************************************************/

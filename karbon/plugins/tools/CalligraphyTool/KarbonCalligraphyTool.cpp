@@ -33,6 +33,8 @@
 #include <KarbonCurveFit.h>
 #include <KoColorBackground.h>
 
+#include <KAction>
+#include <KLocale>
 #include <QtGui/QPainter>
 
 #include <cmath>
@@ -363,6 +365,28 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     connect( this, SIGNAL(pathSelectedChanged(bool)),
              widget, SLOT(setUsePathEnabled(bool)) );
 
+    // add shortcuts
+    KAction *action = new KAction( i18n("Calligraphy: increase width"), this );
+    action->setShortcut( Qt::Key_Right );
+    connect( action, SIGNAL(triggered()), widget, SLOT(increaseWidth()) );
+    addAction( "calligraphy_increase_width", action );
+
+    action = new KAction( i18n("Calligraphy: decrease width"), this );
+    action->setShortcut( Qt::Key_Left );
+    connect( action, SIGNAL(triggered()), widget, SLOT(decreaseWidth()) );
+    addAction( "calligraphy_decrease_width", action );
+
+    action = new KAction( i18n("Calligraphy: increase angle"), this );
+    action->setShortcut( Qt::Key_Up );
+    connect( action, SIGNAL(triggered()), widget, SLOT(increaseAngle()) );
+    addAction( "calligraphy_increase_angle", action );
+
+    action = new KAction( i18n("Calligraphy: decrease angle"), this );
+    action->setShortcut( Qt::Key_Down );
+    connect( action, SIGNAL(triggered()), widget, SLOT(decreaseAngle()) );
+    addAction( "calligraphy_decrease_angle", action );
+
+    // sync all parameters with the loaded profile
     widget->emitAll();
 
     m_optionWidget = widget;
