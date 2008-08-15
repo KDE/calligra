@@ -73,7 +73,7 @@ public:
     enum HeaderFooterType {
         HFTypeNone,       ///< Don't show the frames
         HFTypeEvenOdd,    ///< Show different content for even and odd pages
-        HFTypeUniform,    ///< Show the same content for each page
+        HFTypeUniform    ///< Show the same content for each page
     };
 
     /// Specifies the horizontal position of the line that separates main text and foot note
