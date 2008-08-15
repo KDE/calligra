@@ -97,16 +97,6 @@ void KPrView::initActions()
        setXMLFile( "kpresenter.rc" );
 
     // do special kpresenter stuff here
-    m_actionStartPresentation = new KActionMenu( KIcon("media-playback-start"), i18n( "Start Presentation" ), this );
-    actionCollection()->addAction( "view_mode", m_actionStartPresentation );
-    connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
-    KAction* action = new KAction( i18n( "From Current Page" ), this );
-    m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
-    action = new KAction( i18n( "From First Page" ), this );
-    m_actionStartPresentation->addAction( action );
-    connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
-
     m_actionViewModeNormal = new KAction(i18n("Normal"), this);
     m_actionViewModeNormal->setCheckable(true);
     m_actionViewModeNormal->setChecked(true);
@@ -130,9 +120,23 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
     connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
 
+    m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
+    actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
+    connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    KAction* action = new KAction( i18n( "From Current Page" ), this );
+    m_actionStartPresentation->addAction( action );
+    connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    action = new KAction( i18n( "From First Page" ), this );
+    m_actionStartPresentation->addAction( action );
+    connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
+
     action = new KAction( i18n( "Configure Slide Show..." ), this );
-    actionCollection()->addAction( "settings_slideshow", action );
+    actionCollection()->addAction( "slideshow_configure", action );
     connect( action, SIGNAL( activated() ), this, SLOT( configureSlideShow() ) );
+
+    action = new KAction( i18n( "Configure Presenter View..." ), this );
+    actionCollection()->addAction( "slideshow_presenterview", action );
+    connect( action, SIGNAL( activated() ), this, SLOT( configurePresenterView() ) );
  
     KoPADocumentStructureDocker *docStructureDocker = documentStructureDocker();
     connect(docStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
@@ -197,6 +201,10 @@ void KPrView::dialogCustomSlideShows()
 }
 
 void KPrView::configureSlideShow()
+{
+}
+
+void KPrView::configurePresenterView()
 {
     KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
     KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog( doc, this );

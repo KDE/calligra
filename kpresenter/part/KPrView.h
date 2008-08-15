@@ -57,6 +57,7 @@ protected slots:
     void showNotes();
     void dialogCustomSlideShows();
     void configureSlideShow();
+    void configurePresenterView();
 
 private:
     KActionMenu *m_actionStartPresentation;

@@ -34,8 +34,6 @@
             <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>
-            <Action name="view_mode"/>
-            <Separator/>
             <Action name="view_rulers"/>
             <Separator/>
             <Action name="view_grid"/>
@@ -53,10 +51,6 @@
         <Menu name="format"><text>F&amp;ormat</text>
             <Action name="format_masterpage"/> 
         </Menu>
-        <Menu name="settings"><text>&amp;Settings</text>
-            <Action name="settings_slideshow"/>
-            <Separator/>
-        </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
             <Action name="page_insertpage"/>
@@ -68,6 +62,13 @@
             <Separator/>
             <Action name="page_first"/>
             <Action name="page_last"/>
+        </Menu>
+        <Menu name="slideshow"><text>Sli&amp;de Show</text>
+            <Action name="slideshow_start"/>
+            <Separator/>
+            <Action name="slideshow_configure"/>
+            <Action name="slideshow_presenterview"/>
+            <Separator/>
         </Menu>
     </MenuBar>
     <ToolBar name="mainToolBar">
