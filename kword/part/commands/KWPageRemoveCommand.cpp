@@ -79,6 +79,7 @@ void KWPageRemoveCommand::redo() {
     }
 
     //TODO Alter frame properties to not auto-create a frame again.
+    //TODO unregister framesets also from KWPageSettings
 
     m_document->m_pageManager.removePage(page);
     m_document->firePageSetupChanged();
