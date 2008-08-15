@@ -89,6 +89,8 @@ void KWPageRemoveCommand::redo() {
 void KWPageRemoveCommand::undo() {
     QUndoCommand::undo();
 
+    //TODO uhm... we would need to restore the frames+framesets+content here as well :-/
+
     KWPage *page = m_document->m_pageManager.insertPage(m_pageNumber);
     page->setPageSide(m_pageSide);
     m_pageLayout.orientation = m_orientation;
