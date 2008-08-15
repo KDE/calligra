@@ -177,13 +177,11 @@ QString OracleConnectionInternal::getServerVersion()
        return(NULL);
   }	
 }
-void OracleConnectionInternal::createSequences(){
+bool OracleConnectionInternal::createSequences(){
   KexiDBDrvDbg<<endl; 
-  string sq[5]={"ROW_ID", "BLOBS","OBJECTDATA","OBJECTS","PARTS"};
- 
-  KexiDBDrvDbg<<endl; 
-  for(int i=0;i<5;i++)
-  {
+  string sq[1]={"ROW_ID"}; 
+  int i=0;/*for(int i=0;i<5;i++)
+  {*/
     try
     {
         stmt->execute("CREATE SEQUENCE KEXI__SEQ__"+sq[i]);
@@ -191,49 +189,32 @@ void OracleConnectionInternal::createSequences(){
     catch (&ea)
 	  {
 	    KexiDBDrvDbg << ea.what()<< endl;
-	    return;
+	    return false;
 	  }
-  }
+  //}
   //Needed to retrieve last generated number
   executeSQL("ALTER SEQUENCE KEXI__SEQ__ROW_ID NOCACHE");
 }
 	
-void OracleConnectionInternal::createTriggers()
+bool OracleConnectionInternal::createTrigger
+                                           (QString tableName, IndexSchema* ind)
 {
   KexiDBDrvDbg <<endl;
-  string tg[4]={"BLOBS","OBJECTDATA","OBJECTS","PARTS"};
-  string o[4]={"O","O","O","P"};
-  string create="CREATE OR REPLACE TRIGGER KEXI__TG__";
-  string before="\nBEFORE INSERT ON KEXI__";
-  string begin="\nFOR EACH ROW\nBEGIN\nSELECT KEXI__SEQ__";
-  string nextval=".NEXTVAL INTO :NEW.";
-  string into="_ID FROM DUAL;\nEND;";
-  
-  string tgaux="CREATE OR REPLACE TRIGGER KEXI__TG__AUX\n";
-	      tgaux+="AFTER INSERT ON KEXI__OBJECTS FOR EACH ROW\nBEGIN\n";
-        tgaux+="INSERT INTO KEXI__AUX VALUES (:NEW.ROWID,SYSTIMESTAMP);\nEND;";
+  QString fieldName;
+  QString tg="CREATE OR REPLACE TRIGGER KEXI__TG__"+tableName+
+             "\nBEFORE INSERT ON KEXI__"+tableName+
+             "\nFOR EACH ROW\n"+
+             "BEGIN\n";
+  for(int i=0; i<ind->fieldCount(); i++)
+  {
+      fieldName=ind->field(i)->name();          
+      tg=tg+"SELECT KEXI__SEQ__"+tableName+"__"+fieldName+".NEXTVAL"+
+            "INTO :NEW."+fieldName+";\n";
+  }
+  tg=tg+"END;";
   try
   {
-    for (int i=0;i<4;i++)
-    {
-      rs=stmt->executeQuery
-	        ("SELECT 1 FROM USER_TABLES WHERE TABLE_NAME LIKE 'KEXI__"+tg[i]+"'");
-	    if(rs->next())
-	    {
-        stmt->execute(create+tg[i]+before+tg[i]+begin+tg[i]+nextval+o[i]+into);
-      }
-      stmt->closeResultSet(rs);
-      rs=0;
-    }
-    /*rs=stmt->executeQuery
-	        ("SELECT 1 FROM USER_TABLES WHERE TABLE_NAME LIKE 'KEXI__PARTS'");
-	  if(rs->next())
-	  {  
-      KexiDBDrvDbg <<"AUX"<<endl;
-      KexiDBDrvDbg <<endl<<tgaux.c_str()<<endl;
-      //stmt->execute(tgaux);
-    }
-    */
+    stmt->execute(tg.latin1());
   }    
 	catch (&ea)
 	{

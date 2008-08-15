@@ -66,8 +66,8 @@ class OracleConnectionInternal : public KexiDB::ConnectionInternal
 		
 		//This two are to solve the AUTO_INCREMENT_PK issue 
 		//(nothing similar to that or postgre "SERIAL" in oracle)
-		void createSequences();
-	  void createTriggers();
+		bool createSequences();
+	  bool createTrigger(QString tableName, IndexSchema* ind);
 		
     oracle::occi::Environment *env;
 		oracle::occi::ResultSet  	*rs;

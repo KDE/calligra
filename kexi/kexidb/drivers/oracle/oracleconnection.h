@@ -70,6 +70,8 @@ class OracleConnection : public Connection
 		virtual bool drv_getDatabasesList( QStringList &list );
 		virtual bool drv_createTable(const TableSchema& tableSchema);
 		virtual bool drv_afterInsert(const QString& table, FieldList& fields);
+		virtual bool drv_dropTable( const QString& name );
+		virtual bool drv_alterTableName(TableSchema& tableSchema, const QString& newName);
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_getTablesList( QStringList &list );
