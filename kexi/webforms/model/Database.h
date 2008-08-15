@@ -37,14 +37,14 @@ class QString;
 namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
 namespace Database {     // begin namespace Database
-            
+
     /*!
      * Get all table names
      * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
      * @return QHash with captions as keys and object names as values
      */
     QHash<QString, QString> getNames(KexiDB::ObjectTypes);
-    
+
     /*!
      * Get the schema of a table
      * @param QString& the table name
@@ -59,7 +59,7 @@ namespace Database {     // begin namespace Database
      * @param uint the primary key (numeric) value
      */
     QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString&, const uint);
-    
+
     /*!
      * Despite its name, this method is useful when creating new rows, too
      * Create/Update a row in a given table
@@ -88,8 +88,11 @@ namespace Database {     // begin namespace Database
 
     /*!
      * Run query and show result
+     * @param QString& the query name
+     * @return QPair whose first value is a KexiDB::TableSchema representing the master table \
+     *  with record number as key and a QList<QString> as value (representing data in the row)
      */
-    QPair< KexiDB::QuerySchema, QMap<uint, QList<QString> > > readQuery(const QString&);
+    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readQuery(const QString&);
 
 } // end namespace Database
 } // end namespace Model
