@@ -1,5 +1,10 @@
 [Desktop Entry]
 Name=Karbon PDF Import Filter
+Name[ga]=Scagaire Iompórtála Karbon PDF
+Name[pt]=Filtro de Importação de PDF para o Karbon
+Name[pt_BR]=Filtro de Importação de PDF para o Karbon
+Name[sv]=Karbon PDF-importfilter
+Name[uk]=Фільтр імпорту PDF до Karbon
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/svg+xml
