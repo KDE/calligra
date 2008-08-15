@@ -1,3 +1,16 @@
+ * Frame around the sub shapes.
+
+Plot Area Settings
+ * Title
+    - Readjust title, subtitle, etc on size changes.
+ * make Background button work.
+    - Choose background color
+    - Choose background image
+ * Axes
+    - Logarithmic scaling removes the plot area.
+
+
+
 Legend
 ======
 

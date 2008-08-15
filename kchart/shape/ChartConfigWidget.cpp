@@ -1099,7 +1099,8 @@ void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
         emit legendOrientationChanged( Qt::Horizontal );
 }
 
-void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
+void ChartConfigWidget::ui_axisSelectionChanged( int index )
+{
     // Check for valid index
     if ( index < 0 )
         return;
@@ -1196,7 +1197,8 @@ void ChartConfigWidget::ui_dataSetLabelDataRegionChanged()
     emit dataSetLabelDataRegionChanged( dataSet, region );
 }
 
-void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index ) {
+void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
+{
     // Check for valid index
     if ( index < 0 )
         return;
@@ -1219,7 +1221,8 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
     d->selectedDataSet_CellRegionDialog = index;
 }
 
-void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
+void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
+{
     // Check for valid index
     if ( index < 0 )
         return;
@@ -1243,15 +1246,13 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );
     
-    if ( dataSet->chartType() != LastChartType )
-    {
+    if ( dataSet->chartType() != LastChartType ) {
         d->ui.dataSetHasChartType->blockSignals( true );
         d->ui.dataSetHasChartType->setChecked( true );
         d->ui.dataSetHasChartType->blockSignals( false );
         d->ui.dataSetChartTypeMenu->setEnabled( true );
     }
-    else
-    {
+    else {
         d->ui.dataSetHasChartType->blockSignals( true );
         d->ui.dataSetHasChartType->setChecked( false );
         d->ui.dataSetHasChartType->blockSignals( false );
@@ -1260,13 +1261,10 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
 
     Q_ASSERT( d->ui.dataSetChartTypeMenu->menu() );
 
-    if ( dataSet->chartType() != LastChartType )
-    {
-        switch ( dataSet->chartType() )
-        {
+    if ( dataSet->chartType() != LastChartType ) {
+        switch ( dataSet->chartType() ) {
         case BarChartType:
-            switch ( dataSet->chartSubType() )
-            {
+            switch ( dataSet->chartSubType() ) {
             case StackedChartSubtype:
                 d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_stacked" ) );
                 break;
@@ -1278,8 +1276,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
             }
             break;
         case LineChartType:
-            switch ( dataSet->chartSubType() )
-            {
+            switch ( dataSet->chartSubType() ) {
             case StackedChartSubtype:
                 d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
                 break;
@@ -1291,8 +1288,7 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
             }
             break;
         case AreaChartType:
-            switch ( dataSet->chartSubType() )
-            {
+            switch ( dataSet->chartSubType() ) {
             case StackedChartSubtype:
                 d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
                 break;
@@ -1314,15 +1310,15 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
             break;
         }
     }
-    else
-    {
+    else {
         d->ui.dataSetChartTypeMenu->setIcon( QIcon() );
     }
     
     d->selectedDataSet = index;
 }
 
-void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
+void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index )
+{
     if ( index < 0 )
         return;
     Q_ASSERT( d->dataSetAxes.size() >= index );
@@ -1335,26 +1331,30 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
     emit dataSetAxisChanged( dataSet, axis );
 }
 
-void ChartConfigWidget::ui_axisTitleChanged( const QString& title ) {
+void ChartConfigWidget::ui_axisTitleChanged( const QString& title )
+{
     Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
     
     emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
 }
 
-void ChartConfigWidget::ui_axisShowTitleChanged( bool b ) {
+void ChartConfigWidget::ui_axisShowTitleChanged( bool b )
+{
     Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
     
     // To hide the axis title, we pass an empty string
     emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
-void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {
+void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b )
+{
     Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
     
     emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
-void ChartConfigWidget::ui_axisAdded() {
+void ChartConfigWidget::ui_axisAdded()
+{
     AxisPosition position;
     if ( d->newAxisDialog.positionIsTop->isChecked() )
         position = TopAxisPosition;
@@ -1373,11 +1373,13 @@ void ChartConfigWidget::ui_axisAdded() {
     d->ui.axes->setCurrentIndex( d->ui.axes->count() - 1 );
 }
 
-void ChartConfigWidget::ui_addAxisClicked() {
+void ChartConfigWidget::ui_addAxisClicked()
+{
     d->newAxisDialog.show();
 }
 
-void ChartConfigWidget::ui_removeAxisClicked() {
+void ChartConfigWidget::ui_removeAxisClicked()
+{
     int index = d->ui.axes->currentIndex();
     // Check for valid index
     if ( index < 0 )
@@ -1462,6 +1464,7 @@ void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
     Q_ASSERT( d->dataSets.count() > d->selectedDataSet );
     emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
 }
+
 
 #include "ChartConfigWidget.moc"
 

@@ -501,21 +501,18 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
     d->dataSets.append( dataSet );
     dataSet->setAttachedAxis( this );
     
-    if ( dimension() == XAxisDimension )
-    {
+    if ( dimension() == XAxisDimension ) {
         dataSet->setCategoryDataRegionString( d->categoryDataRegionString );
     }
-    else if ( dimension() == YAxisDimension )
-    {
+    else if ( dimension() == YAxisDimension ) {
         ChartType chartType = dataSet->chartType();
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
         
-        KDChart::AbstractDiagram *diagram = 0;
-        KDChartModel *model = 0;
+        KDChart::AbstractDiagram  *diagram = 0;
+        KDChartModel              *model   = 0;
         
-        switch ( chartType )
-        {
+        switch ( chartType ) {
         case BarChartType:
             if ( !d->kdBarDiagram )
                 d->createBarDiagram();
@@ -561,8 +558,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         if ( model )
             model->addDataSet( dataSet, silent );
         
-        if ( !silent )
-        {
+        if ( !silent ) {
             layoutPlanes();
             requestRepaint();
         }
@@ -579,12 +575,10 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     d->dataSets.removeAll( dataSet );
     dataSet->setAttachedAxis( 0 );
     
-    if ( dimension() == XAxisDimension )
-    {
+    if ( dimension() == XAxisDimension ) {
         dataSet->setCategoryDataRegionString( "" );
     }
-    else if ( dimension() == YAxisDimension )
-    {
+    else if ( dimension() == YAxisDimension ) {
         ChartType chartType = dataSet->chartType();
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
@@ -592,8 +586,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         KDChart::AbstractDiagram **oldDiagram = 0;
         KDChartModel **oldModel = 0;
         
-        switch ( chartType )
-        {
+        switch ( chartType ) {
         case BarChartType:
             oldModel = &d->kdBarDiagramModel;
             oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
@@ -620,21 +613,16 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
             break;
         }
         
-        if ( oldModel && *oldModel )
-        {
-            if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() )
-            {
+        if ( oldModel && *oldModel ) {
+            if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() ) {
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
-                if ( plane )
-                {
+                if ( plane ) {
                     plane->takeDiagram( (*oldDiagram) );
-                    if ( plane->diagrams().size() == 0 )
-                    {
+                    if ( plane->diagrams().size() == 0 ) {
                         d->plotArea->kdChart()->takeCoordinatePlane( plane );
                     }
                 }
-                if ( d->plotArea->parent()->legend()->kdLegend() )
-                {
+                if ( d->plotArea->parent()->legend()->kdLegend() ) {
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
                 }
                 Q_ASSERT( oldDiagram );
@@ -653,8 +641,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         dataSet->setKdChartModel( 0 );
         dataSet->setKdDataSetNumber( -1 );
     
-        if ( !silent )
-        {
+        if ( !silent ) {
             layoutPlanes();
             requestRepaint();
         }
@@ -670,7 +657,8 @@ double Axis::majorInterval() const
 
 void Axis::setMajorInterval( double interval )
 {
-    // Don't overwrite if automatic interval is being requested ( for interval = 0 )
+    // Don't overwrite if automatic interval is being requested ( for
+    // interval = 0 )
     if ( interval != 0.0 )
         d->majorInterval = interval;
     
@@ -745,7 +733,9 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
     if ( dimension() != YAxisDimension )
         return;
 
-    d->kdPlane->setAxesCalcModeY( d->logarithmicScaling ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
+    d->kdPlane->setAxesCalcModeY( d->logarithmicScaling
+				  ? KDChart::AbstractCoordinatePlane::Logarithmic
+				  : KDChart::AbstractCoordinatePlane::Linear );
     
     requestRepaint();
 }
@@ -766,13 +756,13 @@ void Axis::setShowGrid( bool showGrid )
 
     // KDChart
     KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
-        if ( !plane )
-            return;
+    if ( !plane )
+	return;
         
         
-    KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
-	attributes.setGridVisible( d->showGrid );
-	plane->setGridAttributes( orientation(), attributes );
+    KDChart::GridAttributes  attributes = plane->gridAttributes( orientation() );
+    attributes.setGridVisible( d->showGrid );
+    plane->setGridAttributes( orientation(), attributes );
     
     requestRepaint();
 }
@@ -811,33 +801,34 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     
     if ( !axisElement.isNull() ) {
         KoXmlElement n;
-        for ( n = axisElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
+        for ( n = axisElement.firstChild().toElement();
+	      !n.isNull();
+	      n = n.nextSibling().toElement() )
         {
             if ( n.namespaceURI() != KoXmlNS::chart )
                 continue;
-            if ( n.localName() == "title" )
-            {
-                if ( n.hasAttributeNS( KoXmlNS::svg, "x" ) && n.hasAttributeNS( KoXmlNS::svg, "y" ) )
+            if ( n.localName() == "title" ) {
+                if ( n.hasAttributeNS( KoXmlNS::svg, "x" )
+		     && n.hasAttributeNS( KoXmlNS::svg, "y" ) )
                 {
                     const qreal x = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "x" ) );
                     const qreal y = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "y" ) );
                     d->title->setPosition( QPointF( x, y ) );
                 }
                 
-                if ( n.hasAttributeNS( KoXmlNS::svg, "width" ) && n.hasAttributeNS( KoXmlNS::svg, "height" ) )
+                if ( n.hasAttributeNS( KoXmlNS::svg, "width" )
+		     && n.hasAttributeNS( KoXmlNS::svg, "height" ) )
                 {
                     const qreal width = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "width" ) );
                     const qreal height = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "height" ) );
                     d->title->setSize( QSizeF( width, height ) );
                 }
                 
-                if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-                {
+                if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
                     context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
                     styleStack.setTypeProperties( "text" );
                     
-                    if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
-                    {
+                    if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
                         const qreal fontSize = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) );
                         QFont font = d->titleData->document()->defaultFont();
                         font.setPointSizeF( fontSize );
@@ -846,7 +837,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     
                     styleStack.setTypeProperties( "graphic" );
                     
-                    if ( styleStack.hasProperty( KoXmlNS::chart, "logarithmic" ) && styleStack.property( KoXmlNS::chart, "logarithmic" ) == "true" )
+                    if ( styleStack.hasProperty( KoXmlNS::chart, "logarithmic" )
+			 && styleStack.property( KoXmlNS::chart, "logarithmic" ) == "true" )
                     {
                         setScalingLogarithmic( true );
                     }
@@ -854,52 +846,44 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     {
                         d->title->setVisible( styleStack.property( KoXmlNS::chart, "display-label" ) == "true" );
                     }
-                    if( styleStack.hasProperty( KoXmlNS::chart, "gap-width" ) )
+                    if ( styleStack.hasProperty( KoXmlNS::chart, "gap-width" ) )
                     {
                         setGapBetweenSets( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "gap-width" ) ) );
                     }
-                    if( styleStack.hasProperty( KoXmlNS::chart, "overlap" ) )
-                    {
+                    if ( styleStack.hasProperty( KoXmlNS::chart, "overlap" ) ) {
                         setGapBetweenBars( -KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "overlap" ) ) );
                     }
                 }
                 
                 const KoXmlElement textElement = KoXml::namedItemNS( n, KoXmlNS::text, "p" );
-                if ( !textElement.isNull() )
-                {
+                if ( !textElement.isNull() ) {
                     d->title->setVisible( true );
                     setTitleText( textElement.text() );
                 }
-                else
-                {
+                else {
                     qWarning() << "Error: Axis' <chart:title> element contains no <text:p>";
                 }
             }
-            else if ( n.localName() == "grid" )
-            {
+            else if ( n.localName() == "grid" ) {
                 bool major = false;
-                if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) )
-                {
+                if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
                     const QString className = n.attributeNS( KoXmlNS::chart, "class" );
                     if ( className == "major" )
                         major = true;
                 }
-                if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-                {
+
+                if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
                     context.odfLoadingContext().fillStyleStack( n, KoXmlNS::style, "style-name", "chart" );
                     styleStack.setTypeProperties( "graphic" );
-                    if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) )
-                    {
+                    if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) ) {
                         const QString strokeColor = styleStack.property( KoXmlNS::svg, "stroke-color" );
                         KDChart::GridAttributes attr = d->kdPlane->gridAttributes( orientation() );
                         attr.setGridVisible( true );
-                        if ( major )
-                        {
+                        if ( major ) {
                             attr.setGridPen( QColor( strokeColor ) );
                             attr.setSubGridVisible( false );
                         }
-                        else
-                        {
+                        else {
                             attr.setSubGridPen( QColor( strokeColor ) );
                             attr.setSubGridVisible( true );
                         }
@@ -907,8 +891,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     }
                 }
             }
-            else if ( n.localName() == "categories" )
-            {
+            else if ( n.localName() == "categories" ) {
                 if ( n.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
                     setCategoryDataRegionString( n.attributeNS( KoXmlNS::table, "cell-range-address" ) );
             }
@@ -957,16 +940,16 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 
 void Axis::update() const
 {
-    if ( d->kdBarDiagram )
-    {
+    if ( d->kdBarDiagram ) {
         d->kdBarDiagram->doItemsLayout();
         d->kdBarDiagram->update();
     }
-    if ( d->kdLineDiagram )
-    {
+
+    if ( d->kdLineDiagram ) {
         d->kdLineDiagram->doItemsLayout();
         d->kdLineDiagram->update();
     }
+
     d->plotArea->parent()->requestRepaint();
 }
 
@@ -985,8 +968,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     // Return if there's nothing to do
     if ( chartType == d->plotAreaChartType )
         return;
-    if ( d->dataSets.isEmpty() )
-    {
+
+    if ( d->dataSets.isEmpty() ) {
         d->plotAreaChartType = chartType;
         return;
     }
@@ -996,8 +979,7 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     KDChart::AbstractDiagram **oldDiagram = 0;
     KDChart::AbstractDiagram *newDiagram = 0;
     
-    switch ( d->plotAreaChartType )
-    {
+    switch ( d->plotAreaChartType ) {
     case BarChartType:
         oldModel = &d->kdBarDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
@@ -1024,19 +1006,16 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         break;
     }
     
-    if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) )
-    {
+    if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) ) {
         if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPlane ) )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
     }
-    else if ( isPolar( d->plotAreaChartType ) && isCartesian( chartType ) )
-    {
+    else if ( isPolar( d->plotAreaChartType ) && isCartesian( chartType ) ) {
         if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPolarPlane ) )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
     }
     
-    switch ( chartType )
-    {
+    switch ( chartType ) {
     case BarChartType:
         if ( !d->kdBarDiagram )
            d->createBarDiagram();
@@ -1080,45 +1059,39 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     if (    isPolar( chartType ) && !isPolar( d->plotAreaChartType )
          || !isPolar( chartType ) && isPolar( d->plotAreaChartType ) )
     {
-        foreach( DataSet *dataSet, d->dataSets )
-        {
-            if ( dataSet->chartType() != LastChartType )
-            {
+        foreach ( DataSet *dataSet, d->dataSets ) {
+            if ( dataSet->chartType() != LastChartType ) {
                 dataSet->setChartType( LastChartType );
                 dataSet->setChartSubType( NoChartSubtype );
             }
         }
     }
     
-    foreach( DataSet *dataSet, d->dataSets )
-    {
+    foreach ( DataSet *dataSet, d->dataSets ) {
         if ( dataSet->chartType() != LastChartType )
             continue;
         dataSet->setKdDiagram( newDiagram );
         newModel->addDataSet( dataSet );
-        if ( oldModel && *oldModel )
-        {
-        	if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() )
-        	{
+        if ( oldModel && *oldModel ) {
+	    if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() ) {
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
-        		if ( plane )
-        		{
-        		    plane->takeDiagram( (*oldDiagram) );
+		if ( plane ) {
+		    plane->takeDiagram( (*oldDiagram) );
                     if ( plane->diagrams().size() == 0 )
                         d->plotArea->kdChart()->takeCoordinatePlane( plane );
-        		}
-        		if ( d->plotArea->parent()->legend()->kdLegend() )
-        		    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
-        		Q_ASSERT( oldDiagram );
-        		Q_ASSERT( *oldDiagram );
-		        if ( *oldDiagram )
-		            delete *oldDiagram;
-		        delete *oldModel;
-		        *oldModel = 0;
-		        *oldDiagram = 0;
-        	}
-        	else
-        		(*oldModel)->removeDataSet( dataSet );
+		}
+		if ( d->plotArea->parent()->legend()->kdLegend() )
+		    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+		Q_ASSERT( oldDiagram );
+		Q_ASSERT( *oldDiagram );
+		if ( *oldDiagram )
+		    delete *oldDiagram;
+		delete *oldModel;
+		*oldModel = 0;
+		*oldDiagram = 0;
+	    }
+	    else
+		(*oldModel)->removeDataSet( dataSet );
         }
         dataSet->setGlobalChartType( chartType );
     }
@@ -1132,14 +1105,11 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
 
 void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
 {
-    switch ( d->plotAreaChartType )
-    {
+    switch ( d->plotAreaChartType ) {
     case BarChartType:
-        if ( d->kdBarDiagram )
-        {
+        if ( d->kdBarDiagram ) {
             KDChart::BarDiagram::BarType type;
-            switch ( subType )
-            {
+            switch ( subType ) {
             case StackedChartSubtype:
                 type = KDChart::BarDiagram::Stacked; break;
             case PercentChartSubtype:
@@ -1151,11 +1121,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         }
         break;
     case LineChartType:
-        if ( d->kdLineDiagram )
-        {
+        if ( d->kdLineDiagram ) {
             KDChart::LineDiagram::LineType type;
-            switch ( subType )
-            {
+            switch ( subType ) {
             case StackedChartSubtype:
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
@@ -1167,11 +1135,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         }
         break;
     case AreaChartType:
-        if ( d->kdAreaDiagram )
-        {
+        if ( d->kdAreaDiagram ) {
             KDChart::LineDiagram::LineType type;
-            switch ( subType )
-            {
+            switch ( subType ) {
             case StackedChartSubtype:
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
@@ -1183,9 +1149,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         }
         break;
     }
+
     foreach ( DataSet *dataSet, d->dataSets )
         dataSet->setGlobalChartSubType( subType );
-        
 }
 
 void Axis::registerKdXAxis( KDChart::CartesianAxis *axis )
@@ -1215,29 +1181,28 @@ void Axis::deregisterKdXAxis( KDChart::CartesianAxis *axis )
 void Axis::setThreeD( bool threeD )
 {
     // KDChart
-    if ( d->kdBarDiagram )
-    {
+    if ( d->kdBarDiagram ) {
         KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
         d->kdBarDiagram->setThreeDBarAttributes( attributes );
     }
-    if ( d->kdLineDiagram )
-    {
+
+    if ( d->kdLineDiagram ) {
         KDChart::ThreeDLineAttributes attributes( d->kdLineDiagram->threeDLineAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
         d->kdLineDiagram->setThreeDLineAttributes( attributes );
     }
-    if ( d->kdAreaDiagram )
-    {
+
+    if ( d->kdAreaDiagram ) {
         KDChart::ThreeDLineAttributes attributes( d->kdAreaDiagram->threeDLineAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
         d->kdAreaDiagram->setThreeDLineAttributes( attributes );
     }
-    if ( d->kdCircleDiagram )
-    {
+
+    if ( d->kdCircleDiagram ) {
         KDChart::ThreeDPieAttributes attributes( d->kdCircleDiagram->threeDPieAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
@@ -1262,8 +1227,7 @@ void Axis::layoutPlanes()
 
 void Axis::setGapBetweenBars( int percent )
 {
-    if ( d->kdBarDiagram )
-    {
+    if ( d->kdBarDiagram ) {
         KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setBarGapFactor( (float)percent / 100.0 );
         d->kdBarDiagram->setBarAttributes( attributes );
@@ -1274,8 +1238,7 @@ void Axis::setGapBetweenBars( int percent )
 
 void Axis::setGapBetweenSets( int percent )
 {
-    if ( d->kdBarDiagram )
-    {
+    if ( d->kdBarDiagram ) {
         KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
         attributes.setGroupGapFactor( (float)percent / 100.0 );
         d->kdBarDiagram->setBarAttributes( attributes );
@@ -1286,11 +1249,11 @@ void Axis::setGapBetweenSets( int percent )
 
 void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
-    if ( d->kdCircleDiagram )
-    {
+    if ( d->kdCircleDiagram ) {
         KDChart::PieAttributes attributes = d->kdCircleDiagram->pieAttributes();
         attributes.setExplodeFactor( (float)percent / 100.0 );
-        d->kdCircleDiagram->setPieAttributes( dataSet->kdDataSetNumber(), attributes );
+        d->kdCircleDiagram->setPieAttributes( dataSet->kdDataSetNumber(),
+					      attributes );
     }
     
     requestRepaint();
