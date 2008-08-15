@@ -53,5 +53,7 @@ by hand and use org-mode instead.
 	- On Windows the file is locked when used, it's not possible to barely launch
 	  the daemon in parallel with kexi. 
 ** Other
-   - [ ] After adding a new record, bring the user to the tableview
+   - [X] After adding a new record, bring the user to the tableview
+	 - I decided to stay on that page in order to allow the user to enter several
+	   entries subsequently
    - [ ] Descriptive text for field icons

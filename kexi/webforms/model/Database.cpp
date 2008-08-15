@@ -152,7 +152,7 @@ namespace Database {     // begin namespace Database
                     if (query.field(i)->type() == KexiDB::Field::BLOB) {
                         tableContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
                                                      .arg(tableName).arg(query.field(i)->name()).arg(table.primaryKey()->field(0)->name())
-                                                     .arg(QString(pkeyVal)));
+                                                     .arg(QVariant(pkeyVal).toString()));
                     } else {
                         QString escapedValue(cursor->value(i).toString());
                         // the browser usally encodes spaces as pluses.

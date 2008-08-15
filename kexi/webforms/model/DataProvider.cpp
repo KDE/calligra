@@ -31,10 +31,10 @@
 #include <kexidb/connection.h>
 
 namespace KexiWebForms {
-namespace Model {    
+namespace Model {
 
     KexiDB::Connection* gConnection;
-    
+
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
         bool status = false;
@@ -88,6 +88,6 @@ namespace Model {
         }
         return status;
     }
-    
+
 }
 }

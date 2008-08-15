@@ -29,7 +29,6 @@
 #include <pion/net/HTTPResponseWriter.hpp>
 
 #include "../../model/Database.h"
-//#include "../../model/DataProvider.h"
 #include "TemplateProvider.h"
 
 #include "Query.h"
@@ -43,13 +42,14 @@ namespace View {
         QString requestedQuery(d["kwebforms__query"]);
 
         QPair< KexiDB::QuerySchema, QMap<uint, QList<QString> > > pair = KexiWebForms::Model::Database::readQuery(requestedQuery);
+        KexiDB::TableSchema* masterTable = pair.first.masterTable();
 
         QString queryData;
         uint totalRecords = pair.second.count();
 
         // Query header
         queryData.append("<tr>\t<th scope=\"col\">Record</th>\n");
-        foreach(const KexiDB::Field* f, *pair.first.fields()) {
+        foreach(const KexiDB::Field* f, *masterTable->fields()) {
             queryData.append(QString("\t<th scope=\"col\">%1</th>\n").arg(f->captionOrName()));
         }
         queryData.append("</tr>\n");
