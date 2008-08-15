@@ -54,7 +54,7 @@ void KWPageRemoveCommand::redo() {
     const double pageheight = page->height();
     const double pageoffset = page->offsetInDocument();
 
-#idef __GNUC__
+#ifdef __GNUC__
     #warning the logic to delete pages is still broken
 #endif
 
@@ -73,6 +73,9 @@ void KWPageRemoveCommand::redo() {
                 //f->shape()->setAbsolutePosition(pos);
             }
         }
+        // remove empty framesets
+        if (fs->frameCount() < 1)
+            m_document->removeFrameSet(fs);
     }
 
     //TODO Alter frame properties to not auto-create a frame again.
