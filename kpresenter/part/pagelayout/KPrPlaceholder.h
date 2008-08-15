@@ -25,7 +25,7 @@
 #include <QRectF>
 
 class KoXmlElement;
-class KoPASavingContext;
+class KoXmlWriter;
 
 class KPrPlaceholder
 {
@@ -41,10 +41,10 @@ public:
      * can be converted to relative ones.
      */
     bool loadOdf( const KoXmlElement &element, const QRectF & pageSize );
-    void saveOdf( KoPASavingContext & context );
+    void saveOdf( KoXmlWriter & xmlWriter );
 
     QString presentationObject();
-    QRectF position( const QRectF & pageSize );
+    QRectF size( const QRectF & pageSize );
 
 private:
     qreal percent( const KoXmlElement & element, const char * type, qreal absolute );
@@ -55,7 +55,7 @@ private:
      * So the values should be between 0 and 100 might be bigger but does not make 
      * much sense.
      */
-    QRectF m_relativePos;
+    QRectF m_relativeSize;
 };
 
 #endif /* KPRPLACEHOLDER_H */

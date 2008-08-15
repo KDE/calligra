@@ -34,7 +34,7 @@ public:
     KPrPageLayout();
     ~KPrPageLayout();
     bool loadOdf( const KoXmlElement &element, KoPALoadingContext &loadingContext );
-    void saveOdf( KoPASavingContext & context );
+    void saveOdf( KoPASavingContext & context ) const;
 
 private:
     // The display name of the layout

@@ -19,8 +19,14 @@
 
 #include "KPrPageLayout.h"
 
+#include <QBuffer>
+#include <kdebug.h>
+
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 #include "KPrPlaceholder.h"
 
 KPrPageLayout::KPrPageLayout()
@@ -44,21 +50,36 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &lo
     KoXmlElement child;
     forEachElement( child, element ) {
         if ( child.tagName() == "placeholder" && element.namespaceURI() == KoXmlNS::presentation ) {
-#if 0
             KPrPlaceholder * placeholder = new KPrPlaceholder;
-            if ( placeholder->loadOdf( child, loadingContext ) ) {
+            if ( placeholder->loadOdf( child, QRectF( 0, 0, 100, 100 ) /* TODO */ ) ) {
                 m_placeholders.append( placeholder );
             }
             else {
-                // TODO warning
+                kWarning(33000) << "loading placeholder failed";
                 delete placeholder;
             }
-#endif
+        }
+        else {
+            kWarning(33000) << "unknown tag" << child.tagName() << "when loading page layout";
         }
     }
     return true;
 }
 
-void KPrPageLayout::saveOdf( KoPASavingContext & context )
+void KPrPageLayout::saveOdf( KoPASavingContext & context ) const
 {
+    KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
+    QBuffer buffer;
+    buffer.open( IO_WriteOnly );
+    KoXmlWriter elementWriter( &buffer );
+    QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
+    for ( ; it != m_placeholders.end(); ++it ) {
+        ( *it )->saveOdf( elementWriter );
+    }
+
+    QString placeholders = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    style.addChildElement( "placeholders", placeholders );
+
+    // need to save the ptr -> style in the saving context so the pages can use it
+    // TODO return context.mainStyles().lookup( style, "pl" );
 }

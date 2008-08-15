@@ -20,8 +20,10 @@
 #include "KPrPlaceholder.h"
 
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
+#include <KoPASavingContext.h>
 
 KPrPlaceholder::KPrPlaceholder()
 {
@@ -41,38 +43,49 @@ bool KPrPlaceholder::loadOdf( const KoXmlElement & element, const QRectF & pageS
         return false;
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "x" ) ) {
-        m_relativePos.setX( percent( element, "x", pageSize.x() ) );
+        m_relativeSize.setX( percent( element, "x", pageSize.x() ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "y" ) ) {
-        m_relativePos.setY( percent( element, "y", pageSize.y() ) );
+        m_relativeSize.setY( percent( element, "y", pageSize.y() ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "width" ) ) {
-        m_relativePos.setWidth( percent( element, "width", pageSize.width() ) );
+        m_relativeSize.setWidth( percent( element, "width", pageSize.width() ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "height" ) ) {
-        m_relativePos.setHeight( percent( element, "height", pageSize.height() ) );
+        m_relativeSize.setHeight( percent( element, "height", pageSize.height() ) );
     }
     return true;
 }
 
-void KPrPlaceholder::saveOdf( KoPASavingContext & context )
+void KPrPlaceholder::saveOdf( KoXmlWriter & xmlWriter )
 {
+    xmlWriter.startElement( "presentation:placeholder" );
+    xmlWriter.addAttribute( "presentation:object", m_presentationObject );
+    xmlWriter.addAttribute( "svg:x", QString( "%1%%" ).arg( m_relativeSize.x() ) );
+    xmlWriter.addAttribute( "svg:y", QString( "%1%%" ).arg( m_relativeSize.y() ));
+    xmlWriter.addAttribute( "svg:width", QString( "%1%%" ).arg( m_relativeSize.width() ));
+    xmlWriter.addAttribute( "svg:height", QString( "%1%%" ).arg( m_relativeSize.height() ));
 }
 
 QString KPrPlaceholder::presentationObject()
 {
-  return QString();
+    return m_presentationObject;
 }
 
-QRectF KPrPlaceholder::position( const QRectF & pageSize )
+QRectF KPrPlaceholder::size( const QRectF & pageSize )
 {
-  return QRectF();
+    QRectF s;
+    s.setX( pageSize.width() * m_relativeSize.x() );
+    s.setY( pageSize.height() * m_relativeSize.y() );
+    s.setWidth( pageSize.width() * m_relativeSize.width() );
+    s.setY( pageSize.height() * m_relativeSize.height() );
+    return s;
 }
 
 qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, qreal absolute )
 {
     qreal tmp = 0.0;
-    QString value = element.attributeNS( KoXmlNS::svg, type );
+    QString value = element.attributeNS( KoXmlNS::svg, type, QString( "0%" ) );
     if ( value.indexOf( '%' ) > -1 ) { // percent value
         tmp = value.remove( '%' ).toDouble();
     }
