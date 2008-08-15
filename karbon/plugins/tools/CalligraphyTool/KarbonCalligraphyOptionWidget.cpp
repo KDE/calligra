@@ -84,7 +84,8 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     QLabel *angleLabel = new QLabel( i18n( "Angle:" ), this );
     angleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     angleBox = new QSpinBox;
-    angleBox->setRange( 0, 180 );
+    angleBox->setRange( 0, 179 );
+    angleBox->setWrapping( true );
     angleLayout->addWidget( angleLabel );
     angleLayout->addWidget( angleBox );
     detailsLayout->addLayout( angleLayout );
@@ -283,12 +284,12 @@ void KarbonCalligraphyOptionWidget::decreaseWidth()
 
 void KarbonCalligraphyOptionWidget::increaseAngle()
 {
-    angleBox->setValue( angleBox->value() + 3 );
+    angleBox->setValue( (angleBox->value() + 3) % 180 );
 }
 
 void KarbonCalligraphyOptionWidget::decreaseAngle()
 {
-    angleBox->setValue( angleBox->value() - 3 );
+    angleBox->setValue( (angleBox->value() - 3) % 180 );
 }
 
 /******************************************************************************
