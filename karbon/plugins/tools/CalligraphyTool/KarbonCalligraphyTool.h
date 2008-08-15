@@ -65,6 +65,8 @@ private slots:
 
 private:
     void addPoint( KoPointerEvent *event );
+    // auxiliary function that sets m_angle
+    void setAngle( KoPointerEvent *event );
     // auxiliary functions to calculate the dynamic parameters
     // returns the new point and sets speed to the speed
     QPointF calculateNewPoint(const QPointF &mousePos, QPointF *speed);
@@ -76,12 +78,16 @@ private:
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
 
+    // used to determine if the device supports tilt
+    bool m_deviceSupportsTilt;
+
     bool m_usePath;         // follow selected path
     bool m_usePressure;     // use tablet pressure
     bool m_useAngle;        // use tablet angle
     double m_strokeWidth;
     double m_lastWidth;
-    double m_angle; // angle in radians
+    double m_customAngle;   // angle set by the user
+    double m_angle;  // angle to use, may use the device angle, in radians!!!
     double m_fixation;
     double m_thinning;
     double m_caps;
