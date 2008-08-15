@@ -27,6 +27,7 @@ class KoPathShape;
 class KoShapeGroup;
 class KoPathPoint;
 class KarbonCalligraphicShape;
+class KarbonCalligraphyOptionWidget;
 
 class KarbonCalligraphyTool : public KoTool
 {
@@ -69,6 +70,8 @@ private:
     QPointF calculateNewPoint(const QPointF &mousePos, QPointF *speed);
     double calculateWidth( double pressure );
     double calculateAngle( const QPointF &oldSpeed, const QPointF &newSpeed);
+
+    KarbonCalligraphyOptionWidget *m_optionWidget;
 
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;

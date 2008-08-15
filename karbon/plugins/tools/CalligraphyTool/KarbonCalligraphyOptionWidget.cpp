@@ -153,6 +153,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 {
     qDeleteAll( profiles );
+    kDebug() << "dtor!!!!";
 }
 
 /*void KarbonCalligraphyOptionWidget::customProfile()
