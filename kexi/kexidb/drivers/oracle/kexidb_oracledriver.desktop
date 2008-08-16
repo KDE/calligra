@@ -4,6 +4,7 @@ Name=Oracle
 Comment=Kexi database driver for accessing Oracle servers
 Comment[et]=Kexi andmebaasidraiver Oracle serverite kasutamiseks
 Comment[ga]=Tiománaí bunachair sonraí Kexi lenar féidir freastalaithe Oracle a rochtain
+Comment[gl]=Motor da base de datos de Kexi para o acceso a servidores Oracle
 Comment[it]=Driver per banche dati Kexi per accedere ai server Oracle
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Oracle
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores Oracle
