@@ -55,7 +55,7 @@ void KWPageRemoveCommand::redo() {
     Q_ASSERT(page);
 
     const QRectF pagerect = page->rect();
-    const double pageheight = page->height();
+    //const double pageheight = page->height();
     //const double topOfPage = m_document->pageManager()->topOfPage(m_pageNumber);
     //const double pageoffset = page->offsetInDocument();
 
@@ -85,9 +85,8 @@ void KWPageRemoveCommand::redo() {
                     }
 
                     shapes.append(f->shape());
-                    previousPositions.append(pos);
-                    pos.setY(pos.y() - pageheight);
-                    newPositions.append(pos);
+                    previousPositions.append(f->shape()->position());
+                    newPositions.append(f->shape()->position() - QPointF(0, pagerect.height()));
                 }
             }
         }
