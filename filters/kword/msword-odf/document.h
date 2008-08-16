@@ -39,6 +39,7 @@
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
+#include <KoStore.h>
 
 class KoStoreDevice;
 
@@ -58,7 +59,8 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles, KoXmlWriter* metaWriter);
+    Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
+            KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store);
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -92,7 +94,7 @@ public:
     };
 
     // Called by PictureHandler
-    KoStoreDevice* createPictureFrameSet( const QSizeF& size );
+    KoStoreDevice* createPictureFrameSet(QString filename);
 
 public slots:
     // Connected to the KWordTextHandler only when parsing the body

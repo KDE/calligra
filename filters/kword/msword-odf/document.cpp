@@ -44,10 +44,11 @@
 #include <Q3ValueList>
 #include <QBuffer>
 
-Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles, KoXmlWriter* metaWriter )
+Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
+        KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store)
     : m_replacementHandler( new KWordReplacementHandler ),
-      m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ), m_headerCount(0),
-      m_hasHeader(false), m_hasFooter(false),
+      m_pictureHandler( new KWordPictureHandler(this, bodyWriter, metaWriter, store)),
+      m_textHandler( 0 ), m_headerCount(0), m_hasHeader(false), m_hasFooter(false),
       m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ), m_pageLayoutStyle(0),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
@@ -719,11 +720,14 @@ void Document::processSubDocQueue()
 //get the subdocument
 //create the frame for it
 //create the picture element
-KoStoreDevice* Document::createPictureFrameSet( const QSizeF& size )
+KoStoreDevice* Document::createPictureFrameSet(QString filename)
 {
     kDebug(30513) ;
+
+    return m_chain->storageFile(filename, KoStore::Write);
+
     // Grab data that was stored with the functor, that triggered this parsing
-    SubDocument subdoc( m_subdocQueue.front() );
+    //SubDocument subdoc( m_subdocQueue.front() );
 
     //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     //framesetElement.setAttribute( "frameType", 2 /*picture*/ );
@@ -744,10 +748,10 @@ KoStoreDevice* Document::createPictureFrameSet( const QSizeF& size )
     //QDomElement keyElem = m_mainDocument.createElement("KEY");
     //pictureElem.appendChild( keyElem );
     //keyElem.setAttribute( "filename", subdoc.extraName );
-    m_pictureList.append( subdoc.extraName );
+    //m_pictureList.append( subdoc.extraName );
 
-    kDebug(30513) <<"Preparing to write picture for '" << subdoc.name <<"' into" << subdoc.extraName;
-    return m_chain->storageFile( subdoc.extraName, KoStore::Write );
+    //kDebug(30513) <<"Preparing to write picture for '" << subdoc.name <<"' into" << subdoc.extraName;
+    //return m_chain->storageFile( subdoc.extraName, KoStore::Write );
 }
 
 

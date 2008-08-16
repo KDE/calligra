@@ -29,9 +29,14 @@
 
 using namespace wvWare;
 
-KWordPictureHandler::KWordPictureHandler( Document* doc ) : QObject(), m_doc(doc)
+KWordPictureHandler::KWordPictureHandler(Document* doc, KoXmlWriter* bodyWriter,
+        KoXmlWriter* metaWriter, KoStore* store)
+    : QObject(), m_doc(doc), m_pictureCount(0)
 {
     kDebug(30513) ;
+    m_bodyWriter = bodyWriter;
+    m_metaWriter = metaWriter;
+    m_store = store;
 }
 
 #ifdef IMAGE_IMPORT
@@ -44,7 +49,44 @@ void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Wo
 
 void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> )
 {
-    kDebug(30513) << "Escher data found";
+    kDebug(30513) << "Escher data found 2";
+
+    //set up filename
+    QString picName("Pictures/");
+    picName.append(QString::number(m_pictureCount));
+    picName.append(".jpg");
+
+    //write picture data to file
+    //pass KoStore into document & then picturehandler
+    //need manifest writer, too
+    //KoStoreDevice dev(m_store);
+    //dev.open(QIODevice::WriteOnly);
+    m_store->open(picName);//open picture file
+    //QIODevice* dev = m_store->device();//get device to write to
+#define IMG_BUF_SIZE 2048L
+    Q_LONG len = reader.size();
+    while ( len > 0 )  {
+        wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
+        size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
+        Q_LONG n1 = m_store->write( (const char*)buf, n );
+        kDebug(30513) << (int) buf;
+        Q_ASSERT( (size_t)n1 == n );
+        if ( (size_t)n1 != n )
+            return; // ouch
+        len -= n;
+        delete [] buf;
+    }
+    Q_ASSERT( len == 0 );
+    m_store->close(); //close picture file
+
+    //m_manifestWriter->addManifestEntry();
+
+    //write tags to m_bodyWriter
+    m_bodyWriter->startElement("draw:image");
+    m_bodyWriter->addAttribute("xlink:href", picName);
+    m_bodyWriter->endElement();//draw:image
+
+    m_pictureCount++;
 }
 
 void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf )
@@ -57,7 +99,8 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
     // We combine those two things into one call to the document
     QSizeF size( (double)picf->dxaGoal / 20.0, (double)picf->dyaGoal / 20.0 );
     kDebug(30513) <<"size=" << size;
-    KoStoreDevice* dev = m_doc->createPictureFrameSet( size );
+    //fix this next line
+    KoStoreDevice* dev = m_doc->createPictureFrameSet( QString("") );
     Q_ASSERT(dev);
     if ( !dev )
         return; // ouch

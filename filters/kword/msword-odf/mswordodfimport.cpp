@@ -95,9 +95,12 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter metaWriter(&buf);
 
-    //open contentWriter & bodyWriter
-    KoXmlWriter* contentWriter = oasisStore.contentWriter();
-    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    //open contentWriter & bodyWriter *temp* writers
+    //so we can write picture files while we parse
+    QBuffer contentBuf;
+    QBuffer bodyBuf;
+    KoXmlWriter* contentWriter = new KoXmlWriter(&contentBuf);
+    KoXmlWriter* bodyWriter = new KoXmlWriter(&bodyBuf);
     if ( !bodyWriter || !contentWriter )
     {
 	delete d->document;
@@ -105,14 +108,14 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
 	return KoFilter::CreationError; //not sure if this is the right error to return
     }
 
-    kDebug(30513) <<"created contentWriter and bodyWriter.";
+    kDebug(30513) <<"created temp contentWriter and bodyWriter.";
 
     //open tags in bodyWriter
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    d->document = new Document(QFile::encodeName( d->inputFile ).data(), m_chain, bodyWriter, mainStyles, &metaWriter);
+    d->document = new Document(QFile::encodeName( d->inputFile ).data(), m_chain, bodyWriter, mainStyles, &metaWriter, storeout);
     
     //check that we can parse the document?
     if ( !d->document->hasParser() )
@@ -147,6 +150,12 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     //close tags in bodyWriter
     bodyWriter->endElement();//office:text
     bodyWriter->endElement();//office:body
+
+    //now create real content/body writers & dump the information there
+    KoXmlWriter* realContentWriter = oasisStore.contentWriter();
+    realContentWriter->addCompleteElement(&contentBuf);
+    KoXmlWriter* realBodyWriter = oasisStore.bodyWriter();
+    realBodyWriter->addCompleteElement(&bodyBuf);
 
     //now close content & body writers
     if ( !oasisStore.closeContentWriter() )
