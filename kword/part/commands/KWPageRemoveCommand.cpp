@@ -92,9 +92,8 @@ void KWPageRemoveCommand::redo() {
         }
 
         if (shapes.count() > 0) {
-//disable for now for easier testing
-//             KoShapeMoveCommand *command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
-//             m_childcommands.append(command);
+            KoShapeMoveCommand *command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+            m_childcommands.append(command);
         }
     }
 
