@@ -71,24 +71,24 @@
             </listitem>
             <listitem>
               <para>
-                Double clicking a cell with the &LMB; or pressing <keycap>Enter</keycap> or the <keycap>F2</keycap> key also starts
+                Double clicking a cell with the &LMB; or pressing &Enter; or the <keycap>F2</keycap> key also starts
                 editing of the current row.
               </para>
             </listitem>
             <listitem>
               <para>
-                Pressing the <keycap>Esc</keycap> key when the contents of a cell is edited 
+                Pressing the &Esc; key when the contents of a cell is edited 
                 <emphasis>cancels changes made to this cell</emphasis>. However, the pencil
                 <!--<img src="icons/button_tableview_editrow.png" class="icon">-->
                 symbol will not disappear because you can still move to a different cell
                 of the edited row to change its contents. To
                 <emphasis>cancel changes made to the entire edited row</emphasis>, press the
-                <keycap>Esc</keycap> key again.
+                &Esc; key again.
               </para>
             </listitem>
             <listitem>
               <para>
-                Instead of pressing the <keycap>Esc</keycap> key, you can click the
+                Instead of pressing the &Esc; key, you can click the
                 <!--<img src="icons/button_cancel.png" class="icon">--><guibutton>Cancel</guibutton>
                 toolbar button or select
                 <menuchoice><guimenu>Data</guimenu><guimenuitem>Cancel Row Changes</guimenuitem></menuchoice>
@@ -97,7 +97,7 @@
             </listitem>
             <listitem>
               <para>
-                Click the <keycombo action="simul"><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
+                Click the <keycombo action="simul">&Shift;&Enter;</keycombo>
                 keys to accept changes made to all cells in the currently edited row. You can also click
                 <!--<img src="icons/button_ok.png" class="icon">--><guibutton>OK</guibutton> toolbar
                 button or select <menuchoice><guimenu>Data</guimenu><guimenuitem>Save Row</guimenuitem></menuchoice>

@@ -13,12 +13,12 @@
       To test your form, switch to its data view. A single database row (record)
       of data will be displayed and a text cursor will be set inside the first
       data field. You can move between fields using the &LMB; or the <keycap>Tab</keycap> and
-      <keycombo action="simul"><keycap>Shift</keycap><keycap>Tab</keycap></keycombo>
+      <keycombo action="simul">&Shift;&Tab;</keycombo>
       keys. While editing, there will be a 
       <!--<img src="icons/button_tableview_editrow.png" class="icon">-->
       pencil icon visible near the record navigator. After entering the row's (record)
       data you can press the 
-      <keycombo action="simul"><keycap>Shift</keycap><keycap>Enter</keycap></keycombo>
+      <keycombo action="simul">&Shift;&Enter;</keycombo>
       keys or click the 
       <!--<img src="icons/button_ok.png" class="icon">--><guibutton>OK</guibutton>
       toolbar button to accept changes made to the current row. Clicking the

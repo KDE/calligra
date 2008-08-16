@@ -295,9 +295,9 @@
           </listitem>
           <listitem>
             <para>
-              Keeping the <keycap>Ctrl</keycap> key pressed while an item on the
+              Keeping the &Ctrl; key pressed while an item on the
               widgets list is being selected allows to select multiple widgets at a time.
-              Keeping the <keycap>Shift</keycap> key pressed allows to select entire lists
+              Keeping the &Shift; key pressed allows to select entire lists
               of widgets.</para>
           </listitem>
           <!--<listitem>
@@ -402,7 +402,7 @@
           </listitem>
           <listitem>
             <para>
-              Holding the <keycap>Ctrl</keycap> key down while clicking a widget allows to select
+              Holding the &Ctrl; key down while clicking a widget allows to select
               multiple widgets.
             </para>
           </listitem>
@@ -413,7 +413,7 @@
               and <guimenuitem>
               <!--<img src="img/editpaste.png" class="icon">-->Paste</guimenuitem>
               commands, to duplicate a widget within the same form you can hold down the
-              <keycap>Ctrl</keycap> key while moving the widget. After the <keycap>Ctrl</keycap>
+              &Ctrl; key while moving the widget. After the &Ctrl;
               key is released, the dragged widget will not be moved but copied in the new location.
             </para>
           </listitem>
@@ -504,7 +504,7 @@
         form in action). To save, click the 
         <!--<img src="img/filesave.png" class="icon">-->
         <guilabel>Save object changes</guilabel> toolbar button or use the
-        <menuchoice><shortcut><keycombo action="simul"><keycap>Ctrl</keycap><keycap>S</keycap></keycombo></shortcut>
+        <menuchoice><shortcut><keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo></shortcut>
         <guimenu>File</guimenu><guimenuitem>
         <!--<img src="img/filesave.png" class="icon">-->Save</guimenuitem></menuchoice>
         menu command. Upon saving you will be asked for entering the form's name. Enter
@@ -614,13 +614,13 @@
             <para>
               Select the existing button widget by clicking on it or put a new button
               widget onto the form. If you inserted a new button, enter its title and
-              press <keycombo action="press"><keycap>Enter</keycap></keycombo> key.
+              press <keycombo action="press">&Enter;</keycombo> key.
             </para>
           </step>
           <step>
             <para>
-              Click the button widget with the <mousebutton>right</mousebutton> mouse
-              button to display the context menu.
+              Click the button widget with the &RMB;
+              to display the context menu.
             </para>
           </step>
           <step>
@@ -652,7 +652,7 @@
           <step>
             <para>
               Click the <guibutton>OK</guibutton> button or press
-              the <keycombo action="press"><keycap>Enter</keycap></keycombo> key to
+              the <keycombo action="press">&Enter;</keycombo> key to
               accept your selection.
             </para>
           </step>
@@ -672,7 +672,7 @@
           After switching to the form's <emphasis>data view</emphasis> you can try
           whether the action works. For example, if you assigned <guilabel>Delete Row</guilabel>
           action, clicking the button, the current database row will be deleted, similarly
-          to executing <menuchoice><shortcut><keycombo action="simul"><keycap>Ctrl</keycap><keycap>Delete</keycap></keycombo></shortcut><guimenu>Edit</guimenu><guimenuitem>Delete Row</guimenuitem></menuchoice>
+          to executing <menuchoice><shortcut><keycombo action="simul">&Ctrl;<keycap>Delete</keycap></keycombo></shortcut><guimenu>Edit</guimenu><guimenuitem>Delete Row</guimenuitem></menuchoice>
           menu command (depending on your settings you may be asked to confirm the removal).
         </para>
 
@@ -1382,20 +1382,20 @@
         form widget can have focus at the same time. The most frequent use of focus
         is text entry (when a given text field is active, i.e. it is focused).
         An other example is a button widget - when focused, it is possible to
-        <quote>press</quote> it using the <keycombo action="press"><keycap>Enter</keycap></keycombo>
+        <quote>press</quote> it using the <keycombo action="press">&Enter;</keycombo>
         or <keycombo action="press"><keycap>Space</keycap></keycombo> key instead of a mouse button.
       </para>
       <para>
         There are a few methods of making the widgets active (moving the focus
         to the widget): clicking with a mouse button, rotating the mouse wheel
-        over the widget, or using the <keycombo action="press"><keycap>Tab</keycap></keycombo>
+        over the widget, or using the <keycombo action="press">&Tab;</keycombo>
         key. The latter method is often used because of its speed and convenience
         for users. Availability of the focusing methods is controlled by
         <guilabel>Focus Policy</guilabel> property of a given widget.
       </para>
       <para>
-        There is a relationship between focusing (activating) widgets using <keycombo action="press"><keycap>Tab</keycap></keycombo>
-        key and tab order setting of a form. After pressing the <keycombo action="press"><keycap>Tab</keycap></keycombo> key, the
+        There is a relationship between focusing (activating) widgets using <keycombo action="press">&Tab;</keycombo>
+        key and tab order setting of a form. After pressing the <keycombo action="press">&Tab;</keycombo> key, the
         next widget should be focused, so the form should know about the tab order.
       </para>
       <para>To alter tab order for a form's widget:</para>
@@ -1424,7 +1424,7 @@
             widget names, the second - types of the widgets. To make it easier to
             recognize meaning of the names and types for the user, icons related
             to the types are also displayed. The list contains only widgets having
-            focus policy allowing to use the <keycap>Tab</keycap> key. The window
+            focus policy allowing to use the &Tab; key. The window
             allows you to change the tab order or set the automatic tab order.
           </para>
         </step>
