@@ -54,7 +54,7 @@ class GanttPrintingDialog : public PrintingDialog
 {
     Q_OBJECT
 public:
-    GanttPrintingDialog( ViewBase *view, KDGantt::View *view );
+    GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt );
     
     int documentLastPage() const { return documentFirstPage(); }
     void startPrinting( RemovePolicy removePolicy );
