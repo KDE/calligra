@@ -84,6 +84,8 @@ void KWPageRemoveCommand::redo() {
                             tfs->textFrameSetType() == KWord::MainTextFrameSet) continue;
                     }
 
+                    Q_ASSERT(f->shape());
+                    Q_ASSERT(dynamic_cast<KWFrame*>(f->shape()->applicationData()));
                     shapes.append(f->shape());
                     previousPositions.append(f->shape()->position());
                     newPositions.append(f->shape()->position() - QPointF(0, pagerect.height()));
