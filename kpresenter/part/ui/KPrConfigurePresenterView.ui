@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KPrConfigureSlideShow</class>
- <widget class="QWidget" name="KPrConfigureSlideShow" >
+ <class>KPrConfigurePresenterView</class>
+ <widget class="QWidget" name="KPrConfigurePresenterView" >
   <property name="geometry" >
    <rect>
     <x>0</x>

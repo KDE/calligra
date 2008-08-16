@@ -45,7 +45,8 @@
 
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrCustomSlideShowsDialog.h"
-#include "ui/KPrConfigureSlideShowDialog.h"
+// #include "ui/KPrConfigureSlideShowDialog.h"
+#include "ui/KPrConfigurePresenterViewDialog.h"
 #include <QDebug>
 #include <QtGui/QDesktopWidget>
 
@@ -207,7 +208,7 @@ void KPrView::configureSlideShow()
 void KPrView::configurePresenterView()
 {
     KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
-    KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog( doc, this );
+    KPrConfigurePresenterViewDialog *dialog = new KPrConfigurePresenterViewDialog( doc, this );
 
     if ( dialog->exec() == QDialog::Accepted ) {
         doc->setPresentationMonitor( dialog->presentationMonitor() );

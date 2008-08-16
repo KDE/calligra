@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrConfigureSlideShowDialog.h"
+#include "KPrConfigurePresenterViewDialog.h"
 
 #include <QtGui/QDesktopWidget>
 
@@ -26,7 +26,7 @@
 
 #include "KPrDocument.h"
 
-KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, QWidget *parent )
+KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent )
     : KDialog( parent )
     , m_document( document )
 {
@@ -51,22 +51,22 @@ KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document,
 
     setMainWidget( widget );
 
-    setCaption( i18n( "Configure Slide Show" ) );
+    setCaption( i18n( "Configure Presenter View" ) );
 
     ui.monitorComboBox->setCurrentIndex( document->presentationMonitor() );
     ui.presenterViewCheckBox->setChecked(
             document->isPresenterViewEnabled() ? Qt::Checked : Qt::Unchecked );
 }
 
-int KPrConfigureSlideShowDialog::presentationMonitor()
+int KPrConfigurePresenterViewDialog::presentationMonitor()
 {
     return ui.monitorComboBox->currentIndex();
 }
 
-bool KPrConfigureSlideShowDialog::presenterViewEnabled()
+bool KPrConfigurePresenterViewDialog::presenterViewEnabled()
 {
     return ( ui.presenterViewCheckBox->checkState() == Qt::Checked );
 }
 
-#include "KPrConfigureSlideShowDialog.moc"
+#include "KPrConfigurePresenterViewDialog.moc"
 

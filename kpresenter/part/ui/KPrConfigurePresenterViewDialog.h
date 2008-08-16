@@ -17,20 +17,20 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRCONFIGURESLIDESHOWDIALOG_H
-#define KPRCONFIGURESLIDESHOWDIALOG_H
+#ifndef KPRCONFIGUREPRESENTERVIEWDIALOG_H
+#define KPRCONFIGUREPRESENTERVIEWDIALOG_H
 
 #include <KDialog>
 
-#include "ui_KPrConfigureSlideShow.h"
+#include "ui_KPrConfigurePresenterView.h"
 
 class KPrDocument;
 
-class KPrConfigureSlideShowDialog : public KDialog
+class KPrConfigurePresenterViewDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KPrConfigureSlideShowDialog( KPrDocument *document, QWidget *parent=0 );
+    KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent=0 );
 
     int presentationMonitor();
     bool presenterViewEnabled();
@@ -38,9 +38,9 @@ public:
 private slots:
 
 private:
-    Ui::KPrConfigureSlideShow ui;
+    Ui::KPrConfigurePresenterView ui;
     KPrDocument *m_document;
 };
 
-#endif // KPRCONFIGURESLIDESHOWDIALOG_H
+#endif // KPRCONFIGUREPRESENTERVIEWDIALOG_H
 
