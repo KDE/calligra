@@ -118,6 +118,7 @@ void KWDocument::addShape (KoShape *shape) {
         fs->setName(shape->shapeId());
         frame = new KWFrame(shape, fs);
     }
+    Q_ASSERT(frame->frameSet()); //sebsauer, 2008-08-16, seems this can happen on "Delete page" && 2x undo
     addFrameSet(frame->frameSet());
 
     foreach(KoView *view, views()) {

@@ -80,7 +80,7 @@ void KWPageInsertCommand::redo() {
             }
         }
 
-        //FIXME if(false) ???
+        //FIXME if(false) ??? see also KWPageRemoveCommand
         if(false && shapes.count() > 0)
             m_shapeMoveCommand = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
     }

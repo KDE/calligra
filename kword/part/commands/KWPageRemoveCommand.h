@@ -53,6 +53,7 @@ private:
     int m_pageNumber;
     QString m_masterPageName;
     KoText::Direction m_direction;
+    QList<QUndoCommand*> m_childcommands;
 };
 
 #endif

@@ -18,12 +18,15 @@
  */
 
 #include "KWPageRemoveCommand.h"
+#include "KWFrameDeleteCommand.h"
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "frames/KWFrame.h"
 
 #include <KoShapeMoveCommand.h>
 
+#include <QTextDocument>
+#include <kdebug.h>
 #include <KLocale>
 
 KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QUndoCommand *parent)
@@ -43,6 +46,7 @@ KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QU
 }
 
 KWPageRemoveCommand::~KWPageRemoveCommand() {
+    qDeleteAll(m_childcommands);
 }
 
 void KWPageRemoveCommand::redo() {
@@ -52,45 +56,71 @@ void KWPageRemoveCommand::redo() {
 
     const QRectF pagerect = page->rect();
     const double pageheight = page->height();
-    const double pageoffset = page->offsetInDocument();
+    //const double topOfPage = m_document->pageManager()->topOfPage(m_pageNumber);
+    //const double pageoffset = page->offsetInDocument();
 
-#ifdef __GNUC__
-    #warning the logic to delete pages is still broken
-#endif
+    const bool firstRun = m_childcommands.count() == 0;
+    if (firstRun) {
+        QList<KoShape*> shapes;
+        QList<QPointF> previousPositions;
+        QList<QPointF> newPositions;
+        foreach(KWFrameSet* fs, m_document->frameSets()) {
+            foreach(KWFrame *f, fs->frames()) {
+                QPointF pos = f->shape()->absolutePosition();
+                if (pagerect.contains(pos)) {
+                    // remove all frames on the page
+                    KWFrameDeleteCommand *command = new KWFrameDeleteCommand(m_document, f, this);
+                    m_childcommands.append(command);
+                }
+                else if (pos.y() > pagerect.top()) { //> pageoffset) {
+                    // move all frames that follow this page up the height of this page
 
-    foreach(KWFrameSet* fs, m_document->frameSets()) {
-        foreach(KWFrame *f, fs->frames()) {
-            QPointF pos = f->shape()->absolutePosition();
-            if (pagerect.contains(pos)) {
-                // remove all frames on the page
-                fs->removeFrame(f);
-            }
-            else if (pos.y() > pagerect.top()) { //> pageoffset) {
-                // move all frames that follow this page up the height of this page.
+                    if (KWTextFrameSet*tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
+                        // don't move headers, footers or the main frameset
+                        if (tfs->textFrameSetType() == KWord::OddPagesHeaderTextFrameSet ||
+                            tfs->textFrameSetType() == KWord::EvenPagesHeaderTextFrameSet ||
+                            tfs->textFrameSetType() == KWord::OddPagesFooterTextFrameSet ||
+                            tfs->textFrameSetType() == KWord::EvenPagesFooterTextFrameSet ||
+                            tfs->textFrameSetType() == KWord::MainTextFrameSet) continue;
+                    }
 
-//disabled for now for better testing
-                //pos.setY(pos.y() - pageheight);
-                //f->shape()->setAbsolutePosition(pos);
+                    shapes.append(f->shape());
+                    previousPositions.append(pos);
+                    pos.setY(pos.y() - pageheight);
+                    newPositions.append(pos);
+                }
             }
         }
-        // remove empty framesets
-        if (fs->frameCount() < 1)
-            m_document->removeFrameSet(fs);
+
+        if (shapes.count() > 0) {
+//             KoShapeMoveCommand *command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
+//             m_childcommands.append(command);
+        }
+    }
+
+    // redo the commands
+    foreach(QUndoCommand* command, m_childcommands) {
+        command->redo();
     }
 
     //TODO Alter frame properties to not auto-create a frame again.
-    //TODO unregister framesets also from KWPageSettings
 
+    //TODO remove the text include possible pagebreak displayed on the page from the
+    //mainframe's QTextDocument. Atm this results in a new page being added after the
+    //selected page got removed :-/
+
+    // remove the page
     m_document->m_pageManager.removePage(page);
+
+    // update changes
     m_document->firePageSetupChanged();
-    m_document->relayout();
+    m_document->relayout(); //needed?
 }
 
 void KWPageRemoveCommand::undo() {
     QUndoCommand::undo();
 
-    //TODO uhm... we would need to restore the frames+framesets+content here as well :-/
-
+    // insert the page
     KWPage *page = m_document->m_pageManager.insertPage(m_pageNumber);
     page->setPageSide(m_pageSide);
     m_pageLayout.orientation = m_orientation;
@@ -99,6 +129,14 @@ void KWPageRemoveCommand::undo() {
     KWPageSettings *pageSettings = m_document->pageManager()->pageSettings(m_masterPageName);
     if (pageSettings)
         page->setPageSettings(pageSettings);
+
+    // undo the KWFrameDeleteCommand commands
+    foreach(QUndoCommand* command, m_childcommands) {
+        command->undo();
+    }
+
+    // update changes
     m_document->firePageSetupChanged();
+    m_document->relayout(); //needed?
 }
 
