@@ -16,7 +16,7 @@ set(kwordprivate_LIB_SRCS
     KWView.cpp
     KWPage.cpp
     KWPageManager.cpp
-    KWPageSettings.cpp
+    KWPageStyle.cpp
     KWViewMode.cpp
     KWViewModeNormal.cpp
     KWViewModePreview.cpp

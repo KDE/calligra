@@ -21,7 +21,7 @@
 #define KW_PAGEMANAGER_H
 
 #include "kword_export.h"
-#include "KWPageSettings.h"
+#include "KWPageStyle.h"
 
 #include <KoPageLayout.h>
 #include <KoInsets.h>
@@ -102,9 +102,9 @@ public:
      * if onlyAllowAppend is set to true the pagenumber will be ignored and the new page
      * will always be appended.
      * @param pageNumber page number of the new page
-     * @param pageSettings the page settings to use for the new page
+     * @param pageStyle the page style to use for the new page
      */
-    KWPage* insertPage(int pageNumber, KWPageSettings *pageSettings = 0);
+    KWPage* insertPage(int pageNumber, KWPageStyle *pageStyle = 0);
     /**
      * Insert the page instance at the specified position in the document. Note that it is preferred
      * to use the insertPage(int) method which creates a new page.
@@ -113,25 +113,14 @@ public:
     KWPage* insertPage(KWPage *page);
     /**
      * Append a new page at the end of the document
-     * @param pageSettings the page settings to use for the new page
+     * @param pageStyle the page style to use for the new page
      */
-    KWPage* appendPage(KWPageSettings *pageSettings = 0);
+    KWPage* appendPage(KWPageStyle *pageStyle = 0);
 
     /// Remove the page with @p pageNumber renumbering all pages after pages already added
     void removePage(int pageNumber);
     /// Remove @p page renumbering all pages after pages already added
     void removePage(KWPage *page);
-
-#if 0
-    /**
-     * Set the page size and layout of all pages that are not altered to specifically
-     * have sizes different from the default size.
-     * Note that if the ptLeft and ptRight values are < 0 the margins will be based on
-     * page edge.
-     * @param layout the new layout.
-     */
-    void setDefaultPage(const KoPageLayout &layout);
-#endif
 
     /**
      * Returns the argument point, with altered coordinats if the point happens to be
@@ -175,38 +164,38 @@ public:
     void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
 
     /**
-     * Add a new \a KWPageSettings instance to this document.
+     * Add a new \a KWPageStyle instance to this document.
      *
-     * \note that you need to make sure that you only add pagesettings with a
+     * \note that you need to make sure that you only add pageStyle with a
      * masterpage-name that are NOT already registered cause those names need
      * to be unique.
      *
-     * \param pageSettings The \a KWPageSettings instance that should be added. The
+     * \param pageStyle The \a KWPageStyle instance that should be added. The
      * document will take over ownership and takes care of deleting the instance
      * one the document itself got deleted.
      */
-    void addPageSettings(KWPageSettings *pageSettings);
+    void addPageStyle(KWPageStyle *pageStyle);
 
     /**
-     * Returns all pagesettings.
+     * Returns all pagestyles.
      */
-    QHash<QString, KWPageSettings *> pageSettings() const;
+    QHash<QString, KWPageStyle *> pageStyles() const;
 
     /**
-     * Returns the \a KWPageSettings known under the name \p name or NULL if the
-     * document has no such pagesettings.
+     * Returns the \a KWPageStyle known under the name \p name or NULL if the
+     * document has no such page style.
      */
-    KWPageSettings *pageSettings(const QString &name) const;
+    KWPageStyle *pageStyle(const QString &name) const;
 
     /**
-     * Return the default page settings. This equals to pageSettings("Standard").
+     * Return the default page style. This equals to pageStyle("Standard").
      */
-    KWPageSettings* defaultPageSettings() const;
+    KWPageStyle* defaultPageStyle() const;
 
     /**
-     * Remove all page settings and clears the default one.
+     * Remove all page style and clears the default one.
      */
-    void clearPageSettings();
+    void clearPageStyle();
 
 private:
     /// helper method for the topOfPage and bottomOfPage
@@ -221,7 +210,7 @@ private:
     bool m_onlyAllowAppend; // true for WP style documents.
     bool m_preferPageSpread;
 
-    QHash <QString, KWPageSettings *> m_pageSettings;
+    QHash <QString, KWPageStyle *> m_pageStyle;
     KoInsets m_padding;
 };
 

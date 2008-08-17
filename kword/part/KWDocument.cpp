@@ -27,7 +27,7 @@
 #include "KWCanvas.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
-#include "KWPageSettings.h"
+#include "KWPageStyle.h"
 #include "KWOdfLoader.h"
 #include "KWDLoader.h"
 #include "KWOdfWriter.h"
@@ -376,11 +376,11 @@ void KWDocument::clear() {
     foreach(KWPage *page, m_pageManager.pages())
         m_pageManager.removePage(page);
     m_pageManager.setStartPage(1);
-    m_pageManager.clearPageSettings();
-    KoColumns columns = m_pageManager.defaultPageSettings()->columns();
+    m_pageManager.clearPageStyle();
+    KoColumns columns = m_pageManager.defaultPageStyle()->columns();
     m_config.load(this); // re-load values 
     columns.columnSpacing = m_config.defaultColumnSpacing();
-    m_pageManager.defaultPageSettings()->setColumns(columns);
+    m_pageManager.defaultPageStyle()->setColumns(columns);
     foreach(KWFrameSet *fs, m_frameSets) {
         removeFrameSet(fs);
         delete fs;
@@ -457,7 +457,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     while(docHeight <= maxBottom) {
         kDebug(32001) <<"KWDocument::endOfLoading appends a page";
         if (m_pageManager.lastPageNumber() == 0) // apply the firstPageMasterName only on the first page
-            last = m_pageManager.insertPage(m_pageManager.lastPageNumber(), m_pageManager.pageSettings(firstPageMasterName));
+            last = m_pageManager.insertPage(m_pageManager.lastPageNumber(), m_pageManager.pageStyle(firstPageMasterName));
         else // normally this shouldn't happen cause that loop is only run once...
             last = m_pageManager.insertPage(m_pageManager.lastPageNumber());
         ppq->addPage(last);
@@ -658,9 +658,9 @@ void KWDocument::printDebug() {
     kDebug(32001) <<"----------------------------------------";
     kDebug(32001) <<"                 Debug info";
     kDebug(32001) <<"Document:" << this;
-    /*kDebug(32001) <<"Type of document:" << (m_pageSettings.hasMainTextFrame()?"WP":"DTP");
-    kDebug(32001) <<"Headers:" << Helper::HFToString(m_pageSettings.headers());
-    kDebug(32001) <<"Footers:" << Helper::HFToString(m_pageSettings.footers());
+    /*kDebug(32001) <<"Type of document:" << (m_pageStyle.hasMainTextFrame()?"WP":"DTP");
+    kDebug(32001) <<"Headers:" << Helper::HFToString(m_pageStyle.headers());
+    kDebug(32001) <<"Footers:" << Helper::HFToString(m_pageStyles.footers());
     kDebug(32001) <<"Units:" << KoUnit::unitName( unit() );*/
     kDebug(32001) <<"# Framesets:" << frameSetCount();
     int i=0;

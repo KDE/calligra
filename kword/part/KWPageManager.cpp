@@ -34,11 +34,11 @@ KWPageManager::KWPageManager(KWDocument* document)
     m_onlyAllowAppend(false),
     m_preferPageSpread(false)
 {
-    clearPageSettings(); // creates also a new default style.
+    clearPageStyle(); // creates also a new default style.
 }
 
 KWPageManager::~KWPageManager() {
-    qDeleteAll(m_pageSettings);
+    qDeleteAll(m_pageStyle);
     qDeleteAll(m_pageList);
 }
 
@@ -105,7 +105,7 @@ int KWPageManager::lastPageNumber() const {
     return pageCount() + m_firstPage - 1;
 }
 
-KWPage* KWPageManager::insertPage(int pageNumber, KWPageSettings *pageSettings) {
+KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle) {
     if(m_onlyAllowAppend)
         return appendPage();
     // increase the pagenumbers of pages following the pageNumber
@@ -113,12 +113,12 @@ KWPage* KWPageManager::insertPage(int pageNumber, KWPageSettings *pageSettings) 
         if(page->pageNumber() >= pageNumber)
             page->m_pageNum++;
     }
-    if (! pageSettings) {
-        pageSettings = ((pageNumber > 0) && (this->page(pageNumber - 1))) ? this->page(pageNumber - 1)->pageSettings() : this->defaultPageSettings();
+    if (! pageStyle) {
+        pageStyle = ((pageNumber > 0) && (this->page(pageNumber - 1))) ? this->page(pageNumber - 1)->pageStyle() : this->defaultPageStyle();
     }
     KWPage *page = new KWPage(this,
                               qMin( qMax(pageNumber, m_firstPage), lastPageNumber()+1 ),
-                              pageSettings);
+                              pageStyle);
     m_pageList.append(page);
     qSort(m_pageList.begin(), m_pageList.end(), compareItems);
     return page;
@@ -135,12 +135,12 @@ KWPage* KWPageManager::insertPage(KWPage *page) {
     return page;
 }
 
-KWPage* KWPageManager::appendPage(KWPageSettings *pageSettings) {
-    if (! pageSettings) {
+KWPage* KWPageManager::appendPage(KWPageStyle *pageStyle) {
+    if (! pageStyle) {
         KWPage *p = this->page(lastPageNumber());
-        pageSettings = p ? p->pageSettings() : defaultPageSettings();
+        pageStyle = p ? p->pageStyle() : defaultPageStyle();
     }
-    KWPage *page = new KWPage(this, lastPageNumber() + 1, pageSettings);
+    KWPage *page = new KWPage(this, lastPageNumber() + 1, pageStyle);
     m_pageList.append(page);
     return page;
 }
@@ -221,35 +221,35 @@ int KWPageManager::compareItems(KWPage *a, KWPage *b)
     return b->pageNumber() - a->pageNumber() > 0;
 }
 
-QHash<QString, KWPageSettings *> KWPageManager::pageSettings() const
+QHash<QString, KWPageStyle *> KWPageManager::pageStyles() const
 {
-    return m_pageSettings;
+    return m_pageStyle;
 }
 
-KWPageSettings *KWPageManager::pageSettings(const QString &name) const {
-    if (m_pageSettings.contains(name))
-        return m_pageSettings[name];
+KWPageStyle *KWPageManager::pageStyle(const QString &name) const {
+    if (m_pageStyle.contains(name))
+        return m_pageStyle[name];
     return 0;
 }
 
-void KWPageManager::addPageSettings(KWPageSettings *pageSettings) {
-    const QString masterpagename = pageSettings->masterName();
+void KWPageManager::addPageStyle(KWPageStyle *pageStyle) {
+    const QString masterpagename = pageStyle->masterName();
     Q_ASSERT(! masterpagename.isEmpty());
-    Q_ASSERT(! m_pageSettings.contains(masterpagename)); // This should never occur...
-    m_pageSettings[masterpagename] = pageSettings;
-    QObject::connect(pageSettings, SIGNAL(relayout()), m_document, SLOT(relayout()));
+    Q_ASSERT(! m_pageStyle.contains(masterpagename)); // This should never occur...
+    m_pageStyle[masterpagename] = pageStyle;
+    QObject::connect(pageStyle, SIGNAL(relayout()), m_document, SLOT(relayout()));
 }
 
-KWPageSettings* KWPageManager::defaultPageSettings() const {
-    Q_ASSERT(m_pageSettings.contains("Standard"));
-    return m_pageSettings["Standard"];
+KWPageStyle* KWPageManager::defaultPageStyle() const {
+    Q_ASSERT(m_pageStyle.contains("Standard"));
+    return m_pageStyle["Standard"];
 }
 
-void KWPageManager::clearPageSettings() {
-    qDeleteAll(m_pageSettings);
-    m_pageSettings.clear();
+void KWPageManager::clearPageStyle() {
+    qDeleteAll(m_pageStyle);
+    m_pageStyle.clear();
 
-    KWPageSettings* defaultpagesettings = new KWPageSettings("Standard");
-    defaultpagesettings->setPageLayout(KoPageLayout::standardLayout());
-    addPageSettings(defaultpagesettings);
+    KWPageStyle* defaultpagestyle = new KWPageStyle("Standard");
+    defaultpagestyle->setPageLayout(KoPageLayout::standardLayout());
+    addPageStyle(defaultpagestyle);
 }

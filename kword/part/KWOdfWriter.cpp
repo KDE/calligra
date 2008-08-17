@@ -88,8 +88,8 @@ kDebug()<<"START saveHeaderFooter ############################################";
                   << KWord::OddPagesFooterTextFrameSet << KWord::EvenPagesFooterTextFrameSet;
 
             // Iterate over all pagestyles and write them out.
-            QHash<QString, KWPageSettings *> pagesettings = document->pageManager()->pageSettings();
-            QHashIterator<QString, KWPageSettings *> it(pagesettings);
+            QHash<QString, KWPageStyle *> pagestyles = document->pageManager()->pageStyles();
+            QHashIterator<QString, KWPageStyle *> it(pagestyles);
             
             while (it.hasNext()) {
                 it.next();

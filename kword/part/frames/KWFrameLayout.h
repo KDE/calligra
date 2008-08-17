@@ -32,7 +32,7 @@
 class KWPageManager;
 class KWFrameSet;
 class KWTextFrameSet;
-class KWPageSettings;
+class KWPageStyle;
 class KWPage;
 class KWFrame;
 class KWDocument;

@@ -19,7 +19,7 @@
 
 #include "KWDLoader.h"
 #include "KWDocument.h"
-#include "KWPageSettings.h"
+#include "KWPageStyle.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
 
@@ -45,7 +45,7 @@
 
 KWDLoader::KWDLoader(KWDocument *parent)
     : m_document(parent),
-    m_pageSettings(parent->m_pageManager.defaultPageSettings()),
+    m_pageStyle(parent->m_pageManager.defaultPageStyle()),
     m_pageManager(&parent->m_pageManager),
     m_foundMainFS(false)
 {
@@ -103,47 +103,47 @@ bool KWDLoader::load(KoXmlElement &root) {
             }
         }
 
-        //m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeUniform);
+        //m_pageStyle->setFirstHeaderPolicy(KWord::HFTypeUniform);
         switch(paper.attribute("hType").toInt()) {
             // assume its on; will turn it off in the next section.
 /*            case 0:
-                m_pageSettings->setHeaderPolicy(KWord::HFTypeSameAsFirst);
-                m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
+                m_pageStyle->setHeaderPolicy(KWord::HFTypeSameAsFirst);
+                m_pageStyle->setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
                 break;*/
             case 1:
-                m_pageSettings->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
+                m_pageStyle->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
             case 2:
-                m_pageSettings->setHeaderPolicy(KWord::HFTypeUniform); break;
+                m_pageStyle->setHeaderPolicy(KWord::HFTypeUniform); break;
             case 3:
-                m_pageSettings->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
+                m_pageStyle->setHeaderPolicy(KWord::HFTypeEvenOdd); break;
         }
-        //m_pageSettings->setFirstFooterPolicy(KWord::HFTypeUniform);
+        //m_pageStyle->setFirstFooterPolicy(KWord::HFTypeUniform);
         switch(paper.attribute("fType").toInt()) {
             // assume its on; will turn it off in the next section.
         /*    case 0:
-                m_pageSettings->setFooterPolicy(KWord::HFTypeSameAsFirst);
-                m_pageSettings->setFirstFooterPolicy(KWord::HFTypeEvenOdd);
+                m_pageStyle->setFooterPolicy(KWord::HFTypeSameAsFirst);
+                m_pageStyle->setFirstFooterPolicy(KWord::HFTypeEvenOdd);
                 break;*/
             case 1:
-                m_pageSettings->setFooterPolicy(KWord::HFTypeEvenOdd); break;
+                m_pageStyle->setFooterPolicy(KWord::HFTypeEvenOdd); break;
             case 2:
-                m_pageSettings->setFooterPolicy(KWord::HFTypeUniform); break;
+                m_pageStyle->setFooterPolicy(KWord::HFTypeUniform); break;
             case 3:
-                m_pageSettings->setFooterPolicy(KWord::HFTypeEvenOdd); break;
+                m_pageStyle->setFooterPolicy(KWord::HFTypeEvenOdd); break;
         }
-        m_pageSettings->setHeaderDistance(paper.attribute("spHeadBody").toDouble());
-        if(m_pageSettings->headerDistance() == 0.0) // fallback for kde2 version.
-            m_pageSettings->setHeaderDistance(paper.attribute("headBody").toDouble());
-        m_pageSettings->setFooterDistance(paper.attribute("spFootBody").toDouble());
-        if(m_pageSettings->footerDistance() == 0.0) // fallback for kde2 version
-            m_pageSettings->setFooterDistance(paper.attribute("footBody").toDouble());
+        m_pageStyle->setHeaderDistance(paper.attribute("spHeadBody").toDouble());
+        if(m_pageStyle->headerDistance() == 0.0) // fallback for kde2 version.
+            m_pageStyle->setHeaderDistance(paper.attribute("headBody").toDouble());
+        m_pageStyle->setFooterDistance(paper.attribute("spFootBody").toDouble());
+        if(m_pageStyle->footerDistance() == 0.0) // fallback for kde2 version
+            m_pageStyle->setFooterDistance(paper.attribute("footBody").toDouble());
 
-        m_pageSettings->setFootnoteDistance(paper.attribute("spFootNoteBody", "10.0").toDouble());
+        m_pageStyle->setFootnoteDistance(paper.attribute("spFootNoteBody", "10.0").toDouble());
         if ( paper.hasAttribute( "slFootNoteLength" ) )
-            m_pageSettings->setFootNoteSeparatorLineLength(
+            m_pageStyle->setFootNoteSeparatorLineLength(
                     paper.attribute("slFootNoteLength").toInt());
         if ( paper.hasAttribute( "slFootNoteWidth" ) )
-            m_pageSettings->setFootNoteSeparatorLineWidth( paper.attribute(
+            m_pageStyle->setFootNoteSeparatorLineWidth( paper.attribute(
                         "slFootNoteWidth").toDouble());
         Qt::PenStyle type;
         switch(paper.attribute("slFootNoteType").toInt()) {
@@ -153,7 +153,7 @@ bool KWDLoader::load(KoXmlElement &root) {
             case 4: type = Qt::DashDotDotLine; break;
             default: type = Qt::SolidLine; break;
         }
-        m_pageSettings->setFootNoteSeparatorLineType(type);
+        m_pageStyle->setFootNoteSeparatorLineType(type);
 
         if ( paper.hasAttribute("slFootNotePosition"))
         {
@@ -165,16 +165,16 @@ bool KWDLoader::load(KoXmlElement &root) {
                 pos = KWord::FootNoteSeparatorRight;
             else // default: if ( tmp =="left" )
                 pos = KWord::FootNoteSeparatorLeft;
-            m_pageSettings->setFootNoteSeparatorLinePosition(pos);
+            m_pageStyle->setFootNoteSeparatorLinePosition(pos);
         }
-        KoColumns columns = m_pageSettings->columns();
+        KoColumns columns = m_pageStyle->columns();
         if(paper.hasAttribute("columns"))
             columns.columns = paper.attribute("columns").toInt();
         if(paper.hasAttribute("columnspacing"))
             columns.columnSpacing = paper.attribute("columnspacing").toDouble();
         else if(paper.hasAttribute("columnspc")) // fallback for kde2 version
             columns.columnSpacing = paper.attribute("columnspc").toDouble();
-        m_pageSettings->setColumns(columns);
+        m_pageStyle->setColumns(columns);
 
         // <PAPERBORDERS>
         KoXmlElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
@@ -201,25 +201,25 @@ bool KWDLoader::load(KoXmlElement &root) {
     else
         kWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
 
-    m_pageManager->pageSettings("Standard")->setPageLayout(pgLayout);
+    m_pageManager->pageStyle("Standard")->setPageLayout(pgLayout);
 
     // <ATTRIBUTES>
     KoXmlElement attributes = root.namedItem("ATTRIBUTES").toElement();
     if ( !attributes.isNull() )
     {
         if(attributes.attribute("processing", "0") == "1") {
-            m_pageSettings->setMainTextFrame(false); // DTP type document.
+            m_pageStyle->setMainTextFrame(false); // DTP type document.
             m_foundMainFS = true; // we will not reuse the main FS now.
         }
 
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         if(attributes.attribute("hasHeader") != "1") {
-//            m_pageSettings->setFirstHeaderPolicy(KWord::HFTypeNone);
-            m_pageSettings->setHeaderPolicy(KWord::HFTypeNone);
+//            m_pageStyle->setFirstHeaderPolicy(KWord::HFTypeNone);
+            m_pageStyle->setHeaderPolicy(KWord::HFTypeNone);
         }
         if(attributes.attribute("hasFooter") != "1") {
-//            m_pageSettings->setFirstFooterPolicy(KWord::HFTypeNone);
-            m_pageSettings->setFooterPolicy(KWord::HFTypeNone);
+//            m_pageStyle->setFirstFooterPolicy(KWord::HFTypeNone);
+            m_pageStyle->setFooterPolicy(KWord::HFTypeNone);
         }
         if ( attributes.hasAttribute( "unit" ) )
             m_document->setUnit( KoUnit::unit( attributes.attribute( "unit" ) ) );
@@ -988,7 +988,7 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
             frameElem.attribute("bottom").toDouble() - origin.y() );
 
     // increase offset of each frame to account for the padding.
-    double pageHeight = m_pageManager->defaultPageSettings()->pageLayout().height;
+    double pageHeight = m_pageManager->defaultPageStyle()->pageLayout().height;
     Q_ASSERT(pageHeight); // can not be 0
     double offset =  (int) (origin.y() / pageHeight) * (m_pageManager->padding().top + m_pageManager->padding().bottom);
     origin.setY(origin.y() + offset);

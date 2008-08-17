@@ -51,11 +51,11 @@ KWPageInsertCommand::~KWPageInsertCommand() {
 
 void KWPageInsertCommand::redo() {
     QUndoCommand::redo();
-    KWPageSettings *pagesettings = m_document->pageManager()->pageSettings(m_masterPageName); // may return NULL
+    KWPageStyle *pageStyle = m_document->pageManager()->pageStyle(m_masterPageName); // may return NULL
     if(m_page == 0) {
         // Appending a page
         KWPage *prevPage = m_document->m_pageManager.page(m_afterPageNum);
-        m_page = m_document->m_pageManager.insertPage(m_afterPageNum+1, pagesettings);
+        m_page = m_document->m_pageManager.insertPage(m_afterPageNum+1, pageStyle);
         if(prevPage)
             m_page->setDirectionHint(prevPage->directionHint());
         if(m_page->pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
@@ -88,8 +88,8 @@ void KWPageInsertCommand::redo() {
     {
         // Inserting a page
         if (!m_masterPageName.isEmpty())
-            if (pagesettings)
-                m_page->setPageSettings(pagesettings);
+            if (pageStyle)
+                m_page->setPageStyle(pageStyle);
         m_document->m_pageManager.insertPage(m_page);
     }
     if(m_shapeMoveCommand)

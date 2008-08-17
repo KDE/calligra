@@ -28,7 +28,7 @@
 class KWDocument;
 class KWFrameSet;
 class KWFrame;
-class KWPageSettings;
+class KWPageStyle;
 class KWPageManager;
 class KWTextFrameSet;
 class KoParagraphStyle;
@@ -94,7 +94,7 @@ private:
 
 private:
     KWDocument *m_document;
-    KWPageSettings *m_pageSettings;
+    KWPageStyle *m_pageStyle;
     KWPageManager *m_pageManager;
     bool m_foundMainFS;
     int m_nrItemsToLoad, m_itemsLoaded;

@@ -27,7 +27,7 @@
 //#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
-    : KoPageLayoutDialog(parent, page->pageSettings()->pageLayout()),
+    : KoPageLayoutDialog(parent, page->pageStyle()->pageLayout()),
     m_document(document),
     m_page(page)
 {

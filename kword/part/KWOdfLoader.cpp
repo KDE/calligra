@@ -66,7 +66,7 @@ class KWOdfLoader::Private
         KWTextFrame *currentFrame;
 
         /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-        void loadHeaderFooterFrame(KoOdfLoadingContext& context, KWPageSettings *pageSettings, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType);
+        void loadHeaderFooterFrame(KoOdfLoadingContext& context, KWPageStyle *pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType);
 };
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
@@ -273,10 +273,10 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
     while (it.hasNext()) {
         it.next();
         Q_ASSERT(! it.key().isEmpty());
-        KWPageSettings *masterPage = d->document->pageManager()->pageSettings(it.key());
+        KWPageStyle *masterPage = d->document->pageManager()->pageStyle(it.key());
         if (! masterPage) {
-            masterPage = new KWPageSettings(it.key());
-            d->document->pageManager()->addPageSettings(masterPage); // takes over ownership
+            masterPage = new KWPageStyle(it.key());
+            d->document->pageManager()->addPageStyle(masterPage); // takes over ownership
         }
         const KoXmlElement *masterNode = it.value();
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle( masterNode->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
@@ -291,15 +291,15 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
 }
 
 // helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, KWPageSettings *pageSettings, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
+void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, KWPageStyle *pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
 {
     KWTextFrameSet *fs = new KWTextFrameSet(document, fsType);
     fs->setAllowLayout(false);
     switch (fsType) {
-        case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header %1", pageSettings->masterName())); break;
-        case KWord::EvenPagesHeaderTextFrameSet: fs->setName(i18n("Even Pages Header %1", pageSettings->masterName())); break;
-        case KWord::OddPagesFooterTextFrameSet: fs->setName(i18n("Odd Pages Footer %1", pageSettings->masterName())); break;
-        case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer %1", pageSettings->masterName())); break;
+        case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header %1", pageStyle->masterName())); break;
+        case KWord::EvenPagesHeaderTextFrameSet: fs->setName(i18n("Even Pages Header %1", pageStyle->masterName())); break;
+        case KWord::OddPagesFooterTextFrameSet: fs->setName(i18n("Odd Pages Footer %1", pageStyle->masterName())); break;
+        case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer %1", pageStyle->masterName())); break;
         default: break;
     }
 
@@ -329,33 +329,33 @@ void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, K
 
     currentFrame = prevFrame; // restore the previous current frame
 
-    pageSettings->addFrameSet(fsType, fs);
+    pageStyle->addFrameSet(fsType, fs);
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, KWPageSettings *pageSettings, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
+void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle *pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
 {
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
-    // Used in KWPageSettings to determine if, and what kind of header/footer to use.
+    // Used in KWPageStyle to determine if, and what kind of header/footer to use.
     KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeNone : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
 
     if ( ! leftElem.isNull() ) { // header-left and footer-left
-        d->loadHeaderFooterFrame(context, pageSettings, leftElem, hfType, isHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
+        d->loadHeaderFooterFrame(context, pageStyle, leftElem, hfType, isHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
     }
 
     if ( ! elem.isNull() ) { // header and footer
-        d->loadHeaderFooterFrame(context, pageSettings, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
+        d->loadHeaderFooterFrame(context, pageStyle, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
     }
 
     if (isHeader) {
-        pageSettings->setHeaderPolicy(hfType);
+        pageStyle->setHeaderPolicy(hfType);
     }
     else {
-        pageSettings->setFooterPolicy(hfType);
+        pageStyle->setFooterPolicy(hfType);
     }
 }
 

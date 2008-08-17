@@ -23,48 +23,48 @@
 
 #include <QRect>
 
-KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageSettings *pageSettings) {
+KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle) {
     m_parent = parent;
     m_pageNum = pageNum;
-    m_pageSettings = pageSettings;
+    m_pageStyle = pageStyle;
     m_pageSide = pageNum%2==0 ? Left : Right;
 
     m_textDirectionHint = KoText::AutoDirection;
 }
 
 double KWPage::width() const {
-    return m_pageSettings->pageLayout().width * (m_pageSide==PageSpread ? 2:1);
+    return m_pageStyle->pageLayout().width * (m_pageSide==PageSpread ? 2:1);
 }
 
 double KWPage::height() const {
-    return m_pageSettings->pageLayout().height;
+    return m_pageStyle->pageLayout().height;
 }
 
 double KWPage::topMargin() const {
-    return m_pageSettings->pageLayout().top;
+    return m_pageStyle->pageLayout().top;
 }
 double KWPage::bottomMargin() const {
-    return m_pageSettings->pageLayout().bottom;
+    return m_pageStyle->pageLayout().bottom;
 }
 
 double KWPage::leftMargin() const {
     double answer = m_pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
     if(answer != -1)
         return answer;
-    return m_pageSettings->pageLayout().left;
+    return m_pageStyle->pageLayout().left;
 }
 
 double KWPage::rightMargin() const {
     double answer = m_pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
     if(answer != -1)
         return answer;
-    return m_pageSettings->pageLayout().right;
+    return m_pageStyle->pageLayout().right;
 }
 double KWPage::pageEdgeMargin() const {
-    return m_pageSettings->pageLayout().pageEdge;
+    return m_pageStyle->pageLayout().pageEdge;
 }
 double KWPage::marginClosestBinding() const {
-    return m_pageSettings->pageLayout().bindingSide;
+    return m_pageStyle->pageLayout().bindingSide;
 }
 
 double KWPage::offsetInDocument() const { // the y coordinate
@@ -80,7 +80,7 @@ QRectF KWPage::rect(int pageNumber) const {
 }
 
 KoPageFormat::Orientation KWPage::orientationHint() const {
-    return m_pageSettings->pageLayout().orientation;
+    return m_pageStyle->pageLayout().orientation;
 }
 
 KWPage *KWPage::next() {

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPAGESETTINGS_H
-#define KWPAGESETTINGS_H
+#ifndef KWPAGESTYLE_H
+#define KWPAGESTYLE_H
 
 #include "KWord.h"
 #include "kword_export.h"
@@ -27,27 +27,27 @@
 #include "frames/KWTextFrameSet.h"
 
 /**
- * This class holds all the settings for one document used in automatic placing of frames.
+ * A container for all informations for the page wide style.
  *
  * For documents that have a main text auto generated we have a lot of little options
  * to do that. This class wraps all these options.
  *
  * \note that the margins are stored in a \a KoPageLayout instance.
  *
- * \note once you created an instance of \a KWPageSettings you may like to use the
- * KWPageManager::addPageSettings() method to let KWord handle the ownership else
+ * \note once you created an instance of \a KWPageStyle you may like to use the
+ * KWPageManager::addPageStyle() method to let KWord handle the ownership else
  * you are responsible for deleting the instance and taking care that no \a KWPage
  * instance or something else still keeps a (then dangling) pointer to it.
  */
-class KWORD_TEST_EXPORT KWPageSettings : public QObject {
+class KWORD_TEST_EXPORT KWPageStyle : public QObject {
     Q_OBJECT
 public:
     /**
      * constructor, initializing the data to some default values.
      *
-     * \p masterPageName The name of the masterpage for this page settings.
+     * \p masterPageName The name of this page style.
      */
-    explicit KWPageSettings(const QString& mastername);
+    explicit KWPageStyle(const QString& mastername);
 
     /**
      * Return the current columns settings.
@@ -144,24 +144,24 @@ public:
     void setPageLayout(const KoPageLayout &layout);
 
     /**
-     * Get a frameset that is stored in this page settings.
+     * Get a frameset that is stored in this page style.
      * Example of framesets stored : the headers, footers...
      * @param hfType the type of the frameset that must be returned
      * @returns the required frameSet, 0 if none found.
      */
     KWTextFrameSet *getFrameSet (KWord::TextFrameSetType hfType) { return m_hfFrameSets[hfType]; }
     /**
-     * Add a frameset in this page settings.
+     * Add a frameset in this page style.
      * Example of framesets stored : the headers, footers...
      * @param hfType the type of the frameset
      * @param fSet the frameset
-     * This frameset will be destroyed when the page settings is destroyed.
+     * This frameset will be destroyed when the page style is destroyed.
      */
     void addFrameSet (KWord::TextFrameSetType hfType, KWTextFrameSet *fSet) { m_hfFrameSets[hfType] = fSet; }
 
-    /// set the master page name for this page settings.
+    /// set the master page name for this page style.
     //void setMasterName (const QString &name) { m_masterName = name; }
-    /// get the master page name for this page settings.
+    /// get the master page name for this page style.
     QString masterName () const { return m_masterName; }
 
 Q_SIGNALS:
@@ -192,7 +192,7 @@ private:
     KWord::FootNoteSeparatorLinePos m_footNoteSeparatorLinePos; ///< alignment in page
 
     /// disable copy constructor and assignment operator
-    Q_DISABLE_COPY(KWPageSettings)
+    Q_DISABLE_COPY(KWPageStyle)
 };
 
 #endif

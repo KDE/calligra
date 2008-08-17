@@ -20,7 +20,7 @@
 #define kw_page_h
 
 #include "KWPageManager.h"
-#include "KWPageSettings.h"
+#include "KWPageStyle.h"
 #include "KoPageLayout.h"
 #include "kword_export.h"
 
@@ -33,7 +33,7 @@ class KoZoomHandler;
  * a pageSpread. See the PageSide for details.
  * The KWPage is created and maintained by the KWPageManager so you won't find a constructor
  * on this class.  
- * Each KWPage is attached to a KWPageSettings representing the page master.
+ * Each KWPage is attached to a KWPageStyle representing the page master.
  */
 class KWORD_EXPORT KWPage {
 public:
@@ -91,10 +91,10 @@ public:
     /// returns the number of this page as it will be shown to the user.
     int pageNumber() const { return m_pageNum; }
 
-    /// returns the page settings applied on this page
-    KWPageSettings *pageSettings() { return m_pageSettings; }
-    /// set the page settings to apply on this page
-    void setPageSettings (KWPageSettings *settings) { m_pageSettings = settings; }
+    /// returns the page style applied on this page
+    KWPageStyle *pageStyle() { return m_pageStyle; }
+    /// set the page style to apply on this page
+    void setPageStyle (KWPageStyle *style) { m_pageStyle = style; }
 
     /**
      * Return the orientation property of the page.
@@ -126,16 +126,16 @@ private:
     /** private constructor, only for our friends
      * @param parent the KWPageManager that we belong to.
      * @param pageNum the number of the page as the user will see it.
-     * @param pageSettings the page settings to use for the page
+     * @param pageStyle the page style to use for the page
      */
-    KWPage(KWPageManager *parent, int pageNum, KWPageSettings *pageSettings);
+    KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle);
 
     int m_pageNum;
     PageSide m_pageSide;
     KoText::Direction m_textDirectionHint;
 
     KWPageManager *m_parent;
-    KWPageSettings *m_pageSettings;
+    KWPageStyle *m_pageStyle;
 
     friend class KWPageManager;
 };

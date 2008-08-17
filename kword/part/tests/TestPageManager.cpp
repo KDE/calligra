@@ -41,10 +41,10 @@ void TestPageManager::getAddPages() {
     QCOMPARE(page == 0, false);
     QCOMPARE(page->pageNumber(), 1);
     QCOMPARE(page->pageSide(), KWPage::Right);
-    KoPageLayout pageLayout = page->pageSettings()->pageLayout();
+    KoPageLayout pageLayout = page->pageStyle()->pageLayout();
     pageLayout.width = 134.2;
     pageLayout.height = 521.4;
-    page->pageSettings()->setPageLayout(pageLayout);
+    page->pageStyle()->setPageLayout(pageLayout);
     QCOMPARE(page->width(), 134.2);
     QCOMPARE(page->height(), 521.4);
 
@@ -92,10 +92,10 @@ void TestPageManager::getAddPages2() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
     pageManager->setStartPage(1);
     KWPage *page = pageManager->appendPage();
-    KoPageLayout pageLayout = page->pageSettings()->pageLayout();
+    KoPageLayout pageLayout = page->pageStyle()->pageLayout();
     pageLayout.width = 200;
     pageLayout.height = 200;
-    page->pageSettings()->setPageLayout(pageLayout);
+    page->pageStyle()->setPageLayout(pageLayout);
 
     MockShape shape1;
     shape1.setPosition(QPointF(0,0));
@@ -112,7 +112,7 @@ void TestPageManager::getAddPages2() {
     shape3.setSize(QSizeF(9,9));
     QCOMPARE(pageManager->pageNumber(&shape3), 1);
 
-    KWPageSettings *settingsPage2 = new KWPageSettings("page2");
+    KWPageStyle *settingsPage2 = new KWPageStyle("page2");
     pageLayout = settingsPage2->pageLayout();
     pageLayout.width = 600;
     pageLayout.height = 600;
@@ -203,82 +203,82 @@ void TestPageManager::removePages() {
 void TestPageManager::pageInfo() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
 
-    KoPageLayout layout = pageManager->defaultPageSettings()->pageLayout();
+    KoPageLayout layout = pageManager->defaultPageStyle()->pageLayout();
     layout.width = 100;
     layout.height = 200;
     layout.format = KoPageFormat::IsoA4Size;
-    pageManager->defaultPageSettings()->setPageLayout(layout);
+    pageManager->defaultPageStyle()->setPageLayout(layout);
     
-    KWPageSettings *pageSettingsPage2 = new KWPageSettings("Page 2");
-    layout = pageSettingsPage2->pageLayout();
+    KWPageStyle *pageStylePage2 = new KWPageStyle("Page 2");
+    layout = pageStylePage2->pageLayout();
     layout.width = 50;
     layout.height = 100;
-    pageSettingsPage2->setPageLayout(layout);
-    pageManager->addPageSettings(pageSettingsPage2);
+    pageStylePage2->setPageLayout(layout);
+    pageManager->addPageStyle(pageStylePage2);
 
-    KWPageSettings *pageSettingsPage3 = new KWPageSettings("Page 3");
-    layout = pageSettingsPage3->pageLayout();
+    KWPageStyle *pageStylePage3 = new KWPageStyle("Page 3");
+    layout = pageStylePage3->pageLayout();
     layout.width = 300;
     layout.height = 600;
-    pageSettingsPage3->setPageLayout(layout);
-    pageManager->addPageSettings(pageSettingsPage3);
+    pageStylePage3->setPageLayout(layout);
+    pageManager->addPageStyle(pageStylePage3);
     
     pageManager->setStartPage(1);
     KWPage *page1 = pageManager->appendPage();
-    KWPage *page2 = pageManager->appendPage(pageSettingsPage2);
-    KWPage *page3 = pageManager->appendPage(pageSettingsPage3);
+    KWPage *page2 = pageManager->appendPage(pageStylePage2);
+    KWPage *page3 = pageManager->appendPage(pageStylePage3);
 
     QCOMPARE(pageManager->topOfPage(3), 300.0);
     QCOMPARE(pageManager->bottomOfPage(3), 900.0);
 
-    layout = pageSettingsPage3->pageLayout();
+    layout = pageStylePage3->pageLayout();
     layout.height = 500;
-    pageSettingsPage3->setPageLayout(layout);
+    pageStylePage3->setPageLayout(layout);
     QCOMPARE(pageManager->bottomOfPage(3), 800.0);
 
-    layout = pageManager->defaultPageSettings()->pageLayout();
+    layout = pageManager->defaultPageStyle()->pageLayout();
     layout.top = 5;
     layout.left = 6;
     layout.bottom = 7;
     layout.right = 8;
-    pageManager->defaultPageSettings()->setPageLayout(layout);
+    pageManager->defaultPageStyle()->setPageLayout(layout);
     
-    layout = pageSettingsPage2->pageLayout();
+    layout = pageStylePage2->pageLayout();
     layout.top = 9;
     layout.left = 10;
     layout.bottom = 11;
     layout.right = 12;
-    pageSettingsPage2->setPageLayout(layout);
+    pageStylePage2->setPageLayout(layout);
     
     // Page Edge / Page Margin
-    layout = pageManager->defaultPageSettings()->pageLayout();
+    layout = pageManager->defaultPageStyle()->pageLayout();
     layout.pageEdge = 14.0;
-    pageManager->defaultPageSettings()->setPageLayout(layout);
+    pageManager->defaultPageStyle()->setPageLayout(layout);
 
     QCOMPARE(page1->pageSide(), KWPage::Right);
     QCOMPARE(page1->rightMargin(), 14.0);
    
     layout.bindingSide = 15.0;
-    pageManager->defaultPageSettings()->setPageLayout(layout);
+    pageManager->defaultPageStyle()->setPageLayout(layout);
     QCOMPARE(page1->rightMargin(), 14.0);
     QCOMPARE(page1->leftMargin(), 15.0);
     //QCOMPARE(page2->rightMargin(), 12.0); // unchanged due to changes in page1
     //QCOMPARE(page2->leftMargin(), 10.0);
     
-    layout = pageSettingsPage2->pageLayout();
+    layout = pageStylePage2->pageLayout();
     layout.pageEdge = 16.0;
-    pageSettingsPage2->setPageLayout(layout);
+    pageStylePage2->setPageLayout(layout);
     QCOMPARE(page2->pageSide(), KWPage::Left);
     QCOMPARE(page2->leftMargin(), 16.0);
     layout.bindingSide = 17.0;
-    pageSettingsPage2->setPageLayout(layout);
+    pageStylePage2->setPageLayout(layout);
     QCOMPARE(page2->leftMargin(), 16.0);
     QCOMPARE(page2->rightMargin(), 17.0);
     layout.left = 18;
-    pageSettingsPage2->setPageLayout(layout);
+    pageStylePage2->setPageLayout(layout);
     //QCOMPARE(page2->leftMargin(), 18.0);
     layout.right = 19;
-    pageSettingsPage2->setPageLayout(layout);
+    pageStylePage2->setPageLayout(layout);
     //QCOMPARE(page2->rightMargin(), 19.0);
     //QCOMPARE(page2->leftMargin(), 18.0);
 }
@@ -289,25 +289,25 @@ void TestPageManager::testClipToDocument() {
     lay.width = 300;
     lay.height = 600;
     lay.format = KoPageFormat::IsoA4Size;
-    pageManager->defaultPageSettings()->setPageLayout(lay);
+    pageManager->defaultPageStyle()->setPageLayout(lay);
 
-    KWPageSettings *pageSettings1 = new KWPageSettings("page1");
-    lay = pageSettings1->pageLayout();
+    KWPageStyle *pageStyle1 = new KWPageStyle("page1");
+    lay = pageStyle1->pageLayout();
     lay.width = 100;
     lay.height = 200;
-    pageSettings1->setPageLayout(lay);
-    pageManager->addPageSettings(pageSettings1);
+    pageStyle1->setPageLayout(lay);
+    pageManager->addPageStyle(pageStyle1);
 
-    KWPageSettings *pageSettings2 = new KWPageSettings("page2");
-    lay = pageSettings2->pageLayout();
+    KWPageStyle *pageStyle2 = new KWPageStyle("page2");
+    lay = pageStyle2->pageLayout();
     lay.width = 50;
     lay.height = 100;
-    pageSettings2->setPageLayout(lay);
-    pageManager->addPageSettings(pageSettings2);
+    pageStyle2->setPageLayout(lay);
+    pageManager->addPageStyle(pageStyle2);
     
-    KWPage *page1 = pageManager->appendPage(pageSettings1);
-    KWPage *page2 = pageManager->appendPage(pageSettings2);
-    pageManager->appendPage(pageManager->defaultPageSettings());
+    KWPage *page1 = pageManager->appendPage(pageStyle1);
+    KWPage *page2 = pageManager->appendPage(pageStyle2);
+    pageManager->appendPage(pageManager->defaultPageStyle());
 
     QPointF p(10,10);
 
