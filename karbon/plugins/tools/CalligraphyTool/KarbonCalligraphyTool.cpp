@@ -438,7 +438,7 @@ void KarbonCalligraphyTool::setStrokeWidth( double width )
 
 void KarbonCalligraphyTool::setThinning( double thinning )
 {
-    m_thinning = thinning/2.0;
+    m_thinning = thinning;
 }
 
 void KarbonCalligraphyTool::setAngle( int angle )
