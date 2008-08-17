@@ -40,7 +40,7 @@ namespace KChart {
  *  
  * An instance can represent either a simple, contiuous region of cells, as in most cases,
  * or a more complex discontinous region. In its second form, the orientation of each
- * separate continous region can very, as well as their sizes.
+ * separate continous region can vary, as well as their sizes.
  */
 class CHARTSHAPELIB_EXPORT CellRegion
 {
