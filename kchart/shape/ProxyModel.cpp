@@ -36,8 +36,6 @@ class ProxyModel::Private {
 public:
     Private();
     ~Private();
-    
-    void resetDefaultDataSetProperties();
 
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
@@ -697,36 +695,6 @@ bool ProxyModel::firstColumnIsLabel() const
 QList<DataSet*> ProxyModel::dataSets() const
 {
     return d->dataSets;
-}
-
-QVariant ProxyModel::xData( const DataSet *dataSet, int column ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( const_cast<DataSet*>( dataSet ) );
-    return data( index( dataSetNumber * d->dataDimensions + 1, column ) );
-}
-
-QVariant ProxyModel::yData( const DataSet *dataSet, int column ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( const_cast<DataSet*>( dataSet ) );
-    return data( index( dataSetNumber * d->dataDimensions, column ) );
-}
-
-QVariant ProxyModel::customData( const DataSet *dataSet, int column ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( const_cast<DataSet*>( dataSet ) );
-    return data( index( dataSetNumber * d->dataDimensions + 2, column ) );
-}
-
-QVariant ProxyModel::labelData( const DataSet *dataSet ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( const_cast<DataSet*>( dataSet ) );
-    return headerData( dataSetNumber, d->dataDirection );
-}
-
-QVariant ProxyModel::categoryData( const DataSet *dataSet, int column ) const
-{
-    Q_UNUSED( dataSet );
-    return headerData( column, d->dataDirection == Qt::Vertical ? Qt::Horizontal : Qt::Vertical );
 }
 
 #include "ProxyModel.moc"

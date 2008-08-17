@@ -83,12 +83,6 @@ public slots:
     QList<DataSet*> dataSets() const;
 
     void rebuildDataMap();
-    
-    QVariant xData( const DataSet *dataSet, int column ) const;
-    QVariant yData( const DataSet *dataSet, int column ) const;
-    QVariant customData( const DataSet *dataSet, int column ) const;
-    QVariant labelData( const DataSet *dataSet ) const;
-    QVariant categoryData( const DataSet *dataSet, int column ) const;
 
 signals:
     void dataChanged();
