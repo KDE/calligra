@@ -26,6 +26,12 @@
 
 namespace KChart {
 
+/**
+ * @brief The Surface class represents either a chart wall, or chart floor.
+ * 
+ * Currently only the wall can be visualized, though support for a chart floor is
+ * needed to load and save in ODF without loss of data.
+ */
 class Surface
 {
 public:

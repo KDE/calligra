@@ -35,6 +35,9 @@ class QString;
 
 namespace KChart {
 
+/**
+ * @brief The TableModel class is used to store a data table inside a chart document.
+ */
 class CHARTSHAPELIB_EXPORT TableModel : public QStandardItemModel, public KoChart::ChartModel
 {
     Q_OBJECT

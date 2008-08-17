@@ -23,6 +23,12 @@
 
 namespace KChart {
 
+/**
+ * @brief The ThreeDScene class is used to store properties of a 3D scene.
+ * 
+ * Currently it is not more than a dummy class, and will be implemented once
+ * we have a sane 3D charting backend.
+ */
 class ThreeDScene
 {
 public:
