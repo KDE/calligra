@@ -100,6 +100,30 @@ bool CellRegion::contains( const QRect &rect, bool proper ) const
     return false;
 }
 
+bool CellRegion::intersects( const QRect &rect ) const
+{
+    foreach ( const QRect &r, m_rects )
+    {
+        if ( r.intersects( rect ) )
+            return true;
+    }
+    
+    return false;
+}
+
+CellRegion CellRegion::intersected( const QRect &rect ) const
+{
+    CellRegion intersections;
+    
+    foreach ( const QRect &r, m_rects )
+    {
+        if ( r.intersects( rect ) )
+            intersections.add( r.intersected( rect ) );
+    }
+    
+    return intersections;
+}
+
 Qt::Orientation CellRegion::orientation() const
 {
     foreach ( const QRect &rect, m_rects )
@@ -263,7 +287,24 @@ QPoint CellRegion::pointAtIndex( int index ) const
 
 int CellRegion::indexAtPoint( const QPoint &point ) const
 {
-  return 0; //FIXME
+    int indicesLeftToPoint = 0;
+    bool found = false;
+    
+    foreach ( const QRect &rect, m_rects )
+    {
+        if ( !rect.contains( point ) )
+        {
+            indicesLeftToPoint += rect.width() > 1 ? rect.width() : rect.height();
+            continue;
+        }
+        found = true;
+        if ( rect.width() > 1 )
+            indicesLeftToPoint += point.x() - rect.topLeft().x();
+        else
+            indicesLeftToPoint += point.y() - rect.topLeft().y();
+    }
+    
+    return found ? indicesLeftToPoint : -1;
 }
 
 static int rangeCharToInt( char c )
@@ -298,6 +339,9 @@ static QString rangeIntToString( int i )
 // static
 QVector<QRect> CellRegion::stringToRegion( const QString &string )
 {
+    if ( string.isEmpty() )
+        return QVector<QRect>();
+    
     const bool isPoint = !string.contains( ':' );
     kDebug(350001) << "CellRegion::stringToRegion():" << string;
     QString s = string;
@@ -397,6 +441,9 @@ static QString columnName( uint column )
 // static
 QString CellRegion::regionToString( const QVector<QRect> &region )
 {
+    if ( region.isEmpty() )
+        return QString();
+    
     QString result;
     for ( int i = 0; i < region.count(); ++i ) {
         const QRect range = region[i];

@@ -47,7 +47,11 @@ public:
     bool isValid() const;
     
     bool contains( const QPoint &point, bool proper = false ) const;
-    bool contains( const QRect &region, bool proper = false ) const;
+    bool contains( const QRect &rect, bool proper = false ) const;
+    
+    bool intersects( const QRect &rect ) const;
+    
+    CellRegion intersected( const QRect &rect ) const;
     
     int cellCount() const;
     int rectCount() const;
