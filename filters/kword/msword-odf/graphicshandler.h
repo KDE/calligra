@@ -29,6 +29,7 @@
 #include "document.h"
 #include "versionmagic.h"
 #include <KoXmlWriter.h>
+#include <KoGenStyles.h>
 #include <KoStore.h>
 
 #ifndef IMAGE_IMPORT
@@ -44,8 +45,8 @@ class KWordPictureHandler : public QObject, public wvWare::PictureHandler
 {
     Q_OBJECT
 public:
-    KWordPictureHandler( Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter,
-            KoStore* store);
+    KWordPictureHandler( Document* doc, KoXmlWriter* bodyWriter, KoXmlWriter* manifestWriter,
+            KoStore* store, KoGenStyles* mainStyles);
 
 #ifdef IMAGE_IMPORT
     //////// PictureHandler interface
@@ -58,8 +59,9 @@ public:
 private:
     Document* m_doc;
     KoXmlWriter* m_bodyWriter;
-    KoXmlWriter* m_metaWriter;
+    KoXmlWriter* m_manifestWriter;
     KoStore* m_store;
+    KoGenStyles* m_mainStyles;
 
     int m_pictureCount;
 

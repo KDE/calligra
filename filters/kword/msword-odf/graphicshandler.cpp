@@ -25,18 +25,21 @@
 #include <wv2/olestream.h>
 
 #include <KoStoreDevice.h>
+#include <KoGenStyle.h>
 #include <kdebug.h>
+#include <kmimetype.h>
 
 using namespace wvWare;
 
 KWordPictureHandler::KWordPictureHandler(Document* doc, KoXmlWriter* bodyWriter,
-        KoXmlWriter* metaWriter, KoStore* store)
+        KoXmlWriter* manifestWriter, KoStore* store, KoGenStyles* mainStyles)
     : QObject(), m_doc(doc), m_pictureCount(0)
 {
     kDebug(30513) ;
     m_bodyWriter = bodyWriter;
-    m_metaWriter = metaWriter;
+    m_manifestWriter = manifestWriter;
     m_store = store;
+    m_mainStyles = mainStyles;
 }
 
 #ifdef IMAGE_IMPORT
@@ -49,7 +52,7 @@ void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Wo
 
 void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> )
 {
-    kDebug(30513) << "Escher data found 2";
+    kDebug(30513) << "Escher data found";
 
     //set up filename
     QString picName("Pictures/");
@@ -57,12 +60,7 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
     picName.append(".jpg");
 
     //write picture data to file
-    //pass KoStore into document & then picturehandler
-    //need manifest writer, too
-    //KoStoreDevice dev(m_store);
-    //dev.open(QIODevice::WriteOnly);
     m_store->open(picName);//open picture file
-    //QIODevice* dev = m_store->device();//get device to write to
 #define IMG_BUF_SIZE 2048L
     Q_LONG len = reader.size();
     while ( len > 0 )  {
@@ -79,12 +77,31 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
     Q_ASSERT( len == 0 );
     m_store->close(); //close picture file
 
-    //m_manifestWriter->addManifestEntry();
+    //add entry in manifest file
+    QString mimetype(KMimeType::findByPath(picName, 0, true)->name());
+    m_manifestWriter->addManifestEntry(picName, mimetype);
 
-    //write tags to m_bodyWriter
+    //create style
+    QString styleName("fr");
+    styleName.append(QString::number(m_pictureCount));
+    KoGenStyle* style = new KoGenStyle(KoGenStyle::StyleGraphicAuto, "graphic", "Graphics");
+    styleName = m_mainStyles->lookup(*style, styleName);
+    delete style;
+
+    //start frame tag for the picture
+    m_bodyWriter->startElement("draw:frame");
+    m_bodyWriter->addAttribute("draw:style-name", styleName.toUtf8());
+    //TODO these values definitely shouldn't be hardcoded
+    m_bodyWriter->addAttribute("svg:height", "2.5in");
+    m_bodyWriter->addAttribute("svg:width", "3.75in");
+    //start the actual image tag
     m_bodyWriter->startElement("draw:image");
     m_bodyWriter->addAttribute("xlink:href", picName);
+    m_bodyWriter->addAttribute("xlink:type", "simple");
+    m_bodyWriter->addAttribute("xlink:show", "embed");
+    m_bodyWriter->addAttribute("xlink:actuate", "onload");
     m_bodyWriter->endElement();//draw:image
+    m_bodyWriter->endElement();//draw:frame
 
     m_pictureCount++;
 }

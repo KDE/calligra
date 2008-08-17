@@ -45,9 +45,9 @@
 #include <QBuffer>
 
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-        KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store)
+        KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter)
     : m_replacementHandler( new KWordReplacementHandler ),
-      m_pictureHandler( new KWordPictureHandler(this, bodyWriter, metaWriter, store)),
+      m_pictureHandler( new KWordPictureHandler(this, bodyWriter, manifestWriter, store, mainStyles)),
       m_textHandler( 0 ), m_headerCount(0), m_hasHeader(false), m_hasFooter(false),
       m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ), m_pageLayoutStyle(0),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),

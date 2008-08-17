@@ -95,6 +95,11 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     buf.open(QIODevice::WriteOnly);
     KoXmlWriter metaWriter(&buf);
 
+    //create a writer for manifest.xml
+    QBuffer manifestBuf;
+    manifestBuf.open(QIODevice::WriteOnly);
+    KoXmlWriter manifestWriter(&manifestBuf);
+
     //open contentWriter & bodyWriter *temp* writers
     //so we can write picture files while we parse
     QBuffer contentBuf;
@@ -115,7 +120,8 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    d->document = new Document(QFile::encodeName( d->inputFile ).data(), m_chain, bodyWriter, mainStyles, &metaWriter, storeout);
+    d->document = new Document(QFile::encodeName( d->inputFile ).data(), m_chain, bodyWriter, mainStyles,
+            &metaWriter, storeout, &manifestWriter);
     
     //check that we can parse the document?
     if ( !d->document->hasParser() )
@@ -169,10 +175,11 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     kDebug(30513) <<"closed content & body writers.";
 
     //create the manifest file
-    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( "application/vnd.oasis.opendocument.text" );
+    KoXmlWriter* realManifestWriter = oasisStore.manifestWriter( "application/vnd.oasis.opendocument.text" );
     //create the styles.xml file
-    mainStyles->saveOdfStylesDotXml( storeout, manifestWriter );
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    mainStyles->saveOdfStylesDotXml( storeout, realManifestWriter );
+    realManifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    realManifestWriter->addCompleteElement(&manifestBuf);
 
     kDebug(30513) <<"created manifest and styles.xml";
 
@@ -196,7 +203,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
 	delete mainStyles;
 	return KoFilter::CreationError;
     }
-    manifestWriter->addManifestEntry("meta.xml", "text/xml");
+    realManifestWriter->addManifestEntry("meta.xml", "text/xml");
     oasisStore.closeManifestWriter();
 
     //done, so cleanup now

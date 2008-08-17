@@ -60,7 +60,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
     Q_OBJECT
 public:
     Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter,
-            KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store);
+            KoGenStyles* mainStyles, KoXmlWriter* metaWriter, KoStore* store, KoXmlWriter* manifestWriter);
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
