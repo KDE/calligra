@@ -499,12 +499,13 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         return false;
     
     d->dataSets.append( dataSet );
-    dataSet->setAttachedAxis( this );
     
     if ( dimension() == XAxisDimension ) {
         dataSet->setCategoryDataRegionString( d->categoryDataRegionString );
     }
     else if ( dimension() == YAxisDimension ) {
+        dataSet->setAttachedAxis( this );
+        
         ChartType chartType = dataSet->chartType();
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
@@ -573,12 +574,13 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     if ( !d->dataSets.contains( dataSet ) )
         return false;
     d->dataSets.removeAll( dataSet );
-    dataSet->setAttachedAxis( 0 );
     
     if ( dimension() == XAxisDimension ) {
         dataSet->setCategoryDataRegionString( "" );
     }
     else if ( dimension() == YAxisDimension ) {
+        dataSet->setAttachedAxis( 0 );
+        
         ChartType chartType = dataSet->chartType();
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
