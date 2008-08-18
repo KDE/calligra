@@ -162,7 +162,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
     }
 }
 QString OracleConnectionInternal::escapeIdentifier(const QString& str) const {
-	return QString(str).replace('`', "'");
+	return QString(str).replace('`', "'").toUpper();
 }
 QString OracleConnectionInternal::getServerVersion()
 {
@@ -179,47 +179,28 @@ QString OracleConnectionInternal::getServerVersion()
 }
 bool OracleConnectionInternal::createSequences(){
   KexiDBDrvDbg<<endl; 
-  string sq[1]={"ROW_ID"}; 
-  int i=0;/*for(int i=0;i<5;i++)
-  {*/
-    try
-    {
-        stmt->execute("CREATE SEQUENCE KEXI__SEQ__"+sq[i]);
-    }
-    catch (&ea)
-	  {
-	    KexiDBDrvDbg << ea.what()<< endl;
-	    return false;
-	  }
-  //}
-  //Needed to retrieve last generated number
-  executeSQL("ALTER SEQUENCE KEXI__SEQ__ROW_ID NOCACHE");
+  return executeSQL("CREATE SEQUENCE KEXI__SEQ__ROW_ID")&&
+         executeSQL("ALTER SEQUENCE KEXI__SEQ__ROW_ID NOCACHE");
 }
 	
 bool OracleConnectionInternal::createTrigger
                                            (QString tableName, IndexSchema* ind)
 {
-  KexiDBDrvDbg <<endl;
   QString fieldName;
   QString tg="CREATE OR REPLACE TRIGGER KEXI__TG__"+tableName+
-             "\nBEFORE INSERT ON KEXI__"+tableName+
+             "\nBEFORE INSERT ON "+tableName+
              "\nFOR EACH ROW\n"+
              "BEGIN\n";
   for(int i=0; i<ind->fieldCount(); i++)
   {
       fieldName=ind->field(i)->name();          
-      tg=tg+"SELECT KEXI__SEQ__"+tableName+"__"+fieldName+".NEXTVAL"+
-            "INTO :NEW."+fieldName+";\n";
+      tg=tg+"SELECT KEXI__SEQ__"+tableName/*+"__"+fieldName*/+".NEXTVAL "+
+            "INTO :NEW."+fieldName+" FROM DUAL;\n";
   }
   tg=tg+"END;";
-  try
-  {
-    stmt->execute(tg.latin1());
-  }    
-	catch (&ea)
-	{
-	  KexiDBDrvDbg << ea.what()<< endl;
-	}
+  KexiDBDrvDbg <<tg<<endl;
+  
+  return executeSQL(tg); 
 }
 //--------------------------------------
 

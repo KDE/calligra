@@ -302,18 +302,18 @@ bool OracleConnection::drv_createTable( const KexiDB::TableSchema& tableSchema )
     if(ind->isPrimaryKey())
     {
       // Primary keys may have many fields
-      for(int i=0; i<ind->fieldCount(); i++)
-      {
-        KexiDBDrvDbg << "We have a primary key supposedly named " << ind->field(i)->name() << endl;
-        sequenceName = "KEXI__SEQ__" + tableName + "__" + fieldName;
+      //for(int i=0; i<ind->fieldCount(); i++)
+      //{
+        //KexiDBDrvDbg << "PK: " << ind->field(i)->name() << endl;
+        //fieldName = ind->field(i)->name();
+        sequenceName = "KEXI__SEQ__" + tableName;// + "__" + fieldName;
         // Add custom sequence and trigger to manage it
-        fieldName = ind->field(i)->name();
         if(!d->executeSQL("CREATE SEQUENCE "+sequenceName) ||
                           !d->createTrigger(tableName,ind))
         {
           return false;
         }
-      }
+      //}
     }
     return executeSQL("ALTER TABLE " + tableName + " ADD ROW_ID NUMBER");
   }
@@ -334,21 +334,24 @@ bool OracleConnection::drv_afterInsert(const QString& table, FieldList& fields)
 
 bool OracleConnection::drv_dropTable( const QString& name )
 {
-  QString drop="DROP TRIGGER KEXI__TG__"+name;
+  /*QString drop="DROP TRIGGER KEXI__TG__"+name;
   executeSQL(drop.latin1());
   
   QString dropsq="DECLARE";
   dropsq=dropsq   +"CURSOR C_KEXI IS SELECT * FROM USER_OBJECTS\n"              
-	                +"WHERE OBJECT_NAME LIKE 'KEXI__SEQ__"+name+"%';\n"                        
-	                +"BEGIN\n"                                                   
+	                +"WHERE OBJECT_NAME LIKE 'KEXI__SEQ__"+escapeIdentifer(name)                        
+	                +"%';\nBEGIN\n"                                                   
 	                +"FOR V_KEXI IN C_KEXI LOOP\n"                               
 	                +"EXECUTE IMMEDIATE 'DROP SEQUENCE ' || V_KEXI.OBJECT_NAME;\n"   
                   +"END LOOP;\n"                                                   
                   +"END;\n"; 
   executeSQL(drop.latin1());
-  
+  */
+  QString trig ="DROP TRIGGER KEXI__TG__"+ escapeIdentifier(name);
+  QString seq ="DROP SEQUENCE KEXI__SEQ__"+ escapeIdentifier(name);
   m_sql = "DROP TABLE " + escapeIdentifier(name);
-  return executeSQL(m_sql);
+  
+  return executeSQL(trig)&&executeSQL(seq)&&executeSQL(m_sql);
 }
 
 bool OracleConnection::drv_alterTableName

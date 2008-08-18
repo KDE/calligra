@@ -49,7 +49,7 @@ OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 	d->typeNames[Field::ShortInteger]="NUMBER(38)";
 	d->typeNames[Field::Integer]="NUMBER(38)";
 	d->typeNames[Field::BigInteger]="NUMBER(38)"; // Unspecified
-	d->typeNames[Field::Boolean]="BOOL"; // Unspecified (Unsupported?)
+	d->typeNames[Field::Boolean]="NUMBER(1)"; // Unspecified (Unsupported?)
 	d->typeNames[Field::Date]="DATE";
 	d->typeNames[Field::DateTime]="TIMESTAMP";
 	d->typeNames[Field::Time]="DATE";
