@@ -323,7 +323,7 @@ void ResourceAppointmentsView::saveContext( QDomElement &context ) const
 
 KoPrintJob *ResourceAppointmentsView::createPrintJob()
 {
-    m_view->createPrintJob( this );
+    return m_view->createPrintJob( this );
 }
 
 } // namespace KPlato
