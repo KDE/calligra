@@ -17,7 +17,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${CMAKE_SOURCE_DIR}/kchart
                      ${KOGUIUTILS_INCLUDES}
                      ${KOTEXT_INCLUDES}
-                     ${EIGEN_INCLUDE_DIR} )
+                     ${EIGEN2_INCLUDE_DIR} )
 
 
 ########### next target ###############

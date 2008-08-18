@@ -38,8 +38,7 @@
 #include "Cell.h"
 
 // needed by MDETERM and MINVERSE
-#include <eigen/matrix.h>
-#include <eigen/ludecomposition.h>
+#include <Eigen/LU>
 
 using namespace KSpread;
 
@@ -1122,27 +1121,27 @@ Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
   return result;
 }
 
-static Eigen::MatrixX<double> convert( const Value& matrix, ValueCalc *calc )
+static Eigen::MatrixXd convert( const Value& matrix, ValueCalc *calc )
 {
-    const int dim = matrix.rows();
-    Eigen::MatrixX<double> eMatrix( dim );
-    for ( int row = 0; row < dim; ++row )
+    const int rows = matrix.rows(), cols = matrix.columns();
+    Eigen::MatrixXd eMatrix(rows, cols);
+    for ( int row = 0; row < rows; ++row )
     {
-        for ( int col = 0; col < dim; ++col )
+        for ( int col = 0; col < cols; ++col )
         {
-            eMatrix( row, col ) = numToDouble (calc->conv()->toFloat( matrix.element( col, row ) ));
+            eMatrix(row, col) = numToDouble (calc->conv()->toFloat( matrix.element( col, row ) ));
         }
     }
     return eMatrix;
 }
 
-static Value convert( const Eigen::MatrixX<double>& eMatrix )
+static Value convert( const Eigen::MatrixXd& eMatrix )
 {
-    const int dim = eMatrix.size();
+    const int rows = eMatrix.rows(), cols = eMatrix.cols();
     Value matrix( Value::Array );
-    for ( int row = 0; row < dim; ++row )
+    for ( int row = 0; row < rows; ++row )
     {
-        for ( int col = 0; col < dim; ++col )
+        for ( int col = 0; col < cols; ++col )
         {
             matrix.setElement( col, row, Value( eMatrix(row,col) ) );
         }
@@ -1170,11 +1169,13 @@ Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
         return Value::errorVALUE();
 
     Eigen::MatrixXd eMatrix = convert( matrix, calc ),
-                    eMatrixInverse( matrix.rows() );
-    bool invertible;
-    eMatrix.computeInverseSafely( & eMatrixInverse, & invertible );
-    if( invertible )
+                    eMatrixInverse( eMatrix.rows(), eMatrix.cols() );
+    Eigen::LU<Eigen::MatrixXd> lu( eMatrix );
+    if( lu.isInvertible() )
+    {
+	lu.computeInverse( &eMatrixInverse );
         return convert( eMatrixInverse );
+    }
     else
         return Value::errorDIV0();
 }
@@ -1182,28 +1183,13 @@ Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
 // Function: mmult
 Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value m1 = args[0];
-  Value m2 = args[1];
-  unsigned r1 = m1.rows ();
-  unsigned c1 = m1.columns ();
-  unsigned r2 = m2.rows ();
-  unsigned c2 = m2.columns ();
-  if (c1 != r2)  // row/column counts must match
+  const Eigen::MatrixXd eMatrix1 = convert( args[0], calc );
+  const Eigen::MatrixXd eMatrix2 = convert( args[1], calc );
+
+  if ( eMatrix1.cols() != eMatrix2.rows() )  // row/column counts must match
     return Value::errorVALUE();
 
-  // create the resulting matrix
-  Value res( Value::Array );
-
-  // perform the multiplication - O(n^3) algorithm
-  for (uint row = 0; row < r1; ++row)
-    for (uint col = 0; col < c2; ++col) {
-      Value val(0.0);
-      for (uint pos = 0; pos < c1; ++pos)
-        val = calc->add (val,
-            calc->mul (m1.element (pos, row), m2.element (col, pos)));
-      res.setElement (col, row, val);
-    }
-  return res;
+  return convert( eMatrix1 * eMatrix2 );
 }
 
 // Function: MUNIT
@@ -1212,11 +1198,7 @@ Value func_munit( valVector args, ValueCalc* calc, FuncExtra* )
     const int dim = calc->conv()->asInteger( args[0] ).asInteger();
     if ( dim < 1 )
         return Value::errorVALUE();
-    Value result( Value::Array );
-    for ( int row = 0; row < dim; ++row )
-        for ( int col = 0; col < dim; ++col )
-            result.setElement( col, row, Value( col == row ? 1 : 0 ) );
-    return result;
+    return convert( Eigen::MatrixXd::Identity( dim, dim ) );
 }
 
 // Function: SUBTOTAL
@@ -1303,22 +1285,10 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
 }
 
 // Function: TRANSPOSE
-Value func_transpose (valVector args, ValueCalc *, FuncExtra *)
+Value func_transpose (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Value matrix = args[0];
-    const int cols = matrix.columns();
-    const int rows = matrix.rows();
-
-    Value transpose( Value::Array );
-    for ( int row = 0; row < rows; ++row )
-    {
-        for ( int col = 0; col < cols; ++col )
-        {
-            if ( !matrix.element( col, row ).isEmpty() )
-                transpose.setElement( row, col, matrix.element( col, row ) );
-        }
-    }
-    return transpose;
+    const Eigen::MatrixXd eMatrix = convert( args[0], calc );
+    return convert( eMatrix.transpose() );
 }
 
 /*
