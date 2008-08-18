@@ -1,0 +1,12 @@
+TODO Items:
+-clean up code - remove unused functions/code that still remain from previous filter
+-header/footer - create another master page for first-page headers and footers
+-fix column breaks - may have to change the paragraph style structure some
+-in runOfText, use StyleTextAuto instead of StyleAuto
+-check headings processing & fix "unhandled tab justification code: 6" errors
+-tablehandler - process borders so there are no double borders where there shouldn't be
+        -process cell/column width
+-fields - parse more text fields
+-in bulletted lists - check that the bullet character processing is done correctly
+-fix all bugs & errors people find in documents :)
+-other TODO items scatter through the code

@@ -50,14 +50,22 @@ void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Wo
 
 }
 
-void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> )
+void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF>, int type )
 {
     kDebug(30513) << "Escher data found";
 
     //set up filename
     QString picName("Pictures/");
     picName.append(QString::number(m_pictureCount));
-    picName.append(".jpg");
+    //the type coming in corresponds to MSOBLIPTYPE
+    //  see wv2/graphics.h
+    if(type == 5)
+        picName.append(".jpg");
+    else
+    {
+        kWarning() << "Unhandled file type - pictures won't be displayed.";
+        return;
+    }
 
     //write picture data to file
     m_store->open(picName);//open picture file
