@@ -50,6 +50,7 @@ OracleCursor::OracleCursor(KexiDB::Connection* conn, const QString& statement, u
   d->stmt 		= static_cast<OracleConnection*>(conn)->d->stmt;
     
 	KexiDBDrvDbg << "OracleCursor: constructor for query statement" << endl;
+	m_containsROWIDInfo = false;
 }
 
 OracleCursor::OracleCursor(Connection* conn, QuerySchema& query, uint options )
@@ -63,6 +64,7 @@ OracleCursor::OracleCursor(Connection* conn, QuerySchema& query, uint options )
     d->rs 		= static_cast<OracleConnection*>(conn)->d->rs;
     d->stmt 	= static_cast<OracleConnection*>(conn)->d->stmt;
 	KexiDBDrvDbg << "OracleCursor: constructor for query statement2" << endl;
+	m_containsROWIDInfo = false; /*get ROWID if needed*/
 }
 
 OracleCursor::~OracleCursor()
@@ -102,7 +104,7 @@ bool OracleCursor::drv_open()
     m_records_in_buf = d->numRows; 
     m_buffering_completed = true;
     m_afterLast=false;
-    KexiDBDrvDbg <<"DRV OPENED"<<endl;
+    //KexiDBDrvDbg <<"DRV OPENED"<<endl;
     return true;
       
    }
@@ -117,7 +119,7 @@ bool OracleCursor::drv_open()
 
 bool OracleCursor::drv_close() 
 {
-   KexiDBDrvDbg <<endl;
+   //KexiDBDrvDbg <<endl;
    if(d->rs){
       try{
 		    //KexiDBDrvDbg << "Closing " << m_sql << endl;
@@ -150,24 +152,25 @@ bool OracleCursor::moveFirst()
 
 void OracleCursor::drv_getNextRecord()
 {
-  KexiDBDrvDbg << endl;
+  //KexiDBDrvDbg << endl;
   try
   {
     d->rs->next();
-    if(d->rs->status()==ResultSet::DATA_AVAILABLE)
+    switch(d->rs->status())
     {
-      m_result=FetchOK;
-      KexiDBDrvDbg<<"("<<m_at<<"/"<<d->numRows<<") OK"<<endl;
-    }
-    else if(d->rs->status()==ResultSet::END_OF_FETCH)
-    {
-      m_result = FetchEnd;
-      KexiDBDrvDbg<<"("<<m_at<<"/"<<d->numRows<<") FetchEnd"<<endl;
-    }
-    else 
-    {
-      m_result = FetchError;
-      KexiDBDrvDbg<<"Error"<<endl;
+      case ResultSet::DATA_AVAILABLE:
+        m_result=FetchOK;
+        KexiDBDrvDbg<<"("<<m_at+1<<"/"<<d->numRows<<") OK"<<endl;
+        break;
+    
+      case ResultSet::END_OF_FETCH:
+        m_result = FetchEnd;
+        //KexiDBDrvDbg<<"("<<m_at<<"/"<<d->numRows<<") FetchEnd"<<endl;
+        break;
+      
+      default:
+        m_result = FetchError;
+        //KexiDBDrvDbg<<"Error"<<endl;
     } 
  }
  catch(&ea)
@@ -216,7 +219,7 @@ KexiDBDrvDbg <<endl;
  */
 bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 {
-	KexiDBDrvDbg << ": Position is " << (long)m_at<< endl;
+	//KexiDBDrvDbg << ": Position is " << (long)m_at<< endl;
 	if (d->numRows<=0)
 		return false;
 
@@ -260,16 +263,15 @@ void OracleCursor::drv_appendCurrentRecordToBuffer() {KexiDBDrvDbg <<endl;}
 
 void OracleCursor::drv_bufferMovePointerNext()
 {
-    KexiDBDrvDbg << endl;
-   try
-   {
-      d->rs->next();
-   }
-   catch ( &ea)
-   {
-      m_result = FetchError;
-   }   
-   KexiDBDrvDbg <<"("<<at()<<")"<<endl;  
+  KexiDBDrvDbg << endl;
+  try
+  {
+    d->rs->next();
+  }
+  catch ( &ea)
+  {
+    m_result = FetchError;
+  }   
 }
 
 void OracleCursor::drv_bufferMovePointerPrev() 
