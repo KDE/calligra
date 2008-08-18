@@ -22,34 +22,37 @@
 #ifndef KEXIWEBFORMS_CONTROLLER_H
 #define KEXIWEBFORMS_CONTROLLER_H
 
-#include <pion/net/WebService.hpp>
-
 namespace KexiWebForms {
-    namespace View {
-        class Index;
-        class Create;
-        class Read;
-        class Update;
-        class Delete;
-        class Query;
-    }
+namespace View {
+    class Index;
+    class Create;
+    class Read;
+    class Update;
+    class Delete;
+    class Query;
+}
 
-    class Controller : public pion::net::WebService {
-    public:
-        Controller();
-        virtual ~Controller();
+/*!
+ * @brief Controller for the standard view
+ *
+ * This is the Front Controller used to manage the standard static-HTML views
+ */
+class Controller : public pion::net::WebService {
+public:
+    Controller();
+    virtual ~Controller();
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
-    private:
-        View::Index* m_index;
-        View::Create* m_create;
-        View::Read* m_read;
-        View::Update* m_update;
-        View::Delete* m_delete;
-        View::Query* m_query;
-    };
-    
-    
+    virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+private:
+    View::Index* m_index;
+    View::Create* m_create;
+    View::Read* m_read;
+    View::Update* m_update;
+    View::Delete* m_delete;
+    View::Query* m_query;
+};
+
+
 }
 
 #endif /* KEXIWEBFORMS_CONTROLLER_H */

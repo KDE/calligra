@@ -20,8 +20,9 @@
 
 #include <QString>
 
-#include <pion/net/HTTPResponseWriter.hpp>
+#include <google/template.h>
 
+#include <pion/net/HTTPResponseWriter.hpp>
 
 #include "../../model/Database.h"
 #include "TemplateProvider.h"
@@ -32,25 +33,25 @@ using namespace pion::net;
 
 namespace KexiWebForms { // begin namespace KexiWebForms
 namespace View {         // begin namespace View
-    
-    void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        QString requestedTable(d["kwebforms__table"]);
-        QString pkeyName(d["kwebforms__pkey"]);
-        QString pkeyValue(d["kwebforms__pkeyValue"]);
-        
-        setValue("TABLENAME", requestedTable);
 
-        if (KexiWebForms::Model::Database::deleteRow(requestedTable, pkeyName, pkeyValue)) {
-            m_dict->ShowSection("SUCCESS");
-            setValue("MESSAGE", "Row deleted successfully");
-        } else {
-            m_dict->ShowSection("ERROR");
-            /// @todo retrieve proper error message
-            setValue("MESSAGE", "Error while trying to delete row!");
-        }
-        
-        renderTemplate(m_dict, writer);
+void Delete::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
+    QString requestedTable(d["kwebforms__table"]);
+    QString pkeyName(d["kwebforms__pkey"]);
+    QString pkeyValue(d["kwebforms__pkeyValue"]);
+
+    setValue("TABLENAME", requestedTable);
+
+    if (KexiWebForms::Model::Database::deleteRow(requestedTable, pkeyName, pkeyValue)) {
+        m_dict->ShowSection("SUCCESS");
+        setValue("MESSAGE", "Row deleted successfully");
+    } else {
+        m_dict->ShowSection("ERROR");
+        /// @todo retrieve proper error message
+        setValue("MESSAGE", "Error while trying to delete row!");
     }
+
+    renderTemplate(m_dict, writer);
+}
 
 } // end namespace View
 } // end namespace KexiWebForms

@@ -50,17 +50,17 @@ using namespace KexiWebForms;
 
 int main(int argc, char **argv) {
     KCmdLineArgs::init(argc, argv,
-                       new KAboutData ("kwebforms", NULL, ki18n("Web Forms Daemon"),
-                                       "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
-                                       KAboutData::License_GPL_V2,
-                                       ki18n("(C) Copyright 2008, Lorenzo Villani")));
-     
+                       new KAboutData("kwebforms", NULL, ki18n("Web Forms Daemon"),
+                                      "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
+                                      KAboutData::License_GPL_V2,
+                                      ki18n("(C) Copyright 2008, Lorenzo Villani")));
+
     KCmdLineOptions options;
     options.add("port <port>", ki18n("Listen port"), "8080");
     options.add("webroot <directory>", ki18n("Web Root (used also as template root directory)"), "./");
     options.add("ssl <file>", ki18n("Path to SSL certificate file (PEM encoded)"));
     options.add("file <file>", ki18n("Path to Kexi database file"));
-    
+
     KCmdLineArgs::addCmdLineOptions(options);
 
     KUniqueApplication::addCmdLineOptions();
@@ -81,8 +81,13 @@ int main(int argc, char **argv) {
     pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
 
     if (args->isSet("ssl")) {
+#ifdef PION_HAVE_SSL
         server.setSSLKeyFile(args->getOption("ssl").toLatin1().constData());
+#else
+        kError() << "Kwebforms was not compiled with SSL support" << endl;
+#endif
     }
+
 
     // Plugins
     try {
@@ -101,16 +106,16 @@ int main(int argc, char **argv) {
 
     // Other Services
     BlobService blobService;
-    
+
     // Auth
     PionUserManagerPtr userMan(new PionUserManager());
     HTTPAuthPtr auth(new HTTPCookieAuth(userMan));
     KexiWebForms::Auth::Authenticator::init(auth);
-    
+
     // Bind controller
     Controller controller;
     server.addService("/", &controller);
-    
+
     // Restrict CRUD operations (and BlobService) to registered users
     // filtered using our permissions manager
     auth->addRestrict("/read");
@@ -118,10 +123,10 @@ int main(int argc, char **argv) {
     auth->addRestrict("/update");
     auth->addRestrict("/delete");
     auth->addRestrict("/blob");
-    
+
     // File and blob service
     server.addService("/blob", &blobService);
-    
+
     server.start();
     server.setAuthentication(auth);
     main_shutdown_manager.wait();

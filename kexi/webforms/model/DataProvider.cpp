@@ -33,61 +33,61 @@
 namespace KexiWebForms {
 namespace Model {
 
-    KexiDB::Connection* gConnection;
+KexiDB::Connection* gConnection;
 
-    // FIXME: Move creation of ConnectionData outside this function
-    bool initDatabase(const QString& fileName) {
-        bool status = false;
-        KexiDB::Driver* driver;
-        KexiDB::DriverManager manager;
-        KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
+// FIXME: Move creation of ConnectionData outside this function
+bool initDatabase(const QString& fileName) {
+    bool status = false;
+    KexiDB::Driver* driver;
+    KexiDB::DriverManager manager;
+    KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
 
 
-        QString driverName;
-        QString suggestedDriverName;
-        KexiStartupData::Import data;
+    QString driverName;
+    QString suggestedDriverName;
+    KexiStartupData::Import data;
 
-        tristate res = KexiStartupHandler::detectActionForFile(data, driverName, "", fileName);
-        kDebug() << "Database file name: " << fileName << " driver name: " << driverName << endl;
+    tristate res = KexiStartupHandler::detectActionForFile(data, driverName, "", fileName);
+    kDebug() << "Database file name: " << fileName << " driver name: " << driverName << endl;
 
-        if (true == res) {
-            if (driverName == "shortcut") {
-                //! @todo Implement
-            } else if (driverName == "connection") {
-                //! @todo Implement
+    if (true == res) {
+        if (driverName == "shortcut") {
+            //! @todo Implement
+        } else if (driverName == "connection") {
+            //! @todo Implement
+        } else {
+            kDebug() << "This should be a file-based database... now loading it" << endl;
+
+            driver = manager.driver(driverName);
+            if (!driver || manager.error()) {
+                manager.debugError();
+                status = false;
+            } else status = true;
+
+            connData->setFileName(fileName);
+
+            gConnection = driver->createConnection(*connData);
+
+            if (!gConnection || driver->error()) {
+                driver->debugError();
+                status = false;
+            } else status = true;
+
+            if (!gConnection->connect()) {
+                gConnection->debugError();
+                status = false;
+            } else status = true;
+
+            if (!gConnection->useDatabase(fileName)) {
+                kError() << gConnection->errorMsg() << endl;
+                status = false;
             } else {
-                kDebug() << "This should be a file-based database... now loading it" << endl;
-
-                driver = manager.driver(driverName);
-                if (!driver || manager.error()) {
-                    manager.debugError();
-                    status = false;
-                } else status = true;
-
-                connData->setFileName(fileName);
-
-                gConnection = driver->createConnection(*connData);
-
-                if (!gConnection || driver->error()) {
-                    driver->debugError();
-                    status = false;
-                } else status = true;
-
-                if (!gConnection->connect()){
-                    gConnection->debugError();
-                    status = false;
-                } else status = true;
-
-                if (!gConnection->useDatabase(fileName)) {
-                    kError() << gConnection->errorMsg() << endl;
-                    status = false;
-                } else {
-                    status = true;
-                }
+                status = true;
             }
         }
-        return status;
     }
+    return status;
+}
 
 }
 }

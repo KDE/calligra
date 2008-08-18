@@ -21,30 +21,28 @@
 #ifndef KEXIWEBFORMS_VIEW_QUERY_H
 #define KEXIWEBFORMS_VIEW_QUERY_H
 
-#include <QHash>
-
-#include <pion/net/HTTPResponseWriter.hpp>
-
 #include "View.h"
 
 class QString;
+template <class Key, class T> class QHash;
 
 namespace KexiWebForms {
 namespace View {
-    
-    /**
-     * @brief WebService handling the query page
-     *
-     * This service shows the results after running a particular query
-     */
-    class Query : public View {
-    public:
-        Query(const char* name) : View(name) {}
-        virtual ~Query() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
-    
+/*!
+ * @brief Run a query and display the results
+ *
+ * Run the query specified on the URI path (schema is '/query/$name') and
+ * display the results. The result is not editable in any way.
+ */
+class Query : public View {
+public:
+    Query(const char* name) : View(name) {}
+    virtual ~Query() {}
+
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
+
 }
 }
 

@@ -22,26 +22,29 @@
 #ifndef KEXIWEBFORMS_CONTROLLER_H
 #define KEXIWEBFORMS_CONTROLLER_H
 
-#include <pion/net/WebService.hpp>
-
 namespace KexiWebForms {
-    namespace View {
-        class Objects;
-        class XMLTable;
-    }
+namespace View {
+    class Objects;
+    class XMLTable;
+}
 
-    class Controller : public pion::net::WebService {
-    public:
-        Controller();
-        virtual ~Controller();
+/*!
+ * @brief Controller for the extjs-based view
+ *
+ * This is the Front Controller used to manage the extjs-based views
+ */
+class Controller : public pion::net::WebService {
+public:
+    Controller();
+    virtual ~Controller();
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
-    private:
-        View::Objects* m_objects;
-        View::XMLTable* m_xmlTable;
-    };
-    
-    
+    virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+private:
+    View::Objects* m_objects;
+    View::XMLTable* m_xmlTable;
+};
+
+
 }
 
 #endif /* KEXIWEBFORMS_CONTROLLER_H */

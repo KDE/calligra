@@ -22,21 +22,27 @@
 #ifndef KEXIWEBFORMS_VIEW_INDEX_H
 #define KEXIWEBFORMS_VIEW_INDEX_H
 
-#include <QHash>
-
 #include "View.h"
+
+class QString;
+template <class Key, class T> class QHash;
 
 namespace KexiWebForms {
 namespace View {
 
-    class Index : public View {
-    public:
-        Index(const char* name) : View(name) {};
-        virtual ~Index() {}
+/*!
+ * @brief Show the index page
+ *
+ * This view is used to display the index page, nothing else.
+ */
+class Index : public View {
+public:
+    Index(const char* name) : View(name) {};
+    virtual ~Index() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
-    
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
+
 }
 }
 

@@ -21,27 +21,28 @@
 #ifndef KEXIWEBFORMS_VIEW_READ_H
 #define KEXIWEBFORMS_VIEW_READ_H
 
-#include <QHash>
-#include <pion/net/HTTPResponseWriter.hpp>
-
 #include "View.h"
+
+class QString;
+template <class Key, class T> class QHash;
 
 namespace KexiWebForms {
 namespace View {
 
-    /**
-     * @brief WebService handling the read page
-     *
-     * This service lists records in a particular database table
-     */
-    class Read : public View {
-    public:
-        Read(const char* name) : View(name) {}
-        virtual ~Read() {}
+/*!
+ * @brief Show the contents of a table
+ *
+ * Display the contents of table specified in the URI paht (the schema is
+ * '/read/$tableName')
+ */
+class Read : public View {
+public:
+    Read(const char* name) : View(name) {}
+    virtual ~Read() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
-    
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
+
 }
 }
 

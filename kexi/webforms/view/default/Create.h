@@ -22,22 +22,28 @@
 #ifndef KEXIWEBFORMS_VIEW_CREATE_H
 #define KEXIWEBFORMS_VIEW_CREATE_H
 
-#include <QHash>
-#include <pion/net/HTTPResponseWriter.hpp>
-
 #include "View.h"
+
+class QString;
+template <class Key, class T> class QHash;
 
 namespace KexiWebForms {
 namespace View {
-    
-    class Create : public View {
-    public:
-        Create(const char* name) : View(name) {}
-        virtual ~Create() {}
-        
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
-    
+
+/*!
+ * @brief Create a new row
+ *
+ * Display a form to create a new row specified on the URI path (the schema is
+ * '/create/$tableName'
+ */
+class Create : public View {
+public:
+    Create(const char* name) : View(name) {}
+    virtual ~Create() {}
+
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
+
 }
 }
 

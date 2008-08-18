@@ -47,57 +47,57 @@ using namespace pion::net;
 
 namespace KexiWebForms {
 
-    void BlobService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
-        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
-                    boost::bind(&TCPConnection::finish, tcp_conn)));
-        
-        PionUserPtr userPtr(request->getUser());
-        Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
+void BlobService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+    HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                                 boost::bind(&TCPConnection::finish, tcp_conn)));
 
-        if (u.can(Auth::READ)) {
-            QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
-            QString table(queryString.at(2));
-            QString fieldName(queryString.at(3));
-            QString pkey(queryString.at(4));
-            QString pkeyVal(queryString.at(5));
+    PionUserPtr userPtr(request->getUser());
+    Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
 
-            KexiDB::TableSchema* tableSchema = KexiWebForms::Model::gConnection->tableSchema(table);
-            KexiDB::Field* field = tableSchema->field(fieldName);
+    if (u.can(Auth::READ)) {
+        QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
+        QString table(queryString.at(2));
+        QString fieldName(queryString.at(3));
+        QString pkey(queryString.at(4));
+        QString pkeyVal(queryString.at(5));
 
-            if (field->type() == KexiDB::Field::BLOB) {
-                // Perform the rest of the query
-                KexiDB::QuerySchema query(*tableSchema);
-                query.addToWhereExpression(tableSchema->field(pkey), QVariant(pkeyVal));
-                KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->executeQuery(query);
+        KexiDB::TableSchema* tableSchema = KexiWebForms::Model::gConnection->tableSchema(table);
+        KexiDB::Field* field = tableSchema->field(fieldName);
 
-                QByteArray blobData;
-                // There should be only one record
-                cursor->moveNext();
-                for (uint i = 0; i < cursor->fieldCount(); i++) {
-                    if (query.field(i) == field) {
-                        blobData = QByteArray(cursor->value(i).toByteArray());
-                        break;
-                    }
+        if (field->type() == KexiDB::Field::BLOB) {
+            // Perform the rest of the query
+            KexiDB::QuerySchema query(*tableSchema);
+            query.addToWhereExpression(tableSchema->field(pkey), QVariant(pkeyVal));
+            KexiDB::Cursor* cursor = KexiWebForms::Model::gConnection->executeQuery(query);
+
+            QByteArray blobData;
+            // There should be only one record
+            cursor->moveNext();
+            for (uint i = 0; i < cursor->fieldCount(); i++) {
+                if (query.field(i) == field) {
+                    blobData = QByteArray(cursor->value(i).toByteArray());
+                    break;
                 }
-
-                // Resolve the mime type for blobData
-                KSharedPtr<KMimeType> mime = KMimeType::findByContent(blobData);
-                if (mime) {
-                    /// @todo wrong assumption: blobs are not always image/png
-                    writer->getResponse().setContentType("image/png");
-                    writer->writeNoCopy(blobData.data(), blobData.size());
-                    writer->writeNoCopy(HTTPTypes::STRING_CRLF);
-                    writer->writeNoCopy(HTTPTypes::STRING_CRLF);
-                    writer->send();
-                }
-
-                KexiWebForms::Model::gConnection->deleteCursor(cursor);
             }
-        } else {
-            writer->write("Not Authorized");
-            writer->send();
+
+            // Resolve the mime type for blobData
+            KSharedPtr<KMimeType> mime = KMimeType::findByContent(blobData);
+            if (mime) {
+                /// @todo wrong assumption: blobs are not always image/png
+                writer->getResponse().setContentType("image/png");
+                writer->writeNoCopy(blobData.data(), blobData.size());
+                writer->writeNoCopy(HTTPTypes::STRING_CRLF);
+                writer->writeNoCopy(HTTPTypes::STRING_CRLF);
+                writer->send();
+            }
+
+            KexiWebForms::Model::gConnection->deleteCursor(cursor);
         }
-            
+    } else {
+        writer->write("Not Authorized");
+        writer->send();
     }
-    
+
+}
+
 }

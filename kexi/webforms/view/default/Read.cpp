@@ -39,47 +39,47 @@
 namespace KexiWebForms {
 namespace View {
 
-    void Read::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        QString requestedTable(d["kwebforms__table"]);
+void Read::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
+    QString requestedTable(d["kwebforms__table"]);
 
-        QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > pair = KexiWebForms::Model::Database::readTable(requestedTable);
+    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > pair = KexiWebForms::Model::Database::readTable(requestedTable);
 
-        QString tableData;
-        uint totalRecords = pair.second.count();
-        QString primaryKey(pair.first.primaryKey()->field(0)->name());
+    QString tableData;
+    uint totalRecords = pair.second.count();
+    QString primaryKey(pair.first.primaryKey()->field(0)->name());
 
-        // Table header
-        tableData.append("<tr>\t<th scope=\"col\">Record</th>\n");
-        foreach(const KexiDB::Field* f, *pair.first.fields()) {
-            tableData.append(QString("\t<th scope=\"col\">%1</th>\n").arg(f->captionOrName()));
-        }
-        tableData.append("</tr>\n");
-
-        // Table contents
-        foreach(const uint record, pair.second.keys()) {
-            tableData.append("<tr>");
-            tableData.append(QString("<td>%1 of %2</td>").arg(record).arg(totalRecords));
-            QString pkeyVal(pair.second[record].at(pair.first.primaryKey()->field(0)->order()));
-            
-            foreach(const QString& value, pair.second[record]) {
-                tableData.append(QString("\t<td>%1</td>\n").arg(value));
-            }
-            // Toolbox
-            // Edit
-            tableData.append(QString("<td><a href=\"/update/%1/%2/%3\">"
-                                     "<img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>")
-                             .arg(requestedTable).arg(primaryKey).arg(pkeyVal));
-            // Delete
-            tableData.append(QString("<td><a href=\"/delete/%1/%2/%3\">"
-                                     "<img src=\"/f/toolbox/draw-eraser.png\" alt=\"Edit\"/></a></td>")
-                             .arg(requestedTable).arg(primaryKey).arg(pkeyVal));
-            tableData.append("</tr>\n");
-        }
-
-        setValue("TABLEDATA", tableData);
-        setValue("TABLENAME", requestedTable);
-        renderTemplate(m_dict, writer);
+    // Table header
+    tableData.append("<tr>\t<th scope=\"col\">Record</th>\n");
+    foreach(const KexiDB::Field* f, *pair.first.fields()) {
+        tableData.append(QString("\t<th scope=\"col\">%1</th>\n").arg(f->captionOrName()));
     }
-    
-}    
+    tableData.append("</tr>\n");
+
+    // Table contents
+    foreach(const uint record, pair.second.keys()) {
+        tableData.append("<tr>");
+        tableData.append(QString("<td>%1 of %2</td>").arg(record).arg(totalRecords));
+        QString pkeyVal(pair.second[record].at(pair.first.primaryKey()->field(0)->order()));
+
+        foreach(const QString& value, pair.second[record]) {
+            tableData.append(QString("\t<td>%1</td>\n").arg(value));
+        }
+        // Toolbox
+        // Edit
+        tableData.append(QString("<td><a href=\"/update/%1/%2/%3\">"
+                                 "<img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>")
+                         .arg(requestedTable).arg(primaryKey).arg(pkeyVal));
+        // Delete
+        tableData.append(QString("<td><a href=\"/delete/%1/%2/%3\">"
+                                 "<img src=\"/f/toolbox/draw-eraser.png\" alt=\"Edit\"/></a></td>")
+                         .arg(requestedTable).arg(primaryKey).arg(pkeyVal));
+        tableData.append("</tr>\n");
+    }
+
+    setValue("TABLEDATA", tableData);
+    setValue("TABLENAME", requestedTable);
+    renderTemplate(m_dict, writer);
+}
+
+}
 }

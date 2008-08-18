@@ -26,15 +26,24 @@
 
 namespace KexiWebForms {
 
-    class BlobService : public pion::net::WebService {
-    public:
-        BlobService() : pion::net::WebService() {}
-        virtual ~BlobService() {}
+/*!
+ * @brief a service to retrieve binary blobs from a table
+ *
+ * This web service is used to retrieve binary blob from a particular
+ * database table using the following uri schema
+ * '/blob/$table/$primaryKeyName/$primaryKeyValue'
+ *
+ * @note When a table, field or value is not found it leads to spectacular crashes
+ */
+class BlobService : public pion::net::WebService {
+public:
+    BlobService() : pion::net::WebService() {}
+    virtual ~BlobService() {}
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
-    };
-    
-    
+    virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+};
+
+
 }
 
 #endif /* KEXIWEBFORMS_BLOBSERVICE_H */

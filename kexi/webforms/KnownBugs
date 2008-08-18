@@ -5,6 +5,3 @@ When a bug/regression disappears it means that it has been (hopefully) fixed
 - After opening a table for the first time, the kexi__users table is created and filled with two example
   accounts (root and guest) but none of them is usable
   WORK AROUND: restart kwebforms
-
-== REGRESSIONS ==
-- Data is not %-decoded when inserted in the database

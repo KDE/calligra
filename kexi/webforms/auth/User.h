@@ -29,34 +29,34 @@
 namespace KexiWebForms {
 namespace Auth {
 
-    class User {
-    public:
-        User() : m_name("anonymous"), m_password("guest") {}
-        
-        User(const char* name, const char* password) :
-            m_name(name), m_password(password) {}
-        
-        User(const QString& name, const QString& password) :
+class User {
+public:
+    User() : m_name("anonymous"), m_password("guest") {}
+
+    User(const char* name, const char* password) :
             m_name(name), m_password(password) {}
 
-        User(const char* name, const char* password, const QList<Permission>& perms) :
+    User(const QString& name, const QString& password) :
+            m_name(name), m_password(password) {}
+
+    User(const char* name, const char* password, const QList<Permission>& perms) :
             m_name(name), m_password(password), m_perms(perms) {}
 
-        User(const QString& name, const QString& password, const QList<Permission>& perms) :
+    User(const QString& name, const QString& password, const QList<Permission>& perms) :
             m_name(name), m_password(password), m_perms(perms) {}
 
-        void addPermission(Permission);
+    void addPermission(Permission);
 
-        QString name() const;
-        QString password() const;
-        QList<Permission> permissions() const;
-        bool can(Permission);
-        
-    private:
-        QString m_name;
-        QString m_password;
-        QList<Permission> m_perms;
-    };
+    QString name() const;
+    QString password() const;
+    QList<Permission> permissions() const;
+    bool can(Permission);
+
+private:
+    QString m_name;
+    QString m_password;
+    QList<Permission> m_perms;
+};
 
 } // end namespace Auth
 } // end namespace KexiWebForms

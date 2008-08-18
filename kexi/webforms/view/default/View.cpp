@@ -25,33 +25,35 @@
 
 #include <KDebug>
 
+#include <google/template.h>
+
 #include "TemplateProvider.h"
 #include "View.h"
 
 namespace KexiWebForms {
-    namespace View {
+namespace View {
 
-        View::View(const char* name) {
-            m_dict = initTemplate(name);
-        }
+View::View(const char* name) {
+    m_dict = initTemplate(name);
+}
 
-        View::~View() {
-            delete m_dict;
-        }
+View::~View() {
+    delete m_dict;
+}
 
-        void View::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr ptr) {
-            kError() << "Not implemented" << endl;
-        }
-        
-        void View::setValue(const char* k, const QVariant& v) {
-            setValue(k, v.toString());
-        }
-        void View::setValue(const char* k, const QString& v) {
-            setValue(k, v.toUtf8().constData());
-        }
-        void View::setValue(const char* k, const char* v) {
-            m_dict->SetValue(k, v);
-        }
-        
-    }
+void View::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr ptr) {
+    kError() << "Not implemented" << endl;
+}
+
+void View::setValue(const char* k, const QVariant& v) {
+    setValue(k, v.toString());
+}
+void View::setValue(const char* k, const QString& v) {
+    setValue(k, v.toUtf8().constData());
+}
+void View::setValue(const char* k, const char* v) {
+    m_dict->SetValue(k, v);
+}
+
+}
 }

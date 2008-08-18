@@ -40,54 +40,53 @@ using namespace pion::net;
 
 namespace KexiWebForms {
 
-    static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
-        return s1.toLower() < s2.toLower();
-    }
+static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
+    return s1.toLower() < s2.toLower();
+}
 
-    // Adds object list to the menu.
-    // Step 1: Fill the queryNames stringlist
-    // Step 2: Sort it
-    // Step 3: Write the links
-    static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, const char* uri, const char* keyName)
-    {
-        QHash<QString, QString> oNames(KexiWebForms::Model::Database::getNames(objectType));
-        QStringList captions(oNames.uniqueKeys());
-        qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
-        
-        QString HTML;
-        foreach (const QString& caption, captions) {
-            QStringList names(oNames.values(caption));
-            foreach (const QString& name, names) {
-                if (!(name == "kexi__users")) //! @note temporary work around
-                    HTML.append(QString::fromLatin1("\t<li><a href=\"/%1/%2\">%3</a></li>\n").arg(uri).arg(name).arg(caption));
-            }
+// Adds object list to the menu.
+// Step 1: Fill the queryNames stringlist
+// Step 2: Sort it
+// Step 3: Write the links
+static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, const char* uri, const char* keyName) {
+    QHash<QString, QString> oNames(KexiWebForms::Model::Database::getNames(objectType));
+    QStringList captions(oNames.uniqueKeys());
+    qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
+
+    QString HTML;
+    foreach(const QString& caption, captions) {
+        QStringList names(oNames.values(caption));
+        foreach(const QString& name, names) {
+            if (!(name == "kexi__users")) //! @note temporary work around
+                HTML.append(QString::fromLatin1("\t<li><a href=\"/%1/%2\">%3</a></li>\n").arg(uri).arg(name).arg(caption));
         }
-        
-        dict->SetValue(keyName, HTML.toUtf8().constData());
     }
 
-    google::TemplateDictionary* initTemplate(const char* filename) {
-        google::TemplateDictionary* dict = new google::TemplateDictionary(filename);
-        dict->SetFilename(filename);
-        // Add header template
-        google::TemplateDictionary* beforeDict = dict->AddIncludeDictionary("beforecontent");
-        beforeDict->SetFilename("beforecontent.tpl");
-        //beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
+    dict->SetValue(keyName, HTML.toUtf8().constData());
+}
 
-        // Add footer template (-- note, this includes the left menu with the standard template)
-        google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
-        afterDict->SetFilename("aftercontent.tpl");
-        afterDict->ShowSection("LOGIN");
-        
-        addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
-        addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");
-        return dict;
-    }
+google::TemplateDictionary* initTemplate(const char* filename) {
+    google::TemplateDictionary* dict = new google::TemplateDictionary(filename);
+    dict->SetFilename(filename);
+    // Add header template
+    google::TemplateDictionary* beforeDict = dict->AddIncludeDictionary("beforecontent");
+    beforeDict->SetFilename("beforecontent.tpl");
+    //beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
 
-    void renderTemplate(google::TemplateDictionary* dict, pion::net::HTTPResponseWriterPtr writer) {
-        std::string output;
-        google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);
-        writer->write(output);
-    }
+    // Add footer template (-- note, this includes the left menu with the standard template)
+    google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
+    afterDict->SetFilename("aftercontent.tpl");
+    afterDict->ShowSection("LOGIN");
+
+    addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
+    addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");
+    return dict;
+}
+
+void renderTemplate(google::TemplateDictionary* dict, pion::net::HTTPResponseWriterPtr writer) {
+    std::string output;
+    google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);
+    writer->write(output);
+}
 
 }

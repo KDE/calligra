@@ -37,49 +37,48 @@ using namespace pion::net;
 namespace KexiWebForms {
 namespace View {
 
-    static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
-        return s1.toLower() < s2.toLower();
-    }
-    
-    static void addList(KexiDB::ObjectTypes objectType, pion::net::HTTPResponseWriterPtr writer)
-    {
-        KexiWebForms::Model::Database db;
-        QHash<QString, QString> oNames(db.getNames(objectType));
-        QStringList captions(oNames.uniqueKeys());
-        qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
-        
-        QString HTML;
-        foreach (const QString& caption, captions) {
-            QStringList names(oNames.values(caption));
-            foreach (const QString& name, names) {
-                if (!(name == "kexi__users")) //! @note temporary work around
-                    HTML.append(QString::fromLatin1("{\n"
-                                                    "\t\ttext: '%1',\n"
-                                                    "\t\tid: '%2',\n"
-                                                    "\t\tleaf: true\n"
-                                                    "\t},").arg(caption).arg(name));
-            }
-        }
+static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
+    return s1.toLower() < s2.toLower();
+}
 
-        writer->write(HTML.toUtf8().constData());
+static void addList(KexiDB::ObjectTypes objectType, pion::net::HTTPResponseWriterPtr writer) {
+    KexiWebForms::Model::Database db;
+    QHash<QString, QString> oNames(db.getNames(objectType));
+    QStringList captions(oNames.uniqueKeys());
+    qSort(captions.begin(), captions.end(), caseInsensitiveLessThan);
+
+    QString HTML;
+    foreach(const QString& caption, captions) {
+        QStringList names(oNames.values(caption));
+        foreach(const QString& name, names) {
+            if (!(name == "kexi__users")) //! @note temporary work around
+                HTML.append(QString::fromLatin1("{\n"
+                                                "\t\ttext: '%1',\n"
+                                                "\t\tid: '%2',\n"
+                                                "\t\tleaf: true\n"
+                                                "\t},").arg(caption).arg(name));
+        }
     }
-    
-    void Objects::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
-        writer->write("[{\n"
-                      "\ttext: 'Tables',\n"
-                      "\texpanded: true,\n"
-                      "\tchildren: [");
-        addList(KexiDB::TableObjectType, writer);
-        writer->write("]\n"
-                      "},");
-        writer->write("{\n"
-                      "\ttext: 'Queries',\n"
-                      "\texpanded: true,\n"
-                      "\tchildren: [");
-        addList(KexiDB::QueryObjectType, writer);
-        writer->write("]\n"
-                      "}]\n");
-    }
+
+    writer->write(HTML.toUtf8().constData());
+}
+
+void Objects::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
+    writer->write("[{\n"
+                  "\ttext: 'Tables',\n"
+                  "\texpanded: true,\n"
+                  "\tchildren: [");
+    addList(KexiDB::TableObjectType, writer);
+    writer->write("]\n"
+                  "},");
+    writer->write("{\n"
+                  "\ttext: 'Queries',\n"
+                  "\texpanded: true,\n"
+                  "\tchildren: [");
+    addList(KexiDB::QueryObjectType, writer);
+    writer->write("]\n"
+                  "}]\n");
+}
 
 }
 }

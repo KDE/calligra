@@ -43,171 +43,164 @@ namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
 namespace Database {     // begin namespace Database
 
-    QHash<QString, QString> getNames(KexiDB::ObjectTypes objectType) {
-        QList<int> objectIds(gConnection->objectIds(objectType));
-        QHash<QString, QString> objectNamesForCaptions;
+QHash<QString, QString> getNames(KexiDB::ObjectTypes objectType) {
+    QList<int> objectIds(gConnection->objectIds(objectType));
+    QHash<QString, QString> objectNamesForCaptions;
 
-        foreach (const int id, objectIds) {
-            KexiDB::SchemaData schema;
-            tristate res = gConnection->loadObjectSchemaData(id, schema);
-            if (res != true)
-                continue;
-            objectNamesForCaptions.insertMulti(
-                schema.captionOrName(), schema.name() ); //insertMulti() because there can be many objects with the same caption
-        }
-        return objectNamesForCaptions;
+    foreach(const int id, objectIds) {
+        KexiDB::SchemaData schema;
+        tristate res = gConnection->loadObjectSchemaData(id, schema);
+        if (res != true)
+            continue;
+        objectNamesForCaptions.insertMulti(
+            schema.captionOrName(), schema.name());  //insertMulti() because there can be many objects with the same caption
+    }
+    return objectNamesForCaptions;
+}
+
+
+KexiDB::TableSchema* getSchema(const QString& table) {
+    return gConnection->tableSchema(table);
+}
+
+
+QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString& table, const QString& pkey, const uint pkeyValue) {
+    KexiDB::TableSchema tableSchema(*getSchema(table));
+    KexiDB::QuerySchema* query = 0;
+    KexiDB::Cursor* cursor = 0;
+    query = new KexiDB::QuerySchema(tableSchema);
+    query->addToWhereExpression(tableSchema.field(pkey), QVariant(pkeyValue));
+    cursor = gConnection->executeQuery(*query);
+    cursor->moveNext(); // we just hope that everything goes well (aka FIXME!)
+
+    QList<QVariant> values;
+    for (uint i = 0; i < tableSchema.fieldCount(); i++) {
+        values.append(cursor->value(i));
     }
 
-
-    KexiDB::TableSchema* getSchema(const QString& table) {
-        return gConnection->tableSchema(table);
+    if (cursor) {
+        cursor->close();
+        gConnection->deleteCursor(cursor);
     }
 
+    return QPair< KexiDB::TableSchema, QList<QVariant> >(tableSchema, values);
+}
 
-    QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString& table, const QString& pkey, const uint pkeyValue) {
-        KexiDB::TableSchema tableSchema(*getSchema(table));
-        KexiDB::QuerySchema* query = 0;
-        KexiDB::Cursor* cursor = 0;
-        query = new KexiDB::QuerySchema(tableSchema);
-        query->addToWhereExpression(tableSchema.field(pkey), QVariant(pkeyValue));
-        cursor = gConnection->executeQuery(*query);
-        cursor->moveNext(); // we just hope that everything goes well (aka FIXME!)
+bool updateRow(const QString& table, const QHash<QString, QVariant> data, bool create, int pkeyValue) {
+    KexiDB::TableSchema tableSchema(*gConnection->tableSchema(table));
+    KexiDB::QuerySchema query(tableSchema);
+    KexiDB::Cursor* cursor = gConnection->prepareQuery(query);
 
-        QList<QVariant> values;
-        for (uint i = 0; i < tableSchema.fieldCount(); i++) {
-            values.append(cursor->value(i));
+    KexiDB::RecordData recordData(tableSchema.fieldCount());
+    if (!create && (pkeyValue != -1)) {
+        QVector<int> pkeyFields(query.pkeyFieldsOrder());
+        KexiDB::Field* primaryKeyField = tableSchema.primaryKey()->field(0);
+        for (int i = 0; i < pkeyFields.count(); ++i) {
+            int fieldId = pkeyFields.at(i);
+            if (primaryKeyField == query.field(fieldId)) {
+                recordData.insert(fieldId, pkeyValue);
+                break;
+            }
         }
-
-        if (cursor) {
-            cursor->close();
-            gConnection->deleteCursor(cursor);
-        }
-
-        return QPair< KexiDB::TableSchema, QList<QVariant> >(tableSchema, values);
     }
 
-    bool updateRow(const QString& table, const QHash<QString, QVariant> data, bool create, int pkeyValue) {
-        KexiDB::TableSchema tableSchema(*gConnection->tableSchema(table));
-        KexiDB::QuerySchema query(tableSchema);
-        KexiDB::Cursor* cursor = gConnection->prepareQuery(query);
+    KexiDB::RowEditBuffer editBuffer(true);
 
-        KexiDB::RecordData recordData(tableSchema.fieldCount());
-        if (!create && (pkeyValue != -1)) {
-            QVector<int> pkeyFields(query.pkeyFieldsOrder());
-            KexiDB::Field* primaryKeyField = tableSchema.primaryKey()->field(0);
-            for (int i = 0; i < pkeyFields.count(); ++i) {
-                int fieldId = pkeyFields.at(i);
-                if (primaryKeyField == query.field(fieldId)) {
-                    recordData.insert(fieldId, pkeyValue);
-                    break;
+    QStringList fieldNames(data.keys());
+
+    foreach(const QString& name, fieldNames) {
+        QVariant currentValue(data.value(name));
+        // FIXME: Regression, we don't encode data...
+        if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
+            kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
+            editBuffer.insert(*query.columnInfo(name), currentValue);
+        }
+    }
+
+    bool result = false;
+    if (create)
+        result = cursor->insertRow(recordData, editBuffer);
+    else
+        result = cursor->updateRow(recordData, editBuffer);
+
+    if (cursor) {
+        cursor->close();
+        gConnection->deleteCursor(cursor);
+    }
+    return result;
+}
+
+bool deleteRow(const QString& table, const QString& pkeyName, const QString& pkeyValue) {
+    return KexiDB::deleteRow(*gConnection, gConnection->tableSchema(table), pkeyName, pkeyValue);
+}
+
+QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString& tableName) {
+    KexiDB::TableSchema table(*getSchema(tableName));
+    KexiDB::QuerySchema query(table);
+    KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+
+    QMap<uint, QList<QString> > tableContents;
+    if (cursor) {
+        uint record = 1;
+        uint pkeyVal = 0;
+        while (cursor->moveNext()) {
+            for (uint i = 0; i < query.fieldCount(); i++) {
+                if (query.field(i) == table.primaryKey()->field(0)) {
+                    pkeyVal = cursor->value(i).toUInt();
+                }
+
+                if (query.field(i)->type() == KexiDB::Field::BLOB) {
+                    tableContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
+                                                 .arg(tableName).arg(query.field(i)->name()).arg(table.primaryKey()->field(0)->name())
+                                                 .arg(QVariant(pkeyVal).toString()));
+                } else {
+                    tableContents[record].append(Qt::escape(cursor->value(i).toString()));
                 }
             }
+            record++;
         }
 
-        KexiDB::RowEditBuffer editBuffer(true);
-
-        QStringList fieldNames(data.keys());
-
-        foreach(const QString& name, fieldNames) {
-            QVariant currentValue(data.value(name));
-            // FIXME: Regression, we don't encode data...
-            if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
-                kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
-                editBuffer.insert(*query.columnInfo(name), currentValue);
-            }
-        }
-
-        bool result = false;
-        if (create)
-            result = cursor->insertRow(recordData, editBuffer);
-        else
-            result = cursor->updateRow(recordData, editBuffer);
-
-        if (cursor) {
-            cursor->close();
-            gConnection->deleteCursor(cursor);
-        }
-        return result;
+        cursor->close();
+        gConnection->deleteCursor(cursor);
     }
 
-    bool deleteRow(const QString& table, const QString& pkeyName, const QString& pkeyValue) {
-        return KexiDB::deleteRow(*gConnection, gConnection->tableSchema(table), pkeyName, pkeyValue);
-    }
+    return QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > >(table, tableContents);
+}
 
-    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString& tableName) {
-        KexiDB::TableSchema table(*getSchema(tableName));
-        KexiDB::QuerySchema query(table);
-        KexiDB::Cursor* cursor = gConnection->executeQuery(query);
-
-        QMap<uint, QList<QString> > tableContents;
-        if (cursor) {
-            uint record = 1;
-            uint pkeyVal = 0;
-            while (cursor->moveNext()) {
-                for (uint i = 0; i < query.fieldCount(); i++) {
-                    if (query.field(i) == table.primaryKey()->field(0)) {
-                        pkeyVal = cursor->value(i).toUInt();
-                    }
-
-                    if (query.field(i)->type() == KexiDB::Field::BLOB) {
-                        tableContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
-                                                     .arg(tableName).arg(query.field(i)->name()).arg(table.primaryKey()->field(0)->name())
-                                                     .arg(QVariant(pkeyVal).toString()));
-                    } else {
-                        QString escapedValue(cursor->value(i).toString());
-                        // the browser usally encodes spaces as pluses.
-                        escapedValue.replace("++", "+");
-
-                        tableContents[record].append(Qt::escape(cursor->value(i).toString()));
-                    }
-                }
-                record++;
-            }
-
-            cursor->close();
-            gConnection->deleteCursor(cursor);
-        }
-
-        return QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > >(table, tableContents);
-    }
-
-    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readQuery(const QString& queryName) {
-        KexiDB::QuerySchema* query = gConnection->querySchema(queryName);
-        KexiDB::TableSchema* table = 0;
-        QMap<uint, QList<QString> > queryContents;
-        if (query) {
-            table = query->masterTable();
-            if (table) {
-                KexiDB::Cursor* cursor = gConnection->executeQuery(*query);
-                if (cursor) {
-                    uint record = 1;
-                    uint pkeyVal = 0;
-                    while (cursor->moveNext()) {
-                        for (uint i = 0; i < query->fieldCount(); i++) {
-                            if (query->field(i) == table->primaryKey()->field(0)) {
-                                pkeyVal = cursor->value(i).toUInt();
-                            }
-
-                            if (query->field(i)->type() == KexiDB::Field::BLOB) {
-                                queryContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
-                                                             .arg(table->name()).arg(query->field(i)->name())
-                                                             .arg(table->primaryKey()->field(0)->name())
-                                                             .arg(QString(pkeyVal)));
-                            } else {
-                                QString escapedValue(cursor->value(i).toString());
-                                // the browser usally encodes spaces as pluses.
-                                escapedValue.replace("++", "+");
-
-                                queryContents[record].append(Qt::escape(cursor->value(i).toString()));
-                            }
+QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readQuery(const QString& queryName) {
+    KexiDB::QuerySchema* query = gConnection->querySchema(queryName);
+    KexiDB::TableSchema* table = 0;
+    KexiDB::QueryColumnInfo::Vector expandedFields = query->fieldsExpanded();
+    QMap<uint, QList<QString> > queryContents;
+    if (query) {
+        table = query->masterTable();
+        if (table) {
+            KexiDB::Cursor* cursor = gConnection->executeQuery(*query);
+            if (cursor) {
+                uint record = 1;
+                uint pkeyVal = 0;
+                while (cursor->moveNext()) {
+                    for (uint i = 0; i < uint(expandedFields.size()); i++) {
+                        if (query->field(i) == table->primaryKey()->field(0)) {
+                            pkeyVal = cursor->value(i).toUInt();
                         }
-                        record++;
+
+                        /*if (query->field(i)->type() == KexiDB::Field::BLOB) {
+                            queryContents[record].append(QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
+                                                         .arg(table->name()).arg(query->field(i)->name())
+                                                         .arg(table->primaryKey()->field(0)->name())
+                                                         .arg(QString(pkeyVal)));
+                        } else {*/
+                        queryContents[record].append(Qt::escape(cursor->value(i).toString()));
+                        //}
                     }
+                    record++;
                 }
             }
         }
-        return QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > >(*table, queryContents);
     }
+    return QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > >(*table, queryContents);
+}
 
 
 } // end namespace Database

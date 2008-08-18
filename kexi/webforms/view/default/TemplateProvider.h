@@ -24,23 +24,23 @@
 #include <pion/net/HTTPResponseWriter.hpp>
 
 namespace google {
-    class TemplateDictionary;
+class TemplateDictionary;
 }
 
 namespace KexiWebForms {
 
-    /**
-     * Inizialize a template
-     */
-    google::TemplateDictionary* initTemplate(const char*);
+/**
+ * Inizialize a template
+ */
+google::TemplateDictionary* initTemplate(const char*);
 
-    
-    /**
-     * Expand a template and write it in response to the request
-     * @param TemplateDictionary* pointer to google::TemplateDictionary
-     * @param pion::net::HTTPResponseWriterPtr pointer to pion::net::HTTPResponseWriter
-     */
-    void renderTemplate(google::TemplateDictionary*, pion::net::HTTPResponseWriterPtr);
+
+/**
+ * Expand a template and write it in response to the request
+ * @param TemplateDictionary* pointer to google::TemplateDictionary
+ * @param pion::net::HTTPResponseWriterPtr pointer to pion::net::HTTPResponseWriter
+ */
+void renderTemplate(google::TemplateDictionary*, pion::net::HTTPResponseWriterPtr);
 
 }
 

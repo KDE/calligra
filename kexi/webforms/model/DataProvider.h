@@ -28,22 +28,22 @@ class QString;
 namespace KexiWebForms {
 namespace Model {
 
-    /*!
-     * Global connection object
-     *
-     * @fixme That's a bit awful, isn't it?
-     */
-    extern KexiDB::Connection* gConnection;
+/*!
+ * Global connection object
+ *
+ * @note Using global object is doing something "The Wrong Way"™
+ */
+extern KexiDB::Connection* gConnection;
 
-    /*!
-     * Essentially, initialize the KexiDB::Connection object
-     *
-     * @param const QString& Path to a KexiDB file, connection file
-     * shortcut file
-     *
-     * @return boolean false when error occurs, true if everything went well
-     */
-    bool initDatabase(const QString& fileName);
+/*!
+ * Essentially, initialize the KexiDB::Connection object
+ *
+ * @param const QString& Path to a KexiDB file, connection file
+ * shortcut file
+ *
+ * @return boolean false when error occurs, true if everything went well
+ */
+bool initDatabase(const QString& fileName);
 
 }
 }

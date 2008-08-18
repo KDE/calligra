@@ -23,29 +23,29 @@
 namespace KexiWebForms {
 namespace Auth {
 
-    void User::addPermission(Permission p) {
-        m_perms.append(p);
-    }
+void User::addPermission(Permission p) {
+    m_perms.append(p);
+}
 
-    QString User::name() const {
-        return m_name;
-    }
+QString User::name() const {
+    return m_name;
+}
 
-    QString User::password() const {
-        return m_password;
-    }
+QString User::password() const {
+    return m_password;
+}
 
-    QList<Permission> User::permissions() const {
-        return m_perms;
-    }
+QList<Permission> User::permissions() const {
+    return m_perms;
+}
 
-    bool User::can(Permission p) {
-        for (int i = 0; i < m_perms.size(); ++i) {
-            if (m_perms.at(i) == p)
-                return true;
-        }
-        return false;
+bool User::can(Permission p) {
+    for (int i = 0; i < m_perms.size(); ++i) {
+        if (m_perms.at(i) == p)
+            return true;
     }
+    return false;
+}
 
 }
 }

@@ -21,30 +21,28 @@
 #ifndef KEXIWEBFORMS_VIEW_UPDATE_H
 #define KEXIWEBFORMS_VIEW_UPDATE_H
 
-#include <QHash>
-
-#include <pion/net/HTTPResponseWriter.hpp>
-
 #include "View.h"
 
 class QString;
+template <class Key, class T> class QHash;
 
 namespace KexiWebForms {
-namespace View {    
+namespace View {
 
-    /**
-     * @brief WebService handling the update page
-     *
-     * This service creates a form out of table field["table"] and allows to upd["table"]te
-     * values in a particular row.
-     */
-    class Update : public View {
-    public:
-        Update(const char* name) : View(name) {}
-        virtual ~Update() {}
+/*!
+ * @brief Updates a row in a table
+ *
+ * An action that updates the row in a table. It is called with
+ * '/update/$tableName' uri schema. When called shows a form to update the
+ * fields
+ */
+class Update : public View {
+public:
+    Update(const char* name) : View(name) {}
+    virtual ~Update() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
 
 }
 }

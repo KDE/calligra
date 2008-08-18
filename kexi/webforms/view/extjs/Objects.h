@@ -30,21 +30,21 @@
 class QString;
 
 namespace KexiWebForms {
-
 namespace View {
 
-    /**
-     * @brief WebService handling delete operations
-     *
-     * This service is responsible to delete a particular record
-     */
-    class Objects : public IView {
-    public:
-        Objects() {}
-        virtual ~Objects() {}
+/*!
+ * @brief Output the database content as a JSON stream
+ *
+ * This service inspects the database to retrieve table and query names and
+ * produces a JSON document to be loaded from an ExtJS tree view
+ */
+class Objects : public IView {
+public:
+    Objects() {}
+    virtual ~Objects() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
 
 }
 }

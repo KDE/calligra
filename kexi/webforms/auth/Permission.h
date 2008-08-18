@@ -24,13 +24,13 @@
 namespace KexiWebForms {
 namespace Auth {
 
-    enum Permission {
-        CREATE,
-        READ,
-        UPDATE,
-        DELETE,
-        QUERY
-    };
+enum Permission {
+    CREATE,
+    READ,
+    UPDATE,
+    DELETE,
+    QUERY
+};
 
 }
 }

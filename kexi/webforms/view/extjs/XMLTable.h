@@ -29,19 +29,21 @@
 namespace KexiWebForms {
 namespace View {
 
-    /**
-     * @brief WebService handling the read page
-     *
-     * This service lists records in a particular database table
-     */
-    class XMLTable : public IView {
-    public:
-        XMLTable() {}
-        virtual ~XMLTable() {}
+/**
+ * @brief Prints the table data as XML
+ *
+ * This view outputs the contents of a particular table as an XML document
+ * with a special metadata preamble. XML output is the preferred way to display
+ * data in an ExtJS data grid
+ */
+class XMLTable : public IView {
+public:
+    XMLTable() {}
+    virtual ~XMLTable() {}
 
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
-    };
-    
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
+};
+
 }
 }
 

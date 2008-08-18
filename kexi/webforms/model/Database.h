@@ -30,69 +30,76 @@
 
 
 namespace KexiDB {
-    class TableSchema;
+class TableSchema;
 }
 class QString;
 
 namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
+
+/*!
+ * @brief Useful functions to access database contents
+ *
+ * The Database namespace contains some useful functions to access the
+ * contents of the Kexi database.
+ */
 namespace Database {     // begin namespace Database
 
-    /*!
-     * Get all table names
-     * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
-     * @return QHash with captions as keys and object names as values
-     */
-    QHash<QString, QString> getNames(KexiDB::ObjectTypes);
+/*!
+ * Get all table names
+ * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
+ * @return QHash with captions as keys and object names as values
+ */
+QHash<QString, QString> getNames(KexiDB::ObjectTypes);
 
-    /*!
-     * Get the schema of a table
-     * @param QString& the table name
-     * @return a pointer to KexiDB::TableSchema
-     */
-    KexiDB::TableSchema* getSchema(const QString&);
+/*!
+ * Get the schema of a table
+ * @param QString& the table name
+ * @return a pointer to KexiDB::TableSchema
+ */
+KexiDB::TableSchema* getSchema(const QString&);
 
-    /*!
-     * Get the schema of a table and specific field value
-     * @param QString& the table name
-     * @param QString& the primary key name
-     * @param uint the primary key (numeric) value
-     */
-    QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString&, const uint);
+/*!
+ * Get the schema of a table and specific field value
+ * @param QString& the table name
+ * @param QString& the primary key name
+ * @param uint the primary key (numeric) value
+ */
+QPair< KexiDB::TableSchema, QList<QVariant> > getSchema(const QString&, const QString&, const uint);
 
-    /*!
-     * Despite its name, this method is useful when creating new rows, too
-     * Create/Update a row in a given table
-     * Data is automatically percent-encoded
-     * @param QString& the table name
-     * @param QHash<QString, QVariant> a Hash with Name/Value pairs
-     * @param create create a new row, instead of trying to update it
-     */
-    bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
+/*!
+ * Despite its name, this method is useful when creating new rows, too
+ * Create/Update a row in a given table
+ * Data is automatically percent-encoded
+ * @param QString& the table name
+ * @param QHash<QString, QVariant> a Hash with Name/Value pairs
+ * @param create create a new row, instead of trying to update it
+ */
+bool updateRow(const QString&, const QHash<QString, QVariant>, bool create = false, int pkeyValue = -1);
 
-    /*!
-     * Deletes a row from the database
-     * @param KexiDB::TableSchema* the table schema
-     * @param QString& primary key name
-     * @param QString& primary key value
-     */
-    bool deleteRow(const QString&, const QString&, const QString&);
+/*!
+ * Deletes a row from the database
+ * @param KexiDB::TableSchema* the table schema
+ * @param QString& primary key name
+ * @param QString& primary key value
+ */
+bool deleteRow(const QString&, const QString&, const QString&);
 
-    /*!
-     * Read the contents of a table
-     * @param QString& the table name
-     * @return QPair whose first value is a KexiDB::TableSchema and the second is a QMap \
-     *   with record number as key and a QList<QString> as value (representing data in the row)
-     */
-    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString&);
+/*!
+ * Read the contents of a table
+ * @param QString& the table name
+ * @return QPair whose first value is a KexiDB::TableSchema and the second is a QMap \
+ *   with record number as key and a QList<QString> as value (representing data in the row)
+ */
+QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readTable(const QString&);
 
-    /*!
-     * Run query and show result
-     * @param QString& the query name
-     * @return QPair whose first value is a KexiDB::TableSchema representing the master table \
-     *  with record number as key and a QList<QString> as value (representing data in the row)
-     */
-    QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readQuery(const QString&);
+/*!
+ * Run query and show result
+ * @param QString& the query name
+ * @return QPair whose first value is a KexiDB::TableSchema representing the master table \
+ *  with record number as key and a QList<QString> as value (representing data in the row)
+ */
+QPair< KexiDB::TableSchema, QMap<uint, QList<QString> > > readQuery(const QString&);
 
 } // end namespace Database
 } // end namespace Model

@@ -31,9 +31,9 @@
 namespace KexiWebForms {
 namespace View {
 
-    void Index::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr writer) {
-        renderTemplate(m_dict, writer);
-    }
-    
+void Index::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr writer) {
+    renderTemplate(m_dict, writer);
+}
+
 }
 }

@@ -32,23 +32,22 @@ public:
         m_shutdown_now = true;
         m_shutdown_cond.notify_all();
     }
-  
+
     /// blocks until the shutdown condition has been signaled
     inline void wait(void) {
         boost::mutex::scoped_lock shutdown_lock(m_shutdown_mutex);
         while (! m_shutdown_now) {
-            KUniqueApplication::processEvents();
             m_shutdown_cond.wait(shutdown_lock);
         }
     }
-  
+
 private:
     /// true if we should shutdown now
     bool					m_shutdown_now;
-  
+
     /// used to protect the shutdown condition
     boost::mutex			m_shutdown_mutex;
-  
+
     /// triggered when it is time to shutdown
     boost::condition		m_shutdown_cond;
 };

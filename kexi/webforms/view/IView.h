@@ -22,22 +22,37 @@
 #ifndef KEXIWEBFORMS_VIEW_IVIEW_H
 #define KEXIWEBFORMS_VIEW_IVIEW_H
 
-#include <QHash>
-
 #include <pion/net/HTTPResponseWriter.hpp>
 
 class QString;
+template <class Key, class T> class QHash;
 
+/*!
+ * The KexiWebForms namespace contains all the code related to the Kexi
+ * Web Forms Daemon.
+ * @author Lorenzo Villani <lvillani@binaryhelix.net>
+ */
 namespace KexiWebForms {
 namespace View {
 
-    class IView {
-    public:
-        virtual ~IView() {}
-        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr) = 0;
-    };
-    
-    
+/*!
+ * @brief Interface for all view classes
+ *
+ * Interface that must be implemented by all views in order to be
+ * used from the Front Controller
+ */
+class IView {
+public:
+    /*!
+     * Pure virtual function to be implemented by derived view classes
+     * @param QHash<QString,QString>& a const reference to the data stash
+     * @param pion::net::HTTPWriterPtr a pointer to the writer class
+     */
+    virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr) = 0;
+    virtual ~IView() {}
+};
+
+
 } // end namespace View
 } // end namespace KexiWebForms
 
