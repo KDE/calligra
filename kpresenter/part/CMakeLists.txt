@@ -66,13 +66,13 @@ set( kpresenterprivate_LIB_SRCS
      pagelayout/KPrPageLayouts.cpp
 
      ui/KPrCustomSlideShowsDialog.cpp
-     # ui/KPrConfigureSlideShowDialog.cpp
+     ui/KPrConfigureSlideShowDialog.cpp
      ui/KPrConfigurePresenterViewDialog.cpp
    )
 
 kde4_add_ui_files(kpresenterprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.ui
-     # ui/KPrConfigureSlideShow.ui
+     ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
    )
 

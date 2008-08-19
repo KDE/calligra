@@ -93,6 +93,12 @@ public:
      */
     void setPresenterViewEnabled( bool enabled );
 
+    QList<KoPAPageBase*> slideShow() const;
+
+    QString activeCustomSlideShow() const;
+
+    void setActiveCustomSlideShow( const QString &customSlideShow );
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
@@ -120,6 +126,7 @@ protected:
 private:
     int m_presentationMonitor;
     bool m_presenterViewEnabled;
+    QString m_activeCustomSlideShow;
 };
 
 #endif /* KPRDOCUMENT_H */

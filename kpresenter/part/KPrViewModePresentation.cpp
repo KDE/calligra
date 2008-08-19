@@ -144,7 +144,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     // add end off slideshow page
     m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( presentationscreen ), document );
-    QList<KoPAPageBase*> pages = document->pages();
+    QList<KoPAPageBase*> pages = document->slideShow();
     pages.append( m_endOfSlideShowPage );
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );

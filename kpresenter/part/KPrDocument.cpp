@@ -201,5 +201,25 @@ void KPrDocument::setPresenterViewEnabled( bool enabled )
     m_presenterViewEnabled = enabled;
 }
 
+QList<KoPAPageBase*> KPrDocument::slideShow() const
+{
+    if ( !m_activeCustomSlideShow.isNull() &&
+            m_customSlideShows->names().contains( m_activeCustomSlideShow ) ) {
+        return m_customSlideShows->getByName( m_activeCustomSlideShow );
+    }
+
+    return pages();
+}
+
+QString KPrDocument::activeCustomSlideShow() const
+{
+    return m_activeCustomSlideShow;
+}
+
+void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
+{
+    m_activeCustomSlideShow = customSlideShow;
+}
+
 #include "KPrDocument.moc"
 
