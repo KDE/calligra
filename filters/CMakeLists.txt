@@ -55,9 +55,9 @@ if (SHOULD_BUILD_KRITA)
 endif(SHOULD_BUILD_KRITA)
 
 #macro_optional_add_subdirectory(kivio)
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+if(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
 	add_subdirectory(xsltfilter)
-endif(LIBXML2_FOUND AND LIBXSLT_FOUND)	
+endif(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)	
 
 message (STATUS "Re-add kivio filters, karbon filter, kpresenter filters")
 MESSAGE( STATUS "Readd or not Kformula filter: Status ?")
