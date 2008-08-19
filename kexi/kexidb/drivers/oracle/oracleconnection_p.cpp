@@ -33,7 +33,7 @@ connection)
 	KexiDBDrvDbg << "OracleConnectionInternal::Constructor: "<< endl;
    try{
       env = Environment::createEnvironment();
-   }catch (&ea){
+   }catch (oracle::occi::SQLException ea){
       errno=ea.getErrorCode();
       errmsg=strdup(ea.what());
       KexiDBDrvDbg <<errmsg;
@@ -49,7 +49,7 @@ OracleConnectionInternal::~OracleConnectionInternal()
 	 	env=0;
 	 	KexiDBDrvDbg <<endl;
 	}
-	catch (&ea){
+	catch (oracle::occi::SQLException ea){
       errno=ea.getErrorCode();
       errmsg=strdup(ea.what());
       KexiDBDrvDbg <<errmsg;
@@ -91,7 +91,7 @@ bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 	  stmt=oraconn->createStatement();
 	  return true;
   }
-  catch (&ea)
+  catch (oracle::occi::SQLException ea)
   {
      errno=ea.getErrorCode();
      errmsg=strdup(ea.what());
@@ -110,7 +110,7 @@ bool OracleConnectionInternal::db_disconnect()
     oraconn=0;
 	  return true;
 	  }
-	 catch (&ea)
+	 catch (oracle::occi::SQLException ea)
 	 {
 	  errmsg=ea.getMessage().c_str();
 	  KexiDBDrvDbg<<errmsg<<endl;
@@ -133,7 +133,7 @@ bool OracleConnectionInternal::useDatabase(const QString &dbName)
 		rs=0;
 		return !user.compare(dbName);
 	}
-	catch (&ea)
+	catch (oracle::occi::SQLException ea)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
@@ -153,7 +153,7 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
       rs=stmt->getResultSet();
       return(true);
     }
-    catch (&ea)
+    catch (oracle::occi::SQLException ea)
     {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
@@ -170,7 +170,7 @@ QString OracleConnectionInternal::getServerVersion()
 	{ 
 		return QString(oraconn->getServerVersion().c_str());
 	}
-	catch (&ea)
+	catch (oracle::occi::SQLException ea)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());

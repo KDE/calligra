@@ -61,7 +61,7 @@ bool OracleConnection::drv_connect(ServerVersionInfo& version)
 	  version.release = versionRe.cap(3).toInt();
 	  return true;
 	 }
-	 catch ( &ea)
+	 catch (oracle::occi::SQLException ea)
 	 {
 	  KexiDBDrvDbg <<ea.what();
 	  return false;
@@ -113,7 +113,7 @@ bool OracleConnection::drv_getDatabasesList( QStringList &list )
 		
 		return true;
 	}
-	catch (&ea)
+	catch (oracle::occi::SQLException ea)
   {
        KexiDBDrvDbg <<ea.what()<<"\n";
        return false;
@@ -140,7 +140,7 @@ bool OracleConnection::drv_createDatabase( const QString &dbName) {
 		if (res) d->createSequences();
 		return res;
 	}
-	catch (&ea)
+	catch (oracle::occi::SQLException ea)
 	{
 	  KexiDBDrvDbg << ea.what()<< endl;
 	  return false;
@@ -164,7 +164,7 @@ bool OracleConnection::drv_databaseExists
 	  //KexiDBDrvDbg << dbName <<":"<<res<< endl;
     return res;
 	}
-	catch ( &ea)
+	catch ( oracle::occi::SQLException ea)
 	{
 	  KexiDBDrvDbg << ea.what()<< endl;
 	  return(false);
@@ -242,7 +242,7 @@ bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
 		d->stmt->execute(dropsq);
 	  return true;
 	}
-	catch (&ea)
+	catch (oracle::occi::SQLException ea)
 	{
 	  KexiDBDrvDbg <<ea.what()<<endl;
 	  return false;
@@ -270,7 +270,7 @@ bool OracleConnection::drv_setAutoCommit(bool on)
 	  d->stmt->setAutoCommit(on);
 	  KexiDBDrvDbg <<":true"<<endl;
 	  return true;
-	}catch ( &ea){
+	}catch ( oracle::occi::SQLException ea){
 	  KexiDBDrvDbg <<ea.what();
 	  return false;
 	}
@@ -418,7 +418,7 @@ Q_ULLONG OracleConnection::drv_lastInsertRowID()
     return res;
     
   }
-  catch(&ea)
+  catch(oracle::occi::SQLException ea)
   {
     KexiDBDrvDbg<<ea.what()<<endl;
     return -1;

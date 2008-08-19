@@ -108,7 +108,7 @@ bool OracleCursor::drv_open()
     return true;
       
    }
-   catch (&ea)
+   catch (oracle::occi::SQLException ea)
    {
       KexiDBDrvDbg << ea.what()<<endl;
       setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.getMessage().c_str()));
@@ -128,7 +128,7 @@ bool OracleCursor::drv_close()
 		    KexiDBDrvDbg << "Closed" << endl;
         d->rs=0;
       }
-      catch (&ea)
+      catch (oracle::occi::SQLException ea)
       {
         KexiDBDrvDbg <<ea.what()<<endl;
         return false;
@@ -173,7 +173,7 @@ void OracleCursor::drv_getNextRecord()
         //KexiDBDrvDbg<<"Error"<<endl;
     } 
  }
- catch(&ea)
+ catch(oracle::occi::SQLException ea)
  {
     KexiDBDrvDbg <<ea.what()<<endl;
  }
@@ -268,7 +268,7 @@ void OracleCursor::drv_bufferMovePointerNext()
   {
     d->rs->next();
   }
-  catch ( &ea)
+  catch ( oracle::occi::SQLException ea)
   {
     m_result = FetchError;
   }   

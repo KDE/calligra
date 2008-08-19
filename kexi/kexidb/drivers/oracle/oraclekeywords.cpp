@@ -24,6 +24,7 @@ namespace KexiDB {
   const char* OracleDriver::keywords[] = {
 		"ADMIN",
 		"CURSOR",
+		"DATE",
 		"FOUND",
 		"MOUNT",
 		"AFTER",

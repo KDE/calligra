@@ -62,9 +62,9 @@ protected:
 	unsigned long m_numRows;
 	OracleCursorData *d;
 
-private:
+/*private:
 	oracle::occi::SQLException ea;
-
+*/
 };
 
 }

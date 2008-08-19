@@ -46,14 +46,14 @@ OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 	d->typeNames[Field::Text] = "VARCHAR2";
 
 	d->typeNames[Field::Byte]="NUMBER(3)"; // Unspecified by Oracle
-	d->typeNames[Field::ShortInteger]="NUMBER(38)";
-	d->typeNames[Field::Integer]="NUMBER(38)";
-	d->typeNames[Field::BigInteger]="NUMBER(38)"; // Unspecified
+	d->typeNames[Field::ShortInteger]="INTEGER";
+	d->typeNames[Field::Integer]="INTEGER";
+	d->typeNames[Field::BigInteger]="INTEGER"; // Unspecified
 	d->typeNames[Field::Boolean]="NUMBER(1)"; // Unspecified (Unsupported?)
 	d->typeNames[Field::Date]="DATE";
 	d->typeNames[Field::DateTime]="TIMESTAMP";
 	d->typeNames[Field::Time]="DATE";
-	d->typeNames[Field::Float]="BINARY_FLOAT"; // Number?
+	d->typeNames[Field::Float]="FLOAT"; // Number?
 	d->typeNames[Field::Double]="BINARY_DOUBLE"; // Number?
 	d->typeNames[Field::Text]="VARCHAR2"; // Length? not needed
 	d->typeNames[Field::LongText]="LONG";

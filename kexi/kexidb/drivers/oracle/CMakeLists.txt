@@ -3,7 +3,7 @@
 include_directories( ${ORACLE_INCLUDE_DIR} 
 ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( -D__KEXIDB__= )
+ADD_DEFINITIONS( -D__KEXIDB__= ${KDE4_ENABLE_EXCEPTIONS} )
 
 ########### next target ###############
 
