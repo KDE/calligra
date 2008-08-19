@@ -74,7 +74,7 @@
     <ToolBar name="mainToolBar">
         <Separator/>
         <Action name="page_insertpage"/>
-        <Action name="view_mode"/>
+        <Action name="slideshow_start"/>
         <Separator/>
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
