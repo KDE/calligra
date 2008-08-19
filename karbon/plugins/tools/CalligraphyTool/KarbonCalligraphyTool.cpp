@@ -222,7 +222,7 @@ void KarbonCalligraphyTool::setAngle( KoPointerEvent *event )
         }
 
         // y is inverted in qt painting
-        m_angle = std::atan( -event->yTilt() / event->xTilt() ) + M_PI/2;
+        m_angle = std::atan( static_cast<double>(-event->yTilt() / event->xTilt()) ) + M_PI/2;
     }
     else
     {
