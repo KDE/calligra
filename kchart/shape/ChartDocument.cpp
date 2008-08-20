@@ -19,7 +19,6 @@
 */
 
 // Local
-#include "ChartShape.h"
 #include "ChartDocument.h"
 
 // Qt
@@ -36,6 +35,10 @@
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
+
+// KChart
+#include "ChartShape.h"
+
 
 namespace KChart {
 

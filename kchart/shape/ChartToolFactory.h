@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHARTTYPETOOLFACTORY_H
-#define CHARTTYPETOOLFACTORY_H
+#ifndef CHARTTOOLFACTORY_H
+#define CHARTTOOLFACTORY_H
 
 #include "kchart_export.h"
 #include <KoToolFactory.h>

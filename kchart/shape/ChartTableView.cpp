@@ -18,14 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-// KDE
-#include <KDebug>
-
 // KChart
 #include "ChartTableView.h"
 
 // Qt
 #include <QAbstractItemModel>
+
+// KDE
+#include <KDebug>
 
 using namespace KChart;
 

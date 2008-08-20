@@ -20,8 +20,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCHART_CHART_H
-#define KCHART_CHART_H
+#ifndef KCHART_SHAPE_H
+#define KCHART_SHAPE_H
+
 
 // Local
 #include "kchart_export.h"

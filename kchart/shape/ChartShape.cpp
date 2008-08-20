@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
-   Copyright 2007 Inge Wallin         <inge@lysator.liu.se>
+   Copyright 2007-2008 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -30,7 +30,6 @@
 #include "Surface.h"
 #include "ProxyModel.h"
 #include "TextLabelDummy.h"
-#include "KoTextShapeData.h"
 #include "ChartDocument.h"
 #include "TableModel.h"
 
@@ -864,7 +863,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
         // Still waiting...
         //QApplication::setOverrideCursor( Qt::WaitCursor );
 
-    tmpURL = QString();
+    tmpURL.clear();
 
     // see KoDocument::insertChild for an explanation what's going on
     // now :-)

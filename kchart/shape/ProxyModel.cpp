@@ -457,7 +457,7 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
         if ( d->firstColumnIsLabel )
             column--;
         
-        // Find the first occurance of row in the map
+        // Find the first occurrence of row in the map
         for ( int i = 0; i < d->dataMap.size(); i++ )
         {
             if ( d->dataMap[i] == row ) {
@@ -475,7 +475,7 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
         if ( d->firstColumnIsLabel )
             column--;
         
-        // Find the first occurance of column in the map
+        // Find the first occurrence of column in the map
         for ( int i = 0; i < d->dataMap.size(); i++ )
         {
             if ( d->dataMap[i] == column ) {

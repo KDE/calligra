@@ -35,12 +35,14 @@ namespace KChart {
 /**
  * @brief The CellRegion class handles regions in a table.
  *
- * In contrast to a QItemSelection, a cell region can include header data. Therefore,
- * CellRegion( QPoint( 1, 1 ) ) represents the top-left item of a QAbstractItemModel.
+ * In contrast to a QItemSelection, a cell region can include header
+ * data. Therefore, CellRegion( QPoint( 1, 1 ) ) represents the
+ * top-left item of a QAbstractItemModel.
  *  
- * An instance can represent either a simple, contiuous region of cells, as in most cases,
- * or a more complex discontinous region. In its second form, the orientation of each
- * separate continous region can vary, as well as their sizes.
+ * An instance can represent either a simple, contiuous region of
+ * cells, as in most cases, or a more complex discontinuous region. In
+ * its second form, the orientation of each separate continuous region
+ * can vary, as well as their sizes.
  */
 class CHARTSHAPELIB_EXPORT CellRegion
 {

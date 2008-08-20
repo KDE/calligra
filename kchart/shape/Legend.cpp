@@ -369,7 +369,7 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
         // At the moment, this *is* the case, due to the fact
         // that the shape is also rendered in the page overview
         // in KPresenter
-        // Everytime the window is hidden and shown again, a repaint is
+        // Every time the window is hidden and shown again, a repaint is
         // requested --> laggy performance, especially when quickly
         // switching through windows
         d->pixmapRepaintRequested = false;
