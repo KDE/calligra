@@ -35,7 +35,7 @@ int main(int argc, char **argv)
                      KAboutData::License_LGPL, ki18n("(C) 2003-2005 Kexi Team"));
     about.addCredit(ki18n("Lucijan Busch"), ki18n("Original author"), 0, "lucijan@kde.org");
     about.addAuthor(ki18n("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
-    about.addCredit(ki18n("Jarosław Staniek"), ki18n("Win32 version, some icons, many fixes, ideas and bug reports"), "js@iidea.pl");
+    about.addCredit(ki18n("Jarosław Staniek"), ki18n("Win32 version, some icons, many fixes, ideas and bug reports"), "staniek@kde.org");
     about.addCredit(ki18n("Kristof Borrey "), ki18n("Icons"), 0, "kristof.borrey@skynet.be");
     KCmdLineArgs::init(argc, argv, &about);
 

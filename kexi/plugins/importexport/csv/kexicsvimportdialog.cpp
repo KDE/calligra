@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2008 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with KOffice libraries.

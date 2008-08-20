@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
 
    Based on KIntValidator code by Glen Parker <glenebob@nwlink.com>
 

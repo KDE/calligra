@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
 
    Based on nexp.cpp : Parser module of Python-like language
-   (C) 2001 Jaroslaw Staniek, MIMUW (www.mimuw.edu.pl)
+   (C) 2001 Jarosław Staniek, MIMUW (www.mimuw.edu.pl)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004, 2006 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -94,7 +94,7 @@ static const char dontKnow = cancelled;
  * casting these to int is not typesafe. With tristate class it's easier to make it obvious that
  * cancellation should be taken into account.
  *
- * @author Jaroslaw Staniek
+ * @author Jarosław Staniek
  */
 class tristate
 {

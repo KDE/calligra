@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2008 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,7 +60,7 @@ KAboutData* Kexi::createAboutData()
     );
     // authors sorted by last nontrivial contribution date
     aboutData->addAuthor(
-        ki18n("Jarosław Staniek / OpenOffice Polska"), ki18n("Project maintainer & developer, design, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
+        ki18n("Jarosław Staniek / OpenOffice Polska"), ki18n("Project maintainer & developer, design, KexiDB, commercially supported version, win32 port"), "staniek@kde.org");
     aboutData->addAuthor(
         ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
     aboutData->addAuthor(
