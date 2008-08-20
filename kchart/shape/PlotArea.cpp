@@ -134,8 +134,8 @@ PlotArea::Private::~Private()
 
 
 PlotArea::PlotArea( ChartShape *parent )
-    : d( new Private )
-    , KoShape()
+    : KoShape()
+    , d( new Private )
 {
     Q_ASSERT( parent );
     

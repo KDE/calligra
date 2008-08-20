@@ -57,8 +57,8 @@ ChartDocument::Private::~Private()
 }
 
 ChartDocument::ChartDocument( ChartShape *parent )
-    : d ( new Private )
-    , KoDocument( 0, 0 )
+    : KoDocument( 0, 0 )
+    , d ( new Private )
 {
     d->parent = parent;
 }

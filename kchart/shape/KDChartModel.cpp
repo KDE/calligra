@@ -231,22 +231,29 @@ QVariant KDChartModel::headerData( int section,
     // }
 }
 
-QModelIndex KDChartModel::index( int row, int column, const QModelIndex &parent ) const
+QModelIndex KDChartModel::index( int row, int column,
+				 const QModelIndex &parent ) const
 {
+    Q_UNUSED( parent );
+
     return createIndex( row, column, 0 );
 }
 
 QModelIndex KDChartModel::parent( const QModelIndex &index ) const
 {
+    Q_UNUSED( index );
+
     return QModelIndex();
 }
 
 int KDChartModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( d->dataDirection == Qt::Vertical )
-    {
+    Q_UNUSED( parent );
+
+    if ( d->dataDirection == Qt::Vertical ) {
     	if ( d->biggestDataSetIndex < 0 )
-    		return 0;
+	    return 0;
+
     	Q_ASSERT( d->biggestDataSetIndex < d->dataSets.count() );
         return d->dataSetSizes[ d->biggestDataSetIndex ];
     }
@@ -256,11 +263,14 @@ int KDChartModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) co
 
 int KDChartModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
+    Q_UNUSED( parent );
+
     if ( d->dataDirection == Qt::Vertical )
         return d->dataSets.size() * d->dataDimensions;
     
     if ( d->biggestDataSetIndex < 0 )
         return 0;
+
     Q_ASSERT( d->biggestDataSetIndex < d->dataSets.count() );
     return d->dataSetSizes[ d->biggestDataSetIndex ];
 }
