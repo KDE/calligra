@@ -1,7 +1,0 @@
-
-1. Dynamic (non-buffered cursors) in PostgreSQL
-To avoid big memory consuming, we will need to use backend-side (native) cursors
-with "DECLARE CURSOR" statement. Otherwise KexiDB::Cursor needs to be buffered.
-
-http://archives.postgresql.org/pgsql-interfaces/2000-09/msg00082.php
-
