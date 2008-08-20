@@ -1,6 +1,0 @@
-2003-10-06 lucijan, mysql  Ver 12.21 Distrib 4.0.14, for pc-linux-gnu (i686):
-
-parser doesn't allow "SELECT 1, 2, 3, * FROM fish"
-but allows "SELECT *, 1, 2, 3 FROM fish" and "SELECT 1, 2, 3, fish.* FROM fish"
-
-sqlite and postgress support "SELECT 1, 2, 3, * FROM fish" thouugh
