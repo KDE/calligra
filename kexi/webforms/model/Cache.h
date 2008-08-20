@@ -22,9 +22,10 @@
 #ifndef KEXIWEBFORMS_MODEL_CACHE_H
 #define KEXIWEBFORMS_MODEL_CACHE_H
 
+#include <QList>
+#include <QHash>
+
 class QString;
-template <class T> class QList<T>;
-template <class Key, class T> class QHash<Key, T>;
 
 namespace KexiWebForms { // begin namespace KexiWebForms
 namespace Model {        // begin namespace Model
