@@ -224,6 +224,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->status->setMinimumWidth( 300 );
     addStatusBarItem( d->status, 1 );
+    connect( KoToolManager::instance(), SIGNAL(changedStatusText(const QString &)),
+             d->status, SLOT(setText(const QString &)) );
     d->cursorCoords = new QLabel( QString(), statusBar() );
     d->cursorCoords->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->cursorCoords->setMinimumWidth( 50 );
