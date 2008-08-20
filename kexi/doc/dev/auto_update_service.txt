@@ -1,6 +1,6 @@
 Installation / Update Service for QKW / KDE and apps
 
-Jaroslaw Staniek
+Jarosław Staniek
 started: 2003-07-22
 
 OOPL-only: Create Update Service using kdecore/KMD5 and bzip2 lib. This would be used to automatic

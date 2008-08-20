@@ -1,6 +1,6 @@
 PROPOSAL: Generic Guidlines For Kexi Development
 
-Jaroslaw Staniek
+Jarosław Staniek
 started: 2003-06-25
 
 Idea 1

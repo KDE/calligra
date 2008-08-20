@@ -3,7 +3,7 @@
 
  Started 2003-10-13
 
- Copyright (C) 2003 Jaroslaw Staniek js at iidea dot pl
+ Copyright (C) 2003 Jarosław Staniek staniek at kde.org
  (C) OpenOffice Polska 2003
  Kexi home page: http://www.kexi-project.org/
 ---------------------------------------------------

@@ -35,5 +35,5 @@ Also, do not use <b> tags around "" ie.
 
 
 --
-js@iidea.pl, july 2004
+staniek@kde.org, july 2004
 

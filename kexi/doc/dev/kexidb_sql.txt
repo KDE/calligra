@@ -1,6 +1,6 @@
 ---------------------------------------------------------
  KexiDB Common SQL definition
- Copyright (C) 2003 Jaroslaw Staniek js at iidea dot pl
+ Copyright (C) 2003 Jarosław Staniek staniek at kde.org
  Started: 2003-09-10
  Kexi home page: http://www.koffice.org/kexi/
 ---------------------------------------------------------

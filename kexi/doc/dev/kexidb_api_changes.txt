@@ -1,6 +1,6 @@
 --------------------------------------------
  KexiDB Module API Changes
- Doc started: 2003-07-08 by js@iidea.pl
+ Doc started: 2003-07-08 by staniek@kde.org
 --------------------------------------------
 
 These changes are propsals for further disscussions.

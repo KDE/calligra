@@ -1,4 +1,4 @@
-/* Jaroslaw Staniek:
+/* Jarosław Staniek:
    TAKEN FROM his compiler's parser
    AS EXAMPLE FOR LUCIJAN'S KEXISQL PARSER */
 

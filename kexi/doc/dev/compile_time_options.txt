@@ -1,7 +1,7 @@
 Compile-Time Options for Kexi
 -----------------------------
 
-(c) 2005-2007, Jaroslaw Staniek, <js @ iidea . pl>
+(c) 2005-2007, Jarosław Staniek, <staniek @ kde.org>
 
 
 See http://www.kexi-project.org/wiki/wikiview/index.php?AdvancedBuildNotes
