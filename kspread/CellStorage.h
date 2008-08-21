@@ -113,6 +113,7 @@ public:
      */
     Binding binding( int column, int row ) const;
     void setBinding( const Region& region, const Binding& binding );
+    void removeBinding( const Region& region, const Binding& binding );
 
     /**
      * \return the comment associated with the Cell at \p column , \p row .

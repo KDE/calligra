@@ -36,7 +36,6 @@
 #include <QWidget>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasResourceProvider.h>
 
 #include "kspread_export.h"
 
@@ -99,14 +98,6 @@ public:
       ResizeCell,     /**< Merging cell */
       AutoFill,       /**< Autofilling */
       ResizeSelection /**< Resizing the selection */
-    };
-
-    /**
-     * KSpread specific canvas resources
-     */
-    enum Resources
-    {
-        Selection = KoCanvasResource::KSpreadStart  ///< the cell selection
     };
 
     explicit Canvas( View* view );

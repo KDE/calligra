@@ -86,7 +86,6 @@
 // KOffice includes
 #include <KoGlobal.h>
 #include <KoCanvasController.h>
-#include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
 #include <KoColorSetAction.h>
 #include <KoMainWindow.h>
@@ -113,6 +112,8 @@
 
 // KSpread includes
 #include "ApplicationSettings.h"
+#include "BindingManager.h"
+#include "CanvasResources.h"
 #include "CellStorage.h"
 #include "CellView.h"
 #include "Damages.h"
@@ -737,7 +738,9 @@ void View::initView()
     // Let the selection pointer become a canvas resource.
     QVariant variant;
     variant.setValue<void*>( d->selection );
-    d->canvas->resourceProvider()->setResource( Canvas::Selection, variant );
+    d->canvas->resourceProvider()->setResource(CanvasResource::Selection, variant);
+    variant.setValue<QObject*>(doc()->map()->bindingManager());
+    d->canvas->resourceProvider()->setResource(KoTable::Resource::SourceRangeManager, variant);
 
     // Load the KSpread Tools
     ToolRegistry::instance();

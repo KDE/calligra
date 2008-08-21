@@ -82,6 +82,11 @@ public:
     void insert(const Region& region, const T& data);
 
     /**
+     * Removes \p data from \p region .
+     */
+    void remove(const Region& region, const T& data);
+
+    /**
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
@@ -262,6 +267,22 @@ void RectStorage<T>::insert(const Region& region, const T& _data)
         // insert data
         m_tree.insert((*it)->rect(), data);
         regionChanged( (*it)->rect() );
+    }
+}
+
+template<typename T>
+void RectStorage<T>::remove(const Region& region, const T& data)
+{
+    if (!m_storedData.contains(data)) {
+        return;
+    }
+    const Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
+        // keep track of the used area
+        m_usedArea -= (*it)->rect(); // FIXME Can still be used!
+        // insert data
+        m_tree.remove((*it)->rect(), data);
+        regionChanged((*it)->rect());
     }
 }
 

@@ -22,6 +22,7 @@
 #define KSPREAD_BINDING_MODEL
 
 #include <KoChartModel.h>
+#include <KoTableInterface.h>
 
 #include <QAbstractTableModel>
 
@@ -29,13 +30,10 @@ namespace KSpread
 {
 class Binding;
 
-/**
- * A model for a cell range acting as data source.
- */
-class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
+class BindingModel : public QAbstractTableModel, public KoChart::ChartModel, public KoTable::ModelExtension
 {
     Q_OBJECT
-    Q_INTERFACES(KoChart::ChartModel)
+    Q_INTERFACES(KoChart::ChartModel KoTable::ModelExtension)
 public:
     BindingModel(Binding* binding, QObject *parent = 0);
 
@@ -49,6 +47,9 @@ public:
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
     virtual bool setCellRegion(const QString& regionName);
     virtual bool isCellRegionValid(const QString& regionName) const;
+
+    // ModelExtension interface
+    virtual QString regionAddress() const;
 
     const Region& region() const;
     void setRegion(const Region& region);

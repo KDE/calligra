@@ -20,6 +20,8 @@
 #ifndef KSPREAD_BINDING_MANAGER
 #define KSPREAD_BINDING_MANAGER
 
+#include <KoTableInterface.h>
+
 #include <QObject>
 
 class QString;
@@ -32,10 +34,10 @@ class Region;
 /**
  * Manages cell ranges acting as data sources.
  */
-class BindingManager : public QObject
+class BindingManager : public QObject, public KoTable::SourceRangeManager
 {
     Q_OBJECT
-
+    Q_INTERFACES(KoTable::SourceRangeManager)
 public:
     /**
      * Constructor.
@@ -46,6 +48,11 @@ public:
      * Destructor.
      */
     virtual ~BindingManager();
+
+    // KoTable::SourceRangeManager interface
+    virtual const QAbstractItemModel* createModel(const QString& regionName);
+    virtual bool removeModel(const QAbstractItemModel* model);
+    virtual bool isCellRegionValid(const QString& regionName) const;
 
     void regionChanged(const Region& region);
     void updateAllBindings();

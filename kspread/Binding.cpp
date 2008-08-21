@@ -182,6 +182,11 @@ bool BindingModel::isCellRegionValid(const QString& regionName) const
     return Region(regionName, m_region.firstSheet()->map()).isValid();
 }
 
+QString BindingModel::regionAddress() const
+{
+    return m_region.name();
+}
+
 void BindingModel::emitChanged(const Region& region)
 {
     emit changed(region);

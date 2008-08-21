@@ -186,6 +186,15 @@ void CellStorage::setBinding( const Region& region, const Binding& binding )
     d->bindingStorage->insert( region, binding );
 }
 
+void CellStorage::removeBinding(const Region& region, const Binding& binding)
+{
+    // recording undo?
+    if (d->undoData) {
+        d->undoData->bindings << d->bindingStorage->undoData(region);
+    }
+    d->bindingStorage->remove(region, binding);
+}
+
 QString CellStorage::comment( int column, int row ) const
 {
     return d->commentStorage->contains( QPoint( column, row ) );
