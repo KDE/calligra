@@ -1,7 +1,7 @@
 project(kspread)
 
 add_subdirectory( data )
-add_subdirectory( flake )
+add_subdirectory( shape )
 add_subdirectory( dialogs )
 add_subdirectory( tests )
 add_subdirectory( plugins )
