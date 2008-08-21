@@ -44,10 +44,12 @@ namespace KChart {
  *    the x axis; the region is the same among all data sets)
  * 5) for bubble widths (only for bubble charts)
  *
- * A CellRegion can also represent a region that is used to
- * initialize the data series from.
+ * A CellRegion can also represent a region in a spreadsheet that
+ * is relevant for the data of a chart. That way, the initial chart
+ * is created based on the cell selection the user made before
+ * inserting the chart shape.
  *
- * In contrast to a QItemSelection, a cell region can include header
+ * In contrast to a QItemSelection, a CellRegion can include header
  * data. Therefore, CellRegion( QPoint( 1, 1 ) ) represents the
  * top-left item of a QAbstractItemModel.
  *
