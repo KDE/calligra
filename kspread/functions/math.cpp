@@ -1198,7 +1198,11 @@ Value func_munit( valVector args, ValueCalc* calc, FuncExtra* )
     const int dim = calc->conv()->asInteger( args[0] ).asInteger();
     if ( dim < 1 )
         return Value::errorVALUE();
-    return convert( Eigen::MatrixXd::Identity( dim, dim ) );
+    Value result( Value::Array );
+    for ( int row = 0; row < dim; ++row )
+        for ( int col = 0; col < dim; ++col )
+            result.setElement( col, row, Value( col == row ? 1 : 0 ) );
+    return result;
 }
 
 // Function: SUBTOTAL
@@ -1287,8 +1291,20 @@ Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
 // Function: TRANSPOSE
 Value func_transpose (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    const Eigen::MatrixXd eMatrix = convert( args[0], calc );
-    return convert( eMatrix.transpose() );
+    Value matrix = args[0];
+    const int cols = matrix.columns();
+    const int rows = matrix.rows();
+
+    Value transpose( Value::Array );
+    for ( int row = 0; row < rows; ++row )
+    {
+        for ( int col = 0; col < cols; ++col )
+        {
+            if ( !matrix.element( col, row ).isEmpty() )
+                transpose.setElement( row, col, matrix.element( col, row ) );
+        }
+    }
+    return transpose;
 }
 
 /*
