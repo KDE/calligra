@@ -902,6 +902,15 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadin
 
 bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
 {
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.save();
+
+    if( chartElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+    {
+        context.odfLoadingContext().fillStyleStack( chartElement, KoXmlNS::chart, "style-name", "chart" );
+        styleStack.setTypeProperties( "graphic" );
+    }
+
     loadOdfAttributes( chartElement, context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements );
     
     // Check if we're loading an embedded document
@@ -986,6 +995,8 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     }
     
     requestRepaint();
+
+    styleStack.restore();
 
     return true;
 }
