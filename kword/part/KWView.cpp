@@ -780,14 +780,18 @@ This saves problems with finding out which we missed near the end.
 QList<KWFrame*> KWView::selectedFrames() const {
     QList<KWFrame*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
-        KoShape *parent = shape;
-        while(parent->parent())
-            parent = parent->parent();
-        KWFrame *frame = dynamic_cast<KWFrame*> (parent->applicationData());
+        KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         frames.append(frame);
     }
     return frames;
+}
+
+KWFrame *KWView::frameForShape(KoShape *shape) {
+    KoShape *parent = shape;
+    while (parent->parent())
+      parent = shape->parent();
+    return dynamic_cast<KWFrame*>(parent->applicationData());
 }
 
 // -------------------- Actions -----------------------
@@ -820,7 +824,7 @@ void KWView::addBookmark()
     shape = selection->firstSelectedShape();
     if (shape == 0) return; // no shape selected
 
-    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    KWFrame *frame = frameForShape(shape);
     Q_ASSERT(frame);
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
     if (fs == 0) return;
@@ -921,7 +925,7 @@ void KWView::deleteBookmark(const QString &name)
 void KWView::editDeleteFrame() {
     QList<KoShape*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        KWFrame *frame = frameForShape(shape);
         if(frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
             if(fs && fs->textFrameSetType() != KWord::OtherTextFrameSet)
@@ -1145,7 +1149,7 @@ void KWView::selectionChanged()
             m_actionViewHeader->setChecked(m_currentPage->pageStyle()->headers() != KWord::HFTypeNone);
             m_actionViewFooter->setChecked(m_currentPage->pageStyle()->footers() != KWord::HFTypeNone);
         }
-        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        KWFrame *frame = frameForShape(shape);
         KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (fs)
             m_actionAddBookmark->setEnabled(true);
@@ -1158,7 +1162,7 @@ void KWView::selectionChanged()
     m_actionEditDelFrame->setEnabled(false);
     bool first = true;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
-        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         if(first) {
             m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
