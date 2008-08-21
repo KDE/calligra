@@ -56,7 +56,7 @@ QSizeF TablePageManager::size(int page) const
 {
     if (page < 1 || page > d->pages.count() || !d->pages[page - 1]->KoShape::parent())
         return QSizeF();
-    return d->pages[page - 1]->KoShape::parent()->size();
+    return (page == 1) ? d->master->size() : d->pages[page - 1]->KoShape::parent()->size();
 }
 
 void TablePageManager::clearPages()
@@ -67,7 +67,7 @@ void TablePageManager::clearPages()
 
 void TablePageManager::insertPage(int page)
 {
-    if (page < 1 || page > d->pages.count()) {
+    if (page <= 1 || page > d->pages.count()) {
         return;
     }
     TableShape* const shape = static_cast<TableShape*>(d->pages[page - 1]);
