@@ -1,15 +1,12 @@
 project(kspread)
 
+add_subdirectory( data )
 add_subdirectory( flake )
 add_subdirectory( dialogs )
 add_subdirectory( tests )
 add_subdirectory( plugins )
-add_subdirectory( pics )
 add_subdirectory( dtd )
-add_subdirectory( toolbar )
 add_subdirectory( functions )
-add_subdirectory( sheetstyles )
-add_subdirectory( templates )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${CMAKE_CURRENT_SOURCE_DIR}/ui
