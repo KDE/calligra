@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="37">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="38">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -12,7 +12,7 @@
   <Action name="copy"/>
   <Action name="paste"/>
   <Action name="specialPaste"/>
-  <Action name="insertCellCopy"/>
+  <Action name="pasteWithInsertion"/>
   <Menu name="Fill"><text>Fi&amp;ll</text>
         <Action name="fillDown"/>
         <Action name="fillRight"/>
