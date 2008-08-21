@@ -346,7 +346,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
           // if we encounter a non-empty cell, commit the buffered delimiters
           if (!txt.isEmpty()) {
             str += collect + txt;
-            collect = QString();
+            collect.clear();
           }
 
           collect += csvDelimiter;

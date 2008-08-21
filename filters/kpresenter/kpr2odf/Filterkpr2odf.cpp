@@ -625,7 +625,7 @@ void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& object
             textChain += " ";
     }
 
-    if( lastSpan || ( ( lastStyle != QString::null ) && ( lastStyle != styleName ) ) )
+    if ( lastSpan || ( ( !lastStyle.isEmpty() ) && ( lastStyle != styleName ) ) )
     {
         content->startElement( "text:span" );
 
@@ -634,7 +634,7 @@ void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& object
 
         content->endElement();//text:span
 
-        textChain = QString::null;//reset textChain
+        textChain.clear();//reset textChain
     }
 
     //We have to reset the last style if we are going to change the paragraph
@@ -644,7 +644,7 @@ void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& object
     }
     else
     {
-        lastStyle = QString::null;
+        lastStyle.clear();
     }
 }
 

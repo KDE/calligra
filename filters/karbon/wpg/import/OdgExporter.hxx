@@ -35,7 +35,8 @@
 
 class OdgExporter : public libwpg::WPGPaintInterface {
 public:
-	OdgExporter(GraphicsHandler *pHandler, const bool isFlatXML = false);
+	explicit OdgExporter(GraphicsHandler *pHandler,
+			     const bool isFlatXML = false);
 	~OdgExporter();
 
 	void startGraphics(double imageWidth, double imageHeight);

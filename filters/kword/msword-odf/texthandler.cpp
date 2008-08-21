@@ -1011,7 +1011,7 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
     }
 
     //write the parent style name if we have it
-    if(namedStyle != "") {
+    if (!namedStyle.isEmpty()) {
 	paragraphStyle->addAttribute("style:parent-style-name", namedStyle);
     }
     //if we're writing to styles.xml, the style should go there, too
