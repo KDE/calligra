@@ -116,7 +116,11 @@ void TableShape::setColumns( int columns )
     const double factor = (double) d->columns / columns;
     d->columns = columns;
     d->adjustColumnDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
+    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
     d->sheetView->invalidate();
+    if (!d->pageManager) {
+        return;
+    }
     PrintSettings settings = *sheet()->printSettings();
     settings.setPrintRegion(Region(1, 1, d->columns, d->rows, sheet()));
     d->pageManager->setPrintSettings(settings);
@@ -128,7 +132,11 @@ void TableShape::setRows( int rows )
     const double factor = (double) d->rows / rows;
     d->rows = rows;
     d->adjustRowDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
+    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
     d->sheetView->invalidate();
+    if (!d->pageManager) {
+        return;
+    }
     PrintSettings settings = *sheet()->printSettings();
     settings.setPrintRegion(Region(1, 1, d->columns, d->rows, sheet()));
     d->pageManager->setPrintSettings(settings);
@@ -263,6 +271,7 @@ void TableShape::setSize( const QSizeF& newSize )
     if ( qAbs(dx) >= cellWidth || qAbs(dy) >= cellHeight ) {
         d->columns += numAddedCols;
         d->rows += numAddedRows;
+        setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
         d->sheetView->invalidate();
         KoShape::setSize( size2 );
     }

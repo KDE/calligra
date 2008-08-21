@@ -83,6 +83,10 @@ void TablePageManager::preparePage(int page)
         return;
     }
     KoTextShapeData* const data = static_cast<KoTextShapeData*>(d->master->KoShape::parent()->userData());
+    if (!data) {
+        // not embedded in a text shape
+        return;
+    }
     Q_CHECK_PTR(data);
     QTextDocument* const document = data->document();
     Q_CHECK_PTR(document);
