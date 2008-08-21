@@ -1173,7 +1173,7 @@ Value func_minverse( valVector args, ValueCalc* calc, FuncExtra* )
     Eigen::LU<Eigen::MatrixXd> lu( eMatrix );
     if( lu.isInvertible() )
     {
-	lu.computeInverse( &eMatrixInverse );
+        lu.computeInverse( &eMatrixInverse );
         return convert( eMatrixInverse );
     }
     else
