@@ -34,6 +34,9 @@ namespace KSpread
 {
 class Region;
 
+/**
+ * Settings used for printing.
+ */
 class KSPREAD_EXPORT PrintSettings
 {
 public:

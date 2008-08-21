@@ -27,6 +27,9 @@
 namespace KSpread
 {
 
+/**
+ * The tool to change cell ranges.
+ */
 class KSPREAD_EXPORT CellTool : public CellToolBase
 {
     Q_OBJECT

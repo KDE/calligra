@@ -34,6 +34,10 @@ class KoShape;
 namespace KSpread
 {
 
+/**
+ * \ingroup OpenDocument
+ * Data used while saving.
+ */
 class OdfSavingContext
 {
 public:

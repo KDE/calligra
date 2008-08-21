@@ -29,6 +29,9 @@ namespace KSpread
 class Map;
 class Region;
 
+/**
+ * Manages cell ranges acting as data sources.
+ */
 class BindingManager : public QObject
 {
     Q_OBJECT

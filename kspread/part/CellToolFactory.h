@@ -27,6 +27,9 @@
 namespace KSpread
 {
 
+/**
+ * The Factory, that creates a CellTool.
+ */
 class KSPREAD_EXPORT CellToolFactory : public KoToolFactory
 {
     Q_OBJECT

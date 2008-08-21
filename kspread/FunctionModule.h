@@ -27,6 +27,10 @@
 
 namespace KSpread
 {
+
+/**
+ * A function module.
+ */
 class KSPREAD_EXPORT FunctionModule : public QObject
 {
     Q_OBJECT

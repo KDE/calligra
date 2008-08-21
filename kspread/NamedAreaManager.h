@@ -39,6 +39,9 @@ namespace KSpread
 class Map;
 class Region;
 
+/**
+ * Manages named cell areas.
+ */
 class KSPREAD_EXPORT NamedAreaManager : public QObject
 {
     Q_OBJECT

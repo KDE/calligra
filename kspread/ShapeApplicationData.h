@@ -25,6 +25,9 @@
 namespace KSpread
 {
 
+/**
+ * KSpread specific data attached to each shape.
+ */
 class ShapeApplicationData : public KoShapeApplicationData
 {
 public:

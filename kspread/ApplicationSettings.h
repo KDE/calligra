@@ -31,6 +31,9 @@
 namespace KSpread
 {
 
+/**
+ * Visual settings.
+ */
 class KSPREAD_EXPORT ApplicationSettings : public QObject
 {
     Q_OBJECT

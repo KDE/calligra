@@ -29,6 +29,9 @@ namespace KSpread
 {
 class Binding;
 
+/**
+ * A model for a cell range acting as data source.
+ */
 class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
 {
     Q_OBJECT

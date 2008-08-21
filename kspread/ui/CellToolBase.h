@@ -40,7 +40,7 @@ namespace KSpread
 class SheetView;
 
 /**
- * Base tool providing actions acting on cell ranges.
+ * Abstract tool providing actions acting on cell ranges.
  */
 class KSPREAD_EXPORT CellToolBase : public KoInteractionTool
 {

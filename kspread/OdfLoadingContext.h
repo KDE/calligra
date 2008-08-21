@@ -27,6 +27,10 @@
 namespace KSpread
 {
 
+/**
+ * \ingroup OpenDocument
+ * Data used while loading.
+ */
 class OdfLoadingContext
 {
 public:
