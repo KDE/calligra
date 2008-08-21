@@ -22,8 +22,10 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoPALoadingContext.h>
+#include <KoPASavingContext.h>
 
 #include "KPrPageLayout.h"
+#include "KPrPageLayoutSharedSavingData.h"
 
 KPrPageLayouts::KPrPageLayouts()
 {
@@ -39,10 +41,15 @@ KPrPageLayouts::~KPrPageLayouts()
 
 bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
 {
+    KPrPageLayoutSharedSavingData * sharedData = new KPrPageLayoutSharedSavingData();
+
     QMap<QString, KPrPageLayout *>::iterator it( m_pageLayouts.begin() );
     for ( ; it != m_pageLayouts.end(); ++it ) {
-        it.value()->saveOdf( context );
+        QString style = it.value()->saveOdf( context );
+        sharedData->addPageLayoutStyle( it.value(), style );
     }
+
+    context.addSharedData( KPR_PAGE_LAYOUT_SHARED_SAVING_ID, sharedData );
     return true;
 }
 

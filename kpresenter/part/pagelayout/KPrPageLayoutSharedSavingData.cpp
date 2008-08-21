@@ -17,37 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPAGELAYOUT_H
-#define KPRPAGELAYOUT_H
+#include "KPrPageLayoutSharedSavingData.h"
 
-#include <QList>
-#include <QString>
-
-class KPrPlaceholder;
-class KoXmlElement;
-class KoPALoadingContext;
-class KoPASavingContext;
-
-class KPrPageLayout
+KPrPageLayoutSharedSavingData::KPrPageLayoutSharedSavingData()
 {
-public:
-    KPrPageLayout();
-    ~KPrPageLayout();
+}
 
-    bool loadOdf( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+KPrPageLayoutSharedSavingData::~KPrPageLayoutSharedSavingData()
+{
+}
 
-    /**
-     * save the page layout to odf
-     *
-     * @return the style name used for this page layout
-     */
-    QString saveOdf( KoPASavingContext & context ) const;
+void KPrPageLayoutSharedSavingData::addPageLayoutStyle( KPrPageLayout * pageLayout, const QString & styleName )
+{
+    m_pageLayoutToName.insert( pageLayout, styleName );
+}
 
-private:
-    // The display name of the layout
-    QString m_name;
-    // placeholders used in the layout
-    QList<KPrPlaceholder *> m_placeholders;
-};
-
-#endif /* KPRPAGELAYOUT_H */
+QString KPrPageLayoutSharedSavingData::pageLayoutStyle( KPrPageLayout * pageLayout )
+{
+    return m_pageLayoutToName.value( pageLayout, QString() );
+}

@@ -17,37 +17,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPAGELAYOUT_H
-#define KPRPAGELAYOUT_H
+#ifndef KPRPAGELAYOUTSHAREDSAVINGDATA_H
+#define KPRPAGELAYOUTSHAREDSAVINGDATA_H
 
-#include <QList>
+#include <KoSharedSavingData.h>
+#include <QMap>
 #include <QString>
 
-class KPrPlaceholder;
-class KoXmlElement;
-class KoPALoadingContext;
-class KoPASavingContext;
+class KPrPageLayout;
 
-class KPrPageLayout
+#define KPR_PAGE_LAYOUT_SHARED_SAVING_ID "KPrPageLayoutSharedSavingId"
+
+class KPrPageLayoutSharedSavingData : public KoSharedSavingData
 {
 public:
-    KPrPageLayout();
-    ~KPrPageLayout();
-
-    bool loadOdf( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    KPrPageLayoutSharedSavingData();
+    virtual ~KPrPageLayoutSharedSavingData();
 
     /**
-     * save the page layout to odf
+     * Add page layout style name
      *
-     * @return the style name used for this page layout
+     * @param pageLayout the page layout
+     * @param the styleName of the page layout style
      */
-    QString saveOdf( KoPASavingContext & context ) const;
+    void addPageLayoutStyle( KPrPageLayout * pageLayout, const QString & styleName );
+
+    /**
+     * Get page layout style
+     *
+     * @param the pointer to the used page layout
+     * @return the style name for the page layout or an null string if it is not found
+     */
+    QString pageLayoutStyle( KPrPageLayout * pageLayout );
 
 private:
-    // The display name of the layout
-    QString m_name;
-    // placeholders used in the layout
-    QList<KPrPlaceholder *> m_placeholders;
+    QMap<KPrPageLayout *, QString> m_pageLayoutToName;
 };
 
-#endif /* KPRPAGELAYOUT_H */
+#endif /* KPRPAGELAYOUTSHAREDSAVINGDATA_H */

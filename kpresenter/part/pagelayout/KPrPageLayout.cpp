@@ -27,6 +27,7 @@
 #include <KoXmlNS.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoPASavingContext.h>
 #include "KPrPlaceholder.h"
 
 KPrPageLayout::KPrPageLayout()
@@ -72,7 +73,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &lo
     return retval;
 }
 
-void KPrPageLayout::saveOdf( KoPASavingContext & context ) const
+QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
 {
     KoGenStyle style( KoGenStyle::StylePresentationPageLayout );
     QBuffer buffer;
@@ -86,6 +87,6 @@ void KPrPageLayout::saveOdf( KoPASavingContext & context ) const
     QString placeholders = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     style.addChildElement( "placeholders", placeholders );
 
-    // need to save the ptr -> style in the saving context so the pages can use it
-    // TODO return context.mainStyles().lookup( style, "pl" );
+    // return the style name so we can save the ptr -> style in the saving context so the pages can use it during saving
+    return context.mainStyles().lookup( style, "pl" );
 }
