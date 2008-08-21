@@ -33,12 +33,24 @@ class QPoint;
 namespace KChart {
 
 /**
- * @brief The CellRegion class handles regions in a table.
+ * @brief A CellRegion represents a selection of cells in a table.
+ *
+ * Every data set on the chart has five independent cell regions
+ * that indicate where the data in a series comes from:
+ * 1) a region for y values
+ * 2) one for x values (only for scatter and bubble charts)
+ * 3) another one for a label to represent the data set
+ * 4) for the category data (one label for every x value/column on
+ *    the x axis; the region is the same among all data sets)
+ * 5) for bubble widths (only for bubble charts)
+ *
+ * A CellRegion can also represent a region that is used to
+ * initialize the data series from.
  *
  * In contrast to a QItemSelection, a cell region can include header
  * data. Therefore, CellRegion( QPoint( 1, 1 ) ) represents the
  * top-left item of a QAbstractItemModel.
- *  
+ *
  * An instance can represent either a simple, continuous region of
  * cells, as in most cases, or a more complex discontinuous region. In
  * its second form, the orientation of each separate continuous region
