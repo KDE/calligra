@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2008 Inge Wallin     <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -79,8 +80,7 @@ bool CellRegion::isValid() const
 
 bool CellRegion::contains( const QPoint &point, bool proper ) const
 {
-    foreach ( const QRect &rect, m_rects )
-    {
+    foreach ( const QRect &rect, m_rects ) {
         if ( rect.contains( point, proper ) )
             return true;
     }
@@ -90,8 +90,7 @@ bool CellRegion::contains( const QPoint &point, bool proper ) const
 
 bool CellRegion::contains( const QRect &rect, bool proper ) const
 {
-    foreach ( const QRect &r, m_rects )
-    {
+    foreach ( const QRect &r, m_rects ) {
         if ( r.contains( rect, proper ) )
             return true;
     }
@@ -101,8 +100,7 @@ bool CellRegion::contains( const QRect &rect, bool proper ) const
 
 bool CellRegion::intersects( const QRect &rect ) const
 {
-    foreach ( const QRect &r, m_rects )
-    {
+    foreach ( const QRect &r, m_rects ) {
         if ( r.intersects( rect ) )
             return true;
     }
@@ -114,8 +112,7 @@ CellRegion CellRegion::intersected( const QRect &rect ) const
 {
     CellRegion intersections;
     
-    foreach ( const QRect &r, m_rects )
-    {
+    foreach ( const QRect &r, m_rects ) {
         if ( r.intersects( rect ) )
             intersections.add( r.intersected( rect ) );
     }
@@ -125,8 +122,7 @@ CellRegion CellRegion::intersected( const QRect &rect ) const
 
 Qt::Orientation CellRegion::orientation() const
 {
-    foreach ( const QRect &rect, m_rects )
-    {
+    foreach ( const QRect &rect, m_rects ) {
     	if ( rect.width() > 1 )
     		return Qt::Horizontal;
     	if ( rect.height() > 1 )
@@ -140,13 +136,11 @@ Qt::Orientation CellRegion::orientation() const
 int CellRegion::cellCount() const
 {
     int count = 0;
-    if ( orientation() == Qt::Horizontal )
-    {
+    if ( orientation() == Qt::Horizontal ) {
         foreach ( const QRect &rect, m_rects )
             count += rect.width();
     }
-    else
-    {
+    else {
         foreach( const QRect &rect, m_rects )
             count += rect.height();
     }
@@ -166,15 +160,13 @@ void CellRegion::add( const QPoint &point )
 
 void CellRegion::add( const QRect &rect )
 {
-    if ( !rect.isValid() )
-    {
+    if ( !rect.isValid() ) {
         qWarning() << "CellRegion::add() Attempt to add invalid rectangle";
         qWarning() << "CellRegion::add():" << rect;
         return;
     }
     
-    if ( rect.width() > 1 && rect.height() > 1 )
-    {
+    if ( rect.width() > 1 && rect.height() > 1 ) {
         qWarning() << "CellRegion::add() Attempt to add rectangle with height AND width > 1";
         qWarning() << "CellRegion::add():" << rect;
         return;
@@ -192,40 +184,34 @@ void CellRegion::add( const QVector<QRect> &rects )
 
 void CellRegion::subtract( const QPoint &point )
 {
-    if ( orientation() == Qt::Horizontal )
-    {
-        for ( int i = 0; i < m_rects.size(); i++ )
-        {
-            if ( m_rects[ i ].contains( point ) )
-            {
-                if ( m_rects[ i ].topLeft().x() == point.x() )
-                {
+    if ( orientation() == Qt::Horizontal ) {
+        for ( int i = 0; i < m_rects.size(); i++ ) {
+            if ( m_rects[ i ].contains( point ) ) {
+
+                if ( m_rects[ i ].topLeft().x() == point.x() ) {
                     m_rects[ i ].translate( 1, 0 );
                     m_rects[ i ].setWidth( m_rects[ i ].width() - 1 );
                 }
-                else if ( m_rects[ i ].topRight().x() == point.x() )
-                {
+                else if ( m_rects[ i ].topRight().x() == point.x() ) {
                     m_rects[ i ].setWidth( m_rects[ i ].width() - 1 );
                 }
+
                 return;
             }
         }
     }
-    else
-    {
-        for ( int i = 0; i < m_rects.size(); i++ )
-        {
-            if ( m_rects[ i ].contains( point ) )
-            {
-                if ( m_rects[ i ].topLeft().y() == point.y() )
-                {
+    else {
+        for ( int i = 0; i < m_rects.size(); i++ ) {
+            if ( m_rects[ i ].contains( point ) ) {
+
+                if ( m_rects[ i ].topLeft().y() == point.y() ) {
                     m_rects[ i ].translate( 0, 1 );
                     m_rects[ i ].setHeight( m_rects[ i ].height() - 1 );
                 }
-                else if ( m_rects[ i ].bottomLeft().y() == point.y() )
-                {
+                else if ( m_rects[ i ].bottomLeft().y() == point.y() ) {
                     m_rects[ i ].setHeight( m_rects[ i ].height() - 1 );
                 }
+
                 return;
             }
         }
@@ -247,15 +233,12 @@ QPoint CellRegion::pointAtIndex( int index ) const
     // sum of all previous rectangle indices
     int i = 0;
     
-    foreach ( const QRect &rect, m_rects )
-    {
+    foreach ( const QRect &rect, m_rects ) {
         // Rectangle is horizontal
-        if ( rect.width() > 1 )
-        {
+        if ( rect.width() > 1 ) {
             // Found it!
             // Index refers to point in current rectangle
-            if ( i + rect.width() > index )
-            {
+            if ( i + rect.width() > index ) {
                 // Local index of point in this rectangle
                 int j = index - i;
                 return QPoint( rect.x() + j, rect.y() );
@@ -264,12 +247,10 @@ QPoint CellRegion::pointAtIndex( int index ) const
             // add number of indices in current rectangle to total index count
             i += rect.width();
         }
-        else
-        {
+        else {
             // Found it!
             // Index refers to point in current rectangle
-            if ( i + rect.height() > index )
-            {
+            if ( i + rect.height() > index ) {
                 // Local index of point in this rectangle
                 int j = index - i;
                 return QPoint( rect.x(), rect.y() + j );
@@ -289,13 +270,12 @@ int CellRegion::indexAtPoint( const QPoint &point ) const
     int indicesLeftToPoint = 0;
     bool found = false;
     
-    foreach ( const QRect &rect, m_rects )
-    {
-        if ( !rect.contains( point ) )
-        {
+    foreach ( const QRect &rect, m_rects ) {
+        if ( !rect.contains( point ) ) {
             indicesLeftToPoint += rect.width() > 1 ? rect.width() : rect.height();
             continue;
         }
+
         found = true;
         if ( rect.width() > 1 )
             indicesLeftToPoint += point.x() - rect.topLeft().x();
@@ -315,8 +295,7 @@ static int rangeStringToInt( const QString &string )
 {
     int result = 0;
     const int size = string.size();
-    for ( int i = 0; i < size; i++ )
-    {
+    for ( int i = 0; i < size; i++ ) {
         kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) ) );
         result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );
     }
@@ -327,10 +306,10 @@ static int rangeStringToInt( const QString &string )
 static QString rangeIntToString( int i )
 {
     QString tmp = QString::number( i );
-    for( int j = 0; j < tmp.size(); j++ )
-    {
+    for( int j = 0; j < tmp.size(); j++ ) {
         tmp[j] = 'A' + tmp[j].toAscii() - '1';
     }
+
     kDebug(350001) << "tmp=" << tmp;
     return tmp;
 }
@@ -358,26 +337,24 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
 
     const QString topLeft = regionStrings[1];
     QStringList l = topLeft.split( '$' );
-    if ( l.size() < 3 )
-    {
+    if ( l.size() < 3 ) {
         kDebug(350001) << topLeft;
         qWarning() << "2) CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
         return QVector<QRect>();
     }
+
     int column = rangeStringToInt( l[1] );
     int row = l[2].toInt() - 1;
     topLeftPoint = QPoint( column, row );
 
-    if ( isPoint )
-    {
+    if ( isPoint ) {
         kDebug(350001) << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
         return QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
     }
 
     const QString bottomRight = regionStrings[2];
     l = bottomRight.split( '$' );
-    if ( l.size() < 3 )
-    {
+    if ( l.size() < 3 ) {
         qWarning() << "CellRegion::stringToRegion(): Invalid region string \"" << string << "\"";
         return QVector<QRect>();
     }
@@ -399,20 +376,20 @@ int CellRegion::rangeStringToInt( const QString &string )
 {   
     int result = 0;     
     const int size = string.size();     
-    for ( int i = 0; i < size; i++ )    
-    {     
+    for ( int i = 0; i < size; i++ ) {     
         result += rangeCharToInt( string[i].toAscii() ) * pow( 10.0, ( size - i - 1 ) );      
     } 
+
     return result;      
 }   
      
 QString CellRegion::rangeIntToString( int i )   
 {   
     QString tmp = QString::number( i );     
-    for( int j = 0; j < tmp.size(); j++ )   
-    {   
+    for( int j = 0; j < tmp.size(); j++ ) {   
         tmp[j] = 'A' + tmp[j].toAscii() - '1';      
     }
+
     return tmp;     
 }
 

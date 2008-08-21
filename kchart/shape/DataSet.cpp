@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
+   Copyright      2008 Inge Wallin     <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +21,6 @@
 
 // Local
 #include "DataSet.h"
-#include "ProxyModel.h"
-#include "Axis.h"
-#include "PlotArea.h"
-#include "KDChartModel.h"
 
 // Qt
 #include <QAbstractItemModel>
@@ -37,6 +34,13 @@
 // KDChart
 #include <KDChartDataValueAttributes>
 #include <KDChartAbstractDiagram>
+
+// KChart
+#include "ProxyModel.h"
+#include "Axis.h"
+#include "PlotArea.h"
+#include "KDChartModel.h"
+
 
 using namespace KChart;
 
@@ -127,8 +131,7 @@ void DataSet::Private::updateSize()
     
     size = newSize;
     
-    if ( newSize != size && !blockSignals && kdChartModel )
-    {
+    if ( newSize != size && !blockSignals && kdChartModel ) {
         kdChartModel->dataSetSizeChanged( parent, size );
     }
 }
@@ -137,6 +140,7 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
 {
     if ( !region.isValid() )
         return QVariant(); 
+
     QAbstractItemModel *model = this->model->sourceModel();
     if ( !model )
         return QVariant();
@@ -144,15 +148,14 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     QVariant data;
         
     QPoint dataPoint = region.pointAtIndex( index );
-    if ( dataPoint.x() > 0 )
-    {
+    if ( dataPoint.x() > 0 ) {
         if ( dataPoint.y() > 0 )
-            data = model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
+            data = model->data( model->index( dataPoint.y() - 1,
+					      dataPoint.x() - 1 ) );
         else if ( dataPoint.y() == 0 )
             data = model->headerData( dataPoint.x() - 1, Qt::Horizontal );
     }
-    else if ( dataPoint.x() == 0 )
-    {
+    else if ( dataPoint.x() == 0 ) {
         if ( dataPoint.y() > 0 )
             data = model->headerData( dataPoint.y() - 1, Qt::Vertical );
     }
@@ -259,7 +262,7 @@ void DataSet::setChartType( ChartType type )
     if ( type == d->chartType )
         return;
     
-    Axis *axis = d->attachedAxis;
+    Axis  *axis = d->attachedAxis;
     axis->detachDataSet( this );
     
     d->chartType = type;
@@ -282,12 +285,12 @@ void DataSet::setChartSubType( ChartSubtype subType )
 
 void DataSet::setGlobalChartType( ChartType type )
 {
-	d->globalChartType = type;
+    d->globalChartType = type;
 }
 
 void DataSet::setGlobalChartSubType( ChartSubtype type )
 {
-	d->globalChartSubType = type;
+    d->globalChartSubType = type;
 }
 
 
@@ -310,6 +313,7 @@ void DataSet::setShowValues( bool showValues )
 {
     if ( !d->kdDiagram )
         return;
+
     d->showValues = showValues;
     
     KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
@@ -534,10 +538,9 @@ void DataSet::setYDataRegion( const CellRegion &region )
     d->yDataRegion = region;
     d->updateSize();
     
-    if ( !d->blockSignals && d->kdChartModel )
-    {
-        d->kdChartModel->dataChanged( d->kdChartModel->index( 0,          d->kdDataSetNumber ),
-                                     d->kdChartModel->index( d->size - 1, d->kdDataSetNumber ) );
+    if ( !d->blockSignals && d->kdChartModel ) {
+        d->kdChartModel->dataChanged( d->kdChartModel->index( 0,           d->kdDataSetNumber ),
+				      d->kdChartModel->index( d->size - 1, d->kdDataSetNumber ) );
     }
 }
 
@@ -592,68 +595,61 @@ int DataSet::size() const
 
 void DataSet::yDataChanged( const QRect &rect ) const
 {    
-    int start, end;
+    int  start;
+    int  end;
     
     QVector<QRect> yDataRegionRects = d->yDataRegion.rects();
     
-    if ( d->yDataRegion.orientation() == Qt::Horizontal )
-    {
-        QPoint topLeft = rect.topLeft();
-        QPoint topRight = rect.topRight();
+    if ( d->yDataRegion.orientation() == Qt::Horizontal ) {
+        QPoint  topLeft  = rect.topLeft();
+        QPoint  topRight = rect.topRight();
         
         int totalWidth = 0;
         int i;
         
-        for ( i = 0; i < yDataRegionRects.size(); i++ )
-        {
-            if ( yDataRegionRects[i].contains( topLeft ) )
-            {
+        for ( i = 0; i < yDataRegionRects.size(); i++ ) {
+            if ( yDataRegionRects[i].contains( topLeft ) ) {
                 start = totalWidth + topLeft.x() - yDataRegionRects[i].topLeft().x();
                 break;
             }
             totalWidth += yDataRegionRects[i].width();
         }
         
-        for ( ; i < yDataRegionRects.size(); i++ )
-        {
-            if ( yDataRegionRects[i].contains( topRight ) )
-            {
+        for ( ; i < yDataRegionRects.size(); i++ ) {
+            if ( yDataRegionRects[i].contains( topRight ) ) {
                 end = totalWidth + topRight.x() - yDataRegionRects[i].topLeft().x();
                 break;
             }
+
             totalWidth += yDataRegionRects[i].width();
         }
     }
-    else
-    {
-        QPoint topLeft = rect.topLeft();
-        QPoint bottomLeft = rect.bottomLeft();
+    else {
+        QPoint  topLeft    = rect.topLeft();
+        QPoint  bottomLeft = rect.bottomLeft();
         
         int totalHeight = 0;
         int i;
-        for ( i = 0; i < yDataRegionRects.size(); i++ )
-        {
-            if ( yDataRegionRects[i].contains( topLeft ) )
-            {
+        for ( i = 0; i < yDataRegionRects.size(); i++ ) {
+            if ( yDataRegionRects[i].contains( topLeft ) ) {
                 start = totalHeight + topLeft.y() - yDataRegionRects[i].topLeft().y();
                 break;
             }
+
             totalHeight += yDataRegionRects[i].height();
         }
         
-        for ( ; i < yDataRegionRects.size(); i++ )
-        {
-            if ( yDataRegionRects[i].contains( bottomLeft ) )
-            {
+        for ( ; i < yDataRegionRects.size(); i++ ) {
+            if ( yDataRegionRects[i].contains( bottomLeft ) ) {
                 end = totalHeight + bottomLeft.y() - yDataRegionRects[i].topLeft().y();
                 break;
             }
+
             totalHeight += yDataRegionRects[i].height();
         }
     }
     
-    if ( !d->blockSignals && d->kdChartModel )
-    {
+    if ( !d->blockSignals && d->kdChartModel ) {
         d->kdChartModel->dataChanged( d->kdChartModel->index( start, d->kdDataSetNumber ),
                                      d->kdChartModel->index( end,   d->kdDataSetNumber ) );
     }
@@ -681,30 +677,31 @@ void DataSet::categoryDataChanged( const QRect &region ) const
 
 int DataSet::dimension() const
 {
-	const ChartType chartType = d->chartType != LastChartType ? d->chartType : d->globalChartType;
-	switch ( chartType )
-	{
-	case BarChartType:
-	case AreaChartType:
-	case LineChartType:
-	case CircleChartType:
-	case RadarChartType:
-	case SurfaceChartType:
-		return 1;
-	case ScatterChartType:
-	case GanttChartType:
-	case RingChartType:
-		return 2;
-	case BubbleChartType:
-		return 3;
+    const ChartType chartType = ( d->chartType != LastChartType
+				  ? d->chartType
+				  : d->globalChartType );
+    switch ( chartType ) {
+    case BarChartType:
+    case AreaChartType:
+    case LineChartType:
+    case CircleChartType:
+    case RadarChartType:
+    case SurfaceChartType:
+	return 1;
+    case ScatterChartType:
+    case GanttChartType:
+    case RingChartType:
+	return 2;
+    case BubbleChartType:
+	return 3;
 	// We can only determine the dimension if
 	// a chart type is set
-	case LastChartType:
-	    return 0;
-	}
-	
-	// Avoid warnings from compiler
+    case LastChartType:
 	return 0;
+    }
+	
+    // Avoid warnings from compiler
+    return 0;
 }
 
 void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
@@ -725,8 +722,7 @@ int DataSet::kdDataSetNumber() const
 void DataSet::setKdDataSetNumber( int number )
 {
     d->kdDataSetNumber = number;
-    if ( d->kdDiagram && d->kdDataSetNumber >= 0 && size() > 0 )
-    {
+    if ( d->kdDiagram && d->kdDataSetNumber >= 0 && size() > 0 ) {
         d->kdDiagram->setBrush( d->kdDataSetNumber, d->brush );
         d->kdDiagram->setPen( d->kdDataSetNumber, d->pen );
     }
@@ -739,10 +735,10 @@ void DataSet::setKdChartModel( KDChartModel *model )
 
 KDChartModel *DataSet::kdChartModel() const
 {
-	return d->kdChartModel;
+    return d->kdChartModel;
 }
 
 void DataSet::blockSignals( bool block )
 {
-	d->blockSignals = block;
+    d->blockSignals = block;
 }
