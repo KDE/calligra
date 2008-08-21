@@ -41,6 +41,63 @@ Item										Prio	Status
   becomes a child of it and can rely on its dimension to layout the table
   pages.
 
+* Source-/TargetRange concept							1	----
+  Currently, cell ranges, which data is exported, are called Binding. The
+  opposite, cell ranges, that contain imported data, are called Database.
+
+  Binding's only tasks are to track the movement of the range and to inform
+  about value changes. To achieve this it contains a data model, which is used
+  by those who want to work with the range's data. Nothing more; very
+  minimalistic, very generic. The term SourceRange fits well here.
+
+  Database, on the other hand, is more specialised, even if the filter code
+  gets rewritten, so that Database contains a data model. That's because it
+  was developed according to the database range in the OpenDocument spec and
+  this consists of more than just a target range. For the case of filters or
+  sorting, such a database always has got a source and optionally a target
+  range, where the filtered or sorted output gets written to. Because of that
+  the stored range should be separated from Database and named TargetRange.
+
+  TargetRange will contain a data model, like SourceRange fka. Binding does,
+  but retrieves data from it instead of feeding data to it. Additionally,
+  both, SourceRange and TargetRange need a method delivering the current cell
+  region name, because the range can be moved due to column/row/cell range
+  insertions/removals.
+
+  External apps or shapes or internal objects should work with an abstract
+  interface, that provides the model and the cell region name, instead of
+  directly working with the data model. E.g. KChart needs the correct cell
+  region names in the dialogs even after the source ranges have moved.
+
+  Same should be true for the Database's target range, even though the
+  OpenDocument spec does not distinguish between absolute and relative
+  addresses. My interpretation is that this means the cell ranges are fixed.
+  (e.g. OpenDocument v1.1, 8.7.1 Table Filters, Table Range Address: "A differ-
+  entiation between absolute and relative addresses is not possible. Therefore,
+  a table name has to exist in the address and dollar signs are ignored.")
+  OpenOffice does allow their movement though; an autofilter moves there.
+  KSpread should go the most generic way: allow range movements and allow
+  to fix the ranges by dollar signs, even if these are ignored in the ODF in
+  this case.
+
+  External apps or shapes should be allowed to consume or to provide data.
+  Expose an interface to the SourceRangeManager, that takes a cell range name
+  and returns an cell range interface (model + cell range name) and allows to
+  remove such a tracked cell range again.
+  For data providers an interface to TargetRangeManager should be published.
+  This needs a method, that takes a cell range name and a model. The method
+  also returns an cell range interface (model + cell range name). A method to
+  remove the cell range has to be supported, too.
+
+  Summary:
+  1. Binding* becomes SourceRange*.
+  2. SourceRangeModel implements abstract interface (model + cell range name).
+  3. Create TargetRangeModel implementing same abstract interface as SourceRange.
+  4. Refactor Database, so that it refers to a TargetRangeModel.
+  5. DatabaseStorage becomes TargetRangeStorage.
+  6. Expose a SourceRange manager interface to allow externals to consume data.
+  7. Expose a TargetRange manager interface to allow externals to provide data.
+
 
 
 Things to do before the release of KOffice 2.0

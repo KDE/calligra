@@ -1,0 +1,70 @@
+/**
+ * \page interfaces Interfaces
+ * \author Stefan Nikolaus
+ * \date 2008-08-21
+ *
+ *
+ * \section intro Introduction
+ * This page describes how external applications can interact with KSpread.
+ *
+ * \subsection resources Development Resources
+ * The interfaces are located in KoTableInterface.h.
+ * Pointers to them are stored as canvas resources (KoCanvasResourceProvider).
+ *
+ * \subsection ranges About Cell Ranges
+ * KSpread is able to export data from and import data to cell ranges. Those cell
+ * ranges will be modified by column/row/cell range insertions/removals, as every
+ * other cell range does. I.e. their location is variable and external applications
+ * need to get informed about their movements.
+ * For this case, KSpread's interfaces provide methods, that return an <b>extended
+ * model</b> - extended by a method returning the current cell range address.
+ *
+ *
+ *
+ *
+ * \section export Data Export
+ * \par Status
+ *      design not fixed yet; not implemented yet
+ * \par Example usage
+ *      Charts
+ *
+ * The interface for exporting data to external applications is called KoTable::SourceRangeManager.
+ *
+ * To export data there's a method that takes a cell range address and returns an extended model.
+ * The model gets informed of value changes and it informs its views (or its users in general).
+ *
+ * In order to remove a cell range, that acts as data source, a method taking the extended model
+ * as parameter is provided.
+ *
+ *
+ *
+ *
+ * \section import Data Import
+ * \par Status
+ *      design not fixed yet; not implemented yet
+ * \par Example usage
+ *      Database queries
+ *
+ * The interface for importing data from external applications is called KoTable::TargetRangeManager.
+ *
+ * It provides a method, that takes a cell range address and an arbitrary data model. The method
+ * returns an extended model, a proxy model for the provided data model, in order to deliver the
+ * variable cell range address.
+ * If the external application does not want to provide a model itself, but just wants to write
+ * to the cell range, the data model parameter can also be null. Then, a writable table model is
+ * created by KSpread and returned as extended model.
+ *
+ * In order to remove a cell range, that retrieves external data, a method taking the extended model
+ * as parameter is provided.
+ *
+ * The TargetRangeManager implementation needs to track the model signals indicating data changes
+ * and column/row insertions/removals. It has the task to write the data into the value storage.
+ *
+ * Most of the database range settings (OpenDocument v1.1, 8.6.1 Database range) should be passed to
+ * the creation method, collected in one parameter.
+ * Optionally, a dialog should be shown asking for exactly the same settings on creation. The passed
+ * ones should then be taken as defaults, because the defaults may vary for different external data.
+ * Additionally, a list of config widgets is passed, that will be shown in the same dialog. There,
+ * the data provider's parameters can be changed, e.g. altering a SQL query, even later after
+ * creation.
+ */
