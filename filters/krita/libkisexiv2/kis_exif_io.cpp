@@ -140,7 +140,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
     QMap<QString, KisMetaData::Value> oecfStructure = value.asStructure();
     quint16 columns = oecfStructure["Columns"].asVariant().toInt(0);
     quint16 rows = oecfStructure["Rows"].asVariant().toInt(0);
-    
+
     QList<KisMetaData::Value> names = oecfStructure["Names"].asArray();
     QList<KisMetaData::Value> values = oecfStructure["Values"].asArray();
     Q_ASSERT(columns*rows == values.size());
@@ -208,7 +208,7 @@ Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
     QMap<QString, KisMetaData::Value> deviceSettingStructure = value.asStructure();
     quint16 columns = deviceSettingStructure["Columns"].asVariant().toInt(0);
     quint16 rows = deviceSettingStructure["Rows"].asVariant().toInt(0);
-    
+
     QList<KisMetaData::Value> settings = deviceSettingStructure["Settings"].asArray();
     Q_ASSERT(columns*rows == settings.size());
     QByteArray array(4,0);
@@ -230,7 +230,7 @@ KisMetaData::Value flashExifToKMD(const Exiv2::Value::AutoPtr value)
 {
     uint16_t v = value->toLong();
     QMap<QString, KisMetaData::Value> flashStructure;
-    bool fired = ( v & 0x01); // bit 1 is wether flash was fired or not
+    bool fired = ( v & 0x01); // bit 1 is whether flash was fired or not
     flashStructure["Fired"] = QVariant(fired);
     int ret = ( (v >> 1) & 0x03); // bit 2 and 3 are Return
     flashStructure["Return"] = QVariant(ret);
@@ -370,7 +370,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             }
         }
     }
-    
+
     Exiv2::DataBuf rawData = exifData.copy();
     ioDevice->write( (const char*) rawData.pData_, rawData.size_);
     ioDevice->close();

@@ -269,12 +269,12 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
-        if (  marker->marker != (JOCTET) (JPEG_APP0 + 1) 
+        if (  marker->marker != (JOCTET) (JPEG_APP0 + 1)
             || marker->data_length < 14)
         {
             continue; /* Exif data is in an APP1 marker of at least 14 octets */
         }
-        
+
         if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
             GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
             GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
@@ -364,9 +364,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
         break;
     }
-    
+
     dbgFile <<"Looking for XMP information";
-    
+
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
         if (marker->marker != (JOCTET) (JPEG_APP0 + 1) || marker->data_length < 31)
@@ -385,7 +385,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         xmpIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
         break;
     }
-    
+
     // Dump loaded metadata
     layer->metaData()->debugDump();
 
@@ -488,7 +488,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     // Smoothing
     cinfo.smoothing_factor = options.smooth;
-    
+
     // Subsampling
     switch(options.subsampling)
     {
@@ -535,7 +535,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
         }
             break;
     }
-    
+
     // Start compression
     jpeg_start_compress(&cinfo, true);
     // Save exif and iptc information if any available
@@ -587,7 +587,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
-        if (!(*it) || (*it) -> type() == QString()) {
+        if (!(*it) || (*it)->type().isEmpty()) {
             dbgFile <<"Warning: empty annotation";
             ++it;
             continue;
@@ -609,7 +609,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
-    
+
     for (; cinfo.next_scanline < height;) {
         KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;

@@ -275,7 +275,7 @@ namespace {
     void exportAnnotationsForImage(Image * dst, vKisAnnotationSP_it& it, vKisAnnotationSP_it& annotationsEnd)
     {
         while(it != annotationsEnd) {
-            if (!(*it) || (*it) -> type() == QString()) {
+            if (!(*it) || (*it)->type().isEmpty() ) {
                     dbgFile <<"Warning: empty annotation";
                     ++it;
                     continue;

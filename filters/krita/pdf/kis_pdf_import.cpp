@@ -145,7 +145,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     for(QList<int>::const_iterator it = pages.begin(); it != pages.end(); ++it)
     {
         KisPaintLayer* layer = new KisPaintLayer(img.data(),
-            i18n("Page %1").arg( *it + 1),
+            i18n("Page %1", *it + 1),
             quint8_MAX);
         layer->paintDevice()->convertFromQImage( pdoc->page( *it )->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value() ), "");
         img->addLayer(layer, img->rootLayer(), 0);
