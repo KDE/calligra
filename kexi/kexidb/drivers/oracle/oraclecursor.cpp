@@ -1,24 +1,21 @@
-/**
- * @author Julia Sanchez-Simon <hithwen@gmail.com>
- * @author Miguel Angel Aragüez-Rey <fizban87@gmail.com>
- * @date   20/jul/2008
- */
-
 /* This file is part of the KDE project
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   Copyright (C) 2008 Julia Sanchez-Simon <hithwen@gmail.com>
+   Copyright (C) 2008 Miguel Angel Aragüez-Rey <fizban87@gmail.com>
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this program; see the file COPYING.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public License
+along with this program; see the file COPYING.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ Boston, MA 02110-1301, USA.
 */
 
 #include <kexidb/error.h>
@@ -28,7 +25,6 @@
 #include <limits.h>
 #include "oraclecursor.h"
 #include <vector>
-//#include <occi.h>
 
 #define BOOL bool
 using namespace std;
@@ -36,7 +32,8 @@ using namespace KexiDB;
 using namespace oracle::occi;
 
 //Cursor can be defined in two ways:
-OracleCursor::OracleCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
+OracleCursor::OracleCursor
+(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
 	: Cursor(conn,statement,cursor_options)
 	, d( new OracleCursorData(conn) )
 {
@@ -49,7 +46,7 @@ OracleCursor::OracleCursor(KexiDB::Connection* conn, const QString& statement, u
   d->rs   		= static_cast<OracleConnection*>(conn)->d->rs;
   d->stmt 		= static_cast<OracleConnection*>(conn)->d->stmt;
     
-	KexiDBDrvDbg << "OracleCursor: constructor for query statement" << endl;
+	//KexiDBDrvDbg << "OracleCursor: constructor for query statement" << endl;
 	m_containsROWIDInfo = false;
 }
 
@@ -63,8 +60,8 @@ OracleCursor::OracleCursor(Connection* conn, QuerySchema& query, uint options )
     d->env  	= static_cast<OracleConnection*>(conn)->d->env;
     d->rs 		= static_cast<OracleConnection*>(conn)->d->rs;
     d->stmt 	= static_cast<OracleConnection*>(conn)->d->stmt;
-	KexiDBDrvDbg << "OracleCursor: constructor for query statement2" << endl;
-	m_containsROWIDInfo = false; /*get ROWID if needed*/
+	//KexiDBDrvDbg << "OracleCursor: constructor for query statement2" << endl;
+	m_containsROWIDInfo = false; /*If true select * statements fail*/
 }
 
 OracleCursor::~OracleCursor()
@@ -83,15 +80,14 @@ bool OracleCursor::drv_open()
     if(d->rs->next()) d->numRows=d->rs->getInt(1);//Number of rows
     //Oracle doesn't provide a method to count ¬¬
     d->stmt->closeResultSet(d->rs);
-    d->rs = 0; //
-    d->rs=d->stmt->executeQuery(m_sql.latin1()); // TODO: is it ok to use strdup?
+    d->rs = 0; 
+    d->rs=d->stmt->executeQuery(m_sql.latin1()); 
       
     vector<MetaData> md = d->rs->getColumnListMetaData();
     m_fieldCount=md.size();//Number of columns
     d->types=vector<int>(m_fieldCount);
     d->lengths=vector<unsigned long>(m_fieldCount); 
-   
- //KexiDBDrvDbg <<"Iniciatig Metadata"<<endl;   
+      
     for(int i=0; i<m_fieldCount;i++)
     {
       d->lengths[i]=md[i].getInt(MetaData::ATTR_DATA_SIZE);
@@ -104,14 +100,12 @@ bool OracleCursor::drv_open()
     m_records_in_buf = d->numRows; 
     m_buffering_completed = true;
     m_afterLast=false;
-    //KexiDBDrvDbg <<"DRV OPENED"<<endl;
-    return true;
-      
+    return true;     
    }
    catch (oracle::occi::SQLException ea)
    {
       KexiDBDrvDbg << ea.what()<<endl;
-      setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.getMessage().c_str()));
+      setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
       return false;
    }
 
@@ -131,10 +125,10 @@ bool OracleCursor::drv_close()
       catch (oracle::occi::SQLException ea)
       {
         KexiDBDrvDbg <<ea.what()<<endl;
+        setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
         return false;
       }
    }
-   //KexiDBDrvDbg <<"(1)"<<endl;
    d->lengths.~vector<unsigned long>();
    d->types.~vector<int>();
    m_opened=false;
@@ -152,7 +146,6 @@ bool OracleCursor::moveFirst()
 
 void OracleCursor::drv_getNextRecord()
 {
-  //KexiDBDrvDbg << endl;
   try
   {
     d->rs->next();
@@ -160,22 +153,21 @@ void OracleCursor::drv_getNextRecord()
     {
       case ResultSet::DATA_AVAILABLE:
         m_result=FetchOK;
-        KexiDBDrvDbg<<"("<<m_at+1<<"/"<<d->numRows<<") OK"<<endl;
+        //KexiDBDrvDbg<<"("<<m_at+1<<"/"<<d->numRows<<") OK"<<endl;
         break;
-    
+        
       case ResultSet::END_OF_FETCH:
         m_result = FetchEnd;
-        //KexiDBDrvDbg<<"("<<m_at<<"/"<<d->numRows<<") FetchEnd"<<endl;
         break;
       
       default:
         m_result = FetchError;
-        //KexiDBDrvDbg<<"Error"<<endl;
     } 
  }
  catch(oracle::occi::SQLException ea)
  {
     KexiDBDrvDbg <<ea.what()<<endl;
+    setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
  }
 }
 
@@ -186,6 +178,7 @@ QVariant OracleCursor::value(uint pos)
       //so... QVariant=types*pokemon/Ditto
 //What is this function supposed to do?
    //-->Returns the value stored in the column number i (counting from 0)
+   //                                                   (Oracle counts from 1)
    
 KexiDBDrvDbg <<endl;          
 	if (!d->rs->status() || pos>=m_fieldCount)
@@ -214,8 +207,11 @@ KexiDBDrvDbg <<endl;
   return QVariant(d->rs->getString(pos+1).c_str());
 }
 
-/* Not as with sqlite, the DB library doenst returns all values as
+/* 
+   Not as with sqlite, the DB library doenst returns all values as
    strings. So we cannot use cstringtoVariant, isn't it?
+   PD: It seems that you can fetch them as strings but I'm lazy to change this
+       (If it works dont touch if)
  */
 bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 {

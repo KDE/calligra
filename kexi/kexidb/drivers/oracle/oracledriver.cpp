@@ -152,6 +152,7 @@ QByteArray OracleDriver::escapeString(const QByteArray& str) const
  */
 QString OracleDriver::escapeBLOB(const QByteArray& array) const
 {
+  KexiDBDrvDbg<<array<<endl;
 	return QString(array);
 	//return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }

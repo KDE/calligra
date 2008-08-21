@@ -1,7 +1,21 @@
-/*
-* Authors:
-*        Julia Sanchez-Simon        <hithwen@gmail.com>
-*        Miguel Angel Aragüez-Rey   <fizban87@gmail.com>
+/* This file is part of the KDE project
+   Copyright (C) 2008 Julia Sanchez-Simon <hithwen@gmail.com>
+   Copyright (C) 2008 Miguel Angel Aragüez-Rey <fizban87@gmail.com>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
+
+You should have received a copy of the GNU Library General Public License
+along with this program; see the file COPYING.  If not, write to
+the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ Boston, MA 02110-1301, USA.
 */
 
 #ifdef ORACLEMIGRATE_H
@@ -151,14 +165,14 @@ bool OracleConnectionInternal::executeSQL(const QString& statement) {
     {
       stmt->execute(statement.latin1());
       rs=stmt->getResultSet();
-      return(true);
+      return true;
     }
     catch (oracle::occi::SQLException ea)
     {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
        KexiDBDrvDbg<<errmsg;
-       return(false);
+       return false;
     }
 }
 QString OracleConnectionInternal::escapeIdentifier(const QString& str) const {
@@ -194,8 +208,9 @@ bool OracleConnectionInternal::createTrigger
   for(int i=0; i<ind->fieldCount(); i++)
   {
       fieldName=ind->field(i)->name();          
-      tg=tg+"SELECT KEXI__SEQ__"+tableName/*+"__"+fieldName*/+".NEXTVAL "+
-            "INTO :NEW."+fieldName+" FROM DUAL;\n";
+      tg=tg+"IF :NEW."+fieldName+" IS NULL THEN\nSELECT KEXI__SEQ__"+tableName
+      +".NEXTVAL INTO :NEW."+fieldName+" FROM DUAL;\nEND IF;\n";
+
   }
   tg=tg+"END;";
   KexiDBDrvDbg <<tg<<endl;
