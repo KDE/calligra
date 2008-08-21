@@ -63,12 +63,18 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &lo
             kWarning(33000) << "unknown tag" << child.tagName() << "when loading page layout";
         }
     }
-    return true;
+
+    bool retval = true;
+    if ( m_placeholders.isEmpty() ) {
+        kWarning(33000) << "no placehoslders for page layout" << m_name << "found";
+        retval = false;
+    }
+    return retval;
 }
 
 void KPrPageLayout::saveOdf( KoPASavingContext & context ) const
 {
-    KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
+    KoGenStyle style( KoGenStyle::StylePresentationPageLayout );
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );
