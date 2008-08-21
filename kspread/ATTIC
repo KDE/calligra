@@ -1,0 +1,73 @@
+This file contains paths to files, that got outdated.
+
+To save space these files get deleted before release. In order to get access
+to them after that, their last revisions are logged in this file.
+
+
+How to use this attic
+=====================
+
+Moving files to the attic
+-------------------------
+1. Delete the files (svn rm).
+2. Add the names of the deleted files in here with the last revision in which they existed.
+3. Commit the deletion (svn ci).
+
+Accessing deleted files
+-----------------------
+1. Figure out the last revision of the file
+2. 'svn up -r<lastrevision> Foo.cpp'
+
+
+Deleted Files
+=============
+
+InsertCalendar KPart plugin
+---------------------------
+last revision 835379:
+    attic/insertcalendar/
+
+Files related to DCOP
+---------------------
+last revision 832740:
+    attic/KSpreadAppIface.cpp
+    attic/KSpreadAppIface.h
+    attic/KSpreadCellIface.cpp
+    attic/KSpreadCellIface.h
+    attic/KSpreadColumnIface.cpp
+    attic/KSpreadColumnIface.h
+    attic/KSpreadDocIface.cpp
+    attic/KSpreadDocIface.h
+    attic/KSpreadLayoutIface.cpp
+    attic/KSpreadLayoutIface.h
+    attic/KSpreadRowIface.cpp
+    attic/KSpreadRowIface.h
+
+Files related to KoPart embedding
+---------------------------------
+last revision 832273:
+    attic/EmbeddedObjectCommands.cpp
+    attic/EmbeddedObjectCommands.h
+    attic/GeneralProperty.cpp
+    attic/GeneralProperty.h
+    attic/Handler.cpp
+    attic/Handler.h
+    attic/Object.cpp
+    attic/Object.h
+    attic/PropertyEditor.cpp
+    attic/PropertyEditor.h
+    attic/Toolbox.cpp
+    attic/Toolbox.h
+
+Other Files
+-----------
+last revision 832273:
+    attic/Brush.cpp
+    attic/Brush.h
+    attic/Events.cpp
+    attic/Events.h
+    attic/Numformat.cpp
+    attic/PaperLayoutDialog.cpp
+    attic/PaperLayoutDialog.h
+    attic/Pen.cpp
+    attic/Pen.h
