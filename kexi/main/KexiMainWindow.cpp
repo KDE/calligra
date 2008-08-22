@@ -4775,6 +4775,7 @@ tristate KexiMainWindow::printPreviewForItem(KexiPart::Item* item)
 
 tristate KexiMainWindow::showPageSetupForItem(KexiPart::Item* item)
 {
+    Q_UNUSED(item)
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
 //! @todo: accept row changes...
 #ifdef __GNUC__
