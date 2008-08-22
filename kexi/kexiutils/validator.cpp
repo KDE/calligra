@@ -70,7 +70,7 @@ Validator::~Validator()
 Validator::Result Validator::check(const QString &valueName, const QVariant& v,
                                    QString &message, QString &details)
 {
-    if (v.isNull() || v.type() == QVariant::String && v.toString().isEmpty()) {
+    if (v.isNull() || v.type() == (QVariant::String && v.toString().isEmpty())) {
         if (!d->acceptsEmptyValue) {
             message = Validator::msgColumnNotEmpty().arg(valueName);
             return Error;
