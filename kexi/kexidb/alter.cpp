@@ -230,9 +230,12 @@ static AlterTableHandler::ActionDict* createActionDict(
     return dict;
 }
 
-static void debugAction(AlterTableHandler::ActionBase *action, int /*nestingLevel*/,
-                        bool /*simulate*/, const QString& prependString = QString(), QString * debugTarget = 0)
+static void debugAction(AlterTableHandler::ActionBase *action, int nestingLevel,
+                        bool simulate, const QString& prependString = QString(), QString * debugTarget = 0)
 {
+    Q_UNUSED(simulate);
+    Q_UNUSED(nestingLevel);
+    
     QString debugString;
     if (!debugTarget)
         debugString = prependString;
