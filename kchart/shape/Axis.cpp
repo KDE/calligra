@@ -225,6 +225,11 @@ void Axis::Private::createBarDiagram()
         kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
         kdBarDiagram->setModel( kdBarDiagramModel );
         kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
+
+        if ( plotAreaChartSubType == StackedChartSubtype )
+            kdBarDiagram->setType( KDChart::BarDiagram::Stacked );
+        else if ( plotAreaChartSubType == PercentChartSubtype )
+            kdBarDiagram->setType( KDChart::BarDiagram::Percent );
         
         kdBarDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdBarDiagram );
@@ -255,6 +260,11 @@ void Axis::Private::createLineDiagram()
         kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
         kdLineDiagram->setCenterDataPoints( true );
         kdLineDiagram->setModel( kdLineDiagramModel );
+
+        if ( plotAreaChartSubType == StackedChartSubtype )
+            kdLineDiagram->setType( KDChart::LineDiagram::Stacked );
+        else if ( plotAreaChartSubType == PercentChartSubtype )
+            kdLineDiagram->setType( KDChart::LineDiagram::Percent );
         
         kdLineDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdLineDiagram );
@@ -290,6 +300,11 @@ void Axis::Private::createAreaDiagram()
         kdAreaDiagram->setLineAttributes( attr );
         kdAreaDiagram->setModel( kdAreaDiagramModel );
         kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
+
+        if ( plotAreaChartSubType == StackedChartSubtype )
+            kdAreaDiagram->setType( KDChart::LineDiagram::Stacked );
+        else if ( plotAreaChartSubType == PercentChartSubtype )
+            kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
         
         kdAreaDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdAreaDiagram );
@@ -913,6 +928,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     }
     
     requestRepaint();
+
+    styleStack.restore();
     
     return true;
 }
