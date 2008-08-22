@@ -8,7 +8,6 @@ set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp
   SmallToolButton.cpp FlowLayout.cpp
   ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp)
 
-add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 target_link_libraries(kexiutils  
   ${KDE4_KIO_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )

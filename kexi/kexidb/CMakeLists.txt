@@ -8,7 +8,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb/pa
 
 ADD_DEFINITIONS( 
 -D__KEXIDB__= 
--DMAKE_KEXI_DB_LIB
 -DYYERROR_VERBOSE=1
 )
 

@@ -4,11 +4,6 @@ add_subdirectory( factories )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KOPROPERTY_INCLUDES} ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( 
--DMAKE_KFORMEDITOR_LIB
-)
-
-
 ########### next target ###############
 
 set(kformdesigner_LIB_SRCS 
