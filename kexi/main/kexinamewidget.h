@@ -24,7 +24,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <klineedit.h>
 
 namespace KexiUtils
@@ -149,7 +149,7 @@ protected:
     QLabel* lbl_name;
     KLineEdit* le_caption;
     KLineEdit* le_name;
-    Q3GridLayout* lyr;
+    QGridLayout* lyr;
     KexiUtils::MultiValidator *m_validator;
     QString m_nameWarning, m_captionWarning;
 
