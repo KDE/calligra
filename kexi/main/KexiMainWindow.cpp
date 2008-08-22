@@ -2354,8 +2354,6 @@ KexiMainWindow::storeSettings()
     case Qt::RightDockWidgetArea: areaName = "right"; break;
     case Qt::TopDockWidgetArea: areaName = "top"; break;
     case Qt::BottomDockWidgetArea: areaName = "bottom"; break;
-    case Qt::AllDockWidgetAreas: areaName = "all"; break;
-    case Qt::NoDockWidgetArea: areaName = "nowhere"; break;
     default: areaName = "left"; break;
         //left is the default: case Qt::LeftDockWidgetArea: areaName = "left"; break;
     }
