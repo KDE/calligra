@@ -1,3 +1,9 @@
+
+#include <QtGui/qpalette.h>
+
+
+#include <QtGui/qpalette.h>
+
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
@@ -337,7 +343,7 @@ KexiScrollView::drawContents(QPainter * p, int clipx, int clipy, int clipw, int 
         //draw right and bottom borders
         const int wx = childX(m_widget);
         const int wy = childY(m_widget);
-        p->setPen(palette().active().foreground());
+        p->setPen(palette().color(QPalette::Active, QPalette::Foreground));
         p->drawLine(wx + m_widget->width(), wy, wx + m_widget->width(), wy + m_widget->height());
         p->drawLine(wx, wy + m_widget->height(), wx + m_widget->width(), wy + m_widget->height());
 //kDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
