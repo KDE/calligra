@@ -69,7 +69,7 @@ class ElapsedTime
   {
     m_time.start();
     if ( mode != PrintOnlyTime )
-      kDebug() << QString("*** (" + name + ")... Starting measuring...").toLatin1().data();
+      kDebug(36001) << QString("*** (" + name + ")... Starting measuring...").toLatin1().data();
   }
 
   ~ElapsedTime()
@@ -81,9 +81,9 @@ class ElapsedTime
     milliSec -= sec * 1000;
 
     if ( m_name.isNull() )
-      kDebug() << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec).toLatin1().data();
+      kDebug(36001) << QString("*** Elapsed time: %1 min %2 sec %3 msec").arg(min).arg(sec).arg(milliSec).toLatin1().data();
     else
-      kDebug() << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec).toLatin1().data();
+      kDebug(36001) << QString("*** (%1) Elapsed time: %2 min %3 sec %4 msec").arg(m_name).arg(min).arg(sec).arg(milliSec).toLatin1().data();
   }
 
  private:
