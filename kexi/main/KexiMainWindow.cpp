@@ -2890,7 +2890,7 @@ KexiMainWindow::slotProjectNew()
     Q3Process proc(args, this, "process");
     proc.setCommunication((Q3Process::Communication)0);
 //  proc.setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
-    proc.setWorkingDirectory(QFileInfo(fileName).dir(true));
+    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir());
     if (!proc.start()) {
         d->showStartProcessMsg(args);
     }
