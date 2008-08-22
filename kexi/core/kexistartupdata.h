@@ -30,7 +30,7 @@ class KexiProjectData;
 class KEXICORE_EXPORT KexiStartupData
 {
 public:
-    typedef enum Action {
+    enum Action {
         DoNothing,
         CreateBlankProject,
         CreateFromTemplate,
