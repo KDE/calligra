@@ -32,7 +32,7 @@ namespace CanvasResource
 {
 enum
 {
-    Selection = KoCanvasResource::KSpreadStart,  ///< the cell selection
+    Selection = KoCanvasResource::KSpreadStart  ///< the cell selection
 };
 } // namespace CanvasResource
 
