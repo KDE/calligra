@@ -370,7 +370,7 @@ QuerySchema* TableSchema::query()
 Field* TableSchema::anyNonPKField()
 {
     if (!d->anyNonPKField) {
-        Field *f;
+        Field *f = 0;
         for (QListIterator<Field*> it(m_fields); it.hasPrevious();) {
             f = it.previous();
             if (!f->isPrimaryKey() && (!m_pkey || !m_pkey->hasField(f)))
