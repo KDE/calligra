@@ -2626,7 +2626,7 @@ void KexiMainWindow::updateCustomPropertyPanelTabs(
 
 void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWindow)
 {
-    kDebug() << "KexiMainWindow::activeWindowChanged() to = " << (window ? window->caption() : "<none>") << endl;
+    kDebug() << "KexiMainWindow::activeWindowChanged() to = " << (window ? window->windowTitle() : "<none>") << endl;
 
 //! @todo gui clients?
 #if 0
