@@ -30,7 +30,8 @@ class KPrConfigurePresenterViewDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KPrConfigurePresenterViewDialog( KPrDocument *document, QWidget *parent=0 );
+    explicit KPrConfigurePresenterViewDialog( KPrDocument *document,
+					      QWidget *parent=0 );
 
     int presentationMonitor();
     bool presenterViewEnabled();

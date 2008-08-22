@@ -77,7 +77,6 @@ KPrSoundData::~KPrSoundData() {
 
 
 QString KPrSoundData::tagForSaving() {
-    static int counter=0;
     d->taggedForSaving=true;
     d->storeHref = QString("Sounds/%1").arg(d->title);
 

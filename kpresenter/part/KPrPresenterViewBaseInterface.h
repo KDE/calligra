@@ -34,7 +34,7 @@ class KPrPresenterViewBaseInterface : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
+    explicit KPrPresenterViewBaseInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
 public slots:
     /// set the active page to @p page

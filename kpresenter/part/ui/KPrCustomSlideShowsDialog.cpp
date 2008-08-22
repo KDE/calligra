@@ -42,10 +42,10 @@ Q_DECLARE_METATYPE(KoPAPageBase*)
 KPrCustomSlideShowsDialog::KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows,
                                                       KPrDocument *doc, KPrCustomSlideShows *&newSlideShows )
 : QDialog(parent)
+, m_firstTime( true )
 , m_slideShows( new KPrCustomSlideShows(*slideShows) )
 , m_oldSlideShows(slideShows)
 , m_doc(doc)
-, m_firstTime( true )
 {
     m_uiWidget.setupUi( this );
     //Conections
@@ -159,7 +159,7 @@ void KPrCustomSlideShowsDialog::deleteCustomSlideShow()
     }
     if( m_uiWidget.customSlideShowsList->count() == 0 )
     {
-        m_selectedSlideShowName = QString::null;
+        m_selectedSlideShowName.clear();
         m_uiWidget.currentSlidesList->clear();
         m_uiWidget.addSlideButton->setEnabled( false );
         m_uiWidget.deleteButton->setEnabled( false );

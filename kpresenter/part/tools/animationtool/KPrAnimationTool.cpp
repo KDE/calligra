@@ -37,7 +37,10 @@ KPrAnimationTool::~KPrAnimationTool()
 }
 
 
-void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converter) {
+void KPrAnimationTool::paint( QPainter &painter, const KoViewConverter &converter)
+{
+    Q_UNUSED( painter );
+    Q_UNUSED( converter );
 }
 
 
@@ -48,14 +51,17 @@ void KPrAnimationTool::activate(bool temporary)
 
 void KPrAnimationTool::mousePressEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event );
 }
 
 void KPrAnimationTool::mouseMoveEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event );
 }
 
 void KPrAnimationTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    Q_UNUSED( event );
 }
 
 

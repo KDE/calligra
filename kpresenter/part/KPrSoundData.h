@@ -48,7 +48,7 @@ public:
      * @param collection the sound collection which will do the loading of the sound data for us.
      * @param href the url of the sound in the store.
      */
-    KPrSoundData(KPrSoundCollection *collection, QString href="");
+    explicit KPrSoundData(KPrSoundCollection *collection, QString href="");
 
     /**
      * copy constructor using ref-counting.

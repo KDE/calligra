@@ -63,7 +63,7 @@ QString KPrConfigureSlideShowDialog::activeCustomSlideShow() const
         return ui.slidesComboBox->currentText();
     }
 
-    return QString::null;
+    return QString();
 }
 
 void KPrConfigureSlideShowDialog::editCustomSlideShow()
