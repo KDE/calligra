@@ -104,7 +104,10 @@ public:
 #pragma WARNING( TODO  virtual void plugActionList(const QString& name, )
 #endif
     virtual void plugActionList(const QString& name,
-                                const QList<KAction *>& actionList) {}
+                                const QList<KAction *>& actionList) {
+        Q_UNUSED(name)
+        Q_UNUSED(actionList)
+    }
 
 #ifdef __GNUC__
 #warning TODO KXMLGUIClient* guiClient() const;
@@ -118,7 +121,9 @@ public:
 #else
 #pragma WARNING( TODO virtual void unplugActionList (const QString &name); )
 #endif
-    virtual void unplugActionList(const QString &name) {}
+    virtual void unplugActionList(const QString &name) {
+        Q_UNUSED(name)
+    }
 
     //! Implemented by KMainWindow
 #ifdef __GNUC__

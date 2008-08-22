@@ -692,6 +692,8 @@ public:
       }*/
 
     void updatePropEditorVisibility(Kexi::ViewMode viewMode) {
+        /// @note Q_UNUSED(viewMode)
+        Q_UNUSED(viewMode);
         if (propEditorDockWidget) {
             bool visible = wnd->currentWindow() && wnd->currentWindow()->propertySet();
             kDebug() << "updatePropEditorVisibility(): visible == " << visible;

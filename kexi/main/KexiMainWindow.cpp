@@ -2533,6 +2533,7 @@ KexiMainWindow::registerChild(KexiWindow *window)
 void
 KexiMainWindow::updateWindowViewGUIClient(KXMLGUIClient *viewClient)
 {
+    Q_UNUSED(viewClient);
 #ifdef __GNUC__
 #warning TODO updateDialogViewGUIClient()
 #else
@@ -3571,6 +3572,9 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 #else
 #pragma WARNING( TODO KexiMainWindow::closeWindow() )
 #endif
+    ///@note Q_UNUSED layoutTaskBar
+    Q_UNUSED(layoutTaskBar);
+    
     if (!window)
         return true;
     if (d->insideCloseWindow)
@@ -4737,6 +4741,8 @@ bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
 #else
 #pragma WARNING( TODO printItem(item, KexiSimplePrintingSettings::load(), titleText); )
 #endif
+    Q_UNUSED(item)
+    Q_UNUSED(titleText)
     return false;
 }
 
@@ -4752,6 +4758,9 @@ bool KexiMainWindow::printPreviewForItem(KexiPart::Item* item, const QString& ti
 #else
 #pragma WARNING( TODO printPreviewForItem(item, KexiSimplePrintingSettings::load(), titleText, reload); )
 #endif
+    Q_UNUSED(item)
+    Q_UNUSED(titleText)
+    Q_UNUSED(reload)
     return false;
 }
 
