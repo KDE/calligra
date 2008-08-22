@@ -231,7 +231,8 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     Kexi::initCmdLineArgs(argc, argv, aboutdata);
 
     bool GUIenabled = true;
-    QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindow is created
+    /// @note According to GCC 4.3 the following variable is not used, commented for now
+    //QWidget *dummyWidget = 0; //needed to have icon for dialogs before KexiMainWindow is created
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
