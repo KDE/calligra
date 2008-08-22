@@ -39,6 +39,7 @@ namespace KChart {
  * To change properties of a single data point inside a data series,
  * use the DataPointAttributes class. (To be implemented)
  */
+
 class CHARTSHAPELIB_EXPORT DataSet
 {
 public:

@@ -33,15 +33,20 @@ namespace KChart {
 /**
  * @brief The PlotArea class is the central chart element. It plots the data and draws the axes.
  * 
- * There always exists exactly one instance of this class, owned by the chart shape. The plot area
- * itself takes ownership of the axes and the chart wall.
+ * There always exists exactly one instance of this class, owned by
+ * the chart shape. The plot area itself takes ownership of the axes
+ * and the chart wall.
  * 
- * 3D support is not yet fully implemented, a chart floor is not supported at all yet.
+ * 3D support is not yet fully implemented, a chart floor is not
+ * supported at all yet.
  * 
- * This class also plays a central role when loading from or saving to ODF. Though it does not handle
- * anything particular itself, it utilizes the DataSet, TableModel, Axis, Surface, and ProxyModel classes
- * to handle ODF data and properties embedded in the <chart:plotarea> element.
+ * This class also plays a central role when loading from or saving to
+ * ODF. Though it does not handle anything in particular itself, it
+ * utilizes the DataSet, TableModel, Axis, Surface, and ProxyModel
+ * classes to handle ODF data and properties embedded in the
+ * <chart:plotarea> element.
  */
+
 class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape
 {
     Q_OBJECT

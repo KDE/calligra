@@ -29,12 +29,15 @@
 
 namespace KChart {
 
+
 /**
  * @brief The Axis class handles axis as well as grid settings.
  * 
- * Data series can be attached to axes that represent an ordinate. This is done to
- * customize the scaling, i.e., the relation in which the data of a series is visualized.
+ * Data series can be attached to axes that represent an
+ * ordinate. This is done to customize the scaling, i.e., the relation
+ * in which the data of a series is visualized.
  */
+
 class CHARTSHAPELIB_EXPORT Axis : public QObject
 {
     Q_OBJECT

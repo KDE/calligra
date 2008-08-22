@@ -58,6 +58,7 @@ namespace KChart {
  * its second form, the orientation of each separate continuous region
  * can vary, as well as their sizes.
  */
+
 class CHARTSHAPELIB_EXPORT CellRegion
 {
 public:
