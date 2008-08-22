@@ -44,7 +44,7 @@ connection)
     , errno(0)
     , rs(0)
 {
-	KexiDBDrvDbg << "OracleConnectionInternal::Constructor: "<< endl;
+	//KexiDBDrvDbg << "OracleConnectionInternal::Constructor: "<< endl;
    try{
       env = Environment::createEnvironment();
    }catch (oracle::occi::SQLException ea){
@@ -57,7 +57,7 @@ connection)
 
 OracleConnectionInternal::~OracleConnectionInternal()
 {
- KexiDBDrvDbg <<"~OracleConnectionInternal(): ";
+ KexiDBDrvDbg <<endl;
  try{
 	 	Environment::terminateEnvironment(env);
 	 	env=0;
@@ -213,8 +213,6 @@ bool OracleConnectionInternal::createTrigger
 
   }
   tg=tg+"END;";
-  KexiDBDrvDbg <<tg<<endl;
-  
   return executeSQL(tg); 
 }
 //--------------------------------------

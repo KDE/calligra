@@ -66,7 +66,7 @@ OracleCursor::OracleCursor(Connection* conn, QuerySchema& query, uint options )
 
 OracleCursor::~OracleCursor()
 {
-    KexiDBDrvDbg << m_sql << endl;
+    KexiDBDrvDbg  << endl;
 	close();
 }
 

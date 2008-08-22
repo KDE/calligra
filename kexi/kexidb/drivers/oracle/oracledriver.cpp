@@ -113,16 +113,17 @@ bool OracleDriver::drv_isSystemFieldName(const QString&) const {
 }
 
 /**
- * Orace does not have escape characters, although we may need to check this out
- * and see if single quotes ' or the ampersand thing & could be harmful
+ * Add single quotes at the beginning and the end of the string, and escapes any
+ * single quotes found within
  */
 QString OracleDriver::escapeString(const QString& str) const
 {
  //KexiDBDrvDbg <<str<<endl;
-  if (str[0]!='\''){
-	  return QString("\'"+str+"\'");
+  QString res = str;
+  if (res[0]!='\''){
+	  return QString("\'"+res.replace("'","''")+"\'");
 	}else{
-	  return QString(str);
+	  return QString(res.replace("'","''")).mid(1,res.length()-2);
 	}
 }
 

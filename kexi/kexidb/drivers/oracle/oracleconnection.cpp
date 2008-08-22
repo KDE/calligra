@@ -209,7 +209,7 @@ bool OracleConnection::drv_closeDatabase()
  */
 bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
 {
-	KexiDBDrvDbg <<endl;
+	//KexiDBDrvDbg <<endl;
 	QString drop[4];
 	drop[0]= "DECLARE\n";
 	drop[1]= "DECLARE\n";
@@ -335,7 +335,7 @@ bool OracleConnection::drv_afterInsert(const QString& table, FieldList& fields)
 {
   Q_UNUSED(table);
   Q_UNUSED(fields);
-  KexiDBDrvDbg << "Updating ROW_ID on " << table << endl;
+  //KexiDBDrvDbg << "Updating ROW_ID on " << table << endl;
   QString stat=QString("UPDATE "+table
             +" SET ROW_ID=KEXI__SEQ__ROW_ID.NEXTVAL WHERE ROW_ID IS NULL");
   if(d->executeSQL(stat))
