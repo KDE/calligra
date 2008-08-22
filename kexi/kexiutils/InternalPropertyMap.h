@@ -29,8 +29,8 @@ namespace KexiUtils
 
 //! @short A simple property map
 /*!
-  Some classes may need internal property system, not defined as Qt propety
-  system and not publically available (e.g. KexiPart class).
+  Some classes may need internal property system, not defined as Qt proprety
+  system and not publicly available (e.g. KexiPart class).
   Property names are not case-sensitive.
   This class is for use by other classes by inheriting.
 */
@@ -46,7 +46,7 @@ public:
     QVariant internalPropertyValue(const QByteArray& name,
                                    const QVariant& defaultValue = QVariant()) const;
 
-    /*! Sets property value \a value for propety \a name.
+    /*! Sets property value \a value for property \a name.
      If \a value is null, the property is deleted. */
     void setInternalPropertyValue(const QByteArray& name, const QVariant& value);
 
