@@ -401,14 +401,13 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
+    styleStack.clear();
     if( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
     {
-        styleStack.clear();
         context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
-
-        loadOdfAttributes( legendElement, context, OdfAllAttributes );
     }
+    loadOdfAttributes( legendElement, context, OdfAllAttributes );
 
     // TODO: Read optional attributes
     // 1. Legend expansion

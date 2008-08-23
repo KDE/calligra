@@ -905,14 +905,14 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
+    styleStack.clear();
     if( chartElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
     {
         context.odfLoadingContext().fillStyleStack( chartElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
     }
-
     loadOdfAttributes( chartElement, context, OdfAdditionalAttributes | OdfMandatories | OdfCommonChildElements );
-    
+
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
         qDebug() << "Error: Embedded document has no chart:class attribute.";

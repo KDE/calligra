@@ -423,14 +423,12 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
+    styleStack.clear();
     if( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
     {
-        styleStack.clear();
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
-
-        loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
 
         styleStack.setTypeProperties( "chart" );
 
@@ -439,6 +437,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
         else if ( styleStack.hasProperty( KoXmlNS::chart, "stacked" ) && styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
             setChartSubType( StackedChartSubtype );
     }
+    loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
     
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     
