@@ -156,8 +156,6 @@ private:
     /// loops over the selected shapes and returns the frames that go with them.
     QList<KWFrame*> selectedFrames() const;
 
-    static KWFrame *frameForShape(KoShape *shape);
-
 private:
     KWGui *m_gui;
     KWCanvas *m_canvas;

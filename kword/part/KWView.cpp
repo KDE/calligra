@@ -78,6 +78,14 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 
+static KWFrame *frameForShape(KoShape *shape)
+{
+    KoShape *parent = shape;
+    while (parent->parent())
+        parent = shape->parent();
+    return dynamic_cast<KWFrame*>(parent->applicationData());
+}
+
 KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
 {
@@ -787,13 +795,6 @@ QList<KWFrame*> KWView::selectedFrames() const {
     return frames;
 }
 
-KWFrame *KWView::frameForShape(KoShape *shape) {
-    KoShape *parent = shape;
-    while (parent->parent())
-      parent = shape->parent();
-    return dynamic_cast<KWFrame*>(parent->applicationData());
-}
-
 // -------------------- Actions -----------------------
 void KWView::editFrameProperties() {
     KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, this);
@@ -1013,7 +1014,7 @@ void KWView::inlineFrame() {
     }
 
     if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() <<"splitting..."; return; }
-    
+
     selection->select(frameForAnchor->shape());
 
     QPointF absPos = targetShape->absolutePosition();
