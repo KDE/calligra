@@ -29,8 +29,7 @@ class KPrPageLayoutDocker : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit KPrPageLayoutDocker( QWidget* parent = 0,
-				  Qt::WindowFlags flags = 0 );
+    explicit KPrPageLayoutDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
     void setView( KPrView* view );
 

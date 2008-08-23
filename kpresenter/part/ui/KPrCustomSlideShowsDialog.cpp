@@ -159,7 +159,7 @@ void KPrCustomSlideShowsDialog::deleteCustomSlideShow()
     }
     if( m_uiWidget.customSlideShowsList->count() == 0 )
     {
-        m_selectedSlideShowName.clear();
+        m_selectedSlideShowName = QString();
         m_uiWidget.currentSlidesList->clear();
         m_uiWidget.addSlideButton->setEnabled( false );
         m_uiWidget.deleteButton->setEnabled( false );

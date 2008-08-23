@@ -41,8 +41,7 @@ class KPrClickActionDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
-    explicit KPrClickActionDocker( QWidget* parent = 0,
-				   Qt::WindowFlags flags = 0 );
+    explicit KPrClickActionDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
     void setView( KPrView* view );
 
