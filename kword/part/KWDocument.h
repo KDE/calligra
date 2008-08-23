@@ -77,7 +77,8 @@ public:
     virtual bool saveOdf(SavingContext & documentContext );
     /// reimplemented from KoDocument
     KoView* createViewInstance(QWidget*);
-
+    /// reimplemented from KoDocument
+    virtual int pageCount() const { pageManager()->pageCount(); }
 
     // others
     /**

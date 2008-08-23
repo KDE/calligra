@@ -69,7 +69,7 @@ class KWStatusBar::Private
             : statusbar(sb)
             , view(v)
             , controller(0)
-            , currentPageNumber(1)
+            , currentPageNumber(0)
             , modifiedLabel(0)
             , pageLabel(0)
             , mousePosLabel(0)
