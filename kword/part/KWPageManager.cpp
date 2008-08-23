@@ -104,9 +104,8 @@ KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle) {
         KWPage *p = (pageNumber > 0) ? this->page(pageNumber - 1) : 0;
         pageStyle = p ? p->pageStyle() : this->defaultPageStyle();
     }
-    foreach(KWPage *p, m_pageList) { // increase the pagenumbers of pages following the pageNumber
-        if(p->pageNumber() >= pageNumber)
-            p->m_pageNum++;
+    for(int i = pageNumber; i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
+        m_pageList[i]->m_pageNum++;
     }
     KWPage *page = new KWPage(this, pageNumber, pageStyle);
     m_pageList.insert(pageNumber, page);
@@ -117,9 +116,8 @@ KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle) {
 KWPage* KWPageManager::insertPage(KWPage *page) {
     Q_ASSERT( page->pageNumber() <= pageCount() );
     Q_ASSERT( page->pageNumber() == pageCount() || page != this->page(page->pageNumber()) );
-    foreach(KWPage *p, m_pageList) { // increase the pagenumbers of pages following the pageNumber
-        if(p->pageNumber() >= page->pageNumber())
-            p->m_pageNum++;
+    for(int i = page->pageNumber(); i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
+        m_pageList[i]->m_pageNum++;
     }
     if(page->pageNumber() < pageCount()) {
         m_pageList.insert(page->pageNumber(), page);
