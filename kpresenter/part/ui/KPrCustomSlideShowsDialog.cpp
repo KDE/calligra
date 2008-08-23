@@ -262,7 +262,7 @@ void KPrCustomSlideShowsDialog::addSlidesToCurrentSlideShow()
         item->setData( SlideData, QVariant( page ) );
         item->setData( SlidePositionData, QVariant( nextSlideNumberInSlideShow++ ) );
     }
-    //update the SlidwShow with the resulting list
+    //update the SlideShow with the resulting list
     m_slideShows->update( m_selectedSlideShowName, selectedSlideShow );
 }
 
