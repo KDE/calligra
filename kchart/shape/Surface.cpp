@@ -135,6 +135,7 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext
         KDChart::BackgroundAttributes backgroundAttributes = d->kdPlane->backgroundAttributes();
         KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
+        styleStack.clear();
         context.odfLoadingContext().fillStyleStack( surfaceElement, KoXmlNS::chart, "style-name", "chart" );
         
         styleStack.setTypeProperties( "graphic" );
@@ -169,6 +170,8 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext
         d->kdPlane->setBackgroundAttributes( backgroundAttributes );
         d->kdPlane->setFrameAttributes( frameAttributes );
     }
+
+    styleStack.restore();
     
     return true;
 }
