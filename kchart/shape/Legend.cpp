@@ -400,9 +400,16 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
-    
-    loadOdfAttributes( legendElement, context, OdfAllAttributes );
-    
+
+    if( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+    {
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
+        styleStack.setTypeProperties( "graphic" );
+
+        loadOdfAttributes( legendElement, context, OdfAllAttributes );
+    }
+
     // TODO: Read optional attributes
     // 1. Legend expansion
     // 2. Advanced legend styling
@@ -470,6 +477,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
         }
         
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+            styleStack.clear();
             context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
             
             styleStack.setTypeProperties( "text" );
@@ -490,6 +498,8 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
     //d->chart->replaceLegend( d->legend, oldLegend );
     
     d->pixmapRepaintRequested = true;
+
+    styleStack.restore();
 
     return true;
 }
