@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -82,43 +83,45 @@ public:
     bool hasMainTextFrame() const { return m_mainFrame; }
 
     /// return the distance between the main text and the header
-    double headerDistance() const { return m_headerDistance; }
+    Q_SCRIPTABLE double headerDistance() const { return m_headerDistance; }
     /**
      * Set the distance between the main text and the header
      * @param distance the distance
      */
-    void setHeaderDistance(double distance) { m_headerDistance = distance; }
+    Q_SCRIPTABLE void setHeaderDistance(double distance) { m_headerDistance = distance; }
+
     /// return the distance between the footer and the frame directly above that (footnote or main)
-    double footerDistance() const { return m_footerDistance; }
+    Q_SCRIPTABLE double footerDistance() const { return m_footerDistance; }
     /**
      * Set the distance between the footer and the frame directly above that (footnote or main)
      * @param distance the distance
      */
-    void setFooterDistance(double distance) { m_footerDistance = distance; }
+    Q_SCRIPTABLE void setFooterDistance(double distance) { m_footerDistance = distance; }
+
     /// return the distance between the footnote and the main frame.
-    double footnoteDistance() const { return m_footNoteDistance; }
+    Q_SCRIPTABLE double footnoteDistance() const { return m_footNoteDistance; }
     /**
      * Set the distance between the footnote and the main frame.
      * @param distance the distance
      */
-    void setFootnoteDistance(double distance) { m_footNoteDistance = distance; }
+    Q_SCRIPTABLE void setFootnoteDistance(double distance) { m_footNoteDistance = distance; }
     /// return the distance between the main text frame and the end notes frame.
-    double endNoteDistance() const { return m_endNoteDistance; }
+    Q_SCRIPTABLE double endNoteDistance() const { return m_endNoteDistance; }
     /**
      * Set the distance between the main text frame and the end notes frame.
      * @param distance the distance
      */
-    void setEndNoteDistance(double distance) { m_endNoteDistance = distance; }
+    Q_SCRIPTABLE void setEndNoteDistance(double distance) { m_endNoteDistance = distance; }
 
     /// return the line length of the foot note separator line, in percent of the pagewidth
-    int footNoteSeparatorLineLength() const { return m_footNoteSeparatorLineLength;}
+    Q_SCRIPTABLE int footNoteSeparatorLineLength() const { return m_footNoteSeparatorLineLength;}
     /// set the line length of the foot note separator line, in percent of the pagewidth
-    void setFootNoteSeparatorLineLength( int length){  m_footNoteSeparatorLineLength = length;}
+    Q_SCRIPTABLE void setFootNoteSeparatorLineLength( int length){  m_footNoteSeparatorLineLength = length;}
 
     /// return the thickness of the line (in pt) drawn above the foot notes
-    double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
+    Q_SCRIPTABLE double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
     /// set the thickness of the line (in pt) drawn above the foot notes
-    void setFootNoteSeparatorLineWidth( double width){  m_footNoteSeparatorLineWidth=width;}
+    Q_SCRIPTABLE void setFootNoteSeparatorLineWidth( double width){  m_footNoteSeparatorLineWidth=width;}
 
     /// return the pen style used to draw the foot note separator line
     Qt::PenStyle footNoteSeparatorLineType() const { return m_footNoteSeparatorLineType;}
@@ -135,7 +138,7 @@ public:
     }
 
     /// initialize to default settings
-    void clear();
+    Q_SCRIPTABLE void clear();
 
     /// return the pageLayout applied for these pages
     const KoPageLayout pageLayout() const;
@@ -159,10 +162,8 @@ public:
      */
     void addFrameSet (KWord::TextFrameSetType hfType, KWTextFrameSet *fSet) { m_hfFrameSets[hfType] = fSet; }
 
-    /// set the master page name for this page style.
-    //void setMasterName (const QString &name) { m_masterName = name; }
     /// get the master page name for this page style.
-    QString masterName () const { return m_masterName; }
+    Q_SCRIPTABLE QString masterName () const { return m_masterName; }
 
 Q_SIGNALS:
 

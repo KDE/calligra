@@ -211,7 +211,7 @@ void KWStatusBar::slotPagesChanged()
 {
     KWDocument* kwdoc = d->view->kwdocument();
     Q_ASSERT(kwdoc);
-    d->pageLabel->setText( i18nPage.subs(d->currentPageNumber).subs(kwdoc->pageCount()).toString() );
+    d->pageLabel->setText( i18nPage.subs(d->currentPageNumber + 1).subs(kwdoc->pageCount()).toString() );
 }
 
 void KWStatusBar::slotResourceChanged(int key, const QVariant& value)

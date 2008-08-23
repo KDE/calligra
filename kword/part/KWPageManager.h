@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,30 +38,52 @@ class KoShape;
  * The Page Manager manages all the pages a document contains and separates all the frames
  * the document contains into actual printed pages.
  */
-class KWORD_EXPORT KWPageManager {
+class KWORD_EXPORT KWPageManager : public QObject {
+    Q_OBJECT
 public:
     explicit KWPageManager(KWDocument* document);
     ~KWPageManager();
 
-    /// return pageNumber of @p point, pagenumbers for a normal document start at 1.
-    int pageNumber(const QPointF &point) const;
-    /// return pageNumber of the argument shape, pagenumbers for a normal document start at 1.
-    int pageNumber(const KoShape *shape) const;
-    /** return pageNumber of page with document-offset (in the Y direction) of @p ptY,
-     *  pagenumbers for a normal document start at 1.
+    /**
+     * return pageNumber of @p point, pagenumbers for a normal document start at 0.
      */
-    int pageNumber(double ptY) const;
-    /// return total number of pages in this document.
-    int pageCount() const;
-    /// return the highest page number we have in this document.
-    int lastPageNumber() const;
-    /// return the KWPage of a specific page number. Returns 0 if page does not exist.
-    KWPage* page(int pageNumber) const;
-    /// return the KWPage instance where the rect is on. Returns 0 if page does not exist.
+    Q_SCRIPTABLE int pageNumber(const QPointF &point) const;
+
+    /**
+     * return pageNumber of the argument shape, pagenumbers for a normal document start at 0.
+     */
+    int pageNumber(const KoShape *shape) const;
+
+    /**
+     * return pageNumber of page with document-offset (in the Y direction) of @p ptY,
+     * pagenumbers for a normal document start at 0.
+     */
+    Q_SCRIPTABLE int pageNumber(double ptY) const;
+
+    /**
+     * return total number of pages in this document.
+     */
+    Q_SCRIPTABLE int pageCount() const;
+
+    /**
+     * return the KWPage of a specific page number. Returns 0 if page does not exist.
+     */
+    Q_SCRIPTABLE KWPage* page(int pageNumber) const;
+
+    /**
+     * return the KWPage instance where the rect is on. Returns 0 if page does not exist.
+     */
     KWPage* page(const KoShape *shape) const;
-    /// return the KWPage instance where the point is on. Returns 0 if page does not exist.
-    KWPage* page(const QPointF &point) const;
-    /// return the KWPage instance of the y-coordinate in the document. Returns 0 if page does not exist.
+
+    /**
+     * return the KWPage instance where the point is on. Returns 0 if page does not exist.
+     */
+    Q_SCRIPTABLE KWPage* page(const QPointF &point) const;
+
+    /**
+     * return the KWPage instance of the y-coordinate in the document. Returns 0 if
+     * page does not exist.
+     */
     KWPage* page(double ptY) const;
 
     /**
@@ -78,24 +101,6 @@ public:
      */
     double bottomOfPage(int pageNumber) const; // in pt
 
-    /// Set a new startpage for this document, renumbering all pages already added.
-    void setStartPage(int startPage);
-
-    /// return the first pagenumber of this document
-    int startPage() const { return m_firstPage; }
-
-    /**
-     * Register if new pages can only be appended after the last one and not
-     * somewhere in between.
-     * @param appendOnly the new value
-     */
-    void setOnlyAllowAppend(bool appendOnly) { m_onlyAllowAppend = appendOnly; }
-    /**
-     * return if new pages can only be appended after the last one and not
-     * somewhere in between.
-     */
-    bool onlyAllowAppend() { return m_onlyAllowAppend; }
-
     /**
      * Inserts a new page at the specified position in the document.
      * Shifts the page currently at that position (if any) and any subsequent pages after.
@@ -104,21 +109,24 @@ public:
      * @param pageNumber page number of the new page
      * @param pageStyle the page style to use for the new page
      */
-    KWPage* insertPage(int pageNumber, KWPageStyle *pageStyle = 0);
+    Q_SCRIPTABLE KWPage* insertPage(int pageNumber, KWPageStyle *pageStyle = 0);
+
     /**
      * Insert the page instance at the specified position in the document. Note that it is preferred
      * to use the insertPage(int) method which creates a new page.
      * @param page the page that will be inserted.
      */
     KWPage* insertPage(KWPage *page);
+
     /**
      * Append a new page at the end of the document
      * @param pageStyle the page style to use for the new page
      */
-    KWPage* appendPage(KWPageStyle *pageStyle = 0);
+    Q_SCRIPTABLE KWPage* appendPage(KWPageStyle *pageStyle = 0);
 
     /// Remove the page with @p pageNumber renumbering all pages after pages already added
-    void removePage(int pageNumber);
+    Q_SCRIPTABLE void removePage(int pageNumber);
+
     /// Remove @p page renumbering all pages after pages already added
     void removePage(KWPage *page);
 
@@ -151,17 +159,18 @@ public:
      */
     void setPadding(const KoInsets &padding) { m_padding = padding; }
 
+//TODO move following both functions to KWPageStyle
     /**
      * This property can be set to register that new pages created should be made to be a pageSpread when aproriate.
      * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
      */
-    bool preferPageSpread() const { return m_preferPageSpread; }
+    KDE_DEPRECATED bool preferPageSpread() const { return m_preferPageSpread; }
     /**
      * Set the property to register that new pages created should be made to be a pageSpread when aproriate.
      * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
      * @param on If true, it is requested that new, even numbered pages are set to be page spreads.
      */
-    void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
+    KDE_DEPRECATED void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
 
     /**
      * Add a new \a KWPageStyle instance to this document.
@@ -177,6 +186,19 @@ public:
     void addPageStyle(KWPageStyle *pageStyle);
 
     /**
+     * Add a new \a KWPageStyle instance to this document.
+     *
+     * \note that you need to make sure that you only add pageStyle with a
+     * masterpage-name that are NOT already registered cause those names need
+     * to be unique.
+     *
+     * \param pageStyle The \a KWPageStyle instance that should be added. The
+     * document will take over ownership and takes care of deleting the instance
+     * one the document itself got deleted.
+     */
+    Q_SCRIPTABLE KWPageStyle* addPageStyle(const QString &name);
+
+    /**
      * Returns all pagestyles.
      */
     QHash<QString, KWPageStyle *> pageStyles() const;
@@ -185,29 +207,27 @@ public:
      * Returns the \a KWPageStyle known under the name \p name or NULL if the
      * document has no such page style.
      */
-    KWPageStyle *pageStyle(const QString &name) const;
+    Q_SCRIPTABLE KWPageStyle *pageStyle(const QString &name) const;
 
     /**
      * Return the default page style. This equals to pageStyle("Standard").
      */
-    KWPageStyle* defaultPageStyle() const;
+    Q_SCRIPTABLE KWPageStyle* defaultPageStyle() const;
 
     /**
      * Remove all page style and clears the default one.
      */
-    void clearPageStyle();
+    Q_SCRIPTABLE void clearPageStyle();
 
 private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;
     friend class KWPage;
-    static int compareItems(KWPage* a, KWPage *b);
 
 private:
     KWDocument* m_document;
     QList<KWPage*> m_pageList;
     int m_firstPage;
-    bool m_onlyAllowAppend; // true for WP style documents.
     bool m_preferPageSpread;
 
     QHash <QString, KWPageStyle *> m_pageStyle;

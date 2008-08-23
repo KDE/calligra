@@ -3,6 +3,7 @@
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -174,7 +175,7 @@ KWPage* KWDocument::insertPage( int afterPageNum, const QString &masterPageName)
 }
 
 KWPage* KWDocument::appendPage(const QString &masterPageName) {
-    return insertPage(m_pageManager.lastPageNumber(), masterPageName);
+    return insertPage(m_pageManager.pageCount() - 1, masterPageName);
 }
 
 void KWDocument::removePage(int pageNumber) {
@@ -194,15 +195,6 @@ void KWDocument::firePageSetupChanged() {
     emit pageSetupChanged();
 }
 
-void KWDocument::setStartPage(int pagenumber) {
-    if(pagenumber%2 != startPage()%2) {
-        // TODO remove all odd/even headers and recreate them
-        // TODO insert pages so pagespreads always start on an even pagenumber.
-    }
-    m_pageManager.setStartPage(pagenumber);
-    m_inlineTextObjectManager->setProperty(KoInlineObject::StartPage, pagenumber);
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
-}
 
 void KWDocument::removeFrameSet( KWFrameSet *fs ) {
     m_frameSets.removeAt( m_frameSets.indexOf(fs) );
@@ -272,18 +264,6 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     //emit frameSetAdded(fs);
 }
 
-int KWDocument::pageCount() const {
-    return pageManager()->pageCount();
-}
-
-int KWDocument::startPage() const {
-    return pageManager()->startPage();
-}
-
-int KWDocument::lastPage() const {
-    return pageManager()->lastPageNumber();
-}
-
 void KWDocument::addFrame(KWFrame *frame) {
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
@@ -300,7 +280,7 @@ void KWDocument::removeFrame(KWFrame *frame) {
     if(frame->shape() == 0) return;
     KWPage *page = pageManager()->page(frame->shape());
     if(page == 0) return;
-    if(page->pageNumber() != pageManager()->lastPageNumber())
+    if(page->pageNumber() != pageManager()->pageCount() - 1)
         return; // can only delete last page.
     foreach(KWFrameSet *fs, m_frameSets) {
         foreach(KWFrame *f, fs->frames()) {
@@ -375,7 +355,6 @@ void KWDocument::clear() {
     // document defaults
     foreach(KWPage *page, m_pageManager.pages())
         m_pageManager.removePage(page);
-    m_pageManager.setStartPage(1);
     m_pageManager.clearPageStyle();
     KoColumns columns = m_pageManager.defaultPageStyle()->columns();
     m_config.load(this); // re-load values 
@@ -394,7 +373,6 @@ void KWDocument::clear() {
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
 
-    m_inlineTextObjectManager->setProperty(KoInlineObject::StartPage, startPage());
     m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
@@ -432,8 +410,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     QTextBlock block = mainFrameSet()->document()->firstBlock();
     QString firstPageMasterName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
 
-    KWPage *last = pageManager()->page(lastPage());
-    double docHeight = last?(last->offsetInDocument() + last->height()):0.0;
+    KWPage *lastpage = pageManager()->page(pageManager()->pageCount() - 1);
+    double docHeight = lastpage ? (lastpage->offsetInDocument() + lastpage->height()) : 0.0;
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
 
     // insert pages
@@ -456,12 +434,12 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // 'Cause layout is not finished
     while(docHeight <= maxBottom) {
         kDebug(32001) <<"KWDocument::endOfLoading appends a page";
-        if (m_pageManager.lastPageNumber() == 0) // apply the firstPageMasterName only on the first page
-            last = m_pageManager.insertPage(m_pageManager.lastPageNumber(), m_pageManager.pageStyle(firstPageMasterName));
+        if (m_pageManager.pageCount() == 0) // apply the firstPageMasterName only on the first page
+            lastpage = m_pageManager.appendPage(m_pageManager.pageStyle(firstPageMasterName));
         else // normally this shouldn't happen cause that loop is only run once...
-            last = m_pageManager.insertPage(m_pageManager.lastPageNumber());
-        ppq->addPage(last);
-        docHeight += last->height();
+            lastpage = m_pageManager.appendPage();
+        ppq->addPage(lastpage);
+        docHeight += lastpage->height();
     }
 
 #if 0
@@ -582,13 +560,13 @@ bool KWDocument::saveOdf( SavingContext &documentContext ) {
 }
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
-//kDebug(32002) <<"KWDocument::requestMoreSpace";
+    //kDebug(32002) <<"KWDocument::requestMoreSpace";
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
 
     KWFrame *lastFrame = fs->frames()[ fs->frameCount()-1 ];
-    
+
     QString masterPageName;
     if (fs == mainFrameSet()) {
         KoShape *shape = lastFrame->shape();
@@ -604,7 +582,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
     }
 
     KWPage *page = m_pageManager.page(lastFrame->shape());
-    int pageDiff =  m_pageManager.lastPageNumber() - page->pageNumber();
+    int pageDiff =  m_pageManager.pageCount() - 1 - page->pageNumber();
     if(page->pageSide() == KWPage::PageSpread)
         pageDiff--;
     if(pageDiff >= (lastFrame->frameOnBothSheets() ? 1 : 2)) {
@@ -670,9 +648,8 @@ void KWDocument::printDebug() {
         fs->printDebug();
     }
 
-    kDebug(32001) <<"PageManager holds"<< pageCount() <<" pages in the range:" << startPage() <<
-        "-" << lastPage() << endl;
-    for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
+    kDebug(32001) <<"PageManager holds"<< pageCount() <<" pages";
+    for (int pgnum = 0; pgnum < pageCount() ; pgnum++) {
         KWPage *page = pageManager()->page(pgnum);
         pgnum = page->pageNumber(); // in case the last one was a pagespread.
         QString side = "[Left] ";
@@ -686,8 +663,7 @@ void KWDocument::printDebug() {
         }
         kDebug(32001) <<"Page" << num << side <<" width=" << page->width() <<" height=" << page->height();
     }
-    kDebug(32001) <<"  The height of the doc (in pt) is:" << pageManager()->
-        bottomOfPage(lastPage()) << endl;
+    kDebug(32001) <<"  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1) << endl;
 }
 #endif
 

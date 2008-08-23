@@ -110,11 +110,6 @@ namespace Scripting {
             /** Remove the page with the pagenumber \p pageNumber . */
             void removePage( int pageNumber );
 
-            /** Return the first pagenumber of the document. */
-            int startPage();
-            /** Set a new startpage for this document.  */
-            void setStartPage(int pageNumber);
-
             /***** FrameSet *****/
 
             /** Return the amount of framesets this document holds. */

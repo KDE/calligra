@@ -26,6 +26,8 @@
 
 #include <KoText.h>
 #include <QRectF>
+#include <QObject>
+
 class KoZoomHandler;
 
 /**
@@ -35,7 +37,8 @@ class KoZoomHandler;
  * on this class.  
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage {
+class KWORD_EXPORT KWPage : public QObject {
+    Q_OBJECT
 public:
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSide {
@@ -45,21 +48,21 @@ public:
     };
 
     /// return the width of this page (in pt)
-    double width() const;
+    Q_SCRIPTABLE double width() const;
     /// return the height of this page (in pt)
-    double height() const;
+    Q_SCRIPTABLE double height() const;
     /// return the height of the margin at top (in pt);
-    double topMargin() const;
+    Q_SCRIPTABLE double topMargin() const;
     /// return the height of the margin at bottom (in pt);
-    double bottomMargin() const;
+    Q_SCRIPTABLE double bottomMargin() const;
     /// return the width of the margin at left (in pt);
-    double leftMargin() const;
+    Q_SCRIPTABLE double leftMargin() const;
     /// return the width of the margin at right (in pt);
-    double rightMargin() const;
+    Q_SCRIPTABLE double rightMargin() const;
     /// return width of the margin that is the closest to the page edge, i.e. left for even pages
-    double pageEdgeMargin() const;
+    Q_SCRIPTABLE double pageEdgeMargin() const;
     /// return width of the margin that is the closest to the binding, i.e. right for even pages
-    double marginClosestBinding() const;
+    Q_SCRIPTABLE double marginClosestBinding() const;
 
     /**
      * return a rectangle outlining this page, using the offset in the document.
@@ -71,7 +74,7 @@ public:
      * Passing a pagenumber that is not represented by this object will have
      *  unpredictabe results.
      */
-    QRectF rect(int pageNumber=-1) const;
+    Q_SCRIPTABLE QRectF rect(int pageNumber=-1) const;
 
     // the y coordinate
     /**
@@ -81,7 +84,7 @@ public:
      * This method returns the offset of this page in the whole document which means it will
      * add the height of all the pages that come before this one.
      */
-    double offsetInDocument() const;
+    Q_SCRIPTABLE double offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSide
     PageSide pageSide() const { return m_pageSide; }
@@ -89,7 +92,7 @@ public:
     void setPageSide(PageSide ps) { m_pageSide = ps; }
 
     /// returns the number of this page as it will be shown to the user.
-    int pageNumber() const { return m_pageNum; }
+    Q_SCRIPTABLE int pageNumber() const { return m_pageNum; }
 
     /// returns the page style applied on this page
     KWPageStyle *pageStyle() { return m_pageStyle; }

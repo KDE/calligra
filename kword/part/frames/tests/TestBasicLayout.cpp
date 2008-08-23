@@ -16,7 +16,6 @@ class Helper {
 public:
     Helper() {
         pageManager = new KWPageManager(&doc);
-        pageManager->setStartPage(1);
         KWPage *page = pageManager->appendPage();
         KoPageLayout pageLayout = page->pageStyle()->pageLayout();
         pageLayout.width = 200;

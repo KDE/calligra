@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +23,7 @@
 #define KWPAGEINSERTCOMMAND_H
 
 #include <QUndoCommand>
+#include <QPointer>
 
 class KWPage;
 class KWPageManager;
@@ -51,8 +53,8 @@ public:
     KWPage *page() const { return m_page; }
 
 private:
-    KWDocument *m_document;
-    KWPage *m_page;
+    QPointer<KWDocument> m_document;
+    QPointer<KWPage> m_page;
     bool m_deletePage;
     int m_afterPageNum;
     QString m_masterPageName;

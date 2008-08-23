@@ -35,7 +35,6 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     Q_ASSERT(page);
 
     setPageSpread(m_page->pageSide() == KWPage::PageSpread);
-    setStartPageNumber(m_document->startPage());
     setTextDirection(m_page->directionHint());
 }
 
@@ -48,8 +47,6 @@ void KWPageSettingsDialog::accept() {
         KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, pageLayout(), newDir);
         m_document->addCommand(cmd);
     }
-
-    m_document->setStartPage(startPageNumber());
 
     KoPageLayoutDialog::accept();
 }

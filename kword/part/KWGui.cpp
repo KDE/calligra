@@ -123,9 +123,9 @@ bool KWGui::horizontalScrollBarVisible() {
 
 void KWGui::pageSetupChanged() {
     const KWPageManager *pm = m_view->kwdocument()->pageManager();
-    m_verticalRuler->setRulerLength( pm->bottomOfPage(pm->lastPageNumber()) );
+    m_verticalRuler->setRulerLength( pm->bottomOfPage(pm->pageCount() - 1) );
     updateRulers();
-    KWPage *firstPage = pm->page(pm->startPage());
+    KWPage *firstPage = pm->page(0);
     if(firstPage)
         m_horizontalRuler->setRulerLength( firstPage->width() );
     updateRulers();

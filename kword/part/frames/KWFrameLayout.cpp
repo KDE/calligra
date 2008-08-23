@@ -157,7 +157,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
 
     bool odd=false; // an odd number of pages back, so frameOnBothSheets matters
     for(int i=pageNumber-2; i < pageNumber; i++) {
-        if(i < m_pageManager->startPage()) {
+        if(i < 0/*m_pageManager->startPage()*/) {
             odd = true;
             continue;
         }
@@ -530,11 +530,11 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs) {
 void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
     if(fs->frameCount() == 0)
         return;
-    if(pageNumber == m_pageManager->startPage())
+    if(pageNumber == 0/*m_pageManager->startPage()*/)
         return;
     double prevPage, prevPage2;
     prevPage = m_pageManager->topOfPage(pageNumber-1);
-    if(pageNumber - 2 >= m_pageManager->startPage())
+    if(pageNumber - 2 >= 0/*m_pageManager->startPage()*/)
         prevPage2 = m_pageManager->topOfPage(pageNumber-2);
     else
         prevPage2 = -1;

@@ -107,17 +107,6 @@ void Module::removePage( int pageNumber )
     kwDoc()->removePage(pageNumber);
 }
 
-int Module::startPage()
-{
-    return kwDoc()->startPage();
-}
-
-void Module::setStartPage(int pageNumber)
-{
-     //TODO this is evil since it changes page(int pageNumber) above... we need a more persistent way to deal with pages!
-     kwDoc()->setStartPage(pageNumber);
-}
-
 QStringList Module::shapeKeys()
 {
     QStringList keys;

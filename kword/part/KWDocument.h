@@ -3,6 +3,7 @@
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -110,7 +111,6 @@ public:
      * @param masterPageName the name of the master page to use for this new page.
      */
     KWPage* appendPage(const QString &masterPageName = QString());
-
     /**
      * remove a page from the document.
      * @param pageNumber the pageNumber that should be removed.
@@ -125,29 +125,6 @@ public:
      * @param fs the frameset that should be removed from the doc
      */
     void removeFrameSet( KWFrameSet *fs );
-    /**
-     * returns the amount of pages in the document.
-     * @see startPage() @see lastPage()
-     */
-    int pageCount() const;
-    /**
-     * returns the page number of the first page in this document, this is the page number
-     * that will be shown on prints and used in the TOC and user-variables.
-     * @see pageCount() @see lastPage()
-     */
-    int startPage() const;
-    /**
-     * Returns the last page number in this document.
-     * With a higher startPage and a constante pagecount this number will also get higher.
-     */
-    int lastPage() const;
-
-    /**
-     * Set the document to start counting at a specific pagenumber.
-     * This will cause the document to relayout pagespreads and insert pages if needed.
-     * @param pageNumber the new page number of the first page of this document.
-     */
-    void setStartPage(int pageNumber);
 
     /// return the amount of framesets this document holds
     int frameSetCount() const { return m_frameSets.count(); }

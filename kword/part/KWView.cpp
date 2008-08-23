@@ -93,7 +93,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     setComponentData( KWFactory::componentData() );
     setXMLFile( "kword.rc" );
 
-    m_currentPage = m_document->pageManager()->page(m_document->startPage());
+    m_currentPage = m_document->pageManager()->page(0);
 
     setupActions();
 
