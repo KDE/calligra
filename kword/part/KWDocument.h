@@ -78,7 +78,7 @@ public:
     /// reimplemented from KoDocument
     KoView* createViewInstance(QWidget*);
     /// reimplemented from KoDocument
-    virtual int pageCount() const { pageManager()->pageCount(); }
+    virtual int pageCount() const { return pageManager()->pageCount(); }
 
     // others
     /**
@@ -88,7 +88,7 @@ public:
     /**
      * Return the pageManager used in this document.
      */
-    KWPageManager *pageManager() { return &m_pageManager; }
+    Q_SCRIPTABLE KWPageManager *pageManager() { return &m_pageManager; }
 
     /// @return the data center map for this document.
     QMap<QString, KoDataCenter *>  dataCenterMap()  { return m_dataCenterMap; }
