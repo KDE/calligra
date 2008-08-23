@@ -30,6 +30,25 @@ void TestPageManager::init() {
 
 void TestPageManager::getAddPages() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
+
+    QCOMPARE(pageManager->pageCount() == 0, true);
+
+    KWPage* page1 = pageManager->appendPage();
+    KWPage* page3 = pageManager->appendPage();
+    QCOMPARE(pageManager->pageCount() == 2, true);
+    QCOMPARE(pageManager->page(0) == page1, true);
+    QCOMPARE(pageManager->page(1) == page3, true);
+
+    KWPage* page2 = pageManager->insertPage(1);
+    QCOMPARE(pageManager->pageCount() == 3, true);
+    QCOMPARE(pageManager->page(0) == page1, true);
+    QCOMPARE(pageManager->page(1) == page2, true);
+    QCOMPARE(pageManager->page(2) == page3, true);
+
+    KWPage* page4 = pageManager->insertPage(3);
+    QCOMPARE(pageManager->pageCount() == 4, true);
+    QCOMPARE(pageManager->page(3) == page4, true);
+
 #if 0
     pageManager->setStartPage(1);
     pageManager->appendPage();
@@ -210,13 +229,16 @@ void TestPageManager::pageInfo() {
     layout.height = 200;
     layout.format = KoPageFormat::IsoA4Size;
     pageManager->defaultPageStyle()->setPageLayout(layout);
-    
+    QCOMPARE(pageManager->defaultPageStyle()->pageLayout().width, 100.0);
+    QCOMPARE(pageManager->defaultPageStyle()->pageLayout().format, KoPageFormat::IsoA4Size);
+
     KWPageStyle *pageStylePage2 = new KWPageStyle("Page 2");
     layout = pageStylePage2->pageLayout();
     layout.width = 50;
     layout.height = 100;
     pageStylePage2->setPageLayout(layout);
     pageManager->addPageStyle(pageStylePage2);
+    QCOMPARE(pageManager->pageStyle("Page 2")->pageLayout().width, 50.0);
 
     KWPageStyle *pageStylePage3 = new KWPageStyle("Page 3");
     layout = pageStylePage3->pageLayout();
@@ -224,13 +246,20 @@ void TestPageManager::pageInfo() {
     layout.height = 600;
     pageStylePage3->setPageLayout(layout);
     pageManager->addPageStyle(pageStylePage3);
-    
+    QCOMPARE(pageManager->pageStyle("Page 3")->pageLayout().width, 300.0);
+
     KWPage *page1 = pageManager->appendPage();
     KWPage *page2 = pageManager->appendPage(pageStylePage2);
     KWPage *page3 = pageManager->appendPage(pageStylePage3);
 
-    QCOMPARE(pageManager->topOfPage(3), 300.0);
-    QCOMPARE(pageManager->bottomOfPage(3), 900.0);
+    QCOMPARE(pageManager->pageCount(), 3);
+    QCOMPARE(pageManager->page(0), page1);
+    QCOMPARE(pageManager->page(0)->pageStyle(), pageManager->defaultPageStyle());
+    QCOMPARE(pageManager->page(1)->pageStyle(), pageStylePage2);
+    QCOMPARE(pageManager->page(2)->pageStyle(), pageStylePage3);
+
+    QCOMPARE(pageManager->topOfPage(2), 300.0);
+    QCOMPARE(pageManager->bottomOfPage(2), 900.0);
 
     layout = pageStylePage3->pageLayout();
     layout.height = 500;
@@ -243,19 +272,24 @@ void TestPageManager::pageInfo() {
     layout.bottom = 7;
     layout.right = 8;
     pageManager->defaultPageStyle()->setPageLayout(layout);
-    
+
     layout = pageStylePage2->pageLayout();
     layout.top = 9;
     layout.left = 10;
     layout.bottom = 11;
     layout.right = 12;
     pageStylePage2->setPageLayout(layout);
-    
+
+    layout = page1->pageStyle()->pageLayout();
+    layout.right = 14.0;
+    page1->pageStyle()->setPageLayout(layout);
+    QCOMPARE(page1->rightMargin(), 14.0);
+
+#if 0
     // Page Edge / Page Margin
     layout = pageManager->defaultPageStyle()->pageLayout();
     layout.pageEdge = 14.0;
     pageManager->defaultPageStyle()->setPageLayout(layout);
-
     QCOMPARE(page1->pageSide(), KWPage::Right);
     QCOMPARE(page1->rightMargin(), 14.0);
    
@@ -282,6 +316,7 @@ void TestPageManager::pageInfo() {
     pageStylePage2->setPageLayout(layout);
     //QCOMPARE(page2->rightMargin(), 19.0);
     //QCOMPARE(page2->leftMargin(), 18.0);
+#endif
 }
 
 void TestPageManager::testClipToDocument() {

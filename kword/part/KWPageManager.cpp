@@ -178,7 +178,7 @@ void KWPageManager::removePage(KWPage *page) {
 }
 
 QPointF KWPageManager::clipToDocument(const QPointF &point) {
-    int page=m_firstPage;
+    int page = 0;
     qreal startOfpage = 0.0;
 
     foreach (KWPage *p, m_pageList) {

@@ -227,7 +227,6 @@ private:
 private:
     KWDocument* m_document;
     QList<KWPage*> m_pageList;
-    int m_firstPage;
     bool m_preferPageSpread;
 
     QHash <QString, KWPageStyle *> m_pageStyle;
