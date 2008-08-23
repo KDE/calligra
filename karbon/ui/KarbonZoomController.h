@@ -57,7 +57,7 @@ public slots:
      * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction
      * to restore the persistent data.
      */
-    void setZoom(KoZoomMode::Mode mode, double zoom);
+    void setZoom(KoZoomMode::Mode mode, qreal zoom);
 
     /**
      * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize
@@ -71,7 +71,7 @@ private slots:
     void setAvailableSize();
 
     /// when the canvas controller wants us to change zoom
-    void requestZoomBy(const double factor);
+    void requestZoomBy(const qreal factor);
 
     /// so we know when the page size changed
     void resourceChanged(int key, const QVariant & value);

@@ -82,13 +82,13 @@ private:
         bool usePath;
         bool usePressure;
         bool useAngle;
-        double width;
-        double thinning;
+        qreal width;
+        qreal thinning;
         int angle;
-        double fixation;
-        double caps;
-        double mass;
-        double drag;
+        qreal fixation;
+        qreal caps;
+        qreal mass;
+        qreal drag;
     };
 
     // convenience functions:

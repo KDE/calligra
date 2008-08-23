@@ -60,7 +60,7 @@ void KWPrintingDialog::preparePage(int pageNumber) {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
 #endif
-    const double offsetInDocument = page->offsetInDocument();
+    const qreal offsetInDocument = page->offsetInDocument();
     // find images
     foreach(KWFrameSet *fs, m_document->frameSets()) {
         if(fs->frameCount() == 0) continue;
@@ -81,7 +81,7 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));
 
     painter().translate(0, -pageOffset);
-    double width = page->width();
+    qreal width = page->width();
     int clipHeight = (int) POINT_TO_INCH( resolution * page->height());
     int clipWidth = (int) POINT_TO_INCH( resolution * page->width());
     int offset = bleedOffset;

@@ -86,7 +86,7 @@ public:
     : showStatusBar(true), merge(false), maxRecentFiles(10)
     {}
 
-    double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue)
+    qreal getAttribute(KoXmlElement &element, const char *attributeName, qreal defaultValue)
     {
         QString value = element.attribute( attributeName );
         if( ! value.isEmpty() )
@@ -434,11 +434,11 @@ void KarbonPart::initConfig()
     {
         KoGridData defGrid;
         KConfigGroup gridGroup = config->group( "Grid" );
-        double spacingX = gridGroup.readEntry<double>( "SpacingX", defGrid.gridX() );
-        double spacingY = gridGroup.readEntry<double>( "SpacingY", defGrid.gridY() );
+        qreal spacingX = gridGroup.readEntry<qreal>( "SpacingX", defGrid.gridX() );
+        qreal spacingY = gridGroup.readEntry<qreal>( "SpacingY", defGrid.gridY() );
         gridData().setGrid( spacingX, spacingY );
-        //double snapX = gridGroup.readEntry<double>( "SnapX", defGrid.snapX() );
-        //double snapY = gridGroup.readEntry<double>( "SnapY", defGrid.snapY() );
+        //qreal snapX = gridGroup.readEntry<qreal>( "SnapX", defGrid.snapX() );
+        //qreal snapY = gridGroup.readEntry<qreal>( "SnapY", defGrid.snapY() );
         //d->document.grid().setSnap( snapX, snapY );
         QColor color = gridGroup.readEntry( "Color", defGrid.gridColor() );
         gridData().setGridColor( color );

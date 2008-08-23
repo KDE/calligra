@@ -51,7 +51,7 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames) {
     GuiHelper::State layout = GuiHelper::Unset, runaround = GuiHelper::Unset, raDistance = GuiHelper::Unset;
     KWord::RunAroundSide side = KWord::BiggestRunAroundSide;
     KWord::TextRunAround ra = KWord::RunAround;
-    double distance = 10.0;
+    qreal distance = 10.0;
     foreach(KWFrame *frame, frames) {
         if(layout == GuiHelper::Unset) {
             side = frame->runAroundSide();

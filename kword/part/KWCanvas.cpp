@@ -81,7 +81,7 @@ void KWCanvas::setDocumentOffset(const QPoint &offset) {
     m_documentOffset = offset;
 }
 
-void KWCanvas::gridSize(double *horizontal, double *vertical) const {
+void KWCanvas::gridSize(qreal *horizontal, qreal *vertical) const {
     *horizontal = m_document->gridData().gridX();
     *vertical = m_document->gridData().gridY();
 }
@@ -114,7 +114,7 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const {
     Q_ASSERT(shape);
     const QPointF absPos = shape->absolutePosition();
     const QPointF destination = absPos + move;
-    double bottomOfPage = 0.0;
+    qreal bottomOfPage = 0.0;
     KWPage *page = 0;
     foreach(KWPage *p, m_document->pageManager()->pages()) {
         bottomOfPage += p->height();

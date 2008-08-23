@@ -72,16 +72,16 @@ struct PointData
 class KarbonPathFlattenCommand::Private
 {
 public:
-    Private( KoPathShape * p, double f )
+    Private( KoPathShape * p, qreal f )
     : path( p ), flatness( f ), flattened( false ) {}
 
-    double distance( const QPointF &p )
+    qreal distance( const QPointF &p )
     {
         return qAbs( p.x() ) + qAbs( p.y() );
     }
 
     // splits the given segment at the splitPosition and returns the inserted point
-    KoPathPoint * splitSegment( KoPathPoint *p1, KoPathPoint *p2, double splitPosition )
+    KoPathPoint * splitSegment( KoPathPoint *p1, KoPathPoint *p2, qreal splitPosition )
     {
         if ( !p1->activeControlPoint2() && ! p2->activeControlPoint1() )
             return 0;
@@ -127,7 +127,7 @@ public:
             insertCount = 1 + static_cast<uint>( 2 * qMax( qAbs(p3.x()-p0.x()), qAbs(p3.y()-p0.y()) ) );
         else
         {
-            double d = qMax( distance( p0 - 2*p1 + p2 ), distance( p1 - 2*p2 + p3 ) );
+            qreal d = qMax( distance( p0 - 2*p1 + p2 ), distance( p1 - 2*p2 + p3 ) );
             insertCount = 1 + static_cast<uint>( pow( 2, ( ceil( log2( 0.75 * d / flatness ) / 2 ) ) ) );
         }
 
@@ -135,12 +135,12 @@ public:
     }
 
     KoPathShape * path;
-    double flatness;
-    double flattened;
+    qreal flatness;
+    qreal flattened;
     QList< QList<PointData> > oldPointData;
 };
 
-KarbonPathFlattenCommand::KarbonPathFlattenCommand( KoPathShape * path, double flatness, QUndoCommand * parent )
+KarbonPathFlattenCommand::KarbonPathFlattenCommand( KoPathShape * path, qreal flatness, QUndoCommand * parent )
     : QUndoCommand( parent), d( new Private( path, flatness ) )
 {
     // save original point data

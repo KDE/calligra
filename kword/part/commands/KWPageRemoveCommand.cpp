@@ -56,9 +56,9 @@ void KWPageRemoveCommand::redo() {
     Q_ASSERT(page);
 
     const QRectF pagerect = page->rect();
-    //const double pageheight = page->height();
-    //const double topOfPage = m_document->pageManager()->topOfPage(m_pageNumber);
-    //const double pageoffset = page->offsetInDocument();
+    //const qreal pageheight = page->height();
+    //const qreal topOfPage = m_document->pageManager()->topOfPage(m_pageNumber);
+    //const qreal pageoffset = page->offsetInDocument();
 
     const bool firstRun = m_childcommands.count() == 0;
     if (firstRun) {

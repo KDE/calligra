@@ -32,42 +32,42 @@ KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle) {
     m_textDirectionHint = KoText::AutoDirection;
 }
 
-double KWPage::width() const {
+qreal KWPage::width() const {
     return m_pageStyle->pageLayout().width * (m_pageSide==PageSpread ? 2:1);
 }
 
-double KWPage::height() const {
+qreal KWPage::height() const {
     return m_pageStyle->pageLayout().height;
 }
 
-double KWPage::topMargin() const {
+qreal KWPage::topMargin() const {
     return m_pageStyle->pageLayout().top;
 }
-double KWPage::bottomMargin() const {
+qreal KWPage::bottomMargin() const {
     return m_pageStyle->pageLayout().bottom;
 }
 
-double KWPage::leftMargin() const {
-    double answer = m_pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
+qreal KWPage::leftMargin() const {
+    qreal answer = m_pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
     if(answer != -1)
         return answer;
     return m_pageStyle->pageLayout().left;
 }
 
-double KWPage::rightMargin() const {
-    double answer = m_pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
+qreal KWPage::rightMargin() const {
+    qreal answer = m_pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
     if(answer != -1)
         return answer;
     return m_pageStyle->pageLayout().right;
 }
-double KWPage::pageEdgeMargin() const {
+qreal KWPage::pageEdgeMargin() const {
     return m_pageStyle->pageLayout().pageEdge;
 }
-double KWPage::marginClosestBinding() const {
+qreal KWPage::marginClosestBinding() const {
     return m_pageStyle->pageLayout().bindingSide;
 }
 
-double KWPage::offsetInDocument() const { // the y coordinate
+qreal KWPage::offsetInDocument() const { // the y coordinate
     return m_parent->topOfPage(m_pageNum);
 }
 

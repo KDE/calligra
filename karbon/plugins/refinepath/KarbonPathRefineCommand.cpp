@@ -60,7 +60,7 @@ void KarbonPathRefineCommand::redo()
             // into which we insert the point of this iteration
             QList<KoPathPointData> pointData;
             // calculate the segment position where to insert the point
-            double insertPosition = 1.0 / (d->insertCount+1-iteration);
+            qreal insertPosition = 1.0 / (d->insertCount+1-iteration);
             int subpathCount = d->path->subpathCount();
             // iterate over the paths subpaths
             for( int subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )

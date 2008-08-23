@@ -112,7 +112,7 @@ void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGra
         {
             const QConicalGradient * g = static_cast<const QConicalGradient*>( srcGradient );
             start = g->center();
-            double radAngle = g->angle()*M_PI/180.0;
+            qreal radAngle = g->angle()*M_PI/180.0;
             stop = QPointF( 50.0 * cos( radAngle), 50.*sin( radAngle ) );
             break;
         }
@@ -134,7 +134,7 @@ void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGra
         {
             QRadialGradient * g = static_cast<QRadialGradient*>( dstGradient );
             QPointF diff = stop-start;
-            double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+            qreal radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
             g->setCenter( start );
             g->setFocalPoint( start );
             g->setRadius( radius );
@@ -144,7 +144,7 @@ void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGra
         {
             QConicalGradient * g = static_cast<QConicalGradient*>( dstGradient );
             QPointF diff = stop-start;
-            double angle = atan2( diff.y(), diff.x() );
+            qreal angle = atan2( diff.y(), diff.x() );
             if( angle < 0.0 )
                 angle += 2*M_PI;
             g->setCenter( start );
@@ -247,8 +247,8 @@ void KarbonGradientTabWidget::setupConnections()
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
-    connect( m_opacity, SIGNAL( valueChanged( double, bool ) ), this, SLOT( opacityChanged( double, bool ) ) );
-    connect( m_stopOpacity, SIGNAL(valueChanged(double, bool)), this, SLOT( stopChanged() ) );
+    connect( m_opacity, SIGNAL( valueChanged( qreal, bool ) ), this, SLOT( opacityChanged( qreal, bool ) ) );
+    connect( m_stopOpacity, SIGNAL(valueChanged(qreal, bool)), this, SLOT( stopChanged() ) );
     connect( m_stopColor, SIGNAL(changed(const QColor&)), this, SLOT(stopChanged()) );
 }
 
@@ -306,12 +306,12 @@ void KarbonGradientTabWidget::updateUI()
     blockChildSignals( false );
 }
 
-double KarbonGradientTabWidget::opacity() const
+qreal KarbonGradientTabWidget::opacity() const
 {
     return m_opacity->value() / 100.0;
 }
 
-void KarbonGradientTabWidget::setOpacity( double opacity )
+void KarbonGradientTabWidget::setOpacity( qreal opacity )
 {
     if( opacity < 0.0 || opacity > 1.0 )
         return;
@@ -386,7 +386,7 @@ void KarbonGradientTabWidget::combosChange( int )
     emit changed();
 }
 
-void KarbonGradientTabWidget::opacityChanged( double value, bool final )
+void KarbonGradientTabWidget::opacityChanged( qreal value, bool final )
 {
     Q_UNUSED(final);
 

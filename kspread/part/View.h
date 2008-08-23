@@ -210,7 +210,7 @@ public Q_SLOTS:
     void togglePageBorders( bool );
     void toggleProtectSheet( bool );
     void toggleProtectDoc( bool );
-    void viewZoom( KoZoomMode::Mode mode, double zoom );
+    void viewZoom( KoZoomMode::Mode mode, qreal zoom );
 
     void insertSheet();
     void duplicateSheet();

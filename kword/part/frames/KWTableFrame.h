@@ -66,14 +66,14 @@ public:
     /// A layout property. Marks the frame able to get bigger when there is more text to fit.
     void allowToGrow();
     /// A layout option.  Asks the frame to shrink to a maximum of requestedHeight because there is no more text.
-    void autoShrink(double requestedHeight);
+    void autoShrink(qreal requestedHeight);
 
 private:
     /* TODO
     bool m_drawFootNoteLine; */
 
     int m_sortingId;
-    double m_lastHeight, m_minimumFrameHeight;
+    qreal m_lastHeight, m_minimumFrameHeight;
     bool m_canGrow;
 };
 

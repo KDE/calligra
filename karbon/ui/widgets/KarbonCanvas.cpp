@@ -234,7 +234,7 @@ void KarbonCanvas::resizeEvent( QResizeEvent * )
     updateSizeAndOffset();
 }
 
-void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
+void KarbonCanvas::gridSize(qreal *horizontal, qreal *vertical) const {
     if( horizontal )
         *horizontal = d->part->gridData().gridX();
     if( vertical )

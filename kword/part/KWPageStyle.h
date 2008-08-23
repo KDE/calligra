@@ -83,35 +83,35 @@ public:
     bool hasMainTextFrame() const { return m_mainFrame; }
 
     /// return the distance between the main text and the header
-    Q_SCRIPTABLE double headerDistance() const { return m_headerDistance; }
+    Q_SCRIPTABLE qreal headerDistance() const { return m_headerDistance; }
     /**
      * Set the distance between the main text and the header
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setHeaderDistance(double distance) { m_headerDistance = distance; }
+    Q_SCRIPTABLE void setHeaderDistance(qreal distance) { m_headerDistance = distance; }
 
     /// return the distance between the footer and the frame directly above that (footnote or main)
-    Q_SCRIPTABLE double footerDistance() const { return m_footerDistance; }
+    Q_SCRIPTABLE qreal footerDistance() const { return m_footerDistance; }
     /**
      * Set the distance between the footer and the frame directly above that (footnote or main)
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setFooterDistance(double distance) { m_footerDistance = distance; }
+    Q_SCRIPTABLE void setFooterDistance(qreal distance) { m_footerDistance = distance; }
 
     /// return the distance between the footnote and the main frame.
-    Q_SCRIPTABLE double footnoteDistance() const { return m_footNoteDistance; }
+    Q_SCRIPTABLE qreal footnoteDistance() const { return m_footNoteDistance; }
     /**
      * Set the distance between the footnote and the main frame.
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setFootnoteDistance(double distance) { m_footNoteDistance = distance; }
+    Q_SCRIPTABLE void setFootnoteDistance(qreal distance) { m_footNoteDistance = distance; }
     /// return the distance between the main text frame and the end notes frame.
-    Q_SCRIPTABLE double endNoteDistance() const { return m_endNoteDistance; }
+    Q_SCRIPTABLE qreal endNoteDistance() const { return m_endNoteDistance; }
     /**
      * Set the distance between the main text frame and the end notes frame.
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setEndNoteDistance(double distance) { m_endNoteDistance = distance; }
+    Q_SCRIPTABLE void setEndNoteDistance(qreal distance) { m_endNoteDistance = distance; }
 
     /// return the line length of the foot note separator line, in percent of the pagewidth
     Q_SCRIPTABLE int footNoteSeparatorLineLength() const { return m_footNoteSeparatorLineLength;}
@@ -119,9 +119,9 @@ public:
     Q_SCRIPTABLE void setFootNoteSeparatorLineLength( int length){  m_footNoteSeparatorLineLength = length;}
 
     /// return the thickness of the line (in pt) drawn above the foot notes
-    Q_SCRIPTABLE double footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
+    Q_SCRIPTABLE qreal footNoteSeparatorLineWidth() const { return m_footNoteSeparatorLineWidth;}
     /// set the thickness of the line (in pt) drawn above the foot notes
-    Q_SCRIPTABLE void setFootNoteSeparatorLineWidth( double width){  m_footNoteSeparatorLineWidth=width;}
+    Q_SCRIPTABLE void setFootNoteSeparatorLineWidth( qreal width){  m_footNoteSeparatorLineWidth=width;}
 
     /// return the pen style used to draw the foot note separator line
     Qt::PenStyle footNoteSeparatorLineType() const { return m_footNoteSeparatorLineType;}
@@ -182,12 +182,12 @@ private:
     KoPageLayout m_pageLayout;
     QString m_masterName;
     bool m_mainFrame;
-    double m_headerDistance, m_footerDistance, m_footNoteDistance, m_endNoteDistance;
+    qreal m_headerDistance, m_footerDistance, m_footNoteDistance, m_endNoteDistance;
     KWord::HeaderFooterType m_headers, m_footers;
     // These framesets are deleted by KWDocument.
     QMap<KWord::TextFrameSetType, KWTextFrameSet *> m_hfFrameSets;
 
-    double m_footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
+    qreal m_footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
     int m_footNoteSeparatorLineLength; ///< It's a percentage of page.
     Qt::PenStyle m_footNoteSeparatorLineType; ///< foot note separate type
     KWord::FootNoteSeparatorLinePos m_footNoteSeparatorLinePos; ///< alignment in page

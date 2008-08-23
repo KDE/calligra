@@ -124,7 +124,7 @@ private:
 
     enum Handles { center, direction };
 
-    double m_normalizedLength; ///< the normalized direction vector length
+    qreal m_normalizedLength; ///< the normalized direction vector length
     QPointF m_origin;          ///< the pattern handle origin
 };
 

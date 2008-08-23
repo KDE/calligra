@@ -37,7 +37,7 @@
 #include <kdebug.h>
 
 int GradientStrategy::m_handleRadius = 3;
-const double stopDistance = 15.0;
+const qreal stopDistance = 15.0;
 
 
 GradientStrategy::GradientStrategy( KoShape *shape, const QGradient * gradient, Target target )
@@ -116,7 +116,7 @@ bool GradientStrategy::hitHandle( const QPointF &mousePos, const KoViewConverter
 
 bool GradientStrategy::hitLine( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
-    double maxDistance = handleRect( converter ).size().width();
+    qreal maxDistance = handleRect( converter ).size().width();
     if( mouseAtLineSegment( mousePos, maxDistance ) )
     {
         m_lastMousePos = mousePos;
@@ -217,29 +217,29 @@ void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converte
         paintHandle( painter, converter, m_matrix.map( handle ) );
 }
 
-double GradientStrategy::projectToGradientLine( const QPointF &point )
+qreal GradientStrategy::projectToGradientLine( const QPointF &point )
 {
     QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
     QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
     QPointF diff = stopPoint - startPoint;
-    double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+    qreal diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
     if( diffLength == 0.0f )
         return 0.0f;
     // project mouse position relative to stop position on gradient line
-    double scalar = KarbonGlobal::scalarProduct( point-startPoint, diff / diffLength );
+    qreal scalar = KarbonGlobal::scalarProduct( point-startPoint, diff / diffLength );
     return scalar /= diffLength;
 }
 
-bool GradientStrategy::mouseAtLineSegment( const QPointF &mousePos, double maxDistance )
+bool GradientStrategy::mouseAtLineSegment( const QPointF &mousePos, qreal maxDistance )
 {
-    double scalar = projectToGradientLine( mousePos );
+    qreal scalar = projectToGradientLine( mousePos );
     if( scalar < 0.0 || scalar > 1.0 )
         return false;
     // calculate vector between relative mouse position and projected mouse position
     QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
     QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
     QPointF distVec = startPoint + scalar * (stopPoint-startPoint) - mousePos;
-    double dist = distVec.x()*distVec.x() + distVec.y()*distVec.y();
+    qreal dist = distVec.x()*distVec.x() + distVec.y()*distVec.y();
     if( dist > maxDistance*maxDistance )
         return false;
 
@@ -267,7 +267,7 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
             break;
         case Stop:
         {
-            double scalar = projectToGradientLine( mouseLocation ); 
+            qreal scalar = projectToGradientLine( mouseLocation ); 
             scalar = qMax( 0.0, scalar );
             scalar = qMin( scalar, 1.0 );
             m_stops[m_selectionIndex].first = scalar;
@@ -285,9 +285,9 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
 {
     if( m_selection == Line )
     {
-        // double click on gradient line inserts a new gradient stop
+        // qreal click on gradient line inserts a new gradient stop
 
-        double scalar = projectToGradientLine( mouseLocation );
+        qreal scalar = projectToGradientLine( mouseLocation );
         // calculate distance to gradient line
         QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
         QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
@@ -322,7 +322,7 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
         {
             // linear interpolate colors between framing stops
             QColor prevColor = prevStop.second, nextColor = nextStop.second;
-            double colorScale = (scalar - prevStop.first) / (nextStop.first - prevStop.first);
+            qreal colorScale = (scalar - prevStop.first) / (nextStop.first - prevStop.first);
             newColor.setRedF( prevColor.redF() + colorScale * (nextColor.redF()-prevColor.redF()) );
             newColor.setGreenF( prevColor.greenF() + colorScale * (nextColor.greenF()-prevColor.greenF()) );
             newColor.setBlueF( prevColor.blueF() + colorScale * (nextColor.blueF()-prevColor.blueF()) );
@@ -332,7 +332,7 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
     }
     else if( m_selection == Stop )
     {
-        // double click on stop handle removes gradient stop
+        // qreal click on stop handle removes gradient stop
 
         // do not allow removing one of the last two stops
         if( m_stops.count() <= 2 )
@@ -544,7 +544,7 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles( const KoViewC
     // using the cross product of the line vector and the negative z-axis
     QPointF diff = stop-start;
     QPointF ortho( -diff.y(), diff.x() );
-    double orthoLength = sqrt( ortho.x()*ortho.x() + ortho.y()*ortho.y() );
+    qreal orthoLength = sqrt( ortho.x()*ortho.x() + ortho.y()*ortho.y() );
     if( orthoLength == 0.0 )
         ortho = QPointF( stopDistance, 0.0f );
     else
@@ -597,7 +597,7 @@ RadialGradientStrategy::RadialGradientStrategy( KoShape *shape, const QRadialGra
 QBrush RadialGradientStrategy::brush()
 {
     QPointF d = m_handles[radius]-m_handles[center];
-    double r = sqrt( d.x()*d.x() + d.y()*d.y() );
+    qreal r = sqrt( d.x()*d.x() + d.y()*d.y() );
     QRadialGradient gradient( m_handles[center], r, m_handles[focal] );
     gradient.setStops( m_stops );
     gradient.setSpread( m_oldBrush.gradient()->spread() );
@@ -609,8 +609,8 @@ QBrush RadialGradientStrategy::brush()
 ConicalGradientStrategy::ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient, Target target )
 : GradientStrategy( shape, gradient, target )
 {
-    double angle = gradient->angle() * M_PI / 180.0;
-    double scale = 0.25 * ( shape->size().height() + shape->size().width() );
+    qreal angle = gradient->angle() * M_PI / 180.0;
+    qreal scale = 0.25 * ( shape->size().height() + shape->size().width() );
     m_handles.append( gradient->center() );
     m_handles.append( gradient->center() + scale * QPointF( cos( angle ), -sin( angle ) ) );
 }
@@ -618,7 +618,7 @@ ConicalGradientStrategy::ConicalGradientStrategy( KoShape *shape, const QConical
 QBrush ConicalGradientStrategy::brush()
 {
     QPointF d = m_handles[direction]-m_handles[center];
-    double angle = atan2( -d.y(), d.x() ) / M_PI * 180.0;
+    qreal angle = atan2( -d.y(), d.x() ) / M_PI * 180.0;
     if( angle < 0.0 )
         angle += 360;
     QConicalGradient gradient( m_handles[center], angle );

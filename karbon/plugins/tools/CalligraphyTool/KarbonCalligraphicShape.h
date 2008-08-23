@@ -27,20 +27,20 @@
 class KarbonCalligraphicPoint
 {
 public:
-    KarbonCalligraphicPoint(const QPointF &point, double angle, double width)
+    KarbonCalligraphicPoint(const QPointF &point, qreal angle, qreal width)
         : m_point(point), m_angle(angle), m_width(width) {}
 
     QPointF point() const {return m_point;}
-    double angle() const {return m_angle;}
-    double width() const {return m_width;}
+    qreal angle() const {return m_angle;}
+    qreal width() const {return m_width;}
 
     void setPoint(const QPointF &point) {m_point = point;}
-    void setAngle(double angle) {m_angle = angle;}
+    void setAngle(qreal angle) {m_angle = angle;}
 
 private:
     QPointF m_point; // in shape coordinates
-    double m_angle;
-    double m_width;
+    qreal m_angle;
+    qreal m_width;
 };
 
 /*class KarbonCalligraphicShape::Point
@@ -61,7 +61,7 @@ public:
 private:
     KoPainterPath m_prev;
     KoPainterPath m_next;
-    double m_percentage;
+    qreal m_percentage;
 };*/
 
 // the indexes of the path will be similar to:
@@ -71,10 +71,10 @@ private:
 class KarbonCalligraphicShape : public KoParameterShape
 {
 public:
-    KarbonCalligraphicShape( double caps=0.0 );
+    KarbonCalligraphicShape( qreal caps=0.0 );
     ~KarbonCalligraphicShape();
 
-    void appendPoint( const QPointF &p1, double angle, double width );
+    void appendPoint( const QPointF &p1, qreal angle, qreal width );
     void appendPointToPath(const KarbonCalligraphicPoint &p);
 
     // returns the bounding rect of whan needs to be repainted
@@ -125,7 +125,7 @@ private:
     // the actual data then determines it's shape (guide path + data for points)
     QList<KarbonCalligraphicPoint *> m_points;
     bool m_lastWasFlip;
-    double m_caps;
+    qreal m_caps;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H

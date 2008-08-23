@@ -145,32 +145,32 @@ WhirlPinchDlg::WhirlPinchDlg( QWidget* parent, const char* name )
     setMainWidget( mainWidget );
 }
 
-double WhirlPinchDlg::angle() const
+qreal WhirlPinchDlg::angle() const
 {
     return m_angle->value();
 }
 
-double WhirlPinchDlg::pinch() const
+qreal WhirlPinchDlg::pinch() const
 {
     return m_pinch->value();
 }
 
-double WhirlPinchDlg::radius() const
+qreal WhirlPinchDlg::radius() const
 {
     return m_radius->value();
 }
 
-void WhirlPinchDlg::setAngle( double value )
+void WhirlPinchDlg::setAngle( qreal value )
 {
     m_angle->setValue( value);
 }
 
-void WhirlPinchDlg::setPinch( double value )
+void WhirlPinchDlg::setPinch( qreal value )
 {
     m_pinch->setValue(value);
 }
 
-void WhirlPinchDlg::setRadius( double value )
+void WhirlPinchDlg::setRadius( qreal value )
 {
     m_radius->setValue( value);
 }

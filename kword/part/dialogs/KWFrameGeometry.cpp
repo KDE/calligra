@@ -44,13 +44,13 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
 
     widget.keepAspect->setKeepAspectRatio(m_state->keepAspectRatio());
 
-    connect(widget.leftMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
-    connect(widget.rightMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
-    connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
-    connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
+    connect(widget.leftMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(syncMargins(qreal)));
+    connect(widget.rightMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(syncMargins(qreal)));
+    connect(widget.bottomMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(syncMargins(qreal)));
+    connect(widget.topMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(syncMargins(qreal)));
 
-    connect(widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(widthChanged(double)));
-    connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(heightChanged(double)));
+    connect(widget.width, SIGNAL(valueChangedPt(qreal)), this, SLOT(widthChanged(qreal)));
+    connect(widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(heightChanged(qreal)));
 
     connect(m_state, SIGNAL(keepAspectRatioChanged(bool)), widget.keepAspect, SLOT(setKeepAspectRatio(bool)));
     connect(widget.keepAspect, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(updateAspectRatio(bool)));
@@ -128,7 +128,7 @@ void KWFrameGeometry::protectSizeChanged(int protectSizeState)
     widget.keepAspect->setDisabled(lock);
 }
 
-void KWFrameGeometry::syncMargins(double value) {
+void KWFrameGeometry::syncMargins(qreal value) {
     if(! widget.synchronize->isChecked())
         return;
 
@@ -153,7 +153,7 @@ void KWFrameGeometry::cancel() {
     frame->shape()->setSize(m_originalSize);
 }
 
-void KWFrameGeometry::widthChanged(double value) {
+void KWFrameGeometry::widthChanged(qreal value) {
     if(! m_state->keepAspectRatio())  return;
     if(m_blockSignals) return;
     m_blockSignals = true;
@@ -161,7 +161,7 @@ void KWFrameGeometry::widthChanged(double value) {
     m_blockSignals = false;
 }
 
-void KWFrameGeometry::heightChanged(double value) {
+void KWFrameGeometry::heightChanged(qreal value) {
     if(! m_state->keepAspectRatio())  return;
     if(m_blockSignals) return;
     m_blockSignals = true;

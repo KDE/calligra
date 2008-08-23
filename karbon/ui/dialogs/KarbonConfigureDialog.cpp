@@ -334,8 +334,8 @@ ConfigGridPage::ConfigGridPage( KarbonView* view, char* name )
 
     setValuesFromGrid( view->part()->gridData() );
 
-    connect(m_spaceHorizUSpin, SIGNAL(valueChangedPt(double)),this,SLOT(spinBoxHSpacingChanged(double)));
-    connect(m_spaceVertUSpin, SIGNAL(valueChangedPt(double)),this,SLOT(spinBoxVSpacingChanged(double)));
+    connect(m_spaceHorizUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxHSpacingChanged(qreal)));
+    connect(m_spaceVertUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxVSpacingChanged(qreal)));
 }
 
 void ConfigGridPage::slotUnitChanged( int u )
@@ -384,13 +384,13 @@ void ConfigGridPage::setValuesFromGrid( const KoGridData &grid )
     m_gridColorBtn->setColor( grid.gridColor() );
 }
 
-void ConfigGridPage::spinBoxHSpacingChanged( double v )
+void ConfigGridPage::spinBoxHSpacingChanged( qreal v )
 {
     if ( m_bnLinkSpacing->keepAspectRatio() )
         m_spaceVertUSpin->changeValue(v);
 }
 
-void ConfigGridPage::spinBoxVSpacingChanged( double v )
+void ConfigGridPage::spinBoxVSpacingChanged( qreal v )
 {
     if ( m_bnLinkSpacing->keepAspectRatio() )
         m_spaceHorizUSpin->changeValue(v);

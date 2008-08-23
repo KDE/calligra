@@ -56,8 +56,8 @@ KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KAct
 {
     d->canvasController = controller;
     d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), false, 0);
-    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
-            this, SLOT(setZoom(KoZoomMode::Mode, double)));
+    connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+            this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
 
     actionCollection->addAction("view_zoom", d->action);
     actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", d->action, SLOT(zoomIn()));
@@ -67,7 +67,7 @@ KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KAct
     d->zoomHandler = dynamic_cast<KoZoomHandler*>( const_cast<KoViewConverter*>(d->canvas->viewConverter() ) );
 
     connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize() ) );
-    connect(d->canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
+    connect(d->canvasController, SIGNAL( zoomBy(const qreal ) ), this, SLOT( requestZoomBy( const qreal ) ) );
     connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 
@@ -90,7 +90,7 @@ void KarbonZoomController::setZoomMode( KoZoomMode::Mode mode )
     setZoom( mode, 1.0 );
 }
 
-void KarbonZoomController::setZoom( KoZoomMode::Mode mode, double zoom )
+void KarbonZoomController::setZoom( KoZoomMode::Mode mode, qreal zoom )
 {
     if (d->zoomHandler->zoomMode() == mode && d->zoomHandler->zoom() == zoom)
         return; // no change
@@ -162,9 +162,9 @@ void KarbonZoomController::setAvailableSize()
         setZoom(KoZoomMode::ZOOM_PAGE, -1);
 }
 
-void KarbonZoomController::requestZoomBy(const double factor)
+void KarbonZoomController::requestZoomBy(const qreal factor)
 {
-    double zoom = d->zoomHandler->zoom();
+    qreal zoom = d->zoomHandler->zoom();
     d->action->setZoom(factor*zoom);
     setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
     d->action->setEffectiveZoom(factor*zoom);

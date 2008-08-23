@@ -51,7 +51,7 @@ private slots:
     void setDelta( double delta );
 private:
 
-    double lineAngle( const QPointF &p1, const QPointF &p2 );
+    qreal lineAngle( const QPointF &p1, const QPointF &p2 );
     void addPoint( const QPointF & point );
     void finish( bool closePath );
 
@@ -60,8 +60,8 @@ private:
     PencilMode m_mode;
     bool m_optimizeRaw;
     bool m_optimizeCurve;
-    double m_combineAngle;
-    double m_fittingError;
+    qreal m_combineAngle;
+    qreal m_fittingError;
     bool m_close;
 
     QList<QPointF> m_points; // the raw points

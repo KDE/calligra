@@ -60,7 +60,7 @@ public:
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
-    virtual void gridSize(double *horizontal, double *vertical) const;
+    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
     /// reimplemented method from superclass
     virtual bool snapToGrid() const;
     /// reimplemented method from superclass

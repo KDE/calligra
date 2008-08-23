@@ -141,9 +141,9 @@ namespace Scripting {
             void setTextRunAround(int textrunaround) { return m_frame->setTextRunAround( (KWord::TextRunAround) textrunaround ); }
 
             /** Return the space between this frames edge and the text when that text runs around this frame. */
-            double runAroundDistance() const { return m_frame->runAroundDistance(); }
+            qreal runAroundDistance() const { return m_frame->runAroundDistance(); }
             /** Set the space between this frames edge and the text when that text runs around this frame. */
-            void setRunAroundDistance(double runarounddistance) { m_frame->setRunAroundDistance(runarounddistance); }
+            void setRunAroundDistance(qreal runarounddistance) { m_frame->setRunAroundDistance(runarounddistance); }
 
             /** Request a repaint to be queued. */
             void update() const { m_frame->shape()->update(); }
@@ -154,20 +154,20 @@ namespace Scripting {
             void setVisible(bool on) { m_frame->shape()->setVisible(on); }
 
             /** Scale the shape using the zero-point which is the top-left corner. */
-            void setScale(double sx, double sy) { m_frame->shape()->setScale(sx, sy); }
+            void setScale(qreal sx, qreal sy) { m_frame->shape()->setScale(sx, sy); }
 
             /** Return the current rotation in degrees, or NAN if its been transformed too much to extract that info. */
-            double rotation() const { return m_frame->shape()->rotation(); }
+            qreal rotation() const { return m_frame->shape()->rotation(); }
             /** The shape will have the rotation added, using the center of the shape using the size(). */
-            void rotate(double angle) { m_frame->shape()->rotate(angle); }
+            void rotate(qreal angle) { m_frame->shape()->rotate(angle); }
 
             /** The shape will be sheared using the zero-point which is the top-left corner. */
-            void setShear(double sx, double sy) { m_frame->shape()->setShear(sx, sy); }
+            void setShear(qreal sx, qreal sy) { m_frame->shape()->setShear(sx, sy); }
 
             /** Get the width of the shape in pt. */
-            double width() const { return m_frame->shape()->size().width(); }
+            qreal width() const { return m_frame->shape()->size().width(); }
             /** Get the width of the shape in pt. */
-            double height() const { return m_frame->shape()->size().height(); }
+            qreal height() const { return m_frame->shape()->size().height(); }
             /**
             * Resize the shape.
             *
@@ -179,12 +179,12 @@ namespace Scripting {
             * myshape.setSize(w/2.0, h/2.0)
             * \endcode
             */
-            void setSize(double width, double height) { m_frame->shape()->setSize(QSizeF(width,height)); }
+            void setSize(qreal width, qreal height) { m_frame->shape()->setSize(QSizeF(width,height)); }
 
             /** Get the X-position of the shape in pt. */
-            double positionX() const { return m_frame->shape()->position().x(); }
+            qreal positionX() const { return m_frame->shape()->position().x(); }
             /** Get the Y-position of the shape in pt. */
-            double positionY() const { return m_frame->shape()->position().y(); }
+            qreal positionY() const { return m_frame->shape()->position().y(); }
             /**
             * Set the position of the shape in pt.
             *
@@ -196,7 +196,7 @@ namespace Scripting {
             * myshape.setPosition(x+10,y+50)
             * \endcode
             */
-            void setPosition(double x, double y) { m_frame->shape()->setPosition(QPointF(x,y)); }
+            void setPosition(qreal x, qreal y) { m_frame->shape()->setPosition(QPointF(x,y)); }
 
             /** Retrieve the z-coordinate of this shape. */
             int zIndex() const { return m_frame->shape()->zIndex(); }

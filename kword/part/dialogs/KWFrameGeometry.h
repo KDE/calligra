@@ -52,16 +52,16 @@ public:
 private slots:
     void updateShape();
     void protectSizeChanged(int protectSizeState);
-    void syncMargins(double value);
+    void syncMargins(qreal value);
 
-    void widthChanged(double value);
-    void heightChanged(double value);
+    void widthChanged(qreal value);
+    void heightChanged(qreal value);
     void setGeometryAlignment(KoFlake::Position position);
     void updateAspectRatio(bool);
 
 private:
-    double leftPos() const;
-    double topPos() const;
+    qreal leftPos() const;
+    qreal topPos() const;
 
 private:
     Ui::KWFrameGeometry widget;

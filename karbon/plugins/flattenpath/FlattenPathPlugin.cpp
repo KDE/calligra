@@ -114,12 +114,12 @@ FlattenDlg::FlattenDlg( QWidget* parent, const char* name )
     setMainWidget( group );
 }
 
-double FlattenDlg::flatness() const
+qreal FlattenDlg::flatness() const
 {
     return m_flatness->value();
 }
 
-void FlattenDlg::setFlatness( double value )
+void FlattenDlg::setFlatness( qreal value )
 {
     m_flatness->setValue( value);
 }

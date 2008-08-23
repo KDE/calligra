@@ -731,15 +731,15 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
     element = layout.namedItem( "LINESPACING" ).toElement();
     if ( !element.isNull() ) {
         QString type = element.attribute("type", "fixed");
-        double spacing = element.attribute("spacingValue").toDouble();
+        qreal spacing = element.attribute("spacingValue").toDouble();
         if(type == "oneandhalf")
             style->setLineHeightPercent(150);
-        else if(type == "double")
+        else if(type == "qreal")
             style->setLineHeightPercent(200);
         else if(type == "custom") {
             if(spacing == 0.0) {
                 // see if kword 1.1 compatibility is needed
-                if(element.attribute("value") == "double")
+                if(element.attribute("value") == "qreal")
                     style->setLineHeightPercent(200);
                 else if(element.attribute("value") == "oneandhalf")
                     style->setLineHeightPercent(150);
@@ -843,7 +843,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
                     break;
             }
         }
-        double width, innerWidth, spacing;
+        qreal width, innerWidth, spacing;
         KoParagraphStyle::BorderStyle borderStyle;
     };
     element = layout.namedItem( "LEFTBORDER" ).toElement();
@@ -939,7 +939,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem) {
         QString value = element.attribute("value", "0"); // "0" is NoUnderline
         if(value == "1" || value=="single")
             style->setUnderlineType( KoCharacterStyle::SingleLine );
-        else if(value == "double")
+        else if(value == "qreal")
             style->setUnderlineType( KoCharacterStyle::DoubleLine );
         else if(value == "single-bold")
             style->setUnderlineType( KoCharacterStyle::SingleLine ); // TODO support single-bold underline!
@@ -988,9 +988,9 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
             frameElem.attribute("bottom").toDouble() - origin.y() );
 
     // increase offset of each frame to account for the padding.
-    double pageHeight = m_pageManager->defaultPageStyle()->pageLayout().height;
+    qreal pageHeight = m_pageManager->defaultPageStyle()->pageLayout().height;
     Q_ASSERT(pageHeight); // can not be 0
-    double offset =  (int) (origin.y() / pageHeight) * (m_pageManager->padding().top + m_pageManager->padding().bottom);
+    qreal offset =  (int) (origin.y() / pageHeight) * (m_pageManager->padding().top + m_pageManager->padding().bottom);
     origin.setY(origin.y() + offset);
 
     frame->shape()->setPosition(origin);

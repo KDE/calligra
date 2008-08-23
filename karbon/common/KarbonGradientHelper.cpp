@@ -176,7 +176,7 @@ QGradient * KarbonGradientHelper::convertGradient( const QGradient * gradient, Q
         {
             const QConicalGradient * g = static_cast<const QConicalGradient*>( gradient );
             start = g->center();
-            double radAngle = g->angle()*M_PI/180.0;
+            qreal radAngle = g->angle()*M_PI/180.0;
             stop = QPointF( 50.0 * cos( radAngle ), 50.*sin( radAngle ) );
             break;
         }
@@ -194,14 +194,14 @@ QGradient * KarbonGradientHelper::convertGradient( const QGradient * gradient, Q
         case QGradient::RadialGradient:
         {
             QPointF diff = stop-start;
-            double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+            qreal radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
             newGradient = new QRadialGradient( start, radius, start );
             break;
         }
         case QGradient::ConicalGradient:
         {
             QPointF diff = stop-start;
-            double angle = atan2( diff.y(), diff.x() );
+            qreal angle = atan2( diff.y(), diff.x() );
             if( angle < 0.0 )
                 angle += 2*M_PI;
             newGradient = new QConicalGradient( start, angle*180/M_PI );

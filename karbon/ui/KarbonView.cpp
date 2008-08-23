@@ -480,7 +480,7 @@ void KarbonView::editPaste()
         return;
 
     // Paste with a small offset.
-    double copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
+    qreal copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
     part()->addCommand( new VInsertCmd( &part()->document(),
                                         objects.count() == 1
                                             ? i18n( "Paste Object" )
@@ -680,7 +680,7 @@ void KarbonView::selectionDuplicate()
     }
 
     // Paste with a small offset.
-    double copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
+    qreal copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
     part()->addCommand( new VInsertCmd( &part()->document(),
                                         objects.count() == 1
                                             ? i18n( "Duplicate Object" )
@@ -1182,8 +1182,8 @@ void KarbonView::mousePositionChanged( const QPoint &position )
     d->vertRuler->updateMouseCoordinate( viewPos.y() );
 
     QPointF documentPos = d->canvas->viewConverter()->viewToDocument( viewPos );
-    double x = part()->unit().toUserValue(documentPos.x());
-    double y = part()->unit().toUserValue(documentPos.y());
+    qreal x = part()->unit().toUserValue(documentPos.x());
+    qreal y = part()->unit().toUserValue(documentPos.y());
 
     d->cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
 }

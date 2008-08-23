@@ -127,7 +127,7 @@ private slots:
     /// convert current frame to an inline frame
     void inlineFrame();
     /// called if the zoom changed
-    void zoomChanged (KoZoomMode::Mode mode, double zoom);
+    void zoomChanged (KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
     void showStatisticsDialog();
     /// shows or hides the rulers

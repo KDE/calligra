@@ -22,6 +22,8 @@
 
 class KoPathShape;
 
-void karbonSimplifyPath( KoPathShape *path, double error );
+#include <QtCore/qglobal.h>
+
+void karbonSimplifyPath( KoPathShape *path, qreal error );
 
 #endif // KARBONSIMPLIFYPATH_H

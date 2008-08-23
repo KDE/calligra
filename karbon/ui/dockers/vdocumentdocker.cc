@@ -82,9 +82,9 @@ VDocumentPreview::reset()
 bool
 VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 {
-	double scaleFactor;
-	double xoffset = 0.;
-	double yoffset = 0.;
+	qreal scaleFactor;
+	qreal xoffset = 0.;
+	qreal yoffset = 0.;
 
     QSizeF pageSize = m_document->pageSize();
 	if ( ( height() - 4 ) / pageSize.height() > ( width() - 4 ) / pageSize.width() )
@@ -117,8 +117,8 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		{
 			m_lastPoint.setX( mouseEvent->pos().x() );
 			m_lastPoint.setY( mouseEvent->pos().y() );
-			double dx = m_lastPoint.x() - m_firstPoint.x();
-			double dy = m_lastPoint.y() - m_firstPoint.y();
+			qreal dx = m_lastPoint.x() - m_firstPoint.x();
+			qreal dy = m_lastPoint.y() - m_firstPoint.y();
 			scaleFactor /= m_view->zoom();
 	// TODO: needs porting
 			// m_view->canvasWidget()->scrollContentsBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
@@ -134,8 +134,8 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 			m_lastPoint.setX( mouseEvent->pos().x() );
 			m_lastPoint.setY( mouseEvent->pos().y() );
 			update();
-			/*double dx = m_lastPoint.x() - m_firstPoint.x();
-			double dy = m_lastPoint.y() - m_firstPoint.y();
+			/*qreal dx = m_lastPoint.x() - m_firstPoint.x();
+			qreal dy = m_lastPoint.y() - m_firstPoint.y();
 			scaleFactor /= m_view->zoom();
 			m_view->canvasWidget()->scrollBy( int( dx / scaleFactor ), int( dy / scaleFactor ) );
 			m_firstPoint = m_lastPoint;*/
@@ -156,9 +156,9 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 {
 	// TODO : use NotROP, otherwise too slow
 	QPixmap pixmap( width(), height() );
-	double xoffset = 0.;
-	double yoffset = 0.;
-	double scaleFactor;
+	qreal xoffset = 0.;
+	qreal yoffset = 0.;
+	qreal scaleFactor;
 
     QSizeF pageSize = m_document->pageSize();
     if ( ( height() - 4 ) / pageSize.height() > ( width() - 4 ) / pageSize.width() )
@@ -199,8 +199,8 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		QPainter p( &pixmap );
 		p.setMatrix( QMatrix( scaleFactor, 0, 0, -scaleFactor, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setPen( QColor( "red" ) );
-		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
-		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
+		qreal dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
+		qreal dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
 		QPointF p1( dx / scaleFactor, dy / scaleFactor );
 	// TODO: needs porting
 		// p1 = m_view->canvasWidget()->toContents( p1 );
@@ -292,7 +292,7 @@ VDocumentTab::slotCommandAdded( VCommand * )
 }
 
 void
-VDocumentTab::slotZoomChanged( double )
+VDocumentTab::slotZoomChanged( qreal )
 {
 	m_documentPreview->update();
 }

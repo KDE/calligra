@@ -58,7 +58,7 @@ public:
      * return pageNumber of page with document-offset (in the Y direction) of @p ptY,
      * pagenumbers for a normal document start at 0.
      */
-    Q_SCRIPTABLE int pageNumber(double ptY) const;
+    Q_SCRIPTABLE int pageNumber(qreal ptY) const;
 
     /**
      * return total number of pages in this document.
@@ -84,7 +84,7 @@ public:
      * return the KWPage instance of the y-coordinate in the document. Returns 0 if
      * page does not exist.
      */
-    KWPage* page(double ptY) const;
+    KWPage* page(qreal ptY) const;
 
     /**
      * Return the y-offset in this document of the top of page with @p pageNumber
@@ -92,14 +92,14 @@ public:
      * of the page.
      * @see setStartPage(int)
      */
-    double topOfPage(int pageNumber) const; // in pt
+    qreal topOfPage(int pageNumber) const; // in pt
     /**
      * Return the y-offset in this document of the bottom of page with @p pageNumber
      * Note that pageNumber is NOT an offset in the document, but the real number
      * of the page.
      * @see setStartPage(int)
      */
-    double bottomOfPage(int pageNumber) const; // in pt
+    qreal bottomOfPage(int pageNumber) const; // in pt
 
     /**
      * Inserts a new page at the specified position in the document.
@@ -221,7 +221,7 @@ public:
 
 private:
     /// helper method for the topOfPage and bottomOfPage
-    double pageOffset(int pageNumber, bool bottom) const;
+    qreal pageOffset(int pageNumber, bool bottom) const;
     friend class KWPage;
 
 private:

@@ -181,7 +181,7 @@ void KarbonPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     {
         QPointF newPos = m_matrix.inverted().map( mouseLocation ) - m_origin - m_handles[center];
         // calculate the temporary length after handle movement
-        double newLength = sqrt( newPos.x()*newPos.x() + newPos.y()*newPos.y() );
+        qreal newLength = sqrt( newPos.x()*newPos.x() + newPos.y()*newPos.y() );
         // set the new direction vector with the new direction and normalized length
         m_handles[m_selectedHandle] = m_handles[center] + m_normalizedLength / newLength * newPos;
     }
@@ -224,7 +224,7 @@ KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
 {
     // the direction vector controls the rotation of the pattern
     QPointF dirVec = m_handles[direction]-m_handles[center];
-    double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
+    qreal angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
     QMatrix matrix;
     // the center handle controls the translation
     matrix.translate( m_handles[center].x(), m_handles[center].y() );

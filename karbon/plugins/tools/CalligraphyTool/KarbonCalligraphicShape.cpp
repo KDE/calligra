@@ -31,9 +31,9 @@
 #include <cstdlib>
 
 #undef M_PI
-const double M_PI = 3.1415927;
+const qreal M_PI = 3.1415927;
 
-KarbonCalligraphicShape::KarbonCalligraphicShape( double caps )
+KarbonCalligraphicShape::KarbonCalligraphicShape( qreal caps )
     : m_caps( caps )
 {
     setShapeId( KoPathShapeId );
@@ -47,8 +47,8 @@ KarbonCalligraphicShape::~KarbonCalligraphicShape()
 }
 
 void KarbonCalligraphicShape::appendPoint( const QPointF &point,
-                                           double angle,
-                                           double width )
+                                           qreal angle,
+                                           qreal width )
 {
     // convert the point from canvas to shape coordinates
     QPointF p = point - position();
@@ -72,8 +72,8 @@ void KarbonCalligraphicShape::appendPoint( const QPointF &point,
 void KarbonCalligraphicShape::
         appendPointToPath( const KarbonCalligraphicPoint &p )
 {
-    double dx = std::cos( p.angle() ) * p.width();
-    double dy = std::sin( p.angle() ) * p.width();
+    qreal dx = std::cos( p.angle() ) * p.width();
+    qreal dy = std::sin( p.angle() ) * p.width();
 
     // find the outline points
     QPointF p1 = p.point() - QPointF( dx/2, dy/2 );
@@ -195,14 +195,14 @@ void KarbonCalligraphicShape::smoothPoint( const int index )
     QPointF next = pointByIndex( NEXT )->point();
 
     QPointF vector = next - prev;
-    double dist = ( QLineF( prev, next ) ).length();
+    qreal dist = ( QLineF( prev, next ) ).length();
     // normalize the vector (make it's size equal to 1)
     if ( ! qFuzzyCompare(dist + 1, 1) )
         vector /= dist;
-    double mult = 0.35; // found by trial and error, might not be perfect...
+    qreal mult = 0.35; // found by trial and error, might not be perfect...
     // distance of the control points from the point
-    double dist1 = ( QLineF( point, prev ) ).length() * mult;
-    double dist2 = ( QLineF( point, next ) ).length() * mult;
+    qreal dist1 = ( QLineF( point, prev ) ).length() * mult;
+    qreal dist2 = ( QLineF( point, next ) ).length() * mult;
     QPointF vector1 = vector * dist1;
     QPointF vector2 = vector * dist2;
     QPointF controlPoint1 = point - vector1;
@@ -259,7 +259,7 @@ int KarbonCalligraphicShape::ccw( const QPointF &p1,
                                  const QPointF &p3 )
 {
     // calculate two times the area of the triangle fomed by the points given
-    double area2 = ( p2.x() - p1.x() ) * ( p3.y() - p1.y() ) -
+    qreal area2 = ( p2.x() - p1.x() ) * ( p3.y() - p1.y() ) -
                    ( p2.y() - p1.y() ) * ( p3.x() - p1.x() );
     if ( area2 > 0 ) 
     {
@@ -348,19 +348,19 @@ void KarbonCalligraphicShape::addCap( int index1, int index2, int pointIndex,
 {
     QPointF p1 = m_points[index1]->point();
     QPointF p2 = m_points[index2]->point();
-    double width = m_points[index2]->width();
+    qreal width = m_points[index2]->width();
 
     QPointF direction = QLineF( QPointF(0, 0), p2 - p1 ).unitVector().p2();
     QPointF p = p2 + direction * m_caps * width;
 
     KoPathPoint * newPoint = new KoPathPoint(this, p);
     
-    double angle = m_points[index2]->angle();
+    qreal angle = m_points[index2]->angle();
     if ( inverted )
         angle += M_PI;
     
-    double dx = std::cos( angle ) * width;
-    double dy = std::sin( angle ) * width;
+    qreal dx = std::cos( angle ) * width;
+    qreal dy = std::sin( angle ) * width;
     newPoint->setControlPoint1( QPointF(p.x()-dx/2, p.y()-dy/2) );
     newPoint->setControlPoint2( QPointF(p.x()+dx/2, p.y()+dy/2) );
 
@@ -379,20 +379,20 @@ void KarbonCalligraphicShape::simplifyGuidePath()
         points.append( p->point() );
 
     // cumulative data used to determine if the point can be removed
-    double widthChange = 0;
-    double directionChange = 0;
+    qreal widthChange = 0;
+    qreal directionChange = 0;
     QList<KarbonCalligraphicPoint *>::iterator i = m_points.begin() + 2;
 
     while ( i != m_points.end()-1 )
     {
         QPointF point = (*i)->point();
 
-        double width = (*i)->width();
-        double prevWidth = (*(i-1))->width();
-        double widthDiff = width - prevWidth;
+        qreal width = (*i)->width();
+        qreal prevWidth = (*(i-1))->width();
+        qreal widthDiff = width - prevWidth;
         widthDiff /= qMax(width, prevWidth);
         
-        double directionDiff = 0;
+        qreal directionDiff = 0;
         if ( (i+1) != m_points.end() )
         {
             QPointF prev = (*(i-1))->point();

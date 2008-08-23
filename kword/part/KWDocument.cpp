@@ -411,11 +411,11 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     QString firstPageMasterName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
 
     KWPage *lastpage = pageManager()->page(pageManager()->pageCount() - 1);
-    double docHeight = lastpage ? (lastpage->offsetInDocument() + lastpage->height()) : 0.0;
+    qreal docHeight = lastpage ? (lastpage->offsetInDocument() + lastpage->height()) : 0.0;
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
 
     // insert pages
-    double maxBottom = 0;
+    qreal maxBottom = 0;
     foreach(KWFrameSet* fs, m_frameSets) {
         foreach(KWFrame *frame, fs->frames())
             maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());

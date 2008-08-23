@@ -66,9 +66,9 @@ namespace Scripting {
         public Q_SLOTS:
 
             /** Return the width of the document in pt. */
-            virtual double width() const { return m_doc->documentLayout()->documentSize().width(); }
+            virtual qreal width() const { return m_doc->documentLayout()->documentSize().width(); }
             /** Return the height of the document in pt. */
-            virtual double height() const { return m_doc->documentLayout()->documentSize().height(); }
+            virtual qreal height() const { return m_doc->documentLayout()->documentSize().height(); }
             /** Return the number of pages the document has. */
             virtual int pageCount() const { return m_doc->documentLayout()->pageCount(); }
             /** Return true if the document was modified else false is returned. */

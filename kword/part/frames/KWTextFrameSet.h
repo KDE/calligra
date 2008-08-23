@@ -104,9 +104,9 @@ protected:
      * Call this to make it know that the text we want to layout needs more space to be shown fully.
      * This will resize the frame, or emit a moreFramesNeeded signal based on the settings.
      */
-    void requestMoreFrames(double textHeight);
+    void requestMoreFrames(qreal textHeight);
     /// called by the KWTextDocumentLayout to mark that the frame is bigger then the text in it.
-    void spaceLeft(double excessHeight);
+    void spaceLeft(qreal excessHeight);
     /// called by the KWTextDocumentLayout to mark that there are frames not in use because the text is too short.
     void framesEmpty(int emptyFrames);
     /**

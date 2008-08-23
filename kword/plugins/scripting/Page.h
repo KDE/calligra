@@ -67,22 +67,22 @@ namespace Scripting {
             }
 
             /** Return the width of this page in pt. */
-            double width() const { return m_page->width(); }
+            qreal width() const { return m_page->width(); }
 
             /** Return the height of this page in pt. */
-            double height() const { return m_page->height(); }
+            qreal height() const { return m_page->height(); }
 
             /** Return the height of the margin at top in pt. */
-            double topMargin() const { return m_page->topMargin(); }
+            qreal topMargin() const { return m_page->topMargin(); }
 
             /** Return the height of the margin at bottom in pt. */
-            double bottomMargin() const { return m_page->bottomMargin(); }
+            qreal bottomMargin() const { return m_page->bottomMargin(); }
 
             /** Return the width of the margin at left in pt. */
-            double leftMargin() const { return m_page->leftMargin(); }
+            qreal leftMargin() const { return m_page->leftMargin(); }
 
             /** Return the width of the margin at right in pt. */
-            double rightMargin() const { return m_page->rightMargin(); }
+            qreal rightMargin() const { return m_page->rightMargin(); }
 
         private:
             KWPage* m_page;

@@ -761,8 +761,8 @@ void View::initView()
     d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection(), false );
     d->zoomController->zoomAction()->setZoomModes( KoZoomMode::ZOOM_CONSTANT );
     addStatusBarItem( d->zoomController->zoomAction()->createWidget( statusBar() ), 0, true );
-    connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
-             this, SLOT(viewZoom(KoZoomMode::Mode, double)) );
+    connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
+             this, SLOT(viewZoom(KoZoomMode::Mode, qreal)) );
 
     d->columnHeader = new ColumnHeader( this, d->canvas,this );
     d->rowHeader = new RowHeader( this, d->canvas ,this );
@@ -1770,7 +1770,7 @@ void View::togglePageBorders( bool mode )
   d->activeSheet->setShowPageBorders( mode );
 }
 
-void View::viewZoom( KoZoomMode::Mode mode, double zoom )
+void View::viewZoom( KoZoomMode::Mode mode, qreal zoom )
 {
     Q_ASSERT( mode == KoZoomMode::ZOOM_CONSTANT );
     selection()->emitCloseEditor(true); // save changes

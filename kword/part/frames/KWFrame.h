@@ -109,12 +109,12 @@ public:
      * The space between this frames edge and the text when that text runs around this frame.
      * @return the space around this frame to keep free from text
      */
-    double runAroundDistance() const { return m_runAroundDistance; }
+    qreal runAroundDistance() const { return m_runAroundDistance; }
     /**
      * Set the space between this frames edge and the text when that text runs around this frame.
      * @param distance the space around this frame to keep free from text
      */
-    void setRunAroundDistance(double distance) { m_runAroundDistance = distance; }
+    void setRunAroundDistance(qreal distance) { m_runAroundDistance = distance; }
 
     /**
      * Each frame will be rendered by a shape which also holds the position etc.
@@ -177,7 +177,7 @@ private:
     KWord::NewFrameBehavior m_newFrameBehavior;
     KWord::RunAroundSide m_runAroundSide;
     KWord::TextRunAround m_runAround;
-    double m_runAroundDistance;
+    qreal m_runAroundDistance;
     KoTextAnchor *m_anchor;
 
     KWFrameSet *m_frameSet;

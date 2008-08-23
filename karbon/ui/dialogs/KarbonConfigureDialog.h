@@ -144,8 +144,8 @@ public:
 public slots:
     void slotDefault();
     void slotUnitChanged( int );
-    void spinBoxHSpacingChanged( double );
-    void spinBoxVSpacingChanged( double );
+    void spinBoxHSpacingChanged( qreal );
+    void spinBoxVSpacingChanged( qreal );
 
 private:
     void setValuesFromGrid( const KoGridData &grid );

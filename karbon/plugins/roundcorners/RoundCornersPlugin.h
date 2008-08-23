@@ -58,8 +58,8 @@ class RoundCornersDlg : public KDialog
 public:
     explicit RoundCornersDlg( QWidget* parent = 0L, const char* name = 0L );
 
-    double radius() const;
-    void setRadius( double value );
+    qreal radius() const;
+    void setRadius( qreal value );
     void setUnit( const KoUnit &unit );
 
 private:

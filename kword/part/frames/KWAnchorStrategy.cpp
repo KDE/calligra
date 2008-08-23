@@ -109,7 +109,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state) {
         case KoTextAnchor::HorizontalOffset: {
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
             Q_ASSERT(tl.isValid());
-            double x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
+            qreal x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
             newPosition.setX(x + m_anchor->offset().x());
 recalcFrom = 0; // TODO ???
             m_finished = true;
@@ -126,7 +126,7 @@ recalcFrom = 0; // TODO ???
             break;
         case KoTextAnchor::TopOfParagraph: {
             Q_ASSERT(layout->lineCount());
-            double topOfParagraph = layout->lineAt(0).y();
+            qreal topOfParagraph = layout->lineAt(0).y();
             newPosition.setY(topOfParagraph - data->documentOffset());
             recalcFrom = qMax(recalcFrom, block.position());
             break;

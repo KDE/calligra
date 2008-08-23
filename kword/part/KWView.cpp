@@ -111,7 +111,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     connect(m_canvas, SIGNAL(documentSize(const QSizeF &)), m_zoomController, SLOT(setDocumentSize(const QSizeF&)));
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)), this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode, qreal)));
 
     KWStatisticsDockerFactory statisticsFactory(this);
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
@@ -1130,7 +1130,7 @@ void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*
         menu->exec(globalPosition);
 }
 
-void KWView::zoomChanged (KoZoomMode::Mode mode, double zoom) {
+void KWView::zoomChanged (KoZoomMode::Mode mode, qreal zoom) {
     m_document->config().setZoom(qRound(zoom * 100.0));
     m_document->config().setZoomMode(mode);
 }

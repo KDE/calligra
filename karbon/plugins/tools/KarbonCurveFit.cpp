@@ -50,7 +50,7 @@ class FitVector {
 	}
 
 	void normalize(){
-		double len=length();
+		qreal len=length();
 		if(len==0.0f)
 			return;
 		m_X/=len; m_Y/=len;
@@ -61,20 +61,20 @@ class FitVector {
 		m_Y = -m_Y;
 	}
 
-	void scale(double s){
-		double len = length();
+	void scale(qreal s){
+		qreal len = length();
 		if(len==0.0f)
 			return;
 		m_X *= s/len;
 		m_Y *= s/len;
 	}
 
-	double dot(const FitVector &v){
+	qreal dot(const FitVector &v){
 		return ((m_X*v.m_X)+(m_Y*v.m_Y));
 	}
 
-	double length(){
-		return (double) sqrt(m_X*m_X+m_Y*m_Y); 
+	qreal length(){
+		return (qreal) sqrt(m_X*m_X+m_Y*m_Y); 
 	}
 
 	QPointF operator+(const QPointF &p){
@@ -83,12 +83,12 @@ class FitVector {
 	}
 
 	public:
-		double m_X,m_Y;
+		qreal m_X,m_Y;
 };
 
-double distance(const QPointF &p1, const QPointF &p2){
-	double dx = (p1.x()-p2.x());
-	double dy = (p1.y()-p2.y());
+qreal distance(const QPointF &p1, const QPointF &p2){
+	qreal dx = (p1.x()-p2.x());
+	qreal dy = (p1.y()-p2.y());
 	return sqrt( dx*dx + dy*dy );
 }
 
@@ -114,12 +114,12 @@ FitVector ComputeRightTangent(const QList<QPointF> &points,int end){
  *	Assign parameter values to digitized points 
  *	using relative distances between points.
  */
-static double *ChordLengthParameterize(const QList<QPointF> &points,int first,int last)
+static qreal *ChordLengthParameterize(const QList<QPointF> &points,int first,int last)
 {
     int		i;	
-    double	*u;			/*  Parameterization		*/
+    qreal	*u;			/*  Parameterization		*/
 
-    u = new double[(last-first+1)];
+    u = new qreal[(last-first+1)];
 
     u[0] = 0.0;
     for (i = first+1; i <= last; i++) {
@@ -140,7 +140,7 @@ static FitVector VectorAdd(FitVector a,FitVector b)
     c.m_X = a.m_X + b.m_X;  c.m_Y = a.m_Y + b.m_Y;
     return (c);
 }
-static FitVector VectorScale(FitVector v,double s)
+static FitVector VectorScale(FitVector v,qreal s)
 {
     FitVector result;
     result.m_X = v.m_X * s; result.m_Y = v.m_Y * s;
@@ -174,26 +174,26 @@ static FitVector ComputeCenterTangent(const QList<QPointF> &points,int center)
  *  B0, B1, B2, B3 :
  *	Bezier multipliers
  */
-static double B0(double u)
+static qreal B0(qreal u)
 {
-    double tmp = 1.0 - u;
+    qreal tmp = 1.0 - u;
     return (tmp * tmp * tmp);
 }
 
 
-static double B1(double u)
+static qreal B1(qreal u)
 {
-    double tmp = 1.0 - u;
+    qreal tmp = 1.0 - u;
     return (3 * u * (tmp * tmp));
 }
 
-static double B2(double u)
+static qreal B2(qreal u)
 {
-    double tmp = 1.0 - u;
+    qreal tmp = 1.0 - u;
     return (3 * u * u * tmp);
 }
 
-static double B3(double u)
+static qreal B3(qreal u)
 {
     return (u * u * u);
 }
@@ -203,16 +203,16 @@ static double B3(double u)
  *  Use least-squares method to find Bezier control points for region.
  *
  */
-QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
+QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, qreal *uPrime,FitVector tHat1,FitVector tHat2)
 {
     int 	i;
     int 	nPts;			/* Number of pts in sub-curve */
-    double 	C[2][2];			/* Matrix C		*/
-    double 	X[2];			/* Matrix X			*/
-    double 	det_C0_C1,		/* Determinants of matrices	*/
+    qreal 	C[2][2];			/* Matrix C		*/
+    qreal 	X[2];			/* Matrix X			*/
+    qreal 	det_C0_C1,		/* Determinants of matrices	*/
     	   	det_C0_X,
 	   	det_X_C1;
-    double 	alpha_l,		/* Alpha values, left and right	*/
+    qreal 	alpha_l,		/* Alpha values, left and right	*/
     	   	alpha_r;
     FitVector 	tmp;			/* Utility variable		*/
     QPointF	*curve;
@@ -285,7 +285,7 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, doubl
 	/* (if alpha is 0, you get coincident control points that lead to
 	 * divide by zero in any subsequent NewtonRaphsonRootFind() call. */
     if (alpha_l < 1.0e-6 || alpha_r < 1.0e-6) {
-		double	dist = distance(points.at(last),points.at(first)) /
+		qreal	dist = distance(points.at(last),points.at(first)) /
 					3.0;
 
 		curve[0] = points.at(first);
@@ -320,7 +320,7 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, doubl
  *  	Evaluate a Bezier curve at a particular parameter value
  * 
  */
-static QPointF BezierII(int degree,QPointF *V, double t)
+static QPointF BezierII(int degree,QPointF *V, qreal t)
 {
     int 	i, j;		
     QPointF 	Q;	        /* Point on curve at parameter t	*/
@@ -350,11 +350,11 @@ static QPointF BezierII(int degree,QPointF *V, double t)
  *	Find the maximum squared distance of digitized points
  *	to fitted curve.
 */
-static double ComputeMaxError(const QList<QPointF> &points,int first,int last,QPointF *curve,double *u,int *splitPoint)
+static qreal ComputeMaxError(const QList<QPointF> &points,int first,int last,QPointF *curve,qreal *u,int *splitPoint)
 {
     int		i;
-    double	maxDist;		/*  Maximum error		*/
-    double	dist;		/*  Current error		*/
+    qreal	maxDist;		/*  Maximum error		*/
+    qreal	dist;		/*  Current error		*/
     QPointF P;			/*  Point on curve		*/
     FitVector	v;			/*  Vector from point to curve	*/
 
@@ -377,12 +377,12 @@ static double ComputeMaxError(const QList<QPointF> &points,int first,int last,QP
  *  NewtonRaphsonRootFind :
  *	Use Newton-Raphson iteration to find better root.
  */
-static double NewtonRaphsonRootFind(QPointF *Q,QPointF P,double u)
+static qreal NewtonRaphsonRootFind(QPointF *Q,QPointF P,qreal u)
 {
-    double 		numerator, denominator;
+    qreal 		numerator, denominator;
     QPointF 		Q1[3], Q2[2];	/*  Q' and Q''			*/
     QPointF		Q_u, Q1_u, Q2_u; /*u evaluated at Q, Q', & Q''	*/
-    double 		uPrime;		/*  Improved u			*/
+    qreal 		uPrime;		/*  Improved u			*/
     int 		i;
     
     /* Compute Q(u)	*/
@@ -420,13 +420,13 @@ static double NewtonRaphsonRootFind(QPointF *Q,QPointF P,double u)
  *   a better parameterization.
  *
  */
-static double *Reparameterize(const QList<QPointF> &points,int first,int last,double *u,QPointF *curve)
+static qreal *Reparameterize(const QList<QPointF> &points,int first,int last,qreal *u,QPointF *curve)
 {
     int 	nPts = last-first+1;	
     int 	i;
-    double	*uPrime;		/*  New parameter values	*/
+    qreal	*uPrime;		/*  New parameter values	*/
 
-    uPrime = new double[nPts];
+    uPrime = new qreal[nPts];
     for (i = first; i <= last; i++) {
 		uPrime[i-first] = NewtonRaphsonRootFind(curve, points.at(i), u[i-first]);
     }
@@ -434,12 +434,12 @@ static double *Reparameterize(const QList<QPointF> &points,int first,int last,do
 }
 
 QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat1,FitVector tHat2,float error,int &width){
-	double *u;
-	double *uPrime;
-	double maxError;
+	qreal *u;
+	qreal *uPrime;
+	qreal maxError;
 	int splitPoint;
 	int nPts;
-	double iterationError;
+	qreal iterationError;
 	int maxIterations=4;
 	FitVector tHatCenter;
 	QPointF *curve;
@@ -452,7 +452,7 @@ QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat
 	nPts = last-first+1;
 
 	if(nPts == 2){
-	    	double dist = distance(points.at(last), points.at(first)) / 3.0;
+	    	qreal dist = distance(points.at(last), points.at(first)) / 3.0;
 
 		curve = new QPointF[4];
 		

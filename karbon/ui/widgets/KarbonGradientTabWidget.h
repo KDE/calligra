@@ -83,10 +83,10 @@ public:
     void setTarget( GradientTarget target );
 
     /// Returns the gradient opacity
-    double opacity() const;
+    qreal opacity() const;
 
     /// Sets the gradients opacity to @p opacity
-    void setOpacity( double opacity );
+    void setOpacity( qreal opacity );
 
     /// Sets the index of the stop to edit
     void setStopIndex( int index );
@@ -117,7 +117,7 @@ protected Q_SLOTS:
     void combosChange( int );
     void addGradientToPredefs();
     void changeToPredef( QTableWidgetItem* );
-    void opacityChanged( double value, bool final );
+    void opacityChanged( qreal value, bool final );
     void stopsChanged();
     void stopChanged();
 protected:
@@ -138,7 +138,7 @@ private:
     KoSliderCombo * m_opacity;
     KColorButton * m_stopColor;
     KoSliderCombo * m_stopOpacity;
-    double m_gradOpacity;    ///< the gradient opacity
+    qreal m_gradOpacity;    ///< the gradient opacity
     int m_stopIndex; ///< the index of the selected gradient stop
     KoCheckerBoardPainter m_checkerPainter;
     QGradient::Type m_type;

@@ -135,7 +135,7 @@ void KWTextFrameSet::updateTextLayout() {
         lay->scheduleLayout();
 }
 
-void KWTextFrameSet::requestMoreFrames(double textHeight) {
+void KWTextFrameSet::requestMoreFrames(qreal textHeight) {
     //kDebug() <<"KWTextFrameSet::requestMoreFrames" << textHeight;
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
@@ -161,7 +161,7 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
     }
 }
 
-void KWTextFrameSet::spaceLeft(double excessHeight) {
+void KWTextFrameSet::spaceLeft(qreal excessHeight) {
 //kDebug() <<"KWTextFrameSet::spaceLeft" << excessHeight;
     Q_ASSERT(excessHeight >= 0);
     if(m_frames.count() == 0)

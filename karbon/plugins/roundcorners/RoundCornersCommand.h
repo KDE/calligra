@@ -31,7 +31,7 @@ class KoPathPoint;
 class RoundCornersCommand : public QUndoCommand
 {
 public:
-    RoundCornersCommand( KoPathShape * path, double radius, QUndoCommand * parent = 0 );
+    RoundCornersCommand( KoPathShape * path, qreal radius, QUndoCommand * parent = 0 );
     virtual ~RoundCornersCommand();
 
     /// redo the command
@@ -46,7 +46,7 @@ private:
     QPointF tangentAtStart( const KoPathSegment &s );
     QPointF tangentAtEnd( const KoPathSegment &s );
 
-    double m_radius;
+    qreal m_radius;
     KoPathShape * m_path;
     KoPathShape * m_copy;
 };

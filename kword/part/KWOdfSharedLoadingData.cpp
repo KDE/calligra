@@ -153,9 +153,9 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 anchor->setAlignment(KoTextAnchor::VerticalOffset);
 
                 QPointF pt = shape->position();
-                const double x = pt.x() - page->leftMargin();
-                const double y = pt.y() - page->topMargin();
-                const double offset = page->offsetInDocument();
+                const qreal x = pt.x() - page->leftMargin();
+                const qreal y = pt.y() - page->topMargin();
+                const qreal offset = page->offsetInDocument();
                 anchor->setOffset( QPointF(x, offset+y) );
 
                 imageFrame->setTextRunAround(KWord::RunThrough);//dirty hack for now

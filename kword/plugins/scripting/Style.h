@@ -65,7 +65,7 @@ namespace Scripting {
             void setFamily(const QString &family) { m_style->setFontFamily(family); }
 
             /** Return the size of the font. */
-            double size() const { return m_style->fontPointSize(); }
+            qreal size() const { return m_style->fontPointSize(); }
             /**
             * Set the size of the font.
             *
@@ -74,7 +74,7 @@ namespace Scripting {
             * mycharstyle.setSize(12.0)
             * \endcode
             */
-            void setSize(double size) { m_style->setFontPointSize(size); }
+            void setSize(qreal size) { m_style->setFontPointSize(size); }
 
             /** Return the weight of the font. */
             int weight() const { return m_style->fontWeight(); }

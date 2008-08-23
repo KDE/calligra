@@ -123,12 +123,12 @@ RoundCornersDlg::RoundCornersDlg( QWidget* parent, const char* name )
     setMainWidget( group );
 }
 
-double RoundCornersDlg::radius() const
+qreal RoundCornersDlg::radius() const
 {
     return m_radius->value();
 }
 
-void RoundCornersDlg::setRadius( double value )
+void RoundCornersDlg::setRadius( qreal value )
 {
     m_radius->setValue(value);
 }

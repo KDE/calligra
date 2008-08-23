@@ -46,8 +46,8 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
 
     QRectF rect = page->rect();
     QRectF newRect(0, rect.top(), m_newLayout.width * (m_newLayout.left < 0 ? 2:1), m_newLayout.height);
-    const double bottom = rect.bottom();
-    const double sizeDifference = m_newLayout.height - m_oldLayout.height;
+    const qreal bottom = rect.bottom();
+    const qreal sizeDifference = m_newLayout.height - m_oldLayout.height;
     foreach(KWFrameSet *fs, document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;

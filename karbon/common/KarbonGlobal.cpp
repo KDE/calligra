@@ -35,12 +35,12 @@ int KarbonGlobal::binomialCoeff( unsigned n, unsigned k )
                 factorialLn( n - k ) ) );
 }
 
-double KarbonGlobal::factorialLn( unsigned n )
+qreal KarbonGlobal::factorialLn( unsigned n )
 {
     const unsigned cacheSize = 100;
 
     // A static array is initialized to zero.
-    static double cache[ cacheSize ];
+    static qreal cache[ cacheSize ];
 
 
     if( n <= 1 )
@@ -58,9 +58,9 @@ double KarbonGlobal::factorialLn( unsigned n )
     }
 }
 
-double KarbonGlobal::gammaLn( double x )
+qreal KarbonGlobal::gammaLn( qreal x )
 {
-    static double coeff[ 6 ] =
+    static qreal coeff[ 6 ] =
     {
         76.18009172947146,
         -86.50532032941677,
@@ -70,12 +70,12 @@ double KarbonGlobal::gammaLn( double x )
         -0.5395239384953e-5
     };
 
-    double y = x;
+    qreal y = x;
 
-    double tmp = x + 5.5;
+    qreal tmp = x + 5.5;
     tmp -= ( x + 0.5 ) * log( tmp );
 
-    double ser = 1.000000000190015;
+    qreal ser = 1.000000000190015;
 
     for( int i = 0; i < 5; ++i )
     {
@@ -85,12 +85,12 @@ double KarbonGlobal::gammaLn( double x )
     return -tmp + log( 2.5066282746310005 * ser / x );
 }
 
-double KarbonGlobal::scalarProduct(const QPointF &p1, const QPointF &p2)
+qreal KarbonGlobal::scalarProduct(const QPointF &p1, const QPointF &p2)
 {
     return p1.x() * p2.x() + p1.y() * p2.y();
 }
 
-bool KarbonGlobal::pointsAreNear(const QPointF &p1, const QPointF &p2, double range)
+bool KarbonGlobal::pointsAreNear(const QPointF &p1, const QPointF &p2, qreal range)
 {
     return (p2.x() >= p1.x() - range && p2.x() <= p1.x() + range && p2.y() >= p1.y() - range && p2.y() <= p1.y() + range);
 }

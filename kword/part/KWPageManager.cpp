@@ -43,7 +43,7 @@ KWPageManager::~KWPageManager() {
 
 int KWPageManager::pageNumber(const QPointF &point) const {
     int pageNumber = -1;
-    double startOfpage = 0.0;
+    qreal startOfpage = 0.0;
     foreach(KWPage *page, m_pageList) {
         if(startOfpage >= point.y())
             break;
@@ -62,7 +62,7 @@ int KWPageManager::pageNumber(const QPointF &point) const {
 int KWPageManager::pageNumber(const KoShape *shape) const {
     return pageNumber(shape->absolutePosition());
 }
-int KWPageManager::pageNumber(const double y) const {
+int KWPageManager::pageNumber(const qreal y) const {
     return pageNumber(QPointF(0, y));
 }
 int KWPageManager::pageCount() const {
@@ -91,7 +91,7 @@ KWPage* KWPageManager::page(const KoShape *shape) const {
 KWPage* KWPageManager::page(const QPointF &point) const {
     return page(pageNumber(point));
 }
-KWPage* KWPageManager::page(double y) const {
+KWPage* KWPageManager::page(qreal y) const {
     return page(pageNumber(y));
 }
 
@@ -139,16 +139,17 @@ KWPage* KWPageManager::appendPage(KWPageStyle *pageStyle) {
     return page;
 }
 
-double KWPageManager::topOfPage(int pageNum) const {
+qreal KWPageManager::topOfPage(int pageNum) const {
     return pageOffset(pageNum, false);
 }
-double KWPageManager::bottomOfPage(int pageNum) const {
+qreal KWPageManager::bottomOfPage(int pageNum) const {
     return pageOffset(pageNum, true);
 }
 
-double KWPageManager::pageOffset(int pageNum, bool bottom) const {
+qreal KWPageManager::pageOffset(int pageNum, bool bottom) const
+{
     Q_ASSERT(pageNum >= 0);
-    double offset = 0.0;
+    qreal offset = 0.0;
     foreach(KWPage *page, m_pageList) {
         if(page->pageNumber() == pageNum) {
             if(bottom)
@@ -178,7 +179,7 @@ void KWPageManager::removePage(KWPage *page) {
 
 QPointF KWPageManager::clipToDocument(const QPointF &point) {
     int page=m_firstPage;
-    double startOfpage = 0.0;
+    qreal startOfpage = 0.0;
 
     foreach (KWPage *p, m_pageList) {
         startOfpage += p->height();

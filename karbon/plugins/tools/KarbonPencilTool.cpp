@@ -156,9 +156,9 @@ void KarbonPencilTool::addPoint( const QPointF & point )
     m_canvas->updateCanvas( m_shape->boundingRect() );
 }
 
-double KarbonPencilTool::lineAngle( const QPointF &p1, const QPointF &p2 )
+qreal KarbonPencilTool::lineAngle( const QPointF &p1, const QPointF &p2 )
 {
-    double angle = atan2( p2.y() - p1.y(), p2.x() - p1.x() );
+    qreal angle = atan2( p2.y() - p1.y(), p2.x() - p1.x() );
     if( angle < 0.0 )
         angle += 2*M_PI;
 

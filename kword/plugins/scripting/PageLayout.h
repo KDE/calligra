@@ -61,44 +61,44 @@ namespace Scripting {
             }
 
             /** Return page width in pt */
-            double width() { return m_pagelayout.width; }
+            qreal width() { return m_pagelayout.width; }
             /** Set page width in pt */
-            void setWidth(double width) { m_pagelayout.width = width; }
+            void setWidth(qreal width) { m_pagelayout.width = width; }
 
             /** Return page height in pt */
-            double height() { return m_pagelayout.height; }
+            qreal height() { return m_pagelayout.height; }
             /** Set page height in pt */
-            void setHeight(double height) { m_pagelayout.height = height; }
+            void setHeight(qreal height) { m_pagelayout.height = height; }
 
             /** Return left margin in pt */
-            double left() { return m_pagelayout.left; }
+            qreal left() { return m_pagelayout.left; }
             /** Set left margin in pt */
-            void setLeft(double left) { m_pagelayout.left = left; }
+            void setLeft(qreal left) { m_pagelayout.left = left; }
 
             /** Return right margin in pt */
-            double right() { return m_pagelayout.right; }
+            qreal right() { return m_pagelayout.right; }
             /** Set right margin in pt */
-            void setRight(double right) { m_pagelayout.right = right; }
+            void setRight(qreal right) { m_pagelayout.right = right; }
 
             /** Return top margin in pt */
-            double top() { return m_pagelayout.top; }
+            qreal top() { return m_pagelayout.top; }
             /** Set top margin in pt */
-            void setTop(double top) { m_pagelayout.top = top; }
+            void setTop(qreal top) { m_pagelayout.top = top; }
 
             /** Return bottom margin in pt */
-            double bottom() { return m_pagelayout.bottom; }
+            qreal bottom() { return m_pagelayout.bottom; }
             /** Set bottom margin in pt */
-            void setBottom(double bottom) { m_pagelayout.bottom = bottom; }
+            void setBottom(qreal bottom) { m_pagelayout.bottom = bottom; }
 
             /** Return margin on page edge in pt */
-            double pageEdge() { return m_pagelayout.pageEdge; }
+            qreal pageEdge() { return m_pagelayout.pageEdge; }
             /** Set margin on page edge in pt */
-            void setPageEdge(double edge) { m_pagelayout.pageEdge = edge; }
+            void setPageEdge(qreal edge) { m_pagelayout.pageEdge = edge; }
 
             /** Return margin on page-binding edge in pt */
-            double bindingSide() { return m_pagelayout.bindingSide; }
+            qreal bindingSide() { return m_pagelayout.bindingSide; }
             /** Set margin on page-binding edge in pt */
-            void setBindingSide(double side) { m_pagelayout.bindingSide = side; }
+            void setBindingSide(qreal side) { m_pagelayout.bindingSide = side; }
 
         private:
             KoPageLayout m_pagelayout;

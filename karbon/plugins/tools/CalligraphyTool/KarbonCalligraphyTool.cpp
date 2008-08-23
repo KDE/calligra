@@ -40,7 +40,7 @@
 #include <cmath>
 
 #undef M_PI
-const double M_PI = 3.1415927;
+const qreal M_PI = 3.1415927;
 using std::pow;
 using std::sqrt;
 
@@ -183,8 +183,8 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 
     QPointF newSpeed;
     QPointF newPoint= calculateNewPoint( event->point, &newSpeed );
-    double width = calculateWidth( event->pressure() );
-    double angle = calculateAngle( m_speed, newSpeed );
+    qreal width = calculateWidth( event->pressure() );
+    qreal angle = calculateAngle( m_speed, newSpeed );
 
     // add the previous point
     m_shape->appendPoint( m_lastPoint, angle, width );
@@ -247,10 +247,10 @@ QPointF KarbonCalligraphyTool::calculateNewPoint( const QPointF &mousePos,
     m_lastMousePos = mousePos;
 
     // follow selected path
-    double step = QLineF(QPointF(0,0), sp).length();
+    qreal step = QLineF(QPointF(0,0), sp).length();
     m_followPathPosition += step;
 
-    double t;
+    qreal t;
     if (m_followPathPosition >= m_selectedPathOutline.length())
     {
         t = 1.0;
@@ -267,11 +267,11 @@ QPointF KarbonCalligraphyTool::calculateNewPoint( const QPointF &mousePos,
     return res;
 }
 
-double KarbonCalligraphyTool::calculateWidth( double pressure )
+qreal KarbonCalligraphyTool::calculateWidth( qreal pressure )
 {
     // calculate the modulo of the speed
-    double speed = std::sqrt( pow(m_speed.x(), 2) + pow(m_speed.y(), 2) );
-    double thinning =  m_thinning * (speed + 1) / 10.0; // can be negative
+    qreal speed = std::sqrt( pow(m_speed.x(), 2) + pow(m_speed.y(), 2) );
+    qreal thinning =  m_thinning * (speed + 1) / 10.0; // can be negative
 
     if ( thinning > 1 )
         thinning = 1;
@@ -279,9 +279,9 @@ double KarbonCalligraphyTool::calculateWidth( double pressure )
     if ( ! m_usePressure )
         pressure = 1.0;
 
-    double strokeWidth = m_strokeWidth * pressure * (1 - thinning);
+    qreal strokeWidth = m_strokeWidth * pressure * (1 - thinning);
 
-    const double MINIMUM_STROKE_WIDTH = 1.0;
+    const qreal MINIMUM_STROKE_WIDTH = 1.0;
     if ( strokeWidth < MINIMUM_STROKE_WIDTH )
         strokeWidth = MINIMUM_STROKE_WIDTH;
 
@@ -289,12 +289,12 @@ double KarbonCalligraphyTool::calculateWidth( double pressure )
 }
 
 
-double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
+qreal KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
                                               const QPointF &newSpeed )
 {
     // calculate the avarage of the speed (sum of the normalized values)
-    double oldLength = QLineF( QPointF(0,0), oldSpeed ).length();
-    double newLength = QLineF( QPointF(0,0), newSpeed ).length();
+    qreal oldLength = QLineF( QPointF(0,0), oldSpeed ).length();
+    qreal newLength = QLineF( QPointF(0,0), newSpeed ).length();
     QPointF oldSpeedNorm = !qFuzzyCompare(oldLength + 1, 1) ?
                             oldSpeed/oldLength : QPointF(0, 0);
     QPointF newSpeedNorm = !qFuzzyCompare(newLength + 1, 1) ?
@@ -302,7 +302,7 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     QPointF speed = oldSpeedNorm + newSpeedNorm;
 
     // angle solely based on the speed
-    double speedAngle = 0;
+    qreal speedAngle = 0;
     if ( speed.x() != 0 ) // avoid division by zero
     {
         speedAngle = std::atan( speed.y() / speed.x() );
@@ -323,9 +323,9 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     // move 90 degrees
     speedAngle += M_PI/2;
 
-    double fixedAngle = m_angle;
+    qreal fixedAngle = m_angle;
     // check if the fixed angle needs to be flipped
-    double diff = fixedAngle - speedAngle;
+    qreal diff = fixedAngle - speedAngle;
     while ( diff >= M_PI ) // normalize diff between -180 and 180
         diff -= 2*M_PI;
     while ( diff < -M_PI )
@@ -334,7 +334,7 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     if ( std::abs(diff) > M_PI/2 ) // if absolute value < 90
         fixedAngle += M_PI; // += 180
 
-    double dAngle = speedAngle - fixedAngle;
+    qreal dAngle = speedAngle - fixedAngle;
 
     // normalize dAngle between -90 and +90
     while ( dAngle >= M_PI/2 )
@@ -342,7 +342,7 @@ double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
     while ( dAngle < -M_PI/2 )
         dAngle += M_PI;
 
-    double angle = fixedAngle + dAngle*(1.0 - m_fixation);
+    qreal angle = fixedAngle + dAngle*(1.0 - m_fixation);
 
     return angle;
 }

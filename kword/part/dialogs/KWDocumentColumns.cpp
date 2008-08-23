@@ -28,7 +28,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     setUnit(KoUnit(KoUnit::Millimeter));
 
     connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
-    connect(widget.spacing, SIGNAL(valueChangedPt(double)), this, SLOT(optionsChanged()));
+    connect(widget.spacing, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
 }
 
 void KWDocumentColumns::setColumns(const KoColumns &columns) {

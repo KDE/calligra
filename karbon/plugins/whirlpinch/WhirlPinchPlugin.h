@@ -57,12 +57,12 @@ class WhirlPinchDlg : public KDialog
 public:
     explicit WhirlPinchDlg( QWidget* parent = 0L, const char* name = 0L );
 
-    double angle() const;
-    double pinch() const;
-    double radius() const;
-    void setAngle( double value );
-    void setPinch( double value );
-    void setRadius( double value );
+    qreal angle() const;
+    qreal pinch() const;
+    qreal radius() const;
+    void setAngle( qreal value );
+    void setPinch( qreal value );
+    void setRadius( qreal value );
     void setUnit( const KoUnit &unit );
 
 private:

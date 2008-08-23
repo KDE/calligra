@@ -272,11 +272,11 @@ void KarbonGradientWidget::mouseMoveEvent( QMouseEvent* e )
     if( m_currentStop < 0 || m_currentStop >= colorStops.count() )
         return;
 
-    double x = (double)( e->x() - m_pntArea.left() ) / (double)m_pntArea.width();
+    qreal x = (qreal)( e->x() - m_pntArea.left() ) / (qreal)m_pntArea.width();
 
     // move ramp point
-    double minX = m_currentStop > 0 ? colorStops[m_currentStop-1].first : 0.0f;
-    double maxX = m_currentStop < colorStops.count()-1 ? colorStops[m_currentStop+1].first : 1.0f;
+    qreal minX = m_currentStop > 0 ? colorStops[m_currentStop-1].first : 0.0f;
+    qreal maxX = m_currentStop < colorStops.count()-1 ? colorStops[m_currentStop+1].first : 1.0f;
 
     // Clip the color stop between to others.
     x = qMin( x, maxX );

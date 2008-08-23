@@ -48,21 +48,21 @@ public:
     };
 
     /// return the width of this page (in pt)
-    Q_SCRIPTABLE double width() const;
+    Q_SCRIPTABLE qreal width() const;
     /// return the height of this page (in pt)
-    Q_SCRIPTABLE double height() const;
+    Q_SCRIPTABLE qreal height() const;
     /// return the height of the margin at top (in pt);
-    Q_SCRIPTABLE double topMargin() const;
+    Q_SCRIPTABLE qreal topMargin() const;
     /// return the height of the margin at bottom (in pt);
-    Q_SCRIPTABLE double bottomMargin() const;
+    Q_SCRIPTABLE qreal bottomMargin() const;
     /// return the width of the margin at left (in pt);
-    Q_SCRIPTABLE double leftMargin() const;
+    Q_SCRIPTABLE qreal leftMargin() const;
     /// return the width of the margin at right (in pt);
-    Q_SCRIPTABLE double rightMargin() const;
+    Q_SCRIPTABLE qreal rightMargin() const;
     /// return width of the margin that is the closest to the page edge, i.e. left for even pages
-    Q_SCRIPTABLE double pageEdgeMargin() const;
+    Q_SCRIPTABLE qreal pageEdgeMargin() const;
     /// return width of the margin that is the closest to the binding, i.e. right for even pages
-    Q_SCRIPTABLE double marginClosestBinding() const;
+    Q_SCRIPTABLE qreal marginClosestBinding() const;
 
     /**
      * return a rectangle outlining this page, using the offset in the document.
@@ -84,7 +84,7 @@ public:
      * This method returns the offset of this page in the whole document which means it will
      * add the height of all the pages that come before this one.
      */
-    Q_SCRIPTABLE double offsetInDocument() const;
+    Q_SCRIPTABLE qreal offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSide
     PageSide pageSide() const { return m_pageSide; }

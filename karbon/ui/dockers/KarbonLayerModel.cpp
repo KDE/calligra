@@ -208,7 +208,7 @@ QVariant KarbonLayerModel::data( const QModelIndex &index, int role ) const
                 foreach( KoShape* shape, container->iterator() )
                     bbox = bbox.united( shape->outline().boundingRect() );
             }
-            return double(bbox.width()) / bbox.height();
+            return qreal(bbox.width()) / bbox.height();
         }
         default:
             if (role >= int(BeginThumbnailRole))

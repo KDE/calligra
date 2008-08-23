@@ -62,7 +62,7 @@ protected:
 
 private:
     // a list with the top of the page location in view-coordinates, in unzoomed-pt.
-    QList<double> m_pageTops;
+    QList<qreal> m_pageTops;
     bool m_pageSpreadMode;
     QSizeF m_contents;
 };

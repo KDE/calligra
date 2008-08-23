@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-RoundCornersCommand::RoundCornersCommand( KoPathShape * path, double radius, QUndoCommand * parent )
+RoundCornersCommand::RoundCornersCommand( KoPathShape * path, qreal radius, QUndoCommand * parent )
     : QUndoCommand( parent ), m_path( path ), m_copy(0)
 {
     Q_ASSERT( path );

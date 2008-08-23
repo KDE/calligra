@@ -36,13 +36,13 @@
 #include <QPainterPath>
 
 // helper methods
-static double xAtY(const QLineF &line, double y) {
+static qreal xAtY(const QLineF &line, qreal y) {
     if(line.dx() == 0)
         return line.x1();
     return line.x1() +  (y - line.y1()) / line.dy() * line.dx();
 }
 
-static double yAtX(const QLineF &line, double x) {
+static qreal yAtX(const QLineF &line, qreal x) {
     if(line.dy() == 0)
         return line.y1();
     return line.y1() +  (x - line.x1()) / line.dx() * line.dy();
@@ -56,7 +56,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
     // top edge
     if(startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top() ||
             startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top()) {
-        double x = xAtY(line, rect.top());
+        qreal x = xAtY(line, rect.top());
         if(x >= rect.left() && x <= rect.right() && x)
             answer.append(QPointF(x, rect.top()));
     }
@@ -64,7 +64,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
     // left
     if(startOfLine.x() <= rect.left() && endOfLine.x() >= rect.left() ||
             startOfLine.x() >= rect.left() && endOfLine.x() <= rect.left()) {
-        double y = yAtX(line, rect.left());
+        qreal y = yAtX(line, rect.left());
         if(y >= rect.top() && y <= rect.bottom())
             answer.append(QPointF(rect.left(), y));
     }
@@ -72,7 +72,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
     // bottom edge
     if(startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom() ||
             startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom()) {
-        double x = xAtY(line, rect.bottom());
+        qreal x = xAtY(line, rect.bottom());
         if(x >= rect.left() && x <= rect.right())
             answer.append(QPointF(x, rect.bottom()));
     }
@@ -80,7 +80,7 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
     // right
     if(startOfLine.x() <= rect.right() && endOfLine.x() >= rect.right() ||
             startOfLine.x() >= rect.right() && endOfLine.x() <= rect.right()) {
-        double y = yAtX(line, rect.right());
+        qreal y = yAtX(line, rect.right());
         if(y >= rect.top() && y <= rect.bottom())
             answer.append(QPointF(rect.right(), y));
     }
@@ -110,14 +110,14 @@ public:
         init(matrix, shape, 0);
     }
 
-    void init(const QMatrix &matrix, KoShape *shape, double distance) {
+    void init(const QMatrix &matrix, KoShape *shape, qreal distance) {
         QPainterPath path =  matrix.map(shape->outline());
         m_bounds = path.boundingRect();
         if(distance >= 0.0) {
             QMatrix grow = matrix;
             grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
-            const double scaleX = (m_bounds.width() + distance) / m_bounds.width();
-            const double scaleY = (m_bounds.height() + distance) / m_bounds.height();
+            const qreal scaleX = (m_bounds.width() + distance) / m_bounds.width();
+            const qreal scaleY = (m_bounds.height() + distance) / m_bounds.height();
             grow.scale(scaleX, scaleY);
             grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
 
@@ -150,8 +150,8 @@ public:
         }
 
         if(m_side == None) { // first time for this text;
-            double insetLeft = m_bounds.right() - content.left();
-            double insetRight = content.right() - m_bounds.left();
+            qreal insetLeft = m_bounds.right() - content.left();
+            qreal insetRight = content.right() - m_bounds.left();
 
             if(insetLeft < insetRight)
                 m_side = Left;
@@ -162,13 +162,13 @@ public:
             return content;
 
         // two points, as we are checking a rect, not a line.
-        double points[2] = { content.top(), content.bottom() };
+        qreal points[2] = { content.top(), content.bottom() };
         QRectF answer = content;
         for(int i=0; i < 2; i++) {
-            const double y = points[i];
-            double x = m_side==Left?answer.left():answer.right();
+            const qreal y = points[i];
+            qreal x = m_side==Left?answer.left():answer.right();
             bool first = true;
-            QMap<double, QLineF>::const_iterator iter = m_edges.constBegin();
+            QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
             for(;iter != m_edges.constEnd(); ++iter) {
                 QLineF line = iter.value();
                 if(line.y2() < y) // not a section that will intersect with ou Y yet
@@ -178,7 +178,7 @@ public:
                 if(qAbs(line.dy()) < 1E-10 ) // horizontal lines don't concern us.
                     continue;
 
-                double intersect = xAtY(iter.value(), y);
+                qreal intersect = xAtY(iter.value(), y);
                 if(first) {
                     x = intersect;
                     first = false;
@@ -198,7 +198,7 @@ public:
 private:
     enum Side { None, Left, Right, Empty };
     Side m_side;
-    QMultiMap<double, QLineF> m_edges; //sorted with y-coord
+    QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     QRectF m_bounds;
 };
 
@@ -310,8 +310,8 @@ void KWTextDocumentLayout::layout() {
 
     if(! m_state->start())
         return;
-    double endPos = 1E9;
-    double bottomOfText = 0.0;
+    qreal endPos = 1E9;
+    qreal bottomOfText = 0.0;
     bool newParagraph = true;
     bool requestFrameResize = false, firstParagraph = true;
     KoShape *currentShape = 0;
@@ -458,7 +458,7 @@ void KWTextDocumentLayout::layout() {
 
         Line line(m_state);
         if (!line.isValid()) { // end of parag
-            const double posY = m_state->y();
+            const qreal posY = m_state->y();
             if(firstParagraph) {
                 // start counting after the resumed paragraph
                 firstParagraph = false;
@@ -487,7 +487,7 @@ void KWTextDocumentLayout::layout() {
                     } while(lastFrame == 0);
                     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (lastFrame->shape()->userData());
                     Q_ASSERT( data );
-                    double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
+                    qreal spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
                     data->wipe();
                     if(spaceLeft > 3) {
                         // note that this may delete the data and lastFrame !!  Do not access them after this point.
@@ -541,7 +541,7 @@ void KWTextDocumentLayout::layout() {
 
                 QLineF top(QPointF(0, 0), QPointF(lastFrame->shape()->size().width(), 0));
                 top = lastFrame->shape()->absoluteTransformation(0).map(top);
-                const double multiplier = qMax(pageRect.height(), pageRect.width()) / top.length();
+                const qreal multiplier = qMax(pageRect.height(), pageRect.width()) / top.length();
                 QLineF down(top.p1(), QPointF( top.p1().x() - top.dy() * multiplier,
                             top.p1().y() + top.dx() * multiplier));
                 QLineF down2(top.p2(), QPointF( top.p2().x() - top.dy() * multiplier,
@@ -553,7 +553,7 @@ void KWTextDocumentLayout::layout() {
                 list = intersect(pageRect, down2);
                 if(list.count() > 0)
                     down2 = QLineF(down2.p1(), list.last());
-                const double maxFrameLength = qMin(down.length(), down2.length());
+                const qreal maxFrameLength = qMin(down.length(), down2.length());
                 if(maxFrameLength <= currentShape->size().height()) {
                     m_state->clearTillEnd();
                     m_frameSet->requestMoreFrames(0); // new page, please.

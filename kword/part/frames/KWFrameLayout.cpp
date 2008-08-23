@@ -181,8 +181,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
                 Q_ASSERT(frame->newFrameBehavior() == KWord::CopyNewFrame);
                 f = new KWFrame(new KWCopyShape(frame->shape()), frame->frameSet());
             }
-            const double y = frame->shape()->position().y();
-            double offsetFromPage = y - pageRect.top();
+            const qreal y = frame->shape()->position().y();
+            qreal offsetFromPage = y - pageRect.top();
             f->copySettings(frame);
             f->shape()->setPosition(QPointF(frame->shape()->position().x(),
                     page->offsetInDocument() + offsetFromPage));
@@ -219,7 +219,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
-    double requestedHeight[11], minimumHeight[11], resultingPositions[11];
+    qreal requestedHeight[11], minimumHeight[11], resultingPositions[11];
     for(int i=0; i < 11; i++) { // zero fill.
         requestedHeight[i] = 0;
         minimumHeight[i] = 0;
@@ -231,17 +231,17 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
     KoPageLayout layout = page->pageStyle()->pageLayout();
     layout.left = page->leftMargin();
     layout.right = page->rightMargin();
-    double left = 0, width = page->width();
+    qreal left = 0, width = page->width();
     if(page->pageSide() == KWPage::PageSpread) {
         width /= 2;
         if(page->pageNumber() != pageNumber) { // doing the 'right' one
             left = width;
-            double x = layout.left; // swap margins
+            qreal x = layout.left; // swap margins
             layout.left = layout.right;
             layout.right = x;
         }
     }
-    double textWidth = width - layout.left - layout.right;
+    qreal textWidth = width - layout.left - layout.right;
 
     const int columns = page->pageStyle()->columns().columns/* *
         (page->pageSide() == KWPage::PageSpread ? 2: 1)*/;
@@ -286,7 +286,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
     }
 
     // spread space across items.
-    double heightLeft = page->height();
+    qreal heightLeft = page->height();
     for(int i=0; i < 11; i++)
         heightLeft -= qMax(minimumHeight[i], requestedHeight[i]);
     if(heightLeft >= 0) { // easy; plenty of space
@@ -294,7 +294,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
             minimumHeight[6] += heightLeft; // add space below endnote
         else
             minimumHeight[3] += heightLeft; // add space to main text frame
-        double y=page->offsetInDocument();
+        qreal y=page->offsetInDocument();
         for(int i=0; i < 11; i++) {
             resultingPositions[i] = y;
             y += qMax(minimumHeight[i], requestedHeight[i]);
@@ -308,10 +308,10 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
         heightLeft = page->height();
         for(int i=0; i < 11; i++)
             heightLeft -= minimumHeight[i];
-        double y=page->offsetInDocument();
+        qreal y=page->offsetInDocument();
         for(int i=0; i < 11; i++) {
             resultingPositions[i] = y;
-            double row = minimumHeight[i];
+            qreal row = minimumHeight[i];
             if(requestedHeight[i] > row) {
                 row += heightLeft / 3;
             }
@@ -321,7 +321,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
 
     // actually move / size the frames.
     if(main[0]) {
-        const double columnWidth = textWidth / columns;
+        const qreal columnWidth = textWidth / columns;
         QPointF *points = new QPointF[columns];
         for (int i=columns-1; i >= 0; i--)
             points[i] = QPointF(left + layout.left + columnWidth * i, resultingPositions[3]);
@@ -532,7 +532,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
         return;
     if(pageNumber == 0/*m_pageManager->startPage()*/)
         return;
-    double prevPage, prevPage2;
+    qreal prevPage, prevPage2;
     prevPage = m_pageManager->topOfPage(pageNumber-1);
     if(pageNumber - 2 >= 0/*m_pageManager->startPage()*/)
         prevPage2 = m_pageManager->topOfPage(pageNumber-2);
@@ -546,7 +546,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
     while(iter != frames.begin()) {
         iter--;
         KWTextFrame *frame = static_cast<KWTextFrame*> (*iter);
-        double y = frame->shape()->position().y();
+        qreal y = frame->shape()->position().y();
         if(y > prevPage) {
             if(frame->frameOnBothSheets())
                 framesToDuplicate.prepend(frame);
@@ -561,12 +561,12 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
 
     KWPage *page = m_pageManager->page(pageNumber);
     Q_ASSERT(page);
-    const double offsetInDocument = page->offsetInDocument();
+    const qreal offsetInDocument = page->offsetInDocument();
     // now add them in the proper order.
     foreach(KWTextFrame *f, framesToDuplicate) {
         KWTextFrame *frame = new KWTextFrame(createTextShape(page), fs);
-        const double y = f->shape()->position().y();
-        double offsetFromPage = y - prevPage2;
+        const qreal y = f->shape()->position().y();
+        qreal offsetFromPage = y - prevPage2;
         if(y > prevPage)
             offsetFromPage = y - prevPage;
         frame->copySettings(f);

@@ -55,7 +55,7 @@ struct PointData
 class KarbonWhirlPinchCommand::Private
 {
 public:
-    Private( KoPathShape * path, double angle, double pinch, double radius )
+    Private( KoPathShape * path, qreal angle, qreal pinch, qreal radius )
     : pathShape(path), whirlAngle(angle), pinchAmount(pinch), effectRadius(radius)
     {
         effectCenter = pathShape->boundingRect().center();
@@ -71,7 +71,7 @@ public:
         QPointF docPoint = pathShape->shapeToDocument( point );
 
         QPointF delta = docPoint - effectCenter;
-        double distToCenter = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
+        qreal distToCenter = sqrt( delta.x() * delta.x() + delta.y() * delta.y() );
 
         if( distToCenter < effectRadius )
         {
@@ -79,7 +79,7 @@ public:
 
             distToCenter /= effectRadius;
 
-            double scale = pow( sin( M_PI_2 * distToCenter ), -pinchAmount );
+            qreal scale = pow( sin( M_PI_2 * distToCenter ), -pinchAmount );
 
             // pinch:
             m.translate( effectCenter.x(), effectCenter.y() );
@@ -96,14 +96,14 @@ public:
     }
 
     KoPathShape * pathShape;
-    double whirlAngle;
-    double pinchAmount;
-    double effectRadius;
+    qreal whirlAngle;
+    qreal pinchAmount;
+    qreal effectRadius;
     QPointF effectCenter;
     QList< QList<PointData> > pathData;
 };
 
-KarbonWhirlPinchCommand::KarbonWhirlPinchCommand( KoPathShape * path, double angle, double pinch, double radius, QUndoCommand *parent )
+KarbonWhirlPinchCommand::KarbonWhirlPinchCommand( KoPathShape * path, qreal angle, qreal pinch, qreal radius, QUndoCommand *parent )
     : QUndoCommand( parent ), d( new Private( path, angle, pinch, radius ) )
 {
     setText( i18n( "Whirl & pinch" ) );

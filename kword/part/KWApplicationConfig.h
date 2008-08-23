@@ -69,7 +69,7 @@ public:
      */
     KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
 
-    double defaultColumnSpacing() const { return m_defaultColumnSpacing; }
+    qreal defaultColumnSpacing() const { return m_defaultColumnSpacing; }
 
 private:
     bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
@@ -80,7 +80,7 @@ private:
     KoZoomMode::Mode m_zoomMode;
 
     int m_autoSaveSeconds;
-    double m_defaultColumnSpacing;
+    qreal m_defaultColumnSpacing;
 
     Q_DISABLE_COPY (KWApplicationConfig)
 };

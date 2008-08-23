@@ -75,7 +75,7 @@ private:
     KoTextAnchor *const m_anchor;
     int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
     bool m_finished;
-    double m_currentLineY;
+    qreal m_currentLineY;
     int m_pass;
 };
 
