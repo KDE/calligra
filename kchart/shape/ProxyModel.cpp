@@ -30,6 +30,15 @@
 // KDE
 #include <KDebug>
 
+// KOffice
+#include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
+#include <KoOdfGraphicStyles.h>
+
 using namespace KChart;
 
 class ProxyModel::Private {
@@ -311,17 +320,83 @@ void ProxyModel::setSelection( const QVector<QRect> &selection )
     //needReset();
 }
 
-DataSet *ProxyModel::createDataSet()
+bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
-    beginInsertRows( QModelIndex(), d->dataSets.size(), d->dataSets.size() );
-    DataSet *dataSet = new DataSet( this );
-    d->dataSets.append( dataSet );
-    
-    dataSet->setColor( defaultDataSetColor( d->dataSets.size() - 1 ) );
-    dataSet->setNumber( d->dataSets.size() - 1 );
-    endInsertRows();
-    
-    return dataSet;
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.save();
+
+    d->dataSets.clear();
+
+    for ( KoXmlElement n = element.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() ) {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+        if ( n.localName() == "series" ) {
+            DataSet *dataSet = new DataSet( this );
+            dataSet->setNumber( d->dataSets.size() );
+            d->dataSets.append( dataSet );
+
+            if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+                qDebug() << "HAS style-name:" << n.attributeNS( KoXmlNS::chart, "style-name" );
+                styleStack.clear();
+                context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+                //styleStack.setTypeProperties( "chart" );
+
+                // FIXME: Load Pie explode factors
+                //if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
+                //    setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
+
+                styleStack.setTypeProperties( "graphic" );
+
+                if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) ) {
+                    qDebug() << "HAS stroke";
+                    QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
+                    if( stroke == "solid" || stroke == "dash" ) {
+                        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+                        dataSet->setPen( pen );
+                    }
+                }
+
+                if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+                    qDebug() << "HAS fill";
+                    QString fill = styleStack.property( KoXmlNS::draw, "fill" );
+                    QBrush brush;
+                    if ( fill == "solid" || fill == "hatch" ) {
+                        brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
+                    } else if ( fill == "gradient" ) {
+                        brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
+                    } else if ( fill == "bitmap" )
+                        brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
+                    dataSet->setBrush( brush );
+                } else {
+                    dataSet->setColor( defaultDataSetColor( dataSet->number() ) );
+                }
+            }
+
+            if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) ) {
+                const QString region = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+                dataSet->setYDataRegionString( region );
+            }
+            if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) ) {
+                const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
+                dataSet->setLabelDataRegionString( region );
+            }
+
+            KoXmlElement m = n.firstChild().toElement();
+            for ( ; !m.isNull(); m = m.nextSibling().toElement() ) {
+                if ( m.namespaceURI() != KoXmlNS::chart )
+                    continue;
+                // FIXME: Load data points
+            }
+        } else {
+            qWarning() << "ProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
+        }
+    }
+
+    reset();
+
+    styleStack.restore();
+    return true;
 }
 
 QVariant ProxyModel::data( const QModelIndex &index,

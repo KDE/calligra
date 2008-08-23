@@ -182,6 +182,8 @@ void PlotArea::init()
 
 void PlotArea::dataSetCountChanged()
 {
+    if ( !yAxis() )
+        return;
     foreach( DataSet *dataSet, proxyModel()->dataSets() )
     {
         if ( !dataSet->attachedAxis() )
@@ -420,8 +422,23 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
-    
-    //loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
+
+    if( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+    {
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
+
+        styleStack.setTypeProperties( "graphic" );
+
+        loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
+
+        styleStack.setTypeProperties( "chart" );
+
+        if ( styleStack.hasProperty( KoXmlNS::chart, "percentage" ) && styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
+            setChartSubType( PercentChartSubtype );
+        else if ( styleStack.hasProperty( KoXmlNS::chart, "stacked" ) && styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
+            setChartSubType( StackedChartSubtype );
+    }
     
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
     
@@ -463,7 +480,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
         delete axis;
     }
     
-    // Things to load first
+    // A data set is always attached to an axis, so load them first
     KoXmlElement n;
     for ( n = plotAreaElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
     {
@@ -476,16 +493,14 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
         }
     }
 
-    // Things to load second
+    // Load data sets
+    d->shape->proxyModel()->loadOdf( plotAreaElement, context );
+
     for ( n = plotAreaElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
     {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
-        if ( n.localName() == "series" )
-        {
-            loadOdfSeries( n, context );
-        }
-        else if ( n.localName() == "wall" )
+        if ( n.localName() == "wall" )
         {
             d->wall->loadOdf( n, context );
         }
@@ -497,98 +512,10 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
         }
     }
 
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-    {
-        context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
-        styleStack.setTypeProperties( "chart" );
-        if ( styleStack.hasProperty( KoXmlNS::chart, "percentage" ) && styleStack.property( KoXmlNS::chart, "percentage" ) == "true" )
-            setChartSubType( PercentChartSubtype );
-        else if ( styleStack.hasProperty( KoXmlNS::chart, "stacked" ) && styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
-            setChartSubType( StackedChartSubtype );
-    }
-
     styleStack.restore();
     
     requestRepaint();
     
-    return true;
-}
-
-bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingContext &context )
-{
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-    
-    d->shape->proxyModel()->blockSignals( true );
-    
-    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
-    DataSet *dataSet = d->shape->proxyModel()->createDataSet();
-    Q_ASSERT( dataSet );
-    if ( !dataSet )
-        return false;
-    
-    if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-    {
-        context.odfLoadingContext().fillStyleStack( seriesElement, KoXmlNS::chart, "style-name", "chart" );
-
-        styleStack.setTypeProperties( "chart" );
-        
-        if ( styleStack.hasProperty( KoXmlNS::chart, "pie-offset" ) )
-            setPieExplodeFactor( dataSet, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-        
-        styleStack.setTypeProperties( "graphic" );
-        
-        if ( styleStack.hasProperty( KoXmlNS::draw, "stroke" ) )
-        {
-            QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
-            if( stroke == "solid" || stroke == "dash" )
-            {
-                QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
-                dataSet->setPen( pen );
-            }
-        }
-        
-        if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
-        {
-            QString fill = styleStack.property( KoXmlNS::draw, "fill" );
-            QBrush brush;
-            if ( fill == "solid" || fill == "hatch" )
-                brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
-            else if ( fill == "gradient" )
-            {
-                brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
-            }
-            else if ( fill == "bitmap" )
-                brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
-            dataSet->setBrush( brush );
-        }
-    }
-    
-    if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) )
-    {
-        const QString region = seriesElement.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
-        dataSet->setYDataRegionString( region );
-    }
-    if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) )
-    {
-        const QString region = seriesElement.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
-        dataSet->setLabelDataRegionString( region );
-    }
-    
-    KoXmlElement n = seriesElement.firstChild().toElement();
-    for ( ; !n.isNull(); n = n.nextSibling().toElement() )
-    {
-        if ( n.namespaceURI() != KoXmlNS::chart )
-            continue;
-        // FIXME: Load data points
-    }
-
-    xAxis()->attachDataSet( dataSet );
-    yAxis()->attachDataSet( dataSet );
-    
-    d->shape->proxyModel()->blockSignals( false );
-
-    styleStack.restore();
     return true;
 }
 

@@ -50,7 +50,11 @@ public slots:
     virtual void setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection );
 
     void setSelection( const QVector<QRect> &selection );
-    DataSet *createDataSet();
+
+    /**
+    * Load series from ODF
+    */
+    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
 
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
