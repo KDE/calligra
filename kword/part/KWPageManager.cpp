@@ -96,8 +96,7 @@ KWPage* KWPageManager::page(qreal y) const {
 }
 
 KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle) {
-    Q_ASSERT( pageNumber >= 0 && pageNumber <= pageCount() );
-    if(pageNumber >= pageCount()) {
+    if(pageNumber < 0 || pageNumber >= pageCount()) {
         return appendPage(pageStyle);
     }
     if (! pageStyle) {

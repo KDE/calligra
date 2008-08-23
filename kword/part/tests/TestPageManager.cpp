@@ -32,6 +32,8 @@ void TestPageManager::getAddPages() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
 
     QCOMPARE(pageManager->pageCount() == 0, true);
+    QCOMPARE(pageManager->page(-10) == 0, true);
+    QCOMPARE(pageManager->page(10) == 0, true);
 
     KWPage* page1 = pageManager->appendPage();
     KWPage* page3 = pageManager->appendPage();
@@ -49,14 +51,12 @@ void TestPageManager::getAddPages() {
     QCOMPARE(pageManager->pageCount() == 4, true);
     QCOMPARE(pageManager->page(3) == page4, true);
 
-#if 0
-    pageManager->setStartPage(1);
-    pageManager->appendPage();
-    KWPage *page = pageManager->page(0);
-    QCOMPARE(page == 0, true);
-    page = pageManager->page(2);
-    QCOMPARE(page == 0, true);
+    QCOMPARE(page1->pageNumber(), 0);
+    QCOMPARE(page2->pageNumber(), 1);
+    QCOMPARE(page3->pageNumber(), 2);
+    QCOMPARE(page4->pageNumber(), 3);
 
+#if 0
     page = pageManager->page(1);
     QCOMPARE(page == 0, false);
     QCOMPARE(page->pageNumber(), 1);
@@ -167,58 +167,58 @@ void TestPageManager::getAddPages2() {
 
 void TestPageManager::createInsertPages() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
-#if 0
-    pageManager->setStartPage(1);
+
     QCOMPARE(pageManager->pageCount(), 0);
     KWPage *page1 = pageManager->appendPage();
     QCOMPARE(pageManager->pageCount(), 1);
     KWPage *page3 = pageManager->appendPage();
     QCOMPARE(pageManager->pageCount(), 2);
+    QCOMPARE(page3->pageNumber(), 1);
+
+    KWPage *page2 = pageManager->insertPage(1);
+    QCOMPARE(pageManager->pageCount(), 3);
+    QCOMPARE(page1->pageNumber(), 0);
+    QCOMPARE(page2->pageNumber(), 1);
     QCOMPARE(page3->pageNumber(), 2);
 
-    KWPage *page2 = pageManager->insertPage(2);
-    QCOMPARE(pageManager->pageCount(), 3);
-    QCOMPARE(page1->pageNumber(), 1);
-    QCOMPARE(page2->pageNumber(), 2);
-    QCOMPARE(page3->pageNumber(), 3);
-
-    KWPage *page4 = pageManager->insertPage(100);
-    QCOMPARE(pageManager->pageCount(), 4);
-    QCOMPARE(page1->pageNumber(), 1);
-    QCOMPARE(page2->pageNumber(), 2);
-    QCOMPARE(page3->pageNumber(), 3);
-    QCOMPARE(page4->pageNumber(), 4);
-
-    KWPage *page = pageManager->insertPage(0);
+    KWPage *page4 = pageManager->insertPage(-100);
+    KWPage *page5 = pageManager->insertPage(100);
     QCOMPARE(pageManager->pageCount(), 5);
-    QCOMPARE(page->pageNumber(), 1);
+    QCOMPARE(page1->pageNumber(), 0);
+    QCOMPARE(page2->pageNumber(), 1);
+    QCOMPARE(page3->pageNumber(), 2);
+    QCOMPARE(page4->pageNumber(), 3);
+    QCOMPARE(page5->pageNumber(), 4);
+
+    KWPage *page6 = pageManager->insertPage(0);
+    KWPage *page7 = pageManager->insertPage(1);
+    QCOMPARE(pageManager->pageCount(), 7);
+    QCOMPARE(page6->pageNumber(), 0);
+    QCOMPARE(page7->pageNumber(), 1);
     QCOMPARE(page1->pageNumber(), 2);
     QCOMPARE(page2->pageNumber(), 3);
     QCOMPARE(page3->pageNumber(), 4);
     QCOMPARE(page4->pageNumber(), 5);
-#endif
 }
 
 void TestPageManager::removePages() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
-#if 0
-    pageManager->setStartPage(1);
+
     KWPage *page1 = pageManager->appendPage();
-    pageManager->appendPage();
     KWPage *page2 = pageManager->appendPage();
-    /*KWPage *page3 =*/ pageManager->appendPage();
+    pageManager->appendPage();
     KWPage *page4 = pageManager->appendPage();
 
     pageManager->removePage(2);
-    QCOMPARE(page1->pageNumber(), 1);
-    QCOMPARE(page2->pageNumber(), 2);
-    QCOMPARE(page4->pageNumber(), 4);
+    QCOMPARE(page1->pageNumber(), 0);
+    QCOMPARE(page2->pageNumber(), 1);
+    QCOMPARE(page4->pageNumber(), 2);
+
     pageManager->removePage(page2);
-    QCOMPARE(page1->pageNumber(), 1);
-    QCOMPARE(page4->pageNumber(), 3);
+    QCOMPARE(page1->pageNumber(), 0);
+    QCOMPARE(page4->pageNumber(), 1);
 
     /* todo: bool tryRemovingPages(); */
-#endif
 }
 
 void TestPageManager::pageInfo() {
@@ -340,7 +340,7 @@ void TestPageManager::testClipToDocument() {
     lay.height = 100;
     pageStyle2->setPageLayout(lay);
     pageManager->addPageStyle(pageStyle2);
-    
+
     KWPage *page1 = pageManager->appendPage(pageStyle1);
     KWPage *page2 = pageManager->appendPage(pageStyle2);
     pageManager->appendPage(pageManager->defaultPageStyle());

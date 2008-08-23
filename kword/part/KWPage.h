@@ -39,7 +39,9 @@ class KoZoomHandler;
  */
 class KWORD_EXPORT KWPage : public QObject {
     Q_OBJECT
+    Q_ENUMS(PageSide)
 public:
+
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSide {
         Left,       ///< A left page. Used for even-numbered pages
@@ -87,15 +89,15 @@ public:
     Q_SCRIPTABLE qreal offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSide
-    PageSide pageSide() const { return m_pageSide; }
+    Q_SCRIPTABLE PageSide pageSide() const { return m_pageSide; }
     /// set the pageSide of this page, see the PageSide
-    void setPageSide(PageSide ps) { m_pageSide = ps; }
+    Q_SCRIPTABLE void setPageSide(PageSide ps) { m_pageSide = ps; }
 
     /// returns the number of this page as it will be shown to the user.
     Q_SCRIPTABLE int pageNumber() const { return m_pageNum; }
 
     /// returns the page style applied on this page
-    KWPageStyle *pageStyle() { return m_pageStyle; }
+    Q_SCRIPTABLE KWPageStyle *pageStyle() const { return m_pageStyle; }
     /// set the page style to apply on this page
     void setPageStyle (KWPageStyle *style) { m_pageStyle = style; }
 
