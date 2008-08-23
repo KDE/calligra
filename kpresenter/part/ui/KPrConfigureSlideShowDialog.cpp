@@ -26,6 +26,7 @@
 
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsDialog.h"
 
 KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, QWidget *parent )
     : KDialog( parent )
@@ -68,6 +69,33 @@ QString KPrConfigureSlideShowDialog::activeCustomSlideShow() const
 
 void KPrConfigureSlideShowDialog::editCustomSlideShow()
 {
+    KPrCustomSlideShows *finalSlideShows;
+
+    KPrCustomSlideShowsDialog dialog( this, m_document->customSlideShows(), m_document, finalSlideShows );
+    dialog.setModal( true );
+    if ( dialog.exec() == QDialog::Accepted ) {
+        m_document->setCustomSlideShows( finalSlideShows );
+        QString activeSlideShow = ui.slidesComboBox->currentText();
+        int index = ui.slidesComboBox->currentIndex();
+
+        // re-add all custom slide shows
+        ui.slidesComboBox->clear();
+        ui.slidesComboBox->addItem( i18n( "All slides" ) );
+        ui.slidesComboBox->addItems( finalSlideShows->names() );
+
+        QList<QString> customSlideShows = finalSlideShows->names();
+        if ( !customSlideShows.contains( activeSlideShow ) || index == 0 ) {
+            index = 0;
+        }
+        else {
+            index = customSlideShows.indexOf( activeSlideShow ) + 1;
+        }
+        Q_ASSERT( index < ui.slidesComboBox->count() );
+        ui.slidesComboBox->setCurrentIndex( index );
+    }
+    else {
+        delete finalSlideShows;
+    }
 }
 
 #include "KPrConfigureSlideShowDialog.moc"
