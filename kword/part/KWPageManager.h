@@ -232,6 +232,9 @@ private:
 
     QHash <QString, KWPageStyle *> m_pageStyle;
     KoInsets m_padding;
+
+    /// disable copy constructor and assignment operator
+    Q_DISABLE_COPY(KWPageManager)
 };
 
 #endif

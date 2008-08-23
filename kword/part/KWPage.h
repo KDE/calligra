@@ -141,6 +141,9 @@ private:
     KWPageStyle *m_pageStyle;
 
     friend class KWPageManager;
+
+    /// disable copy constructor and assignment operator
+    Q_DISABLE_COPY(KWPage)
 };
 
 #endif
