@@ -741,12 +741,12 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
         qreal spacing = element.attribute("spacingValue").toDouble();
         if(type == "oneandhalf")
             style->setLineHeightPercent(150);
-        else if(type == "qreal")
+        else if(type == "double")
             style->setLineHeightPercent(200);
         else if(type == "custom") {
             if(spacing == 0.0) {
                 // see if kword 1.1 compatibility is needed
-                if(element.attribute("value") == "qreal")
+                if(element.attribute("value") == "double")
                     style->setLineHeightPercent(200);
                 else if(element.attribute("value") == "oneandhalf")
                     style->setLineHeightPercent(150);
@@ -948,7 +948,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem)
         QString value = element.attribute("value", "0"); // "0" is NoUnderline
         if(value == "1" || value=="single")
             style->setUnderlineType( KoCharacterStyle::SingleLine );
-        else if(value == "qreal")
+        else if(value == "double")
             style->setUnderlineType( KoCharacterStyle::DoubleLine );
         else if(value == "single-bold")
             style->setUnderlineType( KoCharacterStyle::SingleLine ); // TODO support single-bold underline!
