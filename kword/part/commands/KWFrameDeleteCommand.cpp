@@ -33,12 +33,14 @@ KWFrameDeleteCommand::KWFrameDeleteCommand(KoShapeControllerBase *shapeControlle
     new KoShapeDeleteCommand(shapeController, frame->shape(), this);
 }
 
-void KWFrameDeleteCommand::redo() {
+void KWFrameDeleteCommand::redo()
+{
     QUndoCommand::redo();
     m_frameSet->removeFrame(m_frame);
 }
 
-void KWFrameDeleteCommand::undo() {
+void KWFrameDeleteCommand::undo()
+{
     QUndoCommand::undo();
     m_frameSet->addFrame(m_frame);
 }

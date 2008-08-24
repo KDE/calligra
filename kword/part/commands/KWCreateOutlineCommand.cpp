@@ -36,16 +36,18 @@ KWCreateOutlineCommand::KWCreateOutlineCommand( KoShapeControllerBase *controlle
 {
 }
 
-KWCreateOutlineCommand::~KWCreateOutlineCommand() {
-    if(m_deleteOnExit) {
+KWCreateOutlineCommand::~KWCreateOutlineCommand()
+{
+    if (m_deleteOnExit) {
         delete m_container;
         delete m_path;
     }
 }
 
-void KWCreateOutlineCommand::redo() {
+void KWCreateOutlineCommand::redo()
+{
     QUndoCommand::redo();
-    if(m_container == 0) {
+    if (m_container == 0) {
         m_path = new KWOutlineShape(m_frame);
         m_container = m_path->parent();
     }
@@ -61,7 +63,8 @@ void KWCreateOutlineCommand::redo() {
     m_deleteOnExit = false;
 }
 
-void KWCreateOutlineCommand::undo() {
+void KWCreateOutlineCommand::undo()
+{
     QUndoCommand::undo();
     Q_ASSERT(m_container);
     KoShape *child = m_frame->shape();

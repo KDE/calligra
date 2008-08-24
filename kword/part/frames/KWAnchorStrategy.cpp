@@ -74,12 +74,14 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
     }
 }
 
-KWAnchorStrategy::~KWAnchorStrategy() {
+KWAnchorStrategy::~KWAnchorStrategy()
+{
 }
 
-bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state) {
+bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
+{
 //kDebug() <<"KWAnchorStrategy::checkState [" << m_pass <<"] pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
-    if(m_finished || m_knowledgePoint > state->cursorPosition())
+    if (m_finished || m_knowledgePoint > state->cursorPosition())
         return false;
 
     // *** alter 'state' to relayout the part we want.
@@ -136,7 +138,7 @@ recalcFrom = 0; // TODO ???
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
             Q_ASSERT(tl.isValid());
             m_currentLineY = tl.y() + tl.height() - data->documentOffset();
-            if(m_anchor->verticalAlignment() == KoTextAnchor::BelowCurrentLine)
+            if (m_anchor->verticalAlignment() == KoTextAnchor::BelowCurrentLine)
                 newPosition.setY(m_currentLineY);
             else
                 newPosition.setY(m_currentLineY - boundingRect.height() - tl.height());
@@ -166,7 +168,7 @@ recalcFrom = 0; // TODO ????
         default:
             Q_ASSERT(false); // new enum added?
     }
-    if(m_pass > 0) { // already been here
+    if (m_pass > 0) { // already been here
         // for the cases where we align with text; check if the text is within margin. If so; set finished to true.
         QPointF diff = newPosition - m_anchor->shape()->position();
         m_finished = qAbs(diff.x()) < 2.0 && qAbs(diff.y()) < 2.0;
@@ -174,7 +176,7 @@ recalcFrom = 0; // TODO ????
     m_pass++;
 
     do { // move the layout class back a couple of paragraphs.
-        if(state->cursorPosition() <= recalcFrom)
+        if (state->cursorPosition() <= recalcFrom)
             break;
     } while(state->previousParag());
 
@@ -185,13 +187,15 @@ recalcFrom = 0; // TODO ????
     return true;
 }
 
-bool KWAnchorStrategy::isFinished() {
+bool KWAnchorStrategy::isFinished()
+{
     // if, for the second time, we passed the point where the anchor was inserted, return true
     return m_finished;
 }
 
-KoShape * KWAnchorStrategy::anchoredShape() const {
-    if(m_anchor->horizontalAlignment() == KoTextAnchor::HorizontalOffset &&
+KoShape * KWAnchorStrategy::anchoredShape() const
+{
+    if (m_anchor->horizontalAlignment() == KoTextAnchor::HorizontalOffset &&
             m_anchor->verticalAlignment() == KoTextAnchor::VerticalOffset)
         return 0;
     return m_anchor->shape();

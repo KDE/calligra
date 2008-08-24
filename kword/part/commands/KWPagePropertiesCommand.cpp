@@ -53,19 +53,19 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
         bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;
         foreach(KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
-            if(remove && shape->boundingRect().intersects(page->rect())) {
-               if(m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
+            if (remove && shape->boundingRect().intersects(page->rect())) {
+               if (m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
                        shape->position().x() >= rect.center().x()) // before it was a pageSpread.
                     new KWFrameDeleteCommand(document, frame, this);
             }
-            else if(shape->position().y() > bottom) { // shape should be moved down
+            else if (shape->position().y() > bottom) { // shape should be moved down
                 shapes.append(shape);
                 previousPositions.append(shape->position());
                 newPositions.append(shape->position() + QPointF(0, sizeDifference) );
             }
-            else if(shape->position().y() > rect.top()) { // Let see if the shape needs to be moved to fit in the page
+            else if (shape->position().y() > rect.top()) { // Let see if the shape needs to be moved to fit in the page
                 QRectF br = shape->boundingRect();
-                if(! newRect.contains(br)) {
+                if (! newRect.contains(br)) {
                     shapes.append(shape);
                     previousPositions.append(shape->position());
                     QPointF newPos = shape->position() - rect.bottomRight() + newRect.bottomRight();
@@ -74,14 +74,15 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
             }
         }
     }
-    if(shapes.count() > 0)
+    if (shapes.count() > 0)
         new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
 
-    if(page->pageNumber() % 2 == 1 && newLayout.left < 0)
+    if (page->pageNumber() % 2 == 1 && newLayout.left < 0)
         new KWPageInsertCommand(m_document, page->pageNumber()-1, this);
 }
 
-void KWPagePropertiesCommand::redo() {
+void KWPagePropertiesCommand::redo()
+{
     QUndoCommand::redo();
     setLayout(m_newLayout);
     m_page->setDirectionHint(m_newDirection);
@@ -89,7 +90,8 @@ void KWPagePropertiesCommand::redo() {
     m_document->firePageSetupChanged();
 }
 
-void KWPagePropertiesCommand::undo() {
+void KWPagePropertiesCommand::undo()
+{
     QUndoCommand::undo();
     //setLayout(m_newLayout);
     setLayout(m_oldLayout);
@@ -98,9 +100,10 @@ void KWPagePropertiesCommand::undo() {
     m_document->firePageSetupChanged();
 }
 
-void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
+void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout)
+{
     m_page->pageStyle()->setPageLayout(layout);
-    if(layout.pageEdge >= 0.0 &&    // assumption based on the KWPageLayout widget.
+    if (layout.pageEdge >= 0.0 &&    // assumption based on the KWPageLayout widget.
             m_page->pageNumber() % 2 == 0)
         m_page->setPageSide(KWPage::PageSpread);
     else

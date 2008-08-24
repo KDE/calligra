@@ -45,21 +45,23 @@ KWPageInsertCommand::KWPageInsertCommand( KWDocument *document, int afterPageNum
 {
 }
 
-KWPageInsertCommand::~KWPageInsertCommand() {
-    if(m_deletePage)
+KWPageInsertCommand::~KWPageInsertCommand()
+{
+    if (m_deletePage)
         delete m_page;
 }
 
-void KWPageInsertCommand::redo() {
+void KWPageInsertCommand::redo()
+{
     QUndoCommand::redo();
     KWPageStyle *pageStyle = m_document->pageManager()->pageStyle(m_masterPageName); // may return NULL
-    if(m_page == 0) {
+    if (m_page == 0) {
         // Appending a page
         KWPage *prevPage = m_document->m_pageManager.page(m_afterPageNum);
         m_page = m_document->m_pageManager.insertPage(m_afterPageNum+1, pageStyle);
-        if(prevPage)
+        if (prevPage)
             m_page->setDirectionHint(prevPage->directionHint());
-        if(m_page->pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
+        if (m_page->pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
             m_page->setPageSide(KWPage::PageSpread);
         PageProcessingQueue *ppq = new PageProcessingQueue(m_document);
         ppq->addPage(m_page);
@@ -73,7 +75,7 @@ void KWPageInsertCommand::redo() {
         foreach(KWFrameSet *fs, m_document->frameSets()) {
             foreach(KWFrame *frame, fs->frames()) {
                 KoShape *shape = frame->shape();
-                if(shape->position().y() > rect.top()) { // frame should be moved down
+                if (shape->position().y() > rect.top()) { // frame should be moved down
                     shapes.append(shape);
                     previousPositions.append(shape->position());
                     newPositions.append(shape->position() + QPointF(0, rect.height()));
@@ -81,8 +83,8 @@ void KWPageInsertCommand::redo() {
             }
         }
 
-        //FIXME if(false) ??? see also KWPageRemoveCommand
-        if(false && shapes.count() > 0)
+        //FIXME if (false) ??? see also KWPageRemoveCommand
+        if (false && shapes.count() > 0)
             m_shapeMoveCommand = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
     }
     else
@@ -93,17 +95,18 @@ void KWPageInsertCommand::redo() {
                 m_page->setPageStyle(pageStyle);
         m_document->m_pageManager.insertPage(m_page);
     }
-    if(m_shapeMoveCommand)
+    if (m_shapeMoveCommand)
         m_shapeMoveCommand->redo();
     m_deletePage = false;
     m_document->firePageSetupChanged();
 }
 
-void KWPageInsertCommand::undo() {
+void KWPageInsertCommand::undo()
+{
     QUndoCommand::undo();
-    if(m_page == 0) return;
+    if (m_page == 0) return;
     m_document->m_pageManager.removePage(m_page);
-    if(m_shapeMoveCommand)
+    if (m_shapeMoveCommand)
         m_shapeMoveCommand->redo();
     m_deletePage = true;
     m_document->firePageSetupChanged();

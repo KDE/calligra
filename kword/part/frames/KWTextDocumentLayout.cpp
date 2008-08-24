@@ -36,52 +36,55 @@
 #include <QPainterPath>
 
 // helper methods
-static qreal xAtY(const QLineF &line, qreal y) {
-    if(line.dx() == 0)
+static qreal xAtY(const QLineF &line, qreal y)
+{
+    if (line.dx() == 0)
         return line.x1();
     return line.x1() +  (y - line.y1()) / line.dy() * line.dx();
 }
 
-static qreal yAtX(const QLineF &line, qreal x) {
-    if(line.dy() == 0)
+static qreal yAtX(const QLineF &line, qreal x)
+{
+    if (line.dy() == 0)
         return line.y1();
     return line.y1() +  (x - line.x1()) / line.dx() * line.dy();
 }
 
 /// Returns 0, one or two points where the line intersects with the rectangle.
-static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
+static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
+{
     QList<QPointF> answer;
     QPointF startOfLine = line.p1();
     QPointF endOfLine = line.p2();
     // top edge
-    if(startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top() ||
+    if (startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top() ||
             startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top()) {
         qreal x = xAtY(line, rect.top());
-        if(x >= rect.left() && x <= rect.right() && x)
+        if (x >= rect.left() && x <= rect.right() && x)
             answer.append(QPointF(x, rect.top()));
     }
 
     // left
-    if(startOfLine.x() <= rect.left() && endOfLine.x() >= rect.left() ||
+    if (startOfLine.x() <= rect.left() && endOfLine.x() >= rect.left() ||
             startOfLine.x() >= rect.left() && endOfLine.x() <= rect.left()) {
         qreal y = yAtX(line, rect.left());
-        if(y >= rect.top() && y <= rect.bottom())
+        if (y >= rect.top() && y <= rect.bottom())
             answer.append(QPointF(rect.left(), y));
     }
 
     // bottom edge
-    if(startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom() ||
+    if (startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom() ||
             startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom()) {
         qreal x = xAtY(line, rect.bottom());
-        if(x >= rect.left() && x <= rect.right())
+        if (x >= rect.left() && x <= rect.right())
             answer.append(QPointF(x, rect.bottom()));
     }
 
     // right
-    if(startOfLine.x() <= rect.right() && endOfLine.x() >= rect.right() ||
+    if (startOfLine.x() <= rect.right() && endOfLine.x() >= rect.right() ||
             startOfLine.x() >= rect.right() && endOfLine.x() <= rect.right()) {
         qreal y = yAtX(line, rect.right());
-        if(y >= rect.top() && y <= rect.bottom())
+        if (y >= rect.top() && y <= rect.bottom())
             answer.append(QPointF(rect.right(), y));
     }
 
@@ -92,16 +95,17 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
 // QPolygonF is a QVector<QPointF>, it has a constructor that takes a QRectF and it has a QPolygonF intersected(const QPolygonF &) method
 
 // ----------------- Class that allows us with the runaround of QPainterPaths ----------------
-class Outline {
+class Outline
+{
 public:
     Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None) {
         init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
-        if(frame->textRunAround() == KWord::NoRunAround)
+        if (frame->textRunAround() == KWord::NoRunAround)
             m_side = Empty;
         else {
-            if(frame->runAroundSide() == KWord::LeftRunAroundSide)
+            if (frame->runAroundSide() == KWord::LeftRunAroundSide)
                 m_side = Right;
-            else if(frame->runAroundSide() == KWord::RightRunAroundSide)
+            else if (frame->runAroundSide() == KWord::RightRunAroundSide)
                 m_side = Left;
         }
     }
@@ -113,7 +117,7 @@ public:
     void init(const QMatrix &matrix, KoShape *shape, qreal distance) {
         QPainterPath path =  matrix.map(shape->outline());
         m_bounds = path.boundingRect();
-        if(distance >= 0.0) {
+        if (distance >= 0.0) {
             QMatrix grow = matrix;
             grow.translate(m_bounds.width() / 2.0, m_bounds.height() / 2.0);
             const qreal scaleX = (m_bounds.width() + distance) / m_bounds.width();
@@ -130,10 +134,10 @@ public:
 
         QPointF prev = *(poly.begin());
         foreach(QPointF vtx, poly) { //initialized edges
-            if(vtx.x() == prev.x() && vtx.y() == prev.y())
+            if (vtx.x() == prev.x() && vtx.y() == prev.y())
                continue;
             QLineF line;
-            if(prev.y() < vtx.y()) // Make sure the vector lines all point downwards.
+            if (prev.y() < vtx.y()) // Make sure the vector lines all point downwards.
                 line = QLineF(prev, vtx);
             else
                 line = QLineF(vtx, prev);
@@ -143,22 +147,22 @@ public:
     }
 
     QRectF limit(const QRectF &content) {
-        if(m_side == Empty) {
+        if (m_side == Empty) {
             if (content.intersects(m_bounds))
                 return QRectF();
             return content;
         }
 
-        if(m_side == None) { // first time for this text;
+        if (m_side == None) { // first time for this text;
             qreal insetLeft = m_bounds.right() - content.left();
             qreal insetRight = content.right() - m_bounds.left();
 
-            if(insetLeft < insetRight)
+            if (insetLeft < insetRight)
                 m_side = Left;
             else
                 m_side = Right;
         }
-        if(!m_bounds.intersects(content))
+        if (!m_bounds.intersects(content))
             return content;
 
         // two points, as we are checking a rect, not a line.
@@ -171,22 +175,22 @@ public:
             QMap<qreal, QLineF>::const_iterator iter = m_edges.constBegin();
             for(;iter != m_edges.constEnd(); ++iter) {
                 QLineF line = iter.value();
-                if(line.y2() < y) // not a section that will intersect with ou Y yet
+                if (line.y2() < y) // not a section that will intersect with ou Y yet
                     continue;
-                if(line.y1() > y) // section is below our Y, so abort loop
+                if (line.y1() > y) // section is below our Y, so abort loop
                     break;
-                if(qAbs(line.dy()) < 1E-10 ) // horizontal lines don't concern us.
+                if (qAbs(line.dy()) < 1E-10 ) // horizontal lines don't concern us.
                     continue;
 
                 qreal intersect = xAtY(iter.value(), y);
-                if(first) {
+                if (first) {
                     x = intersect;
                     first = false;
                 }
-                else if(m_side == Left && intersect > x || m_side == Right && intersect < x)
+                else if (m_side == Left && intersect > x || m_side == Right && intersect < x)
                     x = intersect;
             }
-            if(m_side == Left)
+            if (m_side == Left)
                 answer.setLeft( qMax(answer.left(), x));
             else
                 answer.setRight( qMin(answer.right(), x));
@@ -202,7 +206,8 @@ private:
     QRectF m_bounds;
 };
 
-class KWTextDocumentLayout::DummyShape : public KoShape {
+class KWTextDocumentLayout::DummyShape : public KoShape
+{
 public:
     DummyShape(QTextDocument *doc) : textShapeData(new KoTextShapeData())
     {
@@ -225,32 +230,35 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
     m_dummyShape(new DummyShape(frameSet->document())),
     m_lastKnownFrameCount(0)
 {
-    if(m_frameSet->frameCount()) {
+    if (m_frameSet->frameCount()) {
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (m_frameSet->frames().first()->shape()->userData());
-        if(data) { // reset layout.
+        if (data) { // reset layout.
             data->setEndPosition(-1);
             data->foul();
         }
     }
 }
 
-KWTextDocumentLayout::~KWTextDocumentLayout() {
+KWTextDocumentLayout::~KWTextDocumentLayout()
+{
     m_frameSet = 0;
     delete m_dummyShape;
 }
 
-QList<KoShape*> KWTextDocumentLayout::shapes() const {
+QList<KoShape*> KWTextDocumentLayout::shapes() const
+{
     QList<KoShape*> answer;
     foreach(KWFrame *frame, m_frameSet->frames()) {
-        if(frame->isCopy())
+        if (frame->isCopy())
             continue;
         answer.append(frame->shape());
     }
     return answer;
 }
 
-void KWTextDocumentLayout::relayout() {
-    if(! m_frameSet->allowLayout())
+void KWTextDocumentLayout::relayout()
+{
+    if (! m_frameSet->allowLayout())
         return;
 
     const QList<KWFrame*> frames = m_frameSet->frames();
@@ -259,21 +267,21 @@ void KWTextDocumentLayout::relayout() {
     KWFrame *firstDirtyFrame = 0;
     foreach(KWFrame *frame, frames) {
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
-        if(!firstDirtyFrame && data && data->isDirty())
+        if (!firstDirtyFrame && data && data->isDirty())
             firstDirtyFrame = frame;
-        if(! firstDirtyFrame)
+        if (! firstDirtyFrame)
             dirtyFrames.removeAll(frame);
     }
 
     qSort(m_frameSet->m_frames.begin(), m_frameSet->m_frames.end(), KWTextFrameSet::sortTextFrames); // make sure the ordering is proper
 
-    if(foundADirtyOne) {
+    if (foundADirtyOne) {
         // if the dirty frame has been resorted to no longer be the first one, then we should
         // mark dirty any frame that were previously later in the flow, but are now before it.
         foreach(KWFrame *frame, frames) {
-            if(frame == firstDirtyFrame)
+            if (frame == firstDirtyFrame)
                 break;
-            if(dirtyFrames.contains(frame)) {
+            if (dirtyFrames.contains(frame)) {
                 static_cast<KoTextShapeData*> (frame->shape()->userData())->foul();
                 // just the first is enough.
                 break;
@@ -284,17 +292,19 @@ void KWTextDocumentLayout::relayout() {
     layout();
 }
 
-void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &f) {
+void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &f)
+{
     KoTextDocumentLayout::positionInlineObject(item, position, f);
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
-    if(anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
+    if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
         foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
-            if(strategy->anchor() == anchor) return;
+            if (strategy->anchor() == anchor) return;
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
 
-void KWTextDocumentLayout::layout() {
+void KWTextDocumentLayout::layout()
+{
 //kDebug() <<"KWTextDocumentLayout::layout";
     QList<Outline*> outlines;
     class End {
@@ -308,7 +318,7 @@ void KWTextDocumentLayout::layout() {
     };
     End ender(m_state, &outlines); // poor mans finally{}
 
-    if(! m_state->start())
+    if (! m_state->start())
         return;
     qreal endPos = 1E9;
     qreal bottomOfText = 0.0;
@@ -327,7 +337,7 @@ void KWTextDocumentLayout::layout() {
             void tryFit() {
                 QRectF rect(m_state->x(), m_state->y(), m_state->width(), 1.);
                 line.setLineWidth(rect.width());
-                if(rect.width() <= 0. || line.textLength() == 0) { // margin so small that the text can't fit.
+                if (rect.width() <= 0. || line.textLength() == 0) { // margin so small that the text can't fit.
                     line.setNumColumns(1);
                     line.setPosition(QPointF(rect.x(), rect.y()));
                     return;
@@ -341,10 +351,10 @@ void KWTextDocumentLayout::layout() {
                         line.setLineWidth(rect.width());
                     rect.setHeight(line.height());
                     QRectF newLine = limit(rect);
-                    if(newLine.width() <= 0.)
+                    if (newLine.width() <= 0.)
                         // TODO be more intelligent than just moving down 10 pt
                         rect = QRectF(m_state->x(), rect.top() + 10, m_state->width(), rect.height());
-                    else if(qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right()) < 1E-10)
+                    else if (qAbs(newLine.left() - rect.left()) < 1E-10 && qAbs(newLine.right() - rect.right()) < 1E-10)
                         break;
                     else
                         rect = newLine;
@@ -365,9 +375,9 @@ void KWTextDocumentLayout::layout() {
             const QList<Outline*> *m_outlines;
         };
 
-        if(m_state->shape != currentShape) { // next shape
+        if (m_state->shape != currentShape) { // next shape
             currentShape = m_state->shape;
-            if(m_frameSet->kwordDocument()) {
+            if (m_frameSet->kwordDocument()) {
                 // refresh the outlines cache.
                 qDeleteAll(outlines);
                 outlines.clear();
@@ -375,29 +385,29 @@ void KWTextDocumentLayout::layout() {
                 QRectF bounds = m_state->shape->boundingRect();
                 foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-                    if(tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
+                    if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
                         continue;
                     foreach(KWFrame *frame, fs->frames()) {
-                        if(frame->shape() == currentShape)
+                        if (frame->shape() == currentShape)
                             continue;
-                        if(frame->textRunAround() == KWord::RunThrough)
+                        if (frame->textRunAround() == KWord::RunThrough)
                             continue;
-                        if(frame->outlineShape()) {
-                            if(frame->outlineShape()->zIndex() <= currentShape->zIndex())
+                        if (frame->outlineShape()) {
+                            if (frame->outlineShape()->zIndex() <= currentShape->zIndex())
                                 continue;
                         }
-                        else if(frame->shape()->zIndex() <= currentShape->zIndex())
+                        else if (frame->shape()->zIndex() <= currentShape->zIndex())
                             continue;
-                        if(! bounds.intersects( frame->shape()->boundingRect()))
+                        if (! bounds.intersects( frame->shape()->boundingRect()))
                             continue;
                         bool isChild = false;
                         KoShape *parent = frame->shape()->parent();
                         while(parent && !isChild) {
-                            if(parent == currentShape)
+                            if (parent == currentShape)
                                 isChild = true;
                             parent = parent->parent();
                         }
-                        if(isChild)
+                        if (isChild)
                             continue;
                         QMatrix matrix = (frame->outlineShape() ? frame->outlineShape() : frame->shape())->absoluteTransformation(0);
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
@@ -409,17 +419,17 @@ void KWTextDocumentLayout::layout() {
                 KWPage *page = m_frameSet->pageManager()->page(currentShape);
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (currentShape->userData());
                 Q_ASSERT(data);
-                if(page) {
+                if (page) {
                     data->setPageDirection( page->directionHint() );
 
                     int pagenumber = page->pageNumber();
                     switch( data->pageNumberSelectType() ) {
                         case KoTextShapeData::PageNumberSelectPagePrev: // Select the "previous" page
-                            if( KWPage* p = page->previous() )
+                            if ( KWPage* p = page->previous() )
                                 pagenumber = p->pageNumber();
                             break;
                         case KoTextShapeData::PageNumberSelectPageNext: // Select the "next" page
-                            if( KWPage* p = page->next() )
+                            if ( KWPage* p = page->next() )
                                 pagenumber = p->pageNumber();
                             break;
                         case KoTextShapeData::PageNumberSelectPageCurrent: // Select the "current" page, This is the default.
@@ -433,20 +443,20 @@ void KWTextDocumentLayout::layout() {
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
         foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
-            if(strategy->checkState(m_state)) {
+            if (strategy->checkState(m_state)) {
                 restartLine = true;
                 break;
             }
-            if(strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
+            if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
                 m_activeAnchors.removeAll(strategy);
                 delete strategy;
             }
         }
-        if(restartLine)
+        if (restartLine)
             continue;
 
         foreach(KWAnchorStrategy *strategy, m_newAnchors) {
-            if(strategy->anchoredShape() != 0) {
+            if (strategy->anchoredShape() != 0) {
                 QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
                 matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                 matrix.translate(0, m_state->documentOffsetInShape());
@@ -459,23 +469,23 @@ void KWTextDocumentLayout::layout() {
         Line line(m_state);
         if (!line.isValid()) { // end of parag
             const qreal posY = m_state->y();
-            if(firstParagraph) {
+            if (firstParagraph) {
                 // start counting after the resumed paragraph
                 firstParagraph = false;
                 endPos = posY + m_state->shape->size().height() * 2;
             }
             bool moreText = m_state->nextParag();
-            if(m_state->shape && m_state->y() > posY)
+            if (m_state->shape && m_state->y() > posY)
                 m_state->shape->update(QRectF(0, posY,
                             m_state->shape->size().width(), m_state->y() - posY));
 
-            if(! moreText) {
+            if (! moreText) {
                 const int frameCount = m_frameSet->frameCount();
                 const int framesInUse = m_state->shapeNumber+1;
-                if(framesInUse < frameCount && framesInUse != m_lastKnownFrameCount)
+                if (framesInUse < frameCount && framesInUse != m_lastKnownFrameCount)
                     m_frameSet->framesEmpty(frameCount - framesInUse);
                 m_lastKnownFrameCount = frameCount;
-                if(requestFrameResize) // text ran out while placing it in the dummy shape.
+                if (requestFrameResize) // text ran out while placing it in the dummy shape.
                     m_frameSet->requestMoreFrames(m_state->y() - m_dummyShape->textShapeData->documentOffset());
                 else {
                     // if there is more space in the shape then there is text. Reset the no-grow bool.
@@ -489,7 +499,7 @@ void KWTextDocumentLayout::layout() {
                     Q_ASSERT( data );
                     qreal spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
                     data->wipe();
-                    if(spaceLeft > 3) {
+                    if (spaceLeft > 3) {
                         // note that this may delete the data and lastFrame !!  Do not access them after this point.
                         m_frameSet->spaceLeft(spaceLeft -3);
                     }
@@ -497,7 +507,7 @@ void KWTextDocumentLayout::layout() {
 
                 return; // done!
             }
-            else if(m_state->shape == 0) {
+            else if (m_state->shape == 0) {
                 // encountered a 'end of page' break but we don't have any more pages(/shapes)
                 m_state->clearTillEnd();
                 m_frameSet->requestMoreFrames(0); // new page, please.
@@ -507,7 +517,7 @@ void KWTextDocumentLayout::layout() {
             newParagraph = true;
             continue;
         }
-        if(m_state->interrupted() || newParagraph && m_state->y() > endPos) {
+        if (m_state->interrupted() || newParagraph && m_state->y() > endPos) {
             // enough for now. Try again later.
             scheduleLayout();
             return;
@@ -518,17 +528,17 @@ void KWTextDocumentLayout::layout() {
         bottomOfText = line.line.y() + line.line.height();
 
         while(m_state->addLine(line.line)) {
-            if(m_state->shape == 0) { // no more shapes to put the text in!
+            if (m_state->shape == 0) { // no more shapes to put the text in!
                 line.line.setPosition(QPointF(0, m_state->y()+20));
 
-                if(requestFrameResize) { // plenty more text, but first lets resize the shape.
+                if (requestFrameResize) { // plenty more text, but first lets resize the shape.
                     m_frameSet->requestMoreFrames(m_dummyShape->size().height());
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
                 }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
-                if(lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior) {
+                if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior) {
                     m_state->clearTillEnd();
                     return; // done!
                 }
@@ -548,13 +558,13 @@ void KWTextDocumentLayout::layout() {
                             top.p2().y() + top.dx() * multiplier));
 
                 QList<QPointF> list = intersect(pageRect, down);
-                if(list.count() > 0)
+                if (list.count() > 0)
                     down = QLineF(down.p1(), list.last());
                 list = intersect(pageRect, down2);
-                if(list.count() > 0)
+                if (list.count() > 0)
                     down2 = QLineF(down2.p1(), list.last());
                 const qreal maxFrameLength = qMin(down.length(), down2.length());
-                if(maxFrameLength <= currentShape->size().height()) {
+                if (maxFrameLength <= currentShape->size().height()) {
                     m_state->clearTillEnd();
                     m_frameSet->requestMoreFrames(0); // new page, please.
                     return;
@@ -564,7 +574,7 @@ void KWTextDocumentLayout::layout() {
 
                 m_dummyShape->setSize(QSizeF(currentShape->size().width(), maxFrameLength - currentShape->size().height()));
                 m_dummyShape->textShapeData->setShapeMargins(data->shapeMargins());
-                if(! m_state->setFollowupShape(m_dummyShape)) { // if I can't render into a dummy shape
+                if (! m_state->setFollowupShape(m_dummyShape)) { // if I can't render into a dummy shape
                     m_state->clearTillEnd();
                     return;
                 }
@@ -579,6 +589,6 @@ void KWTextDocumentLayout::layout() {
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->update(repaintRect);
     }
-    if(requestFrameResize)
+    if (requestFrameResize)
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());
 }

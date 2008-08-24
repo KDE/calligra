@@ -67,8 +67,9 @@ KWOutlineShape::~KWOutlineShape()
 {
 }
 
-void KWOutlineShape::paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
-    if(! canvas->shapeManager()->selection()->isSelected(this))
+void KWOutlineShape::paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+{
+    if (! canvas->shapeManager()->selection()->isSelected(this))
         return;
 
     applyConversion( painter, converter );

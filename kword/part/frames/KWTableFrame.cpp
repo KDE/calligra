@@ -34,28 +34,32 @@ KWTableFrame::KWTableFrame(KoShape *shape, KWFrameSet *parent)
 {
 }
 
-KWTableFrame::~KWTableFrame() {
+KWTableFrame::~KWTableFrame()
+{
 }
 
-bool KWTableFrame::canAutoGrow() {
-    if(!m_canGrow)
+bool KWTableFrame::canAutoGrow()
+{
+    if (!m_canGrow)
         return false;
-    if(shape()->size().height() - m_lastHeight < -0.2) { // shape shrunk!
+    if (shape()->size().height() - m_lastHeight < -0.2) { // shape shrunk!
         m_canGrow = false;
         m_minimumFrameHeight = shape()->size().height();
     }
     return m_canGrow;
 }
 
-void KWTableFrame::allowToGrow() {
+void KWTableFrame::allowToGrow()
+{
     m_canGrow = true;
     m_lastHeight = shape()->size().height();
 }
 
-void KWTableFrame::autoShrink(qreal requestedHeight) {
+void KWTableFrame::autoShrink(qreal requestedHeight)
+{
 //kDebug() <<"autoShrink requested:" << requestedHeight <<", min:" << m_minimumFrameHeight <<", last:" << m_lastHeight;
     QSizeF size = shape()->size();
-    if( qAbs(m_lastHeight - size.height()) > 1E-6) { // if not equal
+    if ( qAbs(m_lastHeight - size.height()) > 1E-6) { // if not equal
         m_minimumFrameHeight = size.height();
         m_lastHeight = size.height();
         return;

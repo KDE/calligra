@@ -32,33 +32,39 @@ KWCopyShape::KWCopyShape(KoShape *original)
     setSize(m_original->size());
 }
 
-KWCopyShape::~KWCopyShape() {
+KWCopyShape::~KWCopyShape()
+{
 }
 
-void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter) {
+void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
+{
     painter.setClipRect(QRectF(QPointF(0, 0), converter.documentToView(size()))
             .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.
             Qt::IntersectClip);
     painter.save();
     m_original->paint(painter, converter);
     painter.restore();
-    if(m_original->border())
+    if (m_original->border())
         m_original->border()->paintBorder(m_original, painter, converter);
 }
 
-void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+{
     m_original->paintDecorations(painter, converter, canvas);
 }
 
-const QPainterPath KWCopyShape::outline() const {
+const QPainterPath KWCopyShape::outline() const
+{
     return m_original->outline();
 }
 
-void KWCopyShape::saveOdf( KoShapeSavingContext & context ) const {
+void KWCopyShape::saveOdf( KoShapeSavingContext & context ) const
+{
     // TODO
 }
 
-bool KWCopyShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool KWCopyShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
     return false; // TODO
 }
 

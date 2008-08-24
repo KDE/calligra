@@ -46,11 +46,13 @@ KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QU
     m_direction = page->directionHint();
 }
 
-KWPageRemoveCommand::~KWPageRemoveCommand() {
+KWPageRemoveCommand::~KWPageRemoveCommand()
+{
     qDeleteAll(m_childcommands);
 }
 
-void KWPageRemoveCommand::redo() {
+void KWPageRemoveCommand::redo()
+{
     QUndoCommand::redo();
     KWPage *page = m_document->pageManager()->page(m_pageNumber);
     Q_ASSERT(page);
@@ -119,7 +121,8 @@ void KWPageRemoveCommand::redo() {
     m_document->relayout(); //needed?
 }
 
-void KWPageRemoveCommand::undo() {
+void KWPageRemoveCommand::undo()
+{
     QUndoCommand::undo();
 
     // insert the page

@@ -42,33 +42,36 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
-    if(parent)
+    if (parent)
         parent->addFrame(this);
 }
 
-KWFrame::~KWFrame() {
+KWFrame::~KWFrame()
+{
     m_shape = 0; // no delete is needed as the shape deletes us.
-    if(m_frameSet) {
+    if (m_frameSet) {
         bool justMe = m_frameSet->frameCount() == 1;
         m_frameSet->removeFrame(this); // first remove me so we won't get qreal deleted.
-        if(justMe)
+        if (justMe)
             delete m_frameSet;
         m_frameSet = 0;
     }
     delete m_outline;
 }
 
-void KWFrame::setFrameSet(KWFrameSet *fs) {
-    if(fs == m_frameSet)
+void KWFrame::setFrameSet(KWFrameSet *fs)
+{
+    if (fs == m_frameSet)
         return;
-    if(m_frameSet)
+    if (m_frameSet)
         m_frameSet->removeFrame(this);
     m_frameSet = fs;
-    if(fs)
+    if (fs)
         fs->addFrame(this);
 }
 
-void KWFrame::copySettings(const KWFrame *frame) {
+void KWFrame::copySettings(const KWFrame *frame)
+{
     setFrameBehavior(frame->frameBehavior());
     setNewFrameBehavior(frame->newFrameBehavior());
     setFrameOnBothSheets(frame->frameOnBothSheets());
@@ -79,7 +82,8 @@ void KWFrame::copySettings(const KWFrame *frame) {
     // TODO copy-shape
 }
 
-void KWFrame::saveOdf(KoShapeSavingContext & context) {
+void KWFrame::saveOdf(KoShapeSavingContext & context)
+{
     if (m_anchor)
         return;
 
@@ -88,8 +92,9 @@ void KWFrame::saveOdf(KoShapeSavingContext & context) {
     shape()->saveOdf(context);
 }
 
-void KWFrame::setShape(KoShape *shape) {
-    if(m_shape == shape) return;
+void KWFrame::setShape(KoShape *shape)
+{
+    if (m_shape == shape) return;
     shape->copySettings(m_shape);
     m_shape->setApplicationData(0);
     m_shape->deleteLater();
@@ -98,33 +103,38 @@ void KWFrame::setShape(KoShape *shape) {
     emit m_frameSet->frameAdded(this);
 }
 
-bool KWFrame::isCopy() const {
+bool KWFrame::isCopy() const
+{
     return dynamic_cast<KWCopyShape*> (shape());
 }
 
-void KWFrame::makeCopyFrame() {
-    if(isCopy())
+void KWFrame::makeCopyFrame()
+{
+    if (isCopy())
         return;
     KWFrame *prev = 0;
     foreach(KWFrame* frame, m_frameSet->frames()) {
-        if(frame == this)
+        if (frame == this)
             break;
         prev = frame;
     }
-    if(prev == 0)
+    if (prev == 0)
         return;
     KWCopyShape *copyShape = new KWCopyShape(prev->shape());
     setShape(copyShape);
 }
 
-void KWFrame::setOutlineShape(KWOutlineShape *outline) {
+void KWFrame::setOutlineShape(KWOutlineShape *outline)
+{
     m_outline = outline;
 }
 
-void KWFrame::attachAnchor (KoTextAnchor *anchor) {
+void KWFrame::attachAnchor (KoTextAnchor *anchor)
+{
     m_anchor = anchor;
 }
 
-KoTextAnchor *KWFrame::getAnchor() {
+KoTextAnchor *KWFrame::getAnchor()
+{
     return m_anchor;
 }
