@@ -47,7 +47,7 @@ public:
     ~KFormulaCanvas();
 
     /// reimplemented method from superclass
-    void gridSize( double* horizontal, double* vertical ) const;
+    void gridSize( qreal* horizontal, qreal* vertical ) const;
     
     /// reimplemented method from superclass
     bool snapToGrid() const;

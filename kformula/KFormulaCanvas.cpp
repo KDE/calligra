@@ -95,7 +95,7 @@ void KFormulaCanvas::mouseMoveEvent( QMouseEvent* e )
     m_toolProxy->mouseMoveEvent( e, viewConverter()->viewToDocument( e->pos() ) );
 }
 
-void KFormulaCanvas::gridSize( double* horizontal, double* vertical ) const
+void KFormulaCanvas::gridSize( qreal* horizontal, qreal* vertical ) const
 {
     *horizontal = 10.0;        // set values to a default as KFormula doesn't
     *vertical = 10.0;          // use any grid
