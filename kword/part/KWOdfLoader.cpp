@@ -131,7 +131,7 @@ bool KWOdfLoader::load( KoOdfReadStore & odfStore )
     KWOdfSharedLoadingData * sharedData = new KWOdfSharedLoadingData(this);
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( d->document->dataCenterMap()["StyleManager"] );
     Q_ASSERT( styleManager );
-    sharedData->loadOdfStyles( odfContext, styleManager, true );
+    sharedData->loadOdfStyles(odfContext, styleManager);
     sc.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     KoTextLoader * loader = new KoTextLoader( sc );
