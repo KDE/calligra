@@ -128,23 +128,28 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     m_statusBar = statusBar() ? new KWStatusBar( statusBar(), this ) : 0;
 }
 
-KWView::~KWView() {
+KWView::~KWView()
+{
     delete m_zoomController;
 }
 
-KWCanvas *KWView::kwcanvas() const {
+KWCanvas *KWView::kwcanvas() const
+{
     return m_canvas;
 }
 
-QWidget *KWView::canvas() const {
+QWidget *KWView::canvas() const
+{
     return m_canvas;
 }
 
-void KWView::updateReadWrite(bool readWrite) {
+void KWView::updateReadWrite(bool readWrite)
+{
     // TODO
 }
 
-void KWView::setupActions() {
+void KWView::setupActions()
+{
     m_actionFormatFrameSet  = new KAction(i18n("Frame/Frameset Properties"), this);
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet );
     m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
@@ -785,7 +790,8 @@ This saves problems with finding out which we missed near the end.
 */
 }
 
-QList<KWFrame*> KWView::selectedFrames() const {
+QList<KWFrame*> KWView::selectedFrames() const
+{
     QList<KWFrame*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
         KWFrame *frame = frameForShape(shape);
@@ -796,20 +802,23 @@ QList<KWFrame*> KWView::selectedFrames() const {
 }
 
 // -------------------- Actions -----------------------
-void KWView::editFrameProperties() {
+void KWView::editFrameProperties()
+{
     KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, this);
     frameDialog->exec();
     delete frameDialog;
 }
 
-KoPrintJob * KWView::createPrintJob() {
+KoPrintJob * KWView::createPrintJob()
+{
     KWPrintingDialog *dia = new KWPrintingDialog(this);
     dia->printer().setCreator("KWord 2.0");
     dia->printer().setFullPage(true); // ignore printer margins
     return dia;
 }
 
-void KWView::insertFrameBreak() {
+void KWView::insertFrameBreak()
+{
     // TODO should this be removed??
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
     if(handler)
@@ -923,7 +932,8 @@ void KWView::deleteBookmark(const QString &name)
     }
 }
 
-void KWView::editDeleteFrame() {
+void KWView::editDeleteFrame()
+{
     QList<KoShape*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
@@ -938,39 +948,45 @@ void KWView::editDeleteFrame() {
     m_document->addCommand(cmd);
 }
 
-void KWView::toggleHeader() {
+void KWView::toggleHeader()
+{
     if(m_currentPage == 0)
         return;
     Q_ASSERT(m_currentPage->pageStyle());
     m_currentPage->pageStyle()->setHeaderPolicy( m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone );
 }
 
-void KWView::toggleFooter() {
+void KWView::toggleFooter()
+{
     if(m_currentPage == 0)
         return;
     Q_ASSERT(m_currentPage->pageStyle());
     m_currentPage->pageStyle()->setFooterPolicy( m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone );
 }
 
-void KWView::toggleSnapToGrid() {
+void KWView::toggleSnapToGrid()
+{
     m_snapToGrid = !m_snapToGrid;
     m_document->gridData().setSnapToGrid(m_snapToGrid); // for persistency
 }
 
-void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction) {
+void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction)
+{
     QUndoCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
         kwcanvas()->shapeManager(), direction);
     if(cmd)
         m_document->addCommand(cmd);
 }
 
-void KWView::toggleViewFrameBorders(bool on) {
+void KWView::toggleViewFrameBorders(bool on)
+{
     kwcanvas()->resourceProvider()->setResource(KoText::ShowTextFrames, on);
     kwcanvas()->update();
     m_document->config().setViewFrameBorders(on);
 }
 
-void KWView::formatPage() {
+void KWView::formatPage()
+{
     if(m_currentPage == 0)
         return;
     KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
@@ -978,7 +994,8 @@ void KWView::formatPage() {
     dia->show();
 }
 
-void KWView::inlineFrame() {
+void KWView::inlineFrame()
+{
     Q_ASSERT(kwdocument()->mainFrameSet());
     KoSelection *selection = kwcanvas()->shapeManager()->selection();
 
@@ -1029,18 +1046,21 @@ void KWView::inlineFrame() {
     handler->insertInlineObject(anchor);
 }
 
-void KWView::showStatisticsDialog() {
+void KWView::showStatisticsDialog()
+{
     KWStatisticsDialog *dia = new KWStatisticsDialog(this);
     dia->exec();
     delete dia;
 }
 
-void KWView::showRulers(bool visible) {
+void KWView::showRulers(bool visible)
+{
     m_document->config().setViewRulers(visible);
     m_gui->updateRulers();
 }
 
-void KWView::createLinkedFrame() {
+void KWView::createLinkedFrame()
+{
     KoSelection *selection = kwcanvas()->shapeManager()->selection();
     QList<KoShape*> oldSelection = selection->selectedShapes(KoFlake::TopLevelSelection);
     if(oldSelection.count() == 0)
@@ -1064,7 +1084,8 @@ void KWView::createLinkedFrame() {
     m_document->addCommand(cmd);
 }
 
-void KWView::showStatusBar(bool toggled) {
+void KWView::showStatusBar(bool toggled)
+{
     statusBar()->setVisible(toggled);
 }
 
@@ -1084,7 +1105,8 @@ void KWView::handleDeletePageAction()
     }
 }
 
-void KWView::setShowFormattingChars(bool on) {
+void KWView::setShowFormattingChars(bool on)
+{
     KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
     provider->setResource(KoText::ShowSpaces, on);
     provider->setResource(KoText::ShowTabs, on);
@@ -1092,7 +1114,8 @@ void KWView::setShowFormattingChars(bool on) {
     provider->setResource(KoText::ShowSpecialCharacters, on);
 }
 
-void KWView::editSelectAllFrames() {
+void KWView::editSelectAllFrames()
+{
     KoSelection *selection = kwcanvas()->shapeManager()->selection();
     foreach(KWFrameSet* fs, m_document->frameSets()) {
         foreach(KWFrame *frame, fs->frames()) {
@@ -1102,11 +1125,13 @@ void KWView::editSelectAllFrames() {
     }
 }
 
-void KWView::viewGrid(bool on) {
+void KWView::viewGrid(bool on)
+{
     m_document->gridData().setShowGrid(on);
 }
 
-void KWView::createCustomOutline() {
+void KWView::createCustomOutline()
+{
     QList<KWFrame *> frames = selectedFrames();
     if(frames.count() == 0)
         return;
@@ -1123,7 +1148,8 @@ void KWView::createCustomOutline() {
 
 // end of actions
 
-void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions) {
+void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions)
+{
     unplugActionList( "frameset_type_action" );
     plugActionList( "frameset_type_action", actions );
     QMenu *menu = dynamic_cast<QMenu*> (factory()->container("frame_popup", this));
@@ -1131,7 +1157,8 @@ void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*
         menu->exec(globalPosition);
 }
 
-void KWView::zoomChanged (KoZoomMode::Mode mode, qreal zoom) {
+void KWView::zoomChanged (KoZoomMode::Mode mode, qreal zoom)
+{
     m_document->config().setZoom(qRound(zoom * 100.0));
     m_document->config().setZoomMode(mode);
 }

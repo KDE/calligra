@@ -29,7 +29,8 @@
  * A mode for previewing the overall document
  * Pages are organized in a grid (mostly useful with low zoom levels)
  */
-class KWViewModePreview : public KWViewMode {
+class KWViewModePreview : public KWViewMode
+{
 public:
     /// constructor
     explicit KWViewModePreview( KWCanvas* canvas );

@@ -33,7 +33,8 @@ KWViewModeNormal::KWViewModeNormal( KWCanvas* canvas )
     updatePageCache();
 }
 
-QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const {
+QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const
+{
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     QList<ViewMap> answer;
     qreal offsetX = 0.0;
@@ -70,7 +71,8 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     return answer;
 }
 
-void KWViewModeNormal::updatePageCache() {
+void KWViewModeNormal::updatePageCache()
+{
     m_pageSpreadMode = false;
     foreach(KWPage *page, canvas()->document()->pageManager()->pages()) {
         if(page->pageSide() == KWPage::PageSpread) {
@@ -129,7 +131,8 @@ void KWViewModeNormal::updatePageCache() {
     m_contents = QSizeF(width, bottom);
 }
 
-QPointF KWViewModeNormal::documentToView( const QPointF & point ) const {
+QPointF KWViewModeNormal::documentToView( const QPointF & point ) const
+{
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     KWPage *page = pageManager->page(point);
     if(! page)
@@ -149,7 +152,8 @@ QPointF KWViewModeNormal::documentToView( const QPointF & point ) const {
     return canvas()->viewConverter()->documentToView(translated + offsetInPage);
 }
 
-QPointF KWViewModeNormal::viewToDocument( const QPointF & point ) const {
+QPointF KWViewModeNormal::viewToDocument( const QPointF & point ) const
+{
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     QPointF clippedPoint(qMax(0.0, point.x()), qMax(0.0, point.y()));
     QPointF translated = canvas()->viewConverter()->viewToDocument(clippedPoint);

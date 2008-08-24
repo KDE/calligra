@@ -38,7 +38,8 @@
  * the pages side by side.
  * @see KWViewMode
  */
-class KWViewModeNormal : public KWViewMode {
+class KWViewModeNormal : public KWViewMode
+{
 public:
     ~KWViewModeNormal() {}
 

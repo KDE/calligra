@@ -29,7 +29,8 @@ KWViewMode::KWViewMode( KWCanvas *canvas ) : m_canvas(canvas)
 {
 }
 
-QRectF KWViewMode::documentToView( const QRectF & rect ) const {
+QRectF KWViewMode::documentToView( const QRectF & rect ) const
+{
     QRectF r;
     QPointF topLeft(documentToView( rect.topLeft() ));
     QPointF bottomRight(documentToView( rect.bottomRight() ));
@@ -38,7 +39,8 @@ QRectF KWViewMode::documentToView( const QRectF & rect ) const {
     return r;
 }
 
-QRectF KWViewMode::viewToDocument( const QRectF & rect ) const {
+QRectF KWViewMode::viewToDocument( const QRectF & rect ) const
+{
     QRectF r;
     QPointF topLeft(viewToDocument( rect.topLeft() ));
     QPointF bottomRight(viewToDocument( rect.bottomRight() ));
@@ -47,12 +49,14 @@ QRectF KWViewMode::viewToDocument( const QRectF & rect ) const {
     return r;
 }
 
-void KWViewMode::pageSetupChanged() {
+void KWViewMode::pageSetupChanged()
+{
     updatePageCache();
 }
 
 // static
-KWViewMode *KWViewMode::create( const QString& viewModeType, KWCanvas* canvas ) {
+KWViewMode *KWViewMode::create( const QString& viewModeType, KWCanvas* canvas )
+{
     if(viewModeType == KWViewModePreview::viewMode())
         return new KWViewModePreview(canvas);
 

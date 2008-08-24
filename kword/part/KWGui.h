@@ -33,7 +33,8 @@ class KoRuler;
  * This class is a widget that is the sole widget under a KWView instance
  * separating concerns.
  */
-class KWGui : public QWidget {
+class KWGui : public QWidget
+{
     Q_OBJECT
 
 public:

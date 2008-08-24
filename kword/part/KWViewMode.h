@@ -45,7 +45,8 @@ class KWCanvas;
  * This class provides a layer on top of the KoViewConverter and KWord should not use that
  * interface directly.
  */
-class KWViewMode : public QObject {
+class KWViewMode : public QObject
+{
     Q_OBJECT
 public:
     virtual ~KWViewMode() {}

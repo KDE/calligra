@@ -67,34 +67,41 @@ KWCanvas::~KWCanvas()
     m_toolProxy = 0;
 }
 
-void KWCanvas::pageSetupChanged() {
+void KWCanvas::pageSetupChanged()
+{
     m_viewMode->pageSetupChanged();
     updateSize();
 }
 
-void KWCanvas::updateSize() {
+void KWCanvas::updateSize()
+{
     resourceProvider()->setResource(KWord::CurrentPageCount, m_document->pageCount());
     emit documentSize(m_viewMode->contentsSize());
 }
 
-void KWCanvas::setDocumentOffset(const QPoint &offset) {
+void KWCanvas::setDocumentOffset(const QPoint &offset)
+{
     m_documentOffset = offset;
 }
 
-void KWCanvas::gridSize(qreal *horizontal, qreal *vertical) const {
+void KWCanvas::gridSize(qreal *horizontal, qreal *vertical) const
+{
     *horizontal = m_document->gridData().gridX();
     *vertical = m_document->gridData().gridY();
 }
 
-bool KWCanvas::snapToGrid() const {
+bool KWCanvas::snapToGrid() const
+{
     return m_view->snapToGrid();
 }
 
-void KWCanvas::addCommand(QUndoCommand *command) {
+void KWCanvas::addCommand(QUndoCommand *command)
+{
     m_document->addCommand(command);
 }
 
-void KWCanvas::updateCanvas(const QRectF& rc) {
+void KWCanvas::updateCanvas(const QRectF& rc)
+{
     QRectF zoomedRect = m_viewMode->documentToView(rc);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
     foreach(KWViewMode::ViewMap vm, map) {
@@ -106,11 +113,13 @@ void KWCanvas::updateCanvas(const QRectF& rc) {
     }
 }
 
-const KoViewConverter *KWCanvas::viewConverter() const {
+const KoViewConverter *KWCanvas::viewConverter() const
+{
     return m_view->viewConverter();
 }
 
-void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const {
+void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
+{
     Q_ASSERT(shape);
     const QPointF absPos = shape->absolutePosition();
     const QPointF destination = absPos + move;
@@ -147,11 +156,13 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const {
     }
 }
 
-void KWCanvas::mouseMoveEvent(QMouseEvent *e) {
+void KWCanvas::mouseMoveEvent(QMouseEvent *e)
+{
     m_toolProxy->mouseMoveEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
-void KWCanvas::mousePressEvent(QMouseEvent *e) {
+void KWCanvas::mousePressEvent(QMouseEvent *e)
+{
     m_toolProxy->mousePressEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
     if(!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
@@ -159,27 +170,33 @@ void KWCanvas::mousePressEvent(QMouseEvent *e) {
     }
 }
 
-void KWCanvas::mouseReleaseEvent(QMouseEvent *e) {
+void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
+{
     m_toolProxy->mouseReleaseEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
-void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e) {
+void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+{
     m_toolProxy->mouseDoubleClickEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
-void KWCanvas::keyPressEvent( QKeyEvent *e ) {
+void KWCanvas::keyPressEvent( QKeyEvent *e )
+{
     m_toolProxy->keyPressEvent(e);
 }
 
-QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const {
+QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
+{
     return m_toolProxy->inputMethodQuery(query, *(viewConverter()));
 }
 
-void KWCanvas::updateInputMethodInfo() {
+void KWCanvas::updateInputMethodInfo()
+{
     updateMicroFocus();
 }
 
-void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
+void KWCanvas::keyReleaseEvent (QKeyEvent *e)
+{
 #ifndef NDEBUG
     // Debug keys
     if ( (e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier) ) ) {
@@ -225,11 +242,13 @@ void KWCanvas::wheelEvent( QWheelEvent *e )
     m_toolProxy->wheelEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
 }
 
-void KWCanvas::inputMethodEvent(QInputMethodEvent *event) {
+void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
+{
     m_toolProxy->inputMethodEvent(event);
 }
 
-bool KWCanvas::event (QEvent *event) {
+bool KWCanvas::event (QEvent *event)
+{
     // we should forward tabs, and let tools decide if they should be used or ignored.
     // if the tool ignores it, it will move focus.
     if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
@@ -248,7 +267,8 @@ bool KWCanvas::event (QEvent *event) {
 #ifdef DEBUG_REPAINT
 # include <stdlib.h>
 #endif
-void KWCanvas::paintEvent(QPaintEvent * ev) {
+void KWCanvas::paintEvent(QPaintEvent * ev)
+{
     QPainter painter( this );
     painter.eraseRect(ev->rect());
     painter.translate(-m_documentOffset);

@@ -40,7 +40,8 @@
  * you are responsible for deleting the instance and taking care that no \a KWPage
  * instance or something else still keeps a (then dangling) pointer to it.
  */
-class KWORD_TEST_EXPORT KWPageStyle : public QObject {
+class KWORD_TEST_EXPORT KWPageStyle : public QObject
+{
     Q_OBJECT
 public:
     /**

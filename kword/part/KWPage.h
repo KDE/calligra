@@ -37,7 +37,8 @@ class KoZoomHandler;
  * on this class.  
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage : public QObject {
+class KWORD_EXPORT KWPage : public QObject
+{
     Q_OBJECT
     Q_ENUMS(PageSide)
 public:

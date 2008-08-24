@@ -40,7 +40,8 @@ KWApplicationConfig::KWApplicationConfig()
 {
 }
 
-void KWApplicationConfig::load(KWDocument *document) {
+void KWApplicationConfig::load(KWDocument *document)
+{
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group("Interface");
 //    setCursorInProtectedArea( interface.readEntry( "cursorInProtectArea", true ));
@@ -116,7 +117,8 @@ void KWApplicationConfig::load(KWDocument *document) {
 
 }
 
-void KWApplicationConfig::save() {
+void KWApplicationConfig::save()
+{
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group( "Interface" );
     interface.writeEntry( "ViewFormattingChars", m_viewFormattingChars );

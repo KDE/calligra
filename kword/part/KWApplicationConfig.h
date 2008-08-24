@@ -27,7 +27,8 @@ class KWDocument;
 /**
  * A set of config settings for application-specific stuff (compared to document-specific stuff).
  */
-class KWApplicationConfig {
+class KWApplicationConfig
+{
 public:
     KWApplicationConfig();
 

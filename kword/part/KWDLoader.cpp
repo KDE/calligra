@@ -52,10 +52,12 @@ KWDLoader::KWDLoader(KWDocument *parent)
     connect(this, SIGNAL(sigProgress(int)), m_document, SIGNAL(sigProgress(int)));
 }
 
-KWDLoader::~KWDLoader() {
+KWDLoader::~KWDLoader()
+{
 }
 
-bool KWDLoader::load(KoXmlElement &root) {
+bool KWDLoader::load(KoXmlElement &root)
+{
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
@@ -360,7 +362,8 @@ bool KWDLoader::load(KoXmlElement &root) {
     return true;
 }
 
-void KWDLoader::loadFrameSets( const KoXmlElement &framesets ) {
+void KWDLoader::loadFrameSets( const KoXmlElement &framesets )
+{
     // <FRAMESET>
     // First prepare progress info
     m_nrItemsToLoad = 0; // total count of items (mostly paragraph and frames)
@@ -381,7 +384,8 @@ void KWDLoader::loadFrameSets( const KoXmlElement &framesets ) {
     }
 }
 
-KWFrameSet *KWDLoader::loadFrameSet( const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote) {
+KWFrameSet *KWDLoader::loadFrameSet( const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote)
+{
     QString fsname = framesetElem.attribute("name");
 
     switch(framesetElem.attribute("frameType").toInt()) {
@@ -535,13 +539,15 @@ KWFrameSet *KWDLoader::loadFrameSet( const KoXmlElement &framesetElem, bool load
     }
 }
 
-void KWDLoader::fill(KWFrameSet *fs, const KoXmlElement &framesetElem) {
+void KWDLoader::fill(KWFrameSet *fs, const KoXmlElement &framesetElem)
+{
     //m_visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) ); // TODO
     //m_protectSize=static_cast<bool>( KWDocument::getAttribute( framesetElem, "protectSize", false ) ); TODO
 
 }
 
-void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
+void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
+{
     fill(static_cast<KWFrameSet*>(fs), framesetElem);
     // <FRAME>
     KoXmlElement frameElem;
@@ -703,7 +709,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
     }
 }
 
-void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
+void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
+{
     QString align = layout.namedItem("FLOW").toElement().attribute("align", "auto");
     if(align == "left") {
         style->setAlignment( Qt::AlignLeft | Qt::AlignAbsolute );
@@ -898,14 +905,16 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
     // OHEAD, OFOOT, IFIRST, ILEFT
 }
 
-QColor KWDLoader::colorFrom(const KoXmlElement &element) {
+QColor KWDLoader::colorFrom(const KoXmlElement &element)
+{
     QColor color(element.attribute("red").toInt(),
             element.attribute("green").toInt(),
             element.attribute("blue").toInt());
     return color;
 }
 
-void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem) {
+void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem)
+{
     KoXmlElement element = formatElem.namedItem( "COLOR" ).toElement();
     if( !element.isNull() ) {
         QBrush fg = style->foreground();
@@ -979,7 +988,8 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem) {
        //OFFSETFROMBASELINE
 }
 
-void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
+void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem)
+{
     Q_ASSERT(frame);
     Q_ASSERT(frame->shape());
     QPointF origin( frameElem.attribute("left").toDouble(),
@@ -1043,7 +1053,8 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
     frame->shape()->setZIndex(zIndex);
 }
 
-void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement) {
+void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement)
+{
     key->year = keyElement.attribute("year");
     key->month = keyElement.attribute("month");
     key->day = keyElement.attribute("day");
@@ -1068,7 +1079,8 @@ void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement) {
     }
 }
 
-void KWDLoader::loadStyleTemplates( const KoXmlElement &stylesElem ) {
+void KWDLoader::loadStyleTemplates( const KoXmlElement &stylesElem )
+{
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_document->dataCenterMap()["StyleManager"] );
     Q_ASSERT( styleManager );
 
@@ -1112,7 +1124,8 @@ void KWDLoader::loadStyleTemplates( const KoXmlElement &stylesElem ) {
     }
 }
 
-void KWDLoader::insertAnchors() {
+void KWDLoader::insertAnchors()
+{
     foreach(AnchorData anchor, m_anchors) {
         KWFrameSet *fs = m_document->frameSetByName(anchor.frameSetName);
         if(fs == 0) {

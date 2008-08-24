@@ -78,15 +78,20 @@ KWOdfLoader::KWOdfLoader(KWDocument *document)
     connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
 }
 
-KWOdfLoader::~KWOdfLoader() {
+KWOdfLoader::~KWOdfLoader()
+{
     delete d;
 }
 
-KWDocument* KWOdfLoader::document() const { return d->document; }
-KWPageManager* KWOdfLoader::pageManager() { return & d->document->m_pageManager; }
+KWDocument* KWOdfLoader::document() const
+{ return d->document; }
+KWPageManager* KWOdfLoader::pageManager()
+{ return & d->document->m_pageManager; }
 //QString KWOdfLoader::currentMasterPage() const { return d->currentMasterPage; }
-QString KWOdfLoader::currentFramesetName() const { return d->currentFrame ? d->currentFrame->frameSet()->name() : QString(); }
-KWTextFrame* KWOdfLoader::currentFrame() const { return d->currentFrame; }
+QString KWOdfLoader::currentFramesetName() const
+{ return d->currentFrame ? d->currentFrame->frameSet()->name() : QString(); }
+KWTextFrame* KWOdfLoader::currentFrame() const
+{ return d->currentFrame; }
 
 //1.6: KWDocument::loadOasis
 bool KWOdfLoader::load( KoOdfReadStore & odfStore )

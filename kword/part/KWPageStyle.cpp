@@ -29,7 +29,8 @@ KWPageStyle::KWPageStyle(const QString& mastername)
     clear();
 }
 
-void KWPageStyle::clear() {
+void KWPageStyle::clear()
+{
     // defaults
     m_footNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
     m_footNoteSeparatorLineWidth = 0.5; // like in OOo
@@ -48,21 +49,25 @@ void KWPageStyle::clear() {
     m_pageLayout = KoPageLayout::standardLayout();
 }
 
-void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p) {
+void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
+{
     m_footers = p;
     emit relayout();
 }
 
-void KWPageStyle::setHeaderPolicy(KWord::HeaderFooterType p) {
+void KWPageStyle::setHeaderPolicy(KWord::HeaderFooterType p)
+{
     m_headers = p;
     emit relayout();
 }
 
-const KoPageLayout KWPageStyle::pageLayout() const {
+const KoPageLayout KWPageStyle::pageLayout() const
+{
     return m_pageLayout;
 }
 
-void KWPageStyle::setPageLayout (const KoPageLayout &pageLayout) {
+void KWPageStyle::setPageLayout (const KoPageLayout &pageLayout)
+{
     m_pageLayout = pageLayout;
 }
 
