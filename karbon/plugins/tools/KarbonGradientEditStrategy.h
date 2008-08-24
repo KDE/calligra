@@ -62,7 +62,7 @@ public:
     /// mouse position handling for moving handles
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
 
-    /// mouse qreal click handling
+    /// mouse double click handling
     bool handleDoubleClick( const QPointF &mouseLocation );
 
     /// sets the strategy into editing mode
