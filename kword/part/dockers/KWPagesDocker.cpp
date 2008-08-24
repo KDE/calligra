@@ -168,13 +168,13 @@ void KWPagesDocker::itemClicked( const QModelIndex &index )
 {
     Q_ASSERT(index.internalPointer());
 
-    if( ! index.isValid() )
+    if ( ! index.isValid() )
         return;
 
     KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-    if( ! shape )
+    if ( ! shape )
         return;
-    if( dynamic_cast<KoShapeLayer*>( shape ) )
+    if ( dynamic_cast<KoShapeLayer*>( shape ) )
         return;
 
     QList<KoPAPageBase*> selectedPages;
@@ -196,7 +196,7 @@ void KWPagesDocker::itemClicked( const QModelIndex &index )
 
     foreach( KoShape* shape, selectedShapes )
     {
-        if( shape )
+        if ( shape )
         {
             selection->select( shape );
             shape->update();
@@ -209,7 +209,7 @@ void KWPagesDocker::addLayer()
     bool ok = true;
     QString name = KInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
                                           i18n( "New layer" ), &ok, this );
-    if( ok )
+    if ( ok )
     {
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName( name );
@@ -231,9 +231,9 @@ void KWPagesDocker::deleteItem()
 
     QUndoCommand *cmd = 0;
 
-    if( selectedLayers.count() )
+    if ( selectedLayers.count() )
     {
-        if( m_canvas->document()->pages().count() > selectedPages.count() )
+        if ( m_canvas->document()->pages().count() > selectedPages.count() )
         {
             QList<KoShape*> deleteShapes;
             foreach( KoPAPageBase* page, selectedPages )
@@ -249,12 +249,12 @@ void KWPagesDocker::deleteItem()
             KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is required."), i18n( "Error deleting layers") );
         }
     }
-    else if( selectedShapes.count() )
+    else if ( selectedShapes.count() )
     {
         cmd = new KoShapeDeleteCommand( m_canvas->document(), selectedShapes );
     }
 
-    if( cmd )
+    if ( cmd )
     {
         m_canvas->addCommand( cmd );
         m_model->update();
@@ -272,21 +272,21 @@ void KWPagesDocker::raiseItem()
 
     QUndoCommand *cmd = 0;
 
-    if( selectedLayers.count() )
+    if ( selectedLayers.count() )
     {
 //         // check if all layers could be raised
 //         foreach( KoShapeLayer* layer, selectedLayers )
-//             if( ! m_document->canRaiseLayer( layer ) )
+//             if ( ! m_document->canRaiseLayer( layer ) )
 //                 return;
 
 //        cmd = new KoPALayerReorderCommand( m_document, selectedLayers, KoPALayerReorderCommand::RaiseLayer );
     }
-    else if( selectedShapes.count() )
+    else if ( selectedShapes.count() )
     {
         cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
     }
 
-    if( cmd )
+    if ( cmd )
     {
         m_canvas->addCommand( cmd );
         m_model->update();
@@ -304,21 +304,21 @@ void KWPagesDocker::lowerItem()
 
     QUndoCommand *cmd = 0;
 
-    if( selectedLayers.count() )
+    if ( selectedLayers.count() )
     {
 //         // check if all layers could be raised
 //         foreach( KoShapeLayer* layer, selectedLayers )
-//             if( ! m_document->canLowerLayer( layer ) )
+//             if ( ! m_document->canLowerLayer( layer ) )
 //                 return;
 
 //        cmd = new KoPALayerReorderCommand( m_document, selectedLayers, KoPALayerReorderCommand::LowerLayer );
     }
-    else if( selectedShapes.count() )
+    else if ( selectedShapes.count() )
     {
         cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
     }
 
-    if( cmd )
+    if ( cmd )
     {
         m_canvas->addCommand( cmd );
         m_model->update();
@@ -332,7 +332,7 @@ void KWPagesDocker::extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages,
     shapes.clear();
 
     QModelIndexList selectedItems = m_sectionView->selectionModel()->selectedIndexes();
-    if( selectedItems.count() == 0 )
+    if ( selectedItems.count() == 0 )
         return;
 
     // separate selected layers and selected shapes
@@ -340,9 +340,9 @@ void KWPagesDocker::extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages,
     {
         KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-        if( layer )
+        if ( layer )
             layers.append( layer );
-        else if( ! selectedItems.contains( index.parent() ) )
+        else if ( ! selectedItems.contains( index.parent() ) )
             shapes.append( shape );
     }
 }

@@ -80,13 +80,15 @@ KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* docum
     }
 }
 
-void KWStatistics::updateResource(int which) {
-    if(which == KWord::CurrentPageCount  || which == KWord::CurrentFrameSetCount ||
+void KWStatistics::updateResource(int which)
+{
+    if (which == KWord::CurrentPageCount  || which == KWord::CurrentFrameSetCount ||
             which == KWord::CurrentPictureCount || which == KWord::CurrentTableCount)
         m_action->execute();
 }
 
-void KWStatistics::updateData() {
+void KWStatistics::updateData()
+{
     m_charsWithSpace = 0;
     m_charsWithoutSpace = 0;
     m_words = 0;
@@ -113,12 +115,12 @@ void KWStatistics::updateData() {
 
     foreach(KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-        if(tfs == 0) continue;
+        if (tfs == 0) continue;
         if (m_showInDocker && (!(footEnd ||
                     (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
                      tfs->textFrameSetType() == KWord::OtherTextFrameSet))))
             continue;
-        else if(! (footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
+        else if (! (footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
                     tfs->textFrameSetType() == KWord::OtherTextFrameSet)))
             continue;
         QTextDocument *doc = tfs->document();
@@ -127,7 +129,7 @@ void KWStatistics::updateData() {
             m_paragraphs += 1;
             m_charsWithSpace += block.text().length();
             m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
-            if(block.layout())
+            if (block.layout())
                 m_lines += block.layout()->lineCount();
 
             QString s = block.text();
@@ -147,7 +149,7 @@ void KWStatistics::updateData() {
                 QString word = *it1;
                 re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
                 word.remove(re);
-                if(word.length() <= 3) {  // extension to the original algorithm
+                if (word.length() <= 3) {  // extension to the original algorithm
                     m_syllables++;
                     continue;
                 }
@@ -157,25 +159,25 @@ void KWStatistics::updateData() {
                 QStringList syls = word.split(re, QString::SkipEmptyParts);
                 int word_syllables = 0;
                 for(QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
-                    if(word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
+                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
                         word_syllables--;
                 }
                 for(QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
-                    if(word.indexOf(re) != -1)
+                    if (word.indexOf(re) != -1)
                         word_syllables--;
                 }
                 for(QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
-                    if(word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
+                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
                         word_syllables++;
                 }
                 for(QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
-                    if(word.indexOf(re) != -1)
+                    if (word.indexOf(re) != -1)
                         word_syllables++;
                 }
                 word_syllables += syls.count();
-                if(word_syllables == 0)
+                if (word_syllables == 0)
                     word_syllables = 1;
                 m_syllables += word_syllables;
             }
@@ -186,10 +188,10 @@ void KWStatistics::updateData() {
             // Sentence count
             // Clean up for better result, destroys the original text but we only want to count
             s = s.trimmed();
-            if(s.isEmpty())
+            if (s.isEmpty())
                 continue;
             QChar lastchar = s.at(s.length() - 1);
-            if(! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
+            if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
                 s = s + '.';
             }
             re.setPattern("[.?!]+");         // count "..." as only one "."
@@ -200,7 +202,7 @@ void KWStatistics::updateData() {
             s.replace(re, "*");
             for(int i = 0 ; i < s.length(); ++i) {
                 QChar ch = s[i];
-                if(ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
+                if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
                     ++m_sentences;
             }
         }
@@ -210,10 +212,11 @@ void KWStatistics::updateData() {
         updateDataUi();
 }
 
-void KWStatistics::updateDataUi() {
+void KWStatistics::updateDataUi()
+{
     // calculate Flesch reading ease score:
     float flesch_score = 0;
-    if( m_words > 0 && m_sentences > 0 )
+    if ( m_words > 0 && m_sentences > 0 )
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
     QString flesch = KGlobal::locale()->formatNumber( flesch_score );
 
@@ -252,7 +255,7 @@ void KWStatistics::updateDataUi() {
         widget.lines->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
         widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
         widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
-        if( m_words < 200 ) // a kind of warning if too few words:
+        if ( m_words < 200 ) // a kind of warning if too few words:
             flesch = i18n("approximately %1", flesch );
         widget.flesch->setText(flesch);
     }

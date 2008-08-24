@@ -39,11 +39,11 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
     m_frameRunaroundProperties = new KWFrameRunaroundProperties(m_state);
     addPage(m_frameRunaroundProperties, i18n("Text Run Around"));
 
-    if(frames.count() == 1) {
+    if (frames.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
         KWFrame *frame = frames.first();
         m_state->setKeepAspectRatio(frame->shape()->keepAspectRatio());
-        if(m_frameConnectSelector->open(frame))
+        if (m_frameConnectSelector->open(frame))
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
         else {
             delete m_frameConnectSelector;
@@ -61,25 +61,29 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
     connect(this, SIGNAL( cancelClicked() ), this, SLOT( cancelClicked() ));
 }
 
-KWFrameDialog::~KWFrameDialog() {
+KWFrameDialog::~KWFrameDialog()
+{
 }
 
-void KWFrameDialog::okClicked() {
-    if(m_frameConnectSelector)
+void KWFrameDialog::okClicked()
+{
+    if (m_frameConnectSelector)
         m_frameConnectSelector->save();
     m_generalFrameProperties->save();
     m_frameRunaroundProperties->save();
-    if(m_frameGeometry)
+    if (m_frameGeometry)
         m_frameGeometry->save();
 }
 
-void KWFrameDialog::cancelClicked() {
-    if(m_frameGeometry)
+void KWFrameDialog::cancelClicked()
+{
+    if (m_frameGeometry)
         m_frameGeometry->cancel();
 }
 
 // static
-QList<KoShapeConfigFactory *> KWFrameDialog::panels(KWDocument *doc) {
+QList<KoShapeConfigFactory *> KWFrameDialog::panels(KWDocument *doc)
+{
     QList<KoShapeConfigFactory *> answer;
     FrameConfigSharedState *state = new FrameConfigSharedState(doc);
     answer.append(new KWFrameConnectSelectorFactory(state));

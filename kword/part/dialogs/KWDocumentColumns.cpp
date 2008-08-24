@@ -31,16 +31,18 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     connect(widget.spacing, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
 }
 
-void KWDocumentColumns::setColumns(const KoColumns &columns) {
+void KWDocumentColumns::setColumns(const KoColumns &columns)
+{
     m_columns = columns;
     widget.columns->setValue(columns.columns);
     widget.spacing->changeValue(columns.columnSpacing);
 }
 
-void KWDocumentColumns::setTextAreaAvailable(bool available) {
+void KWDocumentColumns::setTextAreaAvailable(bool available)
+{
     widget.columns->setEnabled(available);
     widget.spacing->setEnabled(available);
-    if(available)
+    if (available)
         optionsChanged();
     else {
         m_columns.columns = 1;
@@ -48,11 +50,13 @@ void KWDocumentColumns::setTextAreaAvailable(bool available) {
     }
 }
 
-void KWDocumentColumns::setUnit(const KoUnit &unit) {
+void KWDocumentColumns::setUnit(const KoUnit &unit)
+{
     widget.spacing->setUnit(unit);
 }
 
-void KWDocumentColumns::optionsChanged() {
+void KWDocumentColumns::optionsChanged()
+{
     m_columns.columns = widget.columns->value();
     m_columns.columnSpacing = widget.spacing->value();
     emit columnsChanged(m_columns);

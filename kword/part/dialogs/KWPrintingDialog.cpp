@@ -41,10 +41,12 @@ KWPrintingDialog::KWPrintingDialog(KWView *view)
     // TODO if the doc is not yet done layouting, the lastpage is not correct
 }
 
-KWPrintingDialog::~KWPrintingDialog() {
+KWPrintingDialog::~KWPrintingDialog()
+{
 }
 
-void KWPrintingDialog::preparePage(int pageNumber) {
+void KWPrintingDialog::preparePage(int pageNumber)
+{
     const int resolution = printer().resolution();
     KoInsets bleed = m_document->pageManager()->padding();
     const int bleedOffset = (int) (m_clipToPage?0:POINT_TO_INCH(-bleed.left * resolution));
@@ -52,7 +54,7 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     const int bleedHeigt = (int) (m_clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
 
     KWPage *page = m_document->pageManager()->page(pageNumber);
-    if(! page)
+    if (! page)
         return;
     QRectF pageRect = page->rect(pageNumber);
     pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
@@ -63,11 +65,11 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     const qreal offsetInDocument = page->offsetInDocument();
     // find images
     foreach(KWFrameSet *fs, m_document->frameSets()) {
-        if(fs->frameCount() == 0) continue;
+        if (fs->frameCount() == 0) continue;
         KWFrame *frame = fs->frames().at(0);
-        if(frame == 0) continue;
+        if (frame == 0) continue;
         QRectF bound = frame->shape()->boundingRect();
-        if(offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
+        if (offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
             continue;
         KoImageData *imageData = dynamic_cast<KoImageData*>(frame->shape()->userData());
         if (imageData) {
@@ -85,10 +87,10 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     int clipHeight = (int) POINT_TO_INCH( resolution * page->height());
     int clipWidth = (int) POINT_TO_INCH( resolution * page->width());
     int offset = bleedOffset;
-    if(page->pageSide() == KWPage::PageSpread) {
+    if (page->pageSide() == KWPage::PageSpread) {
         width /= 2;
         clipWidth /= 2;
-        if(pageNumber != page->pageNumber()) { // right side
+        if (pageNumber != page->pageNumber()) { // right side
             offset += clipWidth;
             painter().translate(-clipWidth, 0);
         }
@@ -98,7 +100,8 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     painter().setClipRect(m_currentPage);
 }
 
-QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber) {
+QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
+{
     Q_ASSERT(pageNumber >= 0);
     Q_ASSERT(pageNumber < m_document->pageManager()->pageCount());
     KWPage *page = m_document->pageManager()->page(pageNumber);
@@ -106,20 +109,24 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber) {
     return shapeManager()->shapesAt(page->rect());
 }
 
-void KWPrintingDialog::printingDone() {
+void KWPrintingDialog::printingDone()
+{
     foreach(KoImageData *image, m_originalImages.keys())
         image->setImageQuality(m_originalImages[image]);
 }
 
-QList<QWidget*> KWPrintingDialog::createOptionWidgets() const {
+QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
+{
     return QList<QWidget*>();
 }
 
-int KWPrintingDialog::documentFirstPage() const {
+int KWPrintingDialog::documentFirstPage() const
+{
     return 0 /*m_document->startPage()*/;
 }
 
-int KWPrintingDialog::documentLastPage() const {
+int KWPrintingDialog::documentLastPage() const
+{
     return m_document->pageManager()->pageCount() - 1;
 }
 

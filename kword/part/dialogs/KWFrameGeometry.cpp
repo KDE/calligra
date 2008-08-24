@@ -60,17 +60,20 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
 
 }
 
-KWFrameGeometry::~KWFrameGeometry() {
+KWFrameGeometry::~KWFrameGeometry()
+{
     m_state->removeUser();
 }
 
-void KWFrameGeometry::open(KWFrame* frame) {
+void KWFrameGeometry::open(KWFrame* frame)
+{
     m_frame = frame;
     open(frame->shape());
     // TODO rest
 }
 
-void KWFrameGeometry::open(KoShape *shape) {
+void KWFrameGeometry::open(KoShape *shape)
+{
     m_originalPosition = shape->absolutePosition();
     m_originalSize = shape->size();
     QPointF position = shape->absolutePosition(widget.positionSelector->position());
@@ -95,10 +98,11 @@ void KWFrameGeometry::open(KoShape *shape) {
     connect(widget.height, SIGNAL(valueChanged(double)), this, SLOT(updateShape()));
 }
 
-void KWFrameGeometry::updateShape() {
-    if(m_blockSignals) return;
+void KWFrameGeometry::updateShape()
+{
+    if (m_blockSignals) return;
     KWFrame *frame = m_frame;
-    if(frame == 0) {
+    if (frame == 0) {
         frame = m_state->frame();
         m_state->markFrameUsed();
     }
@@ -114,7 +118,7 @@ void KWFrameGeometry::updateShape() {
 void KWFrameGeometry::protectSizeChanged(int protectSizeState)
 {
     KWFrame *frame = m_frame;
-    if(frame == 0) {
+    if (frame == 0) {
         frame = m_state->frame();
         m_state->markFrameUsed();
     }
@@ -128,8 +132,9 @@ void KWFrameGeometry::protectSizeChanged(int protectSizeState)
     widget.keepAspect->setDisabled(lock);
 }
 
-void KWFrameGeometry::syncMargins(qreal value) {
-    if(! widget.synchronize->isChecked())
+void KWFrameGeometry::syncMargins(qreal value)
+{
+    if (! widget.synchronize->isChecked())
         return;
 
     widget.leftMargin->changeValue(value);
@@ -138,13 +143,15 @@ void KWFrameGeometry::syncMargins(qreal value) {
     widget.bottomMargin->changeValue(value);
 }
 
-void KWFrameGeometry::save() {
+void KWFrameGeometry::save()
+{
     // no-op now
 }
 
-void KWFrameGeometry::cancel() {
+void KWFrameGeometry::cancel()
+{
     KWFrame *frame = m_frame;
-    if(frame == 0) {
+    if (frame == 0) {
         frame = m_state->frame();
         m_state->markFrameUsed();
     }
@@ -153,23 +160,26 @@ void KWFrameGeometry::cancel() {
     frame->shape()->setSize(m_originalSize);
 }
 
-void KWFrameGeometry::widthChanged(qreal value) {
-    if(! m_state->keepAspectRatio())  return;
-    if(m_blockSignals) return;
+void KWFrameGeometry::widthChanged(qreal value)
+{
+    if (! m_state->keepAspectRatio())  return;
+    if (m_blockSignals) return;
     m_blockSignals = true;
     widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * value);
     m_blockSignals = false;
 }
 
-void KWFrameGeometry::heightChanged(qreal value) {
-    if(! m_state->keepAspectRatio())  return;
-    if(m_blockSignals) return;
+void KWFrameGeometry::heightChanged(qreal value)
+{
+    if (! m_state->keepAspectRatio())  return;
+    if (m_blockSignals) return;
     m_blockSignals = true;
     widget.width->changeValue(m_originalSize.width() / m_originalSize.height() * value);
     m_blockSignals = false;
 }
 
-void KWFrameGeometry::setUnit(KoUnit unit) {
+void KWFrameGeometry::setUnit(KoUnit unit)
+{
     widget.xPos->setUnit(unit);
     widget.yPos->setUnit(unit);
     widget.width->setUnit(unit);
@@ -180,7 +190,8 @@ void KWFrameGeometry::setUnit(KoUnit unit) {
     widget.bottomMargin->setUnit(unit);
 }
 
-void KWFrameGeometry::setGeometryAlignment(KoFlake::Position position) {
+void KWFrameGeometry::setGeometryAlignment(KoFlake::Position position)
+{
     QPointF pos = m_frame->shape()->absolutePosition(position);
     m_blockSignals = true;
     widget.xPos->changeValue(pos.x());
@@ -188,9 +199,10 @@ void KWFrameGeometry::setGeometryAlignment(KoFlake::Position position) {
     m_blockSignals = false;
 }
 
-void KWFrameGeometry::updateAspectRatio(bool keep) {
+void KWFrameGeometry::updateAspectRatio(bool keep)
+{
     m_state->setKeepAspectRatio(keep);
-    if(keep)
+    if (keep)
         widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * widget.width->value());
 }
 

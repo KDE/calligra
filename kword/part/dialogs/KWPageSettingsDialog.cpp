@@ -38,8 +38,9 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     setTextDirection(m_page->directionHint());
 }
 
-void KWPageSettingsDialog::accept() {
-    if(applyToDocument()) {
+void KWPageSettingsDialog::accept()
+{
+    if (applyToDocument()) {
         // TODO
     }
     else {
@@ -51,6 +52,7 @@ void KWPageSettingsDialog::accept() {
     KoPageLayoutDialog::accept();
 }
 
-void KWPageSettingsDialog::reject() {
+void KWPageSettingsDialog::reject()
+{
     KoPageLayoutDialog::reject();
 }

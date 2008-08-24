@@ -41,7 +41,8 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
     connect(m_state, SIGNAL(keepAspectRatioChanged(bool)), widget.keepAspectRatio, SLOT(setChecked(bool)));
 }
 
-void KWGeneralFrameProperties::open(KoShape *shape) {
+void KWGeneralFrameProperties::open(KoShape *shape)
+{
     m_shape = shape;
     // set default values
     widget.isCopyOfPrevious->setEnabled(false);
@@ -50,7 +51,7 @@ void KWGeneralFrameProperties::open(KoShape *shape) {
     widget.resizeLastFrame->setChecked(true);
     widget.isCopyOfPrevious->setVisible(false);
     widget.keepAspectRatio->setChecked(shape->keepAspectRatio());
-    if(shape->shapeId() == TextShape_SHAPEID) {
+    if (shape->shapeId() == TextShape_SHAPEID) {
         widget.reconnect->setChecked(true);
         widget.keepAspectRatio->setVisible(false);
     }
@@ -61,7 +62,8 @@ void KWGeneralFrameProperties::open(KoShape *shape) {
     }
 }
 
-void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
+void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
+{
     m_state->addUser();
     m_frames = frames;
     // checkboxes
@@ -71,29 +73,29 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
     KWord::NewFrameBehavior nfb = KWord::ReconnectNewFrame;
     KWord::FrameBehavior fb = KWord::AutoExtendFrameBehavior;
     foreach (KWFrame *frame, frames) {
-        if(frameBehavior == GuiHelper::Unset) {
+        if (frameBehavior == GuiHelper::Unset) {
             fb = frame->frameBehavior();
             frameBehavior = GuiHelper::On;
-        } else if(fb != frame->frameBehavior())
+        } else if (fb != frame->frameBehavior())
             frameBehavior = GuiHelper::TriState;
 
-        if(newFrame == GuiHelper::Unset) {
+        if (newFrame == GuiHelper::Unset) {
             nfb = frame->newFrameBehavior();
             newFrame = GuiHelper::On;
-        } else if(nfb != frame->newFrameBehavior())
+        } else if (nfb != frame->newFrameBehavior())
             newFrame = GuiHelper::TriState;
 
 
-        if(frame->frameSet()->frameCount() > 1) {
+        if (frame->frameSet()->frameCount() > 1) {
             allFrames.addState(GuiHelper::On);
-            if(frame->frameSet()->frames().indexOf(frame) > 0)
+            if (frame->frameSet()->frames().indexOf(frame) > 0)
                 copyFrame.addState(frame->isCopy() ? GuiHelper::On : GuiHelper::Off);
         }
 
         evenOdd.addState(frame->frameOnBothSheets() ? GuiHelper::On : GuiHelper::Off);
 
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
-        if(textFs)
+        if (textFs)
             protectContent.addState(textFs->protectContent() ? GuiHelper::On : GuiHelper::Off);
         else
             keepAspect.addState(frame->shape()->keepAspectRatio() ? GuiHelper::On : GuiHelper::Off);
@@ -109,51 +111,52 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
     // unfortunately the datamodel is reversed :)
     widget.evenOdd->setChecked( ! widget.evenOdd->isChecked());
 
-    if(newFrame == GuiHelper::On)
+    if (newFrame == GuiHelper::On)
         m_newPageGroup->button(nfb)->setChecked(true);
-    if(frameBehavior == GuiHelper::On)
+    if (frameBehavior == GuiHelper::On)
         m_textGroup->button(fb)->setChecked(true);
-    else if(frameBehavior == GuiHelper::Unset)
+    else if (frameBehavior == GuiHelper::Unset)
         widget.textGroupBox->setVisible(false);
 
-    if(protectContent.m_state == GuiHelper::Unset) {
+    if (protectContent.m_state == GuiHelper::Unset) {
         // if there is no text frame in the whole list of frames.
         widget.reconnect->setVisible(false);
         widget.textGroupBox->setVisible(false);
     }
 }
 
-void KWGeneralFrameProperties::save() {
-    if(m_frames.count() == 0) {
+void KWGeneralFrameProperties::save()
+{
+    if (m_frames.count() == 0) {
         KWFrame *frame = m_state->frame();
-        if(frame == 0 && m_shape)
+        if (frame == 0 && m_shape)
             frame = m_state->createFrame(m_shape);
         Q_ASSERT(frame);
         m_state->markFrameUsed();
         m_frames.append(frame);
     }
     foreach(KWFrame *frame, m_frames) {
-        if(widget.keepAspectRatio->checkState() != Qt::PartiallyChecked)
+        if (widget.keepAspectRatio->checkState() != Qt::PartiallyChecked)
             frame->shape()->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
-        if(m_textGroup->checkedId() != -1) {
+        if (m_textGroup->checkedId() != -1) {
             KWord::FrameBehavior fb = static_cast<KWord::FrameBehavior> (m_textGroup->checkedId());
             frame->setFrameBehavior(fb);
         }
-        if(m_newPageGroup->checkedId() != -1) {
+        if (m_newPageGroup->checkedId() != -1) {
             KWord::NewFrameBehavior nfb = static_cast<KWord::NewFrameBehavior> (m_newPageGroup->checkedId());
             frame->setNewFrameBehavior(nfb);
         }
-        if(widget.evenOdd->checkState() != Qt::PartiallyChecked)
+        if (widget.evenOdd->checkState() != Qt::PartiallyChecked)
             frame->setFrameOnBothSheets( widget.evenOdd->checkState() != Qt::Checked );
-        if(frame->frameSet()) {
-            if(widget.protectContent->checkState() != Qt::PartiallyChecked) {
+        if (frame->frameSet()) {
+            if (widget.protectContent->checkState() != Qt::PartiallyChecked) {
                 KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
-                if(textFs)
+                if (textFs)
                     textFs->setProtectContent(widget.protectContent->checkState() == Qt::Checked);
             }
-            if(widget.allFrames->isEnabled() && widget.allFrames->checkState() == Qt::Checked) {
+            if (widget.allFrames->isEnabled() && widget.allFrames->checkState() == Qt::Checked) {
                 foreach(KWFrame *otherFrame, frame->frameSet()->frames()) {
-                    if(m_frames.contains(otherFrame))
+                    if (m_frames.contains(otherFrame))
                         continue;
                     // TODO add on KWFrame: virtual void copySettings(const KWFrame *frame)
                 }
@@ -163,11 +166,13 @@ void KWGeneralFrameProperties::save() {
     m_state->removeUser();
 }
 
-void KWGeneralFrameProperties::newPageGroupUpdated(int which) {
+void KWGeneralFrameProperties::newPageGroupUpdated(int which)
+{
     widget.createNewPage->setEnabled(which == KWord::ReconnectNewFrame);
 }
 
-void KWGeneralFrameProperties::keepAspectChanged() {
+void KWGeneralFrameProperties::keepAspectChanged()
+{
     m_state->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
 }
 

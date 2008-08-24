@@ -143,7 +143,8 @@ void KWSelectBookmarkDialog::selectionChanged(int currentRow)
     enableButtonOk( currentRow != -1 );
 }
 
-void KWSelectBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item) {
+void KWSelectBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item)
+{
     Q_UNUSED(item);
     accept();
 }

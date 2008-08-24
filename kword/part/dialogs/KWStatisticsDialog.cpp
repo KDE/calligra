@@ -31,6 +31,7 @@ KWStatisticsDialog::KWStatisticsDialog (KWView *parent)
     setMainWidget( new KWStatistics(parent->kwcanvas()->resourceProvider(), parent->kwdocument(), 0, this) );
 }
 
-KWStatisticsDialog::~KWStatisticsDialog() {
+KWStatisticsDialog::~KWStatisticsDialog()
+{
 }
 

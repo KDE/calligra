@@ -46,40 +46,42 @@ KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *s
     widget.distance->setUnit(state->document()->unit());
 }
 
-void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames) {
+void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames)
+{
     m_frames = frames;
     GuiHelper::State layout = GuiHelper::Unset, runaround = GuiHelper::Unset, raDistance = GuiHelper::Unset;
     KWord::RunAroundSide side = KWord::BiggestRunAroundSide;
     KWord::TextRunAround ra = KWord::RunAround;
     qreal distance = 10.0;
     foreach(KWFrame *frame, frames) {
-        if(layout == GuiHelper::Unset) {
+        if (layout == GuiHelper::Unset) {
             side = frame->runAroundSide();
             layout = GuiHelper::On;
-        } else if(side != frame->runAroundSide())
+        } else if (side != frame->runAroundSide())
             layout = GuiHelper::TriState;
 
-        if(runaround == GuiHelper::Unset) {
+        if (runaround == GuiHelper::Unset) {
             ra = frame->textRunAround();
             runaround = GuiHelper::On;
-        } else if(ra != frame->textRunAround())
+        } else if (ra != frame->textRunAround())
             runaround = GuiHelper::TriState;
 
-        if(raDistance == GuiHelper::Unset) {
+        if (raDistance == GuiHelper::Unset) {
             distance = frame->runAroundDistance();
             raDistance = GuiHelper::On;
-        } else if(distance != frame->runAroundDistance())
+        } else if (distance != frame->runAroundDistance())
             raDistance = GuiHelper::TriState;
     }
 
-    if(layout != GuiHelper::TriState)
+    if (layout != GuiHelper::TriState)
         m_runAroundSide->button(side)->setChecked(true);
-    if(runaround != GuiHelper::TriState)
+    if (runaround != GuiHelper::TriState)
         m_runAround->button(ra)->setChecked(true);
     widget.distance->changeValue(distance);
 }
 
-void KWFrameRunaroundProperties::open(KoShape *shape) {
+void KWFrameRunaroundProperties::open(KoShape *shape)
+{
     m_state->addUser();
     m_shape = shape;
     widget.runAround->setChecked(true);
@@ -87,19 +89,20 @@ void KWFrameRunaroundProperties::open(KoShape *shape) {
     widget.distance->changeValue(MM_TO_POINT(3));
 }
 
-void KWFrameRunaroundProperties::save() {
-    if(m_frames.count() == 0) {
+void KWFrameRunaroundProperties::save()
+{
+    if (m_frames.count() == 0) {
         KWFrame *frame = m_state->frame();
-        if(frame == 0 && m_shape)
+        if (frame == 0 && m_shape)
             frame = m_state->createFrame(m_shape);
         Q_ASSERT(frame);
         m_state->markFrameUsed();
         m_frames.append(frame);
     }
     foreach(KWFrame *frame, m_frames) {
-        if(m_runAround->checkedId() != -1)
+        if (m_runAround->checkedId() != -1)
             frame->setTextRunAround( static_cast<KWord::TextRunAround> (m_runAround->checkedId()) );
-        if(m_runAroundSide->checkedId() != -1)
+        if (m_runAroundSide->checkedId() != -1)
             frame->setRunAroundSide( static_cast<KWord::RunAroundSide> (m_runAroundSide->checkedId()) );
         frame->setRunAroundDistance( widget.distance->value() );
     }

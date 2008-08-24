@@ -72,22 +72,26 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     connect (m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
 }
 
-void KWStartupWidget::unitChanged(const KoUnit &unit) {
+void KWStartupWidget::unitChanged(const KoUnit &unit)
+{
     m_unit = unit;
 }
 
-void KWStartupWidget::sizeUpdated(const KoPageLayout &layout) {
+void KWStartupWidget::sizeUpdated(const KoPageLayout &layout)
+{
     m_layout = layout;
 }
 
-void KWStartupWidget::columnsUpdated(const KoColumns &columns) {
+void KWStartupWidget::columnsUpdated(const KoColumns &columns)
+{
     m_columns = columns;
 }
 
-void KWStartupWidget::buttonClicked() {
+void KWStartupWidget::buttonClicked()
+{
     m_doc->clear();
 
-    if(m_layout.left < 0) {
+    if (m_layout.left < 0) {
         m_layout.width /= 2.0;
         m_doc->m_pageManager.setPreferPageSpread(true);
     }

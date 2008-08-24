@@ -28,62 +28,74 @@
 
 #include <klocale.h>
 
-KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoShape *shape) {
+KoShapeConfigWidgetBase *KWFrameConnectSelectorFactory::createConfigWidget(KoShape *shape)
+{
     KWFrameConnectSelector *widget = new KWFrameConnectSelector(m_state);
     widget->open(shape);
     return widget;
 }
 
-QString KWFrameConnectSelectorFactory::name() const {
+QString KWFrameConnectSelectorFactory::name() const
+{
     return i18n("Connect Text Frames");
 }
 
-bool KWFrameConnectSelectorFactory::showForShapeId(const QString &id) const {
+bool KWFrameConnectSelectorFactory::showForShapeId(const QString &id) const
+{
     return id == TextShape_SHAPEID;
 }
 
 
-KoShapeConfigWidgetBase *KWFrameGeometryFactory::createConfigWidget(KoShape *shape) {
+KoShapeConfigWidgetBase *KWFrameGeometryFactory::createConfigWidget(KoShape *shape)
+{
     KWFrameGeometry *widget = new KWFrameGeometry(m_state);
     widget->open(shape);
     return widget;
 }
 
-QString KWFrameGeometryFactory::name() const {
+QString KWFrameGeometryFactory::name() const
+{
     return i18n("Geometry");
 }
 
-bool KWFrameGeometryFactory::showForShapeId(const QString &id) const {
+bool KWFrameGeometryFactory::showForShapeId(const QString &id) const
+{
     return id == TextShape_SHAPEID;
 }
 
 
-KoShapeConfigWidgetBase *KWFrameRunaroundPropertiesFactory::createConfigWidget(KoShape *shape) {
+KoShapeConfigWidgetBase *KWFrameRunaroundPropertiesFactory::createConfigWidget(KoShape *shape)
+{
     KWFrameRunaroundProperties *widget = new KWFrameRunaroundProperties(m_state);
     widget->open(shape);
     return widget;
 }
 
-QString KWFrameRunaroundPropertiesFactory::name() const {
+QString KWFrameRunaroundPropertiesFactory::name() const
+{
     return i18n("Text Run Around");
 }
 
-bool KWFrameRunaroundPropertiesFactory::showForShapeId(const QString &id) const {
+bool KWFrameRunaroundPropertiesFactory::showForShapeId(const QString &id) const
+{
     return id == TextShape_SHAPEID;
 }
 
 
-KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoShape *shape) {
+KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoShape *shape)
+{
     KWGeneralFrameProperties *panel = new KWGeneralFrameProperties(m_state);
     panel->open(shape);
     return panel;
 }
 
-QString KWGeneralFramePropertiesFactory::name() const {
+QString KWGeneralFramePropertiesFactory::name() const
+{
     return i18n("Options");
 }
 
-bool KWGeneralFramePropertiesFactory::showForShapeId(const QString &id) const {
+bool KWGeneralFramePropertiesFactory::showForShapeId(const QString &id) const
+{
     return id == TextShape_SHAPEID;
 }
 
@@ -97,22 +109,25 @@ FrameConfigSharedState::FrameConfigSharedState(KWDocument *document)
 {
 }
 
-FrameConfigSharedState::~FrameConfigSharedState() {
-    if(m_deleteFrame)
+FrameConfigSharedState::~FrameConfigSharedState()
+{
+    if (m_deleteFrame)
         delete m_frame;
 }
 
-void FrameConfigSharedState::removeUser() {
+void FrameConfigSharedState::removeUser()
+{
     m_refcount--;
-    if(m_refcount == 0 && m_frame) {
-        if(m_deleteFrame)
+    if (m_refcount == 0 && m_frame) {
+        if (m_deleteFrame)
             delete m_frame;
         m_frame = 0;
     }
 }
 
-KWFrame *FrameConfigSharedState::createFrame(KoShape *shape) {
-    if(m_frame == 0) {
+KWFrame *FrameConfigSharedState::createFrame(KoShape *shape)
+{
+    if (m_frame == 0) {
         KWFrameSet *fs = new KWFrameSet();
         m_frame = new KWFrame(shape, fs);
         m_document->addFrameSet(fs);
@@ -121,8 +136,9 @@ KWFrame *FrameConfigSharedState::createFrame(KoShape *shape) {
     return m_frame;
 }
 
-void FrameConfigSharedState::setKeepAspectRatio(bool on) {
-    if(m_protectAspectRatio == on)
+void FrameConfigSharedState::setKeepAspectRatio(bool on)
+{
+    if (m_protectAspectRatio == on)
         return;
     m_protectAspectRatio = on;
     emit keepAspectRatioChanged(on);
