@@ -255,23 +255,23 @@ KarbonOdfPatternEditStrategy::~KarbonOdfPatternEditStrategy()
 
 void KarbonOdfPatternEditStrategy::paint( QPainter &painter, const KoViewConverter &converter ) const
 {
-    QPointF originPoint = m_matrix.map( m_handles[origin] );
-    QPointF sizePoint = m_matrix.map( m_handles[size] );
-
     KoShape::applyConversion( painter, converter );
-    painter.save();
-    painter.setBrush( Qt::NoBrush );
-    painter.drawRect( QRectF( originPoint, sizePoint ) );
-    painter.restore();
 
     KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
     if( ! fill )
         return;
 
+    painter.save();
+    painter.setMatrix( m_matrix * painter.matrix() );
+    painter.setBrush( Qt::NoBrush );
+    painter.drawRect( QRectF( m_handles[origin], m_handles[size] ) );
+    painter.restore();
+
     if( fill->repeat() == KoPatternBackground::Tiled )
-        paintHandle( painter, converter, originPoint );
+        paintHandle( painter, converter, m_matrix.map( m_handles[origin] ) );
     if( fill->repeat() != KoPatternBackground::Stretched )
-        paintHandle( painter, converter, sizePoint );
+        paintHandle( painter, converter, m_matrix.map( m_handles[size] ) );
+
 }
 
 bool KarbonOdfPatternEditStrategy::selectHandle( const QPointF &mousePos )
