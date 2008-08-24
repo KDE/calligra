@@ -268,8 +268,8 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
         case Stop:
         {
             qreal scalar = projectToGradientLine( mouseLocation ); 
-            scalar = qMax( 0.0, scalar );
-            scalar = qMin( scalar, 1.0 );
+            scalar = qMax( qreal(0.0), scalar );
+            scalar = qMin( scalar, qreal(1.0) );
             m_stops[m_selectionIndex].first = scalar;
             m_lastMousePos = mouseLocation;
             break;

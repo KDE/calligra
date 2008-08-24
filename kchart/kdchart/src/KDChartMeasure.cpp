@@ -184,7 +184,7 @@ bool Measure::operator==( const Measure& r ) const
 
 GlobalMeasureScaling::GlobalMeasureScaling()
 {
-    mFactors.push( qMakePair(1.0, 1.0) );
+    mFactors.push( qMakePair(qreal(1.0), qreal(1.0)) );
 }
 
 GlobalMeasureScaling::~GlobalMeasureScaling()

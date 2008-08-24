@@ -186,14 +186,14 @@ bool KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
         }
         else
         {
-            m_pageLayout.width = d->getAttribute( paper, "width", 0.0 );
-            m_pageLayout.height = d->getAttribute( paper, "height", 0.0 );
+            m_pageLayout.width = d->getAttribute( paper, "width", qreal(0.0) );
+            m_pageLayout.height = d->getAttribute( paper, "height", qreal(0.0) );
         }
     }
     else
     {
-        m_pageLayout.width = d->getAttribute( doc, "width", 595.277);
-        m_pageLayout.height = d->getAttribute( doc, "height", 841.891 );
+        m_pageLayout.width = d->getAttribute( doc, "width", qreal(595.277) );
+        m_pageLayout.height = d->getAttribute( doc, "height", qreal(841.891) );
     }
 
     kDebug() <<" width=" << m_pageLayout.width;

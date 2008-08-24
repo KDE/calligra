@@ -772,7 +772,7 @@ void PieDiagram::drawArcEffectSegment( QPainter* painter,
     if( endA > 540 )
         drawArcEffectSegment( painter, rect, threeDHeight, 180, endA - 360, granularity );
     if( endA > 360 )
-        endA = qMin( endA, 360.0 );
+        endA = qMin( endA, qreal(360.0) );
 
     int numHalfPoints = static_cast<int>( trunc( ( endA - startA ) / granularity ) ) + 1;
 

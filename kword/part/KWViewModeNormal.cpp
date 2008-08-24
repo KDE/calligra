@@ -155,7 +155,7 @@ QPointF KWViewModeNormal::documentToView( const QPointF & point ) const
 QPointF KWViewModeNormal::viewToDocument( const QPointF & point ) const
 {
     const KWPageManager *pageManager = canvas()->document()->pageManager();
-    QPointF clippedPoint(qMax(0.0, point.x()), qMax(0.0, point.y()));
+    QPointF clippedPoint(qMax(qreal(0.0), point.x()), qMax(qreal(0.0), point.y()));
     QPointF translated = canvas()->viewConverter()->viewToDocument(clippedPoint);
     int pageNumber = 0;
     foreach(qreal top, m_pageTops) {

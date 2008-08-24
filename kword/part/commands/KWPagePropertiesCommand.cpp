@@ -69,7 +69,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
                     shapes.append(shape);
                     previousPositions.append(shape->position());
                     QPointF newPos = shape->position() - rect.bottomRight() + newRect.bottomRight();
-                    newPositions.append(QPointF(qMax(0.0, newPos.x()) , qMax(newRect.y(), newPos.y())));
+                    newPositions.append(QPointF(qMax(qreal(0.0), newPos.x()) , qMax(newRect.y(), newPos.y())));
                 }
             }
         }

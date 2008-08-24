@@ -477,7 +477,7 @@ DataDimension CartesianGrid::calculateGridXY(
         }else{
             // logarithmic calculation (ignoring all negative values)
             qreal min;
-            const qreal minRaw = qMax( qMin( dim.start, dim.end ), 0.0 );
+            const qreal minRaw = qMax( qMin( dim.start, dim.end ), qreal(0.0) );
             const int minLog = static_cast<int>(trunc( log10( minRaw ) ) );
             if( minLog <= 0 )
                 min = 1;
@@ -485,7 +485,7 @@ DataDimension CartesianGrid::calculateGridXY(
                 min = fastPow10( minLog-1 );
 
             qreal max;
-            const qreal maxRaw = qMax( qMax( dim.start, dim.end ), 0.0 );
+            const qreal maxRaw = qMax( qMax( dim.start, dim.end ), qreal(0.0) );
             const int maxLog = static_cast<int>(ceil( log10( maxRaw ) ) );
             if( maxLog <= 0 )
                 max = 1;
