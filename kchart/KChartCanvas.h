@@ -53,7 +53,7 @@ public:
     KChartCanvas( KChartView *view, KChartPart *parent );
     ~KChartCanvas();
 
-    virtual void gridSize( double*, double* ) const;
+    virtual void gridSize( qreal*, qreal* ) const;
     virtual bool snapToGrid() const;
     virtual void addCommand( QUndoCommand* );
     virtual KoShapeManager *shapeManager() const;

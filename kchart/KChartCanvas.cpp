@@ -88,7 +88,7 @@ void KChartCanvas::paintEvent( QPaintEvent *ev )
     painter.end();
 }
 
-void KChartCanvas::gridSize( double*, double* ) const
+void KChartCanvas::gridSize( qreal*, qreal* ) const
 {
 }
 
