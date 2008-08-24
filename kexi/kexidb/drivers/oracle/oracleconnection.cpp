@@ -342,7 +342,7 @@ bool OracleConnection::drv_afterInsert(const QString& table, FieldList& fields)
   {
   //In Oracle DDL sentences are autoconfirmed (AUTOCOMMIT)
   //So I think kexi should reflect it somehow.. like this XD
-    if(table.compare("KEXI__OBJECTS")==0)
+    if(table.compare("kexi__objects "))
       return d->executeSQL("COMMIT");
     return true;  
   }

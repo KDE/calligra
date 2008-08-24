@@ -82,13 +82,20 @@ OracleConnectionInternal::~OracleConnectionInternal()
 */
 bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 {
-	KexiDBDrvDbg<<endl;
-  char *port=(char*)malloc(10*sizeof(char));
-  sprintf(port,"%d",data.port);
-	QString hostName; 
+  QString hostName; 
 	QString sid="LCC";
 	//sid= data.sid.latin1(); //To be included in the API
+	char *port;
 	
+  if(data.port!=0)
+  {
+    port=(char*)malloc(10*sizeof(char));
+    sprintf(port,"%d",data.port);
+  }
+  else
+  {
+    port=strdup("1521");
+  }
 	if (data.hostName.isEmpty() || data.hostName.lower()=="localhost") {
 		//localSocketFile not suported
 			hostName = "127.0.0.1"; 
@@ -103,14 +110,16 @@ bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 																		data.password.latin1(),
 																		connectStr.latin1());
 	  stmt=oraconn->createStatement();
-	  return true;
   }
   catch (oracle::occi::SQLException ea)
   {
      errno=ea.getErrorCode();
-     errmsg=strdup(ea.what());
+     errmsg=ea.what();
+     KexiDBDrvDbg<<ea.what()<<endl;
 	   return false;
-  }	
+  }
+  KexiDBDrvDbg<<"Ok"<<endl;	
+  return true;
 }
 void OracleConnectionInternal::storeResult(){}
 /*! Disconnects from the database.

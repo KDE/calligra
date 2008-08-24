@@ -66,7 +66,7 @@ OracleCursor::OracleCursor(Connection* conn, QuerySchema& query, uint options )
 
 OracleCursor::~OracleCursor()
 {
-    KexiDBDrvDbg  << endl;
+    //KexiDBDrvDbg  << endl;
 	close();
 }
 
@@ -180,7 +180,7 @@ QVariant OracleCursor::value(uint pos)
    //-->Returns the value stored in the column number i (counting from 0)
    //                                                   (Oracle counts from 1)
    
-KexiDBDrvDbg <<endl;          
+//KexiDBDrvDbg <<endl;          
 	if (!d->rs->status() || pos>=m_fieldCount)
     return QVariant();
 
