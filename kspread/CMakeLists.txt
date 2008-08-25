@@ -224,7 +224,7 @@ target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
 	${KDE4_KNOTIFYCONFIG_LIBS}
 	komain koguiutils
-	kutils
+	kutils kstore flake
 	${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
@@ -250,7 +250,7 @@ SET (kspread_KDEINIT_SRCS part/Main.cpp )
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kdeinit_kspread  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kspread  DESTINATION ${LIB_INSTALL_DIR})
 
