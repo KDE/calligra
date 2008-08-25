@@ -42,9 +42,9 @@ kde4_add_ui_files(karbonui_SRCS
 
 kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
 
-target_link_libraries( karbonui ${KDE4_KDECORE_LIBS} 
-                                karboncommon
-                                komain
+target_link_libraries( karbonui ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY}
+                                karboncommon kstore pigmentcms
+                                komain koresources
                                 koguiutils
                                 kotext
                                 flake )

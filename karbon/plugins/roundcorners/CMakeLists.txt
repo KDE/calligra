@@ -12,7 +12,7 @@ kde4_add_plugin(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS}
 
 
 
-target_link_libraries(karbon_roundcornersplugin   ${KDE4_KPARTS_LIBS} karboncommon )
+target_link_libraries(karbon_roundcornersplugin  koguiutils flake  ${KDE4_KPARTS_LIBS} karboncommon )
 
 install(TARGETS karbon_roundcornersplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 

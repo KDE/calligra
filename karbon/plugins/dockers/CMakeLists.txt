@@ -14,7 +14,7 @@ set(karbondockers_SRCS
 
 kde4_add_plugin(karbondockersplugin ${karbondockers_SRCS})
 
-target_link_libraries(karbondockersplugin koguiutils komain karbonui )
+target_link_libraries(karbondockersplugin karboncommon koresources pigmentcms flake ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS} koguiutils komain karbonui )
 
 install(TARGETS karbondockersplugin DESTINATION ${PLUGIN_INSTALL_DIR})
 

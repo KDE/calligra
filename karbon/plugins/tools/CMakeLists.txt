@@ -31,7 +31,7 @@ set(karbon_tools_PART_SRCS
 
 kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
 
-target_link_libraries(karbontools ${KDE4_KPARTS_LIBS} koguiutils karboncommon karbonui )
+target_link_libraries(karbontools koresources pigmentcms koguiutils flake ${KDE4_KPARTS_LIBS} koguiutils karboncommon karbonui )
 
 install(TARGETS karbontools DESTINATION ${PLUGIN_INSTALL_DIR})
 
