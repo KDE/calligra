@@ -128,7 +128,21 @@ void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
     if( shape )
         updateStyle( shape->border(), shape->background() );
     else
-        updateStyle( 0, 0 );
+    {
+        QVariant variant = m_canvas->resourceProvider()->resource( KoCanvasResource::CurrentPage );
+        if( !variant.isNull() )
+        {
+            KoShape* page = static_cast<KoShape*>( variant.value<void*>() );
+            if( page )
+            {
+                updateStyle( page->border(), page->background() );
+            }
+        }
+        else
+        {
+            updateStyle( 0, 0 );
+        }
+    }
 }
 
 void KarbonStyleDocker::selectionChanged()
@@ -286,6 +300,42 @@ void KarbonStyleDocker::updateColor( const QColor &c )
     KoSelection *selection = m_canvas->shapeManager()->selection();
     if( ! selection || ! selection->count() )
     {
+        QVariant variant = provider->resource( KoCanvasResource::CurrentPage );
+        if( !variant.isNull() )
+        {
+            KoShape* page = static_cast<KoShape*>( variant.value<void*>() );
+            if( page )
+            {
+                // check which color to set foreground == border, background == fill
+                if( activeStyle == Karbon::Foreground )
+                {
+                    // get the border of the first selected shape and check if it is a line border
+                    KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( page->border() );
+                    KoLineBorder * newBorder = 0;
+                    if( oldBorder )
+                    {
+                        // preserve the properties of the old border if it is a line border
+                        newBorder = new KoLineBorder( *oldBorder );
+                        newBorder->setColor( c );
+                    }
+                    else
+                        newBorder = new KoLineBorder( 1.0, c );
+
+                    KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
+                    m_canvas->addCommand( cmd );
+                    m_canvas->resourceProvider()->setForegroundColor( kocolor );
+                }
+                else
+                {
+                    KoShapeBackground * fill = new KoColorBackground( c );
+                    KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( page, fill );
+                    m_canvas->addCommand( cmd );
+                    m_canvas->resourceProvider()->setBackgroundColor( kocolor );
+                }
+                return;
+            }
+        }
+
         if( activeStyle == Karbon::Foreground )
             m_canvas->resourceProvider()->setForegroundColor( kocolor );
         else
