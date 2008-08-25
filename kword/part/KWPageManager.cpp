@@ -71,11 +71,7 @@ int KWPageManager::pageNumber(const qreal y) const
 }
 int KWPageManager::pageCount() const
 {
-    if(m_pageList.isEmpty())
-        return 0;
-    KWPage *first = m_pageList.first();
-    KWPage *last = m_pageList.last();
-    return 1 + last->pageNumber() + (last->pageSide() == KWPage::PageSpread?1:0) - first->pageNumber();
+    return m_pageList.count();
 }
 
 KWPage* KWPageManager::page(int pageNum) const
@@ -114,7 +110,7 @@ KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle)
         pageStyle = p ? p->pageStyle() : this->defaultPageStyle();
     }
     for(int i = pageNumber; i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
-        m_pageList[i]->m_pageNum++;
+        m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() + 1);
     }
     KWPage *page = new KWPage(this, pageNumber, pageStyle);
     m_pageList.insert(pageNumber, page);
@@ -127,7 +123,7 @@ KWPage* KWPageManager::insertPage(KWPage *page)
     Q_ASSERT( page->pageNumber() <= pageCount() );
     Q_ASSERT( page->pageNumber() == pageCount() || page != this->page(page->pageNumber()) );
     for(int i = page->pageNumber(); i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
-        m_pageList[i]->m_pageNum++;
+        m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() + 1);
     }
     if(page->pageNumber() < pageCount()) {
         m_pageList.insert(page->pageNumber(), page);
@@ -182,13 +178,10 @@ void KWPageManager::removePage(KWPage *page)
 {
     if(!page)
         return;
-    const int count = page->pageSide() == KWPage::PageSpread ? 2 : 1;
-    foreach(KWPage *p, m_pageList) {
-        if(p->m_pageNum > page->m_pageNum)
-            p->m_pageNum -= count;
-    }
-
-    m_pageList.removeAll(page);
+    for(int i = page->pageNumber() + 1; i < m_pageList.count(); ++i) // decrease the pagenumbers of pages following the pageNumber
+        m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() - 1);
+    m_pageList.removeOne(page);
+    kDebug(31001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
     delete page;
 }
 

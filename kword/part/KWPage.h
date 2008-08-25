@@ -28,6 +28,7 @@
 #include <QRectF>
 #include <QObject>
 
+class KoInlineObject;
 class KoZoomHandler;
 
 /**
@@ -95,7 +96,9 @@ public:
     Q_SCRIPTABLE void setPageSide(PageSide ps) { m_pageSide = ps; }
 
     /// returns the number of this page as it will be shown to the user.
-    Q_SCRIPTABLE int pageNumber() const { return m_pageNum; }
+    Q_SCRIPTABLE int pageNumber() const;
+    /// returns the number of this page for the \a KoInlineObject instance or -1 if the number is invalid.
+    Q_SCRIPTABLE int pageNumber(KoInlineObject* inlineObject);
 
     /// returns the page style applied on this page
     Q_SCRIPTABLE KWPageStyle *pageStyle() const { return m_pageStyle; }
@@ -125,8 +128,8 @@ public:
      */
     KoText::Direction directionHint() const { return m_textDirectionHint; }
 
-    KWPage *next();
-    KWPage *previous();
+    Q_SCRIPTABLE KWPage *next();
+    Q_SCRIPTABLE KWPage *previous();
 
 private:
     /** private constructor, only for our friends
@@ -135,6 +138,8 @@ private:
      * @param pageStyle the page style to use for the page
      */
     KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle);
+    /// Sets the pagenumber to a new value.
+    void setPageNumber(int pageNum);
 
     int m_pageNum;
     PageSide m_pageSide;

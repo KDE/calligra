@@ -421,21 +421,7 @@ void KWTextDocumentLayout::layout()
                 Q_ASSERT(data);
                 if (page) {
                     data->setPageDirection( page->directionHint() );
-
-                    int pagenumber = page->pageNumber();
-                    switch( data->pageNumberSelectType() ) {
-                        case KoTextShapeData::PageNumberSelectPagePrev: // Select the "previous" page
-                            if ( KWPage* p = page->previous() )
-                                pagenumber = p->pageNumber();
-                            break;
-                        case KoTextShapeData::PageNumberSelectPageNext: // Select the "next" page
-                            if ( KWPage* p = page->next() )
-                                pagenumber = p->pageNumber();
-                            break;
-                        case KoTextShapeData::PageNumberSelectPageCurrent: // Select the "current" page, This is the default.
-                            break;
-                    }
-                    data->setPageNumber( pagenumber );
+                    data->setPageNumberProvider( page );
                 }
             }
         }

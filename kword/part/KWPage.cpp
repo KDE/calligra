@@ -19,7 +19,9 @@
  */
 
 #include "KWPage.h"
-#include "KoZoomHandler.h"
+
+#include <KoZoomHandler.h>
+#include <KoInlineObject.h>
 
 #include <QRect>
 
@@ -31,6 +33,55 @@ KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle)
     m_pageSide = pageNum%2==0 ? Left : Right;
 
     m_textDirectionHint = KoText::AutoDirection;
+}
+
+void KWPage::setPageNumber(int pageNum) {
+    if(m_pageNum == pageNum)
+        return;
+
+    m_pageNum = pageNum;
+
+    //TODO mark KoVariable page-number's as dirty
+}
+
+int KWPage::pageNumber() const {
+    return m_pageNum;
+}
+
+int KWPage::pageNumber(KoInlineObject* inlineObject) {
+    Q_ASSERT(inlineObject);
+
+    //The text:select-page attribute varies according to the element where it appears as follows:
+    //  <text:page-continuation> - specifies whether to check for a previous or next page and if the page exists, the continuation text is printed.
+    //  <text:page-number> - specifies whether to display or not the number of the previous or the following page rather than the number of the current page.
+    //Note: To display the current page number on all pages except the first or last page, use a combination of the text:select-page and text:page-adjust attributes.
+    //Note: Obviously these two uses of text:select-page are very close but it still seems to me to be different. The first usage triggers the use of another attribute. 
+    const QString selectpage = inlineObject->attribute("select-page", QString()).toString();
+
+    //text:page-adjust
+    //The text:page-adjust attribute specifies an adjustment of the value of a page number field , allowing the display of page numbers of following or preceding pages. When this attribute is used, the application:
+    //  1. Adds the value of the attribute to the current page number.
+    //  2. Checks to see if the resulting page exists.
+    //  3. If the page exists, the number of that page is displayed.
+    //  4. If the page does not exist, the value of the page number field remains empty and no number is displayed.
+    //The text:page-adjus
+    const int pageadjust = inlineObject->attribute("page-adjust", 0).toInt();
+
+    int pagenum = -1;
+    if (selectpage == "current" || selectpage.isEmpty())
+        pagenum = m_pageNum;
+    else if (selectpage == "previous")
+        pagenum = previous() ? previous()->m_pageNum : -1;
+    else if (selectpage == "next")
+        pagenum = next() ? next()->m_pageNum : -1;
+
+    if(pagenum >= 0) {
+        pagenum += pageadjust;
+        if( ! m_parent->page(pagenum) )
+            pagenum = -1;
+    }
+
+    return pagenum; //"current"
 }
 
 qreal KWPage::width() const
@@ -97,7 +148,7 @@ KoPageFormat::Orientation KWPage::orientationHint() const
 
 KWPage *KWPage::next()
 {
-    return m_parent->page(m_pageNum + m_pageSide == PageSpread ? 2 : 1);
+    return m_parent->page(m_pageNum +1); //(m_pageNum + m_pageSide == PageSpread ? 2 : 1);
 }
 
 KWPage *KWPage::previous()
