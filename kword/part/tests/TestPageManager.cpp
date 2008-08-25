@@ -31,25 +31,25 @@ void TestPageManager::init() {
 void TestPageManager::getAddPages() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
 
-    QCOMPARE(pageManager->pageCount() == 0, true);
+    QCOMPARE(pageManager->pageCount(), 0);
     QCOMPARE(pageManager->page(-10) == 0, true);
     QCOMPARE(pageManager->page(10) == 0, true);
 
     KWPage* page1 = pageManager->appendPage();
     KWPage* page3 = pageManager->appendPage();
-    QCOMPARE(pageManager->pageCount() == 2, true);
-    QCOMPARE(pageManager->page(0) == page1, true);
-    QCOMPARE(pageManager->page(1) == page3, true);
+    QCOMPARE(pageManager->pageCount(), 2);
+    QCOMPARE(pageManager->page(0), page1);
+    QCOMPARE(pageManager->page(1), page3);
 
     KWPage* page2 = pageManager->insertPage(1);
-    QCOMPARE(pageManager->pageCount() == 3, true);
-    QCOMPARE(pageManager->page(0) == page1, true);
-    QCOMPARE(pageManager->page(1) == page2, true);
-    QCOMPARE(pageManager->page(2) == page3, true);
+    QCOMPARE(pageManager->pageCount(), 3);
+    QCOMPARE(pageManager->page(0), page1);
+    QCOMPARE(pageManager->page(1), page2);
+    QCOMPARE(pageManager->page(2), page3);
 
     KWPage* page4 = pageManager->insertPage(3);
-    QCOMPARE(pageManager->pageCount() == 4, true);
-    QCOMPARE(pageManager->page(3) == page4, true);
+    QCOMPARE(pageManager->pageCount(), 4);
+    QCOMPARE(pageManager->page(3), page4);
 
     QCOMPARE(page1->pageNumber(), 0);
     QCOMPARE(page2->pageNumber(), 1);
@@ -111,8 +111,7 @@ void TestPageManager::getAddPages() {
 
 void TestPageManager::getAddPages2() {
     KWPageManager *pageManager = new KWPageManager(&m_doc);
-#if 0
-    pageManager->setStartPage(1);
+
     KWPage *page = pageManager->appendPage();
     KoPageLayout pageLayout = page->pageStyle()->pageLayout();
     pageLayout.width = 200;
@@ -122,17 +121,17 @@ void TestPageManager::getAddPages2() {
     MockShape shape1;
     shape1.setPosition(QPointF(0,0));
     shape1.setSize(QSizeF(2,2));
-    QCOMPARE(pageManager->pageNumber(&shape1), 1);
+    QCOMPARE(pageManager->pageNumber(&shape1), 0);
 
     MockShape shape2;
     shape2.setPosition(QPointF(90,90));
     shape2.setSize(QSizeF(2,2));
-    QCOMPARE(pageManager->pageNumber(&shape2), 1);
+    QCOMPARE(pageManager->pageNumber(&shape2), 0);
 
     MockShape shape3;
     shape3.setPosition(QPointF(190,190));
     shape3.setSize(QSizeF(9,9));
-    QCOMPARE(pageManager->pageNumber(&shape3), 1);
+    QCOMPARE(pageManager->pageNumber(&shape3), 0);
 
     KWPageStyle *settingsPage2 = new KWPageStyle("page2");
     pageLayout = settingsPage2->pageLayout();
@@ -140,29 +139,28 @@ void TestPageManager::getAddPages2() {
     pageLayout.height = 600;
     settingsPage2->setPageLayout(pageLayout);
     page = pageManager->appendPage(settingsPage2);
-    QCOMPARE(pageManager->pageNumber(&shape1), 1);
-    QCOMPARE(pageManager->pageNumber(&shape2), 1);
-    QCOMPARE(pageManager->pageNumber(&shape3), 1);
+    QCOMPARE(pageManager->pageNumber(&shape1), 0);
+    QCOMPARE(pageManager->pageNumber(&shape2), 0);
+    QCOMPARE(pageManager->pageNumber(&shape3), 0);
 
     shape1.setPosition(QPointF(201,201));
-    QCOMPARE(pageManager->pageNumber(&shape1), 2);
+    QCOMPARE(pageManager->pageNumber(&shape1), 1);
     shape1.setPosition(QPointF(300,3));
-    QCOMPARE(pageManager->pageNumber(&shape1), 1); // right of page 1
+    QCOMPARE(pageManager->pageNumber(&shape1), 0); // right of page 1
     shape3.setPosition(QPointF(2,690));
-    QCOMPARE(pageManager->pageNumber(&shape3), 2);
+    QCOMPARE(pageManager->pageNumber(&shape3), 1);
     shape3.setPosition(QPointF(300,300));
-    QCOMPARE(pageManager->pageNumber(&shape3), 2);
-    //QCOMPARE(pageManager->pageNumber(QRectF(300,300,10,10)), 2);
+    QCOMPARE(pageManager->pageNumber(&shape3), 1);
+    //QCOMPARE(pageManager->pageNumber(QRectF(300,300,10,10)), 1);
     shape3.setPosition(QPointF(600,700));
-    QCOMPARE(pageManager->pageNumber(&shape3), 2);
-    //QCOMPARE(pageManager->pageNumber(QRectF(600,700,10,10)), 2); // right of page 2
+    QCOMPARE(pageManager->pageNumber(&shape3), 1);
+    //QCOMPARE(pageManager->pageNumber(QRectF(600,700,10,10)), 1); // right of page 2
 
     // KoPoint based
-    QCOMPARE(pageManager->pageNumber(QPointF(201,201)), 2);
+    QCOMPARE(pageManager->pageNumber(QPointF(201,201)), 1);
     // Y based
-    QCOMPARE(pageManager->pageNumber(201.0), 2);
-    QCOMPARE(pageManager->pageNumber(900.0), 2);
-#endif
+    QCOMPARE(pageManager->pageNumber(201.0), 1);
+    QCOMPARE(pageManager->pageNumber(900.0), 1);
 }
 
 void TestPageManager::createInsertPages() {
@@ -292,14 +290,14 @@ void TestPageManager::pageInfo() {
     pageManager->defaultPageStyle()->setPageLayout(layout);
     QCOMPARE(page1->pageSide(), KWPage::Right);
     QCOMPARE(page1->rightMargin(), 14.0);
-   
+
     layout.bindingSide = 15.0;
     pageManager->defaultPageStyle()->setPageLayout(layout);
     QCOMPARE(page1->rightMargin(), 14.0);
     QCOMPARE(page1->leftMargin(), 15.0);
     //QCOMPARE(page2->rightMargin(), 12.0); // unchanged due to changes in page1
     //QCOMPARE(page2->leftMargin(), 10.0);
-    
+
     layout = pageStylePage2->pageLayout();
     layout.pageEdge = 16.0;
     pageStylePage2->setPageLayout(layout);
@@ -369,6 +367,46 @@ void TestPageManager::testClipToDocument() {
     result = pageManager->clipToDocument(p);
     QCOMPARE(result.y(), 900.0);
     QCOMPARE(result.x(), 300.0);
+}
+
+void TestPageManager::documentPages() {
+    QCOMPARE(m_doc.pageCount(), 0);
+    KWPage *page1 = m_doc.appendPage("pagestyle1");
+    KWPage *page2 = m_doc.appendPage("pagestyle1");
+    KWPage *page3 = m_doc.appendPage("pagestyle2");
+    KWPage *page4 = m_doc.appendPage("pagestyle2");
+    KWPage *page5 = m_doc.insertPage(-99);
+    KWPage *page6 = m_doc.insertPage(99);
+    KWPage *page7 = m_doc.appendPage("pagestyle2");
+    KWPage *page8 = m_doc.appendPage("pagestyle1");
+    KWPage *page9 = m_doc.appendPage();
+    QCOMPARE(m_doc.pageCount(), 9);
+
+    m_doc.removePage(3);
+    m_doc.removePage(3);
+    QCOMPARE(m_doc.pageCount(), 7);
+    QCOMPARE(m_doc.pageManager()->page(2), page3);
+    QCOMPARE(m_doc.pageManager()->page(3), page6);
+
+    page5 = m_doc.insertPage(2);
+    page4 = m_doc.insertPage(2);
+    QCOMPARE(m_doc.pageManager()->page(2), page3);
+    QCOMPARE(m_doc.pageManager()->page(3), page4);
+    QCOMPARE(m_doc.pageManager()->page(4), page5);
+    QCOMPARE(m_doc.pageManager()->page(5), page6);
+
+    m_doc.removePage(-16);
+    m_doc.removePage(16);
+    QCOMPARE(m_doc.pageCount(), 9);
+
+    for(int i = m_doc.pageCount() - 1; i >= 1; --i)
+        m_doc.removePage(0);
+    QCOMPARE(m_doc.pageCount(), 1);
+    QCOMPARE(m_doc.pageManager()->page(0), page9);
+
+    QCOMPARE(m_doc.pageCount(), 1);
+    m_doc.removePage(0); //we can't remove the last page
+    QCOMPARE(m_doc.pageCount(), 1);
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)

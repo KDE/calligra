@@ -36,6 +36,7 @@ private slots: // tests
     void removePages();
     void pageInfo();
     void testClipToDocument();
+    void documentPages();
 
 private:
     KWDocument m_doc;
