@@ -63,7 +63,7 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} )
 
-target_link_libraries(kplatoprivate kplatokernel kplatomodels kplatoui koguiutils ${QT_QTCORE_LIBRARY} )
+target_link_libraries(kplatoprivate koodf ${KDE4_KPARTS_LIBS} kabc kplatokernel kplatomodels kplatoui koguiutils  ${QT_QT3SUPPORT_LIBRARY} ${QT_QTCORE_LIBRARY} komain kstore )
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -91,7 +91,7 @@ target_link_libraries(kdeinit_kplato komain  ${KDE4_KDEUI_LIBS})
 
 install(TARGETS kdeinit_kplato  DESTINATION ${LIB_INSTALL_DIR})
 
-target_link_libraries( kplato kdeinit_kplato ${KDE4_KDEUI_LIBS} )
+target_link_libraries( kplato kdeinit_kplato ${KDE4_KDEUI_LIBS} komain kstore )
 install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
