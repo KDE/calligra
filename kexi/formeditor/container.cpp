@@ -374,7 +374,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 return true;
             // we simulate a mouse move event to update screen
             QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, m_moving->mapFromGlobal(QCursor::pos()), Qt::NoButton,
-                                               Qt::LeftButton | Qt::ControlModifier);
+                                               Qt::LeftButton, Qt::ControlModifier);
             eventFilter(m_moving, mev);
             delete mev;
         } else if (kev->key() == FormManager::self()->contextMenuKey()) {
