@@ -32,7 +32,18 @@ kde4_add_plugin(kformdesigner_kexidbwidgets ${kformdesigner_kexidbwidgets_PART_S
 
 
 
-target_link_libraries(kformdesigner_kexidbwidgets  ${KDE4_KDECORE_LIBS} kformdesigner kexiformutils )
+target_link_libraries(
+    kformdesigner_kexidbwidgets
+    kformdesigner
+    kexiformutils
+    kexidb
+    kexicore
+    kexiguiutils
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kformdesigner_kexidbwidgets  DESTINATION ${PLUGIN_INSTALL_DIR})
 

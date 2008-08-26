@@ -18,7 +18,20 @@ kde4_add_plugin(kexihandler_csv_importexport ${kexihandler_csv_importexport_PART
 
 
 
-target_link_libraries(kexihandler_csv_importexport  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
+target_link_libraries(
+    kexihandler_csv_importexport
+    kexicore
+    keximigrate
+    kexidb
+    kexiutils
+    kexiextendedwidgets
+    keximain
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 if(MSVC)
    # avoid LNK1169 errors
