@@ -23,7 +23,7 @@
 #include <kdemacros.h>
 
 #ifndef KEXI_DB_EXPORT
-# ifdef MAKE_KEXI_DB_LIB
+# ifdef MAKE_KEXIDB_LIB
 #  define KEXI_DB_EXPORT KDE_EXPORT
 # else
 #  define KEXI_DB_EXPORT KDE_IMPORT
