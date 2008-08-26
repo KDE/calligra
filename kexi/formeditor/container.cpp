@@ -981,7 +981,8 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
     QPoint pos = static_cast<QWidget*>(s)->mapTo(m_container, mev->pos());
     int gridX = d->form->gridSize();
     int gridY = d->form->gridSize();
-    if (!FormManager::self()->snapWidgetsToGrid() || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier | Qt::AltModifier)) {
+    if (!FormManager::self()->snapWidgetsToGrid()
+        || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
         tmpx = pos.x();
         tmpy = pos.y();
     } else {
