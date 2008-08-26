@@ -16,10 +16,19 @@ set(kexirelationsview_LIB_SRCS
 
 kde4_add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})
 
-target_link_libraries(kexirelationsview ${KDE4_KDECORE_LIBS}
- kexicore
- kexiextendedwidgets
-)
+target_link_libraries(
+    kexirelationsview
+    kexicore
+    kexiextendedwidgets
+    kexidb
+    kexiutils
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexirelationsview  DESTINATION ${LIB_INSTALL_DIR})

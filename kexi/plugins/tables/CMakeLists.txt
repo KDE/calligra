@@ -14,7 +14,21 @@ kde4_add_plugin(kexihandler_table ${kexihandler_table_PART_SRCS})
 
 
 
-target_link_libraries(kexihandler_table  ${KDE4_KDECORE_LIBS} kexicore kexidb kexidatatable kexiextendedwidgets koproperty )
+target_link_libraries(
+    kexihandler_table
+    kexicore
+    kexidb
+    kexidatatable
+    kexiextendedwidgets
+    koproperty
+    kexiutils
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kexihandler_table  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -32,9 +32,15 @@ set(kexidatatable_LIB_SRCS
 
 kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
-target_link_libraries(kexidatatable  ${KDE4_KIO_LIBS}
- ${QT_QT3SUPPORT_LIBRARY}
- kexicore kexiutils kexiguiutils koproperty 
+target_link_libraries(
+    kexidatatable
+    kexicore
+    kexiutils
+    kexiguiutils
+    koproperty 
+    kexidb
+    ${KDE4_KIO_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
 )
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

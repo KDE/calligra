@@ -18,8 +18,16 @@ set(kexidb_xbasedriver_PART_SRCS
 
 kde4_add_plugin(kexidb_xbasedriver ${kexidb_xbasedriver_PART_SRCS})
 
-target_link_libraries(kexidb_xbasedriver ${XBase_LIBRARIES} 
- ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb keximigrate)
+target_link_libraries(
+    kexidb_xbasedriver
+    kexidb
+    keximigrate
+    kexicore
+    ${XBase_LIBRARIES}
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kexidb_xbasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

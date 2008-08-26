@@ -43,7 +43,19 @@ set(keximigrate_LIB_SRCS
 
 kde4_add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
 
-target_link_libraries(keximigrate  ${KDE4_KDECORE_LIBS} kexicore kexidb kexiextendedwidgets keximain )
+target_link_libraries(
+    keximigrate
+    kexicore
+    kexidb
+    kexiextendedwidgets
+    keximain
+    kexiutils
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS keximigrate  DESTINATION ${LIB_INSTALL_DIR})

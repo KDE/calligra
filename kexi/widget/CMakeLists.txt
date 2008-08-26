@@ -39,8 +39,19 @@ kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
 
 kde4_add_library(kexiextendedwidgets SHARED ${kexiextendedwidgets_LIB_SRCS})
 
-target_link_libraries(kexiextendedwidgets ${KDE4_KDEUI_LIBS}
-  kexiutils kexiguiutils kexidatatable kexicore ktexteditor )
+target_link_libraries(
+    kexiextendedwidgets
+    kexiutils
+    kexiguiutils
+    kexidatatable
+    kexicore
+    ktexteditor
+    kexidb
+    koproperty
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_VERSION} )
 install(TARGETS kexiextendedwidgets  DESTINATION ${LIB_INSTALL_DIR})

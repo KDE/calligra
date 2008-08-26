@@ -8,7 +8,18 @@ set(kexihandler_form_PART_SRCS kexiforms.cpp )
 
 kde4_add_plugin(kexihandler_form ${kexihandler_form_PART_SRCS})
 
-target_link_libraries(kexihandler_form  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexidatatable kexiextendedwidgets kformdesigner koproperty kexiformutils )
+target_link_libraries(
+    kexihandler_form
+    kexicore
+    kexiguiutils
+    kexidatatable
+    kexiextendedwidgets
+    kformdesigner
+    koproperty
+    kexiformutils
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -64,7 +75,23 @@ set(kexiformutils_LIB_SRCS
 
 kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 
-target_link_libraries(kexiformutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets  kformdesigner )
+target_link_libraries(
+    kexiformutils
+    kexicore
+    kexiextendedwidgets
+    kformdesigner
+    kexidb
+    kexiutils
+    kexidatatable
+    kexiguiutils
+    koproperty
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QTXML_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kexiformutils  DESTINATION ${LIB_INSTALL_DIR})

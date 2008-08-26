@@ -8,8 +8,16 @@ kde4_add_plugin(keximigrate_mysql ${keximigrate_mysql_PART_SRCS})
 
 
 
-target_link_libraries(keximigrate_mysql ${MYSQL_LIBRARIES} ${KDE4_KDECORE_LIBS}
- ${KDE4_KPARTS_LIBS} keximigrate )
+target_link_libraries(
+    keximigrate_mysql
+    keximigrate
+    kexidb 
+    kexiutils
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    ${MYSQL_LIBRARIES}
+    )
 
 install(TARGETS keximigrate_mysql  DESTINATION ${PLUGIN_INSTALL_DIR})
 

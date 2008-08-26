@@ -7,8 +7,16 @@ set(keximigrate_xbase_PART_SRCS xbasemigrate.cpp )
 kde4_add_plugin(keximigrate_xbase ${keximigrate_xbase_PART_SRCS})
 
 
-target_link_libraries(keximigrate_xbase ${XBase_LIBRARIES} ${KDE4_KDECORE_LIBS}
- ${KDE4_KPARTS_LIBS} keximigrate )
+target_link_libraries(
+    keximigrate_xbase
+    keximigrate
+    kexidb
+    kexiutils
+    ${KDE4_KPARTS_LIBS}
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    ${XBase_LIBRARIES} 
+    )
 
 install(TARGETS keximigrate_xbase DESTINATION ${PLUGIN_INSTALL_DIR})
 

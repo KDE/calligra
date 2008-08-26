@@ -46,7 +46,20 @@ kde4_add_ui_files(keximain_LIB_SRCS
 
 kde4_add_library(keximain SHARED ${keximain_LIB_SRCS})
 
-target_link_libraries(keximain  kexidb kexicore kexiutils koproperty kexiextendedwidgets ${KDE4_KNEWSTUFF_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} )
+target_link_libraries(
+    keximain
+    kexidb
+    kexicore
+    kexiutils
+    koproperty
+    kexiextendedwidgets
+    kexiguiutils
+    ${KDE4_KNEWSTUFF_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS keximain  DESTINATION ${LIB_INSTALL_DIR})
