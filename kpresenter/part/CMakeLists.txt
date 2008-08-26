@@ -101,7 +101,7 @@ set(kpresenter_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} komain )
 
 install(TARGETS kdeinit_kpresenter DESTINATION ${LIB_INSTALL_DIR})
 
