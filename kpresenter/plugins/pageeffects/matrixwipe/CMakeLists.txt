@@ -35,7 +35,15 @@ set(kpr_pageeffect_matrixwipe_SRCS
 
 kde4_add_plugin(kpr_pageeffect_matrixwipe ${kpr_pageeffect_matrixwipe_SRCS})
 
-target_link_libraries(kpr_pageeffect_matrixwipe kpresenterprivate flake koguiutils)
+target_link_libraries(
+    kpr_pageeffect_matrixwipe
+    kpresenterprivate 
+    flake 
+    koguiutils
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    )
 
 install(TARGETS kpr_pageeffect_matrixwipe  DESTINATION ${PLUGIN_INSTALL_DIR})
 

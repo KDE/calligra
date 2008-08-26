@@ -9,7 +9,16 @@ set(kpresentereventactions_PART_SRCS
 
 kde4_add_plugin(kpresentereventactions ${kpresentereventactions_PART_SRCS})
 
-target_link_libraries(kpresentereventactions kpresenterprivate flake)
+target_link_libraries(
+    kpresentereventactions
+    kpresenterprivate
+    flake
+    kstore
+    ${KDE4_KIO_LIBRARY}
+    ${KDE4_PHONON_LIBRARY}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    )
 
 install(TARGETS kpresentereventactions  DESTINATION ${PLUGIN_INSTALL_DIR})
 

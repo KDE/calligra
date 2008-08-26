@@ -8,7 +8,15 @@ set(kpr_pageeffect_barwipe_PART_SRCS Plugin.cpp
 
 kde4_add_plugin(kpr_pageeffect_barwipe ${kpr_pageeffect_barwipe_PART_SRCS})
 
-target_link_libraries(kpr_pageeffect_barwipe kpresenterprivate flake koguiutils)
+target_link_libraries(
+    kpr_pageeffect_barwipe
+    kpresenterprivate
+    flake 
+    koguiutils
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    )
 
 install(TARGETS kpr_pageeffect_barwipe  DESTINATION ${PLUGIN_INSTALL_DIR})
 

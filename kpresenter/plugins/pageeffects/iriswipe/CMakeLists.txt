@@ -18,7 +18,15 @@ set(kpr_pageeffect_iriswipe_SRCS
 
 kde4_add_plugin(kpr_pageeffect_iriswipe ${kpr_pageeffect_iriswipe_SRCS})
 
-target_link_libraries(kpr_pageeffect_iriswipe kpresenterprivate flake koguiutils)
+target_link_libraries(
+    kpr_pageeffect_iriswipe
+    kpresenterprivate
+    flake
+    koguiutils
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}    
+    )
 
 install(TARGETS kpr_pageeffect_iriswipe  DESTINATION ${PLUGIN_INSTALL_DIR})
 

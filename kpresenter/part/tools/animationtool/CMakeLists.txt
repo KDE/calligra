@@ -15,7 +15,17 @@ kde4_add_plugin(kpresentertoolanimation ${kpresentertoolanimation_PART_SRCS})
 
 
 
-target_link_libraries(kpresentertoolanimation ${KDE4_KDECORE_LIBS} ${KDE4_PHONON_LIBRARY} koguiutils flake kpresenterprivate kopageapp)
+target_link_libraries(
+    kpresentertoolanimation
+    koguiutils
+    flake
+    kpresenterprivate
+    kopageapp
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_PHONON_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kpresentertoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR})
 
