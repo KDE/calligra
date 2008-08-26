@@ -1,9 +1,3 @@
-
-#include <QtGui/qpalette.h>
-
-
-#include <QtGui/qpalette.h>
-
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
@@ -25,6 +19,7 @@
 */
 #include "kexiscrollview.h"
 
+#include <QtGui/QPalette>
 #include <qcursor.h>
 #include <qobject.h>
 #include <qpainter.h>
