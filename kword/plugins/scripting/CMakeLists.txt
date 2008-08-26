@@ -23,7 +23,7 @@ qt4_wrap_cpp(krossmodulekword_PART_SRCS
 )
 
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
-target_link_libraries(krossmodulekword ${KDE4_KROSSUI_LIBS} ${KDE4_KPARTS_LIBS} kokross kwordprivate)
+target_link_libraries(krossmodulekword ${QT_QT3SUPPORT_LIBRARY} komain kotext ${KDE4_KROSSUI_LIBS} flake pigmentcms ${KDE4_KPARTS_LIBS} kokross kwordprivate)
 install(TARGETS krossmodulekword DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES krossmodulekword.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/kword/kpartplugins)

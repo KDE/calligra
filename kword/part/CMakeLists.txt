@@ -77,7 +77,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
-target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake koguiutils kotext)
+target_link_libraries(kwordprivate ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} komain kstore flake pigmentcms koguiutils kotext)
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KWORD_TEST_EXPORT macro do something
@@ -107,7 +107,7 @@ set(kword_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kdeinit_kword  ${KDE4_KDEUI_LIBS} komain )
 
 install(TARGETS kdeinit_kword  DESTINATION ${LIB_INSTALL_DIR})
 
