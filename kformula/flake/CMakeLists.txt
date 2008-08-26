@@ -63,7 +63,18 @@ kde4_add_ui_files( formulashape_PART_SRCS
 
 kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 
-target_link_libraries(formulashape  kstore ${KDE4_KDEUI_LIBS} koguiutils kformulaprivate)
+target_link_libraries(
+    formulashape
+    kstore
+    koguiutils
+    kformulaprivate
+    flake
+    kformulalib
+    komain
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 
 #set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

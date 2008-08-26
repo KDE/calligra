@@ -24,7 +24,20 @@ set(kformulaprivate_LIB_SRCS
 	
 kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
-target_link_libraries(kformulaprivate ${KDE4_KDECORELIBS} koguiutils kformulalib)
+target_link_libraries(
+    kformulaprivate
+    koguiutils
+    kformulalib
+    komain
+    flake
+    kstore
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${KDE4_KDE3SUPPORT_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
