@@ -19,7 +19,20 @@ set(kplatoworkfactory_LIB_SRCS
 
 kde4_add_library(kplatoworkfactory SHARED ${kplatoworkfactory_LIB_SRCS})
 
-target_link_libraries(kplatoworkfactory kplatokernel kplatomodels kplatoui koguiutils)
+target_link_libraries(
+    kplatoworkfactory
+    kplatokernel
+    kplatomodels
+    kplatoui
+    koguiutils
+    komain
+    kstore
+    koodf
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 set_target_properties(kplatoworkfactory PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -45,7 +58,16 @@ set(kplatoworkapp_LIB_SRCS application.cpp )
 
 kde4_add_library(kplatoworkapp  SHARED ${kplatoworkapp_LIB_SRCS})
 
-target_link_libraries(kplatoworkapp kplatoworkfactory komain)
+target_link_libraries(
+    kplatoworkapp
+    kplatoworkfactory
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${QT_QTCORE_LIBRARY} 
+    ${QT_QT3SUPPORT_LIBRARY}   
+    )
 
 set_target_properties(kplatoworkapp PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
@@ -58,11 +80,19 @@ set(kplatowork_KDEINIT_SRCS main.cpp)
 
 kde4_add_kdeinit_executable( kplatowork ${kplatowork_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kplatowork kplatoworkapp )
+target_link_libraries(
+    kdeinit_kplatowork
+    kplatoworkapp
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kdeinit_kplatowork  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kplatowork kdeinit_kplatowork )
+
 install(TARGETS kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

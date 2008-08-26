@@ -30,7 +30,17 @@ qt4_wrap_cpp(krossmodulekplato_PART_SRCS
 )
 
 kde4_add_plugin(krossmodulekplato ${krossmodulekplato_PART_SRCS})
-target_link_libraries(krossmodulekplato ${KDE4_KROSSUI_LIBS} ${KDE4_KPARTS_LIBS} kokross kplatoprivate)
+target_link_libraries(
+    krossmodulekplato
+    kokross
+    kplatoprivate
+    kplatokernel
+    kplatomodels
+    komain
+    ${KDE4_KROSSUI_LIBS}
+    ${KDE4_KPARTS_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 install(TARGETS krossmodulekplato DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES krossmodulekplato.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install(FILES scripting.rc DESTINATION ${DATA_INSTALL_DIR}/kplato/kpartplugins)
