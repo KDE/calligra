@@ -7,7 +7,7 @@ set(kthesaurus_KDEINIT_SRCS main.cc )
 
 kde4_add_kdeinit_executable( kthesaurus ${kthesaurus_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kthesaurus  kotext)
+target_link_libraries(kdeinit_kthesaurus  kotext ${KDE4_KDEUI_LIBS} ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY}  ${QT_QTCORE_LIBRARY})
 
 install(TARGETS kdeinit_kthesaurus  DESTINATION ${LIB_INSTALL_DIR})
 
