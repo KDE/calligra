@@ -36,7 +36,7 @@
 KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
         : KexiView(parent)
 {
-    kDebug() << "KexiRelationMainDlg()" << endl;
+    kDebug() << "KexiRelationMainDlg()";
 // setIcon(SmallIcon("relation"));
     m_defaultIconName = "relation";
     setCaption(i18n("Relationships"));

@@ -67,7 +67,7 @@ KRChartData::KRChartData(QDomNode & element)
                 if (n == "datasource") {
                     _dataSource->setValue(node.firstChild().nodeValue());
                 } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n << endl;
+                    kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
         } else if (n == "name") {
@@ -108,7 +108,7 @@ KRChartData::KRChartData(QDomNode & element)
 //    _lnStyle->setValue(ls.style);
 //   }
         } else {
-            kDebug() << "while parsing field element encountered unknow element: " << n << endl;
+            kDebug() << "while parsing field element encountered unknow element: " << n;
         }
     }
 
@@ -296,10 +296,10 @@ void KRChartData::populateData()
 
 
         } else {
-            kDebug() << "Cursor was invalid: " << _dataSource->value().toString() << endl;
+            kDebug() << "Cursor was invalid: " << _dataSource->value().toString();
         }
     } else {
-        kDebug() << "No connection!" << endl;
+        kDebug() << "No connection!";
     }
 }
 

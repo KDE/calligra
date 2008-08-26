@@ -184,7 +184,7 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QByteArray& name)
     m_query = m_table ? 0 : conn->querySchema(QString(name));
     if (!m_table && !m_query)
         KexiDBWarn << "TableOrQuery(FieldList &tableOrQuery) : "
-        " tableOrQuery is neither table nor query!" << endl;
+        " tableOrQuery is neither table nor query!";
 }
 
 
@@ -195,10 +195,10 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QByteArray& name,
 {
     if (table && !m_table)
         KexiDBWarn << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
-        "no table specified!" << endl;
+        "no table specified!";
     if (!table && !m_query)
         KexiDBWarn << "TableOrQuery(Connection *conn, const QByteArray& name, bool table) : "
-        "no query specified!" << endl;
+        "no query specified!";
 }
 
 TableOrQuerySchema::TableOrQuerySchema(FieldList &tableOrQuery)
@@ -207,7 +207,7 @@ TableOrQuerySchema::TableOrQuerySchema(FieldList &tableOrQuery)
 {
     if (!m_table && !m_query)
         KexiDBWarn << "TableOrQuery(FieldList &tableOrQuery) : "
-        " tableOrQuery is nether table nor query!" << endl;
+        " tableOrQuery is nether table nor query!";
 }
 
 TableOrQuerySchema::TableOrQuerySchema(Connection *conn, int id)
@@ -216,7 +216,7 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, int id)
     m_query = m_table ? 0 : conn->querySchema(id);
     if (!m_table && !m_query)
         KexiDBWarn << "TableOrQuery(Connection *conn, int id) : no table or query found for id=="
-        << id << "!" << endl;
+        << id << "!";
 }
 
 TableOrQuerySchema::TableOrQuerySchema(TableSchema* table)
@@ -224,7 +224,7 @@ TableOrQuerySchema::TableOrQuerySchema(TableSchema* table)
         , m_query(0)
 {
     if (!m_table)
-        KexiDBWarn << "TableOrQuery(TableSchema* table) : no table specified!" << endl;
+        KexiDBWarn << "TableOrQuery(TableSchema* table) : no table specified!";
 }
 
 TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
@@ -232,7 +232,7 @@ TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
         , m_query(query)
 {
     if (!m_query)
-        KexiDBWarn << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
+        KexiDBWarn << "TableOrQuery(QuerySchema* query) : no query specified!";
 }
 
 uint TableOrQuerySchema::fieldCount() const
@@ -252,7 +252,7 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
     if (m_query)
         return m_query->fieldsExpanded(unique ? QuerySchema::Unique : QuerySchema::Default);
 
-    KexiDBWarn << "TableOrQuery::fields() : no query or table specified!" << endl;
+    KexiDBWarn << "TableOrQuery::fields() : no query or table specified!";
     return QueryColumnInfo::Vector();
 }
 
@@ -416,7 +416,7 @@ int ConnectionTestDialog::exec()
 
 void ConnectionTestDialog::slotTimeout()
 {
-// KexiDBDbg << "ConnectionTestDialog::slotTimeout() " << m_errorObj << endl;
+// KexiDBDbg << "ConnectionTestDialog::slotTimeout() " << m_errorObj;
     bool notResponding = false;
     if (m_elapsedTime >= 1000*5) {//5 seconds
         m_stopWaiting = true;
@@ -451,7 +451,7 @@ void ConnectionTestDialog::slotTimeout()
 
 void ConnectionTestDialog::error(KexiDB::Object *obj)
 {
-    KexiDBDbg << "ConnectionTestDialog::error()" << endl;
+    KexiDBDbg << "ConnectionTestDialog::error()";
     m_stopWaiting = true;
     m_errorObj = obj;
     /*  reject();
@@ -500,7 +500,7 @@ int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
 {
 //! @todo does not work with non-SQL data sources
     if (!tableSchema.connection()) {
-        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::TableSchema&): no tableSchema.connection() !" << endl;
+        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::TableSchema&): no tableSchema.connection() !";
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()
@@ -516,7 +516,7 @@ int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
 {
 //! @todo does not work with non-SQL data sources
     if (!querySchema.connection()) {
-        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::QuerySchema&): no querySchema.connection() !" << endl;
+        KexiDBWarn << "KexiDB::rowsCount(const KexiDB::QuerySchema&): no querySchema.connection() !";
         return -1;
     }
     int count = -1; //will be changed only on success of querySingleNumber()
@@ -622,7 +622,7 @@ QString KexiDB::formatNumberForVisibleDecimalPlaces(double value, int decimalPla
 KexiDB::Field::Type KexiDB::intToFieldType(int type)
 {
     if (type < (int)KexiDB::Field::InvalidType || type > (int)KexiDB::Field::LastType) {
-        KexiDBWarn << "KexiDB::intToFieldType(): invalid type " << type << endl;
+        KexiDBWarn << "KexiDB::intToFieldType(): invalid type " << type;
         return KexiDB::Field::InvalidType;
     }
     return (KexiDB::Field::Type)type;
@@ -633,7 +633,7 @@ static bool setIntToFieldType(Field& field, const QVariant& value)
     bool ok;
     const int intType = value.toInt(&ok);
     if (!ok || KexiDB::Field::InvalidType == intToFieldType(intType)) {//for sanity
-        KexiDBWarn << "KexiDB::setFieldProperties(): invalid type" << endl;
+        KexiDBWarn << "KexiDB::setFieldProperties(): invalid type";
         return false;
     }
     field.setType((KexiDB::Field::Type)intType);
@@ -802,7 +802,7 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
             if (!field.table()) {
                 KexiDBWarn << QString(
                     "KexiDB::setFieldProperty() Cannot set \"%1\" property - no table assinged for field!")
-                .arg(QString(propertyName)) << endl;
+                .arg(QString(propertyName));
             } else {
                 LookupFieldSchema *lookup = field.table()->lookupFieldSchema(field);
                 const bool hasLookup = lookup != 0;
@@ -873,7 +873,7 @@ bool KexiDB::setFieldProperty(Field& field, const QByteArray& propertyName, cons
         field.setCustomProperty(propertyName, value);
     }
 
-    KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!" << endl;
+    KexiDBWarn << "KexiDB::setFieldProperty() property \"" << propertyName << "\" not found!";
     return false;
 #undef SET_BOOLEAN_FLAG
 #undef GET_INT
@@ -931,7 +931,7 @@ QVariant KexiDB::loadPropertyValueFromDom(const QDomNode& node)
         return QVariant(text.toLower() == "true" || text == "1");
     }
 //! @todo add more QVariant types
-    KexiDBWarn << "loadPropertyValueFromDom(): unknown type '" << valueType << "'" << endl;
+    KexiDBWarn << "loadPropertyValueFromDom(): unknown type '" << valueType << "'";
     return QVariant();
 }
 
@@ -997,7 +997,7 @@ QVariant KexiDB::emptyValueForType(KexiDB::Field::Type type)
             return QTime::currentTime();
     }
     KexiDBWarn << "KexiDB::emptyValueForType() no value for type "
-    << Field::typeName(type) << endl;
+    << Field::typeName(type);
     return QVariant();
 }
 
@@ -1048,7 +1048,7 @@ QVariant KexiDB::notEmptyValueForType(KexiDB::Field::Type type)
             return QTime::currentTime();
     }
     KexiDBWarn << "KexiDB::notEmptyValueForType() no value for type "
-    << Field::typeName(type) << endl;
+    << Field::typeName(type);
     return QVariant();
 }
 
@@ -1066,7 +1066,7 @@ QString KexiDB::escapeBLOB(const QByteArray& array, BLOBEscapingType type)
     str.reserve(escaped_length);
     if (str.capacity() < escaped_length) {
         KexiDBWarn << "KexiDB::Driver::escapeBLOB(): no enough memory (cannot allocate " <<
-        escaped_length << " chars)" << endl;
+        escaped_length << " chars)";
         return QString();
     }
     if (type == BLOBEscapeXHex)
@@ -1114,12 +1114,12 @@ QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
         const char* s = data;
         const char* end = s + length;
         if (pass == 1) {
-            KexiDBDbg << "processBinaryData(): real size == " << output << endl;
+            KexiDBDbg << "processBinaryData(): real size == " << output;
             array.resize(output);
             output = 0;
         }
         for (int input = 0; s < end; output++) {
-            //  KexiDBDbg<<(int)s[0]<<" "<<(int)s[1]<<" "<<(int)s[2]<<" "<<(int)s[3]<<" "<<(int)s[4]<<endl;
+            //  KexiDBDbg<<(int)s[0]<<" "<<(int)s[1]<<" "<<(int)s[2]<<" "<<(int)s[3]<<" "<<(int)s[4];
             if (s[0] == '\\' && (s + 1) < end) {
                 //special cases as in http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
                 if (s[1] == '\'') {// \'
@@ -1135,7 +1135,7 @@ QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
                         array[output] = char((int(s[1] - '0') * 8 + int(s[2] - '0')) * 8 + int(s[3] - '0'));
                     s += 4;
                 } else {
-                    KexiDBDrvWarn << "processBinaryData(): no octal value after backslash" << endl;
+                    KexiDBDrvWarn << "processBinaryData(): no octal value after backslash";
                     s++;
                 }
             } else {
@@ -1143,7 +1143,7 @@ QByteArray KexiDB::pgsqlByteaToByteArray(const char* data, int length)
                     array[output] = s[0];
                 s++;
             }
-            //  KexiDBDbg<<output<<": "<<(int)array[output]<<endl;
+            //  KexiDBDbg<<output<<": "<<(int)array[output];
         }
     }
     return array;
@@ -1173,7 +1173,7 @@ QVariant KexiDB::stringToVariant(const QString& s, QVariant::Type type, bool &ok
         for (uint i = 0; i < (len - 1); i += 2) {
             int c = s.mid(i, 2).toInt(&ok, 16);
             if (!ok) {
-                KexiDBWarn << "KexiDB::stringToVariant(): Error in digit " << i << endl;
+                KexiDBWarn << "KexiDB::stringToVariant(): Error in digit " << i;
                 return QVariant();
             }
             ba[i/2] = (char)c;

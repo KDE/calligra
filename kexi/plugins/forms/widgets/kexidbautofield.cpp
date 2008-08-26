@@ -205,7 +205,7 @@ void KexiDBAutoField::copyPropertiesToEditor()
 {
     if (m_subwidget) {
 //  kDebug() << "KexiDBAutoField::copyPropertiesToEditor(): base col: " <<  d->baseColor.name() <<
-//   "; text col: " << d->textColor.name() << endl;
+//   "; text col: " << d->textColor.name();
         QPalette p(m_subwidget->palette());
         p.setColor(QPalette::Active, QColorGroup::Base, d->baseColor);
         if (d->widgetType == Boolean)
@@ -368,7 +368,7 @@ bool
 KexiDBAutoField::valueChanged()
 {
     KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>((QWidget*)m_subwidget);
-    kexipluginsdbg << m_origValue  << endl;
+    kexipluginsdbg << m_origValue;
     if (iface)
         return iface->valueChanged();
     return false;

@@ -254,7 +254,7 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
         if (!m_itemsMimeType.isEmpty() && info->mimeType() != m_itemsMimeType.toLatin1())
             continue;
 
-//  kDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
+//  kDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName();
 
         /*   KexiPart::Part *p=Kexi::partManager().part(it);
             if (!p) {
@@ -326,7 +326,7 @@ KexiBrowserItem *KexiBrowser::addGroup(KexiPart::Info& info)
     KexiBrowserItem *item = new KexiBrowserItem(m_list, &info);
     m_baseItems.insert(info.mimeType().toLower(), item);
     return item;
-// kDebug() << "KexiBrowser::addGroup()" << endl;
+// kDebug() << "KexiBrowser::addGroup()";
 }
 
 KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item)
@@ -341,7 +341,7 @@ KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item, KexiBrowserItem *par
 {
 // if (!parent) //TODO: add "Other" part group for that
     // return 0;
-// kDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
+// kDebug() << "KexiBrowser::addItem() found parent:" << parent;
     KexiBrowserItem *bitem;
     if (parent)
         bitem = new KexiBrowserItem(parent, info, &item);
@@ -398,7 +398,7 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const Q
 void
 KexiBrowser::slotExecuteItem(Q3ListViewItem *vitem)
 {
-// kDebug() << "KexiBrowser::slotExecuteItem()" << endl;
+// kDebug() << "KexiBrowser::slotExecuteItem()";
     KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
     if (!it)
         return;
@@ -510,7 +510,7 @@ void KexiBrowser::installEventFilter(QObject * filterObj)
 bool KexiBrowser::eventFilter(QObject *o, QEvent * e)
 {
     /* if (o==m_list && e->type()==QEvent::Resize) {
-        kexidbg << "resize!" << endl;
+        kexidbg << "resize!";
       }*/
     if (o == m_list->renameLineEdit()) {
         if (e->type() == QEvent::Hide)
@@ -705,7 +705,7 @@ void KexiBrowser::clearSelection()
 /*(new action removed)
 void KexiBrowser::slotNewObjectMenuAboutToShow()
 {
-// kexidbg << "KexiBrowser::slotNewObjectMenuAboutToShow()" << endl;
+// kexidbg << "KexiBrowser::slotNewObjectMenuAboutToShow()";
   if ((m_features & Toolbar) && m_newObjectMenu && m_newObjectMenu->isEmpty()) {
     //preload items
     KexiPart::PartInfoList *plist
@@ -752,7 +752,7 @@ bool KexiBrowser::actionEnabled(const QString& actionName) const
 {
     if (actionName == "project_export_data_table" && (m_features & ContextMenus))
         return m_exportActionMenu->isVisible();
-    kWarning() << "KexiBrowser::actionEnabled() no such action: " << actionName << endl;
+    kWarning() << "KexiBrowser::actionEnabled() no such action: " << actionName;
     return false;
 }
 

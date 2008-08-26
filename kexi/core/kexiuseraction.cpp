@@ -30,7 +30,7 @@ KexiUserAction::setMethod(int method, Arguments args)
 void
 KexiUserAction::execute()
 {
-    kDebug() << "KexiUserAction::execute(): " << KexiUserActionMethod::methodName(m_method) << endl;
+    kDebug() << "KexiUserAction::execute(): " << KexiUserActionMethod::methodName(m_method);
 
     switch (m_method) {
     case OpenObject: { //open a project object

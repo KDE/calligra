@@ -222,7 +222,7 @@ bool SQLiteCursor::drv_open()
         // this may as example be the case if SQLiteConnection::drv_useDatabase()
         // wasn't called before. Normaly sqlite_compile/sqlite3_prepare
         // should handle it, but it crashes in in sqlite3SafetyOn at util.c:786
-        kWarning() << "SQLiteCursor::drv_open(): Database handle undefined." << endl;
+        kWarning() << "SQLiteCursor::drv_open(): Database handle undefined.";
         return false;
     }
 
@@ -323,15 +323,15 @@ void SQLiteCursor::drv_getNextRecord()
       if ((int)m_result == (int)FetchOK && d->curr_coldata) {
         for (uint i=0;i<m_fieldCount;i++) {
           KexiDBDrvDbg<<"col."<< i<<": "<< d->curr_colname[i]<<" "<< d->curr_colname[m_fieldCount+i]
-          << " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)") <<endl;
+          << " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)");
         }
-    //  KexiDBDrvDbg << "SQLiteCursor::drv_getNextRecord(): "<<m_fieldCount<<" col(s) fetched"<<endl;
+    //  KexiDBDrvDbg << "SQLiteCursor::drv_getNextRecord(): "<<m_fieldCount<<" col(s) fetched";
       }*/
 }
 
 void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 {
-// KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer():" <<endl;
+// KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer():";
     if (!d->curr_coldata)
         return;
     if (!d->cols_pointers_mem_size)
@@ -340,12 +340,12 @@ void SQLiteCursor::drv_appendCurrentRecordToBuffer()
     const char **src_col = d->curr_coldata;
     const char **dest_col = record;
     for (uint i = 0; i < m_fieldCount; i++, src_col++, dest_col++) {
-//  KexiDBDrvDbg << i <<": '" << *src_col << "'" <<endl;
-//  KexiDBDrvDbg << "src_col: " << src_col << endl;
+//  KexiDBDrvDbg << i <<": '" << *src_col << "'";
+//  KexiDBDrvDbg << "src_col: " << src_col;
         *dest_col = *src_col ? strdup(*src_col) : 0;
     }
     d->records[m_records_in_buf] = record;
-// KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer() ok." <<endl;
+// KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer() ok.";
 }
 
 void SQLiteCursor::drv_bufferMovePointerNext()
@@ -396,7 +396,7 @@ void SQLiteCursor::drv_storeCurrentRecord()
   m_data->rec_stored = true;
   m_data->next_cols = m_data->curr_cols;
   for (int i=0;i<m_data->curr_cols;i++) {
-    KexiDBDrvDbg<<"[COPY] "<<i<<": "<< m_data->curr_coldata[i]<<endl;
+    KexiDBDrvDbg<<"[COPY] "<<i<<": "<< m_data->curr_coldata[i];
     if (m_data->curr_coldata[i])
       m_data->next_coldata[i] = strdup( m_data->curr_coldata[i] );
     else
@@ -452,7 +452,7 @@ bool SQLiteCursor::drv_storeCurrentRow(RecordData &data) const
         }
         //(m_logicalFieldCount introduced) Field *f = (m_containsROWIDInfo && i>=m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
         Field *f = (i >= m_fieldCount) ? 0 : m_fieldsExpanded->at(j)->field;
-//  KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0) << endl;
+//  KexiDBDrvDbg << "SQLiteCursor::storeCurrentRow(): col=" << (col ? *col : 0);
 
 #ifdef SQLITE2
         if (!*col)

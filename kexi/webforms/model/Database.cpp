@@ -112,7 +112,7 @@ bool updateRow(const QString& table, const QHash<QString, QVariant> data, bool c
         QVariant currentValue(data.value(name));
         // FIXME: Regression, we don't encode data...
         if (!(tableSchema.field(name)->isAutoIncrement() && (currentValue.toString() == ""))) {
-            kDebug() << "Inserting " << name << "=" << currentValue.toString() << endl;
+            kDebug() << "Inserting " << name << "=" << currentValue.toString();
             editBuffer.insert(*query.columnInfo(name), currentValue);
         }
     }

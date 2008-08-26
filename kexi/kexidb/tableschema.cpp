@@ -353,7 +353,7 @@ void TableSchema::setNative(bool set)
 {
     if (m_isKexiDBSystem && !set) {
         KexiDBWarn << "TableSchema::setNative(): cannot set native off"
-        " when KexiDB system flag is set on!" << endl;
+        " when KexiDB system flag is set on!";
         return;
     }
     m_native = set;
@@ -386,7 +386,7 @@ bool TableSchema::setLookupFieldSchema(const QString& fieldName, LookupFieldSche
     Field *f = field(fieldName);
     if (!f) {
         KexiDBWarn << "TableSchema::setLookupFieldSchema(): no such field '" << fieldName
-        << "' in table " << name() << endl;
+        << "' in table " << name();
         return false;
     }
     if (lookupFieldSchema)

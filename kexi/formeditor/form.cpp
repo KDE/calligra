@@ -137,7 +137,7 @@ void
 Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString &)
 {
     kDebug() << "Form::createToplevel() container= " << (container ? container->objectName() : "<NULL>")
-    << " formWidget=" << formWidget << endl;
+    << " formWidget=" << formWidget;
 
     setFormWidget(formWidget);
     d->toplevel = new Container(0, container, this);
@@ -159,7 +159,7 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString
 
     connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 
-    kDebug() << "Form::createToplevel(): d->toplevel=" << d->toplevel << endl;
+    kDebug() << "Form::createToplevel(): d->toplevel=" << d->toplevel;
 }
 
 
@@ -386,7 +386,7 @@ Form::changeName(const Q3CString &oldname, const Q3CString &newname)
 //  KMessageBox::sorry(widget()->topLevelWidget(),
 //  i18n("A widget with this name already exists. "
 //   "Please choose another name or rename existing widget."));
-        kDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
+        kDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists";
         FormManager::self()->propertySet()->property("name") = QVariant(oldname);
     } else {
         d->connBuffer->fixName(oldname, newname);
@@ -503,7 +503,7 @@ Form::updateTabStopsOrder()
 {
     for (ObjectTreeListIterator it(d->tabstops);it.current();) {
         if (!(it.current()->widget()->focusPolicy() & Qt::TabFocus)) {
-            kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->objectName() << endl;
+            kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->objectName();
             d->tabstops.remove(it.current());
         } else
             ++it;
@@ -517,7 +517,7 @@ void collectContainers(ObjectTreeItem* item, QSet<Container*>& containers)
         return;
     if (!containers.contains(item->container())) {
         kDebug() << "collectContainers() " << item->container()->objectTree()->className()
-        << " " << item->container()->objectTree()->name() << endl;
+        << " " << item->container()->objectTree()->name();
         containers.insert(item->container());
     }
     for (ObjectTreeListIterator it(*item->children()); it.current(); ++it)
@@ -537,7 +537,7 @@ Form::autoAssignTabStops()
 
     foreach_list(ObjectTreeListIterator, it, d->tabstops) {
         if (it.current()->widget()) {
-            kDebug() << "Form::autoAssignTabStops() widget to sort: " << it.current()->widget() << endl;
+            kDebug() << "Form::autoAssignTabStops() widget to sort: " << it.current()->widget();
             list.append(it.current()->widget());
         }
     }
@@ -545,7 +545,7 @@ Form::autoAssignTabStops()
     list.sort();
     foreach_list(Q3PtrListIterator<QWidget>, iter, list)
     kDebug() << iter.current()->metaObject()->className()
-    << " " << iter.current()->objectName() << endl;
+    << " " << iter.current()->objectName();
 
     d->tabstops.clear();
 
@@ -581,7 +581,7 @@ Form::autoAssignTabStops()
         for (WidgetListIterator it2(hlist); it2.current() != 0; ++it2) {
             ObjectTreeItem *tree = d->topTree->lookup(it2.current()->objectName());
             if (tree) {
-                kDebug() << "Form::autoAssignTabStops() adding " << tree->name() << endl;
+                kDebug() << "Form::autoAssignTabStops() adding " << tree->name();
                 d->tabstops.append(tree);
             }
         }

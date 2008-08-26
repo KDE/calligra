@@ -74,7 +74,7 @@ KexiToggleViewModeAction::KexiToggleViewModeAction(
         setToolTip(i18n("Switch to text view"));
         setWhatsThis(i18n("Switches to text view."));
     } else {
-        kexiwarn << "KexiToggleViewModeAction: invalid mode " << mode << endl;
+        kexiwarn << "KexiToggleViewModeAction: invalid mode " << mode;
     }
 }
 
@@ -424,7 +424,7 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
         kexidbg << "KexiView::eventFilter(): this=[" << o->metaObject()->className()
         << " " << objectName() << "] o=[" << o->metaObject()->className() << " " << o->objectName()
         << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString()) << " "
-        << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type() << endl;
+        << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
         if (KexiUtils::hasParent(this, o)) {
             if (e->type() == QEvent::FocusOut && qApp->focusWidget()
                     && !KexiUtils::hasParent(this, qApp->focusWidget())) {
@@ -434,8 +434,8 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
                 emit focus(true);
             }
             if (e->type() == QEvent::FocusOut) {
-//    kDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
-//    kDebug() << o->className() << " " << o->name()<< endl;
+//    kDebug() << focusWidget()->className() << " " << focusWidget()->name();
+//    kDebug() << o->className() << " " << o->name();
                 KexiView *v = KexiUtils::findParent<KexiView*>(o);
                 if (v) {
                     while (v->d->parentView)
@@ -490,7 +490,7 @@ void KexiView::addChildView(KexiView* childView)
 void KexiView::setFocus()
 {
     if (!d->lastFocusedChildBeforeFocusOut.isNull()) {
-//  kDebug() << "FOCUS: " << d->lastFocusedChildBeforeFocusOut->className() << " " << d->lastFocusedChildBeforeFocusOut->name()<< endl;
+//  kDebug() << "FOCUS: " << d->lastFocusedChildBeforeFocusOut->className() << " " << d->lastFocusedChildBeforeFocusOut->name();
         QWidget *w = d->lastFocusedChildBeforeFocusOut;
         d->lastFocusedChildBeforeFocusOut = 0;
         w->setFocus();

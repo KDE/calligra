@@ -102,7 +102,7 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
         return;
     if (m_item->stored) {
         kWarning() << "KexiBLOBBuffer::Handle::setStoredWidthID(): object for id=" << id
-        << " is aleady stored" << endl;
+        << " is aleady stored";
         return;
     }
 
@@ -136,7 +136,7 @@ KexiBLOBBuffer::Item::Item(const QByteArray& data, KexiBLOBBuffer::Id_t ident, b
 
 KexiBLOBBuffer::Item::~Item()
 {
-    kDebug() << "KexiBLOBBuffer::Item::~Item()" << endl;
+    kDebug() << "KexiBLOBBuffer::Item::~Item()";
     delete m_pixmap;
     m_pixmap = 0;
     delete m_data;
@@ -197,7 +197,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     if (url.isEmpty())
         return KexiBLOBBuffer::Handle();
     if (!url.isValid()) {
-        kDebug() << "::insertPixmap: INVALID URL '" << url << "'" << endl;
+        kDebug() << "::insertPixmap: INVALID URL '" << url << "'";
         return KexiBLOBBuffer::Handle();
     }
 //! @todo what about searching by filename only and then compare data?
@@ -306,7 +306,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
             kWarning() << "KexiBLOBBuffer::objectForId(" << id << "," << stored
-            << "): res!=true || recordData.size()<4; res==" << res.toString() << " recordData.size()==" << recordData.size() << endl;
+            << "): res!=true || recordData.size()<4; res==" << res.toString() << " recordData.size()==" << recordData.size();
             return KexiBLOBBuffer::Handle();
         }
 

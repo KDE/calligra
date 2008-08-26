@@ -57,7 +57,7 @@ IndexSchema::IndexSchema(const IndexSchema& idx, TableSchema& parentTable)
         Field *parentTableField = parentTable.field(f->name());
         if (!parentTableField) {
             KexiDBWarn << "IndexSchema::IndexSchema(const IndexSchema& idx, const TableSchema& parentTable): "
-            "cannot find field '" << f->name() << " in parentTable. Empty index will be created!" << endl;
+            "cannot find field '" << f->name() << " in parentTable. Empty index will be created!";
             FieldList::clear();
             break;
         }
@@ -91,7 +91,7 @@ FieldList& IndexSchema::addField(Field *field)
         KexiDBDbg << "IndexSchema::addField(" << (field ? field->name() : 0)
         << "): WARNING: field doas not belong to the same table '"
         << (field && field->table() ? field->table()->name() : 0)
-        << "'as index!" << endl;
+        << "'as index!";
         return *this;
     }
     return FieldList::addField(field);

@@ -75,7 +75,7 @@ KRLabelData::KRLabelData(QDomNode & element)
                 _lnStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing label element encountered unknow element: " << n << endl;
+            kDebug() << "while parsing label element encountered unknow element: " << n;
         }
     }
 }

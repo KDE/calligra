@@ -67,7 +67,7 @@ bool parseReportTextStyleData(const QDomElement & elemSource, ORTextStyleData & 
                 } else {
                     // we have encountered a tag that we don't understand.
                     // for now we will just inform a debugger about it
-                    kDebug() << "Tag not Parsed at <textstle>:" << elemThis.tagName() << endl;
+                    kDebug() << "Tag not Parsed at <textstle>:" << elemThis.tagName();
                 }
             }
 
@@ -111,7 +111,7 @@ bool parseReportLineStyleData(const QDomElement & elemSource, ORLineStyleData & 
                 } else {
                     // we have encountered a tag that we don't understand.
                     // for now we will just inform a debugger about it
-                    kDebug() << "Tag not Parsed at <linestle>:" << elemThis.tagName() << endl;
+                    kDebug() << "Tag not Parsed at <linestle>:" << elemThis.tagName();
                 }
             }
 
@@ -187,7 +187,7 @@ bool parseReportFont(const QDomElement & elemSource, QFont & fontTarget)
                     if (valid)
                         fontTarget.setPointSize(intTemp);
                     else
-                        kDebug() << "Text not Parsed at <font>:" << elemThis.text() << endl;
+                        kDebug() << "Text not Parsed at <font>:" << elemThis.text();
                 } else if (elemThis.tagName() == "weight") {
                     if (elemThis.text() == "normal")
                         fontTarget.setWeight(50);
@@ -200,12 +200,12 @@ bool parseReportFont(const QDomElement & elemSource, QFont & fontTarget)
                         if (valid && intTemp >= 1 && intTemp <= 100)
                             fontTarget.setWeight(intTemp);
                         else
-                            kDebug() << "Text not Parsed at <font>:" << elemThis.text() << endl;
+                            kDebug() << "Text not Parsed at <font>:" << elemThis.text();
                     }
                 } else {
                     // we have encountered a tag that we don't understand.
                     // for now we will just inform a debugger about it
-                    kDebug() << "Tag not Parsed at <font>:" << elemThis.tagName() << endl;
+                    kDebug() << "Tag not Parsed at <font>:" << elemThis.tagName();
                 }
             }
             nodeCursor = nodeCursor.nextSibling();

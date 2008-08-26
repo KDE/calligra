@@ -38,7 +38,7 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
     if (_rsd) {
         rd = rsd->reportDesigner();
     } else {
-        kDebug() << "Error RSD is null" << endl;
+        kDebug() << "Error RSD is null";
     }
     _head = new ReportSection(rd /*, _rsd*/);
     _foot = new ReportSection(rd /*, _rsd*/);

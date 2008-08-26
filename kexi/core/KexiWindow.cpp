@@ -587,14 +587,14 @@ tristate KexiWindow::switchToViewMode(
             return res;
     }
 
-    kexidbg << "KexiWindow::switchToViewMode()" << endl;
+    kexidbg << "KexiWindow::switchToViewMode()";
     bool dontStore = false;
     KexiView *view = selectedView();
 
     if (d->currentViewMode == newViewMode)
         return true;
     if (!supportsViewMode(newViewMode)) {
-        kexiwarn << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")" << endl;
+        kexiwarn << "! KexiWindow::supportsViewMode(" << Kexi::nameForViewMode(newViewMode) << ")";
         return false;
     }
 
@@ -633,7 +633,7 @@ tristate KexiWindow::switchToViewMode(
         if (!newView) {
             //js TODO error?
             kexiwarn << "Switching to mode " << newViewMode << " failed. Previous mode "
-            << d->currentViewMode << " restored." << endl;
+            << d->currentViewMode << " restored.";
             return false;
         }
         d->creatingViewsMode = Kexi::NoViewMode;
@@ -652,7 +652,7 @@ tristate KexiWindow::switchToViewMode(
         removeView(newViewMode);
         delete newView;
         kexiwarn << "Switching to mode " << newViewMode << " failed. Previous mode "
-        << d->currentViewMode << " restored." << endl;
+        << d->currentViewMode << " restored.";
         return false;
     }
     d->currentViewMode = newViewMode;
@@ -668,7 +668,7 @@ tristate KexiWindow::switchToViewMode(
         removeView(newViewMode);
         delete newView;
         kexiwarn << "Switching to mode " << newViewMode << " failed. Previous mode "
-        << prevViewMode << " restored." << endl;
+        << prevViewMode << " restored.";
         const Kexi::ObjectStatus status(*this);
         setStatus(KexiMainWindowIface::global()->project()->dbConnection(),
                   i18n("Switching to other view failed (%1).", Kexi::nameForViewMode(newViewMode)), "");
@@ -852,7 +852,7 @@ tristate KexiWindow::storeNewData()
         //this part's ID is not stored within kexi__parts:
         KexiDB::TableSchema *ts =
             KexiMainWindowIface::global()->project()->dbConnection()->tableSchema("kexi__parts");
-        kexidbg << "KexiWindow::storeNewData(): schema: " << ts << endl;
+        kexidbg << "KexiWindow::storeNewData(): schema: " << ts;
         if (!ts)
             return false;
 
@@ -878,14 +878,14 @@ tristate KexiWindow::storeNewData()
 
         KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
         kexidbg << "KexiWindow::storeNewData(): fieldlist: "
-        << (fl ? fl->debugString() : QString()) << endl;
+        << (fl ? fl->debugString() : QString());
         if (!fl)
             return false;
 
-        kexidbg << part()->info()->ptr()->untranslatedGenericName() << endl;
+        kexidbg << part()->info()->ptr()->untranslatedGenericName();
 //  QStringList sl = part()->info()->ptr()->propertyNames();
 //  for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
-//   kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString() <<  endl;
+//   kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString();
         if (!KexiMainWindowIface::global()->project()->dbConnection()
                 ->insertRecord(
                     *fl,
@@ -895,11 +895,11 @@ tristate KexiWindow::storeNewData()
                     QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
             return false;
 
-        kexidbg << "KexiWindow::storeNewData(): insert success!" << endl;
+        kexidbg << "KexiWindow::storeNewData(): insert success!";
         part()->info()->setProjectPartID(p_id);
         //(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
         kexidbg << "KexiWindow::storeNewData(): new id is: "
-        << part()->info()->projectPartID()  << endl;
+        << part()->info()->projectPartID();
 
         part()->info()->setIdStoredInPartDatabase(true);
     }
@@ -955,7 +955,7 @@ tristate KexiWindow::storeData(bool dontAsk)
 void KexiWindow::activate()
 {
     KexiView *v = selectedView();
-    //kexidbg << "focusWidget(): " << focusWidget()->name() << endl;
+    //kexidbg << "focusWidget(): " << focusWidget()->name();
 #ifdef __GNUC__
 #warning TODO KexiWindow::activate() OK instead of focusedChildWidget()?
 #else

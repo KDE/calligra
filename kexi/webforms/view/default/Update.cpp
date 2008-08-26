@@ -65,7 +65,7 @@ void Update::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWrite
         QHash<QString, QVariant> data;
         foreach(const QString& field, fieleList) {
             if (schema->field(field)) {
-                kDebug() << "UPDATING: " << field << "=" << d[field] << endl;
+                kDebug() << "UPDATING: " << field << "=" << d[field];
                 data[field] = QVariant(d[field]);
             } else {
                 error = true;

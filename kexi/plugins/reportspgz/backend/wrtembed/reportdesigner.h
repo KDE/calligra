@@ -115,7 +115,7 @@ public:
     QGraphicsScene* activeScene();
     void setActiveScene(QGraphicsScene* a);
     KoProperty::Set* propertySet() {
-        kDebug() << endl; return set;
+        kDebug(); return set;
     }
 
     virtual QSize sizeHint() const;
@@ -129,7 +129,7 @@ public:
 
     void changeSet(KoProperty::Set *);
     KoProperty::Set* itemPropertySet() {
-        kDebug() << endl; return _itmset;
+        kDebug(); return _itmset;
     }
 
     void setModified(bool = true);

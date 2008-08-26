@@ -463,7 +463,7 @@ void KexiTableView::clearColumnsInternal(bool /*repaint*/)
 
 void KexiTableView::slotUpdate()
 {
-    kexidbg << " KexiTableView::slotUpdate() -- " << m_navPanel << endl;
+    kexidbg << " KexiTableView::slotUpdate() -- " << m_navPanel;
 // QSize s(tableSize());
 // viewport()->setUpdatesEnabled(false);
 /// resizeContents(s.width(), s.height());
@@ -534,7 +534,7 @@ QSize KexiTableView::sizeHint() const
     w = qMin(w, qApp->desktop()->availableGeometry(this).width() * 3 / 4); //stretch
     h = qMin(h, qApp->desktop()->availableGeometry(this).height() * 3 / 4); //stretch
 
-// kexidbg << "KexiTableView::sizeHint()= " <<w <<", " <<h << endl;
+// kexidbg << "KexiTableView::sizeHint()= " <<w <<", " <<h;
 
     return QSize(w, h);
     /*QSize(
@@ -649,7 +649,7 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
     bool paintOnlyInsertRow = false;
 
     /* kDebug(44021) << QString(" KexiTableView::drawContents(cx:%1 cy:%2 cw:%3 ch:%4)")
-          .arg(cx).arg(cy).arg(cw).arg(ch) << endl;*/
+          .arg(cx).arg(cy).arg(cw).arg(ch);*/
 
     if (rowlast == -1) {
         rowlast = rows() - 1;
@@ -657,12 +657,12 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
         if (rowfirst == -1) {
             if (rowAt(cy - d->rowHeight) != -1) {
                 paintOnlyInsertRow = true;
-//    kDebug(44021) << "-- paintOnlyInsertRow --" << endl;
+//    kDebug(44021) << "-- paintOnlyInsertRow --";
             }
         }
     }
-// kDebug(44021) << "rowfirst="<<rowfirst<<" rowlast="<<rowlast<<" rows()="<<rows()<<endl;
-// kDebug(44021)<<" plus1row=" << plus1row<<endl;
+// kDebug(44021) << "rowfirst="<<rowfirst<<" rowlast="<<rowlast<<" rows()="<<rows();
+// kDebug(44021)<<" plus1row=" << plus1row;
 
     if (collast == -1)
         collast = columns() - 1;
@@ -697,7 +697,7 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 
 // int maxwc = qMin(cw, (columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
     int maxwc = columnPos(columns() - 1) + columnWidth(columns() - 1);
-// kDebug(44021) << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
+// kDebug(44021) << "KexiTableView::drawContents(): maxwc: " << maxwc;
 
     p->fillRect(cx, cy, cw, ch, d->appearance.baseColor);
 
@@ -753,7 +753,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
     int y2 = h - 1;
 
     /* if (0==qstrcmp("KexiComboBoxPopup",parentWidget()->className())) {
-        kexidbg  << parentWidget()->className() << " >>>>>> KexiTableView::paintCell(col=" << col <<"row="<<row<<") w="<<w<<endl;
+        kexidbg  << parentWidget()->className() << " >>>>>> KexiTableView::paintCell(col=" << col <<"row="<<row<<") w="<<w;
       }*/
 
     // Draw our lines
@@ -880,7 +880,7 @@ void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, 
 // If we are in the focus cell, draw indication
     if (m_currentItem == record && col == m_curCol //js: && !d->recordIndicator)
             && !d->appearance.fullRowSelection) {
-//  kexidbg << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus<<endl;
+//  kexidbg << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus;
 //  if (has_focus) {
         if (isEnabled()) {
             p->setPen(d->appearance.textColor);
@@ -949,16 +949,16 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
 // ts.setWidth( qMin( ts.width(), visibleWidth() ) );
 // ts.setHeight( qMin( ts.height() - (m_navPanel ? m_navPanel->height() : 0), visibleHeight()) );
     /* kDebug(44021) << QString(" (cx:%1 cy:%2 cw:%3 ch:%4)")
-          .arg(cx).arg(cy).arg(cw).arg(ch) << endl;
+          .arg(cx).arg(cy).arg(cw).arg(ch);
       kDebug(44021) << QString(" (w:%3 h:%4)")
-          .arg(ts.width()).arg(ts.height()) << endl;*/
+          .arg(ts.width()).arg(ts.height());*/
 
     // Region of the rect we should draw, calculated in viewport
     // coordinates, as a region can't handle bigger coordinates
     contentsToViewport2(cx, cy, cx, cy);
     QRegion reg(QRect(cx, cy, cw, ch));
 
-//kexidbg << "---cy-- " << contentsY() << endl;
+//kexidbg << "---cy-- " << contentsY();
 
     // Subtract the table from it
 // reg = reg.subtract( QRect( QPoint( 0, 0 ), ts-QSize(0,m_navPanel->isVisible() ? m_navPanel->height() : 0) ) );
@@ -982,14 +982,14 @@ void KexiTableView::paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch)
         QRect realRect(viewportToContents2(rect.topLeft()), rect.size());
         /*  kDebug(44021) << QString("- pEA: p->fillRect(x:%1 y:%2 w:%3 h:%4)")
               .arg(rect.x()).arg(rect.y())
-              .arg(rect.width()).arg(rect.height()) << endl;*/
+              .arg(rect.width()).arg(rect.height());*/
         p->fillRect(realRect, d->appearance.emptyAreaColor);
     }
 }
 
 void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 {
-// kDebug(44021) << "KexiTableView::contentsMouseDoubleClickEvent()" << endl;
+// kDebug(44021) << "KexiTableView::contentsMouseDoubleClickEvent()";
     m_contentsMousePressEvent_dblClick = true;
     contentsMousePressEvent(e);
     m_contentsMousePressEvent_dblClick = false;
@@ -1011,7 +1011,7 @@ void KexiTableView::contentsMouseDoubleClickEvent(QMouseEvent *e)
 
 void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
 {
-// kDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
+// kDebug(44021) << "KexiTableView::contentsMousePressEvent() ??";
     setFocus();
     if (m_data->count() == 0 && !isInsertingEnabled()) {
         Q3ScrollView::contentsMousePressEvent(e);
@@ -1036,7 +1036,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
             return;
     }
 
-// kDebug(44021)<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash"<<endl;
+// kDebug(44021)<<"void KexiTableView::contentsMousePressEvent( QMouseEvent* e ) by now the current items should be set, if not -> error + crash";
     if (e->button() == Qt::RightButton) {
         showContextMenu(e->globalPos());
     } else if (e->button() == Qt::LeftButton) {
@@ -1046,10 +1046,10 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
             s = qMin(d->rowHeight - 3, s);
             s = qMin(columnWidth(m_curCol) - 3, s); //avoid too large box
             const QRect r(columnPos(m_curCol) + qMax(columnWidth(m_curCol) / 2 - s / 2, 0), rowPos(m_curRow) + d->rowHeight / 2 - s / 2 /*- 1*/, s, s);
-            //kexidbg << r << endl;
+            //kexidbg << r;
             if (r.contains(e->pos())) {
 //    kexidbg << "e->x:" << e->x() << " e->y:" << e->y() << " " << rowPos(m_curRow) <<
-//     " " << columnPos(m_curCol) << endl;
+//     " " << columnPos(m_curCol);
                 boolToggled();
             }
         }
@@ -1064,7 +1064,7 @@ void KexiTableView::contentsMousePressEvent(QMouseEvent* e)
 
 void KexiTableView::contentsMouseReleaseEvent(QMouseEvent* e)
 {
-// kDebug(44021) << "KexiTableView::contentsMousePressEvent() ??" << endl;
+// kDebug(44021) << "KexiTableView::contentsMousePressEvent() ??";
     if (m_data->count() == 0 && !isInsertingEnabled())
         return;
 
@@ -1087,7 +1087,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
     // remember old focus cell
     int oldRow = m_curRow;
     int oldCol = m_curCol;
-    kDebug(44021) << "oldRow=" << oldRow << " oldCol=" << oldCol << endl;
+    kDebug(44021) << "oldRow=" << oldRow << " oldCol=" << oldCol;
     bool onInsertItem = false;
 
     int newrow, newcol;
@@ -1103,7 +1103,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
                 return false;
             }
             newrow++;
-            kDebug(44021) << "Clicked just on 'insert' row." << endl;
+            kDebug(44021) << "Clicked just on 'insert' row.";
             onInsertItem = true;
         } else {
             // get new focus cell
@@ -1158,7 +1158,7 @@ void KexiTableView::contentsMouseMoveEvent(QMouseEvent *e)
         if (row > (rows() - 1 + (isInsertingEnabled() ? 1 : 0)))
             row = -1; //no row to paint
     }
-// kexidbg << " row="<<row<< " col="<<col<<endl;
+// kexidbg << " row="<<row<< " col="<<col;
     //update row highlight if needed
     if (d->appearance.rowMouseOverHighlightingEnabled) {
         if (row != d->highlightedRow) {
@@ -1268,7 +1268,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 {
     if (!hasData())
         return;
-// kexidbg << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text()<<endl;
+// kexidbg << "KexiTableView::keyPressEvent: key=" <<e->key() << " txt=" <<e->text();
 
     const int k = e->key();
     const bool ro = isReadOnly();
@@ -1309,7 +1309,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
         }
     } else if (m_rowEditing) {// if a row is in edit mode, do some special stuff
         if (shortCutPressed(e, "data_save_row")) {
-            kexidbg << "shortCutPressed!!!" << endl;
+            kexidbg << "shortCutPressed!!!";
             acceptRowEdit();
             return;
         }
@@ -1412,9 +1412,9 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
                 //this condition is moved after handleKeyPress() to allow to everride enter key as well
                 startEditOrToggleValue();
             } else {
-                kexidbg << "KexiTableView::KeyPressEvent(): default" << endl;
+                kexidbg << "KexiTableView::KeyPressEvent(): default";
                 if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint()) {
-                    kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16) << endl;
+                    kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16);
                     //    e->ignore();
                     Q3ScrollView::keyPressEvent(e);
                     return;
@@ -1427,12 +1427,12 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     if (printable && !ro) {
         KexiTableViewColumn *tvcol = m_data->column(curCol);
         if (tvcol->acceptsFirstChar(e->text()[0])) {
-            kDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==true" << endl;
+            kDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==true";
             //   if (e->text()[0].isPrint())
             createEditor(curRow, curCol, e->text(), true);
         } else {
 //TODO show message "key not allowed eg. on a statusbar"
-            kDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==false" << endl;
+            kDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==false";
         }
     }
 
@@ -1501,11 +1501,11 @@ void KexiTableView::editorShowFocus(int /*row*/, int col)
     KexiDataItemInterface *edit = editor(col);
     /*nt p = rowPos(row);
      (!edit || (p < contentsY()) || (p > (contentsY()+clipper()->height()))) {
-      kexidbg<< "KexiTableView::editorShowFocus() : OUT" << endl;
+      kexidbg<< "KexiTableView::editorShowFocus() : OUT";
       return;
     }*/
     if (edit) {
-        kexidbg << "KexiTableView::editorShowFocus() : IN" << endl;
+        kexidbg << "KexiTableView::editorShowFocus() : IN";
         QRect rect = cellGeometry(m_curRow, m_curCol);
 //  rect.moveBy( -contentsX(), -contentsY() );
         edit->showFocus(rect, isReadOnly() || m_data->column(col)->isReadOnly());
@@ -1525,14 +1525,14 @@ void KexiTableView::reloadData()
 
 void KexiTableView::createEditor(int row, int col, const QString& addText, bool removeOld)
 {
-    kDebug(44021) << "KexiTableView::createEditor('" << addText << "'," << removeOld << ")" << endl;
+    kDebug(44021) << "KexiTableView::createEditor('" << addText << "'," << removeOld << ")";
     if (isReadOnly()) {
-        kDebug(44021) << "KexiTableView::createEditor(): DATA IS READ ONLY!" << endl;
+        kDebug(44021) << "KexiTableView::createEditor(): DATA IS READ ONLY!";
         return;
     }
 
     if (m_data->column(col)->isReadOnly()) {//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
-        kDebug(44021) << "KexiTableView::createEditor(): COL IS READ ONLY!" << endl;
+        kDebug(44021) << "KexiTableView::createEditor(): COL IS READ ONLY!";
         return;
     }
 
@@ -1763,7 +1763,7 @@ void KexiTableView::viewportDragLeaveEvent(QDragLeaveEvent *e)
 
 void KexiTableView::updateCell(int row, int col)
 {
-// kDebug(44021) << "updateCell("<<row<<", "<<col<<")"<<endl;
+// kDebug(44021) << "updateCell("<<row<<", "<<col<<")";
     updateContents(cellGeometry(row, col));
     /* QRect r = cellGeometry(row, col);
       r.setHeight(r.height()+6);
@@ -1778,13 +1778,13 @@ void KexiTableView::updateCurrentCell()
 
 void KexiTableView::updateRow(int row)
 {
-// kDebug(44021) << "updateRow("<<row<<")"<<endl;
+// kDebug(44021) << "updateRow("<<row<<")";
     if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/))
         return;
     //int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 
-    //kexidbg << contentsX() << " " << contentsY() << endl;
-    //kexidbg << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;
+    //kexidbg << contentsX() << " " << contentsY();
+    //kexidbg << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() );
     // updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
     updateContents(QRect(contentsX(), rowPos(row), clipper()->width(), rowHeight()));     //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
 }
@@ -1882,7 +1882,7 @@ int KexiTableView::columnAt(int pos) const
     return m_data->globalColumnID(r);
 
 // if (r==-1)
-//  kexidbg << "columnAt("<<pos<<")==-1 !!!" << endl;
+//  kexidbg << "columnAt("<<pos<<")==-1 !!!";
 // return r;
 }
 
@@ -1911,10 +1911,10 @@ QSize KexiTableView::tableSize() const
               << ", " << rowPos( rows()-1+(isInsertingEnabled()?1:0)) + d->rowHeight
         //   + qMax(m_navPanel ? m_navPanel->height() : 0, horizontalScrollBar()->sizeHint().height())
               + (m_navPanel->isVisible() ? qMax( m_navPanel->height(), horizontalScrollBar()->sizeHint().height() ) :0 )
-              + margin() << endl;
+              + margin();
         */
 //  kexidbg<< m_navPanel->isVisible() <<" "<<m_navPanel->height()<<" "
-//  <<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0))<<endl;
+//  <<horizontalScrollBar()->sizeHint().height()<<" "<<rowPos( rows()-1+(isInsertingEnabled()?1:0));
 
         //int xx = horizontalScrollBar()->sizeHint().height()/2;
 
@@ -1942,7 +1942,7 @@ QSize KexiTableView::tableSize() const
 //-2*d->rowHeight
         );
 
-//  kexidbg << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s << endl;
+//  kexidbg << rows()-1 <<" "<< (isInsertingEnabled()?1:0) <<" "<< (m_rowEditing?1:0) << " " <<  s;
         return s;
 //   +horizontalScrollBar()->sizeHint().height() + margin() );
     }
@@ -2031,7 +2031,7 @@ void KexiTableView::slotRowRepaintRequested(KexiDB::RecordData& record)
 //(js) unused
 void KexiTableView::slotAutoScroll()
 {
-    kDebug(44021) << "KexiTableView::slotAutoScroll()" << endl;
+    kDebug(44021) << "KexiTableView::slotAutoScroll()";
     if (!d->needAutoScroll)
         return;
 
@@ -2063,7 +2063,7 @@ KexiTableView::print(QPrinter &printer, QPrintDialog &printDialog)
     int topMargin = printer.margins().height() + 2;
 // int bottomMargin = topMargin + ( printer.realPageSize()->height() * printer.resolution() + 36 ) / 72;
     int bottomMargin = 0;
-    kDebug(44021) << "KexiTableView::print: bottom = " << bottomMargin << endl;
+    kDebug(44021) << "KexiTableView::print: bottom = " << bottomMargin;
 
     QPainter p(&printer);
 
@@ -2082,10 +2082,10 @@ KexiTableView::print(QPrinter &printer, QPrintDialog &printDialog)
     int right = 0;
     for (i = m_data->first(); i; i = m_data->next()) {
         if (!i->isInsertItem()) {
-            kDebug(44021) << "KexiTableView::print: row = " << row << " y = " << yOffset << endl;
+            kDebug(44021) << "KexiTableView::print: row = " << row << " y = " << yOffset;
             int xOffset = leftMargin;
             for (int col = 0; col < columns(); col++) {
-                kDebug(44021) << "KexiTableView::print: col = " << col << " x = " << xOffset << endl;
+                kDebug(44021) << "KexiTableView::print: col = " << col << " x = " << xOffset;
                 p.saveWorldMatrix();
                 p.translate(xOffset, yOffset);
                 paintCell(&p, i, col, QRect(0, 0, columnWidth(col) + 1, d->rowHeight), true);
@@ -2174,7 +2174,7 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
     if (maxw < KEXITV_MINIMUM_COLUMN_WIDTH)
         maxw = KEXITV_MINIMUM_COLUMN_WIDTH; //not too small
     kexidbg << "KexiTableView: setColumnWidth(colNum=" << colNum
-    << ", indexOfVisibleColumn=" << indexOfVisibleColumn << ", width=" << maxw << " )" << endl;
+    << ", indexOfVisibleColumn=" << indexOfVisibleColumn << ", width=" << maxw << " )";
     setColumnWidth(colNum/* not indexOfVisibleColumn*/, maxw);
 }
 
@@ -2279,7 +2279,7 @@ void KexiTableView::setHorizontalHeaderVisible(bool set)
 
 void KexiTableView::triggerUpdate()
 {
-// kDebug(44021) << "KexiTableView::triggerUpdate()" << endl;
+// kDebug(44021) << "KexiTableView::triggerUpdate()";
 // if (!d->pUpdateTimer->isActive())
     d->pUpdateTimer->start(20);
 //  d->pUpdateTimer->start(200, true);
@@ -2288,7 +2288,7 @@ void KexiTableView::triggerUpdate()
 void KexiTableView::setHBarGeometry(QScrollBar & hbar, int x, int y, int w, int h)
 {
     /*todo*/
-    kDebug(44021) << "KexiTableView::setHBarGeometry" << endl;
+    kDebug(44021) << "KexiTableView::setHBarGeometry";
     if (d->appearance.navigatorEnabled) {
         m_navPanel->setHBarGeometry(hbar, x, y, w, h);
     } else {
@@ -2384,7 +2384,7 @@ void KexiTableView::paste()
 bool KexiTableView::eventFilter(QObject *o, QEvent *e)
 {
     //don't allow to stole key my events by others:
-// kexidbg << "spontaneous " << e->spontaneous() << " type=" << e->type() << endl;
+// kexidbg << "spontaneous " << e->spontaneous() << " type=" << e->type();
 
     if (e->type() == QEvent::KeyPress) {
         if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {

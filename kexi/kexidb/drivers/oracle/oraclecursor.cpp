@@ -46,7 +46,7 @@ OracleCursor::OracleCursor
   d->rs   		= static_cast<OracleConnection*>(conn)->d->rs;
   d->stmt 		= static_cast<OracleConnection*>(conn)->d->stmt;
     
-	//KexiDBDrvDbg << "OracleCursor: constructor for query statement" << endl;
+	//KexiDBDrvDbg << "OracleCursor: constructor for query statement";
 	m_containsROWIDInfo = false;
 }
 
@@ -60,20 +60,20 @@ OracleCursor::OracleCursor(Connection* conn, QuerySchema& query, uint options )
     d->env  	= static_cast<OracleConnection*>(conn)->d->env;
     d->rs 		= static_cast<OracleConnection*>(conn)->d->rs;
     d->stmt 	= static_cast<OracleConnection*>(conn)->d->stmt;
-	//KexiDBDrvDbg << "OracleCursor: constructor for query statement2" << endl;
+	//KexiDBDrvDbg << "OracleCursor: constructor for query statement2";
 	m_containsROWIDInfo = false; /*If true select * statements fail*/
 }
 
 OracleCursor::~OracleCursor()
 {
-    //KexiDBDrvDbg  << endl;
+    //KexiDBDrvDbg;
 	close();
 }
 
 bool OracleCursor::drv_open() 
 {
   QString count="select count(*) from("+m_sql+")";
-  KexiDBDrvDbg <<m_sql<<endl;
+  KexiDBDrvDbg <<m_sql;
   try
   {
     d->rs=d->stmt->executeQuery(count.latin1());
@@ -104,7 +104,7 @@ bool OracleCursor::drv_open()
    }
    catch (oracle::occi::SQLException ea)
    {
-      KexiDBDrvDbg << ea.what()<<endl;
+      KexiDBDrvDbg << ea.what();
       setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
       return false;
    }
@@ -113,18 +113,18 @@ bool OracleCursor::drv_open()
 
 bool OracleCursor::drv_close() 
 {
-   //KexiDBDrvDbg <<endl;
+   //KexiDBDrvDbg;
    if(d->rs){
       try{
-		    //KexiDBDrvDbg << "Closing " << m_sql << endl;
-        //KexiDBDrvDbg << "d->rs->status(): " << d->rs->status() << endl;
+		    //KexiDBDrvDbg << "Closing " << m_sql;
+        //KexiDBDrvDbg << "d->rs->status(): " << d->rs->status();
         //d->stmt->closeResultSet(d->rs);
-		    KexiDBDrvDbg << "Closed" << endl;
+		    KexiDBDrvDbg << "Closed";
         d->rs=0;
       }
       catch (oracle::occi::SQLException ea)
       {
-        KexiDBDrvDbg <<ea.what()<<endl;
+        KexiDBDrvDbg <<ea.what();
         setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
         return false;
       }
@@ -133,13 +133,13 @@ bool OracleCursor::drv_close()
    d->types.~vector<int>();
    m_opened=false;
    d->numRows=0;
-   //KexiDBDrvDbg << "Cursor closed" << endl;
+   //KexiDBDrvDbg << "Cursor closed";
    return true;
 }
 
 bool OracleCursor::moveFirst() 
 {
-  KexiDBDrvDbg <<endl; 
+  KexiDBDrvDbg; 
   if(d->rs->next()) return true;
   return false;
 }
@@ -153,7 +153,7 @@ void OracleCursor::drv_getNextRecord()
     {
       case ResultSet::DATA_AVAILABLE:
         m_result=FetchOK;
-        //KexiDBDrvDbg<<"("<<m_at+1<<"/"<<d->numRows<<") OK"<<endl;
+        //KexiDBDrvDbg<<"("<<m_at+1<<"/"<<d->numRows<<") OK";
         break;
         
       case ResultSet::END_OF_FETCH:
@@ -166,7 +166,7 @@ void OracleCursor::drv_getNextRecord()
  }
  catch(oracle::occi::SQLException ea)
  {
-    KexiDBDrvDbg <<ea.what()<<endl;
+    KexiDBDrvDbg <<ea.what();
     setError(ERR_DB_SPECIFIC,QString::fromUtf8(ea.what()));
  }
 }
@@ -180,7 +180,7 @@ QVariant OracleCursor::value(uint pos)
    //-->Returns the value stored in the column number i (counting from 0)
    //                                                   (Oracle counts from 1)
    
-//KexiDBDrvDbg <<endl;          
+//KexiDBDrvDbg;          
 	if (!d->rs->status() || pos>=m_fieldCount)
     return QVariant();
 
@@ -215,7 +215,7 @@ QVariant OracleCursor::value(uint pos)
  */
 bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 {
-	//KexiDBDrvDbg << ": Position is " << (long)m_at<< endl;
+	//KexiDBDrvDbg << ": Position is " << (long)m_at;
 	if (d->numRows<=0)
 		return false;
 
@@ -254,12 +254,12 @@ bool OracleCursor::drv_storeCurrentRow(RecordData& data) const
 	return true;
 }
 
-void OracleCursor::drv_appendCurrentRecordToBuffer() {KexiDBDrvDbg <<endl;}
+void OracleCursor::drv_appendCurrentRecordToBuffer() {KexiDBDrvDbg;}
 
 
 void OracleCursor::drv_bufferMovePointerNext()
 {
-  KexiDBDrvDbg << endl;
+  KexiDBDrvDbg;
   try
   {
     d->rs->next();
@@ -272,13 +272,13 @@ void OracleCursor::drv_bufferMovePointerNext()
 
 void OracleCursor::drv_bufferMovePointerPrev() 
 {
-   KexiDBDrvDbg << "Operation NOT AVAILABLE" << endl;
+   KexiDBDrvDbg << "Operation NOT AVAILABLE";
 }
 
 
 void OracleCursor::drv_bufferMovePointerTo(Q_LLONG to) 
 {
-  KexiDBDrvDbg <<"("<<to<<"/"<<d->numRows<<")"<<endl;
+  KexiDBDrvDbg <<"("<<to<<"/"<<d->numRows<<")";
   Q_LLONG pos=to-m_at;
   for(int i=0; i<pos;i++)
   {
@@ -288,32 +288,32 @@ void OracleCursor::drv_bufferMovePointerTo(Q_LLONG to)
 
 const char** OracleCursor::rowData() const 
 {
-  KexiDBDrvDbg << endl;
+  KexiDBDrvDbg;
 	return NULL;
 }
 
 int OracleCursor::serverResult()
 {
-  KexiDBDrvDbg << endl;
+  KexiDBDrvDbg;
 	return d->errno;
 }
 
 QString OracleCursor::serverResultName()
 {
-  KexiDBDrvDbg << endl;
+  KexiDBDrvDbg;
 	return QString::null;
 }
 
 void OracleCursor::drv_clearServerResult()
 {
-  KexiDBDrvDbg <<endl;
+  KexiDBDrvDbg;
   d->errno=0;
   d->errmsg="";
 }
 
 QString OracleCursor::serverErrorMsg()
 {
-   KexiDBDrvDbg << endl;
+   KexiDBDrvDbg;
  //Description of last operation's error/result
 	return d->errmsg;
 }

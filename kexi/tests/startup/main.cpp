@@ -76,41 +76,41 @@ int main(int argc, char* argv[])
 
     KexiStartupDialog startup(KexiStartupDialog::Everything, 0, connset, prj_set, 0, "dlg");
     int e = startup.exec();
-    kDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected") << endl;
+    kDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected");
 
     if (e == QDialog::Accepted) {
         int r = startup.result();
         if (r == KexiStartupDialog::TemplateResult) {
-            kDebug() << "Template key == " << startup.selectedTemplateKey() << endl;
+            kDebug() << "Template key == " << startup.selectedTemplateKey();
             if (startup.selectedTemplateKey() == "blank") {
 #if 0
                 KexiConnSelectorDialog sel(connset, 0, "sel");
                 e = sel.exec();
-                kDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected") << endl;
+                kDebug() << (e == QDialog::Accepted ? "Accepted" : "Rejected");
                 if (e == QDialog::Accepted) {
-                    kDebug() << "Selected conn. type: " << (sel.selectedConnectionType() == KexiConnSelectorWidget::FileBased ? "File based" : "Server based") << endl;
+                    kDebug() << "Selected conn. type: " << (sel.selectedConnectionType() == KexiConnSelectorWidget::FileBased ? "File based" : "Server based");
                     if (sel.selectedConnectionType() == KexiConnSelectorWidget::ServerBased) {
-                        kDebug() << "SERVER: " << sel.selectedConnectionData()->serverInfoString() << endl;
+                        kDebug() << "SERVER: " << sel.selectedConnectionData()->serverInfoString();
                     }
                 }
 #endif
             }
         } else if (r == KexiStartupDialog::OpenExistingResult) {
-            kDebug() << "Existing project --------" << endl;
+            kDebug() << "Existing project --------";
             QString selFile = startup.selectedExistingFile();
             if (!selFile.isEmpty())
-                kDebug() << "Project File: " << selFile << endl;
+                kDebug() << "Project File: " << selFile;
             else if (startup.selectedExistingConnection()) {
-                kDebug() << "Existing connection: " << startup.selectedExistingConnection()->serverInfoString() << endl;
+                kDebug() << "Existing connection: " << startup.selectedExistingConnection()->serverInfoString();
                 //ok, now we are trying to show daabases for this conenction to this user
                 //todo
             }
         } else if (r == KexiStartupDialog::OpenRecentResult) {
-            kDebug() << "Recent project --------" << endl;
+            kDebug() << "Recent project --------";
             const KexiProjectData *data = startup.selectedProjectData();
             if (data) {
                 kDebug() << "Selected project: database=" << data->databaseName()
-                << " connection=" << data->constConnectionData()->serverInfoString() << endl;
+                << " connection=" << data->constConnectionData()->serverInfoString();
             }
         }
     }

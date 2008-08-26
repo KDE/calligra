@@ -49,7 +49,7 @@ KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
         : KexiPart::Part(9, parent, l)
         , d(new Private())
 {
-    kDebug() << endl;
+    kDebug();
     setInternalPropertyValue("instanceCaption", i18n("Report"));
     setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new report"));
     setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
@@ -67,7 +67,7 @@ KexiReportPart::~KexiReportPart()
 KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
                                      KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString, QVariant>*)
 {
-    kDebug() << endl;
+    kDebug();
     KexiView* view;
 
     if (viewMode == Kexi::DataViewMode) {
@@ -83,28 +83,28 @@ QString KexiReportPart::loadReport(const QString& name)
     //_internal->_reportName = pReportName;
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection()) {
-        kDebug() << "failed sanity check" << endl;
+        kDebug() << "failed sanity check";
         return "";
     }
     QString src, did;
     KexiDB::SchemaData sd;
     if (win->project()->dbConnection()->loadObjectSchemaData(9, name, sd) != true) {
-        kDebug() << "failed to loafd schema data" << endl;
+        kDebug() << "failed to loafd schema data";
         return "";
     }
 
-    kDebug() << "***Object ID:" << sd.id() << endl;
+    kDebug() << "***Object ID:" << sd.id();
     if (win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true) {
         return src;
     } else {
-        kDebug() << "Unable to load document" << endl;
+        kDebug() << "Unable to load document";
         return "";
     }
 }
 
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
-    kDebug() << endl;
+    kDebug();
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
     td->document = loadReport(window->partItem()->name());
     td->name = window->partItem()->name();

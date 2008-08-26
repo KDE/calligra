@@ -65,13 +65,13 @@ int main(int argc, char** argv)
     KexiDB::DriverManager manager;
     KexiMigration::MigrateManager migrateManager;
 
-    kDebug() << "Creating destination driver..." << endl;
+    kDebug() << "Creating destination driver...";
 
     // Get a driver to the destination database
     KexiDB::Driver *destDriver = manager.driver(KexiDB::defaultFileBasedDriverName() //file based
                                                );
     if (!destDriver || manager.error()) {
-        kDebug() << "Manager error..." << endl;
+        kDebug() << "Manager error...";
         manager.debugError();
     }
 
@@ -87,7 +87,7 @@ int main(int argc, char** argv)
     //! TODO User should be able to specify this
     dbname = destinationDatabase;
     cdata->setFileName(dbname);
-    kDebug() << "Current file name: " << dbname << endl;
+    kDebug() << "Current file name: " << dbname;
 
 
     QString sourceDriverName = "xbase";
@@ -95,7 +95,7 @@ int main(int argc, char** argv)
     KexiMigration::KexiMigrate* sourceDriver = 0;
     sourceDriver = migrateManager.driver(sourceDriverName);
     if (!sourceDriver || migrateManager.error()) {
-        kDebug() << "Import migrate driver error..." << endl;
+        kDebug() << "Import migrate driver error...";
         return -1;
     }
 

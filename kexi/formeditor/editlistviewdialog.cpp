@@ -173,7 +173,7 @@ int
 EditListViewDialog::exec(Q3ListView *listview)
 {
     if (!listview) {
-        kDebug() << "EditListViewDialog ERROR: no listview " << endl;
+        kDebug() << "EditListViewDialog ERROR: no listview ";
         return 0;
     }
 

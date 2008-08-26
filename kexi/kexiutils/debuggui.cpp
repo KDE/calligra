@@ -130,12 +130,12 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
     int availableNestingLevels = 0;
     // compute availableNestingLevels
     Q3ListViewItem * lastItem = kexiAlterTableActionDebugPage->lastItem();
-    //kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString()) << endl;
+    //kDebug() << "lastItem: " << (lastItem ? lastItem->text(0) : QString());
     while (lastItem) {
         lastItem = lastItem->parent();
         availableNestingLevels++;
     }
-    //kDebug() << "availableNestingLevels: " << availableNestingLevels << endl;
+    //kDebug() << "availableNestingLevels: " << availableNestingLevels;
     //go up (availableNestingLevels-levelsToGoUp) levels
     lastItem = kexiAlterTableActionDebugPage->lastItem();
     int levelsToGoUp = availableNestingLevels - nestingLevel;
@@ -143,7 +143,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
         lastItem = lastItem->parent();
         levelsToGoUp--;
     }
-    //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString()) << endl;
+    //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
     if (lastItem) {
         Q3ListViewItem *after = lastItem->firstChild(); //find last child so we can insert a new item after it
         while (after && after->nextSibling())
@@ -156,7 +156,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
         lastItem = kexiAlterTableActionDebugPage->lastItem();
         while (lastItem && lastItem->parent())
             lastItem = lastItem->parent();
-        //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString()) << endl;
+        //kDebug() << "lastItem2: " << (lastItem ? lastItem->text(0) : QString());
         li = new K3ListViewItem(kexiAlterTableActionDebugPage, lastItem, text);   //after
     }
     li->setOpen(true);

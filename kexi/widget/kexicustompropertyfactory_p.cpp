@@ -96,13 +96,13 @@ void KexiIdentifierPropertyEdit::setValue(const QVariant &value, bool emitChange
     QString string(value.toString());
     if (string.isEmpty()) {
         kWarning() << "KexiIdentifierPropertyEdit::setValue(): "
-        "Value cannot be empty. This call has no effect." << endl;
+        "Value cannot be empty. This call has no effect.";
         return;
     }
     QString identifier(KexiUtils::string2Identifier(string));
     if (identifier != string)
         kDebug() << QString("KexiIdentifierPropertyEdit::setValue(): "
-                            "String \"%1\" converted to identifier \"%2\".").arg(string).arg(identifier) << endl;
+                            "String \"%1\" converted to identifier \"%2\".").arg(string).arg(identifier);
     StringEdit::setValue(identifier, emitChange);
 }
 

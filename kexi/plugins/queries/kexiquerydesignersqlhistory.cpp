@@ -354,7 +354,7 @@ void HistoryEntry::highlight()
                 + QString("\">") + i18n("Error: %1", m_error) + "</font>";
     }
 
-    //kDebug() << "HistoryEntry::highlight() text:" << text << endl;
+    //kDebug() << "HistoryEntry::highlight() text:" << text;
     delete m_formated;
     m_formated = new Q3SimpleRichText(text, KGlobalSettings::fixedFont());
 }

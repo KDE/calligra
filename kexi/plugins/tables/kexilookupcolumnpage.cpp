@@ -297,7 +297,7 @@ void KexiLookupColumnPage::slotBoundColumnSelected()
     */
     d->clearBoundColumnButton->setEnabled(!d->boundColumnCombo->fieldOrExpression().isEmpty());
     if (!d->boundColumnCombo->fieldOrExpression().isEmpty()) {
-        kDebug() << endl;
+        kDebug();
     }
 
     // update property set

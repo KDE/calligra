@@ -62,7 +62,7 @@ KRLineData::KRLineData(QDomNode & element)
         } else if (n == "zvalue") {
             Z = node.firstChild().nodeValue().toDouble();
         } else {
-            kDebug() << "While parsing line encountered unknown element: " << n << endl;
+            kDebug() << "While parsing line encountered unknown element: " << n;
         }
     }
     _start.setPointPos(QPointF(sx, sy));

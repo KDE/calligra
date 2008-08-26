@@ -631,7 +631,7 @@ ColDefs ',' ColDef|ColDef
 ColDef:
 IDENTIFIER ColType
 {
-	KexiDBDbg << "adding field " << *$1 << endl;
+	KexiDBDbg << "adding field " << *$1;
 	field->setName($1->toLatin1());
 	parser->table()->addField(field);
 	field = 0;
@@ -639,7 +639,7 @@ IDENTIFIER ColType
 }
 | IDENTIFIER ColType ColKeys
 {
-	KexiDBDbg << "adding field " << *$1 << endl;
+	KexiDBDbg << "adding field " << *$1;
 	field->setName(*$1);
 	delete $1;
 	parser->table()->addField(field);
@@ -662,17 +662,17 @@ ColKey:
 PRIMARY KEY
 {
 	field->setPrimaryKey(true);
-	KexiDBDbg << "primary" << endl;
+	KexiDBDbg << "primary";
 }
 | NOT SQL_NULL
 {
 	field->setNotNull(true);
-	KexiDBDbg << "not_null" << endl;
+	KexiDBDbg << "not_null";
 }
 | AUTO_INCREMENT
 {
 	field->setAutoIncrement(true);
-	KexiDBDbg << "ainc" << endl;
+	KexiDBDbg << "ainc";
 }
 ;
 
@@ -684,7 +684,7 @@ SQL_TYPE
 }
 | SQL_TYPE '(' INTEGER_CONST ')'
 {
-	KexiDBDbg << "sql + length" << endl;
+	KexiDBDbg << "sql + length";
 	field = new Field();
 	field->setPrecision($3);
 	field->setType($1);
@@ -706,7 +706,7 @@ SQL_TYPE
 SelectStatement:
 Select ColViews
 {
-	KexiDBDbg << "Select ColViews=" << $2->debugString() << endl;
+	KexiDBDbg << "Select ColViews=" << $2->debugString();
 
 	if (!($$ = buildSelectQuery( $1, $2 )))
 		return 0;
@@ -718,19 +718,19 @@ Select ColViews
 }
 | Select Tables
 {
-	KexiDBDbg << "Select ColViews Tables" << endl;
+	KexiDBDbg << "Select ColViews Tables";
 	if (!($$ = buildSelectQuery( $1, 0, $2 )))
 		return 0;
 }
 | Select ColViews SelectOptions
 {
-	KexiDBDbg << "Select ColViews Conditions" << endl;
+	KexiDBDbg << "Select ColViews Conditions";
 	if (!($$ = buildSelectQuery( $1, $2, 0, $3 )))
 		return 0;
 }
 | Select ColViews Tables SelectOptions
 {
-	KexiDBDbg << "Select ColViews Tables SelectOptions" << endl;
+	KexiDBDbg << "Select ColViews Tables SelectOptions";
 	if (!($$ = buildSelectQuery( $1, $2, $3, $4 )))
 		return 0;
 }
@@ -739,7 +739,7 @@ Select ColViews
 Select:
 SELECT
 {
-	KexiDBDbg << "SELECT" << endl;
+	KexiDBDbg << "SELECT";
 //	parser->createSelect();
 //	parser->setOperation(Parser::OP_Select);
 	$$ = new QuerySchema();
@@ -749,26 +749,26 @@ SELECT
 SelectOptions: /* todo: more options (having, group by, limit...) */
 WhereClause
 {
-	KexiDBDbg << "WhereClause" << endl;
+	KexiDBDbg << "WhereClause";
 	$$ = new SelectOptionsInternal;
 	$$->whereExpr = $1;
 }
 | ORDER BY OrderByClause
 {
-	KexiDBDbg << "OrderByClause" << endl;
+	KexiDBDbg << "OrderByClause";
 	$$ = new SelectOptionsInternal;
 	$$->orderByColumns = $3;
 }
 | WhereClause ORDER BY OrderByClause
 {
-	KexiDBDbg << "WhereClause ORDER BY OrderByClause" << endl;
+	KexiDBDbg << "WhereClause ORDER BY OrderByClause";
 	$$ = new SelectOptionsInternal;
 	$$->whereExpr = $1;
 	$$->orderByColumns = $4;
 } 
 | ORDER BY OrderByClause WhereClause
 {
-	KexiDBDbg << "OrderByClause WhereClause" << endl;
+	KexiDBDbg << "OrderByClause WhereClause";
 	$$ = new SelectOptionsInternal;
 	$$->whereExpr = $4;
 	$$->orderByColumns = $3;
@@ -787,7 +787,7 @@ WHERE aExpr
 OrderByClause:
 OrderByColumnId
 {
-	KexiDBDbg << "ORDER BY IDENTIFIER" << endl;
+	KexiDBDbg << "ORDER BY IDENTIFIER";
 	$$ = new OrderByColumnInternal::List;
 	OrderByColumnInternal orderByColumn;
 	orderByColumn.setColumnByNameOrNumber( *$1 );
@@ -796,7 +796,7 @@ OrderByColumnId
 }
 | OrderByColumnId OrderByOption
 {
-	KexiDBDbg << "ORDER BY IDENTIFIER OrderByOption" << endl;
+	KexiDBDbg << "ORDER BY IDENTIFIER OrderByOption";
 	$$ = new OrderByColumnInternal::List;
 	OrderByColumnInternal orderByColumn;
 	orderByColumn.setColumnByNameOrNumber( *$1 );
@@ -827,20 +827,20 @@ OrderByColumnId:
 IDENTIFIER
 {
 	$$ = new QVariant( *$1 );
-	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
+	KexiDBDbg << "OrderByColumnId: " << *$$;
 	delete $1;
 }
 | IDENTIFIER '.' IDENTIFIER
 {
 	$$ = new QVariant( *$1 + "." + *$3 );
-	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
+	KexiDBDbg << "OrderByColumnId: " << *$$;
 	delete $1;
 	delete $3;
 }
 | INTEGER_CONST
 {
 	$$ = new QVariant($1);
-	KexiDBDbg << "OrderByColumnId: " << *$$ << endl;
+	KexiDBDbg << "OrderByColumnId: " << *$$;
 }
 
 OrderByOption:
@@ -862,7 +862,7 @@ aExpr2
 aExpr2:
 aExpr3 AND aExpr2
 {
-//	KexiDBDbg << "AND " << $3.debugString() << endl;
+//	KexiDBDbg << "AND " << $3.debugString();
 	$$ = new BinaryExpr( KexiDBExpr_Logical, $1, AND, $3 );
 }
 | aExpr3 OR aExpr2
@@ -1027,18 +1027,18 @@ aExpr9:
 	$$ = new VariableExpr( *$1 );
 	
 //TODO: simplify this later if that's 'only one field name' expression
-	KexiDBDbg << "  + identifier: " << *$1 << endl;
+	KexiDBDbg << "  + identifier: " << *$1;
 	delete $1;
 }
 | QUERY_PARAMETER
 {
 	$$ = new QueryParameterExpr( *$1 );
-	KexiDBDbg << "  + query parameter: " << $$->debugString() << endl;
+	KexiDBDbg << "  + query parameter: " << $$->debugString();
 	delete $1;
 }
 | IDENTIFIER aExprList
 {
-	KexiDBDbg << "  + function: " << *$1 << "(" << $2->debugString() << ")" << endl;
+	KexiDBDbg << "  + function: " << *$1 << "(" << $2->debugString() << ")";
 	$$ = new FunctionExpr(*$1, $2);
 	delete $1;
 }
@@ -1046,21 +1046,21 @@ aExpr9:
 | IDENTIFIER '.' IDENTIFIER
 {
 	$$ = new VariableExpr( *$1 + "." + *$3 );
-	KexiDBDbg << "  + identifier.identifier: " << *$1 << "." << *$3 << endl;
+	KexiDBDbg << "  + identifier.identifier: " << *$1 << "." << *$3;
 	delete $1;
 	delete $3;
 }
 | SQL_NULL
 {
 	$$ = new ConstExpr( SQL_NULL, QVariant() );
-	KexiDBDbg << "  + NULL" << endl;
+	KexiDBDbg << "  + NULL";
 //	$$ = new Field();
 	//$$->setName(QString::null);
 }
 | CHARACTER_STRING_LITERAL
 {
 	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, *$1 );
-	KexiDBDbg << "  + constant " << $1 << endl;
+	KexiDBDbg << "  + constant " << $1;
 	delete $1;
 }
 | INTEGER_CONST
@@ -1078,12 +1078,12 @@ aExpr9:
 //TODO ok?
 
 	$$ = new ConstExpr( INTEGER_CONST, val );
-	KexiDBDbg << "  + int constant: " << val.toString() << endl;
+	KexiDBDbg << "  + int constant: " << val.toString();
 }
 | REAL_CONST
 {
 	$$ = new ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
-	KexiDBDbg << "  + real constant: " << $1.integer << "." << $1.fractional << endl;
+	KexiDBDbg << "  + real constant: " << $1.integer << "." << $1.fractional;
 }
 |
 aExpr10
@@ -1093,7 +1093,7 @@ aExpr10
 aExpr10:
 '(' aExpr ')'
 {
-	KexiDBDbg << "(expr)" << endl;
+	KexiDBDbg << "(expr)";
 	$$ = new UnaryExpr('(', $2);
 }
 ;
@@ -1130,30 +1130,30 @@ FROM FlatTableList
 /*
 | Tables LEFT JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "LEFT JOIN: '" << *$4 << "' ON " << $6 << endl;
+	KexiDBDbg << "LEFT JOIN: '" << *$4 << "' ON " << $6;
 	addTable($4->toQString());
 	delete $4;
 }
 | Tables LEFT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
+	KexiDBDbg << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7;
 	addTable($5);
 }
 | Tables INNER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "INNER JOIN: '" << *$4 << "' ON " << $6 << endl;
+	KexiDBDbg << "INNER JOIN: '" << *$4 << "' ON " << $6;
 	addTable($4->toQString());
 	delete $4;
 }
 | Tables RIGHT JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "RIGHT JOIN: '" << *$4 << "' ON " << $6 << endl;
+	KexiDBDbg << "RIGHT JOIN: '" << *$4 << "' ON " << $6;
 	addTable(*$4);
 	delete $4;
 }
 | Tables RIGHT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	KexiDBDbg << "RIGHT OUTER JOIN: '" << *$5 << "' ON " << $7 << endl;
+	KexiDBDbg << "RIGHT OUTER JOIN: '" << *$5 << "' ON " << $7;
 	addTable($5->toQString());
 	delete $5;
 }*/
@@ -1183,7 +1183,7 @@ FlatTableList ',' FlatTable
 FlatTable:
 IDENTIFIER
 {
-	KexiDBDbg << "FROM: '" << *$1 << "'" << endl;
+	KexiDBDbg << "FROM: '" << *$1 << "'";
 	$$ = new VariableExpr(*$1);
 
 	/*
@@ -1240,13 +1240,13 @@ ColViews ',' ColItem
 {
 	$$ = $1;
 	$$->add( $3 );
-	KexiDBDbg << "ColViews: ColViews , ColItem" << endl;
+	KexiDBDbg << "ColViews: ColViews , ColItem";
 }
 |ColItem
 {
 	$$ = new NArgExpr(0,0);
 	$$->add( $1 );
-	KexiDBDbg << "ColViews: ColItem" << endl;
+	KexiDBDbg << "ColViews: ColItem";
 }
 ;
 
@@ -1258,12 +1258,12 @@ ColExpression
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
 	$$ = $1;
-	KexiDBDbg << " added column expr: '" << $1->debugString() << "'" << endl;
+	KexiDBDbg << " added column expr: '" << $1->debugString() << "'";
 }
 | ColWildCard
 {
 	$$ = $1;
-	KexiDBDbg << " added column wildcard: '" << $1->debugString() << "'" << endl;
+	KexiDBDbg << " added column wildcard: '" << $1->debugString() << "'";
 }
 | ColExpression AS IDENTIFIER
 {
@@ -1271,7 +1271,7 @@ ColExpression
 		KexiDBExpr_SpecialBinary, $1, AS,
 		new VariableExpr(*$3)
 	);
-	KexiDBDbg << " added column expr: " << $$->debugString() << endl;
+	KexiDBDbg << " added column expr: " << $$->debugString();
 	delete $3;
 }
 | ColExpression IDENTIFIER
@@ -1280,7 +1280,7 @@ ColExpression
 		KexiDBExpr_SpecialBinary, $1, 0, 
 		new VariableExpr(*$2)
 	);
-	KexiDBDbg << " added column expr: " << $$->debugString() << endl;
+	KexiDBDbg << " added column expr: " << $$->debugString();
 	delete $2;
 }
 ;
@@ -1342,7 +1342,7 @@ ColWildCard:
 '*'
 {
 	$$ = new VariableExpr("*");
-	KexiDBDbg << "all columns" << endl;
+	KexiDBDbg << "all columns";
 
 //	QueryAsterisk *ast = new QueryAsterisk(parser->select(), dummy);
 //	parser->select()->addAsterisk(ast);
@@ -1353,13 +1353,13 @@ ColWildCard:
 	QString s( *$1 );
 	s += ".*";
 	$$ = new VariableExpr(s);
-	KexiDBDbg << "  + all columns from " << s << endl;
+	KexiDBDbg << "  + all columns from " << s;
 	delete $1;
 }
 /*| ERROR_DIGIT_BEFORE_IDENTIFIER
 {
 	$$ = new VariableExpr($1);
-	KexiDBDbg << "  Invalid identifier! " << $1 << endl;
+	KexiDBDbg << "  Invalid identifier! " << $1;
 	setError(i18n("Invalid identifier \"%1\"",$1));
 }*/
 ;

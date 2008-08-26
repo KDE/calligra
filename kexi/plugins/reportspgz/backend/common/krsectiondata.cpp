@@ -155,7 +155,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
             _objects.append(chart);
 
         } else
-            kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName() << endl;
+            kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
     }
     qSort(_objects.begin(), _objects.end(), zLessThan);
     _valid = true;

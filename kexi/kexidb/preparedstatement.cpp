@@ -68,7 +68,7 @@ QByteArray PreparedStatement::generateStatementString()
             Field *f = m_fields->field(whereItem);
             if (!f) {
                 KexiDBWarn << "PreparedStatement::generateStatementString(): no '"
-                << whereItem << "' field found" << endl;
+                << whereItem << "' field found";
                 continue;
             }
             m_whereFields->append(f);

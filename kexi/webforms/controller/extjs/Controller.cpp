@@ -86,8 +86,8 @@ void Controller::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPCo
             QUrl::fromPercentEncoding(QByteArray(it->second.c_str()));
     }
 
-    kDebug() << "ACTION :" << action << endl;
-    kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
+    kDebug() << "ACTION :" << action;
+    kDebug() << "PARAMETERS COUNT: " << requestURI.count();
 
     bool malformedRequest = true;
     if (action == "objects") {

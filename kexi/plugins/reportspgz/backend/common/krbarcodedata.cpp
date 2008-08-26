@@ -44,7 +44,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
                 if (n == "controlsource") {
                     _controlSource->setValue(node.firstChild().nodeValue());
                 } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n << endl;
+                    kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
         } else if (n == "name") {
@@ -76,7 +76,7 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
         } else if (n == "right") {
             _hAlignment->setValue("Right");
         } else {
-            kDebug() << "while parsing barcode encountered unknow element: " << n << endl;
+            kDebug() << "while parsing barcode encountered unknow element: " << n;
         }
     }
 }
@@ -132,7 +132,7 @@ void KRBarcodeData::setMaxLength(int i)
             min_width_total = 0.90;
             min_height = 0.25;
         } else {
-            kDebug() << "Unknown format encountered: " << _format->value().toString() << endl;
+            kDebug() << "Unknown format encountered: " << _format->value().toString();
         }
     }
 }

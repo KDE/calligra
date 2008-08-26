@@ -34,8 +34,8 @@
 KexiBoolTableEdit::KexiBoolTableEdit(KexiTableViewColumn &column, QWidget *parent)
         : KexiTableEdit(column, parent)
 {
-    kDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-    kDebug() << "KexiBoolTableEdit: type== " << field()->typeName() << endl;
+    kDebug() << "KexiBoolTableEdit: m_origValue.typeName()==" << m_origValue.typeName();
+    kDebug() << "KexiBoolTableEdit: type== " << field()->typeName();
     m_hasFocusableWidget = false;
     m_acceptEditorAfterDeleteContents = true;
     m_usesSelectedTextColor = false;

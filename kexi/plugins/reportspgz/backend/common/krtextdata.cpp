@@ -46,7 +46,7 @@ KRTextData::KRTextData(QDomNode & element) : bpad(0.0)
                 else */if (n == "controlsource") {
                     _controlSource->setValue(node.firstChild().nodeValue());
                 } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n << endl;
+                    kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
         } else if (n == "zvalue") {
@@ -87,7 +87,7 @@ KRTextData::KRTextData(QDomNode & element) : bpad(0.0)
                 _lnStyle->setValue(ls.style);
             }
         } else {
-            kDebug() << "while parsing text element encountered unknow element: " << n << endl;
+            kDebug() << "while parsing text element encountered unknow element: " << n;
         }
     }
 }

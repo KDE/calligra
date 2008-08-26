@@ -42,7 +42,7 @@ View::~View() {
 }
 
 void View::view(const QHash<QString, QString>& data, pion::net::HTTPResponseWriterPtr ptr) {
-    kError() << "Not implemented" << endl;
+    kError() << "Not implemented";
 }
 
 void View::setValue(const char* k, const QVariant& v) {

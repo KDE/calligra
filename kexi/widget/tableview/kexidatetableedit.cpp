@@ -195,14 +195,14 @@ void KexiDateTableEdit::moveToFirstSection()
 bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
 {
   if (o==m_datePicker) {
-    kDebug() << e->type() << endl;
+    kDebug() << e->type();
     switch (e->type()) {
     case QEvent::Hide:
       m_datePickerPopupMenu->hide();
       break;
     case QEvent::KeyPress:
     case QEvent::KeyRelease: {
-      kDebug() << "ok!" << endl;
+      kDebug() << "ok!";
       QKeyEvent *ke = (QKeyEvent *)e;
       if (ke->key()==Qt::Key_Enter || ke->key()==Qt::Key_Return) {
         //accepting picker
@@ -212,7 +212,7 @@ bool KexiDateTableEdit::eventFilter( QObject *o, QEvent *e )
       else if (ke->key()==Qt::Key_Escape) {
         //canceling picker
         m_datePickerPopupMenu->hide();
-        kDebug() << "reject" << endl;
+        kDebug() << "reject";
         return true;
       }
       else m_datePickerPopupMenu->setFocus();
@@ -256,7 +256,7 @@ void KexiDateTableEdit::acceptDate()
 {
   m_edit->setDate(m_datePicker->date());
   m_datePickerPopupMenu->hide();
-  kDebug() << "accept" << endl;
+  kDebug() << "accept";
 }
 
 bool KexiDateTableEdit::cursorAtStart()

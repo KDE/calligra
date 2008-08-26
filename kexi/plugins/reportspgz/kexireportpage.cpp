@@ -34,7 +34,7 @@
 KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r)
         : QWidget(parent, name, Qt::WNoAutoErase)
 {
-    kDebug() << "CREATED PAGE" << endl;
+    kDebug() << "CREATED PAGE";
     rpt = r;
     page = 1;
 
@@ -54,7 +54,7 @@ KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r
 
     setFixedSize(pageWidth, pageHeight);
 
-    kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight << endl;
+    kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
     _repaint = true;
     _pm = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
@@ -69,7 +69,7 @@ void KexiReportPage::paintEvent(QPaintEvent*)
 
 void KexiReportPage::renderPage(int p)
 {
-    kDebug() << "KexiReportPage::renderPage " << p << endl;
+    kDebug() << "KexiReportPage::renderPage " << p;
     page = p;
     _pm->fill();
     QPainter qp(_pm);

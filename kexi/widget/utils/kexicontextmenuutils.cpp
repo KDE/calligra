@@ -143,7 +143,7 @@ void KexiImageContextMenu::insertFromFile()
         }
         return;
     }
-    kDebug() << "fname=" << url.prettyUrl() << endl;
+    kDebug() << "fname=" << url.prettyUrl();
 
 #ifdef __GNUC__
 #warning TODO Q3FileDialog::getOpenFileName for win32
@@ -172,7 +172,7 @@ void KexiImageContextMenu::saveAs()
     emit aboutToSaveAsRequested(origFilename, fileExtension, dataIsEmpty);
 
     if (dataIsEmpty) {
-        kWarning() << "KexiImageContextMenu::saveAs(): no data!" << endl;
+        kWarning() << "KexiImageContextMenu::saveAs(): no data!";
         return;
     }
     if (!origFilename.isEmpty())
@@ -207,7 +207,7 @@ void KexiImageContextMenu::saveAs()
 
     if (QFileInfo(fileName).completeSuffix().isEmpty())
         fileName += (QString(".") + fileExtension);
-    kDebug() << fileName << endl;
+    kDebug() << fileName;
     KUrl url;
     url.setPath(fileName);
 

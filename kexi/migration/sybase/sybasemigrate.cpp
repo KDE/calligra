@@ -122,7 +122,7 @@ bool SybaseMigrate::drv_readTableSchema(
 
         tableSchema.addField(fld);
 
-        kDebug() << fld->caption() << "No.of fields in tableSchema" << tableSchema.fieldCount() << endl;
+        kDebug() << fld->caption() << "No.of fields in tableSchema" << tableSchema.fieldCount();
 
         delete colInfo;
     }
@@ -203,7 +203,7 @@ tristate SybaseMigrate::drv_queryStringListFromSQL(
         if (columnNumber > (numFields - 1)) {
             kWarning() << "SybaseMigrate::drv_querySingleStringFromSQL(" << sqlStatement
             << "): columnNumber too large ("
-            << columnNumber << "), expected 0.." << numFields << endl;
+            << columnNumber << "), expected 0.." << numFields;
         }
         stringList.append(value(i));
     }
@@ -471,7 +471,7 @@ QString SybaseMigrate::value(int pos) const
 bool SybaseMigrate::query(const QString& sqlStatement) const
 {
 
-    //kDebug()<<sqlStatement<<endl;
+    //kDebug()<<sqlStatement;
     // discard any previous results, if remaining
     dbcancel(d->dbProcess);
 
@@ -560,7 +560,7 @@ QList<KexiDB::IndexSchema*> KexiMigration::SybaseMigrate::readIndexes(const QStr
             while (dbnextrow(d->dbProcess) != NO_MORE_ROWS) {
                 // only one row is expected
                 QString fieldName = value(0);
-                kDebug() << fieldName << endl;
+                kDebug() << fieldName;
                 indexSchema->addField(fieldHash[fieldName]);
             }
         }

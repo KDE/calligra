@@ -59,13 +59,13 @@ KexiRelationsConnection::KexiRelationsConnection(
         : d(new Private)
 {
     d->scrollArea = scrollArea;
-// kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << endl;
+// kDebug() << "KexiRelationsConnection::KexiRelationsConnection()";
 
     d->masterTable = masterTbl;
     if (!masterTbl || !detailsTbl) {
-        kDebug() << "KexiRelationsConnection::KexiRelationsConnection(): expect sig11" << endl;
-        kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << masterTbl << endl;
-        kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << detailsTbl << endl;
+        kDebug() << "KexiRelationsConnection::KexiRelationsConnection(): expect sig11";
+        kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << masterTbl;
+        kDebug() << "KexiRelationsConnection::KexiRelationsConnection()" << detailsTbl;
     }
 
     d->detailsTable = detailsTbl;
@@ -226,7 +226,7 @@ KexiRelationsConnection::connectionRect()
 // return QRect(sx - 1, sy - 1, (rx + d->detailsTable->width()) - sx + 1, ry - sy + 1);
 // QRect rect(left - 150, top - 150, dx + 150, dy + 150);
     QRect rect(left - 30, top - 30, dx + 60, dy + 60);
-// kDebug() << "KexiRelationsConnection::connectionRect():" << d->oldRect << "," << rect << endl;
+// kDebug() << "KexiRelationsConnection::connectionRect():" << d->oldRect << "," << rect;
 
     d->oldRect = rect;
 
@@ -274,23 +274,23 @@ KexiRelationsConnection::matchesPoint(const QPoint &p, int tolerance)
     float my = y2 - y1;
     float mag = sqrt(mx * mx + my * my);
     float u = (((p.x() - x1) * (x2 - x1)) + ((p.y() - y1) * (y2 - y1))) / (mag * mag);
-    kDebug() << "KexiRelationsConnection::matchesPoint(): u: " << u << endl;
+    kDebug() << "KexiRelationsConnection::matchesPoint(): u: " << u;
 
     float iX = x1 + u * (x2 - x1);
     float iY = y1 + u * (y2 - y1);
-    kDebug() << "KexiRelationsConnection::matchesPoint(): px: " << p.x() << endl;
-    kDebug() << "KexiRelationsConnection::matchesPoint(): py: " << p.y() << endl;
-    kDebug() << "KexiRelationsConnection::matchesPoint(): ix: " << iX << endl;
-    kDebug() << "KexiRelationsConnection::matchesPoint(): iy: " << iY << endl;
+    kDebug() << "KexiRelationsConnection::matchesPoint(): px: " << p.x();
+    kDebug() << "KexiRelationsConnection::matchesPoint(): py: " << p.y();
+    kDebug() << "KexiRelationsConnection::matchesPoint(): ix: " << iX;
+    kDebug() << "KexiRelationsConnection::matchesPoint(): iy: " << iY;
 
     float dX = iX - p.x();
     float dY = iY - p.y();
 
-    kDebug() << "KexiRelationsConnection::matchesPoint(): dx: " << dX << endl;
-    kDebug() << "KexiRelationsConnection::matchesPoint(): dy: " << dY << endl;
+    kDebug() << "KexiRelationsConnection::matchesPoint(): dx: " << dX;
+    kDebug() << "KexiRelationsConnection::matchesPoint(): dy: " << dY;
 
     float distance = sqrt(dX * dX + dY * dY);
-    kDebug() << "KexiRelationsConnection::matchesPoint(): distance: " << distance << endl;
+    kDebug() << "KexiRelationsConnection::matchesPoint(): distance: " << distance;
 
     if (distance <= tolerance)
         return true;

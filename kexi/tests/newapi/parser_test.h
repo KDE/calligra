@@ -42,7 +42,7 @@ int parserTest(const QString &st, const QStringList &params)
     } else {
         KexiDB::ParserError err = parser.error();
         kDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
-        .arg(err.type()).arg(err.at()) << endl;
+        .arg(err.type()).arg(err.at());
         r = 1;
     }
     delete q;

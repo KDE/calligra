@@ -34,7 +34,7 @@ KEXIDB_DRIVER_INFO( OracleDriver, oracle )
 OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 	: Driver(parent,args)
 {
-	//KexiDBDrvDbg << "OracleDriver::Constructor: "<< endl;
+	//KexiDBDrvDbg << "OracleDriver::Constructor: ";
 	// Set database features and properties
 	d->isFileDriver = false;
 	d->features = SingleTransactions | CursorForward;
@@ -118,7 +118,7 @@ bool OracleDriver::drv_isSystemFieldName(const QString&) const {
  */
 QString OracleDriver::escapeString(const QString& str) const
 {
- //KexiDBDrvDbg <<str<<endl;
+ //KexiDBDrvDbg <<str;
   QString res = str;
   if (res[0]!='\''){
 	  return QString("\'"+res.replace("'","''")+"\'");
@@ -132,7 +132,7 @@ QString OracleDriver::escapeString(const QString& str) const
  */
 QByteArray OracleDriver::escapeString(const QByteArray& str) const
 {
-//KexiDBDrvDbg<<str<<endl;
+//KexiDBDrvDbg<<str;
   if (str[0]!='\''){
     return QByteArray("\'"+str+"\'");
   }else{
@@ -153,7 +153,7 @@ QByteArray OracleDriver::escapeString(const QByteArray& str) const
  */
 QString OracleDriver::escapeBLOB(const QByteArray& array) const
 {
-  KexiDBDrvDbg<<array<<endl;
+  KexiDBDrvDbg<<array;
 	return QString(array);
 	//return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }

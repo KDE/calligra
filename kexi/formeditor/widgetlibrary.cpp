@@ -143,13 +143,13 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
             WidgetFactory *parentFactory = d->factories[w->m_parentFactoryName];
             if (!parentFactory) {
                 kWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->className()
-                << "' - no such parent factory '" << w->m_parentFactoryName << "'" << endl;
+                << "' - no such parent factory '" << w->m_parentFactoryName << "'";
                 continue;
             }
             WidgetInfo* inheritedClass = parentFactory->m_classesByName[ w->m_inheritedClassName ];
             if (!inheritedClass) {
                 kWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->m_inheritedClassName
-                << "' - no such class to inherit in factory '" << w->m_parentFactoryName << "'" << endl;
+                << "' - no such class to inherit in factory '" << w->m_parentFactoryName << "'";
                 continue;
             }
             //ok: inherit properties:
@@ -171,7 +171,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
                 w->setDescription(inheritedClass->description());
         }
 
-//  kDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
+//  kDebug() << "WidgetLibrary::addFactory(): adding class " << w->className();
         Q3ValueList<Q3CString> l = w->alternateClassNames();
         l.prepend(w->className());
         //d->widgets.insert(w->className(), w);
@@ -209,15 +209,15 @@ WidgetLibrary::lookupFactories()
         if (existingService) {
             kWarning() << "WidgetLibrary::lookupFactories(): factory '" << ptr->name()
             << "' already found (library=" << (*existingService)->library()
-            << ")! skipping this one: library=" << ptr->library() << endl;
+            << ")! skipping this one: library=" << ptr->library();
             continue;
         }
-        kDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name() << endl;
+        kDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name();
 
         Q3CString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
         if (!groupName.isEmpty() && !d->supportedFactoryGroups[groupName]) {
             kDebug() << "WidgetLibrary::lookupFactories(): factory group '" << groupName
-            << "' is unsupported by this application (library=" << ptr->library() << ")" << endl;
+            << "' is unsupported by this application (library=" << ptr->library() << ")";
             continue;
         }
         const uint factoryVersion = ptr->property("X-KFormDesigner-WidgetFactoryVersion").toUInt();
@@ -225,7 +225,7 @@ WidgetLibrary::lookupFactories()
             kWarning() << QString("WidgetLibrary::lookupFactories(): factory '%1'"
                                   " has version '%2' but required Widget Factory version is '%3'\n"
                                   " -- skipping this factory!").arg(ptr->library()).arg(factoryVersion)
-            .arg(KFormDesigner::version()) << endl;
+            .arg(KFormDesigner::version());
             continue;
         }
         d->services.insert(ptr->library().toLatin1(), new KService::Ptr(ptr));
@@ -243,7 +243,7 @@ WidgetLibrary::loadFactories()
                                *it.current(), this, QStringList());
         if (!f) {
             kWarning() << "WidgetLibrary::loadFactories(): creating factory failed! "
-            << (*it.current())->library() << endl;
+            << (*it.current())->library();
             continue;
         }
         f->setObjectName((*it.current())->library());

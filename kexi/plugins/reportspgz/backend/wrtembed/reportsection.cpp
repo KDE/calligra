@@ -169,7 +169,7 @@ void ReportSection::initFromXML(QDomNode & section)
         if (n == "height") {
             qreal h = node.firstChild().nodeValue().toDouble();
             h  = POINT_TO_INCH(h) * KoGlobal::dpiY();
-            kDebug() << "Section Height: " << h << endl;
+            kDebug() << "Section Height: " << h;
             scene->setSceneRect(0, 0, scene->width(), h);
             slotResizeBarDragged(0);
         } else if (n == "bgcolor") {
@@ -195,7 +195,7 @@ void ReportSection::initFromXML(QDomNode & section)
             // these are all handled elsewhere but we don't want to show errors
             // because they are expected sometimes
         } else {
-            kDebug() << "Encountered unknown node while parsing section: " << n << endl;
+            kDebug() << "Encountered unknown node while parsing section: " << n;
         }
     }
 }
@@ -246,7 +246,7 @@ void ReportSection::slotTitleDoubleClicked()
 
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << endl;
+    kDebug();
     //Handle Position
     if (p.name() == "BackgroundColor") {
         scene->setBackgroundBrush(p.value().value<QColor>());

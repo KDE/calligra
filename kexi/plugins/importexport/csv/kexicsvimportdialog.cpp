@@ -377,7 +377,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
         /* debug
             for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
               kDebug() << i << ": "
-                << QApplication::clipboard()->data(QClipboard::Clipboard)->format(i) << endl;
+                << QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);
         */
     } else {
         return;
@@ -906,13 +906,13 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 
         if (inGUI && row > (m_maximumRowsForPreview + (m_1stRowForFieldNamesDetected ? 1 : 0))) {
             kexipluginsdbg << "KexiCSVImportDialog::fillTable() loading stopped at row #"
-            << m_maximumRowsForPreview << endl;
+            << m_maximumRowsForPreview;
             break;
         }
         if (nextRow) {
             nextRow = false;
             //additional speedup: stop processing now if too many bytes were loaded for preview
-            kexipluginsdbg << offset << endl;
+            kexipluginsdbg << offset;
             if (inGUI && offset >= m_maximumBytesForPreview && row >= 2) {
                 m_stoppedAt_MAX_BYTES_TO_PREVIEW = true;
                 return true;
@@ -1294,7 +1294,7 @@ void KexiCSVImportDialog::textquoteSelected(int)
     else
         m_textquote = tq[0];
 
-    kexipluginsdbg << "KexiCSVImportDialog::textquoteSelected(): " << m_textquote << endl;
+    kexipluginsdbg << "KexiCSVImportDialog::textquoteSelected(): " << m_textquote;
 
     //delayed, otherwise combobox won't be repainted
     fillTableLater();

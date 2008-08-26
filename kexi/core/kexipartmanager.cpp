@@ -63,7 +63,7 @@ bool Manager::lookup()
     m_parts.clear();
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
-        kWarning() << "KexiPart::Manager::lookup(): No 'Kexi/Handler' service type installed! Aborting." << endl;
+        kWarning() << "KexiPart::Manager::lookup(): No 'Kexi/Handler' service type installed! Aborting.";
         setError(i18n("No \"%1\" service type installed! Check your Kexi installation. Aborting.",
                       QString("Kexi/Handler")));
         return false;
@@ -80,7 +80,7 @@ bool Manager::lookup()
     //compute order
     foreach(KService::Ptr ptr, tlist) {
         QString mime = ptr->property("X-Kexi-TypeMime").toString();
-        kDebug() << "Manager::lookup(): " << mime << endl;
+        kDebug() << "Manager::lookup(): " << mime;
 //<TEMP>: disable some parts if needed
         if (!Kexi::tempShowReports() && mime == "kexi/report")
             continue;
@@ -104,7 +104,7 @@ bool Manager::lookup()
             // to avoid duplicates
             if (!info->mimeType().isEmpty()) {
                 m_partsByMime.insert(info->mimeType(), info);
-                kDebug() << "Manager::lookup(): inserting info to " << info->mimeType() << endl;
+                kDebug() << "Manager::lookup(): inserting info to " << info->mimeType();
             }
             m_partlist.append(info);
         }
@@ -129,8 +129,8 @@ Part* Manager::part(Info *i)
         int error = 0;
         p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
         if (!p) {
-            kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
-            kDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
+            kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")";
+            kDebug() << "  " << KLibLoader::self()->lastErrorMessage();
             i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
             setError(i->errorMessage());
             return 0;

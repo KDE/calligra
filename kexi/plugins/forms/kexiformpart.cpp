@@ -83,7 +83,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
         : KexiPart::Part((int)KexiPart::FormObjectType, parent, l)
         , d(new Private())
 {
-    kexipluginsdbg << "KexiFormPart::KexiFormPart()" << endl;
+    kexipluginsdbg << "KexiFormPart::KexiFormPart()";
     setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                                    "Use '_' character instead of spaces. First character should be a..z character. "
@@ -136,7 +136,7 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 //this is automatic? -no
 //create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
 
-    kexipluginsdbg << "FormPart INIT ACTIONS***********************************************************************" << endl;
+    kexipluginsdbg << "FormPart INIT ACTIONS***********************************************************************";
     //TODO
 
     //guiClient()->setXMLFile("kexiformui.rc");
@@ -268,7 +268,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
-    kexipluginsdbg << "KexiFormPart::createView()" << endl;
+    kexipluginsdbg << "KexiFormPart::createView()";
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;
@@ -562,13 +562,13 @@ void KexiFormPart::slotWidgetCreatedByFormsLibrary(QWidget* widget)
 
         foreach(const QMetaMethod& method, _signals) {
             if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {
-                kDebug() << method.signature() <<  endl;
+                kDebug() << method.signature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
                             formView, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
                 }
             } else if (0 == qstrcmp(method.signature(), handleDropEventSignal)) {
-                kDebug() << method.signature() <<  endl;
+                kDebug() << method.signature();
                 if (formView) {
                     connect(widget, SIGNAL(handleDropEvent(QDropEvent*)),
                             formView, SLOT(slotHandleDropEvent(QDropEvent*)));

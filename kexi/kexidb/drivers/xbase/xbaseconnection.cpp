@@ -77,7 +77,7 @@ Cursor* xBaseConnection::prepareQuery( QuerySchema& query, uint cursor_options )
 }
 
 bool xBaseConnection::drv_getDatabasesList( QStringList &list ) {
-  KexiDBDrvDbg << "xBaseConnection::drv_getDatabasesList()" << endl;
+  KexiDBDrvDbg << "xBaseConnection::drv_getDatabasesList()";
 
   //! TODO Check whether this is the right thing to do
   list<<QStringList( d->dbMap.keys() );
@@ -87,7 +87,7 @@ bool xBaseConnection::drv_getDatabasesList( QStringList &list ) {
 
 bool xBaseConnection::drv_createDatabase( const QString &dbName) {
   //! TODO Check whether this function has any use.
-  KexiDBDrvDbg << "xBaseConnection::drv_createDatabase: " << dbName << endl;
+  KexiDBDrvDbg << "xBaseConnection::drv_createDatabase: " << dbName;
 //	return d->internalConn->createDatabase(d->dbMap[dbName]);
   return true;
 }

@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
 
     if (args->isSet("file")) {
         if (!KexiWebForms::Model::initDatabase(args->getOption("file"))) {
-            kError() << "Something went wrong while initializing database..." << endl;
+            kError() << "Something went wrong while initializing database...";
             return 1;
         }
     } else {
@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
 #ifdef PION_HAVE_SSL
         server.setSSLKeyFile(args->getOption("ssl").toLatin1().constData());
 #else
-        kError() << "Kwebforms was not compiled with SSL support" << endl;
+        kError() << "Kwebforms was not compiled with SSL support";
 #endif
     }
 
@@ -97,10 +97,10 @@ int main(int argc, char **argv) {
         server.setServiceOption("/f", "cache", "0");
         server.setServiceOption("/f", "scan", "0");
     } catch (pion::PionPlugin::DirectoryNotFoundException&) {
-        kError() << "Default plug-ins directory does not exist!" << endl;
+        kError() << "Default plug-ins directory does not exist!";
         return 1;
     } catch (pion::net::WebServer::ServiceNotFoundException&) {
-        kError() << "Could not find FileService, are you have the right plugins in " PION_PLUGINS_DIRECTORY << endl;
+        kError() << "Could not find FileService, are you have the right plugins in " PION_PLUGINS_DIRECTORY;
         return 1;
     }
 

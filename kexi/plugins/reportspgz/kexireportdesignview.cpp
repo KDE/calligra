@@ -86,13 +86,13 @@ KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData&
         window()->setId(rpt->id());
 
         if (rpt->id() > 0 && storeDataBlock(_rd->document().toString(), "pgzreport_layout")) {
-            kDebug() << "Saved OK " << rpt->id() << endl;
+            kDebug() << "Saved OK " << rpt->id();
         } else {
-            kDebug() << "NOT Saved OK" << endl;
+            kDebug() << "NOT Saved OK";
             return 0;
         }
     } else {
-        kDebug() << "Unable to store schema data" << endl;
+        kDebug() << "Unable to store schema data";
         return 0;
     }
     return rpt;
@@ -104,11 +104,11 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 
     if (storeDataBlock(src, "pgzreport_layout")) {
-        kDebug() << "Saved OK" << endl;
+        kDebug() << "Saved OK";
         setDirty(false);
         return true;
     } else {
-        kDebug() << "NOT Saved OK" << endl;
+        kDebug() << "NOT Saved OK";
     }
 
 
@@ -117,7 +117,7 @@ tristate KexiReportDesignView::storeData(bool dontAsk)
 
 tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-    kDebug() << mode << endl;
+    kDebug() << mode;
     dontStore = true;
     if (_rd && mode == Kexi::DataViewMode) {
         tempData()->document = _rd->document().toString();
@@ -128,7 +128,7 @@ tristate KexiReportDesignView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontSto
 
 tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    kDebug() << tempData()->document << endl;
+    kDebug() << tempData()->document;
     if (tempData()->document.isEmpty()) {
         _rd = new ReportDesigner(this, KexiMainWindowIface::global()->project()->dbConnection());
     } else {

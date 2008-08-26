@@ -125,17 +125,17 @@ void KexiRelationsTableContainer::slotContextMenu(K3ListView *, Q3ListViewItem *
 
 void KexiRelationsTableContainer::moved()
 {
-// kDebug()<<"finally emitting moved"<<endl;
+// kDebug()<<"finally emitting moved";
     emit moved(this);
 }
 
 int KexiRelationsTableContainer::globalY(const QString &field)
 {
-// kDebug() << "KexiRelationsTableContainer::globalY()" << endl;
+// kDebug() << "KexiRelationsTableContainer::globalY()";
 // QPoint o = mapFromGlobal(QPoint(0, (d->fieldList->globalY(field))/*+d->parent->contentsY()*/));
 
     QPoint o(0, d->fieldList->globalY(field) + d->scrollArea->verticalScrollBar()->value()); //d->scrollArea->contentsY());
-// kDebug() << "KexiRelationsTableContainer::globalY() db2" << endl;
+// kDebug() << "KexiRelationsTableContainer::globalY() db2";
 //Qt 4 return d->scrollArea->viewport()->mapFromGlobal(o).y();
     return d->scrollArea->widget()->mapFromGlobal(o).y();
 }
@@ -163,7 +163,7 @@ void KexiRelationsTableContainer::focusInEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::setFocus()
 {
-    kDebug() << "SET FOCUS" << endl;
+    kDebug() << "SET FOCUS";
     //select 1st:
     if (d->fieldList->firstChild()) {
         if (d->fieldList->selectedItems().isEmpty())
@@ -186,7 +186,7 @@ void KexiRelationsTableContainer::focusOutEvent(QFocusEvent* event)
 
 void KexiRelationsTableContainer::unsetFocus()
 {
-    kDebug() << "UNSET FOCUS" << endl;
+    kDebug() << "UNSET FOCUS";
     d->tableHeader->unsetFocus();
     d->fieldList->clearSelection();
 

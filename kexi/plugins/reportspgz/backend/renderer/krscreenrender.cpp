@@ -142,7 +142,7 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
             _painter->drawPicture(rc.topLeft(), *(im->picture()));
         } else {
-            kDebug() << "unrecognized primitive type" << endl;
+            kDebug() << "unrecognized primitive type";
         }
     }
 

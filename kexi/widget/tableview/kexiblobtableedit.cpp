@@ -117,14 +117,14 @@ KexiBlobTableEdit::~KexiBlobTableEdit()
 {
     delete d;
 #if 0
-    kDebug() << "KexiBlobTableEdit: Cleaning up..." << endl;
+    kDebug() << "KexiBlobTableEdit: Cleaning up...";
     if (m_tempFile) {
         m_tempFile->unlink();
         //todo
     }
     delete m_proc;
     m_proc = 0;
-    kDebug() << "KexiBlobTableEdit: Ready." << endl;
+    kDebug() << "KexiBlobTableEdit: Ready.";
 #endif
 }
 
@@ -140,17 +140,17 @@ void KexiBlobTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 
 #if 0 //todo?
     QByteArray val = m_origValue.toByteArray();
-    kDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size() << endl;
+    kDebug() << "KexiBlobTableEdit: Size of BLOB: " << val.size();
     m_tempFile = new KTemporaryFile();
     m_tempFile->open();
-    kDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->fileName() << endl;
+    kDebug() << "KexiBlobTableEdit: Creating temporary file: " << m_tempFile->fileName();
     QDataStream stream(m_tempFile);
     stream->writeRawBytes(val.data(), val.size());
     delete m_tempFile;
     m_tempFile = 0;
 
     KMimeMagicResult* mmr = KMimeMagic::self()->findFileType(m_tempFile->fileName());
-    kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType() << endl;
+    kDebug() << "KexiBlobTableEdit: Mimetype = " << mmr->mimeType();
 
     setViewWidget(new QWidget(this));
 #endif
@@ -189,7 +189,7 @@ KexiBlobTableEdit::value()
     stream.readRawBytes(data, f.size());
     value.duplicate(data, f.size());
     free(data);
-    kDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size() << endl;
+    kDebug() << "KexiBlobTableEdit: Size of BLOB: " << value.size();
     return QVariant(value);
 #endif
 }

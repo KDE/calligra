@@ -191,7 +191,7 @@ public:
         }
         void debug(const DebugOptions& debugOptions = DebugOptions()) {
             KexiDBDbg << debugString(debugOptions)
-            << " (req = " << alteringRequirements() << ")" << endl;
+            << " (req = " << alteringRequirements() << ")";
         }
 
     protected:

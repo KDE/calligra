@@ -94,7 +94,7 @@ QPixmap
 PixmapCollection::getPixmap(const QString &name)
 {
     if (!m_pixmaps.contains(name)) {
-        kDebug() << " The icon " << name << " you requested is not in the collection" << endl;
+        kDebug() << " The icon " << name << " you requested is not in the collection";
         return QPixmap();
     }
 

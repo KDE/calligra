@@ -97,12 +97,12 @@ void SQLite2ToSQLite3Migration::receivedStderr(KProcess *, char *buffer, int buf
 
 void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 {
-    kDebug() << "EXIT " << process->name() << endl;
+    kDebug() << "EXIT " << process->name();
 
-    kDebug() << process->isRunning() << " " << process->exitStatus() << endl;
+    kDebug() << process->isRunning() << " " << process->exitStatus();
     m_dlg->close();
     result = !process->isRunning() && 0 == process->exitStatus();//m_process->normalExit();
-    kDebug() << result.toString() << endl;
+    kDebug() << result.toString();
     if (result == true) {
         if (m_restoreStat) {
             //restore permissions for m_filePath
@@ -115,7 +115,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 void SQLite2ToSQLite3Migration::cancelClicked()
 {
     kDebug() << result.toString() << " cancelClicked() " << m_process->isRunning() << " "
-    << m_process->exitStatus() << endl;
+    << m_process->exitStatus();
     if (!m_process->isRunning() && 0 == m_process->exitStatus())
         return;
     result = cancelled;

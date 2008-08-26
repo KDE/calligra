@@ -75,7 +75,7 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
         QString dataSource(formDataItem->dataSource().toLower());
         if (dataSource.isEmpty())
             continue;
-        kexipluginsdbg << widget->objectName() << endl;
+        kexipluginsdbg << widget->objectName();
         m_dataItems.append(formDataItem);
         formDataItem->installListener(this);
         tmpSources.insert(dataSource);
@@ -89,14 +89,14 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 
 void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow)
 {
-    kexipluginsdbg << "KexiFormDataProvider::fillDataItems() cnt=" << record.count() << endl;
+    kexipluginsdbg << "KexiFormDataProvider::fillDataItems() cnt=" << record.count();
     for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
             = m_fieldNumbersForDataItems.constBegin();
             it != m_fieldNumbersForDataItems.constEnd(); ++it) {
         KexiFormDataItemInterface *itemIface = it.key();
         if (!itemIface->columnInfo()) {
             kexipluginsdbg << "KexiFormDataProvider::fillDataItems(): itemIface->columnInfo() == 0"
-            << endl;
+;
             continue;
         }
         //1. Is this a value with a combo box (lookup)?
@@ -112,7 +112,7 @@ void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursor
                                  ? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
                                  .arg(indexForVisibleLookupValue).arg(visibleLookupValue.toString())
                                  : QString())
-        << endl;
+;
         const bool displayDefaultValue = cursorAtNewRow && (value.isNull() && visibleLookupValue.isNull())
                                          && !itemIface->columnInfo()->field->defaultValue().isNull()
                                          && !itemIface->columnInfo()->field->isAutoIncrement(); //no value to set but there is default value defined
@@ -141,7 +141,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
         foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
             if (!dataItemIface->columnInfo() || !dataItemIface->columnInfo()->field)
                 continue;
-            kDebug() << " ** " << dataItemIface->columnInfo()->field->name() << endl;
+            kDebug() << " ** " << dataItemIface->columnInfo()->field->name();
             it_dup = tmpDuplicatedItems.constFind(dataItemIface->columnInfo()->field);
             uint count;
             if (it_dup == tmpDuplicatedItems.constEnd())
@@ -155,7 +155,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
             if (it_dup.value() > 1) {
                 m_duplicatedItems->insert(it_dup.key());
                 kexipluginsdbg << "duplicated item: " << static_cast<KexiDB::Field*>(it_dup.key())->name()
-                << " (" << it_dup.value() << " times)" << endl;
+                << " (" << it_dup.value() << " times)";
             }
         }
     }
@@ -163,7 +163,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
         foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
             if (dataItemIface != item && item->columnInfo()->field == dataItemIface->columnInfo()->field) {
                 kexipluginsdbg << "- setting a copy of value for item '"
-                << dynamic_cast<QObject*>(dataItemIface)->objectName() << "' == " << value << endl;
+                << dynamic_cast<QObject*>(dataItemIface)->objectName() << "' == " << value;
                 dataItemIface->setValue(value);
             }
         }
@@ -195,14 +195,14 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         for (QHash<KexiDB::QueryColumnInfo*, int>::const_iterator it
                 = columnsOrder.constBegin(); it != columnsOrder.constEnd(); ++it) {
             kexipluginsdbg << "query->columnsOrder()[ " << it.key()->field->name() << " ] = "
-            << it.value() << endl;
+            << it.value();
         }
         foreach(KexiFormDataItemInterface *item, m_dataItems) {
             KexiDB::QueryColumnInfo* ci = query->columnInfo(item->dataSource());
             int index = ci ? columnsOrder[ ci ] : -1;
             kexipluginsdbg << "query->columnsOrder()[ " << (ci ? ci->field->name() : "") << " ] = " << index
             << " (dataSource: " << item->dataSource() << ", name="
-            << dynamic_cast<QObject*>(item)->objectName() << ")" << endl;
+            << dynamic_cast<QObject*>(item)->objectName() << ")";
             if (index != -1 && !m_fieldNumbersForDataItems[ item ])
                 m_fieldNumbersForDataItems.insert(item, index);
             //todo
@@ -220,7 +220,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         //all previous indices have corresponding data source
 //  for (; i < (*it); i++) {
 //   newIndices[i] = number++;
-        //kexipluginsdbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
+        //kexipluginsdbg << "invalidateDataSources(): " << i << " -> " << number-1;
 //  }
         //this index have no corresponding data source
 //  newIndices[i]=-1;
@@ -228,14 +228,14 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         if (item)
             item->setInvalidState(QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?"));
         m_dataItems.remove(*it);
-        kexipluginsdbg << "invalidateDataSources(): " << (*it) << " -> " << -1 << endl;
+        kexipluginsdbg << "invalidateDataSources(): " << (*it) << " -> " << -1;
 //  i++;
     }
 #endif
     //fill remaining part of the vector
 // for (; i < dataFieldsCount; i++) { //m_dataItems.count(); i++) {
     //newIndices[i] = number++;
-    //kexipluginsdbg << "invalidateDataSources(): " << i << " -> " << number-1 << endl;
+    //kexipluginsdbg << "invalidateDataSources(): " << i << " -> " << number-1;
     //}
 
 #if 0
@@ -245,10 +245,10 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
         bool ok;
         const int newIndex = newIndices.at(it.data(), &ok);
         if (ok && newIndex != -1) {
-            kexipluginsdbg << "invalidateDataSources(): " << it.key()->dataSource() << ": " << it.data() << " -> " << newIndex << endl;
+            kexipluginsdbg << "invalidateDataSources(): " << it.key()->dataSource() << ": " << it.data() << " -> " << newIndex;
             newFieldNumbersForDataItems.replace(it.key(), newIndex);
         } else {
-            kexipluginsdbg << "invalidateDataSources(): removing " << it.key()->dataSource() << endl;
+            kexipluginsdbg << "invalidateDataSources(): removing " << it.key()->dataSource();
             m_dataItems.remove(it.key());
             it.key()->setInvalidState(QString::fromLatin1("#") + i18n("NAME") + QString::fromLatin1("?"));
         }
@@ -264,7 +264,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
 
     //if (query && m_dataItems.count()!=query->fieldCount()) {
     // kWarning() << "KexiFormDataProvider::invalidateDataSources(): m_dataItems.count()!=query->fieldCount() ("
-    //  << m_dataItems.count() << "," << query->fieldCount() << ")" << endl;
+    //  << m_dataItems.count() << "," << query->fieldCount() << ")";
     //}
     //i = 0;
     m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
@@ -285,7 +285,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
             item->setColumnInfo(ci);
             kexipluginsdbg << "- item=" << dynamic_cast<QObject*>(item)->objectName()
             << " dataSource=" << item->dataSource()
-            << " field=" << ci->field->name() << endl;
+            << " field=" << ci->field->name();
             const int indexForVisibleLookupValue = ci->indexForVisibleLookupValue();
             if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)fieldsExpanded.count()) {
                 //there's lookup column defined: set visible column as well
@@ -300,7 +300,7 @@ void KexiFormDataProvider::invalidateDataSources(const QSet<QString>& invalidSou
                         ->installEventFilter(m_mainWidget);
                     }
                     kexipluginsdbg << " ALSO SET visibleColumn=" << visibleColumnInfo->debugString()
-                    << "\n at position " << indexForVisibleLookupValue << endl;
+                    << "\n at position " << indexForVisibleLookupValue;
                 }
             }
         }

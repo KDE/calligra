@@ -96,7 +96,7 @@ void KexiFormManager::enableAction(const char* name, bool enable)
     if (!formViewWidget)
         return;
 // if (QString(name)=="layout_menu")
-//  kDebug() << "!!!!!!!!!!! " << enable << endl;
+//  kDebug() << "!!!!!!!!!!! " << enable;
     formViewWidget->setAvailable(translateName(name).toLatin1(), enable);
 }
 

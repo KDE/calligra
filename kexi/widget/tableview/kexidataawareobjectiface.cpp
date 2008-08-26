@@ -123,7 +123,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
 {
     const bool theSameData = m_data && m_data == data;
     if (m_owner && m_data && m_data != data/*don't destroy if it's the same*/) {
-        kexidbg << "KexiDataAwareObjectInterface::setData(): destroying old data (owned)" << endl;
+        kexidbg << "KexiDataAwareObjectInterface::setData(): destroying old data (owned)";
         delete m_data; //destroy old data
         m_data = 0;
         m_itemIterator = KexiTableViewData::Iterator();
@@ -133,7 +133,7 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
     if (m_data)
         m_itemIterator = m_data->constBegin();
 
-    kDebug(44021) << "KexiDataAwareObjectInterface::setData(): using shared data" << endl;
+    kDebug(44021) << "KexiDataAwareObjectInterface::setData(): using shared data";
     //add columns
 //OK?
     clearColumnsInternal(false);
@@ -534,11 +534,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
     newrow = qMin(rows() - 1 + (isInsertingEnabled() ? 1 : 0), newrow);
 
 // d->pCurrentItem = itemAt(d->curRow);
-// kDebug(44021) << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol << endl;
+// kDebug(44021) << "setCursorPosition(): d->curRow=" << d->curRow << " oldRow=" << oldRow << " d->curCol=" << d->curCol << " oldCol=" << oldCol;
 
     if (forceSet || m_curRow != newrow || m_curCol != newcol) {
         kexidbg << "setCursorPosition(): " << QString("old:%1,%2 new:%3,%4").arg(m_curCol)
-        .arg(m_curRow).arg(newcol).arg(newrow) << endl;
+        .arg(m_curRow).arg(newcol).arg(newrow);
 
         // cursor moved: get rid of editor
         if (m_editor) {
@@ -587,7 +587,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //  int rh = rowHeight();
 //  ensureVisible( columnPos( d->curCol ) + cw / 2, rowPos( d->curRow ) + rh / 2, cw / 2, rh / 2 );
 //  center(columnPos(d->curCol) + cw / 2, rowPos(d->curRow) + rh / 2, cw / 2, rh / 2);
-// kDebug(44021) << " contentsY() = "<< contentsY() << endl;
+// kDebug(44021) << " contentsY() = "<< contentsY();
 
 //js  if (oldRow > d->curRow)
 //js   ensureVisible(columnPos(d->curCol), rowPos(d->curRow) + rh, columnWidth(d->curCol), rh);
@@ -638,11 +638,11 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         //update row
         if (forceSet || m_curRow != oldRow) {
             if (isInsertingEnabled() && m_curRow == rows()) {
-                kDebug(44021) << "NOW insert item is current" << endl;
+                kDebug(44021) << "NOW insert item is current";
                 m_currentItem = m_insertItem;
             } else {
                 kDebug(44021) << QString("NOW item at %1 (%2) is current")
-                .arg(m_curRow).arg((ulong)itemAt(m_curRow)) << endl;
+                .arg(m_curRow).arg((ulong)itemAt(m_curRow));
                 //NOT EFFECTIVE!!!!!!!!!!!
                 //set item iterator
                 if (!newRowInserted && isInsertingEnabled() && m_currentItem == m_insertItem && m_curRow == (rows() - 1)) {
@@ -679,7 +679,7 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
         /* only needed for forms */
         selectCellInternal();
     } else {
-        kexidbg << "setCursorPosition(): NO CHANGE" << endl;
+        kexidbg << "setCursorPosition(): NO CHANGE";
     }
 
     if (m_initDataContentsOnShow) {
@@ -700,7 +700,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     const int columnEditedBeforeAccepting = m_editor ? currentColumn() : -1;
     if (!acceptEditor())
         return false;
-    kDebug() << "EDIT ROW ACCEPTING..." << endl;
+    kDebug() << "EDIT ROW ACCEPTING...";
 
     bool success = true;
 // bool allow = true;
@@ -712,17 +712,17 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
     if (m_data->rowEditBuffer()->isEmpty() && !m_newRowEditing) {
         /*  if (d->newRowEditing) {
               cancelRowEdit();
-              kDebug() << "-- NOTHING TO INSERT!!!" << endl;
+              kDebug() << "-- NOTHING TO INSERT!!!";
               return true;
             }
             else {*/
-        kDebug() << "-- NOTHING TO ACCEPT!!!" << endl;
+        kDebug() << "-- NOTHING TO ACCEPT!!!";
 //  }
     } else {//not empty edit buffer or new row to insert:
         if (m_newRowEditing) {
 //   emit aboutToInsertRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
 //   if (success) {
-            kDebug() << "-- INSERTING: " << endl;
+            kDebug() << "-- INSERTING: ";
             m_data->rowEditBuffer()->debug();
             success = m_data->saveNewRow(*m_currentItem);
 //    if (!success) {
@@ -732,12 +732,12 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 //   emit aboutToUpdateRow(d->pCurrentItem, m_data->rowEditBuffer(), success, &faultyColumn);
             if (success) {
                 //accept changes for this row:
-                kDebug() << "-- UPDATING: " << endl;
+                kDebug() << "-- UPDATING: ";
                 m_data->rowEditBuffer()->debug();
-                kDebug() << "-- BEFORE: " << endl;
+                kDebug() << "-- BEFORE: ";
                 m_currentItem->debug();
                 success = m_data->saveRowChanges(*m_currentItem);//, &msg, &desc, &faultyColumn);
-                kDebug() << "-- AFTER: " << endl;
+                kDebug() << "-- AFTER: ";
                 m_currentItem->debug();
 
 //    if (!success) {
@@ -761,7 +761,7 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 
         updateAfterAcceptRowEdit();
 
-        kDebug() << "EDIT ROW ACCEPTED:" << endl;
+        kDebug() << "EDIT ROW ACCEPTED:";
 //  /*debug*/itemAt(m_curRow);
 
         if (inserting) {
@@ -775,10 +775,10 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
         /*emit*/ rowEditTerminated(m_curRow);
     } else {
 //  if (!allow) {
-//   kDebug() << "INSERT/EDIT ROW - DISALLOWED by signal!" << endl;
+//   kDebug() << "INSERT/EDIT ROW - DISALLOWED by signal!";
 //  }
 //  else {
-//   kDebug() << "EDIT ROW - ERROR!" << endl;
+//   kDebug() << "EDIT ROW - ERROR!";
 //  }
         int faultyColumn = -1;
         if (m_data->result().column >= 0 && m_data->result().column < columns())
@@ -842,7 +842,7 @@ bool KexiDataAwareObjectInterface::cancelRowEdit()
     updateAfterCancelRowEdit();
 
 //! \todo (js): cancel changes for this row!
-    kexidbg << "EDIT ROW CANCELLED." << endl;
+    kexidbg << "EDIT ROW CANCELLED.";
 
     /*emit*/ rowEditTerminated(m_curRow);
     return true;
@@ -928,7 +928,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         } else if (m_editor->valueIsNull()) {//null value entered
 //   if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
             if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-                kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!" << endl;
+                kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!";
                 res = Validator::Error;
 //    msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
                 msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
@@ -939,7 +939,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                 //   removeEditor();
                 //   return true;
             } else {
-                kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL VALUE WILL BE SET" << endl;
+                kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL VALUE WILL BE SET";
                 //ok, just leave newval as NULL
                 setNull = true;
             }
@@ -948,7 +948,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
             if (m_editor->field()->hasEmptyProperty()) {
 //    if (m_editor->columnInfo()->field->isNotEmpty() && !autoIncColumnCanBeOmitted) {
                 if (m_editor->field()->isNotEmpty() && !autoIncColumnCanBeOmitted) {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY NOT ALLOWED!" << endl;
+                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY NOT ALLOWED!";
                     res = Validator::Error;
 //     msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
@@ -959,12 +959,12 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     //    removeEditor();
                     //    return true;
                 } else {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY VALUE WILL BE SET" << endl;
+                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): EMPTY VALUE WILL BE SET";
                 }
             } else {
 //    if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
                 if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!" << endl;
+                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NEITHER NULL NOR EMPTY VALUE CAN BE SET!";
                     res = Validator::Error;
 //     msg = Validator::msgColumnNotEmpty().arg(m_editor->columnInfo()->field->captionOrName())
                     msg = Validator::msgColumnNotEmpty().arg(m_editor->field()->captionOrName())
@@ -975,7 +975,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
                     //    removeEditor();
                     //    return true;
                 } else {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED" << endl;
+                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL VALUE WILL BE SET BECAUSE EMPTY IS NOT ALLOWED";
                     //ok, just leave newval as NULL
                     setNull = true;
                 }
@@ -985,7 +985,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
     const int realFieldNumber = fieldNumberForColumn(m_curCol);
     if (realFieldNumber < 0) {
-        kWarning() << "KexiDataAwareObjectInterface::acceptEditor(): fieldNumberForColumn(m_curCol) < 0" << endl;
+        kWarning() << "KexiDataAwareObjectInterface::acceptEditor(): fieldNumberForColumn(m_curCol) < 0";
         m_inside_acceptEditor = false;
         return false;
     }
@@ -996,7 +996,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
     if (res == Validator::Ok) {
         if ((!setNull && !valueChanged)
                 || (m_editor->field()->type() != KexiDB::Field::Boolean && setNull && m_currentItem->at(realFieldNumber).isNull())) {
-            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED." << endl;
+            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): VALUE NOT CHANGED.";
             removeEditor();
             if (m_acceptsRowEditAfterCellAccepting || m_internal_acceptsRowEditAfterCellAccepting)
                 acceptRowEdit();
@@ -1009,7 +1009,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 //! @todo validation rules for this value?
             /*
                   if (!ok) {
-                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): INVALID VALUE - NOT CHANGED." << endl;
+                    kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): INVALID VALUE - NOT CHANGED.";
                     res = KexiValidator::Error;
             //js: TODO get detailed info on why m_editor->value() failed
                     msg = i18n("Entered value is invalid.")
@@ -1061,10 +1061,10 @@ bool KexiDataAwareObjectInterface::acceptEditor()
         //should be also added to the buffer
         if (m_data->updateRowEditBufferRef(m_currentItem, m_curCol, currentTVColumn,
                                            newval, /*allowSignals*/true, currentTVColumn->visibleLookupColumnInfo() ? &visibleValue : 0)) {
-            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ EDIT BUFFER CHANGED TO:" << endl;
+            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ EDIT BUFFER CHANGED TO:";
             m_data->rowEditBuffer()->debug();
         } else {
-            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ CHANGE FAILED in KexiDataAwareObjectInterface::updateRowEditBuffer()" << endl;
+            kDebug() << "KexiDataAwareObjectInterface::acceptEditor(): ------ CHANGE FAILED in KexiDataAwareObjectInterface::updateRowEditBuffer()";
             res = Validator::Error;
 
             //now: there might be called cancelEditor() in updateRowEditBuffer() handler,
@@ -1115,7 +1115,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
 void KexiDataAwareObjectInterface::startEditCurrentCell(const QString &setText)
 {
-    kDebug() << "** KexiDataAwareObjectInterface::startEditCurrentCell(" << setText << ")" << endl;
+    kDebug() << "** KexiDataAwareObjectInterface::startEditCurrentCell(" << setText << ")";
 // if (columnType(d->curCol) == KexiDB::Field::Boolean)
 //  return;
     if (isReadOnly() || !columnEditable(m_curCol))
@@ -1545,7 +1545,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
             const int realFieldNumber = fieldNumberForColumn(col);
             if (realFieldNumber < 0) {
                 kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
-                "fieldNumberForColumn(m_curCol) < 0" << endl;
+                "fieldNumberForColumn(m_curCol) < 0";
                 return 0;
             }
             const QVariant *storedValue = &m_currentItem->at(realFieldNumber);
@@ -1566,7 +1566,7 @@ const QVariant* KexiDataAwareObjectInterface::bufferedValueAt(int col, bool useD
     const int realFieldNumber = fieldNumberForColumn(col);
     if (realFieldNumber < 0) {
         kWarning() << "KexiDataAwareObjectInterface::bufferedValueAt(): "
-        "fieldNumberForColumn(m_curCol) < 0" << endl;
+        "fieldNumberForColumn(m_curCol) < 0";
         return 0;
     }
     return &m_currentItem->at(realFieldNumber);
@@ -1731,7 +1731,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
             + QPoint(- m_scrollBarTip->width() - 5,
                      r.height() / 2 - m_scrollBarTip->height() / 2));
         if (verticalScrollBar()->isSliderDown()) {
-            kDebug(44021) << "  isSliderDown()  " << endl;
+            kDebug(44021) << "  isSliderDown()  ";
             m_scrollBarTipTimer.stop();
             m_scrollBarTip->show();
             m_scrollBarTip->raise();
@@ -1771,14 +1771,14 @@ void KexiDataAwareObjectInterface::setScrollbarToolTipsEnabled(bool set)
 
 void KexiDataAwareObjectInterface::vScrollBarSliderReleased()
 {
-    kDebug(44021) << "vScrollBarSliderReleased()" << endl;
+    kDebug(44021) << "vScrollBarSliderReleased()";
     m_scrollBarTip->hide();
 }
 
 void KexiDataAwareObjectInterface::scrollBarTipTimeout()
 {
     if (m_scrollBarTip->isVisible()) {
-//  kDebug(44021) << "TIMEOUT! - hide" << endl;
+//  kDebug(44021) << "TIMEOUT! - hide";
         if (m_scrollBarTipTimerCnt > 0) {
             m_scrollBarTipTimerCnt = 0;
             m_scrollBarTipTimer.start(500);

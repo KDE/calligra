@@ -70,7 +70,7 @@ void KexiBrowserItem::initItem()
         sortKey = listView()->childCount();
     }
     m_sortKey.sprintf("%2.2d", sortKey);
-// kDebug() << "m_sortKey=" << m_sortKey << endl;
+// kDebug() << "m_sortKey=" << m_sortKey;
 }
 
 void
@@ -85,7 +85,7 @@ KexiBrowserItem::clearChildren()
 
 QString KexiBrowserItem::key(int column, bool ascending) const
 {
-// kDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : K3ListViewItem::key(column,ascending)) << endl;
+// kDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : K3ListViewItem::key(column,ascending));
     return m_fifoSorting ? m_sortKey : K3ListViewItem::key(column, ascending);
 }
 

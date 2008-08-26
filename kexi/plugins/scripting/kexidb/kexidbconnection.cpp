@@ -119,7 +119,7 @@ const QStringList KexiDBConnection::queryNames() const
     bool ok = true;
     QStringList queries = m_connection->objectNames(::KexiDB::QueryObjectType, &ok);
     if (! ok) {
-        kDebug() << QString("Failed to determinate querynames.") << endl;
+        kDebug() << QString("Failed to determinate querynames.");
         return QStringList();
     }
     return queries;
@@ -131,11 +131,11 @@ QObject* KexiDBConnection::executeQueryString(const QString& sqlquery)
     // or e.g. a DROP TABLE operation. So, let's check for such dangerous operations right now.
     ::KexiDB::Parser parser(m_connection);
     if (! parser.parse(sqlquery)) {
-        kDebug() << QString("Failed to parse query: %1 %2").arg(parser.error().type()).arg(parser.error().error()) << endl;
+        kDebug() << QString("Failed to parse query: %1 %2").arg(parser.error().type()).arg(parser.error().error());
         return 0;
     }
     if (parser.query() == 0 || parser.operation() != ::KexiDB::Parser::OP_Select) {
-        kDebug() << QString("Invalid query operation \"%1\"").arg(parser.operationString()) << endl;
+        kDebug() << QString("Invalid query operation \"%1\"").arg(parser.operationString());
         return 0;
     }
     ::KexiDB::Cursor* cursor = m_connection->executeQuery(sqlquery);

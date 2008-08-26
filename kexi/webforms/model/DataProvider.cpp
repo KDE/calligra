@@ -48,7 +48,7 @@ bool initDatabase(const QString& fileName) {
     KexiStartupData::Import data;
 
     tristate res = KexiStartupHandler::detectActionForFile(data, driverName, "", fileName);
-    kDebug() << "Database file name: " << fileName << " driver name: " << driverName << endl;
+    kDebug() << "Database file name: " << fileName << " driver name: " << driverName;
 
     if (true == res) {
         if (driverName == "shortcut") {
@@ -56,7 +56,7 @@ bool initDatabase(const QString& fileName) {
         } else if (driverName == "connection") {
             //! @todo Implement
         } else {
-            kDebug() << "This should be a file-based database... now loading it" << endl;
+            kDebug() << "This should be a file-based database... now loading it";
 
             driver = manager.driver(driverName);
             if (!driver || manager.error()) {
@@ -79,7 +79,7 @@ bool initDatabase(const QString& fileName) {
             } else status = true;
 
             if (!gConnection->useDatabase(fileName)) {
-                kError() << gConnection->errorMsg() << endl;
+                kError() << gConnection->errorMsg();
                 status = false;
             } else {
                 status = true;

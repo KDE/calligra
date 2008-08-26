@@ -296,7 +296,7 @@ int KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
         if (o->isEmpty()) // do not consider hidden widgets
             continue;
 
-//  kDebug() << "- doHorizontalLayout(): " << o->widget()->className() << " " << o->widget()->name() << endl;
+//  kDebug() << "- doHorizontalLayout(): " << o->widget()->className() << " " << o->widget()->name();
         QSize oSizeHint = o->sizeHint(); // we cache these ones because it can take
         // a while to get it (eg for child layouts)
         if ((x + oSizeHint.width()) > r.right() && h > 0) {

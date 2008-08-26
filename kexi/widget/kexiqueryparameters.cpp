@@ -157,7 +157,7 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
         }
         default:
             kexiwarn << "KexiQueryParameters::getParameters() unsupported type " << KexiDB::Field::typeName((*it).type)
-            << " for parameter \"" << (*it).message << "\" - aborting query execution!" << endl;
+            << " for parameter \"" << (*it).message << "\" - aborting query execution!";
             return QList<QVariant>();
         }
     }

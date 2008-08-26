@@ -59,7 +59,7 @@ void Query::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriter
         queryData.append(QString("<td>%1 of %2</td>").arg(record).arg(totalRecords));
 
         foreach(const QString& value, pair.second[record]) {
-            kDebug() << "Number of fields: " << pair.second[record].count() << endl;
+            kDebug() << "Number of fields: " << pair.second[record].count();
             queryData.append(QString("\t<td>%1</td>\n").arg(value));
         }
         queryData.append("</tr>\n");

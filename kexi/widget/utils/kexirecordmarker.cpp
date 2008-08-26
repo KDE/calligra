@@ -192,7 +192,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
         points.putPoints(0, 3, ofs2, pos + ofs, ofs2 + ofs, pos + ofs*2,
                          ofs2, pos + ofs*3);
         p.drawPolygon(points);
-//  kDebug() <<"KexiRecordMarker::paintEvent(): POLYGON" << endl;
+//  kDebug() <<"KexiRecordMarker::paintEvent(): POLYGON";
         /*  int half = d->rowHeight / 2;
             points.setPoints(3, 2, pos + 2, width() - 5, pos + half, 2, pos + (2 * half) - 2);*/
     }

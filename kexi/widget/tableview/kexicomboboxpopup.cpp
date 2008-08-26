@@ -152,7 +152,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
     if (column && !field)
         field = column->field();
     if (!field) {
-        kexiwarn << "KexiComboBoxPopup::setData(): !field" << endl;
+        kexiwarn << "KexiComboBoxPopup::setData(): !field";
         return;
     }
 
@@ -181,7 +181,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 //! @todo errmsg
                 return;
             if (multipleLookupColumnJoined) {
-                kDebug() << "--- Orig query: " << endl;
+                kDebug() << "--- Orig query: ";
                 lookupTable->query()->debug();
                 d->privateQuery = new KexiDB::QuerySchema(*lookupTable->query());
             } else {
@@ -196,7 +196,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 //! @todo errmsg
                 return;
             if (multipleLookupColumnJoined) {
-                kDebug() << "--- Orig query: " << endl;
+                kDebug() << "--- Orig query: ";
                 lookupQuery->debug();
                 d->privateQuery = new KexiDB::QuerySchema(*lookupQuery);
             } else {
@@ -215,7 +215,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
             for (it += visibleColumns.count() - 1; it != visibleColumns.constEnd(); --it) {
                 KexiDB::QueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at(*it) : 0;
                 if (!ci) {
-                    kWarning() << "KexiComboBoxPopup::setData(): " << *it << " >= fieldsExpandedSize" << endl;
+                    kWarning() << "KexiComboBoxPopup::setData(): " << *it << " >= fieldsExpandedSize";
                     continue;
                 }
                 KexiDB::VariableExpr *fieldExpr
@@ -232,7 +232,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
                     expr = fieldExpr;
             }
             expr->debug();
-            kDebug() << expr->toString() << endl;
+            kDebug() << expr->toString();
 
             KexiDB::Field *f = new KexiDB::Field();
             f->setExpression(expr);
@@ -246,7 +246,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 // </remove later>
 #endif
 //todo...
-            kDebug() << "--- Private query: " << endl;
+            kDebug() << "--- Private query: ";
             d->privateQuery->debug();
             cursor = field->table()->connection()->prepareQuery(*d->privateQuery);
         }
@@ -263,7 +263,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
         return;
     }
 
-    kWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)" << endl;
+    kWarning() << "KexiComboBoxPopup::setData(KexiTableViewColumn &): no column relatedData \n - moving to setData(KexiDB::Field &)";
 
     // case 3: enum hints
     d->tv->setColumnStretchEnabled(true, -1);   //only needed when using single column
@@ -276,7 +276,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
     for (int i = 0; i < hints.size(); i++) {
         KexiDB::RecordData *record = data->createItem();
         (*record)[0] = QVariant(hints[i]);
-        kDebug() << "added: '" << hints[i] << "'" << endl;
+        kDebug() << "added: '" << hints[i] << "'";
         data->append(record);
     }
     setDataInternal(data, true);
@@ -301,9 +301,9 @@ void KexiComboBoxPopup::updateSize(int minWidth)
     KexiTableEdit *te = dynamic_cast<KexiTableEdit*>(parentWidget());
     const int width = qMax(d->tv->tableSize().width(),
                            (te ? te->totalSize().width() : (parentWidget() ? parentWidget()->width() : 0/*sanity*/)));
-    kexidbg << "KexiComboBoxPopup::updateSize(): size=" << size() << endl;
+    kexidbg << "KexiComboBoxPopup::updateSize(): size=" << size();
     resize(qMax(minWidth, width)/*+(d->tv->columns()>1?2:0)*/ /*(d->updateSizeCalled?0:1)*/, d->tv->rowHeight() * rows + 2);
-    kexidbg << "KexiComboBoxPopup::updateSize(): size after=" << size() << endl;
+    kexidbg << "KexiComboBoxPopup::updateSize(): size after=" << size();
 
     //stretch the last column
     d->tv->setColumnStretchEnabled(true, d->tv->columns() - 1);
@@ -346,7 +346,7 @@ bool KexiComboBoxPopup::eventFilter(QObject *o, QEvent *e)
     if (o == this && e->type() == QEvent::Hide) {
         emit hidden();
     } else if (e->type() == QEvent::MouseButtonPress) {
-        kDebug() << "QEvent::MousePress" << endl;
+        kDebug() << "QEvent::MousePress";
     } else if (o == d->tv) {
         if (e->type() == QEvent::KeyPress) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);

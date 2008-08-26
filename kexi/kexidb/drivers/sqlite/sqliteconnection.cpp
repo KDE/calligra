@@ -91,17 +91,17 @@ SQLiteConnection::SQLiteConnection(Driver *driver, ConnectionData &conn_data)
 
 SQLiteConnection::~SQLiteConnection()
 {
-    KexiDBDrvDbg << "SQLiteConnection::~SQLiteConnection()" << endl;
+    KexiDBDrvDbg << "SQLiteConnection::~SQLiteConnection()";
     //disconnect if was connected
 // disconnect();
     destroy();
     delete d;
-    KexiDBDrvDbg << "SQLiteConnection::~SQLiteConnection() ok" << endl;
+    KexiDBDrvDbg << "SQLiteConnection::~SQLiteConnection() ok";
 }
 
 bool SQLiteConnection::drv_connect(KexiDB::ServerVersionInfo& version)
 {
-    KexiDBDrvDbg << "SQLiteConnection::connect()" << endl;
+    KexiDBDrvDbg << "SQLiteConnection::connect()";
     version.string = QString(SQLITE_VERSION); //defined in sqlite3.h
     QRegExp re("(\\d+)\\.(\\d+)\\.(\\d+)");
     if (re.exactMatch(version.string)) {
@@ -114,7 +114,7 @@ bool SQLiteConnection::drv_connect(KexiDB::ServerVersionInfo& version)
 
 bool SQLiteConnection::drv_disconnect()
 {
-    KexiDBDrvDbg << "SQLiteConnection::disconnect()" << endl;
+    KexiDBDrvDbg << "SQLiteConnection::disconnect()";
     return true;
 }
 
@@ -137,7 +137,7 @@ bool SQLiteConnection::drv_getTablesList(QStringList &list)
     KexiDB::Cursor *cursor;
     m_sql = "select lower(name) from sqlite_master where type='table'";
     if (!(cursor = executeQuery(m_sql))) {
-        KexiDBWarn << "Connection::drv_getTablesList(): !executeQuery()" << endl;
+        KexiDBWarn << "Connection::drv_getTablesList(): !executeQuery()";
         return false;
     }
     list.clear();
@@ -169,7 +169,7 @@ bool SQLiteConnection::drv_useDatabase(const QString &dbName, bool *cancelled,
                                        MessageHandler* msgHandler)
 {
     Q_UNUSED(dbName);
-// KexiDBDrvDbg << "drv_useDatabase(): " << data()->fileName() << endl;
+// KexiDBDrvDbg << "drv_useDatabase(): " << data()->fileName();
 #ifdef SQLITE2
     Q_UNUSED(cancelled);
     Q_UNUSED(msgHandler);
@@ -281,7 +281,7 @@ Cursor* SQLiteConnection::prepareQuery(QuerySchema& query, uint cursor_options)
 
 bool SQLiteConnection::drv_executeSQL(const QString& statement)
 {
-// KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")" <<endl;
+// KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")";
 // QCString st(statement.length()*2);
 // st = escapeString( statement.local8Bit() ); //?
 #ifdef SQLITE_UTF8

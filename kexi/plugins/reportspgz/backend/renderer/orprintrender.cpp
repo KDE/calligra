@@ -104,9 +104,9 @@ bool ORPrintRender::render(ORODocument * pDocument)
             // Render Page Objects
             for (int i = 0; i < p->primitives(); i++) {
                 OROPrimitive * prim = p->primitive(i);
-                kDebug() << "Rendering object" << i << "type" << prim->type() << endl;
+                kDebug() << "Rendering object" << i << "type" << prim->type();
                 if (prim->type() == OROTextBox::TextBox) {
-                    kDebug() << "Text Box" << endl;
+                    kDebug() << "Text Box";
                     OROTextBox * tb = (OROTextBox*) prim;
 
                     QPointF ps = tb->position();
@@ -137,7 +137,7 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     _painter->restore();
 
                 } else if (prim->type() == OROLine::Line) {
-                    kDebug() << "Line" << endl;
+                    kDebug() << "Line";
                     OROLine * ln = (OROLine*) prim;
                     QPointF s = ln->startPoint();
                     QPointF e = ln->endPoint();
@@ -151,7 +151,7 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     _painter->setRenderHint(QPainter::Antialiasing, false);
                     _painter->restore();
                 } else if (prim->type() == OROImage::Image) {
-                    kDebug() << "Image" << endl;
+                    kDebug() << "Image";
                     OROImage * im = (OROImage*) prim;
                     QPointF ps = im->position();
                     QSizeF sz = im->size();
@@ -164,7 +164,7 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     QRectF sr = QRectF(QPointF(0.0, 0.0), rc.size().boundedTo(img.size()));
                     _painter->drawImage(rc.topLeft(), img, sr);
                 } else if (prim->type() == ORORect::Rect) {
-                    kDebug() << "Rect" << endl;
+                    kDebug() << "Rect";
                     ORORect * re = (ORORect*) prim;
 
                     QPointF ps = re->position();

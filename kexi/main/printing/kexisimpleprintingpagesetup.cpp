@@ -166,7 +166,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
     /*#else
       // on !win32 print QPrinter::numCopies() times (the OS does not perform buffering)
       pagesToPrint = printer.pageList();
-      kDebug() << pagesToPrint << endl;
+      kDebug() << pagesToPrint;
       if (pagesToPrint.isEmpty()) {
         fromPage = 0;
         for (int i = 0; i<(int)engine.pagesCount(); i++) {
@@ -189,14 +189,14 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
     #endif*/
     // now, total number of printed pages is printer.numCopies()*printer.pageList().count()
 
-    kDebug() << "printing..." << endl;
+    kDebug() << "printing...";
     bool firstPage = true;
     for (uint copy = 0;copy < loops; copy++) {
-        kDebug() << "copy " << (copy + 1) << " of " << loops << endl;
+        kDebug() << "copy " << (copy + 1) << " of " << loops;
         uint pageNumber = fromPage;
         Q3ValueList<int>::ConstIterator pagesIt = pagesToPrint.constBegin();
         for (;(int)pageNumber == fromPage || !engine.atEnd(); ++pageNumber) {
-            kDebug() << "printing..." << endl;
+            kDebug() << "printing...";
             if (pagesIt == pagesToPrint.constEnd()) //no more pages to print
                 break;
             if ((int)pageNumber < *pagesIt) { //skip pages without printing (needed for computation)
@@ -212,13 +212,13 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
                     printer.newPage();
                 else
                     firstPage = false;
-                kDebug() << "page #" << pageNumber << endl;
+                kDebug() << "page #" << pageNumber;
                 engine.paintPage(pageNumber, painter);
             }
             ++pagesIt;
         }
     }
-    kDebug() << "end of printing." << endl;
+    kDebug() << "end of printing.";
 
     // stop painting, this will automatically send the print data to the printer
     if (!painter.end())

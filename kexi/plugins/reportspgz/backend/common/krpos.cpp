@@ -53,7 +53,7 @@ void KRPos::setScenePos(const QPointF& pos, bool update)
 
 void KRPos::setUnitPos(const QPointF& pos, bool update)
 {
-    kDebug() << pos << endl;
+    kDebug() << pos;
     qreal x, y;
     x = _unit.fromUserValue(pos.x());
     y = _unit.fromUserValue(pos.y());

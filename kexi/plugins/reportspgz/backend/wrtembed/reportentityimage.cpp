@@ -154,7 +154,7 @@ void ReportEntityImage::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityImage::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << s.typeName() << ":" << p.name() << ":" << p.value() << endl;
+    kDebug() << s.typeName() << ":" << p.name() << ":" << p.value();
 
     //Handle Position
     if (p.name() == "Position") {

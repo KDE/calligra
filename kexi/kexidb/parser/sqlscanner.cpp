@@ -1167,7 +1167,7 @@ YY_DECL {
             YY_RULE_SETUP
 #line 281 "sqlscanner.l"
             {
-                KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+                KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")";
                 ECOUNT;
                 yylval.stringValue = new QString(QString::fromUtf8(yytext, yyleng));
                 if (yytext[0] >= '0' && yytext[0] <= '9') {
@@ -1183,7 +1183,7 @@ YY_DECL {
             YY_RULE_SETUP
 #line 293 "sqlscanner.l"
             {
-                KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+                KexiDBDbg << "yytext: '" << yytext << "' (" << yyleng << ")";
                 ECOUNT;
                 yylval.stringValue = new QString(QString::fromUtf8(yytext + 1, yyleng - 2));
                 return QUERY_PARAMETER;
@@ -1201,7 +1201,7 @@ YY_DECL {
             YY_RULE_SETUP
 #line 304 "sqlscanner.l"
             {
-                KexiDBDbg << "char: '" << yytext[0] << "'" << endl;
+                KexiDBDbg << "char: '" << yytext[0] << "'";
                 ECOUNT;
                 return yytext[0];
             }

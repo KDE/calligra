@@ -185,7 +185,7 @@ void ReportEntityText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 
 void ReportEntityText::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << endl;
+    kDebug();
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

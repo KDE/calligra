@@ -97,7 +97,7 @@ Cursor* MySqlConnection::prepareQuery(QuerySchema& query, uint cursor_options)
 
 bool MySqlConnection::drv_getDatabasesList(QStringList &list)
 {
-    KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
+    KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()";
     list.clear();
     MYSQL_RES *res;
 
@@ -117,7 +117,7 @@ bool MySqlConnection::drv_getDatabasesList(QStringList &list)
 
 bool MySqlConnection::drv_createDatabase(const QString &dbName)
 {
-    KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName << endl;
+    KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName;
     // mysql_create_db deprecated, use SQL here.
     if (drv_executeSQL("CREATE DATABASE " + (dbName)))
         return true;

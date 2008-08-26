@@ -213,7 +213,7 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
         return;
     if (!d->scrollArea->tableContainer(t)) {
         KexiRelationsTableContainer *c = d->scrollArea->addTableContainer(t, rect);
-        kDebug() << "KexiRelationsView::slotAddTable(): adding table " << t->name() << endl;
+        kDebug() << "KexiRelationsView::slotAddTable(): adding table " << t->name();
         if (!c)
             return;
         connect(c, SIGNAL(fieldsDoubleClicked(KexiDB::TableOrQuerySchema&, const QStringList&)),
@@ -229,7 +229,7 @@ KexiRelationsView::addTable(KexiDB::TableSchema *t, const QRect &rect)
     }
     if (i < count) {
         int oi = d->tableCombo->currentIndex();
-        kDebug() << "KexiRelationsView::slotAddTable(): removing a table from the combo box" << endl;
+        kDebug() << "KexiRelationsView::slotAddTable(): removing a table from the combo box";
         d->tableCombo->removeItem(i);
         if (d->tableCombo->count() > 0) {
             if (oi >= d->tableCombo->count()) {
@@ -265,7 +265,7 @@ void KexiRelationsView::tableViewGotFocus()
 {
 // if (d->scrollArea->focusedTableContainer == sender())
 //  return;
-// kDebug() << "GOT FOCUS!" <<endl;
+// kDebug() << "GOT FOCUS!";
 // clearSelection();
 // if (d->focusedTableContainer)
 //  d->focusedTableContainer->unsetFocus();

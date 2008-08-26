@@ -296,7 +296,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
             const int newW =
                 painter.fontMetrics().width(m_fieldsExpanded[i]->captionOrAliasOrName() + ":");
 //   kDebug() << "row"<<i<<": "<<m_fieldsExpanded[i]->captionOrAliasOrName()<<" "
-//    << newW <<endl;
+//    << newW;
             if (m_maxFieldNameWidth < newW)
                 m_maxFieldNameWidth = newW;
         }
@@ -381,7 +381,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
               //do not break records between pages
               break;
             }*/
-//  kDebug() << " -------- " << y << " / " << m_pageHeight << endl;
+//  kDebug() << " -------- " << y << " / " << m_pageHeight;
         if (paint)
             paintRecord(painter, offset, /*item,*/ cellMargin, y, paintedRecords,
                         paint, printing, continuedRecord, newOffset);
@@ -419,7 +419,7 @@ uint KexiSimplePrintingEngine::cutTextIfTooLarge(const QFontMetrics& fontMetrics
 {
     QRect realRect;
     uint delta = text.length();
-    kDebug() << "\ntext==" << text << "==text\n" << endl;
+    kDebug() << "\ntext==" << text << "==text\n";
     uint cut = delta;
     const bool updateRect = delta > 0;
     while (delta > 0) {
@@ -508,7 +508,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, const DataOffset& 
     QRect rect;
     QString text;
     for (; i < m_visibleFieldsCount; i++) {
-//   kDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
+//   kDebug() << "row"<<i<<": "<<row.at(i).toString();
         if (paint) {
             painter.drawText(
                 (int)m_leftMargin + cellMargin, (int)y, m_maxFieldNameWidth - cellMargin*2, m_mainLineSpacing,
@@ -614,7 +614,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, const DataOffset& 
         if (!text.isEmpty() && paint) {
 //   kdDebug() << "print engine: painter.drawText: "
 //    << rect.x() <<" "<< rect.y() <<" "<< m_pageWidth - m_maxFieldNameWidth - cellMargin*2
-//    <<" "<< m_topMargin + m_pageHeight - (int)y <<" "<<m_pageHeight<<" "<<y<<" "<< text << endl;
+//    <<" "<< m_topMargin + m_pageHeight - (int)y <<" "<<m_pageHeight<<" "<<y<<" "<< text;
 //   QString firstPartOfText(text), remainingPartOfText;
             //QRect realRect( rect.x(),rect.y(),
 //    m_pageWidth - m_maxFieldNameWidth - cellMargin*2,
@@ -623,9 +623,9 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, const DataOffset& 
 //    painter.fontMetrics(), realRect, Qt::AlignTop|Qt::WordBreak,text);
 
             QString aa(((textOffsetForThisField > 0) ? text.mid(textOffsetForThisField) : text).left(cut).trimmed());
-            kDebug() << "-----" << aa << endl << "=====" << endl;
-            kDebug() << "-----text.mid(textOffsetForThisField):" << text.mid(textOffsetForThisField) << endl << "=====" << endl;
-            kDebug() << "-----text.mid(textOffsetForThisField).left(cut):" << text.mid(textOffsetForThisField).left(cut) << endl << "=====" << endl;
+            kDebug() << "-----" << aa << endl << "=====";
+            kDebug() << "-----text.mid(textOffsetForThisField):" << text.mid(textOffsetForThisField) << endl << "=====";
+            kDebug() << "-----text.mid(textOffsetForThisField).left(cut):" << text.mid(textOffsetForThisField).left(cut) << endl << "=====";
 
             QString xxxx_start, xxxx_end;
             if (textOffsetForThisField > 0) {

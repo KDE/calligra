@@ -567,7 +567,7 @@ public:
 
     bool pendingWindowsExist() {
         if (pendingWindows.begin() != pendingWindows.end())
-            kDebug() <<  pendingWindows.constBegin().key() << " " << (int)pendingWindows.constBegin().value() << endl;
+            kDebug() <<  pendingWindows.constBegin().key() << " " << (int)pendingWindows.constBegin().value();
 //todo(threads)  QMutexLocker dialogsLocker( &dialogsMutex );
         return !pendingWindows.isEmpty();
     }
@@ -653,7 +653,7 @@ public:
         const QList<QAction*> actions( pm->actions() );
         bool nowHideSeparator = false;
         foreach( QAction *action, actions ) {
-          kDebug() << action->text() << endl;
+          kDebug() << action->text();
           if (nowHideSeparator) {
             if (action->isSeparator())
               action->setVisible(false);
@@ -762,7 +762,7 @@ public:
     type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name) {
         if (!item || !name) {
             kWarning() <<
-            "KexiMainWindow::Private::openedCustomObjectsForItem(): !item || !name" << endl;
+            "KexiMainWindow::Private::openedCustomObjectsForItem(): !item || !name";
             return 0;
         }
         QByteArray key(QByteArray::number(item->identifier()) + name);

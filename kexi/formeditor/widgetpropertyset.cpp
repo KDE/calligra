@@ -195,7 +195,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload, boo
 
     // don't add a widget twice
     if (!forceReload && d->widgets.contains(QPointer<QWidget>(w))) {
-        kWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected" << endl;
+        kWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected";
         return;
     }
     // if our list is empty,don't use add parameter value
@@ -243,7 +243,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 // QWidget *subwidget = isSubproperty ? subpropIface->subwidget() : w;
 
     for (KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
-        kDebug() << it.currentKey() << endl;
+        kDebug() << it.currentKey();
         if (!isPropertyVisible(it.currentKey(), isTopLevel, classname))
             d->set[it.currentKey()].setVisible(false);
     }
@@ -266,7 +266,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     if (!KFormDesigner::FormManager::self()
             || !(form = KFormDesigner::FormManager::self()->activeForm())
             || !KFormDesigner::FormManager::self()->activeForm()->objectTree()) {
-        kWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!" << endl;
+        kWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!";
         return;
     }
     ObjectTreeItem *tree = form->objectTree()->lookup(w->objectName());
@@ -281,7 +281,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->metaObject()->className());
     if (!winfo) {
         kWarning() << "WidgetPropertySet::createPropertiesForWidget() no widget info for class "
-        << w->metaObject()->className() << endl;
+        << w->metaObject()->className();
         return;
     }
 
@@ -301,13 +301,13 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
         foreach(Q3CString propName, subproperies) {
 //   tmpList.append( *it );
             propNames.append(propName);
-            kDebug() << "Added subproperty: " << propName << endl;
+            kDebug() << "Added subproperty: " << propName;
         }
     }
 
     // iterate over the property list, and create Property objects
     foreach(Q3CString propName, propNames) {
-        //kDebug() << ">> " << it.current() << endl;
+        //kDebug() << ">> " << it.current();
         const QMetaProperty subMeta = // special case - subproperty
             subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
         const QMetaProperty meta = subMeta.isValid() ? subMeta
@@ -319,7 +319,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
                              ? subpropIface->subwidget() : w;
         WidgetInfo *subwinfo = form->library()->widgetInfoForClassName(
                                    subwidget->metaObject()->className());
-//  kDebug() << "$$$ " << subwidget->className() << endl;
+//  kDebug() << "$$$ " << subwidget->className();
 
         if (subwinfo && meta.isDesignable(subwidget) && !d->set.contains(propertyName)) {
             //! \todo add another list for property description
@@ -617,7 +617,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 // CommandGroup *group = new CommandGroup(commandName);
     for (QMap<Q3CString, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it) {
         if (!d->set.contains(it.key())) {
-            kWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" << it.key() << "\" property not found" << endl;
+            kWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" << it.key() << "\" property not found";
             continue;
         }
         PropertyCommand *subCommand = new PropertyCommand(this, widget->objectName().toLatin1(),

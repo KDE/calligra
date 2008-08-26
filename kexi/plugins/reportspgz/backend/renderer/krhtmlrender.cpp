@@ -97,7 +97,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
     bool renderedPageHead = false;
     bool renderedPageFoot = false;
 
-    kDebug() << "4" << endl;
+    kDebug() << "4";
 
     QDir d(tempDirName);
     // Render Each Section
@@ -128,7 +128,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
             //Render the objects in each section
             for (int i = 0; i < section->primitives(); i++) {
                 OROPrimitive * prim = section->primitive(i);
-                kDebug() << "Got object type" << prim->type() << endl;
+                kDebug() << "Got object type" << prim->type();
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
 
@@ -153,7 +153,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
                     body += tb->text();
                     body += "</div>\n";
                 } else if (prim->type() == OROImage::Image) {
-                    kDebug() << "Saving an image" << endl;
+                    kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
                     style = "position: absolute; ";
                     style += "top: " + QString::number(im->position().y()) + "pt; ";
@@ -170,7 +170,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 
                     im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
-                    kDebug() << "Saving a picture" << endl;
+                    kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
                     style = "position: absolute; ";
                     style += "top: " + QString::number(im->position().y()) + "pt; ";
@@ -189,7 +189,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
                     im->picture()->play(&painter);
                     image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else {
-                    kDebug() << "unrecognized primitive type" << prim->type() << endl;
+                    kDebug() << "unrecognized primitive type" << prim->type();
                 }
             }
             body += "</div>\n";
@@ -255,14 +255,14 @@ QString KRHtmlRender::renderTable(ORODocument *document)
                     tr += tb->text();
                     tr += "</td>\n";
                 } else if (prim->type() == OROImage::Image) {
-                    kDebug() << "Saving an image" << endl;
+                    kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
                     tr += "<td>";
                     tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
                     tr += "</td>\n";
                     im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
-                    kDebug() << "Saving a picture" << endl;
+                    kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
 
                     tr += "<td>";
@@ -273,7 +273,7 @@ QString KRHtmlRender::renderTable(ORODocument *document)
                     im->picture()->play(&painter);
                     image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else {
-                    kDebug() << "unhandled primitive type" << endl;
+                    kDebug() << "unhandled primitive type";
                 }
             }
             tr += "</tr>\n";

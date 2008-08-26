@@ -78,9 +78,9 @@ KexiInputTableEdit::~KexiInputTableEdit()
 
 void KexiInputTableEdit::init()
 {
-// kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName() << endl;
-// kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
-// kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName() << endl;
+// kDebug() << "KexiInputTableEdit: m_origValue.typeName()==" << m_origValue.typeName();
+// kDebug() << "KexiInputTableEdit: type== " << field()->typeName();
+// kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName();
 
 #ifdef __GNUC__
 #warning TODO reenable  m_textFormatter.setField( field() );
@@ -182,7 +182,7 @@ QString KexiInputTableEdit::valueToText(KexiDB::Field* field, const QVariant& va
             if (text.isEmpty()) {
                 //nothing
             } else if (sl.count() == 2) {
-//    kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+//    kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1];
                 const QString sl1 = sl[1];
                 int pos = sl1.length() - 1;
                 if (pos >= 1) {
@@ -243,12 +243,12 @@ void
 KexiInputTableEdit::setRestrictedCompletion()
 {
 #if 0 //js TODO
-    kDebug() << "KexiInputTableEdit::setRestrictedCompletion()" << endl;
+    kDebug() << "KexiInputTableEdit::setRestrictedCompletion()";
 // KLineEdit *content = static_cast<KLineEdit*>(m_view);
     if (m_cview->text().isEmpty())
         return;
 
-    kDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do" << endl;
+    kDebug() << "KexiInputTableEdit::setRestrictedCompletion(): something to do";
 
     m_cview->useGlobalKeyBindings();
 
@@ -265,7 +265,7 @@ KexiInputTableEdit::setRestrictedCompletion()
 void
 KexiInputTableEdit::completed(const QString &s)
 {
-// kDebug() << "KexiInputTableEdit::completed(): " << s << endl;
+// kDebug() << "KexiInputTableEdit::completed(): " << s;
     m_lineedit->setText(s);
 }
 
@@ -393,7 +393,7 @@ bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect&
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
     internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2*3);
-    kexidbg << rect << " " << internalRect << " " << fm.width(text) << endl;
+    kexidbg << rect << " " << internalRect << " " << fm.width(text);
     return fm.width(text) > internalRect.width();
 }
 

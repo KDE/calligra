@@ -209,7 +209,7 @@ void KexiDataAwareView::reloadActions()
 // m_view->initActions(guiClient()->actionCollection());
 //warning FIXME Move this to the table part
     /*
-      kDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
+      kDebug()<<"INIT ACTIONS***********************************************************************";
       new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
       setXMLFile("kexidatatableui.rc");
     */

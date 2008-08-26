@@ -53,7 +53,7 @@ ObjectTreeItem::ObjectTreeItem(const QString &classn, const QString &name, QWidg
 
 ObjectTreeItem::~ObjectTreeItem()
 {
-// kDebug() << "ObjectTreeItem deleted: " << name() << endl;
+// kDebug() << "ObjectTreeItem deleted: " << name();
     delete m_subprops;
 }
 
@@ -84,7 +84,7 @@ ObjectTreeItem::addModifiedProperty(const Q3CString &property, const QVariant &o
 
     if (!m_props.contains(property)) {
         m_props.insert(property, oldValue);
-        kDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue << endl;
+        kDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue;
     }
 }
 
@@ -201,7 +201,7 @@ ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
     parent->addChild(c);
     m_container->form()->emitChildAdded(c);
 
-    kDebug() << "ObjectTree::addItem(): adding " << c->name() << " to " << parent->name() << endl;
+    kDebug() << "ObjectTree::addItem(): adding " << c->name() << " to " << parent->name();
 }
 
 void

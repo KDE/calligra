@@ -213,7 +213,7 @@ void KexiSmallToolButton::paintEvent(QPaintEvent *pe)
 
 void KexiSmallToolButton::slotActionChanged()
 {
-    kDebug() << "slotActionChanged()" << d->action->isEnabled() << endl;
+    kDebug() << "slotActionChanged()" << d->action->isEnabled();
     setEnabled(d->action->isEnabled());
 }
 

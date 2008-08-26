@@ -90,7 +90,7 @@ bool xBaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
   // set destination file name here.
   kexiConnectionData->driverName = KexiDB::defaultFileBasedDriverName();
   kexiConnectionData->setFileName( tempDatabase );
-  kDebug() << "Current file name: " << tempDatabase << endl;
+  kDebug() << "Current file name: " << tempDatabase;
 
 
   QString sourceDriverName = "xbase";
@@ -98,7 +98,7 @@ bool xBaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
   KexiMigration::KexiMigrate* sourceDriver = 0;
   sourceDriver = xBase2KexiMigrateManager.driver( sourceDriverName );
   if(!sourceDriver || xBase2KexiMigrateManager.error()) {
-    kDebug() << "Import migrate driver error..." << endl;
+    kDebug() << "Import migrate driver error...";
     return false;
   }
 
@@ -189,7 +189,7 @@ bool xBaseConnectionInternal::useDatabase(const QString &dbName)
 bool xBaseConnectionInternal::executeSQL(const QString& statement)
 {
 //	KexiDBDrvDbg << "xBaseConnectionInternal::executeSQL: "
-//	             << statement << endl;
+//	             << statement;
   if ( !internalConn ) {
     return false;
   }

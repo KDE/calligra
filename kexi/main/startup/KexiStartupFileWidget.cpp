@@ -110,7 +110,7 @@ KexiStartupFileWidget::~KexiStartupFileWidget()
 
 void KexiStartupFileWidget::slotExistingFileHighlighted(const QString& fileName)
 {
-    kexidbg << fileName << endl;
+    kexidbg << fileName;
     d->highlightedUrl = KUrl(fileName);
     //updateDialogOKButton(0);
     emit fileHighlighted();
@@ -259,7 +259,7 @@ QString KexiStartupFileWidget::selectedFile() const
 #ifdef Q_WS_WIN
 // QString path = selectedFile();
   //js @todo
-// kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text() << endl;
+// kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text();
   QString path = dir()->absolutePath();
   if (!path.endsWith("/") && !path.endsWith("\\"))
     path.append("/");
@@ -268,8 +268,8 @@ QString KexiStartupFileWidget::selectedFile() const
 #else
 // QString path = locationEdit->currentText().trimmed(); //url.path().trimmed(); that does not work, if the full path is not in the location edit !!!!!
   QString path( KFileWidget::selectedFile() );
-  kDebug() << "prev selectedFile() == " << path <<endl;
-  kDebug() << "locationEdit == " << locationEdit()->currentText().trimmed() <<endl;
+  kDebug() << "prev selectedFile() == " << path;
+  kDebug() << "locationEdit == " << locationEdit()->currentText().trimmed();
   //make sure user-entered path is acceped:
 #ifdef __GNUC__
 #warning TODO? setSelection( locationEdit()->currentText().trimmed() );
@@ -278,14 +278,14 @@ QString KexiStartupFileWidget::selectedFile() const
 #endif
 // path = KFileWidget::selectedFile();
   path = locationEdit()->currentText().trimmed();
-  kDebug() << "selectedFile() == " << path <<endl;
+  kDebug() << "selectedFile() == " << path;
 
 #endif
 
   if (!currentFilter().isEmpty()) {
     if (d->mode & SavingFileBasedDB) {
       const QStringList filters( currentFilter().split(" ") );
-      kDebug()<< " filter == " << filters << endl;
+      kDebug()<< " filter == " << filters;
       QString ext( QFileInfo(path).suffix() );
       bool hasExtension = false;
       foreach (const QString& filter, filters) {
@@ -300,12 +300,12 @@ QString KexiStartupFileWidget::selectedFile() const
         if (defaultExtension.isEmpty())
           defaultExtension = filters.first().trimmed().mid(2); //first one
         path += (QString(".")+defaultExtension);
-        kDebug() << "KexiStartupFileWidget::checkURL(): append extension, " << path << endl;
+        kDebug() << "KexiStartupFileWidget::checkURL(): append extension, " << path;
 //Qt4    setSelection( path );
       }
     }
   }
-  kDebug() << "KexiStartupFileWidget::currentFileName() == " << path <<endl;
+  kDebug() << "KexiStartupFileWidget::currentFileName() == " << path;
   return path;
 }
 */
@@ -317,12 +317,12 @@ bool KexiStartupFileWidget::checkSelectedFile()
 // KUrl url = currentURL();
 // QString path = url.path().trimmed();
 // QString path = selectedFile().trimmed();
-    kDebug() << "d->highlightedUrl: " << d->highlightedUrl << endl;
+    kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 
     if (d->highlightedUrl.isEmpty() && !locationEdit()->lineEdit()->text().isEmpty()) {
-        kDebug() << locationEdit()->lineEdit()->text() << endl;
-        //kDebug() << locationEdit()->urls() <<endl;
-        kDebug() << baseUrl() << endl;
+        kDebug() << locationEdit()->lineEdit()->text();
+        //kDebug() << locationEdit()->urls();
+        kDebug() << baseUrl();
 
         d->highlightedUrl = baseUrl();
         const QString firstUrl(locationEdit()->lineEdit()->text());   // FIXME: find first...
@@ -332,15 +332,15 @@ bool KexiStartupFileWidget::checkSelectedFile()
             d->highlightedUrl.addPath(firstUrl);
     }
 
-    kDebug() << "d->highlightedUrl: " << d->highlightedUrl << endl;
+    kDebug() << "d->highlightedUrl: " << d->highlightedUrl;
 // if (url.fileName().trimmed().isEmpty()) {
     if (d->highlightedUrl.isEmpty()) {
         KMessageBox::error(this, i18n("Enter a filename."));
         return false;
     }
 
-    kDebug() << "KexiStartupFileWidget::checkURL() path: " << d->highlightedUrl  << endl;
-// kDebug() << "KexiStartupFileWidget::checkURL() fname: " << url.fileName() << endl;
+    kDebug() << "KexiStartupFileWidget::checkURL() path: " << d->highlightedUrl;
+// kDebug() << "KexiStartupFileWidget::checkURL() fname: " << url.fileName();
 //todo if ( url.isLocalFile() ) {
     QFileInfo fi(d->highlightedUrl.path());
     if (mode() & KFile::ExistingOnly) {
@@ -382,28 +382,28 @@ bool KexiStartupFileWidget::askForOverwriting(const QString& filePath, QWidget *
 
 void KexiStartupFileWidget::accept()
 {
-    kexidbg << "KexiStartupFileWidget::accept()..." << endl;
+    kexidbg << "KexiStartupFileWidget::accept()...";
 
     KFileWidget::accept();
-// kexidbg << selectedFile() << endl;
+// kexidbg << selectedFile();
 
 // locationEdit->setFocus();
 // QKeyEvent ev(QEvent::KeyPress, Qt::Key_Enter, '\n', 0);
 // QApplication::sendEvent(locationEdit, &ev);
 // QApplication::postEvent(locationEdit, &ev);
 
-// kDebug() << "KexiStartupFileWidget::accept() m_lastUrl == " << m_lastUrl.path() << endl;
+// kDebug() << "KexiStartupFileWidget::accept() m_lastUrl == " << m_lastUrl.path();
 // if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
     /*
       if (d->lastFileName==selectedFile()) {//(js) to prevent more multiple kjob signals (I do not know why this is)
     //  m_lastUrl=KUrl();
         d->lastFileName.clear();
-        kDebug() << "d->lastFileName==selectedFile()" << endl;
+        kDebug() << "d->lastFileName==selectedFile()";
     #ifdef Q_WS_WIN
         return;
     #endif
       }
-      kDebug() << "KexiStartupFileWidget::accept(): path = " << selectedFile() << endl;
+      kDebug() << "KexiStartupFileWidget::accept(): path = " << selectedFile();
       if ( checkSelectedFile() ) {
         emit accepted();
       }
@@ -416,7 +416,7 @@ void KexiStartupFileWidget::accept()
 
 void KexiStartupFileWidget::reject()
 {
-    kDebug() << "KexiStartupFileWidget: reject!" << endl;
+    kDebug() << "KexiStartupFileWidget: reject!";
     emit rejected();
 }
 

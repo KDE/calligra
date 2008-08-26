@@ -175,7 +175,7 @@ void WidgetFactory::addClass(WidgetInfo *w)
     if (oldw) {
         kWarning() << "WidgetFactory::addClass(): class with name '"
         << w->className()
-        << "' already exists for factory '" << objectName() << "'" << endl;
+        << "' already exists for factory '" << objectName() << "'";
         return;
     }
     m_classesByName.insert(w->className(), w);
@@ -426,7 +426,7 @@ WidgetFactory::resetEditor()
     if (m_widget) {
         ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->objectName()) : 0;
         if (!tree) {
-            kDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item " << endl;
+            kDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item ";
             return;
         }
         tree->eventEater()->setContainer(m_container);

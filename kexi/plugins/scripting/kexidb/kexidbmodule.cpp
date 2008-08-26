@@ -53,13 +53,13 @@ using namespace Scripting;
 KexiDBModule::KexiDBModule(QObject* parent)
         : QObject(parent)
 {
-    kDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
+    kDebug() << "Kross::KexiDB::KexiDBModule Ctor";
     setObjectName("KexiDB");
 }
 
 KexiDBModule::~KexiDBModule()
 {
-    kDebug() << "Kross::KexiDB::KexiDBModule Dtor" << endl;
+    kDebug() << "Kross::KexiDB::KexiDBModule Dtor";
 }
 
 int KexiDBModule::version()
@@ -76,11 +76,11 @@ QObject* KexiDBModule::driver(const QString& drivername)
 {
     QPointer< ::KexiDB::Driver > driver = m_drivermanager.driver(drivername); // caching is done by the DriverManager
     if (! driver) {
-        kDebug() << QString("KexiDB::Driver No such driver '%1'").arg(drivername) << endl;
+        kDebug() << QString("KexiDB::Driver No such driver '%1'").arg(drivername);
         return 0;
     }
     if (driver->error()) {
-        kDebug() << QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg()) << endl;
+        kDebug() << QString("KexiDB::Driver error for drivername '%1': %2").arg(drivername).arg(driver->errorMsg());
         return 0;
     }
     return new KexiDBDriver(this, driver);
@@ -123,7 +123,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
             }
         }
         if (groupkey.isNull()) {
-            kDebug() << "No groupkey in KexiDBModule::createConnectionDataByFile filename=" << filename << endl;
+            kDebug() << "No groupkey in KexiDBModule::createConnectionDataByFile filename=" << filename;
             return 0;
         }
 
@@ -162,7 +162,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
 
     QString const drivername = m_drivermanager.lookupByMime(mimename);
     if (drivername.isEmpty()) {
-        kDebug() << "No driver in KexiDBModule::createConnectionDataByFile filename=" << filename << " mimename=" << mimename << endl;
+        kDebug() << "No driver in KexiDBModule::createConnectionDataByFile filename=" << filename << " mimename=" << mimename;
         return 0;
     }
 

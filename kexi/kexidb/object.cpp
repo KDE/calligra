@@ -158,16 +158,16 @@ QString Object::serverResultName()
 void Object::debugError()
 {
     if (error()) {
-        KexiDBDbg << "KEXIDB ERROR: " << errorMsg() << endl;
+        KexiDBDbg << "KEXIDB ERROR: " << errorMsg();
         QString s = serverErrorMsg(), sn = serverResultName();
         if (!s.isEmpty())
-            KexiDBDbg << "KEXIDB SERVER ERRMSG: " << s << endl;
+            KexiDBDbg << "KEXIDB SERVER ERRMSG: " << s;
         if (!sn.isEmpty())
-            KexiDBDbg << "KEXIDB SERVER RESULT NAME: " << sn << endl;
+            KexiDBDbg << "KEXIDB SERVER RESULT NAME: " << sn;
         if (serverResult() != 0)
-            KexiDBDbg << "KEXIDB SERVER RESULT #: " << serverResult() << endl;
+            KexiDBDbg << "KEXIDB SERVER RESULT #: " << serverResult();
     } else
-        KexiDBDbg << "KEXIDB OK." << endl;
+        KexiDBDbg << "KEXIDB OK.";
 }
 
 int Object::askQuestion(const QString& message,

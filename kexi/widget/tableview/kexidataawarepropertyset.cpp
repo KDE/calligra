@@ -112,11 +112,11 @@ void KexiDataAwarePropertySet::slotReloadRequested()
 void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
 {
     if (!set || row >= (uint)m_sets.size()) {
-        kexiwarn << "KexiDataAwarePropertySet::set() invalid args: rew=" << row << " propertyset=" << set << endl;
+        kexiwarn << "KexiDataAwarePropertySet::set() invalid args: rew=" << row << " propertyset=" << set;
         return;
     }
     if (set->parent() && set->parent() != this) {
-        kexiwarn << "KexiDataAwarePropertySet::set() propertyset's parent must be NULL or this KexiDataAwarePropertySet" << endl;
+        kexiwarn << "KexiDataAwarePropertySet::set() propertyset's parent must be NULL or this KexiDataAwarePropertySet";
         return;
     }
 
@@ -174,18 +174,18 @@ void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &rows)
     for (QList<int>::ConstIterator r_it = rows.constBegin(); r_it != rows.constEnd() && *r_it < orig_size; ++r_it) {
         cur_r = *r_it;
         if (prev_r >= 0) {
-//   kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2 << endl;
+//   kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2;
             int i = prev_r;
             KoProperty::Set *set = m_sets.at(i + num_removed);
 //Qt4   if (set)
             m_sets.remove(i + num_removed);
-            kDebug() << "property set " << i + num_removed << " deleted" << endl;
+            kDebug() << "property set " << i + num_removed << " deleted";
             delete set;
             num_removed++;
             /* Qt4 : not needed
                   for (; (i+num_removed)<cur_r; i++) {
                     m_sets[ i ] = m_sets.at(i+num_removed);
-                    kDebug() << i << " <- " << i+num_removed << endl;
+                    kDebug() << i << " <- " << i+num_removed;
                   }*/
         }
         prev_r = cur_r - num_removed;
@@ -196,23 +196,23 @@ void KexiDataAwarePropertySet::slotRowsDeleted(const QList<int> &rows)
         KoProperty::Set *set = m_sets.at(cur_r);
         if (set)
           m_sets.remove(cur_r);
-        kDebug() << "property set " << cur_r << " deleted" << endl;
+        kDebug() << "property set " << cur_r << " deleted";
         delete set;
         num_removed++;
         for (int i=prev_r; (i+num_removed)<orig_size; i++) {
           m_sets[ i ] = m_sets.at(i+num_removed);
-          kDebug() << i << " <- " << i+num_removed << endl;
+          kDebug() << i << " <- " << i+num_removed;
         }
       }
       */
     /* Qt4 : not needed
       //finally: clear last rows
       for (int i=orig_size-num_removed; i<orig_size; i++) {
-        kDebug() << i << " <- zero" << endl;
+        kDebug() << i << " <- zero";
         m_sets[ i ] = 0;
       }
       for (int i=orig_size-num_removed; i<orig_size; i++) {
-        kDebug() << i << " <- zero" << endl;
+        kDebug() << i << " <- zero";
         m_sets[ i ] = 0;
       }*/
     //(Qt4) finally: add empty rows

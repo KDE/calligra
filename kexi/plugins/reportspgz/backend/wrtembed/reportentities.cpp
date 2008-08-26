@@ -85,7 +85,7 @@ void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElemen
         re = (ReportEntityChart*)item;
         break;
     default:
-        kDebug() << "ReportEntity::buildXML(): unrecognized rtti type" << item->type() << endl;
+        kDebug() << "ReportEntity::buildXML(): unrecognized rtti type" << item->type();
     };
 
     if (re != NULL) {
@@ -95,7 +95,7 @@ void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElemen
 
 void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect)
 {
-    kDebug() << "Saving Rect " << rect << endl;
+    kDebug() << "Saving Rect " << rect;
     QDomElement element = doc.createElement("rect");
 
     QDomElement x = doc.createElement("x");

@@ -100,7 +100,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
             } else
                 delete sd;
         }
-        kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName() <<  endl;
+        kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
     }
 
     _valid = true;

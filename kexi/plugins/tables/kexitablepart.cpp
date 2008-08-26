@@ -57,7 +57,7 @@ KexiTablePart::KexiTablePart(QObject *parent, const QStringList &l)
         : KexiPart::Part((int)KexiPart::TableObjectType, parent, l)
         , d(new Private())
 {
-    kDebug() << "KexiTablePart::KexiTablePart()" << endl;
+    kDebug() << "KexiTablePart::KexiTablePart()";
     setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                                    "Use '_' character instead of spaces. First character should be a..z character. "
@@ -107,7 +107,7 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
     = static_cast<KexiTablePart::TempData*>(window->data());
     if (!temp->table) {
         temp->table = win->project()->dbConnection()->tableSchema(item.name());
-        kDebug() << "KexiTablePart::execute(): schema is " << temp->table << endl;
+        kDebug() << "KexiTablePart::execute(): schema is " << temp->table;
     }
 
     if (viewMode == Kexi::DesignViewMode) {
@@ -267,7 +267,7 @@ KexiTableDataSource::~KexiTableDataSource()
 KexiDB::FieldList *
 KexiTableDataSource::fields(KexiProject *project, const KexiPart::Item &it)
 {
-    kDebug() << "KexiTableDataSource::fields(): " << it.name() << endl;
+    kDebug() << "KexiTableDataSource::fields(): " << it.name();
     return project->dbConnection()->tableSchema(it.name());
 }
 

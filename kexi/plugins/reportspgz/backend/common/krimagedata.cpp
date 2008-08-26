@@ -46,7 +46,7 @@ KRImageData::KRImageData(QDomNode & element)
                 if (n == "controlsource") {
                     _controlSource->setValue(node.firstChild().nodeValue());
                 } else {
-                    kDebug() << "while parsing field data, encountered unknown element: " << n << endl;
+                    kDebug() << "while parsing field data, encountered unknown element: " << n;
                 }
             }
         } else if (n == "name") {
@@ -58,7 +58,7 @@ KRImageData::KRImageData(QDomNode & element)
         } else if (n == "map") {
             // should read the format in but it will just be reset by the setImageData
             // method
-            kDebug() << "Loading Image Data" << endl;
+            kDebug() << "Loading Image Data";
             setInlineImageData(node.firstChild().nodeValue().toLatin1());
         } else if (n == "rect") {
             QDomNodeList rnl = node.childNodes();
@@ -79,13 +79,13 @@ KRImageData::KRImageData(QDomNode & element)
                     h = node.firstChild().nodeValue().toFloat();
                     h = ((h - (int) h) < 0.5 ? (int) h : (int) h + 1);
                 } else {
-                    kDebug() << "While parsing rect encountered unknown element: " << n << endl;
+                    kDebug() << "While parsing rect encountered unknown element: " << n;
                 }
             }
             _pos.setPointPos(QPointF(x, y));
             _size.setPointSize(QSizeF(w, h));
         } else {
-            kDebug() << "while parsing image element encountered unknown element: " << n << endl;
+            kDebug() << "while parsing image element encountered unknown element: " << n;
         }
     }
 }

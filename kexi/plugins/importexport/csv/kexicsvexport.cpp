@@ -116,7 +116,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
         buffer.reserve(bufSize);
         if ((uint)buffer.capacity() < bufSize) {
             kWarning() << "KexiCSVExportWizard::exportData() cannot allocate memory for " << bufSize
-            << " characters" << endl;
+            << " characters";
             return false;
         }
     } else {
@@ -124,7 +124,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
             stream = predefinedTextStream;
         } else {
             if (options.fileName.isEmpty()) {//sanity
-                kWarning() << "KexiCSVExportWizard::exportData(): fname is empty" << endl;
+                kWarning() << "KexiCSVExportWizard::exportData(): fname is empty";
                 return false;
             }
             kSaveFile = new KSaveFile(options.fileName);
@@ -133,7 +133,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
                 stream = kSaveFileTextStream;
             }
             if (QFile::NoError != kSaveFile->error() || !stream) {//sanity
-                kWarning() << "KexiCSVExportWizard::exportData(): status != 0 or stream == 0" << endl;
+                kWarning() << "KexiCSVExportWizard::exportData(): status != 0 or stream == 0";
 //! @todo show error
                 delete kSaveFileTextStream;
                 delete kSaveFile;

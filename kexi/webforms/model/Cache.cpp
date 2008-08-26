@@ -46,13 +46,13 @@ Cache* Cache::getInstance() {
 bool Cache::updateCachedPkeys(const QString& requestedTable) {
     // FIXME: Check for errors
     if (cachedPkeys[requestedTable].isEmpty()) {
-        kDebug() << "Cached Pkeys is empty, updating" << endl;
+        kDebug() << "Cached Pkeys is empty, updating";
         KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
         KexiDB::QuerySchema idSchema;
         idSchema.addField(tableSchema.primaryKey()->field(0));
         KexiDB::Cursor* cursor = gConnection->executeQuery(idSchema);
         while (cursor->moveNext()) {
-            kDebug() << "Appending " << cursor->value(0).toUInt() << " to cache" << endl;
+            kDebug() << "Appending " << cursor->value(0).toUInt() << " to cache";
             cachedPkeys[requestedTable].append(cursor->value(0).toUInt());
         }
         if (cursor) {

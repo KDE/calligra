@@ -19,7 +19,7 @@ Q3CString prgname;
 
 int main(int argc, char **argv)
 {
-    kDebug() << "main()" << endl;
+    kDebug() << "main()";
     QFileInfo info = QFileInfo(argv[0]);
     prgname = info.baseName().toLatin1();
     KComponentData componentData(prgname);
@@ -31,18 +31,18 @@ int main(int argc, char **argv)
 
     KexiDB::DriverManager manager; // = KexiDB::DriverManager::self();
     QStringList names = manager.driverNames();
-    kDebug() << "DRIVERS: " << endl;
+    kDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
-        kDebug() << *it << endl;
+        kDebug() << *it;
     if (manager.error()) {
-        kDebug() << manager.errorMsg() << endl;
+        kDebug() << manager.errorMsg();
         return 1;
     }
 
     //get driver
     KexiDB::Driver *driver = manager.driver(drv_name);
     if (!driver || manager.error()) {
-        kDebug() << manager.errorMsg() << endl;
+        kDebug() << manager.errorMsg();
         return 1;
     }
 
@@ -52,15 +52,15 @@ int main(int argc, char **argv)
 
     KexiDB::Connection *conn = driver->createConnection(conn_data);
     if (!conn || driver->error()) {
-        kDebug() << "error: " << driver->errorMsg() << endl;
+        kDebug() << "error: " << driver->errorMsg();
         return 1;
     }
     if (!conn->connect()) {
-        kDebug() << "error: " << conn->errorMsg() << endl;
+        kDebug() << "error: " << conn->errorMsg();
         return 1;
     }
     if (!conn->useDatabase(db_name)) {
-        kDebug() << "error: " << conn->errorMsg() << endl;
+        kDebug() << "error: " << conn->errorMsg();
         return 1;
     }
 
@@ -73,24 +73,24 @@ int main(int argc, char **argv)
         parser->parse(cmd.c_str());
         switch (parser->operation()) {
         case KexiDB::Parser::OP_Error:
-            kDebug() << "***********************" << endl;
-            kDebug() << "* error               *" << endl;
-            kDebug() << "***********************" << endl;
+            kDebug() << "***********************";
+            kDebug() << "* error               *";
+            kDebug() << "***********************";
             break;
         case KexiDB::Parser::OP_CreateTable: {
-            kDebug() << "Schema of table: " << parser->table()->name() << endl;
+            kDebug() << "Schema of table: " << parser->table()->name();
             parser->table()->debug();
             break;
         }
         case KexiDB::Parser::OP_Select: {
-            kDebug() << "Select statement: " << endl;
+            kDebug() << "Select statement: ";
             KexiDB::QuerySchema *q = parser->query();
             q->debug();
             delete q;
             break;
         }
         default:
-            kDebug() << "main(): not implemented in main.cpp" << endl;
+            kDebug() << "main(): not implemented in main.cpp";
 
 
         }

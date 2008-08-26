@@ -121,7 +121,7 @@ QSize KexiFieldListView::sizeHint()
 {
     QFontMetrics fm(font());
 
-    kDebug() << m_table->name() << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table->name() + "  ") << endl;
+    kDebug() << m_table->name() << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table->name() + "  ");
 
     QSize s(
         qMax(columnWidth(1) + fm.width("i"), fm.width(m_table->name() + "  ")),

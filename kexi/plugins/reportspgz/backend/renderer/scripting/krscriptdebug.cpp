@@ -32,7 +32,7 @@ KRScriptDebug::~KRScriptDebug()
 
 void KRScriptDebug::print(const QString& s)
 {
-    kDebug() << s << endl;
+    kDebug() << s;
 }
 
 

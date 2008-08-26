@@ -190,7 +190,7 @@ void KexiFindDialog::setCurrentLookInColumnName(const QString& columnName)
         if (index == -1) {
             kWarning() << QString(
                 "KexiFindDialog::setCurrentLookInColumn(%1) column name not found on the list")
-            .arg(columnName) << endl;
+            .arg(columnName);
             return;
         }
         index = index + 1/*"(All fields)"*/ + 1/*"(Current field)"*/;

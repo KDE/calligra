@@ -114,13 +114,13 @@ bool KexiDBCursor::setValue(uint index, QVariant value)
 {
     ::KexiDB::QuerySchema* query = m_cursor->query();
     if (! query) {
-        kDebug() << "Invalid query in KexiDBCursor::setValue index=" << index << " value=" << value << endl;
+        kDebug() << "Invalid query in KexiDBCursor::setValue index=" << index << " value=" << value;
         return false;
     }
 
     ::KexiDB::QueryColumnInfo* column = query->fieldsExpanded().at(index);
     if (! column) {
-        kDebug() << "Invalid column in KexiDBCursor::setValue index=" << index << " value=" << value << endl;
+        kDebug() << "Invalid column in KexiDBCursor::setValue index=" << index << " value=" << value;
         return false;
     }
 

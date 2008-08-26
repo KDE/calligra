@@ -90,7 +90,7 @@ QString KexiTextFormatter::valueToText(const QVariant& value, const QString& add
         QStringList sl = QStringList::split(".", text);
         //nothing
     } else if (sl.count() == 2) {
-//    kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1] << endl;
+//    kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1];
         const QString sl1 = sl[1];
         int pos = sl1.length() - 1;
         if (pos >= 1) {

@@ -32,7 +32,7 @@ OraclePreparedStatement::OraclePreparedStatement(
 #endif
  , m_resetRequired(false)
 {
-	KexiDBDrvDbg << "OraclePreparedStatement: Construction" << endl;
+	KexiDBDrvDbg << "OraclePreparedStatement: Construction";
 }
 
 
@@ -42,7 +42,7 @@ OraclePreparedStatement::~OraclePreparedStatement()
 
 bool OraclePreparedStatement::execute()
 {
-	KexiDBDrvDbg << "OraclePreparedStatement::execute()" << endl;
+	KexiDBDrvDbg << "OraclePreparedStatement::execute()";
 	m_resetRequired = true;
 	if (m_conn->insertRecord(*m_fields, m_args)) {
 		return true;

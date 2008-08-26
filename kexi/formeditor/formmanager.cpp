@@ -489,7 +489,7 @@ void
 FormManager::windowChanged(QWidget *w)
 {
     kDebug() << "FormManager::windowChanged("
-    << (w ? (QString(w->metaObject()->className()) + " " + w->objectName()) : QString("0")) << ")" << endl;
+    << (w ? (QString(w->metaObject()->className()) + " " + w->objectName()) : QString("0")) << ")";
 
     if (!w) {
         m_active = 0;
@@ -513,7 +513,7 @@ FormManager::windowChanged(QWidget *w)
             // m_propList->setCollection(form->pixmapCollection());
 
             kDebug() << "FormManager::windowChanged() active form is "
-            << form->objectTree()->name() << endl;
+            << form->objectTree()->name();
 
             if (m_collection) {
 #ifndef KFD_NO_STYLES
@@ -526,7 +526,7 @@ FormManager::windowChanged(QWidget *w)
                 QStringList::ConstIterator endIt = styles.constEnd();
                 for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx) {
                     if ((*it).toLower() == currentStyle) {
-                        kDebug() << "Updating the style to " << currentStyle << endl;
+                        kDebug() << "Updating the style to " << currentStyle;
                         style->setCurrentItem(idx);
                         break;
                     }
@@ -551,9 +551,9 @@ FormManager::windowChanged(QWidget *w)
     }
 
     for (form = m_preview.first(); form; form = m_preview.next()) {
-        kDebug() << (form->widget() ? form->widget()->objectName() : "") << endl;
+        kDebug() << (form->widget() ? form->widget()->objectName() : "");
         if (form->toplevelContainer() && form->widget() == w) {
-            kDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->objectName() << endl;
+            kDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->objectName();
 
             if (m_collection) {
 #ifndef KFD_NO_STYLES
@@ -566,7 +566,7 @@ FormManager::windowChanged(QWidget *w)
                 QStringList::ConstIterator endIt = styles.constEnd();
                 for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx) {
                     if ((*it).toLower() == currentStyle) {
-                        kDebug() << "Updating the style to " << currentStyle << endl;
+                        kDebug() << "Updating the style to " << currentStyle;
                         style->setCurrentItem(idx);
                         break;
                     }
@@ -703,7 +703,7 @@ FormManager::isTopLevel(QWidget *w)
         return false;
 
 // kDebug() << "FormManager::isTopLevel(): for: " << w->objectName() << " = "
-//  << activeForm()->objectTree()->lookup(w->name())<< endl;
+//  << activeForm()->objectTree()->lookup(w->name());
 
     ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->objectName());
     if (!item)
@@ -1043,7 +1043,7 @@ FormManager::menuSignalChosen(QAction* action)
         else {
             m_connection->setSlot(action->text());
             kDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
-            "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot() << endl;
+            "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot();
             emit connectionCreated(activeForm(), *m_connection);
             stopCreatingConnection();
         }
@@ -1111,7 +1111,7 @@ FormManager::createLayout(int layoutType)
     WidgetList *list = m_active->selectedWidgets();
     // if only one widget is selected (a container), we modify its layout
     if (list->isEmpty()) {//sanity check
-        kWarning() << "FormManager::createLayout(): list is empty!" << endl;
+        kWarning() << "FormManager::createLayout(): list is empty!";
         return;
     }
     if (list->count() == 1) {
@@ -1124,11 +1124,11 @@ FormManager::createLayout(int layoutType)
 
     QWidget *parent = list->first()->parentWidget();
     for (QWidget *w = list->first(); w; w = list->next()) {
-        kDebug() << "comparing widget " << w->objectName() << " whose parent is " << w->parentWidget()->objectName() << " insteaed of " << parent->objectName() << endl;
+        kDebug() << "comparing widget " << w->objectName() << " whose parent is " << w->parentWidget()->objectName() << " insteaed of " << parent->objectName();
         if (w->parentWidget() != parent) {
             KMessageBox::sorry(m_active->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
                                "All selected widgets must have the same parent."));
-            kDebug() << "FormManager::createLayout() widgets don't have the same parent widget" << endl;
+            kDebug() << "FormManager::createLayout() widgets don't have the same parent widget";
             return;
         }
     }
@@ -1267,7 +1267,7 @@ FormManager::alignWidgets(int type)
 
     for (QWidget *w = activeForm()->selectedWidgets()->first(); w; w = activeForm()->selectedWidgets()->next()) {
         if (w->parentWidget() != parentWidget) {
-            kDebug() << "FormManager::alignWidgets() type ==" << type <<  " widgets don't have the same parent widget" << endl;
+            kDebug() << "FormManager::alignWidgets() type ==" << type <<  " widgets don't have the same parent widget";
             return;
         }
     }

@@ -166,7 +166,7 @@ void render3of9(OROPage * page, const QRectF & r, const QString & _str, int alig
         // loop through each char and render the barcode
         QChar c = str.at(i);
         int idx = codeIndex(c);
-        kDebug() << idx << endl;
+        kDebug() << idx;
         if (idx == -1) {
             qDebug("Encountered a non-compliant character while rendering a 3of9 barcode -- skipping");
             continue;
@@ -175,7 +175,7 @@ void render3of9(OROPage * page, const QRectF & r, const QString & _str, int alig
         bool space = false;
         for (int b = 0; b < 9; b++, space = !space) {
             qreal w = (_3of9codes[idx].values[b] == 1 ? narrow_bar * bar_width_mult : narrow_bar);
-            kDebug() << w << space << endl;
+            kDebug() << w << space;
             if (!space) {
                 ORORect * rect = new ORORect();
                 rect->setPen(pen);

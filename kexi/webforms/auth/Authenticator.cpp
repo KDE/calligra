@@ -58,7 +58,7 @@ bool Authenticator::loadStore() {
 
     if (!table) {
         // the table doesn't exist, create it
-        kDebug() << "kexi__users table does not exist, creating it" << endl;
+        kDebug() << "kexi__users table does not exist, creating it";
         KexiDB::TableSchema* kexi__users = new KexiDB::TableSchema("kexi__users");
         kexi__users->setNative(true);
         KexiDB::Field* id = new KexiDB::Field("u_id", KexiDB::Field::Integer);
@@ -82,8 +82,8 @@ bool Authenticator::loadStore() {
 
         if (!KexiWebForms::Model::gConnection->createTable(kexi__users)) {
             // Table was not created, fatal error
-            kError() << "Failed to create system table kexi__users" << endl;
-            kError() << "Error string: " << KexiWebForms::Model::gConnection->errorMsg() << endl;
+            kError() << "Failed to create system table kexi__users";
+            kError() << "Error string: " << KexiWebForms::Model::gConnection->errorMsg();
             delete kexi__users;
             return false;
         } else {
@@ -95,7 +95,7 @@ bool Authenticator::loadStore() {
             // root
             QVariant vtrue(true);
             QVariant vfalse(false);
-            kDebug() << "Creating user root with password root" << endl;
+            kDebug() << "Creating user root with password root";
             QVariant user_root("root");
             QVariant password_root("root");
             editBuffer.insert(*query.columnInfo(name->name()), user_root);
@@ -105,19 +105,19 @@ bool Authenticator::loadStore() {
             editBuffer.insert(*query.columnInfo(update->name()), vtrue);
             editBuffer.insert(*query.columnInfo(fdelete->name()), vtrue);
             editBuffer.insert(*query.columnInfo(fquery->name()), vtrue);
-            kDebug() << "Registering user within database" << endl;
+            kDebug() << "Registering user within database";
             if (cursor->insertRow(recordData, editBuffer)) {
-                kDebug() << "Succeeded" << endl;
+                kDebug() << "Succeeded";
                 User* u = new User("root", "root");
                 m_users.append(*u);
                 m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
             } else {
-                kError() << "An error occurred" << endl;
+                kError() << "An error occurred";
                 return false;
             }
 
             // anonymous
-            kDebug() << "Creating user anonymous with password guest" << endl;
+            kDebug() << "Creating user anonymous with password guest";
             QVariant user_anonymous("anonymous");
             QVariant password_anonymous("guest");
             editBuffer.insert(*query.columnInfo(name->name()), user_anonymous);
@@ -128,12 +128,12 @@ bool Authenticator::loadStore() {
             editBuffer.insert(*query.columnInfo(fdelete->name()), vfalse);
             editBuffer.insert(*query.columnInfo(fquery->name()), vfalse);
             if (cursor->insertRow(recordData, editBuffer)) {
-                kDebug() << "Succeeded" << endl;
+                kDebug() << "Succeeded";
                 User* u = new User("anonymous", "guest");
                 m_users.append(*u);
                 m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
             } else {
-                kError() << "An error occurred" << endl;
+                kError() << "An error occurred";
                 return false;
             }
             KexiWebForms::Model::gConnection->deleteCursor(cursor);
@@ -158,7 +158,7 @@ bool Authenticator::loadStore() {
             User* u = new User(*username, *password, *perms);
             m_users.append(*u);
             m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
-            kDebug() << "Loaded user " << *username << " from store" << endl;
+            kDebug() << "Loaded user " << *username << " from store";
         }
     }
 

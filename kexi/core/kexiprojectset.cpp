@@ -66,7 +66,7 @@ KexiProjectSet::KexiProjectSet(KexiDB::ConnectionData &conndata,
         return;
     }
     QStringList dbnames = conn->databaseNames(false/*skip system*/);
-// kexidbg << dbnames.count() << endl;
+// kexidbg << dbnames.count();
     if (conn->error()) {
         setError(conn);
         delete conn;

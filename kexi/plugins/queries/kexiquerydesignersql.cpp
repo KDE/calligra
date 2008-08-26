@@ -362,7 +362,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
       if(parser->operation() == KexiDB::Parser::OP_Error)
       {
         d->history->addEvent(getQuery(), false, parser->error().error());
-        kDebug() << "KexiQueryDesignerSQLView::beforeSwitchTo(): syntax error!" << endl;
+        kDebug() << "KexiQueryDesignerSQLView::beforeSwitchTo(): syntax error!";
         return false;
       }
       delete parser;
@@ -377,7 +377,7 @@ tristate KexiQueryDesignerSQLView::beforeSwitchTo(Kexi::ViewMode mode, bool &don
 tristate
 KexiQueryDesignerSQLView::afterSwitchFrom(Kexi::ViewMode mode)
 {
-    kDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()" << endl;
+    kDebug() << "KexiQueryDesignerSQLView::afterSwitchFrom()";
 // if (mode==Kexi::DesignViewMode || mode==Kexi::DataViewMode) {
     if (mode == Kexi::NoViewMode) {
         //User opened text view _directly_.
@@ -434,7 +434,7 @@ bool KexiQueryDesignerSQLView::slotCheckQuery()
         return true;
     }
 
-    kDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()" << endl;
+    kDebug() << "KexiQueryDesignerSQLView::slotCheckQuery()";
     //KexiQueryPart::TempData * temp = tempData();
     KexiDB::Parser *parser = KexiMainWindowIface::global()->project()->sqlParser();
     const bool ok = parser->parse(sqlText);

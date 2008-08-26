@@ -454,7 +454,7 @@ StdWidgetFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
         setObjectName(n);
         return w;
     }
-    kDebug() << "WARNING :: w == 0 "  << endl;
+    kDebug() << "WARNING :: w == 0 ";
     return 0;
 }
 

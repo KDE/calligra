@@ -250,7 +250,7 @@ void KexiStartupDialog::done(int r)
     if (d->result != -1) //already done!
         return;
 
-// kDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
+// kDebug() << "KexiStartupDialog::done(" << r << ")";
 // updateSelectedTemplateKeyInfo();
 
     if (r == QDialog::Rejected) {
@@ -579,7 +579,7 @@ void KexiStartupDialog::updateDialogOKButton(KPageWidgetItem *pageWidgetItem)
 //kde4   ? !d->openExistingFileWidget->selectedFile().isEmpty()
             ? !d->openExistingFileWidget->highlightedFile().isEmpty()
             : (bool)d->openExistingConnWidget->selectedConnectionData();
-//kexidbg << d->openExistingFileWidget->selectedFile() << "--------------" <<endl;
+//kexidbg << d->openExistingFileWidget->selectedFile() << "--------------";
     } else if (pageWidgetItem == d->pageOpenRecent) {
         enable = (d->prj_selector->selectedProjectData() != 0);
     }
@@ -603,7 +603,7 @@ void KexiStartupDialog::setupPageOpenExisting()
     QString recentDirClass;
     KFileWidget::getStartUrl(KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
                              recentDirClass);
-    kexidbg << recentDirClass << endl;
+    kexidbg << recentDirClass;
 
     d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet,
             "kfiledialog:///OpenExistingOrCreateNewProject", KAbstractFileWidget::Opening,
@@ -642,7 +642,7 @@ void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataL
 
 void KexiStartupDialog::slotOk()
 {
-// kDebug()<<"KexiStartupDialog::slotOk()"<<endl;
+// kDebug()<<"KexiStartupDialog::slotOk()";
     if (currentPage() == d->pageOpenExisting) {
 #ifdef __GNUC__
 #warning UNUSED? KFileWidget  if (d->openExistingFileDlg) {
@@ -670,13 +670,13 @@ void KexiStartupDialog::slotOk()
 
 void KexiStartupDialog::showSimpleConnForOpenExisting()
 {
-// kDebug() << "simple" << endl;
+// kDebug() << "simple";
     d->openExistingConnWidget->showSimpleConn();
 }
 
 void KexiStartupDialog::showAdvancedConnForOpenExisting()
 {
-// kDebug() << "adv" << endl;
+// kDebug() << "adv";
     d->openExistingConnWidget->showAdvancedConn();
 }
 
@@ -697,7 +697,7 @@ KexiDB::ConnectionData* KexiStartupDialog::selectedExistingConnection() const
 
 void KexiStartupDialog::existingFileHighlighted()
 {
-    kexidbg << "KexiStartupDialog::existingFileHighlighted(): " << endl;
+    kexidbg << "KexiStartupDialog::existingFileHighlighted(): ";
     //d->existingUrlToOpen = KUrl(fileName);
     updateDialogOKButton(0);
 }
@@ -754,10 +754,10 @@ bool KexiStartupDialog::eventFilter(QObject *o, QEvent *e)
 /*int KexiStartupDialog::activePageIndex() const
 {
   if (!d->singlePage) {
-//  kDebug() << "int KexiStartupDialog::activePageIndex()" << KDialog::activePageIndex() << endl;
+//  kDebug() << "int KexiStartupDialog::activePageIndex()" << KDialog::activePageIndex();
     return KDialog::activePageIndex();
   }
-  kDebug() << "int KexiStartupDialog::activePageIndex() == " << 0 << endl;
+  kDebug() << "int KexiStartupDialog::activePageIndex() == " << 0;
   return 0; //there is always "plain page" #0 selected
 }*/
 

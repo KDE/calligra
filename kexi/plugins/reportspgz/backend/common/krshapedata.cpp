@@ -38,7 +38,7 @@ KRShapeData::KRShapeData(QDomNode & element)
         if (n == "name") {
             _name->setValue(node.firstChild().nodeValue());
         } else {
-            kDebug() << "while parsing label element encountered unknow element: " << n << endl;
+            kDebug() << "while parsing label element encountered unknow element: " << n;
         }
     }
 }

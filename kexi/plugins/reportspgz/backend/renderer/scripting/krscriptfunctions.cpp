@@ -53,7 +53,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
         sql += " WHERE(" + _where + ")";
     }
 
-    kDebug() << sql << endl;
+    kDebug() << sql;
     KexiDB::Cursor *curs = _conn->executeQuery(sql);
 
     if (curs) {
@@ -94,7 +94,7 @@ QVariant KRScriptFunctions::value(const QString &field)
 {
     QVariant val;
     if (!_curs) {
-        kDebug() << "No cursor to get value of field " << field << endl;
+        kDebug() << "No cursor to get value of field " << field;
         return val;
     }
 

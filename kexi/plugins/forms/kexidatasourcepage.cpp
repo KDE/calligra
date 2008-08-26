@@ -407,7 +407,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
         m_objectInfoLabel, propertySet);
 
     const bool isForm = objectClassName == "KexiDBForm";
-// kDebug() << "objectClassName=" << objectClassName << endl;
+// kDebug() << "objectClassName=" << objectClassName;
 // {
     /*  //this is top level form's surface: data source means table or query
         QCString dataSourceMimeType, dataSource;

@@ -81,14 +81,14 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 
     _action->setCode((_data->script() + "\n" + fieldFunctions()).toLocal8Bit());
 
-    kDebug() << _action->code() << endl;
+    kDebug() << _action->code();
 
     _action->trigger();
 
     if (_action->hadError()) {
         KMessageBox::error(0, _action->errorMessage());
     } else {
-        kDebug() << "Function Names:" << _action->functionNames() << endl;
+        kDebug() << "Function Names:" << _action->functionNames();
     }
 }
 
@@ -185,6 +185,6 @@ QString KRScriptHandler::where()
         ++i;
     }
     w = w.mid(0, w.length() - 4);
-    kDebug() << w << endl;
+    kDebug() << w;
     return w;
 }

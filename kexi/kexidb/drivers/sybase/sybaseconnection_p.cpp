@@ -72,7 +72,7 @@ SybaseConnectionInternal::~SybaseConnectionInternal()
 
 void SybaseConnectionInternal::storeResult()
 {
-    //KexiDBDrvDbg << "Store Result!!" << endl;
+    //KexiDBDrvDbg << "Store Result!!";
     // all message numbers and message texts were handled in the messageHandler
     // so don't do anything here
 }
@@ -109,7 +109,7 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
     // set message handler
     dbmsghandle(connectionMessageHandler);
 
-    KexiDBDrvDbg << "SybaseConnectionInternal::connect()" << endl;
+    KexiDBDrvDbg << "SybaseConnectionInternal::connect()";
     QByteArray localSocket;
     QString hostName = data.hostName;
 
@@ -227,7 +227,7 @@ bool SybaseConnectionInternal::db_disconnect()
 
     dbclose(dbProcess);
     dbProcess = 0;
-    KexiDBDrvDbg << "SybaseConnection::disconnect()" << endl;
+    KexiDBDrvDbg << "SybaseConnection::disconnect()";
     return true;
 }
 

@@ -73,7 +73,7 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
     Q_UNUSED(item);
     Q_UNUSED(window);
 
-    kDebug() << "KexiQueryPart::createView()" << endl;
+    kDebug() << "KexiQueryPart::createView()";
 
     KexiView* view = 0;
     if (viewMode == Kexi::DataViewMode) {

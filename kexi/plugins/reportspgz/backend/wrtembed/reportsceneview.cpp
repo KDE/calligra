@@ -69,6 +69,6 @@ void ReportSceneView::mouseReleaseEvent(QMouseEvent * e)
 
 QSize ReportSceneView::sizeHint() const
 {
-    //kDebug() <<  scene()->width() << "x" << scene()->height() << endl;
+    //kDebug() <<  scene()->width() << "x" << scene()->height();
     return QSize(scene()->width(), scene()->height());
 }

@@ -46,7 +46,7 @@ orQuery::orQuery(const QString &qstrPName, const QString &qstrSQL,
     qstrName  = qstrPName;
     qstrQuery = qstrSQL;
 
-    kDebug() << qstrName << ":" << qstrQuery << endl;
+    kDebug() << qstrName << ":" << qstrQuery;
 
     //For now, lets assume we only support simple tables or queries
     if (doexec) {
@@ -69,20 +69,20 @@ bool orQuery::execute()
         if (qstrQuery.isEmpty()) {
             qryQuery = _database->executeQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
         } else if (_database->tableSchema(qstrQuery)) {
-            kDebug() << qstrQuery <<  " is a table.." << endl;
+            kDebug() << qstrQuery <<  " is a table..";
             qryQuery = _database->executeQuery(* (_database->tableSchema(qstrQuery)), 1);
             _schema = new KexiDB::TableOrQuerySchema(_database->tableSchema(qstrQuery));
         } else if (_database->querySchema(qstrQuery)) {
-            kDebug() << qstrQuery <<  " is a query.." << endl;
+            kDebug() << qstrQuery <<  " is a query..";
             qryQuery = _database->executeQuery(* (_database->querySchema(qstrQuery)), 1);
-            kDebug() << "...got test result" << endl;
+            kDebug() << "...got test result";
             _schema = new KexiDB::TableOrQuerySchema(_database->querySchema(qstrQuery));
-            kDebug() << "...got schema" << endl;
+            kDebug() << "...got schema";
 
         }
 
         if (qryQuery) {
-            kDebug() << "Moving to first row.." << endl;
+            kDebug() << "Moving to first row..";
             return qryQuery->moveFirst();
         } else
             return false;
@@ -141,7 +141,7 @@ const QString &orData::getValue()
     if (_valid && qryThis->getQuery()) {
         qstrValue = qryThis->getQuery()->value(qryThis->fieldNumber(qstrField)).toString();
     } else {
-        kDebug() << "Not Valid" << endl;
+        kDebug() << "Not Valid";
     }
     return qstrValue;
 }

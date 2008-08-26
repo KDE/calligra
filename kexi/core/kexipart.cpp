@@ -188,7 +188,7 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
 {
     GUIClient *instanceGuiClient = d->instanceGuiClients.value((int)mode);
     if (!instanceGuiClient) {
-        kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+        kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!";
         return 0;
     }
     return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name,
@@ -221,7 +221,7 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
 {
   GUIClient *instanceGuiClient = d->instanceGuiClients[mode];
   if (!instanceGuiClient) {
-    kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+    kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!";
     return 0;
   }
   return instanceGuiClient->actionCollection()->action(name, classname);
@@ -325,7 +325,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
             window->close();
             delete window;
             kexiwarn << "Part::openInstance() !window, cannot switch to a view mode " <<
-            Kexi::nameForViewMode(viewMode) << endl;
+            Kexi::nameForViewMode(viewMode);
             return 0;
         }
         //the window has an error info
@@ -339,7 +339,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         window->close();
         delete window;
         kexiwarn << "Part::openInstance() !window, switching to view mode failed, " <<
-        Kexi::nameForViewMode(viewMode) << endl;
+        Kexi::nameForViewMode(viewMode);
         return 0;
     }
     window->registerWindow(); //ok?
@@ -361,7 +361,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         window->selectedView()->setDirty(
             internalPropertyValue("newObjectsAreDirty", false).toBool() ? item.neverSaved() : false);
 
-    kexidbg << "Part::openInstance() window returned." << endl;
+    kexidbg << "Part::openInstance() window returned.";
     return window;
 }
 

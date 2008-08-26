@@ -126,7 +126,7 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
             --i; --p;
             const int percent = line.toInt(&ok);
             if (ok && percent >= 0 && percent <= 100 && pd->progressBar()->value() < percent) {
-//    kDebug() << percent << endl;
+//    kDebug() << percent;
                 pd->progressBar()->setValue(percent);
                 qApp->processEvents(QEventLoop::AllEvents, 100);
             }
@@ -413,9 +413,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
         }
     }
 
-    /* kDebug() << "ARGC==" << args->count() << endl;
+    /* kDebug() << "ARGC==" << args->count();
       for (int i=0;i<args->count();i++) {
-        kDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
+        kDebug() << "ARG" <<i<< "= " << args->arg(i);
       }*/
 
     if (m_forcedUserMode && m_forcedDesignMode) {
@@ -675,11 +675,11 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
             m_action = CreateFromTemplate;
             return true;
         } else if (r == KexiStartupDialog::OpenExistingResult) {
-//   kDebug() << "Existing project --------" << endl;
+//   kDebug() << "Existing project --------";
             const QString selFile(d->startupDialog->selectedFileName());
             if (!selFile.isEmpty()) {
                 //file-based project
-//    kDebug() << "Project File: " << selFile << endl;
+//    kDebug() << "Project File: " << selFile;
                 cdata.setFileName(selFile);
                 QString detectedDriverName;
                 const tristate res = detectActionForFile(m_importActionData, detectedDriverName,
@@ -697,7 +697,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 m_projectData = new KexiProjectData(cdata, selFile);
             } else if (d->startupDialog->selectedExistingConnection()) {
 //    kDebug() << "Existing connection: " <<
-//     d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
+//     d->startupDialog->selectedExistingConnection()->serverInfoString();
                 KexiDB::ConnectionData *cdata = d->startupDialog->selectedExistingConnection();
                 //ok, now we will try to show projects for this connection to the user
                 bool cancelled;
@@ -711,11 +711,11 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
                 d->startupDialog = 0;
             }
         } else if (r == KexiStartupDialog::OpenRecentResult) {
-//   kDebug() << "Recent project --------" << endl;
+//   kDebug() << "Recent project --------";
             const KexiProjectData *data = d->startupDialog->selectedProjectData();
             if (data) {
 //    kDebug() << "Selected project: database=" << data->databaseName()
-//     << " connection=" << data->constConnectionData()->serverInfoString() << endl;
+//     << " connection=" << data->constConnectionData()->serverInfoString();
             }
 //! @todo
             return data != 0;
@@ -764,7 +764,7 @@ tristate KexiStartupHandler::detectActionForFile(
         ptr = KMimeType::findByFileContent(dbFileName);
         mimename = ptr.data() ? ptr.data()->name() : QString();
         kDebug() << "KexiStartupHandler::detectActionForFile(): found mime is: "
-        << mimename << endl;
+        << mimename;
         if (mimename.isEmpty() || mimename == "application/octet-stream" || mimename == "text/plain") {
             //try by URL:
             ptr = KMimeType::findByUrl(KUrl::fromPath(dbFileName));
@@ -839,7 +839,7 @@ tristate KexiStartupHandler::detectActionForFile(
     } else {//use suggested driver
         detectedDriverName = suggestedDriverName;
     }
-// kDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
+// kDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName;
 //hardcoded for convenience:
     const QString newFileFormat = "SQLite3";
 
@@ -853,7 +853,7 @@ tristate KexiStartupHandler::detectActionForFile(
                         detectedDriverName, QDir::convertSeparators(dbFileName), newFileFormat))) {
         SQLite2ToSQLite3Migration migr(finfo.absoluteFilePath());
         tristate res = migr.run();
-//  kDebug() << "--- migr.run() END ---" <<endl;
+//  kDebug() << "--- migr.run() END ---";
         if (!res) {
             //TODO msg
             KMessageBox::sorry(parent, i18n(

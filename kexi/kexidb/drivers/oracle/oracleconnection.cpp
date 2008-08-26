@@ -94,7 +94,7 @@ Cursor* OracleConnection::prepareQuery(QuerySchema& query, uint cursor_options )
 */
 bool OracleConnection::drv_getDatabasesList( QStringList &list )
 {
-	KexiDBDrvDbg <<endl;
+	KexiDBDrvDbg;
 	QString user;
 	try{
 		d->rs=d->stmt->executeQuery("SELECT user FROM DUAL");
@@ -128,7 +128,7 @@ bool OracleConnection::drv_getDatabasesList( QStringList &list )
  * So,it returns true if dbName is the current Schema
  */
 bool OracleConnection::drv_createDatabase( const QString &dbName) {
-	KexiDBDrvDbg << dbName << endl;
+	KexiDBDrvDbg << dbName;
 	QString user;
   bool res;
 	try
@@ -143,7 +143,7 @@ bool OracleConnection::drv_createDatabase( const QString &dbName) {
 	}
 	catch (oracle::occi::SQLException ea)
 	{
-	  KexiDBDrvDbg << ea.what()<< endl;
+	  KexiDBDrvDbg << ea.what();
 	  d->errmsg=ea.what();
     d->errno=ea.getErrorCode();
 	  return false;
@@ -164,12 +164,12 @@ bool OracleConnection::drv_databaseExists
 		d->stmt->closeResultSet(d->rs);
 		d->rs=0;
 		res=!user.compare(dbName);
-	  //KexiDBDrvDbg << dbName <<":"<<res<< endl;
+	  //KexiDBDrvDbg << dbName <<":"<<res;
     return res;
 	}
 	catch ( oracle::occi::SQLException ea)
 	{
-	  KexiDBDrvDbg << ea.what()<< endl;
+	  KexiDBDrvDbg << ea.what();
 	  d->errmsg=ea.what();
     d->errno=ea.getErrorCode();
 	  return(false);
@@ -179,7 +179,7 @@ bool OracleConnection::drv_databaseExists
 bool OracleConnection::drv_useDatabase(const QString &dbName,
 																	 bool *cancelled, MessageHandler* msgHandler)
 {
-  KexiDBDrvDbg <<endl;
+  KexiDBDrvDbg;
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
 	
@@ -198,7 +198,7 @@ bool OracleConnection::drv_useDatabase(const QString &dbName,
  */
 bool OracleConnection::drv_closeDatabase()
 {
-  KexiDBDrvDbg <<endl;
+  KexiDBDrvDbg;
   active=false;
 	return true;
 }
@@ -209,7 +209,7 @@ bool OracleConnection::drv_closeDatabase()
  */
 bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
 {
-	//KexiDBDrvDbg <<endl;
+	//KexiDBDrvDbg;
 	QString drop[4];
 	drop[0]= "DECLARE\n";
 	drop[1]= "DECLARE\n";
@@ -255,7 +255,7 @@ bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
 	  }
 	  catch (oracle::occi::SQLException ea)
 	  {
-	    KexiDBDrvDbg <<ea.what()<<endl;
+	    KexiDBDrvDbg <<ea.what();
 	    d->errmsg=ea.what();
       d->errno=ea.getErrorCode();
       if(!d->errno==6550 && !d->errno==942) return false;//nothing to be dropped
@@ -283,7 +283,7 @@ bool OracleConnection::drv_setAutoCommit(bool on)
 {
 	try{
 	  d->stmt->setAutoCommit(on);
-	  KexiDBDrvDbg <<":true"<<endl;
+	  KexiDBDrvDbg <<":true";
 	  return true;
 	}catch ( oracle::occi::SQLException ea){
 	  KexiDBDrvDbg <<ea.what();
@@ -301,18 +301,18 @@ bool OracleConnection::drv_executeSQL( const QString& statement )
 bool OracleConnection::drv_createTable( const KexiDB::TableSchema& tableSchema )
 {
   QString tableName = tableSchema.name();
-  KexiDBDrvDbg << tableName << endl;
+  KexiDBDrvDbg << tableName;
   
   IndexSchema *ind; // Used to ask for the primary key
   QString sequenceName;
 	m_sql = createTableStatement(tableSchema);
-	//KexiDBDrvDbg <<m_sql<< endl;
+	//KexiDBDrvDbg <<m_sql;
  
 	if(d->executeSQL(m_sql))
 	{
 	  ind = tableSchema.primaryKey();
-    //KexiDBDrvDbg << "Number of fields in table: " << tableSchema.fieldCount() << endl;
-    //KexiDBDrvDbg << "Number of fields in pk: " << ind->fieldCount() << endl;
+    //KexiDBDrvDbg << "Number of fields in table: " << tableSchema.fieldCount();
+    //KexiDBDrvDbg << "Number of fields in pk: " << ind->fieldCount();
     // TODO: is it ok to check this way? Would it be better using fieldCount == 0 ?
     if(ind->isPrimaryKey())
     {
@@ -335,7 +335,7 @@ bool OracleConnection::drv_afterInsert(const QString& table, FieldList& fields)
 {
   Q_UNUSED(table);
   Q_UNUSED(fields);
-  //KexiDBDrvDbg << "Updating ROW_ID on " << table << endl;
+  //KexiDBDrvDbg << "Updating ROW_ID on " << table;
   QString stat=QString("UPDATE "+table
             +" SET ROW_ID=KEXI__SEQ__ROW_ID.NEXTVAL WHERE ROW_ID IS NULL");
   if(d->executeSQL(stat))
@@ -401,7 +401,7 @@ bool OracleConnection::drv_alterTableName
  */
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
 {
-  KexiDBDrvDbg << endl;
+  KexiDBDrvDbg;
   int res;
   try
   {
@@ -414,7 +414,7 @@ Q_ULLONG OracleConnection::drv_lastInsertRowID()
   }
   catch(oracle::occi::SQLException ea)
   {
-    KexiDBDrvDbg<<ea.what()<<endl;
+    KexiDBDrvDbg<<ea.what();
     d->errmsg=ea.what();
     d->errno=ea.getErrorCode();
     return -1;
@@ -448,7 +448,7 @@ QString OracleConnection::serverErrorMsg()
  */
 bool OracleConnection::drv_containsTable( const QString &tableName )
 {
-  KexiDBDrvDbg<<endl;
+  KexiDBDrvDbg;
 	bool success;
 	return resultExists(QString("SELECT TABLE_NAME FROM ALL_TABLES WHERE TABLE_NAME LIKE %1")
 		.arg(driver()->escapeString(tableName).upper()), success) && success;
@@ -459,7 +459,7 @@ bool OracleConnection::drv_containsTable( const QString &tableName )
  */
 bool OracleConnection::drv_getTablesList( QStringList &list )
 {
-  KexiDBDrvDbg<<endl;
+  KexiDBDrvDbg;
 	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery( "SELECT TABLE_NAME FROM USER_TABLES" ))) 
 	{
@@ -487,7 +487,7 @@ bool OracleConnection::drv_getTablesList( QStringList &list )
 PreparedStatement::Ptr OracleConnection::prepareStatement
                       (PreparedStatement::StatementType type, FieldList& fields)
 {
-    KexiDBDrvDbg<<endl;
+    KexiDBDrvDbg;
 		return KSharedPtr<PreparedStatement>
 		                              (new OraclePreparedStatement(type,*d,fields));
 }

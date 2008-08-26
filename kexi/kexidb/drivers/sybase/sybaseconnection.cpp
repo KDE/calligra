@@ -60,11 +60,11 @@ bool SybaseConnection::drv_connect(KexiDB::ServerVersionInfo& version)
     QString serverVersionString;
 
     if (!querySingleString("Select @@servername" , version.string)) {
-        KexiDBDrvDbg << "Couldn't fetch server name" << endl;
+        KexiDBDrvDbg << "Couldn't fetch server name";
     }
 
     if (!querySingleString("Select @@version", serverVersionString)) {
-        KexiDBDrvDbg << "Couldn't fetch server version" << endl;
+        KexiDBDrvDbg << "Couldn't fetch server version";
     }
 
     QRegExp versionRe("(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)");
@@ -94,7 +94,7 @@ Cursor* SybaseConnection::prepareQuery(QuerySchema& query, uint cursor_options)
 
 bool SybaseConnection::drv_getDatabasesList(QStringList &list)
 {
-    KexiDBDrvDbg << "SybaseConnection::drv_getDatabasesList()" << endl;
+    KexiDBDrvDbg << "SybaseConnection::drv_getDatabasesList()";
 
     // select * from master..sysdatabases ?
     // todo: verify.
@@ -103,7 +103,7 @@ bool SybaseConnection::drv_getDatabasesList(QStringList &list)
 
 bool SybaseConnection::drv_createDatabase(const QString &dbName)
 {
-    KexiDBDrvDbg << "SybaseConnection::drv_createDatabase: " << dbName << endl;
+    KexiDBDrvDbg << "SybaseConnection::drv_createDatabase: " << dbName;
     // mysql_create_db deprecated, use SQL here.
     if (drv_executeSQL("CREATE DATABASE " + dbName)) {
         // set allow_nulls_by_default option to true

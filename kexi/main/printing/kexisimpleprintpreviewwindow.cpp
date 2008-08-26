@@ -95,9 +95,9 @@ KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 void KexiSimplePrintPreviewScrollView::resizeEvent(QResizeEvent *re)
 {
     Q3ScrollView::resizeEvent(re);
-// kDebug() << re->size().width() << " " << re->size().height() << endl;
-// kDebug() << contentsWidth() << " " << contentsHeight() << endl;
-// kDebug() << widget->width() << " " << widget->height() << endl;
+// kDebug() << re->size().width() << " " << re->size().height();
+// kDebug() << contentsWidth() << " " << contentsHeight();
+// kDebug() << widget->width() << " " << widget->height();
     setUpdatesEnabled(false);
     if (re->size().width() > (widget->width() + 2*KexiSimplePrintPreviewScrollView_MARGIN)
             || re->size().height() > (widget->height() + 2*KexiSimplePrintPreviewScrollView_MARGIN)) {
@@ -128,10 +128,10 @@ void KexiSimplePrintPreviewScrollView::setFullWidth()
     double constantWidth = width() - KexiSimplePrintPreviewScrollView_MARGIN * 6;
     double heightForWidth = constantWidth * heightMM / widthMM;
 // heightForWidth = qMin(kapp->desktop()->height()*4/5, heightForWidth);
-    kDebug() << "1: " << heightForWidth << endl;
+    kDebug() << "1: " << heightForWidth;
 #if 0 //todo we can use this if we want to fix the height to width of the page
     heightForWidth = qMin(height(), heightForWidth);
-    kDebug() << "2: " << heightForWidth << endl;
+    kDebug() << "2: " << heightForWidth;
 #endif
     constantWidth = heightForWidth * widthMM / heightMM;
     widget->resize((int)constantWidth, (int)heightForWidth); //keep aspect
@@ -147,7 +147,7 @@ void KexiSimplePrintPreviewScrollView::setFullWidth()
 
 void KexiSimplePrintPreviewScrollView::setContentsPos(int x, int y)
 {
-// kDebug() << "############" << x << " " << y << " " << contentsX()<< " " <<contentsY() << endl;
+// kDebug() << "############" << x << " " << y << " " << contentsX()<< " " <<contentsY();
     if (x < 0 || y < 0) //to avoid endless loop on Linux
         return;
     Q3ScrollView::setContentsPos(x, y);

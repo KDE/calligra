@@ -339,9 +339,9 @@ void KexiNewProjectWizard::accept()
 {
     if (m_prjtype_sel->lv_types->currentItem() == d->lvi_file) {//FILE:
         //check if new db file name is ok
-        kDebug() << "********** sender() " << sender()->metaObject()->className() << endl;
+        kDebug() << "********** sender() " << sender()->metaObject()->className();
         if (sender() == finishButton()) { /*(only if signal does not come from filedialog)*/
-            kDebug() << "********** sender()==finishButton() ********" << endl;
+            kDebug() << "********** sender()==finishButton() ********";
             if (!m_conn_sel->fileWidget->checkSelectedFile()) {
                 return;
             }

@@ -223,7 +223,7 @@ QString KexiComboBoxBase::valueForString(const QString& str, int* row,
     if (column() && column()->isRelatedDataEditable())
         return str; //new value entered and that's allowed
 
-    kexiwarn << "KexiComboBoxBase::valueForString(): no related row found, ID will be painted!" << endl;
+    kexiwarn << "KexiComboBoxBase::valueForString(): no related row found, ID will be painted!";
     if (allowNulls)
         return QString();
     return str; //for sanity but it's weird to show id to the user
@@ -443,7 +443,7 @@ void KexiComboBoxBase::acceptPopupSelection()
 
 void KexiComboBoxBase::slotItemSelected(KexiDB::RecordData*)
 {
-    kexidbg << "KexiComboBoxBase::slotItemSelected(): m_visibleValue = " << m_visibleValue << endl;
+    kexidbg << "KexiComboBoxBase::slotItemSelected(): m_visibleValue = " << m_visibleValue;
 
     QVariant valueToSet;
     KexiTableViewData *relData = column() ? column()->relatedData() : 0;
@@ -573,11 +573,11 @@ void KexiComboBoxBase::undoChanges()
 {
     KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
     if (lookupFieldSchema) {
-//  kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue BEFORE = " << m_visibleValue << endl;
+//  kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue BEFORE = " << m_visibleValue;
         if (popup())
             popup()->tableView()->selectRow(popup()->tableView()->highlightedRow());
         m_visibleValue = visibleValueForLookupField();
-//  kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue AFTER = " << m_visibleValue << endl;
+//  kexidbg << "KexiComboBoxBase::undoChanges(): m_visibleValue AFTER = " << m_visibleValue;
         setValueOrTextInInternalEditor(m_visibleValue);
     }
 }

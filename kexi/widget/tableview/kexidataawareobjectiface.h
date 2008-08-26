@@ -943,7 +943,7 @@ bool m_scrollbarToolTipsEnabled : 1;
 inline bool KexiDataAwareObjectInterface::hasData() const
 {
     if (!m_data)
-        kDebug() << "KexiDataAwareObjectInterface: No data assigned!" << endl;
+        kDebug() << "KexiDataAwareObjectInterface: No data assigned!";
     return m_data != 0;
 }
 
@@ -951,12 +951,12 @@ inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
 {
     KexiDB::RecordData *record = m_data->at(pos);
     if (!record)
-        kDebug() << "KexiTableView::itemAt(" << pos << "): NO ITEM!!" << endl;
+        kDebug() << "KexiTableView::itemAt(" << pos << "): NO ITEM!!";
     else {
-        /*  kDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
+        /*  kDebug() << "KexiTableView::itemAt(" << row << "):";
             int i=1;
             for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
-              kDebug() << i<<": " << (*it).toString()<< endl;*/
+              kDebug() << i<<": " << (*it).toString();*/
     }
     return record;
 }

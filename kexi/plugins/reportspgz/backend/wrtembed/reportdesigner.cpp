@@ -221,9 +221,9 @@ void ReportDesigner::init()
 
 ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QString & d) : QWidget(parent), d(new Private())
 {
-    kDebug() << "***********************************************************" << endl;
-    kDebug() << d << endl;
-    kDebug() << "***********************************************************" << endl;
+    kDebug() << "***********************************************************";
+    kDebug() << d;
+    kDebug() << "***********************************************************";
 
     conn = cn;
     init();
@@ -232,7 +232,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
     QDomElement root = doc.documentElement();
     if (root.tagName() != "report") {
         // arg we got an xml file but not one i know of
-        kDebug() << "root element was not <report>" << endl;;
+        kDebug() << "root element was not <report>";;
     }
 
     deleteDetail();
@@ -296,14 +296,14 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                     insertSection(KRSectionData::ReportHead);
                     getSection(KRSectionData::ReportHead)->initFromXML(it);
                 } else {
-                    kDebug() << "While loading xml tried to add more than one rpthead" << endl;
+                    kDebug() << "While loading xml tried to add more than one rpthead";
                 }
             } else if (n == "rptfoot") {
                 if (getSection(KRSectionData::ReportFoot) == 0) {
                     insertSection(KRSectionData::ReportFoot);
                     getSection(KRSectionData::ReportFoot)->initFromXML(it);
                 } else {
-                    kDebug() << "While loading xml tried to add more than one rpthead" << endl;
+                    kDebug() << "While loading xml tried to add more than one rpthead";
                 }
             } else if (n == "pghead") {
                 // we need to determine which page this is for
@@ -315,28 +315,28 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                         insertSection(KRSectionData::PageHeadFirst);
                         rs = getSection(KRSectionData::PageHeadFirst);
                     } else {
-                        kDebug() << "tried to load more than one page head first" << endl;
+                        kDebug() << "tried to load more than one page head first";
                     }
                 } else if (!it.namedItem("odd").isNull()) {
                     if (getSection(KRSectionData::PageHeadOdd) == 0) {
                         insertSection(KRSectionData::PageHeadOdd);
                         rs = getSection(KRSectionData::PageHeadOdd);
                     } else {
-                        kDebug() << "tried to load more than one page head odd" << endl;
+                        kDebug() << "tried to load more than one page head odd";
                     }
                 } else if (!it.namedItem("even").isNull()) {
                     if (getSection(KRSectionData::PageHeadEven) == 0) {
                         insertSection(KRSectionData::PageHeadEven);
                         rs = getSection(KRSectionData::PageHeadEven);
                     } else {
-                        kDebug() << "tried to load more than one page head even" << endl;
+                        kDebug() << "tried to load more than one page head even";
                     }
                 } else if (!it.namedItem("lastpage").isNull()) {
                     if (getSection(KRSectionData::PageHeadLast) == 0) {
                         insertSection(KRSectionData::PageHeadLast);
                         rs = getSection(KRSectionData::PageHeadLast);
                     } else {
-                        kDebug() << "tried to load more than one page head last" << endl;
+                        kDebug() << "tried to load more than one page head last";
                     }
                 } else {
                     // we have an any pghead
@@ -344,7 +344,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                         insertSection(KRSectionData::PageHeadAny);
                         rs = getSection(KRSectionData::PageHeadAny);
                     } else {
-                        kDebug() << "tried to load more than one page head any" << endl;
+                        kDebug() << "tried to load more than one page head any";
                     }
                 }
                 if (rs) rs->initFromXML(it);
@@ -356,28 +356,28 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                         insertSection(KRSectionData::PageFootFirst);
                         rs = getSection(KRSectionData::PageFootFirst);
                     } else {
-                        kDebug() << "tried to load more than one page foot first" << endl;
+                        kDebug() << "tried to load more than one page foot first";
                     }
                 } else if (!it.namedItem("odd").isNull()) {
                     if (getSection(KRSectionData::PageFootOdd) == 0) {
                         insertSection(KRSectionData::PageFootOdd);
                         rs = getSection(KRSectionData::PageFootOdd);
                     } else {
-                        kDebug() << "tried to load more than one page foot odd" << endl;
+                        kDebug() << "tried to load more than one page foot odd";
                     }
                 } else if (!it.namedItem("even").isNull()) {
                     if (getSection(KRSectionData::PageFootEven) == 0) {
                         insertSection(KRSectionData::PageFootEven);
                         rs = getSection(KRSectionData::PageFootEven);
                     } else {
-                        kDebug() << "tried to load more than one page foot even" << endl;
+                        kDebug() << "tried to load more than one page foot even";
                     }
                 } else if (!it.namedItem("lastpage").isNull()) {
                     if (getSection(KRSectionData::PageFootLast) == 0) {
                         insertSection(KRSectionData::PageFootLast);
                         rs = getSection(KRSectionData::PageFootLast);
                     } else {
-                        kDebug() << "tried to load more than one page foot last" << endl;
+                        kDebug() << "tried to load more than one page foot last";
                     }
                 } else {
                     // we have the any page foot
@@ -385,7 +385,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                         insertSection(KRSectionData::PageFootAny);
                         rs = getSection(KRSectionData::PageFootAny);
                     } else {
-                        kDebug() << "tried to load more than one page foot any" << endl;
+                        kDebug() << "tried to load more than one page foot any";
                     }
                 }
                 if (rs) rs->initFromXML(it);
@@ -394,10 +394,10 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                 rsd->initFromXML(it);
                 setDetail(rsd);
             } else {
-                kDebug() << "Encountered an unknown Element: "  << n << endl;
+                kDebug() << "Encountered an unknown Element: "  << n;
             }
         } else {
-            kDebug() << "Encountered a child node of root that is not an Element" << endl;
+            kDebug() << "Encountered a child node of root that is not an Element";
         }
     }
 
@@ -545,7 +545,7 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
         }
         if (s > KRSectionData::ReportHead)
             idx++;
-        kDebug() << idx << endl;
+        kDebug() << idx;
         ReportSection *rs = new ReportSection(this);
         d->vboxlayout->insertWidget(idx, rs);
 
@@ -805,7 +805,7 @@ void ReportDesigner::setModified(bool mod)
 QStringList ReportDesigner::queryList()
 {
     //Get the list of queries in the database
-    kDebug() << endl;
+    kDebug();
     QStringList qs;
     if (conn && conn->isConnected()) {
         QList<int> tids = conn->tableIds();
@@ -815,7 +815,7 @@ QStringList ReportDesigner::queryList()
             if (tsc)
                 qs << tsc->name();
             else
-                kDebug() << "Error retrieving table schema: " << tids[i] << endl;
+                kDebug() << "Error retrieving table schema: " << tids[i];
         }
 
         QList<int> qids = conn->queryIds();
@@ -825,10 +825,10 @@ QStringList ReportDesigner::queryList()
             if (qsc)
                 qs << qsc->name();
             else
-                kDebug() << "Error retrieving query schema: " << qids[i] << endl;
+                kDebug() << "Error retrieving query schema: " << qids[i];
         }
     }
-    kDebug() << "done" << endl;
+    kDebug() << "done";
     return qs;
 }
 
@@ -847,7 +847,7 @@ QStringList ReportDesigner::fieldList()
             qs << cs[i]->field->name();
         }
     } else {
-        kDebug() << "Cannot return field list" << endl;
+        kDebug() << "Cannot return field list";
     }
     return qs;
 }
@@ -1104,7 +1104,7 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
                 item = new ReportEntityImage(v->document(), v->scene());
                 break;
             case ReportWriterSectionData::LineItem :
-                kDebug() << "Adding Line" << endl;
+                kDebug() << "Adding Line";
                 item = new ReportEntityLine(v->document(), v->scene());
                 //dynamic_cast<QGraphicsLineItem*>(item)->setLine ( e->x()-10, e->y(), e->x()+10, e->y() );
                 dynamic_cast<QGraphicsLineItem*>(item)->setLine(e->x(), e->y(), e->x() + 20, e->y());
@@ -1116,7 +1116,7 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
                 item = new ReportEntityShape(v->document(), v->scene());
                 break;
             default:
-                kDebug() << "attempted to insert an unknown item" << endl;;
+                kDebug() << "attempted to insert an unknown item";;
             }
             if (item) {
                 if (sectionData->insertItem != ReportWriterSectionData::LineItem)
@@ -1198,7 +1198,7 @@ void ReportDesigner::slotItemShape()
 void ReportDesigner::changeSet(KoProperty::Set *s)
 {
     _itmset = s;
-    kDebug() << endl;
+    kDebug();
     emit(propertySetChanged());
 }
 
@@ -1317,7 +1317,7 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
         for (int i = 0; i < sectionData->copy_list.count(); i++) {
             pasted_ent = 0;
             int type = dynamic_cast<KRObjectData*>(sectionData->copy_list[i])->type();
-            kDebug() << type << endl;
+            kDebug() << type;
             QPointF o(sectionData->selected_x_offset, sectionData->selected_y_offset);
             if (type == KRObjectData::EntityLabel) {
                 ReportEntityLabel * ent = dynamic_cast<ReportEntityLabel*>(sectionData->copy_list[i])->clone();
@@ -1359,7 +1359,7 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
             //    pasted_ent = ent;
             //}
             else {
-                kDebug() << "Tried to paste an item I don't understand." << endl;
+                kDebug() << "Tried to paste an item I don't understand.";
             }
 
             if (pasted_ent) {

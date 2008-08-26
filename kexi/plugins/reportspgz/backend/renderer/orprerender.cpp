@@ -216,7 +216,7 @@ qreal ORPreRenderPrivate::finishCurPageSize(bool lastPage)
         retval = renderSectionSize(* (_reportData->pgfoot_any));
     _subtotContextPageFooter = false;
 
-    kDebug() << retval << endl;
+    kDebug() << retval;
     return retval;
 }
 
@@ -226,26 +226,26 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
     qreal offset = _maxHeight - _bottomMargin;
     qreal retval = 0.0;
 
-    kDebug() << offset << endl;
+    kDebug() << offset;
     _subtotContextPageFooter = true;
     if (lastPage && _reportData->pgfoot_last != 0) {
-        kDebug() << "Last Footer" << endl;
+        kDebug() << "Last Footer";
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_last));
         retval = renderSection(* (_reportData->pgfoot_last));
     } else if (_pageCounter == 1 && _reportData->pgfoot_first) {
-        kDebug() << "First Footer" << endl;
+        kDebug() << "First Footer";
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_first));
         retval = renderSection(* (_reportData->pgfoot_first));
     } else if ((_pageCounter % 2) == 1 && _reportData->pgfoot_odd) {
-        kDebug() << "Odd Footer" << endl;
+        kDebug() << "Odd Footer";
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_odd));
         retval = renderSection(* (_reportData->pgfoot_odd));
     } else if ((_pageCounter % 2) == 0 && _reportData->pgfoot_even) {
-        kDebug() << "Even Footer" << endl;
+        kDebug() << "Even Footer";
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_even));
         retval = renderSection(* (_reportData->pgfoot_even));
     } else if (_reportData->pgfoot_any != 0) {
-        kDebug() << "Any Footer" << endl;
+        kDebug() << "Any Footer";
         _yOffset = offset - renderSectionSize(* (_reportData->pgfoot_any));
         retval = renderSection(* (_reportData->pgfoot_any));
     }
@@ -256,7 +256,7 @@ qreal ORPreRenderPrivate::finishCurPage(bool lastPage)
 
 void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 {
-    kDebug() << endl;
+    kDebug();
 
     if (detailData.detail != 0) {
         KexiDB::Cursor *curs;
@@ -281,7 +281,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 _recordCount = 1;
             }
 
-            kDebug() << "Record Count:" << _recordCount << endl;
+            kDebug() << "Record Count:" << _recordCount;
 
             for (i = 0; i < (int) detailData.groupList.count(); i++) {
                 cnt++;
@@ -300,7 +300,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 _subtotContextMap = & (grp->_subtotCheckPoints);
 
                 //Tell interested parties we're about to render a header
-                kDebug() << "EMIT1" << endl;
+                kDebug() << "EMIT1";
                 emit(enteredGroup(keys[i], keyValues[i]));
 
                 if (grp->head)
@@ -311,7 +311,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
             do {
                 int l = curs->at();
 
-                kDebug() << "At:" << l << "Y:" << _yOffset << endl;
+                kDebug() << "At:" << l << "Y:" << _yOffset;
 
                 if (renderSectionSize(* (detailData.detail)) + finishCurPageSize((l + 1 == _recordCount)) + _bottomMargin + _yOffset >= _maxHeight) {
                     if (l > 0)
@@ -394,7 +394,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                         keyValues[i] = curs->value(_query->fieldNumber(keys[i])).toString();
 
                                     //Tell interested parties thak key values changed
-                                    kDebug() << "EMIT2" << endl;
+                                    kDebug() << "EMIT2";
                                     emit(enteredGroup(keys[i], keyValues[i]));
                                 }
                             }
@@ -522,7 +522,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
 qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 {
     qreal intHeight = POINT_TO_INCH(sectionData.height()) * KoGlobal::dpiY();
-    kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count() << endl;
+    kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count();
 
     _handler->populateEngineParameters(_query->getQuery());
 
@@ -905,7 +905,7 @@ ORPreRender::~ORPreRender()
 
 ORODocument* ORPreRender::generate()
 {
-    kDebug() << endl;
+    kDebug();
     if (_internal == 0 || !_internal->_valid || _internal->_reportData == 0)
         return 0;
 
@@ -917,13 +917,13 @@ ORODocument* ORPreRender::generate()
             return 0;
     }
 
-    kDebug() << "Creating Document" << endl;
+    kDebug() << "Creating Document";
     _internal->_document = new ORODocument(_internal->_reportData->title);
 
     _internal->_pageCounter  = 0;
     _internal->_yOffset      = 0.0;
 
-    kDebug() << "Calculating Margins" << endl;
+    kDebug() << "Calculating Margins";
     if (!label.isNull()) {
         if (_internal->_reportData->page.isPortrait()) {
             _internal->_topMargin = (label.startY() / 100.0);
@@ -941,10 +941,10 @@ ORODocument* ORPreRender::generate()
         _internal->_bottomMargin = _internal->_reportData->page.getMarginBottom();
         _internal->_rightMargin  = _internal->_reportData->page.getMarginRight();
         _internal->_leftMargin   = _internal->_reportData->page.getMarginLeft();
-        kDebug() << "Margins:" << _internal->_topMargin << _internal->_bottomMargin << _internal->_rightMargin << _internal->_leftMargin << endl;
+        kDebug() << "Margins:" << _internal->_topMargin << _internal->_bottomMargin << _internal->_rightMargin << _internal->_leftMargin;
     }
 
-    kDebug() << "Calculating Page Size" << endl;
+    kDebug() << "Calculating Page Size";
     ReportPageOptions rpo(_internal->_reportData->page);
     // This should reflect the information of the report page size
     if (_internal->_reportData->page.getPageSize() == "Custom") {
@@ -972,7 +972,7 @@ ORODocument* ORPreRender::generate()
         _internal->_maxHeight = tmp;
     }
 
-    kDebug() << "Page Size:" << _internal->_maxWidth << _internal->_maxHeight << endl;
+    kDebug() << "Page Size:" << _internal->_maxWidth << _internal->_maxHeight;
 
     _internal->_document->setPageOptions(rpo);
 
@@ -1106,7 +1106,7 @@ KexiDB::Connection* ORPreRender::database() const
 
 bool ORPreRender::setDom(const QString & docReport)
 {
-    kDebug() << docReport << endl;
+    kDebug() << docReport;
     if (_internal != 0) {
         if (_internal->_reportData != 0)
             delete _internal->_reportData;

@@ -129,13 +129,13 @@ void KActionsListViewBase::init()
     QList<QAction*> sharedActions(KexiMainWindowIface::global()->allActions());
     const Kexi::ActionCategories *acat = Kexi::actionCategories();
     foreach(QAction *action, sharedActions) {
-//   kDebug() << (*it)->name() << " " << (*it)->text() << endl;
+//   kDebug() << (*it)->name() << " " << (*it)->text();
         //! @todo group actions
         //! @todo: store KAction* here?
         const int actionCategories = acat->actionCategories(action->objectName().toLatin1());
         if (actionCategories == -1) {
             kexipluginswarn << "KActionsListViewBase(): no category declared for action \""
-            << action->objectName() << "\"! Fix this!" << endl;
+            << action->objectName() << "\"! Fix this!";
             continue;
         }
         if (!isActionVisible(action->objectName().toLatin1(), actionCategories))

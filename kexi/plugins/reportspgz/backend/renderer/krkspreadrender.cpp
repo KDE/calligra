@@ -76,7 +76,7 @@ bool KRKSpreadRender::render(ORODocument *document, const KUrl& toUrl)
                 /*
                 else if (prim->type() == OROImage::Image)
                 {
-                 kDebug() << "Saving an image" << endl;
+                 kDebug() << "Saving an image";
                  OROImage * im = ( OROImage* ) prim;
                  tr += "<td>";
                  tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
@@ -85,7 +85,7 @@ bool KRKSpreadRender::render(ORODocument *document, const KUrl& toUrl)
                 }
                 else if (prim->type() == OROPicture::Picture)
                 {
-                 kDebug() << "Saving a picture" << endl;
+                 kDebug() << "Saving a picture";
                  OROPicture * im = ( OROPicture* ) prim;
 
                  tr += "<td>";
@@ -97,7 +97,7 @@ bool KRKSpreadRender::render(ORODocument *document, const KUrl& toUrl)
                  image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
                 }*/
                 else {
-                    kDebug() << "unhandled primitive type" << endl;
+                    kDebug() << "unhandled primitive type";
                 }
             }
         }

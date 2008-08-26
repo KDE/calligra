@@ -167,7 +167,7 @@ void ReportEntityBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityBarcode::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << "ReportEntityBarcode::propertyChanged " << s.typeName() << ":" << p.name() << endl;
+    kDebug() << "ReportEntityBarcode::propertyChanged " << s.typeName() << ":" << p.name();
 
     //Handle Position
     if (p.name() == "Position") {

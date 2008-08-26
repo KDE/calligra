@@ -47,8 +47,8 @@ KRReportData::KRReportData(const QDomElement & elemSource)
     bool valid; //used for local unit conversions
 
     if (elemSource.tagName() != "report") {
-        kDebug() << "QDomElement passed to parseReport() was not <report> tag" << endl;
-        kDebug() << elemSource.text() << endl;
+        kDebug() << "QDomElement passed to parseReport() was not <report> tag";
+        kDebug() << elemSource.text();
         return;
     }
 
@@ -206,7 +206,7 @@ QList<KRObjectData*> KRReportData::objects()
     }
 
     if (detailsection) {
-        kDebug() << "Number of groups: " << detailsection->groupList.count() << endl;
+        kDebug() << "Number of groups: " << detailsection->groupList.count();
         foreach(ORDetailGroupSectionData* g, detailsection->groupList) {
             if (g->head) {
                 obs << g->head->objects();
@@ -219,9 +219,9 @@ QList<KRObjectData*> KRReportData::objects()
             obs << detailsection->detail->objects();
     }
 
-    kDebug() << "Object List:" << endl;
+    kDebug() << "Object List:";
     foreach(KRObjectData* o, obs) {
-        kDebug() << o->entityName() << endl;
+        kDebug() << o->entityName();
     }
     return obs;
 }
@@ -250,7 +250,7 @@ QList<KRSectionData*> KRReportData::sections()
     }
 
     if (detailsection) {
-        kDebug() << "Number of groups: " << detailsection->groupList.count() << endl;
+        kDebug() << "Number of groups: " << detailsection->groupList.count();
         foreach(ORDetailGroupSectionData* g, detailsection->groupList) {
             if (g->head) {
                 secs << g->head;

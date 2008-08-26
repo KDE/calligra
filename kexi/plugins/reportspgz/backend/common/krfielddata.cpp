@@ -48,7 +48,7 @@ KRFieldData::KRFieldData(QDomNode & element)
                 } else if (n == "controlsource") {
                     _controlSource->setValue(node.firstChild().nodeValue());
                 } else {
-                    kDebug() << "while parsing field data encountered and unknown element: " << n << endl;
+                    kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
             //txt = node.firstChild().nodeValue();
@@ -98,7 +98,7 @@ KRFieldData::KRFieldData(QDomNode & element)
          if ( _trackTotalFormat->value().toString().length() > 0 ) _trackTotal->setValue ( true );
         }*/
         else {
-            kDebug() << "while parsing field element encountered unknow element: " << n << endl;
+            kDebug() << "while parsing field element encountered unknow element: " << n;
         }
     }
 }

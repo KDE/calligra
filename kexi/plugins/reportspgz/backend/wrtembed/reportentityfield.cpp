@@ -189,7 +189,7 @@ void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityField::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << "ReportEntityField::propertyChanged " << s.typeName() << ":" << p.name() << ":" << p.value() << endl;
+    kDebug() << "ReportEntityField::propertyChanged " << s.typeName() << ":" << p.name() << ":" << p.value();
 
     //Handle Position
     if (p.name() == "Position") {

@@ -113,7 +113,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
                 parentWidget()->move(newPos);
                 m_grabX = static_cast<QMouseEvent*>(ev)->globalPos().x();
                 m_grabY = static_cast<QMouseEvent*>(ev)->globalPos().y();
-//    kDebug()<<"HEADER:emitting moved"<<endl;
+//    kDebug()<<"HEADER:emitting moved";
                 emit moved();
             }
             return true;
@@ -124,7 +124,7 @@ bool KexiRelationViewTableContainerHeader::eventFilter(QObject *, QEvent *ev)
 
 void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev)
 {
-    kDebug() << "KexiRelationViewTableContainerHeader::Mouse Press Event" << endl;
+    kDebug() << "KexiRelationViewTableContainerHeader::Mouse Press Event";
     static_cast<KexiRelationsTableContainer*>(parentWidget())->setFocus();
     ev->accept();
     if (ev->button() == Qt::LeftButton) {
@@ -145,7 +145,7 @@ void KexiRelationViewTableContainerHeader::mousePressEvent(QMouseEvent *ev)
 
 void KexiRelationViewTableContainerHeader::mouseReleaseEvent(QMouseEvent *ev)
 {
-    kDebug() << "KexiRelationViewTableContainerHeader::Mouse Release Event" << endl;
+    kDebug() << "KexiRelationViewTableContainerHeader::Mouse Release Event";
     if (m_dragging && ev->button() & Qt::LeftButton) {
         setCursor(Qt::ArrowCursor);
         m_dragging = false;
@@ -183,7 +183,7 @@ QSize KexiRelationsTableFieldList::sizeHint() const
     QFontMetrics fm(fontMetrics());
 
 // kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i")
-//  << ", " << fm.width(schema()->name()+"  ") << endl;
+//  << ", " << fm.width(schema()->name()+"  ");
 
     int maxWidth = -1;
     const int iconWidth = IconSize(KIconLoader::Small) + fm.width("i") + 20;
@@ -223,7 +223,7 @@ KexiRelationsTableFieldList::globalY(const QString &item)
 bool
 KexiRelationsTableFieldList::acceptDrag(QDropEvent *ev) const
 {
-// kDebug() << "KexiRelationsTableFieldList::acceptDrag()" << endl;
+// kDebug() << "KexiRelationsTableFieldList::acceptDrag()";
     Q3ListViewItem *receiver = itemAt(ev->pos() - QPoint(0, contentsY()));
     if (!receiver || !KexiFieldDrag::canDecodeSingle(ev))
         return false;
@@ -256,7 +256,7 @@ KexiRelationsTableFieldList::slotDropped(QDropEvent *ev)
         return;
     if (sourceMimeType != "kexi/table" && sourceMimeType == "kexi/query")
         return;
-//  kDebug() << "KexiRelationsTableFieldList::slotDropped() srcfield: " << srcField << endl;
+//  kDebug() << "KexiRelationsTableFieldList::slotDropped() srcfield: " << srcField;
 
     QString rcvField = recever->text(0);
 
@@ -269,7 +269,7 @@ KexiRelationsTableFieldList::slotDropped(QDropEvent *ev)
     m_scrollArea->addConnection(s);
 
     kDebug() << "KexiRelationsTableFieldList::slotDropped() " << srcTable << ":" << srcField << " "
-    << schema()->name() << ":" << rcvField << endl;
+    << schema()->name() << ":" << rcvField;
     ev->accept();
 }
 

@@ -116,7 +116,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
         << " user=" << cg.readEntry("user")
         << " password=" << QString().fill('*', cg.readEntry("password").length())
         << " comment=" << cg.readEntry("comment")
-        << endl;*/
+;*/
 
     //no filename by default
     data.connectionData()->setFileName(QString());
@@ -145,7 +145,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
     data.connectionData()->localSocketFileName = cg.readEntry("localSocketFile");
     data.connectionData()->savePassword = cg.hasKey("password") || cg.hasKey("encryptedPassword");
     if (data.formatVersion >= 2) {
-        kDebug() << cg.hasKey("encryptedPassword") << endl;
+        kDebug() << cg.hasKey("encryptedPassword");
         data.connectionData()->password = cg.readEntry("encryptedPassword");
         KexiUtils::simpleDecrypt(data.connectionData()->password);
     }
@@ -293,11 +293,11 @@ bool KexiDBConnSetShortcutFiles::loadConnectionDataSet(KexiDBConnectionSet& set)
 {
     set.clear();
 // QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-// kexidbg << dirs << endl;
+// kexidbg << dirs;
     QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
 // //also try for capital file extension
 // files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-    kexidbg << files << endl;
+    kexidbg << files;
 
     foreach(QStringList::ConstIterator, it, files) {
         KexiDB::ConnectionData *data = new KexiDB::ConnectionData();

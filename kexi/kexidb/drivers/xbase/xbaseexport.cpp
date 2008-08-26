@@ -301,7 +301,7 @@ bool xBaseExport::performExport(Kexi::ObjectStatus* result) {
 
   // Check if there are any tables
   if (tables.isEmpty()) {
-    kDebug() << "There were no tables to export" << endl;
+    kDebug() << "There were no tables to export";
     if (result)
       result->setStatus(
         i18n("No tables to export found in data source \"%1\".",
@@ -327,7 +327,7 @@ bool xBaseExport::performExport(Kexi::ObjectStatus* result) {
 
     if (m_migrateData->keepData) {
       if (!dest_copyTable(tableCaption, sourceConn, tableSchema)) {
-        kDebug() << "Failed to copy table " << tableCaption << endl;
+        kDebug() << "Failed to copy table " << tableCaption;
         if (result)
           result->setStatus(sourceConn,
               i18n("Could not copy table \"%1\" to destination database.", tableCaption));

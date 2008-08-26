@@ -209,7 +209,7 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
                 addConnectionData(connData);
                 //   else {
                 //this error should be more verbose:
-                //    kWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!" << endl;
+                //    kWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!";
                 //   }
             }
             if (m_remote->list->firstChild()) {

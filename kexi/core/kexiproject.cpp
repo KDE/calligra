@@ -129,7 +129,7 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
     else
         kWarning() << "KexiProject::KexiProject(): passed connection's data ("
         << conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
-        << d->data->connectionData()->serverInfoString() << ")" << endl;
+        << d->data->connectionData()->serverInfoString() << ")";
 }
 
 KexiProject::~KexiProject()
@@ -179,12 +179,12 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     }
     if (incompatibleWithKexi)
         *incompatibleWithKexi = false;
-    kDebug() << "KexiProject::open(): " << d->data->databaseName() << " " << d->data->connectionData()->driverName  << endl;
+    kDebug() << "KexiProject::open(): " << d->data->databaseName() << " " << d->data->connectionData()->driverName;
     KexiDB::MessageTitle et(this,
                             i18n("Could not open project \"%1\".", d->data->databaseName()));
 
     if (!createConnection()) {
-        kDebug() << "KexiProject::open(): !createConnection()" << endl;
+        kDebug() << "KexiProject::open(): !createConnection()";
         return false;
     }
     bool cancel = false;
@@ -194,7 +194,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
             return cancelled;
         }
         kDebug() << "KexiProject::open(): !d->connection->useDatabase() "
-        << d->data->databaseName() << " " << d->data->connectionData()->driverName  << endl;
+        << d->data->databaseName() << " " << d->data->connectionData()->driverName;
 
         if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
 //<temp>
@@ -238,22 +238,22 @@ KexiProject::create(bool forceOverwrite)
             closeConnection();
             return false;
         }
-        kDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---" << endl;
+        kDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---";
     }
     if (!d->connection->createDatabase(d->data->databaseName())) {
         setError(d->connection);
         closeConnection();
         return false;
     }
-    kDebug() << "--- DB '" << d->data->databaseName() << "' created ---" << endl;
+    kDebug() << "--- DB '" << d->data->databaseName() << "' created ---";
     // and now: open
     if (!d->connection->useDatabase(d->data->databaseName())) {
-        kDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---" << endl;
+        kDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---";
         setError(d->connection);
         closeConnection();
         return false;
     }
-    kDebug() << "--- DB '" << d->data->databaseName() << "' used ---" << endl;
+    kDebug() << "--- DB '" << d->data->databaseName() << "' used ---";
 
     //<add some data>
     KexiDB::Transaction trans = d->connection->beginTransaction();
@@ -470,14 +470,14 @@ KexiProject::createConnection()
         connectionOptions |= KexiDB::Driver::ReadOnlyConnection;
     d->connection = driver->createConnection(*d->data->connectionData(), connectionOptions);
     if (!d->connection) {
-        kDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg()  << endl;
+        kDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg();
         setError(driver);
         return false;
     }
 
     if (!d->connection->connect()) {
         setError(d->connection);
-        kDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString()) << endl;
+        kDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
         closeConnection();
         return false;
     }
@@ -509,7 +509,7 @@ bool
 KexiProject::initProject()
 {
 // emit dbAvailable();
-    kDebug() << "KexiProject::open(): checking project parts..." << endl;
+    kDebug() << "KexiProject::open(): checking project parts...";
 
     if (!Kexi::partManager().checkProject(d->connection)) {
         setError(Kexi::partManager().error() ? (KexiDB::Object*)&Kexi::partManager() : (KexiDB::Connection*)d->connection);
@@ -546,7 +546,7 @@ KexiProject::isConnected()
 KexiPart::ItemDict*
 KexiProject::items(KexiPart::Info *i)
 {
-    kDebug() << "KexiProject::items()" << endl;
+    kDebug() << "KexiProject::items()";
     if (!i || !isConnected())
         return 0;
 
@@ -558,7 +558,7 @@ KexiProject::items(KexiPart::Info *i)
     KexiDB::Cursor *cursor = d->connection->executeQuery(
                                  "SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = "
                                  + QString::number(i->projectPartID()));//, KexiDB::Cursor::Buffered);
-// kDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
+// kDebug() << "KexiProject::items(): cursor handle is:" << cursor;
     if (!cursor)
         return 0;
 
@@ -578,11 +578,11 @@ KexiProject::items(KexiPart::Info *i)
             it->setCaption(cursor->value(2).toString());
         }
         dict->insert(it->identifier(), it);
-//  kDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
+//  kDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident;
     }
 
     d->connection->deleteCursor(cursor);
-// kDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
+// kDebug() << "KexiProject::items(): end with count " << dict->count();
     d->itemDictsCache.insert(i->projectPartID(), dict);
     return dict;
 }
@@ -630,7 +630,7 @@ KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
 {
     KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
     if (!dict) {
-        kexiwarn << "KexiProject::itemForMimeType() no mimetype=" << mimeType << endl;
+        kexiwarn << "KexiProject::itemForMimeType() no mimetype=" << mimeType;
         return 0;
     }
     const QString nameToLower(name.toLower());
@@ -638,7 +638,7 @@ KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
         if (item->name().toLower() == nameToLower)
             return item;
     }
-    kexiwarn << "KexiProject::itemForMimeType() no name=" << name << endl;
+    kexiwarn << "KexiProject::itemForMimeType() no name=" << name;
     return 0;
 }
 
@@ -714,7 +714,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
     KexiDB::MessageTitle et(this);
     KexiPart::Part *part = Kexi::partManager().partForMimeType(item.mimeType());
     if (!part) {
-        kexiwarn << "KexiProject::findPartFor() !part: " << item.mimeType() << endl;
+        kexiwarn << "KexiProject::findPartFor() !part: " << item.mimeType();
         setError(&Kexi::partManager());
     }
     return part;
@@ -968,7 +968,7 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
         delete prj;
         return 0;
     }
-    kDebug() << "KexiProject::createBlankProject(): new project created --- " << endl;
+    kDebug() << "KexiProject::createBlankProject(): new project created --- ";
 //todo? Kexi::recentProjects().addProjectData( data );
 
     return prj;

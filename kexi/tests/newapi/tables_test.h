@@ -53,7 +53,7 @@ int tablesTest()
         conn->debugError();
         return 1;
     }
-    kDebug() << "-- PERSONS created --" << endl;
+    kDebug() << "-- PERSONS created --";
     t_persons->debug();
 
     if (!conn->insertRecord(*t_persons, QVariant(1), QVariant(27), QVariant("Jaroslaw"), QVariant("Staniek"))
@@ -61,10 +61,10 @@ int tablesTest()
             || !conn->insertRecord(*t_persons, QVariant(3), QVariant(45), QVariant("Bill"), QVariant("Gates"))
             || !conn->insertRecord(*t_persons, QVariant(4), QVariant(35), QVariant("John"), QVariant("Smith"))
        ) {
-        kDebug() << "-- PERSONS data err. --" << endl;
+        kDebug() << "-- PERSONS data err. --";
         return 1;
     }
-    kDebug() << "-- PERSONS data created --" << endl;
+    kDebug() << "-- PERSONS data created --";
 
 
     KexiDB::TableSchema *t_cars = new KexiDB::TableSchema("cars");
@@ -79,27 +79,27 @@ int tablesTest()
         conn->debugError();
         return 1;
     }
-    kDebug() << "-- CARS created --" << endl;
+    kDebug() << "-- CARS created --";
     if (!conn->insertRecord(*t_cars, QVariant(1), QVariant(1), QVariant("Fiat"))
             || !conn->insertRecord(*t_cars, QVariant(2), QVariant(2), QVariant("Syrena"))
             || !conn->insertRecord(*t_cars, QVariant(3), QVariant(3), QVariant("Chrysler"))
             || !conn->insertRecord(*t_cars, QVariant(4), QVariant(3), QVariant("BMW"))
             || !conn->insertRecord(*t_cars, QVariant(5), QVariant(4), QVariant("Volvo"))
        ) {
-        kDebug() << "-- CARS data err. --" << endl;
+        kDebug() << "-- CARS data err. --";
         return 1;
     }
-    kDebug() << "-- CARS data created --" << endl;
+    kDebug() << "-- CARS data created --";
 
     if (!conn->commitTransaction(t)) {
         conn->debugError();
         return 1;
     }
 
-    kDebug() << "NOW, TABLE LIST: " << endl;
+    kDebug() << "NOW, TABLE LIST: ";
     QStringList tnames = conn->tableNames();
     for (QStringList::iterator it = tnames.begin(); it != tnames.end(); ++it) {
-        kDebug() << " - " << (*it) << endl;
+        kDebug() << " - " << (*it);
     }
 
 

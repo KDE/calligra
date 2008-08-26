@@ -41,7 +41,7 @@ KFormDesigner::removeChildrenFromList(WidgetList &list)
         for (WidgetListIterator it2(list); it2.current() != 0; ++it2) {
             QWidget *widg = it2.current();
             if ((w != widg) && (w->findChild<QWidget*>(widg->objectName()))) {
-                kDebug() << "Removing the widget " << widg->objectName() << "which is a child of " << w->objectName() << endl;
+                kDebug() << "Removing the widget " << widg->objectName() << "which is a child of " << w->objectName();
                 list.remove(widg);
             }
         }
@@ -54,7 +54,7 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
     if (!object || !container || !object->isWidgetType())
         return;
 
-    kDebug() << "Installing event filter on widget: " << object->objectName() << " directed to " << container->objectName() << endl;
+    kDebug() << "Installing event filter on widget: " << object->objectName() << " directed to " << container->objectName();
     object->installEventFilter(container);
     if (((QWidget*)object)->testAttribute(Qt::WA_SetCursor))
         ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
@@ -164,11 +164,11 @@ int VerWidgetList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::It
         y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
 
     kDebug() << w1->objectName() << ": " << y1 << " "
-    << " | " << w2->objectName() << ": " << y2 << endl;
+    << " | " << w2->objectName() << ": " << y2;
 
 
     //kDebug() << w1->name() << ": " << w1->mapTo(m_topLevelWidget, QPoint(0,0)) << " " << w1->y()
-    //<< " | " << w2->name() << ":" /*<< w2->mapFrom(m_topLevelWidget, QPoint(0,w2->y()))*/ << " " << w2->y() << endl;
+    //<< " | " << w2->name() << ":" /*<< w2->mapFrom(m_topLevelWidget, QPoint(0,w2->y()))*/ << " " << w2->y();
     return y1 - y2;
 }
 

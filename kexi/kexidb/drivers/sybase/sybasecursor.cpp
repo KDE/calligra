@@ -43,7 +43,7 @@ SybaseCursor::SybaseCursor(KexiDB::Connection* conn, const QString& statement, u
     //m_options |= Buffered;
 
     d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
-// KexiDBDrvDbg << "SybaseCursor: constructor for query statement" << endl;
+// KexiDBDrvDbg << "SybaseCursor: constructor for query statement";
 }
 
 SybaseCursor::SybaseCursor(Connection* conn, QuerySchema& query, uint options)
@@ -53,7 +53,7 @@ SybaseCursor::SybaseCursor(Connection* conn, QuerySchema& query, uint options)
     //  m_options |= Buffered;
 
     d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
-// KexiDBDrvDbg << "SybaseCursor: constructor for query statement" << endl;
+// KexiDBDrvDbg << "SybaseCursor: constructor for query statement";
 }
 
 SybaseCursor::~SybaseCursor()
@@ -128,7 +128,7 @@ bool SybaseCursor::drv_close()
 
 void SybaseCursor::drv_getNextRecord()
 {
-// KexiDBDrvDbg << "SybaseCursor::drv_getNextRecord" << endl;
+// KexiDBDrvDbg << "SybaseCursor::drv_getNextRecord";
 
     // no buffering , and we don't know how many rows are there in result set
 
@@ -177,7 +177,7 @@ QVariant SybaseCursor::value(uint pos)
  */
 bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
 {
-// KexiDBDrvDbg << "SybaseCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
+// KexiDBDrvDbg << "SybaseCursor::storeCurrentRow: Position is " << (long)m_at;
 // if (d->numRows<=0)
 //  return false;
 

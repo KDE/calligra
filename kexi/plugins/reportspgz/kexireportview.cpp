@@ -207,7 +207,7 @@ void KexiReportView::slotExportHTML()
 
 tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
-    //kDebug() << tempData()->document << endl;
+    //kDebug() << tempData()->document;
     return true;
 }
 
@@ -215,7 +215,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 {
     Q_UNUSED(mode);
 
-    kDebug() << endl;
+    kDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
         delete rpt;
 

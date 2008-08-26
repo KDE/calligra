@@ -153,7 +153,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
                     rsdg->showGroupFoot(true);
                     show_foot = true;
                 } else {
-                    kDebug() << "encountered unknown element while parsing group element: " << gnode.nodeName() << endl;
+                    kDebug() << "encountered unknown element while parsing group element: " << gnode.nodeName();
                 }
             }
             insertSection(groupSectionCount(), rsdg);
@@ -163,7 +163,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
             _detail->initFromXML(node);
         } else {
             // unknown element
-            kDebug() << "while parsing section encountered and unknown element: " <<  n << endl;
+            kDebug() << "while parsing section encountered and unknown element: " <<  n;
         }
     }
 
@@ -227,7 +227,7 @@ int ReportSectionDetail::findSection(const QString & name)
 void ReportSectionDetail::removeSection(int idx, bool del)
 {
     //TODO DOES NOT WORK
-    kDebug() << endl;
+    kDebug();
     ReportSectionDetailGroup * rsd = groupList.at(idx);
 
     vboxlayout->removeWidget(rsd->getGroupHead());

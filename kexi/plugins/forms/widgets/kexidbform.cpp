@@ -72,7 +72,7 @@ public:
         if (indicesForDataAwareWidgetsIt == indicesForDataAwareWidgets.constEnd())
             return -1;
         kexipluginsdbg << "KexiDBForm: column # for item: "
-        << indicesForDataAwareWidgetsIt.value() << endl;
+        << indicesForDataAwareWidgetsIt.value();
         return indicesForDataAwareWidgetsIt.value();
     }
 
@@ -114,14 +114,14 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
     d->dataAwareObject = dataAwareObject;
     m_hasFocusableWidget = false;
 
-    kexipluginsdbg << "KexiDBForm::KexiDBForm(): " << endl;
+    kexipluginsdbg << "KexiDBForm::KexiDBForm(): ";
     setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
     setAcceptDrops(true);
 }
 
 KexiDBForm::~KexiDBForm()
 {
-    kexipluginsdbg << "KexiDBForm::~KexiDBForm(): close" << endl;
+    kexipluginsdbg << "KexiDBForm::~KexiDBForm(): close";
     delete d;
 }
 
@@ -334,7 +334,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
                 kexipluginsdbg << "KexiDBForm::updateTabStopsOrder(): also adding '"
                 << widget->metaObject()->className()
                 << " " << widget->objectName()
-                << "' child to filtered widgets" << endl;
+                << "' child to filtered widgets";
                 //it.current()->widget()->installEventFilter(static_cast<QWidget*>(childrenIt.current()));
                 widget->installEventFilter(this);
                 //   }
@@ -342,7 +342,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
             if (fromWidget) {
                 kexipluginsdbg << "KexiDBForm::updateTabStopsOrder() tab order: "
                 << fromWidget->objectName()
-                << " -> " << it.current()->widget()->objectName() << endl;
+                << " -> " << it.current()->widget()->objectName();
                 //    setTabOrder( fromWidget, it.current()->widget() );
             }
             fromWidget = it.current()->widget();
@@ -353,7 +353,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
         = dynamic_cast<KexiFormDataItemInterface*>(it.current()->widget());
         if (dataItem && !dataItem->dataSource().isEmpty()) {
             kexipluginsdbg << "#" << numberOfDataAwareWidgets << ": "
-            << dataItem->dataSource() << " (" << it.current()->widget()->objectName() << ")" << endl;
+            << dataItem->dataSource() << " (" << it.current()->widget()->objectName() << ")";
 
 // /*! @todo d->indicesForDataAwareWidgets SHOULDNT BE UPDATED HERE BECAUSE
 // THERE CAN BE ALSO NON-TABSTOP DATA WIDGETS!
@@ -370,7 +370,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
         for (QPtrListIterator<QWidget> it(d->orderedFocusWidgets); it.current(); ++it) {
           if (fromWidget) {
             kDebug() << "KexiDBForm::updateTabStopsOrder() tab order: " << fromWidget->name()
-              << " -> " << it.current()->name() << endl;
+              << " -> " << it.current()->name();
             setTabOrder( fromWidget, it.current() );
           }
           fromWidget = it.current();
@@ -404,9 +404,9 @@ void KexiDBForm::updateReadOnlyFlags()
 
 bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 {
-    //kexipluginsdbg << e->type() << endl;
+    //kexipluginsdbg << e->type();
     if (e->type() == QEvent::Resize && watched == this)
-        kexipluginsdbg << "RESIZE" << endl;
+        kexipluginsdbg << "RESIZE";
     if (e->type() == QEvent::KeyPress) {
         if (preview()) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -474,7 +474,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     if (widgetToFocus)
                         widgetToFocus->setFocus();
                     else
-                        kexipluginswarn << "KexiDBForm::eventFilter(): widgetToFocus not found!" << endl;
+                        kexipluginswarn << "KexiDBForm::eventFilter(): widgetToFocus not found!";
 
                     ke->accept();
                     return true;
@@ -514,7 +514,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     realWidget = dynamic_cast<QWidget*>(dynamic_cast<KexiDataItemInterface*>(realWidget)->parentInterface());
 
                 d->setOrderedFocusWidgetsIteratorTo(realWidget);
-                kexipluginsdbg << realWidget->objectName() << endl;
+                kexipluginsdbg << realWidget->objectName();
 
                 // find next/prev widget to focus
                 QWidget *widgetToUnfocus = realWidget;
@@ -566,13 +566,13 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                         //try to accept this will validate the current input (if any)
                         KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::TabFocusReason);
                         KexiUtils::setFocusWithReason(widgetToFocus, Qt::TabFocusReason);
-                        kexipluginsdbg << "focusing " << widgetToFocus->objectName() << endl;
+                        kexipluginsdbg << "focusing " << widgetToFocus->objectName();
                     } else {//backtab
                         KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::BacktabFocusReason);
                         //set focus, see above note
                         KexiUtils::setFocusWithReason(*d->orderedFocusWidgetsIterator, Qt::BacktabFocusReason);
                         kexipluginsdbg << "focusing "
-                        << (*d->orderedFocusWidgetsIterator)->objectName() << endl;
+                        << (*d->orderedFocusWidgetsIterator)->objectName();
                     }
                 }
                 return true;
@@ -581,7 +581,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
     } else if (e->type() == QEvent::FocusIn) {
         bool focusDataWidget = preview();
         if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
-            kDebug() << "->>> focus IN, popup" << endl;
+            kDebug() << "->>> focus IN, popup";
             focusDataWidget = !d->popupFocused;
             d->popupFocused = false;
 //   if (d->widgetFocusedBeforePopup) {
@@ -592,7 +592,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 
         if (focusDataWidget) {
             kexipluginsdbg << "KexiDBForm: FocusIn: " << watched->metaObject()->className()
-            << " " << watched->objectName() << endl;
+            << " " << watched->objectName();
             if (d->dataAwareObject) {
                 QWidget *dataItem = dynamic_cast<QWidget*>(watched);
                 while (dataItem) {
@@ -601,11 +601,11 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                     if (!dataItem)
                         break;
                     kexipluginsdbg << "KexiDBForm: FocusIn: FOUND "
-                    << dataItem->metaObject()->className() << " " << dataItem->objectName() << endl;
+                    << dataItem->metaObject()->className() << " " << dataItem->objectName();
 
                     const int index = d->indexOfDataAwareWidget(dataItem);
                     if (index >= 0) {
-                        kexipluginsdbg << "KexiDBForm: moving cursor to column #" << index << endl;
+                        kexipluginsdbg << "KexiDBForm: moving cursor to column #" << index;
                         editedItem = 0;
                         if ((int)index != d->dataAwareObject->currentColumn()) {
                             d->dataAwareObject->setCursorPosition(d->dataAwareObject->currentRow(), index /*column*/);
@@ -625,7 +625,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
         } else
             d->popupFocused = false;
 //   d->widgetFocusedBeforePopup = 0;
-//  kDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name() << endl;
+//  kDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name();
 //  UNSET_FOCUS_USING_REASON(watched, static_cast<QFocusEvent*>(e)->reason());
     }
     return KexiDBFormBase::eventFilter(watched, e);

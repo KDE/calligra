@@ -102,7 +102,7 @@ void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
 void ReportEntityShape::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    kDebug() << endl;
+    kDebug();
     //kdDebug() << "ReportEntityLabel::buildXML()");
     QDomElement entity = doc.createElement("shape");
 
@@ -124,7 +124,7 @@ void ReportEntityShape::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityShape::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    kDebug() << endl;
+    kDebug();
     //TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
     if (p.name() == "Position") {
         //_pos.setUnitPos(p.value().value<QPointF>(), false);

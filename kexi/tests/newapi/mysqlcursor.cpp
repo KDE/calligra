@@ -12,18 +12,18 @@ int main(int argc, char * argv[])
     KComponentData componentData("newapi");
     KexiDB::DriverManager manager;
     QStringList names = manager.driverNames();
-    kDebug() << "DRIVERS: " << endl;
+    kDebug() << "DRIVERS: ";
     for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
-        kDebug() << *it << endl;
+        kDebug() << *it;
     if (manager.error()) {
-        kDebug() << manager.errorMsg() << endl;
+        kDebug() << manager.errorMsg();
         return 1;
     }
 
     //get driver
     KexiDB::Driver *driver = manager.driver("mySQL");
     if (manager.error()) {
-        kDebug() << manager.errorMsg() << endl;
+        kDebug() << manager.errorMsg();
         return 1;
     }
 
@@ -39,64 +39,64 @@ int main(int argc, char * argv[])
 
     KexiDB::Connection *conn = driver->createConnection(conn_data);
     if (driver->error()) {
-        kDebug() << driver->errorMsg() << endl;
+        kDebug() << driver->errorMsg();
         return 1;
     }
     if (!conn->connect()) {
-        kDebug() << conn->errorMsg() << endl;
+        kDebug() << conn->errorMsg();
         return 1;
     }
     if (!conn->useDatabase("test")) {
-        kDebug() << "use db:" << conn->errorMsg() << endl;
+        kDebug() << "use db:" << conn->errorMsg();
         return 1;
     }
 
-    kDebug() << "Creating first cursor" << endl;
+    kDebug() << "Creating first cursor";
     KexiDB::Cursor *c = conn->executeQuery("select * from Applications");
-    if (!c) kDebug() << conn->errorMsg() << endl;
-    kDebug() << "Creating second cursor" << endl;
+    if (!c) kDebug() << conn->errorMsg();
+    kDebug() << "Creating second cursor";
     KexiDB::Cursor *c2 = conn->executeQuery("select * from Applications");
-    if (!c2) kDebug() << conn->errorMsg() << endl;
+    if (!c2) kDebug() << conn->errorMsg();
 
     QStringList l = conn->databaseNames();
-    if (l.isEmpty()) kDebug() << conn->errorMsg() << endl;
-    kDebug() << "Databases:" << endl;
+    if (l.isEmpty()) kDebug() << conn->errorMsg();
+    kDebug() << "Databases:";
     for (QStringList::ConstIterator it = l.constBegin(); it != l.constEnd() ; ++it)
-        kDebug() << *it << endl;
+        kDebug() << *it;
 
     if (c) {
         while (c->moveNext()) {
-            kDebug() << "Cursor: Value(0)" << c->value(0).toString() << endl;
-            kDebug() << "Cursor: Value(1)" << c->value(1).toString() << endl;
+            kDebug() << "Cursor: Value(0)" << c->value(0).toString();
+            kDebug() << "Cursor: Value(1)" << c->value(1).toString();
         }
-        kDebug() << "Cursor error:" << c->errorMsg() << endl;
+        kDebug() << "Cursor error:" << c->errorMsg();
     }
     if (c2) {
         while (c2->moveNext()) {
-            kDebug() << "Cursor2: Value(0)" << c2->value(0).toString() << endl;
-            kDebug() << "Cursor2: Value(1)" << c2->value(1).toString() << endl;
+            kDebug() << "Cursor2: Value(0)" << c2->value(0).toString();
+            kDebug() << "Cursor2: Value(1)" << c2->value(1).toString();
         }
     }
     if (c) {
-        kDebug() << "Cursor::prev" << endl;
+        kDebug() << "Cursor::prev";
         while (c->movePrev()) {
-            kDebug() << "Cursor: Value(0)" << c->value(0).toString() << endl;
-            kDebug() << "Cursor: Value(1)" << c->value(1).toString() << endl;
+            kDebug() << "Cursor: Value(0)" << c->value(0).toString();
+            kDebug() << "Cursor: Value(1)" << c->value(1).toString();
 
         }
-        kDebug() << "up/down" << endl;
+        kDebug() << "up/down";
         c->moveNext();
-        kDebug() << "Cursor: Value(0)" << c->value(0).toString() << endl;
-        kDebug() << "Cursor: Value(1)" << c->value(1).toString() << endl;
+        kDebug() << "Cursor: Value(0)" << c->value(0).toString();
+        kDebug() << "Cursor: Value(1)" << c->value(1).toString();
         c->moveNext();
-        kDebug() << "Cursor: Value(0)" << c->value(0).toString() << endl;
-        kDebug() << "Cursor: Value(1)" << c->value(1).toString() << endl;
+        kDebug() << "Cursor: Value(0)" << c->value(0).toString();
+        kDebug() << "Cursor: Value(1)" << c->value(1).toString();
         c->movePrev();
-        kDebug() << "Cursor: Value(0)" << c->value(0).toString() << endl;
-        kDebug() << "Cursor: Value(1)" << c->value(1).toString() << endl;
+        kDebug() << "Cursor: Value(0)" << c->value(0).toString();
+        kDebug() << "Cursor: Value(1)" << c->value(1).toString();
         c->movePrev();
-        kDebug() << "Cursor: Value(0)" << c->value(0).toString() << endl;
-        kDebug() << "Cursor: Value(1)" << c->value(1).toString() << endl;
+        kDebug() << "Cursor: Value(0)" << c->value(0).toString();
+        kDebug() << "Cursor: Value(1)" << c->value(1).toString();
 
     }
 #if 0
@@ -110,7 +110,7 @@ int main(int argc, char * argv[])
 // conn->tableNames();
 
     if (!conn->disconnect()) {
-        kDebug() << conn->errorMsg() << endl;
+        kDebug() << conn->errorMsg();
         return 1;
     }
     debug("before del");

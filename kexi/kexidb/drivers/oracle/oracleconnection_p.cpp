@@ -44,7 +44,7 @@ connection)
     , errno(0)
     , rs(0)
 {
-	//KexiDBDrvDbg << "OracleConnectionInternal::Constructor: "<< endl;
+	//KexiDBDrvDbg << "OracleConnectionInternal::Constructor: ";
    try{
       env = Environment::createEnvironment();
    }catch (oracle::occi::SQLException ea){
@@ -57,11 +57,11 @@ connection)
 
 OracleConnectionInternal::~OracleConnectionInternal()
 {
- KexiDBDrvDbg <<endl;
+ KexiDBDrvDbg;
  try{
 	 	Environment::terminateEnvironment(env);
 	 	env=0;
-	 	KexiDBDrvDbg <<endl;
+	 	KexiDBDrvDbg;
 	}
 	catch (oracle::occi::SQLException ea){
       errno=ea.getErrorCode();
@@ -115,10 +115,10 @@ bool OracleConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
   {
      errno=ea.getErrorCode();
      errmsg=ea.what();
-     KexiDBDrvDbg<<ea.what()<<endl;
+     KexiDBDrvDbg<<ea.what();
 	   return false;
   }
-  KexiDBDrvDbg<<"Ok"<<endl;	
+  KexiDBDrvDbg<<"Ok";	
   return true;
 }
 void OracleConnectionInternal::storeResult(){}
@@ -126,7 +126,7 @@ void OracleConnectionInternal::storeResult(){}
  */
 bool OracleConnectionInternal::db_disconnect()
 {
-  KexiDBDrvDbg<<endl;
+  KexiDBDrvDbg;
   try{
 	  oraconn->terminateStatement(stmt);
 	  env->terminateConnection(oraconn);
@@ -136,7 +136,7 @@ bool OracleConnectionInternal::db_disconnect()
 	 catch (oracle::occi::SQLException ea)
 	 {
 	  errmsg=ea.getMessage().c_str();
-	  KexiDBDrvDbg<<errmsg<<endl;
+	  KexiDBDrvDbg<<errmsg;
 	  errno=ea.getErrorCode();
 	  return false;
 	 }
@@ -147,7 +147,7 @@ bool OracleConnectionInternal::db_disconnect()
  */
 bool OracleConnectionInternal::useDatabase(const QString &dbName) 
 {
-  KexiDBDrvDbg<<endl;
+  KexiDBDrvDbg;
 	QString user; 
 	try{
 		rs=stmt->executeQuery("SELECT user FROM DUAL");
@@ -160,7 +160,7 @@ bool OracleConnectionInternal::useDatabase(const QString &dbName)
   {
        errno=ea.getErrorCode();
        errmsg=strdup(ea.what());
-       KexiDBDrvDbg <<"OracleConnectionInternal::useDatabase:"<<ea.what()<<endl;
+       KexiDBDrvDbg <<"OracleConnectionInternal::useDatabase:"<<ea.what();
        return(false);
   }
 }
@@ -168,7 +168,7 @@ bool OracleConnectionInternal::useDatabase(const QString &dbName)
 bool OracleConnectionInternal::executeSQL(const QString& statement) {
     //QString stat=QString(statement);
     //stat.replace("VALUES (", "VALUES ( KEXI__SEQ__ROW_ID.NEXTVAL, ");
-    KexiDBDrvDbg<<statement<<endl;
+    KexiDBDrvDbg<<statement;
     //const char *query=statement.utf8();
     try
     {
@@ -201,7 +201,7 @@ QString OracleConnectionInternal::getServerVersion()
   }	
 }
 bool OracleConnectionInternal::createSequences(){
-  KexiDBDrvDbg<<endl; 
+  KexiDBDrvDbg; 
   return executeSQL("CREATE SEQUENCE KEXI__SEQ__ROW_ID")&&
          executeSQL("ALTER SEQUENCE KEXI__SEQ__ROW_ID NOCACHE");
 }

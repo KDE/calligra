@@ -160,7 +160,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent)
 
 Container::~Container()
 {
-    kDebug() << " Container being deleted this == " << objectName() << endl;
+    kDebug() << " Container being deleted this == " << objectName();
     delete d;
 }
 
@@ -180,15 +180,15 @@ Container::setForm(Form *form)
 bool
 Container::eventFilter(QObject *s, QEvent *e)
 {
-// kDebug() << e->type() << endl;
+// kDebug() << e->type();
     switch (e->type()) {
     case QEvent::MouseButtonPress: {
         m_insertBegin = QPoint(-1, -1);
         m_mousePressEventReceived = true;
 
         kDebug() << "QEvent::MouseButtonPress sender object = " << s->objectName()
-        << "of type " << s->metaObject()->className() << endl;
-        kDebug() << "QEvent::MouseButtonPress this          = " << this->objectName() << endl;
+        << "of type " << s->metaObject()->className();
+        kDebug() << "QEvent::MouseButtonPress this          = " << this->objectName();
 
         m_moving = static_cast<QWidget*>(s);
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
@@ -437,7 +437,7 @@ Container::eventFilter(QObject *s, QEvent *e)
     }
 
     case QEvent::MouseButtonDblClick: { // editing
-        kDebug() << "Container: Mouse dbl click for widget " << s->objectName() << endl;
+        kDebug() << "Container: Mouse dbl click for widget " << s->objectName();
         QWidget *w = static_cast<QWidget*>(s);
         if (!w)
             return false;
@@ -492,7 +492,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         // prevent accidental copying of widget (when moving mouse a little while selecting)
         if (((mev->pos().x() - m_grab.x()) < form()->gridSize() && (m_grab.x() - mev->pos().x()) < form()->gridSize()) &&
                 ((mev->pos().y() - m_grab.y()) < form()->gridSize() && (m_grab.y() - mev->pos().y()) < form()->gridSize())) {
-            kDebug() << "The widget has not been moved. No copying" << endl;
+            kDebug() << "The widget has not been moved. No copying";
             return true;
         }
 
@@ -521,7 +521,7 @@ void
 Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSelected)
 {
     if (w)
-        kDebug() << "slotSelectionChanged " << w->objectName() << endl;
+        kDebug() << "slotSelectionChanged " << w->objectName();
 
     if (!w) {
         d->form->setSelectedWidget(m_container);
@@ -554,7 +554,7 @@ Container::deleteWidget(QWidget *w)
 {
     if (!w)
         return;
-// kDebug() << "Deleting a widget: " << w->objectName() << endl;
+// kDebug() << "Deleting a widget: " << w->objectName();
     d->form->objectTree()->removeItem(w->objectName());
     FormManager::self()->deleteWidgetLater(w);
     d->form->setSelectedWidget(m_container);
@@ -777,7 +777,7 @@ Container::createGridLayout(bool testOnly)
                 end = w->geometry().bottom();
         }
     }
-    kDebug() << "the new grid will have n rows: n == " << rows.size() << endl;
+    kDebug() << "the new grid will have n rows: n == " << rows.size();
 
     end = -10000;
     same = false;
@@ -803,7 +803,7 @@ Container::createGridLayout(bool testOnly)
                 end = w->geometry().right();
         }
     }
-    kDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
+    kDebug() << "the new grid will have n columns: n == " << cols.size();
 
     // We create the layout ..
     Q3GridLayout *layout = 0;
@@ -840,7 +840,7 @@ Container::createGridLayout(bool testOnly)
             i++;
         }
         //kDebug() << "the widget " << w->objectName() << " wil be in the row " << wrow <<
-        //" and will go to the row " << endrow << endl;
+        //" and will go to the row " << endrow;
 
         // .. and column(s)
         i = 0;
@@ -863,7 +863,7 @@ Container::createGridLayout(bool testOnly)
             i++;
         }
         //kDebug() << "the widget " << w->objectName() << " wil be in the col " << wcol <<
-        // " and will go to the col " << endcol << endl;
+        // " and will go to the col " << endcol;
 
         ObjectTreeItem *item = d->form->objectTree()->lookup(w->objectName());
         if (!endrow && !endcol) {

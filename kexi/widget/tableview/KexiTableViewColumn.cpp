@@ -142,7 +142,7 @@ KexiTableViewColumn::KexiTableViewColumn(
 //! @todo 2.0: remove this when queries become editable            ^^^^^^^^^^^^^^
 // kDebug() << "KexiTableViewColumn: query.masterTable()=="
 //  << (query.masterTable() ? query.masterTable()->name() : "notable") << ", columnInfo->field->table()=="
-//  << (columnInfo->field->table() ? columnInfo->fielm_table()->name()  : "notable") << endl;
+//  << (columnInfo->field->table() ? columnInfo->fielm_table()->name()  : "notable");
 
 // m_visible = query.isFieldVisible(&f);
 }
