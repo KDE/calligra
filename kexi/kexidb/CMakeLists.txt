@@ -74,7 +74,7 @@ set(kexidb_LIB_SRCS
 
 kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb 
-   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils )
+   ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kexidb PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
