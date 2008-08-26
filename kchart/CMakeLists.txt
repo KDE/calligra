@@ -40,11 +40,16 @@ kde4_add_kcfg_files(kchartcommon_LIB_SRCS prefs.kcfgc)
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
 target_link_libraries(kchartcommon
-	${KDE4_KDE3SUPPORT_LIBS}
 	kochart
 	koguiutils
 	kdchart
-	chartshapelib )
+	chartshapelib
+    komain
+    kstore
+    flake
+    ${KDE4_KPARTS_LIBS}
+	${KDE4_KDE3SUPPORT_LIBS}
+    )
 
 set_target_properties(kchartcommon
 	PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION}
@@ -76,7 +81,7 @@ set(kchart_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kchart ${kchart_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} komain )
 
 install(TARGETS kdeinit_kchart  DESTINATION ${LIB_INSTALL_DIR})
 
