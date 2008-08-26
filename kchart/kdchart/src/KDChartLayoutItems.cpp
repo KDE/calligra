@@ -566,7 +566,14 @@ void KDChart::TextLayoutItem::paint( QPainter* painter )
     painter->drawRect( rect );
 #endif
     painter->setPen( PrintingParameters::scalePen( mAttributes.pen() ) );
-    painter->drawText( rect, Qt::AlignHCenter | Qt::AlignVCenter, mText );
+    QFontMetrics fontMetrics( f );
+    const int AHight = fontMetrics.boundingRect( QChar::fromAscii( 'A' ) ).height();
+    const qreal AVCenter = fontMetrics.ascent() - AHight / 2.0;
+    // Make sure that capital letters are vertically centered. This looks much
+    // better than just centering the text's bounding rect
+    rect.translate( 0.0, rect.height() / 2.0 - AVCenter );
+    painter->drawText( rect, Qt::AlignHCenter | Qt::AlignTop, mText );
+    
 //    if (  calcSizeHint( realFont() ).width() > rect.width() )
 //        qDebug() << "rect.width()" << rect.width() << "text.width()" << calcSizeHint( realFont() ).width();
 //
