@@ -18,7 +18,16 @@ set(kchartgenericimageexport_PART_SRCS genericimageexport.cpp ${libdialogfilter_
 
 kde4_add_plugin(kchartgenericimageexport WITH_PREFIX ${kchartgenericimageexport_PART_SRCS})
 
-target_link_libraries(kchartgenericimageexport  ${KDE4_KDECORE_LIBS} kchartcommon )
+target_link_libraries(
+    kchartgenericimageexport 
+    kchartcommon
+    kstore
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kchartgenericimageexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

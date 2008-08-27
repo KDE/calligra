@@ -24,7 +24,15 @@ kde4_add_plugin(kwordkword1dot3import WITH_PREFIX ${kwordkword1dot3import_PART_S
 
 
 
-target_link_libraries(kwordkword1dot3import  ${KDE4_KDECORE_LIBS} kstore komain)
+target_link_libraries(
+    kwordkword1dot3import
+    kstore
+    komain
+    koodf
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS kwordkword1dot3import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

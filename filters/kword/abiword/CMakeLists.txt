@@ -16,7 +16,16 @@ kde4_add_plugin(abiwordimport WITH_PREFIX ${abiwordimport_PART_SRCS})
 
 
 
-target_link_libraries(abiwordimport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
+target_link_libraries(
+    abiwordimport
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRAR}
+    ${QT_QTXML_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS abiwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -29,7 +38,14 @@ kde4_add_plugin(abiwordexport WITH_PREFIX ${abiwordexport_PART_SRCS})
 
 
 
-target_link_libraries(abiwordexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
+target_link_libraries(
+    abiwordexport
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS abiwordexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

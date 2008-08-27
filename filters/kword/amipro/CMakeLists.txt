@@ -12,7 +12,14 @@ kde4_add_plugin(amiproimport WITH_PREFIX ${amiproimport_PART_SRCS})
 
 
 
-target_link_libraries(amiproimport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
+target_link_libraries(
+    amiproimport
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS amiproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +32,13 @@ kde4_add_plugin(amiproexport WITH_PREFIX ${amiproexport_PART_SRCS})
 
 
 
-target_link_libraries(amiproexport  ${KDE4_KDECORE_LIBS} kwordexportfilters)
+target_link_libraries(
+    amiproexport
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS amiproexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

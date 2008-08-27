@@ -18,7 +18,15 @@ kde4_add_plugin(mswriteimport WITH_PREFIX ${mswriteimport_PART_SRCS})
 
 
 
-target_link_libraries(mswriteimport komain)
+target_link_libraries(
+    mswriteimport
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS mswriteimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -37,7 +45,15 @@ kde4_add_plugin(mswriteexport WITH_PREFIX ${mswriteexport_PART_SRCS})
 
 
 
-target_link_libraries(mswriteexport  ${KDE4_KDECORE_LIBS} kowmf kwordexportfilters )
+target_link_libraries(
+    mswriteexport
+    kowmf
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS mswriteexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

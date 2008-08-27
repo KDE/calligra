@@ -13,7 +13,15 @@ kde4_add_ui3_files(htmlexport_PART_SRCS ExportDialogUI.ui )
 
 kde4_add_plugin(htmlexport WITH_PREFIX ${htmlexport_PART_SRCS})
 
-target_link_libraries(htmlexport  kwordexportfilters ${KDE4_KDEUI_LIBS}  ${QT_QT3SUPPORT_LIBRARY} kstore)
+target_link_libraries(
+    htmlexport
+    kwordexportfilters
+    kstore
+    komain
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS htmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

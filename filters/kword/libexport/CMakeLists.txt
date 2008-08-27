@@ -21,6 +21,8 @@ target_link_libraries(
     komain
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
     ${QT_QTXML_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY} 
     )
