@@ -48,12 +48,12 @@ OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 	d->typeNames[Field::Byte]="NUMBER(3)"; // Unspecified by Oracle
 	d->typeNames[Field::ShortInteger]="INTEGER";
 	d->typeNames[Field::Integer]="INTEGER";
-	d->typeNames[Field::BigInteger]="INTEGER"; // Unspecified
+	d->typeNames[Field::BigInteger]="INTEGER"; // 
 	d->typeNames[Field::Boolean]="NUMBER(1)"; // Unspecified (Unsupported?)
 	d->typeNames[Field::Date]="DATE";
 	d->typeNames[Field::DateTime]="TIMESTAMP";
 	d->typeNames[Field::Time]="DATE";
-	d->typeNames[Field::Float]="FLOAT"; // Number?
+	d->typeNames[Field::Float]="FLOAT"; //
 	d->typeNames[Field::Double]="BINARY_DOUBLE"; // Number?
 	d->typeNames[Field::Text]="VARCHAR2"; // Length? not needed
 	d->typeNames[Field::LongText]="LONG";
@@ -82,9 +82,7 @@ OracleDriver::OracleDriver( QObject *parent, const QStringList &args)
 }
 
 OracleDriver::~OracleDriver()
-{
-	// Empty
-}
+{}
 
 /**
  * Creates a new connection.
@@ -94,24 +92,36 @@ KexiDB::Connection* OracleDriver::drv_createConnection(ConnectionData & conn_dat
 	return new OracleConnection(this, conn_data);
 }
 
+/**
+ * System resources are tables and views located in their own
+ * schemas (SYSTEM and SYS). There is no special object which
+ * cannot be used, although access to some could be denied due
+ * to insufficient privileges.
+ */
 bool OracleDriver::isSystemDatabaseName(const QString& /*n*/) const
 {
-	/*
-		System resources are tables and views located in their own
-		schemas (SYSTEM and SYS). There is no special object which
-		cannot be used, although access to some could be denied due
-		to insufficient privileges.
-	*/
 	return false;
 }
-
+/**
+ * See KexiDB::OracleDriver::isSystemDatabaseName(const QString &n) const.
+ */
 bool OracleDriver::drv_isSystemFieldName(const QString&) const {
-	/*
-		See KexiDB::OracleDriver::isSystemDatabaseName(const QString &n) const.
-	*/
 	return false;
 }
-
+QString OracleDriver::valueToSQL(uint ftype, const QVariant & v) const
+{
+  switch (ftype) {
+    case Field::Time:
+      return "TO_DATE("+escapeString(v.toString())+", 'HH24:MI:SS')";
+    case Field::Date:
+      //return "TO_DATE("+escapeString(v.toString())+", 'DD-MM-YYYY')";
+    case Field::DateTime:
+    //return dateTimeToSQL(v.toDateTime());
+      return "TO_DATE("+escapeString(v.toString())+", 'DD-MM-YYYY HH24:MI:SS')";
+    default:
+      return Driver::valueToSQL(ftype,v);
+  }
+}
 /**
  * Add single quotes at the beginning and the end of the string, and escapes any
  * single quotes found within
@@ -140,7 +150,7 @@ QByteArray OracleDriver::escapeString(const QByteArray& str) const
 	}
 }
 
-/**
+/*
  * I don't understand this, but what seems quite clear is that Oracle
  * doesn't accept hexadecimal values as one would expect, with '0x' prefix
  * or similar. SQL allows, however, to get the decimal value of a hexadecimal
@@ -158,7 +168,8 @@ QString OracleDriver::escapeBLOB(const QByteArray& array) const
 	//return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }
 
-/*! Add back-ticks to an identifier, and replace any back-ticks within
+/**
+ * Add back-ticks to an identifier, and replace any back-ticks within
  * the name with single quotes.
  */
 QString OracleDriver::drv_escapeIdentifier( const QString& str) const {
