@@ -44,7 +44,7 @@ MagickImport::~MagickImport()
 
 KoFilter::ConversionStatus MagickImport::convert(const QByteArray&, const QByteArray& to)
 {
-    dbgFile <<"Importing using MagickImport!";
+    dbgFile << "Importing using MagickImport!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;
@@ -54,57 +54,57 @@ KoFilter::ConversionStatus MagickImport::convert(const QByteArray&, const QByteA
 
     if (!doc)
         return KoFilter::CreationError;
-    
+
     KisView2 * view = 0;
 
     if (!doc->views().isEmpty()) {
         view = static_cast<KisView2*>(doc->views().first());
     }
-    
+
     QString filename = m_chain -> inputFile();
-    
+
     if (!doc)
         return KoFilter::CreationError;
 
     doc -> prepareForImport();
-        
+
 
     if (!filename.isEmpty()) {
-    
+
         KUrl url;
         url.setPath(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
-            
+
         KisImageMagickConverter ib(doc, doc -> undoAdapter());
 
         //if (view != 0)
         //    view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
         switch (ib.buildImage(url)) {
-            case KisImageBuilder_RESULT_UNSUPPORTED:
-                return KoFilter::NotImplemented;
-                break;
-            case KisImageBuilder_RESULT_INVALID_ARG:
-                return KoFilter::BadMimeType;
-                break;
-            case KisImageBuilder_RESULT_NO_URI:
-            case KisImageBuilder_RESULT_NOT_LOCAL:
-                return KoFilter::FileNotFound;
-                break;
-            case KisImageBuilder_RESULT_BAD_FETCH:
-            case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;                
-                break;
-            case KisImageBuilder_RESULT_FAILURE:
-                return KoFilter::InternalError;
-                break;
-            case KisImageBuilder_RESULT_OK:
-                doc -> setCurrentImage( ib.image());
-                return KoFilter::OK;
-            default:
-                break;
+        case KisImageBuilder_RESULT_UNSUPPORTED:
+            return KoFilter::NotImplemented;
+            break;
+        case KisImageBuilder_RESULT_INVALID_ARG:
+            return KoFilter::BadMimeType;
+            break;
+        case KisImageBuilder_RESULT_NO_URI:
+        case KisImageBuilder_RESULT_NOT_LOCAL:
+            return KoFilter::FileNotFound;
+            break;
+        case KisImageBuilder_RESULT_BAD_FETCH:
+        case KisImageBuilder_RESULT_EMPTY:
+            return KoFilter::ParsingError;
+            break;
+        case KisImageBuilder_RESULT_FAILURE:
+            return KoFilter::InternalError;
+            break;
+        case KisImageBuilder_RESULT_OK:
+            doc -> setCurrentImage(ib.image());
+            return KoFilter::OK;
+        default:
+            break;
         }
 
     }

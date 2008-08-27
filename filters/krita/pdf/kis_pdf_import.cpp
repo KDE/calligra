@@ -64,10 +64,10 @@ KisPDFImport::~KisPDFImport()
 {
 }
 
-KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray& )
+KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray&)
 {
     QString filename = m_chain -> inputFile();
-    dbgFile <<"Importing using PDFImport!" << filename;
+    dbgFile << "Importing using PDFImport!" << filename;
 
     if (filename.isEmpty())
         return KoFilter::FileNotFound;
@@ -83,42 +83,37 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     // We're not set up to handle asynchronous loading at the moment.
     QString tmpFile;
     if (KIO::NetAccess::download(url, tmpFile, qApp -> mainWidget())) {
-        url.setPath( tmpFile );
+        url.setPath(tmpFile);
     }
 
-    Poppler::Document* pdoc = Poppler::Document::load( QFile::encodeName(url.path() ) );
+    Poppler::Document* pdoc = Poppler::Document::load(QFile::encodeName(url.path()));
 
 
-    if ( !pdoc)
-    {
-        dbgFile <<"Error when reading the PDF";
+    if (!pdoc) {
+        dbgFile << "Error when reading the PDF";
         return KoFilter::StorageCreationError;
     }
 
 
-    while( pdoc->isLocked() )
-    {
+    while (pdoc->isLocked()) {
         KPasswordDialog dlg(0);
-	dlg.setPrompt( i18n("A password is required to read that pdf")  );
-	dlg.setWindowTitle( i18n("A password is required to read that pdf") );
-	if( dlg.exec() != QDialog::Accepted )
-	{
-            dbgFile <<"Password canceled";
+        dlg.setPrompt(i18n("A password is required to read that pdf"));
+        dlg.setWindowTitle(i18n("A password is required to read that pdf"));
+        if (dlg.exec() != QDialog::Accepted) {
+            dbgFile << "Password canceled";
             return KoFilter::StorageCreationError;
-	}
-	else
-		pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
+        } else
+            pdoc->unlock(dlg.password().toLocal8Bit(), dlg.password().toLocal8Bit());
     }
 
     KDialog* kdb = new KDialog(0);
-    kdb->setCaption( i18n("PDF Import Options") );
+    kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 
     KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    if(kdb->exec() == QDialog::Rejected)
-    {
+    if (kdb->exec() == QDialog::Rejected) {
         delete pdoc;
         delete kdb;
         return KoFilter::StorageCreationError; // FIXME Cancel doesn't exist :(
@@ -126,8 +121,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     // Init kis's doc
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
-    if (!doc)
-    {
+    if (!doc) {
         delete pdoc;
         delete kdb;
         return KoFilter::CreationError;
@@ -142,17 +136,16 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     img->lock();
     // create a layer
     QList<int> pages = wdg->pages();
-    for(QList<int>::const_iterator it = pages.begin(); it != pages.end(); ++it)
-    {
+    for (QList<int>::const_iterator it = pages.begin(); it != pages.end(); ++it) {
         KisPaintLayer* layer = new KisPaintLayer(img.data(),
-            i18n("Page %1", *it + 1),
-            quint8_MAX);
-        layer->paintDevice()->convertFromQImage( pdoc->page( *it )->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value() ), "");
+                i18n("Page %1", *it + 1),
+                quint8_MAX);
+        layer->paintDevice()->convertFromQImage(pdoc->page(*it)->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value()), "");
         img->addLayer(layer, img->rootLayer(), 0);
         layer->setDirty();
     }
 
-    doc->setCurrentImage( img);
+    doc->setCurrentImage(img);
     img->unlock();
     KIO::NetAccess::removeTempFile(tmpFile);
 

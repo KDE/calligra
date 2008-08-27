@@ -36,25 +36,24 @@
 
 
 KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name)
-    : QWidget(parent, name), m_pdfDoc(pdfDoc)
+        : QWidget(parent, name), m_pdfDoc(pdfDoc)
 {
     setupUi(this);
     m_pages.push_back(0); // The first page is selected
     updateMaxCanvasSize();
-    
-    for(int i = 1; i <= m_pdfDoc->numPages(); i++)
-    {
-        listPages->insertItem(QString::number( i ) );
+
+    for (int i = 1; i <= m_pdfDoc->numPages(); i++) {
+        listPages->insertItem(QString::number(i));
     }
-    
-    connect(intWidth, SIGNAL(  valueChanged ( int ) ), this, SLOT( updateHRes() ) );
-    connect(intHeight, SIGNAL(  valueChanged ( int ) ), this, SLOT( updateHVer() ) );
-    connect(intHorizontal, SIGNAL(  valueChanged ( int ) ), this, SLOT( updateWidth() ) );
-    connect(intVertical, SIGNAL(  valueChanged ( int ) ), this, SLOT( updateHeight() ) );
-    connect(boolAllPages, SIGNAL(  toggled ( bool ) ), this, SLOT( selectAllPages( bool ) ) );
-    connect(boolFirstPage, SIGNAL(  toggled ( bool ) ), this, SLOT( selectFirstPage( bool ) ) );
-    connect(boolSelectionPage, SIGNAL(  toggled ( bool ) ), this, SLOT( selectSelectionOfPages( bool ) ) );
-    connect(listPages, SIGNAL(selectionChanged () ), this, SLOT(updateSelectionOfPages()));
+
+    connect(intWidth, SIGNAL(valueChanged(int)), this, SLOT(updateHRes()));
+    connect(intHeight, SIGNAL(valueChanged(int)), this, SLOT(updateHVer()));
+    connect(intHorizontal, SIGNAL(valueChanged(int)), this, SLOT(updateWidth()));
+    connect(intVertical, SIGNAL(valueChanged(int)), this, SLOT(updateHeight()));
+    connect(boolAllPages, SIGNAL(toggled(bool)), this, SLOT(selectAllPages(bool)));
+    connect(boolFirstPage, SIGNAL(toggled(bool)), this, SLOT(selectFirstPage(bool)));
+    connect(boolSelectionPage, SIGNAL(toggled(bool)), this, SLOT(selectSelectionOfPages(bool)));
+    connect(listPages, SIGNAL(selectionChanged()), this, SLOT(updateSelectionOfPages()));
 }
 
 
@@ -64,11 +63,9 @@ KisPDFImportWidget::~KisPDFImportWidget()
 
 void KisPDFImportWidget::selectAllPages(bool v)
 {
-    if(v)
-    {
+    if (v) {
         m_pages.clear();
-        for(int i = 0; i < m_pdfDoc->numPages(); i++)
-        {
+        for (int i = 0; i < m_pdfDoc->numPages(); i++) {
             m_pages.push_back(i);
         }
         updateMaxCanvasSize();
@@ -76,16 +73,14 @@ void KisPDFImportWidget::selectAllPages(bool v)
 }
 void KisPDFImportWidget::selectFirstPage(bool v)
 {
-    if(v)
-    {
+    if (v) {
         m_pages.clear();
         m_pages.push_back(0); // The first page is selected
     }
 }
 void KisPDFImportWidget::selectSelectionOfPages(bool v)
 {
-    if(v)
-    {
+    if (v) {
         updateSelectionOfPages();
         updateMaxCanvasSize();
     }
@@ -94,33 +89,30 @@ void KisPDFImportWidget::selectSelectionOfPages(bool v)
 
 void KisPDFImportWidget::updateSelectionOfPages()
 {
-    if(! boolSelectionPage->isChecked ()) boolSelectionPage->toggle();
+    if (! boolSelectionPage->isChecked()) boolSelectionPage->toggle();
     m_pages.clear();
-    for(int i = 0; i < m_pdfDoc->numPages(); i++)
-    {
-        if(listPages->isSelected(i)) m_pages.push_back(i);
+    for (int i = 0; i < m_pdfDoc->numPages(); i++) {
+        if (listPages->isSelected(i)) m_pages.push_back(i);
     }
 }
 
 
-void KisPDFImportWidget::updateMaxCanvasSize() {
-    m_maxWidthInch = 0., m_maxHeightInch =0.;
-    for(QList<int>::const_iterator it = m_pages.begin(); it != m_pages.end(); ++it)
-    {
-        Poppler::Page *p = m_pdfDoc->page(*it );
+void KisPDFImportWidget::updateMaxCanvasSize()
+{
+    m_maxWidthInch = 0., m_maxHeightInch = 0.;
+    for (QList<int>::const_iterator it = m_pages.begin(); it != m_pages.end(); ++it) {
+        Poppler::Page *p = m_pdfDoc->page(*it);
         QSizeF size = p->pageSizeF();
-        if(size.width() > m_maxWidthInch)
-        {
+        if (size.width() > m_maxWidthInch) {
             m_maxWidthInch = size.width();
         }
-        if(size.height() > m_maxHeightInch)
-        {
+        if (size.height() > m_maxHeightInch) {
             m_maxHeightInch = size.height();
         }
     }
     m_maxWidthInch /= 72.;
     m_maxHeightInch /= 72.;
-    dbgFile << m_maxWidthInch <<"" << m_maxHeightInch;
+    dbgFile << m_maxWidthInch << "" << m_maxHeightInch;
     updateWidth();
     updateHeight();
 }
@@ -128,25 +120,25 @@ void KisPDFImportWidget::updateMaxCanvasSize() {
 void KisPDFImportWidget::updateWidth()
 {
     intWidth->blockSignals(true);
-    intWidth->setValue( (int) ceil(m_maxWidthInch * intHorizontal->value()));
+    intWidth->setValue((int) ceil(m_maxWidthInch * intHorizontal->value()));
     intWidth->blockSignals(false);
 }
 void KisPDFImportWidget::updateHeight()
 {
     intHeight->blockSignals(true);
-    intHeight->setValue( (int) ceil(m_maxHeightInch * intVertical->value()));
+    intHeight->setValue((int) ceil(m_maxHeightInch * intVertical->value()));
     intHeight->blockSignals(false);
 }
 void KisPDFImportWidget::updateHRes()
 {
     intHorizontal->blockSignals(true);
-    intHorizontal->setValue( (int) (intWidth->value() / m_maxWidthInch ) );
+    intHorizontal->setValue((int)(intWidth->value() / m_maxWidthInch));
     intHorizontal->blockSignals(false);
 }
 void KisPDFImportWidget::updateHVer()
 {
     intVertical->blockSignals(true);
-    intVertical->setValue( (int) (intHeight->value() / m_maxHeightInch ) );
+    intVertical->setValue((int)(intHeight->value() / m_maxHeightInch));
     intVertical->blockSignals(false);
 }
 

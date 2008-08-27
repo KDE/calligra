@@ -31,58 +31,56 @@
 #include "ui_kis_wdg_options_tiff.h"
 
 KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
-    : KDialog(parent), wdg(new QWidget)
+        : KDialog(parent), wdg(new QWidget)
 {
-    setWindowTitle( i18n("TIFF Export Options") );
-    setButtons( KDialog::Ok | KDialog::Cancel );
+    setWindowTitle(i18n("TIFF Export Options"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
     optionswdg = new Ui_KisWdgOptionsTIFF();
     optionswdg->setupUi(wdg);
     activated(0);
-    connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated ( int )), this, SLOT(activated ( int ) ));
-    connect(optionswdg->flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled( bool) ) );
+    connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated(int)), this, SLOT(activated(int)));
+    connect(optionswdg->flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
     setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
+    setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 
 KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
 {
 }
 
-void KisDlgOptionsTIFF::activated ( int index )
+void KisDlgOptionsTIFF::activated(int index)
 {
-/*    optionswdg->groupBoxJPEG->hide();
-    optionswdg->groupBoxDeflate->hide();
-    optionswdg->groupBoxCCITGroupCCITG3->hide();
-    optionswdg->groupBoxPixarLog->hide();*/
-    switch(index)
-    {
-        case 1:
-            optionswdg->codecsOptionsStack->raiseWidget(1);
+    /*    optionswdg->groupBoxJPEG->hide();
+        optionswdg->groupBoxDeflate->hide();
+        optionswdg->groupBoxCCITGroupCCITG3->hide();
+        optionswdg->groupBoxPixarLog->hide();*/
+    switch (index) {
+    case 1:
+        optionswdg->codecsOptionsStack->raiseWidget(1);
 //             optionswdg->groupBoxJPEG->show();
-            break;
-        case 2:
-            optionswdg->codecsOptionsStack->raiseWidget(2);
+        break;
+    case 2:
+        optionswdg->codecsOptionsStack->raiseWidget(2);
 //             optionswdg->groupBoxDeflate->show();
-            break;
-        case 6:
-            optionswdg->codecsOptionsStack->raiseWidget(3);
+        break;
+    case 6:
+        optionswdg->codecsOptionsStack->raiseWidget(3);
 //             optionswdg->groupBoxCCITGroupCCITG3->show();
-            break;
-        case 8:
-            optionswdg->codecsOptionsStack->raiseWidget(4);
+        break;
+    case 8:
+        optionswdg->codecsOptionsStack->raiseWidget(4);
 //             optionswdg->groupBoxPixarLog->show();
-            break;
-        default:
-            optionswdg->codecsOptionsStack->raiseWidget(0);
+        break;
+    default:
+        optionswdg->codecsOptionsStack->raiseWidget(0);
     }
 }
 
 void KisDlgOptionsTIFF::flattenToggled(bool t)
 {
     optionswdg->alpha->setEnabled(t);
-    if(!t)
-    {
+    if (!t) {
         optionswdg->alpha->setChecked(true);
     }
 }
@@ -91,37 +89,36 @@ void KisDlgOptionsTIFF::flattenToggled(bool t)
 KisTIFFOptions KisDlgOptionsTIFF::options()
 {
     KisTIFFOptions options;
-    switch(optionswdg->kComboBoxCompressionType->currentIndex ())
-    {
-        case 0:
-            options.compressionType = COMPRESSION_NONE;
-            break;
-        case 1:
-            options.compressionType = COMPRESSION_JPEG;
-            break;
-        case 2:
-            options.compressionType = COMPRESSION_DEFLATE;
-            break;
-        case 3:
-            options.compressionType = COMPRESSION_LZW;
-            break;
-        case 4:
-            options.compressionType = COMPRESSION_JP2000;
-            break;
-        case 5:
-            options.compressionType = COMPRESSION_CCITTRLE;
-            break;
-        case 6:
-            options.compressionType = COMPRESSION_CCITTFAX3;
-            break;
-        case 7:
-            options.compressionType = COMPRESSION_CCITTFAX4;
-            break;
-        case 8:
-            options.compressionType = COMPRESSION_PIXARLOG;
-            break;
-        default:
-            options.compressionType = COMPRESSION_NONE;
+    switch (optionswdg->kComboBoxCompressionType->currentIndex()) {
+    case 0:
+        options.compressionType = COMPRESSION_NONE;
+        break;
+    case 1:
+        options.compressionType = COMPRESSION_JPEG;
+        break;
+    case 2:
+        options.compressionType = COMPRESSION_DEFLATE;
+        break;
+    case 3:
+        options.compressionType = COMPRESSION_LZW;
+        break;
+    case 4:
+        options.compressionType = COMPRESSION_JP2000;
+        break;
+    case 5:
+        options.compressionType = COMPRESSION_CCITTRLE;
+        break;
+    case 6:
+        options.compressionType = COMPRESSION_CCITTFAX3;
+        break;
+    case 7:
+        options.compressionType = COMPRESSION_CCITTFAX4;
+        break;
+    case 8:
+        options.compressionType = COMPRESSION_PIXARLOG;
+        break;
+    default:
+        options.compressionType = COMPRESSION_NONE;
     }
     options.predictor = optionswdg->kComboBoxPredictor->currentIndex() + 1;
     options.alpha = optionswdg->alpha->isChecked();

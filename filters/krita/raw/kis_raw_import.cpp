@@ -42,7 +42,7 @@ typedef KGenericFactory<KisRawImport> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
 
 KisRawImport::KisRawImport(QObject *parent, const QStringList&)
-    : KoFilter(parent)
+        : KoFilter(parent)
 {
     m_dialog = new KDialog();
     m_dialog->enableButtonApply(false);
@@ -58,9 +58,9 @@ KisRawImport::~KisRawImport()
     delete m_dialog;
 }
 
-inline quint16 correctIndian( quint16 v )
+inline quint16 correctIndian(quint16 v)
 {
-    return ( (v & 0x00FF) << 8) | ( ( v & 0xFF00 >> 8 ) );
+    return ((v & 0x00FF) << 8) | ((v & 0xFF00 >> 8));
 }
 
 KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
@@ -70,7 +70,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         return KoFilter::NotImplemented;
     }
 
-    dbgFile <<"Krita importing from Raw";
+    dbgFile << "Krita importing from Raw";
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
@@ -91,7 +91,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     m_rawWidget.rawSettings->setDefaultSettings();
-    
+
     slotUpdatePreview();
 
     if (m_dialog->exec() == QDialog::Accepted) {
@@ -104,30 +104,30 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         settings.sixteenBitsImage =  true;
         int width, height, rgbmax;
         KDcraw dcraw;
-        if( !dcraw.decodeRAWImage( m_chain->inputFile(), settings, imageData, width, height, rgbmax) ) return KoFilter::CreationError;
+        if (!dcraw.decodeRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax)) return KoFilter::CreationError;
 
         QApplication::restoreOverrideCursor();
-        
+
         // Init the image
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace( "RGBA16", "" );
-        KisImageSP image = new KisImage( doc->undoAdapter(), width, height, cs, filename);
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace("RGBA16", "");
+        KisImageSP image = new KisImage(doc->undoAdapter(), width, height, cs, filename);
         if (image.isNull()) return KoFilter::CreationError;
         image->lock();
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), quint8_MAX);
         image->addNode(layer, image->rootLayer());
         if (layer.isNull()) return KoFilter::CreationError;
-    
+
         KisPaintDeviceSP device = layer->paintDevice();
         if (device.isNull()) return KoFilter::CreationError;
-        
-        
+
+
         // Copy the date
-        
+
         KisHLineIterator it = device->createHLineIterator(0, 0, width);
         for (int y = 0; y < height; ++y) {
-            while( !it.isDone()) {
+            while (!it.isDone()) {
                 KoRgbU16Traits::Pixel* pixel = reinterpret_cast<KoRgbU16Traits::Pixel*>(it.rawData());
-                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it.x() )* 3;
+                quint16* ptr = ((quint16*)imageData.data()) + (y * width + it.x()) * 3;
                 pixel->red = correctIndian(ptr[0]);
                 pixel->green = correctIndian(ptr[1]);
                 pixel->blue = correctIndian(ptr[2]);
@@ -136,11 +136,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             }
             it.nextRow();
         }
-        
+
         layer->setDirty();
         QApplication::restoreOverrideCursor();
         image->unlock();
-        doc->setCurrentImage( image);
+        doc->setCurrentImage(image);
         return KoFilter::OK;
     }
 
@@ -154,17 +154,15 @@ void KisRawImport::slotUpdatePreview()
     RawDecodingSettings settings = rawDecodingSettings();
     int width, height, rgbmax;
     KDcraw dcraw;
-    dcraw.decodeHalfRAWImage( m_chain->inputFile(), settings, imageData, width, height, rgbmax);
-    QImage image( width, height, QImage::Format_RGB32);
-    for( int y = 0; y < height; ++y)
-    {
-        for(int x = 0; x < width; ++x )
-        {
-            quint16* ptr = ((quint16*)imageData.data()) + (y * width + x )* 3;
-            image.setPixel( x,y, qRgb( ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF ));
+    dcraw.decodeHalfRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax);
+    QImage image(width, height, QImage::Format_RGB32);
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            quint16* ptr = ((quint16*)imageData.data()) + (y * width + x) * 3;
+            image.setPixel(x, y, qRgb(ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF));
         }
     }
-    m_rawWidget.preview->setPixmap( QPixmap::fromImage( image ) );
+    m_rawWidget.preview->setPixmap(QPixmap::fromImage(image));
 }
 
 RawDecodingSettings KisRawImport::rawDecodingSettings()
@@ -180,18 +178,18 @@ RawDecodingSettings KisRawImport::rawDecodingSettings()
     settings.whiteBalance = m_rawWidget.rawSettings->whiteBalance();
     settings.customWhiteBalance = m_rawWidget.rawSettings->customWhiteBalance();
     settings.customWhiteBalanceGreen = m_rawWidget.rawSettings->customWhiteBalanceGreen();
-    
+
     settings.enableBlackPoint = m_rawWidget.rawSettings->useBlackPoint();
     settings.blackPoint = m_rawWidget.rawSettings->blackPoint();
-    
+
     settings.enableNoiseReduction = m_rawWidget.rawSettings->useNoiseReduction();
     settings.NRThreshold = m_rawWidget.rawSettings->NRThreshold();
-    
+
     settings.enableCACorrection = m_rawWidget.rawSettings->useCACorrection();
     settings.caMultiplier[0] = m_rawWidget.rawSettings->caRedMultiplier();
     settings.caMultiplier[1] = m_rawWidget.rawSettings->caBlueMultiplier();
-    
-    
+
+
     return settings;
 }
 

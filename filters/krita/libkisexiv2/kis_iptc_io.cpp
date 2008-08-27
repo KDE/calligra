@@ -84,58 +84,53 @@ KisIptcIO::~KisIptcIO()
 void KisIptcIO::initMappingsTable() const
 {
     // For some reason, initializing the tables in the constructor makes the it crash
-    if(d->iptcToKMD.size() == 0)
-    {
-        for(int i = 0; !mappings[i].exivTag.isEmpty(); i++)
-        {
+    if (d->iptcToKMD.size() == 0) {
+        for (int i = 0; !mappings[i].exivTag.isEmpty(); i++) {
             dbgKrita << "mapping[i] = " << mappings[i].exivTag << " " << mappings[i].namespaceUri << " " << mappings[i].name;
             d->iptcToKMD[mappings[i].exivTag] = mappings[i];
             d->kmdToIPTC[
-                    KisMetaData::SchemaRegistry::instance()
-                        ->schemaFromUri(mappings[i].namespaceUri)
-                        ->generateQualifiedName( mappings[i].name) ] = mappings[i];
+                KisMetaData::SchemaRegistry::instance()
+                ->schemaFromUri(mappings[i].namespaceUri)
+                ->generateQualifiedName(mappings[i].name)] = mappings[i];
         }
     }
 }
 
-bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType ) const
+bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
     initMappingsTable();
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::IptcData iptcData;
-    for(QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
-        it != store->end(); ++it )
-    {
+    for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
+            it != store->end(); ++it) {
         const KisMetaData::Entry& entry = *it;
-        if(d->kmdToIPTC.contains(entry.qualifiedName()))
-        {
-            QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName() ].exivTag;
+        if (d->kmdToIPTC.contains(entry.qualifiedName())) {
+            QString iptcKeyStr = d->kmdToIPTC[ entry.qualifiedName()].exivTag;
             Exiv2::IptcKey iptcKey(qPrintable(iptcKeyStr));
-            iptcData.add(iptcKey, kmdValueToExivValue( entry.value(),
-                         Exiv2::IptcDataSets::dataSetType( iptcKey.tag(), iptcKey.record()) ) );
+            iptcData.add(iptcKey, kmdValueToExivValue(entry.value(),
+                         Exiv2::IptcDataSets::dataSetType(iptcKey.tag(), iptcKey.record())));
         }
     }
     Exiv2::DataBuf rawData = iptcData.copy();
-    
-    if( headerType == KisMetaData::IOBackend::JpegHeader )
-    {
+
+    if (headerType == KisMetaData::IOBackend::JpegHeader) {
         QByteArray header;
-        header.append( photoshopMarker );
-        header.append( QByteArray(1, 0) ); // Null terminated string
-        header.append( photoshopBimId_ );
-        header.append( photoshopIptc_ );
-        header.append( QByteArray(2, 0) );
+        header.append(photoshopMarker);
+        header.append(QByteArray(1, 0));   // Null terminated string
+        header.append(photoshopBimId_);
+        header.append(photoshopIptc_);
+        header.append(QByteArray(2, 0));
         qint32 size = rawData.size_;
-        QByteArray sizeArray(4,0);
+        QByteArray sizeArray(4, 0);
         sizeArray[0] = (char)((size & 0xff000000) >> 24);
         sizeArray[1] = (char)((size & 0x00ff0000) >> 16);
         sizeArray[2] = (char)((size & 0x0000ff00) >> 8);
         sizeArray[3] = (char)(size & 0x000000ff);
-        header.append( sizeArray);
-        ioDevice->write( header );
+        header.append(sizeArray);
+        ioDevice->write(header);
     }
-    
-    ioDevice->write( (const char*) rawData.pData_, rawData.size_);
+
+    ioDevice->write((const char*) rawData.pData_, rawData.size_);
     ioDevice->close();
     return true;
 }
@@ -149,23 +144,21 @@ bool KisIptcIO::canSaveAllEntries(KisMetaData::Store* store) const
 bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     initMappingsTable();
-    dbgFile <<"Loading IPTC Tags";
+    dbgFile << "Loading IPTC Tags";
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::IptcData iptcData;
     iptcData.load((const Exiv2::byte*)arr.data(), arr.size());
-    dbgFile <<"There are" << iptcData.count() <<" entries in the IPTC section";
-    for(Exiv2::IptcMetadata::const_iterator it = iptcData.begin();
-        it != iptcData.end(); ++it)
-    {
-        dbgFile <<"Reading info for key" << it->key().c_str();
-        if(d->iptcToKMD.contains(it->key().c_str()))
-        {
+    dbgFile << "There are" << iptcData.count() << " entries in the IPTC section";
+    for (Exiv2::IptcMetadata::const_iterator it = iptcData.begin();
+            it != iptcData.end(); ++it) {
+        dbgFile << "Reading info for key" << it->key().c_str();
+        if (d->iptcToKMD.contains(it->key().c_str())) {
             const IPTCToKMD& iptcToKMd = d->iptcToKMD[it->key().c_str()];
             store->addEntry(KisMetaData::Entry(
-                            KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri),
-                            iptcToKMd.name,
-                            exivValueToKMDValue(it->getValue())));
+                                KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri),
+                                iptcToKMd.name,
+                                exivValueToKMDValue(it->getValue())));
         }
     }
     return false;

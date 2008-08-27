@@ -37,10 +37,11 @@ KisXMPIO::~KisXMPIO()
 {
 }
 
-bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType ) const
+bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
     Q_UNUSED(store);
     Q_UNUSED(ioDevice);
+    Q_UNUSED(headerType);
     return false;
 }
 
@@ -50,20 +51,19 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     dbgFile << "Load XMP Data";
     std::string xmpPacket_;
     QByteArray arr = ioDevice->readAll();
-    xmpPacket_.assign( arr.data(), arr.length() );
+    xmpPacket_.assign(arr.data(), arr.length());
     dbgFile << xmpPacket_.length();
 //     dbgFile << xmpPacket_.c_str();
     Exiv2::XmpData xmpData_;
     Exiv2::XmpParser::decode(xmpData_, xmpPacket_);
-    for( Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it)
-    {
+    for (Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it) {
         dbgFile << it->key().c_str();
-        Exiv2::XmpKey key( it->key() );
+        Exiv2::XmpKey key(it->key());
         dbgFile << key.groupName().c_str() << " " << key.tagName().c_str();
-        const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix( key.groupName().c_str() );
+        const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix(key.groupName().c_str());
         Q_ASSERT(schema);
         KisMetaData::Value v = exivValueToKMDValue(it->getValue());
-        store->addEntry(KisMetaData::Entry(schema, key.tagName().c_str(), v ));
+        store->addEntry(KisMetaData::Entry(schema, key.tagName().c_str(), v));
     }
     return true;
 }

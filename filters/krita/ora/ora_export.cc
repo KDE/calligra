@@ -48,7 +48,7 @@ OraExport::~OraExport()
 
 KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"ORA export! From:" << from <<", To:" << to <<"";
+    dbgFile << "ORA export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -72,11 +72,11 @@ KoFilter::ConversionStatus OraExport::convert(const QByteArray& from, const QByt
 
     KisImageBuilder_Result res;
 
-    if ( (res = kpc.buildFile(url, img)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildFile(url, img)) == KisImageBuilder_RESULT_OK) {
+        dbgFile << "success !";
         return KoFilter::OK;
     }
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }
 

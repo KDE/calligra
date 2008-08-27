@@ -52,7 +52,7 @@ KisTIFFExport::~KisTIFFExport()
 
 KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"Tiff export! From:" << from <<", To:" << to <<"";
+    dbgFile << "Tiff export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -66,23 +66,20 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     const KoColorSpace* cs = output->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
-    if( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32)
-    {
-      kdb->optionswdg->kComboBoxPredictor->removeItem(1);
+    if (type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) {
+        kdb->optionswdg->kComboBoxPredictor->removeItem(1);
     } else {
-      kdb->optionswdg->kComboBoxPredictor->removeItem(2);
+        kdb->optionswdg->kComboBoxPredictor->removeItem(2);
     }
 
-    if(kdb->exec() == QDialog::Rejected)
-    {
+    if (kdb->exec() == QDialog::Rejected) {
         return KoFilter::UserCancelled;
     }
 
     KisTIFFOptions options = kdb->options();
 
-    if( ( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2  )
-    { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
-      options.predictor = 3;
+    if ((type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32) && options.predictor == 2) { // FIXME THIS IS AN HACK FIX THAT IN 2.0 !!
+        options.predictor = 3;
     }
     delete kdb;
 
@@ -95,8 +92,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
     KisImageSP img;
 
-    if(options.flatten)
-    {
+    if (options.flatten) {
         img = new KisImage(0, output->image()->width(), output->image()->height(), output->image()->colorSpace(), "");
         KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*output->image()->projection()));
         KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
@@ -108,14 +104,14 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
 
 
     KisTIFFConverter ktc(output, output->undoAdapter());
-/*    vKisAnnotationSP_it beginIt = img->beginAnnotations();
-    vKisAnnotationSP_it endIt = img->endAnnotations();*/
+    /*    vKisAnnotationSP_it beginIt = img->beginAnnotations();
+        vKisAnnotationSP_it endIt = img->endAnnotations();*/
     KisImageBuilder_Result res;
-    if ( (res = ktc.buildFile(url, img, options)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = ktc.buildFile(url, img, options)) == KisImageBuilder_RESULT_OK) {
+        dbgFile << "success !";
         return KoFilter::OK;
     }
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }
 

@@ -32,50 +32,45 @@
 
 OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
 {
-    
+
 }
 QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
 {
-    QString filename = QString("data/layer%1.png").arg( m_id++ );
-    if( m_store->open(filename))
-    {
-        KoStoreDevice io ( m_store );
-        if ( !io.open( QIODevice::WriteOnly ) )
-        {
-            dbgFile <<"Could not open for writing:" << filename;
+    QString filename = QString("data/layer%1.png").arg(m_id++);
+    if (m_store->open(filename)) {
+        KoStoreDevice io(m_store);
+        if (!io.open(QIODevice::WriteOnly)) {
+            dbgFile << "Could not open for writing:" << filename;
             return "";
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
         vKisAnnotationSP_it annotIt = 0;
-        KisMetaData::Store* store = new KisMetaData::Store( *layer->metaData( ));
-        if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, KisPNGOptions(), store ) != KisImageBuilder_RESULT_OK)
-        {
+        KisMetaData::Store* store = new KisMetaData::Store(*layer->metaData());
+        if (pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, KisPNGOptions(), store) != KisImageBuilder_RESULT_OK) {
             dbgFile << "Saving PNG failed:" << filename;
             delete store;
             return "";
         }
         delete store;
         io.close();
-        if(!m_store->close())
-        {
+        if (!m_store->close()) {
             return "";
         }
     } else {
         dbgFile << "Opening of data file failed :" << filename;
         return "";
     }
-    
+
     return filename;
 }
 void OraSaveContext::saveStack(const QDomDocument& doc)
 {
-    if( m_store->open("stack.xml") )
-    {
-        KoStoreDevice io ( m_store );
-        io.write( doc.toByteArray());
+    if (m_store->open("stack.xml")) {
+        KoStoreDevice io(m_store);
+        io.write(doc.toByteArray());
         io.close();
         m_store->close();
     } else {
-        dbgFile <<"Opening of the stack.xml file failed :";
+        dbgFile << "Opening of the stack.xml file failed :";
     }
 }

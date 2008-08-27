@@ -66,7 +66,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         return KoFilter::NotImplemented;
     }
 
-    dbgFile <<"Krita exporting to OpenEXR";
+    dbgFile << "Krita exporting to OpenEXR";
 
     // XXX: Add dialog about flattening layers here
 
@@ -155,7 +155,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
 void KisOpenEXRExport::getPixel(const quint8 *src, half *red, half *green, half *blue, half *alpha) const
 {
-   struct Pixel {
+    struct Pixel {
         half blue;
         half green;
         half red;

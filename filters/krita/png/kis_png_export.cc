@@ -46,49 +46,50 @@
 
 class KisExifInfoVisitor : public KisNodeVisitor
 {
-    public:
-        using KisNodeVisitor::visit;
-    
-        KisExifInfoVisitor() :
+public:
+    using KisNodeVisitor::visit;
+
+    KisExifInfoVisitor() :
             m_exifInfo(0),
-            m_countPaintLayer(0)
-        { }
-    public:
+            m_countPaintLayer(0) { }
+public:
 
-        virtual bool visit(KisExternalLayer*)
-        {
-            return true;
-        }
+    virtual bool visit(KisExternalLayer*) {
+        return true;
+    }
 
-        virtual bool visit(KisGeneratorLayer*)
-        {
-            return true;
-        }
+    virtual bool visit(KisGeneratorLayer*) {
+        return true;
+    }
 
-        virtual bool visit(KisPaintLayer* layer) {
-            m_countPaintLayer++;
-            if (!layer->metaData()->empty())
-            {
-                m_exifInfo = layer->metaData();
-            }
-            return true;
+    virtual bool visit(KisPaintLayer* layer) {
+        m_countPaintLayer++;
+        if (!layer->metaData()->empty()) {
+            m_exifInfo = layer->metaData();
         }
+        return true;
+    }
 
-        
-        virtual bool visit(KisGroupLayer* layer)
-        {
-            dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
-            return visitAll( layer, true );
-        }
-        
-        virtual bool visit(KisAdjustmentLayer* ) {  return true; }
-        
-    public:
-        inline uint countPaintLayer() { return m_countPaintLayer; }
-        inline KisMetaData::Store* exifInfo() {return m_exifInfo; }
-    private:
-        KisMetaData::Store* m_exifInfo;
-        uint m_countPaintLayer;
+
+    virtual bool visit(KisGroupLayer* layer) {
+        dbgFile << "Visiting on grouplayer" << layer->name() << "";
+        return visitAll(layer, true);
+    }
+
+    virtual bool visit(KisAdjustmentLayer*) {
+        return true;
+    }
+
+public:
+    inline uint countPaintLayer() {
+        return m_countPaintLayer;
+    }
+    inline KisMetaData::Store* exifInfo() {
+        return m_exifInfo;
+    }
+private:
+    KisMetaData::Store* m_exifInfo;
+    uint m_countPaintLayer;
 };
 
 
@@ -106,10 +107,8 @@ KisPNGExport::~KisPNGExport()
 bool hasVisibleWidgets()
 {
     QWidgetList wl = QApplication::allWidgets();
-    foreach(QWidget* w, wl)
-    {
-        if(w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget"))
-        {
+    foreach(QWidget* w, wl) {
+        if (w->isVisible() && strcmp(w->metaObject()->className(), "QDesktopWidget")) {
             dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
             return true;
         }
@@ -119,7 +118,7 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"Png export! From:" << from <<", To:" << to <<"";
+    dbgFile << "Png export! From:" << from << ", To:" << to << "";
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
@@ -134,7 +133,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
         return KoFilter::NotImplemented;
 
     KDialog* kdb = new KDialog(0);
-    kdb->setCaption( i18n("PNG Export Options") );
+    kdb->setCaption(i18n("PNG Export Options"));
     kdb->setModal(false);
 
     KisImageSP img = output->image();
@@ -142,14 +141,12 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     pd = new KisPaintDevice(*img->projection());
     KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
 
-    KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0,0, img->width(), img->height());
+    KisRectConstIteratorPixel it = l->paintDevice()->createRectConstIterator(0, 0, img->width(), img->height());
     const KoColorSpace* cs = l->paintDevice()->colorSpace();
 
     bool isThereAlpha = false;
-    while( !it.isDone() )
-    {
-        if(cs->alpha( it.rawData() ) != 255)
-        {
+    while (!it.isDone()) {
+        if (cs->alpha(it.rawData()) != 255) {
             isThereAlpha = true;
             break;
         }
@@ -161,10 +158,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     wdg->alpha->setEnabled(isThereAlpha);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    if( hasVisibleWidgets())
-    {
-        if(kdb->exec() == QDialog::Rejected)
-        {
+    if (hasVisibleWidgets()) {
+        if (kdb->exec() == QDialog::Rejected) {
             return KoFilter::OK; // FIXME Cancel doesn't exist :(
         }
     }
@@ -188,22 +183,21 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     options.interlace = interlace;
     options.compression = compression;
     KisExifInfoVisitor eIV;
-    eIV.visit( img->rootLayer().data() );
+    eIV.visit(img->rootLayer().data());
     KisMetaData::Store* eI = 0;
-    if(eIV.countPaintLayer() == 1)
+    if (eIV.countPaintLayer() == 1)
         eI = eIV.exifInfo();
-    if(eI)
-    {
-        KisMetaData::Store* copy = new KisMetaData::Store( *eI );
+    if (eI) {
+        KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ( (res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+        dbgFile << "success !";
         delete eI;
         return KoFilter::OK;
     }
     delete eI;
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }
 

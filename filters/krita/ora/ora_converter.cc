@@ -61,13 +61,12 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    KoStore* store = KoStore::createStore( qApp->mainWidget(), uri, KoStore::Read, "odr", KoStore::Zip);
-    if( !store)
-    {
+    KoStore* store = KoStore::createStore(qApp->mainWidget(), uri, KoStore::Read, "odr", KoStore::Zip);
+    if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    OraLoadContext olc( store );
+    OraLoadContext olc(store);
     KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
     orslv.loadImage();
     m_img = orslv.image();
@@ -91,17 +90,16 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageSP image
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open file for writing
-    KoStore* store = KoStore::createStore( qApp -> mainWidget(), uri, KoStore::Write, "odr", KoStore::Zip);
-    if(!store)
-    {
+    KoStore* store = KoStore::createStore(qApp -> mainWidget(), uri, KoStore::Write, "odr", KoStore::Zip);
+    if (!store) {
         return KisImageBuilder_RESULT_FAILURE;
     }
-    
-    OraSaveContext osc( store );
-    KisOpenRasterStackSaveVisitor orssv( &osc  );
-    
-    image->rootLayer()->accept( orssv );
-    
+
+    OraSaveContext osc(store);
+    KisOpenRasterStackSaveVisitor orssv(&osc);
+
+    image->rootLayer()->accept(orssv);
+
     delete store;
     return KisImageBuilder_RESULT_OK;
 }

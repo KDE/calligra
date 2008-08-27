@@ -38,15 +38,14 @@ OraLoadContext::~OraLoadContext()
 
 KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
 {
-    if (m_store->open(filename) ) {
-        KoStoreDevice io ( m_store );
-        if ( !io.open( QIODevice::ReadOnly ) )
-        {
-            dbgFile <<"Could not open for reading:" << filename;
+    if (m_store->open(filename)) {
+        KoStoreDevice io(m_store);
+        if (!io.open(QIODevice::ReadOnly)) {
+            dbgFile << "Could not open for reading:" << filename;
             return 0;
         }
-        KisPNGConverter pngConv(0, 0 );
-        pngConv.buildImage( &io );
+        KisPNGConverter pngConv(0, 0);
+        pngConv.buildImage(&io);
         io.close();
         m_store->close();
         return pngConv.image()->projection();
@@ -57,7 +56,7 @@ KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
 QDomDocument OraLoadContext::loadStack()
 {
     m_store->open("stack.xml");
-    KoStoreDevice io ( m_store );
+    KoStoreDevice io(m_store);
     QDomDocument doc;
     doc.setContent(&io, false);
     io.close();

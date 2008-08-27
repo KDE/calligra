@@ -48,49 +48,50 @@ class KisExternalLayer;
 
 class KisExifInfoVisitor : public KisNodeVisitor
 {
-    public:
-        using KisNodeVisitor::visit;
-    
-        KisExifInfoVisitor() :
+public:
+    using KisNodeVisitor::visit;
+
+    KisExifInfoVisitor() :
             m_exifInfo(0),
-            m_countPaintLayer(0)
-        { }
-    public:
+            m_countPaintLayer(0) { }
+public:
 
-        virtual bool visit(KisExternalLayer*)
-        {
-            return true;
-        }
+    virtual bool visit(KisExternalLayer*) {
+        return true;
+    }
 
-        virtual bool visit(KisGeneratorLayer*)
-        {
-            return true;
-        }
+    virtual bool visit(KisGeneratorLayer*) {
+        return true;
+    }
 
-        virtual bool visit(KisPaintLayer* layer) {
-            m_countPaintLayer++;
-            if (!layer->metaData()->empty())
-            {
-                m_exifInfo = layer->metaData();
-            }
-            return true;
+    virtual bool visit(KisPaintLayer* layer) {
+        m_countPaintLayer++;
+        if (!layer->metaData()->empty()) {
+            m_exifInfo = layer->metaData();
         }
+        return true;
+    }
 
-        
-        virtual bool visit(KisGroupLayer* layer)
-        {
-            dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
-            return visitAll( layer, true );
-        }
-        
-        virtual bool visit(KisAdjustmentLayer* ) {  return true; }
-        
-    public:
-        inline uint countPaintLayer() { return m_countPaintLayer; }
-        inline KisMetaData::Store* exifInfo() {return m_exifInfo; }
-    private:
-        KisMetaData::Store* m_exifInfo;
-        uint m_countPaintLayer;
+
+    virtual bool visit(KisGroupLayer* layer) {
+        dbgFile << "Visiting on grouplayer" << layer->name() << "";
+        return visitAll(layer, true);
+    }
+
+    virtual bool visit(KisAdjustmentLayer*) {
+        return true;
+    }
+
+public:
+    inline uint countPaintLayer() {
+        return m_countPaintLayer;
+    }
+    inline KisMetaData::Store* exifInfo() {
+        return m_exifInfo;
+    }
+private:
+    KisMetaData::Store* m_exifInfo;
+    uint m_countPaintLayer;
 };
 
 
@@ -107,27 +108,26 @@ KisJPEGExport::~KisJPEGExport()
 
 KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"JPEG export! From:" << from <<", To:" << to <<"";
+    dbgFile << "JPEG export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
 
 
     KDialog* kdb = new KDialog(0);
-    kdb->setWindowTitle( i18n("JPEG Export Options") );
-    kdb->setButtons( KDialog::Ok | KDialog::Cancel );
+    kdb->setWindowTitle(i18n("JPEG Export Options"));
+    kdb->setButtons(KDialog::Ok | KDialog::Cancel);
 
     Ui::WdgOptionsJPEG wdgUi;
 //     = new Ui::WdgOptionsJPEG(kdb);
     QWidget* wdg = new QWidget(kdb);
     wdgUi.setupUi(wdg);
     KisMetaData::FilterRegistryModel frm;
-    wdgUi.metaDataFilters->setModel( &frm );
-    
+    wdgUi.metaDataFilters->setModel(&frm);
+
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    if(kdb->exec() == QDialog::Rejected)
-    {
+    if (kdb->exec() == QDialog::Rejected) {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }
     KisJPEGOptions options;
@@ -172,23 +172,22 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KisImageBuilder_Result res;
 
     KisExifInfoVisitor eIV;
-    eIV.visit( img->rootLayer().data() );
+    eIV.visit(img->rootLayer().data());
 
     KisMetaData::Store* eI = 0;
-    if(eIV.countPaintLayer() == 1)
+    if (eIV.countPaintLayer() == 1)
         eI = eIV.exifInfo();
-    if(eI)
-    {
-        KisMetaData::Store* copy = new KisMetaData::Store( *eI );
+    if (eI) {
+        KisMetaData::Store* copy = new KisMetaData::Store(*eI);
         eI = copy;
     }
-    if ( (res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
-        dbgFile <<"success !";
+    if ((res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
+        dbgFile << "success !";
         delete eI;
         return KoFilter::OK;
     }
     delete eI;
-    dbgFile <<" Result =" << res;
+    dbgFile << " Result =" << res;
     return KoFilter::InternalError;
 }
 

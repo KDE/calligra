@@ -43,7 +43,7 @@ MagickExport::~MagickExport()
 
 KoFilter::ConversionStatus MagickExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    dbgFile <<"magick export! From:" << from <<", To:" << to <<"";
+    dbgFile << "magick export! From:" << from << ", To:" << to << "";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;

@@ -67,7 +67,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         return KoFilter::NotImplemented;
     }
 
-    dbgFile <<"\n\n\nKrita importing from OpenEXR";
+    dbgFile << "\n\n\nKrita importing from OpenEXR";
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
@@ -86,8 +86,8 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     Box2i dataWindow = file.dataWindow();
     Box2i displayWindow = file.displayWindow();
 
-    dbgFile <<"Data window:" << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1);
-    dbgFile <<"Display window:" << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1);
+    dbgFile << "Data window:" << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1);
+    dbgFile << "Display window:" << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1);
 
     int imageWidth = displayWindow.max.x - displayWindow.min.x + 1;
     int imageHeight = displayWindow.max.y - displayWindow.min.y + 1;
@@ -97,7 +97,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     int dataWidth  = dataWindow.max.x - dataWindow.min.x + 1;
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
-    const KoColorSpace *cs = static_cast<const KoColorSpace *>((KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBAF16HALF", ""),"")));
+    const KoColorSpace *cs = static_cast<const KoColorSpace *>((KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBAF16HALF", ""), "")));
 
     if (cs == 0) {
         return KoFilter::InternalError;
@@ -111,8 +111,8 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         return KoFilter::CreationError;
     }
     image->lock();
-    KisPaintLayerSP layer = new KisPaintLayer( image, image->nextLayerName(), OPACITY_OPAQUE, cs);
-    layer->setCompositeOp( cs->compositeOp( COMPOSITE_OVER ) );
+    KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE, cs);
+    layer->setCompositeOp(cs->compositeOp(COMPOSITE_OVER));
 
     if (!layer) {
         return KoFilter::CreationError;
@@ -147,7 +147,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         }
     }
 
-    image->addNode(layer.data(), image->rootLayer().data() );
+    image->addNode(layer.data(), image->rootLayer().data());
     layer->setDirty();
     doc -> setCurrentImage(image);
     doc -> undoAdapter() -> setUndo(true);
