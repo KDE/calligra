@@ -59,7 +59,6 @@ enum KisImageBuilder_Result {
  * Build a KisImage representation of an image file.
  */
 class KisImageMagickConverter : public QObject {
-    typedef QObject super;
     Q_OBJECT
 
 public:
