@@ -12,7 +12,7 @@ kde4_add_plugin(gnumericexport WITH_PREFIX ${gnumericexport_PART_SRCS})
 
 
 
-target_link_libraries(gnumericexport  ${KDE4_KDECORE_LIBS} kspreadcommon )
+target_link_libraries(gnumericexport ${QT_QTXML_LIBRARY}  ${QT_QTGUI_LIBRARY} komain ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} kspreadcommon )
 
 install(TARGETS gnumericexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +25,7 @@ kde4_add_plugin(gnumericimport WITH_PREFIX ${gnumericimport_PART_SRCS})
 
 
 
-target_link_libraries(gnumericimport  ${KDE4_KDECORE_LIBS} kspreadcommon )
+target_link_libraries(gnumericimport ${QT_QTGUI_LIBRARY} komain ${QT_QTXML_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} kspreadcommon )
 
 install(TARGETS gnumericimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
