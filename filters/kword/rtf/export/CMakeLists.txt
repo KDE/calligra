@@ -12,7 +12,14 @@ kde4_add_plugin(rtfexport WITH_PREFIX ${rtfexport_PART_SRCS})
 
 
 
-target_link_libraries(rtfexport  ${KDE4_KDECORE_LIBS} kwordexportfilters )
+target_link_libraries(
+    rtfexport
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS rtfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

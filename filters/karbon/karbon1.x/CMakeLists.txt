@@ -10,7 +10,18 @@ set(karbon1ximport_PART_SRCS
 
 kde4_add_plugin(karbon1ximport WITH_PREFIX ${karbon1ximport_PART_SRCS})
 
-target_link_libraries(karbon1ximport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon koguiutils kotext )
+target_link_libraries(
+    karbon1ximport
+    koguiutils
+    karboncommon
+    koguiutils
+    kotext
+    flake
+    kstore
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS karbon1ximport DESTINATION ${PLUGIN_INSTALL_DIR})
 

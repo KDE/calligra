@@ -12,7 +12,15 @@ kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
 
 
 
-target_link_libraries(wmlimport  ${KDE4_KDECORE_LIBS} komain kwordexportfilters)
+target_link_libraries(
+    wmlimport
+    komain
+    kwordexportfilters
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QTXML_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS wmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +33,13 @@ kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
 
 
 
-target_link_libraries(wmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters komain )
+target_link_libraries(
+    wmlexport
+    kwordexportfilters
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS wmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

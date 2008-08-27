@@ -12,7 +12,14 @@ kde4_add_plugin(powerpointimport WITH_PREFIX ${powerpointimport_PART_SRCS})
 
 
 
-target_link_libraries(powerpointimport  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(
+    powerpointimport
+    komain
+    kstore
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS powerpointimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

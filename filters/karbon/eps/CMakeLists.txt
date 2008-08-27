@@ -22,7 +22,13 @@ set(karbonepsimport_PART_SRCS epsimport.cc pscommentlexer.cc )
 
 kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
 
-target_link_libraries(karbonepsimport  ${KDE4_KDECORE_LIBS} koguiutils )
+target_link_libraries(
+    karbonepsimport
+    koguiutils
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

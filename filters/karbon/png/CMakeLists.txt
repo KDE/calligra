@@ -11,7 +11,18 @@ kde4_add_ui_files( karbonpngexport_PART_SRCS PngExportOptionsWidget.ui )
 
 kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 
-target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon karbonui )
+target_link_libraries(
+    karbonpngexport
+    koguiutils
+    karboncommon
+    karbonui
+    komain
+    koodf
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS karbonpngexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

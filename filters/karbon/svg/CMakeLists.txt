@@ -11,7 +11,19 @@ set(karbonsvgexport_PART_SRCS
 
 kde4_add_plugin(karbonsvgexport WITH_PREFIX ${karbonsvgexport_PART_SRCS})
 
-target_link_libraries(karbonsvgexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon karbonui )
+target_link_libraries(
+    karbonsvgexport
+    koguiutils
+    karboncommon
+    karbonui
+    flake
+    kstore
+    komain
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -25,7 +37,19 @@ set(karbonsvgimport_PART_SRCS
 
 kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 
-target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon karbonui kotext )
+target_link_libraries(
+    karbonsvgimport
+    koguiutils
+    karboncommon
+    karbonui
+    kotext
+    kstore
+    komain
+    flake
+    ${KDE4_KDECORE_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QT3SUPPORT_LIBRARY}
+    )
 
 install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
