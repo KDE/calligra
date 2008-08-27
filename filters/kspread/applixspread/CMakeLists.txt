@@ -12,7 +12,7 @@ kde4_add_plugin(applixspreadimport WITH_PREFIX ${applixspreadimport_PART_SRCS})
 
 
 
-target_link_libraries(applixspreadimport  ${KDE4_KDECORE_LIBS} komain )
+target_link_libraries(applixspreadimport ${QT_QTGUI_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS applixspreadimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -24,23 +24,3 @@ install( FILES  kspread_applixspread_import.desktop  DESTINATION ${SERVICES_INST
 
 
 
-
-#original Makefile.am contents follow:
-
-######## General stuff
-#
-#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-#
-######## Files
-#
-#kde_module_LTLIBRARIES = libapplixspreadimport.la
-#
-#libapplixspreadimport_la_SOURCES = applixspreadimport.cc
-#libapplixspreadimport_la_LIBADD = $(KOFFICE_LIBS)
-#libapplixspreadimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-#noinst_HEADERS = applixspreadimport.h
-#
-#METASOURCES = AUTO
-#
-#service_DATA = kspread_applixspread_import.desktop
-#servicedir = $(kde_servicesdir)

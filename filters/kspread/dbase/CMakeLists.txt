@@ -12,7 +12,7 @@ kde4_add_plugin(dbaseimport WITH_PREFIX ${dbaseimport_PART_SRCS})
 
 
 
-target_link_libraries(dbaseimport komain)
+target_link_libraries(dbaseimport komain ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS})
 
 install(TARGETS dbaseimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -21,26 +21,3 @@ install(TARGETS dbaseimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  kspread_dbase_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
-
-
-
-
-#original Makefile.am contents follow:
-
-######## General stuff
-#
-#INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(all_includes)
-#
-######## Files
-#
-#kde_module_LTLIBRARIES = libdbaseimport.la
-#
-#libdbaseimport_la_SOURCES = dbaseimport.cc dbase.cpp
-#libdbaseimport_la_LIBADD = $(KOFFICE_LIBS)
-#libdbaseimport_la_LDFLAGS = -module $(KDE_PLUGIN)
-#noinst_HEADERS = dbaseimport.h dbase.h
-#
-#METASOURCES = AUTO
-#
-#service_DATA = kspread_dbase_import.desktop
-#servicedir = $(kde_servicesdir)
