@@ -18,7 +18,7 @@ kde4_add_plugin(mswordodf_import WITH_PREFIX ${mswordodf_import_PART_SRCS})
 
 
 
-target_link_libraries(mswordodf_import  ${KDE4_KDECORE_LIBS} ${WV2_LIBRARIES} komain)
+target_link_libraries(mswordodf_import ${QT_QTGUI_LIBRARY} koodf kstore ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDECORE_LIBS} ${WV2_LIBRARIES} komain)
 
 install(TARGETS mswordodf_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
