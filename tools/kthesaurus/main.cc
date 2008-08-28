@@ -47,7 +47,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 
     KoTextEditingPlugin *thesaurus;
 
-    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+    foreach(const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (factory->id() == "thesaurustool") {
