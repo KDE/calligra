@@ -12,7 +12,7 @@ kde4_add_kcfg_files(koshell_KDEINIT_SRCS koshellsettings.kcfgc )
 
 kde4_add_kdeinit_executable( koshell ${koshell_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_koshell  ${KDE4_KDECORE_LIBS} koguiutils )
+target_link_libraries(kdeinit_koshell ${KDE4_KDECORE_LIBS} koguiutils )
 
 install(TARGETS kdeinit_koshell  DESTINATION ${LIB_INSTALL_DIR})
 

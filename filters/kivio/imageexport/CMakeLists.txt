@@ -14,7 +14,7 @@ kde4_add_plugin(kivioimageexport WITH_PREFIX ${kivioimageexport_PART_SRCS})
 
 
 
-target_link_libraries(kivioimageexport  ${KDE4_KDECORE_LIBS} kiviocommon )
+target_link_libraries(kivioimageexport  kiviocommon )
 
 install(TARGETS kivioimageexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

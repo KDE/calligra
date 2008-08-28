@@ -28,7 +28,7 @@ kde4_add_plugin( kspreadsolver WITH_PREFIX ${solver_PART_SRCS} )
 target_link_libraries( kspreadsolver
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
-	kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS}
+	kspreadcommon ${QT_QT3SUPPORT_LIBRARY}
 	${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS}
 )
 

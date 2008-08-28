@@ -223,11 +223,14 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
 	${KDE4_KNOTIFYCONFIG_LIBS} ${KDE4_KPARTS_LIBS}
-	komain koguiutils
-	kutils kstore flake pigmentcms
+	koguiutils
+	kutils flake
 	${KDE4_KDE3SUPPORT_LIBS} )
 
-set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kspreadcommon PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "koguiutils;flake"
+)
 install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
