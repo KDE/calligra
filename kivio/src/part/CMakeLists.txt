@@ -11,9 +11,12 @@ set(kivioprivate_LIB_SRCS
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
-target_link_libraries(kivioprivate  ${QT_QT3SUPPORT_LIBRARY} koguiutils flake kopageapp ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS} komain)
+target_link_libraries(kivioprivate ${QT_QT3SUPPORT_LIBRARY} kopageapp ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS})
 
-set_target_properties(kivioprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kivioprivate PROPERTIES
+    VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kopageapp"
+)
 install(TARGETS kivioprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 ### kiviopart ###
@@ -30,11 +33,11 @@ set(kivio_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} komain ${QT_QTGUI_LIBRARY} )
+target_link_libraries(kdeinit_kivio komain)
 
 install(TARGETS kdeinit_kivio DESTINATION ${LIB_INSTALL_DIR})
 
-target_link_libraries(kivio kdeinit_kivio ${QT_QTGUI_LIBRARY})
+target_link_libraries(kivio kdeinit_kivio)
 install(TARGETS kivio ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
