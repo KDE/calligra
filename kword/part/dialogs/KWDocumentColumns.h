@@ -29,7 +29,8 @@
 /**
  * This widget visually shows and alters the KoColumns data structure.
  */
-class KWDocumentColumns : public QWidget {
+class KWDocumentColumns : public QWidget
+{
     Q_OBJECT
 public:
     KWDocumentColumns(QWidget *parent, const KoColumns &columns);

@@ -53,16 +53,15 @@
 
 #include "KWCanvas.h"
 
-enum ButtonIds
-{
+enum ButtonIds {
     Button_New,
     Button_Raise,
     Button_Lower,
     Button_Delete
 };
 
-KWPagesDockerFactory::KWPagesDockerFactory( KWCanvas* canvas )
-    : m_canvas( canvas )
+KWPagesDockerFactory::KWPagesDockerFactory(KWCanvas* canvas)
+        : m_canvas(canvas)
 {
 }
 
@@ -74,65 +73,65 @@ QString KWPagesDockerFactory::id() const
 QDockWidget* KWPagesDockerFactory::createDockWidget()
 {
     KWPagesDocker* docker = new KWPagesDocker();
-    docker->setCanvas( m_canvas );
+    docker->setCanvas(m_canvas);
 
     return docker;
 }
 
-KWPagesDocker::KWPagesDocker( QWidget* parent )
-    : QDockWidget( parent )
-    , m_canvas( 0 )
-    , m_model( 0 )
+KWPagesDocker::KWPagesDocker(QWidget* parent)
+        : QDockWidget(parent)
+        , m_canvas(0)
+        , m_model(0)
 {
-    setWindowTitle( i18n( "Document" ) );
+    setWindowTitle(i18n("Document"));
 
-    QWidget *mainWidget = new QWidget( this );
-    QGridLayout* layout = new QGridLayout( mainWidget );
-    layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 4 );
-    m_sectionView->setDisplayMode( KoDocumentSectionView::DetailedMode );
-    QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
-    buttonGroup->setExclusive( false );
+    QWidget *mainWidget = new QWidget(this);
+    QGridLayout* layout = new QGridLayout(mainWidget);
+    layout->addWidget(m_sectionView = new KoDocumentSectionView(mainWidget), 0, 0, 1, 4);
+    m_sectionView->setDisplayMode(KoDocumentSectionView::DetailedMode);
+    QButtonGroup *buttonGroup = new QButtonGroup(mainWidget);
+    buttonGroup->setExclusive(false);
 
-    QPushButton *button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "list-add" ) );
-    button->setToolTip( i18n("Add a new page") );
-    buttonGroup->addButton( button, Button_New );
-    layout->addWidget( button, 1, 0 );
+    QPushButton *button = new QPushButton(mainWidget);
+    button->setIcon(SmallIcon("list-add"));
+    button->setToolTip(i18n("Add a new page"));
+    buttonGroup->addButton(button, Button_New);
+    layout->addWidget(button, 1, 0);
 
-    button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "arrow-up" ) );
-    button->setToolTip( i18n("Move selected page up") );
-    buttonGroup->addButton( button, Button_Raise );
-    layout->addWidget( button, 1, 1 );
+    button = new QPushButton(mainWidget);
+    button->setIcon(SmallIcon("arrow-up"));
+    button->setToolTip(i18n("Move selected page up"));
+    buttonGroup->addButton(button, Button_Raise);
+    layout->addWidget(button, 1, 1);
 
-    button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "arrow-down" ) );
-    button->setToolTip( i18n("Move selected page down") );
-    buttonGroup->addButton( button, Button_Lower );
-    layout->addWidget( button, 1, 2 );
+    button = new QPushButton(mainWidget);
+    button->setIcon(SmallIcon("arrow-down"));
+    button->setToolTip(i18n("Move selected page down"));
+    buttonGroup->addButton(button, Button_Lower);
+    layout->addWidget(button, 1, 2);
 
-    button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "list-remove" ) );
-    button->setToolTip( i18n("Delete selected pages") );
-    buttonGroup->addButton( button, Button_Delete );
-    layout->addWidget( button, 1, 3 );
+    button = new QPushButton(mainWidget);
+    button->setIcon(SmallIcon("list-remove"));
+    button->setToolTip(i18n("Delete selected pages"));
+    buttonGroup->addButton(button, Button_Delete);
+    layout->addWidget(button, 1, 3);
 
-    layout->setSpacing( 0 );
-    layout->setMargin( 3 );
+    layout->setSpacing(0);
+    layout->setMargin(3);
 
-    setWidget( mainWidget );
+    setWidget(mainWidget);
 
-    connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
+    connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
 
     m_model = new KoPADocumentModel();
-    m_sectionView->setItemsExpandable( true );
-    m_sectionView->setModel( m_model );
-    m_sectionView->setDisplayMode( KoDocumentSectionView::MinimalMode );
-    m_sectionView->setSelectionMode( QAbstractItemView::ExtendedSelection );
-    m_sectionView->setSelectionBehavior( QAbstractItemView::SelectRows );
-    m_sectionView->setDragDropMode( QAbstractItemView::InternalMove );
+    m_sectionView->setItemsExpandable(true);
+    m_sectionView->setModel(m_model);
+    m_sectionView->setDisplayMode(KoDocumentSectionView::MinimalMode);
+    m_sectionView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_sectionView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_sectionView->setDragDropMode(QAbstractItemView::InternalMove);
 
-    connect( m_sectionView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
+    connect(m_sectionView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
 }
 
 KWPagesDocker::~KWPagesDocker()
@@ -145,36 +144,35 @@ void KWPagesDocker::updateView()
     m_model->update();
 }
 
-void KWPagesDocker::slotButtonClicked( int buttonId )
+void KWPagesDocker::slotButtonClicked(int buttonId)
 {
-    switch( buttonId )
-    {
-        case Button_New:
-            addLayer();
-            break;
-        case Button_Raise:
-            raiseItem();
-            break;
-        case Button_Lower:
-            lowerItem();
-            break;
-        case Button_Delete:
-            deleteItem();
-            break;
+    switch (buttonId) {
+    case Button_New:
+        addLayer();
+        break;
+    case Button_Raise:
+        raiseItem();
+        break;
+    case Button_Lower:
+        lowerItem();
+        break;
+    case Button_Delete:
+        deleteItem();
+        break;
     }
 }
 
-void KWPagesDocker::itemClicked( const QModelIndex &index )
+void KWPagesDocker::itemClicked(const QModelIndex &index)
 {
     Q_ASSERT(index.internalPointer());
 
-    if ( ! index.isValid() )
+    if (! index.isValid())
         return;
 
-    KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-    if ( ! shape )
+    KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+    if (! shape)
         return;
-    if ( dynamic_cast<KoShapeLayer*>( shape ) )
+    if (dynamic_cast<KoShapeLayer*>(shape))
         return;
 
     QList<KoPAPageBase*> selectedPages;
@@ -182,23 +180,21 @@ void KWPagesDocker::itemClicked( const QModelIndex &index )
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
+    extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
     // XXX: Do stuff withthe selected pages!
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    foreach( KoShape* shape, selection->selectedShapes() )
-        shape->update();
+    foreach(KoShape* shape, selection->selectedShapes())
+    shape->update();
 
     selection->deselectAll();
 
-    foreach( KoShape* shape, selectedShapes )
-    {
-        if ( shape )
-        {
-            selection->select( shape );
+    foreach(KoShape* shape, selectedShapes) {
+        if (shape) {
+            selection->select(shape);
             shape->update();
         }
     }
@@ -207,15 +203,14 @@ void KWPagesDocker::itemClicked( const QModelIndex &index )
 void KWPagesDocker::addLayer()
 {
     bool ok = true;
-    QString name = KInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
-                                          i18n( "New layer" ), &ok, this );
-    if ( ok )
-    {
+    QString name = KInputDialog::getText(i18n("New Layer"), i18n("Enter the name of the new layer:"),
+                                         i18n("New layer"), &ok, this);
+    if (ok) {
         KoShapeLayer* layer = new KoShapeLayer();
-        layer->setName( name );
-        QUndoCommand *cmd = new KoShapeCreateCommand( m_canvas->document(), layer, 0 );
-        cmd->setText( i18n( "Create Layer") );
-        m_canvas->addCommand( cmd );
+        layer->setName(name);
+        QUndoCommand *cmd = new KoShapeCreateCommand(m_canvas->document(), layer, 0);
+        cmd->setText(i18n("Create Layer"));
+        m_canvas->addCommand(cmd);
         m_model->update();
     }
 }
@@ -227,36 +222,28 @@ void KWPagesDocker::deleteItem()
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
+    extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
     QUndoCommand *cmd = 0;
 
-    if ( selectedLayers.count() )
-    {
-        if ( m_canvas->document()->pages().count() > selectedPages.count() )
-        {
+    if (selectedLayers.count()) {
+        if (m_canvas->document()->pages().count() > selectedPages.count()) {
             QList<KoShape*> deleteShapes;
-            foreach( KoPAPageBase* page, selectedPages )
-            {
+            foreach(KoPAPageBase* page, selectedPages) {
                 deleteShapes += page->iterator();
-                deleteShapes.append( page );
+                deleteShapes.append(page);
             }
-            cmd = new KoShapeDeleteCommand( m_canvas->document(), deleteShapes );
-            cmd->setText( i18n( "Delete Layer" ) );
+            cmd = new KoShapeDeleteCommand(m_canvas->document(), deleteShapes);
+            cmd->setText(i18n("Delete Layer"));
+        } else {
+            KMessageBox::error(0L, i18n("Could not delete all layers. At least one layer is required."), i18n("Error deleting layers"));
         }
-        else
-        {
-            KMessageBox::error( 0L, i18n( "Could not delete all layers. At least one layer is required."), i18n( "Error deleting layers") );
-        }
-    }
-    else if ( selectedShapes.count() )
-    {
-        cmd = new KoShapeDeleteCommand( m_canvas->document(), selectedShapes );
+    } else if (selectedShapes.count()) {
+        cmd = new KoShapeDeleteCommand(m_canvas->document(), selectedShapes);
     }
 
-    if ( cmd )
-    {
-        m_canvas->addCommand( cmd );
+    if (cmd) {
+        m_canvas->addCommand(cmd);
         m_model->update();
     }
 }
@@ -268,27 +255,23 @@ void KWPagesDocker::raiseItem()
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
+    extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
     QUndoCommand *cmd = 0;
 
-    if ( selectedLayers.count() )
-    {
+    if (selectedLayers.count()) {
 //         // check if all layers could be raised
 //         foreach( KoShapeLayer* layer, selectedLayers )
 //             if ( ! m_document->canRaiseLayer( layer ) )
 //                 return;
 
 //        cmd = new KoPALayerReorderCommand( m_document, selectedLayers, KoPALayerReorderCommand::RaiseLayer );
-    }
-    else if ( selectedShapes.count() )
-    {
-        cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape );
+    } else if (selectedShapes.count()) {
+        cmd = KoShapeReorderCommand::createCommand(selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape);
     }
 
-    if ( cmd )
-    {
-        m_canvas->addCommand( cmd );
+    if (cmd) {
+        m_canvas->addCommand(cmd);
         m_model->update();
     }
 }
@@ -300,57 +283,52 @@ void KWPagesDocker::lowerItem()
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedPages, selectedLayers, selectedShapes );
+    extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
     QUndoCommand *cmd = 0;
 
-    if ( selectedLayers.count() )
-    {
+    if (selectedLayers.count()) {
 //         // check if all layers could be raised
 //         foreach( KoShapeLayer* layer, selectedLayers )
 //             if ( ! m_document->canLowerLayer( layer ) )
 //                 return;
 
 //        cmd = new KoPALayerReorderCommand( m_document, selectedLayers, KoPALayerReorderCommand::LowerLayer );
-    }
-    else if ( selectedShapes.count() )
-    {
-        cmd = KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape );
+    } else if (selectedShapes.count()) {
+        cmd = KoShapeReorderCommand::createCommand(selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape);
     }
 
-    if ( cmd )
-    {
-        m_canvas->addCommand( cmd );
+    if (cmd) {
+        m_canvas->addCommand(cmd);
         m_model->update();
     }
 }
 
-void KWPagesDocker::extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes )
+void KWPagesDocker::extractSelectedLayersAndShapes(QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes)
 {
     pages.clear();
     layers.clear();
     shapes.clear();
 
     QModelIndexList selectedItems = m_sectionView->selectionModel()->selectedIndexes();
-    if ( selectedItems.count() == 0 )
+    if (selectedItems.count() == 0)
         return;
 
     // separate selected layers and selected shapes
-    foreach( QModelIndex index, selectedItems )
-    {
-        KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
-        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
-        if ( layer )
-            layers.append( layer );
-        else if ( ! selectedItems.contains( index.parent() ) )
-            shapes.append( shape );
+    foreach(QModelIndex index, selectedItems) {
+        KoShape *shape = static_cast<KoShape*>(index.internalPointer());
+        KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
+        if (layer)
+            layers.append(layer);
+        else if (! selectedItems.contains(index.parent()))
+            shapes.append(shape);
     }
 }
 
-void KWPagesDocker::setCanvas( KoCanvasBase* canvas)
-{ 
-    m_canvas = static_cast<KWCanvas*> ( canvas );
-    m_model->setDocument( m_canvas->document() );
+void KWPagesDocker::setCanvas(KoCanvasBase* canvas)
+{
+    m_canvas = static_cast<KWCanvas*>(canvas);
+    m_model->setDocument(m_canvas->document());
 }
 
 #include "KWPagesDocker.moc"

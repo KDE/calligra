@@ -17,11 +17,12 @@
  */
 #include <kunittest/tester.h>
 
-class KWFrameViewTester : public KUnitTest::Tester {
-    public:
-        void allTests();
-    private:
-        void testListeners();
-        void testGetView();
-        void testMouseMeaning();
+class KWFrameViewTester : public KUnitTest::Tester
+{
+public:
+    void allTests();
+private:
+    void testListeners();
+    void testGetView();
+    void testMouseMeaning();
 };

@@ -49,21 +49,21 @@
 // #include <kurl.h>
 
 typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
-K_EXPORT_COMPONENT_FACTORY( krossmodulekword, KWordScriptingFactory( "krossmodulekword" ) )
+K_EXPORT_COMPONENT_FACTORY(krossmodulekword, KWordScriptingFactory("krossmodulekword"))
 
 /// \internal d-pointer class.
 class KWScriptingPart::Private
 {
-    public:
+public:
 };
 
 KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)
-    : KoScriptingPart(new Scripting::Module(parent), args)
-    , d(new Private())
+        : KoScriptingPart(new Scripting::Module(parent), args)
+        , d(new Private())
 {
     setComponentData(KWScriptingPart::componentData());
-    setXMLFile(KStandardDirs::locate("data","kword/kpartplugins/scripting.rc"), true);
-    kDebug(32010) <<"KWScripting plugin. Class:" << metaObject()->className() <<", Parent:" << parent->metaObject()->className();
+    setXMLFile(KStandardDirs::locate("data", "kword/kpartplugins/scripting.rc"), true);
+    kDebug(32010) << "KWScripting plugin. Class:" << metaObject()->className() << ", Parent:" << parent->metaObject()->className();
 
     /*
     // Add variables

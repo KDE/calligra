@@ -26,9 +26,9 @@
 #include <kdebug.h>
 
 KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
-    : m_state(state),
-    m_frame(0),
-    m_blockSignals(false)
+        : m_state(state),
+        m_frame(0),
+        m_blockSignals(false)
 {
     m_state->addUser();
     widget.setupUi(this);
@@ -56,7 +56,7 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
     connect(widget.keepAspect, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(updateAspectRatio(bool)));
 
     connect(widget.positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
-        this, SLOT(setGeometryAlignment(KoFlake::Position)));
+            this, SLOT(setGeometryAlignment(KoFlake::Position)));
 
 }
 
@@ -87,7 +87,7 @@ void KWFrameGeometry::open(KoShape *shape)
 
     if (shape->isLocked()) {
         widget.protectSize->setCheckState(Qt::Checked);
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (shape->applicationData());
+        KWTextFrame *tf = dynamic_cast<KWTextFrame*>(shape->applicationData());
         if (tf && static_cast<KWTextFrameSet*>(tf->frameSet())->textFrameSetType() != KWord::OtherTextFrameSet)
             widget.protectSize->setEnabled(false); // auto-generated frame, can't edit
     }

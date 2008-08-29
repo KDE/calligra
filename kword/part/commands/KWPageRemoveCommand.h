@@ -38,7 +38,7 @@ public:
      * @param page the page to remove.
      * @param parent the parent for command macros
      */
-    explicit KWPageRemoveCommand( KWDocument *document, KWPage *page, QUndoCommand *parent = 0 );
+    explicit KWPageRemoveCommand(KWDocument *document, KWPage *page, QUndoCommand *parent = 0);
     ~KWPageRemoveCommand();
 
     /// (re)do the command

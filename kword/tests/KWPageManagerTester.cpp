@@ -29,7 +29,8 @@ using namespace KUnitTest;
 KUNITTEST_MODULE(kunittest_KWPageManagerTester, "PageManager Tester");
 KUNITTEST_MODULE_REGISTER_TESTER(KWPageManagerTester);
 
-void KWPageManagerTester::allTests() {
+void KWPageManagerTester::allTests()
+{
     getAddPages();
     getAddPages2();
     createInsertPages();
@@ -38,7 +39,8 @@ void KWPageManagerTester::allTests() {
     testClipToDocument();
 }
 
-void KWPageManagerTester::getAddPages() {
+void KWPageManagerTester::getAddPages()
+{
     KWPageManager *pageManager = new KWPageManager();
     pageManager->setStartPage(1);
     pageManager->appendPage();
@@ -97,40 +99,41 @@ void KWPageManagerTester::getAddPages() {
     CHECK(page->pageSide(), KWPage::Right);
 }
 
-void KWPageManagerTester::getAddPages2() {
+void KWPageManagerTester::getAddPages2()
+{
     KWPageManager *pageManager = new KWPageManager();
     pageManager->setStartPage(1);
     KWPage *page = pageManager->appendPage();
     page->setWidth(200);
     page->setHeight(200);
 
-    CHECK(pageManager->pageNumber(KoRect(0,0,2,2)), 1);
-    CHECK(pageManager->pageNumber(KoRect(90,90,2,2)), 1);
-    CHECK(pageManager->pageNumber(KoRect(190,190,9,9)), 1);
+    CHECK(pageManager->pageNumber(KoRect(0, 0, 2, 2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(90, 90, 2, 2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(190, 190, 9, 9)), 1);
 
     page = pageManager->appendPage();
     page->setWidth(600);
     page->setHeight(600);
-    CHECK(pageManager->pageNumber(KoRect(0,0,2,2)), 1);
-    CHECK(pageManager->pageNumber(KoRect(90,90,2,2)), 1);
-    CHECK(pageManager->pageNumber(KoRect(190,190,9,9)), 1);
+    CHECK(pageManager->pageNumber(KoRect(0, 0, 2, 2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(90, 90, 2, 2)), 1);
+    CHECK(pageManager->pageNumber(KoRect(190, 190, 9, 9)), 1);
 
-    CHECK(pageManager->pageNumber(KoRect(201,201,2,2)), 2);
+    CHECK(pageManager->pageNumber(KoRect(201, 201, 2, 2)), 2);
 #ifdef STRICT_PAGECHECKS // was true before KWPageManager.cpp -r511705:511706
-    CHECK(pageManager->pageNumber(KoRect(300,3,2,2)), -1); // right of page 1
+    CHECK(pageManager->pageNumber(KoRect(300, 3, 2, 2)), -1); // right of page 1
 #else
-    CHECK(pageManager->pageNumber(KoRect(300,3,2,2)), 1); // right of page 1
+    CHECK(pageManager->pageNumber(KoRect(300, 3, 2, 2)), 1); // right of page 1
 #endif
-    CHECK(pageManager->pageNumber(KoRect(2, 690,9,9)), 2);
-    CHECK(pageManager->pageNumber(KoRect(300,300,10,10)), 2);
+    CHECK(pageManager->pageNumber(KoRect(2, 690, 9, 9)), 2);
+    CHECK(pageManager->pageNumber(KoRect(300, 300, 10, 10)), 2);
 #ifdef STRICT_PAGECHECKS // was true before KWPageManager.cpp -r511705:511706
-    CHECK(pageManager->pageNumber(KoRect(600,700,10,10)), -1); // right of page 2
+    CHECK(pageManager->pageNumber(KoRect(600, 700, 10, 10)), -1); // right of page 2
 #else
-    CHECK(pageManager->pageNumber(KoRect(600,700,10,10)), 2); // right of page 2
+    CHECK(pageManager->pageNumber(KoRect(600, 700, 10, 10)), 2); // right of page 2
 #endif
 
     // KoPoint based
-    CHECK(pageManager->pageNumber(KoPoint(201,201)), 2);
+    CHECK(pageManager->pageNumber(KoPoint(201, 201)), 2);
     // Y based
     CHECK(pageManager->pageNumber(201.0), 2);
 #ifdef STRICT_PAGECHECKS // was true before KWPageManager.cpp -r511705:511706
@@ -140,7 +143,8 @@ void KWPageManagerTester::getAddPages2() {
 #endif
 }
 
-void KWPageManagerTester::createInsertPages() {
+void KWPageManagerTester::createInsertPages()
+{
     KWPageManager *pageManager = new KWPageManager();
     pageManager->setStartPage(1);
     CHECK(pageManager->pageCount(), 0);
@@ -178,7 +182,8 @@ void KWPageManagerTester::createInsertPages() {
     CHECK(page6->pageNumber(), 6);
 }
 
-void KWPageManagerTester::removePages() {
+void KWPageManagerTester::removePages()
+{
     KWPageManager *pageManager = new KWPageManager();
     pageManager->setStartPage(1);
     KWPage *page1 = pageManager->appendPage();
@@ -198,7 +203,8 @@ void KWPageManagerTester::removePages() {
     /* todo: bool tryRemovingPages(); */
 }
 
-void KWPageManagerTester::pageInfo() {
+void KWPageManagerTester::pageInfo()
+{
     KWPageManager *pageManager = new KWPageManager();
     KoPageLayout layout;
     layout.ptWidth = 300;
@@ -278,7 +284,8 @@ void KWPageManagerTester::pageInfo() {
     CHECK(page2->leftMargin(), 18.0);
 }
 
-void KWPageManagerTester::testClipToDocument() {
+void KWPageManagerTester::testClipToDocument()
+{
     KWPageManager *pageManager = new KWPageManager();
     KoPageLayout lay;
     lay.ptWidth = 300;
@@ -293,7 +300,7 @@ void KWPageManagerTester::testClipToDocument() {
     page2->setHeight(100);
     /*KWPage *page3 =*/ pageManager->appendPage();
 
-    KoPoint p(10,10);
+    KoPoint p(10, 10);
 
     KoPoint result = pageManager->clipToDocument(p);
     CHECK(p == result, true);

@@ -36,7 +36,7 @@ public:
      * @param frame the frame to delete.
      * @param parent the parent for macro command functionality
      */
-    explicit KWFrameDeleteCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent = 0 );
+    explicit KWFrameDeleteCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent = 0);
 
     /// redo the command
     virtual void redo();

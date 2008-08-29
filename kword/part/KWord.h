@@ -26,7 +26,8 @@
 #include <KoCanvasResourceProvider.h>
 
 /// The kword-global namespace for all KWord related things.
-class KWord {
+class KWord
+{
 public:
     /// what should happen when the frame is full (too small for its contents)
     enum FrameBehavior {

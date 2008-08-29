@@ -148,30 +148,40 @@ public:
      * Return the padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    const KoInsets &padding() const { return m_padding; }
+    const KoInsets &padding() const {
+        return m_padding;
+    }
     /**
      * Return the padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    KoInsets &padding() { return m_padding; }
+    KoInsets &padding() {
+        return m_padding;
+    }
     /**
      * Set a new padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    void setPadding(const KoInsets &padding) { m_padding = padding; }
+    void setPadding(const KoInsets &padding) {
+        m_padding = padding;
+    }
 
 //TODO move following both functions to KWPageStyle
     /**
      * This property can be set to register that new pages created should be made to be a pageSpread when aproriate.
      * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
      */
-    KDE_DEPRECATED bool preferPageSpread() const { return m_preferPageSpread; }
+    KDE_DEPRECATED bool preferPageSpread() const {
+        return m_preferPageSpread;
+    }
     /**
      * Set the property to register that new pages created should be made to be a pageSpread when aproriate.
      * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
      * @param on If true, it is requested that new, even numbered pages are set to be page spreads.
      */
-    KDE_DEPRECATED void setPreferPageSpread(bool on) { m_preferPageSpread = on; }
+    KDE_DEPRECATED void setPreferPageSpread(bool on) {
+        m_preferPageSpread = on;
+    }
 
     /**
      * Add a new \a KWPageStyle instance to this document.

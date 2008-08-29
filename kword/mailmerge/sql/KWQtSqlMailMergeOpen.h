@@ -38,19 +38,19 @@ class KWQtSqlMailMergeOpen : public KDialogBase
     Q_OBJECT
 
 public:
-    KWQtSqlMailMergeOpen( QWidget *parent, KWQtSqlSerialDataSourceBase *db_ );
+    KWQtSqlMailMergeOpen(QWidget *parent, KWQtSqlSerialDataSourceBase *db_);
     ~KWQtSqlMailMergeOpen();
 private:
- KWQtSqlSerialDataSourceBase *db;
- KWQtSqlOpenWidget *widget;
+    KWQtSqlSerialDataSourceBase *db;
+    KWQtSqlOpenWidget *widget;
 
- void fillSavedProperties();
+    void fillSavedProperties();
 
 private slots:
-void handleOk();
+    void handleOk();
 public slots:
-void savedPropertiesChanged(const QString&);
-void slotSave();
+    void savedPropertiesChanged(const QString&);
+    void slotSave();
 };
 
 #endif

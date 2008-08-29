@@ -20,13 +20,13 @@
 #include "KWCreateBookmarkDialog.h"
 
 KWCreateBookmark::KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     widget.setupUi(this);
     widget.bookmarkName->setCompleter(0);
     widget.bookmarkName->insertItems(0, nameList);
     widget.bookmarkName->setEditText(suggestedName);
-    connect( widget.bookmarkName, SIGNAL( editTextChanged(const QString &) ), this, SIGNAL( bookmarkNameChanged(const QString &) ) );
+    connect(widget.bookmarkName, SIGNAL(editTextChanged(const QString &)), this, SIGNAL(bookmarkNameChanged(const QString &)));
 }
 
 QString KWCreateBookmark::bookmarkName()
@@ -35,23 +35,22 @@ QString KWCreateBookmark::bookmarkName()
 }
 
 KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent)
-    : KDialog(parent),
-    m_nameList(nameList)
+        : KDialog(parent),
+        m_nameList(nameList)
 {
     if (suggestedName.isEmpty() || m_nameList.contains(suggestedName)) {
-        enableButtonOk( false );
-        ui = new KWCreateBookmark( nameList, "", this );
+        enableButtonOk(false);
+        ui = new KWCreateBookmark(nameList, "", this);
+    } else {
+        ui = new KWCreateBookmark(nameList, suggestedName, this);
     }
-    else {
-        ui = new KWCreateBookmark( nameList, suggestedName, this );
-    }
-    setMainWidget( ui );
-    setCaption(i18n("Create New Bookmark") );
-    setModal( true );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    showButtonSeparator( true );
-    connect( ui, SIGNAL( bookmarkNameChanged(const QString &) ), this, SLOT( nameChanged(const QString &) ) );
+    setMainWidget(ui);
+    setCaption(i18n("Create New Bookmark"));
+    setModal(true);
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    showButtonSeparator(true);
+    connect(ui, SIGNAL(bookmarkNameChanged(const QString &)), this, SLOT(nameChanged(const QString &)));
 }
 
 QString KWCreateBookmarkDialog::newBookmarkName()
@@ -62,9 +61,9 @@ QString KWCreateBookmarkDialog::newBookmarkName()
 void KWCreateBookmarkDialog::nameChanged(const QString &bookmarkName)
 {
     if (!m_nameList.contains(bookmarkName))
-        enableButtonOk( !bookmarkName.isEmpty() );
+        enableButtonOk(!bookmarkName.isEmpty());
     else
-        enableButtonOk( false );
+        enableButtonOk(false);
 }
 
 #include <KWCreateBookmarkDialog.moc>

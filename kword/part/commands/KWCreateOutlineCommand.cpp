@@ -26,13 +26,13 @@
 
 #include <KLocale>
 
-KWCreateOutlineCommand::KWCreateOutlineCommand( KoShapeControllerBase *controller, KWFrame *frame, QUndoCommand *parent )
-    : QUndoCommand(i18n("Create custom outline"), parent),
-    m_controller(controller),
-    m_frame(frame),
-    m_container(0),
-    m_path(0),
-    m_deleteOnExit(false)
+KWCreateOutlineCommand::KWCreateOutlineCommand(KoShapeControllerBase *controller, KWFrame *frame, QUndoCommand *parent)
+        : QUndoCommand(i18n("Create custom outline"), parent),
+        m_controller(controller),
+        m_frame(frame),
+        m_container(0),
+        m_path(0),
+        m_deleteOnExit(false)
 {
 }
 
@@ -50,8 +50,7 @@ void KWCreateOutlineCommand::redo()
     if (m_container == 0) {
         m_path = new KWOutlineShape(m_frame);
         m_container = m_path->parent();
-    }
-    else {
+    } else {
         KoShape *child = m_frame->shape();
         m_container->setTransformation(child->absoluteTransformation(0));
         QMatrix matrix;

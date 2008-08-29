@@ -26,7 +26,8 @@
 #include <KoShape.h>
 #include <KWDocument.h>
 
-class TestPageManager : public QObject {
+class TestPageManager : public QObject
+{
     Q_OBJECT
 private slots: // tests
     void init();
@@ -40,12 +41,15 @@ private slots: // tests
 
 private:
     KWDocument m_doc;
-    class MockShape : public KoShape {
-        public:
-            MockShape() : KoShape() {}
-            virtual void paint(QPainter &, const KoViewConverter&) {}
-            virtual void saveOdf( KoShapeSavingContext & ) const {}
-            virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
+class MockShape : public KoShape
+    {
+    public:
+        MockShape() : KoShape() {}
+        virtual void paint(QPainter &, const KoViewConverter&) {}
+        virtual void saveOdf(KoShapeSavingContext &) const {}
+        virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+            return false;
+        }
     };
 };
 

@@ -33,9 +33,9 @@
 // // #include <kdebug.h>
 
 
-KWViewModePreview::KWViewModePreview( KWCanvas* canvas )
-    : KWViewMode(canvas),
-    m_pagesPerRow(3)
+KWViewModePreview::KWViewModePreview(KWCanvas* canvas)
+        : KWViewMode(canvas),
+        m_pagesPerRow(3)
 {
 }
 
@@ -44,12 +44,12 @@ QSizeF KWViewModePreview::contentsSize() const
     return QSizeF();
 }
 
-QPointF KWViewModePreview::documentToView( const QPointF & point ) const
+QPointF KWViewModePreview::documentToView(const QPointF & point) const
 {
     return QPointF();
 }
 
-QPointF KWViewModePreview::viewToDocument( const QPointF & point ) const
+QPointF KWViewModePreview::viewToDocument(const QPointF & point) const
 {
     return QPointF();
 }

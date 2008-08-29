@@ -27,7 +27,8 @@
  * reused from the original, as passed on the constructor.  The shapes appearance
  * will be the same as the original, just in a different place in the document.
  */
-class KWCopyShape : public KoShape {
+class KWCopyShape : public KoShape
+{
 public:
     /**
      * Constructor
@@ -43,9 +44,9 @@ public:
     /// reimplemented from KoShape
     const QPainterPath outline() const;
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
 
 private:
     KoShape *m_original;

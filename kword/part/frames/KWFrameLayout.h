@@ -45,7 +45,8 @@ class KoShape;
  * For normal frames this class will be able to (re)move them on page resize/deletion or create
  * followup frames for new pages.
  */
-class KWORD_TEST_EXPORT KWFrameLayout : public QObject {
+class KWORD_TEST_EXPORT KWFrameLayout : public QObject
+{
     Q_OBJECT
 public:
     /**
@@ -89,7 +90,9 @@ public:
     void createNewFrameForPage(KWTextFrameSet *fs, int pageNumber);
 
     /// Set the document to be passed to new instances of the KWTextFrameSet
-    void setDocument(KWDocument *document) { m_document = document; }
+    void setDocument(KWDocument *document) {
+        m_document = document;
+    }
 
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;

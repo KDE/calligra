@@ -36,21 +36,21 @@
 #include <QTimer>
 
 KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
-    : QWidget(parent),
-    m_resourceProvider(provider),
-    m_action(new KoAction(this)),
-    m_selection(selection),
-    m_document(document),
-    m_textDocument(0),
-    m_timer(0),
-    m_charsWithSpace(0),
-    m_charsWithoutSpace(0),
-    m_words(0),
-    m_sentences(0),
-    m_lines(0),
-    m_syllables(0),
-    m_paragraphs(0),
-    m_autoUpdate(true)
+        : QWidget(parent),
+        m_resourceProvider(provider),
+        m_action(new KoAction(this)),
+        m_selection(selection),
+        m_document(document),
+        m_textDocument(0),
+        m_timer(0),
+        m_charsWithSpace(0),
+        m_charsWithoutSpace(0),
+        m_words(0),
+        m_sentences(0),
+        m_lines(0),
+        m_syllables(0),
+        m_paragraphs(0),
+        m_autoUpdate(true)
 {
     if (m_selection) {
         m_showInDocker = true;
@@ -65,8 +65,7 @@ KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* docum
         connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
         connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
         connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
-    }
-    else {
+    } else {
         m_showInDocker = false;
         widget.setupUi(this);
         m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
@@ -109,23 +108,23 @@ void KWStatistics::updateData()
     add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
     QStringList add_syl_regexp;
     add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
-        << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
-    
+    << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+
     bool footEnd = m_showInDocker ? widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
 
     foreach(KWFrameSet *fs, m_document->frameSets()) {
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
         if (m_showInDocker && (!(footEnd ||
-                    (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                     tfs->textFrameSetType() == KWord::OtherTextFrameSet))))
+                                 (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
+                                  tfs->textFrameSetType() == KWord::OtherTextFrameSet))))
             continue;
-        else if (! (footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
-                    tfs->textFrameSetType() == KWord::OtherTextFrameSet)))
+        else if (!(footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
+                               tfs->textFrameSetType() == KWord::OtherTextFrameSet)))
             continue;
         QTextDocument *doc = tfs->document();
         QTextBlock block = doc->begin();
-        while(block.isValid()) {
+        while (block.isValid()) {
             m_paragraphs += 1;
             m_charsWithSpace += block.text().length();
             m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
@@ -144,7 +143,7 @@ void KWStatistics::updateData()
             QStringList wordlist = s.split(re, QString::SkipEmptyParts);
             m_words += wordlist.count();
             re.setCaseSensitivity(Qt::CaseInsensitive);
-            for(QStringList::Iterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
+            for (QStringList::Iterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
                 QString word1 = *it1;
                 QString word = *it1;
                 re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
@@ -158,20 +157,20 @@ void KWStatistics::updateData()
                 re.setPattern("[^aeiouy]+");
                 QStringList syls = word.split(re, QString::SkipEmptyParts);
                 int word_syllables = 0;
-                for(QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
+                for (QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
                     if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
                         word_syllables--;
                 }
-                for(QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
+                for (QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
                     if (word.indexOf(re) != -1)
                         word_syllables--;
                 }
-                for(QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
+                for (QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
                     if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
                         word_syllables++;
                 }
-                for(QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
+                for (QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
                     re.setPattern(*it);
                     if (word.indexOf(re) != -1)
                         word_syllables++;
@@ -200,7 +199,7 @@ void KWStatistics::updateData()
             s.replace(re, "0,0");
             re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
             s.replace(re, "*");
-            for(int i = 0 ; i < s.length(); ++i) {
+            for (int i = 0 ; i < s.length(); ++i) {
                 QChar ch = s[i];
                 if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
                     ++m_sentences;
@@ -216,47 +215,46 @@ void KWStatistics::updateDataUi()
 {
     // calculate Flesch reading ease score:
     float flesch_score = 0;
-    if ( m_words > 0 && m_sentences > 0 )
+    if (m_words > 0 && m_sentences > 0)
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
-    QString flesch = KGlobal::locale()->formatNumber( flesch_score );
+    QString flesch = KGlobal::locale()->formatNumber(flesch_score);
 
     if (m_showInDocker) {
         int currentIndex = widgetDocker.statistics->currentIndex();
         if (currentIndex == 0)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_words, 0 ));
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_words, 0));
         else if (currentIndex == 1)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_sentences, 0));
         else if (currentIndex == 2)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_syllables, 0));
         else if (currentIndex == 3)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_lines, 0));
         else if (currentIndex == 4)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_charsWithSpace, 0));
         else if (currentIndex == 5)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0));
         else if (currentIndex == 6)
             widgetDocker.count->setText(flesch);
-    }
-    else {
+    } else {
         // tab 1
         widget.pages->setText(
-                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentPageCount), 0 ) );
+            KGlobal::locale()->formatNumber(m_resourceProvider->intResource(KWord::CurrentPageCount), 0));
         widget.frames->setText(
-                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentFrameSetCount), 0 ) );
+            KGlobal::locale()->formatNumber(m_resourceProvider->intResource(KWord::CurrentFrameSetCount), 0));
         widget.pictures->setText(
-                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentPictureCount), 0 ) );
+            KGlobal::locale()->formatNumber(m_resourceProvider->intResource(KWord::CurrentPictureCount), 0));
         widget.tables->setText(
-                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentTableCount), 0 ) );
+            KGlobal::locale()->formatNumber(m_resourceProvider->intResource(KWord::CurrentTableCount), 0));
 
         // tab 2
-        widget.words->setText(KGlobal::locale()->formatNumber( m_words, 0 ));
-        widget.sentences->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
-        widget.syllables->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
-        widget.lines->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
-        widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
-        widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
-        if ( m_words < 200 ) // a kind of warning if too few words:
-            flesch = i18n("approximately %1", flesch );
+        widget.words->setText(KGlobal::locale()->formatNumber(m_words, 0));
+        widget.sentences->setText(KGlobal::locale()->formatNumber(m_sentences, 0));
+        widget.syllables->setText(KGlobal::locale()->formatNumber(m_syllables, 0));
+        widget.lines->setText(KGlobal::locale()->formatNumber(m_lines, 0));
+        widget.characters->setText(KGlobal::locale()->formatNumber(m_charsWithSpace, 0));
+        widget.characters2->setText(KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0));
+        if (m_words < 200)   // a kind of warning if too few words:
+            flesch = i18n("approximately %1", flesch);
         widget.flesch->setText(flesch);
     }
 }
@@ -267,8 +265,7 @@ void KWStatistics::setAutoUpdate(int state)
         m_autoUpdate = true;
         connect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
         updateData();
-    }
-    else {
+    } else {
         m_autoUpdate = false;
         disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
     }

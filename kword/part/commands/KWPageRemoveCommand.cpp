@@ -30,9 +30,9 @@
 #include <kdebug.h>
 #include <KLocale>
 
-KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QUndoCommand *parent)
-    : QUndoCommand(i18n("Remove Page"), parent),
-    m_document(document)
+KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage *page, QUndoCommand *parent)
+        : QUndoCommand(i18n("Remove Page"), parent),
+        m_document(document)
 {
     Q_ASSERT(page);
     Q_ASSERT(document);
@@ -74,17 +74,16 @@ void KWPageRemoveCommand::redo()
                     // remove all frames on the page
                     KWFrameDeleteCommand *command = new KWFrameDeleteCommand(m_document, f, this);
                     m_childcommands.append(command);
-                }
-                else if (pos.y() > pagerect.top()) { //> pageoffset) {
+                } else if (pos.y() > pagerect.top()) { //> pageoffset) {
                     // move all frames that follow this page up the height of this page
 
                     if (KWTextFrameSet*tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
                         // don't move headers, footers or the main frameset
                         if (tfs->textFrameSetType() == KWord::OddPagesHeaderTextFrameSet ||
-                            tfs->textFrameSetType() == KWord::EvenPagesHeaderTextFrameSet ||
-                            tfs->textFrameSetType() == KWord::OddPagesFooterTextFrameSet ||
-                            tfs->textFrameSetType() == KWord::EvenPagesFooterTextFrameSet ||
-                            tfs->textFrameSetType() == KWord::MainTextFrameSet) continue;
+                                tfs->textFrameSetType() == KWord::EvenPagesHeaderTextFrameSet ||
+                                tfs->textFrameSetType() == KWord::OddPagesFooterTextFrameSet ||
+                                tfs->textFrameSetType() == KWord::EvenPagesFooterTextFrameSet ||
+                                tfs->textFrameSetType() == KWord::MainTextFrameSet) continue;
                     }
 
                     Q_ASSERT(f->shape());

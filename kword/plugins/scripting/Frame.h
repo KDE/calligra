@@ -30,204 +30,251 @@
 #include "TextCursor.h"
 #include <KoColorBackground.h>
 
-namespace Scripting {
+namespace Scripting
+{
 
+/**
+* A frame holds a number of \a Frame (zero or more) objects where
+* each frame holds the content that is displayed on screen.
+*
+* The following python sample resizes the first frame of a
+* frameset named MyFrameSet to half of it's original size;
+* \code
+* import KWord
+* fs = KWord.frameSetByName("MyFrameSet")
+* if not fs:
+*     raise "No FrameSet named 'MyFrameSet'"
+* if fs.frameCount() < 1:
+*     raise "The FrameSet has no frames"
+* f = fs.frame(0)
+* f.setSize(f.width()/2.0, f.height()/2.0)
+* \code
+*
+* The following python sample script does iterate over all frames
+* each frameset has and prints the shape-id;
+* \code
+* import KWord
+* for i in range( KWord.frameSetCount() ):
+*     fs = KWord.frameSet(i)
+*     for k in fs.frameCount():
+*         print fs.frame(k).shapeId()
+* \endcode
+*/
+class Frame : public QObject
+{
+    Q_OBJECT
+    Q_ENUMS(TextRunAround)
+    Q_ENUMS(FrameBehavior)
+public:
+    Frame(QObject* parentFrameSet, KWFrame* frame) : QObject(parentFrameSet), m_frame(frame) {}
+    virtual ~Frame() {}
+
+    enum TextRunAround {
+        NoRunAround = KWord::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
+        RunAround = KWord::RunAround, ///< The text will run around the outline of the frame
+        RunThrough = KWord::RunThrough ///< The text will completely ignore the frame and layout as if it was not there
+    };
+
+    enum FrameBehavior {
+        AutoExtendFrameBehavior = KWord::AutoExtendFrameBehavior, ///< Make the frame bigger to fit the contents
+        AutoCreateNewFrameBehavior = KWord::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
+        IgnoreContentFrameBehavior = KWord::IgnoreContentFrameBehavior ///< Ignore the content and clip it
+    };
+
+public Q_SLOTS:
+
+    /** Return the Id of this shape, identifying the type of shape by the id of the factory. */
+    QString shapeId() const {
+        return m_frame->shape()->shapeId();
+    }
+    /** Return the parent \a FrameSet object this \a Frame object is child of. */
+    QObject* frameSet() {
+        return parent();
+    }
+
+    /*testcases
+    QObject* cursor() {
+        KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
+        return frame ? new TextCursor(this, QTextCursor(frame->document())) : 0;
+    }
+    int position() {
+        KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
+        return frame ? frame->position() : 0;
+    }
+    int endPosition() {
+        KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
+        return frame ? frame->endPosition() : 0;
+    }
+    */
+
+    /** This property defines what should happen when the frame is full.*/
+    int frameBehavior() const {
+        return m_frame->frameBehavior();
+    }
     /**
-    * A frame holds a number of \a Frame (zero or more) objects where
-    * each frame holds the content that is displayed on screen.
+    * Set what should happen when the frame is full.
     *
-    * The following python sample resizes the first frame of a
-    * frameset named MyFrameSet to half of it's original size;
-    * \code
-    * import KWord
-    * fs = KWord.frameSetByName("MyFrameSet")
-    * if not fs:
-    *     raise "No FrameSet named 'MyFrameSet'"
-    * if fs.frameCount() < 1:
-    *     raise "The FrameSet has no frames"
-    * f = fs.frame(0)
-    * f.setSize(f.width()/2.0, f.height()/2.0)
-    * \code
+    * Valid values for the parameter \p framebehavior are;
+    * \li AutoExtendFrameBehavior = Make the frame bigger to fit the contents.
+    * \li AutoCreateNewFrameBehavior = Create a new frame on the next page.
+    * \li IgnoreContentFrameBehavior = Ignore the content and clip it.
     *
-    * The following python sample script does iterate over all frames
-    * each frameset has and prints the shape-id;
+    * Python sample that does set the frame-behavior of the frame
+    * myframe to AutoExtendFrameBehavior;
     * \code
-    * import KWord
-    * for i in range( KWord.frameSetCount() ):
-    *     fs = KWord.frameSet(i)
-    *     for k in fs.frameCount():
-    *         print fs.frame(k).shapeId()
+    * myframe.setFrameBehavior(myframe.AutoExtendFrameBehavior)
     * \endcode
     */
-    class Frame : public QObject
-    {
-            Q_OBJECT
-            Q_ENUMS(TextRunAround)
-            Q_ENUMS(FrameBehavior)
-        public:
-            Frame(QObject* parentFrameSet, KWFrame* frame) : QObject(parentFrameSet), m_frame(frame) {}
-            virtual ~Frame() {}
+    void setFrameBehavior(int framebehavior) {
+        m_frame->setFrameBehavior((KWord::FrameBehavior) framebehavior);
+    }
 
-            enum TextRunAround {
-                NoRunAround = KWord::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
-                RunAround = KWord::RunAround, ///< The text will run around the outline of the frame
-                RunThrough = KWord::RunThrough ///< The text will completely ignore the frame and layout as if it was not there
-            };
+    /** Return the text runaround property for this frame. This property specifies
+    how text from another textframe will behave when this frame intersects with it. */
+    int textRunAround() const {
+        return m_frame->textRunAround();
+    }
+    /**
+    * Set the text runaround property for this frame.
+    *
+    * Valid values for the parameter \p textrunaround are;
+    * \li NoRunAround = The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
+    * \li RunAround = The text will run around the outline of the frame.
+    * \li RunThrough = The text will completely ignore the frame and layout as if it was not there.
+    *
+    * Python sample that does set the round-around property of the both
+    * frames myframe1 and myframe2;
+    * \code
+    * myframe1.setTextRunAround(myframe.NoRunAround)
+    * myframe2.setTextRunAround(myframe.RunThrough)
+    * \endcode
+    */
+    void setTextRunAround(int textrunaround) {
+        return m_frame->setTextRunAround((KWord::TextRunAround) textrunaround);
+    }
 
-            enum FrameBehavior {
-                AutoExtendFrameBehavior = KWord::AutoExtendFrameBehavior, ///< Make the frame bigger to fit the contents
-                AutoCreateNewFrameBehavior = KWord::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
-                IgnoreContentFrameBehavior = KWord::IgnoreContentFrameBehavior ///< Ignore the content and clip it
-            };
+    /** Return the space between this frames edge and the text when that text runs around this frame. */
+    qreal runAroundDistance() const {
+        return m_frame->runAroundDistance();
+    }
+    /** Set the space between this frames edge and the text when that text runs around this frame. */
+    void setRunAroundDistance(qreal runarounddistance) {
+        m_frame->setRunAroundDistance(runarounddistance);
+    }
 
-        public Q_SLOTS:
+    /** Request a repaint to be queued. */
+    void update() const {
+        m_frame->shape()->update();
+    }
 
-            /** Return the Id of this shape, identifying the type of shape by the id of the factory. */
-            QString shapeId() const { return m_frame->shape()->shapeId(); }
-            /** Return the parent \a FrameSet object this \a Frame object is child of. */
-            QObject* frameSet() { return parent(); }
+    /** Returns current visibility state of this shape. */
+    bool isVisible() const {
+        return m_frame->shape()->isVisible();
+    }
+    /** Changes the Shape to be visible or invisible. */
+    void setVisible(bool on) {
+        m_frame->shape()->setVisible(on);
+    }
 
-            /*testcases
-            QObject* cursor() {
-                KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
-                return frame ? new TextCursor(this, QTextCursor(frame->document())) : 0;
-            }
-            int position() {
-                KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
-                return frame ? frame->position() : 0;
-            }
-            int endPosition() {
-                KoTextShapeData *frame = dynamic_cast<KoTextShapeData*>( m_frame->shape()->userData() );
-                return frame ? frame->endPosition() : 0;
-            }
-            */
+    /** Scale the shape using the zero-point which is the top-left corner. */
+    void setScale(qreal sx, qreal sy) {
+        m_frame->shape()->setScale(sx, sy);
+    }
 
-            /** This property defines what should happen when the frame is full.*/
-            int frameBehavior() const { return m_frame->frameBehavior(); }
-            /**
-            * Set what should happen when the frame is full.
-            *
-            * Valid values for the parameter \p framebehavior are;
-            * \li AutoExtendFrameBehavior = Make the frame bigger to fit the contents.
-            * \li AutoCreateNewFrameBehavior = Create a new frame on the next page.
-            * \li IgnoreContentFrameBehavior = Ignore the content and clip it.
-            *
-            * Python sample that does set the frame-behavior of the frame
-            * myframe to AutoExtendFrameBehavior;
-            * \code
-            * myframe.setFrameBehavior(myframe.AutoExtendFrameBehavior)
-            * \endcode
-            */
-            void setFrameBehavior(int framebehavior) { m_frame->setFrameBehavior( (KWord::FrameBehavior) framebehavior ); }
+    /** Return the current rotation in degrees, or NAN if its been transformed too much to extract that info. */
+    qreal rotation() const {
+        return m_frame->shape()->rotation();
+    }
+    /** The shape will have the rotation added, using the center of the shape using the size(). */
+    void rotate(qreal angle) {
+        m_frame->shape()->rotate(angle);
+    }
 
-            /** Return the text runaround property for this frame. This property specifies
-            how text from another textframe will behave when this frame intersects with it. */
-            int textRunAround() const { return m_frame->textRunAround(); }
-            /**
-            * Set the text runaround property for this frame.
-            *
-            * Valid values for the parameter \p textrunaround are;
-            * \li NoRunAround = The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
-            * \li RunAround = The text will run around the outline of the frame.
-            * \li RunThrough = The text will completely ignore the frame and layout as if it was not there.
-            *
-            * Python sample that does set the round-around property of the both
-            * frames myframe1 and myframe2;
-            * \code
-            * myframe1.setTextRunAround(myframe.NoRunAround)
-            * myframe2.setTextRunAround(myframe.RunThrough)
-            * \endcode
-            */
-            void setTextRunAround(int textrunaround) { return m_frame->setTextRunAround( (KWord::TextRunAround) textrunaround ); }
+    /** The shape will be sheared using the zero-point which is the top-left corner. */
+    void setShear(qreal sx, qreal sy) {
+        m_frame->shape()->setShear(sx, sy);
+    }
 
-            /** Return the space between this frames edge and the text when that text runs around this frame. */
-            qreal runAroundDistance() const { return m_frame->runAroundDistance(); }
-            /** Set the space between this frames edge and the text when that text runs around this frame. */
-            void setRunAroundDistance(qreal runarounddistance) { m_frame->setRunAroundDistance(runarounddistance); }
+    /** Get the width of the shape in pt. */
+    qreal width() const {
+        return m_frame->shape()->size().width();
+    }
+    /** Get the width of the shape in pt. */
+    qreal height() const {
+        return m_frame->shape()->size().height();
+    }
+    /**
+    * Resize the shape.
+    *
+    * The following python sample does resize the shape
+    * to the half size;
+    * \code
+    * w = myshape.width()
+    * h = myshape.height()
+    * myshape.setSize(w/2.0, h/2.0)
+    * \endcode
+    */
+    void setSize(qreal width, qreal height) {
+        m_frame->shape()->setSize(QSizeF(width, height));
+    }
 
-            /** Request a repaint to be queued. */
-            void update() const { m_frame->shape()->update(); }
+    /** Get the X-position of the shape in pt. */
+    qreal positionX() const {
+        return m_frame->shape()->position().x();
+    }
+    /** Get the Y-position of the shape in pt. */
+    qreal positionY() const {
+        return m_frame->shape()->position().y();
+    }
+    /**
+    * Set the position of the shape in pt.
+    *
+    * The following python sample does move the shape myshape
+    * by 50 pixels down and by 10 pixels to the right;
+    * \code
+    * x = myshape.positionX()
+    * y = myshape.positionY()
+    * myshape.setPosition(x+10,y+50)
+    * \endcode
+    */
+    void setPosition(qreal x, qreal y) {
+        m_frame->shape()->setPosition(QPointF(x, y));
+    }
 
-            /** Returns current visibility state of this shape. */
-            bool isVisible() const { return m_frame->shape()->isVisible(); }
-            /** Changes the Shape to be visible or invisible. */
-            void setVisible(bool on) { m_frame->shape()->setVisible(on); }
+    /** Retrieve the z-coordinate of this shape. */
+    int zIndex() const {
+        return m_frame->shape()->zIndex();
+    }
+    /** Set the z-coordinate of this shape. */
+    void setZIndex(int zIndex) {
+        m_frame->shape()->setZIndex(zIndex);
+    }
 
-            /** Scale the shape using the zero-point which is the top-left corner. */
-            void setScale(qreal sx, qreal sy) { m_frame->shape()->setScale(sx, sy); }
+    /** Return the background color of the shape. */
+    QColor backgroundColor() const {
+        KoColorBackground * fill = dynamic_cast<KoColorBackground*>(m_frame->shape()->background());
+        if (fill)
+            return fill->color();
+        else
+            return QColor();
+    }
+    /**
+    * Set the background color of the shape.
+    *
+    * Python sample script that sets the background-color of the
+    * shape myshape to red aka RGB-value FF0000;
+    * \code
+    * myshape.setBackgroundColor("#ff0000")
+    * \endcode
+    */
+    void setBackgroundColor(const QColor& color) {
+        KoColorBackground * newFill = new KoColorBackground(color);
+        m_frame->shape()->setBackground(newFill);
+    }
 
-            /** Return the current rotation in degrees, or NAN if its been transformed too much to extract that info. */
-            qreal rotation() const { return m_frame->shape()->rotation(); }
-            /** The shape will have the rotation added, using the center of the shape using the size(). */
-            void rotate(qreal angle) { m_frame->shape()->rotate(angle); }
-
-            /** The shape will be sheared using the zero-point which is the top-left corner. */
-            void setShear(qreal sx, qreal sy) { m_frame->shape()->setShear(sx, sy); }
-
-            /** Get the width of the shape in pt. */
-            qreal width() const { return m_frame->shape()->size().width(); }
-            /** Get the width of the shape in pt. */
-            qreal height() const { return m_frame->shape()->size().height(); }
-            /**
-            * Resize the shape.
-            *
-            * The following python sample does resize the shape
-            * to the half size;
-            * \code
-            * w = myshape.width()
-            * h = myshape.height()
-            * myshape.setSize(w/2.0, h/2.0)
-            * \endcode
-            */
-            void setSize(qreal width, qreal height) { m_frame->shape()->setSize(QSizeF(width,height)); }
-
-            /** Get the X-position of the shape in pt. */
-            qreal positionX() const { return m_frame->shape()->position().x(); }
-            /** Get the Y-position of the shape in pt. */
-            qreal positionY() const { return m_frame->shape()->position().y(); }
-            /**
-            * Set the position of the shape in pt.
-            *
-            * The following python sample does move the shape myshape
-            * by 50 pixels down and by 10 pixels to the right;
-            * \code
-            * x = myshape.positionX()
-            * y = myshape.positionY()
-            * myshape.setPosition(x+10,y+50)
-            * \endcode
-            */
-            void setPosition(qreal x, qreal y) { m_frame->shape()->setPosition(QPointF(x,y)); }
-
-            /** Retrieve the z-coordinate of this shape. */
-            int zIndex() const { return m_frame->shape()->zIndex(); }
-            /** Set the z-coordinate of this shape. */
-            void setZIndex(int zIndex) { m_frame->shape()->setZIndex(zIndex); }
-
-            /** Return the background color of the shape. */
-            QColor backgroundColor() const { 
-                KoColorBackground * fill = dynamic_cast<KoColorBackground*>( m_frame->shape()->background() );
-                if( fill )
-                    return fill->color();
-                else
-                    return QColor();
-            }
-            /**
-            * Set the background color of the shape.
-            *
-            * Python sample script that sets the background-color of the
-            * shape myshape to red aka RGB-value FF0000;
-            * \code
-            * myshape.setBackgroundColor("#ff0000")
-            * \endcode
-            */
-            void setBackgroundColor(const QColor& color) {
-                KoColorBackground * newFill = new KoColorBackground( color );
-                m_frame->shape()->setBackground( newFill );
-            }
-
-        private:
-            KWFrame* m_frame;
-    };
+private:
+    KWFrame* m_frame;
+};
 }
 
 #endif

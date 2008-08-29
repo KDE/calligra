@@ -23,15 +23,16 @@
 
 class KWFrame;
 
-class KWOutlineShape : public KoPathShape {
+class KWOutlineShape : public KoPathShape
+{
 public:
     KWOutlineShape(KWFrame *frame);
     ~KWOutlineShape();
 
     /// empty. This thing is never printable.
-    virtual void paintComponent (QPainter &, const KoViewConverter &) {}
+    virtual void paintComponent(QPainter &, const KoViewConverter &) {}
     /// reimplemented
-    virtual void paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    virtual void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
 
 private:
     bool m_paintOutline;

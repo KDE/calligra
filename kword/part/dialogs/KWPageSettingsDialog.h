@@ -28,7 +28,8 @@
 class KWDocument;
 
 /// A dialog to show the settings for one page and apply them afterwards.
-class KWPageSettingsDialog : public KoPageLayoutDialog {
+class KWPageSettingsDialog : public KoPageLayoutDialog
+{
     Q_OBJECT
 public:
     explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, KWPage *page);

@@ -30,7 +30,7 @@ class KoShape;
 class KWCreateOutlineCommand : public QUndoCommand
 {
 public:
-    explicit KWCreateOutlineCommand( KoShapeControllerBase *controller, KWFrame *frame, QUndoCommand *parent = 0 );
+    explicit KWCreateOutlineCommand(KoShapeControllerBase *controller, KWFrame *frame, QUndoCommand *parent = 0);
     ~KWCreateOutlineCommand();
 
     /// (re)do the command

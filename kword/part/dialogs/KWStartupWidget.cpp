@@ -26,8 +26,8 @@
 #include <KoPagePreviewWidget.h>
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
-    : QWidget(parent),
-    m_unit(KoUnit::Millimeter)
+        : QWidget(parent),
+        m_unit(KoUnit::Millimeter)
 {
     widget.setupUi(this);
     // TODO get unit from config and set it on m_unit
@@ -62,14 +62,14 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     prev->setColumns(columns);
     prev->setPageLayout(m_layout);
 
-    connect (m_sizeWidget, SIGNAL( layoutChanged(const KoPageLayout&)), this, SLOT(sizeUpdated(const KoPageLayout&)));
-    connect (widget.createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
-    connect (widget.mainText, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setTextAreaAvailable(bool)));
-    connect (widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setTextAreaAvailable(bool)));
-    connect (m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), m_columnsWidget, SLOT(setUnit(const KoUnit&)));
-    connect (m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), prev, SLOT(setColumns(const KoColumns&)));
-    connect (m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), this, SLOT(columnsUpdated(const KoColumns&)));
-    connect (m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
+    connect(m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), this, SLOT(sizeUpdated(const KoPageLayout&)));
+    connect(widget.createButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    connect(widget.mainText, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setTextAreaAvailable(bool)));
+    connect(widget.mainText, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setTextAreaAvailable(bool)));
+    connect(m_sizeWidget, SIGNAL(unitChanged(const KoUnit&)), m_columnsWidget, SLOT(setUnit(const KoUnit&)));
+    connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), prev, SLOT(setColumns(const KoColumns&)));
+    connect(m_columnsWidget, SIGNAL(columnsChanged(const KoColumns&)), this, SLOT(columnsUpdated(const KoColumns&)));
+    connect(m_sizeWidget, SIGNAL(layoutChanged(const KoPageLayout&)), prev, SLOT(setPageLayout(const KoPageLayout&)));
 }
 
 void KWStartupWidget::unitChanged(const KoUnit &unit)

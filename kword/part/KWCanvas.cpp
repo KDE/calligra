@@ -40,12 +40,12 @@
 // #define DEBUG_REPAINT
 
 
-KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent )
-    : QWidget(parent),
-    KoCanvasBase( document ),
-    m_document( document ),
-    m_view(view),
-    m_viewMode(0)
+KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent)
+        : QWidget(parent),
+        KoCanvasBase(document),
+        m_document(document),
+        m_view(view),
+        m_viewMode(0)
 {
     m_shapeManager = new KoShapeManager(this);
     m_viewMode = KWViewMode::create(viewMode, this);
@@ -107,8 +107,8 @@ void KWCanvas::updateCanvas(const QRectF& rc)
     foreach(KWViewMode::ViewMap vm, map) {
         vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
         QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
-                (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
-                vm.clipRect.width(), vm.clipRect.height());
+                        (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
+                        vm.clipRect.width(), vm.clipRect.height());
         update(finalClip);
     }
 }
@@ -127,9 +127,9 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
     KWPage *page = 0;
     foreach(KWPage *p, m_document->pageManager()->pages()) {
         bottomOfPage += p->height();
-        if(bottomOfPage >= absPos.y())
+        if (bottomOfPage >= absPos.y())
             page = p;
-        if(bottomOfPage >= destination.y()) {
+        if (bottomOfPage >= destination.y()) {
             page = p;
             break;
         }
@@ -139,32 +139,32 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
         move.setY(0);
         return;
     }
-    QRectF pageRect (page->rect().adjusted(5, 5, -5, -5));
-    QPainterPath path (shape->absoluteTransformation(0).map(shape->outline()));
+    QRectF pageRect(page->rect().adjusted(5, 5, -5, -5));
+    QPainterPath path(shape->absoluteTransformation(0).map(shape->outline()));
     QRectF shapeBounds = path.boundingRect();
     shapeBounds.moveTopLeft(shapeBounds.topLeft() + move);
     if (!shapeBounds.intersects(pageRect)) {
         if (shapeBounds.left() > pageRect.right()) // need to move to the left some
-            move.setX( move.x() + (pageRect.right() - shapeBounds.left()) );
+            move.setX(move.x() + (pageRect.right() - shapeBounds.left()));
         else if (shapeBounds.right() < pageRect.left()) // need to move to the right some
-            move.setX( move.x() + pageRect.left() - shapeBounds.right());
+            move.setX(move.x() + pageRect.left() - shapeBounds.right());
 
         if (shapeBounds.top() > pageRect.bottom()) // need to move up some
-            move.setY( move.y() + (pageRect.bottom() - shapeBounds.top()) );
+            move.setY(move.y() + (pageRect.bottom() - shapeBounds.top()));
         else if (shapeBounds.bottom() < pageRect.top()) // need to move down some
-            move.setY( move.y() + pageRect.top() - shapeBounds.bottom());
+            move.setY(move.y() + pageRect.top() - shapeBounds.bottom());
     }
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseMoveEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
+    m_toolProxy->mouseMoveEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
 }
 
 void KWCanvas::mousePressEvent(QMouseEvent *e)
 {
-    m_toolProxy->mousePressEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
-    if(!e->isAccepted() && e->button() == Qt::RightButton) {
+    m_toolProxy->mousePressEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
+    if (!e->isAccepted() && e->button() == Qt::RightButton) {
         m_view->popupContextMenu(e->globalPos(), m_toolProxy->popupActionList());
         e->setAccepted(true);
     }
@@ -172,15 +172,15 @@ void KWCanvas::mousePressEvent(QMouseEvent *e)
 
 void KWCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseReleaseEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
+    m_toolProxy->mouseReleaseEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
 }
 
 void KWCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    m_toolProxy->mouseDoubleClickEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
+    m_toolProxy->mouseDoubleClickEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
 }
 
-void KWCanvas::keyPressEvent( QKeyEvent *e )
+void KWCanvas::keyPressEvent(QKeyEvent *e)
 {
     m_toolProxy->keyPressEvent(e);
 }
@@ -195,32 +195,32 @@ void KWCanvas::updateInputMethodInfo()
     updateMicroFocus();
 }
 
-void KWCanvas::keyReleaseEvent (QKeyEvent *e)
+void KWCanvas::keyReleaseEvent(QKeyEvent *e)
 {
 #ifndef NDEBUG
     // Debug keys
-    if ( (e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier) ) ) {
-        if(e->key() == Qt::Key_F) {
+    if ((e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier))) {
+        if (e->key() == Qt::Key_F) {
             document()->printDebug();
             e->accept();
             return;
         }
-        if(e->key() == Qt::Key_P) {
+        if (e->key() == Qt::Key_P) {
             //printRTDebug( 0 );
             e->accept();
             return;
         }
-        if(e->key() == Qt::Key_V) {
+        if (e->key() == Qt::Key_V) {
             //printRTDebug( 1 );
             e->accept();
             return;
         }
-        if(e->key() == Qt::Key_S) {
+        if (e->key() == Qt::Key_S) {
             //m_doc->printStyleDebug();
             e->accept();
             return;
         }
-        if(e->key() == Qt::Key_M) {
+        if (e->key() == Qt::Key_M) {
             //const QDateTime dtMark ( QDateTime::currentDateTime() );
             //kDebug(32002) <<"Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
             e->accept();
@@ -232,14 +232,14 @@ void KWCanvas::keyReleaseEvent (QKeyEvent *e)
     m_toolProxy->keyReleaseEvent(e);
 }
 
-void KWCanvas::tabletEvent( QTabletEvent *e )
+void KWCanvas::tabletEvent(QTabletEvent *e)
 {
-    m_toolProxy->tabletEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
+    m_toolProxy->tabletEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
 }
 
-void KWCanvas::wheelEvent( QWheelEvent *e )
+void KWCanvas::wheelEvent(QWheelEvent *e)
 {
-    m_toolProxy->wheelEvent( e, m_viewMode->viewToDocument(e->pos() + m_documentOffset) );
+    m_toolProxy->wheelEvent(e, m_viewMode->viewToDocument(e->pos() + m_documentOffset));
 }
 
 void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
@@ -247,15 +247,15 @@ void KWCanvas::inputMethodEvent(QInputMethodEvent *event)
     m_toolProxy->inputMethodEvent(event);
 }
 
-bool KWCanvas::event (QEvent *event)
+bool KWCanvas::event(QEvent *event)
 {
     // we should forward tabs, and let tools decide if they should be used or ignored.
     // if the tool ignores it, it will move focus.
-    if(event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*> (event);
-        if(keyEvent->key() == Qt::Key_Backtab)
+    if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        if (keyEvent->key() == Qt::Key_Backtab)
             return true;
-        if(keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
+        if (keyEvent->key() == Qt::Key_Tab && event->type() == QEvent::KeyPress) {
             // we loose key-release events, which I think is not an issue.
             keyPressEvent(keyEvent);
             return true;
@@ -269,11 +269,11 @@ bool KWCanvas::event (QEvent *event)
 #endif
 void KWCanvas::paintEvent(QPaintEvent * ev)
 {
-    QPainter painter( this );
+    QPainter painter(this);
     painter.eraseRect(ev->rect());
     painter.translate(-m_documentOffset);
 
-    if(m_viewMode->hasPages()) {
+    if (m_viewMode->hasPages()) {
         QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
         foreach(KWViewMode::ViewMap vm, map) {
             painter.save();
@@ -282,17 +282,16 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
             painter.setClipRect(vm.clipRect);
             QColor color = Qt::white; // TODO paper background
 #ifdef DEBUG_REPAINT
-    color = QColor(random()%255, random()%255, random()%255);
+            color = QColor(random() % 255, random() % 255, random() % 255);
 #endif
             painter.fillRect(vm.clipRect, QBrush(color));
             if (isAntialiased())
                 painter.setRenderHint(QPainter::Antialiasing);
-            m_shapeManager->paint( painter, *(viewConverter()), false );
-            m_toolProxy->paint( painter, *(viewConverter()) );
+            m_shapeManager->paint(painter, *(viewConverter()), false);
+            m_toolProxy->paint(painter, *(viewConverter()));
             painter.restore();
         }
-    }
-    else {
+    } else {
         // TODO paint the main-text-flake directly
         kWarning() << "Non-page painting not implemented yet!\n";
     }

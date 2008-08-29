@@ -31,12 +31,13 @@
 #include <QPainter>
 
 KWOutlineShape::KWOutlineShape(KWFrame *frame)
-    : m_paintOutline (false)
+        : m_paintOutline(false)
 {
     setShapeId(KoPathShapeId);
     setApplicationData(frame);
 
-    class MyGroup : public KoShapeGroup {
+    class MyGroup : public KoShapeGroup
+    {
     public:
         ~MyGroup() {
             setApplicationData(0); // make sure deleting this will not delete the parent frame.
@@ -52,7 +53,7 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
 
     const QSizeF s = child->size();
     // init with a simple rect as the outline of the original.
-    moveTo(QPointF(0,0));
+    moveTo(QPointF(0, 0));
     lineTo(QPointF(s.width(), 0));
     lineTo(QPointF(s.width(), s.height()));
     lineTo(QPointF(0, s.height()));
@@ -67,16 +68,16 @@ KWOutlineShape::~KWOutlineShape()
 {
 }
 
-void KWOutlineShape::paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+void KWOutlineShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
 {
     if (! canvas->shapeManager()->selection()->isSelected(this))
         return;
 
-    applyConversion( painter, converter );
+    applyConversion(painter, converter);
 
     QPen pen = QPen(canvas->resourceProvider()->koColorResource(KWord::FrameOutlineColor).toQColor());
-    QPointF onePixel = converter.viewToDocument(QPointF(1,1));
+    QPointF onePixel = converter.viewToDocument(QPointF(1, 1));
     pen.setWidthF(onePixel.x());
-    painter.strokePath( outline(), pen );
+    painter.strokePath(outline(), pen);
 }
 

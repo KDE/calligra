@@ -33,7 +33,8 @@ class KWFrameSet;
 class KWDocument;
 
 /// A widget that is shown for 1 textframe to connect it to a frameset
-class KWFrameConnectSelector : public KoShapeConfigWidgetBase {
+class KWFrameConnectSelector : public KoShapeConfigWidgetBase
+{
     Q_OBJECT
 public:
     /// constructor
@@ -46,8 +47,10 @@ public:
     /// reimplemented
     void save();
 
-    /// reimplemented 
-    virtual bool showOnShapeCreate() { return true; }
+    /// reimplemented
+    virtual bool showOnShapeCreate() {
+        return true;
+    }
 
 private slots:
     void frameSetSelected();

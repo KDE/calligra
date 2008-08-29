@@ -8,7 +8,8 @@
 
 class KWFrameSet;
 
-class TestBasicLayout : public QObject {
+class TestBasicLayout : public QObject
+{
     Q_OBJECT
 public:
     TestBasicLayout();

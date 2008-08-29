@@ -9,7 +9,8 @@
 #include <qtest_kde.h>
 
 
-void TestClipToPage::testClipToPage() {
+void TestClipToPage::testClipToPage()
+{
     KWDocument doc;
     KWPage *page1 = doc.appendPage("Standard");
     KoPageLayout layout = page1->pageStyle()->pageLayout();

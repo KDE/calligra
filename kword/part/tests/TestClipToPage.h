@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-class TestClipToPage : public QObject {
+class TestClipToPage : public QObject
+{
     Q_OBJECT
 private slots: // tests
     void testClipToPage();

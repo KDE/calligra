@@ -46,8 +46,7 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockMinimized;
     }
 

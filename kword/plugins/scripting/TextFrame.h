@@ -26,64 +26,65 @@
 
 #include "TextCursor.h"
 
-namespace Scripting {
+namespace Scripting
+{
 
-    /**
-    * The TextFrame class represents a frame within a \a TextDocument .
-    */
-    class TextFrame : public QObject
-    {
-            Q_OBJECT
-        public:
-            TextFrame(QObject* parent, QTextFrame* frame)
-                : QObject( parent ), m_frame( frame ) {}
-            virtual ~TextFrame() {}
+/**
+* The TextFrame class represents a frame within a \a TextDocument .
+*/
+class TextFrame : public QObject
+{
+    Q_OBJECT
+public:
+    TextFrame(QObject* parent, QTextFrame* frame)
+            : QObject(parent), m_frame(frame) {}
+    virtual ~TextFrame() {}
 
-        public Q_SLOTS:
+public Q_SLOTS:
 
-            /** Return the frame content as plain text. */
-            QString text() const {
-                return QTextCursor(m_frame).block().text();
-            }
+    /** Return the frame content as plain text. */
+    QString text() const {
+        return QTextCursor(m_frame).block().text();
+    }
 
-            /** Return the \a TextCursor object for this frame. */
-            QObject* cursor() {
-                return new TextCursor(this, QTextCursor(m_frame));
-            }
+    /** Return the \a TextCursor object for this frame. */
+    QObject* cursor() {
+        return new TextCursor(this, QTextCursor(m_frame));
+    }
 
-            /** Return the first position in the frame. */
-            int firstPosition() const {
-                return m_frame->firstPosition();
-            }
+    /** Return the first position in the frame. */
+    int firstPosition() const {
+        return m_frame->firstPosition();
+    }
 
-            /** Return a \a TextCursor object for the first position in the frame. */
-            QObject* firstCursorPosition() {
-                return new TextCursor(this, m_frame->firstCursorPosition());
-            }
+    /** Return a \a TextCursor object for the first position in the frame. */
+    QObject* firstCursorPosition() {
+        return new TextCursor(this, m_frame->firstCursorPosition());
+    }
 
-            /** Return the last position in the frame. */
-            int lastPosition() const {
-                return m_frame->lastPosition();
-            }
+    /** Return the last position in the frame. */
+    int lastPosition() const {
+        return m_frame->lastPosition();
+    }
 
-            /** Return a \a TextCursor object for the last position in the frame. */
-            QObject* lastCursorPosition() {
-                return new TextCursor(this, m_frame->lastCursorPosition());
-            }
+    /** Return a \a TextCursor object for the last position in the frame. */
+    QObject* lastCursorPosition() {
+        return new TextCursor(this, m_frame->lastCursorPosition());
+    }
 
-            /** Return a child \a TextFrame object with the defined \p index . */
-            QObject* childFrame(int index) {
-                return (index >= 0 && index < m_frame->childFrames().count()) ? m_frame->childFrames().at(index) : 0;
-            }
+    /** Return a child \a TextFrame object with the defined \p index . */
+    QObject* childFrame(int index) {
+        return (index >= 0 && index < m_frame->childFrames().count()) ? m_frame->childFrames().at(index) : 0;
+    }
 
-            /** Return the number of \a TextCursor objects. */
-            int childFrameCount() const {
-                return m_frame->childFrames().count();
-            }
+    /** Return the number of \a TextCursor objects. */
+    int childFrameCount() const {
+        return m_frame->childFrames().count();
+    }
 
-        private:
-            QPointer<QTextFrame> m_frame;
-    };
+private:
+    QPointer<QTextFrame> m_frame;
+};
 
 }
 

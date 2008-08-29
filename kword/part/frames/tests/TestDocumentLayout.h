@@ -16,7 +16,8 @@ class QTextDocument;
 class QTextLayout;
 class KWTextDocumentLayout;
 
-class TestDocumentLayout : public QObject {
+class TestDocumentLayout : public QObject
+{
     Q_OBJECT
 public:
     TestDocumentLayout() {}
@@ -37,14 +38,17 @@ private:
     KoStyleManager *styleManager;
 };
 
-class MockTextShape : public KoShape {
-  public:
+class MockTextShape : public KoShape
+{
+public:
     MockTextShape() {
         setUserData(new KoTextShapeData());
     }
     virtual void paint(QPainter &, const KoViewConverter &) { }
-    virtual void saveOdf( KoShapeSavingContext & ) const {}
-    virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
+    virtual void saveOdf(KoShapeSavingContext &) const {}
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+        return false;
+    }
 };
 
 #endif

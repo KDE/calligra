@@ -51,28 +51,28 @@ typedef Q3ValueList< DbRecord > Db;
 class KWClassicSerialDataSource: public KWMailMergeDataSource
 {
     Q_OBJECT
-    public:
-    KWClassicSerialDataSource(const KComponentData &inst,QObject *parent);
+public:
+    KWClassicSerialDataSource(const KComponentData &inst, QObject *parent);
     ~KWClassicSerialDataSource();
 
-    virtual void save( QDomDocument &doc,QDomElement&);
-    virtual void load( QDomElement& elem );
-    virtual class QString getValue( const QString &name, int record = -1 ) const;
+    virtual void save(QDomDocument &doc, QDomElement&);
+    virtual void load(QDomElement& elem);
+    virtual class QString getValue(const QString &name, int record = -1) const;
     virtual int getNumRecords() const {
         return (int)db.count();
     }
-    virtual  bool showConfigDialog(QWidget *,int);
-    virtual void refresh(bool){};
+    virtual  bool showConfigDialog(QWidget *, int);
+    virtual void refresh(bool) {};
 
-    protected:
+protected:
     friend class KWClassicMailMergeEditor;
     friend class KWClassicMailMergeEditorList;
 
-    void setValue( const QString &name, const QString &value, int record = -1 );
+    void setValue(const QString &name, const QString &value, int record = -1);
     void appendRecord();
-    void addEntry( const QString &name );
-    void removeEntry( const QString &name );
-    void removeRecord( int i );
+    void addEntry(const QString &name);
+    void removeEntry(const QString &name);
+    void removeRecord(int i);
     Db db;
 };
 
@@ -85,12 +85,12 @@ class KWClassicSerialDataSource: public KWMailMergeDataSource
 class KWClassicMailMergeEditorListItem : public Q3ListViewItem
 {
 public:
-    KWClassicMailMergeEditorListItem( Q3ListView *parent );
-    KWClassicMailMergeEditorListItem( Q3ListView *parent, Q3ListViewItem *after );
+    KWClassicMailMergeEditorListItem(Q3ListView *parent);
+    KWClassicMailMergeEditorListItem(Q3ListView *parent, Q3ListViewItem *after);
     virtual ~KWClassicMailMergeEditorListItem();
 
-    virtual void setText( int i, const QString &text );
-    virtual QString text( int i ) const;
+    virtual void setText(int i, const QString &text);
+    virtual QString text(int i) const;
     void setup();
     void update();
 
@@ -110,20 +110,20 @@ class KWClassicMailMergeEditorList : public Q3ListView
     Q_OBJECT
 
 public:
-    KWClassicMailMergeEditorList( QWidget *parent, KWClassicSerialDataSource *db_ );
+    KWClassicMailMergeEditorList(QWidget *parent, KWClassicSerialDataSource *db_);
     virtual ~KWClassicMailMergeEditorList();
 
     void invalidateCurrentRecord();
     void updateItems();
-    void displayRecord( int i );
+    void displayRecord(int i);
 
-    void setSorting( int, bool increasing = true ) {
-        Q3ListView::setSorting( -1, increasing );
+    void setSorting(int, bool increasing = true) {
+        Q3ListView::setSorting(-1, increasing);
     }
 
 protected slots:
-    void columnSizeChange( int c, int os, int ns );
-    void sectionClicked( int c );
+    void columnSizeChange(int c, int os, int ns);
+    void sectionClicked(int c);
 
 protected:
     KWClassicSerialDataSource *db;
@@ -142,10 +142,10 @@ class KWClassicMailMergeEditor : public KDialog
     Q_OBJECT
 
 public:
-    KWClassicMailMergeEditor( QWidget *parent, KWClassicSerialDataSource *db_ );
+    KWClassicMailMergeEditor(QWidget *parent, KWClassicSerialDataSource *db_);
 
 protected:
-    void resizeEvent( QResizeEvent *e );
+    void resizeEvent(QResizeEvent *e);
     void updateButton();
 
     QSpinBox *records;
@@ -163,7 +163,7 @@ protected:
     QToolButton *deleteEntry;
 
 protected slots:
-    void changeRecord( int i );
+    void changeRecord(int i);
     void addEntry();
     void addRecord();
     void removeEntry();

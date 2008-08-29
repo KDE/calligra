@@ -35,7 +35,8 @@ class KWDocumentColumns;
  * This class embeds the page size/columns tabs to allow the user to select the document
  * markup for his new empty document.
  */
-class KWStartupWidget : public QWidget {
+class KWStartupWidget : public QWidget
+{
     Q_OBJECT
 public:
     /**

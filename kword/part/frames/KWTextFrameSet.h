@@ -31,7 +31,8 @@ class KWDocument;
 /**
  * A frameset with a TextDocument backing it.
  */
-class KWORD_EXPORT KWTextFrameSet : public KWFrameSet {
+class KWORD_EXPORT KWTextFrameSet : public KWFrameSet
+{
     Q_OBJECT
 public:
     /// normal constructor, for user text
@@ -45,15 +46,23 @@ public:
     ~KWTextFrameSet();
 
     /// return the type of frameSet this is
-    KWord::TextFrameSetType textFrameSetType() { return m_textFrameSetType; }
+    KWord::TextFrameSetType textFrameSetType() {
+        return m_textFrameSetType;
+    }
 
     /// return the document with the text that belongs to this frameset.
-    QTextDocument *document() const { return m_document; }
+    QTextDocument *document() const {
+        return m_document;
+    }
 
     /// return true if the content of this frameset should not be allowed to be altered
-    bool protectContent() const { return m_protectContent; }
+    bool protectContent() const {
+        return m_protectContent;
+    }
     /// set wheater the content of this frameset should not be allowed to be altered
-    void setProtectContent(bool protect) { m_protectContent = protect; }
+    void setProtectContent(bool protect) {
+        m_protectContent = protect;
+    }
 
     /**
      * Sets the flag if this frameset is allowed to automaticall do layout of the textdata.
@@ -77,11 +86,17 @@ public:
      * Set the page manager used by this frameset.
      * If we can't get rid of the dependency on KWDocument, we should remove this variable.
      */
-    void setPageManager(const KWPageManager *pageMager) { m_pageManager = pageMager; }
+    void setPageManager(const KWPageManager *pageMager) {
+        m_pageManager = pageMager;
+    }
     /// return the pageManager for this frameSet
-    const KWPageManager* pageManager() const { return m_pageManager; }
+    const KWPageManager* pageManager() const {
+        return m_pageManager;
+    }
     /// return the document for this frameset
-    const KWDocument *kwordDocument() const { return m_kwordDocument; }
+    const KWDocument *kwordDocument() const {
+        return m_kwordDocument;
+    }
 
 #ifndef NDEBUG
     void printDebug();

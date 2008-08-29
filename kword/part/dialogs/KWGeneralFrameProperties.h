@@ -30,7 +30,8 @@
 class KWFrame;
 
 /// A widget that allows the user to alter the general frame properties
-class KWGeneralFrameProperties : public KoShapeConfigWidgetBase {
+class KWGeneralFrameProperties : public KoShapeConfigWidgetBase
+{
     Q_OBJECT
 public:
     /// constructor
@@ -43,8 +44,10 @@ public:
     /// reimplemented
     void save();
 
-    /// reimplemented 
-    virtual bool showOnShapeCreate() { return true; }
+    /// reimplemented
+    virtual bool showOnShapeCreate() {
+        return true;
+    }
 
 private slots:
     void newPageGroupUpdated(int which);

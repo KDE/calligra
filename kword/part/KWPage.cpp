@@ -30,13 +30,14 @@ KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle)
     m_parent = parent;
     m_pageNum = pageNum;
     m_pageStyle = pageStyle;
-    m_pageSide = pageNum%2==0 ? Left : Right;
+    m_pageSide = pageNum % 2 == 0 ? Left : Right;
 
     m_textDirectionHint = KoText::AutoDirection;
 }
 
-void KWPage::setPageNumber(int pageNum) {
-    if(m_pageNum == pageNum)
+void KWPage::setPageNumber(int pageNum)
+{
+    if (m_pageNum == pageNum)
         return;
 
     m_pageNum = pageNum;
@@ -44,18 +45,20 @@ void KWPage::setPageNumber(int pageNum) {
     //TODO mark KoVariable page-number's as dirty
 }
 
-int KWPage::pageNumber() const {
+int KWPage::pageNumber() const
+{
     return m_pageNum;
 }
 
-int KWPage::pageNumber(KoInlineObject* inlineObject) {
+int KWPage::pageNumber(KoInlineObject* inlineObject)
+{
     Q_ASSERT(inlineObject);
 
     //The text:select-page attribute varies according to the element where it appears as follows:
     //  <text:page-continuation> - specifies whether to check for a previous or next page and if the page exists, the continuation text is printed.
     //  <text:page-number> - specifies whether to display or not the number of the previous or the following page rather than the number of the current page.
     //Note: To display the current page number on all pages except the first or last page, use a combination of the text:select-page and text:page-adjust attributes.
-    //Note: Obviously these two uses of text:select-page are very close but it still seems to me to be different. The first usage triggers the use of another attribute. 
+    //Note: Obviously these two uses of text:select-page are very close but it still seems to me to be different. The first usage triggers the use of another attribute.
     const QString selectpage = inlineObject->attribute("select-page", QString()).toString();
 
     //text:page-adjust
@@ -75,9 +78,9 @@ int KWPage::pageNumber(KoInlineObject* inlineObject) {
     else if (selectpage == "next")
         pagenum = next() ? next()->m_pageNum : -1;
 
-    if(pagenum >= 0) {
+    if (pagenum >= 0) {
         pagenum += pageadjust;
-        if( ! m_parent->page(pagenum) )
+        if (! m_parent->page(pagenum))
             pagenum = -1;
     }
 
@@ -86,7 +89,7 @@ int KWPage::pageNumber(KoInlineObject* inlineObject) {
 
 qreal KWPage::width() const
 {
-    return m_pageStyle->pageLayout().width * (m_pageSide==PageSpread ? 2:1);
+    return m_pageStyle->pageLayout().width * (m_pageSide == PageSpread ? 2 : 1);
 }
 
 qreal KWPage::height() const
@@ -106,7 +109,7 @@ qreal KWPage::bottomMargin() const
 qreal KWPage::leftMargin() const
 {
     qreal answer = m_pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
-    if(answer != -1)
+    if (answer != -1)
         return answer;
     return m_pageStyle->pageLayout().left;
 }
@@ -114,7 +117,7 @@ qreal KWPage::leftMargin() const
 qreal KWPage::rightMargin() const
 {
     qreal answer = m_pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
-    if(answer != -1)
+    if (answer != -1)
         return answer;
     return m_pageStyle->pageLayout().right;
 }
@@ -128,16 +131,17 @@ qreal KWPage::marginClosestBinding() const
 }
 
 qreal KWPage::offsetInDocument() const
-{ // the y coordinate
+{
+    // the y coordinate
     return m_parent->topOfPage(m_pageNum);
 }
 
 QRectF KWPage::rect(int pageNumber) const
 {
-    if(pageNumber == m_pageNum && m_pageSide == PageSpread) // left
-        return QRectF(0, offsetInDocument(), width()/2, height());
-    if(pageNumber == m_pageNum+1 && m_pageSide == PageSpread) // right
-        return QRectF(width()/2, offsetInDocument(), width()/2, height());
+    if (pageNumber == m_pageNum && m_pageSide == PageSpread) // left
+        return QRectF(0, offsetInDocument(), width() / 2, height());
+    if (pageNumber == m_pageNum + 1 && m_pageSide == PageSpread) // right
+        return QRectF(width() / 2, offsetInDocument(), width() / 2, height());
     return QRectF(0, offsetInDocument(), width(), height());
 }
 
@@ -148,10 +152,10 @@ KoPageFormat::Orientation KWPage::orientationHint() const
 
 KWPage *KWPage::next()
 {
-    return m_parent->page(m_pageNum +1); //(m_pageNum + m_pageSide == PageSpread ? 2 : 1);
+    return m_parent->page(m_pageNum + 1); //(m_pageNum + m_pageSide == PageSpread ? 2 : 1);
 }
 
 KWPage *KWPage::previous()
 {
-    return m_parent->page(m_pageNum -1);
+    return m_parent->page(m_pageNum - 1);
 }

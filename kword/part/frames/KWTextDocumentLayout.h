@@ -32,7 +32,8 @@ class KWAnchorStrategy;
  * KWords text layouter that allows text to flow in multiple frames and around
  * other KWord objects.
  */
-class KWORD_TEST_EXPORT KWTextDocumentLayout : public KoTextDocumentLayout {
+class KWORD_TEST_EXPORT KWTextDocumentLayout : public KoTextDocumentLayout
+{
 public:
     /// constructor
     explicit KWTextDocumentLayout(KWTextFrameSet *frameSet);

@@ -44,23 +44,23 @@
 class KWQtSqlPowerSerialDataSource: public KWQtSqlSerialDataSourceBase
 {
     Q_OBJECT
-    public:
-    KWQtSqlPowerSerialDataSource(const KComponentData &inst,QObject *parent);
+public:
+    KWQtSqlPowerSerialDataSource(const KComponentData &inst, QObject *parent);
     ~KWQtSqlPowerSerialDataSource();
 
-    virtual void save( QDomDocument &doc,QDomElement&);
-    virtual void load( QDomElement& elem );
-    virtual class QString getValue( const QString &name, int record = -1 ) const;
+    virtual void save(QDomDocument &doc, QDomElement&);
+    virtual void load(QDomElement& elem);
+    virtual class QString getValue(const QString &name, int record = -1) const;
     virtual int getNumRecords() const {
-        return (myquery?((myquery->size()<0)?0:myquery->size()):0);
+        return (myquery ? ((myquery->size() < 0) ? 0 : myquery->size()) : 0);
     }
-    virtual  bool showConfigDialog(QWidget *,int);
+    virtual  bool showConfigDialog(QWidget *, int);
     virtual void refresh(bool force);
 
-    protected:
-	friend class KWQtSqlPowerMailMergeEditor;
-	QString query;
-	KWMySqlCursor *myquery;
+protected:
+    friend class KWQtSqlPowerMailMergeEditor;
+    QString query;
+    KWMySqlCursor *myquery;
 
     void clearSampleRecord();
     void addSampleRecordEntry(QString name);
@@ -78,17 +78,17 @@ class KWQtSqlPowerMailMergeEditor : public KDialogBase
     Q_OBJECT
 
 public:
-    KWQtSqlPowerMailMergeEditor( QWidget *parent, KWQtSqlPowerSerialDataSource *db_ );
+    KWQtSqlPowerMailMergeEditor(QWidget *parent, KWQtSqlPowerSerialDataSource *db_);
     ~KWQtSqlPowerMailMergeEditor();
 private:
- KWQtSqlPowerSerialDataSource *db;
- KWQtSqlPowerWidget *widget;
+    KWQtSqlPowerSerialDataSource *db;
+    KWQtSqlPowerWidget *widget;
 private slots:
- void openSetup();
- void updateDBViews();
- void slotTableChanged ( Q3ListBoxItem * item );
- void slotExecute();
- void slotSetQuery();
+    void openSetup();
+    void updateDBViews();
+    void slotTableChanged(Q3ListBoxItem * item);
+    void slotExecute();
+    void slotSetQuery();
 };
 
 

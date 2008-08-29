@@ -36,60 +36,60 @@
 #include <QTextBlock>
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
-    : m_document( new QTextDocument() ),
-    m_protectContent(false),
-    m_layoutTriggered(false),
-    m_allowLayoutRequests(true),
-    m_textFrameSetType( KWord::OtherTextFrameSet ),
-    m_pageManager(0),
-    m_kwordDocument(doc)
+        : m_document(new QTextDocument()),
+        m_protectContent(false),
+        m_layoutTriggered(false),
+        m_allowLayoutRequests(true),
+        m_textFrameSetType(KWord::OtherTextFrameSet),
+        m_pageManager(0),
+        m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    if ( m_kwordDocument ) {
+    if (m_kwordDocument) {
         layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_kwordDocument->dataCenterMap()["StyleManager"] );
-        Q_ASSERT( styleManager );
-        layout->setStyleManager( styleManager );
+        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
+        Q_ASSERT(styleManager);
+        layout->setStyleManager(styleManager);
     }
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
 }
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType type)
-    : m_document( new QTextDocument() ),
-    m_protectContent(false),
-    m_layoutTriggered(false),
-    m_allowLayoutRequests(true),
-    m_textFrameSetType( type ),
-    m_pageManager(0),
-    m_kwordDocument(doc)
+        : m_document(new QTextDocument()),
+        m_protectContent(false),
+        m_layoutTriggered(false),
+        m_allowLayoutRequests(true),
+        m_textFrameSetType(type),
+        m_pageManager(0),
+        m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    if ( m_kwordDocument ) {
+    if (m_kwordDocument) {
         layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
-        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_kwordDocument->dataCenterMap()["StyleManager"] );
-        Q_ASSERT( styleManager );
-        layout->setStyleManager( styleManager );
+        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
+        Q_ASSERT(styleManager);
+        layout->setStyleManager(styleManager);
     }
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
-    switch(m_textFrameSetType) {
-        case KWord::OddPagesHeaderTextFrameSet:
-            setName(i18n("Odd Pages Header"));
-            break;
-        case KWord::EvenPagesHeaderTextFrameSet:
-            setName(i18n("Even Pages Header"));
-            break;
-        case KWord::OddPagesFooterTextFrameSet:
-            setName(i18n("Odd Pages Footer"));
-            break;
-        case KWord::EvenPagesFooterTextFrameSet:
-            setName(i18n("Even Pages Footer"));
-            break;
-        case KWord::MainTextFrameSet:
-            setName(i18n("Main text"));
-            break;
-        default: ;
+    switch (m_textFrameSetType) {
+    case KWord::OddPagesHeaderTextFrameSet:
+        setName(i18n("Odd Pages Header"));
+        break;
+    case KWord::EvenPagesHeaderTextFrameSet:
+        setName(i18n("Even Pages Header"));
+        break;
+    case KWord::OddPagesFooterTextFrameSet:
+        setName(i18n("Odd Pages Footer"));
+        break;
+    case KWord::EvenPagesFooterTextFrameSet:
+        setName(i18n("Even Pages Footer"));
+        break;
+    case KWord::MainTextFrameSet:
+        setName(i18n("Main text"));
+        break;
+    default: ;
     }
 }
 
@@ -102,7 +102,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
     if (m_textFrameSetType != KWord::OtherTextFrameSet)
         frame->shape()->setLocked(true);
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
     if (data == 0) {// probably a copy frame.
         Q_ASSERT(frameCount() > 1);
         return;
@@ -111,29 +111,28 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
         delete m_document;
         m_document = data->document();
         KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-        if ( m_kwordDocument ) {
+        if (m_kwordDocument) {
             layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
-            KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_kwordDocument->dataCenterMap()["StyleManager"] );
-            Q_ASSERT( styleManager );
-            layout->setStyleManager( styleManager );
+            KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
+            Q_ASSERT(styleManager);
+            layout->setStyleManager(styleManager);
         }
         m_document->setDocumentLayout(layout);
         data->setDocument(m_document, false);
-    }
-    else {
+    } else {
         data->setDocument(m_document, false);
         data->setEndPosition(-1);
         data->foul();
         updateTextLayout();
     }
-    connect (data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
+    connect(data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
 }
 
 void KWTextFrameSet::updateTextLayout()
 {
     if (! m_allowLayoutRequests)
         return;
-    KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
+    KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
     if (lay)
         lay->scheduleLayout();
 }
@@ -143,13 +142,12 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
     //kDebug() <<"KWTextFrameSet::requestMoreFrames" << textHeight;
     if (frameCount() == 0)
         return; // there is no way we can get more frames anyway.
-    KWTextFrame *lastFrame = static_cast<KWTextFrame*> (frames()[frameCount()-1]);
+    KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
 
     if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);
-    }
-    else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior && lastFrame->canAutoGrow()) {
+    } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior && lastFrame->canAutoGrow()) {
         // enlarge last shape
         KoShape *shape = lastFrame->shape();
         if (shape->isLocked()) { // don't alter a locked shape.
@@ -173,7 +171,7 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
         return;
     QList<KWFrame*>::Iterator iter = --m_frames.end();
     do {
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (*(iter));
+        KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));
         if (tf) {
             if (tf && tf->frameBehavior() == KWord::AutoExtendFrameBehavior) {
                 tf->autoShrink(tf->shape()->size().height() - excessHeight);
@@ -182,7 +180,7 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
             return;
         }
         --iter;
-    } while(iter != m_frames.begin());
+    } while (iter != m_frames.begin());
 }
 
 void KWTextFrameSet::framesEmpty(int emptyFrames)
@@ -195,10 +193,10 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
     QList<KWFrame*>::Iterator iter = --myFrames.end();
     KWPage *page = 0;
     do {
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (*(iter));
+        KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));
         if (tf) {
             KWPage *pageForFrame = m_pageManager->page(tf->shape());
-            if (page ==0) // first loop
+            if (page == 0) // first loop
                 page = pageForFrame;
             else if (page != pageForFrame) { // all frames on the page (of this FS) are empty.
                 deleteFrom = iter;
@@ -207,11 +205,11 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
         }
         if (--emptyFrames < 0)
             break;
-    } while(iter-- != myFrames.begin());
+    } while (iter-- != myFrames.begin());
 
-    while(deleteFrom != myFrames.end()) { // remove all frames till end.
+    while (deleteFrom != myFrames.end()) { // remove all frames till end.
         removeFrame(*deleteFrom);
-        delete (*deleteFrom)->shape();
+        delete(*deleteFrom)->shape();
         ++deleteFrom;
     }
 }
@@ -222,7 +220,7 @@ void KWTextFrameSet::setAllowLayout(bool allow)
         return;
     m_allowLayoutRequests = allow;
     if (m_allowLayoutRequests) {
-        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>( m_document->documentLayout() );
+        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*>(m_document->documentLayout());
         if (lay)
             lay->scheduleLayout();
     }
@@ -245,7 +243,7 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     QPointF pos = frame1->shape()->absolutePosition();
     QRectF bounds = frame2->shape()->boundingRect();
 
-    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (frame1->frameSet());
+    KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
     bool rtl = false; // right-to-left
     if (tfs && tfs->pageManager()) { // check per page.
         KWPage *page1 = tfs->pageManager()->page(frame1->shape());
@@ -274,17 +272,17 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
 void KWTextFrameSet::printDebug(KWFrame *frame)
 {
     KWFrameSet::printDebug(frame);
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
+    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
     if (textShapeData == 0) return;
-    kDebug(32001) <<"     Text position:" << textShapeData->position() <<", end:" << textShapeData->endPosition();
-    kDebug(32001) <<"     Offset in text-document;" << textShapeData->documentOffset();
+    kDebug(32001) << "     Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
+    kDebug(32001) << "     Offset in text-document;" << textShapeData->documentOffset();
 }
 
 void KWTextFrameSet::printDebug()
 {
     static const char * type[] = { "FirstPageHeader", "OddPagesHeader", "EvenPagesHeader", "FirstPageFooter", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
-    kDebug(32001) <<" | Is a KWTextFrameSet";
-    kDebug(32001) <<" | FS Type:" << type[m_textFrameSetType];
+    kDebug(32001) << " | Is a KWTextFrameSet";
+    kDebug(32001) << " | FS Type:" << type[m_textFrameSetType];
     KWFrameSet::printDebug();
 }
 #endif

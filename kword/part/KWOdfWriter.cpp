@@ -46,92 +46,90 @@
 /// \internal d-pointer class.
 class KWOdfWriter::Private
 {
-    public:
-        /// The KWord document.
-        QPointer<KWDocument> document;
+public:
+    /// The KWord document.
+    QPointer<KWDocument> document;
 
-        QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
-        {
-            QByteArray tag;
-            switch (fs->textFrameSetType()) {
-                case KWord::OddPagesHeaderTextFrameSet:  tag = "style:header";       break;
-                case KWord::EvenPagesHeaderTextFrameSet: tag = "style:header-left";  break;
-                case KWord::OddPagesFooterTextFrameSet:  tag = "style:footer";       break;
-                case KWord::EvenPagesFooterTextFrameSet: tag = "style:footer-left";  break;
-                default: return QByteArray();
-            }
-
-            QByteArray content;
-            QBuffer buffer(&content);
-            buffer.open(IO_WriteOnly);
-            KoXmlWriter writer(&buffer);
-            KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
-
-            Q_ASSERT(fs->frames().count() > 0);
-            KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>( fs->frames().first()->shape()->userData() );
-            Q_ASSERT(shapedata);
-
-            writer.startElement(tag);
-            shapedata->saveOdf(context, 0, -1, false);
-            writer.endElement();
-
-            return content;
+    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs) {
+        QByteArray tag;
+        switch (fs->textFrameSetType()) {
+        case KWord::OddPagesHeaderTextFrameSet:  tag = "style:header";       break;
+        case KWord::EvenPagesHeaderTextFrameSet: tag = "style:header-left";  break;
+        case KWord::OddPagesFooterTextFrameSet:  tag = "style:footer";       break;
+        case KWord::EvenPagesFooterTextFrameSet: tag = "style:footer-left";  break;
+        default: return QByteArray();
         }
 
-        void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
-        {
-kDebug()<<"START saveHeaderFooter ############################################";
+        QByteArray content;
+        QBuffer buffer(&content);
+        buffer.open(IO_WriteOnly);
+        KoXmlWriter writer(&buffer);
+        KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
 
-            // We need to flush them out ordered as defined in the specs.
-            QList<KWord::TextFrameSetType> order;
-            order << KWord::OddPagesHeaderTextFrameSet << KWord::EvenPagesHeaderTextFrameSet
-                  << KWord::OddPagesFooterTextFrameSet << KWord::EvenPagesFooterTextFrameSet;
+        Q_ASSERT(fs->frames().count() > 0);
+        KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
+        Q_ASSERT(shapedata);
 
-            // Iterate over all pagestyles and write them out.
-            QHash<QString, KWPageStyle *> pagestyles = document->pageManager()->pageStyles();
-            QHashIterator<QString, KWPageStyle *> it(pagestyles);
-            
-            while (it.hasNext()) {
-                it.next();
+        writer.startElement(tag);
+        shapedata->saveOdf(context, 0, -1, false);
+        writer.endElement();
 
-                KoGenStyle masterStyle(KoGenStyle::StyleMaster);
-                //masterStyle.setAutoStyleInStylesDotXml(true);
-                KoGenStyle layoutStyle = it.value()->pageLayout().saveOasis();
-                layoutStyle.setAutoStyleInStylesDotXml(true);
-                masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
+        return content;
+    }
 
-                for(int i = 0; i < order.count(); ++i) {
-                    KWTextFrameSet *fs = it.value()->getFrameSet(order[i]);
-                    if (! fs)
-                        continue;
+    void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles) {
+        kDebug() << "START saveHeaderFooter ############################################";
 
-                    if (fs->frames().count() < 1) { //FIXME should not happen but it does :-/
-                        kWarning()<<"Frameset with ZERO frames what should not happen!!!";
-                        continue;
-                    }
+        // We need to flush them out ordered as defined in the specs.
+        QList<KWord::TextFrameSetType> order;
+        order << KWord::OddPagesHeaderTextFrameSet << KWord::EvenPagesHeaderTextFrameSet
+        << KWord::OddPagesFooterTextFrameSet << KWord::EvenPagesFooterTextFrameSet;
 
-                    QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
-                    if (content.isNull())
-                        continue;
+        // Iterate over all pagestyles and write them out.
+        QHash<QString, KWPageStyle *> pagestyles = document->pageManager()->pageStyles();
+        QHashIterator<QString, KWPageStyle *> it(pagestyles);
 
-                    masterStyle.addChildElement(QString::number(i), content);
+        while (it.hasNext()) {
+            it.next();
+
+            KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+            //masterStyle.setAutoStyleInStylesDotXml(true);
+            KoGenStyle layoutStyle = it.value()->pageLayout().saveOasis();
+            layoutStyle.setAutoStyleInStylesDotXml(true);
+            masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
+
+            for (int i = 0; i < order.count(); ++i) {
+                KWTextFrameSet *fs = it.value()->getFrameSet(order[i]);
+                if (! fs)
+                    continue;
+
+                if (fs->frames().count() < 1) { //FIXME should not happen but it does :-/
+                    kWarning() << "Frameset with ZERO frames what should not happen!!!";
+                    continue;
                 }
 
-                // append the headerfooter-style to the main-style
-                if(! masterStyle.isEmpty())
-                    mainStyles.lookup(masterStyle, it.key(), KoGenStyles::DontForceNumbering);
+                QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
+                if (content.isNull())
+                    continue;
+
+                masterStyle.addChildElement(QString::number(i), content);
             }
 
-            //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
-            //    mainStyles.markStyleForStylesXml( s.name );
-
-kDebug()<<"END saveHeaderFooter ############################################";
+            // append the headerfooter-style to the main-style
+            if (! masterStyle.isEmpty())
+                mainStyles.lookup(masterStyle, it.key(), KoGenStyles::DontForceNumbering);
         }
+
+        //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
+        //    mainStyles.markStyleForStylesXml( s.name );
+
+        kDebug() << "END saveHeaderFooter ############################################";
+    }
 };
 
 KWOdfWriter::KWOdfWriter(KWDocument *document)
-    : QObject()
-    , d(new Private())
+        : QObject()
+        , d(new Private())
 {
     d->document = document;
 }
@@ -144,13 +142,13 @@ KWOdfWriter::~KWOdfWriter()
 // 1.6: KWDocument::saveOasisHelper()
 bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver)
 {
-    kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
     KoStore * store = odfStore.store();
     KoXmlWriter * manifestWriter = odfStore.manifestWriter();
 
     KoXmlWriter* contentWriter = odfStore.contentWriter();
-    if (  !contentWriter )
+    if (!contentWriter)
         return false;
 
     KoGenStyles mainStyles;
@@ -160,16 +158,16 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     // styles into the page-layout automatic-style.
     d->saveHeaderFooter(embeddedSaver, mainStyles);
 
-    KoShapeSavingContext context( *bodyWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver);
 
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( "office:text" );
+    bodyWriter->startElement("office:body");
+    bodyWriter->startElement("office:text");
 
     KWTextFrameSet *mainTextFrame = 0;
 
     foreach(KWFrameSet *fs, d->document->frameSets()) {
         // TODO loop over all non-autocreated frames and save them.
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs) {
             if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
                 mainTextFrame = tfs;
@@ -185,9 +183,9 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     }
 
     if (mainTextFrame) {
-        if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first() ) {
-            KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>( mainTextFrame->frames().first()->shape()->userData() );
-            if ( shapeData ) {
+        if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
+            KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
+            if (shapeData) {
                 shapeData->saveOdf(context);
             }
         }
@@ -196,18 +194,18 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    mainStyles.saveOdfAutomaticStyles(contentWriter, false);
 
     odfStore.closeContentWriter();
 
     // add manifest line for content.xml
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    manifestWriter->addManifestEntry("content.xml", "text/xml");
 
     // save the styles.xml
-    if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
+    if (!mainStyles.saveOdfStylesDotXml(store, manifestWriter))
         return false;
 
-    if ( !context.saveDataCenter( store, manifestWriter ) ) {
+    if (!context.saveDataCenter(store, manifestWriter)) {
         return false;
     }
 

@@ -9,11 +9,13 @@
 #include <MockShapes.h>
 #include <kcomponentdata.h>
 
-TestTextFrameSorting::TestTextFrameSorting() {
+TestTextFrameSorting::TestTextFrameSorting()
+{
     new KComponentData("TestTextFrameSorting");
 }
 
-void TestTextFrameSorting::testSimpleSorting() {
+void TestTextFrameSorting::testSimpleSorting()
+{
     KWTextFrameSet tfs(0);
     KWFrame * frame1 = createFrame(QPointF(10, 10), tfs);
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
@@ -26,7 +28,8 @@ void TestTextFrameSorting::testSimpleSorting() {
     QCOMPARE(tfs.m_frames[2], frame2);
 }
 
-void TestTextFrameSorting::testSortingOnPagespread() {
+void TestTextFrameSorting::testSortingOnPagespread()
+{
     KWTextFrameSet tfs(0);
     KWFrame * frame1 = createFrame(QPointF(10, 200), tfs);
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
@@ -68,7 +71,8 @@ void TestTextFrameSorting::testSortingOnPagespread() {
     QCOMPARE(tfs.m_frames[4], frame1);
 }
 
-void TestTextFrameSorting::testRtlSorting() {
+void TestTextFrameSorting::testRtlSorting()
+{
     KWTextFrameSet tfs(0);
     KWFrame * frame1 = createFrame(QPointF(10, 10), tfs);
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
@@ -90,7 +94,8 @@ void TestTextFrameSorting::testRtlSorting() {
     QCOMPARE(tfs.m_frames[1], frame1);
 }
 
-void TestTextFrameSorting::testSortingById() {
+void TestTextFrameSorting::testSortingById()
+{
     KWTextFrameSet tfs(0);
     KWTextFrame * frame1 = createFrame(QPointF(10, 200), tfs);
     KWTextFrame * frame2 = createFrame(QPointF(120, 10), tfs);
@@ -107,7 +112,8 @@ void TestTextFrameSorting::testSortingById() {
     QCOMPARE(tfs.m_frames[2], frame3);
 }
 
-KWTextFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextFrameSet &fs) {
+KWTextFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextFrameSet &fs)
+{
     MockShape *shape = new MockShape();
     shape->setUserData(new KoTextShapeData());
     KWTextFrame *frame = new KWTextFrame(shape, &fs);

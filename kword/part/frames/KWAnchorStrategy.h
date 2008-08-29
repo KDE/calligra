@@ -35,7 +35,8 @@ class KWFrame;
  * calling checkState() which will return false as long as there is not enough layout information
  * to properly position the anchored frame.
  */
-class KWAnchorStrategy {
+class KWAnchorStrategy
+{
 public:
     /**
      * Constructor.
@@ -69,7 +70,9 @@ public:
     /**
      * Return the text anchor this strategy works for.
      */
-    KoTextAnchor *anchor() { return m_anchor; }
+    KoTextAnchor *anchor() {
+        return m_anchor;
+    }
 
 private:
     KoTextAnchor *const m_anchor;

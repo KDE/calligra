@@ -37,11 +37,19 @@ public:
     /// save the config settings.
     void save();
 
-    void setViewFrameBorders(bool on) { m_viewFrameBorders = on; }
-    bool viewFrameBorders() const { return m_viewFrameBorders; }
+    void setViewFrameBorders(bool on) {
+        m_viewFrameBorders = on;
+    }
+    bool viewFrameBorders() const {
+        return m_viewFrameBorders;
+    }
 
-    void setViewRulers(bool on) { m_viewRulers = on; }
-    bool viewRulers() const {return m_viewRulers; }
+    void setViewRulers(bool on) {
+        m_viewRulers = on;
+    }
+    bool viewRulers() const {
+        return m_viewRulers;
+    }
 
     /**
      * Set the zoom level for new views and for next startups of kword.
@@ -50,27 +58,37 @@ public:
      * screen versions should be exactly the same.
      * @param percent the new zoom level to be persisted between sessions.
      */
-    void setZoom(int percent) { m_zoom = percent; }
+    void setZoom(int percent) {
+        m_zoom = percent;
+    }
 
     /**
      * Return the percentage of zoom.
      * @return the percentage of zoom.
      * @see setZoom(int)
      */
-    int zoom() const { return m_zoom; }
+    int zoom() const {
+        return m_zoom;
+    }
 
     /**
      * Set the mode of zooming for new views and to be persisted between sessions.
      * @param mode the new mode
      */
-    void setZoomMode(KoZoomMode::Mode mode) { m_zoomMode = mode; }
+    void setZoomMode(KoZoomMode::Mode mode) {
+        m_zoomMode = mode;
+    }
 
     /**
      * Return the zoomMode to be used for new views.
      */
-    KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
+    KoZoomMode::Mode zoomMode() const {
+        return m_zoomMode;
+    }
 
-    qreal defaultColumnSpacing() const { return m_defaultColumnSpacing; }
+    qreal defaultColumnSpacing() const {
+        return m_defaultColumnSpacing;
+    }
 
 private:
     bool m_viewFrameBorders, m_viewRulers, m_viewFormattingChars, m_viewFormattingBreak, m_viewFormattingSpace;
@@ -83,7 +101,7 @@ private:
     int m_autoSaveSeconds;
     qreal m_defaultColumnSpacing;
 
-    Q_DISABLE_COPY (KWApplicationConfig)
+    Q_DISABLE_COPY(KWApplicationConfig)
 };
 
 #endif

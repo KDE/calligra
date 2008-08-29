@@ -23,8 +23,8 @@
 #include "frames/KWFrame.h"
 
 KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *state)
-    : m_state(state),
-     m_shape(0)
+        : m_state(state),
+        m_shape(0)
 {
     widget.setupUi(this);
 
@@ -101,10 +101,10 @@ void KWFrameRunaroundProperties::save()
     }
     foreach(KWFrame *frame, m_frames) {
         if (m_runAround->checkedId() != -1)
-            frame->setTextRunAround( static_cast<KWord::TextRunAround> (m_runAround->checkedId()) );
+            frame->setTextRunAround(static_cast<KWord::TextRunAround>(m_runAround->checkedId()));
         if (m_runAroundSide->checkedId() != -1)
-            frame->setRunAroundSide( static_cast<KWord::RunAroundSide> (m_runAroundSide->checkedId()) );
-        frame->setRunAroundDistance( widget.distance->value() );
+            frame->setRunAroundSide(static_cast<KWord::RunAroundSide>(m_runAroundSide->checkedId()));
+        frame->setRunAroundDistance(widget.distance->value());
     }
     m_state->removeUser();
 }

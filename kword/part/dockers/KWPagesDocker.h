@@ -33,12 +33,11 @@ class KWCanvas;
 class KWPagesDockerFactory : public KoDockFactory
 {
 public:
-    KWPagesDockerFactory( KWCanvas* canvas );
+    KWPagesDockerFactory(KWCanvas* canvas);
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const
-    {
+    DockPosition defaultDockPosition() const {
         return DockRight;
     }
 private:
@@ -47,23 +46,23 @@ private:
 
 class KWPagesDocker : public QDockWidget, public KoCanvasObserver
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit KWPagesDocker( QWidget* parent = 0 );
+    explicit KWPagesDocker(QWidget* parent = 0);
     virtual ~KWPagesDocker();
-    
-    virtual void setCanvas( KoCanvasBase* canvas);
+
+    virtual void setCanvas(KoCanvasBase* canvas);
 
 public slots:
     void updateView();
 private slots:
-    void slotButtonClicked( int buttonId );
+    void slotButtonClicked(int buttonId);
     void addLayer();
     void deleteItem();
     void raiseItem();
     void lowerItem();
-    void itemClicked( const QModelIndex &index );
+    void itemClicked(const QModelIndex &index);
 private:
     //void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
     KWCanvas* m_canvas;

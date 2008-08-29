@@ -8,7 +8,8 @@
 class KWTextFrame;
 class KWTextFrameSet;
 
-class TestTextFrameSorting : public QObject {
+class TestTextFrameSorting : public QObject
+{
     Q_OBJECT
 public:
     TestTextFrameSorting();

@@ -25,18 +25,18 @@
 #include <KConfigGroup>
 
 KWApplicationConfig::KWApplicationConfig()
-  : m_viewFrameBorders(false),
-    m_viewRulers(false),
-    m_viewFormattingChars(false),
-    m_viewFormattingBreak(false),
-    m_viewFormattingSpace(false),
-    m_viewFormattingEndParag(false),
-    m_viewFormattingTabs(false),
-    m_createBackupFile(true),
-    m_zoom(100),
-    m_zoomMode(KoZoomMode::ZOOM_WIDTH),
-    m_autoSaveSeconds( KoDocument::defaultAutoSave() ),
-    m_defaultColumnSpacing(MM_TO_POINT(6))
+        : m_viewFrameBorders(false),
+        m_viewRulers(false),
+        m_viewFormattingChars(false),
+        m_viewFormattingBreak(false),
+        m_viewFormattingSpace(false),
+        m_viewFormattingEndParag(false),
+        m_viewFormattingTabs(false),
+        m_createBackupFile(true),
+        m_zoom(100),
+        m_zoomMode(KoZoomMode::ZOOM_WIDTH),
+        m_autoSaveSeconds(KoDocument::defaultAutoSave()),
+        m_defaultColumnSpacing(MM_TO_POINT(6))
 {
 }
 
@@ -46,7 +46,7 @@ void KWApplicationConfig::load(KWDocument *document)
     KConfigGroup interface = config->group("Interface");
 //    setCursorInProtectedArea( interface.readEntry( "cursorInProtectArea", true ));
     // Config-file value in mm, default 10 pt
-    qreal indent = interface.readEntry("Indent", MM_TO_POINT(10.0) ) ;
+    qreal indent = interface.readEntry("Indent", MM_TO_POINT(10.0)) ;
 //    setIndentValue(indent);
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
     m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds / 60.0)) * 60; // read key in minutes
@@ -55,16 +55,16 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
 //    m_maxRecentFiles = interface.readEntry( "NbRecentFile", 10 );
 
-    m_viewFormattingChars = interface.readEntry( "ViewFormattingChars", m_viewFormattingChars );
-    m_viewFormattingBreak = interface.readEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
-    m_viewFormattingSpace = interface.readEntry( "ViewFormattingSpace", m_viewFormattingSpace );
-    m_viewFormattingEndParag = interface.readEntry( "ViewFormattingEndParag", m_viewFormattingEndParag );
-    m_viewFormattingTabs = interface.readEntry( "ViewFormattingTabs", m_viewFormattingTabs );
+    m_viewFormattingChars = interface.readEntry("ViewFormattingChars", m_viewFormattingChars);
+    m_viewFormattingBreak = interface.readEntry("ViewFormattingBreaks", m_viewFormattingBreak);
+    m_viewFormattingSpace = interface.readEntry("ViewFormattingSpace", m_viewFormattingSpace);
+    m_viewFormattingEndParag = interface.readEntry("ViewFormattingEndParag", m_viewFormattingEndParag);
+    m_viewFormattingTabs = interface.readEntry("ViewFormattingTabs", m_viewFormattingTabs);
 
-    m_viewFrameBorders = interface.readEntry( "ViewFrameBorders", m_viewFrameBorders );
+    m_viewFrameBorders = interface.readEntry("ViewFrameBorders", m_viewFrameBorders);
 
-    m_zoom = interface.readEntry( "Zoom", m_zoom );
-    m_zoomMode = static_cast<KoZoomMode::Mode> (interface.readEntry( "ZoomMode", (int) m_zoomMode));
+    m_zoom = interface.readEntry("Zoom", m_zoom);
+    m_zoomMode = static_cast<KoZoomMode::Mode>(interface.readEntry("ZoomMode", (int) m_zoomMode));
 
 //    m_bShowDocStruct = interface.readEntry( "showDocStruct", true );
 //    m_viewModeType = interface.readEntry( "viewmode", "ModeNormal" );
@@ -81,16 +81,15 @@ void KWApplicationConfig::load(KWDocument *document)
 //    setShowGrid( interface.readEntry( "ShowGrid" , false ));
 //    setSnapToGrid( interface.readEntry( "SnapToGrid", false ));
 
-    int undo=30;
+    int undo = 30;
     KConfigGroup misc = config->group("Misc");
-    if(misc.exists())
-    {
-        undo = misc.readEntry("UndoRedo",-1);
+    if (misc.exists()) {
+        undo = misc.readEntry("UndoRedo", -1);
 
         //load default unit setting - this is only used for new files (from templates) or empty files
-        if ( document && misc.hasKey( "Units" ) )
-            document->setUnit( KoUnit::unit( misc.readEntry("Units") ) );
-        m_defaultColumnSpacing = misc.readEntry( "ColumnSpacing", m_defaultColumnSpacing );
+        if (document && misc.hasKey("Units"))
+            document->setUnit(KoUnit::unit(misc.readEntry("Units")));
+        m_defaultColumnSpacing = misc.readEntry("ColumnSpacing", m_defaultColumnSpacing);
     }
 
 //    if(undo!=-1)
@@ -103,16 +102,15 @@ void KWApplicationConfig::load(KWDocument *document)
 //    m_layoutViewMode = KWViewMode::create( m_viewModeType, this, 0 /*no canvas*/);
 
     KConfigGroup path = config->group("Kword Path");
-    if(path.exists())
-    {
+    if (path.exists()) {
 //        if ( path.hasKey( "expression path" ) )
 //            m_personalExpressionPath = path.readPathEntry( "expression path", QStringList() );
-        if(document)
-            document->setBackupPath(path.readPathEntry( "backup path", QString() ));
+        if (document)
+            document->setBackupPath(path.readPathEntry("backup path", QString()));
     }
 
     // Load personal dict
-    KConfigGroup spelling = KoGlobal::kofficeConfig()->group( "Spelling" );
+    KConfigGroup spelling = KoGlobal::kofficeConfig()->group("Spelling");
 //    m_spellCheckPersonalDict = spelling.readListEntry( "PersonalDict" );
 
 }
@@ -120,17 +118,17 @@ void KWApplicationConfig::load(KWDocument *document)
 void KWApplicationConfig::save()
 {
     KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup interface = config->group( "Interface" );
-    interface.writeEntry( "ViewFormattingChars", m_viewFormattingChars );
-    interface.writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
-    interface.writeEntry( "ViewFormattingEndParag", m_viewFormattingEndParag );
-    interface.writeEntry( "ViewFormattingTabs", m_viewFormattingTabs );
-    interface.writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
-    interface.writeEntry( "ViewFrameBorders", m_viewFrameBorders );
-    interface.writeEntry( "Zoom", m_zoom );
-    interface.writeEntry( "ZoomMode", (int)m_zoomMode );
+    KConfigGroup interface = config->group("Interface");
+    interface.writeEntry("ViewFormattingChars", m_viewFormattingChars);
+    interface.writeEntry("ViewFormattingBreaks", m_viewFormattingBreak);
+    interface.writeEntry("ViewFormattingEndParag", m_viewFormattingEndParag);
+    interface.writeEntry("ViewFormattingTabs", m_viewFormattingTabs);
+    interface.writeEntry("ViewFormattingSpace", m_viewFormattingSpace);
+    interface.writeEntry("ViewFrameBorders", m_viewFrameBorders);
+    interface.writeEntry("Zoom", m_zoom);
+    interface.writeEntry("ZoomMode", (int)m_zoomMode);
 //    interface.writeEntry( "showDocStruct", m_bShowDocStruct );
-    interface.writeEntry( "Rulers", m_viewRulers );
+    interface.writeEntry("Rulers", m_viewRulers);
 //    interface.writeEntry( "viewmode", m_viewModeType) ;
 //    interface.writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
 //    interface.writeEntry( "ShowGrid" , m_bShowGrid );

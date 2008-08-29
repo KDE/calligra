@@ -28,37 +28,37 @@
 KComponentData* KWFactory::s_instance = 0;
 KAboutData* KWFactory::s_aboutData = 0;
 
-KWFactory::KWFactory( QObject* parent, const char* name )
-    : KoFactory( parent, name )
+KWFactory::KWFactory(QObject* parent, const char* name)
+        : KoFactory(parent, name)
 {
-  // Create our instance, so that it becomes KGlobal::instance if the
-  // main app is KWord.
-  (void) componentData();
+    // Create our instance, so that it becomes KGlobal::instance if the
+    // main app is KWord.
+    (void) componentData();
 }
 
 KWFactory::~KWFactory()
 {
     delete s_aboutData;
-    s_aboutData=0;
+    s_aboutData = 0;
     delete s_instance;
-    s_instance=0L;
+    s_instance = 0L;
 }
 
-KParts::Part* KWFactory::createPartObject( QWidget *parentWidget, QObject* parent, const char* classname, const QStringList & )
+KParts::Part* KWFactory::createPartObject(QWidget *parentWidget, QObject* parent, const char* classname, const QStringList &)
 {
-    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
 
-    KWDocument *doc = new KWDocument( parentWidget, parent, !bWantKoDocument );
+    KWDocument *doc = new KWDocument(parentWidget, parent, !bWantKoDocument);
 
-    if ( !bWantKoDocument )
-      doc->setReadWrite( false );
+    if (!bWantKoDocument)
+        doc->setReadWrite(false);
 
     return doc;
 }
 
 KAboutData* KWFactory::aboutData()
 {
-    if(!s_aboutData) {
+    if (!s_aboutData) {
         s_aboutData = newKWordAboutData();
     }
     return s_aboutData;
@@ -66,14 +66,13 @@ KAboutData* KWFactory::aboutData()
 
 const KComponentData &KWFactory::componentData()
 {
-    if ( !s_instance )
-    {
-      s_instance = new KComponentData( aboutData() );
+    if (!s_instance) {
+        s_instance = new KComponentData(aboutData());
 
-      s_instance->dirs()->addResourceType( "kword_template",
-                                           "data", "kword/templates/");
+        s_instance->dirs()->addResourceType("kword_template",
+                                            "data", "kword/templates/");
 
-      KIconLoader::global()->addAppDir("koffice");
+        KIconLoader::global()->addAppDir("koffice");
     }
     return *s_instance;
 }

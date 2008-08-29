@@ -62,18 +62,18 @@ public:
      *  @brief Loads an OASIS OpenDocument from a store.
      *  This implements the KoDocument::loadOdf method.
      */
-    bool load( KoOdfReadStore & odfStore );
+    bool load(KoOdfReadStore & odfStore);
 
 signals:
     /**
      * This signal is emitted during loading with a percentage within 1-100 range
      * \param percent the progress as a percentage
      */
-    void sigProgress( int percent );
+    void sigProgress(int percent);
 
 
 protected:
-    virtual void loadSettings( const KoXmlDocument& settings );
+    virtual void loadSettings(const KoXmlDocument& settings);
     virtual void loadMasterPageStyles(KoOdfLoadingContext& context);
 
 private:

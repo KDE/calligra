@@ -20,7 +20,7 @@
 #include "KWDocumentColumns.h"
 
 KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
-    : QWidget(parent)
+        : QWidget(parent)
 {
     widget.setupUi(this);
 

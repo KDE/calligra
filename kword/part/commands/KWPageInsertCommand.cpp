@@ -34,14 +34,14 @@
 
 #include <KLocale>
 
-KWPageInsertCommand::KWPageInsertCommand( KWDocument *document, int afterPageNum, QUndoCommand *parent, const QString &masterPageName)
-    : QUndoCommand(i18n("Insert Page"), parent),
-    m_document(document),
-    m_page(0),
-    m_deletePage(false),
-    m_afterPageNum(afterPageNum),
-    m_masterPageName(masterPageName),
-    m_shapeMoveCommand(0)
+KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, QUndoCommand *parent, const QString &masterPageName)
+        : QUndoCommand(i18n("Insert Page"), parent),
+        m_document(document),
+        m_page(0),
+        m_deletePage(false),
+        m_afterPageNum(afterPageNum),
+        m_masterPageName(masterPageName),
+        m_shapeMoveCommand(0)
 {
 }
 
@@ -58,7 +58,7 @@ void KWPageInsertCommand::redo()
     if (m_page == 0) {
         // Appending a page
         KWPage *prevPage = m_document->m_pageManager.page(m_afterPageNum);
-        m_page = m_document->m_pageManager.insertPage(m_afterPageNum+1, pageStyle);
+        m_page = m_document->m_pageManager.insertPage(m_afterPageNum + 1, pageStyle);
         if (prevPage)
             m_page->setDirectionHint(prevPage->directionHint());
         if (m_page->pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
@@ -86,9 +86,7 @@ void KWPageInsertCommand::redo()
         //FIXME if (false) ??? see also KWPageRemoveCommand
         if (false && shapes.count() > 0)
             m_shapeMoveCommand = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
-    }
-    else
-    {
+    } else {
         // Inserting a page
         if (!m_masterPageName.isEmpty())
             if (pageStyle)

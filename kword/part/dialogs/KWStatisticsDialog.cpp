@@ -22,13 +22,13 @@
 #include "KWView.h"
 #include "KWCanvas.h"
 
-KWStatisticsDialog::KWStatisticsDialog (KWView *parent)
-    : KDialog(parent)
+KWStatisticsDialog::KWStatisticsDialog(KWView *parent)
+        : KDialog(parent)
 {
-    setCaption( i18n("Statistics") );
-    setButtons( KDialog::Close );
-    setDefaultButton( KDialog::Close );
-    setMainWidget( new KWStatistics(parent->kwcanvas()->resourceProvider(), parent->kwdocument(), 0, this) );
+    setCaption(i18n("Statistics"));
+    setButtons(KDialog::Close);
+    setDefaultButton(KDialog::Close);
+    setMainWidget(new KWStatistics(parent->kwcanvas()->resourceProvider(), parent->kwdocument(), 0, this));
 }
 
 KWStatisticsDialog::~KWStatisticsDialog()

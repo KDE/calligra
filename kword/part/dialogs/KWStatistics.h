@@ -32,11 +32,12 @@ class KoAction;
 class KoSelection;
 class KWDocument;
 
-class KWStatistics : public QWidget {
+class KWStatistics : public QWidget
+{
     Q_OBJECT
 public:
     KWStatistics(KoCanvasResourceProvider *provider, KWDocument *m_document,
-            KoSelection *selection = 0, QWidget *parent = 0);
+                 KoSelection *selection = 0, QWidget *parent = 0);
 
 private slots:
     void updateResource(int which);

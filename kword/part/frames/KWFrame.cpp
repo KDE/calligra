@@ -27,18 +27,18 @@
 #include <KoXmlWriter.h>
 
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
-      // Initialize member vars here. This ensures they are all initialized, since it's
-      // easier to compare this list with the member vars list (compiler ensures order).
-    : m_shape(shape),
-    m_frameBehavior( KWord::AutoExtendFrameBehavior ),
-    m_copyToEverySheet( true ),
-    m_newFrameBehavior( KWord::NoFollowupFrame ),
-    m_runAroundSide( KWord::BiggestRunAroundSide ),
-    m_runAround( KWord::RunAround ),
-    m_runAroundDistance( 1.0 ),
-    m_anchor(0),
-    m_frameSet( parent ),
-    m_outline(0)
+// Initialize member vars here. This ensures they are all initialized, since it's
+// easier to compare this list with the member vars list (compiler ensures order).
+        : m_shape(shape),
+        m_frameBehavior(KWord::AutoExtendFrameBehavior),
+        m_copyToEverySheet(true),
+        m_newFrameBehavior(KWord::NoFollowupFrame),
+        m_runAroundSide(KWord::BiggestRunAroundSide),
+        m_runAround(KWord::RunAround),
+        m_runAroundDistance(1.0),
+        m_anchor(0),
+        m_frameSet(parent),
+        m_outline(0)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -105,7 +105,7 @@ void KWFrame::setShape(KoShape *shape)
 
 bool KWFrame::isCopy() const
 {
-    return dynamic_cast<KWCopyShape*> (shape());
+    return dynamic_cast<KWCopyShape*>(shape());
 }
 
 void KWFrame::makeCopyFrame()
@@ -129,7 +129,7 @@ void KWFrame::setOutlineShape(KWOutlineShape *outline)
     m_outline = outline;
 }
 
-void KWFrame::attachAnchor (KoTextAnchor *anchor)
+void KWFrame::attachAnchor(KoTextAnchor *anchor)
 {
     m_anchor = anchor;
 }

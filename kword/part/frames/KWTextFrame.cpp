@@ -26,11 +26,11 @@
 #include <kdebug.h>
 
 KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)
-    : KWFrame(shape, parent),
-    m_sortingId( -1 ),
-    m_lastHeight(shape->size().height()),
-    m_minimumFrameHeight(m_lastHeight),
-    m_canGrow(true)
+        : KWFrame(shape, parent),
+        m_sortingId(-1),
+        m_lastHeight(shape->size().height()),
+        m_minimumFrameHeight(m_lastHeight),
+        m_canGrow(true)
 {
 }
 
@@ -59,7 +59,7 @@ void KWTextFrame::autoShrink(qreal requestedHeight)
 {
 //kDebug() <<"autoShrink requested:" << requestedHeight <<", min:" << m_minimumFrameHeight <<", last:" << m_lastHeight;
     QSizeF size = shape()->size();
-    if ( qAbs(m_lastHeight - size.height()) > 1E-6) { // if not equal
+    if (qAbs(m_lastHeight - size.height()) > 1E-6) {  // if not equal
         m_minimumFrameHeight = size.height();
         m_lastHeight = size.height();
         return;

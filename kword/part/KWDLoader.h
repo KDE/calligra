@@ -71,9 +71,9 @@ private:
 
 
     /// find and load all framesets
-    void loadFrameSets( const KoXmlElement &framesets );
+    void loadFrameSets(const KoXmlElement &framesets);
     /// load one frameset
-    KWFrameSet *loadFrameSet( const KoXmlElement &framesetElem, bool loadFrames = true , bool loadFootnote = true);
+    KWFrameSet *loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames = true , bool loadFootnote = true);
     /// fill the data of fs with the info from the element
     void fill(KWFrameSet *fs, const KoXmlElement &element);
     /// fill the data of fs with the info from the element
@@ -87,7 +87,7 @@ private:
     void insertAnchors();
 
     // load the document wide styles
-    void loadStyleTemplates( const KoXmlElement &styles );
+    void loadStyleTemplates(const KoXmlElement &styles);
 
     // helper method. Gets the color from an element assuming there are 'red','green', 'blue' attributes on it.
     QColor colorFrom(const KoXmlElement &element);

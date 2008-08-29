@@ -24,20 +24,20 @@
 #include <klocale.h>
 #include <kofficeversion.h>
 
-static const char* KWORD_DESCRIPTION=I18N_NOOP("KOffice Word Processor");
+static const char* KWORD_DESCRIPTION = I18N_NOOP("KOffice Word Processor");
 // First official public release Oct 2000 version 0.8
 // KOffice-1.1-beta1: version 0.9
 // KOffice-1.1-beta2: version 1.1 (to remove confusion)
 // KOffice-1.2: version 1.2
 // From then on: always the same as the KOffice version
-static const char* KWORD_VERSION=KOFFICE_VERSION_STRING;
+static const char* KWORD_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kword", 0, ki18n("KWord"),
-                                           KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
-                                           ki18n("(c) 1998-2008, The KWord Team"), KLocalizedString(),
-                                           "http://www.koffice.org/kword/" );
+    KAboutData * aboutData = new KAboutData("kword", 0, ki18n("KWord"),
+                                            KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
+                                            ki18n("(c) 1998-2008, The KWord Team"), KLocalizedString(),
+                                            "http://www.koffice.org/kword/");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
     aboutData->addAuthor(ki18n("Thomas Zander"));
     aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");

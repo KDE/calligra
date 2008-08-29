@@ -24,7 +24,8 @@
 
 class KWView;
 
-class KWStatisticsDialog : public KDialog {
+class KWStatisticsDialog : public KDialog
+{
     Q_OBJECT
 public:
     /**
@@ -33,7 +34,7 @@ public:
      * @param document the parent document where the frames belong to
      * @param parent a parent widget for the purpose of centering the dialog
      */
-    KWStatisticsDialog (KWView *parent);
+    KWStatisticsDialog(KWView *parent);
     ~KWStatisticsDialog();
 };
 

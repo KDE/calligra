@@ -27,10 +27,10 @@
 
 #include "KWFrameGeometry.h"
 
-KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
-    : KPageDialog(parent),
-    m_frameConnectSelector(0),
-    m_frameGeometry(0)
+KWFrameDialog::KWFrameDialog(const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
+        : KPageDialog(parent),
+        m_frameConnectSelector(0),
+        m_frameGeometry(0)
 {
     m_state = new FrameConfigSharedState(document);
     setFaceType(Tabbed);
@@ -57,8 +57,8 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
     m_generalFrameProperties->open(frames);
     m_frameRunaroundProperties->open(frames);
 
-    connect(this, SIGNAL( okClicked() ), this, SLOT( okClicked() ));
-    connect(this, SIGNAL( cancelClicked() ), this, SLOT( cancelClicked() ));
+    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(cancelClicked()));
 }
 
 KWFrameDialog::~KWFrameDialog()

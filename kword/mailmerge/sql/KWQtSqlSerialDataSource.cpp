@@ -38,115 +38,111 @@
  *
  ******************************************************************/
 
-KWQtSqlSerialDataSource::KWQtSqlSerialDataSource(const KComponentData &inst,QObject *parent)
-	: KWQtSqlSerialDataSourceBase(inst,parent)
+KWQtSqlSerialDataSource::KWQtSqlSerialDataSource(const KComponentData &inst, QObject *parent)
+        : KWQtSqlSerialDataSourceBase(inst, parent)
 {
-  myquery=0;
+    myquery = 0;
 }
 
 KWQtSqlSerialDataSource::~KWQtSqlSerialDataSource()
 {
-        delete myquery;
-        QSqlDatabase::removeDatabase("KWQTSQLPOWER");
+    delete myquery;
+    QSqlDatabase::removeDatabase("KWQTSQLPOWER");
 }
 
 
-QString KWQtSqlSerialDataSource::getValue( const QString &name, int record ) const
+QString KWQtSqlSerialDataSource::getValue(const QString &name, int record) const
 {
-        int num=record;
+    int num = record;
 
-        if (!myquery) return name;
-        if ( num < 0 || num > (int)myquery->size() )
-                return name;
-        if (!myquery->seek(num,false)) return i18n(">>>Illegal position within datasource<<<");
-        if (!myquery->contains(name)) return i18n(">>>Field %1 is unknown in the current database query<<<").arg(name);
-        return (myquery->value(name)).toString();
+    if (!myquery) return name;
+    if (num < 0 || num > (int)myquery->size())
+        return name;
+    if (!myquery->seek(num, false)) return i18n(">>>Illegal position within datasource<<<");
+    if (!myquery->contains(name)) return i18n(">>>Field %1 is unknown in the current database query<<<").arg(name);
+    return (myquery->value(name)).toString();
 }
 
-void KWQtSqlSerialDataSource::save( QDomDocument & /*doc*/, QDomElement & /*parent*/)
+void KWQtSqlSerialDataSource::save(QDomDocument & /*doc*/, QDomElement & /*parent*/)
 {
-/*
-	QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
-	parent.appendChild(def);
-	for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
-	{
-		QDomElement defEnt=doc.createElement(QString::fromLatin1("FIELD"));
-		defEnt.setAttribute(QString::fromLatin1("name"),it.key());
-		def.appendChild(defEnt);
-	}
-	QDomElement cont=doc.createElement(QString::fromLatin1("CONTENT"));
-	parent.appendChild(cont);
-	for (Db::Iterator dbI=db.begin();dbI!=db.end();++dbI)
-	{
-		QDomElement rec=doc.createElement(QString::fromLatin1("RECORD"));
-		cont.appendChild(rec);
-		for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
-		{
-			QDomElement recEnt=doc.createElement(QString::fromLatin1("ITEM"));
-			recEnt.setAttribute(QString::fromLatin1("name"),it.key());
-			recEnt.setAttribute(QString::fromLatin1("data"),(*dbI)[it.key()]);
-			rec.appendChild(recEnt);
-		}
-	}
-*/
+    /*
+     QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
+     parent.appendChild(def);
+     for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
+     {
+      QDomElement defEnt=doc.createElement(QString::fromLatin1("FIELD"));
+      defEnt.setAttribute(QString::fromLatin1("name"),it.key());
+      def.appendChild(defEnt);
+     }
+     QDomElement cont=doc.createElement(QString::fromLatin1("CONTENT"));
+     parent.appendChild(cont);
+     for (Db::Iterator dbI=db.begin();dbI!=db.end();++dbI)
+     {
+      QDomElement rec=doc.createElement(QString::fromLatin1("RECORD"));
+      cont.appendChild(rec);
+      for (DbRecord::Iterator it=sampleRecord.begin();it!=sampleRecord.end();++it)
+      {
+       QDomElement recEnt=doc.createElement(QString::fromLatin1("ITEM"));
+       recEnt.setAttribute(QString::fromLatin1("name"),it.key());
+       recEnt.setAttribute(QString::fromLatin1("data"),(*dbI)[it.key()]);
+       rec.appendChild(recEnt);
+      }
+     }
+    */
 }
 
-void KWQtSqlSerialDataSource::load( QDomElement& /*parentElem*/ )
+void KWQtSqlSerialDataSource::load(QDomElement& /*parentElem*/)
 {
-/*
-	db.clear();
-	sampleRecord.clear();
-	QDomNode defNd=parentElem.namedItem("DEFINITION");
-	if (defNd.isNull()) return;
-	QDomElement def=defNd.toElement();
-	for (QDomElement defEnt=def.firstChild().toElement();!defEnt.isNull();defEnt=defEnt.nextSibling().toElement())
-	{
-		sampleRecord[defEnt.attribute(QString::fromLatin1("name"))]=defEnt.attribute(QString::fromLatin1("name"));//i18n( "No Value" );
-	}
-	QDomNode contNd=parentElem.namedItem("CONTENT");
-	if (contNd.isNull()) return;
-	for (QDomNode rec=contNd.firstChild();!rec.isNull();rec=rec.nextSibling())
-	{
-		appendRecord();
-		for (QDomElement recEnt=rec.firstChild().toElement();!recEnt.isNull();recEnt=recEnt.nextSibling().toElement())
-		{
-			setValue(recEnt.attribute(QString::fromLatin1("name")),
-				recEnt.attribute(QString::fromLatin1("data")),db.count()-1);
-		}
-	}
-*/
+    /*
+     db.clear();
+     sampleRecord.clear();
+     QDomNode defNd=parentElem.namedItem("DEFINITION");
+     if (defNd.isNull()) return;
+     QDomElement def=defNd.toElement();
+     for (QDomElement defEnt=def.firstChild().toElement();!defEnt.isNull();defEnt=defEnt.nextSibling().toElement())
+     {
+      sampleRecord[defEnt.attribute(QString::fromLatin1("name"))]=defEnt.attribute(QString::fromLatin1("name"));//i18n( "No Value" );
+     }
+     QDomNode contNd=parentElem.namedItem("CONTENT");
+     if (contNd.isNull()) return;
+     for (QDomNode rec=contNd.firstChild();!rec.isNull();rec=rec.nextSibling())
+     {
+      appendRecord();
+      for (QDomElement recEnt=rec.firstChild().toElement();!recEnt.isNull();recEnt=recEnt.nextSibling().toElement())
+      {
+       setValue(recEnt.attribute(QString::fromLatin1("name")),
+        recEnt.attribute(QString::fromLatin1("data")),db.count()-1);
+      }
+     }
+    */
 }
 
-bool KWQtSqlSerialDataSource::showConfigDialog(QWidget *par,int action)
+bool KWQtSqlSerialDataSource::showConfigDialog(QWidget *par, int action)
 {
-	bool ret=false;
-	if (action==KWSLEdit)
-	{
-		KWQtSqlDataSourceEditor *dia=new KWQtSqlDataSourceEditor(par,this);
-		ret=dia->exec();
-		delete dia;
-	}
-	else ret=KWQtSqlSerialDataSourceBase::showConfigDialog(par,action);
+    bool ret = false;
+    if (action == KWSLEdit) {
+        KWQtSqlDataSourceEditor *dia = new KWQtSqlDataSourceEditor(par, this);
+        ret = dia->exec();
+        delete dia;
+    } else ret = KWQtSqlSerialDataSourceBase::showConfigDialog(par, action);
 
-	return ret;
+    return ret;
 }
 
 void KWQtSqlSerialDataSource::refresh(bool force)
 {
-        if ((force) || (myquery==0))
-        {
-                if (myquery)
-                {
-                        delete myquery;
-                        myquery=0;
-                }
-                if ((!database) || (!database->isOpen())) openDatabase();
-		if ((!database) || (!database->isOpen())) return;
-                myquery=new Q3SqlCursor(tableName,true,database);
-                myquery->setMode(Q3SqlCursor::ReadOnly);
-		myquery->select(filter);
+    if ((force) || (myquery == 0)) {
+        if (myquery) {
+            delete myquery;
+            myquery = 0;
         }
-        kDebug()<<QString("There were %1 rows in the query").arg(myquery->size());
+        if ((!database) || (!database->isOpen())) openDatabase();
+        if ((!database) || (!database->isOpen())) return;
+        myquery = new Q3SqlCursor(tableName, true, database);
+        myquery->setMode(Q3SqlCursor::ReadOnly);
+        myquery->select(filter);
+    }
+    kDebug() << QString("There were %1 rows in the query").arg(myquery->size());
 
 }
 
@@ -162,57 +158,57 @@ void KWQtSqlSerialDataSource::refresh(bool force)
 
 
 
-KWQtSqlDataSourceEditor::KWQtSqlDataSourceEditor( QWidget *parent, KWQtSqlSerialDataSource *db_ )
-        :KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
+KWQtSqlDataSourceEditor::KWQtSqlDataSourceEditor(QWidget *parent, KWQtSqlSerialDataSource *db_)
+        : KDialogBase(Plain, i18n("Mail Merge - Editor"), Ok | Cancel, Ok, parent, "", true), db(db_)
 {
-	tableName=db->tableName;
-	filter=db->filter;
-        (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
-        setMainWidget(widget=new QtSqlDataSourceEditor(plainPage()));
-	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
-	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilter()));
-	updateTableCombo();
+    tableName = db->tableName;
+    filter = db->filter;
+    (new Q3VBoxLayout(plainPage()))->setAutoAdd(true);
+    setMainWidget(widget = new QtSqlDataSourceEditor(plainPage()));
+    connect(widget->tableCombo, SIGNAL(activated(int)), this, SLOT(tableChanged(int)));
+    connect(widget->editFilter, SIGNAL(clicked()), this, SLOT(editFilter()));
+    updateTableCombo();
 
 //        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
 }
 
 void KWQtSqlDataSourceEditor::tableChanged(int item)
 {
-	tableName=widget->tableCombo->text(item);
-	Q3SqlCursor *tmpCursor=new Q3SqlCursor(tableName,true,db->database);
-	tmpCursor->setMode(Q3SqlCursor::ReadOnly);
+    tableName = widget->tableCombo->text(item);
+    Q3SqlCursor *tmpCursor = new Q3SqlCursor(tableName, true, db->database);
+    tmpCursor->setMode(Q3SqlCursor::ReadOnly);
 
-	if (widget->filterCheckBox->isChecked()) tmpCursor->select(filter);
+    if (widget->filterCheckBox->isChecked()) tmpCursor->select(filter);
 
-	widget->DataTable->setSqlCursor(tmpCursor,true,true);
-	widget->DataTable->refresh(Q3DataTable::RefreshAll);
+    widget->DataTable->setSqlCursor(tmpCursor, true, true);
+    widget->DataTable->refresh(Q3DataTable::RefreshAll);
 }
 
 void KWQtSqlDataSourceEditor::updateTableCombo()
 {
-	widget->tableCombo->clear();
-        if (!db->database) return;
-	widget->tableCombo->insertItem("");
-        widget->tableCombo->insertStringList(db->database->tables());
+    widget->tableCombo->clear();
+    if (!db->database) return;
+    widget->tableCombo->insertItem("");
+    widget->tableCombo->insertStringList(db->database->tables());
 }
 
 void KWQtSqlDataSourceEditor::slotSetQuery()
 {
-        db->tableName=tableName;
-	db->filter=filter;
-        db->refresh(true);
+    db->tableName = tableName;
+    db->filter = filter;
+    db->refresh(true);
 }
 
 
 void KWQtSqlDataSourceEditor::editFilter()
 {
-	KWQtSqlEasyFilter *f=new KWQtSqlEasyFilter(static_cast<QWidget*>(parent()));
-	f->exec();
+    KWQtSqlEasyFilter *f = new KWQtSqlEasyFilter(static_cast<QWidget*>(parent()));
+    f->exec();
 }
 
-extern "C" {
-        KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb(const KComponentData &inst,QObject *parent)
-        {
-                return new KWQtSqlSerialDataSource(inst,parent);
-        }
+extern "C"
+{
+    KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb(const KComponentData &inst, QObject *parent) {
+        return new KWQtSqlSerialDataSource(inst, parent);
+    }
 }

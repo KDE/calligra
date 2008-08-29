@@ -27,7 +27,7 @@
 // #include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original)
-    : m_original(original)
+        : m_original(original)
 {
     setSize(m_original->size());
 }
@@ -39,8 +39,8 @@ KWCopyShape::~KWCopyShape()
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     painter.setClipRect(QRectF(QPointF(0, 0), converter.documentToView(size()))
-            .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.
-            Qt::IntersectClip);
+                        .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.
+                        Qt::IntersectClip);
     painter.save();
     m_original->paint(painter, converter);
     painter.restore();
@@ -58,12 +58,12 @@ const QPainterPath KWCopyShape::outline() const
     return m_original->outline();
 }
 
-void KWCopyShape::saveOdf( KoShapeSavingContext & context ) const
+void KWCopyShape::saveOdf(KoShapeSavingContext & context) const
 {
     // TODO
 }
 
-bool KWCopyShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool KWCopyShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
     return false; // TODO
 }

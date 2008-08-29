@@ -53,7 +53,7 @@ public:
      * @param view the parent KWView object
      * @param parent the parent widget.
      */
-    KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent );
+    KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, KWGui *parent);
     virtual ~KWCanvas();
 
     /// ask the widget to set the size this canvas takes to display all content
@@ -67,27 +67,39 @@ public:
     /// reimplemented method from superclass
     virtual void addCommand(QUndoCommand *command);
     /// reimplemented method from superclass
-    virtual KoShapeManager *shapeManager() const { return m_shapeManager; }
+    virtual KoShapeManager *shapeManager() const {
+        return m_shapeManager;
+    }
     /// reimplemented method from superclass
     virtual void updateCanvas(const QRectF& rc);
     /// reimplemented method from superclass
     virtual const KoViewConverter *viewConverter() const;
     /// reimplemented method from superclass
-    virtual QWidget* canvasWidget() { return this; }
+    virtual QWidget* canvasWidget() {
+        return this;
+    }
     /// reimplemented method from superclass
-    virtual KoUnit unit() const { return document()->unit(); }
+    virtual KoUnit unit() const {
+        return document()->unit();
+    }
     /// reimplemented method from superclass
-    virtual KoToolProxy * toolProxy() const { return m_toolProxy; }
+    virtual KoToolProxy * toolProxy() const {
+        return m_toolProxy;
+    }
     /// reimplemented method from superclass
     virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
     /// reimplemented method from superclass
     virtual void updateInputMethodInfo();
     // getters
     /// return the document that this canvas works on
-    KWDocument *document() const { return m_document; }
+    KWDocument *document() const {
+        return m_document;
+    }
 
     /// return the viewMode currently associated with this canvas
-    KWViewMode *viewMode() const { return m_viewMode; }
+    KWViewMode *viewMode() const {
+        return m_viewMode;
+    }
 
 public slots:
     /**
@@ -106,7 +118,7 @@ signals:
 
 protected:
     /// reimplemented method from superclass
-    virtual void keyPressEvent( QKeyEvent *e );
+    virtual void keyPressEvent(QKeyEvent *e);
     /// reimplemented method from superclass
     virtual void mouseMoveEvent(QMouseEvent *e);
     /// reimplemented method from superclass
@@ -116,13 +128,13 @@ protected:
     /// reimplemented method from superclass
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
     /// reimplemented method from superclass
-    virtual void keyReleaseEvent (QKeyEvent *e);
+    virtual void keyReleaseEvent(QKeyEvent *e);
     /// reimplemented method from superclass
     virtual void paintEvent(QPaintEvent * ev);
     /// reimplemented method from superclass
-    virtual void tabletEvent( QTabletEvent *e );
+    virtual void tabletEvent(QTabletEvent *e);
     /// reimplemented method from superclass
-    virtual void wheelEvent( QWheelEvent *e );
+    virtual void wheelEvent(QWheelEvent *e);
     /// reimplemented method from superclass
     virtual bool event(QEvent *event);
     /// reimplemented method from superclass

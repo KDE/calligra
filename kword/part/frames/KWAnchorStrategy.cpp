@@ -29,48 +29,48 @@
 #include <KDebug>
 
 KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
-    : m_anchor(anchor),
-    m_finished(false),
-    m_currentLineY(0),
-    m_pass(0)
+        : m_anchor(anchor),
+        m_finished(false),
+        m_currentLineY(0),
+        m_pass(0)
 {
     // figure out until what cursor position we need to layout to get all the info we need
-    switch(m_anchor->horizontalAlignment()) {
-        case KoTextAnchor::ClosestToBinding:
-        case KoTextAnchor::Left:
-        case KoTextAnchor::FurtherFromBinding:
-        case KoTextAnchor::Right:
-        case KoTextAnchor::Center: {
-            KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (anchor->shape()->parent()->userData());
-            Q_ASSERT(data);
-            m_knowledgePoint = data->position();
-            break;
-        }
-        case KoTextAnchor::HorizontalOffset:
-            m_knowledgePoint = anchor->positionInDocument();
+    switch (m_anchor->horizontalAlignment()) {
+    case KoTextAnchor::ClosestToBinding:
+    case KoTextAnchor::Left:
+    case KoTextAnchor::FurtherFromBinding:
+    case KoTextAnchor::Right:
+    case KoTextAnchor::Center: {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
+        Q_ASSERT(data);
+        m_knowledgePoint = data->position();
+        break;
     }
-    switch(m_anchor->verticalAlignment()) {
-        case KoTextAnchor::TopOfParagraph:
-            m_knowledgePoint = qMax(m_knowledgePoint,
-                    anchor->document()->findBlock(anchor->positionInDocument()).position()+1);
-            break;
-        case KoTextAnchor::VerticalOffset:
-        case KoTextAnchor::AboveCurrentLine:
-        case KoTextAnchor::BelowCurrentLine:
-            m_knowledgePoint = qMax(m_knowledgePoint, anchor->positionInDocument());
-            break;
-        case KoTextAnchor::TopOfFrame:
-        case KoTextAnchor::BottomOfFrame: {
-            KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (anchor->shape()->parent()->userData());
-            Q_ASSERT(data);
-            m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
-            break;
-        }
-        case KoTextAnchor::BottomOfParagraph: {
-            QTextBlock block = anchor->document()->findBlock(anchor->positionInDocument());
-            m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length() - 2);
-            break;
-        }
+    case KoTextAnchor::HorizontalOffset:
+        m_knowledgePoint = anchor->positionInDocument();
+    }
+    switch (m_anchor->verticalAlignment()) {
+    case KoTextAnchor::TopOfParagraph:
+        m_knowledgePoint = qMax(m_knowledgePoint,
+                                anchor->document()->findBlock(anchor->positionInDocument()).position() + 1);
+        break;
+    case KoTextAnchor::VerticalOffset:
+    case KoTextAnchor::AboveCurrentLine:
+    case KoTextAnchor::BelowCurrentLine:
+        m_knowledgePoint = qMax(m_knowledgePoint, anchor->positionInDocument());
+        break;
+    case KoTextAnchor::TopOfFrame:
+    case KoTextAnchor::BottomOfFrame: {
+        KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(anchor->shape()->parent()->userData());
+        Q_ASSERT(data);
+        m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
+        break;
+    }
+    case KoTextAnchor::BottomOfParagraph: {
+        QTextBlock block = anchor->document()->findBlock(anchor->positionInDocument());
+        m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length() - 2);
+        break;
+    }
     }
 }
 
@@ -94,79 +94,79 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
     Q_ASSERT(m_anchor->shape()->parent());
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QPointF newPosition;
-    switch(m_anchor->horizontalAlignment()) {
-        case KoTextAnchor::ClosestToBinding: // TODO figure out a way to do pages...
-        case KoTextAnchor::Left:
-            recalcFrom = block.position();
-            break;
-        case KoTextAnchor::FurtherFromBinding: // TODO figure out a way to do pages...
-        case KoTextAnchor::Right:
-            newPosition.setX(containerBoundingRect.width() - boundingRect.width());
-            recalcFrom = block.position();
-            break;
-        case KoTextAnchor::Center:
-            newPosition.setX((containerBoundingRect.width() - boundingRect.width()) / 2.0);
-            recalcFrom = block.position();
-            break;
-        case KoTextAnchor::HorizontalOffset: {
-            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-            Q_ASSERT(tl.isValid());
-            qreal x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
-            newPosition.setX(x + m_anchor->offset().x());
-recalcFrom = 0; // TODO ???
-            m_finished = true;
-            break;
-        }
-        default:
-            Q_ASSERT(false); // new enum added?
+    switch (m_anchor->horizontalAlignment()) {
+    case KoTextAnchor::ClosestToBinding: // TODO figure out a way to do pages...
+    case KoTextAnchor::Left:
+        recalcFrom = block.position();
+        break;
+    case KoTextAnchor::FurtherFromBinding: // TODO figure out a way to do pages...
+    case KoTextAnchor::Right:
+        newPosition.setX(containerBoundingRect.width() - boundingRect.width());
+        recalcFrom = block.position();
+        break;
+    case KoTextAnchor::Center:
+        newPosition.setX((containerBoundingRect.width() - boundingRect.width()) / 2.0);
+        recalcFrom = block.position();
+        break;
+    case KoTextAnchor::HorizontalOffset: {
+        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+        Q_ASSERT(tl.isValid());
+        qreal x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
+        newPosition.setX(x + m_anchor->offset().x());
+        recalcFrom = 0; // TODO ???
+        m_finished = true;
+        break;
     }
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (m_anchor->shape()->parent()->userData());
+    default:
+        Q_ASSERT(false); // new enum added?
+    }
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     Q_ASSERT(data);
-    switch(m_anchor->verticalAlignment()) {
-        case KoTextAnchor::TopOfFrame:
-            recalcFrom = qMax(recalcFrom, data->position());
-            break;
-        case KoTextAnchor::TopOfParagraph: {
-            Q_ASSERT(layout->lineCount());
-            qreal topOfParagraph = layout->lineAt(0).y();
-            newPosition.setY(topOfParagraph - data->documentOffset());
-            recalcFrom = qMax(recalcFrom, block.position());
-            break;
-        }
-        case KoTextAnchor::AboveCurrentLine:
-        case KoTextAnchor::BelowCurrentLine: {
-            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-            Q_ASSERT(tl.isValid());
-            m_currentLineY = tl.y() + tl.height() - data->documentOffset();
-            if (m_anchor->verticalAlignment() == KoTextAnchor::BelowCurrentLine)
-                newPosition.setY(m_currentLineY);
-            else
-                newPosition.setY(m_currentLineY - boundingRect.height() - tl.height());
-            recalcFrom = qMax(recalcFrom, block.position());
-            break;
-        }
-        case KoTextAnchor::BottomOfParagraph: {
-            QTextLine tl = layout->lineAt(layout->lineCount()-1);
-            Q_ASSERT(tl.isValid());
-            newPosition.setY(tl.y() + tl.height() - data->documentOffset());
-            recalcFrom = qMax(recalcFrom, block.position());
-            break;
-        }
-        case KoTextAnchor::BottomOfFrame:
-            newPosition.setY(containerBoundingRect.height() - boundingRect.height());
-            recalcFrom = qMax(recalcFrom, block.position()); // TODO move further back if shape is tall
-            break;
-        case KoTextAnchor::VerticalOffset: {
-            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-            Q_ASSERT(tl.isValid());
-            newPosition.setY(tl.y() + tl.ascent() + m_anchor->offset().y() - data->documentOffset() - boundingRect.height());
-            // use frame runaround properties (runthrough/around and side) to give shape a nice position
-recalcFrom = 0; // TODO ????
-            m_finished = true;
-            break;
-        }
-        default:
-            Q_ASSERT(false); // new enum added?
+    switch (m_anchor->verticalAlignment()) {
+    case KoTextAnchor::TopOfFrame:
+        recalcFrom = qMax(recalcFrom, data->position());
+        break;
+    case KoTextAnchor::TopOfParagraph: {
+        Q_ASSERT(layout->lineCount());
+        qreal topOfParagraph = layout->lineAt(0).y();
+        newPosition.setY(topOfParagraph - data->documentOffset());
+        recalcFrom = qMax(recalcFrom, block.position());
+        break;
+    }
+    case KoTextAnchor::AboveCurrentLine:
+    case KoTextAnchor::BelowCurrentLine: {
+        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+        Q_ASSERT(tl.isValid());
+        m_currentLineY = tl.y() + tl.height() - data->documentOffset();
+        if (m_anchor->verticalAlignment() == KoTextAnchor::BelowCurrentLine)
+            newPosition.setY(m_currentLineY);
+        else
+            newPosition.setY(m_currentLineY - boundingRect.height() - tl.height());
+        recalcFrom = qMax(recalcFrom, block.position());
+        break;
+    }
+    case KoTextAnchor::BottomOfParagraph: {
+        QTextLine tl = layout->lineAt(layout->lineCount() - 1);
+        Q_ASSERT(tl.isValid());
+        newPosition.setY(tl.y() + tl.height() - data->documentOffset());
+        recalcFrom = qMax(recalcFrom, block.position());
+        break;
+    }
+    case KoTextAnchor::BottomOfFrame:
+        newPosition.setY(containerBoundingRect.height() - boundingRect.height());
+        recalcFrom = qMax(recalcFrom, block.position()); // TODO move further back if shape is tall
+        break;
+    case KoTextAnchor::VerticalOffset: {
+        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+        Q_ASSERT(tl.isValid());
+        newPosition.setY(tl.y() + tl.ascent() + m_anchor->offset().y() - data->documentOffset() - boundingRect.height());
+        // use frame runaround properties (runthrough/around and side) to give shape a nice position
+        recalcFrom = 0; // TODO ????
+        m_finished = true;
+        break;
+    }
+    default:
+        Q_ASSERT(false); // new enum added?
     }
     if (m_pass > 0) { // already been here
         // for the cases where we align with text; check if the text is within margin. If so; set finished to true.
@@ -178,7 +178,7 @@ recalcFrom = 0; // TODO ????
     do { // move the layout class back a couple of paragraphs.
         if (state->cursorPosition() <= recalcFrom)
             break;
-    } while(state->previousParag());
+    } while (state->previousParag());
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();

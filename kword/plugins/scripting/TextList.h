@@ -33,99 +33,100 @@
 #include "TextCursor.h"
 #include "Style.h"
 
-namespace Scripting {
+namespace Scripting
+{
 
-    /**
-    * The TextList provides a list of items within a \a TextDocument .
-    */
-    class TextList : public QObject
-    {
-            Q_OBJECT
-        public:
-            TextList(QObject* parent, QTextList* list)
-                : QObject( parent ), m_list( list ) {}
-            virtual ~TextList() {}
+/**
+* The TextList provides a list of items within a \a TextDocument .
+*/
+class TextList : public QObject
+{
+    Q_OBJECT
+public:
+    TextList(QObject* parent, QTextList* list)
+            : QObject(parent), m_list(list) {}
+    virtual ~TextList() {}
 
-        public Q_SLOTS:
+public Q_SLOTS:
 
-            /** Return the number of items the list has. */
-            int countItems() {
-                return m_list ? m_list->count() : 0;
-            }
+    /** Return the number of items the list has. */
+    int countItems() {
+        return m_list ? m_list->count() : 0;
+    }
 
-            /** Return a \a TextCursor object for the item at the position \p index . */
-            QObject* item(int index) {
-                QTextCursor cursor = m_list ? QTextCursor(m_list->item(index)) : QTextCursor();
-                return cursor.isNull() ? 0 : new TextCursor(this, cursor);
-            }
-
-#if 0
-            QObject* addItem() {
-                if( ! m_list )
-                    return 0;
-                QTextBlock block;
-                m_list->add(block);
-                QTextCursor cursor(block);
-                return cursor.isNull() ? 0 : new TextCursor(this, cursor);
-            }
-#endif
-
-            /** Return the content as text of the defined item with index \p index . */
-            QString itemText(int index) {
-                QTextBlock block = m_list ? m_list->item(index) : QTextBlock();
-                return block.isValid() ? m_list->itemText(block) : QString();
-            }
-
-            /** Return the content of the list as text. */
-            QString text() {
-                QString result;
-                const int count = m_list ? m_list->count() : 0;
-                for(int i = 0; i < count; ++i) {
-                    const QString s = m_list->itemText( m_list->item(i) );
-                    if( ! s.isNull() )
-                        result += QString("%1\n").arg(s);
-                }
-                return result;
-            }
-
-            /** Remove the item at position \p index . */
-            void removeItem(int index) {
-                if( m_list )
-                    m_list->removeItem(index);
-            }
-
-            /** Set the style this TextList uses to the as argument passed \a Style object. */
-            void setStyle(QObject* style) {
-                ParagraphStyle* s = dynamic_cast<ParagraphStyle*>(style);
-                if( ! s ) {
-                    kWarning() << "TextList.setStyle Invalid ParagraphStyle object" << endl;
-                    return;
-                }
-                KoParagraphStyle* ps = s->style();
-                if( ! ps ) {
-                    kWarning() << "TextList.setStyle Invalid KoParagraphStyle object" << endl;
-                    return;
-                }
-                const int count = m_list ? m_list->count() : 0;
-                for(int i = 0; i < count; ++i) {
-                    QTextBlock block = m_list->item(i);
-                    ps->applyStyle(block);
-                }
-            }
+    /** Return a \a TextCursor object for the item at the position \p index . */
+    QObject* item(int index) {
+        QTextCursor cursor = m_list ? QTextCursor(m_list->item(index)) : QTextCursor();
+        return cursor.isNull() ? 0 : new TextCursor(this, cursor);
+    }
 
 #if 0
-            void setListStyle(int liststyle) {
-                KoListStyle s;
-                s.setStyle( (KoListStyle::Style)liststyle );
-                const int count = m_list ? m_list->count() : 0;
-                for(int i = 0; i < count; i++)
-                    s.applyStyle( m_list->item(i) );
-            }
+    QObject* addItem() {
+        if (! m_list)
+            return 0;
+        QTextBlock block;
+        m_list->add(block);
+        QTextCursor cursor(block);
+        return cursor.isNull() ? 0 : new TextCursor(this, cursor);
+    }
 #endif
 
-        private:
-            QPointer<QTextList> m_list;
-    };
+    /** Return the content as text of the defined item with index \p index . */
+    QString itemText(int index) {
+        QTextBlock block = m_list ? m_list->item(index) : QTextBlock();
+        return block.isValid() ? m_list->itemText(block) : QString();
+    }
+
+    /** Return the content of the list as text. */
+    QString text() {
+        QString result;
+        const int count = m_list ? m_list->count() : 0;
+        for (int i = 0; i < count; ++i) {
+            const QString s = m_list->itemText(m_list->item(i));
+            if (! s.isNull())
+                result += QString("%1\n").arg(s);
+        }
+        return result;
+    }
+
+    /** Remove the item at position \p index . */
+    void removeItem(int index) {
+        if (m_list)
+            m_list->removeItem(index);
+    }
+
+    /** Set the style this TextList uses to the as argument passed \a Style object. */
+    void setStyle(QObject* style) {
+        ParagraphStyle* s = dynamic_cast<ParagraphStyle*>(style);
+        if (! s) {
+            kWarning() << "TextList.setStyle Invalid ParagraphStyle object" << endl;
+            return;
+        }
+        KoParagraphStyle* ps = s->style();
+        if (! ps) {
+            kWarning() << "TextList.setStyle Invalid KoParagraphStyle object" << endl;
+            return;
+        }
+        const int count = m_list ? m_list->count() : 0;
+        for (int i = 0; i < count; ++i) {
+            QTextBlock block = m_list->item(i);
+            ps->applyStyle(block);
+        }
+    }
+
+#if 0
+    void setListStyle(int liststyle) {
+        KoListStyle s;
+        s.setStyle((KoListStyle::Style)liststyle);
+        const int count = m_list ? m_list->count() : 0;
+        for (int i = 0; i < count; i++)
+            s.applyStyle(m_list->item(i));
+    }
+#endif
+
+private:
+    QPointer<QTextList> m_list;
+};
 
 }
 

@@ -41,7 +41,7 @@ public:
      * @param parent the parent for command macros
      * @param masterPageName the master page name for the new page
      */
-    explicit KWPageInsertCommand( KWDocument *document, int afterPageNum, QUndoCommand *parent = 0, const QString &masterPageName = QString() );
+    explicit KWPageInsertCommand(KWDocument *document, int afterPageNum, QUndoCommand *parent = 0, const QString &masterPageName = QString());
     ~KWPageInsertCommand();
 
     /// redo the command
@@ -50,7 +50,9 @@ public:
     void undo();
 
     /// return the page created.  Note that the result is 0 before the first redo()
-    KWPage *page() const { return m_page; }
+    KWPage *page() const {
+        return m_page;
+    }
 
 private:
     QPointer<KWDocument> m_document;

@@ -35,7 +35,7 @@ class KoZoomHandler;
  * This class represents a printed page of the document.  Each page is either left, right or
  * a pageSpread. See the PageSide for details.
  * The KWPage is created and maintained by the KWPageManager so you won't find a constructor
- * on this class.  
+ * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
 class KWORD_EXPORT KWPage : public QObject
@@ -78,7 +78,7 @@ public:
      * Passing a pagenumber that is not represented by this object will have
      *  unpredictabe results.
      */
-    Q_SCRIPTABLE QRectF rect(int pageNumber=-1) const;
+    Q_SCRIPTABLE QRectF rect(int pageNumber = -1) const;
 
     // the y coordinate
     /**
@@ -91,9 +91,13 @@ public:
     Q_SCRIPTABLE qreal offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSide
-    Q_SCRIPTABLE PageSide pageSide() const { return m_pageSide; }
+    Q_SCRIPTABLE PageSide pageSide() const {
+        return m_pageSide;
+    }
     /// set the pageSide of this page, see the PageSide
-    Q_SCRIPTABLE void setPageSide(PageSide ps) { m_pageSide = ps; }
+    Q_SCRIPTABLE void setPageSide(PageSide ps) {
+        m_pageSide = ps;
+    }
 
     /// returns the number of this page as it will be shown to the user.
     Q_SCRIPTABLE int pageNumber() const;
@@ -101,9 +105,13 @@ public:
     Q_SCRIPTABLE int pageNumber(KoInlineObject* inlineObject);
 
     /// returns the page style applied on this page
-    Q_SCRIPTABLE KWPageStyle *pageStyle() const { return m_pageStyle; }
+    Q_SCRIPTABLE KWPageStyle *pageStyle() const {
+        return m_pageStyle;
+    }
     /// set the page style to apply on this page
-    void setPageStyle (KWPageStyle *style) { m_pageStyle = style; }
+    void setPageStyle(KWPageStyle *style) {
+        m_pageStyle = style;
+    }
 
     /**
      * Return the orientation property of the page.
@@ -119,14 +127,18 @@ public:
      * the paragraph.
      * @param direction the direction.
      */
-    void setDirectionHint(KoText::Direction direction) { m_textDirectionHint = direction; }
+    void setDirectionHint(KoText::Direction direction) {
+        m_textDirectionHint = direction;
+    }
 
     /**
      * return the text-direction that text on this page should be initialized with.
      * New text that is written on this page can use this to set the text direction for
      * the paragraph.
      */
-    KoText::Direction directionHint() const { return m_textDirectionHint; }
+    KoText::Direction directionHint() const {
+        return m_textDirectionHint;
+    }
 
     Q_SCRIPTABLE KWPage *next();
     Q_SCRIPTABLE KWPage *previous();

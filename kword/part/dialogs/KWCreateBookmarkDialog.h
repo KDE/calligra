@@ -26,7 +26,8 @@
 #include <QList>
 #include <KDialog>
 
-class KWCreateBookmark : public QWidget {
+class KWCreateBookmark : public QWidget
+{
     Q_OBJECT
 public:
     KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
@@ -39,7 +40,8 @@ private:
     Ui::CreateBookmark widget;
 };
 
-class KWCreateBookmarkDialog : public KDialog {
+class KWCreateBookmarkDialog : public KDialog
+{
     Q_OBJECT
 public:
     KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);

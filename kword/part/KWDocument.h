@@ -56,14 +56,14 @@ public:
     /**
      * Constructor, normally called by the KWFactory::createPartObject()
      */
-    explicit KWDocument( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
+    explicit KWDocument(QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false);
     ~KWDocument();
 
     // KoShapeControllerBase interface
     /// reimplemented from KoShapeControllerBase
-    void addShape (KoShape *shape);
+    void addShape(KoShape *shape);
     /// reimplemented from KoShapeControllerBase
-    void removeShape (KoShape *shape);
+    void removeShape(KoShape *shape);
 
 
     // KoDocument interface
@@ -74,27 +74,37 @@ public:
     /// reimplemented from KoDocument
     virtual bool loadOdf(KoOdfReadStore & odfStore);
     /// reimplemented from KoDocument
-    virtual bool saveOdf(SavingContext & documentContext );
+    virtual bool saveOdf(SavingContext & documentContext);
     /// reimplemented from KoDocument
     KoView* createViewInstance(QWidget*);
     /// reimplemented from KoDocument
-    virtual int pageCount() const { return pageManager()->pageCount(); }
+    virtual int pageCount() const {
+        return pageManager()->pageCount();
+    }
 
     // others
     /**
      * Return the pageManager used in this document.
      */
-    const KWPageManager *pageManager() const { return &m_pageManager; }
+    const KWPageManager *pageManager() const {
+        return &m_pageManager;
+    }
     /**
      * Return the pageManager used in this document.
      */
-    Q_SCRIPTABLE KWPageManager *pageManager() { return &m_pageManager; }
+    Q_SCRIPTABLE KWPageManager *pageManager() {
+        return &m_pageManager;
+    }
 
     /// @return the data center map for this document.
-    QMap<QString, KoDataCenter *>  dataCenterMap()  { return m_dataCenterMap; }
+    QMap<QString, KoDataCenter *>  dataCenterMap()  {
+        return m_dataCenterMap;
+    }
 
     /// @return the data center map for this document.
-    const QMap<QString, KoDataCenter *>  dataCenterMap() const { return m_dataCenterMap; }
+    const QMap<QString, KoDataCenter *>  dataCenterMap() const {
+        return m_dataCenterMap;
+    }
 
     /**
      * Insert a new page after another,
@@ -105,7 +115,7 @@ public:
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
      */
-    KWPage* insertPage( int afterPageNum, const QString &masterPageName = QString() );
+    KWPage* insertPage(int afterPageNum, const QString &masterPageName = QString());
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
@@ -125,29 +135,39 @@ public:
      * caller will have the responsibility to delete it when its no longer of use.
      * @param fs the frameset that should be removed from the doc
      */
-    void removeFrameSet( KWFrameSet *fs );
+    void removeFrameSet(KWFrameSet *fs);
 
     /// return the amount of framesets this document holds
-    int frameSetCount() const { return m_frameSets.count(); }
+    int frameSetCount() const {
+        return m_frameSets.count();
+    }
     /// return a list of all the framesets this document holds
-    const QList<KWFrameSet*> &frameSets() const { return m_frameSets; }
+    const QList<KWFrameSet*> &frameSets() const {
+        return m_frameSets;
+    }
     /// return a frameset, or null, by name. @see KWFrameSet::name()
-    KWFrameSet *frameSetByName( const QString & name );
+    KWFrameSet *frameSetByName(const QString & name);
     /// return a suggestion for a copy frameset that does not collide with known ones.
-    QString suggestFrameSetNameForCopy( const QString& base );
+    QString suggestFrameSetNameForCopy(const QString& base);
     /// return a suggestion for a new frameset name that does not collide with known ones.
-    QString uniqueFrameSetName( const QString& suggestion );
+    QString uniqueFrameSetName(const QString& suggestion);
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
     /// return the inlineTextObjectManager for this document.
-    KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
+    KoInlineTextObjectManager *inlineTextObjectManager() const {
+        return m_inlineTextObjectManager;
+    }
 
     /// reimplemented from super
     QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
-    KWApplicationConfig &config() { return m_config; }
-    const KWApplicationConfig &config() const { return m_config; }
+    KWApplicationConfig &config() {
+        return m_config;
+    }
+    const KWApplicationConfig &config() const {
+        return m_config;
+    }
 
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
@@ -158,7 +178,7 @@ public slots:
     /// Relayout the pages
     void relayout();
     /// Register new frameset
-    void addFrameSet( KWFrameSet *f );
+    void addFrameSet(KWFrameSet *f);
 
 signals:
     /// signal emitted when a page has been added
@@ -166,8 +186,8 @@ signals:
 
 private slots:
     /// Frame maintenance on already registered framesets
-    void addFrame( KWFrame *frame );
-    void removeFrame( KWFrame *frame );
+    void addFrame(KWFrame *frame);
+    void removeFrame(KWFrame *frame);
     void requestMoreSpace(KWTextFrameSet *fs);
     void removeFrameFromViews(KWFrame*);
 
@@ -176,7 +196,7 @@ private slots:
 
 protected:
     /// reimplemented from KoDocument
-    virtual bool completeLoading (KoStore *store);
+    virtual bool completeLoading(KoStore *store);
 
 private:
     friend class PageProcessingQueue;
@@ -186,7 +206,7 @@ private:
     friend class KWPagePropertiesCommand;
     friend class KWPageInsertCommand;
     friend class KWPageRemoveCommand;
-    QString renameFrameSet( const QString& prefix , const QString& base );
+    QString renameFrameSet(const QString& prefix , const QString& base);
     /// post process loading after either oasis or oldxml loading finished
     void endOfLoading();
     /** Called before loading
@@ -216,7 +236,8 @@ private:
 };
 
 /// \internal
-class PageProcessingQueue : public QObject {
+class PageProcessingQueue : public QObject
+{
     Q_OBJECT
 public:
     explicit PageProcessingQueue(KWDocument *parent);

@@ -32,9 +32,9 @@
 #include <kdeversion.h>
 
 KWPrintingDialog::KWPrintingDialog(KWView *view)
-    : KoPrintingDialog(view),
-    m_document(view->kwdocument()),
-    m_clipToPage(false)
+        : KoPrintingDialog(view),
+        m_document(view->kwdocument()),
+        m_clipToPage(false)
 {
     setShapeManager(view->kwcanvas()->shapeManager());
     printer().setFromTo(0/*m_document->startPage()*/, m_document->pageManager()->pageCount() - 1);
@@ -49,9 +49,9 @@ void KWPrintingDialog::preparePage(int pageNumber)
 {
     const int resolution = printer().resolution();
     KoInsets bleed = m_document->pageManager()->padding();
-    const int bleedOffset = (int) (m_clipToPage?0:POINT_TO_INCH(-bleed.left * resolution));
-    const int bleedWidth = (int) (m_clipToPage?0:POINT_TO_INCH((bleed.left + bleed.right) * resolution));
-    const int bleedHeigt = (int) (m_clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
+    const int bleedOffset = (int)(m_clipToPage ? 0 : POINT_TO_INCH(-bleed.left * resolution));
+    const int bleedWidth = (int)(m_clipToPage ? 0 : POINT_TO_INCH((bleed.left + bleed.right) * resolution));
+    const int bleedHeigt = (int)(m_clipToPage ? 0 : POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
 
     KWPage *page = m_document->pageManager()->page(pageNumber);
     if (! page)
@@ -80,12 +80,12 @@ void KWPrintingDialog::preparePage(int pageNumber)
         }
     }
 
-    const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));
+    const int pageOffset = qRound(POINT_TO_INCH(resolution * offsetInDocument));
 
     painter().translate(0, -pageOffset);
     qreal width = page->width();
-    int clipHeight = (int) POINT_TO_INCH( resolution * page->height());
-    int clipWidth = (int) POINT_TO_INCH( resolution * page->width());
+    int clipHeight = (int) POINT_TO_INCH(resolution * page->height());
+    int clipWidth = (int) POINT_TO_INCH(resolution * page->width());
     int offset = bleedOffset;
     if (page->pageSide() == KWPage::PageSpread) {
         width /= 2;
@@ -112,7 +112,7 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 void KWPrintingDialog::printingDone()
 {
     foreach(KoImageData *image, m_originalImages.keys())
-        image->setImageQuality(m_originalImages[image]);
+    image->setImageQuality(m_originalImages[image]);
 }
 
 QList<QWidget*> KWPrintingDialog::createOptionWidgets() const

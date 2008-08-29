@@ -38,27 +38,27 @@
 
 extern "C"
 {
-    KDE_EXPORT QObject* krossmodule()
-    {
+    KDE_EXPORT QObject* krossmodule() {
         return new Scripting::Module();
     }
 }
 
 using namespace Scripting;
 
-namespace Scripting {
+namespace Scripting
+{
 
-    /// \internal d-pointer class.
-    class Module::Private
-    {
-        public:
-            QPointer<KWDocument> doc;
-    };
+/// \internal d-pointer class.
+class Module::Private
+{
+public:
+    QPointer<KWDocument> doc;
+};
 }
 
 Module::Module(QObject* parent)
-    : KoScriptingModule(parent, "KWord")
-    , d( new Private() )
+        : KoScriptingModule(parent, "KWord")
+        , d(new Private())
 {
     d->doc = 0;
 }
@@ -70,10 +70,10 @@ Module::~Module()
 
 KWDocument* Module::kwDoc()
 {
-    if(! d->doc) {
-        if( KWView* v = dynamic_cast< KWView* >(view()) )
+    if (! d->doc) {
+        if (KWView* v = dynamic_cast< KWView* >(view()))
             d->doc = v->kwdocument();
-        if( ! d->doc )
+        if (! d->doc)
             d->doc = new KWDocument(0, this);
     }
     return d->doc;
@@ -95,13 +95,13 @@ QObject* Module::page(int pageNumber)
     return page ? new Page(this, page) : 0;
 }
 
-QObject* Module::insertPage( int afterPageNum )
+QObject* Module::insertPage(int afterPageNum)
 {
     KWPage* page = kwDoc()->insertPage(afterPageNum);
     return new Page(this, page);
 }
 
-void Module::removePage( int pageNumber )
+void Module::removePage(int pageNumber)
 {
     //TODO remove also the wrapper? and what's about pages that are "Spread" (page that represents 2 pagenumbers)?
     kwDoc()->removePage(pageNumber);
@@ -111,7 +111,7 @@ QStringList Module::shapeKeys()
 {
     QStringList keys;
     foreach(QString key, KoShapeRegistry::instance()->keys())
-        keys.append(key);
+    keys.append(key);
     return keys;
 }
 
@@ -122,7 +122,7 @@ int Module::frameSetCount()
 
 QObject* Module::frameSet(int frameSetNr)
 {
-    KWFrameSet* frameset = (frameSetNr>=0 && frameSetNr<kwDoc()->frameSetCount()) ? kwDoc()->frameSets().at(frameSetNr) : 0;
+    KWFrameSet* frameset = (frameSetNr >= 0 && frameSetNr < kwDoc()->frameSetCount()) ? kwDoc()->frameSets().at(frameSetNr) : 0;
     return frameset ? new FrameSet(this, frameset) : 0;
 }
 
@@ -167,17 +167,17 @@ int Module::frameCount()
 {
     int count = 0;
     foreach(KWFrameSet* set, kwDoc()->frameSets())
-        count += set->frames().count();
+    count += set->frames().count();
     return count;
 }
 
 QObject* Module::frame(int frameNr)
 {
-    if(frameNr >= 0) {
+    if (frameNr >= 0) {
         int idx = 0;
         foreach(KWFrameSet* set, kwDoc()->frameSets()) {
             const int c = set->frames().count();
-            if(frameNr < idx + c)
+            if (frameNr < idx + c)
                 return new Frame(new FrameSet(this, set), set->frames().at(idx));
             idx += c;
         }
@@ -187,13 +187,13 @@ QObject* Module::frame(int frameNr)
 
 QObject* Module::addTextFrame(const QString& framesetname)
 {
-    FrameSet* set = dynamic_cast< FrameSet* >( addTextFrameSet(framesetname) );
+    FrameSet* set = dynamic_cast< FrameSet* >(addTextFrameSet(framesetname));
     return set ? set->addTextFrame() : 0;
 }
 
 QObject* Module::addFrame(const QString& framesetname, const QString& shapeId)
 {
-    FrameSet* set = dynamic_cast< FrameSet* >( addFrameSet(framesetname) );
+    FrameSet* set = dynamic_cast< FrameSet* >(addFrameSet(framesetname));
     return set ? set->addFrame(shapeId) : 0;
 }
 
@@ -201,8 +201,8 @@ QObject* Module::findFrameSet(KWord::TextFrameSetType type)
 {
     foreach(KWFrameSet* set, kwDoc()->frameSets()) {
         KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >(set);
-        if( textframeset )
-            if( textframeset->textFrameSetType() == type)
+        if (textframeset)
+            if (textframeset->textFrameSetType() == type)
                 return new FrameSet(this, textframeset);
     }
     return 0;
@@ -215,24 +215,24 @@ QObject* Module::standardPageLayout()
 
 QObject* Module::defaultParagraphStyle()
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
-    Q_ASSERT( styleManager );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(kwDoc()->dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
     KoParagraphStyle* s = styleManager->defaultParagraphStyle();
     return s ? new ParagraphStyle(this, s) : 0;
 }
 
 QObject* Module::paragraphStyle(const QString& name)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
-    Q_ASSERT( styleManager );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(kwDoc()->dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
     KoParagraphStyle* s = styleManager->paragraphStyle(name);
     return s ? new ParagraphStyle(this, s) : 0;
 }
 
 QObject* Module::addParagraphStyle(const QString& name)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
-    Q_ASSERT( styleManager );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(kwDoc()->dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
     KoParagraphStyle* s = new KoParagraphStyle();
     s->setName(name);
     styleManager->add(s);
@@ -241,16 +241,16 @@ QObject* Module::addParagraphStyle(const QString& name)
 
 QObject* Module::characterStyle(const QString& name)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
-    Q_ASSERT( styleManager );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(kwDoc()->dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
     KoCharacterStyle* s = styleManager->characterStyle(name);
     return s ? new CharacterStyle(this, s) : 0;
 }
 
 QObject* Module::addCharacterStyle(const QString& name)
 {
-    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
-    Q_ASSERT( styleManager );
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>(kwDoc()->dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
     KoCharacterStyle* s = new KoCharacterStyle();
     s->setName(name);
     styleManager->add(s);

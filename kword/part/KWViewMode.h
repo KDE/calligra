@@ -58,30 +58,38 @@ public:
     };
 
     /** Document coord -> view coord */
-    virtual QPointF documentToView( const QPointF & point ) const = 0;
+    virtual QPointF documentToView(const QPointF & point) const = 0;
 
     /** Document coord -> view coord */
-    QRectF documentToView( const QRectF & rect ) const ;
+    QRectF documentToView(const QRectF & rect) const ;
 
     /** View coord -> Document coord */
-    virtual QPointF viewToDocument( const QPointF & point ) const = 0;
+    virtual QPointF viewToDocument(const QPointF & point) const = 0;
 
     /** View coord -> Document coord */
-    QRectF viewToDocument( const QRectF & rect ) const;
+    QRectF viewToDocument(const QRectF & rect) const;
 
     /** Size of the contents area, in pixels */
     virtual QSizeF contentsSize() const = 0;
 
     /** Should selected text be drawn as such? */
-    virtual bool drawSelections() { return true; }
+    virtual bool drawSelections() {
+        return true;
+    }
 
     /** Should we see frame borders? This setting doesn't always come from KWView... */
-    bool drawFrameBorders() const { return m_drawFrameBorders; }
+    bool drawFrameBorders() const {
+        return m_drawFrameBorders;
+    }
     /** Should we see frame borders? This setting doesn't always come from KWView... */
-    void setDrawFrameBorders(bool b)  { m_drawFrameBorders = b; }
+    void setDrawFrameBorders(bool b)  {
+        m_drawFrameBorders = b;
+    }
 
     /** Does this viewmode know anything about pages? */
-    virtual bool hasPages() { return true; }
+    virtual bool hasPages() {
+        return true;
+    }
 
     /** Return the name of the viewmode, used for loading/saving. */
     virtual const QString type() const = 0;
@@ -96,13 +104,15 @@ public:
      * @param viewModeType the type of viewMode
      * @param canvas passed to the new ViewMode as a parent for which this viewMode is made
      */
-    static KWViewMode *create( const QString& viewModeType, KWCanvas* canvas );
+    static KWViewMode *create(const QString& viewModeType, KWCanvas* canvas);
 
     /**
      * Returns the canvas this viewmode is operating on.
      * Note that the canvas will give access to all needed parts of the application.
      */
-    KWCanvas * canvas() const { return m_canvas; }
+    KWCanvas * canvas() const {
+        return m_canvas;
+    }
 
     /**
      * This method converts a clip-rect of the view to a set of cliprects as they are
@@ -133,7 +143,7 @@ protected:
     /**
      * Constructor not for public; use KWViewMode::create() instead.
      */
-    KWViewMode( KWCanvas* canvas );
+    KWViewMode(KWCanvas* canvas);
     /**
      * Will be called when the pageSetupChanged() has been notified.
      */

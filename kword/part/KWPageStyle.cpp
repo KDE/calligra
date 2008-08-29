@@ -23,8 +23,8 @@
 #include <kdebug.h>
 
 KWPageStyle::KWPageStyle(const QString& mastername)
-    : QObject()
-    , m_masterName(mastername)
+        : QObject()
+        , m_masterName(mastername)
 {
     clear();
 }
@@ -66,7 +66,7 @@ const KoPageLayout KWPageStyle::pageLayout() const
     return m_pageLayout;
 }
 
-void KWPageStyle::setPageLayout (const KoPageLayout &pageLayout)
+void KWPageStyle::setPageLayout(const KoPageLayout &pageLayout)
 {
     m_pageLayout = pageLayout;
 }

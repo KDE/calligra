@@ -29,7 +29,8 @@ class KWFrame;
 class KoShape;
 
 /// A (very simple) widget to show some KoShape sizing / positioning information.
-class KWFrameGeometry : public KoShapeConfigWidgetBase {
+class KWFrameGeometry : public KoShapeConfigWidgetBase
+{
     Q_OBJECT
 public:
     explicit KWFrameGeometry(FrameConfigSharedState *state);
@@ -47,7 +48,9 @@ public:
     virtual void setUnit(KoUnit unit);
 
     /// reimplemented
-    virtual bool showOnShapeCreate() { return true; }
+    virtual bool showOnShapeCreate() {
+        return true;
+    }
 
 private slots:
     void updateShape();

@@ -31,7 +31,8 @@ class KWFrame;
 class KoShape;
 
 /// A widget that is shown to allow the user to select the run around properties
-class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase {
+class KWFrameRunaroundProperties : public KoShapeConfigWidgetBase
+{
     Q_OBJECT
 public:
     /// constructor
@@ -44,8 +45,10 @@ public:
     /// reimplemented
     void save();
 
-    /// reimplemented 
-    virtual bool showOnShapeCreate() { return true; }
+    /// reimplemented
+    virtual bool showOnShapeCreate() {
+        return true;
+    }
 
 private:
     Ui::KWFrameRunaroundProperties widget;

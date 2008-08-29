@@ -27,19 +27,19 @@ class QStringList;
 
 class KWQtSqlEasyFilter: public KDialogBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-    KWQtSqlEasyFilter( QWidget *parent);
+    KWQtSqlEasyFilter(QWidget *parent);
     virtual ~KWQtSqlEasyFilter();
 protected:
     void createColumn(int i);
 
 protected slots:
-    void slotValueChanged ( int, int);
+    void slotValueChanged(int, int);
 private:
-	Q3Table *m_table;
-	Q3ScrollView *m_view;
-        QStringList m_fieldList,m_sortingList,m_operationList;
+    Q3Table *m_table;
+    Q3ScrollView *m_view;
+    QStringList m_fieldList, m_sortingList, m_operationList;
 
 
 };

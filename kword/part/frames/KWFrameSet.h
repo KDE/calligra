@@ -33,7 +33,8 @@ class KWFrame;
  * The FrameSet holds KWFrame objects that actually render the content this object
  * holds to the screen or to the printer.
  */
-class KWORD_EXPORT KWFrameSet : public QObject {
+class KWORD_EXPORT KWFrameSet : public QObject
+{
     Q_OBJECT
 public:
     /// Constructor.
@@ -59,21 +60,29 @@ public:
      * users to look for and use.
      * @param name the new name
      */
-    void setName(const QString &name) { m_name = name; }
+    void setName(const QString &name) {
+        m_name = name;
+    }
     /**
      * Return this framesets name.
      */
-    const QString &name() const { return m_name; }
+    const QString &name() const {
+        return m_name;
+    }
 
     /**
      * List all frames this frameset has.  In the order that any content will flow through them.
      */
-    const QList<KWFrame*> frames() const { return m_frames; }
+    const QList<KWFrame*> frames() const {
+        return m_frames;
+    }
 
     /**
      * Return the amount of frames this frameset has.
      */
-    int frameCount() const { return m_frames.count(); }
+    int frameCount() const {
+        return m_frames.count();
+    }
 
 #ifndef NDEBUG
     /// use kDebug calls to print internal info on this frameset
@@ -101,7 +110,9 @@ protected:
      * Overwrite in inheriting classes to do something with the frame on add.
      * @param frame the frame that has just been added
      */
-    virtual void setupFrame(KWFrame *frame) { Q_UNUSED(frame); }
+    virtual void setupFrame(KWFrame *frame) {
+        Q_UNUSED(frame);
+    }
 
     /// The list of frames that this frameset owns.
     QList<KWFrame*> m_frames;

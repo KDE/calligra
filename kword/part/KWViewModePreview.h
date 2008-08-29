@@ -33,11 +33,11 @@ class KWViewModePreview : public KWViewMode
 {
 public:
     /// constructor
-    explicit KWViewModePreview( KWCanvas* canvas );
+    explicit KWViewModePreview(KWCanvas* canvas);
     ~KWViewModePreview() {}
 
-    QPointF documentToView( const QPointF & point ) const;
-    QPointF viewToDocument( const QPointF & point ) const;
+    QPointF documentToView(const QPointF & point) const;
+    QPointF viewToDocument(const QPointF & point) const;
     virtual QSizeF contentsSize() const;
 
     /**
@@ -45,16 +45,24 @@ public:
      * You can set the preferred pages per row here.
      * @param num the new number of pages per row
      */
-    void setPagesPerRow(int num) { m_pagesPerRow=num; }
+    void setPagesPerRow(int num) {
+        m_pagesPerRow = num;
+    }
     /**
      * @return the number of pages we are showing per row
      */
-    int pagesPerRow() const { return m_pagesPerRow; }
+    int pagesPerRow() const {
+        return m_pagesPerRow;
+    }
 
     /// return a string identification of this viewMode
-    static const QString viewMode() { return "ModePreview"; }
+    static const QString viewMode() {
+        return "ModePreview";
+    }
     /// return a string identification of this viewMode
-    const QString type() const { return KWViewModePreview::viewMode(); }
+    const QString type() const {
+        return KWViewModePreview::viewMode();
+    }
     QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
 
 protected:

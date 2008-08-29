@@ -45,7 +45,7 @@ public:
      * @param direction the new page layout direction
      * @param parent the parent for macro command functionality
      */
-    explicit KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent = 0 );
+    explicit KWPagePropertiesCommand(KWDocument *document, KWPage *page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent = 0);
 
     /// redo the command
     void redo();

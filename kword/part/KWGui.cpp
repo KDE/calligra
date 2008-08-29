@@ -43,11 +43,11 @@
 #include <QAction>
 #include <QScrollBar>
 
-KWGui::KWGui( const QString& viewMode, KWView *parent )
-  : QWidget( parent),
-    m_view(parent)
+KWGui::KWGui(const QString& viewMode, KWView *parent)
+        : QWidget(parent),
+        m_view(parent)
 {
-    QGridLayout *gridLayout = new QGridLayout( this );
+    QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setMargin(0);
     gridLayout->setSpacing(0);
 
@@ -59,24 +59,24 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_verticalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler->setShowMousePosition(true);
 
-    m_canvas = new KWCanvas( viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this );
+    m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
     m_canvasController = new KoCanvasController(this);
     m_canvasController->setCanvas(m_canvas);
-    m_canvasController->setCanvasMode( KoCanvasController::AlignTop );
+    m_canvasController->setCanvasMode(KoCanvasController::AlignTop);
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
     KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
-    m_view->createDockWidget( &toolBoxFactory );
+    m_view->createDockWidget(&toolBoxFactory);
 
     KoDockerManager *dockerManager = new KoDockerManager(m_view);
-    connect(m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
-             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+            dockerManager, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(m_horizontalRuler, 0, 1);
     gridLayout->addWidget(m_verticalRuler, 1, 0);
-    gridLayout->addWidget( m_canvasController, 1, 1 );
+    gridLayout->addWidget(m_canvasController, 1, 1);
 
     new KoRulerController(m_horizontalRuler, m_canvas->resourceProvider());
 
@@ -99,59 +99,67 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     QTimer::singleShot(0, this, SLOT(setupUnitActions()));
 }
 
-KWGui::~KWGui() {
+KWGui::~KWGui()
+{
     KoToolManager::instance()->removeCanvasController(m_canvasController);
 }
 
-int KWGui::visibleWidth() const {
+int KWGui::visibleWidth() const
+{
     return m_canvasController->visibleWidth();
 }
 
-int KWGui::visibleHeight() const {
+int KWGui::visibleHeight() const
+{
     return m_canvasController->visibleHeight();
 }
 
-QSize KWGui::viewportSize() const {
+QSize KWGui::viewportSize() const
+{
     return m_canvasController->viewport()->size();
 }
 
 
-bool KWGui::horizontalScrollBarVisible() {
+bool KWGui::horizontalScrollBarVisible()
+{
     return m_canvasController->horizontalScrollBar() &&
-        m_canvasController->horizontalScrollBar()->isVisible();
+           m_canvasController->horizontalScrollBar()->isVisible();
 }
 
-void KWGui::pageSetupChanged() {
+void KWGui::pageSetupChanged()
+{
     const KWPageManager *pm = m_view->kwdocument()->pageManager();
-    m_verticalRuler->setRulerLength( pm->bottomOfPage(pm->pageCount() - 1) );
+    m_verticalRuler->setRulerLength(pm->bottomOfPage(pm->pageCount() - 1));
     updateRulers();
     KWPage *firstPage = pm->page(0);
-    if(firstPage)
-        m_horizontalRuler->setRulerLength( firstPage->width() );
+    if (firstPage)
+        m_horizontalRuler->setRulerLength(firstPage->width());
     updateRulers();
 }
 
-void KWGui::updateMousePos(const QPoint &point) {
+void KWGui::updateMousePos(const QPoint &point)
+{
     m_horizontalRuler->updateMouseCoordinate(point.x());
     m_verticalRuler->updateMouseCoordinate(point.y());
 }
 
-void KWGui::updateRulers() const {
-    m_verticalRuler->setVisible( m_view->kwdocument()->config().viewRulers() );
-    m_horizontalRuler->setVisible( m_view->kwdocument()->config().viewRulers() );
+void KWGui::updateRulers() const
+{
+    m_verticalRuler->setVisible(m_view->kwdocument()->config().viewRulers());
+    m_horizontalRuler->setVisible(m_view->kwdocument()->config().viewRulers());
 }
 
-void KWGui::shapeSelectionChanged() {
+void KWGui::shapeSelectionChanged()
+{
     QPointF start, end;
     bool first = true;
     foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         QRectF rect = shape->boundingRect();
-        if(first) {
+        if (first) {
             start = rect.topLeft();
             end = rect.bottomRight();
             first = false;
-        }
-        else {
+        } else {
             start.setX(qMin(start.x(), rect.left()));
             start.setY(qMin(start.y(), rect.top()));
             end.setX(qMax(end.x(), rect.right()));
@@ -162,7 +170,8 @@ void KWGui::shapeSelectionChanged() {
     m_verticalRuler->setActiveRange(start.y(), end.y());
 }
 
-void KWGui::setupUnitActions() {
+void KWGui::setupUnitActions()
+{
     QList<QAction*> unitActions = m_view->createChangeUnitActions();
     QAction *separator = new QAction(this);
     separator->setSeparator(true);

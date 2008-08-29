@@ -17,14 +17,15 @@
  */
 #include <kunittest/tester.h>
 
-class KWPageManagerTester : public KUnitTest::Tester {
-    public:
-        void allTests();
-    private:
-        void getAddPages();
-        void getAddPages2();
-        void createInsertPages();
-        void removePages();
-        void pageInfo();
-        void testClipToDocument();
+class KWPageManagerTester : public KUnitTest::Tester
+{
+public:
+    void allTests();
+private:
+    void getAddPages();
+    void getAddPages2();
+    void createInsertPages();
+    void removePages();
+    void pageInfo();
+    void testClipToDocument();
 };

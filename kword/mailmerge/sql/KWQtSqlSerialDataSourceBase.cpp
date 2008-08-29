@@ -44,62 +44,58 @@
  *
  ******************************************************************/
 
-int KWQtSqlSerialDataSourceBase::connectionId=0;
+int KWQtSqlSerialDataSourceBase::connectionId = 0;
 
-KWQtSqlSerialDataSourceBase::KWQtSqlSerialDataSourceBase(const KComponentData &inst,QObject *parent)
-	: KWMailMergeDataSource(inst,parent)
+KWQtSqlSerialDataSourceBase::KWQtSqlSerialDataSourceBase(const KComponentData &inst, QObject *parent)
+        : KWMailMergeDataSource(inst, parent)
 {
-	DataBaseConnection=QString("KWQTSQLPOWER")+parent->name()+QString("--%1").arg(connectionId++);
-	port=i18n("default");
+    DataBaseConnection = QString("KWQTSQLPOWER") + parent->name() + QString("--%1").arg(connectionId++);
+    port = i18n("default");
 }
 
 KWQtSqlSerialDataSourceBase::~KWQtSqlSerialDataSourceBase()
 {
-	QSqlDatabase::removeDatabase(DataBaseConnection);
+    QSqlDatabase::removeDatabase(DataBaseConnection);
 }
 
 
-bool KWQtSqlSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
+bool KWQtSqlSerialDataSourceBase::showConfigDialog(QWidget *par, int action)
 {
-   bool ret=false;
-   if (action==KWSLOpen)
-   {
-   	KWQtSqlMailMergeOpen *dia=new KWQtSqlMailMergeOpen(par,this);
+    bool ret = false;
+    if (action == KWSLOpen) {
+        KWQtSqlMailMergeOpen *dia = new KWQtSqlMailMergeOpen(par, this);
 
-	ret=dia->exec();
-	if (ret) openDatabase();
-	delete dia;
-   }
-   return ret;
+        ret = dia->exec();
+        if (ret) openDatabase();
+        delete dia;
+    }
+    return ret;
 }
 
 bool  KWQtSqlSerialDataSourceBase::openDatabase()
 {
-	QByteArray pwd;
-	QSqlDatabase::removeDatabase(DataBaseConnection);
-        database=QSqlDatabase::addDatabase(driver,DataBaseConnection);
-        if (database)
-        {
-                if (database->lastError().type()!=QSqlError::NoError)
-                {
-			QMessageBox::critical(0,i18n("Error"),database->lastError().databaseText(),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
-			return false;
-                }
-                database->setDatabaseName(databasename);
-                database->setUserName(username);
-                database->setHostName(hostname);
-		if ((port!=i18n("default"))&& (!port.isEmpty()))
-			database->setPort(port.toInt());
-
-		if (KPasswordDialog::getPassword(pwd, i18n("Please enter the password for the database connection"))
-			== KPasswordDialog::Accepted) database->setPassword(pwd);
-                if (database->open())
-                {
-                        return true;
-                }
-		QMessageBox::critical(0,i18n("Error"),database->lastError().databaseText(),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
-		return false;
+    QByteArray pwd;
+    QSqlDatabase::removeDatabase(DataBaseConnection);
+    database = QSqlDatabase::addDatabase(driver, DataBaseConnection);
+    if (database) {
+        if (database->lastError().type() != QSqlError::NoError) {
+            QMessageBox::critical(0, i18n("Error"), database->lastError().databaseText(), QMessageBox::Abort, QMessageBox::NoButton, QMessageBox::NoButton);
+            return false;
         }
-	QMessageBox::critical(0,i18n("Error"),i18n("Unable to create database object"),QMessageBox::Abort,QMessageBox::NoButton,QMessageBox::NoButton);
+        database->setDatabaseName(databasename);
+        database->setUserName(username);
+        database->setHostName(hostname);
+        if ((port != i18n("default")) && (!port.isEmpty()))
+            database->setPort(port.toInt());
+
+        if (KPasswordDialog::getPassword(pwd, i18n("Please enter the password for the database connection"))
+                == KPasswordDialog::Accepted) database->setPassword(pwd);
+        if (database->open()) {
+            return true;
+        }
+        QMessageBox::critical(0, i18n("Error"), database->lastError().databaseText(), QMessageBox::Abort, QMessageBox::NoButton, QMessageBox::NoButton);
         return false;
+    }
+    QMessageBox::critical(0, i18n("Error"), i18n("Unable to create database object"), QMessageBox::Abort, QMessageBox::NoButton, QMessageBox::NoButton);
+    return false;
 }

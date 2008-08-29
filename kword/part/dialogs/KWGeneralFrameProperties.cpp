@@ -23,8 +23,8 @@
 #include "frames/KWTextFrameSet.h"
 
 KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state)
-    : m_state(state),
-    m_shape(0)
+        : m_state(state),
+        m_shape(0)
 {
     widget.setupUi(this);
     m_textGroup = new QButtonGroup(widget.textGroupBox);
@@ -54,8 +54,7 @@ void KWGeneralFrameProperties::open(KoShape *shape)
     if (shape->shapeId() == TextShape_SHAPEID) {
         widget.reconnect->setChecked(true);
         widget.keepAspectRatio->setVisible(false);
-    }
-    else {
+    } else {
         widget.noFollowup->setChecked(true);
         widget.reconnect->setVisible(false);
         widget.textGroupBox->setVisible(false);
@@ -72,7 +71,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
     GuiHelper::State newFrame = GuiHelper::Unset, frameBehavior = GuiHelper::Unset;
     KWord::NewFrameBehavior nfb = KWord::ReconnectNewFrame;
     KWord::FrameBehavior fb = KWord::AutoExtendFrameBehavior;
-    foreach (KWFrame *frame, frames) {
+    foreach(KWFrame *frame, frames) {
         if (frameBehavior == GuiHelper::Unset) {
             fb = frame->frameBehavior();
             frameBehavior = GuiHelper::On;
@@ -94,7 +93,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
 
         evenOdd.addState(frame->frameOnBothSheets() ? GuiHelper::On : GuiHelper::Off);
 
-        KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
+        KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(frame->frameSet());
         if (textFs)
             protectContent.addState(textFs->protectContent() ? GuiHelper::On : GuiHelper::Off);
         else
@@ -109,7 +108,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
     keepAspect.updateCheckBox(widget.keepAspectRatio, true);
     evenOdd.updateCheckBox(widget.evenOdd, false);
     // unfortunately the datamodel is reversed :)
-    widget.evenOdd->setChecked( ! widget.evenOdd->isChecked());
+    widget.evenOdd->setChecked(! widget.evenOdd->isChecked());
 
     if (newFrame == GuiHelper::On)
         m_newPageGroup->button(nfb)->setChecked(true);
@@ -137,20 +136,20 @@ void KWGeneralFrameProperties::save()
     }
     foreach(KWFrame *frame, m_frames) {
         if (widget.keepAspectRatio->checkState() != Qt::PartiallyChecked)
-            frame->shape()->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
+            frame->shape()->setKeepAspectRatio(widget.keepAspectRatio->checkState() == Qt::Checked);
         if (m_textGroup->checkedId() != -1) {
-            KWord::FrameBehavior fb = static_cast<KWord::FrameBehavior> (m_textGroup->checkedId());
+            KWord::FrameBehavior fb = static_cast<KWord::FrameBehavior>(m_textGroup->checkedId());
             frame->setFrameBehavior(fb);
         }
         if (m_newPageGroup->checkedId() != -1) {
-            KWord::NewFrameBehavior nfb = static_cast<KWord::NewFrameBehavior> (m_newPageGroup->checkedId());
+            KWord::NewFrameBehavior nfb = static_cast<KWord::NewFrameBehavior>(m_newPageGroup->checkedId());
             frame->setNewFrameBehavior(nfb);
         }
         if (widget.evenOdd->checkState() != Qt::PartiallyChecked)
-            frame->setFrameOnBothSheets( widget.evenOdd->checkState() != Qt::Checked );
+            frame->setFrameOnBothSheets(widget.evenOdd->checkState() != Qt::Checked);
         if (frame->frameSet()) {
             if (widget.protectContent->checkState() != Qt::PartiallyChecked) {
-                KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
+                KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(frame->frameSet());
                 if (textFs)
                     textFs->setProtectContent(widget.protectContent->checkState() == Qt::Checked);
             }
@@ -173,6 +172,6 @@ void KWGeneralFrameProperties::newPageGroupUpdated(int which)
 
 void KWGeneralFrameProperties::keepAspectChanged()
 {
-    m_state->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
+    m_state->setKeepAspectRatio(widget.keepAspectRatio->checkState() == Qt::Checked);
 }
 

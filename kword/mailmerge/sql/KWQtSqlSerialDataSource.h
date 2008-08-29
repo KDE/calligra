@@ -35,24 +35,24 @@
 
 class KWQtSqlSerialDataSource: public KWQtSqlSerialDataSourceBase
 {
-    public:
-    KWQtSqlSerialDataSource(const KComponentData &inst,QObject *parent);
+public:
+    KWQtSqlSerialDataSource(const KComponentData &inst, QObject *parent);
     ~KWQtSqlSerialDataSource();
 
-    virtual void save( QDomDocument &doc,QDomElement&);
-    virtual void load( QDomElement& elem );
-    virtual class QString getValue( const QString &name, int record = -1 ) const;
+    virtual void save(QDomDocument &doc, QDomElement&);
+    virtual void load(QDomElement& elem);
+    virtual class QString getValue(const QString &name, int record = -1) const;
     virtual int getNumRecords() const {
-        return (myquery?((myquery->size()<0)?0:myquery->size()):0);
+        return (myquery ? ((myquery->size() < 0) ? 0 : myquery->size()) : 0);
     }
     virtual void refresh(bool);
-    virtual  bool showConfigDialog(QWidget *,int);
+    virtual  bool showConfigDialog(QWidget *, int);
 
-    protected:
-	friend class KWQtSqlDataSourceEditor;
-	QString tableName;
-	QString filter;
-	Q3SqlCursor *myquery;
+protected:
+    friend class KWQtSqlDataSourceEditor;
+    QString tableName;
+    QString filter;
+    Q3SqlCursor *myquery;
 };
 
 /******************************************************************
@@ -66,19 +66,21 @@ class KWQtSqlDataSourceEditor : public KDialogBase
     Q_OBJECT
 
 public:
-    KWQtSqlDataSourceEditor( QWidget *parent, KWQtSqlSerialDataSource *db_ );
-    ~KWQtSqlDataSourceEditor(){;}
+    KWQtSqlDataSourceEditor(QWidget *parent, KWQtSqlSerialDataSource *db_);
+    ~KWQtSqlDataSourceEditor() {
+        ;
+    }
 private:
-  KWQtSqlSerialDataSource *db;
-  QtSqlDataSourceEditor *widget;
-  void updateTableCombo();
-  QString filter;
-  QString tableName;
+    KWQtSqlSerialDataSource *db;
+    QtSqlDataSourceEditor *widget;
+    void updateTableCombo();
+    QString filter;
+    QString tableName;
 
 private slots:
-  void tableChanged(int);
-  void slotSetQuery();
-  void editFilter();
+    void tableChanged(int);
+    void slotSetQuery();
+    void editFilter();
 };
 
 

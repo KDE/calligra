@@ -32,21 +32,21 @@ class KWMailMergeKSpread;
 
 class KWMailMergeKSpreadConfig: public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-    KWMailMergeKSpreadConfig( QWidget *parent, KWMailMergeKSpread *object );
+public:
+    KWMailMergeKSpreadConfig(QWidget *parent, KWMailMergeKSpread *object);
     virtual ~KWMailMergeKSpreadConfig();
 
 
-  protected slots:
+protected slots:
     virtual void slotOk();
 
     void loadDocument();
     void documentLoaded();
-    void slotTextChanged( const QString & _text );
+    void slotTextChanged(const QString & _text);
 
-  private:
+private:
     void initGUI();
 
     KWMailMergeKSpread *_object;

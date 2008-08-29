@@ -43,13 +43,19 @@ class KWViewModeNormal : public KWViewMode
 public:
     ~KWViewModeNormal() {}
 
-    QPointF documentToView( const QPointF & point ) const;
-    QPointF viewToDocument( const QPointF & point ) const;
-    virtual QSizeF contentsSize() const { return m_contents; }
+    QPointF documentToView(const QPointF & point) const;
+    QPointF viewToDocument(const QPointF & point) const;
+    virtual QSizeF contentsSize() const {
+        return m_contents;
+    }
 
     /// return a string identification of this viewMode
-    static const QString viewMode() { return "ModeNormal"; }
-    const QString type() const { return KWViewModeNormal::viewMode(); }
+    static const QString viewMode() {
+        return "ModeNormal";
+    }
+    const QString type() const {
+        return KWViewModeNormal::viewMode();
+    }
     QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
 
 protected:
@@ -57,7 +63,7 @@ protected:
     /**
      * Constructor; please use KWViewMode::create()
      */
-    KWViewModeNormal( KWCanvas* canvas );
+    KWViewModeNormal(KWCanvas* canvas);
 
     void updatePageCache();
 

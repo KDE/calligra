@@ -39,28 +39,36 @@
 class KWMySqlCursor: public Q3SqlCursor
 {
 public:
-    KWMySqlCursor( const QString & query = QString::null, bool autopopulate = true, QSqlDatabase* db = 0 ): Q3SqlCursor( QString::null, autopopulate, db )
-    {
-        exec( query );
-        if ( autopopulate )
+    KWMySqlCursor(const QString & query = QString::null, bool autopopulate = true, QSqlDatabase* db = 0): Q3SqlCursor(QString::null, autopopulate, db) {
+        exec(query);
+        if (autopopulate)
             *(QSqlRecord*)this = ((QSqlQuery*)this)->driver()->record(
-*(QSqlQuery*)this );
-        setMode( Q3SqlCursor::ReadOnly );
+                                     *(QSqlQuery*)this);
+        setMode(Q3SqlCursor::ReadOnly);
     }
-    KWMySqlCursor( const KWMySqlCursor & other ): Q3SqlCursor( other ) {}
-    KWMySqlCursor( const QSqlQuery & query, bool autopopulate = true ): Q3SqlCursor( QString::null, autopopulate )
-    {
+    KWMySqlCursor(const KWMySqlCursor & other): Q3SqlCursor(other) {}
+    KWMySqlCursor(const QSqlQuery & query, bool autopopulate = true): Q3SqlCursor(QString::null, autopopulate) {
         *(QSqlQuery*)this = query;
-        if ( autopopulate )
-            *(QSqlRecord*)this = query.driver()->record( query );
-        setMode( Q3SqlCursor::ReadOnly );
+        if (autopopulate)
+            *(QSqlRecord*)this = query.driver()->record(query);
+        setMode(Q3SqlCursor::ReadOnly);
     }
-    bool select( const QString & /*filter*/, const QSqlIndex & /*sort*/ = QSqlIndex() ) { return exec( lastQuery() ); }
-    QSqlIndex primaryIndex( bool /*prime*/ = true ) const { return QSqlIndex(); }
-    int insert( bool /*invalidate*/ = true ) { return false; }
-    int update( bool /*invalidate*/ = true ) { return false; }
-    int del( bool /*invalidate*/ = true ) { return false; }
-    void setName( const QString& /*name*/, bool /*autopopulate*/ = true ) {}
+    bool select(const QString & /*filter*/, const QSqlIndex & /*sort*/ = QSqlIndex()) {
+        return exec(lastQuery());
+    }
+    QSqlIndex primaryIndex(bool /*prime*/ = true) const {
+        return QSqlIndex();
+    }
+    int insert(bool /*invalidate*/ = true) {
+        return false;
+    }
+    int update(bool /*invalidate*/ = true) {
+        return false;
+    }
+    int del(bool /*invalidate*/ = true) {
+        return false;
+    }
+    void setName(const QString& /*name*/, bool /*autopopulate*/ = true) {}
 };
 
 

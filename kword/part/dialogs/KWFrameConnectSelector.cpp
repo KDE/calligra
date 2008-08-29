@@ -24,22 +24,22 @@
 
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
-    : m_state(state),
-    m_frame(0)
+        : m_state(state),
+        m_frame(0)
 {
     widget.setupUi(this);
 
-    connect (widget.framesList, SIGNAL( itemClicked(QTreeWidgetItem*, int) ),
-            this, SLOT( frameSetSelected() ));
-    connect (widget.frameSetName, SIGNAL( textChanged(const QString &) ),
-            this, SLOT( nameChanged(const QString &)) );
+    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(frameSetSelected()));
+    connect(widget.frameSetName, SIGNAL(textChanged(const QString &)),
+            this, SLOT(nameChanged(const QString &)));
 }
 
 bool KWFrameConnectSelector::open(KWFrame *frame)
 {
     m_state->addUser();
     m_frame = frame;
-    KWTextFrame *textFrame = dynamic_cast<KWTextFrame*> (frame);
+    KWTextFrame *textFrame = dynamic_cast<KWTextFrame*>(frame);
     if (textFrame == 0)
         return false;
     widget.framesList->clear();
@@ -48,7 +48,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
         widget.frameSetName->setText(m_state->document()->uniqueFrameSetName(i18n("frameset")));
 
     foreach(KWFrameSet *fs, m_state->document()->frameSets()) {
-        KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*> (fs);
+        KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*>(fs);
         if (textFs == 0 || textFs->textFrameSetType() != KWord::OtherTextFrameSet)
             continue;
         m_frameSets.append(textFs);
@@ -60,7 +60,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
     }
 
     if (textFrame->frameSet()) { // already has a frameset
-        KWTextFrameSet *textFs = static_cast<KWTextFrameSet*> (textFrame->frameSet());
+        KWTextFrameSet *textFs = static_cast<KWTextFrameSet*>(textFrame->frameSet());
         if (textFs->textFrameSetType() != KWord::OtherTextFrameSet)
             return false; // can't alter frameSet of this auto-generated frame!
 
@@ -70,15 +70,13 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
             widget.frameSetName->setText(textFs->name());
         }
         widget.existingRadio->setChecked(true);
-    }
-    else if (m_frameSets.count() == 0) { // no framesets on document
+    } else if (m_frameSets.count() == 0) { // no framesets on document
         QTreeWidgetItem *helpText = new QTreeWidgetItem(widget.framesList);
         helpText->setText(0, i18n("No framesets in document"));
         widget.framesList->setEnabled(false);
         widget.existingRadio->setEnabled(false);
         widget.newRadio->setChecked(true);
-    }
-    else {
+    } else {
         widget.newRadio->setChecked(true);
     }
     return true;
@@ -93,7 +91,7 @@ void KWFrameConnectSelector::nameChanged(const QString &text)
 {
     widget.newRadio->setChecked(true);
     foreach(QTreeWidgetItem *item, widget.framesList->selectedItems())
-        widget.framesList->setItemSelected(item, false);
+    widget.framesList->setItemSelected(item, false);
     foreach(QTreeWidgetItem *item, m_items) {
         if (item->text(0) == text) {
             widget.framesList->setCurrentItem(item);
@@ -111,8 +109,7 @@ void KWFrameConnectSelector::save()
         newFS->setName(widget.frameSetName->text());
         m_frame->setFrameSet(newFS);
         m_state->document()->addFrameSet(newFS);
-    }
-    else { // attach to (different) FS
+    } else { // attach to (different) FS
         QTreeWidgetItem *selected = widget.framesList->currentItem();
         Q_ASSERT(selected);
         int index = m_items.indexOf(selected);

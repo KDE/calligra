@@ -12,7 +12,8 @@
 
 #include <kcomponentdata.h>
 
-class Helper {
+class Helper
+{
 public:
     Helper() {
         pageManager = new KWPageManager(&doc);
@@ -32,11 +33,13 @@ public:
     KWPageStyle *pageStyle;
 };
 
-TestBasicLayout::TestBasicLayout() {
+TestBasicLayout::TestBasicLayout()
+{
     new KComponentData("TestBasicLayout");
 }
 
-void TestBasicLayout::testGetOrCreateFrameSet() {
+void TestBasicLayout::testGetOrCreateFrameSet()
+{
     Helper helper;
     m_frames.clear();
     KWPage *page = helper.pageManager->page(1);
@@ -59,7 +62,8 @@ void TestBasicLayout::testGetOrCreateFrameSet() {
     QCOMPARE(main, main2);
 }
 
-void TestBasicLayout::testCreateNewFramesForPage() {
+void TestBasicLayout::testCreateNewFramesForPage()
+{
     Helper helper;
     m_frames.clear();
     QVERIFY(m_frames.count() == 0);
@@ -81,7 +85,8 @@ void TestBasicLayout::testCreateNewFramesForPage() {
     QCOMPARE(main->frameCount(), 1);
 }
 
-void TestBasicLayout::testShouldHaveHeaderOrFooter() {
+void TestBasicLayout::testShouldHaveHeaderOrFooter()
+{
     Helper helper;
     m_frames.clear();
     KWFrameLayout bfl(helper.pageManager, m_frames);
@@ -150,7 +155,8 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter() {
 }
 
 // helper method (slot)
-void TestBasicLayout::addFS(KWFrameSet*fs) {
+void TestBasicLayout::addFS(KWFrameSet*fs)
+{
     m_frames.append(fs);
 }
 

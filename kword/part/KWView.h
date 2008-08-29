@@ -58,14 +58,16 @@ public:
      * @param document the document we show.
      * @param parent a parent widget we show ourselves in.
      */
-    KWView( const QString& viewMode, KWDocument *document, QWidget *parent );
+    KWView(const QString& viewMode, KWDocument *document, QWidget *parent);
     ~KWView();
 
     /**
      * return the KWDocument that owns this view.
      * @see KoView::document()
      */
-    KWDocument *kwdocument() const { return m_document; }
+    KWDocument *kwdocument() const {
+        return m_document;
+    }
 
     // interface KoView
     /// overwritten method from superclass
@@ -74,7 +76,9 @@ public:
     QWidget *canvas() const;
 
     /// returns true if this view has the snap-to-grid enabled.
-    bool snapToGrid() const { return m_snapToGrid; }
+    bool snapToGrid() const {
+        return m_snapToGrid;
+    }
 
     /**
      * Return the current canvas; much like canvas(), but this one does not downcast.
@@ -82,7 +86,9 @@ public:
     KWCanvas *kwcanvas() const;
 
     /// Return the view converter for this view.
-    KoViewConverter *viewConverter() { return &m_zoomHandler; }
+    KoViewConverter *viewConverter() {
+        return &m_zoomHandler;
+    }
 
     /// show a popup on the view, adding to it a list of actions
     void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);
@@ -113,13 +119,21 @@ private slots:
     /// snap to grid
     void toggleSnapToGrid();
     /** Move the selected frame above maximum 1 frame that is in front of it. */
-    void raiseFrame() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::RaiseShape); }
+    void raiseFrame() {
+        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::RaiseShape);
+    }
     /** Move the selected frame behind maximum 1 frame that is behind it */
-    void lowerFrame() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::LowerShape); }
+    void lowerFrame() {
+        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::LowerShape);
+    }
     /** Move the selected frame(s) to be in the front most position. */
-    void bringToFront() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::BringToFront); }
+    void bringToFront() {
+        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::BringToFront);
+    }
     /** Move the selected frame(s) to be behind all other frames */
-    void sendToBack() { adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack); }
+    void sendToBack() {
+        adjustZOrderOfSelectedFrames(KoShapeReorderCommand::SendToBack);
+    }
     /// turns the border display on/off
     void toggleViewFrameBorders(bool on);
     /// displays the KWPageSettingsDialog that allows to change properties of the entire page
@@ -127,7 +141,7 @@ private slots:
     /// convert current frame to an inline frame
     void inlineFrame();
     /// called if the zoom changed
-    void zoomChanged (KoZoomMode::Mode mode, qreal zoom);
+    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
     /// displays the KWStatisticsDialog
     void showStatisticsDialog();
     /// shows or hides the rulers

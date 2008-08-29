@@ -27,9 +27,9 @@
 //#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
-    : KoPageLayoutDialog(parent, page->pageStyle()->pageLayout()),
-    m_document(document),
-    m_page(page)
+        : KoPageLayoutDialog(parent, page->pageStyle()->pageLayout()),
+        m_document(document),
+        m_page(page)
 {
     Q_ASSERT(document);
     Q_ASSERT(page);
@@ -42,8 +42,7 @@ void KWPageSettingsDialog::accept()
 {
     if (applyToDocument()) {
         // TODO
-    }
-    else {
+    } else {
         KoText::Direction newDir = textDirection();
         KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, pageLayout(), newDir);
         m_document->addCommand(cmd);

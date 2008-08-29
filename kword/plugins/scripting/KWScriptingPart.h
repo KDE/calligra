@@ -29,15 +29,15 @@
 */
 class KWScriptingPart : public KoScriptingPart
 {
-        Q_OBJECT
-    public:
-        KWScriptingPart(QObject* parent, const QStringList&);
-        virtual ~KWScriptingPart();
-    private:
-        /// \internal d-pointer class.
-        class Private;
-        /// \internal d-pointer instance.
-        Private* const d;
+    Q_OBJECT
+public:
+    KWScriptingPart(QObject* parent, const QStringList&);
+    virtual ~KWScriptingPart();
+private:
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif

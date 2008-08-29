@@ -39,24 +39,24 @@ class KWQtSqlSerialDataSourceBase: public KWMailMergeDataSource
 {
     Q_OBJECT
     K_DCOP
-    public:
-    KWQtSqlSerialDataSourceBase(const KComponentData &inst,QObject *parent);
+public:
+    KWQtSqlSerialDataSourceBase(const KComponentData &inst, QObject *parent);
     ~KWQtSqlSerialDataSourceBase();
 
-   virtual bool showConfigDialog(QWidget *par,int action);
+    virtual bool showConfigDialog(QWidget *par, int action);
 
-    protected:
-	friend class KWQtSqlMailMergeOpen;
-	QString hostname;
-	QString username;
-	QString driver;
-	QString port;
-	QString databasename;
-	QPointer<QSqlDatabase> database;
-	QString DataBaseConnection;
-        static int connectionId;
-   k_dcop:
-     bool openDatabase();
+protected:
+    friend class KWQtSqlMailMergeOpen;
+    QString hostname;
+    QString username;
+    QString driver;
+    QString port;
+    QString databasename;
+    QPointer<QSqlDatabase> database;
+    QString DataBaseConnection;
+    static int connectionId;
+k_dcop:
+    bool openDatabase();
 
 };
 

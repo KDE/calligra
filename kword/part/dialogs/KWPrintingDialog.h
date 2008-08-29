@@ -28,12 +28,15 @@
 class KWView;
 class KWDocument;
 
-class KWPrintingDialog : public KoPrintingDialog {
+class KWPrintingDialog : public KoPrintingDialog
+{
 public:
     KWPrintingDialog(KWView *view);
     ~KWPrintingDialog();
 
-    void setClipToPage(bool on) { m_clipToPage = on; }
+    void setClipToPage(bool on) {
+        m_clipToPage = on;
+    }
 
     virtual QList<QWidget*> createOptionWidgets() const;
 

@@ -25,7 +25,8 @@
 #include <QWidget>
 #include <KDialog>
 
-class KWSelectBookmark : public QWidget {
+class KWSelectBookmark : public QWidget
+{
     Q_OBJECT
 public:
     explicit KWSelectBookmark(QList<QString> nameList, QWidget *parent = 0);
@@ -49,7 +50,8 @@ private:
     QWidget *parentWidget;
 };
 
-class KWSelectBookmarkDialog : public KDialog {
+class KWSelectBookmarkDialog : public KDialog
+{
     Q_OBJECT
 public:
     explicit KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);

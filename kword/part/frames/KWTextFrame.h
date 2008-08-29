@@ -31,7 +31,8 @@ class KWTextFrameSet;
 /**
  * A single frame capable of showing text from a KWTextFrameSet
  */
-class KWORD_EXPORT KWTextFrame : public KWFrame {
+class KWORD_EXPORT KWTextFrame : public KWFrame
+{
 public:
     /**
      * Constructor
@@ -41,7 +42,7 @@ public:
      */
     KWTextFrame(KoShape *shape, KWTextFrameSet *parent);
     ~KWTextFrame();
-    
+
     /**
      * Set the sorting Id that influences the sorting order of the text frames.
      * Text frames have an order in which they are used to flow the text in,
@@ -52,14 +53,18 @@ public:
      * @return the id of sorting, where -1 means sorting based on position, and heigher
      *      means later in the sequence.
      */
-    int sortingId() const { return m_sortingId; }
+    int sortingId() const {
+        return m_sortingId;
+    }
     /**
      * Set the sorting id of the frame in the frameset.
      * @param id of sorting, where -1 means sorting based on position, and heigher
      *      means later in the sequence.
      * @see sortingId()
      */
-    void setSortingId(int id) { m_sortingId = id; }
+    void setSortingId(int id) {
+        m_sortingId = id;
+    }
 
     /// A layout property. Return if the frame can autogrow. @see allowToGrow
     bool canAutoGrow();

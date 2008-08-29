@@ -44,14 +44,16 @@ public:
      *        will use to show the content
      * @param parent the parent view
      */
-    KWGui( const QString& viewMode, KWView *parent );
+    KWGui(const QString& viewMode, KWView *parent);
     ~KWGui();
 
     /**
      * Return the canvas child.
      * @return the canvas child.
      */
-    KWCanvas *canvas() const { return m_canvas; }
+    KWCanvas *canvas() const {
+        return m_canvas;
+    }
     /**
      * return the width of the canvas that is fully shown and not obscured behind scrollbars.
      * @return the amount of pixels visible
@@ -78,7 +80,9 @@ public:
     void updateRulers() const;
 
     /// return the canvasController that wraps this view
-    KoCanvasController *canvasController() const { return m_canvasController; }
+    KoCanvasController *canvasController() const {
+        return m_canvasController;
+    }
 
 private slots:
     void pageSetupChanged();
