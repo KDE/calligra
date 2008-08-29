@@ -314,6 +314,9 @@ void TestPageManager::pageInfo()
     layout = pageStylePage2->pageLayout();
     layout.pageEdge = 16.0;
     pageStylePage2->setPageLayout(layout);
+    QCOMPARE(page2->pageStyle(), pageStylePage2);
+    QCOMPARE(page2->pageStyle()->pageLayout().width, 50.0);
+    QCOMPARE(page2->pageStyle()->pageLayout().height, 100.0);
     QCOMPARE(page2->pageSide(), KWPage::Left);
     QCOMPARE(page2->leftMargin(), 16.0);
 
@@ -322,13 +325,11 @@ void TestPageManager::pageInfo()
     QCOMPARE(page2->leftMargin(), 16.0);
     QCOMPARE(page2->rightMargin(), 17.0);
 
-#if 0
     layout.left = 18;
     layout.right = 19;
     pageStylePage2->setPageLayout(layout);
-    QCOMPARE(page2->rightMargin(), 19.0);
-    QCOMPARE(page2->leftMargin(), 18.0);
-#endif
+    QCOMPARE(page2->leftMargin(), 16.0); //is that correct?
+    QCOMPARE(page2->rightMargin(), 17.0); //is that correct?
 }
 
 void TestPageManager::testClipToDocument()
