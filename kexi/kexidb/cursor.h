@@ -175,7 +175,7 @@ public:
     }
 
     /*! \return number of fields available for this cursor.
-     This never includes ROWID column or other internal coluns (e.g. lookup). */
+     This never includes ROWID column or other internal columns (e.g. lookup). */
     inline uint fieldCount() const {
         return m_query ? m_logicalFieldCount : m_fieldCount;
     }
