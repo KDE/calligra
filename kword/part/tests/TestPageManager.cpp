@@ -252,23 +252,25 @@ void TestPageManager::pageInfo()
     pageManager->addPageStyle(pageStylePage3);
     QCOMPARE(pageManager->pageStyle("Page 3")->pageLayout().width, 300.0);
 
-    KWPage *page1 = pageManager->appendPage();
+    KWPage *page1l = pageManager->appendPage();
+    KWPage *page1r = pageManager->appendPage();
     KWPage *page2 = pageManager->appendPage(pageStylePage2);
     KWPage *page3 = pageManager->appendPage(pageStylePage3);
 
-    QCOMPARE(pageManager->pageCount(), 3);
-    QCOMPARE(pageManager->page(0), page1);
-    QCOMPARE(pageManager->page(0)->pageStyle(), pageManager->defaultPageStyle());
-    QCOMPARE(pageManager->page(1)->pageStyle(), pageStylePage2);
-    QCOMPARE(pageManager->page(2)->pageStyle(), pageStylePage3);
+    QCOMPARE(pageManager->pageCount(), 4);
+    QCOMPARE(pageManager->page(0), page1l);
+    QCOMPARE(pageManager->page(1), page1r);
+    QCOMPARE(pageManager->page(1)->pageStyle(), pageManager->defaultPageStyle());
+    QCOMPARE(pageManager->page(2)->pageStyle(), pageStylePage2);
+    QCOMPARE(pageManager->page(3)->pageStyle(), pageStylePage3);
 
-    QCOMPARE(pageManager->topOfPage(2), 300.0);
-    QCOMPARE(pageManager->bottomOfPage(2), 900.0);
+    QCOMPARE(pageManager->topOfPage(3), 500.0);
+    QCOMPARE(pageManager->bottomOfPage(3), 1100.0);
 
     layout = pageStylePage3->pageLayout();
     layout.height = 500;
     pageStylePage3->setPageLayout(layout);
-    QCOMPARE(pageManager->bottomOfPage(3), 800.0);
+    QCOMPARE(pageManager->bottomOfPage(4), 1000.0);
 
     layout = pageManager->defaultPageStyle()->pageLayout();
     layout.top = 5;
@@ -284,42 +286,48 @@ void TestPageManager::pageInfo()
     layout.right = 12;
     pageStylePage2->setPageLayout(layout);
 
-    layout = page1->pageStyle()->pageLayout();
+    layout = page1l->pageStyle()->pageLayout(); //layout is valid for page1l and page1r
     layout.right = 14.0;
-    page1->pageStyle()->setPageLayout(layout);
-    QCOMPARE(page1->rightMargin(), 14.0);
+    page1l->pageStyle()->setPageLayout(layout);
+    QCOMPARE(page1l->rightMargin(), 14.0);
+    QCOMPARE(page1r->rightMargin(), 14.0);
 
-#if 0
     // Page Edge / Page Margin
     layout = pageManager->defaultPageStyle()->pageLayout();
     layout.pageEdge = 14.0;
     pageManager->defaultPageStyle()->setPageLayout(layout);
-    QCOMPARE(page1->pageSide(), KWPage::Right);
-    QCOMPARE(page1->rightMargin(), 14.0);
+    QCOMPARE(page1l->pageSide(), KWPage::Left);
+    QCOMPARE(page1r->pageSide(), KWPage::Right);
+    QCOMPARE(page1l->rightMargin(), 14.0);
+    QCOMPARE(page1l->leftMargin(), 14.0);
 
     layout.bindingSide = 15.0;
     pageManager->defaultPageStyle()->setPageLayout(layout);
-    QCOMPARE(page1->rightMargin(), 14.0);
-    QCOMPARE(page1->leftMargin(), 15.0);
-    //QCOMPARE(page2->rightMargin(), 12.0); // unchanged due to changes in page1
-    //QCOMPARE(page2->leftMargin(), 10.0);
+    QCOMPARE(page1l->leftMargin(), 14.0);
+    QCOMPARE(page1l->rightMargin(), 15.0);
+    QCOMPARE(page1r->leftMargin(), 15.0);
+    QCOMPARE(page1r->rightMargin(), 14.0);
+
+    QCOMPARE(page2->rightMargin(), 12.0); // unchanged due to changes in page1
+    QCOMPARE(page2->leftMargin(), 10.0);
 
     layout = pageStylePage2->pageLayout();
     layout.pageEdge = 16.0;
     pageStylePage2->setPageLayout(layout);
     QCOMPARE(page2->pageSide(), KWPage::Left);
     QCOMPARE(page2->leftMargin(), 16.0);
+
     layout.bindingSide = 17.0;
     pageStylePage2->setPageLayout(layout);
     QCOMPARE(page2->leftMargin(), 16.0);
     QCOMPARE(page2->rightMargin(), 17.0);
+
+#if 0
     layout.left = 18;
-    pageStylePage2->setPageLayout(layout);
-    //QCOMPARE(page2->leftMargin(), 18.0);
     layout.right = 19;
     pageStylePage2->setPageLayout(layout);
-    //QCOMPARE(page2->rightMargin(), 19.0);
-    //QCOMPARE(page2->leftMargin(), 18.0);
+    QCOMPARE(page2->rightMargin(), 19.0);
+    QCOMPARE(page2->leftMargin(), 18.0);
 #endif
 }
 
