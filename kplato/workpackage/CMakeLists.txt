@@ -61,6 +61,7 @@ kde4_add_library(kplatoworkapp  SHARED ${kplatoworkapp_LIB_SRCS})
 target_link_libraries(
     kplatoworkapp
     kplatoworkfactory
+    kplatokernel
     komain
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
