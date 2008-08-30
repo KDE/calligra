@@ -29,6 +29,7 @@
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
+#include <KoTextDocument.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -49,7 +50,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
         Q_ASSERT(styleManager);
-        layout->setStyleManager(styleManager);
+        KoTextDocument(m_document).setStyleManager(styleManager);
     }
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
@@ -69,7 +70,7 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
         Q_ASSERT(styleManager);
-        layout->setStyleManager(styleManager);
+        KoTextDocument(m_document).setStyleManager(styleManager);
     }
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
@@ -115,7 +116,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
             layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
             KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
             Q_ASSERT(styleManager);
-            layout->setStyleManager(styleManager);
+            KoTextDocument(m_document).setStyleManager(styleManager);
         }
         m_document->setDocumentLayout(layout);
         data->setDocument(m_document, false);

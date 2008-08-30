@@ -550,9 +550,10 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
     if (framesetElem.hasAttribute("protectContent"))
         fs->setProtectContent((bool)framesetElem.attribute("protectContent").toInt());
 
-    fs->document()->clear(); // Get rid of dummy paragraph (and more if any)
-
     QTextCursor cursor(fs->document());
+    cursor.select(QTextCursor::Document);
+    cursor.removeSelectedText();
+
     // <PARAGRAPH>
     bool firstParag = true;
     KoXmlElement paragraph;

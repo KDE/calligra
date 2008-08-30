@@ -8,7 +8,7 @@
 #include <KoListStyle.h>
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
-
+#include <KoTextDocument.h>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -40,7 +40,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText)
     layout = dynamic_cast<KWTextDocumentLayout*>(doc->documentLayout());
     Q_ASSERT(layout);
     styleManager = new KoStyleManager();
-    layout->setStyleManager(styleManager);
+    KoTextDocument(doc).setStyleManager(styleManager);
 
     QTextBlock block = doc->begin();
     if (initText.length() > 0) {
