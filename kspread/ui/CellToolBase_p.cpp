@@ -1120,10 +1120,10 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
     const QRectF visibleRect = sheet->cellCoordinatesToDocument(cellRange);
 
     /* these vars are used for clarity, the array for simpler function arguments  */
-    double left = visibleRect.left();
-    double top = visibleRect.top();
-    double right = visibleRect.right();
-    double bottom = visibleRect.bottom();
+    qreal left = visibleRect.left();
+    qreal top = visibleRect.top();
+    qreal right = visibleRect.right();
+    qreal bottom = visibleRect.bottom();
     if (sheet->layoutDirection() == Qt::RightToLeft) {
         const double docWidth = q->size().width();
         left = docWidth - visibleRect.right();

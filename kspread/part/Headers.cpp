@@ -1517,8 +1517,8 @@ void SelectAllButton::paintEvent( QPaintEvent* event )
 
     // the painter
     QPainter painter( this );
-    double zoomX;
-    double zoomY;
+    qreal zoomX;
+    qreal zoomY;
     m_canvasBase->viewConverter()->zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 

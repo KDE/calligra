@@ -137,19 +137,19 @@ public:
   /**
    * \return width of the text
    */
-  double textWidth() const;
+  qreal textWidth() const;
 
   /**
    * \return height of the text
    */
-  double textHeight() const;
+  qreal textHeight() const;
 
     /**
      * \return the rectangle the text covers
      */
     QRectF textRect() const;
 
-  QString testAnchor( const Cell& cell, double x, double y ) const;
+  QString testAnchor( const Cell& cell, qreal x, qreal y ) const;
 
     bool hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const;
 
@@ -164,8 +164,8 @@ public:
     bool isObscured() const;
     bool obscuresCells() const;
 
-    double cellHeight() const;
-    double cellWidth() const;
+    qreal cellHeight() const;
+    qreal cellWidth() const;
 
     bool dimensionFits() const;
 

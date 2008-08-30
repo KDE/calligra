@@ -41,7 +41,7 @@
 #include <KDChartChart>
 #include <KDChartBackgroundAttributes>
 
-typedef QVector<qreal> datalist;
+typedef QVector<double> datalist;
 
 KRChartData::KRChartData(QDomNode & element)
 {

@@ -564,7 +564,7 @@ QSizeF AdjustColumnRowManipulator::textSize( const QString& text, const Style& s
     {
         // Vertical text.
 
-        double width = 0.0;
+        qreal width = 0.0;
         for ( int i = 0; i < text.length(); i++ )
             width = qMax( width, fontMetrics.width( text.at( i ) ) );
 

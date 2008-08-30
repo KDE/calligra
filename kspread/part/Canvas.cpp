@@ -176,7 +176,7 @@ Doc* Canvas::doc() const
   return d->view->doc();
 }
 
-void Canvas::gridSize( double* horizontal, double* vertical ) const
+void Canvas::gridSize( qreal* horizontal, qreal* vertical ) const
 {
     *horizontal = doc()->map()->defaultColumnFormat()->width();
     *vertical = doc()->map()->defaultRowFormat()->height();
@@ -664,7 +664,7 @@ void Canvas::paintEvent( QPaintEvent* event )
     painter.save();
 
     painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
-    double zoomX, zoomY;
+    qreal zoomX, zoomY;
     viewConverter()->zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
 

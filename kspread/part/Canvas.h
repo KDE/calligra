@@ -108,7 +108,7 @@ public:
 
     // KoCanvasBase interface methods.
     /// reimplemented method from KoCanvasBase
-    virtual void gridSize( double* horizontal, double* vertical ) const;
+    virtual void gridSize( qreal* horizontal, qreal* vertical ) const;
     /// reimplemented method from KoCanvasBase
     virtual bool snapToGrid() const;
     /// reimplemented method from KoCanvasBase
