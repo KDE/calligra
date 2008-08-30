@@ -421,14 +421,13 @@ void KWTextDocumentLayout::layout()
                         outlines.append(new Outline(frame, matrix));
                     }
                 }
-                // set the page number of the shape.
+                // set the page for the shape.
                 KWPage *page = m_frameSet->pageManager()->page(currentShape);
+                Q_ASSERT(page);
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(currentShape->userData());
                 Q_ASSERT(data);
-                if (page) {
-                    data->setPageDirection(page->directionHint());
-                    data->setPageNumberProvider(page);
-                }
+                data->setPageDirection(page->directionHint());
+                data->setPage(page);
             }
         }
 

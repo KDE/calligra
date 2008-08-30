@@ -29,6 +29,7 @@
 
 #include <QList>
 #include <QPointF>
+#include <QPointer>
 
 class KWPage;
 class KoShape;
@@ -48,7 +49,7 @@ public:
     /**
      * return pageNumber of @p point, pagenumbers for a normal document start at 0.
      */
-    Q_SCRIPTABLE int pageNumber(const QPointF &point) const;
+    int pageNumber(const QPointF &point) const;
 
     /**
      * return pageNumber of the argument shape, pagenumbers for a normal document start at 0.
@@ -59,17 +60,17 @@ public:
      * return pageNumber of page with document-offset (in the Y direction) of @p ptY,
      * pagenumbers for a normal document start at 0.
      */
-    Q_SCRIPTABLE int pageNumber(qreal ptY) const;
+    int pageNumber(qreal ptY) const;
 
     /**
      * return total number of pages in this document.
      */
-    Q_SCRIPTABLE int pageCount() const;
+    int pageCount() const;
 
     /**
      * return the KWPage of a specific page number. Returns 0 if page does not exist.
      */
-    Q_SCRIPTABLE KWPage* page(int pageNumber) const;
+    KWPage* page(int pageNumber) const;
 
     /**
      * return the KWPage instance where the rect is on. Returns 0 if page does not exist.
@@ -79,7 +80,7 @@ public:
     /**
      * return the KWPage instance where the point is on. Returns 0 if page does not exist.
      */
-    Q_SCRIPTABLE KWPage* page(const QPointF &point) const;
+    KWPage* page(const QPointF &point) const;
 
     /**
      * return the KWPage instance of the y-coordinate in the document. Returns 0 if
@@ -110,7 +111,7 @@ public:
      * @param pageNumber page number of the new page
      * @param pageStyle the page style to use for the new page
      */
-    Q_SCRIPTABLE KWPage* insertPage(int pageNumber, KWPageStyle *pageStyle = 0);
+    KWPage* insertPage(int pageNumber, KWPageStyle *pageStyle = 0);
 
     /**
      * Insert the page instance at the specified position in the document. Note that it is preferred
@@ -123,10 +124,10 @@ public:
      * Append a new page at the end of the document
      * @param pageStyle the page style to use for the new page
      */
-    Q_SCRIPTABLE KWPage* appendPage(KWPageStyle *pageStyle = 0);
+    KWPage* appendPage(KWPageStyle *pageStyle = 0);
 
     /// Remove the page with @p pageNumber renumbering all pages after pages already added
-    Q_SCRIPTABLE void removePage(int pageNumber);
+    void removePage(int pageNumber);
 
     /// Remove @p page renumbering all pages after pages already added
     void removePage(KWPage *page);
@@ -207,7 +208,7 @@ public:
      * document will take over ownership and takes care of deleting the instance
      * one the document itself got deleted.
      */
-    Q_SCRIPTABLE KWPageStyle* addPageStyle(const QString &name);
+    KWPageStyle* addPageStyle(const QString &name);
 
     /**
      * Returns all pagestyles.
@@ -218,17 +219,17 @@ public:
      * Returns the \a KWPageStyle known under the name \p name or NULL if the
      * document has no such page style.
      */
-    Q_SCRIPTABLE KWPageStyle *pageStyle(const QString &name) const;
+    KWPageStyle *pageStyle(const QString &name) const;
 
     /**
      * Return the default page style. This equals to pageStyle("Standard").
      */
-    Q_SCRIPTABLE KWPageStyle* defaultPageStyle() const;
+    KWPageStyle* defaultPageStyle() const;
 
     /**
      * Remove all page style and clears the default one.
      */
-    Q_SCRIPTABLE void clearPageStyle();
+    void clearPageStyle();
 
 private:
     /// helper method for the topOfPage and bottomOfPage

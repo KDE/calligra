@@ -39,7 +39,13 @@ KWPageManager::KWPageManager(KWDocument* document)
 KWPageManager::~KWPageManager()
 {
     qDeleteAll(m_pageStyle);
-    qDeleteAll(m_pageList);
+
+    // prevent crashes on shutdown of KWord what is needed to make the dirty hack
+    // in the KWPage dtor working to inform us if something weird goes on with our
+    // m_pageList list.
+    QList<KWPage*> delpages = m_pageList;
+    m_pageList.clear();
+    qDeleteAll(delpages);
 }
 
 int KWPageManager::pageNumber(const QPointF &point) const
@@ -216,7 +222,7 @@ QPointF KWPageManager::clipToDocument(const QPointF &point)
 
 QList<KWPage*> KWPageManager::pages() const
 {
-    return QList<KWPage*> (m_pageList);
+    return m_pageList;
 }
 
 // **** PageList ****
