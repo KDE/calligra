@@ -154,7 +154,7 @@ Exiv2::Value* arrayToExivValue(const KisMetaData::Value& value)
 {
     Exiv2::ValueType<_TYPE_>* ev = new Exiv2::ValueType<_TYPE_>();
     for (int i = 0; i < value.asArray().size(); ++i) {
-        ev->value_.push_back(value.asVariant().value<_TYPE_>());
+        ev->value_.push_back(qVariantValue<_TYPE_>(value.asVariant()));
     }
     return ev;
 }
