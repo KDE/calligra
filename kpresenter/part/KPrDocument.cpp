@@ -27,6 +27,7 @@
 #include "KPrFactory.h"
 #include "KPrViewModeNotes.h"
 #include "KPrSoundCollection.h"
+#include "pagelayout/KPrPageLayouts.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
 #include <KoShapeManager.h>
@@ -49,6 +50,8 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
 
     KPrSoundCollection *soundCol = new KPrSoundCollection();
     insertIntoDataCenterMap("SoundCollection", soundCol);
+
+    insertIntoDataCenterMap( PageLayouts, new KPrPageLayouts() );
 
     loadKPrConfig();
 }

@@ -31,6 +31,8 @@
 #include "KPrDocument.h"
 #include "KPrPageApplicationData.h"
 #include "KPrNotes.h"
+#include "pagelayout/KPrPageLayout.h"
+#include "pagelayout/KPrPageLayouts.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 
@@ -41,6 +43,7 @@ class KPrPage::Private
 public:
     Private( KPrPage * page, KPrDocument * document )
     : pageNotes( new KPrNotes( page, document ) )
+    , layout( 0 )
     {}
 
     ~Private()
@@ -49,6 +52,7 @@ public:
     }
 
     KPrNotes * pageNotes;
+    KPrPageLayout * layout;
 };
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
@@ -105,6 +109,17 @@ void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paCont
 void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
     KoPAPage::loadOdfPageTag( element, loadingContext );
+
+    if ( element.hasAttributeNS( KoXmlNS::presentation, "presentation-page-layout-name" ) ) {
+        KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( loadingContext.dataCenter( PageLayouts ) );
+        Q_ASSERT( layouts );
+        if ( layouts ) {
+            kDebug(33001) << "layout" << element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
+            QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
+            QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
+            d->layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
+        }
+    }
 
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
 
