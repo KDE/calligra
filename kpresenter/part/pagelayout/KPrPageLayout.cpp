@@ -50,7 +50,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
 
     KoXmlElement child;
     forEachElement( child, element ) {
-        if ( child.tagName() == "placeholder" && element.namespaceURI() == KoXmlNS::presentation ) {
+        if ( child.tagName() == "placeholder" && child.namespaceURI() == KoXmlNS::presentation ) {
             KPrPlaceholder * placeholder = new KPrPlaceholder;
             if ( placeholder->loadOdf( child, pageRect ) ) {
                 m_placeholders.append( placeholder );
@@ -61,7 +61,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
             }
         }
         else {
-            kWarning(33000) << "unknown tag" << child.tagName() << "when loading page layout";
+            kWarning(33000) << "unknown tag" << child.namespaceURI() << child.tagName() << "when loading page layout";
         }
     }
 
