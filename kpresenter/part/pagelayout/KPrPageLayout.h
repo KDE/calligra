@@ -23,6 +23,7 @@
 #include <QList>
 #include <QString>
 
+class QRectF;
 class KPrPlaceholder;
 class KoXmlElement;
 class KoPALoadingContext;
@@ -34,7 +35,14 @@ public:
     KPrPageLayout();
     ~KPrPageLayout();
 
-    bool loadOdf( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    /**
+     * Load the page layout
+     *
+     * @param
+     * @param
+     * @return 
+     */
+    bool loadOdf( const KoXmlElement &element, const QRectF & pageRect );
 
     /**
      * save the page layout to odf

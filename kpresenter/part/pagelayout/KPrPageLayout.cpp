@@ -39,7 +39,7 @@ KPrPageLayout::~KPrPageLayout()
     qDeleteAll( m_placeholders );
 }
 
-bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &loadingContext )
+bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRect )
 {
     if ( element.hasAttributeNS( KoXmlNS::style, "display-name" ) ) {
         m_name = element.attributeNS( KoXmlNS::style, "display-name" );
@@ -52,7 +52,7 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &lo
     forEachElement( child, element ) {
         if ( child.tagName() == "placeholder" && element.namespaceURI() == KoXmlNS::presentation ) {
             KPrPlaceholder * placeholder = new KPrPlaceholder;
-            if ( placeholder->loadOdf( child, QRectF( 0, 0, 100, 100 ) /* TODO */ ) ) {
+            if ( placeholder->loadOdf( child, pageRect ) ) {
                 m_placeholders.append( placeholder );
             }
             else {
@@ -76,9 +76,13 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, KoPALoadingContext &lo
 QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
 {
     KoGenStyle style( KoGenStyle::StylePresentationPageLayout );
+
+    style.addAttribute( "style:display-name", m_name );
+
     QBuffer buffer;
     buffer.open( IO_WriteOnly );
     KoXmlWriter elementWriter( &buffer );
+
     QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
     for ( ; it != m_placeholders.end(); ++it ) {
         ( *it )->saveOdf( elementWriter );

@@ -22,23 +22,42 @@
 
 #include <QMap>
 #include <QString>
+#include <KoDataCenter.h>
 
+class QRectF;
 class KPrPageLayout;
 class KoPALoadingContext;
 class KoPASavingContext;
 
-class KPrPageLayouts
+#define PageLayouts "PageLayouts"
+
+class KPrPageLayouts : public KoDataCenter
 {
 public:
     KPrPageLayouts();
     ~KPrPageLayouts();
 
-    bool saveOdf( KoPASavingContext & context );
-    void loadOdf( KoPALoadingContext &loadingContext );
+    /// reimplemented
+    virtual bool completeLoading( KoStore *store );
+    /// reimplemented
+    virtual bool completeSaving( KoStore *store, KoXmlWriter * manifestWriter );
 
-    KPrPageLayout * pageLayout( const QString & name );
+    bool saveOdf( KoPASavingContext & context );
+    // loadOdf is not implemented as loading is done by pageLayout and TODO
+
+    /**
+     *
+     */
+    KPrPageLayout * pageLayout( const QString & name, KoPALoadingContext & loadingContext, const QRectF & pageRect );
+
+    /**
+     * load all not yet loaded styles and add application styles
+     */
+    // TODO
 
 private:
+    // the string is the style name assosiated with the page layout when the file was 
+    // loaded from file
     QMap<QString, KPrPageLayout *> m_pageLayouts;
 };
 
