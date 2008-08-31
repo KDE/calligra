@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 project(openexr)
 
 include_directories(
