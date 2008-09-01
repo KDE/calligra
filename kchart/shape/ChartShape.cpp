@@ -771,7 +771,12 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
     }
     
     QString url = objectElement.attributeNS( KoXmlNS::xlink, "href" );
-    
+
+    // it can happes that the url is empty e.g. when it is  presentation:placeholder 
+    if ( url.isEmpty() ) {
+        return true;
+    }
+
     QString tmpURL;
     if ( url[0] == '#' )
         url = url.mid( 1 );
