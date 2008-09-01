@@ -23,7 +23,6 @@ target_link_libraries(
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
-    ${KDE4_KROSSUI_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )
