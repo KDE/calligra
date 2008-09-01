@@ -38,6 +38,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
+#include <KoStyleManager.h>
 
 #include <QBuffer>
 #include <KTemporaryFile>
@@ -71,7 +72,7 @@ public:
         Q_ASSERT(shapedata);
 
         writer.startElement(tag);
-        shapedata->saveOdf(context, 0, -1, false);
+        shapedata->saveOdf(context, 0, -1);
         writer.endElement();
 
         return content;
@@ -152,12 +153,16 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         return false;
 
     KoGenStyles mainStyles;
-    KoXmlWriter * bodyWriter = odfStore.bodyWriter();
+
+    // Save the named styles
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(d->document->dataCenterMap()["StyleManager"]);
+    styleManager->saveOdf(mainStyles);
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
     d->saveHeaderFooter(embeddedSaver, mainStyles);
 
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
     KoShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver);
 
     bodyWriter->startElement("office:body");
