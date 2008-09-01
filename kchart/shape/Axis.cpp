@@ -631,7 +631,9 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         }
         
         if ( oldModel && *oldModel ) {
-            if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() ) {
+            const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
+                                     ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
+            if ( dataSetCount == (*oldModel)->dataDimensions() ) {
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
                 if ( plane ) {
                     plane->takeDiagram( (*oldDiagram) );
@@ -1092,25 +1094,27 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         dataSet->setKdDiagram( newDiagram );
         newModel->addDataSet( dataSet );
         if ( oldModel && *oldModel ) {
-	    if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() ) {
+            const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
+                                     ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
+            if ( dataSetCount == (*oldModel)->dataDimensions() ) {
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
-		if ( plane ) {
-		    plane->takeDiagram( (*oldDiagram) );
-                    if ( plane->diagrams().size() == 0 )
-                        d->plotArea->kdChart()->takeCoordinatePlane( plane );
-		}
-		if ( d->plotArea->parent()->legend()->kdLegend() )
-		    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
-		Q_ASSERT( oldDiagram );
-		Q_ASSERT( *oldDiagram );
-		if ( *oldDiagram )
-		    delete *oldDiagram;
-		delete *oldModel;
-		*oldModel = 0;
-		*oldDiagram = 0;
-	    }
-	    else
-		(*oldModel)->removeDataSet( dataSet );
+                if ( plane ) {
+                    plane->takeDiagram( (*oldDiagram) );
+                            if ( plane->diagrams().size() == 0 )
+                                d->plotArea->kdChart()->takeCoordinatePlane( plane );
+                }
+                if ( d->plotArea->parent()->legend()->kdLegend() )
+                    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+                Q_ASSERT( oldDiagram );
+                Q_ASSERT( *oldDiagram );
+                if ( *oldDiagram )
+                    delete *oldDiagram;
+                delete *oldModel;
+                *oldModel = 0;
+                *oldDiagram = 0;
+            }
+            else
+            (*oldModel)->removeDataSet( dataSet );
         }
         dataSet->setGlobalChartType( chartType );
     }
