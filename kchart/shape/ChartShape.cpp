@@ -39,6 +39,7 @@
 // KOffice
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoStore.h>
 #include <KoDocument.h>
 #include <KoShapeSavingContext.h>
@@ -338,8 +339,8 @@ void ChartShape::Private::showLabel( KoShape *label )
 }
 
 ChartShape::ChartShape()
-    : d ( new Private( this ) )
-    , KoFrameShape( KoXmlNS::draw, "object" )
+    : KoFrameShape( KoXmlNS::draw, "object" )
+    , d ( new Private( this ) )
 {
     setShapeId( ChartShapeId );
     KoShape::setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
@@ -1017,16 +1018,26 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingCo
 
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    // Create document
-    // Add document using KoEmbeddedDocumentSaver::embedDocument
-    // That's it =)
     Q_ASSERT( d->plotArea );
     
     KoXmlWriter&  bodyWriter = context.xmlWriter();
+    
+    // Check if we're saving to a chart document. If not, embed a chart document.
+    // ChartShape::saveOdf() will then be called again later, when the current document
+    // saves the embedded documents.
+    if ( QString( bodyWriter.tagHierarchy().last() ) != "office:chart" ) {
+        bodyWriter.startElement( "draw:frame" );
+        saveOdfAttributes( context, OdfTransformation | OdfSize );
+
+        bodyWriter.startElement( "draw:object" );
+        context.embeddedSaver().embedDocument( bodyWriter, d->document );
+        bodyWriter.endElement(); // draw:object
+
+        bodyWriter.endElement(); // draw:frame
+        return;
+    }
     KoGenStyles&  mainStyles( context.mainStyles() );
-
-    kError(32001) << "----------------------------------------------------------------";
-
+    
     bodyWriter.startElement( "chart:chart" );
 
     // 1. Write the chart type.
@@ -1062,7 +1073,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 
     // 7. Save the data
     saveOdfData( bodyWriter, mainStyles );
-
+    
     bodyWriter.endElement(); // chart:chart
 }
 

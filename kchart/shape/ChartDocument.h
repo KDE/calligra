@@ -45,7 +45,7 @@ public:
     bool loadOdf( KoOdfReadStore &odfStore );
     bool loadXML( QIODevice *device, const KoXmlDocument &doc );
     
-    bool saveOdf( KoDocument::SavingContext &context );
+    bool saveOdf( SavingContext &context );
     KoView *createViewInstance( QWidget *parent );
     
     void paintContent( QPainter &painter, const QRect &rect ); 

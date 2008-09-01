@@ -29,12 +29,19 @@
 
 // KOffice
 #include <KoDocument.h>
+#include <KoXmlWriter.h>
 #include <KoOdfReadStore.h>
-#include <KoView.h>
+#include <KoOdfWriteStore.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
-#include <KoOdfLoadingContext.h>
+#include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoView.h>
+#include <KComponentData>
+#include <KDebug>
 
 // KChart
 #include "ChartShape.h"
@@ -64,6 +71,10 @@ ChartDocument::ChartDocument( ChartShape *parent )
     , d ( new Private )
 {
     d->parent = parent;
+    // Needed by KoDocument::nativeOasisMimeType().
+    // KoEmbeddedDocumentSaver uses that method to
+    // get the mimetype of the embedded document.
+    setComponentData( KComponentData( "kchart" ) );
 }
 
 ChartDocument::~ChartDocument()
@@ -75,14 +86,20 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
 {
     KoXmlDocument doc = odfStore.contentDoc();
     KoXmlNode bodyNode = doc.documentElement().namedItemNS( KoXmlNS::office, "body" );
-    if ( bodyNode.isNull() )
+    if ( bodyNode.isNull() ) {
+        kError(35001) << "No <office:body> element found.";
         return false;
+    }
     KoXmlNode chartElementParentNode = bodyNode.namedItemNS( KoXmlNS::office, "chart" );
-    if ( chartElementParentNode.isNull() )
+    if ( chartElementParentNode.isNull() ) {
+        kError(35001) << "No <office:chart> element found.";
         return false;
+    }
     KoXmlElement chartElement = chartElementParentNode.namedItemNS( KoXmlNS::chart, "chart" ).toElement();
-    if ( chartElement.isNull() )
+    if ( chartElement.isNull() ) {
+        kError(35001) << "No <chart:chart> element found.";
         return false;
+    }
     KoOdfLoadingContext odfLoadingContext( odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext context( odfLoadingContext, 0 );
 
@@ -94,9 +111,49 @@ bool ChartDocument::loadXML( QIODevice *, const KoXmlDocument &doc )
     return false;
 }
 
-bool ChartDocument::saveOdf( KoDocument::SavingContext &context )
+bool ChartDocument::saveOdf( SavingContext &context )
 {
-    return false;
+    KoOdfWriteStore &odfStore = context.odfStore;
+    KoStore *store = odfStore.store();
+    KoXmlWriter *manifestWriter = odfStore.manifestWriter();
+    KoXmlWriter *contentWriter = odfStore.contentWriter();
+    if ( !contentWriter )
+        return false;
+    
+    KoGenStyles mainStyles;
+    KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+    if ( !bodyWriter )
+        return false;
+    
+    KoEmbeddedDocumentSaver embeddedSaver = context.embeddedSaver;
+    
+    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedSaver );
+    
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:chart" );
+    
+    d->parent->saveOdf( savingContext );
+    
+    bodyWriter->endElement(); // office:chart
+    bodyWriter->endElement(); // office:body
+
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+    odfStore.closeContentWriter();
+
+    // add manifest line for content.xml
+    manifestWriter->addManifestEntry( url().path() + "/content.xml", "text/xml" );
+    // add manifest line for styles.xml
+    manifestWriter->addManifestEntry( url().path() + "/styles.xml", "text/xml" );
+
+    // save the styles.xml
+    if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
+        return false;
+
+    if ( !savingContext.saveDataCenter( store, manifestWriter ) ) {
+        return false;
+    }
+    
+    return true;
 }
 
 KoView *ChartDocument::createViewInstance( QWidget *parent )
