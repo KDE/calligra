@@ -216,7 +216,7 @@ bool SerializeCollector::initializeGlobalPointers(
                                                 objectName,
                                                 InitializedPointersMapItem(
                                                         new AttributesModel(0, 0) ) );
-                                        // Only external attribute-models are instantiated explicitely,
+                                        // Only external attribute-models are instantiated explicitly,
                                         // the other objects are found in their respective diagrams.
                                     }
                                 }

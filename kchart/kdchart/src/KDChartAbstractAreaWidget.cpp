@@ -119,7 +119,7 @@ void AbstractAreaWidget::paintIntoRect( QPainter& painter, const QRect& rect )
 
 /*
     // make sure, the contents of the widget have been set up,
-    // so we get a usefull geometry:
+    // so we get a useful geometry:
     needSizeHint();
 
     const QRect oldGeometry( layout()->geometry() );

@@ -233,14 +233,14 @@ namespace KDChart {
          * where they are put layouting wise: The first is the reference plane. If
          * such a reference plane is set, on a plane, it will use the same cell in the
          * layout as that one. In addition to this, planes can share an axis. In that case
-         * they will be layed out in relation to each other as suggested by the position
+         * they will be laid out in relation to each other as suggested by the position
          * of the axis. If, for example Plane1 and Plane2 share an axis at position Left,
          * that will result in the layout: Axis Plane1 Plane 2, vertically. If Plane1
          * also happens to be Plane2's reference plane, both planes are drawn over each
          * other. The reference plane concept allows two planes to share the same space
          * even if neither has any axis, and in case there are shared axis, it is used
          * to decided, whether the planes should be painted on top of each other or
-         * layed out vertically or horizontally next to each other.
+         * laid out vertically or horizontally next to each other.
          * @return The reference coordinate plane associated with this one.
          */
         AbstractCoordinatePlane * referenceCoordinatePlane() const;

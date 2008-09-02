@@ -159,7 +159,7 @@ namespace KDChart {
 
         /**
          * @return The largest and smallest visible horizontal value space
-         * value. If this is not explicitely set,or if both values are the same,
+         * value. If this is not explicitly set,or if both values are the same,
          * the plane will use the union of the dataBoundaries of all
          * associated diagrams.
          * \see KDChart::AbstractDiagram::dataBoundaries
@@ -168,7 +168,7 @@ namespace KDChart {
 
         /**
          * @return The largest and smallest visible horizontal value space
-         * value. If this is not explicitely set, or if both values are the same,
+         * value. If this is not explicitly set, or if both values are the same,
          * the plane will use the union of the dataBoundaries of all
          * associated diagrams.
          * \see KDChart::AbstractDiagram::dataBoundaries

@@ -947,7 +947,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                 // old code:
                 // bool painttick = true;
 
-                //Dont paint more ticks than we need
+                //Do not paint more ticks than we need
                 //when diagram type is Bar
                 if (  centerAbscissaTicks && i == maxValueX )
                     painttick = false;
@@ -964,7 +964,7 @@ void CartesianAxis::paintCtx( PaintContext* context )
                     if( bIsVisibleLabel ){
                         if ( isLogarithmicX )
                             labelItem->setText( customizedLabel(QString::number( i ) ) );
-                        /* We dont need that
+                        /* We do not need that
                         * it causes header labels to be skipped even if there is enough
                         * space for them to displayed.
                         * Commenting for now - I need to test more in details - Let me know if I am wrong here.

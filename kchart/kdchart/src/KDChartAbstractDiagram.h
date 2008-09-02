@@ -113,7 +113,7 @@ namespace KDChart {
          * Associate an AttributesModel with this diagram. Note that
          * the diagram does _not_ take ownership of the AttributesModel.
          * This should thus only be used with AttributesModels that
-         * have been explicitely created by the user, and are owned
+         * have been explicitly created by the user, and are owned
          * by her. Setting an AttributesModel that is internal to
          * another diagram is an error.
          *
@@ -245,7 +245,7 @@ namespace KDChart {
         void setHidden( bool hidden );
 
         /**
-         * Retrieve the hidden status speficied globally. This will fall
+         * Retrieve the hidden status specified globally. This will fall
          * back automatically to the default settings ( = not hidden), if there
          * are no specific settings.
          * @return The global hidden status.
@@ -293,7 +293,7 @@ namespace KDChart {
         void setDataValueAttributes( const DataValueAttributes & a );
 
         /**
-         * Retrieve the DataValueAttributes speficied globally. This will fall
+         * Retrieve the DataValueAttributes specified globally. This will fall
          * back automatically to the default settings, if there
          * are no specific settings.
          * @return The global DataValueAttributes.

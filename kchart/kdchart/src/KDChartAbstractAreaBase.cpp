@@ -179,7 +179,7 @@ void AbstractAreaBase::paintFrameAttributes( QPainter& painter, const QRect& rec
 
     if( !attributes.isVisible() ) return;
 
-    // Note: We set the brush to NoBrush explicitely here.
+    // Note: We set the brush to NoBrush explicitly here.
     //       Otherwise we might get a filled rectangle, so any
     //       previously drawn background would be overwritten by that area.
 

@@ -63,7 +63,7 @@ MainWindow::MainWindow( QWidget* parent ) :
     // register our own serializer for saving / loading the Y axis:
     KDChart::registerElementSerializer<
             AdjustedCartesianAxisSerializer,
-            AdjustedCartesianAxis >( 0 ); // will be un-registred in ~Mainwindow()
+            AdjustedCartesianAxis >( 0 ); // will be un-registered in ~Mainwindow()
 
 
     // Set up the diagrams

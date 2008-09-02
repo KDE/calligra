@@ -350,7 +350,7 @@ void LeveyJenningsDiagram::setModel( QAbstractItemModel* model )
 }
 
 // TODO: This is the 'easy' solution
-// eruate, wheter this is enough or we need some better one or even boost here
+// eruate, whether this is enough or we need some better one or even boost here
 void LeveyJenningsDiagram::calculateMeanAndStandardDeviation() const
 {
     QVector< double > values;

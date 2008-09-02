@@ -302,7 +302,7 @@ bool LegendsSerializer::Private::doParseLegend( const QDomElement& container, Le
                     bOK = false;
                 }
             } else if( tagName == "TextsMap" ) {
-                // parse the map of explicitely set texts
+                // parse the map of explicitly set texts
                 QDomNode node2 = element.firstChild();
                 while( !node2.isNull() ) {
                     QDomElement ele2 = node2.toElement();

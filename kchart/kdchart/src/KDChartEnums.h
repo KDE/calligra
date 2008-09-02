@@ -56,7 +56,7 @@ public:
       \note Granularity with can be set for Linear axis calculation mode only,
       there is no way to specify a step width for Logarithmic axes.
 
-      Value occuring in the GranularitySequence names only are showing
+      Value occurring in the GranularitySequence names only are showing
       their respective relation ship.  For real data they will most times not
       be used directly, but be multiplied by positive (or negative, resp.)
       powers of ten.

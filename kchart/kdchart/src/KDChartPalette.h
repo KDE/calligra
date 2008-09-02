@@ -66,7 +66,7 @@ public:
     static const Palette& subduedPalette();
     static const Palette& rainbowPalette();
 
-    /** @return wether this represents a valid palette. For a palette to be
+    /** @return whether this represents a valid palette. For a palette to be
      * valid it needs to have at least one brush associated. */
     bool isValid() const;
 

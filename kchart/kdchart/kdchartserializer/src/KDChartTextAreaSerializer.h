@@ -67,7 +67,7 @@ namespace KDChart {
          * if the respective header/footer was found in the list of global elements.
          *
          * This method is called transparently by the Serializer, so you should
-         * not need to call it explicitely.
+         * not need to call it explicitly.
          *
          * In case still want to call it just make sure that you have called
          * \c KDChart::SerializeCollector::instance()->initializeParsedGlobalPointers()

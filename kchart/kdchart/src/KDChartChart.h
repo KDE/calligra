@@ -59,7 +59,7 @@ namespace KDChart {
      * or footers. It takes ownership of all these elements when they are assigned
      * to it. Each diagram is associated with a coordinate plane, of which the chart
      * can have more than one. The coordinate planes (and thus the associated diagrams)
-     * can be layed out in various ways.
+     * can be laid out in various ways.
      *
      * The Chart class makes heavy use of the Qt Interview framework for model/view
      * programming, and thus requires data to be presented to it in a QAbstractItemModel

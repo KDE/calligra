@@ -586,7 +586,7 @@ Widget::SubType Widget::subType() const
 
 
 /**
- * Checks, wheter the given width matches with the one used until now.
+ * Checks, whether the given width matches with the one used until now.
  */
 bool Widget::checkDatasetWidth( int width )
 {
