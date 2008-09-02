@@ -48,7 +48,7 @@ target_link_libraries(
     kdchart
     flake
     kotext
-    kstore
+    kostore
     komain
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
@@ -65,7 +65,7 @@ target_link_libraries(
     chartshapelib
     kdchart
     flake
-    kstore
+    kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}

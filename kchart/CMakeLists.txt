@@ -45,7 +45,7 @@ target_link_libraries(kchartcommon
 	kdchart
 	chartshapelib
     komain
-    kstore
+    kostore
     flake
     ${KDE4_KPARTS_LIBS}
 	${KDE4_KDE3SUPPORT_LIBS}

@@ -7,7 +7,7 @@ kde4_add_plugin(Filterkpr2odf WITH_PREFIX ${Filterkpr2odf_PART_SRCS})
 target_link_libraries(
     Filterkpr2odf
     komain
-    kstore
+    kostore
     koodf
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}

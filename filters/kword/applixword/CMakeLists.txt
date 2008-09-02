@@ -15,7 +15,7 @@ kde4_add_plugin(applixwordimport WITH_PREFIX ${applixwordimport_PART_SRCS})
 target_link_libraries(
     applixwordimport
     komain
-    kstore
+    kostore
     ${KDE4_KDECORE_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}

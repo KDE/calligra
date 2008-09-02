@@ -26,7 +26,7 @@ kde4_add_plugin(kwordkword1dot3import WITH_PREFIX ${kwordkword1dot3import_PART_S
 
 target_link_libraries(
     kwordkword1dot3import
-    kstore
+    kostore
     komain
     koodf
     ${KDE4_KDECORE_LIBS}

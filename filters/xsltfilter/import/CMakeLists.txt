@@ -15,7 +15,7 @@ kde4_add_plugin(xsltimport WITH_PREFIX ${xsltimport_PART_SRCS})
 target_link_libraries(
     xsltimport
     komain
-    kstore
+    kostore
     ${LIBXML2_LIBRARIES}
     ${LIBXSLT_LIBRARIES}
     ${KDE4_KIO_LIBS}

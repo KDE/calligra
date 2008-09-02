@@ -17,7 +17,7 @@ target_link_libraries(
     karboncommon
     karbonui
     flake
-    kstore
+    kostore
     komain
     ${KDE4_KDECORE_LIBS}
     ${QT_QTCORE_LIBRARY}
@@ -43,7 +43,7 @@ target_link_libraries(
     karboncommon
     karbonui
     kotext
-    kstore
+    kostore
     komain
     flake
     ${KDE4_KDECORE_LIBS}

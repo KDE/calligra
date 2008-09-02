@@ -21,7 +21,7 @@ kde4_add_plugin(kchartgenericimageexport WITH_PREFIX ${kchartgenericimageexport_
 target_link_libraries(
     kchartgenericimageexport 
     kchartcommon
-    kstore
+    kostore
     komain
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}

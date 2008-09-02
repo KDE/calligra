@@ -16,7 +16,7 @@ target_link_libraries(
     koguiutils
     karboncommon
     karbonui
-    kstore
+    kostore
     flake
     komain
     ${KDE4_KDECORE_LIBS}

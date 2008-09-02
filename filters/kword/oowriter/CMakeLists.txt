@@ -18,7 +18,7 @@ target_link_libraries(
     oowriterimport
     komain
     koodf
-    kstore
+    kostore
     ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
@@ -41,7 +41,7 @@ target_link_libraries(
     oowriterexport
     komain
     kwordexportfilters
-    kstore
+    kostore
     koodf
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}

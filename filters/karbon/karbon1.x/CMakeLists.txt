@@ -17,7 +17,7 @@ target_link_libraries(
     koguiutils
     kotext
     flake
-    kstore
+    kostore
     komain
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}

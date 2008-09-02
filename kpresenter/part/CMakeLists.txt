@@ -86,7 +86,7 @@ target_link_libraries(
     kotext
     kopageapp
     komain
-    kstore
+    kostore
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}

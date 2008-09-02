@@ -13,7 +13,7 @@ target_link_libraries(
     kpresentereventactions
     kpresenterprivate
     flake
-    kstore
+    kostore
     ${KDE4_KIO_LIBRARY}
     ${KDE4_PHONON_LIBRARY}
     ${QT_QTCORE_LIBRARY}
