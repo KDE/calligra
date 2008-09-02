@@ -34,7 +34,7 @@ class KivioDocument : public KoPADocument
         virtual KoOdf::DocumentType documentType() const;
 
     signals:
-        /// Emited when the gui needs to be updated.
+        /// Emitted when the gui needs to be updated.
         void updateGui();
 
     protected:

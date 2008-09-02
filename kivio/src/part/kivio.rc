@@ -55,7 +55,7 @@
 
     <Menu name="default_canvas_popup">
         <ActionList name="toolproxy_action_list"/>
-        <Seperator/>
+        <Separator/>
         <Action name="edit_delete"/>
     </Menu>
 
