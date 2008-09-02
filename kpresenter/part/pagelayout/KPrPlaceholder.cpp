@@ -24,6 +24,7 @@
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 #include <KoPASavingContext.h>
+#include <kdebug.h>
 
 KPrPlaceholder::KPrPlaceholder()
 {
@@ -43,10 +44,10 @@ bool KPrPlaceholder::loadOdf( const KoXmlElement & element, const QRectF & pageS
         return false;
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "x" ) ) {
-        m_relativeSize.setX( percent( element, "x", pageSize.x() ) );
+        m_relativeSize.setX( percent( element, "x", pageSize.width() ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "y" ) ) {
-        m_relativeSize.setY( percent( element, "y", pageSize.y() ) );
+        m_relativeSize.setY( percent( element, "y", pageSize.height() ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::svg, "width" ) ) {
         m_relativeSize.setWidth( percent( element, "width", pageSize.width() ) );
@@ -54,6 +55,9 @@ bool KPrPlaceholder::loadOdf( const KoXmlElement & element, const QRectF & pageS
     if ( element.hasAttributeNS( KoXmlNS::svg, "height" ) ) {
         m_relativeSize.setHeight( percent( element, "height", pageSize.height() ) );
     }
+
+    kDebug() << "convert" << pageSize << m_relativeSize;
+
     return true;
 }
 
@@ -61,10 +65,11 @@ void KPrPlaceholder::saveOdf( KoXmlWriter & xmlWriter )
 {
     xmlWriter.startElement( "presentation:placeholder" );
     xmlWriter.addAttribute( "presentation:object", m_presentationObject );
-    xmlWriter.addAttribute( "svg:x", QString( "%1%%" ).arg( m_relativeSize.x() ) );
-    xmlWriter.addAttribute( "svg:y", QString( "%1%%" ).arg( m_relativeSize.y() ));
-    xmlWriter.addAttribute( "svg:width", QString( "%1%%" ).arg( m_relativeSize.width() ));
-    xmlWriter.addAttribute( "svg:height", QString( "%1%%" ).arg( m_relativeSize.height() ));
+    xmlWriter.addAttribute( "svg:x", QString( "%1\%" ).arg( m_relativeSize.x() * 100.0 ) );
+    xmlWriter.addAttribute( "svg:y", QString( "%1\%" ).arg( m_relativeSize.y() * 100.0 ));
+    xmlWriter.addAttribute( "svg:width", QString( "%1\%" ).arg( m_relativeSize.width() * 100.0 ));
+    xmlWriter.addAttribute( "svg:height", QString( "%1\%" ).arg( m_relativeSize.height() * 100.0 ));
+    xmlWriter.endElement();
 }
 
 QString KPrPlaceholder::presentationObject()
@@ -87,10 +92,10 @@ qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, 
     qreal tmp = 0.0;
     QString value = element.attributeNS( KoXmlNS::svg, type, QString( "0%" ) );
     if ( value.indexOf( '%' ) > -1 ) { // percent value
-        tmp = value.remove( '%' ).toDouble();
+        tmp = value.remove( '%' ).toDouble() / 100.0;
     }
     else { // fixed value
-        tmp = absolute / KoUnit::parseValue( value );
+        tmp = KoUnit::parseValue( value ) / absolute;
     }
 
     return tmp;
