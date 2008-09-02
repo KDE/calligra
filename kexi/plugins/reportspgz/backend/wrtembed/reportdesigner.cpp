@@ -1224,7 +1224,7 @@ void ReportDesigner::slotEditDelete()
     sectionData->selected_items_rw = 0;
 
     //TODO temporary
-    //clears cut and copy lists to make sure we dont crash
+    //clears cut and copy lists to make sure we do not crash
     //if weve deleted something in the list
     //should really check if an item is in the list first
     //and remove it.

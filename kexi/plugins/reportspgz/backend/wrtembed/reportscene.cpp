@@ -72,7 +72,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
         QPen pen = painter->pen();
         painter->setPen(QColor(212, 212, 212));
 
-        if (pixel_increment > 2) { // dont bother painting points if increments are so small
+        if (pixel_increment > 2) { // do not bother painting points if increments are so small
             int wpoints = qRound(sceneRect().width() / pixel_increment);
             int hpoints = qRound(sceneRect().height() / pixel_increment);
             for (int i = 0; i < wpoints; ++i) {

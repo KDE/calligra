@@ -52,7 +52,7 @@ public slots:
     /** Returns the version number the KexiDB module defines. */
     int version();
 
-    /** Returns a list with avaible drivernames. */
+    /** Returns a list with available drivernames. */
     const QStringList driverNames();
 
     /** Return the to the defined \p drivername matching \a KexiDBDriver object. */

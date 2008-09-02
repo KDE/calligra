@@ -65,7 +65,7 @@ orQuery::~orQuery()
 bool orQuery::execute()
 {
     if (_database && qryQuery == 0) {
-        //NOTE we can use the variation of executeQuery to pass in paramters
+        //NOTE we can use the variation of executeQuery to pass in parameters
         if (qstrQuery.isEmpty()) {
             qryQuery = _database->executeQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
         } else if (_database->tableSchema(qstrQuery)) {

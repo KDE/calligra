@@ -450,7 +450,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
         elemThis = ob;
         //++it;
         // TODO: See if this can be simplified anymore than it already is.
-        //       All we need to know is how much strech we are going to get.
+        //       All we need to know is how much stretch we are going to get.
         if (elemThis->type() == KRObjectData::EntityText) {
             orData       dataThis;
             KRTextData * t = elemThis->toText();
@@ -909,7 +909,7 @@ ORODocument* ORPreRender::generate()
     if (_internal == 0 || !_internal->_valid || _internal->_reportData == 0)
         return 0;
 
-    // Do this check now so we don't have to undo alot of work later if it fails
+    // Do this check now so we don't have to undo a lot of work later if it fails
     LabelSizeInfo label;
     if (_internal->_reportData->page.getPageSize() == "Labels") {
         label = LabelSizeInfo::getByName(_internal->_reportData->page.getLabelType());

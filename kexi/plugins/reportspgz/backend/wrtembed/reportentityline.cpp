@@ -148,7 +148,7 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityLine::propertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
-    //TODO KoProperty doesnt support QPointF
+    //TODO KoProperty does not support QPointF
     if (p.name() == "Start") {
         //setLine ( _start.toScene().x(), _start.toScene().y(), line().p1().x(), line().p1().y() );
     } else if (p.name() == "End") {

@@ -136,7 +136,7 @@ void KRFieldData::createProperties()
     _lnColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
     _lnStyle = new KoProperty::Property("LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
 
-    //TODO I dont think we need these
+    //TODO I do not think we need these
     _trackTotal = new KoProperty::Property("TrackTotal", QVariant(false, 0), "Track Total", "Track Total");
     _trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false, 0), "Track Builtin Format", "Track Builtin Format");
     _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false, 0), "Use Sub Total", "Use Sub Total");

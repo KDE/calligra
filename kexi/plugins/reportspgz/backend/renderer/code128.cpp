@@ -331,7 +331,7 @@ void renderCode128(OROPage * page, const QRectF & r, const QString & _str, int a
         }
     }
 
-    // we have to do the stop character seperatly like this because it has
+    // we have to do the stop character separately like this because it has
     // 7 elements in it's bar sequence rather than 6 like the others
     int STOP_CHARACTER[] = { 2, 3, 3, 1, 1, 1, 2 };
     space = false;

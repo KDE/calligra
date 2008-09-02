@@ -355,7 +355,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
             kexipluginsdbg << "#" << numberOfDataAwareWidgets << ": "
             << dataItem->dataSource() << " (" << it.current()->widget()->objectName() << ")";
 
-// /*! @todo d->indicesForDataAwareWidgets SHOULDNT BE UPDATED HERE BECAUSE
+// /*! @todo d->indicesForDataAwareWidgets SHOULD NOT BE UPDATED HERE BECAUSE
 // THERE CAN BE ALSO NON-TABSTOP DATA WIDGETS!
 // */
             d->indicesForDataAwareWidgets.insert(dataItem, numberOfDataAwareWidgets);

@@ -74,7 +74,7 @@ public slots:
     QString dataSource();
 
     /**
-     * Set the data soure for the chart
+     * Set the data source for the chart
      * @param datasource
      */
     void setDataSource(const QString &);

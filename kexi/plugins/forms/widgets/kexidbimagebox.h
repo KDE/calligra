@@ -136,7 +136,7 @@ public:
         return KexiFrame::lineWidth();
     }
 
-    /*! Overriden to change the policy behaviour a bit:
+    /*! Overridden to change the policy behaviour a bit:
      NoFocus is returned regardless the real focus flag
      if the data source is empty (see dataSource()). */
 #ifdef __GNUC__

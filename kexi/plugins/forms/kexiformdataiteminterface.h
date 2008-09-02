@@ -86,7 +86,7 @@ public:
      text \a displayText and become read only to prevent entering data,
      because updating at the database backend is not available.
      \a displayText is usually set to something i18n'd like "#NAME?".
-     Note: that even widgets that usualy do not display texts (e.g. pixmaps)
+     Note: that even widgets that usually do not display texts (e.g. pixmaps)
      should display \a displayText too.
     */
     virtual void setInvalidState(const QString& displayText) = 0;
