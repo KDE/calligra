@@ -28,7 +28,7 @@
 #include "frames/KWTextFrameSet.h"
 
 /**
- * A container for all informations for the page wide style.
+ * A container for all information for the page wide style.
  *
  * For documents that have a main text auto generated we have a lot of little options
  * to do that. This class wraps all these options.
