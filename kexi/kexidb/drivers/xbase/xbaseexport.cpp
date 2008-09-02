@@ -117,7 +117,7 @@ bool xBaseExportPrivate::appendRecord( const QString& sourceTableName , KexiDB::
 
   if (fieldType == XB_MEMO_FLD) {
   #ifdef XB_MEMO_FIELDS
-    // we use size()+1 as size to accomodate `\0`
+    // we use size()+1 as size to accommodate `\0`
     table->UpdateMemoData(i, stringData.size()+1, stringData.constData(), F_SETLKW );
   #else
     kDebug()<<"XB_MEMO_FIELDS support disabled during compilation of XBase libraries";
@@ -132,7 +132,7 @@ bool xBaseExportPrivate::appendRecord( const QString& sourceTableName , KexiDB::
         kDebug()<<"Invalid data "<<stringData;
         return false;
       default:
-        kDebug()<<"Error number "<<returnCode<<" has occured";
+        kDebug()<<"Error number "<<returnCode<<" has occurred";
         return false;
     }
     }

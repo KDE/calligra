@@ -215,7 +215,7 @@ public:
     KexiPart::Item* createPartItem(KexiPart::Part *part,
                                    const QString& suggestedCaption = QString());
 
-    /*! Adds item \a item after it is succesfully stored as an instance of part
+    /*! Adds item \a item after it is successfully stored as an instance of part
      pointed by \a info. Also clears 'neverSaved' flag if \a item.
      Used by KexiWindow::storeNewData().
      @internal */

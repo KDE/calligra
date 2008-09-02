@@ -27,7 +27,7 @@
 #define MAXPRECISION 19
 /* 
 ** these routines are copied from the freetds project which does something
-** very similiar
+** very similar
 */
 
 static int multiply_byte(unsigned char *product, int num, unsigned char *multiplier);

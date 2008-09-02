@@ -925,7 +925,7 @@ bool m_scrollbarToolTipsEnabled : 1;
     bool exists : 1;
     };
 
-    /*! Used to mark recently found value. Updated on succesful execution of find().
+    /*! Used to mark recently found value. Updated on successful execution of find().
      If the current cursor's position changes, or data in the current cell changes,
      positionOfRecentlyFoundValue.exists is set to false. */
     PositionOfValue m_positionOfRecentlyFoundValue;

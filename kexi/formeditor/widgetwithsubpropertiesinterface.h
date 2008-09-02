@@ -49,7 +49,7 @@ public:
     //! \return the assigned subwidget.
     QWidget* subwidget() const;
 
-    //! \return a set of subproperties avaliable for this widget.
+    //! \return a set of subproperties available for this widget.
     QSet<Q3CString> subproperies() const;
 
     //! \return a metaproperty for a widget's subproperty

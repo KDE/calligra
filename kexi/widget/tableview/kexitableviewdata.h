@@ -302,12 +302,12 @@ signals:
     void aboutToChangeCell(KexiDB::RecordData *record, int colnum, QVariant& newValue,
                            KexiDB::ResultInfo* result);
 
-    /*! Emited before inserting of a new, current row.
+    /*! Emitted before inserting of a new, current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this inserting. You can also change columns in \a record. */
     void aboutToInsertRow(KexiDB::RecordData *record, KexiDB::ResultInfo* result, bool repaint);
 
-    /*! Emited before changing of an edited, current row.
+    /*! Emitted before changing of an edited, current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this change. You can also change columns in \a record. */
     void aboutToUpdateRow(KexiDB::RecordData *record, KexiDB::RowEditBuffer* buffer,
@@ -320,7 +320,7 @@ signals:
     //! A row has been inserted at \a index position (not db-aware data only)
     void rowInserted(KexiDB::RecordData*, uint index, bool repaint);
 
-    /*! Emited before deleting of a current row.
+    /*! Emitted before deleting of a current row.
      Connect this signal to your slot and set \a result->success to false
      to disallow this deleting. */
     void aboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);

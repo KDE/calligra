@@ -1480,7 +1480,7 @@ QString Connection::selectStatement(KexiDB::QuerySchema& querySchema,
                 driver(), options.identifierEscaping));
     const QVector<int> pkeyFieldsOrder(querySchema.pkeyFieldsOrder());
     if (orderByString.isEmpty() && !pkeyFieldsOrder.isEmpty()) {
-        //add automatic ORDER BY if there is no explicity defined (especially helps when there are complex JOINs)
+        //add automatic ORDER BY if there is no explicitly defined (especially helps when there are complex JOINs)
         OrderByColumnList automaticPKOrderBy;
         const QueryColumnInfo::Vector fieldsExpanded(querySchema.fieldsExpanded());
         foreach(int pkeyFieldsIndex, pkeyFieldsOrder) {

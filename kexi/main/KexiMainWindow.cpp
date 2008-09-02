@@ -5025,7 +5025,7 @@ void KexiMainWindow::slotEditReplace(bool all)
     KexiSearchAndReplaceViewInterface* iface = d->currentViewSupportingSearchAndReplaceInterface();
     if (!iface)
         return;
-//! @todo add question: "Do you want to replace every occurence of \"%1\" with \"%2\"?
+//! @todo add question: "Do you want to replace every occurrence of \"%1\" with \"%2\"?
 //!       You won't be able to undo this." + "Do not ask again".
     tristate res = iface->findNextAndReplace(
                        d->findDialog()->valueToFind(), d->findDialog()->valueToReplaceWith(),

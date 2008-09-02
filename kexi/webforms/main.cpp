@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
             return 1;
         }
     } else {
-        kError() << "You must specifiy a Kexi file path";
+        kError() << "You must specify a Kexi file path";
         return 1;
     }
 

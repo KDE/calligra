@@ -245,7 +245,7 @@ signals:
     //! emitted when the window is about to close
     void closing();
 
-    /*! Emited to inform the world that 'dirty' flag changes.
+    /*! Emitted to inform the world that 'dirty' flag changes.
      Activated by KexiView::setDirty(). */
     void dirtyChanged(KexiWindow*);
 

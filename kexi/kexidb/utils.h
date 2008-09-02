@@ -237,7 +237,7 @@ protected:
  within a connection \a conn. The statement should be of type SELECT.
  For SQL data sources it does not fetch any records, only "COUNT(*)"
  SQL aggregation is used at the backed.
- -1 is returned if error occured. */
+ -1 is returned if error occurred. */
 int rowCount(Connection &conn, const QString& sql);
 
 //! @todo perhaps use quint64 here?

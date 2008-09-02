@@ -514,7 +514,7 @@ bool KexiComboBoxBase::handleKeyPressForPopup(QKeyEvent *ke)
 
     const bool enterPressed = k == Qt::Key_Enter || k == Qt::Key_Return;
 
-    // The editor may be active but the pull down menu not existant/visible,
+    // The editor may be active but the pull down menu not existent/visible,
     // e.g. when the user has pressed a normal button to activate the editor
     // Don't handle the event here in that case.
     if (!popup() || (!enterPressed && !popup()->isVisible())) {

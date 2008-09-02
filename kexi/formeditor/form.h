@@ -332,7 +332,7 @@ public:
     /*! Tells the Form to reassign the tab stops because the widget layout has changed
      (called for example before saving or displaying the tab order dialog).
      Automatically sorts widget from the top-left to bottom-right corner.
-     Widget can be grouped with containers. In paticular, for tab widgets,
+     Widget can be grouped with containers. In particular, for tab widgets,
      child widgets should ordered by parent tab's order. */
     void autoAssignTabStops();
 

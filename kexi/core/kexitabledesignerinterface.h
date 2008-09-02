@@ -53,7 +53,7 @@ class Set;
 
  All the methods contain addCommand argument. Set if to true to get the command added
  to the undo/redo buffer, what will look like real user's action. This is also needed
- to poperly generate arguments for commiting the "alter table" operation.
+ to poperly generate arguments for committing the "alter table" operation.
 */
 class KEXICORE_EXPORT KexiTableDesignerInterface
 {

@@ -87,9 +87,9 @@ Cursor* OracleConnection::prepareQuery(QuerySchema& query, uint cursor_options )
 }
 
 /*
- As databases doesnt exist in Oracle we should redefine the concept
+ As databases does not exist in Oracle we should redefine the concept
  on purpose of cheating kexi.
- The only database wich can exist is the current user.
+ The only database which can exist is the current user.
  That database exists if it contains kexi tables.
 */
 bool OracleConnection::drv_getDatabasesList( QStringList &list )
@@ -124,8 +124,8 @@ bool OracleConnection::drv_getDatabasesList( QStringList &list )
 }
 
 /*
- * Oracle doesnt offer a list of db (the equivalent would be user schemas)
- * So,it returns true if dbName is the current Schema
+ * Oracle does not offer a list of db (the equivalent would be user schemas)
+ * So, it returns true if dbName is the current Schema
  */
 bool OracleConnection::drv_createDatabase( const QString &dbName) {
 	KexiDBDrvDbg << dbName;
@@ -204,7 +204,7 @@ bool OracleConnection::drv_closeDatabase()
 }
 
 /*
- * Drops the database acording our refeinition is droping all KEXI__ tables,
+ * Drops the database according our refeinition is droping all KEXI__ tables,
  * secuences and triggers and tables created inside kexi
  */
 bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
@@ -267,13 +267,13 @@ bool OracleConnection::drv_dropDatabase( const QString& /*dbName*/)
   Extract from Oracle documentation:
 	As soon as you connect to the oralce database, a transaction begins.
 	Once the transaction begins, every SQL DML statement you issue subsequently 
-	becomes a part of this transaction (DDL are autocommited).
+	becomes a part of this transaction (DDL are autocommitted).
 	A transaction ends when you disconnect from the database,
 	or when you issue a COMMIT or ROLLBACK command. 
 
 	Autonomus transactions must be defined in PL/SQL blocks and 
 	has no link to the calling transaction,
-	so only commited data can be shared by both transactions.
+	so only committed data can be shared by both transactions.
 */
 TransactionData* OracleConnection::drv_beginTransaction()
 {
@@ -396,7 +396,7 @@ bool OracleConnection::drv_alterTableName
 }
 /*
  * RowID in Oracle is not a number, is an alphanumeric string, so we have an 
- * extra column on every single table wich is called ROW_ID and a global 
+ * extra column on every single table which is called ROW_ID and a global 
  * sequence. The value of ROW_ID is set on drv_afterInsert
  */
 Q_ULLONG OracleConnection::drv_lastInsertRowID()
