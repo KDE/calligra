@@ -283,7 +283,7 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     style.addAttribute( "draw:start-intensity", "100%" );
     style.addAttribute( "draw:end-intensity", "100%" );
     style.addAttribute( "draw:border", "0%" );
-    //Check wether the gradient belongs to a page or to an object
+    //Check whether the gradient belongs to a page or to an object
     int type = 1;//we default to 1
     if( gradientElement.nodeName() == "PAGE" )
     {
@@ -687,7 +687,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         //NOTE: depth is not portable
     }
 
-//     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standar Graphic style
+//     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
 
     return m_styles.lookup( style, "gr" );
 }

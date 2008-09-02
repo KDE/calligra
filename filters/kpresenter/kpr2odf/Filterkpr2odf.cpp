@@ -327,7 +327,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
 
     content->startElement( "presentation:settings" );
 
-    //Load wether the presentation ends or it's in an infinite loop
+    //Load whether the presentation ends or it's in an infinite loop
     KoXmlElement infinitLoop( m_mainDoc.namedItem( "DOC" ).namedItem( "INFINITLOOP" ).toElement() );
     if( !infinitLoop.isNull() )
     {
@@ -335,7 +335,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->addAttribute( "presentation:endless", ( value )? "true" : "false" );
     }
 
-    //Specify wether the effects can be started automatically or
+    //Specify whether the effects can be started automatically or
     //ignore any previous order and start them manually
     KoXmlElement manualSwitch = m_mainDoc.namedItem( "DOC" ).namedItem( "MANUALSWITCH" ).toElement();
     if( !manualSwitch.isNull() )
@@ -595,7 +595,7 @@ void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& o
     //convert every text element
     for( KoXmlElement text = objectElement.firstChild().toElement(); !text.isNull();  text = text.nextSibling().toElement() )
     {
-        if( text.nodeName() == "TEXT" ) //only TEXT childs are relevant
+        if( text.nodeName() == "TEXT" ) //only TEXT children are relevant
         {
             appendText( content, text );
         }
@@ -858,7 +858,7 @@ void Filterkpr2odf::getRealSizeAndOrig( QSizeF &size, QPointF &realOrig, int sta
     setMinMax( min_x, min_y, max_x, max_y, secondPoint );
 
     /* 4. check if maximal points lie on the arc.
-     * There are three posibilities how many sections have to
+     * There are three possibilities how many sections have to
      * been checked.
      * 1. the arc is only once on one side of the x axis
      * 2. the arc is on both sides of the x axis
