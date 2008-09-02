@@ -78,7 +78,7 @@ KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name, KoPALoadingCon
         QHash<QString, KoXmlElement*>::iterator it( layouts.find( name ) );
 
         if ( it != layouts.end() ) {
-            KPrPageLayout * pageLayout = new KPrPageLayout();
+            pageLayout = new KPrPageLayout();
             if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
                 m_pageLayouts.insert( it.key(), pageLayout );
             }
