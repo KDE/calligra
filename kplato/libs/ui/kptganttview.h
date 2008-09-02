@@ -25,6 +25,8 @@
 
 #include "kptviewbase.h"
 
+#include "ui_kptganttprintingoptions.h"
+
 #include <kdganttglobal.h>
 #include <kdganttview.h>
 
@@ -49,6 +51,21 @@ class Project;
 class Relation;
 class ScheduleManager;
 class MyKDGanttView;
+class GanttPrintingOptions;
+
+class KPLATOUI_EXPORT GanttPrintingOptions : public QWidget, public Ui::GanttPrintingOptionsWidget
+{
+    Q_OBJECT
+public:
+    explicit GanttPrintingOptions( QWidget *parent = 0 );
+
+    void setPrintRowLabels( bool value ) { ui_printRowLabels->setChecked( value ); }
+    bool printRowLabels() const { return ui_printRowLabels->isChecked(); }
+    
+    void setSinglePage( bool value )  { value ? ui_singlePage->setChecked( false ) : ui_multiplePages->setChecked( true ); }
+    bool singlePage() const { return ui_singlePage->isChecked(); }
+
+};
 
 class GanttPrintingDialog : public PrintingDialog
 {
@@ -56,13 +73,22 @@ class GanttPrintingDialog : public PrintingDialog
 public:
     GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt );
     
-    int documentLastPage() const { return documentFirstPage(); }
     void startPrinting( RemovePolicy removePolicy );
     QList<QWidget*> createOptionWidgets() const;
     void printPage( int page, QPainter &painter );
     
+    int documentLastPage() const;
+    
 protected:
     KDGantt::View *m_gantt;
+    QRectF m_sceneRect;
+    int m_horPages;
+    int m_vertPages;
+    double m_headerHeight;
+    GanttPrintingOptions *m_options;
+    bool m_singlePage;
+    bool m_printRowLabels;
+    QRectF m_pageRect;
 };
 
 class GanttTreeView : public TreeViewBase

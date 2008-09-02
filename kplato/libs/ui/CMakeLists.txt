@@ -79,6 +79,7 @@ set(kplatoui_LIB_SRCS
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
     kptprintingheaderfooter.ui
+    kptganttprintingoptions.ui
     
     kptworkpackagecontrolpanel.ui
     

@@ -36,6 +36,7 @@
 #include <kdganttconstraintmodel.h>
 #include <kdganttconstraint.h>
 #include <kdganttdatetimegrid.h>
+#include <kdganttgraphicsview.h>
 #include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
@@ -58,27 +59,82 @@
 namespace KPlato
 {
 
+GanttPrintingOptions::GanttPrintingOptions( QWidget *parent )
+    : QWidget( parent )
+{
+    setupUi( this );
+    ui_printRowLabels->hide(); // TODO or remove?
+    setWindowTitle( "Options" );
+}
+
+//----------------
 GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
     : PrintingDialog( view ),
-    m_gantt( gantt )
+    m_gantt( gantt ),
+    m_singlePage( true ),
+    m_printRowLabels( true )
 {
+    m_pageRect = printer().pageRect();
+    m_pageRect.setSize( m_pageRect.size() - QSize( -30, 30 ) ); // TEST
+    m_headerHeight = gantt->graphicsView()->headerHeight();
+    m_sceneRect = m_gantt->graphicsView()->printRect();
+    m_horPages = 1;
+    qreal c = m_sceneRect.width() - m_pageRect.width();
+    while ( c > 0 ) {
+        ++m_horPages;
+        c -= m_pageRect.width();
+    }
+    m_vertPages = 1;
+    c = m_sceneRect.height() - m_pageRect.height() - m_headerHeight;
+    while ( c > 0 ) {
+        ++m_vertPages;
+        c -= m_pageRect.height();
+    }
+    kDebug()<<m_sceneRect<<m_pageRect<<m_horPages<<m_vertPages;
+    printer().setFromTo( documentFirstPage(), documentLastPage() );
 }
 
 void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
+    m_singlePage = m_options->singlePage();
+    //m_printRowLabels = m_options->printRowLabels();
     KoPrintingDialog::startPrinting( removePolicy );
 }
 
 QList<QWidget*> GanttPrintingDialog::createOptionWidgets() const
 {
     //kDebug();
-    return QList<QWidget*>();
+    GanttPrintingOptions *w = new GanttPrintingOptions();
+    //w->setPrintRowLabels( m_printRowLabels );
+    w->setSinglePage( m_singlePage );
+    
+    const_cast<GanttPrintingDialog*>( this )->m_options = w;
+    
+    return QList<QWidget*>() << m_options;
 }
+
+int GanttPrintingDialog::documentLastPage() const
+{
+    kDebug()<<m_horPages<<m_vertPages;
+    return m_singlePage ? documentFirstPage() : m_horPages * m_vertPages;
+}
+
 
 void GanttPrintingDialog::printPage( int page, QPainter &painter )
 {
-    painter.scale( 0.95, 0.95 ); // FIXME printer().pageRect() is outside paper!!
-    m_gantt->print( &painter, printer().pageRect(), false );
+    QRectF sourceRect = m_sceneRect;
+    int p = page - documentFirstPage();
+    QRectF pageRect = m_pageRect;
+    int vert = m_singlePage ? 0 : p / m_horPages;
+    int hor = m_singlePage ? 0 : p % m_horPages;
+    if ( ! m_singlePage && documentLastPage() > documentFirstPage() ) {
+        // print on multiple pages, so calculate rects to print
+        qreal hh = vert == 0 ? m_headerHeight : 0;
+        qreal ho = vert > 0 ? m_headerHeight : 0;
+        sourceRect = QRectF( sourceRect.x() + ( pageRect.width() * hor ), sourceRect.y() + ( ( pageRect.height() * vert ) - ho ), pageRect.width(), pageRect.height() - hh );
+        kDebug()<<p<<hor<<vert<<sourceRect;
+    }
+    m_gantt->print( &painter, pageRect, sourceRect, m_printRowLabels, vert == 0 );
 }
 
 
