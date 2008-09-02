@@ -56,7 +56,7 @@ public:
     // TODO
 
 private:
-    // the string is the style name assosiated with the page layout when the file was 
+    // the string is the style name associated with the page layout when the file was 
     // loaded from file
     QMap<QString, KPrPageLayout *> m_pageLayouts;
 };

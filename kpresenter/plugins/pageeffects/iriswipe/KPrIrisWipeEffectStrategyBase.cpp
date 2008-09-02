@@ -42,7 +42,7 @@ int KPrIrisWipeEffectStrategyBase::findMaxScaling( const KPrPageEffect::Data &da
 
     int pathMaxMeasure;
     int maxMeasure;
-    //We find wether the screen is taller or wider so that we can start searching
+    //We find whether the screen is taller or wider so that we can start searching
     //from a closer point
     if( width > height )
     {

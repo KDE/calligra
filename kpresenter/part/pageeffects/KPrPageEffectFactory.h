@@ -64,7 +64,7 @@ public:
      *
      * This is used for loading a page effect from odf
      *
-     * @param element The element containing the informations for creating the page effect
+     * @param element The element containing the information for creating the page effect
      */
     KPrPageEffect * createPageEffect( const KoXmlElement & element ) const;
 
