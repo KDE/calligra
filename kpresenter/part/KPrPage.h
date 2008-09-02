@@ -51,8 +51,13 @@ public:
     void removeShape( KoShape * shape );
 
 protected:
+    /// reimplemented
+    virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
+
+    /// reimplemented
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
 
+    /// reimplemented
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
 
     /// reimplemented

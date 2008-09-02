@@ -22,17 +22,20 @@
 #include <QString>
 
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoStyleStack.h>
 #include <KoGenStyle.h>
 #include <KoPALoadingContext.h>
+#include <KoPASavingContext.h>
 
 #include "KPrDocument.h"
 #include "KPrPageApplicationData.h"
 #include "KPrNotes.h"
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
+#include "pagelayout/KPrPageLayoutSharedSavingData.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 
@@ -91,6 +94,21 @@ void KPrPage::removeShape( KoShape * shape )
     // TODO
 }
 
+void KPrPage::saveOdfPageContent( KoPASavingContext & paContext ) const
+{
+    if ( d->layout ) {
+        KPrPageLayoutSharedSavingData * layouts = dynamic_cast<KPrPageLayoutSharedSavingData *>( paContext.sharedData( KPR_PAGE_LAYOUT_SHARED_SAVING_ID ) );
+        Q_ASSERT( layouts );
+        if ( layouts ) {
+            QString layoutStyle = layouts->pageLayoutStyle( d->layout );
+            if ( ! layoutStyle.isEmpty() ) {
+                paContext.xmlWriter().addAttribute( "presentation:presentation-page-layout-name", layoutStyle );
+            }
+        }
+    }
+    KoPAPageBase::saveOdfPageContent( paContext );
+}
+
 void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
     KoPAPage::saveOdfPageStyleData( style, paContext );
@@ -114,10 +132,10 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
         KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( loadingContext.dataCenter( PageLayouts ) );
         Q_ASSERT( layouts );
         if ( layouts ) {
-            kDebug(33001) << "layout" << element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
             QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
             QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
             d->layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
+            kDebug(33001) << "page layout" << layoutName << d->layout;
         }
     }
 

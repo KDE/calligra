@@ -72,6 +72,16 @@ const char * KPrDocument::odfTagName( bool withNamespace )
     return withNamespace ? "office:presentation": "presentation";
 }
 
+void KPrDocument::saveOdfDocumentStyles( KoPASavingContext & context )
+{
+    KoPADocument::saveOdfDocumentStyles( context );
+    KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( dataCenterMap().value( PageLayouts ) );
+    Q_ASSERT( layouts );
+    if ( layouts ) {
+        layouts->saveOdf( context );
+    }
+}
+
 KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 {
     return new KPrPage( masterPage, this );
