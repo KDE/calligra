@@ -67,7 +67,7 @@ void PlotWidget::draw( Project &p, ScheduleManager &sm )
 {
    return drawModel( p, sm );
    
-    // Retrieve datas
+    // Retrieve data
     mKpoBCWP->clearPoints();
     mKpoBCWS->clearPoints();
     mKpoACWP->clearPoints();

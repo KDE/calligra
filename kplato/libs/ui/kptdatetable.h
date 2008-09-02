@@ -343,7 +343,7 @@ protected:
 
     /**
      *  pos can be 1..42
-     * row starts at 1, col depends on wether weeks are presented (in col 0)
+     * row starts at 1, col depends on whether weeks are presented (in col 0)
      */
     int position(int row, int col) { return ((7 * (row - 1)) + col - m_dateStartCol + 1); }
 

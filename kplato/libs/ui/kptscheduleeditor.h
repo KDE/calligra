@@ -237,7 +237,7 @@ public:
     QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list @p name
     virtual QList<QAction*> actionList( const QString name ) const;
-    /// Allways returns this (if we are called, we are hit)
+    /// Always returns this (if we are called, we are hit)
     virtual ViewBase *hitView( const QPoint &glpos );
 
 signals:

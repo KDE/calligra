@@ -268,7 +268,7 @@ public:
         RS_Refused,         /// Last message refused
         RS_Update           /// The workpackage includes updated data
     };
-    /// @enum WPResponseType describes wether a response is required
+    /// @enum WPResponseType describes whether a response is required
     enum WPResponseType { 
         RT_None,        /// No response is required
         RT_Required     /// Response is required

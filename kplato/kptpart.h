@@ -85,7 +85,7 @@ public:
     bool saveWorkPackageFormat( const QString &file, const Node *node, long id  );
     bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  );
 
-    /// Load the workpackage from @p url into @p project. Return true if successfull, else false.
+    /// Load the workpackage from @p url into @p project. Return true if successful, else false.
     bool loadWorkPackage( Project &project, const KUrl &url );
     bool loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document );
     
@@ -96,9 +96,9 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent );
     virtual bool loadChildren( KoStore* );
      
-    /// Load kplato specfic files
+    /// Load kplato specific files
     virtual bool completeLoading( KoStore* store );
-    /// Save kplato specfic files
+    /// Save kplato specific files
     virtual bool completeSaving( KoStore* store );
 
 

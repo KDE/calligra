@@ -40,8 +40,8 @@ Chart::Chart()
 }
 
 //******************
-// CALCULATE DATAS 
-//*****************
+// CALCULATE DATA 
+//******************
 
 
 QVector<QDate> Chart::calculateWeeks(const Project & p,const ScheduleManager &sm)
@@ -214,7 +214,7 @@ void Chart::calculateData(const Project & p, const ScheduleManager & sm)
 }
 
 //******************************************
-// TRANSFORM DATAS TO CHART COORDINATES
+// TRANSFORM DATA TO CHART COORDINATES
 //******************************************
 
 /* Calculate the percentage of the cost and replace the result in the vector */

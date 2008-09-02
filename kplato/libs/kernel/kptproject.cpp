@@ -76,7 +76,7 @@ void Project::init()
 
 Project::~Project()
 {
-    disconnect(); // NOTE: may be a problem if sombody uses the destroyd() signal
+    disconnect(); // NOTE: may be a problem if somebody uses the destroyd() signal
     delete m_standardWorktime;
     while ( !m_resourceGroups.isEmpty() )
         delete m_resourceGroups.takeFirst();

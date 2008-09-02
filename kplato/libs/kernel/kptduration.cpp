@@ -129,7 +129,7 @@ Duration Duration::operator*(const Duration value) const {
 
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
-        kDebug()<<"Devide by zero:"<<this->toString();
+        kDebug()<<"Divide by zero:"<<this->toString();
         return 0.0;
     }
     return (double)(m_ms) / (double)(d.m_ms);

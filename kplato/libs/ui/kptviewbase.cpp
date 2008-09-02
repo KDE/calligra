@@ -959,7 +959,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                     hideColumn( i );
                 } else if ( s == "shown" ) {
                     showColumn( i );
-                } else kDebug()<<objectName()<<"Unkown column:"<<s;
+                } else kDebug()<<objectName()<<"Unknown column:"<<s;
             }
         } else {
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
@@ -971,7 +971,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                         hideColumn( i );
                     } else if ( s == "shown" ) {
                         showColumn( i );
-                    } else kDebug()<<objectName()<<"Unkown column:"<<s;
+                    } else kDebug()<<objectName()<<"Unknown column:"<<s;
                 } else kDebug()<<"Column not in enum:"<<i;
             }
         }

@@ -2026,7 +2026,7 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
 Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
     //kDebug()<<"--------> calcDuration"<<(backward?"(B)":"(F)")<<m_name<<" time="<<time<<" effort="<<effort.toString(Duration::Format_Day);
     
-    // Allready checked: m_currentSchedule and time.
+    // Already checked: m_currentSchedule and time.
     Duration dur = effort; // use effort as default duration
     if (m_estimate->type() == Estimate::Type_Effort) {
         if (m_requests == 0 || m_requests->isEmpty()) {

@@ -54,7 +54,7 @@ class XMLLoaderObject;
  * appointments.
  * There is one schedule per node and one per resource.
  * Schedules can be of type Expected, Optimistic or Pessimistic
- * refering to which estimate is used for the calculation.
+ * referring to which estimate is used for the calculation.
  * Schedule is subclassed into:
  * MainSchedule     Used by the main project.
  * NodeSchedule     Used by all other nodes (tasks).
