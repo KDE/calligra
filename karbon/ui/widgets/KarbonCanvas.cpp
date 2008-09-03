@@ -48,6 +48,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QFocusEvent>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QMenu>
 #include <QtCore/QEvent>
 #include <QtCore/QSizeF>
 
@@ -189,6 +190,14 @@ void KarbonCanvas::mouseMoveEvent(QMouseEvent *e)
 void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
     d->toolProxy->mousePressEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
+    if( !e->isAccepted() && e->button() == Qt::RightButton ) {
+        QMenu menu( this );
+        foreach( QAction *action, d->toolProxy->popupActionList() ) {
+            menu.addAction( action );
+        }
+        menu.exec( e->globalPos() );
+        e->setAccepted( true );
+    }
 }
 
 void KarbonCanvas::mouseDoubleClickEvent(QMouseEvent *e)
