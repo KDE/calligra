@@ -65,10 +65,10 @@ void KPrPlaceholder::saveOdf( KoXmlWriter & xmlWriter )
 {
     xmlWriter.startElement( "presentation:placeholder" );
     xmlWriter.addAttribute( "presentation:object", m_presentationObject );
-    xmlWriter.addAttribute( "svg:x", QString( "%1\%" ).arg( m_relativeSize.x() * 100.0 ) );
-    xmlWriter.addAttribute( "svg:y", QString( "%1\%" ).arg( m_relativeSize.y() * 100.0 ));
-    xmlWriter.addAttribute( "svg:width", QString( "%1\%" ).arg( m_relativeSize.width() * 100.0 ));
-    xmlWriter.addAttribute( "svg:height", QString( "%1\%" ).arg( m_relativeSize.height() * 100.0 ));
+    xmlWriter.addAttribute( "svg:x", QString( "%1%" ).arg( m_relativeSize.x() * 100.0 ) );
+    xmlWriter.addAttribute( "svg:y", QString( "%1%" ).arg( m_relativeSize.y() * 100.0 ));
+    xmlWriter.addAttribute( "svg:width", QString( "%1%" ).arg( m_relativeSize.width() * 100.0 ));
+    xmlWriter.addAttribute( "svg:height", QString( "%1%" ).arg( m_relativeSize.height() * 100.0 ));
     xmlWriter.endElement();
 }
 
