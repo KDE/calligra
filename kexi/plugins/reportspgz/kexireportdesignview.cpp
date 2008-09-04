@@ -18,7 +18,6 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 #include "kexireportdesignview.h"
-#include "backend/wrtembed/reportdesigner.h"
 #include <core/KexiMainWindowIface.h>
 #include <kdebug.h>
 #include <QScrollArea>
@@ -72,6 +71,7 @@ KoProperty::Set *KexiReportDesignView::propertySet()
 
 void KexiReportDesignView::slotDesignerPropertySetChanged()
 {
+    propertySetReloaded(true);
     propertySetSwitched();
 }
 KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
@@ -160,14 +160,15 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
     connect(sectionEdit, SIGNAL(activated()), _rd, SLOT(slotSectionEditor()));
 
     //Control Actions
-    connect(res->itemLabel, SIGNAL(clicked()), _rd, SLOT(slotItemLabel()));
-    connect(res->itemField, SIGNAL(clicked()), _rd, SLOT(slotItemField()));
-    connect(res->itemText, SIGNAL(clicked()), _rd, SLOT(slotItemText()));
-    connect(res->itemLine, SIGNAL(clicked()), _rd, SLOT(slotItemLine()));
-    connect(res->itemBarcode, SIGNAL(clicked()), _rd, SLOT(slotItemBarcode()));
-    connect(res->itemChart, SIGNAL(clicked()), _rd, SLOT(slotItemChart()));
-    connect(res->itemImage, SIGNAL(clicked()), _rd, SLOT(slotItemImage()));
-    connect(res->itemShape, SIGNAL(clicked()), _rd, SLOT(slotItemShape()));
+    connect(res->itemLabel, SIGNAL(clicked()), this, SLOT(slotLabel()));
+    connect(res->itemField, SIGNAL(clicked()), this, SLOT(slotField()));
+    connect(res->itemText, SIGNAL(clicked()), this, SLOT(slotText()));
+    connect(res->itemLine, SIGNAL(clicked()), this, SLOT(slotLine()));
+    connect(res->itemBarcode, SIGNAL(clicked()), this, SLOT(slotBarcode()));
+    connect(res->itemChart, SIGNAL(clicked()),this, SLOT(slotChart()));
+    connect(res->itemImage, SIGNAL(clicked()), this, SLOT(slotImage()));
+    connect(res->itemShape, SIGNAL(clicked()), this, SLOT(slotShape()));
+connect(res->itemCheck, SIGNAL(clicked()), this, SLOT(slotCheck()));
 
     //Raise/Lower
     connect(itemRaiseAction, SIGNAL(activated()), _rd, SLOT(slotRaiseSelected()));

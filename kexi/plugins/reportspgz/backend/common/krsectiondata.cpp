@@ -34,6 +34,7 @@
 #include "krimagedata.h"
 #include "krlabeldata.h"
 #include "krchartdata.h"
+#include "krcheckdata.h"
 
 KRSectionData::KRSectionData()
 {
@@ -153,6 +154,9 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
         } else if (elemThis.tagName() == "chart") {
             KRChartData * chart = new KRChartData(elemThis);
             _objects.append(chart);
+        } else if (elemThis.tagName() == "check") {
+            KRCheckData * check = new KRCheckData(elemThis);
+            _objects.append(check);
 
         } else
             kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();

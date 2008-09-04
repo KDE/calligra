@@ -34,6 +34,7 @@ ReportEntitySelector::ReportEntitySelector(QWidget *parent)
     itemImage = new KPushButton(KIcon("insert-image"), i18n("Image"), this);
     itemChart = new KPushButton(KIcon("view-statistics"), i18n("Chart"), this);
     itemShape = new KPushButton(KIcon("view-statistics"), i18n("Shape"), this);
+    itemCheck = new KPushButton(KIcon("list-add"), i18n("Check"), this);
 
     itemLabel->setFlat(true);
     layout->addWidget(itemLabel);
@@ -44,6 +45,7 @@ ReportEntitySelector::ReportEntitySelector(QWidget *parent)
     layout->addWidget(itemImage);
     layout->addWidget(itemChart);
     layout->addWidget(itemShape);
+    layout->addWidget(itemCheck);
     layout->addStretch();
     setLayout(layout);
 }

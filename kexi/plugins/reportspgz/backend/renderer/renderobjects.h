@@ -438,4 +438,70 @@ protected:
     QPen _pen;
     QBrush _brush;
 };
+
+class OROCheck : public OROPrimitive
+{
+public:
+    OROCheck();
+    virtual ~OROCheck();
+    virtual OROPrimitive* clone();
+    static const int Check;
+
+    void setCheckType(const QString& t){
+        if (t == "Cross" || t == "Tick" || t == "Dot") {
+            _checkType = t;
+        }
+        else {
+            _checkType = "Cross";
+        }
+    }
+
+    QString checkType(){return _checkType;};
+
+    QSizeF size() const {
+        return _size;
+    }
+    void setSize(const QSizeF &s){
+        _size = s;
+    }
+
+    void setValue(bool v){
+        _value = v;
+    }
+    bool value(){
+        return _value;
+    }
+
+    void setLineStyle(const ORLineStyleData& ls){
+        _lineStyle = ls;
+    }
+
+    ORLineStyleData lineStyle(){
+        return _lineStyle;
+    }
+    void setForegroundColor(const QColor& fg){
+        _fgcolor = fg;
+    }
+    QColor foregroundColor(){
+        return _fgcolor;
+    }
+
+    void setBackgroundColor(const QColor& bg){
+        _bgcolor = bg;
+    }
+    QColor backgroundColor(){
+        return _bgcolor;
+    }
+
+    protected:
+            QSizeF _size;
+            QString _checkType;
+            bool _value;
+            ORLineStyleData _lineStyle;
+            QColor _fgcolor;
+            QColor _bgcolor;
+
+
+};
+
 #endif // __RENDEROBJECTS_H__

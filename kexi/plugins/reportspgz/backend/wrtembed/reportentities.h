@@ -83,37 +83,5 @@ private:
     static QFont _defaultFont;
 };
 
-#if 0
-//
-// ReportEntityGraph
-//
-class ReportEntityGraph : public Q3CanvasRectangle, public ReportEntity
-{
-public:
-    ReportEntityGraph(ReportWindow *, Q3Canvas * canvas);
-    ReportEntityGraph(QDomNode & element, ReportWindow *, Q3Canvas * canvas);
-    ReportEntityGraph(ORGraphData &, ReportWindow *, Q3Canvas *);
-
-    virtual ~ReportEntityGraph();
-
-    void copyData(ORGraphData &);
-
-    void setQuery(const QString &);
-    QString query();
-
-    virtual void propertyDialog(QMap<QString, QColor>*, QuerySourceList * qsl, QWidget * parent);
-    virtual void buildXML(QDomDocument & doc, QDomElement & parent);
-
-    virtual int rtti() const;
-    static int RTTI;
-protected:
-    virtual void drawShape(QPainter&);
-
-private:
-    ReportWindow * _rw;
-    ORGraphData _graphData;
-
-};
-#endif
 #endif
 

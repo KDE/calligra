@@ -1,3 +1,6 @@
+#make it a project so cmake spits out a codeblocks project
+#project(reports)
+
 include_directories( ${KOMAIN_INCLUDES} 
 ${KOGUIUTILS_INCLUDES} 
 ${KOODF_INCLUDES} 
@@ -29,6 +32,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/common/krimagedata.cpp
 	backend/common/krlinedata.cpp
 	backend/common/krshapedata.cpp
+	backend/common/krcheckdata.cpp
 	backend/common/krsectiondata.cpp
 	backend/common/labelsizeinfo.cpp
 	backend/common/reportpageoptions.cpp
@@ -73,6 +77,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/wrtembed/reportentityimage.cpp
 	backend/wrtembed/reportentitychart.cpp
 	backend/wrtembed/reportentityshape.cpp
+	backend/wrtembed/reportentitycheck.cpp
 	backend/wrtembed/reportsection.cpp
 	backend/wrtembed/reportsectiondetailgroup.cpp
 	backend/wrtembed/reportsectiondetail.cpp

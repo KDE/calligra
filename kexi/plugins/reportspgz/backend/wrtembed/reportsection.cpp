@@ -30,6 +30,8 @@
 #include "reportentitybarcode.h"
 #include "reportentityimage.h"
 #include "reportentitychart.h"
+#include "reportentitycheck.h"
+#include "reportentityshape.h"
 
 #include "reportscene.h"
 #include "reportsceneview.h"
@@ -190,6 +192,10 @@ void ReportSection::initFromXML(QDomNode & section)
             (new ReportEntityImage(node, sceneview->document(), scene))->setVisible(true);
         } else if (n == "chart") {
             (new ReportEntityChart(node, sceneview->document(), scene))->setVisible(true);
+        } else if (n == "check") {
+            (new ReportEntityCheck(node, sceneview->document(), scene))->setVisible(true);
+        } else if (n == "shape") {
+            (new ReportEntityShape(node, sceneview->document(), scene))->setVisible(true);
         } else if (n == "key" || n == "firstpage" || n == "lastpage"
                    || n == "odd" || n == "even") {
             // these are all handled elsewhere but we don't want to show errors

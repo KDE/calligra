@@ -43,6 +43,7 @@
 #include <krlabeldata.h>
 #include <krlinedata.h>
 #include <krchartdata.h>
+#include <krcheckdata.h>
 
 #include "scripting/krscripthandler.h"
 #include <krreportdata.h>
@@ -813,6 +814,50 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 p2->setPosition(ch->_pos.toPoint());
                 sec->addPrimitive(p2);
             }
+        } else if (elemThis->type() == KRObjectData::EntityCheck) {
+            orData dataThis;
+            KRCheckData *cd = elemThis->toCheck();
+            OROCheck *chk = new OROCheck();
+
+            QPointF pos = cd->_pos.toScene();
+            QSizeF size = cd->_size.toScene();
+            pos += QPointF(_leftMargin, _yOffset);
+
+            chk->setPosition(pos);
+            chk->setSize(size);
+
+            chk->setLineStyle(cd->lineStyle());
+            chk->setBackgroundColor(cd->_bgColor->value().value<QColor>());
+            chk->setForegroundColor(cd->_fgColor->value().value<QColor>());
+            chk->setCheckType(cd->_checkStyle->value().toString());
+
+            QString str = QString::null;
+
+            QString cs = cd->_controlSource->value().toString();
+            if (cs.left(1) == "=") {
+                    str = cs.mid(1);
+            } else {
+                QString qry = "Data Source";
+                QString clm = cd->_controlSource->value().toString();
+
+                populateData(cd->data(), dataThis);
+                str = dataThis.getValue();
+            }
+
+            bool v = false;
+
+            str = str.lower();
+
+            kDebug() << "Check Value:" << str;
+            if (str == "t" || str == "true" || str == "1")
+                v = true;
+
+            chk->setValue(v);
+
+            _page->addPrimitive(chk);
+            OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
+            chk2->setPosition(cd->_pos.toPoint());
+            sec->addPrimitive(chk2);
         } else {
             kDebug() << "Encountered an unknown element while rendering a section.";
         }

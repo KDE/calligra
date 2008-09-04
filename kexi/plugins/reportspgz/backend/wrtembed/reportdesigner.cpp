@@ -33,6 +33,7 @@
 #include "reportentityimage.h"
 #include "reportentitychart.h"
 #include "reportentityshape.h"
+#include "reportentitycheck.h"
 #include "reportsectiondetailgroup.h"
 
 // dialogs
@@ -87,12 +88,12 @@ public:
     ReportWriterSectionData() {
         selected_items_rw = 0;
         mouseAction = ReportWriterSectionData::MA_None;
-        insertItem = NoItem;
+        insertItem = KRObjectData::EntityNone;
     }
     virtual ~ReportWriterSectionData() {
         selected_items_rw = 0;
     }
-
+/*
     enum ItemType {
         NoItem = 0,
         LabelItem,
@@ -102,9 +103,10 @@ public:
         BarcodeItem,
         ImageItem,
         ChartItem,
-        ShapeItem
+        ShapeItem,
+        CheckItem
     };
-
+*/
     enum MouseAction {
         MA_None = 0,
         MA_Insert = 1,
@@ -127,7 +129,7 @@ public:
     ReportWindow * selected_items_rw;
 
     MouseAction mouseAction;
-    ItemType insertItem;
+    KRObjectData::EntityTypes insertItem;
 
     // copy data
     int copy_x_pos;        // the base x position of the copy (typically the first items original pos)
@@ -1088,38 +1090,41 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
         switch (sectionData->mouseAction) {
         case ReportWriterSectionData::MA_Insert:
             switch (sectionData->insertItem) {
-            case ReportWriterSectionData::LabelItem :
+            case KRObjectData::EntityLabel :
                 item = new ReportEntityLabel(v->document(), v->scene());
                 break;
-            case ReportWriterSectionData::FieldItem :
+            case KRObjectData::EntityField :
                 item = new ReportEntityField(v->document(), v->scene());
                 break;
-            case ReportWriterSectionData::TextItem :
+            case KRObjectData::EntityText :
                 item = new ReportEntityText(v->document(), v->scene());
                 break;
-            case ReportWriterSectionData::BarcodeItem :
+            case KRObjectData::EntityBarcode :
                 item = new ReportEntityBarcode(v->document(), v->scene());
                 break;
-            case ReportWriterSectionData::ImageItem :
+            case KRObjectData::EntityImage :
                 item = new ReportEntityImage(v->document(), v->scene());
                 break;
-            case ReportWriterSectionData::LineItem :
+            case KRObjectData::EntityLine :
                 kDebug() << "Adding Line";
                 item = new ReportEntityLine(v->document(), v->scene());
                 //dynamic_cast<QGraphicsLineItem*>(item)->setLine ( e->x()-10, e->y(), e->x()+10, e->y() );
                 dynamic_cast<QGraphicsLineItem*>(item)->setLine(e->x(), e->y(), e->x() + 20, e->y());
                 break;
-            case ReportWriterSectionData::ChartItem :
+            case KRObjectData::EntityChart :
                 item = new ReportEntityChart(v->document(), v->scene());
                 break;
-            case ReportWriterSectionData::ShapeItem :
+            case KRObjectData::EntityShape :
                 item = new ReportEntityShape(v->document(), v->scene());
+                break;
+            case KRObjectData::EntityCheck :
+                item = new ReportEntityCheck(v->document(), v->scene());
                 break;
             default:
                 kDebug() << "attempted to insert an unknown item";;
             }
             if (item) {
-                if (sectionData->insertItem != ReportWriterSectionData::LineItem)
+                if (sectionData->insertItem != KRObjectData::EntityLine)
                     item->setPos(e->x(), e->y());
 
                 item->setVisible(true);
@@ -1128,7 +1133,7 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
             }
 
             sectionData->mouseAction = ReportWriterSectionData::MA_None;
-            sectionData->insertItem = ReportWriterSectionData::NoItem;
+            sectionData->insertItem = KRObjectData::EntityNone;
             break;
         default:
             // what to do? Nothing
@@ -1144,55 +1149,10 @@ unsigned int ReportDesigner::selectionCount()
     return activeScene()->selectedItems().count();
 }
 
-//
-// Item Actions
-//
-void ReportDesigner::slotItemLabel()
+void ReportDesigner::slotItem(KRObjectData::EntityTypes typ)
 {
     sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::LabelItem;
-}
-
-void ReportDesigner::slotItemField()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::FieldItem;
-}
-
-void ReportDesigner::slotItemText()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::TextItem;
-}
-
-void ReportDesigner::slotItemLine()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::LineItem;
-}
-
-void ReportDesigner::slotItemBarcode()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::BarcodeItem;
-}
-
-void ReportDesigner::slotItemImage()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::ImageItem;
-}
-
-void ReportDesigner::slotItemChart()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::ChartItem;
-}
-
-void ReportDesigner::slotItemShape()
-{
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = ReportWriterSectionData::ShapeItem;
+    sectionData->insertItem = typ;
 }
 
 void ReportDesigner::changeSet(KoProperty::Set *s)

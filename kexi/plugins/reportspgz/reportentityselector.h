@@ -45,6 +45,7 @@ public:
     KPushButton *itemImage;
     KPushButton *itemChart;
     KPushButton *itemShape;
+    KPushButton *itemCheck;
 };
 
 #endif

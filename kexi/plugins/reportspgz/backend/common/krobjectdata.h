@@ -30,6 +30,7 @@ class KRBarcodeData;
 class KRImageData;
 class KRChartData;
 class KRShapeData;
+class KRCheckData;
 
 namespace KoProperty
 {
@@ -43,6 +44,7 @@ class KRObjectData
 {
 public:
     enum EntityTypes {
+        EntityNone = 0,
         EntityLine  = 65537,
         EntityLabel = 65550,
         EntityField = 65551,
@@ -50,7 +52,8 @@ public:
         EntityBarcode = 65553,
         EntityImage = 65554,
         EntityChart = 65555,
-        EntityShape = 65556
+        EntityShape = 65556,
+        EntityCheck = 65557
     };
 
     KRObjectData();
@@ -65,6 +68,7 @@ public:
     virtual KRImageData * toImage();
     virtual KRChartData * toChart();
     virtual KRShapeData * toShape();
+    virtual KRCheckData * toCheck();
 
     KoProperty::Set* properties() {
         return _set;

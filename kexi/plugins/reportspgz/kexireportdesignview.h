@@ -24,7 +24,8 @@
 #include <QDomDocument>
 #include <koproperty/set.h>
 #include <kexireportpart.h>
-class ReportDesigner;
+#include "backend/wrtembed/reportdesigner.h"
+
 class QScrollArea;
 class ReportEntitySelector;
 
@@ -64,6 +65,14 @@ protected:
 
 private slots:
     void slotDesignerPropertySetChanged();
+    void slotLabel(){_rd->slotItem(KRObjectData::EntityLabel);};
+    void slotField(){_rd->slotItem(KRObjectData::EntityField);};
+    void slotText(){_rd->slotItem(KRObjectData::EntityText);};
+    void slotChart(){_rd->slotItem(KRObjectData::EntityChart);};
+    void slotBarcode(){_rd->slotItem(KRObjectData::EntityBarcode);};
+    void slotImage(){_rd->slotItem(KRObjectData::EntityImage);};
+    void slotLine(){_rd->slotItem(KRObjectData::EntityLine);};
+    void slotCheck(){_rd->slotItem(KRObjectData::EntityCheck);};
 
 
 

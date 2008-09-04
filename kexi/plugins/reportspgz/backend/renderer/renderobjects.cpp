@@ -501,3 +501,28 @@ OROPrimitive* OROEllipse::clone()
     theClone->setBrush(_brush);
     return theClone;
 }
+
+const int OROCheck::Check = 7;
+
+OROCheck::OROCheck()
+        : OROPrimitive(OROCheck::Check)
+{
+
+}
+
+OROCheck::~OROCheck()
+{
+
+}
+
+OROPrimitive* OROCheck::clone()
+{
+    OROCheck *theClone = new OROCheck();
+    theClone->setSize(_size);
+    theClone->setPosition(_position);
+    theClone->setLineStyle(_lineStyle);
+    theClone->setBackgroundColor(_bgcolor);
+    theClone->setForegroundColor(_fgcolor);
+    theClone->setValue(_value);
+    return theClone;
+}

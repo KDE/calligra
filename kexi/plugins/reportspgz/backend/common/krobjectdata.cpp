@@ -61,5 +61,7 @@ KRShapeData * KRObjectData::toShape()
 {
     return 0;
 }
-
-
+KRCheckData * KRObjectData::toCheck()
+{
+    return 0;
+}

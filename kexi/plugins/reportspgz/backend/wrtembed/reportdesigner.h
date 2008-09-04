@@ -36,6 +36,7 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 #include <kdebug.h>
+#include <krobjectdata.h>
 
 class ReportGridOptions;
 class QDomDocument;
@@ -149,6 +150,7 @@ public slots:
     void slotEditPaste();
     void slotEditPaste(QGraphicsScene *, const QPointF &);
 
+/*
     void slotItemLabel();
     void slotItemField();
     void slotItemText();
@@ -157,6 +159,8 @@ public slots:
     void slotItemImage();
     void slotItemChart();
     void slotItemShape();
+    void slotItemCheck();*/
+    void slotItem(KRObjectData::EntityTypes);
 
     void slotSectionEditor();
 

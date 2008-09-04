@@ -61,6 +61,7 @@ ReportEntity::ReportEntity(ReportDesigner* r)
 
 void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElement & parent)
 {
+    /*
     ReportEntity * re = NULL;
     switch (dynamic_cast<KRObjectData*>(item)->type()) {
     case KRObjectData::EntityLabel:
@@ -91,6 +92,14 @@ void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElemen
     if (re != NULL) {
         re->buildXML(doc, parent);
     }
+    */
+    ReportEntity *re = NULL;
+    re = dynamic_cast<ReportEntity*>(item);
+
+    if (re != NULL) {
+        re->buildXML(doc, parent);
+    }
+
 }
 
 void ReportEntity::buildXMLRect(QDomDocument & doc, QDomElement & entity, QRectF rect)

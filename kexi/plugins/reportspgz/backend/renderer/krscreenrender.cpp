@@ -140,7 +140,74 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
             QPointF ps = im->position();
             QSizeF sz = im->size();
             QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+            _painter->save();
             _painter->drawPicture(rc.topLeft(), *(im->picture()));
+            _painter->restore();
+        } else if (prim->type() == OROCheck::Check) {
+            OROCheck * chk = (OROCheck*) prim;
+            QPointF ps = chk->position();
+            QSizeF sz = chk->size();
+            QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
+
+            _painter->save();
+
+            _painter->setBackgroundMode ( Qt::OpaqueMode );
+            _painter->setRenderHint(QPainter::Antialiasing);
+            QColor bg = chk->backgroundColor();
+            //bg.setAlpha(chk->);
+
+            _painter->setBackground(bg);
+            _painter->setPen(chk->foregroundColor());
+
+            if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
+                _painter->setPen(QPen(QColor(224, 224, 224)));
+            } else {
+                _painter->setPen(QPen(chk->lineStyle().lnColor, chk->lineStyle().weight, chk->lineStyle().style));
+            }
+
+            qreal ox = sz.width()/5;
+            qreal oy = sz.height()/5;
+
+            //Checkbox Style
+            if (chk->checkType() == "Cross"){
+                _painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
+
+                if (chk->value()) {
+                    QPen lp;
+                    lp.setColor(chk->foregroundColor());
+                    lp.setWidth(ox > oy ? oy : ox);
+                    _painter->setPen(lp);
+                    _painter->drawLine(QPointF(ox,oy) + ps, QPointF(sz.width() - ox, sz.height() - oy) + ps);
+                    _painter->drawLine(QPointF(ox, sz.height() - oy) + ps, QPoint(sz.width() - ox, oy) + ps);
+                }
+            }
+            else if (chk->checkType() == "Dot"){
+            //Radio Style
+                _painter->drawEllipse(rc);
+
+                if (chk->value()) {
+                    QBrush lb(chk->foregroundColor());
+                    _painter->setBrush(lb);
+                    _painter->setPen(Qt::NoPen);
+                    _painter->drawEllipse(rc.center(), sz.width()/2 - ox, sz.height()/2 - oy);
+                }
+            }
+            else {
+            //Tickbox Style
+                _painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
+
+                if (chk->value()) {
+                    QPen lp;
+                    lp.setColor(chk->foregroundColor());
+                    lp.setWidth(ox > oy ? oy : ox);
+                    _painter->setPen(lp);
+                    _painter->drawLine(QPointF(ox,sz.height()/2) + ps, QPointF(sz.width() / 2, sz.height() - oy) + ps);
+                    _painter->drawLine(QPointF(sz.width() / 2, sz.height() - oy) + ps, QPointF(sz.width() - ox, oy) + ps);
+                }
+            }
+
+            _painter->restore();
+
         } else {
             kDebug() << "unrecognized primitive type";
         }
