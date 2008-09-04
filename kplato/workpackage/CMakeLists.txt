@@ -26,7 +26,7 @@ target_link_libraries(
     kplatoui
     koguiutils
     komain
-    kstore
+    kostore
     koodf
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
