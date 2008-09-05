@@ -99,7 +99,7 @@
           Save the query design for later use by clicking the <!--<img src="icons/filesave.png" class="icon">-->
           <guibutton>Save</guibutton> button on the toolbar. You can also use
           <menuchoice><guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>
-          from the menubar or press the <keycombo action="simul"><keycap>Ctrl</keycap><keycap>S</keycap></keycombo>
+          from the menubar or press the <keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
           keys. Because the query design has not been saved yet, you will be asked to
           specify a name for it. Enter <literal>Contacts</literal> text in the
           <guilabel>caption</guilabel> field and click the <guibutton>OK</guibutton> button.

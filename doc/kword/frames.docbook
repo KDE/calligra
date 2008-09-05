@@ -408,7 +408,7 @@ cursor where you want the break to be located in the document.</para>
 
 <listitem>
 <para>You can use the keyboard shortcut:
-<keycombo><keycap>Ctrl</keycap><keycap>Return</keycap></keycombo></para>
+<keycombo>&Ctrl;<keycap>Return</keycap></keycombo></para>
 </listitem>
 </itemizedlist>
 
