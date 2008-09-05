@@ -94,6 +94,16 @@ void KPrPage::removeShape( KoShape * shape )
     // TODO
 }
 
+void KPrPage::setLayout( KPrPageLayout * layout )
+{
+    d->layout = layout;
+}
+
+KPrPageLayout * KPrPage::layout()
+{
+    return d->layout;
+}
+
 void KPrPage::saveOdfPageContent( KoPASavingContext & paContext ) const
 {
     if ( d->layout ) {

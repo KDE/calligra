@@ -29,6 +29,7 @@
 class KPrDocument;
 class KPrPageApplicationData;
 class KPrNotes;
+class KPrPageLayout;
 
 class KPRESENTER_EXPORT KPrPage : public KoPAPage, public KPrAnimationController
 {
@@ -49,6 +50,21 @@ public:
 
     void addShape( KoShape * shape );
     void removeShape( KoShape * shape );
+
+    /**
+     * Set the layout to use on the page
+     *
+     * @param layout the layout that should be used from now. 
+     *        If 0 no layout will be used.
+     */
+    void setLayout( KPrPageLayout * layout );
+
+    /**
+     * Get the layout used on the page
+     *
+     * @return layout that is used or 0 if no layout is used
+     */
+    KPrPageLayout * layout();
 
 protected:
     /// reimplemented
