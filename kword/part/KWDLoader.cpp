@@ -581,7 +581,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
 
                 QTextBlock block = cursor.block();
                 paragStyle.applyStyle(block);
-                if (!style->listStyle().isValid() && paragStyle.listStyle().isValid()) {
+                if (style->listStyle() && paragStyle.listStyle()) {
                     Q_ASSERT(block.textList());
                     // this parag has a parag specific list.  Lets see if we can merge it with
                     // previous ones.
@@ -751,12 +751,8 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
         style->setBreakBefore(true);
     element = layout.namedItem("COUNTER").toElement();
     if (!element.isNull()) {
-        KoListStyle orig = style->listStyle();
-        KoListStyle *lstyle;
-        if (orig.isValid())
-            lstyle = new KoListStyle(orig);
-        else
-            lstyle = new KoListStyle();
+        KoListStyle *orig = style->listStyle();
+        KoListStyle *lstyle = orig ? orig : new KoListStyle(style);
 
         KoListLevelProperties llp = lstyle->levelProperties(element.attribute("depth").toInt() + 1);
 
@@ -781,7 +777,6 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
             kWarning() << "According to spec COUNTER with type 7 is not supported, ignoring\n";
             // fall through
         default: {
-            delete lstyle;
             lstyle = 0;
         }
         }
@@ -798,11 +793,9 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout)
             if (element.attribute("restart", "false") == "true")
                 style->setRestartListNumbering(true);
             style->setListLevel(llp.level());
-            style->setListStyle(*lstyle);
             lstyle->setLevelProperties(llp);
-        } else
-            style->removeListStyle();
-        delete lstyle;
+        }
+        style->setListStyle(lstyle);
     }
 
     class BorderConverter

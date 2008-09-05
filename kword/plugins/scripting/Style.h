@@ -407,7 +407,7 @@ public Q_SLOTS:
 
     /** Return true if this item is a list item else false is returned. */
     bool isList() const {
-        return m_style->listStyle().isValid();
+        return m_style->listStyle() != 0;
     }
 
 #if 0
