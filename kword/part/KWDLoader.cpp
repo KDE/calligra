@@ -575,7 +575,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                 KoParagraphStyle *style = styleManager->paragraphStyle(styleName);
                 if (!style)
                     style = styleManager->defaultParagraphStyle();
-                KoParagraphStyle paragStyle(*style); // tmp style.
+                KoParagraphStyle paragStyle;  // tmp style
+                paragStyle.copyProperties(style);
                 fill(&paragStyle, layout);
 
                 QTextBlock block = cursor.block();
