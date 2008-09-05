@@ -646,7 +646,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                         continue;
                     }
                     if (id == "1") {
-                        KoCharacterStyle s2(*style);
+                        KoCharacterStyle s2;
+                        s2.copyProperties(style);
                         fill(&s2, format);
                         s2.applyStyle(&formatCursor);
                     } else if (id == "2") {
