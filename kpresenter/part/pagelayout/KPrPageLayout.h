@@ -24,6 +24,7 @@
 #include <QString>
 
 class QRectF;
+class QPixmap;
 class KPrPlaceholder;
 class KoXmlElement;
 class KoPALoadingContext;
@@ -50,6 +51,11 @@ public:
      * @return the style name used for this page layout
      */
     QString saveOdf( KoPASavingContext & context ) const;
+
+    /**
+     * get the thumbnail of the layout
+     */
+    QPixmap thumbnail() const;
 
 private:
     // The display name of the layout

@@ -44,7 +44,28 @@ public:
     void saveOdf( KoXmlWriter & xmlWriter );
 
     QString presentationObject();
-    QRectF size( const QRectF & pageSize );
+
+    /**
+     * Calculate object rect according to the page size
+     *
+     * @param pageSize The size of the page
+     */
+    QRectF rect( const QSizeF & pageSize );
+
+    /**
+     * Fix wrongly saved data from OO
+     *
+     * fix for wrong saved data from OO somehow they save negative values for width and height somethimes
+     * It will take the values from rect to update the width or height if they are negative
+     * <style:presentation-page-layout style:name="AL10T12">
+     *   <presentation:placeholder presentation:object="title" svg:x="2.057cm" svg:y="1.743cm" svg:width="23.911cm" svg:height="3.507cm"/>
+     *   <presentation:placeholder presentation:object="outline" svg:x="2.057cm" svg:y="5.838cm" svg:width="11.669cm" svg:height="13.23cm"/>
+     *   <presentation:placeholder presentation:object="object" svg:x="14.309cm" svg:y="5.838cm" svg:width="-0.585cm" svg:height="6.311cm"/>
+     *   <presentation:placeholder presentation:object="object" svg:x="14.309cm" svg:y="12.748cm" svg:width="-0.585cm" svg:height="-0.601cm"/>
+     * </style:presentation-page-layout>
+     * 
+     */
+    void fix( const QRectF & rect );
 
 private:
     qreal percent( const KoXmlElement & element, const char * type, qreal absolute );

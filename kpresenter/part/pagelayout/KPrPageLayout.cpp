@@ -30,6 +30,13 @@
 #include <KoPASavingContext.h>
 #include "KPrPlaceholder.h"
 
+#include <KoPAView.h>
+#include <QSize>
+#include <QPainter>
+#include <QPixmap>
+#include <kiconloader.h>
+#include <ksvgrenderer.h>
+
 KPrPageLayout::KPrPageLayout()
 {
 }
@@ -70,6 +77,24 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
         kWarning(33000) << "no placehoslders for page layout" << m_name << "found";
         retval = false;
     }
+    else {
+        /* 
+         * do fixups for wrong saved data from OO somehow they save negative values for width and height somethimes
+         * <style:presentation-page-layout style:name="AL10T12">
+         *   <presentation:placeholder presentation:object="title" svg:x="2.057cm" svg:y="1.743cm" svg:width="23.911cm" svg:height="3.507cm"/>
+         *   <presentation:placeholder presentation:object="outline" svg:x="2.057cm" svg:y="5.838cm" svg:width="11.669cm" svg:height="13.23cm"/>
+         *   <presentation:placeholder presentation:object="object" svg:x="14.309cm" svg:y="5.838cm" svg:width="-0.585cm" svg:height="6.311cm"/>
+         *   <presentation:placeholder presentation:object="object" svg:x="14.309cm" svg:y="12.748cm" svg:width="-0.585cm" svg:height="-0.601cm"/>
+         * </style:presentation-page-layout>
+         */
+        QList<KPrPlaceholder *>::iterator it( m_placeholders.begin() );
+        KPrPlaceholder * last = *it;
+        ++it;
+        for ( ; it != m_placeholders.end(); ++it ) {
+            ( *it )->fix( last->rect( QSizeF( 1, 1 ) ) );
+            last = *it;
+        }
+    }
     return retval;
 }
 
@@ -93,4 +118,28 @@ QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
 
     // return the style name so we can save the ptr -> style in the saving context so the pages can use it during saving
     return context.mainStyles().lookup( style, "pl" );
+}
+
+QPixmap KPrPageLayout::thumbnail() const
+{
+    static KIconLoader * loader = KIconLoader::global();
+
+    KSvgRenderer renderer;
+
+    QSize size( 80, 60 );
+    QPixmap pic( size );
+    pic.fill();
+    QPainter p( &pic );
+
+    QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
+    for ( ; it != m_placeholders.end(); ++it ) {
+
+        QString file = loader->iconPath( ( *it )->presentationObject(), KIconLoader::User );
+        if ( renderer.load( file ) ) {
+            kDebug(33001) << "-----------------" <<( *it )->presentationObject() << ( *it )->rect( size );
+            renderer.render( &p, ( *it )->rect( size ) );
+        }
+    }
+
+    return pic;
 }

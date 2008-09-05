@@ -55,6 +55,8 @@ public:
      */
     // TODO
 
+    const QMap<QString, KPrPageLayout *> & layouts() const;
+
 private:
     // the string is the style name associated with the page layout when the file was 
     // loaded from file

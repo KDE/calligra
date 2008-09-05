@@ -77,14 +77,24 @@ QString KPrPlaceholder::presentationObject()
     return m_presentationObject;
 }
 
-QRectF KPrPlaceholder::size( const QRectF & pageSize )
+QRectF KPrPlaceholder::rect( const QSizeF & pageSize )
 {
-    QRectF s;
-    s.setX( pageSize.width() * m_relativeSize.x() );
-    s.setY( pageSize.height() * m_relativeSize.y() );
-    s.setWidth( pageSize.width() * m_relativeSize.width() );
-    s.setY( pageSize.height() * m_relativeSize.height() );
-    return s;
+    QRectF r;
+    r.setX( pageSize.width() * m_relativeSize.x() );
+    r.setY( pageSize.height() * m_relativeSize.y() );
+    r.setWidth( pageSize.width() * m_relativeSize.width() );
+    r.setHeight( pageSize.height() * m_relativeSize.height() );
+    return r;
+}
+
+void KPrPlaceholder::fix( const QRectF & rect )
+{
+    if ( m_relativeSize.width() < 0 ) {
+        m_relativeSize.setWidth( rect.width() );
+    }
+    if ( m_relativeSize.height() < 0 ) {
+        m_relativeSize.setHeight( rect.height() );
+    }
 }
 
 qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, qreal absolute )

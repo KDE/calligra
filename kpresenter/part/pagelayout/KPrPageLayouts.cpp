@@ -91,3 +91,8 @@ KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name, KoPALoadingCon
 
     return pageLayout;
 }
+
+const QMap<QString, KPrPageLayout *> & KPrPageLayouts::layouts() const
+{
+    return m_pageLayouts;
+}
