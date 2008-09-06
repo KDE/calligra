@@ -21,8 +21,11 @@
 #define KPRPAGELAYOUTDOCKER_H
 
 #include <QDockWidget>
+#include <QMap>
 
 class QListWidget;
+class QListWidgetItem;
+class KPrPageLayout;
 class KPrView;
 
 class KPrPageLayoutDocker : public QDockWidget
@@ -39,6 +42,7 @@ public slots:
 private:
     KPrView* m_view;
     QListWidget * m_layoutsView;
+    QMap<KPrPageLayout *, QListWidgetItem *> m_layout2item;
 };
 
 #endif /* KPRPAGELAYOUTDOCKER_H */

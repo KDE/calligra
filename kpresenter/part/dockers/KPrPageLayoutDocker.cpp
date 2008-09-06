@@ -20,9 +20,20 @@
 #include "KPrPageLayoutDocker.h"
 
 #include <QListWidget>
+#include <QSize>
 #include <QVBoxLayout>
 
 #include <klocale.h>
+
+#include <KoPADocument.h>
+
+#include "KPrPage.h"
+#include "KPrView.h"
+#include "pagelayout/KPrPageLayout.h"
+#include "pagelayout/KPrPageLayouts.h"
+
+// this is needed so it can be used in a QVariant
+Q_DECLARE_METATYPE( KPrPageLayout* )
 
 KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags )
 : QDockWidget( parent, flags )
@@ -31,7 +42,8 @@ KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags
     setWindowTitle( i18n( "Page layouts" ) );
 
     QWidget* base = new QWidget( this );
-    QListWidget * m_layoutsView = new QListWidget( base );
+    m_layoutsView = new QListWidget( base );
+    m_layoutsView->setIconSize( QSize( 80, 60 ) );
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( m_layoutsView );
@@ -43,10 +55,44 @@ void KPrPageLayoutDocker::setView( KPrView* view )
 {
     Q_ASSERT( view );
     m_view = view;
+    connect( m_view, SIGNAL( activePageChanged() ),
+             this, SLOT( slotActivePageChanged() ) );
+
+    KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( view->kopaDocument()->dataCenterMap()[ PageLayouts ] );
+    Q_ASSERT( layouts );
+
+    const QMap<QString, KPrPageLayout *> & layoutMap = layouts->layouts();
+
+    // TODO add empty layout
+
+    foreach( KPrPageLayout * layout, layoutMap ) {
+        QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "TODO", m_layoutsView );
+        item->setData( Qt::UserRole, QVariant( layout ) );
+        m_layout2item.insert( layout, item );
+    }
+
+    slotActivePageChanged();
 }
 
 void KPrPageLayoutDocker::slotActivePageChanged()
 {
+    Q_ASSERT( m_view );
+
+    KPrPage * page = dynamic_cast<KPrPage*>( m_view->activePage() );
+    if ( page ) {
+        KPrPageLayout * layout = page->layout();
+        QListWidgetItem * item = m_layout2item.value( layout, 0 );
+        if ( item ) {
+            item->setSelected( true );
+            m_layoutsView->scrollToItem( item );
+        }
+        else {
+            QList<QListWidgetItem*> items = m_layoutsView->selectedItems();
+            foreach ( QListWidgetItem * i, items ) {
+                i->setSelected( false );
+            }
+        }
+    }
 }
 
 #include "KPrPageLayoutDocker.moc"
