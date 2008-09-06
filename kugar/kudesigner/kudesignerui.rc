@@ -33,7 +33,7 @@
     <Action name="line"/>
   </Menu>
 </MenuBar>
-<ToolBar fullWidth="false" name="edit_toolbar" position="top"><Text>Edit</Text>
+<ToolBar fullWidth="false" name="edit_toolbar" position="top"><text>Edit</text>
 <!--  <Action name="koffice_undo"/>
   <Action name="koffice_redo"/>
   <Separator/>

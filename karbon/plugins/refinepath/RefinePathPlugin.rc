@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="refinepathplugin" library="karbon_refinepathplugin">
+<gui name="refinepathplugin" library="karbon_refinepathplugin" version="1">
 <MenuBar>
 	<Menu name="effects">
 		<Action name="path_refine"/>
@@ -8,4 +8,4 @@
 <ToolBar name="Effects" fullWidth="false">
 	<Action name="path_refine"/>
 </ToolBar>
-</kpartplugin>
+</gui>

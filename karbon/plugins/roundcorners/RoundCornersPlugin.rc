@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartplugin name="roundcornersplugin" library="karbon_roundcornersplugin">
+<gui name="roundcornersplugin" library="karbon_roundcornersplugin" version="1">
 <MenuBar>
 	<Menu name="effects">
 		<Action name="path_round_corners"/>
@@ -8,4 +8,4 @@
 <ToolBar name="Effects" hidden="true" fullWidth="false">
 	<Action name="path_round_corners"/>
 </ToolBar>
-</kpartplugin>
+</gui>
