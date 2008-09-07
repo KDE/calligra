@@ -827,7 +827,6 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             chk->setSize(size);
 
             chk->setLineStyle(cd->lineStyle());
-            chk->setBackgroundColor(cd->_bgColor->value().value<QColor>());
             chk->setForegroundColor(cd->_fgColor->value().value<QColor>());
             chk->setCheckType(cd->_checkStyle->value().toString());
 

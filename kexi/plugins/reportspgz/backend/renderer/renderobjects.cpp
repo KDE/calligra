@@ -521,7 +521,6 @@ OROPrimitive* OROCheck::clone()
     theClone->setSize(_size);
     theClone->setPosition(_position);
     theClone->setLineStyle(_lineStyle);
-    theClone->setBackgroundColor(_bgcolor);
     theClone->setForegroundColor(_fgcolor);
     theClone->setValue(_value);
     return theClone;

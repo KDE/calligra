@@ -37,10 +37,6 @@ KRCheckData::KRCheckData(QDomNode &element)
             }
         } else if (n == "fgcolor") {
             _fgColor->setValue(QColor(node.firstChild().nodeValue()));
-        } else if (n == "bgcolor") {
-            _bgColor->setValue(QColor(node.firstChild().nodeValue()));
-        } else if (n == "bgopacity") {
-            _bgOpacity->setValue(node.firstChild().nodeValue().toInt());
         } else {
             kDebug() << "while parsing check element encountered unknown element: " << n << endl;
         }
@@ -65,11 +61,7 @@ void KRCheckData::createProperties()
     _controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "", "Control Source");
     _controlSource->setOption("extraValueAllowed", "true");
 
-    _bgColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
     _fgColor = new KoProperty::Property("ForegroundColor", Qt::black, "Foreground Color", "Foreground Color");
-    _bgOpacity = new KoProperty::Property("Opacity", 255, "Opacity", "Opacity");
-    _bgOpacity->setOption("max", 255);
-    _bgOpacity->setOption("min", 0);
 
     _lnWeight = new KoProperty::Property("Weight", 1, "Line Weight", "Line Weight");
     _lnColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
@@ -80,9 +72,7 @@ void KRCheckData::createProperties()
     _set->addProperty(_checkStyle);
     _set->addProperty(_pos.property());
     _set->addProperty(_size.property());
-    _set->addProperty(_bgColor);
     _set->addProperty(_fgColor);
-    _set->addProperty(_bgOpacity);
     _set->addProperty(_lnWeight);
     _set->addProperty(_lnColor);
     _set->addProperty(_lnStyle);

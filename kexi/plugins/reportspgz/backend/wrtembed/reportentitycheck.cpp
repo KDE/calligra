@@ -69,10 +69,7 @@ void ReportEntityCheck::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     painter->setBackgroundMode ( Qt::OpaqueMode );
     painter->setRenderHint(QPainter::Antialiasing);
-    QColor bg = _bgColor->value().value<QColor>();
-    bg.setAlpha(_bgOpacity->value().toInt());
 
-    painter->setBackground(bg);
     painter->setPen(_fgColor->value().value<QColor>());
 
     if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0) {
@@ -149,6 +146,11 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 
     //Line Style
     buildXMLLineStyle(doc, entity, lineStyle());
+
+    //Color
+    QDomElement fc = doc.createElement("fgcolor");
+    fc.appendChild(doc.createTextNode(_fgColor->value().value<QColor>().name()));
+    entity.appendChild(fc);
 
     QDomElement cs = doc.createElement("controlsource");
     cs.appendChild(doc.createTextNode(_controlSource->value().toString()));

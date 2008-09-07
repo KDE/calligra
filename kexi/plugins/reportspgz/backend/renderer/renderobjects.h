@@ -486,20 +486,12 @@ public:
         return _fgcolor;
     }
 
-    void setBackgroundColor(const QColor& bg){
-        _bgcolor = bg;
-    }
-    QColor backgroundColor(){
-        return _bgcolor;
-    }
-
     protected:
             QSizeF _size;
             QString _checkType;
             bool _value;
             ORLineStyleData _lineStyle;
             QColor _fgcolor;
-            QColor _bgcolor;
 
 
 };

@@ -153,10 +153,7 @@ bool KRScreenRender::render(ORODocument * pDocument , int page)
 
             _painter->setBackgroundMode ( Qt::OpaqueMode );
             _painter->setRenderHint(QPainter::Antialiasing);
-            QColor bg = chk->backgroundColor();
-            //bg.setAlpha(chk->);
 
-            _painter->setBackground(bg);
             _painter->setPen(chk->foregroundColor());
 
             if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {

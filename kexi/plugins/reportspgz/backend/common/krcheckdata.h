@@ -37,8 +37,6 @@ class KRCheckData : public KRObjectData
     KoProperty::Property * _controlSource;
     KoProperty::Property* _checkStyle;
     KoProperty::Property* _fgColor;
-    KoProperty::Property* _bgColor;
-    KoProperty::Property* _bgOpacity;
     KoProperty::Property* _lnColor;
     KoProperty::Property* _lnWeight;
     KoProperty::Property* _lnStyle;
