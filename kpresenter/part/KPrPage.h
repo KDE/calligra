@@ -46,6 +46,11 @@ public:
      */
     static KPrPageApplicationData * pageData( KoPAPageBase * page );
 
+    /**
+     * Get the presentation notes for this page
+     *
+     * @return the presentation notes
+     */
     KPrNotes *pageNotes();
 
     void addShape( KoShape * shape );

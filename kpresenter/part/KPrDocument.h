@@ -93,10 +93,28 @@ public:
      */
     void setPresenterViewEnabled( bool enabled );
 
+    /**
+     * Get the list of pages for slide show. It is possible that the pages for
+     * slideshow are different from KoPADocument::pages() due to custom slide show
+     *
+     * @return the list of pages for slide show
+     */
     QList<KoPAPageBase*> slideShow() const;
 
+    /**
+     * Get the name of currently active custom slide show, or an empty string
+     * if "all slides" is used for the slide show and no active custom slide show
+     *
+     * @return the name of currently active custom slide show, or empty string if none
+     */
     QString activeCustomSlideShow() const;
 
+    /**
+     * Set the currently active custom slide show. The custom slide show name should
+     * be valid, i.e. KPrCustomSlideShow::names() contains the name
+     *
+     * @param customSlideShow the new active custom slide show
+     */
     void setActiveCustomSlideShow( const QString &customSlideShow );
 
 protected:

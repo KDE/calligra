@@ -33,8 +33,10 @@ public:
     KPrNotes( KPrPage * page, KPrDocument * document );
     ~KPrNotes();
 
+    /// Get the main text note shape for this presentation notes
     KoShape *textShape();
 
+    /// Get the main thumbnail shape for this presentation notes
     KoShape *thumbnailShape();
 
     /// reimplemented
@@ -43,10 +45,13 @@ public:
     /// reimplemented
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
+    /// reimplemented
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
+    /// Get the page layout for this presentation notes
     KoPageLayout &pageLayout() { return m_pageLayout; }
 
+    /// update the page thumbnail to reflect current page
     void updatePageThumbnail();
 
 private:
