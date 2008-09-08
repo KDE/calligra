@@ -408,7 +408,7 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
         }
         if ( index.userData == X_Axis ) {
             if ( parent( index ).number() == 0 ) {
-                return "Days"; // left y-axis
+                return "Time"; // left y-axis
             }
             if ( parent( index ).number() == 1 ) {
                 // Top axis label
@@ -474,6 +474,14 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
         }
         return QVariant();
     }
+    if ( role == AbstractChartModel::AxisStartDateRole ) {
+        //kDebug()<<"Display:"<<index;
+        if ( index.userData == X_Axis ) {
+            return startDate();
+        }
+        return QDate();
+    }
+    
     return QVariant();
 }
 

@@ -232,7 +232,7 @@ p, li { white-space: pre-wrap; }
           <number>0</number>
          </property>
          <item>
-          <widget class="KPlotWidget" name="plotwidget" >
+          <widget class="KPlato::KPlotWidget" name="plotwidget" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
              <horstretch>0</horstretch>
@@ -268,9 +268,9 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KPlotWidget</class>
+   <class>KPlato::KPlotWidget</class>
    <extends>QFrame</extends>
-   <header>kplotwidget.h</header>
+   <header>plotting/kplotwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

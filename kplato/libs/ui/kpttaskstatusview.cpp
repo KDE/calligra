@@ -55,9 +55,10 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
-#include <kplotwidget.h>
-#include <kplotobject.h>
-#include <kplotaxis.h>
+
+#include "plotting/kplotwidget.h"
+#include "plotting/kplotobject.h"
+#include "plotting/kplotaxis.h"
 
 namespace KPlato
 {
@@ -615,8 +616,15 @@ QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
             range.prepend ( QPointF ( m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble(), m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble() ) );
             if ( idx.number() == 0 ) {
                 plotwidget->axis( KPlotWidget::BottomAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
+                
+                plotwidget->axis( KPlotWidget::BottomAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
+                plotwidget->axis( KPlotWidget::BottomAxis )->setTickLabelFormat( 'd' );
             } else {
                 plotwidget->axis( KPlotWidget::TopAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
+                
+                plotwidget->axis( KPlotWidget::TopAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
+                plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelFormat( 'w' );
+                
                 plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelsShown( true );
             }
         } else if ( type == AbstractChartModel::Axis_Y ) {
@@ -626,10 +634,15 @@ QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
                 QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
                 //kDebug()<<"LeftAxis:"<<s;
                 plotwidget->axis( KPlotWidget::LeftAxis )->setLabel( s );
+                
+                plotwidget->axis( KPlotWidget::LeftAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
             } else {
                 QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
                 //kDebug()<<"RightAxis:"<<s;
                 plotwidget->axis( KPlotWidget::RightAxis )->setLabel( s );
+            
+                plotwidget->axis( KPlotWidget::RightAxis )->setStartDate( m_model.axisData( ai, AbstractChartModel::AxisStartDateRole ).toDate() );
+            
                 plotwidget->axis( KPlotWidget::RightAxis )->setTickLabelsShown( true );
             }
         }

@@ -15,6 +15,10 @@ include_directories(
 ########### KPlato private library ###############
 
 set(kplatoui_LIB_SRCS
+    plotting/kplotaxis.cpp
+    plotting/kplotwidget.cpp
+    plotting/kplotobject.cpp
+    
     kptworkpackagecontrolpanel.cpp
     kptworkpackagecontroldialog.cpp
     kptworkpackageview.cpp
