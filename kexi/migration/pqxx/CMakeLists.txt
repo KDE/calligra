@@ -10,8 +10,16 @@ kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
 
 
 
-target_link_libraries(keximigrate_pqxx ${POSTGRESQL_LIBRARIES} ${PQXX_LIBRARIES} 
- ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )
+target_link_libraries(
+    keximigrate_pqxx 
+    ${POSTGRESQL_LIBRARIES} 
+    ${PQXX_LIBRARIES} 
+    ${KDE4_KDECORE_LIBS} 
+    ${KDE4_KPARTS_LIBS} 
+    keximigrate 
+    kexidb
+    kexiutils
+	)
 
 install(TARGETS keximigrate_pqxx  DESTINATION ${PLUGIN_INSTALL_DIR})
 
