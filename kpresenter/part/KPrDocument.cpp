@@ -216,7 +216,7 @@ void KPrDocument::setPresenterViewEnabled( bool enabled )
 
 QList<KoPAPageBase*> KPrDocument::slideShow() const
 {
-    if ( !m_activeCustomSlideShow.isNull() &&
+    if ( !m_activeCustomSlideShow.isEmpty() &&
             m_customSlideShows->names().contains( m_activeCustomSlideShow ) ) {
         return m_customSlideShows->getByName( m_activeCustomSlideShow );
     }

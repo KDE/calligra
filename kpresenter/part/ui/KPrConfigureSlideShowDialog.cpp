@@ -45,7 +45,7 @@ KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document,
     setCaption( i18n( "Configure Slide Show" ) );
 
     QString activeCustomSlideShow = document->activeCustomSlideShow();
-    if ( activeCustomSlideShow.isNull() ) {
+    if ( activeCustomSlideShow.isEmpty() ) {
         ui.slidesComboBox->setCurrentIndex( 0 );
     }
     else {
