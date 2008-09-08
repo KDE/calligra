@@ -354,8 +354,10 @@ bool OracleConnection::drv_dropTable( const QString& name )
   QString trig ="DROP TRIGGER KEXI__TG__"+ escapeIdentifier(name);
   QString seq ="DROP SEQUENCE KEXI__SEQ__"+ escapeIdentifier(name);
   m_sql = "DROP TABLE " + escapeIdentifier(name);
-  
-  return d->executeSQL(trig)&& d->executeSQL(seq)&& d->executeSQL(m_sql);
+
+  d->executeSQL(trig);
+  d->executeSQL(seq);
+  return d->executeSQL(m_sql);
 }
 
 /*
@@ -371,8 +373,10 @@ bool OracleConnection::drv_alterTableName
  
   if(ind->isPrimaryKey())
   {
+    d->rs = d->stmt->executeQuery(QString("SELECT KEXI__SEQ__"+oldTableName+".NEXTVAL FROM DUAL").latin1());
+    int n = d->rs->getInt(1);
     QString sq="CREATE SEQUENCE KEXI__SEQ__" + escapeIdentifier(newName) 
-               +" START WITH KEXI__SEQ__"+oldTableName+".NEXTVAL";          
+               +" START WITH " + n;          
     if(!d->executeSQL(sq.latin1())||!d->createTrigger(newName,ind)) return false;
   }
   
