@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrHexagonWipeEffectFactory.h"
+
 #include <cmath>
 
 #include <klocale.h>
 
-#include "KPrHexagonWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 using std::sin;

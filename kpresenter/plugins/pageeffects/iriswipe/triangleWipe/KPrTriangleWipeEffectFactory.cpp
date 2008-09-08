@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrTriangleWipeEffectFactory.h"
+
 #include <cmath>
 
 #include <klocale.h>
 
-#include "KPrTriangleWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define TriangleWipeEffectFactoryId "TriangleWipeEffectFactory"

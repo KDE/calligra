@@ -18,9 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrMiscShapeWipeEffectFactory.h"
+
 #include <klocale.h>
 
-#include "KPrMiscShapeWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define MiscShapeWipeEffectFactoryId "MiscShapeWipeEffect"

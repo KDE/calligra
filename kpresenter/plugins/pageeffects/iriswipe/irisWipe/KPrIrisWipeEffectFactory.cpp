@@ -1,6 +1,7 @@
+#include "KPrIrisWipeEffectFactory.h"
+
 #include <klocale.h>
 
-#include "KPrIrisWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define IrisWipeEffectId "IrisWipeEffect"

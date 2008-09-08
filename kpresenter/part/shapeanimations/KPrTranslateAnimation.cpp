@@ -21,7 +21,6 @@
 
 #include <QPainter>
 
-#include <QPainter>
 #include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 

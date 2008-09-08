@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrArrowHeadWipeEffectFactory.h"
 
 #include <cmath>
 
 #include <klocale.h>
 
-#include "KPrArrowHeadWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define ArrowHeadEffectFactoryId "ArrowHeadEffectFactory"

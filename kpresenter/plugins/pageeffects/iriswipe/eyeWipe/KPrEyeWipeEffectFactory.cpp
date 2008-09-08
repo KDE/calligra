@@ -18,11 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrEyeWipeEffectFactory.h"
+
 #include <cmath>
 
 #include <klocale.h>
 
-#include "KPrEyeWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define EyeWipeEffectId "EyeWipeEffect"

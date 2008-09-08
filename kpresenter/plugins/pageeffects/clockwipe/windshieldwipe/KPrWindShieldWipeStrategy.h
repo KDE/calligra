@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRDOUBLESWEEPWIPESTRATEGY_H
-#define KPRDOUBLESWEEPWIPESTRATEGY_H
+#ifndef KPRWINDSHIELDWIPESTRATEGY_H
+#define KPRWINDSHIELDWIPESTRATEGY_H
 
 #include <KPrPageEffectStrategy.h>
 #include "KPrSweepWipeStrategy.h"
@@ -33,4 +33,4 @@ public:
     virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
 };
 
-#endif // KPRDOUBLESWEEPWIPESTRATEGY_H
+#endif // KPRWINDSHIELDWIPESTRATEGY_H

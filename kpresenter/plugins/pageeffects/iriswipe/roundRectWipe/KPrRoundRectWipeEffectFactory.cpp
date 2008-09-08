@@ -17,12 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrRoundRectWipeEffectFactory.h"
+
 #include <cmath>
 
 #include <klocale.h>
 #include <kdeversion.h>
 
-#include "KPrRoundRectWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define RoundRectWipeEffectFactoryId "RoundRectWipeEffectFactory"

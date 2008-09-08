@@ -17,15 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrCustomSlideShows.h"
+
 //KOffice includes
-#include <KoXmlWriter.h>
 #include <KoPAPageBase.h>
 #include <KoXmlWriter.h>
 
 //KPresenter includes
 #include <KPrDocument.h>
-
-#include "KPrCustomSlideShows.h"
 
 KPrCustomSlideShows::KPrCustomSlideShows()
 {

@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrPentagonWipeEffectFactory.h"
 
 #include <cmath>
 
 #include <klocale.h>
 
-#include "KPrPentagonWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define PentagonEffectFactoryId "PentagonEffectFactory"

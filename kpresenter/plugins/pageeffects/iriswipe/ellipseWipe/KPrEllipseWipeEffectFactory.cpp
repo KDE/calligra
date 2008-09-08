@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KPrEllipseWipeEffectFactory.h"
+
 #include <cmath>
 
 #include <klocale.h>
 
-#include "KPrEllipseWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
 
 #define EllipseWipeEffectFactoryId "EllipseWipeEffectFactory"

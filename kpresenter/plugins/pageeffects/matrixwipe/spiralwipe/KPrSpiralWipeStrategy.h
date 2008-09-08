@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSNAKEWIPEDIAGONALSTRATEGY_H
-#define KPRSNAKEWIPEDIAGONALSTRATEGY_H
+#ifndef KPRSPIRALWIPESTRATEGY_H
+#define KPRSPIRALWIPESTRATEGY_H
 
 #include "../KPrMatrixWipeStrategy.h"
 
@@ -35,4 +35,4 @@ private:
     bool m_clockwise;
 };
 
-#endif // KPRSNAKEWIPEDIAGONALSTRATEGY_H
+#endif // KPRSPIRALWIPESTRATEGY_H

@@ -43,8 +43,6 @@
 #include "shapeanimations/KPrAnimationData.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
-#include <KoShapeManager.h>
-#include <KoShapeLayer.h>
 #include <KoShapeLayer.h>
 #include <KoPAMasterPage.h>
 #include <KoSelection.h>

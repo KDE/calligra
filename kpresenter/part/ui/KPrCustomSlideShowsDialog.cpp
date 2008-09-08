@@ -16,12 +16,14 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
+#include "KPrCustomSlideShowsDialog.h"
+
 //Qt includes
 #include <QDebug>
 #include <QStringList>
 #include <QListWidgetItem>
 #include <QIcon>
-#include <QListWidgetItem>
 #include <QList>
 
 //KDE includes
@@ -33,8 +35,6 @@
 
 //KPresenter includes
 #include <KPrCustomSlideShows.h>
-
-#include "KPrCustomSlideShowsDialog.h"
 
 //so to be able to use it in a QVariant
 Q_DECLARE_METATYPE(KoPAPageBase*)

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRIRISWIPESTRATEGYBASE_H
-#define KPRIRISWIPESTRATEGYBASE_H
+#ifndef KPRIRISWIPEEFFECTSTRATEGYBASE_H
+#define KPRIRISWIPEEFFECTSTRATEGYBASE_H
 
 //Qt includes
 #include <QPainterPath>
@@ -44,4 +44,4 @@ protected:
     QPainterPath m_shape;
 };
 
-#endif // KPRIRISWIPESTRATEGYBASE_H
+#endif // KPRIRISWIPEEFFECTSTRATEGYBASE_H

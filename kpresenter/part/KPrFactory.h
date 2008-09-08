@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRESENTER_FACTORY_H
-#define KPRESENTER_FACTORY_H
+#ifndef KPRFACTORY_H
+#define KPRFACTORY_H
 
 #include <KoFactory.h>
 #include "kpresenter_export.h"
