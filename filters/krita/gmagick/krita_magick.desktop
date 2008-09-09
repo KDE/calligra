@@ -1,15 +1,23 @@
 [Desktop Entry]
-Name=Krita
+Categories=Qt;KDE;Office;Graphics;
+Exec=krita %u
+Icon=krita
+MimeType=image/x-xcf-gimp;image/gif;image/cgm;image/x-bmp;image/x-ico;image/x-pcx;image/x-portable-pixmap;image/x-targa;image/x-xbm;image/x-xcf;image/x-xpm;image/x-vnd.adobe.photoshop;image/x-rgb;application/dicom;
 Name[hi]=केरिता
+Name=Krita
 Name[ne]=क्रिता
 Name[ta]=கிரிட்டா
 Name[x-test]=xxKritaxx
 Name[zh_TW]=繪圖_Krita
-Exec=krita %u
-MimeType=image/x-xcf-gimp;image/gif;image/cgm;image/x-bmp;image/x-ico;image/x-pcx;image/x-portable-pixmap;image/x-targa;image/x-xbm;image/x-xcf;image/x-xpm;image/x-vnd.adobe.photoshop;image/x-rgb;application/dicom;
 Type=Application
-Icon=krita
-Categories=Qt;KDE;Office;Graphics;
-X-KDE-StartupNotify=true
-X-DBUS-StartupType=Multi
 NoDisplay=true
+Path=
+StartupNotify=true
+Terminal=false
+Type=Application
+X-DBUS-StartupType=multi
+X-KDE-StartupNotify=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+ype=Application
+
