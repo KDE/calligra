@@ -52,7 +52,7 @@ namespace KPlato
 //----------------------
 DependecyViewPrintingDialog::DependecyViewPrintingDialog( ViewBase *parent, DependencyView *view )
     : PrintingDialog( parent ),
-    m_view( view )
+    m_depview( view )
 {
 }
 
@@ -78,7 +78,7 @@ void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setClipping( true );
 
-    paintHeaderFooter( painter, PrintingOptions(), page, *(m_view->project()) );
+    paintHeaderFooter( painter, printingOptions(), page, *(m_depview->project()) );
 
     int gap = 8;
     int pageHeight = pageRect.height();
@@ -91,7 +91,7 @@ void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
     painter.translate( 0, hRect.height() + gap );
     
     QRect r( 0, 0, pageRect.width(), pageHeight );
-    m_view->itemScene()->render( &painter, r );
+    m_depview->itemScene()->render( &painter, r );
     
     painter.restore();
 }

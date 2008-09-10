@@ -96,17 +96,27 @@ PrintingDialog::PrintingDialog( ViewBase *view )
 {
 }
 
+PrintingOptions PrintingDialog::printingOptions() const
+{
+    return m_view->printingOptions();
+}
+
+void PrintingDialog::setPrintingOptions( const PrintingOptions &opt )
+{
+    return m_view->setPrintingOptions( opt );
+}
+
 void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
     PrintingOptions opt = m_widget->options();
-    m_view->setPrintingOptions( opt );
+    setPrintingOptions( opt );
     KoPrintingDialog::startPrinting( removePolicy );
 }
 
 QList<QWidget*> PrintingDialog::createOptionWidgets() const
 {
     //kDebug();
-    PrintingHeaderFooter *w = new PrintingHeaderFooter( m_view->printingOptions() );
+    PrintingHeaderFooter *w = new PrintingHeaderFooter( printingOptions() );
     const_cast<PrintingDialog*>( this )->m_widget = w;
     
     return QList<QWidget*>() << m_widget;
@@ -1132,7 +1142,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setClipping( true );
     
-    paintHeaderFooter( painter, m_view->printingOptions(), page, *(model->project()) );
+    paintHeaderFooter( painter, printingOptions(), page, *(model->project()) );
     
     int gap = 8;
     int pageHeight = pageRect.height() - height;

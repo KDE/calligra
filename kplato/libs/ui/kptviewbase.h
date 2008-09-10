@@ -121,6 +121,9 @@ public:
     QRect footerRect() const;
     void paintHeaderFooter( QPainter &p, const PrintingOptions &options, int pageNumber, const Project &project );
     
+    PrintingOptions printingOptions() const;
+    void setPrintingOptions( const PrintingOptions &opt);
+    
 signals:
     void changed ( const PrintingOptions &opt );
     

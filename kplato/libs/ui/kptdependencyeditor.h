@@ -60,7 +60,7 @@ public:
     void printPage( int page, QPainter &painter );
     
 private:
-    DependencyView *m_view;
+    DependencyView *m_depview;
 };
 
 class KPLATOUI_EXPORT DependencyLinkItemBase : public QGraphicsPathItem
