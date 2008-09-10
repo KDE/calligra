@@ -116,8 +116,12 @@ void KPrCustomSlideShowsDialog::renameCustomSlideShow( QListWidgetItem *item )
     disconnect( m_uiWidget.customSlideShowsList, SIGNAL( itemChanged( QListWidgetItem*) ),
                 this, SLOT( renameCustomSlideShow(QListWidgetItem*) ) );
 
+    // Empty string is not allowed as a name, if the name is empty, revert back to previous name
+    if ( item->data( Qt::DisplayRole ).toString().isEmpty() ) {
+        item->setText( item->data( SlideShowNameData ).toString() );
+    }
     //If the name is not already in use, use it
-    if( !m_slideShows->names().contains( item->data( Qt::DisplayRole ).toString() ) )
+    else if( !m_slideShows->names().contains( item->data( Qt::DisplayRole ).toString() ) )
     {
         m_slideShows->rename( item->data( SlideShowNameData ).toString(), item->data( Qt::DisplayRole ).toString() );
         item->setData( SlideShowNameData, item->data( Qt::DisplayRole ) );
