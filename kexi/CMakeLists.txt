@@ -24,6 +24,8 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
   ${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ )
 
 add_subdirectory( 3rdparty )
+add_subdirectory( koproperty ) #todo: remove
+add_subdirectory( koproperty2 )
 add_subdirectory( kexiutils )
 add_subdirectory( kexidb )
 add_subdirectory( core )
