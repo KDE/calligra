@@ -1,6 +1,6 @@
 if(KDE4_BUILD_TESTS)
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty2 ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/koproperty2 ${KOMAIN_INCLUDES} )
 
 ########### next target ###############
 
