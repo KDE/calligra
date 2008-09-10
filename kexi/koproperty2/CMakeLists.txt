@@ -2,7 +2,7 @@ add_subdirectory( test )
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30007)
 
-include_directories( ${CMAKE_SOURCE_DIR}/libs/koproperty2/editors ${CMAKE_SOURCE_DIR}/libs/guiutils ${KOMAIN_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/koproperty2/editors )
 
 
 set(libkopropertyeditors_SRCS
@@ -44,7 +44,7 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
 
 kde4_add_library(koproperty2 SHARED ${koproperty_LIB_SRCS})
 
-target_link_libraries(koproperty2 koguiutils ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(koproperty2 ${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(koproperty2 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS koproperty2  ${INSTALL_TARGETS_DEFAULT_ARGS})
