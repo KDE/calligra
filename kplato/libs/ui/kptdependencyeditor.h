@@ -49,6 +49,19 @@ class Relation;
 class DependencyConnectorItem;
 class DependencyNodeItem;
 class DependencyScene;
+class DependencyView;
+
+class KPLATOUI_EXPORT DependecyViewPrintingDialog : public PrintingDialog
+{
+    Q_OBJECT
+public:
+    DependecyViewPrintingDialog( ViewBase *parent, DependencyView *view );
+    int documentLastPage() const;
+    void printPage( int page, QPainter &painter );
+    
+private:
+    DependencyView *m_view;
+};
 
 class KPLATOUI_EXPORT DependencyLinkItemBase : public QGraphicsPathItem
 {
@@ -386,6 +399,10 @@ public:
     virtual Relation *currentRelation() const;
 
     virtual void updateReadWrite( bool /*readwrite*/ ) {}
+
+    virtual KoPrintJob *createPrintJob();
+    
+    DependencyView *view() const { return m_view; }
 
 signals:
     void requestPopupMenu( const QString&, const QPoint & );

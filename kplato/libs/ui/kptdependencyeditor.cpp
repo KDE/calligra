@@ -49,6 +49,54 @@
 namespace KPlato
 {
 
+//----------------------
+DependecyViewPrintingDialog::DependecyViewPrintingDialog( ViewBase *parent, DependencyView *view )
+    : PrintingDialog( parent ),
+    m_view( view )
+{
+}
+
+int DependecyViewPrintingDialog::documentLastPage() const
+{
+    //TODO
+    return documentFirstPage();
+}
+
+void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
+{
+    painter.save();
+
+    painter.scale( 0.95, 0.95 ); //FIXME pageRect seems to be (partially) outside the actual page!!
+
+    QRect hRect = headerRect();
+    QRect fRect = footerRect();
+    QRect pageRect = printer().pageRect();
+
+    kDebug()<<pageRect<<hRect<<fRect;
+
+    painter.translate( pageRect.topLeft() );
+
+    painter.setClipping( true );
+
+    paintHeaderFooter( painter, PrintingOptions(), page, *(m_view->project()) );
+
+    int gap = 8;
+    int pageHeight = pageRect.height();
+    if ( hRect.isValid() ) {
+        pageHeight -= ( hRect.height() + gap );
+    }
+    if ( fRect.isValid() ) {
+        pageHeight -= ( fRect.height() + gap );
+    }
+    painter.translate( 0, hRect.height() + gap );
+    
+    QRect r( 0, 0, pageRect.width(), pageHeight );
+    m_view->itemScene()->render( &painter, r );
+    
+    painter.restore();
+}
+
+
 DependencyLinkItemBase::DependencyLinkItemBase( QGraphicsItem *parent )
     : QGraphicsPathItem( parent ),
     predItem( 0 ),
@@ -1722,6 +1770,13 @@ void DependencyEditor::slotDeleteTask()
     emit deleteTaskList( lst );
 }
 
+KoPrintJob *DependencyEditor::createPrintJob()
+{
+    DependecyViewPrintingDialog *dia = new DependecyViewPrintingDialog( this, m_view );
+    dia->printer().setCreator("KPlato 0.7");
+//    dia->printer().setFullPage(true); // ignore printer margins
+    return dia;
+}
 
 } // namespace KPlato
 
