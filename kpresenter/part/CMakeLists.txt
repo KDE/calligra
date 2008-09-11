@@ -38,6 +38,8 @@ set( kpresenterprivate_LIB_SRCS
      KPrPresenterViewToolWidget.cpp
      KPrPresenterViewWidget.cpp
      KPrEndOfSlideShowPage.cpp
+     KPrPlaceholderShape.cpp
+     KPrPlaceholderShapeFactory.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
