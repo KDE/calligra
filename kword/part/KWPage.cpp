@@ -118,12 +118,12 @@ KoPageFormat::Orientation KWPage::orientationHint() const
     return m_pageStyle->pageLayout().orientation;
 }
 
-KWPage *KWPage::previous() const
+const KWPage *KWPage::previous() const
 {
     return m_parent->page(m_pageNum - 1);
 }
 
-KWPage *KWPage::next() const
+const KWPage *KWPage::next() const
 {
     return m_parent->page(m_pageNum + 1); //(m_pageNum + m_pageSide == PageSpread ? 2 : 1);
 }

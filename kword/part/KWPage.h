@@ -138,9 +138,9 @@ public:
     }
 
     /// returns the previous page.
-    KWPage *previous() const;
+    const KWPage *previous() const;
     /// returns the next page.
-    KWPage *next() const;
+    const KWPage *next() const;
 
 private:
     /** private constructor, only for our friends
