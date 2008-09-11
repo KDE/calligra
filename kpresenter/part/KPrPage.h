@@ -26,6 +26,7 @@
 
 #include "kpresenter_export.h"
 
+class KoPADocument;
 class KPrDocument;
 class KPrPageApplicationData;
 class KPrNotes;
@@ -53,8 +54,11 @@ public:
      */
     KPrNotes *pageNotes();
 
-    void addShape( KoShape * shape );
-    void removeShape( KoShape * shape );
+    /// reimplemented
+    virtual void shapeAdded( KoShape * shape );
+
+    /// reimplemented
+    virtual void shapeRemoved( KoShape * shape );
 
     /**
      * Set the layout to use on the page
@@ -62,7 +66,7 @@ public:
      * @param layout the layout that should be used from now. 
      *        If 0 no layout will be used.
      */
-    void setLayout( KPrPageLayout * layout );
+    void setLayout( KPrPageLayout * layout, KoPADocument * document  );
 
     /**
      * Get the layout used on the page

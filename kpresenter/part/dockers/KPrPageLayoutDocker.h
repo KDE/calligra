@@ -38,6 +38,7 @@ public:
 
 public slots:
     void slotActivePageChanged();
+    void slotSelectionChanged();
 
 private:
     KPrView* m_view;

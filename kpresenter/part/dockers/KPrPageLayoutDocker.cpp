@@ -67,11 +67,14 @@ void KPrPageLayoutDocker::setView( KPrView* view )
 
     foreach( KPrPageLayout * layout, layoutMap ) {
         QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "TODO", m_layoutsView );
-        item->setData( Qt::UserRole, QVariant( layout ) );
+        item->setData( Qt::UserRole, QVariant::fromValue( layout ) );
         m_layout2item.insert( layout, item );
     }
 
     slotActivePageChanged();
+
+    connect( m_layoutsView, SIGNAL( itemSelectionChanged() ),
+             this, SLOT( slotSelectionChanged() ) );
 }
 
 void KPrPageLayoutDocker::slotActivePageChanged()
@@ -83,14 +86,30 @@ void KPrPageLayoutDocker::slotActivePageChanged()
         KPrPageLayout * layout = page->layout();
         QListWidgetItem * item = m_layout2item.value( layout, 0 );
         if ( item ) {
+            m_layoutsView->blockSignals( true );
             item->setSelected( true );
+            m_layoutsView->blockSignals( false );
             m_layoutsView->scrollToItem( item );
         }
         else {
             QList<QListWidgetItem*> items = m_layoutsView->selectedItems();
             foreach ( QListWidgetItem * i, items ) {
+                m_layoutsView->blockSignals( true );
                 i->setSelected( false );
+                m_layoutsView->blockSignals( false );
             }
+        }
+    }
+}
+
+void KPrPageLayoutDocker::slotSelectionChanged()
+{
+    Q_ASSERT( m_view );
+    KPrPage * page = dynamic_cast<KPrPage*>( m_view->activePage() );
+    if ( page ) {
+        QList<QListWidgetItem *> items = m_layoutsView->selectedItems();
+        if ( !items.isEmpty() ) {
+            page->setLayout( items.at( 0 )->data( Qt::UserRole ).value<KPrPageLayout *>(), m_view->kopaDocument() );
         }
     }
 }

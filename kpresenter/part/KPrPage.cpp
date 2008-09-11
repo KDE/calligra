@@ -27,15 +27,18 @@
 #include <KoOdfStylesReader.h>
 #include <KoStyleStack.h>
 #include <KoGenStyle.h>
+#include <KoShapeLayer.h>
 #include <KoPALoadingContext.h>
 #include <KoPASavingContext.h>
 
 #include "KPrDocument.h"
 #include "KPrPageApplicationData.h"
 #include "KPrNotes.h"
+#include "KPrPlaceholderShape.h"
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "pagelayout/KPrPageLayoutSharedSavingData.h"
+#include "pagelayout/KPrPlaceholder.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 
@@ -82,21 +85,48 @@ KPrNotes *KPrPage::pageNotes()
     return d->pageNotes;
 }
 
-void KPrPage::addShape( KoShape * shape )
+void KPrPage::shapeAdded( KoShape * shape )
 {
     Q_ASSERT( shape );
     // TODO
 }
 
-void KPrPage::removeShape( KoShape * shape )
+void KPrPage::shapeRemoved( KoShape * shape )
 {
     Q_ASSERT( shape );
     // TODO
 }
 
-void KPrPage::setLayout( KPrPageLayout * layout )
+void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
 {
     d->layout = layout;
+
+    if ( layout ) {
+        QList<KoShape*> shapes = iterator();
+        Q_ASSERT( !shapes.isEmpty() );
+        KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shapes[0] );
+
+        /*
+         * need to know
+         * presentation:class specifies if it is created via layout
+         * presentation:placeholder="true" it is only a placeholder without content
+         * used in the current layout? it is possible that it is not used but contains content (no longer only a placeholder)
+         */
+#if 0
+        QSizeF pageSize( pageLayout().width, pageLayout().height );
+        foreach ( KPrPlaceholder * placeholder, layout->placeholders() ) {
+             QRectF position = placeholder->rect( pageSize );
+             KoShape * shape = new KPrPlaceholderShape();
+             shape->setSize( position.size() );
+             shape->setPosition( position.topLeft() );
+             shape->setParent( layer );
+             document->addShape( shape );
+        }
+#endif
+    }
+    else {
+        kDebug(33001) << "layout is 0";
+    }
 }
 
 KPrPageLayout * KPrPage::layout()
