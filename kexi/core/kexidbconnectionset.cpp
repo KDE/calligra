@@ -63,7 +63,7 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
 
     QString filename(_filename);
     bool generateUniqueFilename = filename.isEmpty()
-                                  || !filename.isEmpty() && data == d->dataForFilenames.value(filename);
+        || (!filename.isEmpty() && data == d->dataForFilenames.value(filename));
 
     if (generateUniqueFilename) {
         QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
