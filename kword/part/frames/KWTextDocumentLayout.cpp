@@ -57,32 +57,32 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
     QPointF startOfLine = line.p1();
     QPointF endOfLine = line.p2();
     // top edge
-    if (startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top() ||
-            startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top()) {
+    if ((startOfLine.y() <= rect.top() && endOfLine.y() >= rect.top()) ||
+            (startOfLine.y() >= rect.top() && endOfLine.y() <= rect.top())) {
         qreal x = xAtY(line, rect.top());
         if (x >= rect.left() && x <= rect.right() && x)
             answer.append(QPointF(x, rect.top()));
     }
 
     // left
-    if (startOfLine.x() <= rect.left() && endOfLine.x() >= rect.left() ||
-            startOfLine.x() >= rect.left() && endOfLine.x() <= rect.left()) {
+    if ((startOfLine.x() <= rect.left() && endOfLine.x() >= rect.left()) ||
+            (startOfLine.x() >= rect.left() && endOfLine.x() <= rect.left())) {
         qreal y = yAtX(line, rect.left());
         if (y >= rect.top() && y <= rect.bottom())
             answer.append(QPointF(rect.left(), y));
     }
 
     // bottom edge
-    if (startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom() ||
-            startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom()) {
+    if ((startOfLine.y() <= rect.bottom() && endOfLine.y() >= rect.bottom()) ||
+            (startOfLine.y() >= rect.bottom() && endOfLine.y() <= rect.bottom())) {
         qreal x = xAtY(line, rect.bottom());
         if (x >= rect.left() && x <= rect.right())
             answer.append(QPointF(x, rect.bottom()));
     }
 
     // right
-    if (startOfLine.x() <= rect.right() && endOfLine.x() >= rect.right() ||
-            startOfLine.x() >= rect.right() && endOfLine.x() <= rect.right()) {
+    if ((startOfLine.x() <= rect.right() && endOfLine.x() >= rect.right()) ||
+            (startOfLine.x() >= rect.right() && endOfLine.x() <= rect.right())) {
         qreal y = yAtX(line, rect.right());
         if (y >= rect.top() && y <= rect.bottom())
             answer.append(QPointF(rect.right(), y));
@@ -186,7 +186,7 @@ public:
                 if (first) {
                     x = intersect;
                     first = false;
-                } else if (m_side == Left && intersect > x || m_side == Right && intersect < x)
+                } else if ((m_side == Left && intersect > x) || (m_side == Right && intersect < x))
                     x = intersect;
             }
             if (m_side == Left)
@@ -507,7 +507,7 @@ void KWTextDocumentLayout::layout()
             newParagraph = true;
             continue;
         }
-        if (m_state->interrupted() || newParagraph && m_state->y() > endPos) {
+        if (m_state->interrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
             scheduleLayout();
             return;
