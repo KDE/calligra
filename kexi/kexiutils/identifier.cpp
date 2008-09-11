@@ -29,7 +29,7 @@ bool KexiUtils::isIdentifier(const QString& s)
     const uint sLength = s.length();
     for (i = 0; i < sLength; i++) {
         QChar c = s.at(i).toLower();
-        if (!(c == '_' || c >= 'a' && c <= 'z' || i > 0 && c >= '0' && c <= '9'))
+        if (!((c == '_' || c >= 'a') && (c <= 'z' || i > 0) && (c >= '0' && c <= '9')))
             break;
     }
     return i > 0 && i == sLength;
