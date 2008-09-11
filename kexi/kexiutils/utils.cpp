@@ -408,6 +408,16 @@ void KexiUtils::drawPixmap(QPainter& p, const WidgetMargins& margins, const QRec
 #else
 #pragma WARNING(TODO KexiUtils::drawPixmap)
 #endif
+    // The code below is excluded from compilation, this generates lots of warnings
+    // with GCC since no arguments get used
+    // Temporary fix follows.
+    Q_UNUSED(p);
+    Q_UNUSED(margins);
+    Q_UNUSED(rect);
+    Q_UNUSED(pixmap);
+    Q_UNUSED(alignment);
+    Q_UNUSED(scaledContents);
+    Q_UNUSED(keepAspectRatio);
 #if 0 //todo
     if (pixmap.isNull())
         return;
@@ -581,6 +591,8 @@ WidgetMargins& KexiUtils::WidgetMargins::operator+= (const WidgetMargins & margi
 const WidgetMargins KexiUtils::operator+ (
     const WidgetMargins& margins1, const WidgetMargins & margins2)
 {
+    // margins2 is not used
+    Q_UNUSED(margins2);
     return WidgetMargins(
                margins1.left + margins1.left,
                margins1.top + margins1.top,
