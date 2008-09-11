@@ -231,6 +231,28 @@ public:
      */
     void clearPageStyle();
 
+    /**
+     * Return the first page in the page managers list of pages.
+     * Will return 0 if there are no pages.
+     */
+    const KWPage *begin() const;
+    /**
+     * Return the last page in the page managers list of pages.
+     * Will return 0 if there are no pages.
+     */
+    const KWPage *last() const;
+
+    /**
+     * Return the first page in the page managers list of pages.
+     * Will return 0 if there are no pages.
+     */
+    KWPage *begin();
+    /**
+     * Return the last page in the page managers list of pages.
+     * Will return 0 if there are no pages.
+     */
+    KWPage *last();
+
 private:
     /// helper method for the topOfPage and bottomOfPage
     qreal pageOffset(int pageNumber, bool bottom) const;

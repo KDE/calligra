@@ -133,10 +133,11 @@ void KWViewModeNormal::updatePageCache()
 QPointF KWViewModeNormal::documentToView(const QPointF & point) const
 {
     const KWPageManager *pageManager = canvas()->document()->pageManager();
-    KWPage *page = pageManager->page(point);
+    const KWPage *page = pageManager->page(point);
     if (! page)
-        page = pageManager->page(pageManager->pageCount() - 1);
-    Q_ASSERT(page);
+        page = pageManager->last();
+    if (page == 0)
+        return QPointF();
     int pageIndex = page->pageNumber();
     qreal x = 0;
     if (m_pageSpreadMode && page->pageSide() == KWPage::Right) {

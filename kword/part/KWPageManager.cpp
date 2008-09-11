@@ -272,3 +272,31 @@ void KWPageManager::clearPageStyle()
     defaultpagestyle->setPageLayout(KoPageLayout::standardLayout());
     addPageStyle(defaultpagestyle);
 }
+
+const KWPage *KWPageManager::begin() const
+{
+    if (m_pageList.isEmpty())
+        return 0;
+    return m_pageList.first();
+}
+
+const KWPage *KWPageManager::last() const
+{
+    if (m_pageList.isEmpty())
+        return 0;
+    return m_pageList.last();
+}
+
+KWPage *KWPageManager::begin()
+{
+    if (m_pageList.isEmpty())
+        return 0;
+    return m_pageList.first();
+}
+
+KWPage *KWPageManager::last()
+{
+    if (m_pageList.isEmpty())
+        return 0;
+    return m_pageList.last();
+}
