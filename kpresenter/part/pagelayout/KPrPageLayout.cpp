@@ -120,6 +120,11 @@ QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
     return context.mainStyles().lookup( style, "pl" );
 }
 
+QList<KPrPlaceholder *> KPrPageLayout::placeholders() const
+{
+    return m_placeholders;
+}
+
 QPixmap KPrPageLayout::thumbnail() const
 {
     static KIconLoader * loader = KIconLoader::global();

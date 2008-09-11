@@ -53,6 +53,10 @@ public:
     QString saveOdf( KoPASavingContext & context ) const;
 
     /**
+     * Get the placeholders of the layout
+     */
+    QList<KPrPlaceholder *> placeholders() const;
+    /**
      * get the thumbnail of the layout
      */
     QPixmap thumbnail() const;
