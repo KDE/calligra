@@ -67,6 +67,7 @@ set( kpresenterprivate_LIB_SRCS
      pagelayout/KPrPageLayout.cpp
      pagelayout/KPrPageLayouts.cpp
      pagelayout/KPrPageLayoutSharedSavingData.cpp
+     pagelayout/KPrPlaceholders.cpp
 
      ui/KPrCustomSlideShowsDialog.cpp
      ui/KPrConfigureSlideShowDialog.cpp
