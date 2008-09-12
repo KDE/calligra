@@ -36,7 +36,7 @@ set(kexicore_LIB_SRCS
    kexiguimsghandler.cpp 
    kexitextmsghandler.cpp 
    kexidataiteminterface.cpp 
-   kexievents.cpp 
+#unused   kexievents.cpp 
    kexidbshortcutfile.cpp 
    kexiblobbuffer.cpp 
    kexistaticpart.cpp
