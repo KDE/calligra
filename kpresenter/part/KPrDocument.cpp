@@ -178,9 +178,9 @@ void KPrDocument::saveKPrConfig()
 
 KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
 {
-    KPrAnimationController * controller = dynamic_cast<KPrAnimationController *>( page );
-    Q_ASSERT( controller );
-    return controller->animations();
+    KPrPageData * pageData = dynamic_cast<KPrPageData *>( page );
+    Q_ASSERT( pageData );
+    return pageData->animations();
 }
 
 KPrCustomSlideShows* KPrDocument::customSlideShows()

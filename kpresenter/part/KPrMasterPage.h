@@ -22,10 +22,10 @@
 
 #include <KoPAMasterPage.h>
 
-#include "KPrAnimationController.h"
+#include "KPrPageData.h"
 #include "KPrShapeAnimations.h"
 
-class KPrMasterPage : public KoPAMasterPage, public KPrAnimationController
+class KPrMasterPage : public KoPAMasterPage, public KPrPageData
 {
 public:
     explicit KPrMasterPage();

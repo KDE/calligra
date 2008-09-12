@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATIONCONTROLLER_H
-#define KPRANIMATIONCONTROLLER_H
+#ifndef KPRPAGEDATA_H
+#define KPRPAGEDATA_H
 
 #include "KPrShapeAnimations.h"
 
-class KPrAnimationController
+class KPrPageData
 {
 public:
-    KPrAnimationController();
-    ~KPrAnimationController();
+    KPrPageData();
+    ~KPrPageData();
 
     KPrShapeAnimations & animations();
 
@@ -34,4 +34,4 @@ private:
     KPrShapeAnimations m_animations;
 };
 
-#endif /* KPRANIMATIONCONTROLLER_H */
+#endif /* KPRPAGEDATA_H */

@@ -256,10 +256,10 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
     KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
     Q_ASSERT( kprPage );
-    KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( kprPage->masterPage() );
-    Q_ASSERT( controller );
+    KPrPageData * pageData = dynamic_cast<KPrPageData*>( kprPage->masterPage() );
+    Q_ASSERT( pageData );
     QSet<int> steps = kprPage->animations().steps().toSet();
-    steps.unite( controller->animations().steps().toSet() );
+    steps.unite( pageData->animations().steps().toSet() );
     m_steps = steps.toList();
 }
 
@@ -415,17 +415,17 @@ void KPrAnimationDirector::updateAnimations()
         m_maxShapeDuration = 0;
 
         KPrPage * page = dynamic_cast<KPrPage *>( m_pages[m_pageIndex] );
-        KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( page->masterPage() );
+        KPrPageData * pageData = dynamic_cast<KPrPageData*>( page->masterPage() );
         Q_ASSERT( page );
-        Q_ASSERT( controller );
+        Q_ASSERT( pageData );
 
         m_hasAnimation = false;
         insertAnimations( page, m_canvas->shapeManager() );
-        insertAnimations( controller, m_canvas->masterShapeManager() );
+        insertAnimations( pageData, m_canvas->masterShapeManager() );
     }
 }
 
-void KPrAnimationDirector::insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager )
+void KPrAnimationDirector::insertAnimations( KPrPageData * controller, KoShapeManager * shapeManager )
 {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
     QRectF pageRect( 0, 0, pageLayout.width, pageLayout.height );

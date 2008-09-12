@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrAnimationController.h"
+#include "KPrPageData.h"
 
-KPrAnimationController::KPrAnimationController()
+KPrPageData::KPrPageData()
 {
 }
 
-KPrAnimationController::~KPrAnimationController()
+KPrPageData::~KPrPageData()
 {
 }
 
-KPrShapeAnimations & KPrAnimationController::animations()
+KPrShapeAnimations & KPrPageData::animations()
 {
     return m_animations;
 }

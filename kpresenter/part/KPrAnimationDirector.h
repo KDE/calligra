@@ -39,7 +39,7 @@ class KoPAView;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrAnimationData;
-class KPrAnimationController;
+class KPrPageData;
 class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
@@ -133,7 +133,7 @@ protected:
     void updateAnimations();
 
     // helper method for updateAnimations
-    void insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager );
+    void insertAnimations( KPrPageData * controller, KoShapeManager * shapeManager );
 
     // helper method for freeing the resources of the animations
     void clearAnimations();

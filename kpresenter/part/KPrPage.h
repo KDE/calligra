@@ -22,7 +22,7 @@
 
 #include <KoPAPage.h>
 
-#include "KPrAnimationController.h"
+#include "KPrPageData.h"
 
 #include "kpresenter_export.h"
 
@@ -32,7 +32,7 @@ class KPrPageApplicationData;
 class KPrNotes;
 class KPrPageLayout;
 
-class KPRESENTER_EXPORT KPrPage : public KoPAPage, public KPrAnimationController
+class KPRESENTER_EXPORT KPrPage : public KoPAPage, public KPrPageData
 {
 public:
     KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );
