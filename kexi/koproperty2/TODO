@@ -2,7 +2,8 @@ KOProperty Library TODOs
 ------------------------
 
 General
-- more powerful editors
+- more powerful editors:
+-- for qsizef, qpointf, and qrectf
 
 PixmapEdit
 - add copy/cut/paste/delete actions
