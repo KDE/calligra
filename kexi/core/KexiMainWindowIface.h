@@ -244,9 +244,6 @@ public:
      Also used by KexiFormEventAction. */
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
-    /*! Shows application's startup widget, setups it if necessary. */
-    virtual void showStartupMainWidget() = 0;
-
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
