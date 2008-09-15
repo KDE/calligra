@@ -27,7 +27,7 @@
 #include <kurlrequester.h>
 #include <klineedit.h>
 
-#include "property.h"
+#include "Property.h"
 
 
 using namespace KoProperty;

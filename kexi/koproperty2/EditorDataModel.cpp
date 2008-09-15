@@ -18,8 +18,8 @@
 */
 
 #include "EditorDataModel.h"
-#include "property.h"
-#include "set.h"
+#include "Property.h"
+#include "Set.h"
 
 #include <KLocale>
 

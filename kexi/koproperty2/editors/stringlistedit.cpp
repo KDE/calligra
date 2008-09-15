@@ -35,7 +35,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "property.h"
+#include "Property.h"
 
 using namespace KoProperty;
 

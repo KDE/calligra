@@ -19,7 +19,7 @@
 */
 
 #include "factory.h"
-#include "property.h"
+#include "Property.h"
 #include "customproperty.h"
 #include "booledit.h"
 #include "combobox.h"

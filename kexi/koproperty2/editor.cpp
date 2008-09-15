@@ -21,9 +21,9 @@
 
 #include "editor.h"
 #include "editoritem.h"
-#include "set.h"
+#include "Set.h"
 #include "factory.h"
-#include "property.h"
+#include "Property.h"
 #include "widget.h"
 
 #include <QPushButton>

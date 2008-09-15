@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "widgetproxy.h"
-#include "property.h"
+#include "Property.h"
 #include "widget.h"
 #include "factory.h"
 

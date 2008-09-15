@@ -20,7 +20,7 @@
 */
 
 #include "booledit.h"
-#include "property.h"
+#include "Property.h"
 
 #include <kiconloader.h>
 #include <klocale.h>

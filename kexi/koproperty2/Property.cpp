@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "property.h"
+#include "Property.h"
 #include "customproperty.h"
-#include "set.h"
+#include "Set.h"
 #include "factory.h"
 
 #include <kdebug.h>

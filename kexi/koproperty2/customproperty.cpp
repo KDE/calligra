@@ -18,7 +18,7 @@
 */
 
 #include "customproperty.h"
-#include "property.h"
+#include "Property.h"
 
 #include <QSize>
 #include <QRect>

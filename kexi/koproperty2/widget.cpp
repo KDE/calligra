@@ -19,7 +19,7 @@
 */
 
 #include "widget.h"
-#include "property.h"
+#include "Property.h"
 #include "editoritem.h"
 #include "editor.h"
 

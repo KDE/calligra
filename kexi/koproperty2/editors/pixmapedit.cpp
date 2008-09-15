@@ -21,7 +21,7 @@
 
 #include "pixmapedit.h"
 #include "editoritem.h"
-#include "property.h"
+#include "Property.h"
 
 #include <QLayout>
 #include <QPainter>

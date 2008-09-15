@@ -20,7 +20,7 @@
 
 #include "spinbox.h"
 
-#include "property.h"
+#include "Property.h"
 
 #include <QLayout>
 #include <QObject>

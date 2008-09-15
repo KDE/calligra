@@ -19,9 +19,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "set.h"
-#include "property.h"
-#include "utils.h"
+#include "Set.h"
+#include "Property.h"
+#include "Utils.h"
 
 #include <qapplication.h>
 #include <q3asciidict.h>

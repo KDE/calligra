@@ -21,10 +21,10 @@
 
 #include "editoritem.h"
 #include "editor.h"
-#include "property.h"
+#include "Property.h"
 #include "widget.h"
 #include "factory.h"
-#include "utils.h"
+#include "Utils.h"
 
 #include <QPainter>
 #include <QPixmap>
