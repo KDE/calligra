@@ -20,6 +20,8 @@
 #ifndef KPRPLACEHOLDERS_H
 #define KPRPLACEHOLDERS_H
 
+#define BOOST_MULTI_INDEX_DISABLE_SERIALIZATION
+
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
