@@ -33,7 +33,10 @@ KPrPlaceholderShape::~KPrPlaceholderShape()
 void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
     QRectF target = converter.documentToView( QRectF( QPointF( 0,0 ), size() ) );
-    painter.fillRect( target, QColor( Qt::gray ) );
+    QPen pen( Qt::gray );
+    pen.setStyle( Qt::DashLine );
+    painter.setPen( pen );
+    painter.drawRect( target );
 }
 
 bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
@@ -47,5 +50,6 @@ bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 
 void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    // TODO
     Q_UNUSED( context );
 }
