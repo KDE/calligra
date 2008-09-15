@@ -71,7 +71,7 @@ QMap<QString, QWidget *> KPrAnimationTool::createOptionWidgets()
     effectWidget->setView((dynamic_cast<KoPACanvas *>(m_canvas))->koPAView());
 
     QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Page effects"), effectWidget);
+    widgets.insert(i18n("Transitions"), effectWidget);
     return widgets;
 }
 

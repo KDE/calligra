@@ -18,6 +18,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrView.cpp
      KPrViewModePresentation.cpp
      KPrViewModeNotes.cpp
+     KPrViewModePreviewPageEffect.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
      KPrShapeAnimations.cpp

@@ -68,7 +68,7 @@ public:
     void finish();
 
     /**
-     * Check if the page effect os finished.
+     * Check if the page effect is finished.
      *
      * @return true when the page effect is finished
      */
