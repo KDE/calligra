@@ -73,7 +73,7 @@ public:
      *
      * @return layout that is used or 0 if no layout is used
      */
-    KPrPageLayout * layout();
+    KPrPageLayout * layout() const;
 
 protected:
     /// reimplemented
@@ -84,6 +84,9 @@ protected:
 
     /// reimplemented
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+
+    /// reimplemented
+    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
 
     /// reimplemented
     virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;

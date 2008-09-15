@@ -49,7 +49,6 @@ class KPrPage::Private
 public:
     Private( KPrPage * page, KPrDocument * document )
     : pageNotes( new KPrNotes( page, document ) )
-    , layout( 0 )
     {}
 
     ~Private()
@@ -58,7 +57,6 @@ public:
     }
 
     KPrNotes * pageNotes;
-    KPrPageLayout * layout;
 };
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
@@ -88,59 +86,33 @@ KPrNotes *KPrPage::pageNotes()
 void KPrPage::shapeAdded( KoShape * shape )
 {
     Q_ASSERT( shape );
-    // TODO
+    placeholders().shapeAdded( shape );
 }
 
 void KPrPage::shapeRemoved( KoShape * shape )
 {
     Q_ASSERT( shape );
-    // TODO
+    placeholders().shapeRemoved( shape );
 }
 
 void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
 {
-    d->layout = layout;
-
-    if ( layout ) {
-        QList<KoShape*> shapes = iterator();
-        Q_ASSERT( !shapes.isEmpty() );
-        KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shapes[0] );
-
-        /*
-         * need to know
-         * presentation:class specifies if it is created via layout
-         * presentation:placeholder="true" it is only a placeholder without content
-         * used in the current layout? it is possible that it is not used but contains content (no longer only a placeholder)
-         */
-#if 0
-        QSizeF pageSize( pageLayout().width, pageLayout().height );
-        foreach ( KPrPlaceholder * placeholder, layout->placeholders() ) {
-             QRectF position = placeholder->rect( pageSize );
-             KoShape * shape = new KPrPlaceholderShape();
-             shape->setSize( position.size() );
-             shape->setPosition( position.topLeft() );
-             shape->setParent( layer );
-             document->addShape( shape );
-        }
-#endif
-    }
-    else {
-        kDebug(33001) << "layout is 0";
-    }
+    QSizeF pageSize( pageLayout().width, pageLayout().height );
+    placeholders().setLayout( layout, document, iterator(), pageSize );
 }
 
-KPrPageLayout * KPrPage::layout()
+KPrPageLayout * KPrPage::layout() const
 {
-    return d->layout;
+    return placeholders().layout();
 }
 
 void KPrPage::saveOdfPageContent( KoPASavingContext & paContext ) const
 {
-    if ( d->layout ) {
+    if ( layout() ) {
         KPrPageLayoutSharedSavingData * layouts = dynamic_cast<KPrPageLayoutSharedSavingData *>( paContext.sharedData( KPR_PAGE_LAYOUT_SHARED_SAVING_ID ) );
         Q_ASSERT( layouts );
         if ( layouts ) {
-            QString layoutStyle = layouts->pageLayoutStyle( d->layout );
+            QString layoutStyle = layouts->pageLayoutStyle( layout() );
             if ( ! layoutStyle.isEmpty() ) {
                 paContext.xmlWriter().addAttribute( "presentation:presentation-page-layout-name", layoutStyle );
             }
@@ -168,17 +140,6 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
 {
     KoPAPage::loadOdfPageTag( element, loadingContext );
 
-    if ( element.hasAttributeNS( KoXmlNS::presentation, "presentation-page-layout-name" ) ) {
-        KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( loadingContext.dataCenter( PageLayouts ) );
-        Q_ASSERT( layouts );
-        if ( layouts ) {
-            QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
-            QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
-            d->layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
-            kDebug(33001) << "page layout" << layoutName << d->layout;
-        }
-    }
-
     KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
 
     int pageProperties = m_pageProperties & UseMasterBackground;
@@ -204,6 +165,23 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
     if ( node.isElement() ) {
         d->pageNotes->loadOdf(node.toElement(), loadingContext);
     }
+}
+
+void KPrPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext )
+{
+    // the layout needs to be loaded after the shapes are already loaded so the initialization of the data works
+    KPrPageLayout * layout = 0;
+    if ( element.hasAttributeNS( KoXmlNS::presentation, "presentation-page-layout-name" ) ) {
+        KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( loadingContext.dataCenter( PageLayouts ) );
+        Q_ASSERT( layouts );
+        if ( layouts ) {
+            QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
+            QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
+            layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
+            kDebug(33001) << "page layout" << layoutName << layout;
+        }
+    }
+    placeholders().init( layout, iterator() );
 }
 
 bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const

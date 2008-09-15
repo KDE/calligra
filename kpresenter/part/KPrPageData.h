@@ -21,6 +21,7 @@
 #define KPRPAGEDATA_H
 
 #include "KPrShapeAnimations.h"
+#include "pagelayout/KPrPlaceholders.h"
 
 class KPrPageData
 {
@@ -29,9 +30,12 @@ public:
     ~KPrPageData();
 
     KPrShapeAnimations & animations();
+    KPrPlaceholders & placeholders();
+    const KPrPlaceholders & placeholders() const;
 
 private:
     KPrShapeAnimations m_animations;
+    KPrPlaceholders m_placeholders;
 };
 
 #endif /* KPRPAGEDATA_H */
