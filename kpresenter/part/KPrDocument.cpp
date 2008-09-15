@@ -26,27 +26,48 @@
 #include "KPrShapeApplicationData.h"
 #include "KPrFactory.h"
 #include "KPrViewModeNotes.h"
+#include "KPrPlaceholderShapeFactory.h"
 #include "KPrSoundCollection.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
 #include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeRegistry.h>
 #include <KoXmlNS.h>
 
 #include <KConfig>
 #include <KConfigGroup>
+#include <KGlobal>
+
+class InitOnce
+{
+public:
+    InitOnce()
+    {
+        KoShapeRegistry * registry = KoShapeRegistry::instance();
+        KoShapeFactory * factory = new KPrPlaceholderShapeFactory( registry );
+        registry->addFactory( new KPrPlaceholderShapeFactory( registry ) );
+    }
+};
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
 , m_customSlideShows(new KPrCustomSlideShows())
 {
+    K_GLOBAL_STATIC( InitOnce, s_initOnce );
+    InitOnce * initOnce = s_initOnce;
+
     setComponentData(KPrFactory::componentData(), false);
     setTemplateType( "kpresenter_template" );
 
     KoShapeLoadingContext::addAdditionalAttributeData( KoShapeLoadingContext::AdditionalAttributeData(
                                                        KoXmlNS::presentation, "placeholder",
                                                        "presentation:placeholder" ) );
+
+    KoShapeLoadingContext::addAdditionalAttributeData( KoShapeLoadingContext::AdditionalAttributeData(
+                                                       KoXmlNS::presentation, "class",
+                                                       "presentation:class" ) );
 
     KPrSoundCollection *soundCol = new KPrSoundCollection();
     insertIntoDataCenterMap("SoundCollection", soundCol);
