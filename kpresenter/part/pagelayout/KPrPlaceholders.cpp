@@ -19,6 +19,14 @@
 
 #include "KPrPlaceholders.h"
 
+#include <KoShape.h>
+#include <KoShapeContainer.h>
+#include <KoShapeLayer.h>
+#include <KoPADocument.h>
+#include "KPrPageLayout.h"
+#include "KPrPlaceholder.h"
+#include "KPrPlaceholderShape.h"
+
 KPrPlaceholders::KPrPlaceholders()
 :m_layout( 0 )
 {
@@ -28,32 +36,121 @@ KPrPlaceholders::~KPrPlaceholders()
 {
 }
 
-void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes )
+void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes, const QSizeF & pageSize )
+{
+    Q_ASSERT( m_initialized );
+    m_layout = layout;
+
+    Q_ASSERT( !shapes.isEmpty() );
+    KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shapes[0] );
+
+    QMap<QString, QList<QRectF> > placeholders;
+    if ( layout ) {
+        foreach ( KPrPlaceholder * placeholder, layout->placeholders() ) {
+            placeholders[placeholder->presentationObject()].append( placeholder->rect( pageSize ) );
+        }
+    }
+
+    Placeholders::iterator it( m_placeholders.begin() );
+
+    while ( it != m_placeholders.end() ) {
+        Placeholders::iterator next( it );
+        ++next;
+        QMap<QString, QList<QRectF> >::iterator itPlaceholder( placeholders.find( it->presentationClass ) );
+        if ( itPlaceholder != placeholders.end() && !itPlaceholder.value().isEmpty() ) {
+            QRectF rect = itPlaceholder.value().takeFirst();
+            if ( itPlaceholder.value().isEmpty() ) {
+                placeholders.erase( itPlaceholder );
+            }
+            // shape reposition
+            // TODO command
+            it->shape->setSize( rect.size() );
+            it->shape->setPosition( rect.topLeft() );
+        }
+        else {
+            if ( it->isPlaceholder ) {
+                // shape remove
+                // TODO command
+                // it is already deleted by the shapeRemoved it = m_placeholders.erase( it );
+                // this is done as it gets deleted by shapeRemoved
+                Placeholders::iterator next( it );
+                ++next;
+                document->removeShape( it->shape );
+            }
+        }
+        it = next;
+    }
+
+    QMap<QString, QList<QRectF> >::const_iterator itPlaceholder( placeholders.begin() );
+    for ( ; itPlaceholder != placeholders.end(); ++itPlaceholder ) {
+        const QList<QRectF> & list( itPlaceholder.value() );
+        QList<QRectF>::const_iterator listIt( list.begin() );
+        for ( ; listIt != list.end(); ++listIt ) {
+             KoShape * shape = new KPrPlaceholderShape();
+             shape->setAdditionalAttribute( "presentation:placeholder", "true" );
+             shape->setAdditionalAttribute( "presentation:class", itPlaceholder.key() );
+             shape->setSize( ( * listIt ).size() );
+             shape->setPosition( ( * listIt ).topLeft() );
+             shape->setParent( layer );
+             document->addShape( shape );
+             // TODO command
+        }
+    }
+}
+
+void KPrPlaceholders::init( KPrPageLayout * layout, const QList<KoShape *> & shapes )
 {
     m_layout = layout;
-// check if we are initialized if not walk the shapes and get the data
-// check if we have enough presentation of the classes we need
-// remove all other placeholders
-// this needs to create commands to do all the work
-// we need to make sure undo/redo is working
+    add( shapes );
+
+    m_initialized = true;
+}
+
+KPrPageLayout * KPrPlaceholders::layout() const
+{
+    Q_ASSERT( m_initialized );
+    return m_layout;
 }
 
 void KPrPlaceholders::shapeAdded( KoShape * shape )
 {
+    Q_ASSERT( m_initialized );
 // if presentation:class add to index no matter if it is a placeholder or not
+    QString presentationClass = shape->additionalAttribute( "presentation:class" );
+    QString placeholder = shape->additionalAttribute( "presentation:placeholder" );
+    if ( !presentationClass.isNull() ) {
+        m_placeholders.get<1>().insert( Placeholder( presentationClass, shape, placeholder == "true" ) );
+    }
 }
 
 void KPrPlaceholders::shapeRemoved( KoShape * shape )
 {
+    Q_ASSERT( m_initialized );
 // if it is a placeholder remove it
 // if presentation:class is set and not a placeholder remove it and add a placeholder
 //    this needs to be checked as on undo/redo we might get a problem
 // other do nothing
+    QString presentationClass = shape->additionalAttribute( "presentation:class" );
+    if ( !presentationClass.isNull() ) {
+        // TODO m_placeholders.erase()
+        PlaceholdersByShape::iterator it( m_placeholders.get<2>().find( shape ) );
+        if ( it != m_placeholders.get<2>().end() ) {
+            m_placeholders.get<2>().erase( it );
+        }
+    }
 }
 
-void KPrPlaceholders::initialize( const QList<KoShape *> & shapes )
+void KPrPlaceholders::add( const QList<KoShape *> & shapes )
 {
-    if ( m_initialized ) {
-        return;
+    foreach( KoShape* shape, shapes ) {
+        QString presentationClass = shape->additionalAttribute( "presentation:class" );
+        QString placeholder = shape->additionalAttribute( "presentation:placeholder" );
+        if ( !presentationClass.isNull() ) {
+            m_placeholders.get<1>().insert( Placeholder( presentationClass, shape, placeholder == "true" ) );
+        }
+        KoShapeContainer* container = dynamic_cast<KoShapeContainer*>( shape );
+        if ( container ) {
+            add( container->iterator() );
+        }
     }
 }

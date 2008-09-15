@@ -23,9 +23,11 @@
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 #include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/sequenced_index.hpp>
 
 #include <QString>
 
+class QSizeF;
 class KoShape;
 class KoPADocument;
 class KPrPageLayout;
@@ -46,6 +48,7 @@ struct Placeholder
 typedef boost::multi_index_container<
     Placeholder,
     boost::multi_index::indexed_by<
+        boost::multi_index::sequenced<>,
         boost::multi_index::ordered_non_unique<
             boost::multi_index::member<Placeholder, QString, &Placeholder::presentationClass>
         >,
@@ -57,6 +60,8 @@ typedef boost::multi_index_container<
         >
     >
 > Placeholders;
+
+typedef boost::multi_index::nth_index<Placeholders,2>::type PlaceholdersByShape;
 
 class KPrPlaceholders
 {
@@ -70,14 +75,24 @@ public:
      * @param document The document where the shapes are located in
      * @param shapes list of first level shapes
      */
-    void setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes );
+    void setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes, const QSizeF & pageSize );
+
+    /**
+     * This function should only be used during loading
+     * @param layout the layout that should be used from now. 
+     *        If 0 no layout will be used.
+     * TODO tz: maybe make privat and the classes that need to call it a friend
+     */
+    void init( KPrPageLayout * layout, const QList<KoShape *> & shapes );
+
+    KPrPageLayout * layout() const;
 
     void shapeAdded( KoShape * shape );
 
     void shapeRemoved( KoShape * shape );
 
 private:
-    void initialize( const QList<KoShape *> & shapes );
+    void add( const QList<KoShape *> & shapes );
 
     KPrPageLayout * m_layout;
     // that is set to true when the m_placeholders is initialized
