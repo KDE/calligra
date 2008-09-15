@@ -9,7 +9,7 @@ include_directories(
 
 # Workaround, exceptions are needed for pion-net
 # FIXME: This won't work for other compilers
-add_definitions(-fexceptions)
+add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 # Alternatives
