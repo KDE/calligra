@@ -62,7 +62,7 @@ koproperty_global.h
 koproperty_export.h
 Property.h
 Set.h
-utils.h
+Utils.h
 widget.h
 widgetproxy.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2 COMPONENT Devel)
