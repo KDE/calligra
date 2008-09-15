@@ -60,7 +60,7 @@ int KWPageManager::pageNumber(const QPointF &point) const
     }
 #ifdef DEBUG_PAGES
     if (pageNumber < 0) {
-        kWarning(31001) << "KWPageManager::pageNumber(" << point << ") failed; QPoint does not have a valid page";
+        kWarning(32001) << "KWPageManager::pageNumber(" << point << ") failed; QPoint does not have a valid page";
         kDebug(32001) << kBacktrace();
     }
 #endif
@@ -88,7 +88,7 @@ KWPage* KWPageManager::page(int pageNum) const
             return page;
     }
 #ifdef DEBUG_PAGES
-    kWarning(31001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
+    kWarning(32001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
     kDebug(32001) << kBacktrace();
 #endif
     return 0;
@@ -120,7 +120,7 @@ KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle)
     }
     KWPage *page = new KWPage(this, pageNumber, pageStyle);
     m_pageList.insert(pageNumber, page);
-    kDebug(31001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
+    kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
     return page;
 }
 
@@ -136,7 +136,7 @@ KWPage* KWPageManager::insertPage(KWPage *page)
     } else {
         m_pageList.append(page);
     }
-    kDebug(31001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
+    kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
     return page;
 }
 
@@ -148,7 +148,7 @@ KWPage* KWPageManager::appendPage(KWPageStyle *pageStyle)
     }
     KWPage *page = new KWPage(this, m_pageList.count(), pageStyle);
     m_pageList.append(page);
-    kDebug(31001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
+    kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
     return page;
 }
 
@@ -187,7 +187,7 @@ void KWPageManager::removePage(KWPage *page)
     for (int i = page->pageNumber() + 1; i < m_pageList.count(); ++i) // decrease the pagenumbers of pages following the pageNumber
         m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() - 1);
     m_pageList.removeOne(page);
-    kDebug(31001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
+    kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
     delete page;
 }
 
