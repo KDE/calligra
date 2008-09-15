@@ -46,8 +46,12 @@ class KOPROPERTY_EXPORT EditorView : public QTreeView
 public:
     EditorView(QWidget *parent = 0);
     ~EditorView();
+protected slots:
+    virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
+
 protected:
-//    virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
+    virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
+    virtual void drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
 };
 
 #if 0

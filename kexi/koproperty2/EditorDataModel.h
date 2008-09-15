@@ -66,9 +66,11 @@ public:
       bool removeRows(int position, int rows,
                       const QModelIndex &parent = QModelIndex());*/
 
+    QModelIndex buddy( const QModelIndex & index ) const;
+
+    Property *getItem(const QModelIndex &index) const;
 private:
 //    void setupModelData(const QStringList &lines, TreeItem *parent);
-    Property *getItem(const QModelIndex &index) const;
 
     class Private;
     Private * const d;

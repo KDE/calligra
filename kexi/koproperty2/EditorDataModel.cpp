@@ -63,8 +63,11 @@ QVariant EditorDataModel::data(const QModelIndex &index, int role) const
 
     Property *prop = getItem(index);
     const int col = index.column();
-    if (col == 0)
-        return prop->name();
+    if (col == 0) {
+        if (!prop->caption().isEmpty())
+            return prop->caption();
+        prop->name();
+    }
 
     return prop->value();
 }
@@ -75,15 +78,15 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
         return Qt::ItemIsEnabled;
 
     const int col = index.column();
-    if (col == 0)
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+//    if (col == 0)
+//buddy...        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     Property *prop = getItem(index);
     if (prop) {
-//        if (!prop->children()) {
+        if (!prop->children()) {
             f |= Qt::ItemIsEditable;
-//        }
+        }
     }
     return f;
 }
@@ -246,6 +249,13 @@ bool EditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
             return false;
 
         return rootItem->setData(section, value);*/
+}
+
+QModelIndex EditorDataModel::buddy( const QModelIndex & idx ) const
+{
+    if (idx.column() == 0)
+        return index( idx.row(), 1, parent(idx));
+    return idx;
 }
 
 /*

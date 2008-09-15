@@ -18,11 +18,17 @@
 */
 
 #include "EditorView.h"
+#include "EditorDataModel.h"
+#include "Property.h"
 
 #include <QtGui/QStyledItemDelegate>
 #include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
 #include <QtGui/QItemEditorFactory>
 #include <QtGui/QStandardItemEditorCreator>
+#include <QtGui/QPainter>
+#include <QtGui/QVBoxLayout>
+#include <QtDebug>
 
 #include <KLocale>
 
@@ -73,6 +79,47 @@ void RectEdit::setValue(const QRect& value)
         .arg(value.height()));
 }
 
+class StringEdit : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QString value READ value WRITE setValue USER true)
+public:
+    StringEdit(QWidget *parent = 0);
+    ~StringEdit();
+    QString value() const;
+    void setValue(const QString& value);
+private:
+    QLineEdit *m_editor;
+};
+
+StringEdit::StringEdit(QWidget *parent)
+ : QWidget(parent)
+{
+    QVBoxLayout *lyr = new QVBoxLayout(this);
+    m_editor = new QLineEdit(this);
+    m_editor->setFrame(false);
+    lyr->setContentsMargins(0,0,0,0);
+    lyr->addWidget(m_editor);
+    setFocusProxy(m_editor);
+//    setStyleSheet("border: 2px solid gray;");
+}
+
+StringEdit::~StringEdit()
+{
+}
+
+QString StringEdit::value() const
+{
+    return m_editor->text();
+}
+
+void StringEdit::setValue(const QString& value)
+{
+    m_editor->setText(value);
+    m_editor->deselect();
+    m_editor->end(false);
+}
+
 //----------
 
 class ItemEditorFactory : public QItemEditorFactory
@@ -86,6 +133,10 @@ ItemEditorFactory::ItemEditorFactory()
 {
      QItemEditorCreatorBase *creator = new QStandardItemEditorCreator<RectEdit>();
      registerEditor(QVariant::Rect, creator);
+     creator = new QStandardItemEditorCreator<StringEdit>();
+     registerEditor(QVariant::String, creator);
+     creator = new QStandardItemEditorCreator<StringEdit>();
+     registerEditor(QVariant::Color, creator);
 }
 
 ItemEditorFactory::~ItemEditorFactory()
@@ -105,6 +156,8 @@ public:
         const QModelIndex &index) const;
     virtual QWidget * createEditor(QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void updateEditorGeometry( QWidget * editor, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 ItemDelegate::ItemDelegate(QObject *parent)
@@ -118,22 +171,62 @@ ItemDelegate::~ItemDelegate()
 }
 
 void ItemDelegate::paint(QPainter *painter, 
-                               const QStyleOptionViewItem &option,
-                               const QModelIndex &index) const
+                         const QStyleOptionViewItem &option,
+                         const QModelIndex &index) const
 {
-    QStyledItemDelegate::paint(painter, option, index);
+    QStyleOptionViewItem alteredOption(option);
+    alteredOption.rect.setTop(alteredOption.rect.top() + 1);
+    painter->save();
+    QRect r(option.rect);
+    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
+    if (index.column()==0) {
+        r.setWidth(r.width() - 1);
+        r.setLeft(0);
+
+        Property *property = editorModel->getItem(index);
+        if (property && property->isModified()) {
+            QFont font(alteredOption.font);
+            font.setBold(true);
+            alteredOption.font = font;
+        }
+    }
+    else {
+        r.setLeft(r.left()-1);
+    }
+    QStyledItemDelegate::paint(painter, alteredOption, index);
+    QPen pen(QColor("#c0c0c0"));
+    pen.setWidth(1);
+    painter->setPen(pen);
+    painter->drawRect(r);
+    //qDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
+    painter->restore();
 }
 
 QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                   const QModelIndex &index) const
+                             const QModelIndex &index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index);
+    return QStyledItemDelegate::sizeHint(option, index) + QSize(0, 2);
 }
 
 QWidget * ItemDelegate::createEditor(QWidget * parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    return QStyledItemDelegate::createEditor(parent, option, index);
+    QStyleOptionViewItem alteredOption(option);
+    QWidget *w = QStyledItemDelegate::createEditor(parent, alteredOption, index);
+//    QVBoxLayout
+    w->setStyleSheet(/*"background-color: green;*/"border-top: 1px solid #c0c0c0;");
+    return w;
+}
+
+void ItemDelegate::updateEditorGeometry( QWidget * editor, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    QStyleOptionViewItem alteredOption(option);
+//    alteredOption.rect.setTop(alteredOption.rect.top() + 1);
+    QStyledItemDelegate::updateEditorGeometry(editor, alteredOption, index);
+    QRect r(editor->geometry());
+//    r.setTop(r.top() + 2);
+    editor->setGeometry(r);
 }
 
 //----------
@@ -156,11 +249,20 @@ EditorView::~EditorView()
 {
 }
 
-/*bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
+void EditorView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    QTreeView::edit( index, trigger, event );
-}*/
+    QTreeView::currentChanged( current, previous );
+}
 
+bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
+{
+    return QTreeView::edit( index, trigger, event );
+}
+
+void EditorView::drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
+{
+    QTreeView::drawBranches( painter, rect, index );
+}
 
 #if 0
 #include "editoritem.h"
