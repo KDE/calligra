@@ -17,10 +17,19 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2008-09-11..15
+KoProperty2
+--EditorDataModel: use buddy() so we can show editor widget even when 1st column's cell was clicked
+--EditorView: test StringEdit editor and a test factory created
+--ItemDelegate: paint full-line borders, like in Designer and many other propeditors (there's no way 
+to paint [+] without branch lines in Qt4's QStyle anyway); 
+
 2008-09-10
+KoProperty, KoProperty2
 - libkoproperty 1 & 2 moved to kexi/
 
 2008-09-09
+KoProperty2
 - koproperty2 improved
 
 ~~~~~~~~~~~~~~~~ 2.0 alpha 10 ~~~~~~~~~~~~~~~~
