@@ -71,4 +71,3 @@ private:
 };
 
 #endif // KPRPAGEEFFECTDOCKER_H
-

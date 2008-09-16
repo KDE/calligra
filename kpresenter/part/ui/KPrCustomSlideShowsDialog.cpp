@@ -130,7 +130,7 @@ void KPrCustomSlideShowsDialog::renameCustomSlideShow( QListWidgetItem *item )
     else
     {
         KMessageBox Message;
-        Message.sorry(this, i18n("There can't be 2 SlideShows with the same name"), i18n("Error"), KMessageBox::Notify );
+        Message.sorry(this, i18n("There can not be 2 SlideShows with the same name"), i18n("Error"), KMessageBox::Notify );
 
         item->setText( item->data( SlideShowNameData ).toString() );
         m_uiWidget.customSlideShowsList->editItem( item );
@@ -163,7 +163,7 @@ void KPrCustomSlideShowsDialog::deleteCustomSlideShow()
     }
     if( m_uiWidget.customSlideShowsList->count() == 0 )
     {
-        m_selectedSlideShowName = QString();
+        m_selectedSlideShowName.clear();
         m_uiWidget.currentSlidesList->clear();
         m_uiWidget.addSlideButton->setEnabled( false );
         m_uiWidget.deleteButton->setEnabled( false );

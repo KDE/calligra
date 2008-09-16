@@ -189,6 +189,7 @@ void KPrView::showNotes()
 void KPrView::dialogCustomSlideShows()
 {
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
+    Q_ASSERT( doc );
     KPrCustomSlideShows *finalSlideShows;
 
     KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), doc, finalSlideShows );

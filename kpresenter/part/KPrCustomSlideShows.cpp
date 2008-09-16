@@ -129,7 +129,7 @@ void KPrCustomSlideShows::saveOdf( KoXmlWriter* writer )
         QString pages;
         foreach( KoPAPageBase* pageName, slideList )
         {
-            pages += pageName->name() + ",";
+            pages += pageName->name() + ',';
         }
         pages.truncate( pages.size() - 2 );//remove the last comma
         writer->addAttribute( "presentation:pages", pages );
@@ -155,7 +155,7 @@ void KPrCustomSlideShows::loadOdf( KoXmlElement* presentationSettings, KPrDocume
     {
         QString name = presentationShow.attribute( "name" );
         QString pages = presentationShow.attribute( "pages" );
-        QStringList splitedPages = pages.split( "," );
+        QStringList splitedPages = pages.split( ',' );
         QList<KoPAPageBase*> slideShow;
         foreach( QString pageName, splitedPages )
         {
