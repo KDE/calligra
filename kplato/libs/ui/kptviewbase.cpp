@@ -1257,10 +1257,15 @@ void DoubleTreeViewBase::init()
 {
     setOrientation( Qt::Horizontal );
     setHandleWidth( 3 );
-    m_leftview = new TreeViewBase( this );
+    m_leftview = new TreeViewBase();
     m_leftview->setObjectName("Left view");
-    m_rightview = new TreeViewBase( this );
+    addWidget( m_leftview );
+    setStretchFactor( 0, 1 );
+    m_rightview = new TreeViewBase();
     m_rightview->setObjectName("Right view");
+    addWidget( m_rightview );
+    setStretchFactor( 1, 1 );
+
 
     connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
@@ -1321,6 +1326,8 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> s
         }
         //kDebug()<<lst;
         m_leftview->setColumnsHidden( lst );
+    } else {
+        setStretchFactors();
     }
 }
 
@@ -1511,6 +1518,14 @@ void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
     emit headerContextMenuRequested( pos );
 }
 
+void DoubleTreeViewBase::setStretchFactors()
+{
+    int lc = m_leftview->header()->count() - m_leftview->header()->hiddenSectionCount();
+    int rc = m_rightview->header()->count() - m_rightview->header()->hiddenSectionCount();
+    setStretchFactor( indexOf( m_rightview ), qMax( 1, qMin( 4, rc / lc ) ) );
+    //kDebug()<<this<<"set stretch factor="<<qMax( 1, qMin( 4, rc / lc ) );
+}
+
 bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
     //kDebug();
@@ -1525,6 +1540,8 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
         m_rightview->loadContext( map, e );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
+        } else {
+            setStretchFactors();
         }
     }
     return true;

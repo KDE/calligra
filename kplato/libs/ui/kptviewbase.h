@@ -258,7 +258,7 @@ class KPLATOUI_EXPORT TreeViewBase : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit TreeViewBase( QWidget *parent );
+    explicit TreeViewBase( QWidget *parent = 0 );
 
     void setReadWrite( bool rw );
     virtual void createItemDelegates();
@@ -456,6 +456,8 @@ public:
 
     KoPrintJob *createPrintJob( ViewBase *parent );
 
+    void setStretchFactors();
+    
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( QModelIndex index, const QPoint& pos );
