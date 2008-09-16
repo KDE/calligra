@@ -37,4 +37,4 @@ public:
     };
 };
 
-#endif /* KPRPENTAGONWIPEEFFECTFACTORY_H */s
+#endif /* KPRPENTAGONWIPEEFFECTFACTORY_H */

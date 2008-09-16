@@ -63,7 +63,7 @@ int KPrIrisWipeEffectStrategyBase::findMaxScaling( const KPrPageEffect::Data &da
     while( !path.contains( widget ) )
     {
         QMatrix matrix;
-        matrix.translate( halfWidth, halfWidth );
+        matrix.translate( halfWidth, halfHeight );
         double maxScaling = (double) maxMeasure / (double) pathMaxMeasure;
         matrix.scale( maxScaling, maxScaling );
         path = matrix.map( m_shape );
@@ -93,29 +93,30 @@ void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const K
         scaleStep = 1 / m_shape.boundingRect().height();
     }
 
+    QPoint pointZero( 0, 0 );
     if( !reverse() )
     {
         QRect rect( 0, 0, width, height );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
+        p.drawPixmap( pointZero, data.m_oldPage, rect );
 
         QMatrix matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( currPos*scaleStep, currPos*scaleStep );
 
         p.setClipPath( matrix.map(m_shape) );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+        p.drawPixmap( pointZero, data.m_newPage, rect );
     }
     else
     {
         QRect rect( 0, 0, width, height );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+        p.drawPixmap( pointZero, data.m_newPage, rect );
 
         QMatrix matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( ( fullScale - currPos )*scaleStep, ( fullScale - currPos )*scaleStep );
 
         p.setClipPath( matrix.map(m_shape) );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
+        p.drawPixmap( pointZero, data.m_oldPage, rect );
     }
 }
 
@@ -150,7 +151,8 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
     {
         QMatrix matrix;
         matrix.translate( width/2, height/2 );
-        matrix.scale( ( fullScale - lastPos )*scaleStep, ( fullScale - lastPos )*scaleStep );
+        matrix.scale( ( fullScale - lastPos - 3 )*scaleStep, ( fullScale - lastPos - 3 )*scaleStep );
+        //NOTE: i have no idea why I can't just update the old rectangle and have to do this small hack (update a bigger rectangle) instead, we think that might be something floating-point releated, but i think this will work just fine
         newPath = matrix.map( m_shape );
     }
 
