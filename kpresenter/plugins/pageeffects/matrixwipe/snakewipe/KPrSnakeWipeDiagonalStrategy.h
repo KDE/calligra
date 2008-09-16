@@ -29,7 +29,7 @@ public:
     KPrSnakeWipeDiagonalStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse);
     virtual ~KPrSnakeWipeDiagonalStrategy();
 protected:
-    virtual int maxIndex(int collumns, int rows);
+    virtual int maxIndex(int columns, int rows);
     QVector<int> m_indices;
 };
 

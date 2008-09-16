@@ -119,7 +119,7 @@ void KPrMatrixWipeStrategy::next( const KPrPageEffect::Data &data )
     }
 }
 
-KPrMatrixWipeStrategy::Direction KPrMatrixWipeStrategy::squareDirection(int x, int y, int collumns, int rows)
+KPrMatrixWipeStrategy::Direction KPrMatrixWipeStrategy::squareDirection(int x, int y, int columns, int rows)
 {
     return NotSmooth;
 }

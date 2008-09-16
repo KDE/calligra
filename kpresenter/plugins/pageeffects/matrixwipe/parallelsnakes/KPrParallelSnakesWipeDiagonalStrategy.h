@@ -29,8 +29,8 @@ public:
     KPrParallelSnakesWipeDiagonalStrategy(bool reverseAngle, bool reverse);
     virtual ~KPrParallelSnakesWipeDiagonalStrategy();
 protected:
-    virtual int maxIndex(int collumns, int rows);
-    virtual int squareIndex(int x, int y, int collumns, int rows);
+    virtual int maxIndex(int columns, int rows);
+    virtual int squareIndex(int x, int y, int columns, int rows);
     QVector<int> m_indices;
     bool m_reverseAngle;
 };

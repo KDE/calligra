@@ -51,27 +51,27 @@ KPrParallelSnakesWipeHorizontalStrategy::~KPrParallelSnakesWipeHorizontalStrateg
 {
 }
 
-int KPrParallelSnakesWipeHorizontalStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrParallelSnakesWipeHorizontalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     int X = x;
     int idx;
     if (y < rows / 2) {
-        if (m_reverseTop) X = collumns - X - 1;
-        if (y & 1) X = collumns - X - 1;
-     idx = X + y * collumns;
+        if (m_reverseTop) X = columns - X - 1;
+        if (y & 1) X = columns - X - 1;
+     idx = X + y * columns;
     } else {
-        if (m_reverseBottom) X = collumns - X - 1;
-        if (!(y & 1)) X = collumns - X - 1;
-        idx = X + (rows - y - 1) * collumns;
+        if (m_reverseBottom) X = columns - X - 1;
+        if (!(y & 1)) X = columns - X - 1;
+        idx = X + (rows - y - 1) * columns;
     }
     if (reverse()) {
-        return rows * collumns / 2 - idx - 1;
+        return rows * columns / 2 - idx - 1;
     } else {
         return idx;
     }
 }
 
-KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeHorizontalStrategy::squareDirection(int x, int y, int collumns, int rows)
+KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeHorizontalStrategy::squareDirection(int x, int y, int columns, int rows)
 {
     bool reverse = false;
     if (y >= rows / 2) reverse = !reverse;
@@ -85,8 +85,8 @@ KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeHorizontalStrategy::square
     return reverse ? RightToLeft : LeftToRight;
 }
 
-int KPrParallelSnakesWipeHorizontalStrategy::maxIndex(int collumns, int rows)
+int KPrParallelSnakesWipeHorizontalStrategy::maxIndex(int columns, int rows)
 {
-    return collumns * rows / 2;
+    return columns * rows / 2;
 }
 

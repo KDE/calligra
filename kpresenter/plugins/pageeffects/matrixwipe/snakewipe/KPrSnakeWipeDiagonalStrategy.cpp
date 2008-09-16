@@ -28,20 +28,20 @@ KPrSnakeWipeDiagonalStrategy::~KPrSnakeWipeDiagonalStrategy()
 {
 }
 
-int KPrSnakeWipeDiagonalStrategy::maxIndex(int collumns, int rows)
+int KPrSnakeWipeDiagonalStrategy::maxIndex(int columns, int rows)
 {
-    m_indices.resize(collumns * rows);
+    m_indices.resize(columns * rows);
     int idx = 0;
     int i = 0, j = 0;
     int dx = 1, dy = -1;
-    while (idx < collumns*rows) {
+    while (idx < columns*rows) {
         m_indices[i * rows + j] = idx;
         idx++;
         i += dx;
         j += dy;
-        if (i < 0 || j < 0 || i >= collumns || j >= rows) {
-            if (i >= collumns) {
-                i = collumns - 1;
+        if (i < 0 || j < 0 || i >= columns || j >= rows) {
+            if (i >= columns) {
+                i = columns - 1;
                 j += 2;
             }
             if (j >= rows) {
@@ -57,6 +57,6 @@ int KPrSnakeWipeDiagonalStrategy::maxIndex(int collumns, int rows)
             dx = -dx; dy = -dy;
         }
     }
-    return collumns * rows;
+    return columns * rows;
 }
 

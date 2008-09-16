@@ -41,9 +41,9 @@ public:
         RightToLeft
     };
 protected:
-    virtual int squareIndex(int x, int y, int collumns, int rows) = 0;
-    virtual Direction squareDirection(int x, int y, int collumns, int rows);
-    virtual int maxIndex(int collumns, int rows) = 0;
+    virtual int squareIndex(int x, int y, int columns, int rows) = 0;
+    virtual Direction squareDirection(int x, int y, int columns, int rows);
+    virtual int maxIndex(int columns, int rows) = 0;
     void setNeedEvenSquares(bool hor = true, bool vert = true);
     bool m_smooth;
 private:

@@ -31,21 +31,21 @@ KPrParallelSnakesWipeDiagonalStrategy::~KPrParallelSnakesWipeDiagonalStrategy()
 {
 }
 
-int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int collumns, int rows)
+int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int columns, int rows)
 {
-    m_indices.resize(collumns * rows);
+    m_indices.resize(columns * rows);
     int idx = 0;
     int i = 0, j = 0;
     int dx = 1, dy = -1;
-    while (idx < collumns*rows / 2) {
+    while (idx < columns*rows / 2) {
         m_indices[i * rows + j] = idx;
-        m_indices[(collumns - i - 1) * rows + (rows - j - 1)] = idx;
+        m_indices[(columns - i - 1) * rows + (rows - j - 1)] = idx;
         idx++;
         i += dx;
         j += dy;
-        if (i < 0 || j < 0 || i >= collumns || j >= rows) {
-            if (i >= collumns) {
-                i = collumns - 1;
+        if (i < 0 || j < 0 || i >= columns || j >= rows) {
+            if (i >= columns) {
+                i = columns - 1;
                 j += 2;
             }
             if (j >= rows) {
@@ -61,13 +61,13 @@ int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int collumns, int rows)
             dx = -dx; dy = -dy;
         }
     }
-    return collumns * rows;
+    return columns * rows;
 }
 
-int KPrParallelSnakesWipeDiagonalStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrParallelSnakesWipeDiagonalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     if (m_reverseAngle) y = rows - y - 1;
     int idx = m_indices[x * rows + y];
     if (reverse()) return idx;
-    else return collumns * rows / 2 - idx - 1;
+    else return columns * rows / 2 - idx - 1;
 }

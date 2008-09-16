@@ -28,9 +28,9 @@ public:
     KPrParallelSnakesWipeVerticalStrategy(bool reverseLeft, bool reverseRight, bool reverse);
     virtual ~KPrParallelSnakesWipeVerticalStrategy();
 protected:
-    virtual int squareIndex(int x, int y, int collumns, int rows);
-    virtual Direction squareDirection(int x, int y, int collumns, int rows);
-    virtual int maxIndex(int collumns, int rows);
+    virtual int squareIndex(int x, int y, int columns, int rows);
+    virtual Direction squareDirection(int x, int y, int columns, int rows);
+    virtual int maxIndex(int columns, int rows);
 private:
     bool m_reverseLeft;
     bool m_reverseRight;

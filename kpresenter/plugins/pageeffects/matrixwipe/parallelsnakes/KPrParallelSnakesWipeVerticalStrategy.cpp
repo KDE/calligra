@@ -51,33 +51,33 @@ KPrParallelSnakesWipeVerticalStrategy::~KPrParallelSnakesWipeVerticalStrategy()
 {
 }
 
-int KPrParallelSnakesWipeVerticalStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrParallelSnakesWipeVerticalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     int Y = y;
     int idx;
-    if (x < collumns / 2) {
+    if (x < columns / 2) {
         if (m_reverseLeft) Y = rows - Y - 1;
         if (x & 1) Y = rows - Y - 1;
         idx = Y + x * rows;
     } else {
         if (m_reverseRight) Y = rows - Y - 1;
         if (!(x & 1)) Y = rows - Y - 1;
-        idx = Y + (collumns - x - 1) * rows;
+        idx = Y + (columns - x - 1) * rows;
     }
     if (reverse()) {
-        return rows * collumns / 2 - idx - 1;
+        return rows * columns / 2 - idx - 1;
     } else {
         return idx;
     }
 }
 
-KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeVerticalStrategy::squareDirection(int x, int y, int collumns, int rows)
+KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeVerticalStrategy::squareDirection(int x, int y, int columns, int rows)
 {
     bool reverse = false;
-    if (x >= collumns / 2) reverse = !reverse;
+    if (x >= columns / 2) reverse = !reverse;
     if (x & 1) reverse = !reverse;
     if (this->reverse()) reverse = !reverse;
-    if (x < collumns / 2) {
+    if (x < columns / 2) {
         if (m_reverseLeft) reverse = !reverse;
     } else {
         if (m_reverseRight) reverse = !reverse;
@@ -85,8 +85,8 @@ KPrMatrixWipeStrategy::Direction KPrParallelSnakesWipeVerticalStrategy::squareDi
     return reverse ? BottomToTop : TopToBottom;
 }
 
-int KPrParallelSnakesWipeVerticalStrategy::maxIndex(int collumns, int rows)
+int KPrParallelSnakesWipeVerticalStrategy::maxIndex(int columns, int rows)
 {
-    return collumns * rows / 2;
+    return columns * rows / 2;
 }
 

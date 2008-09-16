@@ -28,8 +28,8 @@ public:
     KPrBoxSnakesWipeStrategy(int horRepeat, int verRepeat, bool clockwise, bool reverse);
     virtual ~KPrBoxSnakesWipeStrategy();
 protected:
-    virtual int maxIndex(int collumns, int rows);
-    virtual int squareIndex(int x, int y, int collumns, int rows);
+    virtual int maxIndex(int columns, int rows);
+    virtual int squareIndex(int x, int y, int columns, int rows);
 private:
     int m_horRepeat;
     int m_verRepeat;

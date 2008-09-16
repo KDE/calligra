@@ -30,17 +30,17 @@ KPrWaterfallWipeBottomLeftStrategy::~KPrWaterfallWipeBottomLeftStrategy()
 {
 }
 
-int KPrWaterfallWipeBottomLeftStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrWaterfallWipeBottomLeftStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     return x + (rows - y - 1);
 }
 
-KPrMatrixWipeStrategy::Direction KPrWaterfallWipeBottomLeftStrategy::squareDirection(int x, int y, int collumns, int rows)
+KPrMatrixWipeStrategy::Direction KPrWaterfallWipeBottomLeftStrategy::squareDirection(int x, int y, int columns, int rows)
 {
     return m_direction;
 }
 
-int KPrWaterfallWipeBottomLeftStrategy::maxIndex(int collumns, int rows)
+int KPrWaterfallWipeBottomLeftStrategy::maxIndex(int columns, int rows)
 {
-    return collumns + rows;
+    return columns + rows;
 }

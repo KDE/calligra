@@ -58,13 +58,13 @@ static int getFirstLeg(bool clockwise, int verrepeat, int horrepeat) {
     return 0;
 }
 
-int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     if (m_horRepeat == 2) {
-        if (x >= collumns / 2) {
-            x = collumns - x - 1;
+        if (x >= columns / 2) {
+            x = columns - x - 1;
         }
-        collumns /= 2;
+        columns /= 2;
     }
     if (m_verRepeat == 2) {
         if (y >= rows / 2) {
@@ -74,8 +74,8 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
     }
     int m_firstLeg = getFirstLeg(m_clockwise, m_verRepeat, m_horRepeat);
 
-    int curRing = qMin(qMin(x, y), qMin(collumns - x - 1, rows - y - 1));
-    int maxRingSize = (collumns + rows - 2) * 2;
+    int curRing = qMin(qMin(x, y), qMin(columns - x - 1, rows - y - 1));
+    int maxRingSize = (columns + rows - 2) * 2;
     int passed = 0;
     if (curRing > 0) passed = curRing * (maxRingSize + maxRingSize - (curRing-1) * 8) / 2;
     int leg = 0;
@@ -83,7 +83,7 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
         if (y == curRing) {
             leg = 0;
         }
-        if (x == collumns - curRing - 1) {
+        if (x == columns - curRing - 1) {
             leg = 1;
         }
         if (y == rows - curRing - 1) {
@@ -98,9 +98,9 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
             }
         }
         if (leg < m_firstLeg) leg += 4;
-        if (leg > m_firstLeg && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : collumns) - 2*curRing - 1;
-        if (leg > m_firstLeg+1 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? collumns : rows) - 2*curRing - 1;
-        if (leg > m_firstLeg+2 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : collumns) - 2*curRing - 1;
+        if (leg > m_firstLeg && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : columns) - 2*curRing - 1;
+        if (leg > m_firstLeg+1 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? columns : rows) - 2*curRing - 1;
+        if (leg > m_firstLeg+2 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : columns) - 2*curRing - 1;
         if (leg > 3) leg -= 4;
 
         if (leg == 0) {
@@ -108,7 +108,7 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
         } else if (leg == 1) {
             passed += y - curRing;
         } else if (leg == 2) {
-            passed += collumns - x - curRing - 1;
+            passed += columns - x - curRing - 1;
         } else if (leg == 3) {
             passed += rows - y - curRing - 1;
         }
@@ -119,7 +119,7 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
         if (y == rows - curRing - 1) {
             leg = 1;
         }
-        if (x == collumns - curRing - 1) {
+        if (x == columns - curRing - 1) {
             leg = 2;
         }
         if (y == curRing && x != curRing) {
@@ -131,9 +131,9 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
             }
         }
         if (leg < m_firstLeg) leg += 4;
-        if (leg > m_firstLeg && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? collumns : rows) - 2*curRing - 1;
-        if (leg > m_firstLeg+1 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : collumns) - 2*curRing - 1;
-        if (leg > m_firstLeg+2 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? collumns : rows) - 2*curRing - 1;
+        if (leg > m_firstLeg && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? columns : rows) - 2*curRing - 1;
+        if (leg > m_firstLeg+1 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? rows : columns) - 2*curRing - 1;
+        if (leg > m_firstLeg+2 && leg < m_firstLeg+4) passed += (m_firstLeg&1 ? columns : rows) - 2*curRing - 1;
         if (leg > 3) leg -= 4;
 
         if (leg == 0) {
@@ -143,14 +143,14 @@ int KPrBoxSnakesWipeStrategy::squareIndex(int x, int y, int collumns, int rows)
         } else if (leg == 2) {
             passed += rows - y - curRing - 1;
         } else if (leg == 3) {
-            passed += collumns - x - curRing - 1;
+            passed += columns - x - curRing - 1;
         }
     }
-    return reverse() ? collumns * rows - passed - 1 : passed;
+    return reverse() ? columns * rows - passed - 1 : passed;
 }
 
-int KPrBoxSnakesWipeStrategy::maxIndex(int collumns, int rows)
+int KPrBoxSnakesWipeStrategy::maxIndex(int columns, int rows)
 {
-    return collumns * rows / m_horRepeat / m_verRepeat;
+    return columns * rows / m_horRepeat / m_verRepeat;
 }
 

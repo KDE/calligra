@@ -29,7 +29,7 @@ KPrSnakeWipeBottomLeftDiagonalStrategy::~KPrSnakeWipeBottomLeftDiagonalStrategy(
 {
 }
 
-int KPrSnakeWipeBottomLeftDiagonalStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrSnakeWipeBottomLeftDiagonalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     return m_indices[x * rows + (rows - y - 1)];
 }

@@ -28,8 +28,8 @@ public:
     KPrSpiralWipeStrategy(int firstLeg, bool clockwise, bool reverse);
     virtual ~KPrSpiralWipeStrategy();
 protected:
-    virtual int maxIndex(int collumns, int rows);
-    virtual int squareIndex(int x, int y, int collumns, int rows);
+    virtual int maxIndex(int columns, int rows);
+    virtual int squareIndex(int x, int y, int columns, int rows);
 private:
     int m_firstLeg;
     bool m_clockwise;

@@ -29,21 +29,21 @@ KPrSnakeWipeBottomRightHorizontalStrategy::~KPrSnakeWipeBottomRightHorizontalStr
 {
 }
 
-int KPrSnakeWipeBottomRightHorizontalStrategy::squareIndex(int x, int y, int collumns, int rows)
+int KPrSnakeWipeBottomRightHorizontalStrategy::squareIndex(int x, int y, int columns, int rows)
 {
     int X = x;
-    if (y & 1) X = collumns - x - 1;
-    return X + (rows - y - 1) * collumns;
+    if (y & 1) X = columns - x - 1;
+    return X + (rows - y - 1) * columns;
 }
 
-KPrMatrixWipeStrategy::Direction KPrSnakeWipeBottomRightHorizontalStrategy::squareDirection(int x, int y, int collumns, int rows)
+KPrMatrixWipeStrategy::Direction KPrSnakeWipeBottomRightHorizontalStrategy::squareDirection(int x, int y, int columns, int rows)
 {
     if (y & 1) return RightToLeft;
     else return LeftToRight;
 }
 
-int KPrSnakeWipeBottomRightHorizontalStrategy::maxIndex(int collumns, int rows)
+int KPrSnakeWipeBottomRightHorizontalStrategy::maxIndex(int columns, int rows)
 {
-    return collumns * rows;
+    return columns * rows;
 }
 

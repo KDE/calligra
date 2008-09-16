@@ -28,7 +28,7 @@ public:
     KPrSnakeWipeTopRightDiagonalStrategy();
     virtual ~KPrSnakeWipeTopRightDiagonalStrategy();
 protected:
-    virtual int squareIndex(int x, int y, int collumns, int rows);
+    virtual int squareIndex(int x, int y, int columns, int rows);
 };
 
 #endif // KPRSNAKEWIPETOPRIGHTDIAGONALSTRATEGY_H
