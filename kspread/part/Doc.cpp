@@ -176,6 +176,7 @@ Doc::~Doc()
     saveConfig();
 
   delete d->map;
+  clearUndoHistory();
   qDeleteAll( d->dataCenterMap );
 
   delete d;
