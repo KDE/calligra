@@ -533,4 +533,4 @@ QHash<QByteArray, QVariant> KoProperty::propertyValues(const Set& set)
     return result;
 }
 
-#include "set.moc"
+#include "Set.moc"
