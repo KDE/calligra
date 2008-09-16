@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include <property.h>
+#include <Property.h>
 #include <editor.h>
 
 #include "test.h"
