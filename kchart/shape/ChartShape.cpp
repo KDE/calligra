@@ -106,24 +106,21 @@
 
 namespace KChart {
 
-static const struct {
-    ChartType   chartType;
-    const char    *odfName;
-} odfChartTypes[] = {
-    { BarChartType ,    "chart:bar"     },
-    { LineChartType,    "chart:line"    },
-    { AreaChartType ,   "chart:area"    },
-    { CircleChartType,  "chart:circle"  },
-    { RingChartType,    "chart:ring"    },
-    { ScatterChartType, "chart:scatter" },
-    { RadarChartType,   "chart:radar"   },
-    { StockChartType,   "chart:stock"   },
-    { BubbleChartType,  "chart:bubble"  },
-    { SurfaceChartType, "chart:surface" },
-    { GanttChartType,   "chart:gantt"   },
+const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
+    "chart:bar",
+    "chart:line",
+    "chart:area",
+    "chart:circle",
+    "chart:ring",
+    "chart:scatter",
+    "chart:radar",
+    "chart:stock",
+    "chart:bubble",
+    "chart:surface",
+    "chart:gantt"
 };
 
-const ChartSubtype  defaultSubtypes[NUM_CHARTTYPES] = {
+const ChartSubtype  defaultSubtypes[ NUM_CHARTTYPES ] = {
     NormalChartSubtype,     // Bar
     NormalChartSubtype,     // Line
     NormalChartSubtype,     // Area
@@ -136,9 +133,6 @@ const ChartSubtype  defaultSubtypes[NUM_CHARTTYPES] = {
     NoChartSubtype,         // Surface
     NoChartSubtype          // Gantt
 };
-
-static const unsigned int  numChartTypes = ( sizeof odfChartTypes
-                                                / sizeof *odfChartTypes );
 
 bool isPolar( ChartType type )
 {
@@ -273,6 +267,7 @@ public:
     Surface *floor;
     
     ProxyModel *model;
+    QAbstractItemModel *internalModel;
     
     ChartDocument *document;
     
@@ -282,6 +277,7 @@ public:
 ChartShape::Private::Private( ChartShape *shape )
 {
     this->shape = shape;
+    internalModel = 0;
     title = 0;
     subTitle = 0;
     footer = 0;
@@ -528,6 +524,10 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
     Q_ASSERT( model );
     kDebug() << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model );
+    if ( takeOwnershipOfModel )
+        d->internalModel = model;
+    else
+        d->internalModel = 0;
     
     requestRepaint();
 }
@@ -537,6 +537,10 @@ void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &sele
     Q_ASSERT( model );
     kDebug() << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model, selection );
+    if ( d->internalModel ) {
+        delete d->internalModel;
+        d->internalModel = 0;
+    }
     
     requestRepaint();
 }
@@ -933,11 +937,11 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
                                                          "class", QString() );
     // Find out what charttype the chart class corresponds to.
     bool  knownType = false;
-    for ( unsigned int i = 0 ; i < numChartTypes ; ++i ) {
-        if ( chartClass == odfChartTypes[i].odfName ) {
+    for ( int type = 0; type < (int)LastChartType; ++type ) {
+        if ( chartClass == ODF_CHARTTYPES[ (ChartType)type ] ) {
             qDebug() <<"found chart of type" << chartClass;
 
-            d->plotArea->setChartType( odfChartTypes[i].chartType );
+            d->plotArea->setChartType( (ChartType)type );
             knownType = true;
             break;  
         }
@@ -1013,10 +1017,10 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingCo
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
     
-    TableModel *model = new TableModel( 0 );
-    model->loadOdf( tableElement, context );    
+    TableModel *model = new TableModel;
+    model->loadOdf( tableElement, context );
     
-    setModel( model, QVector<QRect>() );
+    setModel( model, true );
     
     return true;
 }
@@ -1044,20 +1048,11 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     KoGenStyles&  mainStyles( context.mainStyles() );
     
     bodyWriter.startElement( "chart:chart" );
+    
+    saveOdfAttributes( context, OdfAllAttributes ^ OdfTransformation );
 
     // 1. Write the chart type.
-    bool knownType = false;
-    for ( unsigned int i = 0 ; i < numChartTypes ; ++i ) {
-        if ( d->plotArea->chartType() == odfChartTypes[i].chartType ) {
-            bodyWriter.addAttribute( "chart:class", odfChartTypes[i].odfName );
-            knownType = true;
-            break;
-        }
-    }
-    if ( !knownType ) {
-        kError(32001) << "Unknown chart type in ChartShape::saveOdf:"
-                      << (int) d->plotArea->chartType() << endl;
-    }
+    bodyWriter.addAttribute( "chart:class", ODF_CHARTTYPES[ d->plotArea->chartType() ] );
 
     // 2. Write the title.
     saveOdfLabel( d->title, bodyWriter, mainStyles, Title );
@@ -1069,12 +1064,10 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfLabel( d->footer, bodyWriter, mainStyles, Footer );
 
     // 5. Write the legend.
-    d->legend->saveOdf( bodyWriter, mainStyles );
+    d->legend->saveOdf( context );
 
     // 6. Write the plot area (this is where the real action is!).
-    bodyWriter.startElement( "chart:plot-area" );
-    d->plotArea->saveOdf( bodyWriter, mainStyles );
-    bodyWriter.endElement();
+    d->plotArea->saveOdf( context );
 
     // 7. Save the data
     saveOdfData( bodyWriter, mainStyles );
@@ -1085,9 +1078,12 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
 {
     Q_UNUSED( mainStyles );
+    
+    if ( !d->internalModel )
+        return;
 
-    const int cols = d->model->columnCount();
-    const int rows = d->model->rowCount();
+    const int cols = d->internalModel->columnCount();
+    const int rows = d->internalModel->rowCount();
 
     bodyWriter.startElement( "table:table" );
     bodyWriter.addAttribute( "table:name", "local-table" );
@@ -1124,9 +1120,9 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     for ( int row = 0; row < rows ; ++row ) {
         bodyWriter.startElement( "table:table-row" );
         for ( int col = 0; col < cols; ++col ) {
-            //QVariant value( d->model.cellVal( row, col ) );
-            QModelIndex  index = d->model->index( row, col );
-            QVariant     value = d->model->data( index );
+            //QVariant value( d->internalModel.cellVal( row, col ) );
+            QModelIndex  index = d->internalModel->index( row, col );
+            QVariant     value = d->internalModel->data( index );
 
             QString  valType;
             QString  valStr;

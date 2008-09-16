@@ -503,8 +503,11 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
     return true;
 }
 
-void Legend::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
+void Legend::saveOdf( KoShapeSavingContext &context ) const
 {
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
+    
     bodyWriter.startElement( "chart:legend" );
 
     QString lp = LegendPositionToString( d->position );
@@ -520,6 +523,8 @@ void Legend::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
     
     QString styleName = saveOdfFont( mainStyles, d->font, d->fontColor );
     bodyWriter.addAttribute( "chart:style-name", styleName );
+    
+    saveOdfAttributes( context, OdfAllAttributes );
     
     KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     KoGenStyle *style = ( KoGenStyle* )( mainStyles.style( styleName ) );
@@ -544,15 +549,10 @@ void Legend::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
         break;
     };
     
-    bodyWriter.addAttribute( "koffice:legend-expansion", lexpansion );
+    bodyWriter.addAttribute( "office:legend-expansion", lexpansion );
     if ( !title().isEmpty() )
-        bodyWriter.addAttribute( "koffice:title", title() );
+        bodyWriter.addAttribute( "office:title", title() );
     bodyWriter.endElement(); // chart:legend
-}
-
-void Legend::saveOdf( KoShapeSavingContext &context ) const
-{
-    Q_UNUSED( context );
 }
 
 KDChart::Legend *Legend::kdLegend() const

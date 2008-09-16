@@ -55,6 +55,7 @@ public slots:
     * Load series from ODF
     */
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
+    void saveOdf( KoShapeSavingContext &context ) const;
 
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;

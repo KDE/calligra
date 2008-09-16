@@ -35,6 +35,10 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 
+// Qt
+#include <QDomNode>
+#include <QDomDocument>
+
 namespace KChart {
 
 TableModel::TableModel( QObject *parent /* = 0 */)
@@ -75,9 +79,12 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
     setColumnCount( 0 );
     
     KoXmlElement n = tableElement.firstChild().toElement();
+    const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
+    QTextStream stream(stdout);
+    stream << node;
+    
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
-        kDebug(350001) << n.localName();
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
         if ( n.localName() == "table-rows" || n.localName() == "table-header-rows" )

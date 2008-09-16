@@ -943,7 +943,7 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
     axisStyle.addProperty( "chart:display-label", "true" );
 
-    const QString styleName = mainStyles.lookup( axisStyle, "ch" );
+    const QString styleName = mainStyles.lookup( axisStyle, "ch", KoGenStyles::ForceNumbering );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
     // TODO scale: logarithmic/linear

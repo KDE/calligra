@@ -68,7 +68,6 @@ public:
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
     
     bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );
-    void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     void saveOdf( KoShapeSavingContext &context ) const;
     
     KDChart::Legend *kdLegend() const;

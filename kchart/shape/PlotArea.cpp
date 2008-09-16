@@ -30,6 +30,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <KoTextShapeData.h>
@@ -491,7 +492,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
             addAxis( axis );
         }
     }
-
     // Load data sets
     d->shape->proxyModel()->loadOdf( plotAreaElement, context );
 
@@ -520,10 +520,13 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
 
 void PlotArea::saveOdf( KoShapeSavingContext &context ) const
 {
-}
-
-void PlotArea::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
-{
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
+    
+    bodyWriter.startElement( "chart:plot-area" );
+    
+    saveOdfAttributes( context, OdfAllAttributes );
+    
     // Prepare the style for the plot area
     KoGenStyle plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
 
@@ -549,14 +552,14 @@ void PlotArea::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
 
     // Data direction
     {
-        Qt::Orientation  direction = proxyModel()->dataDirection();
+        Qt::Orientation direction = proxyModel()->dataDirection();
         plotAreaStyle.addProperty( "chart:series-source",  
                                    ( direction == Qt::Horizontal )
                                    ? "rows" : "columns" );
     }
 
     // Register the style, and get back its auto-generated name
-    const QString  styleName = mainStyles.lookup( plotAreaStyle, "ch" );
+    const QString styleName = mainStyles.lookup( plotAreaStyle, "ch", KoGenStyles::ForceNumbering );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
     if ( isCartesian( d->chartType ) ) {
@@ -564,11 +567,17 @@ void PlotArea::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
             axis->saveOdf( bodyWriter, mainStyles );
         }
     }
+    
+    
+    // Save data series
+    d->shape->proxyModel()->saveOdf( context );
 
     // TODO chart:series
     // TODO chart:wall
     // TODO chart:grid
     // TODO chart:floor
+    
+    bodyWriter.endElement(); // chart:plot-area
 }
 
 void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle ) const

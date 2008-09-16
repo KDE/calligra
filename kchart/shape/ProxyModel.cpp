@@ -33,6 +33,8 @@
 // KOffice
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
@@ -318,6 +320,35 @@ void ProxyModel::setSelection( const QVector<QRect> &selection )
 {
     d->selection = selection;
     //needReset();
+}
+
+void ProxyModel::saveOdf( KoShapeSavingContext &context ) const
+{
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
+    
+    foreach ( DataSet *dataSet, d->dataSets ) {
+        bodyWriter.startElement( "chart:series" );
+        
+        KoGenStyle style( KoGenStyle::StyleGraphicAuto, "chart" );
+        
+        if ( dataSet->chartType() != LastChartType )
+            style.addProperty( "chart:family", ODF_CHARTTYPES[ dataSet->chartType() ] );
+            
+        KoOdfGraphicStyles::saveOasisFillStyle( style, mainStyles, dataSet->brush() );
+            
+        // TODO: Save external data sources also
+        const QString prefix( "local-table." );
+        
+        // Save cell regions
+        bodyWriter.addAttribute( "chart:values-cell-range-address", prefix + dataSet->yDataRegionString() );
+        bodyWriter.addAttribute( "chart:label-cell-address", prefix + dataSet->labelDataRegionString() );
+        
+        const QString styleName = mainStyles.lookup( style, "ch", KoGenStyles::ForceNumbering );
+        bodyWriter.addAttribute( "chart:style-name", styleName );
+        
+        bodyWriter.endElement(); // chart:series
+    }
 }
 
 bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context )
