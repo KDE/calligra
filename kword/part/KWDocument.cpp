@@ -103,7 +103,6 @@ KWDocument::~KWDocument()
 {
     saveConfig();
     qDeleteAll(m_frameSets);
-    clearUndoHistory();
     qDeleteAll(m_dataCenterMap);
     delete m_inlineTextObjectManager;
     m_inlineTextObjectManager = 0;

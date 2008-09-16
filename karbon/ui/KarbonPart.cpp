@@ -133,7 +133,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
 KarbonPart::~KarbonPart()
 {
-    clearUndoHistory();
     delete d;
 }
 
