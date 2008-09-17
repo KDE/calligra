@@ -93,6 +93,7 @@ void KPrPlaceholderTool::activate( bool temporary )
     newShape->setZIndex( shape->zIndex() );
     newShape->setSize( shape->size() );
     newShape->setPosition( shape->position() );
+    newShape->setAdditionalAttribute( "presentation:class", shape->additionalAttribute( "presentation:class" ) );
 
     // replace placeholder by shape
     m_canvas->shapeController()->removeShape( shape, cmd );
