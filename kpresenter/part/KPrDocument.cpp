@@ -29,11 +29,13 @@
 #include "KPrPlaceholderShapeFactory.h"
 #include "KPrSoundCollection.h"
 #include "pagelayout/KPrPageLayouts.h"
+#include "tools/KPrPlaceholderToolFactory.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
 #include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
 #include <KoXmlNS.h>
 
 #include <KConfig>
@@ -45,6 +47,8 @@ class InitOnce
 public:
     InitOnce()
     {
+        KoToolRegistry * toolRegistry = KoToolRegistry::instance();
+        toolRegistry->add( new KPrPlaceholderToolFactory( toolRegistry ) );
         KoShapeRegistry * registry = KoShapeRegistry::instance();
         KoShapeFactory * factory = new KPrPlaceholderShapeFactory( registry );
         registry->addFactory( new KPrPlaceholderShapeFactory( registry ) );
