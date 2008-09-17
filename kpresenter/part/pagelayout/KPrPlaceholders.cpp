@@ -92,6 +92,7 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
              shape->setSize( ( * listIt ).size() );
              shape->setPosition( ( * listIt ).topLeft() );
              shape->setParent( layer );
+             shape->setShapeId( KPrPlaceholderShapeId );
              document->addShape( shape );
              // TODO command
         }
