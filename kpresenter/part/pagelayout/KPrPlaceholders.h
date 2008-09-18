@@ -96,10 +96,16 @@ public:
 private:
     void add( const QList<KoShape *> & shapes );
 
+    // set the new layout 
+    // this gets called by the KPrPageLayoutCommand
+    void setLayout( KPrPageLayout * layout );
+
     KPrPageLayout * m_layout;
     // that is set to true when the m_placeholders is initialized
     bool m_initialized;
     Placeholders m_placeholders;
+
+    friend class KPrPageLayoutCommand;
 };
 
 #endif /* KPRPLACEHOLDERS_H */

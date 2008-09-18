@@ -22,10 +22,15 @@
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
+#include <KoShapeMoveCommand.h>
+#include <KoShapeSizeCommand.h>
+#include <KoShapeDeleteCommand.h>
+#include <KoShapeCreateCommand.h>
 #include <KoPADocument.h>
 #include "KPrPageLayout.h"
 #include "KPrPlaceholder.h"
 #include "KPrPlaceholderShape.h"
+#include "commands/KPrPageLayoutCommand.h"
 
 KPrPlaceholders::KPrPlaceholders()
 :m_layout( 0 )
@@ -39,7 +44,9 @@ KPrPlaceholders::~KPrPlaceholders()
 void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes, const QSizeF & pageSize )
 {
     Q_ASSERT( m_initialized );
-    m_layout = layout;
+
+    QUndoCommand * cmd = new QUndoCommand( i18n( "Set Layout" ) );
+    new KPrPageLayoutCommand( this, layout, cmd );
 
     Q_ASSERT( !shapes.isEmpty() );
     KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shapes[0] );
@@ -62,25 +69,33 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
             if ( itPlaceholder.value().isEmpty() ) {
                 placeholders.erase( itPlaceholder );
             }
-            // shape reposition
-            // TODO command
-            it->shape->setSize( rect.size() );
-            it->shape->setPosition( rect.topLeft() );
+            // replace the shape as given by the layout
+            QList<KoShape *> shapes;
+            QList<QSizeF> oldSizes;
+            QList<QSizeF> newSizes;
+            QList<QPointF> oldPosition;
+            QList<QPointF> newPosition;
+            shapes.append( it->shape );
+            oldSizes.append( it->shape->size() );
+            newSizes.append( rect.size() );
+            oldPosition.append( it->shape->position() );
+            newPosition.append( rect.topLeft() );
+            new KoShapeSizeCommand( shapes, oldSizes, newSizes, cmd );
+            new KoShapeMoveCommand( shapes, oldPosition, newPosition, cmd );
         }
         else {
             if ( it->isPlaceholder ) {
                 // shape remove
-                // TODO command
-                // it is already deleted by the shapeRemoved it = m_placeholders.erase( it );
                 // this is done as it gets deleted by shapeRemoved
                 Placeholders::iterator next( it );
                 ++next;
-                document->removeShape( it->shape );
+                new KoShapeDeleteCommand( document, it->shape, cmd );
             }
         }
         it = next;
     }
 
+    // add placeholder shapes for all available positions
     QMap<QString, QList<QRectF> >::const_iterator itPlaceholder( placeholders.begin() );
     for ( ; itPlaceholder != placeholders.end(); ++itPlaceholder ) {
         const QList<QRectF> & list( itPlaceholder.value() );
@@ -93,10 +108,16 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
              shape->setPosition( ( * listIt ).topLeft() );
              shape->setParent( layer );
              shape->setShapeId( KPrPlaceholderShapeId );
-             document->addShape( shape );
-             // TODO command
+             new KoShapeCreateCommand( document, shape, cmd );
         }
     }
+    document->addCommand( cmd );
+}
+
+void KPrPlaceholders::setLayout( KPrPageLayout * layout )
+{
+    Q_ASSERT( m_initialized );
+    m_layout = layout;
 }
 
 void KPrPlaceholders::init( KPrPageLayout * layout, const QList<KoShape *> & shapes )
@@ -133,7 +154,6 @@ void KPrPlaceholders::shapeRemoved( KoShape * shape )
 // other do nothing
     QString presentationClass = shape->additionalAttribute( "presentation:class" );
     if ( !presentationClass.isNull() ) {
-        // TODO m_placeholders.erase()
         PlaceholdersByShape::iterator it( m_placeholders.get<2>().find( shape ) );
         if ( it != m_placeholders.get<2>().end() ) {
             m_placeholders.get<2>().erase( it );
