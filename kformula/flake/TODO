@@ -1,0 +1,26 @@
+- implement the new tool widget
+- change removeChild( BasicElement* element ) to removeChild( FormulaCursor* cursor, BasicElement* child ) 
+- implement insertText completly
+
+- make load and save working for every element
+  -> update test suite
+- implement inheritsAttribute() method in every element class
+- finish the scriptLevel implementation in AttributeManager
+- implement a AttributeManager test for scriptLevel
+- add defaultAttributevalues to mstyle
+- solve KoViewConverter issue in AttributeManager, make it always set...
+- correct mathspace parsing in operator element.
+- implement rendering in all token elements
+- make FormulaCursor class able to insert elements
+- add functionality to FormulaToolOptions so that user can insert elements
+- implement cursor movement with acceptCursor() method
+
+mid term ( potential prerelease ) goals:
+- create template files - decide what kind of templates should be in place
+- add attribute caching as member variables in elements so that paint()
+  does not need a AttributeManager
+
+long term goals:
+- add selecting to FormulaCursor class
+- iron the loading process out so that it won't crash on errors and report them
+
