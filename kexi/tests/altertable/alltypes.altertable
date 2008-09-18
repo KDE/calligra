@@ -1,0 +1,109 @@
+openDatabase 1.kexi
+
+/* 
+ This test checks:
+ - creating table fields of all possible types 
+ - adding new fields to the table with preserving the original content
+ Additionally:
+ - as "booleanField" field is type of bool, and by default 
+   it is declared as NOT NULL, values for it are filled with "false".
+ - 3rd (original) field is removed before adding new fields
+
+ Used tables: cars
+*/
+designTable cars 
+ i=3
+ removeField i
+ insertField i textField
+ changeFieldProperty i type string text
+ i++
+ insertField i longTextField
+ changeFieldProperty i type string longText
+ i++
+ insertField i byteField
+ changeFieldProperty i type string byte
+ i++
+ insertField i shortIntField
+ changeFieldProperty i type string shortInteger
+ i++
+ insertField i intField
+ changeFieldProperty i type string integer
+ i++
+ insertField i bigIntField
+ changeFieldProperty i type string bigInteger
+ i++
+ insertField i booleanField
+ changeFieldProperty i type string boolean
+ i++
+ insertField i dateField
+ changeFieldProperty i type string date
+ i++
+ insertField i dateTimeField
+ changeFieldProperty i type string dateTime
+ i++
+ insertField i timeField
+ changeFieldProperty i type string time
+ i++
+ insertField i floatField
+ changeFieldProperty i type string float
+ i++
+ insertField i doubleField
+ changeFieldProperty i type string double
+ i++
+ insertField i blobField
+ changeFieldProperty i type string blob
+endDesign
+
+ showSchema
+
+ checkSchema
+  id  UNSIGNED Integer AUTOINC UNIQUE PKEY NOTNULL NOTEMPTY
+  owner  UNSIGNED Integer
+  textfield Text(200)
+  longtextfield LongText
+  bytefield Byte
+  shortintfield ShortInteger
+  intfield Integer
+  bigintfield BigInteger
+  booleanfield Boolean NOTNULL DEFAULT=[bool]false
+  datefield Date
+  datetimefield DateTime
+  timefield Time
+  floatfield Float
+  doublefield Double
+  blobfield BLOB
+ endSchema
+
+ showActions
+
+ checkActions
+  Remove table field "model"
+  Insert table field "textfield" at position 2 (textfield Text(200))
+  Insert table field "longtextfield" at position 3 (longtextfield LongText)
+  Insert table field "bytefield" at position 4 (bytefield Byte)
+  Insert table field "shortintfield" at position 5 (shortintfield ShortInteger)
+  Insert table field "intfield" at position 6 (intfield Integer)
+  Insert table field "bigintfield" at position 7 (bigintfield BigInteger)
+  Insert table field "booleanfield" at position 8 (booleanfield Boolean NOTNULL DEFAULT=[bool]false)
+  Insert table field "datefield" at position 9 (datefield Date)
+  Insert table field "datetimefield" at position 10 (datetimefield DateTime)
+  Insert table field "timefield" at position 11 (timefield Time)
+  Insert table field "floatfield" at position 12 (floatfield Float)
+  Insert table field "doublefield" at position 13 (doublefield Double)
+  Insert table field "blobfield" at position 14 (blobfield BLOB)
+ endActions
+
+ saveTableDesign #executes Alter Table
+
+ showTableData clipboard
+ stop
+
+ checkTableData
+"ID"	"Car owner"	"textField"	"longTextField"	"byteField"	"shortIntField"	"intField"	"bigIntField"	"booleanField"	"dateField"	"dateTimeField"	"timeField"	"floatField"	"doubleField"	"blobField"
+1	2							false						
+2	2							false						
+3	3							false						
+5	4							false						
+6	3							false						
+ endTableData
+

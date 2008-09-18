@@ -1,0 +1,158 @@
+-----------------------------------------------------------
+Settings stored in 'kexirc' config file
+
+This is official list.
+All other settings are unofficial and are subject to change.
+
+Started: 2004-08-20, js
+-----------------------------------------------------------
+
+Group: MainWindow
+# percentage width of the Project Navigator pane
+-LeftDockPosition [integer: 0..100]
+
+# True if the Project Navigator pane is visible after startup.
+-ShowProjectNavigator [boolean] (default: true)
+
+# True if single click should open item in the Project Navigator.
+# Otherwise double click should be used to open item.
+# Meaningful when "single click to open files" option is set 
+# in the Control Center.
+- SingleClickOpensItem [boolean] (default: false)
+
+# Percentage property editor's width
+-RightDockPosition [integer: 0..100]
+
+# True if "hover close button" should be available for tabs in the main window.
+# Only affects IDEAl user unterface mode.
+-HoverCloseButtonForTabs [boolean] (default: false)
+
+Group: PropertyEditor
+-FontSize [integer]
+
+Group: Notification Messages
+-dontAskBeforeDeleteRow [boolean] (default: false)
+
+-askBeforeOpeningFileReadOnly [boolean] (default: true)
+
+# If true, warning messages related to plugins, e.g. 
+# "Errors encountered during loading plugins" 
+# will not be displayed on the application's startup.
+-dontShowWarningsRelatedToPluginsLoading [boolean] (default: false)
+
+Group: General
+#especially useful for SQL-related messages
+#default=true for advanced Kexi mode
+NOT YET IMPELMENTED: -alwaysShowDetailsInMsgBoxes [boolean]
+
+Group: Recent Dirs
+-lastVisitedImagePath [stringlist] # used for open/save dialogs for image files
+                                   # see KexiImageBox::slotInsertFromFile() and slotSaveAs();
+
+Group: Startup
+-OpenExistingType [File|Server]
+-ShowStartupDialog [boolean]
+#default file db driver name, used on file db creation:
+TODO: -DefaultFileDBDriverName [string default="sqlite3", can be also "sqlite2"]
+
+Group: TableView
+TODO: -add default values for KexiTableView::Appearance
+
+Group: TableDesigner
+-autogeneratePrimaryKeysOnTableDesignSaving [boolean]
+TODO: -defaultFieldType [the list of types], default=Text
+TODO: -autoPrimaryKeyForFieldNames [stringlist]
+TODO: -defaultTextFieldLength [uint, <255] default=50
+TODO: -defaultIntegerFieldSubtype [the list of types (byte, short, etc.)] default=long
+
+Group: QueryDesigner
+TODO: -autoJoinOnTableInserting [boolean]
+
+Group: KeyboardNavigation
+-cursorPlacementAfterLastOrFirstFormField [stringlist: nextOrPrevRecord|firstOrLastField(default)]
+
+Group: Forms
+TODO:-overrideStyleName [string] (empty if do not override)
+TODO:-doNotFocusAutonumberFields [boolean] (true by default; when this and autoTabStop for a form is true, 
+                                         autonumber text fields are skipped)
+                                         implement this in KexiFormView::afterSwitchFrom()
+TODO:-appendColonToAutoLabels [boolean] (true by default; when true, colon character is appended 
+                                      to autolabel text)
+TODO:-makeFirstCharacterUpperCaseInAutoLabels [boolean] (true by default; when true, first character 
+                                      in autolabel text is converted to upper case. 
+                                      Usable when no field's title is provided)
+TODO:-labelPositionInAutoLabels [enum: Left, Top] (Left by default)
+
+TODO:-gridSize [uint] (10 by default)
+
+Group: NewFormDefaults
+TODO:-styleName [string]
+TODO:-autoTabStop [boolean]
+
+Group: ImportExport
+# Default character encoding for MS Access MDB/MDE files (older than 2000).
+# Currently used by in Advanced Options of Importing Wizard. 
+# Useful if you are performing many imports of MS Access databases.
+# Valid values can be "cp 1250", "cp 1251", etc. Case insensitive.
+# If not provided, system default will be is assumed.
+-DefaultEncodingForMSAccessFiles [string]
+
+# Default character encoding for importing CSV (Comma-Separated Value) files.
+# If not provided, system default will be is assumed.
+-DefaultEncodingForImportingCSVFiles [string]
+
+# True if options should be visible in the "CSV Export dialog".
+-ShowOptionsInCSVExportDialog [boolean] (false by default)
+
+# If provided, appropriate options for CSV Export Dialog will be loaded
+-StoreOptionsForCSVExportDialog [boolean] (default: false)
+
+# Default delimiter used for exporting CSV (Comma-Separated Value) files.
+-DefaultDelimiterForExportingCSVFiles [string] (default is ",")
+
+# Default text quote character used for exporting CSV (Comma-Separated Value) files.
+-DefaultTextQuoteForExportingCSVFiles [string] (default is ")
+
+# Default character encoding for exporting CSV (Comma-Separated Value) files.
+# If not provided, system default will be is assumed.
+# Only used when StoreOptionsForCSVExportDialog option is true.
+-DefaultEncodingForExportingCSVFiles [string]
+
+# Default setting used to specify whether column names should be added as the first row
+# for exporting CSV (Comma-Separated Value) files.
+# Only used when StoreOptionsForCSVExportDialog option is true.
+-AddColumnNamesForExportingCSVFiles [string] (default: true)
+
+# Maximum number of rows that can be displayed in the CSV import dialog. 
+# Used to decrease memory consumption.
+-MaximumRowsForPreviewInImportDialog [int] (default: 100)
+
+# Maximum number of bytes that can be loaded to preview the data in the CSV
+# import dialog. Used to decrease memory consumption and speed up the GUI.
+-MaximumBytesForPreviewInImportDialog [int] (default: 10240)
+
+Group: Recent Dirs
+# A list of recently displayed directories in file dialogs related to CSV 
+  import/export.
+-CSVImportExport [string list]
+
+# A list of recently displayed directories in "Source database" file dialog 
+  of Project Migration
+-ProjectMigrationSourceDir [string list]
+
+# A list of recently displayed directories in "Destination database" file 
+  dialog of Project Migration
+-ProjectMigrationDestinationDir [string list]
+
+# A list of recently displayed directories in "Open existing project" 
+  and "Create new project" file dialog of Startup Dialog
+-OpenExistingOrCreateNewProject [string list]
+
+# A list of recently displayed directories in file dialogs related to images 
+  (e.g. images within forms).
+-LastVisitedImagePath [string list]
+
+# A list of recent displayed directories in a file dialogs used for dowloading 
+  example databases (Get Hot New Stuff)
+-DownloadExampleDatabases [string list]
+

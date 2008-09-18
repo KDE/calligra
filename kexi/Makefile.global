@@ -1,0 +1,28 @@
+KEXI_OPTIONS =
+
+if compile_kross
+  SCRIPTINGDEFINES=-DKEXI_SCRIPTS_SUPPORT
+endif
+
+AM_CPPFLAGS=$(SCRIPTINGDEFINES)
+
+KDE_CXXFLAGS = \
+$(USE_EXCEPTIONS) $(KEXI_OPTIONS)
+
+KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_global.h
+
+# temporary:
+##KDE_CXXFLAGS += -DKEXI_NO_AUTOFIELD_WIDGET
+
+# temporary unless cursor works properly in the Designer
+KDE_CXXFLAGS += -DKEXI_NO_CURSOR_PROPERTY
+
+# temporary: turn off processEvents() to avoid possible crashes
+# KDE_CXXFLAGS += -DKEXI_NO_PROCESS_EVENTS
+
+KDE_CXXFLAGS += -DKEXI_NO_CTXT_HELP -DKEXI_NO_SUBFORM -DKEXI_DB_COMBOBOX_WIDGET
+
+# TODO: undefine this before release!
++KDE_CXXFLAGS += -DKEXI_DEBUG_GUI
+
+VER_INFO = -version-info 3:0:0

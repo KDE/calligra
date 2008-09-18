@@ -1,0 +1,204 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="kexi" version="164">
+<MenuBar>
+  <Menu name="file" noMerge="0">
+    <text>&amp;Project</text>
+    <Action name="project_new" />
+    <Action name="project_open"/>
+    <Action name="project_download_examples"/>
+    <Action name="project_open_recent"/>
+    <!-- Menu name="project_open_recent">
+      <text>Open Recent</text>
+      <MergeLocal name="recent_actions"/>
+      <Separator />
+      <Action name="project_open_recent_more"/>
+    </Menu -->
+    <Separator />
+    <Action name="project_save"/>
+    <Action name="project_saveas"/>
+    <Separator />
+    <Menu name="project_import">
+      <text>&amp;Import</text>
+      <Action name="project_import_data_table" />
+      <Action name="project_import_objects" />
+    </Menu>
+    <Menu name="project_export">
+      <text>&amp;Export</text>
+      <Action name="project_export_data_table" />
+      <Action name="project_export_objects" />
+    </Menu>
+    <Separator />
+    <Action name="project_print"/>
+    <Action name="project_print_preview"/>
+    <Action name="project_print_setup"/>
+    <Separator />
+    <Action name="project_relations"/>
+    <Action name="project_properties"/>
+    <Separator />
+    <Action name="project_close"/>
+    <Separator />
+    <Action name="quit"/>
+  </Menu>
+
+  <Menu name="edit" noMerge="1">
+    <text>&amp;Edit</text>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+    <MergeLocal name="edit_undo_merge"/>
+    <Separator/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+    <Menu name="edit_copy_special">
+      <text>Copy &amp;Special</text>
+      <Action name="edit_copy_special_data_table"/>
+    </Menu>
+    <Menu name="edit_paste_special">
+      <text>Paste &amp;Special</text>
+      <Action name="edit_paste_special_data_table"/>
+    </Menu>
+    <MergeLocal name="edit_paste_merge"/>
+    <Separator/>
+    <Action name="edit_find"/>
+    <Action name="edit_replace"/>
+    <Separator/>
+    <Action name="edit_select_all"/> 
+    <Separator/>
+    <Action name="edit_delete"/>
+    <Action name="edit_delete_row"/>
+    <ActionList name="edit_clear_table"/>
+    <ActionList name="edit_insert_empty_row"/>
+    <Merge/>
+  </Menu>
+  
+  <Menu name="view" noMerge="1">
+    <text>&amp;View</text>
+    <Action name="view_data_mode" type="toggle" />
+    <Action name="view_design_mode" type="toggle" />
+    <Action name="view_text_mode" type="toggle" />
+    <Separator/>
+    <Action name="view_navigator"/>
+    <Action name="view_mainarea"/>
+    <Action name="view_propeditor"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+
+  <Menu name="insert" noMerge="1">
+    <text>&amp;Insert</text>
+  </Menu>
+
+  <Menu name="format" noMerge="0">
+    <text>&amp;Format</text>
+    <Action name="format_font"/>
+    <Separator/>
+    <MergeLocal/>
+  </Menu>
+
+  <Menu name="data" noMerge="1">
+    <text>&amp;Data</text>
+    <Action name="data_save_row"/>
+    <Action name="data_cancel_row_changes"/>
+    <!-- Action name="data_filter"/ -->
+    <Menu name="data_sort">
+      <text>Sort</text>
+      <Action name="data_sort_az"/>
+      <Action name="data_sort_za"/>
+    </Menu>
+    <Action name="data_execute"/>
+  </Menu>
+
+  <Merge/>
+
+  <Menu name="tools" noMerge="0">
+    <text>&amp;Tools</text>
+    <!-- Menu name="tools_migrate">
+      <text>&amp;Migrate</text>
+    </Menu -->
+    <Action name="tools_import_project"/>
+    <Action name="tools_compact_database"/>
+    <Action name="tools_scripts"/>
+    <MergeLocal/>
+  </Menu>
+
+  <Menu name="window" noMerge="0">
+    <text>&amp;Window</text>
+    <MergeLocal/>
+  </Menu>
+  
+  <Menu name="settings" noMerge="1">
+    <text>&amp;Settings</text>
+    <Action name="options_show_menubar"/>
+    <Action name="options_show_toolbar"/>
+    <Merge name="StandardToolBarMenuHandler"/>
+    <Merge name="KMDIViewActions"/>
+    <MergeLocal name="show_toolbar_merge"/>
+    <Action name="options_show_statusbar"/>
+    <MergeLocal name="show_merge"/>
+    <Separator/>
+    <!-- Menu name="options_show_other">
+      <Text>&amp;Other</Text>
+      <Action name="options_show_nav"/>
+      <Action name="options_show_contexthelp"/>
+      <Action name="options_enable_forms"/>
+    </Menu -->
+    <Separator/>
+    <Action name="options_configure_keybinding"/>
+    <Action name="options_configure_toolbars"/>
+    <Action name="options_configure"/>
+  </Menu>
+  
+  <Menu name="help">
+    <text>&amp;Help</text>
+    <Action name="help_show_important_info" noMerge="0"/>
+    <Action name="help_start_feedback_agent" noMerge="0"/>
+    <!-- not yet needed: Menu name="help_licenses" noMerge="0">
+    <text>Other &amp;Licenses</text>
+      <Merge />
+    </Menu -->
+  </Menu>
+</MenuBar>
+
+<ToolBar name="mainToolBar" noMerge="1" fullWidth="false" index="0">
+  <text>Main Toolbar</text>
+  <Action name="project_save"/>
+  <Separator/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+  <!-- Separator/ -->
+  <!-- Action name="view_zoom"/ -->
+  <!-- Separator/ -->
+  <Action name="project_relations"/>
+</ToolBar>
+
+<ToolBar name="viewToolBar" fullWidth="false" noMerge="1" index="1">
+  <text>View</text>
+  <Action name="view_data_mode" type="toggle" />
+  <Action name="view_design_mode" type="toggle" />
+  <Action name="view_text_mode" type="toggle" />
+</ToolBar>
+
+<ToolBar name="dataToolBar" fullWidth="false" noMerge="1" index="2">
+  <text>Data</text>
+  <Action name="data_cancel_row_changes"/>
+  <Action name="data_save_row"/>
+  <Separator/>
+  <Action name="data_sort_az"/>
+  <Action name="data_sort_za"/>
+  <Separator/>
+  <Action name="edit_find"/>
+  <!-- Action name="data_filter"/ -->
+</ToolBar>
+
+<ToolBar name="designToolBar" fullWidth="false" noMerge="1" index="3">
+  <text>Design</text>
+</ToolBar>
+
+<ToolBar name="format" fullWidth="false" noMerge="1" index="4">
+  <text>Format</text>
+</ToolBar>
+
+</kpartgui>

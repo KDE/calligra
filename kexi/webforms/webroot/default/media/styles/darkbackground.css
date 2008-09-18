@@ -1,0 +1,273 @@
+/**
+ * based on code by Sebastian Faubel
+ * modified by Christoph Cullmann and Olaf Schmidt 
+ */
+
+/* common (X)HTML formats */
+
+body {
+font-size: 100%;
+line-height: 1.2em; /* Note: it is inherited as is, not recalculated! */
+background-color: #000022;
+color: white;
+font-family: sans-serif;
+padding: 0;
+margin: 0;
+}
+
+table, td, th {
+font-family: sans-serif;
+padding: 0;
+margin: 0;
+text-align: left;
+background-color: black;
+}
+
+input, select {
+font-size: 0.8em;
+line-height: 1em;
+}
+
+form {
+margin: 0;
+padding: 0;
+}
+
+optgroup {
+font-style: normal;
+}
+
+a:link {
+color: #CCCCFF;
+text-decoration: underline;
+}
+
+a:visited {
+color: #FFCCFF;
+text-decoration: underline;
+}
+
+a:hover {
+text-decoration: underline;
+}
+
+/* navigation header, this is the combined area with logo and section links */
+
+#nav_header_top {
+text-align: right;
+}
+
+#nav_header_bottom {
+clear: left;
+padding: 0.3em;
+background-color: black;
+text-align: left;
+}
+
+#nav_header_logo, #nav_header_logo_right {
+display: none;
+}
+
+/* title text */
+#nav_header_title {
+float: left;
+font-size: 2em;
+line-height: 1.4em;
+padding-left: 0.2em;
+}
+
+/* location combo */
+#nav_header_location {
+}
+
+/* location URL */
+#nav_header_bottom_left {
+vertical-align: middle;
+
+font-size: 0.8em;
+line-height: 1.1em;
+}
+
+/* place for the links to contact, sitemap, ... s*/
+#nav_header_bottom_right {
+float: right;
+vertical-align: middle;
+
+font-size: 0.8em;
+line-height: 1.1em;
+}
+
+/* main color definitions */
+
+.menuheader {
+height: 0;
+line-height: 0;
+margin: 0;
+padding: 0;
+font-size: 0;
+}
+
+#leftmenu, #rightmenu {
+width: 20%;
+}
+
+#leftmenu h2, #rightmenu h2 {
+font-size: 1em;
+padding-left: 1em;
+vertical-align: middle;
+background-color: #000022;
+color: white;
+margin-top: 0;
+}
+
+#rightmenu h3 {
+padding: 0.3em 0.8em;
+font-size: 1em;
+}
+
+#leftmenu ul, #rightmenu ul {
+margin: 0;
+padding-left: 0.5em;
+padding-bottom: 1em;
+}
+
+#leftmenu ul {
+list-style-type: none;
+}
+
+#rightmenu ul {
+list-style-type: none;
+}
+
+#leftmenu li, #rightmenu li {
+font-size: 0.8em;
+}
+
+#leftmenu li {
+margin-left: 1em;
+}
+
+#rightmenu li {
+margin-left: 1.5em;
+}
+
+#leftmenu ul ul, #rightmenu ul ul {
+margin: 0;
+padding-left: 0;
+}
+
+#leftmenu li li, #rightmenu li li{
+font-size: 0.8em;
+margin-left: 2em;
+list-style-type: square;
+}
+
+/**
+ * page footer
+ */
+
+/* background + border at top */
+#footer {
+background-color: #000022;
+}
+
+/* footer text stuff + image */
+#footer_text {
+display: none;
+}
+
+/* classes */
+
+/* static IDs, ordered top to bottom */
+
+#content {
+border: 1px solid white;
+padding: 0em 0.7em 1.5em 0.7em;
+text-align: justify;
+background-color: black;
+}
+
+#content td, #content th {
+font-family: sans-serif;
+padding: 0.25em;
+margin: 0;
+text-align: left;
+}
+
+#content h4, #content h3, #content h2, #content h1 {
+text-align: left;
+line-height: 1em; /* without this lines stick in each other for headings */
+}
+
+#quicklinks {
+font-size: 1em;
+text-align: center;
+margin-top: 1em;
+margin-left: 0.5em;
+margin-bottom: 0.5em;
+margin-right: 0.5em;
+}
+
+.menu_box {
+background-color: black;
+}
+
+#search {
+text-align: center;
+padding: 0.2em 0.2em 0.2em 0.2em;
+}
+
+#search label {
+display: none;
+}
+
+#search input, #search select {
+width: 95%;
+margin-bottom: 2px;
+}
+
+#hotspot {
+font-size: 0.8em;
+line-height: 1em;
+text-align: center;
+padding: 0 0 0.8em 0;
+}
+
+#rightmenu h3 {
+margin-bottom: 0;
+}
+
+.newsbox1 {
+background-color: #000022;
+margin-top: 1em;
+margin-bottom: 0.5em;
+}
+
+.newsbox2 {
+background-color: black;
+margin-top: 1em;
+margin-bottom: 0.5em
+}
+
+/* common style for tables used in the page */
+.table_box {
+background-color: #000022;
+border: 0;
+padding: 0;
+margin: 0;
+border-spacing: 0;
+}
+
+.table_box th {
+background-color: #000022;
+color: white;
+}
+
+/* hidden stuff */
+.doNotDisplay {
+display: none;
+}
+
+@media aural { .doNotDisplay {
+display: inline;
+}}

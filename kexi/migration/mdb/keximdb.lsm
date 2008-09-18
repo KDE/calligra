@@ -1,0 +1,12 @@
+Begin4
+Title:          keximdb
+Version:        @VERSION@
+Entered-date:   @DATE@
+Description:    MS Access (MDB) driver for Kexi, the KOffice database program
+Keywords:       Microsoft Access to Kexi (KexiDB) database migration driver 
+Author:         martin.ellis@kdemail.net (Martin Ellis)
+Maintained-by:  martin.ellis@kdemail.net (Martin Ellis)
+Primary-site:   ftp.kde.org /pub/kde/stable/apps/KDE3.x/database
+        @SIZE@   keximdb-@VERSION@.tar.gz
+Copying-policy: LGPL
+End

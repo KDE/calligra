@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# sqltest_int - fast parser testing using sqlite database (interactive)
+# Type sqltest_int for usage info.
+
+[ $# -lt 1 ] && echo "Usage: $0 <sqlite-database-name> [-v] [other_options]" && \
+ echo " -v    Verbose mode" && exit 1
+
+dbname=$1
+shift
+
+echo "Enter SQL Statement:"
+read
+
+./sqltest "$dbname" "$REPLY" $*
+#!/bin/bash
+
+# sqltest_int - fast parser testing using sqlite database (interactive)
+# Type sqltest_int for usage info.
+
+[ $# -lt 1 ] && echo "Usage: $0 <sqlite-database-name> [-v] [other_options]" && \
+ echo " -v    Verbose mode" && exit 1
+
+dbname=$1
+shift
+
+echo "Enter SQL Statement:"
+read
+
+./sqltest "$dbname" "$REPLY" $*

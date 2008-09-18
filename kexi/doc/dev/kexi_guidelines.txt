@@ -1,0 +1,35 @@
+PROPOSAL: Generic Guidlines For Kexi Development
+
+Jarosław Staniek
+started: 2003-06-25
+
+Idea 1
+Add tests for command line-only operations using kexiDB library.
+These tests can be later turned to command line options for Kexi what will allow non 
+GUI operations o databases/projects.
+
+Idea 2
+Look at QSQL module from QT. E.g. there is efficient cursor feature (it works quite good with mysql).
+We have KexiDBRecordSet instead, but this is just the same thing.
+In fact many KexiDB features are compatible with QSQL.
+Focus on:
+- avoid loading all result data to client memory (fetch some records instead)
+- avoid blocking operations (do asynchronously as many things as possible)
+- avoid memory copying (at low level try to store original char* data instead of QString,
+  convert to QString only on data displaying)
+
+Idea 3
+Directories layout:
+dialogs/
++-altertable/
++-datatable/
++-queryeditor/
++-sqleditor
+
+widgets/
++-tableview/
++-datatableview/
+
+Idea 4
+Classes naming guidelines:
+'Dialog' suffix for all classes 

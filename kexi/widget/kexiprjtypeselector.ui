@@ -1,0 +1,148 @@
+<ui version="4.0" stdsetdef="1" >
+  <author></author>
+  <comment></comment>
+  <exportmacro></exportmacro>
+  <class>KexiPrjTypeSelector</class>
+  <widget class="QWidget" name="KexiPrjTypeSelector" >
+    <property name="geometry" >
+      <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>254</width>
+        <height>61</height>
+      </rect>
+    </property>
+    <layout class="QVBoxLayout" >
+      <property name="margin" >
+        <number>0</number>
+      </property>
+      <item>
+        <widget class="Q3ButtonGroup" name="buttonGroup" >
+          <property name="frameShape" >
+            <enum>Q3GroupBox::NoFrame</enum>
+          </property>
+          <property name="frameShadow" >
+            <enum>Q3GroupBox::Plain</enum>
+          </property>
+          <property name="lineWidth" >
+            <number>0</number>
+          </property>
+          <property name="title" >
+            <string/>
+          </property>
+          <property name="selectedId" stdset="0" >
+            <number>1</number>
+          </property>
+          <layout class="QGridLayout" >
+            <property name="margin" >
+              <number>0</number>
+            </property>
+            <item row="1" column="1" >
+              <widget class="QRadioButton" name="option_server" >
+                <property name="text" >
+                  <string>Projects stored on a database server</string>
+                </property>
+                <property name="buttonGroupId" >
+                  <number>2</number>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="1" >
+              <widget class="QRadioButton" name="option_file" >
+                <property name="text" >
+                  <string>Projects stored in a file</string>
+                </property>
+                <property name="checked" >
+                  <bool>true</bool>
+                </property>
+                <property name="buttonGroupId" >
+                  <number>1</number>
+                </property>
+              </widget>
+            </item>
+            <item row="0" column="0" >
+              <widget class="QLabel" name="icon_file" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="scaledContents" >
+                  <bool>true</bool>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="1" column="0" >
+              <widget class="QLabel" name="icon_server" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="text" >
+                  <string/>
+                </property>
+                <property name="scaledContents" >
+                  <bool>true</bool>
+                </property>
+                <property name="alignment" >
+                  <set>Qt::AlignVCenter|Qt::AlignLeft</set>
+                </property>
+                <property name="wordWrap" >
+                  <bool>false</bool>
+                </property>
+              </widget>
+            </item>
+            <item row="2" column="1" >
+              <widget class="Q3Frame" name="frame_server" >
+                <property name="sizePolicy" >
+                  <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                  </sizepolicy>
+                </property>
+                <property name="frameShape" >
+                  <enum>NoFrame</enum>
+                </property>
+                <property name="frameShadow" >
+                  <enum>Plain</enum>
+                </property>
+              </widget>
+            </item>
+          </layout>
+        </widget>
+      </item>
+    </layout>
+  </widget>
+  <layoutdefault spacing="6" margin="11" />
+  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+  <tabstops>
+    <tabstop>option_file</tabstop>
+    <tabstop>option_server</tabstop>
+  </tabstops>
+  <connections>
+    <connection>
+      <sender>buttonGroup</sender>
+      <signal>clicked(int)</signal>
+      <receiver>KexiPrjTypeSelectorBase</receiver>
+      <slot>slotSelectionChanged(int)</slot>
+    </connection>
+  </connections>
+</ui>

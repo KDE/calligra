@@ -1,0 +1,11 @@
+--- ./libmdb.cvs/dump.c	2005-07-02 09:16:05.000000000 +0200
++++ ./libmdb/dump.c	2007-11-09 22:05:36.156250000 +0100
+@@ -13,7 +13,7 @@
+ 
+ 	memset(asc, 0, sizeof(asc));
+ 	k = 0;
+-	for (j=start; j<start+len; j++) {
++	for (j=start; (size_t)j<(start+len); j++) {
+ 		int c = ((const unsigned char *)(buf))[j];
+ 		if (k == 0) {
+ 			fprintf(stdout, "%04x  ", j);

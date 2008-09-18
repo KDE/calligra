@@ -1,0 +1,166 @@
+--- ./libmdb.cvs/data.c	2007-03-17 02:08:52.000000000 +0100
++++ ./libmdb/data.c	2007-11-10 01:21:51.093750000 +0100
+@@ -13,8 +13,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #include "mdbtools.h"
+@@ -206,9 +206,9 @@
+ mdb_xfer_bound_data(MdbHandle *mdb, int start, MdbColumn *col, int len)
+ {
+ int ret;
+-	//if (!strcmp("Name",col->name)) {
+-		//printf("start %d %d\n",start, len);
+-	//}
++	
++		
++	
+ 	if (len) {
+ 		col->cur_value_start = start;
+ 		col->cur_value_len = len;
+@@ -220,7 +220,7 @@
+ 		if (!len) {
+ 			strcpy(col->bind_ptr, "");
+ 		} else {
+-			//fprintf(stdout,"len %d size %d\n",len, col->col_size);
++			
+ 			char *str;
+ 			if (col->col_type == MDB_NUMERIC) {
+ 				str = mdb_num_to_string(mdb, start,
+@@ -308,9 +308,9 @@
+ 	} else if (col->col_type == MDB_OLE) {
+ 		mdb_xfer_bound_ole(mdb, offset, col, len);
+ 	} else {
+-		//if (!mdb_test_sargs(mdb, col, offset, len)) {
+-			//return 0;
+-		//}
++		
++			
++		
+ 		mdb_xfer_bound_data(mdb, offset, col, len);
+ 	}
+ 	return 1;
+@@ -470,7 +470,7 @@
+ 			return 0;
+ 		}
+ 		if (col->bind_ptr)
+-			memcpy(col->bind_ptr, buf + row_start + 4, len - 4);
++			memcpy(col->bind_ptr, (char*)buf + row_start + 4, len - 4);
+ 		col->cur_blob_pg_row = mdb_get_int32(buf, row_start);
+ 
+ 		return len;
+@@ -494,7 +494,7 @@
+ 	if (ole_len & 0x80000000) {
+ 		/* inline ole field, if we can satisfy it, then do it */
+ 		len = col->cur_value_len - MDB_MEMO_OVERHEAD;
+-		if (chunk_size >= len) {
++		if ((size_t)chunk_size >= len) {
+ 			if (col->bind_ptr) 
+ 				memcpy(col->bind_ptr, 
+ 					&mdb->pg_buf[col->cur_value_start + 
+@@ -517,7 +517,7 @@
+ 		mdb_debug(MDB_DEBUG_OLE,"start %d len %d", row_start, len);
+ 
+ 		if (col->bind_ptr) {
+-			memcpy(col->bind_ptr, buf + row_start, len);
++			memcpy(col->bind_ptr, (char*)buf + row_start, len);
+ 			if (mdb_get_option(MDB_DEBUG_OLE))
+ 				buffer_dump(col->bind_ptr, 0, 16);
+ 		}
+@@ -530,7 +530,7 @@
+ 			return 0;
+ 		}
+ 		if (col->bind_ptr) 
+-			memcpy(col->bind_ptr, buf + row_start + 4, len - 4);
++			memcpy(col->bind_ptr, (char*)buf + row_start + 4, len - 4);
+ 		col->cur_blob_pg_row = mdb_get_int32(buf, row_start);
+ 
+ 		return len;
+@@ -573,7 +573,7 @@
+ 			pg_row & 0xff, row_start, len);
+ 
+ 		if (dest)
+-			memcpy(dest, buf + row_start, len);
++			memcpy(dest, (char*)buf + row_start, len);
+ 		return len;
+ 	} else if ((ole_len & 0xff000000) == 0) { // assume all flags in MSB
+ 		/* multi-page */
+@@ -629,7 +629,7 @@
+ 
+ 	if (memo_len & 0x80000000) {
+ 		/* inline memo field */
+-		mdb_unicode2ascii(mdb, pg_buf + start + MDB_MEMO_OVERHEAD,
++		mdb_unicode2ascii(mdb, (char*)pg_buf + start + MDB_MEMO_OVERHEAD,
+ 			size - MDB_MEMO_OVERHEAD, text, MDB_BIND_SIZE);
+ 		return text;
+ 	} else if (memo_len & 0x40000000) {
+@@ -647,7 +647,7 @@
+ 			pg_row & 0xff, row_start, len);
+ 		buffer_dump(buf, row_start, len);
+ #endif
+-		mdb_unicode2ascii(mdb, buf + row_start, len, text, MDB_BIND_SIZE);
++		mdb_unicode2ascii(mdb, (char*)buf + row_start, len, text, MDB_BIND_SIZE);
+ 		return text;
+ 	} else if ((memo_len & 0xff000000) == 0) { // assume all flags in MSB
+ 		/* multi-page memo field */
+@@ -672,7 +672,7 @@
+ 			if (tmpoff + len - 4 > memo_len) {
+ 				break;
+ 			}
+-			memcpy(tmp + tmpoff, buf + row_start + 4, len - 4);
++			memcpy(tmp + tmpoff, (char*)buf + row_start + 4, len - 4);
+ 			tmpoff += len - 4;
+ 		} while (( pg_row = mdb_get_int32(buf, row_start) ));
+ 		if (tmpoff < memo_len) {
+@@ -691,15 +691,20 @@
+ mdb_num_to_string(MdbHandle *mdb, int start, int datatype, int prec, int scale)
+ {
+ 	char *text;
++	int negative;
+ 	gint32 l;
+ 
+ 	memcpy(&l, mdb->pg_buf+start+13, 4);
+-
+-	text = (char *) g_malloc(prec+2);
+-	sprintf(text, "%0*" G_GINT32_FORMAT, prec, GINT32_FROM_LE(l));
++	negative = (*(mdb->pg_buf+start) & 0x80) ? 1 : 0;
++	text = (char *) g_malloc(prec+2+negative);
++	if (negative) {
++		sprintf(text, "-%0*" G_GINT32_FORMAT, prec, GINT32_FROM_LE(l));
++	} else {
++		sprintf(text, "%0*" G_GINT32_FORMAT, prec, GINT32_FROM_LE(l));
++	}
+ 	if (scale) {
+-		memmove(text+prec-scale, text+prec-scale+1, scale+1);
+-		text[prec-scale] = '.';
++		memmove(text+prec-scale+1+negative, text+prec-scale+negative, scale+1);
++		text[prec-scale+negative] = '.';
+ 	}
+ 	return text;
+ }
+@@ -828,8 +833,8 @@
+ 			text = g_strdup_printf("%d", mdb_get_byte(buf, start));
+ 		break;
+ 		case MDB_INT:
+-			text = g_strdup_printf("%hd",
+-				(short)mdb_get_int16(buf, start));
++			text = g_strdup_printf("%ld",
++				(long)mdb_get_int16(buf, start));
+ 		break;
+ 		case MDB_LONGINT:
+ 			text = g_strdup_printf("%ld",
+@@ -852,7 +857,7 @@
+ 				text = g_strdup("");
+ 			} else {
+ 				text = (char *) g_malloc(MDB_BIND_SIZE);
+-				mdb_unicode2ascii(mdb, buf + start,
++				mdb_unicode2ascii(mdb, (char*)buf + start,
+ 					size, text, MDB_BIND_SIZE);
+ 			}
+ 		break;

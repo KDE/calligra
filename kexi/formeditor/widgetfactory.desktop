@@ -1,0 +1,52 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=KFormDesigner/WidgetFactory
+Comment=Widget Factory Base
+Comment[bg]=Създаване на графични обекти
+Comment[ca]=Factoria base d'estris
+Comment[cy]=Bâs Ffatri Celfigion
+Comment[de]=Basis für die Erstellung von Bedienelementen
+Comment[el]=Βάση μηχανής γραφικών συστατικών
+Comment[eo]=Fenestraĵfabrikbazo
+Comment[es]=Base de fábrica de elementos
+Comment[et]=Vidinate põhibaas
+Comment[eu]=Trepeten faktoriaren oinarria
+Comment[fa]=پایۀ کارخانۀ عنصر
+Comment[fi]=Käyttöliittymäelementtien pohja
+Comment[fr]=Base de création de widgets
+Comment[gl]=Fábrica de Elementos
+Comment[he]=בסיס למפעל פריטים
+Comment[hi]=विजेट फ़ैक्टरी आधार
+Comment[hr]=Baza widget tvornice
+Comment[hu]=Widgetkészítő-alap
+Comment[is]=Hluta smiðjugrunnur
+Comment[it]=Base della fabbrica di oggetti
+Comment[ja]=ウィジェットファクトリーベース
+Comment[kk]=Бөлшектер фабрикасының негізі
+Comment[lv]=Logdaļas fabrikas bāze
+Comment[ms]=Pangkalan Kilang Widget
+Comment[nb]=Base for elementfabrikk
+Comment[nds]=Basis för't Opstellen vun Stüerelementen
+Comment[ne]=विजेट फ्याक्ट्री आधार
+Comment[pl]=Podstawowa fabryka kontrolek
+Comment[pt]=Fábrica de Elementos
+Comment[pt_BR]=Fábrica de Elementos
+Comment[ru]=Базовое приложение, содержащее офисный элемент управления
+Comment[se]=Áhtafabrihka vuođđu
+Comment[sk]=Základ pre vytváracie rozhranie prvkov
+Comment[sl]=Tovarna gradnikov
+Comment[sv]=Bas för att skapa grafiska komponenter
+Comment[ta]=சாளர தொழிற்சாலை தளம்
+Comment[uk]=База фабрики віджетів
+Comment[x-test]=xxWidget Factory Basexx
+Comment[zh_CN]=基础组件工厂
+Comment[zh_TW]=視窗元件工廠基地
+
+[PropertyDef::X-KFormDesigner-FactoryGroup]
+Type=QString
+
+[PropertyDef::X-KFormDesigner-WidgetFactoryVersion]
+Type=int
+
+[PropertyDef::X-KFormDesigner-XMLGUIFileName]
+Type=QString

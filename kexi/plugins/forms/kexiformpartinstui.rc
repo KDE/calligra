@@ -1,0 +1,77 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiformpartinst" version="13">
+
+<MenuBar>
+  <Menu name="edit">
+   <Action name="fompart_clear_contents"/>
+   <Separator />
+   <Action name="formpart_taborder"/>
+   <Action name="formpart_adjust_size"/>
+   <Action name="formpart_pixmap_collection"/>
+   <Action name="formpart_connections"/>
+   <!-- Action name="change_style"/ -->
+  </Menu>
+  <Menu name="format" noMerge="0">
+  <text>&amp;Format</text>
+   <Action name="snap_to_grid"/>
+   <Separator/>
+   <Action name="formpart_layout_menu"/>
+   <Action name="formpart_break_layout"/>
+   <Separator/>
+   <Action name="formpart_align_menu"/>
+   <Action name="formpart_adjust_size_menu"/>
+   <Separator/>
+   <Action name="formpart_format_raise"/>
+   <Action name="formpart_format_lower"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="widgets" fullWidth="false">
+ <text>Widgets</text>
+   <Action name="pointer"/>
+   <!-- Action name="drag_connection"/ -->
+   <Separator/>
+   <Action name="library_widget_KexiDBAutoField"/>
+   <Action name="library_widget_KexiDBLabel"/>
+   <Action name="library_widget_KexiPictureLabel"/>
+   <Action name="library_widget_KexiDBImageBox"/>
+   <Action name="library_widget_KexiDBLineEdit"/>
+   <Action name="library_widget_KexiDBTextEdit"/>
+   <Action name="library_widget_KPushButton"/>
+   <Action name="library_widget_KexiDBComboBox"/>
+   <!-- Action name="library_widget_QRadioButton"/ -->
+   <Action name="library_widget_KexiDBCheckBox"/>
+   <Action name="library_widget_Spacer"/>
+   <Action name="library_widget_Line"/>
+   <Separator/>
+   <Action name="library_widget_KexiFrame"/>
+   <Action name="library_widget_QGroupBox"/>
+   <Action name="library_widget_KFDTabWidget"/>
+   <!-- TODO Action name="library_widget_KexiDBSubForm"/ -->
+   <Separator/>
+   <Action name="library_widget_Spring"/>
+   <Separator/>
+   <Action name="other_widgets_menu"/>
+   <ActionList name="library_widgets" />
+   <Merge/>
+</ToolBar>
+<ToolBar name="format" fullWidth="false" noMerge="1">
+<text>Format</text>
+   <!-- Action name="formpart_layout_menu"/ -->
+   <Action name="formpart_align_menu"/>
+   <Action name="formpart_adjust_size_menu"/>
+   <Action name="show_form_ui" />
+</ToolBar>
+<!-- ToolBar name="tools" fullWidth="false">
+   <Action name="change_style"/>
+</ToolBar -->
+
+<Menu name="other_widgets_menu">
+   <Action name="library_widget_KexiDBIntSpinBox"/>
+   <Action name="library_widget_KexiDBDoubleSpinBox"/>
+   <Action name="library_widget_KexiDBDateEdit"/>
+   <Action name="library_widget_KexiDBTimeEdit"/>
+   <Action name="library_widget_KexiDBDateTimeEdit"/>
+</Menu> 
+
+</kpartgui>

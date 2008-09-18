@@ -1,0 +1,30 @@
+[Desktop Entry]
+Name=xBase
+Name[x-test]=xxxBasexx
+Comment=xBase Migration Driver for Kexi
+Comment[ca]=Controlador de migració xBase per al Kexi
+Comment[de]=xBase-Migrationstreiber für Kexi
+Comment[el]=Οδηγός μεταφοράς xBase του Kexi
+Comment[et]=Kexi xBase'i migreerimisdraiver
+Comment[ga]=Tiománaí Ascnaimh xBase le haghaidh Kexi
+Comment[gl]=Motor de MIgración Sybase para Kexi
+Comment[it]=Driver di migrazione xBase per Kexi
+Comment[kk]=xBase -ден Kexi-ге ауысу драйвері
+Comment[nds]=xBase-Utlagerndriever för Kexi
+Comment[nl]=xBase-migratiestuurprogramma voor Kexi
+Comment[pt]=Controlador de Migração de xBase do Kexi
+Comment[pt_BR]=Driver de Migração do xBase para o Kexi
+Comment[sv]=xBase-övergångsdrivrutin för Kexi
+Comment[tr]=Kexi için xBase Taşıma Sürücüsü
+Comment[uk]=Драйвер міграції xBase для Kexi
+Comment[x-test]=xxxBase Migration Driver for Kexixx
+Comment[zh_CN]=Kexi xBase 升迁驱动
+Comment[zh_TW]=Kexi 的 xBase 轉移驅動程式
+
+X-KDE-Library=keximigrate_xbase
+X-KDE-ServiceTypes=Kexi/MigrationDriver
+Type=Service
+InitialPreference=8
+X-Kexi-MigrationDriverName=xBase
+X-Kexi-MigrationDriverType=Network
+X-Kexi-KexiMigrationVersion=1.1

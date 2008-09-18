@@ -1,0 +1,96 @@
+--- ./libmdb.cvs/iconv.c	2005-09-08 01:27:43.000000000 +0200
++++ ./libmdb/iconv.c	2007-11-09 22:05:36.390625000 +0100
+@@ -13,8 +13,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #include "mdbtools.h"
+@@ -24,6 +24,10 @@
+ #include "dmalloc.h"
+ #endif
+ 
++#ifdef _WIN32
++#include <windows.h>
++#endif
++
+ /*
+  * This function is used in reading text data from an MDB table.
+  */
+@@ -68,7 +72,7 @@
+ 	len_out = dlen;
+ 
+ #if HAVE_ICONV
+-	//printf("1 len_in %d len_out %d\n",len_in, len_out);
++	
+ 	while (1) {
+ 		iconv(mdb->iconv_in, &in_ptr, &len_in, &out_ptr, &len_out);
+ 		if ((!len_in) || (errno == E2BIG)) break;
+@@ -78,7 +82,7 @@
+ 		*out_ptr++ = '?';
+ 		len_out--;
+ 	}
+-	//printf("2 len_in %d len_out %d\n",len_in, len_out);
++	
+ 	dlen -= len_out;
+ #else
+ 	if (IS_JET3(mdb)) {
+@@ -95,7 +99,7 @@
+ 
+ 	if (tmp) g_free(tmp);
+ 	dest[dlen]='\0';
+-	//printf("dest %s\n",dest);
++	
+ 	return dlen;
+ }
+ 
+@@ -119,7 +123,7 @@
+ 
+ #ifdef HAVE_ICONV
+ 	iconv(mdb->iconv_out, &in_ptr, &len_in, &out_ptr, &len_out);
+-	//printf("len_in %d len_out %d\n", len_in, len_out);
++	
+ 	dlen -= len_out;
+ #else
+ 	if (IS_JET3(mdb)) {
+@@ -192,18 +196,28 @@
+                 mdb->iconv_out = iconv_open("UCS-2LE", iconv_code);
+                 mdb->iconv_in = iconv_open(iconv_code, "UCS-2LE");
+         } else {
+-                /* According to Microsoft Knowledge Base pages 289525 and */
++		/* According to Microsoft Knowledge Base pages 289525 and */
+ 		/* 202427, code page info is not contained in the database */
+-		const char *jet3_iconv_code;
+ 
+ 		/* check environment variable */
+-		if (!(jet3_iconv_code=getenv("MDB_JET3_CHARSET"))) {
+-			jet3_iconv_code="CP1252";
++		const char *jet3_iconv_code_from_env = getenv("MDB_JET3_CHARSET");
++		if (jet3_iconv_code_from_env)
++			mdb_set_encoding(mdb, jet3_iconv_code_from_env);
++		else if (!mdb->jet3_iconv_code) {
++#ifdef _WIN32
++			// get the default from OS
++			char default_encoding[] = "CP       ";
++			if (GetLocaleInfoA( MAKELCID(MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), SORT_DEFAULT), 
++			 LOCALE_IDEFAULTANSICODEPAGE, default_encoding+2, sizeof(default_encoding)-2-1 ))
++				mdb->jet3_iconv_code = g_strdup(default_encoding);
++			else
++#endif
++				mdb->jet3_iconv_code = g_strdup("CP1252");
+ 		}
+ 
+-                mdb->iconv_out = iconv_open(jet3_iconv_code, iconv_code);
+-                mdb->iconv_in = iconv_open(iconv_code, jet3_iconv_code);
+-        }
++		mdb->iconv_out = iconv_open(mdb->jet3_iconv_code, iconv_code);
++		mdb->iconv_in = iconv_open(iconv_code, mdb->jet3_iconv_code);
++	}
+ #endif
+ }
+ void mdb_iconv_close(MdbHandle *mdb)

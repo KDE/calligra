@@ -1,0 +1,99 @@
+#!/bin/sh
+#
+#   Copyright (C) 2006 Jaroslaw Staniek <js@iidea.pl>
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public
+#   License as published by the Free Software Foundation; either
+#   version 2 of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; see the file COPYING.  If not, write to
+#   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+#   Boston, MA 02110-1301, USA.
+#
+
+basedir=`dirname "$0"`
+
+function setup_messages {
+	lang=`grep Language= ~/.kde/share/config/kdeglobals | head -n 1 | \
+		sed -e 's/Language=\(.*\):.*/\1/'`
+	if [ -z "$lang" ] ; then lang="en" ; fi
+	
+	IFS=:
+	for dir in `kde-config --expandvars --path locale` ; do
+		transl_file="$dir"$lang"/LC_MESSAGES/kexi_add_column_gui_transl_$lang.sh";
+		if [ -f "$transl_file" ] ; then
+			source "$transl_file"
+			break
+		else
+			transl_file=;
+		fi
+	done
+	IFS=" "
+	if [ -z "$transl_file" ] ; then
+		transl_file="$basedir/kexi_add_column_gui_transl_$lang.sh";
+		if [ ! -f "$transl_file" ] ; then	source "$transl_file"; else transl_file=; fi
+	fi
+echo 	$transl_file
+	if  [ -z "$transl_file" ] ; then
+	# default: english messages:
+		msg_filters="*.kexi|Kexi Project stored in a file
+*.*|All files"
+		msg_select_db_file="Select database file"
+		msg_enter_table_name="Table name (without spaces):"
+		msg_enter_new_column_name="New column's name (without spaces):"
+		msg_enter_new_column_type="New column's type:"
+		msg_byte="Byte"
+		msg_short_integer="Short integer"
+		msg_integer="Integer"
+		msg_big_integer="Big integer"
+		msg_yes_no="Yes/No"
+		msg_date="Date"
+		msg_date_time="Date/Time"
+		msg_time="Time"
+		msg_float="Single precision number"
+		msg_double="Double precision number"
+		msg_text="Text"
+		msg_long_text="Long text"
+		msg_object="Object (image)"
+		msg_enter_new_column_caption="New column's caption (optional):"
+	fi
+} # /setup_messages
+
+setup_messages
+
+database_name=`kdialog --title "$msg_select_db_file" --getopenfilename . "$msg_filters"` || exit 1
+
+table_name=`kdialog --inputbox "$msg_enter_table_name"` || exit 1
+
+new_column_name=`kdialog --inputbox "$msg_enter_new_column_name"` || exit 1
+
+new_column_type=`kdialog --radiolist "$msg_enter_new_column_type                         " \
+Byte "$msg_byte" off \
+ShortInteger "$msg_short_integer" off \
+Integer "$msg_integer" off \
+BigInteger "$msg_big_integer" off \
+Boolean "$msg_yes_no" off \
+Date "$msg_date" off \
+DateTime "$msg_date_time" off \
+Time "$msg_time" off \
+Float "$msg_float" off \
+Double "$msg_double" off \
+Text "$msg_text" off \
+LongText "$msg_long_text" off \
+BLOB "$msg_object" off ` || exit 1
+new_column_caption=`kdialog --inputbox "$msg_enter_new_column_caption"`
+
+msg=`sh kexi_add_column "$database_name" "$table_name" "$new_column_name" \
+	"$new_column_type" "$new_column_caption" 2>&1`
+
+[ -z "$msg" ] && exit 0
+
+kdialog --error "$msg"
+exit 1

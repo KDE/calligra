@@ -1,0 +1,167 @@
+#############################################################################
+# Makefile for building: sqlite2
+#############################################################################
+
+####### Compiler, tools and options
+
+CC		=	cl
+CXX		=	cl
+LEX		= flex
+YACC		= byacc
+CFLAGS	=	-nologo -Zm200 -W3 -MDd -Z7 -GX -GR -DTHREADSAFE=1 
+CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MDd -Z7 -GX -GR  -DUNICODE 
+LEXFLAGS	=
+YACCFLAGS	=-d
+INCPATH	=	 -Isrc
+LINK	=	link
+LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /DEBUG /SUBSYSTEM:console /DEF:kexisql.def /DLL
+VERSION=2.8.2
+LIBS	=	 "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" 
+IDC		=	$(QTDIR)\bin\idc.exe
+IDL		=	midl
+ZIP		=	zip -r -9
+COPY_FILE	=       copy
+COPY_DIR	=       copy
+DEL_FILE	=       del
+DEL_DIR	=       rmdir
+MOVE		=       move
+CHK_DIR_EXISTS =	if not exist
+MKDIR		=	mkdir
+
+####### Files
+
+HEADERS =	
+SOURCES =	\
+src/attach.c \
+src/auth.c \
+src/btree.c \
+src/btree_rb.c \
+src/build.c \
+src/copy.c \
+src/date.c \
+src/delete.c \
+src/expr.c \
+src/func.c \
+src/hash.c \
+src/insert.c \
+src/main.c \
+src/os.c \
+src/pager.c \
+src/pragma.c \
+src/printf.c \
+src/random.c \
+src/select.c \
+src/table.c \
+src/tokenize.c \
+src/trigger.c \
+src/update.c \
+src/util.c \
+src/vacuum.c \
+src/vdbe.c \
+src/vdbeaux.c \
+src/where.c \
+src/opcodes.c \
+src/parse.c \
+src/shell.c
+
+OBJECTS =	\
+obj/attach.obj \
+obj/auth.obj \
+obj/btree.obj \
+obj/btree_rb.obj \
+obj/build.obj \
+obj/copy.obj \
+obj/date.obj \
+obj/delete.obj \
+obj/expr.obj \
+obj/func.obj \
+obj/hash.obj \
+obj/insert.obj \
+obj/main.obj \
+obj/os.obj \
+obj/pager.obj \
+obj/pragma.obj \
+obj/printf.obj \
+obj/random.obj \
+obj/select.obj \
+obj/table.obj \
+obj/tokenize.obj \
+obj/trigger.obj \
+obj/update.obj \
+obj/util.obj \
+obj/vacuum.obj \
+obj/vdbe.obj \
+obj/vdbeaux.obj \
+obj/where.obj \
+obj/opcodes.obj \
+obj/parse.obj \
+obj/shell.obj
+
+FORMS =	
+UICDECLS =	
+UICIMPLS =	
+SRCMOC	=	
+OBJMOC	=	
+DIST	=	
+TARGET	=	$(KDEDIR)/bin/kexisql2_d.dll
+
+####### Implicit rules
+
+.SUFFIXES: .c .cpp .cc .cxx .C
+
+{.}.cpp{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cc{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.cxx{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.C{obj\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{.}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+{src\}.c{obj\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj\ @<<
+	$<
+<<
+
+####### Build rules
+
+all: $(TARGET) sqlite2
+
+$(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC) 
+	$(LINK) $(LFLAGS) /OUT:$(TARGET) @<< 
+	  $(OBJECTS) $(OBJMOC) $(LIBS)
+<<
+
+sqlite2:	obj/shell.obj $(KDEDIR)/bin/kexisql2.lib
+	link $(READLINE_FLAGS) $(LIBPTHREAD) \
+		/OUT:$(KDEDIR)/bin/ksqlite2.exe obj/shell.obj $(KDEDIR)/bin/kexisql2.lib $(LIBREADLINE)
+
+mocables: $(SRCMOC)
+uicables: $(UICIMPLS) $(UICDECLS)
+
+clean: 
+	-del obj\*.obj
+
+distclean: clean
+	-del $(TARGET)
+
+install: all 
+
+uninstall: 
+

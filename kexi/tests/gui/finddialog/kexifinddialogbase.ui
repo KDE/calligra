@@ -1,0 +1,326 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>KexiFindDialogBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>KexiFindDialogBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>476</width>
+            <height>224</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Find Text</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="KHistoryCombo" row="1" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>m_textToReplace</cstring>
+            </property>
+            <property name="insertPolicy">
+                <enum>AtTop</enum>
+            </property>
+            <property name="autoCompletion">
+                <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="4" column="2">
+            <property name="name">
+                <cstring>m_caseSensitive</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>Qt::WheelFocus</enum>
+            </property>
+            <property name="text">
+                <string>C&amp;ase sensitive</string>
+            </property>
+        </widget>
+        <widget class="KHistoryCombo" row="0" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>m_textToFind</cstring>
+            </property>
+            <property name="insertPolicy">
+                <enum>AtTop</enum>
+            </property>
+            <property name="autoCompletion">
+                <bool>true</bool>
+            </property>
+            <property name="duplicatesEnabled">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="4" column="1">
+            <item>
+                <property name="text">
+                    <string>Any Part of Field</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Whole Field</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Start of Field</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>m_match</cstring>
+            </property>
+            <property name="insertPolicy">
+                <enum>NoInsert</enum>
+            </property>
+        </widget>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Fi&amp;nd:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_textToFind</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>m_replaceLbl</cstring>
+            </property>
+            <property name="text">
+                <string>Re&amp;place with:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_textToReplace</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>textLabel2_2_2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Search:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_search</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>textLabel2_2_3</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Match:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_match</cstring>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="3" column="1">
+            <item>
+                <property name="text">
+                    <string>Up</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Down</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>All Rows</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>m_search</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>Qt::WheelFocus</enum>
+            </property>
+            <property name="insertPolicy">
+                <enum>NoInsert</enum>
+            </property>
+        </widget>
+        <widget class="KComboBox" row="2" column="1">
+            <property name="name">
+                <cstring>m_lookIn</cstring>
+            </property>
+            <property name="insertPolicy">
+                <enum>NoInsert</enum>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>textLabel2_2</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Look in column:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>m_lookIn</cstring>
+            </property>
+        </widget>
+        <spacer row="4" column="3">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>16</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QCheckBox" row="5" column="2">
+            <property name="name">
+                <cstring>m_wholeWords</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>Qt::WheelFocus</enum>
+            </property>
+            <property name="text">
+                <string>&amp;Whole words only</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="6" column="2">
+            <property name="name">
+                <cstring>m_promptOnReplace</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>Qt::WheelFocus</enum>
+            </property>
+            <property name="text">
+                <string>Prompt on replace</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="7" column="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>16</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="0" column="4" rowspan="8" colspan="1">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>m_btnFind</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Find Next</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>m_btnClose</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Close</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>m_btnReplace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replace</string>
+                    </property>
+                </widget>
+                <widget class="KPushButton">
+                    <property name="name">
+                        <cstring>m_btnReplaceAll</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Replace All</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer8</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
+                    </property>
+                </spacer>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+    <connection>
+        <sender>m_btnClose</sender>
+        <signal>clicked()</signal>
+        <receiver>KexiFindDialogBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>m_textToFind</tabstop>
+    <tabstop>m_textToReplace</tabstop>
+    <tabstop>m_lookIn</tabstop>
+    <tabstop>m_search</tabstop>
+    <tabstop>m_match</tabstop>
+    <tabstop>m_caseSensitive</tabstop>
+    <tabstop>m_wholeWords</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kcombobox.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+    <includehint>kpushbutton.h</includehint>
+</includehints>
+</UI>

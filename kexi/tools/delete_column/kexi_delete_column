@@ -1,0 +1,136 @@
+#!/bin/sh
+#
+#   Copyright (C) 2006-2007 Jaroslaw Staniek <js@iidea.pl>
+#
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public
+#   License as published by the Free Software Foundation; either
+#   version 2 of the License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; see the file COPYING.  If not, write to
+#   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+#   Boston, MA 02110-1301, USA.
+#
+
+function usage {
+	echo "This script deletes a single table column from a .kexi (SQLite 3)
+database file without removing data from the table.
+
+Usage:
+ $0 database_name table_name column_name
+
+- {database_name}.old backup file is created before proceeding
+- database_name, table_name, column_name must exist
+- note that queries, forms and other objects referencing 
+   to the altered table can become invalid and have to be 
+   fixed by hand
+
+Example: to delete 'price' column from table 'products', type
+ $0 db.kexi products price"
+}
+
+function exit_with_error {
+	rm -f "$temp_db"
+	echo $*
+	echo "Error."
+	exit 1
+}
+
+function check {
+	[ -n "$*" ] && exit_with_error "$*"
+}
+
+ksqlite="ksqlite -noheader"
+ksqlite_header="ksqlite -header"
+
+if [ $# -lt 3 ] ; then
+	usage
+	exit 0
+fi
+database_name=$1
+table_name=$2
+column_name=$3
+
+temp_db=`mktemp "$database_name"XXXXXXXX` || exit_with_error
+cp "$database_name" "$temp_db" || exit_with_error
+
+# 1. alter the table physically
+
+function prepare_new_create_table_statement {
+	# possible problems: typename ( number , number ) may contain ","
+	
+	schema=`echo ".schema '$table_name';" | $ksqlite "$database_name" | \
+		grep "^CREATE TABLE $table_name " | \
+		sed -e "s/[^(]*(\(.*\));/\1/" || exit_with_error`
+	
+	IFS=","
+	for coldef in $schema ; do
+		col=`echo $coldef | sed "s/^[ ]*\([^ ]*\) .*$/\1/"`
+		if [ "$col" != "$column_name" ] ; then
+			echo -n ,$coldef
+		fi
+	done | cut -c2-
+	IFS=" "
+}
+
+function get_sql_column_names {
+	names=`$ksqlite_header "$temp_db" "SELECT * FROM '$temp_table_name' LIMIT 1;" | \
+		head -n 1 || exit_with_error`
+	IFS="|"
+	for col in $names ; do
+		if [ "$col" != "$column_name" ] ; then
+			echo -n ", $col"
+		fi
+	done | cut -c3-
+	IFS=" "
+}
+
+# 1.1. rename the original table to a temp name
+temp_table_name=`mktemp "$table_name"XXXXXXXX`
+msg=`$ksqlite "$temp_db" "ALTER TABLE '$table_name' RENAME TO '$temp_table_name';"`
+check "$msg"
+
+# 1.2. create a new table without the removed column and copy the data
+new_create_table_statement=`prepare_new_create_table_statement`
+msg=`$ksqlite "$temp_db" "CREATE TABLE '$table_name' ($new_create_table_statement);"`
+check "$msg"
+
+sql_column_names=`get_sql_column_names`
+msg=`$ksqlite "$temp_db" "INSERT INTO '$table_name' SELECT $sql_column_names FROM '$temp_table_name';"`
+check "$msg"
+
+# 1.3. drop the temporary table
+msg=`$ksqlite "$temp_db" "DROP TABLE '$temp_table_name';"`
+check "$msg"
+
+
+# 2. alter information in the kexi__fields system table (schema)
+
+# 2.1. Get table's ID
+table_id=`$ksqlite "$temp_db" "SELECT o_id FROM kexi__objects WHERE o_type=1 AND o_name='$table_name';" || exit_with_error`
+
+# 2.1. Get column's number
+column_order=`$ksqlite "$temp_db" "SELECT f_order FROM kexi__fields WHERE t_id=$table_id AND f_name='$column_name';" || exit_with_error`
+
+$ksqlite "$temp_db" "DELETE FROM kexi__fields WHERE t_id=$table_id AND f_name='$column_name';"
+
+for fname in `$ksqlite "$temp_db" \
+	"SELECT f_name FROM kexi__fields WHERE t_id=$table_id AND f_order>=$column_order ORDER BY f_order DESC;"` ; do
+	msg=`$ksqlite "$temp_db" "UPDATE kexi__fields SET f_order=$column_order WHERE t_id=$table_id AND f_name='$fname';"`
+	check "$msg"
+	column_order=`expr $column_order + 1`
+done
+
+# 3. Copy the original database file to .old file and replace 
+#     the original with the new one
+cp "$database_name" "$database_name.old" || exit_with_error
+mv "$temp_db" "$database_name" || exit_with_error
+
+exit 1
+

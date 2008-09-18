@@ -1,0 +1,85 @@
+== Kexi CHANGES ==
+
+1.1.1 "Access Granted" - within KOffice 1.6.1
+ * Support for parameter queries in Design and SQL view;
+    user is asked for entering value of a parameter in a dialog window.
+ * Data-aware combo box is for use with forms and tabular views;
+    data source for the combo box can be defined in the Table Designer.
+
+1.1 "Access Granted" - within KOffice 1.6
+   (alpha 1: 2006-07-01, beta 1: 2006-09-11, stable: 2006-??-??)
+ * Object data type and data-aware image form widget
+ * Improvements in Auto Field form widget
+ * Table design altering without removing the existing data
+ * Support for Data-aware combo boxes in the Table View
+
+1.0 "Black Mamba" - within KOffice 1.5 
+   (beta 1: 2006-01-31, beta 2: 2006-03-11, rc 1: 2006-03-29, stable: 2006-04-11)
+ * Improved data-aware forms. 
+ * Form Designer's Data Source Pane for assigning data source to forms and
+    widgets. Object tree view for easier navigating within widgets hierarchy. 
+ * Import from CSV files and pasting tabular data from clipboard. Export data
+    to CSV files and copying tabular data to clipboard. Automatic detection of
+    delimiters and column types. 
+ * Improved server connection dialog. Stored connection data. 
+ * Support for images in forms (stored as BLOBs). 
+ * New form widget: multiline editor. 
+ * Improved MS Access (mdb/mde) file import (optional plugin). 
+ * Improved import of server databases to a file-based projects. Entire Kexi
+    projects (not only tables) can be imported too. 
+ * Scripting plugin (Python and Ruby) to extend functionality, including
+    example script for HTML export. 
+ * Simple printouts, print settings and print preview for table and query
+    data. 
+ * Handbook added (incomplete). 
+ * More than two hundreds of overall improvements and bug fixes.
+
+0.9 "Shorthorn" - released independent of KOffice (beta 1: 2005-05-07, stable: 2005-05-31)
+ * better translation for messages compared to 0.8 version, especialy in Form Designer
+
+0.8 - within KOffice 1.4 (beta 1: 2005-04-29, stable: 2005-06-14)
+ * Database forms are now officially supported
+ * Many improvements in handling server databases
+ * For users' convenience, Tabular Data View's behaviour is similar 
+   to Form Data View's behaviour
+ * Data and project migration from existing data sources (SQLite, MySQL, PostgreSQL)
+ * Microsoft Access MDB database file import available as optional KEXIMDB plugin.
+ * Tens of overall improvements and hundreds of bugfixes. 
+
+0.1 beta 5 "Halloween" (2004-10-01)
+ * Tens of improvements in KexiDB, Database Support Library (readded MySQL support, 
+   SQLite3 support and migration to/from SQLite2 with unicode characters, renewed 
+   SQL Parsing module)
+ * Much improved Form Designer (more widgets and editing actions, subforms, 
+   KDevelop plugin mode, KFormDesigner mode)
+ * Much improved Table Designer (autonumbers, both Visual and SQL mode, parser)
+ * Fixes in Query Designer
+ * Many fixes in Data Table View (new actions, more convenient navigation 
+   and data editing)
+ * Overall application improvements (more error/problem messages, actions, 
+   new command line options, better startup handling)
+
+0.1 beta 4 "FireDuck" (2004-07-16)
+ * Much improved Form Designer (widget editing, additional tools)
+ * Much improved Query Designer (both Visual and SQL mode, parser)
+ * Fixes in Table Designer
+ * Many fixes in Data Table View (universal data editing widget)
+ * Overall application improvements (error/problem messages, loading/saving, actions)
+
+0.1 beta 3 "United Europe" (2004-05-01)
+ * Improved Table Designer
+ * Much improved general-purpose Data Table View
+ * Properties window added (now used for table designer, more to come)
+ * Consistent window closing, data saving, removing, editing, consistent questions
+ * Table designs (and other design types, in the future) are now saved 
+    only when needed, on demand
+ * Renewed Query Designer
+
+0.1 beta 2 "Warsaw by Night" (2004-01-20)
+* database library rewrite
+* core rewrite
+* extended blob support
+  - entering text
+  - showing a thumbnail image
+  - showing a icon
+* syntaxhighlighting in query history

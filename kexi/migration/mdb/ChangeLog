@@ -1,0 +1,34 @@
+Mon Jun  4 14:49:44 CEST 2007
+  Ported to Qt4, imported into koffice/kexi/migration/ for Kexi 2.0.
+-- Jaroslaw Staniek <js@iidea.pl>
+
+Wed May 10 20:55:21 BST 2006 - version 1.0.1.
+  Apply fix for decimal number import.
+-- Martin Ellis <martin.ellis@kdemail.net>
+
+Wed Jan 18 22:03:44 GMT 2006
+  Portability fixes: 
+   * make optimisation disabling work with automake.
+   * dumb down strftime parameter for old C libraries.
+  Use QDateTime instead of QDate for importing dates and times.
+  Remove dodgy and slow date parsing code.
+-- Martin Ellis <martin.ellis@kdemail.net>
+
+Wed Jan 18 12:56:33 GMT 2006
+  Fix Heisenbug - MDB import of Northwind DB crashes in
+  mdb_read_indices if optimisations above -O0 are used.
+
+  Pass "%FT%T" to mdb_set_date_fmt, to get something in
+  a format that QDate::fromString( ..., Qt:ISODate)
+  to prevent silly locale problems with dates.
+-- Martin Ellis <martin.ellis@kdemail.net>
+
+Fri Nov  4 19:43:16 GMT 2005
+  Update for improved Kexi Migration API
+  *  Sample datbases like Northwind are now imported without a problem.
+-- Martin Ellis <martin.ellis@kdemail.net>
+
+Sat, 05 Mar 2005 22:32:08 +0000
+  Initial version of MDB migration driver for Kexi.
+  Using latest mdbtools from CVS (i.e. 5 March 2005).
+-- Martin Ellis <kde@martinellis.co.uk>

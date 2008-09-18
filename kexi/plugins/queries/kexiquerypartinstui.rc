@@ -1,0 +1,24 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiquerypartinst" version="4">
+
+<MenuBar>
+  <Menu name="view" noMerge="1">
+    <text>&amp;View</text>
+    <Action name="querypart_view_toggle_history"/>
+  </Menu>
+  <Menu name="data">
+    <text>&amp;Data</text>
+    <Action name="querypart_check_query"/>
+    <Action name="querypart_execute_query"/>
+    <Merge/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="designToolBar" fullWidth="false" noMerge="0">
+  <text>Design</text>
+  <Action name="querypart_check_query"/>
+  <Action name="querypart_execute_query"/>
+  <Action name="querypart_view_toggle_history"/>
+</ToolBar>
+
+</kpartgui>

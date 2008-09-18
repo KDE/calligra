@@ -1,0 +1,128 @@
+KexiDB: DriverManagerInternal::incRefCount(): 1
+kio (KTrader): KServiceTypeProfile::offers( Kexi/DBDriver, )
+kio (KSycoca): Trying to open ksycoca from /var/tmp/kdecache-jowenn/ksycoca
+kio (KTrader): Returning 2 offers
+KexiDB: KexiDB::DriverManager::lookupDrivers(): registered driver: mySQL(kexidb_mysqldriver)
+KexiDB: KexiDB::DriverManager::lookupDrivers(): registered driver: SQLite(kexidb_sqlitedriver)
+newapi: DRIVERS: 
+newapi: SQLite
+newapi: mySQL
+KexiDB: DriverManager::driver(): loading mySQL
+KexiDB: KexiDBInterfaceManager::load(): library: kexidb_mysqldriver
+KexiDB (driver impl): MySqlDriver::MySqlDriver()
+KexiDB: KexiDBInterfaceManager::load(): loading succeed: mySQL
+KexiDB: drv=134779696
+KexiDB (driver impl): MySqlConnection::connect()
+KexiDB: Connection::databaseExists(test,true)
+KexiDB: Connection::databaseNames(true)
+KexiDB (driver impl): MySqlConnection::drv_getDatabasesList()
+newapi: Creating first cursor
+newapi: Creating second cursor
+KexiDB: Connection::databaseNames(false)
+KexiDB (driver impl): MySqlConnection::drv_getDatabasesList()
+KexiDB: Connection::databaseNames(): mysql
+KexiDB: Connection::databaseNames(): test
+KexiDB: add 
+newapi: Databases:
+newapi: test
+KexiDB: m_at < m_records_in_buf :: 0 < 0
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 1
+newapi: Cursor: Value(0)0
+newapi: Cursor: Value(1)A
+KexiDB: m_at < m_records_in_buf :: 1 < 1
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 2
+newapi: Cursor: Value(0)1
+newapi: Cursor: Value(1)B
+KexiDB: m_at < m_records_in_buf :: 2 < 2
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 3
+newapi: Cursor: Value(0)2
+newapi: Cursor: Value(1)C
+KexiDB: m_at < m_records_in_buf :: 3 < 3
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 4
+newapi: Cursor: Value(0)3
+newapi: Cursor: Value(1)D
+KexiDB: m_at < m_records_in_buf :: 4 < 4
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 5
+newapi: Cursor: Value(0)4
+newapi: Cursor: Value(1)E
+KexiDB: m_at < m_records_in_buf :: 5 < 5
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_result != FetchOK ********
+newapi: Cursor error:
+KexiDB: m_at < m_records_in_buf :: 0 < 0
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 1
+newapi: Cursor2: Value(0)0
+newapi: Cursor2: Value(1)A
+KexiDB: m_at < m_records_in_buf :: 1 < 1
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 2
+newapi: Cursor2: Value(0)1
+newapi: Cursor2: Value(1)B
+KexiDB: m_at < m_records_in_buf :: 2 < 2
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 3
+newapi: Cursor2: Value(0)2
+newapi: Cursor2: Value(1)C
+KexiDB: m_at < m_records_in_buf :: 3 < 3
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 4
+newapi: Cursor2: Value(0)3
+newapi: Cursor2: Value(1)D
+KexiDB: m_at < m_records_in_buf :: 4 < 4
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_at == 5
+newapi: Cursor2: Value(0)4
+newapi: Cursor2: Value(1)E
+KexiDB: m_at < m_records_in_buf :: 5 < 5
+KexiDB (driver impl): ==== (buffered) sqlite_step ====
+KexiDB (driver impl): m_result != FetchOK ********
+newapi: Cursor::prev
+newapi: Cursor: Value(0)4
+newapi: Cursor: Value(1)E
+newapi: Cursor: Value(0)3
+newapi: Cursor: Value(1)D
+newapi: Cursor: Value(0)2
+newapi: Cursor: Value(1)C
+newapi: Cursor: Value(0)1
+newapi: Cursor: Value(1)B
+newapi: Cursor: Value(0)0
+newapi: Cursor: Value(1)A
+newapi: up/down
+KexiDB: m_at < m_records_in_buf :: -1 < 5
+KexiDB (driver impl): m_at == 1
+newapi: Cursor: Value(0)0
+newapi: Cursor: Value(1)A
+KexiDB: m_at < m_records_in_buf :: 1 < 5
+KexiDB (driver impl): m_at == 2
+newapi: Cursor: Value(0)1
+newapi: Cursor: Value(1)B
+newapi: Cursor: Value(0)1
+newapi: Cursor: Value(1)B
+newapi: Cursor: Value(0)0
+newapi: Cursor: Value(1)A
+KexiDB: DriverManager::~DriverManager()
+KexiDB: DriverManagerInternal::decRefCount(): 0
+KexiDB: DriverManagerInternal::~DriverManagerInternal()
+KexiDB: Driver::~Driver()
+KexiDB: Cursor::close() == true
+KexiDB: Cursor::~Cursor() 'select * from Applications'
+KexiDB: Cursor::close() == true
+KexiDB: Cursor::~Cursor() 'select * from Applications'
+KexiDB: Connection::closeDatabase(): true
+KexiDB (driver impl): MySqlConnection::disconnect()
+KexiDB: Connection::~Connection()
+KexiDB: ~Transaction(): null
+KexiDB: -- Transaction::globalcount == 0
+KexiDB: ~Transaction(): null
+KexiDB: -- Transaction::globalcount == 0
+KexiDB: Driver::~Driver() ok
+KexiDB: DriverManagerInternal::~DriverManagerInternal() ok
+KexiDB: DriverManager::~DriverManager() ok
+KexiDB: ~Transaction(): null
+KexiDB: -- Transaction::globalcount == 0

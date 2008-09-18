@@ -1,0 +1,233 @@
+#############################################################################
+# Makefile for building: sqlite3
+#############################################################################
+
+####### Compiler, tools and options
+
+CC		=	cl
+CXX		=	cl
+LEX		= flex
+YACC		= byacc
+CFLAGS	=	-nologo -Zm200 -W3 -MD -Z7 -GX -GR -DTHREADSAFE=1 -D_OFF_T_DEFINED=1 -DNO_TCL=1
+CXXFLAGS	=	-nologo -Zm200 /GR /GX /GZ /TP -W3 -MD -Z7 -GX -GR  -DUNICODE 
+LEXFLAGS	=
+YACCFLAGS	=-d
+INCPATH	=	 -Isrc -I$(QTDIR)\include 
+LINK	=	link
+LFLAGS	=	/NOLOGO /FORCE:MULTIPLE /SUBSYSTEM:windows /DEF:sqlite3.def /DLL
+VERSION=3.0.7
+LIBS	=	 "kernel32.lib" "user32.lib" "gdi32.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "imm32.lib" "winmm.lib" "wsock32.lib" "winspool.lib" 
+IDL		=	midl
+ZIP		=	zip -r -9
+COPY_FILE	=       copy
+COPY_DIR	=       copy
+DEL_FILE	=       del
+DEL_DIR	=       rmdir
+MOVE		=       move
+CHK_DIR_EXISTS =	if not exist
+MKDIR		=	mkdir
+
+####### Files
+
+HEADERS =	\
+  src/btree.h \
+  src/hash.h \
+  src/keywordhash.h \
+  src/opcodes.h \
+  src/os.h \
+  src/os_common.h \
+  src/pager.h \
+  src/parse.h \
+  src/sqlite3.h \
+  src/sqliteInt.h \
+  src/vdbe.h \
+  src/vdbeInt.h
+
+SOURCES =	\
+  src/alter.c \
+  src/analyze.c \
+  src/attach.c \
+  src/auth.c \
+  src/btree.c \
+  src/build.c \
+  src/callback.c \
+  src/complete.c \
+  src/date.c \
+  src/delete.c \
+  src/expr.c \
+  src/func.c \
+  src/hash.c \
+  src/insert.c \
+  src/legacy.c \
+  src/main.c \
+  src/opcodes.c \
+  src/os_unix.c \
+  src/os_win.c \
+  src/pager.c \
+  src/parse.c \
+  src/pragma.c \
+  src/prepare.c \
+  src/printf.c \
+  src/random.c \
+  src/select.c \
+  src/shell.c \
+  src/sqlite.h.in \
+  src/sqliteInt.h \
+  src/table.c \
+  src/tclsqlite.c \
+  src/tokenize.c \
+  src/trigger.c \
+  src/utf.c \
+  src/update.c \
+  src/util.c \
+  src/vacuum.c \
+  src/vdbe.c \
+  src/vdbe.h \
+  src/vdbeapi.c \
+  src/vdbeaux.c \
+  src/vdbefifo.c \
+  src/vdbemem.c \
+  src/vdbeInt.h \
+  src/where.c
+
+OBJECTS =	\
+  obj_rel/alter.obj \
+  obj_rel/analyze.obj \
+  obj_rel/attach.obj \
+  obj_rel/auth.obj \
+  obj_rel/btree.obj \
+  obj_rel/build.obj \
+  obj_rel/callback.obj \
+  obj_rel/complete.obj \
+  obj_rel/date.obj \
+  obj_rel/delete.obj \
+  obj_rel/expr.obj \
+  obj_rel/func.obj \
+  obj_rel/hash.obj \
+  obj_rel/insert.obj \
+  obj_rel/legacy.obj \
+  obj_rel/main.obj \
+  obj_rel/opcodes.obj \
+  obj_rel/os_unix.obj \
+  obj_rel/os_win.obj \
+  obj_rel/pager.obj \
+  obj_rel/parse.obj \
+  obj_rel/pragma.obj \
+  obj_rel/prepare.obj \
+  obj_rel/printf.obj \
+  obj_rel/random.obj \
+  obj_rel/select.obj \
+  obj_rel/shell.obj \
+  obj_rel/table.obj \
+  obj_rel/tclsqlite.obj \
+  obj_rel/tokenize.obj \
+  obj_rel/trigger.obj \
+  obj_rel/utf.obj \
+  obj_rel/update.obj \
+  obj_rel/util.obj \
+  obj_rel/vacuum.obj \
+  obj_rel/vdbe.obj \
+  obj_rel/vdbeapi.obj \
+  obj_rel/vdbeaux.obj \
+  obj_rel/vdbefifo.obj \
+  obj_rel/vdbemem.obj \
+  obj_rel/where.obj
+
+FORMS =	
+UICDECLS =	
+UICIMPLS =	
+SRCMOC	=	
+OBJMOC	=	
+DIST	=	
+TARGET	=	$(KDEDIR)/bin/kexisql3.dll
+
+####### Implicit rules
+
+.SUFFIXES: .c .cpp .cc .cxx .C
+
+{moc\}.cpp{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{moc\}.cc{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{moc\}.cxx{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{moc\}.C{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{moc\}.c{obj_rel\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{.}.cpp{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{.}.cc{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{.}.cxx{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{.}.C{obj_rel\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{.}.c{obj_rel\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+{src\}.c{obj_rel\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Foobj_rel\ @<<
+	$<
+<<
+
+####### Build rules
+
+all: $(TARGET) sqlite
+
+$(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC) 
+	$(LINK) $(LFLAGS) /OUT:$(TARGET) @<< 
+	  $(OBJECTS) $(OBJMOC) $(LIBS)
+<<
+
+sqlite:	src/shell.c $(KDEDIR)/bin/kexisql3.lib
+	link $(READLINE_FLAGS) $(LIBPTHREAD) \
+		/OUT:$(KDEDIR)/bin/ksqlite.exe obj_rel/shell.obj $(KDEDIR)/bin/kexisql3.lib $(LIBREADLINE)
+
+mocables: $(SRCMOC)
+uicables: $(UICIMPLS) $(UICDECLS)
+
+uiclean:
+mocclean:
+clean: 
+	-del obj_rel\*.obj
+	-del sqlite.pdb
+
+distclean: clean
+	-del $(TARGET)
+
+####### Install
+
+install: all 
+
+uninstall: 
+

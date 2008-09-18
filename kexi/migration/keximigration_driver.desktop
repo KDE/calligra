@@ -1,0 +1,60 @@
+[Desktop Entry]
+Type=ServiceType
+X-KDE-ServiceType=Kexi/MigrationDriver
+Comment=Kexi Data Migration Driver
+Comment[bg]=Драйвер на Kexi за мигриране на данни
+Comment[ca]=Controlador de migració de dades del Kexi
+Comment[cy]=Gyrrydd Mudo Data Kexi
+Comment[da]=Kexi datamigrationsdriver
+Comment[de]=Datenmigrationstreiber für Kexi
+Comment[el]=Οδηγός μεταφοράς δεδομένων του Kexi
+Comment[eo]=Kexi datum-migrada pelilo
+Comment[es]=Controlador de migración de datos de Kexi
+Comment[et]=Kexi andmete migreerimisdraiver
+Comment[eu]=Kexi-ren datuak migratzeko kontrolatzailea
+Comment[fa]=گردانندۀ جابه‌جایی دادۀ Kexi
+Comment[fi]=Kexi tietojen siirtoajuri
+Comment[fr]=Pilote de migration de données de Kexi
+Comment[fy]=Kexi Gegevensmigraasje stjoerprogramma
+Comment[ga]=Tiománaí Ascnaimh Sonraí Kexi
+Comment[gl]=Controlador de Migración de Datos de Kexi
+Comment[he]=מנהל התקן Data-Migration ל־Kexi
+Comment[hi]=केएक्जाई डाटा माइग्रेशन ड्राइवर
+Comment[hr]=Kexi upravljački program za migraciju podataka
+Comment[hu]=Kexi adatmigrálási meghajtó
+Comment[is]=Kexi gagnaflutningsrekill
+Comment[it]=Driver di migrazione dei dati per Kexi
+Comment[ja]=Kexi データ移行ドライバ
+Comment[kk]=Kexi деректердің ауысу драйвері
+Comment[lv]=Kexi datu migrācijas draiveris
+Comment[ms]=Pemacu Migrasi Data Kexi
+Comment[nb]=Kexi-driver for datamigrering
+Comment[nds]=Datenutlagerndriever för Kexi
+Comment[ne]=केक्सी डेटा माइग्रेसन ड्राइभर
+Comment[nl]=Kexi Datamigratie Stuurprogramma
+Comment[pl]=Wtyczka do migracji danych programu Kexi
+Comment[pt]=Controlador de Migração de Dados do Kexi
+Comment[pt_BR]=Driver de Migração de Dados do Kexi
+Comment[ru]=Модуль драйвера миграции Kexi
+Comment[sk]=Ovládač Kexi Data Migration
+Comment[sl]=Gonilnik za prenos podatkov za Kexi
+Comment[sv]=Kexi dataövergångsdrivrutin
+Comment[tr]=Kexi Veri Taşıma Sürücüsü
+Comment[uk]=Драйвер міграції даних для Kexi
+Comment[uz]=Kexi uchun maʼlumotlar migratsiyasi drayveri
+Comment[uz@cyrillic]=Kexi учун маълумотлар миграцияси драйвери
+Comment[x-test]=xxKexi Data Migration Driverxx
+Comment[zh_CN]=Kexi 数据升迁驱动
+Comment[zh_TW]=Kexi 資料轉移驅動程式
+
+[PropertyDef::X-Kexi-FileMigrationDriverMime]
+Type=QString
+
+[PropertyDef::X-Kexi-MigrationDriverName]
+Type=QString
+
+[PropertyDef::X-Kexi-MigrationDriverType]
+Type=QString
+
+[PropertyDef::X-Kexi-KexiMigrationVersion]
+Type=QString

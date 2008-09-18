@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiformpart" version="6">
+
+<!-- ToolBar name="design" fullWidth="false" noMerge="0">
+   <text>Design</text>
+   <Action name="show_form_ui"/>
+</ToolBar -->
+
+</kpartgui>
+

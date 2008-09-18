@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kexiscriptpartinst" version="14">
+
+  <MenuBar>
+    <Menu name="settings" noMerge="1">
+      <Action name="script_config_editor"/>
+    </Menu>
+  </MenuBar>
+
+</kpartgui>

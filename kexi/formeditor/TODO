@@ -1,0 +1,66 @@
+^^^^^^^^^^^^^^^  IMPORTANT  ^^^^^^^^^^^^^^^^^^^^^^
+**** New Features : ******
+* KXmlGuiWindow support : Make an action editor + a toolbar editor (as in MozillaFirebird ?) + a menu editor
+  (see Gambas and askk other devs if they already have done this)
+* Automatically set label name to the text
+* Create an event editor and manage signals/slots (EventBuffer ?)
+	HOWEVER, SIGNAL/SLOT ISSUES (js):
+	1. signals/slots mechanism is hard to use for average folks
+	2. it may be easily simplified to avoid confusing them
+	3. TrollTech would try to get influence on the Kexi Project
+	  because of violating their licenses, if we'd like to expose
+		all their technologies so plainly
+	  (at least commercial) license mentions that there cannot be
+	  a project that is a replacement of the Qt developed out of the Qt)
+	4. It wouldn't hurt to ask them, as well.
+* Add many other widgets :-)
+* Create db-aware widget factory
+
+****** Bugfixes/Changes : *****
+* Add a grouping ability to Widget
+* Switch WifdgetInfo::className() to QCString
+* Make subform open design when double-clickng
+
+^^^^^^^^^^^^^^^^^^  OTHER ^^^^^^^^^^^^^^^^^^^^^^^^
+* Move tab between two QTabWidgets by drag'n drop
+* Better editor for iconview
+* during inline editing: CTRL+Enter could insert \n
+
+^^^^^^^^^^^^^^^^ DONE ^^^^^^^^^^^^^^
+* Finish sync between Form and ObjectTreeView (2/21/04)
+* Only QTabWidget should be selected, not pages (2/21/04)
+* Add a minimum size for created widgets (using size hint) (2/21/04)
+* Move the pasted widget a little to avoid to have two widgets at the same pos (2/21/04)
+* Make FormManager independant of the parent container (ie no longer depends on QWorkspace) (2/23/04)
+* Fix pixmaps in Property Editor (2/24/04)
+* Properties names and values are now i18n'ed (2/24/04)
+* Add a classname and filename member into Form (2/24/04)
+* Add support for layouts and special container (HBox, VBox ...) and spacers (partially 2/27/04)
+* Allow Multiple selection : edit common properties (colors, font..),copy/cut them at one time, ... (2/28/04)
+* Move multiple selected widgets at one time (2/29/04)
+* Added real support for old values (2/29/04)
+* Form previewing stuff (3/01/04)
+* QByteArray methods in FormIO (3/01/04)
+* Undo support(3/05/04)
+* Alignment and layout properties also support old values (3/06/04)
+* Better handling of multiple widgets in ObjectPropertyBuffer : each widget has its own old value, so reset will act as expected (3/07/04)
+* Remove all these " Q*** " names (3/08/04)
+* When double-clicking on a QLabel or a QLabel (others ?), the widget should be inline-editable (also on creation) (3/11/04)
+* Add many other widgets :-) (part I : all basic widgets) (3/20/04)
+* Add grid layout (3/27/04)
+* Add many other widgets :-) (part II : all basic containers + more widgets) (4/13/04)
+* Change tab position by drag'n drop (4/14/04)
+* Icons in ObjectTreeView(in branch) + context menu (4/14/04)
+* Modify Spacer for better compatibility (save orientation and expanding) (4/19/04)
+* Rich text editor (see BasKet source) (4/20/04)
+* Allow to select multiple widgets by drawing a rectangle on form (4/22/04)
+* Add a "Lay out Vertcally / horizontally " menu item when multiple widgets are selected (4/22/04)
+* Select all widgets when pasted (8/05/04)
+* Handle tab stops (8/05/04)
+* Make ObjectTreeView handle multiple widgets (11/05/04)
+* Manage label buddies using a popup menu (24/05/04)
+* dragging with CTRL key can cause object's copying (25/05/04)
+* Create a PixmapCollection with an editor which allow to choose pixmaps by path or from KDE icons, no inline saving of pixmaps (9/06/04)
+* Make actions toggable (with KToggleAction) (js 11/06/04)
+* Make FormWidget pure virtual (17/06/04)
+* Resize label to fit the text (22/06/04)
