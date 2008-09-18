@@ -1,8 +1,0 @@
-debian/tmp/usr/lib/kde3/kexidb_pqxxsqldriver.so
-debian/tmp/usr/lib/kde3/kexidb_pqxxsqldriver.la
-debian/tmp/usr/lib/kde3/keximigrate_pqxx.so
-debian/tmp/usr/lib/kde3/keximigrate_pqxx.la
-debian/tmp/usr/share/services/kexidb_pqxxsqldriver.desktop
-debian/tmp/usr/share/services/keximigrate_pqxx.desktop
-
-debian/overrides/kexi-postgresql-driver /usr/share/lintian/overrides
