@@ -198,7 +198,7 @@ void KexiWindow::createSubwidgets()
 // topBarHLyr->addSpacing(KDialog::marginHint()/2);
 // d->topBarLyr = new KexiFlowLayout(topBarHLyr, KDialog::marginHint()/2, 2);
 
-    const bool userMode = KexiMainWindowIface::global()->userMode();
+    //const bool userMode = KexiMainWindowIface::global()->userMode(); // unused
 
     /* if (userMode
         || d->supportedViewModes == Kexi::DataViewMode
@@ -213,9 +213,9 @@ void KexiWindow::createSubwidgets()
       }*/
 
     // Data actions
-    QAction * a;
-    KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
-    KexiSmallToolButton *btn;
+    //QAction * a; //unused
+    //KActionCollection *ac = KexiMainWindowIface::global()->actionCollection(); //unused
+    //KexiSmallToolButton *btn; // unused
     /*
       a = sharedAction("project_save");
       d->saveDesignButton = new KexiSmallToolButton(a, this);
