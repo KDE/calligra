@@ -154,8 +154,9 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
     if (!d)
         return;
     //KDE3: bool insideWindow = o && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow>(o, "KexiWindow"));
-    bool insideKexiWindow = o
-                            && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
+    //This variable seems not to be used
+    //bool insideKexiWindow = o
+    //                        && (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
 
     KexiActionProxy *p = o ? d->actionProxies.value(o) : 0;
     foreach(KAction* a, d->sharedActions) {
