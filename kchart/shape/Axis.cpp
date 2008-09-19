@@ -820,10 +820,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     
     if ( !axisElement.isNull() ) {
         KoXmlElement n;
-        for ( n = axisElement.firstChild().toElement();
-	      !n.isNull();
-	      n = n.nextSibling().toElement() )
-        {
+        forEachElement ( n, axisElement ) {
             if ( n.namespaceURI() != KoXmlNS::chart )
                 continue;
             if ( n.localName() == "title" ) {

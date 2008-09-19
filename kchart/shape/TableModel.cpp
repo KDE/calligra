@@ -78,12 +78,12 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
     setRowCount( 0 );
     setColumnCount( 0 );
     
-    KoXmlElement n = tableElement.firstChild().toElement();
     const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
     QTextStream stream(stdout);
     stream << node;
     
-    for( ; !n.isNull(); n = n.nextSibling().toElement() )
+    KoXmlElement n;
+    forEachElement ( n, tableElement )
     {
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
@@ -91,8 +91,8 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
         {
             const bool isHeader = n.localName() == "table-header-rows";
             int row = 0;
-            KoXmlElement _n = n.firstChild().toElement();
-            for ( ; !_n.isNull(); _n = _n.nextSibling().toElement() )
+            KoXmlElement _n;
+            forEachElement ( _n, n )
             {
                 if ( _n.namespaceURI() != KoXmlNS::table )
                     continue;
@@ -101,14 +101,14 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
                     int column = 0;
                     if ( !isHeader )
                         setRowCount( rowCount() + 1 );
-                    KoXmlElement __n = _n.firstChild().toElement();
-                    for ( ; !__n.isNull(); __n = __n.nextSibling().toElement() )
+                    KoXmlElement __n;
+                    forEachElement ( __n, _n )
                     {
                         if ( __n.namespaceURI() != KoXmlNS::table )
                             continue;
                         if ( __n.localName() == "table-cell" )
                         {
-                            if ( isHeader )
+                            if ( column >= columnCount() )
                                 setColumnCount( columnCount() + 1 );
                             const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
                             QString valueString;

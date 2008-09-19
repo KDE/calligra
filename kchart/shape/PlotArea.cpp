@@ -482,7 +482,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
     
     // A data set is always attached to an axis, so load them first
     KoXmlElement n;
-    for ( n = plotAreaElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
+    forEachElement ( n, plotAreaElement )
     {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
@@ -495,7 +495,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
     // Load data sets
     d->shape->proxyModel()->loadOdf( plotAreaElement, context );
 
-    for ( n = plotAreaElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
+    forEachElement ( n, plotAreaElement )
     {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
