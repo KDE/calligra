@@ -22,8 +22,6 @@
 #include <QUndoCommand>
 #include <klocale.h>
 
-#include <KoShapeRegistry.h>
-#include <KoShapeFactory.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
@@ -79,13 +77,10 @@ void KPrPlaceholderTool::activate( bool temporary )
 
     QUndoCommand *cmd = new QUndoCommand( i18n( "Edit Shape" ) );
 
-    KoShape * shape = selectedShapes.at( 0 );
+    KPrPlaceholderShape * shape = selectedShapes.at( 0 );
 
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
-    Q_ASSERT( factory );
-    // Create a TextShape
     // TODO get the KoShapeControllerBase to add it here
-    KoShape * newShape = factory->createDefaultShapeAndInit( 0 );
+    KoShape * newShape = shape->createShape( 0 );
     Q_ASSERT( newShape );
 
     // copy settings from placeholder shape

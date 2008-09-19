@@ -24,6 +24,8 @@
 
 #define KPrPlaceholderShapeId "KPrPlaceholderShapeId"
 
+class KPrPlaceholderStrategy;
+
 /**
  * This shape is used as placeholder as long as the shape is not modified
  */
@@ -31,11 +33,17 @@ class KPrPlaceholderShape : public KoShape
 {
 public:
     KPrPlaceholderShape();
+    KPrPlaceholderShape( const QString & presentationClass );
     virtual ~KPrPlaceholderShape();
 
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
+
+    KoShape * createShape( KoShapeControllerBase * shapeController );
+
+private:
+    KPrPlaceholderStrategy * m_strategy;
 };
 
 #endif /* KPRPLACEHOLDERSHAPE_H */

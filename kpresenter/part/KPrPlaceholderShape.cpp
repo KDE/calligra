@@ -20,14 +20,26 @@
 #include "KPrPlaceholderShape.h"
 
 #include <QPainter>
+#include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
+#include <KoXmlWriter.h>
+
+#include "KPrPlaceholderStrategy.h"
 
 KPrPlaceholderShape::KPrPlaceholderShape()
+: m_strategy( 0 )
 {
+}
+
+KPrPlaceholderShape::KPrPlaceholderShape( const QString & presentationClass )
+: m_strategy( 0 )
+{
+    m_strategy = KPrPlaceholderStrategy::create( presentationClass );
 }
 
 KPrPlaceholderShape::~KPrPlaceholderShape()
 {
+    delete m_strategy;
 }
 
 void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter )
@@ -41,15 +53,36 @@ void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &conve
 
 bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    // TODO
     loadOdfAttributes( element, context, OdfAllAttributes );
-    Q_UNUSED( element );
-    Q_UNUSED( context );
+
+    delete m_strategy;
+
+    m_strategy = KPrPlaceholderStrategy::create( additionalAttribute( "presentation:class" ) );
+    if ( m_strategy == 0 ) {
+        return false;
+    }
+
     return true;
 }
 
 void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    // TODO
-    Q_UNUSED( context );
+    KoXmlWriter & writer = context.xmlWriter();
+    writer.startElement( "draw:frame" );
+    saveOdfAttributes( context, OdfAllAttributes );
+    if ( m_strategy ) {
+        m_strategy->saveOdf( context );
+    }
+    saveOdfCommonChildElements( context );
+    writer.endElement(); // draw:frame
+}
+
+KoShape * KPrPlaceholderShape::createShape( KoShapeControllerBase * shapeController )
+{
+    Q_ASSERT( m_strategy );
+    KoShape * shape = 0;
+    if ( m_strategy ) {
+        shape = m_strategy->createShape( shapeController );
+    }
+    return shape;
 }
