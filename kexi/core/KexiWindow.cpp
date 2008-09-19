@@ -38,7 +38,6 @@
 
 #include <QStackedWidget>
 #include <QTimer>
-#include <Q3VBoxLayout>
 #include <QEvent>
 #include <QCloseEvent>
 
