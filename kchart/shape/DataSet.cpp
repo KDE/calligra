@@ -33,7 +33,9 @@
 
 // KDChart
 #include <KDChartDataValueAttributes>
+#include <KDChartTextAttributes>
 #include <KDChartAbstractDiagram>
+#include <KDChartMeasure>
 
 // KChart
 #include "ProxyModel.h"
@@ -318,6 +320,10 @@ void DataSet::setShowValues( bool showValues )
     
     KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
     attributes.setVisible( showValues );
+    // FIXME: This should be a dynamic property that can be changed by the user (for 2.1)
+    KDChart::TextAttributes textAttributes = attributes.textAttributes();
+    textAttributes.setFontSize( KDChart::Measure( 6, KDChartEnums::MeasureCalculationModeAbsolute ) );
+    attributes.setTextAttributes( textAttributes );
     d->kdDiagram->setDataValueAttributes( d->kdDataSetNumber, attributes );
     
     if ( d->attachedAxis )
