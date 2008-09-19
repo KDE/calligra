@@ -79,14 +79,13 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 {
     //set defaults
     if (qApp) {
-        QPalette p = widget ? widget->palette() : qApp->palette();
-        baseColor = p.active().base();
-        textColor = p.active().text();
+        baseColor = QPalette::Base;
+        textColor = QPalette::Text;
         borderColor = QColor(200, 200, 200);
-        emptyAreaColor = p.active().color(QColorGroup::Base);
-        rowHighlightingColor = KexiUtils::blendedColors(p.active().highlight(), baseColor, 33, 66);
-        rowMouseOverHighlightingColor = KexiUtils::blendedColors(p.active().highlight(), baseColor, 10, 90);
-        rowMouseOverAlternateHighlightingColor = KexiUtils::blendedColors(p.active().highlight(), alternateBackgroundColor, 10, 90);
+        emptyAreaColor = QPalette::Base;
+        rowHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, baseColor, 33, 66);
+        rowMouseOverHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, baseColor, 10, 90);
+        rowMouseOverAlternateHighlightingColor = KexiUtils::blendedColors(QPalette::Highlight, alternateBackgroundColor, 10, 90);
         rowHighlightingTextColor = textColor;
         rowMouseOverHighlightingTextColor = textColor;
     }
