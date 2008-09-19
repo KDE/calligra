@@ -107,13 +107,11 @@ Legend::Legend( ChartShape *parent )
     
     d->kdLegend = new KDChart::Legend();
     
-    setTitleFontSize( 7 );
+    setTitleFontSize( 10 );
     setTitle( QString() );
+    setFontSize( 8 );
     
-    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
-    attributes.setFontSize( KDChart::Measure( 9, KDChartEnums::MeasureCalculationModeAbsolute ) );
-    attributes.setAutoShrink( false );
-    d->kdLegend->setTextAttributes( attributes );
+    update();
     
     parent->addChild( this );
 }
