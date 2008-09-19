@@ -373,8 +373,11 @@ ChartShape::ChartShape()
     }
     
     addChild( d->title );
-    titleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Title" ) + "</div>" );
-    d->title->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    QFont font = titleData()->document()->defaultFont();
+    font.setPointSizeF( 12.0 );
+    titleData()->document()->setDefaultFont( font );
+    titleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Title" ) + "</font></div>" );
+    d->title->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.7 ) ) );
     d->title->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, 0.0 ) );
     d->title->setVisible( false );
     d->title->setZIndex( 2 );
@@ -390,8 +393,11 @@ ChartShape::ChartShape()
         d->subTitle->setUserData( dataDummy );
     }
     addChild( d->subTitle );
+    font = subTitleData()->document()->defaultFont();
+    font.setPointSizeF( 10.0 );
+    subTitleData()->document()->setDefaultFont( font );
     subTitleData()->document()->setHtml( "<div align=\"center\">" + i18n( "Subtitle" ) + "</div>" );
-    d->subTitle->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    d->subTitle->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.6 ) ) );
     d->subTitle->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, d->title->size().height() ) );
     d->subTitle->setVisible( false );
     d->subTitle->setZIndex( 3 );
@@ -407,8 +413,11 @@ ChartShape::ChartShape()
         d->footer->setUserData( dataDummy );
     }
     addChild( d->footer );
+    font = footerData()->document()->defaultFont();
+    font.setPointSizeF( 10.0 );
+    footerData()->document()->setDefaultFont( font );
     footerData()->document()->setHtml( "<div align=\"center\">" + i18n( "Footer" ) + "</div>" );
-    d->footer->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    d->footer->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.6 ) ) );
     d->footer->setPosition( QPointF( size().width() / 2.0 - d->footer->size().width() / 2.0, size().height() - d->footer->size().height() ) );
     d->footer->setVisible( false );
     d->footer->setZIndex( 4 );
