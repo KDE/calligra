@@ -505,9 +505,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
         }
         //else if ( n.localName() == "floor" )
         //    d->floor->loadOdf( n, context );
-        else if ( n.localName() != "axis" )
+        else if ( n.localName() != "axis" && n.localName() != "series" )
         {
-            qWarning() << "PlotArea::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
+            qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
 
