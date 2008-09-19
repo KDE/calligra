@@ -423,11 +423,15 @@ QString CellRegion::regionToString( const QVector<QRect> &region )
     QString result;
     for ( int i = 0; i < region.count(); ++i ) {
         const QRect range = region[i];
+        result.append( '$' );
         result.append( columnName( range.left() ) );
+            result.append( '$' );
         result.append( QString::number( range.top() ) );
         if ( range.topLeft() != range.bottomRight() ) {
             result.append( ':' );
+            result.append( '$' );
             result.append( columnName(range.right() ) );
+            result.append( '$' );
             result.append( QString::number( range.bottom() ) );
         }
         if ( i < region.count() - 1 ) {
