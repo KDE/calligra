@@ -358,7 +358,8 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
 
     d->dataSets.clear();
 
-    for ( KoXmlElement n = element.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() ) {
+    KoXmlElement n;
+    forEachElement ( n, element ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
         if ( n.localName() == "series" ) {
@@ -413,8 +414,8 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
                 dataSet->setLabelDataRegionString( region );
             }
 
-            KoXmlElement m = n.firstChild().toElement();
-            for ( ; !m.isNull(); m = m.nextSibling().toElement() ) {
+            KoXmlElement m;
+            forEachElement ( m, n ) {
                 if ( m.namespaceURI() != KoXmlNS::chart )
                     continue;
                 // FIXME: Load data points
@@ -424,6 +425,7 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
         }
     }
 
+    rebuildDataMap();
     reset();
 
     styleStack.restore();
