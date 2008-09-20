@@ -525,13 +525,25 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     
     bodyWriter.startElement( "chart:plot-area" );
     
-    saveOdfAttributes( context, OdfAllAttributes );
+    KoGenStyle plotAreaStyle;
+    plotAreaStyle = KoGenStyle( KoGenStyle::StyleGraphicAuto, "chart" );
     
-    // Prepare the style for the plot area
-    KoGenStyle plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
-
+    // Data direction
+    const Qt::Orientation direction = proxyModel()->dataDirection();
+    plotAreaStyle.addProperty( "chart:series-source",  
+                               ( direction == Qt::Horizontal )
+                               ? "rows" : "columns" );
     // Save chart subtype
     saveOdfSubType( bodyWriter, plotAreaStyle );
+    
+    bodyWriter.addAttribute( "chart:style-name", saveStyle( plotAreaStyle, context ) );
+    
+    const QSizeF s( size() );
+    const QPointF p( position() );
+    bodyWriter.addAttributePt( "svg:width", s.width() );
+    bodyWriter.addAttributePt( "svg:height", s.height() );
+    bodyWriter.addAttributePt( "svg:x", p.x() );
+    bodyWriter.addAttributePt( "svg:y", p.y() );
 
     // About the data:
     //   Save if the first row / column contain headers.
@@ -550,24 +562,11 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     bodyWriter.addAttribute( "chart:data-source-has-labels",
                             dataSourceHasLabels );
 
-    // Data direction
-    {
-        Qt::Orientation direction = proxyModel()->dataDirection();
-        plotAreaStyle.addProperty( "chart:series-source",  
-                                   ( direction == Qt::Horizontal )
-                                   ? "rows" : "columns" );
-    }
-
-    // Register the style, and get back its auto-generated name
-    const QString styleName = mainStyles.lookup( plotAreaStyle, "ch", KoGenStyles::ForceNumbering );
-    bodyWriter.addAttribute( "chart:style-name", styleName );
-
     if ( isCartesian( d->chartType ) ) {
         foreach( Axis *axis, d->axes ) {
             axis->saveOdf( bodyWriter, mainStyles );
         }
     }
-    
     
     // Save data series
     d->shape->proxyModel()->saveOdf( context );

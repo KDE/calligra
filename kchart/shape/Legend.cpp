@@ -522,16 +522,17 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
     QString styleName = saveOdfFont( mainStyles, d->font, d->fontColor );
     bodyWriter.addAttribute( "chart:style-name", styleName );
     
-    saveOdfAttributes( context, OdfAllAttributes );
-    
-    KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
     KoGenStyle *style = ( KoGenStyle* )( mainStyles.style( styleName ) );
-    if ( style ) {
-        style->addProperty( "draw:stroke", "solid", gt );
-        style->addProperty( "draw:stroke-color", frameColor().name(), gt );
-        style->addProperty( "draw:fill", "solid", gt );
-        style->addProperty( "draw:fill-color", backgroundColor().name(), gt );
-    }
+    Q_ASSERT( style );
+    if ( style )
+        saveStyle( *style, context );
+    
+    const QSizeF s( size() );
+    const QPointF p( position() );
+    context.xmlWriter().addAttributePt( "svg:width", s.width() );
+    context.xmlWriter().addAttributePt( "svg:height", s.height() );
+    context.xmlWriter().addAttributePt( "svg:x", p.x() );
+    context.xmlWriter().addAttributePt( "svg:y", p.y() );
     
     QString  lexpansion;
     switch ( expansion() )
