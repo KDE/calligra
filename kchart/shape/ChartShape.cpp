@@ -183,22 +183,16 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
     if ( !labelData )
         return false;
     
-    const qreal x = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "x" ) );
-    const qreal y = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "x" ) );
-    const qreal width = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "width" ) );
-    const qreal height = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "height" ) );
-    
-    label->setPosition( QPointF( x, y ) );
-    label->setSize( QSizeF( width, height ) );
+    label->loadOdf( labelElement, context );
     
     // TODO: Read optional attributes
     // 1. Table range
-    // 2. Position and size
-    // 3. Style name
     KoXmlElement  pElement = KoXml::namedItemNS( labelElement,
                                             KoXmlNS::text, "p" );
     
     labelData->document()->setPlainText( pElement.text() );
+    
+    label->setVisible( true );
     
     return true;
 }
@@ -1058,7 +1052,11 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     
     bodyWriter.startElement( "chart:chart" );
     
-    saveOdfAttributes( context, OdfAllAttributes ^ OdfTransformation );
+    saveOdfAttributes( context, OdfAllAttributes ^ OdfMandatories );
+    
+    KoGenStyle style;
+    style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "chart" );
+    bodyWriter.addAttribute( "chart:style-name", saveStyle( style, context ) );
 
     // 1. Write the chart type.
     bodyWriter.addAttribute( "chart:class", ODF_CHARTTYPES[ d->plotArea->chartType() ] );
