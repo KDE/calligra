@@ -195,7 +195,7 @@ void ItemDelegate::paint(QPainter *painter,
         r.setWidth(r.width() - 1);
         r.setLeft(0);
 
-        Property *property = editorModel->getItem(index);
+        Property *property = editorModel->propertyForItem(index);
         if (property && property->isModified()) {
             modified = true;
             QFont font(alteredOption.font);
@@ -365,7 +365,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         //store prev. selection for this prop set
         QModelIndex index = currentIndex();
         if (index.isValid()) {
-            Property *property = d->model->getItem(index);
+            Property *property = d->model->propertyForItem(index);
             d->set->setPreviousSelection(property->name());
         }
         else {
@@ -459,7 +459,7 @@ void EditorView::mousePressEvent ( QMouseEvent * event )
         kDebug() << event->pos();
         kDebug() << columnWidth(0);
         const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
-        Property *property = editorModel->getItem(index);
+        Property *property = editorModel->propertyForItem(index);
         if (property && property->isModified()) {
           const int iconSize = getIconSize( rowHeight( index ) );
           int x2 = columnWidth(0);
@@ -478,7 +478,7 @@ void EditorView::undo()
     if (!d->set || d->set->isReadOnly())
         return;
 
-    Property *property = d->model->getItem(currentIndex());
+    Property *property = d->model->propertyForItem(currentIndex());
 
     int propertySync = property->autoSync();
     bool sync = (propertySync != 0 && propertySync != 1) ?

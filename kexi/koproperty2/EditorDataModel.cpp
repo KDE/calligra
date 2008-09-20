@@ -78,7 +78,7 @@ QVariant EditorDataModel::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole && role != Qt::EditRole)
         return QVariant();
 
-    Property *prop = getItem(index);
+    Property *prop = propertyForItem(index);
     const int col = index.column();
     if (col == 0) {
         if (!prop->caption().isEmpty())
@@ -99,7 +99,7 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
 //buddy...        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 
     Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    Property *prop = getItem(index);
+    Property *prop = propertyForItem(index);
     if (prop) {
         if (!prop->children()) {
             f |= Qt::ItemIsEditable;
@@ -108,7 +108,7 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
     return f;
 }
 
-Property *EditorDataModel::getItem(const QModelIndex &index) const
+Property *EditorDataModel::propertyForItem(const QModelIndex &index) const
 {
     if (index.isValid()) {
         Property *item = static_cast<Property*>(index.internalPointer());
@@ -136,7 +136,7 @@ QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &paren
     if (parent.isValid() && parent.column() != 0)
         return QModelIndex();
 
-    Property *parentItem = getItem(parent);
+    Property *parentItem = propertyForItem(parent);
     Property *childItem;
     if (parentItem == &d->rootItem) { // special case: top level
         int r = 0;
@@ -168,7 +168,7 @@ QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &paren
 
 bool EditorDataModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    Property *parentItem = getItem(parent);
+    Property *parentItem = propertyForItem(parent);
     bool success;
 
     beginInsertRows(parent, position, position + rows - 1);
@@ -184,7 +184,7 @@ QModelIndex EditorDataModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    Property *childItem = getItem(index);
+    Property *childItem = propertyForItem(index);
     Property *parentItem = childItem->parent();
 
     if (!parentItem)
@@ -214,7 +214,7 @@ QModelIndex EditorDataModel::parent(const QModelIndex &index) const
 
 bool EditorDataModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
-    Property *parentItem = getItem(parent);
+    Property *parentItem = propertyForItem(parent);
     bool success = true;
 
     beginRemoveRows(parent, position, position + rows - 1);
@@ -226,7 +226,7 @@ bool EditorDataModel::removeRows(int position, int rows, const QModelIndex &pare
 
 int EditorDataModel::rowCount(const QModelIndex &parent) const
 {
-    Property *parentItem = getItem(parent);
+    Property *parentItem = propertyForItem(parent);
     if (!parentItem)
         return 0;
     if (parentItem == &d->rootItem) { // top level
@@ -247,7 +247,7 @@ bool EditorDataModel::setData(const QModelIndex &index, const QVariant &value,
     if (role != Qt::EditRole)
         return false;
 
-    Property *item = getItem(index);
+    Property *item = propertyForItem(index);
     if (item == &d->rootItem)
         return false;
     item->setValue(value);

@@ -32,6 +32,9 @@ namespace KoProperty
 class Property;
 class Set;
 
+/*! @short A data model for using Set objects within the Qt's model/view API.
+ @see EditorView
+*/
 class KOPROPERTY_EXPORT EditorDataModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -68,10 +71,15 @@ public:
 
     QModelIndex buddy( const QModelIndex & index ) const;
 
-    Property *getItem(const QModelIndex &index) const;
-
+    //! @return property set object for this model.
     Set& propertySet() const;
 
+    //! @return property object for model index @a index
+    //! or 0 for invalid index or index without property assigned.
+    Property *propertyForItem(const QModelIndex& index) const;
+
+    //! @return model index for property named @a propertyName
+    //! or invalid index if such property could not be found.
     QModelIndex indexForPropertyName(const QByteArray& propertyName) const;
 private:
 //    void setupModelData(const QStringList &lines, TreeItem *parent);
