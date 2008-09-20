@@ -297,6 +297,10 @@ QWidget *ChartTool::createOptionWidget()
     		 this,   SLOT( setAxisStepWidth( Axis*, double ) ) );
     connect( widget, SIGNAL( axisSubStepWidthChanged( Axis*, double ) ),
     		 this,   SLOT( setAxisSubStepWidth( Axis*, double ) ) );
+    connect( widget, SIGNAL( axisUseAutomaticStepWidthChanged( Axis*, bool ) ),
+    		 this,   SLOT( setAxisUseAutomaticStepWidth( Axis*, bool ) ) );
+    connect( widget, SIGNAL( axisUseAutomaticSubStepWidthChanged( Axis*, bool ) ),
+    		 this,   SLOT( setAxisUseAutomaticSubStepWidth( Axis*, bool ) ) );
 
     connect( widget, SIGNAL( legendTitleChanged( const QString& ) ),
              this,   SLOT( setLegendTitle( const QString& ) ) );
@@ -621,7 +625,8 @@ void ChartTool::setAxisShowTitle( Axis *axis, bool show )
 
 void ChartTool::setAxisShowGridLines( Axis *axis, bool b )
 {
-	axis->setShowGrid( b );
+	axis->setShowMajorGrid( b );
+	axis->setShowMinorGrid( b );
     d->shape->update();
 }
 
@@ -640,6 +645,18 @@ void ChartTool::setAxisStepWidth( Axis *axis, double width )
 void ChartTool::setAxisSubStepWidth( Axis *axis, double width )
 {
     axis->setMinorInterval( width );
+    d->shape->update();
+}
+
+void ChartTool::setAxisUseAutomaticStepWidth( Axis *axis, bool automatic )
+{
+    axis->setUseAutomaticMajorInterval( automatic );
+    d->shape->update();
+}
+
+void ChartTool::setAxisUseAutomaticSubStepWidth( Axis *axis, bool automatic )
+{
+    axis->setUseAutomaticMinorInterval( automatic );
     d->shape->update();
 }
 

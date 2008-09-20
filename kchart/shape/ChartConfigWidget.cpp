@@ -726,7 +726,7 @@ void ChartConfigWidget::update()
             const Axis *selectedAxis = d->shape->plotArea()->axes().first();
 
             d->ui.axisShowGridLines->setEnabled( true );
-            d->ui.axisShowGridLines->setChecked( selectedAxis->showGrid() );
+            d->ui.axisShowGridLines->setChecked( selectedAxis->showMajorGrid() || selectedAxis->showMinorGrid() );
             d->ui.axisShowTitle->setEnabled( true );
             d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
             d->ui.axisTitle->setEnabled( true );
@@ -1115,7 +1115,7 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index )
     d->ui.axisShowTitle->setChecked( axis->title()->isVisible() );
     d->ui.axisShowTitle->blockSignals( false );
     d->ui.axisShowGridLines->blockSignals( true );
-    d->ui.axisShowGridLines->setChecked( axis->showGrid() );
+    d->ui.axisShowGridLines->setChecked( axis->showMajorGrid() || axis->showMinorGrid() );
     d->ui.axisShowGridLines->blockSignals( false );
     
     d->axisScalingDialog.logarithmicScaling->blockSignals( true );
@@ -1124,6 +1124,24 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index )
     else
         d->axisScalingDialog.logarithmicScaling->setEnabled( false );
     d->axisScalingDialog.logarithmicScaling->blockSignals( false );
+    
+    d->axisScalingDialog.stepWidth->blockSignals( true );
+    d->axisScalingDialog.stepWidth->setValue( axis->majorInterval() );
+    d->axisScalingDialog.stepWidth->blockSignals( false );
+    
+    d->axisScalingDialog.subStepWidth->blockSignals( true );
+    d->axisScalingDialog.subStepWidth->setValue( axis->minorInterval() );
+    d->axisScalingDialog.subStepWidth->blockSignals( false );
+    
+    d->axisScalingDialog.automaticStepWidth->blockSignals( true );
+    d->axisScalingDialog.automaticStepWidth->setChecked( axis->useAutomaticMajorInterval() );
+    d->axisScalingDialog.stepWidth->setEnabled( !axis->useAutomaticMajorInterval() );
+    d->axisScalingDialog.automaticStepWidth->blockSignals( false );
+    
+    d->axisScalingDialog.automaticSubStepWidth->blockSignals( true );
+    d->axisScalingDialog.automaticSubStepWidth->setChecked( axis->useAutomaticMinorInterval() );
+    d->axisScalingDialog.subStepWidth->setEnabled( !axis->useAutomaticMinorInterval() );
+    d->axisScalingDialog.automaticSubStepWidth->blockSignals( false );
 }
 
 
@@ -1436,12 +1454,24 @@ void ChartConfigWidget::ui_axisSubStepWidthChanged( double width )
 
 void ChartConfigWidget::ui_axisUseAutomaticStepWidthChanged( bool b )
 {
-    ui_axisStepWidthChanged( b ? 0.0 : d->axisScalingDialog.stepWidth->value() );
+    int index = d->ui.axes->currentIndex();
+    // Check for valid index
+    if ( index < 0 )
+        return;
+    Q_ASSERT( d->axes.size() > index );
+
+    emit axisUseAutomaticStepWidthChanged( d->axes[ index ], b );
 }
 
 void ChartConfigWidget::ui_axisUseAutomaticSubStepWidthChanged( bool b )
 {
-    ui_axisSubStepWidthChanged( b ? 0.0 : d->axisScalingDialog.subStepWidth->value() );
+    int index = d->ui.axes->currentIndex();
+    // Check for valid index
+    if ( index < 0 )
+        return;
+    Q_ASSERT( d->axes.size() > index );
+
+    emit axisUseAutomaticSubStepWidthChanged( d->axes[ index ], b );
 }
 
 void ChartConfigWidget::ui_axisScalingButtonClicked()

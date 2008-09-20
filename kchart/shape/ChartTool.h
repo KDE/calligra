@@ -101,6 +101,8 @@ private slots:
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true );
     void setAxisStepWidth( Axis *axis, double width );
     void setAxisSubStepWidth( Axis *axis, double width );
+    void setAxisUseAutomaticStepWidth( Axis *axis, bool automatic);
+    void setAxisUseAutomaticSubStepWidth( Axis *axis, bool automatic );
 
     // Legend
     void setShowLegend( bool b );

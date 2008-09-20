@@ -55,30 +55,39 @@ public:
     double majorInterval() const;
     double minorInterval() const;
     int minorIntervalDevisor() const;
+    bool useAutomaticMajorInterval() const;
+    bool useAutomaticMinorInterval() const;
     bool showInnerMinorTicks() const;
     bool showOuterMinorTicks() const;
     bool showInnerMajorTicks() const;
     bool showOuterMajorTicks() const;
     bool scalingIsLogarithmic() const;
-    bool showGrid() const;
+    bool showMajorGrid() const;
+    bool showMinorGrid() const;
     Qt::Orientation orientation();
+    QFont font() const;
     
     void setCategoryDataRegionString( const QString &region );
 	
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
+    void setDimension( AxisDimension dimension );
     bool attachDataSet( DataSet *dataSet, bool silent = false );
     bool detachDataSet( DataSet *dataSet, bool silent = false );
     void setMajorInterval( double interval );
     void setMinorInterval( double interval );
     void setMinorIntervalDevisor( int devisor );
+    void setUseAutomaticMajorInterval( bool automatic );
+    void setUseAutomaticMinorInterval( bool automatic );
     void setShowInnerMinorTicks( bool showTicks );
     void setShowOuterMinorTicks( bool showTicks );
     void setShowInnerMajorTicks( bool showTicks );
     void setShowOuterMajorTicks( bool showTicks );
     void setScalingLogarithmic( bool logarithmicScaling );
-    void setShowGrid( bool showGrid );
+    void setShowMajorGrid( bool showGrid );
+    void setShowMinorGrid( bool showGrid );
     void setThreeD( bool threeD );
+    void setFont( const QFont &font );
     
     bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles );

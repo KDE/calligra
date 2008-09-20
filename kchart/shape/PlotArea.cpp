@@ -176,7 +176,7 @@ void PlotArea::init()
     xAxis->setPosition( BottomAxisPosition );
     Axis *yAxis = new Axis( this );
     yAxis->setPosition( LeftAxisPosition );
-    yAxis->setShowGrid( true );
+    yAxis->setShowMajorGrid( true );
     d->axes.append( xAxis );
     d->axes.append( yAxis );
 }

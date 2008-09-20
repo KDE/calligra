@@ -148,6 +148,8 @@ signals:
     void axisUseLogarithmicScalingChanged( Axis *axis, bool b );
     void axisStepWidthChanged( Axis *axis, double width );
     void axisSubStepWidthChanged( Axis *axis, double width );
+    void axisUseAutomaticStepWidthChanged( Axis *axis, bool automatic );
+    void axisUseAutomaticSubStepWidthChanged( Axis *axis, bool automatic );
 
     void legendTitleChanged( const QString& );
     void legendFontChanged( const QFont& font );

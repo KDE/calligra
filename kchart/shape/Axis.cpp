@@ -40,6 +40,7 @@
 #include <KoUnit.h>
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
+#include <KoCharacterStyle.h>
 
 // KDChart
 #include <KDChartChart>
@@ -85,6 +86,7 @@ public:
     PlotArea *plotArea;
     
     AxisPosition position;
+    AxisDimension dimension;
     KoShape *title;
     TextLabelData *titleData;
     QString id;
@@ -96,7 +98,12 @@ public:
     bool showInnerMajorTicks;
     bool showOuterMajorTicks;
     bool logarithmicScaling;
-    bool showGrid;
+    bool showMajorGrid;
+    bool showMinorGrid;
+    bool useAutomaticMajorInterval;
+    bool useAutomaticMinorInterval;
+    
+    QFont font;
     
     KDChart::CartesianAxis *kdAxis;
     KDChart::CartesianCoordinatePlane *kdPlane;
@@ -125,6 +132,12 @@ public:
 
 Axis::Private::Private()
 {
+    useAutomaticMajorInterval = true;
+    useAutomaticMinorInterval = true;
+    
+    majorInterval = 2;
+    minorIntervalDevisor = 1;
+    
     kdBarDiagram = 0;
     kdLineDiagram = 0;
     kdAreaDiagram = 0;
@@ -402,16 +415,20 @@ Axis::Axis( PlotArea *parent )
     d->plotArea = parent;
     d->kdAxis = new KDChart::CartesianAxis();
     d->kdPlane = new KDChart::CartesianCoordinatePlane();
-    d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
-    d->kdPolarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
     
     d->plotAreaChartType = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();
     
     KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
+    gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_10_50 );
     d->kdPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
+    
+    gridAttributes = d->kdPlane->gridAttributes( Qt::Vertical );
+    gridAttributes.setGridVisible( false );
+    gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_10_50 );
+    d->kdPlane->setGridAttributes( Qt::Vertical, gridAttributes );
     
     gridAttributes = d->kdPolarPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
@@ -420,7 +437,8 @@ Axis::Axis( PlotArea *parent )
     //d->createBarDiagram();
     //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
     
-    setShowGrid( false );
+    setShowMajorGrid( false );
+    setShowMinorGrid( false );
     
     d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( d->title )
@@ -465,9 +483,32 @@ AxisPosition Axis::position() const
     return d->position;
 }
 
+void Axis::setDimension( AxisDimension dimension )
+{
+    d->dimension = dimension;
+    
+    // We don't support z axes yet, so hide them.
+    // They are only kept to not lose them when saving a document
+    // that previously had a z axis.
+    if ( dimension == ZAxisDimension ) {
+        d->kdPlane->setReferenceCoordinatePlane( 0 );
+        d->title->setVisible( false );
+    } else
+        d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
+    
+    requestRepaint();
+}
+
 void Axis::setPosition( AxisPosition position )
 {
     d->position = position;
+    
+    // FIXME: In KChart 2.1, we will have vertical bar diagrams.
+    // That means that e.g. LeftAxisPosition != YAxisDimension!
+    if ( position == LeftAxisPosition || position == RightAxisPosition )
+        setDimension( YAxisDimension );
+    else if ( position == TopAxisPosition || position == BottomAxisPosition )
+        setDimension( XAxisDimension );
     
     if ( position == LeftAxisPosition )
         d->title->rotate( -90 - d->title->rotation() );
@@ -497,9 +538,7 @@ QString Axis::id() const
 
 AxisDimension Axis::dimension() const
 {
-    if ( d->position == LeftAxisPosition || d->position == RightAxisPosition )
-        return YAxisDimension;
-    return XAxisDimension;
+    return d->dimension;
 }
 
 QList<DataSet*> Axis::dataSets() const
@@ -565,6 +604,8 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
             model = d->kdScatterDiagramModel;
             diagram = d->kdScatterDiagram;
             break;
+        default:;
+            // FIXME: Implement more chart types
         }
         
         Q_ASSERT( model );
@@ -628,6 +669,8 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
             oldModel = &d->kdScatterDiagramModel;
             oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
             break;
+        default:;
+            // FIXME: Implement more chart types
         }
         
         if ( oldModel && *oldModel ) {
@@ -678,17 +721,19 @@ void Axis::setMajorInterval( double interval )
 {
     // Don't overwrite if automatic interval is being requested ( for
     // interval = 0 )
-    if ( interval != 0.0 )
+    if ( interval != 0.0 ) {
         d->majorInterval = interval;
+        d->useAutomaticMajorInterval = false;
+    } else
+        d->useAutomaticMajorInterval = true;
     
     // KDChart
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
-    if ( !plane )
-        return;
-    
-    KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
+    KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setGridStepWidth( interval );
-    plane->setGridAttributes( orientation(), attributes );
+    // FIXME: Hide minor tick marks more appropriately
+    if ( !d->showMinorGrid && interval != 0.0 )
+        setMinorInterval( interval );
+    d->kdPlane->setGridAttributes( orientation(), attributes );
     
     requestRepaint();
 }
@@ -700,7 +745,10 @@ double Axis::minorInterval() const
 
 void Axis::setMinorInterval( double interval )
 {
-    setMinorIntervalDevisor( (int)( d->majorInterval / interval ) );
+    if ( interval == 0.0 )
+        setMinorIntervalDevisor( 0.0 );
+    else
+        setMinorIntervalDevisor( qRound( d->majorInterval / interval ) );
 }
 
 int Axis::minorIntervalDevisor() const
@@ -710,19 +758,50 @@ int Axis::minorIntervalDevisor() const
 
 void Axis::setMinorIntervalDevisor( int devisor )
 {
-    d->minorIntervalDevisor = devisor;
+    // A divisor of 0.0 means automatic minor interval calculation
+    if ( devisor != 0 ) {
+        d->minorIntervalDevisor = devisor;
+        d->useAutomaticMinorInterval = false;
+    } else
+        d->useAutomaticMinorInterval = true;
     
     // KDChart
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
-        if ( !plane )
-            return;
-        
-        
-    KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
-    attributes.setGridSubStepWidth( d->majorInterval / devisor );
-    plane->setGridAttributes( orientation(), attributes );
+    KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
+    if ( devisor != 0 )
+        attributes.setGridSubStepWidth( d->majorInterval / devisor );
+    else
+        attributes.setGridSubStepWidth( 0.0 );
+    d->kdPlane->setGridAttributes( orientation(), attributes );
     
     requestRepaint();
+}
+
+
+
+bool Axis::useAutomaticMajorInterval() const
+{
+    return d->useAutomaticMajorInterval;
+}
+
+bool Axis::useAutomaticMinorInterval() const
+{
+    return d->useAutomaticMinorInterval;
+}
+
+void Axis::setUseAutomaticMajorInterval( bool automatic )
+{
+    d->useAutomaticMajorInterval = automatic;
+    // A value of 0.0 will activate automatic intervals,
+    // but not change d->majorInterval
+    setMajorInterval( automatic ? 0.0 : majorInterval() );
+}
+
+void Axis::setUseAutomaticMinorInterval( bool automatic )
+{
+    d->useAutomaticMinorInterval = automatic;
+    // A value of 0.0 will activate automatic intervals,
+    // but not change d->minorIntervalDivisor
+    setMinorInterval( automatic ? 0.0 : minorInterval() );
 }
 
 bool Axis::showInnerMinorTicks() const
@@ -755,6 +834,7 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
     d->kdPlane->setAxesCalcModeY( d->logarithmicScaling
 				  ? KDChart::AbstractCoordinatePlane::Logarithmic
 				  : KDChart::AbstractCoordinatePlane::Linear );
+    d->kdPlane->layoutPlanes();
     
     requestRepaint();
 }
@@ -764,24 +844,36 @@ bool Axis::scalingIsLogarithmic() const
     return d->logarithmicScaling;
 }
 
-bool Axis::showGrid() const
+bool Axis::showMajorGrid() const
 {
-    return d->showGrid;
+    return d->showMajorGrid;
 }
 
-void Axis::setShowGrid( bool showGrid )
+void Axis::setShowMajorGrid( bool showGrid )
 {
-    d->showGrid = showGrid;
+    d->showMajorGrid = showGrid;
 
     // KDChart
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
-    if ( !plane )
-	return;
-        
-        
-    KDChart::GridAttributes  attributes = plane->gridAttributes( orientation() );
-    attributes.setGridVisible( d->showGrid );
-    plane->setGridAttributes( orientation(), attributes );
+    KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
+    attributes.setGridVisible( d->showMajorGrid );
+    d->kdPlane->setGridAttributes( orientation(), attributes );
+    
+    requestRepaint();
+}
+
+bool Axis::showMinorGrid() const
+{
+    return d->showMajorGrid;
+}
+
+void Axis::setShowMinorGrid( bool showGrid )
+{
+    d->showMajorGrid = showGrid;
+
+    // KDChart
+    KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
+    attributes.setSubGridVisible( d->showMinorGrid );
+    d->kdPlane->setGridAttributes( orientation(), attributes );
     
     requestRepaint();
 }
@@ -813,10 +905,21 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     
     d->title->setVisible( false );
     
-    KDChart::GridAttributes attr = d->kdPlane->gridAttributes( orientation() );
-    attr.setGridVisible( false );
-    attr.setSubGridVisible( false );
-    d->kdPlane->setGridAttributes( orientation(), attr );
+    KDChart::GridAttributes gridAttr = d->kdPlane->gridAttributes( orientation() );
+    gridAttr.setGridVisible( false );
+    gridAttr.setSubGridVisible( false );
+    
+    d->showMajorGrid = false;
+    d->showMinorGrid = false;
+    
+    d->showInnerMinorTicks = false;
+    d->showOuterMinorTicks = false;
+    d->showInnerMajorTicks = false;
+    d->showOuterMajorTicks = true;
+    
+    // Use automatic interval calculation by default
+    setMajorInterval( 0.0 );
+    setMinorInterval( 0.0 );
     
     if ( !axisElement.isNull() ) {
         KoXmlElement n;
@@ -850,25 +953,6 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                         font.setPointSizeF( fontSize );
                         d->titleData->document()->setDefaultFont( font );
                     }
-                    
-                    styleStack.setTypeProperties( "graphic" );
-                    
-                    if ( styleStack.hasProperty( KoXmlNS::chart, "logarithmic" )
-			 && styleStack.property( KoXmlNS::chart, "logarithmic" ) == "true" )
-                    {
-                        setScalingLogarithmic( true );
-                    }
-                    if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) )
-                    {
-                        d->title->setVisible( styleStack.property( KoXmlNS::chart, "display-label" ) == "true" );
-                    }
-                    if ( styleStack.hasProperty( KoXmlNS::chart, "gap-width" ) )
-                    {
-                        setGapBetweenSets( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "gap-width" ) ) );
-                    }
-                    if ( styleStack.hasProperty( KoXmlNS::chart, "overlap" ) ) {
-                        setGapBetweenBars( -KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "overlap" ) ) );
-                    }
                 }
                 
                 const KoXmlElement textElement = KoXml::namedItemNS( n, KoXmlNS::text, "p" );
@@ -886,6 +970,17 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     const QString className = n.attributeNS( KoXmlNS::chart, "class" );
                     if ( className == "major" )
                         major = true;
+                } else {
+                    qWarning() << "Error: Axis' <chart:grid> element contains no valid class. It must be either \"major\" or \"minor\".";
+                    continue;
+                }
+                
+                if ( major ) {
+                    gridAttr.setGridVisible( true );
+                    d->showMajorGrid = true;
+                } else {
+                    gridAttr.setSubGridVisible( true );
+                    d->showMinorGrid = true;
                 }
 
                 if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
@@ -893,17 +988,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                     styleStack.setTypeProperties( "graphic" );
                     if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) ) {
                         const QString strokeColor = styleStack.property( KoXmlNS::svg, "stroke-color" );
-                        KDChart::GridAttributes attr = d->kdPlane->gridAttributes( orientation() );
-                        attr.setGridVisible( true );
-                        if ( major ) {
-                            attr.setGridPen( QColor( strokeColor ) );
-                            attr.setSubGridVisible( false );
-                        }
-                        else {
-                            attr.setSubGridPen( QColor( strokeColor ) );
-                            attr.setSubGridVisible( true );
-                        }
-                        d->kdPlane->setGridAttributes( orientation(), attr );
+                        gridAttr.setGridVisible( true );
+                        if ( major )
+                            gridAttr.setGridPen( QColor( strokeColor ) );
+                        else
+                            gridAttr.setSubGridPen( QColor( strokeColor ) );
                     }
                 }
             }
@@ -923,8 +1012,45 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 setPosition( BottomAxisPosition );
             if ( dimension == "y" )
                 setPosition( LeftAxisPosition );
+            if ( dimension == "z" )
+                setDimension( ZAxisDimension );
         }
     }
+    
+    if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
+        styleStack.setTypeProperties( "text" );
+        
+        KoCharacterStyle charStyle;
+        charStyle.loadOdf( context.odfLoadingContext() );
+        setFont( charStyle.font() );
+        
+        styleStack.setTypeProperties( "chart" );
+        
+        if ( styleStack.hasProperty( KoXmlNS::chart, "logarithmic" )
+             && styleStack.property( KoXmlNS::chart, "logarithmic" ) == "true" )
+        {
+            setScalingLogarithmic( true );
+        }
+        
+        if ( styleStack.hasProperty( KoXmlNS::chart, "interval-major" ) )
+            setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
+        if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
+            setMinorIntervalDevisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
+        if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) )
+        {
+            d->title->setVisible( styleStack.property( KoXmlNS::chart, "display-label" ) == "true" );
+        }
+        if ( styleStack.hasProperty( KoXmlNS::chart, "gap-width" ) )
+        {
+            setGapBetweenSets( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "gap-width" ) ) );
+        }
+        if ( styleStack.hasProperty( KoXmlNS::chart, "overlap" ) ) {
+            setGapBetweenBars( -KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "overlap" ) ) );
+        }
+    }
+    
+    d->kdPlane->setGridAttributes( orientation(), gridAttr );
     
     requestRepaint();
 
@@ -1055,6 +1181,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         oldModel = &d->kdScatterDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
         break;
+    default:;
+        // FIXME: Implement more chart types
     }
     
     if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) ) {
@@ -1103,6 +1231,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         newModel = d->kdScatterDiagramModel;
         newDiagram = d->kdScatterDiagram;
         break;
+    default:;
+        // FIXME: Implement more chart types
     }
     
     Q_ASSERT( newModel );
@@ -1201,6 +1331,8 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             d->kdAreaDiagram->setType( type );
         }
         break;
+    default:;
+        // FIXME: Implement more chart types
     }
 
     foreach ( DataSet *dataSet, d->dataSets )
@@ -1310,6 +1442,19 @@ void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
     }
     
     requestRepaint();
+}
+
+QFont Axis::font() const
+{
+    return d->font;
+}
+
+void Axis::setFont( const QFont &font )
+{
+    KDChart::TextAttributes attr = d->kdAxis->textAttributes();
+    attr.setFont( font );
+    d->font = font;
+    d->kdAxis->setTextAttributes( attr );
 }
 
 #include "Axis.moc"
