@@ -940,7 +940,7 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
     axisStyle.addProperty( "chart:display-label", "true" );
 
-    const QString styleName = mainStyles.lookup( axisStyle, "ch", KoGenStyles::ForceNumbering );
+    const QString styleName = mainStyles.lookup( axisStyle, "ch" );
     bodyWriter.addAttribute( "chart:style-name", styleName );
 
     // TODO scale: logarithmic/linear
@@ -951,7 +951,40 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     else if ( dimension() == YAxisDimension )
         bodyWriter.addAttribute( "chart:dimension", "y" );
 
-    bodyWriter.addAttribute( "chart:axis-name", d->titleData->document()->toPlainText() );
+    QString name;
+    switch( dimension() ) {
+    case XAxisDimension:
+        name = "x";
+        break;
+    case YAxisDimension:
+        name = "y";
+        break;
+    case ZAxisDimension:
+        name = "z";
+        break;
+    }
+    int i = 1;
+    foreach ( Axis *axis, d->plotArea->axes() ) {
+        if ( axis == this )
+            break;
+        if ( axis->dimension() == dimension() )
+            i++;
+    }
+    if ( i == 1 )
+        name = "primary-" + name;
+    else if ( i == 2 )
+        name = "secondary-" + name;
+    // Usually, there's not more than two axes of the same dimension.
+    // But use a fallback name here nevertheless.
+    else
+        name = QString::number( i ) + "-" + name;
+    bodyWriter.addAttribute( "chart:name", name );
+    
+    bodyWriter.startElement( "chart:title" );
+    bodyWriter.startElement( "text:p" );
+    bodyWriter.addTextNode( d->titleData->document()->toPlainText() );
+    bodyWriter.endElement(); // text:p
+    bodyWriter.endElement(); // chart:title
 
     bodyWriter.endElement(); // chart:axis
 }
