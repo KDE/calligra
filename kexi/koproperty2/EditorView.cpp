@@ -20,6 +20,7 @@
 #include "EditorView.h"
 #include "EditorDataModel.h"
 #include "Property.h"
+#include "Set.h"
 
 #include <QtGui/QStyledItemDelegate>
 #include <QtGui/QLabel>
@@ -28,9 +29,12 @@
 #include <QtGui/QStandardItemEditorCreator>
 #include <QtGui/QPainter>
 #include <QtGui/QVBoxLayout>
-#include <QtDebug>
+#include <QtGui/QMouseEvent>
 
 #include <KLocale>
+#include <KIconLoader>
+#include <KIconEffect>
+#include <KDebug>
 
 using namespace KoProperty;
 
@@ -158,6 +162,8 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     virtual void updateEditorGeometry( QWidget * editor, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual bool editorEvent( QEvent * event, QAbstractItemModel * model,
+        const QStyleOptionViewItem & option, const QModelIndex & index );
 };
 
 ItemDelegate::ItemDelegate(QObject *parent)
@@ -170,6 +176,11 @@ ItemDelegate::~ItemDelegate()
 {
 }
 
+static int getIconSize(int rowHeight)
+{
+    return rowHeight * 2 / 3;
+}
+
 void ItemDelegate::paint(QPainter *painter, 
                          const QStyleOptionViewItem &option,
                          const QModelIndex &index) const
@@ -179,12 +190,14 @@ void ItemDelegate::paint(QPainter *painter,
     painter->save();
     QRect r(option.rect);
     const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
+    bool modified = false;
     if (index.column()==0) {
         r.setWidth(r.width() - 1);
         r.setLeft(0);
 
         Property *property = editorModel->getItem(index);
         if (property && property->isModified()) {
+            modified = true;
             QFont font(alteredOption.font);
             font.setBold(true);
             alteredOption.font = font;
@@ -193,12 +206,47 @@ void ItemDelegate::paint(QPainter *painter,
     else {
         r.setLeft(r.left()-1);
     }
+    const int x2 = alteredOption.rect.right();
+    const int y2 = alteredOption.rect.bottom();
+    const int iconSize = getIconSize( alteredOption.rect.height() );
+    if (modified) {
+        alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
+    }
+
     QStyledItemDelegate::paint(painter, alteredOption, index);
+
+    if (modified) {
+        alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 3 / 2 );
+//        int x1 = alteredOption.rect.right();
+        int y1 = alteredOption.rect.top();
+        QLinearGradient grad(x2 - iconSize * 2, y1, x2 - iconSize / 2, y1);
+        QColor color(
+            alteredOption.palette.color( 
+                (alteredOption.state & QStyle::State_Selected) ? QPalette::Highlight : QPalette::Base ));
+        color.setAlpha(0);
+        grad.setColorAt(0.0, color);
+        color.setAlpha(255);
+        grad.setColorAt(0.5, color);
+//        grad.setColorAt(1.0, color);
+        QBrush gradBrush(grad);
+        painter->fillRect(x2 - iconSize * 2, y1, 
+            iconSize * 2, y2 - y1 + 1, gradBrush);
+        QPixmap revertIcon( DesktopIcon("edit-undo", iconSize) );
+//        QPixmap alphaChannel(revertIcon.size());
+//        alphaChannel.fill(QColor(127, 127, 127));
+//        revertIcon.setAlphaChannel(alphaChannel);
+        revertIcon = KIconEffect().apply(revertIcon, KIconEffect::Colorize, 1.0, 
+            alteredOption.palette.color(
+                (alteredOption.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text ), false);
+        painter->drawPixmap( x2 - iconSize - 2, 
+            y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
+    }
+
     QPen pen(QColor("#c0c0c0"));
     pen.setWidth(1);
     painter->setPen(pen);
     painter->drawRect(r);
-    //qDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
+    //kDebug()<<"rect:" << r << "viewport:" << painter->viewport() << "window:"<<painter->window();
     painter->restore();
 }
 
@@ -229,10 +277,34 @@ void ItemDelegate::updateEditorGeometry( QWidget * editor,
     editor->setGeometry(r);
 }
 
+bool ItemDelegate::editorEvent( QEvent * event, QAbstractItemModel * model,
+    const QStyleOptionViewItem & option, const QModelIndex & index )
+{
+    if (index.column() == 0 && event->type() == QEvent::MouseButtonPress) {
+        kDebug() << "!!!";
+    }
+    return QStyledItemDelegate::editorEvent( event, model, option, index );
+}
+
 //----------
+
+class EditorView::Private
+{
+public:
+    Private()
+     : set(0)
+     , model(0)
+     , autoSync(true)
+    {
+    }
+    Set *set;
+    EditorDataModel *model;
+    bool autoSync : 1;
+};
 
 EditorView::EditorView(QWidget* parent)
         : QTreeView(parent)
+        , d( new Private )
 {
     setObjectName(QLatin1String("EditorView"));
     setAlternatingRowColors(true);
@@ -247,6 +319,121 @@ EditorView::EditorView(QWidget* parent)
 
 EditorView::~EditorView()
 {
+    delete d;
+}
+
+void EditorView::changeSet(Set *set, SetOptions options)
+{
+    changeSetInternal(set, options, QByteArray());
+}
+
+void EditorView::changeSet(Set *set, const QByteArray& propertyToSelect)
+{
+    changeSetInternal(set, 0, propertyToSelect);
+}
+
+void EditorView::changeSetInternal(Set *set, SetOptions options, 
+    const QByteArray& propertyToSelect)
+{
+//! @todo port??
+#if 0
+    if (d->insideSlotValueChanged) {
+        //changeSet() called from inside of slotValueChanged()
+        //this is dangerous, because there can be pending events,
+        //especially for the GUI stuff, so let's do delayed work
+        d->setListLater_list = set;
+        d->preservePrevSelection_preservePrevSelection = preservePrevSelection;
+        d->preservePrevSelection_propertyToSelect = propertyToSelect;
+        qApp->processEvents(QEventLoop::AllEvents);
+        if (d->set) {
+            //store prev. selection for this prop set
+            if (d->currentItem)
+                d->set->setPrevSelection(d->currentItem->property()->name());
+            kDebug(30007) << d->set->prevSelection();
+        }
+        if (!d->setListLater_set) {
+            d->setListLater_set = true;
+            d->changeSetLaterTimer.setSingleShot(true);
+            d->changeSetLaterTimer.start(10);
+        }
+        return;
+    }
+#endif
+
+    if (d->set) {
+        acceptInput();
+        //store prev. selection for this prop set
+        QModelIndex index = currentIndex();
+        if (index.isValid()) {
+            Property *property = d->model->getItem(index);
+            d->set->setPreviousSelection(property->name());
+        }
+        else {
+            d->set->setPreviousSelection(QByteArray());
+        }
+        d->set->disconnect(this);
+    }
+
+    QByteArray selectedPropertyName1 = propertyToSelect;
+    QByteArray selectedPropertyName2 = propertyToSelect;
+    if (options & PreservePreviousSelection) {
+        //try to find prev. selection:
+        //1. in new list's prev. selection
+        if (set)
+            selectedPropertyName1 = set->previousSelection();
+        //2. in prev. list's current selection
+        if (d->set)
+            selectedPropertyName2 = d->set->previousSelection();
+    }
+
+    d->set = set;
+    if (d->set) {
+        //receive property changes
+        connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
+                this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
+        connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
+                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
+        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+        connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
+    }
+
+//    fill();
+    delete d->model;
+    d->model = d->set ? new EditorDataModel(*d->set, this) : 0;
+    if (d->model) {
+        setModel( d->model );
+    }
+
+    emit propertySetChanged(d->set);
+
+    if (d->set) {
+        //select prev. selected item
+        QModelIndex index;
+        if (!selectedPropertyName2.isEmpty()) //try other one for old prop set
+            index = d->model->indexForPropertyName( selectedPropertyName2 );
+        if (!index.isValid() && !selectedPropertyName1.isEmpty()) //try old one for current prop set
+            index = d->model->indexForPropertyName( selectedPropertyName1 );
+
+        if (index.isValid()) {
+            setCurrentIndex(index);
+            scrollTo(index);
+//            QTimer::singleShot(10, this, SLOT(selectItemLater()));
+            //d->doNotSetFocusOnSelection = !hasParent(this, focusWidget());
+            //setSelected(item, true);
+            //d->doNotSetFocusOnSelection = false;
+//   ensureItemVisible(item);
+        }
+    }
+}
+
+void EditorView::setAutoSync(bool enable)
+{
+    d->autoSync = enable;
+}
+
+bool EditorView::isAutoSync() const
+{
+    return d->autoSync;
 }
 
 void EditorView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
@@ -262,6 +449,57 @@ bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * 
 void EditorView::drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
 {
     QTreeView::drawBranches( painter, rect, index );
+}
+
+void EditorView::mousePressEvent ( QMouseEvent * event )
+{
+    QTreeView::mousePressEvent( event );
+    QModelIndex index = indexAt( event->pos() );
+    if (index.column() == 0) {
+        kDebug() << event->pos();
+        kDebug() << columnWidth(0);
+        const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
+        Property *property = editorModel->getItem(index);
+        if (property && property->isModified()) {
+          const int iconSize = getIconSize( rowHeight( index ) );
+          int x2 = columnWidth(0);
+          int x1 = x2 - iconSize - 2;
+          if (x1 < event->x() && event->x() < x2) {
+              undo();
+          }
+       }
+    }
+}
+
+void EditorView::undo()
+{
+//    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(model());
+//    if (!d->currentWidget || !d->currentItem || (d->set && d->set->isReadOnly()) || (d->currentWidget && d->currentWidget->isReadOnly()))
+    if (!d->set || d->set->isReadOnly())
+        return;
+
+    Property *property = d->model->getItem(currentIndex());
+
+    int propertySync = property->autoSync();
+    bool sync = (propertySync != 0 && propertySync != 1) ?
+                d->autoSync : (propertySync != 0);
+
+    if (sync)
+        property->resetValue();
+    update( currentIndex() );
+ /*   if (d->currentWidget && d->currentItem) {//(check because current widget could be removed by resetValue())
+        d->currentWidget->setValue(d->currentItem->property()->value());
+        repaintItem(d->currentItem);
+    }*/
+}
+
+void EditorView::acceptInput()
+{
+//! @todo
+}
+
+void EditorView::propertySetChanged(KoProperty::Set *set)
+{
 }
 
 #if 0
@@ -342,6 +580,7 @@ public:
     EditorItem::Dict itemDict;
 
     int baseRowHeight;
+//PORTED
 bool sync : 1;
 bool insideSlotValueChanged : 1;
 

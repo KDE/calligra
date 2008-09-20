@@ -41,17 +41,97 @@ class QSize;*/
 namespace KoProperty
 {
 
+class Set;
+
+//! @brief A widget for editing properties
+//! @todo review this .............
+/*! Editor widgets use property options using Property::option(const char *)
+    to override default behaviour of editor items.
+    Currently supported options are:
+    <ul><li> min: integer setting for minimum value of IntEdit and DoubleEdit item. Default is 0.
+    Set "min" to -1, if you want this special value to be allowed.</li>
+    <li> minValueText: i18n'd QString used in IntEdit to set "specialValueText"
+            widget's property</li>
+    <li> max: integer setting for minimum value of IntEdit item. Default is 0xffff.</li>
+    <li> precision:  The number of decimals after the decimal point. (for DoubleEdit)</li>
+    <li> step : the size of the step that is taken when the user hits the up
+    or down buttons (for DoubleEdit) </li>
+    <li> 3rdState: i18n'd QString used in BoolEdit. If not empty, the the editor's button
+     accept third "null" state with name equal to this string. When this value is selected,
+     Widget::value() returns null QVariant. This option is used for example in the "defaultValue"
+     property for a field of type boolean (in Kexi Table Designer). Third, "null" value
+     of the property means there is no "defaultValue" specified. </li>
+    <li>
+     extraValueAllowed: Allow the user to manually enter a value into a combobox
+     that isnt in the list.  The entered text will be returned as opposed to a matching key.
+    </li>
+    </ul>
+   \author Jarosław Staniek <staniek@kde.org>
+ */
 class KOPROPERTY_EXPORT EditorView : public QTreeView
 {
 public:
+    /*! Creates an empty property editor with @a parent as parent widget. */
     EditorView(QWidget *parent = 0);
+
     ~EditorView();
+
+public slots:
+    //! Options for changeSet().
+    enum SetOption {
+        PreservePreviousSelection = 1 //!< If used, previously selected editor item
+                                      //!< will be kept selected.
+    };
+    Q_DECLARE_FLAGS(SetOptions, SetOption)
+
+    /*! Populates the editor view with items for each property from the @ set set.
+     Child items for composed properties are also created.
+     See SetOption documentation for description of @a options options.
+     If @a preservePreviousSelection is true, previously selected editor
+     item will be kept selected, if present. */
+    void changeSet(Set *set, SetOptions options = 0);
+
+    /*! Populates the editor view with items for each property from the @ set set.
+     Child items for composed properties are also created.
+     If @a propertyToSelect is provided, item for this property name
+     will be selected, if present. */
+    void changeSet(Set *set, const QByteArray& propertyToSelect);
+
+    /*! If @a enable is true (the default), property values are automatically synced as
+    soon as editor contents change (e.g. every time the user types a character)
+    and the values are written back to the assigned property set. 
+    If @a enable is false, property set is updated only when selection within
+    the property editor or user presses Enter/Return key.
+    Each property can overwrite this setting by changing its own autoSync flag.
+    */
+    void setAutoSync(bool enable);
+
+    /*! @return value of autoSync flag. */
+    bool isAutoSync() const;
+
+    /*! Accepts the changes made to the current editor item (if any)
+     (as if the user had pressed Enter key). */
+    void acceptInput();
+
+signals:
+    /*! Emitted when current property set has been changed. May be 0. */
+    void propertySetChanged(KoProperty::Set *set);
+
 protected slots:
     virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
 
-protected:
+private:
+    /*! Used by changeSet(). */
+    void changeSetInternal(Set *set, SetOptions options, const QByteArray& propertyToSelect);
     virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
     virtual void drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
+    virtual void mousePressEvent( QMouseEvent * event );
+
+    /*! Undoes the last change in the property editor.*/
+    void undo();
+
+    class Private;
+    Private * const d;
 };
 
 #if 0
@@ -92,6 +172,7 @@ class KOPROPERTY_EXPORT Editor : public K3ListView
     Q_OBJECT
 
 public:
+//PORTED
     /*! Creates an empty Editor with \a parent as parent widget.
     If \a autoSync == true, properties values are automatically synced as
     soon as editor contents change (eg the user types text, etc.)
@@ -108,28 +189,33 @@ public:
     virtual void setSorting(int column, bool ascending = true);
 
 public slots:
+//PORTED
     /*! Populates the editor with an item for each property in the List.
       Also creates child items for composed properties.
      If \a preservePrevSelection is true, previously selected editor
      item will be kept selected, if present. */
     void changeSet(Set *set, bool preservePrevSelection = false);
 
+//PORTED
     /*! Populates the editor with an item for each property in the List.
       Also creates child items for composed properties.
      If \a propertyToSelect is not empty, editor item for this property name
      will be selected, if present. */
     void changeSet(Set *set, const QByteArray& propertyToSelect);
 
+//UNUSED
     /*! Clears all items in the list.
        if \a editorOnly is true, then only the current editor will be cleared,
       not the whole list.
     */
     void clear(bool editorOnly = false);
 
+//PORTED
     /*! Accept the changes mae to the current editor (as if the user had pressed Enter key) */
     void acceptInput();
 
 signals:
+//PORTED
     /*! Emitted when current property set has been changed. May be 0. */
     void propertySetChanged(KoProperty::Set *set);
 
@@ -160,6 +246,7 @@ protected slots:
        creating a new editor for the newly selected item. */
     void slotClicked(Q3ListViewItem *item);
 
+//ported
     /*! Undoes the last change in property editor.*/
     void undo();
 
@@ -198,7 +285,7 @@ protected:
     void updateFont();
 
     virtual void contentsMousePressEvent(QMouseEvent * e);
-
+//PORTED
     /*! Used for changeSet(). */
     void changeSetInternal(Set *set, bool preservePrevSelection,
                            const QByteArray& propertyToSelect);

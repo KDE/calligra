@@ -307,8 +307,8 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
         if (d->set) {
             //store prev. selection for this prop set
             if (d->currentItem)
-                d->set->setPrevSelection(d->currentItem->property()->name());
-            kDebug(30007) << d->set->prevSelection();
+                d->set->setPreviousSelection(d->currentItem->property()->name());
+            kDebug(30007) << d->set->previousSelection();
         }
         if (!d->setListLater_set) {
             d->setListLater_set = true;
@@ -322,9 +322,9 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
         slotWidgetAcceptInput(d->currentWidget);
         //store prev. selection for this prop set
         if (d->currentItem)
-            d->set->setPrevSelection(d->currentItem->property()->name());
+            d->set->setPreviousSelection(d->currentItem->property()->name());
         else
-            d->set->setPrevSelection("");
+            d->set->setPreviousSelection("");
         d->set->disconnect(this);
     }
 
@@ -333,10 +333,10 @@ Editor::changeSetInternal(Set *set, bool preservePrevSelection, const QByteArray
         //try to find prev. selection:
         //1. in new list's prev. selection
         if (set)
-            selectedPropertyName1 = set->prevSelection();
+            selectedPropertyName1 = set->previousSelection();
         //2. in prev. list's current selection
         if (d->set)
-            selectedPropertyName2 = d->set->prevSelection();
+            selectedPropertyName2 = d->set->previousSelection();
     }
 
     d->set = set;

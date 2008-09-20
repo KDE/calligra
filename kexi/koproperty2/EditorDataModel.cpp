@@ -21,6 +21,8 @@
 #include "Property.h"
 #include "Set.h"
 
+#include <QtCore/QHash>
+
 #include <KLocale>
 
 using namespace KoProperty;
@@ -31,6 +33,7 @@ public:
     Private() {}
     Set *set;
     Property rootItem;
+    QHash<QByteArray, QModelIndex> indicesForNames;
 };
 
 // -------------------
@@ -40,6 +43,20 @@ EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent)
         , d(new Private)
 {
     d->set = &propertySet;
+    collectIndices();
+}
+
+void EditorDataModel::collectIndices() const
+{
+    int r = 0;
+    for (Set::Iterator it(*d->set); it.current(); r++, ++it) {
+        d->indicesForNames.insert( it.current()->name(), createIndex(r, 0, it.current()) );
+    }
+}
+
+QModelIndex EditorDataModel::indexForPropertyName(const QByteArray& propertyName) const
+{
+    return d->indicesForNames.value(propertyName);
 }
 
 EditorDataModel::~EditorDataModel()
@@ -66,7 +83,7 @@ QVariant EditorDataModel::data(const QModelIndex &index, int role) const
     if (col == 0) {
         if (!prop->caption().isEmpty())
             return prop->caption();
-        prop->name();
+        return prop->name();
     }
 
     return prop->value();
@@ -311,5 +328,10 @@ void EditorDataModel::setupModelData(const QStringList &lines, Property *parent)
     }
 }
 */
+
+Set& EditorDataModel::propertySet() const
+{
+    return *d->set;
+}
 
 #include "EditorDataModel.moc"

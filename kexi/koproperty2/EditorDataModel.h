@@ -69,8 +69,13 @@ public:
     QModelIndex buddy( const QModelIndex & index ) const;
 
     Property *getItem(const QModelIndex &index) const;
+
+    Set& propertySet() const;
+
+    QModelIndex indexForPropertyName(const QByteArray& propertyName) const;
 private:
 //    void setupModelData(const QStringList &lines, TreeItem *parent);
+    void collectIndices() const;
 
     class Private;
     Private * const d;

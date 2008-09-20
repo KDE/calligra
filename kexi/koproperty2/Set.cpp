@@ -421,13 +421,13 @@ Set::debug()
 }
 
 QByteArray
-Set::prevSelection() const
+Set::previousSelection() const
 {
     return d->prevSelection;
 }
 
 void
-Set::setPrevSelection(const QByteArray &prevSelection)
+Set::setPreviousSelection(const QByteArray &prevSelection)
 {
     d->prevSelection = prevSelection;
 }

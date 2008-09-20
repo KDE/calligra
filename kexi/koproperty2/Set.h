@@ -165,9 +165,9 @@ public:
 
     /*! Used by property editor to preserve previous selection when this set
      is assigned again. */
-    QByteArray prevSelection() const;
+    QByteArray previousSelection() const;
 
-    void setPrevSelection(const QByteArray& prevSelection);
+    void setPreviousSelection(const QByteArray& prevSelection);
 
     /*! A name of this property set type, that is usable when
      we want to know if two property set objects have the same type.
