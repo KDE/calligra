@@ -392,11 +392,9 @@ QMatrix SvgImport::parseTransform( const QString &transform )
             else    // Spec : if only one param given, assume uniform scaling
                 result.scale(params[0].toDouble(), params[0].toDouble());
         }
-        else if(subtransform[0] == "skewx")
+        else if(subtransform[0].toLower() == "skewx")
             result.shear(tan(params[0].toDouble() * KarbonGlobal::pi_180), 0.0F);
-        else if(subtransform[0] == "skewy")
-            result.shear(tan(params[0].toDouble() * KarbonGlobal::pi_180), 0.0F);
-        else if(subtransform[0] == "skewy")
+        else if(subtransform[0].toLower() == "skewy")
             result.shear(0.0F, tan(params[0].toDouble() * KarbonGlobal::pi_180));
         else if(subtransform[0] == "matrix")
         {
