@@ -29,7 +29,7 @@
 #include "datetimeedit.h"
 #include "dummywidget.h"
 #include "fontedit.h"
-#include "linestyleedit.h"
+//TODO #include "linestyleedit.h"
 #include "pixmapedit.h"
 #include "pointedit.h"
 #include "rectedit.h"
@@ -204,8 +204,8 @@ FactoryManager::createWidgetForProperty(Property *property)
     case FileURL:
     case DirectoryURL:
         return new URLEdit(property);
-    case LineStyle:
-        return new LineStyleEdit(property);
+//TODO    case LineStyle:
+//        return new LineStyleEdit(property);
 
         // Composed types
     case Size:
