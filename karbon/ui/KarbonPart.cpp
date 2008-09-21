@@ -251,11 +251,13 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    QString masterPageName = "Standard"; // use default layout as fallback
-    KoXmlElement *master = odfStore.styles().masterPages()[ masterPageName ];
-    if ( !master ) //last test...
-        master = odfStore.styles().masterPages()[ "Default" ];
-    Q_ASSERT( master );
+    KoXmlElement * master = 0;
+    if( odfStore.styles().masterPages().contains( "Standard" ) )
+        master = odfStore.styles().masterPages().value( "Standard" );
+    else if( odfStore.styles().masterPages().contains( "Default" ) )
+        master = odfStore.styles().masterPages().value( "Default" );
+    else if( ! odfStore.styles().masterPages().empty() )
+        master = odfStore.styles().masterPages().begin().value();
 
     if( master )
     {
@@ -265,7 +267,10 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
         setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
     }
     else
+    {
+        kWarning() << "No master page found!";
         return false;
+    }
 
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext shapeContext( context, this );
