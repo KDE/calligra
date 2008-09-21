@@ -40,7 +40,7 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
-    KoShape * createShape( KoShapeControllerBase * shapeController );
+    KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
 
 private:
     KPrPlaceholderStrategy * m_strategy;

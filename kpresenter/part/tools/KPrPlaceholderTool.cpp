@@ -80,7 +80,7 @@ void KPrPlaceholderTool::activate( bool temporary )
     KPrPlaceholderShape * shape = selectedShapes.at( 0 );
 
     // TODO get the KoShapeControllerBase to add it here
-    KoShape * newShape = shape->createShape( 0 );
+    KoShape * newShape = shape->createShape( m_canvas->shapeController()->dataCenterMap() );
     Q_ASSERT( newShape );
 
     // copy settings from placeholder shape

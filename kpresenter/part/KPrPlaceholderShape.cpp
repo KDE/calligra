@@ -77,12 +77,12 @@ void KPrPlaceholderShape::saveOdf( KoShapeSavingContext & context ) const
     writer.endElement(); // draw:frame
 }
 
-KoShape * KPrPlaceholderShape::createShape( KoShapeControllerBase * shapeController )
+KoShape * KPrPlaceholderShape::createShape( const QMap<QString, KoDataCenter *> & dataCenterMap )
 {
     Q_ASSERT( m_strategy );
     KoShape * shape = 0;
     if ( m_strategy ) {
-        shape = m_strategy->createShape( shapeController );
+        shape = m_strategy->createShape( dataCenterMap );
     }
     return shape;
 }

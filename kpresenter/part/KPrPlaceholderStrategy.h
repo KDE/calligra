@@ -20,8 +20,11 @@
 #ifndef KPRPLACEHOLDERSTRATEGY_H
 #define KPRPLACEHOLDERSTRATEGY_H
 
+#include <QMap>
+
 class QString;
 class KoShape;
+class KoDataCenter;
 class KoShapeControllerBase;
 class KoShapeSavingContext;
 
@@ -37,7 +40,7 @@ public:
 
     virtual ~KPrPlaceholderStrategy();
 
-    virtual KoShape * createShape( KoShapeControllerBase * shapeController );
+    virtual KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
     void saveOdf( KoShapeSavingContext & context );
 
 protected:

@@ -81,13 +81,13 @@ KPrPlaceholderStrategy::~KPrPlaceholderStrategy()
 {
 }
 
-KoShape * KPrPlaceholderStrategy::createShape( KoShapeControllerBase * shapeController )
+KoShape * KPrPlaceholderStrategy::createShape( const QMap<QString, KoDataCenter *> & dataCenterMap )
 {
     KoShape * shape = 0;
     KoShapeFactory * factory = KoShapeRegistry::instance()->value( m_shapeId );
     Q_ASSERT( factory );
     if ( factory ) {
-        shape = factory->createDefaultShapeAndInit( shapeController );
+        shape = factory->createDefaultShapeAndInit( dataCenterMap );
     }
     return shape;
 }
