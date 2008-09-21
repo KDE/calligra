@@ -73,8 +73,8 @@
 #include <QtGui/QPrintPreviewDialog>
 #endif
 
-#define ALPHA 10
-//#define BETA
+//#define ALPHA 10
+#define BETA 1
 //#define RC
 
 class KoPartManager : public KParts::PartManager
