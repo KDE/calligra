@@ -273,7 +273,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     }
 
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext shapeContext( context, this );
+    KoShapeLoadingContext shapeContext( context, dataCenterMap() );
 
     d->document.loadOasis( page, shapeContext );
 

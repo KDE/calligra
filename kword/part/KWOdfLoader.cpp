@@ -132,7 +132,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     // TODO check versions and mimetypes etc.
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext sc(odfContext, d->document);
+    KoShapeLoadingContext sc(odfContext, d->document->dataCenterMap());
 
     // Load all styles before the corresponding paragraphs try to use them!
     //KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
@@ -332,7 +332,7 @@ void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, K
     // use auto-styles from styles.xml, not those from content.xml
     context.setUseStylesAutoStyles(true);
 
-    KoShapeLoadingContext ctxt(context, document);
+    KoShapeLoadingContext ctxt(context, document->dataCenterMap());
     KoTextLoader loader(ctxt);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);
