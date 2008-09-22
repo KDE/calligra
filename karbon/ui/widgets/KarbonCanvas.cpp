@@ -96,6 +96,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
 
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
+    setBackgroundColor( Qt::white );
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus); // allow to receive keyboard input
     updateSizeAndOffset();
@@ -385,6 +386,13 @@ void KarbonCanvas::updateInputMethodInfo() {
 KoGuidesData * KarbonCanvas::guidesData()
 {
     return &d->part->guidesData();
+}
+
+void KarbonCanvas::setBackgroundColor( const QColor &color )
+{
+    QPalette pal = palette();
+    pal.setColor( QPalette::Normal, backgroundRole(), color );
+    setPalette( pal );
 }
 
 #include "KarbonCanvas.moc"

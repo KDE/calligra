@@ -103,6 +103,9 @@ public:
      */
     QRectF documentViewRect();
 
+    /// Sets the canvas background color to the given color
+    void setBackgroundColor( const QColor &color );
+    
 public slots:
 
     /**
