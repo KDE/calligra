@@ -17,6 +17,12 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2008-09-23
+KoProperty2
+- 'revert to defaults' works
+- line edit now uses KLineEdit and has clear button enabled
+- added tooltip for 'revert to defaults' button
+
 2008-09-11..21
 KoProperty2
 --EditorDataModel: use buddy() so we can show editor widget even when 1st column's cell was clicked
