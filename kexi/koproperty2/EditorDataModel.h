@@ -43,6 +43,9 @@ public:
     EditorDataModel(Set &propertySet, QObject *parent = 0);
     ~EditorDataModel();
 
+    enum Role {
+        PropertyModifiedRole = Qt::UserRole + 0
+    };
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation,
                         int role = Qt::DisplayRole) const;

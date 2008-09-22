@@ -22,10 +22,8 @@
 #include "Property.h"
 #include "Set.h"
 
+#include <QtCore/QPointer>
 #include <QtGui/QStyledItemDelegate>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QItemEditorFactory>
 #include <QtGui/QStandardItemEditorCreator>
 #include <QtGui/QPainter>
 #include <QtGui/QVBoxLayout>
@@ -38,37 +36,30 @@
 
 using namespace KoProperty;
 
+static bool computeAutoSync(Property *property, bool defaultAutoSync)
+{
+    return (property->autoSync() != 0 && property->autoSync() != 1) ?
+                defaultAutoSync : (property->autoSync() != 0);
+}
+
 static const char RECTEDIT_MASK[] = "%1,%2 %3x%4";
 
-class RectEdit : public QLabel
-{
-    Q_OBJECT
-    Q_PROPERTY(QRect value READ value WRITE setValue USER true)
-public:
-    RectEdit(QWidget *parent = 0);
-    ~RectEdit();
-    QRect value() const;
-    void setValue(const QRect& value);
-private:
-    QRect m_rect;
-};
-
-RectEdit::RectEdit(QWidget *parent)
+RectEdit2::RectEdit2(QWidget *parent)
  : QLabel(parent)
 {
     setTextInteractionFlags(Qt::TextSelectableByMouse);
 }
 
-RectEdit::~RectEdit()
+RectEdit2::~RectEdit2()
 {
 }
 
-QRect RectEdit::value() const
+QRect RectEdit2::value() const
 {
     return m_rect;
 }
 
-void RectEdit::setValue(const QRect& value)
+void RectEdit2::setValue(const QRect& value)
 {
     m_rect = value;
     setText(QString::fromLatin1(RECTEDIT_MASK)
@@ -83,9 +74,10 @@ void RectEdit::setValue(const QRect& value)
         .arg(value.height()));
 }
 
+/* old
 class StringEdit : public QWidget
 {
-    Q_OBJECT
+    rmQ_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
 public:
     StringEdit(QWidget *parent = 0);
@@ -122,29 +114,76 @@ void StringEdit::setValue(const QString& value)
     m_editor->setText(value);
     m_editor->deselect();
     m_editor->end(false);
+}*/
+
+StringEdit2::StringEdit2(QWidget *parent)
+ : KLineEdit(parent)
+ , m_slotTextChangedEnabled(true)
+{
+    setFrame(false);
+    setContentsMargins(0,0,0,0);
+    setClearButtonShown(true);
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
+}
+
+StringEdit2::~StringEdit2()
+{
+}
+
+QString StringEdit2::value() const
+{
+    return text();
+}
+
+void StringEdit2::setValue(const QString& value)
+{
+    m_slotTextChangedEnabled = false;
+    setText(value);
+    m_slotTextChangedEnabled = true;
+/*    deselect();
+    end(false);*/
+}
+
+void StringEdit2::slotTextChanged( const QString & text )
+{
+    Q_UNUSED(text)
+    if (!m_slotTextChangedEnabled)
+        return;
+    emit commitData(this);
 }
 
 //----------
 
-class ItemEditorFactory : public QItemEditorFactory
+/*
+template<class T>
+ItemEditorCreator : public QStandardItemEditorCreator<T>
 {
 public:
-    ItemEditorFactory();
-    virtual ~ItemEditorFactory();
-};
+    ItemEditorCreator(
+};*/
 
 ItemEditorFactory::ItemEditorFactory()
+ : QObject()
+ , QItemEditorFactory()
 {
-     QItemEditorCreatorBase *creator = new QStandardItemEditorCreator<RectEdit>();
+     QItemEditorCreatorBase *creator = new QStandardItemEditorCreator<RectEdit2>();
      registerEditor(QVariant::Rect, creator);
-     creator = new QStandardItemEditorCreator<StringEdit>();
+     creator = new QStandardItemEditorCreator<StringEdit2>();
      registerEditor(QVariant::String, creator);
-     creator = new QStandardItemEditorCreator<StringEdit>();
+     creator = new QStandardItemEditorCreator<StringEdit2>();
      registerEditor(QVariant::Color, creator);
 }
 
 ItemEditorFactory::~ItemEditorFactory()
 {
+}
+
+QWidget* ItemEditorFactory::createEditor( QVariant::Type type, QWidget * parent ) const
+{
+    QWidget *w = QItemEditorFactory::createEditor(type, parent);
+//    QObject::connect(w, SIGNAL(commitData(QWidget*)),
+//        this, SIGNAL(commitData(QWidget*)));
+    return w;
 }
 
 //----------
@@ -164,6 +203,7 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
     virtual bool editorEvent( QEvent * event, QAbstractItemModel * model,
         const QStyleOptionViewItem & option, const QModelIndex & index );
+    mutable QPointer<QWidget> m_currentEditor;
 };
 
 ItemDelegate::ItemDelegate(QObject *parent)
@@ -195,8 +235,8 @@ void ItemDelegate::paint(QPainter *painter,
         r.setWidth(r.width() - 1);
         r.setLeft(0);
 
-        Property *property = editorModel->propertyForItem(index);
-        if (property && property->isModified()) {
+        QVariant modifiedVariant( editorModel->data(index, EditorDataModel::PropertyModifiedRole) );
+        if (modifiedVariant.isValid() && modifiedVariant.toBool()) {
             modified = true;
             QFont font(alteredOption.font);
             font.setBold(true);
@@ -261,8 +301,16 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
 {
     QStyleOptionViewItem alteredOption(option);
     QWidget *w = QStyledItemDelegate::createEditor(parent, alteredOption, index);
-//    QVBoxLayout
     w->setStyleSheet(/*"background-color: green;*/"border-top: 1px solid #c0c0c0;");
+    QObject::disconnect(w, SIGNAL(commitData(QWidget*)),
+        this, SIGNAL(commitData(QWidget*)));
+    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *property = editorModel->propertyForItem(index);
+    if (computeAutoSync( property, static_cast<EditorView*>(this->parent())->isAutoSync() )) {
+        QObject::connect(w, SIGNAL(commitData(QWidget*)),
+            this, SIGNAL(commitData(QWidget*)));
+    }
+    m_currentEditor = w;
     return w;
 }
 
@@ -299,6 +347,7 @@ public:
     }
     Set *set;
     EditorDataModel *model;
+    ItemDelegate *itemDelegate;
     bool autoSync : 1;
 };
 
@@ -314,7 +363,7 @@ EditorView::EditorView(QWidget* parent)
     setAnimated(false);
     setAllColumnsShowFocus(true);
     setEditTriggers(QAbstractItemView::AllEditTriggers);
-    setItemDelegate(new ItemDelegate(this));
+    setItemDelegate(d->itemDelegate = new ItemDelegate(this));
 }
 
 EditorView::~EditorView()
@@ -443,7 +492,15 @@ void EditorView::currentChanged( const QModelIndex & current, const QModelIndex 
 
 bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
 {
-    return QTreeView::edit( index, trigger, event );
+    bool result = QTreeView::edit( index, trigger, event );
+    if (result) {
+      QLineEdit *lineEditEditor = dynamic_cast<QLineEdit*>( (QObject*)d->itemDelegate->m_currentEditor );
+      if (lineEditEditor) {
+        lineEditEditor->deselect();
+        lineEditEditor->end(false);
+      }
+    }
+    return result;
 }
 
 void EditorView::drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const
@@ -455,12 +512,12 @@ void EditorView::mousePressEvent ( QMouseEvent * event )
 {
     QTreeView::mousePressEvent( event );
     QModelIndex index = indexAt( event->pos() );
+    setCurrentIndex(index);
     if (index.column() == 0) {
         kDebug() << event->pos();
         kDebug() << columnWidth(0);
-        const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
-        Property *property = editorModel->propertyForItem(index);
-        if (property && property->isModified()) {
+        QVariant modifiedVariant( d->model->data(index, EditorDataModel::PropertyModifiedRole) );
+        if (modifiedVariant.isValid() && modifiedVariant.toBool()) {
           const int iconSize = getIconSize( rowHeight( index ) );
           int x2 = columnWidth(0);
           int x1 = x2 - iconSize - 2;
@@ -479,14 +536,10 @@ void EditorView::undo()
         return;
 
     Property *property = d->model->propertyForItem(currentIndex());
-
-    int propertySync = property->autoSync();
-    bool sync = (propertySync != 0 && propertySync != 1) ?
-                d->autoSync : (propertySync != 0);
-
-    if (sync)
+    if (computeAutoSync( property, d->autoSync ))
         property->resetValue();
-    update( currentIndex() );
+//    update( currentIndex() );
+//??    QTreeView::edit(currentIndex());
  /*   if (d->currentWidget && d->currentItem) {//(check because current widget could be removed by resetValue())
         d->currentWidget->setValue(d->currentItem->property()->value());
         repaintItem(d->currentItem);
@@ -498,8 +551,9 @@ void EditorView::acceptInput()
 //! @todo
 }
 
-void EditorView::propertySetChanged(KoProperty::Set *set)
+void EditorView::commitData( QWidget * editor )
 {
+    QAbstractItemView::commitData( editor );
 }
 
 #if 0

@@ -36,12 +36,55 @@ class QSize;*/
 
 #include "koproperty_export.h"
 
+#include <QtGui/QItemEditorFactory>
 #include <QtGui/QTreeView>
+#include <QtGui/QLabel>
+
+#include <KLineEdit>
 
 namespace KoProperty
 {
 
 class Set;
+
+class RectEdit2 : public QLabel
+{
+    Q_OBJECT
+    Q_PROPERTY(QRect value READ value WRITE setValue USER true)
+public:
+    RectEdit2(QWidget *parent = 0);
+    ~RectEdit2();
+    QRect value() const;
+    void setValue(const QRect& value);
+private:
+    QRect m_rect;
+};
+
+class StringEdit2 : public KLineEdit
+{
+    Q_OBJECT
+    Q_PROPERTY(QString value READ value WRITE setValue USER true)
+public:
+    StringEdit2(QWidget *parent = 0);
+    ~StringEdit2();
+    QString value() const;
+    void setValue(const QString& value);
+signals:
+    void commitData( QWidget * editor );
+private slots:
+    void slotTextChanged( const QString & text );
+private:
+    bool m_slotTextChangedEnabled : 1;
+};
+
+class ItemEditorFactory : public QObject, public QItemEditorFactory
+{
+    Q_OBJECT
+public:
+    ItemEditorFactory();
+    virtual ~ItemEditorFactory();
+    virtual QWidget * createEditor ( QVariant::Type type, QWidget * parent ) const;
+};
 
 //! @brief A widget for editing properties
 //! @todo review this .............
@@ -70,13 +113,13 @@ class Set;
  */
 class KOPROPERTY_EXPORT EditorView : public QTreeView
 {
+    Q_OBJECT
 public:
     /*! Creates an empty property editor with @a parent as parent widget. */
     EditorView(QWidget *parent = 0);
 
     ~EditorView();
 
-public slots:
     //! Options for changeSet().
     enum SetOption {
         PreservePreviousSelection = 1 //!< If used, previously selected editor item
@@ -84,6 +127,7 @@ public slots:
     };
     Q_DECLARE_FLAGS(SetOptions, SetOption)
 
+public slots:
     /*! Populates the editor view with items for each property from the @ set set.
      Child items for composed properties are also created.
      See SetOption documentation for description of @a options options.
@@ -119,6 +163,7 @@ signals:
 
 protected slots:
     virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
+    virtual void commitData( QWidget * editor );
 
 private:
     /*! Used by changeSet(). */

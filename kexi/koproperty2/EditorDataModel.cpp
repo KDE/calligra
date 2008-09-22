@@ -75,18 +75,25 @@ QVariant EditorDataModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
-        return QVariant();
-
-    Property *prop = propertyForItem(index);
     const int col = index.column();
     if (col == 0) {
-        if (!prop->caption().isEmpty())
-            return prop->caption();
-        return prop->name();
+        Property *prop = propertyForItem(index);
+        if (role == Qt::DisplayRole) {
+            if (!prop->caption().isEmpty())
+                return prop->caption();
+            return prop->name();
+        }
+        else if (role == PropertyModifiedRole) {
+            return prop->isModified();
+        }
     }
-
-    return prop->value();
+    else if (col == 1) {
+        Property *prop = propertyForItem(index);
+        if (role == Qt::EditRole || role == Qt::DisplayRole ) {
+            return prop->value();
+        }
+    }
+    return QVariant();
 }
 
 Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
