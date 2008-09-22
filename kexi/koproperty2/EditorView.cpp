@@ -28,6 +28,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMouseEvent>
+#include <QtGui/QToolTip>
 
 #include <KLocale>
 #include <KIconLoader>
@@ -508,23 +509,39 @@ void EditorView::drawBranches( QPainter * painter, const QRect & rect, const QMo
     QTreeView::drawBranches( painter, rect, index );
 }
 
+QRect EditorView::revertButtonArea( const QModelIndex& index ) const
+{
+    if (index.column() != 0)
+        return QRect();
+    QVariant modifiedVariant( d->model->data(index, EditorDataModel::PropertyModifiedRole) );
+    if (!modifiedVariant.isValid() || !modifiedVariant.toBool())
+        return QRect();
+    const int iconSize = getIconSize( rowHeight( index ) );
+    int x2 = columnWidth(0);
+    int x1 = x2 - iconSize - 2;
+    QRect r(visualRect(index));
+    kDebug() << r;
+    r.setLeft(x1);
+    r.setRight(x2);
+    kDebug() << r;
+    return r;
+}
+
+bool EditorView::withinRevertButtonArea( int x, const QModelIndex& index ) const
+{
+    QRect r(revertButtonArea( index ));
+    if (!r.isValid())
+        return false;
+    return r.left() < x && x < r.right();
+}
+
 void EditorView::mousePressEvent ( QMouseEvent * event )
 {
     QTreeView::mousePressEvent( event );
     QModelIndex index = indexAt( event->pos() );
     setCurrentIndex(index);
-    if (index.column() == 0) {
-        kDebug() << event->pos();
-        kDebug() << columnWidth(0);
-        QVariant modifiedVariant( d->model->data(index, EditorDataModel::PropertyModifiedRole) );
-        if (modifiedVariant.isValid() && modifiedVariant.toBool()) {
-          const int iconSize = getIconSize( rowHeight( index ) );
-          int x2 = columnWidth(0);
-          int x1 = x2 - iconSize - 2;
-          if (x1 < event->x() && event->x() < x2) {
-              undo();
-          }
-       }
+    if (withinRevertButtonArea( event->x(), index )) {
+        undo();
     }
 }
 
@@ -554,6 +571,25 @@ void EditorView::acceptInput()
 void EditorView::commitData( QWidget * editor )
 {
     QAbstractItemView::commitData( editor );
+}
+
+bool EditorView::viewportEvent( QEvent * event )
+{
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *hevent = static_cast<QHelpEvent*>(event);
+        const QModelIndex index = indexAt(hevent->pos());
+        if (index.column() == 0) {
+            if (withinRevertButtonArea( hevent->x(), index )) {
+                QRect r(revertButtonArea( index ));
+                QToolTip::showText(hevent->globalPos(), i18n("Undo changes"), this, r);
+            }
+            else {
+                QToolTip::hideText();
+            }
+        }
+        return true;
+    }
+    return QTreeView::viewportEvent(event);
 }
 
 #if 0

@@ -161,6 +161,9 @@ signals:
     /*! Emitted when current property set has been changed. May be 0. */
     void propertySetChanged(KoProperty::Set *set);
 
+protected:
+    virtual bool viewportEvent( QEvent * event );
+
 protected slots:
     virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
     virtual void commitData( QWidget * editor );
@@ -171,6 +174,13 @@ private:
     virtual bool edit( const QModelIndex & index, EditTrigger trigger, QEvent * event );
     virtual void drawBranches( QPainter * painter, const QRect & rect, const QModelIndex & index ) const;
     virtual void mousePressEvent( QMouseEvent * event );
+
+    //! @return true if @a x is within the area of the revert button for @a index index.
+    bool withinRevertButtonArea( int x, const QModelIndex& index ) const;
+
+    //! @return area of revert button, if it is displayed for @a index index.
+    //! Otherwise invalid QRect is returned.
+    QRect revertButtonArea( const QModelIndex& index ) const;
 
     /*! Undoes the last change in the property editor.*/
     void undo();
