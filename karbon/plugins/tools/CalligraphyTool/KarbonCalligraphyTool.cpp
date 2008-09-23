@@ -213,7 +213,7 @@ void KarbonCalligraphyTool::setAngle( KoPointerEvent *event )
     {
         if ( event->xTilt() == 0 && event->yTilt() == 0 )
             return; // leave as is
-        kDebug() << "using tilt" << m_angle;
+        kDebug(38000) << "using tilt" << m_angle;
 
         if ( event->x() == 0 )
         {
@@ -227,7 +227,7 @@ void KarbonCalligraphyTool::setAngle( KoPointerEvent *event )
     else
     {
         m_angle = event->rotation() + M_PI/2;
-        kDebug() << "using rotation" << m_angle;
+        kDebug(38000) << "using rotation" << m_angle;
     }
 }
 
