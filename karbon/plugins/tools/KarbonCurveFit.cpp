@@ -122,12 +122,12 @@ static qreal *ChordLengthParameterize(const QList<QPointF> &points,int first,int
     u = new qreal[(last-first+1)];
 
     u[0] = 0.0;
-    for (i = first+1; i <= last; i++) {
+    for (i = first+1; i <= last; ++i) {
 		u[i-first] = u[i-first-1] +
 	  			distance(points.at(i), points.at(i-1));
     }
 
-    for (i = first + 1; i <= last; i++) {
+    for (i = first + 1; i <= last; ++i) {
 		u[i-first] = u[i-first] / u[last-first];
     }
 
@@ -225,7 +225,7 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, qreal
     QVector< QVector<FitVector> > A(nPts, QVector<FitVector>(2));
  
     /* Compute the A's	*/
-    for (i = 0; i < nPts; i++) {
+    for (i = 0; i < nPts; ++i) {
 		FitVector v1, v2;
 		v1 = tHat1;
 		v2 = tHat2;
@@ -243,7 +243,7 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, qreal
     X[0]    = 0.0;
     X[1]    = 0.0;
 
-    for (i = 0; i < nPts; i++) {
+    for (i = 0; i < nPts; ++i) {
         C[0][0] += (A[i][0]).dot(A[i][0]);
 		C[0][1] += A[i][0].dot(A[i][1]);
 		/* C[1][0] += V2Dot(&A[i][0], &A[i][1]);*/	
@@ -328,13 +328,13 @@ static QPointF BezierII(int degree,QPointF *V, qreal t)
 
     Vtemp = new QPointF[degree+1];
     
-    for (i = 0; i <= degree; i++) {
+    for (i = 0; i <= degree; ++i) {
 		Vtemp[i] = V[i];
     }
 
     /* Triangle computation	*/
-    for (i = 1; i <= degree; i++) {	
-		for (j = 0; j <= degree-i; j++) {
+    for (i = 1; i <= degree; ++i) {	
+		for (j = 0; j <= degree-i; ++j) {
 	    	Vtemp[j].setX((1.0 - t) * Vtemp[j].x() + t * Vtemp[j+1].x());
 	    	Vtemp[j].setY((1.0 - t) * Vtemp[j].y() + t * Vtemp[j+1].y());
 		}
@@ -360,7 +360,7 @@ static qreal ComputeMaxError(const QList<QPointF> &points,int first,int last,QPo
 
     *splitPoint = (last - first + 1)/2;
     maxDist = 0.0;
-    for (i = first + 1; i < last; i++) {
+    for (i = first + 1; i < last; ++i) {
 		P = BezierII(3, curve, u[i-first]);
 		v = VectorSub(P, points.at(i));
 		dist = v.length();
@@ -389,13 +389,13 @@ static qreal NewtonRaphsonRootFind(QPointF *Q,QPointF P,qreal u)
     Q_u = BezierII(3,Q, u);
     
     /* Generate control vertices for Q'	*/
-    for (i = 0; i <= 2; i++) {
+    for (i = 0; i <= 2; ++i) {
 		Q1[i].setX((Q[i+1].x() - Q[i].x()) * 3.0);
 		Q1[i].setY((Q[i+1].y() - Q[i].y()) * 3.0);
     }
     
     /* Generate control vertices for Q'' */
-    for (i = 0; i <= 1; i++) {
+    for (i = 0; i <= 1; ++i) {
 		Q2[i].setX((Q1[i+1].x() - Q1[i].x()) * 2.0);
 		Q2[i].setY((Q1[i+1].y() - Q1[i].y()) * 2.0);
     }
@@ -427,7 +427,7 @@ static qreal *Reparameterize(const QList<QPointF> &points,int first,int last,qre
     qreal	*uPrime;		/*  New parameter values	*/
 
     uPrime = new qreal[nPts];
-    for (i = first; i <= last; i++) {
+    for (i = first; i <= last; ++i) {
 		uPrime[i-first] = NewtonRaphsonRootFind(curve, points.at(i), u[i-first]);
     }
     return (uPrime);
@@ -486,7 +486,7 @@ QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat
 	/*  If error not too large, try some reparameterization  */
 	/*  and iteration */
 	if (maxError < iterationError) {
-		for (i = 0; i < maxIterations; i++) {
+		for (i = 0; i < maxIterations; ++i) {
 			uPrime = Reparameterize(points, first, last, u, curve);
 			delete[] curve;
 			curve = GenerateBezier(points, first, last, uPrime, tHat1, tHat2);
@@ -516,10 +516,10 @@ QPointF *FitCubic(const QList<QPointF> &points,int first,int last,FitVector tHat
 	cu2 = FitCubic(points, splitPoint, last, tHatCenter, tHat2, error,w2);
 
 	QPointF *newcurve = new QPointF[w1+w2];
-	for(int i=0;i<w1;i++){
+	for(int i=0;i<w1;++i){
 		newcurve[i]=cu1[i];
 	}
-	for(int i=0;i<w2;i++){
+	for(int i=0;i<w2;++i){
 		newcurve[i+w1]=cu2[i];
 	}
 	
