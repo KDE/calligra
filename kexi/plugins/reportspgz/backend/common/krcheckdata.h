@@ -29,6 +29,7 @@ class KRCheckData : public KRObjectData
         ORDataData data() {
         return ORDataData("Data Source", _controlSource->value().toString());
         }
+        QString controlSource()const;
 
     protected:
     QRectF _rect();

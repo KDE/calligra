@@ -832,9 +832,11 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             QString str = QString::null;
 
-            QString cs = cd->_controlSource->value().toString();
+            QString cs = cd->controlSource();
+            kDebug() << "EntityCheck CS:" << cs;
+
             if (cs.left(1) == "=") {
-                    str = cs.mid(1);
+                str = _handler->evaluate(cd->entityName()).toString();
             } else {
                 QString qry = "Data Source";
                 QString clm = cd->_controlSource->value().toString();

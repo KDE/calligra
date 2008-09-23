@@ -199,7 +199,7 @@ void KRFieldData::setTextFlags(Qt::Alignment f)
 {
 }
 
-QString KRFieldData::column() const
+QString KRFieldData::controlSource() const
 {
     return _controlSource->value().toString();
 }
@@ -210,11 +210,6 @@ void KRFieldData::setColumn(const QString& t)
         _controlSource->setValue(t);
     }
 }
-
-//bool    KRFieldData::trackTotal()       { return _trackTotal->value().toBool(); }
-//bool    KRFieldData::trackBuiltinFormat() { return _trackBuiltinFormat->value().toBool(); }
-//bool    KRFieldData::useSubTotal() { return _useSubTotal->value().toBool(); }
-//QString KRFieldData::trackTotalFormat() { return _trackTotalFormat->value().toString(); }
 
 void KRFieldData::setTrackTotal(bool yes)
 {

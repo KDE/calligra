@@ -170,7 +170,7 @@ void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
 // dquery.appendChild ( doc.createTextNode ( query() ) );
 // data.appendChild ( dquery );
     QDomElement dcolumn = doc.createElement("controlsource");
-    dcolumn.appendChild(doc.createTextNode(column()));
+    dcolumn.appendChild(doc.createTextNode(controlSource()));
     data.appendChild(dcolumn);
     entity.appendChild(data);
 

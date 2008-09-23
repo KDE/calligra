@@ -59,11 +59,7 @@ public:
     void setTrackTotalFormat(const QString &, bool = FALSE);
     void setUseSubTotal(bool);
 
-    QString column() const;
-    //bool trackTotal();
-    //bool trackBuiltinFormat();
-    //bool useSubTotal();
-    //QString trackTotalFormat();
+    QString controlSource() const;
 
     ORLineStyleData lineStyle();
     ORTextStyleData textStyle();

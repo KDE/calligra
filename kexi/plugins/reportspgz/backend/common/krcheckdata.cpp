@@ -87,6 +87,10 @@ ORLineStyleData KRCheckData::lineStyle()
     return ls;
 }
 
+QString KRCheckData::controlSource() const
+{
+    return _controlSource->value().toString();
+}
 // RTTI
 int KRCheckData::type() const
 {

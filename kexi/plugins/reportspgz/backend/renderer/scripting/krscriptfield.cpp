@@ -33,7 +33,7 @@ Field::~Field()
 
 QString Field::source()
 {
-    return _field->column();
+    return _field->controlSource();
 }
 
 void Field::setSource(const QString& s)

@@ -29,6 +29,7 @@
 #include "krscriptdebug.h"
 #include <krobjectdata.h>
 #include <krfielddata.h>
+#include <krcheckdata.h>
 #include <kmessagebox.h>
 #include "krscriptconstants.h"
 #include <krreportdata.h>
@@ -143,17 +144,27 @@ QString KRScriptHandler::fieldFunctions()
 
     QList<KRObjectData *>obs = _data->objects();
     foreach(KRObjectData* o, obs) {
+        //The field or check contains an expression
+        //TODO this is a horrible hack, need to get a similar feature into kross
         if (o->type() == KRObjectData::EntityField) {
             KRFieldData* fld = o->toField();
-            if (fld->column()[0] == '=') {
-                //The field contains an expression
-                func = QString("function %1_onrender_(){return %2;}").arg(fld->entityName().toLower()).arg(fld->column().mid(1));
+            if (fld->controlSource()[0] == '=') {
+                func = QString("function %1_onrender_(){return %2;}").arg(fld->entityName().toLower()).arg(fld->controlSource().mid(1));
+
+                funcs += func + "\n";
+            }
+        }
+        if (o->type() == KRObjectData::EntityCheck) {
+        KRCheckData* chk = o->toCheck();
+            if (chk->controlSource()[0] == '=') {
+                func = QString("function %1_onrender_(){return %2;}").arg(chk->entityName().toLower()).arg(chk->controlSource().mid(1));
 
                 funcs += func + "\n";
             }
 
         }
     }
+
 
     return funcs;
 }
