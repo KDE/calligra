@@ -187,7 +187,7 @@ KoSubpath KarbonSimplifyPath::subdivideAux( KoPathPoint *p1,
     ++recursiveDepth;
     if (recursiveDepth >= MAX_RECURSIVE_DEPTH)
     {
-        kDebug() << "reached MAX_RECURSIVE_DEPTH";
+        kDebug(38000) << "reached MAX_RECURSIVE_DEPTH";
         --recursiveDepth;
         return QList<KoPathPoint *>();
     }

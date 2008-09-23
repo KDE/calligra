@@ -173,7 +173,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 {
     qDeleteAll( profiles );
-    kDebug() << "dtor!!!!";
+    kDebug(38000) << "dtor!!!!";
 }
 
 /*void KarbonCalligraphyOptionWidget::customProfile()
@@ -199,7 +199,7 @@ void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
 {
     if ( changingProfile )
         return;
-    kDebug() << "trying profile" << name;
+    kDebug(38000) << "trying profile" << name;
     // write the new profile in the config file
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
     KConfigGroup generalGroup( &config, "General" );
@@ -481,17 +481,17 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
     KConfigGroup generalGroup( &config, "General" );
     QString currentProfile = generalGroup.readEntry( "profile", QString() );
-    kDebug() << currentProfile;
+    kDebug(38000) << currentProfile;
     // find the index needed by the comboBox
     int index = profilePosition( currentProfile );
 
     if ( currentProfile.isEmpty() || index < 0 )
     {
-        kDebug() << "invalid karboncalligraphyrc!!" << currentProfile << index;
+        kDebug(38000) << "invalid karboncalligraphyrc!!" << currentProfile << index;
         return;
     }
 
-    kDebug() << comboBox->currentIndex() << index;
+    kDebug(38000) << comboBox->currentIndex() << index;
     comboBox->setCurrentIndex( index );
 
     Profile *profile = profiles[currentProfile];
@@ -512,7 +512,7 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 
 void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
 {
-    kDebug() << name;
+    kDebug(38000) << name;
     Profile *profile = new Profile;
     profile->name = name;
     profile->usePath = usePath->isChecked();
@@ -538,20 +538,20 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
         profile->index = profiles.count();
         profiles.insert( name, profile );
         // add the profile to the combobox
-        kDebug() << "BEFORE:";
+        kDebug(38000) << "BEFORE:";
         QString dbg;
         for ( int i = 0; i < comboBox->count(); ++i )
             dbg += comboBox->itemText(i) + ' ';
-        kDebug() << dbg;
+        kDebug(38000) << dbg;
         int pos = profilePosition(name);
         changingProfile = true;
         comboBox->insertItem( pos, name );
         changingProfile = false;
-         kDebug() << "AFTER:";
+         kDebug(38000) << "AFTER:";
         for ( int i = 0; i < comboBox->count(); ++i )
             dbg += comboBox->itemText(i) + ' ';
-        kDebug() << dbg;
-        kDebug() << "new at" << pos << comboBox->itemText(pos) << name;
+        kDebug(38000) << dbg;
+        kDebug(38000) << "new at" << pos << comboBox->itemText(pos) << name;
     }
 
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
@@ -574,21 +574,21 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
     generalGroup.writeEntry( "profile", name );
 
     config.sync();
-    kDebug() << name;
+    kDebug(38000) << name;
 
     int pos = profilePosition(name);
-    kDebug() << "adding in" << pos << comboBox->itemText(pos);
+    kDebug(38000) << "adding in" << pos << comboBox->itemText(pos);
     comboBox->setCurrentIndex( profilePosition(name) );
-    kDebug() << comboBox->currentText();
+    kDebug(38000) << comboBox->currentText();
 }
 
 void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 {
-    kDebug() << "removing profile" << name;
+    kDebug(38000) << "removing profile" << name;
     QString dbg;
     foreach (const QString &n, profiles.keys())
             dbg += n + ' ';
-    kDebug() << dbg;
+    kDebug(38000) << dbg;
     int index = profilePosition(name);
     if ( index < 0 ) return; // no such profile
 
@@ -596,7 +596,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     KConfig config( KGlobal::mainComponent(), RCFILENAME );
     int deletedIndex = profiles[name]->index;
     QString deletedGroup = "Profile" + QString::number( deletedIndex );
-    kDebug() << deletedGroup;
+    kDebug(38000) << deletedGroup;
     config.deleteGroup( deletedGroup );
     config.sync();
 
