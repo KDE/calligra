@@ -992,22 +992,22 @@ void KarbonView::initActions()
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    KAction *actionBringToFront  = new KAction(KIcon("bring_forward"), i18n("Bring to &Front"), this);
+    KAction *actionBringToFront  = new KAction(KIcon("object-arrange-front"), i18n("Bring to &Front"), this);
     actionCollection()->addAction("object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction *actionRaise  = new KAction(KIcon("raise"), i18n("&Raise"), this);
+    KAction *actionRaise  = new KAction(KIcon("object-arrange-raise"), i18n("&Raise"), this);
     actionCollection()->addAction("object_move_up", actionRaise );
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction *actionLower  = new KAction(KIcon("lower"), i18nc("Lower selected shapes", "&Lower"), this);
+    KAction *actionLower  = new KAction(KIcon("object-arrange-lower"), i18nc("Lower selected shapes", "&Lower"), this);
     actionCollection()->addAction("object_move_down", actionLower );
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction *actionSendToBack  = new KAction(KIcon("send_backward"), i18n("Send to &Back"), this);
+    KAction *actionSendToBack  = new KAction(KIcon("object-arrange-back"), i18n("Send to &Back"), this);
     actionCollection()->addAction("object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
