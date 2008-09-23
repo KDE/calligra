@@ -178,7 +178,7 @@ QVariant KarbonLayerModel::data( const QModelIndex &index, int role ) const
                 else
                     name = i18n("Shape");
             }
-            return name + QString(" (%1)").arg( shape->zIndex() );
+            return name;// + QString(" (%1)").arg( shape->zIndex() );
         }
         case Qt::DecorationRole: return QVariant();//return shape->icon();
         case Qt::EditRole: return shape->name();

@@ -196,8 +196,8 @@ bool KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
         m_pageLayout.height = d->getAttribute( doc, "height", qreal(841.891) );
     }
 
-    kDebug() <<" width=" << m_pageLayout.width;
-    kDebug() <<" height=" << m_pageLayout.height;
+    kDebug(38000) <<" width=" << m_pageLayout.width;
+    kDebug(38000) <<" height=" << m_pageLayout.height;
         KoXmlElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if( !borders.isNull() )
     {
