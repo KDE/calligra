@@ -45,7 +45,7 @@
       <item>
        <widget class="QRadioButton" name="ui_multiplePages" >
         <property name="text" >
-         <string>Devide chart on multiple pages</string>
+         <string>Divide chart on multiple pages</string>
         </property>
        </widget>
       </item>
