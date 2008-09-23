@@ -485,7 +485,7 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     // find the index needed by the comboBox
     int index = profilePosition( currentProfile );
 
-    if ( currentProfile == "" || index < 0 )
+    if ( currentProfile.isEmpty() || index < 0 )
     {
         kDebug() << "invalid karboncalligraphyrc!!" << currentProfile << index;
         return;
@@ -541,7 +541,7 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
         kDebug() << "BEFORE:";
         QString dbg;
         for ( int i = 0; i < comboBox->count(); ++i )
-            dbg += comboBox->itemText(i) + " ";
+            dbg += comboBox->itemText(i) + ' ';
         kDebug() << dbg;
         int pos = profilePosition(name);
         changingProfile = true;
@@ -549,7 +549,7 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
         changingProfile = false;
          kDebug() << "AFTER:";
         for ( int i = 0; i < comboBox->count(); ++i )
-            dbg += comboBox->itemText(i) + " ";
+            dbg += comboBox->itemText(i) + ' ';
         kDebug() << dbg;
         kDebug() << "new at" << pos << comboBox->itemText(pos) << name;
     }
@@ -587,7 +587,7 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
     kDebug() << "removing profile" << name;
     QString dbg;
     foreach (const QString &n, profiles.keys())
-            dbg += n + " ";
+            dbg += n + ' ';
     kDebug() << dbg;
     int index = profilePosition(name);
     if ( index < 0 ) return; // no such profile
