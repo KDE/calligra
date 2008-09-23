@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Oracle
+Name[x-test]=xxOraclexx
 Comment=Kexi database driver for accessing Oracle servers
 Comment[de]=Kexi-Datenbanktreiber für Zugriff auf Oracle-Server
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές Oracle
@@ -14,6 +15,7 @@ Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Oracl
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores Oracle
 Comment[sv]=Databasdrivrutin i Kexi för att komma åt Oracle-servrar
 Comment[uk]=Драйвер бази даних Kexi для доступу до серверів Oracle
+Comment[x-test]=xxKexi database driver for accessing Oracle serversxx
 Comment[zh_TW]=存取 Oracle 伺服器的 Kexi 資料庫驅動程式
 X-KDE-Library=kexidb_oracledriver
 X-KDE-ServiceTypes=Kexi/DBDriver

@@ -16,6 +16,7 @@ Comment[pt_BR]=Plugin para o KSpread
 Comment[sv]=Insticksprogram för Kspread
 Comment[tr]=KSpread için Eklenti
 Comment[uk]=Втулок для KSpread
+Comment[x-test]=xxPlugin for KSpreadxx
 Comment[zh_TW]=KSpread 外掛程式
 [PropertyDef::X-KSpread-Version]
 Type=int

@@ -13,6 +13,7 @@ Name[pt]=Ferramenta de Animação
 Name[pt_BR]=Ferramenta de Animação
 Name[sv]=Animeringsverktyg
 Name[uk]=Засіб для анімації
+Name[x-test]=xxAnimation Toolxx
 Name[zh_TW]=動畫工具
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service
