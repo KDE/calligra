@@ -77,6 +77,7 @@ public:
     void setDescription(const QString& desc);
 
     bool isElement() const { return m_accountList.isEmpty(); }
+    bool isDefaultAccount() const;
     
     Accounts *list() const { return m_list; }
     void setList(Accounts *list) { m_list = list; }
@@ -159,6 +160,9 @@ public:
     void removeShutdown(const Node &node);
     void addShutdown(Node &node);
     void deleteCostPlace(CostPlace *cp);
+    
+    EffortCostMap plannedCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
+
 private:
     QString m_name;
     QString m_description;
@@ -220,6 +224,8 @@ public:
         { if (account == m_defaultAccount) m_defaultAccount = 0; }
 
     void accountChanged( Account *account );
+    QList<Account*> allAccounts() const { return m_idDict.values(); }
+    QList<Node*> allNodes() const;
     
 signals:
     void accountAdded( const Account * );

@@ -2039,11 +2039,6 @@ void View::updateView( QWidget * )
 
     QWidget *widget2;
 
-    widget2 = m_viewlist->findView( "AccountsView" );
-    if ( widget2 && m_updateAccountsview )
-        static_cast<ViewBase*>( widget2 ) ->draw();
-    m_updateAccountsview = false;
-
     widget2 = m_viewlist->findView( "ResourceAssignmentView" );
     if ( widget2 && m_updateResourceAssignmentView )
         static_cast<ViewBase*>( widget2 ) ->draw( getProject() );

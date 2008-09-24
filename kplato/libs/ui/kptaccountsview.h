@@ -49,23 +49,34 @@ class Account;
 class Project;
 class Resource;
 class ScheduleManager;
+class CostBreakdownItemModel;
+
+class KPLATOUI_EXPORT AccountsTreeView : public DoubleTreeViewBase
+{
+    Q_OBJECT
+public:
+    explicit AccountsTreeView( QWidget *parent = 0 );
+    
+protected slots:
+    void slotModelReset();
+
+};
 
 class KPLATOUI_EXPORT AccountsView : public ViewBase
 {
     Q_OBJECT
 public:
-
     AccountsView( Project *project, KoDocument *part, QWidget *parent );
 
     //~AccountsView();
 
     virtual void setZoom( double zoom );
     virtual void setProject( Project *project );
-    using ViewBase::draw;
-    virtual void draw();
 
     virtual bool loadContext( const KoXmlElement &context );
     virtual void saveContext( QDomElement &context ) const;
+
+    CostBreakdownItemModel *model() const;
 
 signals:
     void configChanged();
@@ -74,52 +85,18 @@ public slots:
     void slotConfigure();
     void setScheduleManager( ScheduleManager *sm );
     
-protected slots:
-    void slotUpdate();
-    
-protected:
-//    void getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const;
-//    void setContextClosedItems( const Context::Accountsview &context );
 
 private:
-    class KPLATOUI_EXPORT AccountItem : public DoubleListViewBase::MasterListItem
-    {
-    public:
-        AccountItem( Account *a, QTreeWidget *parent, bool highlight = false );
-        AccountItem( Account *a, QTreeWidgetItem *parent, bool highlight = false );
-        AccountItem( const QString& text, Account *a, QTreeWidgetItem *parent, bool _highlight = false );
-
-        void add
-            ( int col, const QDate &date, const EffortCost &ec );
-
-        Account *account;
-        EffortCostMap costMap;
-    };
-    
     void init();
-    void initAccList( const AccountList &list );
-    void initAccSubItems( Account *acc, AccountItem *parent );
-    void initAccList( const AccountList &list, AccountItem *parent );
-    void createPeriods();
-    void clearPeriods();
-    QString periodText( int offset );
-
+    
 private:
     Project *m_project;
     ScheduleManager *m_manager;
-
-    int m_defaultFontSize;
-
+    AccountsTreeView *m_view;
+    
     QDate m_date;
     int m_period;
     bool m_cumulative;
-
-    DoubleListViewBase *m_dlv;
-
-    QStringList m_periodTexts;
-    QPushButton *m_changeBtn;
-    QLabel *m_label;
-
 };
 
 }  //KPlato namespace

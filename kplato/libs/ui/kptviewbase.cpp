@@ -1309,6 +1309,11 @@ QList<int> DoubleTreeViewBase::expandColumnList( const QList<int> lst ) const
     return mlst;
 }
 
+void DoubleTreeViewBase::hideColumns( TreeViewBase *view, const QList<int> &list )
+{
+    view->setColumnsHidden( list );
+}
+
 void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> slaveList )
 {
     m_leftview->setColumnsHidden( masterList );

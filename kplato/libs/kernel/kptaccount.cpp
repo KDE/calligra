@@ -69,6 +69,11 @@ Account::~Account() {
         delete m_costPlaces.takeFirst();
 }
     
+bool Account::isDefaultAccount() const
+{
+    return m_list == 0 ? false : m_list->defaultAccount() == this;
+}
+
 void Account::changed() {
     if ( m_list ) {
         m_list->accountChanged( this );
@@ -290,6 +295,60 @@ void Account::deleteCostPlace(CostPlace *cp) {
     delete cp;
 }
 
+EffortCostMap Account::plannedCost(const QDate &start, const QDate &end, long id) const {
+    EffortCostMap ec;
+    if ( ! isElement() ) {
+        foreach ( Account *a, m_accountList ) {
+            ec += a->plannedCost( start, end, id );
+        }
+        return ec;
+    }
+    foreach (Account::CostPlace *cp, m_costPlaces) {
+        Node *n = cp->node();
+        if (n == 0) {
+            continue;
+        }
+        //kDebug()<<"n="<<n->name();
+        if (cp->running()) {
+            ec += n->plannedEffortCostPrDay(start, end, id);
+        }
+        if (cp->startup()) {
+            if (n->startTime( id ).date() >= start &&
+                n->startTime( id ).date() <= end)
+                ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+        }
+        if (cp->shutdown()) {
+            if (n->endTime( id ).date() >= start &&
+                n->endTime( id ).date() <= end)
+                ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+        }
+    }
+    if (isDefaultAccount()) {
+        QList<Node*> list = m_list == 0 ? QList<Node*>() : m_list->allNodes();
+        foreach (Node *n, list) {
+            if ( n->numChildren() > 0 ) {
+                continue;
+            }
+            if (n->runningAccount() == 0) {
+                kDebug()<<"default, running:"<<n->name();
+                ec += n->plannedEffortCostPrDay(start, end, id);
+            }
+            if (n->startupAccount() == 0) {
+                kDebug()<<"default, startup:"<<n->name();
+                if (n->startTime( id ).date() >= start &&
+                    n->startTime( id ).date() <= end)
+                    ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            }
+            if (n->shutdownAccount() == 0) {
+                kDebug()<<"default, shutdown:"<<n->name();
+                if (n->endTime( id ).date() >= start &&
+                    n->endTime( id ).date() <= end)
+                    ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+            }
+        }
+    }
+    return ec;
+}
 
 //------------------------------------
 Account::CostPlace::CostPlace(Account *acc, Node *node, bool running, bool strtup, bool shutdown)
@@ -382,52 +441,7 @@ Accounts::~Accounts() {
 }
 
 EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end, long id) {
-    EffortCostMap ec;
-    foreach (Account::CostPlace *cp, account.costPlaces()) {
-        Node *n = cp->node();
-        if (n == 0) {
-            continue;
-        }
-        //kDebug()<<"n="<<n->name();
-        if (cp->running()) {
-            ec += n->plannedEffortCostPrDay(start, end, id);
-        }
-        if (cp->startup()) {
-            if (n->startTime( id ).date() >= start &&
-                n->startTime( id ).date() <= end)
-                ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
-        }
-        if (cp->shutdown()) {
-            if (n->endTime( id ).date() >= start &&
-                n->endTime( id ).date() <= end)
-                ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
-        }
-    }
-    if (&account == m_defaultAccount) {
-        QHash<QString, Node*> hash = m_project.nodeDict();
-        foreach (Node *n, hash) {
-            if ( n->numChildren() > 0 ) {
-                continue;
-            }
-            if (n->runningAccount() == 0) {
-                kDebug()<<"default, running:"<<n->name();
-                ec += n->plannedEffortCostPrDay(start, end, id);
-            }
-            if (n->startupAccount() == 0) {
-                kDebug()<<"default, startup:"<<n->name();
-                if (n->startTime( id ).date() >= start &&
-                    n->startTime( id ).date() <= end)
-                    ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
-            }
-            if (n->shutdownAccount() == 0) {
-                kDebug()<<"default, shutdown:"<<n->name();
-                if (n->endTime( id ).date() >= start &&
-                    n->endTime( id ).date() <= end)
-                    ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
-            }
-        }
-    }
-    return ec;
+    return account.plannedCost( start, end, id );
 }
 
 EffortCostMap Accounts::actualCost(const Account &account, const QDate &start, const QDate &end, long id) {
@@ -638,6 +652,11 @@ QString Accounts::uniqueId( const QString &seed ) const
 void Accounts::accountChanged( Account *account ) 
 {
     emit changed( account );
+}
+
+QList<Node*> Accounts::allNodes() const
+{
+    return m_project.allNodes();
 }
 
 #ifndef NDEBUG

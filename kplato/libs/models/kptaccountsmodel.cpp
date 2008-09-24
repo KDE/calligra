@@ -27,6 +27,7 @@
 #include "kpttask.h"
 #include "kptaccount.h"
 #include "kptdatetime.h"
+#include "kptschedule.h"
 
 #include <QList>
 #include <QObject>
@@ -430,6 +431,309 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
     }
     if ( cmd )
         emit executeCommand( cmd );
+}
+
+//----------------------------------------
+CostBreakdownItemModel::CostBreakdownItemModel( QObject *parent )
+    : ItemModelBase( parent ),
+    m_project( 0 ),
+    m_manager( 0 )
+{
+}
+
+CostBreakdownItemModel::~CostBreakdownItemModel()
+{
+}
+
+void CostBreakdownItemModel::slotAccountToBeInserted( const Account *parent, int row )
+{
+    //kDebug()<<parent->name();
+    beginInsertRows( index( parent ), row, row );
+}
+
+void CostBreakdownItemModel::slotAccountInserted( const Account *account )
+{
+    //kDebug()<<account->name();
+    endInsertRows();
+}
+
+void CostBreakdownItemModel::slotAccountToBeRemoved( const Account *account )
+{
+    //kDebug()<<account->name();
+    int row = index( account ).row();
+    beginRemoveRows( index( account->parent() ), row, row );
+}
+
+void CostBreakdownItemModel::slotAccountRemoved( const Account *account )
+{
+    //kDebug()<<account->name();
+    endRemoveRows();
+}
+
+void CostBreakdownItemModel::setProject( Project *project )
+{
+    if ( m_project ) {
+        Accounts *acc = &( m_project->accounts() );
+        disconnect( acc , SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        
+        disconnect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
+        disconnect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        
+        disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
+        disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+    }
+    m_project = project;
+    if ( project ) {
+        Accounts *acc = &( project->accounts() );
+        kDebug()<<acc;
+        connect( acc, SIGNAL( changed( Account* ) ), this, SLOT( slotAccountChanged( Account* ) ) );
+        
+        connect( acc, SIGNAL( accountAdded( const Account* ) ), this, SLOT( slotAccountInserted( const Account* ) ) );
+        connect( acc, SIGNAL( accountToBeAdded( const Account*, int ) ), this, SLOT( slotAccountToBeInserted( const Account*, int ) ) );
+        
+        connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
+        connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+    }
+}
+
+void CostBreakdownItemModel::setScheduleManager( ScheduleManager *sm )
+{
+    if ( m_manager != sm ) {
+        m_manager = sm;
+        fetchData();
+    }
+}
+
+long CostBreakdownItemModel::id() const
+{
+    return m_manager == 0 ? -1 : m_manager->id();
+}
+
+void CostBreakdownItemModel::fetchData()
+{
+    kDebug();
+    m_plannedCostMap.clear();
+    if ( m_project == 0 || m_manager == 0 ) {
+        return;
+    }
+    const Accounts &accounts = m_project->accounts();
+    foreach ( Account *a, accounts.allAccounts() ) {
+        if ( a->isElement() ) {
+            kDebug()<<"Add element:"<<a->name();
+            m_plannedCostMap.insert( a, a->plannedCost( m_start, m_end, id() ) );
+        }
+    }
+    bool finished = false;
+    while ( ! finished ) {
+        finished = true;
+        foreach ( Account *a, m_plannedCostMap.keys() ) {
+            if ( a->parent() && ! m_plannedCostMap.contains( a->parent() ) ) {
+                kDebug()<<"Add parent:"<<a->name()<<a->accountList();
+                EffortCostMap ec;
+                foreach ( Account *ac, a->accountList() ) {
+                    ec += m_plannedCostMap.value( ac );
+                }
+                m_plannedCostMap.insert( a->parent(), ec );
+                finished = false;
+            }
+        }
+    }
+}
+
+QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
+{
+    if ( !index.isValid() || m_project == 0 || m_manager == 0 ) {
+        return QModelIndex();
+    }
+    //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
+    Account *a = account( index );
+    if ( a == 0 ) {
+        return QModelIndex();
+    }
+    Account *par = a->parent();
+    if ( par ) {
+        a = par->parent();
+        int row = -1;
+        if ( a ) {
+            row = a->accountList().indexOf( par );
+        } else {
+            row = m_project->accounts().accountList().indexOf( par );
+        }
+        //kDebug()<<par->name()<<":"<<row;
+        return createIndex( row, 0, par );
+    }
+    return QModelIndex();
+}
+
+QModelIndex CostBreakdownItemModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+        return QModelIndex();
+    }
+    Account *par = account( parent );
+    if ( par == 0 ) {
+        if ( row < m_project->accounts().accountList().count() ) {
+            return createIndex( row, column, m_project->accounts().accountList().at( row ) );
+        }
+    } else if ( row < par->accountList().count() ) {
+        return createIndex( row, column, par->accountList().at( row ) );
+    }
+    return QModelIndex();
+}
+
+QModelIndex CostBreakdownItemModel::index( const Account *account ) const
+{
+    Account *a = const_cast<Account*>(account);
+    if ( m_project == 0 || m_manager == 0 || account == 0 ) {
+        return QModelIndex();
+    }
+    int row = -1;
+    Account *par = a->parent();
+    if ( par == 0 ) {
+        row = m_project->accounts().accountList().indexOf( a );
+    } else {
+        row = par->accountList().indexOf( a );
+    }
+    if ( row == -1 ) {
+        return QModelIndex();
+    }
+    return createIndex( row, 0, a );
+
+}
+
+int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
+{
+    int c = 3;
+    switch ( m_period ) {
+        case Period_Day: {
+            c += m_start.daysTo( m_end ) + 1;
+            break;
+        }
+        case Period_Week: {
+            break;
+        }
+        case Period_Month: {
+            break;
+        }
+    }
+    return c;
+}
+
+int CostBreakdownItemModel::rowCount( const QModelIndex &parent ) const
+{
+    if ( m_project == 0 || m_manager == 0 ) {
+        return 0;
+    }
+    Account *par = account( parent );
+    if ( par == 0 ) {
+        return m_project->accounts().accountList().count();
+    }
+    return par->accountList().count();
+}
+
+QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) const
+{
+    QVariant result;
+    Account *a = account( index );
+    if ( a == 0 ) {
+        return QVariant();
+    }
+    if ( role == Qt::DisplayRole ) {
+        switch ( index.column() ) {
+            case 0: return a->name();
+            case 1: return a->description();
+            case 2: return m_plannedCostMap.value( a ).costTo( m_end );
+            default: {
+                EffortCostMap ec = m_plannedCostMap.value( a );
+                switch ( m_period ) {
+                    case Period_Day: {
+                        double cost = ec.costOnDate( m_start.addDays( index.column() - 3 ) );
+                        //kDebug()<<m_start<<m_start.addDays( index.column() - 3 )<<cost;
+                        return cost;
+                    }
+                    case Period_Week: 
+                    case Period_Month:
+                    default:
+                        return 0.0;
+                        break;
+                }
+            }
+        }
+    }
+    if ( role == Qt::TextAlignmentRole ) {
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
+    return QVariant();
+}
+
+void CostBreakdownItemModel::setPeriodType( int period )
+{
+    if ( m_period != period ) {
+        m_period = period;
+        reset();
+    }
+}
+
+void CostBreakdownItemModel::setPeriod( const QDate &start, const QDate &end )
+{
+    m_start = start;
+    m_end = end;
+    fetchData();
+    reset();
+}
+
+QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( orientation == Qt::Horizontal ) {
+        if ( role == Qt::DisplayRole ) {
+            if ( section == 0 ) {
+                return i18n( "Name" );
+            }
+            if ( section == 1 ) {
+                return i18n( "Description" );
+            }
+            if ( section == 2 ) {
+                return i18n( "Total" );
+            }
+            switch ( m_period ) {
+                case Period_Day: {
+                    return m_start.addDays( section - 3 ).toString( Qt::ISODate );
+                }
+                case Period_Week: 
+                case Period_Month:
+                default:
+                    return section;
+                    break;
+            }
+            return QVariant();
+        }
+        if ( role == Qt::TextAlignmentRole ) {
+            switch ( section ) {
+                case 0: return QVariant();
+                case 1: return QVariant();
+                default: return Qt::AlignRight;
+            }
+            return QVariant();
+        }
+    }
+    return ItemModelBase::headerData(section, orientation, role);
+}
+
+Account *CostBreakdownItemModel::account( const QModelIndex &index ) const
+{
+    return static_cast<Account*>( index.internalPointer() );
+}
+
+void CostBreakdownItemModel::slotAccountChanged( Account *account )
+{
+    Account *par = account->parent();
+    if ( par ) {
+        int row = par->accountList().indexOf( account );
+        emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
+    } else {
+        int row = m_project->accounts().accountList().indexOf( account );
+        emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
+    }
 }
 
 

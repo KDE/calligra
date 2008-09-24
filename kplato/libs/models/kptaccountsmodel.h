@@ -23,13 +23,14 @@
 #include "kplatomodels_export.h"
 
 #include <kptitemmodelbase.h>
-
+#include "kpteffortcostmap.h"
 
 namespace KPlato
 {
 
 class Project;
 class Account;
+class ScheduleManager;
 
 
 class KPLATOMODELS_EXPORT AccountModel : public QObject
@@ -97,6 +98,56 @@ protected:
 private:
     AccountModel m_model;
     Account *m_account; // test for sane operation
+};
+
+//---------------
+class KPLATOMODELS_EXPORT CostBreakdownItemModel : public ItemModelBase
+{
+    Q_OBJECT
+public:
+    enum PeriodType { Period_Day, Period_Week, Period_Month };
+    
+    explicit CostBreakdownItemModel( QObject *parent = 0 );
+    ~CostBreakdownItemModel();
+
+    virtual void setProject( Project *project );
+    virtual void setScheduleManager( ScheduleManager *sm );
+    long id() const;
+    
+    virtual QModelIndex parent( const QModelIndex & index ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    QModelIndex index( const Account* account ) const;
+
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    Account *account( const QModelIndex &index ) const;
+
+    void fetchData();
+    void setPeriodType( int period );
+    void setPeriod( const QDate &start, const QDate &end );
+    
+protected slots:
+    void slotAccountChanged( Account* );
+    void slotAccountToBeInserted( const Account *parent, int row );
+    void slotAccountInserted( const Account *account );
+    void slotAccountToBeRemoved( const Account *account );
+    void slotAccountRemoved( const Account *account );
+
+private:
+    Project *m_project;
+    ScheduleManager *m_manager;
+    
+    int m_period;
+    QDate m_start;
+    QDate m_end;
+    QMap<Account*, EffortCostMap> m_plannedCostMap;
+    QMap<Account*, EffortCostMap> m_actualCostMap;
+
 };
 
 
