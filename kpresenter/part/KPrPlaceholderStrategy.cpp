@@ -37,11 +37,11 @@ static const struct {
     const char * m_xmlElement;
     const char * m_text;
 } placeholderData[] = {
-    { "title", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add a title" ) },
-    { "outline", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add an outline" ) },
-    { "subtitle", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add a text" ) },
-    { "text", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add a text" ) },
-    { "notes", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add notes" ) },
+    { "title", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a title" ) },
+    { "outline", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add an outline" ) },
+    { "subtitle", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a text" ) },
+    { "text", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add a text" ) },
+    { "notes", "TextShapeID", "<draw:text-box/>", I18N_NOOP( "Double click to add notes" ) },
     { "graphic", "PictureShape", "<draw:image xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>", 
                                        I18N_NOOP( "Double click to add a picture" ) },
     { "chart", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
@@ -55,7 +55,7 @@ void fillPlaceholderMap()
 {
     QPair<const char *, const char *> data;
     data.first = "TextShapeID";
-    data.second = "<draw:textbox/>";
+    data.second = "<draw:text-box/>";
     s_placeholderMap.insert( "title", data );
     s_placeholderMap.insert( "outline", data );
     s_placeholderMap.insert( "subtitle", data );
