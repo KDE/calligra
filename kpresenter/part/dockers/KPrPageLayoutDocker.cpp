@@ -44,6 +44,9 @@ KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags
     QWidget* base = new QWidget( this );
     m_layoutsView = new QListWidget( base );
     m_layoutsView->setIconSize( QSize( 80, 60 ) );
+    m_layoutsView->setViewMode( QListView::IconMode );
+    m_layoutsView->setFlow( QListView::LeftToRight );
+    m_layoutsView->setMovement( QListView::Static );
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( m_layoutsView );
@@ -66,7 +69,7 @@ void KPrPageLayoutDocker::setView( KPrView* view )
     // TODO add empty layout
 
     foreach( KPrPageLayout * layout, layoutMap ) {
-        QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "TODO", m_layoutsView );
+        QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "", m_layoutsView );
         item->setData( Qt::UserRole, QVariant::fromValue( layout ) );
         m_layout2item.insert( layout, item );
     }
