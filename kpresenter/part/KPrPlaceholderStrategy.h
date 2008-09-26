@@ -23,6 +23,8 @@
 #include <QMap>
 
 class QString;
+class QRectF;
+class QPainter;
 class KoShape;
 class KoDataCenter;
 class KoShapeControllerBase;
@@ -41,6 +43,9 @@ public:
     virtual ~KPrPlaceholderStrategy();
 
     virtual KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
+
+    void paint( QPainter & painter, const QRectF & rect );
+
     void saveOdf( KoShapeSavingContext & context );
 
 protected:
@@ -49,6 +54,11 @@ protected:
      * @param xmlElement The xml element used in saveOdf to write out the content of the frame
      */
     KPrPlaceholderStrategy( const char * shapeId, const char * xmlElement );
+
+    /**
+     * Get the text that is displayed
+     */
+    virtual QString text() const;
 
     const char * m_shapeId;
     const char * m_xmlElement;

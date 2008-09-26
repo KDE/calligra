@@ -20,6 +20,7 @@
 #include "KPrPlaceholderShape.h"
 
 #include <QPainter>
+#include <QTextOption>
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlWriter.h>
@@ -44,11 +45,17 @@ KPrPlaceholderShape::~KPrPlaceholderShape()
 
 void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    QRectF target = converter.documentToView( QRectF( QPointF( 0,0 ), size() ) );
-    QPen pen( Qt::gray );
-    pen.setStyle( Qt::DashLine );
-    painter.setPen( pen );
-    painter.drawRect( target );
+    applyConversion( painter, converter );
+    QRectF rect( QPointF( 0, 0 ), size() );
+    if ( m_strategy ) {
+        m_strategy->paint( painter, rect );
+    }
+    else {
+        QPen pen( Qt::gray );
+        pen.setStyle( Qt::DashLine );
+        painter.setPen( pen );
+        painter.drawRect( rect );
+    }
 }
 
 bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )

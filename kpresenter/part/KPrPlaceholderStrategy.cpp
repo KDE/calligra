@@ -19,6 +19,11 @@
 
 #include "KPrPlaceholderStrategy.h"
 
+#include <QPainter>
+#include <QPen>
+#include <QTextOption>
+
+#include <klocale.h>
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
@@ -26,11 +31,31 @@
 
 static QMap<QString, QPair<const char *, const char *> > s_placeholderMap;
 
+static const struct {
+    const char * m_presentationClass;
+    const char * m_shapeId;
+    const char * m_xmlElement;
+    const char * m_text;
+} placeholderData[] = {
+    { "title", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add a title" ) },
+    { "outline", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add an outline" ) },
+    { "subtitle", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add a text" ) },
+    { "text", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add a text" ) },
+    { "notes", "TextShapeID", "<draw:textbox/>", I18N_NOOP( "Double click to add notes" ) },
+    { "graphic", "PictureShape", "<draw:image xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>", 
+                                       I18N_NOOP( "Double click to add a picture" ) },
+    { "chart", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
+                                       I18N_NOOP( "Double click to add a chart" ) },
+    { "object", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
+                                       I18N_NOOP( "Double click to add a chart" ) }
+};
+
+
 void fillPlaceholderMap()
 {
     QPair<const char *, const char *> data;
     data.first = "TextShapeID";
-    data.second = "<draw:textbox>";
+    data.second = "<draw:textbox/>";
     s_placeholderMap.insert( "title", data );
     s_placeholderMap.insert( "outline", data );
     s_placeholderMap.insert( "subtitle", data );
@@ -92,8 +117,27 @@ KoShape * KPrPlaceholderStrategy::createShape( const QMap<QString, KoDataCenter 
     return shape;
 }
 
+void KPrPlaceholderStrategy::paint( QPainter & painter, const QRectF & rect )
+{
+    QPen penText( Qt::black );
+    painter.setPen( penText );
+    //painter.setFont()
+    QTextOption options( Qt::AlignCenter );
+    options.setWrapMode( QTextOption::WordWrap );
+    painter.drawText( rect, text(), options );
+    QPen pen( Qt::gray );
+    pen.setStyle( Qt::DashLine );
+    painter.setPen( pen );
+    painter.drawRect( rect );
+}
+
 void KPrPlaceholderStrategy::saveOdf( KoShapeSavingContext & context )
 {
     KoXmlWriter & writer = context.xmlWriter();
     writer.addCompleteElement( m_xmlElement );
+}
+
+QString KPrPlaceholderStrategy::text() const
+{
+    return i18n( "Double click to insert ..." );
 }

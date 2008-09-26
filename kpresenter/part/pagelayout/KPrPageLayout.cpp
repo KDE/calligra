@@ -136,14 +136,16 @@ QPixmap KPrPageLayout::thumbnail() const
     pic.fill();
     QPainter p( &pic );
 
-    QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
-    for ( ; it != m_placeholders.end(); ++it ) {
-
-        QString file = loader->iconPath( ( *it )->presentationObject(), KIconLoader::User );
-        if ( renderer.load( file ) ) {
+    QString file = loader->iconPath( "layout", KIconLoader::User );
+    if ( renderer.load( file ) ) {
+        QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
+        for ( ; it != m_placeholders.end(); ++it ) {
             kDebug(33001) << "-----------------" <<( *it )->presentationObject() << ( *it )->rect( size );
-            renderer.render( &p, ( *it )->rect( size ) );
+            renderer.render( &p, ( *it )->presentationObject(), ( *it )->rect( size ) );
         }
+    }
+    else {
+        kWarning(33001) << "could not load" << file;
     }
 
     return pic;
