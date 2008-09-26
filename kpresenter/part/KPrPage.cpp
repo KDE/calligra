@@ -64,6 +64,7 @@ KPrPage::KPrPage( KoPAMasterPage * masterPage, KPrDocument * document )
 , d( new Private( this, document ) )
 {
     setApplicationData( new KPrPageApplicationData() );
+    placeholders().init( 0, iterator() );
 }
 
 KPrPage::~KPrPage()
