@@ -23,9 +23,9 @@
 #include <klocale.h>
 
 KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
-    : KoShapeFactory( parent, KoFormulaShapeId, i18n( "A formula shape" ) )
+    : KoShapeFactory( parent, KoFormulaShapeId, i18n( "Formula" ) )
 {
-    setToolTip( i18n( "A formula" ) );
+    setToolTip(i18n( "A formula"));
     setIcon( "x-shape-formula" );
 
 /*    KoShapeTemplate t;
