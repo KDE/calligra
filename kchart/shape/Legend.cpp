@@ -508,7 +508,7 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
     
     bodyWriter.startElement( "chart:legend" );
 
-    saveOdfAttributes( (OdfMandatories ^ OdfStyle) | OdfPosition );
+    saveOdfAttributes( context, (OdfMandatories ^ OdfStyle) | OdfPosition );
 
     QString lp = LegendPositionToString( d->position );
     
