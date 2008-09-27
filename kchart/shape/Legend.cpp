@@ -529,8 +529,6 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
     
     const QSizeF s( size() );
     const QPointF p( position() );
-    context.xmlWriter().addAttributePt( "svg:width", s.width() );
-    context.xmlWriter().addAttributePt( "svg:height", s.height() );
     context.xmlWriter().addAttributePt( "svg:x", p.x() );
     context.xmlWriter().addAttributePt( "svg:y", p.y() );
     
