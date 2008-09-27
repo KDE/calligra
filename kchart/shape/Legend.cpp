@@ -508,6 +508,8 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
     
     bodyWriter.startElement( "chart:legend" );
 
+    saveOdfAttributes( (OdfMandatories ^ OdfStyle) | OdfPosition );
+
     QString lp = LegendPositionToString( d->position );
     
     QString lalign;
@@ -526,11 +528,6 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
     Q_ASSERT( style );
     if ( style )
         saveStyle( *style, context );
-    
-    const QSizeF s( size() );
-    const QPointF p( position() );
-    context.xmlWriter().addAttributePt( "svg:x", p.x() );
-    context.xmlWriter().addAttributePt( "svg:y", p.y() );
     
     QString  lexpansion;
     switch ( expansion() )
