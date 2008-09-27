@@ -33,6 +33,7 @@
 #include <KPrDocument.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
+#include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoEventAction.h>
 #include <KoEventActionFactory.h>
@@ -107,8 +108,15 @@ void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
 {
     m_canvas = canvas;
 
-    connect( m_canvas->shapeManager(), SIGNAL( selectionChanged() ),
-             this, SLOT( selectionChanged() ) );
+    if ( m_canvas ) {
+        connect( m_canvas->shapeManager(), SIGNAL( selectionChanged() ),
+                this, SLOT( selectionChanged() ) );
+
+        m_soundCollection = dynamic_cast<KPrSoundCollection *>( m_canvas->shapeController()->dataCenterMap()["SoundCollection"] );
+    }
+    else {
+        m_soundCollection = 0;
+    }
 
     selectionChanged();
 }
