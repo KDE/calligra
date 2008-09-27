@@ -98,10 +98,10 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
     vbox->addWidget(d->label, 1);
 
 
-    QStringList lst = Factory::global().dirs()->findAllResources("sheet-styles", "*.ksts", KStandardDirs::Recursive);
+    const QStringList lst = Factory::global().dirs()->findAllResources("sheet-styles", "*.ksts", KStandardDirs::Recursive);
 
     int index = 0;
-    QStringList::Iterator it = lst.begin();
+    QStringList::ConstIterator it = lst.begin();
     for(; it != lst.end(); ++it)
     {
         KConfig config(*it, KConfig::SimpleConfig);

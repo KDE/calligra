@@ -299,9 +299,9 @@ void SortDialog::init()
   ',' + i18n("Sunday");
 
   KSharedConfigPtr config = Factory::global().config();
-  QStringList other = config->group( "Parameters" ).readEntry("Other list", QStringList());
+  const QStringList other = config->group( "Parameters" ).readEntry("Other list", QStringList());
   QString tmp;
-  for ( QStringList::Iterator it = other.begin(); it != other.end(); ++it )
+  for ( QStringList::ConstIterator it = other.begin(); it != other.end(); ++it )
   {
     if((*it) != "\\")
       tmp += (*it) + ", ";

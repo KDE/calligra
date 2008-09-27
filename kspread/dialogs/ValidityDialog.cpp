@@ -466,9 +466,9 @@ void ValidityDialog::init()
      case Validity::List:
      {
          chooseType->setCurrentIndex(7);
-         QStringList lst =validity.validityList();
+         const QStringList lst =validity.validityList();
          QString tmp;
-         for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it ) {
+         for ( QStringList::ConstIterator it = lst.begin(); it != lst.end(); ++it ) {
              tmp +=( *it ) + '\n';
          }
          validityList->setText( tmp );

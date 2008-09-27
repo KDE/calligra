@@ -191,9 +191,9 @@ void ListDialog::init()
     lst.append(sday);
 
     d->config = Factory::global().config();
-    QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
+    const QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
-    for (QStringList::Iterator it = other.begin(); it != other.end();++it) {
+    for (QStringList::ConstIterator it = other.begin(); it != other.end();++it) {
         if ((*it) != "\\") {
             tmp += (*it) + ", ";
         } else if (it != other.begin()) {
