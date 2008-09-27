@@ -58,7 +58,6 @@ public:
     int findSection(const QString & name);
     void removeSection(int idx, bool del = FALSE);
 
-    void adjustSize();
     virtual QSize sizeHint() const;
 protected:
     QString _query;

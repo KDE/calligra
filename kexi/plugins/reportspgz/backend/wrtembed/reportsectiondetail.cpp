@@ -47,13 +47,6 @@ ReportSectionDetail::~ReportSectionDetail()
     _rd = 0;
 }
 
-void ReportSectionDetail::adjustSize()
-{
-    _detail->adjustSize();
-    QWidget::adjustSize();
-    parentWidget()->adjustSize();
-}
-
 int ReportSectionDetail::pageBreak() const
 {
     return _pagebreak;
@@ -236,7 +229,7 @@ void ReportSectionDetail::removeSection(int idx, bool del)
     groupList.removeAt(idx);
 
     if (_rd) _rd->setModified(TRUE);
-    if (del == TRUE) delete rsd;
+    if (del) delete rsd;
     adjustSize();
 }
 
@@ -246,8 +239,8 @@ QSize ReportSectionDetail::sizeHint() const
     ReportSectionDetailGroup * rsdg = 0;
     for (int gi = 0; gi < (int) groupList.count(); gi++) {
         rsdg = groupList.at(gi);
-        if (rsdg->isGroupHeadShowing()) s += rsdg->getGroupHead()->sizeHint();
-        if (rsdg->isGroupFootShowing()) s += rsdg->getGroupFoot()->sizeHint();
+        if (rsdg->isGroupHeadShowing()) s += rsdg->getGroupHead()->size();
+        if (rsdg->isGroupFootShowing()) s += rsdg->getGroupFoot()->size();
     }
-    return s += _detail->sizeHint();
+    return s += _detail->size();
 }

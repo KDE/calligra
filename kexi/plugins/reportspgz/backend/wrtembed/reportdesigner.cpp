@@ -1158,7 +1158,6 @@ void ReportDesigner::slotItem(KRObjectData::EntityTypes typ)
 void ReportDesigner::changeSet(KoProperty::Set *s)
 {
     _itmset = s;
-    kDebug();
     emit(propertySetChanged());
 }
 

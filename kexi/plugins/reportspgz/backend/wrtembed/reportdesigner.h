@@ -116,7 +116,7 @@ public:
     QGraphicsScene* activeScene();
     void setActiveScene(QGraphicsScene* a);
     KoProperty::Set* propertySet() {
-        kDebug(); return set;
+        return set;
     }
 
     virtual QSize sizeHint() const;

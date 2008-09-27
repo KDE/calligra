@@ -129,11 +129,11 @@ void ReportSection::slotResizeBarDragged(int delta)
     sectionRuler->setRulerLength(h);
 
     scene->setSceneRect(0, 0, scene->width(), h);
-    sceneview->setSceneRect(0, 0, scene->width(), h);
+    //sceneview->setSceneRect(0, 0, scene->width(), h);
     sceneview->resizeContents(QSize(scene->width(), h));
 
     _rd->setModified(true);
-    _rd->adjustSize();
+    //_rd->adjustSize();
 }
 
 void ReportSection::buildXML(QDomDocument & doc, QDomElement & section)
