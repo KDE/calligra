@@ -114,7 +114,13 @@ void KRImageData::setInlineImageData(QByteArray dat, const QString &fn)
 
     if (!fn.isEmpty()) {
         QPixmap pix(fn);
-        _staticImage->setValue(pix);
+        if (!pix.isNull())
+            _staticImage->setValue(pix);
+        else {
+            QPixmap blank(1,1);
+            blank.fill();
+            _staticImage->setValue(blank);
+        }
     } else {
 
         QByteArray binaryStream;
