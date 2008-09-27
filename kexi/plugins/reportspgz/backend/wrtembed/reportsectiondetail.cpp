@@ -219,8 +219,6 @@ int ReportSectionDetail::findSection(const QString & name)
 
 void ReportSectionDetail::removeSection(int idx, bool del)
 {
-    //TODO DOES NOT WORK
-    kDebug();
     ReportSectionDetailGroup * rsd = groupList.at(idx);
 
     vboxlayout->removeWidget(rsd->getGroupHead());
