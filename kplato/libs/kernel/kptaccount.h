@@ -161,6 +161,7 @@ public:
     void addShutdown(Node &node);
     void deleteCostPlace(CostPlace *cp);
     
+    EffortCostMap plannedCost(long id = BASELINESCHEDULE) const;
     EffortCostMap plannedCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
 
 private:

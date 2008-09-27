@@ -32,6 +32,7 @@ namespace KPlato
 {
 
 class AccountsviewConfigPanel;
+class AccountsTreeView;
 
 class AccountsviewConfigurePanelBase : public QWidget, public Ui::AccountsviewConfigurePanelBase
 {
@@ -45,14 +46,13 @@ public:
 class AccountsviewConfigDialog : public KDialog {
     Q_OBJECT
 public:
-    AccountsviewConfigDialog(const QDate &date, int period, const QStringList &periodTexts, bool cumulative, QWidget *parent);
+    AccountsviewConfigDialog( AccountsTreeView *view, QWidget *parent);
 
-    QDate date();
-    int period();
-    QString periodText();
-    bool isCumulative();
-
+public slots:
+    void slotOk();
+    
 private:
+    AccountsTreeView *m_view;
     AccountsviewConfigPanel *m_panel;
 };
 

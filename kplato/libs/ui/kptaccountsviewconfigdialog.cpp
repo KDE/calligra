@@ -19,6 +19,9 @@
 
 #include "kptaccountsviewconfigdialog.h"
 
+#include "kptaccountsview.h"
+#include "kptaccountsmodel.h"
+
 #include <QCheckBox>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
@@ -32,50 +35,76 @@
 namespace KPlato
 {
 
-AccountsviewConfigDialog::AccountsviewConfigDialog(const QDate &date, int period,  const QStringList &periodTexts, bool cumulative, QWidget *p)
-    : KDialog(p)
+AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWidget *p)
+    : KDialog(p),
+    m_view( view )
 {
     setCaption( i18n("Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel(this);
-    m_panel->dateEdit->setDate(date);
-    m_panel->periodBox->addItems(periodTexts);
-    m_panel->periodBox->setCurrentIndex(period);
-    m_panel->cumulative->setChecked(cumulative);
+    switch ( view->startMode() ) {
+        case CostBreakdownItemModel::StartMode_Project: m_panel->ui_projectstartBtn->setChecked( true ); break;
+        case CostBreakdownItemModel::StartMode_Date: m_panel->ui_startdateBtn->setChecked( true ); break;
+    }
+    switch ( view->endMode() ) {
+        case CostBreakdownItemModel::EndMode_Project: m_panel->ui_projectendBtn->setChecked( true ); break;
+        case CostBreakdownItemModel::EndMode_Date: m_panel->ui_enddateBtn->setChecked( true ); break;
+        case CostBreakdownItemModel::EndMode_CurrentDate: m_panel->ui_currentdateBtn->setChecked( true ); break;
+    }
+    m_panel->ui_startdate->setDate( view->startDate() );
+    m_panel->ui_enddate->setDate( view->endDate() );
+    m_panel->ui_periodBox->setCurrentIndex( view->periodType() );
+    m_panel->ui_cumulative->setChecked( view->cumulative() );
     setMainWidget(m_panel);
 
     enableButtonOk(false);
 
     connect(m_panel, SIGNAL(changed(bool)), SLOT( enableButtonOk(bool)));
+    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 
-QDate AccountsviewConfigDialog::date() {
-    return m_panel->dateEdit->date();
-}
+void AccountsviewConfigDialog::slotOk()
+{
+    kDebug();
+    m_view->setPeriodType( m_panel->ui_periodBox->currentIndex() );
+    m_view->setCumulative( m_panel->ui_cumulative->isChecked() );
+    if ( m_panel->ui_startdateBtn->isChecked() ) {
+        m_view->setStartDate( m_panel->ui_startdate->date() );
+        m_view->setStartMode( CostBreakdownItemModel::StartMode_Date );
+    } else {
+        m_view->setStartMode( CostBreakdownItemModel::StartMode_Project );
+    }
 
-int AccountsviewConfigDialog::period() {
-    return m_panel->periodBox->currentIndex();
-}
-
-QString AccountsviewConfigDialog::periodText() {
-    return m_panel->periodBox->currentText();
-}
-
-bool AccountsviewConfigDialog::isCumulative() {
-    return m_panel->cumulative->isChecked();
+    if ( m_panel->ui_enddateBtn->isChecked() ) {
+        m_view->setEndDate( m_panel->ui_enddate->date() );
+        m_view->setEndMode( CostBreakdownItemModel::EndMode_Date );
+    } else if ( m_panel->ui_currentdateBtn->isChecked() ) {
+        m_view->setEndMode( CostBreakdownItemModel::EndMode_CurrentDate );
+    } else {
+        m_view->setEndMode( CostBreakdownItemModel::EndMode_Project );
+    }
 }
 
 
 //----------------------------
 AccountsviewConfigPanel::AccountsviewConfigPanel(QWidget *parent)
-    : AccountsviewConfigurePanelBase(parent) {
+    : AccountsviewConfigurePanelBase(parent)
+{
 
-    connect(dateEdit, SIGNAL(changed(QDate)), SLOT(slotChanged()));
-    connect(periodBox, SIGNAL(activated(int)), SLOT(slotChanged()));
-    connect(cumulative, SIGNAL(clicked()), SLOT(slotChanged()));
+    connect(ui_startdate, SIGNAL(dateChanged(const QDate&)), SLOT(slotChanged()));
+    connect(ui_enddate, SIGNAL(dateChanged(const QDate&)), SLOT(slotChanged()));
+    connect(ui_periodBox, SIGNAL(activated(int)), SLOT(slotChanged()));
+    connect(ui_cumulative, SIGNAL(clicked()), SLOT(slotChanged()));
+
+    connect(ui_projectstartBtn, SIGNAL(clicked()), SLOT(slotChanged()));
+    connect(ui_startdateBtn, SIGNAL(clicked()), SLOT(slotChanged()));
+    connect(ui_projectendBtn, SIGNAL(clicked()), SLOT(slotChanged()));
+    connect(ui_currentdateBtn, SIGNAL(clicked()), SLOT(slotChanged()));
+    connect(ui_enddateBtn, SIGNAL(clicked()), SLOT(slotChanged()));
+    
 }
 
 void AccountsviewConfigPanel::slotChanged() {

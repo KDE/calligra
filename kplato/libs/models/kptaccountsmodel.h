@@ -105,7 +105,9 @@ class KPLATOMODELS_EXPORT CostBreakdownItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    enum PeriodType { Period_Day, Period_Week, Period_Month };
+    enum PeriodType { Period_Day = 0, Period_Week = 1, Period_Month = 2 };
+    enum StartMode { StartMode_Project = 0, StartMode_Date = 1 };
+    enum EndMode { EndMode_Project = 0, EndMode_Date = 1, EndMode_CurrentDate = 2 };
     
     explicit CostBreakdownItemModel( QObject *parent = 0 );
     ~CostBreakdownItemModel();
@@ -128,9 +130,26 @@ public:
     Account *account( const QModelIndex &index ) const;
 
     void fetchData();
-    void setPeriodType( int period );
-    void setPeriod( const QDate &start, const QDate &end );
     
+    bool cumulative() const;
+    void setCumulative( bool on );
+    int periodType() const;
+    void setPeriodType( int period );
+    int startMode() const;
+    void setStartMode( int mode );
+    int endMode() const;
+    void setEndMode( int mode );
+    QDate startDate() const;
+    void setStartDate( const QDate &date );
+    QDate endDate() const;
+    void setEndDate( const QDate &date );
+    
+    void setStartDate();
+    void setEndDate();
+    void updateDates();
+    
+    QString formatMoney( double cost ) const;
+
 protected slots:
     void slotAccountChanged( Account* );
     void slotAccountToBeInserted( const Account *parent, int row );
@@ -142,7 +161,10 @@ private:
     Project *m_project;
     ScheduleManager *m_manager;
     
-    int m_period;
+    bool m_cumulative;
+    int m_periodtype;
+    int m_startmode;
+    int m_endmode;
     QDate m_start;
     QDate m_end;
     QMap<Account*, EffortCostMap> m_plannedCostMap;

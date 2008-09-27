@@ -524,10 +524,12 @@ Duration Appointment::plannedEffortTo(const QDate& date) const {
 
 // Returns a list of efforts pr day for interval start, end inclusive
 // The list only includes days with any planned effort
-EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) const {
+EffortCostMap Appointment::plannedPrDay(const QDate& pstart, const QDate& pend) const {
     //kDebug()<<m_node->id()<<","<<m_resource->id();
     EffortCostMap ec;
     Duration eff;
+    QDate start = pstart.isValid() ? pstart : startTime().date();
+    QDate end = pend.isValid() ? pend : endTime().date();
     QDate dt(start);
     QDate ndt(dt.addDays(1));
     double rate = m_resource->normalRatePrHour();

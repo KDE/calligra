@@ -39,10 +39,12 @@
 #include <QtGui/QPrintDialog>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QMenu>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kaction.h>
 
 #include <kdebug.h>
 
@@ -63,7 +65,9 @@ AccountsTreeView::AccountsTreeView( QWidget *parent )
     v->setResizeMode( 1, QHeaderView::Stretch );
     v->setResizeMode ( 2, QHeaderView::ResizeToContents );
     
-    m_rightview->header()->setResizeMode ( QHeaderView::ResizeToContents );
+    v = m_rightview->header();
+    v->setResizeMode ( QHeaderView::ResizeToContents );
+    v->setStretchLastSection( false );
             
     hideColumns( m_rightview, QList<int>() << 0 << 1 << 2 );
     slotModelReset();
@@ -78,6 +82,71 @@ void AccountsTreeView::slotModelReset()
     kDebug()<<v->sectionSize(2)<<v->sectionSizeHint(2)<<v->defaultSectionSize()<<v->minimumSectionSize();
 }
 
+CostBreakdownItemModel *AccountsTreeView::model() const
+{
+    return static_cast<CostBreakdownItemModel*>( DoubleTreeViewBase::model() );
+}
+
+bool AccountsTreeView::cumulative() const
+{
+    return model()->cumulative();
+}
+
+void AccountsTreeView::setCumulative( bool on )
+{
+    model()->setCumulative( on );
+}
+
+int AccountsTreeView::periodType() const
+{
+    return model()->periodType();
+}
+    
+void AccountsTreeView::setPeriodType( int period )
+{
+    model()->setPeriodType( period );
+}
+
+int AccountsTreeView::startMode() const
+{
+    return model()->startMode();
+}
+
+void AccountsTreeView::setStartMode( int mode )
+{
+    model()->setStartMode( mode );
+}
+
+int AccountsTreeView::endMode() const
+{
+    return model()->endMode();
+}
+
+void AccountsTreeView::setEndMode( int mode )
+{
+    model()->setEndMode( mode );
+}
+
+QDate AccountsTreeView::startDate() const
+{
+    return model()->startDate();
+}
+
+void AccountsTreeView::setStartDate( const QDate &date )
+{
+    model()->setStartDate( date );
+}
+
+QDate AccountsTreeView::endDate() const
+{
+    return model()->endDate();
+}
+
+void AccountsTreeView::setEndDate( const QDate &date )
+{
+    model()->setEndDate( date );
+}
+
 //------------------------
 AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
@@ -85,6 +154,10 @@ AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent 
         m_manager( 0 )
 {
     init();
+
+    setupGui();
+    
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void AccountsView::setZoom( double zoom )
@@ -97,8 +170,34 @@ void AccountsView::init()
     QVBoxLayout *l = new QVBoxLayout( this );
     m_view = new AccountsTreeView( this );
     l->addWidget( m_view );
-    model()->setPeriodType( 0 );
     setProject( m_project );
+}
+
+void AccountsView::setupGui()
+{
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
+void AccountsView::slotOptions()
+{
+    kDebug();
+    AccountsviewConfigDialog dlg( m_view, this );
+    if ( dlg.exec() == QDialog::Accepted ) {
+        model()->setStartDate();
+        model()->setEndDate();
+
+    }
 }
 
 void AccountsView::setProject( Project *project )
@@ -110,9 +209,6 @@ void AccountsView::setProject( Project *project )
 void AccountsView::setScheduleManager( ScheduleManager *sm )
 {
     m_manager = sm;
-    if ( sm ) {
-        model()->setPeriod( m_project->startTime( sm->id() ).date(), m_project->endTime( sm->id() ).date() );
-    }
     model()->setScheduleManager( sm );
 }
 

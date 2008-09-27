@@ -42,6 +42,8 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QPrinter;
 
+class KAction;
+
 namespace KPlato
 {
 
@@ -57,6 +59,21 @@ class KPLATOUI_EXPORT AccountsTreeView : public DoubleTreeViewBase
 public:
     explicit AccountsTreeView( QWidget *parent = 0 );
     
+    CostBreakdownItemModel *model() const;
+    
+    bool cumulative() const;
+    void setCumulative( bool on );
+    int periodType() const;
+    void setPeriodType( int period );
+    int startMode() const;
+    void setStartMode( int mode );
+    int endMode() const;
+    void setEndMode( int mode );
+    QDate startDate() const;
+    void setStartDate( const QDate &date );
+    QDate endDate() const;
+    void setEndDate( const QDate &date );
+
 protected slots:
     void slotModelReset();
 
@@ -69,7 +86,8 @@ public:
     AccountsView( Project *project, KoDocument *part, QWidget *parent );
 
     //~AccountsView();
-
+    void setupGui();
+    
     virtual void setZoom( double zoom );
     virtual void setProject( Project *project );
 
@@ -85,7 +103,10 @@ public slots:
     void slotConfigure();
     void setScheduleManager( ScheduleManager *sm );
     
-
+protected slots:
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotOptions();
+    
 private:
     void init();
     
@@ -97,6 +118,10 @@ private:
     QDate m_date;
     int m_period;
     bool m_cumulative;
+    
+    // View options context menu
+    KAction *actionOptions;
+
 };
 
 }  //KPlato namespace

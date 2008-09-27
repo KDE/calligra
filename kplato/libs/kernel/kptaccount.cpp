@@ -21,6 +21,7 @@
 
 #include <qdom.h>
 #include <QString>
+#include <QDate>
 
 #include <klocale.h>
 
@@ -293,6 +294,11 @@ void Account::deleteCostPlace(CostPlace *cp) {
     if (i != -1)
         m_costPlaces.removeAt(i);
     delete cp;
+}
+
+EffortCostMap Account::plannedCost(long id) const
+{
+    return plannedCost( QDate(), QDate(), id );
 }
 
 EffortCostMap Account::plannedCost(const QDate &start, const QDate &end, long id) const {

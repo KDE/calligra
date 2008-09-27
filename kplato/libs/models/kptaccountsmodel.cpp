@@ -437,7 +437,11 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
 CostBreakdownItemModel::CostBreakdownItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_project( 0 ),
-    m_manager( 0 )
+    m_manager( 0 ),
+    m_cumulative( false ),
+    m_periodtype( Period_Day ),
+    m_startmode( StartMode_Project ),
+    m_endmode( EndMode_Project )
 {
 }
 
@@ -498,10 +502,20 @@ void CostBreakdownItemModel::setProject( Project *project )
 
 void CostBreakdownItemModel::setScheduleManager( ScheduleManager *sm )
 {
+    kDebug()<<m_project<<m_manager<<sm;
     if ( m_manager != sm ) {
         m_manager = sm;
         fetchData();
+        updateDates();
+        reset();
     }
+}
+
+void CostBreakdownItemModel::updateDates()
+{
+    setStartDate();
+    setEndDate();
+    kDebug()<<m_startmode<<m_start<<m_endmode<<m_end;
 }
 
 long CostBreakdownItemModel::id() const
@@ -511,7 +525,7 @@ long CostBreakdownItemModel::id() const
 
 void CostBreakdownItemModel::fetchData()
 {
-    kDebug();
+    //kDebug()<<m_start<<m_end;
     m_plannedCostMap.clear();
     if ( m_project == 0 || m_manager == 0 ) {
         return;
@@ -519,8 +533,7 @@ void CostBreakdownItemModel::fetchData()
     const Accounts &accounts = m_project->accounts();
     foreach ( Account *a, accounts.allAccounts() ) {
         if ( a->isElement() ) {
-            kDebug()<<"Add element:"<<a->name();
-            m_plannedCostMap.insert( a, a->plannedCost( m_start, m_end, id() ) );
+            m_plannedCostMap.insert( a, a->plannedCost( id() ) );
         }
     }
     bool finished = false;
@@ -528,7 +541,6 @@ void CostBreakdownItemModel::fetchData()
         finished = true;
         foreach ( Account *a, m_plannedCostMap.keys() ) {
             if ( a->parent() && ! m_plannedCostMap.contains( a->parent() ) ) {
-                kDebug()<<"Add parent:"<<a->name()<<a->accountList();
                 EffortCostMap ec;
                 foreach ( Account *ac, a->accountList() ) {
                     ec += m_plannedCostMap.value( ac );
@@ -538,6 +550,7 @@ void CostBreakdownItemModel::fetchData()
             }
         }
     }
+    //kDebug()<<m_plannedCostMap.keys();
 }
 
 QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
@@ -604,16 +617,24 @@ QModelIndex CostBreakdownItemModel::index( const Account *account ) const
 int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
 {
     int c = 3;
-    switch ( m_period ) {
-        case Period_Day: {
-            c += m_start.daysTo( m_end ) + 1;
-            break;
-        }
-        case Period_Week: {
-            break;
-        }
-        case Period_Month: {
-            break;
+    if ( m_start.isValid() && m_end.isValid() ) {
+        switch ( m_periodtype ) {
+            case Period_Day: {
+                c += m_start.daysTo( m_end ) + 1;
+                break;
+            }
+            case Period_Week: {
+                int days = KGlobal::locale()->weekStartDay() - m_start.dayOfWeek();
+                if ( days > 0 ) {
+                    days -= 7;
+                }
+                QDate start = m_start.addDays( days );
+                c += (start.daysTo( m_end ) / 7) + 1;
+                break;
+            }
+            case Period_Month: {
+                break;
+            }
         }
     }
     return c;
@@ -631,6 +652,11 @@ int CostBreakdownItemModel::rowCount( const QModelIndex &parent ) const
     return par->accountList().count();
 }
 
+QString CostBreakdownItemModel::formatMoney( double cost ) const
+{
+    return KGlobal::locale()->formatMoney( cost, "", 0 );
+}
+
 QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -642,16 +668,36 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
         switch ( index.column() ) {
             case 0: return a->name();
             case 1: return a->description();
-            case 2: return m_plannedCostMap.value( a ).costTo( m_end );
+            case 2: return formatMoney( m_plannedCostMap.value( a ).totalCost() );
             default: {
+                int col = index.column() - 3;
                 EffortCostMap ec = m_plannedCostMap.value( a );
-                switch ( m_period ) {
+                switch ( m_periodtype ) {
                     case Period_Day: {
-                        double cost = ec.costOnDate( m_start.addDays( index.column() - 3 ) );
-                        //kDebug()<<m_start<<m_start.addDays( index.column() - 3 )<<cost;
+                        double cost = 0.0;
+                        if ( m_cumulative ) {
+                            cost = ec.costTo( m_start.addDays( col ) );
+                        } else {
+                            cost = ec.costOnDate( m_start.addDays( col ) );
+                        }
+                        //kDebug()<<m_start<<m_start.addDays( col )<<cost;
                         return cost;
                     }
-                    case Period_Week: 
+                    case Period_Week: {
+                        double cost = 0.0; 
+                        int days = KGlobal::locale()->weekStartDay() - m_start.dayOfWeek();
+                        if ( days > 0 ) {
+                            days -= 7; ;
+                        }
+                        QDate start = m_start.addDays( days );
+                        int week = col;
+                        if ( m_cumulative ) {
+                            cost = ec.costTo( start.addDays( ++week * 7 ) );
+                        } else {
+                            cost = week == 0 ? ec.cost( m_start, m_start.daysTo( start.addDays( 7 ) ) ) : ec.cost( start.addDays( week * 7 ) );
+                        }
+                        return formatMoney( cost );
+                    }
                     case Period_Month:
                     default:
                         return 0.0;
@@ -666,19 +712,110 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
     return QVariant();
 }
 
+int CostBreakdownItemModel::periodType() const
+{
+    return m_periodtype;
+}
+
 void CostBreakdownItemModel::setPeriodType( int period )
 {
-    if ( m_period != period ) {
-        m_period = period;
+    if ( m_periodtype != period ) {
+        m_periodtype = period;
         reset();
     }
 }
 
-void CostBreakdownItemModel::setPeriod( const QDate &start, const QDate &end )
+int CostBreakdownItemModel::startMode() const
 {
-    m_start = start;
-    m_end = end;
-    fetchData();
+    return m_startmode;
+}
+
+void CostBreakdownItemModel::setStartMode( int mode )
+{
+    if ( m_startmode != mode ) {
+        m_startmode = mode;
+        setStartDate();
+        reset();
+    }
+}
+
+int CostBreakdownItemModel::endMode() const
+{
+    return m_endmode;
+}
+
+void CostBreakdownItemModel::setEndMode( int mode )
+{
+    if ( m_endmode != mode ) {
+        m_endmode = mode;
+        setEndDate();
+        reset();
+    }
+}
+
+void CostBreakdownItemModel::setStartDate()
+{
+    if ( m_startmode == StartMode_Project ) {
+        m_start = m_project->startTime( id() ).date();
+        foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+            if ( ! ec.startDate().isValid() ) {
+                continue;
+            }
+            if ( ! m_start.isValid() || m_start > ec.startDate() ) {
+                m_start = ec.startDate();
+            }
+        }
+    }
+}
+
+void CostBreakdownItemModel::setEndDate()
+{
+    if ( m_endmode == EndMode_Project ) {
+        m_end = m_project->endTime( id() ).date();
+        foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+            if ( ! ec.endDate().isValid() ) {
+                continue;
+            }
+            if ( ! m_end.isValid() || m_end < ec.endDate() ) {
+                m_end = ec.endDate();
+            }
+        }
+    } else if ( m_endmode == EndMode_CurrentDate ) {
+        m_end = QDate::currentDate();
+    }
+}
+
+QDate CostBreakdownItemModel::startDate() const
+{
+    return m_start;
+}
+
+
+void CostBreakdownItemModel::setStartDate( const QDate &date )
+{
+    m_start = date;
+    reset();
+}
+
+QDate CostBreakdownItemModel::endDate() const
+{
+    return m_end;
+}
+
+void CostBreakdownItemModel::setEndDate( const QDate &date )
+{
+    m_end = date;
+    reset();
+}
+
+bool CostBreakdownItemModel::cumulative() const
+{
+    return m_cumulative;
+}
+
+void CostBreakdownItemModel::setCumulative( bool on )
+{
+    m_cumulative = on;
     reset();
 }
 
@@ -695,17 +832,27 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             if ( section == 2 ) {
                 return i18n( "Total" );
             }
-            switch ( m_period ) {
+            switch ( m_periodtype ) {
                 case Period_Day: {
                     return m_start.addDays( section - 3 ).toString( Qt::ISODate );
                 }
-                case Period_Week: 
+                case Period_Week: {
+                    return m_start.addDays( ( section - 3 ) * 7 ).weekNumber();
+                }
                 case Period_Month:
                 default:
                     return section;
                     break;
             }
             return QVariant();
+        }
+        if ( role == Qt::ToolTipRole ) {
+            switch ( section ) {
+                case 0: return ToolTip::accountName();
+                case 1: return ToolTip::accountDescription();
+                case 2: return i18n( "The total cost for the account" );
+                default: return QVariant();
+            }
         }
         if ( role == Qt::TextAlignmentRole ) {
             switch ( section ) {
