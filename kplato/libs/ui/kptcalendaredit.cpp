@@ -130,8 +130,8 @@ void CalendarEdit::slotAddIntervalClicked() {
 //NOTE: enum CalendarDay::State must match combobox state!
 void CalendarEdit::slotApplyClicked() {
     //kDebug()<<"("<<m_calendar<<")";
-    DateMap dates = calendarPanel->selectedDates();
-    for(DateMap::iterator it = dates.begin(); it != dates.end(); ++it) {
+    const DateMap dates = calendarPanel->selectedDates();
+    for(DateMap::const_iterator it = dates.begin(); it != dates.end(); ++it) {
         QDate date = QDate::fromString(it.key(), Qt::ISODate);
         //kDebug()<<"Date:"<<date;
         CalendarDay *calDay = m_calendar->findDay(date);
@@ -150,8 +150,8 @@ void CalendarEdit::slotApplyClicked() {
         }
     }
 
-    IntMap weekdays = calendarPanel->selectedWeekdays();
-    for(IntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
+    const IntMap weekdays = calendarPanel->selectedWeekdays();
+    for(IntMap::const_iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
         //kDebug()<<"weekday="<<it.key();
         CalendarDay *weekday = m_calendar->weekday(it.key());
         weekday->setState(state->currentIndex());//NOTE!!

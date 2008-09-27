@@ -74,8 +74,8 @@ void Chart::calculatePlannedCost( const Project & p, const ScheduleManager &sm)
     //kDebug()<<"calculatePlannedCost()"<<weeks<<","<<vect;
     mBCWSPoints.clear();
 
-    QVector<QDate>  lWeeks = calculateWeeks(p,sm);
-    QVector<QDate>::iterator it_weeks = lWeeks.begin();
+    const QVector<QDate>  lWeeks = calculateWeeks(p,sm);
+    QVector<QDate>::const_iterator it_weeks = lWeeks.begin();
     float sum=0;
     //mBCWSPoints.push_back(QPointF(0,0));
 
@@ -109,8 +109,8 @@ void Chart::calculateActualCost(const Project & p, const ScheduleManager &sm)
     //kDebug()<<"calculateActualCost()"<<weeks<<vect;
     mACWPPoints.clear();
     
-    QVector<QDate>  lWeeks = calculateWeeks(p,sm);
-    QVector<QDate>::iterator it_weeks = lWeeks.begin();
+    const QVector<QDate>  lWeeks = calculateWeeks(p,sm);
+    QVector<QDate>::const_iterator it_weeks = lWeeks.begin();
     float sum=0;
     //mACWPPoints.push_back(QPointF(0,0));
 
@@ -144,8 +144,8 @@ void Chart::calculateBCWP(const Project & p, const ScheduleManager &sm)
 
     mBCWPPoints.clear();
 
-    QVector<QDate>  lWeeks = calculateWeeks(p,sm);
-    QVector<QDate>::iterator it_weeks = lWeeks.begin();
+    const QVector<QDate>  lWeeks = calculateWeeks(p,sm);
+    QVector<QDate>::const_iterator it_weeks = lWeeks.begin();
     float sum=0;
 //    mBCWPPoints.push_back(QPointF(0,0));
 
