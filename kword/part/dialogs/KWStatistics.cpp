@@ -140,10 +140,10 @@ void KWStatistics::updateData()
             // one that's too low.
             // IMPORTANT: please test any changes against demos/statistics.kwd
             QRegExp re("\\s+");
-            QStringList wordlist = s.split(re, QString::SkipEmptyParts);
+            const QStringList wordlist = s.split(re, QString::SkipEmptyParts);
             m_words += wordlist.count();
             re.setCaseSensitivity(Qt::CaseInsensitive);
-            for (QStringList::Iterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
+            for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
                 QString word1 = *it1;
                 QString word = *it1;
                 re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
