@@ -1135,7 +1135,8 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect paperRect = printer().paperRect();
     
     ItemModelBase *model = m_tree->model();
-    
+    Q_ASSERT( model != 0 );
+    Q_ASSERT( model->project() != 0 );
     kDebug()<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );

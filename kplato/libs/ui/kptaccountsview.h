@@ -98,11 +98,9 @@ public:
 
     CostBreakdownItemModel *model() const;
 
-signals:
-    void configChanged();
-
+    KoPrintJob *createPrintJob();
+    
 public slots:
-    void slotConfigure();
     void setScheduleManager( ScheduleManager *sm );
     
 protected slots:

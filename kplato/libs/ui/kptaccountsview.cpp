@@ -282,10 +282,9 @@ void AccountsView::saveContext( QDomElement &context ) const
     
 }
 
-
-void AccountsView::slotConfigure()
+KoPrintJob *AccountsView::createPrintJob()
 {
-    //kDebug();
+    return m_view->createPrintJob( this );
 }
 
 

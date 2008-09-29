@@ -436,7 +436,6 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
 //----------------------------------------
 CostBreakdownItemModel::CostBreakdownItemModel( QObject *parent )
     : ItemModelBase( parent ),
-    m_project( 0 ),
     m_manager( 0 ),
     m_cumulative( false ),
     m_periodtype( Period_Day ),

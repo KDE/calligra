@@ -163,7 +163,6 @@ protected slots:
     void slotAccountRemoved( const Account *account );
 
 private:
-    Project *m_project;
     ScheduleManager *m_manager;
     
     bool m_cumulative;
