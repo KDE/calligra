@@ -73,6 +73,8 @@ public:
     void setStartDate( const QDate &date );
     QDate endDate() const;
     void setEndDate( const QDate &date );
+    int showMode() const;
+    void setShowMode( int show );
 
 protected slots:
     void slotModelReset();

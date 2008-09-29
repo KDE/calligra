@@ -45,18 +45,32 @@ AccountsviewConfigDialog::AccountsviewConfigDialog( AccountsTreeView *view, QWid
     showButtonSeparator( true );
     m_panel = new AccountsviewConfigPanel(this);
     switch ( view->startMode() ) {
-        case CostBreakdownItemModel::StartMode_Project: m_panel->ui_projectstartBtn->setChecked( true ); break;
-        case CostBreakdownItemModel::StartMode_Date: m_panel->ui_startdateBtn->setChecked( true ); break;
+        case CostBreakdownItemModel::StartMode_Project: 
+            m_panel->ui_projectstartBtn->setChecked( true );
+            m_panel->ui_startdate->setEnabled( false );
+            break;
+        case CostBreakdownItemModel::StartMode_Date:
+            m_panel->ui_startdateBtn->setChecked( true );
+            break;
     }
     switch ( view->endMode() ) {
-        case CostBreakdownItemModel::EndMode_Project: m_panel->ui_projectendBtn->setChecked( true ); break;
-        case CostBreakdownItemModel::EndMode_Date: m_panel->ui_enddateBtn->setChecked( true ); break;
-        case CostBreakdownItemModel::EndMode_CurrentDate: m_panel->ui_currentdateBtn->setChecked( true ); break;
+        case CostBreakdownItemModel::EndMode_Project:
+            m_panel->ui_projectendBtn->setChecked( true );
+            m_panel->ui_enddate->setEnabled( false );
+            break;
+        case CostBreakdownItemModel::EndMode_Date:
+            m_panel->ui_enddateBtn->setChecked( true );
+            break;
+        case CostBreakdownItemModel::EndMode_CurrentDate:
+            m_panel->ui_currentdateBtn->setChecked( true );
+            m_panel->ui_enddate->setEnabled( false );
+            break;
     }
     m_panel->ui_startdate->setDate( view->startDate() );
     m_panel->ui_enddate->setDate( view->endDate() );
     m_panel->ui_periodBox->setCurrentIndex( view->periodType() );
     m_panel->ui_cumulative->setChecked( view->cumulative() );
+    m_panel->ui_showBox->setCurrentIndex( view->showMode() );
     setMainWidget(m_panel);
 
     enableButtonOk(false);
@@ -71,6 +85,7 @@ void AccountsviewConfigDialog::slotOk()
     kDebug();
     m_view->setPeriodType( m_panel->ui_periodBox->currentIndex() );
     m_view->setCumulative( m_panel->ui_cumulative->isChecked() );
+    m_view->setShowMode( m_panel->ui_showBox->currentIndex() );
     if ( m_panel->ui_startdateBtn->isChecked() ) {
         m_view->setStartDate( m_panel->ui_startdate->date() );
         m_view->setStartMode( CostBreakdownItemModel::StartMode_Date );
@@ -104,7 +119,10 @@ AccountsviewConfigPanel::AccountsviewConfigPanel(QWidget *parent)
     connect(ui_projectendBtn, SIGNAL(clicked()), SLOT(slotChanged()));
     connect(ui_currentdateBtn, SIGNAL(clicked()), SLOT(slotChanged()));
     connect(ui_enddateBtn, SIGNAL(clicked()), SLOT(slotChanged()));
+    connect(ui_showBox, SIGNAL(activated(int)), SLOT(slotChanged()));
     
+    connect(ui_startdateBtn, SIGNAL(toggled(bool)), ui_startdate, SLOT(setEnabled(bool)));
+    connect(ui_enddateBtn, SIGNAL(toggled(bool)), ui_enddate, SLOT(setEnabled(bool)));
 }
 
 void AccountsviewConfigPanel::slotChanged() {

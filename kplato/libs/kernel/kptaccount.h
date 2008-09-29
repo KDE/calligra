@@ -164,6 +164,9 @@ public:
     EffortCostMap plannedCost(long id = BASELINESCHEDULE) const;
     EffortCostMap plannedCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE) const;
 
+    EffortCostMap actualCost(long id = BASELINESCHEDULE);
+    EffortCostMap actualCost(const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
+    
 private:
     QString m_name;
     QString m_description;

@@ -147,6 +147,15 @@ void AccountsTreeView::setEndDate( const QDate &date )
     model()->setEndDate( date );
 }
 
+int AccountsTreeView::showMode() const
+{
+    return model()->showMode();
+}
+void AccountsTreeView::setShowMode( int show )
+{
+    model()->setShowMode( show );
+}
+
 //------------------------
 AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
@@ -247,64 +256,32 @@ void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
 
 bool AccountsView::loadContext( const KoXmlElement &context )
 {
-    //kDebug()<<"---->"<<endl;
-/*    const Context::Accountsview &context = c.accountsview;
+    //kDebug();
+    m_view->setShowMode( context.attribute( "show-mode" ).toInt() );
+    m_view->setCumulative( (bool)( context.attribute( "cumulative" ).toInt() ) );
+    m_view->setPeriodType( context.attribute( "period-type", "0" ).toInt() );
+    m_view->setStartDate( QDate::fromString( context.attribute( "start-date", "" ), Qt::ISODate ) );
+    m_view->setStartMode( context.attribute( "start-mode", "0" ).toInt() );
+    m_view->setEndDate( QDate::fromString( context.attribute( "end-date", "" ), Qt::ISODate ) );
+    m_view->setEndMode( context.attribute( "end-mode", "0" ).toInt() );
     
-    QList<int> list;
-    list << context.accountsviewsize << context.periodviewsize;
-    //m_dlv->setSizes(list); //NOTE: Doesn't always work!
-    m_date = context.date;
-    if ( !m_date.isValid() )
-    m_date = QDate::currentDate();
-    m_period = context.period;
-    m_cumulative = context.cumulative;
-    setContextClosedItems( context );*/
-    //kDebug()<<"<----";
+    kDebug()<<m_view->startMode()<<m_view->startDate()<<m_view->endMode()<<m_view->endDate();
     return true;
 }
 
-// void AccountsView::setContextClosedItems( const Context::Accountsview &context )
-// {
-//     for ( QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it ) {
-//                 if (m_accounts.findAccount(*it)) {
-//                     QTreeWidgetItemIterator lit(m_dlv->masterListView());
-//                     for (; lit.current(); ++lit) {
-//                         if (lit.current()->text(0) == (*it)) {
-//                             m_dlv->setOpen(lit.current(), false);
-//                             break;
-//                         }
-//                     }
-//                 }
-//     }
-// }
-
 void AccountsView::saveContext( QDomElement &context ) const
 {
-    //kDebug()<<endl;
-/*    Context::Accountsview &context = c.accountsview;
+    //kDebug();
+    context.setAttribute( "show-mode", m_view->showMode() );
+    context.setAttribute( "cumulative", m_view->cumulative() );
+    context.setAttribute( "period-type", m_view->periodType() );
+    context.setAttribute( "start-mode", m_view->startMode() );
+    context.setAttribute( "start-date", m_view->startDate().toString( Qt::ISODate ) );
+    context.setAttribute( "end-mode", m_view->endMode() );
+    context.setAttribute( "end-date", m_view->endDate().toString( Qt::ISODate ) );
     
-    context.accountsviewsize = m_dlv->sizes() [ 0 ];
-    context.periodviewsize = m_dlv->sizes() [ 1 ];
-    context.date = m_date;
-    context.period = m_period;
-    context.cumulative = m_cumulative;*/
-    //kDebug()<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
-
-    //getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
 }
 
-// void AccountsView::getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const
-// {
-//     if ( item == 0 )
-//         return ;
-//         for (QTreeWidgetItem *i = item; i; i = i->nextSibling()) {
-//             if (!i->isOpen()) {
-//                 context.closedItems.append(i->text(0));
-//                 kDebug()<<"add closed"<<i->text(0);
-//             }
-//             getContextClosedItems(context, i->firstChild());
-//         }
-// }
 
 void AccountsView::slotConfigure()
 {

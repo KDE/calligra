@@ -108,6 +108,7 @@ public:
     enum PeriodType { Period_Day = 0, Period_Week = 1, Period_Month = 2 };
     enum StartMode { StartMode_Project = 0, StartMode_Date = 1 };
     enum EndMode { EndMode_Project = 0, EndMode_Date = 1, EndMode_CurrentDate = 2 };
+    enum ShowMode { ShowMode_Actual = 0, ShowMode_Planned = 1, ShowMode_Both = 2, ShowMode_Deviation = 3 };
     
     explicit CostBreakdownItemModel( QObject *parent = 0 );
     ~CostBreakdownItemModel();
@@ -143,13 +144,17 @@ public:
     void setStartDate( const QDate &date );
     QDate endDate() const;
     void setEndDate( const QDate &date );
-    
+    int showMode() const;
+    void setShowMode( int show );
+
     void setStartDate();
     void setEndDate();
     void updateDates();
     
-    QString formatMoney( double cost ) const;
-
+    QString formatMoney( double plannedCost, double actualCost ) const;
+    QString format() const { return m_format; }
+    void setFormat( const QString &f ) { m_format = f; }
+    
 protected slots:
     void slotAccountChanged( Account* );
     void slotAccountToBeInserted( const Account *parent, int row );
@@ -167,9 +172,11 @@ private:
     int m_endmode;
     QDate m_start;
     QDate m_end;
+    int m_showmode;
     QMap<Account*, EffortCostMap> m_plannedCostMap;
     QMap<Account*, EffortCostMap> m_actualCostMap;
-
+    QString m_format;
+    
 };
 
 

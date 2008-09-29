@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>223</width>
-    <height>326</height>
+    <width>225</width>
+    <height>334</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -22,48 +22,78 @@
      <property name="title" >
       <string/>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout" >
-      <item>
+     <layout class="QGridLayout" name="gridLayout_3" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Show:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QComboBox" name="ui_showBox" >
+        <item>
+         <property name="text" >
+          <string>Actual cost</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Planned cost</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Actual and planned</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Deviation</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="textLabel1_2" >
+        <property name="text" >
+         <string>Periodicity:</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QComboBox" name="ui_periodBox" >
+        <item>
+         <property name="text" >
+          <string>Day</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Week</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Month</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2" >
        <widget class="QCheckBox" name="ui_cumulative" >
         <property name="text" >
          <string>Cumulative</string>
         </property>
        </widget>
       </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" >
-        <item>
-         <widget class="QLabel" name="textLabel1_2" >
-          <property name="text" >
-           <string>Periodicity:</string>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="ui_periodBox" >
-          <item>
-           <property name="text" >
-            <string>Day</string>
-           </property>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Week</string>
-           </property>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Month</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
+     <zorder>ui_cumulative</zorder>
+     <zorder>layoutWidget</zorder>
+     <zorder>ui_showBox</zorder>
     </widget>
    </item>
    <item>
@@ -124,19 +154,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer" >
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

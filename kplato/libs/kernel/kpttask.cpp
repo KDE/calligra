@@ -2797,7 +2797,9 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end )
             break;
         case EnterEffortPerTask: // hmmm
         case EnterEffortPerResource: {
-            for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
+            QDate st = start.isValid() ? start : m_startTime.date();
+            QDate et = end.isValid() ? end : m_finishTime.date();
+            for ( QDate d = st; d <= et; d = d.addDays( 1 ) ) {
                 ec.add( d, actualEffort( d ), actualCost( d ) );
             }
         }

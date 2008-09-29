@@ -441,8 +441,10 @@ CostBreakdownItemModel::CostBreakdownItemModel( QObject *parent )
     m_cumulative( false ),
     m_periodtype( Period_Day ),
     m_startmode( StartMode_Project ),
-    m_endmode( EndMode_Project )
+    m_endmode( EndMode_Project ),
+    m_showmode( ShowMode_Both )
 {
+    m_format = QString( "%1 [%2]" );
 }
 
 CostBreakdownItemModel::~CostBreakdownItemModel()
@@ -534,6 +536,7 @@ void CostBreakdownItemModel::fetchData()
     foreach ( Account *a, accounts.allAccounts() ) {
         if ( a->isElement() ) {
             m_plannedCostMap.insert( a, a->plannedCost( id() ) );
+            m_actualCostMap.insert( a, a->actualCost( id() ) );
         }
     }
     bool finished = false;
@@ -544,6 +547,20 @@ void CostBreakdownItemModel::fetchData()
                 EffortCostMap ec;
                 foreach ( Account *ac, a->accountList() ) {
                     ec += m_plannedCostMap.value( ac );
+                }
+                m_plannedCostMap.insert( a->parent(), ec );
+                finished = false;
+            }
+        }
+    }
+    finished = false;
+    while ( ! finished ) {
+        finished = true;
+        foreach ( Account *a, m_actualCostMap.keys() ) {
+            if ( a->parent() && ! m_actualCostMap.contains( a->parent() ) ) {
+                EffortCostMap ec;
+                foreach ( Account *ac, a->accountList() ) {
+                    ec += m_actualCostMap.value( ac );
                 }
                 m_plannedCostMap.insert( a->parent(), ec );
                 finished = false;
@@ -633,6 +650,11 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
                 break;
             }
             case Period_Month: {
+                int days = m_start.daysInMonth() - m_start.day() + 1;
+                for ( QDate d = m_start; d < m_end; d = d.addDays( days ) ) {
+                    ++c;
+                    days = qMin( d.daysTo( m_end ), d.daysInMonth() );
+                }
                 break;
             }
         }
@@ -652,9 +674,21 @@ int CostBreakdownItemModel::rowCount( const QModelIndex &parent ) const
     return par->accountList().count();
 }
 
-QString CostBreakdownItemModel::formatMoney( double cost ) const
+QString CostBreakdownItemModel::formatMoney( double cost1, double cost2 ) const
 {
-    return KGlobal::locale()->formatMoney( cost, "", 0 );
+    if ( m_showmode == ShowMode_Planned ) {
+        return KGlobal::locale()->formatMoney( cost1, "", 0 );
+    }
+    if ( m_showmode == ShowMode_Actual ) {
+        return KGlobal::locale()->formatMoney( cost2, "", 0 );
+    }
+    if ( m_showmode == ShowMode_Both ) {
+        return QString(m_format).arg( KGlobal::locale()->formatMoney( cost2, "", 0 ) ).arg( KGlobal::locale()->formatMoney( cost1, "", 0 ) );
+    }
+    if ( m_showmode == ShowMode_Deviation ) {
+        return KGlobal::locale()->formatMoney( cost1 - cost2, "", 0 );
+    }
+    return "";
 }
 
 QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) const
@@ -668,37 +702,71 @@ QVariant CostBreakdownItemModel::data( const QModelIndex &index, int role ) cons
         switch ( index.column() ) {
             case 0: return a->name();
             case 1: return a->description();
-            case 2: return formatMoney( m_plannedCostMap.value( a ).totalCost() );
+            case 2: {
+                return formatMoney( m_plannedCostMap.value( a ).totalCost(), m_actualCostMap.value( a ).totalCost() );
+            }
             default: {
                 int col = index.column() - 3;
-                EffortCostMap ec = m_plannedCostMap.value( a );
+                EffortCostMap pc = m_plannedCostMap.value( a );
+                EffortCostMap ac = m_actualCostMap.value( a );
                 switch ( m_periodtype ) {
                     case Period_Day: {
-                        double cost = 0.0;
+                        double planned = 0.0;
                         if ( m_cumulative ) {
-                            cost = ec.costTo( m_start.addDays( col ) );
+                            planned = pc.costTo( m_start.addDays( col ) );
                         } else {
-                            cost = ec.costOnDate( m_start.addDays( col ) );
+                            planned = pc.costOnDate( m_start.addDays( col ) );
                         }
-                        //kDebug()<<m_start<<m_start.addDays( col )<<cost;
-                        return cost;
+                        double actual = 0.0;
+                        if ( m_cumulative ) {
+                            actual = ac.costTo( m_start.addDays( col ) );
+                        } else {
+                            actual = ac.costOnDate( m_start.addDays( col ) );
+                        }
+                        return formatMoney( planned, actual );
                     }
                     case Period_Week: {
-                        double cost = 0.0; 
                         int days = KGlobal::locale()->weekStartDay() - m_start.dayOfWeek();
                         if ( days > 0 ) {
                             days -= 7; ;
                         }
                         QDate start = m_start.addDays( days );
                         int week = col;
+                        double planned = 0.0;
                         if ( m_cumulative ) {
-                            cost = ec.costTo( start.addDays( ++week * 7 ) );
+                            planned = pc.costTo( start.addDays( ++week * 7 ) );
                         } else {
-                            cost = week == 0 ? ec.cost( m_start, m_start.daysTo( start.addDays( 7 ) ) ) : ec.cost( start.addDays( week * 7 ) );
+                            planned = week == 0 ? pc.cost( m_start, m_start.daysTo( start.addDays( 7 ) ) ) : pc.cost( start.addDays( week * 7 ) );
                         }
-                        return formatMoney( cost );
+                        double actual = 0.0;
+                        if ( m_cumulative ) {
+                            actual = ac.costTo( start.addDays( ++week * 7 ) );
+                        } else {
+                            actual = week == 0 ? ac.cost( m_start, m_start.daysTo( start.addDays( 7 ) ) ) : ac.cost( start.addDays( week * 7 ) );
+                        }
+                        return formatMoney( planned, actual );
                     }
-                    case Period_Month:
+                    case Period_Month: {
+                        int days = m_start.daysInMonth() - m_start.day() + 1;
+                        QDate start = m_start;
+                        for ( int i = 0; i < col; ++i ) {
+                            start = start.addDays( days );
+                            days = start.daysInMonth();
+                        }
+                        int planned = 0.0;
+                        if ( m_cumulative ) {
+                            planned = pc.costTo( start.addDays( start.daysInMonth() - start.day() + 1 ) );
+                        } else {
+                            planned = pc.cost( start, start.daysInMonth() - start.day() + 1);
+                        }
+                        int actual = 0.0;
+                        if ( m_cumulative ) {
+                            actual = ac.costTo( start.addDays( start.daysInMonth() - start.day() + 1 ) );
+                        } else {
+                            actual = ac.cost( start, start.daysInMonth() - start.day() + 1);
+                        }
+                        return formatMoney( planned, actual );
+                    }
                     default:
                         return 0.0;
                         break;
@@ -732,11 +800,9 @@ int CostBreakdownItemModel::startMode() const
 
 void CostBreakdownItemModel::setStartMode( int mode )
 {
-    if ( m_startmode != mode ) {
-        m_startmode = mode;
-        setStartDate();
-        reset();
-    }
+    m_startmode = mode;
+    setStartDate();
+    reset();
 }
 
 int CostBreakdownItemModel::endMode() const
@@ -746,11 +812,9 @@ int CostBreakdownItemModel::endMode() const
 
 void CostBreakdownItemModel::setEndMode( int mode )
 {
-    if ( m_endmode != mode ) {
-        m_endmode = mode;
-        setEndDate();
-        reset();
-    }
+    m_endmode = mode;
+    setEndDate();
+    reset();
 }
 
 void CostBreakdownItemModel::setStartDate()
@@ -758,6 +822,14 @@ void CostBreakdownItemModel::setStartDate()
     if ( m_startmode == StartMode_Project ) {
         m_start = m_project->startTime( id() ).date();
         foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+            if ( ! ec.startDate().isValid() ) {
+                continue;
+            }
+            if ( ! m_start.isValid() || m_start > ec.startDate() ) {
+                m_start = ec.startDate();
+            }
+        }
+        foreach ( const EffortCostMap &ec, m_actualCostMap.values() ) {
             if ( ! ec.startDate().isValid() ) {
                 continue;
             }
@@ -773,6 +845,14 @@ void CostBreakdownItemModel::setEndDate()
     if ( m_endmode == EndMode_Project ) {
         m_end = m_project->endTime( id() ).date();
         foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+            if ( ! ec.endDate().isValid() ) {
+                continue;
+            }
+            if ( ! m_end.isValid() || m_end < ec.endDate() ) {
+                m_end = ec.endDate();
+            }
+        }
+        foreach ( const EffortCostMap &ec, m_actualCostMap.values() ) {
             if ( ! ec.endDate().isValid() ) {
                 continue;
             }
@@ -819,6 +899,15 @@ void CostBreakdownItemModel::setCumulative( bool on )
     reset();
 }
 
+int CostBreakdownItemModel::showMode() const
+{
+    return m_showmode;
+}
+void CostBreakdownItemModel::setShowMode( int show )
+{
+    m_showmode = show;
+}
+
 QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
@@ -832,14 +921,23 @@ QVariant CostBreakdownItemModel::headerData( int section, Qt::Orientation orient
             if ( section == 2 ) {
                 return i18n( "Total" );
             }
+            int col = section - 3;
             switch ( m_periodtype ) {
                 case Period_Day: {
-                    return m_start.addDays( section - 3 ).toString( Qt::ISODate );
+                    return m_start.addDays( col ).toString( Qt::ISODate );
                 }
                 case Period_Week: {
-                    return m_start.addDays( ( section - 3 ) * 7 ).weekNumber();
+                    return m_start.addDays( ( col ) * 7 ).weekNumber();
                 }
-                case Period_Month:
+                case Period_Month: {
+                    int days = m_start.daysInMonth() - m_start.day() + 1;
+                    QDate start = m_start;
+                    for ( int i = 0; i < col; ++i ) {
+                        start = start.addDays( days );
+                        days = start.daysInMonth();
+                    }
+                    return QDate::shortMonthName( start.month() );
+                }
                 default:
                     return section;
                     break;
