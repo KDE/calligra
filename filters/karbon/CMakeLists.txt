@@ -3,7 +3,7 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/KoRectangleShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/star/KoStarShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pictureshape/PictureShape.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/simpletextshape/SimpleTextShape.cpp)
+    ${CMAKE_SOURCE_DIR}/plugins/artistictextshape/ArtisticTextShape.cpp)
 
 
 include_directories(
@@ -27,6 +27,7 @@ endif (LIBWPD AND LIBWPG_FOUND)
 add_subdirectory( wmf )
 add_subdirectory( karbon1.x )
 add_subdirectory( eps )
+#add_subdirectory( pdf )
 
 # enable again when these filters are ported
 if(FALSE)

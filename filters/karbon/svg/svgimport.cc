@@ -51,7 +51,7 @@
 #include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
-#include <plugins/simpletextshape/SimpleTextShape.h>
+#include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -1384,7 +1384,7 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     double offset = 0.0;
 
     QPointF textPosition;
-    SimpleTextShape * text = 0;
+    ArtisticTextShape * text = 0;
 
     addGraphicContext();
     setupTransform( b );
@@ -1404,7 +1404,7 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
             textPosition.setY( parseUnit( b.attribute( "y" ) ) );
         }
 
-        text = static_cast<SimpleTextShape*>( createShape( SimpleTextShapeID ) );
+        text = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );
         if( ! text )
             return 0;
 
@@ -1495,7 +1495,7 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
                     if( ! obj )
                         obj = findObject( key, shapes );
                     if( obj ) 
-                        content += dynamic_cast<SimpleTextShape*>( obj )->text();
+                        content += dynamic_cast<ArtisticTextShape*>( obj )->text();
                 }
                 else
                 {
@@ -1530,7 +1530,7 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
         textPosition.setX( parseUnit( b.attribute( "x" ) ) );
         textPosition.setY( parseUnit( b.attribute( "y" ) ) );
 
-        text = static_cast<SimpleTextShape*>( createShape( SimpleTextShapeID ) );
+        text = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );
         if( ! text )
             return 0;
 
@@ -1551,9 +1551,9 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
         text->setPosition( text->position() - QPointF( 0, text->baselineOffset() ) );
 
     if( anchor == "middle" )
-        text->setTextAnchor( SimpleTextShape::AnchorMiddle );
+        text->setTextAnchor( ArtisticTextShape::AnchorMiddle );
     else if( anchor == "end" )
-        text->setTextAnchor( SimpleTextShape::AnchorEnd );
+        text->setTextAnchor( ArtisticTextShape::AnchorEnd );
 
     if( !b.attribute("id").isEmpty() )
         text->setName( b.attribute("id") );

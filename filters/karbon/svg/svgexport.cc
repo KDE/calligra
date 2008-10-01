@@ -45,7 +45,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <plugins/simpletextshape/SimpleTextShape.h>
+#include <plugins/artistictextshape/ArtisticTextShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <plugins/pictureshape/PictureShape.h>
@@ -222,9 +222,9 @@ void SvgExport::saveShape( KoShape * shape )
     }
     else
     {
-        if( shape->shapeId() == SimpleTextShapeID )
+        if( shape->shapeId() == ArtisticTextShapeID )
         {
-            saveText( static_cast<SimpleTextShape*>( shape ) );
+            saveText( static_cast<ArtisticTextShape*>( shape ) );
         }
         else if( shape->shapeId() == PICTURESHAPEID )
         {
@@ -592,7 +592,7 @@ void SvgExport::getHexColor( QTextStream *stream, const QColor & color )
     *stream << Output;
 }
 
-void SvgExport::saveText( SimpleTextShape * text )
+void SvgExport::saveText( ArtisticTextShape * text )
 {
     printIndentation( m_body, m_indent++ );
     *m_body << "<text" << getID( text );
@@ -611,12 +611,12 @@ void SvgExport::saveText( SimpleTextShape * text )
         *m_body << " font-style=\"italic\"";
 
     qreal anchorOffset = 0.0;
-    if( text->textAnchor() == SimpleTextShape::AnchorMiddle )
+    if( text->textAnchor() == ArtisticTextShape::AnchorMiddle )
     {
         anchorOffset += 0.5 * text->size().width();
         *m_body << " text-anchor=\"middle\"";
     }
-    else if( text->textAnchor() == SimpleTextShape::AnchorEnd )
+    else if( text->textAnchor() == ArtisticTextShape::AnchorEnd )
     {
         anchorOffset += text->size().width();
         *m_body << " text-anchor=\"end\"";
@@ -625,7 +625,7 @@ void SvgExport::saveText( SimpleTextShape * text )
     printIndentation( m_body, m_indent );
 
     // check if we are set on a path
-    if( text->layout() == SimpleTextShape::Straight )
+    if( text->layout() == ArtisticTextShape::Straight )
     {
         QMatrix m = text->transformation();
         if( isTranslation( m ) )

@@ -40,7 +40,7 @@
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/star/KoStarShape.h>
-#include <simpletextshape/SimpleTextShape.h>
+#include <artistictextshape/ArtisticTextShape.h>
 #include <pictureshape/PictureShape.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
@@ -1329,13 +1329,13 @@ KoShape * KarbonImport::loadText( const KoXmlElement &element )
     */
     QString text = element.attribute( "text", "" );
 
-    SimpleTextShape * textShape = new SimpleTextShape();
+    ArtisticTextShape * textShape = new ArtisticTextShape();
     if( ! textShape )
         return 0;
 
     textShape->setFont( font );
     textShape->setText( text );
-    textShape->setTextAnchor( static_cast<SimpleTextShape::TextAnchor>( alignment ) );
+    textShape->setTextAnchor( static_cast<ArtisticTextShape::TextAnchor>( alignment ) );
 
     KoXmlElement e = element.firstChild().toElement();
     if( e.tagName() == "PATH" )

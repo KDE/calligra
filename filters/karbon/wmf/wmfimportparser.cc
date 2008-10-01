@@ -33,7 +33,7 @@
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <pictureshape/PictureShape.h>
-#include <simpletextshape/SimpleTextShape.h>
+#include <artistictextshape/ArtisticTextShape.h>
 #include <kdebug.h>
 
 /*
@@ -389,7 +389,7 @@ void WMFImportParser::drawText( int x, int y, int , int , int flags, const QStri
     QFont font = mFont;
     font.setPointSizeF( coordY( mFont.pointSize() ) );
 
-    SimpleTextShape * textShape = new SimpleTextShape();
+    ArtisticTextShape * textShape = new ArtisticTextShape();
     textShape->setFont( font );
     textShape->setText( text );
 
@@ -403,7 +403,7 @@ void WMFImportParser::drawText( int x, int y, int , int , int flags, const QStri
     // set text anchor
     qreal xOffset = 0.0;
     if( flags & AlignHCenter ) {
-        textShape->setTextAnchor( SimpleTextShape::AnchorMiddle );
+        textShape->setTextAnchor( ArtisticTextShape::AnchorMiddle );
         xOffset = -0.5 * textShape->size().width();
     }
 
