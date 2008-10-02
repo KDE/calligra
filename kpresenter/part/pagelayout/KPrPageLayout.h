@@ -56,10 +56,18 @@ public:
      * Get the placeholders of the layout
      */
     QList<KPrPlaceholder *> placeholders() const;
+
     /**
      * get the thumbnail of the layout
      */
     QPixmap thumbnail() const;
+
+    /**
+     * @brief Check if the page layouts match
+     *
+     * The page layouts match if the placeholder are the same.
+     */
+    bool operator<( const KPrPageLayout & other ) const;
 
 private:
     // The display name of the layout

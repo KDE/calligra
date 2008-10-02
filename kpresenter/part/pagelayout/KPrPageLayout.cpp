@@ -150,3 +150,37 @@ QPixmap KPrPageLayout::thumbnail() const
 
     return pic;
 }
+
+bool comparePlaceholder( const KPrPlaceholder * p1, const KPrPlaceholder * p2 )
+{
+    return ( * p1 ) < ( * p2 );
+}
+
+bool KPrPageLayout::operator<( const KPrPageLayout & other ) const
+{
+    if ( m_placeholders.size() == other.m_placeholders.size() ) {
+        QList<KPrPlaceholder *> placeholders( m_placeholders );
+        QList<KPrPlaceholder *> otherPlaceholders( other.m_placeholders );
+        qSort( placeholders.begin(), placeholders.end(), comparePlaceholder );
+        qSort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholder );
+
+        QList<KPrPlaceholder *>::iterator it( placeholders.begin() );
+        QList<KPrPlaceholder *>::iterator otherIt( otherPlaceholders.begin() );
+        kDebug() << "KPrPageLayout::operator< start" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
+
+        for ( ; it != placeholders.end(); ++it, ++otherIt ) {
+            kDebug() << "KPrPageLayout::operator<" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
+            if ( *( *it ) == *( *otherIt ) ) {
+                kDebug() << "KPrPageLayout::operator< 0" << ( *( *it ) < *( *otherIt ) );
+                continue;
+            }
+            kDebug() << "KPrPageLayout::operator< 1" << ( *( *it ) < *( *otherIt ) );
+            return *( *it ) < *( *otherIt );
+        }
+        kDebug() << "KPrPageLayout::operator< 2" << false;
+        return false;
+        // sort of the different placeholders by position and type
+    }
+    kDebug() << "KPrPageLayout::operator< 3" << ( m_placeholders.size() < other.m_placeholders.size() );
+    return m_placeholders.size() < other.m_placeholders.size();
+}

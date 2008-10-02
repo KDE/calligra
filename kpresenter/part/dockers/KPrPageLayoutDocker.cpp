@@ -64,14 +64,12 @@ void KPrPageLayoutDocker::setView( KPrView* view )
     KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( view->kopaDocument()->dataCenterMap()[ PageLayouts ] );
     Q_ASSERT( layouts );
 
-    const QMap<QString, KPrPageLayout *> & layoutMap = layouts->layouts();
+    const QList<KPrPageLayout *> layoutMap = layouts->layouts();
 
     // TODO add empty layout
 
     foreach( KPrPageLayout * layout, layoutMap ) {
-        QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "", m_layoutsView );
-        item->setData( Qt::UserRole, QVariant::fromValue( layout ) );
-        m_layout2item.insert( layout, item );
+        addLayout( layout );
     }
 
     slotActivePageChanged();
@@ -88,6 +86,10 @@ void KPrPageLayoutDocker::slotActivePageChanged()
     if ( page ) {
         KPrPageLayout * layout = page->layout();
         QListWidgetItem * item = m_layout2item.value( layout, 0 );
+        if ( item == 0 && layout != 0 ) {
+            item = addLayout( layout );
+        }
+
         if ( item ) {
             m_layoutsView->blockSignals( true );
             item->setSelected( true );
@@ -115,6 +117,14 @@ void KPrPageLayoutDocker::slotSelectionChanged()
             page->setLayout( items.at( 0 )->data( Qt::UserRole ).value<KPrPageLayout *>(), m_view->kopaDocument() );
         }
     }
+}
+
+QListWidgetItem * KPrPageLayoutDocker::addLayout( KPrPageLayout * layout )
+{
+    QListWidgetItem * item = new QListWidgetItem( QIcon( layout->thumbnail() ), "", m_layoutsView );
+    item->setData( Qt::UserRole, QVariant::fromValue( layout ) );
+    m_layout2item.insert( layout, item );
+    return item;
 }
 
 #include "KPrPageLayoutDocker.moc"

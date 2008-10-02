@@ -110,3 +110,25 @@ qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, 
 
     return tmp;
 }
+
+bool KPrPlaceholder::operator==( const KPrPlaceholder & other ) const
+{
+    return m_presentationObject == other.m_presentationObject && m_relativeSize == other.m_relativeSize;
+}
+
+bool KPrPlaceholder::operator<( const KPrPlaceholder & other ) const
+{
+    if ( m_presentationObject == other.m_presentationObject ) {
+        if ( m_relativeSize.x() == other.m_relativeSize.x() ) {
+            if ( m_relativeSize.y() == other.m_relativeSize.y() ) {
+                if ( m_relativeSize.width() == other.m_relativeSize.width() ) {
+                    return m_relativeSize.height() < other.m_relativeSize.height();
+                }
+                return m_relativeSize.width() < other.m_relativeSize.width();
+            }
+            return m_relativeSize.y() < other.m_relativeSize.y();
+        }
+        return m_relativeSize.x() < other.m_relativeSize.x();
+    }
+    return m_presentationObject < other.m_presentationObject;
+}

@@ -67,6 +67,13 @@ public:
      */
     void fix( const QRectF & rect );
 
+    /**
+     * Check the placeholders are identical 
+     */
+    bool operator==( const KPrPlaceholder & other ) const;
+
+    bool operator<( const KPrPlaceholder & other ) const;
+
 private:
     qreal percent( const KoXmlElement & element, const char * type, qreal absolute );
 

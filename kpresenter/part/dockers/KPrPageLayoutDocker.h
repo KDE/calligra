@@ -41,6 +41,7 @@ public slots:
     void slotSelectionChanged();
 
 private:
+    QListWidgetItem * addLayout( KPrPageLayout * layout );
     KPrView* m_view;
     QListWidget * m_layoutsView;
     QMap<KPrPageLayout *, QListWidgetItem *> m_layout2item;

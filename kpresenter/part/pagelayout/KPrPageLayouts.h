@@ -26,6 +26,7 @@
 
 class QRectF;
 class KPrPageLayout;
+class KPrPageLayoutWrapper;
 class KoPALoadingContext;
 class KoPASavingContext;
 
@@ -55,12 +56,11 @@ public:
      */
     // TODO
 
-    const QMap<QString, KPrPageLayout *> & layouts() const;
+    const QList<KPrPageLayout *> layouts() const;
 
 private:
-    // the string is the style name associated with the page layout when the file was 
-    // loaded from file
-    QMap<QString, KPrPageLayout *> m_pageLayouts;
+    // this is a simulation of a std::set<KPrPageLayout, compareByKPrPageLayout>()
+    QMap<KPrPageLayoutWrapper, KPrPageLayout *> m_pageLayouts;
 };
 
 #endif /* KPRPAGELAYOUTS_H */

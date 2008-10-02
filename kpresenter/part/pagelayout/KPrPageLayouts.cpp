@@ -27,13 +27,28 @@
 #include "KPrPageLayout.h"
 #include "KPrPageLayoutSharedSavingData.h"
 
+class KPrPageLayoutWrapper
+{
+public:
+    explicit KPrPageLayoutWrapper( KPrPageLayout * pageLayout )
+    : layout( pageLayout )
+    {}
+
+    bool operator<( const KPrPageLayoutWrapper & other ) const
+    {
+        return *layout < *( other.layout );
+    }
+
+    KPrPageLayout * layout;
+};
+
 KPrPageLayouts::KPrPageLayouts()
 {
 }
 
 KPrPageLayouts::~KPrPageLayouts()
 {
-    QMap<QString, KPrPageLayout *>::iterator it( m_pageLayouts.begin() );
+    QMap<KPrPageLayoutWrapper, KPrPageLayout *>::iterator it( m_pageLayouts.begin() );
     for ( ; it != m_pageLayouts.end(); ++it ) {
         delete it.value();
     }
@@ -56,7 +71,7 @@ bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
 {
     KPrPageLayoutSharedSavingData * sharedData = new KPrPageLayoutSharedSavingData();
 
-    QMap<QString, KPrPageLayout *>::iterator it( m_pageLayouts.begin() );
+    QMap<KPrPageLayoutWrapper, KPrPageLayout *>::iterator it( m_pageLayouts.begin() );
     for ( ; it != m_pageLayouts.end(); ++it ) {
         QString style = it.value()->saveOdf( context );
         sharedData->addPageLayoutStyle( it.value(), style );
@@ -69,30 +84,31 @@ bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
 KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name, KoPALoadingContext & loadingContext, const QRectF & pageRect )
 {
     KPrPageLayout * pageLayout = 0;
-    QMap<QString, KPrPageLayout *>::iterator it( m_pageLayouts.find( name ) );
-    if ( it != m_pageLayouts.end() ) {
-        pageLayout = it.value();
-    }
-    else {
-        QHash<QString, KoXmlElement*> layouts = loadingContext.odfLoadingContext().stylesReader().presentationPageLayouts();
-        QHash<QString, KoXmlElement*>::iterator it( layouts.find( name ) );
 
-        if ( it != layouts.end() ) {
-            pageLayout = new KPrPageLayout();
-            if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
-                m_pageLayouts.insert( it.key(), pageLayout );
+    QHash<QString, KoXmlElement*> layouts = loadingContext.odfLoadingContext().stylesReader().presentationPageLayouts();
+    QHash<QString, KoXmlElement*>::iterator it( layouts.find( name ) );
+
+    if ( it != layouts.end() ) {
+        pageLayout = new KPrPageLayout();
+        if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
+            QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.find( KPrPageLayoutWrapper( pageLayout ) ) );
+            if ( it != m_pageLayouts.end() ) {
+                delete pageLayout;
+                pageLayout = *it;
             }
             else {
-                delete pageLayout;
-                pageLayout = 0;
+                m_pageLayouts.insert( KPrPageLayoutWrapper( pageLayout ), pageLayout );
             }
         }
+        else {
+            delete pageLayout;
+            pageLayout = 0;
+        }
     }
-
     return pageLayout;
 }
 
-const QMap<QString, KPrPageLayout *> & KPrPageLayouts::layouts() const
+const QList<KPrPageLayout *> KPrPageLayouts::layouts() const
 {
-    return m_pageLayouts;
+    return m_pageLayouts.values();
 }
