@@ -29,9 +29,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 
-static QMap<QString, QPair<const char *, const char *> > s_placeholderMap;
-
-static const struct {
+static const struct PlaceholderData {
     const char * m_presentationClass;
     const char * m_shapeId;
     const char * m_xmlElement;
@@ -47,38 +45,17 @@ static const struct {
     { "chart", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
                                        I18N_NOOP( "Double click to add a chart" ) },
     { "object", "ChartShape", "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>",
-                                       I18N_NOOP( "Double click to add a chart" ) }
+                                       I18N_NOOP( "Double click to add an object" ) }
 };
 
+static QMap<QString, const PlaceholderData *> s_placeholderMap;
 
 void fillPlaceholderMap()
 {
-    QPair<const char *, const char *> data;
-    data.first = "TextShapeID";
-    data.second = "<draw:text-box/>";
-    s_placeholderMap.insert( "title", data );
-    s_placeholderMap.insert( "outline", data );
-    s_placeholderMap.insert( "subtitle", data );
-    s_placeholderMap.insert( "text", data );
-    s_placeholderMap.insert( "notes", data );
-    data.first = "PictureShape";
-    data.second = "<draw:image xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>";
-    s_placeholderMap.insert( "graphic", data );
-    data.first = "ChartShape";
-    data.second = "<draw:object xlink:href=\"\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>";
-    s_placeholderMap.insert( "chart", data );
-    s_placeholderMap.insert( "object", data );
-    /*
-     * not yet supported
-     * table
-     * orgchart
-     * page
-     * handout
-     * header
-     * footer
-     * date-time
-     * page-number
-    */
+    const unsigned int numPlaceholderData = sizeof( placeholderData ) / sizeof( *placeholderData );
+    for ( unsigned int i = 0; i < numPlaceholderData; ++i ) {
+        s_placeholderMap.insert( placeholderData[i].m_presentationClass, &placeholderData[i] );
+    }
 }
 
 KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & presentationClass )
@@ -89,16 +66,14 @@ KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & present
 
     // TODO create a special strategy for pictures to show a dialog where the user can select a picture
     KPrPlaceholderStrategy * strategy = 0;
-    QMap<QString, QPair<const char *, const char *> >::const_iterator it( s_placeholderMap.find( presentationClass ) );
-    if ( it != s_placeholderMap.end() ) {
-        strategy = new KPrPlaceholderStrategy( it.value().first, it.value().second );
+    if ( s_placeholderMap.contains( presentationClass ) ) {
+        strategy = new KPrPlaceholderStrategy( presentationClass );
     }
     return strategy;
 }
 
-KPrPlaceholderStrategy::KPrPlaceholderStrategy( const char * shapeId, const char * xmlElement )
-: m_shapeId( shapeId )
-, m_xmlElement( xmlElement )
+KPrPlaceholderStrategy::KPrPlaceholderStrategy( const QString & presentationClass )
+: m_placeholderData( s_placeholderMap[presentationClass] )
 {
 }
 
@@ -109,7 +84,7 @@ KPrPlaceholderStrategy::~KPrPlaceholderStrategy()
 KoShape * KPrPlaceholderStrategy::createShape( const QMap<QString, KoDataCenter *> & dataCenterMap )
 {
     KoShape * shape = 0;
-    KoShapeFactory * factory = KoShapeRegistry::instance()->value( m_shapeId );
+    KoShapeFactory * factory = KoShapeRegistry::instance()->value( m_placeholderData->m_shapeId );
     Q_ASSERT( factory );
     if ( factory ) {
         shape = factory->createDefaultShapeAndInit( dataCenterMap );
@@ -134,10 +109,10 @@ void KPrPlaceholderStrategy::paint( QPainter & painter, const QRectF & rect )
 void KPrPlaceholderStrategy::saveOdf( KoShapeSavingContext & context )
 {
     KoXmlWriter & writer = context.xmlWriter();
-    writer.addCompleteElement( m_xmlElement );
+    writer.addCompleteElement( m_placeholderData->m_xmlElement );
 }
 
 QString KPrPlaceholderStrategy::text() const
 {
-    return i18n( "Double click to insert ..." );
+    return i18n( m_placeholderData->m_text );
 }

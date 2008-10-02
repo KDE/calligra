@@ -29,6 +29,7 @@ class KoShape;
 class KoDataCenter;
 class KoShapeControllerBase;
 class KoShapeSavingContext;
+class PlaceholderData;
 
 class KPrPlaceholderStrategy
 {
@@ -53,15 +54,14 @@ protected:
      * @param shapeId The id of the shape used for creating a shape of that type
      * @param xmlElement The xml element used in saveOdf to write out the content of the frame
      */
-    KPrPlaceholderStrategy( const char * shapeId, const char * xmlElement );
+    KPrPlaceholderStrategy( const QString & presentationClass );
 
     /**
      * Get the text that is displayed
      */
     virtual QString text() const;
 
-    const char * m_shapeId;
-    const char * m_xmlElement;
+    const PlaceholderData * m_placeholderData;
 };
 
 #endif /* KPRPLACEHOLDERSTRATEGY_H */
