@@ -38,6 +38,7 @@
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
 #include "KPrShapeManagerAnimationStrategy.h"
+#include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "shapeanimations/KPrAnimationData.h"
@@ -87,7 +88,7 @@ KPrAnimationDirector::~KPrAnimationDirector()
     clearAnimations();
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
-    m_canvas->masterShapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->masterShapeManager() ) );
+    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( m_canvas->masterShapeManager() ) );
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )

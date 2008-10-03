@@ -36,6 +36,7 @@
 #include "KPrPageApplicationData.h"
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
+#include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "dockers/KPrClickActionDocker.h"
 #include "dockers/KPrClickActionDockerFactory.h"
@@ -58,6 +59,8 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 {
     initGUI();
     initActions();
+
+    masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager() ) );
 }
 
 KPrView::~KPrView()
