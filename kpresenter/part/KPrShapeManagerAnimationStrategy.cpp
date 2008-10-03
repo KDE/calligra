@@ -24,6 +24,7 @@
 #include <KoShapeManager.h>
 
 #include "KPrShapeAnimations.h"
+#include "KPrPlaceholderShape.h"
 #include "KPrAnimationDirector.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
@@ -41,18 +42,20 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
 
 void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
-    if ( m_animationDirector->shapeShown( shape ) ) {
-        //kDebug() << shape;
-        painter.save();
-        painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
-        // animate shape
-        QPair<KPrShapeAnimation *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
-        if ( animation.first ) {
-            animation.first->animate( painter, converter, animation.second );
+    if ( ! dynamic_cast<KPrPlaceholderShape *>( shape ) ) {
+        if ( m_animationDirector->shapeShown( shape ) ) {
+            //kDebug() << shape;
+            painter.save();
+            painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
+            // animate shape
+            QPair<KPrShapeAnimation *, KPrAnimationData *> animation = m_animationDirector->shapeAnimation( shape );
+            if ( animation.first ) {
+                animation.first->animate( painter, converter, animation.second );
+            }
+            // paint shape
+            shapeManager()->paintShape( shape, painter, converter, forPrint );
+            painter.restore();  // for the matrix
         }
-        // paint shape
-        shapeManager()->paintShape( shape, painter, converter, forPrint );
-        painter.restore();  // for the matrix
     }
 }
 
