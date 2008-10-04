@@ -82,9 +82,11 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Milestone Gantt View" )
             << i18n( "Resource Assignments" )
             << i18n( "Cost Breakdown" )
-            << i18n( "Performance Chart" )
+            << i18n( "Performance Chart" );
+    /* Deactivate for koffice 2.0
             << i18n( "Performance Status" )
             << i18n( "Tasks by Resources" );
+    */
     widget.viewtype->addItems( lst );
     
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
@@ -153,12 +155,14 @@ bool AddViewPanel::ok()
         case 14: // Performance Chart
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
+/* Deactivate for koffice 2.0 release
         case 15: // Performance Status
             m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         case 16: // Tasks by Resources
             m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
+*/
         default:
             kError()<<"Unknown view type!";
             break;

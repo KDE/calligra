@@ -394,9 +394,11 @@ void View::createViews()
                     } else if ( type == "AccountsView" ) {
                         v = createAccountsView( cat, tag, name, tip );
                     } else if ( type == "ResourceAssignmentView" ) {
-                        v = createResourceAssignmentView( cat, tag, name, tip );
+                        // Deactivate for koffice 2.0 release
+                        //v = createResourceAssignmentView( cat, tag, name, tip );
                     } else if ( type == "ChartView" ) {
-                        v = createChartView( cat, tag, name, tip );
+                        // Deactivate for koffice 2.0 release
+                        //v = createChartView( cat, tag, name, tip );
                     } else if ( type == "PerformanceStatusView" ) {
                         v = createPerformanceStatusView( cat, tag, name, tip );
                     } else  {
@@ -453,9 +455,11 @@ void View::createViews()
 
         createAccountsView( cat, "AccountsView", i18n( "Cost Breakdown" ), i18n( "View planned cost" ) );
 
-        createResourceAssignmentView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), i18n( "View task status per resource" ) );
+        // Deactivate for koffice 2.0 release
+        //createResourceAssignmentView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), i18n( "View task status per resource" ) );
 
-        createChartView( cat, "PerformanceChart", i18n( "Performance Chart" ), i18n( "Cost and schedule monitoring" ) );
+        // Deactivate for koffice 2.0 release
+        //createChartView( cat, "PerformanceChart", i18n( "Performance Chart" ), i18n( "Cost and schedule monitoring" ) );
     }
 }
 
