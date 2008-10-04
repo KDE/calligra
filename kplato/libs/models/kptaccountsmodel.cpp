@@ -475,6 +475,17 @@ void CostBreakdownItemModel::slotAccountRemoved( const Account *account )
     endRemoveRows();
 }
 
+void CostBreakdownItemModel::slotNodeChanged( Node *node )
+{
+    fetchData();
+    foreach ( Account *a, m_plannedCostMap.keys() ) {
+        QModelIndex idx1 = index( a );
+        QModelIndex idx2 = index( idx1.row(), columnCount() - 1, parent( idx1 ) );
+        //kDebug()<<a->name()<<idx1<<idx2;
+        emit dataChanged( idx1, idx2  );
+    }
+}
+
 void CostBreakdownItemModel::setProject( Project *project )
 {
     if ( m_project ) {
@@ -486,6 +497,10 @@ void CostBreakdownItemModel::setProject( Project *project )
         
         disconnect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         disconnect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+    
+        disconnect( m_project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
     }
     m_project = project;
     if ( project ) {
@@ -498,6 +513,10 @@ void CostBreakdownItemModel::setProject( Project *project )
         
         connect( acc, SIGNAL( accountRemoved( const Account* ) ), this, SLOT( slotAccountRemoved( const Account* ) ) );
         connect( acc, SIGNAL( accountToBeRemoved( const Account* ) ), this, SLOT( slotAccountToBeRemoved( const Account* ) ) );
+    
+        connect( project , SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( project , SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( project , SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
     }
 }
 
@@ -524,6 +543,34 @@ long CostBreakdownItemModel::id() const
     return m_manager == 0 ? -1 : m_manager->id();
 }
 
+EffortCostMap CostBreakdownItemModel::fetchPlannedCost( Account *account )
+{
+    EffortCostMap ec;
+    if ( account->isElement() ) {
+        ec = account->plannedCost( id() );
+    } else {
+        foreach ( Account *a, account->accountList() ) {
+            ec += fetchPlannedCost( a );
+        }
+    }
+    m_plannedCostMap.insert( account, ec );
+    return ec;
+}
+
+EffortCostMap CostBreakdownItemModel::fetchActualCost( Account *account )
+{
+    EffortCostMap ec;
+    if ( account->isElement() ) {
+        ec = account->actualCost( id() );
+    } else {
+        foreach ( Account *a, account->accountList() ) {
+            ec += fetchActualCost( a );
+        }
+    }
+    m_actualCostMap.insert( account, ec );
+    return ec;
+}
+
 void CostBreakdownItemModel::fetchData()
 {
     //kDebug()<<m_start<<m_end;
@@ -531,42 +578,10 @@ void CostBreakdownItemModel::fetchData()
     if ( m_project == 0 || m_manager == 0 ) {
         return;
     }
-    const Accounts &accounts = m_project->accounts();
-    foreach ( Account *a, accounts.allAccounts() ) {
-        if ( a->isElement() ) {
-            m_plannedCostMap.insert( a, a->plannedCost( id() ) );
-            m_actualCostMap.insert( a, a->actualCost( id() ) );
-        }
+    foreach ( Account *a, m_project->accounts().accountList() ) {
+        fetchPlannedCost( a );
+        fetchActualCost( a );
     }
-    bool finished = false;
-    while ( ! finished ) {
-        finished = true;
-        foreach ( Account *a, m_plannedCostMap.keys() ) {
-            if ( a->parent() && ! m_plannedCostMap.contains( a->parent() ) ) {
-                EffortCostMap ec;
-                foreach ( Account *ac, a->accountList() ) {
-                    ec += m_plannedCostMap.value( ac );
-                }
-                m_plannedCostMap.insert( a->parent(), ec );
-                finished = false;
-            }
-        }
-    }
-    finished = false;
-    while ( ! finished ) {
-        finished = true;
-        foreach ( Account *a, m_actualCostMap.keys() ) {
-            if ( a->parent() && ! m_actualCostMap.contains( a->parent() ) ) {
-                EffortCostMap ec;
-                foreach ( Account *ac, a->accountList() ) {
-                    ec += m_actualCostMap.value( ac );
-                }
-                m_plannedCostMap.insert( a->parent(), ec );
-                finished = false;
-            }
-        }
-    }
-    //kDebug()<<m_plannedCostMap.keys();
 }
 
 QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
@@ -970,13 +985,12 @@ Account *CostBreakdownItemModel::account( const QModelIndex &index ) const
 
 void CostBreakdownItemModel::slotAccountChanged( Account *account )
 {
-    Account *par = account->parent();
-    if ( par ) {
-        int row = par->accountList().indexOf( account );
-        emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
-    } else {
-        int row = m_project->accounts().accountList().indexOf( account );
-        emit dataChanged( createIndex( row, 0, account ), createIndex( row, columnCount() - 1, account ) );
+    fetchData();
+    foreach ( Account *a, m_plannedCostMap.keys() ) {
+        QModelIndex idx1 = index( a );
+        QModelIndex idx2 = index( idx1.row(), columnCount() - 1, parent( idx1 ) );
+        //kDebug()<<a->name()<<idx1<<idx2;
+        emit dataChanged( idx1, idx2  );
     }
 }
 

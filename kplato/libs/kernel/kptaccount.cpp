@@ -213,10 +213,12 @@ void Account::addRunning(Node &node) {
     Account::CostPlace *cp = findCostPlace(node);
     if (cp) {
         cp->setRunning(true);
+        changed();
         return;
     }
     cp = new CostPlace(this, &node, true);
     append(cp);
+    changed();
 }
 
 Account::CostPlace *Account::findStartup(const Node &node) const {
@@ -231,6 +233,7 @@ void Account::removeStartup(const Node &node) {
         if (cp->isEmpty()) {
             deleteCostPlace(cp);
         }
+        changed();
     }
 }
 
@@ -238,11 +241,12 @@ void Account::addStartup(Node &node) {
     Account::CostPlace *cp = findCostPlace(node);
     if (cp) {
         cp->setStartup(true);
+        changed();
         return;
     }
     cp = new CostPlace(this, &node, false, true, false);
     append(cp);
-
+    changed();
 }
 
 Account::CostPlace *Account::findShutdown(const Node &node) const {
@@ -257,6 +261,7 @@ void Account::removeShutdown(const Node &node) {
         if (cp->isEmpty()) {
             deleteCostPlace(cp);
         }
+        changed();
     }
 }
 
@@ -264,10 +269,12 @@ void Account::addShutdown(Node &node) {
     Account::CostPlace *cp = findCostPlace(node);
     if (cp) {
         cp->setShutdown(true);
+        changed();
         return;
     }
     cp = new CostPlace(this, &node, false, false, true);
     append(cp);
+    changed();
 }
 
 Account *Account::findAccount(const QString &id) const {

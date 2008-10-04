@@ -31,7 +31,7 @@ namespace KPlato
 class Project;
 class Account;
 class ScheduleManager;
-
+class Node;
 
 class KPLATOMODELS_EXPORT AccountModel : public QObject
 {
@@ -130,8 +130,6 @@ public:
 
     Account *account( const QModelIndex &index ) const;
 
-    void fetchData();
-    
     bool cumulative() const;
     void setCumulative( bool on );
     int periodType() const;
@@ -155,12 +153,19 @@ public:
     QString format() const { return m_format; }
     void setFormat( const QString &f ) { m_format = f; }
     
+protected:
+    void fetchData();
+    EffortCostMap fetchPlannedCost( Account *account );
+    EffortCostMap fetchActualCost( Account *account );
+    
 protected slots:
     void slotAccountChanged( Account* );
     void slotAccountToBeInserted( const Account *parent, int row );
     void slotAccountInserted( const Account *account );
     void slotAccountToBeRemoved( const Account *account );
     void slotAccountRemoved( const Account *account );
+    
+    void slotNodeChanged( Node *node );
 
 private:
     ScheduleManager *m_manager;
