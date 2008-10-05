@@ -136,8 +136,6 @@ protected:
     /// reimplemented method from superclass
     virtual void wheelEvent(QWheelEvent *e);
     /// reimplemented method from superclass
-    virtual bool event(QEvent *event);
-    /// reimplemented method from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);

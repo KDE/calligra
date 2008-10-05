@@ -217,6 +217,13 @@ void KarbonCanvas::keyReleaseEvent (QKeyEvent *e) {
 
 void KarbonCanvas::keyPressEvent (QKeyEvent *e) {
     d->toolProxy->keyPressEvent(e);
+    if (! e->isAccepted()) {
+        if (e->key() == Qt::Key_Backtab
+                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+            focusNextPrevChild(false);
+        else if (e->key() == Qt::Key_Tab)
+            focusNextPrevChild(true);
+    }
 }
 
 void KarbonCanvas::tabletEvent( QTabletEvent *e )

@@ -73,6 +73,13 @@ void KFormulaCanvas::paintEvent( QPaintEvent* e )
 void KFormulaCanvas::keyPressEvent( QKeyEvent* e )
 {
     m_toolProxy->keyPressEvent( e );
+    if (! e->isAccepted()) {
+        if (e->key() == Qt::Key_Backtab
+                || (e->key() == Qt::Key_Tab && (e->modifiers() & Qt::ShiftModifier)))
+            focusNextPrevChild(false);
+        else if (e->key() == Qt::Key_Tab)
+            focusNextPrevChild(true);
+    }
 }
 
 void KFormulaCanvas::mousePressEvent( QMouseEvent* e )
