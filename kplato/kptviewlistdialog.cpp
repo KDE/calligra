@@ -75,14 +75,14 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Dependency Editor (Graphic)" )
             << i18n( "Dependency Editor (List)" )
             << i18n( "Schedule Handler" )
-            << i18n( "Project Status" )
             << i18n( "Task Status" )
             << i18n( "Task View" )
             << i18n( "Gantt View" )
             << i18n( "Milestone Gantt View" )
             << i18n( "Resource Assignments" )
             << i18n( "Cost Breakdown" )
-            << i18n( "Performance Chart" );
+            << i18n( "Project Performance Chart" )
+            << i18n( "Tasks Performance Chart" );
     /* Deactivate for koffice 2.0
             << i18n( "Performance Status" )
             << i18n( "Tasks by Resources" );
@@ -131,29 +131,29 @@ bool AddViewPanel::ok()
         case 6: // Schedules Handler
             m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 7: // Project status
-            m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+        case 7: // Task status
+            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         case 8: // Task status
-            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
-            break;
-        case 9: // Task status
             m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 10: // Gantt View
+        case 9: // Gantt View
             m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 11: // Milestone Gantt View
+        case 10: // Milestone Gantt View
             m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 12: // Resource Assignments
+        case 11: // Resource Assignments
             m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 13: // Cost Breakdown
+        case 12: // Cost Breakdown
             m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 14: // Performance Chart
-            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+        case 13: // Project Performance Chart
+            m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 14: // Task Performance Chart
+            m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
 /* Deactivate for koffice 2.0 release
         case 15: // Performance Status

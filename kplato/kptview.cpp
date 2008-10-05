@@ -439,9 +439,9 @@ void View::createViews()
         createScheduleHandler( cat, "ScheduleHandler", i18n( "Schedules" ), i18n( "Calculate and analyze project schedules" ) );
     
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
-        createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Status" ), i18n( "View project status information" ) );
+        createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Performance Chart" ), i18n( "View project status information" ) );
         
-        createPerformanceStatusView( cat, "PerformanceStatusView", i18n( "Performance Status" ), i18n( "View performance status information" ) );
+        createPerformanceStatusView( cat, "PerformanceStatusView", i18n( "Tasks Performance Chart" ), i18n( "View tasks performance status information" ) );
         
         createTaskStatusView( cat, "TaskStatusView", i18n( "Task Status" ), i18n( "View task progress information" ) );
         
@@ -453,7 +453,7 @@ void View::createViews()
         
         createResourceAppointmentsView( cat, "ResourceAppointmentsView", i18n( "Resource Assignments" ), i18n( "View resource assignments" ) );
 
-        createAccountsView( cat, "AccountsView", i18n( "Cost Breakdown" ), i18n( "View planned cost" ) );
+        createAccountsView( cat, "AccountsView", i18n( "Cost Breakdown" ), i18n( "View planned and actual cost" ) );
 
         // Deactivate for koffice 2.0 release
         //createResourceAssignmentView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), i18n( "View task status per resource" ) );
