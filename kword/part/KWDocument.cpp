@@ -375,7 +375,7 @@ void KWDocument::clear()
     // document defaults
     foreach(KWPage page, m_pageManager.pages())
         m_pageManager.removePage(page);
-    m_pageManager.clearPageStyle();
+    m_pageManager.clearPageStyles();
 
     m_config.load(this); // re-load values
     foreach(KWFrameSet *fs, m_frameSets) {

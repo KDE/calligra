@@ -321,7 +321,7 @@ void KWPageManager::removePage(const KWPage &page)
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
 }
 
-QPointF KWPageManager::clipToDocument(const QPointF &point)
+QPointF KWPageManager::clipToDocument(const QPointF &point) const
 {
     qreal startOfpage = 0.0;
 
@@ -400,7 +400,7 @@ KWPageStyle KWPageManager::defaultPageStyle() const
     return d->defaultPageStyle;
 }
 
-void KWPageManager::clearPageStyle()
+void KWPageManager::clearPageStyles()
 {
     d->pageStyles.clear();
     addPageStyle("Standard").setPageLayout(KoPageLayout::standardLayout());
@@ -438,12 +438,7 @@ KWPage KWPageManager::last()
     return KWPage(d, end.value());
 }
 
-const KoInsets &KWPageManager::padding() const
-{
-    return d->padding;
-}
-
-KoInsets &KWPageManager::padding()
+KoInsets KWPageManager::padding() const
 {
     return d->padding;
 }

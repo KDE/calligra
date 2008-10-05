@@ -95,6 +95,7 @@ public:
      * @see setStartPage(int)
      */
     qreal topOfPage(int pageNumber) const; // in pt
+
     /**
      * Return the y-offset in this document of the bottom of page with @p pageNumber
      * Note that pageNumber is NOT an offset in the document, but the real number
@@ -139,7 +140,7 @@ public:
      * The resulting point is the shortest distance from the argument inside the document.
      * @param point the point to test
      */
-    QPointF clipToDocument(const QPointF &point);
+    QPointF clipToDocument(const QPointF &point) const;
 
     /**
      * Return an ordered list of all pages.
@@ -151,13 +152,7 @@ public:
      * Return the padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    const KoInsets &padding() const;
-
-    /**
-     * Return the padding used for this document. This is used to have some space around each
-     * page outside of the printable area for page bleed.
-     */
-    KoInsets &padding();
+    KoInsets padding() const;
 
     /**
      * Set a new padding used for this document. This is used to have some space around each
@@ -224,13 +219,14 @@ public:
     /**
      * Remove all page style and clears the default one.
      */
-    void clearPageStyle();
+    void clearPageStyles();
 
     /**
      * Return the first page in the page managers list of pages.
      * Will return 0 if there are no pages.
      */
     const KWPage begin() const;
+
     /**
      * Return the last page in the page managers list of pages.
      * Will return 0 if there are no pages.
@@ -242,6 +238,7 @@ public:
      * Will return 0 if there are no pages.
      */
     KWPage begin();
+
     /**
      * Return the last page in the page managers list of pages.
      * Will return 0 if there are no pages.
