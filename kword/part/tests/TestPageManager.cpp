@@ -497,5 +497,20 @@ void TestPageManager::testPageTraversal()
     QCOMPARE(page.isValid(), false);
 }
 
+void TestPageManager::testSetPageStyle()
+{
+    KWPageManager manager;
+    KWPage page = manager.appendPage();
+
+    KWPageStyle style("myStyle");
+    KoPageLayout layout = KoPageLayout::standardLayout();
+    layout.height = 100;
+    style.setPageLayout(layout);
+    page.setPageStyle(style);
+
+    QCOMPARE(page.height(), 100.);
+    QVERIFY(manager.pageStyle("myStyle") == style);
+}
+
 QTEST_KDEMAIN(TestPageManager, GUI)
 #include "TestPageManager.moc"

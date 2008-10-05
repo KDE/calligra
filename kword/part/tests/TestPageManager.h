@@ -41,6 +41,7 @@ private slots: // tests
     void testDirectionHint();
     void testPageNumber();
     void testPageTraversal();
+    void testSetPageStyle();
 };
 
 #endif

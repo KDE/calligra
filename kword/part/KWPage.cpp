@@ -20,6 +20,8 @@
 #include "KWPage.h"
 #include "KWPageManager_p.h"
 
+#include <KDebug>
+
 void KWPage::setPageNumber(int pageNumber)
 {
     if (isValid())
@@ -65,7 +67,18 @@ KWPageStyle KWPage::pageStyle() const
 
 void KWPage::setPageStyle(const KWPageStyle style)
 {
-    // TODO
+    if (! isValid())
+        return;
+    if (! style.isValid()) {
+        kWarning(32001) << "Passing invalid style to KWPage::setPageStyle()";
+        return;
+    }
+    if (! priv->pageStyles.contains(style.name()))
+        priv->pageStyles.insert(style.name(), style);
+
+    KWPageManagerPrivate::Page page = priv->pages[n];
+    page.style = style;
+    priv->pages.insert(n, page);
 }
 
 void KWPage::setPageSide(PageSide ps)
