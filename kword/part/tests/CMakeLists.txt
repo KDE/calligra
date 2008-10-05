@@ -22,4 +22,10 @@ set(TestPageCommands_test_SRCS TestPageCommands.cpp)
 kde4_add_unit_test(TestPageCommands TESTNAME kword-part-TestPageCommands  ${TestPageCommands_test_SRCS})
 target_link_libraries(TestPageCommands kwordprivate ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestViewMode_test_SRCS TestViewMode.cpp)
+kde4_add_unit_test(TestViewMode TESTNAME kword-part-TestViewMode  ${TestViewMode_test_SRCS})
+target_link_libraries(TestViewMode kwordprivate ${QT_QTTEST_LIBRARY})
+
 ########### end ###############
