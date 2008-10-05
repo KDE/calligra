@@ -175,7 +175,7 @@ public:
     void addFrameSet(KWord::TextFrameSetType hfType, KWTextFrameSet *fSet);
 
     /// get the master page name for this page style.
-    QString masterName() const;
+    QString name() const;
 
     bool operator==(const KWPageStyle &other) const;
 

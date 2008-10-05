@@ -401,17 +401,17 @@ void TestPageManager::documentPages()
     QCOMPARE(document.pageCount(), 0);
     KWPage page1 = document.appendPage("pagestyle1");
     QVERIFY(page1.isValid());
-    QCOMPARE(page1.pageStyle().masterName(), QString("Standard")); // doesn't auto-create styles
+    QCOMPARE(page1.pageStyle().name(), QString("Standard")); // doesn't auto-create styles
     QCOMPARE(page1.pageNumber(), 1);
     KWPage page2 = document.appendPage("pagestyle1");
     QVERIFY(page2.isValid());
-    QCOMPARE(page2.pageStyle().masterName(), QString("Standard"));
+    QCOMPARE(page2.pageStyle().name(), QString("Standard"));
     QCOMPARE(page2.pageNumber(), 2);
     KWPage page3 = document.appendPage("pagestyle2");
-    QCOMPARE(page3.pageStyle().masterName(), QString("Standard"));
+    QCOMPARE(page3.pageStyle().name(), QString("Standard"));
     QCOMPARE(page3.pageNumber(), 3);
     KWPage page4 = document.appendPage("pagestyle2");
-    QCOMPARE(page4.pageStyle().masterName(), QString("Standard"));
+    QCOMPARE(page4.pageStyle().name(), QString("Standard"));
     QCOMPARE(page4.pageNumber(), 4);
     KWPage page5 = document.insertPage(-99);
     QVERIFY(page5.isValid());

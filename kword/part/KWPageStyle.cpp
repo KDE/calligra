@@ -33,7 +33,7 @@ public:
 
     KoColumns columns;
     KoPageLayout pageLayout;
-    QString masterName;
+    QString name;
     bool mainFrame;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
     KWord::HeaderFooterType headers, footers;
@@ -70,10 +70,10 @@ void KWPageStylePrivate::clear()
 
 ///////////
 
-KWPageStyle::KWPageStyle(const QString& mastername)
+KWPageStyle::KWPageStyle(const QString& name)
     : d (new KWPageStylePrivate())
 {
-    d->masterName = mastername;
+    d->name = name;
 }
 
 KWPageStyle::KWPageStyle(const KWPageStyle &ps)
@@ -87,7 +87,7 @@ KWPageStyle::KWPageStyle()
 
 bool KWPageStyle::isValid() const
 {
-    return d && !d->masterName.isEmpty();
+    return d && !d->name.isEmpty();
 }
 
 
@@ -246,9 +246,9 @@ void KWPageStyle::addFrameSet(KWord::TextFrameSetType hfType, KWTextFrameSet *fS
     d->hfFrameSets[hfType] = fSet;
 }
 
-QString KWPageStyle::masterName() const
+QString KWPageStyle::name() const
 {
-    return d->masterName;
+    return d->name;
 }
 
 bool KWPageStyle::operator==(const KWPageStyle &other) const

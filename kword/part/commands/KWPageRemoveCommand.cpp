@@ -38,7 +38,7 @@ KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUnd
     Q_ASSERT(document);
     m_pageNumber = page.pageNumber();
     Q_ASSERT(page.pageStyle().isValid());
-    m_masterPageName = page.pageStyle().masterName();
+    m_masterPageName = page.pageStyle().name();
     Q_ASSERT(document->pageManager()->page(m_pageNumber) == page);
     m_pageSide = page.pageSide();
     m_pageLayout = page.pageStyle().pageLayout();
