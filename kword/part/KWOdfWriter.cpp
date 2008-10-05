@@ -51,7 +51,8 @@ public:
     /// The KWord document.
     QPointer<KWDocument> document;
 
-    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs) {
+    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
+    {
         QByteArray tag;
         switch (fs->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:  tag = "style:header";       break;

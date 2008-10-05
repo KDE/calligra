@@ -376,7 +376,6 @@ KWPageStyle KWPageManager::pageStyle(const QString &name) const
 void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
     Q_ASSERT(! pageStyle.name().isEmpty());
-qDebug() << "addPageStyle" << pageStyle.name();
     Q_ASSERT(! d->pageStyles.contains(pageStyle.name())); // This should never occur...
     d->pageStyles.insert(pageStyle.name(), pageStyle);
 }

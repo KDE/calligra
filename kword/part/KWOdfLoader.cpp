@@ -290,7 +290,8 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
         it.next();
         Q_ASSERT(! it.key().isEmpty());
         KWPageStyle masterPage = d->document->pageManager()->pageStyle(it.key());
-        if (!masterPage.isValid())
+        bool alreadyExists = masterPage.isValid();
+        if (!alreadyExists)
             masterPage = KWPageStyle(it.key());
         const KoXmlElement *masterNode = it.value();
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
@@ -301,7 +302,8 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, true); // Load headers
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, false); // Load footers
         }
-        d->document->pageManager()->addPageStyle(masterPage);
+        if (!alreadyExists)
+            d->document->pageManager()->addPageStyle(masterPage);
     }
 }
 
