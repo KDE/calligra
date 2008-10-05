@@ -38,12 +38,14 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     const int pageOffset = m_pageManager->begin().pageNumber();
     qreal offsetX = 0.0;
     foreach (const KWPage &page, m_pageManager->pages()) {
+#ifdef DEBUG
         if (page.pageNumber() - pageOffset >= m_pageTops.count()) {
             kWarning(32003) << "KWViewModeNormal ERROR; pagemanager has more pages than viewmode ("
             << m_pageManager->pageCount() << ">" << m_pageTops.count()
             << "). Make sure you add pages via the document!";
             break;
         }
+#endif
 
         QRectF zoomedPage = m_viewConverter->documentToView(page.rect());
         ViewMap vm;
@@ -130,6 +132,8 @@ void KWViewModeNormal::updatePageCache()
         }
         bottom = top;
     }
+    if (bottom > GAP)
+        bottom -= GAP; // remove one too many added
     m_contents = QSizeF(width, bottom);
 }
 
@@ -158,19 +162,19 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
 {
     QPointF clippedPoint(qMax(qreal(0.0), point.x()), qMax(qreal(0.0), point.y()));
     QPointF translated = m_viewConverter->viewToDocument(clippedPoint);
-    int pageNumber = -1;
+    int pageNumber = 0;
     foreach(qreal top, m_pageTops) {
         if (translated.y() < top)
             break;
         pageNumber++;
     }
     translated = m_viewConverter->viewToDocument(point);
-    KWPage page = m_pageManager->page(pageNumber); //(pageNumber -1 + m_pageManager->startPage());
+    KWPage page = m_pageManager->page(pageNumber -1 + m_pageManager->begin().pageNumber());
     qreal xOffset = translated.x();
 
     if (page.isValid() && m_pageSpreadMode && page.pageSide() == KWPage::Right && page != m_pageManager->begin()) {
         // there is a page displayed left of this one.
-        KWPage prevPage = m_pageManager->page(page.pageNumber() - 1);
+        KWPage prevPage = page.previous();
         if (xOffset <= prevPage.width()) // was left page instead of right :)
             page = prevPage;
         else
@@ -182,7 +186,7 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
 
     qreal yOffset = translated.y();
     if (pageNumber >= 0)
-        yOffset -= m_pageTops[pageNumber];
+        yOffset -= m_pageTops[pageNumber -1];
 
     return QPointF(xOffset, page.offsetInDocument() + yOffset);
 }
