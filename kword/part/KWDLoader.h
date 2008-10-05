@@ -20,15 +20,15 @@
 #ifndef KWDLOADER_H
 #define KWDLOADER_H
 
-#include <QObject>
+#include "KWPageStyle.h"
 
 #include <KoXmlReader.h>
 #include <QTextDocument>
+#include <QObject>
 
 class KWDocument;
 class KWFrameSet;
 class KWFrame;
-class KWPageStyle;
 class KWPageManager;
 class KWTextFrameSet;
 class KoParagraphStyle;
@@ -94,7 +94,7 @@ private:
 
 private:
     KWDocument *m_document;
-    KWPageStyle *m_pageStyle;
+    KWPageStyle m_pageStyle;
     KWPageManager *m_pageManager;
     bool m_foundMainFS;
     int m_nrItemsToLoad, m_itemsLoaded;

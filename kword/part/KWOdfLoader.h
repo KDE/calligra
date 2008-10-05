@@ -77,7 +77,7 @@ protected:
     virtual void loadMasterPageStyles(KoOdfLoadingContext& context);
 
 private:
-    void loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle *pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
+    void loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
     void loadFinished(KoOdfLoadingContext& context, QTextCursor& cursor);
 
 private:

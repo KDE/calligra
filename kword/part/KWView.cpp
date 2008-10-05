@@ -177,7 +177,7 @@ void KWView::setupActions()
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in KWord.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
     if (m_currentPage)
-        m_actionViewHeader->setChecked(m_currentPage->pageStyle()->headers() != KWord::HFTypeNone);
+        m_actionViewHeader->setChecked(m_currentPage->pageStyle().headers() != KWord::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
@@ -186,7 +186,7 @@ void KWView::setupActions()
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in KWord. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
     if (m_currentPage)
-        m_actionViewFooter->setChecked(m_currentPage->pageStyle()->footers() != KWord::HFTypeNone);
+        m_actionViewFooter->setChecked(m_currentPage->pageStyle().footers() != KWord::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
@@ -953,8 +953,8 @@ void KWView::toggleHeader()
 {
     if (m_currentPage == 0)
         return;
-    Q_ASSERT(m_currentPage->pageStyle());
-    m_currentPage->pageStyle()->setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    Q_ASSERT(m_currentPage->pageStyle().isValid());
+    m_currentPage->pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
     m_document->relayout();
 }
 
@@ -962,8 +962,8 @@ void KWView::toggleFooter()
 {
     if (m_currentPage == 0)
         return;
-    Q_ASSERT(m_currentPage->pageStyle());
-    m_currentPage->pageStyle()->setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    Q_ASSERT(m_currentPage->pageStyle().isValid());
+    m_currentPage->pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
     m_document->relayout();
 }
 
@@ -1178,8 +1178,8 @@ void KWView::selectionChanged()
             m_currentPage = currentPage;
             m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage->pageNumber());
             m_zoomController->setPageSize(m_currentPage->rect().size());
-            m_actionViewHeader->setChecked(m_currentPage->pageStyle()->headers() != KWord::HFTypeNone);
-            m_actionViewFooter->setChecked(m_currentPage->pageStyle()->footers() != KWord::HFTypeNone);
+            m_actionViewHeader->setChecked(m_currentPage->pageStyle().headers() != KWord::HFTypeNone);
+            m_actionViewFooter->setChecked(m_currentPage->pageStyle().footers() != KWord::HFTypeNone);
         }
         KWFrame *frame = frameForShape(shape);
         KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());

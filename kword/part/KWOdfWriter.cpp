@@ -79,6 +79,8 @@ public:
     }
 
     void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles) {
+    // TODO rewrite this to properly find the framesets in the document
+#if 0
         kDebug() << "START saveHeaderFooter ############################################";
 
         // We need to flush them out ordered as defined in the specs.
@@ -125,6 +127,7 @@ public:
         //    mainStyles.markStyleForStylesXml( s.name );
 
         kDebug() << "END saveHeaderFooter ############################################";
+#endif
     }
 };
 

@@ -102,11 +102,11 @@ public:
     int pageNumber(int select = 0, int adjustment = 0) const;
 
     /// returns the page style applied on this page
-    KWPageStyle *pageStyle() const {
+    KWPageStyle pageStyle() const {
         return m_pageStyle;
     }
     /// set the page style to apply on this page
-    void setPageStyle(KWPageStyle *style) {
+    void setPageStyle(const KWPageStyle style) {
         m_pageStyle = style;
     }
 
@@ -148,14 +148,14 @@ private:
      * @param pageNum the number of the page as the user will see it.
      * @param pageStyle the page style to use for the page
      */
-    KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle);
+    KWPage(KWPageManager *parent, int pageNum, const KWPageStyle &pageStyle);
 
     int m_pageNum;
     PageSide m_pageSide;
     KoText::Direction m_textDirectionHint;
 
     KWPageManager *m_parent;
-    KWPageStyle *m_pageStyle;
+    KWPageStyle m_pageStyle;
 
     friend class KWPageManager;
 

@@ -37,11 +37,11 @@ KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage *page, QUn
     Q_ASSERT(page);
     Q_ASSERT(document);
     m_pageNumber = page->pageNumber();
-    Q_ASSERT(page->pageStyle());
-    m_masterPageName = page->pageStyle()->masterName();
+    Q_ASSERT(page->pageStyle().isValid());
+    m_masterPageName = page->pageStyle().masterName();
     Q_ASSERT(document->pageManager()->page(m_pageNumber) == page);
     m_pageSide = page->pageSide();
-    m_pageLayout = page->pageStyle()->pageLayout();
+    m_pageLayout = page->pageStyle().pageLayout();
     m_orientation = page->orientationHint();
     m_direction = page->directionHint();
 }
@@ -128,10 +128,10 @@ void KWPageRemoveCommand::undo()
     KWPage *page = m_document->m_pageManager.insertPage(m_pageNumber);
     page->setPageSide(m_pageSide);
     m_pageLayout.orientation = m_orientation;
-    page->pageStyle()->setPageLayout(m_pageLayout);
+    page->pageStyle().setPageLayout(m_pageLayout);
     page->setDirectionHint(m_direction);
-    KWPageStyle *pageStyle = m_document->pageManager()->pageStyle(m_masterPageName);
-    if (pageStyle)
+    KWPageStyle pageStyle = m_document->pageManager()->pageStyle(m_masterPageName);
+    if (pageStyle.isValid())
         page->setPageStyle(pageStyle);
 
     // undo the KWFrameDeleteCommand commands

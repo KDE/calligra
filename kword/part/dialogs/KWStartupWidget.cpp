@@ -95,10 +95,11 @@ void KWStartupWidget::buttonClicked()
         m_layout.width /= 2.0;
         m_doc->m_pageManager.setPreferPageSpread(true);
     }
-    KWPageStyle *style = m_doc->m_pageManager.defaultPageStyle();
-    style->setColumns(m_columns);
-    style->setMainTextFrame(widget.mainText->isChecked());
-    style->setPageLayout(m_layout);
+    KWPageStyle style = m_doc->m_pageManager.defaultPageStyle();
+    style.setColumns(m_columns);
+    style.setMainTextFrame(widget.mainText->isChecked());
+    style.setPageLayout(m_layout);
+    m_doc->m_pageManager.addPageStyle(style);
     m_doc->setUnit(m_unit);
 
     m_doc->appendPage("Standard");

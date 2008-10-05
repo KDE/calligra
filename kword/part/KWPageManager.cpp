@@ -37,8 +37,6 @@ KWPageManager::KWPageManager()
 
 KWPageManager::~KWPageManager()
 {
-    qDeleteAll(m_pageStyle);
-
     // prevent crashes on shutdown of KWord what is needed to make the dirty hack
     // in the KWPage dtor working to inform us if something weird goes on with our
     // m_pageList list.
@@ -110,14 +108,15 @@ KWPage* KWPageManager::page(qreal y) const
     return page(pageNumber(y));
 }
 
-KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle)
+KWPage* KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 {
     if (pageNumber <= 0 || (!m_pageList.isEmpty() && last()->pageNumber() < pageNumber))
         return appendPage(pageStyle);
 
-    if (! pageStyle) {
+    KWPageStyle style = pageStyle;
+    if (! style.isValid()) {
         KWPage *prev = page(pageNumber - 1);
-        pageStyle = prev ? prev->pageStyle() : defaultPageStyle();
+        style = prev ? prev->pageStyle() : defaultPageStyle();
     }
 
     // increase the pagenumbers of pages following the pageNumber
@@ -131,7 +130,7 @@ KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle)
         }
     }
 
-    KWPage *page = new KWPage(this, pageNumber, pageStyle);
+    KWPage *page = new KWPage(this, pageNumber, style);
     m_pageList.insert(insertPoint, page);
     kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
     return page;
@@ -153,11 +152,12 @@ KWPage* KWPageManager::insertPage(KWPage *page)
     return page;
 }
 
-KWPage* KWPageManager::appendPage(KWPageStyle *pageStyle)
+KWPage* KWPageManager::appendPage(const KWPageStyle &pageStyle)
 {
-    if (! pageStyle) {
+    KWPageStyle style = pageStyle;
+    if (!style.isValid()) {
         KWPage *p = last();
-        pageStyle = p ? p->pageStyle() : defaultPageStyle();
+        style = p ? p->pageStyle() : defaultPageStyle();
     }
     int lastPageNumber = 0;
     KWPage *lastPage = last();
@@ -253,36 +253,36 @@ QList<KWPage*> KWPageManager::pages() const
 
 // **** PageList ****
 
-QHash<QString, KWPageStyle *> KWPageManager::pageStyles() const
+QHash<QString, KWPageStyle> KWPageManager::pageStyles() const
 {
     return m_pageStyle;
 }
 
-KWPageStyle *KWPageManager::pageStyle(const QString &name) const
+KWPageStyle KWPageManager::pageStyle(const QString &name) const
 {
     if (m_pageStyle.contains(name))
         return m_pageStyle[name];
-    return 0;
+    return KWPageStyle();
 }
 
-void KWPageManager::addPageStyle(KWPageStyle *pageStyle)
+void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
-    const QString masterpagename = pageStyle->masterName();
+    const QString masterpagename = pageStyle.masterName();
     Q_ASSERT(! masterpagename.isEmpty());
     Q_ASSERT(! m_pageStyle.contains(masterpagename)); // This should never occur...
-    m_pageStyle[masterpagename] = pageStyle;
+    m_pageStyle.insert(masterpagename, pageStyle);
 }
 
-KWPageStyle* KWPageManager::addPageStyle(const QString &name)
+KWPageStyle KWPageManager::addPageStyle(const QString &name)
 {
     if (m_pageStyle.contains(name))
         return m_pageStyle[name];
-    KWPageStyle* pagestyle = new KWPageStyle(name);
+    KWPageStyle pagestyle(name);
     addPageStyle(pagestyle);
     return pagestyle;
 }
 
-KWPageStyle* KWPageManager::defaultPageStyle() const
+KWPageStyle KWPageManager::defaultPageStyle() const
 {
     Q_ASSERT(m_pageStyle.contains("Standard"));
     return m_pageStyle["Standard"];
@@ -290,11 +290,10 @@ KWPageStyle* KWPageManager::defaultPageStyle() const
 
 void KWPageManager::clearPageStyle()
 {
-    qDeleteAll(m_pageStyle);
     m_pageStyle.clear();
 
-    KWPageStyle* defaultpagestyle = new KWPageStyle("Standard");
-    defaultpagestyle->setPageLayout(KoPageLayout::standardLayout());
+    KWPageStyle defaultpagestyle("Standard");
+    defaultpagestyle.setPageLayout(KoPageLayout::standardLayout());
     addPageStyle(defaultpagestyle);
 }
 

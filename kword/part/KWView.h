@@ -20,13 +20,14 @@
 #ifndef KWVIEW_H
 #define KWVIEW_H
 
+#include "kword_export.h"
+
 #include <KoView.h>
 #include <KoViewConverter.h>
 #include <KoZoomHandler.h>
 #include <KoShapeReorderCommand.h>
 
 #include <QWidget>
-#include "kword_export.h"
 
 class KWDocument;
 class KWCanvas;

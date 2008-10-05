@@ -370,12 +370,9 @@ void KWDocument::clear()
 {
     // document defaults
     foreach(KWPage *page, m_pageManager.pages())
-    m_pageManager.removePage(page);
+        m_pageManager.removePage(page);
     m_pageManager.clearPageStyle();
-    KoColumns columns = m_pageManager.defaultPageStyle()->columns();
     m_config.load(this); // re-load values
-    columns.columnSpacing = m_config.defaultColumnSpacing();
-    m_pageManager.defaultPageStyle()->setColumns(columns);
     foreach(KWFrameSet *fs, m_frameSets) {
         removeFrameSet(fs);
         delete fs;

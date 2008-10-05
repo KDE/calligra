@@ -25,7 +25,7 @@
 
 #include <QRect>
 
-KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle)
+KWPage::KWPage(KWPageManager *parent, int pageNum, const KWPageStyle &pageStyle)
 {
     m_parent = parent;
     m_pageNum = pageNum;
@@ -52,21 +52,21 @@ int KWPage::pageNumber(int select, int adjustment) const
 
 qreal KWPage::width() const
 {
-    return m_pageStyle->pageLayout().width * (m_pageSide == PageSpread ? 2 : 1);
+    return m_pageStyle.pageLayout().width * (m_pageSide == PageSpread ? 2 : 1);
 }
 
 qreal KWPage::height() const
 {
-    return m_pageStyle->pageLayout().height;
+    return m_pageStyle.pageLayout().height;
 }
 
 qreal KWPage::topMargin() const
 {
-    return m_pageStyle->pageLayout().top;
+    return m_pageStyle.pageLayout().top;
 }
 qreal KWPage::bottomMargin() const
 {
-    return m_pageStyle->pageLayout().bottom;
+    return m_pageStyle.pageLayout().bottom;
 }
 
 qreal KWPage::leftMargin() const
@@ -74,7 +74,7 @@ qreal KWPage::leftMargin() const
     qreal answer = m_pageSide == Left ? pageEdgeMargin() : marginClosestBinding();
     if (answer != -1)
         return answer;
-    return m_pageStyle->pageLayout().left;
+    return m_pageStyle.pageLayout().left;
 }
 
 qreal KWPage::rightMargin() const
@@ -82,15 +82,15 @@ qreal KWPage::rightMargin() const
     qreal answer = m_pageSide == Right ? pageEdgeMargin() : marginClosestBinding();
     if (answer != -1)
         return answer;
-    return m_pageStyle->pageLayout().right;
+    return m_pageStyle.pageLayout().right;
 }
 qreal KWPage::pageEdgeMargin() const
 {
-    return m_pageStyle->pageLayout().pageEdge;
+    return m_pageStyle.pageLayout().pageEdge;
 }
 qreal KWPage::marginClosestBinding() const
 {
-    return m_pageStyle->pageLayout().bindingSide;
+    return m_pageStyle.pageLayout().bindingSide;
 }
 
 qreal KWPage::offsetInDocument() const
@@ -110,7 +110,7 @@ QRectF KWPage::rect(int pageNumber) const
 
 KoPageFormat::Orientation KWPage::orientationHint() const
 {
-    return m_pageStyle->pageLayout().orientation;
+    return m_pageStyle.pageLayout().orientation;
 }
 
 const KWPage *KWPage::previous() const

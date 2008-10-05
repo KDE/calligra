@@ -38,19 +38,19 @@ void TestTextFrameSorting::testSortingOnPagespread()
     KWFrame * frame5 = createFrame(QPointF(230, 10), tfs);
 
     KWDocument doc;
-    KWPageManager pm(&doc);
+    KWPageManager pm;
 //pm.setStartPage(2);
     KWPage *page = pm.appendPage();
-    KoPageLayout layout = page->pageStyle()->pageLayout();
+    KoPageLayout layout = page->pageStyle().pageLayout();
     layout.width = 450;
     layout.height = 150;
     page->setDirectionHint(KoText::LeftRightTopBottom);
     page->setPageSide(KWPage::PageSpread);
-    page->pageStyle()->setPageLayout(layout);
+    page->pageStyle().setPageLayout(layout);
     page = pm.appendPage();
     page->setDirectionHint(KoText::LeftRightTopBottom);
     layout.width = 200;
-    page->pageStyle()->setPageLayout(layout);
+    page->pageStyle().setPageLayout(layout);
     tfs.setPageManager(&pm);
 
     // test KWPageManager::pageNumber first
@@ -78,13 +78,13 @@ void TestTextFrameSorting::testRtlSorting()
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
 
     KWDocument doc;
-    KWPageManager pm(&doc);
+    KWPageManager pm;
     KWPage *page = pm.appendPage();
     page->setDirectionHint(KoText::RightLeftTopBottom);
     QCOMPARE(page->directionHint(), KoText::RightLeftTopBottom);
-    KoPageLayout layout = page->pageStyle()->pageLayout();
+    KoPageLayout layout = page->pageStyle().pageLayout();
     layout.width = 200;
-    page->pageStyle()->setPageLayout(layout);
+    page->pageStyle().setPageLayout(layout);
     tfs.setPageManager(&pm);
 
     qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);

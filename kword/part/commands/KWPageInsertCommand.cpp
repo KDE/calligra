@@ -54,7 +54,7 @@ KWPageInsertCommand::~KWPageInsertCommand()
 void KWPageInsertCommand::redo()
 {
     QUndoCommand::redo();
-    KWPageStyle *pageStyle = m_document->pageManager()->pageStyle(m_masterPageName); // may return NULL
+    KWPageStyle pageStyle = m_document->pageManager()->pageStyle(m_masterPageName);
     if (m_page == 0) {
         // Appending a page
         KWPage *prevPage = m_document->m_pageManager.page(m_afterPageNum);
@@ -89,7 +89,7 @@ void KWPageInsertCommand::redo()
     } else {
         // Inserting a page
         if (!m_masterPageName.isEmpty())
-            if (pageStyle)
+            if (pageStyle.isValid())
                 m_page->setPageStyle(pageStyle);
         m_document->m_pageManager.insertPage(m_page);
     }

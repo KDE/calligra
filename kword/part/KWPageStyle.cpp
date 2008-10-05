@@ -22,48 +22,235 @@
 #include "KWPageStyle.h"
 #include <kdebug.h>
 
-KWPageStyle::KWPageStyle(const QString& mastername)
-        : m_masterName(mastername)
-{
-    clear();
-}
+#include <QSharedData>
 
-void KWPageStyle::clear()
+class KWPageStylePrivate : public QSharedData
+{
+public:
+    KWPageStylePrivate() { clear(); }
+
+    void clear();
+
+    KoColumns columns;
+    KoPageLayout pageLayout;
+    QString masterName;
+    bool mainFrame;
+    qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
+    KWord::HeaderFooterType headers, footers;
+    // These framesets are deleted by KWDocument.
+    QMap<KWord::TextFrameSetType, KWTextFrameSet *> hfFrameSets;
+
+    qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
+    int footNoteSeparatorLineLength; ///< It's a percentage of page.
+    Qt::PenStyle footNoteSeparatorLineType; ///< foot note separate type
+    KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
+
+    // See parag 16.2 for all the ODF features.
+};
+
+void KWPageStylePrivate::clear()
 {
     // defaults
-    m_footNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
-    m_footNoteSeparatorLineWidth = 0.5; // like in OOo
-    m_footNoteSeparatorLineType = Qt::SolidLine;
+    footNoteSeparatorLineLength = 20; // 20%, i.e. 1/5th
+    footNoteSeparatorLineWidth = 0.5; // like in OOo
+    footNoteSeparatorLineType = Qt::SolidLine;
 
-    m_mainFrame = true;
-    m_headerDistance = 10; // ~3mm
-    m_footerDistance = 10;
-    m_footNoteDistance = 10;
-    m_endNoteDistance = 10;
-    m_headers = KWord::HFTypeNone;
-    m_footers = KWord::HFTypeNone;
-    m_columns.columns = 1;
-    m_columns.columnSpacing = 17; // ~ 6mm
-    m_hfFrameSets.clear();
-    m_pageLayout = KoPageLayout::standardLayout();
+    mainFrame = true;
+    headerDistance = 10; // ~3mm
+    footerDistance = 10;
+    footNoteDistance = 10;
+    endNoteDistance = 10;
+    headers = KWord::HFTypeNone;
+    footers = KWord::HFTypeNone;
+    columns.columns = 1;
+    columns.columnSpacing = 17; // ~ 6mm
+    hfFrameSets.clear();
+    pageLayout = KoPageLayout::standardLayout();
+}
+
+///////////
+
+KWPageStyle::KWPageStyle(const QString& mastername)
+{
+    d->masterName = mastername;
+}
+
+KWPageStyle::KWPageStyle(const KWPageStyle &ps)
+    : d(ps.d)
+{
+}
+
+KWPageStyle::KWPageStyle()
+{
+}
+
+bool KWPageStyle::isValid() const
+{
+    return !d->masterName.isEmpty();
+}
+
+
+KWPageStyle &KWPageStyle::operator=(const KWPageStyle &ps)
+{
+    d = ps.d;
+    return *this;
+}
+
+KWPageStyle::~KWPageStyle()
+{
 }
 
 void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
 {
-    m_footers = p;
+    d->footers = p;
 }
 
 void KWPageStyle::setHeaderPolicy(KWord::HeaderFooterType p)
 {
-    m_headers = p;
+    d->headers = p;
 }
 
 const KoPageLayout KWPageStyle::pageLayout() const
 {
-    return m_pageLayout;
+    return d->pageLayout;
 }
 
 void KWPageStyle::setPageLayout(const KoPageLayout &pageLayout)
 {
-    m_pageLayout = pageLayout;
+    d->pageLayout = pageLayout;
+}
+
+const KoColumns &KWPageStyle::columns() const
+{
+    return d->columns;
+}
+
+void KWPageStyle::setColumns(const KoColumns &columns)
+{
+    d->columns = columns;
+}
+
+KWord::HeaderFooterType KWPageStyle::headers() const
+{
+    return d->headers;
+}
+
+KWord::HeaderFooterType KWPageStyle::footers() const
+{
+    return d->footers;
+}
+
+void KWPageStyle::setMainTextFrame(bool on)
+{
+    d->mainFrame = on;
+}
+
+bool KWPageStyle::hasMainTextFrame() const
+{
+    return d->mainFrame;
+}
+
+qreal KWPageStyle::headerDistance() const
+{
+    return d->headerDistance;
+}
+
+void KWPageStyle::setHeaderDistance(qreal distance)
+{
+    d->headerDistance = distance;
+}
+
+qreal KWPageStyle::footerDistance() const
+{
+    return d->footerDistance;
+}
+
+void KWPageStyle::setFooterDistance(qreal distance)
+{
+    d->footerDistance = distance;
+}
+
+qreal KWPageStyle::footnoteDistance() const
+{
+    return d->footNoteDistance;
+}
+
+void KWPageStyle::setFootnoteDistance(qreal distance)
+{
+    d->footNoteDistance = distance;
+}
+
+qreal KWPageStyle::endNoteDistance() const
+{
+    return d->endNoteDistance;
+}
+
+void KWPageStyle::setEndNoteDistance(qreal distance)
+{
+    d->endNoteDistance = distance;
+}
+
+int KWPageStyle::footNoteSeparatorLineLength() const
+{
+    return d->footNoteSeparatorLineLength;
+}
+
+void KWPageStyle::setFootNoteSeparatorLineLength(int length)
+{
+    d->footNoteSeparatorLineLength = length;
+}
+
+qreal KWPageStyle::footNoteSeparatorLineWidth() const
+{
+    return d->footNoteSeparatorLineWidth;
+}
+
+void KWPageStyle::setFootNoteSeparatorLineWidth(qreal width)
+{
+    d->footNoteSeparatorLineWidth = width;
+}
+
+Qt::PenStyle KWPageStyle::footNoteSeparatorLineType() const
+{
+    return d->footNoteSeparatorLineType;
+}
+
+void KWPageStyle::setFootNoteSeparatorLineType(Qt::PenStyle type)
+{
+    d->footNoteSeparatorLineType = type;
+}
+
+KWord::FootNoteSeparatorLinePos KWPageStyle::footNoteSeparatorLinePosition() const
+{
+    return d->footNoteSeparatorLinePos;
+}
+
+void KWPageStyle::setFootNoteSeparatorLinePosition(KWord::FootNoteSeparatorLinePos position)
+{
+    d->footNoteSeparatorLinePos = position;
+}
+
+void KWPageStyle::clear()
+{
+    d->clear();
+}
+
+KWTextFrameSet *KWPageStyle::getFrameSet(KWord::TextFrameSetType hfType)
+{
+    return d->hfFrameSets[hfType];
+}
+
+void KWPageStyle::addFrameSet(KWord::TextFrameSetType hfType, KWTextFrameSet *fSet)
+{
+    d->hfFrameSets[hfType] = fSet;
+}
+
+QString KWPageStyle::masterName() const
+{
+    return d->masterName;
+}
+
+bool KWPageStyle::operator==(const KWPageStyle &other) const
+{
+    return d == other.d;
 }

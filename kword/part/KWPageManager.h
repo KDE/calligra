@@ -110,7 +110,7 @@ public:
      * @param pageNumber page number of the new page
      * @param pageStyle the page style to use for the new page
      */
-    KWPage* insertPage(int pageNumber, KWPageStyle *pageStyle = 0);
+    KWPage* insertPage(int pageNumber, const KWPageStyle &pageStyle = KWPageStyle());
 
     /**
      * Insert the page instance at the specified position in the document. Note that it is preferred
@@ -123,7 +123,7 @@ public:
      * Append a new page at the end of the document
      * @param pageStyle the page style to use for the new page
      */
-    KWPage* appendPage(KWPageStyle *pageStyle = 0);
+    KWPage* appendPage(const KWPageStyle &pageStyle = KWPageStyle());
 
     /// Remove the page with @p pageNumber renumbering all pages after pages already added
     void removePage(int pageNumber);
@@ -194,7 +194,7 @@ public:
      * document will take over ownership and takes care of deleting the instance
      * one the document itself got deleted.
      */
-    void addPageStyle(KWPageStyle *pageStyle);
+    void addPageStyle(const KWPageStyle &pageStyle);
 
     /**
      * Add a new \a KWPageStyle instance to this document.
@@ -207,23 +207,24 @@ public:
      * document will take over ownership and takes care of deleting the instance
      * one the document itself got deleted.
      */
-    KWPageStyle* addPageStyle(const QString &name);
+    KWPageStyle addPageStyle(const QString &name);
 
     /**
      * Returns all pagestyles.
+     * // TODO only return a qlist of styles, they have a their name in them alraedy
      */
-    QHash<QString, KWPageStyle *> pageStyles() const;
+    QHash<QString, KWPageStyle> pageStyles() const;
 
     /**
      * Returns the \a KWPageStyle known under the name \p name or NULL if the
      * document has no such page style.
      */
-    KWPageStyle *pageStyle(const QString &name) const;
+    KWPageStyle pageStyle(const QString &name) const;
 
     /**
      * Return the default page style. This equals to pageStyle("Standard").
      */
-    KWPageStyle* defaultPageStyle() const;
+    KWPageStyle defaultPageStyle() const;
 
     /**
      * Remove all page style and clears the default one.
@@ -261,7 +262,7 @@ private:
     QList<KWPage*> m_pageList;
     bool m_preferPageSpread;
 
-    QHash <QString, KWPageStyle *> m_pageStyle;
+    QHash <QString, KWPageStyle> m_pageStyle;
     KoInsets m_padding;
 
     /// disable copy constructor and assignment operator

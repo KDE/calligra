@@ -16,12 +16,12 @@ class Helper
 {
 public:
     Helper() {
-        pageManager = new KWPageManager(&doc);
+        pageManager = new KWPageManager();
         KWPage *page = pageManager->appendPage();
-        KoPageLayout pageLayout = page->pageStyle()->pageLayout();
+        KoPageLayout pageLayout = page->pageStyle().pageLayout();
         pageLayout.width = 200;
         pageLayout.height = 200;
-        page->pageStyle()->setPageLayout(pageLayout);
+        page->pageStyle().setPageLayout(pageLayout);
         pageStyle = page->pageStyle();
     }
     ~Helper() {
@@ -30,7 +30,7 @@ public:
 
     KWDocument doc;
     KWPageManager *pageManager;
-    KWPageStyle *pageStyle;
+    KWPageStyle pageStyle;
 };
 
 TestBasicLayout::TestBasicLayout()
@@ -93,21 +93,21 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter()
     connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
 
     // test the first page
-    helper.pageStyle->setHeaderPolicy(KWord::HFTypeNone);
-    helper.pageStyle->setFooterPolicy(KWord::HFTypeNone);
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeNone);
+    helper.pageStyle.setFooterPolicy(KWord::HFTypeNone);
     KWord::TextFrameSetType origin;
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), false);  // header
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, false, &origin), false); // footer
 
-    helper.pageStyle->setHeaderPolicy(KWord::HFTypeEvenOdd);
-    helper.pageStyle->setFooterPolicy(KWord::HFTypeUniform);
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd);
+    helper.pageStyle.setFooterPolicy(KWord::HFTypeUniform);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), true);
     QCOMPARE(origin, KWord::OddPagesHeaderTextFrameSet);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, false, &origin), true);
     QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
 
-    helper.pageStyle->setHeaderPolicy(KWord::HFTypeUniform);
-    helper.pageStyle->setFooterPolicy(KWord::HFTypeEvenOdd);
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeUniform);
+    helper.pageStyle.setFooterPolicy(KWord::HFTypeEvenOdd);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, true, &origin), true);
     QCOMPARE(origin, KWord::OddPagesHeaderTextFrameSet);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(1, false, &origin), true);
@@ -115,37 +115,37 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter()
 
     // append the second page, same pageStyle like the first
     helper.pageManager->appendPage();
-    QCOMPARE(helper.pageManager->page(1)->pageStyle(), helper.pageManager->page(2)->pageStyle());
+    QVERIFY(helper.pageManager->page(1)->pageStyle() == helper.pageManager->page(2)->pageStyle());
 
     // append the theird page with another pagesettings
-    KWPageStyle* pagesettings3 = new KWPageStyle("Page3PageStyle");
-    helper.pageManager->addPageStyle(pagesettings3); // takes over ownership
+    KWPageStyle pagesettings3("Page3PageStyle");
+    helper.pageManager->addPageStyle(pagesettings3);
     helper.pageManager->appendPage(pagesettings3);
-    QCOMPARE(helper.pageManager->page(3)->pageStyle(), pagesettings3);
+    QVERIFY(helper.pageManager->page(3)->pageStyle() == pagesettings3);
 
     // test the second page
-    helper.pageStyle->setHeaderPolicy(KWord::HFTypeNone);
-    helper.pageStyle->setFooterPolicy(KWord::HFTypeNone);
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeNone);
+    helper.pageStyle.setFooterPolicy(KWord::HFTypeNone);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, true, &origin), false);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, false, &origin), false);
 
-    helper.pageStyle->setHeaderPolicy(KWord::HFTypeEvenOdd);
-    helper.pageStyle->setFooterPolicy(KWord::HFTypeUniform);
+    helper.pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd);
+    helper.pageStyle.setFooterPolicy(KWord::HFTypeUniform);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, true, &origin), true);
     QCOMPARE(origin, KWord::EvenPagesHeaderTextFrameSet);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, false, &origin), true);
     QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
 
     // test the theird page
-    pagesettings3->setHeaderPolicy(KWord::HFTypeEvenOdd);
-    pagesettings3->setFooterPolicy(KWord::HFTypeUniform);
+    pagesettings3.setHeaderPolicy(KWord::HFTypeEvenOdd);
+    pagesettings3.setFooterPolicy(KWord::HFTypeUniform);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, true, &origin), true);
     QCOMPARE(origin, KWord::OddPagesHeaderTextFrameSet);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, false, &origin), true);
     QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
 
-    pagesettings3->setHeaderPolicy(KWord::HFTypeNone);
-    pagesettings3->setFooterPolicy(KWord::HFTypeNone);
+    pagesettings3.setHeaderPolicy(KWord::HFTypeNone);
+    pagesettings3.setFooterPolicy(KWord::HFTypeNone);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, true, &origin), false);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, false, &origin), false);
 
