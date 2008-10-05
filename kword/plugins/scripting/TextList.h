@@ -47,7 +47,7 @@ public:
             : QObject(parent), m_list(list) {}
     virtual ~TextList() {}
 
-public Q_SLOTS:
+public slots:
 
     /** Return the number of items the list has. */
     int countItems() {

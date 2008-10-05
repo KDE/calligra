@@ -81,7 +81,7 @@ public:
         IgnoreContentFrameBehavior = KWord::IgnoreContentFrameBehavior ///< Ignore the content and clip it
     };
 
-public Q_SLOTS:
+public slots:
 
     /** Return the Id of this shape, identifying the type of shape by the id of the factory. */
     QString shapeId() const {

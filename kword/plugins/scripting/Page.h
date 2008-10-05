@@ -39,7 +39,7 @@ public:
             : QObject(module), m_page(page) {}
     virtual ~Page() {}
 
-public Q_SLOTS:
+public slots:
 
     /** Return the number of this page as it will be shown to the user. */
     int pageNumber() const {

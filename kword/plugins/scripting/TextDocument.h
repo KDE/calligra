@@ -63,7 +63,7 @@ public:
         return objmanager ? objmanager->variableManager() : 0;
     }
 
-public Q_SLOTS:
+public slots:
 
     /** Return the width of the document in pt. */
     virtual qreal width() const {

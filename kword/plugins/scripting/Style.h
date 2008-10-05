@@ -42,7 +42,7 @@ public:
     KoCharacterStyle* style() const {
         return m_style;
     }
-public Q_SLOTS:
+public slots:
 
     /***** Name *****/
 

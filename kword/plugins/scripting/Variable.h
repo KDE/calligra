@@ -108,7 +108,7 @@ public:
 #endif
     }
 
-public Q_SLOTS:
+public slots:
 
     /**
     * Return the values the variable has as string.
@@ -136,7 +136,7 @@ public Q_SLOTS:
         m_optionswidget = optionswidget;
     }
 
-Q_SIGNALS:
+signals:
 
     /**
     * This signal got emitted if properties got updated.
