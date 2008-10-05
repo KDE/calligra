@@ -519,7 +519,7 @@ void KarbonPart::removeShape( KoShape* shape )
     setModified( true );
 }
 
-QMap<QString, KoDataCenter*> KarbonPart::dataCenterMap()
+QMap<QString, KoDataCenter*> KarbonPart::dataCenterMap() const
 {
     return d->document.dataCenterMap();
 }

@@ -220,7 +220,7 @@ Map *Doc::map () const
   return d->map;
 }
 
-QMap<QString, KoDataCenter *> Doc::dataCenterMap()
+QMap<QString, KoDataCenter *> Doc::dataCenterMap() const
 {
     return d->dataCenterMap;
 }

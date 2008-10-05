@@ -98,12 +98,7 @@ public:
     }
 
     /// @return the data center map for this document.
-    QMap<QString, KoDataCenter *>  dataCenterMap()  {
-        return m_dataCenterMap;
-    }
-
-    /// @return the data center map for this document.
-    const QMap<QString, KoDataCenter *>  dataCenterMap() const {
+    QMap<QString, KoDataCenter *>  dataCenterMap() const {
         return m_dataCenterMap;
     }
 

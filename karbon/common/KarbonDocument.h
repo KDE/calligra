@@ -213,7 +213,7 @@ public:
     KoImageCollection * imageCollection();
 
     /// Returns the documents data centers
-    QMap<QString, KoDataCenter*> dataCenterMap();
+    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
 private:
 

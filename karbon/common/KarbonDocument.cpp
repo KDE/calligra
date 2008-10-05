@@ -362,7 +362,7 @@ KoImageCollection * KarbonDocument::imageCollection()
     return (KoImageCollection *)d->dataCenterMap["ImageCollection"];
 }
 
-QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap()
+QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const
 {
     return d->dataCenterMap;
 }

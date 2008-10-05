@@ -110,7 +110,7 @@ public:
   virtual QByteArray mimeType() const { return MIME_TYPE; }
 
     // KoShapeControllerBase interface
-    QMap<QString, KoDataCenter*> dataCenterMap();
+    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
   /**
    * @return the Map that belongs to this Document

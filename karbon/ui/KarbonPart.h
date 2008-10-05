@@ -73,7 +73,7 @@ public:
     /// implemented from KoShapeController
     virtual void removeShape( KoShape* shape );
     /// implemented from KoShapeController
-    virtual QMap<QString, KoDataCenter*> dataCenterMap();
+    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
     /// Gives access to document content
     KarbonDocument& document();

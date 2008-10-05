@@ -60,7 +60,7 @@ public:
     /// reimplemented from KoShapeControllerBase
     void removeShape (KoShape *shape);
     /// reimplemented from KoShapeControllerBase
-    QMap<QString, KoDataCenter *> dataCenterMap();
+    virtual QMap<QString, KoDataCenter *> dataCenterMap() const;
 
 
     // KoDocument interface

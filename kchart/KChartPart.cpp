@@ -323,7 +323,7 @@ void KChartPart::removeShape( KoShape* )
 {
 }
 
-QMap<QString, KoDataCenter *> KChartPart::dataCenterMap()
+QMap<QString, KoDataCenter *> KChartPart::dataCenterMap() const
 {
     //Q_ASSERT(false);
     // if the kchart app ever supports more than a single shape this should be implemented

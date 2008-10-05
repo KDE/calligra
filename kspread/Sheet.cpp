@@ -359,7 +359,7 @@ void Sheet::removeShape(KoShape* shape)
     }
 }
 
-QMap<QString, KoDataCenter*> Sheet::dataCenterMap()
+QMap<QString, KoDataCenter*> Sheet::dataCenterMap() const
 {
     return doc() ? doc()->dataCenterMap() : QMap<QString, KoDataCenter*>();
 }

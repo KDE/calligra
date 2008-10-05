@@ -127,7 +127,7 @@ public:
     // KoShapeControllerBase interface
     virtual void addShape(KoShape* shape);
     virtual void removeShape(KoShape* shape);
-    virtual QMap<QString, KoDataCenter*> dataCenterMap();
+    virtual QMap<QString, KoDataCenter*> dataCenterMap() const;
 
     /**
      * \ingroup Embedding
