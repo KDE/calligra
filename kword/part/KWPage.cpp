@@ -191,6 +191,10 @@ KoPageFormat::Orientation KWPage::orientationHint() const
     return page.orientation;
 }
 
+void KWPage::setOrientationHint(KoPageFormat::Orientation)
+{
+}
+
 const KWPage KWPage::previous() const
 {
     if (! isValid())

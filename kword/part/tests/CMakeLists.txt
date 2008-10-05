@@ -16,4 +16,10 @@ set(TestClipToPage_test_SRCS TestClipToPage.cpp)
 kde4_add_unit_test(TestClipToPage TESTNAME kword-part-TestClipToPage  ${TestClipToPage_test_SRCS})
 target_link_libraries(TestClipToPage kwordprivate ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestPageCommands_test_SRCS TestPageCommands.cpp)
+kde4_add_unit_test(TestPageCommands TESTNAME kword-part-TestPageCommands  ${TestPageCommands_test_SRCS})
+target_link_libraries(TestPageCommands kwordprivate ${QT_QTTEST_LIBRARY})
+
 ########### end ###############

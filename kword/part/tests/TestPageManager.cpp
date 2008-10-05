@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005,2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,11 +23,9 @@
 
 #include <QRectF>
 #include <kdebug.h>
-#include <kcomponentdata.h>
 
 void TestPageManager::init()
 {
-    new KComponentData("TestPageManager");
 }
 
 void TestPageManager::getAddPages()
@@ -394,75 +392,110 @@ void TestPageManager::testClipToDocument()
     QCOMPARE(result.x(), 300.0);
 }
 
-// TODO move this to its own test class (its testing kwdocument, not the pagemanager)
-void TestPageManager::documentPages()
+void TestPageManager::testOrientationHint()
 {
-    KWDocument document;
-    QCOMPARE(document.pageCount(), 0);
-    KWPage page1 = document.appendPage("pagestyle1");
-    QVERIFY(page1.isValid());
-    QCOMPARE(page1.pageStyle().name(), QString("Standard")); // doesn't auto-create styles
-    QCOMPARE(page1.pageNumber(), 1);
-    KWPage page2 = document.appendPage("pagestyle1");
-    QVERIFY(page2.isValid());
-    QCOMPARE(page2.pageStyle().name(), QString("Standard"));
-    QCOMPARE(page2.pageNumber(), 2);
-    KWPage page3 = document.appendPage("pagestyle2");
-    QCOMPARE(page3.pageStyle().name(), QString("Standard"));
-    QCOMPARE(page3.pageNumber(), 3);
-    KWPage page4 = document.appendPage("pagestyle2");
-    QCOMPARE(page4.pageStyle().name(), QString("Standard"));
-    QCOMPARE(page4.pageNumber(), 4);
-    KWPage page5 = document.insertPage(-99);
-    QVERIFY(page5.isValid());
-    QCOMPARE(page5.pageNumber(), 5);
-    KWPage page6 = document.insertPage(99);
-    QVERIFY(page6.isValid());
-    QCOMPARE(page6.pageNumber(), 6);
-    KWPage page7 = document.appendPage("pagestyle2");
-    QVERIFY(page7.isValid());
-    QCOMPARE(page7.pageNumber(), 7);
-    KWPage page8 = document.appendPage("pagestyle1");
-    QVERIFY(page8.isValid());
-    QCOMPARE(page8.pageNumber(), 8);
-    KWPage page9 = document.appendPage();
-    QCOMPARE(page9.pageNumber(), 9);
-    QCOMPARE(document.pageCount(), 9);
+    KWPageManager pageManager;
+    KWPage page = pageManager.appendPage();
+    QCOMPARE(page.orientationHint(), KoPageFormat::Portrait);
+    page.setOrientationHint(KoPageFormat::Landscape);
+    QCOMPARE(page.orientationHint(), KoPageFormat::Landscape);
+    page.setOrientationHint(KoPageFormat::Portrait);
+    QCOMPARE(page.orientationHint(), KoPageFormat::Portrait);
 
-    document.removePage(3);
-    QCOMPARE(document.pageCount(), 8);
-    QVERIFY(! page3.isValid());
-    QCOMPARE(document.pageManager()->page(2), page2);
-    QCOMPARE(document.pageManager()->page(5), page6);
-    document.removePage(3);
-    QVERIFY(! page3.isValid());
-    QVERIFY(! page4.isValid());
-    QCOMPARE(document.pageCount(), 7);
-    QCOMPARE(document.pageManager()->page(2), page2);
-    QCOMPARE(document.pageManager()->page(4), page6);
+    page.setOrientationHint(KoPageFormat::Landscape);
+    KWPage page2 = pageManager.appendPage();
+    QCOMPARE(page2.orientationHint(), KoPageFormat::Landscape); // inherit from last page
+    page.setOrientationHint(KoPageFormat::Portrait);
+    QCOMPARE(page2.orientationHint(), KoPageFormat::Landscape); // but separate
+    QCOMPARE(page.orientationHint(), KoPageFormat::Portrait);
+}
 
-    page4 = document.insertPage(2); // kwdocument uses 'after' instead of 'as' that the pageManager uses
-    QCOMPARE(page4.pageNumber(), 3);
-    page3 = document.insertPage(2);
-    QCOMPARE(page3.pageNumber(), 3);
-    QCOMPARE(page4.pageNumber(), 4);
-    QCOMPARE(document.pageManager()->page(2), page2);
-    QCOMPARE(document.pageManager()->page(3), page3);
-    QCOMPARE(document.pageManager()->page(4), page4);
-    QCOMPARE(document.pageManager()->page(5), page5);
+void TestPageManager::testDirectionHint()
+{
+    KWPageManager pageManager;
+    KWPage page = pageManager.appendPage();
+    QCOMPARE(page.directionHint(), KoText::AutoDirection);
+    page.setDirectionHint(KoText::LeftRightTopBottom);
+    QCOMPARE(page.directionHint(), KoText::LeftRightTopBottom);
+    page.setDirectionHint(KoText::TopBottomRightLeft);
+    QCOMPARE(page.directionHint(), KoText::TopBottomRightLeft);
 
-    document.removePage(-16);
-    document.removePage(16);
-    QCOMPARE(document.pageCount(), 9);
+    KWPage page2 = pageManager.appendPage();
+    QCOMPARE(page2.directionHint(), KoText::TopBottomRightLeft); // inherit from last page
+    page.setDirectionHint(KoText::LeftRightTopBottom);
+    QCOMPARE(page2.directionHint(), KoText::TopBottomRightLeft); // but separate
+    QCOMPARE(page.directionHint(), KoText::LeftRightTopBottom);
+}
 
-    for (int i = document.pageCount() - 1; i >= 1; --i)
-        document.removePage(1);
-    QCOMPARE(document.pageCount(), 1);
-    QCOMPARE(document.pageManager()->page(1), page9);
+void TestPageManager::testPageNumber()
+{
+    KWPageManager pageManager;
+    KWPage page = pageManager.appendPage();
+    QCOMPARE(page.pageNumber(), 1);
+    page.setPageNumber(1);
+    QCOMPARE(page.pageNumber(), 1);
+    QCOMPARE(page.pageSide(), KWPage::Right);
+    page.setPageNumber(5);
+    QCOMPARE(page.pageNumber(), 5);
+    QCOMPARE(page.pageSide(), KWPage::Right);
+    page.setPageNumber(2);
+    QCOMPARE(page.pageNumber(), 2);
+    QCOMPARE(page.pageSide(), KWPage::Left);
+    page.setPageSide(KWPage::PageSpread);
+    QCOMPARE(page.pageSide(), KWPage::PageSpread);
+    QVERIFY(pageManager.page(2) == page);
+    QVERIFY(pageManager.page(3) == page);
+    KWPage page2 = pageManager.appendPage();
+    QCOMPARE(page2.pageNumber(), 4);
 
-    QCOMPARE(document.pageCount(), 1);
-    document.removePage(1); //we can't remove the last page
-    QCOMPARE(document.pageCount(), 1);
+    KWPage page3 = pageManager.appendPage();
+    QCOMPARE(page3.pageNumber(), 5);
+
+    page.setPageNumber(10); // should renumber stuff
+    QCOMPARE(page.pageNumber(), 10);
+    QCOMPARE(page.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page2.pageNumber(), 12);
+    QCOMPARE(page3.pageNumber(), 13);
+
+    page2.setPageNumber(20);
+    QCOMPARE(page.pageNumber(), 10);
+    QCOMPARE(page.pageSide(), KWPage::PageSpread);
+    QCOMPARE(page2.pageNumber(), 20);
+    QCOMPARE(page3.pageNumber(), 21);
+}
+
+void TestPageManager::testPageTraversal()
+{
+    KWPageManager manager;
+    for (int i = 1; i < 6; ++i)
+        manager.appendPage();
+    KWPage page = manager.begin();
+    QCOMPARE(page.pageNumber(), 1);
+    page = page.next();
+    QCOMPARE(page.pageNumber(), 2);
+    page = page.next();
+    QCOMPARE(page.pageNumber(), 3);
+    page = page.next();
+    QCOMPARE(page.pageNumber(), 4);
+    page = page.next();
+    QCOMPARE(page.pageNumber(), 5);
+    QCOMPARE(page.isValid(), true);
+    page = page.next();
+    QCOMPARE(page.isValid(), false);
+    page = manager.last();
+    QCOMPARE(page.pageNumber(), 5);
+    QCOMPARE(page.isValid(), true);
+    page = page.previous();
+    QCOMPARE(page.pageNumber(), 4);
+    page = page.previous();
+    QCOMPARE(page.pageNumber(), 3);
+    page = page.previous();
+    QCOMPARE(page.pageNumber(), 2);
+    page = page.previous();
+    QCOMPARE(page.pageNumber(), 1);
+    QCOMPARE(page.isValid(), true);
+    page = page.previous();
+    QCOMPARE(page.isValid(), false);
 }
 
 QTEST_KDEMAIN(TestPageManager, GUI)

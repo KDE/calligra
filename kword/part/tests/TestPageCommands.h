@@ -16,30 +16,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPAGEMANAGERTESTER_H
-#define KWPAGEMANAGERTESTER_H
+#ifndef KWPAGECOMMANDS_H
+#define KWPAGECOMMANDS_H
 
 #include <QObject>
 #include <QtTest/QtTest>
 #include <qtest_kde.h>
 
-#include <tests/MockShapes.h> // from flake
+// #include <KoShape.h>
+// #include <tests/MockShapes.h> // from flake
 
-class TestPageManager : public QObject
+class TestPageCommands : public QObject
 {
     Q_OBJECT
 private slots: // tests
     void init();
-    void getAddPages();
-    void getAddPages2();
-    void createInsertPages();
-    void removePages();
-    void pageInfo();
-    void testClipToDocument();
-    void testOrientationHint();
-    void testDirectionHint();
-    void testPageNumber();
-    void testPageTraversal();
+    void documentPages();
 };
 
 #endif

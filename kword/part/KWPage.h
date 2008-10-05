@@ -121,6 +121,7 @@ public:
      * when this property is set properly, though.
      */
     KoPageFormat::Orientation orientationHint() const;
+    void setOrientationHint(KoPageFormat::Orientation);
 
     /**
      * Set the text-direction that text on this page should be initialized with.
