@@ -73,8 +73,13 @@ void KWPage::setPageSide(PageSide ps)
     if (! isValid())
         return;
     KWPageManagerPrivate::Page page = priv->pages[n];
+
+    const bool needsRenumbering = (page.pageSide == PageSpread && ps != PageSpread) || ps == PageSpread;
     page.pageSide = ps;
     priv->pages.insert(n, page);
+
+    if (needsRenumbering)
+        priv->setPageNumberForId(n, page.pageNumber);
 }
 
 KWPage::PageSide KWPage::pageSide() const

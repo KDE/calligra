@@ -58,14 +58,11 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
 
 void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
 {
-    if (pageNumbers.isEmpty() || ! pageNumbers.contains(pageId))
+    if (pageNumbers.isEmpty() || ! pages.contains(pageId))
         return;
-    Q_ASSERT(pages.contains(pageId));
-//   if (pages[pageId].pageNumber == newPageNumber)
-//       return;
 
     const int oldPageNumber = pages[pageId].pageNumber;
-    const int diff = newPageNumber - oldPageNumber;
+    int diff = newPageNumber - oldPageNumber;
     int from = oldPageNumber;
     int to = newPageNumber;
     if (from > to)
@@ -73,7 +70,6 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
 
     QMap<int, int> oldPageNumbers = pageNumbers; // backup
     QHash<int, Page> oldPages = pages; // backup
-    Q_ASSERT(oldPages.count() == oldPageNumbers.count());
 
     pageNumbers.clear();
     pages.clear();
@@ -84,15 +80,25 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
             kWarning() << "you requested to change the page number to a number that already exist, all will end soon";
             return;
         }
-int oldPageNumber = page.pageNumber;
+        const int oldPageNumber = page.pageNumber; // debug only
         if (page.pageNumber >= from)
             page.pageNumber += diff;
-qDebug() << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber;
+        kDebug(32001) << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber << "side" << page.pageSide;
+        if (page.pageSide == KWPage::PageSpread) {
+            if (page.pageNumber % 2 == 1) { // pagespreads can only be on even pageNumbers
+                page.pageNumber++;
+                diff++;
+            }
+            pageNumbers.insert(page.pageNumber + 1, id);
+        }
+        else {
+            page.pageSide = page.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
+        }
         pageNumbers.insert(page.pageNumber, id);
         pages.insert(id, page);
     }
 
-    Q_ASSERT(pageNumbers.count() == pages.count() && pageNumbers.count() == oldPages.count());
+    Q_ASSERT(pages.count() == oldPages.count()); // don't loose anything :)
 }
 
 ///////////
@@ -150,21 +156,12 @@ int KWPageManager::pageCount() const
 
 KWPage KWPageManager::page(int pageNum) const
 {
-#if 0
-    foreach(KWPage *page, m_pageList) {
-        if (page->pageNumber() == pageNum ||
-                (page->pageSide() == KWPage::PageSpread && page->pageNumber() + 1 == pageNum))
-            return page;
-    }
-#ifdef DEBUG_PAGES
-    kWarning(32001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
-    kDebug(32001) << kBacktrace();
-#endif
-    return 0;
-#endif
     if (d->pageNumbers.contains(pageNum))
         return KWPage(d, d->pageNumbers.value(pageNum));
 
+#ifdef DEBUG_PAGES
+    kWarning(32001) << "KWPageManager::page(" << pageNum << ") failed; Requested page does not exist";
+#endif
     return KWPage();
 }
 
