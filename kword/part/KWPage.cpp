@@ -35,11 +35,6 @@ KWPage::KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle)
     m_textDirectionHint = KoText::AutoDirection;
 }
 
-void KWPage::setPageNumber(int pageNum)
-{
-    m_pageNum = pageNum;
-}
-
 int KWPage::pageNumber(int select, int adjustment) const
 {
     int pagenum = -1;

@@ -39,11 +39,10 @@ class KoShape;
  * The Page Manager manages all the pages a document contains and separates all the frames
  * the document contains into actual printed pages.
  */
-class KWORD_EXPORT KWPageManager : public QObject
+class KWORD_EXPORT KWPageManager
 {
-    Q_OBJECT
 public:
-    explicit KWPageManager(KWDocument* document);
+    explicit KWPageManager();
     ~KWPageManager();
 
     /**
@@ -259,7 +258,6 @@ private:
     friend class KWPage;
 
 private:
-    KWDocument* m_document;
     QList<KWPage*> m_pageList;
     bool m_preferPageSpread;
 

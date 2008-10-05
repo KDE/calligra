@@ -24,7 +24,7 @@
 #include <qtest_kde.h>
 
 #include <KoShape.h>
-#include <KWDocument.h>
+#include <tests/MockShapes.h> // from flake
 
 class TestPageManager : public QObject
 {
@@ -38,19 +38,6 @@ private slots: // tests
     void pageInfo();
     void testClipToDocument();
     void documentPages();
-
-private:
-    KWDocument m_doc;
-class MockShape : public KoShape
-    {
-    public:
-        MockShape() : KoShape() {}
-        virtual void paint(QPainter &, const KoViewConverter&) {}
-        virtual void saveOdf(KoShapeSavingContext &) const {}
-        virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
-            return false;
-        }
-    };
 };
 
 #endif

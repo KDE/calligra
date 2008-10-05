@@ -29,9 +29,8 @@
 
 //#define DEBUG_PAGES
 
-KWPageManager::KWPageManager(KWDocument* document)
-        : m_document(document),
-        m_preferPageSpread(false)
+KWPageManager::KWPageManager()
+        : m_preferPageSpread(false)
 {
     clearPageStyle(); // creates also a new default style.
 }
@@ -71,10 +70,12 @@ int KWPageManager::pageNumber(const KoShape *shape) const
 {
     return pageNumber(shape->absolutePosition());
 }
+
 int KWPageManager::pageNumber(const qreal y) const
 {
     return pageNumber(QPointF(0, y));
 }
+
 int KWPageManager::pageCount() const
 {
     return m_pageList.count();
@@ -93,14 +94,17 @@ KWPage* KWPageManager::page(int pageNum) const
 #endif
     return 0;
 }
+
 KWPage* KWPageManager::page(const KoShape *shape) const
 {
     return page(pageNumber(shape));
 }
+
 KWPage* KWPageManager::page(const QPointF &point) const
 {
     return page(pageNumber(point));
 }
+
 KWPage* KWPageManager::page(qreal y) const
 {
     return page(pageNumber(y));
@@ -108,18 +112,27 @@ KWPage* KWPageManager::page(qreal y) const
 
 KWPage* KWPageManager::insertPage(int pageNumber, KWPageStyle *pageStyle)
 {
-    if (pageNumber < 0 || pageNumber >= pageCount()) {
+    if (pageNumber <= 0 || (!m_pageList.isEmpty() && last()->pageNumber() < pageNumber))
         return appendPage(pageStyle);
-    }
+
     if (! pageStyle) {
-        KWPage *p = (pageNumber > 0) ? this->page(pageNumber - 1) : 0;
-        pageStyle = p ? p->pageStyle() : this->defaultPageStyle();
+        KWPage *prev = page(pageNumber - 1);
+        pageStyle = prev ? prev->pageStyle() : defaultPageStyle();
     }
-    for (int i = pageNumber; i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
-        m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() + 1);
+
+    // increase the pagenumbers of pages following the pageNumber
+    int insertPoint = -1;
+    for (int i=0; i < m_pageList.count(); ++i) {
+        KWPage *page = m_pageList.at(i);
+        if (insertPoint >= 0 || page->pageNumber() >= pageNumber) {
+            page->m_pageNum = page->m_pageNum + 1;
+            if (insertPoint < 0)
+                insertPoint = i;
+        }
     }
+
     KWPage *page = new KWPage(this, pageNumber, pageStyle);
-    m_pageList.insert(pageNumber, page);
+    m_pageList.insert(insertPoint, page);
     kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
     return page;
 }
@@ -129,7 +142,7 @@ KWPage* KWPageManager::insertPage(KWPage *page)
     Q_ASSERT(page->pageNumber() <= pageCount());
     Q_ASSERT(page->pageNumber() == pageCount() || page != this->page(page->pageNumber()));
     for (int i = page->pageNumber(); i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
-        m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() + 1);
+        m_pageList[i]->m_pageNum = m_pageList[i]->m_pageNum + 1;
     }
     if (page->pageNumber() < pageCount()) {
         m_pageList.insert(page->pageNumber(), page);
@@ -143,10 +156,17 @@ KWPage* KWPageManager::insertPage(KWPage *page)
 KWPage* KWPageManager::appendPage(KWPageStyle *pageStyle)
 {
     if (! pageStyle) {
-        KWPage *p = this->page(m_pageList.count() - 1);
-        pageStyle = p ? p->pageStyle() : this->defaultPageStyle();
+        KWPage *p = last();
+        pageStyle = p ? p->pageStyle() : defaultPageStyle();
     }
-    KWPage *page = new KWPage(this, m_pageList.count(), pageStyle);
+    int lastPageNumber = 0;
+    KWPage *lastPage = last();
+    if (lastPage) {
+        lastPageNumber = lastPage->pageNumber();
+        if (lastPage->pageSide() == KWPage::PageSpread)
+            lastPageNumber++;
+    }
+    KWPage *page = new KWPage(this, lastPageNumber + 1, pageStyle);
     m_pageList.append(page);
     kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
     return page;
@@ -156,6 +176,7 @@ qreal KWPageManager::topOfPage(int pageNum) const
 {
     return pageOffset(pageNum, false);
 }
+
 qreal KWPageManager::bottomOfPage(int pageNum) const
 {
     return pageOffset(pageNum, true);
@@ -180,12 +201,17 @@ void KWPageManager::removePage(int pageNumber)
 {
     removePage(page(pageNumber));
 }
+
 void KWPageManager::removePage(KWPage *page)
 {
     if (!page)
         return;
-    for (int i = page->pageNumber() + 1; i < m_pageList.count(); ++i) // decrease the pagenumbers of pages following the pageNumber
-        m_pageList[i]->setPageNumber(m_pageList[i]->pageNumber() - 1);
+
+    // decrease the pagenumbers of pages following the pageNumber
+    for (int i = m_pageList.indexOf(page); i < m_pageList.count() && i >= 0; ++i) {
+        KWPage *p = m_pageList.at(i);
+        p->m_pageNum = p->m_pageNum - 1;
+    }
     m_pageList.removeOne(page);
     kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
     delete page;
@@ -245,7 +271,6 @@ void KWPageManager::addPageStyle(KWPageStyle *pageStyle)
     Q_ASSERT(! masterpagename.isEmpty());
     Q_ASSERT(! m_pageStyle.contains(masterpagename)); // This should never occur...
     m_pageStyle[masterpagename] = pageStyle;
-    QObject::connect(pageStyle, SIGNAL(relayout()), m_document, SLOT(relayout()));
 }
 
 KWPageStyle* KWPageManager::addPageStyle(const QString &name)

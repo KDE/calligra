@@ -955,6 +955,7 @@ void KWView::toggleHeader()
         return;
     Q_ASSERT(m_currentPage->pageStyle());
     m_currentPage->pageStyle()->setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_document->relayout();
 }
 
 void KWView::toggleFooter()
@@ -963,6 +964,7 @@ void KWView::toggleFooter()
         return;
     Q_ASSERT(m_currentPage->pageStyle());
     m_currentPage->pageStyle()->setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
+    m_document->relayout();
 }
 
 void KWView::toggleSnapToGrid()

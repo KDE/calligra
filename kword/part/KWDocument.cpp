@@ -73,7 +73,6 @@
 
 KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode),
-        m_pageManager(this),
         m_frameLayout(&m_pageManager, m_frameSets)
 {
     m_frameLayout.setDocument(this);

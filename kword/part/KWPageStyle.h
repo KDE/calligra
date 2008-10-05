@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -40,9 +40,8 @@
  * you are responsible for deleting the instance and taking care that no \a KWPage
  * instance or something else still keeps a (then dangling) pointer to it.
  */
-class KWORD_TEST_EXPORT KWPageStyle : public QObject
+class KWORD_TEST_EXPORT KWPageStyle
 {
-    Q_OBJECT
 public:
     /**
      * constructor, initializing the data to some default values.
@@ -96,67 +95,67 @@ public:
     }
 
     /// return the distance between the main text and the header
-    Q_SCRIPTABLE qreal headerDistance() const {
+    qreal headerDistance() const {
         return m_headerDistance;
     }
     /**
      * Set the distance between the main text and the header
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setHeaderDistance(qreal distance) {
+    void setHeaderDistance(qreal distance) {
         m_headerDistance = distance;
     }
 
     /// return the distance between the footer and the frame directly above that (footnote or main)
-    Q_SCRIPTABLE qreal footerDistance() const {
+    qreal footerDistance() const {
         return m_footerDistance;
     }
     /**
      * Set the distance between the footer and the frame directly above that (footnote or main)
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setFooterDistance(qreal distance) {
+    void setFooterDistance(qreal distance) {
         m_footerDistance = distance;
     }
 
     /// return the distance between the footnote and the main frame.
-    Q_SCRIPTABLE qreal footnoteDistance() const {
+    qreal footnoteDistance() const {
         return m_footNoteDistance;
     }
     /**
      * Set the distance between the footnote and the main frame.
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setFootnoteDistance(qreal distance) {
+    void setFootnoteDistance(qreal distance) {
         m_footNoteDistance = distance;
     }
     /// return the distance between the main text frame and the end notes frame.
-    Q_SCRIPTABLE qreal endNoteDistance() const {
+    qreal endNoteDistance() const {
         return m_endNoteDistance;
     }
     /**
      * Set the distance between the main text frame and the end notes frame.
      * @param distance the distance
      */
-    Q_SCRIPTABLE void setEndNoteDistance(qreal distance) {
+    void setEndNoteDistance(qreal distance) {
         m_endNoteDistance = distance;
     }
 
     /// return the line length of the foot note separator line, in percent of the pagewidth
-    Q_SCRIPTABLE int footNoteSeparatorLineLength() const {
+    int footNoteSeparatorLineLength() const {
         return m_footNoteSeparatorLineLength;
     }
     /// set the line length of the foot note separator line, in percent of the pagewidth
-    Q_SCRIPTABLE void setFootNoteSeparatorLineLength(int length) {
+    void setFootNoteSeparatorLineLength(int length) {
         m_footNoteSeparatorLineLength = length;
     }
 
     /// return the thickness of the line (in pt) drawn above the foot notes
-    Q_SCRIPTABLE qreal footNoteSeparatorLineWidth() const {
+    qreal footNoteSeparatorLineWidth() const {
         return m_footNoteSeparatorLineWidth;
     }
     /// set the thickness of the line (in pt) drawn above the foot notes
-    Q_SCRIPTABLE void setFootNoteSeparatorLineWidth(qreal width) {
+    void setFootNoteSeparatorLineWidth(qreal width) {
         m_footNoteSeparatorLineWidth = width;
     }
 
@@ -179,7 +178,7 @@ public:
     }
 
     /// initialize to default settings
-    Q_SCRIPTABLE void clear();
+    void clear();
 
     /// return the pageLayout applied for these pages
     const KoPageLayout pageLayout() const;
@@ -208,21 +207,9 @@ public:
     }
 
     /// get the master page name for this page style.
-    Q_SCRIPTABLE QString masterName() const {
+    QString masterName() const {
         return m_masterName;
     }
-
-Q_SIGNALS:
-
-    /**
-     * This signal is emitted if a relayout is requested cause for
-     * example the state of the header/footer changed.
-     *
-     * The KWPageManager does redirect the signal to the
-     * KWDocument::relayout() function which will update all
-     * pages.
-     */
-    void relayout();
 
 private:
     KoColumns m_columns;

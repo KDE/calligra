@@ -149,8 +149,6 @@ private:
      * @param pageStyle the page style to use for the page
      */
     KWPage(KWPageManager *parent, int pageNum, KWPageStyle *pageStyle);
-    /// Sets the pagenumber to a new value.
-    void setPageNumber(int pageNum);
 
     int m_pageNum;
     PageSide m_pageSide;

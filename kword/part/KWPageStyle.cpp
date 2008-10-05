@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
  *
@@ -23,8 +23,7 @@
 #include <kdebug.h>
 
 KWPageStyle::KWPageStyle(const QString& mastername)
-        : QObject()
-        , m_masterName(mastername)
+        : m_masterName(mastername)
 {
     clear();
 }
@@ -52,13 +51,11 @@ void KWPageStyle::clear()
 void KWPageStyle::setFooterPolicy(KWord::HeaderFooterType p)
 {
     m_footers = p;
-    emit relayout();
 }
 
 void KWPageStyle::setHeaderPolicy(KWord::HeaderFooterType p)
 {
     m_headers = p;
-    emit relayout();
 }
 
 const KoPageLayout KWPageStyle::pageLayout() const
@@ -70,5 +67,3 @@ void KWPageStyle::setPageLayout(const KoPageLayout &pageLayout)
 {
     m_pageLayout = pageLayout;
 }
-
-#include "KWPageStyle.moc"
