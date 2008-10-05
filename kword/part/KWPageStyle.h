@@ -21,7 +21,6 @@
 #ifndef KWPAGESTYLE_H
 #define KWPAGESTYLE_H
 
-#include "frames/KWTextFrameSet.h"
 #include "KWord.h"
 #include "kword_export.h"
 
@@ -157,30 +156,18 @@ public:
     /// set the pageLayout applied for these pages
     void setPageLayout(const KoPageLayout &layout);
 
-    /**
-     * Get a frameset that is stored in this page style.
-     * Example of framesets stored : the headers, footers...
-     * @param hfType the type of the frameset that must be returned
-     * @returns the required frameSet, 0 if none found.
-     */
-    KWTextFrameSet *getFrameSet(KWord::TextFrameSetType hfType);
-
-    /**
-     * Add a frameset in this page style.
-     * Example of framesets stored : the headers, footers...
-     * @param hfType the type of the frameset
-     * @param fSet the frameset
-     * This frameset will be destroyed when the page style is destroyed.
-     */
-    void addFrameSet(KWord::TextFrameSetType hfType, KWTextFrameSet *fSet);
-
     /// get the master page name for this page style.
     QString name() const;
 
     bool operator==(const KWPageStyle &other) const;
+    inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }
+
+    uint hash() const;
 
 private:
     QExplicitlySharedDataPointer<KWPageStylePrivate> d;
 };
+
+KWORD_TEST_EXPORT uint qHash(const KWPageStyle &style);
 
 #endif

@@ -20,6 +20,7 @@
 
 #include "KWPageRemoveCommand.h"
 #include "KWFrameDeleteCommand.h"
+#include "frames/KWTextFrameSet.h"
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "frames/KWFrame.h"

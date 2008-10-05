@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,8 @@
 #define KWTEXTFRAMESET_H
 
 #include "KWFrameSet.h"
-#include "kword_export.h"
+#include "../KWPageStyle.h"
+#include "../kword_export.h"
 
 class QTextDocument;
 class KWTextFrame;
@@ -98,6 +99,9 @@ public:
         return m_kwordDocument;
     }
 
+    void setPageStyle(const KWPageStyle &style);
+    KWPageStyle pageStyle() const;
+
 #ifndef NDEBUG
     void printDebug();
     void printDebug(KWFrame *frame);
@@ -140,6 +144,7 @@ private:
     KWord::TextFrameSetType m_textFrameSetType;
     const KWPageManager *m_pageManager;
     const KWDocument *m_kwordDocument;
+    KWPageStyle m_pageStyle; // the page Style this frameset is associated with.
 
     // return true if frame1 is sorted before frame2
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -414,31 +414,24 @@ QList<KWFrame *> KWFrameLayout::framesInPage(QRectF page)
 
 KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type, const KWPage &page)
 {
+    Q_ASSERT(page.isValid());
     setup();
-    KWTextFrameSet *pAnswer = 0;
+    FrameSets frameSets = m_pageStyles.value(page.pageStyle());
     KWTextFrameSet **answer = 0;
     switch (type) {
     case KWord::OddPagesHeaderTextFrameSet:
+        answer = &frameSets.oddHeaders;
+        break;
     case KWord::EvenPagesHeaderTextFrameSet:
+        answer = &frameSets.evenHeaders;
+        break;
     case KWord::OddPagesFooterTextFrameSet:
+        answer = &frameSets.oddFooters;
+        break;
     case KWord::EvenPagesFooterTextFrameSet:
-/* // TODO use the KWDocument storage and not mix frames and page styles
-        pAnswer = pageStyle->getFrameSet(type);
-        if (! pAnswer) { // create new one if we don't have one yet
-            pAnswer = new KWTextFrameSet(m_document, type);
-            pageStyle->addFrameSet(type, pAnswer);
-            //fs->setName(i18n("Odd Pages Header"));
-            KWTextFrame *tf = new KWTextFrame(createTextShape(page), pAnswer);
-            //tf->shape()->setVisible(false);
-            tf->setFrameBehavior(KWord::AutoExtendFrameBehavior);
-            tf->setNewFrameBehavior(KWord::CopyNewFrame);
-            emit newFrameSet(pAnswer);
-            Q_ASSERT(m_frameSets.contains(pAnswer));
-        }
-        return pAnswer;
-*/
+        answer = &frameSets.evenFooters;
+        break;
     case KWord::MainTextFrameSet:
-        // if m_maintext is NULL we create a new
         answer = &m_maintext;
         break;
     default:
@@ -447,11 +440,15 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type, const K
         return newFS;
     }
     Q_ASSERT(answer);
-    if (*answer == 0) {
+    if (*answer == 0) { // it wasn't created yet, lets do so now.
         KWTextFrameSet *newFS = new KWTextFrameSet(m_document, type);
-        emit newFrameSet(newFS);
-        Q_ASSERT(m_frameSets.contains(newFS));
         *answer = newFS;
+        if (type != KWord::MainTextFrameSet) {
+            newFS->setPageStyle(page.pageStyle());
+            m_pageStyles.insert(page.pageStyle(), frameSets);
+        }
+        emit newFrameSet(newFS);
+        Q_ASSERT(m_frameSets.contains(newFS)); // the emit should have made that so :)
     }
     return *answer;
 }
@@ -467,14 +464,32 @@ void KWFrameLayout::setup()
         return;
 
     m_maintext = 0;
+    m_pageStyles.clear();
     foreach(KWFrameSet *fs, m_frameSets) {
         // add checks for out-of-area frames
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs) {
-            if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
-                m_maintext = tfs;
-            }
+        if (tfs == 0)
+            continue;
+        FrameSets frameSets = m_pageStyles.value(tfs->pageStyle());
+        switch (tfs->textFrameSetType()) {
+        case KWord::OddPagesHeaderTextFrameSet:
+            frameSets.oddHeaders = tfs;
+            break;
+        case KWord::EvenPagesHeaderTextFrameSet:
+            frameSets.evenHeaders = tfs;
+            break;
+        case KWord::OddPagesFooterTextFrameSet:
+            frameSets.oddFooters = tfs;
+            break;
+        case KWord::EvenPagesFooterTextFrameSet:
+            frameSets.evenFooters = tfs;
+            break;
+        case KWord::MainTextFrameSet:
+            m_maintext = tfs;
+        default: ;// ignore
         }
+        if (tfs->pageStyle().isValid())
+            m_pageStyles.insert(tfs->pageStyle(), frameSets);
     }
     m_setup = true;
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -105,6 +105,14 @@ signals:
 
 private:
     friend class TestBasicLayout;
+    struct FrameSets {
+        FrameSets() : oddHeaders(0), evenHeaders(0), oddFooters(0), evenFooters(0) {}
+        KWTextFrameSet *oddHeaders;
+        KWTextFrameSet *evenHeaders;
+        KWTextFrameSet *oddFooters;
+        KWTextFrameSet *evenFooters;
+    };
+
     KoShape *createTextShape(const KWPage &page);
     KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
     QList<KWFrame *> framesInPage(QRectF page);
@@ -114,9 +122,10 @@ private:
     void cleanFrameSet(KWTextFrameSet *fs);
     KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
-private:
+
     const KWPageManager *m_pageManager;
     const QList<KWFrameSet *> &m_frameSets;
+    QHash<KWPageStyle, FrameSets> m_pageStyles;
 
     KWTextFrameSet *m_maintext;
 

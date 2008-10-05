@@ -37,8 +37,6 @@ public:
     bool mainFrame;
     qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
     KWord::HeaderFooterType headers, footers;
-    // These framesets are deleted by KWDocument.
-    QMap<KWord::TextFrameSetType, KWTextFrameSet *> hfFrameSets;
 
     qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
     int footNoteSeparatorLineLength; ///< It's a percentage of page.
@@ -64,7 +62,6 @@ void KWPageStylePrivate::clear()
     footers = KWord::HFTypeNone;
     columns.columns = 1;
     columns.columnSpacing = 17; // ~ 6mm
-    hfFrameSets.clear();
     pageLayout = KoPageLayout::standardLayout();
 }
 
@@ -236,16 +233,6 @@ void KWPageStyle::clear()
     d->clear();
 }
 
-KWTextFrameSet *KWPageStyle::getFrameSet(KWord::TextFrameSetType hfType)
-{
-    return d->hfFrameSets[hfType];
-}
-
-void KWPageStyle::addFrameSet(KWord::TextFrameSetType hfType, KWTextFrameSet *fSet)
-{
-    d->hfFrameSets[hfType] = fSet;
-}
-
 QString KWPageStyle::name() const
 {
     return d->name;
@@ -254,4 +241,14 @@ QString KWPageStyle::name() const
 bool KWPageStyle::operator==(const KWPageStyle &other) const
 {
     return d == other.d;
+}
+
+uint KWPageStyle::hash() const
+{
+    return ((uint) d) + 1;
+}
+
+uint qHash(const KWPageStyle &style)
+{
+    return style.hash();
 }
