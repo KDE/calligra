@@ -67,7 +67,7 @@ public:
     /**
      * Return the current columns settings.
      */
-    const KoColumns &columns() const;
+    KoColumns columns() const;
     /**
      * Set the new columns settings
      */
