@@ -226,8 +226,7 @@ private:
     Qt::PenStyle m_footNoteSeparatorLineType; ///< foot note separate type
     KWord::FootNoteSeparatorLinePos m_footNoteSeparatorLinePos; ///< alignment in page
 
-    /// disable copy constructor and assignment operator
-    Q_DISABLE_COPY(KWPageStyle)
+// See parag 16.2 for all the ODF features.
 };
 
 #endif
