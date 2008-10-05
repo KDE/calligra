@@ -25,7 +25,7 @@ public:
         Page()
             : pageSide(KWPage::Right),
             pageNumber(1),
-            orientation(KoPageFormat::Landscape),
+            orientation(KoPageFormat::Portrait),
             textDirection(KoText::AutoDirection)
         {
         }

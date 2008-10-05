@@ -27,6 +27,7 @@
 #include "KWPageManager.h"
 #include "KWApplicationConfig.h"
 #include "frames/KWFrameLayout.h"
+#include "kword_export.h"
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>

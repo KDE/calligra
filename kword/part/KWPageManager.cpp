@@ -92,7 +92,7 @@ qDebug() << "adjusting page number from" << oldPageNumber << "to" << page.pageNu
         pages.insert(id, page);
     }
 
-    Q_ASSERT(pageNumbers.count() == pages.count() == oldPages.count());
+    Q_ASSERT(pageNumbers.count() == pages.count() && pageNumbers.count() == oldPages.count());
 }
 
 ///////////
@@ -115,8 +115,11 @@ int KWPageManager::pageNumber(const QPointF &point) const
     int pageNumber = -1;
     qreal startOfpage = 0.0;
     foreach (int pageId, d->pageNumbers.values()) {
-        if (startOfpage >= point.y())
+        if (startOfpage >= point.y()) {
+            if (pageNumber == -1)
+                pageNumber = d->pages[pageId].pageNumber;
             break;
+        }
         KWPage page(d, pageId);
         startOfpage += page.height();
         pageNumber = page.pageNumber();
@@ -250,24 +253,24 @@ KWPage KWPageManager::insertPage(const KWPage &page)
 KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
 {
     KWPageManagerPrivate::Page page;
-    page.style = pageStyle;
 
-    KWPage lastPage = last();
-    if (!page.style.isValid()) {
-        if (lastPage.isValid())
-            page.style = lastPage.pageStyle();
-        else
-            page.style = defaultPageStyle();
+    if (! d->pages.isEmpty()) {
+        QMap<int, int>::iterator end = d->pageNumbers.end();
+        --end; // last one is one before the imaginary 'end'
+        KWPageManagerPrivate::Page lastPage = d->pages[end.value()];
+        page = lastPage;
+        ++page.pageNumber;
+        if (lastPage.pageSide == KWPage::PageSpread)
+            ++page.pageNumber;
     }
-
-    if (lastPage.isValid()) {
-        page.pageNumber = lastPage.pageNumber() + 1;
-        if (lastPage.pageSide() == KWPage::PageSpread)
-            page.pageNumber++;
-    }
-    else
+    else {
         page.pageNumber = 1;
+    }
     page.pageSide = page.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
+
+    page.style = pageStyle;
+    if (! page.style.isValid())
+        page.style = defaultPageStyle();
 
     d->pages.insert(++d->lastId, page);
     d->pageNumbers.insert(page.pageNumber, d->lastId);
@@ -353,7 +356,7 @@ QPointF KWPageManager::clipToDocument(const QPointF &point)
 QList<KWPage> KWPageManager::pages() const
 {
     QList<KWPage> answer;
-    foreach(int key, d->pageNumbers.values()) {
+    foreach(int key, d->pages.keys()) {
         answer << KWPage(d, key);
     }
     return answer;
@@ -376,6 +379,7 @@ KWPageStyle KWPageManager::pageStyle(const QString &name) const
 void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
     Q_ASSERT(! pageStyle.name().isEmpty());
+qDebug() << "addPageStyle" << pageStyle.name();
     Q_ASSERT(! d->pageStyles.contains(pageStyle.name())); // This should never occur...
     d->pageStyles.insert(pageStyle.name(), pageStyle);
 }

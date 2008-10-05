@@ -191,8 +191,13 @@ KoPageFormat::Orientation KWPage::orientationHint() const
     return page.orientation;
 }
 
-void KWPage::setOrientationHint(KoPageFormat::Orientation)
+void KWPage::setOrientationHint(KoPageFormat::Orientation orientation)
 {
+    if (! isValid())
+        return;
+    KWPageManagerPrivate::Page page = priv->pages[n];
+    page.orientation = orientation;
+    priv->pages.insert(n, page);
 }
 
 const KWPage KWPage::previous() const
@@ -214,7 +219,6 @@ const KWPage KWPage::next() const
     ++iter;
     if (iter == priv->pageNumbers.end())
         return KWPage();
-    --iter;
     return KWPage(priv, iter.value());
 }
 
