@@ -56,6 +56,44 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
     return offset;
 }
 
+void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
+{
+    if (pageNumbers.isEmpty() || ! pageNumbers.contains(pageId))
+        return;
+    Q_ASSERT(pages.contains(pageId));
+//   if (pages[pageId].pageNumber == newPageNumber)
+//       return;
+
+    const int oldPageNumber = pages[pageId].pageNumber;
+    const int diff = newPageNumber - oldPageNumber;
+    int from = oldPageNumber;
+    int to = newPageNumber;
+    if (from > to)
+        qSwap(from, to);
+
+    QMap<int, int> oldPageNumbers = pageNumbers; // backup
+    QHash<int, Page> oldPages = pages; // backup
+    Q_ASSERT(oldPages.count() == oldPageNumbers.count());
+
+    pageNumbers.clear();
+    pages.clear();
+
+    foreach (int id, oldPages.keys()) {
+        Page page = oldPages[id];
+        if (diff < 0 && page.pageNumber >= from && page.pageNumber < to) {
+            kWarning() << "you requested to change the page number to a number that already exist, all will end soon";
+            return;
+        }
+int oldPageNumber = page.pageNumber;
+        if (page.pageNumber >= from)
+            page.pageNumber += diff;
+qDebug() << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber;
+        pageNumbers.insert(page.pageNumber, id);
+        pages.insert(id, page);
+    }
+
+    Q_ASSERT(pageNumbers.count() == pages.count() == oldPages.count());
+}
 
 ///////////
 

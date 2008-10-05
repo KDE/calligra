@@ -14,6 +14,12 @@ public:
 
     qreal pageOffset(int pageNum, bool bottom) const;
 
+    /**
+     * Update the page number for the page related to the pageId and also update the
+     * page number of all pages following the page.
+     */
+    void setPageNumberForId(int pageId, int newPageNumber);
+
 
     struct Page {
         Page()

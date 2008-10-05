@@ -39,8 +39,8 @@ void TestTextFrameSorting::testSortingOnPagespread()
 
     KWDocument doc;
     KWPageManager pm;
-//pm.setStartPage(2);
     KWPage page = pm.appendPage();
+    page.setPageNumber(2);
     KoPageLayout layout = page.pageStyle().pageLayout();
     layout.width = 450;
     layout.height = 150;

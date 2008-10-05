@@ -102,6 +102,13 @@ public:
     /// returns the number of this page. reimplemented from the \a KoTextPage interface.
     int pageNumber(int select = 0, int adjustment = 0) const;
 
+    /**
+     * Adjusts the page number of this page and all pages following.
+     * Page numbers that are set like this are never saved, this is runtime data only.
+     * Instead you should insert a pagraph in the main-text flow with the new page number.
+     */
+    void setPageNumber(int pageNumber);
+
     /// returns the page style applied on this page
     KWPageStyle pageStyle() const;
     /// set the page style to apply on this page

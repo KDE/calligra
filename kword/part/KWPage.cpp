@@ -20,13 +20,11 @@
 #include "KWPage.h"
 #include "KWPageManager_p.h"
 
-#if 0
 void KWPage::setPageNumber(int pageNumber)
 {
-// should update the pageNumber and all pagenumbers following this one
-// Page numbers set like this are never saved, instead insert a pagraph in the main-text flow with the new page number.
+    if (isValid())
+        priv->setPageNumberForId(n, pageNumber);
 }
-#endif
 
 bool KWPage::isValid() const
 {
