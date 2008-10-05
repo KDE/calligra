@@ -150,7 +150,15 @@ int KWPageManager::pageNumber(const qreal y) const
 
 int KWPageManager::pageCount() const
 {
-    return d->pageNumbers.count();
+    int count = 0;
+    QHash<int,KWPageManagerPrivate::Page>::const_iterator iter = d->pages.constBegin();
+    while (iter != d->pages.constEnd()) {
+        if (iter.value().pageSide == KWPage::PageSpread)
+            ++count;
+        ++count;
+        ++iter;
+    }
+    return count;
 }
 
 KWPage KWPageManager::page(int pageNum) const

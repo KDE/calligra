@@ -512,5 +512,19 @@ void TestPageManager::testSetPageStyle()
     QVERIFY(manager.pageStyle("myStyle") == style);
 }
 
+void TestPageManager::testPageCount()
+{
+    KWPageManager manager;
+    QCOMPARE(manager.pageCount(), 0);
+    KWPage page = manager.appendPage();
+    QCOMPARE(manager.pageCount(), 1);
+    KWPage page2 = manager.appendPage();
+    QCOMPARE(manager.pageCount(), 2);
+    KWPage page3 = manager.appendPage();
+    QCOMPARE(manager.pageCount(), 3);
+    page2.setPageSide(KWPage::PageSpread);
+    QCOMPARE(manager.pageCount(), 4);
+}
+
 QTEST_KDEMAIN(TestPageManager, GUI)
 #include "TestPageManager.moc"
