@@ -377,10 +377,6 @@ void KWDocument::clear()
         m_pageManager.removePage(page);
     m_pageManager.clearPageStyle();
 
-    KWPageStyle style("Standard");
-    style.setPageLayout(KoPageLayout::standardLayout());
-    m_pageManager.addPageStyle(style);
-
     m_config.load(this); // re-load values
     foreach(KWFrameSet *fs, m_frameSets) {
         removeFrameSet(fs);

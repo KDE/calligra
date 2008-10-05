@@ -48,6 +48,7 @@ public:
 
     QHash <QString, KWPageStyle> pageStyles;
     KoInsets padding;
+    KWPageStyle defaultPageStyle;
 };
 
 #endif

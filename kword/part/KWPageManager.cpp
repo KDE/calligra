@@ -32,8 +32,10 @@
 
 KWPageManagerPrivate::KWPageManagerPrivate()
     : lastId(0),
-    preferPageSpread(false)
+    preferPageSpread(false),
+    defaultPageStyle("Standard")
 {
+    defaultPageStyle.setPageLayout(KoPageLayout::standardLayout());
 }
 
 qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
@@ -106,9 +108,6 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
 KWPageManager::KWPageManager()
     : d (new KWPageManagerPrivate())
 {
-    KWPageStyle defaultpagestyle("Standard");
-    defaultpagestyle.setPageLayout(KoPageLayout::standardLayout());
-    addPageStyle(defaultpagestyle);
 }
 
 KWPageManager::~KWPageManager()
@@ -376,7 +375,6 @@ KWPageStyle KWPageManager::pageStyle(const QString &name) const
 void KWPageManager::addPageStyle(const KWPageStyle &pageStyle)
 {
     Q_ASSERT(! pageStyle.name().isEmpty());
-    Q_ASSERT(! d->pageStyles.contains(pageStyle.name())); // This should never occur...
     d->pageStyles.insert(pageStyle.name(), pageStyle);
 }
 
@@ -391,12 +389,13 @@ KWPageStyle KWPageManager::addPageStyle(const QString &name)
 
 KWPageStyle KWPageManager::defaultPageStyle() const
 {
-    return d->pageStyles["Standard"];
+    return d->defaultPageStyle;
 }
 
 void KWPageManager::clearPageStyle()
 {
     d->pageStyles.clear();
+    addPageStyle("Standard").setPageLayout(KoPageLayout::standardLayout());
 }
 
 const KWPage KWPageManager::begin() const
