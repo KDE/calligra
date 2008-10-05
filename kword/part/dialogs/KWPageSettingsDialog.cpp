@@ -26,16 +26,16 @@
 
 //#include <KDebug>
 
-KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
-        : KoPageLayoutDialog(parent, page->pageStyle().pageLayout()),
+KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, const KWPage &page)
+        : KoPageLayoutDialog(parent, page.pageStyle().pageLayout()),
         m_document(document),
         m_page(page)
 {
     Q_ASSERT(document);
-    Q_ASSERT(page);
+    Q_ASSERT(page.isValid());
 
-    setPageSpread(m_page->pageSide() == KWPage::PageSpread);
-    setTextDirection(m_page->directionHint());
+    setPageSpread(m_page.pageSide() == KWPage::PageSpread);
+    setTextDirection(m_page.directionHint());
 }
 
 void KWPageSettingsDialog::accept()

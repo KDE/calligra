@@ -33,6 +33,7 @@
 
 class KWPage;
 class KoShape;
+class KWPageManagerPrivate;
 
 
 /**
@@ -69,23 +70,23 @@ public:
     /**
      * return the KWPage of a specific page number. Returns 0 if page does not exist.
      */
-    KWPage* page(int pageNumber) const;
+    KWPage page(int pageNumber) const;
 
     /**
      * return the KWPage instance where the rect is on. Returns 0 if page does not exist.
      */
-    KWPage* page(const KoShape *shape) const;
+    KWPage page(const KoShape *shape) const;
 
     /**
      * return the KWPage instance where the point is on. Returns 0 if page does not exist.
      */
-    KWPage* page(const QPointF &point) const;
+    KWPage page(const QPointF &point) const;
 
     /**
      * return the KWPage instance of the y-coordinate in the document. Returns 0 if
      * page does not exist.
      */
-    KWPage* page(qreal ptY) const;
+    KWPage page(qreal ptY) const;
 
     /**
      * Return the y-offset in this document of the top of page with @p pageNumber
@@ -110,26 +111,27 @@ public:
      * @param pageNumber page number of the new page
      * @param pageStyle the page style to use for the new page
      */
-    KWPage* insertPage(int pageNumber, const KWPageStyle &pageStyle = KWPageStyle());
+    KWPage insertPage(int pageNumber, const KWPageStyle &pageStyle = KWPageStyle());
 
     /**
      * Insert the page instance at the specified position in the document. Note that it is preferred
      * to use the insertPage(int) method which creates a new page.
      * @param page the page that will be inserted.
+// TODO can we remove this?
      */
-    KWPage* insertPage(KWPage *page);
+    KWPage insertPage(const KWPage &page);
 
     /**
      * Append a new page at the end of the document
      * @param pageStyle the page style to use for the new page
      */
-    KWPage* appendPage(const KWPageStyle &pageStyle = KWPageStyle());
+    KWPage appendPage(const KWPageStyle &pageStyle = KWPageStyle());
 
     /// Remove the page with @p pageNumber renumbering all pages after pages already added
     void removePage(int pageNumber);
 
     /// Remove @p page renumbering all pages after pages already added
-    void removePage(KWPage *page);
+    void removePage(const KWPage &page);
 
     /**
      * Returns the argument point, with altered coordinats if the point happens to be
@@ -141,47 +143,40 @@ public:
 
     /**
      * Return an ordered list of all pages.
+// TODO create iterator instead
      */
-    QList<KWPage*> pages() const;
+    QList<KWPage> pages() const;
 
     /**
      * Return the padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    const KoInsets &padding() const {
-        return m_padding;
-    }
+    const KoInsets &padding() const;
+
     /**
      * Return the padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    KoInsets &padding() {
-        return m_padding;
-    }
+    KoInsets &padding();
+
     /**
      * Set a new padding used for this document. This is used to have some space around each
      * page outside of the printable area for page bleed.
      */
-    void setPadding(const KoInsets &padding) {
-        m_padding = padding;
-    }
+    void setPadding(const KoInsets &padding);
 
-//TODO move following both functions to KWPageStyle
     /**
      * This property can be set to register that new pages created should be made to be a pageSpread when aproriate.
      * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
      */
-    KDE_DEPRECATED bool preferPageSpread() const {
-        return m_preferPageSpread;
-    }
+    bool preferPageSpread() const;
+
     /**
      * Set the property to register that new pages created should be made to be a pageSpread when aproriate.
      * Note that the pageManager itself will not use this variable since it doesn't have a factory method for pages.
      * @param on If true, it is requested that new, even numbered pages are set to be page spreads.
      */
-    KDE_DEPRECATED void setPreferPageSpread(bool on) {
-        m_preferPageSpread = on;
-    }
+    void setPreferPageSpread(bool on);
 
     /**
      * Add a new \a KWPageStyle instance to this document.
@@ -235,38 +230,29 @@ public:
      * Return the first page in the page managers list of pages.
      * Will return 0 if there are no pages.
      */
-    const KWPage *begin() const;
+    const KWPage begin() const;
     /**
      * Return the last page in the page managers list of pages.
      * Will return 0 if there are no pages.
      */
-    const KWPage *last() const;
+    const KWPage last() const;
 
     /**
      * Return the first page in the page managers list of pages.
      * Will return 0 if there are no pages.
      */
-    KWPage *begin();
+    KWPage begin();
     /**
      * Return the last page in the page managers list of pages.
      * Will return 0 if there are no pages.
      */
-    KWPage *last();
+    KWPage last();
 
 private:
-    /// helper method for the topOfPage and bottomOfPage
-    qreal pageOffset(int pageNumber, bool bottom) const;
-    friend class KWPage;
-
-private:
-    QList<KWPage*> m_pageList;
-    bool m_preferPageSpread;
-
-    QHash <QString, KWPageStyle> m_pageStyle;
-    KoInsets m_padding;
-
     /// disable copy constructor and assignment operator
     Q_DISABLE_COPY(KWPageManager)
+
+    KWPageManagerPrivate * const d;
 };
 
 #endif

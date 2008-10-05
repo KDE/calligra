@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005, 2007-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef kw_page_h
-#define kw_page_h
+#ifndef KWPAGE_H
+#define KWPAGE_H
 
 #include "KWPageManager.h"
 #include "KWPageStyle.h"
@@ -31,6 +31,7 @@
 
 class KoInlineObject;
 class KoZoomHandler;
+class KWPageManagerPrivate;
 
 /**
  * This class represents a printed page of the document.  Each page is either left, right or
@@ -39,9 +40,13 @@ class KoZoomHandler;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage : public QObject, public KoTextPage
+class KWORD_EXPORT KWPage : public KoTextPage
 {
 public:
+    inline KWPage() : priv(0), n(0) {}
+    inline KWPage(KWPageManagerPrivate *manager, int index) : priv(manager), n(index) {}
+    inline KWPage(const KWPage &o) : priv(o.priv), n(o.n) {}
+    inline KWPage &operator=(const KWPage &o) { priv = o.priv; n = o.n; return *this; }
 
     /// An enum to define if this is a page that is printed to be a left or a right page
     enum PageSide {
@@ -90,25 +95,17 @@ public:
     qreal offsetInDocument() const;
 
     /// Return the pageSide of this page, see the PageSide
-    PageSide pageSide() const {
-        return m_pageSide;
-    }
+    PageSide pageSide() const;
     /// set the pageSide of this page, see the PageSide
-    void setPageSide(PageSide ps) {
-        m_pageSide = ps;
-    }
+    void setPageSide(PageSide ps);
 
     /// returns the number of this page. reimplemented from the \a KoTextPage interface.
     int pageNumber(int select = 0, int adjustment = 0) const;
 
     /// returns the page style applied on this page
-    KWPageStyle pageStyle() const {
-        return m_pageStyle;
-    }
+    KWPageStyle pageStyle() const;
     /// set the page style to apply on this page
-    void setPageStyle(const KWPageStyle style) {
-        m_pageStyle = style;
-    }
+    void setPageStyle(const KWPageStyle style);
 
     /**
      * Return the orientation property of the page.
@@ -124,43 +121,35 @@ public:
      * the paragraph.
      * @param direction the direction.
      */
-    void setDirectionHint(KoText::Direction direction) {
-        m_textDirectionHint = direction;
-    }
+    void setDirectionHint(KoText::Direction direction);
 
     /**
      * return the text-direction that text on this page should be initialized with.
      * New text that is written on this page can use this to set the text direction for
      * the paragraph.
      */
-    KoText::Direction directionHint() const {
-        return m_textDirectionHint;
-    }
+    KoText::Direction directionHint() const;
 
     /// returns the previous page.
-    const KWPage *previous() const;
+    const KWPage previous() const;
     /// returns the next page.
-    const KWPage *next() const;
+    const KWPage next() const;
+
+    bool isValid() const;
+
+    bool operator==(const KWPage &other) const;
+    inline bool operator!=(const KWPage &other) const { return ! operator==(other); }
+
+    uint hash() const;
 
 private:
-    /** private constructor, only for our friends
-     * @param parent the KWPageManager that we belong to.
-     * @param pageNum the number of the page as the user will see it.
-     * @param pageStyle the page style to use for the page
-     */
-    KWPage(KWPageManager *parent, int pageNum, const KWPageStyle &pageStyle);
-
-    int m_pageNum;
-    PageSide m_pageSide;
-    KoText::Direction m_textDirectionHint;
-
-    KWPageManager *m_parent;
-    KWPageStyle m_pageStyle;
-
-    friend class KWPageManager;
-
-    /// disable copy constructor and assignment operator
-    Q_DISABLE_COPY(KWPage)
+    KWPageManagerPrivate *priv;
+    int n;
 };
+
+inline uint qHash(const KWPage &page)
+{
+    return page.hash();
+}
 
 #endif

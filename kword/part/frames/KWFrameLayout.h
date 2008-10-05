@@ -105,14 +105,14 @@ signals:
 
 private:
     friend class TestBasicLayout;
-    KoShape *createTextShape(KWPage *page);
-    KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, KWPage *page);
+    KoShape *createTextShape(const KWPage &page);
+    KWTextFrameSet *getOrCreate(KWord::TextFrameSetType type, const KWPage &page);
     QList<KWFrame *> framesInPage(QRectF page);
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord::TextFrameSetType *origin);
     bool hasFrameOn(KWTextFrameSet *fs, int pageNumber);
     void cleanFrameSet(KWTextFrameSet *fs);
-    KWFrame* createCopyFrame(KWFrameSet *fs, KWPage *page);
+    KWFrame* createCopyFrame(KWFrameSet *fs, const KWPage &page);
 
 private:
     const KWPageManager *m_pageManager;

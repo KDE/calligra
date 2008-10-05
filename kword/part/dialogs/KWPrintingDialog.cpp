@@ -53,23 +53,23 @@ void KWPrintingDialog::preparePage(int pageNumber)
     const int bleedWidth = (int)(m_clipToPage ? 0 : POINT_TO_INCH((bleed.left + bleed.right) * resolution));
     const int bleedHeigt = (int)(m_clipToPage ? 0 : POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
 
-    KWPage *page = m_document->pageManager()->page(pageNumber);
-    if (! page)
+    KWPage page = m_document->pageManager()->page(pageNumber);
+    if (! page.isValid())
         return;
-    QRectF pageRect = page->rect(pageNumber);
+    QRectF pageRect = page.rect(pageNumber);
     pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
 #endif
-    const qreal offsetInDocument = page->offsetInDocument();
+    const qreal offsetInDocument = page.offsetInDocument();
     // find images
     foreach(KWFrameSet *fs, m_document->frameSets()) {
         if (fs->frameCount() == 0) continue;
         KWFrame *frame = fs->frames().at(0);
         if (frame == 0) continue;
         QRectF bound = frame->shape()->boundingRect();
-        if (offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
+        if (offsetInDocument > bound.bottom() || offsetInDocument + page.height() < bound.top())
             continue;
         KoImageData *imageData = dynamic_cast<KoImageData*>(frame->shape()->userData());
         if (imageData) {
@@ -83,14 +83,14 @@ void KWPrintingDialog::preparePage(int pageNumber)
     const int pageOffset = qRound(POINT_TO_INCH(resolution * offsetInDocument));
 
     painter().translate(0, -pageOffset);
-    qreal width = page->width();
-    int clipHeight = (int) POINT_TO_INCH(resolution * page->height());
-    int clipWidth = (int) POINT_TO_INCH(resolution * page->width());
+    qreal width = page.width();
+    int clipHeight = (int) POINT_TO_INCH(resolution * page.height());
+    int clipWidth = (int) POINT_TO_INCH(resolution * page.width());
     int offset = bleedOffset;
-    if (page->pageSide() == KWPage::PageSpread) {
+    if (page.pageSide() == KWPage::PageSpread) {
         width /= 2;
         clipWidth /= 2;
-        if (pageNumber != page->pageNumber()) { // right side
+        if (pageNumber != page.pageNumber()) { // right side
             offset += clipWidth;
             painter().translate(-clipWidth, 0);
         }
@@ -104,9 +104,9 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 {
     Q_ASSERT(pageNumber >= 0);
     Q_ASSERT(pageNumber < m_document->pageManager()->pageCount());
-    KWPage *page = m_document->pageManager()->page(pageNumber);
-    Q_ASSERT(page);
-    return shapeManager()->shapesAt(page->rect());
+    KWPage page = m_document->pageManager()->page(pageNumber);
+    Q_ASSERT(page.isValid());
+    return shapeManager()->shapesAt(page.rect());
 }
 
 void KWPrintingDialog::printingDone()

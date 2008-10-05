@@ -422,12 +422,12 @@ void KWTextDocumentLayout::layout()
                     }
                 }
                 // set the page for the shape.
-                KWPage *page = m_frameSet->pageManager()->page(currentShape);
-                Q_ASSERT(page);
+                KWPage page = m_frameSet->pageManager()->page(currentShape);
+                Q_ASSERT(page.isValid());
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(currentShape->userData());
                 Q_ASSERT(data);
-                data->setPageDirection(page->directionHint());
-                data->setPage(page);
+                data->setPageDirection(page.directionHint());
+                // data->setPage(page); // TODO
             }
         }
 
@@ -535,9 +535,9 @@ void KWTextDocumentLayout::layout()
 
                 // find out the maximum size this frame can be extended to while still
                 // fitting in the page.  We'll continue doing layout and see if there is text till end of page.
-                KWPage *page = m_frameSet->pageManager()->page(lastFrame->shape());
-                QRectF pageRect = page->rect();
-                pageRect.adjust(page->leftMargin(), page->topMargin(), -page->rightMargin(), -page->bottomMargin());
+                KWPage page = m_frameSet->pageManager()->page(lastFrame->shape());
+                QRectF pageRect = page.rect();
+                pageRect.adjust(page.leftMargin(), page.topMargin(), -page.rightMargin(), -page.bottomMargin());
 
                 QLineF top(QPointF(0, 0), QPointF(lastFrame->shape()->size().width(), 0));
                 top = lastFrame->shape()->absoluteTransformation(0).map(top);

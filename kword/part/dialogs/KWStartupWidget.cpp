@@ -20,6 +20,7 @@
 #include "KWStartupWidget.h"
 
 #include "KWDocumentColumns.h"
+#include "KWPage.h"
 
 #include <KWDocument.h>
 #include <KoPageLayoutWidget.h>

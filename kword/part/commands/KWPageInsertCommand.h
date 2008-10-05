@@ -22,8 +22,9 @@
 #ifndef KWPAGEINSERTCOMMAND_H
 #define KWPAGEINSERTCOMMAND_H
 
+#include "../KWPage.h"
+
 #include <QUndoCommand>
-#include <QPointer>
 
 class KWPage;
 class KWPageManager;
@@ -49,15 +50,14 @@ public:
     /// revert the actions done in redo
     void undo();
 
-    /// return the page created.  Note that the result is 0 before the first redo()
-    KWPage *page() const {
+    /// return the page created.
+    KWPage page() const {
         return m_page;
     }
 
 private:
-    QPointer<KWDocument> m_document;
-    QPointer<KWPage> m_page;
-    bool m_deletePage;
+    KWDocument *m_document;
+    KWPage m_page;
     int m_afterPageNum;
     QString m_masterPageName;
     KoShapeMoveCommand *m_shapeMoveCommand;

@@ -35,7 +35,7 @@ class Page : public QObject
 {
     Q_OBJECT
 public:
-    Page(Module* module, KWPage* page)
+    Page(Module* module, KWPage &page)
             : QObject(module), m_page(page) {}
     virtual ~Page() {}
 
@@ -43,7 +43,7 @@ public Q_SLOTS:
 
     /** Return the number of this page as it will be shown to the user. */
     int pageNumber() const {
-        return m_page->pageNumber();
+        return m_page.pageNumber();
     }
 
     /** Return the pageside of this page.
@@ -54,7 +54,7 @@ public Q_SLOTS:
     * \li "Spread" for page spread which is one page that represents 2 pagenumbers.
     */
     QString pageSide() const {
-        switch (m_page->pageSide()) {
+        switch (m_page.pageSide()) {
         case KWPage::Left: return "Left";
         case KWPage::Right: return "Right";
         case KWPage::PageSpread: return "Spread";
@@ -64,43 +64,43 @@ public Q_SLOTS:
     /** Set the pageside of this page. See the pageSide() method above for a
     list of valid arguments. */
     void setPageSide(const QString& ps) {
-        if (ps == "Left") m_page->setPageSide(KWPage::Left);
-        else if (ps == "Right") m_page->setPageSide(KWPage::Right);
-        else if (ps == "Spread") m_page->setPageSide(KWPage::PageSpread);
+        if (ps == "Left") m_page.setPageSide(KWPage::Left);
+        else if (ps == "Right") m_page.setPageSide(KWPage::Right);
+        else if (ps == "Spread") m_page.setPageSide(KWPage::PageSpread);
     }
 
     /** Return the width of this page in pt. */
     qreal width() const {
-        return m_page->width();
+        return m_page.width();
     }
 
     /** Return the height of this page in pt. */
     qreal height() const {
-        return m_page->height();
+        return m_page.height();
     }
 
     /** Return the height of the margin at top in pt. */
     qreal topMargin() const {
-        return m_page->topMargin();
+        return m_page.topMargin();
     }
 
     /** Return the height of the margin at bottom in pt. */
     qreal bottomMargin() const {
-        return m_page->bottomMargin();
+        return m_page.bottomMargin();
     }
 
     /** Return the width of the margin at left in pt. */
     qreal leftMargin() const {
-        return m_page->leftMargin();
+        return m_page.leftMargin();
     }
 
     /** Return the width of the margin at right in pt. */
     qreal rightMargin() const {
-        return m_page->rightMargin();
+        return m_page.rightMargin();
     }
 
 private:
-    KWPage* m_page;
+    KWPage m_page;
 };
 
 }

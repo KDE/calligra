@@ -180,7 +180,7 @@ public:
     bool operator==(const KWPageStyle &other) const;
 
 private:
-    QSharedDataPointer<KWPageStylePrivate> d;
+    QExplicitlySharedDataPointer<KWPageStylePrivate> d;
 };
 
 #endif

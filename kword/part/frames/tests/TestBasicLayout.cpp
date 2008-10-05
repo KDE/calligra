@@ -17,12 +17,12 @@ class Helper
 public:
     Helper() {
         pageManager = new KWPageManager();
-        KWPage *page = pageManager->appendPage();
-        KoPageLayout pageLayout = page->pageStyle().pageLayout();
+        KWPage page = pageManager->appendPage();
+        KoPageLayout pageLayout = page.pageStyle().pageLayout();
         pageLayout.width = 200;
         pageLayout.height = 200;
-        page->pageStyle().setPageLayout(pageLayout);
-        pageStyle = page->pageStyle();
+        page.pageStyle().setPageLayout(pageLayout);
+        pageStyle = page.pageStyle();
     }
     ~Helper() {
         delete pageManager;
@@ -42,7 +42,7 @@ void TestBasicLayout::testGetOrCreateFrameSet()
 {
     Helper helper;
     m_frames.clear();
-    KWPage *page = helper.pageManager->page(1);
+    KWPage page = helper.pageManager->page(1);
     KWFrameLayout bfl(helper.pageManager, m_frames);
     connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
 
@@ -68,7 +68,7 @@ void TestBasicLayout::testCreateNewFramesForPage()
     m_frames.clear();
     QVERIFY(m_frames.count() == 0);
     KWFrameLayout bfl(helper.pageManager, m_frames);
-    KWPage *page = helper.pageManager->page(1);
+    KWPage page = helper.pageManager->page(1);
     connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
 
     KWTextFrameSet *main = bfl.getOrCreate(KWord::MainTextFrameSet, page);
@@ -115,13 +115,13 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter()
 
     // append the second page, same pageStyle like the first
     helper.pageManager->appendPage();
-    QVERIFY(helper.pageManager->page(1)->pageStyle() == helper.pageManager->page(2)->pageStyle());
+    QVERIFY(helper.pageManager->page(1).pageStyle() == helper.pageManager->page(2).pageStyle());
 
     // append the theird page with another pagesettings
     KWPageStyle pagesettings3("Page3PageStyle");
     helper.pageManager->addPageStyle(pagesettings3);
     helper.pageManager->appendPage(pagesettings3);
-    QVERIFY(helper.pageManager->page(3)->pageStyle() == pagesettings3);
+    QVERIFY(helper.pageManager->page(3).pageStyle() == pagesettings3);
 
     // test the second page
     helper.pageStyle.setHeaderPolicy(KWord::HFTypeNone);
@@ -136,7 +136,7 @@ void TestBasicLayout::testShouldHaveHeaderOrFooter()
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(2, false, &origin), true);
     QCOMPARE(origin, KWord::OddPagesFooterTextFrameSet);
 
-    // test the theird page
+    // test the 3rd page
     pagesettings3.setHeaderPolicy(KWord::HFTypeEvenOdd);
     pagesettings3.setFooterPolicy(KWord::HFTypeUniform);
     QCOMPARE(bfl.shouldHaveHeaderOrFooter(3, true, &origin), true);

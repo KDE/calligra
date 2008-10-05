@@ -192,12 +192,12 @@ void KWTextFrameSet::framesEmpty(int emptyFrames)
     QList<KWFrame*> myFrames = m_frames; // make a copy so we can do a removeFrame without worries
     QList<KWFrame*>::Iterator deleteFrom = myFrames.end();
     QList<KWFrame*>::Iterator iter = --myFrames.end();
-    KWPage *page = 0;
+    KWPage page;
     do {
         KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));
         if (tf) {
-            KWPage *pageForFrame = m_pageManager->page(tf->shape());
-            if (page == 0) // first loop
+            KWPage pageForFrame = m_pageManager->page(tf->shape());
+            if (!page.isValid()) // first loop
                 page = pageForFrame;
             else if (page != pageForFrame) { // all frames on the page (of this FS) are empty.
                 deleteFrom = iter;
@@ -247,14 +247,14 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame1->frameSet());
     bool rtl = false; // right-to-left
     if (tfs && tfs->pageManager()) { // check per page.
-        KWPage *page1 = tfs->pageManager()->page(frame1->shape());
-        KWPage *page2 = tfs->pageManager()->page(frame2->shape());
-        if (page1 != page2 && page1 != 0 && page2 != 0)
-            return page1->pageNumber() < page2->pageNumber();
+        KWPage page1 = tfs->pageManager()->page(frame1->shape());
+        KWPage page2 = tfs->pageManager()->page(frame2->shape());
+        if (page1 != page2 && page1.isValid() && page2.isValid())
+            return page1.pageNumber() < page2.pageNumber();
 
         // both on same page
-        if (page1)
-            rtl = page1->directionHint() == KoText::RightLeftTopBottom;
+        if (page1.isValid())
+            rtl = page1.directionHint() == KoText::RightLeftTopBottom;
     }
 
     if (pos.x() > bounds.right()) return rtl;

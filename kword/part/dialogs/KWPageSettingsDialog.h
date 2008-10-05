@@ -32,7 +32,7 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
 {
     Q_OBJECT
 public:
-    explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, KWPage *page);
+    explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
 
 private:
     void accept();
@@ -40,7 +40,7 @@ private:
 
 private:
     KWDocument *m_document;
-    KWPage *m_page;
+    KWPage m_page;
 };
 
 #endif

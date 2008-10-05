@@ -30,21 +30,22 @@
 
 #include <KLocale>
 
-KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, KWPage *page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent)
-        : QUndoCommand(i18n("Page Properties"), parent),
-        m_document(document),
-        m_page(page),
-        m_oldLayout(page->pageStyle().pageLayout()),
-        m_newLayout(newLayout),
-        m_oldDirection(page->directionHint()),
-        m_newDirection(direction)
+KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWPage &page,
+        const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent)
+    : QUndoCommand(i18n("Page Properties"), parent),
+    m_document(document),
+    m_page(page),
+    m_oldLayout(page.pageStyle().pageLayout()),
+    m_newLayout(newLayout),
+    m_oldDirection(page.directionHint()),
+    m_newDirection(direction)
 {
     // move
     QList<KoShape *> shapes;
     QList<QPointF> previousPositions;
     QList<QPointF> newPositions;
 
-    QRectF rect = page->rect();
+    QRectF rect = page.rect();
     QRectF newRect(0, rect.top(), m_newLayout.width * (m_newLayout.left < 0 ? 2 : 1), m_newLayout.height);
     const qreal bottom = rect.bottom();
     const qreal sizeDifference = m_newLayout.height - m_oldLayout.height;
@@ -53,7 +54,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, KWPage *p
         bool remove = tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet;
         foreach(KWFrame *frame, fs->frames()) {
             KoShape *shape = frame->shape();
-            if (remove && shape->boundingRect().intersects(page->rect())) {
+            if (remove && shape->boundingRect().intersects(page.rect())) {
                 if (m_oldLayout.left < 0 && m_newLayout.left >= 0 &&
                         shape->position().x() >= rect.center().x()) // before it was a pageSpread.
                     new KWFrameDeleteCommand(document, frame, this);
@@ -75,16 +76,16 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, KWPage *p
     if (shapes.count() > 0)
         new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
 
-    if (page->pageNumber() % 2 == 1 && newLayout.left < 0)
-        new KWPageInsertCommand(m_document, page->pageNumber() - 1, this);
+    if (page.pageNumber() % 2 == 1 && newLayout.left < 0)
+        new KWPageInsertCommand(m_document, page.pageNumber() - 1, this);
 }
 
 void KWPagePropertiesCommand::redo()
 {
     QUndoCommand::redo();
     setLayout(m_newLayout);
-    m_page->setDirectionHint(m_newDirection);
-    m_document->m_frameLayout.createNewFramesForPage(m_page->pageNumber());
+    m_page.setDirectionHint(m_newDirection);
+    m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
 }
 
@@ -93,17 +94,17 @@ void KWPagePropertiesCommand::undo()
     QUndoCommand::undo();
     //setLayout(m_newLayout);
     setLayout(m_oldLayout);
-    m_page->setDirectionHint(m_oldDirection);
-    m_document->m_frameLayout.createNewFramesForPage(m_page->pageNumber());
+    m_page.setDirectionHint(m_oldDirection);
+    m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
 }
 
 void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout)
 {
-    m_page->pageStyle().setPageLayout(layout);
+    m_page.pageStyle().setPageLayout(layout);
     if (layout.pageEdge >= 0.0 &&    // assumption based on the KWPageLayout widget.
-            m_page->pageNumber() % 2 == 0)
-        m_page->setPageSide(KWPage::PageSpread);
+            m_page.pageNumber() % 2 == 0)
+        m_page.setPageSide(KWPage::PageSpread);
     else
-        m_page->setPageSide(m_page->pageNumber() % 2 == 0 ? KWPage::Left : KWPage::Right);
+        m_page.setPageSide(m_page.pageNumber() % 2 == 0 ? KWPage::Left : KWPage::Right);
 }

@@ -21,6 +21,7 @@
 #define KWVIEW_H
 
 #include "kword_export.h"
+#include "KWPage.h"
 
 #include <KoView.h>
 #include <KoViewConverter.h>
@@ -33,7 +34,6 @@ class KWDocument;
 class KWCanvas;
 class KWFrame;
 class KWGui;
-class KWPage;
 class KWStatusBar;
 
 class KoShape;
@@ -177,7 +177,7 @@ private:
     KWDocument *m_document;
     KoZoomHandler m_zoomHandler;
     KoZoomController *m_zoomController;
-    KWPage *m_currentPage;
+    KWPage m_currentPage;
     KWStatusBar* m_statusBar;
 
     KAction *m_actionFormatFrameSet;

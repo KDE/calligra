@@ -38,20 +38,20 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
     const KWPageManager *pageManager = canvas()->document()->pageManager();
     QList<ViewMap> answer;
     qreal offsetX = 0.0;
-    foreach(KWPage *page, pageManager->pages()) {
-        Q_ASSERT(page->pageNumber() < m_pageTops.count());
-        if (page->pageNumber() >= m_pageTops.count()) {
+    foreach(const KWPage &page, pageManager->pages()) {
+        Q_ASSERT(page.pageNumber() < m_pageTops.count());
+        if (page.pageNumber() >= m_pageTops.count()) {
             kWarning(32003) << "KWViewModeNormal ERROR; pagemanager has more pages than viewmode ("
             << pageManager->pageCount() << ">" << m_pageTops.count()
             << "). Make sure you add pages via the document!";
             break;
         }
 
-        QRectF zoomedPage = canvas()->viewConverter()->documentToView(page->rect());
+        QRectF zoomedPage = canvas()->viewConverter()->documentToView(page.rect());
         ViewMap vm;
-        //kDebug(32003) <<"page[" << page->pageNumber() <<"] uses pagetops:" << m_pageTops[page->pageNumber()];
+        //kDebug(32003) <<"page[" << page.pageNumber() <<"] uses pagetops:" << m_pageTops[page.pageNumber()];
         vm.distance = canvas()->viewConverter()->documentToView(
-                          QPointF(offsetX, m_pageTops[page->pageNumber()] - page->offsetInDocument()));
+                          QPointF(offsetX, m_pageTops[page.pageNumber()] - page.offsetInDocument()));
 
         QRectF targetPage = QRectF(zoomedPage.topLeft() + vm.distance, zoomedPage.size());
         QRectF intersection = targetPage.intersect(viewRect);
@@ -61,8 +61,8 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             answer.append(vm);
         }
         if (m_pageSpreadMode) {
-            if (page->pageSide() == KWPage::Left)
-                offsetX = page->width() + GAP;
+            if (page.pageSide() == KWPage::Left)
+                offsetX = page.width() + GAP;
             else
                 offsetX = 0.0;
         }
@@ -74,8 +74,8 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
 void KWViewModeNormal::updatePageCache()
 {
     m_pageSpreadMode = false;
-    foreach(KWPage *page, canvas()->document()->pageManager()->pages()) {
-        if (page->pageSide() == KWPage::PageSpread) {
+    foreach(const KWPage &page, canvas()->document()->pageManager()->pages()) {
+        if (page.pageSide() == KWPage::PageSpread) {
             m_pageSpreadMode = true;
             break;
         }
@@ -84,31 +84,31 @@ void KWViewModeNormal::updatePageCache()
     qreal width = 0.0, bottom = 0.0;
     if (m_pageSpreadMode) { // two pages next to each other per row
         qreal top = 0.0, last = 0.0, halfWidth = 0.0;
-        foreach(KWPage *page, canvas()->document()->pageManager()->pages()) {
-            switch (page->pageSide()) {
+        foreach(const KWPage &page, canvas()->document()->pageManager()->pages()) {
+            switch (page.pageSide()) {
             case KWPage::PageSpread:
                 if (last > 0)
                     top += last + GAP;
                 m_pageTops.append(top);
                 m_pageTops.append(top);
-                top += page->height() + GAP;
-                width = qMax(width, page->width());
+                top += page.height() + GAP;
+                width = qMax(width, page.width());
                 halfWidth = 0.0;
                 last = 0.0;
                 bottom = top;
                 break;
             case KWPage::Left:
                 m_pageTops.append(top);
-                last = page->height();
-                halfWidth = page->width() + GAP;
+                last = page.height();
+                halfWidth = page.width() + GAP;
                 width = qMax(width, halfWidth);
                 bottom = top + last;
                 break;
             case KWPage::Right:
                 m_pageTops.append(top);
-                top += qMax(page->height(), last);
+                top += qMax(page.height(), last);
                 last = 0.0;
-                width = qMax(width, halfWidth + page->width());
+                width = qMax(width, halfWidth + page.width());
                 halfWidth = 0.0;
                 bottom = top;
                 top += GAP;
@@ -120,10 +120,10 @@ void KWViewModeNormal::updatePageCache()
         }
     } else { // each page on a row
         qreal top = 0.0;
-        foreach(KWPage *page, canvas()->document()->pageManager()->pages()) {
+        foreach(const KWPage &page, canvas()->document()->pageManager()->pages()) {
             m_pageTops.append(top);
-            top += page->height() + GAP;
-            width = qMax(width, page->width());
+            top += page.height() + GAP;
+            width = qMax(width, page.width());
         }
         bottom = top;
     }
@@ -133,20 +133,20 @@ void KWViewModeNormal::updatePageCache()
 QPointF KWViewModeNormal::documentToView(const QPointF & point) const
 {
     const KWPageManager *pageManager = canvas()->document()->pageManager();
-    const KWPage *page = pageManager->page(point);
-    if (! page)
+    KWPage page = pageManager->page(point);
+    if (! page.isValid())
         page = pageManager->last();
-    if (page == 0)
+    if (! page.isValid())
         return QPointF();
-    int pageIndex = page->pageNumber();
+    int pageIndex = page.pageNumber();
     qreal x = 0;
-    if (m_pageSpreadMode && page->pageSide() == KWPage::Right) {
-        KWPage *prevPage = canvas()->document()->pageManager()->page(page->pageNumber() - 1);
-        if (prevPage)
-            x = prevPage->width();
+    if (m_pageSpreadMode && page.pageSide() == KWPage::Right) {
+        KWPage prevPage = canvas()->document()->pageManager()->page(page.pageNumber() - 1);
+        if (prevPage.isValid())
+            x = prevPage.width();
     }
 
-    QPointF offsetInPage(point.x(),  + point.y() - page->offsetInDocument());
+    QPointF offsetInPage(point.x(),  + point.y() - page.offsetInDocument());
     Q_ASSERT(pageIndex >= 0 && pageIndex < m_pageTops.count());
     QPointF translated(x, m_pageTops[pageIndex]);
     return canvas()->viewConverter()->documentToView(translated + offsetInPage);
@@ -164,24 +164,24 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
         pageNumber++;
     }
     translated = canvas()->viewConverter()->viewToDocument(point);
-    KWPage *page = pageManager->page(pageNumber); //(pageNumber -1 + pageManager->startPage());
+    KWPage page = pageManager->page(pageNumber); //(pageNumber -1 + pageManager->startPage());
     qreal xOffset = translated.x();
 
-    if (page && m_pageSpreadMode && page->pageSide() == KWPage::Right && page->pageNumber() > 0/*pageManager->startPage()*/) {
+    if (page.isValid() && m_pageSpreadMode && page.pageSide() == KWPage::Right && page != pageManager->begin()) {
         // there is a page displayed left of this one.
-        KWPage *prevPage = pageManager->page(page->pageNumber() - 1);
-        if (xOffset <= prevPage->width()) // was left page instead of right :)
+        KWPage prevPage = pageManager->page(page.pageNumber() - 1);
+        if (xOffset <= prevPage.width()) // was left page instead of right :)
             page = prevPage;
         else
-            xOffset -= prevPage->width();
+            xOffset -= prevPage.width();
     }
 
-    if (! page) // below doc or right of last page
+    if (! page.isValid()) // below doc or right of last page
         return QPointF(m_contents.width(), m_contents.height());
 
     qreal yOffset = translated.y();
     if (pageNumber >= 0)
         yOffset -= m_pageTops[pageNumber];
 
-    return QPointF(xOffset, page->offsetInDocument() + yOffset);
+    return QPointF(xOffset, page.offsetInDocument() + yOffset);
 }

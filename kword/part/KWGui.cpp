@@ -129,16 +129,16 @@ bool KWGui::horizontalScrollBarVisible()
 void KWGui::pageSetupChanged()
 {
     const KWPageManager *pm = m_view->kwdocument()->pageManager();
-    const KWPage *firstPage = pm->begin();
-    const KWPage *lastPage = pm->last();
+    const KWPage firstPage = pm->begin();
+    const KWPage lastPage = pm->last();
     int height = 0;
-    if (lastPage)
-        height = lastPage->offsetInDocument() + lastPage->height();
+    if (lastPage.isValid())
+        height = lastPage.offsetInDocument() + lastPage.height();
     m_verticalRuler->setRulerLength(height);
     updateRulers();
     int width = 0;
-    if (firstPage)
-        width = firstPage->width();
+    if (firstPage.isValid())
+        width = firstPage.width();
     m_horizontalRuler->setRulerLength(width);
     updateRulers();
 }

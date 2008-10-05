@@ -37,8 +37,6 @@
 KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, QUndoCommand *parent, const QString &masterPageName)
         : QUndoCommand(i18n("Insert Page"), parent),
         m_document(document),
-        m_page(0),
-        m_deletePage(false),
         m_afterPageNum(afterPageNum),
         m_masterPageName(masterPageName),
         m_shapeMoveCommand(0)
@@ -47,22 +45,20 @@ KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum,
 
 KWPageInsertCommand::~KWPageInsertCommand()
 {
-    if (m_deletePage)
-        delete m_page;
 }
 
 void KWPageInsertCommand::redo()
 {
     QUndoCommand::redo();
     KWPageStyle pageStyle = m_document->pageManager()->pageStyle(m_masterPageName);
-    if (m_page == 0) {
+    if (!m_page.isValid()) {
         // Appending a page
-        KWPage *prevPage = m_document->m_pageManager.page(m_afterPageNum);
+        KWPage prevPage = m_document->m_pageManager.page(m_afterPageNum);
         m_page = m_document->m_pageManager.insertPage(m_afterPageNum + 1, pageStyle);
-        if (prevPage)
-            m_page->setDirectionHint(prevPage->directionHint());
-        if (m_page->pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
-            m_page->setPageSide(KWPage::PageSpread);
+        if (prevPage.isValid())
+            m_page.setDirectionHint(prevPage.directionHint());
+        if (m_page.pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
+            m_page.setPageSide(KWPage::PageSpread);
         PageProcessingQueue *ppq = new PageProcessingQueue(m_document);
         ppq->addPage(m_page);
 
@@ -71,7 +67,7 @@ void KWPageInsertCommand::redo()
         QList<QPointF> previousPositions;
         QList<QPointF> newPositions;
 
-        QRectF rect = m_page->rect();
+        QRectF rect = m_page.rect();
         foreach(KWFrameSet *fs, m_document->frameSets()) {
             foreach(KWFrame *frame, fs->frames()) {
                 KoShape *shape = frame->shape();
@@ -90,23 +86,21 @@ void KWPageInsertCommand::redo()
         // Inserting a page
         if (!m_masterPageName.isEmpty())
             if (pageStyle.isValid())
-                m_page->setPageStyle(pageStyle);
+                m_page.setPageStyle(pageStyle);
         m_document->m_pageManager.insertPage(m_page);
     }
     if (m_shapeMoveCommand)
         m_shapeMoveCommand->redo();
-    m_deletePage = false;
     m_document->firePageSetupChanged();
 }
 
 void KWPageInsertCommand::undo()
 {
     QUndoCommand::undo();
-    if (m_page == 0) return;
+    if (!m_page.isValid()) return;
     m_document->m_pageManager.removePage(m_page);
     if (m_shapeMoveCommand)
         m_shapeMoveCommand->redo();
-    m_deletePage = true;
     m_document->firePageSetupChanged();
 }
 

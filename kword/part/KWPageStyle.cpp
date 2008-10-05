@@ -71,6 +71,7 @@ void KWPageStylePrivate::clear()
 ///////////
 
 KWPageStyle::KWPageStyle(const QString& mastername)
+    : d (new KWPageStylePrivate())
 {
     d->masterName = mastername;
 }
@@ -86,7 +87,7 @@ KWPageStyle::KWPageStyle()
 
 bool KWPageStyle::isValid() const
 {
-    return !d->masterName.isEmpty();
+    return d && !d->masterName.isEmpty();
 }
 
 

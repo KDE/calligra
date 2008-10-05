@@ -124,9 +124,9 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
     const QPointF absPos = shape->absolutePosition();
     const QPointF destination = absPos + move;
     qreal bottomOfPage = 0.0;
-    KWPage *page = 0;
-    foreach(KWPage *p, m_document->pageManager()->pages()) {
-        bottomOfPage += p->height();
+    KWPage page;
+    foreach(const KWPage &p, m_document->pageManager()->pages()) {
+        bottomOfPage += p.height();
         if (bottomOfPage >= absPos.y())
             page = p;
         if (bottomOfPage >= destination.y()) {
@@ -134,12 +134,12 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
             break;
         }
     }
-    if (page == 0) { // shape was not in any page to begin with, can't propose anything sane...
+    if (!page.isValid()) { // shape was not in any page to begin with, can't propose anything sane...
         move.setX(0);
         move.setY(0);
         return;
     }
-    QRectF pageRect(page->rect().adjusted(5, 5, -5, -5));
+    QRectF pageRect(page.rect().adjusted(5, 5, -5, -5));
     QPainterPath path(shape->absoluteTransformation(0).map(shape->outline()));
     QRectF shapeBounds = path.boundingRect();
     shapeBounds.moveTopLeft(shapeBounds.topLeft() + move);

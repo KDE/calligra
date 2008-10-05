@@ -115,13 +115,13 @@ public:
      * Use appendPage in WP mode, insertPage in DTP mode.
      * @param masterPageName the name of the master page to use for this new page.
      */
-    KWPage* insertPage(int afterPageNum, const QString &masterPageName = QString());
+    KWPage insertPage(int afterPageNum, const QString &masterPageName = QString());
     /**
      * Append a new page, creating followup frames (but not headers/footers),
      * and return the page number.
      * @param masterPageName the name of the master page to use for this new page.
      */
-    KWPage* appendPage(const QString &masterPageName = QString());
+    KWPage appendPage(const QString &masterPageName = QString());
     /**
      * remove a page from the document.
      * @param pageNumber the pageNumber that should be removed.
@@ -241,13 +241,13 @@ class PageProcessingQueue : public QObject
     Q_OBJECT
 public:
     explicit PageProcessingQueue(KWDocument *parent);
-    void addPage(KWPage *page);
+    void addPage(KWPage page);
 
 private slots:
     void process();
 
 private:
-    QList<KWPage *> m_pages;
+    QList<KWPage> m_pages;
     bool m_triggered;
     KWDocument *m_document;
 };

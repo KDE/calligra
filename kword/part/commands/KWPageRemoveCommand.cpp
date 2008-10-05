@@ -30,20 +30,20 @@
 #include <kdebug.h>
 #include <KLocale>
 
-KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage *page, QUndoCommand *parent)
+KWPageRemoveCommand::KWPageRemoveCommand(KWDocument *document, KWPage page, QUndoCommand *parent)
         : QUndoCommand(i18n("Remove Page"), parent),
         m_document(document)
 {
-    Q_ASSERT(page);
+    Q_ASSERT(page.isValid());
     Q_ASSERT(document);
-    m_pageNumber = page->pageNumber();
-    Q_ASSERT(page->pageStyle().isValid());
-    m_masterPageName = page->pageStyle().masterName();
+    m_pageNumber = page.pageNumber();
+    Q_ASSERT(page.pageStyle().isValid());
+    m_masterPageName = page.pageStyle().masterName();
     Q_ASSERT(document->pageManager()->page(m_pageNumber) == page);
-    m_pageSide = page->pageSide();
-    m_pageLayout = page->pageStyle().pageLayout();
-    m_orientation = page->orientationHint();
-    m_direction = page->directionHint();
+    m_pageSide = page.pageSide();
+    m_pageLayout = page.pageStyle().pageLayout();
+    m_orientation = page.orientationHint();
+    m_direction = page.directionHint();
 }
 
 KWPageRemoveCommand::~KWPageRemoveCommand()
@@ -54,13 +54,13 @@ KWPageRemoveCommand::~KWPageRemoveCommand()
 void KWPageRemoveCommand::redo()
 {
     QUndoCommand::redo();
-    KWPage *page = m_document->pageManager()->page(m_pageNumber);
-    Q_ASSERT(page);
+    KWPage page = m_document->pageManager()->page(m_pageNumber);
+    Q_ASSERT(page.isValid());
 
-    const QRectF pagerect = page->rect();
-    //const qreal pageheight = page->height();
+    const QRectF pagerect = page.rect();
+    //const qreal pageheight = page.height();
     //const qreal topOfPage = m_document->pageManager()->topOfPage(m_pageNumber);
-    //const qreal pageoffset = page->offsetInDocument();
+    //const qreal pageoffset = page.offsetInDocument();
 
     const bool firstRun = m_childcommands.count() == 0;
     if (firstRun) {
@@ -125,14 +125,14 @@ void KWPageRemoveCommand::undo()
     QUndoCommand::undo();
 
     // insert the page
-    KWPage *page = m_document->m_pageManager.insertPage(m_pageNumber);
-    page->setPageSide(m_pageSide);
+    KWPage page = m_document->m_pageManager.insertPage(m_pageNumber);
+    page.setPageSide(m_pageSide);
     m_pageLayout.orientation = m_orientation;
-    page->pageStyle().setPageLayout(m_pageLayout);
-    page->setDirectionHint(m_direction);
+    page.pageStyle().setPageLayout(m_pageLayout);
+    page.setDirectionHint(m_direction);
     KWPageStyle pageStyle = m_document->pageManager()->pageStyle(m_masterPageName);
     if (pageStyle.isValid())
-        page->setPageStyle(pageStyle);
+        page.setPageStyle(pageStyle);
 
     // undo the KWFrameDeleteCommand commands
     foreach(QUndoCommand* command, m_childcommands) {

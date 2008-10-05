@@ -91,13 +91,13 @@ int Module::pageCount()
 
 QObject* Module::page(int pageNumber)
 {
-    KWPage* page = kwDoc()->pageManager()->page(pageNumber);
-    return page ? new Page(this, page) : 0;
+    KWPage page = kwDoc()->pageManager()->page(pageNumber);
+    return page.isValid() ? new Page(this, page) : 0;
 }
 
 QObject* Module::insertPage(int afterPageNum)
 {
-    KWPage* page = kwDoc()->insertPage(afterPageNum);
+    KWPage page = kwDoc()->insertPage(afterPageNum);
     return new Page(this, page);
 }
 

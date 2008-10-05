@@ -21,6 +21,7 @@
 #define KWPAGEPROPERTIESCOMMAND_H
 
 #include "../kword_export.h"
+#include "../KWPage.h"
 
 #include <KoPageLayout.h>
 #include <KoText.h>
@@ -45,7 +46,7 @@ public:
      * @param direction the new page layout direction
      * @param parent the parent for macro command functionality
      */
-    explicit KWPagePropertiesCommand(KWDocument *document, KWPage *page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent = 0);
+    explicit KWPagePropertiesCommand(KWDocument *document, const KWPage &page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent = 0);
 
     /// redo the command
     void redo();
@@ -56,7 +57,7 @@ private:
     void setLayout(const KoPageLayout &layout);
 
     KWDocument *m_document;
-    KWPage *m_page;
+    KWPage m_page;
     KoPageLayout m_oldLayout, m_newLayout;
     KoText::Direction m_oldDirection, m_newDirection;
 };
