@@ -33,9 +33,8 @@
 // // #include <kdebug.h>
 
 
-KWViewModePreview::KWViewModePreview(KWCanvas* canvas)
-        : KWViewMode(canvas),
-        m_pagesPerRow(3)
+KWViewModePreview::KWViewModePreview()
+        : m_pagesPerRow(3)
 {
 }
 

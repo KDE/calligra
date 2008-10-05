@@ -25,7 +25,10 @@
 #include "KWViewModeNormal.h"
 #include "KWViewModePreview.h"
 
-KWViewMode::KWViewMode(KWCanvas *canvas) : m_canvas(canvas)
+KWViewMode::KWViewMode()
+    : m_pageManager(0),
+    m_viewConverter(0),
+    m_drawFrameBorders(false)
 {
 }
 
@@ -57,9 +60,14 @@ void KWViewMode::pageSetupChanged()
 // static
 KWViewMode *KWViewMode::create(const QString& viewModeType, KWCanvas* canvas)
 {
+    KWViewMode * vm = 0;
     if (viewModeType == KWViewModePreview::viewMode())
-        return new KWViewModePreview(canvas);
+        vm = new KWViewModePreview();
+    if (vm == 0)
+        vm = new KWViewModeNormal();
 
-    return new KWViewModeNormal(canvas);
+    vm->setPageManager(canvas->document()->pageManager());
+    vm->setViewConverter(canvas->viewConverter());
+    return vm;
 }
 

@@ -21,8 +21,11 @@
 #ifndef KWVIEWMODE_H
 #define KWVIEWMODE_H
 
-class KWFrameSet;
 class KWCanvas;
+class KWPageManager;
+class KoViewConverter;
+
+#include "kword_export.h"
 
 #include <QPointF>
 #include <QRectF>
@@ -45,10 +48,11 @@ class KWCanvas;
  * This class provides a layer on top of the KoViewConverter and KWord should not use that
  * interface directly.
  */
-class KWViewMode : public QObject
+class KWORD_TEST_EXPORT KWViewMode : public QObject
 {
     Q_OBJECT
 public:
+    KWViewMode();
     virtual ~KWViewMode() {}
 
     /// a two value return type for clipRectToDocument()
@@ -107,14 +111,6 @@ public:
     static KWViewMode *create(const QString& viewModeType, KWCanvas* canvas);
 
     /**
-     * Returns the canvas this viewmode is operating on.
-     * Note that the canvas will give access to all needed parts of the application.
-     */
-    KWCanvas * canvas() const {
-        return m_canvas;
-    }
-
-    /**
      * This method converts a clip-rect of the view to a set of cliprects as they are
      * mirrored on the document space.
      * For a cliprect that overlaps various pages that same amount of arguments will
@@ -138,19 +134,19 @@ public slots:
      * added or removed or just resized.
      */
     void pageSetupChanged();
+    void setPageManager(KWPageManager *pageManager) { m_pageManager = pageManager; updatePageCache(); }
+    void setViewConverter(const KoViewConverter *viewConverter) { m_viewConverter = viewConverter; }
 
 protected:
-    /**
-     * Constructor not for public; use KWViewMode::create() instead.
-     */
-    KWViewMode(KWCanvas* canvas);
     /**
      * Will be called when the pageSetupChanged() has been notified.
      */
     virtual void updatePageCache() = 0;
 
+    KWPageManager *m_pageManager;
+    const KoViewConverter *m_viewConverter;
+
 private:
-    KWCanvas * m_canvas;
     bool m_drawFrameBorders;
 };
 

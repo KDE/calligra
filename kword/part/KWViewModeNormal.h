@@ -38,13 +38,17 @@
  * the pages side by side.
  * @see KWViewMode
  */
-class KWViewModeNormal : public KWViewMode
+class KWORD_TEST_EXPORT KWViewModeNormal : public KWViewMode
 {
 public:
+    /**
+     * Constructor; please use KWViewMode::create()
+     */
+    KWViewModeNormal();
     ~KWViewModeNormal() {}
 
-    QPointF documentToView(const QPointF & point) const;
-    QPointF viewToDocument(const QPointF & point) const;
+    virtual QPointF documentToView(const QPointF & point) const;
+    virtual QPointF viewToDocument(const QPointF & point) const;
     virtual QSizeF contentsSize() const {
         return m_contents;
     }
@@ -53,21 +57,14 @@ public:
     static const QString viewMode() {
         return "ModeNormal";
     }
-    const QString type() const {
+    virtual const QString type() const {
         return KWViewModeNormal::viewMode();
     }
-    QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
+    virtual QList<ViewMap> clipRectToDocument(const QRect &viewRect) const;
 
 protected:
-    friend class KWViewMode; // allow it to instantiate us.
-    /**
-     * Constructor; please use KWViewMode::create()
-     */
-    KWViewModeNormal(KWCanvas* canvas);
-
     void updatePageCache();
 
-private:
     // a list with the top of the page location in view-coordinates, in unzoomed-pt.
     QList<qreal> m_pageTops;
     bool m_pageSpreadMode;
