@@ -205,10 +205,58 @@ void TestBasicLayout::headerPerPage()
     QCOMPARE(fsets2.evenFooters, (void*) 0);
 }
 
+void TestBasicLayout::testFrameCreation()
+{
+    Helper helper;
+    m_frames.clear();
+    KWFrameLayout bfl(helper.pageManager, m_frames);
+    connect(&bfl, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWPageStyle style = helper.pageManager->defaultPageStyle();
+    style.setHeaderPolicy(KWord::HFTypeUniform);
+    style.setMainTextFrame(true);
+
+    bfl.createNewFramesForPage(1);
+    QVERIFY(bfl.m_maintext != 0);
+    QCOMPARE(bfl.m_maintext->frameCount(), 1);
+
+    KWFrameLayout::FrameSets frameSets = bfl.m_pageStyles.value(style);
+    QVERIFY(frameSets.oddHeaders != 0);
+    QCOMPARE(frameSets.oddHeaders->frameCount(), 1);
+    QVERIFY(frameSets.evenHeaders == 0);
+    QVERIFY(frameSets.oddFooters == 0);
+    QVERIFY(frameSets.evenFooters == 0);
+
+    KoColumns columns = style.columns();
+    columns.columns = 2;
+    style.setColumns(columns);
+
+    removeAllFrames();
+    bfl.createNewFramesForPage(1);
+    QCOMPARE(bfl.m_maintext->frameCount(), 2);
+
+    frameSets = bfl.m_pageStyles.value(style);
+    QVERIFY(frameSets.oddHeaders != 0);
+    QCOMPARE(frameSets.oddHeaders->frameCount(), 1);
+    QVERIFY(frameSets.evenHeaders == 0);
+    QVERIFY(frameSets.oddFooters == 0);
+    QVERIFY(frameSets.evenFooters == 0);
+}
+
 // helper method (slot)
 void TestBasicLayout::addFS(KWFrameSet*fs)
 {
     m_frames.append(fs);
+}
+
+void TestBasicLayout::removeAllFrames()
+{
+    foreach (KWFrameSet *fs, m_frames) {
+        foreach (KWFrame *frame, fs->frames()) {
+            fs->removeFrame(frame);
+            delete frame->shape();
+        }
+    }
 }
 
 QTEST_KDEMAIN(TestBasicLayout, GUI)

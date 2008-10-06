@@ -20,11 +20,14 @@ private slots:
     void testCreateNewFramesForPage();
     void testShouldHaveHeaderOrFooter();
     void headerPerPage();
+    void testFrameCreation();
 
     // helper
     void addFS(KWFrameSet*);
 
 private:
+    void removeAllFrames();
+
     QList<KWFrameSet*> m_frames;
 };
 
