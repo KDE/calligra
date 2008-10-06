@@ -49,7 +49,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     m_setup = false; // force reindexing of types
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    //if (!page.isValid()) return; // page already deleted, probably.
+    if (!page.isValid()) return; // page already deleted, probably.
 
     // Header footer handling.
     // first make a list of all types.

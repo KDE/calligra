@@ -951,7 +951,6 @@ void KWView::toggleHeader()
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
     m_currentPage.pageStyle().setHeaderPolicy(m_actionViewHeader->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
-        // TODO fix
     m_document->relayout();
 }
 
@@ -961,7 +960,6 @@ void KWView::toggleFooter()
         return;
     Q_ASSERT(m_currentPage.pageStyle().isValid());
     m_currentPage.pageStyle().setFooterPolicy(m_actionViewFooter->isChecked() ? KWord::HFTypeEvenOdd : KWord::HFTypeNone);
-        // TODO fix
     m_document->relayout();
 }
 

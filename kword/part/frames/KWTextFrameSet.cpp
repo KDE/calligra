@@ -285,13 +285,13 @@ void KWTextFrameSet::printDebug(KWFrame *frame)
     KWFrameSet::printDebug(frame);
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
     if (textShapeData == 0) return;
-    kDebug(32001) << "     Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
-    kDebug(32001) << "     Offset in text-document;" << textShapeData->documentOffset();
+    kDebug(32001) << " Text position:" << textShapeData->position() << ", end:" << textShapeData->endPosition();
+    kDebug(32001) << " Offset in text-document;" << textShapeData->documentOffset();
 }
 
 void KWTextFrameSet::printDebug()
 {
-    static const char * type[] = { "FirstPageHeader", "OddPagesHeader", "EvenPagesHeader", "FirstPageFooter", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
+    static const char * type[] = { "OddPagesHeader", "EvenPagesHeader", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
     kDebug(32001) << " | Is a KWTextFrameSet";
     kDebug(32001) << " | FS Type:" << type[m_textFrameSetType];
     KWFrameSet::printDebug();
