@@ -19,7 +19,7 @@
 
 #include "KWDLoader.h"
 #include "KWDocument.h"
-#include "KWPageStyle.h"
+#include "KWPage.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
 
@@ -45,8 +45,8 @@
 
 KWDLoader::KWDLoader(KWDocument *parent)
         : m_document(parent),
-        m_pageStyle(parent->m_pageManager.defaultPageStyle()),
         m_pageManager(&parent->m_pageManager),
+        m_pageStyle(m_pageManager->defaultPageStyle()),
         m_foundMainFS(false)
 {
     connect(this, SIGNAL(sigProgress(int)), m_document, SIGNAL(sigProgress(int)));
@@ -101,32 +101,33 @@ bool KWDLoader::load(KoXmlElement &root)
             }
         }
 
-        //m_pageStyle.setFirstHeaderPolicy(KWord::HFTypeUniform);
-        switch (paper.attribute("hType").toInt()) {
-            // assume its on; will turn it off in the next section.
-            /*            case 0:
-                            m_pageStyle.setHeaderPolicy(KWord::HFTypeSameAsFirst);
-                            m_pageStyle.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
-                            break;*/
-        case 1:
-            m_pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd); break;
-        case 2:
+        const int headerType = paper.attribute("hType").toInt();
+        const int footerType = paper.attribute("fType").toInt();
+        if (headerType == 1 || headerType == 2 || footerType == 1 || footerType == 2)
+            m_firstPageStyle = KWPageStyle("First Page"); // we are going to need that
+
+        switch (headerType) {
+        case 0: // same on all pages
             m_pageStyle.setHeaderPolicy(KWord::HFTypeUniform); break;
-        case 3:
+        case 1: // different on first, even and odd pages (2&3)
+            m_firstPageStyle.setHeaderPolicy(KWord::HFTypeUniform);
+            m_pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd); break;
+        case 2: // different on first and other pages
+            m_firstPageStyle.setHeaderPolicy(KWord::HFTypeUniform);
+            m_pageStyle.setHeaderPolicy(KWord::HFTypeUniform); break;
+        case 3: // different on even and odd pages
             m_pageStyle.setHeaderPolicy(KWord::HFTypeEvenOdd); break;
         }
-        //m_pageStyle.setFirstFooterPolicy(KWord::HFTypeUniform);
-        switch (paper.attribute("fType").toInt()) {
-            // assume its on; will turn it off in the next section.
-            /*    case 0:
-                    m_pageStyle.setFooterPolicy(KWord::HFTypeSameAsFirst);
-                    m_pageStyle.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-                    break;*/
-        case 1:
-            m_pageStyle.setFooterPolicy(KWord::HFTypeEvenOdd); break;
-        case 2:
+        switch (footerType) {
+        case 0: // same on all pages
             m_pageStyle.setFooterPolicy(KWord::HFTypeUniform); break;
-        case 3:
+        case 1: // different on first, even and odd pages (2&3)
+            m_firstPageStyle.setFooterPolicy(KWord::HFTypeUniform);
+            m_pageStyle.setFooterPolicy(KWord::HFTypeEvenOdd); break;
+        case 2: // different on first and other pages
+            m_firstPageStyle.setFooterPolicy(KWord::HFTypeUniform);
+            m_pageStyle.setFooterPolicy(KWord::HFTypeUniform); break;
+        case 3: // different on even and odd pages
             m_pageStyle.setFooterPolicy(KWord::HFTypeEvenOdd); break;
         }
         m_pageStyle.setHeaderDistance(paper.attribute("spHeadBody").toDouble());
@@ -207,12 +208,14 @@ bool KWDLoader::load(KoXmlElement &root)
 
         //KWDocument::getAttribute( attributes, "standardpage", QString::null );
         if (attributes.attribute("hasHeader") != "1") {
-//            m_pageStyle.setFirstHeaderPolicy(KWord::HFTypeNone);
             m_pageStyle.setHeaderPolicy(KWord::HFTypeNone);
+            if (m_firstPageStyle.isValid())
+                m_firstPageStyle.setHeaderPolicy(KWord::HFTypeNone);
         }
         if (attributes.attribute("hasFooter") != "1") {
-//            m_pageStyle.setFirstFooterPolicy(KWord::HFTypeNone);
             m_pageStyle.setFooterPolicy(KWord::HFTypeNone);
+            if (m_firstPageStyle.isValid())
+                m_firstPageStyle.setFooterPolicy(KWord::HFTypeNone);
         }
         if (attributes.hasAttribute("unit"))
             m_document->setUnit(KoUnit::unit(attributes.attribute("unit")));
@@ -225,6 +228,17 @@ bool KWDLoader::load(KoXmlElement &root)
                 m_initialEditing->m_initialCursorParag = attributes.attribute( "cursorParagraph" ).toInt();
                 m_initialEditing->m_initialCursorIndex = attributes.attribute( "cursorIndex" ).toInt();
         */
+    }
+    if (m_firstPageStyle.isValid()
+            && m_firstPageStyle.footerPolicy() != KWord::HFTypeNone
+            && m_firstPageStyle.headerPolicy() != KWord::HFTypeNone) {
+        m_firstPageStyle.setColumns(m_pageStyle.columns());
+        m_firstPageStyle.setMainTextFrame(m_pageStyle.hasMainTextFrame());
+        m_firstPageStyle.setHeaderDistance(m_pageStyle.headerDistance());
+        m_firstPageStyle.setFooterDistance(m_pageStyle.footerDistance());
+        m_firstPageStyle.setEndNoteDistance(m_pageStyle.endNoteDistance());
+        m_firstPageStyle.setPageLayout(m_pageStyle.pageLayout());
+        m_pageManager->addPageStyle(m_firstPageStyle);
     }
 
 #if 0
@@ -340,6 +354,11 @@ bool KWDLoader::load(KoXmlElement &root)
     // <EMBEDDED>
     loadEmbeddedObjects(root);
 #endif
+    if (m_firstPageStyle.isValid()) {
+        m_pageManager->appendPage(m_firstPageStyle);
+        m_pageManager->appendPage(m_pageStyle);
+    }
+
     emit sigProgress(100); // the rest is only processing, not loading
 
     kDebug(32001) << "Loading took" << (float)(dt.elapsed()) / 1000 << " seconds";
@@ -411,22 +430,29 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
 
             } else { // Normal text frame
                 KWord::TextFrameSetType type;
+                KWPageStyle styleForFS;
                 switch (framesetElem.attribute("frameInfo").toInt()) {
                 case 0: // body
                     type = m_foundMainFS ? KWord::OtherTextFrameSet : KWord::MainTextFrameSet;
                     m_foundMainFS = true;
                     break;
-                    /*                    case 1: // first header
-                                            type = KWord::FirstPageHeaderTextFrameSet; break;*/
+                case 1: // first header
+                    styleForFS = m_firstPageStyle;
+                    type = KWord::OddPagesHeaderTextFrameSet; break;
                 case 2: // even header
+                    styleForFS = m_pageStyle;
                     type = KWord::EvenPagesHeaderTextFrameSet; break;
                 case 3: // odd header
+                    styleForFS = m_pageStyle;
                     type = KWord::OddPagesHeaderTextFrameSet; break;
-                    /*case 4: // first footer
-                        type = KWord::FirstPageFooterTextFrameSet; break;*/
+                case 4: // first footer
+                    styleForFS = m_firstPageStyle;
+                    type = KWord::OddPagesFooterTextFrameSet; break;
                 case 5: // even footer
+                    styleForFS = m_pageStyle;
                     type = KWord::EvenPagesFooterTextFrameSet; break;
                 case 6: // odd footer
+                    styleForFS = m_pageStyle;
                     type = KWord::OddPagesFooterTextFrameSet; break;
                 case 7: // footnote
                     type = KWord::FootNoteTextFrameSet; break;
@@ -436,6 +462,7 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                 KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
                 fs->setAllowLayout(false);
                 fs->setName(fsname);
+                fs->setPageStyle(styleForFS);
                 fill(fs, framesetElem);
                 m_document->addFrameSet(fs);
 

@@ -94,8 +94,9 @@ private:
 
 private:
     KWDocument *m_document;
-    KWPageStyle m_pageStyle;
     KWPageManager *m_pageManager;
+    KWPageStyle m_pageStyle;
+    KWPageStyle m_firstPageStyle;
     bool m_foundMainFS;
     int m_nrItemsToLoad, m_itemsLoaded;
 

@@ -678,8 +678,8 @@ void KWDocument::printDebug()
 
     foreach (const KWPageStyle &style, m_pageManager.pageStyles()) {
         kDebug(32001) << "PageStyle" << style.name();
-        kDebug(32001) << " +-- Header:" << headerFooterType[style.headerPolicy()] << style.headerPolicy();
-        kDebug(32001) << " +-- Footer:" << headerFooterType[style.footerPolicy()] << style.footerPolicy();
+        kDebug(32001) << " +-- Header:" << headerFooterType[style.headerPolicy()];
+        kDebug(32001) << " +-- Footer:" << headerFooterType[style.footerPolicy()];
     }
 
     kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1) << endl;
