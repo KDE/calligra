@@ -564,7 +564,7 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
 
     if ( isCartesian( d->chartType ) ) {
         foreach( Axis *axis, d->axes ) {
-            axis->saveOdf( bodyWriter, mainStyles );
+            axis->saveOdf( context );
         }
     }
     

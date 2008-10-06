@@ -30,6 +30,7 @@
 
 // KOffice
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoShapeRegistry.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -1059,8 +1060,10 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     return true;
 }
 
-void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
+void Axis::saveOdf( KoShapeSavingContext &context )
 {
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
     bodyWriter.startElement( "chart:axis" );
 
     KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
@@ -1111,8 +1114,26 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.addTextNode( d->titleData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
     bodyWriter.endElement(); // chart:title
+    
+    if ( showMajorGrid() )
+        saveOdfGrid( context, OdfMajorGrid );
+    if ( showMinorGrid() )
+        saveOdfGrid( context, OdfMinorGrid );
 
     bodyWriter.endElement(); // chart:axis
+}
+
+void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
+{
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
+    
+    KoGenStyle gridStyle( KoGenStyle::StyleAuto, "chart" );
+    // Save stroke
+    
+    bodyWriter.startElement( "chart:grid" );
+    bodyWriter.addAttribute( "chart:class", gridClass == OdfMinorGrid ? "minor" : "major" );
+    bodyWriter.endElement(); // chart:grid
 }
 
 void Axis::update() const

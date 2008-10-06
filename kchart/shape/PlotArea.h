@@ -87,7 +87,6 @@ public:
     bool loadOdfSeries( const KoXmlElement &seriesElement, KoShapeLoadingContext &context );
     
     void saveOdf( KoShapeSavingContext &context ) const;
-    void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     void saveOdfSubType( KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle ) const;
     
     void setChartType( ChartType type );

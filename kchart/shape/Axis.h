@@ -29,6 +29,10 @@
 
 namespace KChart {
 
+enum OdfGridClass {
+    OdfMajorGrid,
+    OdfMinorGrid
+};
 
 /**
  * @brief The Axis class handles axis as well as grid settings.
@@ -90,7 +94,8 @@ public:
     void setFont( const QFont &font );
     
     bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context);
-    void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles );
+    void saveOdf( KoShapeSavingContext &context );
+    void saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass );
     
     KDChart::CartesianAxis *kdAxis() const;
     KDChart::AbstractCoordinatePlane *kdPlane() const;
