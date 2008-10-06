@@ -380,7 +380,7 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    switch (header ? page.pageStyle().headers() : page.pageStyle().footers()) {
+    switch (header ? page.pageStyle().headerPolicy() : page.pageStyle().footerPolicy()) {
     case KWord::HFTypeNone : break;
     case KWord::HFTypeEvenOdd:
         if (header)
@@ -395,8 +395,8 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
         break;
     }
     if (header)
-        return page.pageStyle().headers() != KWord::HFTypeNone;
-    return page.pageStyle().footers() != KWord::HFTypeNone;
+        return page.pageStyle().headerPolicy() != KWord::HFTypeNone;
+    return page.pageStyle().footerPolicy() != KWord::HFTypeNone;
 }
 
 QList<KWFrame *> KWFrameLayout::framesInPage(QRectF page)

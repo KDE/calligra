@@ -74,12 +74,12 @@ public:
     void setColumns(const KoColumns &columns);
 
     /// Return the type of header the pages will get.
-    KWord::HeaderFooterType headers() const;
+    KWord::HeaderFooterType headerPolicy() const;
     /// set the type of header the pages will get.
     void setHeaderPolicy(KWord::HeaderFooterType p);
 
     /// Return the type of footers the pages will get.
-    KWord::HeaderFooterType footers() const;
+    KWord::HeaderFooterType footerPolicy() const;
     /// Set the type of footers the pages will get.
     void setFooterPolicy(KWord::HeaderFooterType p);
 

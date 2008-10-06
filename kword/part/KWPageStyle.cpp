@@ -128,12 +128,12 @@ void KWPageStyle::setColumns(const KoColumns &columns)
     d->columns = columns;
 }
 
-KWord::HeaderFooterType KWPageStyle::headers() const
+KWord::HeaderFooterType KWPageStyle::headerPolicy() const
 {
     return d->headers;
 }
 
-KWord::HeaderFooterType KWPageStyle::footers() const
+KWord::HeaderFooterType KWPageStyle::footerPolicy() const
 {
     return d->footers;
 }
