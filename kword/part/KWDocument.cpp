@@ -644,37 +644,24 @@ void KWDocument::removeFrameFromViews(KWFrame *frame)
 #ifndef NDEBUG
 void KWDocument::printDebug()
 {
-    class Helper
-    {
-    public:
-        static QString HFToString(KWord::HeaderFooterType type) {
-            switch (type) {
-            case KWord::HFTypeEvenOdd: return "evenOdd";
-            case KWord::HFTypeUniform: return "Uniform";
-            default:
-                return "None";
-            }
-        }
-    };
+    static const char * headerFooterType[] = { "None", "EvenOdd", "Uniform", "ERROR" };
 
     kDebug(32001) << "----------------------------------------";
     kDebug(32001) << "                 Debug info";
     kDebug(32001) << "Document:" << this;
-    /*kDebug(32001) <<"Type of document:" << (m_pageStyle.hasMainTextFrame()?"WP":"DTP");
-    kDebug(32001) <<"Headers:" << Helper::HFToString(m_pageStyle.headers());
-    kDebug(32001) <<"Footers:" << Helper::HFToString(m_pageStyles.footers());
-    kDebug(32001) <<"Units:" << KoUnit::unitName( unit() );*/
+    /*kDebug(32001) <<"Type of document:" << (m_pageStyle.hasMainTextFrame()?"WP":"DTP"); */
+    kDebug(32001) <<"Units:" << KoUnit::unitName( unit() );
     kDebug(32001) << "# Framesets:" << frameSetCount();
     int i = 0;
     foreach(KWFrameSet *fs, m_frameSets) {
         kDebug(32001) << "Frameset" << i++ << ": '" <<
-        fs->name() << "' (" << fs << ")" << /*(fs->isDeleted()?" Deleted":"")<<*/endl;
+        fs->name() << "' (" << fs << ")" << endl;
         fs->printDebug();
     }
 
     kDebug(32001) << "PageManager holds" << pageCount() << " pages";
     KWPage page = m_pageManager.begin();
-     while(page.isValid()) {
+    while(page.isValid()) {
         int pgnum = page.pageNumber();
         QString side = "[Left] ";
         QString num = QString::number(pgnum);
@@ -685,9 +672,16 @@ void KWDocument::printDebug()
             pgnum++;
             num += '-' + QString::number(pgnum);
         }
-        kDebug(32001) << "Page" << num << side << " width=" << page.width() << " height=" << page.height();
+        kDebug(32001) << "Page" << num << side << " width:" << page.width() << " height:" << page.height() << "following" << page.pageStyle().name();
         page = page.next();
     }
+
+    foreach (const KWPageStyle &style, m_pageManager.pageStyles()) {
+        kDebug(32001) << "PageStyle" << style.name();
+        kDebug(32001) << " +-- Header:" << headerFooterType[style.headerPolicy()] << style.headerPolicy();
+        kDebug(32001) << " +-- Footer:" << headerFooterType[style.footerPolicy()] << style.footerPolicy();
+    }
+
     kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1) << endl;
 }
 #endif
