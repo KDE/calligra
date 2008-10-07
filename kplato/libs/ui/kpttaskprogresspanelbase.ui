@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="completionTab" >
       <property name="geometry" >
@@ -127,7 +127,11 @@
            </spacer>
           </item>
           <item row="1" column="0" colspan="2" >
-           <widget class="CompletionEntryEditor" name="entryTable" />
+           <widget class="CompletionEntryEditor" name="entryTable" >
+            <property name="tabKeyNavigation" >
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -217,7 +221,11 @@
         </layout>
        </item>
        <item>
-        <widget class="UsedEffortEditor" name="resourceTable" />
+        <widget class="UsedEffortEditor" name="resourceTable" >
+         <property name="tabKeyNavigation" >
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -293,10 +301,23 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>started</tabstop>
+  <tabstop>startTime</tabstop>
+  <tabstop>finished</tabstop>
+  <tabstop>finishTime</tabstop>
+  <tabstop>addEntryBtn</tabstop>
+  <tabstop>removeEntryBtn</tabstop>
+  <tabstop>entryTable</tabstop>
+  <tabstop>ui_year</tabstop>
   <tabstop>prevWeekBtn</tabstop>
+  <tabstop>weekNumber</tabstop>
   <tabstop>nextWeekBtn</tabstop>
   <tabstop>addResource</tabstop>
   <tabstop>resourceTable</tabstop>
+  <tabstop>optionCompleted</tabstop>
+  <tabstop>optionEffort</tabstop>
+  <tabstop>optionResource</tabstop>
  </tabstops>
  <includes>
   <include location="local" >kdatetimewidget.h</include>

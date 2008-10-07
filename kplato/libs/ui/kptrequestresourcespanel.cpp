@@ -31,10 +31,9 @@
 #include <QPushButton>
 #include <QString>
 #include <qvalidator.h>
-//#include <QTableWidgetItem>
+#include <QHeaderView>
 #include <qtablewidget.h>
 
-#include <q3datetimeedit.h>
 
 namespace KPlato
 {
@@ -111,7 +110,9 @@ void GroupLVItem::insert(QTableWidget *table) {
     table->setColumnCount(1);
     if (m_group->numResources() == 0) {
         table->setRowCount(1);
-        table->setItem(0, 0, new QTableWidgetItem(i18n("None")));
+        QTableWidgetItem *item = new QTableWidgetItem(i18n("None"));
+        table->setItem(0, 0, item);
+        item->setFlags( item->flags() & ~Qt::ItemIsEnabled );
     } else {
         table->setRowCount(m_group->numResources());
         int i = 0;
@@ -163,6 +164,9 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
         groupChanged(item);
     }
 
+    resourceTable->horizontalHeader()->hide();
+    resourceTable->verticalHeader()->hide();
+    
     connect(groupList, SIGNAL(itemSelectionChanged()),  SLOT(groupChanged()));
     connect(resourceTable, SIGNAL(cellChanged(int, int)), SLOT(resourceChanged(int, int)));
 //    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));

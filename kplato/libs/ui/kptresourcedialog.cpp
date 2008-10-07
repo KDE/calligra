@@ -59,10 +59,10 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
 
     connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
 
-    connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotChanged()));
-    connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotChanged()));
-    connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
-    connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
+    connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotChanged()));
+    connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotChanged()));
+    connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
+    connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
 }
 
 
@@ -72,19 +72,19 @@ void ResourceDialogImpl::slotChanged() {
 
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
     if (availableUntil->dateTime() < availableFrom->dateTime()) {
-        disconnect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), this,  SLOT(slotAvailableUntilChanged(const QDateTime&)));
+        disconnect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), this,  SLOT(slotAvailableUntilChanged(const QDateTime&)));
         //kDebug()<<"From:"<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString();
         availableUntil->setDateTime(availableFrom->dateTime());
-        connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
+        connect(availableUntil, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
     }
 }
 
 void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
     if (availableFrom->dateTime() > availableUntil->dateTime()) {
-        disconnect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), this,  SLOT(slotAvailableFromChanged(const QDateTime&)));
+        disconnect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), this,  SLOT(slotAvailableFromChanged(const QDateTime&)));
         //kDebug()<<"Until:"<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString();
         availableFrom->setDateTime(availableUntil->dateTime());
-        connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
+        connect(availableFrom, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
     }
 }
 

@@ -219,8 +219,11 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
         case Node::Type_Summarytask:
             name = "summarytask_popup";
             break;
+        case Node::Type_Project:
+            break;
         default:
             name = "node_popup";
+            break;
     }
     kDebug()<<name;
     emit requestPopupMenu( name, pos );

@@ -196,6 +196,7 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
 CalendarDayView::CalendarDayView( QWidget *parent )
     : QTableView( parent )
 {
+    setTabKeyNavigation( false );
     setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
     horizontalHeader()->setResizeMode( QHeaderView::Stretch );
     m_model = new CalendarDayItemModel( this );
