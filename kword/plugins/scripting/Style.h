@@ -248,7 +248,7 @@ public:
     */
 
     enum ListStyle {
-        NoItem = KoListStyle::NoItem,
+        None = KoListStyle::None,
         SquareItem = KoListStyle::SquareItem,
         DiscItem = KoListStyle::DiscItem,
         CircleItem = KoListStyle::CircleItem,
