@@ -1322,7 +1322,7 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     QMatrix matrix;
     matrix.translate( x + 0.5 * width, y + 0.5 * height );
     matrix.rotate( rotateAngle );
-    matrix.translate( -0.5 * width , -0.5 * height );
+    matrix.translate( -0.5 * width, -0.5 * height );
 
     QString matrixString = QString( "matrix(%1 %2 %3 %4 %5pt %6pt)" )
                         .arg( matrix.m11() ).arg( matrix.m12() )
@@ -1508,8 +1508,7 @@ QString Filterkpr2odf::rotateValue( double val )
     QString str;
     if ( val != 0.0 )
     {
-        //FIXME: OOo needs -1 *, KPresenter loads it just fine, which is the right behavior?
-        double value = ( ( double )val * M_PI ) / 180.0;
+        double value = ( ( double )val * M_PI ) / -180.0;
         str = QString( "rotate(%1)" ).arg( value );
     }
     return str;
