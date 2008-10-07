@@ -1318,7 +1318,6 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     double y = orig.attribute( "y" ).toDouble();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
-    //TODO
     QMatrix matrix;
     matrix.translate( x + 0.5 * width, y + 0.5 * height );
     matrix.rotate( rotateAngle );
