@@ -615,7 +615,11 @@ void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 
 void TreeViewBase::focusInEvent(QFocusEvent *event)
 {
+    //kDebug()<<event->reason();
     QAbstractScrollArea::focusInEvent(event); //NOTE: not QTreeView
+    if ( event->reason() == Qt::MouseFocusReason ) {
+        return;
+    }
     QModelIndex curr = currentIndex();
     if ( ! curr.isValid() || ! isIndexHidden( curr ) ) {
         return;
