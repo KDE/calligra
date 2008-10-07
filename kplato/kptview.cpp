@@ -483,13 +483,13 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
     return v;
 }
 
-ViewBase *View::createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ResourceEditor *resourceeditor = new ResourceEditor( getPart(), m_tab );
     m_tab->addWidget( resourceeditor );
     resourceeditor->draw( getProject() );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "resource_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceeditor, getPart(), "resource_editor", index );
     i->setToolTip( 0, tip );
 
     connect( resourceeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );

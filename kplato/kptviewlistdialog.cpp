@@ -90,28 +90,62 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
     widget.viewtype->addItems( lst );
     
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
-        m_categories.insert( item->text( 0 ), item->tag() );
+        m_categories.insert( item->text( 0 ), item );
     }
     widget.category->addItems( m_categories.keys() );
-    
+    ViewListItem *curr = m_viewlist.currentCategory();
+    if ( curr ) {
+        widget.category->setCurrentIndex( m_categories.values().indexOf( curr ) );
+    }
+    fillAfter( m_categories.value( widget.category->currentText() ) );
+
     connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
     connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
+    connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
+    connect( widget.category, SIGNAL( editTextChanged( const QString& ) ), SLOT( categoryChanged() ) );
+}
+
+void AddViewPanel::categoryChanged()
+{
+    kDebug()<<widget.category->currentText();
+    fillAfter( m_categories.value( widget.category->currentText() ) );
+    changed();
+}
+
+void AddViewPanel::fillAfter( ViewListItem *cat )
+{
+    kDebug()<<cat;
+    widget.insertAfter->clear();
+    if ( cat ) {
+        widget.insertAfter->addItem( i18n( "Top" ) );
+        int idx = 0;
+        for ( int i = 0; i < cat->childCount(); ++i ) {
+            ViewListItem *itm = static_cast<ViewListItem*>( cat->child( i ) );
+            widget.insertAfter->addItem( itm->text( 0 ), QVariant::fromValue( (void*)itm ) );
+        }
+        if ( cat == m_viewlist.currentCategory() ) {
+            ViewListItem *v = m_viewlist.currentItem();
+            if ( v && v->type() != ViewListItem::ItemType_Category ) {
+                widget.insertAfter->setCurrentIndex( cat->indexOfChild( v ) + 1 );
+            }
+        }
+    }
 }
 
 bool AddViewPanel::ok()
 {
     QString n = widget.category->currentText();
-    QString c = m_categories.value( n );
-    if ( c.isEmpty() ) {
-        c = n;
-    }
+    ViewListItem *curr = m_categories.value( n );
+    QString c = curr == 0 ? n : curr->tag();
+    
     ViewListItem *cat = m_viewlist.addCategory( c, n );
     if ( cat == 0 ) {
         return false;
     }
+    int index = widget.insertAfter->currentIndex();
     switch ( widget.viewtype->currentIndex() ) {
         case 0: // Resource editor
-            m_view->createResourcEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createResourcEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 1: // Task editor
             m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );

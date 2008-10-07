@@ -114,11 +114,13 @@ public:
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
-    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );
+    ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString(), int index = -1 );
     /// Create a embedded child document view (callers resposibility to add to the list)
     ViewListItem *createChildDocumentView( const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
 
     void setSelected( QTreeWidgetItem *item );
+    ViewListItem *currentItem() const;
+    ViewListItem *currentCategory() const;
     KoView *findView( const QString &tag ) const;
     ViewListItem *findItem( const QString &tag ) const;
     ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent ) const;

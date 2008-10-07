@@ -6,28 +6,14 @@
     <x>0</x>
     <y>0</y>
     <width>184</width>
-    <height>141</height>
+    <height>169</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QGridLayout" name="gridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
    <item row="0" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
-      <string>View type:</string>
-     </property>
-     <property name="buddy" >
-      <cstring>viewtype</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="KComboBox" name="viewtype" >
-     <property name="autoCompletion" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
     <widget class="QLabel" name="label_3" >
      <property name="text" >
       <string>Category:</string>
@@ -37,7 +23,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="0" column="1" >
     <widget class="KComboBox" name="category" >
      <property name="editable" >
       <bool>true</bool>
@@ -50,7 +36,44 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>After</string>
+     </property>
+     <property name="buddy" >
+      <cstring>insertAfter</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KComboBox" name="insertAfter" >
+     <property name="insertPolicy" >
+      <enum>QComboBox::InsertAlphabetically</enum>
+     </property>
+     <property name="autoCompletion" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>View type:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>viewtype</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="KComboBox" name="viewtype" >
+     <property name="autoCompletion" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
     <widget class="QLabel" name="label_4" >
      <property name="text" >
       <string>Name:</string>
@@ -60,10 +83,10 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
+   <item row="3" column="1" >
     <widget class="QLineEdit" name="viewname" />
    </item>
-   <item row="3" column="0" >
+   <item row="4" column="0" >
     <widget class="QLabel" name="label_5" >
      <property name="text" >
       <string>Tip:</string>
@@ -73,7 +96,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
+   <item row="4" column="1" >
     <widget class="QLineEdit" name="tooltip" />
    </item>
   </layout>

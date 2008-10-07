@@ -113,7 +113,7 @@ public:
     void setActiveSchedule( long id ) const;
     
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index = -1 );
     ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );

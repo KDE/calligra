@@ -380,16 +380,17 @@ QString ViewListWidget::uniqueTag( const QString &seed ) const
     return tag;
 }
 
-ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon )
+ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon, int index )
 {
-    ViewListItem * item = new ViewListItem( category, uniqueTag( tag ), QStringList( name ), ViewListItem::ItemType_SubView );
+    ViewListItem * item = new ViewListItem( uniqueTag( tag ), QStringList( name ), ViewListItem::ItemType_SubView );
     item->setView( view );
     item->setDocument( doc );
     if ( !icon.isEmpty() ) {
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
     }
     item->setFlags( item->flags() | Qt::ItemIsEditable );
-    //kDebug() << "added: " << item->tag() << endl;
+    category->insertChild( ( index == -1 ? category->childCount() : index ), item );
+    //kDebug() << "added: " << item->tag();
     return item;
 }
 
@@ -415,6 +416,23 @@ void ViewListWidget::setSelected( QTreeWidgetItem *item )
     }
     m_viewlist->setCurrentItem( item );
     //kDebug()<<item<<","<<m_viewlist->currentItem();
+}
+
+ViewListItem *ViewListWidget::currentItem() const
+{
+    return static_cast<ViewListItem*>( m_viewlist->currentItem() );
+}
+
+ViewListItem *ViewListWidget::currentCategory() const
+{
+    ViewListItem *item = static_cast<ViewListItem*>( m_viewlist->currentItem() );
+    if ( item == 0 ) {
+        return 0;
+    }
+    if ( item->type() == ViewListItem::ItemType_Category ) {
+        return item;
+    }
+    return static_cast<ViewListItem*>( item->parent() );
 }
 
 KoView *ViewListWidget::findView( const QString &tag ) const
