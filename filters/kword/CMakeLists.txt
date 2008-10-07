@@ -9,7 +9,7 @@ add_subdirectory( libexport )
 add_subdirectory( abiword )
 add_subdirectory( amipro )
 add_subdirectory( applixword )
-#add_subdirectory( ascii )
+add_subdirectory( ascii )
 add_subdirectory( docbook )
 #html FIXME: export dialog is Qt 3 version ui file
 if(NOT WIN32)
