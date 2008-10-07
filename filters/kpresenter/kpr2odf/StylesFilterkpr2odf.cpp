@@ -114,7 +114,6 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 
     //Add the page effect
     //Enum: PageEffect
-    //TODO: check if it's correct, I've found at least 4 elements wrong.
     KoXmlElement pageEffect = page.namedItem( "PGEFFECT" ).toElement();
     if( !pageEffect.isNull() )
     {

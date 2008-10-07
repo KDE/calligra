@@ -1139,6 +1139,7 @@ void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& ob
     if( fileName.contains( "Arrow" ) )
     {
         appendArrow( content, objectElement );
+        exportAnimation( objectElement, content->indentLevel() );
         return;
     }
 
