@@ -287,13 +287,13 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     int type = 1;//we default to 1
     if( gradientElement.nodeName() == "PAGE" )
     {
-        KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
+        KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
         if( !backColor1.isNull() )
         {
             style.addAttribute( "draw:start-color", backColor1.attribute( "color" ) );
         }
 
-        KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
+        KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
         if( !backColor2.isNull() )
         {
             style.addAttribute( "draw:end-color", backColor2.attribute( "color" ) );

@@ -507,13 +507,13 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     switch( type )
     {
     case 0: //Horizontal
-        content->addAttributePt( "svg:y1", y2/2.0 );
-        content->addAttributePt( "svg:y2", y2/2.0 );
+        content->addAttributePt( "svg:y1", 0.5 * y2 );
+        content->addAttributePt( "svg:y2", 0.5 * y2 );
         break;
     case 1: //Vertical
         content->addAttributePt( "svg:y1", y1 );
         content->addAttributePt( "svg:y2", y2 );
-        xpos1 = QString( "%1pt" ).arg( x1/2.0 );
+        xpos1 = QString( "%1pt" ).arg( 0.5 * x1 );
         xpos2 = xpos1;
         break;
     case 2: //Left Top to Right Bottom
@@ -729,8 +729,8 @@ void Filterkpr2odf::setEndPoints( QPointF points[], const QSizeF& size, int star
     int angles[] = { startAngle, endAngle };
     double anglesInRad[] = { angles[0] * M_PI / 180, angles[1] * M_PI / 180 };
 
-    double radius1 = size.width() / 2.0;
-    double radius2 = size.height() / 2.0;
+    double radius1 = 0.5 * size.width();
+    double radius2 = 0.5 * size.height();
 
     double prop = radius2 / radius1;
 
@@ -777,8 +777,8 @@ void Filterkpr2odf::getRealSizeAndOrig( QSizeF &size, QPointF &realOrig, int sta
         len = ( endAngle - startAngle );
     }
 
-    double radius1 = size.width() / 2.0;
-    double radius2 = size.height() / 2.0;
+    double radius1 = 0.5 * size.width();
+    double radius2 = 0.5 * size.height();
 
     // the rotation angle
     double angInRad = angle * M_PI / 180;
@@ -1005,8 +1005,8 @@ void Filterkpr2odf::getRealSizeAndOrig( QSizeF &size, QPointF &realOrig, int sta
         }//else
     }
 
-    double mid_x = size.width() / 2;
-    double mid_y = size.height() / 2;
+    double mid_x = 0.5 * size.width();
+    double mid_y = 0.5 * size.height();
 
     size.setWidth( max_x - min_x );
     size.setHeight( max_y - min_y );
@@ -1318,12 +1318,11 @@ void Filterkpr2odf::appendArrow( KoXmlWriter* content, const KoXmlElement& objec
     double y = orig.attribute( "y" ).toDouble();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
-    QMatrix matrix;
-    matrix.translate( x, y );
     //TODO
-//     matrix.translate( -width/2, -height/2 );
-//     QMatrix matrix2;
-//     matrix2.rotate( rotateAngle );
+    QMatrix matrix;
+    matrix.translate( x + 0.5 * width, y + 0.5 * height );
+    matrix.rotate( rotateAngle );
+    matrix.translate( -0.5 * width , -0.5 * height );
 
     QString matrixString = QString( "matrix(%1 %2 %3 %4 %5pt %6pt)" )
                         .arg( matrix.m11() ).arg( matrix.m12() )
