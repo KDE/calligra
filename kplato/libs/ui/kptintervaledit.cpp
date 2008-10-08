@@ -32,10 +32,21 @@
 namespace KPlato
 {
 
-IntervalEdit::IntervalEdit(QWidget *parent)
+IntervalEdit::IntervalEdit( CalendarDay *day, QWidget *parent)
     : IntervalEditImpl(parent)
 {
     //kDebug();
+    if ( day ) {
+        const QList<TimeInterval*> &intervals = day->workingIntervals();
+        setIntervals( intervals );
+        if ( ! intervals.isEmpty() ) {
+            startTime->setTime( intervals.last()->endTime() );
+            double l = ( intervals.last()->endTime().msecsTo( QTime().addMSecs( -1 ) ) + 1 )  / (1000.0*60.0*60.0);
+            length->setValue( qMin( l, 8.0 ) );
+        }
+    }
+    enableButtons();
+    startTime->setFocus();
 }
 
 
@@ -65,7 +76,6 @@ IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     connect( startTime, SIGNAL( timeChanged( const QTime& ) ), SLOT( enableButtons() ) );
     connect( length, SIGNAL( valueChanged( double ) ), SLOT( enableButtons() ) );
     
-    enableButtons();
 }
 
 void IntervalEditImpl::slotClearClicked() {
@@ -158,10 +168,7 @@ IntervalEditDialog::IntervalEditDialog( CalendarDay *day, QWidget *parent)
     setDefaultButton( Ok );
     showButtonSeparator( true );
     //kDebug()<<&p;
-    m_panel = new IntervalEdit( this );
-    if ( day ) {
-        m_panel->setIntervals( day->workingIntervals() );
-    }
+    m_panel = new IntervalEdit( day, this );
     setMainWidget( m_panel );
     enableButtonOk( false );
 

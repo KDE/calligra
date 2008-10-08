@@ -37,7 +37,7 @@ class MacroCommand;
 class IntervalEditBase : public QWidget, public Ui::IntervalEditBase
 {
 public:
-  explicit IntervalEditBase( QWidget *parent ) : QWidget( parent ) {
+    explicit IntervalEditBase(QWidget *parent) : QWidget( parent ) {
     setupUi( this );
   }
 };
@@ -51,7 +51,7 @@ public:
     QList<TimeInterval*> intervals() const;
     void setIntervals(const QList<TimeInterval*> &intervals);
     
-private slots:
+protected slots:
     void slotClearClicked();
     void slotAddIntervalClicked();
     void slotRemoveIntervalClicked();
@@ -65,7 +65,7 @@ signals:
 class IntervalEdit : public IntervalEditImpl {
     Q_OBJECT
 public:
-    explicit IntervalEdit(QWidget *parent=0);
+    explicit IntervalEdit( CalendarDay *day, QWidget *parent=0);
 
 };
 
