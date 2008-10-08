@@ -132,9 +132,6 @@ protected:
     /// Returns the handle rect
     QRectF handleRect( const KoViewConverter &converter ) const;
 
-    /// Returns the combined shape and gradient matrix 
-    QMatrix matrix( const KoViewConverter * converter ) const;
-
     /// creates an updated brush from the actual data
     virtual QBrush brush() = 0;
 

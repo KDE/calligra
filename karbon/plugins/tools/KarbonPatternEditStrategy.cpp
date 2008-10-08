@@ -261,17 +261,16 @@ void KarbonOdfPatternEditStrategy::paint( QPainter &painter, const KoViewConvert
     if( ! fill )
         return;
 
-    QMatrix matrix = shape()->absoluteTransformation(&converter);
     painter.save();
-    painter.setWorldMatrix( matrix, true );
+    painter.setMatrix( m_matrix * painter.matrix() );
     painter.setBrush( Qt::NoBrush );
     painter.drawRect( QRectF( m_handles[origin], m_handles[size] ) );
     painter.restore();
 
     if( fill->repeat() == KoPatternBackground::Tiled )
-        paintHandle( painter, converter, matrix.map( m_handles[origin] ) );
+        paintHandle( painter, converter, m_matrix.map( m_handles[origin] ) );
     if( fill->repeat() != KoPatternBackground::Stretched )
-        paintHandle( painter, converter, matrix.map( m_handles[size] ) );
+        paintHandle( painter, converter, m_matrix.map( m_handles[size] ) );
 
 }
 
