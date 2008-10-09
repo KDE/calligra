@@ -315,7 +315,7 @@ void KWPagesDocker::extractSelectedLayersAndShapes(QList<KoPAPageBase*> &pages, 
         return;
 
     // separate selected layers and selected shapes
-    foreach(QModelIndex index, selectedItems) {
+    foreach(const QModelIndex &index, selectedItems) {
         KoShape *shape = static_cast<KoShape*>(index.internalPointer());
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
         if (layer)

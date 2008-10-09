@@ -88,7 +88,7 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
     // Init shape Factories with our frame based configuration panels.
     // and ask every shapefactory to populate the dataCenterMap
     QList<KoShapeConfigFactory *> panels = KWFrameDialog::panels(this);
-    foreach(QString id, KoShapeRegistry::instance()->keys()) {
+    foreach(const QString &id, KoShapeRegistry::instance()->keys()) {
         KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
         shapeFactory->setOptionPanels(panels);
         shapeFactory->populateDataCenterMap(m_dataCenterMap);
@@ -249,8 +249,8 @@ void KWDocument::relayout()
         }
     }
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
-    foreach(KWPage page, pageManager()->pages())
-    ppq->addPage(page);
+    foreach(const KWPage &page, pageManager()->pages())
+        ppq->addPage(page);
 }
 
 void KWDocument::addFrameSet(KWFrameSet *fs)
@@ -259,7 +259,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     setModified(true);
     m_frameSets.append(fs);
     foreach(KWFrame *frame, fs->frames())
-    addFrame(frame);
+        addFrame(frame);
 
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if (tfs) {
@@ -373,7 +373,7 @@ QString KWDocument::renameFrameSet(const QString &prefix, const QString& base)
 void KWDocument::clear()
 {
     // document defaults
-    foreach(KWPage page, m_pageManager.pages())
+    foreach(const KWPage &page, m_pageManager.pages())
         m_pageManager.removePage(page);
     m_pageManager.clearPageStyles();
 
@@ -531,7 +531,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // remove header/footer frames that are not visible.
     m_frameLayout.cleanupHeadersFooters();
 
-    foreach(KWPage page, m_pageManager.pages())
+    foreach(const KWPage &page, m_pageManager.pages())
         m_frameLayout.createNewFramesForPage(page.pageNumber());
 
     foreach(KWFrameSet *fs, m_frameSets) {
@@ -733,7 +733,7 @@ void PageProcessingQueue::addPage(KWPage page)
 
 void PageProcessingQueue::process()
 {
-    foreach(KWPage page, m_pages) {
+    foreach(const KWPage &page, m_pages) {
         emit m_document->pageSetupChanged();
         m_document->m_frameLayout.createNewFramesForPage(page.pageNumber());
     }

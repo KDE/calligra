@@ -86,7 +86,7 @@
         <item>
          <widget class="QRadioButton" name="noExtraText" >
           <property name="text" >
-           <string>Don't show the extra text</string>
+           <string>Do not show the extra text</string>
           </property>
          </widget>
         </item>

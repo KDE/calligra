@@ -133,7 +133,7 @@ public:
         QPolygonF poly = path.toFillPolygon();
 
         QPointF prev = *(poly.begin());
-        foreach(QPointF vtx, poly) { //initialized edges
+        foreach(const QPointF &vtx, poly) { //initialized edges
             if (vtx.x() == prev.x() && vtx.y() == prev.y())
                 continue;
             QLineF line;
