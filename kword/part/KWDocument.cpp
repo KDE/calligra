@@ -678,8 +678,15 @@ void KWDocument::printDebug()
 
     foreach (const KWPageStyle &style, m_pageManager.pageStyles()) {
         kDebug(32001) << "PageStyle" << style.name();
-        kDebug(32001) << " +-- Header:" << headerFooterType[style.headerPolicy()];
-        kDebug(32001) << " +-- Footer:" << headerFooterType[style.footerPolicy()];
+        kDebug(32001) << "     Header:" << headerFooterType[style.headerPolicy()];
+        kDebug(32001) << "     Footer:" << headerFooterType[style.footerPolicy()];
+        KoColumns columns = style.columns();
+        if (columns.columns != 1)
+            kDebug(32001) << " +-- Columns:" << columns.columns << columns.columnSpacing << "pt spacing";
+        KoPageLayout layout = style.pageLayout();
+        kDebug(32001) << "     PageSize: " << layout.width << "x" << layout.height;
+        kDebug(32001) << "     Indents: (tlbr, edge, binding)" << layout.top << layout.left
+                << layout.bottom << layout.right << layout.pageEdge << layout.bindingSide;
     }
 
     kDebug(32001) << "  The height of the doc (in pt) is:" << pageManager()->bottomOfPage(pageManager()->pageCount() - 1) << endl;
