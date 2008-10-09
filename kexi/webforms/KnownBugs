@@ -1,7 +1,0 @@
-This files is a list of known bugs, soon-to-be-fixed.
-When a bug/regression disappears it means that it has been (hopefully) fixed
-
-== KNOWN BUGS ==
-- After opening a table for the first time, the kexi__users table is created and filled with two example
-  accounts (root and guest) but none of them is usable
-  WORK AROUND: restart kwebforms
