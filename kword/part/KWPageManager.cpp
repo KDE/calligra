@@ -35,6 +35,7 @@ KWPageManagerPrivate::KWPageManagerPrivate()
     preferPageSpread(false),
     defaultPageStyle("Standard")
 {
+    pageStyles.insert(defaultPageStyle.name(), defaultPageStyle);
 }
 
 qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
@@ -402,7 +403,7 @@ KWPageStyle KWPageManager::defaultPageStyle() const
 void KWPageManager::clearPageStyles()
 {
     d->pageStyles.clear();
-    addPageStyle("Standard");
+    d->defaultPageStyle = addPageStyle("Standard");
 }
 
 const KWPage KWPageManager::begin() const
