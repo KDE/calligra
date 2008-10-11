@@ -166,6 +166,8 @@ AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent 
 
     setupGui();
     
+    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
@@ -187,6 +189,12 @@ void AccountsView::setupGui()
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
+}
+
+void AccountsView::slotContextMenuRequested( QModelIndex, const QPoint &pos )
+{
+    kDebug();
+    slotHeaderContextMenuRequested( pos );
 }
 
 void AccountsView::slotHeaderContextMenuRequested( const QPoint &pos )
