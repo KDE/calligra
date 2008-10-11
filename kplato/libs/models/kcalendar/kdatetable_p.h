@@ -35,6 +35,9 @@ class KDateInternalYearSelector : public QLineEdit
 protected:
   QIntValidator *val;
   int result;
+  
+  virtual void focusOutEvent(QFocusEvent*);
+    
 public Q_SLOTS:
   void yearEnteredSlot();
 Q_SIGNALS:

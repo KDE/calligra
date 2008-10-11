@@ -29,9 +29,9 @@
 #include <QList>
 #include <QStyleOptionViewItem>
 #include <QStyleOptionHeader>
+#include <QFrame>
 
 class KMenu;
-
 
 namespace KPlato
 {
@@ -43,6 +43,21 @@ class KDateTableWeekNumberDelegate;
 
 class StyleOptionHeader;
 class StyleOptionViewItem;
+
+class KPLATOMODELS_EXPORT Frame: public QFrame
+{
+    Q_OBJECT
+public:
+    Frame( QWidget *parent = 0 );
+
+public slots:
+    void updateFocus( QFocusEvent *e );
+
+protected:
+    virtual void paintEvent(QPaintEvent *e);
+    void drawFrame(QPainter *p);
+};
+
 
 /**
  * Frame with popup menu behavior.
@@ -274,6 +289,8 @@ Q_SIGNALS:
 
     //----->
     void selectionChanged( const QList<QDate>& );
+    
+    void focusChanged( QFocusEvent *e );
     
 protected slots:
     void slotReset();

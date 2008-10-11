@@ -183,7 +183,7 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
         QObject *obj = m_view->model()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
-            name = "resourceeditor_group_popup";
+            //name = "resourceeditor_group_popup";
         } else {
             Resource *r = qobject_cast<Resource*>( obj );
             if ( r ) {
@@ -191,16 +191,11 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
             }
         }
     }
-    emit requestPopupMenu( name, pos );
-}
-
-void ResourceEditor::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
     }
+    emit requestPopupMenu( name, pos );
 }
 
 Resource *ResourceEditor::currentResource() const

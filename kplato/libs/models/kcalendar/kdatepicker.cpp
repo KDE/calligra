@@ -33,6 +33,7 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QDoubleValidator>
 #include <QtGui/QWidget>
+#include <QPushButton>
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>
@@ -61,21 +62,21 @@ public:
 
     QToolButton *closeButton;
     QComboBox *selectWeek;
-    QToolButton *todayButton;
+    QPushButton *todayButton;
     QBoxLayout *navigationLayout;
 
     /// the year forward button
-    QToolButton *yearForward;
+    QPushButton *yearForward;
     /// the year backward button
-    QToolButton *yearBackward;
+    QPushButton *yearBackward;
     /// the month forward button
-    QToolButton *monthForward;
+    QPushButton *monthForward;
     /// the month backward button
-    QToolButton *monthBackward;
+    QPushButton *monthBackward;
     /// the button for selecting the month directly
-    QToolButton *selectMonth;
+    QPushButton *selectMonth;
     /// the button for selecting the year directly
-    QToolButton *selectYear;
+    QPushButton *selectYear;
     /// the line edit to enter the date directly
     QLineEdit *line;
     /// the validator for the line edit:
@@ -137,6 +138,7 @@ KDatePicker::KDatePicker(const QDate& dt, QWidget* parent)
 
 void KDatePicker::init( const QDate &dt )
 {
+  setFocusPolicy( Qt::StrongFocus );
 
   QBoxLayout * topLayout = new QVBoxLayout(this);
   topLayout->setSpacing(0);
@@ -147,34 +149,66 @@ void KDatePicker::init( const QDate &dt )
   d->navigationLayout->setMargin(0);
   topLayout->addLayout(d->navigationLayout);
   d->navigationLayout->addStretch();
-  d->yearBackward = new QToolButton(this);
-  d->yearBackward->setAutoRaise(true);
+  
+  d->yearBackward = new QPushButton(this);
+  //d->yearBackward->setAutoRaise(true);
+  d->yearBackward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->yearBackward->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->yearBackward);
-  d->monthBackward = new QToolButton(this);
-  d->monthBackward ->setAutoRaise(true);
+  d->yearBackward->installEventFilter( this );
+  
+  d->monthBackward = new QPushButton(this);
+  //d->monthBackward ->setAutoRaise(true);
+  d->monthBackward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->monthBackward->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->monthBackward);
   d->navigationLayout->addSpacing(KDialog::spacingHint());
+  d->monthBackward->installEventFilter( this );
 
-  d->selectMonth = new QToolButton(this);
-  d->selectMonth ->setAutoRaise(true);
+  d->selectMonth = new QPushButton(this);
+  //d->selectMonth ->setAutoRaise(true);
+  d->selectMonth->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->selectMonth->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->selectMonth);
-  d->selectYear = new QToolButton(this);
+  d->selectMonth->installEventFilter( this );
+
+  d->selectYear = new QPushButton(this);
   d->selectYear->setCheckable(true);
-  d->selectYear->setAutoRaise(true);
+  //d->selectYear->setAutoRaise(true);
+  d->selectYear->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->selectYear->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->selectYear);
   d->navigationLayout->addSpacing(KDialog::spacingHint());
+  d->selectYear->installEventFilter( this );
 
-  d->monthForward = new QToolButton(this);
-  d->monthForward ->setAutoRaise(true);
+  d->monthForward = new QPushButton(this);
+  //d->monthForward ->setAutoRaise(true);
+  d->monthForward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->monthForward->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->monthForward);
-  d->yearForward = new QToolButton(this);
-  d->yearForward ->setAutoRaise(true);
+  
+  d->yearForward = new QPushButton(this);
+  //d->yearForward ->setFlat(true);
+  d->yearForward->setSizePolicy ( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->yearForward->setMaximumSize( QSize( 30, 30 ) );
   d->navigationLayout->addWidget(d->yearForward);
+  d->yearForward->installEventFilter( this );
+
   d->navigationLayout->addStretch();
 
   d->line = new KLineEdit(this);
   d->val = new KDateValidator(this);
-  d->table = new KDateTable(this);
+  
+  Frame *f = new Frame( this );
+  topLayout->addWidget( f );
+  QVBoxLayout *l = new QVBoxLayout( f );
+  
+  d->table = new KDateTable(f);
+  connect( d->table, SIGNAL( focusChanged( QFocusEvent* ) ), f, SLOT( updateFocus( QFocusEvent* ) ) );
+  l->addWidget( d->table );
+  f->setFocusProxy( d->table );
+  d->table->installEventFilter( this );
+  
   d->fontsize = KGlobalSettings::generalFont().pointSize();
   if (d->fontsize == -1)
      d->fontsize = QFontInfo(KGlobalSettings::generalFont()).pointSize();
@@ -182,8 +216,13 @@ void KDatePicker::init( const QDate &dt )
   d->fontsize++; // Make a little bigger
 
   d->selectWeek = new QComboBox(this);  // read only week selection
-  d->todayButton = new QToolButton(this);
+  d->selectWeek->installEventFilter( this );
+  
+  d->todayButton = new QPushButton(this);
   d->todayButton->setIcon(KIcon("calendar-today"));
+  d->todayButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+  d->todayButton->setMaximumSize( QSize( 25, 25 ) );
+  d->todayButton->installEventFilter( this );
 
   d->yearForward->setToolTip(i18n("Next year"));
   d->yearBackward->setToolTip(i18n("Previous year"));
@@ -227,8 +266,6 @@ void KDatePicker::init( const QDate &dt )
   d->table->setFocus();
 
 
-  topLayout->addWidget(d->table);
-
   QBoxLayout * bottomLayout = new QHBoxLayout();
   bottomLayout->setMargin(0);
   bottomLayout->setSpacing(0);
@@ -250,7 +287,7 @@ KDatePicker::~KDatePicker()
 bool
 KDatePicker::eventFilter(QObject *o, QEvent *e )
 {
-   if ( e->type() == QEvent::KeyPress ) {
+/*   if ( e->type() == QEvent::KeyPress ) {
       QKeyEvent *k = (QKeyEvent *)e;
 
       if ( (k->key() == Qt::Key_PageUp) ||
@@ -262,6 +299,9 @@ KDatePicker::eventFilter(QObject *o, QEvent *e )
           d->table->setFocus();
           return true; // eat event
        }
+   }*/
+   if ( o != this && ( e->type() == QEvent::FocusIn || e->type() == QEvent::FocusOut ) ) {
+       update();
    }
    return QFrame::eventFilter( o, e );
 }
@@ -270,6 +310,101 @@ void
 KDatePicker::resizeEvent(QResizeEvent* e)
 {
   QWidget::resizeEvent(e);
+}
+
+void
+KDatePicker::paintEvent(QPaintEvent *e)
+{
+    //kDebug()<<e;
+    QPainter paint(this);
+    drawFrame(&paint);
+}
+
+void
+KDatePicker::drawFrame(QPainter *p)
+{
+    QPoint p1, p2;
+    QStyleOptionFrame opt;
+    opt.init(this);
+    QList<QWidget*> lst = findChildren<QWidget*>();
+    foreach ( QWidget *w, lst ) {
+        if ( w->hasFocus() ) {
+            opt.state |= QStyle::State_HasFocus;
+            break;
+        }
+    }
+    int frameShape  = frameStyle() & QFrame::Shape_Mask;
+    int frameShadow = frameStyle() & QFrame::Shadow_Mask;
+
+    int lw = 0;
+    int mlw = 0;
+    opt.rect = frameRect();
+    switch (frameShape) {
+        case QFrame::Box:
+        case QFrame::HLine:
+        case QFrame::VLine:
+        case QFrame::StyledPanel:
+            lw = lineWidth();
+            mlw = midLineWidth();
+            break;
+        default:
+        // most frame styles do not handle customized line and midline widths
+        // (see updateFrameWidth()).
+            lw = frameWidth();
+            break;
+    }
+    opt.lineWidth = lw;
+    opt.midLineWidth = mlw;
+    if (frameShadow == Sunken)
+        opt.state |= QStyle::State_Sunken;
+    else if (frameShadow == Raised)
+        opt.state |= QStyle::State_Raised;
+
+    switch (frameShape) {
+        case Box:
+            if (frameShadow == Plain)
+                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
+            else
+                qDrawShadeRect(p, opt.rect, opt.palette, frameShadow == Sunken, lw, mlw);
+            break;
+
+
+        case StyledPanel:
+            style()->drawPrimitive(QStyle::PE_Frame, &opt, p, this);
+            break;
+
+        case Panel:
+            if (frameShadow == Plain)
+                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
+            else
+                qDrawShadePanel(p, opt.rect, opt.palette, frameShadow == Sunken, lw);
+            break;
+
+        case WinPanel:
+            if (frameShadow == Plain)
+                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
+            else
+                qDrawWinPanel(p, opt.rect, opt.palette, frameShadow == Sunken);
+            break;
+        case HLine:
+        case VLine:
+            if (frameShape == HLine) {
+                p1 = QPoint(opt.rect.x(), opt.rect.height() / 2);
+                p2 = QPoint(opt.rect.x() + opt.rect.width(), p1.y());
+            } else {
+                p1 = QPoint(opt.rect.x()+opt.rect.width() / 2, 0);
+                p2 = QPoint(p1.x(), opt.rect.height());
+            }
+            if (frameShadow == Plain) {
+                QPen oldPen = p->pen();
+                p->setPen(QPen(opt.palette.foreground().color(), lw));
+                p->drawLine(p1, p2);
+                p->setPen(oldPen);
+            } else {
+                qDrawShadeLine(p, p1, p2, opt.palette, frameShadow == Sunken, lw, mlw);
+            }
+            break;
+    }
 }
 
 void
@@ -437,12 +572,11 @@ KDatePicker::selectYearClicked()
       // ----- set this month
       setDate(date);
     } else {
-      KNotification::beep();
+      //KNotification::beep();
     }
   d->selectYear->setChecked( false );
   delete popup;
 }
-
 
 // ####### KDE4: setEnabled isn't virtual anymore, so this isn't polymorphic.
 // Better reimplement changeEvent() instead.

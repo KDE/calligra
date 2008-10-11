@@ -119,7 +119,6 @@ public slots:
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
@@ -208,7 +207,6 @@ public slots:
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
     void slotScheduleSelectionChanged( ScheduleManager *sm );
 
     void slotSelectionChanged( const QModelIndexList );

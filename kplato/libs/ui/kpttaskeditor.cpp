@@ -225,6 +225,10 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
             name = "node_popup";
             break;
     }
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
     kDebug()<<name;
     emit requestPopupMenu( name, pos );
 }
@@ -233,15 +237,6 @@ void TaskEditor::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
     static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
-}
-
-void TaskEditor::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
 }
 
 void TaskEditor::slotEnableActions()
@@ -624,6 +619,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
     } else kDebug()<<"No node: "<<index;
     if ( name.isEmpty() ) {
         kDebug()<<"No menu";
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     emit requestPopupMenu( name, pos );
@@ -633,15 +629,6 @@ void TaskView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
     static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
-}
-
-void TaskView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
 }
 
 void TaskView::slotEnableActions()

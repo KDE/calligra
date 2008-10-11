@@ -189,7 +189,6 @@ public slots:
 
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
     void slotOptions();
     
 private:
@@ -288,7 +287,6 @@ public slots:
 
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
-    void slotHeaderContextMenuRequested( const QPoint &pos );
     void slotOptions();
 
 private:

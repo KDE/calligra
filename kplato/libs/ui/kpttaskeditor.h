@@ -131,8 +131,6 @@ private slots:
     void slotSplitView();
     void slotOptions();
     
-    void slotHeaderContextMenuRequested( const QPoint& );
-    
 private:
     void edit( QModelIndex index );
 
@@ -198,8 +196,6 @@ private slots:
 
     void slotSplitView();
     void slotOptions();
-
-    void slotHeaderContextMenuRequested( const QPoint& );
 
 private:
     NodeTreeView *m_view;

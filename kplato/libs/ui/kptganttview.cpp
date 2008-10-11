@@ -171,6 +171,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
 {
     kDebug()<<"------------------- create MyKDGanttView -----------------------";
     GanttTreeView *tv = new GanttTreeView( this );
+    tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setLeftView( tv );
     setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
     m_model = new NodeItemModel( tv );
@@ -203,6 +204,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
     
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
+    static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( tv->alternatingRowColors() );
     
     connect( m_model, SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
@@ -377,15 +379,6 @@ void GanttView::setupGui()
     addContextAction( actionOptions );
 }
 
-void GanttView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
-}
-
 void GanttView::slotOptions()
 {
     kDebug();
@@ -453,6 +446,7 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
         }
     } else kDebug()<<"No node";
     if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
         kDebug()<<"No menu";
         return;
     }
@@ -523,6 +517,7 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------"<<endl;
     GanttTreeView *tv = new GanttTreeView( this );
     tv->setRootIsDecorated( false );
+    tv->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setLeftView( tv );
     setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
     m_model = new MilestoneItemModel( tv );
@@ -552,6 +547,7 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
+    static_cast<KDGantt::DateTimeGrid*>( grid() )->setRowSeparators( tv->alternatingRowColors() );
 }
 
 void MilestoneKDGanttView::update()
@@ -708,18 +704,10 @@ void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint
     } else kDebug()<<"No node";
     if ( name.isEmpty() ) {
         kDebug()<<"No menu";
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     emit requestPopupMenu( name, pos );
-}
-
-void MilestoneGanttView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
 }
 
 void MilestoneGanttView::slotOptions()

@@ -154,8 +154,8 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
 void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
     //kDebug()<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
-/*    QString name;
-    if ( index.isValid() ) {
+    QString name;
+/*    if ( index.isValid() ) {
         QObject *obj = m_view->model()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
@@ -166,17 +166,12 @@ void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, cons
                 name = "resourceeditor_resource_popup";
             }
         }
+    }*/
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
     }
-    emit requestPopupMenu( name, pos );*/
-}
-
-void ResourceAppointmentsView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug()<<endl;
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
+    emit requestPopupMenu( name, pos );
 }
 
 Resource *ResourceAppointmentsView::currentResource() const

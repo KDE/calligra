@@ -221,15 +221,6 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
-void TaskStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
-}
-
 void TaskStatusView::updateReadWrite( bool rw )
 {
     m_view->setReadWrite( rw );
@@ -276,6 +267,7 @@ void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const Q
     }
     Node *node = m_view->model()->node( index );
     if ( node == 0 ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     slotContextMenuRequested( node, pos );
@@ -298,6 +290,7 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
     }
     kDebug()<<name;
     if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     emit requestPopupMenu( name, pos );
@@ -433,16 +426,6 @@ ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
 
 
 }
-
-void ProjectStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
-}
-
 
 void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
 {
@@ -826,15 +809,6 @@ PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent 
     connect( m_view->treeView(), SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 }
 
-void PerformanceStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
-}
-
 void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
     kDebug()<<index<<pos;
@@ -843,6 +817,7 @@ void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, 
     }
     Node *node = m_view->nodeModel()->node( index );
     if ( node == 0 ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     slotContextMenuRequested( node, pos );
@@ -871,6 +846,7 @@ void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& 
     }
     //kDebug()<<name;
     if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     emit requestPopupMenu( name, pos );

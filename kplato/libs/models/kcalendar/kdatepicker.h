@@ -22,6 +22,8 @@
 
 #include "../kplatomodels_export.h"
 
+#include "kdatetable.h"
+
 #include <QtCore/QDateTime>
 #include <QtGui/QFrame>
 
@@ -139,7 +141,9 @@ protected:
   virtual bool eventFilter(QObject *o, QEvent *e );
   /// the resize event
   virtual void resizeEvent(QResizeEvent*);
-
+  virtual void paintEvent(QPaintEvent *e);
+  void drawFrame(QPainter *p);
+  
 protected Q_SLOTS:
   void dateChangedSlot(const QDate&);
   void tableClickedSlot();

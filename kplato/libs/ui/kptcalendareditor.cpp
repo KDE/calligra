@@ -354,13 +354,8 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     
     sp = new QSplitter( f );
     l->addWidget( sp );
-    f = new QFrame( sp );
-    f->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
-    l = new QVBoxLayout( f );
-    l->setMargin( 0 );
-
-    KDatePicker *w = new KDatePicker( f );
-    l->addWidget( w );
+    KDatePicker *w = new KDatePicker( sp );
+    w->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     w->dateTable()->setWeekNumbersEnabled( true );
     w->dateTable()->setGridEnabled( true );
     w->dateTable()->setSelectionMode( KDateTable::ExtendedSelection );

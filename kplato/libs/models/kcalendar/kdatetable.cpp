@@ -67,6 +67,114 @@
 namespace KPlato
 {
     
+Frame::Frame( QWidget *parent )
+    : QFrame( parent )
+{
+    setSizePolicy( QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding );
+    setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    setLineWidth(1);
+}
+
+void Frame::updateFocus(QFocusEvent *e)
+{
+    if ( e->type() == QEvent::FocusIn ) {
+        setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    } else {
+        setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
+    }
+    update();
+}
+
+void Frame::paintEvent(QPaintEvent *e)
+{
+    //kDebug()<<e;
+    QPainter paint(this);
+    drawFrame(&paint);
+}
+
+void Frame::drawFrame(QPainter *p)
+{
+    QPoint p1, p2;
+    QStyleOptionFrame opt;
+    opt.init(this);
+    if ( hasFocus() ) {
+        opt.state |= QStyle::State_HasFocus;
+    }
+    int frameShape  = frameStyle() & QFrame::Shape_Mask;
+    int frameShadow = frameStyle() & QFrame::Shadow_Mask;
+
+    int lw = 0;
+    int mlw = 0;
+    opt.rect = frameRect();
+    switch (frameShape) {
+        case QFrame::Box:
+        case QFrame::HLine:
+        case QFrame::VLine:
+        case QFrame::StyledPanel:
+            lw = lineWidth();
+            mlw = midLineWidth();
+            break;
+        default:
+            // most frame styles do not handle customized line and midline widths
+            // (see updateFrameWidth()).
+            lw = frameWidth();
+            break;
+    }
+    opt.lineWidth = lw;
+    opt.midLineWidth = mlw;
+    if (frameShadow == Sunken)
+        opt.state |= QStyle::State_Sunken;
+    else if (frameShadow == Raised)
+        opt.state |= QStyle::State_Raised;
+
+    switch (frameShape) {
+        case Box:
+            if (frameShadow == Plain)
+                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
+            else
+                qDrawShadeRect(p, opt.rect, opt.palette, frameShadow == Sunken, lw, mlw);
+            break;
+
+
+        case StyledPanel:
+            style()->drawPrimitive(QStyle::PE_Frame, &opt, p, this);
+            break;
+
+        case Panel:
+            if (frameShadow == Plain)
+                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
+            else
+                qDrawShadePanel(p, opt.rect, opt.palette, frameShadow == Sunken, lw);
+            break;
+
+        case WinPanel:
+            if (frameShadow == Plain)
+                qDrawPlainRect(p, opt.rect, opt.palette.foreground().color(), lw);
+            else
+                qDrawWinPanel(p, opt.rect, opt.palette, frameShadow == Sunken);
+            break;
+        case HLine:
+        case VLine:
+            if (frameShape == HLine) {
+                p1 = QPoint(opt.rect.x(), opt.rect.height() / 2);
+                p2 = QPoint(opt.rect.x() + opt.rect.width(), p1.y());
+            } else {
+                p1 = QPoint(opt.rect.x()+opt.rect.width() / 2, 0);
+                p2 = QPoint(p1.x(), opt.rect.height());
+            }
+            if (frameShadow == Plain) {
+                QPen oldPen = p->pen();
+                p->setPen(QPen(opt.palette.foreground().color(), lw));
+                p->drawLine(p1, p2);
+                p->setPen(oldPen);
+            } else {
+                qDrawShadeLine(p, p1, p2, opt.palette, frameShadow == Sunken, lw, mlw);
+            }
+            break;
+    }
+}
+
+
 class KDateTable::KDateTablePrivate
 {
 public:
@@ -562,7 +670,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
     if ( pCellDate == d->mDate )
     {
         d->m_styleOptionDate.state |= QStyle::State_Active;
-        if ( d->m_selectionmode != SingleSelection )
+        if ( d->m_selectionmode != SingleSelection && hasFocus() )
         {
             d->m_styleOptionDate.state |= QStyle::State_HasFocus;
         }
@@ -646,6 +754,24 @@ KDateTable::keyPressEvent( QKeyEvent *e )
     case Qt::Key_Meta:
     case Qt::Key_Shift:
       // Don't beep for modifiers
+      break;
+    case Qt::Key_Menu:
+        if (  d->popupMenuEnabled )
+        {
+            KMenu *menu = new KMenu();
+            menu->addTitle( KGlobal::locale()->formatDate(d->mDate) );
+            emit aboutToShowContextMenu( menu, d->mDate );
+            int p = posFromDate( d->mDate ) - 1;
+            int col = p % 7;
+            int row = p / 7;
+            QPoint pos = geometry().topLeft();
+            QSize size = geometry().size();
+            int sx = size.width() / 8;
+            int sy = size.height() / 7;
+            pos = QPoint( pos.x() + sx + sx / 2 + sx * col, pos.y() + sy + sy * row );
+            kDebug()<<pos<<p<<col<<row;
+            menu->popup(mapToGlobal(pos));
+        }
       break;
     default:
       if (!e->modifiers()) { // hm
@@ -860,12 +986,14 @@ void KDateTable::focusInEvent( QFocusEvent *e )
 {
 //    repaintContents(false);
     QWidget::focusInEvent( e );
+    emit focusChanged( e );
 }
 
 void KDateTable::focusOutEvent( QFocusEvent *e )
 {
 //    repaintContents(false);
     QWidget::focusOutEvent( e );
+    emit focusChanged( e );
 }
 
 QSize
@@ -927,6 +1055,11 @@ KDateInternalYearSelector::KDateInternalYearSelector
   val->setRange(0, 8000);
   setValidator(val);
   connect(this, SIGNAL(returnPressed()), SLOT(yearEnteredSlot()));
+}
+
+void KDateInternalYearSelector::focusOutEvent(QFocusEvent*)
+{
+    emit(closeMe(1));
 }
 
 void
@@ -1054,6 +1187,7 @@ KPopupFrame::exec(const QPoint &pos)
   eventLoop.exec();
 
   hide();
+  kDebug()<<d->result;
   return d->result;
 }
 
@@ -1160,12 +1294,13 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
     painter->fillRect( option.rectF, bg );
     painter->setBrush( bg );
     
-    if ( date == QDate::currentDate() ) {
-        painter->setPen( palette.text() );
-        painter->drawRect( option.rectF );
-    } else if ( option.state & QStyle::State_HasFocus ) {
+    
+    if ( option.state & QStyle::State_HasFocus ) {
         painter->setPen( palette.text() );
         painter->setPen( Qt::DotLine );
+        painter->drawRect( option.rectF );
+    } else if ( date == QDate::currentDate() ) {
+        painter->setPen( palette.text() );
         painter->drawRect( option.rectF );
     }
 

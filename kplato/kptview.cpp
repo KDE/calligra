@@ -2065,7 +2065,23 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
     QMenu * menu = this->popupMenu( menuname );
     if ( menu ) {
         //kDebug()<<menu<<":"<<menu->actions().count();
+        ViewBase *v = qobject_cast<ViewBase*>( m_tab->currentWidget() );
+        kDebug()<<v<<menuname;
+        QList<QAction*> lst;
+        if ( v ) {
+            lst = v->contextActionList();
+            kDebug()<<lst;
+            if ( ! lst.isEmpty() ) {
+                menu->addSeparator();
+                foreach ( QAction *a, lst ) {
+                    menu->addAction( a );
+                }
+            }
+        }
         menu->exec( pos );
+        foreach ( QAction *a, lst ) {
+            menu->removeAction( a );
+        }
     }
 }
 

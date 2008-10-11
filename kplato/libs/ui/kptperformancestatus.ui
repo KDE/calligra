@@ -9,12 +9,24 @@
     <height>284</height>
    </rect>
   </property>
+  <property name="focusPolicy" >
+   <enum>Qt::NoFocus</enum>
+  </property>
+  <property name="contextMenuPolicy" >
+   <enum>Qt::CustomContextMenu</enum>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout_3" >
    <property name="margin" >
     <number>0</number>
    </property>
    <item>
     <widget class="QFrame" name="frame_2" >
+     <property name="focusPolicy" >
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="contextMenuPolicy" >
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="frameShape" >
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -70,6 +82,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="text" >
             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -87,6 +102,9 @@ p, li { white-space: pre-wrap; }
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="text" >
             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -103,6 +121,9 @@ p, li { white-space: pre-wrap; }
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
            </property>
            <property name="text" >
             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
@@ -126,6 +147,9 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="1" column="0" >
           <widget class="QLabel" name="labelCost" >
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="text" >
             <string>Cost:</string>
            </property>
@@ -133,6 +157,12 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="1" column="1" >
           <widget class="QLineEdit" name="bcwsCost" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="readOnly" >
             <bool>true</bool>
            </property>
@@ -140,6 +170,15 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="1" column="2" >
           <widget class="QLineEdit" name="bcwpCost" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
+           <property name="acceptDrops" >
+            <bool>false</bool>
+           </property>
            <property name="readOnly" >
             <bool>true</bool>
            </property>
@@ -147,6 +186,12 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="1" column="3" >
           <widget class="QLineEdit" name="acwpCost" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="readOnly" >
             <bool>true</bool>
            </property>
@@ -156,6 +201,9 @@ p, li { white-space: pre-wrap; }
           <layout class="QHBoxLayout" name="horizontalLayout" >
            <item>
             <widget class="QLabel" name="label_2" >
+             <property name="contextMenuPolicy" >
+              <enum>Qt::NoContextMenu</enum>
+             </property>
              <property name="text" >
               <string>CPI:</string>
              </property>
@@ -163,6 +211,12 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <widget class="QLineEdit" name="cpi" >
+             <property name="focusPolicy" >
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="contextMenuPolicy" >
+              <enum>Qt::NoContextMenu</enum>
+             </property>
              <property name="readOnly" >
               <bool>true</bool>
              </property>
@@ -172,6 +226,9 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="2" column="0" >
           <widget class="QLabel" name="labelEffort" >
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="text" >
             <string>Effort:</string>
            </property>
@@ -179,6 +236,12 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="2" column="1" >
           <widget class="QLineEdit" name="bcwsEffort" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="readOnly" >
             <bool>true</bool>
            </property>
@@ -186,6 +249,12 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="2" column="2" >
           <widget class="QLineEdit" name="bcwpEffort" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="readOnly" >
             <bool>true</bool>
            </property>
@@ -193,6 +262,12 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="2" column="3" >
           <widget class="QLineEdit" name="acwpEffort" >
+           <property name="focusPolicy" >
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="readOnly" >
             <bool>true</bool>
            </property>
@@ -202,6 +277,9 @@ p, li { white-space: pre-wrap; }
           <layout class="QHBoxLayout" name="horizontalLayout_2" >
            <item>
             <widget class="QLabel" name="label_7" >
+             <property name="contextMenuPolicy" >
+              <enum>Qt::NoContextMenu</enum>
+             </property>
              <property name="text" >
               <string>SPI:</string>
              </property>
@@ -209,6 +287,12 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <widget class="QLineEdit" name="spi" >
+             <property name="focusPolicy" >
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="contextMenuPolicy" >
+              <enum>Qt::NoContextMenu</enum>
+             </property>
              <property name="readOnly" >
               <bool>true</bool>
              </property>
@@ -239,17 +323,20 @@ p, li { white-space: pre-wrap; }
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="contextMenuPolicy" >
+            <enum>Qt::NoContextMenu</enum>
+           </property>
            <property name="lineWidth" >
             <number>0</number>
            </property>
-           <property name="backgroundColor" >
+           <property name="backgroundColor" stdset="0" >
             <color>
              <red>255</red>
              <green>255</green>
              <blue>255</blue>
             </color>
            </property>
-           <property name="foregroundColor" >
+           <property name="foregroundColor" stdset="0" >
             <color>
              <red>0</red>
              <green>0</green>
@@ -271,6 +358,7 @@ p, li { white-space: pre-wrap; }
    <class>KPlato::KPlotWidget</class>
    <extends>QFrame</extends>
    <header>plotting/kplotwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -163,20 +163,11 @@ void ScheduleEditor::setGuiActive( bool activate )
     }
 }
 
-void ScheduleEditor::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
-}
-
 void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
     kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
-/*    QString name;
-    if ( index.isValid() ) {
+    QString name;
+/*    if ( index.isValid() ) {
         QObject *obj = m_view->model()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
@@ -187,9 +178,13 @@ void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
                 name = "resourceeditor_resource_popup";
             }
         }
+    }*/
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
     }
     kDebug()<<name;
-    emit requestPopupMenu( name, pos );*/
+    emit requestPopupMenu( name, pos );
 }
 
 void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
@@ -455,18 +450,10 @@ void ScheduleLogView::setGuiActive( bool activate )
     }*/
 }
 
-void ScheduleLogView::slotHeaderContextMenuRequested( const QPoint &pos )
-{
-    kDebug();
-    QList<QAction*> lst = contextActionList();
-    if ( ! lst.isEmpty() ) {
-        QMenu::exec( lst, pos,  lst.first() );
-    }
-}
-
 void ScheduleLogView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
     kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
+    slotHeaderContextMenuRequested( pos );
 }
 
 void ScheduleLogView::slotScheduleSelectionChanged( ScheduleManager *sm )

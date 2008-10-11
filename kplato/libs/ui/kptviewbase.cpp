@@ -37,6 +37,7 @@
 #include <QMetaEnum>
 #include <QStyleOption>
 #include <QPainter>
+#include <QMenu>
 
 namespace KPlato
 {
@@ -305,6 +306,15 @@ KoPrintJob *ViewBase::createPrintJob()
     KMessageBox::sorry(this, i18n("This view does not support printing."));
 
     return 0;
+}
+
+void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos, lst.first() );
+    }
 }
 
 //----------------------

@@ -211,7 +211,8 @@ public slots:
     virtual void setGuiActive( bool activate );
 
     void slotUpdateReadWrite( bool );
-    
+    virtual void slotHeaderContextMenuRequested( const QPoint &pos );
+
 signals:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );
