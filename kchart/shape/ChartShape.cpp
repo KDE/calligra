@@ -199,6 +199,9 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
 
 void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, OdfLabelType odfLabelType )
 {
+    // Don't save hidden labels, as that's the way of removing them from a chart.
+    if ( !label->isVisible() )
+        return;
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
         return;
