@@ -20,43 +20,43 @@ include_directories(
 
 ###########  target kchartcommon  ###############
 
-#set(kchartcommon_LIB_SRCS 
-#   KChartFactory.cpp
-#   KChartPart.cpp
-#   KChartView.cpp
-#   KChartCanvas.cpp
-#   KChartViewAdaptor.cpp
-#    KChartPrintJob.cpp
+set(kchartcommon_LIB_SRCS
+   KChartFactory.cpp
+   KChartPart.cpp
+   KChartView.cpp
+   KChartCanvas.cpp
+   KChartViewAdaptor.cpp
+   KChartPrintJob.cpp
 
-#   dialogs/KCPageLayout.cpp
-#   dialogs/KCPrinterDialog.cpp
+   dialogs/KCPageLayout.cpp
+   dialogs/KCPrinterDialog.cpp
 
    # FIXME: Remove this
 #   kdchart/examples/tools/TableModel.cpp
-#)
+)
 
-#kde4_add_kcfg_files(kchartcommon_LIB_SRCS prefs.kcfgc)
+kde4_add_kcfg_files(kchartcommon_LIB_SRCS prefs.kcfgc)
 
-#kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
+kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
-#target_link_libraries(kchartcommon
-#	kochart
-#	koguiutils
-#	kdchart
-#	chartshapelib
-#    komain
-#    kostore
-#    flake
-#    ${KDE4_KPARTS_LIBS}
-#	${KDE4_KDE3SUPPORT_LIBS}
-#    )
+target_link_libraries(kchartcommon
+	kochart
+	koguiutils
+	kdchart
+	chartshapelib
+    komain
+    kostore
+    flake
+    ${KDE4_KPARTS_LIBS}
+	${KDE4_KDE3SUPPORT_LIBS}
+    )
 
-#set_target_properties(kchartcommon
-#	PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION}
-#	SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-#)
+set_target_properties(kchartcommon
+	PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION}
+	SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+)
 
-#install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
 ########### target kchartpart ###############
