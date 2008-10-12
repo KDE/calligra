@@ -336,6 +336,7 @@ void ProxyModel::saveOdf( KoShapeSavingContext &context ) const
             style.addProperty( "chart:family", ODF_CHARTTYPES[ dataSet->chartType() ] );
             
         KoOdfGraphicStyles::saveOasisFillStyle( style, mainStyles, dataSet->brush() );
+        KoOdfGraphicStyles::saveOasisStrokeStyle( style, mainStyles, dataSet->pen() );
             
         // TODO: Save external data sources also
         const QString prefix( "local-table." );

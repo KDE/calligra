@@ -42,6 +42,7 @@
 #include <KoStyleStack.h>
 #include <KoOdfLoadingContext.h>
 #include <KoCharacterStyle.h>
+#include <KoOdfGraphicStyles.h>
 
 // KDChart
 #include <KDChartChart>
@@ -1128,11 +1129,16 @@ void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
     KoXmlWriter &bodyWriter = context.xmlWriter();
     KoGenStyles &mainStyles = context.mainStyles();
     
-    KoGenStyle gridStyle( KoGenStyle::StyleAuto, "chart" );
-    // Save stroke
+    KoGenStyle gridStyle( KoGenStyle::StyleGraphicAuto, "chart" );
+    
+    KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
+    QPen gridPen = attributes.gridPen();
+    KoOdfGraphicStyles::saveOasisStrokeStyle( gridStyle, mainStyles, gridPen );
     
     bodyWriter.startElement( "chart:grid" );
     bodyWriter.addAttribute( "chart:class", gridClass == OdfMinorGrid ? "minor" : "major" );
+    // FIXME: For some reason, major and minor grid both get the same style name assigned
+    bodyWriter.addAttribute( "chart:style-name", mainStyles.lookup( gridStyle, "ch" ) );
     bodyWriter.endElement(); // chart:grid
 }
 

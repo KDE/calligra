@@ -34,9 +34,11 @@
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoStyleStack.h>
 #include <KoOdfGraphicStyles.h>
+#include <KoGenStyles.h>
 
 // KDChart
 #include <KDChartAbstractCoordinatePlane>
@@ -175,3 +177,23 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext
     
     return true;
 }
+
+void Surface::saveOdf( KoShapeSavingContext &context )
+{
+    KoXmlWriter &bodyWriter = context.xmlWriter();
+    KoGenStyles &mainStyles = context.mainStyles();
+    KoGenStyle style = KoGenStyle( KoGenStyle::StyleGraphicAuto, "chart" );
+
+    // Fixme: Also save floor
+    bodyWriter.startElement( "chart:wall" );
+
+    QBrush backgroundBrush = d->kdPlane->backgroundAttributes().brush();
+    QPen framePen = d->kdPlane->frameAttributes().pen();
+    KoOdfGraphicStyles::saveOasisFillStyle( style, mainStyles, backgroundBrush );
+    KoOdfGraphicStyles::saveOasisStrokeStyle( style, mainStyles, framePen );
+
+    bodyWriter.addAttribute( "chart:style-name", mainStyles.lookup( style, "ch" ) );
+
+    bodyWriter.endElement(); // chart:wall
+}
+

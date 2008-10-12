@@ -51,6 +51,7 @@ public:
     void setFramePen( const QPen &pen );
     
     bool loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext &context );
+    void saveOdf( KoShapeSavingContext &context );
 
 private:
     class Private;

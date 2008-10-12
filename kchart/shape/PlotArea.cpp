@@ -571,8 +571,9 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     // Save data series
     d->shape->proxyModel()->saveOdf( context );
 
+    d->wall->saveOdf( context );
+
     // TODO chart:series
-    // TODO chart:wall
     // TODO chart:grid
     // TODO chart:floor
     
