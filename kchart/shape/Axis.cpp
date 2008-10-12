@@ -1132,7 +1132,7 @@ void Axis::saveOdfGrid( KoShapeSavingContext &context, OdfGridClass gridClass )
     KoGenStyle gridStyle( KoGenStyle::StyleGraphicAuto, "chart" );
     
     KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
-    QPen gridPen = attributes.gridPen();
+    QPen gridPen = (gridClass == OdfMinorGrid ? attributes.subGridPen() : attributes.gridPen());
     KoOdfGraphicStyles::saveOasisStrokeStyle( gridStyle, mainStyles, gridPen );
     
     bodyWriter.startElement( "chart:grid" );
