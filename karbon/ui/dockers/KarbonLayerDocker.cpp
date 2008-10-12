@@ -177,8 +177,21 @@ void KarbonLayerDocker::itemClicked( const QModelIndex &index )
     KoShape *shape = shapeFromIndex( index );
     if( ! shape )
         return;
-    if( dynamic_cast<KoShapeLayer*>( shape ) )
+
+    KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+    if( ! canvasController )
         return;
+    
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! selection )
+        return;
+    
+    KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shape );
+    if( layer )
+    {
+        selection->setActiveLayer( layer );
+        return;
+    }
 
     QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
@@ -186,9 +199,6 @@ void KarbonLayerDocker::itemClicked( const QModelIndex &index )
     // separate selected layers and selected shapes
     extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
 
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     foreach( KoShape* shape, selection->selectedShapes() )
         shape->update();
 

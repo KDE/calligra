@@ -1356,6 +1356,22 @@ void KarbonView::selectionChanged()
         d->intersectPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         d->subtractPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         d->unitePath->setEnabled( selectedPaths + selectedParametrics == 2 );
+        
+        // if only one shape selected, set its parent layer as the active layer
+        if( count == 1 )
+        {
+            KoShapeContainer * parent = selection->selectedShapes().first()->parent();
+            while( parent )
+            {
+                if( parent->parent() )
+                    parent = parent->parent();
+                else
+                    break;
+            }
+            KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( parent );
+            if( layer )
+                selection->setActiveLayer( layer );
+        }
     }
 
     emit selectionChange();
