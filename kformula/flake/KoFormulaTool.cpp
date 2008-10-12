@@ -29,6 +29,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <QKeyEvent>
+#include <KAction>
 #include <QPainter>
 #include "KoFormulaTool.moc"
 
@@ -209,57 +210,57 @@ KoFormulaShape* KoFormulaTool::shape()
 
 void KoFormulaTool::setupActions()
 {
-    QAction* action;
+    KAction* action;
 
-    action = new QAction( i18n( "Insert fence" ), this );
+    action = new KAction( i18n( "Insert fence" ), this );
     action->setData( QString( "mfenced" ) ); 
     addAction( "insert_fence", action );
 
-    action = new QAction( i18n( "Insert root" ), this );
+    action = new KAction( i18n( "Insert root" ), this );
     action->setData( QString( "mroot" ) ); 
     addAction( "insert_root", action );
 
-    action = new QAction( i18n( "Insert square root" ), this );
+    action = new KAction( i18n( "Insert square root" ), this );
     action->setData( QString( "msqrt" ) ); 
     addAction( "insert_sqrt", action );
 
-    action = new QAction( i18n( "Insert fraction" ), this );
+    action = new KAction( i18n( "Insert fraction" ), this );
     action->setData( QString( "mfrac" ) ); 
     addAction( "insert_fraction", action );
 
-    action = new QAction( i18n( "Insert 3x3 table" ), this );
+    action = new KAction( i18n( "Insert 3x3 table" ), this );
     action->setData( QString( "mtable" ) ); 
     addAction( "insert_33table", action );
 
-    action = new QAction( i18n( "Insert 2x2 table" ), this );
+    action = new KAction( i18n( "Insert 2x2 table" ), this );
     action->setData( QString( "mtable" ) ); 
     addAction( "insert_22table", action );
 
-    action = new QAction( i18n( "Insert 3 dimensional vector" ), this );
+    action = new KAction( i18n( "Insert 3 dimensional vector" ), this );
     action->setData( QString( "mtable" ) ); 
     addAction( "insert_31table", action );
 
-    action = new QAction( i18n( "Insert 2 dimensional vector" ), this );
+    action = new KAction( i18n( "Insert 2 dimensional vector" ), this );
     action->setData( QString( "mtable" ) ); 
     addAction( "insert_21table", action );
 
-    action = new QAction( i18n( "Insert table row" ), this );
+    action = new KAction( i18n( "Insert table row" ), this );
     action->setData( QString( "mtr" ) ); 
     addAction( "insert_tablerow", action );
 
-    action = new QAction( i18n( "Insert table column" ), this );
+    action = new KAction( i18n( "Insert table column" ), this );
     action->setData( QString( "mtd" ) ); 
     addAction( "insert_tablecol", action );
 
-    action = new QAction( i18n( "Insert subscript" ), this );
+    action = new KAction( i18n( "Insert subscript" ), this );
     action->setData( QString( "msub" ) ); 
     addAction( "insert_subscript", action );
 
-    action = new QAction( i18n( "Insert superscript" ), this );
+    action = new KAction( i18n( "Insert superscript" ), this );
     action->setData( QString( "msup" ) ); 
     addAction( "insert_supscript", action );
 
-    action = new QAction( i18n( "Insert sub- and superscript" ), this );
+    action = new KAction( i18n( "Insert sub- and superscript" ), this );
     action->setData( QString( "msubsup" ) ); 
     addAction( "insert_subsupscript", action );
 }

@@ -164,7 +164,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->createPopupMenuActions();
 
     // Create the actions.
-    QAction* action = 0;
+    KAction* action = 0;
 
     // -- cell style actions --
 

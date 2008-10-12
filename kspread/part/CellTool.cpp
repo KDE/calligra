@@ -131,7 +131,7 @@ CellTool::CellTool( KoCanvasBase* canvas )
     d->dragStart = QPoint( -1, -1 );
     d->mouseAction = Private::None;
 
-    QAction* action = 0;
+    KAction* action = 0;
 
     // -- misc actions --
 

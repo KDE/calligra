@@ -193,7 +193,7 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 {
     // Enable/disable actions.
-    const QList<QAction*> actions = q->actions().values();
+    const QList<KAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
     optionWidget.formulaButton->setEnabled(enable);

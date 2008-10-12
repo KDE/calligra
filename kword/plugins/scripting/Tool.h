@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QAction>
 #include <QSignalMapper>
+#include <KAction>
 
 #include <kdebug.h>
 #include <KoToolManager.h>
@@ -70,8 +71,8 @@ public:
         m_toolproxy = c ? c->toolProxy() : 0;
 
         m_signalMapper = new QSignalMapper(this);
-        QHash<QString, QAction*> actionhash = actions();
-        for (QHash<QString, QAction*>::const_iterator it = actionhash.constBegin(); it != actionhash.constEnd(); ++it) {
+        QHash<QString, KAction*> actionhash = actions();
+        for (QHash<QString, KAction*>::const_iterator it = actionhash.constBegin(); it != actionhash.constEnd(); ++it) {
             connect(it.value(), SIGNAL(triggered()), m_signalMapper, SLOT(map()));
             m_signalMapper->setMapping(it.value() , it.key());
         }
@@ -87,8 +88,8 @@ public:
     KoTextSelectionHandler* textSelection() const {
         return dynamic_cast< KoTextSelectionHandler* >(toolSelection());
     }
-    QHash<QString, QAction*> actions() const {
-        return m_toolproxy ? m_toolproxy->actions() : QHash<QString, QAction*>();
+    QHash<QString, KAction*> actions() const {
+        return m_toolproxy ? m_toolproxy->actions() : QHash<QString, KAction*>();
     }
 
 public slots:

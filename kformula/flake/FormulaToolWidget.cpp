@@ -32,6 +32,8 @@
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
 
+#include <KAction>
+
 #include <KFileDialog>
 #include <KMessageBox>
 #include <QFile>
