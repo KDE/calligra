@@ -249,9 +249,8 @@ bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, 
             break;
         case PropertiesRole:
             setProperties( shape, value.value<PropertyList>());
-            break;
+            // fall through
         case ActiveRole:
-            if (value.toBool())
             {
                 KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
                 KoSelection * selection = canvasController->canvas()->shapeManager()->selection();
