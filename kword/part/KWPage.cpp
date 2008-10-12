@@ -33,28 +33,11 @@ bool KWPage::isValid() const
     return priv && priv->pages.contains(n);
 }
 
-int KWPage::pageNumber(int select, int adjustment) const
+int KWPage::pageNumber() const
 {
     if (! isValid())
         return 0; // invalid
-
-    int pageNumber = priv->pages[n].pageNumber;
-/*
-    // TODO move this to another class
-    int pagenum = -1;
-    if (const KWPage* p = select ? m_parent->page(m_pageNum + select) : this) {
-        if (adjustment) {
-            p = m_parent->page(pagenum + adjustment);
-            pagenum = p ? p->m_pageNum : -1;
-        }
-        else {
-            pagenum = p->m_pageNum;
-        }
-    }
-    return pagenum;
-*/
-    return pageNumber;
-
+    return priv->pages[n].pageNumber;
 }
 
 KWPageStyle KWPage::pageStyle() const

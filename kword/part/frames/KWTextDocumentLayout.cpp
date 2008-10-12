@@ -23,6 +23,7 @@
 #include "KWTextFrame.h"
 #include "KWDocument.h"
 #include "KWPage.h"
+#include "KWPageTextInfo.h"
 #include "frames/KWAnchorStrategy.h"
 #include "frames/KWOutlineShape.h"
 
@@ -427,7 +428,7 @@ void KWTextDocumentLayout::layout()
                 KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(currentShape->userData());
                 Q_ASSERT(data);
                 data->setPageDirection(page.directionHint());
-                // data->setPage(page); // TODO
+                data->setPage(new KWPageTextInfo(page));
             }
         }
 

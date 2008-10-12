@@ -22,7 +22,6 @@
 #include "KWPageManager.h"
 #include "KWPageStyle.h"
 #include "KoPageLayout.h"
-#include "KoTextPage.h"
 #include "kword_export.h"
 
 #include <KoText.h>
@@ -40,7 +39,7 @@ class KWPageManagerPrivate;
  * on this class.
  * Each KWPage is attached to a KWPageStyle representing the page master.
  */
-class KWORD_EXPORT KWPage : public KoTextPage
+class KWORD_EXPORT KWPage
 {
 public:
     inline KWPage() : priv(0), n(0) {}
@@ -99,8 +98,8 @@ public:
     /// set the pageSide of this page, see the PageSide
     void setPageSide(PageSide ps);
 
-    /// returns the number of this page. reimplemented from the \a KoTextPage interface.
-    int pageNumber(int select = 0, int adjustment = 0) const;
+    /// returns the user visible number of this page.
+    int pageNumber() const;
 
     /**
      * Adjusts the page number of this page and all pages following.
@@ -151,6 +150,7 @@ public:
     uint hash() const;
 
 private:
+    friend class KWPageTextInfo;
     KWPageManagerPrivate *priv;
     int n;
 };
