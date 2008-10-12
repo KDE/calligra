@@ -71,6 +71,9 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
 
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 3 );
+    layout->setRowStretch( 0, 1 );
+    layout->setRowStretch( 1, 1 );
+    layout->setRowStretch( 2, 10 );
 
     QWidget * colorWidget = new QWidget( m_stack );
     QGridLayout * gLayout = new QGridLayout( colorWidget );
