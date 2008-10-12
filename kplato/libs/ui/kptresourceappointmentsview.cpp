@@ -94,6 +94,11 @@ void ResourceAppointmentsTreeView::slotRefreshed()
     hideColumns( lst1, lst2 );
 }
 
+QModelIndex ResourceAppointmentsTreeView::currentIndex() const
+{
+    return selectionModel()->currentIndex();
+}
+
 //-----------------------------------
 
 ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *parent )
@@ -153,25 +158,24 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
 
 void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    //kDebug()<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
+    kDebug()<<index<<pos;
     QString name;
-/*    if ( index.isValid() ) {
-        QObject *obj = m_view->model()->object( index );
-        ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
-        if ( g ) {
-            name = "resourceeditor_group_popup";
-        } else {
-            Resource *r = qobject_cast<Resource*>( obj );
-            if ( r ) {
-                name = "resourceeditor_resource_popup";
-            }
+    if ( index.isValid() ) {
+        Node *n = m_view->model()->node( index );
+        if ( n ) {
+            name = "resourceappointment_popup";
         }
-    }*/
+    }
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
     }
     emit requestPopupMenu( name, pos );
+}
+
+Node *ResourceAppointmentsView::currentNode() const
+{
+    return m_view->model()->node( m_view->currentIndex() );
 }
 
 Resource *ResourceAppointmentsView::currentResource() const

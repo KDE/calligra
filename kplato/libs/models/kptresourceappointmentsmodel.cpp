@@ -662,6 +662,15 @@ QObject *ResourceAppointmentsItemModel::object( const QModelIndex &index ) const
     return o;
 }
 
+Node *ResourceAppointmentsItemModel::node( const QModelIndex &index ) const
+{
+    Appointment *a = appointment( index );
+    if ( a == 0 ) {
+        return 0;
+    }
+    return a->node()->node();
+}
+
 Appointment *ResourceAppointmentsItemModel::appointment( const QModelIndex &index ) const
 {
     if ( ! m_appointments.contains( index.internalPointer() ) ) {

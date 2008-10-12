@@ -309,6 +309,11 @@ private:
     KAction *actionTaskProgress;
     KAction *actionDeleteTask;
     KAction *actionTaskWorkpackage;
+    KAction *actionIndentTask;
+    KAction *actionUnindentTask;
+    KAction *actionMoveTaskUp;
+    KAction *actionMoveTaskDown;
+
     KAction *actionEditResource;
     KAction *actionEditCalendar;
     KAction *actionEditRelation;

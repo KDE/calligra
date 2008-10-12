@@ -813,6 +813,7 @@ void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, 
 {
     kDebug()<<index<<pos;
     if ( ! index.isValid() ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     Node *node = m_view->nodeModel()->node( index );

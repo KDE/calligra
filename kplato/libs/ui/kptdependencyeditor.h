@@ -314,6 +314,7 @@ signals:
     void connectItems( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void itemDoubleClicked( QGraphicsItem * );
     void contextMenuRequested( QGraphicsItem*, const QPoint& );
+    void contextMenuRequested( QGraphicsItem* );
     
 protected:
     virtual void drawBackground ( QPainter * painter, const QRectF & rect );
@@ -362,7 +363,8 @@ signals:
     void selectionChanged( QGraphicsItem * );
     void selectionChanged( QList<QGraphicsItem*> );
     void makeConnection( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
-    
+    void contextMenuRequested( QGraphicsItem*, const QPoint& );
+
 public slots:
     void slotNodeAdded( Node *node );
     void slotNodeRemoved( Node *node );
@@ -376,6 +378,7 @@ protected slots:
     
     void slotSelectedItems(); // HACK due to tt bug 160653
     void slotConnectorClicked( DependencyConnectorItem *item );
+    void slotContextMenuRequested( QGraphicsItem* );
     
 private:
     Project *m_project;

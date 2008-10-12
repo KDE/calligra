@@ -1300,8 +1300,12 @@ void DependencyScene::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent *event )
 
 void DependencyScene::contextMenuEvent ( QGraphicsSceneContextMenuEvent *event )
 {
-    //kDebug()<<event->pos()<<event->scenePos()<<event->screenPos();
-    emit contextMenuRequested( itemAt( event->scenePos() ), event->screenPos() );
+    if ( event->reason() == QGraphicsSceneContextMenuEvent::Mouse ) {
+        kDebug()<<"Mouse:"<<itemAt( event->scenePos())<<event->pos()<<event->scenePos()<<event->screenPos();
+        emit contextMenuRequested( itemAt( event->scenePos() ), event->screenPos() );
+    } else {
+        emit contextMenuRequested( focusItem() );
+    }
 }
 
 //--------------------
@@ -1315,6 +1319,18 @@ DependencyView::DependencyView( QWidget *parent )
     
     connect( scene(), SIGNAL( selectionChanged() ), this, SLOT( slotSelectionChanged() ) );
     connect( scene(), SIGNAL( connectItems( DependencyConnectorItem*, DependencyConnectorItem* ) ), this, SIGNAL( makeConnection( DependencyConnectorItem*, DependencyConnectorItem* ) ) );
+
+    connect( scene(), SIGNAL( contextMenuRequested( QGraphicsItem* ) ), this, SLOT( slotContextMenuRequested( QGraphicsItem* ) ) );
+
+    connect( scene(), SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ), this, SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ) );
+}
+
+void DependencyView::slotContextMenuRequested( QGraphicsItem *item )
+{
+    if ( item ) {
+        kDebug()<<item<<item->boundingRect()<<(item->mapToScene( item->pos() ).toPoint())<<(mapToGlobal( item->mapToParent( item->pos() ).toPoint()));
+        emit contextMenuRequested( item, mapToGlobal( item->mapToScene( item->boundingRect().topRight() ).toPoint() ) );
+    }
 }
 
 void DependencyView::slotConnectorClicked( DependencyConnectorItem *item )
@@ -1502,7 +1518,8 @@ DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
 
     connect( m_view->itemScene(), SIGNAL( itemDoubleClicked( QGraphicsItem* ) ), this, SLOT( slotItemDoubleClicked( QGraphicsItem* ) ) );
     
-    connect( m_view->itemScene(), SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QGraphicsItem*, const QPoint& ) ) );
+    connect( m_view, SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QGraphicsItem*, const QPoint& ) ) );
+
 }
 
 void DependencyEditor::slotItemDoubleClicked( QGraphicsItem *item )
@@ -1621,32 +1638,34 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
 {
     //kDebug()<<item<<","<<pos;
     QString name;
-    if ( item == 0 ) {
-        return;
-    } else if ( item->type() == DependencyNodeItem::Type ) {
-        m_currentnode = static_cast<DependencyNodeItem*>( item )->node();
-        if ( m_currentnode == 0 ) {
-            //kDebug()<<"No node";
-            return;
+    if ( item ) {
+        if ( item->type() == DependencyNodeItem::Type ) {
+            m_currentnode = static_cast<DependencyNodeItem*>( item )->node();
+            if ( m_currentnode == 0 ) {
+                //kDebug()<<"No node";
+                return;
+            }
+            switch ( m_currentnode->type() ) {
+                case Node::Type_Task:
+                case Node::Type_Milestone:
+                    name = "task_popup";
+                    break;
+                case Node::Type_Summarytask:
+                    name = "summarytask_popup";
+                    break;
+                default:
+                    name = "node_popup";
+            }
+            //kDebug()<<m_currentnode->name()<<" :"<<pos;
+        } else if ( item->type() == DependencyLinkItem::Type ) {
+            m_currentrelation = static_cast<DependencyLinkItem*>( item )->relation;
+            if ( m_currentrelation == 0 ) {
+                return;
+            }
+            name = "relation_popup";
+        } else if ( item->type() == DependencyConnectorItem::Type ) {
+            kDebug()<<"DependencyConnectorItem"<<item;
         }
-        switch ( m_currentnode->type() ) {
-            case Node::Type_Task:
-            case Node::Type_Milestone:
-                name = "task_popup";
-                break;
-            case Node::Type_Summarytask:
-                name = "summarytask_popup";
-                break;
-            default:
-                name = "node_popup";
-        }
-        //kDebug()<<m_currentnode->name()<<" :"<<pos;
-    } else if ( item->type() == DependencyLinkItem::Type ) {
-        m_currentrelation = static_cast<DependencyLinkItem*>( item )->relation;
-        if ( m_currentrelation == 0 ) {
-            return;
-        }
-        name = "relation_popup";
     }
     //kDebug()<<name;
     if ( ! name.isEmpty() ) {

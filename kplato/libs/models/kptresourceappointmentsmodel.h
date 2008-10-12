@@ -74,6 +74,7 @@ public:
   
 
     QObject *object( const QModelIndex &index ) const;
+    Node *node( const QModelIndex &index ) const;
     Appointment *appointment( const QModelIndex &index ) const;
     QModelIndex createAppointmentIndex( int row, int col, void *ptr ) const;
     Resource *resource( const QModelIndex &index ) const;

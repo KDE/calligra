@@ -356,7 +356,9 @@ void PertEditor::setAvailableItemEnabled( QTreeWidgetItem *item )
 {
     //kDebug()<<item;
     Node *node = itemToNode( item );
-    Q_ASSERT( node != 0 );
+    if ( node == 0 ) {
+        return;
+    }
     
     Node *selected = itemToNode( m_tasktree->currentItem() );
     if ( selected == 0 || ! m_project->legalToLink( node, selected ) ) {

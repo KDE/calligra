@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="11">
+<kpartgui name="KPlato" version="13">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -103,46 +103,13 @@
         <Separator/>
         <ActionList name="calendareditor_day_list"/>
     </ToolBar>
-    <Menu name="node_popup">
-<!--        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
-        <Separator/> -->
-        <Action name="delete_task"/>
-        <Action name="indent_task"/>
-        <Action name="unindent_task"/>
-        <Action name="move_task_up"/>
-        <Action name="move_task_down"/>
-    </Menu>
     <Menu name="task_popup">
         <Action name="node_properties"/>
-        <Separator/>
-        <!--        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
-        <Separator/> -->
-        <Action name="delete_task"/>
-        <Action name="indent_task"/>
-        <Action name="unindent_task"/>
-        <Action name="move_task_up"/>
-        <Action name="move_task_down"/>
-        <Separator/>
         <Action name="task_progress"/>
-        <Separator/>
         <Action name="task_workpackagecontrol"/>
     </Menu>
     <Menu name="summarytask_popup">
         <Action name="node_properties"/>
-        <Separator/>
-        <!--        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
-        <Separator/> -->
-        <Action name="delete_task"/>
-        <Action name="indent_task"/>
-        <Action name="unindent_task"/>
-        <Action name="move_task_up"/>
-        <Action name="move_task_down"/>
     </Menu>
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
@@ -155,22 +122,14 @@
     <Menu name="taskview_milestone_popup">
         <Action name="task_progress"/>
     </Menu>
-    <Menu name="resourceassigment_popup">
-	    <Action name="task_progress"/>
+    <Menu name="resourceappointment_popup">
+        <Action name="task_progress"/>
     </Menu>
-    <Menu name="resourceview_popup">
-        <Action name="edit_resource"/>
-        <!--        <Separator/>
-        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/> -->
+    <Menu name="resourceassigment_popup">
+        <Action name="task_progress"/>
     </Menu>
     <Menu name="resourceeditor_resource_popup">
         <Action name="edit_resource"/>
-        <!--        <Separator/>
-        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/> -->
     </Menu>
     <Menu name="accountseditor_popup">
         <Action name="add_account"/>

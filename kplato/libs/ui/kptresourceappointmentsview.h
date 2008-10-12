@@ -59,6 +59,8 @@ public:
     void setProject( Project *project ) { model()->setProject( project ); }
     void setScheduleManager( ScheduleManager *sm ) { model()->setScheduleManager( sm ); }
 
+    QModelIndex currentIndex() const;
+    
 protected slots:
     void slotActivated( const QModelIndex index );
 
@@ -81,6 +83,7 @@ public:
     
     virtual void updateReadWrite( bool /*readwrite*/ ) {};
 
+    virtual Node *currentNode() const;
     virtual Resource *currentResource() const;
     virtual ResourceGroup *currentResourceGroup() const;
     

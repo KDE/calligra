@@ -228,6 +228,19 @@ View::View( Part* part, QWidget* parent )
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
+            
+    actionIndentTask = new KAction(KIcon( "edit-indent" ), i18n("Indent Task"), this);
+    actionCollection()->addAction("indent_task", actionIndentTask );
+    connect( actionIndentTask, SIGNAL( triggered( bool ) ), SLOT( slotIndentTask() ) );
+    actionUnindentTask= new KAction(KIcon( "edit-unindent" ), i18n("Unindent Task"), this);
+    actionCollection()->addAction("unindent_task", actionUnindentTask );
+    connect( actionUnindentTask, SIGNAL( triggered( bool ) ), SLOT( slotUnindentTask() ) );
+    actionMoveTaskUp = new KAction(KIcon( "edit-up" ), i18n("Move Task Up"), this);
+    actionCollection()->addAction("move_task_up", actionMoveTaskUp );
+    connect( actionMoveTaskUp, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskUp() ) );
+    actionMoveTaskDown = new KAction(KIcon( "edit-down" ), i18n("Move Task Down"), this);
+    actionCollection()->addAction("move_task_down", actionMoveTaskDown );
+    connect( actionMoveTaskDown, SIGNAL( triggered( bool ) ), SLOT( slotMoveTaskDown() ) );
     
     actionTaskWorkpackage  = new KAction(KIcon( "document-properties" ), i18n("Work Package Control..."), this);
     actionCollection()->addAction("task_workpackagecontrol", actionTaskWorkpackage );
