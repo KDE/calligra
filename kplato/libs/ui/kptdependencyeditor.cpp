@@ -226,6 +226,7 @@ DependencyLinkItem::DependencyLinkItem( DependencyNodeItem *predecessor, Depende
 
     m_arrow->setBrush( Qt::black );
 
+    m_pen = pen();
 }
 
 DependencyLinkItem::~DependencyLinkItem()
@@ -298,13 +299,17 @@ QPointF DependencyLinkItem::endPoint() const
 void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
     setZValue( zValue() + 1 );
-    m_pen = pen();
     setPen( QPen( Qt::black, 2 ) );
     m_arrow->setPen( pen() );
     update();
 }
 
 void DependencyLinkItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*event*/ )
+{
+    resetHooverIndication();
+}
+
+void DependencyLinkItem::resetHooverIndication()
 {
     setZValue( zValue() - 1 );
     setPen( m_pen );
@@ -420,6 +425,11 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
 DependencyScene *DependencyConnectorItem::itemScene() const
 {
     return static_cast<DependencyScene*>( scene() );
+}
+
+DependencyNodeItem *DependencyConnectorItem::nodeItem() const
+{
+    return static_cast<DependencyNodeItem*>( parentItem() );
 }
 
 Node *DependencyConnectorItem::node() const
@@ -803,18 +813,22 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
         old->update();
     }
     if ( item ) {
-        foreach ( QGraphicsItem *item, items() ) {
-            if ( item != m_connectionitem && item->type() != DependencyConnectorItem::Type )
-                item->setAcceptsHoverEvents( false );
+        foreach ( QGraphicsItem *i, items() ) {
+            if ( i != m_connectionitem && i->type() != DependencyConnectorItem::Type ) {
+                i->setAcceptsHoverEvents( false );
+                if ( i->type() == DependencyLinkItem::Type ) {
+                    static_cast<DependencyLinkItem*>( i )->resetHooverIndication();
+                }
+            }
         }
         item->setCursor( Qt::UpArrowCursor );
         m_connectionitem->setPredConnector( item );
         m_connectionitem->show();
         item->update();
     } else {
-        foreach ( QGraphicsItem *item, items() ) {
-            if ( item != m_connectionitem && item->type() != DependencyConnectorItem::Type )
-                item->setAcceptsHoverEvents( true );
+        foreach ( QGraphicsItem *i, items() ) {
+            if ( i != m_connectionitem && i->type() != DependencyConnectorItem::Type )
+                i->setAcceptsHoverEvents( true );
         }
     }
 }
@@ -1025,6 +1039,63 @@ DependencyLinkItem *DependencyScene::findItem( const Relation* rel ) const
     foreach ( QGraphicsItem *i, itemList( DependencyLinkItem::Type ) ) {
         if ( static_cast<DependencyLinkItem*>( i )->relation == rel ) {
             return static_cast<DependencyLinkItem*>( i );
+        }
+    }
+    return 0;
+}
+
+DependencyLinkItem *DependencyScene::findItem( const DependencyConnectorItem *c1, const DependencyConnectorItem *c2, bool exact ) const
+{
+    DependencyNodeItem *n1 = c1->nodeItem();
+    DependencyNodeItem *n2 = c2->nodeItem();
+    foreach ( QGraphicsItem *i, itemList( DependencyLinkItem::Type ) ) {
+        DependencyLinkItem *link = static_cast<DependencyLinkItem*>( i );
+        if ( link->predItem == n1 && link->succItem == n2 ) {
+            switch ( link->relation->type() ) {
+                case Relation::StartStart:
+                    if ( c1->ctype() == DependencyNodeItem::Start && c2->ctype() == DependencyNodeItem::Start ) {
+                        return link;
+                    }
+                    break;
+                case Relation::FinishStart:
+                    if ( c1->ctype() == DependencyNodeItem::Finish && c2->ctype() == DependencyNodeItem::Start ) {
+                        return link;
+                    }
+                    break;
+                case Relation::FinishFinish:
+                    if ( c1->ctype() == DependencyNodeItem::Finish && c2->ctype() == DependencyNodeItem::Finish ) {
+                        return link;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return 0;
+        }
+        if ( link->predItem == n2 && link->succItem == n1 ) {
+            if ( exact ) {
+                return 0;
+            }
+            switch ( link->relation->type() ) {
+                case Relation::StartStart:
+                    if ( c2->ctype() == DependencyNodeItem::Start && c1->ctype() == DependencyNodeItem::Start ) {
+                        return link;
+                    }
+                    break;
+                case Relation::FinishStart:
+                    if ( c1->ctype() == DependencyNodeItem::Finish && c1->ctype() == DependencyNodeItem::Start ) {
+                        return link;
+                    }
+                    break;
+                case Relation::FinishFinish:
+                    if ( c1->ctype() == DependencyNodeItem::Finish && c1->ctype() == DependencyNodeItem::Finish ) {
+                        return link;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return 0;
         }
     }
     return 0;
@@ -1303,9 +1374,24 @@ void DependencyScene::contextMenuEvent ( QGraphicsSceneContextMenuEvent *event )
     if ( event->reason() == QGraphicsSceneContextMenuEvent::Mouse ) {
         kDebug()<<"Mouse:"<<itemAt( event->scenePos())<<event->pos()<<event->scenePos()<<event->screenPos();
         emit contextMenuRequested( itemAt( event->scenePos() ), event->screenPos() );
-    } else {
-        emit contextMenuRequested( focusItem() );
+        return;
     }
+    if ( focusItem() ) {
+        if ( focusItem()->type() == DependencyConnectorItem::Type ) {
+            DependencyConnectorItem *to = static_cast<DependencyConnectorItem*>( focusItem() );
+            DependencyConnectorItem *from = fromItem();
+            kDebug()<<"DependencyConnectorItem:"<<from<<to;
+            if ( from ) {
+                DependencyLinkItem *link = findItem( from, to );
+                if ( link ) {
+                    emit dependencyContextMenuRequested( link, to );
+                    setFromItem( 0 ); // avoid showing spurious DependencyCreatorItem
+                    return;
+                } else kDebug()<<"No link";
+            }
+        } else kDebug()<<"Not connector type"<<focusItem();
+    } else kDebug()<<"No focusItem";
+    emit contextMenuRequested( focusItem() );
 }
 
 //--------------------
@@ -1322,10 +1408,20 @@ DependencyView::DependencyView( QWidget *parent )
 
     connect( scene(), SIGNAL( contextMenuRequested( QGraphicsItem* ) ), this, SLOT( slotContextMenuRequested( QGraphicsItem* ) ) );
 
+    connect( scene(), SIGNAL( dependencyContextMenuRequested( DependencyLinkItem*, DependencyConnectorItem* ) ), this, SLOT( slotDependencyContextMenuRequested( DependencyLinkItem*, DependencyConnectorItem* ) ) );
+
     connect( scene(), SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ), this, SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ) );
 }
 
 void DependencyView::slotContextMenuRequested( QGraphicsItem *item )
+{
+    if ( item ) {
+        kDebug()<<item<<item->boundingRect()<<(item->mapToScene( item->pos() ).toPoint())<<(mapToGlobal( item->mapToParent( item->pos() ).toPoint()));
+        emit contextMenuRequested( item, mapToGlobal( item->mapToScene( item->boundingRect().topRight() ).toPoint() ) );
+    }
+}
+
+void DependencyView::slotDependencyContextMenuRequested( DependencyLinkItem *item, DependencyConnectorItem *connector )
 {
     if ( item ) {
         kDebug()<<item<<item->boundingRect()<<(item->mapToScene( item->pos() ).toPoint())<<(mapToGlobal( item->mapToParent( item->pos() ).toPoint()));
@@ -1659,12 +1755,11 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             //kDebug()<<m_currentnode->name()<<" :"<<pos;
         } else if ( item->type() == DependencyLinkItem::Type ) {
             m_currentrelation = static_cast<DependencyLinkItem*>( item )->relation;
-            if ( m_currentrelation == 0 ) {
-                return;
+            if ( m_currentrelation ) {
+                name = "relation_popup";
             }
-            name = "relation_popup";
         } else if ( item->type() == DependencyConnectorItem::Type ) {
-            kDebug()<<"DependencyConnectorItem"<<item;
+            kDebug()<<"DependencyConnectorItem:"<<item;
         }
     }
     //kDebug()<<name;

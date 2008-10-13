@@ -105,6 +105,8 @@ public:
     
     void setItemVisible( bool show );
 
+    void resetHooverIndication();
+    
 protected:
     virtual void hoverEnterEvent( QGraphicsSceneHoverEvent *event );
     virtual void hoverLeaveEvent( QGraphicsSceneHoverEvent *event );
@@ -233,6 +235,7 @@ public:
     DependencyScene *itemScene() const;
     Node* node() const;
     QPointF connectorPoint() const;
+    DependencyNodeItem *nodeItem() const;
     
 protected:
     void hoverEnterEvent ( QGraphicsSceneHoverEvent *event );
@@ -281,6 +284,7 @@ public:
     int row( qreal y ) const { return (int)( y / gridHeight() ); }
     
     DependencyLinkItem *findItem( const Relation *rel ) const;
+    DependencyLinkItem *findItem( const DependencyConnectorItem *c1, const DependencyConnectorItem *c2, bool exact = true ) const;
     DependencyNodeItem *findItem( const Node *node ) const;
     
     DependencyNodeItem *findPrevItem( Node *node )  const;
@@ -315,6 +319,7 @@ signals:
     void itemDoubleClicked( QGraphicsItem * );
     void contextMenuRequested( QGraphicsItem*, const QPoint& );
     void contextMenuRequested( QGraphicsItem* );
+    void dependencyContextMenuRequested( DependencyLinkItem*, DependencyConnectorItem* );
     
 protected:
     virtual void drawBackground ( QPainter * painter, const QRectF & rect );
@@ -379,7 +384,8 @@ protected slots:
     void slotSelectedItems(); // HACK due to tt bug 160653
     void slotConnectorClicked( DependencyConnectorItem *item );
     void slotContextMenuRequested( QGraphicsItem* );
-    
+    void slotDependencyContextMenuRequested( DependencyLinkItem *item, DependencyConnectorItem *connector );
+
 private:
     Project *m_project;
 };
