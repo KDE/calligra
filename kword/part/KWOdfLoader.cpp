@@ -36,7 +36,6 @@
 #include <KoXmlNS.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
-#include <KoImageData.h>
 #include <KoTextShapeData.h>
 #include <KoTextAnchor.h>
 #include <KoShapeContainer.h>
