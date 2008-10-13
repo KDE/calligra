@@ -461,7 +461,7 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     }
 
     //write the text with its formatting inside a <text:span> tag
-    KoGenStyle textStyle(KoGenStyle::StyleAuto, "text");
+    KoGenStyle textStyle(KoGenStyle::StyleTextAuto, "text");
     writeFormattedText(&textStyle, chp, m_currentStyle ? &m_currentStyle->chp() : 0, newText.string(), true, QString("T"));
 
 } //end runOfText()
