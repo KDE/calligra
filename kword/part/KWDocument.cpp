@@ -153,19 +153,26 @@ void KWDocument::paintContent(QPainter&, const QRect& rect)
 KoView* KWDocument::createViewInstance(QWidget* parent)
 {
     KWView *view = new KWView(m_viewMode, this, parent);
+    bool switchToolCalled = false;
     foreach(KWFrameSet *fs, m_frameSets) {
         if (fs->frameCount() == 0)
             continue;
         foreach(KWFrame *frame, fs->frames())
-        view->kwcanvas()->shapeManager()->add(frame->shape());
+            view->kwcanvas()->shapeManager()->add(frame->shape());
+        if (switchToolCalled)
+            continue;
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet) {
             KoSelection *selection = view->kwcanvas()->shapeManager()->selection();
             selection->select(fs->frames().first()->shape());
+
             KoToolManager::instance()->switchToolRequested(
                 KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
+            switchToolCalled = true;
         }
     }
+    if (!switchToolCalled)
+        KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
 
     return view;
 }
