@@ -50,7 +50,7 @@ void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Wo
 
 }
 
-void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF>, int type )
+void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf, int type )
 {
     kDebug(30513) << "Escher data found";
 
@@ -99,15 +99,19 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
     //start frame tag for the picture
     m_bodyWriter->startElement("draw:frame");
     m_bodyWriter->addAttribute("draw:style-name", styleName.toUtf8());
-    //TODO these values definitely shouldn't be hardcoded
-    m_bodyWriter->addAttribute("svg:height", "2.5in");
-    m_bodyWriter->addAttribute("svg:width", "3.75in");
+    //mx, my = horizontal & vertical user scaling in .001 %
+    double horiz_scale = picf->mx / 1000.0;
+    double vert_scale = picf->my / 1000.0;
+    double height = ((double) picf->dyaGoal * vert_scale) / 20.0; //twips -> pt
+    double width = ((double) picf->dxaGoal * horiz_scale) / 20.0; //twips -> pt
+    m_bodyWriter->addAttributePt("svg:height", height);
+    m_bodyWriter->addAttributePt("svg:width", width);
     //start the actual image tag
     m_bodyWriter->startElement("draw:image");
     m_bodyWriter->addAttribute("xlink:href", picName);
     m_bodyWriter->addAttribute("xlink:type", "simple");
     m_bodyWriter->addAttribute("xlink:show", "embed");
-    m_bodyWriter->addAttribute("xlink:actuate", "onload");
+    m_bodyWriter->addAttribute("xlink:actuate", "onLoad");
     m_bodyWriter->endElement();//draw:image
     m_bodyWriter->endElement();//draw:frame
 
