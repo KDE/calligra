@@ -240,7 +240,7 @@ public:
         return cost;
     }
     double bcwpTotalEffort() const {
-        double eff;
+        double eff = 0.0;
         if ( ! m_days.isEmpty() ) {
             eff = m_days.values().last().bcwpEffort();
         }
