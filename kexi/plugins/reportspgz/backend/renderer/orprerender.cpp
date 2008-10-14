@@ -260,7 +260,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
     kDebug();
 
     if (detailData.detail != 0) {
-        KexiDB::Cursor *curs;
+        KexiDB::Cursor *curs = 0;
         _subtotContextDetail = &detailData;
 
         if (_query) {
