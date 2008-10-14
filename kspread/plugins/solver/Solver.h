@@ -20,7 +20,7 @@
 #ifndef KSPREAD_SOLVER
 #define KSPREAD_SOLVER
 
-#include <gsl_multimin.h>
+#include <gsl/gsl_multimin.h>
 
 #include <kparts/plugin.h>
 
