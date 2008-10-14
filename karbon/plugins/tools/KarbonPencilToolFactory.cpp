@@ -32,7 +32,7 @@ KarbonPencilToolFactory::KarbonPencilToolFactory(QObject *parent)
     setToolType( mainToolType() );
     setIcon( "draw-freehand" );
     setPriority( 3 );
-    setActivationShapeId("flake/always");
+    setActivationShapeId("flake/edit");
 }
 
 KarbonPencilToolFactory::~KarbonPencilToolFactory() {

@@ -33,7 +33,7 @@ KPrAnimationToolFactory::KPrAnimationToolFactory(QObject *parent)
     setToolType(mainToolType());
     setPriority(40);
     setIcon("animation-kpresenter");
-    setActivationShapeId("flake/always");
+    setActivationShapeId("flake/edit");
 }
 
 KPrAnimationToolFactory::~KPrAnimationToolFactory()
