@@ -773,7 +773,7 @@ Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
 double Task::budgetedCostPerformed( const QDate &date, long id ) const
 {
     //kDebug();
-    double c;
+    double c = 0.0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
             c += n->budgetedCostPerformed( date, id );
