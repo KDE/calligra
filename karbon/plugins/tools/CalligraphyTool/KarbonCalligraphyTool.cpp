@@ -147,14 +147,13 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     {
         m_lastShape = m_shape;
         m_canvas->addCommand( cmd );
+        m_canvas->updateCanvas( m_shape->boundingRect() );
     }
     else
     {
         // TODO: when may this happen????
         delete m_shape;
     }
-
-    m_canvas->updateCanvas( m_shape->boundingRect() );
 
     m_shape = 0;
 }
