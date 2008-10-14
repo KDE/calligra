@@ -1370,114 +1370,114 @@ Record::~Record()
 
 Record* Record::create( unsigned type )
 {
-  Record* record = 0;
-
-  if( type == BOFRecord::id )
-    record = new BOFRecord();
-
-  else if( type == EOFRecord::id )
-    record = new EOFRecord();
-
-  if( type == BackupRecord::id )
-    record = new BackupRecord();
-
-  if( type == BlankRecord::id )
-    record = new BlankRecord();
-
-  if( type == BoolErrRecord::id )
-    record = new BoolErrRecord();
-
-  if( type == BottomMarginRecord::id )
-    record = new BottomMarginRecord();
-
-  if( type == BoundSheetRecord::id )
-    record = new BoundSheetRecord();
-
-  if( type == CalcModeRecord::id )
-    record = new CalcModeRecord();
-
-  if( type == ColInfoRecord::id )
-    record = new ColInfoRecord();
-
-  if( type == DateModeRecord::id )
-    record = new DateModeRecord();
-
-  if( type == DimensionRecord::id )
-    record = new DimensionRecord();
-
-  if( type == ExternNameRecord::id )
-    record = new ExternNameRecord();
-
-  else if( type == FilepassRecord::id )
-    record = new FilepassRecord();
-
-  else if( type == FontRecord::id )
-    record = new FontRecord();
-
-  else if( type == FooterRecord::id )
-    record = new FooterRecord();
-
-  else if( type == FormatRecord::id )
-    record = new FormatRecord();
-
-  else if( type == FormulaRecord::id )
-    record = new FormulaRecord();
-
-  else if( type == HeaderRecord::id )
-    record = new HeaderRecord();
-
-  else if( type == LabelRecord::id )
-    record = new LabelRecord();
-
-  else if( type == LabelSSTRecord::id )
-    record = new LabelSSTRecord();
-
-  if( type == LeftMarginRecord::id )
-    record = new LeftMarginRecord();
-
-  else if( type == MergedCellsRecord::id )
-    record = new MergedCellsRecord();
-
-  else if( type == MulBlankRecord::id )
-    record = new MulBlankRecord();
-
-  else if( type == MulRKRecord::id )
-    record = new MulRKRecord();
-
-  else if( type == NameRecord::id )
-    record = new NameRecord();
-
-  else if( type == NumberRecord::id )
-    record = new NumberRecord();
-
-  else if( type == PaletteRecord::id )
-    record = new PaletteRecord();
-
-  else if( type == RightMarginRecord::id )
-    record = new RightMarginRecord();
-
-  else if( type == RKRecord::id )
-    record = new RKRecord();
-
-  else if( type == RowRecord::id )
-    record = new RowRecord();
-
-  else if( type == RStringRecord::id )
-    record = new RStringRecord();
-
-  else if( type == SSTRecord::id )
-    record = new SSTRecord();
-
-  else if( type == StringRecord::id )
-    record = new StringRecord();
-
-  else if( type == XFRecord::id )
-    record = new XFRecord();
-
-  else if( type == TopMarginRecord::id )
-    record = new TopMarginRecord();
-
-  return record;
+  switch( type )
+  {
+    case BOFRecord::id:
+      return new BOFRecord();
+  
+    case EOFRecord::id:
+      return new EOFRecord();
+  
+    case BackupRecord::id:
+      return new BackupRecord();
+  
+    case BlankRecord::id:
+      return new BlankRecord();
+  
+    case BoolErrRecord::id:
+      return new BoolErrRecord();
+  
+    case BottomMarginRecord::id:
+      return new BottomMarginRecord();
+  
+    case BoundSheetRecord::id:
+      return new BoundSheetRecord();
+  
+    case CalcModeRecord::id:
+      return new CalcModeRecord();
+  
+    case ColInfoRecord::id:
+      return new ColInfoRecord();
+  
+    case DateModeRecord::id:
+      return new DateModeRecord();
+  
+    case DimensionRecord::id:
+      return new DimensionRecord();
+  
+    case ExternNameRecord::id:
+      return new ExternNameRecord();
+  
+    case FilepassRecord::id:
+      return new FilepassRecord();
+  
+    case FontRecord::id:
+      return new FontRecord();
+  
+    case FooterRecord::id:
+      return new FooterRecord();
+  
+    case FormatRecord::id:
+      return new FormatRecord();
+  
+    case FormulaRecord::id:
+      return new FormulaRecord();
+  
+    case HeaderRecord::id:
+      return new HeaderRecord();
+  
+    case LabelRecord::id:
+      return new LabelRecord();
+  
+    case LabelSSTRecord::id:
+      return new LabelSSTRecord();
+  
+    case LeftMarginRecord::id:
+      return new LeftMarginRecord();
+  
+    case MergedCellsRecord::id:
+      return new MergedCellsRecord();
+  
+    case MulBlankRecord::id:
+      return new MulBlankRecord();
+  
+    case MulRKRecord::id:
+      return new MulRKRecord();
+  
+    case NameRecord::id:
+      return new NameRecord();
+  
+    case NumberRecord::id:
+      return new NumberRecord();
+  
+    case PaletteRecord::id:
+      return new PaletteRecord();
+  
+    case RightMarginRecord::id:
+      return new RightMarginRecord();
+  
+    case RKRecord::id:
+      return new RKRecord();
+  
+    case RowRecord::id:
+      return new RowRecord();
+  
+    case RStringRecord::id:
+      return new RStringRecord();
+  
+    case SSTRecord::id:
+      return new SSTRecord();
+  
+    case StringRecord::id:
+      return new StringRecord();
+  
+    case XFRecord::id:
+      return new XFRecord();
+  
+    case TopMarginRecord::id:
+      return new TopMarginRecord();
+  }
+  return 0;
 }
 
 void Record::setPosition( unsigned pos )
