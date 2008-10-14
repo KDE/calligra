@@ -679,6 +679,8 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
                                      ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
             if ( dataSetCount == (*oldModel)->dataDimensions() ) {
+                Q_ASSERT( oldDiagram );
+                Q_ASSERT( *oldDiagram );
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
                 if ( plane ) {
                     plane->takeDiagram( (*oldDiagram) );
@@ -689,8 +691,6 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
                 if ( d->plotArea->parent()->legend()->kdLegend() ) {
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
                 }
-                Q_ASSERT( oldDiagram );
-                Q_ASSERT( *oldDiagram );
                 if ( *oldDiagram )
                     delete *oldDiagram;
                 delete *oldModel;
@@ -1284,6 +1284,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
             const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
                                      ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
             if ( dataSetCount == (*oldModel)->dataDimensions() ) {
+                Q_ASSERT( oldDiagram );
+                Q_ASSERT( *oldDiagram );
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
                 if ( plane ) {
                     plane->takeDiagram( (*oldDiagram) );
@@ -1292,8 +1294,6 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
                 }
                 if ( d->plotArea->parent()->legend()->kdLegend() )
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
-                Q_ASSERT( oldDiagram );
-                Q_ASSERT( *oldDiagram );
                 if ( *oldDiagram )
                     delete *oldDiagram;
                 delete *oldModel;
