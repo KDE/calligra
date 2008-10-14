@@ -1444,7 +1444,7 @@ Record* Record::create( unsigned type )
   else if( type == MulRKRecord::id )
     record = new MulRKRecord();
 
-  if( type == NameRecord::id )
+  else if( type == NameRecord::id )
     record = new NameRecord();
 
   else if( type == NumberRecord::id )
