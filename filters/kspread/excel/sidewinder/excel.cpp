@@ -1370,113 +1370,111 @@ Record::~Record()
 
 Record* Record::create( unsigned type )
 {
-  switch( type )
-  {
-    case BOFRecord::id:
-      return new BOFRecord();
+  if( type ==BOFRecord::id)
+    return new BOFRecord();
+
+  else if( type ==EOFRecord::id)
+    return new EOFRecord();
+
+  else if( type ==BackupRecord::id)
+    return new BackupRecord();
+
+  else if( type ==BlankRecord::id)
+    return new BlankRecord();
+
+  else if( type ==BoolErrRecord::id)
+    return new BoolErrRecord();
+
+  else if( type ==BottomMarginRecord::id)
+    return new BottomMarginRecord();
+
+  else if( type ==BoundSheetRecord::id)
+    return new BoundSheetRecord();
+
+  else if( type ==CalcModeRecord::id)
+    return new CalcModeRecord();
+
+  else if( type ==ColInfoRecord::id)
+    return new ColInfoRecord();
+
+  else if( type ==DateModeRecord::id)
+    return new DateModeRecord();
+
+  else if( type ==DimensionRecord::id)
+    return new DimensionRecord();
+
+  else if( type ==ExternNameRecord::id)
+    return new ExternNameRecord();
+
+  else if( type ==FilepassRecord::id)
+    return new FilepassRecord();
+
+  else if( type ==FontRecord::id)
+    return new FontRecord();
+
+  else if( type ==FooterRecord::id)
+    return new FooterRecord();
+
+  else if( type ==FormatRecord::id)
+    return new FormatRecord();
+
+  else if( type ==FormulaRecord::id)
+    return new FormulaRecord();
+
+  else if( type ==HeaderRecord::id)
+    return new HeaderRecord();
+
+  else if( type ==LabelRecord::id)
+    return new LabelRecord();
+
+  else if( type ==LabelSSTRecord::id)
+    return new LabelSSTRecord();
+
+  else if( type ==LeftMarginRecord::id)
+    return new LeftMarginRecord();
+
+  else if( type ==MergedCellsRecord::id)
+    return new MergedCellsRecord();
+
+  else if( type ==MulBlankRecord::id)
+    return new MulBlankRecord();
+
+  else if( type ==MulRKRecord::id)
+    return new MulRKRecord();
+
+  else if( type ==NameRecord::id)
+    return new NameRecord();
+
+  else if( type ==NumberRecord::id)
+    return new NumberRecord();
+
+  else if( type ==PaletteRecord::id)
+    return new PaletteRecord();
+
+  else if( type ==RightMarginRecord::id)
+    return new RightMarginRecord();
+
+  else if( type ==RKRecord::id)
+    return new RKRecord();
+
+  else if( type ==RowRecord::id)
+    return new RowRecord();
+
+  else if( type ==RStringRecord::id)
+    return new RStringRecord();
+
+  else if( type ==SSTRecord::id)
+    return new SSTRecord();
+
+  else if( type ==StringRecord::id)
+    return new StringRecord();
+
+  else if( type ==XFRecord::id)
+    return new XFRecord();
+
+  else if( type ==TopMarginRecord::id)
+    return new TopMarginRecord();
   
-    case EOFRecord::id:
-      return new EOFRecord();
-  
-    case BackupRecord::id:
-      return new BackupRecord();
-  
-    case BlankRecord::id:
-      return new BlankRecord();
-  
-    case BoolErrRecord::id:
-      return new BoolErrRecord();
-  
-    case BottomMarginRecord::id:
-      return new BottomMarginRecord();
-  
-    case BoundSheetRecord::id:
-      return new BoundSheetRecord();
-  
-    case CalcModeRecord::id:
-      return new CalcModeRecord();
-  
-    case ColInfoRecord::id:
-      return new ColInfoRecord();
-  
-    case DateModeRecord::id:
-      return new DateModeRecord();
-  
-    case DimensionRecord::id:
-      return new DimensionRecord();
-  
-    case ExternNameRecord::id:
-      return new ExternNameRecord();
-  
-    case FilepassRecord::id:
-      return new FilepassRecord();
-  
-    case FontRecord::id:
-      return new FontRecord();
-  
-    case FooterRecord::id:
-      return new FooterRecord();
-  
-    case FormatRecord::id:
-      return new FormatRecord();
-  
-    case FormulaRecord::id:
-      return new FormulaRecord();
-  
-    case HeaderRecord::id:
-      return new HeaderRecord();
-  
-    case LabelRecord::id:
-      return new LabelRecord();
-  
-    case LabelSSTRecord::id:
-      return new LabelSSTRecord();
-  
-    case LeftMarginRecord::id:
-      return new LeftMarginRecord();
-  
-    case MergedCellsRecord::id:
-      return new MergedCellsRecord();
-  
-    case MulBlankRecord::id:
-      return new MulBlankRecord();
-  
-    case MulRKRecord::id:
-      return new MulRKRecord();
-  
-    case NameRecord::id:
-      return new NameRecord();
-  
-    case NumberRecord::id:
-      return new NumberRecord();
-  
-    case PaletteRecord::id:
-      return new PaletteRecord();
-  
-    case RightMarginRecord::id:
-      return new RightMarginRecord();
-  
-    case RKRecord::id:
-      return new RKRecord();
-  
-    case RowRecord::id:
-      return new RowRecord();
-  
-    case RStringRecord::id:
-      return new RStringRecord();
-  
-    case SSTRecord::id:
-      return new SSTRecord();
-  
-    case StringRecord::id:
-      return new StringRecord();
-  
-    case XFRecord::id:
-      return new XFRecord();
-  
-    case TopMarginRecord::id:
-      return new TopMarginRecord();
-  }
   return 0;
 }
 
