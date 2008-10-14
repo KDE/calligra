@@ -117,7 +117,7 @@ void FormulaCursor::insertText( const QString& text )
 
 void FormulaCursor::insertData( const QString& data )
 {
-    BasicElement* elementToInsert;
+    BasicElement* elementToInsert = 0;
 
     // MathML data to load
     if( data.startsWith( '<' ) ) {
@@ -130,6 +130,8 @@ void FormulaCursor::insertData( const QString& data )
     else
         elementToInsert = ElementFactory::createElement( data, m_currentElement );
 
+    Q_ASSERT( elementToInsert );
+    
     insertElement( elementToInsert );
 }
 
