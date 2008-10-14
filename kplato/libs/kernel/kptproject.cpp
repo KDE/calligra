@@ -1558,7 +1558,7 @@ Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
 double Project::budgetedCostPerformed( const QDate &date, long id ) const
 {
     //kDebug();
-    double c;
+    double c = 0.0;
     foreach (Node *n, childNodeIterator()) {
         c += n->budgetedCostPerformed( date, id );
     }
