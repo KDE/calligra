@@ -399,7 +399,6 @@ void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int 
     if( ! pic )
         return;
 
-    pic->init( mDoc->dataCenterMap() );
     pic->setUserData( data );
     pic->setPosition( QPointF(x,y) );
     if( sw < 0 )
@@ -562,7 +561,7 @@ KoShape * WMFImportParser::createShape( const QString &shapeID )
         return 0;
     }
 
-    KoShape * shape = factory->createDefaultShapeAndInit( 0 );
+    KoShape * shape = factory->createDefaultShapeAndInit( mDoc->dataCenterMap() );
     if( shape && shape->shapeId().isEmpty() )
         shape->setShapeId( factory->id() );
 
