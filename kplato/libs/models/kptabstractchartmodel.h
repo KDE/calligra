@@ -126,7 +126,8 @@ public:
         AxisMaxRole,
         AxisTypeRole,
         AxisDataTypeRole,
-        AxisStartDateRole
+        AxisStartDateRole,
+        DataLabelRole
     };
     
     /// Defines the axis' position

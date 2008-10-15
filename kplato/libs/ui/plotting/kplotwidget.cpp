@@ -32,7 +32,7 @@
 #include <QtAlgorithms>
 
 #include "kplotaxis.h"
-#include "kplotpoint.h"
+#include <kplotpoint.h>
 #include "kplotobject.h"
 
 #define XPADDING 20

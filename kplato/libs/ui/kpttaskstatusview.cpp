@@ -60,6 +60,8 @@
 #include "plotting/kplotobject.h"
 #include "plotting/kplotaxis.h"
 
+#include <kplotpoint.h>
+
 namespace KPlato
 {
 
@@ -672,6 +674,7 @@ void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAx
     QVariantList xlst = data[0].toList();
     QVariantList ylst = data[1].toList();
     QVariant color = m_model.data( index, axisSet, Qt::ForegroundRole );
+    QVariant label = m_model.data( index, axisSet, AbstractChartModel::DataLabelRole );
     KPlotObject *kpo = new KPlotObject( color.value<QColor>(), KPlotObject::Lines, 4 );
     double factor = plotwidget->dataRect().height() / plotwidget->secondaryDataRect().height();
     for (int i = 0; i < ylst.count(); ++i ) {
@@ -680,7 +683,11 @@ void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAx
         if ( axisSet.number() == 1 ) {
             y *= factor;
         }
-        kpo->addPoint( xlst[i].toInt(), y );
+        KPlotPoint *p = new KPlotPoint( xlst[i].toInt(), y );
+        if ( label.isValid() && i == ylst.count() / 2 ) {
+            p->setLabel( label.toString() );
+        }
+        kpo->addPoint( p );
     }
     plotwidget->addPlotObject( kpo );
 }

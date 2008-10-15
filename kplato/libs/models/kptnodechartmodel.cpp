@@ -295,18 +295,37 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
         if ( m_dataShown.showCost && axis.number() == 0 ) {
             //kDebug()<<"cost"<<axis;
             switch ( idx.userData ) {
-                case BCWS: return QColor( Qt::green );
+                case BCWS: return QColor( Qt::darkGreen );
                 case BCWP: return QColor( Qt::red );
-                case ACWP: return QColor( Qt::blue );
+                case ACWP: return QColor( Qt::darkRed );
             }
         } else {
             //kDebug()<<"effort"<<axis;
             switch ( idx.userData ) {
                 case BCWS: return QColor( Qt::black );
-                case BCWP: return QColor( Qt::gray );
-                case ACWP: return QColor( Qt::yellow );
+                case BCWP: return QColor( Qt::darkGray );
+                case ACWP: return QColor( Qt::darkBlue );
             }
         }
+        return QVariant();
+    }
+    if ( role == AbstractChartModel::DataLabelRole ) {
+        if ( m_dataShown.showCost && axis.number() == 0 ) {
+            //kDebug()<<"cost"<<axis;
+            switch ( idx.userData ) {
+                case BCWS: return i18n( "BCWS (Cost)" );
+                case BCWP: return i18n( "BCWP (Cost)" );
+                case ACWP: return i18n( "ACWP (Cost)" );
+            }
+        } else {
+            //kDebug()<<"effort"<<axis;
+            switch ( idx.userData ) {
+                case BCWS: return i18n( "BCWS (Effort)" );
+                case BCWP: return i18n( "BCWP (Effort)" );
+                case ACWP: return i18n( "ACWP (Effort)" );
+            }
+        }
+        return QVariant();
     }
     return QVariant();
 }
