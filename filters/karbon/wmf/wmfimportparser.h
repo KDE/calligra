@@ -120,6 +120,8 @@ private:
     double scaleH( int height );
 
 private:
+    KoShape * createShape( const QString &shapeID );
+
     KarbonDocument *mDoc;
     QRegion   mClippingRegion;
     QPen      mPen;

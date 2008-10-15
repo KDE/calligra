@@ -29,6 +29,8 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoShapeFactory.h>
+#include <KoShapeRegistry.h>
 
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
@@ -193,9 +195,14 @@ void WMFImportParser::moveTo( int left, int top ) {
 
 
 void WMFImportParser::lineTo( int left, int top ) {
-    KoPathShape * line = new KoPathShape();
+    KoPathShape * line = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+    if( ! line )
+        return;
+    
     line->moveTo( QPointF( coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y()) ) );
     line->lineTo( QPointF( coordX(left), coordY(top) ) );
+    line->normalize();
+
     appendPen( *line );
 
     mDoc->add( line );
@@ -207,7 +214,10 @@ void WMFImportParser::lineTo( int left, int top ) {
 void WMFImportParser::drawRect( int left, int top, int width, int height ) {
     QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
 
-    KoRectangleShape * rectangle = new KoRectangleShape();
+    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>( createShape( KoRectangleShapeId ) );
+    if( ! rectangle )
+        return;
+    
     rectangle->setPosition( bound.topLeft() );
     rectangle->setSize( bound.size() );
 
@@ -221,7 +231,10 @@ void WMFImportParser::drawRect( int left, int top, int width, int height ) {
 void WMFImportParser::drawRoundRect( int left, int top, int width, int height, int roundw, int roundh ) {
     QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
 
-    KoRectangleShape * rectangle = new KoRectangleShape();
+    KoRectangleShape * rectangle = static_cast<KoRectangleShape*>( createShape( KoRectangleShapeId ) );
+    if( ! rectangle )
+        return;
+    
     rectangle->setPosition( bound.topLeft() );
     rectangle->setSize( bound.size() );
     rectangle->setCornerRadiusX( 2.0 * qAbs( roundw )  );
@@ -237,7 +250,10 @@ void WMFImportParser::drawRoundRect( int left, int top, int width, int height, i
 void WMFImportParser::drawEllipse( int left, int top, int width, int height ) {
     QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
 
-    KoEllipseShape *ellipse = new KoEllipseShape();
+    KoEllipseShape *ellipse = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
+    if( ! ellipse )
+        return;
+    
     ellipse->setPosition( bound.topLeft() );
     ellipse->setSize( bound.size() );
 
@@ -255,7 +271,10 @@ void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen 
 
     QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
 
-    KoEllipseShape * arc = new KoEllipseShape();
+    KoEllipseShape * arc = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
+    if( ! arc )
+        return;
+
     arc->setType( KoEllipseShape::Arc );
     arc->setStartAngle( start );
     arc->setEndAngle( end );
@@ -276,7 +295,10 @@ void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen 
 
     QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
 
-    KoEllipseShape * pie = new KoEllipseShape();
+    KoEllipseShape * pie = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
+    if( ! pie )
+        return;
+
     pie->setType( KoEllipseShape::Pie );
     pie->setStartAngle( start );
     pie->setEndAngle( end );
@@ -297,7 +319,10 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
 
     QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
 
-    KoEllipseShape * chord = new KoEllipseShape();
+    KoEllipseShape * chord = static_cast<KoEllipseShape*>( createShape( KoEllipseShapeId ) );
+    if( ! chord )
+        return;
+
     chord->setType( KoEllipseShape::Chord );
     chord->setStartAngle( start );
     chord->setEndAngle( end );
@@ -312,7 +337,10 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
 
 
 void WMFImportParser::drawPolyline( const QPolygon &pa ) {
-    KoPathShape *polyline = new KoPathShape();
+    KoPathShape *polyline = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+    if( ! polyline )
+        return;
+    
     appendPen( *polyline );
     appendPoints( *polyline, pa );
 
@@ -321,7 +349,10 @@ void WMFImportParser::drawPolyline( const QPolygon &pa ) {
 
 
 void WMFImportParser::drawPolygon( const QPolygon &pa, bool winding ) {
-    KoPathShape *polygon = new KoPathShape();
+    KoPathShape *polygon = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+    if( ! polygon )
+        return;
+    
     appendPen( *polygon );
     appendBrush( *polygon );
     appendPoints( *polygon, pa );
@@ -333,7 +364,9 @@ void WMFImportParser::drawPolygon( const QPolygon &pa, bool winding ) {
 
 
 void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
-    KoPathShape *path = new KoPathShape();
+    KoPathShape *path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+    if( ! path )
+        return;
 
     if ( listPa.count() > 0 ) {
         appendPen( *path );
@@ -343,7 +376,10 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
         path->setFillRule( winding ? Qt::WindingFill : Qt::OddEvenFill );
         foreach( QPolygon pa, listPa )
         {
-            KoPathShape *newPath = new KoPathShape();
+            KoPathShape *newPath = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+            if( ! newPath )
+                continue;
+
             appendPoints( *newPath, pa );
             newPath->close();
             path->combine( newPath );
@@ -356,8 +392,14 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 
 void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int sy, int sw, int sh ) {
     KoImageData * data = mDoc->imageCollection()->getImage( image );
+    if( ! data )
+        return;
 
-    PictureShape * pic = new PictureShape();
+    PictureShape * pic = static_cast<PictureShape*>( createShape( PICTURESHAPEID ) );
+    if( ! pic )
+        return;
+
+    pic->init( mDoc->dataCenterMap() );
     pic->setUserData( data );
     pic->setPosition( QPointF(x,y) );
     if( sw < 0 )
@@ -388,7 +430,10 @@ void WMFImportParser::drawText( int x, int y, int , int , int flags, const QStri
     QFont font = mFont;
     font.setPointSizeF( coordY( mFont.pointSize() ) );
 
-    ArtisticTextShape * textShape = new ArtisticTextShape();
+    ArtisticTextShape * textShape = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );
+    if( ! textShape )
+        return;
+
     textShape->setFont( font );
     textShape->setText( text );
 
@@ -506,4 +551,26 @@ double WMFImportParser::scaleW( int width )
 double WMFImportParser::scaleH( int height )
 {
     return (height * mScaleY);
+}
+
+KoShape * WMFImportParser::createShape( const QString &shapeID )
+{
+    KoShapeFactory * factory = KoShapeRegistry::instance()->get( shapeID );
+    if( ! factory )
+    {
+        kWarning(30514) << "Could not find factory for shape id" << shapeID;
+        return 0;
+    }
+
+    KoShape * shape = factory->createDefaultShapeAndInit( 0 );
+    if( shape && shape->shapeId().isEmpty() )
+        shape->setShapeId( factory->id() );
+
+    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+    if( path && shapeID == KoPathShapeId )
+        path->clear();
+    // reset tranformation that might come from the default shape
+    shape->setTransformation( QMatrix() );
+
+    return shape;
 }
