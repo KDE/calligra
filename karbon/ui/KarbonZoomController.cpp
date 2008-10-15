@@ -55,7 +55,7 @@ KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KAct
     : QObject(controller), d( new Private() )
 {
     d->canvasController = controller;
-    d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), false, 0);
+    d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), false, this);
     connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
             this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
 
