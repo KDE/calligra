@@ -60,7 +60,7 @@ bool KPrPageLayouts::completeLoading( KoStore *store )
     return true;
 }
 
-bool KPrPageLayouts::completeSaving( KoStore *store, KoXmlWriter * manifestWriter )
+bool KPrPageLayouts::completeSaving( KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context )
 {
     Q_UNUSED( store );
     Q_UNUSED( manifestWriter );

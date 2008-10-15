@@ -96,7 +96,7 @@ public:
 
     // KoDataCenter interface
     virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context);
 
     /**
      * \return a pointer to the binding manager

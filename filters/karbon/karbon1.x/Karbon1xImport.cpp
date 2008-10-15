@@ -569,7 +569,7 @@ void KarbonImport::loadPattern( KoShape * shape, const KoXmlElement &element )
         return;
     }
 
-    KoDataCenter * dataCenter = m_document.dataCenterMap().value( "ImageCollewction", 0 );
+    KoDataCenter * dataCenter = m_document.dataCenterMap().value( "ImageCollection", 0 );
     KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
     if( imageCollection )
     {
@@ -1293,8 +1293,7 @@ KoShape * KarbonImport::loadImage( const KoXmlElement &element )
 
     QImage img( fname );
 
-    KoImageData * data = new KoImageData( m_document.imageCollection() );
-    data->setImage( QImage( fname ).mirrored( false, true ) );
+    KoImageData * data = m_document.imageCollection()->getImage( QImage( fname ).mirrored( false, true ) );
 
     PictureShape * picture = new PictureShape();
     picture->setUserData( data );

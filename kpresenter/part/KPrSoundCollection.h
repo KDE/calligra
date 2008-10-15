@@ -47,7 +47,7 @@ public:
      * and have a recognized KPrSoundData::storeHref().
      * @return returns true if save was successful (no sounds failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter );
+    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
 
     KPrSoundData *findSound(QString title);
 

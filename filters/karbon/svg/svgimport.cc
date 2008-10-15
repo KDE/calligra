@@ -1147,8 +1147,7 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
             break;
         case Qt::TexturePattern:
         {
-            KoDataCenter * dataCenter = m_document->dataCenterMap().value( "ImageCollection", 0 );
-            KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+            KoImageCollection * imageCollection = m_document->imageCollection();
             if( imageCollection )
             {
                 KoPatternBackground * bg = new KoPatternBackground( imageCollection );
@@ -1724,8 +1723,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             KoShape * picture = createShape( PICTURESHAPEID );
             if( picture )
             {
-                KoImageData * data = new KoImageData( m_document->imageCollection() );
-                data->setImage( img );
+                // TODO use it already for loading
+                KoImageData * data = m_document->imageCollection()->getImage(img);
 
                 double x = parseUnit( b.attribute( "x" ) );
                 double y = parseUnit( b.attribute( "y" ) );

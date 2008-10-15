@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,6 +58,7 @@ public:
 KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
     : KoShapeContainer()
     , m_page( page )
+    , m_imageCollection( new KoImageCollection() )
 {
     // add default layer
     KoShapeLayer* layer = new KoShapeLayer;
@@ -86,19 +88,12 @@ KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
 
 KPrNotes::~KPrNotes()
 {
+    delete m_imageCollection;
 }
 
 KoShape *KPrNotes::textShape()
 {
     return m_textShape;
-}
-
-KoShape *KPrNotes::thumbnailShape()
-{
-    KoImageData *imageData = new KoImageData(new KoImageCollection(),"");
-    imageData->setImage( m_page->thumbnail( m_thumbnailShape->size().toSize() ).toImage() );
-    m_thumbnailShape->setUserData(imageData);
-    return m_thumbnailShape;
 }
 
 void KPrNotes::saveOdf(KoShapeSavingContext &context) const
@@ -171,8 +166,7 @@ void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converte
 
 void KPrNotes::updatePageThumbnail()
 {
-    KoImageData *imageData = new KoImageData( new KoImageCollection() );
-    imageData->setImage( m_page->thumbnail( m_thumbnailShape->size().toSize() ).toImage() );
+    KoImageData *imageData = m_imageCollection->getImage(m_page->thumbnail( m_thumbnailShape->size().toSize() ).toImage());
     m_thumbnailShape->setUserData( imageData );
 }
 

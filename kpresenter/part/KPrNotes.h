@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #include <KoPageLayout.h>
 
 class KoShape;
+class KoImageCollection;
 class KPrDocument;
 class KPrPage;
 
@@ -35,9 +37,6 @@ public:
 
     /// Get the main text note shape for this presentation notes
     KoShape *textShape();
-
-    /// Get the main thumbnail shape for this presentation notes
-    KoShape *thumbnailShape();
 
     /// reimplemented
     virtual void saveOdf(KoShapeSavingContext &context) const;
@@ -62,6 +61,7 @@ private:
     KoShape *m_thumbnailShape;
     KoPageLayout m_pageLayout;
     KPrPage *m_page;
+    KoImageCollection * m_imageCollection;
 };
 
 #endif // KPRNOTES_H

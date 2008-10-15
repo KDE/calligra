@@ -41,7 +41,7 @@ public:
     /// reimplemented
     virtual bool completeLoading( KoStore *store );
     /// reimplemented
-    virtual bool completeSaving( KoStore *store, KoXmlWriter * manifestWriter );
+    virtual bool completeSaving( KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
 
     bool saveOdf( KoPASavingContext & context );
     // loadOdf is not implemented as loading is done by pageLayout and TODO

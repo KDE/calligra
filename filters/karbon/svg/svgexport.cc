@@ -705,7 +705,7 @@ void SvgExport::saveImage( PictureShape * picture )
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
-        if( imageData->saveToFile( &buffer ) )
+        if( imageData->saveToFile( buffer ) )
         {
             const QString mimeType( KMimeType::findByContent( ba )->name() );
             *m_body << " xlink:href=\"data:" << mimeType << ";base64," << ba.toBase64() <<  "\"";
@@ -715,8 +715,9 @@ void SvgExport::saveImage( PictureShape * picture )
     {
         // write to a temp file first
         KTemporaryFile imgFile;
-        if( imageData->saveToFile( &imgFile ) )
+        if( imageData->saveToFile( imgFile ) )
         {
+            // tz: TODO the new version of KoImageData has the extension save inside maybe that can be used
             // get the mime type from the temp file content
             KMimeType::Ptr mimeType = KMimeType::findByFileContent( imgFile.fileName() );
             // get url of destination directory

@@ -84,7 +84,7 @@ bool KPrSoundCollection::completeLoading(KoStore *store) {
     return true;
 }
 
-bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter ) {
+bool KPrSoundCollection::completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context ) {
     foreach(KPrSoundData *sound, d->sounds) {
         if(sound->isTaggedForSaving())
         {

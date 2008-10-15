@@ -52,7 +52,6 @@
 #include <KoStyleManager.h>
 #include <KoInteractionTool.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoImageCollection.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>

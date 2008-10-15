@@ -355,8 +355,7 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 
 
 void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int sy, int sw, int sh ) {
-    KoImageData * data = new KoImageData( mDoc->imageCollection() );
-    data->setImage( image );
+    KoImageData * data = mDoc->imageCollection()->getImage( image );
 
     PictureShape * pic = new PictureShape();
     pic->setUserData( data );
@@ -448,8 +447,7 @@ void WMFImportParser::appendBrush( KoShape& obj )
             break;
         case Qt::TexturePattern:
         {
-            KoDataCenter * dataCenter = mDoc->dataCenterMap().value( "ImageCollewction", 0 );
-            KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+            KoImageCollection * imageCollection = mDoc->imageCollection();
             if( imageCollection )
             {
                 KoPatternBackground * bg = new KoPatternBackground( imageCollection );

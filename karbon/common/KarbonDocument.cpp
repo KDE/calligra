@@ -359,7 +359,7 @@ const VLayerList& KarbonDocument::layers() const
 
 KoImageCollection * KarbonDocument::imageCollection()
 {
-    return (KoImageCollection *)d->dataCenterMap["ImageCollection"];
+    return dynamic_cast<KoImageCollection *>( d->dataCenterMap["ImageCollection"] );
 }
 
 QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap() const

@@ -215,10 +215,11 @@ bool Map::completeLoading(KoStore *store)
     return true;
 }
 
-bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter)
+bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context)
 {
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);
+    Q_UNUSED(context);
     return true;
 }
 
