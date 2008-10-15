@@ -26,6 +26,8 @@
 #include <QItemDelegate>
 #include <QStyle>
 #include <QHeaderView>
+#include <QBrush>
+
 #include <kmenu.h>
 
 #include "KoDocument.h"
@@ -65,7 +67,6 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
         // this is a top-level item.
         QStyleOptionButton buttonOption;
         buttonOption.state = option.state;
-        buttonOption.state &= ~QStyle::State_HasFocus;
 
         buttonOption.rect = option.rect;
         buttonOption.palette = option.palette;
@@ -98,20 +99,20 @@ void ViewCategoryDelegate::paint( QPainter * painter, const QStyleOptionViewItem
 }
 
 ViewListItem::ViewListItem( const QString &tag, const QStringList &strings, int type )
-: QTreeWidgetItem( strings, type ),
-m_tag( tag )
+    : QTreeWidgetItem( strings, type ),
+    m_tag( tag )
 {
 }
 
 ViewListItem::ViewListItem( QTreeWidget *parent, const QString &tag, const QStringList &strings, int type )
-: QTreeWidgetItem( parent, strings, type ),
-m_tag( tag )
+    : QTreeWidgetItem( parent, strings, type ),
+    m_tag( tag )
 {
 }
 
 ViewListItem::ViewListItem( QTreeWidgetItem *parent, const QString &tag, const QStringList &strings, int type )
-: QTreeWidgetItem( parent, strings, type ),
-m_tag( tag )
+    : QTreeWidgetItem( parent, strings, type ),
+    m_tag( tag )
 {
 }
 
@@ -178,7 +179,7 @@ void ViewListItem::save( QDomElement &element ) const
 }
 
 ViewListTreeWidget::ViewListTreeWidget( QWidget *parent )
-: QTreeWidget( parent )
+    : QTreeWidget( parent )
 {
     header() ->hide();
     setRootIsDecorated( false );
@@ -284,8 +285,9 @@ ViewListItem *ViewListTreeWidget::category( const KoView *view ) const
 
 //-----------------------
 ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXmlGuiWindow *parent )
-: QWidget( parent ),
-m_part( part )
+    : QWidget( parent ),
+    m_part( part ),
+    m_prev( 0 )
 {
     setObjectName("ViewListWidget");
     m_viewlist = new ViewListTreeWidget( this );
@@ -332,7 +334,14 @@ void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev
     if ( item == 0 || item->type() == ViewListItem::ItemType_Category ) {
         return ;
     }
+    QVariant v;
+    if ( m_prev ) {
+        m_prev->setData( 0, Qt::BackgroundRole, v );
+    }
     emit activated( static_cast<ViewListItem*>( item ), static_cast<ViewListItem*>( prev ) );
+    v = QBrush( QColor( Qt::yellow ) );
+    item->setData( 0, Qt::BackgroundRole, v );
+    m_prev = item;
 }
 
 ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& name )

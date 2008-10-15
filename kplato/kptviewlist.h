@@ -64,7 +64,7 @@ class KPLATO_EXPORT ViewListItem : public QTreeWidgetItem
         void save( QDomElement &element ) const;
 
         void setReadWrite( bool rw );
-        
+
     private:
         QString m_tag;
 };
@@ -176,6 +176,8 @@ private:
     QList<QAction*> m_addview;
     QList<QAction*> m_editdocument;
     QList<QAction*> m_adddocument;
+    
+    QTreeWidgetItem *m_prev;
 };
 
 } //Kplato namespace
