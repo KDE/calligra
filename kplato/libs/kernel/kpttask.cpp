@@ -531,9 +531,6 @@ EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, 
     switch ( completion().entrymode() ) {
         case Completion::FollowPlan:
             return plannedEffortCostPrDay( start, end, id );
-        case Completion::EnterCompleted:
-            //TODO
-            break;
         default:
             return completion().effortCostPrDay( start, end );
     }
@@ -2791,17 +2788,37 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end )
 {
     //kDebug()<<start<<end;
     EffortCostMap ec;
+    if ( ! isStarted() ) {
+        return ec;
+    }
     switch ( m_entrymode ) {
         case FollowPlan:
-        case EnterCompleted:
             break;
-        case EnterEffortPerTask: // hmmm
+        case EnterCompleted:
+        case EnterEffortPerTask: {
+            QDate st = start.isValid() ? start : m_startTime.date();
+            QDate et = end.isValid() ? end : m_finishTime.date();
+            Duration last;
+            foreach ( QDate d, m_entries.uniqueKeys() ) {
+                if ( d < st ) {
+                    continue;
+                }
+                // FIXME cost is difficult, we don't know who has done the work
+                ec.insert( d, m_entries[ d ]->totalPerformed - last, 0.0 );
+                if ( d > et ) {
+                    break;
+                }
+                last = m_entries[ d ]->totalPerformed;
+            }
+            break;
+        }
         case EnterEffortPerResource: {
             QDate st = start.isValid() ? start : m_startTime.date();
             QDate et = end.isValid() ? end : m_finishTime.date();
             for ( QDate d = st; d <= et; d = d.addDays( 1 ) ) {
                 ec.add( d, actualEffort( d ), actualCost( d ) );
             }
+            break;
         }
     }
     return ec;
