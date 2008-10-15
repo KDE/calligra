@@ -2786,7 +2786,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
 
 EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end ) const
 {
-    //kDebug()<<start<<end;
+    kDebug()<<m_node->name()<<start<<end;
     EffortCostMap ec;
     if ( ! isStarted() ) {
         return ec;
@@ -2803,12 +2803,15 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end )
                 if ( d < st ) {
                     continue;
                 }
-                // FIXME cost is difficult, we don't know who has done the work
-                ec.insert( d, m_entries[ d ]->totalPerformed - last, 0.0 );
-                if ( d > et ) {
+                Duration e = m_entries[ d ]->totalPerformed;
+                kDebug()<<d<<e.toDouble(Duration::Unit_h)<<last.toDouble(Duration::Unit_h);
+                if ( e != Duration::zeroDuration && e != last ) {
+                    ec.insert( d, e - last, 0.0 ); // FIXME cost is difficult, we don't know who has done the work
+                    last = e;
+                }
+                if ( et.isValid() && d > et ) {
                     break;
                 }
-                last = m_entries[ d ]->totalPerformed;
             }
             break;
         }
@@ -2890,7 +2893,9 @@ EffortCostMap Completion::actualEffortCost() const
 {
     //kDebug();
     EffortCostMap map;
-    
+    if ( ! isStarted() ) {
+        return map;
+    }
     QList< const QMap<QDate, UsedEffort::ActualEffort*>* > lst;
     QList< double > rate;
     QDate start, end;
@@ -2922,10 +2927,28 @@ EffortCostMap Completion::actualEffortCost() const
                 Duration eff = a->normalEffort();
                 double cost = eff.toDouble( Duration::Unit_h ) * nc;
                 c.add( eff, cost );
-                kDebug()<<d<<m_node->name()<<eff.toString()<<nc<<cost<<"->"<<c.effort().toString()<<c.cost();
+                kDebug()<<m_node->name()<<d<<eff.toDouble(Duration::Unit_h)<<nc<<cost<<"->"<<c.effort().toDouble(Duration::Unit_h)<<c.cost();
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
+            }
+        }
+    } else if ( ! m_entries.isEmpty() ) {
+        QDate st = start.isValid() ? start : m_startTime.date();
+        QDate et = end.isValid() ? end : m_finishTime.date();
+        Duration last;
+        foreach ( QDate d, m_entries.uniqueKeys() ) {
+            if ( d < st ) {
+                continue;
+            }
+            Duration e = m_entries[ d ]->totalPerformed;
+            if ( e != Duration::zeroDuration && e != last ) {
+                kDebug()<<m_node->name()<<d<<(e - last).toDouble(Duration::Unit_h);
+                map.insert( d, e - last, 0.0 ); // FIXME cost is difficult, we don't know who has done the work
+                last = e;
+            }
+            if ( et.isValid() && d > et ) {
+                break;
             }
         }
     }
