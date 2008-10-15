@@ -39,7 +39,8 @@ KAboutData * newKWordAboutData()
                                             ki18n("(c) 1998-2008, The KWord Team"), KLocalizedString(),
                                             "http://www.koffice.org/kword/");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData->addAuthor(ki18n("Thomas Zander"));
+    aboutData->addAuthor(ki18n("Thomas Zander"), KLocalizedString(), "zander@kde.org");
+    aboutData->addAuthor(ki18n("Girish Ramakrishnan"), ki18n("ODF Support"), "girish@forwardbias.in");
     aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
     aboutData->addAuthor(ki18n("Reginald Stadlbauer"), KLocalizedString(), "reggie@kde.org");
     aboutData->addAuthor(ki18n("Sven Lüppken"), KLocalizedString(), "sven@kde.org");
