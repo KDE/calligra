@@ -119,6 +119,10 @@
         <Action name="task_progress"/>
         <Action name="task_workpackagecontrol"/>
     </Menu>
+    <Menu name="taskeditor_milestone_popup">
+        <Action name="node_properties"/>
+        <Action name="task_progress"/>
+    </Menu>
     <Menu name="taskview_milestone_popup">
         <Action name="task_progress"/>
     </Menu>

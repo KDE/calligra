@@ -37,7 +37,11 @@ namespace KPlato
 {
 
 class Project;
+class Node;
 class Resource;
+class ResourceGroup;
+class Calendar;
+class Relation;
 class Context;
 
 /**
@@ -70,11 +74,15 @@ public:
     /// Set readWrite mode
     virtual void updateReadWrite( bool );
 
+    /// Return the view that has focus
+    ViewBase *focusView() const;
     /// Returns the list of action lists that shall be plugged/unplugged
     virtual QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list name
     virtual QList<QAction*> actionList( const QString name ) const;
-    
+    /// Returns the list of context menu actions for the active view
+    virtual QList<QAction*> contextActionList() const;
+
     /// Sets context info to this view. Reimplement.
     virtual bool setContext( const Context &/*context*/ ) { return false; }
     /// Gets context info from this view. Reimplement.
@@ -96,6 +104,16 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
     
+    virtual Node* currentNode() const;
+    
+    virtual Resource* currentResource() const;
+    
+    virtual ResourceGroup* currentResourceGroup() const;
+
+    virtual Calendar* currentCalendar() const;
+
+    virtual Relation *currentRelation() const;
+
 public slots:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );

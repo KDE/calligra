@@ -186,9 +186,7 @@ void AccountsView::init()
 
 void AccountsView::setupGui()
 {
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void AccountsView::slotContextMenuRequested( QModelIndex, const QPoint &pos )

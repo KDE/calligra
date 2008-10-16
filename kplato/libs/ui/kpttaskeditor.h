@@ -91,7 +91,6 @@ public:
     virtual KoPrintJob *createPrintJob();
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint & );
     void openNode();
     void addTask();
     void addMilestone();
@@ -112,6 +111,9 @@ protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
 
+protected slots:
+    virtual void slotOptions();
+
 private slots:
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
@@ -129,7 +131,6 @@ private slots:
     void slotMoveTaskDown();
 
     void slotSplitView();
-    void slotOptions();
     
 private:
     void edit( QModelIndex index );
@@ -146,8 +147,6 @@ private:
     KAction *actionIndentTask;
     KAction *actionUnindentTask;
 
-    // View options context menu
-    KAction *actionOptions;
 };
 
 class KPLATOUI_EXPORT TaskView : public ViewBase
@@ -174,7 +173,6 @@ public:
     KoPrintJob *createPrintJob();
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint & );
     void openNode();
 
 public slots:
@@ -187,6 +185,9 @@ protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
 
+protected slots:
+    virtual void slotOptions();
+
 private slots:
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
@@ -195,14 +196,10 @@ private slots:
     void slotEnableActions();
 
     void slotSplitView();
-    void slotOptions();
 
 private:
     NodeTreeView *m_view;
 
-    // View options context menu
-    KAction *actionSplitView;
-    KAction *actionOptions;
 };
 
 } //namespace KPlato

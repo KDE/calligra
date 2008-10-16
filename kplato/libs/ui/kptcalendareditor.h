@@ -151,7 +151,6 @@ public:
     virtual Calendar *currentCalendar() const;
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint& );
     void addCalendar( Calendar *calendar );
     void deleteCalendar( QList<Calendar*> );
     

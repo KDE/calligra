@@ -106,7 +106,7 @@ public slots:
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
-    void slotOptions();
+    virtual void slotOptions();
     
 private:
     void init();
@@ -120,9 +120,6 @@ private:
     int m_period;
     bool m_cumulative;
     
-    // View options context menu
-    KAction *actionOptions;
-
 };
 
 }  //KPlato namespace

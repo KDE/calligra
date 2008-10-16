@@ -89,7 +89,6 @@ public:
     KoPrintJob *createPrintJob();
 
 signals:
-    void requestPopupMenu( const QString&, const QPoint & );
     void openNode();
     void addRelation();
     void deleteRelation( Relation * );
@@ -97,6 +96,9 @@ signals:
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
+
+protected slots:
+    virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );
@@ -112,7 +114,6 @@ private slots:
     void slotDeleteRelation( Relation *r );
 
     void slotSplitView();
-    void slotOptions();
     
     void slotHeaderContextMenuRequested( const QPoint& );
     
@@ -121,9 +122,6 @@ private:
 
 private:
     RelationTreeView *m_view;
-
-    // View options context menu
-    KAction *actionOptions;
 };
 
 

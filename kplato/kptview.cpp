@@ -598,6 +598,8 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
     
+    connect( handler, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
     handler->draw( getProject() );
     handler->updateReadWrite( m_readWrite );
     return handler;

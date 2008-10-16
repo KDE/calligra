@@ -113,7 +113,6 @@ public:
     KoPrintJob *createPrintJob();
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint & );
     void openNode();
 
 public slots:
@@ -122,6 +121,9 @@ public slots:
 
     void setScheduleManager( ScheduleManager *sm );
 
+protected slots:
+    virtual void slotOptions();
+
 protected:
     void updateActionsEnabled( bool on );
 
@@ -129,15 +131,12 @@ private slots:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotSplitView();
-    void slotOptions();
     
 private:
     Project *m_project;
     int m_id;
     TaskStatusTreeView *m_view;
 
-    // View options context menu
-    KAction *actionOptions;
 };
 
 //--------------------------------------
@@ -237,15 +236,12 @@ public slots:
 protected:
     void updateActionsEnabled( bool on );
 
-private slots:
-    void slotOptions();
+protected slots:
+    virtual void slotOptions();
 
 private:
     Project *m_project;
     PerformanceStatusBase *m_view;
-
-    // View options context menu
-    KAction *actionOptions;
 };
 
 //----------------------------------
@@ -297,14 +293,14 @@ public:
     
     Node *currentNode() const;
     
-signals:
-    void requestPopupMenu( const QString&, const QPoint & );
-
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
     void setScheduleManager( ScheduleManager *sm );
+
+protected slots:
+    virtual void slotOptions();
 
 protected:
     void updateActionsEnabled( bool on );
@@ -312,14 +308,10 @@ protected:
 private slots:
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
-    void slotOptions();
 
 private:
     PerformanceStatusTreeView *m_view;
 
-    // View options context menu
-    KAction *actionOptions;
-    
 };
 
 //--------------------------------------

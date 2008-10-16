@@ -64,17 +64,6 @@ public:
     void draw( Project &project );
     void draw();
 
-    QList<Node*> criticalPath();
-
-    DateTime getStartEarlyDate(Node * currentNode);
-    DateTime getFinishEarlyDate(Node * currentNode);
-    DateTime getStartLateDate(Node * currentNode);
-    DateTime getFinishLateDate(Node * currentNode);
-    Duration getProjectFloat(Project *project);
-    Duration getFreeMargin(Node * currentNode);
-    Duration getTaskFloat(Node * currentNode);
-    void testComplexGraph();
-
     PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->model() ); }
 
     /// Loads context info into this view.
@@ -84,6 +73,8 @@ public:
 
     KoPrintJob *createPrintJob();
     
+    Node *currentNode() const;
+            
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
@@ -92,21 +83,17 @@ protected slots:
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
     void slotScheduleManagerChanged( ScheduleManager *sm );
     void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotContextMenuRequested( const QModelIndex& index, const QPoint& pos );
     
     void slotSplitView();
-    void slotOptions();
+    virtual void slotOptions();
     
 private:
     Node * m_node;
     Project * m_project;
-    bool complexGraph;
-    QList<Node *> m_criticalPath;
     ScheduleManager *current_schedule;
     Ui::PertResult widget;
     
-    // View options context menu
-    KAction *actionOptions;
-
 private slots:
     void slotUpdate();
 
@@ -136,6 +123,8 @@ public:
 
     KoPrintJob *createPrintJob();
     
+    Node *currentNode() const;
+    
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
@@ -144,9 +133,10 @@ protected slots:
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
     void slotScheduleManagerChanged( ScheduleManager *sm );
     void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotContextMenuRequested( const QModelIndex& index, const QPoint& pos );
     
     void slotSplitView();
-    void slotOptions();
+    virtual void slotOptions();
     
     void slotFinishTimeChanged( const QDateTime &dt );
     void slotProbabilityChanged( int value );
@@ -160,9 +150,6 @@ private:
     ScheduleManager *current_schedule;
     Ui::CpmWidget widget;
     
-    // View options context menu
-    KAction *actionOptions;
-
     bool block;
 };
 

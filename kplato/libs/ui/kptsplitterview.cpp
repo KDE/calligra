@@ -52,12 +52,14 @@ void SplitterView::addView( ViewBase *view )
 {
     m_splitter->addWidget( view );
     connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( view, SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ), SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ) );
 }
 
 void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &label )
 {
     tab->addTab( view, label );
     connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    connect( view, SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ), SIGNAL( requestPopupMenu( const QString&, const QPoint& ) ) );
 }
 
 // reimp
@@ -233,52 +235,92 @@ void SplitterView::updateReadWrite( bool mode )
     }
 }
 
+ViewBase *SplitterView::focusView() const
+{
+    QList<ViewBase*> lst = findChildren<ViewBase*>();
+    kDebug()<<lst;
+    foreach ( ViewBase *v, lst ) {
+        if ( v->isActive() ) {
+            kDebug()<<v;
+            return v;
+        }
+    }
+    return 0;
+}
+
 QStringList SplitterView::actionListNames() const
 {
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v  ) {
-            if ( v->hasFocus() ) {
-                return v->actionListNames();
-            }
-            continue;
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
-                if ( v && v->hasFocus() ) {
-                    return v->actionListNames();
-                }
-                continue;
-            }
-        }
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->actionListNames();
     }
     return QStringList();
 }
     
 QList<QAction*> SplitterView::actionList( const QString name ) const
 {
-    for ( int i = 0; i < m_splitter->count(); ++i ) {
-        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v ) {
-            if ( v->hasFocus() ) {
-                return v->actionList( name );
-            }
-            continue;
-        } else {
-            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
-            if (tw ) {
-                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
-                if ( v && v->hasFocus() ) {
-                    return v->actionList( name );
-                }
-                continue;
-            }
-        }
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->actionList( name );
     }
     return QList<QAction*>();
 }
     
+QList<QAction*> SplitterView::contextActionList() const
+{
+    ViewBase *view = focusView();
+    kDebug()<<this<<view;
+    if ( view ) {
+        return view->contextActionList();
+    }
+    return QList<QAction*>();
+}
+
+Node* SplitterView::currentNode() const
+{
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->currentNode();
+    }
+    return 0;
+}
+    
+Resource* SplitterView::currentResource() const
+{
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->currentResource();
+    }
+    return 0;
+}
+
+ResourceGroup* SplitterView::currentResourceGroup() const
+{
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->currentResourceGroup();
+    }
+    return 0;
+}
+
+Calendar* SplitterView::currentCalendar() const
+{
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->currentCalendar();
+    }
+    return 0;
+}
+
+Relation *SplitterView::currentRelation() const
+{
+    ViewBase *view = focusView();
+    if ( view ) {
+        return view->currentRelation();
+    }
+    return 0;
+}
+
 bool SplitterView::loadContext( const KoXmlElement &context )
 {
     kDebug()<<endl;

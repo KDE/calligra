@@ -374,9 +374,7 @@ void GanttView::setZoom( double )
 
 void GanttView::setupGui()
 {
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void GanttView::slotOptions()
@@ -678,9 +676,7 @@ Node *MilestoneGanttView::currentNode() const
 
 void MilestoneGanttView::setupGui()
 {
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )

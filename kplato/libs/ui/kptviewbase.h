@@ -158,6 +158,9 @@ public:
     /// Return the type of view this is (class name)
     QString viewType() const { return metaObject()->className(); }
     
+    /// Returns true if this view or any child widget has focus
+    bool isActive() const;
+    
     virtual void setZoom(double /*zoom*/) {}
     /// Set the project this view shall handle.
     virtual void setProject( Project * /*project*/ ) {}
@@ -213,12 +216,19 @@ public slots:
     void slotUpdateReadWrite( bool );
     virtual void slotHeaderContextMenuRequested( const QPoint &pos );
 
+    
 signals:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );
+    /// Request for a context menu popup
+    void requestPopupMenu( const QString&, const QPoint & );
     
+protected slots:
+    virtual void slotOptions() {}
 
 protected:
+    void createOptionAction();
+    
     /// List of all menu/toolbar actions (used for plug/unplug)
     QMap<QString, QList<QAction*> > m_actionListMap;
 
@@ -231,6 +241,10 @@ protected:
     bool m_readWrite;
     
     PrintingOptions m_printingOptions;
+    
+    // View options context menu
+    KAction *actionOptions;
+
 };
 
 //------------------

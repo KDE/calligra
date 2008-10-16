@@ -119,9 +119,6 @@ private:
 
     void updateTasks();
 
-signals:
-    void requestPopupMenu( QString s, const QPoint&);
-
 protected slots:
     void resSelectionChanged();
     void resSelectionChanged( QTreeWidgetItem *item );

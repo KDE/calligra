@@ -163,7 +163,7 @@ void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, cons
     if ( index.isValid() ) {
         Node *n = m_view->model()->node( index );
         if ( n ) {
-            name = "resourceappointment_popup";
+            name = "taskview_popup";
         }
     }
     if ( name.isEmpty() ) {
@@ -247,9 +247,7 @@ void ResourceAppointmentsView::setupGui()
     addAction( name, actionDeleteSelection );
     */
     // Add the context menu actions for the view options
-/*    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );*/
+/*   createOptionAction();*/
 }
 
 void ResourceAppointmentsView::slotOptions()

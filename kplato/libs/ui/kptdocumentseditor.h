@@ -86,7 +86,6 @@ public:
     DocumentTreeView *view() const { return m_view; }
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint& );
     void addDocument();
     void deleteDocumentList( QList<Document*> );
     void editDocument( Document *doc );
@@ -96,13 +95,15 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
+protected slots:
+    virtual void slotOptions();
+
 protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint &pos );
-    void slotOptions();
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
@@ -121,8 +122,6 @@ private:
     KAction *actionAddDocument;
     KAction *actionDeleteSelection;
 
-    // View options context menu
-    KAction *actionOptions;
 };
 
 }  //KPlato namespace

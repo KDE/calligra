@@ -268,9 +268,7 @@ void ResourceEditor::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void ResourceEditor::slotSplitView()

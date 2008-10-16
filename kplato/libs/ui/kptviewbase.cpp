@@ -270,13 +270,27 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
 //--------------
 ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
     : KoView( doc, parent ),
-    m_readWrite( false )
+    m_readWrite( false ),
+    actionOptions( 0 )
 {
 }
     
 KoDocument *ViewBase::part() const
 {
      return koDocument();
+}
+
+bool ViewBase::isActive() const
+{
+    if ( hasFocus() ) {
+        return true;
+    }
+    foreach ( TreeViewBase *v, findChildren<TreeViewBase*>() ) {
+        if ( v->hasFocus() ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void ViewBase::updateReadWrite( bool readwrite )
@@ -315,6 +329,13 @@ void ViewBase::slotHeaderContextMenuRequested( const QPoint &pos )
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos, lst.first() );
     }
+}
+
+void ViewBase::createOptionAction()
+{
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure View..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
 }
 
 //----------------------

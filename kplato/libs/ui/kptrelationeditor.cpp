@@ -139,9 +139,11 @@ void RelationEditor::slotContextMenuRequested( const QModelIndex& index, const Q
 {
     Relation *rel = m_view->model()->relation( index );
     if ( rel == 0 ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
-    emit requestPopupMenu( "relation_popup", pos );
+    QString name = "relation_popup";
+    emit requestPopupMenu( name, pos );
 }
 
 void RelationEditor::slotHeaderContextMenuRequested( const QPoint &pos )
@@ -168,9 +170,7 @@ void RelationEditor::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void RelationEditor::slotSplitView()

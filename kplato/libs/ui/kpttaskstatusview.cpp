@@ -265,6 +265,7 @@ void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const Q
 {
     kDebug()<<index<<pos;
     if ( ! index.isValid() ) {
+        slotHeaderContextMenuRequested( pos );
         return;
     }
     Node *node = m_view->model()->node( index );
@@ -304,9 +305,7 @@ void TaskStatusView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void TaskStatusView::slotSplitView()
@@ -461,9 +460,7 @@ void ProjectStatusView::setGuiActive( bool activate )
 void ProjectStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void ProjectStatusView::slotOptions()
@@ -887,9 +884,7 @@ void PerformanceStatusView::setGuiActive( bool activate )
 void PerformanceStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void PerformanceStatusView::slotOptions()

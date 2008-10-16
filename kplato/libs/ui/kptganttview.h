@@ -164,12 +164,6 @@ signals:
     void addRelation( Node *par, Node *child, int linkType );
     void itemDoubleClicked();
 
-    /**
-     * Requests a specific type of popup menu.
-     * Usually a KPlato::View object is connected to this signal.
-     */
-    void requestPopupMenu( const QString& menuname, const QPoint & pos );
-
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     
@@ -189,7 +183,7 @@ public slots:
 
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
-    void slotOptions();
+    virtual void slotOptions();
     
 private:
     bool m_readWrite;
@@ -211,9 +205,6 @@ private:
     bool m_showAppointments;
     Project *m_project;
     
-    // View options context menu
-    KAction *actionOptions;
-
 };
 
 class KPLATOUI_EXPORT MilestoneKDGanttView : public KDGantt::View
@@ -269,12 +260,6 @@ public:
 signals:
     void itemDoubleClicked();
 
-    /**
-     * Requests a specific type of popup menu.
-     * Usually a KPlato::View object is connected to this signal.
-     */
-    void requestPopupMenu( const QString& menuname, const QPoint & pos );
-
 public slots:
     void setScheduleManager( ScheduleManager *sm );
 
@@ -287,7 +272,7 @@ public slots:
 
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
-    void slotOptions();
+    virtual void slotOptions();
 
 private:
     bool m_readWrite;
@@ -301,8 +286,6 @@ private:
     bool m_showNoInformation;
     Project *m_project;
 
-    // View options context menu
-    KAction *actionOptions;
 };
 
 }  //KPlato namespace

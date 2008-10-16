@@ -480,23 +480,24 @@ void DependencyConnectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void DependencyConnectorItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     //kDebug();
+    QStyleOptionGraphicsItem opt( *option );
     if ( itemScene()->fromItem() == this ) {
-        const_cast<QStyleOptionGraphicsItem*>( option )->state |= QStyle::State_Selected;
+        opt.state |= QStyle::State_Selected;
     }
-    if ( option->state & ( QStyle::State_Selected | QStyle::State_HasFocus ) ) {
+    if ( opt.state & ( QStyle::State_Selected | QStyle::State_HasFocus ) ) {
         painter->save();
         QBrush b = brush();
         QPen p = pen();
-        if (option->state & QStyle::State_Selected) {
-            QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+        if (opt.state & QStyle::State_Selected) {
+            QPalette::ColorGroup cg = opt.state & QStyle::State_Enabled
                     ? QPalette::Normal : QPalette::Disabled;
-            if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
+            if (cg == QPalette::Normal && !(opt.state & QStyle::State_Active))
                 cg = QPalette::Inactive;
     
             p.setStyle( Qt::NoPen );
-            b = option->palette.brush(cg, QPalette::Highlight);
+            b = opt.palette.brush(cg, QPalette::Highlight);
         }
-        if (option->state & QStyle::State_HasFocus) {
+        if (opt.state & QStyle::State_HasFocus) {
             p.setStyle( Qt::DotLine );
             p.setColor( Qt::white );
         }
@@ -535,7 +536,7 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     
     setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable );
     
-    m_symbol = new QGraphicsPathItem( this );
+    m_symbol = new DependencyNodeSymbolItem( this );
     m_symbol->setZValue( zValue() + 10.0 );
     setSymbol();
 }
@@ -553,37 +554,7 @@ DependencyScene *DependencyNodeItem::itemScene() const
 }
 void DependencyNodeItem::setSymbol()
 {
-    QPainterPath p;
-    QBrush b( Qt::SolidPattern );
-    switch ( m_node->type() ) {
-        case Node::Type_Summarytask:
-            b.setColor( Qt::cyan );
-            p.moveTo( 0.0, 0.0 );
-            p.lineTo( 10.0, 0.0 );
-            p.lineTo( 5.0, 10.0 );
-            p.lineTo( 0.0, 0.0 );
-            break;
-        case Node::Type_Task:
-            b.setColor( Qt::green );
-            p.moveTo( 0.0, 0.0 );
-            p.lineTo( 10.0, 0.0 );
-            p.lineTo( 10.0, 10.0 );
-            p.lineTo( 0.0, 10.0 );
-            p.lineTo( 0.0, 0.0 );
-            break;
-        case Node::Type_Milestone:
-            b.setColor( Qt::blue );
-            p.moveTo( 5.0, 0.0 );
-            p.lineTo( 10.0, 5.0 );
-            p.lineTo( 5.0, 10.0 );
-            p.lineTo( 0.0, 5.0 );
-            p.lineTo( 5.0, 0.0 );
-            break;
-        default: 
-            break;
-    }
-    m_symbol->setPath( p );
-    m_symbol->setBrush( b );
+    m_symbol->setSymbol( m_node->type() );
 }
 
 QPointF DependencyNodeItem::connectorPoint( DependencyNodeItem::ConnectorType type ) const
@@ -770,7 +741,6 @@ void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsIte
             b = option->palette.brush(cg, QPalette::Highlight);
         }
         if (option->state & QStyle::State_HasFocus) {
-            kDebug()<<"focus";
             QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
                     ? QPalette::Active : QPalette::Disabled;
             if (cg == QPalette::Active && !(option->state & QStyle::State_Active))
@@ -787,6 +757,42 @@ void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsIte
     painter->setPen( p );
     painter->setBrush( b );
     painter->drawRect( rect() );
+}
+
+//--------------------
+void DependencyNodeSymbolItem::setSymbol( int type )
+{
+    KDGantt::ItemType itemtype = KDGantt::TypeNone;
+    QPainterPath p;
+    switch ( type ) {
+        case Node::Type_Summarytask:
+            itemtype = KDGantt::TypeSummary;
+            p.moveTo( 0.0, 0.0 );
+            p.lineTo( 10.0, 0.0 );
+            p.lineTo( 5.0, 10.0 );
+            p.lineTo( 0.0, 0.0 );
+            break;
+        case Node::Type_Task:
+            itemtype = KDGantt::TypeTask;
+            p.moveTo( 0.0, 0.0 );
+            p.lineTo( 10.0, 0.0 );
+            p.lineTo( 10.0, 10.0 );
+            p.lineTo( 0.0, 10.0 );
+            p.lineTo( 0.0, 0.0 );
+            break;
+        case Node::Type_Milestone:
+            itemtype = KDGantt::TypeEvent;
+            p.moveTo( 5.0, 0.0 );
+            p.lineTo( 10.0, 5.0 );
+            p.lineTo( 5.0, 10.0 );
+            p.lineTo( 0.0, 5.0 );
+            p.lineTo( 5.0, 0.0 );
+            break;
+        default: 
+            break;
+    }
+    setPath( p );
+    setBrush( m_delegate.defaultBrush( itemtype ) );
 }
 
 //--------------------
@@ -1734,6 +1740,9 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
 {
     //kDebug()<<item<<","<<pos;
     QString name;
+    if ( item && item->type() == DependencyNodeSymbolItem::Type ) {
+        item = item->parentItem();
+    }
     if ( item ) {
         if ( item->type() == DependencyNodeItem::Type ) {
             m_currentnode = static_cast<DependencyNodeItem*>( item )->node();
@@ -1743,8 +1752,10 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             }
             switch ( m_currentnode->type() ) {
                 case Node::Type_Task:
-                case Node::Type_Milestone:
                     name = "task_popup";
+                    break;
+                case Node::Type_Milestone:
+                    name = "taskeditor_milestone_popup";
                     break;
                 case Node::Type_Summarytask:
                     name = "summarytask_popup";

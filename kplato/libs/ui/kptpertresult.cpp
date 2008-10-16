@@ -87,7 +87,8 @@ static double dist[][2] = {
 PertResult::PertResult( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_node( 0 ),
-    m_project( 0 )
+    m_project( 0 ),
+    current_schedule( 0 )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------";
     widget.setupUi(this);
@@ -96,12 +97,8 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
     widget.treeWidgetTaskResult->setStretchLastSection( false );
     widget.treeWidgetTaskResult->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-//    QHeaderView *header=widget.treeWidgetTaskResult->header();
     setupGui();
     
-    current_schedule=0;
-
-        
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     QList<int> show;
     show << NodeModel::NodeEarlyStart
@@ -123,6 +120,8 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
     widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
     widget.treeWidgetTaskResult->masterView()->setDefaultColumns( QList<int>() << 0 );
     widget.treeWidgetTaskResult->slaveView()->setDefaultColumns( show );
+    
+    connect( widget.treeWidgetTaskResult, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
     
     connect( widget.treeWidgetTaskResult, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
@@ -153,161 +152,6 @@ void PertResult::draw()
         }
         widget.totalFloat->setText( locale->formatNumber( f.toDouble( Duration::Unit_h ) ) );
     }
-/*    kDebug() << "UPDATE PE" << endl;
-      widget.treeWidgetTaskResult->clear();
-      if ( current_schedule == 0 || current_schedule->id() == -1 ) {
-          return;
-    }
-    KLocale * locale = KGlobal::locale();
-    QList<Node*> list;
-    QString res;
-    testComplexGraph();
-    foreach(Node * currentNode, m_project->childNodeIterator()){
-        if (currentNode->type()!=4){
- 
-            QTreeWidgetItem * item = new QTreeWidgetItem(widget.treeWidgetTaskResult );
-            item->setText(0, currentNode->id());
-            item->setText(1, currentNode->name());
-            item->setText(2,locale->formatDateTime(getStartEarlyDate(currentNode)));
-            item->setText(3,locale->formatDateTime(getFinishEarlyDate(currentNode)));
-            item->setText(4,locale->formatDateTime(getStartLateDate(currentNode)));
-            item->setText(5,locale->formatDateTime(getFinishLateDate(currentNode)));
-            item->setText(6,res.number(getTaskFloat(currentNode).days()));
-            item->setText(7,res.number(getFreeMargin(currentNode).days()));
-        }
-        widget.totalFloat->setText(res.number(getProjectFloat(m_project).days()));
-
-    }
-    list=criticalPath();
-    QList<Node*>::iterator it=list.begin();
-    while(it!=list.end()) 
-    {
-         res+=(*it)->id();
-         it++;
-         if(it!=list.end()) res+=" - ";
-    }
-    widget.labelResultCriticalPath->setText(res);*/
-}
-
-DateTime PertResult::getStartEarlyDate(Node * currentNode)
-{
-    DateTime duration;
-    Task * t;
-    t=static_cast<Task *>(currentNode);
-    //if the task has no parent so the early date start is 0
-    duration=t->earlyStart(current_schedule->id());
-    duration.setDateOnly(true);
-    return duration;
-}
-
-DateTime PertResult::getFinishEarlyDate(Node * currentNode)
-{
-    //it's the early start date + duration of the task
-    Task * t;
-    t=static_cast<Task *>(currentNode);
-    DateTime duration;
-
-    duration=t->earlyFinish(current_schedule->id());
-    duration.setDateOnly(true);
-    return (duration);
-}
- 
-DateTime PertResult::getStartLateDate(Node * currentNode)
-{
-    Task * t;
-    DateTime duration;
-    t=static_cast<Task *>(currentNode);
-    duration=t->lateStart(current_schedule->id());
-    duration.setDateOnly(true);
-    return (duration);
-
-}
-
-
-DateTime PertResult::getFinishLateDate(Node * currentNode)
-{
-    DateTime duration;
-    Task * t;
-    t=static_cast<Task *>(currentNode);
-    duration=t->lateFinish(current_schedule->id());
-    duration.setDateOnly(true);
-    return duration;
-}
-
-Duration PertResult::getProjectFloat(Project *project)
-{
-    Duration duration;
-    foreach(Node * currentNode, project->childNodeIterator() )
-    {
-	duration=duration+getTaskFloat(currentNode);
-    }
-    //duration.setDayOnly(true);
-    return duration;
-}
-
-Duration PertResult::getFreeMargin(Node * currentNode)
-{
-    //search the small duration of the nextest task
-    Task * t;
-    DateTime duration;
-    for (QList<Relation*>::iterator it=currentNode->dependChildNodes().begin();it!=currentNode->dependChildNodes().end();it++)
-    {
-        if(it==currentNode->dependChildNodes().begin())
-        {
-	    duration=getStartEarlyDate((*it)->child());
-	}
-	t=static_cast<Task *>((*it)->child ());
-        if(getStartEarlyDate((*it)->child ())<duration)
-	{
-	    duration=getStartEarlyDate((*it)->child ());
-	}
-    }
-    t=static_cast<Task *>(currentNode);
-    duration.setDateOnly(true);
-    return duration-(getStartEarlyDate(currentNode)+=(t->endTime()-t->startTime())); 
-}
-
-Duration PertResult::getTaskFloat(Node * currentNode)
-{
-    if(currentNode->dependChildNodes().size()==0  && complexGraph==true)
-    {
-         return getFinishLateDate(currentNode)-getStartEarlyDate(currentNode);
-    }
-    else
-    {
-        return getFinishLateDate(currentNode)-getFinishEarlyDate(currentNode);
-    }
-}
-
-QList<Node*> PertResult::criticalPath()
-{
-    QList<Node*> list;
-    foreach(Node * currentNode, m_node->childNodeIterator() )
-    {
-	if(currentNode->dependChildNodes().size()==0 && getFinishLateDate(currentNode)==getStartEarlyDate(currentNode))
-    	{
-          list.push_back(currentNode) ;
-    	}
-	else
-	{
-	   if(getFinishLateDate(currentNode)==getFinishEarlyDate(currentNode))
-	   {
-               list.push_back(currentNode) ;
-	   }
-	}
-    }
-    return list;
-}
-void PertResult::testComplexGraph()
-{
-    complexGraph=false;
-    foreach(Node * currentNode, m_node->childNodeIterator() )
-    {
-	if(currentNode->dependParentNodes().size()>1)
-	{
-	    complexGraph=true;
-	}
-    } 
 }
 
 void PertResult::setupGui()
@@ -316,15 +160,52 @@ void PertResult::setupGui()
     connect(widget.treeWidgetTaskResult->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( widget.treeWidgetTaskResult->actionSplitView() );
     
-    actionOptions = new KAction( KIcon("configure"), i18n("Configure..."), this );
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void PertResult::slotSplitView()
 {
     kDebug();
     widget.treeWidgetTaskResult->setViewSplitMode( ! widget.treeWidgetTaskResult->isViewSplit() );
+}
+
+Node *PertResult::currentNode() const
+{
+    return model()->node( widget.treeWidgetTaskResult->selectionModel()->currentIndex() );
+}
+
+void PertResult::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
+{
+    kDebug()<<index<<pos;
+    Node *node = model()->node( index );
+    if ( node == 0 ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+    kDebug()<<node->name()<<" :"<<pos;
+    QString name;
+    switch ( node->type() ) {
+        case Node::Type_Task:
+            name = "task_popup";
+            break;
+        case Node::Type_Milestone:
+            name = "taskeditor_milestone_popup";
+            break;
+        case Node::Type_Summarytask:
+            name = "summarytask_popup";
+            break;
+        case Node::Type_Project:
+            break;
+        default:
+            name = "node_popup";
+            break;
+    }
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+    kDebug()<<name;
+    emit requestPopupMenu( name, pos );
 }
 
 void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
@@ -368,7 +249,6 @@ void PertResult::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
     if ( sm == model()->manager() ) {
         current_schedule = 0;
         model()->setManager( 0 );
-//        draw(); // clears view
     }
 }
 
@@ -459,6 +339,8 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     }
     widget.cpmTable->slaveView()->setDefaultColumns( show );
     
+    connect( widget.cpmTable, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+
     connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
     
     connect( widget.finishTime, SIGNAL( dateTimeChanged( const QDateTime& ) ), SLOT( slotFinishTimeChanged( const QDateTime& ) ) );
@@ -472,15 +354,52 @@ void PertCpmView::setupGui()
     connect(widget.cpmTable->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( widget.cpmTable->actionSplitView() );
     
-    actionOptions = new KAction( KIcon("configure"), i18n("Configure..."), this );
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void PertCpmView::slotSplitView()
 {
     kDebug();
     widget.cpmTable->setViewSplitMode( ! widget.cpmTable->isViewSplit() );
+}
+
+Node *PertCpmView::currentNode() const
+{
+    return model()->node( widget.cpmTable->selectionModel()->currentIndex() );
+}
+
+void PertCpmView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
+{
+    kDebug()<<index<<pos;
+    Node *node = model()->node( index );
+    if ( node == 0 ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+    kDebug()<<node->name()<<" :"<<pos;
+    QString name;
+    switch ( node->type() ) {
+        case Node::Type_Task:
+            name = "task_popup";
+            break;
+        case Node::Type_Milestone:
+            name = "taskeditor_milestone_popup";
+            break;
+        case Node::Type_Summarytask:
+            name = "summarytask_popup";
+            break;
+        case Node::Type_Project:
+            break;
+        default:
+            name = "node_popup";
+            break;
+    }
+    if ( name.isEmpty() ) {
+        slotHeaderContextMenuRequested( pos );
+        return;
+    }
+    kDebug()<<name;
+    emit requestPopupMenu( name, pos );
 }
 
 void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
@@ -540,7 +459,7 @@ void PertCpmView::setProject( Project *project )
         disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotScheduleManagerChanged( ScheduleManager* ) ) );
     }
     m_project = project;
-    widget.cpmTable->model()->setProject( m_project );
+    model()->setProject( m_project );
     if ( m_project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );

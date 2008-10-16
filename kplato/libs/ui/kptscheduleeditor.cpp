@@ -54,27 +54,19 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setStretchLastSection ( false );
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setModel( new ScheduleItemModel() );
-    setSelectionModel( new QItemSelectionModel( model() ) );
+    
+    ScheduleItemModel *m = new ScheduleItemModel( this );
+    setModel( m );
+    //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
     createItemDelegates();
-
-    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
-
 }
 
 void ScheduleTreeView::slotActivated( const QModelIndex index )
 {
     kDebug()<<index.column();
-}
-
-void ScheduleTreeView::headerContextMenuRequested( const QPoint &pos )
-{
-    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
@@ -167,18 +159,6 @@ void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
 {
     kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
-/*    if ( index.isValid() ) {
-        QObject *obj = m_view->model()->object( index );
-        ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
-        if ( g ) {
-            name = "resourceeditor_group_popup";
-        } else {
-            Resource *r = qobject_cast<Resource*>( obj );
-            if ( r ) {
-                name = "resourceeditor_resource_popup";
-            }
-        }
-    }*/
     if ( name.isEmpty() ) {
         slotHeaderContextMenuRequested( pos );
         return;
@@ -267,9 +247,7 @@ void ScheduleEditor::setupGui()
 
 
     // Add the context menu actions for the view options
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void ScheduleEditor::updateReadWrite( bool readwrite )
@@ -483,9 +461,7 @@ void ScheduleLogView::slotEnableActions( const ScheduleManager * )
 void ScheduleLogView::setupGui()
 {
     // Add the context menu actions for the view options
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void ScheduleLogView::updateReadWrite( bool readwrite )
@@ -521,6 +497,7 @@ void ScheduleLogView::saveContext( QDomElement &context ) const
 ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
     : SplitterView( part, parent )
 {
+    kDebug()<<"---------------- Create ScheduleHandlerView ------------------";
     m_scheduleEditor = new ScheduleEditor( part, this );
     m_scheduleEditor->setObjectName( "ScheduleEditor" );
     addView( m_scheduleEditor );

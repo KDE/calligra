@@ -28,6 +28,9 @@
 #include "kptviewbase.h"
 #include "kptnode.h"
 
+#include "kdganttglobal.h"
+#include "kdganttitemdelegate.h"
+
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
@@ -46,6 +49,7 @@ class Project;
 //class Node;
 class Relation;
 
+class DependencyNodeSymbolItem;
 class DependencyConnectorItem;
 class DependencyNodeItem;
 class DependencyScene;
@@ -145,7 +149,6 @@ public:
 };
 
 //-----------------------
-
 class KPLATOUI_EXPORT DependencyNodeItem : public QGraphicsRectItem
 {
 public:
@@ -209,7 +212,7 @@ private:
     DependencyConnectorItem *m_start;
     DependencyConnectorItem *m_finish;
     QGraphicsTextItem *m_text;
-    QGraphicsPathItem *m_symbol;
+    DependencyNodeSymbolItem *m_symbol;
     
     DependencyNodeItem *m_parent;
     QList<DependencyNodeItem*> m_children;
@@ -219,6 +222,21 @@ private:
     
     QList<DependencyLinkItem*> m_parentrelations;
     QList<DependencyLinkItem*> m_childrelations;
+};
+
+//-----------------------
+class KPLATOUI_EXPORT DependencyNodeSymbolItem : public QGraphicsPathItem
+{
+public:
+    explicit DependencyNodeSymbolItem( DependencyNodeItem *parent = 0 )
+        : QGraphicsPathItem( parent )
+    {}
+    enum  { Type = QGraphicsItem::UserType + 3 };
+    int type() const { return Type; }
+    
+    void setSymbol( int type );
+private:
+    KDGantt::ItemDelegate m_delegate;
 };
 
 //-----------------------

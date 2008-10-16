@@ -213,8 +213,10 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
-        case Node::Type_Milestone:
             name = "task_popup";
+            break;
+        case Node::Type_Milestone:
+            name = "taskeditor_milestone_popup";
             break;
         case Node::Type_Summarytask:
             name = "summarytask_popup";
@@ -317,9 +319,7 @@ void TaskEditor::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
 
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void TaskEditor::slotSplitView()
@@ -649,9 +649,7 @@ void TaskView::setupGui()
     connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
     addContextAction( m_view->actionSplitView() );
     
-    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
-    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );
+    createOptionAction();
 }
 
 void TaskView::slotSplitView()

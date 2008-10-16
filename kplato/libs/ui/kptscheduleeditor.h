@@ -51,9 +51,6 @@ public:
 
     ScheduleItemModel *model() const { return static_cast<ScheduleItemModel*>( TreeViewBase::model() ); }
 
-    void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
-    bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
-
     Project *project() const { return model()->project(); }
     void setProject( Project *project ) { model()->setProject( project ); }
 
@@ -64,18 +61,11 @@ signals:
     void currentColumnChanged( QModelIndex, QModelIndex );
     void selectionChanged( const QModelIndexList );
 
-    void contextMenuRequested( QModelIndex, const QPoint& );
-    
 protected slots:
-    void headerContextMenuRequested( const QPoint &pos );
     void slotActivated( const QModelIndex index );
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
-protected:
-
-private:
-    bool m_arrowKeyNavigation;
 };
 
 class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
@@ -100,7 +90,6 @@ public:
     KoPrintJob *createPrintJob();
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint& );
     void calculateSchedule( Project*, ScheduleManager* );
     void baselineSchedule( Project*, ScheduleManager* );
     void addScheduleManager( Project* );
@@ -117,6 +106,9 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
+protected slots:
+    virtual void slotOptions();
+
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
     
@@ -131,8 +123,6 @@ private slots:
     void slotAddSubSchedule();
     void slotDeleteSelection();
     
-    void slotOptions();
-    
 private:
     ScheduleTreeView *m_view;
 
@@ -142,7 +132,6 @@ private:
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
     
-    KAction *actionOptions;
 };
 
 
@@ -198,12 +187,12 @@ public:
     /// Save context info from this view.
     virtual void saveContext( QDomElement &/*context*/ ) const;
     
-signals:
-    void requestPopupMenu( const QString&, const QPoint& );
-
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
+
+protected slots:
+    virtual void slotOptions();
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
@@ -214,12 +203,8 @@ private slots:
     void updateActionsEnabled( const QModelIndex &index );
     void slotEnableActions( const ScheduleManager *sm );
 
-    void slotOptions();
-
 private:
     ScheduleLogTreeView *m_view;
-    
-    KAction *actionOptions;
 };
 
 

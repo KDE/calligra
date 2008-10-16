@@ -85,7 +85,6 @@ public:
     KoPrintJob *createPrintJob();
     
 signals:
-    void requestPopupMenu( const QString&, const QPoint& );
     void addResource( ResourceGroup* );
     void deleteObjectList( QObjectList );
     
@@ -93,13 +92,15 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
+protected slots:
+    virtual void slotOptions();
+
 protected:
     void updateActionsEnabled(  bool on = true );
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
     void slotSplitView();
-    void slotOptions();
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
@@ -116,8 +117,6 @@ private:
     KAction *actionAddGroup;
     KAction *actionDeleteSelection;
 
-    // View options context menu
-    KAction *actionOptions;
 };
 
 }  //KPlato namespace
