@@ -50,7 +50,6 @@ public:
         KoToolRegistry * toolRegistry = KoToolRegistry::instance();
         toolRegistry->add( new KPrPlaceholderToolFactory( toolRegistry ) );
         KoShapeRegistry * registry = KoShapeRegistry::instance();
-        KoShapeFactory * factory = new KPrPlaceholderShapeFactory( registry );
         registry->addFactory( new KPrPlaceholderShapeFactory( registry ) );
     }
 };
