@@ -32,6 +32,7 @@ namespace KexiDB
 {
 class Connection;
 class Cursor;
+class Field;
 }
 
 /**
@@ -56,8 +57,27 @@ public:
     KDChart::Widget *widget() {
         return _chartWidget;
     }
+
+    /**
+    @brief Perform the query for the chart and set the charts data
+    */
     void populateData();
     void setConnection(KexiDB::Connection*);
+
+    /**
+    @brief Set the value of a field from the master (report) data set
+    This data will be used when retrieving the data for the chart
+    as the values in a 'where' clause.
+    */
+    void setLinkData(QString, QVariant);
+
+    /**
+    @brief Return the list of master fields
+    The caller will use this to set the current value for each field
+    at that stage in the report
+    */
+    QStringList masterFields();
+
 protected:
     KRSize _size;
     KoProperty::Property * _dataSource;
@@ -73,10 +93,8 @@ protected:
     KoProperty::Property *_bgColor;
     KoProperty::Property* _displayLegend;
 
-    //KoProperty::Property* _lnWeight;
-    //KoProperty::Property* _lnStyle;
-
-    //ORLineStyleData lineStyle();
+    KoProperty::Property* _linkMaster;
+    KoProperty::Property* _linkChild;
 
     KDChart::Widget *_chartWidget;
 
@@ -90,7 +108,6 @@ protected:
     QStringList fieldNames(const QString &);
     QStringList fieldNamesHackUntilImprovedParser(const QString &);
 
-
 private:
     virtual void createProperties();
     static int RTTI;
@@ -100,6 +117,8 @@ private:
     friend class Scripting::Chart;
 
     KexiDB::Cursor *dataSet();
+
+    QMap<QString,QVariant> _links; //Map of field->value for child/master links
 
 };
 

@@ -792,6 +792,13 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
         } else if (elemThis->type() == KRObjectData::EntityChart) {
             KRChartData * ch = elemThis->toChart();
             ch->setConnection(_conn);
+
+            QStringList masterFields = ch->masterFields();
+            for (int i = 0; i < masterFields.size(); ++i){
+                if (!masterFields[i].simplified().isEmpty()){
+                    ch->setLinkData(masterFields[i], _query->getQuery()->value(_query->fieldNumber(masterFields[i])));
+                }
+            }
             ch->populateData();
             if (ch->widget()) {
                 OROPicture * id = new OROPicture();

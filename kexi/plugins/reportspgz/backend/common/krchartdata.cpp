@@ -34,6 +34,9 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <kexidb/parser/parser.h>
+#include <kexidb/field.h>
+#include <kexidb/queryschema.h>
+
 #include <koproperty/property.h>
 #include <QMotifStyle>
 #include <kdebug.h>
@@ -107,6 +110,10 @@ KRChartData::KRChartData(QDomNode & element)
 //    _lnColor->setValue(ls.lnColor);
 //    _lnStyle->setValue(ls.style);
 //   }
+        } else if (n =="linkmaster") {
+            _linkMaster->setValue(node.firstChild().nodeValue());
+        } else if (n =="linkchild") {
+            _linkChild->setValue(node.firstChild().nodeValue());
         } else {
             kDebug() << "while parsing field element encountered unknow element: " << n;
         }
@@ -164,6 +171,8 @@ void KRChartData::createProperties()
 
     _bgColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
 
+    _linkMaster = new KoProperty::Property("LinkMaster", "", "Link Master", i18n("Fields from master data source"));
+    _linkChild = new KoProperty::Property("LinkChild", "", "Link Child", i18n("Fields from child data source"));
 
     _set->addProperty(_name);
     _set->addProperty(_dataSource);
@@ -180,9 +189,8 @@ void KRChartData::createProperties()
     _set->addProperty(_yTitle);
     _set->addProperty(_bgColor);
     _set->addProperty(_displayLegend);
-
-    //_set->addProperty ( _lnColor );
-    //_set->addProperty ( _lnStyle );
+    _set->addProperty ( _linkMaster );
+    _set->addProperty ( _linkChild );
 
     set3D(false);
     setAA(false);
@@ -303,6 +311,17 @@ void KRChartData::populateData()
     }
 }
 
+QStringList KRChartData::masterFields()
+{
+    return _linkMaster->value().toString().split(",");
+}
+
+void KRChartData::setLinkData(QString fld, QVariant val)
+{
+    kDebug() << "Field: " << fld << "is" << val;
+    _links[fld] = val;
+}
+
 QStringList KRChartData::fieldNames(const QString &stmt)
 {
     KexiDB::Parser *pars;
@@ -334,7 +353,6 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser(const QString &stmt)
 {
     QStringList fn;
     QString ds = _dataSource->value().toString();
-    KexiDB::Cursor *c = 0;
     KexiDB::Field::List fl;
     QString s;
 
@@ -372,8 +390,6 @@ void KRChartData::setAxis(const QString& xa, const QString &ya)
             }
         }
 
-
-
         if (!xAxis) {
             xAxis =  new KDChart::CartesianAxis(dynamic_cast<KDChart::AbstractCartesianDiagram*>(_chartWidget->diagram()));
             xAxis->setPosition(KDChart::CartesianAxis::Bottom);
@@ -395,18 +411,40 @@ KexiDB::Cursor *KRChartData::dataSet()
 {
     QString ds = _dataSource->value().toString();
     KexiDB::Cursor *c = 0;
+    KexiDB::QuerySchema *qs;
 
+    //Determin the type of the source data and create a queryschema
     if (_conn && _conn->tableSchema(ds)) {
         kDebug() << ds << "is a table";
-        c = _conn->executeQuery(* (_conn->tableSchema(ds)), 1);
+        qs = new KexiDB::QuerySchema(*(_conn->tableSchema(ds)));
     } else if (_conn && _conn->querySchema(ds)) {
         kDebug() << ds << "is a query";
-        c = _conn->executeQuery(* (_conn->querySchema(ds)), 1);
+        qs = _conn->querySchema(ds);
     } else {
         kDebug() << ds << "is a statement";
-        c = _conn->executeQuery(ds);
+        KexiDB::Parser *pars;
+        pars = new KexiDB::Parser(_conn);
+        pars->setOperation(KexiDB::Parser::OP_Select);
+        pars->parse(ds);
+        qs = pars->select();
     }
 
+    //Now go through each master field value, and add the correspanding child field
+    //as a where condition on the query
+    if (qs) {
+        QStringList childFields = _linkChild->value().toString().split(",");
+        QStringList masterFields = _linkMaster->value().toString().split(",");
+
+        for(int i = 0; i < childFields.size(); ++i){
+            KexiDB::Field *f = qs->findTableField(childFields[i]);
+            //Only add the condition if we found the child field, and we have data for the master field
+            if (f && _links.contains(masterFields[i])) {
+                qs->addToWhereExpression(f, _links[masterFields[i]]);
+            }
+        }
+
+        c = _conn->executeQuery(*qs, 1);
+    }
     return c;
 }
 void KRChartData::setBackgroundColor(const QColor&)

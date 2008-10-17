@@ -197,6 +197,16 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
     QDomElement dl = doc.createElement("displaylegend");
     dl.appendChild(doc.createTextNode(_displayLegend->value().toBool() ? "true" : "false"));
     entity.appendChild(dl);
+
+    //link master/child
+    QDomElement lm = doc.createElement("linkmaster");
+    lm.appendChild(doc.createTextNode(_linkMaster->value().toString()));
+    entity.appendChild(lm);
+    QDomElement lc = doc.createElement("linkchild");
+    lc.appendChild(doc.createTextNode(_linkChild->value().toString()));
+    entity.appendChild(lc);
+
+
     //Line Style
 // buildXMLLineStyle(doc, entity, lineStyle());
 
