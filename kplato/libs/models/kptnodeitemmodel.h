@@ -120,7 +120,10 @@ public:
         NodeBCWS,
         NodeBCWP,
         NodeACWP,
-        NodePerformanceIndex
+        NodePerformanceIndex,
+        //
+        NodeCritical,
+        NodeCriticalPath
     };
     const QMetaEnum columnMap() const;
     
@@ -214,6 +217,9 @@ public:
     QVariant nodeBCWP( const Node *node, int role ) const;
     QVariant nodeACWP( const Node *node, int role ) const;
     QVariant nodePerformanceIndex( const Node *node, int role ) const;
+
+    QVariant nodeIsCritical( const Node *node, int role ) const;
+    QVariant nodeInCriticalPath( const Node *node, int role ) const;
 
 private:
     Project *m_project;

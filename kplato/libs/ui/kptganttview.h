@@ -34,16 +34,21 @@
 
 #include "kdganttitemdelegate.h"
 
+#include <QBrush>
+
 namespace KDGantt
 {
     class StyleOptionGanttItem;
+    class Constraint;
 }
 
 class KoDocument;
 
+class QPainter;
 class QPoint;
 class QSplitter;
 class QModelIndex;
+class QPointF;
 
 class KoPrintJob;
 
@@ -72,6 +77,8 @@ public:
 //    virtual QString toolTip( const QModelIndex& idx ) const;
     virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
     virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+    
+    virtual void paintConstraintItem( QPainter* p, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const KDGantt::Constraint &constraint );
 
     QString itemText( const QModelIndex& idx, int type ) const;
 
@@ -87,6 +94,8 @@ public:
 
 private:
     Q_DISABLE_COPY(GanttItemDelegate);
+    QBrush m_criticalBrush;
+
 };
 
 //--------------------------------------
@@ -182,6 +191,9 @@ public:
     
     GanttItemDelegate *delegate() const { return m_ganttdelegate; }
     
+    bool loadContext( const KoXmlElement &settings );
+    void saveContext( QDomElement &settings ) const;
+
 public slots:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );

@@ -1411,6 +1411,32 @@ QVariant NodeModel::nodePerformanceIndex( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::nodeIsCritical( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->isCritical();
+        case Qt::ToolTipRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::nodeInCriticalPath( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->inCriticalPath();
+        case Qt::ToolTipRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::data( const Node *n, int property, int role ) const
 {
     QVariant result;
@@ -1490,6 +1516,8 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeBCWP: result = nodeBCWP( n, role ); break;
         case NodeACWP: result = nodeACWP( n, role ); break;
         case NodePerformanceIndex: result = nodePerformanceIndex( n, role ); break;
+        case NodeCritical: result = nodeIsCritical( n, role ); break;
+        case NodeCriticalPath: result = nodeInCriticalPath( n, role ); break;
 
         default:
             //kDebug()<<"Invalid property number: "<<property;;
@@ -1587,6 +1615,8 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeBCWP: return i18nc( "Budgeted Cost of Work Performed", "BCWP" );
             case NodeACWP: return i18nc( "Actual Cost of Work Performed", "ACWP" );
             case NodePerformanceIndex: return i18nc( "Schedule Performance Index", "SPI" );
+            case NodeCritical: return i18n( "Critical" );
+            case NodeCriticalPath: return i18n( "Critical Path" );
             
             default: return QVariant();
         }

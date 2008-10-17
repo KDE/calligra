@@ -66,14 +66,18 @@ namespace KPlato
 GanttItemDelegate::GanttItemDelegate( QObject *parent )
     : KDGantt::ItemDelegate( parent ),
     showResources( false ),
-    showTaskName( false ),
-    showTaskLinks( false ),
+    showTaskName( true ),
+    showTaskLinks( true ),
     showProgress( false ),
     showPositiveFloat( false ),
     showCriticalPath( false ),
     showCriticalTasks( false ),
     showAppointments( false )
 {
+    QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
+    b.setColorAt( 0., Qt::red );
+    b.setColorAt( 1., Qt::darkRed );
+    m_criticalBrush = QBrush( b );
 }
 
 QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
@@ -84,7 +88,7 @@ QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
         txt = i.data( Qt::DisplayRole ).toString();
     }
     if ( type == KDGantt::TypeTask && showResources ) {
-        QModelIndex i = idx.model()->index( idx.row(), NodeModel::NodeAllocation, idx.parent() );
+        QModelIndex i = idx.model()->index( idx.row(), NodeModel::NodeAssigments, idx.parent() );
         if ( ! txt.isEmpty() ) {
             txt += ' ';
         }
@@ -145,6 +149,17 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
     switch( typ ) {
     case KDGantt::TypeTask:
         if ( itemRect.isValid() ) {
+            bool critical = false;
+            if ( showCriticalTasks ) {
+                critical = idx.model()->index( idx.row(), NodeModel::NodeCritical, idx.parent() ).data( Qt::DisplayRole ).toBool();
+            }
+            if ( ! critical && showCriticalPath ) {
+                critical = idx.model()->index( idx.row(), NodeModel::NodeCriticalPath, idx.parent() ).data( Qt::DisplayRole ).toBool();
+            }
+            if ( critical ) {
+                painter->setBrush( m_criticalBrush );
+            }
+            kDebug()<<critical;
             qreal pw = painter->pen().width()/2.;
             pw-=1;
             QRectF r = itemRect;
@@ -234,6 +249,13 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
         break;
     }
     painter->restore();
+}
+
+void GanttItemDelegate::paintConstraintItem( QPainter* painter, const  QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const  KDGantt::Constraint &constraint )
+{
+    if ( showTaskLinks ) {
+        KDGantt::ItemDelegate::paintConstraintItem( painter, opt, start, end, constraint );
+    }
 }
 
 //------------------------------------------------
@@ -553,6 +575,38 @@ void MyKDGanttView::createDependencies()
     }
 }
 
+bool MyKDGanttView::loadContext( const KoXmlElement &settings )
+{
+    treeView()->loadContext( model()->columnMap(), settings );
+    KoXmlElement e = settings.namedItem( "ganttchart" ).toElement();
+    if ( ! e.isNull() ) {
+        m_ganttdelegate->showTaskLinks = (bool)( e.attribute( "show-dependencies", "0" ).toInt() );
+        m_ganttdelegate->showTaskName = (bool)( e.attribute( "show-taskname", "0" ).toInt() );
+        m_ganttdelegate->showResources = (bool)( e.attribute( "show-resourcenames", "0" ).toInt() );
+        m_ganttdelegate->showProgress = (bool)( e.attribute( "show-completion", "0" ).toInt() );
+        m_ganttdelegate->showCriticalPath = (bool)( e.attribute( "show-criticalpath", "0" ).toInt() );
+        m_ganttdelegate->showCriticalTasks = (bool)( e.attribute( "show-criticaltasks", "0" ).toInt() );
+        m_ganttdelegate->showPositiveFloat = (bool)( e.attribute( "show-positivefloat", "0" ).toInt() );
+    }
+    return true;
+}
+
+void MyKDGanttView::saveContext( QDomElement &settings ) const
+{
+    kDebug();
+    treeView()->saveContext( model()->columnMap(), settings );
+    
+    QDomElement e = settings.ownerDocument().createElement( "ganttchart" );
+    settings.appendChild( e );
+    e.setAttribute( "show-dependencies", m_ganttdelegate->showTaskLinks );
+    e.setAttribute( "show-taskname", m_ganttdelegate->showTaskName );
+    e.setAttribute( "show-resourcenames", m_ganttdelegate->showResources );
+    e.setAttribute( "show-completion", m_ganttdelegate->showProgress );
+    e.setAttribute( "show-criticalpath", m_ganttdelegate->showCriticalPath  );
+    e.setAttribute( "show-criticaltasks", m_ganttdelegate->showCriticalTasks );
+    e.setAttribute( "show-positivefloat", m_ganttdelegate->showPositiveFloat );
+}
+
 //------------------------------------------
 GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
         : ViewBase( part, parent ),
@@ -719,43 +773,13 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
 bool GanttView::loadContext( const KoXmlElement &settings )
 {
     kDebug();
-    return m_gantt->treeView()->loadContext( m_gantt->model()->columnMap(), settings );
-/*    QDomElement elm = context.firstChildElement( objectName() );
-    if ( elm.isNull() ) {
-        return false;
-    }*/
-    
-//     Q3ValueList<int> list = m_splitter->sizes();
-//     list[ 0 ] = context.ganttviewsize;
-//     list[ 1 ] = context.taskviewsize;
-//     m_splitter->setSizes( list );
-
-    //TODO this does not work yet!
-    //     currentItemChanged(findItem(project.findNode(context.currentNode)));
-
-/*    m_showResources = context.showResources ;
-    m_showTaskName = context.showTaskName;*/
-//    m_showTaskLinks = (bool)settings.attribute( "show-dependencies" , "0" ).toInt();
-/*    m_showProgress = context.showProgress;
-    m_showPositiveFloat = context.showPositiveFloat;
-    m_showCriticalTasks = context.showCriticalTasks;
-    m_showCriticalPath = context.showCriticalPath;
-    m_showNoInformation = context.showNoInformation;*/
-    //TODO this does not work yet!
-    //     getContextClosedNodes(context, m_gantt->firstChild());
-    //     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
-    //         KDGanttViewItem *item = findItem(m_project->findNode(*it));
-    //         if (item) {
-    //             item->setOpen(false);
-    //         }
-    //     }
-    return true;
+    return m_gantt->loadContext( settings );
 }
 
 void GanttView::saveContext( QDomElement &settings ) const
 {
     kDebug();
-    m_gantt->treeView()->saveContext( m_gantt->model()->columnMap(), settings );
+    m_gantt->saveContext( settings );
 }
 
 void GanttView::updateReadWrite( bool on )

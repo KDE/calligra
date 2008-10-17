@@ -35,28 +35,6 @@
             <Separator/>
             <ActionList name="view_schedule_list"/>
             <Separator/>
-            <Menu name="view_gantt_options"><text>Ganttview Options</text>
-                <Action name="view_gantt_showResources"/>
-                <Action name="view_gantt_showTaskName"/>
-                <Action name="view_gantt_showTaskLinks"/>
-                <Action name="view_gantt_showProgress"/>
-                <Action name="view_gantt_showFloat"/>
-                <Action name="view_gantt_showCriticalPath"/>
-                <Action name="view_gantt_showCriticalTasks"/>
-                <Action name="view_task_appointments"/>
-                <Action name="calculate_schedule"/>
-            </Menu>
-            <Separator/>
-            <!--<Action name="view_pert"/> -->
-            <Separator/>
-            <Menu name="view_resource_options"><text>Resourceview Options</text>
-                <Action name="view_resource_appointments"/> <Action name="calculate_schedule"/>
-
-            </Menu>
-            <Separator/>
-            <!-- <Menu name="view_accounts_options"><text>Accountsview Options</text>
-            </Menu> -->
-            <Separator/>
         </Menu>
 <!--        <Menu name="project"><text>&amp;Project</text>
             <Action name="project_edit"/>
