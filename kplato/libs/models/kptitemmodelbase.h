@@ -33,6 +33,8 @@
 class KoDocument;
 class QDomElement;
 class QUndoCommand;
+class QPainter;
+class QModelIndex;
 
 /// The main namespace
 namespace KPlato

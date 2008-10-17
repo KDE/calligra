@@ -56,9 +56,243 @@
 #include <kmessagebox.h>
 #include <kaction.h>
 
+#include "kdganttglobal.h"
+#include "kdganttstyleoptionganttitem.h"
+
+/// The main namespace
 namespace KPlato
 {
 
+GanttItemDelegate::GanttItemDelegate( QObject *parent )
+    : KDGantt::ItemDelegate( parent ),
+    showResources( false ),
+    showTaskName( false ),
+    showTaskLinks( false ),
+    showProgress( false ),
+    showPositiveFloat( false ),
+    showCriticalPath( false ),
+    showCriticalTasks( false ),
+    showAppointments( false )
+{
+}
+
+QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
+{
+    QString txt;
+    if ( showTaskName ) {
+        QModelIndex i = idx.model()->index( idx.row(), NodeModel::NodeName, idx.parent() );
+        txt = i.data( Qt::DisplayRole ).toString();
+    }
+    if ( type == KDGantt::TypeTask && showResources ) {
+        QModelIndex i = idx.model()->index( idx.row(), NodeModel::NodeAllocation, idx.parent() );
+        if ( ! txt.isEmpty() ) {
+            txt += ' ';
+        }
+        txt += '(' + i.data( Qt::DisplayRole ).toString() + ')';
+    }
+    kDebug()<<txt;
+    return txt;
+}
+
+KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+{
+    kDebug()<<opt<<idx;
+    if ( !idx.isValid() ) return KDGantt::Span();
+
+    int typ = idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt();
+    QString txt = itemText( idx, typ );
+    
+    QRectF itemRect = opt.itemRect;
+    if (  typ == KDGantt::TypeEvent ) {
+        itemRect = QRectF( itemRect.left()-itemRect.height()/2., itemRect.top(), itemRect.height(), itemRect.height() );
+    }
+
+    int tw = opt.fontMetrics.width( txt );
+    tw += static_cast<int>( itemRect.height()/2. );
+    switch ( opt.displayPosition ) {
+        case KDGantt::StyleOptionGanttItem::Left:
+            return KDGantt::Span( itemRect.left()-tw, itemRect.width()+tw );
+        case KDGantt::StyleOptionGanttItem::Right:
+            return KDGantt::Span( itemRect.left(), itemRect.width()+tw );
+        case KDGantt::StyleOptionGanttItem::Center:
+            return KDGantt::Span( itemRect.left(), itemRect.width() );
+    }
+    return KDGantt::Span();
+}
+
+/*! Paints the gantt item \a idx using \a painter and \a opt
+ */
+void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx )
+{
+    if ( !idx.isValid() ) return;
+    
+    const KDGantt::ItemType typ = static_cast<KDGantt::ItemType>( idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt() );
+    
+    QString txt = itemText( idx, typ );
+    QRectF itemRect = opt.itemRect;
+    QRectF boundingRect = opt.boundingRect;
+    boundingRect.setY( itemRect.y() );
+    boundingRect.setHeight( itemRect.height() );
+
+    painter->save();
+
+    QPen pen = defaultPen( typ );
+    if ( opt.state & QStyle::State_Selected ) pen.setWidth( 2*pen.width() );
+    painter->setPen( pen );
+    painter->setBrush( defaultBrush( typ ) );
+
+    qreal pw = painter->pen().width()/2.;
+    switch( typ ) {
+    case KDGantt::TypeTask:
+        if ( itemRect.isValid() ) {
+            qreal pw = painter->pen().width()/2.;
+            pw-=1;
+            QRectF r = itemRect;
+            r.translate( 0., r.height()/6. );
+            r.setHeight( 2.*r.height()/3. );
+            painter->setBrushOrigin( itemRect.topLeft() );
+            painter->save();
+            painter->translate( 0.5, 0.5 );
+            painter->drawRect( r );
+            if ( showProgress ) {
+                bool ok;
+                qreal completion = idx.model()->data( idx, KDGantt::TaskCompletionRole ).toDouble( &ok );
+                if ( ok ) {
+                    qreal h = r.height();
+                    QRectF cr( r.x(), r.y()+h/4. + 1,
+                            r.width()*completion/100., h/2. - 2 );
+                    painter->fillRect( cr, painter->pen().brush() );
+                }
+            }
+            painter->restore();
+            Qt::Alignment ta;
+            switch( opt.displayPosition ) {
+            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            }
+            painter->drawText( boundingRect, ta, txt );
+        }
+        break;
+    case KDGantt::TypeSummary:
+        if ( opt.itemRect.isValid() ) {
+            // TODO
+            pw-=1;
+            const QRectF r = QRectF( opt.itemRect ).adjusted( -pw, -pw, pw, pw );
+            QPainterPath path;
+            const qreal delta = r.height()/2.;
+            path.moveTo( r.topLeft() );
+            path.lineTo( r.topRight() );
+            path.lineTo( QPointF( r.right(), r.top() + 2.*delta ) );
+            //path.lineTo( QPointF( r.right()-3./2.*delta, r.top() + delta ) );
+            path.quadTo( QPointF( r.right()-.5*delta, r.top() + delta ), QPointF( r.right()-2.*delta, r.top() + delta ) );
+            //path.lineTo( QPointF( r.left()+3./2.*delta, r.top() + delta ) );
+            path.lineTo( QPointF( r.left() + 2.*delta, r.top() + delta ) );
+            path.quadTo( QPointF( r.left()+.5*delta, r.top() + delta ), QPointF( r.left(), r.top() + 2.*delta ) );
+            path.closeSubpath();
+            painter->setBrushOrigin( itemRect.topLeft() );
+            painter->save();
+            painter->translate( 0.5, 0.5 );
+            painter->drawPath( path );
+            painter->restore();
+            Qt::Alignment ta;
+            switch( opt.displayPosition ) {
+            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            }
+            painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
+        }
+        break;
+    case KDGantt::TypeEvent:
+        //qDebug() << opt.boundingRect << opt.itemRect;
+        if ( opt.boundingRect.isValid() ) {
+            const qreal pw = painter->pen().width() / 2. - 1;
+            const QRectF r = QRectF( opt.rect ).adjusted( -pw, -pw, pw, pw );
+            QPainterPath path;
+            const qreal delta = static_cast< int >( r.height() / 2 );
+            path.moveTo( delta, 0. );
+            path.lineTo( 2.*delta, delta );
+            path.lineTo( delta, 2.*delta );
+            path.lineTo( 0., delta );
+            path.closeSubpath();
+            painter->save();
+            painter->translate( r.topLeft() );
+            painter->translate( 0.5, 0.5 );
+            painter->drawPath( path );
+            painter->restore();
+            Qt::Alignment ta;
+            switch( opt.displayPosition ) {
+            case KDGantt::StyleOptionGanttItem::Left: ta = Qt::AlignLeft; break;
+            case KDGantt::StyleOptionGanttItem::Right: ta = Qt::AlignRight; break;
+            case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
+            }
+            painter->drawText( boundingRect, ta | Qt::AlignVCenter, txt );
+        }
+        break;
+    default:
+        break;
+    }
+    painter->restore();
+}
+
+//------------------------------------------------
+GanttChartDisplayOptionsPanel::GanttChartDisplayOptionsPanel( GanttItemDelegate *delegate, QWidget *parent )
+    : QWidget( parent ),
+    m_delegate( delegate )
+{
+    setupUi( this );
+    setValues( *delegate );
+
+    connect( ui_showTaskName, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showResourceNames, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showDependencies, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showPositiveFloat, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showCriticalPath, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showCriticalTasks, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_showCompletion, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+}
+
+void GanttChartDisplayOptionsPanel::slotOk()
+{
+    m_delegate->showTaskName = ui_showTaskName->checkState() == Qt::Checked;
+    m_delegate->showResources = ui_showResourceNames->checkState() == Qt::Checked;
+    m_delegate->showTaskLinks = ui_showDependencies->checkState() == Qt::Checked;
+    m_delegate->showPositiveFloat = ui_showPositiveFloat->checkState() == Qt::Checked;
+    m_delegate->showCriticalPath = ui_showCriticalPath->checkState() == Qt::Checked;
+    m_delegate->showCriticalTasks = ui_showCriticalTasks->checkState() == Qt::Checked;
+    m_delegate->showProgress = ui_showCompletion->checkState() == Qt::Checked;
+}
+
+void GanttChartDisplayOptionsPanel::setValues( const GanttItemDelegate &del )
+{
+    ui_showTaskName->setCheckState( del.showTaskName ? Qt::Checked : Qt::Unchecked );
+    ui_showResourceNames->setCheckState( del.showResources ? Qt::Checked : Qt::Unchecked );
+    ui_showDependencies->setCheckState( del.showTaskLinks ? Qt::Checked : Qt::Unchecked );
+    ui_showPositiveFloat->setCheckState( del.showPositiveFloat ? Qt::Checked : Qt::Unchecked );
+    ui_showCriticalPath->setCheckState( del.showCriticalPath ? Qt::Checked : Qt::Unchecked );
+    ui_showCriticalTasks->setCheckState( del.showCriticalTasks ? Qt::Checked : Qt::Unchecked );
+    ui_showCompletion->setCheckState( del.showProgress ? Qt::Checked : Qt::Unchecked );
+}
+
+void GanttChartDisplayOptionsPanel::setDefault()
+{
+    GanttItemDelegate del;
+    setValues( del );
+}
+
+//----
+GanttViewSettingsDialog::GanttViewSettingsDialog( TreeViewBase *view, GanttItemDelegate *delegate, QWidget *parent )
+    : ItemViewSettupDialog( view, parent )
+{
+    GanttChartDisplayOptionsPanel *panel = new GanttChartDisplayOptionsPanel( delegate );
+    KPageWidgetItem *page = insertWidget( 1, panel, i18n( "Chart" ), i18n( "Gantt Chart Settings" ) );
+    
+    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+}
+
+//-------------------------
 GanttPrintingOptions::GanttPrintingOptions( QWidget *parent )
     : QWidget( parent )
 {
@@ -167,7 +401,8 @@ GanttTreeView::GanttTreeView( QWidget* parent )
 MyKDGanttView::MyKDGanttView( QWidget *parent )
     : KDGantt::View( parent ),
     m_project( 0 ),
-    m_manager( 0 )
+    m_manager( 0 ),
+    m_ganttdelegate( new GanttItemDelegate( this ) )
 {
     kDebug()<<"------------------- create MyKDGanttView -----------------------";
     GanttTreeView *tv = new GanttTreeView( this );
@@ -191,6 +426,8 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
         }
     }
 
+    graphicsView()->setItemDelegate( m_ganttdelegate );
+    
     setConstraintModel( new KDGantt::ConstraintModel() );
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
 
@@ -335,19 +572,6 @@ GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
 
     setupGui();
     
-    m_showExpected = true;
-    m_showOptimistic = false;
-    m_showPessimistic = false;
-    m_showResources = false; // FIXME
-    m_showTaskName = false; // FIXME
-    m_showTaskLinks = false; // FIXME
-    m_showProgress = false; //FIXME
-    m_showPositiveFloat = false; //FIXME
-    m_showCriticalTasks = false; //FIXME
-    m_showCriticalPath = false; //FIXME
-    m_showNoInformation = false; //FIXME
-    m_showAppointments = false;
-
     m_taskView = new TaskAppointmentsView( m_splitter );
     m_taskView->hide();
 
@@ -380,8 +604,10 @@ void GanttView::setupGui()
 void GanttView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_gantt->treeView(), true );
-    dlg.exec();
+    GanttViewSettingsDialog dlg( m_gantt->treeView(), m_gantt->delegate() );
+    if ( dlg.exec() == QDialog::Accepted ) {
+        m_gantt->graphicsView()->updateScene();
+    }
 }
 
 void GanttView::clear()
@@ -390,10 +616,49 @@ void GanttView::clear()
     m_taskView->clear();
 }
 
+void GanttView::setShowResources( bool on )
+{
+    m_gantt->delegate()->showResources = on;
+}
+
+void GanttView::setShowTaskName( bool on )
+{
+    m_gantt->delegate()->showTaskName = on;
+}
+
+void GanttView::setShowProgress( bool on )
+{
+    m_gantt->delegate()->showProgress = on;
+}
+
+void GanttView::setShowPositiveFloat( bool on )
+{
+    m_gantt->delegate()->showPositiveFloat = on;
+}
+
+void GanttView::setShowCriticalTasks( bool on )
+{
+    m_gantt->delegate()->showCriticalTasks = on;
+}
+
+void GanttView::setShowCriticalPath( bool on )
+{
+    m_gantt->delegate()->showCriticalPath = on;
+}
+
+void GanttView::setShowNoInformation( bool on )
+{
+    m_gantt->delegate()->showNoInformation = on;
+}
+
+void GanttView::setShowAppointments( bool on )
+{
+    m_gantt->delegate()->showAppointments = on;
+}
+
 void GanttView::setShowTaskLinks( bool on )
 {
-    m_showTaskLinks = on;
-//    m_gantt->setShowTaskLinks( on );
+    m_gantt->delegate()->showTaskLinks = on;
 }
 
 void GanttView::setProject( Project *project )
@@ -470,7 +735,7 @@ bool GanttView::loadContext( const KoXmlElement &settings )
 
 /*    m_showResources = context.showResources ;
     m_showTaskName = context.showTaskName;*/
-    m_showTaskLinks = (bool)settings.attribute( "show-dependencies" , "0" ).toInt();
+//    m_showTaskLinks = (bool)settings.attribute( "show-dependencies" , "0" ).toInt();
 /*    m_showProgress = context.showProgress;
     m_showPositiveFloat = context.showPositiveFloat;
     m_showCriticalTasks = context.showCriticalTasks;

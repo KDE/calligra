@@ -24,11 +24,20 @@
 #include "kplatoui_export.h"
 
 #include "kptviewbase.h"
+#include "kptitemviewsettup.h"
 
 #include "ui_kptganttprintingoptions.h"
+#include "ui_kptganttchartdisplayoptions.h"
 
 #include <kdganttglobal.h>
 #include <kdganttview.h>
+
+#include "kdganttitemdelegate.h"
+
+namespace KDGantt
+{
+    class StyleOptionGanttItem;
+}
 
 class KoDocument;
 
@@ -37,6 +46,7 @@ class QSplitter;
 class QModelIndex;
 
 class KoPrintJob;
+
 
 namespace KPlato
 {
@@ -53,6 +63,61 @@ class ScheduleManager;
 class MyKDGanttView;
 class GanttPrintingOptions;
 
+class KPLATOMODELS_EXPORT GanttItemDelegate : public KDGantt::ItemDelegate
+{
+    Q_OBJECT
+public:
+    GanttItemDelegate( QObject *parent = 0 );
+
+//    virtual QString toolTip( const QModelIndex& idx ) const;
+    virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
+
+    QString itemText( const QModelIndex& idx, int type ) const;
+
+    bool showResources;
+    bool showTaskName;
+    bool showTaskLinks;
+    bool showProgress;
+    bool showPositiveFloat;
+    bool showCriticalPath;
+    bool showCriticalTasks;
+    bool showAppointments;
+    bool showNoInformation;
+
+private:
+    Q_DISABLE_COPY(GanttItemDelegate);
+};
+
+//--------------------------------------
+class GanttChartDisplayOptionsPanel : public QWidget, public Ui::GanttChartDisplayOptions
+{
+    Q_OBJECT
+public:
+    explicit GanttChartDisplayOptionsPanel( GanttItemDelegate *delegate, QWidget *parent = 0 );
+
+    void setValues( const GanttItemDelegate &del );
+
+public slots:
+    void slotOk();
+    void setDefault();
+
+signals:
+    void changed();
+
+private:
+    GanttItemDelegate *m_delegate;
+};
+
+class GanttViewSettingsDialog : public ItemViewSettupDialog
+{
+    Q_OBJECT
+public:
+    explicit GanttViewSettingsDialog( TreeViewBase *view, GanttItemDelegate *delegate, QWidget *parent = 0 );
+
+};
+
+//--------------------
 class KPLATOUI_EXPORT GanttPrintingOptions : public QWidget, public Ui::GanttPrintingOptionsWidget
 {
     Q_OBJECT
@@ -115,6 +180,8 @@ public:
 
     GanttTreeView *treeView() const;
     
+    GanttItemDelegate *delegate() const { return m_ganttdelegate; }
+    
 public slots:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );
@@ -126,6 +193,7 @@ protected:
     NodeItemModel *m_model;
     Project *m_project;
     ScheduleManager *m_manager;
+    GanttItemDelegate *m_ganttdelegate;
 };
 
 class KPLATOUI_EXPORT GanttView : public ViewBase
@@ -153,8 +221,6 @@ public:
 
     void updateReadWrite( bool on );
 
-    bool showNoInformation() const { return m_showNoInformation; }
-
     KoPrintJob *createPrintJob();
     
 signals:
@@ -166,19 +232,15 @@ signals:
 
 public slots:
     void setScheduleManager( ScheduleManager *sm );
-    
-    void setShowExpected( bool on ) { m_showExpected = on; }
-    void setShowOptimistic( bool on ) { m_showOptimistic = on; }
-    void setShowPessimistic( bool on ) { m_showPessimistic = on; }
-    void setShowResources( bool on ) { m_showResources = on; }
-    void setShowTaskName( bool on ) { m_showTaskName = on; }
+    void setShowResources( bool on );
+    void setShowTaskName( bool on );
     void setShowTaskLinks( bool on );
-    void setShowProgress( bool on ) { m_showProgress = on; }
-    void setShowPositiveFloat( bool on ) { m_showPositiveFloat = on; }
-    void setShowCriticalTasks( bool on ) { m_showCriticalTasks = on; }
-    void setShowCriticalPath( bool on ) { m_showCriticalPath = on; }
-    void setShowNoInformation( bool on ) { m_showNoInformation = on; }
-    void setShowAppointments( bool on ) { m_showAppointments = on; }
+    void setShowProgress( bool on );
+    void setShowPositiveFloat( bool on );
+    void setShowCriticalTasks( bool on );
+    void setShowCriticalPath( bool on );
+    void setShowNoInformation( bool on );
+    void setShowAppointments( bool on );
     void update();
 
 protected slots:
@@ -191,20 +253,7 @@ private:
     QSplitter *m_splitter;
     MyKDGanttView *m_gantt;
     TaskAppointmentsView *m_taskView;
-    bool m_showExpected;
-    bool m_showOptimistic;
-    bool m_showPessimistic;
-    bool m_showResources;
-    bool m_showTaskName;
-    bool m_showTaskLinks;
-    bool m_showProgress;
-    bool m_showPositiveFloat;
-    bool m_showCriticalTasks;
-    bool m_showCriticalPath;
-    bool m_showNoInformation;
-    bool m_showAppointments;
     Project *m_project;
-    
 };
 
 class KPLATOUI_EXPORT MilestoneKDGanttView : public KDGantt::View
