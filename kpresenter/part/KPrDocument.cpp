@@ -107,6 +107,15 @@ void KPrDocument::saveOdfDocumentStyles( KoPASavingContext & context )
     }
 }
 
+bool KPrDocument::loadOdfDocumentStyles( KoPALoadingContext & context )
+{
+    KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( dataCenterMap().value( PageLayouts ) );
+    Q_ASSERT( layouts );
+    if ( layouts ) {
+        layouts->loadOdf( context );
+    }
+}
+
 KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 {
     return new KPrPage( masterPage, this );

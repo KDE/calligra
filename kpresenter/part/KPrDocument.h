@@ -120,6 +120,9 @@ public:
     /// reimplemented
     virtual void saveOdfDocumentStyles( KoPASavingContext & context );
 
+    /// reimplemented
+    virtual bool loadOdfDocumentStyles( KoPALoadingContext & context );
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );

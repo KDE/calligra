@@ -81,6 +81,32 @@ bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
     return true;
 }
 
+bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
+{
+    QHash<QString, KoXmlElement*> layouts = context.odfLoadingContext().stylesReader().presentationPageLayouts();
+    QHash<QString, KoXmlElement*>::iterator it( layouts.begin() );
+
+    QRectF pageRect( 0, 0, 680, 510 );
+    for ( ; it != layouts.end(); ++it ) {
+        KPrPageLayout * pageLayout = new KPrPageLayout();
+        if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
+            QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.find( KPrPageLayoutWrapper( pageLayout ) ) );
+            if ( it != m_pageLayouts.end() ) {
+                delete pageLayout;
+            }
+            else {
+                m_pageLayouts.insert( KPrPageLayoutWrapper( pageLayout ), pageLayout );
+            }
+        }
+        else {
+            delete pageLayout;
+            pageLayout = 0;
+        }
+    }
+
+    return true;
+}
+
 KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name, KoPALoadingContext & loadingContext, const QRectF & pageRect )
 {
     KPrPageLayout * pageLayout = 0;

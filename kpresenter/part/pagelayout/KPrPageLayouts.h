@@ -44,17 +44,17 @@ public:
     virtual bool completeSaving( KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
 
     bool saveOdf( KoPASavingContext & context );
-    // loadOdf is not implemented as loading is done by pageLayout and TODO
+
+    /**
+     * load all not yet loaded styles and add application styles
+     */
+    bool loadOdf( KoPALoadingContext & context );
 
     /**
      *
      */
     KPrPageLayout * pageLayout( const QString & name, KoPALoadingContext & loadingContext, const QRectF & pageRect );
 
-    /**
-     * load all not yet loaded styles and add application styles
-     */
-    // TODO
 
     const QList<KPrPageLayout *> layouts() const;
 
