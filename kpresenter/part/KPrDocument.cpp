@@ -60,6 +60,9 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
 {
     K_GLOBAL_STATIC( InitOnce, s_initOnce );
     InitOnce * initOnce = s_initOnce;
+    // have this is as otherwise we get a warning from the compiler
+    // the variable is used and the way it is done is to only call it once
+    Q_UNUSED( initOnce );
 
     setComponentData(KPrFactory::componentData(), false);
     setTemplateType( "kpresenter_template" );
@@ -113,6 +116,7 @@ bool KPrDocument::loadOdfDocumentStyles( KoPALoadingContext & context )
     if ( layouts ) {
         layouts->loadOdf( context );
     }
+    return true;
 }
 
 KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
