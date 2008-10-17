@@ -61,6 +61,9 @@ void KPrPageLayoutDocker::setView( KPrView* view )
     connect( m_view, SIGNAL( activePageChanged() ),
              this, SLOT( slotActivePageChanged() ) );
 
+    // remove the layouts from the last view
+    m_layoutsView->clear();
+
     KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( view->kopaDocument()->dataCenterMap()[ PageLayouts ] );
     Q_ASSERT( layouts );
 
