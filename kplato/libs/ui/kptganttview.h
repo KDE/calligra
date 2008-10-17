@@ -93,7 +93,7 @@ public:
     bool showNoInformation;
 
 private:
-    Q_DISABLE_COPY(GanttItemDelegate);
+    Q_DISABLE_COPY(GanttItemDelegate)
     QBrush m_criticalBrush;
 
 };
