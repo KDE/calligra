@@ -75,29 +75,32 @@ void KPrPlaceholderTool::activate( bool temporary )
         return;
     }
 
-    QUndoCommand *cmd = new QUndoCommand( i18n( "Edit Shape" ) );
-
     KPrPlaceholderShape * shape = selectedShapes.at( 0 );
 
-    // TODO get the KoShapeControllerBase to add it here
     KoShape * newShape = shape->createShape( m_canvas->shapeController()->dataCenterMap() );
-    Q_ASSERT( newShape );
+    // only do anything when we got a shape back
+    if ( newShape ) {
+        // copy settings from placeholder shape
+        newShape->setParent( shape->parent() );
+        newShape->setZIndex( shape->zIndex() );
+        newShape->setSize( shape->size() );
+        newShape->setPosition( shape->position() );
+        newShape->setAdditionalAttribute( "presentation:class", shape->additionalAttribute( "presentation:class" ) );
 
-    // copy settings from placeholder shape
-    newShape->setParent( shape->parent() );
-    newShape->setZIndex( shape->zIndex() );
-    newShape->setSize( shape->size() );
-    newShape->setPosition( shape->position() );
-    newShape->setAdditionalAttribute( "presentation:class", shape->additionalAttribute( "presentation:class" ) );
+        QUndoCommand *cmd = new QUndoCommand( i18n( "Edit Shape" ) );
 
-    // replace placeholder by shape
-    m_canvas->shapeController()->removeShape( shape, cmd );
-    m_canvas->shapeController()->addShape( newShape, cmd );
-    m_canvas->addCommand( cmd );
+        // replace placeholder by shape
+        m_canvas->shapeController()->removeShape( shape, cmd );
+        m_canvas->shapeController()->addShape( newShape, cmd );
+        m_canvas->addCommand( cmd );
 
-    // activate the correct tool for the shape
-    QList<KoShape *> shapes;
-    shapes.append( newShape );
-    m_canvas->shapeManager()->selection()->select( newShape );
-    activateTool( KoToolManager::instance()->preferredToolForSelection( shapes ) );
+        // activate the correct tool for the shape
+        QList<KoShape *> shapes;
+        shapes.append( newShape );
+        m_canvas->shapeManager()->selection()->select( newShape );
+        activateTool( KoToolManager::instance()->preferredToolForSelection( shapes ) );
+    }
+    else {
+        emit done();
+    }
 }
