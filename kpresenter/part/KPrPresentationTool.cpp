@@ -49,6 +49,7 @@ void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &conve
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 {
     if ( event->button() & Qt::LeftButton ) {
+        event->accept();
         finishEventActions();
         KoShape * shapeClicked = m_canvas->shapeManager()->shapeAt( event->point );
         if (shapeClicked) {
@@ -62,6 +63,11 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
             }
         }
         m_viewMode.navigate( KPrAnimationDirector::NextStep );
+    }
+    else if ( event->button() & Qt::RightButton ) {
+        event->accept();
+        finishEventActions();
+        m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
     }
 }
 
