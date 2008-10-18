@@ -19,6 +19,8 @@
 
 #include "KPrPlaceholderStrategy.h"
 
+#include "KPrPlaceholderPictureStrategy.h"
+
 #include <QPainter>
 #include <QPen>
 #include <QTextOption>
@@ -64,10 +66,14 @@ KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & present
         fillPlaceholderMap();
     }
 
-    // TODO create a special strategy for pictures to show a dialog where the user can select a picture
     KPrPlaceholderStrategy * strategy = 0;
-    if ( s_placeholderMap.contains( presentationClass ) ) {
-        strategy = new KPrPlaceholderStrategy( presentationClass );
+    if ( presentationClass == "graphic" ) {
+        strategy = new KPrPlaceholderPictureStrategy();
+    }
+    else {
+        if ( s_placeholderMap.contains( presentationClass ) ) {
+            strategy = new KPrPlaceholderStrategy( presentationClass );
+        }
     }
     return strategy;
 }
@@ -100,8 +106,11 @@ void KPrPlaceholderStrategy::paint( QPainter & painter, const QRectF & rect )
     QTextOption options( Qt::AlignCenter );
     options.setWrapMode( QTextOption::WordWrap );
     painter.drawText( rect, text(), options );
+
     QPen pen( Qt::gray );
-    pen.setStyle( Qt::DashLine );
+    pen.setStyle( Qt::DashLine ); // endless loop
+    //pen.setStyle( Qt::DotLine ); // endless loop
+    //pen.setStyle( Qt::DashDotLine ); // endless loop
     painter.setPen( pen );
     painter.drawRect( rect );
 }
