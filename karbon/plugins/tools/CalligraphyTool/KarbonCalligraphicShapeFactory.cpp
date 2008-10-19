@@ -26,9 +26,13 @@
 KarbonCalligraphicShapeFactory::KarbonCalligraphicShapeFactory( QObject *parent )
 : KoShapeFactory( parent, KarbonCalligraphicShapeId, i18n( "A calligraphic shape" ) )
 {
-    setToolTip( i18n( "An calligraphic shape" ) );
+    setToolTip( i18n( "Calligraphic Shape" ) );
     setIcon("ellipse-shape");
     setLoadingPriority( 1 ); // TODO: to what should this be set??
+}
+
+KarbonCalligraphicShapeFactory::~KarbonCalligraphicShapeFactory()
+{
 }
 
 KoShape * KarbonCalligraphicShapeFactory::createDefaultShape() const
@@ -59,3 +63,9 @@ QList<KoShapeConfigWidgetBase*> KarbonCalligraphicShapeFactory::createShapeOptio
     panels.append( new CalligraphicShapeConfigWidget() );
     return panels;
 }*/
+
+bool KarbonCalligraphicShapeFactory::hidden() const
+{
+    return true;
+}
+

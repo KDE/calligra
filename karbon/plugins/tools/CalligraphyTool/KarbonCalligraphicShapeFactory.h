@@ -30,11 +30,12 @@ class KarbonCalligraphicShapeFactory : public KoShapeFactory
 public:
     /// constructor
     explicit KarbonCalligraphicShapeFactory( QObject *parent );
-    ~KarbonCalligraphicShapeFactory() {}
+    virtual ~KarbonCalligraphicShapeFactory();
     KoShape * createDefaultShape() const;
     KoShape * createShape( const KoProperties * params ) const;
     //virtual bool supports(const KoXmlElement & e) const;
     //virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    bool hidden() const;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPEFACTORY_H
