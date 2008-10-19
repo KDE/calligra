@@ -434,63 +434,28 @@ void KarbonView::fileImportGraphic()
 void KarbonView::editCut()
 {
     debugView("KarbonView::editCut()");
-
     d->canvas->toolProxy()->cut();
-    /*
-    addSelectionToClipboard();
-    // remove selection
-    editDeleteSelection();
-    */
 }
 
 void KarbonView::editCopy()
 {
     debugView("KarbonView::editCopy()");
     d->canvas->toolProxy()->copy();
-
-    /*
-    addSelectionToClipboard();
-    */
-}
-
-void KarbonView::addSelectionToClipboard() const
-{
-    debugView("KarbonView::addSelectionToClipboard()");
-
-    /*
-    if( part()->document().selection()->objects().count() <= 0 )
-        return;
-
-    KarbonDrag* kd = new KarbonDrag();
-    kd->setObjectList( part()->document().selection()->objects() );
-    QApplication::clipboard()->setMimeData( kd->mimeData() );
-    */
 }
 
 void KarbonView::editPaste()
 {
     debugView("KarbonView::editPaste()");
-
+    // TODO bring back copy offset
     d->canvas->toolProxy()->paste();
-    /*
-    KarbonDrag kd;
-    VObjectList objects;
+}
 
-    if( !kd.decode( QApplication::clipboard()->mimeData(), objects, part()->document() ) )
-        return;
-
-    // Paste with a small offset.
-    qreal copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
-    part()->addCommand( new VInsertCmd( &part()->document(),
-                                        objects.count() == 1
-                                            ? i18n( "Paste Object" )
-                                            : i18n( "Paste Objects" ),
-                                        &objects, copyOffset ),
-                        true );
-
-    part()->repaintAllViews();
-    selectionChanged();
-    */
+void KarbonView::selectionDuplicate()
+{
+    debugView("KarbonView::selectionDuplicate()");
+    d->canvas->toolProxy()->copy();
+    // TODO bring back copy offset
+    d->canvas->toolProxy()->paste();
 }
 
 void KarbonView::editSelectAll()
@@ -593,7 +558,6 @@ void KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
     d->canvas->addCommand( cmd );
 }
 
-
 void KarbonView::selectionDistributeHorizontalCenter()
 {
     debugView("KarbonView::selectionDistributeHorizontalCenter()");
@@ -662,35 +626,6 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
     KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand( selectedShapes, distribute, selection->boundingRect());
 
     d->canvas->addCommand( cmd );
-}
-
-void KarbonView::selectionDuplicate()
-{
-    debugView("KarbonView::selectionDuplicate()");
-    /*
-    if ( !part()->document().selection()->objects().count() )
-        return;
-
-    VObjectList  objects;
-
-    // Create copies of all the objects and not just the list.
-    VObjectListIterator itr( part()->document().selection()->objects() );
-    for ( ; itr.current() ; ++itr )    {
-        objects.append( itr.current()->clone() );
-    }
-
-    // Paste with a small offset.
-    qreal copyOffset = part()->componentData().config()->group("").readEntry( "CopyOffset", 10 );
-    part()->addCommand( new VInsertCmd( &part()->document(),
-                                        objects.count() == 1
-                                            ? i18n( "Duplicate Object" )
-                                            : i18n( "Duplicate Objects" ),
-                                        &objects, copyOffset ),
-                        true );
-
-    part()->repaintAllViews();
-    selectionChanged();
-    */
 }
 
 void KarbonView::selectionBringToFront()

@@ -171,7 +171,6 @@ protected:
     void createStrokeDock();
     void createColorDock();
 
-    void addSelectionToClipboard() const;
     virtual KoPrintJob * createPrintJob();
 
 private:
