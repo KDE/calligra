@@ -56,8 +56,9 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
     Q_ASSERT( factory );
     if ( factory ) {
-        // as this is never saved 0 is ok here
-        KoShape * textShape = factory->createDefaultShapeAndInit( 0 );
+        // as this is never saved an empty map is ok here
+        QMap<QString, KoDataCenter *> dataCenterMap;
+        KoShape * textShape = factory->createDefaultShapeAndInit( dataCenterMap );
         QTextDocument * document = qobject_cast<KoTextShapeData*>( textShape->userData() )->document();
         QTextCursor cursor( document );
         QTextCharFormat format;

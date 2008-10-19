@@ -88,7 +88,9 @@ void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     QList<KoShape*> shapes;
     painter->setRenderHint(QPainter::Antialiasing);
 
-    mShape = (KoShape*)(KoShapeRegistry::instance()->value(_shapeType->value().toString()))->createDefaultShapeAndInit(0);
+    // TODO check if it is ok to pass an empty map. The image shape might not work
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    mShape = (KoShape*)(KoShapeRegistry::instance()->value(_shapeType->value().toString()))->createDefaultShapeAndInit(dataCenterMap);
     mShape->setSize(_size.toScene());
     shapes << mShape;
 

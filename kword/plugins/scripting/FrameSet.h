@@ -103,7 +103,9 @@ public slots:
             kWarning(32010) << "Scripting::Module::addFrame() Invalid shapeId: " << shapeId << endl;
             return 0;
         }
-        KoShape *shape = factory->createDefaultShapeAndInit(0);
+        // FIXME check if it is ok to pass an empty map. The shape might not work and crash the program
+        QMap<QString, KoDataCenter *> dataCenterMap;
+        KoShape *shape = factory->createDefaultShapeAndInit( dataCenterMap );
         Q_ASSERT(shape);
         shape->setZIndex(100 + m_frameset->frameCount());
         KWFrame* frame = 0;

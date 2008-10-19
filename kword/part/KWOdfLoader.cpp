@@ -218,7 +218,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
     // Create a TextShape
-    KoShape *shape = factory->createDefaultShapeAndInit(d->document);
+    KoShape *shape = factory->createDefaultShapeAndInit(d->document->dataCenterMap());
     Q_ASSERT(shape);
     // The TextShape will be displayed within a KWTextFrame
     KWTextFrame *frame = new KWTextFrame(shape, fs);
@@ -324,7 +324,7 @@ void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, c
     // Add the frameset and the shape for the header/footer to the document.
     KoShapeFactory *sf = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(sf);
-    KoShape *s = sf->createDefaultShapeAndInit(document);
+    KoShape *s = sf->createDefaultShapeAndInit(document->dataCenterMap());
     Q_ASSERT(s);
     KWTextFrame *f = new KWTextFrame(s, fs);
     document->addFrameSet(fs);
