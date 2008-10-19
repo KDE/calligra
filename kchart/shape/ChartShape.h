@@ -153,6 +153,9 @@ public:
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+
+    /// reimplemented
+    void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
     
     void updateChildrenPositions();
     

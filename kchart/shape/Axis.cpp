@@ -442,7 +442,9 @@ Axis::Axis( PlotArea *parent )
     setShowMajorGrid( false );
     setShowMinorGrid( false );
     
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
+    // TODO check if it is ok to pass an empty map. The text shape might not work correctly
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
     if ( d->title )
     {
         d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );

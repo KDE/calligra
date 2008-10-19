@@ -356,7 +356,9 @@ ChartShape::ChartShape()
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
     
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
+    // We use a empty dataCenterMap here for the creation and then in init we init the shapes with the correct data
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
     if ( !d->title )
     {
         d->title = new TextLabelDummy;
@@ -379,7 +381,7 @@ ChartShape::ChartShape()
     d->title->setVisible( false );
     d->title->setZIndex( 2 );
 
-    d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
+    d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
     if ( !d->subTitle )
     {
         d->subTitle = new TextLabelDummy;
@@ -399,7 +401,7 @@ ChartShape::ChartShape()
     d->subTitle->setVisible( false );
     d->subTitle->setZIndex( 3 );
 
-    d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
+    d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
     if ( !d->footer )
     {
         d->footer = new TextLabelDummy;
@@ -1177,6 +1179,13 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 
     bodyWriter.endElement(); // table:table-rows
     bodyWriter.endElement(); // table:table
+}
+
+void ChartShape::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
+{
+    d->title->init( dataCenterMap );
+    d->subTitle->init( dataCenterMap );
+    d->footer->init( dataCenterMap );
 }
 
 void ChartShape::update() const
