@@ -121,6 +121,13 @@ void KPrPlaceholderStrategy::saveOdf( KoShapeSavingContext & context )
     writer.addCompleteElement( m_placeholderData->m_xmlElement );
 }
 
+bool KPrPlaceholderStrategy::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
+{
+    Q_UNUSED( element );
+    Q_UNUSED( context );
+    return true;
+}
+
 QString KPrPlaceholderStrategy::text() const
 {
     return i18n( m_placeholderData->m_text );

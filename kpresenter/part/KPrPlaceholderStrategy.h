@@ -25,9 +25,11 @@
 class QString;
 class QRectF;
 class QPainter;
+class KoXmlElement;
 class KoShape;
 class KoDataCenter;
 class KoShapeControllerBase;
+class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class PlaceholderData;
 
@@ -45,9 +47,11 @@ public:
 
     virtual KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
 
-    void paint( QPainter & painter, const QRectF & rect );
+    virtual void paint( QPainter & painter, const QRectF & rect );
 
-    void saveOdf( KoShapeSavingContext & context );
+    virtual void saveOdf( KoShapeSavingContext & context );
+
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 protected:
     /**

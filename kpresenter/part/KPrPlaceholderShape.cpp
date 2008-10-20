@@ -68,6 +68,7 @@ bool KPrPlaceholderShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     if ( m_strategy == 0 ) {
         return false;
     }
+    m_strategy->loadOdf( element, context );
 
     return true;
 }
