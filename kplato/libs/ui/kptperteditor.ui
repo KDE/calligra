@@ -31,6 +31,15 @@
          <number>2</number>
         </property>
         <item>
+         <widget class="QTreeWidget" name="taskList" >
+          <column>
+           <property name="text" >
+            <string>Tasks</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item>
          <widget class="QTreeWidget" name="available" >
           <column>
            <property name="text" >
@@ -110,15 +119,6 @@
         <item>
          <widget class="RelationTreeView" name="required" />
         </item>
-        <item>
-         <widget class="QTreeWidget" name="taskList" >
-          <column>
-           <property name="text" >
-            <string>Tasks</string>
-           </property>
-          </column>
-         </widget>
-        </item>
        </layout>
       </item>
      </layout>
@@ -133,6 +133,13 @@
    <header>kptrelationeditor.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>taskList</tabstop>
+  <tabstop>available</tabstop>
+  <tabstop>addBtn</tabstop>
+  <tabstop>removeBtn</tabstop>
+  <tabstop>required</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
