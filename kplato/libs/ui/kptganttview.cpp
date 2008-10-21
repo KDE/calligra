@@ -257,19 +257,19 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
         break;
     case KDGantt::TypeSummary:
         if ( opt.itemRect.isValid() ) {
-            // TODO
             pw-=1;
             const QRectF r = QRectF( itemRect ).adjusted( -pw, -pw, pw, pw );
             QPainterPath path;
-            const qreal delta = r.height()/2.;
+            const qreal deltaY = r.height()/2.;
+            const qreal deltaX = qMin( r.width()/2., deltaY );
             path.moveTo( r.topLeft() );
             path.lineTo( r.topRight() );
-            path.lineTo( QPointF( r.right(), r.top() + 2.*delta ) );
+            path.lineTo( QPointF( r.right(), r.top() + 2.*deltaY ) );
             //path.lineTo( QPointF( r.right()-3./2.*delta, r.top() + delta ) );
-            path.quadTo( QPointF( r.right()-.5*delta, r.top() + delta ), QPointF( r.right()-2.*delta, r.top() + delta ) );
+            path.quadTo( QPointF( r.right()-.5*deltaX, r.top() + deltaY ), QPointF( r.right()-2.*deltaX, r.top() + deltaY ) );
             //path.lineTo( QPointF( r.left()+3./2.*delta, r.top() + delta ) );
-            path.lineTo( QPointF( r.left() + 2.*delta, r.top() + delta ) );
-            path.quadTo( QPointF( r.left()+.5*delta, r.top() + delta ), QPointF( r.left(), r.top() + 2.*delta ) );
+            path.lineTo( QPointF( r.left() + 2.*deltaX, r.top() + deltaY ) );
+            path.quadTo( QPointF( r.left()+.5*deltaX, r.top() + deltaY ), QPointF( r.left(), r.top() + 2.*deltaY ) );
             path.closeSubpath();
             painter->setBrushOrigin( itemRect.topLeft() );
             painter->save();
