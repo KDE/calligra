@@ -25,6 +25,7 @@
 
 #include "kptviewbase.h"
 #include "kptitemviewsettup.h"
+#include "kptnodeitemmodel.h"
 
 #include "ui_kptganttprintingoptions.h"
 #include "ui_kptganttchartdisplayoptions.h"
@@ -49,6 +50,7 @@ class QPoint;
 class QSplitter;
 class QModelIndex;
 class QPointF;
+class QSortFilterProxyModel;
 
 class KoPrintJob;
 
@@ -60,7 +62,7 @@ class TaskAppointmentsView;
 
 class Node;
 class MilestoneItemModel;
-class NodeItemModel;
+class GanttItemModel;
 class Task;
 class Project;
 class Relation;
@@ -80,8 +82,10 @@ public:
     
     virtual void paintConstraintItem( QPainter* p, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const KDGantt::Constraint &constraint );
 
+    QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
     QString itemText( const QModelIndex& idx, int type ) const;
-
+    int itemFloatWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
+    
     bool showResources;
     bool showTaskName;
     bool showTaskLinks;
@@ -98,7 +102,7 @@ private:
 
 };
 
-//--------------------------------------
+//---------------------------------------
 class GanttChartDisplayOptionsPanel : public QWidget, public Ui::GanttChartDisplayOptions
 {
     Q_OBJECT
@@ -173,19 +177,17 @@ public:
 
 };
 
-class MyKDGanttView : public KDGantt::View
+class GanttViewBase : public KDGantt::View
 {
     Q_OBJECT
 public:
-    MyKDGanttView( QWidget *parent );
+    GanttViewBase( QWidget *parent );
     
-    NodeItemModel *model() const { return m_model; }
+    QSortFilterProxyModel *sfModel() const;
+    void setItemModel( ItemModelBase *model );
+    ItemModelBase *model() const;
     void setProject( Project *project );
-    void setScheduleManager( ScheduleManager *sm );
-    void update();
-
-    void clearDependencies();
-    void createDependencies();
+    Project *project() const { return m_project; }
 
     GanttTreeView *treeView() const;
     
@@ -193,6 +195,25 @@ public:
     
     bool loadContext( const KoXmlElement &settings );
     void saveContext( QDomElement &settings ) const;
+
+protected:
+    Project *m_project;
+    GanttItemDelegate *m_ganttdelegate;
+    NodeItemModel m_defaultModel;
+};
+
+class MyKDGanttView : public GanttViewBase
+{
+    Q_OBJECT
+public:
+    MyKDGanttView( QWidget *parent );
+    
+    GanttItemModel *model() const;
+    void setProject( Project *project );
+    void setScheduleManager( ScheduleManager *sm );
+    
+    void clearDependencies();
+    void createDependencies();
 
 public slots:
     void addDependency( Relation *rel );
@@ -202,10 +223,7 @@ public slots:
     void slotNodeInserted( Node *node );
     
 protected:
-    NodeItemModel *m_model;
-    Project *m_project;
     ScheduleManager *m_manager;
-    GanttItemDelegate *m_ganttdelegate;
 };
 
 class KPLATOUI_EXPORT GanttView : public ViewBase
@@ -253,7 +271,6 @@ public slots:
     void setShowCriticalPath( bool on );
     void setShowNoInformation( bool on );
     void setShowAppointments( bool on );
-    void update();
 
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );
@@ -268,26 +285,21 @@ private:
     Project *m_project;
 };
 
-class KPLATOUI_EXPORT MilestoneKDGanttView : public KDGantt::View
+class KPLATOUI_EXPORT MilestoneKDGanttView : public GanttViewBase
 {
     Q_OBJECT
 public:
     MilestoneKDGanttView( QWidget *parent );
 
-    MilestoneItemModel *model() const { return m_model; }
+    MilestoneItemModel *model() const;
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
-    void update();
-
-    GanttTreeView *treeView() const;
     
 public slots:
     void slotProjectCalculated( ScheduleManager *sm );
 
 protected:
-    Project *m_project;
     ScheduleManager *m_manager;
-    MilestoneItemModel *m_model;
 };
 
 class KPLATOUI_EXPORT MilestoneGanttView : public ViewBase
@@ -329,7 +341,6 @@ public slots:
     void setShowPositiveFloat( bool on ) { m_showPositiveFloat = on; }
     void setShowCriticalTasks( bool on ) { m_showCriticalTasks = on; }
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
-    void update();
 
 protected slots:
     void slotContextMenuRequested( QModelIndex, const QPoint &pos );

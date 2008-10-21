@@ -155,19 +155,12 @@ QVariant NodeModel::type( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return node->typeToString( true );
         case Qt::EditRole:
-            return node->typeToString();
+            return node->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
-        case KDGantt::ItemTypeRole: {
-            switch ( node->type() ) {
-                case Node::Type_Summarytask: return KDGantt::TypeSummary;
-                case Node::Type_Milestone: return KDGantt::TypeEvent;
-                default: return KDGantt::TypeTask;
-            }
-        }
     }
     return QVariant();
 }
@@ -1093,7 +1086,32 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
             }
             break;
         case Qt::EditRole:
+            if ( t->completion().isStarted() ) {
+                return t->completion().startTime().dateTime();
+            }
             break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::isStarted( const Node *node, int role ) const
+{
+    if ( ! ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) ) {
+        return QVariant();
+    }
+    const Task *t = static_cast<const Task*>( node );
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            return t->completion().isStarted();
+        case Qt::ToolTipRole:
+            if ( t->completion().isStarted() ) {
+                return i18n( "The task started at: %1", KGlobal::locale()->formatDate( t->completion().startTime().date(), KLocale::LongDate ) );
+            }
+            return i18n( "The task is not started" );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1119,7 +1137,32 @@ QVariant NodeModel::finishedTime( const Node *node, int role ) const
             }
             break;
         case Qt::EditRole:
+            if ( t->completion().isFinished() ) {
+                return t->completion().finishTime().dateTime();
+            }
             break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::isFinished( const Node *node, int role ) const
+{
+    if ( ! ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) ) {
+        return QVariant();
+    }
+    const Task *t = static_cast<const Task*>( node );
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            return t->completion().isFinished();
+        case Qt::ToolTipRole:
+            if ( t->completion().isFinished() ) {
+                return i18n( "The task finished at: %1", KGlobal::locale()->formatDate( t->completion().finishTime().date(), KLocale::LongDate ) );
+            }
+            return i18n( "The task is not finished" );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1415,7 +1458,7 @@ QVariant NodeModel::nodeIsCritical( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->isCritical();
+            return node->isCritical( id() );
         case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -1428,7 +1471,7 @@ QVariant NodeModel::nodeInCriticalPath( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->inCriticalPath();
+            return node->inCriticalPath( id() );
         case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -1496,8 +1539,10 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeRemainingEffort: result = remainingEffort( n, role ); break;
         case NodePlannedCost: result = plannedCostTo( n, role ); break;
         case NodeActualCost: result = actualCostTo( n, role ); break;
-        case NodeStarted: result = startedTime( n, role ); break;
-        case NodeFinished: result = finishedTime( n, role ); break;
+        case NodeActualStart: result = startedTime( n, role ); break;
+        case NodeStarted: result = isStarted( n, role ); break;
+        case NodeActualFinish: result = finishedTime( n, role ); break;
+        case NodeFinished: result = isFinished( n, role ); break;
         case NodeStatusNote: result = note( n, role ); break;
         
         // Scheduling errors
@@ -1595,7 +1640,9 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeRemainingEffort: return i18n( "Remaining Effort" );
             case NodePlannedCost: return i18n( "Planned Cost" );
             case NodeActualCost: return i18n( "Actual Cost" );
+            case NodeActualStart: return i18n( "Actual Start" );
             case NodeStarted: return i18n( "Started" );
+            case NodeActualFinish: return i18n( "Actual Finish" );
             case NodeFinished: return i18n( "Finished" );
             case NodeStatusNote: return i18n( "Status Note" );
             
@@ -1677,8 +1724,10 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeRemainingEffort: return ToolTip::nodeRemainingEffort();
             case NodePlannedCost: return ToolTip::nodePlannedCostTo();
             case NodeActualCost: return ToolTip::nodeActualCostTo();
-            case NodeStarted: return ToolTip::completionStartedTime();
-            case NodeFinished: return ToolTip::completionFinishedTime();
+            case NodeActualStart: return ToolTip::completionStartedTime();
+            case NodeStarted: return ToolTip::completionStarted();
+            case NodeActualFinish: return ToolTip::completionFinishedTime();
+            case NodeFinished: return ToolTip::completionFinished();
             case NodeStatusNote: return ToolTip::completionStatusNote();
     
             // Scheduling errors
@@ -2337,17 +2386,6 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     QVariant result;
     Node *n = node( index );
     if ( n != 0 ) {
-        // Special for kdgantt
-        if ( index.column() == NodeModel::NodeStartTime && role ==  KDGantt::StartTimeRole ) {
-            QDateTime t = n->startTime( m_nodemodel.id() ).dateTime();
-            //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t;
-            return t;
-        }
-        if ( index.column() == NodeModel::NodeEndTime && role == KDGantt::EndTimeRole ) {
-            QDateTime t = n->endTime( m_nodemodel.id() ).dateTime();
-            //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t;
-            return t;
-        }
         result = m_nodemodel.data( n, index.column(), role );
         //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<result;
     }
@@ -2397,6 +2435,7 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
+                case NodeModel::NodeName: return Qt::AlignLeft;
                 case NodeModel::NodeType: return Qt::AlignCenter;
                 default: return QVariant();
             }
@@ -2662,6 +2701,25 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
     return QModelIndex();
 }
 
+//------------------------------------------------
+GanttItemModel::GanttItemModel( QObject *parent )
+    : NodeItemModel( parent )
+{
+}
+
+QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
+{
+    if ( index.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+        QVariant result = NodeItemModel::data( index, Qt::EditRole );
+        switch ( result.toInt() ) {
+            case Node::Type_Summarytask: return KDGantt::TypeSummary;
+            case Node::Type_Milestone: return KDGantt::TypeEvent;
+            default: return KDGantt::TypeTask;
+        }
+    }
+    return NodeItemModel::data( index, role );
+}
+
 //----------------------------
 MilestoneItemModel::MilestoneItemModel( QObject *parent )
     : ItemModelBase( parent )
@@ -2679,9 +2737,10 @@ void MilestoneItemModel::slotNodeToBeInserted( Node *parent, int row )
 void MilestoneItemModel::slotNodeInserted( Node *node )
 {
     //kDebug()<<node->name();
-    if ( node && node->type() == Node::Type_Milestone && m_mslist.indexOf( node ) == -1 ) {
-        beginInsertRows( QModelIndex(), m_mslist.count(), m_mslist.count() );
-        m_mslist.append( node );
+    if ( node ) {
+        m_mslist = m_project->allNodes();
+        int pos = m_mslist.indexOf( node );
+        beginInsertRows( QModelIndex(), pos, pos );
         endInsertRows();
         //kDebug()<<node->name()<<": "<<m_mslist.count();
     }
@@ -2694,12 +2753,12 @@ void MilestoneItemModel::slotNodeToBeRemoved( Node *node )
     if ( row != -1 ) {
         beginRemoveRows( QModelIndex(), row, row );
         m_mslist.removeAt( row );
-        endRemoveRows();
     }
 }
 
 void MilestoneItemModel::slotNodeRemoved( Node *node )
 {
+    endRemoveRows();
 }
 
 void MilestoneItemModel::slotLayoutChanged()
@@ -2750,11 +2809,7 @@ void MilestoneItemModel::resetModel()
 {
     m_mslist.clear();
     if ( m_project != 0 ) {
-        foreach ( Node *n, m_project->allNodes() ) {
-            if ( n->type() == Node::Type_Milestone ) {
-                m_mslist.append( n );
-            }
-        }
+        m_mslist = m_project->allNodes();
     }
     reset();
 }
@@ -3023,19 +3078,17 @@ QVariant MilestoneItemModel::data( const QModelIndex &index, int role ) const
     QVariant result;
     Node *n = node( index );
     if ( n != 0 ) {
-        // Special for kdgantt
-        if ( role ==  KDGantt::StartTimeRole && index.column() == NodeModel::NodeStartTime ) {
-            QDateTime t = n->startTime( m_nodemodel.id() ).dateTime();
-            //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t;
-            return t;
+        if ( index.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+            result = m_nodemodel.data( n, index.column(), Qt::EditRole );
+            switch ( result.toInt() ) {
+                case Node::Type_Summarytask: return KDGantt::TypeSummary;
+                case Node::Type_Milestone: return KDGantt::TypeEvent;
+                default: return KDGantt::TypeTask;
+            }
+            return result;
         }
-        if ( role == KDGantt::EndTimeRole && index.column() == NodeModel::NodeEndTime ) {
-            QDateTime t = n->endTime( m_nodemodel.id() ).dateTime();
-            //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t;
-            return t;
-        }
-        result = m_nodemodel.data( n, index.column(), role );
     }
+    result = m_nodemodel.data( n, index.column(), role );
     if ( role == Qt::DisplayRole && ! result.isValid() ) {
         result = " "; // HACK to show focus in empty cells
     }
@@ -3076,6 +3129,7 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
+                case NodeModel::NodeName: return Qt::AlignLeft;
                 case NodeModel::NodeType: return Qt::AlignCenter;
                 default: return QVariant();
             }
@@ -3285,7 +3339,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
 
 Node *MilestoneItemModel::node( const QModelIndex &index ) const
 {
-    Node *n = m_project;
+    Node *n = 0;
     if ( index.isValid() ) {
         //kDebug()<<index;
         n = static_cast<Node*>( index.internalPointer() );
@@ -3299,18 +3353,8 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
     if ( node == 0 ) {
         return;
     }
-    if ( node->type() != Node::Type_Milestone ) {
-        // Type may have changed from Milestone, so try to remove
-        slotNodeToBeRemoved( node );
-        return;
-    }
     int row = m_mslist.indexOf( node );
-    if ( row == -1 ) {
-        // Type may have changed to Milestone, so insert
-        slotNodeInserted( node );
-        return;
-    }
-    //kDebug()<<node->name()<<": "<<row;
+    kDebug()<<node->name()<<": "<<node->typeToString()<<row;
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
 }
 

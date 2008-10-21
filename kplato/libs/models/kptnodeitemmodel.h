@@ -101,7 +101,9 @@ public:
         NodeRemainingEffort,
         NodePlannedCost,
         NodeActualCost,
+        NodeActualStart,
         NodeStarted,
+        NodeActualFinish,
         NodeFinished,
         NodeStatusNote,
             
@@ -189,7 +191,9 @@ public:
     QVariant status( const Node *node, int role ) const;
     QVariant completed( const Node *node, int role ) const;
     QVariant startedTime( const Node *node, int role ) const;
+    QVariant isStarted( const Node *node, int role ) const;
     QVariant finishedTime( const Node *node, int role ) const;
+    QVariant isFinished( const Node *node, int role ) const;
     QVariant plannedEffortTo( const Node *node, int role ) const;
     QVariant actualEffortTo( const Node *node, int role ) const;
     QVariant remainingEffort( const Node *node, int role ) const;
@@ -313,6 +317,17 @@ private:
     NodeModel m_nodemodel;
 };
 
+//--------------------------------------
+class KPLATOMODELS_EXPORT GanttItemModel : public NodeItemModel
+{
+    Q_OBJECT
+public:
+    GanttItemModel( QObject *parent = 0 );
+    
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+};
+
+// TODO: Rename, this is now a flat node item model
 class KPLATOMODELS_EXPORT MilestoneItemModel : public ItemModelBase
 {
     Q_OBJECT

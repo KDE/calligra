@@ -90,8 +90,8 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
             << NodeModel::NodePlannedCost
             << NodeModel::NodeActualCost
             << NodeModel::NodeStatus
-            << NodeModel::NodeStarted
-            << NodeModel::NodeFinished
+            << NodeModel::NodeActualStart
+            << NodeModel::NodeActualFinish
             << NodeModel::NodeStatusNote;
 
     QList<int> lst2; 

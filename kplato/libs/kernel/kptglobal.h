@@ -97,7 +97,9 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString nodePlannedCostTo();
     static QString nodeActualCostTo();
     static QString completionStartedTime();
+    static QString completionStarted();
     static QString completionFinishedTime();
+    static QString completionFinished();
     static QString completionStatusNote();
     
     static QString estimateExpected();

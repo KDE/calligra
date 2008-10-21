@@ -70,7 +70,9 @@ namespace KPlato
     QString ToolTip::nodePlannedCostTo() { return i18n( "Planned cost" ); }
     QString ToolTip::nodeActualCostTo() { return i18n( "Actual cost" ); }
     QString ToolTip::completionStartedTime() { return i18n( "Time when task was actually started" ); }
+    QString ToolTip::completionStarted() { return i18n( "Shows if the task is started" ); }
     QString ToolTip::completionFinishedTime() { return i18n( "Time when task was actually finished" ); }
+    QString ToolTip::completionFinished() { return i18n( "Shows if the task is finished" ); }
     QString ToolTip::completionStatusNote() { return i18n( "Status Note" ); }
     
     QString ToolTip::estimateExpected() { return i18n( "Calculated expected estimate" ); }

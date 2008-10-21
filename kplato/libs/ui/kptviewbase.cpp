@@ -30,6 +30,8 @@
 #include <KoDocument.h>
 #include <KoShape.h>
 
+#include <QAbstractItemModel>
+#include <QAbstractProxyModel>
 #include <QHeaderView>
 #include <QPoint>
 #include <QScrollBar>
@@ -944,7 +946,12 @@ void TreeViewBase::setSelectionModel( QItemSelectionModel *model )
 
 ItemModelBase *TreeViewBase::model() const
 {
-    return static_cast<ItemModelBase*>( QTreeView::model() );
+    QAbstractItemModel *m = QTreeView::model();
+    QAbstractProxyModel *p = qobject_cast<QAbstractProxyModel*>( m );
+    if ( p ) {
+        return static_cast<ItemModelBase*>( p->sourceModel() );
+    }
+    return static_cast<ItemModelBase*>( m );
 }
 
 void TreeViewBase::setStretchLastSection( bool mode )
