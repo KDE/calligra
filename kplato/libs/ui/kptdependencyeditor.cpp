@@ -66,8 +66,6 @@ void DependecyViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
 
-    painter.scale( 0.95, 0.95 ); //FIXME pageRect seems to be (partially) outside the actual page!!
-
     QRect hRect = headerRect();
     QRect fRect = footerRect();
     QRect pageRect = printer().pageRect();

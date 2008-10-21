@@ -409,8 +409,6 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
     
-    painter.scale( 0.95, 0.95 ); //FIXME pageRect seems to be (partially) outside the actual page!!
-    
     m_firstRow = firstRow( page );
     
     QHeaderView *mh = m_tree->header();
@@ -1162,8 +1160,6 @@ int DoubleTreeViewPrintingDialog::firstRow( int page ) const
 void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 {
     painter.save();
-    
-    painter.scale( 0.95, 0.95 ); //FIXME pageRect seems to be (partially) outside the actual page!!
     
     m_firstRow = firstRow( page );
     

@@ -428,7 +428,6 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
     m_printRowLabels( true )
 {
     m_pageRect = printer().pageRect();
-    m_pageRect.setSize( m_pageRect.size() - QSize( -30, 30 ) ); // TEST
     m_headerHeight = gantt->graphicsView()->headerHeight();
     m_sceneRect = m_gantt->graphicsView()->printRect();
     m_horPages = 1;
