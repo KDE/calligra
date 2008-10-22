@@ -50,7 +50,7 @@ public:
     virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
     virtual void saveOdf(KoShapeSavingContext & context) const;
-    virtual void init(QMap<QString, KoDataCenter*> dataCenterMap);
+    virtual void init(const QMap<QString, KoDataCenter*> & dataCenterMap);
     virtual void setSize(const QSizeF &size);
 
     /**

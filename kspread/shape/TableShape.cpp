@@ -220,7 +220,7 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
     tableContext.valStyle.writeStyle(context.xmlWriter());
 }
 
-void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
+void TableShape::init(const QMap<QString, KoDataCenter*> & dataCenterMap)
 {
     Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
     Q_CHECK_PTR(map);
