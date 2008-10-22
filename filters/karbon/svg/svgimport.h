@@ -117,6 +117,9 @@ protected:
     /// creates a shape from the given shape id
     KoShape * createShape( const QString &shapeID );
 
+    /// Builds the document from the given shapes list
+    void buildDocument( QList<KoShape*> shapes );
+
 private:
     KarbonDocument * m_document;
     QStack<SvgGraphicsContext*>    m_gc;

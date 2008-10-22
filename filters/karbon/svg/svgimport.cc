@@ -39,6 +39,7 @@
 #include <KoPathShape.h>
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
+#include <commands/KoShapeUngroupCommand.h>
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
 #include <KoOdfWriteStore.h>
@@ -201,25 +202,62 @@ void SvgImport::convert()
 
     m_gc.push( gc );
     QList<KoShape*> shapes = parseGroup( docElem );
-    foreach( KoShape * shape, shapes )
-        m_document->add( shape );
 
-    KoShapeLayer * layer = 0;
-    // check if we have to insert a default layer
-    if( m_document->layers().count() == 0 )
+    buildDocument( shapes );
+}
+
+void SvgImport::buildDocument( QList<KoShape*> shapes )
+{
+    // if we have only top level groups, make them layers
+    bool onlyTopLevelGroups = true;
+    foreach( KoShape * shape, shapes )
     {
-        layer = new KoShapeLayer();
-        m_document->insertLayer( layer );
+        if( ! dynamic_cast<KoShapeGroup*>( shape ) )
+        {
+            onlyTopLevelGroups = false;
+            break;
+        }
+    }
+
+    KoShapeLayer * oldLayer = 0;
+    if( m_document->layers().count() )
+        oldLayer = m_document->layers().first();
+
+    if( onlyTopLevelGroups )
+    {
+        foreach( KoShape * shape, shapes )
+        {
+            // ungroup toplevel groups
+            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( shape );
+            QList<KoShape*> children = group->iterator();
+            KoShapeUngroupCommand cmd( group, children );
+            cmd.redo();
+            
+            KoShapeLayer * layer = new KoShapeLayer();
+            foreach( KoShape * child, children )
+            {
+                m_document->add( child );
+                layer->addChild( child );
+                if( ! group->name().isEmpty() )
+                    layer->setName( group->name() );
+            }
+            m_document->insertLayer( layer );
+            delete group;
+        }
     }
     else
-        layer = m_document->layers().first();
-
-    // add all toplevel shapes to the layer
-    foreach( KoShape * shape, m_document->shapes() )
     {
-        if( ! shape->parent() )
+        KoShapeLayer * layer = new KoShapeLayer();
+        foreach( KoShape * shape, shapes )
+        {
+            m_document->add( shape );
             layer->addChild( shape );
+        }
+        m_document->insertLayer( layer );
     }
+
+    if( oldLayer )
+        m_document->removeLayer( oldLayer );
 }
 
 // Helper functions
