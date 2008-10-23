@@ -250,8 +250,8 @@ KWPage KWPageManager::insertPage(const KWPage &page)
         m_pageList.append(page);
     }
     kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
-    return page;
 #endif
+    return page;
 }
 
 KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
