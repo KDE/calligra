@@ -153,7 +153,11 @@ void KPrView::startPresentation()
 
 void KPrView::startPresentationFromBeginning()
 {
-    setActivePage( m_doc->pageByNavigation( activePage(), KoPageApp::PageFirst ) );
+    KPrDocument * doc = dynamic_cast<KPrDocument *>( m_doc );
+    QList<KoPAPageBase*> slideshow = doc->slideShow();
+    if ( !slideshow.isEmpty() ) {
+        setActivePage( slideshow.first() );
+    }
     startPresentation();
 }
 
