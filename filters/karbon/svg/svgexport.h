@@ -74,7 +74,7 @@ private:
     void getFill( KoShape * shape, QTextStream *stream );
     void getStroke( KoShape * shape, QTextStream *stream );
     void getColorStops( const QGradientStops & colorStops );
-    void getGradient( KoShape * shape, const QBrush & brush );
+    void getGradient( const QBrush & brush );
     void getPattern( const QPixmap& patt );
     void getHexColor( QTextStream *, const QColor & color  );
     QString getTransform( const QMatrix &matrix, const QString &attributeName );

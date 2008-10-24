@@ -116,7 +116,7 @@ void WmfExport::paintShape( KoShape * shape )
         return;
 
     QList<QPolygon> polygons;
-    foreach( QPolygonF subpath, subpaths )
+    foreach( const QPolygonF & subpath, subpaths )
     {
         QPolygon p;
         uint pointCount = subpath.count();

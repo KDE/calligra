@@ -374,7 +374,7 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
         appendPoints( *path, listPa.first() );
         path->close();
         path->setFillRule( winding ? Qt::WindingFill : Qt::OddEvenFill );
-        foreach( QPolygon pa, listPa )
+        foreach( const QPolygon & pa, listPa )
         {
             KoPathShape *newPath = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
             if( ! newPath )

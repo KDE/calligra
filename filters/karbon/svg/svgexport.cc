@@ -354,7 +354,7 @@ bool SvgExport::isTranslation( const QMatrix &m )
 void SvgExport::getColorStops( const QGradientStops & colorStops )
 {
     m_indent2++;
-    foreach( QGradientStop stop, colorStops )
+    foreach( const QGradientStop &stop, colorStops )
     {
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<stop stop-color=\"";
@@ -365,7 +365,7 @@ void SvgExport::getColorStops( const QGradientStops & colorStops )
     m_indent2--;
 }
 
-void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
+void SvgExport::getGradient( const QBrush &brush )
 {
     const QString spreadMethod[3] = {
         QString("spreadMethod=\"pad\" "),
@@ -507,7 +507,7 @@ void SvgExport::getFill( KoShape * shape, QTextStream *stream )
         case Qt::LinearGradientPattern:
         case Qt::RadialGradientPattern:
         case Qt::ConicalGradientPattern:
-            getGradient( shape, fill );
+            getGradient( fill );
             break;
         case Qt::TexturePattern:
             getPattern( fill.texture() );
@@ -543,7 +543,7 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     if( line->lineStyle() == Qt::NoPen )
         *stream << "none";
     else if( line->lineBrush().gradient() )
-        getGradient( shape, line->lineBrush() );
+        getGradient( line->lineBrush() );
     else
         getHexColor( stream, line->color() );
     *stream << "\"";
