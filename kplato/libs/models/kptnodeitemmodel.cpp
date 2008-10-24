@@ -2667,7 +2667,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
     }
     int row = node->parentNode()->findChildNode( node );
     kDebug()<<node->name()<<row;
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );
 }
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
