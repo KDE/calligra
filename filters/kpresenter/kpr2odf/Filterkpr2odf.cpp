@@ -507,13 +507,15 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     switch( type )
     {
     case 0: //Horizontal
-        content->addAttributePt( "svg:y1", 0.5 * y2 );
-        content->addAttributePt( "svg:y2", 0.5 * y2 );
-        break;
+    {
+        double y = ( y1 + y2 ) * 0.5;
+        content->addAttributePt( "svg:y1", y );
+        content->addAttributePt( "svg:y2", y );
+    }   break;
     case 1: //Vertical
         content->addAttributePt( "svg:y1", y1 );
         content->addAttributePt( "svg:y2", y2 );
-        xpos1 = QString( "%1pt" ).arg( 0.5 * x1 );
+        xpos1 = QString( "%1pt" ).arg( 0.5 * ( x1 + x2 ) );
         xpos2 = xpos1;
         break;
     case 2: //Left Top to Right Bottom
