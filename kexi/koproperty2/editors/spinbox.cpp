@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,30 +22,39 @@
 #include "spinbox.h"
 
 #include "Property.h"
+#include "EditorDataModel.h"
 
-#include <QLayout>
-#include <QObject>
+#include <KGlobal>
+#include <KLocale>
+
 #include <QVariant>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QLineEdit>
 
-#include <kglobal.h>
-#include <klocale.h>
-
-using namespace KoProperty;
-
-IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntEdit *parent)
-        : KIntSpinBox(lower, upper, step, value, parent, base)
+IntSpinBox::IntSpinBox(const KoProperty::Property* prop, QWidget *parent)
+        : KIntNumInput(parent)
 {
-    lineEdit()->setAlignment(Qt::AlignLeft);
-    installEventFilter(lineEdit());
-    installEventFilter(this);
+    QLineEdit* le = spinBox()->findChild<QLineEdit*>();
+    if (le)
+        le->setAlignment(Qt::AlignLeft);
+    spinBox()->setFrame(false);
+    spinBox()->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
+
+    QVariant minVal(prop->option("min", -INT_MAX));
+    QVariant maxVal(prop->option("max", INT_MAX));
+    setMinimum(minVal.toInt());
+    setMaximum(maxVal.toInt());
+    QString minValueText(prop->option("minValueText").toString());
+    if (!minValueText.isEmpty())
+        setSpecialValueText(minValueText);
+//todo?    installEventFilter(lineEdit());
+//todo?    installEventFilter(this);
 
     // NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
     // An empty string matches all object names.
-    QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
+/*TODO    QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
 #ifndef Q_WS_WIN
 #ifdef __GNUC__
 #warning TODO: fix for Qt4
@@ -52,10 +62,14 @@ IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntE
 #endif
     QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
     if (spin)
-        spin->installEventFilter(this);
+        spin->installEventFilter(this);*/
 }
 
-void IntSpinBox::setValue(const QVariant &value)
+IntSpinBox::~IntSpinBox()
+{
+}
+
+/*void IntSpinBox::setValue(const QVariant &value)
 {
     if (dynamic_cast<IntEdit*>(parentWidget()) && dynamic_cast<IntEdit*>(parentWidget())->isReadOnly())
         return;
@@ -63,8 +77,9 @@ void IntSpinBox::setValue(const QVariant &value)
         lineEdit()->clear();
     else
         KIntSpinBox::setValue(value.toInt());
-}
+}*/
 
+/* TODO?
 bool
 IntSpinBox::eventFilter(QObject *o, QEvent *e)
 {
@@ -84,10 +99,11 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 
     return KIntSpinBox::eventFilter(o, e);
 }
-
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
 IntEdit::IntEdit(Property *property, QWidget *parent)
         : Widget(property, parent)
 {
@@ -184,20 +200,46 @@ IntEdit::setReadOnlyInternal(bool readOnly)
     if (readOnly)
         setLeavesTheSpaceForRevertButton(false);
 }
+*/
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DoubleSpinBox::DoubleSpinBox(double lower, double upper, double step, double value, int precision, DoubleEdit *parent)
-        : QDoubleSpinBox(parent)
+DoubleSpinBox::DoubleSpinBox(const KoProperty::Property* prop, QWidget *parent)
+        : KDoubleNumInput(parent)
 {
-    setMinimum(lower);
-    setMaximum(upper);
-    setValue(value);
-    setSingleStep(step);
-    setDecimals(precision);
-    lineEdit()->setAlignment(Qt::AlignLeft);
-    installEventFilter(lineEdit());
+    QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
+    QLineEdit* le = 0;
+    if (sb)
+        le = sb->findChild<QLineEdit*>();
+    if (le)
+        le->setAlignment(Qt::AlignLeft);
+    sb->setFrame(false);
+    setStyleSheet(QString());
+    sb->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
+
+    QVariant minVal(prop->option("min", 0.0));
+    QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
+    QVariant step(prop->option("step", 0.01));
+    bool slider(prop->option("slider", false).toBool());
+    if (!minVal.isNull() && !maxVal.isNull() && !step.isNull()) {
+        setRange(minVal.toDouble(), maxVal.toDouble(), step.toDouble(), slider);
+    }
+    else {
+        if (!minVal.isNull())
+            setMinimum(minVal.toDouble());
+        if (!maxVal.isNull())
+            setMaximum(maxVal.toDouble());
+    }
+    QVariant precision(prop->option("precision"));
+    if (!precision.isNull())
+        setDecimals(precision.toInt());
+    QString minValueText(prop->option("minValueText").toString());
+    if (!minValueText.isEmpty())
+        setSpecialValueText(minValueText);
+    
+//    spinBox()->lineEdit()->setAlignment(Qt::AlignLeft);
+/*    installEventFilter(lineEdit());
     installEventFilter(this);
 
     // NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
@@ -210,9 +252,21 @@ DoubleSpinBox::DoubleSpinBox(double lower, double upper, double step, double val
 #endif
     QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
     if (spin)
-        spin->installEventFilter(this);
+        spin->installEventFilter(this);*/
 }
 
+DoubleSpinBox::~DoubleSpinBox()
+{
+}
+
+void DoubleSpinBox::resizeEvent( QResizeEvent * event )
+{
+    QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
+    sb->setFixedHeight(height()+1);
+    KDoubleNumInput::resizeEvent(event);
+}
+
+/*
 bool
 DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 {
@@ -233,7 +287,6 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
     return QDoubleSpinBox::eventFilter(o, e);
 }
 
-
 void DoubleSpinBox::setValue(const QVariant& value)
 {
     if (dynamic_cast<DoubleEdit*>(parentWidget()) && dynamic_cast<DoubleEdit*>(parentWidget())->isReadOnly())
@@ -242,8 +295,9 @@ void DoubleSpinBox::setValue(const QVariant& value)
         lineEdit()->clear();
     else
         QDoubleSpinBox::setValue(value.toDouble());
-}
+}*/
 
+/*
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DoubleEdit::DoubleEdit(Property *property, QWidget *parent)
@@ -351,6 +405,70 @@ DoubleEdit::setReadOnlyInternal(bool readOnly)
     updateSpinWidgets();
     if (readOnly)
         setLeavesTheSpaceForRevertButton(false);
+}
+*/
+
+//-----------------------
+
+IntSpinBoxDelegate::IntSpinBoxDelegate()
+{
+}
+
+QString IntSpinBoxDelegate::displayText( const KoProperty::Property* prop ) const
+{
+    if (prop->hasOptions()) {
+        //replace min value with minValueText if defined
+        QVariant minValue(prop->option("min"));
+        QString minValueText(prop->option("minValueText").toString());
+        if (!minValue.isNull() && !minValueText.isEmpty()
+            && minValue.toInt() == prop->value().toInt())
+        {
+            return minValueText;
+        }
+    }
+    return QString::number(prop->value().toInt());
+}
+
+QWidget* IntSpinBoxDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    const KoProperty::EditorDataModel *editorModel
+        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
+    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    return new IntSpinBox(prop, parent);
+}
+
+//-----------------------
+
+DoubleSpinBoxDelegate::DoubleSpinBoxDelegate()
+{
+}
+
+QString DoubleSpinBoxDelegate::displayText( const KoProperty::Property* prop ) const
+{
+    QString valueText;
+    if (prop->hasOptions()) {
+        //replace min value with minValueText if defined
+        QVariant minValue(prop->option("min"));
+        QString minValueText(prop->option("minValueText").toString());
+        if (!minValue.isNull() && !minValueText.isEmpty()
+            && minValue.toDouble() == prop->value().toDouble())
+        {
+            return minValueText;
+        }
+    }
+//! @todo precision? 
+//! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
+    return KGlobal::locale()->formatNumber(prop->value().toDouble());
+}
+
+QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    const KoProperty::EditorDataModel *editorModel
+        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
+    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    return new DoubleSpinBox(prop, parent);
 }
 
 #include "spinbox.moc"

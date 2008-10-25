@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,40 +22,34 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
-#include <knuminput.h>
+#include "Factory.h"
+#include <KNumInput>
 
-#include "../widget.h"
-//Added by qt3to4:
-#include <QtCore/QEvent>
-
-namespace KoProperty
-{
-
-class IntEdit;
-class DoubleEdit;
-
-// Int Editor
-
-class IntSpinBox : public KIntSpinBox
+class IntSpinBox : public KIntNumInput
 {
     Q_OBJECT
+    Q_PROPERTY(int value READ value WRITE setValue USER true)
 
 public:
-    IntSpinBox(int lower, int upper, int step, int value, int base = 10,
-               IntEdit *parent = 0);
-    virtual ~IntSpinBox() {
-        ;
-    }
+    IntSpinBox(const KoProperty::Property* prop, QWidget *parent = 0);
+    virtual ~IntSpinBox();
 
-    virtual void setValue(const QVariant &value);
+    virtual int value() const { return KIntNumInput::value(); }
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-    QLineEdit * lineEdit() const {
+//    virtual void setProperty(const KoProperty::Property *prop);
+    
+//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+
+public slots:
+    virtual void setValue(int value) { KIntNumInput::setValue(value); }
+
+//todo?    virtual bool eventFilter(QObject *o, QEvent *e);
+/*    QLineEdit * lineEdit() const {
         return KIntSpinBox::lineEdit();
-    }
+    }*/
 };
 
-class KOPROPERTY_EXPORT IntEdit : public Widget
+/*class KOPROPERTY_EXPORT IntEdit : public Widget
 {
     Q_OBJECT
 
@@ -75,31 +70,36 @@ protected slots:
 
 private:
     IntSpinBox  *m_edit;
-};
+};*/
 
 // Double editor
 
-class DoubleSpinBox : public QDoubleSpinBox
+class DoubleSpinBox : public KDoubleNumInput
 {
     Q_OBJECT
+    Q_PROPERTY(double value READ value WRITE setValue USER true)
 
 public:
-    //! \todo Support setting precision limits, step, etc.
-    DoubleSpinBox(double lower, double upper, double step, double value = 0,
-                  int precision = 2, DoubleEdit *parent = 0);
-    virtual ~DoubleSpinBox() {
-        ;
-    }
+//! @todo Support setting precision limits, step, etc.
+    DoubleSpinBox(const KoProperty::Property* prop, QWidget *parent = 0);
+    virtual ~DoubleSpinBox();
 
-    virtual bool eventFilter(QObject *o, QEvent *e);
-    QLineEdit * lineEdit() const {
+//    virtual bool eventFilter(QObject *o, QEvent *e);
+/*    QLineEdit * lineEdit() const {
         return QDoubleSpinBox::lineEdit();
-    }
+    }*/
+
+    virtual double value() const { return KDoubleNumInput::value(); }
 
 public slots:
-    virtual void setValue(const QVariant& value);
+    virtual void setValue(double value) { KDoubleNumInput::setValue(value); }
+
+protected:
+    //! Used to fix height of the internal spin box
+    virtual void resizeEvent( QResizeEvent * event );
 };
 
+/*
 class KOPROPERTY_EXPORT DoubleEdit : public Widget
 {
     Q_OBJECT
@@ -121,8 +121,30 @@ protected slots:
 
 private:
     DoubleSpinBox  *m_edit;
+};*/
+
+class IntSpinBoxDelegate : public KoProperty::EditorCreatorInterface, 
+                           public KoProperty::ValueDisplayInterface
+{
+public:
+    IntSpinBoxDelegate();
+    
+    virtual QString displayText( const KoProperty::Property* prop ) const;
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-}
+class DoubleSpinBoxDelegate : public KoProperty::EditorCreatorInterface, 
+                              public KoProperty::ValueDisplayInterface
+{
+public:
+    DoubleSpinBoxDelegate();
+    
+    virtual QString displayText( const KoProperty::Property* prop ) const;
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+};
 
 #endif

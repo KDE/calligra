@@ -30,14 +30,14 @@
 #include "datetimeedit.h"
 #include "dummywidget.h"
 //TODO #include "linestyleedit.h"
-#include "pixmapedit.h"
-#include "pointedit.h"*/
+#include "pixmapedit.h"*/
+#include "pointedit.h"
 #include "fontedit.h"
 #include "rectedit.h"
 #include "sizeedit.h"
-/*#include "sizepolicyedit.h"
+/*#include "sizepolicyedit.h"*/
 #include "spinbox.h"
-#include "stringlistedit.h"*/
+/*#include "stringlistedit.h"*/
 #include "stringedit.h"
 /*#include "symbolcombo.h"
 #include "timeedit.h"
@@ -51,11 +51,14 @@ using namespace KoProperty;
 DefaultFactory::DefaultFactory()
  : Factory()
 {
+    addEditor( KoProperty::Bool, new BoolDelegate );
+    addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
+    addPainter( KoProperty::Point, new PointDelegate );
     addDisplay( KoProperty::Rect, new RectDelegate );
     addPainter( KoProperty::Size, new SizeDelegate );
+    addEditor( KoProperty::Int, new IntSpinBoxDelegate );
     addEditor( KoProperty::String, new StringDelegate );
-    addEditor( KoProperty::Bool, new BoolDelegate );
     addEditor( KoProperty::ValueFromList, new ComboBoxDelegate );
 }
 

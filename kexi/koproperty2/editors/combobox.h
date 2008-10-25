@@ -42,7 +42,7 @@ public:
 //    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 public slots:
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual void setValue(const QVariant &value);
 
 protected slots:
     void slotValueChanged(int value);

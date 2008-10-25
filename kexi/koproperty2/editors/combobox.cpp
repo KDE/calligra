@@ -90,7 +90,7 @@ QVariant ComboBox::value() const
     return QVariant(m_property->listData()->keys[idx]);
 }
 
-void ComboBox::setValue(const QVariant &value, bool emitChange)
+void ComboBox::setValue(const QVariant &value)
 {
     if (!m_property || !m_property->listData()) {
         kopropertywarn << "propery listData not available!" << endl;

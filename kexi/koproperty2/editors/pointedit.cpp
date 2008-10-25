@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,72 +20,13 @@
 */
 
 #include "pointedit.h"
-#include "editoritem.h"
 
-#include <QLabel>
-#include <QLayout>
-#include <QPainter>
-#include <QToolTip>
-#include <QTextEdit>
+#include <QtCore/QPoint>
 
-#include <klocale.h>
-
-#define POINTEDIT_MASK "%1,%2"
-
-using namespace KoProperty;
-
-PointEdit::PointEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+QString PointDelegate::displayText( const QVariant& value ) const
 {
-    setHasBorders(false);
-    m_edit = new QLabel(this);
-    m_edit->setTextInteractionFlags(Qt::TextSelectableByMouse);
-// m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-    QPalette pal = m_edit->palette();
-    pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
-    m_edit->setPalette(pal);
-// m_edit->setBackgroundMode(Qt::PaletteBase);
-// m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    setEditor(m_edit);
-// setFocusWidget(m_edit);
+    const QPoint p(value.toPoint());
+    return QString::fromLatin1(POINTEDIT_MASK)
+        .arg(p.x())
+        .arg(p.y());
 }
-
-PointEdit::~PointEdit()
-{}
-
-QVariant
-PointEdit::value() const
-{
-    return m_value;
-}
-
-void
-PointEdit::setValue(const QVariant &value, bool emitChange)
-{
-    m_value = value;
-    m_edit->setText(QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
-    this->setToolTip(QString("%1, %2").arg(value.toPoint().x()).arg(value.toPoint().y()));
-
-    if (emitChange)
-        emit valueChanged(this);
-}
-
-void
-PointEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    QRect rect(r);
-    rect.setBottom(r.bottom() + 1);
-    Widget::drawViewer(p, cg, rect, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
-// p->eraseRect(r);
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-//  QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
-}
-
-void
-PointEdit::setReadOnlyInternal(bool readOnly)
-{
-    Q_UNUSED(readOnly);
-}
-
-#include "pointedit.moc"

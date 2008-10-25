@@ -20,11 +20,11 @@ set(libkopropertyeditors_SRCS
   editors/fontedit.cpp
 #todo  editors/linestyledit.cpp
 #  editors/pixmapedit.cpp
-#  editors/pointedit.cpp
+  editors/pointedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
 #  editors/sizepolicyedit.cpp
-#  editors/spinbox.cpp
+  editors/spinbox.cpp
   editors/stringedit.cpp
 #  editors/stringlistedit.cpp
 #  editors/symbolcombo.cpp
