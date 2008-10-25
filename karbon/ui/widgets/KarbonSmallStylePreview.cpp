@@ -35,7 +35,7 @@
 #include <KGlobalSettings>
 
 #include <QtGui/QColor>
-#include <QtGui/QFrame>
+#include <QtGui/QPushButton>
 #include <QtGui/QLabel>
 #include <QtGui/QLayout>
 #include <QtGui/QPixmap>
@@ -48,12 +48,14 @@
 #define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15
 
-class KarbonFillStyleWidget : public QFrame
+class KarbonFillStyleWidget : public QPushButton
 {
 public:
     KarbonFillStyleWidget( QWidget * parent )
-    : QFrame( parent ), m_fill(0), m_checkerPainter( 5 )
+    : QPushButton( parent ), m_fill(0), m_checkerPainter( 5 )
     {
+        setCursor( Qt::PointingHandCursor );
+        setToolTip( i18n("Press to apply fill to selection" ) );
     }
     void setFill( const KoShapeBackground * fill )
     {
@@ -100,20 +102,22 @@ protected:
 
         painter.end();
 
-        QFrame::paintEvent( event );
+        //QPushButton::paintEvent( event );
     }
-
+    
 private:
     const KoShapeBackground * m_fill; ///< the fill to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-class KarbonStrokeStyleWidget : public QFrame
+class KarbonStrokeStyleWidget : public QPushButton
 {
 public:
     KarbonStrokeStyleWidget( QWidget * parent )
-    : QFrame( parent ), m_stroke(0), m_checkerPainter( 5 )
+    : QPushButton( parent ), m_stroke(0), m_checkerPainter( 5 )
     {
+        setCursor( Qt::PointingHandCursor );
+        setToolTip( i18n("Press to apply stroke to selection" ) );
     }
     void setStroke( const KoShapeBorderModel * stroke )
     {
@@ -170,7 +174,7 @@ protected:
 
         painter.end();
 
-        QFrame::paintEvent( event );
+        //QPushButton::paintEvent( event );
     }
 
 private:
@@ -188,15 +192,13 @@ KarbonSmallStylePreview::KarbonSmallStylePreview( QWidget* parent )
     QLabel * strokeLabel = new QLabel( i18n( "Stroke:" ), this );
     strokeLabel->setMinimumHeight( FRAMEHEIGHT );
     m_strokeFrame = new KarbonStrokeStyleWidget( this );
-    m_strokeFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
     m_strokeFrame->setMinimumSize( QSize(FRAMEWIDTH,FRAMEHEIGHT) );
-
+    
     QLabel * fillLabel = new QLabel( i18n( "Fill:" ), this );
     fillLabel->setMinimumHeight( FRAMEHEIGHT );
     m_fillFrame = new KarbonFillStyleWidget( this );
-    m_fillFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
     m_fillFrame->setMinimumSize( QSize(FRAMEWIDTH,FRAMEHEIGHT) );
-
+    
     layout->addWidget( strokeLabel, 0, 0 );
     layout->addWidget( m_strokeFrame, 0, 1 );
     layout->addWidget( fillLabel, 1, 0 );
@@ -208,6 +210,8 @@ KarbonSmallStylePreview::KarbonSmallStylePreview( QWidget* parent )
 
     connect( KoToolManager::instance(), SIGNAL(changedCanvas(const KoCanvasBase *)),
              this, SLOT(canvasChanged(const KoCanvasBase *)));
+    connect( m_strokeFrame, SIGNAL(clicked()), this, SIGNAL(strokeApplied()) );
+    connect( m_fillFrame, SIGNAL(clicked()), this, SIGNAL(fillApplied()) );
 }
 
 KarbonSmallStylePreview::~KarbonSmallStylePreview()

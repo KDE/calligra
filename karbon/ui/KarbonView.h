@@ -159,6 +159,10 @@ protected slots:
     void pageOffsetChanged();
 
     void updateUnit( KoUnit unit );
+    
+    void applyFillToSelection();
+    void applyStrokeToSelection();
+    
 signals:
     void selectionChange();
     void pageLayoutChanged();

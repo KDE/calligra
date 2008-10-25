@@ -238,7 +238,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     addStatusBarItem( zoomController->zoomAction()->createWidget( statusBar() ), 0 );
     zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
-    addStatusBarItem( new KarbonSmallStylePreview( statusBar() ), 0 );
+    KarbonSmallStylePreview * smallPreview = new KarbonSmallStylePreview( statusBar() );
+    connect( smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()) );
+    connect( smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()) );
+    addStatusBarItem( smallPreview, 0 );
 
     // layout:
     QGridLayout *layout = new QGridLayout();
@@ -1369,6 +1372,26 @@ QList<KoPathShape*> KarbonView::selectedPathShapes()
 KoPrintJob * KarbonView::createPrintJob()
 {
     return new KarbonPrintJob(this);
+}
+
+void KarbonView::applyFillToSelection()
+{
+    KoSelection *selection = d->canvas->shapeManager()->selection();
+    if( ! selection->count() )
+        return;
+    
+    KoShape * shape = selection->firstSelectedShape();
+    d->canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), shape->background() ) );
+}
+
+void KarbonView::applyStrokeToSelection()
+{
+    KoSelection *selection = d->canvas->shapeManager()->selection();
+    if( ! selection->count() )
+        return;
+    
+    KoShape * shape = selection->firstSelectedShape();
+    d->canvas->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), shape->border() ) );
 }
 
 #include "KarbonView.moc"
