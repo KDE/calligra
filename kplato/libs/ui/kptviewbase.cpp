@@ -48,7 +48,7 @@ PrintingHeaderFooter::PrintingHeaderFooter( const PrintingOptions &opt, QWidget 
     : QWidget( parent )
 {
     setupUi( this );
-    setWindowTitle( "Header and Footer" );
+    setWindowTitle( i18n("Header and Footer" ));
     setOptions( opt );
 }
 

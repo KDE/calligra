@@ -417,7 +417,7 @@ GanttPrintingOptions::GanttPrintingOptions( QWidget *parent )
 {
     setupUi( this );
     ui_printRowLabels->hide(); // TODO or remove?
-    setWindowTitle( "Options" );
+    setWindowTitle( i18n("Options") );
 }
 
 //----------------
