@@ -17,6 +17,16 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2008-10-26
+KoProperty2
+- editor widgets ported to the new API: point, int, double
+
+2008-10-25
+KoProperty2
+- factories refactored using convenient interfaces
+- editor widgets ported to the new API: string, rect, size, combo, bool
+- improvements in the model and view classes
+
 2008-09-23
 KoProperty2
 - 'revert to defaults' works
