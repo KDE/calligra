@@ -38,13 +38,18 @@ public:
 
 public slots:
     void slotActivePageChanged();
-    void slotSelectionChanged();
+    void slotItemPressed( QListWidgetItem * item );
+    void slotCurrentItemChanged( QListWidgetItem * item, QListWidgetItem * previous );
 
 private:
     QListWidgetItem * addLayout( KPrPageLayout * layout );
+    void applyLayout( QListWidgetItem * item );
     KPrView* m_view;
     QListWidget * m_layoutsView;
     QMap<KPrPageLayout *, QListWidgetItem *> m_layout2item;
+    // store the last item which was active so we can detect that 
+    // the already selected item was clicked again.
+    QListWidgetItem * m_previousItem;
 };
 
 #endif /* KPRPAGELAYOUTDOCKER_H */

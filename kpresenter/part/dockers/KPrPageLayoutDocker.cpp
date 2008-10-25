@@ -32,12 +32,15 @@
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
 
+#include <kdebug.h>
+
 // this is needed so it can be used in a QVariant
 Q_DECLARE_METATYPE( KPrPageLayout* )
 
 KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags )
 : QDockWidget( parent, flags )
 , m_view( 0 )
+, m_previousItem( 0 )
 {
     setWindowTitle( i18n( "Page Layouts" ) );
 
@@ -77,8 +80,10 @@ void KPrPageLayoutDocker::setView( KPrView* view )
 
     slotActivePageChanged();
 
-    connect( m_layoutsView, SIGNAL( itemSelectionChanged() ),
-             this, SLOT( slotSelectionChanged() ) );
+    connect( m_layoutsView, SIGNAL( itemPressed( QListWidgetItem * ) ),
+             this, SLOT( slotItemPressed( QListWidgetItem * ) ) );
+    connect( m_layoutsView, SIGNAL( currentItemChanged( QListWidgetItem *, QListWidgetItem * ) ),
+             this, SLOT( slotCurrentItemChanged( QListWidgetItem *, QListWidgetItem * ) ) );
 }
 
 void KPrPageLayoutDocker::slotActivePageChanged()
@@ -110,17 +115,22 @@ void KPrPageLayoutDocker::slotActivePageChanged()
     }
 }
 
-void KPrPageLayoutDocker::slotSelectionChanged()
+void KPrPageLayoutDocker::slotItemPressed( QListWidgetItem * item )
 {
-    Q_ASSERT( m_view );
-    KPrPage * page = dynamic_cast<KPrPage*>( m_view->activePage() );
-    if ( page ) {
-        QList<QListWidgetItem *> items = m_layoutsView->selectedItems();
-        if ( !items.isEmpty() ) {
-            page->setLayout( items.at( 0 )->data( Qt::UserRole ).value<KPrPageLayout *>(), m_view->kopaDocument() );
-        }
+    if ( item == m_previousItem ) {
+        applyLayout( item );
+    }
+    else {
+        m_previousItem = item;
     }
 }
+
+void KPrPageLayoutDocker::slotCurrentItemChanged( QListWidgetItem * item, QListWidgetItem * previous )
+{
+    applyLayout( item );
+    m_previousItem = previous;
+}
+
 
 QListWidgetItem * KPrPageLayoutDocker::addLayout( KPrPageLayout * layout )
 {
@@ -128,6 +138,18 @@ QListWidgetItem * KPrPageLayoutDocker::addLayout( KPrPageLayout * layout )
     item->setData( Qt::UserRole, QVariant::fromValue( layout ) );
     m_layout2item.insert( layout, item );
     return item;
+}
+
+void KPrPageLayoutDocker::applyLayout( QListWidgetItem * item )
+{
+    // don't crash when all items are replaced
+    if ( item ) {
+        Q_ASSERT( m_view );
+        KPrPage * page = dynamic_cast<KPrPage*>( m_view->activePage() );
+        if ( page ) {
+            page->setLayout( item->data( Qt::UserRole ).value<KPrPageLayout *>(), m_view->kopaDocument() );
+        }
+    }
 }
 
 #include "KPrPageLayoutDocker.moc"
