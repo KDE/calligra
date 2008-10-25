@@ -27,6 +27,7 @@
 #include <KarbonGradientItem.h>
 #include <KarbonGradientHelper.h>
 
+#include <KoPageApp.h>
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -132,7 +133,7 @@ void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
         updateStyle( shape->border(), shape->background() );
     else
     {
-        KoShape* page = m_canvas->resourceProvider()->koShapeResource( KoCanvasResource::CurrentPage );
+        KoShape* page = m_canvas->resourceProvider()->koShapeResource( KoPageApp::CurrentPage );
         if( page )
         {
             updateStyle( page->border(), page->background() );
@@ -299,7 +300,7 @@ void KarbonStyleDocker::updateColor( const QColor &c )
     KoSelection *selection = m_canvas->shapeManager()->selection();
     if( ! selection || ! selection->count() )
     {
-        KoShape* page = m_canvas->resourceProvider()->koShapeResource( KoCanvasResource::CurrentPage );
+        KoShape* page = m_canvas->resourceProvider()->koShapeResource( KoPageApp::CurrentPage );
         if( page )
         {
             // check which color to set foreground == border, background == fill
