@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,36 +20,15 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "../widget.h"
+#include "Factory.h"
 
-#include <QtCore/QVariant>
+static const char *RECTEDIT_MASK = "%1,%2 %3x%4";
 
-class QLabel;
-
-namespace KoProperty
+class RectDelegate : public KoProperty::LabelCreator
 {
-
-class KOPROPERTY_EXPORT RectEdit : public Widget
-{
-    Q_OBJECT
-
 public:
-    explicit RectEdit(Property *property, QWidget *parent = 0);
-    virtual ~RectEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-
-private:
-    QLabel   *m_edit;
-    QVariant   m_value;
+    RectDelegate() {}
+    virtual QString displayText( const QVariant& value ) const;
 };
-
-}
 
 #endif

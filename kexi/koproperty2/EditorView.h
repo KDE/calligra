@@ -47,6 +47,7 @@ namespace KoProperty
 
 class Set;
 
+/*
 class RectEdit2 : public QLabel
 {
     Q_OBJECT
@@ -75,16 +76,16 @@ private slots:
     void slotTextChanged( const QString & text );
 private:
     bool m_slotTextChangedEnabled : 1;
-};
+};*/
 
-class ItemEditorFactory : public QObject, public QItemEditorFactory
+/*
+class Factory2 : public QItemEditorFactory
 {
     Q_OBJECT
 public:
-    ItemEditorFactory();
-    virtual ~ItemEditorFactory();
-    virtual QWidget * createEditor ( QVariant::Type type, QWidget * parent ) const;
-};
+    Factory2();
+    virtual ~Factory2();
+};*/
 
 //! @brief A widget for editing properties
 //! @todo review this .............

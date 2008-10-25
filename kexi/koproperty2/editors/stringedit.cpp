@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,44 @@
 */
 
 #include "stringedit.h"
+
+StringEdit::StringEdit(QWidget *parent)
+ : KLineEdit(parent)
+ , m_slotTextChangedEnabled(true)
+{
+    setFrame(false);
+    setContentsMargins(0,0,0,0);
+    setClearButtonShown(true);
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
+}
+
+StringEdit::~StringEdit()
+{
+}
+
+QString StringEdit::value() const
+{
+    return text();
+}
+
+void StringEdit::setValue(const QString& value)
+{
+    m_slotTextChangedEnabled = false;
+    setText(value);
+    m_slotTextChangedEnabled = true;
+/*    deselect();
+    end(false);*/
+}
+
+void StringEdit::slotTextChanged( const QString & text )
+{
+    Q_UNUSED(text)
+    if (!m_slotTextChangedEnabled)
+        return;
+    emit commitData(this);
+}
+
+#if 0
 
 #include <QLayout>
 #include <QLineEdit>
@@ -76,5 +115,7 @@ StringEdit::setReadOnlyInternal(bool readOnly)
 {
     m_edit->setReadOnly(readOnly);
 }
+
+#endif
 
 #include "stringedit.moc"

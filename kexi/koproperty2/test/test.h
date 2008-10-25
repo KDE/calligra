@@ -44,7 +44,6 @@ public:
 
 private:
     KoProperty::Set *m_set;
-    KoProperty::Editor *edit;
 };
 
 #endif

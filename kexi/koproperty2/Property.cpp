@@ -520,11 +520,11 @@ Property::setOption(const char* name, const QVariant& val)
 }
 
 QVariant
-Property::option(const char* name) const
+Property::option(const char* name, const QVariant& defaultValue) const
 {
     if (d->options.contains(name))
         return d->options[name];
-    return QVariant();
+    return defaultValue;
 }
 
 bool

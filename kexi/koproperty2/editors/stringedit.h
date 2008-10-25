@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,8 +22,40 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
-#include "../widget.h"
+#include <QtCore/QVariant>
+#include <KLineEdit>
 
+#include "Factory.h"
+
+class StringEdit : public KLineEdit
+{
+    Q_OBJECT
+    Q_PROPERTY(QString value READ value WRITE setValue USER true)
+public:
+    StringEdit(QWidget *parent = 0);
+    ~StringEdit();
+    QString value() const;
+    void setValue(const QString& value);
+signals:
+    void commitData( QWidget * editor );
+private slots:
+    void slotTextChanged( const QString & text );
+private:
+    bool m_slotTextChangedEnabled : 1;
+};
+
+class StringDelegate : public KoProperty::EditorCreatorInterface
+{
+public:
+    StringDelegate() {}
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        return new StringEdit(parent);
+    }
+};
+
+#if 0
 class QLineEdit;
 
 namespace KoProperty
@@ -50,5 +83,6 @@ protected:
 };
 
 }
+#endif
 
 #endif

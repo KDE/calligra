@@ -11,25 +11,25 @@ include_directories(
 
 set(libkopropertyeditors_SRCS
   editors/booledit.cpp
-  editors/coloredit.cpp
+#  editors/coloredit.cpp
   editors/combobox.cpp
-  editors/cursoredit.cpp
-  editors/dateedit.cpp
-  editors/datetimeedit.cpp
-  editors/dummywidget.cpp
+#  editors/cursoredit.cpp
+#  editors/dateedit.cpp
+#  editors/datetimeedit.cpp
+#  editors/dummywidget.cpp
   editors/fontedit.cpp
 #todo  editors/linestyledit.cpp
-  editors/pixmapedit.cpp
-  editors/pointedit.cpp
+#  editors/pixmapedit.cpp
+#  editors/pointedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
-  editors/sizepolicyedit.cpp
-  editors/spinbox.cpp
+#  editors/sizepolicyedit.cpp
+#  editors/spinbox.cpp
   editors/stringedit.cpp
-  editors/stringlistedit.cpp
-  editors/symbolcombo.cpp
-  editors/timeedit.cpp
-  editors/urledit.cpp
+#  editors/stringlistedit.cpp
+#  editors/symbolcombo.cpp
+#  editors/timeedit.cpp
+#  editors/urledit.cpp
 )
 
 ########### next target ###############
@@ -38,12 +38,15 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
    Property.cpp
    customproperty.cpp
    Set.cpp
-   editor.cpp
-   editoritem.cpp
+   Factory.cpp
+   DefaultFactory.cpp
+#old   editor.cpp
+#old   editoritem.cpp
    EditorView.cpp
    EditorDataModel.cpp
-   factory.cpp
-   widget.cpp )
+#old   factory.cpp
+#old   widget.cpp
+)
 
 
 kde4_add_library(koproperty2 SHARED ${koproperty_LIB_SRCS})
@@ -62,16 +65,18 @@ install(TARGETS koproperty2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
 install( FILES
 customproperty.h
-editor.h
-editoritem.h
-factory.h
+#old editor.h
+#old editoritem.h
+Factory.h
 koproperty_global.h
 koproperty_export.h
 Property.h
 Set.h
 Utils.h
-widget.h
-widgetproxy.h
+Factory.h
+EditorView.h
+#old widget.h
+#old widgetproxy.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2 COMPONENT Devel)
 
 #install( FILES

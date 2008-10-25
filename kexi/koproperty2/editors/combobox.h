@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,41 +22,56 @@
 #ifndef KPROPERTY_COMBOBOX_H
 #define KPROPERTY_COMBOBOX_H
 
-#include "../widget.h"
+#include "Factory.h"
+#include <KComboBox>
 
-class KComboBox;
-
-namespace KoProperty
-{
-
-class KOPROPERTY_EXPORT ComboBox : public Widget
+class ComboBox : public KComboBox
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit ComboBox(Property *property, QWidget *parent = 0);
+    explicit ComboBox(const KoProperty::Property* property, QWidget *parent = 0);
+
     virtual ~ComboBox();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
 
-    virtual void setProperty(Property *property);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void setProperty(const KoProperty::Property *property);
+    
+//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+
+public slots:
+    virtual void setValue(const QVariant &value, bool emitChange = true);
 
 protected slots:
     void slotValueChanged(int value);
 
 protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+//    virtual void setReadOnlyInternal(bool readOnly);
     QString keyForValue(const QVariant &value);
-    void fillBox();
+    void fillValues();
 
-    KComboBox *m_edit;
-bool m_setValueEnabled : 1;
-    bool m_extraValueAllowed;
+//    KComboBox *m_edit;
+    const KoProperty::Property *m_property;
+//    QList<QVariant> keys;
+    bool m_setValueEnabled : 1;
+    bool m_extraValueAllowed : 1;
 };
 
-}
+class ComboBoxDelegate : public KoProperty::EditorCreatorInterface, 
+                         public KoProperty::ValueDisplayInterface //ValuePainterInterface
+{
+public:
+    ComboBoxDelegate();
+    
+    virtual QString displayText( const KoProperty::Property* property ) const;
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+//    virtual void paint( QPainter * painter, 
+//        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+};
 
 #endif
-

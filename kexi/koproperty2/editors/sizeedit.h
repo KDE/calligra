@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,36 +22,15 @@
 #ifndef KPROPERTY_SIZEEDIT_H
 #define KPROPERTY_SIZEEDIT_H
 
-#include "../widget.h"
+#include "Factory.h"
 
-#include <QtCore/QVariant>
+static const char *SIZEEDIT_MASK = "%1x%2";
 
-class QLabel;
-
-namespace KoProperty
+class SizeDelegate : public KoProperty::LabelCreator
 {
-
-class KOPROPERTY_EXPORT SizeEdit : public Widget
-{
-    Q_OBJECT
-
 public:
-    explicit SizeEdit(Property *property, QWidget *parent = 0);
-    virtual ~SizeEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-
-private:
-    QLabel *m_edit;
-    QVariant m_value;
+    SizeDelegate() {}
+    virtual QString displayText( const QVariant& value ) const;
 };
-
-}
 
 #endif

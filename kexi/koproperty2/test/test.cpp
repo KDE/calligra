@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "Property.h"
 #include "EditorView.h"
-#include "EditorDataModel.h"
 
 #include <kmainwindow.h>
 #include <klocale.h>
@@ -32,9 +33,6 @@
 #include <QCursor>
 #include <QApplication>
 #include <QDesktopWidget>
-
-#include <Property.h>
-#include <editor.h>
 
 #include "test.h"
 
@@ -70,7 +68,7 @@ Test::Test()
     m_set->addProperty(new Property("Int", 2, "Int"), group);
     m_set->addProperty(new Property("Double", 3.1415, "Double"), group);
     m_set->addProperty(new Property("Bool", QVariant(true), "Bool"), group);
-    m_set->addProperty(p = new Property("3 States", QVariant(), "3 States", "", Boolean), group);
+    m_set->addProperty(p = new Property("3 States", QVariant(), "3 States", "", Bool), group);
     p->setOption("3rdState", "None");
     m_set->addProperty(p = new Property("Date", QDate::currentDate(), "Date"), group);
     p->setIcon("date");
@@ -96,9 +94,9 @@ Test::Test()
         group = "ComplexGroup";
         m_set->setGroupDescription(group, "Complex Group");
     }
-    m_set->addProperty(new Property("Rect", this->geometry(), "Rect"), group);
+    m_set->addProperty(new Property("Rect", QRect(5,11,100,200), "Rect"), group);
     m_set->addProperty(new Property("Point", QPoint(3, 4), "Point"), group);
-    m_set->addProperty(new Property("Size", QPoint(3, 4), "Size"), group);
+    m_set->addProperty(new Property("Size", QSize(10, 20), "Size"), group);
 
 //  Appearance
     if (!flat) {
@@ -110,36 +108,24 @@ Test::Test()
     QPixmap pm(DesktopIcon("network-wired"));
     m_set->addProperty(p = new Property("Pixmap", pm, "Pixmap"), group);
     p->setIcon("kpaint");
-    m_set->addProperty(p = new Property("Font", this->font(), "Font"), group);
+    QFont myFont("Times", 12);
+    m_set->addProperty(p = new Property("Font", myFont, "Font"), group);
     p->setIcon("fonts");
     m_set->addProperty(new Property("Cursor", QCursor(Qt::WaitCursor), "Cursor"), group);
     m_set->addProperty(new Property("LineStyle", 3, "Line Style", "", LineStyle), group);
     m_set->addProperty(new Property("SizePolicy", sizePolicy(), "Size Policy"), group);
 
 // kDebug(30007) << m_set->groupNames();
-
-// ---------------------------
-
-    edit = new Editor(0, true/*autosync*/);
-    edit->show();
-    edit->changeSet(m_set);
-    resize(400, qApp->desktop()->height() - 200);
-    move(x(), 5);
-//  edit->setFocus();
-
-// ---------------------------
-//    EditorDataModel *editorDataModel = new EditorDataModel(*m_set, this);
     EditorView *editorView = new EditorView(this);
     editorView->changeSet(m_set);
- //   editorView->setModel(editorDataModel);
 //crashes.. why?: editorView->expandAll();
     setCentralWidget(editorView);
+    resize(400, qApp->desktop()->height() - 200);
     editorView->setFocus();
 }
 
 Test::~Test()
 {
-    delete edit;
 }
 
 #include "test.moc"

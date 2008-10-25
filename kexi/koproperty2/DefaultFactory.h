@@ -17,14 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "sizeedit.h"
+#ifndef KPROPERTY_DEFAULT_FACTORY_H
+#define KPROPERTY_DEFAULT_FACTORY_H
 
-#include <QtCore/QSize>
+#include "Factory.h"
 
-QString SizeDelegate::displayText( const QVariant& value ) const
+namespace KoProperty
 {
-    const QSize s(value.toSize());
-    return QString::fromLatin1(SIZEEDIT_MASK)
-        .arg(s.width())
-        .arg(s.height());
+
+class DefaultFactory : public Factory
+{
+public:
+    DefaultFactory();
+    ~DefaultFactory();
+};
+
 }
+
+#endif

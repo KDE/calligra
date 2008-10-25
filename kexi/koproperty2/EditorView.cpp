@@ -21,9 +21,10 @@
 #include "EditorDataModel.h"
 #include "Property.h"
 #include "Set.h"
+#include "Factory.h"
 
 #include <QtCore/QPointer>
-#include <QtGui/QStyledItemDelegate>
+#include <QtGui/QItemDelegate>
 #include <QtGui/QStandardItemEditorCreator>
 #include <QtGui/QPainter>
 #include <QtGui/QVBoxLayout>
@@ -43,6 +44,7 @@ static bool computeAutoSync(Property *property, bool defaultAutoSync)
                 defaultAutoSync : (property->autoSync() != 0);
 }
 
+/*
 static const char RECTEDIT_MASK[] = "%1,%2 %3x%4";
 
 RectEdit2::RectEdit2(QWidget *parent)
@@ -73,7 +75,7 @@ void RectEdit2::setValue(const QRect& value)
         .arg(value.y())
         .arg(value.width())
         .arg(value.height()));
-}
+}*/
 
 /* old
 class StringEdit : public QWidget
@@ -117,6 +119,7 @@ void StringEdit::setValue(const QString& value)
     m_editor->end(false);
 }*/
 
+/*
 StringEdit2::StringEdit2(QWidget *parent)
  : KLineEdit(parent)
  , m_slotTextChangedEnabled(true)
@@ -141,8 +144,8 @@ void StringEdit2::setValue(const QString& value)
     m_slotTextChangedEnabled = false;
     setText(value);
     m_slotTextChangedEnabled = true;
-/*    deselect();
-    end(false);*/
+//    deselect();
+//    end(false);
 }
 
 void StringEdit2::slotTextChanged( const QString & text )
@@ -152,6 +155,7 @@ void StringEdit2::slotTextChanged( const QString & text )
         return;
     emit commitData(this);
 }
+*/
 
 //----------
 
@@ -163,6 +167,7 @@ public:
     ItemEditorCreator(
 };*/
 
+/*
 ItemEditorFactory::ItemEditorFactory()
  : QObject()
  , QItemEditorFactory()
@@ -185,11 +190,11 @@ QWidget* ItemEditorFactory::createEditor( QVariant::Type type, QWidget * parent 
 //    QObject::connect(w, SIGNAL(commitData(QWidget*)),
 //        this, SIGNAL(commitData(QWidget*)));
     return w;
-}
+}*/
 
 //----------
 
-class ItemDelegate : public QStyledItemDelegate
+class ItemDelegate : public QItemDelegate
 {
 public:
     ItemDelegate(QObject *parent);
@@ -200,17 +205,18 @@ public:
         const QModelIndex &index) const;
     virtual QWidget * createEditor(QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual void updateEditorGeometry( QWidget * editor, 
-        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-    virtual bool editorEvent( QEvent * event, QAbstractItemModel * model,
-        const QStyleOptionViewItem & option, const QModelIndex & index );
+//    virtual void updateEditorGeometry( QWidget * editor, 
+//        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+//    virtual bool editorEvent( QEvent * event, QAbstractItemModel * model,
+//        const QStyleOptionViewItem & option, const QModelIndex & index );
     mutable QPointer<QWidget> m_currentEditor;
+private:
 };
 
 ItemDelegate::ItemDelegate(QObject *parent)
-: QStyledItemDelegate(parent)
+: QItemDelegate(parent)
 {
-    setItemEditorFactory( new ItemEditorFactory() );
+//moved    setItemEditorFactory( new ItemEditorFactory() );
 }
 
 ItemDelegate::~ItemDelegate()
@@ -220,6 +226,14 @@ ItemDelegate::~ItemDelegate()
 static int getIconSize(int rowHeight)
 {
     return rowHeight * 2 / 3;
+}
+
+static int typeForProperty( Property* prop )
+{
+    if (prop->listData())
+        return KoProperty::ValueFromList;
+    else
+        return prop->type();
 }
 
 void ItemDelegate::paint(QPainter *painter, 
@@ -254,7 +268,19 @@ void ItemDelegate::paint(QPainter *painter,
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 1 );
     }
 
-    QStyledItemDelegate::paint(painter, alteredOption, index);
+    Property *property = editorModel->propertyForItem(index);
+    const int t = typeForProperty( property ); //index.data(Qt::EditRole).userType();
+    bool useQItemDelegatePaint = index.column() == 0;
+    if (QVariant::Size == t) {
+      kDebug() << "!";
+    }
+    if (!useQItemDelegatePaint) {
+        if (!(alteredOption.state & QStyle::State_Selected) && !FactoryManager::self()->paint(t, painter, alteredOption, index))
+            useQItemDelegatePaint = true; // ValueDisplayInterface will be used
+    }
+    if (useQItemDelegatePaint) {
+        QItemDelegate::paint(painter, alteredOption, index);
+    }
 
     if (modified) {
         alteredOption.rect.setRight( alteredOption.rect.right() - iconSize * 3 / 2 );
@@ -294,27 +320,44 @@ void ItemDelegate::paint(QPainter *painter,
 QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
-    return QStyledItemDelegate::sizeHint(option, index) + QSize(0, 2);
+    return QItemDelegate::sizeHint(option, index) + QSize(0, 2);
 }
 
 QWidget * ItemDelegate::createEditor(QWidget * parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
+    if (!index.isValid())
+        return 0;
     QStyleOptionViewItem alteredOption(option);
-    QWidget *w = QStyledItemDelegate::createEditor(parent, alteredOption, index);
-    w->setStyleSheet(/*"background-color: green;*/"border-top: 1px solid #c0c0c0;");
-    QObject::disconnect(w, SIGNAL(commitData(QWidget*)),
-        this, SIGNAL(commitData(QWidget*)));
+//    QWidget *w = QStyledItemDelegate::createEditor(parent, alteredOption, index);
+//???    int t = index.data(Qt::EditRole).userType();
     const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
     Property *property = editorModel->propertyForItem(index);
+    int t = typeForProperty(property);
+    QWidget *w = FactoryManager::self()->createEditor(t, parent, alteredOption, index);
+    if (w) {
+        if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)"))
+            && property && !property->children())
+        {
+//            QObject::connect(w, SIGNAL(commitData(QWidget*)),
+//                this, SIGNAL(commitData(QWidget*)));
+        }
+    }
+    else {
+        w = QItemDelegate::createEditor(parent, alteredOption, index);
+    }
+    QObject::disconnect(w, SIGNAL(commitData(QWidget*)),
+        this, SIGNAL(commitData(QWidget*)));
     if (computeAutoSync( property, static_cast<EditorView*>(this->parent())->isAutoSync() )) {
         QObject::connect(w, SIGNAL(commitData(QWidget*)),
             this, SIGNAL(commitData(QWidget*)));
     }
+//    w->resize(w->size()+QSize(0,2));
     m_currentEditor = w;
     return w;
 }
 
+/*
 void ItemDelegate::updateEditorGeometry( QWidget * editor, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
@@ -325,7 +368,8 @@ void ItemDelegate::updateEditorGeometry( QWidget * editor,
 //    r.setTop(r.top() + 2);
     editor->setGeometry(r);
 }
-
+*/
+/*
 bool ItemDelegate::editorEvent( QEvent * event, QAbstractItemModel * model,
     const QStyleOptionViewItem & option, const QModelIndex & index )
 {
@@ -333,7 +377,7 @@ bool ItemDelegate::editorEvent( QEvent * event, QAbstractItemModel * model,
         kDebug() << "!!!";
     }
     return QStyledItemDelegate::editorEvent( event, model, option, index );
-}
+}*/
 
 //----------
 
@@ -493,6 +537,10 @@ void EditorView::currentChanged( const QModelIndex & current, const QModelIndex 
 
 bool EditorView::edit( const QModelIndex & index, EditTrigger trigger, QEvent * event )
 {
+/*    Property *property = d->model->propertyForItem(index);
+    if (property && property->children())
+        return false;*/
+
     bool result = QTreeView::edit( index, trigger, event );
     if (result) {
       QLineEdit *lineEditEditor = dynamic_cast<QLineEdit*>( (QObject*)d->itemDelegate->m_currentEditor );
@@ -578,16 +626,13 @@ bool EditorView::viewportEvent( QEvent * event )
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *hevent = static_cast<QHelpEvent*>(event);
         const QModelIndex index = indexAt(hevent->pos());
-        if (index.column() == 0) {
-            if (withinRevertButtonArea( hevent->x(), index )) {
-                QRect r(revertButtonArea( index ));
-                QToolTip::showText(hevent->globalPos(), i18n("Undo changes"), this, r);
-            }
-            else {
-                QToolTip::hideText();
-            }
+        if (index.column() == 0 && withinRevertButtonArea( hevent->x(), index )) {
+            QRect r(revertButtonArea( index ));
+            QToolTip::showText(hevent->globalPos(), i18n("Undo changes"), this, r);
         }
-        return true;
+        else {
+            QToolTip::hideText();
+        }
     }
     return QTreeView::viewportEvent(event);
 }

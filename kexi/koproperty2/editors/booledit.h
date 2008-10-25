@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,44 +22,44 @@
 #ifndef KPROPERTY_BOOLEDIT_H
 #define KPROPERTY_BOOLEDIT_H
 
-#include "../widget.h"
-#include "combobox.h"
+//#include "../widget.h"
+//todo #include "combobox.h"
+#include "Factory.h"
+#include <QtCore/QEvent>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
-#include <QtCore/QEvent>
 
-class QToolButton;
+#include <QToolButton>
 
-namespace KoProperty
-{
-
-class KOPROPERTY_EXPORT BoolEdit : public Widget
+class BoolEdit : public QToolButton
 {
     Q_OBJECT
+    Q_PROPERTY(bool value READ value WRITE setValue USER true)
 
 public:
-    explicit BoolEdit(Property *property, QWidget *parent = 0);
+    explicit BoolEdit(QWidget *parent = 0);
+
     virtual ~BoolEdit();
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual bool value() const;
 
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    static void draw(QPainter *p, const QRect &r, const QVariant &value, const QString& nullText);
+
+public slots:
+    virtual void setValue(bool value);
 
 protected slots:
     void  slotValueChanged(bool state);
 
 protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-    void setState(bool state);
-    virtual void resizeEvent(QResizeEvent *ev);
+    virtual void paintEvent( QPaintEvent * event );
+//    virtual void setReadOnlyInternal(bool readOnly);
+//    void setState(bool state);
+//    virtual void resizeEvent(QResizeEvent *ev);
     virtual bool eventFilter(QObject* watched, QEvent* e);
-
-private:
-    QToolButton *m_toggle;
-    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
 
+#if 0 //TODO
 class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 {
     Q_OBJECT
@@ -75,7 +75,19 @@ public:
     virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
     QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
+#endif
 
-}
+class BoolDelegate : public KoProperty::EditorCreatorInterface, 
+                     public KoProperty::ValuePainterInterface
+{
+public:
+    BoolDelegate();
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+};
 
 #endif

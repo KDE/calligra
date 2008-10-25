@@ -68,42 +68,57 @@ should have a type number >= UserDefined .*/
 enum PropertyType {
     //standard supported QVariant types
     Auto = 0x00ffffff,
-    Invalid = QVariant::Invalid   /**<invalid property type*/,
-    Map = QVariant::Map           /**<QMap<QString, QVariant>*/,
-    List = QVariant::List         /**<QList<QVariant>*/,
-    String = QVariant::String     /**<string*/,
-    StringList = QVariant::StringList  /**<string list*/,
-    Font = QVariant::Font         /**<font*/,
-    Pixmap = QVariant::Pixmap     /**<pixmap*/,
-    //! @todo implement QVariant::Brush
-    Rect = QVariant::Rect         /**<rectangle (x,y, width, height)*/,
-    Size = QVariant::Size         /**<size (width, height)*/,
-    Color = QVariant::Color       /**<color*/,
-    //! \todo implement QVariant::Palette
-    //! \todo implement QVariant::ColorGroup
-    //! \todo implement QVariant::IconSet
-    Point = QVariant::Point       /**<point (x,y)*/,
-    //! \todo implement QVariant::Image
-    Integer = QVariant::Int       /**<integer*/,
-    //! \todo implement QVariant::UInt
-    Boolean = QVariant::Bool      /**<boolean*/,
-    Double = QVariant::Double     /**<double*/,
-    CString = QVariant::CString   /** latin-1 string*/,
-    //! @todo implement QVariant::PointArray
-    //! @todo implement QVariant::Region
-    //! @todo implement QVariant::Bitmap
-    Cursor = QVariant::Cursor     /**<cursor*/,
-    SizePolicy = QVariant::SizePolicy  /**<size policy (horizontal, vertical)*/,
-    Date = QVariant::Date         /**<date*/,
-    Time = QVariant::Time         /**<time*/,
-    DateTime = QVariant::DateTime /**<date and time*/,
-    //! @todo implement QVariant::ByteArray
-    //! @todo implement QVariant::BitArray
-    //! @todo implement QVariant::KeySequence
+    Invalid = QVariant::Invalid,
+    BitArray = QVariant::BitArray,
+    Bitmap = QVariant::Bitmap,
+    Bool = QVariant::Bool,
+    Brush = QVariant::Brush,
+    ByteArray = QVariant::ByteArray,
+    Char = QVariant::Char,
+    Color = QVariant::Color,
+    Cursor = QVariant::Cursor,
+    Date = QVariant::Date,
+    DateTime = QVariant::DateTime,
+    Double = QVariant::Double,
+    Font = QVariant::Font,
+    Icon = QVariant::Icon,
+    Image = QVariant::Image,
+    Int = QVariant::Int,
+    KeySequence = QVariant::KeySequence,
+    Line = QVariant::Line,
+    LineF = QVariant::LineF,
+    List = QVariant::List,
+    Locale = QVariant::Locale,
+    LongLong = QVariant::LongLong,
+    Map = QVariant::Map,
+    Matrix = QVariant::Matrix,
+    Transform = QVariant::Transform,
+    Palette = QVariant::Palette,
+    Pen = QVariant::Pen,
+    Pixmap = QVariant::Pixmap,
+    Point = QVariant::Point,
+    PointArray = QVariant::PointArray,
+    PointF = QVariant::PointF,
+    Polygon = QVariant::Polygon,
+    Rect = QVariant::Rect,
+    RectF = QVariant::RectF,
+    RegExp = QVariant::RegExp,
+    Region = QVariant::Region,
+    Size = QVariant::Size,
+    SizeF = QVariant::SizeF,
+    SizePolicy = QVariant::SizePolicy,
+    String = QVariant::String,
+    StringList = QVariant::StringList,
+    TextFormat = QVariant::TextFormat,
+    TextLength = QVariant::TextLength,
+    Time = QVariant::Time,
+    UInt = QVariant::UInt,
+    ULongLong = QVariant::ULongLong,
+    Url = QVariant::Url,
 
     //predefined custom types
-    ValueFromList = 2000          /**<string value from a list*/,
-    Symbol = 2001                 /**<unicode symbol code*/,
+    ValueFromList = 1000          /**<string value from a list*/,
+    Symbol                        /**<unicode symbol code*/,
     FontName                      /**<font name, e.g. "times new roman"*/,
     FileURL                       /**<url of a file*/,
     PictureFileURL                /**<url of a pixmap*/,
@@ -315,7 +330,7 @@ public:
     /*! \return parent property for this property, or NULL if there is no parent property. */
     Property* parent() const;
 
-    /*! \return the custom property for this property.or NULL if there was
+    /*! \return the custom property for this property, or NULL if there was
     no custom property defined. */
     CustomProperty* customProperty() const;
 
@@ -383,8 +398,9 @@ public:
     */
     void setOption(const char* name, const QVariant& val);
 
-    /*! \return a value for option \a name or null value if there is no such option set. */
-    QVariant option(const char* name) const;
+    /*! \return a value for option \a name or null value if there is no such option set. 
+     If there is no such value, @a defaultValue is returned. */
+    QVariant option(const char* name, const QVariant& defaultValue = QVariant()) const;
 
     /*! \return true if at least one option is defined for this property. */
     bool hasOptions() const;

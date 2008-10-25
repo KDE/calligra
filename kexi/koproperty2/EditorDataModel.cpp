@@ -18,6 +18,7 @@
 */
 
 #include "EditorDataModel.h"
+#include "Factory.h"
 #include "Property.h"
 #include "Set.h"
 
@@ -89,8 +90,11 @@ QVariant EditorDataModel::data(const QModelIndex &index, int role) const
     }
     else if (col == 1) {
         Property *prop = propertyForItem(index);
-        if (role == Qt::EditRole || role == Qt::DisplayRole ) {
+        if (role == Qt::EditRole) {
             return prop->value();
+        }
+        else if (role == Qt::DisplayRole) {
+            return FactoryManager::self()->convertValueToText(prop);
         }
     }
     return QVariant();
@@ -105,11 +109,14 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
 //    if (col == 0)
 //buddy...        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 
-    Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    Qt::ItemFlags f = Qt::ItemIsEnabled;
     Property *prop = propertyForItem(index);
     if (prop) {
-        if (!prop->children()) {
+//        if (!prop->children()) {
             f |= Qt::ItemIsEditable;
+//        }
+        if (col != 1 || !prop->children()) {
+            f |= Qt::ItemIsSelectable;
         }
     }
     return f;
@@ -130,9 +137,9 @@ QVariant EditorDataModel::headerData(int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         if (section == 0) {
-            return i18n("Name");
+            return i18nc("Property name", "Name");
         } else {
-            return i18n("Value");
+            return i18nc("Property value", "Value");
         }
     }
     return QVariant();

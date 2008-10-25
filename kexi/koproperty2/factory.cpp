@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,9 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "factory.h"
+#include "Factory.h"
+#include "DefaultFactory.h"
 #include "Property.h"
 #include "customproperty.h"
+/*
 #include "booledit.h"
 #include "combobox.h"
 #include "coloredit.h"
@@ -41,222 +42,162 @@
 #include "symbolcombo.h"
 #include "timeedit.h"
 #include "urledit.h"
-
+*/
 #include <kdebug.h>
 #include <kglobal.h>
-
-#include <QHash>
 
 namespace KoProperty
 {
 
-CustomPropertyFactory::CustomPropertyFactory(QObject *parent)
-        : QObject(parent)
+Label::Label(QWidget *parent, const KoProperty::ValueDisplayInterface *iface)
+    : QLabel(parent)
+    , m_iface(iface)
 {
+  setAutoFillBackground(true);
+  setContentsMargins(0,0,0,0);
+  setIndent(0);
 }
 
-CustomPropertyFactory::~CustomPropertyFactory()
+QVariant Label::value() const
 {
+    return m_value;
 }
+
+void Label::setValue(const QVariant& value)
+{
+    setText( m_iface->displayText(value) );
+    m_value = value;
+}
+
+//---------------
 
 //! @internal
 class FactoryManager::Private
 {
 public:
-    Private() {}
-    ~Private() {}
+    Private()
+    {
+    }
+    ~Private()
+    {
+        qDeleteAll(factories);
+    }
 
-    //registered widgets for property types
-    QHash<int, CustomPropertyFactory*> registeredWidgets;
-    QHash<int, CustomPropertyFactory*> registeredCustomProperties;
+    QSet<Factory*> factories;
+    QHash<int, EditorCreatorInterface*> editorCreators;
+    QHash<int, ValuePainterInterface*> valuePainters;
+    QHash<int, ValueDisplayInterface*> valueDisplays;
+//    QHash<int, Factory*> factoryForType;
+//    QHash<int, CustomPropertyFactory*> registeredCustomProperties;
 };
 
 //! @internal
-class FactoryManagerInternal
+class Factory::Private
 {
 public:
-    FactoryManagerInternal() : manager(new FactoryManager()) {}
-    ~FactoryManagerInternal() {
-        delete manager;
+    Private()
+    {
     }
-    FactoryManager* manager;
+    ~Private()
+    {
+        qDeleteAll(editorCreatorsSet);
+        qDeleteAll(valuePaintersSet);
+        qDeleteAll(valueDisplaysSet);
+    }
+
+    QHash<int, EditorCreatorInterface*> editorCreators;
+    QHash<int, ValuePainterInterface*> valuePainters;
+    QHash<int, ValueDisplayInterface*> valueDisplays;
+    QSet<EditorCreatorInterface*> editorCreatorsSet;
+    QSet<ValuePainterInterface*> valuePaintersSet;
+    QSet<ValueDisplayInterface*> valueDisplaysSet;
 };
 
 }
 
-K_GLOBAL_STATIC(KoProperty::FactoryManagerInternal, _int)
-
 using namespace KoProperty;
 
-FactoryManager::FactoryManager()
-        : QObject(0)
-        , d(new Private)
+Factory::Factory()
+    : d( new Private )
 {
-    setObjectName("KoProperty::FactoryManager");
 }
 
-FactoryManager::~FactoryManager()
+Factory::~Factory()
 {
     delete d;
 }
 
-FactoryManager*
-FactoryManager::self()
+QHash<int, EditorCreatorInterface*> Factory::editorCreators() const
 {
-    return _int->manager;
+    return d->editorCreators;
 }
 
-///////////////////  Functions related to widgets /////////////////////////////////////
-
-void
-FactoryManager::registerFactoryForEditor(int editorType, CustomPropertyFactory *widgetFactory)
+QHash<int, ValuePainterInterface*> Factory::valuePainters() const
 {
-    if (!widgetFactory)
-        return;
-    if (d->registeredWidgets.contains(editorType))
-        kopropertywarn << "FactoryManager::registerFactoryForEditor(): "
-        "Overriding already registered custom widget type \"" << editorType << "\"" << endl;
-    d->registeredWidgets.insert(editorType, widgetFactory);
+    return d->valuePainters;
 }
 
-void
-FactoryManager::registerFactoryForEditors(const QList<int> &editorTypes, CustomPropertyFactory *factory)
+QHash<int, ValueDisplayInterface*> Factory::valueDisplays() const
 {
-    QList<int>::ConstIterator endIt = editorTypes.constEnd();
-    for (QList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
-        registerFactoryForEditor(*it, factory);
+    return d->valueDisplays;
 }
 
-CustomPropertyFactory *
-FactoryManager::factoryForEditorType(int type)
+void Factory::addEditor(int type, EditorCreatorInterface *creator)
 {
-    return d->registeredWidgets[type];
+    addEditorInternal( type, creator, true );
+    if (dynamic_cast<ValuePainterInterface*>(creator))
+        addPainterInternal( type, dynamic_cast<ValuePainterInterface*>(creator), false/* !own*/ );
+    if (dynamic_cast<ValueDisplayInterface*>(creator))
+        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(creator), false/* !own*/ );
 }
 
-Widget*
-FactoryManager::createWidgetForProperty(Property *property)
+void Factory::addPainter(int type, ValuePainterInterface *painter)
 {
-    if (!property)
-        return 0;
-
-    const int type = property->type();
-
-    CustomPropertyFactory *factory = d->registeredWidgets[type];
-    if (factory)
-        return factory->createCustomWidget(property);
-
-    //handle combobox-based widgets:
-    if (type == Cursor)
-        return new CursorEdit(property);
-
-    if (property->listData()) {
-        return new ComboBox(property);
-    }
-
-    //handle other widget types:
-    switch (type) {
-        // Default QVariant types
-    case String:
-    case CString:
-        return new StringEdit(property);
-    case Rect_X:
-    case Rect_Y:
-    case Rect_Width:
-    case Rect_Height:
-    case Point_X:
-    case Point_Y:
-    case Size_Width:
-    case Size_Height:
-    case SizePolicy_HorStretch:
-    case SizePolicy_VerStretch:
-    case Integer:
-        return new IntEdit(property);
-    case Double:
-        return new DoubleEdit(property);
-    case Boolean: {
-        //boolean editors can optionally accept 3rd state:
-        QVariant thirdState = property->option("3rdState");
-        if (thirdState.toString().isEmpty())
-            return new BoolEdit(property);
-        else
-            return new ThreeStateBoolEdit(property);
-    }
-    case Date:
-        return new DateEdit(property);
-    case Time:
-        return new TimeEdit(property);
-    case DateTime:
-        return new DateTimeEdit(property);
-    case StringList:
-        return new StringListEdit(property);
-    case Color:
-        return new ColorButton(property);
-    case Font:
-        return new FontEdit(property);
-    case Pixmap:
-        return new PixmapEdit(property);
-
-        // Other default types
-    case Symbol:
-        return new SymbolCombo(property);
-        //case FontName:
-        // return new FontCombo(property);
-    case FileURL:
-    case DirectoryURL:
-        return new URLEdit(property);
-//TODO    case LineStyle:
-//        return new LineStyleEdit(property);
-
-        // Composed types
-    case Size:
-        return new SizeEdit(property);
-    case Point:
-        return new PointEdit(property);
-    case Rect:
-        return new RectEdit(property);
-    case SizePolicy:
-        return new SizePolicyEdit(property);
-
-    case List:
-    case Map:
-    default:
-        kopropertywarn << "No editor for property " << property->name() << " of type " << property->type() << endl;
-        return new DummyWidget(property);
-    }
+    addPainterInternal(type, painter, true);
+    if (dynamic_cast<EditorCreatorInterface*>(painter))
+        addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(painter), false/* !own*/ );
+    if (dynamic_cast<ValueDisplayInterface*>(painter))
+        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(painter), false/* !own*/ );
 }
 
-///////////////////  Functions related to custom properties /////////////////////////////////////
-
-void
-FactoryManager::registerFactoryForProperty(int propertyType, CustomPropertyFactory *factory)
+void Factory::addDisplay(int type, ValueDisplayInterface *display)
 {
-    if (!factory)
-        return;
-    if (d->registeredCustomProperties.contains(propertyType))
-        kopropertywarn << "FactoryManager::registerFactoryForProperty(): "
-        "Overriding already registered custom property type \"" << propertyType << "\"" << endl;
-
-    delete d->registeredCustomProperties[ propertyType ];
-    d->registeredCustomProperties.insert(propertyType, factory);
+    addDisplayInternal(type, display, true);
+    if (dynamic_cast<EditorCreatorInterface*>(display))
+        addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(display), false/* !own*/ );
+    if (dynamic_cast<ValueDisplayInterface*>(display))
+        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(display), false/* !own*/ );
 }
 
-void
-FactoryManager::registerFactoryForProperties(const QList<int> &propertyTypes,
-        CustomPropertyFactory *factory)
+void Factory::addEditorInternal(int type, EditorCreatorInterface *editor, bool own)
 {
-    QList<int>::ConstIterator endIt = propertyTypes.constEnd();
-    for (QList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
-        registerFactoryForProperty(*it, factory);
+    if (own)
+        d->editorCreatorsSet.insert(editor);
+    d->editorCreators.insert(type, editor);
 }
 
-CustomProperty*
-FactoryManager::createCustomProperty(Property *parent)
+void Factory::addPainterInternal(int type, ValuePainterInterface *painter, bool own)
+{
+    if (own)
+        d->valuePaintersSet.insert(painter);
+    d->valuePainters.insert(type, painter);
+}
+
+void Factory::addDisplayInternal(int type, ValueDisplayInterface *display, bool own)
+{
+    if (own)
+        d->valueDisplaysSet.insert(display);
+    d->valueDisplays.insert(type, display);
+}
+
+CustomProperty* FactoryManager::createCustomProperty(Property *parent)
 {
     const int type = parent->type();
+/* TODO
     CustomPropertyFactory *factory = d->registeredWidgets[type];
     if (factory)
         return factory->createCustomProperty(parent);
-
+*/
     switch (type) {
     case Size: case Size_Width: case Size_Height:
         return new SizeCustomProperty(parent);
@@ -267,8 +208,123 @@ FactoryManager::createCustomProperty(Property *parent)
     case SizePolicy: case SizePolicy_HorStretch: case SizePolicy_VerStretch:
     case SizePolicy_HorData: case SizePolicy_VerData:
         return new SizePolicyCustomProperty(parent);
-    default:
-        return 0;
+    default:;
+    }
+    return 0;
+}
+
+//------------
+
+FactoryManager::FactoryManager()
+        : QObject(0)
+        , d(new Private)
+{
+    setObjectName("KoProperty::FactoryManager");
+    registerFactory(new DefaultFactory);
+}
+
+FactoryManager::~FactoryManager()
+{
+    delete d;
+}
+
+FactoryManager* FactoryManager::self()
+{
+    K_GLOBAL_STATIC(KoProperty::FactoryManager, _self);
+    return _self;
+}
+
+void FactoryManager::registerFactory(Factory *factory)
+{
+    d->factories.insert(factory);
+    QHash<int, EditorCreatorInterface*>::ConstIterator editorCreatorsItEnd = factory->editorCreators().constEnd();
+    for (QHash<int, EditorCreatorInterface*>::ConstIterator it( factory->editorCreators().constBegin() );
+        it != editorCreatorsItEnd; ++it)
+    {
+        d->editorCreators.insert(it.key(), it.value());
+    }
+    QHash<int, ValuePainterInterface*>::ConstIterator valuePaintersItEnd = factory->valuePainters().constEnd();
+    for (QHash<int, ValuePainterInterface*>::ConstIterator it( factory->valuePainters().constBegin() );
+        it != valuePaintersItEnd; ++it)
+    {
+        d->valuePainters.insert(it.key(), it.value());
+    }
+    QHash<int, ValueDisplayInterface*>::ConstIterator valueDisplaysItEnd = factory->valueDisplays().constEnd();
+    for (QHash<int, ValueDisplayInterface*>::ConstIterator it( factory->valueDisplays().constBegin() );
+        it != valueDisplaysItEnd; ++it)
+    {
+        d->valueDisplays.insert(it.key(), it.value());
     }
 }
 
+QWidget * FactoryManager::createEditor( 
+    int type, QWidget *parent,
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    const EditorCreatorInterface *creator = d->editorCreators.value(type);
+    if (!creator)
+        return 0;
+    QWidget *w = creator->createEditor(type, parent, option, index);
+    if (w) {
+        if (creator->options.removeBorders) {
+//! @todo get real border color from the palette
+            w->setStyleSheet("border-top: 1px solid #c0c0c0;");
+        }
+    }
+    return w;
+}
+
+bool FactoryManager::paint( int type, QPainter * painter, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    const ValuePainterInterface *_painter = d->valuePainters.value(type);
+    if (!_painter)
+        return false;
+    _painter->paint(painter, option, index);
+    return true;
+}
+
+bool FactoryManager::canConvertValueToText( int type ) const
+{
+    return d->valueDisplays.value(type) != 0;
+}
+
+bool FactoryManager::canConvertValueToText( const Property* property ) const
+{
+    return d->valueDisplays.value( property->type() ) != 0;
+}
+
+QString FactoryManager::convertValueToText( const Property* property ) const
+{
+    const ValueDisplayInterface *display = d->valueDisplays.value( property->type() );
+    return display ? display->displayText( property ) : property->value().toString();
+}
+
+EditorCreatorInterface::EditorCreatorInterface()
+{
+}
+
+EditorCreatorInterface::~EditorCreatorInterface()
+{
+}
+
+EditorCreatorInterface::Options::Options()
+ : removeBorders(true)
+{
+}
+
+ValuePainterInterface::ValuePainterInterface()
+{
+}
+
+ValuePainterInterface::~ValuePainterInterface()
+{
+}
+
+ValueDisplayInterface::ValueDisplayInterface()
+{
+}
+
+ValueDisplayInterface::~ValueDisplayInterface()
+{
+}
