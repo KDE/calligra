@@ -185,18 +185,6 @@ QObject* Module::frame(int frameNr)
     return 0;
 }
 
-QObject* Module::addTextFrame(const QString& framesetname)
-{
-    FrameSet* set = dynamic_cast< FrameSet* >(addTextFrameSet(framesetname));
-    return set ? set->addTextFrame() : 0;
-}
-
-QObject* Module::addFrame(const QString& framesetname, const QString& shapeId)
-{
-    FrameSet* set = dynamic_cast< FrameSet* >(addFrameSet(framesetname));
-    return set ? set->addFrame(shapeId) : 0;
-}
-
 QObject* Module::findFrameSet(KWord::TextFrameSetType type)
 {
     foreach(KWFrameSet* set, kwDoc()->frameSets()) {

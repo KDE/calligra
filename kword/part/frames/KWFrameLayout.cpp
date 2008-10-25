@@ -499,7 +499,10 @@ KoShape *KWFrameLayout::createTextShape(const KWPage &page)
     Q_ASSERT(page.isValid());
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShapeAndInit(m_document->dataCenterMap());
+    QMap<QString, KoDataCenter *> dataCenterMap;
+    if (m_document)
+        dataCenterMap = m_document->dataCenterMap();
+    KoShape *shape = factory->createDefaultShapeAndInit(dataCenterMap);
     shape->setPosition(QPointF(0, page.offsetInDocument()));
     return shape;
 }

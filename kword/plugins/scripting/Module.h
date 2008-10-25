@@ -167,19 +167,6 @@ public slots:
     /** Return a the \a Frame object identified by the index frameNr. */
     QObject* frame(int frameNr);
 
-    /** Add and return a new \a FrameSet object for text handled with \a TextDocument .
-    *
-    * Python sample code;
-    * \code
-    * import KWord
-    * textshape = KWord.addTextFrame("MyTextShape")
-    * textshape.document().setText("Some text")
-    * \endcode
-    */
-    QObject* addTextFrame(const QString& framesetname);
-    /** Add and return a new \a FrameSet object. */
-    QObject* addFrame(const QString& framesetname, const QString& shapeId);
-
     /***** Page Layout *****/
 
     /** Return the standard page layout. */
@@ -206,7 +193,7 @@ public slots:
     QObject* tool();
 
 private:
-    /// \internal d-pointer class.
+    /// \internal d-pointer class. (TODO: remove the dpointer, just overhead for non-exported class)
     class Private;
     /// \internal d-pointer instance.
     Private* const d;
