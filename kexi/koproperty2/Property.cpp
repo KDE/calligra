@@ -22,7 +22,7 @@
 #include "Property.h"
 #include "customproperty.h"
 #include "Set.h"
-#include "factory.h"
+#include "Factory.h"
 
 #include <kdebug.h>
 
