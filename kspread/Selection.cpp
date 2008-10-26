@@ -890,12 +890,17 @@ Selection::Editor Selection::lastEditorWithFocus() const
 
 void Selection::startReferenceSelection(const Region& region)
 {
+    // (Tomas) do we really need this?
     if (d->referenceMode) {
         if (region.isValid()) {
             initialize(region);
         }
         return;
     }
+    // former selection exists - we are in ref mode already, even though it's suspended
+    if (!d->formerSelection.isEmpty())
+        return;
+    
     d->formerSelection = *this;
     clear();
     setOriginSheet(activeSheet());

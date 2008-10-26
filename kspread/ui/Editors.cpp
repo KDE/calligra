@@ -668,7 +668,7 @@ void CellEditor::functionAutoComplete( const QString& item )
 
 void CellEditor::slotCursorPositionChanged()
 {
-//   kDebug() << endl <<"position:" << cursorPosition();
+  // kDebug() <<"position:" << cursorPosition()<<endl;;
 
   // TODO Stefan: optimize this function!
 
@@ -765,7 +765,7 @@ void CellEditor::slotCursorPositionChanged()
     {
       d->highlighter->resetRangeChanged();
 
-      selection()->blockSignals(true);
+      //selection()->blockSignals(true);
       setUpdateChoice(false);
 
       Tokens tokens = d->highlighter->formulaTokens();
@@ -802,7 +802,7 @@ void CellEditor::slotCursorPositionChanged()
         }
       }
       setUpdateChoice(true);
-      selection()->blockSignals(false);
+      //selection()->blockSignals(false);
     }
   }
 }
@@ -951,12 +951,9 @@ bool CellEditor::checkChoice()
 
     Tokens tokens = d->highlighter->formulaTokens();
 
-    // empty formula?
-    if (tokens.count() < 1)
-    {
-      selection()->startReferenceSelection();
-    }
-    else
+    // switch to reference selection mode if we haven't yet
+    selection()->startReferenceSelection();
+    if (tokens.count())  // formula not empty?
     {
       Token token;
       for (int i = 0; i < tokens.count(); ++i)
@@ -1488,39 +1485,31 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
     // Create the embedded editor, if necessary.
     if (!d->cellTool->editor()) {
         d->cellTool->createEditor(false /* keep content */, false /* no focus */);
-        d->cellTool->editor()->setCursorPosition(textCursor().position());
     }
 
-    switch (event->key())
-    {
-    case Qt::Key_Down:
-    case Qt::Key_Up:
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        d->cellTool->editor()->setText(toPlainText());
-        // Don't allow to start a chooser when pressing the arrow keys
-        // in this widget, since only up and down would work anyway.
-        // This is why we call slotDoneEdit now, instead of sending
-        // to the canvas.
-        //QApplication::sendEvent( m_pCanvas, _ev );
-        d->isArray = (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier);
-        applyChanges();
-        event->accept(); // QKeyEvent
-        break;
-    case Qt::Key_F2:
+    // set the cell editor's cursor to where ours is
+    d->cellTool->editor()->setCursorPosition(textCursor().position());
+    // set the cell editor's selection to match ours
+    // TODO
+    // now send the event to the cell editor for processing
+    QApplication::sendEvent (d->cellTool->editor(), event);
+
+    // If the user did something that destroyed the cell editor, we're done
+    if (!d->cellTool->editor()) {
+        d->cellTool->canvas()->canvasWidget()->setFocus();
+        event->accept();
+        return;
+    }
+    if (event->key() == Qt::Key_F2) {
         // Switch the focus back to the embedded editor.
         d->cellTool->editor()->setFocus();
-        d->cellTool->editor()->setText(toPlainText());
-        d->cellTool->editor()->setCursorPosition(textCursor().position());
-        break;
-    default:
-        KTextEdit::keyPressEvent(event);
-        setFocus();
-        d->cellTool->editor()->setCheckChoice(false);
-        d->cellTool->editor()->setText(toPlainText());
-        d->cellTool->editor()->setCheckChoice(true);
-        d->cellTool->editor()->setCursorPosition(textCursor().position());
     }
+    // put cursor and selection positions to sync
+    int pos = d->cellTool->editor()->cursorPosition();
+    textCursor().setPosition(pos);
+    // TODO: also restore selection
+
+    event->accept ();
 }
 
 void ExternalEditor::focusOutEvent(QFocusEvent* event)
