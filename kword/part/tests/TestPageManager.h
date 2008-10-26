@@ -43,6 +43,7 @@ private slots: // tests
     void testPageTraversal();
     void testSetPageStyle();
     void testPageCount();
+    void testPageSpreadLayout();
 };
 
 #endif

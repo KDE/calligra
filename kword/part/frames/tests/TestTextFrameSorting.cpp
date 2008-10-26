@@ -37,7 +37,6 @@ void TestTextFrameSorting::testSortingOnPagespread()
     KWFrame * frame4 = createFrame(QPointF(340, 10), tfs);
     KWFrame * frame5 = createFrame(QPointF(230, 10), tfs);
 
-    KWDocument doc;
     KWPageManager pm;
     KWPage page = pm.appendPage();
     page.setPageNumber(2);
@@ -53,7 +52,10 @@ void TestTextFrameSorting::testSortingOnPagespread()
     page.pageStyle().setPageLayout(layout);
     tfs.setPageManager(&pm);
 
+    QCOMPARE(page.offsetInDocument(), 150.);
+
     // test KWPageManager::pageNumber first
+    QCOMPARE(pm.begin().pageNumber(), 2);
     QCOMPARE(pm.pageNumber(frame2->shape()), 2);
     QCOMPARE(pm.pageNumber(frame1->shape()), 4);
 
@@ -77,7 +79,6 @@ void TestTextFrameSorting::testRtlSorting()
     KWFrame * frame1 = createFrame(QPointF(10, 10), tfs);
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
 
-    KWDocument doc;
     KWPageManager pm;
     KWPage page = pm.appendPage();
     page.setDirectionHint(KoText::RightLeftTopBottom);

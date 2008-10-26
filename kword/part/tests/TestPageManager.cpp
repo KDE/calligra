@@ -526,5 +526,26 @@ void TestPageManager::testPageCount()
     QCOMPARE(manager.pageCount(), 4);
 }
 
+void TestPageManager::testPageSpreadLayout()
+{
+    KWPageManager manager;
+    KWPage page = manager.appendPage();
+    KoPageLayout layout = page.pageStyle().pageLayout();
+    layout.width = 450;
+    layout.height = 150;
+    page.setPageSide(KWPage::PageSpread);
+    page.pageStyle().setPageLayout(layout);
+    KWPage page2 = manager.appendPage();
+    page2.setDirectionHint(KoText::LeftRightTopBottom);
+    layout.width = 200;
+    page2.pageStyle().setPageLayout(layout);
+
+    QCOMPARE(page.offsetInDocument(), 0.);
+    QCOMPARE(page2.offsetInDocument(), 150.);
+
+    QCOMPARE(manager.pageNumber(QPointF(10, 200)), 4);
+    QCOMPARE(manager.pageNumber(QPointF(10, 151)), 4);
+}
+
 QTEST_KDEMAIN(TestPageManager, GUI)
 #include "TestPageManager.moc"

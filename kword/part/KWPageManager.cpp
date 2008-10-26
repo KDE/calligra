@@ -43,17 +43,17 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
     Q_ASSERT(pageNum >= 0);
     qreal offset = 0.0;
 
-    // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int>::const_iterator iter = pageNumbers.begin();
-    while(iter != pageNumbers.end()) {
+    for (;iter != pageNumbers.end(); ++iter) {
         const KWPageManagerPrivate::Page page = pages[iter.value()];
+        if (page.pageSide == KWPage::PageSpread && iter.key()%2 == 1)
+            continue;
         if (iter.key() == pageNum) {
             if (bottom)
                 offset += page.style.pageLayout().height;
             break;
         }
         offset += page.style.pageLayout().height + padding.top + padding.bottom;
-        ++iter;
     }
     return offset;
 }
@@ -117,25 +117,19 @@ KWPageManager::~KWPageManager()
 
 int KWPageManager::pageNumber(const QPointF &point) const
 {
-    int pageNumber = -1;
     qreal startOfpage = 0.0;
-    foreach (int pageId, d->pageNumbers.values()) {
-        if (startOfpage >= point.y()) {
-            if (pageNumber == -1)
-                pageNumber = d->pages[pageId].pageNumber;
+    int answer = -1;
+    QMap<int, int>::const_iterator iter = d->pageNumbers.begin();
+    for (;iter != d->pageNumbers.end(); ++iter) {
+        const KWPageManagerPrivate::Page page = d->pages[iter.value()];
+        if (page.pageSide == KWPage::PageSpread && iter.key()%2 == 1)
+            continue;
+        startOfpage += page.style.pageLayout().height + d->padding.top + d->padding.bottom;
+        answer = iter.key();
+        if (startOfpage >= point.y())
             break;
-        }
-        KWPage page(d, pageId);
-        startOfpage += page.height();
-        pageNumber = page.pageNumber();
     }
-#ifdef DEBUG_PAGES
-    if (pageNumber < 0) {
-        kWarning(32001) << "KWPageManager::pageNumber(" << point << ") failed; QPoint does not have a valid page";
-        kDebug(32001) << kBacktrace();
-    }
-#endif
-    return pageNumber;
+    return answer;
 }
 
 int KWPageManager::pageNumber(const KoShape *shape) const
