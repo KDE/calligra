@@ -24,6 +24,8 @@
 #include "Property.h"
 #include "EditorDataModel.h"
 
+#include <climits>
+
 #include <KGlobal>
 #include <KLocale>
 
