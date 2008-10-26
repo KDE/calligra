@@ -28,7 +28,7 @@
 KarbonPencilToolFactory::KarbonPencilToolFactory(QObject *parent)
 : KoToolFactory(parent, "KarbonPencilTool", i18n("Pencil tool") )
 {
-    setToolTip( i18n("Freehand Drawing Tool") );
+    setToolTip( i18n("Freehand Path Drawing Tool") );
     setToolType( mainToolType() );
     setIcon( "draw-freehand" );
     setPriority( 3 );
