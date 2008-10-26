@@ -1,7 +1,6 @@
 [Desktop Entry]
 Icon=template_emptylandscape
 Name=Empty 16:10
-Name[x-test]=xxEmpty 16:10xx
 Comment=Empty presentation 10:16
 Type=Link
 URL=.source/emptyLandscapeWide.otp
