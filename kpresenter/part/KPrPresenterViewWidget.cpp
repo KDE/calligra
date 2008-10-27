@@ -45,6 +45,7 @@
 KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : QWidget( parent )
     , m_viewMode( viewMode )
+    , m_pages( pages )
     , m_canvas( canvas )
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
@@ -57,8 +58,8 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
     m_stackedLayout->addWidget( m_slidesWidget );
-    connect( m_slidesWidget, SIGNAL( selectedPageChanged( KoPAPageBase *, bool ) ), this,
-            SLOT( requestChangePage( KoPAPageBase *, bool ) ) );
+    connect( m_slidesWidget, SIGNAL( selectedPageChanged( int, bool ) ), this,
+            SLOT( requestChangePage( int, bool ) ) );
     
     vLayout->addLayout( m_stackedLayout );
 
@@ -131,14 +132,14 @@ void KPrPresenterViewWidget::requestNextSlide()
     m_viewMode->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier ) );
 }
 
-void KPrPresenterViewWidget::requestChangePage( KoPAPageBase *page, bool enableMainView )
+void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
 {
     if ( enableMainView ) {
         m_toolWidget->toggleSlideThumbnails( false );
     }
-    m_viewMode->navigateToPage( page );
-    m_mainWidget->setActivePage( page );
-    m_slidesWidget->setActivePage( page );
+    m_viewMode->navigateToPage( index );
+    m_mainWidget->setActivePage( m_pages[index] );
+    m_slidesWidget->setActivePage( m_pages[index] );
 }
 
 #include "KPrPresenterViewWidget.moc"

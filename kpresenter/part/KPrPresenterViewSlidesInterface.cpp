@@ -54,14 +54,12 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<Ko
 
 void KPrPresenterViewSlidesInterface::itemClicked( const QModelIndex &index )
 {
-    KoPAPageBase *page = static_cast<KoPAPageBase *>( index.internalPointer() );
-    emit selectedPageChanged( page, false );
+    emit selectedPageChanged( index.row(), false );
 }
 
 void KPrPresenterViewSlidesInterface::itemDoubleClicked( const QModelIndex &index )
 {
-    KoPAPageBase *page = static_cast<KoPAPageBase *>( index.internalPointer() );
-    emit selectedPageChanged( page, true );
+    emit selectedPageChanged( index.row(), true );
 }
 
 #include "KPrPresenterViewSlidesInterface.moc"

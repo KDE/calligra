@@ -244,11 +244,11 @@ void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigat
     }
 }
 
-void KPrViewModePresentation::navigateToPage( KoPAPageBase * page )
+void KPrViewModePresentation::navigateToPage( int index )
 {
-    m_animationDirector->navigateToPage( page );
+    m_animationDirector->navigateToPage( index );
     if ( m_pvAnimationDirector ) {
-        m_pvAnimationDirector->navigateToPage( page );
+        m_pvAnimationDirector->navigateToPage( index );
     }
 }
 

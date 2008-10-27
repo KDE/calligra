@@ -48,10 +48,11 @@ private slots:
     void showSlideThumbnails( bool show );
     void requestPreviousSlide();
     void requestNextSlide();
-    void requestChangePage( KoPAPageBase *page, bool enableMainView );
+    void requestChangePage( int index, bool enableMainView );
 
 private:
     KPrViewModePresentation *m_viewMode;
+    QList<KoPAPageBase *> m_pages;
     KoPACanvas *m_canvas;
 
     QStackedLayout *m_stackedLayout;

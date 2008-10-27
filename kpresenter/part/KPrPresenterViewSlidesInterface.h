@@ -39,7 +39,7 @@ public:
     explicit KPrPresenterViewSlidesInterface( const QList<KoPAPageBase *> &pages, QWidget *parent = 0 );
 
 signals:
-    void selectedPageChanged( KoPAPageBase *page, bool doubleClicked );
+    void selectedPageChanged( int index, bool doubleClicked );
 
 private slots:
     void itemClicked( const QModelIndex &index );

@@ -73,7 +73,7 @@ public:
     /**
      * do the navigation to the page specified
      */
-    void navigateToPage( KoPAPageBase * page );
+    void navigateToPage( int index );
 
     /**
      * Check if the shape is shown

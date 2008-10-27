@@ -181,7 +181,7 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
     return presentationFinished;
 }
 
-void KPrAnimationDirector::navigateToPage( KoPAPageBase *page )
+void KPrAnimationDirector::navigateToPage( int index )
 {
     if ( m_pageEffectRunner ) {
         m_pageEffectRunner->finish();
@@ -195,7 +195,8 @@ void KPrAnimationDirector::navigateToPage( KoPAPageBase *page )
         m_timeLine.stop();
     }
 
-    m_pageIndex = m_pages.indexOf( page );
+    m_pageIndex = index;
+    KoPAPageBase *page = m_pages[m_pageIndex];
 
     m_stepIndex = 0;
 
