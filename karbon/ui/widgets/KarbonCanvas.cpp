@@ -192,12 +192,15 @@ void KarbonCanvas::mousePressEvent(QMouseEvent *e)
 {
     d->toolProxy->mousePressEvent( e, d->zoomHandler.viewToDocument( widgetToView( e->pos() + d->documentOffset ) ) );
     if( !e->isAccepted() && e->button() == Qt::RightButton ) {
-        QMenu menu( this );
-        foreach( QAction *action, d->toolProxy->popupActionList() ) {
-            menu.addAction( action );
+        QList<QAction*> actions = d->toolProxy->popupActionList();
+        if( !actions.isEmpty() ) {
+            QMenu menu( this );
+            foreach( QAction *action, d->toolProxy->popupActionList() ) {
+                menu.addAction( action );
+            }
+            menu.exec( e->globalPos() );
+            e->setAccepted( true );
         }
-        menu.exec( e->globalPos() );
-        e->setAccepted( true );
     }
 }
 
