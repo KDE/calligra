@@ -106,7 +106,7 @@ bool KFormulaPartDocument::loadOdf( KoOdfReadStore & odfStore )
     return true;
 }
 
-bool KFormulaPartDocument::loadXML(QIODevice *, const KoXmlDocument& doc)
+bool KFormulaPartDocument::loadXML(const KoXmlDocument& doc, KoStore*)
 {
     // TODO: Check whether it's really MathML or old KFO format
     m_formulaElement->readMathML( doc.documentElement() );

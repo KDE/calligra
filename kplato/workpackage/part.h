@@ -147,7 +147,7 @@ public:
     virtual void paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view) {}
 
     // The load and save functions.
-    virtual bool loadXML( QIODevice *, const KoXmlDocument &document );
+    virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
     
     void setTitleModified();

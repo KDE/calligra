@@ -71,7 +71,7 @@ public:
     void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
 
     /// reimplemented from KoDocument
-    bool loadXML( QIODevice *, const KoXmlDocument & doc );
+    bool loadXML( const KoXmlDocument & doc, KoStore *store );
 
     /// reimplemented from KoDocument
     bool loadOdf( KoOdfReadStore & odfStore );

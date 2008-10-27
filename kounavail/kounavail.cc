@@ -50,7 +50,7 @@ bool KoUnavailPart::loadOdf( KoOdfReadStore & odfStore )
     return true;
 }
 
-bool KoUnavailPart::loadXML( QIODevice *, const KoXmlDocument &doc )
+bool KoUnavailPart::loadXML( const KoXmlDocument &doc, KoStore *)
 {
     // Simply keep a copy of the whole document ;)
     m_doc = KoXml::asQDomDocument( QDomDocument(), doc );

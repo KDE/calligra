@@ -157,7 +157,7 @@ bool ScriptingModule::fromXML(const QString& xml)
 	KoXmlDocument xmldoc;
 	if(! xmldoc.setContent(xml, true))
 		return false;
-	return kspreadDoc()->loadXML(0, xmldoc);
+	return kspreadDoc()->loadXML(xmldoc, 0);
 }
 
 QString ScriptingModule::toXML()

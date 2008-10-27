@@ -156,7 +156,7 @@ void KarbonPart::removeView( KoView *view )
     KoDocument::removeView( view );
 }
 
-bool KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
+bool KarbonPart::loadXML( const KoXmlDocument& document, KoStore* )
 {
     bool success = false;
 

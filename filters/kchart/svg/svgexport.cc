@@ -70,7 +70,7 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
 
     // Read the document from the XML tree.
     KChart::KChartPart  kchartDoc;
-    if ( !kchartDoc.loadXML(0, domIn) ) {
+    if ( !kchartDoc.loadXML(domIn, 0) ) {
         KMessageBox::error( 0, i18n( "Malformed XML data." ),
 			    i18n( "SVG Export Error" ) );
         return KoFilter::WrongFormat;

@@ -43,7 +43,7 @@ public:
     ~ChartDocument();
     
     bool loadOdf( KoOdfReadStore &odfStore );
-    bool loadXML( QIODevice *device, const KoXmlDocument &doc );
+    bool loadXML( const KoXmlDocument &doc, KoStore *store );
     
     bool saveOdf( SavingContext &context );
     KoView *createViewInstance( QWidget *parent );

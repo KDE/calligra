@@ -108,7 +108,7 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
     return d->parent->loadOdfEmbedded( chartElement, context );
 }
 
-bool ChartDocument::loadXML( QIODevice *, const KoXmlDocument &doc )
+bool ChartDocument::loadXML( const KoXmlDocument &doc, KoStore *)
 {
     return false;
 }

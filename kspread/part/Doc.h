@@ -135,7 +135,7 @@ public:
    * \ingroup NativeFormat
    * Main loading method.
    */
-  virtual bool loadXML( QIODevice *, const KoXmlDocument& doc );
+  virtual bool loadXML( const KoXmlDocument& doc, KoStore *store );
 
 
   /**

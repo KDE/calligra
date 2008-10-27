@@ -537,7 +537,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
     return true;
 }
 
-bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
+bool Doc::loadXML( const KoXmlDocument& doc, KoStore* )
 {
   QTime dt;
   dt.start();

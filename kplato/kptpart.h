@@ -63,7 +63,7 @@ public:
     const Project &getProject() const { return * m_project; }
 
     // The load and save functions. Look in the file kplato.dtd for info
-    virtual bool loadXML( QIODevice *, const KoXmlDocument &document );
+    virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
     /// Save a workpackage file containing @p node with schedule identity @p id
     QDomDocument saveWorkPackageXML( const Node *node, long id = -1 );

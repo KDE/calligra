@@ -112,10 +112,10 @@ bool Part::loadOdf( KoOdfReadStore & odfStore )
 {
     Q_UNUSED( odfStore );
     kWarning()<< "OpenDocument not supported, let's try native xml format";
-    return loadXML( 0, odfStore.contentDoc() ); // We have only one format, so try to load that!
+    return loadXML( odfStore.contentDoc(), 0 ); // We have only one format, so try to load that!
 }
 
-bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
+bool Part::loadXML( const KoXmlDocument &document, KoStore* )
 {
     kDebug();
     QTime dt;

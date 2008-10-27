@@ -1097,7 +1097,7 @@ QDomDocument KChartPart::saveXML()
 }
 
 
-bool KChartPart::loadXML( QIODevice*, const KoXmlDocument& doc )
+bool KChartPart::loadXML( const KoXmlDocument& doc, KoStore* )
 {
     Q_UNUSED( doc );
 

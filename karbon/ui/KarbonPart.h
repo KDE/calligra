@@ -60,7 +60,7 @@ public:
     /// reimplemented form KoDocument
     virtual void paintContent( QPainter& painter, const QRect& rect);
     /// reimplemented form KoDocument
-    virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
+    virtual bool loadXML( const KoXmlDocument& document, KoStore *store );
     /// reimplemented form KoDocument
     virtual bool loadOdf( KoOdfReadStore & odfStore );
     /// reimplemented form KoDocument

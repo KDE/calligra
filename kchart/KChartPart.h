@@ -100,7 +100,7 @@ public:
 
     // Save and load
     virtual QDomDocument  saveXML();
-    virtual bool          loadXML( QIODevice *, const KoXmlDocument& doc );
+    virtual bool loadXML( const KoXmlDocument& doc, KoStore *store );
     virtual bool          loadOdf( KoOdfReadStore & odfStore );
     virtual bool          saveOdf( SavingContext &documentContext );
 
