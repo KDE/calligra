@@ -177,19 +177,39 @@ void setAnnotationsForImage(const Image * src, KisImageSP image)
         KisAnnotation* annotation = new KisAnnotation(QString("IPTC"), "", rawdata);
         Q_CHECK_PTR(annotation);
 
-        image -> addAnnotation(annotation);
-    }
-    for (int i = 0; i < src->generic_profiles; i++) {
-        QByteArray rawdata;
-        rawdata.resize(length);
-        memcpy(rawdata.data(), src->generic_profile[i].info, src->generic_profile[i].length);
+            image -> addAnnotation(annotation);
+        }
+#if MagickLibVersion >= 0x0200000
+        {
+          ImageProfileIterator profile_iterator = AllocateImageProfileIterator( 
+          const char * name;
+          const unsigned char * profile;
+          size_t length;
+          while( NextImageProfile( profile_iterator, &name, &profile, &length ) != MagickPassFail )
+          {
+              QByteArray rawdata;
+              rawdata.resize(length);
+              memcpy(rawdata.data(), profile, length);
+  
+              KisAnnotation* annotation = new KisAnnotation(QString(name), "", rawdata);
+              Q_CHECK_PTR(annotation);
+  
+              image -> addAnnotation(annotation);
+          }
+        }
+#else
+        for(int i = 0; i < src->generic_profiles; i++)
+        {
+            QByteArray rawdata;
+            rawdata.resize(src->generic_profile[i].length);
+            memcpy(rawdata.data(), src->generic_profile[i].info, src->generic_profile[i].length);
 
         KisAnnotation* annotation = new KisAnnotation(QString(src->generic_profile[i].name), "", rawdata);
         Q_CHECK_PTR(annotation);
 
         image -> addAnnotation(annotation);
     }
-
+#endif
     const ImageAttribute* imgAttr = GetImageAttribute(src, NULL);
     while (imgAttr) {
         QByteArray rawdata;
