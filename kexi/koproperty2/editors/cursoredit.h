@@ -41,7 +41,7 @@ public:
 };
 
 class CursorDelegate : public KoProperty::EditorCreatorInterface, 
-                       public KoProperty::ValueDisplayInterface
+                       public KoProperty::ValuePainterInterface
 {
 public:
     CursorDelegate();

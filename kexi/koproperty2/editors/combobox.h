@@ -33,7 +33,16 @@ class ComboBox : public KComboBox
 public:
     class Options {
     public:
+        class IconProviderInterface {
+        public:
+            virtual QIcon icon(int index) const = 0;
+            virtual IconProviderInterface* clone() const = 0;
+        };
         Options();
+        Options(const Options& other);
+        ~Options();
+        
+        IconProviderInterface *iconProvider;
         bool extraValueAllowed : 1;
     };
 

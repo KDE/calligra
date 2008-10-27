@@ -33,8 +33,21 @@
 #include "Property.h"
 
 ComboBox::Options::Options()
- : extraValueAllowed(false)
+ : iconProvider(0)
+ , extraValueAllowed(false)
 {
+}
+
+ComboBox::Options::Options(const ComboBox::Options& other)
+{
+    *this = other;
+    if (other.iconProvider)
+        iconProvider = other.iconProvider->clone();
+}
+
+ComboBox::Options::~Options()
+{
+    delete iconProvider;
 }
 
 ComboBox::ComboBox(const KoProperty::Property::ListData* listData, const Options& options, QWidget *parent)
@@ -165,7 +178,15 @@ void ComboBox::fillValues()
         return;
     }
 //    m_keys = m_property->listData()->keys;
-    addItems(m_listData.names);
+    int index = 0;
+    foreach( const QString& itemName, m_listData.names ) {
+        addItem(itemName);
+        if (m_options.iconProvider) {
+            QIcon icon = m_options.iconProvider->icon(index);
+            setItemIcon(index, icon);
+        }
+        index++;
+    }
     KCompletion *comp = completionObject();
     comp->insertItems(m_listData.names);
     comp->setCompletionMode(KGlobalSettings::CompletionShell);
