@@ -59,9 +59,17 @@ bool KisXMPIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     for (Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it) {
         dbgFile << it->key().c_str();
         Exiv2::XmpKey key(it->key());
-        dbgFile << key.groupName().c_str() << " " << key.tagName().c_str();
+        dbgFile << key.groupName().c_str() << " " << key.tagName().c_str() << " " << key.ns().c_str();
         const KisMetaData::Schema* schema = KisMetaData::SchemaRegistry::instance()->schemaFromPrefix(key.groupName().c_str());
-        Q_ASSERT(schema);
+        if( !schema)
+        {
+          schema = KisMetaData::SchemaRegistry::instance()->schemaFromUri( key.ns().c_str() );
+          if( !schema )
+          {
+            schema = KisMetaData::SchemaRegistry::instance()->create(key.ns().c_str(), key.groupName().c_str() );
+            Q_ASSERT(schema);
+          }
+        }
         KisMetaData::Value v = exivValueToKMDValue(it->getValue());
         store->addEntry(KisMetaData::Entry(schema, key.tagName().c_str(), v));
     }
