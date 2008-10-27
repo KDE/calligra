@@ -13,7 +13,7 @@ set(libkopropertyeditors_SRCS
   editors/booledit.cpp
 #  editors/coloredit.cpp
   editors/combobox.cpp
-#  editors/cursoredit.cpp
+  editors/cursoredit.cpp
 #  editors/dateedit.cpp
 #  editors/datetimeedit.cpp
 #  editors/dummywidget.cpp

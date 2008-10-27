@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,29 +24,33 @@
 
 #include "combobox.h"
 
-template<class U, class T> class QMap;
-
-namespace KoProperty
-{
-
-class KOPROPERTY_EXPORT CursorEdit : public ComboBox
+class CursorEdit : public ComboBox
 {
     Q_OBJECT
+    Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
 
 public:
-    explicit CursorEdit(Property *property, QWidget *parent = 0);
+    CursorEdit(QWidget *parent = 0);
     virtual ~CursorEdit();
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual QCursor cursorValue() const;
+    virtual void setCursorValue(const QCursor &value);
 
-    virtual void setProperty(Property *property);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-private:
-    static QMap<QString, QVariant> *m_spValues;
+//    virtual void setProperty(Property *property);
+//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 };
 
-}
+class CursorDelegate : public KoProperty::EditorCreatorInterface, 
+                       public KoProperty::ValueDisplayInterface
+{
+public:
+    CursorDelegate();
+
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+};
 
 #endif

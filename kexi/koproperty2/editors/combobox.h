@@ -31,14 +31,23 @@ class ComboBox : public KComboBox
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit ComboBox(const KoProperty::Property* property, QWidget *parent = 0);
+    class Options {
+    public:
+        Options();
+        bool extraValueAllowed : 1;
+    };
+
+//    ComboBox(const KoProperty::Property* property, QWidget *parent = 0);
+    ComboBox(const KoProperty::Property::ListData* listData, const Options& options, 
+        QWidget *parent = 0);
 
     virtual ~ComboBox();
 
     virtual QVariant value() const;
 
-    virtual void setProperty(const KoProperty::Property *property);
-    
+//    virtual void setProperty(const KoProperty::Property *property);
+    void setListData(const KoProperty::Property::ListData & listData);
+
 //    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 public slots:
@@ -53,10 +62,11 @@ protected:
     void fillValues();
 
 //    KComboBox *m_edit;
-    const KoProperty::Property *m_property;
+//    const KoProperty::Property *m_property;
+      KoProperty::Property::ListData m_listData;
 //    QList<QVariant> keys;
     bool m_setValueEnabled : 1;
-    bool m_extraValueAllowed : 1;
+    Options m_options;
 };
 
 class ComboBoxDelegate : public KoProperty::EditorCreatorInterface, 

@@ -24,9 +24,9 @@
 #include "booledit.h"
 #include "combobox.h"
 /*
-#include "coloredit.h"
+#include "coloredit.h"*/
 #include "cursoredit.h"
-#include "dateedit.h"
+/*#include "dateedit.h"
 #include "datetimeedit.h"
 #include "dummywidget.h"
 //TODO #include "linestyleedit.h"
@@ -52,6 +52,7 @@ DefaultFactory::DefaultFactory()
  : Factory()
 {
     addEditor( KoProperty::Bool, new BoolDelegate );
+    addEditor( KoProperty::Cursor, new CursorDelegate );
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
     addPainter( KoProperty::Point, new PointDelegate );
