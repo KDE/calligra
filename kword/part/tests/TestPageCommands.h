@@ -23,16 +23,15 @@
 #include <QObject>
 #include <QtTest/QtTest>
 #include <qtest_kde.h>
-
-// #include <KoShape.h>
-// #include <tests/MockShapes.h> // from flake
-
 class TestPageCommands : public QObject
 {
     Q_OBJECT
 private slots: // tests
     void init();
     void documentPages();
+    void testInsertPageCommand();
+    void testInsertPageCommand2();
+    void testInsertPageCommand3();
 };
 
 #endif

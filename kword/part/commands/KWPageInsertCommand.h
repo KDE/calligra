@@ -22,6 +22,7 @@
 #ifndef KWPAGEINSERTCOMMAND_H
 #define KWPAGEINSERTCOMMAND_H
 
+#include "../kword_export.h"
 #include "../KWPage.h"
 
 #include <QUndoCommand>
@@ -32,7 +33,7 @@ class KWDocument;
 class KoShapeMoveCommand;
 
 /// The undo / redo command for inserting a new page in a kword document.
-class KWPageInsertCommand : public QUndoCommand
+class KWORD_TEST_EXPORT KWPageInsertCommand : public QUndoCommand
 {
 public:
     /**
@@ -51,16 +52,14 @@ public:
     virtual void undo();
 
     /// return the page created.
-    KWPage page() const {
-        return m_page;
-    }
+    KWPage page() const;
 
 private:
-    KWDocument *m_document;
-    KWPage m_page;
-    int m_afterPageNum;
-    QString m_masterPageName;
-    KoShapeMoveCommand *m_shapeMoveCommand;
+    // private class is not exactly needed since this class is not exported.
+    // but since we use private API in the cpp file I decided to use a d-pointer
+    // to avoid including private headers in a public header.
+    class Private;
+    Private * const d;
 };
 
 #endif

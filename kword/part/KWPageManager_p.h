@@ -28,18 +28,8 @@
 class KWPageManagerPrivate
 {
 public:
-    KWPageManagerPrivate();
-
-    qreal pageOffset(int pageNum, bool bottom) const;
-
-    /**
-     * Update the page number for the page related to the pageId and also update the
-     * page number of all pages following the page.
-     */
-    void setPageNumberForId(int pageId, int newPageNumber);
-
-
-    struct Page {
+    struct Page
+    {
         Page()
             : pageSide(KWPage::Right),
             pageNumber(1),
@@ -53,6 +43,20 @@ public:
         KoPageFormat::Orientation orientation;
         KoText::Direction textDirection;
     };
+
+    KWPageManagerPrivate();
+
+    qreal pageOffset(int pageNum, bool bottom) const;
+
+    /**
+     * Update the page number for the page related to the pageId and also update the
+     * page number of all pages following the page.
+     */
+    void setPageNumberForId(int pageId, int newPageNumber);
+
+    /// helper method for the commands.
+    void insertPage(const Page &page);
+
 
     // use a sorted map to find page the identifier for page objects based on the page number.
     QMap<int, int> pageNumbers; // page number to pageId

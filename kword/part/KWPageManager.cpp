@@ -103,6 +103,30 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
     Q_ASSERT(pages.count() == oldPages.count()); // don't loose anything :)
 }
 
+void KWPageManagerPrivate::insertPage(const Page &newPage)
+{
+    // increase the pagenumbers of pages following the pageNumber
+    QMap<int, int> numbers = pageNumbers;
+    if (numbers.count()) {
+        QMap<int, int>::iterator iter = numbers.end();
+        do {
+            --iter;
+
+            if (iter.key() < newPage.pageNumber)
+                break;
+            KWPageManagerPrivate::Page page = pages[iter.value()];
+            pageNumbers.remove(page.pageNumber);
+            page.pageNumber++;
+            pages.insert(iter.value(), page);
+            pageNumbers.insert(page.pageNumber, iter.value());
+        } while (iter != numbers.begin());
+    }
+
+    pages.insert(++lastId, newPage);
+    Q_ASSERT(! pageNumbers.contains(newPage.pageNumber));
+    pageNumbers.insert(newPage.pageNumber, lastId);
+}
+
 ///////////
 
 KWPageManager::KWPageManager()
@@ -203,49 +227,12 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
     if (! newPage.style.isValid())
         newPage.style = defaultPageStyle();
     newPage.pageNumber = pageNumber;
-
-    // increase the pagenumbers of pages following the pageNumber
-    QMap<int, int> pageNumbers = d->pageNumbers;
-    if (pageNumbers.count()) {
-        QMap<int, int>::iterator iter = pageNumbers.end();
-        do {
-            --iter;
-
-            if (iter.key() < pageNumber)
-                break;
-            KWPageManagerPrivate::Page page = d->pages[iter.value()];
-            d->pageNumbers.remove(page.pageNumber);
-            page.pageNumber++;
-            d->pages.insert(iter.value(), page);
-            d->pageNumbers.insert(page.pageNumber, iter.value());
-        } while (iter != pageNumbers.begin());
-    }
-
     newPage.pageSide = newPage.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
-    d->pages.insert(++d->lastId, newPage);
-    Q_ASSERT(! d->pageNumbers.contains(newPage.pageNumber));
-    d->pageNumbers.insert(newPage.pageNumber, d->lastId);
+    d->insertPage(newPage);
+
     kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
 
     return KWPage(d, d->lastId);
-}
-
-KWPage KWPageManager::insertPage(const KWPage &page)
-{
-#if 0
-    Q_ASSERT(page.pageNumber() <= pageCount());
-    Q_ASSERT(page.pageNumber() == pageCount() || page != this->page(page->pageNumber()));
-    for (int i = page->pageNumber(); i < m_pageList.count(); ++i) { // increase the pagenumbers of pages following the pageNumber
-        m_pageList[i]->m_pageNum = m_pageList[i]->m_pageNum + 1;
-    }
-    if (page->pageNumber() < pageCount()) {
-        m_pageList.insert(page->pageNumber(), page);
-    } else {
-        m_pageList.append(page);
-    }
-    kDebug(32001) << "pageNumber=" << page->pageNumber() << "pageCount=" << pageCount();
-#endif
-    return page;
 }
 
 KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
@@ -297,18 +284,21 @@ void KWPageManager::removePage(const KWPage &page)
     if (!page.isValid())
         return;
     const int removedPageNumber = page.pageNumber();
-    d->pages.remove(d->pageNumbers[page.pageNumber()]);
+    d->pages.remove(d->pageNumbers[removedPageNumber]);
 
     // decrease the pagenumbers of pages following the pageNumber
     QMap<int, int> pageNumbers = d->pageNumbers;
     QMap<int, int>::iterator iter = pageNumbers.begin();
-    while(iter != pageNumbers.end()) {
+    while (iter != pageNumbers.end()) {
         if (iter.key() > removedPageNumber) {
             KWPageManagerPrivate::Page page = d->pages[iter.value()];
             d->pageNumbers.remove(page.pageNumber);
             page.pageNumber--;
             d->pages.insert(iter.value(), page);
             d->pageNumbers.insert(page.pageNumber, iter.value());
+        }
+        else if (iter.key() == removedPageNumber) {
+            d->pageNumbers.remove(iter.key());
         }
         ++iter;
     }

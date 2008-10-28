@@ -114,7 +114,7 @@ void KWPageRemoveCommand::redo()
     //selected page got removed :-/
 
     // remove the page
-    m_document->m_pageManager.removePage(page);
+    m_document->pageManager()->removePage(page);
 
     // update changes
     m_document->firePageSetupChanged();
@@ -126,7 +126,7 @@ void KWPageRemoveCommand::undo()
     QUndoCommand::undo();
 
     // insert the page
-    KWPage page = m_document->m_pageManager.insertPage(m_pageNumber);
+    KWPage page = m_document->pageManager()->insertPage(m_pageNumber);
     page.setPageSide(m_pageSide);
     m_pageLayout.orientation = m_orientation;
     page.pageStyle().setPageLayout(m_pageLayout);

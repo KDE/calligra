@@ -115,14 +115,6 @@ public:
     KWPage insertPage(int pageNumber, const KWPageStyle &pageStyle = KWPageStyle());
 
     /**
-     * Insert the page instance at the specified position in the document. Note that it is preferred
-     * to use the insertPage(int) method which creates a new page.
-     * @param page the page that will be inserted.
-// TODO can we remove this?
-     */
-    KWPage insertPage(const KWPage &page);
-
-    /**
      * Append a new page at the end of the document
      * @param pageStyle the page style to use for the new page
      */
@@ -244,6 +236,8 @@ public:
      * Will return 0 if there are no pages.
      */
     KWPage last();
+
+    KWPageManagerPrivate *priv() { return d; }
 
 private:
     /// disable copy constructor and assignment operator
