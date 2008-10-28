@@ -194,14 +194,15 @@ public:
 
 //----------------------
 
-ComboBox::Options& initComboBoxOptions( ComboBox::Options& options, QWidget* parent )
+ComboBox::Options initComboBoxOptions( QWidget* parent )
 {
+    ComboBox::Options options;
     options.iconProvider = new CursorIconProvider(parent);
     return options;
 }
 
 CursorEdit::CursorEdit(QWidget *parent)
-        : ComboBox(s_cursorListData, initComboBoxOptions( ComboBox::Options(), this ), parent)
+        : ComboBox(s_cursorListData, initComboBoxOptions( this ), parent)
 {
  //   if (property)
  //       property->setListData(new Property::ListData(*s_cursorListData));
