@@ -130,6 +130,7 @@ public:
      * document is closed, after removing it the
      * caller will have the responsibility to delete it when its no longer of use.
      * @param fs the frameset that should be removed from the doc
+     * \sa addFrameSet()
      */
     void removeFrameSet(KWFrameSet *fs);
 
