@@ -187,7 +187,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = cs->createColorConverter( KoColorSpaceRegistry::instance()->colorSpace(csName, profile) );
+        transform = KoColorSpaceRegistry::instance()->colorSpace(csName, profile)->createColorConverter( cs );
     }
 
     // Creating the KisImageSP
