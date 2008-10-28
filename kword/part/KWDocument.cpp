@@ -416,7 +416,6 @@ bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
 
 bool KWDocument::loadXML(const KoXmlDocument & doc, KoStore *store)
 {
-    Q_UNUSED(store); // TODO use it for the imageCollection
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
