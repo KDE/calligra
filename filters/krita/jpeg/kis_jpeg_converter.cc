@@ -185,14 +185,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     // TODO fixit
     // Create the cmsTransform if needed
 
-    cmsHTRANSFORM transform = 0;
-#if 0
+    KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
-        transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
-                                       cs->profile()->profile() , cs->colorSpaceType(),
-                                       INTENT_PERCEPTUAL, 0);
+        transform = cs->createColorConverter( KoColorSpaceRegistry::instance()->colorSpace(csName, profile) );
     }
-#endif
 
     // Creating the KisImageSP
     if (! m_img) {
@@ -217,7 +213,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             while (!it.isDone()) {
                 quint8 *d = it.rawData();
                 d[0] = *(src++);
-                if (transform) cmsDoTransform(transform, d, d, 1);
+                if (transform) transform->transform(d, d, 1 );
                 d[1] = quint8_MAX;
                 ++it;
             }
@@ -228,7 +224,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 d[2] = *(src++);
                 d[1] = *(src++);
                 d[0] = *(src++);
-                if (transform) cmsDoTransform(transform, d, d, 1);
+                if (transform) transform->transform(d, d, 1 );
                 d[3] = quint8_MAX;
                 ++it;
             }
@@ -240,7 +236,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 d[1] = quint8_MAX - *(src++);
                 d[2] = quint8_MAX - *(src++);
                 d[3] = quint8_MAX - *(src++);
-                if (transform) cmsDoTransform(transform, d, d, 1);
+                if (transform) transform->transform(d, d, 1 );
                 d[4] = quint8_MAX;
                 ++it;
             }
