@@ -34,7 +34,7 @@
 
 #include <KLocale>
 
-KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, QUndoCommand *parent, const QString &masterPageName)
+KWPageInsertCommand::KWPageInsertCommand(KWDocument *document, int afterPageNum, const QString &masterPageName, QUndoCommand *parent)
         : QUndoCommand(i18n("Insert Page"), parent),
         m_document(document),
         m_afterPageNum(afterPageNum),

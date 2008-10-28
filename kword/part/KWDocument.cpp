@@ -178,7 +178,7 @@ KoView* KWDocument::createViewInstance(QWidget* parent)
 
 KWPage KWDocument::insertPage(int afterPageNum, const QString &masterPageName)
 {
-    KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, 0, masterPageName);
+    KWPageInsertCommand *cmd = new KWPageInsertCommand(this, afterPageNum, masterPageName);
     addCommand(cmd);
     Q_ASSERT(cmd->page().isValid());
     return cmd->page();

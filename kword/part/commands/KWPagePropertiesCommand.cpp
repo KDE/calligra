@@ -77,7 +77,7 @@ KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWP
         new KoShapeMoveCommand(shapes, previousPositions, newPositions, this);
 
     if (page.pageNumber() % 2 == 1 && newLayout.left < 0)
-        new KWPageInsertCommand(m_document, page.pageNumber() - 1, this);
+        new KWPageInsertCommand(m_document, page.pageNumber() - 1, QString(), this);
 }
 
 void KWPagePropertiesCommand::redo()
