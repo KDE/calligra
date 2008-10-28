@@ -550,6 +550,23 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 dbgFile << "IPTC information could not be saved."; // TODO: warn the user ?
             }
         }
+        // Save XMP
+        if (options.xmp ) {
+            dbgFile << "Trying to save XMP information";
+            KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+            Q_ASSERT(xmpIO);
+
+            QBuffer buffer;
+            xmpIO->saveTo(metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
+
+            dbgFile << "XMP information size is" << buffer.data().size();
+            QByteArray data = buffer.data();
+            if (data.size() < MAX_DATA_BYTES_IN_MARKER) {
+                jpeg_write_marker(&cinfo, JPEG_APP0 + 14, (const JOCTET*)data.data(), data.size());
+            } else {
+                dbgFile << "XMP information could not be saved."; // TODO: warn the user ?
+            }
+        }
     }
 
     // Save annotation
