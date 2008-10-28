@@ -115,7 +115,7 @@ class KisTIFFPostProcessorICCLABtoCIELAB : public KisTIFFPostProcessor {
 
 class KisTIFFReaderBase {
     public:
-        KisTIFFReaderBase( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : m_device(device), m_alphapos(alphapos), m_sourceDepth(sourceDepth), m_nbcolorssamples(nbcolorssamples), m_nbextrasamples(extrasamplescount), m_poses(poses), m_transformProfile(transformProfile), m_postprocess(postprocessor)
+        KisTIFFReaderBase( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor) : m_device(device), m_alphapos(alphapos), m_sourceDepth(sourceDepth), m_nbcolorssamples(nbcolorssamples), m_nbextrasamples(extrasamplescount), m_poses(poses), m_transformProfile(transformProfile), m_postprocess(postprocessor)
         {
             
         }
@@ -142,7 +142,7 @@ class KisTIFFReaderBase {
         inline quint8 nbColorsSamples() { return m_nbcolorssamples; }
         inline quint8 nbExtraSamples() { return m_nbextrasamples; }
         inline quint8* poses() { return m_poses; }
-        inline cmsHTRANSFORM transform() { return m_transformProfile; }
+        inline KoColorTransformation* transform() { return m_transformProfile; }
         inline KisTIFFPostProcessor* postProcessor() { return m_postprocess; }
     private:
         KisPaintDeviceSP m_device;
@@ -151,14 +151,14 @@ class KisTIFFReaderBase {
         quint8 m_nbcolorssamples;
         quint8 m_nbextrasamples;
         quint8* m_poses;
-        cmsHTRANSFORM m_transformProfile;
+        KoColorTransformation* m_transformProfile;
         KisTIFFPostProcessor* m_postprocess;
         quint32 m_tiffDataWidth;
 };
 
 class KisTIFFReaderTarget8bit : public KisTIFFReaderBase {
     public:
-        KisTIFFReaderTarget8bit( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        KisTIFFReaderTarget8bit( KisPaintDeviceSP device, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
         {
             
         }
@@ -169,7 +169,7 @@ class KisTIFFReaderTarget8bit : public KisTIFFReaderBase {
 
 class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
     public:
-        KisTIFFReaderTarget16bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        KisTIFFReaderTarget16bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
         {
             
         }
@@ -179,7 +179,7 @@ class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
 
 class KisTIFFReaderTarget32bit : public KisTIFFReaderBase {
     public:
-        KisTIFFReaderTarget32bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        KisTIFFReaderTarget32bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
         {
             
         }
@@ -189,7 +189,7 @@ class KisTIFFReaderTarget32bit : public KisTIFFReaderBase {
 
 class KisTIFFReaderFromPalette : public  KisTIFFReaderBase {
     public:
-        KisTIFFReaderFromPalette( KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor ), m_red(red), m_green(green), m_blue(blue)
+        KisTIFFReaderFromPalette( KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, KoColorTransformation* transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor ), m_red(red), m_green(green), m_blue(blue)
         {
             
         }

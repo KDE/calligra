@@ -270,17 +270,11 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
 
     // Create the cmsTransform if needed
-    cmsHTRANSFORM transform = 0;
-#if 0
-    // TODO: fixit See also: [Bug 148864] New: CMYK colors distorted when loading / saving
+    KoColorTransformation* transform = 0;
     if (profile && !profile->isSuitableForOutput()) {
         dbgFile << "The profile can't be used in krita, need conversion";
-        transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
-                                       cs->profile()->profile() , cs->colorSpaceType(),
-                                       INTENT_PERCEPTUAL, 0);
+        transform = cs->createColorConverter( KoColorSpaceRegistry::instance()->colorSpace(csName, profile) );
     }
-#endif
-
 
     // Check if there is an alpha channel
     int8 alphapos = -1; // <- no alpha
