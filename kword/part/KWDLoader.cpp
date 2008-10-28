@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,14 +38,17 @@
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoColorBackground.h>
+#include <KoImageCollection.h>
+#include <KoImageData.h>
 
 // KDE + Qt includes
 #include <QTextBlock>
 #include <klocale.h>
 #include <kdebug.h>
 
-KWDLoader::KWDLoader(KWDocument *parent)
+KWDLoader::KWDLoader(KWDocument *parent, KoStore *store)
         : m_document(parent),
+        m_store(store),
         m_pageManager(&parent->m_pageManager),
         m_pageStyle(m_pageManager->defaultPageStyle()),
         m_foundMainFS(false)
@@ -508,13 +512,19 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
         KWFrameSet *fs = new KWFrameSet();
         fill(fs, framesetElem);
         fs->setName(fsname);
-        /*TODO this no longer works after imagecollection is not directly accessable
-                KoImageData data(m_document->imageCollection());
-                data.setStoreHref(imageKey.filename);
-                KWImageFrame *imageFrame = new KWImageFrame(data, fs);
-                imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
-                fill(imageFrame, frame);
-        */
+
+        KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
+        Q_ASSERT(factory);
+        KoShape *shape = factory->createDefaultShapeAndInit(m_document->dataCenterMap());
+        shape->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
+
+        KoImageCollection * collection = dynamic_cast< KoImageCollection *>( m_document->dataCenterMap()["ImageCollection"] );
+        Q_ASSERT( collection );
+        KoImageData * data = collection->getImage( imageKey.filename, m_store );
+        shape->setUserData( data );
+
+        KWFrame * f = new KWFrame( shape, fs );
+        fill( f, frame );
         m_document->addFrameSet(fs);
         return fs;
     }

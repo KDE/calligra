@@ -423,7 +423,7 @@ bool KWDocument::loadXML(const KoXmlDocument & doc, KoStore *store)
     }
     clear();
     KoXmlElement root = doc.documentElement();
-    KWDLoader loader(this);
+    KWDLoader loader(this, store);
     bool rc = loader.load(root);
     if (rc)
         endOfLoading();
