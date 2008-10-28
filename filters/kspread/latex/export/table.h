@@ -51,7 +51,7 @@ class Table: public XmlParser, Config
 	Q3PtrList<Column> _columns;
 	Q3PtrList<Cell> _cells;
 	
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	int _maxRow, _maxCol;	/* Size of the table (nb of cell) */
 	bool _columnNumber;
 	bool _borders;

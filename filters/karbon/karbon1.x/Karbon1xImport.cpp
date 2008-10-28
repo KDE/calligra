@@ -227,7 +227,7 @@ bool KarbonImport::convert( const KoXmlDocument &document )
             pageLayout.bottom = borders.attribute( "bottom" ).toDouble();
     }
 
-    // TODO set page layout to the ouput document
+    // TODO set page layout to the output document
 
     return success;
 }

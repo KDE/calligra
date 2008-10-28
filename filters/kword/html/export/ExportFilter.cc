@@ -469,7 +469,7 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
 
     ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
 
-    kDebug(30503) <<"Quiting HtmlWorker::doFullParagraph";
+    kDebug(30503) <<"Quitting HtmlWorker::doFullParagraph";
     return true;
 }
 

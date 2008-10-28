@@ -26,7 +26,7 @@
 // KDE project (http://www.kde.org)
 //
 // This is a support class for the KDatePicker class.  It just
-// draws the calender table without titles, but could theoretically
+// draws the calendar table without titles, but could theoretically
 // be used as a standalone.
 //
 // When a date is selected by the user, it emits a signal:

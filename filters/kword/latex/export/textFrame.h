@@ -55,7 +55,7 @@ class TextFrame: public Element
 	Q3PtrList<Para> _parags;
 	//QPtrList<Para> _footnotes;
 
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	EEnv      _lastEnv;
 	EType     _lastTypeEnum;
 

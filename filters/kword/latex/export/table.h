@@ -45,7 +45,7 @@ class Table: public Q3PtrList<Element>, public Element
 	//QString _name;
 	//QString _grpMgr;
 
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	int     _maxRow, _maxCol;	/* Size of the table (nb of cell) */
 
 	public:

@@ -26,7 +26,7 @@
 #include "fileheader.h"	/* for _header use */
 #include "layout.h"
 
-/* Static Datas */
+/* Static Data */
 QString Layout::_last_name;
 EType   Layout::_last_counter;
 

@@ -42,7 +42,7 @@ class Column;
 class Cell: public Format
 {
 	
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	long _row;
 	long _col;
 	QString _text;

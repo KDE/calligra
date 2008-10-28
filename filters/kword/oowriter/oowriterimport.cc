@@ -2352,7 +2352,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& 
         }
         else if ( localName == "table-column" )
         {
-            // Allready treated in OoWriterImport::parseTable, we do not need to do anything here!
+            // Already treated in OoWriterImport::parseTable, we do not need to do anything here!
         }
         // TODO sub-table
         else

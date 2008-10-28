@@ -434,7 +434,7 @@ void TextZone::generate_format_begin(QTextStream & out)
 		out << red << ", " << green << ", " << blue << "}{";
 	}
 
-	/* Alignement */
+	/* Alignment */
 	switch(getAlign())
 	{
 		case EA_NONE:
@@ -457,7 +457,7 @@ void TextZone::generate_format_end(QTextStream & out)
 {
 	kDebug(30522) <<"GENERATE FORMAT END";
 	
-	/* Alignement */
+	/* Alignment */
 	if(getAlign() == EA_SUPER)
 		out << "}";
 	if(getAlign() == EA_SUB)

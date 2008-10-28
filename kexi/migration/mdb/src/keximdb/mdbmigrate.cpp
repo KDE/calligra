@@ -128,7 +128,7 @@ MdbTableDef* MDBMigrate::getTableDef(const QString& tableName)
 {
     MdbTableDef *tableDef = 0;
 
-    // Look through each entry in the catalogue ...
+    // Look through each entry in the catalog...
     for (unsigned int i = 0; i < m_mdb->num_catalog; i++) {
         MdbCatalogEntry* dbObject =
             (MdbCatalogEntry*)(g_ptr_array_index(m_mdb->catalog, i));
@@ -194,9 +194,9 @@ bool MDBMigrate::drv_readTableSchema(const QString& originalName,
 
 bool MDBMigrate::drv_tableNames(QStringList& tableNames)
 {
-    // Try to read the catalogue of database objects
+    // Try to read the catalog of database objects
     if (!mdb_read_catalog(m_mdb, MDB_ANY)) {
-        kDebug() << "MDBMigrate::drv_tableNames: couldn't read catalogue";
+        kDebug() << "MDBMigrate::drv_tableNames: couldn't read catalog";
         return false;
     }
 

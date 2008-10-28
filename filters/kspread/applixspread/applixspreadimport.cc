@@ -129,7 +129,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
 	}
 
         /**********************************************************************
-         *  Looking for some View-Informations                                *
+         *  Looking for some View-Information                                 *
          **********************************************************************/
         else if (mystr.startsWith ("View Start, Name:") )
 	{

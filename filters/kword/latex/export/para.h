@@ -68,9 +68,9 @@ class Para: public Layout
 
 	/* TO MANAGE THE LIST */
 
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	TextFrame*             	_element;		/* Father frame */
-	unsigned int          	_currentPos;	/* Begining of the text to use the good format */
+	unsigned int          	_currentPos;	/* Beginning of the text to use the good format */
 	static Q3PtrStack<EType> _historicList;	/* opened lists but not closed */
 	int                   	_nbLines;		/* Nb of lines in a cell (table) */
 	static int				_tabulation;	/* Size of the para tabulation (for lists). */

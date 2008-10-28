@@ -59,7 +59,7 @@ class Format: public XmlParser
 	unsigned int _pos;
 	unsigned int _taille;		/* Length of the string */
 
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	Para*   _para;		/* Parent class */
 
 	public:

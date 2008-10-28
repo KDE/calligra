@@ -458,7 +458,7 @@
                         </rect>
                     </property>
                     <property name="text">
-                        <string>Export informations about author</string>
+                        <string>Export information about author</string>
                     </property>
                     <property name="checked">
                         <bool>false</bool>

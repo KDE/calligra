@@ -2524,7 +2524,7 @@ void FontRecord::dump( std::ostream& out ) const
     case Normal: out << "Normal" << std::endl; break;
     case Subscript: out << "Subscript" << std::endl; break;
     case Superscript: out << "Superscript" << std::endl; break;
-    default: out << "Unkown " << escapement() << std::endl; break;
+    default: out << "Unknown " << escapement() << std::endl; break;
   };
 }
 
@@ -3766,7 +3766,7 @@ UString SSTRecord::stringAt( unsigned index ) const
 void SSTRecord::dump( std::ostream& out ) const
 {
   out << "SST" << std::endl;
-  out << "         Occurences : " << d->total << std::endl;
+  out << "         Occurrences : " << d->total << std::endl;
   out << "              Count : " << count() << std::endl;
   for( unsigned i = 0; i < count(); i++ )
     out << "         String #" << std::setw(2) << i << " : " <<

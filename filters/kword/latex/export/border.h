@@ -45,7 +45,7 @@ class Border
 	int  _bkRed,   _bkGreen,  _bkBlue;
 	int  _bleftpt, _brightpt, _btoppt, _bbottompt;
 
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	bool   _hasLeftBorder;
 	bool   _hasRightBorder;
 	bool   _hasTopBorder;

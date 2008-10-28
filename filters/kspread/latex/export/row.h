@@ -39,7 +39,7 @@
 class Row: public Format
 {
 	
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	long _row;
 	double _height;
 

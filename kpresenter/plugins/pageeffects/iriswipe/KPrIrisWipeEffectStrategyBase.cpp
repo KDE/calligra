@@ -152,7 +152,7 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
         QMatrix matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( ( fullScale - lastPos - 3 )*scaleStep, ( fullScale - lastPos - 3 )*scaleStep );
-        //NOTE: i have no idea why I can't just update the old rectangle and have to do this small hack (update a bigger rectangle) instead, we think that might be something floating-point releated, but i think this will work just fine
+        // NOTE: i have no idea why I can't just update the old rectangle and have to do this small hack (update a bigger rectangle) instead, we think that might be something floating-point related, but i think this will work just fine
         newPath = matrix.map( m_shape );
     }
 

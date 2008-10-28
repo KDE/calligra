@@ -39,7 +39,7 @@
 class Column: public Format
 {
 	
-	/* USEFULL DATA */
+	/* USEFUL DATA */
 	long _col;
 	double _width;
 
