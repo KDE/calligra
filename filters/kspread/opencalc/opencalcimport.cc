@@ -2282,8 +2282,7 @@ bool OpenCalcImport::createStyleMap( KoXmlDocument const & styles )
       kDebug(30518) <<"OpenCalc version:" << d;
       if ( d > 1.0 )
       {
-        QString message( i18n("This document was created with OpenOffice.org version '%1'. This filter was written for version 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
-        message.arg( content.attributeNS( ooNS::office, "version", QString() ) );
+        QString message( i18n("This document was created with OpenOffice.org version '%1'. This filter was written for version 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?", content.attributeNS( ooNS::office, "version", QString() ) ) );
         if ( KMessageBox::warningYesNo( 0, message, i18n( "Unsupported document version" ) ) == KMessageBox::No )
           return false;
       }
