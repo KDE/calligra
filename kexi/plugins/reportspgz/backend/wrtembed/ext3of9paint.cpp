@@ -196,3 +196,4 @@ void renderExtended3of9(const QRect & r, const QString & str, int align, QPainte
 
     return;
 }
+

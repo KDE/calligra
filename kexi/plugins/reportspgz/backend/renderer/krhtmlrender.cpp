@@ -293,3 +293,4 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 
     return html;
 }
+

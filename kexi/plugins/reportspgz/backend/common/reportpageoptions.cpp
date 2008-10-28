@@ -232,3 +232,4 @@ qreal ReportPageOptions::heightPx()
 
     return pageHeight;
 }
+

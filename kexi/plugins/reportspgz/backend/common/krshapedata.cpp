@@ -73,3 +73,4 @@ KRShapeData * KRShapeData::toShape()
 {
     return this;
 }
+

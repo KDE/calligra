@@ -86,3 +86,4 @@ KexiReportPage::~KexiReportPage()
 
 
 #include "kexireportpage.moc"
+

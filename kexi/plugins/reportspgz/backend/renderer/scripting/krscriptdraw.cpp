@@ -148,3 +148,4 @@ void KRScriptDraw::text(qreal x, qreal y, const QString &txt, const QString &fnt
 
     }
 }
+

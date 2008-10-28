@@ -198,3 +198,4 @@ KRLabelData * KRLabelData::toLabel()
 {
     return this;
 }
+

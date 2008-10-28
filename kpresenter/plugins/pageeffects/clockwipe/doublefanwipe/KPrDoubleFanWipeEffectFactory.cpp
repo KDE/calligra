@@ -57,3 +57,4 @@ QString KPrDoubleFanWipeEffectFactory::subTypeName(int subType) const
         return i18n( "Unknown subtype" );
     }
 }
+

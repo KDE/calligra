@@ -72,3 +72,4 @@ QSize ReportSceneView::sizeHint() const
     //kDebug() <<  scene()->width() << "x" << scene()->height();
     return QSize(scene()->width(), scene()->height());
 }
+

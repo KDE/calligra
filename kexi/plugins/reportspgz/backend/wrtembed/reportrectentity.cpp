@@ -299,3 +299,4 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
 
     return QGraphicsItem::itemChange(change, value);
 }
+

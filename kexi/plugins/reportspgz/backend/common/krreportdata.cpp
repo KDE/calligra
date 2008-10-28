@@ -323,3 +323,4 @@ KRSectionData* KRReportData::section(KRSectionData::Section s)
     }
     return sec;
 }
+
