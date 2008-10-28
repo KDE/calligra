@@ -35,9 +35,6 @@ public:
 
     virtual QCursor cursorValue() const;
     virtual void setCursorValue(const QCursor &value);
-
-//    virtual void setProperty(Property *property);
-//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 };
 
 class CursorDelegate : public KoProperty::EditorCreatorInterface, 

@@ -64,13 +64,6 @@ public:
         if (index < 0 || index >= keys.count())
             return Qt::ArrowCursor;
         return (Qt::CursorShape)(keys[index].toInt());
-/*        if (index >= 1 && index <= 10)
-            return (Qt::CursorShape)(index - 1);
-        if (index == 0)
-            return Qt::BlankCursor;
-        if (index >= 11 && index <= 18)
-            return (Qt::CursorShape)index;
-        return Qt::ArrowCursor;*/
     }
 
     int shapeToIndex(Qt::CursorShape _shape) const
@@ -204,8 +197,6 @@ ComboBox::Options initComboBoxOptions( QWidget* parent )
 CursorEdit::CursorEdit(QWidget *parent)
         : ComboBox(s_cursorListData, initComboBoxOptions( this ), parent)
 {
- //   if (property)
- //       property->setListData(new Property::ListData(*s_cursorListData));
 }
 
 CursorEdit::~CursorEdit()
@@ -215,28 +206,12 @@ CursorEdit::~CursorEdit()
 QCursor CursorEdit::cursorValue() const
 {
     return QCursor( (Qt::CursorShape)ComboBox::value().toInt() );
-//    return QCursor( s_cursorListData->indexToShape(ComboBox::value().toInt()) );
 }
 
 void CursorEdit::setCursorValue(const QCursor &value)
 {
-//    ComboBox::setValue( s_cursorListData->shapeToIndex( value.shape() ) );
     ComboBox::setValue( value.shape() );
 }
-
-/*
-void CursorEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    ComboBox::drawViewer(p, cg, r, value.value<QCursor>().shape());
-}*/
-
-/*
-void CursorEdit::setProperty(Property *prop)
-{
-    if (prop && prop != property())
-        prop->setListData(new Property::ListData(*m_cursorListData));
-    ComboBox::setProperty(prop);
-}*/
 
 //---------------
 
@@ -255,11 +230,10 @@ void CursorDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
-//    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
-//    Property *prop = editorModel->propertyForItem(index);
     int comboIndex = s_cursorListData->shapeToIndex( index.data(Qt::EditRole).value<QCursor>().shape() );
+    int pmSize = (option.rect.height() >= 32) ? 32 : 16;
     const QPixmap pm( s_cursorListData->pixmapForIndex(comboIndex, option.palette)
-        .scaled(16, 16, Qt::KeepAspectRatio, Qt::SmoothTransformation) );
+        .scaled(pmSize, pmSize, Qt::KeepAspectRatio, Qt::SmoothTransformation) );
     QPoint pmPoint(option.rect.topLeft());
     pmPoint.setX(pmPoint.x() + 2);
     painter->drawPixmap(pmPoint, pm);
