@@ -156,6 +156,16 @@ void KarbonPart::removeView( KoView *view )
     KoDocument::removeView( view );
 }
 
+void KarbonPart::openTemplate(const KUrl& url)
+{
+    KoDocument::openTemplate( url );
+
+    // explicitly set the output mimetype to our native mimetype
+    // so that autosaving works for not yet saved templates as well
+    if( outputMimeType().isEmpty() )
+        setOutputMimeType( "application/vnd.oasis.opendocument.graphics" );
+}
+
 bool KarbonPart::loadXML( const KoXmlDocument& document, KoStore* )
 {
     bool success = false;

@@ -114,6 +114,9 @@ protected:
     /// Reads settings from config file
     void initConfig();
 
+protected slots:
+    /// reimplemented from KoDocument
+    virtual void openTemplate(const KUrl& url);
 private:
     class Private;
     Private * const d;
