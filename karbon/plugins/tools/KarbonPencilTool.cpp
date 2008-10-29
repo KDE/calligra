@@ -104,6 +104,9 @@ void KarbonPencilTool::mouseMoveEvent( KoPointerEvent *event )
 
 void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    if( ! m_shape )
+        return;
+    
     addPoint( event->point );
     finish( event->modifiers() & Qt::ShiftModifier );
 
