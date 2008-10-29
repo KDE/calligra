@@ -44,6 +44,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrPlaceholderShapeFactory.cpp
      KPrPlaceholderStrategy.cpp
      KPrPlaceholderPictureStrategy.cpp
+     KPrPlaceholderTextStrategy.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp

@@ -20,12 +20,14 @@
 #include "KPrPlaceholderStrategy.h"
 
 #include "KPrPlaceholderPictureStrategy.h"
+#include "KPrPlaceholderTextStrategy.h"
 
 #include <QPainter>
 #include <QPen>
 #include <QTextOption>
 
 #include <klocale.h>
+#include <KoShape.h>
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
@@ -70,6 +72,9 @@ KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & present
     if ( presentationClass == "graphic" ) {
         strategy = new KPrPlaceholderPictureStrategy();
     }
+    else if ( presentationClass == "outline" || presentationClass == "title" ) {
+        strategy = new KPrPlaceholderTextStrategy( presentationClass );
+    }
     else {
         if ( s_placeholderMap.contains( presentationClass ) ) {
             strategy = new KPrPlaceholderStrategy( presentationClass );
@@ -98,8 +103,9 @@ KoShape * KPrPlaceholderStrategy::createShape( const QMap<QString, KoDataCenter 
     return shape;
 }
 
-void KPrPlaceholderStrategy::paint( QPainter & painter, const QRectF & rect )
+void KPrPlaceholderStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect )
 {
+    KoShape::applyConversion( painter, converter );
     QPen penText( Qt::black );
     painter.setPen( penText );
     //painter.setFont()

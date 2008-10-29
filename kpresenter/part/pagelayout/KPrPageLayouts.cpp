@@ -19,10 +19,12 @@
 
 #include "KPrPageLayouts.h"
 
+#include <KoPageLayout.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoPALoadingContext.h>
 #include <KoPASavingContext.h>
+#include <KoPAMasterPage.h>
 
 #include "KPrPageLayout.h"
 #include "KPrPageLayoutSharedSavingData.h"
@@ -64,6 +66,7 @@ bool KPrPageLayouts::completeSaving( KoStore *store, KoXmlWriter * manifestWrite
 {
     Q_UNUSED( store );
     Q_UNUSED( manifestWriter );
+    Q_UNUSED( context );
     return true;
 }
 
@@ -86,21 +89,27 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
     QHash<QString, KoXmlElement*> layouts = context.odfLoadingContext().stylesReader().presentationPageLayouts();
     QHash<QString, KoXmlElement*>::iterator it( layouts.begin() );
 
-    QRectF pageRect( 0, 0, 680, 510 );
-    for ( ; it != layouts.end(); ++it ) {
-        KPrPageLayout * pageLayout = new KPrPageLayout();
-        if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
-            QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.find( KPrPageLayoutWrapper( pageLayout ) ) );
-            if ( it != m_pageLayouts.end() ) {
-                delete pageLayout;
+    // TODO need to use the correct page size
+    // we should check which layouts are already loaded
+    const QMap<QString, KoPAMasterPage *> & masterPages = context.masterPages();
+    if ( ! masterPages.isEmpty() ) {
+        KoPageLayout & layout = masterPages.begin().value() ->pageLayout();
+        QRectF pageRect( 0, 0, layout.width, layout.height );
+        for ( ; it != layouts.end(); ++it ) {
+            KPrPageLayout * pageLayout = new KPrPageLayout();
+            if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
+                QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.find( KPrPageLayoutWrapper( pageLayout ) ) );
+                if ( it != m_pageLayouts.end() ) {
+                    delete pageLayout;
+                }
+                else {
+                    m_pageLayouts.insert( KPrPageLayoutWrapper( pageLayout ), pageLayout );
+                }
             }
             else {
-                m_pageLayouts.insert( KPrPageLayoutWrapper( pageLayout ), pageLayout );
+                delete pageLayout;
+                pageLayout = 0;
             }
-        }
-        else {
-            delete pageLayout;
-            pageLayout = 0;
         }
     }
 

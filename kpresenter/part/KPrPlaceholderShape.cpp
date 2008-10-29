@@ -45,12 +45,12 @@ KPrPlaceholderShape::~KPrPlaceholderShape()
 
 void KPrPlaceholderShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    applyConversion( painter, converter );
     QRectF rect( QPointF( 0, 0 ), size() );
     if ( m_strategy ) {
-        m_strategy->paint( painter, rect );
+        m_strategy->paint( painter, converter, rect );
     }
     else {
+        applyConversion( painter, converter );
         QPen pen( Qt::gray );
         pen.setStyle( Qt::DashLine );
         painter.setPen( pen );

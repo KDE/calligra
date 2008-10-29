@@ -17,34 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRPLACEHOLDERSTRATEGY_H
-#define KPRPLACEHOLDERSTRATEGY_H
+#ifndef KPRPLACEHOLDERTEXTSTRATEGY_H
+#define KPRPLACEHOLDERTEXTSTRATEGY_H
 
-#include <QMap>
+#include "KPrPlaceholderStrategy.h"
 
-class QString;
-class QRectF;
-class QPainter;
-class KoXmlElement;
 class KoShape;
-class KoDataCenter;
-class KoShapeControllerBase;
-class KoShapeLoadingContext;
-class KoShapeSavingContext;
-class KoViewConverter;
-class PlaceholderData;
 
-class KPrPlaceholderStrategy
+class KPrPlaceholderTextStrategy : public KPrPlaceholderStrategy
 {
 public:
-    /**
-     * Factory method to create a KPrPlaceholderStrategy
-     *
-     * @param presentationClass The presentation:class attribute of the placeholder
-     */
-    static KPrPlaceholderStrategy * create( const QString & presentationClass );
-
-    virtual ~KPrPlaceholderStrategy();
+    virtual ~KPrPlaceholderTextStrategy();
 
     virtual KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
 
@@ -55,17 +38,11 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
 protected:
-    /**
-     * @param presentationClass The presentation:class of the shape used for creating a shape of that type
-     */
-    KPrPlaceholderStrategy( const QString & presentationClass );
+    KPrPlaceholderTextStrategy( const QString & presentationClass );
 
-    /**
-     * Get the text that is displayed
-     */
-    virtual QString text() const;
+    friend class KPrPlaceholderStrategy;
 
-    const PlaceholderData * m_placeholderData;
+    KoShape * m_textShape;
 };
 
-#endif /* KPRPLACEHOLDERSTRATEGY_H */
+#endif /* KPRPLACEHOLDERTEXTSTRATEGY_H */
