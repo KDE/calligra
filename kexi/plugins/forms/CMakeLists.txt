@@ -105,7 +105,7 @@ target_link_libraries(
     )
 
 set_target_properties(kexiformutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kexiformutils  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexiformutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

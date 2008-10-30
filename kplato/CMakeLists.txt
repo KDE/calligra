@@ -67,7 +67,7 @@ target_link_libraries(kplatoprivate koodf ${KDE4_KPARTS_LIBS} kabc kplatokernel 
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoprivate DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kplatoprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### KPlato part ###############
 
@@ -89,7 +89,7 @@ kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kplato komain  ${KDE4_KDEUI_LIBS})
 
-install(TARGETS kdeinit_kplato  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( kplato kdeinit_kplato ${KDE4_KDEUI_LIBS} komain kostore )
 install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})

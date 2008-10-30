@@ -143,7 +143,7 @@ add_subdirectory( data )
 #target_link_libraries(kpresenterprivate  ${KDE4_KDE3SUPPORT_LIBS} koguiutils kotext kopainter )
 #
 #set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-#install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kpresenterprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #
 #
 ############ next target ###############
@@ -169,7 +169,7 @@ add_subdirectory( data )
 #
 #target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} komain koguiutils )
 #
-#install(TARGETS kdeinit_kpresenter  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kdeinit_kpresenter  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #
 #target_link_libraries( kpresenter kdeinit_kpresenter )
 #install(TARGETS kpresenter  DESTINATION ${BIN_INSTALL_DIR})

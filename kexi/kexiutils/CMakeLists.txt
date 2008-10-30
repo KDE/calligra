@@ -25,7 +25,7 @@ set_target_properties(kexiutils PROPERTIES
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "${KDE4_KIO_LIBS};${KDE4_KDE3SUPPORT_LIBS}"
 )
 
-install(TARGETS kexiutils  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h kexiutils_global.h
   styleproxy.h longlongvalidator.h InternalPropertyMap.h 

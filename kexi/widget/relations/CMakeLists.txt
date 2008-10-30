@@ -31,7 +31,7 @@ target_link_libraries(
     )
 
 set_target_properties(kexirelationsview PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kexirelationsview  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexirelationsview  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

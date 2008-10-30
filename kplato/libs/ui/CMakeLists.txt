@@ -127,7 +127,7 @@ target_link_libraries(kplatoui kabc komain kostore kplatokernel kplatomodels kog
 
 set_target_properties(kplatoui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoui DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kplatoui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 

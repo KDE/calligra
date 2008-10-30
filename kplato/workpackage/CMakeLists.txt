@@ -36,7 +36,7 @@ target_link_libraries(
 
 set_target_properties(kplatoworkfactory PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoworkfactory DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kplatoworkfactory ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### KPlatoWork part ###############
@@ -72,7 +72,7 @@ target_link_libraries(
 
 set_target_properties(kplatoworkapp PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatoworkapp DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kplatoworkapp ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### KPlatoWork executable ###############
@@ -90,7 +90,7 @@ target_link_libraries(
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
-install(TARGETS kdeinit_kplatowork  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( kplatowork kdeinit_kplatowork )
 

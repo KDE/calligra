@@ -104,7 +104,7 @@ kde4_add_library(kdchart SHARED ${kdchart_LIB_SRCS})
 target_link_libraries(kdchart  ${QT_QTSVG_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
 
 set_target_properties(kdchart PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kdchart  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdchart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

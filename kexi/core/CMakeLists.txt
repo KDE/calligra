@@ -54,7 +54,7 @@ set_target_properties(kexicore PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kexiutils;kexidb;koproperty"
 )
-install(TARGETS kexicore  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexicore  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

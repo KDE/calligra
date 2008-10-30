@@ -15,4 +15,4 @@ target_link_libraries( karboncommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTXML_LIBRARY}
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS karboncommon  ${INSTALL_TARGETS_DEFAULT_ARGS})

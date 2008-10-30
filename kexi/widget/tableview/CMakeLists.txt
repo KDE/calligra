@@ -44,7 +44,7 @@ target_link_libraries(
 )
 
 set_target_properties(kexidatatable PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kexidatatable  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexidatatable  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

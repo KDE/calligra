@@ -44,7 +44,7 @@ target_link_libraries(kformulalib flake koodf kostore ${KDE4_KDEUI_LIBS} koguiut
 
 set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kformulalib DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kformulalib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 

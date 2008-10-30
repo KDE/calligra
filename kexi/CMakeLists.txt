@@ -79,7 +79,7 @@ install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 #set(kexi_KDEINIT_SRCS main.cpp )
 #kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
 #target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
-#install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kdeinit_kexi  ${INSTALL_TARGETS_DEFAULT_ARGS})
 #target_link_libraries( kexi kdeinit_kexi )
 #install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 

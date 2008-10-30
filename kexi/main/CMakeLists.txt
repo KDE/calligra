@@ -62,7 +62,7 @@ target_link_libraries(
     )
 
 set_target_properties(keximain PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS keximain  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS keximain  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

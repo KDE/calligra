@@ -58,7 +58,7 @@ target_link_libraries(
     )
 
 set_target_properties(keximigrate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS keximigrate  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS keximigrate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

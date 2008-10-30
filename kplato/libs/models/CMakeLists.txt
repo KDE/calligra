@@ -38,5 +38,5 @@ target_link_libraries(kplatomodels kplatokernel ${KDE4_KABC_LIBS})
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatomodels DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kplatomodels ${INSTALL_TARGETS_DEFAULT_ARGS})
 

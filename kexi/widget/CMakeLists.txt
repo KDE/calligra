@@ -54,7 +54,7 @@ target_link_libraries(
     )
 
 set_target_properties(kexiextendedwidgets PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_VERSION} )
-install(TARGETS kexiextendedwidgets  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexiextendedwidgets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

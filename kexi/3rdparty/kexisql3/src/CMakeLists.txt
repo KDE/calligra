@@ -55,7 +55,7 @@ kde4_add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
 target_link_libraries(kexisql3  ${KDE4_KDECORE_LIBS} )
 
 set_target_properties(kexisql3 PROPERTIES VERSION 3.2.8 SOVERSION 3 )
-install(TARGETS kexisql3  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexisql3  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

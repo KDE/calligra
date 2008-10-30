@@ -42,7 +42,7 @@ target_link_libraries(
 set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
 
-install(TARGETS kformulaprivate DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kformulaprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### next target ###############
 
@@ -64,7 +64,7 @@ kde4_add_kdeinit_executable( kformula ${kformula_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kformula  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 
-install(TARGETS kdeinit_kformula  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kformula  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( kformula kdeinit_kformula )
 install(TARGETS kformula  ${INSTALL_TARGETS_DEFAULT_ARGS})

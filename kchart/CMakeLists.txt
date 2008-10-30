@@ -56,7 +56,7 @@ set_target_properties(kchartcommon
 	SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
 )
 
-install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kchartcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### target kchartpart ###############
@@ -83,7 +83,7 @@ install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 #target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} komain )
 
-#install(TARGETS kdeinit_kchart  DESTINATION ${LIB_INSTALL_DIR})
+#install(TARGETS kdeinit_kchart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #target_link_libraries( kchart kdeinit_kchart )
 #install(TARGETS kchart  ${INSTALL_TARGETS_DEFAULT_ARGS})

@@ -17,7 +17,7 @@ set_target_properties(kivioprivate PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kopageapp"
 )
-install(TARGETS kivioprivate  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kivioprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### kiviopart ###
 set(kiviopart_PART_SRCS KivioFactoryInit.cpp )
@@ -35,7 +35,7 @@ kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kivio komain)
 
-install(TARGETS kdeinit_kivio DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kivio ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(kivio kdeinit_kivio)
 install(TARGETS kivio ${INSTALL_TARGETS_DEFAULT_ARGS})

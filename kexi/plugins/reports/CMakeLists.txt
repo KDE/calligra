@@ -41,7 +41,7 @@ kde4_add_library(kexireportutils SHARED ${kexireportutils_LIB_SRCS})
 target_link_libraries(kexireportutils  ${KDE4_KDECORE_LIBS} kexicore kexiextendedwidgets kexiformutilswidgets kformdesigner kexiformutils )
 
 set_target_properties(kexireportutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kexireportutils  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexireportutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

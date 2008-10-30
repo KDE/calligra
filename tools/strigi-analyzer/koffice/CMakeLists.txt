@@ -11,5 +11,5 @@ set_target_properties(koffice PROPERTIES
     PREFIX strigita_)
 
 # install the module in the right directory so it is picked up
-install(TARGETS koffice LIBRARY DESTINATION ${LIB_INSTALL_DIR}/strigi)
+install(TARGETS koffice LIBRARY ${INSTALL_TARGETS_DEFAULT_ARGS}/strigi)
 

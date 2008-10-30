@@ -89,7 +89,7 @@ set_target_properties(kwordprivate
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kotext;koguiutils"
 )
-install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kwordprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### KWordPart Library ###############
 
@@ -113,7 +113,7 @@ kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kword  ${KDE4_KDEUI_LIBS} komain )
 
-install(TARGETS kdeinit_kword  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kword  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( kword kdeinit_kword )
 install(TARGETS kword  ${INSTALL_TARGETS_DEFAULT_ARGS})

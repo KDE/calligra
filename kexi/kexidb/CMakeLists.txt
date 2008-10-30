@@ -83,7 +83,7 @@ if(MSVC)
    set_target_properties(kexidb PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
 endif(MSVC)
 
-install(TARGETS kexidb  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexidb  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

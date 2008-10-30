@@ -50,7 +50,7 @@ kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_karbon  komain ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}  karboncommon karbonui )
 
-install(TARGETS kdeinit_karbon  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( karbon kdeinit_karbon )
 install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})

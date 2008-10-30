@@ -231,7 +231,7 @@ set_target_properties(kspreadcommon PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "koguiutils;flake"
 )
-install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kspreadcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############
@@ -255,7 +255,7 @@ kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kspread  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )
 
-install(TARGETS kdeinit_kspread  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( kspread kdeinit_kspread )
 install(TARGETS kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})

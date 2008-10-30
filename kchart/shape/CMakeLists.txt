@@ -57,7 +57,7 @@ target_link_libraries(
     )
 set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS chartshapelib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_add_plugin(chartshape ChartShapeFactory.cpp )
 target_link_libraries(

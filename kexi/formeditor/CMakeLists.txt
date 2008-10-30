@@ -39,7 +39,7 @@ target_link_libraries(kformdesigner koproperty kexiutils
 
 
 set_target_properties(kformdesigner PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kformdesigner  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kformdesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

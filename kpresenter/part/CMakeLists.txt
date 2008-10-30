@@ -107,7 +107,7 @@ target_link_libraries(
     )
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kpresenterprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### kpresenterpart ###
 set(kpresenterpart_PART_SRCS KPrFactoryInit.cpp )
@@ -127,7 +127,7 @@ kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRARY} komain )
 
-install(TARGETS kdeinit_kpresenter DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kdeinit_kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(kpresenter kdeinit_kpresenter)
 install(TARGETS kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})

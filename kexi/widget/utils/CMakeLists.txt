@@ -26,7 +26,7 @@ target_link_libraries(kexiguiutils
 )
 
 set_target_properties(kexiguiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kexiguiutils  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kexiguiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

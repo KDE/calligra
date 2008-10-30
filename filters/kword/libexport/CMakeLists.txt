@@ -28,5 +28,5 @@ target_link_libraries(
     )
 
 set_target_properties(kwordexportfilters PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
-install(TARGETS kwordexportfilters  DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kwordexportfilters  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -30,5 +30,5 @@ target_link_libraries(kplatokernel kostore ${QT_QTGUI_LIBRARY})
 
 set_target_properties(kplatokernel PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-install(TARGETS kplatokernel DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kplatokernel ${INSTALL_TARGETS_DEFAULT_ARGS})
 
