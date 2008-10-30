@@ -218,7 +218,12 @@ void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )
 {
     m_view->setActivePage( page );
     if ( m_presenterViewWidget ) {
-        m_presenterViewWidget->setActivePage( page );
+        if ( 0 != m_animationDirector ) {
+            m_presenterViewWidget->setActivePage( m_animationDirector->currentPage() );
+        }
+        else {
+            m_presenterViewWidget->setActivePage( page );
+        }
     }
 }
 

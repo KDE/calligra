@@ -90,6 +90,11 @@ void KPrPresenterViewWidget::setActivePage( KoPAPageBase *page )
     m_activeWidget->setActivePage( page );
 }
 
+void KPrPresenterViewWidget::setActivePage( int pageIndex )
+{
+    m_activeWidget->setActivePage( pageIndex );
+}
+
 void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize, const QSize &canvasSize )
 {
     // a better way to resize the canvas, still need to find optimum value
@@ -138,8 +143,8 @@ void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
         m_toolWidget->toggleSlideThumbnails( false );
     }
     m_viewMode->navigateToPage( index );
-    m_mainWidget->setActivePage( m_pages[index] );
-    m_slidesWidget->setActivePage( m_pages[index] );
+    m_mainWidget->setActivePage( index );
+    m_slidesWidget->setActivePage( index );
 }
 
 #include "KPrPresenterViewWidget.moc"

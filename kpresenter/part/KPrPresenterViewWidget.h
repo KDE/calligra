@@ -42,6 +42,7 @@ public:
     KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent=0 );
     ~KPrPresenterViewWidget();
     void setActivePage( KoPAPageBase *page );
+    void setActivePage( int pageIndex );
     void updateWidget( const QSize &widgetSize, const QSize &canvasSize );
 
 private slots:

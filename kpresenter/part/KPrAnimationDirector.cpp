@@ -139,6 +139,11 @@ KoViewConverter * KPrAnimationDirector::viewConverter()
     return &m_zoomHandler;
 }
 
+int KPrAnimationDirector::currentPage() const
+{
+    return m_pageIndex;
+}
+
 bool KPrAnimationDirector::navigate( Navigation navigation )
 {
     bool finished = false;

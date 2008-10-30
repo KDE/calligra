@@ -45,7 +45,7 @@ public:
 
 public slots:
     /// reimplemented
-    virtual void setActivePage( KoPAPageBase *page );
+    virtual void setActivePage( int pageIndex );
 
 private:
     KoPACanvas *m_canvas;

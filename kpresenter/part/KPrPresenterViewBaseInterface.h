@@ -38,14 +38,17 @@ public:
 
 public slots:
     /// set the active page to @p page
-    virtual void setActivePage( KoPAPageBase *page );
+    void setActivePage( KoPAPageBase *page );
+
+    /// set the active page number to @p pageIndex
+    virtual void setActivePage( int pageIndex );
 
 signals:
     void activeSlideChanged( KoPAPageBase *page );
 
 protected:
     QList<KoPAPageBase *> m_pages;
-    KoPAPageBase *m_activePage;
+    int m_activePage;
 };
 
 #endif

@@ -27,7 +27,12 @@ KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface( const QList<KoPAPa
 
 void KPrPresenterViewBaseInterface::setActivePage( KoPAPageBase *page )
 {
-    m_activePage = page;
+    setActivePage( m_pages.indexOf( page ) );
+}
+
+void KPrPresenterViewBaseInterface::setActivePage( int pageIndex )
+{
+    m_activePage = pageIndex;
 }
 
 #include "KPrPresenterViewBaseInterface.moc"

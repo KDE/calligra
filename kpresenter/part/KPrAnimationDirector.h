@@ -64,6 +64,11 @@ public:
     KoViewConverter * viewConverter();
 
     /**
+     * get the current page number
+     */
+    int currentPage() const;
+
+    /**
      * do the next step in the presentation
      *
      * @return true if slideshow is finished and should be exited, false otherwise

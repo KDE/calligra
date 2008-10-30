@@ -82,18 +82,19 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     setLayout( vLayout );
 }
 
-void KPrPresenterViewInterface::setActivePage( KoPAPageBase *page )
+void KPrPresenterViewInterface::setActivePage( int pageIndex )
 {
-    KPrPresenterViewBaseInterface::setActivePage( page );
+    KPrPresenterViewBaseInterface::setActivePage( pageIndex );
 
-    int currentIndex = m_pages.indexOf( page );
+    Q_ASSERT(pageIndex >= 0 && pageIndex < m_pages.size());
+    KoPAPageBase *page = m_pages.at( pageIndex );
     int pageCount = dynamic_cast<KPrEndOfSlideShowPage *>( m_pages.last() ) ?
             m_pages.count() - 1 : m_pages.count();
 
     // set the thumbnail for next page preview
     KoPAPageBase *nextPage = 0;
-    if ( currentIndex != pageCount ) {
-        nextPage = m_pages.at( currentIndex + 1 );
+    if ( pageIndex != pageCount ) {
+        nextPage = m_pages.at( pageIndex + 1 );
         m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
     }
     else { // End of presentation, just a black pixmap for the next slide preview
@@ -103,8 +104,8 @@ void KPrPresenterViewInterface::setActivePage( KoPAPageBase *page )
     }
 
     // update the label
-    m_currentSlideLabel->setText( currentIndex != pageCount ? 
-            i18n( "Current Slide %1 of %2", currentIndex + 1, pageCount ) : 
+    m_currentSlideLabel->setText( pageIndex != pageCount ? 
+            i18n( "Current Slide %1 of %2", pageIndex + 1, pageCount ) : 
             i18n( "End of Slide Show" ) );
 
     // set the presentation notes
@@ -124,15 +125,13 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
     m_canvas->setFixedSize( size );
 
     // set the thumbnail for next page preview
-    int currentIndex = m_pages.indexOf( m_activePage );
-
-    Q_ASSERT( currentIndex != -1 );
+    Q_ASSERT( m_activePage != -1 );
     KoPAPageBase *nextPage = 0;
-    if ( currentIndex != m_pages.count() - 1 ) {
-        nextPage = m_pages.at( currentIndex + 1 );
+    if ( m_activePage != m_pages.count() - 1 ) {
+        nextPage = m_pages.at( m_activePage + 1 );
     }
     else {
-        nextPage = m_activePage;
+        nextPage = m_pages.at( m_activePage );
     }
     m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
 }
