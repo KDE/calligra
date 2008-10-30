@@ -425,6 +425,16 @@ public:
     AppointmentIntervalList externalAppointments( const QString &id );
     AppointmentIntervalList externalAppointments() const;
 
+    int numExternalAppointments() const { return m_externalAppointments.count(); }
+    QList<Appointment*> externalAppointmentList() const { return m_externalAppointments.values(); }
+    
+signals:
+    void externalAppointmentToBeAdded( Resource *r, int row );
+    void externalAppointmentAdded( Resource*, Appointment* );
+    void externalAppointmentToBeRemoved( Resource *r, int row );
+    void externalAppointmentRemoved();
+    void externalAppointmentChanged( Resource *r, Appointment *a );
+
 protected:
     void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );
     virtual void changed();
@@ -439,8 +449,7 @@ private:
     QString m_email;
     DateTime m_availableFrom;
     DateTime m_availableUntil;
-    QMap<QString, AppointmentIntervalList> m_externalAppointments;
-    QMap<QString, QString> m_externalNames;
+    QMap<QString, Appointment*> m_externalAppointments;
 
     int m_units; // avalable units in percent
 

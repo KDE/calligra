@@ -371,6 +371,7 @@ public:
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
+    int state(const QDate &date) const;
     void setState( CalendarDay *day, CalendarDay::State state );
     void addWorkInterval( CalendarDay *day, TimeInterval *ti );
     void takeWorkInterval( CalendarDay *day, TimeInterval *ti );

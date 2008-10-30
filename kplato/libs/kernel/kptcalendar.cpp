@@ -777,6 +777,19 @@ void Calendar::save(QDomElement &element) const {
     
 }
 
+int Calendar::state(const QDate &date) const
+{
+    CalendarDay *day = findDay( date );
+    if ( day && day->state() != CalendarDay::Undefined ) {
+        return day->state();
+    }
+    day = weekday( date.dayOfWeek() );
+    if ( day && day->state() != CalendarDay::Undefined ) {
+        return day->state();
+    }
+    return m_parent ? m_parent->state( date ) : CalendarDay::Undefined;
+}
+
 CalendarDay *Calendar::findDay(const QDate &date, bool skipUndefined) const {
     //kDebug()<<date.toString();
     foreach (CalendarDay *d, m_days) {

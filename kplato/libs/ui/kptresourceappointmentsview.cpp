@@ -56,11 +56,54 @@ namespace KPlato
 
 
 //--------------------
+
+ResourceAppointmentsDisplayOptionsPanel::ResourceAppointmentsDisplayOptionsPanel( ResourceAppointmentsItemModel *model, QWidget *parent )
+    : QWidget( parent ),
+    m_model( model )
+{
+    setupUi( this );
+    setValues( *model );
+
+    connect( ui_internalAppointments, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+    connect( ui_externalAppointments, SIGNAL(  stateChanged ( int ) ), SIGNAL( changed() ) );
+}
+
+void ResourceAppointmentsDisplayOptionsPanel::slotOk()
+{
+    m_model->setShowInternalAppointments( ui_internalAppointments->checkState() == Qt::Checked );
+    m_model->setShowExternalAppointments( ui_externalAppointments->checkState() == Qt::Checked );
+}
+
+void ResourceAppointmentsDisplayOptionsPanel::setValues( const ResourceAppointmentsItemModel &m )
+{
+    ui_internalAppointments->setCheckState( m.showInternalAppointments() ? Qt::Checked : Qt::Unchecked );
+    ui_externalAppointments->setCheckState( m.showExternalAppointments() ? Qt::Checked : Qt::Unchecked );
+}
+
+void ResourceAppointmentsDisplayOptionsPanel::setDefault()
+{
+    ResourceAppointmentsItemModel m;
+    setValues( m );
+}
+
+//----
+ResourceAppointmentsSettingsDialog::ResourceAppointmentsSettingsDialog( ResourceAppointmentsItemModel *model, QWidget *parent )
+    : KPageDialog( parent )
+{
+    ResourceAppointmentsDisplayOptionsPanel *panel = new ResourceAppointmentsDisplayOptionsPanel( model );
+    KPageWidgetItem *page = addPage( panel, i18n( "General" ) );
+    page->setHeader( i18n( "Resource Assignments View Settings" ) );
+    
+    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+}
+
+//---------------------------------------
 ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     : DoubleTreeViewBase( true, parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setStretchLastSection( false );
+    m_rightview->setStretchLastSection( false );
     
     ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel( this );
     setModel( m );
@@ -69,26 +112,24 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     QList<int> lst2; lst2 << 0 << 1;
     hideColumns( lst1, lst2 );
     
-    //connect( model(), SIGNAL( columnsInserted ( const QModelIndex&, int, int ) ), SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
-    //slotRefreshed();
-    connect( m, SIGNAL( refreshed() ) , SLOT( slotRefreshed() ) );
+    m_leftview->resizeColumnToContents ( 1 );
+    connect( m, SIGNAL( modelReset() ), SLOT( slotRefreshed() ) );
+    
+    m_rightview->setObjectName( "ResourceAppointments" );
 }
 
 void ResourceAppointmentsTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<index.column()<<endl;
-}
-
-void ResourceAppointmentsTreeView::slotColumnsInserted( const QModelIndex&, int c1, int c2 )
-{
-    kDebug()<<c1<<", "<<c2<<endl;
-    slotRefreshed();
+    kDebug()<<index.column();
 }
 
 void ResourceAppointmentsTreeView::slotRefreshed()
 {
-    kDebug()<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount()<<endl;
-    m_leftview->selectionModel()->clear();
+    //kDebug()<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount();
+    ResourceAppointmentsItemModel *m = model();
+    setModel( 0 );
+    setModel( m );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
     QList<int> lst1; lst1 << 2 << -1;
     QList<int> lst2; lst2 << 0 << 1;
     hideColumns( lst1, lst2 );
@@ -104,7 +145,7 @@ QModelIndex ResourceAppointmentsTreeView::currentIndex() const
 ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    kDebug()<<"------------------- ResourceAppointmentsView -----------------------"<<endl;
+    kDebug()<<"------------------- ResourceAppointmentsView -----------------------";
 
     setupGui();
     
@@ -148,7 +189,7 @@ void ResourceAppointmentsView::draw()
 
 void ResourceAppointmentsView::setGuiActive( bool activate )
 {
-    kDebug()<<activate<<endl;
+    kDebug()<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -192,13 +233,13 @@ ResourceGroup *ResourceAppointmentsView::currentResourceGroup() const
 
 void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<curr.row()<<", "<<curr.column()<<endl;
+    //kDebug()<<curr.row()<<", "<<curr.column();
 //    slotEnableActions();
 }
 
 void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList )
 {
-    //kDebug()<<list.count()<<endl;
+    //kDebug()<<list.count();
     updateActionsEnabled();
 }
 
@@ -227,40 +268,22 @@ void ResourceAppointmentsView::updateActionsEnabled(  bool on )
 
 void ResourceAppointmentsView::setupGui()
 {
-/*    QString name = "resourceeditor_edit_list";
-    actionAddResource  = new KAction(KIcon( "document-new" ), i18n("Add Resource..."), this);
-    actionCollection()->addAction("add_resource", actionAddResource );
-    actionAddResource->setShortcut( KShortcut( Qt::CTRL Qt::SHIFT + Qt::Key_I ) );
-    connect( actionAddResource, SIGNAL( triggered( bool ) ), SLOT( slotAddResource() ) );
-    addAction( name, actionAddResource );
-    
-    actionAddGroup  = new KAction(KIcon( "document-new" ), i18n("Add Resource Group..."), this);
-    actionCollection()->addAction("add_group", actionAddGroup );
-    actionAddGroup->setShortcut( KShortcut( Qt::CTRL Qt::Key_I ) );
-    connect( actionAddGroup, SIGNAL( triggered( bool ) ), SLOT( slotAddGroup() ) );
-    addAction( name, actionAddGroup );
-    
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Items"), this);
-    actionCollection()->addAction("delete_selection", actionDeleteSelection );
-    actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
-    connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
-    addAction( name, actionDeleteSelection );
-    */
     // Add the context menu actions for the view options
-/*   createOptionAction();*/
+    createOptionAction();
 }
 
 void ResourceAppointmentsView::slotOptions()
 {
-    kDebug()<<endl;
-    ItemViewSettupDialog dlg( m_view->masterView() );
+    kDebug();
+    ResourceAppointmentsSettingsDialog
+    dlg( m_view->model() );
     dlg.exec();
 }
 
 
 void ResourceAppointmentsView::slotAddResource()
 {
-    //kDebug()<<endl;
+    //kDebug();
 /*    QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -289,7 +312,7 @@ void ResourceAppointmentsView::slotAddResource()
 
 void ResourceAppointmentsView::slotAddGroup()
 {
-    //kDebug()<<endl;
+    //kDebug();
 /*    ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->model()->insertGroup( g );
     if ( i.isValid() ) {
@@ -301,7 +324,7 @@ void ResourceAppointmentsView::slotAddGroup()
 void ResourceAppointmentsView::slotDeleteSelection()
 {
 /*    QObjectList lst = m_view->selectedObjects();
-    //kDebug()<<lst.count()<<" objects"<<endl;
+    //kDebug()<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
     }*/
@@ -309,13 +332,13 @@ void ResourceAppointmentsView::slotDeleteSelection()
 
 bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
-    return m_view->loadContext( model()->columnMap(), context );
+    kDebug();
+    return true;// m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceAppointmentsView::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( model()->columnMap(), context );
+    //m_view->saveContext( model()->columnMap(), context );
 }
 
 KoPrintJob *ResourceAppointmentsView::createPrintJob()

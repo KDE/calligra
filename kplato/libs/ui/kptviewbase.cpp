@@ -544,20 +544,24 @@ void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
 
 void TreeViewBase::setColumnsHidden( const QList<int> &lst )
 {
-    //kDebug()<<m_hideList<<endl;
-    int prev = 0;
+    //kDebug()<<m_hideList;
+    int prev = -1;
+    QList<int> xlst;
     foreach ( int c, lst ) {
         if ( c == -1 ) {
             // hide rest
             for ( int i = prev+1; i < model()->columnCount(); ++i ) {
                 if ( ! lst.contains( i ) ) {
-                    hideColumn( i );
+                    xlst << i;
                 }
             }
             break;
         }
-        hideColumn( c );
+        xlst << c;
         prev = c;
+    }
+    for ( int c = 0; c < model()->columnCount(); ++c ) {
+        setColumnHidden( c, xlst.contains( c ) );
     }
 }
 
@@ -1089,7 +1093,6 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
         }
     }
 }
-
 
 //----------------------
 DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview )

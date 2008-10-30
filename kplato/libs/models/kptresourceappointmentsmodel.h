@@ -51,6 +51,7 @@ public:
 
     virtual void setProject( Project *project );
     virtual void setScheduleManager( ScheduleManager *sm );
+    long id() const;
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
@@ -77,14 +78,30 @@ public:
     Node *node( const QModelIndex &index ) const;
     Appointment *appointment( const QModelIndex &index ) const;
     QModelIndex createAppointmentIndex( int row, int col, void *ptr ) const;
+    Appointment *externalAppointment( const QModelIndex &index ) const;
+    QModelIndex createExternalAppointmentIndex( int row, int col, void *ptr ) const;
     Resource *resource( const QModelIndex &index ) const;
     QModelIndex createResourceIndex( int row, int col, void *ptr ) const;
     ResourceGroup *resourcegroup( const QModelIndex &index ) const;
     QModelIndex createGroupIndex( int row, int col, void *ptr ) const;
 
+    void refresh();
+    void refreshData();
+
+    QDate startDate() const;
+    QDate endDate() const;
+
+    Resource *parent( const Appointment *a ) const;
+    int rowNumber( Resource *res, Appointment *a ) const;
+    void setShowInternalAppointments( bool show );
+    bool showInternalAppointments() const { return m_showInternal; }
+    void setShowExternalAppointments( bool show );
+    bool showExternalAppointments() const { return m_showExternal; }
+
 signals:
     void refreshed();
-      
+    void appointmentInserted( Resource*, Appointment* );
+    
 protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
@@ -99,12 +116,19 @@ protected slots:
     void slotCalendarChanged( Calendar* cal );
     void slotProjectCalculated( ScheduleManager *sm );
     
+    void slotAppointmentToBeInserted( Resource *r, int row );
+    void slotAppointmentInserted( Resource*, Appointment* );
+    void slotAppointmentToBeRemoved( Resource *r, int row );
+    void slotAppointmentRemoved();
+    void slotAppointmentChanged( Resource *r, Appointment *a );
+    
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
     
     QVariant name( const Resource *res, int role ) const;
     QVariant name( const ResourceGroup *res, int role ) const;
     QVariant name( const Node *node, int role ) const;
+    QVariant name( const Appointment *appointment, int role ) const;
     
     QVariant total( const Resource *res, int role ) const;
     QVariant total( const Resource *res, const QDate &date, int role ) const;
@@ -112,22 +136,19 @@ protected:
     
     QVariant assignment( const Appointment *a, const QDate &date, int role ) const;
     
-    void refresh();
-    
 private:
     int m_columnCount;
     QMap<const Appointment*, EffortCostMap> m_effortMap;
+    QMap<const Appointment*, EffortCostMap> m_externalEffortMap;
     QDate m_start;
     QDate m_end;
-    
-    QList<const void*> m_groups;
-    QList<const void*> m_resources;
-    QList<const void*> m_appointments;
     
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
     
     ScheduleManager *m_manager;
+    bool m_showInternal;
+    bool m_showExternal;
 };
 
 

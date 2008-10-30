@@ -843,15 +843,15 @@ bool ResourceSchedule::isOverbooked( const KDateTime &start, const KDateTime &en
         return false;
     //kDebug()<<start.toString()<<" -"<<end.toString();
     Appointment a = appointmentIntervals();
-    foreach ( AppointmentInterval *i, a.intervals() ) {
-        if ( ( !end.isValid() || i->startTime() < end ) &&
-                ( !start.isValid() || i->endTime() > start ) ) {
-            if ( i->load() > m_resource->units() ) {
+    foreach ( const AppointmentInterval &i, a.intervals() ) {
+        if ( ( !end.isValid() || i.startTime() < end ) &&
+                ( !start.isValid() || i.endTime() > start ) ) {
+            if ( i.load() > m_resource->units() ) {
                 //kDebug()<<m_name<<" overbooked";
                 return true;
             }
         }
-        if ( i->startTime() >= end )
+        if ( i.startTime() >= end )
             break;
     }
     //kDebug()<<m_name<<" not overbooked";
@@ -878,16 +878,16 @@ Duration ResourceSchedule::effort( const DateTimeInterval &interval ) const
     if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
         return eff;
     }
-    foreach ( AppointmentInterval *i, a.intervals() ) {
-        if ( interval.second <= i->startTime() ) {
+    foreach ( const AppointmentInterval &i, a.intervals() ) {
+        if ( interval.second <= i.startTime() ) {
             break;
         }
-        if ( interval.first >= i->startTime() ) {
-            DateTime et = i->endTime() < interval.second ? i->endTime() : interval.second;
-            eff -= ( et - interval.first ) * ((double)i->load()/100.0 );
+        if ( interval.first >= i.startTime() ) {
+            DateTime et = i.endTime() < interval.second ? i.endTime() : interval.second;
+            eff -= ( et - interval.first ) * ((double)i.load()/100.0 );
         } else {
-            DateTime et = i->endTime() < interval.second ? i->endTime() : interval.second;
-            eff -= ( et - i->startTime() ) * ((double)i->load()/100.0 );
+            DateTime et = i.endTime() < interval.second ? i.endTime() : interval.second;
+            eff -= ( et - i.startTime() ) * ((double)i.load()/100.0 );
         }
     }
     return eff;
@@ -908,19 +908,19 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
         //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
     }
-    foreach ( AppointmentInterval *i, a.intervals() ) {
-        if ( i->startTime() < interval.second && i->endTime() > interval.first ) {
-            DateTime t = i->startTime();
+    foreach ( const AppointmentInterval &i, a.intervals() ) {
+        if ( i.startTime() < interval.second && i.endTime() > interval.first ) {
+            DateTime t = i.startTime();
             if ( t > interval.first ) {
                 //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<t<<" PART";
                 return DateTimeInterval( interval.first, t );
             }
-            t = i->endTime();
+            t = i.endTime();
             if ( t < interval.second ) {
                 //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<t<<","<<interval.second<<" PART";
                 return DateTimeInterval( t, interval.second );
             }
-            if ( i->startTime() <= interval.first && i->endTime() >= interval.second ) {
+            if ( i.startTime() <= interval.first && i.endTime() >= interval.second ) {
                 //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" BUSY";
                 return DateTimeInterval( DateTime(), DateTime() );
             }
@@ -1054,13 +1054,13 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
                     if ( e2.tagName() != "node" ) {
                         continue;
                     }
-                    kDebug()<<"node"<<endl;
+                    kDebug()<<"node";
                     QString s = e2.attribute( "id" );
                     Node *node = status.project().findNode( s );
                     if ( node ) {
                         lst.append( node );
                     } else {
-                        kError()<<"Failed to find node id="<<s<<endl;
+                        kError()<<"Failed to find node id="<<s;
                     }
                 }
                 m_pathlists.append( lst );
@@ -1268,7 +1268,7 @@ int ScheduleManager::removeChild( const ScheduleManager *sm )
 
 void ScheduleManager::insertChild( ScheduleManager *sm, int index )
 {
-    kDebug()<<m_name<<", insert"<<sm->name()<<","<<index;
+    //kDebug()<<m_name<<", insert"<<sm->name()<<","<<index;
     if ( index == -1 ) {
         m_children.append( sm );
     } else {

@@ -437,15 +437,19 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     KoXmlElement parent = element.namedItem( "external-appointments" ).toElement();
     KoXmlElement e;
     forEachElement( e, parent ) {
-        if ( e.localName() == "project" ) {
+        if ( e.nodeName() == "project" ) {
             QString id = e.attribute( "id" );
             if ( id.isEmpty() ) {
+		kError()<<"Missing project id";
                 continue;
             }
-            if ( m_externalAppointments.contains( id ) ) {
-                clearExternalAppointments( id );
-            }
-            m_externalAppointments[ id ].loadXML( e, status );
+            clearExternalAppointments( id ); // in case...
+            AppointmentIntervalList lst;
+            lst.loadXML( e, status );
+            Appointment *a = new Appointment();
+            a->setIntervals( lst );
+            a->setAuxcilliaryInfo( e.attribute( "name", "Unknown" ) );
+            m_externalAppointments[ id ] = a;
         }
     }
     return true;
@@ -476,7 +480,8 @@ void Resource::save(QDomElement &element) const {
             QDomElement el = e.ownerDocument().createElement("project");
             e.appendChild( el );
             el.setAttribute( "id", id );
-            m_externalAppointments[ id ].saveXML( el );
+            el.setAttribute( "name", m_externalAppointments[ id ]->auxcilliaryInfo() );
+            m_externalAppointments[ id ]->intervals().saveXML( el );
         }
     }
 }
@@ -890,16 +895,28 @@ void Resource::setProject( Project *project )
 
 void Resource::addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load )
 {
-    //kDebug()<<projectId<<from<<end<<load;
-    m_externalAppointments[ id ].add( from, end, load );
-    if ( ! m_externalNames.contains( id ) ) {
-        m_externalNames[ id ] = name;
+    Appointment *a = m_externalAppointments.value( id );
+    if ( a == 0 ) {
+        a = new Appointment();
+        a->setAuxcilliaryInfo( name );
+        a->addInterval( from, end, load );
+        //kDebug()<<m_name<<name<<"new appointment:"<<a<<from<<end<<load;
+        m_externalAppointments[ id ] = a;
+        int row = m_externalAppointments.keys().indexOf( id );
+        m_externalAppointments.remove( id );
+        emit externalAppointmentToBeAdded( this, row );
+        m_externalAppointments[ id ] = a;
+        emit externalAppointmentAdded( this, a );
+    } else {
+        //kDebug()<<m_name<<name<<"new interval:"<<a<<from<<end<<load;
+        a->addInterval( from, end, load );
+        emit externalAppointmentChanged( this, a );
     }
 }
 
 void Resource::clearExternalAppointments()
 {
-    foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
+    foreach ( QString id, m_externalAppointments.keys() ) {
         clearExternalAppointments( id );
     }
 }
@@ -907,27 +924,30 @@ void Resource::clearExternalAppointments()
 void Resource::clearExternalAppointments( const QString projectId )
 {
     while ( m_externalAppointments.contains( projectId ) ) {
-        AppointmentIntervalList lst = m_externalAppointments.take( projectId );
-        foreach ( AppointmentInterval *a, lst.values() ) {
-            delete a;
-        }
+        int row = m_externalAppointments.keys().indexOf( projectId );
+        emit externalAppointmentToBeRemoved( this, row );
+        Appointment *a  = m_externalAppointments.take( projectId );
+        emit externalAppointmentRemoved();
+        delete a;
     }
-    m_externalNames.remove( projectId );
 }
 
 AppointmentIntervalList Resource::externalAppointments( const QString &id )
 {
-    return m_externalAppointments.value( id );
+    if ( ! m_externalAppointments.contains( id ) ) {
+        return AppointmentIntervalList();
+    }
+    return m_externalAppointments[ id ]->intervals();
 }
 
 AppointmentIntervalList Resource::externalAppointments() const
 {
     //kDebug()<<m_externalAppointments;
-    AppointmentIntervalList lst;
-    foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
-        lst += m_externalAppointments[ id ];
+    Appointment app;
+    foreach ( Appointment *a, m_externalAppointments ) {
+        app += *a;
     }
-    return lst;
+    return app.intervals();
 }
 
 
@@ -1660,6 +1680,11 @@ void Resource::printDebug(const QString& _indent)
     foreach (Schedule *s, m_schedules) {
         s->printDebug(indent);
     }
+    kDebug()<<indent<<"  + External appointments:"<<m_externalAppointments.count();
+    foreach ( Appointment *a, m_externalAppointments ) {
+        kDebug()<<indent<<"  ! Appointment to:"<<a->auxcilliaryInfo();
+        a->printDebug(indent);
+    }
     indent += "  !";
 }
 
@@ -1686,6 +1711,7 @@ void ResourceRequestCollection::printDebug(const QString& indent)
         r->printDebug(indent+"  ");
     }
 }
+
 #endif
 
 }  //KPlato namespace

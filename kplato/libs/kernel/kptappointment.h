@@ -53,7 +53,7 @@ class KPLATOKERNEL_EXPORT AppointmentInterval {
 public:
     AppointmentInterval();
     AppointmentInterval(const AppointmentInterval &AppointmentInterval);
-    AppointmentInterval(const DateTime &start, const DateTime end, double load=100);
+    AppointmentInterval(const DateTime &start, const DateTime &end, double load=100);
     ~AppointmentInterval();
     
     void set(DateTime &start, DateTime &end, double load=100);
@@ -90,14 +90,14 @@ private:
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMap<QString, AppointmentInterval*> {
+class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMap<QString, AppointmentInterval> {
 public:
     /// Add @p interval to the list. Handle overlapping with existsing intervals.
     void add( const AppointmentInterval &interval );
     /// Add an interval to the list. Handle overlapping with existsing intervals.
     void add( const DateTime &st, const DateTime &et, double load );
     /// Add the interval @p a to the list. Assumes no overlap.
-    void inSort(AppointmentInterval *a);
+    void inSort(const AppointmentInterval &a);
     /// Load intervals from document
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
     /// Save intervals to document
@@ -155,9 +155,7 @@ public:
     /// detach appointment from resource and node
     void detach();
     
-    void addInterval(AppointmentInterval *a);
-    void addInterval(AppointmentInterval &a) 
-        { addInterval(new AppointmentInterval(a)); }
+    void addInterval(const AppointmentInterval &a);
     void addInterval(const DateTime &start, const DateTime &end, double load=100);
     void addInterval(const DateTime &start, const Duration &duration, double load=100);
     void setIntervals(const AppointmentIntervalList &lst);
@@ -205,6 +203,10 @@ public:
     int calculationMode() const { return m_calculationMode; }
     
     void merge(const Appointment &app);
+    
+    void setAuxcilliaryInfo( const QString &info ) { m_auxcilliaryInfo = info; }
+    QString auxcilliaryInfo() const { return m_auxcilliaryInfo; }
+    
 protected:
     void copy(const Appointment &app);
     
@@ -219,6 +221,7 @@ private:
 
     AppointmentIntervalList m_intervals;
     
+    QString m_auxcilliaryInfo;
 
 #ifndef NDEBUG
 public:

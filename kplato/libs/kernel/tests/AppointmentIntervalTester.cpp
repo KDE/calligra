@@ -38,177 +38,183 @@ void AppointmentIntervalTester::addInterval()
     
     // Add an interval
     lst.add( dt1, dt2, load );
-    QCOMPARE( dt1, lst.values().first()->startTime() );
-    QCOMPARE( dt2, lst.values().first()->endTime() );
-    QCOMPARE( load, lst.values().first()->load() );
+    QCOMPARE( dt1, lst.values().first().startTime() );
+    QCOMPARE( dt2, lst.values().first().endTime() );
+    QCOMPARE( load, lst.values().first().load() );
     
     // add load
     lst.add( dt1, dt2, load );
-    QCOMPARE( dt1, lst.values().first()->startTime() );
-    QCOMPARE( dt2, lst.values().first()->endTime() );
-    QCOMPARE( load*2, lst.values().first()->load() );
+    QCOMPARE( dt1, lst.values().first().startTime() );
+    QCOMPARE( dt2, lst.values().first().endTime() );
+    QCOMPARE( load*2, lst.values().first().load() );
     
     // Add an interval after
     DateTime dt3 = dt2 + Duration( 0, 4, 0 );
     DateTime dt4 = dt3 + Duration( 0, 1, 0 );
     
     lst.add( dt3, dt4, load );
-    QCOMPARE( dt1, lst.values().first()->startTime() );
-    QCOMPARE( dt2, lst.values().first()->endTime() );
-    QCOMPARE( load*2, lst.values().first()->load() );
+    QCOMPARE( dt1, lst.values().first().startTime() );
+    QCOMPARE( dt2, lst.values().first().endTime() );
+    QCOMPARE( load*2, lst.values().first().load() );
     
-    QCOMPARE( dt3, lst.values().last()->startTime() );
-    QCOMPARE( dt4, lst.values().last()->endTime() );
-    QCOMPARE( load, lst.values().last()->load() );
+    QCOMPARE( dt3, lst.values().last().startTime() );
+    QCOMPARE( dt4, lst.values().last().endTime() );
+    QCOMPARE( load, lst.values().last().load() );
 
     // Add an interval in between
     DateTime dt5 = dt2 + Duration( 0, 2, 0 );
     DateTime dt6 = dt5 + Duration( 0, 1, 0 );
     
     lst.add( dt5, dt6, load );
-    QMutableMapIterator<QString, AppointmentInterval*> i( lst );
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-    
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}    
     // Add an overlapping interval at start
     DateTime dt7 = dt1 - Duration( 0, 1, 0 );
     DateTime dt8 = dt7 + Duration( 0, 2, 0 );
     
     lst.add( dt7, dt8, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt7, i.value()->startTime() );
-    QCOMPARE( dt1, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt7, i.value().startTime() );
+    QCOMPARE( dt1, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt8, i.value()->endTime() );
-    QCOMPARE( load*3, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt8, i.value().endTime() );
+    QCOMPARE( load*3, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
     // Add an overlapping interval at start > start, end == end
     DateTime dt9 = dt7 +  Duration( 0, 0, 30 );
     DateTime dt10 = dt9 + Duration( 0, 0, 30 );
     
     lst.add( dt9, dt10, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt7, i.value()->startTime() );
-    QCOMPARE( dt9, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt7, i.value().startTime() );
+    QCOMPARE( dt9, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt9, i.value()->startTime() );
-    QCOMPARE( dt10, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt9, i.value().startTime() );
+    QCOMPARE( dt10, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt8, i.value()->endTime() );
-    QCOMPARE( load*3, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt8, i.value().endTime() );
+    QCOMPARE( load*3, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
     // Add an overlapping interval at start > start, end < end
     DateTime dt11 = dt3 +  Duration( 0, 0, 10 );
     DateTime dt12 = dt11 + Duration( 0, 0, 30 );
     
     lst.add( dt11, dt12, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt7, i.value()->startTime() );
-    QCOMPARE( dt9, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt7, i.value().startTime() );
+    QCOMPARE( dt9, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt9, i.value()->startTime() );
-    QCOMPARE( dt10, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt9, i.value().startTime() );
+    QCOMPARE( dt10, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt8, i.value()->endTime() );
-    QCOMPARE( load*3, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt8, i.value().endTime() );
+    QCOMPARE( load*3, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt11, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt11, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt11, i.value()->startTime() );
-    QCOMPARE( dt12, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt11, i.value().startTime() );
+    QCOMPARE( dt12, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt12, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt12, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start == start.1, end == end.2
     lst.clear();
     
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt1, dt4, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
-
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start < start.1, end == end.2
     lst.clear();
     dt5 = dt1 - Duration( 0, 1, 0 );
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt4, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt1, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt1, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
-
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start < start.1, end > end.2
     lst.clear();
     dt5 = dt1 - Duration( 0, 1, 0 );
@@ -216,28 +222,29 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt1, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt1, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt4, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt4, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start < start.1, end < end.2
     lst.clear();
     dt5 = dt1 - Duration( 0, 1, 0 );
@@ -245,28 +252,29 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt1, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt1, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt6, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt6, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start > start.1, end < end.2
     lst.clear();
     dt5 = dt1 + Duration( 0, 0, 30 );
@@ -274,28 +282,29 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt5, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt5, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt6, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt6, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start > start.1, end == end.2
     lst.clear();
     dt5 = dt1 + Duration( 0, 0, 30 );
@@ -303,24 +312,25 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt5, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt5, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
-
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
+}
     // Add an interval overlapping 2 intervals at start > start.1, end > end.2
     lst.clear();
     dt5 = dt1 + Duration( 0, 0, 30 );
@@ -328,28 +338,29 @@ void AppointmentIntervalTester::addInterval()
     lst.add( dt1, dt2, load );
     lst.add( dt3, dt4, load );
     lst.add( dt5, dt6, load );
-    i.toFront();
+{
+    QMutableMapIterator<QString, AppointmentInterval> i( lst );
     i.next();
-    QCOMPARE( dt1, i.value()->startTime() );
-    QCOMPARE( dt5, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt1, i.value().startTime() );
+    QCOMPARE( dt5, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt5, i.value()->startTime() );
-    QCOMPARE( dt2, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt5, i.value().startTime() );
+    QCOMPARE( dt2, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt2, i.value()->startTime() );
-    QCOMPARE( dt3, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
+    QCOMPARE( dt2, i.value().startTime() );
+    QCOMPARE( dt3, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
     i.next();
-    QCOMPARE( dt3, i.value()->startTime() );
-    QCOMPARE( dt4, i.value()->endTime() );
-    QCOMPARE( load*2, i.value()->load() );
+    QCOMPARE( dt3, i.value().startTime() );
+    QCOMPARE( dt4, i.value().endTime() );
+    QCOMPARE( load*2, i.value().load() );
     i.next();
-    QCOMPARE( dt4, i.value()->startTime() );
-    QCOMPARE( dt6, i.value()->endTime() );
-    QCOMPARE( load, i.value()->load() );
-
+    QCOMPARE( dt4, i.value().startTime() );
+    QCOMPARE( dt6, i.value().endTime() );
+    QCOMPARE( load, i.value().load() );
+}
 
 }
 
@@ -363,15 +374,15 @@ void AppointmentIntervalTester::addAppointment()
     
     app2.addInterval( dt1, dt2, load );
     app1 += app2;
-    QCOMPARE( dt1, app1.intervals().values().first()->startTime() );
-    QCOMPARE( dt2, app1.intervals().values().first()->endTime() );
-    QCOMPARE( load, app1.intervals().values().first()->load() );
+    QCOMPARE( dt1, app1.intervals().values().first().startTime() );
+    QCOMPARE( dt2, app1.intervals().values().first().endTime() );
+    QCOMPARE( load, app1.intervals().values().first().load() );
 
     app1 += app2;
-    kDebug()<<load<<app1.intervals().values().first()->load();
-    QCOMPARE( dt1, app1.intervals().values().first()->startTime() );
-    QCOMPARE( dt2, app1.intervals().values().first()->endTime() );
-    QCOMPARE( load*2, app1.intervals().values().first()->load() );
+    kDebug()<<load<<app1.intervals().values().first().load();
+    QCOMPARE( dt1, app1.intervals().values().first().startTime() );
+    QCOMPARE( dt2, app1.intervals().values().first().endTime() );
+    QCOMPARE( load*2, app1.intervals().values().first().load() );
 }
 
 } //namespace KPlato

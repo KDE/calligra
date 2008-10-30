@@ -22,8 +22,12 @@
 
 #include "kplatoui_export.h"
 
+#include "ui_kptresourceappointmentsdisplayoptions.h"
+
 #include "kptviewbase.h"
 #include "kptresourceappointmentsmodel.h"
+
+#include <kpagedialog.h>
 
 class KoDocument;
 
@@ -45,8 +49,37 @@ class Appointment;
 class Resource;
 class ResourceGroup;
 class ScheduleManager;
+class ResourceAppointmentsItemModel;
 
-  
+//-------------------------------------------------
+class ResourceAppointmentsDisplayOptionsPanel : public QWidget, public Ui::ResourceAppointmentsDisplayOptions
+{
+    Q_OBJECT
+public:
+    explicit ResourceAppointmentsDisplayOptionsPanel( ResourceAppointmentsItemModel *model, QWidget *parent = 0 );
+
+    void setValues( const ResourceAppointmentsItemModel &del );
+
+public slots:
+    void slotOk();
+    void setDefault();
+
+signals:
+    void changed();
+
+private:
+    ResourceAppointmentsItemModel *m_model;
+};
+
+class ResourceAppointmentsSettingsDialog : public KPageDialog
+{
+    Q_OBJECT
+public:
+    explicit ResourceAppointmentsSettingsDialog( ResourceAppointmentsItemModel *model, QWidget *parent = 0 );
+
+};
+
+//------------------------
 class KPLATOUI_EXPORT ResourceAppointmentsTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
@@ -63,8 +96,6 @@ public:
     
 protected slots:
     void slotActivated( const QModelIndex index );
-
-    void slotColumnsInserted( const QModelIndex&, int c1, int c2 );
     void slotRefreshed();
 };
 

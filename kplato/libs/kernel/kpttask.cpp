@@ -808,7 +808,7 @@ EffortCostMap Task::acwp( long id ) const
     if (type() == Node::Type_Summarytask) {
         return Node::acwp( id );
     }
-    kDebug()<<m_name<<completion().entrymode();
+    //kDebug()<<m_name<<completion().entrymode();
     switch ( completion().entrymode() ) {
         case Completion::FollowPlan:
             //TODO
@@ -2786,7 +2786,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
 
 EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end ) const
 {
-    kDebug()<<m_node->name()<<start<<end;
+    //kDebug()<<m_node->name()<<start<<end;
     EffortCostMap ec;
     if ( ! isStarted() ) {
         return ec;
@@ -2804,7 +2804,7 @@ EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end )
                     continue;
                 }
                 Duration e = m_entries[ d ]->totalPerformed;
-                kDebug()<<d<<e.toDouble(Duration::Unit_h)<<last.toDouble(Duration::Unit_h);
+                //kDebug()<<d<<e.toDouble(Duration::Unit_h)<<last.toDouble(Duration::Unit_h);
                 if ( e != Duration::zeroDuration && e != last ) {
                     ec.insert( d, e - last, 0.0 ); // FIXME cost is difficult, we don't know who has done the work
                     last = e;
@@ -2900,7 +2900,7 @@ EffortCostMap Completion::actualEffortCost() const
     QList< double > rate;
     QDate start, end;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
-        kDebug()<<m_node->name()<<r->name();
+        //kDebug()<<m_node->name()<<r->name();
         const QMap<QDate, UsedEffort::ActualEffort*> &m = usedEffort( r )->actualEffortMap();
         if ( m.isEmpty() ) {
             continue;
@@ -2914,7 +2914,7 @@ EffortCostMap Completion::actualEffortCost() const
         lst.append( &m );
         rate.append( r->normalRate() );
     }
-    kDebug()<<m_node->name()<<start<<end<<lst;
+    //kDebug()<<m_node->name()<<start<<end<<lst;
     if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
         for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
             EffortCost c;
@@ -2927,7 +2927,7 @@ EffortCostMap Completion::actualEffortCost() const
                 Duration eff = a->normalEffort();
                 double cost = eff.toDouble( Duration::Unit_h ) * nc;
                 c.add( eff, cost );
-                kDebug()<<m_node->name()<<d<<eff.toDouble(Duration::Unit_h)<<nc<<cost<<"->"<<c.effort().toDouble(Duration::Unit_h)<<c.cost();
+                //kDebug()<<m_node->name()<<d<<eff.toDouble(Duration::Unit_h)<<nc<<cost<<"->"<<c.effort().toDouble(Duration::Unit_h)<<c.cost();
             }
             if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
                 map.add( d, c );
@@ -2943,7 +2943,7 @@ EffortCostMap Completion::actualEffortCost() const
             }
             Duration e = m_entries[ d ]->totalPerformed;
             if ( e != Duration::zeroDuration && e != last ) {
-                kDebug()<<m_node->name()<<d<<(e - last).toDouble(Duration::Unit_h);
+                //kDebug()<<m_node->name()<<d<<(e - last).toDouble(Duration::Unit_h);
                 map.insert( d, e - last, 0.0 ); // FIXME cost is difficult, we don't know who has done the work
                 last = e;
             }
@@ -3213,7 +3213,7 @@ void WorkPackage::saveXML(QDomElement &element) const
 
 QList<Resource*> WorkPackage::fetchResources()
 {
-    kDebug()<<m_task.name();
+    //kDebug()<<m_task.name();
     QList<Resource*> lst;
     if ( id() == NOTSCHEDULED ) {
         kDebug()<<"No schedule";
@@ -3226,7 +3226,7 @@ QList<Resource*> WorkPackage::fetchResources()
             }
         }
     }
-    kDebug()<<lst;
+    //kDebug()<<lst;
     return lst;
 }
 
