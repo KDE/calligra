@@ -53,7 +53,6 @@ private:
     enum {
         SlideShowNameData = 33,
         SlideData = 34,
-        SlidePositionData = 35
     };
 
     bool m_firstTime;

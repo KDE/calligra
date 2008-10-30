@@ -232,9 +232,6 @@ void KPrCustomSlideShowsDialog::changedSelectedSlideshow(QListWidgetItem* curren
     m_selectedSlideShowName = current->data( SlideShowNameData ).toString();
     QList<KoPAPageBase*> pages = m_slideShows->getByName( m_selectedSlideShowName );
 
-    //the position of the slide in the slideShow
-    int slideNumberInSlideShow = 0;
-
     //insert them into the current slideShow list
     QListWidgetItem * item;
     foreach( KoPAPageBase* page, pages )
@@ -242,7 +239,6 @@ void KPrCustomSlideShowsDialog::changedSelectedSlideshow(QListWidgetItem* curren
         item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n( "Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
         item->setData( SlideData, QVariant( page ) );
-        item->setData( SlidePositionData, QVariant( slideNumberInSlideShow++ ) );
     }
 }
 
@@ -251,9 +247,6 @@ void KPrCustomSlideShowsDialog::addSlidesToCurrentSlideShow()
     //get the selected items and slideshow
     QList<QListWidgetItem*> selectedPages = m_uiWidget.availableSlidesList->selectedItems();
     QList<KoPAPageBase*> selectedSlideShow = m_slideShows->getByName( m_selectedSlideShowName );
-
-    //the position of the next slide in the slideshow
-    int nextSlideNumberInSlideShow = selectedPages.size();
 
     //insert the slides at the end and update the Widget
     foreach( QListWidgetItem* item, selectedPages )
@@ -264,7 +257,6 @@ void KPrCustomSlideShowsDialog::addSlidesToCurrentSlideShow()
         item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n("Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
         item->setData( SlideData, QVariant( page ) );
-        item->setData( SlidePositionData, QVariant( nextSlideNumberInSlideShow++ ) );
     }
     //update the SlideShow with the resulting list
     m_slideShows->update( m_selectedSlideShowName, selectedSlideShow );
@@ -288,9 +280,9 @@ void KPrCustomSlideShowsDialog::removeSlidesFromCurrentSlideShow()
     //remove the slides and update the widget
     foreach( QListWidgetItem* item, selectedPages )
     {
-        m_uiWidget.customSlideShowsList->takeItem( m_uiWidget.customSlideShowsList->row(item) );
-        int i = item->data( SlidePositionData ).toInt();
-        selectedSlideShow.removeAt( i );
+        int row = m_uiWidget.currentSlidesList->row(item);
+        m_uiWidget.currentSlidesList->takeItem( row );
+        selectedSlideShow.removeAt( row );
         delete item;
     }
     //update the selected SlideShow
