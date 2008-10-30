@@ -52,7 +52,7 @@ private Q_SLOTS:
 private:
     enum {
         SlideShowNameData = 33,
-        SlideData = 34,
+        SlideData = 34
     };
 
     bool m_firstTime;
