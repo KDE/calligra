@@ -20,20 +20,6 @@
 #ifndef KPROPERTY_EDITORVIEW_H
 #define KPROPERTY_EDITORVIEW_H
 
-/*
-#include <QPointer>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QResizeEvent>
-#include <QKeyEvent>
-#include <QEvent>
-#include <QByteArray>
-#include "koproperty_global.h"
-
-#include <k3listview.h>
-
-class QSize;*/
-
 #include "koproperty_export.h"
 
 #include <QtGui/QItemEditorFactory>
@@ -46,46 +32,6 @@ namespace KoProperty
 {
 
 class Set;
-
-/*
-class RectEdit2 : public QLabel
-{
-    Q_OBJECT
-    Q_PROPERTY(QRect value READ value WRITE setValue USER true)
-public:
-    RectEdit2(QWidget *parent = 0);
-    ~RectEdit2();
-    QRect value() const;
-    void setValue(const QRect& value);
-private:
-    QRect m_rect;
-};
-
-class StringEdit2 : public KLineEdit
-{
-    Q_OBJECT
-    Q_PROPERTY(QString value READ value WRITE setValue USER true)
-public:
-    StringEdit2(QWidget *parent = 0);
-    ~StringEdit2();
-    QString value() const;
-    void setValue(const QString& value);
-signals:
-    void commitData( QWidget * editor );
-private slots:
-    void slotTextChanged( const QString & text );
-private:
-    bool m_slotTextChangedEnabled : 1;
-};*/
-
-/*
-class Factory2 : public QItemEditorFactory
-{
-    Q_OBJECT
-public:
-    Factory2();
-    virtual ~Factory2();
-};*/
 
 //! @brief A widget for editing properties
 //! @todo review this .............
