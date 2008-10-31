@@ -94,6 +94,13 @@ public:
 
     QModelIndex currentIndex() const;
     
+    /// Load context info into this view.
+    virtual bool loadContext( const KoXmlElement &context );
+    using DoubleTreeViewBase::loadContext;
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &context ) const;
+    using DoubleTreeViewBase::saveContext;
+
 protected slots:
     void slotActivated( const QModelIndex index );
     void slotRefreshed();

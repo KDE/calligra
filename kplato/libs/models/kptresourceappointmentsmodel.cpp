@@ -587,11 +587,21 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, int role ) c
 {
     switch ( role ) {
         case Qt::DisplayRole: {
-            QList<Appointment*> lst = res->appointments( m_manager->id() );
             Duration d;
-            foreach ( Appointment *a, lst ) {
-                if ( m_effortMap.contains( a ) ) {
-                    d += m_effortMap[ a ].totalEffort();
+            if ( m_showInternal ) {
+                QList<Appointment*> lst = res->appointments( m_manager->id() );
+                foreach ( Appointment *a, lst ) {
+                    if ( m_effortMap.contains( a ) ) {
+                        d += m_effortMap[ a ].totalEffort();
+                    }
+                }
+            }
+            if ( m_showExternal ) {
+                QList<Appointment*> lst = res->externalAppointmentList();
+                foreach ( Appointment *a, lst ) {
+                    if ( m_externalEffortMap.contains( a ) ) {
+                        d += m_externalEffortMap[ a ].totalEffort();
+                    }
                 }
             }
             return KGlobal::locale()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
@@ -611,11 +621,21 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, const QDate 
 {
     switch ( role ) {
         case Qt::DisplayRole: {
-            QList<Appointment*> lst = res->appointments( id() );
             Duration d;
-            foreach ( Appointment *a, lst ) {
-                if ( m_effortMap.contains( a ) ) {
-                    d += m_effortMap[ a ].effortOnDate( date );
+            if ( m_showInternal ) {
+                QList<Appointment*> lst = res->appointments( id() );
+                foreach ( Appointment *a, lst ) {
+                    if ( m_effortMap.contains( a ) ) {
+                        d += m_effortMap[ a ].effortOnDate( date );
+                    }
+                }
+            }
+            if ( m_showExternal ) {
+                QList<Appointment*> lst = res->externalAppointmentList();
+                foreach ( Appointment *a, lst ) {
+                    if ( m_externalEffortMap.contains( a ) ) {
+                        d += m_externalEffortMap[ a ].effortOnDate( date );
+                    }
                 }
             }
             QString ds = KGlobal::locale()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );

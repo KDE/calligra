@@ -123,6 +123,26 @@ void ResourceAppointmentsTreeView::slotActivated( const QModelIndex index )
     kDebug()<<index.column();
 }
 
+bool ResourceAppointmentsTreeView::loadContext( const KoXmlElement &context )
+{
+    kDebug();
+    KoXmlElement e = context.namedItem( "common" ).toElement();
+    if ( ! e.isNull() ) {
+        model()->setShowInternalAppointments( (bool)( e.attribute( "show-internal-appointments", "0" ).toInt() ) );
+        model()->setShowExternalAppointments( (bool)( e.attribute( "show-external-appointments", "0" ).toInt() ) );
+    }
+    return true;
+}
+
+void ResourceAppointmentsTreeView::saveContext( QDomElement &settings ) const
+{
+    kDebug();
+    QDomElement e = settings.ownerDocument().createElement( "common" );
+    settings.appendChild( e );
+    e.setAttribute( "show-internal-appointments", model()->showInternalAppointments() );
+    e.setAttribute( "show-external-appointments", model()->showExternalAppointments() );
+}
+
 void ResourceAppointmentsTreeView::slotRefreshed()
 {
     //kDebug()<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount();
@@ -332,13 +352,12 @@ void ResourceAppointmentsView::slotDeleteSelection()
 
 bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
 {
-    kDebug();
-    return true;// m_view->loadContext( model()->columnMap(), context );
+    return m_view->loadContext( context );
 }
 
 void ResourceAppointmentsView::saveContext( QDomElement &context ) const
 {
-    //m_view->saveContext( model()->columnMap(), context );
+    m_view->saveContext( context );
 }
 
 KoPrintJob *ResourceAppointmentsView::createPrintJob()
