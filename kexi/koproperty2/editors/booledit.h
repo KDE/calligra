@@ -30,6 +30,9 @@
 
 #include <QToolButton>
 
+//! A bool editor supporting two states: true and false. 
+/*! For null values, false is displayed.
+*/
 class BoolEdit : public QToolButton
 {
     Q_OBJECT
@@ -63,6 +66,9 @@ private:
     QString m_noText;
 };
 
+//! A bool editor supporting three states: true, false and null. 
+/*! The editor is implemented as a drop-down list.
+*/
 class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 {
     Q_OBJECT
