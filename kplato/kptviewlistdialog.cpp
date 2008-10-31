@@ -148,46 +148,46 @@ bool AddViewPanel::ok()
             m_view->createResourcEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 1: // Task editor
-            m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 2: // Work & Vacation Editor
-            m_view->createCalendarEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createCalendarEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 3: // Accounts Editor
-            m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 4: // Dependency Editor (Graphic)
-            m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 5: // Dependency Editor (List)
-            m_view->createPertEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createPertEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 6: // Schedules Handler
-            m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 7: // Task status
-            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 8: // Task status
-            m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 9: // Gantt View
-            m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 10: // Milestone Gantt View
-            m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 11: // Resource Assignments
-            m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 12: // Cost Breakdown
-            m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 13: // Project Performance Chart
-            m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createProjectStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
         case 14: // Task Performance Chart
-            m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text(), index );
             break;
 /* Deactivate for koffice 2.0 release
         case 15: // Performance Status

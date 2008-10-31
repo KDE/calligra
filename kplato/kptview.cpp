@@ -476,12 +476,12 @@ void View::createViews()
     }
 }
 
-ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ResourceAppointmentsView *v = new ResourceAppointmentsView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "resource_view" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "resource_view", index );
     i->setToolTip( 0, tip );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -515,12 +515,12 @@ ViewBase *View::createResourcEditor( ViewListItem *cat, const QString tag, const
     return resourceeditor;
 }
 
-ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     TaskEditor *taskeditor = new TaskEditor( getPart(), m_tab );
     m_tab->addWidget( taskeditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "task_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskeditor, getPart(), "task_editor", index );
     i->setToolTip( 0, tip );
 
     taskeditor->draw( getProject() );
@@ -546,12 +546,12 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     return taskeditor;
 }
 
-ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     AccountsEditor *ae = new AccountsEditor( getPart(), m_tab );
     m_tab->addWidget( ae );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, ae, getPart(), "accounts_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ae, getPart(), "accounts_editor", index );
     i->setToolTip( 0, tip );
 
     ae->draw( getProject() );
@@ -561,12 +561,12 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
     return ae;
 }
 
-ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     CalendarEditor *calendareditor = new CalendarEditor( getPart(), m_tab );
     m_tab->addWidget( calendareditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, calendareditor, getPart(), "calendar_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, calendareditor, getPart(), "calendar_editor", index );
     i->setToolTip( 0, tip );
 
     calendareditor->draw( getProject() );
@@ -578,12 +578,12 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
     return calendareditor;
 }
 
-ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ScheduleHandlerView *handler = new ScheduleHandlerView( getPart(), m_tab );
     m_tab->addWidget( handler );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, handler, getPart(), "schedule_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, handler, getPart(), "schedule_editor", index );
     i->setToolTip( 0, tip );
 
     connect( handler->scheduleEditor(), SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
@@ -620,12 +620,12 @@ ScheduleEditor *View::createScheduleEditor( QWidget *parent )
     return scheduleeditor;
 }
 
-ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ScheduleEditor *scheduleeditor = new ScheduleEditor( getPart(), m_tab );
     m_tab->addWidget( scheduleeditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, scheduleeditor, getPart(), "schedule_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, scheduleeditor, getPart(), "schedule_editor", index );
     i->setToolTip( 0, tip );
 
     scheduleeditor->setProject( &( getProject() ) );
@@ -645,12 +645,12 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
 }
 
 
-ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     DependencyEditor *editor = new DependencyEditor( getPart(), m_tab );
     m_tab->addWidget( editor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, editor, getPart(), "task_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, editor, getPart(), "task_editor", index );
     i->setToolTip( 0, tip );
 
     editor->draw( getProject() );
@@ -672,12 +672,12 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     return editor;
 }
 
-ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     PertEditor *perteditor = new PertEditor( getPart(), m_tab );
     m_tab->addWidget( perteditor );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, perteditor, getPart(), "task_editor" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, perteditor, getPart(), "task_editor", index );
     i->setToolTip( 0, tip );
 
     perteditor->draw( getProject() );
@@ -688,12 +688,12 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
     return perteditor;
 }
 
-ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ProjectStatusView *v = new ProjectStatusView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view", index );
     i->setToolTip( 0, tip );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -706,12 +706,12 @@ ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, c
     return v;
 }
 
-ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     PerformanceStatusView *v = new PerformanceStatusView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view", index );
     i->setToolTip( 0, tip );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -727,12 +727,12 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
 }
 
 
-ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
     m_tab->addWidget( taskstatusview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskstatusview, getPart(), "status_view" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, taskstatusview, getPart(), "status_view", index );
     i->setToolTip( 0, tip );
 
     connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
@@ -747,12 +747,12 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     return taskstatusview;
 }
 
-ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     TaskView *v = new TaskView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "task_view" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "task_view", index );
     i->setToolTip( 0, tip );
 
     v->draw( getProject() );
@@ -767,12 +767,12 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     return v;
 }
 
-ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     GanttView *ganttview = new GanttView( getPart(), m_tab, getPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart", index );
     i->setToolTip( 0, tip );
 
     ganttview->setProject( &( getProject() ) );
@@ -793,12 +793,12 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     return ganttview;
 }
 
-ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     MilestoneGanttView *ganttview = new MilestoneGanttView( getPart(), m_tab, getPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart", index );
     i->setToolTip( 0, tip );
 
     ganttview->setProject( &( getProject() ) );
@@ -814,12 +814,12 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
 }
 
 
-ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     AccountsView *accountsview = new AccountsView( &getProject(), getPart(), m_tab );
     m_tab->addWidget( accountsview );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "accounts" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "accounts", index );
     i->setToolTip( 0, tip );
 
     accountsview->setScheduleManager( currentScheduleManager() );
@@ -831,13 +831,13 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
     return accountsview;
 }
 
-ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ResourceAssignmentView *resourceAssignmentView = new ResourceAssignmentView( getPart(), m_tab );
     m_tab->addWidget( resourceAssignmentView );
     m_updateResourceAssignmentView = true;
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceAssignmentView, getPart(), "resource_assignment" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, resourceAssignmentView, getPart(), "resource_assignment", index );
     i->setToolTip( 0, tip );
 
     resourceAssignmentView->draw( getProject() );
@@ -849,12 +849,12 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
     return resourceAssignmentView;
 }
 
-ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip, int index )
 {
     ChartView *v = new ChartView( getPart(), m_tab );
     m_tab->addWidget( v );
 
-    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "chart" );
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "chart", index );
     i->setToolTip( 0, tip );
 
     v->setProject( &( getProject() ) );
