@@ -164,8 +164,10 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
     event->ignore();
     QModelIndex index = indexAt( event->pos() );
     if ( ! index.isValid() ) {
-        event->accept();
-        return; // always ok to drop on main project
+            if ( model()->dropAllowed( 0, event->mimeData() ) ) {
+                event->accept();
+            }
+        return;
     }
     Calendar *c = model()->calendar( index );
     if ( c == 0 ) {
@@ -362,6 +364,13 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     w->dateTable()->setDateDelegate( new DateTableDateDelegate() );
     w->dateTable()->setModel( m_model );
     w->dateTable()->setPopupMenuEnabled( true );
+
+    m_calendarview->setDragDropMode( QAbstractItemView::InternalMove );
+    m_calendarview->setDropIndicatorShown( true );
+    m_calendarview->setDragEnabled ( true );
+    m_calendarview->setAcceptDrops( true );
+    m_calendarview->setAcceptDropsOnView( true );
+
     connect( w->dateTable(), SIGNAL( aboutToShowContextMenu( KMenu*, const QDate& ) ), SLOT( slotContextMenuDate( KMenu*, const QDate& ) ) );
     
 /*    const QDate date(2007,7,19);

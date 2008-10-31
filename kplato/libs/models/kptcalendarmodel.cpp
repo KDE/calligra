@@ -155,16 +155,11 @@ Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
     if ( !m_readWrite ) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+    flags |= Qt::ItemIsDropEnabled;
     if ( !index.isValid() ) {
         return flags;
     }
-
-    if ( !index.isValid() )
-        return flags;
-    if ( !m_readWrite ) {
-        return flags &= ~Qt::ItemIsEditable;
-    }
+    flags |= Qt::ItemIsDragEnabled;
     if ( calendar ( index ) ) {
         switch ( index.column() ) {
             case 1: 
@@ -474,14 +469,16 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         MacroCommand *cmd = 0;
         QList<Calendar*> lst = calendarList( stream );
         foreach ( Calendar *c, lst ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Re-parent Calendar" ) );
-            cmd->addCommand( new CalendarModifyParentCmd( m_project, c, par ) );
+            if ( c->parentCal() != par ) {
+                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Re-parent Calendar" ) );
+                cmd->addCommand( new CalendarModifyParentCmd( m_project, c, par ) );
+            }
         }
         if ( cmd ) {
             emit executeCommand( cmd );
+            return true;
         }
         //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
-        return true;
     }
     return false;
 }
@@ -502,17 +499,21 @@ QList<Calendar*> CalendarItemModel::calendarList( QDataStream &stream ) const
 
 bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 {
+    kDebug()<<on<<data->hasFormat("application/x-vnd.kde.kplato.calendarid.internal");
     if ( !data->hasFormat("application/x-vnd.kde.kplato.calendarid.internal") ) {
         return false;
-    }
-    if ( on == 0 ) {
-        return true;
     }
     QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.calendarid.internal" );
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Calendar*> lst = calendarList( stream );
     foreach ( Calendar *c, lst ) {
-        if ( on == c || on->isChildOf( c ) ) {
+        if ( flags( index( c ) ) & Qt::ItemIsDropEnabled == 0 ) {
+            return false;
+        }
+        if ( on == c->parentCal() ) {
+            return false;
+        }
+        if ( on != 0 && ( on == c || on->isChildOf( c ) ) ) {
             return false;
         }
     }
