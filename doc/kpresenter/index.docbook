@@ -20,26 +20,23 @@
 
 <authorgroup>
 <author>
-<firstname>Neil</firstname>
-<surname>Lucock</surname>
+&Neil.Lucock;
 <affiliation>
-<address><email>neil@nlucock.freeserve.co.uk</email></address>
+<address>&Neil.Lucock.mail;</address>
 </affiliation>
 </author>
 
 <author>
-<firstname>Krishna</firstname>
-<surname>Tateneni</surname>
+&Krishna.Tateneni;
 <affiliation>
-<address><email>tateneni@pluto.njcc.com</email></address>
+<address>&Krishna.Tateneni.mail;</address>
 </affiliation>
 </author>
 
 <author>
-<firstname>Anne-Marie</firstname>
-<surname>Mahfouf</surname>
+&Anne-Marie.Mahfouf;
 <affiliation>
-<address><email>annemarie.mahfouf@free.fr</email></address>
+<address>&Anne-Marie.Mahfouf.mail;</address>
 </affiliation>
 </author>
 
@@ -59,17 +56,17 @@
 
 <copyright>
 <year>1999</year><year>2000</year>
-<holder>Krishna Tateneni</holder>
+<holder>&Krishna.Tateneni;</holder>
 </copyright>
 
 <copyright>
 <year>2001</year><year>2002</year>
-<holder>Neil Lucock</holder>
+<holder>&Neil.Lucock;</holder>
 </copyright>
 
 <copyright>
 <year>2005</year>
-<holder>Anne-Marie Mahfouf</holder>
+<holder>&Anne-Marie.Mahfouf;</holder>
 </copyright>
 
 <copyright>
@@ -204,7 +201,7 @@ Werner Trobin <email>trobin@kde.org</email>.
 
 <listitem>
 <para>
-David Faure <email>dfaure@kde.org</email>
+&David.Faure; &David.Faure.mail;
 </para>
 </listitem>
 
@@ -222,7 +219,7 @@ Luk&aacute;&scaron; Tinkl <email>lukas@kde.org</email>
 
 <listitem>
 <para>
-Thorsten Zachmann <email>t.zachmann@zagge.de</email>
+&Thorsten.Zachmann; &Thorsten.Zachmann.mail;
 </para>
 </listitem>
 
@@ -240,10 +237,9 @@ Percy Leonhardt <email>percy@eris23.de</email>
 </itemizedlist>
 
 <para>
-Documentation based on the work copyright 1999-2000 by Krishna
-Tateneni.  Portions are copyright 2000-2002 Neil Lucock
-<email>neil@nlucock.freeserve.co.uk</email>
-and 2005 Anne-Marie Mahfouf  <email>annemarie.mahfouf@free.fr</email>
+Documentation based on the work copyright 1999-2000 by &Krishna.Tateneni;
+.  Portions are copyright 2000-2002 &Neil.Lucock; &Neil.Lucock.mail;
+and 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->

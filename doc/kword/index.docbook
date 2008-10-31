@@ -728,7 +728,7 @@ can read and write effectively.  Rich Text Format is probably a good choice.</pa
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
 <listitem><para>Krister Wicksell Eriksson <email>krister.wicksell@spray.se</email></para></listitem>
 <listitem><para>&David.Faure; &David.Faure.mail;</para></listitem>
-<listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
+<listitem><para>&Nicolas.Goutte; &Nicolas.Goutte.mail;</para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>&Simon.Hausmann; &Simon.Hausmann.mail;</para></listitem>
 <listitem><para>Nash Hoogwater <email>nrhoogwater@wanadoo.nl</email></para></listitem>
@@ -751,7 +751,7 @@ can read and write effectively.  Rich Text Format is probably a good choice.</pa
 <listitem><para>&Matthias.Kalle.Dalheimer; <email>kalle@dalheimer.de</email></para></listitem>
 <listitem><para>Clarence Dang <email>dang@kde.org</email></para></listitem>
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
-<listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
+<listitem><para>&Nicolas.Goutte; &Nicolas.Goutte.mail;</para></listitem>
 <listitem><para>Tomasz Grobelny <email>grotk@poczta.onet.pl</email></para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
 <listitem><para>Ariya Hidayat <email>ariya@kde.org</email></para></listitem>
@@ -962,7 +962,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>SGML</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>TeX Document</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>WML</entry><entry>Yes</entry><entry>Yes</entry></row>
-<row><entry>WordPerfect</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>&WordPerfect;</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>&XML;</entry><entry>Yes</entry><entry>No</entry></row>
 </tbody>
 </tgroup>

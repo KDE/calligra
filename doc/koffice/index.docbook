@@ -14,14 +14,12 @@
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
 <author>
-<firstname>Raphael</firstname>
-<surname>Langerhorst</surname>
-<affiliation><address><email>raphael.langerhorst@kdemail.net</email></address></affiliation> 
+&Raphael.Langerhorst;
+<affiliation><address>&Raphael.Langerhorst.mail;</address></affiliation> 
 </author>
 <author>
-<firstname>Jost</firstname>
-<surname>Schenck</surname>
-<affiliation><address><email>jost@schenck.de</email></address></affiliation> 
+&Jost.Schenck;
+<affiliation><address>&Jost.Schenck.mail;</address></affiliation> 
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
@@ -59,10 +57,10 @@
 <listitem><para>&kspread; (a spreadsheet application)</para></listitem> 
 <listitem><para>&kpresenter; (screen and slide presentations)</para></listitem>
 <listitem><para>&kivio; (a flowchart application)</para></listitem>
-<listitem><para>Karbon14 (a vector drawing application)</para></listitem>
+<listitem><para>&karbon14; (a vector drawing application)</para></listitem>
 <listitem><para>&krita; (a pixel based drawing application)</para></listitem>
 <listitem><para>&kugar; (a tool for generating business quality reports)</para></listitem>
-<listitem><para>Kexi (an integrated environment for managing data)</para></listitem>
+<listitem><para>&kexi; (an integrated environment for managing data)</para></listitem>
 <listitem><para>&kchart; (a charts/graphs generation application)</para></listitem>
 <listitem><para>&kformula; (an editor for mathematical formulae)</para></listitem>
 </itemizedlist>
@@ -148,10 +146,10 @@ as native file format.
 </para>
 </sect2>
 <sect2 id="featurekde">
-<title>KDE Features</title>
+<title>&kde; Features</title>
 <para>
 Since &koffice; builds on &kde; all the features you would expect from a
-&kde; application are also available in &koffice;. This includes DCOP, KParts,
+&kde; application are also available in &koffice;. This includes &DCOP;, KParts,
 Desktop Integration, Configurability and so on. All this makes the look and
 feel of &koffice; very familiar and really integrates &koffice; into the
 desktop environment, thus allowing seamless workflows.
@@ -418,7 +416,7 @@ bars. Unfortunately, at the moment, there are no easy-to-use dialogs
 to do this. &koffice; stores its &GUI; configuration in &XML; files
 and you'll have to edit those. Hopefully, this situation will change
 in the future; for now, you'll need some basic knowledge of how an
-&XML; document works (or <acronym>HTML</acronym>, which is a subset of
+&XML; document works (or &HTML;, which is a subset of
 &XML;). [The <quote>action</quote> concept needs to be discussed in
 more detail -- kt.]  </para>
 
@@ -503,7 +501,7 @@ install &koffice;, news about &koffice; development, screenshots &etc;
 </para></listitem>
 <listitem>
 <para>
-<ulink url="http://www.kde.org">The KDE Homepage</ulink>. KDE is the most advanced and 
+<ulink url="http://www.kde.org">The &kde; Homepage</ulink>. &kde; is the most advanced and 
 absolutely free desktop environment for unix-like operating systems. 
 &koffice; makes use of the &kde; libraries.
 </para></listitem>
@@ -608,7 +606,7 @@ http://www.koffice.org/people.php</ulink>.
 </para>
 
 <para>
-This manual is copyright by Jost Schenck. It can be distributed
+This manual is copyright by &Jost.Schenck;. It can be distributed
 freely, as long as this copyright notice is included. You may change
 it as long as you send me the changes or commit them to &kde;
 <acronym>CVS</acronym>.  I'll not be liable for anything resulting

@@ -13,10 +13,9 @@
 
 <authorgroup>
 <author>
-<firstname>Anne-Marie</firstname>
-<surname>Mahfouf</surname>
+&Anne-Marie.Mahfouf;
 <affiliation>
-<address><email>annma@kde.org</email></address>
+<address>&Anne-Marie.Mahfouf.mail;</address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -24,7 +23,7 @@
 
 <copyright>
 <year>2005-2006</year>
-<holder>Anne-Marie Mahfouf</holder>
+<holder>&Anne-Marie.Mahfouf;</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
@@ -82,9 +81,9 @@ Environment.  Other applications in &koffice; include:</para>
 Word-processor/Desktop Publishing Program.)</para></listitem>
 <listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
-<listitem><para>Kexi (An integrated environment for databases.)  </para></listitem>
+<listitem><para>&kexi; (An integrated environment for databases.)  </para></listitem>
 <listitem><para>&kivio; (A flowchart creator.)</para></listitem>
-<listitem><para><application>Karbon14</application> (A vector drawing program.)</para></listitem>
+<listitem><para><application>&karbon14;</application> (A vector drawing program.)</para></listitem>
 <listitem><para>&krita; (A pixel based drawing program.)</para></listitem>
 <listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
 <listitem><para>&kformula; (A formula editor.)</para></listitem>
@@ -147,7 +146,7 @@ You can also import any supported document using the <menuchoice><guimenu>File</
 </mediaobject>
 </screenshot>
 
-<para>The side pane allows you to open a new &koffice; component as if it was the stand-alone application. In most components, you are asked what document you want to open, a template, an empty document or an existing document. The main window of the component is then shown and the menubar, toolbars and statusbar in &koshell; are
+<para>The side pane allows you to open a new &koffice; component as if it was the stand-alone application. In most components, you are asked what document you want to open, a template, an empty document or an existing document. The main window of the component is then shown and the menubar, toolbars and status bar in &koshell; are
 adapted to reflect the functionality of the active component.</para>
 
 
@@ -445,13 +444,13 @@ Original authors:
 <email>sven@kde.org</email></para> </listitem>
 <listitem><para>Torben Weis
 <email>weis@kde.org</email></para> </listitem>
-<listitem><para>David Faure
-<email>faure@kde.org</email></para> </listitem>
+<listitem><para>&David.Faure;
+&David.Faure.mail;</para> </listitem>
 </itemizedlist>
 </para>
 
 <para>
-Documentation copyright 2005 Anne-Marie Mahfouf annma@kde.org
+Documentation copyright 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->

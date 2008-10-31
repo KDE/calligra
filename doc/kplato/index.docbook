@@ -19,18 +19,15 @@
 
 <authorgroup>
 <author>
-<firstname>Raphael</firstname>
-<!-- <othername></othername> -->
-<surname>Langerhorst</surname>
+&Raphael.Langerhorst;
 <affiliation>
-<address><email>raphael.langerhorst@kdemail.net</email></address>
+<address>&Raphael.Langerhorst.mail;</address>
 </affiliation>
 </author>
 <author>
-<firstname>Anne-Marie</firstname>
-<surname>Mahfouf</surname>
+&Anne-Marie.Mahfouf;
 <affiliation>
-<address><email>annma@kde.org</email></address>
+<address>&Anne-Marie.Mahfouf.mail;</address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -100,7 +97,7 @@ be used within larger documents of other &koffice; components.
 </listitem>
 <listitem><para>Work breakdown structure (WBS).</para></listitem>
 <listitem><para>Critical path and resources.</para></listitem>
-<listitem><para>Embedding into other KOffice applications.</para></listitem>
+<listitem><para>Embedding into other &koffice; applications.</para></listitem>
 </itemizedlist>
 </chapter>
 

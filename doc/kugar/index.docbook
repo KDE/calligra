@@ -24,17 +24,15 @@
 
 <authorgroup>
 <author>
-<firstname>Alexander</firstname>
-<surname>Dymo</surname>
+&Alexander.Dymo;
 <affiliation>
-<address><email>cloudtemple@mksat.net</email></address>
+<address>&Alexander.Dymo.mail;</address>
 </affiliation>
 </author>
 <author>
-<firstname>Phil</firstname>
-<surname>Thompson</surname>
+&Phil.Thompson;
 <affiliation>
-<address><email>phil@river-bank.demon.co.uk</email></address>
+<address>&Phil.Thompson.mail;</address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -42,11 +40,11 @@
 <copyright>
 <year>2000</year>
 <year>2001</year>
-<holder>Phil Thompson</holder>
+<holder>&Phil.Thompson;</holder>
 </copyright>
 <copyright>
 <year>2002</year>
-<holder>Alexander Dymo</holder>
+<holder>&Alexander.Dymo;</holder>
 </copyright>
 <!--&underFDL;-->
 <legalnotice>&FDLNotice;</legalnotice>
@@ -122,14 +120,14 @@ about using &kugar; in their own applications.</para>
 Copyright 2000 Mutiny Bay Software
 </para>
 <para>
-Copyright 2000, 2001, Phil Thompson
+Copyright 2000, 2001, &Phil.Thompson;
 </para>
 <para>
-Copyright 2002 Alexander Dymo
+Copyright 2002 &Alexander.Dymo;
 </para>
 
-<para>Portions of the documentation Copyright 2000, 2001 Phil Thompson
-and Copyright 2002 Alexander Dymo</para>
+<para>Portions of the documentation Copyright 2000, 2001 &Phil.Thompson;
+and Copyright 2002 &Alexander.Dymo;</para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;

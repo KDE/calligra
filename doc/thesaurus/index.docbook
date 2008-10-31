@@ -12,9 +12,8 @@
 
 <authorgroup>
 <author>
-<firstname>Daniel</firstname>
-<surname>Naber</surname>
-<affiliation><address><email>daniel.naber@t-online.de</email></address></affiliation> 
+&Daniel.Naber;
+<affiliation><address>&Daniel.Naber.mail;</address></affiliation> 
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
@@ -25,7 +24,7 @@
 <copyright>
 <year>2002</year>
 <year>2003</year>
-<holder>Daniel Naber</holder>
+<holder>&Daniel.Naber;</holder>
 </copyright>
 
 <abstract>
@@ -83,7 +82,7 @@ included in &koffice; &mdash; this introduces several limitations
 <listitem><para>Only exact matches are found, &eg; if you search for a plural
 form nothing will be found.</para></listitem>
 <listitem><para>Many not so common words have been removed.</para></listitem>
-<listitem><para>It doesn't distinguish between parts of speech, e.g. verbs and
+<listitem><para>It doesn't distinguish between parts of speech, &eg; verbs and
 nouns are mixed up in the lists of words.</para></listitem>
 <listitem><para>It won't separate the different meanings words can have.</para></listitem>
 <listitem><para>Adjectives don't really have a <quote>more general</quote> / <quote>more specific</quote>
@@ -105,7 +104,7 @@ to the &wordnet; project, but to &kde;.</para>
 <para>By default, only the English language is supported 
 in &kthesaurus;. You can check out
 <ulink url="http://www.koffice.org/addons/#thesauri">the
-KOffice download page</ulink> to see which other languages 
+&koffice; download page</ulink> to see which other languages 
 are available.</para>
 
 </chapter>
@@ -133,7 +132,7 @@ or have a look at the <ulink url="http://www.cogsci.princeton.edu/~wn/">&wordnet
 <title>Copyright and Licensing</title>
 
 <para>
-&kthesaurus; and this documentation is copyrighted by Daniel Naber.
+&kthesaurus; and this documentation is copyrighted by &Daniel.Naber;.
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->

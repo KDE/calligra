@@ -19,9 +19,7 @@
 &Jonathan.Drews; &Jonathan.Drews.mail;
 </author>
 <author>
-<firstname>Raphael</firstname>
-<surname>Langerhorst</surname>
-<email>raphael.langerhorst@kdemail.net</email>
+&Raphael.Langerhorst; &Raphael.Langerhorst.mail;
 </author>
 <!-- 
 <othercredit role="developer">
@@ -1349,8 +1347,7 @@ Contributors:
 Documentation copyright 2002 &Jonathan.Drews; &Jonathan.Drews.mail;
 </para>
 <para>
-Documentation copyright 2005 Raphael Langerhorst
-<email>raphael.langerhorst@kdemail.net</email>
+Documentation copyright 2005 &Raphael.Langerhorst; &Raphael.Langerhorst.mail;
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
