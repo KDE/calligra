@@ -98,6 +98,9 @@ public:
 public slots:
     void setValue(const QVariant& value);
 
+protected:
+    virtual void paintEvent( QPaintEvent * event );
+
 private:
     const ValueDisplayInterface *m_iface;
     QVariant m_value;
@@ -124,7 +127,9 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const
     {
         painter->save();
-        painter->drawText( option.rect, Qt::AlignLeft | Qt::AlignVCenter, 
+        QRect r(option.rect);
+        r.setLeft(r.left()+1);
+        painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, 
             displayText( index.data(Qt::EditRole) ) );
         painter->restore();
     }
@@ -148,6 +153,9 @@ public:
     void addPainter(int type, ValuePainterInterface *painter);
 
     void addDisplay(int type, ValueDisplayInterface *display);
+
+    static void paintTopGridLine(QWidget *widget);
+    static void setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent);
 
 protected:
     void addEditorInternal(int type, EditorCreatorInterface *editor, bool own = true);

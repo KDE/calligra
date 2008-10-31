@@ -47,7 +47,7 @@ public:
     };
 
 //    ComboBox(const KoProperty::Property* property, QWidget *parent = 0);
-    ComboBox(const KoProperty::Property::ListData* listData, const Options& options, 
+    ComboBox(const KoProperty::Property::ListData& listData, const Options& options, 
         QWidget *parent = 0);
 
     virtual ~ComboBox();
@@ -66,6 +66,7 @@ protected slots:
     void slotValueChanged(int value);
 
 protected:
+    virtual void paintEvent( QPaintEvent * event );
 //    virtual void setReadOnlyInternal(bool readOnly);
     QString keyForValue(const QVariant &value);
     void fillValues();

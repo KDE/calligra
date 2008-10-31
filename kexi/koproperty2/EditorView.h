@@ -128,6 +128,12 @@ public:
     };
     Q_DECLARE_FLAGS(SetOptions, SetOption)
 
+    //! @return grid line color, defaultGridLineColor() by default
+    QColor gridLineColor() const;
+
+    //! @return default grid line color - Qt::gray
+    static QColor defaultGridLineColor() { return Qt::gray; }
+
 public slots:
     /*! Populates the editor view with items for each property from the @ set set.
      Child items for composed properties are also created.
@@ -157,6 +163,9 @@ public slots:
     /*! Accepts the changes made to the current editor item (if any)
      (as if the user had pressed Enter key). */
     void acceptInput();
+
+    //! Sets grid line color
+    void setGridLineColor(const QColor& color);
 
 signals:
     /*! Emitted when current property set has been changed. May be 0. */

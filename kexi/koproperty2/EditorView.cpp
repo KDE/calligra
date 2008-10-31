@@ -309,7 +309,10 @@ void ItemDelegate::paint(QPainter *painter,
             y1 + 1 + (alteredOption.rect.height() - revertIcon.height()) / 2, revertIcon);
     }
 
-    QPen pen(QColor("#c0c0c0"));
+    QColor gridLineColor( dynamic_cast<EditorView*>(painter->device()) ? 
+        dynamic_cast<EditorView*>(painter->device())->gridLineColor()
+        : EditorView::defaultGridLineColor() );
+    QPen pen(gridLineColor);
     pen.setWidth(1);
     painter->setPen(pen);
     painter->drawRect(r);
@@ -334,6 +337,7 @@ QWidget * ItemDelegate::createEditor(QWidget * parent,
     const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
     Property *property = editorModel->propertyForItem(index);
     int t = typeForProperty(property);
+    alteredOption.rect.setHeight(alteredOption.rect.height()+3);
     QWidget *w = FactoryManager::self()->createEditor(t, parent, alteredOption, index);
     if (w) {
         if (-1 != w->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("commitData(QWidget*)"))
@@ -387,12 +391,14 @@ public:
     Private()
      : set(0)
      , model(0)
+     , gridLineColor( EditorView::defaultGridLineColor() )
      , autoSync(true)
     {
     }
     Set *set;
     EditorDataModel *model;
     ItemDelegate *itemDelegate;
+    QColor gridLineColor;
     bool autoSync : 1;
 };
 
@@ -635,6 +641,16 @@ bool EditorView::viewportEvent( QEvent * event )
         }
     }
     return QTreeView::viewportEvent(event);
+}
+
+QColor EditorView::gridLineColor() const
+{
+    return d->gridLineColor;
+}
+
+void EditorView::setGridLineColor(const QColor& color)
+{
+    d->gridLineColor = color;
 }
 
 #if 0

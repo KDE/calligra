@@ -43,16 +43,16 @@ public:
     FontEditRequester(QWidget* parent)
             : KFontRequester(parent)
     {
-        setContentsMargins(0,0,0,0);
+//        setContentsMargins(0,0,0,0);
 /*
         QPalette pal = label()->palette();
         pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
         label()->setPalette(pal);
         label()->setMinimumWidth(0);*/
 //        label()->setFrameShape(QFrame::Box);
-        label()->setContentsMargins(0,0,0,0);
+//        label()->setContentsMargins(0,0,0,0);
         label()->setFrameShape(QFrame::NoFrame);
-        label()->setIndent(-1);
+        label()->setIndent(1);
         label()->setFocusPolicy(Qt::ClickFocus);
 /*
         KAcceleratorManager::setNoAccel(label());
@@ -61,10 +61,11 @@ public:
         delete layout();*/
         button()->setText(i18n("..."));
         button()->setToolTip(i18n("Change font"));
+        button()->setWhatsThis(i18n("Changes font"));
         button()->setFocusPolicy(Qt::NoFocus);
         button()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         QFontMetrics fm(button()->font());
-        button()->setFixedWidth(fm.width(button()->text() + ' '));
+        button()->setFixedWidth(fm.width(button()->text() + "  "));
     }
 /*    virtual void resizeEvent(QResizeEvent *e)
     {

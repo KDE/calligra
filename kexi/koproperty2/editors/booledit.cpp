@@ -35,22 +35,68 @@
 #include <QLayout>
 #include <QBitmap>
 
+/*! @return name for state with index @a index,
+ where 0 means true, 1 means false and 2 means none */
+static QString stateName(int index, const KoProperty::Property* prop)
+{
+    QString stateNameString;
+    if (index == 0) {
+        stateNameString = prop->option("yesName", QString()).toString();
+        if (stateNameString.isEmpty())
+            return i18n("Yes");
+    }
+    else if (index == 1) {
+        stateNameString = prop->option("noName", QString()).toString();
+        if (stateNameString.isEmpty())
+            return i18n("No");
+    }
+    else {
+        stateNameString = prop->option("3rdStateName", QString()).toString();
+        if (stateNameString.isEmpty())
+            return i18n("None");
+    }
+    return stateNameString;
+}
+
+//! Sets up @a data list data with keys and names for true, false, none values, respectively
+static void setupThreeStateListData(KoProperty::Property::ListData &data, 
+    const KoProperty::Property* prop)
+{
+    data.keys << true << false << QVariant();
+    data.names << stateName(0, prop) << stateName(1, prop) << stateName(2, prop);
+}
+
+static int valueToIndex(const QVariant& value)
+{
+    if (value.isNull() || !value.isValid())
+        return 2;
+    else
+        return value.toBool() ? 0 : 1;
+}
+
+//-------------------------
+
 class BoolEditGlobal
 {
 public:
     BoolEditGlobal()
         : yesIcon(SmallIcon("dialog-ok"))
         , noIcon(SmallIcon("button_no"))
+        , noneIcon(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small))
     {
+        noneIcon.fill(Qt::transparent);
     }
     QPixmap yesIcon;
     QPixmap noIcon;
+    QPixmap noneIcon;
 };
 
 K_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
-BoolEdit::BoolEdit(QWidget *parent)
+BoolEdit::BoolEdit(const KoProperty::Property *prop, QWidget *parent)
     : QToolButton(parent)
+    , m_yesText( stateName(0, prop) )
+    , m_noText( stateName(1, prop) )
 {
     setFocusPolicy(Qt::WheelFocus);
     setCheckable(true);
@@ -102,17 +148,33 @@ BoolEdit::slotValueChanged(bool state)
 }
 
 void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
-                 const QString& nullText)
+                    const QString& text, bool threeState)
 {
 //    p->eraseRect(r);
     QRect r2(r);
     r2.moveLeft(r2.left() + KIconLoader::SizeSmall + 6);
 
-    if (value.isNull() && !nullText.isEmpty()) {
-        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, nullText);
+    if (!threeState && value.isNull()) {
+        // 2 states but null value
+        p->drawText(r2, Qt::AlignVCenter | Qt::AlignLeft, text);
     } else {
-        const QPixmap icon( value.toBool() ? g_boolEdit->yesIcon : g_boolEdit->noIcon );
-        const QString text( value.toBool() ? i18n("Yes") : i18n("No") );
+        QPixmap icon;
+//        QString text;
+
+        if (threeState && valueToIndex(value) == 2) {
+            // draw icon for the 3rd state for Three-State editor
+            icon = g_boolEdit->noneIcon;
+        }
+        else {
+            // draw true or false icon regardless of the 2 or 3 state version
+            icon = value.toBool() ? g_boolEdit->yesIcon : g_boolEdit->noIcon;
+        }
+/*        
+        if (threeState 
+            if (value.isNull() || !value.isValid())
+            //draw text state for Three-State editor
+            if (value.isNull() || !value.isValid())
+                text = overrideText;*/
         p->drawPixmap(
             r.left() + 3,
             r2.top() + (r2.height() - 1 - KIconLoader::SizeSmall) / 2,
@@ -128,7 +190,9 @@ void BoolEdit::paintEvent( QPaintEvent * event )
 {
     QToolButton::paintEvent(event);
     QPainter p(this);
-    BoolEdit::draw(&p, rect(), value(), QString::null);
+    const QVariant v( value() );
+    BoolEdit::draw(&p, rect(), v, 
+        v.toBool() ? m_yesText : m_noText, false /*2state*/);
 }
 
 /*void
@@ -176,67 +240,75 @@ BoolEdit::setReadOnlyInternal(bool readOnly)
 
 //--------------------------------------------------
 
-#if 0 //TODO
-ThreeStateBoolEdit::ThreeStateBoolEdit(Property *property, QWidget *parent)
-        : ComboBox(property, parent)
-        , m_yesIcon(SmallIcon("dialog-ok"))
-        , m_noIcon(SmallIcon("button_no"))
+class ThreeStateBoolIconProvider : public ComboBox::Options::IconProviderInterface
 {
-    m_edit->addItem(m_yesIcon, i18n("Yes"));
-    m_edit->addItem(m_noIcon, i18n("No"));
-    QVariant thirdState = property ? property->option("3rdState") : QVariant();
-    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
-    nullIcon.fill(Qt::transparent);
-    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
+public:
+    ThreeStateBoolIconProvider() {}
+    virtual QIcon icon(int index) const
+    {
+          if (index == 0)
+              return g_boolEdit->yesIcon;
+          else if (index == 1)
+              return g_boolEdit->noIcon;
+          return g_boolEdit->noneIcon;
+    }
+    virtual IconProviderInterface* clone() const
+    {
+        return new ThreeStateBoolIconProvider();
+    }
+};
+
+ComboBox::Options initThreeStateBoolOptions()
+{
+    ComboBox::Options options;
+    options.iconProvider = new ThreeStateBoolIconProvider();
+    return options;
+}
+
+ThreeStateBoolEdit::ThreeStateBoolEdit(
+    const KoProperty::Property::ListData& listData, 
+    QWidget *parent)
+        : ComboBox(listData, initThreeStateBoolOptions(), parent)
+{
+//    QPixmap nullIcon(m_yesIcon.size());   //transparent pixmap of appropriate size
+//    nullIcon.fill(Qt::transparent);
+//    m_edit->addItem(nullIcon, thirdState.toString().isEmpty() ? i18n("None") : thirdState.toString());
+    setCurrentIndex(2);
 }
 
 ThreeStateBoolEdit::~ThreeStateBoolEdit()
 {
 }
 
-QVariant
-ThreeStateBoolEdit::value() const
+QVariant ThreeStateBoolEdit::value() const
 {
     // list items: true, false, NULL
-    const int idx = m_edit->currentIndex();
+    const int idx = currentIndex();
     if (idx == 0)
-        return QVariant(true);
+        return true;
     else
-        return idx == 1 ? QVariant(false) : QVariant();
+        return idx == 1 ? false : QVariant();
 }
 
-void
-ThreeStateBoolEdit::setProperty(Property *prop)
+/*void ThreeStateBoolEdit::setProperty(Property *prop)
 {
     m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
     Widget::setProperty(prop);
     m_setValueEnabled = true;
     if (prop)
         setValue(prop->value(), false); //now the value can be set
-}
+}*/
 
-void
-ThreeStateBoolEdit::setValue(const QVariant &value, bool emitChange)
+void ThreeStateBoolEdit::setValue(const QVariant &value)
 {
-    if (!m_setValueEnabled)
-        return;
+//    if (!m_setValueEnabled)
+//        return;
 
-    if (value.isNull())
-        m_edit->setCurrentIndex(2);
-    else
-        m_edit->setCurrentIndex(value.toBool() ? 0 : 1);
+    setCurrentIndex( valueToIndex(value) );
 
-    if (emitChange)
-        emit valueChanged(this);
+//    if (emitChange)
+//        emit valueChanged(this);
 }
-
-void
-ThreeStateBoolEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-    Q_UNUSED(cg);
-    drawViewerInternal(p, r, value, m_yesIcon, m_noIcon, m_edit->itemText(2));
-}
-#endif
 
 //---------------
 
@@ -248,16 +320,52 @@ BoolDelegate::BoolDelegate()
 QWidget * BoolDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    return new BoolEdit(parent);
+    const KoProperty::EditorDataModel *editorModel
+        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
+    KoProperty::Property *prop = editorModel->propertyForItem(index);
+
+    // boolean editors can optionally accept 3rd state:
+    if (prop->option("3State", false).toBool()) {
+        KoProperty::Property::ListData threeStateListData;
+        setupThreeStateListData(threeStateListData, prop);
+        return new ThreeStateBoolEdit(threeStateListData, parent);
+    }
+    else {
+        return new BoolEdit(prop, parent);
+    }
 }
 
 void BoolDelegate::paint( QPainter * painter, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
-//    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(index.model());
-//    Property *prop = editorModel->propertyForItem(index);
-    BoolEdit::draw(painter, option.rect, index.data(Qt::EditRole), QString());
+    const KoProperty::EditorDataModel *editorModel
+        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
+    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    QVariant value( index.data(Qt::EditRole) );
+    if (prop->option("3State", false).toBool()) {
+        int listIndex = valueToIndex(value);
+//        const QString stateNameString( stateName(listIndex, prop) );
+/*        const int iconSize = IconSize(KIconLoader::Small);
+        if (listIndex < 0 || listIndex > 2)
+            listIndex = 2;
+        QRect r( option.rect );
+        r.setLeft(1+r.left()+2+iconSize);
+        painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, 
+            threeStateListData.names[listIndex] ); */
+        BoolEdit::draw(painter, option.rect, value, stateName(listIndex, prop), true/*3state*/);
+    }
+    else
+    {
+        if (value.isNull() && !prop->option("nullName", QString()).toString().isEmpty()) {
+            BoolEdit::draw(painter, option.rect, value, 
+                prop->option("nullName", QString()).toString(), false/*2state*/);
+        }
+        else {
+            BoolEdit::draw(painter, option.rect, value, stateName(value.toBool() ? 0 : 1, prop),
+                false/*2state*/);
+        }
+    }
     painter->restore();
 }
 

@@ -23,6 +23,7 @@
 
 #include "Property.h"
 #include "EditorDataModel.h"
+#include "EditorView.h"
 
 #include <climits>
 
@@ -39,10 +40,13 @@ IntSpinBox::IntSpinBox(const KoProperty::Property* prop, QWidget *parent)
         : KIntNumInput(parent)
 {
     QLineEdit* le = spinBox()->findChild<QLineEdit*>();
-    if (le)
+    if (le) {
         le->setAlignment(Qt::AlignLeft);
+        le->setContentsMargins(-2,0,0,0);
+    }
     spinBox()->setFrame(false);
-    spinBox()->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
+//    spinBox()->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
+    KoProperty::Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent);
 
     QVariant minVal(prop->option("min", -INT_MAX));
     QVariant maxVal(prop->option("max", INT_MAX));
@@ -214,11 +218,13 @@ DoubleSpinBox::DoubleSpinBox(const KoProperty::Property* prop, QWidget *parent)
     QLineEdit* le = 0;
     if (sb)
         le = sb->findChild<QLineEdit*>();
-    if (le)
+    if (le) {
         le->setAlignment(Qt::AlignLeft);
+        le->setContentsMargins(-2,0,0,0);
+    }
     sb->setFrame(false);
-    setStyleSheet(QString());
-    sb->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
+//    setStyleSheet(QString());
+    KoProperty::Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent);
 
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));

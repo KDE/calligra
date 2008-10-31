@@ -195,7 +195,7 @@ ComboBox::Options initComboBoxOptions( QWidget* parent )
 }
 
 CursorEdit::CursorEdit(QWidget *parent)
-        : ComboBox(s_cursorListData, initComboBoxOptions( this ), parent)
+        : ComboBox(*s_cursorListData, initComboBoxOptions( this ), parent)
 {
 }
 

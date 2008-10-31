@@ -55,9 +55,9 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Cursor, new CursorDelegate );
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
-    addPainter( KoProperty::Point, new PointDelegate );
-    addDisplay( KoProperty::Rect, new RectDelegate );
-    addPainter( KoProperty::Size, new SizeDelegate );
+    addEditor( KoProperty::Point, new PointDelegate );
+    addEditor( KoProperty::Rect, new RectDelegate );
+    addEditor( KoProperty::Size, new SizeDelegate );
     addEditor( KoProperty::Int, new IntSpinBoxDelegate );
     addEditor( KoProperty::String, new StringDelegate );
     addEditor( KoProperty::ValueFromList, new ComboBoxDelegate );

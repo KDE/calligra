@@ -21,6 +21,7 @@
 
 #include "combobox.h"
 #include "EditorDataModel.h"
+#include "EditorView.h"
 
 #include <QLayout>
 #include <QMap>
@@ -50,7 +51,7 @@ ComboBox::Options::~Options()
     delete iconProvider;
 }
 
-ComboBox::ComboBox(const KoProperty::Property::ListData* listData, const Options& options, QWidget *parent)
+ComboBox::ComboBox(const KoProperty::Property::ListData& listData, const Options& options, QWidget *parent)
         : KComboBox(parent)
         , m_options(options)
 {
@@ -70,8 +71,8 @@ ComboBox::ComboBox(const KoProperty::Property::ListData* listData, const Options
     setAutoCompletion(true);
     setContextMenuPolicy(Qt::NoContextMenu);
 
-    if (listData)
-        setListData(*listData);
+//    if (listData)
+    setListData(listData);
 //    if (property->listData()) {
   //      fillValues(property);
     //}
@@ -218,6 +219,12 @@ void ComboBox::slotValueChanged(int)
 //    emit valueChanged(this);
 }
 
+void ComboBox::paintEvent( QPaintEvent * event )
+{
+    KComboBox::paintEvent(event);
+    KoProperty::Factory::paintTopGridLine(this);
+}
+
 /*
 void ComboBox::setReadOnlyInternal(bool readOnly)
 {
@@ -267,11 +274,12 @@ QString ComboBoxDelegate::displayText( const KoProperty::Property* property ) co
 QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KoProperty::EditorDataModel *editorModel = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
+    const KoProperty::EditorDataModel *editorModel
+        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
     KoProperty::Property *property = editorModel->propertyForItem(index);
     ComboBox::Options options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
-    ComboBox *cb = new ComboBox(property->listData(), options, parent);
+    ComboBox *cb = new ComboBox(*property->listData(), options, parent);
     cb->setObjectName( property->name() );
     return cb;
 }

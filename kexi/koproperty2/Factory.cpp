@@ -19,6 +19,8 @@
 
 #include "Factory.h"
 #include "DefaultFactory.h"
+#include "EditorView.h"
+#include "EditorDataModel.h"
 #include "Property.h"
 #include "customproperty.h"
 /*
@@ -54,8 +56,8 @@ Label::Label(QWidget *parent, const KoProperty::ValueDisplayInterface *iface)
     , m_iface(iface)
 {
   setAutoFillBackground(true);
-  setContentsMargins(0,0,0,0);
-  setIndent(0);
+  setContentsMargins(0,1,0,0);
+  setIndent(1);
 }
 
 QVariant Label::value() const
@@ -67,6 +69,12 @@ void Label::setValue(const QVariant& value)
 {
     setText( m_iface->displayText(value) );
     m_value = value;
+}
+
+void Label::paintEvent( QPaintEvent * event )
+{
+    QLabel::paintEvent(event);
+    KoProperty::Factory::paintTopGridLine(this);
 }
 
 //---------------
@@ -213,6 +221,29 @@ CustomProperty* FactoryManager::createCustomProperty(Property *parent)
     return 0;
 }
 
+//static
+void Factory::paintTopGridLine(QWidget *widget)
+{
+    // paint top grid line
+    QPainter p(widget);
+    QColor gridLineColor( dynamic_cast<EditorView*>(widget->parentWidget()) ? 
+        dynamic_cast<EditorView*>(widget->parentWidget())->gridLineColor()
+        : EditorView::defaultGridLineColor() );
+    p.setPen(QPen( QBrush(gridLineColor), 1));
+    p.drawLine(0, 0, widget->width()-1, 0);
+}
+
+//static
+void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent)
+{
+    QColor gridLineColor( dynamic_cast<KoProperty::EditorView*>(parent) ? 
+        dynamic_cast<KoProperty::EditorView*>(parent)->gridLineColor()
+        : KoProperty::EditorView::defaultGridLineColor() );
+    widget->setStyleSheet(
+        QString::fromLatin1("border-top: 1px solid %1;border-bottom: 1px solid %1;")
+        .arg(gridLineColor.name()));
+}
+
 //------------
 
 FactoryManager::FactoryManager()
@@ -266,9 +297,19 @@ QWidget * FactoryManager::createEditor(
         return 0;
     QWidget *w = creator->createEditor(type, parent, option, index);
     if (w) {
-        if (creator->options.removeBorders) {
+       const EditorDataModel *editorModel
+           = dynamic_cast<const EditorDataModel*>(index.model());
+       Property *property = editorModel->propertyForItem(index);
+       w->setObjectName( property->name() );
+       if (creator->options.removeBorders) {
 //! @todo get real border color from the palette
-            w->setStyleSheet("border-top: 1px solid #c0c0c0;");
+            QColor gridLineColor( dynamic_cast<EditorView*>(parent) ? 
+                dynamic_cast<EditorView*>(parent)->gridLineColor()
+                : EditorView::defaultGridLineColor() );
+            w->setStyleSheet(
+                QString::fromLatin1("%1 { border-top: 1px solid %2; }")
+                .arg(QString::fromLatin1(w->metaObject()->className()).replace("KoProperty::", QString()))
+                .arg(gridLineColor.name()));
         }
     }
     return w;

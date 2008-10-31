@@ -22,8 +22,7 @@
 #ifndef KPROPERTY_BOOLEDIT_H
 #define KPROPERTY_BOOLEDIT_H
 
-//#include "../widget.h"
-//todo #include "combobox.h"
+#include "combobox.h"
 #include "Factory.h"
 #include <QtCore/QEvent>
 #include <QtGui/QPixmap>
@@ -37,13 +36,14 @@ class BoolEdit : public QToolButton
     Q_PROPERTY(bool value READ value WRITE setValue USER true)
 
 public:
-    explicit BoolEdit(QWidget *parent = 0);
+    explicit BoolEdit(const KoProperty::Property *prop, QWidget *parent = 0);
 
     virtual ~BoolEdit();
 
     virtual bool value() const;
 
-    static void draw(QPainter *p, const QRect &r, const QVariant &value, const QString& nullText);
+    static void draw(QPainter *p, const QRect &r, const QVariant &value,
+                     const QString& text, bool threeState);
 
 public slots:
     virtual void setValue(bool value);
@@ -57,25 +57,28 @@ protected:
 //    void setState(bool state);
 //    virtual void resizeEvent(QResizeEvent *ev);
     virtual bool eventFilter(QObject* watched, QEvent* e);
+
+private:
+    QString m_yesText;
+    QString m_noText;
 };
 
-#if 0 //TODO
 class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 {
     Q_OBJECT
+//    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    ThreeStateBoolEdit(Property *property, QWidget *parent = 0);
+    ThreeStateBoolEdit(const KoProperty::Property::ListData& listData, QWidget *parent = 0);
     virtual ~ThreeStateBoolEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+    virtual void setValue(const QVariant &value);
 
-    virtual void setProperty(Property *property);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
+//    virtual void setProperty(Property *property);
+//    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+//    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
 };
-#endif
 
 class BoolDelegate : public KoProperty::EditorCreatorInterface, 
                      public KoProperty::ValuePainterInterface
