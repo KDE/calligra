@@ -142,7 +142,7 @@ void KarbonGradientWidget::paintEvent( QPaintEvent* )
     // light line between gradient and point area
     painter.drawLine( QLine( QPoint( 1, 3 + gh ), QPoint( width() - 1, 3 + gh ) ) );
 
-    painter.setPen( colorGroup().dark() );
+    painter.setPen( palette().dark().color() );
     // left-top frame around widget
     painter.drawLine( QPoint(), QPoint( 0, height() - 1 ) );
     painter.drawLine( QPoint(), QPoint( width() - 1, 0 ) );
