@@ -496,10 +496,6 @@ void KarbonView::editDeleteSelection()
 {
     debugView("KarbonView::editDeleteSelection()");
 
-    KoSelection* selection = d->canvas->shapeManager()->selection();
-    if( ! selection )
-        return;
-
     d->canvas->toolProxy()->deleteSelection();
 }
 
@@ -922,6 +918,7 @@ void KarbonView::initActions()
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction );
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
+    connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
     // edit <-----
 
     // object ----->
@@ -1261,7 +1258,6 @@ void KarbonView::selectionChanged()
     d->intersectPath->setEnabled( false );
     d->subtractPath->setEnabled( false );
     d->unitePath->setEnabled( false );
-    d->deleteSelectionAction->setEnabled( count > 0 );
 
     kDebug(38000) << count <<" shapes selected";
 
