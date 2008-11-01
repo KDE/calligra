@@ -962,7 +962,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>SGML</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>TeX Document</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>WML</entry><entry>Yes</entry><entry>Yes</entry></row>
-<row><entry>&WordPerfect;</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>&Wordperfect;</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>&XML;</entry><entry>Yes</entry><entry>No</entry></row>
 </tbody>
 </tgroup>

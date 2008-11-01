@@ -20,32 +20,23 @@
 
 <authorgroup>
 <author>
-&Neil.Lucock;
-<affiliation>
-<address>&Neil.Lucock.mail;</address>
-</affiliation>
+&Neil.Lucock; &Neil.Lucock.mail;
 </author>
 
 <author>
-&Krishna.Tateneni;
-<affiliation>
-<address>&Krishna.Tateneni.mail;</address>
-</affiliation>
+&Krishna.Tateneni; &Krishna.Tateneni.mail;
 </author>
 
 <author>
-&Anne-Marie.Mahfouf;
-<affiliation>
-<address>&Anne-Marie.Mahfouf.mail;</address>
-</affiliation>
+&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
 </author>
 
 <author>
+<personname>
 <firstname>Gary</firstname>
 <surname>Cramblitt</surname>
-<affiliation>
-<address><email>garycramblitt@comcast.net</email></address>
-</affiliation>
+</personname>
+<email>garycramblitt@comcast.net</email>
 </author>
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->

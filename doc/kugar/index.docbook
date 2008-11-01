@@ -24,16 +24,10 @@
 
 <authorgroup>
 <author>
-&Alexander.Dymo;
-<affiliation>
-<address>&Alexander.Dymo.mail;</address>
-</affiliation>
+&Alexander.Dymo; &Alexander.Dymo.mail;
 </author>
 <author>
-&Phil.Thompson;
-<affiliation>
-<address>&Phil.Thompson.mail;</address>
-</affiliation>
+&Phil.Thompson; &Phil.Thompson.mail;
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>

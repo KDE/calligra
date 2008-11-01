@@ -14,12 +14,10 @@
 <subtitle>A General Introduction</subtitle>
 <authorgroup>
 <author>
-&Raphael.Langerhorst;
-<affiliation><address>&Raphael.Langerhorst.mail;</address></affiliation> 
+&Raphael.Langerhorst; &Raphael.Langerhorst.mail;
 </author>
 <author>
-&Jost.Schenck;
-<affiliation><address>&Jost.Schenck.mail;</address></affiliation> 
+&Jost.Schenck; &Jost.Schenck.mail;
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
@@ -322,7 +320,7 @@ highly configurable, even down to detailed toolbar and menu layout.
 <sect1 id="the-font-issue">
 <title>Optimizing Font Output</title>
 <para>
-Fonts are a difficult topic on X Windows. In this section we'll cover
+Fonts are a difficult topic on &X-Window;. In this section we'll cover
 some problems that are frequently reported by people using
 &koffice;. Some problems are not just &koffice;s fault, but depend on
 your system configuration, which is why you may need to modify system
@@ -350,7 +348,7 @@ STUFF
 <emphasis>on screen</emphasis>, printout can pose a problem: on most
 systems, printing is done via
 <application>ghostscript</application>. Now, while &koffice; knows the
-font names used by X Windows, it does normally
+font names used by &X-Window;, it does normally
 <emphasis>not</emphasis> know the font names used by
 <application>ghostscript</application>. &koffice; tries to guess these
 names, which unfortunately doesn't work all of the time.  </para>

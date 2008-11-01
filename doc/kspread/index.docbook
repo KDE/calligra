@@ -24,23 +24,17 @@
 
 <authorgroup>
 <author>
-&Pamela.Roberts;
-<affiliation>
-<address>&Pamela.Roberts.mail;</address>
-</affiliation>
+&Pamela.Roberts; &Pamela.Roberts.mail;
 </author>
 <author>
-&Anne-Marie.Mahfouf;
-<affiliation>
-<address>&Anne-Marie.Mahfouf.mail;</address>
-</affiliation>
+&Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
 </author>
 <author>
+<personname>
 <firstname>Gary</firstname>
 <surname>Cramblitt</surname>
-<affiliation>
-<address><email>garycramblitt@comcast.net</email></address>
-</affiliation>
+</personname>
+<email>garycramblitt@comcast.net</email>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
