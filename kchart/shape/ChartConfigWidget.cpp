@@ -276,26 +276,29 @@ ChartConfigWidget::ChartConfigWidget()
     d->tableEditor.tableViewContainer->addWidget( d->tableView );
     d->tableEditorDialog->hide();
     
-    connect( d->tableEditor.firstRowIsLabel, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( firstRowIsLabelChanged( bool ) ) );
+    // We need only connect one of the data direction buttons, since
+    // they are mutually exclusive.
+    connect( d->tableEditor.firstRowIsLabel,    SIGNAL( toggled( bool ) ),
+             this,                              SIGNAL( firstRowIsLabelChanged( bool ) ) );
     connect( d->tableEditor.firstColumnIsLabel, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( firstColumnIsLabelChanged( bool ) ) );
+             this,                              SIGNAL( firstColumnIsLabelChanged( bool ) ) );
     connect( d->tableEditor.dataSetsInRows, SIGNAL( toggled( bool ) ),
-             this, SLOT( ui_dataSetsInRowsChanged( bool ) ) );
+             this,                          SLOT( ui_dataSetsInRowsChanged( bool ) ) );
     
-    connect( d->ui.showTitle, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( showTitleChanged( bool ) ) );
+    // "Plot Area" tab
+    connect( d->ui.showTitle,    SIGNAL( toggled( bool ) ),
+             this,               SIGNAL( showTitleChanged( bool ) ) );
     connect( d->ui.showSubTitle, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( showSubTitleChanged( bool ) ) );
-    connect( d->ui.showFooter, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( showFooterChanged( bool ) ) );
+             this,               SIGNAL( showSubTitleChanged( bool ) ) );
+    connect( d->ui.showFooter,   SIGNAL( toggled( bool ) ),
+             this,               SIGNAL( showFooterChanged( bool ) ) );
     
     connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
-             this, SLOT( setThreeDMode( bool ) ) );
+             this,             SLOT( setThreeDMode( bool ) ) );
     connect( d->ui.showLegend, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( showLegendChanged( bool ) ) );
+             this,             SIGNAL( showLegendChanged( bool ) ) );
     
-    // "Datasets" Tab
+    // "Datasets" tab
     connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
              this, SLOT( datasetColorSelected( const QColor& ) ) );
     connect( d->ui.datasetShowValues, SIGNAL( toggled( bool ) ),
@@ -307,7 +310,7 @@ ChartConfigWidget::ChartConfigWidget()
     connect( d->ui.pieExplodeFactor, SIGNAL( valueChanged( int ) ),
              this, SLOT( ui_dataSetPieExplodeFactorChanged( int ) ) );
     
-    // "Legend" Tab
+    // "Legend" tab
     connect( d->ui.legendTitle, SIGNAL( textChanged( const QString& ) ),
              this, SIGNAL( legendTitleChanged( const QString& ) ) );
     connect( d->ui.legendShowFrame, SIGNAL( toggled( bool ) ),
@@ -315,6 +318,8 @@ ChartConfigWidget::ChartConfigWidget()
     connect( d->ui.legendOrientationIsVertical, SIGNAL( toggled( bool ) ),
              this, SLOT( setLegendOrientationIsVertical( bool ) ) );
     
+    // Second part of "Plot Area" tab.
+    // FIXME: Is there any particular reason it's separated from the Labels?
     d->ui.addAxis->setIcon( KIcon( "list-add" ) );
     d->ui.removeAxis->setIcon( KIcon( "list-remove" ) );
 
@@ -335,19 +340,10 @@ ChartConfigWidget::ChartConfigWidget()
     setupDialogs();
     createActions();
     
-    // Activate spin box "acceleration"
+    // Activate spin box "acceleration" for "Data Sets"->"Bar Properties"
     d->ui.gapBetweenBars->setAccelerated( true );
     d->ui.gapBetweenSets->setAccelerated( true );
     d->ui.pieExplodeFactor->setAccelerated( true );
-
-    // We need only connect one of the data direction buttons, since
-    // they are mutually exclusive.
-    //connect( d->ui.m_dataInRows, SIGNAL( toggled( bool ) ),
-    //         this,               SLOT( setDataInRows( bool ) ) );
-    //connect( d->ui.m_firstRowAsLabel, SIGNAL( toggled( bool ) ),
-    //         this,                    SIGNAL( firstRowIsLabelChanged( bool ) ) );
-    //connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
-    //         this,                       SIGNAL( firstColumnIsLabelChanged( bool ) ) );
 }
 
 ChartConfigWidget::~ChartConfigWidget()

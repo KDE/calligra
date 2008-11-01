@@ -255,34 +255,40 @@ public:
     
     void showLabel( KoShape *label );
     
-    KoShape *title;
-    KoShape *subTitle;
-    KoShape *footer;
-    Legend *legend;
-    PlotArea *plotArea;
-    Surface *wall;
-    Surface *floor;
+    // The components of a chart
+    KoShape   *title;
+    KoShape   *subTitle;
+    KoShape   *footer;
+    Legend    *legend;
+    PlotArea  *plotArea;
+    Surface   *wall;
+    Surface   *floor;
     
-    ProxyModel *model;
-    QAbstractItemModel *internalModel;
+    // Data
+    QAbstractItemModel  *internalModel; // The actual data
+    ProxyModel          *model;		// What's presented to KDChart
     
     ChartDocument *document;
     
-    ChartShape *shape;
+    ChartShape *shape;		// The chart that owns this ChartShape::Private
 };
+
 
 ChartShape::Private::Private( ChartShape *shape )
 {
     this->shape = shape;
+
     internalModel = 0;
-    title = 0;
+
+    title    = 0;
     subTitle = 0;
-    footer = 0;
-    legend = 0;
+    footer   = 0;
+    legend   = 0;
     plotArea = 0;
-    wall = 0;
-    floor = 0;
-    model = 0;
+    wall     = 0;
+    floor    = 0;
+    model    = 0;
+
     document = 0;
 }
 
@@ -324,7 +330,8 @@ void ChartShape::Private::showLabel( KoShape *label )
         }
         if ( spaceToExpand > 0.0 )
         {
-            plotArea->setSize( QSizeF( plotAreaSize.width(), plotAreaSize.height() - spaceToExpand ) );
+            plotArea->setSize( QSizeF( plotAreaSize.width(),
+				       plotAreaSize.height() - spaceToExpand ) );
         }
     }
     

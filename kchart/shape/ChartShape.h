@@ -90,6 +90,7 @@ extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 extern QColor defaultDataSetColor( int dataSetNum );
 
+
 class CHARTSHAPELIB_EXPORT ChartShape : public QObject, public KoChart::ChartInterface, public KoFrameShape, public KoShapeContainer
 {
     Q_OBJECT
@@ -99,19 +100,20 @@ public:
     ~ChartShape();
     
     // Getter methods
-    QAbstractItemModel *model() const;
-    ProxyModel *proxyModel() const;
+    QAbstractItemModel *model()      const;
+    ProxyModel         *proxyModel() const;
     
+    // Parts of the chart
     KoShape *title() const;
     TextLabelData *titleData() const;
     KoShape *subTitle() const;
     TextLabelData *subTitleData() const;
     KoShape *footer() const;
     TextLabelData *footerData() const;
-    Legend *legend() const;
+    Legend   *legend() const;
     PlotArea *plotArea() const;
-    Surface *wall() const;
-    Surface *floor() const;
+    Surface  *wall() const;
+    Surface  *floor() const;
     
     void showTitle();
     void showSubTitle();
@@ -126,9 +128,9 @@ public:
     void setPosition( const QPointF &size );
     void setSize( const QSizeF &size );
     
-    ChartType chartType() const;
-    ChartSubtype chartSubType() const;
-    bool isThreeD() const;
+    ChartType     chartType() const;
+    ChartSubtype  chartSubType() const;
+    bool          isThreeD() const;
     
     // Inherited from chart interface
     void setFirstRowIsLabel( bool isLabel );
