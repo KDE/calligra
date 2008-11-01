@@ -294,6 +294,12 @@ void KWView::setupActions()
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
 
+    action = new KAction(KIcon("edit-delete"), i18n("Delete"), this);
+    action->setShortcut(QKeySequence("Del"));
+    connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
+    connect(kwcanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
+    actionCollection()->addAction("edit_delete", action );
+
     action = new QAction(i18n("Show Grid"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_grid", action);
@@ -1123,6 +1129,11 @@ void KWView::editSelectAllFrames()
                 selection->select(frame->shape());
         }
     }
+}
+
+void KWView::editDeleteSelection()
+{
+    kwcanvas()->toolProxy()->deleteSelection();
 }
 
 void KWView::viewGrid(bool on)

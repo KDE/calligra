@@ -157,6 +157,8 @@ private slots:
     void setShowFormattingChars(bool on);
     /// selects all frames
     void editSelectAllFrames();
+    /// calls delete on the active tool
+    void editDeleteSelection();
     /// show or hide the grid
     void viewGrid(bool);
     /// create a KWOutlineShape for the selected frame(s).

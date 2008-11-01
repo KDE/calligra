@@ -15,6 +15,7 @@
   <Action name="edit_selectall"/>
   <Action name="edit_selectallframes"/>
   <Action name="edit_selectcurrentframe"/>
+  <Action name="edit_delete"/>
   <Separator/>
   <Action name="edit_find"/>
   <Action name="edit_findnext"/>
