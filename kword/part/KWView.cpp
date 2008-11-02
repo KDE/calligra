@@ -992,7 +992,7 @@ void KWView::toggleViewFrameBorders(bool on)
 
 void KWView::formatPage()
 {
-    if (m_currentPage.isValid())
+    if (! m_currentPage.isValid())
         return;
     KWPageSettingsDialog *dia = new KWPageSettingsDialog(this, m_document, m_currentPage);
     dia->showTextDirection(kwcanvas()->resourceProvider()->boolResource(KoText::BidiDocument));
