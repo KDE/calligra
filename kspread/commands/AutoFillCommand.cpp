@@ -344,13 +344,13 @@ Value AutoFillSequenceItem::nextValue(int _no, Value _delta) const
         }
         else if (m_value.isFloat())
         {
-            Value value(m_value.asFloat() + (double)_no * _delta.asFloat());
+            Value value(m_value.asFloat() + (long double)_no * _delta.asFloat());
             value.setFormat(_delta.format());
             return value;
         }
         else if (m_value.isComplex())
         {
-            Value value(m_value.asComplex() + (double)_no * _delta.asComplex());
+            Value value(m_value.asComplex() + (long double)_no * _delta.asComplex());
             value.setFormat(_delta.format());
             return value;
         }
@@ -427,13 +427,13 @@ Value AutoFillSequenceItem::prevValue(int _no, Value _delta) const
         }
         else if (m_value.isFloat())
         {
-            Value value(m_value.asFloat() - (double)_no * _delta.asFloat());
+            Value value(m_value.asFloat() - (long double)_no * _delta.asFloat());
             value.setFormat(_delta.format());
             return value;
         }
         else if (m_value.isComplex())
         {
-            Value value(m_value.asComplex() - (double)_no * _delta.asComplex());
+            Value value(m_value.asComplex() - (long double)_no * _delta.asComplex());
             value.setFormat(_delta.format());
             return value;
         }
@@ -588,7 +588,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
             else if (v.isInteger())
                 str += QString::number(v.asInteger()) + ' ';
             else if (v.isFloat())
-                str += QString::number(v.asFloat()) + ' ';
+                str += QString::number((double) v.asFloat()) + ' ';
             else
                 str += v.asString() + ' ';
         }
@@ -632,7 +632,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
             else if (v.isInteger())
                 str += QString::number(v.asInteger()) + ' ';
             else if (v.isFloat())
-                str += QString::number(v.asFloat()) + ' ';
+                str += QString::number((double) v.asFloat()) + ' ';
             else
                 str += v.asString() + ' ';
         }

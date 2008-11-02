@@ -118,6 +118,7 @@ void InformationModule::registerFunctions()
   repo->add (f);
   f = new Function ("ISREF", func_isref);
   f->setNeedsExtra (true);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("ISTEXT", func_istext);
   repo->add (f);
@@ -256,8 +257,9 @@ Value func_istext (valVector args, ValueCalc *, FuncExtra *)
 }
 
 // Function: ISREF
-Value func_isref (valVector, ValueCalc * /*calc*/, FuncExtra *e)
+Value func_isref (valVector args, ValueCalc * /*calc*/, FuncExtra *e)
 {
+  if (args[0].isError()) return args[0];  // errors pass through
   // no reference ?
   if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
     return Value (false);

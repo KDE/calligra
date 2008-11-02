@@ -87,15 +87,15 @@ void TestValue::testFloat()
   // floating-point value
   v1 = new Value( M_PI );
   QCOMPARE( v1->type(), Value::Float );
-  QCOMPARE( numToDouble(v1->asFloat()), M_PI );
+  QCOMPARE( numToDouble(v1->asFloat()), (long double) M_PI );
   *v1 = Value( false ); // dummy
-  *v1 = Value( 14.03 );
+  *v1 = Value( 14.03l );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v1->isInteger(), false );
   QCOMPARE( v1->isFloat(), true );
   QCOMPARE( v1->isString(), false );
   QCOMPARE( v1->isNumber(), true );
-  QCOMPARE( numToDouble(v1->asFloat()), 14.03 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.03l );
   delete v1;
 }
 
@@ -145,7 +145,7 @@ void TestValue::testDate()
   {
     QDate dv1 = QDate( y, m, d );
     if( !dv1.isValid() ) continue;
-    double serialNo = -dv1.daysTo( refDate ) + 1.0;
+    long double serialNo = -dv1.daysTo( refDate ) + 1.0;
     *v1 = Value( Value( dv1, doc.map()->calculationSettings() ) );
     QCOMPARE(numToDouble(v1->asFloat()),serialNo);
     date_error = v1->asFloat() != serialNo;
@@ -237,12 +237,12 @@ void TestValue::testArray()
   // fill simple 1x1 array
   v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
-  v2 = new Value( 14.3 );
+  v2 = new Value( 14.3l );
   v1->setElement( 0, 0, *v2 );
   delete v2;
   v2 = new Value( v1->element( 0, 0 ) );
   QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( numToDouble(v2->asFloat()), 14.3 );
+  QCOMPARE( numToDouble(v2->asFloat()), 14.3l );
   delete v2;
   delete v1;
 
@@ -271,15 +271,15 @@ void TestValue::testArray()
   // assignment of array value
   v1 = new Value( Value::Array );
   QCOMPARE( v1->type(), Value::Array );
-  v1->setElement( 1, 1, Value( 44.3) );
-  v1->setElement( 0, 1, Value( 34.3) );
-  v1->setElement( 1, 0, Value( 24.3) );
-  v1->setElement( 0, 0, Value( 14.3) );
+  v1->setElement( 1, 1, Value( 44.3l) );
+  v1->setElement( 0, 1, Value( 34.3l) );
+  v1->setElement( 1, 0, Value( 24.3l) );
+  v1->setElement( 0, 0, Value( 14.3l) );
   v2 = new Value( *v1 ); // v2 is now also an array
   delete v1;
   v1 = new Value( v2->element( 0, 0 ) );
   QCOMPARE( v1->type(), Value::Float );
-  QCOMPARE( numToDouble(v1->asFloat()), 14.3 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.3l );
   delete v1;
   delete v2;
 
@@ -303,12 +303,12 @@ void TestValue::testCopy()
 
   // copy value
   v1 = new Value();
-  *v1 = Value( 14.3 );
+  *v1 = Value( 14.3l );
   v2 = new Value( *v1 );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( numToDouble(v1->asFloat()), 14.3 );
-  QCOMPARE( numToDouble(v2->asFloat()), 14.3 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.3l );
+  QCOMPARE( numToDouble(v2->asFloat()), 14.3l );
   delete v1;
   delete v2;
 }
@@ -319,13 +319,13 @@ void TestValue::testAssignment()
   Value* v2;
 
   // value assignment
-  v1 = new Value( 14.3 );
+  v1 = new Value( 14.3l );
   v2 = new Value( true );
   *v2 = *v1;
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( numToDouble(v1->asFloat()), 14.3 );
-  QCOMPARE( numToDouble(v2->asFloat()), 14.3 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.3l );
+  QCOMPARE( numToDouble(v2->asFloat()), 14.3l );
   delete v1;
   delete v2;
 

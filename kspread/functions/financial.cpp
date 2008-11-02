@@ -2152,8 +2152,8 @@ Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *)
   QDate settlement = calc->conv()->asDate (args[0]).asDate(calc->settings());
   QDate maturity = calc->conv()->asDate (args[1]).asDate(calc->settings());
   QDate issue = calc->conv()->asDate (args[2]).asDate(calc->settings());
-  double rate = calc->conv()->asFloat (args[3]).asFloat();
-  double price = calc->conv()->asFloat (args[4]).asFloat();
+  long double rate = calc->conv()->asFloat (args[3]).asFloat();
+  long double price = calc->conv()->asFloat (args[4]).asFloat();
   
   // opt. basis
   int basis=0;
@@ -2165,12 +2165,12 @@ Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *)
 
   QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
-  double issMat = yearFrac(date0, issue, maturity, basis);
-  double issSet = yearFrac(date0, issue, settlement, basis);
-  double setMat = yearFrac(date0, settlement, maturity, basis);
+  long double issMat = yearFrac(date0, issue, maturity, basis);
+  long double issSet = yearFrac(date0, issue, settlement, basis);
+  long double setMat = yearFrac(date0, settlement, maturity, basis);
  
-  double res = 1.0 + issMat * rate;
-  res /= price /100.0 + issSet *rate;
+  long double res = 1.0l + issMat * rate;
+  res /= price /100.0l + issSet *rate;
   res--;
   res /= setMat;
 

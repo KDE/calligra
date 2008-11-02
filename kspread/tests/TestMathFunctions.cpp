@@ -58,7 +58,7 @@ Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int
   bool res = fabs(v2.asFloat()-result.asFloat())<epsilon;
 
   if (!res)
-    kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << v2.asFloat() <<" to" << result.asFloat() <<"  diff =" << v2.asFloat()-result.asFloat();
+    kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << (double) v2.asFloat() <<" to" << (double)result.asFloat() <<"  diff =" << (double)(v2.asFloat()-result.asFloat());
 /*  else
     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();*/
   if (res)

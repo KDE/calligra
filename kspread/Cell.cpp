@@ -1271,7 +1271,7 @@ void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
     {
       xmlWriter.addAttribute( "office:value-type", "percentage" );
       xmlWriter.addAttribute( "office:value",
-          QString::number( numToDouble (value().asFloat() )) );
+          QString::number( (double) numToDouble (value().asFloat() )) );
       break;
     }
     case Value::fmt_Money:
@@ -1283,7 +1283,7 @@ void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
         Currency currency = style.currency();
         xmlWriter.addAttribute( "office:currency", currency.code() );
       }
-      xmlWriter.addAttribute( "office:value", QString::number( numToDouble (value().asFloat()) ) );
+      xmlWriter.addAttribute( "office:value", QString::number( (double) numToDouble (value().asFloat()) ) );
       break;
     }
     case Value::fmt_DateTime: break;  //NOTHING HERE

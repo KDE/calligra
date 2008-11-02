@@ -242,7 +242,7 @@ int KSpread::days360( const QDate& _date1, const QDate& _date2, bool european )
 // }
 
 // yearFrac
-double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis )
+long double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis )
 {
   QDate date1 = startDate;
   QDate date2 = endDate;
@@ -265,8 +265,8 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
 
 //   kDebug(36002) <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
 
-  double res=0;
-  double peryear=0;
+  long double res=0;
+  long double peryear=0;
   int nYears=0;
 
   switch(basis)
@@ -357,64 +357,64 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
     }
   }
 
-  res = double(nYears) + (double)days / peryear;
+  res = (long double)(nYears) + (long double)days / peryear;
 //   kDebug(36002)<<"getYearFrac res="<<res;
   return res;
 }
 
 // pow1p calculate (1+x)^y accurately
-double KSpread::pow1p ( const double& x, const double& y)
+long double KSpread::pow1p ( const long double& x, const long double& y)
 {
-  if (fabs(x) > 0.5)
-    return pow(1 + x, y);
+  if (fabsl(x) > 0.5)
+    return powl(1 + x, y);
   else
-    return exp(y * log1p (x));
+    return expl(y * log1pl (x));
 }
 
 // pow1pm1 calculate ((1+x)^y)-1 accurately
-double KSpread::pow1pm1 ( const double& x, const double& y)
+long double KSpread::pow1pm1 ( const long double& x, const long double& y)
 {
   if (x <= -1)
-    return pow(1 + x, y) - 1;
+    return powl(1 + x, y) - 1;
   else
-    return expm1(y * log1p (x));
+    return expm1l(y * log1pl (x));
 }
 
-double KSpread::duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, 
-const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups)
+long double KSpread::duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, 
+const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups)
 {
-  double yield = yield_;
-  double coup = coup_;
+  long double yield = yield_;
+  long double coup = coup_;
 
 //   kDebug(36002)<<"DURATION_HELPER";
 //   kDebug(36002)<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
 
 
-  double yearfrac = yearFrac( refDate, settlement, maturity, basis);
-  double res = 0.0;
-  const double f100 = 100.0;
-  coup *= f100 / double ( freq );
+  long double yearfrac = yearFrac( refDate, settlement, maturity, basis);
+  long double res = 0.0l;
+  const long double f100 = 100.0l;
+  coup *= f100 / (long double) ( freq );
   
   yield /= freq;
   yield += 1.0;
 
-  double diff = yearfrac * freq - numOfCoups;  
+  long double diff = yearfrac * freq - numOfCoups;  
   
-  double t;
+  long double t;
   
-  for( t = 1.0 ; t < numOfCoups ; t++ )
+  for( t = 1.0l ; t < numOfCoups ; t += 1.0l )
     res += ( t + diff ) * ( coup ) / pow ( yield, t + diff );
 
   res += ( numOfCoups + diff ) * ( coup + f100 ) / pow( yield, numOfCoups + diff );
 
-  double p = 0.0;
-  for( t = 1.0 ; t < numOfCoups ; t++ )
+  long double p = 0.0l;
+  for( t = 1.0l ; t < numOfCoups ; t += 1.0l )
     p += coup / pow( yield, t + diff );
 
   p += ( coup + f100 ) / pow( yield, numOfCoups + diff );
 
   res /= p;
-  res /= double( freq );
+  res /= (long double)( freq );
 
   return( res );
 }

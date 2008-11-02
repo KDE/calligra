@@ -46,7 +46,7 @@ class Number::Private : public QSharedData {
 
   union
   {
-    double f;
+    long double f;
   };
 
   // static empty data to be shared
@@ -73,10 +73,10 @@ Number::Number (int num)
   : d( Private::null() )
 {
   d->type = Number::Float;
-  d->f = (double) num;
+  d->f = (long double) num;
 }
 
-Number::Number (double num)
+Number::Number (long double num)
   : d( Private::null() )
 {
   d->type = Number::Float;
@@ -102,7 +102,7 @@ Number& Number::operator= (const Number &n)
 }
 
 
-double Number::asFloat () const
+long double Number::asFloat () const
 {
   return d->f;
 }
@@ -191,7 +191,7 @@ Number Number::pow (const Number &exp) const
 
 Number Number::log (Number base) const
 {
-  double logbase = ::log10 (base.d->f);
+  long double logbase = ::log10 (base.d->f);
   return Number (::log10 (d->f) / logbase);
 }
 
@@ -282,20 +282,20 @@ Number Number::atgh () const
 
 namespace KSpread {
 
-double numToDouble (Number n) { return n.asFloat (); }
+long double numToDouble (Number n) { return n.asFloat (); }
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that
-Number operator+ (double n1, const Number &n2) { return n2 + n1; }
-Number operator- (double n1, const Number &n2) { return (n2 - n1).neg(); }
-Number operator* (double n1, const Number &n2) { return n2 * n1; }
-Number operator/ (double n1, const Number &n2) { return Number(n1) / n2; /* TODO optimise perhaps */ }
-bool operator<= (double n1, const Number &n2) { return (n2 >= n1); }
-bool operator< (double n1, const Number &n2) { return (n2 > n1); }
-bool operator== (double n1, const Number &n2) { return (n2 == n1); }
-bool operator!= (double n1, const Number &n2) { return (n2 != n1); }
-bool operator>= (double n1, const Number &n2) { return (n2 <= n1); }
-bool operator> (double n1, const Number &n2) { return (n2 < n1); }
+Number operator+ (long double n1, const Number &n2) { return n2 + n1; }
+Number operator- (long double n1, const Number &n2) { return (n2 - n1).neg(); }
+Number operator* (long double n1, const Number &n2) { return n2 * n1; }
+Number operator/ (long double n1, const Number &n2) { return Number(n1) / n2; /* TODO optimise perhaps */ }
+bool operator<= (long double n1, const Number &n2) { return (n2 >= n1); }
+bool operator< (long double n1, const Number &n2) { return (n2 > n1); }
+bool operator== (long double n1, const Number &n2) { return (n2 == n1); }
+bool operator!= (long double n1, const Number &n2) { return (n2 != n1); }
+bool operator>= (long double n1, const Number &n2) { return (n2 <= n1); }
+bool operator> (long double n1, const Number &n2) { return (n2 < n1); }
 
 // external versions of the functions
 Number fmod (const Number &n1, const Number &n2) { return n1.mod(n2); }

@@ -336,7 +336,7 @@ QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
 
   /* return w/o fraction part if not necessary */
   if (result == 0)
-    return QString::number(numToDouble (value));
+    return QString::number((double) numToDouble (value));
 
   switch (fmtType) {
   case Format::fraction_half:
@@ -371,7 +371,7 @@ QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
     break;
   default:
     kDebug(36001) <<"Error in Fraction format";
-    return QString::number(numToDouble (value));
+    return QString::number((double) numToDouble (value));
     break;
   } /* switch */
 
@@ -391,13 +391,13 @@ QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
         diff = fabs(result - calc);
       }
     }
-    if( index1 == 0 ) return QString("%1").arg( floor(numToDouble (value)) );
-    if( index1 == index ) return QString("%1").arg( floor(numToDouble (value))+1 );
+    if( index1 == 0 ) return QString("%1").arg( (double) floor(numToDouble (value)) );
+    if( index1 == index ) return QString("%1").arg( (double) floor(numToDouble (value))+1 );
     if( floor (numToDouble (value)) == 0)
       return QString("%1/%2").arg( index1 ).arg( index );
 
     return QString("%1 %2/%3")
-        .arg( floor(numToDouble (value)) )
+        .arg( (double) floor(numToDouble (value)) )
         .arg( index1 )
         .arg( index );
   }
@@ -436,14 +436,14 @@ QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
   numerator = ::fabs(numerator);
 
   if (denominator == numerator)
-    return QString().setNum(floor(numToDouble (value + 1)));
+    return QString().setNum((double) floor(numToDouble (value + 1)));
   else
   {
     if ( floor(numToDouble (value)) == 0 )
       return QString("%1/%2").arg(numerator).arg(denominator);
     else
       return QString("%1 %2/%3")
-        .arg(floor(numToDouble (value)))
+        .arg((double)floor(numToDouble (value)))
         .arg(numerator)
         .arg(denominator);
   }

@@ -81,6 +81,7 @@ void ReferenceModule::registerFunctions()
   f = new Function ("AREAS",    func_areas);
   f->setParamCount (1);
   f->setNeedsExtra (true);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("CHOOSE",   func_choose);
   f->setParamCount (2, -1);

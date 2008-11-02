@@ -69,7 +69,7 @@ static double GammaHelp( double& x, bool& reflect )
 
 void awSum (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()) && (!val.isError()))
     res = c->add (res, val);
 }
 
@@ -82,7 +82,7 @@ void awSumA (ValueCalc *c, Value &res, Value val, Value)
 void awSumSq (ValueCalc *c, Value &res, Value val, Value)
 {
   // removed (!val.isBoolean()) to allow conversion from BOOL to int
-  if ((!val.isEmpty()) && (!val.isString()))
+  if ((!val.isEmpty()) && (!val.isString()) && (!val.isError()))
     res = c->add (res, c->sqr (val));
 }
 
@@ -94,7 +94,7 @@ void awSumSqA (ValueCalc *c, Value &res, Value val, Value)
 
 void awCount (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()) && (!val.isError()))
     res = c->add (res, 1);
 }
 
@@ -163,7 +163,7 @@ void awMinA (ValueCalc *c, Value &res, Value val, Value)
 
 void awProd (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()) && (!val.isError()))
     res = c->mul (res, val);
 }
 
@@ -177,7 +177,7 @@ void awProdA (ValueCalc *c, Value &res, Value val, Value)
 void awDevSq (ValueCalc *c, Value &res, Value val,
     Value avg)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()) && (!val.isError()))
     res = c->add (res, c->sqr (c->sub (val, avg)));
 }
 
@@ -414,7 +414,7 @@ Value ValueCalc::div (const Value &a, Number b)
 Value ValueCalc::pow (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (::pow (converter->toFloat(a), b));
+  Value res = Value (::powl (converter->toFloat(a), b));
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -425,7 +425,7 @@ Value ValueCalc::pow (const Value &a, Number b)
 Value ValueCalc::abs (const Value &a)
 {
   if (a.isError()) return a;
-  return Value (fabs (converter->toFloat (a)));
+  return Value (fabsl (converter->toFloat (a)));
 }
 
 bool ValueCalc::isZero (const Value &a)

@@ -645,7 +645,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       else
         cellElem.setAttribute( "table:value-type", "float" );
 
-      cellElem.setAttribute( "table:value", QString::number( numToDouble(value.asFloat()) ) );
+      cellElem.setAttribute( "table:value", QString::number( (double)numToDouble(value.asFloat()) ) );
     }
     else
     {

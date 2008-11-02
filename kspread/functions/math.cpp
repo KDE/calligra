@@ -266,6 +266,7 @@ void MathModule::registerFunctions()
   f = new Function ("COUNTIF",       func_countif);
   f->setParamCount (2);
   f->setAcceptArray ();
+  f->setNeedsExtra (true);
   repo->add (f);
   f = new Function ("DIV",           func_div);
   f->setParamCount (1, -1);
@@ -988,8 +989,12 @@ Value func_countblank (valVector args, ValueCalc *, FuncExtra *)
 }
 
 // Function: COUNTIF
-Value func_countif (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_countif (valVector args, ValueCalc *calc, FuncExtra *e)
 {
+  // the first parameter must be a reference
+  if ((e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
+    return Value::errorNA();
+
   Value range = args[0];
   QString condition = calc->conv()->asString (args[1]).asString();
 

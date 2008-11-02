@@ -856,7 +856,7 @@ Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *)
   bool convergenceError;
 
   // create formula string
-  QString formula = QString("BETADIST(x;%1;%2)").arg(alpha.asFloat()).arg(beta.asFloat());
+  QString formula = QString("BETADIST(x;%1;%2)").arg((double)alpha.asFloat()).arg((double)beta.asFloat());
 
   result = IterateInverse ( p.asFloat(), formula , 0.0, 1.0, convergenceError);
 
@@ -1207,7 +1207,7 @@ Value func_finv (valVector args, ValueCalc *, FuncExtra *)
   bool convergenceError;
 
   // create formula string
-  QString formula = QString("FDIST(x;%1;%2;1)").arg(f1.asFloat()).arg(f2.asFloat());
+  QString formula = QString("FDIST(x;%1;%2;1)").arg((double)f1.asFloat()).arg((double)f2.asFloat());
 
   result = IterateInverse ( p.asFloat(), formula , f1.asFloat()*0.5, f1.asFloat(), convergenceError);
 
@@ -1410,7 +1410,7 @@ Value func_gammainv (valVector args, ValueCalc *calc, FuncExtra *)
   Value start = calc->mul(alpha, beta);
 
   // create formula string
-  QString formula = QString("GAMMADIST(x;%1;%2;1)").arg(alpha.asFloat()).arg(beta.asFloat());
+  QString formula = QString("GAMMADIST(x;%1;%2;1)").arg((double)alpha.asFloat()).arg((double)beta.asFloat());
 
   result = IterateInverse ( p.asFloat(), formula , start.asFloat()*0.5, start.asFloat(), convergenceError);
 
@@ -1938,7 +1938,7 @@ Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *)
   bool convergenceError;
 
   // create formula string
-  QString formula = QString("LEGACYCHIDIST(x;%1)").arg(DF.asFloat());
+  QString formula = QString("LEGACYCHIDIST(x;%1)").arg((double)DF.asFloat());
 
   result = IterateInverse ( p.asFloat(), formula , DF.asFloat()*0.5, DF.asFloat(), convergenceError);
 
@@ -1994,7 +1994,7 @@ Value func_legacyfinv (valVector args, ValueCalc *, FuncExtra *)
   bool convergenceError;
 
   // create formula string
-  QString formula = QString("LEGACYFDIST(x;%1;%2)").arg(f1.asFloat()).arg(f2.asFloat());
+  QString formula = QString("LEGACYFDIST(x;%1;%2)").arg((double)f1.asFloat()).arg((double)f2.asFloat());
 
   result = IterateInverse ( p.asFloat(), formula , f1.asFloat()*0.5, f1.asFloat(), convergenceError);
 
@@ -2742,7 +2742,7 @@ Value func_tinv (valVector args, ValueCalc *calc, FuncExtra *)
   bool convergenceError;
 
   // create formula string
-  QString formula = QString("TDIST(x;%1;2)").arg(DF.asFloat());
+  QString formula = QString("TDIST(x;%1;2)").arg((double)DF.asFloat());
 
   result = IterateInverse ( p.asFloat(), formula , DF.asFloat()*0.5, DF.asFloat(), convergenceError);
 

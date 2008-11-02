@@ -26,9 +26,9 @@
 
 #include <math.h>
 
-typedef double Number;
+typedef long double Number;
 
-inline double numToDouble (Number n) { return n; }
+inline long double numToDouble (Number n) { return n; }
 
 namespace KSpread {
 
@@ -54,9 +54,9 @@ using namespace std;
 namespace KSpread {
 
 /**
-The Number class holds a single floating-point number. At the moment, it's just a wrapper for double, but it's going to support GnuMP or something eventually.
+The Number class holds a single floating-point number. At the moment, it's just a wrapper for long double, but it's going to support GnuMP or something eventually.
 
-The class is made so that if high precision is not desired, a "typedef Number double" will revert us back to doubles.
+The class is made so that if high precision is not desired, a "typedef long double Number" will revert us back to doubles.
 
 The class will be able to format itself into a string, using provided locale settings. (TODO: how to handle this so that parsing/formatting works even if we typedef this class out?)
 
@@ -72,13 +72,13 @@ class KSPREAD_EXPORT Number {
     // constructors
     Number ();
     Number (int num);
-    Number (double num);
+    Number (long double num);
 
     Number (const Number& n);
 
     ~Number ();
 
-    double asFloat () const;
+    long double asFloat () const;
 
     // set/get
     Number& operator= (const Number &n);
@@ -151,20 +151,20 @@ class KSPREAD_EXPORT Number {
 
 // conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its parameter
 // usage of this function should eventually be removed, because places that use it are not ready for high precision support
-KSPREAD_EXPORT double numToDouble (Number n);
+KSPREAD_EXPORT long double numToDouble (Number n);
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that
-Number operator+ (double n1, const Number &n2);
-Number operator- (double n1, const Number &n2);
-Number operator* (double n1, const Number &n2);
-Number operator/ (double n1, const Number &n2);
-bool operator<= (double n1, const Number &n2);
-bool operator< (double n1, const Number &n2);
-bool operator== (double n1, const Number &n2);
-bool operator!= (double n1, const Number &n2);
-bool operator>= (double n1, const Number &n2);
-bool operator> (double n1, const Number &n2);
+Number operator+ (long double n1, const Number &n2);
+Number operator- (long double n1, const Number &n2);
+Number operator* (long double n1, const Number &n2);
+Number operator/ (long double n1, const Number &n2);
+bool operator<= (long double n1, const Number &n2);
+bool operator< (long double n1, const Number &n2);
+bool operator== (long double n1, const Number &n2);
+bool operator!= (long double n1, const Number &n2);
+bool operator>= (long double n1, const Number &n2);
+bool operator> (long double n1, const Number &n2);
 
 // external versions of the functions
 Number fmod (const Number &n1, const Number &n2);

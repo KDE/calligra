@@ -137,7 +137,7 @@ QVariant valueToVariant(const KSpread::Value& value, Sheet* sheet)
 		case KSpread::Value::Integer:
 			return static_cast<qint64>(value.asInteger());
 		case KSpread::Value::Float:
-			return numToDouble (value.asFloat());
+			return (double) numToDouble (value.asFloat());
 		case KSpread::Value::Complex:
 			return sheet->map()->converter()->asString(value).asString();
 		case KSpread::Value::String:

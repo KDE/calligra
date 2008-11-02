@@ -257,6 +257,16 @@ Value::Value( double f )
   d->format = fmt_Number;
 }
 
+// create a floating-point value
+Value::Value( long double f )
+  : d( Private::null() )
+{
+  d->type = Float;
+  d->f = Number (f);
+  d->format = fmt_Number;
+}
+
+
 #ifdef KSPREAD_HIGH_PRECISION_SUPPORT
 // create a floating-point value
 Value::Value( Number f )
@@ -426,7 +436,7 @@ QVariant Value::asVariant() const
             result = d->i;
             break;
         case Value::Float:
-            result = d->f;
+            result = (double) numToDouble (d->f);
             break;
         case Value::Complex:
             // FIXME: add support for complex numbers
@@ -860,15 +870,15 @@ QTextStream& operator<<( QTextStream& ts, Value value )
       ts << ": " << value.asInteger(); break;
 
     case Value::Float:
-      ts << ": " << numToDouble (value.asFloat()); break;
+      ts << ": " << (double) numToDouble (value.asFloat()); break;
 
     case Value::Complex:
     {
       const complex<Number> complex( value.asComplex() );
-      ts << ": " << numToDouble (complex.real());
+      ts << ": " << (double) numToDouble (complex.real());
       if ( complex.imag() >= 0.0 )
           ts << '+';
-      ts << numToDouble (complex.imag()) << 'i';
+      ts << (double) numToDouble (complex.imag()) << 'i';
       break;
     }
 

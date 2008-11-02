@@ -72,11 +72,11 @@ bool TestStatisticalFunctions::TestArray(const QString& formula, const QString& 
   // if checkSize is disabled the count of Array array could be lower than result array
   for (int e=0; e<Array.count(); e++)
   {
-    kDebug()<<"check element ("<<e<<") "<<Array.element(e).asFloat()<<" "<<result.element(e).asFloat();
-    bool res = fabs(Array.element(e).asFloat()-result.element(e).asFloat())<epsilon;
+    kDebug()<<"check element ("<<e<<") "<<(double)Array.element(e).asFloat()<<" "<<(double)result.element(e).asFloat();
+    bool res = (long double) fabsl(Array.element(e).asFloat()-result.element(e).asFloat())<epsilon;
     if( !res )
     {
-      kDebug()<<"check failed -->" <<"Element(" << e <<") " << Array.element(e).asFloat() <<" to" << result.element(e).asFloat() <<"  diff =" << Array.element(e).asFloat()-result.element(e).asFloat();
+      kDebug()<<"check failed -->" <<"Element(" << e <<") " << (double)Array.element(e).asFloat() <<" to" << (double) result.element(e).asFloat() <<"  diff =" << (double)(Array.element(e).asFloat()-result.element(e).asFloat());
       return false;
     }
   }
@@ -98,7 +98,7 @@ Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& 
   bool res = fabs(v2.asFloat()-result.asFloat())<epsilon;
 
   if (!res)
-    kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << v2.asFloat() <<" to" << result.asFloat() <<"  diff =" << v2.asFloat()-result.asFloat();
+    kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << (double)v2.asFloat() <<" to" << (double)result.asFloat() <<"  diff =" << (double)(v2.asFloat()-result.asFloat());
 //   else
 //     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
   if (res)
