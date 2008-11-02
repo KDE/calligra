@@ -78,6 +78,9 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     m_activeWidget = m_mainWidget;
     KoPAPageBase *activePage = m_viewMode->view()->activePage();
+    if ( !m_pages.contains( activePage ) ) {
+        activePage = m_pages[0];
+    }
     m_activeWidget->setActivePage( activePage );
 }
 
