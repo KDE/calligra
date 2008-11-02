@@ -356,7 +356,7 @@ Value ValueCalc::sqr (const Value &a)
 Value ValueCalc::sqrt (const Value &a)
 {
   if (a.isError()) return a;
-  Value res = Value (::pow (converter->toFloat(a), 0.5));
+  Value res = Value (::pow ((qreal)converter->toFloat(a), 0.5));
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
