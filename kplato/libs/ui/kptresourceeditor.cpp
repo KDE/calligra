@@ -64,13 +64,10 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
     setModel( new ResourceItemModel( this ) );
     
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
 
     createItemDelegates();
 
-    setDragDropMode( QAbstractItemView::DragDrop );
-    setAcceptDrops( true );
-    setDropIndicatorShown( true );
-    
 }
 
 void ResourceTreeView::slotActivated( const QModelIndex index )
@@ -127,6 +124,12 @@ ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     setupGui();
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+    m_view->setDragDropMode( QAbstractItemView::DragDrop );
+    m_view->setDropIndicatorShown( true );
+    m_view->setDragEnabled ( true );
+    m_view->setAcceptDrops( true );
+//    m_view->setAcceptDropsOnView( true );
+
 
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2; lst2 << 0;

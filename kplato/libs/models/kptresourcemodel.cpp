@@ -527,23 +527,18 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flags = ItemModelBase::flags( index );
     if ( !m_readWrite ) {
+        //kDebug()<<"read only"<<flags;
         return flags &= ~Qt::ItemIsEditable;
     }
     if ( !index.isValid() ) {
+        //kDebug()<<"invalid"<<flags;
         return flags;
-    }
-
-    if ( !index.isValid() )
-        return flags;
-    if ( !m_readWrite ) {
-        return flags &= ~Qt::ItemIsEditable;
     }
     Resource *r = qobject_cast<Resource*>( object ( index ) );
     if ( r != 0 ) {
         flags |= Qt::ItemIsEditable;
-        if ( ! r->isScheduled() ) {
-            flags |= Qt::ItemIsDragEnabled;
-        }
+        flags |= Qt::ItemIsDragEnabled;
+        //kDebug()<<"resource"<<flags;
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
         flags |= Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
@@ -551,6 +546,7 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
             case ResourceModel::ResourceType: flags |= Qt::ItemIsEditable; break;
             default: flags &= ~Qt::ItemIsEditable;
         }
+        //kDebug()<<"group"<<flags;
     }
     return flags;
 }
@@ -1000,24 +996,37 @@ Qt::DropActions ResourceItemModel::supportedDropActions() const
     return Qt::MoveAction | Qt::CopyAction;
 }
 
+bool ResourceItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
+{
+    //kDebug()<<index;
+    // TODO: if internal, don't allow dropping on my own parent
+    // TODO: if internal, only MoveAction is allowed, but there is no indication...
+    switch ( dropIndicatorPosition ) {
+        case ItemModelBase::OnItem:
+            return qobject_cast<ResourceGroup*>( object( index ) ); // Allow only on group
+        default:
+            break;
+    }
+    return false;
+}
 
 QStringList ResourceItemModel::mimeTypes() const
 {
     return QStringList() 
             << "text/x-vcard"
+            << "text/directory"
             << "application/x-vnd.kde.kplato.resourceitemmodel.internal";
 }
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
-    kDebug()<<row<<" p:"<<parent.row();
+    kDebug()<<row<<column<<parent;
     if (action == Qt::IgnoreAction) {
         return true;
     }
     if (column > 0) {
         return false;
     }
-    //kDebug()<<row<<" p:"<<parent.row();
     ResourceGroup *g = 0;
     if ( parent.isValid() ) {
         g = qobject_cast<ResourceGroup*>( object( parent ) );
@@ -1025,30 +1034,12 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         g = qobject_cast<ResourceGroup*>( object( index( row, column, parent ) ) );
     }
     if ( g == 0 ) {
+        kDebug()<<"No group"<<row<<column<<parent;
         return false;
     }
-    //kDebug()<<data->formats();
-    if ( data->hasFormat( "text/x-vcard" ) ) {
-        if ( action != Qt::CopyAction ) {
-            return false;
-        }
-        MacroCommand *m = 0;
-        QByteArray vcard = data->data( "text/x-vcard" );
-        KABC::VCardConverter vc;
-        KABC::Addressee::List lst = vc.parseVCards( vcard );
-        foreach( KABC::Addressee a, lst ) {
-            if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from addressbook", "Add %1 resources from addressbook", lst.count() ) );
-            Resource *r = new Resource();
-            r->setName( a.formattedName() );
-            r->setEmail( a.preferredEmail() );
-            m->addCommand( new AddResourceCmd( g, r ) );
-        }
-        if ( m ) {
-            emit executeCommand( m );
-        }
-        return true;
-    }
+    kDebug()<<data->formats()<<g->name();
     if ( data->hasFormat( "application/x-vnd.kde.kplato.resourceitemmodel.internal" ) ) {
+        kDebug()<<action<<Qt::MoveAction;
         if ( action != Qt::MoveAction ) {
             return false;
         }
@@ -1072,6 +1063,31 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         }
         return true;
     }
+    if ( data->hasFormat( "text/x-vcard" ) || data->hasFormat( "text/directory" ) ) {
+        if ( action != Qt::CopyAction ) {
+            return false;
+        }
+        QString f = data->hasFormat( "text/x-vcard" ) ? "text/x-vcard" : "text/directory";
+        MacroCommand *m = 0;
+        QByteArray vcard = data->data( f );
+        KABC::VCardConverter vc;
+        KABC::Addressee::List lst = vc.parseVCards( vcard );
+        foreach( KABC::Addressee a, lst ) {
+            if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from addressbook", "Add %1 resources from addressbook", lst.count() ) );
+            Resource *r = new Resource();
+            QString uid = a.uid();
+            if ( ! m_project->findResource( uid ) ) {
+                r->setId( uid );
+            }
+            r->setName( a.formattedName() );
+            r->setEmail( a.preferredEmail() );
+            m->addCommand( new AddResourceCmd( g, r ) );
+        }
+        if ( m ) {
+            emit executeCommand( m );
+        }
+        return true;
+    }
     return false;
 }
 
@@ -1086,6 +1102,7 @@ QList<Resource*> ResourceItemModel::resourceList( QDataStream &stream )
             lst << r;
         }
     }
+    kDebug()<<lst;
     return lst;
 }
 
@@ -1100,10 +1117,6 @@ QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
             //kDebug()<<index.row();
             Resource *r = ::qobject_cast<Resource*>( object( index ) );
             if ( r ) {
-                if ( r->isScheduled() ) {
-                    rows.clear();
-                    break;
-                }
                 rows << index.row();
                 stream << r->id();
             } else if ( ::qobject_cast<ResourceGroup*>( object( index ) ) ) {
