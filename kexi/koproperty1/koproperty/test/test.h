@@ -22,7 +22,7 @@
 
 #include <kxmlguiwindow.h>
 
-#include "set.h"
+#include "koproperty/set.h"
 
 /*!
  * @internal

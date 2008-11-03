@@ -18,8 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "Property.h"
-#include "EditorView.h"
+#include "test.h"
+
+#include "koproperty/Property.h"
+#include "koproperty/EditorView.h"
 
 #include <kmainwindow.h>
 #include <klocale.h>
@@ -33,8 +35,6 @@
 #include <QCursor>
 #include <QApplication>
 #include <QDesktopWidget>
-
-#include "test.h"
 
 using namespace KoProperty;
 
