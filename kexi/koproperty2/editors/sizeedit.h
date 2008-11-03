@@ -24,9 +24,22 @@
 
 #include "Factory.h"
 
-static const char *SIZEEDIT_MASK = "%1x%2";
+static const char *SIZEEDIT_MASK = "%1 x %2";
 
-class SizeDelegate : public KoProperty::LabelCreator
+class SizeComposedProperty : public KoProperty::ComposedPropertyInterface
+{
+public:
+    explicit SizeComposedProperty(KoProperty::Property *parent);
+
+    virtual void setValue(KoProperty::Property *property, 
+        const QVariant &value, bool rememberOldValue);
+
+    virtual void childValueChanged(KoProperty::Property *child, 
+        const QVariant &value, bool rememberOldValue);
+};
+
+class SizeDelegate : public KoProperty::LabelCreator, 
+                     public KoProperty::ComposedPropertyCreator<SizeComposedProperty>
 {
 public:
     SizeDelegate() {}

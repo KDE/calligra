@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,42 +20,17 @@
 #ifndef KPROPERTY_SIZEPOLICYEDIT_H
 #define KPROPERTY_SIZEPOLICYEDIT_H
 
-#include "../widget.h"
+#include "Factory.h"
 
-#include <QtCore/QVariant>
-//Added by qt3to4:
-#include <QtGui/QLabel>
+static const char *SIZEPOLICY_MASK = "%1, %2 %3, %4";
 
-template<class U, class T> class QMap;
-
-class QLabel;
-
-namespace KoProperty
+class SizePolicyDelegate : public KoProperty::LabelCreator
 {
-
-class KOPROPERTY_EXPORT SizePolicyEdit : public Widget
-{
-    Q_OBJECT
-
 public:
-    explicit SizePolicyEdit(Property *property, QWidget *parent = 0);
-    virtual ~SizePolicyEdit();
+    SizePolicyDelegate() {}
+    virtual QString displayText( const QVariant& value ) const;
 
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-    QString findDescription(const QVariant &value) const;
-
-private:
-    QVariant  m_value;
-    QLabel  *m_edit;
-    static QMap<QString, QVariant> *m_spValues;
+    static const KoProperty::Property::ListData& listData();
 };
-
-}
 
 #endif

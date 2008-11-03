@@ -47,7 +47,8 @@ public:
 
     static void draw(QPainter *p, const QRect &r, const QVariant &value,
                      const QString& text, bool threeState);
-
+signals:
+    void commitData( QWidget * editor );
 public slots:
     virtual void setValue(bool value);
 
@@ -84,6 +85,8 @@ public:
 //    virtual void setProperty(Property *property);
 //    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 //    QPixmap m_yesIcon, m_noIcon; //!< icons for m_toggle
+signals:
+    void commitData( QWidget * editor );
 };
 
 class BoolDelegate : public KoProperty::EditorCreatorInterface, 

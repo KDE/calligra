@@ -22,9 +22,22 @@
 
 #include "Factory.h"
 
-static const char *RECTEDIT_MASK = "%1,%2 %3x%4";
+static const char *RECTEDIT_MASK = "%1, %2 %3 x %4";
 
-class RectDelegate : public KoProperty::LabelCreator
+class RectComposedProperty : public KoProperty::ComposedPropertyInterface
+{
+public:
+    explicit RectComposedProperty(KoProperty::Property *parent);
+
+    virtual void setValue(KoProperty::Property *property, 
+        const QVariant &value, bool rememberOldValue);
+
+    virtual void childValueChanged(KoProperty::Property *child, 
+        const QVariant &value, bool rememberOldValue);
+};
+
+class RectDelegate : public KoProperty::LabelCreator,
+                     public KoProperty::ComposedPropertyCreator<RectComposedProperty>
 {
 public:
     RectDelegate() {}

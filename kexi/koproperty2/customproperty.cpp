@@ -18,6 +18,7 @@
 */
 
 #include "customproperty.h"
+#include "sizepolicyedit.h"
 #include "Property.h"
 
 #include <QSize>
@@ -264,47 +265,35 @@ RectCustomProperty::value() const
 SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
         : CustomProperty(property)
 {
-#ifdef __GNUC__
-#warning "kde4: port QVariant::SizePolicy"
-#endif
-#if 0
     if (property && (property->type() == SizePolicy)) {
-//  QMap<QString, QVariant> spValues;
-        Q3ValueList<QVariant> keys;
-        keys << QSizePolicy::Fixed
-        << QSizePolicy::Minimum
-        << QSizePolicy::Maximum
-        << QSizePolicy::Preferred
-        << QSizePolicy::Expanding
-        << QSizePolicy::MinimumExpanding
-        << QSizePolicy::Ignored;
-        QStringList strings;
-        strings << i18n("Size Policy", "Fixed")
-        << i18n("Size Policy", "Minimum")
-        << i18n("Size Policy", "Maximum")
-        << i18n("Size Policy", "Preferred")
-        << i18n("Size Policy", "Expanding")
-        << i18n("Size Policy", "Minimum Expanding")
-        << i18n("Size Policy", "Ignored");
-
-        new Property("hSizeType", new Property::ListData(keys, strings),
-                     (int)property->value().toSizePolicy().horData(),
-                     i18n("Horz. Size Type"), i18n("Horizontal Size Type"),
-                     SizePolicy_HorData, property);
-        new Property("vSizeType", new Property::ListData(keys, strings),
-                     (int)property->value().toSizePolicy().verData(),
-                     i18n("Vert. Size Type"), i18n("Vertical Size Type"),
-                     SizePolicy_VerData, property);
+        const QSizePolicy sp(property->value().value<QSizePolicy>());
+        new Property("hSizeType", 
+            new Property::ListData(
+                SizePolicyDelegate::listData().keys, SizePolicyDelegate::listData().names),
+                     (int)sp.horizontalPolicy(),
+                     i18nc("Size Policy, in short", "Horz. Size Type"),
+                     i18nc("Size Policy", "Horizontal Size Type"),
+                     ValueFromList/*SizePolicy_HorizontalPolicy*/, property);
+        new Property("vSizeType", 
+            new Property::ListData(
+                SizePolicyDelegate::listData().keys, SizePolicyDelegate::listData().names),
+                     (int)sp.verticalPolicy(),
+                     i18nc("Size Policy, in short", "Vert. Size Type"),
+                     i18nc("Size Policy", "Vertical Size Type"),
+                     ValueFromList/*SizePolicy_VerticalPolicy*/, property);
         new Property("hStretch",
-                     property->value().toSizePolicy().horStretch(),
-                     i18n("Horz. Stretch"), i18n("Horizontal Stretch"),
-                     SizePolicy_HorStretch, property);
+                     sp.horizontalStretch(),
+                     i18nc("Size Policy", "Horz. Stretch"),
+                     i18nc("Size Policy", "Horizontal Stretch"),
+                     Int, property);
+//                     SizePolicy_HorizontalStretch, property);
         new Property("vStretch",
-                     property->value().toSizePolicy().verStretch(),
-                     i18n("Vert. Stretch"), i18n("Vertical Stretch"),
-                     SizePolicy_VerStretch, property);
+                     sp.verticalStretch(),
+                     i18nc("Size Policy", "Vert. Stretch"),
+                     i18nc("Size Policy", "Vertical Stretch"),
+                     Int, property);
+//                     SizePolicy_VerticalStretch, property);
     }
-#endif
 }
 
 SizePolicyCustomProperty::~SizePolicyCustomProperty()
@@ -317,55 +306,43 @@ SizePolicyCustomProperty::handleValue() const
     if (!m_property)
         return false;
 
-    switch (m_property->type()) {
-    case SizePolicy_HorData:
-    case SizePolicy_VerData:
-    case SizePolicy_HorStretch:
-    case SizePolicy_VerStretch:
+    return m_property->type() != SizePolicy;
+/*    switch (m_property->type()) {
+    case SizePolicy_HorizontalPolicy:
+    case SizePolicy_VerticalPolicy:
+    case SizePolicy_HorizontalStretch:
+    case SizePolicy_VerticalStretch:
         return true;
     default:
         return false;
-    }
+    }*/
 }
 
 void
 SizePolicyCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 {
-    Q_UNUSED(value);
-    Q_UNUSED(rememberOldValue);
-
     if (!m_property)
         return;
 
     if (m_property->parent()) {
-#ifdef __GNUC__
-#warning "kde4: port it"
-#endif
-#if 0
-        QSizePolicy v = m_property->parent()->value().toSizePolicy();
+        QSizePolicy v( m_property->parent()->value().value<QSizePolicy>() );
 
-        if (m_property->type() == SizePolicy_HorData)
-            v.setHorData(QSizePolicy::SizeType(value.toInt()));
-        else if (m_property->type() == SizePolicy_VerData)
-            v.setVerData(QSizePolicy::SizeType(value.toInt()));
-        else if (m_property->type() == SizePolicy_HorStretch)
-            v.setHorStretch(value.toInt());
-        else if (m_property->type() == SizePolicy_VerStretch)
-            v.setVerStretch(value.toInt());
+        if (m_property->name() == "hSizeType")
+            v.setHorizontalPolicy(QSizePolicy::Policy(value.toInt()));
+        else if (m_property->name() == "vSizeType")
+            v.setVerticalPolicy(QSizePolicy::Policy(value.toInt()));
+        else if (m_property->name() == "hStretch")
+            v.setHorizontalStretch(value.toInt());
+        else if (m_property->name() == "vStretch")
+            v.setVerticalStretch(value.toInt());
 
         m_property->parent()->setValue(v, true, false);
-#endif
     } else {
-#ifdef __GNUC__
-#warning "kde4: port QVariant::QSizePolicy"
-#endif
-#if 0
-        QSizePolicy v = value.toSizePolicy();
-        m_property->child("hSizeType")->setValue(v.horData(), rememberOldValue, false);
-        m_property->child("vSizeType")->setValue(v.verData(), rememberOldValue, false);
-        m_property->child("hStretch")->setValue(v.horStretch(), rememberOldValue, false);
-        m_property->child("vStretch")->setValue(v.verStretch(), rememberOldValue, false);
-#endif
+        const QSizePolicy v = value.value<QSizePolicy>();
+        m_property->child("hSizeType")->setValue(v.horizontalPolicy(), rememberOldValue, false);
+        m_property->child("vSizeType")->setValue(v.verticalPolicy(), rememberOldValue, false);
+        m_property->child("hStretch")->setValue(v.horizontalStretch(), rememberOldValue, false);
+        m_property->child("vStretch")->setValue(v.verticalStretch(), rememberOldValue, false);
     }
 }
 
@@ -374,18 +351,13 @@ SizePolicyCustomProperty::value() const
 {
     if (!m_property || !m_property->parent())
         return QVariant();
-#ifdef __GNUC__
-#warning "kde4: port it"
-#endif
-#if 0
-    if (m_property->type() == SizePolicy_HorData)
-        return m_property->parent()->value().toSizePolicy().horData();
-    else if (m_property->type() == SizePolicy_VerData)
-        return m_property->parent()->value().toSizePolicy().verData();
-    else if (m_property->type() == SizePolicy_HorStretch)
-        return m_property->parent()->value().toSizePolicy().horStretch();
-    else if (m_property->type() == SizePolicy_VerStretch)
-        return m_property->parent()->value().toSizePolicy().verStretch();
-#endif
+    if (m_property->name() == "hSizeType")
+        return m_property->parent()->value().value<QSizePolicy>().horizontalPolicy();
+    else if (m_property->name() == "vSizeType")
+        return m_property->parent()->value().value<QSizePolicy>().verticalPolicy();
+    else if (m_property->name() == "hStretch")
+        return m_property->parent()->value().value<QSizePolicy>().horizontalStretch();
+    else if (m_property->name() == "vStretch")
+        return m_property->parent()->value().value<QSizePolicy>().verticalStretch();
     return QVariant();
 }

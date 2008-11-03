@@ -23,7 +23,7 @@ set(libkopropertyeditors_SRCS
   editors/pointedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
-#  editors/sizepolicyedit.cpp
+  editors/sizepolicyedit.cpp
   editors/spinbox.cpp
   editors/stringedit.cpp
 #  editors/stringlistedit.cpp
@@ -34,9 +34,9 @@ set(libkopropertyeditors_SRCS
 
 ########### next target ###############
 
-set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
+set(koproperty_LIB_SRCS
    Property.cpp
-   customproperty.cpp
+#old   customproperty.cpp
    Set.cpp
    Factory.cpp
    DefaultFactory.cpp
@@ -46,6 +46,7 @@ set(koproperty_LIB_SRCS ${libkopropertyeditors_SRCS}
    EditorDataModel.cpp
 #old   factory.cpp
 #old   widget.cpp
+   ${libkopropertyeditors_SRCS}
 )
 
 
@@ -64,7 +65,7 @@ install(TARGETS koproperty2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
 install( FILES
-customproperty.h
+#old customproperty.h
 #old editor.h
 #old editoritem.h
 Factory.h

@@ -19,6 +19,7 @@
 
 #include "rectedit.h"
 
+#include <KLocale>
 #include <QtCore/QRect>
 
 QString RectDelegate::displayText( const QVariant& value ) const
@@ -29,4 +30,49 @@ QString RectDelegate::displayText( const QVariant& value ) const
         .arg(r.y())
         .arg(r.width())
         .arg(r.height());
+}
+
+//------------
+
+RectComposedProperty::RectComposedProperty(KoProperty::Property *property)
+        : KoProperty::ComposedPropertyInterface(property)
+{
+    const QRect r( property->value().toRect() );
+    (void)new KoProperty::Property("x",
+        r.x(), i18n("X"), i18n("X"), KoProperty::Int, property);
+    (void)new KoProperty::Property("y",
+        r.y(), i18n("Y"), i18n("Y"), KoProperty::Int, property);
+//! @todo uint!
+    (void)new KoProperty::Property("width",
+        r.width(), i18n("Width"), i18n("Width"), KoProperty::Int, property);
+//! @todo uint!
+    (void)new KoProperty::Property("height",
+        r.height(), i18n("Height"), i18n("Height"), KoProperty::Int, property);
+}
+
+void RectComposedProperty::setValue(KoProperty::Property *property,
+    const QVariant &value, bool rememberOldValue)
+{
+    const QRect r( value.toRect() );
+    property->child("x")->setValue(r.x(), rememberOldValue, false);
+    property->child("y")->setValue(r.y(), rememberOldValue, false);
+    property->child("width")->setValue(r.width(), rememberOldValue, false);
+    property->child("height")->setValue(r.height(), rememberOldValue, false);
+}
+
+void RectComposedProperty::childValueChanged(KoProperty::Property *child,
+    const QVariant &value, bool rememberOldValue)
+{
+    QRect r( child->parent()->value().toRect() );
+
+    if (child->name() == "x")
+        r.moveLeft(value.toInt());
+    else if (child->name() == "y")
+        r.moveTop(value.toInt());
+    else if (child->name() == "width")
+        r.setWidth(value.toInt());
+    else if (child->name() == "height")
+        r.setHeight(value.toInt());
+
+    child->parent()->setValue(r, true, false);
 }

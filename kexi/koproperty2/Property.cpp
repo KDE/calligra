@@ -20,7 +20,7 @@
 */
 
 #include "Property.h"
-#include "customproperty.h"
+//#include "customproperty.h"
 #include "Set.h"
 #include "Factory.h"
 
@@ -44,9 +44,10 @@ public:
     PropertyPrivate()
             : caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
-            autosync(-1), custom(0), useCustomProperty(true),
+            autosync(-1), composed(0), useComposedProperty(true),
             sets(0), parent(0), children(0), relatedProperties(0),
-            sortingKey(0) {
+            sortingKey(0)
+    {
     }
 
     inline void setCaptionForDisplaying(const QString& captionForDisplaying) {
@@ -64,7 +65,7 @@ public:
         delete listData;
         delete children;
         delete relatedProperties;
-        delete custom;
+        delete composed;
         delete sets;
     }
 
@@ -87,9 +88,9 @@ bool visible : 1;
     int autosync;
     QMap<QByteArray, QVariant> options;
 
-    CustomProperty *custom;
-    //! Flag used to allow CustomProperty to use setValue()
-    bool useCustomProperty;
+    ComposedPropertyInterface *composed;
+    //! Flag used to allow composed property to use setValue() without causing recursion
+    bool useComposedProperty;
 
     //! Used when a single set is assigned for the property
     QPointer<Set> set;
@@ -183,7 +184,7 @@ Property::Property(const QByteArray &name, const QVariant &value,
     else
         d->type = type;
 
-    d->custom = FactoryManager::self()->createCustomProperty(this);
+    d->composed = FactoryManager::self()->createComposedProperty(this);
 
     if (parent)
         parent->addChild(this);
@@ -201,7 +202,7 @@ Property::Property(const QByteArray &name, const QStringList &keys, const QStrin
     d->type = type;
     setListData(keys, strings);
 
-    d->custom = FactoryManager::self()->createCustomProperty(this);
+    d->composed = FactoryManager::self()->createComposedProperty(this);
 
     if (parent)
         parent->addChild(this);
@@ -219,7 +220,7 @@ Property::Property(const QByteArray &name, ListData* listData,
     d->type = type;
     d->listData = listData;
 
-    d->custom = FactoryManager::self()->createCustomProperty(this);
+    d->composed = FactoryManager::self()->createComposedProperty(this);
 
     if (parent)
         parent->addChild(this);
@@ -311,8 +312,8 @@ Property::setIcon(const QString &icon)
 QVariant
 Property::value() const
 {
-    if (d->custom && d->custom->handleValue())
-        return d->custom->value();
+//??    if (d->custom && d->custom->handleValue())
+//??        return d->custom->value();
     return d->value;
 }
 
@@ -326,7 +327,15 @@ Property::oldValue() const
 }
 
 void
-Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomProperty)
+Property::childValueChanged(Property *child, const QVariant &value, bool rememberOldValue)
+{
+    if (!d->composed)
+        return;
+    d->composed->childValueChangedInternal(child, value, rememberOldValue);
+}
+
+void
+Property::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
     if (d->name.isEmpty()) {
         kopropertywarn << "Property::setValue(): COULD NOT SET value to a null property" << endl;
@@ -379,13 +388,21 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
         d->changed = false;
     }
     QVariant prevValue;
-    if (d->custom && useCustomProperty) {
-        d->custom->setValue(value, rememberOldValue);
-        prevValue = d->custom->value();
-    } else
-        prevValue = currentValue;
+    if (d->parent) {
+        d->parent->childValueChanged(this, value, rememberOldValue);
+    }
 
-    if (!d->custom || !useCustomProperty || !d->custom->handleValue())
+    if (d->composed && useComposedProperty) {
+        prevValue = currentValue; //???
+        d->composed->setChildValueChangedEnabled(false);
+        d->composed->setValue(this, value, rememberOldValue);
+        d->composed->setChildValueChangedEnabled(true);
+//        prevValue = d->composed->value();
+    } else {
+        prevValue = currentValue;
+    }
+
+//    if (!d->composed || !useComposedProperty)// || !composed->handleValue())
         d->value = value;
 
     emitPropertyChanged(); // called as last step in this method!
@@ -565,9 +582,9 @@ Property::operator= (const Property & property)
         delete d->relatedProperties;
         d->relatedProperties = 0;
     }
-    if (d->custom) {
-        delete d->custom;
-        d->custom = 0;
+    if (d->composed) {
+        delete d->composed;
+        d->composed = 0;
     }
 
     d->name = property.d->name;
@@ -585,14 +602,14 @@ Property::operator= (const Property & property)
     if (property.d->listData) {
         d->listData = new ListData(*property.d->listData); //QMap<QString, QVariant>(*(property.d->valueList));
     }
-    if (property.d->custom) {
-        d->custom = FactoryManager::self()->createCustomProperty(this);
-        // updates all children value, using CustomProperty
+    if (property.d->composed) {
+        d->composed = FactoryManager::self()->createComposedProperty(this);
+        // updates all children value, using ComposedPropertyInterface
         setValue(property.value());
     } else {
         d->value = property.d->value;
         if (property.d->children) {
-            // no CustomProperty (should never happen), simply copy all children
+            // no ComposedPropertyInterface (should never happen), simply copy all children
             d->children = new QList<Property*>();
             QList<Property*>::ConstIterator endIt = property.d->children->constEnd();
             for (QList<Property*>::ConstIterator it = property.d->children->constBegin(); it != endIt; ++it) {
@@ -708,16 +725,15 @@ Property::addRelatedProperty(Property *property)
         d->relatedProperties->append(property);
 }
 
-CustomProperty*
-Property::customProperty() const
+ComposedPropertyInterface* Property::composedProperty() const
 {
-    return d->custom;
+    return d->composed;
 }
 
 void
-Property::setCustomProperty(CustomProperty *prop)
+Property::setComposedProperty(ComposedPropertyInterface *prop)
 {
-    d->custom = prop;
+    d->composed = prop;
 }
 
 int Property::sortingKey() const

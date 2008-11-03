@@ -21,6 +21,7 @@
 
 #include "pointedit.h"
 
+#include <KLocale>
 #include <QtCore/QPoint>
 
 QString PointDelegate::displayText( const QVariant& value ) const
@@ -29,4 +30,39 @@ QString PointDelegate::displayText( const QVariant& value ) const
     return QString::fromLatin1(POINTEDIT_MASK)
         .arg(p.x())
         .arg(p.y());
+}
+
+//------------
+
+PointComposedProperty::PointComposedProperty(KoProperty::Property *property)
+        : KoProperty::ComposedPropertyInterface(property)
+{
+    const QPoint p( property->value().toPoint() );
+//! @todo uint!
+    (void)new KoProperty::Property("x",
+        p.x(), i18n("X"), i18n("X"), KoProperty::Int, property);
+//! @todo uint!
+    (void)new KoProperty::Property("y",
+        p.y(), i18n("Y"), i18n("Y"), KoProperty::Int, property);
+}
+
+void PointComposedProperty::setValue(KoProperty::Property *property, 
+    const QVariant &value, bool rememberOldValue)
+{
+    const QPoint p( value.toPoint() );
+    property->child("x")->setValue(p.x(), rememberOldValue, false);
+    property->child("y")->setValue(p.y(), rememberOldValue, false);
+}
+
+void PointComposedProperty::childValueChanged(KoProperty::Property *child,
+    const QVariant &value, bool rememberOldValue)
+{
+    QPoint p( child->parent()->value().toPoint() );
+
+    if (child->name() == "x")
+        p.setX(value.toInt());
+    else if (child->name() == "y")
+        p.setY(value.toInt());
+
+    child->parent()->setValue(p, true, false);
 }

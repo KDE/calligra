@@ -40,6 +40,9 @@ public:
     
 //    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
+signals:
+    void commitData( QWidget * editor );
+
 public slots:
     virtual void setValue(int value) { KIntNumInput::setValue(value); }
 
@@ -90,6 +93,9 @@ public:
     }*/
 
     virtual double value() const { return KDoubleNumInput::value(); }
+
+signals:
+    void commitData( QWidget * editor );
 
 public slots:
     virtual void setValue(double value) { KDoubleNumInput::setValue(value); }

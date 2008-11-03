@@ -217,6 +217,7 @@ void ComboBox::setListData(const KoProperty::Property::ListData & listData)
 void ComboBox::slotValueChanged(int)
 {
 //    emit valueChanged(this);
+    emit commitData( this );
 }
 
 void ComboBox::paintEvent( QPaintEvent * event )
@@ -265,7 +266,9 @@ QString ComboBoxDelegate::displayText( const KoProperty::Property* property ) co
         return property->value().toString();
     if (property->value().isNull())
         return QString();
+    kDebug() << "property->value()==" << property->value();
     const int idx = listData->keys.indexOf( property->value() );
+    kDebug() << "idx==" << idx;
     if (idx == -1)
         return QString();
     return property->listData()->names[ idx ];

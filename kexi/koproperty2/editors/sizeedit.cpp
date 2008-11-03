@@ -19,6 +19,7 @@
 
 #include "sizeedit.h"
 
+#include <KLocale>
 #include <QtCore/QSize>
 
 QString SizeDelegate::displayText( const QVariant& value ) const
@@ -28,3 +29,53 @@ QString SizeDelegate::displayText( const QVariant& value ) const
         .arg(s.width())
         .arg(s.height());
 }
+
+//------------
+
+SizeComposedProperty::SizeComposedProperty(KoProperty::Property *property)
+        : KoProperty::ComposedPropertyInterface(property)
+{
+    const QSize s( property->value().toSize() );
+//! @todo uint!
+    (void)new KoProperty::Property("width", 
+        s.width(), i18n("Width"), i18n("Width"), KoProperty::Int, property);
+//! @todo uint!
+    (void)new KoProperty::Property("height", 
+        s.height(), i18n("Height"), i18n("Height"), KoProperty::Int, property);
+}
+
+void SizeComposedProperty::setValue(KoProperty::Property *property, 
+    const QVariant &value, bool rememberOldValue)
+{
+    const QSize s( value.toSize() );
+    property->child("width")->setValue(s.width(), rememberOldValue, false);
+    property->child("height")->setValue(s.height(), rememberOldValue, false);
+}
+
+void SizeComposedProperty::childValueChanged(KoProperty::Property *child,
+    const QVariant &value, bool rememberOldValue)
+{
+    QSize s( child->parent()->value().toSize() );
+    if (child->name() == "width")
+        s.setWidth(value.toInt());
+    else if (child->name() == "height")
+        s.setHeight(value.toInt());
+
+    child->parent()->setValue(s, true, false);
+}
+
+/*
+QVariant
+SizeComposedProperty::value() const
+{
+    if (!m_property || !m_property->parent())
+        return QVariant();
+
+    if (m_property->type() == Size_Height)
+        return m_property->parent()->value().toSize().height();
+    else if (m_property->type() == Size_Width)
+        return m_property->parent()->value().toSize().width();
+
+    return QVariant();
+}
+*/

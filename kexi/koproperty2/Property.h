@@ -39,11 +39,8 @@ template<class U> class Q3AsciiDictIterator;
     Every property has its own row displayed using EditorItem object, within Editor widget.
     Widget class provides editing feature for EditorItem objects if a user selects a given item.
 
- KoProperty framework also supports adding custom property types
- and custom property editor types using Custom Property and CustomPropertyFactory.
-  If you cannot store your value type in a QVariant, consider using composed properties
- (see FactoryManager for more information) or storing it in CustomProperty yourself with handleValue()
-  set to true.
+ KoProperty framework also supports adding composed and property types
+ and custom property editor types.
 
  Take a look at the test application, available in /koproperty/test to see how to use KoProperty.
 
@@ -55,7 +52,7 @@ namespace KoProperty
 {
 
 class PropertyPrivate;
-class CustomProperty;
+class ComposedPropertyInterface;
 class Set;
 
 ///*! Helper function to create a value list from two string lists. */
@@ -126,7 +123,7 @@ enum PropertyType {
     LineStyle                     /**<line style*/,
 
     // Child property types
-    Size_Height = 3001,
+/*    Size_Height = 3001,
     Size_Width,
     Point_X,
     Point_Y,
@@ -134,10 +131,10 @@ enum PropertyType {
     Rect_Y,
     Rect_Width,
     Rect_Height,
-    SizePolicy_HorData,
-    SizePolicy_VerData,
-    SizePolicy_HorStretch,
-    SizePolicy_VerStretch,
+    SizePolicy_HorizontalPolicy,
+    SizePolicy_VerticalPolicy,
+    SizePolicy_HorizontalStretch,
+    SizePolicy_VerticalStretch,*/
 
     UserDefined = 4000            /**<plugin defined properties should start here*/
 };
@@ -146,7 +143,7 @@ enum PropertyType {
 
   It can hold a property of any type supported by QVariant. You can also create you own property
   types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
-  use \ref CustomProperty instead. \n
+  use \ref ComposedPropertyInterface instead. \n
   Each property stores old value to allow undo. It has a name (a QCString), a caption (i18n'ed name
   shown in Editor) and a description (also i18n'ed). \n
   It also supports setting arbitrary number of options (of type option=value).
@@ -293,8 +290,10 @@ public:
     /*! Gets the previous property value.*/
     QVariant oldValue() const;
 
+    void childValueChanged(Property *child, const QVariant &value, bool rememberOldValue);
+
     /*! Sets the value of the property.*/
-    void setValue(const QVariant &value, bool rememberOldValue = true, bool useCustomProperty = true);
+    void setValue(const QVariant &value, bool rememberOldValue = true, bool useComposedProperty = true);
 
     /*! Resets the value of the property to the old value.
      @see oldValue() */
@@ -330,13 +329,12 @@ public:
     /*! \return parent property for this property, or NULL if there is no parent property. */
     Property* parent() const;
 
-    /*! \return the custom property for this property, or NULL if there was
-    no custom property defined. */
-    CustomProperty* customProperty() const;
+    /*! \return the composed property for this property, or NULL if there was
+    no composed property defined. */
+    ComposedPropertyInterface* composedProperty() const;
 
-    /*! Sets custom property \a prop for this property.
-     @see CustomPropertyFactory */
-    void setCustomProperty(CustomProperty *prop);
+    /*! Sets composed property \a prop for this property. */
+    void setComposedProperty(ComposedPropertyInterface *prop);
 
     /*! \return true if this property is null. Null properties have empty names. */
     bool isNull() const;
@@ -450,7 +448,7 @@ protected:
 
     friend class Set;
     friend class Buffer;
-    friend class CustomProperty;
+    friend class ComposedPropertyInterface;
 };
 
 }

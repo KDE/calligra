@@ -36,6 +36,66 @@ class QPainter;
 namespace KoProperty
 {
 
+//! An interface for for composed property handlers
+/*! You have to subclass ComposedPropertyInterface to override the behaviour of a property type.\n
+  In the constructor, you should create the child properties (if needed).
+  Then, you need to implement the functions concerning values.\n
+
+  Example implementation of composed properties can be found in editors/ directory.
+*/
+class KOPROPERTY_EXPORT ComposedPropertyInterface
+{
+public:
+    explicit ComposedPropertyInterface(Property *parent);
+    virtual ~ComposedPropertyInterface();
+
+    /*! This function modifies the child properties for parent value @a value.
+     It is called by @ref Property::setValue() when
+     the property is composed.
+    You don't have to modify the property value, it is done by Property class.
+    Note that when calling Property::setValue, you <b>need</b> to set
+    useComposedProperty (the third parameter) to false, or there will be infinite recursion. */
+    virtual void setValue(Property *property, const QVariant &value, bool rememberOldValue) = 0;
+
+    void childValueChangedInternal(Property *child, const QVariant &value, bool rememberOldValue) {
+      if (m_childValueChangedEnabled)
+        childValueChanged(child, value, rememberOldValue);
+    }
+
+    /*! This function is called by \ref Property::value() when
+    a custom property is set and \ref handleValue() is true.
+    You should return property's value, taken from parent's value.*/
+//    virtual QVariant value() const = 0;
+
+    /*! Tells whether CustomProperty should be used to get the property's value.
+    CustomProperty::setValue() will always be called. But if handleValue() == true,
+    then the value stored in the Property won't be changed.
+    You should return true for child properties, and false for others. */
+/*    virtual bool handleValue() const {
+        return false;
+    }*/
+    void setChildValueChangedEnabled(bool set) { m_childValueChangedEnabled = set; }
+protected:
+    virtual void childValueChanged(Property *child, const QVariant &value, bool rememberOldValue) = 0;
+
+    //    Property  *m_property;
+
+    /*! This method emits the \a Set::propertyChanged() signal for all
+    sets our parent-property is registered in. */
+    void emitPropertyChanged();
+    bool m_childValueChangedEnabled : 1;
+};
+
+class KOPROPERTY_EXPORT ComposedPropertyCreatorInterface
+{
+public:
+    ComposedPropertyCreatorInterface();
+    
+    virtual ~ComposedPropertyCreatorInterface();
+
+    virtual ComposedPropertyInterface* createComposedProperty(Property *parent) const = 0;
+};
+
 //! An interface for editor widget creators.
 /*! Options can be set in the options attribute in order to customize 
     widget creation process. Do this in the EditorCreatorInterface constructor.
@@ -94,7 +154,8 @@ class KOPROPERTY_EXPORT Label : public QLabel
 public:
     Label(QWidget *parent, const ValueDisplayInterface *iface);
     QVariant value() const;
-
+signals:
+    void commitData( QWidget * editor );
 public slots:
     void setValue(const QVariant& value);
 
@@ -137,11 +198,26 @@ public:
 
 typedef EditorCreator<Label> LabelCreator;
 
+//! Creator returning composed property object
+template<class ComposedProperty>
+class KOPROPERTY_EXPORT ComposedPropertyCreator : public ComposedPropertyCreatorInterface
+{
+public:
+    ComposedPropertyCreator() : ComposedPropertyCreatorInterface() {}
+    
+    virtual ~ComposedPropertyCreator() {}
+
+    virtual ComposedProperty* createComposedProperty(Property *parent) const {
+        return new ComposedProperty(parent);
+    }
+};
+
 class KOPROPERTY_EXPORT Factory
 {
 public:
     Factory();
     virtual ~Factory();
+    QHash<int, ComposedPropertyCreatorInterface*> composedPropertyCreators() const;
     QHash<int, EditorCreatorInterface*> editorCreators() const;
     QHash<int, ValuePainterInterface*> valuePainters() const;
     QHash<int, ValueDisplayInterface*> valueDisplays() const;
@@ -149,6 +225,8 @@ public:
     //! Adds editor creator @a creator for type @a type.
     //! The creator becomes owned by the factory.
     void addEditor(int type, EditorCreatorInterface *creator);
+
+    void addComposedPropertyCreator( int type, ComposedPropertyCreatorInterface* creator );
 
     void addPainter(int type, ValuePainterInterface *painter);
 
@@ -159,6 +237,9 @@ public:
 
 protected:
     void addEditorInternal(int type, EditorCreatorInterface *editor, bool own = true);
+
+    void addComposedPropertyCreatorInternal(int type, 
+        ComposedPropertyCreatorInterface* creator, bool own = true);
 
     //! Adds value painter @a painter for type @a type.
     //! The painter becomes owned by the factory.
@@ -189,6 +270,8 @@ public:
         QPainter * painter,
         const QStyleOptionViewItem & option, 
         const QModelIndex & index ) const;
+
+    ComposedPropertyInterface* createComposedProperty(Property *parent);
 
     bool canConvertValueToText( int type ) const;
 
@@ -270,10 +353,10 @@ public:
      Child properties are created in CustomProperty constructor of the <b>parent</b> type,
      by adding CustomProperty::property() as parent in Property constructor.\n
      Child properties should return handleValue() == true and in CustomProperty::setValue(),
-     parent's Property::setValue() should be called, making sure that useCustomProperty argument is set
+     parent's Property::setValue() should be called, making sure that useComposedProperty argument is set
      to false.\n
      Parent's handleValue() should be set to false, unless you cannot store the property in a QVariant.
-     You just need to update children's value, making sure that useCustomProperty argument is set
+     You just need to update children's value, making sure that useComposedProperty argument is set
      to false.
 
      \section custom_editor Using Custom Editors

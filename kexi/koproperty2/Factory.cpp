@@ -22,7 +22,7 @@
 #include "EditorView.h"
 #include "EditorDataModel.h"
 #include "Property.h"
-#include "customproperty.h"
+//#include "customproperty.h"
 /*
 #include "booledit.h"
 #include "combobox.h"
@@ -92,6 +92,7 @@ public:
     }
 
     QSet<Factory*> factories;
+    QHash<int, ComposedPropertyCreatorInterface*> composedPropertyCreators;
     QHash<int, EditorCreatorInterface*> editorCreators;
     QHash<int, ValuePainterInterface*> valuePainters;
     QHash<int, ValueDisplayInterface*> valueDisplays;
@@ -113,9 +114,11 @@ public:
         qDeleteAll(valueDisplaysSet);
     }
 
+    QHash<int, ComposedPropertyCreatorInterface*> composedPropertyCreators;
     QHash<int, EditorCreatorInterface*> editorCreators;
     QHash<int, ValuePainterInterface*> valuePainters;
     QHash<int, ValueDisplayInterface*> valueDisplays;
+    QSet<ComposedPropertyCreatorInterface*> composedPropertyCreatorsSet;
     QSet<EditorCreatorInterface*> editorCreatorsSet;
     QSet<ValuePainterInterface*> valuePaintersSet;
     QSet<ValueDisplayInterface*> valueDisplaysSet;
@@ -133,6 +136,11 @@ Factory::Factory()
 Factory::~Factory()
 {
     delete d;
+}
+
+QHash<int, ComposedPropertyCreatorInterface*> Factory::composedPropertyCreators() const
+{
+    return d->composedPropertyCreators;
 }
 
 QHash<int, EditorCreatorInterface*> Factory::editorCreators() const
@@ -153,28 +161,60 @@ QHash<int, ValueDisplayInterface*> Factory::valueDisplays() const
 void Factory::addEditor(int type, EditorCreatorInterface *creator)
 {
     addEditorInternal( type, creator, true );
-    if (dynamic_cast<ValuePainterInterface*>(creator))
+    if (dynamic_cast<ComposedPropertyCreatorInterface*>(creator)) {
+        addComposedPropertyCreatorInternal( type, 
+            dynamic_cast<ComposedPropertyCreatorInterface*>(creator), false/* !own*/ );
+    }
+    if (dynamic_cast<ValuePainterInterface*>(creator)) {
         addPainterInternal( type, dynamic_cast<ValuePainterInterface*>(creator), false/* !own*/ );
-    if (dynamic_cast<ValueDisplayInterface*>(creator))
+    }
+    if (dynamic_cast<ValueDisplayInterface*>(creator)) {
         addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(creator), false/* !own*/ );
+    }
+}
+
+void Factory::addComposedPropertyCreator( int type, ComposedPropertyCreatorInterface* creator )
+{
+    addComposedPropertyCreatorInternal( type, creator, true );
+    if (dynamic_cast<EditorCreatorInterface*>(creator)) {
+        addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(creator), false/* !own*/ );
+    }
+    if (dynamic_cast<ValuePainterInterface*>(creator)) {
+        addPainterInternal( type, dynamic_cast<ValuePainterInterface*>(creator), false/* !own*/ );
+    }
+    if (dynamic_cast<ValueDisplayInterface*>(creator)) {
+        addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(creator), false/* !own*/ );
+    }
 }
 
 void Factory::addPainter(int type, ValuePainterInterface *painter)
 {
     addPainterInternal(type, painter, true);
-    if (dynamic_cast<EditorCreatorInterface*>(painter))
+    if (dynamic_cast<ComposedPropertyCreatorInterface*>(painter)) {
+        addComposedPropertyCreatorInternal( type, 
+        dynamic_cast<ComposedPropertyCreatorInterface*>(painter), false/* !own*/ );
+    }
+    if (dynamic_cast<EditorCreatorInterface*>(painter)) {
         addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(painter), false/* !own*/ );
-    if (dynamic_cast<ValueDisplayInterface*>(painter))
+    }
+    if (dynamic_cast<ValueDisplayInterface*>(painter)) {
         addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(painter), false/* !own*/ );
+    }
 }
 
 void Factory::addDisplay(int type, ValueDisplayInterface *display)
 {
     addDisplayInternal(type, display, true);
-    if (dynamic_cast<EditorCreatorInterface*>(display))
+    if (dynamic_cast<ComposedPropertyCreatorInterface*>(display)) {
+        addComposedPropertyCreatorInternal( type, 
+        dynamic_cast<ComposedPropertyCreatorInterface*>(display), false/* !own*/ );
+    }
+    if (dynamic_cast<EditorCreatorInterface*>(display)) {
         addEditorInternal( type, dynamic_cast<EditorCreatorInterface*>(display), false/* !own*/ );
-    if (dynamic_cast<ValueDisplayInterface*>(display))
+    }
+    if (dynamic_cast<ValueDisplayInterface*>(display)) {
         addDisplayInternal( type, dynamic_cast<ValueDisplayInterface*>(display), false/* !own*/ );
+    }
 }
 
 void Factory::addEditorInternal(int type, EditorCreatorInterface *editor, bool own)
@@ -182,6 +222,13 @@ void Factory::addEditorInternal(int type, EditorCreatorInterface *editor, bool o
     if (own)
         d->editorCreatorsSet.insert(editor);
     d->editorCreators.insert(type, editor);
+}
+
+void Factory::addComposedPropertyCreatorInternal(int type, ComposedPropertyCreatorInterface* creator, bool own)
+{
+    if (own)
+        d->composedPropertyCreatorsSet.insert(creator);
+    d->composedPropertyCreators.insert(type, creator);
 }
 
 void Factory::addPainterInternal(int type, ValuePainterInterface *painter, bool own)
@@ -196,29 +243,6 @@ void Factory::addDisplayInternal(int type, ValueDisplayInterface *display, bool 
     if (own)
         d->valueDisplaysSet.insert(display);
     d->valueDisplays.insert(type, display);
-}
-
-CustomProperty* FactoryManager::createCustomProperty(Property *parent)
-{
-    const int type = parent->type();
-/* TODO
-    CustomPropertyFactory *factory = d->registeredWidgets[type];
-    if (factory)
-        return factory->createCustomProperty(parent);
-*/
-    switch (type) {
-    case Size: case Size_Width: case Size_Height:
-        return new SizeCustomProperty(parent);
-    case Point: case Point_X: case Point_Y:
-        return new PointCustomProperty(parent);
-    case Rect: case Rect_X: case Rect_Y: case Rect_Width: case Rect_Height:
-        return new RectCustomProperty(parent);
-    case SizePolicy: case SizePolicy_HorStretch: case SizePolicy_VerStretch:
-    case SizePolicy_HorData: case SizePolicy_VerData:
-        return new SizePolicyCustomProperty(parent);
-    default:;
-    }
-    return 0;
 }
 
 //static
@@ -268,19 +292,29 @@ FactoryManager* FactoryManager::self()
 void FactoryManager::registerFactory(Factory *factory)
 {
     d->factories.insert(factory);
-    QHash<int, EditorCreatorInterface*>::ConstIterator editorCreatorsItEnd = factory->editorCreators().constEnd();
+    QHash<int, ComposedPropertyCreatorInterface*>::ConstIterator composedPropertyCreatorsItEnd
+        = factory->composedPropertyCreators().constEnd();
+    for (QHash<int, ComposedPropertyCreatorInterface*>::ConstIterator it( factory->composedPropertyCreators().constBegin() );
+        it != composedPropertyCreatorsItEnd; ++it)
+    {
+        d->composedPropertyCreators.insert(it.key(), it.value());
+    }
+    QHash<int, EditorCreatorInterface*>::ConstIterator editorCreatorsItEnd 
+        = factory->editorCreators().constEnd();
     for (QHash<int, EditorCreatorInterface*>::ConstIterator it( factory->editorCreators().constBegin() );
         it != editorCreatorsItEnd; ++it)
     {
         d->editorCreators.insert(it.key(), it.value());
     }
-    QHash<int, ValuePainterInterface*>::ConstIterator valuePaintersItEnd = factory->valuePainters().constEnd();
+    QHash<int, ValuePainterInterface*>::ConstIterator valuePaintersItEnd
+        = factory->valuePainters().constEnd();
     for (QHash<int, ValuePainterInterface*>::ConstIterator it( factory->valuePainters().constBegin() );
         it != valuePaintersItEnd; ++it)
     {
         d->valuePainters.insert(it.key(), it.value());
     }
-    QHash<int, ValueDisplayInterface*>::ConstIterator valueDisplaysItEnd = factory->valueDisplays().constEnd();
+    QHash<int, ValueDisplayInterface*>::ConstIterator valueDisplaysItEnd
+        = factory->valueDisplays().constEnd();
     for (QHash<int, ValueDisplayInterface*>::ConstIterator it( factory->valueDisplays().constBegin() );
         it != valueDisplaysItEnd; ++it)
     {
@@ -339,6 +373,63 @@ QString FactoryManager::convertValueToText( const Property* property ) const
 {
     const ValueDisplayInterface *display = d->valueDisplays.value( property->type() );
     return display ? display->displayText( property ) : property->value().toString();
+}
+
+ComposedPropertyInterface* FactoryManager::createComposedProperty(Property *parent)
+{
+    const ComposedPropertyCreatorInterface *creator = d->composedPropertyCreators.value( parent->type() );
+    return creator ? creator->createComposedProperty(parent) : 0;
+}
+
+#if 0
+    const int type = parent->type();
+/* TODO
+    CustomPropertyFactory *factory = d->registeredWidgets[type];
+    if (factory)
+        return factory->createCustomProperty(parent);
+*/
+    switch (type) {
+    case Size:
+    case Size_Width:
+    case Size_Height:
+        return new SizeCustomProperty(parent);
+    case Point:
+    case Point_X:
+    case Point_Y:
+        return new PointCustomProperty(parent);
+    case Rect:
+    case Rect_X:
+    case Rect_Y:
+    case Rect_Width:
+    case Rect_Height:
+        return new RectCustomProperty(parent);
+    case SizePolicy:
+/*    case SizePolicy_HorizontalStretch:
+    case SizePolicy_VerticalStretch:
+    case SizePolicy_HorizontalPolicy:
+    case SizePolicy_VerticalPolicy:*/
+        return new SizePolicyCustomProperty(parent);
+    default:;
+    }
+    return 0;
+#endif
+
+ComposedPropertyInterface::ComposedPropertyInterface(Property *parent)
+ : m_childValueChangedEnabled(true)
+{
+    Q_UNUSED(parent)
+}
+
+ComposedPropertyInterface::~ComposedPropertyInterface()
+{
+}
+
+ComposedPropertyCreatorInterface::ComposedPropertyCreatorInterface()
+{
+}
+
+ComposedPropertyCreatorInterface::~ComposedPropertyCreatorInterface()
+{
 }
 
 EditorCreatorInterface::EditorCreatorInterface()

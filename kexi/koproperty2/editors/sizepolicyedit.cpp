@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,104 +18,71 @@
 */
 
 #include "sizepolicyedit.h"
-#include "editoritem.h"
 
-#include <QLabel>
-#include <QLayout>
-#include <QPainter>
-#include <QSizePolicy>
-#include <QMap>
-#include <QToolTip>
+#include <QtGui/QSizePolicy>
+#include <KLocale>
+#include <KGlobal>
 
-#include <klocale.h>
-
-using namespace KoProperty;
-
-QMap<QString, QVariant> *SizePolicyEdit::m_spValues = 0;
-
-SizePolicyEdit::SizePolicyEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+class SizePolicyListData : public KoProperty::Property::ListData
 {
-    setHasBorders(false);
-// QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
-    m_edit = new QLabel(this);
-    m_edit->setIndent(KPROPEDITOR_ITEM_MARGIN);
-    m_edit->setBackgroundRole(QPalette::Base);
-// m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_edit->setMinimumHeight(5);
-    setEditor(m_edit);
-// l->addWidget(m_edit);
-    setFocusWidget(m_edit);
-
-
-    if (!m_spValues) {
-        m_spValues = new QMap<QString, QVariant>();
-        (*m_spValues)[i18nc("Size Policy", "Fixed")] = QSizePolicy::Fixed;
-        (*m_spValues)[i18nc("Size Policy", "Minimum")] = QSizePolicy::Minimum;
-        (*m_spValues)[i18nc("Size Policy", "Maximum")] = QSizePolicy::Maximum;
-        (*m_spValues)[i18nc("Size Policy", "Preferred")] = QSizePolicy::Preferred;
-        (*m_spValues)[i18nc("Size Policy", "Expanding")] = QSizePolicy::Expanding;
-        (*m_spValues)[i18nc("Size Policy", "Minimum Expanding")] = QSizePolicy::MinimumExpanding;
-        (*m_spValues)[i18nc("Size Policy", "Ignored")] = QSizePolicy::Ignored;
+public:
+    SizePolicyListData() : KoProperty::Property::ListData(keysInternal(), stringsInternal())
+    {
     }
-}
 
-SizePolicyEdit::~SizePolicyEdit()
-{
-    delete m_spValues;
-    m_spValues = 0;
-}
-
-QVariant
-SizePolicyEdit::value() const
-{
-    return m_value;
-}
-
-void
-SizePolicyEdit::setValue(const QVariant &value, bool emitChange)
-{
-    m_value = value;
-    m_edit->setText(QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
-                    arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
-                    arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
-    this->setToolTip(m_edit->text());
-
-    if (emitChange)
-        emit valueChanged(this);
-}
-
-void
-SizePolicyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
-{
-// p->eraseRect(r);
-// p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
-    QRect rect(r);
-    rect.setBottom(r.bottom() + 1);
-    Widget::drawViewer(p, cg, rect,
-                       QString("%1/%2/%3/%4").arg(findDescription(value.value<QSizePolicy>().horizontalPolicy())).
-                       arg(findDescription(value.value<QSizePolicy>().verticalPolicy())).
-                       arg(value.value<QSizePolicy>().horizontalStretch()).arg(value.value<QSizePolicy>().verticalStretch()));
-}
-
-QString
-SizePolicyEdit::findDescription(const QVariant &value) const
-{
-    if (!m_spValues)
-        return QString();
-
-    QMap<QString, QVariant>::ConstIterator endIt = m_spValues->constEnd();
-    for (QMap<QString, QVariant>::ConstIterator it = m_spValues->constBegin(); it != endIt; ++ it) {
-        if (it.value() == value)
-            return it.key();
+    QString nameForPolicy(QSizePolicy::Policy p) {
+        const int index = keys.indexOf((int)p);
+        if (index == -1)
+            return names[0];
+        return names[index];
     }
-    return QString();;
+private:
+    static QList<QVariant> keysInternal() {
+        QList<QVariant> keys;
+        keys
+         << QSizePolicy::Fixed
+         << QSizePolicy::Minimum
+         << QSizePolicy::Maximum
+         << QSizePolicy::Preferred
+         << QSizePolicy::Expanding
+         << QSizePolicy::MinimumExpanding
+         << QSizePolicy::Ignored;
+        return keys;
+    }
+
+    static QStringList stringsInternal() {
+        QStringList strings;
+        strings
+         << i18nc("Size Policy", "Fixed")
+         << i18nc("Size Policy", "Minimum")
+         << i18nc("Size Policy", "Maximum")
+         << i18nc("Size Policy", "Preferred")
+         << i18nc("Size Policy", "Expanding")
+         << i18nc("Size Policy", "Minimum Expanding")
+         << i18nc("Size Policy", "Ignored");
+        return strings;
+    }
+};
+
+K_GLOBAL_STATIC(SizePolicyListData, s_sizePolicyListData)
+
+//---------
+
+QString SizePolicyDelegate::displayText( const QVariant& value ) const
+{
+    const QSizePolicy sp(value.value<QSizePolicy>());
+    
+    return QString::fromLatin1(SIZEPOLICY_MASK)
+        .arg(s_sizePolicyListData->nameForPolicy(sp.horizontalPolicy()))
+        .arg(s_sizePolicyListData->nameForPolicy(sp.verticalPolicy()))
+        .arg(sp.horizontalStretch())
+        .arg(sp.verticalStretch());
 }
 
-void
-SizePolicyEdit::setReadOnlyInternal(bool readOnly)
+//static
+const KoProperty::Property::ListData& SizePolicyDelegate::listData()
 {
-    Q_UNUSED(readOnly);
+    return *s_sizePolicyListData;
 }
 
 #include "sizepolicyedit.moc"
