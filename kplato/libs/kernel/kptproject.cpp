@@ -985,7 +985,7 @@ bool Project::addSubTask( Node* task, Node* parent )
     return addSubTask( task, -1, parent );
 }
 
-bool Project::addSubTask( Node* task, int index, Node* parent )
+bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
 {
     // we want to add a subtask to the node "parent" at the given index.
     // If parent is 0, add to this
@@ -998,14 +998,14 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
         return false;
     }
     int i = index == -1 ? p->numChildren() : index;
-    emit nodeToBeAdded( p, i );
+    if ( emitSignal ) emit nodeToBeAdded( p, i );
     p->insertChildNode( i, task );
-    emit nodeAdded( task );
-    emit changed();
+    if ( emitSignal ) emit nodeAdded( task );
+    if ( emitSignal ) emit changed();
     return true;
 }
 
-void Project::takeTask( Node *node )
+void Project::takeTask( Node *node, bool emitSignal )
 {
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
@@ -1013,10 +1013,10 @@ void Project::takeTask( Node *node )
         return;
     }
     removeId( node->id() );
-    emit nodeToBeRemoved( node );
+    if ( emitSignal ) emit nodeToBeRemoved( node );
     parent->takeChildNode( node );
-    emit nodeRemoved( node );
-    emit changed();
+    if ( emitSignal ) emit nodeRemoved( node );
+    if ( emitSignal ) emit changed();
 }
 
 bool Project::canMoveTask( Node* node, Node *newParent )
@@ -1040,9 +1040,9 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
     }
     const Node *before = newParent->childNode( newPos );
     emit nodeToBeMoved( node );
-    takeTask( node );
+    takeTask( node, false );
     int i = before == 0 ? newParent->numChildren() : newPos;
-    addSubTask( node, i, newParent );
+    addSubTask( node, i, newParent, false );
     emit nodeMoved( node );
     return true;
 }

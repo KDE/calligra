@@ -392,6 +392,7 @@ public slots:
     void slotNodeAdded( Node *node );
     void slotNodeRemoved( Node *node );
     void slotNodeChanged( Node *node );
+    void slotNodeMoved( Node *node );
     
 protected slots:
     void slotSelectionChanged();

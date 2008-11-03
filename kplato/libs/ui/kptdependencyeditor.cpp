@@ -1472,6 +1472,7 @@ void DependencyView::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeAdded( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
     }
     m_project = project;
     if ( project ) {
@@ -1482,6 +1483,7 @@ void DependencyView::setProject( Project *project )
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeAdded( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
     }
     if ( itemScene() ) {
         itemScene()->setProject( project );
@@ -1558,6 +1560,12 @@ void DependencyView::slotNodeChanged( Node *node )
         item->setText( node->name() );
         item->setSymbol();
     } else kDebug()<<"Node does not exist!";
+}
+
+void DependencyView::slotNodeMoved( Node *node )
+{
+    slotNodeRemoved( node );
+    slotNodeAdded( node );
 }
 
 void DependencyView::setItemExpanded( int , bool )

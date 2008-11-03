@@ -127,12 +127,12 @@ public:
      * Add the node @p task to @p parent, in position @p index
      * If @p parent is zero, it will be added to this project.
      */
-    bool addSubTask( Node* task, int index, Node* parent );
+    bool addSubTask( Node* task, int index, Node* parent, bool emitSignal = true );
     /**
      * Remove the @p node.
      * The node is not deleted.
      */
-    void takeTask( Node *node );
+    void takeTask( Node *node, bool emitSignal = true );
     bool canMoveTask( Node* node, Node *newParent );
     bool moveTask( Node* node, Node *newParent, int newPos );
     bool canIndentTask( Node* node );
