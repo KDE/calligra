@@ -479,7 +479,7 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                     default: behav = KWord::AutoExtendFrameBehavior; break;
                     }
                     foreach(KWFrame *frame, fs->frames())
-                    frame->setFrameBehavior(behav);
+                        frame->setFrameBehavior(behav);
                 }
                 return fs;
             }

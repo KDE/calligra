@@ -213,7 +213,7 @@ void KWView::setupActions()
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
     foreach(QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(kwcanvas()))
-    actionMenu->addAction(action);
+        actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
     m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
@@ -1146,7 +1146,7 @@ void KWView::createCustomOutline()
     }
     QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
     foreach(KWFrame *frame, frames)
-    new KWCreateOutlineCommand(m_document, frame, cmd);
+        new KWCreateOutlineCommand(m_document, frame, cmd);
     m_document->addCommand(cmd);
 }
 
