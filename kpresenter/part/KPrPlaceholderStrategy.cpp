@@ -31,9 +31,11 @@
 #include <KoShapeFactory.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 
-static const struct PlaceholderData {
+static const class PlaceholderData {
+    public:
     const char * m_presentationClass;
     const char * m_shapeId;
     const char * m_xmlElement;
