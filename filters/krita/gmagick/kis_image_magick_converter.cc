@@ -182,7 +182,7 @@ void setAnnotationsForImage(const Image * src, KisImageSP image)
 // WARNING Graphics Magick 1.2 has a smaller version number than 1.1
 #if MagickLibVersion >= 0x020000 && MagickLibVersion < 0x0100000
         {
-          ImageProfileIterator profile_iterator = AllocateImageProfileIterator( 
+          ImageProfileIterator profile_iterator = AllocateImageProfileIterator( src );
           const char * name;
           const unsigned char * profile;
           size_t length;
