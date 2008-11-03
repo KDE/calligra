@@ -221,13 +221,13 @@ void KWView::setupActions()
     actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
     connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT(addBookmark()));
 
-    QAction *action = new QAction(i18n("Select Bookmark..."), this);
+    KAction *action = new KAction(i18n("Select Bookmark..."), this);
     action->setIcon(KIcon("bookmarks"));
     action->setShortcut(Qt::CTRL + Qt::Key_G);
     actionCollection()->addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT(selectBookmark()));
 
-    action = new QAction(i18n("Frame Borders"), this);
+    action = new KAction(i18n("Frame Borders"), this);
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
@@ -235,13 +235,13 @@ void KWView::setupActions()
     action->setChecked(m_document->config().viewFrameBorders());
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
 
-    action = new QAction(i18n("Page Layout..."), this);
+    action = new KAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action);
     action->setToolTip(i18n("Change properties of entire page"));
     action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
     connect(action, SIGNAL(triggered()), this, SLOT(formatPage()));
 
-    action = new QAction(i18n("Make inline"), this);
+    action = new KAction(i18n("Make inline"), this);
     action->setToolTip(i18n("Convert current frame to an inline frame"));
     action->setWhatsThis(i18n("Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position."));
     actionCollection()->addAction("inline_frame", action);
@@ -270,20 +270,20 @@ void KWView::setupActions()
     actionCollection()->addAction("show_ruler", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
 
-    action = new QAction(i18n("Delete Page"), this);
+    action = new KAction(i18n("Delete Page"), this);
     actionCollection()->addAction("delete_page", action);
     connect(action, SIGNAL(triggered()), this, SLOT(deletePage()));
     handleDeletePageAction(); //decide if we enable or disable this action
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(handleDeletePageAction()));
 
-    action = new QAction(i18n("Formatting Characters"), this);
+    action = new KAction(i18n("Formatting Characters"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_formattingchars", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters."));
 
-    action = new QAction(i18n("Select All Frames"), this);
+    action = new KAction(i18n("Select All Frames"), this);
 
     actionCollection()->addAction("edit_selectallframes", action);
     connect(action, SIGNAL(triggered()), this, SLOT(editSelectAllFrames()));
@@ -294,7 +294,7 @@ void KWView::setupActions()
     connect(kwcanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
     actionCollection()->addAction("edit_delete", action );
 
-    action = new QAction(i18n("Show Grid"), this);
+    action = new KAction(i18n("Show Grid"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_grid", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(viewGrid(bool)));
