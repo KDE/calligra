@@ -100,6 +100,7 @@ protected:
 private slots:
     void slotNodeAdded( Node* );
     void slotNodeRemoved( Node* );
+    void slotNodeMoved( Node* );
     void slotNodeChanged( Node* );
     void slotRelationAdded( Relation *rel );
     void slotRelationRemoved( Relation *rel );

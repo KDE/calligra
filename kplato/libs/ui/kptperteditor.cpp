@@ -158,6 +158,7 @@ void PertEditor::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeAdded( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRelationAdded( Relation* ) ) );
         disconnect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRelationRemoved( Relation* ) ) );
@@ -166,6 +167,7 @@ void PertEditor::setProject( Project *project )
     if ( m_project ) {
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeAdded( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( slotRelationAdded( Relation* ) ) );
         connect( m_project, SIGNAL( relationRemoved( Relation* ) ), this, SLOT( slotRelationRemoved( Relation* ) ) );
@@ -194,7 +196,7 @@ void PertEditor::slotRelationRemoved( Relation *rel )
 
 void PertEditor::slotNodeAdded( Node *node )
 {
-    //kDebug();
+    kDebug()<<node->name()<<node->childNodeIterator();
     Node *parent = node->parentNode();
     int index = parent->indexOf( node );
     QTreeWidgetItem *pitem = findNodeItem( parent, m_tasktree->invisibleRootItem() );
@@ -243,6 +245,12 @@ void PertEditor::slotNodeRemoved( Node *node )
     }
 }
 
+void PertEditor::slotNodeMoved( Node *node )
+{
+    //kDebug();
+    draw();
+}
+
 void PertEditor::slotNodeChanged( Node *node )
 {
     QTreeWidgetItem *item = findNodeItem( node, m_tasktree->invisibleRootItem() );
@@ -276,8 +284,8 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
         QTreeWidgetItem * item = new QTreeWidgetItem( parent );
         item->setText( 0, currentChild->name());
         item->setData( 0, NodeRole, currentChild->id() );
+        //kDebug()<<"Added task"<<currentChild->name()<<"parent"<<currentChild->parent();
         drawSubTasksName( item, currentChild);
-        //kDebug() << SUBTASK FOUND";
     }
 }
 
