@@ -186,7 +186,7 @@ void setAnnotationsForImage(const Image * src, KisImageSP image)
           const char * name;
           const unsigned char * profile;
           size_t length;
-          while( NextImageProfile( profile_iterator, &name, &profile, &length ) != MagickPassFail )
+          while( NextImageProfile( profile_iterator, &name, &profile, &length ) != MagickFail )
           {
               QByteArray rawdata;
               rawdata.resize(length);
