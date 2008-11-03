@@ -86,12 +86,6 @@ void KWPageInsertCommand::redo()
         //KWPage prevPage = m_document->pageManager().page(m_afterPageNum);
         KWPageStyle pageStyle = d->document->pageManager()->pageStyle(d->masterPageName);
         d->page = d->document->pageManager()->insertPage(d->pageNumber, pageStyle);
-/*
-        if (prevPage.isValid())
-            m_page.setDirectionHint(prevPage.directionHint());
-        if (m_page.pageNumber() % 2 == 0 && m_document->pageManager().preferPageSpread()) // should be a pageSpread
-            m_page.setPageSide(KWPage::PageSpread);
-*/
         // move shapes after this page down.
         QList<KoShape *> shapes;
         QList<QPointF> previousPositions;
