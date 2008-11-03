@@ -163,12 +163,6 @@ void KWView::setupActions()
     m_actionInsertFrameBreak->setToolTip(i18n("Force the remainder of the text into the next page"));
     m_actionInsertFrameBreak->setWhatsThis(i18n("All text after this point will be moved into the next page."));
 
-    m_actionEditDelFrame  = new KAction(i18n("Delete Frame"), this);
-    actionCollection()->addAction("edit_delframe", m_actionEditDelFrame);
-    m_actionEditDelFrame->setToolTip(i18n("Delete the currently selected frame(s)"));
-    m_actionEditDelFrame->setWhatsThis(i18n("Delete the currently selected frame(s)."));
-    connect(m_actionEditDelFrame, SIGNAL(triggered()), this, SLOT(editDeleteFrame()));
-
     m_actionViewHeader = new KToggleAction(i18n("Enable Document Headers"), this);
     actionCollection()->addAction("format_header", m_actionViewHeader);
     m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
@@ -1198,21 +1192,12 @@ void KWView::selectionChanged()
     // actions need at least one shape selected
     actionCollection()->action("create_linked_frame")->setEnabled(shape);
 
-    m_actionEditDelFrame->setEnabled(false);
-    bool first = true;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
-        if (first) {
-            m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
-            m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, frame->frameSet());
-            first = false;
-        }
-        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
-        if (fs == 0 || fs->textFrameSetType() == KWord::OtherTextFrameSet) {
-            m_actionEditDelFrame->setEnabled(true);
-            break;
-        }
+        m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
+        m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, frame->frameSet());
+        break;
     }
 }
 
