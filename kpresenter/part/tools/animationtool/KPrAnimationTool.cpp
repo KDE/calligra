@@ -23,6 +23,7 @@
 #include <klocale.h>
 
 #include <QMap>
+#include <QPainter>
 
 #include <KoPACanvas.h>
 #include <KPrPageEffectDocker.h>
