@@ -3,7 +3,7 @@ add_subdirectory( test )
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30007)
 
 include_directories(
-  ${CMAKE_SOURCE_DIR}/kexi/koproperty2/editors
+  ${CMAKE_SOURCE_DIR}/kexi/koproperty2/koproperty/editors
 #  ${CMAKE_SOURCE_DIR}/libs/guiutils
 #  ${KOMAIN_INCLUDES}
 )
