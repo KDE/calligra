@@ -1,0 +1,45 @@
+dirs:
+- tools/shared/qtpropertybrowser - QtAbstractPropertyBrowser
+- tools/designer/src/lib/shared/qttreepropertybrowser.h - QtTreePropertyBrowser 
+                                                          public QtAbstractPropertyBrowser
+- tools/designer/src/lib/shared/qdesigner_propertyeditor_p.h - QDesignerPropertyEditor
+- tools/designer/src/components/propertyeditor - qdesigner_internal::PropertyEditor
+- tools/designer/src/components/lib - QDesignerComponents::createPropertyEditor() created property editor 
+for QDesignerPropertyEditorInterface
+
+Everything compiled into QtDesignerComponentsd4.dll
+
+We base koproperty on this example: examples\itemviews\editabletreemodel
+
+compare to DesignerEditorFactory::createEditor()
+
+=== API changes in 2.0 (compared to 1.X) ===
+Editor:
+- renamed to EditorView
+- now based on model/view items and QTreeView
+- Editor::clear() removed; use changeSet(0) to clear the visual contents;
+  clear the property set in Set object to clear the data
+
+TODO:
+-port lines like this in Property.cpp:
+d—>custom = FactoryManager::self()—>createCustomProperty(this);
+
+-editors porting status
+OK booledit
+coloredit
+OK combobex
+OK cursoredit
+dateedit
+datetimeedit
+dummywidget
+OK fontedit
+OK rectedit
+OK sizeedit
+OK sizepolicyedit
+OK spinbox
+OK stringedit
+stringlistedit
+symbolcombo
+timeedit
+urledit
+
