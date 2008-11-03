@@ -26,6 +26,7 @@
 #include <QPainter>
 
 #include <KoPACanvas.h>
+#include <KoViewConverter.h>
 #include <KPrPageEffectDocker.h>
 
 KPrAnimationTool::KPrAnimationTool( KoCanvasBase *canvas )
