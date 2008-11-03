@@ -111,13 +111,14 @@ void KWPageInsertCommand::redo()
         d->page = d->document->pageManager()->page(d->pageNumber);
     }
 
+    // make sure we have updated the view before we do anything else
+    d->document->firePageSetupChanged();
+
     if (d->shapeMoveCommand)
         d->shapeMoveCommand->redo();
     Q_ASSERT(d->page.isValid());
     PageProcessingQueue *ppq = new PageProcessingQueue(d->document);
     ppq->addPage(d->page);
-
-    d->document->firePageSetupChanged();
 }
 
 void KWPageInsertCommand::undo()
@@ -138,11 +139,10 @@ void KWPageInsertCommand::undo()
         }
     }
     d->document->pageManager()->removePage(d->page);
+    d->document->firePageSetupChanged();
     d->page = KWPage(); // invalidate
     if (d->shapeMoveCommand)
         d->shapeMoveCommand->undo();
-
-    d->document->firePageSetupChanged();
 }
 
 KWPage KWPageInsertCommand::page() const
