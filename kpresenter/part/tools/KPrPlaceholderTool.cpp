@@ -20,6 +20,7 @@
 #include "KPrPlaceholderTool.h"
 
 #include <QUndoCommand>
+#include <QPainter>
 #include <klocale.h>
 
 #include <KoCanvasBase.h>
