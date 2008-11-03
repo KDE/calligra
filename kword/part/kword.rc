@@ -113,7 +113,6 @@
  </Menu>
  <Menu name="frames"><text>Fra&amp;mes</text>
   <Action name="format_frameset"/>
-  <Action name="edit_delframe"/>
   <Separator/>
   <Action name="raiseframe"/>
   <Action name="lowerframe"/>
