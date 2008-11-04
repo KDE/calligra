@@ -19,6 +19,15 @@ Editor:
 - now based on model/view items and QTreeView
 - Editor::clear() removed; use changeSet(0) to clear the visual contents;
   clear the property set in Set object to clear the data
+- Factory objects do not need parent (are owned by FactoryManager)
+- implementation of custom factories happens by using Factory::addEditor() 
+  and similar functions; used interfaces are EditorCreatorInterface,
+  ValuePainterInterface, ValueDisplayInterface
+  and helpers: Label, EditorCreator, LabelCreator
+- custom property API (CustomProperty) replaced with 'composed' properies API; 
+  implementation of subproperties moved to factory itself 
+  thourgh offered ComposedPropertyInterface and ComposedPropertyCreatorInterface
+  (e.g. size/rect/point types use this API)
 
 TODO:
 -port lines like this in Property.cpp:
