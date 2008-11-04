@@ -1248,7 +1248,7 @@ void KarbonView::selectionChanged()
     debugView("KarbonView::selectionChanged()");
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    int count = selection->selectedShapes( KoFlake::TopLevelSelection ).count();
+    int count = selection->selectedShapes( KoFlake::FullSelection ).count();
 
     d->groupObjects->setEnabled( count > 1 );
     d->ungroupObjects->setEnabled( false );
@@ -1267,11 +1267,9 @@ void KarbonView::selectionChanged()
         uint selectedGroups = 0;
         uint selectedParametrics = 0;
         // check for different shape types for enabling specific actions
-        foreach( KoShape* shape, selection->selectedShapes() )
+        foreach( KoShape* shape, selection->selectedShapes( KoFlake::FullSelection ) )
         {
-            if( dynamic_cast<KoShapeGroup*>( shape->parent() ) )
-                selectedGroups++;
-            else if( dynamic_cast<KoPathShape*>( shape ) )
+            if( dynamic_cast<KoPathShape*>( shape ) )
             {
                 KoParameterShape * ps = dynamic_cast<KoParameterShape*>( shape );
                 if( ps && ps->isParametricShape() )
@@ -1280,6 +1278,14 @@ void KarbonView::selectionChanged()
                     selectedPaths++;
             }
         }
+        foreach( KoShape* shape, selection->selectedShapes( KoFlake::TopLevelSelection ) )
+        {
+            if( dynamic_cast<KoShapeGroup*>( shape ) )
+                selectedGroups++;
+        }
+        kDebug(38000) << selectedGroups <<" group shapes selected";
+        kDebug(38000) << selectedPaths <<" path shapes selected";
+        kDebug(38000) << selectedParametrics <<" parameter shapes selected";
         d->ungroupObjects->setEnabled( selectedGroups > 0 );
         //TODO enable action when the ClosePath command is ported
         //d->closePath->setEnabled( selectedPaths > 0 );
