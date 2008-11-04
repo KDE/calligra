@@ -339,6 +339,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
 
     d->set = set;
+/*not needed 
     if (d->set) {
         //receive property changes
         connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
@@ -347,7 +348,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
                 this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
-    }
+    }*/
 
 //    fill();
     delete d->model;
