@@ -33,6 +33,8 @@
 #include <QStyleOptionViewItem>
 #include <QFontDatabase>
 
+using namespace KoProperty;
+
 //! @internal
 //! reimplemented to better button and label's positioning
 class FontEditRequester : public KFontRequester

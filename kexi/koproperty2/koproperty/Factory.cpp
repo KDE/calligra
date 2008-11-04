@@ -322,6 +322,11 @@ void FactoryManager::registerFactory(Factory *factory)
     }
 }
 
+bool FactoryManager::isEditorForTypeAvailable( int type ) const
+{
+    return d->editorCreators.value(type);
+}
+
 QWidget * FactoryManager::createEditor( 
     int type, QWidget *parent,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const

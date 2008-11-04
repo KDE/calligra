@@ -260,6 +260,8 @@ class KOPROPERTY_EXPORT FactoryManager : public QObject
 {
     Q_OBJECT
 public:
+    bool isEditorForTypeAvailable( int type ) const;
+
     QWidget * createEditor(
         int type,
         QWidget *parent,

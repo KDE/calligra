@@ -22,15 +22,20 @@
 
 #include "Factory.h"
 
+namespace KoProperty
+{
+
 static const char *SIZEPOLICY_MASK = "%1, %2 %3, %4";
 
-class SizePolicyDelegate : public KoProperty::LabelCreator
+class KOPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator
 {
 public:
     SizePolicyDelegate() {}
     virtual QString displayText( const QVariant& value ) const;
 
-    static const KoProperty::Property::ListData& listData();
+    static const Property::ListData& listData();
 };
+
+}
 
 #endif

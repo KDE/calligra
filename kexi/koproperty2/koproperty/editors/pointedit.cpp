@@ -24,6 +24,8 @@
 #include <KLocale>
 #include <QtCore/QPoint>
 
+using namespace KoProperty;
+
 QString PointDelegate::displayText( const QVariant& value ) const
 {
     const QPoint p(value.toPoint());
@@ -34,19 +36,17 @@ QString PointDelegate::displayText( const QVariant& value ) const
 
 //------------
 
-PointComposedProperty::PointComposedProperty(KoProperty::Property *property)
-        : KoProperty::ComposedPropertyInterface(property)
+PointComposedProperty::PointComposedProperty(Property *property)
+        : ComposedPropertyInterface(property)
 {
     const QPoint p( property->value().toPoint() );
-//! @todo uint!
-    (void)new KoProperty::Property("x",
-        p.x(), i18n("X"), i18n("X"), KoProperty::Int, property);
-//! @todo uint!
-    (void)new KoProperty::Property("y",
-        p.y(), i18n("Y"), i18n("Y"), KoProperty::Int, property);
+    (void)new Property("x",
+        p.x(), i18n("X"), i18n("X"), Int, property);
+    (void)new Property("y",
+        p.y(), i18n("Y"), i18n("Y"), Int, property);
 }
 
-void PointComposedProperty::setValue(KoProperty::Property *property, 
+void PointComposedProperty::setValue(Property *property, 
     const QVariant &value, bool rememberOldValue)
 {
     const QPoint p( value.toPoint() );
@@ -54,7 +54,7 @@ void PointComposedProperty::setValue(KoProperty::Property *property,
     property->child("y")->setValue(p.y(), rememberOldValue, false);
 }
 
-void PointComposedProperty::childValueChanged(KoProperty::Property *child,
+void PointComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
     QPoint p( child->parent()->value().toPoint() );

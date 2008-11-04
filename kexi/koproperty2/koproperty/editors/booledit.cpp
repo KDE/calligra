@@ -35,9 +35,11 @@
 #include <QLayout>
 #include <QBitmap>
 
+using namespace KoProperty;
+
 /*! @return name for state with index @a index,
  where 0 means true, 1 means false and 2 means none */
-static QString stateName(int index, const KoProperty::Property* prop)
+static QString stateName(int index, const Property* prop)
 {
     QString stateNameString;
     if (index == 0) {
@@ -59,8 +61,8 @@ static QString stateName(int index, const KoProperty::Property* prop)
 }
 
 //! Sets up @a data list data with keys and names for true, false, none values, respectively
-static void setupThreeStateListData(KoProperty::Property::ListData &data, 
-    const KoProperty::Property* prop)
+static void setupThreeStateListData(Property::ListData &data, 
+    const Property* prop)
 {
     data.keys << true << false << QVariant();
     data.names << stateName(0, prop) << stateName(1, prop) << stateName(2, prop);
@@ -93,7 +95,7 @@ public:
 
 K_GLOBAL_STATIC(BoolEditGlobal, g_boolEdit)
 
-BoolEdit::BoolEdit(const KoProperty::Property *prop, QWidget *parent)
+BoolEdit::BoolEdit(const Property *prop, QWidget *parent)
     : QToolButton(parent)
     , m_yesText( stateName(0, prop) )
     , m_noText( stateName(1, prop) )
@@ -266,7 +268,7 @@ ComboBox::Options initThreeStateBoolOptions()
 }
 
 ThreeStateBoolEdit::ThreeStateBoolEdit(
-    const KoProperty::Property::ListData& listData, 
+    const Property::ListData& listData, 
     QWidget *parent)
         : ComboBox(listData, initThreeStateBoolOptions(), parent)
 {
@@ -320,13 +322,13 @@ BoolDelegate::BoolDelegate()
 QWidget * BoolDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KoProperty::EditorDataModel *editorModel
-        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
-    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
 
     // boolean editors can optionally accept 3rd state:
     if (prop->option("3State", false).toBool()) {
-        KoProperty::Property::ListData threeStateListData;
+        Property::ListData threeStateListData;
         setupThreeStateListData(threeStateListData, prop);
         return new ThreeStateBoolEdit(threeStateListData, parent);
     }
@@ -339,9 +341,9 @@ void BoolDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
-    const KoProperty::EditorDataModel *editorModel
-        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
-    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
     QVariant value( index.data(Qt::EditRole) );
     if (prop->option("3State", false).toBool()) {
         int listIndex = valueToIndex(value);

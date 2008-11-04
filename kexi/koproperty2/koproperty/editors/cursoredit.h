@@ -24,7 +24,10 @@
 
 #include "combobox.h"
 
-class CursorEdit : public ComboBox
+namespace KoProperty
+{
+
+class KOPROPERTY_EXPORT CursorEdit : public ComboBox
 {
     Q_OBJECT
     Q_PROPERTY(QCursor value READ cursorValue WRITE setCursorValue USER true)
@@ -37,8 +40,8 @@ public:
     virtual void setCursorValue(const QCursor &value);
 };
 
-class CursorDelegate : public KoProperty::EditorCreatorInterface, 
-                       public KoProperty::ValuePainterInterface
+class KOPROPERTY_EXPORT CursorDelegate : public EditorCreatorInterface, 
+                       public ValuePainterInterface
 {
 public:
     CursorDelegate();
@@ -49,5 +52,7 @@ public:
     virtual void paint( QPainter * painter, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
+
+}
 
 #endif

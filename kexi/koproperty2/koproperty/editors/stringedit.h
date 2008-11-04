@@ -27,7 +27,10 @@
 
 #include "Factory.h"
 
-class StringEdit : public KLineEdit
+namespace KoProperty
+{
+
+class KOPROPERTY_EXPORT StringEdit : public KLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue USER true)
@@ -44,7 +47,7 @@ private:
     bool m_slotTextChangedEnabled : 1;
 };
 
-class StringDelegate : public KoProperty::EditorCreatorInterface
+class KOPROPERTY_EXPORT StringDelegate : public EditorCreatorInterface
 {
 public:
     StringDelegate() {}
@@ -84,5 +87,7 @@ protected:
 
 }
 #endif
+
+}
 
 #endif

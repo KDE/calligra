@@ -23,10 +23,12 @@
 #include <KLocale>
 #include <KGlobal>
 
-class SizePolicyListData : public KoProperty::Property::ListData
+using namespace KoProperty;
+
+class SizePolicyListData : public Property::ListData
 {
 public:
-    SizePolicyListData() : KoProperty::Property::ListData(keysInternal(), stringsInternal())
+    SizePolicyListData() : Property::ListData(keysInternal(), stringsInternal())
     {
     }
 
@@ -80,7 +82,7 @@ QString SizePolicyDelegate::displayText( const QVariant& value ) const
 }
 
 //static
-const KoProperty::Property::ListData& SizePolicyDelegate::listData()
+const Property::ListData& SizePolicyDelegate::listData()
 {
     return *s_sizePolicyListData;
 }

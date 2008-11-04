@@ -25,18 +25,24 @@
 #include "Factory.h"
 #include <KNumInput>
 
-class IntSpinBox : public KIntNumInput
+namespace KoProperty {
+
+//! A delegate supporting Int and UInt types
+/*! Note that due to KIntNumInput limitations, for UInt the maximum value 
+    is INT_MAX, not UINT_MAX.
+*/
+class KOPROPERTY_EXPORT IntSpinBox : public KIntNumInput
 {
     Q_OBJECT
-    Q_PROPERTY(int value READ value WRITE setValue USER true)
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    IntSpinBox(const KoProperty::Property* prop, QWidget *parent = 0);
+    IntSpinBox(const Property* prop, QWidget *parent = 0);
     virtual ~IntSpinBox();
 
-    virtual int value() const { return KIntNumInput::value(); }
+    virtual QVariant value() const;
 
-//    virtual void setProperty(const KoProperty::Property *prop);
+//    virtual void setProperty(const Property *prop);
     
 //    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
@@ -44,12 +50,14 @@ signals:
     void commitData( QWidget * editor );
 
 public slots:
-    virtual void setValue(int value) { KIntNumInput::setValue(value); }
+    virtual void setValue(const QVariant& value);
 
 //todo?    virtual bool eventFilter(QObject *o, QEvent *e);
 /*    QLineEdit * lineEdit() const {
         return KIntSpinBox::lineEdit();
     }*/
+private:
+    bool m_unsigned : 1;
 };
 
 /*class KOPROPERTY_EXPORT IntEdit : public Widget
@@ -77,14 +85,14 @@ private:
 
 // Double editor
 
-class DoubleSpinBox : public KDoubleNumInput
+class KOPROPERTY_EXPORT DoubleSpinBox : public KDoubleNumInput
 {
     Q_OBJECT
     Q_PROPERTY(double value READ value WRITE setValue USER true)
 
 public:
 //! @todo Support setting precision limits, step, etc.
-    DoubleSpinBox(const KoProperty::Property* prop, QWidget *parent = 0);
+    DoubleSpinBox(const Property* prop, QWidget *parent = 0);
     virtual ~DoubleSpinBox();
 
 //    virtual bool eventFilter(QObject *o, QEvent *e);
@@ -129,28 +137,31 @@ private:
     DoubleSpinBox  *m_edit;
 };*/
 
-class IntSpinBoxDelegate : public KoProperty::EditorCreatorInterface, 
-                           public KoProperty::ValueDisplayInterface
+//! A delegate supporting Int, UInt, LongLong and ULongLong types
+class KOPROPERTY_EXPORT IntSpinBoxDelegate : public EditorCreatorInterface, 
+                           public ValueDisplayInterface
 {
 public:
     IntSpinBoxDelegate();
     
-    virtual QString displayText( const KoProperty::Property* prop ) const;
+    virtual QString displayText( const Property* prop ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-class DoubleSpinBoxDelegate : public KoProperty::EditorCreatorInterface, 
-                              public KoProperty::ValueDisplayInterface
+class KOPROPERTY_EXPORT DoubleSpinBoxDelegate : public EditorCreatorInterface, 
+                              public ValueDisplayInterface
 {
 public:
     DoubleSpinBoxDelegate();
     
-    virtual QString displayText( const KoProperty::Property* prop ) const;
+    virtual QString displayText( const Property* prop ) const;
 
     virtual QWidget * createEditor( int type, QWidget *parent, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
+
+}
 
 #endif

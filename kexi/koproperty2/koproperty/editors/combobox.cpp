@@ -33,6 +33,8 @@
 
 #include "Property.h"
 
+using namespace KoProperty;
+
 ComboBox::Options::Options()
  : iconProvider(0)
  , extraValueAllowed(false)
@@ -51,7 +53,7 @@ ComboBox::Options::~Options()
     delete iconProvider;
 }
 
-ComboBox::ComboBox(const KoProperty::Property::ListData& listData, const Options& options, QWidget *parent)
+ComboBox::ComboBox(const Property::ListData& listData, const Options& options, QWidget *parent)
         : KComboBox(parent)
         , m_options(options)
 {
@@ -194,7 +196,7 @@ void ComboBox::fillValues()
 }
 
 /*
-void ComboBox::setProperty( const KoProperty::Property *property )
+void ComboBox::setProperty( const Property *property )
 {
 //    const bool b = (property() == prop);
 //    m_setValueEnabled = false; //setValue() couldn't be called before fillBox()
@@ -208,7 +210,7 @@ void ComboBox::setProperty( const KoProperty::Property *property )
 //        setValue(prop->value(), false); //now the value can be set
 }*/
 
-void ComboBox::setListData(const KoProperty::Property::ListData & listData)
+void ComboBox::setListData(const Property::ListData & listData)
 {
     m_listData = listData;
     fillValues();
@@ -223,7 +225,7 @@ void ComboBox::slotValueChanged(int)
 void ComboBox::paintEvent( QPaintEvent * event )
 {
     KComboBox::paintEvent(event);
-    KoProperty::Factory::paintTopGridLine(this);
+    Factory::paintTopGridLine(this);
 }
 
 /*
@@ -259,9 +261,9 @@ ComboBoxDelegate::ComboBoxDelegate()
     options.removeBorders = false;
 }
 
-QString ComboBoxDelegate::displayText( const KoProperty::Property* property ) const
+QString ComboBoxDelegate::displayText( const Property* property ) const
 {
-    KoProperty::Property::ListData *listData = property->listData();
+    Property::ListData *listData = property->listData();
     if (!listData)
         return property->value().toString();
     if (property->value().isNull())
@@ -277,9 +279,9 @@ QString ComboBoxDelegate::displayText( const KoProperty::Property* property ) co
 QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KoProperty::EditorDataModel *editorModel
-        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
-    KoProperty::Property *property = editorModel->propertyForItem(index);
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *property = editorModel->propertyForItem(index);
     ComboBox::Options options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
     ComboBox *cb = new ComboBox(*property->listData(), options, parent);

@@ -27,6 +27,9 @@
 
 #include "Factory.h"
 
+namespace KoProperty
+{
+
 /*
 class FontEdit : public KLineEdit
 {
@@ -45,8 +48,8 @@ private:
     bool m_slotTextChangedEnabled : 1;
 };*/
 
-class FontDelegate : public KoProperty::EditorCreatorInterface, 
-                     public KoProperty::ValuePainterInterface
+class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface, 
+                     public ValuePainterInterface
 {
 public:
     FontDelegate() {}
@@ -56,34 +59,6 @@ public:
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
-#if 0
-class QLineEdit;
-
-namespace KoProperty
-{
-
-class KOPROPERTY_EXPORT StringEdit : public Widget
-{
-    Q_OBJECT
-
-public:
-    explicit StringEdit(Property *property, QWidget *parent = 0);
-    virtual ~StringEdit();
-
-    virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-
-protected:
-    virtual void setReadOnlyInternal(bool readOnly);
-
-protected slots:
-    void slotValueChanged(const QString&);
-
-protected:
-    QLineEdit *m_edit;
-};
-
 }
-#endif
 
 #endif

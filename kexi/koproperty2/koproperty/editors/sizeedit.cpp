@@ -22,6 +22,8 @@
 #include <KLocale>
 #include <QtCore/QSize>
 
+using namespace KoProperty;
+
 QString SizeDelegate::displayText( const QVariant& value ) const
 {
     const QSize s(value.toSize());
@@ -32,19 +34,17 @@ QString SizeDelegate::displayText( const QVariant& value ) const
 
 //------------
 
-SizeComposedProperty::SizeComposedProperty(KoProperty::Property *property)
-        : KoProperty::ComposedPropertyInterface(property)
+SizeComposedProperty::SizeComposedProperty(Property *property)
+        : ComposedPropertyInterface(property)
 {
     const QSize s( property->value().toSize() );
-//! @todo uint!
-    (void)new KoProperty::Property("width", 
-        s.width(), i18n("Width"), i18n("Width"), KoProperty::Int, property);
-//! @todo uint!
-    (void)new KoProperty::Property("height", 
-        s.height(), i18n("Height"), i18n("Height"), KoProperty::Int, property);
+    (void)new Property("width", 
+        s.width(), i18n("Width"), i18n("Width"), UInt, property);
+    (void)new Property("height", 
+        s.height(), i18n("Height"), i18n("Height"), UInt, property);
 }
 
-void SizeComposedProperty::setValue(KoProperty::Property *property, 
+void SizeComposedProperty::setValue(Property *property, 
     const QVariant &value, bool rememberOldValue)
 {
     const QSize s( value.toSize() );
@@ -52,7 +52,7 @@ void SizeComposedProperty::setValue(KoProperty::Property *property,
     property->child("height")->setValue(s.height(), rememberOldValue, false);
 }
 
-void SizeComposedProperty::childValueChanged(KoProperty::Property *child,
+void SizeComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
     QSize s( child->parent()->value().toSize() );

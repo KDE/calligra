@@ -52,10 +52,12 @@
 #include <KGlobal>
 #include <KIconLoader>
 
-class CursorListData : public KoProperty::Property::ListData
+using namespace KoProperty;
+
+class CursorListData : public Property::ListData
 {
 public:
-    CursorListData() : KoProperty::Property::ListData(keysInternal(), stringsInternal())
+    CursorListData() : Property::ListData(keysInternal(), stringsInternal())
     {
     }
 

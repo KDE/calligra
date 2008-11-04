@@ -55,12 +55,15 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Cursor, new CursorDelegate );
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
+//! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::Point, new PointDelegate );
     addEditor( KoProperty::Rect, new RectDelegate );
     addEditor( KoProperty::Size, new SizeDelegate );
     addEditor( KoProperty::SizePolicy, new SizePolicyDelegate );
     addEditor( KoProperty::Int, new IntSpinBoxDelegate );
     addEditor( KoProperty::String, new StringDelegate );
+    addEditor( KoProperty::UInt, new IntSpinBoxDelegate );
+//! @todo addEditor( KoProperty::ULongLong, new LongLongSpinBoxDelegate );
     addEditor( KoProperty::ValueFromList, new ComboBoxDelegate );
 }
 

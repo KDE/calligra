@@ -21,6 +21,8 @@
 
 #include "stringedit.h"
 
+using namespace KoProperty;
+
 StringEdit::StringEdit(QWidget *parent)
  : KLineEdit(parent)
  , m_slotTextChangedEnabled(true)

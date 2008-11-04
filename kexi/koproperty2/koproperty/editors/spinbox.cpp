@@ -29,6 +29,7 @@
 
 #include <KGlobal>
 #include <KLocale>
+#include <KDebug>
 
 #include <QVariant>
 #include <QPainter>
@@ -36,8 +37,11 @@
 #include <QEvent>
 #include <QLineEdit>
 
-IntSpinBox::IntSpinBox(const KoProperty::Property* prop, QWidget *parent)
+using namespace KoProperty;
+
+IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent)
         : KIntNumInput(parent)
+        , m_unsigned( prop->type() == UInt )
 {
     QLineEdit* le = spinBox()->findChild<QLineEdit*>();
     if (le) {
@@ -46,9 +50,10 @@ IntSpinBox::IntSpinBox(const KoProperty::Property* prop, QWidget *parent)
     }
     spinBox()->setFrame(false);
 //    spinBox()->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
-    KoProperty::Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent);
+    Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent);
 
-    QVariant minVal(prop->option("min", -INT_MAX));
+    
+    QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
     QVariant maxVal(prop->option("max", INT_MAX));
     setMinimum(minVal.toInt());
     setMaximum(maxVal.toInt());
@@ -73,6 +78,23 @@ IntSpinBox::IntSpinBox(const KoProperty::Property* prop, QWidget *parent)
 
 IntSpinBox::~IntSpinBox()
 {
+}
+
+QVariant IntSpinBox::value() const
+{
+    if (m_unsigned)
+        return uint( KIntNumInput::value() );
+    return KIntNumInput::value();
+}
+
+void IntSpinBox::setValue(const QVariant& value)
+{
+    int v( value.toInt() );
+    if (m_unsigned && v<0) {
+        kWarning() << "could not assign negative value" << v << "- assigning 0";
+        v = 0;
+    }
+    KIntNumInput::setValue(v);
 }
 
 /*void IntSpinBox::setValue(const QVariant &value)
@@ -211,7 +233,7 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DoubleSpinBox::DoubleSpinBox(const KoProperty::Property* prop, QWidget *parent)
+DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent)
         : KDoubleNumInput(parent)
 {
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
@@ -224,7 +246,7 @@ DoubleSpinBox::DoubleSpinBox(const KoProperty::Property* prop, QWidget *parent)
     }
     sb->setFrame(false);
 //    setStyleSheet(QString());
-    KoProperty::Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent);
+    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent);
 
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
@@ -422,7 +444,7 @@ IntSpinBoxDelegate::IntSpinBoxDelegate()
 {
 }
 
-QString IntSpinBoxDelegate::displayText( const KoProperty::Property* prop ) const
+QString IntSpinBoxDelegate::displayText( const Property* prop ) const
 {
     if (prop->hasOptions()) {
         //replace min value with minValueText if defined
@@ -440,9 +462,9 @@ QString IntSpinBoxDelegate::displayText( const KoProperty::Property* prop ) cons
 QWidget* IntSpinBoxDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KoProperty::EditorDataModel *editorModel
-        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
-    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
     return new IntSpinBox(prop, parent);
 }
 
@@ -452,7 +474,7 @@ DoubleSpinBoxDelegate::DoubleSpinBoxDelegate()
 {
 }
 
-QString DoubleSpinBoxDelegate::displayText( const KoProperty::Property* prop ) const
+QString DoubleSpinBoxDelegate::displayText( const Property* prop ) const
 {
     QString valueText;
     if (prop->hasOptions()) {
@@ -473,9 +495,9 @@ QString DoubleSpinBoxDelegate::displayText( const KoProperty::Property* prop ) c
 QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent, 
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    const KoProperty::EditorDataModel *editorModel
-        = dynamic_cast<const KoProperty::EditorDataModel*>(index.model());
-    KoProperty::Property *prop = editorModel->propertyForItem(index);
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *prop = editorModel->propertyForItem(index);
     return new DoubleSpinBox(prop, parent);
 }
 

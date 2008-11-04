@@ -123,9 +123,9 @@ void ItemDelegate::paint(QPainter *painter,
     Property *property = editorModel->propertyForItem(index);
     const int t = typeForProperty( property ); //index.data(Qt::EditRole).userType();
     bool useQItemDelegatePaint = index.column() == 0;
-    if (QVariant::Size == t) {
+/*    if (QVariant::Size == t) {
       kDebug() << "!";
-    }
+    }*/
     if (!useQItemDelegatePaint) {
         if (!(alteredOption.state & QStyle::State_Selected) && !FactoryManager::self()->paint(t, painter, alteredOption, index))
             useQItemDelegatePaint = true; // ValueDisplayInterface will be used

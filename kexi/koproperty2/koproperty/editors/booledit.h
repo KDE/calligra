@@ -30,16 +30,19 @@
 
 #include <QToolButton>
 
+namespace KoProperty
+{
+
 //! A bool editor supporting two states: true and false. 
 /*! For null values, false is displayed.
 */
-class BoolEdit : public QToolButton
+class KOPROPERTY_EXPORT BoolEdit : public QToolButton
 {
     Q_OBJECT
     Q_PROPERTY(bool value READ value WRITE setValue USER true)
 
 public:
-    explicit BoolEdit(const KoProperty::Property *prop, QWidget *parent = 0);
+    explicit BoolEdit(const Property *prop, QWidget *parent = 0);
 
     virtual ~BoolEdit();
 
@@ -76,7 +79,7 @@ class KOPROPERTY_EXPORT ThreeStateBoolEdit : public ComboBox
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    ThreeStateBoolEdit(const KoProperty::Property::ListData& listData, QWidget *parent = 0);
+    ThreeStateBoolEdit(const Property::ListData& listData, QWidget *parent = 0);
     virtual ~ThreeStateBoolEdit();
 
     virtual QVariant value() const;
@@ -89,8 +92,8 @@ signals:
     void commitData( QWidget * editor );
 };
 
-class BoolDelegate : public KoProperty::EditorCreatorInterface, 
-                     public KoProperty::ValuePainterInterface
+class KOPROPERTY_EXPORT BoolDelegate : public EditorCreatorInterface, 
+                     public ValuePainterInterface
 {
 public:
     BoolDelegate();
@@ -101,5 +104,7 @@ public:
     virtual void paint( QPainter * painter, 
         const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
+
+}
 
 #endif

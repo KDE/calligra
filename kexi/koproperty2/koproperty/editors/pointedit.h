@@ -24,27 +24,31 @@
 
 #include "Factory.h"
 
+namespace KoProperty
+{
+
 static const char *POINTEDIT_MASK = "%1, %2";
 
-class PointComposedProperty : public KoProperty::ComposedPropertyInterface
+class KOPROPERTY_EXPORT PointComposedProperty : public ComposedPropertyInterface
 {
 public:
-    explicit PointComposedProperty(KoProperty::Property *parent);
+    explicit PointComposedProperty(Property *parent);
 
-    virtual void setValue(KoProperty::Property *property, 
+    virtual void setValue(Property *property, 
         const QVariant &value, bool rememberOldValue);
 
-    virtual void childValueChanged(KoProperty::Property *child, 
+    virtual void childValueChanged(Property *child, 
         const QVariant &value, bool rememberOldValue);
 };
 
-class PointDelegate : public KoProperty::LabelCreator,
-                     public KoProperty::ComposedPropertyCreator<PointComposedProperty>
+class KOPROPERTY_EXPORT PointDelegate : public LabelCreator,
+                     public ComposedPropertyCreator<PointComposedProperty>
 {
 public:
     PointDelegate() {}
     virtual QString displayText( const QVariant& value ) const;
 };
 
-#endif
+}
 
+#endif

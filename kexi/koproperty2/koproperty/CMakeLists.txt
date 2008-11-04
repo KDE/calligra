@@ -36,16 +36,11 @@ set(libkopropertyeditors_SRCS
 
 set(koproperty_LIB_SRCS
    Property.cpp
-#old   customproperty.cpp
    Set.cpp
    Factory.cpp
    DefaultFactory.cpp
-#old   editor.cpp
-#old   editoritem.cpp
    EditorView.cpp
    EditorDataModel.cpp
-#old   factory.cpp
-#old   widget.cpp
    ${libkopropertyeditors_SRCS}
 )
 
@@ -65,43 +60,37 @@ install(TARGETS koproperty2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons  )
 install( FILES
-#old customproperty.h
-#old editor.h
-#old editoritem.h
-Factory.h
-koproperty_global.h
-koproperty_export.h
-Property.h
-Set.h
-Utils.h
-Factory.h
-EditorView.h
-#old widget.h
-#old widgetproxy.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2 COMPONENT Devel)
+  Factory.h
+  koproperty_global.h
+  koproperty_export.h
+  Property.h
+  Set.h
+  Utils.h
+  Factory.h
+  EditorView.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2 COMPONENT Devel
+)
 
-#install( FILES
-#editors/booledit.h
-#editors/booledit.h
-#editors/coloredit.h
-#editors/combobox.h
-#editors/cursoredit.h
-#editors/dateedit.h
-#editors/datetimeedit.h
-#editors/dummywidget.h
-#editors/fontedit.h
-#editors/linestyleedit.h
-#editors/pixmapedit.h
-#editors/pointedit.h
-#editors/rectedit.h
-#editors/sizeedit.h
-#editors/sizepolicyedit.h
-#editors/spinbox.h
-#editors/spinbox.h
-#editors/stringedit.h
-#editors/stringlistedit.h
-#editors/symbolcombo.h
-#editors/timeedit.h
-#editors/urledit.h
-#DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2/editors COMPONENT Devel)
-
+install( FILES
+editors/booledit.h
+editors/coloredit.h
+editors/combobox.h
+editors/cursoredit.h
+editors/dateedit.h
+editors/datetimeedit.h
+editors/dummywidget.h
+editors/fontedit.h
+editors/linestyleedit.h
+editors/pixmapedit.h
+editors/pointedit.h
+editors/rectedit.h
+editors/sizeedit.h
+editors/sizepolicyedit.h
+editors/spinbox.h
+editors/spinbox.h
+editors/stringedit.h
+editors/stringlistedit.h
+editors/symbolcombo.h
+editors/timeedit.h
+editors/urledit.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/koproperty2/editors COMPONENT Devel)

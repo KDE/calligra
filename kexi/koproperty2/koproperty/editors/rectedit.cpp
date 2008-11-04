@@ -22,6 +22,8 @@
 #include <KLocale>
 #include <QtCore/QRect>
 
+using namespace KoProperty;
+
 QString RectDelegate::displayText( const QVariant& value ) const
 {
     const QRect r(value.toRect());
@@ -34,23 +36,21 @@ QString RectDelegate::displayText( const QVariant& value ) const
 
 //------------
 
-RectComposedProperty::RectComposedProperty(KoProperty::Property *property)
-        : KoProperty::ComposedPropertyInterface(property)
+RectComposedProperty::RectComposedProperty(Property *property)
+        : ComposedPropertyInterface(property)
 {
     const QRect r( property->value().toRect() );
-    (void)new KoProperty::Property("x",
-        r.x(), i18n("X"), i18n("X"), KoProperty::Int, property);
-    (void)new KoProperty::Property("y",
-        r.y(), i18n("Y"), i18n("Y"), KoProperty::Int, property);
-//! @todo uint!
-    (void)new KoProperty::Property("width",
-        r.width(), i18n("Width"), i18n("Width"), KoProperty::Int, property);
-//! @todo uint!
-    (void)new KoProperty::Property("height",
-        r.height(), i18n("Height"), i18n("Height"), KoProperty::Int, property);
+    (void)new Property("x",
+        r.x(), i18n("X"), i18n("X"), Int, property);
+    (void)new Property("y",
+        r.y(), i18n("Y"), i18n("Y"), Int, property);
+    (void)new Property("width",
+        r.width(), i18n("Width"), i18n("Width"), UInt, property);
+    (void)new Property("height",
+        r.height(), i18n("Height"), i18n("Height"), UInt, property);
 }
 
-void RectComposedProperty::setValue(KoProperty::Property *property,
+void RectComposedProperty::setValue(Property *property,
     const QVariant &value, bool rememberOldValue)
 {
     const QRect r( value.toRect() );
@@ -60,7 +60,7 @@ void RectComposedProperty::setValue(KoProperty::Property *property,
     property->child("height")->setValue(r.height(), rememberOldValue, false);
 }
 
-void RectComposedProperty::childValueChanged(KoProperty::Property *child,
+void RectComposedProperty::childValueChanged(Property *child,
     const QVariant &value, bool rememberOldValue)
 {
     QRect r( child->parent()->value().toRect() );
