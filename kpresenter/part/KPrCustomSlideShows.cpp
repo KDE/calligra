@@ -21,6 +21,7 @@
 
 //KOffice includes
 #include <KoPAPageBase.h>
+#include <KoPAPage.h>
 #include <KoXmlWriter.h>
 
 //KPresenter includes
@@ -115,25 +116,24 @@ void KPrCustomSlideShows::removeSlidesFromAll( const QList<KoPAPageBase*> &slide
     }
 }
 
-void KPrCustomSlideShows::saveOdf( KoXmlWriter* writer )
+void KPrCustomSlideShows::saveOdf( KoPASavingContext & context )
 {
-    foreach( QString name, m_customSlideShows.keys() )
-    {
+    foreach( QString name, m_customSlideShows.keys() ) {
         QList<KoPAPageBase*> slideList = m_customSlideShows.value( name );
-        if( slideList.isEmpty() )
-        {
-            continue;
-        }
-        writer->startElement( "presentation:show" );
-        writer->addAttribute( "presentation:name", name );
+        context.xmlWriter().startElement( "presentation:show" );
+        context.xmlWriter().addAttribute( "presentation:name", name );
         QString pages;
-        foreach( KoPAPageBase* pageName, slideList )
-        {
-            pages += pageName->name() + ',';
+        foreach( KoPAPageBase* page, slideList ) {
+            KoPAPage * p = dynamic_cast<KoPAPage *>( page );
+            if ( p ) {
+                pages += context.pageName( p ) + ',';
+            }
         }
-        pages.truncate( pages.size() - 2 );//remove the last comma
-        writer->addAttribute( "presentation:pages", pages );
-        writer->endElement();//presentation:show
+        if( !slideList.isEmpty() ) {
+            pages.truncate( pages.size() - 1 );//remove the last comma
+        }
+        context.xmlWriter().addAttribute( "presentation:pages", pages );
+        context.xmlWriter().endElement();//presentation:show
     }
 }
 

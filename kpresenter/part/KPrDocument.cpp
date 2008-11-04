@@ -37,6 +37,7 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -97,6 +98,14 @@ KoView * KPrDocument::createViewInstance( QWidget *parent )
 const char * KPrDocument::odfTagName( bool withNamespace )
 {
     return withNamespace ? "office:presentation": "presentation";
+}
+
+bool KPrDocument::saveOdfEpilogue( KoPASavingContext & context )
+{
+    context.xmlWriter().startElement( "presentation:settings" );
+    m_customSlideShows->saveOdf( context );
+    context.xmlWriter().endElement();//presentation:settings
+    return true;
 }
 
 void KPrDocument::saveOdfDocumentStyles( KoPASavingContext & context )

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007-2008      Carlos Licea <carlos.licea@kdemail.org>
+   Copyright (C) 2007-2008 Carlos Licea <carlos.licea@kdemail.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@
 class KoXmlWriter;
 class KoPAPageBase;
 class KoXmlElement;
+class KoPASavingContext;
 class KPrDocument;
 
 #include "kpresenter_export.h"
@@ -121,7 +123,7 @@ public:
     /**
     * @brief saves the slideShows into the given writer
     */
-    void saveOdf( KoXmlWriter* writer );
+    void saveOdf( KoPASavingContext & context );
 
     void loadOdf( KoXmlElement* presentationSettings, KPrDocument* kprDocument );
 

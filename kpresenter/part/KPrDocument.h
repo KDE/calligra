@@ -130,6 +130,9 @@ protected:
     virtual const char *odfTagName( bool withNamespace );
 
     /// reimplemented
+    virtual bool saveOdfEpilogue( KoPASavingContext & context );
+
+    /// reimplemented
     virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
     /// reimplemented
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
