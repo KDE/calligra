@@ -73,6 +73,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     m_config.load();
 
     setProject( new Project() ); // after config is loaded
+    m_project->setId( m_project->uniqueNodeId() );
 }
 
 
@@ -172,6 +173,9 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
             Project * newProject = new Project();
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
+                if ( newProject->id().isEmpty() ) {
+                    newProject->setId( newProject->uniqueNodeId() );
+                }
                 // The load went fine. Throw out the old project
                 setProject( newProject );
             } else {

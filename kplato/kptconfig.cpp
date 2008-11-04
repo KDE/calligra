@@ -32,6 +32,12 @@ namespace KPlato
 Config::Config()
 {
     m_readWrite = true;
+    // set some reasonable defaults
+    m_taskDefaults.estimate()->setType( Estimate::Type_Effort );
+    m_taskDefaults.estimate()->setUnit( Duration::Unit_h );
+    m_taskDefaults.estimate()->setExpectedEstimate( 1.0 );
+    m_taskDefaults.estimate()->setPessimisticRatio( 0 );
+    m_taskDefaults.estimate()->setOptimisticRatio( 0 );
 }
 
 Config::~Config()
@@ -56,16 +62,17 @@ void Config::load() {
         m_taskDefaults.setDescription(grp.readEntry("Description"));
         m_taskDefaults.setConstraint((Node::ConstraintType)grp.readEntry("ConstraintType",0));
         
-        QDateTime dt = QDateTime::fromString(grp.readEntry("ConstraintStartTime"), Qt::ISODate);
+        QDateTime dt = QDateTime::fromString(grp.readEntry("ConstraintStartTime", QString()), Qt::ISODate);
         m_taskDefaults.setConstraintStartTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         kDebug()<<"ConstraintStartTime"<<grp.readEntry("ConstraintStartTime")<<m_taskDefaults.constraintStartTime().toString();
         
-        dt = QDateTime::fromString(grp.readEntry("ConstraintEndTime"), Qt::ISODate);
+        dt = QDateTime::fromString(grp.readEntry("ConstraintEndTime", QString()), Qt::ISODate);
         m_taskDefaults.setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         
         m_taskDefaults.estimate()->setType((Estimate::Type)grp.readEntry("EstimateType",0));
         m_taskDefaults.estimate()->setUnit(Duration::unitFromString(grp.readEntry("Unit","h")));
-        m_taskDefaults.estimate()->setExpectedEstimate(grp.readEntry("ExpectedEstimate",0));
+        double value = grp.readEntry("ExpectedEstimate",1);
+        m_taskDefaults.estimate()->setExpectedEstimate(grp.readEntry("ExpectedEstimate",1.0));
         m_taskDefaults.estimate()->setPessimisticRatio(grp.readEntry("PessimisticEstimate",0));
         m_taskDefaults.estimate()->setOptimisticRatio(grp.readEntry("OptimisticEstimate",0));
     }
