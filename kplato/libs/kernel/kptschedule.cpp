@@ -978,6 +978,11 @@ MainSchedule::~MainSchedule()
     //kDebug()<<"("<<this<<")";
 }
 
+void MainSchedule::incProgress()
+{
+    if ( m_manager ) m_manager->incProgress();
+}
+
 bool MainSchedule::isBaselined() const
 {
     return m_manager == 0 ? false : m_manager->isBaselined();
@@ -1538,6 +1543,11 @@ int ScheduleManager::indexOf( const MainSchedule* sch ) const
 QList<MainSchedule*> ScheduleManager::schedules() const
 {
     return m_schedules;
+}
+
+void ScheduleManager::incProgress()
+{
+    m_project.incProgress();
 }
 
 bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )

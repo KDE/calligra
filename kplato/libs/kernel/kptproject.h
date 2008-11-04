@@ -476,6 +476,8 @@ public:
     void setTaskDefaults( const Task &task );
     const Task &taskDefaults() const { return *m_taskDefaults; }
     
+    void incProgress();
+
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
@@ -487,7 +489,7 @@ signals:
     void currentScheduleChanged();
     /// Use to show progress during calculation
     void sigProgress( int );
-    
+    void maxProgress( int );
     /// This signal is emitted when one of the nodes members is changed.
     void nodeChanged( Node* );
     /// This signal is emitted when the node is to be added to the project.
@@ -610,7 +612,8 @@ private:
     int m_projectSlack;
 
     Task *m_taskDefaults;
-    
+    int m_progress;
+
 #ifndef NDEBUG
 public:
     void printDebug( bool children, const QByteArray& indent );

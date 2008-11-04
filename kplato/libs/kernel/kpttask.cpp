@@ -1137,6 +1137,7 @@ DateTime Task::calculateEarlyFinish(int use) {
     cs->insertForwardNode( this );
     cs->earlyFinish = cs->earlyStart + m_durationForward;
     //kDebug()<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<cs->earlyFinish<<""<<m_name;
+    cs->incProgress();
     return cs->earlyFinish;
 }
 
@@ -1340,6 +1341,7 @@ DateTime Task::calculateLateStart(int use) {
     cs->insertBackwardNode( this );
     cs->lateStart = cs->lateFinish - m_durationBackward;
     //kDebug()<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<cs->lateStart<<" "<<m_name;
+    cs->incProgress();
     return cs->lateStart;
 }
 
@@ -1660,6 +1662,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     }
     //kDebug()<<cs->startTime<<" :"<<cs->endTime<<""<<m_name<<" scheduleForward()";
     m_visitedForward = true;
+    cs->incProgress();
     return cs->endTime;
 }
 
@@ -1970,6 +1973,7 @@ DateTime Task::scheduleFromEndTime(int use) {
     }
     //kDebug()<<m_name<<":"<<cs->startTime<<" :"<<cs->endTime;
     m_visitedBackward = true;
+    cs->incProgress();
     return cs->startTime;
 }
 

@@ -214,6 +214,8 @@ public:
     virtual void logWarning( const QString &, int = -1 ) {}
     virtual void logInfo( const QString &, int = -1 ) {}
     
+    virtual void incProgress() { if ( m_parent ) m_parent->incProgress(); }
+
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
     
@@ -462,6 +464,8 @@ public:
     QString logPhase( int phase ) const { return m_logPhase.value( phase ); }
     static QString logSeverity( int severity );
     
+    virtual void incProgress();
+
 protected:
     virtual void changed( Schedule *sch );
 
@@ -576,6 +580,8 @@ public:
             
     void scheduleChanged( MainSchedule *sch );
     
+    void incProgress();
+
 protected:
     MainSchedule *loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status );
     

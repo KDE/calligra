@@ -39,6 +39,7 @@
 #include <QTreeWidgetItem>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QProgressBar>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -1138,15 +1139,32 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( project == 0 || sm == 0 ) {
         return;
     }
-    statusBar()->showMessage( i18n( "%1: Calculating...", sm->name() ) );
-//    connect( project, SIGNAL( sigProgress( int ) ), SLOT(slotProgressChanged( int ) ) );
+    removeStatusBarItem( m_estlabel );
+    m_text = new QLabel( i18n( "%1: Calculating...", sm->name() ) );
+    addStatusBarItem( m_text, 0, true );
+    m_progress = new QProgressBar();
+    m_progress->setMaximumHeight(statusBar()->fontMetrics().height());
+    addStatusBarItem( m_progress, 0, true );
+    connect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
+    connect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT( setValue( int ) ) );
     QApplication::setOverrideCursor( Qt::WaitCursor );
     CalculateScheduleCmd *cmd =  new CalculateScheduleCmd( *project, *sm, i18n( "Calculate %1", sm->name() ) );
     getPart() ->addCommand( cmd );
     QApplication::restoreOverrideCursor();
-    statusBar()->clearMessage();
-    statusBar()->showMessage( i18n( "%1: Calculating done", sm->name() ), 2000 );
     slotUpdate();
+    m_text->setText( i18n( "%1: Calculating done", sm->name() ) );
+    disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
+    disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
+    QTimer::singleShot( 2000, this, SLOT( removeProgressBarItems() ) );
+}
+
+void View::removeProgressBarItems()
+{
+    removeStatusBarItem( m_progress );
+    removeStatusBarItem( m_text );
+    addStatusBarItem( m_estlabel, 0, true );
+    delete m_progress;
+    delete m_text;
 }
 
 void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )

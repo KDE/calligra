@@ -176,9 +176,18 @@ void Project::calculate( const DateTime &dt )
 
 void Project::calculate( ScheduleManager &sm )
 {
-    emit sigProgress( 0 );
+    m_progress = 0;
+    int nodes = 0;
+    foreach ( Node *n, nodeIdDict.values() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            nodes++;
+        }
+    }
+    int maxprogress = nodes * 3;
     //kDebug();
     if ( sm.recalculate() ) {
+        emit maxProgress( maxprogress );
+        incProgress();
         sm.setCalculateAll( false );
         sm.createSchedules();
         sm.setRecalculateFrom( KDateTime::currentLocalDateTime() );
@@ -186,8 +195,16 @@ void Project::calculate( ScheduleManager &sm )
             sm.expected()->startTime = sm.parentManager()->expected()->startTime;
             sm.expected()->earlyStart = sm.parentManager()->expected()->earlyStart;
         }
+        incProgress();
         calculate( sm.expected(), KDateTime::currentLocalDateTime() );
     } else {
+        if ( sm.optimistic() ) {
+            maxprogress += nodes * 3;
+        }
+        if ( sm.pessimistic() ) {
+            maxprogress += nodes * 3;
+        }
+        emit maxProgress( maxprogress );
         sm.createSchedules();
         calculate( sm.expected() );
         emit scheduleChanged( sm.expected() );
@@ -199,8 +216,7 @@ void Project::calculate( ScheduleManager &sm )
         }
         setCurrentSchedule( sm.expected()->id() );
     }
-    emit sigProgress( 100 );
-    emit sigProgress( -1 );
+    emit sigProgress( maxprogress );
     emit projectCalculated( &sm );
     emit scheduleManagerChanged( &sm );
     emit changed();
@@ -297,6 +313,12 @@ void Project::calculate()
     } else {
         kError() << "Illegal project type: " << type() << endl;
     }
+}
+
+void Project::incProgress()
+{
+    m_progress += 1;
+    emit sigProgress( m_progress );
 }
 
 bool Project::calcCriticalPath( bool fromEnd )

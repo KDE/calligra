@@ -212,6 +212,8 @@ protected slots:
 
     void slotCurrentChanged( int );
 
+    void removeProgressBarItems();
+
 #ifndef NDEBUG
     void slotPrintDebug();
     void slotPrintSelectedDebug();
@@ -268,6 +270,7 @@ private:
 
     QLabel *m_estlabel;
     QProgressBar *m_progress;
+    QLabel *m_text;
 
     ViewAdaptor* m_dbus;
 
