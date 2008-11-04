@@ -21,6 +21,8 @@
 #include <KoShapeControllerBase.h>
 #include <KoPathShape.h>
 #include <KoShapeContainer.h>
+#include <KoShapeGroup.h>
+#include <KoShapeGroupCommand.h>
 
 #include <klocale.h>
 
@@ -31,7 +33,8 @@ class KarbonBooleanCommand::Private
 public:
     Private( KoShapeControllerBase * c )
     : controller( c ), pathA(0), pathB(0), resultingPath(0)
-    , resultParent(0), operation( Intersection ), isExecuted(false)
+    , resultParent(0), resultParentCmd(0)
+    , operation( Intersection ), isExecuted(false)
     {}
 
     ~Private()
@@ -45,6 +48,7 @@ public:
     KoPathShape * pathB;
     KoPathShape * resultingPath;
     KoShapeContainer * resultParent;
+    QUndoCommand * resultParentCmd;
     BooleanOperation operation;
     bool isExecuted;
 };
@@ -96,6 +100,13 @@ void KarbonBooleanCommand::redo()
         d->resultingPath->setBorder( d->pathA->border() );
         d->resultingPath->setBackground( d->pathA->background() );
         d->resultingPath->setShapeId( d->pathA->shapeId() );
+        
+        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( d->pathA->parent() );
+        if( group )
+        {
+            QList<KoShape*> childs;
+            d->resultParentCmd = new KoShapeGroupCommand( group, childs << d->resultingPath, this );
+        }
     }
 
     if( d->controller )
@@ -116,9 +127,12 @@ void KarbonBooleanCommand::undo()
 
     if( d->controller && d->resultingPath )
     {
-        d->resultParent = d->resultingPath->parent();
-        if( d->resultParent )
-            d->resultParent->removeChild( d->resultingPath );
+        if( ! d->resultParentCmd )
+        {
+            d->resultParent = d->resultingPath->parent();
+            if( d->resultParent )
+                d->resultParent->removeChild( d->resultingPath );
+        }
         d->controller->removeShape( d->resultingPath );
     }
 
