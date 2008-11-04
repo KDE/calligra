@@ -52,7 +52,8 @@ private slots:
     void testTaskDeleteCmd();
 
     void schedule();
-    
+    void scheduleFullday();
+
 private:
     Project *m_project;
     Task *m_task;

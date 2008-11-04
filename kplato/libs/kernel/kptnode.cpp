@@ -1152,6 +1152,15 @@ EffortCost Node::acwp( const QDate &date, long id ) const
     return ec;
 }
 
+void Node::slotStandardWorktimeChanged( StandardWorktime* )
+{
+    //kDebug()<<m_estimate;
+    if ( m_estimate ) {
+        m_estimate->m_expectedCached = false;
+        m_estimate->m_optimisticCached = false;
+        m_estimate->m_pessimisticCached = false;
+    }
+}
 
 //////////////////////////   Estimate   /////////////////////////////////
 

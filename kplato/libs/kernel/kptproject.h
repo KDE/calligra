@@ -286,6 +286,7 @@ public:
      */
     StandardWorktime *standardWorktime() { return m_standardWorktime; }
     void setStandardWorktime( StandardWorktime * worktime );
+    void changed( StandardWorktime* );
 
     /// Check if a link exists between node @p par and @p child.
     bool linkExists( const Node *par, const Node *child ) const;
@@ -539,6 +540,10 @@ signals:
      * @parem cal The new default calendar. May be 0.
      */
     void defaultCalendarChanged( Calendar *cal );
+    /**
+     * Emitted when the the standard worktime has been changed.
+     */
+    void standardWorktimeChanged( StandardWorktime* );
     
     /// Emitted when the relation @p rel is about to be added.
     void relationToBeAdded( Relation *rel, int parentIndex, int childIndex );

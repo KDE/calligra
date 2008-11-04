@@ -46,7 +46,7 @@ namespace KPlato
 {
 
 class Calendar;
-
+class Project;
 class IntMap;
 class DateTime;
 class Project;
@@ -530,10 +530,12 @@ public:
 class KPLATOKERNEL_EXPORT StandardWorktime
 {
 public:
-    StandardWorktime();
+    StandardWorktime( Project *project = 0 );
     StandardWorktime(StandardWorktime* worktime);
     ~StandardWorktime();
-    
+
+    /// Set Project
+    void setProject( Project *project ) { m_project = project; }
     /// The work time of a normal year.
     Duration durationYear() const { return m_year; }
     /// The work time of a normal year.
@@ -566,18 +568,20 @@ public:
     /// The work time of a normal day
     double day() const { return m_day.toDouble(Duration::Unit_h); }
     /// Set the work time of a normal day
-    void setDay(const Duration day) { m_day = day; }
+    void setDay(const Duration day) { m_day = day; changed(); }
     /// Set the work time of a normal day
-    void setDay(double hours) { m_day = Duration(hours, Duration::Unit_h); }
+    void setDay(double hours) { m_day = Duration(hours, Duration::Unit_h); changed(); }
     
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
-    
+    void changed();
+
 protected:
     void init();
     
 private:
+    Project *m_project;
     Duration m_year;
     Duration m_month;
     Duration m_week;

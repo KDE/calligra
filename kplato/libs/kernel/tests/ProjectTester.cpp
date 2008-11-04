@@ -759,6 +759,46 @@ void ProjectTester::schedule()
 
 }
 
+void ProjectTester::scheduleFullday()
+{
+    Calendar c("Test");
+    QTime t1(0,0,0);
+    int length = 24*60*60*1000;
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c.weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    } 
+    ResourceGroup *g = new ResourceGroup();
+    g->setName( "G1" );
+    m_project->addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setName( "R1" );
+    r->setCalendar( &c );
+    m_project->addResource( g, r );
+
+    Task *t = m_project->createTask( m_project );
+    t->setName( "T1" );
+    m_project->addTask( t, m_project );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 3 * 14.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+    
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    gr->addResourceRequest( new ResourceRequest( r ) );
+    t->addRequest( gr );
+
+    ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+    
+    QCOMPARE( t->startTime(), m_project->startTime() );
+    QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 14 )) );
+    
+
+}
+
 
 } //namespace KPlato
 

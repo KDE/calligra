@@ -1000,6 +1000,7 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     int i = index == -1 ? p->numChildren() : index;
     if ( emitSignal ) emit nodeToBeAdded( p, i );
     p->insertChildNode( i, task );
+    connect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), task, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
     if ( emitSignal ) emit nodeAdded( task );
     if ( emitSignal ) emit changed();
     return true;
@@ -1014,6 +1015,7 @@ void Project::takeTask( Node *node, bool emitSignal )
     }
     removeId( node->id() );
     if ( emitSignal ) emit nodeToBeRemoved( node );
+    disconnect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), node, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
     parent->takeChildNode( node );
     if ( emitSignal ) emit nodeRemoved( node );
     if ( emitSignal ) emit changed();
@@ -1768,6 +1770,8 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
     if ( m_standardWorktime != worktime ) {
         delete m_standardWorktime;
         m_standardWorktime = worktime;
+        m_standardWorktime->setProject( this );
+        emit standardWorktimeChanged( worktime );
     }
 }
 
@@ -2125,6 +2129,12 @@ void Project::changed( Resource *resource )
 void Project::changed( Calendar *cal )
 {
     emit calendarChanged( cal );
+    emit changed();
+}
+
+void Project::changed( StandardWorktime *w )
+{
+    emit standardWorktimeChanged( w );
     emit changed();
 }
 

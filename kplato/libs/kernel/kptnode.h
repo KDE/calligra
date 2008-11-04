@@ -570,6 +570,9 @@ public:
     virtual void changed() { changed( this ); }
     Duration getmDurationForward(){ return this->m_durationForward;}
     
+public slots:
+    void slotStandardWorktimeChanged( StandardWorktime* );
+
 protected:
     /**
      * Calculates and returns the duration of the node.
@@ -804,6 +807,7 @@ protected:
     void copy( const Estimate &estimate );
     
 private:
+    friend class Node;
     Node *m_parent;
     /// Holds the unit entered by user
     Duration::Unit m_unit;

@@ -1192,7 +1192,9 @@ QList<CalendarDay*> Calendar::workingDays() const
 }
 
 /////////////
-StandardWorktime::StandardWorktime() {
+StandardWorktime::StandardWorktime( Project *project )
+    : m_project( project )
+ {
     init();
 }
 
@@ -1207,7 +1209,8 @@ StandardWorktime::StandardWorktime(StandardWorktime *worktime) {
     }
 }
 
-StandardWorktime::~StandardWorktime() {
+StandardWorktime::~StandardWorktime()
+{
     //kDebug()<<"("<<this<<")";
 }
 
@@ -1217,6 +1220,13 @@ void StandardWorktime::init() {
     m_month = Duration(0, 176, 0);
     m_week = Duration(0, 40, 0);
     m_day = Duration(0, 8, 0);
+}
+
+void StandardWorktime::changed()
+{
+    if ( m_project ) {
+        m_project->changed( this );
+    }
 }
 
 bool StandardWorktime::load( KoXmlElement &element, XMLLoaderObject &status ) {
