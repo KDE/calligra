@@ -77,7 +77,7 @@ QDockWidget* KarbonLayerDockerFactory::createDockWidget()
 }
 
 KarbonLayerDocker::KarbonLayerDocker()
-    : m_part( 0 ), m_model( 0 )
+: m_part( 0 ), m_model( 0 ), m_updateTimer( this )
 {
     setWindowTitle( i18n( "Layer view" ) );
 
@@ -133,6 +133,10 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_layerView->setSortingEnabled(true);
 
     connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
+    
+    m_updateTimer.setSingleShot( true );
+    m_updateTimer.setInterval( 250 );
+    connect( &m_updateTimer, SIGNAL(timeout()), m_model, SLOT(update()) );
 }
 
 KarbonLayerDocker::~KarbonLayerDocker()
@@ -141,7 +145,10 @@ KarbonLayerDocker::~KarbonLayerDocker()
 
 void KarbonLayerDocker::updateView()
 {
-    m_model->update();
+    if( m_updateTimer.isActive() )
+        return;
+    
+    m_updateTimer.start();
 }
 
 void KarbonLayerDocker::setPart( KParts::Part * part )

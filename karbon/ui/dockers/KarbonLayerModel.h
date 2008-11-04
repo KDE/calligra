@@ -35,8 +35,6 @@ class KarbonLayerModel : public KoDocumentSectionModel
 public:
     /// Constructs a new layer model using the specified documents data
     KarbonLayerModel( QObject * parent = 0 );
-    /// Triggers an update of the complete model
-    void update();
 
     /// Sets a new document to show contents of
     void setDocument( KarbonDocument * newDocument );
@@ -53,6 +51,11 @@ public:
     virtual QStringList mimeTypes() const;
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
+
+public slots:
+    /// Triggers an update of the complete model
+    void update();
+    
 private:
     /// Returns properties of the given shape
     PropertyList properties( KoShape* shape ) const;

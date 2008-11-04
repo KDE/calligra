@@ -1331,7 +1331,10 @@ void KarbonView::createLayersTabDock()
     KarbonLayerDockerFactory layerFactory;
     KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(createDockWidget(&layerFactory));
     layerDocker->setPart( d->part );
-    connect( this, SIGNAL( selectionChange() ), layerDocker, SLOT( updateView() ) );
+    connect( d->canvas->shapeManager(), SIGNAL(selectionChanged()),
+             layerDocker, SLOT(updateView()) );
+    connect( d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+             layerDocker, SLOT(updateView()) );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * )),
              layerDocker, SLOT( setPart( KParts::Part * ) ) );
 }

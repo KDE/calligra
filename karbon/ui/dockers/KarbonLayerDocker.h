@@ -20,6 +20,7 @@
 #define KARBONLAYERDOCKER_H
 
 #include <QDockWidget>
+#include <QtCore/QTimer>
 #include <KoDockFactory.h>
 
 class KoDocumentSectionView;
@@ -77,6 +78,7 @@ private:
     KarbonLayerModel * m_model;
     KarbonLayerSortingModel * m_sortModel;
     KoDocumentSectionView * m_layerView;
+    QTimer m_updateTimer;
 };
 
 #endif // KARBONLAYERDOCKER_H
