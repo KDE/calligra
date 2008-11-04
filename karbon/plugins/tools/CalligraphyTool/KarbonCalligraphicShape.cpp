@@ -374,6 +374,10 @@ QString KarbonCalligraphicShape::pathShapeId() const
 
 void KarbonCalligraphicShape::simplifyGuidePath()
 {
+    // do not attempt to simplify if there are too few points
+    if( m_points.count() < 3 )
+        return;
+    
     QList<QPointF> points;
     foreach( KarbonCalligraphicPoint *p, m_points )
         points.append( p->point() );
