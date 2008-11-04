@@ -47,9 +47,9 @@ Test::Test()
     const bool readOnly = args->isSet("ro");
 
 // setXMLFile("testui.rc");
-    QFont f;
+/*    QFont f;
     f.setPixelSize(f.pixelSize()*2 / 3);
-    setFont(f);
+    setFont(f);*/
 
     /*  First, create the Set which will hold the properties.  */
     Property *p = 0;
