@@ -49,6 +49,7 @@
 #include <QtGui/QRadialGradient>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QConicalGradient>
+#include <QtGui/QTableWidgetItem>
 
 #include <math.h>
 
@@ -157,7 +158,7 @@ void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGra
 }
 
 KarbonGradientTabWidget::KarbonGradientTabWidget( QWidget* parent )
-    : QTabWidget( parent )
+    : KTabWidget( parent )
     , m_gradOpacity( 1.0 ), m_stopIndex(-1), m_checkerPainter( 4 )
         , m_type( QGradient::LinearGradient ), m_spread( QGradient::PadSpread )
 {

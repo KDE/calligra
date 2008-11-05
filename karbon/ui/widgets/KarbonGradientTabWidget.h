@@ -24,11 +24,8 @@
 
 #include <karbonui_export.h>
 
-#include <QWidget>
-#include <QTabWidget>
-#include <QtGui/QTableWidgetItem>
+#include <KTabWidget>
 
-#include <KoAbstractGradient.h>
 #include <KoCheckerBoardPainter.h>
 
 class KComboBox;
@@ -39,6 +36,8 @@ class KarbonGradientChooser;
 class KoSliderCombo;
 class KoResourceItem;
 class KColorButton;
+class QWidget;
+class QTableWidgetItem;
 
 /**
  * A tab widget for managing gradients.
@@ -46,7 +45,7 @@ class KColorButton;
  * It has one tab to edit a selected gradients type, spread method and color stops.
  * Another tab contains a list with predefined gradients to choose from.
  */
-class KARBONUI_EXPORT KarbonGradientTabWidget : public QTabWidget
+class KARBONUI_EXPORT KarbonGradientTabWidget : public KTabWidget
 {
 Q_OBJECT
 
@@ -58,12 +57,7 @@ public:
 
     /**
      * Creates a new gradient tab widget with the given parent.
-     *
-     * The predefined gradients are retrived from the given resource server.
-     *
-     * @param server the resource server to retrieve predefined gradients from
      * @param parent the widgets parent
-     * @param name the widgets name
      */
     explicit KarbonGradientTabWidget( QWidget* parent = 0L );
 
@@ -110,7 +104,7 @@ public:
     void setStops( const QGradientStops &stops );
 
 Q_SIGNALS:
-    /// Is emmited a soon as the gradient changes
+    /// Is emitted a soon as the gradient changes
     void changed();
 
 protected Q_SLOTS:
