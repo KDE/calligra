@@ -75,6 +75,7 @@ protected slots:
     void slotCalculationNeeded();
     void slotOk();
     void slotCalendarChanged(int);
+    void slotButtonClicked(int button);
 
 private:
     Resource *m_original;

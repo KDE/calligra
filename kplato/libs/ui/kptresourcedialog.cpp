@@ -162,7 +162,6 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     }
     dia->calendarList->setCurrentIndex(cal);
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
@@ -176,6 +175,14 @@ void ResourceDialog::enableButtonOk() {
 
 void ResourceDialog::slotCalculationNeeded() {
     m_calculationNeeded = true;
+}
+
+void ResourceDialog::slotButtonClicked(int button) {
+    if (button == KDialog::Ok) {
+        slotOk();
+    } else {
+        KDialog::slotButtonClicked(button);
+    }
 }
 
 void ResourceDialog::slotOk() {
