@@ -315,6 +315,9 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
 {
     switch ( role ) {
         case Qt::EditRole: {
+            if ( timeZone( a, Role::EnumListValue ) == value.toInt() ) {
+                return false;
+            }
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
             QString name = lst.value( value.toInt() );
             KTimeZone tz;

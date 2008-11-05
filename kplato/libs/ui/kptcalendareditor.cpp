@@ -511,14 +511,12 @@ void CalendarEditor::slotContextMenuCalendar( QModelIndex index, const QPoint& p
 {
     //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
-    if ( index.isValid() ) {
+/*    if ( index.isValid() ) {
         Calendar *a = m_calendarview->model()->calendar( index );
         if ( a ) {
             name = "calendareditor_calendar_popup";
-        } else if ( m_dayview->model()->day( index ) ) {
-            name = "calendareditor_day_popup";
         }
-    }
+    }*/
     //kDebug()<<name;
     if ( name.isEmpty() ) {
         return;
