@@ -23,6 +23,7 @@
 #include <kexi_export.h>
 #include <koproperty/property.h>
 #include <kexiutils/tristate.h>
+#include <QVariant>
 
 class Q3CString;
 
