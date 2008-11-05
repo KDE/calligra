@@ -48,7 +48,6 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
     
     connect(namefield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));
     connect(leaderfield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));
-    connect(idfield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));
     connect(descriptionfield, SIGNAL(textChanged()), SLOT(slotObligatedFieldsFilled()));
     
     connect(chooseLeader, SIGNAL(clicked()), SLOT(slotChooseResponsible()));
@@ -59,7 +58,6 @@ void SummaryTaskGeneralPanel::setStartValues(Task &task) {
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
-    idfield->setText(task.id());
     wbsfield->setText(task.wbsCode());
     
     namefield->setFocus();
@@ -67,7 +65,7 @@ void SummaryTaskGeneralPanel::setStartValues(Task &task) {
 }
 
 void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
-    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
+    emit obligatedFieldsFilled(!namefield->text().isEmpty());
 }
 
 MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
@@ -87,10 +85,6 @@ MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
         cmd->addCommand(new NodeModifyDescriptionCmd(m_task, descriptionfield->text()));
         modified = true;
     }
-    if (!idfield->isHidden() && idfield->text() != m_task.id()) {
-        cmd->addCommand(new NodeModifyIdCmd(m_task, idfield->text()));
-        modified = true;
-    }
     if (!modified) {
         delete cmd;
         return 0;
@@ -99,11 +93,6 @@ MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
 }
 
 bool SummaryTaskGeneralPanel::ok() {
-    if (idfield->text() != m_task.id() && m_task.findNode(idfield->text())) {
-        KMessageBox::sorry(this, i18n("Task id must be unique"));
-        idfield->setFocus();
-        return false;
-    }
     return true;
 }
 

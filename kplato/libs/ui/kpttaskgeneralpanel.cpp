@@ -62,7 +62,6 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
-    idfield->setText(task.id());
     wbsfield->setText(task.wbsCode());
 
     int cal = 0;
@@ -137,10 +136,6 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
         cmd->addCommand(new NodeModifyConstraintEndTimeCmd(m_task, endDateTime()));
         modified = true;
     }
-    if (!idfield->isHidden() && idfield->text() != m_task.id()) {
-        cmd->addCommand(new NodeModifyIdCmd(m_task, idfield->text()));
-        modified = true;
-    }
     int et = estimationType();
     if (et != m_task.estimate()->type()) {
         cmd->addCommand(new ModifyEstimateTypeCmd(m_task,  m_task.estimate()->type(), et));
@@ -182,11 +177,6 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
 }
 
 bool TaskGeneralPanel::ok() {
-    if (idfield->text() != m_task.id() && m_task.findNode(idfield->text())) {
-        KMessageBox::sorry(this, i18n("Task id must be unique"));
-        idfield->setFocus();
-        return false;
-    }
     return true;
 }
 
@@ -230,7 +220,6 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     setObjectName(n);
     setupUi(this);
 
-    connect(idfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(namefield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
@@ -369,7 +358,7 @@ void TaskGeneralPanelImpl::setEstimateType( int type)
 void TaskGeneralPanelImpl::checkAllFieldsFilled()
 {
     emit changed();
-    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
+    emit obligatedFieldsFilled(!namefield->text().isEmpty());
 }
 
 

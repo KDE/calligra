@@ -48,7 +48,7 @@ public:
     MacroCommand *buildCommand();
 
 protected slots:
-    void slotOk();
+    void slotButtonClicked(int button);
 
 private:
     SummaryTaskGeneralPanel *m_generalTab;

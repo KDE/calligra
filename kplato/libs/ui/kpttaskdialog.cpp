@@ -62,13 +62,11 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, QWidget *p)
 
     enableButtonOk(false);
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_documentsTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 }
-
 
 MacroCommand *TaskDialog::buildCommand() {
     MacroCommand *m = new MacroCommand(i18n("Modify Task"));
@@ -100,13 +98,16 @@ MacroCommand *TaskDialog::buildCommand() {
     return m;
 }
 
-void TaskDialog::slotOk() {
-    if (!m_generalTab->ok())
-        return;
-    if (!m_resourcesTab->ok())
-        return;
-
-    accept();
+void TaskDialog::slotButtonClicked(int button) {
+    if (button == KDialog::Ok) {
+        if (!m_generalTab->ok())
+            return;
+        if (!m_resourcesTab->ok())
+            return;
+        accept();
+    } else {
+        KDialog::slotButtonClicked(button);
+    }
 }
 
 

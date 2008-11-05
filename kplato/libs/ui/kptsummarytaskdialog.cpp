@@ -41,7 +41,6 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
     enableButtonOk(false);
 
     connect(m_generalTab, SIGNAL(obligatedFieldsFilled(bool)), SLOT(enableButtonOk(bool)));
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
 }
 
 
@@ -60,11 +59,14 @@ MacroCommand *SummaryTaskDialog::buildCommand() {
     return m;
 }
 
-void SummaryTaskDialog::slotOk() {
-    if (!m_generalTab->ok())
-        return;
-
-    accept();
+void SummaryTaskDialog::slotButtonClicked(int button) {
+    if (button == KDialog::Ok) {
+        if (!m_generalTab->ok())
+            return;
+        accept();
+    } else {
+        KDialog::slotButtonClicked(button);
+    }
 }
 
 
