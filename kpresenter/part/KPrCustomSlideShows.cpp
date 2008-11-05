@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007-2008      Carlos Licea <carlos.licea@kdemail.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,9 +20,12 @@
 
 #include "KPrCustomSlideShows.h"
 
+#include <kdebug.h>
 //KOffice includes
 #include <KoPAPageBase.h>
 #include <KoPAPage.h>
+#include <KoPALoadingContext.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
 //KPresenter includes
@@ -137,38 +141,38 @@ void KPrCustomSlideShows::saveOdf( KoPASavingContext & context )
     }
 }
 
-void KPrCustomSlideShows::loadOdf( KoXmlElement* presentationSettings, KPrDocument* kprDocument )
+void KPrCustomSlideShows::loadOdf( const KoXmlElement & presentationSettings, KoPALoadingContext & context )
 {
     m_customSlideShows.clear();
 
-    //Create a map of Name-Address so that we can look for the names much faster
-    QMap<QString,KoPAPageBase*> pageNames;
-    foreach( KoPAPageBase* page, kprDocument->pages() )
-    {
-        pageNames.insert( page->name(), page );
-    }
+    KoXmlElement element;
+    forEachElement( element, presentationSettings ) {
+        if ( element.tagName() == "show" && element.namespaceURI() == KoXmlNS::presentation ) {
+            if ( element.hasAttributeNS( KoXmlNS::presentation, "name" ) && element.hasAttributeNS( KoXmlNS::presentation, "pages" ) ) {
+                QString name = element.attributeNS( KoXmlNS::presentation, "name" );
+                QString pages = element.attributeNS( KoXmlNS::presentation, "pages" );
 
-    //Now load the customSlidesShows
-    QList<QString> usedNames;//used to avoid duplicates, shouldn't happen but we cannot assert it
-    KoXmlElement presentationShow = presentationSettings->firstChild().toElement();
-    for( ; !presentationShow.isNull(); presentationShow = presentationShow.nextSibling().toElement() )
-    {
-        QString name = presentationShow.attribute( "name" );
-        QString pages = presentationShow.attribute( "pages" );
-        QStringList splitedPages = pages.split( ',' );
-        QList<KoPAPageBase*> slideShow;
-        foreach( QString pageName, splitedPages )
-        {
-            slideShow.append( pageNames.value( pageName ) );
+                QStringList splitedPages = pages.split( ',' );
+                QList<KoPAPageBase*> slideShow;
+                foreach( QString pageName, splitedPages ) {
+                    KoPAPage * page = context.pageByName( pageName );
+                    if ( page ) {
+                        slideShow.append( page );
+                    }
+                    else {
+                        kWarning(33001) << "missing attributes is presentation:show";
+                    }
+                }
+                if ( !m_customSlideShows.contains( name ) ) {
+                    m_customSlideShows.insert( name, slideShow );
+                }
+                else {
+                    kWarning(33001) << "slide show with name" << name << "already existing. It will not be inserted.";
+                }
+            }
+            else {
+                kWarning(33001) << "missing attributes is presentation:show";
+            }
         }
-        if( usedNames.contains( name ) )
-        {
-            insert( name, slideShow );
-        }
-        else
-        {
-            //The item is repeated, just update
-            update( name, slideShow );
-        }
-    }//for
+    }
 }

@@ -30,6 +30,7 @@ class KoXmlWriter;
 class KoPAPageBase;
 class KoXmlElement;
 class KoPASavingContext;
+class KoPALoadingContext;
 class KPrDocument;
 
 #include "kpresenter_export.h"
@@ -121,11 +122,19 @@ public:
     void removeSlidesFromAll( const QList<KoPAPageBase*> &slideShow );
 
     /**
-    * @brief saves the slideShows into the given writer
-    */
+     * @brief Save the slide shows
+     *
+     * @param context The saving context
+     */
     void saveOdf( KoPASavingContext & context );
 
-    void loadOdf( KoXmlElement* presentationSettings, KPrDocument* kprDocument );
+    /**
+     * @brief Load the slide shows
+     *
+     * @param element The element containing the presentation:settings
+     * @param context The loading context
+     */
+    void loadOdf( const KoXmlElement & presentationSettings, KoPALoadingContext & context );
 
 private:
     QMap< QString, QList<KoPAPageBase*> > m_customSlideShows;
