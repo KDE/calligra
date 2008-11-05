@@ -723,60 +723,108 @@ void KDateTable::KDateTablePrivate::endOfWeek()
 void
 KDateTable::keyPressEvent( QKeyEvent *e )
 {
+    QDate cd = d->mDate;
     switch( e->key() ) {
     case Qt::Key_Up:
-            setDate(d->mDate.addDays(-7));
+        setDate(d->mDate.addDays(-7));
         break;
     case Qt::Key_Down:
-            setDate(d->mDate.addDays(7));
+        setDate(d->mDate.addDays(7));
         break;
     case Qt::Key_Left:
-            setDate(d->mDate.addDays(-1));
+        setDate(d->mDate.addDays(-1));
         break;
     case Qt::Key_Right:
-            setDate(d->mDate.addDays(1));
+        setDate(d->mDate.addDays(1));
         break;
     case Qt::Key_Minus:
         setDate(d->mDate.addDays(-1));
-	break;
+        break;
     case Qt::Key_Plus:
         setDate(d->mDate.addDays(1));
-	break;
+        break;
     case Qt::Key_N:
         setDate(QDate::currentDate());
-	break;
+        break;
     case Qt::Key_Return:
     case Qt::Key_Enter:
         emit tableClicked();
+        break;
+    }
+
+    switch( e->key() ) {
+    case Qt::Key_Down:
+    case Qt::Key_Up:
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_Minus:
+    case Qt::Key_Plus: {
+        if ( d->m_selectionmode == ExtendedSelection ) {
+            if ( e->modifiers() & Qt::ShiftModifier ) {
+                int inc = cd > d->mDate ? 1 : -1;
+                for ( QDate dd = d->mDate;  dd != cd; dd = dd.addDays( inc ) ) {
+                    if ( ! d->m_selectedDates.contains( dd ) ) {
+                        d->m_selectedDates << dd;
+                    }
+                }
+            } else if ( e->modifiers() & Qt::ControlModifier ) {
+                // keep selection, just move on
+            } else {
+                d->m_selectedDates.clear();
+            }
+        }
+        break;}
+    case Qt::Key_Space:
+    case Qt::Key_Select:
+        if ( d->m_selectionmode == ExtendedSelection ) {
+            if ( e->modifiers() & Qt::ControlModifier ) {
+                if ( d->m_selectedDates.contains( d->mDate ) ) {
+                    d->m_selectedDates.removeAt( d->m_selectedDates.indexOf( d->mDate ) );
+                } else {
+                    d->m_selectedDates << d->mDate;
+                }
+            } else if ( ! d->m_selectedDates.contains( d->mDate ) ) {
+                d->m_selectedDates << d->mDate;
+            }
+            update();
+        }
+        break;
+    case Qt::Key_Menu:
+        if (  d->popupMenuEnabled )
+        {
+            KMenu *menu = new KMenu();
+            if ( d->m_selectionmode == ExtendedSelection ) {
+                emit aboutToShowContextMenu( menu, d->m_selectedDates );
+            } else {
+                menu->addTitle( KGlobal::locale()->formatDate(d->mDate) );
+                emit aboutToShowContextMenu( menu, d->mDate );
+            }
+            if ( menu->isEmpty() ) {
+                delete menu;
+            } else {
+                int p = posFromDate( d->mDate ) - 1;
+                int col = p % 7;
+                int row = p / 7;
+                QPoint pos = geometry().topLeft();
+                QSize size = geometry().size();
+                int sx = size.width() / 8;
+                int sy = size.height() / 7;
+                pos = QPoint( pos.x() + sx + sx / 2 + sx * col, pos.y() + sy + sy * row );
+                kDebug()<<pos<<p<<col<<row;
+                menu->popup(mapToGlobal(pos));
+            }
+        }
         break;
     case Qt::Key_Control:
     case Qt::Key_Alt:
     case Qt::Key_Meta:
     case Qt::Key_Shift:
-      // Don't beep for modifiers
-      break;
-    case Qt::Key_Menu:
-        if (  d->popupMenuEnabled )
-        {
-            KMenu *menu = new KMenu();
-            menu->addTitle( KGlobal::locale()->formatDate(d->mDate) );
-            emit aboutToShowContextMenu( menu, d->mDate );
-            int p = posFromDate( d->mDate ) - 1;
-            int col = p % 7;
-            int row = p / 7;
-            QPoint pos = geometry().topLeft();
-            QSize size = geometry().size();
-            int sx = size.width() / 8;
-            int sy = size.height() / 7;
-            pos = QPoint( pos.x() + sx + sx / 2 + sx * col, pos.y() + sy + sy * row );
-            kDebug()<<pos<<p<<col<<row;
-            menu->popup(mapToGlobal(pos));
-        }
-      break;
+        // Don't beep for modifiers
+        break;
     default:
-      if (!e->modifiers()) { // hm
-    KNotification::beep();
-}
+        if (!e->modifiers()) { // hm
+            KNotification::beep();
+        }
     }
 }
 
@@ -855,81 +903,84 @@ KDateTable::mousePressEvent(QMouseEvent *e)
   pos = (7 * (row - 1)) + col;
   QDate clickedDate = dateFromPos( pos );
 
-  switch ( d->m_selectionmode )
+  if ( d->m_selectionmode != ExtendedSelection || e->button() !=  Qt::RightButton || ! d->m_selectedDates.contains( clickedDate ) )
   {
-      case SingleSelection:
-/*          d->m_selectedDates.clear();
-          d->m_selectedDates << clickedDate;
-          emit selectionChanged( d->m_selectedDates );*/
-          break;
-      case ExtendedSelection:
-          //kDebug()<<"extended "<<e->modifiers()<<", "<<clickedDate;
-          if ( e->modifiers() & Qt::ShiftModifier )
-          {
-              if ( d->m_selectedDates.isEmpty() )
-              {
-                  d->m_selectedDates << clickedDate;
-              }
-              else if ( d->mDate != clickedDate )
-              {
-                QDate dt = d->mDate;
-                int nxt = dt < clickedDate ? 1 : -1;
+    switch ( d->m_selectionmode )
+    {
+        case SingleSelection:
+            break;
+        case ExtendedSelection:
+            //kDebug()<<"extended "<<e->modifiers()<<", "<<clickedDate;
+            if ( e->modifiers() & Qt::ShiftModifier )
+            {
+                if ( d->m_selectedDates.isEmpty() )
+                {
+                    d->m_selectedDates << clickedDate;
+                }
+                else if ( d->mDate != clickedDate )
+                {
+                    QDate dt = d->mDate;
+                    int nxt = dt < clickedDate ? 1 : -1;
+                    if ( d->m_selectedDates.contains( clickedDate ) )
+                    {
+                        d->m_selectedDates.removeAt( d->m_selectedDates.indexOf( clickedDate ) );
+                    }
+                    while ( dt != clickedDate )
+                    {
+                        if ( ! d->m_selectedDates.contains( dt ) )
+                        {
+                            d->m_selectedDates << dt;
+                        }
+                        dt = dt.addDays( nxt );
+                    }
+                    d->m_selectedDates << clickedDate;
+                }
+                else
+                {
+                    break; // selection not changed
+                }
+            }
+            else if ( e->modifiers() & Qt::ControlModifier )
+            {
                 if ( d->m_selectedDates.contains( clickedDate ) )
                 {
                     d->m_selectedDates.removeAt( d->m_selectedDates.indexOf( clickedDate ) );
                 }
-                while ( dt != clickedDate )
+                else
                 {
-                    if ( ! d->m_selectedDates.contains( dt ) )
-                    {
-                        d->m_selectedDates << dt;
-                    }
-                    dt = dt.addDays( nxt );
+                    d->m_selectedDates << clickedDate;
                 }
+            }
+            else
+            {
+                d->m_selectedDates.clear();
                 d->m_selectedDates << clickedDate;
-              }
-              else
-              {
-                  break; // selection not changed
-              }
-          }
-          else if ( e->modifiers() & Qt::ControlModifier )
-          {
-              if ( d->m_selectedDates.contains( clickedDate ) )
-              {
-                  d->m_selectedDates.removeAt( d->m_selectedDates.indexOf( clickedDate ) );
-              }
-              else
-              {
-                  d->m_selectedDates << clickedDate;
-              }
-          }
-          else
-          {
-              d->m_selectedDates.clear();
-              d->m_selectedDates << clickedDate;
-          }
-          emit selectionChanged( d->m_selectedDates );
-          break;
-      default: break;
+            }
+            emit selectionChanged( d->m_selectedDates );
+            break;
+        default: break;
+    }
+    // set the new date. If it is in the previous or next month, the month will
+    // automatically be changed, no need to do that manually...
+    setDate( clickedDate );
+
+    // This could be optimized to only call update over the regions
+    // of old and new cell, but 99% of times there is also a call to
+    // setDate that already calls update() so no need to optimize that
+    // much here
+    update();
   }
-  // set the new date. If it is in the previous or next month, the month will
-  // automatically be changed, no need to do that manually...
-  setDate( clickedDate );
-
-  // This could be optimized to only call update over the regions
-  // of old and new cell, but 99% of times there is also a call to
-  // setDate that already calls update() so no need to optimize that
-  // much here
-  update();
-
   emit tableClicked();
 
   if (  e->button() == Qt::RightButton && d->popupMenuEnabled )
   {
         KMenu *menu = new KMenu();
-        menu->addTitle( KGlobal::locale()->formatDate(clickedDate) );
-        emit aboutToShowContextMenu( menu, clickedDate );
+        if ( d->m_selectionmode == ExtendedSelection ) {
+            emit aboutToShowContextMenu( menu, d->m_selectedDates );
+        } else {
+            menu->addTitle( KGlobal::locale()->formatDate(clickedDate) );
+            emit aboutToShowContextMenu( menu, clickedDate );
+        }
         menu->popup(e->globalPos());
   }
 }

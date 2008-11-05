@@ -285,7 +285,13 @@ Q_SIGNALS:
      * right clicks on that date and the popup menu is enabled). Connect
      * the slot where you fill the menu to this signal.
      */
-    void aboutToShowContextMenu( KMenu * menu, const QDate &date);
+    void aboutToShowContextMenu( KMenu * menu, const QDate &date );
+
+    /**
+     * A popup menu for selected dates is about to be shown.
+     * Connect the slot where you fill the menu to this signal.
+     */
+    void aboutToShowContextMenu( KMenu * menu, const QList<QDate>& );
 
     //----->
     void selectionChanged( const QList<QDate>& );

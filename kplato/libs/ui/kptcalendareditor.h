@@ -45,6 +45,7 @@ class Project;
 class Calendar;
 class CalendarDay;
 class DateTableDataModel;
+class KDatePicker;
 
 class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 {
@@ -166,6 +167,7 @@ private slots:
     void slotContextMenuCalendar( QModelIndex index, const QPoint& pos );
     void slotContextMenuDay( QModelIndex index, const QPoint& pos );
     void slotContextMenuDate( KMenu*, const QDate& );
+    void slotContextMenuDate( KMenu*, const QList<QDate>& );
     
     void slotCalendarSelectionChanged( const QModelIndexList );
     void slotCurrentCalendarChanged( const QModelIndex& );
@@ -190,7 +192,7 @@ private slots:
 private:
     CalendarTreeView *m_calendarview;
     CalendarDayView *m_dayview;
-    
+    KDatePicker *m_datePicker;
     DateTableDataModel *m_model;
     
     KAction *actionAddCalendar;
@@ -205,7 +207,7 @@ private:
     KAction *actionSetVacation;
     KAction *actionSetWork;
     
-    QDate m_currentMenuDate;
+    QList<QDate> m_currentMenuDateList;
 
 };
 
