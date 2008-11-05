@@ -21,7 +21,7 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} 
-  ${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ )
+  ${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ koproperty1 )
 
 SET(KOPROPERTY_LIBS koproperty)
 
