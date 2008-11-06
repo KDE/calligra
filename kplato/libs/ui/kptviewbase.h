@@ -357,6 +357,8 @@ protected:
 
     void dragMoveEvent(QDragMoveEvent *event);
 
+    void updateSelection( const QModelIndex &oldidx, const QModelIndex &newidx, QKeyEvent *event );
+
 protected slots:
     /// Close the @p editor, using sender()->endEditHint().
     /// Use @p hint if sender is not of type ItemDelegate.

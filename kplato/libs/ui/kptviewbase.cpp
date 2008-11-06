@@ -492,8 +492,12 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
     painter.restore();
 }
 
-
-//------------------------------------------------
+/**
+ * TreeViewBase is a QTreeView adapted for operation by keyboard only and as components in DoubleTreeViewBase.
+ * Note that keyboard navigation and selection behavior may not be fully compliant with QTreeView.
+ * If you use other settings than  QAbstractItemView::ExtendedSelection and QAbstractItemView::SelectRows,
+ * you should have a look at the implementation keyPressEvent() and updateSelection().
+ */
 
 TreeViewBase::TreeViewBase( QWidget *parent )
     : QTreeView( parent ),
@@ -707,18 +711,14 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
             }
             case Qt::Key_Down: {
                 QModelIndex i = moveCursor( MoveDown, Qt::NoModifier );
-                if ( i.isValid() ) {
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-                }
+                updateSelection( current, i, event );
                 event->accept();
                 return;
                 break;
             }
             case Qt::Key_Up: {
                 QModelIndex i = moveCursor( MoveUp, Qt::NoModifier );
-                if ( i.isValid() ) {
-                    selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
-                }
+                updateSelection( current, i, event );
                 event->accept();
                 return;
                 break;
@@ -727,6 +727,37 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
         }
     }
     QTreeView::keyPressEvent(event);
+}
+
+void TreeViewBase::updateSelection( const QModelIndex &oldidx, const QModelIndex &newidx, QKeyEvent *event )
+{
+    if ( newidx == oldidx || ! newidx.isValid() ) {
+        return;
+    }
+    if ( !hasFocus() && QApplication::focusWidget() == indexWidget(oldidx) ) {
+        setFocus();
+    }
+    QItemSelectionModel::SelectionFlags command;
+    // NoUpdate on Key movement and Ctrl
+    Qt::KeyboardModifiers modifiers = static_cast<const QKeyEvent*>(event)->modifiers();
+    switch (static_cast<const QKeyEvent*>(event)->key()) {
+    case Qt::Key_Backtab:
+        modifiers = modifiers & ~Qt::ShiftModifier; // special case for backtab
+    case Qt::Key_Down:
+    case Qt::Key_Up:
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+        if (modifiers & Qt::ControlModifier)
+            command = QItemSelectionModel::NoUpdate;
+        else if (modifiers & Qt::ShiftModifier)
+            command = QItemSelectionModel::Select | selectionBehaviorFlags();
+        else
+            command = QItemSelectionModel::Clear | selectionBehaviorFlags();
+        break;
+    default:
+        break;
+    }
+    selectionModel()->setCurrentIndex( newidx, command );
 }
 
 void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
@@ -1261,7 +1292,11 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 }
 
 
-//--------------------------------
+/**
+ * DoubleTreeViewBase is a QSplitter contaning two treeviews.
+ * This makes it possible to keep columns visible in one view when scrolling the other view horizontally.
+ */
+
 DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
     : QSplitter( parent ),
     m_rightview( 0 ),
