@@ -192,8 +192,6 @@ void KPrViewModePresentation::deactivate()
         if ( page == m_endOfSlideShowPage ) {
             page = m_view->kopaDocument()->pages().last();
         }
-        delete m_endOfSlideShowPage;
-        m_endOfSlideShowPage = 0;
     }
     m_tool->deactivate();
 
@@ -202,6 +200,11 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
     m_view->updateActivePage( page );
+
+    // only delete after the new page has been set
+    delete m_endOfSlideShowPage;
+    m_endOfSlideShowPage = 0;
+
     delete m_animationDirector;
     m_animationDirector = 0;
 
