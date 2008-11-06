@@ -20,8 +20,8 @@
 */
 
 #include "combobox.h"
-#include "EditorDataModel.h"
-#include "EditorView.h"
+#include "koproperty/EditorDataModel.h"
+#include "koproperty/EditorView.h"
 
 #include <QLayout>
 #include <QMap>
@@ -285,7 +285,6 @@ QWidget* ComboBoxDelegate::createEditor( int type, QWidget *parent,
     ComboBox::Options options;
     options.extraValueAllowed = property->option("extraValueAllowed", false).toBool();
     ComboBox *cb = new ComboBox(*property->listData(), options, parent);
-    cb->setObjectName( property->name() );
     return cb;
 }
 

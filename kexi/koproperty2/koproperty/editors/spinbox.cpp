@@ -20,10 +20,9 @@
 */
 
 #include "spinbox.h"
-
-#include "Property.h"
-#include "EditorDataModel.h"
-#include "EditorView.h"
+#include "koproperty/Property.h"
+#include "koproperty/EditorDataModel.h"
+#include "koproperty/EditorView.h"
 
 #include <climits>
 

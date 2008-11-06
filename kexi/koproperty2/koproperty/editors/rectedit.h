@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "Factory.h"
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {

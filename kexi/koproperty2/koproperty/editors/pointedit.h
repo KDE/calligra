@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_POINTEDIT_H
 #define KPROPERTY_POINTEDIT_H
 
-#include "Factory.h"
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {

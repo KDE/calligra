@@ -29,8 +29,8 @@
 /*#include "dateedit.h"
 #include "datetimeedit.h"
 #include "dummywidget.h"
-//TODO #include "linestyleedit.h"
-#include "pixmapedit.h"*/
+//TODO #include "linestyleedit.h"*/
+#include "pixmapedit.h"
 #include "pointedit.h"
 #include "fontedit.h"
 #include "rectedit.h"
@@ -56,6 +56,7 @@ DefaultFactory::DefaultFactory()
     addEditor( KoProperty::Double, new DoubleSpinBoxDelegate );
     addEditor( KoProperty::Font, new FontDelegate );
 //! @todo addEditor( KoProperty::LongLong, new LongLongSpinBoxDelegate );
+    addEditor( KoProperty::Pixmap, new PixmapDelegate );
     addEditor( KoProperty::Point, new PointDelegate );
     addEditor( KoProperty::Rect, new RectDelegate );
     addEditor( KoProperty::Size, new SizeDelegate );

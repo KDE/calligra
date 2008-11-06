@@ -3,6 +3,7 @@ add_subdirectory( test )
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=30007)
 
 include_directories(
+  ${CMAKE_SOURCE_DIR}/kexi/koproperty2
   ${CMAKE_SOURCE_DIR}/kexi/koproperty2/koproperty/editors
 #  ${CMAKE_SOURCE_DIR}/libs/guiutils
 #  ${KOMAIN_INCLUDES}
@@ -19,7 +20,7 @@ set(libkopropertyeditors_SRCS
 #  editors/dummywidget.cpp
   editors/fontedit.cpp
 #todo  editors/linestyledit.cpp
-#  editors/pixmapedit.cpp
+  editors/pixmapedit.cpp
   editors/pointedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp

@@ -22,10 +22,10 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
+#include "koproperty/Factory.h"
+
 #include <QtCore/QVariant>
 #include <KLineEdit>
-
-#include "Factory.h"
 
 namespace KoProperty
 {
@@ -49,7 +49,7 @@ private:
 };*/
 
 class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface, 
-                     public ValuePainterInterface
+                                       public ValuePainterInterface
 {
 public:
     FontDelegate() {}

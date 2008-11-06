@@ -22,7 +22,8 @@
 #ifndef KPROPERTY_SPINBOX_H
 #define KPROPERTY_SPINBOX_H
 
-#include "Factory.h"
+#include "koproperty/Factory.h"
+
 #include <KNumInput>
 
 namespace KoProperty {

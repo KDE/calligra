@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_LINESTYLEEDIT_H
 #define KPROPERTY_LINESTYLEEDIT_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
 
 #include <libs/guiutils/KoLineStyleSelector.h>
 class KoLineStyleSelector;

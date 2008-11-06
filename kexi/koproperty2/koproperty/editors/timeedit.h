@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_TIMEEDIT_H
 #define KPROPERTY_TIMEEDIT_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
 
 class Q3TimeEdit;
 

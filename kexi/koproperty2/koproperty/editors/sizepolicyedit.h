@@ -20,7 +20,7 @@
 #ifndef KPROPERTY_SIZEPOLICYEDIT_H
 #define KPROPERTY_SIZEPOLICYEDIT_H
 
-#include "Factory.h"
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {

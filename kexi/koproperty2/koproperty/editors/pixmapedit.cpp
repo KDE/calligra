@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +20,13 @@
 */
 
 #include "pixmapedit.h"
-#include "editoritem.h"
-#include "Property.h"
+#include "koproperty/Property.h"
+#include "koproperty/EditorDataModel.h"
 
 #include <QLayout>
 #include <QPainter>
 #include <QLabel>
 #include <QCursor>
-#include <QPushButton>
 #include <QFont>
 #include <QFontMetrics>
 #include <QImage>
@@ -43,8 +42,11 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 
-#include <kdebug.h>
-#include <kimageio.h>
+#include <KDebug>
+#include <KImageio>
+#include <KPushButton>
+#include <KFileDialog>
+#include <KLocale>
 
 /* KDE4:
 #ifdef Q_WS_WIN
@@ -52,29 +54,30 @@
 #include <krecentdirs.h>
 #endif*/
 
-#ifndef PURE_QT
-#include <kfiledialog.h>
-#include <klocale.h>
-#include <kfiledialog.h>
-#endif
-
 using namespace KoProperty;
 
-PixmapEdit::PixmapEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
+PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
+        : QWidget(parent)
+        , m_property(prop)
 {
-    setHasBorders(false);
+//    setHasBorders(false);
+    setBackgroundRole(QPalette::Base);
+
+    QHBoxLayout *lyr = new QHBoxLayout(this);
+    lyr->setContentsMargins(0,0,0,0);
 
     m_edit = new QLabel(this);
+    lyr->addWidget(m_edit);
     m_edit->setToolTip(i18n("Click to show image preview"));
     m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_edit->setMinimumHeight(5);
+//    m_edit->setMinimumHeight(5);
     m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_edit->setBackgroundRole(QPalette::Base);
     m_edit->setMouseTracking(true);
-    setBackgroundRole(QPalette::Base);
+    m_edit->installEventFilter(this);
 
-    m_button = new QPushButton(i18n("..."), this);
+    m_button = new KPushButton(i18nc("Three dots for 'Insert image from file' button", "..."), this);
+    lyr->addWidget(m_button);
     m_button->setToolTip(i18n("Insert image from file"));
     m_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     QFontMetrics fm(m_button->font());
@@ -88,7 +91,7 @@ PixmapEdit::PixmapEdit(Property *property, QWidget *parent)
     m_popup->setLineWidth(1);
     m_popup->hide();
 
-    setFocusWidget(m_edit);
+    setFocusProxy(m_edit);
     connect(m_button, SIGNAL(clicked()), this, SLOT(selectPixmap()));
 }
 
@@ -97,14 +100,12 @@ PixmapEdit::~PixmapEdit()
     delete m_popup;
 }
 
-QVariant
-PixmapEdit::value() const
+QVariant PixmapEdit::value() const
 {
     return m_pixmap;
 }
 
-void
-PixmapEdit::setValue(const QVariant &value, bool emitChange)
+void PixmapEdit::setValue(const QVariant &value)
 {
     m_pixmap = value.value<QPixmap>();
     if (m_pixmap.isNull() || (m_pixmap.height() <= height())) {
@@ -122,10 +123,11 @@ PixmapEdit::setValue(const QVariant &value, bool emitChange)
         QPixmap pm = QPixmap::fromImage(img);
         m_edit->setPixmap(pm);
     }
-    if (emitChange)
-        emit valueChanged(this);
+//    if (emitChange)
+//        emit valueChanged(this);
 }
 
+/*
 void
 PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &value)
 {
@@ -147,10 +149,9 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
     }
     p->drawPixmap(r2.topLeft().x(),
                   r2.topLeft().y() + (r2.height() - m_scaledPixmap.height()) / 2, m_scaledPixmap);
-}
+}*/
 
-QString
-PixmapEdit::selectPixmapFileName()
+QString PixmapEdit::selectPixmapFileName()
 {
     /*#ifdef PURE_QT
       QString url = QFileDialog::getOpenFileName();
@@ -159,7 +160,7 @@ PixmapEdit::selectPixmapFileName()
         emit valueChanged(this);
       }
     #endif*/
-    QString caption(i18n("Insert Image From File (for \"%1\" property)", property()->caption()));
+    const QString caption(i18n("Insert Image From File (for \"%1\" property)", m_property->caption()));
     /*KDE4:
     #ifdef Q_WS_WIN
       QString recentDir;
@@ -168,7 +169,7 @@ PixmapEdit::selectPixmapFileName()
         convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)),
         this, 0, caption);
     #else*/
-    KUrl url(KFileDialog::getImageOpenUrl(
+    const KUrl url(KFileDialog::getImageOpenUrl(
                  KUrl(":lastVisitedImagePath"), this, caption));
     QString fileName = url.isLocalFile() ? url.path() : url.prettyUrl();
 
@@ -177,16 +178,15 @@ PixmapEdit::selectPixmapFileName()
     return fileName;
 }
 
-void
-PixmapEdit::selectPixmap()
+void PixmapEdit::selectPixmap()
 {
-    QString fileName(selectPixmapFileName());
+    const QString fileName(selectPixmapFileName());
     if (fileName.isEmpty())
         return;
 
     QPixmap pm;
     if (!pm.load(fileName)) {
-        //! @todo err msg
+//! @todo err msg
         return;
     }
     setValue(pm);
@@ -201,6 +201,7 @@ PixmapEdit::selectPixmap()
     */
 }
 
+/*
 void
 PixmapEdit::resizeEvent(QResizeEvent *e)
 {
@@ -209,7 +210,7 @@ PixmapEdit::resizeEvent(QResizeEvent *e)
     m_edit->resize(e->size() - QSize(m_button->width(), -1));
     m_button->move(m_edit->width(), 0);
     m_button->setFixedSize(m_button->width(), height());
-}
+}*/
 
 bool
 PixmapEdit::eventFilter(QObject *o, QEvent *ev)
@@ -223,7 +224,7 @@ PixmapEdit::eventFilter(QObject *o, QEvent *ev)
             m_popup->setPixmap(m_previewPixmap.isNull() ? m_pixmap : m_previewPixmap);
             m_popup->resize(m_previewPixmap.size() + QSize(2*3, 2*3));
             QPoint pos = QCursor::pos() + QPoint(3, 15);
-            QRect screenRect = QApplication::desktop()->availableGeometry(this);
+            const QRect screenRect = QApplication::desktop()->availableGeometry(this);
             if ((pos.x() + m_popup->width()) > screenRect.width())
                 pos.setX(screenRect.width() - m_popup->width());
             if ((pos.y() + m_popup->height()) > screenRect.height())
@@ -231,8 +232,9 @@ PixmapEdit::eventFilter(QObject *o, QEvent *ev)
             m_popup->move(pos);
             m_popup->show();
         } else if (ev->type() == QEvent::MouseButtonRelease || ev->type() == QEvent::Hide) {
-            if (m_popup->isVisible())
+            if (m_popup->isVisible()) {
                 m_popup->hide();
+            }
         } else if (ev->type() == QEvent::KeyPress) {
             QKeyEvent* e = static_cast<QKeyEvent*>(ev);
             if ((e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Space) || (e->key() == Qt::Key_Return)) {
@@ -241,14 +243,57 @@ PixmapEdit::eventFilter(QObject *o, QEvent *ev)
             }
         }
     }
-
-    return Widget::eventFilter(o, ev);
+    return QWidget::eventFilter(o, ev);
 }
 
+/*
 void
 PixmapEdit::setReadOnlyInternal(bool readOnly)
 {
     m_button->setEnabled(!readOnly);
+}*/
+
+//-----------------------
+
+PixmapDelegate::PixmapDelegate()
+{
+//    options.removeBorders = false;
+}
+
+QWidget* PixmapDelegate::createEditor( int type, QWidget *parent, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    const EditorDataModel *editorModel
+        = dynamic_cast<const EditorDataModel*>(index.model());
+    Property *property = editorModel->propertyForItem(index);
+    PixmapEdit *pe = new PixmapEdit(property, parent);
+    return pe;
+}
+
+void PixmapDelegate::paint( QPainter * painter, 
+    const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    QPixmap pm( index.data(Qt::EditRole).value<QPixmap>() );
+    if (pm.isNull())
+        return;
+    painter->save();
+    if (pm.height() > option.rect.height() || pm.width() > option.rect.width()) { //scale down
+        QImage img(pm.toImage());
+        img = img.scaled(option.rect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        pm = QPixmap::fromImage(img);
+    }
+/*todo    if (m_recentlyPainted != value) {
+        m_recentlyPainted = value;
+        m_scaledPixmap = value.value<QPixmap>();
+        if (m_scaledPixmap.height() > r2.height() || m_scaledPixmap.width() > r2.width()) { //scale down
+            QImage img(m_scaledPixmap.toImage());
+            img = img.scaled(r2.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            m_scaledPixmap = QPixmap::fromImage(img);
+        }
+    }*/
+    painter->drawPixmap(option.rect.topLeft().x(),
+                  option.rect.topLeft().y() + (option.rect.height() - pm.height()) / 2, pm);
+    painter->restore();
 }
 
 #include "pixmapedit.moc"

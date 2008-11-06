@@ -22,7 +22,8 @@
 #ifndef KPROPERTY_COMBOBOX_H
 #define KPROPERTY_COMBOBOX_H
 
-#include "Factory.h"
+#include "koproperty/Factory.h"
+
 #include <KComboBox>
 
 namespace KoProperty
@@ -86,7 +87,7 @@ protected:
 };
 
 class KOPROPERTY_EXPORT ComboBoxDelegate : public EditorCreatorInterface, 
-                         public ValueDisplayInterface //ValuePainterInterface
+                                           public ValueDisplayInterface
 {
 public:
     ComboBoxDelegate();

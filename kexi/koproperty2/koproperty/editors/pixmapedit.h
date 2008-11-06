@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,37 +22,35 @@
 #ifndef KPROPERTY_PIXMAPEDIT_H
 #define KPROPERTY_PIXMAPEDIT_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
+
 #include <QtGui/QPixmap>
 #include <QtCore/QVariant>
-//Added by qt3to4:
-#include <QtGui/QLabel>
-#include <QtGui/QResizeEvent>
-#include <QtCore/QEvent>
 
 class QLabel;
-class QPushButton;
+class KPushButton;
 
 namespace KoProperty
 {
 
-class KOPROPERTY_EXPORT PixmapEdit : public Widget
+class KOPROPERTY_EXPORT PixmapEdit : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    explicit PixmapEdit(Property *property, QWidget *parent = 0);
+    explicit PixmapEdit(Property *prop, QWidget *parent = 0);
     virtual ~PixmapEdit();
 
     virtual QVariant value() const;
-    virtual void setValue(const QVariant &value, bool emitChange = true);
-    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
+    virtual void setValue(const QVariant &value);
+//moved    virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
-    void resizeEvent(QResizeEvent *ev);
+//    void resizeEvent(QResizeEvent *ev);
     bool eventFilter(QObject *o, QEvent *ev);
 
 protected:
-    virtual void setReadOnlyInternal(bool readOnly);
+//    virtual void setReadOnlyInternal(bool readOnly);
 
 protected slots:
     /*! Helper used by selectPixmap(). Can be also used by subclassess.
@@ -67,9 +65,23 @@ protected slots:
 protected:
     QLabel *m_edit;
     QLabel *m_popup;
-    QPushButton *m_button;
-    QVariant m_recentlyPainted;
-    QPixmap m_pixmap, m_scaledPixmap, m_previewPixmap;
+    KPushButton *m_button;
+    Property *m_property;
+//todo    QVariant m_recentlyPainted;
+    QPixmap m_pixmap, /* todo? m_scaledPixmap,*/ m_previewPixmap;
+};
+
+class KOPROPERTY_EXPORT PixmapDelegate : public EditorCreatorInterface, 
+                                         public ValuePainterInterface
+{
+public:
+    PixmapDelegate();
+    
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 };
 
 }

@@ -23,12 +23,12 @@
 #define KPROPERTY_BOOLEDIT_H
 
 #include "combobox.h"
-#include "Factory.h"
+#include "koproperty/Factory.h"
+
 #include <QtCore/QEvent>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
-
-#include <QToolButton>
+#include <QtGui/QToolButton>
 
 namespace KoProperty
 {

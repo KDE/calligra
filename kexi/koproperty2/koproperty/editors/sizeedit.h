@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_SIZEEDIT_H
 #define KPROPERTY_SIZEEDIT_H
 
-#include "Factory.h"
+#include "koproperty/Factory.h"
 
 namespace KoProperty
 {

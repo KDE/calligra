@@ -19,8 +19,8 @@
 */
 
 #include "booledit.h"
-#include "Property.h"
-#include "EditorDataModel.h"
+#include "koproperty/Property.h"
+#include "koproperty/EditorDataModel.h"
 
 #include <KIconLoader>
 #include <KLocale>

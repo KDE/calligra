@@ -20,7 +20,7 @@
 */
 
 #include "cursoredit.h"
-#include "Property.h"
+#include "koproperty/Property.h"
 
 #include "xpm/blank_cursor.xpm"
 #include "xpm/arrow_cursor.xpm"

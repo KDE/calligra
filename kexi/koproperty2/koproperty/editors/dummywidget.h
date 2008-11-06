@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_DUMMYWIDGET_H
 #define KPROPERTY_DUMMYWIDGET_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
 
 #include <QtCore/QVariant>
 

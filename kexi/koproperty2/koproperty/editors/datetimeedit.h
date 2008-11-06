@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_DATETIMEEDIT_H
 #define KPROPERTY_DATETIMEEDIT_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
 
 class Q3DateTimeEdit;
 class QDateTime;

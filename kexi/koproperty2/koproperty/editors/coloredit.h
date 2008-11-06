@@ -21,7 +21,8 @@
 #ifndef KPROPERTY_COLOREDIT_H
 #define KPROPERTY_COLOREDIT_H
 
-#include "../widget.h"
+#include "koproperty/Factory.h"
+
 //Added by qt3to4:
 #include <QtCore/QEvent>
 
