@@ -103,6 +103,9 @@ const char * KPrDocument::odfTagName( bool withNamespace )
 bool KPrDocument::saveOdfEpilogue( KoPASavingContext & context )
 {
     context.xmlWriter().startElement( "presentation:settings" );
+    if ( !m_activeCustomSlideShow.isEmpty() && m_customSlideShows->names().contains(  m_activeCustomSlideShow ) ) {
+        context.xmlWriter().addAttribute( "presentation:show", m_activeCustomSlideShow );
+    }
     m_customSlideShows->saveOdf( context );
     context.xmlWriter().endElement();//presentation:settings
     return true;
@@ -123,6 +126,14 @@ bool KPrDocument::loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext
     const KoXmlElement & presentationSettings( KoXml::namedItemNS( body, KoXmlNS::presentation, "settings" ) );
     if ( !presentationSettings.isNull() ) {
         m_customSlideShows->loadOdf( presentationSettings, context );
+    }
+
+    m_activeCustomSlideShow = QString( "" );
+    if ( presentationSettings.hasAttributeNS( KoXmlNS::presentation, "show" ) ) {
+        QString show = presentationSettings.attributeNS( KoXmlNS::presentation, "show" );
+        if ( m_customSlideShows->names().contains( show ) ) {
+            m_activeCustomSlideShow = show;
+        }
     }
 
     return true;
@@ -190,6 +201,7 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
 
 void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
 {
+    Q_UNUSED( page );
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
         // reinsert animations. this is needed on undo of a delete shape that had a animations
@@ -202,6 +214,7 @@ void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
 
 void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
 {
+    Q_UNUSED( page );
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
         QSet<KPrShapeAnimation *> animations = applicationData->animations();
