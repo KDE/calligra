@@ -284,7 +284,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     }
 
     KexiMainWindow *win = new KexiMainWindow();
-    QApplication::setMainWidget(win);
+    QApplication::setMainWidget(win); // FIXME: Deprecated method
 #ifdef KEXI_DEBUG_GUI
     //if (debugWindow)
     //debugWindow->reparent(win, QPoint(1,1));
@@ -3103,7 +3103,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 //! @todo use KRun
     args << fileName;
     Q3Process proc(args, this, "process");
-    proc.setWorkingDirectory(QFileInfo(fileName).dir(true));
+    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir());
     const bool ok = proc.start();
     if (!ok) {
         d->showStartProcessMsg(args);
@@ -4326,7 +4326,7 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         bool preservePrevSelection, const QByteArray& propertyToSelect)
 {
     kDebug() << "KexiMainWindow::propertySetSwitched() currentWindow(): "
-    << (currentWindow() ? currentWindow()->caption() : QString("NULL")) << " window: " << (window ? window->caption() : QString("NULL"));
+    << (currentWindow() ? currentWindow()->windowTitle() : QString("NULL")) << " window: " << (window ? window->windowTitle() : QString("NULL"));
     if (currentWindow() != window) {
         d->propBuffer = 0; //we'll need to move to another prop. set
         return;
@@ -4976,7 +4976,7 @@ void KexiMainWindow::slotEditFind()
     d->findDialog()->setReplaceMode(false);
 
     d->findDialog()->show();
-    d->findDialog()->setActiveWindow();
+    d->findDialog()->activateWindow();
     d->findDialog()->raise();
 }
 
@@ -5012,7 +5012,7 @@ void KexiMainWindow::slotEditReplace()
     d->findDialog()->setReplaceMode(true);
 //! @todo slotEditReplace()
     d->findDialog()->show();
-    d->findDialog()->setActiveWindow();
+    d->findDialog()->activateWindow();
 }
 
 void KexiMainWindow::slotEditReplaceNext()
