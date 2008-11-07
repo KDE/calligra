@@ -19,6 +19,8 @@ set(kplatoui_LIB_SRCS
     plotting/kplotwidget.cpp
     plotting/kplotobject.cpp
     
+    kptganttitemdelegate.cpp
+
     kptworkpackagecontrolpanel.cpp
     kptworkpackagecontroldialog.cpp
     kptworkpackageview.cpp

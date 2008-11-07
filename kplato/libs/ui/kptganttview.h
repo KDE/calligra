@@ -26,22 +26,13 @@
 #include "kptviewbase.h"
 #include "kptitemviewsettup.h"
 #include "kptnodeitemmodel.h"
+#include "kptganttitemdelegate.h"
 
 #include "ui_kptganttprintingoptions.h"
 #include "ui_kptganttchartdisplayoptions.h"
 
 #include <kdganttglobal.h>
 #include <kdganttview.h>
-
-#include "kdganttitemdelegate.h"
-
-#include <QBrush>
-
-namespace KDGantt
-{
-    class StyleOptionGanttItem;
-    class Constraint;
-}
 
 class KoDocument;
 
@@ -70,37 +61,6 @@ class ScheduleManager;
 class MyKDGanttView;
 class GanttPrintingOptions;
 
-class KPLATOMODELS_EXPORT GanttItemDelegate : public KDGantt::ItemDelegate
-{
-    Q_OBJECT
-public:
-    GanttItemDelegate( QObject *parent = 0 );
-
-//    virtual QString toolTip( const QModelIndex& idx ) const;
-    virtual KDGantt::Span itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    virtual void paintGanttItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx );
-    
-    virtual void paintConstraintItem( QPainter* p, const QStyleOptionGraphicsItem& opt, const QPointF& start, const QPointF& end, const KDGantt::Constraint &constraint );
-
-    QVariant data( const QModelIndex& idx, int column, int role = Qt::DisplayRole ) const;
-    QString itemText( const QModelIndex& idx, int type ) const;
-    int itemFloatWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const;
-    
-    bool showResources;
-    bool showTaskName;
-    bool showTaskLinks;
-    bool showProgress;
-    bool showPositiveFloat;
-    bool showCriticalPath;
-    bool showCriticalTasks;
-    bool showAppointments;
-    bool showNoInformation;
-
-private:
-    Q_DISABLE_COPY(GanttItemDelegate)
-    QBrush m_criticalBrush;
-
-};
 
 //---------------------------------------
 class GanttChartDisplayOptionsPanel : public QWidget, public Ui::GanttChartDisplayOptions
