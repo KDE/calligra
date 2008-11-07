@@ -254,6 +254,8 @@ private:
     void initialSet(const Set *set);
 };
 
+KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
+
 }
 
 #endif

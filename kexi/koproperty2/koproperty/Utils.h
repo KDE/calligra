@@ -20,6 +20,8 @@
 #ifndef KPROPERTY_UTILS_H
 #define KPROPERTY_UTILS_H
 
+#include "koproperty_global.h"
+
 #include <QtCore/QMap>
 #include <QtGui/QWidget>
 
@@ -42,8 +44,6 @@ protected:
     class Private;
     Private * const d;
 };
-
-KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 
