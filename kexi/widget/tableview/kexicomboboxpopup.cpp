@@ -57,8 +57,8 @@ public:
         a.rowHighlightingEnabled = true;
         a.rowMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.rowMouseOverHighlightingColor = colorGroup().highlight();
-        a.rowMouseOverHighlightingTextColor = colorGroup().highlightedText();
+        a.rowMouseOverHighlightingColor = palette().highlight();
+        a.rowMouseOverHighlightingTextColor = palette().highlightedText();
         a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
         a.gridEnabled = false;
         setAppearance(a);
