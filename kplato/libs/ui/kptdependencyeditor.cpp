@@ -1729,6 +1729,10 @@ void DependencyEditor::slotItemDoubleClicked( QGraphicsItem *item )
         emit editNode( static_cast<DependencyNodeItem*>( item )->node() );
         return;
     }
+    if ( item && item->type() == DependencyNodeSymbolItem::Type ) {
+        emit editNode( static_cast<DependencyNodeItem*>( item->parentItem() )->node() );
+        return;
+    }
 }
 
 void DependencyEditor::slotCreateRelation( DependencyConnectorItem *pred, DependencyConnectorItem *succ )
