@@ -43,7 +43,7 @@
 #include <QMouseEvent>
 
 #include <KDebug>
-#include <KImageio>
+#include <KImageIO>
 #include <KPushButton>
 #include <KFileDialog>
 #include <KLocale>
