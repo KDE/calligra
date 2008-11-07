@@ -58,7 +58,7 @@ public:
     QList<DataSet*> dataSets() const;
     double majorInterval() const;
     double minorInterval() const;
-    int minorIntervalDevisor() const;
+    int minorIntervalDivisor() const;
     bool useAutomaticMajorInterval() const;
     bool useAutomaticMinorInterval() const;
     bool showInnerMinorTicks() const;
@@ -80,7 +80,7 @@ public:
     bool detachDataSet( DataSet *dataSet, bool silent = false );
     void setMajorInterval( double interval );
     void setMinorInterval( double interval );
-    void setMinorIntervalDevisor( int devisor );
+    void setMinorIntervalDivisor( int divisor );
     void setUseAutomaticMajorInterval( bool automatic );
     void setUseAutomaticMinorInterval( bool automatic );
     void setShowInnerMinorTicks( bool showTicks );

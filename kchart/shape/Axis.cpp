@@ -94,7 +94,7 @@ public:
     QString id;
     QList<DataSet*> dataSets;
     double majorInterval;
-    int minorIntervalDevisor;
+    int minorIntervalDivisor;
     bool showInnerMinorTicks;
     bool showOuterMinorTicks;
     bool showInnerMajorTicks;
@@ -138,7 +138,7 @@ Axis::Private::Private()
     useAutomaticMinorInterval = true;
     
     majorInterval = 2;
-    minorIntervalDevisor = 1;
+    minorIntervalDivisor = 1;
     
     kdBarDiagram = 0;
     kdLineDiagram = 0;
@@ -744,37 +744,37 @@ void Axis::setMajorInterval( double interval )
 
 double Axis::minorInterval() const
 {
-    return ( d->majorInterval / (double)d->minorIntervalDevisor ); 
+    return ( d->majorInterval / (double)d->minorIntervalDivisor ); 
 }
 
 void Axis::setMinorInterval( double interval )
 {
     if ( interval == 0.0 )
-        setMinorIntervalDevisor( 0.0 );
+        setMinorIntervalDivisor( 0 );
     else
-        setMinorIntervalDevisor( qRound( d->majorInterval / interval ) );
+	setMinorIntervalDivisor( int( qRound( d->majorInterval / interval ) ) );
 }
 
-int Axis::minorIntervalDevisor() const
+int Axis::minorIntervalDivisor() const
 {
-    return d->minorIntervalDevisor;
+    return d->minorIntervalDivisor;
 }
 
 // FIXME: should this be an int?  It's called with floats all the time
 //        Besides, shouldn't it be d_i_visor?
-void Axis::setMinorIntervalDevisor( int devisor )
+void Axis::setMinorIntervalDivisor( int divisor )
 {
     // A divisor of 0.0 means automatic minor interval calculation
-    if ( devisor != 0 ) {
-        d->minorIntervalDevisor = devisor;
+    if ( divisor != 0 ) {
+        d->minorIntervalDivisor = divisor;
         d->useAutomaticMinorInterval = false;
     } else
         d->useAutomaticMinorInterval = true;
     
     // KDChart
     KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
-    if ( devisor != 0 )
-        attributes.setGridSubStepWidth( d->majorInterval / devisor );
+    if ( divisor != 0 )
+        attributes.setGridSubStepWidth( d->majorInterval / divisor );
     else
         attributes.setGridSubStepWidth( 0.0 );
     d->kdPlane->setGridAttributes( orientation(), attributes );
@@ -1042,7 +1042,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-major" ) )
             setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
-            setMinorIntervalDevisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
+            setMinorIntervalDivisor( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-minor-divisor" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "display-label" ) )
         {
             d->title->setVisible( styleStack.property( KoXmlNS::chart, "display-label" ) == "true" );
