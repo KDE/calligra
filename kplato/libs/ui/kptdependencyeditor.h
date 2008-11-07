@@ -28,8 +28,9 @@
 #include "kptviewbase.h"
 #include "kptnode.h"
 
+#include "kptganttview.h" // NOTE: for the delegate
+
 #include "kdganttglobal.h"
-#include "kdganttitemdelegate.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -178,6 +179,7 @@ public:
     Node *node() const { return m_node; }
     QString text() const { return m_text->toPlainText(); }
     void setText( const QString &text ) const { m_text->setPlainText( text ); }
+    void setText();
     
     enum ConnectorType { Start, Finish };
     QPointF connectorPoint( ConnectorType type ) const;
@@ -201,6 +203,10 @@ public:
     DependencyConnectorItem *startConnector() const { return m_start; }
     DependencyConnectorItem *finishConnector() const { return m_finish; }
     
+    DependencyConnectorItem *connectorItem( ConnectorType ctype ) const;
+    QList<DependencyLinkItem*> predecessorItems( ConnectorType ctype ) const;
+    QList<DependencyLinkItem*> successorItems( ConnectorType ctype ) const;
+
 protected:
     void moveToY( qreal y );
     void moveToX( qreal x );
@@ -213,7 +219,8 @@ private:
     DependencyConnectorItem *m_finish;
     QGraphicsTextItem *m_text;
     DependencyNodeSymbolItem *m_symbol;
-    
+    QFont m_textFont;
+
     DependencyNodeItem *m_parent;
     QList<DependencyNodeItem*> m_children;
     
@@ -234,9 +241,9 @@ public:
     enum  { Type = QGraphicsItem::UserType + 3 };
     int type() const { return Type; }
     
-    void setSymbol( int type );
+    void setSymbol( int type, const QRectF &rect );
 private:
-    KDGantt::ItemDelegate m_delegate;
+    GanttItemDelegate m_delegate;
 };
 
 //-----------------------
@@ -255,6 +262,9 @@ public:
     QPointF connectorPoint() const;
     DependencyNodeItem *nodeItem() const;
     
+    QList<DependencyLinkItem*> predecessorItems() const;
+    QList<DependencyLinkItem*> successorItems() const;
+
 protected:
     void hoverEnterEvent ( QGraphicsSceneHoverEvent *event );
     void hoverLeaveEvent ( QGraphicsSceneHoverEvent *event );
@@ -282,8 +292,9 @@ public:
     
     qreal horizontalGap() const { return 40.0; }
     qreal verticalGap() const { return 6.0; }
-    qreal itemWidth() const { return 40.0; }
-    qreal itemHeight() const { return 20.0; }
+    qreal itemWidth() const { return 50.0; }
+    qreal itemHeight() const { return 26.0; }
+    QRectF symbolRect() const { return QRectF( 1.0, 1.0, 15.0, 15.0 ); }
     qreal connectorWidth() const { return 8.0; }
     
     qreal totalItemWidth() const { return connectorWidth()*2 + itemWidth(); }
@@ -338,7 +349,8 @@ signals:
     void contextMenuRequested( QGraphicsItem*, const QPoint& );
     void contextMenuRequested( QGraphicsItem* );
     void dependencyContextMenuRequested( DependencyLinkItem*, DependencyConnectorItem* );
-    
+    void focusItemChanged( QGraphicsItem* );
+
 protected:
     virtual void drawBackground ( QPainter * painter, const QRectF & rect );
     virtual void mouseMoveEvent( QGraphicsSceneMouseEvent *mouseEvent );
@@ -394,6 +406,9 @@ public slots:
     void slotNodeChanged( Node *node );
     void slotNodeMoved( Node *node );
     
+protected:
+    void keyPressEvent(QKeyEvent *event);    
+
 protected slots:
     void slotSelectionChanged();
     void slotRelationAdded( Relation* rel );
@@ -404,6 +419,7 @@ protected slots:
     void slotConnectorClicked( DependencyConnectorItem *item );
     void slotContextMenuRequested( QGraphicsItem* );
     void slotDependencyContextMenuRequested( DependencyLinkItem *item, DependencyConnectorItem *connector );
+    void slotFocusItemChanged( QGraphicsItem* );
 
 private:
     Project *m_project;
@@ -453,7 +469,7 @@ public slots:
 protected:
     void updateActionsEnabled( bool on );
     int selectedNodeCount() const;
-    
+
 private slots:
     void slotItemDoubleClicked( QGraphicsItem *item );
     void slotCurrentChanged( const QModelIndex&, const QModelIndex& );

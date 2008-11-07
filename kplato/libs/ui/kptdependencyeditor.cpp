@@ -35,6 +35,7 @@
 #include <QWidget>
 #include <QTimer>
 
+#include <kmenu.h>
 #include <kicon.h>
 #include <kaction.h>
 #include <kglobal.h>
@@ -513,6 +514,15 @@ void DependencyConnectorItem::paint(QPainter *painter, const QStyleOptionGraphic
     painter->fillRect( r, Qt::black );
 }
 
+QList<DependencyLinkItem*> DependencyConnectorItem::predecessorItems() const
+{
+    return nodeItem()->predecessorItems( m_ctype );
+}
+
+QList<DependencyLinkItem*> DependencyConnectorItem::successorItems() const
+{
+    return nodeItem()->successorItems( m_ctype );
+}
 
 //--------------------
 DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
@@ -527,10 +537,10 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     m_finish = new DependencyConnectorItem( DependencyNodeItem::Finish, this );
     
     m_text = new QGraphicsTextItem( this );
-    QFont f = m_text->font();
-    f.setPointSize( 8 );
-    m_text->setFont( f );
-    m_text->setPlainText( node->name() );
+    m_textFont = m_text->font();
+    m_textFont.setPointSize( 8 );
+    m_text->setFont( m_textFont );
+    setText();
     
     setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable );
     
@@ -546,13 +556,18 @@ DependencyNodeItem::~DependencyNodeItem()
     //qDeleteAll( m_children );
 }
 
+void DependencyNodeItem::setText()
+{
+    m_text->setPlainText( m_node == 0 ? QString() : QString( "%1  %2").arg( m_node->wbsCode() ).arg(m_node->name() ) ); 
+}
+
 DependencyScene *DependencyNodeItem::itemScene() const
 {
     return static_cast<DependencyScene*>( scene() );
 }
 void DependencyNodeItem::setSymbol()
 {
-    m_symbol->setSymbol( m_node->type() );
+    m_symbol->setSymbol( m_node->type(), itemScene()->symbolRect() );
 }
 
 QPointF DependencyNodeItem::connectorPoint( DependencyNodeItem::ConnectorType type ) const
@@ -757,34 +772,72 @@ void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsIte
     painter->drawRect( rect() );
 }
 
+DependencyConnectorItem *DependencyNodeItem::connectorItem( ConnectorType ctype ) const
+{
+    switch ( ctype ) {
+        case Start: return m_start;
+        case Finish: return m_finish;
+        default: break;
+    }
+    return 0;
+}
+
+QList<DependencyLinkItem*> DependencyNodeItem::predecessorItems( ConnectorType ctype ) const
+{
+    QList<DependencyLinkItem*> lst;
+    foreach ( DependencyLinkItem *i, m_parentrelations ) {
+        if ( ctype == Start && ( i->relation->type() == Relation::StartStart || i->relation->type() == Relation::FinishStart ) ) {
+            lst << i;
+        }
+        if ( ctype == Finish && i->relation->type() == Relation::FinishFinish ) {
+            lst << i;
+        }
+    }
+    return lst;
+}
+
+QList<DependencyLinkItem*> DependencyNodeItem::successorItems( ConnectorType ctype ) const
+{
+    QList<DependencyLinkItem*> lst;
+    foreach ( DependencyLinkItem *i, m_childrelations ) {
+        if ( ctype == Start && i->relation->type() == Relation::StartStart ) {
+            lst << i;
+        }
+        if ( ctype == Finish && ( i->relation->type() == Relation::FinishFinish || i->relation->type() == Relation::FinishStart ) ) {
+            lst << i;
+        }
+    }
+    return lst;
+}
+
 //--------------------
-void DependencyNodeSymbolItem::setSymbol( int type )
+void DependencyNodeSymbolItem::setSymbol( int type, const QRectF &rect )
 {
     KDGantt::ItemType itemtype = KDGantt::TypeNone;
     QPainterPath p;
     switch ( type ) {
         case Node::Type_Summarytask:
             itemtype = KDGantt::TypeSummary;
-            p.moveTo( 0.0, 0.0 );
-            p.lineTo( 10.0, 0.0 );
-            p.lineTo( 5.0, 10.0 );
-            p.lineTo( 0.0, 0.0 );
+            p.moveTo( rect.topLeft() );
+            p.lineTo( rect.topRight() );
+            p.lineTo( rect.left() + rect.width() / 2.0, rect.bottom() );
+            p.closeSubpath();
             break;
         case Node::Type_Task:
             itemtype = KDGantt::TypeTask;
-            p.moveTo( 0.0, 0.0 );
-            p.lineTo( 10.0, 0.0 );
-            p.lineTo( 10.0, 10.0 );
-            p.lineTo( 0.0, 10.0 );
-            p.lineTo( 0.0, 0.0 );
+            p.moveTo( rect.topLeft() );
+            p.lineTo( rect.topRight() );
+            p.lineTo( rect.bottomRight() );
+            p.lineTo( rect.bottomLeft() );
+            p.closeSubpath();
             break;
         case Node::Type_Milestone:
             itemtype = KDGantt::TypeEvent;
-            p.moveTo( 5.0, 0.0 );
-            p.lineTo( 10.0, 5.0 );
-            p.lineTo( 5.0, 10.0 );
-            p.lineTo( 0.0, 5.0 );
-            p.lineTo( 5.0, 0.0 );
+            p.moveTo( rect.left() + ( rect.width() / 2.0 ), rect.top() );
+            p.lineTo( rect.right(), rect.top() + ( rect.height() / 2.0 ) );
+            p.lineTo( rect.left() + ( rect.width() / 2.0 ), rect.bottom() );
+            p.lineTo( rect.left(), rect.top() + ( rect.height() / 2.0 ) );
+            p.closeSubpath();
             break;
         default: 
             break;
@@ -1160,6 +1213,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
         if ( focusItem() ) {
             update( focusItem()->boundingRect() );
         }
+        emit focusItemChanged( focusItem() );
         return;
     }
     switch ( keyEvent->key() ) {
@@ -1171,6 +1225,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                     setFocusItem( item );
                     update( static_cast<DependencyNodeItem*>( fitem )->rect() );
                     update( item->rect() );
+                    emit focusItemChanged( focusItem() );
                 }
                 return;
             }
@@ -1184,12 +1239,14 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                         setFocusItem( item->finishConnector() );
                         update( citem->rect() );
                         update( item->finishConnector()->rect() );
+                        emit focusItemChanged( focusItem() );
                     }
                 } else {
                     // Goto node item (parent)
                     setFocusItem( citem->parentItem() );
                     update( citem->rect() );
                     update( static_cast<DependencyNodeItem*>( citem->parentItem() )->rect() );
+                    emit focusItemChanged( focusItem() );
                 }
                 return;
             }
@@ -1203,6 +1260,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                     setFocusItem( item );
                     update( item->rect() );
                     update( static_cast<DependencyNodeItem*>( item->parentItem() )->rect() );
+                    emit focusItemChanged( focusItem() );
                 }
                 return;
             }
@@ -1216,12 +1274,14 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                         setFocusItem( item->startConnector() );
                         update( citem->rect() );
                         update( item->startConnector()->rect() );
+                        emit focusItemChanged( focusItem() );
                     }
                 } else {
                     // Goto node item (parent)
                     setFocusItem( citem->parentItem() );
                     update( citem->rect() );
                     update( static_cast<DependencyNodeItem*>( citem->parentItem() )->rect() );
+                    emit focusItemChanged( focusItem() );
                 }
                 return;
             }
@@ -1235,6 +1295,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                     setFocusItem( item );
                     update( static_cast<DependencyNodeItem*>( fitem )->rect() );
                     update( item->rect() );
+                    emit focusItemChanged( focusItem() );
                 }
                 return;
             }
@@ -1247,6 +1308,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                         setFocusItem( item->finishConnector() );
                         update( citem->rect() );
                         update( item->finishConnector()->rect() );
+                        emit focusItemChanged( focusItem() );
                     }
                 } else {
                     DependencyNodeItem *item = nodeItem( static_cast<DependencyNodeItem*>( fitem )->row() - 1 );
@@ -1254,6 +1316,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                         setFocusItem( item->startConnector() );
                         update( citem->rect() );
                         update( item->startConnector()->rect() );
+                        emit focusItemChanged( focusItem() );
                     }
                 }
                 return;
@@ -1268,6 +1331,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                     setFocusItem( item );
                     update( static_cast<DependencyNodeItem*>( fitem )->rect() );
                     update( item->rect() );
+                    emit focusItemChanged( focusItem() );
                 }
             }
             if ( fitem->type() == DependencyConnectorItem::Type ) {
@@ -1279,6 +1343,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                         setFocusItem( item->finishConnector() );
                         update( citem->rect() );
                         update( item->finishConnector()->rect() );
+                        emit focusItemChanged( focusItem() );
                     }
                 } else {
                     DependencyNodeItem *item = nodeItem( static_cast<DependencyNodeItem*>( fitem )->row() + 1 );
@@ -1286,6 +1351,7 @@ void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
                         setFocusItem( item->startConnector() );
                         update( citem->rect() );
                         update( item->startConnector()->rect() );
+                        emit focusItemChanged( focusItem() );
                     }
                 }
                 return;
@@ -1415,6 +1481,8 @@ DependencyView::DependencyView( QWidget *parent )
     connect( scene(), SIGNAL( dependencyContextMenuRequested( DependencyLinkItem*, DependencyConnectorItem* ) ), this, SLOT( slotDependencyContextMenuRequested( DependencyLinkItem*, DependencyConnectorItem* ) ) );
 
     connect( scene(), SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ), this, SIGNAL( contextMenuRequested( QGraphicsItem*, const QPoint& ) ) );
+
+    connect( itemScene(), SIGNAL( focusItemChanged( QGraphicsItem* ) ), this, SLOT( slotFocusItemChanged( QGraphicsItem* ) ) );
 }
 
 void DependencyView::slotContextMenuRequested( QGraphicsItem *item )
@@ -1452,6 +1520,11 @@ void DependencyView::slotSelectionChanged()
 void DependencyView::slotSelectedItems()
 {
     emit selectionChanged( itemScene()->selectedItems() );
+}
+
+void DependencyView::slotFocusItemChanged( QGraphicsItem *item )
+{
+    ensureVisible( item, 10, 10 );
 }
 
 void DependencyView::setItemScene( DependencyScene *scene )
@@ -1542,6 +1615,7 @@ void DependencyView::slotNodeAdded( Node *node )
         //kDebug()<<node->name();
         itemScene()->setItemVisible( item, true );
     }
+    ensureVisible( item );
 }
 
 void DependencyView::slotNodeRemoved( Node *node )
@@ -1557,7 +1631,7 @@ void DependencyView::slotNodeChanged( Node *node )
 {
     DependencyNodeItem *item = findItem( node );
     if ( item ) {
-        item->setText( node->name() );
+        item->setText();
         item->setSymbol();
     } else kDebug()<<"Node does not exist!";
 }
@@ -1607,6 +1681,20 @@ void DependencyView::createLinks()
 {
     //kDebug();
     itemScene()->createLinks();
+}
+
+void DependencyView::keyPressEvent(QKeyEvent *event)
+{
+    if ( event->modifiers() & Qt::ControlModifier ) {
+        switch ( event->key() ) {
+            case Qt::Key_Plus:
+                return scale( 1.1, 1.1 );
+            case Qt::Key_Minus:
+                return scale( 0.9, 0.9 );
+            default: break;
+        }
+    }
+    QGraphicsView::keyPressEvent(event);
 }
 
 //-----------------------------------
@@ -1776,7 +1864,26 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
                 name = "relation_popup";
             }
         } else if ( item->type() == DependencyConnectorItem::Type ) {
-            kDebug()<<"DependencyConnectorItem:"<<item;
+            DependencyConnectorItem *c = static_cast<DependencyConnectorItem*>( item );
+            QList<DependencyLinkItem*> items;
+            QList<QAction*> actions;
+            KMenu menu;;
+            foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
+                items << i;
+                actions << menu.addAction( i->predItem->text() );
+            }
+            menu.addSeparator();
+            foreach ( DependencyLinkItem *i, c->successorItems() ) {
+                items << i;
+                actions << menu.addAction( i->succItem->text() );
+            }
+            if ( ! actions.isEmpty() ) {
+                QAction *action = menu.exec( pos );
+                if ( action && actions.contains( action ) ) {
+                    emit modifyRelation( items[ actions.indexOf( action ) ]->relation );
+                    return;
+                }
+            }
         }
     }
     //kDebug()<<name;
