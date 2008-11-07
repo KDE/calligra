@@ -294,7 +294,7 @@ ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXm
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     l->addWidget( m_viewlist );
-    m_viewlist->setEditTriggers( QAbstractItemView::DoubleClicked );
+    m_viewlist->setEditTriggers( QAbstractItemView::EditKeyPressed | QAbstractItemView::DoubleClicked );
 
     connect( m_viewlist, SIGNAL( currentItemChanged( QTreeWidgetItem*, QTreeWidgetItem* ) ), SLOT( slotActivated( QTreeWidgetItem*, QTreeWidgetItem* ) ) );
 
@@ -630,6 +630,7 @@ void ViewListWidget::setupContextMenus()
     QAction *action;
     // document insert actions
     // Query for document types
+#if 0
     m_lstEntries = KoDocumentEntry::query(KoDocumentEntry::OnlyEmbeddableDocuments);
     QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
@@ -645,6 +646,7 @@ void ViewListWidget::setupContextMenus()
             connect(action, SIGNAL( triggered( bool ) ), this, SLOT( slotCreatePart() ) );
             m_adddocument.append( action );
     }
+#endif
     // no item actions
     //action = new QAction( KIcon( "document-new" ), i18n( "New Category..." ), this );
     //m_noitem.append( action );

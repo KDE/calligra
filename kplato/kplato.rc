@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="14">
+<kpartgui name="KPlato" version="15">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -87,18 +87,18 @@
     <Menu name="task_popup">
         <Action name="node_properties"/>
         <Action name="task_progress"/>
-        <Action name="task_workpackagecontrol"/>
+        <!--<Action name="task_workpackagecontrol"/>-->
     </Menu>
     <Menu name="summarytask_popup">
         <Action name="node_properties"/>
     </Menu>
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
-        <Action name="task_workpackagecontrol"/>
+        <!--<Action name="task_workpackagecontrol"/>-->
     </Menu>
     <Menu name="taskview_popup">
         <Action name="task_progress"/>
-        <Action name="task_workpackagecontrol"/>
+        <!--<Action name="task_workpackagecontrol"/>-->
     </Menu>
     <Menu name="taskeditor_milestone_popup">
         <Action name="node_properties"/>
