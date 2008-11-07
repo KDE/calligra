@@ -243,7 +243,7 @@ public:
     //! single shot after 1ms for contents updating
     void triggerUpdate();
 
-    typedef enum ScrollDirection {
+    enum ScrollDirection {
         ScrollUp,
         ScrollDown,
         ScrollLeft,
