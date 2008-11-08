@@ -22,8 +22,8 @@
 #define __REPORTENTITYSHAPE_H__
 
 #include <QGraphicsRectItem>
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include <krshapedata.h>
 #include "reportrectentity.h"
 #include <KoShape.h>

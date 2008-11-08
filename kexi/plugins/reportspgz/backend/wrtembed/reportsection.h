@@ -28,8 +28,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QMouseEvent>
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 #include <krsectiondata.h>
 #include <QGraphicsScene>
 #include "reportscene.h"

@@ -24,7 +24,7 @@
 
 #include <QGraphicsRectItem>
 #include "reportentities.h"
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 #include <KoUnit.h>
 #include <krobjectdata.h>
 

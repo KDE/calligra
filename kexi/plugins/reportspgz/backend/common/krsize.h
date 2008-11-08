@@ -22,7 +22,7 @@
 #include <KoUnit.h>
 #include <QSizeF>
 #include <KoGlobal.h>
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 
 /**
  @author

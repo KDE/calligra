@@ -23,8 +23,8 @@
 #define __REPORTENTITYLABEL_H__
 
 #include <QGraphicsRectItem>
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include <krlabeldata.h>
 #include "reportrectentity.h"
 //

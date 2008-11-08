@@ -34,8 +34,8 @@
 #include <formeditor/commands.h>
 #include <formeditor/objecttree.h>
 
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 #include <widget/kexicustompropertyfactory.h>
 #include <core/KexiMainWindowIface.h>
 

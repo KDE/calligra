@@ -28,7 +28,7 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 #include <QGraphicsScene>
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 #include <QGraphicsSceneMouseEvent>
 
 //

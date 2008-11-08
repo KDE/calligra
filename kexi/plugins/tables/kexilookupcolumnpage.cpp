@@ -40,8 +40,8 @@
 #include <kexidb/connection.h>
 #include <kexiproject.h>
 
-#include <koproperty/property.h>
-#include <koproperty/utils.h>
+#include <koproperty/Property.h>
+#include <koproperty/Utils.h>
 
 QString mimeTypeToType(const QString& mimeType)
 {

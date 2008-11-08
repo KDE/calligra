@@ -22,7 +22,7 @@
 
 #include <core/KexiView.h>
 #include <QDomDocument>
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 #include <kexireportpart.h>
 #include "backend/wrtembed/reportdesigner.h"
 

@@ -46,7 +46,7 @@
 #include <KoGlobal.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 
 #include <kdebug.h>
 

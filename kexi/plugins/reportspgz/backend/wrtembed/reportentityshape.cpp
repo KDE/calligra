@@ -26,7 +26,7 @@
 #include <qpainter.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <KoShapeRegistry.h>

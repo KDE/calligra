@@ -33,8 +33,8 @@
 
 #include <krreportdata.h>
 #include <kexidb/connection.h>
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 #include <kdebug.h>
 #include <krobjectdata.h>
 

@@ -23,8 +23,8 @@
 #ifndef __REPORTENTITYBARCODE_H__
 #define __REPORTENTITYBARCODE_H__
 
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 
 #include "reportrectentity.h"
 #include <krbarcodedata.h>

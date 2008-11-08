@@ -24,7 +24,7 @@
 #define __REPORTENTITYTEXT_H__
 
 #include "reportrectentity.h"
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <krtextdata.h>
 
 class ReportEntity;

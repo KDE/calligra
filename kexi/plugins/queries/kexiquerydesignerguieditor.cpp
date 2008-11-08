@@ -55,8 +55,8 @@
 #include <widget/tableview/kexidataawarepropertyset.h>
 #include <widget/relations/KexiRelationsView.h>
 #include <widget/relations/KexiRelationsTableContainer.h>
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include "kexiquerypart.h"
 #include <KexiWindow.h>
 #include <KexiWindowData.h>

@@ -39,8 +39,8 @@
 #include <kexiproject.h>
 
 #include <formeditor/commands.h>
-#include <koproperty/property.h>
-#include <koproperty/utils.h>
+#include <koproperty/Property.h>
+#include <koproperty/Utils.h>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
         : QWidget(parent)

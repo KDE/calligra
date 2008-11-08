@@ -67,7 +67,7 @@
 #include <kexidb/schemadata.h>
 #include <kexiutils/tristate.h>
 
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <KoGlobal.h>

@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 #include <kexi_export.h>
 
 class KexiObjectInfoLabel;

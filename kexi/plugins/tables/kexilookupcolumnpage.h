@@ -26,7 +26,7 @@
 #include <QLabel>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 
 class KexiProject;
 class QLabel;

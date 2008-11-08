@@ -20,7 +20,7 @@
 #ifndef KEXITABLEDESIGNERINTERVIEW_H
 #define KEXITABLEDESIGNERINTERVIEW_H
 
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <kexidb/alter.h>
 #include <core/kexitabledesignerinterface.h>
 

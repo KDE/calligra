@@ -58,8 +58,8 @@
 #include <kexiutils/utils.h>
 #include <KexiMainWindowIface.h>
 
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"

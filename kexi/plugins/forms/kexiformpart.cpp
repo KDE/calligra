@@ -49,7 +49,7 @@
 #include <widgetpropertyset.h>
 #include <widgetlibrary.h>
 #include <objecttreeview.h>
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 
 #include "kexiformview.h"
 #include "widgets/kexidbform.h"

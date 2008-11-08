@@ -24,8 +24,8 @@
 #define __REPORTENTITYLINE_H__
 
 #include <QGraphicsLineItem>
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include "reportentities.h"
 #include <krlinedata.h>
 

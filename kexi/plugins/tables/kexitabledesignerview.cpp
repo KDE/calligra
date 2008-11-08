@@ -38,8 +38,8 @@
 #include <k3command.h>
 #include <KActionCollection>
 
-#include <koproperty/set.h>
-#include <koproperty/utils.h>
+#include <koproperty/Set.h>
+#include <koproperty/Utils.h>
 
 #include <kexidb/cursor.h>
 #include <kexidb/tableschema.h>
