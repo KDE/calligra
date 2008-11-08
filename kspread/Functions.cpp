@@ -496,7 +496,7 @@ QString FunctionDescription::toQML() const
     text += "</p>";
   }
 
-  text += "<p><b>" + i18n("Return type: ") + "</b>";
+  text += "<p><b>" + i18n("Return type:") + "</b> ";
   text += toString( type() );
   text += "</p>";
 
