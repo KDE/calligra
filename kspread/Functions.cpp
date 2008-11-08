@@ -518,9 +518,9 @@ QString FunctionDescription::toQML() const
     QList<FunctionParameter>::ConstIterator it = m_params.begin();
     for( ; it != m_params.end(); ++it )
     {
-      text += "<li><b>" + i18n("Comment:") + "</b>";
+      text += "<li><b>" + i18n("Comment:") + "</b> ";
       text += (*it).helpText();
-      text += "<br><b>" + i18n("Type:") + "</b>";
+      text += "<br><b>" + i18n("Type:") + "</b> ";
       text += toString( (*it).type(), (*it).hasRange() );
     }
     text += "</ul>";
