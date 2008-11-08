@@ -58,6 +58,8 @@ protected:
     virtual bool drv_connect(KexiDB::ServerVersionInfo& version);
     virtual bool drv_disconnect();
     virtual bool drv_getDatabasesList(QStringList &list);
+    //! reimplemented using "SHOW DATABASES LIKE..." because MySQL stores db names in lower case.
+    virtual bool drv_databaseExists(const QString &dbName, bool ignoreErrors = true);
     virtual bool drv_createDatabase(const QString &dbName = QString());
     virtual bool drv_useDatabase(const QString &dbName = QString(), bool *cancelled = 0,
                                  MessageHandler* msgHandler = 0);
