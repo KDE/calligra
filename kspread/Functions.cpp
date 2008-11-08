@@ -496,9 +496,7 @@ QString FunctionDescription::toQML() const
     text += "</p>";
   }
 
-  text += "<p><b>" + i18n("Return type:") + "</b> ";
-  text += toString( type() );
-  text += "</p>";
+  text += i18n ("<p><b>Return type:</b> %1</p>", toString( type() ));
 
   if ( !m_syntax.isEmpty() )
   {
@@ -518,10 +516,8 @@ QString FunctionDescription::toQML() const
     QList<FunctionParameter>::ConstIterator it = m_params.begin();
     for( ; it != m_params.end(); ++it )
     {
-      text += "<li><b>" + i18n("Comment:") + "</b> ";
-      text += (*it).helpText();
-      text += "<br><b>" + i18n("Type:") + "</b> ";
-      text += toString( (*it).type(), (*it).hasRange() );
+      text += i18n ("<li><b>Comment:</b> %1", (*it).helpText());
+      text += i18n ("<br><b>Type:</b> %1", toString( (*it).type(), (*it).hasRange() ));
     }
     text += "</ul>";
   }
