@@ -11,7 +11,7 @@ include_directories(
 
 
 set(libkopropertyeditors_SRCS
-#  editors/utils.cpp -- Temporarily disabled to make it build
+  editors/utils.cpp
   editors/booledit.cpp
 #  editors/coloredit.cpp
   editors/combobox.cpp
@@ -19,9 +19,9 @@ set(libkopropertyeditors_SRCS
 #  editors/dateedit.cpp
 #  editors/datetimeedit.cpp
 #  editors/dummywidget.cpp
-  # editors/fontedit.cpp -- Temopoararily disabled to make it build (missing util.h)
+  editors/fontedit.cpp
 #todo  editors/linestyledit.cpp
-  # editors/pixmapedit.cpp -- Temporarily disabled to make it build (missing util.h)
+  editors/pixmapedit.cpp
   editors/pointedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
@@ -43,7 +43,7 @@ set(koproperty_LIB_SRCS
    DefaultFactory.cpp
    EditorView.cpp
    EditorDataModel.cpp
-#   Utils.cpp -- Temporarily disabled to make it build
+   Utils.cpp
    ${libkopropertyeditors_SRCS}
 )
 
