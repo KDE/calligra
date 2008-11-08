@@ -12,4 +12,8 @@ jstaniek (2008-06-09):
 We're limited to C++, and there apparently are no many templates: http://en.wikipedia.org/wiki/Template_engine_(web)
 There's http://reki.ru/products/ctpp/ but I am not sure it's worth switching.
 
-
+lvillani (2008-11-19):
+Ok, that is nasty, just discovered that the official ctemplate packages put headers in /usr/include/google but
+distributors (Fedora, at least) decided to put them in /usr/include/ctemplate.
+A brutal work-around would be detecting if we have headers installed in /usr/include/google or in 
+/usr/include/ctemplate and include them in our headers using a prefix'ed variable.
