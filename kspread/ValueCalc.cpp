@@ -404,7 +404,7 @@ Value ValueCalc::div (const Value &a, Number b)
 Value ValueCalc::pow (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (::powl (converter->toFloat(a), b));
+  Value res = Value (::pow (converter->toFloat(a), b));
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -415,7 +415,7 @@ Value ValueCalc::pow (const Value &a, Number b)
 Value ValueCalc::abs (const Value &a)
 {
   if (a.isError()) return a;
-  return Value (fabsl (converter->toFloat (a)));
+  return Value (fabs (converter->toFloat (a)));
 }
 
 bool ValueCalc::isZero (const Value &a)
