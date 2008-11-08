@@ -50,7 +50,6 @@
 #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "widgetpropertyset.h"
-#include <koproperty/property.h>
 
 #include "stdwidgetfactory.h"
 

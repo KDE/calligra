@@ -159,7 +159,7 @@ KFormDesignerKDevPart::KFormDesignerKDevPart(QWidget *parent, const char *name, 
         dockTree->setFixedExtentWidth(256);
 
         Q3DockWindow *dockEditor = new Q3DockWindow(dockArea);
-        KoProperty::Editor *editor = new KoProperty::Editor(dockEditor);
+        KoProperty::EditorView *editor = new KoProperty::EditorView(dockEditor);
         dockEditor->setWidget(editor);
         dockEditor->setCaption(i18n("Properties"));
         dockEditor->setResizeEnabled(true);

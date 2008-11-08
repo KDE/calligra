@@ -69,10 +69,10 @@
 #include "connectiondialog.h"
 #include "events.h"
 #include "utils.h"
-#include "kfdpixmapedit.h"
-#include <koproperty/editor.h>
-#include <koproperty/property.h>
-#include <koproperty/factory.h>
+//todo #include "kfdpixmapedit.h"
+#include <koproperty/EditorView.h>
+#include <koproperty/Property.h>
+#include <koproperty/Factory.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 
@@ -90,6 +90,8 @@
 
 namespace KFormDesigner
 {
+
+/*TODO
 
 //! @internal
 class PropertyFactory : public KoProperty::CustomPropertyFactory
@@ -110,6 +112,7 @@ public:
         return new KFDPixmapEdit(prop);
     }
 };
+*/
 
 }
 
@@ -169,8 +172,13 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
             this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 
     // register kfd custom editors
-    KoProperty::FactoryManager::self()->registerFactoryForEditor(KoProperty::Pixmap,
-            new PropertyFactory(KoProperty::FactoryManager::self()));
+#ifdef __GNUC__
+#warning register factory
+#else
+#pragma WARNING( register factory )
+#endif
+//todo    KoProperty::FactoryManager::self()->registerFactoryForEditor(KoProperty::Pixmap,
+//todo            new PropertyFactory(KoProperty::FactoryManager::self()));
 }
 
 FormManager::~FormManager()
@@ -207,7 +215,7 @@ FormManager::createWidgetLibrary(FormManager* m, const QStringList& supportedFac
 }
 
 void
-FormManager::setEditor(KoProperty::Editor *editor)
+FormManager::setEditor(KoProperty::EditorView *editor)
 {
     m_editor = editor;
 

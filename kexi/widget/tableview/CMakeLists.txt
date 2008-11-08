@@ -37,7 +37,7 @@ target_link_libraries(
     kexicore
     kexiutils
     kexiguiutils
-    koproperty 
+    ${KOPROPERTY_LIBS}
     kexidb
     ${KDE4_KIO_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}

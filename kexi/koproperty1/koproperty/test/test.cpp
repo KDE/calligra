@@ -32,8 +32,8 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include <koproperty/property.h>
-#include <koproperty/editor.h>
+#include "koproperty/property.h"
+#include "koproperty/editor.h"
 
 using namespace KoProperty;
 

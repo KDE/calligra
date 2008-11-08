@@ -20,23 +20,21 @@
 
 #include "kexipropertyeditorview.h"
 #include <KexiMainWindowIface.h>
-#include <koproperty/set.h>
-#include <koproperty/editor.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/EditorView.h>
+#include <koproperty/Property.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include <qlayout.h>
-#include <qlabel.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
 
 KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
         : QWidget(parent)
 {
-    Q3HBoxLayout *hlyr = new Q3HBoxLayout(this);
+    QHBoxLayout *hlyr = new QHBoxLayout(this);
     m_objectIconLabel = new QLabel(this);
     m_objectIconLabel->setMargin(2);
     setFixedHeight(IconSize(KIconLoader::Small) + 2 + 2);
@@ -96,7 +94,7 @@ class KexiPropertyEditorView::Private
 public:
     Private() {
     }
-    KoProperty::Editor *editor;
+    KoProperty::EditorView *editor;
 //  QLabel *objectIcon;
 //  QString iconName;
 //  QLabel *objectClassName;
@@ -114,7 +112,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
     //TODO: set a nice icon
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
-    Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
+    QVBoxLayout *lyr = new QVBoxLayout(this);
 
     //add object class info
     d->objectInfoLabel = new KexiObjectInfoLabel(this);
@@ -131,7 +129,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
     d->objectClassName->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     vlyr->addWidget(d->objectClassName);*/
 
-    d->editor = new KoProperty::Editor(this, true /*AutoSync*/, "propeditor");
+    d->editor = new KoProperty::EditorView(this); //, true /*AutoSync*/, "propeditor");
     lyr->addWidget(d->editor);
     setFocusProxy(d->editor);
     d->objectInfoLabel->setBuddy(d->editor);
@@ -169,7 +167,7 @@ void KexiPropertyEditorView::resize (  int w, int h  )
   QWidget::resize( w, h );
 }*/
 
-KoProperty::Editor *KexiPropertyEditorView::editor() const
+KoProperty::EditorView *KexiPropertyEditorView::editor() const
 {
     return d->editor;
 }

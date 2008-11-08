@@ -22,7 +22,7 @@
 #include "kexidataawareobjectiface.h"
 
 #include <kexi_global.h>
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <KexiView.h>
 
 #define MAX_FIELDS 101 //nice prime number (default prop. set vector size)

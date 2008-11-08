@@ -17,9 +17,49 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+TODO
+ Form editor:
+ - FormManager::FormManager: register factory (port to koproperty2)
+ - port KFDPixmapEdit, PropertyFactory
+
+2008-11-08
+Kexi
+- use KoProperty2 in Kexi (this breaks many functions now)
+
+2008-11-07
+KoProperty2
+= re-added GroupContainer (a dependency of kfd)
+= fixed painting pixmap delegate
+
+2008-11-06
+KoProperty2
+- pixmap editor ported
+
+2008-11-04
+KoProperty2
+- int spin box editor now handles uint type as well
+- rect and size types: width and height properties are now of type uint
+
+Widgets
+- KexiCustomPropertyFactory ported to KoProperty2
+
+2008-11-01..03
+KoProperty2
+- custom property API replaced with 'composed'; implementation of subproperties moved
+  to factory itself (size/rect/point types already ported to this API)
+- propertytest app: added '-property' option for testing of a single property type
+
+2008-10-30
+KoProperty2
+- drawing gray grid lines and altering style sheets for grids moved to a common routine
+- 3-state bool editor properly works and is painted
+- fixed painting recently implemented editors for composed types (rect, point, size)
+
 2008-10-26
 KoProperty2
-- editor widgets ported to the new API: point, int, double
+- editor widgets ported to the new API: point, int, double, cursor
+- combo editor: added possibility of displaying icons
+- cursor editor displays icons
 
 2008-10-25
 KoProperty2

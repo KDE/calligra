@@ -54,7 +54,7 @@
 #include "utils.h"
 #include "widgetpropertyset.h"
 #include "widgetwithsubpropertiesinterface.h"
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <kexiutils/utils.h>
 
 using namespace KFormDesigner;

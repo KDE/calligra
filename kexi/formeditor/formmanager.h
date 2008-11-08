@@ -32,6 +32,7 @@
 
 #include "form.h"
 #include <kexi_export.h>
+#include <koproperty/EditorView.h>
 
 class QWidget;
 class QWorkspace;
@@ -181,8 +182,8 @@ public:
      an icon ...) */
     bool isTopLevel(QWidget *w);
 
-    //! \return A pointer to the KoProperty::Editor we use.
-    //unused KoProperty::Editor* propertyEditor() const { return m_editor; }
+    //! \return A pointer to the KoProperty::EditorView we use.
+    //unused KoProperty::EditorView* propertyEditor() const { return m_editor; }
 
     /*! Shows a property set \a set in a Property Editor.
      If \a buff is 0, Property Editor will be cleared.
@@ -198,7 +199,7 @@ public:
     void unblockPropertyEditorUpdating(void *blockingObject, WidgetPropertySet *set);
 
     /*! Sets the external property editor pane used by FormDesigner (it may be docked).*/
-    void setEditor(KoProperty::Editor *editor);
+    void setEditor(KoProperty::EditorView *editor);
 
     /*! Sets the external object tree view used by FormDesigner (it may be docked).
      This function also connects appropriate signals and slots to ensure
@@ -472,7 +473,7 @@ private:
 
     WidgetPropertySet *m_propSet;
 //  WidgetLibrary *m_lib;
-    QPointer<KoProperty::Editor>  m_editor;
+    QPointer<KoProperty::EditorView>  m_editor;
     QPointer<ObjectTreeView>  m_treeview;
     // Forms
     Q3PtrList<Form> m_forms;

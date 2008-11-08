@@ -103,8 +103,8 @@
 #include <widget/kexibrowser.h>
 #include <widget/kexipropertyeditorview.h>
 #include <widget/utils/kexirecordnavigator.h>
-#include <koproperty/editor.h>
-#include <koproperty/set.h>
+#include <koproperty/EditorView.h>
+#include <koproperty/Set.h>
 
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectWizard.h"
@@ -3592,7 +3592,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         if (d->propEditor) {
             // ah, closing detached window - better switch off property buffer right now...
             d->propBuffer = 0;
-            d->propEditor->editor()->changeSet(0, false);
+            d->propEditor->editor()->changeSet(0);
         }
     }
 
@@ -4336,10 +4336,14 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
             d->propBuffer = newBuf;
             if (preservePrevSelection) {
-                if (propertyToSelect.isEmpty())
-                    d->propEditor->editor()->changeSet(d->propBuffer, preservePrevSelection);
-                else
+                if (propertyToSelect.isEmpty()) {
+                    d->propEditor->editor()->changeSet(d->propBuffer, 
+                        preservePrevSelection ? KoProperty::EditorView::PreservePreviousSelection
+                            : KoProperty::EditorView::SetOption(0));
+                }
+                else {
                     d->propEditor->editor()->changeSet(d->propBuffer, propertyToSelect);
+                }
             }
         }
     }

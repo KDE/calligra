@@ -37,7 +37,7 @@ namespace KoProperty
 {
 class Property;
 class Set;
-class Editor;
+class EditorView;
 }
 
 namespace KFormDesigner
@@ -45,7 +45,7 @@ namespace KFormDesigner
 
 //! A dialog to edit the contents of a listview (K3ListView or QListView)
 /*! The dialog contains two pages, one to edit columns and one to edit ist items.
- KoProperty::Editor is used in columns to edit column properties
+ KoProperty::EditorView is used in columns to edit column properties
  (there are two properties not supported by Qt Designer: 'width' and 'resizable').
  The user can enter list contents inside the list
  using K3ListViewItem::setRenameable(). Pixmaps are not yet supported. */
@@ -83,7 +83,7 @@ protected:
 
 protected:
     enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
-    KoProperty::Editor  *m_editor;
+    KoProperty::EditorView  *m_editor;
     KoProperty::Set  *m_propSet;
     KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
     K3ListBox  *m_listbox;

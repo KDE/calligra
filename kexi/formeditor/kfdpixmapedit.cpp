@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include "formmanager.h"
 #include "form.h"
 #include "objecttree.h"

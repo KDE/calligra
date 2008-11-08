@@ -25,7 +25,7 @@
 #include <QVector>
 #include <QList>
 #include <QByteArray>
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 #include <kexidb/RecordData.h>
 
 typedef QVector<KoProperty::Set*> SetVector;

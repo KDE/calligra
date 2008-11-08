@@ -15,7 +15,7 @@ target_link_libraries(
     kexidatatable
     kexiextendedwidgets
     kformdesigner
-    koproperty
+    ${KOPROPERTY_LIBS}
     kexiformutils
     ${KDE4_KDECORE_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}
@@ -95,7 +95,7 @@ target_link_libraries(
     kexiutils
     kexidatatable
     kexiguiutils
-    koproperty
+    ${KOPROPERTY_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}

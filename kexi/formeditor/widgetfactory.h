@@ -175,7 +175,7 @@ public:
 
     /*! Sets autoSync flag for property \a propertyName.
      This allows to override autoSync flag for certain widget's property, because
-     e.g. KoProperty::Editor can have autoSync flag set to false or true, but
+     e.g. KoProperty::EditorView can have autoSync flag set to false or true, but
      not all properties have to comply with that.
      \a flag equal to cancelled value means there is no overriding (the default). */
     void setAutoSyncForProperty(const char *propertyName, tristate flag);

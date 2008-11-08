@@ -208,7 +208,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload, boo
     else {
         if (forceReload) {
             KFormDesigner::FormManager::self()->showPropertySet(0, true/*force*/);
-            prevProperty = d->set.prevSelection();
+            prevProperty = d->set.previousSelection();
         }
         clearSet(true); //clear but do not reload to avoid blinking
         d->widgets.append(QPointer<QWidget>(w));

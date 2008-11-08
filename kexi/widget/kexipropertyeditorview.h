@@ -28,7 +28,7 @@ class QLabel;
 
 namespace KoProperty
 {
-class Editor;
+class EditorView;
 class Set;
 }
 
@@ -106,7 +106,7 @@ public:
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
-    KoProperty::Editor *editor() const;
+    KoProperty::EditorView *editor() const;
 
 // public slots:
 //  virtual void setGeometry( const QRect &r );

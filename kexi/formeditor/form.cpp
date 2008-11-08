@@ -42,7 +42,6 @@
 #include "events.h"
 #include "utils.h"
 #include "form.h"
-#include <koproperty/property.h>
 #include <kexiutils/utils.h>
 #include <kexi_global.h>
 

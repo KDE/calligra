@@ -47,7 +47,7 @@ target_link_libraries(
     kexicore
     ktexteditor
     kexidb
-    koproperty
+    ${KOPROPERTY_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
     ${QT_QT3SUPPORT_LIBRARY}

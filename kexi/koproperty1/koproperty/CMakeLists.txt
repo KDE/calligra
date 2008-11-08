@@ -2,8 +2,12 @@
 
 add_subdirectory( test )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/koproperty1/koproperty/editors ${CMAKE_SOURCE_DIR}/libs/guiutils ${KOMAIN_INCLUDES} )
-
+include_directories(
+  ${CMAKE_SOURCE_DIR}/kexi/koproperty1
+  ${CMAKE_SOURCE_DIR}/kexi/koproperty1/koproperty/editors
+  ${CMAKE_SOURCE_DIR}/libs/guiutils
+  ${KOMAIN_INCLUDES}
+)
 
 set(libkopropertyeditors_SRCS
   editors/booledit.cpp

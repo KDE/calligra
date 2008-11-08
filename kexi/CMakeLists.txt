@@ -20,17 +20,23 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} 
-  ${KDE4_INCLUDES} ${QT_INCLUDES}  ${CMAKE_SOURCE_DIR}/libs/ koproperty1 )
+include_directories(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_BINARY_DIR}
+  koproperty2
+  ${KDE4_INCLUDES}
+  ${QT_INCLUDES}
+  ${CMAKE_SOURCE_DIR}/libs
+)
 
-SET(KOPROPERTY_LIBS koproperty)
-
-#SET(KOPROPERTY_LIBS koproperty2)
-#include_directories( koproperty2 )
+#SET(KOPROPERTY_LIBS koproperty)
+#add_subdirectory( koproperty1/koproperty ) #todo: remove
+#include_directories( koproperty1 )
+SET(KOPROPERTY_LIBS koproperty2)
+add_subdirectory( koproperty2/koproperty )
+include_directories( koproperty2 )
 
 add_subdirectory( 3rdparty )
-add_subdirectory( koproperty1/koproperty ) #todo: remove
-add_subdirectory( koproperty2/koproperty )
 add_subdirectory( kexiutils )
 add_subdirectory( kexidb )
 add_subdirectory( core )

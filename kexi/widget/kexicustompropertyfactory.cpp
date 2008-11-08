@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,12 +21,11 @@
 #include "kexicustompropertyfactory_p.h"
 #include <kexiutils/identifier.h>
 
-#include <koproperty/customproperty.h>
-//Added by qt3to4:
-#include <Q3ValueList>
+//#include <koproperty/customproperty.h>
 
 using namespace KoProperty;
 
+#if 0
 //! @internal
 class PixmapIdCustomProperty : public CustomProperty
 {
@@ -68,18 +67,42 @@ public:
     }
     QString m_value;
 };
+#endif
+
+#if 0 //TODO
+class KexiImagePropertyEditorDelegate : public KoProperty::EditorCreatorInterface, 
+                                        public KoProperty::ValuePainterInterface
+{
+public:
+    KexiImagePropertyEditorDelegate() {}
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+    virtual void paint( QPainter * painter, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+};
+#endif
+
+class KexiIdentifierPropertyEditorDelegate : public KoProperty::EditorCreatorInterface
+{
+public:
+    KexiIdentifierPropertyEditorDelegate() {}
+    virtual QWidget * createEditor( int type, QWidget *parent, 
+        const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        return new KexiIdentifierPropertyEdit(parent);
+    }
+};
 
 //---------------
 
-KexiCustomPropertyFactory::KexiCustomPropertyFactory(QObject* parent)
-        : CustomPropertyFactory(parent)
+KexiCustomPropertyFactory::KexiCustomPropertyFactory()
+        : KoProperty::Factory()
 {
+//TODO    addEditor( KexiCustomPropertyFactory::PixmapId, new KexiImagePropertyEditorDelegate );
+    addEditor( KexiCustomPropertyFactory::Identifier, new KexiIdentifierPropertyEditorDelegate );
 }
 
-KexiCustomPropertyFactory::~KexiCustomPropertyFactory()
-{
-}
-
+/*
 CustomProperty* KexiCustomPropertyFactory::createCustomProperty(Property *parent)
 {
     const int type = parent->type();
@@ -99,17 +122,11 @@ Widget* KexiCustomPropertyFactory::createCustomWidget(Property *prop)
         return new KexiIdentifierPropertyEdit(prop);
 
     return 0;
-}
+}*/
 
 void KexiCustomPropertyFactory::init()
 {
-    if (KoProperty::FactoryManager::self()->factoryForEditorType(KexiCustomPropertyFactory::PixmapId))
+    if (KoProperty::FactoryManager::self()->isEditorForTypeAvailable(KexiCustomPropertyFactory::PixmapId))
         return; //already registered
-
-    // register custom editors and properties
-    KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(KoProperty::FactoryManager::self());
-    Q3ValueList<int> types;
-    types << KexiCustomPropertyFactory::PixmapId << KexiCustomPropertyFactory::Identifier;
-    KoProperty::FactoryManager::self()->registerFactoryForProperties(types, factory);
-    KoProperty::FactoryManager::self()->registerFactoryForEditors(types, factory);
+    KoProperty::FactoryManager::self()->registerFactory( new KexiCustomPropertyFactory );
 }

@@ -48,8 +48,8 @@
 #include "container.h"
 #include "formmanager.h"
 #include "objecttreeview.h"
-#include <koproperty/set.h>
-#include <koproperty/editor.h>
+#include <koproperty/Set.h>
+#include <koproperty/Editor.h>
 
 #include "kfd_part.h"
 
@@ -159,7 +159,7 @@ KFormDesignerPart::KFormDesignerPart(QWidget *parent, const char *name, bool rea
         dockTree->setFixedExtentWidth(256);
 
         Q3DockWindow *dockEditor = new Q3DockWindow(dockArea);
-        m_editor = new KoProperty::Editor(dockEditor);
+        m_editor = new KoProperty::EditorView(dockEditor);
         dockEditor->setWidget(m_editor);
         dockEditor->setCaption(i18n("Properties"));
         dockEditor->setResizeEnabled(true);
@@ -372,7 +372,7 @@ KFormDesignerPart::closeUrl()
             return false;
     }
 
-    delete(KoProperty::Editor*)m_editor;
+    delete (KoProperty::EditorView*)m_editor;
     return true;
 }
 

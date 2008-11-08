@@ -87,7 +87,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
     setWindowTitle(i18n("Project Navigator"));
     setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
-    Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
+    QVBoxLayout *lyr = new QVBoxLayout(this);
     lyr->setContentsMargins(
         KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2, KDialog::marginHint() / 2);
     lyr->setSpacing(KDialog::marginHint() / 2);
@@ -135,7 +135,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
     KexiSmallToolButton *btn;
     if (m_features & Toolbar) {
         btn = new KexiSmallToolButton(m_openAction, this);
-        buttons_flyr->add(btn);
+        buttons_flyr->addWidget(btn);
     }
 
     if (KexiMainWindowIface::global()->userMode()) {
@@ -166,7 +166,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
         if (m_features & Toolbar) {
             btn = new KexiSmallToolButton(m_designAction, this);
 //   m_designAction->setEnabled(false);
-            buttons_flyr->add(btn);
+            buttons_flyr->addWidget(btn);
         }
 
         m_editTextAction = addAction("editText_object", KIcon(), i18n("Open in &Text View"),
@@ -190,7 +190,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 
             m_deleteObjectToolButton = new KexiSmallToolButton(m_deleteAction, this);
             //m_deleteObjectToolButton->setText(QString());
-            buttons_flyr->add(m_deleteObjectToolButton);
+            buttons_flyr->addWidget(m_deleteObjectToolButton);
         }
     }
 
