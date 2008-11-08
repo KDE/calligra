@@ -22,7 +22,7 @@
 
 #include "KexiWindow.h"
 #include "kexiproject.h"
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
