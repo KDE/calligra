@@ -17,10 +17,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef MYSQLDRIVER_GLOBAL_H
+#ifndef MYSQLDRIVER_GLOBAL_H	
 #define MYSQLDRIVER_GLOBAL_H
 
-#include <QGlobal.h>
+#include <qglobal.h>
 #ifdef Q_WS_WIN
 # define KDEWIN_FCNTL_H
 # define KDEWIN_SYS_STAT_H
