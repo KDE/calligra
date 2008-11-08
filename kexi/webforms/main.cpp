@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
         kError() << "Default plug-ins directory does not exist!";
         return 1;
     } catch (pion::net::WebServer::ServiceNotFoundException&) {
-        kError() << "Could not find FileService, are you have the right plugins in " PION_PLUGINS_DIRECTORY;
+        kError() << "Could not find FileService, do you have the right plugins in " PION_PLUGINS_DIRECTORY "?";
         return 1;
     }
 
