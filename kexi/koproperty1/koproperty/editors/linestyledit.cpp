@@ -79,6 +79,7 @@ LineStyleEdit::setValue(const QVariant &value, bool emitChange)
 void
 LineStyleEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVariant &v)
 {
+    Q_UNUSED(v);
     p->eraseRect(r);
 
     if (!value().canConvert(QVariant::Int))
