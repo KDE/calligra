@@ -85,6 +85,8 @@ install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kplato_KDEINIT_SRCS main.cpp )
 
+kde4_add_app_icon(kplato_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-kplato.png")
+
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kplato komain  ${KDE4_KDEUI_LIBS})

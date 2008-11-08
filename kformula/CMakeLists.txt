@@ -59,6 +59,7 @@ install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kformula_KDEINIT_SRCS main.cpp )
 
+kde4_add_app_icon(kformula_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/pics/hi*-app-kformula.png")
 
 kde4_add_kdeinit_executable( kformula ${kformula_KDEINIT_SRCS})
 
