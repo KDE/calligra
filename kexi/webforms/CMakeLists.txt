@@ -1,6 +1,6 @@
 #
 # Kexi Web Forms build script
-# 
+#
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/kexi/3rdparty/shttpd/src
@@ -30,6 +30,7 @@ else (WITH_EXTJS_WEBFORMS)
   message(STATUS "Kexi Web Forms: enabled default view")
 endif (WITH_EXTJS_WEBFORMS)
 
+# Ugly, isn't it?
 file(GLOB webforms_view_SRCS view/${USED_VIEW}/*.cpp)
 file(GLOB webforms_controller_SRCS controller/${USED_VIEW}/*.cpp)
 file(WRITE controller.h.in "#include \"controller/${USED_VIEW}/Controller.h\"")
