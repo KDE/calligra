@@ -60,6 +60,7 @@ Value ValueParser::parse( const QString& str ) const
 
   // First as number
   val = tryParseNumber (strStripped, &ok);
+
   if (ok)
     return val;
 

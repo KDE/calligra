@@ -387,7 +387,7 @@ Number Value::asFloat() const
     if ( type() == Float )
         result = d->f;
     else if ( type() == Integer )
-        result = static_cast<int>(d->i);
+        result = static_cast<Number>(d->i);
     else if ( type() == Complex )
         result = d->pc->real();
     return result;
@@ -402,7 +402,7 @@ complex<Number> Value::asComplex() const
     else if ( type() == Float )
         result = d->f;
     else if ( type() == Integer )
-        result = static_cast<int>(d->i);
+        result = static_cast<Number>(d->i);
     return result;
 }
 

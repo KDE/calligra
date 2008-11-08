@@ -226,21 +226,11 @@ Value ValueCalc::add (const Value &a, const Value &b)
   if (a.isError()) return a;
   if (b.isError()) return b;
   Value res;
-  if ((a.isInteger() && b.isEmpty()) || (a.isEmpty() && b.isInteger())
-      || (a.isInteger() && b.isInteger()))
-  {
-    int aa, bb;
-    aa = converter->toInteger (a);
-    bb = converter->toInteger (b);
-    res = Value (aa + bb);
-  }
-  else
-  {
-    Number aa, bb;
-    aa = converter->toFloat (a);
-    bb = converter->toFloat (b);
-    res = Value (aa + bb);
-  }
+
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
+  res = Value (aa + bb);
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a, b));
