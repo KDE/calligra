@@ -21,7 +21,7 @@
 #define KEXITABLEDESIGNERINTERFACE_H
 
 #include <kexi_export.h>
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <kexiutils/tristate.h>
 #include <QVariant>
 
