@@ -109,6 +109,8 @@ install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kword_KDEINIT_SRCS main.cpp )
 
+kde4_add_app_icon(kword_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/app/*/kword.png")
+
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kword  ${KDE4_KDEUI_LIBS} komain )
