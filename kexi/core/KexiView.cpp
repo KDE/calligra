@@ -192,7 +192,7 @@ KexiView::KexiView(QWidget *parent)
 
     installEventFilter(this);
 
-    QLayout *l = layout();
+    // QLayout *l = layout(); -- FIXME: Not used?
     d->mainLyr = new QVBoxLayout(this);
     d->mainLyr->setContentsMargins(0, KDialog::marginHint() / 3, 0, 0);
 
