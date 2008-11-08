@@ -79,7 +79,7 @@ bool DataProvider::initDatabase(const QString& fileName) {
 
             m_connection = m_driver->createConnection(*m_connData);
 
-            #warning "This is just for compatibility"
+#warning "This is just for compatibility"
             gConnection = m_connection; // FIXME: drop this and port all code
 
             if (!m_connection || m_driver->error()) {
