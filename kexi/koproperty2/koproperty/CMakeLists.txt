@@ -19,9 +19,9 @@ set(libkopropertyeditors_SRCS
 #  editors/dateedit.cpp
 #  editors/datetimeedit.cpp
 #  editors/dummywidget.cpp
-  editors/fontedit.cpp
+  # editors/fontedit.cpp -- Temopoararily disabled to make it build (missing util.h)
 #todo  editors/linestyledit.cpp
-  editors/pixmapedit.cpp
+  # editors/pixmapedit.cpp -- Temporarily disabled to make it build (missing util.h)
   editors/pointedit.cpp
   editors/rectedit.cpp
   editors/sizeedit.cpp
