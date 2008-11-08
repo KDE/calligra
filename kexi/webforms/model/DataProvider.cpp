@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
@@ -26,20 +27,20 @@
 
 #include <main/startup/KexiStartup.h>
 
-#include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
+#include <kexidb/drivermanager.h>
 
 namespace KexiWebForms {
 namespace Model {
 
 KexiDB::Connection* gConnection;
+DataProvider* DataProvider::m_instance = 0;
 
-
-DataProvider::DataProvider() {
+DataProvider* DataProvider::instance() {
     if (!m_instance)
-        m_istance = new DataProvider();
-    return m_istance;
+        m_instance = new DataProvider();
+    return m_instance;
 }
 
 KexiDB::Connection* DataProvider::connection() {
@@ -66,17 +67,17 @@ bool DataProvider::initDatabase(const QString& fileName) {
         } else {
             kDebug() << "This should be a file-based database... now loading it";
 
-            m_driver = manager.driver(driverName);
-            if (!driver || manager.error()) {
+            m_driver = m_manager.driver(driverName);
+            if (!m_driver || m_manager.error()) {
                 m_manager.debugError();
                 status = false;
             } else status = true;
 
             m_connData->setFileName(fileName);
 
-            m_connection = m_driver->createConnection(*connData);
+            m_connection = m_driver->createConnection(*m_connData);
 
-            if (!m_connection || driver->error()) {
+            if (!m_connection || m_driver->error()) {
                 m_driver->debugError();
                 status = false;
             } else status = true;
@@ -86,7 +87,7 @@ bool DataProvider::initDatabase(const QString& fileName) {
                 status = false;
             } else status = true;
 
-            if (!gConnection->useDatabase(fileName)) {
+            if (!m_connection->useDatabase(fileName)) {
                 kError() << m_connection->errorMsg();
                 status = false;
             } else {

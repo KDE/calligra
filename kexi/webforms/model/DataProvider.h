@@ -21,7 +21,9 @@
 #ifndef KEXIWEBFORMS_DATAPROVIDER_H
 #define KEXIWEBFORMS_DATAPROVIDER_H
 
+#include <kexidb/driver.h>
 #include <kexidb/connection.h>
+#include <kexidb/drivermanager.h>
 
 class QString;
 
@@ -51,9 +53,9 @@ public:
     bool reopenDatabase();
     KexiDB::Connection* connection();
 protected:
-    DataProvider();
+    DataProvider() {};
 private:
-    DataProvider* m_instance;
+    static DataProvider* m_instance;
     KexiDB::Driver* m_driver;
     KexiDB::Connection* m_connection;
     KexiDB::DriverManager m_manager;
@@ -61,19 +63,7 @@ private:
 
     QString m_dbName;
     bool m_initialized;
-}
-
-/*!
- * Essentially, initialize the KexiDB::Connection object
- *
- * @param const QString& Path to a KexiDB file, connection file
- * shortcut file
- *
- * @return boolean false when error occurs, true if everything went well
- */
-bool initDatabase(const QString& fileName);
-
-bool reopenDatabase();
+};
 
 }
 }

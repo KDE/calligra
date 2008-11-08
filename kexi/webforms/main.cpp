@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
     if (args->isSet("file")) {
-        if (!KexiWebForms::Model::initDatabase(args->getOption("file"))) {
+        if (!KexiWebForms::Model::DataProvider::instance()->initDatabase(args->getOption("file"))) {
             kError() << "Something went wrong while initializing database...";
             return 1;
         }
