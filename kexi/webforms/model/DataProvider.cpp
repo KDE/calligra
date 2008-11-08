@@ -35,13 +35,21 @@ namespace Model {
 
 KexiDB::Connection* gConnection;
 
-// FIXME: Move creation of ConnectionData outside this function
-bool initDatabase(const QString& fileName) {
-    bool status = false;
-    KexiDB::Driver* driver;
-    KexiDB::DriverManager manager;
-    KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
 
+DataProvider::DataProvider() {
+    if (!m_instance)
+        m_istance = new DataProvider();
+    return m_istance;
+}
+
+KexiDB::Connection* DataProvider::connection() {
+    // FIXME: Ensure that the connection pointer exists!
+    return m_connection;
+}
+
+bool DataProvider::initDatabase(const QString& fileName) {
+    bool status = false;
+    m_connData = new KexiDB::ConnectionData();
 
     QString driverName;
     QString suggestedDriverName;
@@ -58,28 +66,28 @@ bool initDatabase(const QString& fileName) {
         } else {
             kDebug() << "This should be a file-based database... now loading it";
 
-            driver = manager.driver(driverName);
+            m_driver = manager.driver(driverName);
             if (!driver || manager.error()) {
-                manager.debugError();
+                m_manager.debugError();
                 status = false;
             } else status = true;
 
-            connData->setFileName(fileName);
+            m_connData->setFileName(fileName);
 
-            gConnection = driver->createConnection(*connData);
+            m_connection = m_driver->createConnection(*connData);
 
-            if (!gConnection || driver->error()) {
-                driver->debugError();
+            if (!m_connection || driver->error()) {
+                m_driver->debugError();
                 status = false;
             } else status = true;
 
-            if (!gConnection->connect()) {
-                gConnection->debugError();
+            if (!m_connection->connect()) {
+                m_connection->debugError();
                 status = false;
             } else status = true;
 
             if (!gConnection->useDatabase(fileName)) {
-                kError() << gConnection->errorMsg();
+                kError() << m_connection->errorMsg();
                 status = false;
             } else {
                 status = true;

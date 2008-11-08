@@ -35,6 +35,34 @@ namespace Model {
  */
 extern KexiDB::Connection* gConnection;
 
+/**
+ * @brief A class 'abstracting' the access to a database file
+ *
+ * DataProvider abstracts a bit the connection to a SQLite-based database
+ * It's a singleton, it's not thread-safe, and it's a huge work-around a bug
+ * I found at initialization time, when the Authenticator creates the tables
+ * required to manage user authentication. That said, enjoy!
+ */
+class DataProvider {
+public:
+    static DataProvider* instance();
+
+    bool initDatabase(const QString& name);
+    bool reopenDatabase();
+    KexiDB::Connection* connection();
+protected:
+    DataProvider();
+private:
+    DataProvider* m_instance;
+    KexiDB::Driver* m_driver;
+    KexiDB::Connection* m_connection;
+    KexiDB::DriverManager m_manager;
+    KexiDB::ConnectionData* m_connData;
+
+    QString m_dbName;
+    bool m_initialized;
+}
+
 /*!
  * Essentially, initialize the KexiDB::Connection object
  *
@@ -44,6 +72,8 @@ extern KexiDB::Connection* gConnection;
  * @return boolean false when error occurs, true if everything went well
  */
 bool initDatabase(const QString& fileName);
+
+bool reopenDatabase();
 
 }
 }

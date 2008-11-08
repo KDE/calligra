@@ -57,7 +57,7 @@ bool Authenticator::loadStore() {
     KexiDB::TableSchema* table = KexiWebForms::Model::gConnection->tableSchema("kexi__users");
 
     if (!table) {
-        // the table doesn't exist, create it
+        // the table doesn't exist, create it (programmatically)
         kDebug() << "kexi__users table does not exist, creating it";
         KexiDB::TableSchema* kexi__users = new KexiDB::TableSchema("kexi__users");
         kexi__users->setNative(true);
