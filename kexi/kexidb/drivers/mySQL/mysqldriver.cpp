@@ -19,24 +19,25 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#ifdef Q_WS_WIN
-# include <mysql/config-win.h>
-#endif
-#include <mysql_version.h>
-#include <mysql.h>
-#define BOOL bool
-
-#include <QVariant>
-#include <QFile>
-
-#include <kgenericfactory.h>
-#include <kdebug.h>
-
+#include "mysqldriver_global.h"
 #include "mysqldriver.h"
 #include "mysqlconnection.h"
 #include <kexidb/field.h>
 #include <kexidb/driver_p.h>
 #include <kexidb/utils.h>
+
+#include <QVariant>
+#include <QFile>
+
+#ifdef Q_WS_WIN
+# include <config-win.h>
+#endif
+#include <mysql_version.h>
+#include <mysql.h>
+#define BOOL bool
+
+#include <kgenericfactory.h>
+#include <kdebug.h>
 
 using namespace KexiDB;
 
