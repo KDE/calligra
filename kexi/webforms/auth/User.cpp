@@ -18,6 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <KDebug>
+
 #include "User.h"
 
 namespace KexiWebForms {
@@ -41,9 +43,12 @@ QList<Permission> User::permissions() const {
 
 bool User::can(Permission p) {
     for (int i = 0; i < m_perms.size(); ++i) {
-        if (m_perms.at(i) == p)
+        if (m_perms.at(i) == p) {
+            kDebug() << "User " << name() << " authorized";
             return true;
+        }
     }
+    kDebug() << "User " << name() << " NOT authorized";
     return false;
 }
 
