@@ -343,10 +343,7 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
   d->completionListBox->setFrameStyle( QFrame::NoFrame );
 //   d->completionListBox->setVariableWidth( true );
   d->completionListBox->installEventFilter( this );
-  connect( d->completionListBox, SIGNAL(selected(const QString&)), this,
-    SLOT(itemSelected(const QString&)) );
-  connect( d->completionListBox, SIGNAL(highlighted(const QString&)), this,
-    SLOT(itemSelected(const QString&)) );
+  connect( d->completionListBox, SIGNAL(currentRowChanged(int)), SLOT(itemSelected()) );
   connect( d->completionListBox, SIGNAL(activated(QModelIndex)), SLOT(doneCompletion()) );
   layout->addWidget( d->completionListBox );
 
@@ -354,6 +351,7 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
     Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
   d->hintLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
   d->hintLabel->setPalette( QToolTip::palette() );
+  d->hintLabel->setWordWrap( true );
   d->hintLabel->hide();
 }
 
@@ -363,8 +361,10 @@ FunctionCompletion::~FunctionCompletion()
       delete d;
 }
 
-void FunctionCompletion::itemSelected( const QString& item )
+void FunctionCompletion::itemSelected()
 {
+    QString item = d->completionListBox->currentItem()->text();
+
     KSpread::FunctionDescription* desc;
     desc = KSpread::FunctionRepository::self()->functionInfo(item);
     if(!desc)

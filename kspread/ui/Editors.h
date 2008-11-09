@@ -158,7 +158,7 @@ public slots:
     void doneCompletion();
 
 private slots:
-    void itemSelected( const QString& item );
+    void itemSelected();
 
 signals:
     /**
