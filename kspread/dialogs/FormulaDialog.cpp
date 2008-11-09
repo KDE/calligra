@@ -118,7 +118,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* 
 
     QItemSelectionModel* selectionmodel = new QItemSelectionModel(proxyModel, this);
     functions->setSelectionModel(selectionmodel);
-    connect(selectionmodel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+    connect(selectionmodel, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSelected()));
     //connect(proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
