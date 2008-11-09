@@ -1478,7 +1478,7 @@ void CellToolBase::styleDialog()
     StyleManagerDialog dialog(m_canvas->canvasWidget(), selection(), styleManager);
     dialog.exec();
 
-    static_cast<KSelectAction*>(action("stylemenu"))->setItems(styleManager->styleNames());
+    static_cast<KSelectAction*>(action("setStyle"))->setItems(styleManager->styleNames());
     if (selection()->activeSheet())
         map->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
     m_canvas->canvasWidget()->update();
@@ -1531,9 +1531,9 @@ void CellToolBase::createStyleFromCell()
 
     selection()->activeSheet()->map()->styleManager()->insertStyle(style);
     cell.setStyle(*style);
-    QStringList functionList(static_cast<KSelectAction*>(action("stylemenu"))->items());
+    QStringList functionList(static_cast<KSelectAction*>(action("setStyle"))->items());
     functionList.push_back(styleName);
-    static_cast<KSelectAction*>(action("stylemenu"))->setItems(functionList);
+    static_cast<KSelectAction*>(action("setStyle"))->setItems(functionList);
 }
 
 void CellToolBase::bold(bool enable)
