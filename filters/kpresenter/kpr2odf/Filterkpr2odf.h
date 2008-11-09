@@ -88,7 +88,7 @@ private:
     const QString createGradientStyle( const KoXmlElement& page );
     const QString createGraphicStyle( const KoXmlElement& page );
     const QString createPageLayout();//we use more than one tag, better load them from m_mainDoc
-    const QString createMasterPageStyle( const KoXmlNode & objects );//same as above
+    const QString createMasterPageStyle( const KoXmlNode & objects, const KoXmlElement & masterBackground );//same as above
     const QString createOpacityGradientStyle( int opacity );
     const QString createMarkerStyle( int markerType );
     const QString createStrokeDashStyle( int strokeStyle );

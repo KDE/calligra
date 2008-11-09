@@ -280,9 +280,10 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
 
     //Go to the first background, there might be missing backgrounds
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
+    KoXmlElement masterBackground = backgrounds.namedItem( "MASTERPAGE" ).toElement();
     //Parse pages
     //create the master page style
-    const QString masterPageStyleName = createMasterPageStyle( objects );
+    const QString masterPageStyleName = createMasterPageStyle( objects, masterBackground );
     //The pages are all stored inside PAGETITLES
     //and all notes in PAGENOTES
     KoXmlNode title = titles.firstChild();

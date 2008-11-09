@@ -26,19 +26,24 @@
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
     KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
-    KoXmlElement backMaster = page.namedItem( "BACKMASTER" ).toElement();
-    if( !backMaster.isNull() )
-    {
-        style.addProperty( "presentation:background-visible", backMaster.attribute( "presentation:displayBackground", "1" ) == "1" );
-        style.addProperty( "presentation:background-objects-visible", backMaster.attribute( "displayMasterPageObject", "1" ) == "1" );
+    if ( page.nodeName() == "PAGE" ) {
+        KoXmlElement backMaster = page.namedItem( "BACKMASTER" ).toElement();
+        if( !backMaster.isNull() )
+        {
+            style.addProperty( "presentation:background-visible", backMaster.attribute( "presentation:displayBackground", "1" ) == "1" );
+            style.addProperty( "presentation:background-objects-visible", backMaster.attribute( "displayMasterPageObject", "1" ) == "1" );
+        }
+        else
+        {
+            //if BACKMASTER is not found we assume it's true
+            style.addProperty( "presentation:background-visible", true );
+            style.addProperty( "presentation:background-objects-visible", true );
+            style.addProperty( "draw:fill", "none" );
+        }
     }
-    else
-    {
-        //if BACKMASTER is not found we assume it's true
-        style.addProperty( "presentation:background-visible", true );
-        style.addProperty( "presentation:background-objects-visible", true );
-        style.addProperty( "draw:fill", "none" );
-    }
+
+    style.setAutoStyleInStylesDotXml( m_sticky );
+
     if( !page.hasChildNodes() ) //we check if this is an empty page
     {
         return m_styles.lookup( style, "dp" );
@@ -285,12 +290,14 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     style.addAttribute( "draw:border", "0%" );
     //Check whether the gradient belongs to a page or to an object
     int type = 1;//we default to 1
-    if( gradientElement.nodeName() == "PAGE" )
+    if( gradientElement.nodeName() == "PAGE" || gradientElement.nodeName() == "MASTERPAGE" )
     {
         KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
-        if( !backColor1.isNull() )
-        {
+        if( !backColor1.isNull() ) {
             style.addAttribute( "draw:start-color", backColor1.attribute( "color" ) );
+        }
+        else {
+            style.addAttribute( "draw:end-color", "#ffffff" );
         }
 
         KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
@@ -427,20 +434,25 @@ const QString Filterkpr2odf::createPageLayout()
     return m_styles.lookup( style, "pm" );
 }
 
-const QString Filterkpr2odf::createMasterPageStyle( const KoXmlNode & objects )
+const QString Filterkpr2odf::createMasterPageStyle( const KoXmlNode & objects, const KoXmlElement & masterBackground )
 {
-    KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
-    KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
+    //KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
+    //KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
+
+    // set that we work on master 
+    m_sticky = true;
 
     KoGenStyle style( KoGenStyle::StyleMaster, "" );
     style.addAttribute( "style:page-layout-name", createPageLayout() );
+
+    style.addAttribute( "draw:style-name", createPageStyle( masterBackground ) );
 
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter xmlWriter( &buffer );
 
-    m_sticky = true;
     convertObjects( &xmlWriter, objects );
+
     m_sticky = false;
 
     QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
