@@ -48,14 +48,10 @@
 #include <kdebug.h>
 
 KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags flags )
-: QDockWidget( parent, flags )
+: QWidget( parent, flags )
 , m_view( 0 )
 , m_soundCollection( 0 )
 {
-    setWindowTitle( i18n( "Click Actions" ) );
-
-    QWidget* base = new QWidget( this );
-
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
     m_cbPlaySound = new QComboBox();
@@ -70,8 +66,7 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
                  this, SLOT( addCommand( QUndoCommand * ) ) );
     }
 
-    base->setLayout( layout );
-    setWidget( base );
+    setLayout( layout );
 }
 
 void KPrClickActionDocker::selectionChanged()
@@ -111,20 +106,17 @@ void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
     if ( m_canvas ) {
         connect( m_canvas->shapeManager(), SIGNAL( selectionChanged() ),
                 this, SLOT( selectionChanged() ) );
-
-        m_soundCollection = dynamic_cast<KPrSoundCollection *>( m_canvas->shapeController()->dataCenterMap()["SoundCollection"] );
-    }
-    else {
-        m_soundCollection = 0;
-    }
+   }
 
     selectionChanged();
 }
 
-void KPrClickActionDocker::setView( KPrView *view )
+void KPrClickActionDocker::setView(KoPAView  *view )
 {
     m_view = view;
     m_soundCollection = dynamic_cast<KPrSoundCollection *>( m_view->kopaDocument()->dataCenterMap()["SoundCollection"] );
+
+    setCanvas(view->kopaCanvas());
 }
 
 void KPrClickActionDocker::addCommand( QUndoCommand * command )

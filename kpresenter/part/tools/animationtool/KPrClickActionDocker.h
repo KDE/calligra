@@ -21,29 +21,29 @@
 #ifndef KPRCLICKACTIONDOCKER_H
 #define KPRCLICKACTIONDOCKER_H
 
-#include <QDockWidget>
+#include <QWidget>
 #include <QMap>
 #include <QPixmap>
 #include <KoCanvasObserver.h>
 
 class QComboBox;
 class QUndoCommand;
-class KPrView;
+class KoPAView;
 class KoCanvasBase;
 class QCheckBox;
 class KPrSoundCollection;
 class KoEventActionWidget;
 
 /**
- * This is the page effect docker widget that let's you choose a page animation.
+ * This is the click action docker widget that let's you choose a click action for your shapes
  */
-class KPrClickActionDocker : public QDockWidget, public KoCanvasObserver
+class KPrClickActionDocker : public QWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
     explicit KPrClickActionDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
-    void setView( KPrView* view );
+    void setView( KoPAView* view );
 
 public slots:
     void addCommand( QUndoCommand * command );
@@ -56,7 +56,7 @@ private slots:
     virtual void setCanvas( KoCanvasBase *canvas );
 
 private:
-    KPrView *m_view;
+    KoPAView *m_view;
     KPrSoundCollection *m_soundCollection;
     KoCanvasBase *m_canvas;
     QComboBox *m_cbPlaySound; // TODO remove when the embedded widgets are ok

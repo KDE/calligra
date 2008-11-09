@@ -51,8 +51,6 @@ set( kpresenterprivate_LIB_SRCS
      commands/KPrPageLayoutCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
-     dockers/KPrClickActionDockerFactory.cpp
-     dockers/KPrClickActionDocker.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
      dockers/KPrPageLayoutDocker.cpp
 
