@@ -294,9 +294,11 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
         }
 
         KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
-        if( !backColor2.isNull() )
-        {
+        if( !backColor2.isNull() ) {
             style.addAttribute( "draw:end-color", backColor2.attribute( "color" ) );
+        }
+        else {
+            style.addAttribute( "draw:end-color", "#ffffff" );
         }
 
         KoXmlElement bcType = gradientElement.namedItem( "BCTYPE" ).toElement();
