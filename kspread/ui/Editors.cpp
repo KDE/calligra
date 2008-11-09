@@ -344,6 +344,13 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
 //   d->completionListBox->setVariableWidth( true );
   d->completionListBox->installEventFilter( this );
   connect( d->completionListBox, SIGNAL(currentRowChanged(int)), SLOT(itemSelected()) );
+  // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
+  // the help (with the mouse) without inserting the function
+  if ( d->completionListBox->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, d->completionListBox) ) {
+    connect( d->completionListBox, SIGNAL(itemEntered(QListWidgetItem*)), this, SLOT(itemSelected(QListWidgetItem*)) );
+    d->completionListBox->setMouseTracking(true);
+  }
+
   connect( d->completionListBox, SIGNAL(activated(QModelIndex)), SLOT(doneCompletion()) );
   layout->addWidget( d->completionListBox );
 
@@ -361,9 +368,14 @@ FunctionCompletion::~FunctionCompletion()
       delete d;
 }
 
-void FunctionCompletion::itemSelected()
+void FunctionCompletion::itemSelected( QListWidgetItem* listItem )
 {
-    QString item = d->completionListBox->currentItem()->text();
+    QString item;
+    if ( listItem ) {
+        item = listItem->text();
+    } else {
+        item = d->completionListBox->currentItem()->text();
+    }
 
     KSpread::FunctionDescription* desc;
     desc = KSpread::FunctionRepository::self()->functionInfo(item);

@@ -43,6 +43,7 @@ class KTextEdit;
 class QFont;
 class QAbstractButton;
 class QTextEdit;
+class QListWidgetItem;
 
 class KoViewConverter;
 
@@ -158,7 +159,7 @@ public slots:
     void doneCompletion();
 
 private slots:
-    void itemSelected();
+    void itemSelected( QListWidgetItem* item = 0 );
 
 signals:
     /**
