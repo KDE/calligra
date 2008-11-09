@@ -760,8 +760,6 @@ int Axis::minorIntervalDivisor() const
     return d->minorIntervalDivisor;
 }
 
-// FIXME: should this be an int?  It's called with floats all the time
-//        Besides, shouldn't it be d_i_visor?
 void Axis::setMinorIntervalDivisor( int divisor )
 {
     // A divisor of 0.0 means automatic minor interval calculation
