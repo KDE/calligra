@@ -26,12 +26,15 @@
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
     KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
+
+    bool useMasterBackground = false;
     if ( page.nodeName() == "PAGE" ) {
         KoXmlElement backMaster = page.namedItem( "BACKMASTER" ).toElement();
         if( !backMaster.isNull() )
         {
-            style.addProperty( "presentation:background-visible", backMaster.attribute( "presentation:displayBackground", "1" ) == "1" );
+            style.addProperty( "presentation:background-visible", backMaster.attribute( "displayBackground", "1" ) == "1" );
             style.addProperty( "presentation:background-objects-visible", backMaster.attribute( "displayMasterPageObject", "1" ) == "1" );
+            useMasterBackground = backMaster.attribute( "useMasterBackground", "0" ) == "1";
         }
         else
         {
@@ -49,63 +52,65 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         return m_styles.lookup( style, "dp" );
     }
 
-    //it is not an empty page let's keep loading
-    KoXmlElement backType = page.namedItem( "BACKTYPE" ).toElement();
-    if( backType.isNull() || backType.attribute( "value" ) == "0" )
-    {
-        //it's some form of color, plain or a gradient
-        KoXmlElement bcType = page.namedItem( "BCTYPE" ).toElement();
-        if( bcType.isNull() || bcType.attribute( "value" ) == "0" )
+    if ( !useMasterBackground ) {
+        //it is not an empty page let's keep loading
+        KoXmlElement backType = page.namedItem( "BACKTYPE" ).toElement();
+        if( backType.isNull() || backType.attribute( "value" ) == "0" )
         {
-            //background is a plain color
-            QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
-            //if the backcolor is not present it's implicitally white
-            //unless a draw:fill is found, in which case even though a
-            //draw:fill-color is not present it's black in KPresenter2.0
-            style.addProperty( "draw:fill", "solid" );
-            style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color", "#ffffff" ) );
+            //it's some form of color, plain or a gradient
+            KoXmlElement bcType = page.namedItem( "BCTYPE" ).toElement();
+            if( bcType.isNull() || bcType.attribute( "value" ) == "0" )
+            {
+                //background is a plain color
+                QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
+                //if the backcolor is not present it's implicitally white
+                //unless a draw:fill is found, in which case even though a
+                //draw:fill-color is not present it's black in KPresenter2.0
+                style.addProperty( "draw:fill", "solid" );
+                style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color", "#ffffff" ) );
+            }
+            else
+            {
+                //background is a gradient
+                style.addProperty( "draw:fill", "gradient" );
+                style.addProperty( "draw:fill-gradient-name", createGradientStyle( page ) );
+            }
         }
         else
         {
-            //background is a gradient
-            style.addProperty( "draw:fill", "gradient" );
-            style.addProperty( "draw:fill-gradient-name", createGradientStyle( page ) );
-        }
-    }
-    else
-    {
-        //it's a picture instead
-        QString pictureName = getPictureNameFromKey( page.namedItem( "BACKPICTUREKEY" ).toElement() );
-        KoXmlElement backView = page.namedItem( "BACKVIEW" ).toElement();
-        style.addProperty( "draw:fill", "bitmap" );
+            //it's a picture instead
+            QString pictureName = getPictureNameFromKey( page.namedItem( "BACKPICTUREKEY" ).toElement() );
+            KoXmlElement backView = page.namedItem( "BACKVIEW" ).toElement();
+            style.addProperty( "draw:fill", "bitmap" );
 
-        //The image is specified by a draw:fill-image style in draw:fill-image-name
-        KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
+            //The image is specified by a draw:fill-image style in draw:fill-image-name
+            KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
 
-        //default values
-        drawFillImage.addAttribute( "xlink:href", "Pictures/" + m_pictures[ pictureName ] );
-        drawFillImage.addAttribute( "xlink:type", "simple" );
-        drawFillImage.addAttribute( "xlink:show", "embed" );
-        drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
-        QString repeat;
-        if( backView.isNull() )
-        {
-            //the picture is just centered
-            repeat = "no-repeat";
-        }
-        else if( backView.attribute( "value" ) == "0"  )
-        {
-            //the picture is stretched
-            repeat = "stretch";
-        }
-        else if( backView.attribute( "value" ) == "2" )
-        {
-            //picture is in mosaic
-            repeat = "repeat";
-        }
-        style.addProperty( "style:repeat", repeat );
+            //default values
+            drawFillImage.addAttribute( "xlink:href", "Pictures/" + m_pictures[ pictureName ] );
+            drawFillImage.addAttribute( "xlink:type", "simple" );
+            drawFillImage.addAttribute( "xlink:show", "embed" );
+            drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
+            QString repeat;
+            if( backView.isNull() )
+            {
+                //the picture is just centered
+                repeat = "no-repeat";
+            }
+            else if( backView.attribute( "value" ) == "0"  )
+            {
+                //the picture is stretched
+                repeat = "stretch";
+            }
+            else if( backView.attribute( "value" ) == "2" )
+            {
+                //picture is in mosaic
+                repeat = "repeat";
+            }
+            style.addProperty( "style:repeat", repeat );
 
-        style.addProperty( "draw:fill-image-name", m_styles.lookup( drawFillImage, "picture" ) );
+            style.addProperty( "draw:fill-image-name", m_styles.lookup( drawFillImage, "picture" ) );
+        }
     }
 
     //Add the duration of the page effect
