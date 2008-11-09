@@ -49,7 +49,6 @@
 #include "KarbonConfigureDialog.h"
 
 // Dockers.
-#include "vdocumentdocker.h"
 #include "KarbonLayerDocker.h"
 
 // The rest.

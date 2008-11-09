@@ -44,7 +44,6 @@
 #include "KarbonFactory.h"
 #include "KarbonView.h"
 #include <KarbonCanvas.h>
-#include <vdocumentdocker.h>
 
 #include <KoApplication.h>
 #include <KoDataCenter.h>
