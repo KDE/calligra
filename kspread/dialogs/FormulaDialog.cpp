@@ -120,6 +120,12 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* 
     functions->setSelectionModel(selectionmodel);
     connect(selectionmodel, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
             this, SLOT(slotSelected()));
+    // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
+    // the help without inserting the function
+    if (functions->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, functions)) {
+        connect(functions, SIGNAL(entered(QModelIndex)), this, SLOT(slotIndexSelected(QModelIndex)));
+        functions->setMouseTracking(true);
+    }
     //connect(proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
 
     selectFunction = new QPushButton( page );
@@ -687,6 +693,16 @@ void FormulaDialog::slotDoubleClicked( QModelIndex item )
         result->setCursorPosition(pos+text.length()+2);
     }
     slotChangeText( "" );
+}
+
+void FormulaDialog::slotIndexSelected( const QModelIndex& index )
+{
+    // This slot is only called when single-click to activate is uesd in the listbox, when the mouse moves over a item; to prevent
+    // the active selection to change after the user activated one, slotSelected is only called when the current tab is the Help tab,
+    // and not when the parameters tab is active
+    if ( m_tabwidget->currentIndex() != 0 ) return;
+    QString function = proxyModel->data( index ).toString();
+    slotSelected(function);
 }
 
 void FormulaDialog::slotSelected( const QString& afunction )
