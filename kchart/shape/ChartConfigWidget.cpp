@@ -272,16 +272,20 @@ ChartConfigWidget::ChartConfigWidget()
     // Quick-access settings
     d->tableEditorDialog = new QDialog( this );
     d->tableEditor.setupUi( d->tableEditorDialog );
+    // FIXME: Why does the tableView belong to the tool option window
+    //        instead of the data editor dialog?  There is no reason
+    //        for it to even exist outside the data editor /iw
     d->tableView = new ChartTableView;
     d->tableEditor.tableViewContainer->addWidget( d->tableView );
     d->tableEditorDialog->hide();
     
-    // We need only connect one of the data direction buttons, since
-    // they are mutually exclusive.
     connect( d->tableEditor.firstRowIsLabel,    SIGNAL( toggled( bool ) ),
              this,                              SIGNAL( firstRowIsLabelChanged( bool ) ) );
     connect( d->tableEditor.firstColumnIsLabel, SIGNAL( toggled( bool ) ),
              this,                              SIGNAL( firstColumnIsLabelChanged( bool ) ) );
+
+    // We need only connect one of the data direction buttons, since
+    // they are mutually exclusive.
     connect( d->tableEditor.dataSetsInRows, SIGNAL( toggled( bool ) ),
              this,                          SLOT( ui_dataSetsInRowsChanged( bool ) ) );
     
@@ -353,21 +357,23 @@ ChartConfigWidget::~ChartConfigWidget()
 
 void ChartConfigWidget::open( KoShape* shape )
 {
-    d->shape = dynamic_cast<ChartShape*>( shape );
-    
+    // Find the selected shape and adapt the tool option window to
+    // which of the subshapes of the chart widget that was actually
+    // selected.  Then select the tab depending on which one it was.
 
-    if ( !d->shape )
-    {
+    // First see if it was the chart shape itself.
+    d->shape = dynamic_cast<ChartShape*>( shape );
+    if ( !d->shape ) {
+	// If not, try to see if it was the plot area.
         PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
-        if ( plotArea )
-        {
+        if ( plotArea ) {
             d->shape = plotArea->parent();
             d->ui.tabWidget->setCurrentIndex( 0 );
         }
-        else
-        {
+        else {
+	    // And finally try if it was the legend.
             Legend *legend = dynamic_cast<Legend*>( shape );
-            Q_ASSERT( legend ); // No shape we support
+            Q_ASSERT( legend );
             d->shape = dynamic_cast<ChartShape*>( legend->parent() );
             Q_ASSERT( d->shape );
             d->ui.tabWidget->setCurrentIndex( 2 );
@@ -376,7 +382,7 @@ void ChartConfigWidget::open( KoShape* shape )
 
     KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
     TableModel *tableModel = qobject_cast<TableModel*>( d->shape->model() );
-    d->sourceIsSpreadSheet = spreadSheetModel != 0 && tableModel == 0;
+    d->sourceIsSpreadSheet = ( spreadSheetModel != 0 && tableModel == 0 );
     kDebug() << d->sourceIsSpreadSheet;
     
     // Update the axis titles
@@ -387,16 +393,18 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
     
     // Fill the data table
-    if ( d->sourceIsSpreadSheet )
-    {
+    if ( d->sourceIsSpreadSheet ) {
     	d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
     	d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
     	d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
     	d->cellRegionDialog.yDataRegion->setValidator( d->cellRegionStringValidator );
     	d->cellRegionDialog.categoryDataRegion->setValidator( d->cellRegionStringValidator );
     	
+	// If the data source is external, the editData button opens a
+	// dialog to edit the data ranges instead of the data itself.
         d->ui.editData->setText( i18n( "Data Ranges..." ) );
-        connect( d->ui.editData, SIGNAL( clicked( bool ) ), &d->cellRegionDialog, SLOT( show() ) );
+        connect( d->ui.editData,       SIGNAL( clicked( bool ) ),
+		 &d->cellRegionDialog, SLOT( show() ) );
         connect( d->cellRegionDialog.xDataRegion, SIGNAL( editingFinished() ),
                  this, SLOT( ui_dataSetXDataRegionChanged() ) );
         connect( d->cellRegionDialog.yDataRegion, SIGNAL( editingFinished() ),
@@ -410,11 +418,12 @@ void ChartConfigWidget::open( KoShape* shape )
         connect( d->cellRegionDialog.dataSets, SIGNAL( currentIndexChanged( int ) ),
                  this, SLOT( ui_dataSetSelectionChanged_CellRegionDialog( int ) ) );
     }
-    else
-    {
+    else {
+	// This part is run when the data source is not external,
+	// i.e. the data is handled by the chart shape itself.
         d->tableView->setModel( d->shape->model() );
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
-                 this, SLOT( slotShowTableEditor( bool ) ) );
+                 this,           SLOT( slotShowTableEditor( bool ) ) );
     }
     
     update();
@@ -469,12 +478,14 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         type    = AreaChartType;
         subtype = PercentChartSubtype;
     }
-    
+
+    // also known as polar chart.
     else if ( action == d->radarChartAction ) {
         type = RadarChartType;
         subtype = NoChartSubtype;
     }
-    
+
+    // also known as pie chart
     else if ( action == d->circleChartAction ) {
         type = CircleChartType;
         subtype = NoChartSubtype;
@@ -509,8 +520,7 @@ void ChartConfigWidget::ui_dataSetHasChartTypeChanged( bool b )
     if ( d->selectedDataSet < 0 )
         return;
     
-    if ( !b )
-    {
+    if ( !b ) {
         DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
         Q_ASSERT( dataSet );
         if ( !dataSet )
@@ -705,7 +715,7 @@ void ChartConfigWidget::update()
         d->axes = d->shape->plotArea()->axes();
         d->dataSetAxes.clear();
     
-        if ( !d->axes.isEmpty()    ) {
+        if ( !d->axes.isEmpty() ) {
             foreach ( Axis *axis, d->axes ) {
                 d->ui.axes->addItem( axis->titleText() );
                 if ( axis->dimension() == YAxisDimension ) {
@@ -1169,10 +1179,11 @@ void ChartConfigWidget::ui_dataSetYDataRegionChanged()
 
 void ChartConfigWidget::ui_dataSetCustomDataRegionChanged()
 {
-	// Only makes sense when bubble charts are implemented
-	// TODO: ui_dataSetCustomDataRegionChanged
-	return;
-	/*
+    // Only makes sense when bubble charts are implemented
+    // TODO: ui_dataSetCustomDataRegionChanged
+    return;
+
+  /*
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;

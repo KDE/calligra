@@ -159,43 +159,54 @@ void ChartTool::mouseReleaseEvent( KoPointerEvent *event )
     event->ignore();
 }
 
+
 void ChartTool::activate( bool )
 {
     KoShape *selectedShape = 0;
     
-    // Get the shape that the tool is working on. 
+    // Get the chart shape that the tool is working on. 
     // Let d->shape point to it.
-    KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection  *selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape *shape, selection->selectedShapes() ) {
+
+	// Find out which type of shape that the user clicked on.
+	// We support several here, since the chart shape is comprised
+	// of several subshapes (plotarea, legend)
         d->shape = dynamic_cast<ChartShape*>( shape );
         if ( !d->shape ) {
             PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
-            if ( plotArea )
-            {
+            if ( plotArea ) {
                 selectedShape = plotArea;
                 d->shape = plotArea->parent();
             }
-            else
-            {
+            else {
                 Legend *legend = dynamic_cast<Legend*>( shape );
-                if ( legend )
-                {
+                if ( legend ) {
                     selectedShape = legend;
                     d->shape = dynamic_cast<ChartShape*>( legend->parent() );
                 }
             }
         }
         
+	// Insert the values from the selected shape (note: not only
+	// chart shape, but also plotarea or legend) into the tool
+	// option widget.
         if ( selectedShape ) {
-            foreach (QWidget *w, optionWidgets().values()) {
+            foreach ( QWidget *w, optionWidgets().values() ) {
                 KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
-                Q_ASSERT(widget);
-                if (widget)
+                Q_ASSERT( widget );
+                if ( widget )
                     widget->open( selectedShape );
             }
+
+	    // We support only one selected chart at the time, so once
+	    // we found one, we don't need to search for any more
+	    // among the selected shapes.
             break;
         }
     }
+
+    // If we couldn't determine a chart shape, then there is nothing to do.
     if ( !d->shape ) { // none found
         emit done();
         return;
@@ -210,6 +221,7 @@ void ChartTool::deactivate()
 {
     d->shape = 0;
 }
+
 
 void ChartTool::updateActions()
 {
@@ -230,22 +242,22 @@ QWidget *ChartTool::createOptionWidget()
     widget->open( d->shape );
 
     connect( widget, SIGNAL( dataDirectionChanged( Qt::Orientation ) ),
-             this,    SLOT( setDataDirection( Qt::Orientation ) ) );
+             this,   SLOT( setDataDirection( Qt::Orientation ) ) );
     connect( widget, SIGNAL( firstRowIsLabelChanged( bool ) ),
-             this,    SLOT( setFirstRowIsLabel( bool ) ) );
+             this,   SLOT( setFirstRowIsLabel( bool ) ) );
     connect( widget, SIGNAL( firstColumnIsLabelChanged( bool ) ),
-             this,    SLOT( setFirstColumnIsLabel( bool ) ) );
+             this,   SLOT( setFirstColumnIsLabel( bool ) ) );
     
     connect( widget, SIGNAL( dataSetXDataRegionChanged( DataSet*, const QString& ) ),
-    		 this,   SLOT( setDataSetXDataRegion( DataSet*, const QString& ) ) );
+	     this,   SLOT( setDataSetXDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetYDataRegionChanged( DataSet*, const QString& ) ),
-    		 this,   SLOT( setDataSetYDataRegion( DataSet*, const QString& ) ) );
+	     this,   SLOT( setDataSetYDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetCustomDataRegionChanged( DataSet*, const QString& ) ),
-    		 this,   SLOT( setDataSetCustomDataRegion( DataSet*, const QString& ) ) );
+	     this,   SLOT( setDataSetCustomDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetLabelDataRegionChanged( DataSet*, const QString& ) ),
-    		 this,   SLOT( setDataSetLabelDataRegion( DataSet*, const QString& ) ) );
+	     this,   SLOT( setDataSetLabelDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetCategoryDataRegionChanged( DataSet*, const QString& ) ),
-    		 this,   SLOT( setDataSetCategoryDataRegion( DataSet*, const QString& ) ) );
+	     this,   SLOT( setDataSetCategoryDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetChartTypeChanged( DataSet*, ChartType ) ),
              this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
     connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),
@@ -357,35 +369,35 @@ void ChartTool::setChartSubType( ChartSubtype subtype )
 void ChartTool::setDataSetXDataRegion( DataSet *dataSet, const QString &region )
 {
 	if ( !dataSet )
-		return;
+	    return;
 	dataSet->setXDataRegionString( region );
 }
 
 void ChartTool::setDataSetYDataRegion( DataSet *dataSet, const QString &region )
 {
 	if ( !dataSet )
-		return;
+	    return;
 	dataSet->setYDataRegionString( region );
 }
 
 void ChartTool::setDataSetCustomDataRegion( DataSet *dataSet, const QString &region )
 {
 	if ( !dataSet )
-		return;
+	    return;
 	dataSet->setCustomDataRegionString( region );
 }
 
 void ChartTool::setDataSetLabelDataRegion( DataSet *dataSet, const QString &region )
 {
 	if ( !dataSet )
-		return;
+	    return;
 	dataSet->setLabelDataRegionString( region );
 }
 
 void ChartTool::setDataSetCategoryDataRegion( DataSet *dataSet, const QString &region )
 {
 	if ( !dataSet )
-		return;
+	    return;
 	dataSet->setCategoryDataRegionString( region );
 }
 
@@ -592,8 +604,10 @@ void ChartTool::setLegendShowFrame( bool show )
 }
 
 
-void ChartTool::addAxis( AxisPosition position, const QString& title ) {
+void ChartTool::addAxis( AxisPosition position, const QString& title )
+{
     Q_ASSERT( d->shape );
+
     Axis *axis = new Axis( d->shape->plotArea() );
     axis->setPosition( position );
     axis->setTitleText( title );
@@ -625,8 +639,8 @@ void ChartTool::setAxisShowTitle( Axis *axis, bool show )
 
 void ChartTool::setAxisShowGridLines( Axis *axis, bool b )
 {
-	axis->setShowMajorGrid( b );
-	axis->setShowMinorGrid( b );
+    axis->setShowMajorGrid( b );
+    axis->setShowMinorGrid( b );
     d->shape->update();
 }
 

@@ -43,6 +43,14 @@ Item                                                                   Status
   + If there are several chartshapes, then the tool doesn't adapt	JOSI
     when one shape is chosen and then another.
 
+* Smaller bugs
+  + When you double click on a chart, the tool option window adapts
+    to the data in the chart (e.g. the type, etc), but if the chart
+    is selected by the default tool and then the chart tool is 
+    activated, then this is not the case.  Note that if either the 
+    legend or plot area is selected by the default tool instead of 
+    the chart shape itself, it works again.
+
 * ChartShape
   + Handle all chart types                                              ----
      - bar                                                              done
