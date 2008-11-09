@@ -569,11 +569,14 @@ CellEditor::CellEditor(QWidget* parent, Selection* selection, bool captureAllKey
   // A choose should always start at the edited cell
 //  selection()->setChooseMarkerRow( selection()->d->selection->marker().y() );
 //  selection()->setChooseMarkerColumn( selection()->d->selection->marker().x() );
+
+  connect( d->selection, SIGNAL( destroyed() ), SLOT( slotSelectionDestroyed() ) );
 }
 
 CellEditor::~CellEditor()
 {
-  selection()->endReferenceSelection();
+  if (selection())
+    selection()->endReferenceSelection();
 
   delete d->highlighter;
   delete d->functionCompletion;
@@ -1232,7 +1235,11 @@ void CellEditor::setCursorToRange(uint pos)
   d->updatingChoice = false;
 }
 
-
+void CellEditor::slotSelectionDestroyed()
+{
+kDebug() << "editor destroyed";
+  d->selection = 0;
+}
 
 /*****************************************************************************
  *
