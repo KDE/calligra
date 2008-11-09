@@ -667,6 +667,8 @@ void CellEditor::functionAutoComplete( const QString& item )
   d->textEdit->setTextCursor( textCursor );
   d->textEdit->insertPlainText( item );
   d->textEdit->blockSignals( false );
+  // call slotTextChanged to sync the text between the inline editor and the editor in the docker
+  slotTextChanged();
 }
 
 void CellEditor::slotCursorPositionChanged()
