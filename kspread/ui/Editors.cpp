@@ -806,7 +806,7 @@ void CellEditor::slotCursorPositionChanged()
           Region region(token.text(), selection()->activeSheet()->map(), selection()->activeSheet());
           it = region.constBegin();
 
-          if (!alreadyUsedRegions.contains(region))
+          if (it != region.constEnd() && !alreadyUsedRegions.contains(region))
           {
             QRect r=(*it)->rect();
 
