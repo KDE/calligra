@@ -391,7 +391,7 @@ void KarbonGradientTool::initialize()
         if( strategy->target() == GradientStrategy::Fill )
         {
             KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( strategy->shape()->background() );
-            if( ! fill || ! fill->gradient()->type() != strategy->type() )
+            if( ! fill || ! fill->gradient() || fill->gradient()->type() != strategy->type() )
             {
                 // delete the gradient
                 m_strategies.remove( strategy->shape(), strategy );
