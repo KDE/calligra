@@ -708,6 +708,9 @@ QRectF Selection::selectionHandleArea(const KoViewConverter* viewConverter) cons
   }
   else
   {
+    if (!isValid()) {
+        return QRectF();
+    }
     column = lastRange().right();
     row = lastRange().bottom();
   }
