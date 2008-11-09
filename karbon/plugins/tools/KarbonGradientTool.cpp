@@ -476,7 +476,8 @@ void KarbonGradientTool::initialize()
     // automatically select strategy when editing single shape
     if( selectedShapes.count() == 1 && m_strategies.count() )
     {
-        m_currentStrategy = m_strategies.values().first();
+        if( m_currentStrategy && ! m_strategies.values().contains( m_currentStrategy ) )
+            m_currentStrategy = m_strategies.values().first();
     }
 
     delete m_gradient;
