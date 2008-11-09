@@ -245,6 +245,7 @@ void KarbonGradientTabWidget::setupConnections()
 {
     connect( m_gradientType, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
     connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
+    connect( m_gradientTarget, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
