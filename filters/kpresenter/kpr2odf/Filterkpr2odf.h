@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -87,7 +88,7 @@ private:
     const QString createGradientStyle( const KoXmlElement& page );
     const QString createGraphicStyle( const KoXmlElement& page );
     const QString createPageLayout();//we use more than one tag, better load them from m_mainDoc
-    const QString createMasterPageStyle();//same as above
+    const QString createMasterPageStyle( const KoXmlNode & objects );//same as above
     const QString createOpacityGradientStyle( int opacity );
     const QString createMarkerStyle( int markerType );
     const QString createStrokeDashStyle( int strokeStyle );
@@ -108,7 +109,7 @@ private:
     int m_objectIndex;//the number of the next object
     QHash<QString,QString> m_pictures;//store the <fullFilename, name> pair of the keys
     QHash<QString,QString> m_sounds;//store the <fullFilename, name> pair of the keys
-
+    bool m_sticky; // set to true when we want to read objects from the master page
 
     KoGenStyles m_styles;//style collector
 };

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,6 +59,7 @@ Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 : KoFilter(parent)
 , m_currentPage( 1 )
 , m_objectIndex( 1 )
+, m_sticky( false )
 {
 }
 
@@ -280,7 +282,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
     //Parse pages
     //create the master page style
-    const QString masterPageStyleName = createMasterPageStyle();
+    const QString masterPageStyleName = createMasterPageStyle( objects );
     //The pages are all stored inside PAGETITLES
     //and all notes in PAGENOTES
     KoXmlNode title = titles.firstChild();
@@ -383,6 +385,12 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 
         //Now define what kind of object is
         KoXmlElement objectElement = object.toElement();
+
+        bool sticky = objectElement.attribute( "sticky", "0" ).toInt() == 1;
+        if ( sticky != m_sticky ) {
+            continue;
+        }
+
         //Enum: ObjType
         switch( objectElement.attribute( "type" ).toInt() )
         {

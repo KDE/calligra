@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -424,13 +425,24 @@ const QString Filterkpr2odf::createPageLayout()
     return m_styles.lookup( style, "pm" );
 }
 
-const QString Filterkpr2odf::createMasterPageStyle()
+const QString Filterkpr2odf::createMasterPageStyle( const KoXmlNode & objects )
 {
     KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
     KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
 
     KoGenStyle style( KoGenStyle::StyleMaster, "" );
     style.addAttribute( "style:page-layout-name", createPageLayout() );
+
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter xmlWriter( &buffer );
+
+    m_sticky = true;
+    convertObjects( &xmlWriter, objects );
+    m_sticky = false;
+
+    QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    style.addChildElement( "master", contentElement );
 
     return m_styles.lookup( style, "Default" );
 }
@@ -687,6 +699,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
     }
 
 //     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
+    style.setAutoStyleInStylesDotXml( m_sticky );
 
     return m_styles.lookup( style, "gr" );
 }
