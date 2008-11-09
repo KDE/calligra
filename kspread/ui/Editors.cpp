@@ -347,6 +347,7 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
     SLOT(itemSelected(const QString&)) );
   connect( d->completionListBox, SIGNAL(highlighted(const QString&)), this,
     SLOT(itemSelected(const QString&)) );
+  connect( d->completionListBox, SIGNAL(activated(QModelIndex)), SLOT(doneCompletion()) );
   layout->addWidget( d->completionListBox );
 
   d->hintLabel = new QLabel( 0, (Qt::WFlags)

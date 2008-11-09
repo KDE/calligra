@@ -146,15 +146,16 @@ public:
     bool eventFilter( QObject *o, QEvent *e );
 
     /**
-    * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
-    */
-    void doneCompletion();
-
-    /**
     * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.
     * @param choices A list of possible function names which match the characters that the user has already entered.
     */
     void showCompletion( const QStringList &choices );
+
+public slots:
+    /**
+    * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
+    */
+    void doneCompletion();
 
 private slots:
     void itemSelected( const QString& item );
