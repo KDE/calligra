@@ -758,7 +758,7 @@ void View::initView()
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
-    d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection(), false );
+    d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection() );
     d->zoomController->zoomAction()->setZoomModes( KoZoomMode::ZOOM_CONSTANT );
     addStatusBarItem( d->zoomController->zoomAction()->createWidget( statusBar() ), 0, true );
     connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),

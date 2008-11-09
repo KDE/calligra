@@ -121,7 +121,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     m_canvasController->setCanvas( m_canvas );
     m_canvasController->setCanvasMode( KoCanvasController::Centered );
 
-    m_zoomController = new KoZoomController( m_canvasController, m_zoomHandler, actionCollection(), true );
+    m_zoomController = new KoZoomController( m_canvasController, m_zoomHandler, actionCollection() );
 
     connect( m_canvasController, SIGNAL( moveDocumentOffset( const QPoint& ) ),
              m_canvas, SLOT( setDocumentOffset( const QPoint& ) ) );

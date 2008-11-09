@@ -55,10 +55,16 @@ KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KAct
     : QObject(controller), d( new Private() )
 {
     d->canvasController = controller;
-    d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), false, this);
+    
+    d->action = new KoZoomAction(KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE, i18n("Zoom"), this);
+    d->action->setSpecialButtons( KoZoomAction::ZoomToSelection|KoZoomAction::ZoomToAll );
     connect(d->action, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),
             this, SLOT(setZoom(KoZoomMode::Mode, qreal)));
-
+    connect(d->action, SIGNAL(zoomedToSelection()),
+            this, SIGNAL(zoomedToSelection()));
+    connect(d->action, SIGNAL(zoomedToAll()),
+            this, SIGNAL(zoomedToAll()));
+                              
     actionCollection->addAction("view_zoom", d->action);
     actionCollection->addAction(KStandardAction::ZoomIn, "zoom_in", d->action, SLOT(zoomIn()));
     actionCollection->addAction(KStandardAction::ZoomOut, "zoom_out", d->action, SLOT(zoomOut()));

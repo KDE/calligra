@@ -52,6 +52,19 @@ public:
      */
     void setZoomMode(KoZoomMode::Mode mode);
 
+signals:
+    /**
+    * Signal is triggered when the user clicks the zoom to selection button.
+    * Nothing else happens except that this signal is emitted.
+    */
+    void zoomedToSelection();
+    
+    /**
+    * Signal is triggered when the user clicks the zoom to all button.
+    * Nothing else happens except that this signal is emitted.
+    */
+    void zoomedToAll();
+        
 public slots:
     /**
      * Set the zoom and the zoom mode for this zoom Controller.  Typically for use just after construction

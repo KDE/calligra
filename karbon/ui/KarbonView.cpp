@@ -237,7 +237,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     zoomController->setPageSize( d->part->document().pageSize() );
     addStatusBarItem( zoomController->zoomAction()->createWidget( statusBar() ), 0 );
     zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
-
+    connect( zoomController, SIGNAL(zoomedToSelection()), this, SLOT(zoomSelection()));
+    connect( zoomController, SIGNAL(zoomedToAll()), this, SLOT(zoomDrawing()));
+    
     KarbonSmallStylePreview * smallPreview = new KarbonSmallStylePreview( statusBar() );
     connect( smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()) );
     connect( smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()) );
