@@ -67,7 +67,7 @@ public:
   void setSize( unsigned size ); // HACKS
 
 
-  static EString fromUnicodeString( const void* p, bool longString, unsigned maxsize = 0 );
+  static EString fromUnicodeString( const void* p, bool longString, unsigned maxsize = 0, unsigned continuePosition = 0xFFFFFFFF);
 
   static EString fromSheetName( const void* p, unsigned maxsize = 0 );
 
@@ -230,7 +230,7 @@ public:
   /**
     Sets the data for this record.
    */
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions );
 
   /**
     Sets the position of the record in the OLE stream. Somehow this is
@@ -441,7 +441,7 @@ public:
    */
   void setBackup( bool r );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "BACKUP"; }
 
@@ -498,7 +498,7 @@ public:
   */
   virtual ~BOFRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
     Returns the version, like Excel95, Excel97, and so on.
@@ -557,7 +557,7 @@ public:
    */
   BlankRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "BLANK"; }
 
@@ -601,7 +601,7 @@ public:
    */
   Value value() const;
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "BOOLERR"; }
 
@@ -651,7 +651,7 @@ public:
    */
   void setBottomMargin( double m );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "BOTTOMMARGIN"; }
 
@@ -755,7 +755,7 @@ public:
    */
   unsigned bofPosition() const;
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "BOUNDSHEET"; }
 
@@ -810,7 +810,7 @@ public:
    */
   void setAutoCalc( bool r );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "CALCMODE"; }
 
@@ -927,7 +927,7 @@ public:
    */
   void setOutlineLevel( unsigned l );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "COLINFO"; }
 
@@ -988,7 +988,7 @@ public:
    */
   void setBase1904( bool r );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "DATEMODE"; }
 
@@ -1087,7 +1087,7 @@ public:
 
   virtual const char* name(){ return "DIMENSION"; }
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1124,7 +1124,7 @@ public:
 
   void setExternName( const UString& name );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
 
 
@@ -1171,7 +1171,7 @@ public:
    */
   virtual ~EOFRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "EOF"; }
 
@@ -1203,7 +1203,7 @@ public:
    */
   virtual ~FilepassRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "FILEPASS"; }
 
@@ -1388,7 +1388,7 @@ public:
    */
   void setUnderline( unsigned u );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "FONT"; }
 
@@ -1435,7 +1435,7 @@ public:
    */
   void setFooter( const UString& f );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "FOOTER"; }
 
@@ -1524,7 +1524,7 @@ public:
 
   virtual const char* name(){ return "FORMAT"; }
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual void dump( std::ostream& out ) const;
 
@@ -1571,7 +1571,7 @@ public:
 
   FormulaTokens tokens() const;
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "FORMULA"; }
 
@@ -1622,7 +1622,7 @@ public:
    */
   void setHeader( const UString& h );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "HEADER"; }
 
@@ -1677,7 +1677,7 @@ public:
    */
   void setLabel( const UString& l );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "LABEL"; }
 
@@ -1727,7 +1727,7 @@ public:
    */
   unsigned sstIndex() const;
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "LABELSST"; }
 
@@ -1776,7 +1776,7 @@ public:
    */
   void setLeftMargin( double m );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "LEFTMARGIN"; }
 
@@ -1844,7 +1844,7 @@ public:
    */
   unsigned lastColumn( unsigned i ) const;
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "MERGEDCELLS"; }
 
@@ -1886,7 +1886,7 @@ public:
    */
   virtual ~MulBlankRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
    * Returns XF index of ith column.
@@ -1938,7 +1938,7 @@ public:
    */
   virtual ~MulRKRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
    Returns XF index of ith column.
@@ -2007,7 +2007,7 @@ public:
 
   void setDefinedName( const UString& name );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "NAME"; }
 
@@ -2047,7 +2047,7 @@ public:
    */
   virtual ~NumberRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
    * Returns the floating-point value specified by the record.
@@ -2110,7 +2110,7 @@ public:
    */
   unsigned count() const;
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "PALETTE"; }
 
@@ -2161,7 +2161,7 @@ public:
    */
   void setRightMargin( double m );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "RIGHTMARGIN"; }
 
@@ -2203,7 +2203,7 @@ public:
    */
   virtual ~RKRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
    * Returns true if the record holds an integer value.
@@ -2344,7 +2344,7 @@ public:
    */
   void setHidden( bool h );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "ROW"; }
 
@@ -2404,7 +2404,7 @@ public:
    */
   void setLabel( const UString& l );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "RSTRING"; }
 
@@ -2447,7 +2447,7 @@ public:
    */
   virtual ~SSTRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
     Returns the number of available string in this string table.
@@ -2501,7 +2501,7 @@ public:
    */
   virtual ~StringRecord();
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   /**
     Returns the string (in Unicode).
@@ -2560,7 +2560,7 @@ public:
    */
   void setTopMargin( double m );
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual const char* name(){ return "TOPMARGIN"; }
 
@@ -3063,7 +3063,7 @@ public:
 
   virtual const char* name(){ return "XF"; }
 
-  virtual void setData( unsigned size, const unsigned char* data );
+  virtual void setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions  );
 
   virtual void dump( std::ostream& out ) const;
 
