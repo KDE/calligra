@@ -296,7 +296,7 @@ public:
     QRectF symbolRect() const { return QRectF( 1.0, 1.0, 15.0, 15.0 ); }
     qreal connectorWidth() const { return 8.0; }
     
-    qreal totalItemWidth() const { return connectorWidth()*2 + itemWidth(); }
+    qreal totalItemWidth() const { return itemWidth(); }
     qreal columnWidth() const { return horizontalGap() + totalItemWidth(); }
     
     qreal gridHeight() const { return verticalGap() + itemHeight(); }
