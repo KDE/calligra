@@ -68,7 +68,7 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     m_calendars.clear();
     calendarCombo->addItem(i18n("None"));
     m_calendars.insert(0, 0);
-    QList<Calendar*> list = m_project.calendars();
+    QList<Calendar*> list = m_project.allCalendars();
     int i=1;
     foreach (Calendar *c, list) {
         calendarCombo->insertItem(i, c->name());
