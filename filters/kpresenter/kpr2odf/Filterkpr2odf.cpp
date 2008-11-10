@@ -488,58 +488,75 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     content->startElement( "draw:line" );
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
-    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
-    if ( !angle.isNull() )
-    {
-        content->addAttribute( "draw:transform", rotateValue( angle.attribute( "value" ).toDouble() ) );
-    }
-
-    //NOTE: we cannot use set2DGeometry because it's handled different
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
-    double x1 = orig.attribute( "x" ).toDouble();
-    double y1 = orig.attribute( "y" ).toDouble() - m_pageHeight * ( m_currentPage - 1 );
-    double x2 = size.attribute( "width" ).toDouble() + x1;
-    double y2 = size.attribute( "height" ).toDouble() + y1;
+
+    QRectF r( orig.attribute( "x" ).toDouble(),
+              orig.attribute( "y" ).toDouble() - m_pageHeight * ( m_currentPage - 1 ),
+              size.attribute( "width" ).toDouble(),
+              size.attribute( "height" ).toDouble() );
+
+    double x1 = 0.0;
+    double y1 = 0.0;
+    double x2 = 0.0;
+    double y2 = 0.0;
+    QPointF center( r.width() / 2, r.height() / 2 );
 
     KoXmlElement lineType = objectElement.namedItem( "LINETYPE" ).toElement();
     int type = 0;
-    if ( !lineType.isNull() )
-    {
+    if ( !lineType.isNull() ) {
         type = lineType.attribute( "value" ).toInt();
     }
 
-    content->addAttribute( "draw:id",  QString( "object%1" ).arg( m_objectIndex ) );
-    QString xpos1 = QString( "%1pt" ).arg( x1 );
-    QString xpos2 = QString( "%1pt" ).arg( x2 );
-
-    //Enum: LineType
-    switch( type )
-    {
-    case 0: //Horizontal
-    {
-        double y = ( y1 + y2 ) * 0.5;
-        content->addAttributePt( "svg:y1", y );
-        content->addAttributePt( "svg:y2", y );
-    }   break;
-    case 1: //Vertical
-        content->addAttributePt( "svg:y1", y1 );
-        content->addAttributePt( "svg:y2", y2 );
-        xpos1 = QString( "%1pt" ).arg( 0.5 * ( x1 + x2 ) );
-        xpos2 = xpos1;
-        break;
-    case 2: //Left Top to Right Bottom
-        content->addAttributePt( "svg:y1", y1 );
-        content->addAttributePt( "svg:y2", y2 );
-        break;
-    case 3: //Left Bottom to Right Top
-        content->addAttributePt( "svg:y1", y2 );
-        content->addAttributePt( "svg:y2", y1 );
-        break;
+    switch ( type ) {
+        case 0:
+            x1 = -center.x();
+            x2 = -x1;
+            break;
+        case 1:
+            y1 = -center.y();
+            y2 = -y1;
+            break;
+        case 2:
+            x1 = -center.x();
+            y1 = -center.y();
+            x2 = -x1;
+            y2 = -y1;
+            break;
+        case 3:
+            x1 = -center.x();
+            y1 = center.y();
+            x2 = -x1;
+            y2 = -y1;
+            break;
     }
 
-    content->addAttribute( "svg:x1", xpos1 );
-    content->addAttribute( "svg:x2", xpos2 );
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
+    if ( !angle.isNull() ) {
+        double angInRad = -angle.attribute( "value" ).toDouble() * M_PI / 180.0;
+        QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        double transX1 = 0.0;
+        double transY1 = 0.0;
+        double transX2 = 0.0;
+        double transY2 = 0.0;
+        m.map( x1, y1, &transX1, &transY1 );
+        m.map( x2, y2, &transX2, &transY2 );
+        x1 = transX1;
+        y1 = transY1;
+        x2 = transX2;
+        y2 = transY2;
+    }
+
+    x1 += r.x() + center.x();
+    y1 += r.y() + center.y();
+    x2 += r.x() + center.x();
+    y2 += r.y() + center.y();
+
+    //save all into pt
+    content->addAttributePt( "svg:x1", x1 );
+    content->addAttributePt( "svg:y1", y1 );
+    content->addAttributePt( "svg:x2", x2 );
+    content->addAttributePt( "svg:y2", y2 );
 
     KoXmlElement name = objectElement.namedItem( "OBJECTNAME").toElement();
     QString nameString = name.attribute( "objectName" );
