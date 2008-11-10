@@ -19,6 +19,7 @@
 */
 
 #include <cmath>
+#include <cfloat>
 
 //Qt includes
 #include <QByteArray>
@@ -1491,27 +1492,42 @@ void Filterkpr2odf::set2DGeometry( KoXmlWriter* content, const KoXmlElement& obj
         content->addAttribute( "draw:name", nameStr );
     }
 
-    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
-    if( !angle.isNull() )
-    {
-        QString returnAngle = rotateValue( angle.attribute( "value" ).toDouble() );
-        if( !returnAngle.isEmpty() )
-        {
-            content->addAttribute( "draw:transform", returnAngle );
-        }
-    }
-
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
 
     double y = orig.attribute( "y" ).toDouble();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
+    QPointF o( orig.attribute( "x" ).toDouble(), y );
+
     content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
-    content->addAttributePt( "svg:x", orig.attribute( "x" ).toDouble() );
-    content->addAttributePt( "svg:y",  y );
-    content->addAttributePt( "svg:width", size.attribute( "width" ).toDouble() );
-    content->addAttributePt( "svg:height", size.attribute( "height" ).toDouble() );
+
+    QSizeF s( size.attribute( "width" ).toDouble(), size.attribute(  "height" ).toDouble() );
+    content->addAttributePt( "svg:width", s.width() );
+    content->addAttributePt( "svg:height", s.height() );
+
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
+    if( !angle.isNull() ) {
+        double angInRad = -angle.attribute( "value" ).toDouble() * M_PI / 180.0;
+        QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        QPointF center( s.width() / 2, s.height() / 2 );
+        double rotX = 0.0;
+        double rotY = 0.0;
+        m.map( center.x(), center.y(), &rotX, &rotY );
+        QPointF rot( rotX, rotY );
+        QPointF trans( center - rot + o );
+
+        QString transX;
+        transX.setNum( trans.x(), 'g', DBL_DIG );
+        QString transY;
+        transY.setNum( trans.y(), 'g', DBL_DIG );
+        QString str = QString( "rotate(%1) translate(%2pt %3pt)" ).arg( angInRad ).arg( transX ).arg( transY );
+        content->addAttribute( "draw:transform", str );
+    }
+    else {
+        content->addAttributePt( "svg:x", o.x() );
+        content->addAttributePt( "svg:y", o.y() );
+    }
 }
 
 QString Filterkpr2odf::rotateValue( double val )
