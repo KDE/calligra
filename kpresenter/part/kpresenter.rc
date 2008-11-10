@@ -52,7 +52,7 @@
             <Action name="format_masterpage"/> 
         </Menu>
         <Menu name="page">
-            <Text>&amp;Page</Text>
+            <Text>&amp;Slide</Text>
             <Action name="page_insertpage"/>
             <Action name="page_copypage"/>
             <Action name="page_deletepage"/>
