@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT rc.cpp *.cpp *.h -o $podir/KarbonTools.pot
+$XGETTEXT rc.cpp *.cpp *.h CalligraphyTool/*.cpp CalligraphyTool/*.h -o $podir/KarbonTools.pot
