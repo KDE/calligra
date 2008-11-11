@@ -77,7 +77,7 @@ void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
     //<presentation:sound xlink:href="/opt/kde4t/share/sounds/KDE-Im-Contact-In.ogg" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
     context.xmlWriter().startElement( "presentation:sound" );
     context.xmlWriter().addAttribute( "xlink:href", m_soundData->tagForSaving() );
-    context.xmlWriter().addAttribute( "xlink:type", "new" );
+    context.xmlWriter().addAttribute( "xlink:type", "simple" );
     context.xmlWriter().addAttribute( "xlink:actuate", "onRequest" );
     context.xmlWriter().endElement();
 
