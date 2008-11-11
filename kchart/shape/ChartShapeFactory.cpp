@@ -148,7 +148,7 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     KoShape *xAxisTitle = shape->plotArea()->xAxis()->title();
     if ( xAxis )
     {
-        xAxis->setTitleText( "Month" );
+        xAxis->setTitleText( i18n( "Month" ) );
         xAxisTitle->setPosition( QPointF( shapeSize.width() / 2.0 - xAxisTitle->size().width() / 2.0,
                                           shapeSize.height() - xAxisTitle->size().height() ) );
         plotAreaSize.rheight() -= xAxisTitle->size().height();
@@ -158,7 +158,7 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     KoShape *yAxisTitle = shape->plotArea()->yAxis()->title();
     if ( yAxis )
     {
-        yAxis->setTitleText( "Growth in %" );
+        yAxis->setTitleText( i18n( "Growth in %") );
         yAxisTitle->setPosition( QPointF( -yAxisTitle->size().width() / 2.0 + yAxisTitle->size().height() / 2.0,
                                           shapeSize.height() / 2.0 - yAxisTitle->size().height() / 2.0 ) );
         plotAreaPos.rx() += yAxisTitle->size().height();
