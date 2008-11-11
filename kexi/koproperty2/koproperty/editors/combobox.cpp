@@ -99,7 +99,7 @@ ComboBox::~ComboBox()
 QVariant ComboBox::value() const
 {
     if (m_listData.keys.isEmpty()) {
-        kopropertywarn << "propery listData not available!" << endl;
+        kWarning() << "propery listData not available!";
         return QVariant();
     }
     const int idx = currentIndex();
@@ -114,7 +114,7 @@ QVariant ComboBox::value() const
 void ComboBox::setValue(const QVariant &value)
 {
     if (m_listData.keys.isEmpty()) {
-        kopropertywarn << "propery listData not available!" << endl;
+        kWarning() << "propery listData not available!";
         return;
     }
     if (!m_setValueEnabled)
@@ -129,16 +129,16 @@ void ComboBox::setValue(const QVariant &value)
                 setCurrentIndex(-1);
                 setEditText(value.toString());
             }
-            kopropertywarn << "NO SUCH KEY '" << value.toString()
-            << "' (property '" << objectName() << "')" << endl;
+            kWarning() << "NO SUCH KEY '" << value.toString()
+            << "' (property '" << objectName() << "')";
         } else {
             QStringList list;
             for (int i = 0; i < count(); i++)
                 list += itemText(i);
-            kopropertywarn << "ComboBox::setValue(): NO SUCH INDEX WITHIN COMBOBOX: " << idx
+            kWarning() << "NO SUCH INDEX WITHIN COMBOBOX: " << idx
             << " count=" << count() << " value='" << value.toString()
             << "' (property '" << objectName() << "')\nActual combobox contents: "
-            << list << endl;
+            << list;
         }
         setItemText(currentIndex(), QString());
     }
@@ -177,7 +177,7 @@ void ComboBox::fillValues()
 //    if (!m_property)
 //        return;
     if (m_listData.keys.isEmpty()) {
-        kopropertywarn << "property listData not available!" << endl;
+        kWarning() << "property listData not available!";
         return;
     }
 //    m_keys = m_property->listData()->keys;

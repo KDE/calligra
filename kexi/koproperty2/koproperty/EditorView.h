@@ -62,7 +62,6 @@ class Set;
          that is not in the list. The entered text will be returned as opposed to a matching key.
     </li>
     </ul>
-   @author Jarosław Staniek <staniek@kde.org>
  */
 class KOPROPERTY_EXPORT EditorView : public QTreeView
 {

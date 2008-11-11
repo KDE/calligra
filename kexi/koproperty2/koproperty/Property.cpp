@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,10 +81,10 @@ public:
 // QMap<QString, QVariant> *valueList;
     QString icon;
 
-bool changed : 1;
-bool storable : 1;
-bool readOnly : 1;
-bool visible : 1;
+    bool changed : 1;
+    bool storable : 1;
+    bool readOnly : 1;
+    bool visible : 1;
     int autosync;
     QMap<QByteArray, QVariant> options;
 
@@ -338,13 +338,13 @@ void
 Property::setValue(const QVariant &value, bool rememberOldValue, bool useComposedProperty)
 {
     if (d->name.isEmpty()) {
-        kopropertywarn << "Property::setValue(): COULD NOT SET value to a null property" << endl;
+        kWarning() << "COULD NOT SET value to a null property";
         return;
     }
     QVariant currentValue = this->value();
     const QVariant::Type t = currentValue.type();
     const QVariant::Type newt = value.type();
-// kopropertydbg << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
+// kDebug() << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")";
     if (t != newt && !currentValue.isNull() && !value.isNull()
             && !((t == QVariant::Int && newt == QVariant::UInt)
                  || (t == QVariant::UInt && newt == QVariant::Int)
@@ -353,8 +353,8 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCompose
                  || (t == QVariant::ULongLong && newt == QVariant::LongLong)
                  || (t == QVariant::LongLong && newt == QVariant::ULongLong)
                 )) {
-        kopropertywarn << "Property::setValue(): INCOMPATIBLE TYPES! old=" << currentValue
-        << " new=" << value << endl;
+        kWarning() << "INCOMPATIBLE TYPES! old=" << currentValue
+        << " new=" << value;
     }
 
     //1. Check if the value should be changed
@@ -675,8 +675,8 @@ Property::addChild(Property *prop)
         prop->setSortingKey(d->children->count());
         prop->d->parent = this;
     } else {
-        kopropertywarn << "Property::addChild(): property \"" << name()
-        << "\": child property \"" << prop->name() << "\" already added" << endl;
+        kWarning() << "property \"" << name()
+        << "\": child property \"" << prop->name() << "\" already added";
         return;
     }
 }
@@ -780,5 +780,5 @@ Property::debug()
     dbg += (d->visible ? " visible" : " hidden");
     dbg += " )";
 
-    kopropertydbg << dbg << endl;
+    kDebug() << dbg;
 }

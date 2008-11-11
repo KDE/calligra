@@ -690,7 +690,7 @@ Editor::fill()
     d->topItem = new EditorDummyItem(this);
 
     const QList<QByteArray> groupNames = d->set->groupNames();
-// kopropertydbg << "Editor::fill(): group names = " << groupNames.count() << endl;
+// kDebug() << "Editor::fill(): group names = " << groupNames.count() << endl;
     if (groupNames.count() == 1) { // one group (default one), so don't show groups
         //add flat set of properties
         const QList<QByteArray>& propertyNames = d->set->propertyNamesForGroup(groupNames.first());
@@ -741,7 +741,7 @@ Editor::addItem(const QByteArray &name, EditorItem *parent)
 
     Property *property = &(d->set->property(name));
     if (!property || !property->isVisible()) {
-//  kopropertydbg << "Property is not visible: " << name << endl;
+//  kDebug() << "Property is not visible: " << name << endl;
         return;
     }
     Q3ListViewItem *last = parent ? parent->firstChild() : d->topItem->firstChild();
@@ -1381,10 +1381,10 @@ Editor::setFocus()
         }
     }
     if (d->currentWidget) {
-//  kopropertydbg << "d->currentWidget->setFocus()" << endl;
+//  kDebug() << "d->currentWidget->setFocus()" << endl;
         d->currentWidget->setFocus();
     } else {
-//  kopropertydbg << "K3ListView::setFocus()" << endl;
+//  kDebug() << "K3ListView::setFocus()" << endl;
         K3ListView::setFocus();
     }
 }

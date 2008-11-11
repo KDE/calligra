@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,11 +42,12 @@ template<class U> class Q3AsciiDictIterator;
  KoProperty framework also supports adding composed and property types
  and custom property editor types.
 
- Take a look at the test application, available in /koproperty/test to see how to use KoProperty.
+ Take a look at the test application, available in koproperty/test/ directory 
+ to see example uses of the framework.
 
- \author Cedric Pasteur <cedric.pasteur@free.fr>
- \author Alexander Dymo <cloudtemple@mskat.net>
- \author Jarosław Staniek <staniek@kde.org>
+ @author Cedric Pasteur <cedric.pasteur@free.fr>
+ @author Alexander Dymo <cloudtemple@mskat.net>
+ @author Jarosław Staniek <staniek@kde.org>
 */
 namespace KoProperty
 {
@@ -189,9 +190,6 @@ class KOPROPERTY_EXPORT Property
 public:
     //! A contant for null property
     QT_STATIC_CONST Property null;
-
-    typedef Q3AsciiDict<Property> Dict;
-    typedef Q3AsciiDictIterator<Property> DictIterator;
 
     /*! Data container for properties of list type. */
     class KOPROPERTY_EXPORT ListData

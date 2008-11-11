@@ -243,9 +243,9 @@ WidgetPropertySet::addWidget(QWidget *w)
 // QWidget *subwidget = isSubproperty ? subpropIface->subwidget() : w;
 
     for (KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
-        kDebug() << it.currentKey();
-        if (!isPropertyVisible(it.currentKey(), isTopLevel, classname))
-            d->set[it.currentKey()].setVisible(false);
+        kDebug() << it.current();
+        if (!isPropertyVisible(it.current()->name(), isTopLevel, classname))
+            d->set[it.current()->name()].setVisible(false);
     }
 
     if (d->widgets.count() >= 2) {
@@ -384,7 +384,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     }
 
     (*this)["name"].setAutoSync(false); // name should be updated only when pressing Enter
-    (*this)["enabled"].setValue(QVariant(tree->isEnabled()));
+    (*this)["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
         form->library()->setPropertyOptions(*this, *winfo, w);

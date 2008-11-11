@@ -22,9 +22,31 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-11-09..11
+KoProperty2
+- do not display invisible properties (Property::isVisible()==false)
+- removed obsolete widget.{h|cpp}
+- added overloaded ctor of Set::Iterator accepting functor
+- removed unnecessary koproperty{warn|dbg} macros 
+  as we use own KDE_DEFAULT_DEBUG_AREA
+- added Set::PropertySelector for easy iterating over selected properties
+- Set is now based on QHash<QByteArray, Property*>
+- Set::Iterator is now based on QHash<QByteArray, Property*>::ConstIterator,
+  not on an ascii dict iterator from Qt3. 
+- optimized removing properties from the set and thus destructing sets
+
 2008-11-08
 Kexi
 - use KoProperty2 in Kexi (this breaks many functions now)
+KexiDB
+- MySQL driver: fixed problem with creating a new database 
+  when the name contains uppercase characters
+  (MySQL's "SHOW DATABASES LIKE .." does not work unless 
+  we convert the argument to lowecase.
+= make a few statements uppercase
+- use QString::arg() and escapeIdentifier() for building 
+  statements (security..)
+Predicate: ported
 
 2008-11-07
 KoProperty2
