@@ -244,7 +244,9 @@ public:
     
     virtual void setProject( Project *project );
     void setManager( ScheduleManager *sm );
-    
+    ScheduleManager *manager() const { return m_nodemodel.manager(); }
+    long id() const { return m_nodemodel.id(); }
+
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     
     virtual QModelIndex parent( const QModelIndex & index ) const;
@@ -311,7 +313,12 @@ protected:
     bool setStartupCost( Node *node, const QVariant &value, int role );
     bool setShutdownAccount( Node *node, const QVariant &value, int role );
     bool setShutdownCost( Node *node, const QVariant &value, int role );
-    
+    bool setCompletion( Node *node, const QVariant &value, int role );
+    bool setActualEffort( Node *node, const QVariant &value, int role );
+    bool setRemainingEffort( Node *node, const QVariant &value, int role );
+    bool setStartedTime( Node *node, const QVariant &value, int role );
+    bool setFinishedTime( Node *node, const QVariant &value, int role );
+
 private:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;

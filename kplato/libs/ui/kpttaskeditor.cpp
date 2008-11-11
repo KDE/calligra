@@ -479,7 +479,6 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     l->setMargin( 0 );
     m_view = new NodeTreeView( this );
     l->addWidget( m_view );
-    updateReadWrite( false );
     setupGui();
 
     //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
@@ -488,6 +487,29 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     m_view->setDragEnabled ( true );
     m_view->setAcceptDrops( false );
     m_view->setAcceptDropsOnView( false );
+
+    QList<int> readonly; 
+    readonly << NodeModel::NodeName
+            << NodeModel::NodeResponsible
+            << NodeModel::NodeAllocation
+            << NodeModel::NodeEstimateType
+            << NodeModel::NodeEstimateCalendar
+            << NodeModel::NodeEstimate
+            << NodeModel::NodeOptimisticRatio
+            << NodeModel::NodePessimisticRatio
+            << NodeModel::NodeRisk
+            << NodeModel::NodeConstraint 
+            << NodeModel::NodeConstraintStart 
+            << NodeModel::NodeConstraintEnd 
+            << NodeModel::NodeRunningAccount 
+            << NodeModel::NodeStartupAccount 
+            << NodeModel::NodeStartupCost 
+            << NodeModel::NodeShutdownAccount 
+            << NodeModel::NodeShutdownCost 
+            << NodeModel::NodeDescription;
+    foreach ( int c, readonly ) {
+        m_view->model()->setReadOnly( c, true );
+    }
 
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> show; 
@@ -514,6 +536,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
     m_view->slaveView()->setDefaultColumns( show );
     
+    connect( m_view->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -524,10 +547,9 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
-void TaskView::updateReadWrite( bool /*rw*/ )
+void TaskView::updateReadWrite( bool rw )
 {
-    // This is view only, don't allow editing
-    m_view->setReadWrite( false );
+    m_view->setReadWrite( rw );
 }
 
 void TaskView::draw( Project &project )

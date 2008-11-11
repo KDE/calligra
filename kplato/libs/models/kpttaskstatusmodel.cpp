@@ -149,10 +149,9 @@ void TaskStatusItemModel::setManager( ScheduleManager *sm )
     refresh();
 }
 
-
 void TaskStatusItemModel::clear()
 {
-    foreach ( NodeList *l, m_top ) {
+    foreach ( NodeMap *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
             //FIXME: gives error msg:
@@ -208,19 +207,19 @@ void TaskStatusItemModel::refresh()
         const Completion &c = t->completion();
         if ( c.isFinished() ) {
             if ( c.finishTime().date() > begin ) {
-                m_finished.append( t );
+                m_finished.insert( t->wbsCode(), t );
             }
         } else if ( c.isStarted() ) {
-            m_running.append( t );
+            m_running.insert( t->wbsCode(), t );
         } else if ( t->startTime( m_id ).date() < m_nodemodel.now() ) {
             // should have been started
-            m_notstarted.append( t );
+            m_notstarted.insert( t->wbsCode(), t );
         } else if ( t->startTime( m_id ).date() <= end ) {
             // start next period
-            m_upcoming.append( t );
+            m_upcoming.insert( t->wbsCode(), t );
         }
     }
-    foreach ( NodeList *l, m_top ) {
+    foreach ( NodeMap *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
             kDebug()<<index(l)<<0<<c-1;
@@ -236,12 +235,21 @@ Qt::ItemFlags TaskStatusItemModel::flags( const QModelIndex &index ) const
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     flags &= ~( Qt::ItemIsEditable | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled );
     Node *n = node( index );
-    if ( n == 0 || n->type() != Node::Type_Task ) {
+    if ( n == 0 || n->type() != Node::Type_Task || m_id == -1 || ! n->isScheduled( m_id ) ) {
         return flags;
     }
     Task *t = static_cast<Task*>( n );
-    if ( t->completion().isStarted() && ! t->completion().isFinished() ) {
+    if ( ! t->completion().isStarted() ) {
         switch ( index.column() ) {
+            case NodeModel::NodeActualStart:
+                flags |= Qt::ItemIsEditable;
+                break;
+            default: break;
+        }
+    } else if ( ! t->completion().isFinished() ) {
+        // task is running
+        switch ( index.column() ) {
+            case NodeModel::NodeActualFinish:
             case NodeModel::NodeCompleted:
             case NodeModel::NodeRemainingEffort:
                 flags |= Qt::ItemIsEditable;
@@ -264,7 +272,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
         return QModelIndex();
     }
     //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
-    int row = m_top.indexOf( static_cast<NodeList*>( index.internalPointer() ) );
+    int row = m_top.indexOf( static_cast<NodeMap*>( index.internalPointer() ) );
     if ( row != -1 ) {
         return QModelIndex(); // top level has no parent
     }
@@ -272,9 +280,9 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
     if ( n == 0  ) {
         return QModelIndex();
     }
-    NodeList *lst = 0;
-    foreach ( NodeList *l, m_top ) {
-        if ( l->indexOf( n ) != -1 ) {
+    NodeMap *lst = 0;
+    foreach ( NodeMap *l, m_top ) {
+        if ( l->values().indexOf( n ) != -1 ) {
             lst = l;
             break;
         }
@@ -297,7 +305,7 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
         }
         return createIndex(row, column, m_top.value( row ) );
     }
-    NodeList *l = list( parent );
+    NodeMap *l = list( parent );
     if ( l == 0 ) {
         return QModelIndex();
     }
@@ -305,7 +313,7 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
         kWarning()<<"Row >= rowCount, Qt4.4 asks, so we need to handle it"<<parent<<row<<column;
         return QModelIndex();
     }
-    QModelIndex i = createIndex(row, column, l->value( row ) );
+    QModelIndex i = createIndex(row, column, l->values().value( row ) );
     Q_ASSERT( i.internalPointer() != 0 );
     return i;
 }
@@ -315,8 +323,8 @@ QModelIndex TaskStatusItemModel::index( const Node *node ) const
     if ( m_project == 0 || node == 0 ) {
         return QModelIndex();
     }
-    foreach( NodeList *l, m_top ) {
-        int row = l->indexOf( const_cast<Node*>( node ) );
+    foreach( NodeMap *l, m_top ) {
+        int row = l->values().indexOf( const_cast<Node*>( node ) );
         if ( row != -1 ) {
             return createIndex( row, 0, const_cast<Node*>( node ) );
         }
@@ -324,12 +332,12 @@ QModelIndex TaskStatusItemModel::index( const Node *node ) const
     return QModelIndex();
 }
 
-QModelIndex TaskStatusItemModel::index( const NodeList *lst ) const
+QModelIndex TaskStatusItemModel::index( const NodeMap *lst ) const
 {
     if ( m_project == 0 || lst == 0 ) {
         return QModelIndex();
     }
-    NodeList *l = const_cast<NodeList*>( lst );
+    NodeMap *l = const_cast<NodeMap*>( lst );
     int row = m_top.indexOf( l );
     if ( row == -1 ) {
         return QModelIndex();
@@ -355,9 +363,23 @@ QVariant TaskStatusItemModel::name( int row, int role ) const
 bool TaskStatusItemModel::setCompletion( Node *node, const QVariant &value, int role )
 {
     if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
-        Task *t = static_cast<Task*>( node );
+        Completion &c = static_cast<Task*>( node )->completion();
+        QDate date = QDate::currentDate();
         // xgettext: no-c-format
-        emit executeCommand( new ModifyCompletionPercentFinishedCmd( t->completion(), QDate::currentDate(), value.toInt(), i18n( "Modify % Completed" ) ) );
+        MacroCommand *m = new MacroCommand( i18n( "Modify % Completed" ) );
+        m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, value.toInt() ) );
+        emit executeCommand( m ); // also adds a new entry if necessary
+        if ( c.entrymode() == Completion::EnterCompleted ) {
+            Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
+            Duration actual = ( planned * value.toInt() ) / 100;
+            kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
+            NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
+            cmd->execute();
+            m->addCommand( cmd );
+            cmd = new ModifyCompletionRemainingEffortCmd( c, date, planned - actual  );
+            cmd->execute();
+            m->addCommand( cmd );
+        }
         return true;
     }
     return false;
@@ -389,6 +411,45 @@ bool TaskStatusItemModel::setActualEffort( Node *node, const QVariant &value, in
     return false;
 }
 
+bool TaskStatusItemModel::setStartedTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            Task *t = qobject_cast<Task*>( node );
+            if ( t == 0 ) {
+                return false;
+            }
+            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualStart, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            if ( ! t->completion().isStarted() ) {
+                m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
+            }
+            m->addCommand( new ModifyCompletionStartTimeCmd( t->completion(), value.toDateTime() ) );
+            emit executeCommand( m );
+            return true;
+        }
+    }
+    return false;
+}
+
+bool TaskStatusItemModel::setFinishedTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            Task *t = qobject_cast<Task*>( node );
+            if ( t == 0 ) {
+                return false;
+            }
+            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            if ( ! t->completion().isFinished() ) {
+                m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
+            }
+            m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
+            emit executeCommand( m );
+            return true;
+        }
+    }
+    return false;
+}
 
 QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
 {
@@ -402,12 +463,30 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n == 0 ) {
         switch ( index.column() ) {
-            case 0: return name( index.row(), role );
+            case NodeModel::NodeName: return name( index.row(), role );
             default: break;
         }
         return QVariant();
     }
     result = m_nodemodel.data( n, index.column(), role );
+    if ( role == Qt::DisplayRole ) {
+        switch ( index.column() ) {
+            case NodeModel::NodeActualStart:
+                if ( ! result.isValid() ) {
+                    return m_nodemodel.data( n, NodeModel::NodeStatus, role );
+                }
+            break;
+        }
+    } else if ( role == Qt::EditRole ) {
+        switch ( index.column() ) {
+            case NodeModel::NodeActualStart:
+            case NodeModel::NodeActualFinish:
+                if ( ! result.isValid() ) {
+                    return QDateTime::currentDateTime();
+                }
+            break;
+        }
+    }
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
@@ -418,6 +497,7 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
+
 bool TaskStatusItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
     switch ( index.column() ) {
@@ -427,6 +507,10 @@ bool TaskStatusItemModel::setData( const QModelIndex &index, const QVariant &val
             return setRemainingEffort( node( index ), value, role );
         case NodeModel::NodeActualEffort:
             return setActualEffort( node( index ), value, role );
+        case NodeModel::NodeActualStart:
+            return setStartedTime( node( index ), value, role );
+        case NodeModel::NodeActualFinish:
+            return setFinishedTime( node( index ), value, role );
         default:
             break;
     }
@@ -478,7 +562,7 @@ int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
         //kDebug()<<"top="<<m_top.count()<<m_top;
         return m_top.count();
     }
-    NodeList *l = list( parent );
+    NodeMap *l = list( parent );
     if ( l ) {
         //kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l<<m_topNames.value( parent.row() );
         return l->count();
@@ -528,12 +612,12 @@ bool TaskStatusItemModel::dropMimeData( const QMimeData *, Qt::DropAction , int 
     return false;
 }
 
-NodeList *TaskStatusItemModel::list( const QModelIndex &index ) const
+NodeMap *TaskStatusItemModel::list( const QModelIndex &index ) const
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.internalPointer() );
-        if ( m_top.contains( static_cast<NodeList*>( index.internalPointer() ) ) ) {
-            return static_cast<NodeList*>( index.internalPointer() );
+        if ( m_top.contains( static_cast<NodeMap*>( index.internalPointer() ) ) ) {
+            return static_cast<NodeMap*>( index.internalPointer() );
         }
     }
     return 0;
@@ -542,8 +626,8 @@ NodeList *TaskStatusItemModel::list( const QModelIndex &index ) const
 Node *TaskStatusItemModel::node( const QModelIndex &index ) const
 {
     if ( index.isValid() ) {
-        foreach ( NodeList *l, m_top ) {
-            int row = l->indexOf( static_cast<Node*>( index.internalPointer() ) );
+        foreach ( NodeMap *l, m_top ) {
+            int row = l->values().indexOf( static_cast<Node*>( index.internalPointer() ) );
             if ( row != -1 ) {
                 return static_cast<Node*>( index.internalPointer() );
             }
@@ -565,9 +649,9 @@ void TaskStatusItemModel::slotNodeChanged( Node *node )
 void TaskStatusItemModel::slotWbsDefinitionChanged()
 {
     kDebug();
-    foreach ( NodeList *l, m_top ) {
+    foreach ( NodeMap *l, m_top ) {
         for ( int row = 0; row < l->count(); ++row ) {
-            emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, l->value( row ) ), createIndex( row, NodeModel::NodeWBSCode, l->value( row ) ) );
+            emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, l->values().value( row ) ), createIndex( row, NodeModel::NodeWBSCode, l->values().value( row ) ) );
         }
     }
 }

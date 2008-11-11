@@ -1030,6 +1030,9 @@ QVariant NodeModel::status( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             int st = t->state( id() );
+            if ( st & Node::State_NotScheduled ) {
+                return SchedulingState::notScheduled();
+            }
             if ( st & Node::State_Finished ) {
                 if ( st & Node::State_FinishedLate ) {
                     return i18n( "Finished late" );
@@ -1180,6 +1183,8 @@ QVariant NodeModel::plannedEffortTo( const Node *node, int role ) const
             return i18n( "Planned effort until %1: %2", l->formatDate( m_now ), l->formatNumber( node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 ) );
         case Qt::EditRole:
             return node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h );
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1198,6 +1203,8 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
             return i18n( "Actual effort used up to %1: %2", l->formatDate( m_now ), l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 ) );
         case Qt::EditRole:
             return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1226,6 +1233,8 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
             const Task *t = dynamic_cast<const Task*>( node );
             return t->completion().remainingEffort().toDouble( Duration::Unit_h );
         }
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1873,6 +1882,10 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
+    if ( isColumnReadOnly( index.column() ) ) {
+        //kDebug()<<"Column is readonly:"<<index.column();
+        return flags;
+    }
     Node *n = node( index );
     if ( m_readWrite && n != 0 ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
@@ -1956,7 +1969,32 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeDescription: // description
                 break;
             default: 
-                flags &= ~Qt::ItemIsEditable;
+                break;
+        }
+        Task *t = static_cast<Task*>( n );
+        if ( manager() && t->isScheduled( id() ) ) {
+            if ( ! t->completion().isStarted() ) {
+                switch ( index.column() ) {
+                    case NodeModel::NodeActualStart:
+                        flags |= Qt::ItemIsEditable;
+                        break;
+                    default: break;
+                }
+            } else if ( ! t->completion().isFinished() ) {
+                switch ( index.column() ) {
+                    case NodeModel::NodeActualFinish:
+                    case NodeModel::NodeCompleted:
+                    case NodeModel::NodeRemainingEffort:
+                        flags |= Qt::ItemIsEditable;
+                        break;
+                    case NodeModel::NodeActualEffort:
+                        if ( t->completion().entrymode() == Completion::EnterEffortPerTask || t->completion().entrymode() == Completion::EnterEffortPerResource ) {
+                            flags |= Qt::ItemIsEditable;
+                        }
+                        break;
+                    default: break;
+                }
+            }
         }
     }
     return flags;
@@ -2384,6 +2422,97 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
     return false;
 }
 
+bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+        Completion &c = static_cast<Task*>( node )->completion();
+        QDate date = QDate::currentDate();
+        // xgettext: no-c-format
+        MacroCommand *m = new MacroCommand( i18n( "Modify % Completed" ) );
+        m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, value.toInt() ) );
+        emit executeCommand( m ); // also adds a new entry if necessary
+        if ( c.entrymode() == Completion::EnterCompleted ) {
+            Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
+            Duration actual = ( planned * value.toInt() ) / 100;
+            kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
+            NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
+            cmd->execute();
+            m->addCommand( cmd );
+            cmd = new ModifyCompletionRemainingEffortCmd( c, date, planned - actual  );
+            cmd->execute();
+            m->addCommand( cmd );
+        }
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::setRemainingEffort( Node *node, const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+        Task *t = static_cast<Task*>( node );
+        double d( value.toList()[0].toDouble() );
+        Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+        Duration dur( d, unit );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remainig Effort" ) ) );
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::setActualEffort( Node *node, const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+        Task *t = static_cast<Task*>( node );
+        double d( value.toList()[0].toDouble() );
+        Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+        Duration dur( d, unit );
+        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Actual Effort" ) ) );
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::setStartedTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            Task *t = qobject_cast<Task*>( node );
+            if ( t == 0 ) {
+                return false;
+            }
+            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualStart, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            if ( ! t->completion().isStarted() ) {
+                m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
+            }
+            m->addCommand( new ModifyCompletionStartTimeCmd( t->completion(), value.toDateTime() ) );
+            emit executeCommand( m );
+            return true;
+        }
+    }
+    return false;
+}
+
+bool NodeItemModel::setFinishedTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            Task *t = qobject_cast<Task*>( node );
+            if ( t == 0 ) {
+                return false;
+            }
+            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            if ( ! t->completion().isFinished() ) {
+                m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
+            }
+            m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
+            emit executeCommand( m );
+            return true;
+        }
+    }
+    return false;
+}
+
 QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -2391,6 +2520,16 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     if ( n != 0 ) {
         result = m_nodemodel.data( n, index.column(), role );
         //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<result;
+    }
+    if ( role == Qt::EditRole ) {
+        switch ( index.column() ) {
+            case NodeModel::NodeActualStart:
+            case NodeModel::NodeActualFinish:
+                if ( ! result.isValid() ) {
+                    return QDateTime::currentDateTime();
+                }
+            break;
+        }
     }
     if ( role == Qt::DisplayRole && ! result.isValid() ) {
         result = " "; // HACK to show focus in empty cells
@@ -2424,6 +2563,11 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         case NodeModel::NodeShutdownAccount: return setShutdownAccount( n, value, role );
         case NodeModel::NodeShutdownCost: return setShutdownCost( n, value, role );
         case NodeModel::NodeDescription: return setDescription( n, value, role );
+        case NodeModel::NodeCompleted: return setCompletion( n, value, role );
+        case NodeModel::NodeActualEffort: return setActualEffort( n, value, role );
+        case NodeModel::NodeRemainingEffort: return setRemainingEffort( n, value, role );
+        case NodeModel::NodeActualStart: return setStartedTime( n, value, role );
+        case NodeModel::NodeActualFinish: return setFinishedTime( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -2466,6 +2610,10 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
         case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
         case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
         case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
+
+        case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
+        case NodeModel::NodeActualEffort: return new DurationSpinBoxDelegate( parent );
+
         default: return 0;
     }
     return 0;

@@ -624,7 +624,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 e->percentFinished = value.toInt();
                 if ( m_completion->entrymode() == Completion::EnterCompleted && m_node ) {
                     // calculate used/remaining
-                    Duration est = m_node->estimate()->pertExpected();
+                    Duration est = m_node->plannedEffort( id() );
                     e->totalPerformed = est * e->percentFinished / 100;
                     e->remainingEffort = est - e->totalPerformed;
                 }
@@ -770,7 +770,7 @@ void CompletionEntryItemModel::addEntry( const QDate date )
     Completion::Entry *e = new Completion::Entry();
     if ( m_completion->entries().isEmpty() ) {
         if ( m_node ) {
-            e->remainingEffort = m_node->estimate()->pertExpected();
+            e->remainingEffort = m_node->plannedEffort( id() );
         }
     } else {
         e->percentFinished = m_completion->percentFinished();

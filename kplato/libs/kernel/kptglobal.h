@@ -173,6 +173,18 @@ struct KPLATOKERNEL_EXPORT WhatsThis
 
 }; //namespace WhatsThis
 
+struct KPLATOKERNEL_EXPORT SchedulingState
+{
+    static QString deleted();
+    static QString notScheduled();
+    static QString scheduled();
+    static QString resourceOverbooked();
+    static QString resourceNotAvailable();
+    static QString resourceNotAllocated();
+    static QString constraintsNotMet();
+
+}; //namespace WhatsThis
+
 
 } //namespace KPlato
 

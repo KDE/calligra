@@ -2470,6 +2470,9 @@ bool Task::effortMetError( long id ) const
 uint Task::state( long id ) const
 {
     int st = Node::State_None;
+    if ( ! isScheduled( id ) ) {
+        st |= State_NotScheduled;
+    }
     if ( completion().isFinished() ) {
         st |= Node::State_Finished;
         if ( completion().finishTime() > endTime( id ) ) {

@@ -135,19 +135,19 @@ QStringList Schedule::state() const
 {
     QStringList lst;
     if ( m_deleted )
-        lst << i18n( "Deleted" );
+        lst << SchedulingState::deleted();
     if ( notScheduled )
-        lst << i18n( "Not scheduled" );
+        lst << SchedulingState::notScheduled();
     if ( schedulingError )
-        lst << i18n( "Cannot fullfill constraints" );
+        lst << SchedulingState::constraintsNotMet();
     if ( resourceError )
-        lst << i18n( "No resource allocated" );
+        lst << SchedulingState::resourceNotAllocated();
     if ( resourceNotAvailable )
-        lst << i18n( "Resource not available" );
+        lst << SchedulingState::resourceNotAvailable();
     if ( resourceOverbooked )
-        lst << i18n( "Resource overbooked" );
+        lst << SchedulingState::resourceOverbooked();
     if ( lst.isEmpty() )
-        lst << i18n( "Scheduled" );
+        lst << SchedulingState::scheduled();
     return lst;
 }
 
