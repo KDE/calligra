@@ -21,8 +21,12 @@
 #include <kdebug.h>
 
 #include <kexidb/cursor.h>
-#include "krscriptfunctions.h"
+#include <KexiMainWindowIface.h>
+#include <kexiproject.h>
+#include <kexipart.h>
+#include <kexiutils/tristate.h>
 
+#include "krscriptfunctions.h"
 #include <parsexmlutils.h>
 #include <krsectiondata.h>
 #include "krscriptsection.h"
@@ -57,7 +61,7 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 
     //Add math functions to the script
     _functions = new KRScriptFunctions(_curs);
-    _action->addObject(_functions, "math");
+    _action->addObject(_functions, "field");
 
     //Add constants object
     _constants = new KRScriptConstants();
@@ -72,15 +76,17 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
     _action->addObject(_draw, "draw");
 
     //Add a general report object
-    _action->addObject(new Scripting::Report(_data), "report");
+    _report = new Scripting::Report(_data);
+    _action->addObject(_report, "report");
 
     //Add the sections
     QList<KRSectionData*> secs = _data->sections();
     foreach(KRSectionData *sec, secs) {
-        _action->addObject(new Scripting::Section(sec), sec->name());
+	_sectionMap[sec] = new Scripting::Section(sec);
+        _action->addObject(_sectionMap[sec], sec->name());
     }
 
-    _action->setCode((_data->script() + "\n" + fieldFunctions()).toLocal8Bit());
+    _action->setCode((_data->script() + "\n" + fieldFunctions()).toLocal8Bit() + scriptCode().toLocal8Bit());
 
     kDebug() << _action->code();
 
@@ -91,15 +97,18 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
     } else {
         kDebug() << "Function Names:" << _action->functionNames();
     }
+
+    _report->eventOnOpen();
 }
 
 KRScriptHandler::~KRScriptHandler()
 {
-    delete _action;
+    delete _report;
     delete _functions;
     delete _constants;
     delete _debug;
     delete _draw;
+    delete _action;
 }
 
 void KRScriptHandler::setSource(const QString &s)
@@ -126,6 +135,14 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
         _draw->setPage(cp);
     _draw->setOffset(off);
 
+    Scripting::Section *ss = _sectionMap[section];
+    if (ss)
+    {
+	ss->eventOnRender();
+    }
+    
+    return;
+    
     if (!_action->hadError() && _action->functionNames().contains(section->name() + "_onrender")) {
         QVariant result = _action->callFunction(section->name() + "_onrender");
         displayErrors();
@@ -198,4 +215,45 @@ QString KRScriptHandler::where()
     w = w.mid(0, w.length() - 4);
     kDebug() << w;
     return w;
+}
+
+QString KRScriptHandler::scriptCode()
+{
+    QList<int> scriptids = KexiMainWindowIface::global()->project()->dbConnection()->objectIds(KexiPart::ScriptObjectType);
+    QString scripts;
+    
+    int id;
+    QString script;
+   
+    foreach (id, scriptids) {
+	kDebug() << "ID:" << id;
+	tristate res;
+	res = KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(id, script, QString());
+	if (res == true){
+	    QDomDocument domdoc;
+	    bool parsed = domdoc.setContent(script, false);
+
+	    if (! parsed) {
+		kDebug() << "XML parsing error";
+		return false;
+	    }
+
+	    QDomElement scriptelem = domdoc.namedItem("script").toElement();
+	    if (scriptelem.isNull()) {
+		kDebug() << "script domelement is null";
+		return false;
+	    }
+
+	    QString interpretername = scriptelem.attribute("language");
+	    kDebug() << interpretername;
+	    if (_data->interpreter() == interpretername) {
+		scripts += '\n' + scriptelem.text().toUtf8();
+	    }
+	}
+	else{
+	    kDebug() << "Unable to loadDataBlock";
+	}
+    }
+    
+    return scripts;
 }

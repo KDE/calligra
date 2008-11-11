@@ -35,6 +35,7 @@ public:
 
 public slots:
     void print(const QString&);
+    void message(const QString &, const QString&);
 
 };
 

@@ -135,8 +135,6 @@ public:
 
     void setModified(bool = true);
 
-    void showScriptEditor();
-
     /**Return a unique name that can be used by the entity*/
     QString suggestEntityName(const QString &) const;
 
@@ -150,16 +148,6 @@ public slots:
     void slotEditPaste();
     void slotEditPaste(QGraphicsScene *, const QPointF &);
 
-/*
-    void slotItemLabel();
-    void slotItemField();
-    void slotItemText();
-    void slotItemLine();
-    void slotItemBarcode();
-    void slotItemImage();
-    void slotItemChart();
-    void slotItemShape();
-    void slotItemCheck();*/
     void slotItem(KRObjectData::EntityTypes);
 
     void slotSectionEditor();
@@ -216,9 +204,6 @@ private:
     KoProperty::Property* _gridSnap;
     KoProperty::Property* _labelType;
     KoProperty::Property* _interpreter;
-
-    QString editorText(const QString&);
-    QString _script;
 
     ReportWriterSectionData * sectionData;
     unsigned int selectionCount();

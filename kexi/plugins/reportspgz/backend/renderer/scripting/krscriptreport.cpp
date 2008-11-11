@@ -36,16 +36,20 @@ namespace Scripting
 Report::Report(KRReportData *r)
 {
     _reportdata = r;
+    _scriptObject = 0;
 }
 
 
 Report::~Report()
 {
+
 }
+
 QString Report::title()
 {
     return _reportdata->title;
 }
+
 QString Report::recordSource()
 {
     return _reportdata->query();
@@ -95,4 +99,23 @@ QObject* Report::sectionByName(const QString &n)
         return new QObject();
     }
 }
+
+void Report::initialize(Kross::Object::Ptr ptr)
+{
+        _scriptObject = ptr;
+}
+
+void Report::eventOnOpen()
+{
+    if (_scriptObject)
+	_scriptObject->callMethod("OnOpen");
+}
+
+void Report::eventOnClose()
+{
+    if (_scriptObject)
+	_scriptObject->callMethod("OnClose");
+}
+
+
 }

@@ -19,6 +19,7 @@
  */
 #include "krscriptdebug.h"
 #include <kdebug.h>
+#include <kmessagebox.h>
 
 KRScriptDebug::KRScriptDebug(QObject *parent)
         : QObject(parent)
@@ -35,4 +36,7 @@ void KRScriptDebug::print(const QString& s)
     kDebug() << s;
 }
 
-
+void KRScriptDebug::message(const QString &t, const QString &m)
+{
+    KMessageBox::information(0, m, t);
+}
