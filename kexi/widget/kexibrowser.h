@@ -166,10 +166,11 @@ protected:
     KexiItemMenu *m_itemMenu;
     KexiGroupMenu *m_partMenu;
     KAction *m_deleteAction, *m_renameAction,
-//   *m_newObjectAction, // *m_newObjectToolbarAction,
-    *m_openAction, *m_designAction, *m_editTextAction,
-    *m_executeAction,
-    *m_dataExportAction, *m_printAction, *m_pageSetupAction;
+       *m_newObjectAction, 
+    // *m_newObjectToolbarAction,
+        *m_openAction, *m_designAction, *m_editTextAction,
+        *m_executeAction,
+        *m_dataExportAction, *m_printAction, *m_pageSetupAction;
     KActionMenu* m_exportActionMenu;
 //  KMenu* m_newObjectMenu;
     QAction *m_itemMenuTitle, *m_partMenuTitle,

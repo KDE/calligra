@@ -144,7 +144,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
         m_renameAction = 0;
         m_designAction = 0;
         m_editTextAction = 0;
-//(new action removed)  m_newObjectAction = 0;
+        m_newObjectAction = 0;
 //(new action removed)  m_newObjectMenu = 0;
     } else {
         m_deleteAction = addAction("edit_delete", KIcon("edit-delete"), i18n("&Delete"),
@@ -173,10 +173,9 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
                                      i18n("Open object in text view"), i18n("Opens selected object in the list in text view."),
                                      SLOT(slotEditTextObject()));
 
-        /*(new action removed)  m_newObjectAction = addAction("new_object", KIcon("document-new"), QString(),
+        m_newObjectAction = addAction("new_object", KIcon("document-new"), QString(),
               QString(), QString(),
               SLOT(slotNewObject()));
-              */
         if (m_features & Toolbar) {
             /*(new action removed)   m_newObjectToolButton = new KexiSmallToolButton(this);
                   m_newObjectMenu = new KMenu(this);
@@ -386,8 +385,8 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const Q
         m_itemMenu->update(par_it->partInfo(), bit->partItem());
     } else if (m_partMenu) {
         pm = m_partMenu;
-//(new action removed)  m_newObjectAction->setIcon( KIcon(bit->partInfo()->itemIcon()) );
-//(new action removed)  m_partMenu->update(bit->partInfo());
+//        m_newObjectAction->setIcon( KIcon(bit->partInfo()->itemIcon()) );
+        m_partMenu->update(bit->partInfo());
         m_list->setCurrentItem(item);
         m_list->repaintItem(item);
     }
@@ -469,32 +468,31 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 
     if (m_prevSelectedPart != part) {
         m_prevSelectedPart = part;
-        /*(new action removed)
-            if (part) {
-              if (m_newObjectAction) {
-                m_newObjectAction->setText(
-                  i18n("&Create Object: %1...", part->instanceCaption() ));
-                m_newObjectAction->setIcon( KIcon(part->info()->createItemIcon()) );
-                if (m_features & Toolbar) {
-                  m_newObjectToolButton->setIcon( KIcon(part->info()->createItemIcon()) );
-                  m_newObjectToolButton->setToolTip(
-                    i18n("Create object: %1", part->instanceCaption().toLower() ));
-                  m_newObjectToolButton->setWhatsThis(
-                    i18n("Creates a new object: %1", part->instanceCaption().toLower() ));
-                }
-              }
-            } else {
-              if (m_newObjectAction) {
-                m_newObjectAction->setText(i18n("&Create Object..."));
-          //   m_newObjectToolbarAction->setIcon( KIcon("document-new") );
-          //   m_newObjectToolbarAction->setText(m_newObjectAction->text());
-                if (m_features & Toolbar) {
-                  m_newObjectToolButton->setIcon( KIcon("document-new") );
-                  m_newObjectToolButton->setToolTip(i18n("Create object"));
-                  m_newObjectToolButton->setWhatsThis(i18n("Creates a new object"));
-                }
-              }
-            }*/
+        if (part) {
+          if (m_newObjectAction) {
+            m_newObjectAction->setText(
+              i18n("&Create Object: %1...", part->instanceCaption() ));
+            m_newObjectAction->setIcon( KIcon(part->info()->createItemIcon()) );
+            if (m_features & Toolbar) {
+/*              m_newObjectToolButton->setIcon( KIcon(part->info()->createItemIcon()) );
+              m_newObjectToolButton->setToolTip(
+                i18n("Create object: %1", part->instanceCaption().toLower() ));
+              m_newObjectToolButton->setWhatsThis(
+                i18n("Creates a new object: %1", part->instanceCaption().toLower() ));*/
+            }
+          }
+        } else {
+          if (m_newObjectAction) {
+            m_newObjectAction->setText(i18n("&Create Object..."));
+      //   m_newObjectToolbarAction->setIcon( KIcon("document-new") );
+      //   m_newObjectToolbarAction->setText(m_newObjectAction->text());
+            if (m_features & Toolbar) {
+/*              m_newObjectToolButton->setIcon( KIcon("document-new") );
+              m_newObjectToolButton->setToolTip(i18n("Create object"));
+              m_newObjectToolButton->setWhatsThis(i18n("Creates a new object"));*/
+            }
+          }
+        }
     }
     emit selectionChanged(it ? it->partItem() : 0);
 }
@@ -568,7 +566,7 @@ void KexiBrowser::slotRemove()
 
 void KexiBrowser::slotNewObject()
 {
-    if (/*(new action removed) !m_newObjectAction ||*/ !(m_features & Writable))
+    if (!m_newObjectAction || !(m_features & Writable))
         return;
     KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
     if (!it || !it->partInfo())
@@ -782,14 +780,13 @@ void KexiBrowser::setReadOnly(bool set)
         m_deleteAction->setEnabled(!m_readOnly);
     if (m_renameAction)
         m_renameAction->setEnabled(!m_readOnly);
-    /*(new action removed)
       if (m_newObjectAction) {
         m_newObjectAction->setEnabled(!m_readOnly);
         if (m_features & Toolbar) {
-          m_newObjectMenu->setEnabled(!m_readOnly);
-          m_newObjectToolButton->setEnabled(!m_readOnly);
+//removed          m_newObjectMenu->setEnabled(!m_readOnly);
+//removed          m_newObjectToolButton->setEnabled(!m_readOnly);
         }
-      }*/
+      }
 }
 
 bool KexiBrowser::isReadOnly() const
@@ -894,8 +891,8 @@ void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
             && partItem && part && (part->supportedViewModes() & Kexi::TextViewMode)) {
         addAction("editText_object");
     }
-    if (addAction("new_object"))
-        addSeparator();
+//    if (addAction("new_object"))
+//        addSeparator();
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
     //todo plugSharedAction("edit_cut", m_itemMenu);
@@ -934,18 +931,17 @@ KexiGroupMenu::~KexiGroupMenu()
 {
 }
 
-#if 0 //unused
+//#if 0 //unused
 void KexiGroupMenu::update(KexiPart::Info* partInfo)
 {
     clear();
-    addTitle(KIcon(partInfo->itemIcon()), partInfo->groupName());
+//not needed    addTitle(KIcon(partInfo->itemIcon()), partInfo->groupName());
     addAction("new_object");
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 // addSeparator();
 // qobject_cast<KexiBrowser*>(parent())->plugSharedAction("edit_paste", this);
 #endif
 }
-#endif
 
 #include "kexibrowser.moc"
 #include "kexibrowser_p.moc"
