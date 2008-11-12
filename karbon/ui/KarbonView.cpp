@@ -928,22 +928,22 @@ void KarbonView::initActions()
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    KAction *actionBringToFront  = new KAction(KIcon("object-arrange-front"), i18n("Bring to &Front"), this);
+    KAction *actionBringToFront  = new KAction(KIcon("object-order-front"), i18n("Bring to &Front"), this);
     actionCollection()->addAction("object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction *actionRaise  = new KAction(KIcon("object-arrange-raise"), i18n("&Raise"), this);
+    KAction *actionRaise  = new KAction(KIcon("object-order-raise"), i18n("&Raise"), this);
     actionCollection()->addAction("object_move_up", actionRaise );
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction *actionLower  = new KAction(KIcon("object-arrange-lower"), i18nc("Lower selected shapes", "&Lower"), this);
+    KAction *actionLower  = new KAction(KIcon("object-order-lower"), i18nc("Lower selected shapes", "&Lower"), this);
     actionCollection()->addAction("object_move_down", actionLower );
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction *actionSendToBack  = new KAction(KIcon("object-arrange-back"), i18n("Send to &Back"), this);
+    KAction *actionSendToBack  = new KAction(KIcon("object-order-back"), i18n("Send to &Back"), this);
     actionCollection()->addAction("object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
@@ -1030,12 +1030,12 @@ void KarbonView::initActions()
     d->snapGridAction->setToolTip(i18n( "Snaps to grid"));
     connect(d->snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
 
-    d->groupObjects  = new KAction(KIcon("group"), i18n("&Group Objects"), this);
+    d->groupObjects  = new KAction(KIcon("object-group"), i18n("&Group Objects"), this);
     actionCollection()->addAction("selection_group", d->groupObjects );
     d->groupObjects->setShortcut(QKeySequence("Ctrl+G"));
     connect(d->groupObjects, SIGNAL(triggered()), this, SLOT(groupSelection()));
 
-    d->ungroupObjects  = new KAction(KIcon("ungroup"), i18n("&Ungroup Objects"), this);
+    d->ungroupObjects  = new KAction(KIcon("object-ungroup"), i18n("&Ungroup Objects"), this);
     actionCollection()->addAction("selection_ungroup", d->ungroupObjects );
     d->ungroupObjects->setShortcut(QKeySequence("Ctrl+Shift+G"));
     connect(d->ungroupObjects, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
