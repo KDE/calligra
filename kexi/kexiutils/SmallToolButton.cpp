@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,8 +43,8 @@ public:
     }
 
     QPointer<QAction> action;
-bool enableSlotButtonToggled : 1;
-bool enableSlotActionToggled : 1;
+    bool enableSlotButtonToggled : 1;
+    bool enableSlotActionToggled : 1;
 };
 
 //--------------------------------
@@ -144,14 +144,19 @@ void KexiSmallToolButton::setToolButtonStyle(Qt::ToolButtonStyle style)
 
 void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
 {
-    int width = 0;
+    int width;
+    const bool fixWidth = style()->inherits("QWindowsStyle");
     if (text.isEmpty() || toolButtonStyle() == Qt::ToolButtonIconOnly) {
-        width = 10;
-//  setToolButtonStyle(Qt::ToolButtonIconOnly);
+        if (fixWidth) {
+            width = 10;
+        }
     } else {
-        QFont f(KGlobalSettings::toolBarFont());
-        f.setPixelSize(KexiUtils::smallFont().pixelSize());
-        width += QFontMetrics(f).width(text + " ");
+        if (fixWidth) {
+            QString text2( text + " " );
+            if (d->action && d->action->isCheckable())
+                text2 += "   ";
+            width = fontMetrics().width(text2);
+        }
         if (toolButtonStyle() != Qt::ToolButtonTextOnly)
             QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         QToolButton::setText(text);
@@ -161,12 +166,16 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
     if (toolButtonStyle() == Qt::ToolButtonTextOnly) {
         QToolButton::setIcon(QIcon());
     } else if (!icon.isNull()) {
-        width += IconSize(KIconLoader::Small);
+        if (fixWidth) {
+            width = IconSize(KIconLoader::Small);
+        }
         QToolButton::setIcon(icon);
     }
-    QStyleOption opt;
-    width += style()->pixelMetric(QStyle::PM_ButtonMargin, &opt, this);
-    //setFixedWidth( width );
+    if (fixWidth) {
+        QStyleOption opt;
+        width += style()->pixelMetric(QStyle::PM_ButtonMargin, &opt, this);
+        setFixedWidth( width );
+    }
 }
 
 QSize KexiSmallToolButton::sizeHint() const
