@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>454</width>
+    <width>511</width>
     <height>306</height>
    </rect>
   </property>
@@ -20,17 +20,9 @@
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="completionTab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>446</width>
-        <height>275</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Completion</string>
       </attribute>
@@ -55,7 +47,11 @@
         </widget>
        </item>
        <item row="0" column="1" >
-        <widget class="QDateTimeEdit" name="startTime" />
+        <widget class="QDateTimeEdit" name="startTime" >
+         <property name="calendarPopup" >
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="0" column="2" >
         <widget class="QCheckBox" name="finished" >
@@ -68,7 +64,11 @@
         </widget>
        </item>
        <item row="0" column="3" >
-        <widget class="QDateTimeEdit" name="finishTime" />
+        <widget class="QDateTimeEdit" name="finishTime" >
+         <property name="calendarPopup" >
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item row="0" column="4" >
         <spacer>
@@ -139,14 +139,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="usedEffortTab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>446</width>
-        <height>275</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Per Resource</string>
       </attribute>
@@ -230,14 +222,6 @@
       </layout>
      </widget>
      <widget class="QWidget" name="optionsTab" >
-      <property name="geometry" >
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>446</width>
-        <height>275</height>
-       </rect>
-      </property>
       <attribute name="title" >
        <string>Mode</string>
       </attribute>

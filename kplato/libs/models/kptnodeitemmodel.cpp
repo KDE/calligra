@@ -1978,6 +1978,11 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                     case NodeModel::NodeActualStart:
                         flags |= Qt::ItemIsEditable;
                         break;
+                    case NodeModel::NodeActualFinish:
+                        if ( t->type() == Node::Type_Milestone ) {
+                            flags |= Qt::ItemIsEditable;
+                        }
+                        break;
                     default: break;
                 }
             } else if ( ! t->completion().isFinished() ) {
@@ -2486,6 +2491,14 @@ bool NodeItemModel::setStartedTime( Node *node, const QVariant &value, int role 
                 m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
             }
             m->addCommand( new ModifyCompletionStartTimeCmd( t->completion(), value.toDateTime() ) );
+            if ( t->type() == Node::Type_Milestone ) {
+                m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
+                m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
+                if ( t->completion().percentFinished() < 100 ) {
+                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                }
+            }
             emit executeCommand( m );
             return true;
         }
@@ -2504,8 +2517,16 @@ bool NodeItemModel::setFinishedTime( Node *node, const QVariant &value, int role
             MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
             if ( ! t->completion().isFinished() ) {
                 m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
+                if ( t->completion().percentFinished() < 100 ) {
+                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                }
             }
             m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
+            if ( t->type() == Node::Type_Milestone ) {
+                m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
+                m->addCommand( new ModifyCompletionStartTimeCmd( t->completion(), value.toDateTime() ) );
+            }
             emit executeCommand( m );
             return true;
         }

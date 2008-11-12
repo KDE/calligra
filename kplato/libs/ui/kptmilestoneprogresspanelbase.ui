@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
-    <height>120</height>
+    <width>321</width>
+    <height>90</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>MilestoneProgressPanelBase</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>4</number>
+   </property>
+   <property name="margin" >
+    <number>0</number>
    </property>
    <item>
     <widget class="QCheckBox" name="finished" >
@@ -28,14 +28,9 @@
     </widget>
    </item>
    <item>
-    <widget class="KDateTimeWidget" native="1" name="finishTime" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+    <widget class="QDateTimeEdit" name="finishTime" >
+     <property name="calendarPopup" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -47,7 +42,7 @@
      <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>321</width>
        <height>31</height>
@@ -59,14 +54,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>KDateTimeWidget</class>
-   <extends>QWidget</extends>
-   <header>kdatetimewidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <includes>
   <include location="local" >kdatetimewidget.h</include>
   <include location="local" >kdatewidget.h</include>
