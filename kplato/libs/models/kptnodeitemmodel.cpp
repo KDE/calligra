@@ -1178,9 +1178,9 @@ QVariant NodeModel::plannedEffortTo( const Node *node, int role ) const
     KLocale *l = KGlobal::locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatNumber( node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 );
+            return node->plannedEffortTo( m_now, id() ).format();
         case Qt::ToolTipRole:
-            return i18n( "Planned effort until %1: %2", l->formatDate( m_now ), l->formatNumber( node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 ) );
+            return i18n( "Planned effort until %1: %2", l->formatDate( m_now ), node->plannedEffortTo( m_now, id() ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h );
         case Role::DurationUnit:
@@ -1197,10 +1197,10 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
     KLocale *l = KGlobal::locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 );
+            return node->actualEffortTo( m_now ).format();
         case Qt::ToolTipRole:
             //kDebug()<<m_now<<node;
-            return i18n( "Actual effort used up to %1: %2", l->formatDate( m_now ), l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 ) );
+            return i18n( "Actual effort used up to %1: %2", l->formatDate( m_now ), node->actualEffortTo( m_now ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
         case Role::DurationUnit:
@@ -1218,14 +1218,14 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
         case Qt::DisplayRole: {
             const Task *t = dynamic_cast<const Task*>( node );
             if ( t ) {
-                return KGlobal::locale()->formatNumber( t->completion().remainingEffort().toDouble( Duration::Unit_h ), 1 );
+                return t->completion().remainingEffort().format();
             }
             break;
         }
         case Qt::ToolTipRole: {
             const Task *t = dynamic_cast<const Task*>( node );
             if ( t ) {
-                return i18n( "Remaining effort: %1", KGlobal::locale()->formatNumber( t->completion().remainingEffort().toDouble( Duration::Unit_h ), 1 ) );
+                return i18n( "Remaining effort: %1", t->completion().remainingEffort().toString( Duration::Format_i18nHour ) );
             }
             break;
         }

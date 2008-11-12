@@ -26,6 +26,8 @@
 #include <qglobal.h>
 #include <QString>
 
+class KLocale;
+
 /// The main namespace.
 namespace KPlato
 {
@@ -124,6 +126,8 @@ public:
     /// Subtract duration with duration @p d
     Duration &operator-=(const Duration &d) {subtract(d); return *this; }
 
+    /// Format duration into a string with @p unit and @p presition using @p locale. If @p locale == 0, uses KGLobal::locale.
+    QString format( Unit unit = Unit_h, int presition = 1, const KLocale *locale = 0 ) const;
     /// Convert duration to a string with @p format
     QString toString(Format format = Format_DayTime) const;
     /// Create a duration from string @p s with @p format
