@@ -167,7 +167,7 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
         QToolButton::setIcon(QIcon());
     } else if (!icon.isNull()) {
         if (fixWidth) {
-            width = IconSize(KIconLoader::Small);
+            width += IconSize(KIconLoader::Small);
         }
         QToolButton::setIcon(icon);
     }
