@@ -30,6 +30,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QToolTip>
+#include <QtGui/QApplication>
 
 #include <KLocale>
 #include <KIconLoader>
@@ -339,23 +340,21 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
 
     d->set = set;
-/*not needed 
     if (d->set) {
+/*not needed 
         //receive property changes
         connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
-        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));*/
+//NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
-    }*/
+    }
 
 //    fill();
     delete d->model;
     d->model = d->set ? new EditorDataModel(*d->set, this) : 0;
-    if (d->model) {
-        setModel( d->model );
-    }
+    setModel( d->model );
 
     emit propertySetChanged(d->set);
 
@@ -377,6 +376,13 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 //   ensureItemVisible(item);
         }
     }
+}
+
+void EditorView::slotSetWillBeDeleted()
+{
+//    qApp->processEvents();
+    changeSet(0, QByteArray());
+//    clearSelection();
 }
 
 void EditorView::setAutoSync(bool enable)

@@ -129,6 +129,9 @@ protected slots:
     virtual void currentChanged( const QModelIndex & current, const QModelIndex & previous );
     virtual void commitData( QWidget * editor );
 
+    /*! Called when current property set is about to be destroyed. */
+    void slotSetWillBeDeleted();
+
 private:
     /*! Used by changeSet(). */
     void changeSetInternal(Set *set, SetOptions options, const QByteArray& propertyToSelect);
