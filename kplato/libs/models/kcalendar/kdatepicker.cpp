@@ -219,7 +219,7 @@ void KDatePicker::init( const QDate &dt )
   d->selectWeek->installEventFilter( this );
   
   d->todayButton = new QPushButton(this);
-  d->todayButton->setIcon(KIcon("calendar-today"));
+  d->todayButton->setIcon(KIcon("go-jump-today"));
   d->todayButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
   d->todayButton->setMaximumSize( QSize( 25, 25 ) );
   d->todayButton->installEventFilter( this );
