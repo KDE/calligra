@@ -4325,14 +4325,16 @@ void KexiMainWindow::acceptPropertySetEditing()
 void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         bool preservePrevSelection, const QByteArray& propertyToSelect)
 {
-    kDebug() << "KexiMainWindow::propertySetSwitched() currentWindow(): "
-    << (currentWindow() ? currentWindow()->windowTitle() : QString("NULL")) << " window: " << (window ? window->windowTitle() : QString("NULL"));
-    if (currentWindow() != window) {
+    KexiWindow* _currentWindow = currentWindow();
+    kDebug() << "currentWindow(): "
+    << (_currentWindow ? _currentWindow->windowTitle() : QString("NULL"))
+    << " window: " << (window ? window->windowTitle() : QString("NULL"));
+    if (_currentWindow && _currentWindow != window) {
         d->propBuffer = 0; //we'll need to move to another prop. set
         return;
     }
     if (d->propEditor) {
-        KoProperty::Set *newBuf = currentWindow() ? currentWindow()->propertySet() : 0;
+        KoProperty::Set *newBuf = _currentWindow ? _currentWindow->propertySet() : 0;
         if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
             d->propBuffer = newBuf;
             if (preservePrevSelection) {
@@ -4345,6 +4347,9 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
                     d->propEditor->editor()->changeSet(d->propBuffer, propertyToSelect);
                 }
             }
+        }
+        if (newBuf && _currentWindow->currentViewMode() == Kexi::DesignViewMode) {
+            d->propEditorDockWidget->setVisible(true);
         }
     }
 }
