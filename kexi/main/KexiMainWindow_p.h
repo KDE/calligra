@@ -150,6 +150,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 
     tbar = new KToolBar(this);
     addTab(tbar, i18n("Project"));
+    setCurrentWidget(tbar); // the default
     addAction(tbar, "project_new");
     addAction(tbar, "project_open");
     addAction(tbar, "project_print");
