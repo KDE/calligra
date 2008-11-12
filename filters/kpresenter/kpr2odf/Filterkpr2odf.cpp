@@ -572,7 +572,23 @@ void Filterkpr2odf::appendRectangle( KoXmlWriter* content, const KoXmlElement& o
     content->startElement( "draw:rect" );
 
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
     set2DGeometry( content, objectElement );
+
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    //<RNDS x="75" y="75"/>
+    const KoXmlElement rnds = objectElement.namedItem( "RNDS" ).toElement();
+    if ( !rnds.isNull() ) {
+        if ( rnds.hasAttribute( "x" ) && rnds.hasAttribute( "y" ) ) {
+            int x = rnds.attribute( "x" ).toInt();
+            int y = rnds.attribute( "y" ).toInt();
+            content->addAttribute( "svg:rx", x / 200.0 * width );
+            content->addAttribute( "svg:ry", y / 200.0 * height );
+        }
+    }
 
     content->endElement();//draw:rect
 }
