@@ -750,12 +750,13 @@ protected:
     virtual void vScrollBarValueChanged(int v);
 
     /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
-    virtual void vScrollBarSliderReleased();
+//replaced by QToolTip    virtual void vScrollBarSliderReleased();
 
-    /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
+    /* Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
      m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
      else the m_scrollBarTipTimerCnt is just set to 0.*/
-    virtual void scrollBarTipTimeout();
+/*replaced by QToolTip
+    virtual void scrollBarTipTimeout();*/
 
     /*! Shows error message box suitable for \a resultInfo. This can be "sorry" or "detailedSorry"
      message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true.
@@ -911,10 +912,11 @@ bool m_vScrollBarValueChanged_enabled : 1;
     /*! True, if vscrollbar tooltips are enabled (true by default). */
 bool m_scrollbarToolTipsEnabled : 1;
 
+/*replaced by QToolTip
     QLabel* m_scrollBarTip; //!< scrollbar tooltip
     QTimer m_scrollBarTipTimer; //!< scrollbar tooltip's timer
     uint m_scrollBarTipTimerCnt; //!< helper for timeout counting (scrollbar tooltip)
-
+*/
     //! Used to mark recently found value
     class PositionOfValue
     {

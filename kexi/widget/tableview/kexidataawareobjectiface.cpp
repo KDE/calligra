@@ -79,12 +79,13 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_verticalHeaderAlreadyAdded = false;
     m_vScrollBarValueChanged_enabled = true;
     m_scrollbarToolTipsEnabled = true;
-    m_scrollBarTipTimerCnt = 0;
-    m_scrollBarTipTimer.setSingleShot(true);
-    m_scrollBarTip = 0;
+//    m_scrollBarTipTimerCnt = 0;
+//    m_scrollBarTipTimer.setSingleShot(true);
+//    m_scrollBarTip = 0;
     m_recentSearchDirection = KexiSearchAndReplaceViewInterface::Options::DefaultSearchDirection;
 
     // setup scrollbar tooltip and related members
+/*replaced by QToolTip
     m_scrollBarTip = new QLabel();
     m_scrollBarTip->setObjectName("vScrollBarToolTip");
     m_scrollBarTip->setWindowFlags(
@@ -96,7 +97,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
     m_scrollBarTip->setAlignment(Qt::AlignCenter);
     m_scrollBarTip->setFrameStyle(QFrame::Plain | QFrame::Box);
     m_scrollBarTip->setLineWidth(1);
-
+ */
     clearVariables();
 }
 
@@ -104,7 +105,7 @@ KexiDataAwareObjectInterface::~KexiDataAwareObjectInterface()
 {
     delete m_insertItem;
 // delete m_rowEditBuffer;
-    delete m_scrollBarTip;
+/*replaced by QToolTip    delete m_scrollBarTip;*/
     //we cannot delete m_data here... subclasses should do this
 }
 
@@ -181,12 +182,12 @@ void KexiDataAwareObjectInterface::setData(KexiTableViewData *data, bool owner)
             QObject::connect(m_data, SIGNAL(rowRepaintRequested(KexiDB::RecordData&)),
                              thisObject, SLOT(slotRowRepaintRequested(KexiDB::RecordData&)));
             // setup scrollbar's tooltip
-            QObject::connect(verticalScrollBar(), SIGNAL(sliderReleased()),
-                             thisObject, SLOT(vScrollBarSliderReleased()));
+//            QObject::connect(verticalScrollBar(), SIGNAL(sliderReleased()),
+//                             thisObject, SLOT(vScrollBarSliderReleased()));
             QObject::connect(verticalScrollBar(), SIGNAL(valueChanged(int)),
                              thisObject, SLOT(vScrollBarValueChanged(int)));
-            QObject::connect(&m_scrollBarTipTimer, SIGNAL(timeout()),
-                             thisObject, SLOT(scrollBarTipTimeout()));
+/*replaced by QToolTip            QObject::connect(&m_scrollBarTipTimer, SIGNAL(timeout()),
+                             thisObject, SLOT(scrollBarTipTimeout()));*/
         }
     }
 
@@ -1703,8 +1704,26 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
     if (!m_vScrollBarValueChanged_enabled)
         return;
 
-    if (m_scrollbarToolTipsEnabled) {
+    if (m_scrollbarToolTipsEnabled && verticalScrollBar()->isSliderDown()) {
+        QWidget* thisWidget = dynamic_cast<QWidget*>(this);
+//        const QRect r( verticalScrollBar()->sliderRect() );
+        const int row = lastVisibleRow() + 1;
+        const QString toolTipText( i18n("Row: %1", row) );
+        QToolTip::showText(
+            QPoint(
+                thisWidget->mapToGlobal(verticalScrollBar()->pos()).x()
+                    - thisWidget->fontMetrics().width(toolTipText+"    "),
+                QCursor::pos().y() ),
+//                +QPoint(0,verticalScrollBar()->height() * verticalScrollBar()->value()/verticalScrollBar()->maximum()),
+//                +QPoint(0,verticalScrollBar()->sliderPosition()), 
+//                + QPoint(- m_scrollBarTip->width() - 5,
+//                 r.height() / 2 - m_scrollBarTip->height() / 2),
+            toolTipText,
+            0, 
+            QRect()
+        );
 //  const QRect r( verticalScrollBar()->sliderRect() );
+/*replaced by QToolTip
         QStyleOptionComplex styleOption;
         styleOption.initFrom(verticalScrollBar());
 #ifdef __GNUC__
@@ -1713,9 +1732,9 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 #pragma WARNING( ported but not tested KexiDataAwareObjectInterface::vScrollBarValueChanged() )
 #endif
         QRect r;
-        /*TODO  const QRect r( verticalScrollBar()->style()->subControlRect(
-              QStyle::CC_ScrollBar, &styleOption,
-              QStyle::SC_ScrollBarSlider, verticalScrollBar()) ); */
+        //TODO  const QRect r( verticalScrollBar()->style()->subControlRect(
+        //      QStyle::CC_ScrollBar, &styleOption,
+        //      QStyle::SC_ScrollBarSlider, verticalScrollBar()) ); 
 
         const int row = lastVisibleRow() + 1;
         if (row <= 0) {
@@ -1733,8 +1752,8 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
         if (verticalScrollBar()->isSliderDown()) {
             kDebug(44021) << "  isSliderDown()  ";
             m_scrollBarTipTimer.stop();
-            m_scrollBarTip->show();
-            m_scrollBarTip->raise();
+            //m_scrollBarTip->show();
+            //m_scrollBarTip->raise();
         } else {
             m_scrollBarTipTimerCnt++;
             if (m_scrollBarTipTimerCnt > 4) {
@@ -1743,7 +1762,7 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
                 m_scrollBarTip->raise();
                 m_scrollBarTipTimer.start(500);
             }
-        }
+        }*/
     }
     //update bottom view region
     /* if (m_navPanel && (contentsHeight() - contentsY() - clipper()->height()) <= qMax(d->rowHeight,m_navPanel->height())) {
@@ -1769,12 +1788,15 @@ void KexiDataAwareObjectInterface::setScrollbarToolTipsEnabled(bool set)
     m_scrollbarToolTipsEnabled = set;
 }
 
+#if 0
 void KexiDataAwareObjectInterface::vScrollBarSliderReleased()
 {
     kDebug(44021) << "vScrollBarSliderReleased()";
-    m_scrollBarTip->hide();
+/*replaced by QToolTip    m_scrollBarTip->hide();*/
 }
+#endif
 
+/*replaced by QToolTip
 void KexiDataAwareObjectInterface::scrollBarTipTimeout()
 {
     if (m_scrollBarTip->isVisible()) {
@@ -1787,13 +1809,13 @@ void KexiDataAwareObjectInterface::scrollBarTipTimeout()
         m_scrollBarTip->hide();
     }
     m_scrollBarTipTimerCnt = 0;
-}
+}*/
 
 void KexiDataAwareObjectInterface::focusOutEvent(QFocusEvent* e)
 {
     Q_UNUSED(e);
-    m_scrollBarTipTimer.stop();
-    m_scrollBarTip->hide();
+/*replaced by QToolTip    m_scrollBarTipTimer.stop();
+    m_scrollBarTip->hide();*/
 
     updateCell(m_curRow, m_curCol);
 }

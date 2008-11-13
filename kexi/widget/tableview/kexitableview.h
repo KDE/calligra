@@ -485,10 +485,11 @@ protected slots:
         KexiDataAwareObjectInterface::vScrollBarValueChanged(v);
     }
 
+#if 0 // 2.0
     /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
-    virtual void vScrollBarSliderReleased() {
+/*replaced by QToolTip    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();
-    }
+    }*/
 
     /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
      m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
@@ -496,7 +497,7 @@ protected slots:
     virtual void scrollBarTipTimeout() {
         KexiDataAwareObjectInterface::scrollBarTipTimeout();
     }
-
+#endif
 protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
