@@ -221,6 +221,7 @@ Name[sv]=Tolkning misslyckades
 Name[tr]=Ayrıştırma başarısız oldu
 Name[uk]=Обробка зазнала невдачі
 Name[x-test]=xxParsing failedxx
+Name[zh_CN]=分析失败
 Name[zh_TW]=剖析失敗
 Comment=Parsing of a cell's formula failed
 Comment[ca]=Ha fallat l'anàlisi d'una fórmula de la cel·la

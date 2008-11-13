@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Calendar Tool
+Name[ca]=Eina de calendari
 Name[de]=Kalender-Werkzeug
 Name[el]=Εργαλείο ημερολογίου
 Name[et]=Kalendritööriist
@@ -16,8 +17,10 @@ Name[sv]=Kalenderverktyg
 Name[tr]=Takvim Aracı
 Name[uk]=Інструмент календаря
 Name[x-test]=xxCalendar Toolxx
+Name[zh_CN]=日历工具
 Name[zh_TW]=行事曆工具
 Comment=Inserts a calendar into a cell range.
+Comment[ca]=Insereix un calendari a un interval de cel·la.
 Comment[de]=Fügt einen Kalender in einen Zellbereich ein.
 Comment[el]=Εισαγωγή ενός ημερολογίου σε ένα εύρος κελιών.
 Comment[et]=Kalendri lisamine lahtrivahemikku.

@@ -3,6 +3,7 @@ Type=Service
 Name=Oracle
 Name[x-test]=xxOraclexx
 Comment=Kexi database driver for accessing Oracle servers
+Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors Oracle
 Comment[de]=Kexi-Datenbanktreiber für Zugriff auf Oracle-Server
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές Oracle
 Comment[et]=Kexi andmebaasidraiver Oracle serverite kasutamiseks

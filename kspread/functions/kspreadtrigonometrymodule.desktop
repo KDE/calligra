@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Trigonometry Functions
+Name[ca]=Funcions trigonomètriques
 Name[de]=Trigonometrie-Funktionen
 Name[el]=Συναρτήσεις τριγωνομετρίας
 Name[et]=Trigonomeetriafunktsioonid
@@ -16,6 +17,7 @@ Name[sv]=Trigonometriska funktioner
 Name[tr]=Trigonometrik Fonksiyonlar
 Name[uk]=Тригонометричні функції
 Name[x-test]=xxTrigonometry Functionsxx
+Name[zh_CN]=三角函数
 Name[zh_TW]=三角函數
 Comment=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 Comment[x-test]=xxACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANHxx
