@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,6 +71,34 @@ protected:
     QLabel *m_objectIconLabel, *m_objectNameLabel;
 };
 
+//! @short A base class for propety pane's tabs.
+/*! Defines vertical layout and offers info label on the top. 
+ Use layout() to access the QVBoxLayout object.
+*/
+class KEXIEXTWIDGETS_EXPORT KexiPropertyPaneViewBase : public QWidget
+{
+    Q_OBJECT
+
+public:
+    KexiPropertyPaneViewBase(QWidget* parent);
+    virtual ~KexiPropertyPaneViewBase();
+
+    KexiObjectInfoLabel *infoLabel() const;
+
+    /*! Helper function. Updates \a infoLabel widget by reusing properties provided
+     by property set \a set.
+     Read documentation of KexiPropertyEditorView class for information about accepted properties.
+     If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed
+     (without icon or any other additional part).
+     If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes
+     hidden. */
+    void updateInfoLabelForPropertySet(
+        KoProperty::Set* set, const QString& textToDisplayForNullSet = QString());
+protected:
+    class Private;
+    Private * const d;
+};
+
 //! @short The container (acts as a dock window) for KexiPropertyEditor.
 /*! The widget displays KexiObjectInfoLabel on its top, to show user what
  object the properties belong to. Read KexiObjectInfoLabel documentation for
@@ -85,24 +113,13 @@ protected:
    property instead of "name" - this can be usable when we know that "caption" properties
    are available for a given type of objects (this is the case for Table Designer fields)
 */
-class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget
+class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public KexiPropertyPaneViewBase
 {
     Q_OBJECT
 
 public:
     KexiPropertyEditorView(QWidget* parent);
     virtual ~KexiPropertyEditorView();
-
-    /*! Helper function. Updates \a infoLabel widget by reusing properties provided
-     by property set \a set.
-     Read documentation of KexiPropertyEditorView class for information about accepted properties.
-     If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed
-     (without icon or any other additional part).
-     If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes
-     hidden. */
-    static void updateInfoLabelForPropertySet(
-        KexiObjectInfoLabel *infoLabel, KoProperty::Set* set,
-        const QString& textToDisplayForNullSet = QString());
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;

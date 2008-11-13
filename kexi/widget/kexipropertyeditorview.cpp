@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,12 +35,14 @@ KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
         : QWidget(parent)
 {
     QHBoxLayout *hlyr = new QHBoxLayout(this);
+    hlyr->setContentsMargins(0, 0, 0, 0);
+    hlyr->setSpacing(2);
     m_objectIconLabel = new QLabel(this);
     m_objectIconLabel->setMargin(2);
     setFixedHeight(IconSize(KIconLoader::Small) + 2 + 2);
     hlyr->addWidget(m_objectIconLabel);
     m_objectNameLabel = new QLabel(this);
-    m_objectNameLabel->setMargin(2);
+//    m_objectNameLabel->setMargin(2);
     m_objectNameLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     hlyr->addWidget(m_objectNameLabel);
 }
@@ -89,56 +91,109 @@ void KexiObjectInfoLabel::setBuddy(QWidget * buddy)
 //------------------------------
 
 //! @internal
+class KexiPropertyPaneViewBase::Private
+{
+public:
+    Private() {
+    }
+    KexiObjectInfoLabel *infoLabel;
+};
+
+KexiPropertyPaneViewBase::KexiPropertyPaneViewBase(QWidget* parent)
+        : QWidget(parent)
+        , d(new Private())
+{
+    //TODO: set a nice icon
+//    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
+
+    QVBoxLayout *lyr = new QVBoxLayout(this);
+    lyr->setContentsMargins(2, 2, 2, 2);
+    lyr->setSpacing(2);
+
+    //add object class info
+    d->infoLabel = new KexiObjectInfoLabel(this);
+    d->infoLabel->setObjectName("KexiObjectInfoLabel");
+    lyr->addWidget(d->infoLabel);
+}
+
+KexiPropertyPaneViewBase::~KexiPropertyPaneViewBase()
+{
+    delete d;
+}
+
+KexiObjectInfoLabel *KexiPropertyPaneViewBase::infoLabel() const
+{
+    return d->infoLabel;
+}
+
+void KexiPropertyPaneViewBase::updateInfoLabelForPropertySet(
+        KoProperty::Set* set, const QString& textToDisplayForNullSet)
+{
+    QString className, iconName, objectName;
+    if (set) {
+        if (set->contains("this:classString"))
+            className = (*set)["this:classString"].value().toString();
+        if (set->contains("this:iconName"))
+            iconName = (*set)["this:iconName"].value().toString();
+        const bool useCaptionAsObjectName = set->contains("this:useCaptionAsObjectName")
+                                            && (*set)["this:useCaptionAsObjectName"].value().toBool();
+        if (set->contains(useCaptionAsObjectName ? "caption" : "name"))
+            objectName = (*set)[useCaptionAsObjectName ? "caption" : "name"].value().toString();
+        if (objectName.isEmpty() && useCaptionAsObjectName && set->contains("name")) // get name if there is no caption
+            objectName = (*set)["name"].value().toString();
+    }
+    if (!set || objectName.isEmpty()) {
+        objectName = textToDisplayForNullSet;
+        className.clear();
+        iconName.clear();
+    }
+
+    if (className.isEmpty() && objectName.isEmpty())
+        d->infoLabel->hide();
+    else
+        d->infoLabel->show();
+
+    if (d->infoLabel->objectClassName() == className
+            && d->infoLabel->objectClassIcon() == iconName
+            && d->infoLabel->objectName() == objectName)
+        return;
+
+    d->infoLabel->setObjectClassIcon(iconName);
+    d->infoLabel->setObjectClassName(className);
+    d->infoLabel->setObjectName(objectName);
+}
+
+//------------------------------
+
+//! @internal
 class KexiPropertyEditorView::Private
 {
 public:
     Private() {
     }
     KoProperty::EditorView *editor;
-//  QLabel *objectIcon;
-//  QString iconName;
-//  QLabel *objectClassName;
-    KexiObjectInfoLabel *objectInfoLabel;
 };
 
 //------------------------------
 
 KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
-        : QWidget(parent)
+        : KexiPropertyPaneViewBase(parent)
         , d(new Private())
 {
     setObjectName("KexiPropertyEditorView");
     setWindowTitle(i18n("Properties"));
     //TODO: set a nice icon
-    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
-
-    QVBoxLayout *lyr = new QVBoxLayout(this);
-
-    //add object class info
-    d->objectInfoLabel = new KexiObjectInfoLabel(this);
-    lyr->addWidget(d->objectInfoLabel);
-
-    /*
-    QHBoxLayout *vlyr = new QHBoxLayout(lyr);
-    d->objectIcon = new QLabel(this);
-    d->objectIcon->setMargin(2);
-    d->objectIcon->setFixedHeight( IconSize(KIconLoader::Small) + 2 + 2 );
-    vlyr->addWidget(d->objectIcon);
-    d->objectClassName = new QLabel(this);
-    d->objectClassName->setMargin(2);
-    d->objectClassName->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-    vlyr->addWidget(d->objectClassName);*/
+//    setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
     d->editor = new KoProperty::EditorView(this); //, true /*AutoSync*/, "propeditor");
-    lyr->addWidget(d->editor);
+    layout()->addWidget(d->editor);
     setFocusProxy(d->editor);
-    d->objectInfoLabel->setBuddy(d->editor);
+    infoLabel()->setBuddy(d->editor);
     setFocusPolicy(Qt::WheelFocus);
 
     connect(d->editor, SIGNAL(propertySetChanged(KoProperty::Set*)),
             this, SLOT(slotPropertySetChanged(KoProperty::Set*)));
 
-// d->iconName = "dummy";
     slotPropertySetChanged(0);
 }
 
@@ -172,54 +227,10 @@ KoProperty::EditorView *KexiPropertyEditorView::editor() const
     return d->editor;
 }
 
-/*! Updates \a infoLabel widget by reusing properties provided by property set \a set.
- Read documentation of KexiPropertyEditorView class for information about accepted properties.
- If \a set is 0 and \a textToDisplayForNullSet string is not empty, this string is displayed
- (without icon or any other additional part).
- If \a set is 0 and \a textToDisplayForNullSet string is empty, the \a infoLabel widget becomes
- hidden.
-*/
-void KexiPropertyEditorView::updateInfoLabelForPropertySet(KexiObjectInfoLabel *infoLabel,
-        KoProperty::Set* set, const QString& textToDisplayForNullSet)
-{
-    QString className, iconName, objectName;
-    if (set) {
-        if (set->contains("this:classString"))
-            className = (*set)["this:classString"].value().toString();
-        if (set->contains("this:iconName"))
-            iconName = (*set)["this:iconName"].value().toString();
-        const bool useCaptionAsObjectName = set->contains("this:useCaptionAsObjectName")
-                                            && (*set)["this:useCaptionAsObjectName"].value().toBool();
-        if (set->contains(useCaptionAsObjectName ? "caption" : "name"))
-            objectName = (*set)[useCaptionAsObjectName ? "caption" : "name"].value().toString();
-        if (objectName.isEmpty() && useCaptionAsObjectName && set->contains("name")) // get name if there is no caption
-            objectName = (*set)["name"].value().toString();
-    }
-    if (!set || objectName.isEmpty()) {
-        objectName = textToDisplayForNullSet;
-        className.clear();
-        iconName.clear();
-    }
-
-    if (className.isEmpty() && objectName.isEmpty())
-        infoLabel->hide();
-    else
-        infoLabel->show();
-
-    if (infoLabel->objectClassName() == className
-            && infoLabel->objectClassIcon() == iconName
-            && infoLabel->objectName() == objectName)
-        return;
-
-    infoLabel->setObjectClassIcon(iconName);
-    infoLabel->setObjectClassName(className);
-    infoLabel->setObjectName(objectName);
-}
-
 void KexiPropertyEditorView::slotPropertySetChanged(KoProperty::Set* set)
 {
     //update information about selected object
-    updateInfoLabelForPropertySet(d->objectInfoLabel, set);
+    updateInfoLabelForPropertySet(set);
     d->editor->setEnabled(set);
 }
 

@@ -224,9 +224,9 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     if (!d->lookupColumnPage) {
         d->lookupColumnPage = new KexiLookupColumnPage(0);
         connect(d->lookupColumnPage,
-                SIGNAL(jumpToObjectRequested(const Q3CString&, const Q3CString&)),
+                SIGNAL(jumpToObjectRequested(const QString&, const QString&)),
                 KexiMainWindowIface::global()->thisWidget(),
-                SLOT(highlightObject(const Q3CString&, const Q3CString&)));
+                SLOT(highlightObject(const QString&, const QString&)));
 
 //! @todo add "Table" tab
 

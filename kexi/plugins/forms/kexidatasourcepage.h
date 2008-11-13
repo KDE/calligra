@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,11 +19,10 @@
 #ifndef KEXIDATASOURCEPAGE_H
 #define KEXIDATASOURCEPAGE_H
 
-#include <QWidget>
+#include <widget/kexipropertyeditorview.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
 #include <koproperty/Set.h>
-#include <kexi_export.h>
 
 class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
@@ -34,7 +33,7 @@ class QToolButton;
 class QLabel;
 
 //! A page within form designer's property tabbed pane, providing data source editor
-class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
+class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public KexiPropertyPaneViewBase
 {
     Q_OBJECT
 
@@ -44,9 +43,6 @@ public:
 
     KexiDataSourceComboBox* dataSourceCombo() const {
         return m_dataSourceCombo;
-    }
-    KexiObjectInfoLabel* objectInfoLabel() const {
-        return m_objectInfoLabel;
     }
 
 public slots:
@@ -92,7 +88,6 @@ protected:
     void updateSourceFieldWidgetsAvailability();
 
     KexiFieldComboBox *m_sourceFieldCombo;
-    KexiObjectInfoLabel *m_objectInfoLabel;
     KexiDataSourceComboBox* m_dataSourceCombo;
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
     *m_widgetDSLabel, *m_availableFieldsLabel,

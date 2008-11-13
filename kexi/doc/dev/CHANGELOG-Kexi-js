@@ -22,6 +22,17 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-11-13
+Property Pane
+- fixed layout, refactored object info label as KexiPropertyPaneViewBase
+  for use in custom tabs: KexiPropertyEditorView, KexiDataSourcePage
+= remove some Qt3 dependencies
+= fix layout margins
+Widgets
+= further fixes for small toolbar button width on Windows
+Table View
+= fix layout margins of the editor
+
 2008-11-12
 KoProperty2
 - unset the current property set (that is about to be deleted) from the editor
@@ -29,6 +40,7 @@ KoProperty2
 Main Window
 - display property editor after entering into the design view directly
 - tabbar: "Project" tab is active by default
+- fix placement of the statusbar
 Widgets
 - small tool button: fix width for the Windows style and substyles
 Project Navigator

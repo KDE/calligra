@@ -3982,7 +3982,7 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
 }
 
 KexiWindow *
-KexiMainWindow::openObject(const Q3CString& mimeType, const QString& name,
+KexiMainWindow::openObject(const QString& mimeType, const QString& name,
                            Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs)
 {
     KexiPart::Item *item = d->prj->itemForMimeType(mimeType, name);
@@ -4399,7 +4399,7 @@ void KexiMainWindow::slotStartFeedbackAgent()
     if (wizard->exec()) {
         KToolInvocation::invokeMailer("kexi-reports-dummy@kexi.org",
                                       QString(), QString(),
-                                      about->appName() + Q3CString(" [feedback]"),
+                                      about->appName() + QString::fromLatin1(" [feedback]"),
                                       wizard->feedbackDocument().toString(2).local8Bit());
     }
 
@@ -5080,7 +5080,7 @@ void KexiMainWindow::slotGetNewStuff()
 #endif
 }
 
-void KexiMainWindow::highlightObject(const Q3CString& mime, const Q3CString& name)
+void KexiMainWindow::highlightObject(const QString& mime, const QString& name)
 {
     slotViewNavigator();
     if (!d->prj)

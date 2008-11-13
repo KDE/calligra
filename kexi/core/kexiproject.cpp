@@ -630,7 +630,7 @@ KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
 {
     KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
     if (!dict) {
-        kexiwarn << "KexiProject::itemForMimeType() no mimetype=" << mimeType;
+        kexiwarn << "no mimetype=" << mimeType;
         return 0;
     }
     const QString nameToLower(name.toLower());
@@ -638,7 +638,7 @@ KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
         if (item->name().toLower() == nameToLower)
             return item;
     }
-    kexiwarn << "KexiProject::itemForMimeType() no name=" << name;
+    kexiwarn << "no name=" << name;
     return 0;
 }
 
@@ -714,7 +714,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
     KexiDB::MessageTitle et(this);
     KexiPart::Part *part = Kexi::partManager().partForMimeType(item.mimeType());
     if (!part) {
-        kexiwarn << "KexiProject::findPartFor() !part: " << item.mimeType();
+        kexiwarn << "!part: " << item.mimeType();
         setError(&Kexi::partManager());
     }
     return part;

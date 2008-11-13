@@ -421,7 +421,9 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
           QGridLayout *secondAnd3rdColumnGrLyr
        - kactionPageWidget contains only a QVBoxLayout and label+kactionListView
     */
-    d->glyr = new QGridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+//    d->glyr = new QGridLayout(mainWidget, 2, 2, KDialog::marginHint(), KDialog::spacingHint());
+    d->glyr = new QGridLayout(mainWidget); // 2x2
+    KexiUtils::setStandardMarginsAndSpacing(d->glyr);
     d->glyr->setRowStretch(1, 1);
 
     // 1st column: action types
@@ -442,12 +444,15 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(
     // widget stack for 2nd and 3rd column
     d->secondAnd3rdColumnStack = new QStackedWidget(mainWidget);
     d->secondAnd3rdColumnStack->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    d->glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);
+//    d->glyr->addMultiCellWidget(d->secondAnd3rdColumnStack, 0, 1, 1, 1);
+    d->glyr->addWidget(d->secondAnd3rdColumnStack, 0, 1, 2, 1);
 
     d->secondAnd3rdColumnMainWidget = new QWidget(d->secondAnd3rdColumnStack);
     d->secondAnd3rdColumnMainWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    d->secondAnd3rdColumnGrLyr = new QGridLayout(
-        d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
+//    d->secondAnd3rdColumnGrLyr = new QGridLayout(
+//        d->secondAnd3rdColumnMainWidget, 2, 2, 0, KDialog::spacingHint());
+    d->secondAnd3rdColumnGrLyr = new QGridLayout(d->secondAnd3rdColumnMainWidget);
+    KDialog::resizeLayout(d->secondAnd3rdColumnGrLyr, 0, KDialog::spacingHint());
     d->secondAnd3rdColumnGrLyr->setRowStretch(1, 2);
     d->secondAnd3rdColumnStack->addWidget(d->secondAnd3rdColumnMainWidget);
 
