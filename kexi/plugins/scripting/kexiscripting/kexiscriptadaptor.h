@@ -190,7 +190,14 @@ public Q_SLOTS:
     bool openItem(const QString& mimetype, const QString& name, const QString& viewmode = QString(), QVariantMap args = QVariantMap()) {
         bool openingCancelled;
         KexiPart::Item *item = partItem(mimeType(mimetype), name);
-        KexiWindow* window = item ? mainWindow()->openObject(item, stringToViewMode(viewmode), openingCancelled, args.isEmpty() ? 0 : &args) : 0;
+        KexiWindow* window = item 
+            ? mainWindow()->openObject(
+                item,
+                stringToViewMode(viewmode),
+                openingCancelled,
+                args.isEmpty() ? 0 : &args
+              )
+            : 0;
         return (window && ! openingCancelled);
     }
 
