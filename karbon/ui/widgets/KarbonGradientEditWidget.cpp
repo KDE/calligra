@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KarbonGradientTabWidget.h"
+#include "KarbonGradientEditWidget.h"
 #include "KarbonGradientWidget.h"
 #include "KarbonGradientHelper.h"
 
@@ -444,5 +444,5 @@ void KarbonGradientEditWidget::stopChanged()
     }
 }
 
-#include "KarbonGradientTabWidget.moc"
+#include "KarbonGradientEditWidget.moc"
 

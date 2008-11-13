@@ -21,7 +21,7 @@
 #include "KarbonGradientTool.h"
 #include "KarbonGradientEditStrategy.h"
 
-#include <KarbonGradientTabWidget.h>
+#include <KarbonGradientEditWidget.h>
 #include <KarbonCursor.h>
 #include <KarbonGradientHelper.h>
 #include <KarbonGradientItem.h>
