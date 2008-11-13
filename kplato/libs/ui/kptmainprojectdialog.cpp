@@ -33,7 +33,7 @@ MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char *na
     : KDialog( parent),
       project(p)
 {
-    setCaption( i18n("Project Settings") );
+    setWindowTitle( i18n("Project Settings") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
