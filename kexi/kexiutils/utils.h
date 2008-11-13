@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@
 
 class QColor;
 class QMetaProperty;
+class QLayout;
 class KAction;
 
 //! @short General Utils
@@ -540,7 +541,10 @@ public:
 protected:
     virtual void changeEvent(QEvent *event);
 };
-}
+
+/*! Sets KDialog::marginHint() margins and KDialog::spacingHint() spacing 
+ for the layout @a layout. */
+KEXIUTILS_EXPORT void setStandardMarginsAndSpacing(QLayout *layout);
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.
@@ -549,5 +553,6 @@ protected:
     { Q3VBoxLayout *lyr = new Q3VBoxLayout(where); \
         lyr->addWidget(what); }
 
+} //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H
