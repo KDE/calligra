@@ -26,7 +26,6 @@
 #include <qpoint.h>
 #include <qpixmapcache.h>
 #include <qtoolbutton.h>
-#include <Q3VBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>
 

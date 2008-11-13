@@ -23,15 +23,12 @@
 
 #include <qregexp.h>
 #include <qevent.h>
-#include <qlayout.h>
 #include <qtimer.h>
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <QPaintEvent>
+#include <QHBoxLayout>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -95,11 +92,12 @@ void KexiInputTableEdit::init()
 
     const bool align_right = displayedField()->isNumericType();
 
+    QHBoxLayout *lyr = 0;
     if (!align_right) {
         //create layer for internal editor
-        Q3HBoxLayout *lyr = new Q3HBoxLayout(this);
+        lyr = new QHBoxLayout(this);
         lyr->addSpacing(4);
-        lyr->setAutoAdd(true);
+//2.0        lyr->setAutoAdd(true);
     }
 
     //create internal editor
@@ -111,6 +109,8 @@ void KexiInputTableEdit::init()
       border: 1px solid %1; \
       border-radius: 0px; \
       padding: 0 0px; }").arg(focus.name()));
+    if (lyr)
+        lyr->addWidget(m_lineedit);
 
     setViewWidget(m_lineedit);
     if (align_right)

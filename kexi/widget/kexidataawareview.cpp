@@ -26,7 +26,7 @@
 #include <KActionCollection>
 
 #include <qlayout.h>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include <kmenu.h>
 
