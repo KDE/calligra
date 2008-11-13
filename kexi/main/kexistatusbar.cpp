@@ -46,6 +46,7 @@ KexiStatusBar::KexiStatusBar(QWidget *parent)
         , m_activePart(0)
 {
     setObjectName("KexiStatusBar");
+    setContentsMargins(2, 0, 2, 0);
     int id = 0;
     m_msgID = id++;
     insertPermanentItem("", m_msgID, 1 /*stretch*/);

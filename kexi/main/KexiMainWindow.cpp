@@ -371,8 +371,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: unused  createShellGUI(true);
     //}
 
-    d->statusBar = new KexiStatusBar(d->mainWidget);
-
 // d->origAppCaption = windowTitle();
 
     // Setup menu
@@ -1951,6 +1949,9 @@ void KexiMainWindow::setupMainWidget()
     d->mainWidget = new KexiMainWidget();
     vlyr->addWidget(d->mainWidget, 1);
     d->mainWidget->setParent(this);
+
+    d->statusBar = new KexiStatusBar(this);
+    vlyr->addWidget(d->statusBar);
 }
 
 void KexiMainWindow::setupProjectNavigator()

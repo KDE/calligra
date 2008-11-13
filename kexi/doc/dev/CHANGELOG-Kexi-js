@@ -28,6 +28,11 @@ KoProperty2
   (fixes possible crash)
 Main Window
 - display property editor after entering into the design view directly
+- tabbar: "Project" tab is active by default
+Widgets
+- small tool button: fix width for the Windows style and substyles
+Project Navigator
+- add a popup menu to the group items, with "Create new" action 
 
 2008-11-09..11
 KoProperty2
