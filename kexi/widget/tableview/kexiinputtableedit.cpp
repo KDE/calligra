@@ -96,6 +96,7 @@ void KexiInputTableEdit::init()
     if (!align_right) {
         //create layer for internal editor
         lyr = new QHBoxLayout(this);
+        lyr->setContentsMargins(0, 0, 0, 0);
         lyr->addSpacing(4);
 //2.0        lyr->setAutoAdd(true);
     }
