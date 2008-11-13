@@ -380,9 +380,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 
 void EditorView::slotSetWillBeDeleted()
 {
-//    qApp->processEvents();
     changeSet(0, QByteArray());
-//    clearSelection();
 }
 
 void EditorView::setAutoSync(bool enable)
