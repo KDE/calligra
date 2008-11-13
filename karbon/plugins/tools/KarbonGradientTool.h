@@ -25,9 +25,10 @@
 #include <QtCore/QMultiMap>
 
 class GradientStrategy;
-class KarbonGradientTabWidget;
+class KarbonGradientEditWidget;
 class QUndoCommand;
 class KoShape;
+class QTableWidgetItem;
 
 /**
  * A tool for editing gradient backgrounds of shapes.
@@ -54,18 +55,22 @@ public:
     virtual void deactivate();
 
 protected:
+    /// reimplemented from KoTool
     virtual QWidget * createOptionWidget();
-
+    /// reimplemented from KoTool
+    virtual QMap<QString, QWidget *> createOptionWidgets();
+    
 private Q_SLOTS:
     virtual void resourceChanged( int key, const QVariant & res );
     void initialize();
     void gradientChanged();
+    void gradientSelected( QTableWidgetItem* );
 private:
     QGradient * m_gradient;
     QMultiMap<KoShape*,GradientStrategy*> m_strategies; ///< the list of gradient strategies
     GradientStrategy * m_currentStrategy;  ///< the current editing strategy
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
-    KarbonGradientTabWidget * m_gradientWidget;
+    KarbonGradientEditWidget * m_gradientWidget;
     QUndoCommand * m_currentCmd;
     int m_oldSnapStrategies; ///< the previously enables snap strategies
 };

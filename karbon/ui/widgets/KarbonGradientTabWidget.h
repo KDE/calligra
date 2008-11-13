@@ -19,25 +19,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONGRADIENTTABWIDGET_H
-#define KARBONGRADIENTTABWIDGET_H
+#ifndef KARBONGRADIENTEDITWIDGET_H
+#define KARBONGRADIENTEDITWIDGET_H
 
 #include <karbonui_export.h>
-
-#include <KTabWidget>
-
 #include <KoCheckerBoardPainter.h>
+#include <QtGui/QWidget>
 
-class KComboBox;
 class KarbonGradientWidget;
-class KListWidget;
-class QPushButton;
-class KarbonGradientChooser;
 class KoSliderCombo;
-class KoResourceItem;
+class KComboBox;
 class KColorButton;
-class QWidget;
-class QTableWidgetItem;
+class QPushButton;
 
 /**
  * A tab widget for managing gradients.
@@ -45,7 +38,7 @@ class QTableWidgetItem;
  * It has one tab to edit a selected gradients type, spread method and color stops.
  * Another tab contains a list with predefined gradients to choose from.
  */
-class KARBONUI_EXPORT KarbonGradientTabWidget : public KTabWidget
+class KARBONUI_EXPORT KarbonGradientEditWidget : public QWidget
 {
 Q_OBJECT
 
@@ -59,10 +52,10 @@ public:
      * Creates a new gradient tab widget with the given parent.
      * @param parent the widgets parent
      */
-    explicit KarbonGradientTabWidget( QWidget* parent = 0L );
+    explicit KarbonGradientEditWidget( QWidget* parent = 0L );
 
     /// Destroys the widget
-    ~KarbonGradientTabWidget();
+    virtual ~KarbonGradientEditWidget();
 
     /**
      * Sets a new gradient to edit.
@@ -110,7 +103,6 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void combosChange( int );
     void addGradientToPredefs();
-    void changeToPredef( QTableWidgetItem* );
     void opacityChanged( qreal value, bool final );
     void stopsChanged();
     void stopChanged();
@@ -122,12 +114,10 @@ protected:
     void blockChildSignals( bool block );
 
 private:
-    QWidget          *m_editTab;
     KarbonGradientWidget * m_gradientWidget;
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;
-    KarbonGradientChooser *m_predefGradientsView;
     QPushButton      *m_addToPredefs;
     KoSliderCombo * m_opacity;
     KColorButton * m_stopColor;
@@ -140,4 +130,4 @@ private:
     QGradientStops m_stops;
 };
 
-#endif // KARBONGRADIENTTABWIDGET_H
+#endif // KARBONGRADIENTEDITWIDGET_H

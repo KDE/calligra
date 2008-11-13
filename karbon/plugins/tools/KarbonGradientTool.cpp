@@ -24,6 +24,8 @@
 #include <KarbonGradientTabWidget.h>
 #include <KarbonCursor.h>
 #include <KarbonGradientHelper.h>
+#include <KarbonGradientItem.h>
+#include <KarbonGradientChooser.h>
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
@@ -144,7 +146,7 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
     KoSelection * selection = m_canvas->shapeManager()->selection();
 
-    KarbonGradientTabWidget::GradientTarget target = m_gradientWidget->target();
+    KarbonGradientEditWidget::GradientTarget target = m_gradientWidget->target();
 
     GradientStrategy * newStrategy = 0;
 
@@ -153,7 +155,7 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
         if( ! selection->isSelected( shape ) )
             continue;
 
-        if( target == KarbonGradientTabWidget::FillGradient )
+        if( target == KarbonGradientEditWidget::FillGradient )
         {
             // target is fill so check the background style
             if( ! dynamic_cast<KoGradientBackground*>( shape->background() ) )
@@ -291,9 +293,9 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
         {
             m_gradientWidget->setGradient( *m_currentStrategy->gradient() );
             if( m_currentStrategy->target() == GradientStrategy::Fill )
-                m_gradientWidget->setTarget( KarbonGradientTabWidget::FillGradient );
+                m_gradientWidget->setTarget( KarbonGradientEditWidget::FillGradient );
             else
-                m_gradientWidget->setTarget( KarbonGradientTabWidget::StrokeGradient );
+                m_gradientWidget->setTarget( KarbonGradientEditWidget::StrokeGradient );
             m_gradientWidget->setStopIndex( m_currentStrategy->selectedColorStop() );
         }
         m_currentStrategy->setEditing( false );
@@ -316,9 +318,9 @@ void KarbonGradientTool::mouseDoubleClickEvent( KoPointerEvent *event )
         {
             m_gradientWidget->setGradient( *m_currentStrategy->gradient() );
             if( m_currentStrategy->target() == GradientStrategy::Fill )
-                m_gradientWidget->setTarget( KarbonGradientTabWidget::FillGradient );
+                m_gradientWidget->setTarget( KarbonGradientEditWidget::FillGradient );
             else
-                m_gradientWidget->setTarget( KarbonGradientTabWidget::StrokeGradient );
+                m_gradientWidget->setTarget( KarbonGradientEditWidget::StrokeGradient );
         }
         m_canvas->updateCanvas( m_currentStrategy->boundingRect( *m_canvas->viewConverter() ) );
     }
@@ -488,9 +490,9 @@ void KarbonGradientTool::initialize()
     {
         m_gradientWidget->setGradient( *m_gradient );
         if( strategy->target() == GradientStrategy::Fill )
-            m_gradientWidget->setTarget( KarbonGradientTabWidget::FillGradient );
+            m_gradientWidget->setTarget( KarbonGradientEditWidget::FillGradient );
         else
-            m_gradientWidget->setTarget( KarbonGradientTabWidget::StrokeGradient );
+            m_gradientWidget->setTarget( KarbonGradientEditWidget::StrokeGradient );
     }
 }
 
@@ -527,13 +529,32 @@ void KarbonGradientTool::resourceChanged( int key, const QVariant & res )
     }
 }
 
+QMap<QString, QWidget *> KarbonGradientTool::createOptionWidgets()
+{
+    m_gradientWidget = new KarbonGradientEditWidget();
+    m_gradientWidget->setGradient( *m_gradient );
+
+    connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );
+    
+    KarbonGradientChooser * chooser = new KarbonGradientChooser();
+    
+    connect( chooser, SIGNAL( selected( QTableWidgetItem * ) ), 
+             this, SLOT( gradientSelected( QTableWidgetItem* ) ) );
+    
+    QMap<QString, QWidget *> widgets;
+    widgets.insert( i18n( "Edit Gradient" ), m_gradientWidget );
+    widgets.insert( i18n( "Predefined Gradients" ), chooser );
+    
+    return widgets;
+}
+
 QWidget * KarbonGradientTool::createOptionWidget()
 {
     QWidget *optionWidget = new QWidget();
     QVBoxLayout* layout = new QVBoxLayout( optionWidget );
     layout->setMargin(6);
 
-    m_gradientWidget = new KarbonGradientTabWidget( optionWidget );
+    m_gradientWidget = new KarbonGradientEditWidget( optionWidget );
     m_gradientWidget->setGradient( *m_gradient );
     layout->addWidget( m_gradientWidget );
 
@@ -541,6 +562,24 @@ QWidget * KarbonGradientTool::createOptionWidget()
 
     return optionWidget;
 }
+
+void KarbonGradientTool::gradientSelected( QTableWidgetItem* item )
+{
+    if( ! item )
+        return;
+    
+    KarbonGradientItem * gradientItem = dynamic_cast<KarbonGradientItem*>(item);
+    if( ! gradientItem )
+        return;
+    
+    QGradient * newGradient = gradientItem->gradient()->toQGradient();
+    if( newGradient )
+    {
+        m_gradientWidget->setGradient( *newGradient );
+        gradientChanged();
+        delete newGradient;
+    }
+ }
 
 void KarbonGradientTool::gradientChanged()
 {
@@ -550,7 +589,7 @@ void KarbonGradientTool::gradientChanged()
     QGradient::Spread spread = m_gradientWidget->spread();
     QGradientStops stops = m_gradientWidget->stops();
 
-    if( m_gradientWidget->target() == KarbonGradientTabWidget::FillGradient )
+    if( m_gradientWidget->target() == KarbonGradientEditWidget::FillGradient )
     {
         QList<KoShapeBackground*> newFills;
         foreach( KoShape * shape, selectedShapes )
