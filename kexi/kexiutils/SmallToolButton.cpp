@@ -133,7 +133,7 @@ void KexiSmallToolButton::init()
     f.setPixelSize(KexiUtils::smallFont().pixelSize());
     setFont(f);
     setAutoRaise(true);
-    setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 }
 
 void KexiSmallToolButton::setToolButtonStyle(Qt::ToolButtonStyle style)
@@ -144,17 +144,17 @@ void KexiSmallToolButton::setToolButtonStyle(Qt::ToolButtonStyle style)
 
 void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
 {
-    int width;
-    const bool fixWidth = style()->inherits("QWindowsStyle");
+    int width = 0;
+    const bool fixWidth = style()->inherits("QWindowsStyle") && toolButtonStyle() != Qt::ToolButtonIconOnly;
     if (text.isEmpty() || toolButtonStyle() == Qt::ToolButtonIconOnly) {
         if (fixWidth) {
-            width = 10;
+            width = 6;
         }
     } else {
         if (fixWidth) {
-            QString text2( text + " " );
+            QString text2( text + "   " );
             if (d->action && d->action->isCheckable())
-                text2 += "   ";
+                text2 += "  ";
             width = fontMetrics().width(text2);
         }
         if (toolButtonStyle() != Qt::ToolButtonTextOnly)
@@ -172,8 +172,11 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
         QToolButton::setIcon(icon);
     }
     if (fixWidth) {
-        QStyleOption opt;
-        width += style()->pixelMetric(QStyle::PM_ButtonMargin, &opt, this);
+        if (!text.isEmpty()) {
+            QStyleOption opt;
+            opt.initFrom(this);
+            width += style()->pixelMetric(QStyle::PM_ButtonMargin, &opt, this);
+        }
         setFixedWidth( width );
     }
 }
