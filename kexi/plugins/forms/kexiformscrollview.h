@@ -139,17 +139,17 @@ public slots:
 
     /*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
 //! @todo unused for now, will be used for continuous forms
-    virtual void vScrollBarSliderReleased() {
+/*    virtual void vScrollBarSliderReleased() {
         KexiDataAwareObjectInterface::vScrollBarSliderReleased();
-    }
+    }*/
 
     /*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
      m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
      else the m_scrollBarTipTimerCnt is just set to 0.*/
 //! @todo unused for now, will be used for continuous forms
-    virtual void scrollBarTipTimeout() {
+/*    virtual void scrollBarTipTimeout() {
         KexiDataAwareObjectInterface::scrollBarTipTimeout();
-    }
+    }*/
 
 signals:
     virtual void itemChanged(KexiDB::RecordData*, int row, int col);
