@@ -56,7 +56,7 @@ bool KPrPlaceholder::loadOdf( const KoXmlElement & element, const QRectF & pageS
         m_relativeSize.setHeight( percent( element, "height", pageSize.height() ) );
     }
 
-    kDebug() << "convert" << pageSize << m_relativeSize;
+    kDebug(33001) << "convert" << pageSize << m_relativeSize;
 
     return true;
 }
