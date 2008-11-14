@@ -25,6 +25,8 @@ TODO
  - add kexi__objects.o_class 
 
 2008-11-14
+Tables
+- fixed bug in table removing code, introduced in r671303
 Core
 - in general: we're no longer using part IDs, we have switched 
   to Java-like part class names e.g. org.kexi-project.table;

@@ -126,11 +126,11 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
 
 bool KexiTablePart::remove(KexiPart::Item &item)
 {
-    if (KexiMainWindowIface::global()->project()
-            || !KexiMainWindowIface::global()->project()->dbConnection())
+    KexiProject *project = KexiMainWindowIface::global()->project();
+    if (!project || !project->dbConnection())
         return false;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KexiDB::Connection *conn = project->dbConnection();
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
 
     if (sch) {

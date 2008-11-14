@@ -4225,7 +4225,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     }
 
     //also close 'print setup' dialog for this item, if any
-    tristate res;
+    tristate res = true;
 // int printedObjectID = 0;
 // if (d->pageSetupWindowItemID2dataItemID_map.contains(item->identifier()))
 //  printedObjectID = d->pageSetupWindowItemID2dataItemID_map[ item->identifier() ];
