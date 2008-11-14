@@ -248,12 +248,12 @@ public:
     }
 
     //! Updates actions
-    void showActionsForMimeType(const QString& mimeType) {
-        if (m_currentMimeType == mimeType)
+    void showActionsForPartClass(const QString& partClass) {
+        if (m_currentPartClass == partClass)
             return;
-        m_currentMimeType = mimeType;
+        m_currentPartClass = partClass;
         clear();
-        KexiPart::Part *part = Kexi::partManager().partForMimeType(m_currentMimeType);
+        KexiPart::Part *part = Kexi::partManager().partForClass(m_currentPartClass);
         if (!part)
             return;
         int supportedViewModes = part->supportedViewModes();
@@ -316,7 +316,7 @@ public:
         setMinimumWidth(columnWidth(0));
     }
 
-    QString m_currentMimeType;
+    QString m_currentPartClass;
 };
 
 //-------------------------------------
@@ -657,10 +657,10 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
     KexiBrowserItem* browserItem = dynamic_cast<KexiBrowserItem*>(item);
     if (browserItem) {
         d->updateSelectActionToBeExecutedMessage(browserItem->partInfo()->objectName());
-        if (d->objectsListView->itemsMimeType().toLatin1() != browserItem->partInfo()->mimeType()) {
+        if (d->objectsListView->itemsPartClass() != browserItem->partInfo()->partClass()) {
             d->objectsListView->setProject(
-                KexiMainWindowIface::global()->project(), browserItem->partInfo()->mimeType());
-            d->actionToExecuteListView->showActionsForMimeType(browserItem->partInfo()->mimeType());
+                KexiMainWindowIface::global()->project(), browserItem->partInfo()->partClass());
+            d->actionToExecuteListView->showActionsForPartClass(browserItem->partInfo()->partClass());
             d->setActionToExecuteSectionVisible(false);
         }
         if (d->secondAnd3rdColumnStack->currentWidget() != d->secondAnd3rdColumnMainWidget) {
@@ -702,7 +702,7 @@ KexiFormEventAction::ActionData KexiActionSelectionDialog::currentAction() const
                     d->actionToExecuteListView->selectedItem());
         if (d->objectsListView && actionToExecute && !actionToExecute->data.isEmpty()) {
             KexiPart::Item* partItem = d->objectsListView->selectedPartItem();
-            KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForMimeType(partItem->mimeType()) : 0;
+            KexiPart::Info* partInfo = partItem ? Kexi::partManager().infoForClass(partItem->partClass()) : 0;
             if (partInfo) {
                 // opening or executing: table:name, query:name, form:name, macro:name, script:name, etc.
                 data.string = QString("%1:%2").arg(partInfo->objectName()).arg(partItem->name());

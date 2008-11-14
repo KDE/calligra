@@ -34,7 +34,7 @@ class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public Q3TimeEdit, public KexiFormDa
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
 
 public:
@@ -44,8 +44,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourceMimeType() const {
-        return KexiFormDataItemInterface::dataSourceMimeType();
+    inline QString dataSourcePartClass() const {
+        return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual QVariant value();
     virtual void setInvalidState(const QString& displayText);
@@ -76,8 +76,8 @@ public slots:
     inline void setDataSource(const QString &ds) {
         KexiFormDataItemInterface::setDataSource(ds);
     }
-    inline void setDataSourceMimeType(const QString &ds) {
-        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    inline void setDataSourcePartClass(const QString &partClass) {
+        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
     virtual void setReadOnly(bool set);
 

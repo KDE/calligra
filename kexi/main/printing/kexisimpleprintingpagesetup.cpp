@@ -356,7 +356,7 @@ KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup(KexiMainWindow *mainWin
     if (m_item) {
         m_origCaptionLabelText = m_contents->captionLabel->text();
         m_contents->headerTitleLineEdit->setText(m_item->captionOrName());
-        if (m_item->mimeType() == "kexi/query") {
+        if (m_item->partClass() == "org.kexi-project.query") {
             m_contents->openDataLink->setText(i18n("Open This Query"));
             m_origCaptionLabelText = I18N_NOOP("<h2>Page setup for printing \"%1\" query data</h2>");
         }

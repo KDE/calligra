@@ -54,7 +54,7 @@ public:
 };
 
 KexiTablePart::KexiTablePart(QObject *parent, const QStringList &l)
-        : KexiPart::Part((int)KexiPart::TableObjectType, parent, l)
+        : KexiPart::Part(parent, l)
         , d(new Private())
 {
     kDebug() << "KexiTablePart::KexiTablePart()";

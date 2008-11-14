@@ -66,7 +66,7 @@ public:
 
 signals:
     /*! Emitted when a field is double clicked */
-    void fieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+    void fieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
                             const QString& fieldName);
 
 protected slots:

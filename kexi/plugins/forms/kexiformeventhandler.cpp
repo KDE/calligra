@@ -56,7 +56,7 @@ KexiPart::Info* KexiFormEventAction::ActionData::decodeString(
         return 0;
     KexiPart::Info *info = 0;
     if (_actionType != "kaction" && _actionType != "currentForm") {
-        info = Kexi::partManager().infoForMimeType(QString("kexi/%1").arg(_actionType));
+        info = Kexi::partManager().infoForClass(QString("org.kexi-project.%1").arg(_actionType));
         if (!info)
             return 0;
     }
@@ -84,8 +84,8 @@ void KexiFormEventAction::activate()
     KexiProject* project = KexiMainWindowIface::global()->project();
     if (!project)
         return;
-    KexiPart::Part* part = Kexi::partManager().partForMimeType(
-                               QString("kexi/%1").arg(m_actionName));
+    KexiPart::Part* part = Kexi::partManager().partForClass(
+                               QString("org.kexi-project.%1").arg(m_actionName));
     if (!part)
         return;
     KexiPart::Item* item = project->item(part->info(), m_objectName);

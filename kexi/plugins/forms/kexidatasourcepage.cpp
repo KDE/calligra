@@ -270,10 +270,10 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 
 void KexiDataSourcePage::slotGotoSelected()
 {
-    const QString mime(m_dataSourceCombo->selectedMimeType());
-    if (mime == "kexi/table" || mime == "kexi/query") {
+    const QString partClass(m_dataSourceCombo->selectedPartClass());
+    if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
         if (m_dataSourceCombo->isSelectionValid())
-            emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName());
+            emit jumpToObjectRequested(partClass, m_dataSourceCombo->selectedName());
     }
 }
 
@@ -284,18 +284,19 @@ void KexiDataSourcePage::slotInsertSelectedFields()
     if (selectedFieldNames.isEmpty())
         return;
 
-    emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query",
+    emit insertAutoFields(m_fieldListView->schema()->table()
+                            ? "org.kexi-project.table" : "org.kexi-project.query",
                           m_fieldListView->schema()->name(), selectedFieldNames);
 #endif
 }
 
-void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
         const QString& fieldName)
 {
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     QStringList selectedFields;
     selectedFields.append(fieldName);
-    emit insertAutoFields(sourceMimeType, sourceName, selectedFields);
+    emit insertAutoFields(sourcePartClass, sourceName, selectedFields);
 #endif
 }
 
@@ -318,12 +319,15 @@ void KexiDataSourcePage::slotDataSourceChanged()
 {
     if (!m_dataSourceCombo->project())
         return;
-    const QString mime(m_dataSourceCombo->selectedMimeType());
+    const QString partClass(m_dataSourceCombo->selectedPartClass());
     bool dataSourceFound = false;
     QString name(m_dataSourceCombo->selectedName());
-    if ((mime == "kexi/table" || mime == "kexi/query") && m_dataSourceCombo->isSelectionValid()) {
+    if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") 
+        && m_dataSourceCombo->isSelectionValid())
+    {
         KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
-            m_dataSourceCombo->project()->dbConnection(), name.toLatin1(), mime == "kexi/table");
+            m_dataSourceCombo->project()->dbConnection(), name.toLatin1(), 
+            partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
             m_tableOrQuerySchema = tableOrQuery;
@@ -331,7 +335,7 @@ void KexiDataSourcePage::slotDataSourceChanged()
             m_fieldListView->setSchema(tableOrQuery);
 #endif
             dataSourceFound = true;
-            m_sourceFieldCombo->setTableOrQuery(name, mime == "kexi/table");
+            m_sourceFieldCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
         } else {
             delete tableOrQuery;
         }
@@ -351,7 +355,7 @@ void KexiDataSourcePage::slotDataSourceChanged()
 #endif
     }
     updateSourceFieldWidgetsAvailability();
-    emit formDataSourceChanged(mime, name);
+    emit formDataSourceChanged(partClass, name);
 }
 
 void KexiDataSourcePage::slotFieldSelected()
@@ -377,9 +381,9 @@ void KexiDataSourcePage::slotFieldSelected()
     );
 }
 
-void KexiDataSourcePage::setDataSource(const QString& mimeType, const QString& name)
+void KexiDataSourcePage::setDataSource(const QString& partClass, const QString& name)
 {
-    m_dataSourceCombo->setDataSource(mimeType, name);
+    m_dataSourceCombo->setDataSource(partClass, name);
 }
 
 void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
@@ -413,12 +417,12 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 // kDebug() << "objectClassName=" << objectClassName;
 // {
     /*  //this is top level form's surface: data source means table or query
-        QCString dataSourceMimeType, dataSource;
-        if (buffer->hasProperty("dataSourceMimeType"))
-          dataSourceMimeType = (*buffer)["dataSourceMimeType"].value().toCString();
+        QCString dataSourcePartClass, dataSource;
+        if (buffer->hasProperty("dataSourcePartClass"))
+          dataSourcePartClass = (*buffer)["dataSourcePartClass"].value().toCString();
         if (buffer->hasProperty("dataSource"))
           dataSource = (*buffer)["dataSource"].value().toCString();
-        m_dataSourceCombo->setDataSource(dataSourceMimeType, dataSource);*/
+        m_dataSourceCombo->setDataSource(dataSourcePartClass, dataSource);*/
 // }
 // else {
 

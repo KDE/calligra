@@ -52,7 +52,7 @@ public slots:
 
     //! Sets data source of a currently selected form.
     //! This is performed on form initialization and on activating.
-    void setDataSource(const QString& mimeType, const QString& name);
+    void setDataSource(const QString& partClass, const QString& name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
@@ -71,7 +71,7 @@ signals:
                                             KexiDB::Field::Type type);
 
     /*! Signal emitted when 'insert fields' button has been clicked */
-    void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+    void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields);
 
 protected slots:
@@ -81,7 +81,7 @@ protected slots:
     void slotGotoSelected();
     void slotInsertSelectedFields();
     void slotFieldListViewSelectionChanged();
-    void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+    void slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
                                 const QString& fieldName);
 
 protected:

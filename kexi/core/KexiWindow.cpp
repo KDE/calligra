@@ -586,7 +586,7 @@ tristate KexiWindow::switchToViewMode(
             return res;
     }
 
-    kexidbg << "KexiWindow::switchToViewMode()";
+    kexidbg;
     bool dontStore = false;
     KexiView *view = selectedView();
 
@@ -833,7 +833,10 @@ tristate KexiWindow::storeNewData()
     if (!v)
         return false;
     //create schema object and assign information
-    KexiDB::SchemaData sdata(d->part->info()->projectPartID());
+    KexiProject *project = KexiMainWindowIface::global()->project();
+    KexiDB::SchemaData sdata(
+        project->idForClass(d->part->info()->partClass()));
+//    KexiDB::SchemaData sdata(d->part->info()->projectPartID());
     sdata.setName(d->item->name());
     sdata.setCaption(d->item->caption());
     sdata.setDescription(d->item->description());
@@ -843,28 +846,33 @@ tristate KexiWindow::storeNewData()
     if (cancel)
         return cancelled;
     if (!d->schemaData) {
-        setStatus(KexiMainWindowIface::global()->project()->dbConnection(), i18n("Saving object's definition failed."), "");
+        setStatus(project->dbConnection(), i18n("Saving object's definition failed."), "");
         return false;
     }
 
+    if (project->idForClass(part()->info()->partClass()) < 0) {
+        if (!project->createIdForPart(*part()->info()))
+            return false;
+    }
+#if 0 // moved to KexiProject
     if (!part()->info()->isIdStoredInPartDatabase()) {
         //this part's ID is not stored within kexi__parts:
         KexiDB::TableSchema *ts =
-            KexiMainWindowIface::global()->project()->dbConnection()->tableSchema("kexi__parts");
-        kexidbg << "KexiWindow::storeNewData(): schema: " << ts;
+            project->dbConnection()->tableSchema("kexi__parts");
+        kexidbg << "schema: " << ts;
         if (!ts)
             return false;
 
         //temp. hack: avoid problems with autonumber
         // see http://bugs.kde.org/show_bug.cgi?id=89381
-        int p_id = part()->info()->projectPartID();
+        int p_id = project->idForClass(part()->info()->partClass());
 
         if (p_id < 0) {
             // Find first available custom part ID by taking the greatest
             // existing custom ID (if it exists) and adding 1.
             p_id = (int)KexiPart::UserObjectType;
-            tristate success = KexiMainWindowIface::global()->project()->dbConnection()
-                               ->querySingleNumber("SELECT max(p_id) FROM kexi__parts", d->id);
+            tristate success = project->dbConnection()
+                                ->querySingleNumber("SELECT max(p_id) FROM kexi__parts", d->id);
             if (!success) {
                 // Couldn't read part id's from the kexi__parts table
                 return false;
@@ -876,7 +884,7 @@ tristate KexiWindow::storeNewData()
         }
 
         KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-        kexidbg << "KexiWindow::storeNewData(): fieldlist: "
+        kexidbg << "fieldlist: "
         << (fl ? fl->debugString() : QString());
         if (!fl)
             return false;
@@ -885,31 +893,29 @@ tristate KexiWindow::storeNewData()
 //  QStringList sl = part()->info()->ptr()->propertyNames();
 //  for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
 //   kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString();
-        if (!KexiMainWindowIface::global()->project()->dbConnection()
-                ->insertRecord(
+        if (!project->dbConnection()->insertRecord(
                     *fl,
                     QVariant(p_id),
                     QVariant(part()->info()->ptr()->untranslatedGenericName()),
-                    QVariant(part()->info()->mimeType()),
-                    QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
+                    QVariant(QString::fromLatin1("kexi/") + part()->info()->objectName()/*ok?*/),
+                    QVariant(part()->info()->partClass() /*always ok?*/)))
             return false;
 
-        kexidbg << "KexiWindow::storeNewData(): insert success!";
+        kexidbg << "insert success!";
         part()->info()->setProjectPartID(p_id);
         //(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
-        kexidbg << "KexiWindow::storeNewData(): new id is: "
-        << part()->info()->projectPartID();
+        kexidbg << "new id is: " << part()->info()->projectPartID();
 
         part()->info()->setIdStoredInPartDatabase(true);
     }
-
+#endif
     /* Sets 'dirty' flag on every dialog's view. */
     setDirty(false);
 // v->setDirty(false);
     //new schema data has now ID updated to a unique value
     //-assign that to item's identifier
     d->item->setIdentifier(d->schemaData->id());
-    KexiMainWindowIface::global()->project()->addStoredItem(part()->info(), d->item);
+    project->addStoredItem(part()->info(), d->item);
 
     return true;
 }
@@ -923,7 +929,8 @@ tristate KexiWindow::storeData(bool dontAsk)
         return false;
 
 #define storeData_ERR \
-    setStatus(KexiMainWindowIface::global()->project()->dbConnection(), i18n("Saving object's data failed."),"");
+    setStatus(KexiMainWindowIface::global()->project()->dbConnection(), \
+        i18n("Saving object's data failed."),"");
 
     //save changes using transaction
     KexiDB::Transaction transaction = KexiMainWindowIface::global()

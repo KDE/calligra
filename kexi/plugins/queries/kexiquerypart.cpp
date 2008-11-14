@@ -39,7 +39,7 @@
 //------------------------------------------------
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const QStringList &l)
-        : KexiPart::Part((int)KexiPart::QueryObjectType, parent, l)
+        : KexiPart::Part(parent, l)
 {
     setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,18 +44,11 @@ class Info;
 class Part;
 class StaticPart;
 
-struct Missing {
-    QString name;
-    QString mime;
-    QString url;
-};
-
 typedef QHash<QString, Info*> PartInfoDict;
 typedef QHash<QString, Info*>::iterator PartInfoDictIterator;
-typedef QList<Missing> MissingList;
 typedef QList<Info*> PartInfoList;
 typedef QList<Info*>::iterator PartInfoListIterator;
-typedef QHash<int, Part*> PartDict;
+typedef QHash<QString, Part*> PartDict;
 
 /**
  * @short KexiPart's manager: looks up and instantiates them
@@ -80,10 +73,12 @@ public:
     bool lookup();
 
     /**
-     * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
-     * if needed. Return 0 if loading failed.
+     * \return a part object for specified class name, e.g. "org.kexi-project.table"
+     * @note For compatibility, if a string without any dot is provided, "org.kexi-project."
+     *       will be prepended to the class name.
+     * Dlopens a part using KexiPart::Info if needed. Return 0 if loading failed.
      */
-    Part *partForMimeType(const QString& mimeTypt);
+    Part *partForClass(const QString& className);
 
     /**
      * \return a part object for specified info. Dlopens a part using KexiPart::Info
@@ -92,10 +87,13 @@ public:
     Part *part(Info *);
 
     /**
-     * \return the info for a corresponding internal mime
+     * \return the info for a corresponding internal class name, e.g. "org.kexi-project.table"
+     * @note For compatibility, if a string without any dot is provided, "org.kexi-project."
+     *       will be prepended to the class name.
      */
-    Info *infoForMimeType(const QString& mimeType);
+    Info *infoForClass(const QString& className);
 
+#if 0 // moved to KexiProject
     /**
      * checks project's kexi__part table
      * and checks if all parts used in a project are available locally
@@ -110,6 +108,7 @@ public:
     MissingList missingParts() const {
         return m_missing;
     }
+#endif
 
 
     /**
@@ -129,9 +128,11 @@ protected:
 private:
     PartDict m_parts;
     PartInfoList m_partlist;
-    PartInfoDict m_partsByMime;
+    PartInfoDict m_partsByClass;
+#if 0 // moved to KexiProject
     MissingList m_missing;
-    int m_nextTempProjectPartID;
+#endif
+//    int m_nextTempProjectPartID;
 bool m_lookupDone : 1;
 bool m_lookupResult : 1;
 

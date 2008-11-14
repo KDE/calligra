@@ -39,5 +39,5 @@ KexiDataAwareWidgetInfo::~KexiDataAwareWidgetInfo()
 void KexiDataAwareWidgetInfo::init()
 {
     setAutoSyncForProperty("dataSource", false);
-    setAutoSyncForProperty("dataSourceMimeType", false);
+    setAutoSyncForProperty("dataSourcePartClass", false);
 }

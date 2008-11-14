@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -50,6 +50,12 @@ namespace KexiPart
 {
 class Part;
 class Info;
+
+struct MissingPart {
+    QString name;
+    QString className;
+};
+typedef QList<MissingPart> MissingPartsList;
 }
 
 class KexiMainWindow;
@@ -128,15 +134,31 @@ public:
     bool isConnected();
 
     /**
+     * @return internal identifier for part class @a partClass.
+     * -1 is returned if the class is unknown.
+     * While the part classes are unique strings like :org.kexi-project.table",
+     * the identifiers are specific to the given physically stored project,
+     * because sets of parts can differ from between various Kexi installations.
+     */
+    int idForClass(const QString &partClass) const;
+
+    /**
+     * @return part class for internal identifier.
+     * Empty string is returned if the class is unknown.
+     * @see idForClass()
+     */
+    QString classForId(int classId) const;
+    
+    /**
      * @return all items of a type \a i in this project
      */
     KexiPart::ItemDict* items(KexiPart::Info *i);
 
     /**
-     * @return all items of a type \a mime in this project
+     * @return all items of a class \a partClass in this project
      * It is a convenience function.
      */
-    KexiPart::ItemDict* itemsForMimeType(const QString &mimeType);
+    KexiPart::ItemDict* itemsForClass(const QString &partClass);
 
     /**
      * Puts a list of items of a type \a i in this project into \a list.
@@ -145,15 +167,15 @@ public:
     void getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
 
     /**
-     * Puts a sorted list of items of a type \a mimeType in this project into \a list.
+     * Puts a sorted list of items of a class \a partClass into \a list.
      * You can then sort this list using ItemList::sort().
      */
-    void getSortedItemsForMimeType(KexiPart::ItemList& list, const QString &mimeType);
+    void getSortedItemsForClass(KexiPart::ItemList& list, const QString &partClass);
 
     /**
-     * @return item of type \a mime and name \a name
+     * @return item of class \a partClass and name \a name
      */
-    KexiPart::Item* itemForMimeType(const QString &mimeType, const QString &name);
+    KexiPart::Item* itemForClass(const QString &partClass, const QString &name);
 
     /**
      * @return item of type \a i and name \a name
@@ -183,7 +205,7 @@ public:
                            Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
 
     //! For convenience
-    KexiWindow* openObject(QWidget* parent, const QString &mimeType,
+    KexiWindow* openObject(QWidget* parent, const QString &partClass,
                            const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 
     /*! Remove a part instance pointed by \a item.
@@ -225,6 +247,11 @@ public:
      after successful removal.
      Used to delete an unstored part item previusly created with createPartItem(). */
     void deleteUnstoredItem(KexiPart::Item *item);
+
+    /**
+     * @returns parts metioned in the project meta tables but not available locally
+     */
+    KexiPart::MissingPartsList missingParts() const;
 
 #if 0 //remove?
     /*! Creates object using data provided by \a dlg dialog.
@@ -326,14 +353,33 @@ signals:
 //  void objectCreated(const QCString &mime, const QCString& name);
 
 protected:
+    bool createIdForPart(const KexiPart::Info& info);
+
+private:
     /*! Checks whether the project's connection is read-only.
      If so, error message is set and false is returned. */
     bool checkWritable();
+
+    /*! Retrieves basic information (class, id, name, caption) 
+     about all items of all types for this project.
+     @return true on success. */
+    bool retrieveItems();
+
+    /**
+     * Checks project's kexi__part table.
+     * @a singlePartClass can be provided to only check specified part.
+     * Internal identifiers of part(s) are remembered.
+     *
+     * Use @ref missingParts() to get a list of missing parts.
+     * @see idForClass()
+     */
+    bool checkProject(const QString& singlePartClass = QString());
 
     class Private;
     Private *d;
 
     friend class KexiMainWindow;
+    friend class KexiWindow;
 };
 
 

@@ -27,11 +27,11 @@ using namespace KexiPart;
 
 //------------------------------
 
-StaticInfo::StaticInfo(const QString& mimeType, const QString& itemIcon,
+StaticInfo::StaticInfo(const QString& partClass, const QString& itemIcon,
                        const QString& objectName)
         : Info()
 {
-    d->mimeType = mimeType;
+    d->partClass = partClass;
     d->itemIcon = itemIcon;
     d->objectName = objectName;
 }
@@ -42,9 +42,9 @@ StaticInfo::~StaticInfo()
 
 //------------------------------
 
-StaticPart::StaticPart(const QString& mimeType, const QString& itemIcon,
+StaticPart::StaticPart(const QString& partClass, const QString& itemIcon,
                        const QString& objectName)
-        : Part(&Kexi::partManager(), new StaticInfo(mimeType, itemIcon, objectName))
+        : Part(&Kexi::partManager(), new StaticInfo(partClass, itemIcon, objectName))
 {
     Kexi::partManager().insertStaticPart(this);
 }

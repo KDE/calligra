@@ -238,18 +238,18 @@ KexiBrowser::~KexiBrowser()
 {
 }
 
-void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
+void KexiBrowser::setProject(KexiProject* prj, const QString& itemsPartClass,
                              QString* partManagerErrorMessages)
 {
     clear();
-    m_itemsMimeType = itemsMimeType;
-    m_list->setRootIsDecorated(m_itemsMimeType.isEmpty());
+    m_itemsPartClass = itemsPartClass;
+    m_list->setRootIsDecorated(m_itemsPartClass.isEmpty());
 
     KexiPart::PartInfoList* plist = Kexi::partManager().partInfoList();
     foreach(KexiPart::Info *info, *plist) {
         if (!info->isVisibleInNavigator())
             continue;
-        if (!m_itemsMimeType.isEmpty() && info->mimeType() != m_itemsMimeType.toLatin1())
+        if (!m_itemsPartClass.isEmpty() && info->partClass() != m_itemsPartClass)
             continue;
 
 //  kDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName();
@@ -263,10 +263,11 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
 
         //load part - we need this to have GUI merged with part's actions
 //! @todo FUTURE - don't do that when DESIGN MODE is OFF
+        kDebug() << info->partClass() << info->objectName();
         KexiPart::Part *p = Kexi::partManager().part(info);
         if (p) {
             KexiBrowserItem *groupItem = 0;
-            if (m_itemsMimeType.isEmpty()) {
+            if (m_itemsPartClass.isEmpty()) {
                 groupItem = addGroup(*info);
                 if (!groupItem)
                     continue;
@@ -277,8 +278,8 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
             if (!item_dict)
                 continue;
             foreach(KexiPart::Item *item, *item_dict)
-            addItem(*item, groupItem, info);
-            if (!m_itemsMimeType.isEmpty())
+                addItem(*item, groupItem, info);
+            if (!m_itemsPartClass.isEmpty())
                 break; //the only group added, so our work is completed
         } else {
             //add this error to the list that will be displayed later
@@ -311,9 +312,9 @@ KAction* KexiBrowser::addAction(const QString& name, const KIcon& icon, const QS
     return action;
 }
 
-QString KexiBrowser::itemsMimeType() const
+QString KexiBrowser::itemsPartClass() const
 {
-    return m_itemsMimeType;
+    return m_itemsPartClass;
 }
 
 KexiBrowserItem *KexiBrowser::addGroup(KexiPart::Info& info)
@@ -322,7 +323,7 @@ KexiBrowserItem *KexiBrowser::addGroup(KexiPart::Info& info)
         return 0;
 
     KexiBrowserItem *item = new KexiBrowserItem(m_list, &info);
-    m_baseItems.insert(info.mimeType().toLower(), item);
+    m_baseItems.insert(info.partClass().toLower(), item);
     return item;
 // kDebug() << "KexiBrowser::addGroup()";
 }
@@ -330,8 +331,8 @@ KexiBrowserItem *KexiBrowser::addGroup(KexiPart::Info& info)
 KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item)
 {
     //part object for this item
-    KexiBrowserItem *parent = item.mimeType().isEmpty()
-                              ? 0 : m_baseItems.value(item.mimeType().toLower());
+    KexiBrowserItem *parent = item.partClass().isEmpty()
+                              ? 0 : m_baseItems.value(item.partClass().toLower());
     return addItem(item, parent, parent->partInfo());
 }
 

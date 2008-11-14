@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003,2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,11 +46,6 @@ public:
      */
     QString groupName() const;
 
-    /**
-     * @return the internal mime type of this part
-     */
-    QString mimeType() const;
-
 //  /**
 //   * @return the icon for groups
 //   */
@@ -72,9 +67,9 @@ public:
     QString objectName() const;
 
     /**
-     * @return the project-part-id
+     * @return the globally-unique class id associated with this part (e.g. "org.kexi-project.table")
      */
-    int projectPartID() const;
+    QString partClass() const;
 
     /**
      * @return the KService::Ptr associated with this part
@@ -107,6 +102,14 @@ public:
      */
     bool isExecuteSupported() const;
 
+    /**
+     * \return true if the property editing facilities should 
+     * be displayed even if the item's property set 
+     * (KexiWindow::propertySet()) is 0.
+     * False by default. It is set to true e.g. for table part.
+     */
+    bool isPropertyEditorAlwaysVisibleInDesignMode() const;
+
 protected:
     /**
      * Used in StaticInfo
@@ -117,11 +120,17 @@ protected:
     friend class ::KexiProject;
     friend class ::KexiWindow;
 
+#if 0 //moved as internal to KexiProject
+    /**
+     * @return the project-part-id
+     */
+    int projectPartID() const;
+
     /**
      * Sets the project-part-id.
      */
     void setProjectPartID(int id);
-
+#endif
     /**
      * Sets the broken flag and error message.
      * Most likely to be called by @ref KexiPart::Manager

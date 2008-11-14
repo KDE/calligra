@@ -1368,7 +1368,7 @@ void KexiCSVImportDialog::accept()
         msg.showErrorMessage(i18n("No database connection available."));
         return;
     }
-    KexiPart::Part *part = Kexi::partManager().partForMimeType("kexi/table");
+    KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
     if (!part) {
         msg.showErrorMessage(&Kexi::partManager());
         return;

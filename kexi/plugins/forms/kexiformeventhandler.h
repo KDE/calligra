@@ -81,7 +81,7 @@ public:
 
         QString option; //!< option used when name is "table/query/etc.:\<objectName\>" is set;
         //!< can be set to "open", "design", "editText", etc.
-        //!< @see ActionToExecuteListView::showActionsForMimeType()
+        //!< @see ActionToExecuteListView::showActionsForPartClass()
     };
 
     KexiFormEventAction(QObject* parent, const QString& actionName,

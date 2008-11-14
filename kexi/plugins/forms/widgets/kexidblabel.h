@@ -46,7 +46,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
     Q_PROPERTY(bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true)
     Q_OVERRIDE(QPixmap pixmap DESIGNABLE false)
     Q_OVERRIDE(bool scaledContents DESIGNABLE false)
@@ -61,8 +61,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourceMimeType() const {
-        return KexiFormDataItemInterface::dataSourceMimeType();
+    inline QString dataSourcePartClass() const {
+        return KexiFormDataItemInterface::dataSourcePartClass();
     }
 
     virtual QVariant value();
@@ -101,8 +101,8 @@ public slots:
         KexiFormDataItemInterface::setDataSource(ds);
     }
 
-    inline void setDataSourceMimeType(const QString &ds) {
-        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    inline void setDataSourcePartClass(const QString &partClass) {
+        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
 
     virtual void setText(const QString& text);

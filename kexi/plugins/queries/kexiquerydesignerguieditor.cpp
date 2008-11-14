@@ -1205,11 +1205,11 @@ void
 KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiDB::RecordData * /*record*/, int /*row*/,
         QDropEvent *ev, KexiDB::RecordData*& newRecord)
 {
-    QString sourceMimeType;
+    QString sourcePartClass;
     QString srcTable;
     QString srcField;
 
-    if (!KexiFieldDrag::decodeSingle(ev, sourceMimeType, srcTable, srcField))
+    if (!KexiFieldDrag::decodeSingle(ev, sourcePartClass, srcTable, srcField))
         return;
     //insert new row at specific place
     newRecord = createNewRow(srcTable, srcField, true /* visible*/);
@@ -1750,17 +1750,17 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
 
 void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item& item)
 {
-    d->relations->objectCreated(item.mimeType(), item.name());
+    d->relations->objectCreated(item.partClass(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)
 {
-    d->relations->objectDeleted(item.mimeType(), item.name());
+    d->relations->objectDeleted(item.partClass(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
-    d->relations->objectRenamed(item.mimeType(), oldName, item.name());
+    d->relations->objectRenamed(item.partClass(), oldName, item.name());
 }
 
 #include "kexiquerydesignerguieditor.moc"

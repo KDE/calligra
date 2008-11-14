@@ -52,7 +52,7 @@ public slots:
                                         KexiDB::Field::Type type);
 
     /*! Receives signal from KexiDataSourcePage and inserts autofields onto the current form. */
-    void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+    void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields);
 
 protected slots:

@@ -70,17 +70,17 @@ public:
 
     /*! Sets project \a prj for this browser. If \a partManagerErrorMessages is not NULL
      it will be set to error message if there's a problem with loading any KexiPart.
-     If \a itemsMimeType is empty (the default), items of all mime types are displayed,
-     items for only one mime type are displayed. In the latter case, no group (parent)
+     If \a itemsPartClass is empty (the default), items of all part classes are displayed,
+     items for only one part class are displayed. In the latter case, no group (parent)
      items are displayed.
      Previous items are removed. */
-    void setProject(KexiProject* prj, const QString& itemsMimeType = QString(),
+    void setProject(KexiProject* prj, const QString& itemsPartClass = QString(),
                     QString* partManagerErrorMessages = 0);
 
-    /*! \return items' mime type previously set by setProject. Returns empty string
-     if setProject() was not executed yet or itemsMimeType argument of setProject() was
-     empty (i.e. all mime types are displayed). */
-    QString itemsMimeType() const;
+    /*! \return items' part class previously set by setProject. Returns empty string
+     if setProject() was not executed yet or itemsPartClass argument of setProject() was
+     empty (i.e. all part classes are displayed). */
+    QString itemsPartClass() const;
 
     KexiPart::Item* selectedPartItem() const;
 
@@ -179,7 +179,7 @@ protected:
     KexiPart::Part *m_prevSelectedPart;
     KToolBar *m_toolbar;
     KexiSmallToolButton /* *m_newObjectToolButton,*/ *m_deleteObjectToolButton;
-    QString m_itemsMimeType;
+    QString m_itemsPartClass;
 bool m_singleClick : 1;
 bool m_readOnly : 1;
 };

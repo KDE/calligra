@@ -21,6 +21,28 @@ TODO
  Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
+ Kexi:
+ - add kexi__objects.o_class 
+
+2008-11-14
+Core
+- in general: we're no longer using part IDs, we have switched 
+  to Java-like part class names e.g. org.kexi-project.table;
+  this allows for easier development of custom 3rdparty plugins
+- Plugins: removed X-Kexi-TypeMime property (of values like kexi/query)
+  and added X-Kexi-Class, e.g. org.kexi-project.query
+- KexiPart::Manager::partForMimeType() replaced 
+  by KexiPart::Manager::partForClass()
+- KexiPart::Manager::infoForMimeType() replaced
+  by to KexiPart::Manager::infoForClass()
+- KexiProject::itemsForMimeType() replaced
+  by KexiProject::itemsForClass()
+- KexiProject::getSortedItemsForMimeType() replaced 
+  by KexiProject::getSortedItemsForClass()
+- KexiProject::itemForMimeType() replaced 
+  by KexiProject::itemForClass()
+-  KexiProject::items(): retrieve info about all objects instead 
+  of running queries separately for each class
 
 2008-11-13
 Property Pane

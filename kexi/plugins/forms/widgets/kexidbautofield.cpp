@@ -670,7 +670,7 @@ KexiDBAutoField::setFocusPolicy(Qt::FocusPolicy policy)
 void
 KexiDBAutoField::updateInformationAboutUnboundField()
 {
-    if ((d->autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
+    if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
             || (!d->autoCaption && d->caption.isEmpty())) {
         d->label->setText(QString::fromLatin1(name()) + " " + i18nc("Unbound Auto Field", " (unbound)"));
     }
@@ -681,7 +681,7 @@ KexiDBAutoField::paintEvent( QPaintEvent* pe )
 {
   QWidget::paintEvent( pe );
 
-  if (   (d->autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
+  if (   (d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
     || (!d->autoCaption && d->caption.isEmpty()) )
   {
     QPainter p(this);

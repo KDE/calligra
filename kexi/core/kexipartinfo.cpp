@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,31 +29,39 @@ using namespace KexiPart;
 Info::Private::Private(const KService::Ptr& aPtr)
         : ptr(aPtr)
         , groupName(aPtr->name())
-        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
-        , itemIcon(aPtr->property("X-Kexi-ItemIcon").toString())
-        , objectName(aPtr->property("X-Kexi-TypeName").toString())
+//        , mimeType(aPtr->property("X-Kexi-TypeMime").toString())
+        , itemIcon(aPtr->property("X-Kexi-ItemIcon", QVariant::String).toString())
+        , objectName(aPtr->property("X-Kexi-TypeName", QVariant::String).toString())
+//        , projectPartID( aPtr->property("X-Kexi-TypeId").toInt() )
+        , partClass( aPtr->property("X-Kexi-Class", QVariant::String).toString() )
         , broken(false)
         , idStoredInPartDatabase(false)
 {
-    QVariant val = ptr->property("X-Kexi-NoObject");
-    isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
+    QVariant val = ptr->property("X-Kexi-NoObject", QVariant::Bool);
+    isVisibleInNavigator = val.isValid() ? !val.toBool() : true;
 
-//! @todo (js)..... now it's hardcoded!
-    if (objectName == "table")
-        projectPartID = KexiDB::TableObjectType;
-    else if (objectName == "query")
-        projectPartID = KexiDB::QueryObjectType;
-// else if(objectName == "html")
-//  m_projectPartID = KexiDB::WebObjectType;
-    else
-        projectPartID = -1; //TODO!!
+    val = aPtr->property("X-Kexi-PropertyEditorAlwaysVisibleInDesignMode", QVariant::Bool);
+    isPropertyEditorAlwaysVisibleInDesignMode = val.isValid() ? val.toBool() : false;
+#if 0
+    if (projectPartID == 0) {
+        if (isVisibleInNavigator) {
+            kWarning() << "Could not found project part ID! (name: '" << objectName 
+                << "'). Possible problem with installation of the .desktop files for Kexi plugins";
+            isVisibleInNavigator = false;
+        }
+        projectPartID = -1;
+    }
+#endif
 }
 
 Info::Private::Private()
+#if 0 //moved as internal to KexiProject
         : projectPartID(-1) //OK?
-        , broken(false)
+#endif
+        : broken(false)
         , isVisibleInNavigator(false)
         , idStoredInPartDatabase(false)
+        , isPropertyEditorAlwaysVisibleInDesignMode(false)
 {
 }
 
@@ -79,9 +87,9 @@ QString Info::groupName() const
     return d->groupName;
 }
 
-QString Info::mimeType() const
+QString Info::partClass() const
 {
-    return d->mimeType;
+    return d->partClass;
 }
 
 QString Info::itemIcon() const
@@ -114,6 +122,7 @@ bool Info::isVisibleInNavigator() const
     return d->isVisibleInNavigator;
 }
 
+#if 0 //moved as internal to KexiProject
 int Info::projectPartID() const
 {
     return d->projectPartID;
@@ -123,6 +132,7 @@ void Info::setProjectPartID(int id)
 {
     d->projectPartID = id;
 }
+#endif
 
 void Info::setBroken(bool broken, const QString& errorMessage)
 {
@@ -160,6 +170,11 @@ bool Info::isExecuteSupported() const
 {
     QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsExecution") : QVariant();
     return val.isValid() ? val.toBool() : false;
+}
+
+bool Info::isPropertyEditorAlwaysVisibleInDesignMode() const
+{
+    return d->isPropertyEditorAlwaysVisibleInDesignMode;
 }
 
 //--------------

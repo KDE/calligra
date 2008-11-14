@@ -504,7 +504,7 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
         if (KexiMainWindowIface::global()) {
             bool openingCancelled;
             KexiMainWindowIface::global()->openObject(
-                "kexi/form", subform->formName(), Kexi::DesignViewMode,
+                "org.kexi-project.form", subform->formName(), Kexi::DesignViewMode,
                 openingCancelled);
         }
         return true;
@@ -573,7 +573,7 @@ KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
         const Q3CString& property, bool isTopLevel)
 {
     //general
-    if (property == "dataSource" || property == "dataSourceMimeType") {
+    if (property == "dataSource" || property == "dataSourcePartClass") {
         return false; //force
     }
 

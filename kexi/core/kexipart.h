@@ -83,7 +83,7 @@ class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalProper
     Q_OBJECT
 
 public:
-    Part(int partID, QObject *parent, const QStringList &);
+    Part(QObject *parent, const QStringList &);
 
     virtual ~Part();
 
@@ -166,7 +166,9 @@ public:
     /*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be
      used inside \a dialog. */
     virtual KexiView* createView(QWidget *parent, KexiWindow *window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
+                                 KexiPart::Item &item, 
+                                 Kexi::ViewMode viewMode = Kexi::DataViewMode, 
+                                 QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
     /*! i18n'd instance name usable for displaying in gui as object's name.
      The name is valid identifier - contains latin1 lowercase characters only.
@@ -319,7 +321,7 @@ protected:
 
     void setInfo(Info *info);
 
-    int registeredPartID() const;
+//    int registeredPartID() const;
 
     /*! Sets supported modes for windows created by this part in "user mode".
      The default is Kexi::DataViewMode. It is altered in classes like KexiSimplePrintingPart.

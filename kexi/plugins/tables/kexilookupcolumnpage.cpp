@@ -40,24 +40,20 @@
 #include <koproperty/Property.h>
 #include <koproperty/Utils.h>
 
-QString mimeTypeToType(const QString& mimeType)
+QString partClassToType(const QString& partClass)
 {
-    if (mimeType == "kexi/table")
+    if (partClass == "org.kexi-project.table")
         return "table";
-    else if (mimeType == "kexi/query")
+    else if (partClass == "org.kexi-project.query")
         return "query";
 //! @todo more types
-    return mimeType;
+    return partClass;
 }
 
-QString typeToMimeType(const QString& type)
+QString typeToPartClass(const QString& type)
 {
-    if (type == "table")
-        return "kexi/table";
-    else if (type == "query")
-        return "kexi/query";
+    return QString::fromLatin1("org.kexi-project.")+type;
 //! @todo more types
-    return type;
 }
 
 //----------------------------------------------
@@ -265,7 +261,7 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 
     QString rowSource, rowSourceType;
     if (hasRowSource) {
-        rowSourceType = typeToMimeType(d->propertyValue("rowSourceType").toString());
+        rowSourceType = typeToPartClass(d->propertyValue("rowSourceType").toString());
         rowSource = d->propertyValue("rowSource").toString();
     }
     d->rowSourceCombo->setDataSource(rowSourceType, rowSource);
@@ -343,19 +339,19 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 {
     if (!d->rowSourceCombo->project())
         return;
-    QString mime(d->rowSourceCombo->selectedMimeType());
+    QString partClass(d->rowSourceCombo->selectedPartClass());
     bool rowSourceFound = false;
     QString name = d->rowSourceCombo->selectedName();
-    if ((mime == "kexi/table" || mime == "kexi/query") && d->rowSourceCombo->isSelectionValid()) {
+    if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") && d->rowSourceCombo->isSelectionValid()) {
         KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
-            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), mime == "kexi/table");
+            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 //disabled   d->fieldListView->setSchema( tableOrQuery );
             /*tmp*/
             delete tableOrQuery;
             rowSourceFound = true;
-            d->boundColumnCombo->setTableOrQuery(name, mime == "kexi/table");
-            d->visibleColumnCombo->setTableOrQuery(name, mime == "kexi/table");
+            d->boundColumnCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
+            d->visibleColumnCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
         } else {
             delete tableOrQuery;
         }
@@ -378,11 +374,11 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 
     //update property set
     if (d->hasPropertySet()) {
-        d->changeProperty("rowSourceType", mimeTypeToType(mime));
+        d->changeProperty("rowSourceType", partClassToType(partClass));
         d->changeProperty("rowSource", name);
     }
 
-//disabled emit formDataSourceChanged(mime, name);
+//disabled emit formDataSourceChanged(partClass, name);
 //! @todo update d->propertySet ^^
 }
 
@@ -411,10 +407,10 @@ void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 
 void KexiLookupColumnPage::slotGotoSelectedRowSource()
 {
-    const QString mime( d->rowSourceCombo->selectedMimeType() );
-    if (mime == "kexi/table" || mime == "kexi/query") {
+    const QString partClass( d->rowSourceCombo->selectedPartClass() );
+    if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
         if (d->rowSourceCombo->isSelectionValid())
-            emit jumpToObjectRequested(mime, d->rowSourceCombo->selectedName());
+            emit jumpToObjectRequested(partClass, d->rowSourceCombo->selectedName());
     }
 }
 

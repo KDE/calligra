@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,13 +61,15 @@ public:
             , sqlParser(0)
             , versionMajor(0)
             , versionMinor(0)
-            , privateIDCounter(0) {
+            , privateIDCounter(0)
+            , itemsRetrieved(false)
+    {
     }
     ~Private() {
         delete data;
         data = 0;
         delete sqlParser;
-        foreach(KexiPart::ItemDict* dict, itemDictsCache) {
+        foreach(KexiPart::ItemDict* dict, itemDicts) {
             qDeleteAll(*dict);
             dict->clear();
         }
@@ -75,19 +77,30 @@ public:
         unstoredItems.clear();
     }
 
+    void saveClassId(const QString& partClass, int id)
+    {
+        classIds.insert(partClass, id);
+        classNames.insert(id, partClass);
+    }
+
     QPointer<KexiDB::Connection> connection;
     QPointer<KexiProjectData> data;
     QString error_title;
+    KexiPart::MissingPartsList missingParts;
 
+    QHash<QString, int> classIds;
+    QHash<int, QString> classNames;
     //! a cache for item() method, indexed by project part's ids
-    QHash<int, KexiPart::ItemDict*> itemDictsCache;
+    QHash<QString, KexiPart::ItemDict*> itemDicts;
     QSet<KexiPart::Item*> unstoredItems;
-    int tempPartItemID_Counter; //!< helper for getting unique
-    //!< temporary identifiers for unstored items
+    //! helper for getting unique
+    //! temporary identifiers for unstored items
+    int tempPartItemID_Counter; 
     KexiDB::Parser* sqlParser;
     int versionMajor;
     int versionMinor;
     int privateIDCounter; //!< counter: ID for private "document" like Relations window
+    bool itemsRetrieved : 1;
 };
 
 //---------------------------
@@ -179,12 +192,12 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
     }
     if (incompatibleWithKexi)
         *incompatibleWithKexi = false;
-    kDebug() << "KexiProject::open(): " << d->data->databaseName() << " " << d->data->connectionData()->driverName;
+    kDebug() << d->data->databaseName() << d->data->connectionData()->driverName;
     KexiDB::MessageTitle et(this,
                             i18n("Could not open project \"%1\".", d->data->databaseName()));
 
     if (!createConnection()) {
-        kDebug() << "KexiProject::open(): !createConnection()";
+        kDebug() << "!createConnection()";
         return false;
     }
     bool cancel = false;
@@ -193,7 +206,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
         if (cancel) {
             return cancelled;
         }
-        kDebug() << "KexiProject::open(): !d->connection->useDatabase() "
+        kDebug() << "!d->connection->useDatabase() "
         << d->data->databaseName() << " " << d->data->connectionData()->driverName;
 
         if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
@@ -427,13 +440,24 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
             partsTableOk = d->connection->createTable(t_parts, true/*replaceExisting*/);
 
             KexiDB::FieldList *fl = t_parts->subList("p_id", "p_name", "p_mime", "p_url");
-            if (partsTableOk)
-                partsTableOk = d->connection->insertRecord(*fl, QVariant(1), QVariant("Tables"),
-                               QVariant("kexi/table"), QVariant("http://koffice.org/kexi/"));
+#define INSERT_RECORD(id, groupName, name) \
+            if (partsTableOk) { \
+                partsTableOk = d->connection->insertRecord(*fl, QVariant(int(KexiPart::id)), \
+                    QVariant(groupName), \
+                    QVariant("kexi/" name), QVariant("org.kexi-project." name)); \
+                if (partsTableOk) { \
+                    d->saveClassId("org.kexi-project." name, int(KexiPart::id)); \
+                } \
+            }
 
-            if (partsTableOk)
-                partsTableOk = d->connection->insertRecord(*fl, QVariant(2), QVariant("Queries"),
-                               QVariant("kexi/query"), QVariant("http://koffice.org/kexi/"));
+            INSERT_RECORD(TableObjectType, "Tables", "table")
+            INSERT_RECORD(QueryObjectType, "Queries", "query")
+            INSERT_RECORD(FormObjectType, "Forms", "form")
+            INSERT_RECORD(ReportObjectType, "Reports", "report")
+            INSERT_RECORD(ScriptObjectType, "Scripts", "script")
+            INSERT_RECORD(WebObjectType, "Web pages", "web")
+            INSERT_RECORD(MacroObjectType, "Macros", "macro")
+#undef INSERT_RECORD
         }
     }
 
@@ -470,14 +494,14 @@ KexiProject::createConnection()
         connectionOptions |= KexiDB::Driver::ReadOnlyConnection;
     d->connection = driver->createConnection(*d->data->connectionData(), connectionOptions);
     if (!d->connection) {
-        kDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg();
+        kDebug() << "uuups failed " << driver->errorMsg();
         setError(driver);
         return false;
     }
 
     if (!d->connection->connect()) {
         setError(d->connection);
-        kDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
+        kDebug() << "error connecting: " << (d->connection ? d->connection->errorMsg() : QString());
         closeConnection();
         return false;
     }
@@ -509,10 +533,10 @@ bool
 KexiProject::initProject()
 {
 // emit dbAvailable();
-    kDebug() << "KexiProject::open(): checking project parts...";
+    kDebug() << "checking project parts...";
 
-    if (!Kexi::partManager().checkProject(d->connection)) {
-        setError(Kexi::partManager().error() ? (KexiDB::Object*)&Kexi::partManager() : (KexiDB::Connection*)d->connection);
+    if (!checkProject()) {
+//        setError(Kexi::partManager().error() ? (KexiDB::Object*)&Kexi::partManager() : (KexiDB::Connection*)d->connection);
         return false;
     }
 
@@ -546,51 +570,81 @@ KexiProject::isConnected()
 KexiPart::ItemDict*
 KexiProject::items(KexiPart::Info *i)
 {
-    kDebug() << "KexiProject::items()";
+    kDebug();
     if (!i || !isConnected())
         return 0;
 
     //trying in cache...
-    KexiPart::ItemDict *dict = d->itemDictsCache.value(i->projectPartID());
+    KexiPart::ItemDict *dict = d->itemDicts.value(i->partClass());
     if (dict)
         return dict;
-    //retrieve:
+    if (d->itemsRetrieved)
+        return 0;
+    if (!retrieveItems())
+        return 0;
+    return items(i); // try again
+}
+
+bool KexiProject::retrieveItems()
+{
+    d->itemsRetrieved = true;
     KexiDB::Cursor *cursor = d->connection->executeQuery(
-                                 "SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = "
-                                 + QString::number(i->projectPartID()));//, KexiDB::Cursor::Buffered);
-// kDebug() << "KexiProject::items(): cursor handle is:" << cursor;
+        QLatin1String("SELECT o_id, o_name, o_caption, o_type FROM kexi__objects ORDER BY o_type"));
+//                               "SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = "
+//                                 + QString::number(i->projectPartID()));
     if (!cursor)
         return 0;
 
-    dict = new KexiPart::ItemDict();
-
+    int recentPartId = -1000;
+    QString partClass;
+    KexiPart::ItemDict *dict = 0;
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-        KexiPart::Item *it = new KexiPart::Item();
         bool ok;
+        int partId = cursor->value(3).toInt(&ok);
+        if (!ok)
+            continue;
+        if (recentPartId != partId) {
+            // create next part items dict
+            recentPartId = partId;
+            partClass = classForId( partId );
+            if (partClass.isEmpty())
+                continue;
+            dict = new KexiPart::ItemDict();
+            d->itemDicts.insert(partClass, dict);
+        }
+        KexiPart::Item *it = new KexiPart::Item();
         int ident = cursor->value(0).toInt(&ok);
         QString objName(cursor->value(1).toString());
-
         if (ok && (ident > 0) && !d->connection->isInternalTableSchema(objName)
-                && KexiUtils::isIdentifier(objName)) {
+                && KexiUtils::isIdentifier(objName))
+        {
             it->setIdentifier(ident);
-            it->setMimeType(i->mimeType()); //js: may be not null???
+            it->setPartClass(partClass); //js: may be not null???
             it->setName(objName);
             it->setCaption(cursor->value(2).toString());
         }
         dict->insert(it->identifier(), it);
-//  kDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident;
+//  kDebug() << "ITEM ADDED == "<<objName <<" id="<<ident;
     }
 
     d->connection->deleteCursor(cursor);
-// kDebug() << "KexiProject::items(): end with count " << dict->count();
-    d->itemDictsCache.insert(i->projectPartID(), dict);
-    return dict;
+    return true;
+}
+
+int KexiProject::idForClass(const QString &partClass) const
+{
+    return d->classIds.value(partClass, -1);
+}
+
+QString KexiProject::classForId(int classId) const
+{
+    return d->classNames.value(classId);
 }
 
 KexiPart::ItemDict*
-KexiProject::itemsForMimeType(const QString &mimeType)
+KexiProject::itemsForClass(const QString &partClass)
 {
-    KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
+    KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
     return items(info);
 }
 
@@ -606,9 +660,9 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
 }
 
 void
-KexiProject::getSortedItemsForMimeType(KexiPart::ItemList& list, const QString &mimeType)
+KexiProject::getSortedItemsForClass(KexiPart::ItemList& list, const QString &partClass)
 {
-    KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
+    KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
     getSortedItems(list, info);
 }
 
@@ -626,11 +680,11 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 }
 
 KexiPart::Item*
-KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
+KexiProject::itemForClass(const QString &partClass, const QString &name)
 {
-    KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
+    KexiPart::ItemDict *dict = itemsForClass(partClass);
     if (!dict) {
-        kexiwarn << "no mimetype=" << mimeType;
+        kexiwarn << "no part class=" << partClass;
         return 0;
     }
     const QString nameToLower(name.toLower());
@@ -659,7 +713,7 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 KexiPart::Item*
 KexiProject::item(int identifier)
 {
-    foreach(KexiPart::ItemDict *dict, d->itemDictsCache) {
+    foreach(KexiPart::ItemDict *dict, d->itemDicts) {
         KexiPart::Item *item = dict->value(identifier);
         if (item)
             return item;
@@ -712,9 +766,9 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 {
     clearError();
     KexiDB::MessageTitle et(this);
-    KexiPart::Part *part = Kexi::partManager().partForMimeType(item.mimeType());
+    KexiPart::Part *part = Kexi::partManager().partForClass(item.partClass());
     if (!part) {
-        kexiwarn << "!part: " << item.mimeType();
+        kexiwarn << "!part: " << item.partClass();
         setError(&Kexi::partManager());
     }
     return part;
@@ -742,10 +796,10 @@ KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item& item,
     return window;
 }
 
-KexiWindow* KexiProject::openObject(QWidget* parent, const QString &mimeType,
+KexiWindow* KexiProject::openObject(QWidget* parent, const QString &partClass,
                                     const QString& name, Kexi::ViewMode viewMode)
 {
-    KexiPart::Item *it = itemForMimeType(mimeType, name);
+    KexiPart::Item *it = itemForClass(partClass, name);
     return it ? openObject(parent, *it, viewMode) : 0;
 }
 
@@ -792,7 +846,7 @@ bool KexiProject::removeObject(KexiPart::Item& item)
 
     //now: remove this item from cache
     if (part->info()) {
-        KexiPart::ItemDict *dict = d->itemDictsCache.value(part->info()->projectPartID());
+        KexiPart::ItemDict *dict = d->itemDicts.value(part->info()->partClass());
         if (!(dict && dict->remove(item.identifier())))
             d->unstoredItems.remove(&item);//remove temp.
     }
@@ -813,7 +867,7 @@ bool KexiProject::renameObject(KexiPart::Item& item, const QString& _newName)
             setError(i18n("Could not set empty name for this object."));
             return false;
         }
-        if (this->itemForMimeType(item.mimeType(), newName) != 0) {
+        if (this->itemForClass(item.partClass(), newName) != 0) {
             setError(i18n("Could not use this name. Object with name \"%1\" already exists.",
                           newName));
             return false;
@@ -908,7 +962,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 
     KexiPart::Item *item = new KexiPart::Item();
     item->setIdentifier(--d->tempPartItemID_Counter);  //temporary
-    item->setMimeType(info->mimeType());
+    item->setPartClass(info->partClass());
     item->setName(new_name);
     item->setCaption(new_caption);
     item->setNeverSaved(true);
@@ -968,7 +1022,7 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
         delete prj;
         return 0;
     }
-    kDebug() << "KexiProject::createBlankProject(): new project created --- ";
+    kDebug() << "new project created --- ";
 //todo? Kexi::recentProjects().addProjectData( data );
 
     return prj;
@@ -996,9 +1050,123 @@ tristate KexiProject::dropProject(KexiProjectData* data,
     return prj.dbConnection()->dropDatabase();
 }
 
+bool KexiProject::checkProject(const QString& singlePartClass)
+{
+    clearError();
+// QString errmsg = i18n("Invalid project contents.");
+
+//! @todo catch errors!
+    if (!d->connection->isDatabaseUsed()) {
+        setError(d->connection);
+        return false;
+    }
+    QString sql("SELECT p_id, p_name, p_mime, p_url FROM kexi__parts");
+    if (!singlePartClass.isEmpty()) {
+        sql.append(QString(" WHERE p_url=%1").arg(d->connection->driver()->escapeString(singlePartClass)));
+    }
+    KexiDB::Cursor *cursor = d->connection->executeQuery(sql);
+    if (!cursor) {
+        setError(d->connection);
+        return false;
+    }
+
+    bool saved = false;
+    for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
+        QString partMime( cursor->value(2).toString() );
+        QString partClass( cursor->value(3).toString() );
+        if (partClass.startsWith("http://")) {
+            // for compatibility with Kexi 1.x
+            // part mime was used at the time
+            partClass = QString::fromLatin1("org.kexi-project.")
+                + QString(partMime).replace("kexi/", QString());
+        }
+        KexiPart::Info *info = Kexi::partManager().infoForClass(partClass);
+        if (info) {
+//            i->setProjectPartID(cursor->value(0).toInt());
+            d->saveClassId(partClass, cursor->value(0).toInt());
+            saved = true;
+//            i->setIdStoredInPartDatabase(true);
+        }
+        else {
+            KexiPart::MissingPart m;
+            m.name = cursor->value(1).toString();
+            m.className = partClass;
+            d->missingParts.append(m);
+        }
+    }
+
+    d->connection->deleteCursor(cursor);
+    if (!saved && !singlePartClass.isEmpty()) {
+        return false; // failure is single part class was not found
+    }
+    return true;
+}
+
 int KexiProject::generatePrivateID()
 {
     return --d->privateIDCounter;
+}
+
+bool KexiProject::createIdForPart(const KexiPart::Info& info)
+{
+    int p_id = idForClass(info.partClass());
+    if (p_id > 0) {
+        return true;
+    }
+    // try again, perhaps the id is already created
+    if (checkProject(info.partClass())) {
+        return true;
+    }
+
+    // Find first available custom part ID by taking the greatest
+    // existing custom ID (if it exists) and adding 1.
+    p_id = (int)KexiPart::UserObjectType;
+    tristate success = d->connection->querySingleNumber("SELECT max(p_id) FROM kexi__parts", p_id);
+    if (!success) {
+        // Couldn't read part id's from the kexi__parts table
+        return false;
+    } else {
+        // Got a maximum part ID, or there were no parts
+        p_id = p_id + 1;
+        p_id = qMax(p_id, (int)KexiPart::UserObjectType);
+    }
+
+    //this part's ID is not stored within kexi__parts:
+    KexiDB::TableSchema *ts =
+        d->connection->tableSchema("kexi__parts");
+    if (!ts)
+        return false;
+    KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
+    kexidbg << "fieldlist: " << (fl ? fl->debugString() : QString());
+    if (!fl)
+        return false;
+
+    kexidbg << info.ptr()->untranslatedGenericName();
+//  QStringList sl = part()->info()->ptr()->propertyNames();
+//  for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
+//   kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString();
+    if (!d->connection->insertRecord(
+                *fl,
+                QVariant(p_id),
+                QVariant(info.ptr()->untranslatedGenericName()),
+                QVariant(QString::fromLatin1("kexi/") + info.objectName()/*ok?*/),
+                QVariant(info.partClass() /*always ok?*/)))
+    {
+        return false;
+    }
+
+    kexidbg << "insert success!";
+    d->saveClassId(info.partClass(), p_id);
+//    part()->info()->setProjectPartID(p_id);
+    //(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
+    kexidbg << "new id is: " << p_id;
+
+//    part()->info()->setIdStoredInPartDatabase(true);
+}
+
+KexiPart::MissingPartsList KexiProject::missingParts() const
+{
+    return d->missingParts;
 }
 
 #include "kexiproject.moc"

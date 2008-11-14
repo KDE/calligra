@@ -48,19 +48,20 @@ public:
         m_dataSource = ds;
     }
 
-    /*! \return the mime type of the data source for this widget.
-     Data source mime type means here types like "kexi/table" or "kexi/query"
-     in.the data source is set to object (as within form or subform) or is empty
-     if the data source is set to table field or query column. */
-    inline QString dataSourceMimeType() const {
-        return m_dataSourceMimeType;
+    /*! \return the class of the part for the widget's data source.
+     Data source part class means here types like "org.kexi-project.table" 
+     or "org.kexi-project.query" if the data source is set to object
+     (as within form or subform)
+     or is empty if the data source is set to table field or query column. */
+    inline QString dataSourcePartClass() const {
+        return m_dataSourcePartClass;
     }
 
-    /*! Sets the mime type of the data source for this widget.
-     Data source usually means here a "kexi/table" or "kexi/query".
-     @see dataSourceMimeType() */
-    inline void setDataSourceMimeType(const QString &ds) {
-        m_dataSourceMimeType = ds;
+    /*! Sets the class of the part for the data widget's data source.
+     Data source usually means here a "org.kexi-project.table" or "org.kexi-project.query".
+     @see dataSourcePartClass() */
+    inline void setDataSourcePartClass(const QString &partClass) {
+        m_dataSourcePartClass = partClass;
     }
 
     /*! If \a displayDefaultValue is true, the value set by KexiDataItemInterface::setValue()
@@ -156,7 +157,7 @@ public:
 
 protected:
     QString m_dataSource;
-    QString m_dataSourceMimeType;
+    QString m_dataSourcePartClass;
     KexiDB::QueryColumnInfo* m_columnInfo;
     KexiDisplayUtils::DisplayParameters *m_displayParametersForEnteredValue; //!< used in setDisplayDefaultValue()
     KexiDisplayUtils::DisplayParameters *m_displayParametersForDefaultValue; //!< used in setDisplayDefaultValue()

@@ -304,10 +304,10 @@ void KexiFormView::updateAutoFieldsDataSource()
     //-inherit data types
     //(this data has not been stored in the form)
     QString dataSourceString(m_dbform->dataSource());
-    QString dataSourceMimeTypeString(m_dbform->dataSourceMimeType());
+    QString dataSourcePartClassString(m_dbform->dataSourcePartClass());
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableOrQuerySchema tableOrQuery(
-        conn, dataSourceString.toLatin1(), dataSourceMimeTypeString == "kexi/table");
+        conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
     for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
@@ -332,10 +332,10 @@ void KexiFormView::updateValuesForSubproperties()
     //-inherit data types
     //(this data has not been stored in the form)
     QString dataSourceString(m_dbform->dataSource());
-    QString dataSourceMimeTypeString(m_dbform->dataSourceMimeType());
+    QString dataSourcePartClassString(m_dbform->dataSourcePartClass());
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableOrQuerySchema tableOrQuery(
-        conn, dataSourceString.toLatin1(), dataSourceMimeTypeString == "kexi/table");
+        conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
@@ -576,7 +576,7 @@ void KexiFormView::initDataSource()
 {
     deleteQuery();
     QString dataSourceString(m_dbform->dataSource());
-    QString dataSourceMimeTypeString(m_dbform->dataSourceMimeType());
+    QString dataSourcePartClassString(m_dbform->dataSourcePartClass());
 //! @todo also handle anonymous (not stored) queries provided as statements here
     bool ok = !dataSourceString.isEmpty();
 
@@ -598,22 +598,22 @@ void KexiFormView::initDataSource()
         m_scrollView->setMainDataSourceWidget(m_dbform);
         sources = m_scrollView->usedDataSources();
         conn = KexiMainWindowIface::global()->project()->dbConnection();
-        if (dataSourceMimeTypeString.isEmpty() /*table type is the default*/
-                || dataSourceMimeTypeString == "kexi/table") {
+        if (dataSourcePartClassString.isEmpty() /*table type is the default*/
+                || dataSourcePartClassString == "org.kexi-project.table") {
             tableSchema = conn->tableSchema(dataSourceString);
             if (tableSchema) {
                 /* We will build a _minimum_ query schema from selected table fields. */
                 m_query = new KexiDB::QuerySchema();
                 m_queryIsOwned = true;
 
-                if (dataSourceMimeTypeString.isEmpty())
-                    m_dbform->setDataSourceMimeType("kexi/table"); //update for compatibility
+                if (dataSourcePartClassString.isEmpty())
+                    m_dbform->setDataSourcePartClass("org.kexi-project.table"); //update for compatibility
             }
         }
 
         if (!tableSchema) {
-            if (dataSourceMimeTypeString.isEmpty() /*also try to find a query (for compatibility with Kexi<=0.9)*/
-                    || dataSourceMimeTypeString == "kexi/query") {
+            if (dataSourcePartClassString.isEmpty() /*also try to find a query (for compatibility with Kexi<=0.9)*/
+                    || dataSourcePartClassString == "org.kexi-project.query") {
                 //try to find predefined query schema.
                 //Note: In general, we could not skip unused fields within this query because
                 //      it can have GROUP BY clause.
@@ -621,12 +621,12 @@ void KexiFormView::initDataSource()
                 m_query = conn->querySchema(dataSourceString);
                 m_queryIsOwned = false;
                 ok = m_query != 0;
-                if (ok && dataSourceMimeTypeString.isEmpty())
-                    m_dbform->setDataSourceMimeType("kexi/query"); //update for compatibility
+                if (ok && dataSourcePartClassString.isEmpty())
+                    m_dbform->setDataSourcePartClass("org.kexi-project.query"); //update for compatibility
                 // query results are read-only
 //! @todo There can be read-write queries, e.g. simple "SELECT * FROM...". Add a checking function to KexiDB.
                 forceReadOnlyDataSource = true;
-            } else //no other mime types supported
+            } else //no other classes are supported
                 ok = false;
         }
     }
@@ -1043,14 +1043,14 @@ void
 KexiFormView::updateDataSourcePage()
 {
     if (viewMode() == Kexi::DesignViewMode) {
-        QString dataSourceMimeType, dataSource;
+        QString dataSourcePartClass, dataSource;
         KFormDesigner::WidgetPropertySet *set = KFormDesigner::FormManager::self()->propertySet();
-        if (set->contains("dataSourceMimeType"))
-            dataSourceMimeType = (*set)["dataSourceMimeType"].value().toString();
+        if (set->contains("dataSourcePartClass"))
+            dataSourcePartClass = (*set)["dataSourcePartClass"].value().toString();
         if (set->contains("dataSource"))
             dataSource = (*set)["dataSource"].value().toCString();
 
-        formPart()->dataSourcePage()->setDataSource(dataSourceMimeType, dataSource);
+        formPart()->dataSourcePage()->setDataSource(dataSourcePartClass, dataSource);
     }
 }
 
@@ -1071,17 +1071,17 @@ KexiFormView::slotHandleDropEvent(QDropEvent* e)
             ? form()->objectTree()->lookup(targetContainerWidget->objectName()) : 0;
     if (targetContainerWidgetItem && targetContainerWidgetItem->container()
             && KexiFieldDrag::canDecodeMultiple(e)) {
-        QString sourceMimeType, sourceName;
+        QString sourcePartClass, sourceName;
         QStringList fields;
-        if (!KexiFieldDrag::decodeMultiple(e, sourceMimeType, sourceName, fields))
+        if (!KexiFieldDrag::decodeMultiple(e, sourcePartClass, sourceName, fields))
             return;
-        insertAutoFields(sourceMimeType, sourceName, fields,
+        insertAutoFields(sourcePartClass, sourceName, fields,
                          targetContainerWidgetItem->container(), e->pos());
     }
 }
 
 void
-KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                                const QStringList& fields, KFormDesigner::Container* targetContainer, const QPoint& _pos)
 {
     if (fields.isEmpty())
@@ -1089,7 +1089,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 
     KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.toLatin1(),
-                                            sourceMimeType == "kexi/table");
+                                            sourcePartClass == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query()) {
         kexipluginswarn << "KexiFormView::insertAutoFields(): no such table/query \""
         << sourceName << "\"";

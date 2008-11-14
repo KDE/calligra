@@ -239,7 +239,7 @@ public slots:
                                    QString* errorMessage = 0);
 
     //! For convenience
-    virtual KexiWindow* openObject(const QString& mime, const QString& name,
+    virtual KexiWindow* openObject(const QString& partClass, const QString& name,
                                    Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0);
 
     /*! Closes the object for \a item.
@@ -256,7 +256,7 @@ public slots:
                                       bool& allowOverwriting, const QString& messageWhenAskingForName = QString());
 
     /*! Implemented for KexiMainWindow */
-    virtual void highlightObject(const QString& mime, const QString& name);
+    virtual void highlightObject(const QString& partClass, const QString& name);
 
     /*! Opens project pointed by \a projectData.
      Application state (e.g. actions) is updated.
