@@ -166,21 +166,21 @@ bool KPrPageLayout::operator<( const KPrPageLayout & other ) const
 
         QList<KPrPlaceholder *>::iterator it( placeholders.begin() );
         QList<KPrPlaceholder *>::iterator otherIt( otherPlaceholders.begin() );
-        kDebug(33001) << "KPrPageLayout::operator< start" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
+        kDebug() << "KPrPageLayout::operator< start" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
 
         for ( ; it != placeholders.end(); ++it, ++otherIt ) {
-            kDebug(33001) << "KPrPageLayout::operator<" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
+            kDebug() << "KPrPageLayout::operator<" << ( *it )->rect( QSizeF( 1, 1 ) ) << ( *otherIt )->rect( QSizeF( 1, 1 ) );
             if ( *( *it ) == *( *otherIt ) ) {
-                kDebug(33001) << "KPrPageLayout::operator< 0" << ( *( *it ) < *( *otherIt ) );
+                kDebug() << "KPrPageLayout::operator< 0" << ( *( *it ) < *( *otherIt ) );
                 continue;
             }
-            kDebug(33001) << "KPrPageLayout::operator< 1" << ( *( *it ) < *( *otherIt ) );
+            kDebug() << "KPrPageLayout::operator< 1" << ( *( *it ) < *( *otherIt ) );
             return *( *it ) < *( *otherIt );
         }
-        kDebug(33001) << "KPrPageLayout::operator< 2" << false;
+        kDebug() << "KPrPageLayout::operator< 2" << false;
         return false;
         // sort of the different placeholders by position and type
     }
-    kDebug(33001) << "KPrPageLayout::operator< 3" << ( m_placeholders.size() < other.m_placeholders.size() );
+    kDebug() << "KPrPageLayout::operator< 3" << ( m_placeholders.size() < other.m_placeholders.size() );
     return m_placeholders.size() < other.m_placeholders.size();
 }

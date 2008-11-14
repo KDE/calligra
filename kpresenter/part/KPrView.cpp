@@ -38,6 +38,8 @@
 #include "KPrViewModeNotes.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "commands/KPrAnimationCreateCommand.h"
+#include "dockers/KPrClickActionDocker.h"
+#include "dockers/KPrClickActionDockerFactory.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
 #include "dockers/KPrPageLayoutDocker.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
@@ -57,23 +59,6 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 {
     initGUI();
     initActions();
-
-    // Change strings because in KPreenter it's called slides and not pages
-    actionCollection()->action("view_masterpages")->setText(i18n("Show Master Slides"));
-    actionCollection()->action("page_insertpage")->setText(i18n( "Insert Slide"));
-    actionCollection()->action("page_insertpage")->setToolTip(i18n("Insert a new slide after the current one"));
-    actionCollection()->action("page_insertpage")->setWhatsThis(i18n("Insert a new slide after the current one"));
-    actionCollection()->action("page_copypage")->setText(i18n("Copy Slide"));
-    actionCollection()->action("page_copypage")->setToolTip(i18n("Copy the current slide"));
-    actionCollection()->action("page_copypage")->setWhatsThis(i18n("Copy the current slide"));
-    actionCollection()->action("page_deletepage")->setText(i18n("Delete Slide"));
-    actionCollection()->action("page_deletepage")->setToolTip(i18n("Delete the current slide"));
-    actionCollection()->action("page_deletepage")->setWhatsThis(i18n("Delete the current slide"));
-    actionCollection()->action("format_masterpage")->setText(i18n("Master Slide..."));
-    actionCollection()->action("page_previous")->setText(i18n("Previous Slide"));
-    actionCollection()->action("page_next")->setText(i18n("Next Slide"));
-    actionCollection()->action("page_first")->setText(i18n("First Slide"));
-    actionCollection()->action("page_last")->setText(i18n("Last Slide"));
 
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager() ) );
 }
@@ -97,6 +82,11 @@ void KPrView::updateActivePage(KoPAPageBase *page)
 
 void KPrView::initGUI()
 {
+    // add action event docker to the main window
+    KPrClickActionDockerFactory clickActionFactory;
+    KPrClickActionDocker *clickActionDocker = qobject_cast<KPrClickActionDocker*>( createDockWidget( &clickActionFactory ) );
+    clickActionDocker->setView( this );
+
     // add page effect docker to the main window
     KPrPageLayoutDockerFactory pageLayoutFactory;
     KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( createDockWidget( &pageLayoutFactory ) );
@@ -137,11 +127,10 @@ void KPrView::initActions()
     m_actionStartPresentation = new KActionMenu( KIcon("view-presentation"), i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "slideshow_start", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
-    KAction* action = new KAction( i18n( "From Current Slide" ), 
-this );
+    KAction* action = new KAction( i18n( "From Current Page" ), this );
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
-    action = new KAction( i18n( "From First Slide" ), this );
+    action = new KAction( i18n( "From First Page" ), this );
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
 

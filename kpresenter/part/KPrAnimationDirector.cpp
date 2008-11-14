@@ -147,11 +147,6 @@ KoViewConverter * KPrAnimationDirector::viewConverter()
     return &m_zoomHandler;
 }
 
-int KPrAnimationDirector::currentPage() const
-{
-    return m_pageIndex;
-}
-
 bool KPrAnimationDirector::navigate( Navigation navigation )
 {
     bool finished = false;
@@ -194,7 +189,7 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
     return presentationFinished;
 }
 
-void KPrAnimationDirector::navigateToPage( int index )
+void KPrAnimationDirector::navigateToPage( KoPAPageBase *page )
 {
     if ( m_pageEffectRunner ) {
         m_pageEffectRunner->finish();
@@ -208,8 +203,7 @@ void KPrAnimationDirector::navigateToPage( int index )
         m_timeLine.stop();
     }
 
-    m_pageIndex = index;
-    KoPAPageBase *page = m_pages[m_pageIndex];
+    m_pageIndex = m_pages.indexOf( page );
 
     m_stepIndex = 0;
 

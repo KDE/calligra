@@ -6,7 +6,6 @@ set(kpresentertoolanimation_PART_SRCS
     KPrAnimationTool.cpp
     KPrAnimationToolFactory.cpp
     KPrPageEffectDocker.cpp
-    KPrClickActionDocker.cpp
     )
 
 

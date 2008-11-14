@@ -51,6 +51,8 @@ set( kpresenterprivate_LIB_SRCS
      commands/KPrPageLayoutCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
+     dockers/KPrClickActionDockerFactory.cpp
+     dockers/KPrClickActionDocker.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
      dockers/KPrPageLayoutDocker.cpp
 
@@ -120,8 +122,6 @@ install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### kdeinit kpresenter ###
 set(kpresenter_KDEINIT_SRCS main.cpp )
-
-kde4_add_app_icon(kpresenter_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kpresenter.png")
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 

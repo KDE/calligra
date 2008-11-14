@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QPair>
 #include <QTimeLine>
-#include <QTime>
 
 #include <KoZoomHandler.h>
 
@@ -172,6 +171,7 @@ private:
     int m_maxShapeDuration;
     // true when there is an animtion in this step
     bool m_hasAnimation;
+    
     // KPresenter BE Team code -- begin //
     QList<bool> m_isPassed;
     QList<QTime*> m_currentSlideTime;
