@@ -30,6 +30,7 @@
 #include <KToolBar>
 #include <QGroupBox>
 #include <QHBoxLayout>
+#include <Q3PopupMenu>
 
 #include <kexiutils/SmallToolButton.h>
 
