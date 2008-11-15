@@ -151,6 +151,8 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->findOptions = 0;
     d->findLeftColumn = 0;
     d->findRightColumn = 0;
+    d->findTopRow = 0;
+    d->findBottomRow = 0;
     d->typeValue = FindOption::Value;
     d->directionValue = FindOption::Row;
     d->find = 0;
@@ -2900,14 +2902,14 @@ void CellToolBase::initFindReplace()
     int colEnd = !bck ? region.right() : region.left();
     int rowStart = !bck ? region.top() : region.bottom();
     int rowEnd = !bck ? region.bottom() : region.top();
-    if (d->findOptions & KFind::FromCursor) {
-        QPoint marker(selection()->marker());
-        colStart = marker.x();
-        rowStart = marker.y();
-    }
+    
     d->findLeftColumn = region.left();
     d->findRightColumn = region.right();
-    d->findPos = QPoint(colStart, rowStart);
+    d->findTopRow = region.top();
+    d->findBottomRow = region.bottom();
+
+    d->findStart = QPoint(colStart, rowStart);
+    d->findPos = (d->findOptions & KFind::FromCursor) ? selection()->marker() : d->findStart;
     d->findEnd = QPoint(colEnd, rowEnd);
     //kDebug() << d->findPos <<" to" << d->findEnd;
     //kDebug() <<"leftcol=" << d->findLeftColumn <<" rightcol=" << d->findRightColumn;
@@ -2961,6 +2963,7 @@ void CellToolBase::findNext()
         //removeHighlight();
         if (findObj->shouldRestart()) {
             d->findOptions &= ~KFind::FromCursor;
+            d->findPos = d->findStart;
             findObj->resetCounts();
             findNext();
         } else { // done, close the 'find next' dialog
@@ -2996,7 +2999,7 @@ Cell CellToolBase::findNextCell()
     int col = d->findPos.x();
     int row = d->findPos.y();
     int maxRow = sheet->cellStorage()->rows();
-    //kDebug() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
+    // kDebug() <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
 
     if (d->directionValue == FindOption::Row) {
         while (!cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0)) {
@@ -3028,10 +3031,10 @@ Cell CellToolBase::findNextCell()
                 break;
             // Prepare looking in the next col
             if (forw)  {
-                row = 0;
+                row = d->findTopRow;
                 ++col;
             } else {
-                col = maxRow;
+                row = d->findBottomRow;
                 --col;
             }
             //kDebug() <<"next row:" << col << ',' << row;
@@ -3040,7 +3043,7 @@ Cell CellToolBase::findNextCell()
     // if (!cell)
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make d->findEnd(max, max) in that case...)
-    //kDebug() <<" returning" << cell;
+    // kDebug() <<" returning" << cell;
     return cell;
 }
 
