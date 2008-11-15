@@ -186,6 +186,10 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 
 QWidget* CalendarTool::createOptionWidget()
 {
+    // Create the main cell tool widget. It is not visible, but the CellTool makes heavy use
+    // of it, and it refuses to work correctly if it does not exist
+    CellTool::createOptionWidget ();
+
     CalendarToolWidget* widget =  new CalendarToolWidget(m_canvas->canvasWidget());
     connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
             this, SLOT(insertCalendar(const QDate&, const QDate&)));
