@@ -655,8 +655,9 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
     KexiPart::ItemDict* dict = items(i);
     if (!dict)
         return;
-    foreach(KexiPart::Item *item, *dict)
-    list.append(item);
+    foreach(KexiPart::Item *item, *dict) {
+      list.append(item);
+    }
 }
 
 void
@@ -921,12 +922,14 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 
     KexiPart::ItemDict *dict = items(info);
     QSet<QString> storedItemNames;
-    foreach(KexiPart::Item* item, *dict)
-    storedItemNames.insert(item->name().toLower());
+    foreach(KexiPart::Item* item, *dict) {
+        storedItemNames.insert(item->name().toLower());
+    }
 
     QSet<QString> unstoredItemNames;
-    foreach(KexiPart::Item* item, d->unstoredItems)
-    unstoredItemNames.insert(item->name().toLower());
+    foreach(KexiPart::Item* item, d->unstoredItems) {
+        unstoredItemNames.insert(item->name().toLower());
+    }
 
     //find new, unique default name for this item
     int n;

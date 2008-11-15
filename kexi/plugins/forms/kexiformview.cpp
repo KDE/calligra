@@ -1228,8 +1228,9 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     //select all inserted widgets, if multiple
     if (widgetsToSelect.count() > 1) {
         form()->setSelectedWidget(0);
-        foreach_list(KFormDesigner::WidgetListIterator, it, widgetsToSelect)
-        form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+        foreach_list(KFormDesigner::WidgetListIterator, it, widgetsToSelect) {
+            form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+        }
     }
 
     // eventually, update property pane

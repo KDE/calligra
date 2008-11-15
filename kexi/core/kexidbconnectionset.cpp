@@ -155,7 +155,7 @@ void KexiDBConnectionSet::load()
 // files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
 // kexidbg << files;
 
-    foreach(QString file, files) {
+    foreach(const QString& file, files) {
         KexiDB::ConnectionData *data = new KexiDB::ConnectionData();
         KexiDBConnShortcutFile shortcutFile(file);
         if (!shortcutFile.loadConnectionData(*data)) {

@@ -82,7 +82,7 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
     //Add the sections
     QList<KRSectionData*> secs = _data->sections();
     foreach(KRSectionData *sec, secs) {
-	_sectionMap[sec] = new Scripting::Section(sec);
+        _sectionMap[sec] = new Scripting::Section(sec);
         _action->addObject(_sectionMap[sec], sec->name());
     }
 
@@ -226,33 +226,33 @@ QString KRScriptHandler::scriptCode()
     QString script;
    
     foreach (id, scriptids) {
-	kDebug() << "ID:" << id;
-	tristate res;
-	res = KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(id, script, QString());
-	if (res == true){
-	    QDomDocument domdoc;
-	    bool parsed = domdoc.setContent(script, false);
+        kDebug() << "ID:" << id;
+        tristate res;
+        res = KexiMainWindowIface::global()->project()->dbConnection()->loadDataBlock(id, script, QString());
+        if (res == true){
+            QDomDocument domdoc;
+            bool parsed = domdoc.setContent(script, false);
 
-	    if (! parsed) {
-		kDebug() << "XML parsing error";
-		return false;
-	    }
+            if (! parsed) {
+            kDebug() << "XML parsing error";
+            return false;
+            }
 
-	    QDomElement scriptelem = domdoc.namedItem("script").toElement();
-	    if (scriptelem.isNull()) {
-		kDebug() << "script domelement is null";
-		return false;
-	    }
+            QDomElement scriptelem = domdoc.namedItem("script").toElement();
+            if (scriptelem.isNull()) {
+            kDebug() << "script domelement is null";
+            return false;
+            }
 
-	    QString interpretername = scriptelem.attribute("language");
-	    kDebug() << interpretername;
-	    if (_data->interpreter() == interpretername) {
-		scripts += '\n' + scriptelem.text().toUtf8();
-	    }
-	}
-	else{
-	    kDebug() << "Unable to loadDataBlock";
-	}
+            QString interpretername = scriptelem.attribute("language");
+            kDebug() << interpretername;
+            if (_data->interpreter() == interpretername) {
+            scripts += '\n' + scriptelem.text().toUtf8();
+            }
+        }
+        else{
+            kDebug() << "Unable to loadDataBlock";
+        }
     }
     
     return scripts;

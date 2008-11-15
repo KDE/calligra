@@ -88,9 +88,10 @@ public Q_SLOTS:
     * has the objectName \p name or NULL if there is no such action.
     */
     QObject* action(const QString& name) {
-        foreach(QAction* action, mainWindow()->allActions())
-        if (action->objectName() == name)
-            return action;
+        foreach(QAction* action, mainWindow()->allActions()) {
+            if (action->objectName() == name)
+                return action;
+        }
         return 0;
     }
 
@@ -136,8 +137,9 @@ public Q_SLOTS:
             KexiPart::ItemList l;
             project()->getSortedItemsForClass(l, partClass(className).toUtf8());
             l.sort();
-            foreach(KexiPart::Item* i, l)
-            list << i->name();
+            foreach(KexiPart::Item* i, l) {
+                list << i->name();
+            }
         }
         return list;
     }

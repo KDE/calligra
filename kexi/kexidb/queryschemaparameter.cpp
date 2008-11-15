@@ -42,8 +42,9 @@ QString QuerySchemaParameter::debugString() const
 void KexiDB::debug(const QuerySchemaParameterList& list)
 {
     KexiDBDbg << QString("Query parameters (%1):").arg(list.count());
-    foreach(const QuerySchemaParameter& parameter, list)
-    KexiDBDbg << " - " << parameter.debugString();
+    foreach(const QuerySchemaParameter& parameter, list) {
+        KexiDBDbg << "-" << parameter.debugString();
+    }
 }
 
 //================================================

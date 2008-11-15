@@ -288,8 +288,9 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     d->dataTable->dataAwareObject()->acceptRowEdit();
 
     QStringList sortedTableNames;
-    foreach(KexiRelationsTableContainer* cont, *d->relations->tables())
-    sortedTableNames += cont->schema()->name();
+    foreach(KexiRelationsTableContainer* cont, *d->relations->tables()) {
+        sortedTableNames += cont->schema()->name();
+    }
     qHeapSort(sortedTableNames);
 
     //several tables can be hidden now, so remove rows for these tables
@@ -877,8 +878,9 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     //     so in step 4. we will be able to add
     //     remaining invisible columns with criterias
     query->debug();
-    foreach(KexiDB::Field* field, *query->fields())
-    field->debug();
+    foreach(KexiDB::Field* field, *query->fields()) {
+        field->debug();
+    }
     foreach(KexiDB::Field* field, *query->fields()) {
         //append a new row
         QString tableName, fieldName, columnAlias, criteriaString;
@@ -992,7 +994,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     //5. Show fields for unused criterias (with "Visible" column set to false)
     foreach(
         KexiDB::BaseExpr *criteriaArgument, // <-- contains field or table.field
-        criterias) {
+        criterias)
+    {
         if (usedCriterias.contains(criteriaArgument))
             continue;
         //unused: append a new row

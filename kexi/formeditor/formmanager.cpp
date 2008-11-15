@@ -812,9 +812,9 @@ FormManager::createSignalMenu(QWidget *w)
         KexiUtils::methodsForMetaObjectWithParents(w->metaObject(),
                 QMetaMethod::Signal, QMetaMethod::Public));
 //qt3: Q3StrList list = w->metaObject()->signalNames(true);
-    foreach(QMetaMethod method, list)
-    m_sigSlotMenu->addAction(QString::fromLatin1(method.signature()));
-
+    foreach(QMetaMethod method, list) {
+        m_sigSlotMenu->addAction(QString::fromLatin1(method.signature()));
+    }
     QAction* result = m_sigSlotMenu->exec(QCursor::pos());
     if (result)
         menuSignalChosen(result);
@@ -965,9 +965,9 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
         QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));
-        foreach(QMetaMethod m, list)
-        sigMenu->addAction(m.signature());
-
+        foreach(QMetaMethod m, list) {
+            sigMenu->addAction(m.signature());
+        }
         QAction *eventsSubMenuAction = m_popup->addMenu(sigMenu);
         eventsSubMenuAction->setText(i18n("Events"));
 //  menuIds->append(id);
@@ -1233,8 +1233,9 @@ FormManager::slotStyle()
     if (m_style) {
         activeForm()->widget()->setStyle(m_style);
         const QList<QWidget*> l(activeForm()->widget()->findChildren<QWidget*>());
-        foreach(QWidget *w, l)
-        w->setStyle(m_style);
+        foreach(QWidget *w, l) {
+            w->setStyle(m_style);
+        }
     }
 }
 

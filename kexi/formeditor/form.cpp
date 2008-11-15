@@ -542,10 +542,10 @@ Form::autoAssignTabStops()
     }
 
     list.sort();
-    foreach_list(Q3PtrListIterator<QWidget>, iter, list)
-    kDebug() << iter.current()->metaObject()->className()
-    << " " << iter.current()->objectName();
-
+    foreach_list(Q3PtrListIterator<QWidget>, iter, list) {
+        kDebug() << iter.current()->metaObject()->className()
+            << " " << iter.current()->objectName();
+    }
     d->tabstops.clear();
 
     /// We automatically sort widget from the top-left to bottom-right corner

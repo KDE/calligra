@@ -133,8 +133,9 @@ KexiScriptDesignView::KexiScriptDesignView(
     menu->setObjectName("script_edit_menu");
     menu->setToolTip(i18n("Edit actions"));
     menu->setWhatsThis(i18n("Edit actions"));
-    foreach(QAction *a, d->editor->defaultContextMenu()->actions())
-    menu->addAction(a);
+    foreach(QAction *a, d->editor->defaultContextMenu()->actions()) {
+        menu->addAction(a);
+    }
     if (KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
         menu->addSeparator();
         QAction* a = new KAction(KIcon("configure"), i18n("Configure Editor..."), this);
@@ -192,8 +193,9 @@ void KexiScriptDesignView::slotFileNew()
 void KexiScriptDesignView::slotFileOpen()
 {
     QStringList filters;
-    foreach(QString interpreter, Kross::Manager::self().interpreters())
-    filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
+    foreach(QString interpreter, Kross::Manager::self().interpreters()) {
+        filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
+    }
     const QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kexiscriptingdesigner"), filters.join(" "));
     if (file.isEmpty())
         return;
@@ -207,8 +209,9 @@ void KexiScriptDesignView::slotFileOpen()
 void KexiScriptDesignView::slotFileSave()
 {
     QStringList filters;
-    foreach(QString interpreter, Kross::Manager::self().interpreters())
-    filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
+    foreach(QString interpreter, Kross::Manager::self().interpreters()) {
+        filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
+    }
     const QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///kexiscriptingdesigner"), filters.join(" "));
     if (file.isEmpty())
         return;

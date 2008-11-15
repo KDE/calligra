@@ -3593,8 +3593,9 @@ void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterf
 
 void Connection::unregisterForTablesSchemaChanges(TableSchemaChangeListenerInterface& listener)
 {
-    foreach(QSet<TableSchemaChangeListenerInterface*> *listeners, d->tableSchemaChangeListeners)
-    listeners->remove(&listener);
+    foreach(QSet<TableSchemaChangeListenerInterface*> *listeners, d->tableSchemaChangeListeners) {
+        listeners->remove(&listener);
+    }
 }
 
 QSet<Connection::TableSchemaChangeListenerInterface*>*

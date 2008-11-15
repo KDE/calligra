@@ -45,6 +45,8 @@ Core
   by KexiProject::itemForClass()
 -  KexiProject::items(): retrieve info about all objects instead 
   of running queries separately for each class
+Kexi
+= add {} to one-line foreach to avoid unreadable code by astyle
 
 2008-11-13
 Property Pane

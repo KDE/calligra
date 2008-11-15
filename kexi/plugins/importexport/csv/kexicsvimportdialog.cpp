@@ -143,8 +143,9 @@ void installRecursiveEventFilter(QObject *filter, QObject *object)
 {
     object->installEventFilter(filter);
     QList<QObject*> list(object->children());
-    foreach(QObject *obj, list)
-    installRecursiveEventFilter(filter, obj);
+    foreach(QObject *obj, list) {
+        installRecursiveEventFilter(filter, obj);
+    }
 }
 
 KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)

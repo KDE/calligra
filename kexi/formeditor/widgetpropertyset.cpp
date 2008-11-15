@@ -289,8 +289,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     QList<QMetaProperty> propList(
         KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()));
     QList<Q3CString> propNames;
-    foreach(QMetaProperty mp, propList)
-    propNames.append(mp.name());
+    foreach(QMetaProperty mp, propList) {
+        propNames.append(mp.name());
+    }
 
     // add subproperties if available
     WidgetWithSubpropertiesInterface* subpropIface
@@ -759,9 +760,9 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
             d->lastGeoCommand->setPos(static_cast<QMoveEvent*>(ev)->pos());
         else  {
             QStringList list;
-            foreach(const QPointer<QWidget>& widget, d->widgets)
-            list.append(widget->objectName());
-
+            foreach(const QPointer<QWidget>& widget, d->widgets) {
+                list.append(widget->objectName());
+            }
             d->lastGeoCommand = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
             if (KFormDesigner::FormManager::self()->activeForm())
                 KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastGeoCommand, false);

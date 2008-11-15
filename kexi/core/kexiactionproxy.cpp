@@ -98,9 +98,9 @@ KexiActionProxy::~KexiActionProxy()
     qDeleteAll(m_signals);
     m_signals.clear();
     //detach myself from every child
-    foreach(KexiActionProxy *proxy, m_sharedActionChildren)
-    proxy->setActionProxyParent_internal(0);
-
+    foreach(KexiActionProxy *proxy, m_sharedActionChildren) {
+        proxy->setActionProxyParent_internal(0);
+    }
     //take me from parent
     if (m_actionProxyParent)
         m_actionProxyParent->takeActionProxyChild(this);

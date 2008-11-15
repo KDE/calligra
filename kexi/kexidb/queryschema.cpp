@@ -584,8 +584,9 @@ QuerySchema::QuerySchema(TableSchema& tableSchema)
 //replaced by explicit field list: addField( new QueryAsterisk(this) );
 
     // add explicit field list to avoid problems (e.g. with fields added outside of Kexi):
-    foreach(Field* f, *d->masterTable->fields())
-    addField(f);
+    foreach(Field* f, *d->masterTable->fields()) {
+        addField(f);
+    }
 }
 
 QuerySchema::QuerySchema(const QuerySchema& querySchema)
@@ -1367,8 +1368,9 @@ void QuerySchema::computeFieldsExpanded()
 //Qt 4  d->fieldsExpanded->setAutoDelete(true);
         d->columnsOrderExpanded = new QHash<QueryColumnInfo*, int>();
     } else {//for future:
-        foreach(QueryColumnInfo* ci, *d->fieldsExpanded)
-        delete ci;
+        foreach(QueryColumnInfo* ci, *d->fieldsExpanded) {
+            delete ci;
+        }
         d->fieldsExpanded->clear();
         d->fieldsExpanded->resize(list.count());
         d->columnsOrderExpanded->clear();
@@ -1441,8 +1443,9 @@ void QuerySchema::computeFieldsExpanded()
 
     //create internal expanded list with lookup fields
     if (d->internalFields) {
-        foreach(QueryColumnInfo* ci, *d->internalFields)
-        delete ci;
+        foreach(QueryColumnInfo* ci, *d->internalFields) {
+            delete ci;
+        }
         d->internalFields->clear();
         d->internalFields->resize(lookup_list.count());
     }

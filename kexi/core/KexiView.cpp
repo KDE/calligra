@@ -532,16 +532,18 @@ void KexiView::updateActions(bool activated)
 {
     //do nothing here
     //do the same for children :)
-    foreach(KexiView* view, d->children)
-    view->updateActions(activated);
+    foreach(KexiView* view, d->children) {
+        view->updateActions(activated);
+    }
 }
 
 void KexiView::setViewActions(const QList<QAction*>& actions)
 {
     d->viewActions = actions;
     d->viewActionsHash.clear();
-    foreach(QAction* action, d->viewActions)
-    d->viewActionsHash.insert(action->objectName().toLatin1(), action);
+    foreach(QAction* action, d->viewActions) {
+        d->viewActionsHash.insert(action->objectName().toLatin1(), action);
+    }
 }
 
 QAction* KexiView::viewAction(const char* name) const
