@@ -57,8 +57,8 @@ public:
         a.rowHighlightingEnabled = true;
         a.rowMouseOverHighlightingEnabled = true;
         a.persistentSelections = false;
-        a.rowMouseOverHighlightingColor = palette().highlight();
-        a.rowMouseOverHighlightingTextColor = palette().highlightedText();
+        a.rowMouseOverHighlightingColor = palette().highlight().color();
+        a.rowMouseOverHighlightingTextColor = palette().highlightedText().color();
         a.rowHighlightingTextColor = a.rowMouseOverHighlightingTextColor;
         a.gridEnabled = false;
         setAppearance(a);
@@ -130,7 +130,10 @@ void KexiComboBoxPopup::init()
 {
     setObjectName("KexiComboBoxPopup");
     d = new KexiComboBoxPopupPrivate();
-    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
+//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
+    QPalette pal(palette());
+    pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
+    setPalette(pal);
     setLineWidth(1);
     setFrameStyle(Box | Plain);
 

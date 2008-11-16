@@ -815,15 +815,21 @@ void KexiDBImageBox::setPalette(const QPalette &pal)
         return;
     m_insideSetPalette = true;
     setPaletteBackgroundColor(pal.active().base());
-    setPaletteForegroundColor(pal.active().foreground());
+    //setPaletteForegroundColor(pal.active().foreground());
+    QPalette p(palette());
+    p.setColor(foregroundRole(), pal.color(foregroundRole()));
+    setPalette(p);
     m_insideSetPalette = false;
 }
 
 void KexiDBImageBox::setPaletteBackgroundColor(const QColor & color)
 {
-    kexipluginsdbg << "KexiDBImageBox::setPaletteBackgroundColor(): " << color.name();
+    kexipluginsdbg << color.name();
     m_paletteBackgroundColorChanged = true;
-    KexiFrame::setPaletteBackgroundColor(color);
+    //KexiFrame::setPaletteBackgroundColor(color);
+    QPalette pal(palette());
+    pal.setColor(backgroundRole(), color);
+    setPalette(pal);
     if (m_chooser)
         m_chooser->setPalette(qApp->palette());
 }

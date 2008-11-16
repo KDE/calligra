@@ -100,9 +100,10 @@ void KexiGradientWidget::rebuildCache(void)
 //  if ( p_backgroundPixmap.isNull() ) {
         //unsetPalette();
         //} else {
-        QWidget::setPaletteBackgroundPixmap(p_backgroundPixmap);
         //}
-        QWidget::setPaletteBackgroundColor(p_backgroundColor);
+        QPalette pal(palette());
+        pal.setBrush(backgroundRole(), QBrush(p_backgroundColor, p_backgroundPixmap));
+        setPalette(pal);
 
         for (WidgetList::Iterator it = childWidgetList.begin();
                 it != childWidgetList.end(); ++it) {
@@ -357,7 +358,9 @@ void KexiGradientWidget::setPaletteBackgroundColor(const QColor& color)
 {
     p_backgroundColor = color;
     if (p_displayMode == NoGradient) {
-        QWidget::setPaletteBackgroundColor(p_backgroundColor);
+        QPalette pal(palette());
+        pal.setColor(backgroundRole(), QBrush(p_backgroundColor));
+        setPalette(pal);
     }
 }
 

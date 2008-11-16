@@ -101,7 +101,11 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 
     if (viewMode() == Kexi::DataViewMode) {
         m_scrollView->recordNavigator()->setRecordHandler(m_scrollView);
-        m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
+        //m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
+        QPalette pal(m_scrollView->viewport()->palette());
+        pal.setBrush(m_scrollView->viewport()->backgroundRole(), 
+            m_dbform->palette().brush(QPalette::Background));
+        m_scrollView->viewport()->setPalette(pal);
 //moved to formmanager  connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
     } else {
         connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QByteArray&)),

@@ -145,9 +145,6 @@ bool KexiSectionHeader::eventFilter(QObject *o, QEvent *e)
         QLayoutItem *item = d->lyr->itemAt(1);
         if (item && item->widget())
             item->widget()->setFocus();
-//  if (KexiUtils::hasParent( this, static_cast<QWidget*>(o))) {
-//   d->lbl->setPaletteBackgroundColor( e->type()==QEvent::FocusIn ? red : blue);
-//  }
     }
     return QWidget::eventFilter(o, e);
 }

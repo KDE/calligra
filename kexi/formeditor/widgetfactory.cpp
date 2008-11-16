@@ -191,13 +191,13 @@ void WidgetFactory::hideClass(const char *classname)
 void
 WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
                             QWidget *w, Container *container, QRect geometry,
-                            Qt::Alignment alignment, bool useFrame, bool multiLine, Qt::BackgroundMode background)
+                            Qt::Alignment alignment, bool useFrame, bool multiLine, 
+                            Qt::BackgroundMode background)
 {
 //#ifdef KEXI_KTEXTEDIT
     if (multiLine) {
         KTextEdit *textedit = new KTextEdit(w->parentWidget());
-        textedit->setText(text);
-        textedit->setTextFormat(Qt::PlainText);
+        textedit->setPlainText(text);
         textedit->setAlignment(alignment);
         if (dynamic_cast<QTextEdit*>(w)) {
             textedit->setWordWrapMode(dynamic_cast<QTextEdit*>(w)->wordWrapMode());
@@ -209,12 +209,14 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
         textedit->setGeometry(geometry);
         textedit->setBackgroundRole(w->backgroundRole());
         QPalette pal(textedit->palette());
-        pal.setColor(w->backgroundRole(), w->palette().active().background());
+        pal.setBrush(textedit->backgroundRole(), w->palette().brush(w->backgroundRole()));
         textedit->setPalette(pal);
         //for(int i =0; i <= textedit->paragraphs(); i++)
         // textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
         //textedit->selectAll(true);
-        textedit->setColor(w->paletteForegroundColor());
+        QPalette p(textedit->palette());
+        p.setBrush(textedit->foregroundRole(), w->palette().brush(w->foregroundRole()));
+        textedit->setPalette(p);
         //textedit->selectAll(false);
         textedit->moveCursor(QTextEdit::MoveEnd, false);
         //textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
@@ -541,7 +543,8 @@ WidgetFactory::isPropertyVisible(const Q3CString &classname, QWidget *w,
 {
     if (multiple) {
         return property == "font" || property == "paletteBackgroundColor" || property == "enabled"
-               || property == "paletteForegroundColor" || property == "cursor" || property == "paletteBackgroundPixmap";
+               || property == "paletteForegroundColor" || property == "cursor" 
+               || property == "paletteBackgroundPixmap";
     }
 
 // if(d->properties.isEmpty() && !isTopLevel)
@@ -653,7 +656,7 @@ void WidgetFactory::setEditorText(const QString& text)
 {
     QWidget *ed = editor(m_widget);
     if (dynamic_cast<KTextEdit*>(ed))
-        dynamic_cast<KTextEdit*>(ed)->setText(text);
+        dynamic_cast<KTextEdit*>(ed)->setPlainText(text);
     else
         dynamic_cast<KLineEdit*>(ed)->setText(text);
 }
