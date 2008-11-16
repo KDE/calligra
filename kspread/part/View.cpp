@@ -97,7 +97,6 @@
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoTabBar.h>
-#include <KoToolBox.h>
 #include <KoToolBoxFactory.h>
 #include <KoToolDocker.h>
 #include <KoDockerManager.h>
