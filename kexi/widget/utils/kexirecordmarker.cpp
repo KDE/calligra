@@ -2,7 +2,7 @@
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Till Busch <till@bux.at>
    Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,11 +22,11 @@
 
 #include "kexirecordmarker.h"
 
-#include <qcolor.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qapplication.h>
+#include <QColor>
+#include <QBrush>
+#include <QPixmap>
+#include <QPainter>
+#include <QImage>
 #include <QPolygon>
 #include <QPaintEvent>
 #include <QStyle>
@@ -73,7 +73,7 @@ public:
     int highlightedRow;
     int editRow;
     int rows;
-    QColor selectionBackgroundColor;
+    QBrush selectionBackgroundBrush;
 bool showInsertRow : 1;
 };
 
@@ -83,7 +83,7 @@ KexiRecordMarker::KexiRecordMarker(QWidget *parent)
         : QWidget(parent)
         , d(new Private())
 {
-    setSelectionBackgroundColor(parent->palette().color(QPalette::Highlight));
+    setSelectionBackgroundBrush(parent->palette().brush(QPalette::Highlight));
 }
 
 KexiRecordMarker::~KexiRecordMarker()
@@ -151,6 +151,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 
     for (int i = first; i <= last; i++) {
         int y = ((d->rowHeight * i) - d->offset);
+        p.setBrush(palette().brush(backgroundRole()));
         p.drawRect(r);
         QStyleOptionHeader optionHeader;
         optionHeader.initFrom(this);
@@ -162,14 +163,16 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 //! @todo Qt4: blend entire QBrush?
         if (d->currentRow == i)
             alteredColor = KexiUtils::blendedColors(
-                               palette().color(QPalette::Window), d->selectionBackgroundColor, 2, 1);
+                               palette().color(QPalette::Window), d->selectionBackgroundBrush.color(), 2, 1);
         else if (d->highlightedRow == i)
             alteredColor = KexiUtils::blendedColors(
-                               palette().color(QPalette::Window), d->selectionBackgroundColor, 4, 1);
+                               palette().color(QPalette::Window), d->selectionBackgroundBrush.color(), 4, 1);
 
         if (alteredColor.isValid()) {
+            optionHeader.palette.setBrush(QPalette::Button, d->selectionBackgroundBrush);
             optionHeader.palette.setColor(QPalette::Button, alteredColor);
             //set background color as well (e.g. for thinkeramik)
+            optionHeader.palette.setBrush(QPalette::Window, d->selectionBackgroundBrush);
             optionHeader.palette.setColor(QPalette::Window, alteredColor);
         }
         style()->drawControl(QStyle::CE_HeaderSection, &optionHeader, &p);
@@ -257,14 +260,14 @@ void KexiRecordMarker::showInsertRow(bool show)
     update();
 }
 
-void KexiRecordMarker::setSelectionBackgroundColor(const QColor &color)
+void KexiRecordMarker::setSelectionBackgroundBrush(const QBrush &brush)
 {
-    d->selectionBackgroundColor = color;
+    d->selectionBackgroundBrush = brush;
 }
 
-QColor KexiRecordMarker::selectionBackgroundColor() const
+QBrush KexiRecordMarker::selectionBackgroundBrush() const
 {
-    return d->selectionBackgroundColor;
+    return d->selectionBackgroundBrush;
 }
 
 #include "kexirecordmarker.moc"

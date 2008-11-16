@@ -271,7 +271,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
     m_verticalHeader = new KexiRecordMarker(this);
     m_verticalHeader->setObjectName("m_verticalHeader");
-    m_verticalHeader->setSelectionBackgroundColor(palette().active().highlight());
+    m_verticalHeader->setSelectionBackgroundBrush(palette().brush(QPalette::Highlight));
     m_verticalHeader->setCellHeight(d->rowHeight);
 // m_verticalHeader->setFixedWidth(d->rowHeight);
     m_verticalHeader->setCurrentRow(-1);
@@ -2478,7 +2478,7 @@ void KexiTableView::paletteChange(const QPalette &oldPalette)
     Q_UNUSED(oldPalette);
     //update:
     if (m_verticalHeader)
-        m_verticalHeader->setSelectionBackgroundColor(palette().active().highlight());
+        m_verticalHeader->setSelectionBackgroundBrush(palette().brush(QPalette::Highlight));
     if (m_horizontalHeader)
         m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
 }

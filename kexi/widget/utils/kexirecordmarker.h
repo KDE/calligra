@@ -2,7 +2,7 @@
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Till Busch <till@bux.at>
    Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -53,8 +53,8 @@ public slots:
     void setEditRow(int row);
     void showInsertRow(bool show);
 
-    QColor selectionBackgroundColor() const;
-    void setSelectionBackgroundColor(const QColor &color);
+    QBrush selectionBackgroundBrush() const;
+    void setSelectionBackgroundBrush(const QBrush &brush);
 
     void addLabel(bool upd = true);
     void removeLabel(bool upd = true);
