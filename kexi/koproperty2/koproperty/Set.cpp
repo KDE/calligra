@@ -193,6 +193,18 @@ private:
 
 using namespace KoProperty;
 
+//////////////////////////////////////////////
+
+Set::PropertySelector::PropertySelector()
+{
+}
+
+Set::PropertySelector::~PropertySelector()
+{
+}
+
+//////////////////////////////////////////////
+
 //Set::Iterator class
 Set::Iterator::Iterator(const Set &set, PropertySelector *selector)
     : m_iterator( set.d->hashConstIterator() )

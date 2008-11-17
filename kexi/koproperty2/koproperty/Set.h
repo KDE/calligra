@@ -49,6 +49,8 @@ public:
     class KOPROPERTY_EXPORT PropertySelector
     {
     public:
+        PropertySelector();
+        virtual ~PropertySelector();
         virtual bool operator()(const Property& prop) const = 0;
     };
     //! A class to iterate over a Set.
