@@ -1551,7 +1551,7 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
  */
 
 static double ccmath_gaml(double x)
-{ double g,h;
+{ double g,h=0; /* NB must be called with 0<=x<29 */
   for(g=1.; x<30. ;g*=x,x+=1.) h=x*x;
   g=(x-.5)*log(x)-x+.918938533204672-log(g);
   g+=(1.-(1./6.-(1./3.-1./(4.*h))/(7.*h))/(5.*h))/(12.*x);
@@ -1679,34 +1679,41 @@ static double ccmath_nbes(double v,double x)
 
 /* ---------- end of CCMATH code ---------- */
 
+template <typename func_ptr>
+Value CalcBessel(
+  func_ptr       *func,
+  ValueConverter *converter, 
+  Value v, Value x)
+{
+  double vv = numToDouble (converter->toFloat (v));
+  double xx = numToDouble (converter->toFloat (x));
+  // vv must be a non-negative integer and <29 for implementation reasons
+  // xx must be non-negative
+  if(xx>=0 && vv>=0 && vv<29 && vv == floor(vv))
+    return Value (func (vv, xx));
+  return Value::errorVALUE();
+}
 
 Value ValueCalc::besseli (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_ibes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_ibes, converter, v, x);
 }
 
 Value ValueCalc::besselj (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_jbes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_jbes, converter, v, x);
 }
 
 Value ValueCalc::besselk (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_kbes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_kbes, converter, v, x);
 }
 
 Value ValueCalc::besseln (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_nbes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_nbes, converter, v, x);
 }
+
 
 // ------------------------------------------------------
 
