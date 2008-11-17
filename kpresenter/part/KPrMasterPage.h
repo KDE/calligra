@@ -30,6 +30,13 @@ class KPrMasterPage : public KoPAMasterPage, public KPrPageData
 public:
     explicit KPrMasterPage();
     virtual ~KPrMasterPage();
+
+    /**
+     * Get the page type used in the document
+     *
+     * @return KoPageApp::Slide
+     */
+    virtual KoPageApp::PageType pageType() const;
 };
 
 #endif /* KPRMASTERPAGE_H */

@@ -75,6 +75,13 @@ public:
      */
     KPrPageLayout * layout() const;
 
+    /**
+     * Get the page type used in the document
+     *
+     * @return KoPageApp::Slide
+     */
+    virtual KoPageApp::PageType pageType() const;
+
 protected:
     /// reimplemented
     virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;

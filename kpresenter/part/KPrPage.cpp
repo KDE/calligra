@@ -191,3 +191,7 @@ bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const
     return true;
 }
 
+KoPageApp::PageType KPrPage::pageType() const
+{
+    return KoPageApp::Slide;
+}
