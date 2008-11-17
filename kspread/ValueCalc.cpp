@@ -713,7 +713,7 @@ Value ValueCalc::random (Value range)
 Value ValueCalc::fact (const Value &which)
 {
   // we can simply use integers - no one is going to compute factorial of
-  // anything bigger than 2^32
+  // anything bigger than 2^64
   return fact (converter->asInteger (which).asInteger());
 }
 
@@ -721,7 +721,7 @@ Value ValueCalc::fact (const Value &which,
     const Value &end)
 {
   // we can simply use integers - no one is going to compute factorial of
-  // anything bigger than 2^32
+  // anything bigger than 2^64
   return fact (converter->asInteger (which).asInteger(),
       converter->asInteger (end).asInteger ());
 }
@@ -731,11 +731,12 @@ Value ValueCalc::fact (int which, int end) {
     return Value (-1);
   if (which == 0)
     return Value (1);
-  // no multiplication if val==end
-  if (which == end)
-    return Value (1);
-
-  return (mul (fact (which-1, end), which));
+  Value res = Value(1);
+  while (which > end) {
+    res = mul (res, which);
+    which--;
+  }
+  return res;
 }
 
 Value ValueCalc::factDouble (int which)
@@ -745,7 +746,12 @@ Value ValueCalc::factDouble (int which)
   if ((which == 0) || (which == 1))
     return Value (1);
 
-  return (mul (factDouble (which-2), which));
+  Value res = Value(1);
+  while (which > 1) {
+    res = mul (res, which);
+    which -= 2;
+  }
+  return res;
 }
 
 Value ValueCalc::factDouble (Value which)
