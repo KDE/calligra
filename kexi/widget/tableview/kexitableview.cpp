@@ -120,7 +120,8 @@ public:
             return i18n("Row navigator");
 //    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
         }
-        KexiDB::Field *f = m_tv->field(m_tv->columnAt(pos.x() - leftMargin));
+        const int col = m_tv->columnAt(pos.x() - leftMargin);
+        KexiDB::Field *f = col == -1 ? 0 : m_tv->field(col);
         if (!f)
             return QString();
         return f->description().isEmpty() ? f->captionOrName() : f->description();
