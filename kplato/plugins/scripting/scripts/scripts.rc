@@ -1,8 +1,28 @@
 <KrossScripting>
 
     <!--
-        The "import" collection provides scripts to import content into KPlato.
+        The "Resource Busy Information" collection provides scripts to handle rbi content in KPlato.
         //-->
+    <collection name="Resource Busy Information" text="Resource Busy Information" comment="Handle resource busy information">
+        <script
+               name="pyimportbusyinfo"
+               text="Import Resource Busy Information"
+               comment="Python script to import busy information from file"
+               interpreter="python"
+               file="extensions/busyinfoimport.py" />
+        <script
+               name="pyexportbusyinfo"
+               text="Export Resource Busy Information"
+               comment="Python script to export busy information to file"
+               interpreter="python"
+               file="extensions/busyinfoexport.py" />
+        <script
+               name="pyclearbusyinfo"
+               text="Clear Resource Busy Information"
+               comment="Python script to clear the imported resource busy information"
+               interpreter="python"
+               file="extensions/busyinfoclear.py" />
+    </collection>
     <collection name="import" text="Import" comment="Import content">
         <script
                name="pyimportresources"
@@ -11,39 +31,13 @@
                interpreter="python"
                file="extensions/resourcesimport.py" />
     </collection>
-    <collection name="import" text="Import" comment="Import content">
-        <script
-               name="pyimportbusyinfo"
-               text="KPlato Busy Information File"
-               comment="Python script to import busy information from file"
-               interpreter="python"
-               file="extensions/busyinfoimport.py" />
-    </collection>
 
     <!--
         The "export" collection provides scripts to export content from KPlato.
         //-->
-    <collection name="export" text="Export" comment="Export busy info">
-        <script
-               name="pyexportbusyinfo"
-               text="KPlato Busy Information File"
-               comment="Python script to export busy information to file"
-               interpreter="python"
-               file="extensions/busyinfoexport.py" />
-    </collection>
+<!--    <collection name="export" text="Export" comment="Export busy info">
+    </collection>-->
     
-    <!--
-        The "utilities" collection provides misc useful tools
-        //-->
-    <collection name="utilities" text="Utitlities" comment="Useful tools">
-        <script
-               name="pyclearbusyinfo"
-               text="Clear KPlato Busy Information"
-               comment="Python script to clear busy information"
-               interpreter="python"
-               file="extensions/busyinfoclear.py" />
-    </collection>
-
     <!--
         The "samples" collection provides misc example scripts to demonstrate
         parts of the KPlato scripting functionality.
