@@ -340,7 +340,8 @@ public:
     QList<DependencyNodeItem*> removeChildItems( DependencyNodeItem *item );
     
     DependencyNodeItem *nodeItem( int row ) const;
-    
+    const QList<DependencyNodeItem*> &nodeItems() const { return m_allItems; }
+
 signals:
     void connectorClicked( DependencyConnectorItem *item );
     void connectItems( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
@@ -413,6 +414,7 @@ protected slots:
     void slotRelationAdded( Relation* rel );
     void slotRelationRemoved( Relation* rel );
     void slotRelationModified( Relation* rel );
+    void slotWbsCodeChanged();
     
     void slotSelectedItems(); // HACK due to tt bug 160653
     void slotConnectorClicked( DependencyConnectorItem *item );

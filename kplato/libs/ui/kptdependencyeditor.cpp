@@ -1582,6 +1582,8 @@ void DependencyView::setProject( Project *project )
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
+
+        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsCodeChanged() ) );
     }
     if ( itemScene() ) {
         itemScene()->setProject( project );
@@ -1641,6 +1643,7 @@ void DependencyView::slotNodeAdded( Node *node )
         itemScene()->setItemVisible( item, true );
     }
     ensureVisible( item );
+    slotWbsCodeChanged();
 }
 
 void DependencyView::slotNodeRemoved( Node *node )
@@ -1650,6 +1653,7 @@ void DependencyView::slotNodeRemoved( Node *node )
         //kDebug()<<node->name();
         itemScene()->setItemVisible( item, false );
     } else kDebug()<<"Node does not exist!";
+    slotWbsCodeChanged();
 }
 
 void DependencyView::slotNodeChanged( Node *node )
@@ -1659,6 +1663,13 @@ void DependencyView::slotNodeChanged( Node *node )
         item->setText();
         item->setSymbol();
     } else kDebug()<<"Node does not exist!";
+}
+
+void DependencyView::slotWbsCodeChanged()
+{
+    foreach( DependencyNodeItem *i, itemScene()->nodeItems() ) {
+        i->setText();
+    }
 }
 
 void DependencyView::slotNodeMoved( Node *node )

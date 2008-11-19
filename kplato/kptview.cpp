@@ -1213,7 +1213,7 @@ void View::slotAddSubTask()
     // do is to add a first project. We will silently accept the challenge
     // and will not complain.
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskDialog *dia = new TaskDialog( *node, getProject().accounts() );
+    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts() );
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1234,7 +1234,7 @@ void View::slotAddSubTask()
 void View::slotAddTask()
 {
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskDialog *dia = new TaskDialog( *node, getProject().accounts() );
+    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts() );
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1257,7 +1257,7 @@ void View::slotAddMilestone()
     Task * node = getProject().createTask( currentTask() );
     node->estimate() ->clear();
 
-    TaskDialog *dia = new TaskDialog( *node, getProject().accounts() );
+    TaskAddDialog *dia = new TaskAddDialog( *node, getProject().accounts() );
     if ( dia->exec() == QDialog::Accepted ) {
         Node * currNode = currentTask();
         if ( currNode ) {

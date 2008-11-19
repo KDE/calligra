@@ -110,6 +110,13 @@ void TaskDialog::slotButtonClicked(int button) {
     }
 }
 
+//---------------------------
+TaskAddDialog::TaskAddDialog(Task &task, Accounts &accounts, QWidget *p)
+    : TaskDialog(task, accounts, p)
+{
+    // do not know wbs code yet
+    m_generalTab->hideWbs();
+}
 
 }  //KPlato namespace
 
