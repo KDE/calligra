@@ -4348,7 +4348,9 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
                 }
             }
         }
-        if (newBuf && _currentWindow->currentViewMode() == Kexi::DesignViewMode) {
+        if (   (newBuf && _currentWindow->currentViewMode() == Kexi::DesignViewMode)
+            || (!newBuf && _currentWindow && _currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode()))
+        {
             d->propEditorDockWidget->setVisible(true);
         }
     }
