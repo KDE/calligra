@@ -697,4 +697,16 @@ void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
     layout->setSpacing( KDialog::spacingHint() );
 }
 
+QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
+{
+    QPixmap dest(original);
+    dest.fill(color);
+    {
+        QPainter p(&dest);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.drawPixmap(0, 0, original);
+    }
+    return dest;
+}
+
 #include "utils_p.moc"

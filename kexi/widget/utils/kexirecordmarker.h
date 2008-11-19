@@ -27,7 +27,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 
-class QImage;
+class QPixmap;
 
 //! \brief Record marker, usually displayed at the left side of a table view or a continuous form.
 class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
@@ -40,8 +40,8 @@ public:
 
     int rows() const;
 
-    static QImage* penImage();
-    static QImage* plusImage();
+    static const QPixmap* penPixmap();
+    static const QPixmap* plusPixmap();
 
 public slots:
     void setOffset(int offset);

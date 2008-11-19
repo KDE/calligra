@@ -232,6 +232,10 @@ KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
  with accessibility settings. */
 KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
+/*! @return pixmap @a original colored using @a color color. Used for coloring bitmaps 
+ that have to reflect the foreground color. */
+KEXIUTILS_EXPORT QPixmap replaceColors(const QPixmap& original, const QColor& color);
+
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
 
