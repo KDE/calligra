@@ -58,11 +58,9 @@ class KToggleAction;
 class KoCanvasController;
 class KoRuler;
 
-class VDocumentTab;
 class KarbonLayerDocker;
 class KarbonZoomController;
 
-class VPainterFactory;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
@@ -145,8 +143,6 @@ public slots:
     void showGuides();
     void snapToGrid();
 
-    void showSelectionPopupMenu( const QPoint &pos );
-
 protected slots:
     // Object related operations.
 
@@ -164,7 +160,6 @@ protected slots:
     void applyStrokeToSelection();
     
 signals:
-    void selectionChange();
     void pageLayoutChanged();
 
 protected:

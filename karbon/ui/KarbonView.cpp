@@ -128,8 +128,6 @@
 #include <QtGui/QLabel>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
-#include <Qt3Support/q3dragobject.h>
-#include <Qt3Support/q3popupmenu.h>
 #include <QtGui/QPrinter>
 
 
@@ -506,6 +504,7 @@ void KarbonView::selectionAlignHorizontalLeft()
 
     selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
 }
+
 void KarbonView::selectionAlignHorizontalCenter()
 {
     debugView("KarbonView::selectionAlignHorizontalCenter()");
@@ -1202,24 +1201,6 @@ void KarbonView::snapToGrid()
     d->canvas->update();
 }
 
-void KarbonView::showSelectionPopupMenu( const QPoint &pos )
-{
-    debugView(QString("KarbonView::showSelectionPopupMenu(QPoint(%1, %2))").arg(pos.x()).arg(pos.y()));
-
-    QList<QAction*> actionList;
-    if( d->groupObjects->isEnabled() )
-        actionList.append( d->groupObjects );
-    else if( d->ungroupObjects->isEnabled() )
-        actionList.append( d->ungroupObjects );
-    if( d->closePath->isEnabled() )
-        actionList.append( d->closePath );
-    if( d->combinePath->isEnabled() )
-        actionList.append( d->combinePath );
-    plugActionList( "selection_type_action", actionList );
-    ((Q3PopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
-    unplugActionList( "selection_type_action" );
-}
-
 void KarbonView::configure()
 {
     debugView("KarbonView::configure()");
@@ -1314,8 +1295,6 @@ void KarbonView::selectionChanged()
                 selection->setActiveLayer( layer );
         }
     }
-
-    emit selectionChange();
 }
 
 void KarbonView::setCursor( const QCursor &c )
