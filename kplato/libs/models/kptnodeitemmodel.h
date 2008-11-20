@@ -26,6 +26,7 @@
 #include <QDate>
 #include <QItemDelegate>
 #include <QMetaEnum>
+#include <QSortFilterProxyModel>
 
 class QMimeData;
 class QModelIndex;
@@ -377,7 +378,7 @@ public:
 
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
 
-    const QList<Node*> &mileStones() const { return m_mslist; }
+    QList<Node*> mileStones() const;
     
 protected slots:
     void slotNodeChanged( Node* );
@@ -416,6 +417,22 @@ protected:
 private:
     NodeModel m_nodemodel;
     QList<Node*> m_mslist;
+};
+
+class KPLATOMODELS_EXPORT NodeSortFilterProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    NodeSortFilterProxyModel( ItemModelBase* model, QObject *parent, bool filterUnscheduled = true );
+
+    ItemModelBase *itemModel() const;
+
+protected:
+    bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
+
+private:
+    NodeItemModel *m_model;
+    bool m_filterUnscheduled;
 };
 
 } //namespace KPlato

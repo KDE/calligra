@@ -143,7 +143,7 @@ class GanttViewBase : public KDGantt::View
 public:
     GanttViewBase( QWidget *parent );
     
-    QSortFilterProxyModel *sfModel() const;
+    NodeSortFilterProxyModel *sfModel() const;
     void setItemModel( ItemModelBase *model );
     ItemModelBase *model() const;
     void setProject( Project *project );

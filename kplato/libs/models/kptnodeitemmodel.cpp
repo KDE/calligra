@@ -67,13 +67,13 @@ const QMetaEnum NodeModel::columnMap() const
 
 void NodeModel::setProject( Project *project )
 {
-    //kDebug()<<m_project<<"->"<<project;
+    kDebug()<<m_project<<"->"<<project;
     m_project = project;
 }
 
 void NodeModel::setManager( ScheduleManager *sm )
 {
-    //kDebug()<<m_manager<<"->"<<sm;
+    kDebug()<<m_manager<<"->"<<sm;
     m_manager = sm;
 }
 
@@ -1355,7 +1355,8 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
             return node->notScheduled( id() );
-            break;
+        case Qt::EditRole:
+            return node->notScheduled( id() );
         case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -1844,7 +1845,7 @@ void NodeItemModel::setProject( Project *project )
         //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
-    //kDebug()<<m_project<<"->"<<project;
+    kDebug()<<this<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
@@ -1869,7 +1870,7 @@ void NodeItemModel::setManager( ScheduleManager *sm )
     m_nodemodel.setManager( sm );
     if ( sm ) {
     }
-    //kDebug()<<sm;
+    kDebug()<<this<<sm;
     reset();
 }
     
@@ -2901,7 +2902,18 @@ MilestoneItemModel::MilestoneItemModel( QObject *parent )
 MilestoneItemModel::~MilestoneItemModel()
 {
 }
-    
+
+QList<Node*> MilestoneItemModel::mileStones() const
+{
+    QList<Node*> lst;
+    foreach( Node* n, m_mslist ) {
+        if ( n->type() == Node::Type_Milestone ) {
+            lst << n;
+        }
+    }
+    return lst;
+}
+
 void MilestoneItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
 }
@@ -3547,6 +3559,37 @@ void MilestoneItemModel::slotWbsDefinitionChanged()
     }
 }
 
+//--------------
+NodeSortFilterProxyModel::NodeSortFilterProxyModel( ItemModelBase* model, QObject *parent, bool filterUnscheduled )
+    : QSortFilterProxyModel( parent ),
+    m_filterUnscheduled( filterUnscheduled )
+{
+    setSourceModel( model );
+    setDynamicSortFilter( true );
+}
+
+ItemModelBase *NodeSortFilterProxyModel::itemModel() const
+{
+    return static_cast<ItemModelBase *>( sourceModel() );
+}
+
+bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
+{
+    kDebug()<<sourceModel()<<row<<parent;
+    if ( itemModel()->project() == 0 ) {
+        kDebug()<<itemModel()->project();
+        return false;
+    }
+    if ( m_filterUnscheduled ) {
+        QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
+        if ( s == "true" ) {
+            return false;
+        }
+    }
+    bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
+    kDebug()<<this<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    return accepted;
+}
 
 } //namespace KPlato
 

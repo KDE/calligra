@@ -52,7 +52,6 @@
 #include <QMenu>
 #include <QModelIndex>
 #include <QPainter>
-#include <QSortFilterProxyModel>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -240,16 +239,13 @@ GanttViewBase::GanttViewBase( QWidget *parent )
     setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
     tv->header()->setStretchLastSection( true );
     
-    QSortFilterProxyModel *m = new QSortFilterProxyModel( this );
-    m->setSourceModel( &m_defaultModel );
+    NodeSortFilterProxyModel *m = new NodeSortFilterProxyModel( &m_defaultModel, this );
     KDGantt::View::setModel( m );
-    
-    m->setDynamicSortFilter ( true );
 }
 
-QSortFilterProxyModel *GanttViewBase::sfModel() const
+NodeSortFilterProxyModel *GanttViewBase::sfModel() const
 {
-    return static_cast<QSortFilterProxyModel*>( KDGantt::View::model() );
+    return static_cast<NodeSortFilterProxyModel*>( KDGantt::View::model() );
 }
 
 void GanttViewBase::setItemModel( ItemModelBase *model )
@@ -259,7 +255,7 @@ void GanttViewBase::setItemModel( ItemModelBase *model )
 
 ItemModelBase *GanttViewBase::model() const
 {
-    return static_cast<ItemModelBase*>( sfModel()->sourceModel() );
+    return sfModel()->itemModel();
 }
 
 GanttTreeView *GanttViewBase::treeView() const
@@ -313,7 +309,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
 {
     kDebug()<<"------------------- create MyKDGanttView -----------------------";
     setItemModel( new GanttItemModel( this ) );
-    
+
     QList<int> show;
     show << NodeModel::NodeName
             << NodeModel::NodeCompleted
@@ -700,6 +696,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
         foreach ( const Node *n, model()->mileStones() ) {
             if ( ! start.isValid() || start > n->startTime().dateTime() ) {
                 start = n->startTime( sm->id() ).dateTime();
+                kDebug()<<n->name()<<start;
             }
         }
         if ( ! start.isValid() ) {
@@ -707,6 +704,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
         }
         KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
         start = start.addDays( -1 );
+        kDebug()<<project()->startTime().toString()<<g->startDateTime()<<start;
         if ( g->startDateTime() !=  start ) {
             g->setStartDateTime( start );
         }

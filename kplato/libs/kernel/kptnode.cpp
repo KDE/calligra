@@ -583,6 +583,15 @@ bool Node::schedulingError( long id ) const
 
 bool Node::notScheduled( long id ) const
 {
+    if ( type() == Type_Summarytask ) {
+        // i am scheduled if al least on child is scheduled
+        foreach ( Node *n, m_nodes ) {
+            if ( ! n->notScheduled( id ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
     Schedule *s = schedule( id );
     return s == 0 || s->isDeleted() || s->notScheduled;
 }
