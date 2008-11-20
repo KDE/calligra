@@ -694,8 +694,12 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
     if ( sm && m_project ) {
         QDateTime start;
         foreach ( const Node *n, model()->mileStones() ) {
-            if ( ! start.isValid() || start > n->startTime().dateTime() ) {
-                start = n->startTime( sm->id() ).dateTime();
+            QDateTime nt = n->startTime( sm->id() ).dateTime();
+            if ( ! nt.isValid() ) {
+                continue;
+            }
+            if ( ! start.isValid() || start > nt ) {
+                start = nt;
                 kDebug()<<n->name()<<start;
             }
         }
