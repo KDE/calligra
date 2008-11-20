@@ -64,8 +64,18 @@ public slots:
 
     void clear(bool upd = true);
 
+signals:
+    //! Used to allow row selecting by clicking on the section
+    void rowPressed(uint row);
+
+    //! Used to allow row highlighting by moving mouse over the section
+    void rowHighlighted(int row);
+
 protected:
     virtual void paintEvent(QPaintEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void leaveEvent(QEvent *e);
 
     class Private;
     Private * const d;

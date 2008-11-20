@@ -498,6 +498,15 @@ protected slots:
         KexiDataAwareObjectInterface::scrollBarTipTimeout();
     }
 #endif
+    //! for navigator
+    virtual void moveToRecordRequested(uint r);
+    virtual void moveToLastRecordRequested();
+    virtual void moveToPreviousRecordRequested();
+    virtual void moveToNextRecordRequested();
+    virtual void moveToFirstRecordRequested();
+    virtual void addNewRecordRequested() {
+        KexiDataAwareObjectInterface::addNewRecordRequested();
+    }
 protected:
     /*! Reimplementation for KexiDataAwareObjectInterface
      Initializes data contents (resizes it, sets cursor at 1st row).
@@ -640,16 +649,6 @@ protected:
 
     virtual void updateWidgetContents() {
         update();
-    }
-
-    //! for navigator
-    virtual void moveToRecordRequested(uint r);
-    virtual void moveToLastRecordRequested();
-    virtual void moveToPreviousRecordRequested();
-    virtual void moveToNextRecordRequested();
-    virtual void moveToFirstRecordRequested();
-    virtual void addNewRecordRequested() {
-        KexiDataAwareObjectInterface::addNewRecordRequested();
     }
 
     //! Copy current selection to a clipboard (e.g. cell)

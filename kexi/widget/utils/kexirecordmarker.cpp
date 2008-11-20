@@ -94,6 +94,7 @@ KexiRecordMarker::KexiRecordMarker(QWidget *parent)
         , d(new Private())
 {
     setSelectionBackgroundBrush(parent->palette().brush(QPalette::Highlight));
+    setMouseTracking(true);
 }
 
 KexiRecordMarker::~KexiRecordMarker()
@@ -287,6 +288,40 @@ void KexiRecordMarker::setSelectionBackgroundBrush(const QBrush &brush)
 QBrush KexiRecordMarker::selectionBackgroundBrush() const
 {
     return d->selectionBackgroundBrush;
+}
+
+void KexiRecordMarker::mouseMoveEvent(QMouseEvent *e)
+{
+    const int y = e->y();
+//    kDebug() << "y:" << y << "d->rowHeight:" << d->rowHeight;
+//    kDebug() << "y / d->rowHeight:" << (y / d->rowHeight);
+    const uint row = y / d->rowHeight;
+    if ((int)row < rows()) {
+        setHighlightedRow(row);
+        emit rowHighlighted(row);
+    }
+    else {
+        setHighlightedRow(-1);
+        emit rowHighlighted(-1);
+    }
+    QWidget::mouseMoveEvent(e);
+}
+
+void KexiRecordMarker::mousePressEvent(QMouseEvent *e)
+{
+    const int y = e->y();
+    const uint row = y / d->rowHeight;
+    if ((int)row < rows()) {
+        emit rowPressed(row);
+    }
+    QWidget::mousePressEvent(e);
+}
+
+void KexiRecordMarker::leaveEvent(QEvent *e)
+{
+    setHighlightedRow(-1);
+    emit rowHighlighted(-1);
+    QWidget::leaveEvent(e);
 }
 
 #include "kexirecordmarker.moc"

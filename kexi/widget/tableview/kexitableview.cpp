@@ -276,6 +276,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_verticalHeader->setCellHeight(d->rowHeight);
 // m_verticalHeader->setFixedWidth(d->rowHeight);
     m_verticalHeader->setCurrentRow(-1);
+    connect(m_verticalHeader, SIGNAL(rowPressed(uint)), this, SLOT(moveToRecordRequested(uint)));
+    connect(m_verticalHeader, SIGNAL(rowHighlighted(int)), this, SLOT(setHighlightedRow(int)));
 
     setMargins(
         qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
