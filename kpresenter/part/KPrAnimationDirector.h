@@ -172,10 +172,10 @@ private:
     int m_maxShapeDuration;
     // true when there is an animtion in this step
     bool m_hasAnimation;
+
     // KPresenter BE Team code -- begin //
-    QList<bool> m_isPassed;
-    QList<QTime*> m_currentSlideTime;
-    QList<int> m_finalTimeSlide;
+    QTime *m_currentSlideTime;
+    QMap<int,int> m_finalTimeSlide;
     // KPresenter BE Team code -- end //
 };
 

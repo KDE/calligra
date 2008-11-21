@@ -81,11 +81,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     }
     
     // KPresenter BE Team code -- begin //
-    for(int i = 0 ; i<m_pages.size() ; i++){
-	m_isPassed.append(false);
-	m_currentSlideTime[i] = new QTime();
-	m_finalTimeSlide.append(0);
-    }
+    m_currentSlideTime = new QTime();
+    m_finalTimeSlide.insert(m_pageIndex,0);
+    m_currentSlideTime->start();
     // KPresenter BE Team code -- end //
 }
 
@@ -280,11 +278,14 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
 bool KPrAnimationDirector::changePage( Navigation navigation )
 {
+    // KPresenter BE Team code -- begin //
+    if(m_finalTimeSlide.contains(m_pageIndex))	{
+      m_finalTimeSlide.remove(m_pageIndex);
+    }
+    m_finalTimeSlide.insert(m_pageIndex,m_currentSlideTime->elapsed());
+    // KPresenter BE Team code -- end //
     switch ( navigation )
     {
-	// KPresenter BE Team code -- begin //
-	m_finalTimeSlide[m_pageIndex] += m_currentSlideTime[m_pageIndex]->elapsed();
-	// KPresenter BE Team code -- end //
         case FirstPage:
             m_pageIndex = 0;
             break;
@@ -314,12 +315,7 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
     }
     m_stepIndex = 0;
     // KPresenter BE Team code -- begin //
-    if (!(m_isPassed[m_pageIndex])){
-	m_isPassed[m_pageIndex] = true;
-	m_currentSlideTime[m_pageIndex]->start();
-    } else {
-	m_currentSlideTime[m_pageIndex]->restart();
-    }
+    m_currentSlideTime->restart();
     // KPresenter BE Team code -- end //
 
     updateActivePage( m_pages[m_pageIndex] );
