@@ -41,7 +41,7 @@ Info::Private::Private(const KService::Ptr& aPtr)
     isVisibleInNavigator = val.isValid() ? !val.toBool() : true;
 
     val = aPtr->property("X-Kexi-PropertyEditorAlwaysVisibleInDesignMode", QVariant::Bool);
-    isPropertyEditorAlwaysVisibleInDesignMode = val.isValid() ? val.toBool() : false;
+    isPropertyEditorAlwaysVisibleInDesignMode = val.isValid() ? val.toBool() : true;
 #if 0
     if (projectPartID == 0) {
         if (isVisibleInNavigator) {

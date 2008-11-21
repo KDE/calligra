@@ -921,6 +921,10 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
     }
 
     KexiPart::ItemDict *dict = items(info);
+    if (!dict) {
+      dict = new KexiPart::ItemDict();
+      d->itemDicts.insert(info->partClass(), dict);
+    }
     QSet<QString> storedItemNames;
     foreach(KexiPart::Item* item, *dict) {
         storedItemNames.insert(item->name().toLower());
@@ -1165,6 +1169,7 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
     kexidbg << "new id is: " << p_id;
 
 //    part()->info()->setIdStoredInPartDatabase(true);
+    return true;
 }
 
 KexiPart::MissingPartsList KexiProject::missingParts() const

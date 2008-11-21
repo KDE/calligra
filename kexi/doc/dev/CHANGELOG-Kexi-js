@@ -22,6 +22,13 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-11-21
+Core
+- make default value of X-Kexi-PropertyEditorAlwaysVisibleInDesignMode 
+  flag for kexi parts == true by default
+- remove crash on creation of a new part item that is first of its class 
+  within a given project; e.g. when the first query is created
+  (introduced after moving towards "part classes")
 
 2008-11-19
 Main Window
