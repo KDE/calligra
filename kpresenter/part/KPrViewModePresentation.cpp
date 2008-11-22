@@ -246,6 +246,8 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
     bool finished = m_animationDirector->navigate( navigation );
+    int index = m_animationDirector->currentPage();
+    m_presenterViewWidget->updateSlideIndex(index);
     if ( m_pvAnimationDirector ) {
         finished = m_pvAnimationDirector->navigate( navigation ) && finished;
     }

@@ -22,6 +22,7 @@
 
 #include <QtCore/QTime>
 #include <QtGui/QFrame>
+#include <QMap>
 
 class QLabel;
 class QTimer;
@@ -38,6 +39,7 @@ class KPrPresenterViewToolWidget : public QFrame
 public:
     KPrPresenterViewToolWidget( QWidget *parent = 0 );
     void toggleSlideThumbnails( bool toggle );
+    void updateSlideIndex(int index);
 
 signals:
     void slideThumbnailsToggled( bool toggle );
@@ -45,15 +47,20 @@ signals:
     void nextSlideClicked();
 
 private slots:
-    void updateClock();
+    void updateClock();    
 
 private:
     QToolButton *m_slidesToolButton;
     QLabel *m_clockLabel;
     QLabel *m_timerLabel;
+    QLabel *m_timerSlideLabel;
 
     QTime m_currentTime;
     QTimer *m_clockTimer;
+    
+    QTime *m_currentSlideTime;
+    QMap<int,int> m_finalTimeSlide;
+    int indexCurrentPage;
 };
 
 #endif

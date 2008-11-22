@@ -23,6 +23,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QToolButton>
 #include <QtCore/QTimer>
+#include <KDebug>
 
 #include <KIcon>
 
@@ -87,7 +88,22 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     m_timerLabel->setStyleSheet("QLabel { font-size: 24px }");
     hLayout->addWidget( m_timerLabel );
     mainLayout->addLayout(hLayout);
-
+    
+    mainLayout->addSpacing( 5 );
+    frame = new QFrame;
+    frame->setFrameStyle(QFrame::VLine | QFrame::Sunken);
+    mainLayout->addWidget(frame);
+    mainLayout->addSpacing( 5 );
+    
+    hLayout = new QHBoxLayout;
+    iconLabel = new QLabel;
+    iconLabel->setPixmap( KIcon( "chronometer" ).pixmap( iconSize ) );
+    hLayout->addWidget(iconLabel);
+    m_timerSlideLabel = new QLabel( "<font color=\"#00FF00\">00:00:00</font>");
+    m_timerSlideLabel->setStyleSheet("QLabel { font-size: 24px }");
+    hLayout->addWidget( m_timerSlideLabel );
+    mainLayout->addLayout(hLayout);
+    
     setLayout(mainLayout);
     setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
@@ -95,6 +111,11 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     m_clockTimer = new QTimer( this );
     connect( m_clockTimer, SIGNAL( timeout() ), this, SLOT( updateClock() ) );
     m_clockTimer->start( 1000 );
+    
+    m_currentSlideTime = new QTime();
+    indexCurrentPage = 0;
+    m_finalTimeSlide.insert(indexCurrentPage,0);
+    m_currentSlideTime->start();
 }
 
 void KPrPresenterViewToolWidget::toggleSlideThumbnails( bool toggle )
@@ -116,6 +137,31 @@ void KPrPresenterViewToolWidget::updateClock()
     // display the timer, with 0 appended if only 1 digit
     m_timerLabel->setText( QString( "%1:%2:%3").arg( hour, 2, 10, QChar( '0' ) )
             .arg( min, 2, 10, QChar( '0' ) ).arg( sec, 2, 10, QChar( '0' ) ) );
+    
+    sec = m_currentSlideTime->elapsed()/1000;
+    hour = sec / 3600;
+    sec -= hour * 3600;
+    min = sec / 60;
+    sec -= min * 60;
+
+    // display the timer, with 0 appended if only 1 digit
+    QString texte = QString( "%1:%2:%3").arg( hour, 2, 10, QChar('0' ) ).
+    arg( min, 2, 10, QChar( '0' ) ).arg( sec, 2, 10, QChar( '0' ));
+    if(sec>10)
+	texte = "<font color=\"#FF0000\">"+texte+"</font>";
+    else
+	texte = "<font color=\"#00FF00\">"+texte+"</font>";
+    m_timerSlideLabel->setText( texte );
+}
+
+void KPrPresenterViewToolWidget::updateSlideIndex(int index)
+{
+    if(m_finalTimeSlide.contains(indexCurrentPage))	{
+      m_finalTimeSlide.remove(indexCurrentPage);
+    }
+    m_finalTimeSlide.insert(indexCurrentPage,m_currentSlideTime->elapsed()/1000);
+    indexCurrentPage = index;
+    m_currentSlideTime->restart();
 }
 
 #include "KPrPresenterViewToolWidget.moc"

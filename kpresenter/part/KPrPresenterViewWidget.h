@@ -44,6 +44,7 @@ public:
     void setActivePage( KoPAPageBase *page );
     void setActivePage( int pageIndex );
     void updateWidget( const QSize &widgetSize, const QSize &canvasSize );
+    void updateSlideIndex(int index);
 
 private slots:
     void showSlideThumbnails( bool show );
