@@ -547,11 +547,18 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
 
     //We now define what's the object filled with, we "default" to a brush if both attributes are present
     KoXmlElement brush = element.namedItem( "BRUSH" ).toElement();
+    KoXmlElement fillType = element.namedItem( "FILLTYPE" ).toElement();
+
+    int fillTypeValue = 0;
+    if ( ! fillType.isNull() ) {
+        fillTypeValue = fillType.attribute( "value" ).toInt();
+    }
+
     KoXmlElement gradient = element.namedItem( "GRADIENT" ).toElement();
     KoXmlElement filename = element.namedItem( "FILENAME" ).toElement();
     bool isConnection = filename.attribute( "value" ).startsWith( "Connections" );
     QString fill;
-    if( !brush.isNull() && !isConnection )
+    if( !brush.isNull() && !isConnection && fillTypeValue == 0 )
     {
         QString fillColor( brush.attribute( "color" ) );
 
@@ -588,7 +595,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             style.addProperty( "draw:opacity", createOpacityGradientStyle( opacity ) );
         }
     }
-    else if( !gradient.isNull() )
+    else if( !gradient.isNull() && fillTypeValue == 1 )
     {
         fill = "gradient";
         style.addProperty( "draw:fill-gradient-name", createGradientStyle( gradient ) );
