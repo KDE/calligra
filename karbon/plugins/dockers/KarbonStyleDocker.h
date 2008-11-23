@@ -33,6 +33,7 @@ class KoCanvasBase;
 class KoTriangleColorSelector;
 class KoColor;
 class KoColorSlider;
+class KoShape;
 class QBrush;
 class QStackedWidget;
 class QTableWidgetItem;
@@ -63,6 +64,8 @@ private slots:
     void opacityChanged( int );
     void colorChanged( const QColor &c );
 private:
+    void updateColor( const QColor &c, const QList<KoShape*> & selectedShapes );
+
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
     QStackedWidget * m_stack;
