@@ -1276,6 +1276,8 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         d->cellEditor->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
                 d->optionWidget.userInput, SLOT(setText(const QString &)));
+        connect(d->optionWidget.userInput, SIGNAL(textChanged(const QString &)),
+                d->cellEditor, SLOT(setText(const QString &)));
         d->optionWidget.applyButton->setEnabled(true);
         d->optionWidget.cancelButton->setEnabled(true);
 

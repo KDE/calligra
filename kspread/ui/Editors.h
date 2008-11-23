@@ -204,8 +204,6 @@ public:
     int cursorPosition() const;
     void setCursorPosition(int pos);
 
-    void setText(const QString& text);
-
     /** wrapper to KTextEdit::text() */
     QString text() const;
 
@@ -229,6 +227,9 @@ public:
 Q_SIGNALS:
     void textChanged(const QString &text);
     void modificationChanged(bool changed);
+
+public slots:
+    void setText(const QString& text);
 
 private slots:
     void  slotTextChanged();
@@ -314,6 +315,9 @@ public:
 
     void setCellTool(CellToolBase* cellTool);
 
+Q_SIGNALS:
+    void textChanged (const QString &text);
+
 public Q_SLOTS:
     void applyChanges();
     void discardChanges();
@@ -322,6 +326,9 @@ public Q_SLOTS:
 protected:
     void keyPressEvent(QKeyEvent *event);
     void focusOutEvent(QFocusEvent *event);
+
+private slots:
+    void slotTextChanged ();
 
 private:
     Q_DISABLE_COPY(ExternalEditor)

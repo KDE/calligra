@@ -903,7 +903,7 @@ void Selection::startReferenceSelection(const Region& region)
     // former selection exists - we are in ref mode already, even though it's suspended
     if (!d->formerSelection.isEmpty())
         return;
-    
+
     d->formerSelection = *this;
     clear();
     setOriginSheet(activeSheet());

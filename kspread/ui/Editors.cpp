@@ -937,7 +937,8 @@ void CellEditor::slotTextChanged()
       return;
     }
   }
-
+  
+  if (hasFocus())  // update the external editor, but only if we have focus
     emit textChanged(d->textEdit->toPlainText());
   // selection()->view()->editWidget()->textCursor().setPosition( d->textEdit->cursorPosition() );
 }
@@ -1146,12 +1147,14 @@ QString CellEditor::text() const
 
 void CellEditor::setText(const QString& text)
 {
+    setCheckChoice (false);
     d->textEdit->setPlainText(text);
     //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
     //be quickly deleted using the backspace key
 
     // This also ensures that the caret is sized correctly for the text
     setCursorPosition( text.length() );
+    setCheckChoice (true);
     kDebug() <<"text cursor positioned at the end";
 
     if (d->fontLength == 0)
@@ -1449,6 +1452,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     d->highlighter = 0;
     d->isArray = false;
     setMinimumSize(100, 30);
+    connect (this, SIGNAL (textChanged()), this, SLOT (slotTextChanged ()));
 }
 
 ExternalEditor::~ExternalEditor()
@@ -1509,16 +1513,10 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
         d->cellTool->createEditor(false /* keep content */, false /* no focus */);
     }
 
-    // set the cell editor's cursor to where ours is
-    d->cellTool->editor()->setCursorPosition(textCursor().position());
-    // set the cell editor's selection to match ours
-    // TODO
-    // now send the event to the cell editor for processing
-    QApplication::sendEvent (d->cellTool->editor(), event);
-
-    // If the user did something that destroyed the cell editor, we're done
-    if (!d->cellTool->editor()) {
-        d->cellTool->canvas()->canvasWidget()->setFocus();
+    // the Enter key is handled by the embedded editor
+    if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)) {
+        d->cellTool->editor()->setFocus();
+        QApplication::sendEvent (d->cellTool->editor(), event);
         event->accept();
         return;
     }
@@ -1526,12 +1524,8 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
         // Switch the focus back to the embedded editor.
         d->cellTool->editor()->setFocus();
     }
-    // put cursor and selection positions to sync
-    int pos = d->cellTool->editor()->cursorPosition();
-    textCursor().setPosition(pos);
-    // TODO: also restore selection
-
-    event->accept ();
+    // call inherited handler
+    KTextEdit::keyPressEvent (event);
 }
 
 void ExternalEditor::focusOutEvent(QFocusEvent* event)
@@ -1539,6 +1533,12 @@ void ExternalEditor::focusOutEvent(QFocusEvent* event)
     Q_ASSERT(d->cellTool);
     d->cellTool->selection()->setLastEditorWithFocus(Selection::ExternalEditor);
     KTextEdit::focusOutEvent(event);
+}
+
+void ExternalEditor::slotTextChanged ()
+{
+  if (!hasFocus()) return;  // only report change if we have focus
+  emit textChanged (toPlainText());
 }
 
 #if 0 // KSPREAD_DISCARD_FORMULA_BAR
