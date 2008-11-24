@@ -37,8 +37,17 @@
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
+
+#ifdef CHANGETRK
+ #include <KoTextShapeSavingContext.h>
+#endif
+
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
+
+#ifdef CHANGETRK
+ #include <KoGenChanges.h>
+#endif
 
 #include <QBuffer>
 #include <KTemporaryFile>
@@ -51,7 +60,11 @@ public:
     /// The KWord document.
     QPointer<KWDocument> document;
 
+#ifdef CHANGETRK
+    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes, KWTextFrameSet* fs)
+#else
     QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
+#endif
     {
         QByteArray tag;
         switch (fs->textFrameSetType()) {
@@ -66,7 +79,11 @@ public:
         QBuffer buffer(&content);
         buffer.open(IO_WriteOnly);
         KoXmlWriter writer(&buffer);
-        KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
+#ifdef CHANGETRK
+        KoTextShapeSavingContext context(writer, mainStyles, embeddedSaver, changes);
+#else
+	KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
+#endif
 
         Q_ASSERT(fs->frames().count() > 0);
         KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
@@ -79,7 +96,11 @@ public:
         return content;
     }
 
+#ifdef CHANGETRK
+    void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges& changes) {
+#else
     void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles) {
+#endif
     // TODO rewrite this to properly find the framesets in the document
 #if 0
         kDebug() << "START saveHeaderFooter ############################################";
@@ -111,8 +132,11 @@ public:
                     kWarning() << "Frameset with ZERO frames what should not happen!!!";
                     continue;
                 }
-
-                QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
+#ifdef CHANGETRK
+                QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, changes, fs);
+#else
+		QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
+#endif
                 if (content.isNull())
                     continue;
 
@@ -156,7 +180,16 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     if (!contentWriter)
         return false;
 
+#ifdef CHANGETRK
+    KoXmlWriter* changeWriter = odfStore.changeWriter();
+    if (!changeWriter)
+	return false;
+#endif
+
     KoGenStyles mainStyles;
+#ifdef CHANGETRK
+    KoGenChanges changes;
+#endif
 
     // Save the named styles
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(d->document->dataCenterMap()["StyleManager"]);
@@ -164,13 +197,21 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
+#ifdef CHANGETRK
+    d->saveHeaderFooter(embeddedSaver, mainStyles, changes);
+#else
     d->saveHeaderFooter(embeddedSaver, mainStyles);
+#endif
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+#ifdef CHANGETRK
+    KoTextShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver, changes);
+#else
     KoShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver);
 
     bodyWriter->startElement("office:body");
     bodyWriter->startElement("office:text");
+#endif
 
     KWTextFrameSet *mainTextFrame = 0;
 
@@ -199,11 +240,18 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
             }
         }
     }
-
+#ifdef CHANGETRK
+//    bodyWriter->endElement(); // office:text
+//    bodyWriter->endElement(); // office:body
+#else
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
+#endif
 
     mainStyles.saveOdfAutomaticStyles(contentWriter, false);
+#ifdef CHANGETRK
+    changes.saveOdfChanges(changeWriter);
+#endif
 
     odfStore.closeContentWriter();
 
