@@ -1277,7 +1277,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     QWidget *w = focusWidget();
 // if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view() && w!=m_editor)) {
 // if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view())) {
-    if (!w || w != viewport() && w != this && (!m_editor || !KexiUtils::hasParent(dynamic_cast<QObject*>(m_editor), w))) {
+    if (!w || (w != viewport() && w != this && (!m_editor || !KexiUtils::hasParent(dynamic_cast<QObject*>(m_editor), w)))) {
         //don't process stranger's events
         e->ignore();
         return;
@@ -1415,7 +1415,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
                 startEditOrToggleValue();
             } else {
                 kexidbg << "KexiTableView::KeyPressEvent(): default";
-                if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint()) {
+                if (e->text().isEmpty() || (!e->text().isEmpty() && !e->text()[0].isPrint())) {
                     kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16);
                     //    e->ignore();
                     Q3ScrollView::keyPressEvent(e);
