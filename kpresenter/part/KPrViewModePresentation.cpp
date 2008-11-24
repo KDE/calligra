@@ -175,6 +175,9 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
             m_pvAnimationDirector = new KPrAnimationDirector( m_view,
                     m_presenterViewCanvas, pages, m_view->activePage() );
+		    
+	    int index = m_animationDirector->currentPage();
+	    m_presenterViewWidget->updateSlideIndex(index);
         }
         else {
             kWarning() << "Presenter View is enabled but only found one monitor";

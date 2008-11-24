@@ -160,8 +160,25 @@ void KPrPresenterViewToolWidget::updateSlideIndex(int index)
       m_finalTimeSlide.remove(indexCurrentPage);
     }
     m_finalTimeSlide.insert(indexCurrentPage,m_currentSlideTime->elapsed()/1000);
-    indexCurrentPage = index;
-    m_currentSlideTime->restart();
+    if(indexCurrentPage != index)	{
+      indexCurrentPage = index;
+      m_currentSlideTime->restart();
+    }
+    
+    int sec = m_currentSlideTime->elapsed()/1000;
+    int hour = sec / 3600;
+    sec -= hour * 3600;
+    int min = sec / 60;
+    sec -= min * 60;
+
+    // display the timer, with 0 appended if only 1 digit
+    QString texte = QString( "%1:%2:%3").arg( hour, 2, 10, QChar('0' ) ).
+    arg( min, 2, 10, QChar( '0' ) ).arg( sec, 2, 10, QChar( '0' ));
+    if(sec>10)
+	texte = "<font color=\"#FF0000\">"+texte+"</font>";
+    else
+	texte = "<font color=\"#00FF00\">"+texte+"</font>";
+    m_timerSlideLabel->setText( texte );
 }
 
 #include "KPrPresenterViewToolWidget.moc"
