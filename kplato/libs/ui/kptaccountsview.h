@@ -89,7 +89,7 @@ public:
 
     //~AccountsView();
     void setupGui();
-    
+    Project *project() const { return m_project; }
     virtual void setZoom( double zoom );
     virtual void setProject( Project *project );
 

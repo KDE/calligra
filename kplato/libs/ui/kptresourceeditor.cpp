@@ -60,19 +60,28 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
-    
-    setModel( new ResourceItemModel( this ) );
+    ResourceItemModel *m = new ResourceItemModel( this );
+    setModel( m );
     
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
 
-    createItemDelegates();
+    createItemDelegates( m );
+
+    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
 
 }
 
 void ResourceTreeView::slotActivated( const QModelIndex index )
 {
     kDebug()<<index.column();
+}
+
+void ResourceTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
+{
+    if ( model()->dropAllowed( index, dropIndicatorPosition, event->mimeData() ) ) {
+        event->accept();
+    }
 }
 
 QObject *ResourceTreeView::currentObject() const

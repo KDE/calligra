@@ -268,7 +268,7 @@ void PertResult::setProject( Project *project )
         disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotScheduleManagerChanged( ScheduleManager* ) ) );
     }
     m_project = project;
-    widget.treeWidgetTaskResult->model()->setProject( m_project );
+    model()->setProject( m_project );
     if ( m_project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
