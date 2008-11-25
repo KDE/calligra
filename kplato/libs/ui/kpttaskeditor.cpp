@@ -57,35 +57,13 @@ NodeTreeView::NodeTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    createItemDelegates( m );
-
-    connect( this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), SLOT(slotDropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
-}
-
-NodeItemModel *NodeTreeView::baseModel() const
-{
-    NodeSortFilterProxyModel *pr = proxyModel();
-    if ( pr ) {
-        return static_cast<NodeItemModel*>( pr->sourceModel() );
-    }
-    return static_cast<NodeItemModel*>( model() );
-}
     
+    createItemDelegates();
+}
+
 void NodeTreeView::slotActivated( const QModelIndex index )
 {
     kDebug()<<index.column();
-}
-
-void NodeTreeView::slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event )
-{
-    QModelIndex idx = index;
-    NodeSortFilterProxyModel *pr = proxyModel();
-    if ( pr ) {
-        idx = pr->mapToSource( index );
-    }
-    if ( baseModel()->dropAllowed( idx, dropIndicatorPosition, event->mimeData() ) ) {
-        event->accept();
-    }
 }
 
 //-----------------------------------
@@ -200,7 +178,7 @@ QList<Node*> TaskEditor::selectedNodes() const {
         return lst;
     }
     foreach ( QModelIndex i, sm->selectedRows() ) {
-        Node * n = m_view->baseModel()->node( i );
+        Node * n = m_view->model()->node( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
         }
@@ -218,7 +196,7 @@ Node *TaskEditor::selectedNode() const
 }
 
 Node *TaskEditor::currentNode() const {
-    Node * n = m_view->baseModel()->node( m_view->selectionModel()->currentIndex() );
+    Node * n = m_view->model()->node( m_view->selectionModel()->currentIndex() );
     if ( n == 0 || n->type() == Node::Type_Project ) {
         return 0;
     }
@@ -227,7 +205,7 @@ Node *TaskEditor::currentNode() const {
 
 void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
-    Node *node = m_view->baseModel()->node( index );
+    Node *node = m_view->model()->node( index );
     if ( node == 0 ) {
         return;
     }
@@ -260,7 +238,7 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
 void TaskEditor::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
-    m_view->baseModel()->setManager( sm );
+    static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
 }
 
 void TaskEditor::slotEnableActions()
@@ -364,7 +342,7 @@ void TaskEditor::slotAddTask()
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(),  m_view->project() );
-        QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
+        QModelIndex idx = m_view->model()->insertSubtask( t, t->parentNode() );
         Q_ASSERT( idx.isValid() );
         edit( idx );
         return;
@@ -374,7 +352,7 @@ void TaskEditor::slotAddTask()
         return;
     }
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), sib->parentNode() );
-    QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
+    QModelIndex idx = m_view->model()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
     edit( idx );
 }
@@ -386,7 +364,7 @@ void TaskEditor::slotAddMilestone()
         // insert under main project
         Task *t = m_view->project()->createTask( m_view->project() );
         t->estimate()->clear();
-        QModelIndex idx = m_view->baseModel()->insertSubtask( t, t->parentNode() );
+        QModelIndex idx = m_view->model()->insertSubtask( t, t->parentNode() );
         Q_ASSERT( idx.isValid() );
         edit( idx );
         return;
@@ -397,7 +375,7 @@ void TaskEditor::slotAddMilestone()
     }
     Task *t = m_view->project()->createTask( sib->parentNode() );
     t->estimate()->clear();
-    QModelIndex idx = m_view->baseModel()->insertTask( t, sib );
+    QModelIndex idx = m_view->model()->insertTask( t, sib );
     Q_ASSERT( idx.isValid() );
     edit( idx );
 }
@@ -410,7 +388,7 @@ void TaskEditor::slotAddSubtask()
         return;
     }
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), parent );
-    QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
+    QModelIndex idx = m_view->model()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
     edit( idx );
 }
@@ -479,12 +457,12 @@ void TaskEditor::slotMoveTaskDown()
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_view->loadContext( baseModel()->columnMap(), context );
+    return m_view->loadContext( model()->columnMap(), context );
 }
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( baseModel()->columnMap(), context );
+    m_view->saveContext( model()->columnMap(), context );
 }
 
 KoPrintJob *TaskEditor::createPrintJob()
@@ -530,7 +508,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
             << NodeModel::NodeShutdownCost 
             << NodeModel::NodeDescription;
     foreach ( int c, readonly ) {
-        m_view->baseModel()->setReadOnly( c, true );
+        m_view->model()->setReadOnly( c, true );
     }
 
     QList<int> lst1; lst1 << 1 << -1;
@@ -618,7 +596,7 @@ QList<Node*> TaskView::selectedNodes() const {
         return lst;
     }
     foreach ( QModelIndex i, sm->selectedRows() ) {
-        Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( i ) );
+        Node * n = m_view->model()->node( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
         }
@@ -636,7 +614,7 @@ Node *TaskView::selectedNode() const
 }
 
 Node *TaskView::currentNode() const {
-    Node * n = m_view->baseModel()->node( proxyModel()->mapToSource( m_view->selectionModel()->currentIndex() ) );
+    Node * n = m_view->model()->node( m_view->selectionModel()->currentIndex() );
     if ( n == 0 || n->type() == Node::Type_Project ) {
         return 0;
     }
@@ -646,7 +624,7 @@ Node *TaskView::currentNode() const {
 void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
     QString name;
-    Node *node = m_view->baseModel()->node( proxyModel()->mapToSource( index ) );
+    Node *node = m_view->model()->node( index );
     if ( node ) {
         switch ( node->type() ) {
             case Node::Type_Task:
@@ -672,7 +650,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
 void TaskView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
-    m_view->baseModel()->setManager( sm );
+    static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
 }
 
 void TaskView::slotEnableActions()
@@ -712,12 +690,12 @@ void TaskView::slotOptions()
 bool TaskView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_view->loadContext( m_view->baseModel()->columnMap(), context );
+    return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 
 void TaskView::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( m_view->baseModel()->columnMap(), context );
+    m_view->saveContext( m_view->model()->columnMap(), context );
 }
 
 KoPrintJob *TaskView::createPrintJob()

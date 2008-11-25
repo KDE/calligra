@@ -61,7 +61,6 @@ public:
     
     void setupGui();
     void setProject( Project *project );
-    Project *project() const { return m_project; }
     void draw( Project &project );
     void draw();
 
@@ -109,7 +108,6 @@ public:
     
     void setupGui();
     void setProject( Project *project );
-    Project *project() const { return m_project; }
     void draw( Project &project );
     void draw();
     

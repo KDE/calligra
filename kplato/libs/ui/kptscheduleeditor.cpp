@@ -61,7 +61,7 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    createItemDelegates( m );
+    createItemDelegates();
 }
 
 void ScheduleTreeView::slotActivated( const QModelIndex index )
@@ -349,7 +349,7 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-//    createItemDelegates( m_model);
+//    createItemDelegates();
 
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );

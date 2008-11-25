@@ -144,7 +144,6 @@ public:
     CalendarEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
-    Project *project() const { return m_calendarview->project(); }
     virtual void draw( Project &project );
     virtual void draw();
 

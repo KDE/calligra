@@ -97,7 +97,6 @@ public:
     
     void setupGui();
     virtual void setProject( Project *project );
-    Project *project() const { return m_view->project(); }
     using ViewBase::draw;
     virtual void draw( Project &project );
 
@@ -218,7 +217,6 @@ public:
     ProjectStatusView( KoDocument *part, QWidget *parent );
 
     void setupGui();
-    Project *project() const { return m_project; }
     virtual void setProject( Project *project );
 
     /// Loads context info into this view. Reimplement.
@@ -254,7 +252,6 @@ public:
     explicit PerformanceStatusTreeView( QWidget *parent );
 
     NodeItemModel *nodeModel() const;
-    Project *project() const;
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
     void draw();
@@ -284,7 +281,6 @@ public:
     PerformanceStatusView( KoDocument *part, QWidget *parent );
 
     void setupGui();
-    Project *project() const { return m_view->project(); }
     virtual void setProject( Project *project );
 
     /// Loads context info into this view. Reimplement.

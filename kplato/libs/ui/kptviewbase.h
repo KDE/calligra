@@ -39,7 +39,6 @@ class KAction;
 
 class QWidget;
 class QMetaEnum;
-class QAbstractItemModel;
 
 class KoDocument;
 class KoPrintJob;
@@ -56,6 +55,7 @@ class Relation;
 class Calendar;
 class Context;
 
+class ItemModelBase;
 class ViewBase;
 class TreeViewBase;
 class DoubleTreeViewBase;
@@ -164,8 +164,6 @@ public:
     virtual void setZoom(double /*zoom*/) {}
     /// Set the project this view shall handle.
     virtual void setProject( Project * /*project*/ ) {}
-    /// Return the project
-    virtual Project *project() const { return 0; }
     /// Draw data from current part / project
     virtual void draw() {}
     /// Draw data from project.
@@ -254,7 +252,7 @@ class KPLATOUI_EXPORT TreeViewPrintingDialog : public PrintingDialog
 {
     Q_OBJECT
 public:
-    TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview, Project *project = 0 );
+    TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview );
     ~TreeViewPrintingDialog() {}
 
     virtual int documentFirstPage() const { return 1; }
@@ -267,7 +265,6 @@ protected:
 
 private:
     TreeViewBase *m_tree;
-    Project *m_project;
     int m_firstRow;
 };
 
@@ -279,7 +276,7 @@ public:
     explicit TreeViewBase( QWidget *parent = 0 );
 
     void setReadWrite( bool rw );
-    virtual void createItemDelegates( ItemModelBase *model );
+    virtual void createItemDelegates();
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
@@ -298,6 +295,7 @@ public:
 
     void setAcceptDropsOnView( bool mode ) { m_acceptDropsOnView = mode; }
 
+    ItemModelBase *model() const;
     virtual void setModel( QAbstractItemModel *model );
 
     virtual void setSelectionModel( QItemSelectionModel *model );
@@ -341,8 +339,6 @@ signals:
     void moveBeforeFirstColumn( const QModelIndex & );
     void editAfterLastColumn( const QModelIndex & );
     void editBeforeFirstColumn( const QModelIndex & );
-
-    void dropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -396,7 +392,7 @@ class KPLATOUI_EXPORT DoubleTreeViewPrintingDialog : public PrintingDialog
 {
     Q_OBJECT
 public:
-    DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview, Project *project );
+    DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview );
     ~DoubleTreeViewPrintingDialog() {}
 
     virtual int documentFirstPage() const { return 1; }
@@ -409,7 +405,6 @@ protected:
     
 private:
     DoubleTreeViewBase *m_tree;
-    Project *m_project;
     int m_firstRow;
 };
 
@@ -423,8 +418,8 @@ public:
 
     void setReadWrite( bool rw );
 
-    void setModel( QAbstractItemModel *model );
-    QAbstractItemModel *model() const;
+    void setModel( ItemModelBase *model );
+    ItemModelBase *model() const;
 
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
@@ -433,7 +428,7 @@ public:
     void setSelectionModel( QItemSelectionModel *model );
     void setSelectionMode( QAbstractItemView::SelectionMode mode );
     void setSelectionBehavior( QAbstractItemView::SelectionBehavior mode );
-    virtual void createItemDelegates( ItemModelBase *model );
+    virtual void createItemDelegates();
     void setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate );
     void setEditTriggers ( QAbstractItemView::EditTriggers );
     QAbstractItemView::EditTriggers editTriggers() const;
@@ -480,8 +475,6 @@ public:
 
     void setStretchFactors();
     
-    QModelIndex indexAt( const QPoint &pos ) const;
-
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( QModelIndex index, const QPoint& pos );
@@ -494,8 +487,6 @@ signals:
 
     void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     void selectionChanged( const QModelIndexList );
-
-    void dropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 
 public slots:
     void edit( const QModelIndex &index );
@@ -517,6 +508,7 @@ protected:
 protected:
     TreeViewBase *m_leftview;
     TreeViewBase *m_rightview;
+    ItemModelBase *m_model;
     QItemSelectionModel *m_selectionmodel;
     bool m_arrowKeyNavigation;
     bool m_readWrite;

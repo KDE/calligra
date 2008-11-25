@@ -114,7 +114,6 @@ public:
     
     void setupGui();
     virtual void setProject( Project *project );
-    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
 

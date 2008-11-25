@@ -76,7 +76,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setStretchLastSection( false );
     
-    createItemDelegates( m );
+    createItemDelegates();
     
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
@@ -766,11 +766,6 @@ void PerformanceStatusTreeView::setScheduleManager( ScheduleManager *sm )
 {
     nodeModel()->setManager( sm );
     m_chart->setScheduleManager( sm );
-}
-
-Project *PerformanceStatusTreeView::project() const
-{
-    return nodeModel()->project();
 }
 
 void PerformanceStatusTreeView::setProject( Project *project )

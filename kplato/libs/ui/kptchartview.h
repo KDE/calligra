@@ -40,8 +40,7 @@ class KPLATOUI_EXPORT ChartView : public ViewBase
     Q_OBJECT
 public:
     explicit ChartView( KoDocument *part, QWidget *parent=0 );
-
-    Project *project() const { return m_project; }
+    
     virtual void setProject( Project *project );
     
 public slots:

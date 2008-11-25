@@ -77,7 +77,6 @@ public:
     AccountsEditor( KoDocument *KoDocument, QWidget *parent );
     
     void setupGui();
-    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
 

@@ -341,10 +341,9 @@ void ViewBase::createOptionAction()
 }
 
 //----------------------
-TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview, Project *project )
+TreeViewPrintingDialog::TreeViewPrintingDialog( ViewBase *view, TreeViewBase *treeview )
     : PrintingDialog( view ),
     m_tree( treeview ),
-    m_project( project ),
     m_firstRow( -1 )
 {
 }
@@ -420,7 +419,7 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect pageRect = printer().pageRect();
     QRect paperRect = printer().paperRect();
     
-    QAbstractItemModel *model = m_tree->model();
+    ItemModelBase *model = m_tree->model();
     
     kDebug()<<pageRect<<paperRect;
 
@@ -428,9 +427,7 @@ void TreeViewPrintingDialog::printPage( int page, QPainter &painter )
 
     painter.setClipping( true );
     
-    if ( m_project ) {
-        paintHeaderFooter( painter, m_view->printingOptions(), page, *(m_project) );
-    }
+    paintHeaderFooter( painter, m_view->printingOptions(), page, *(model->project()) );
     
     int gap = 8;
     int pageHeight = pageRect.height() - height;
@@ -519,7 +516,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 
 KoPrintJob * TreeViewBase::createPrintJob( ViewBase *parent )
 {
-    TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this, parent->project() );
+    TreeViewPrintingDialog *dia = new TreeViewPrintingDialog( parent, this );
     dia->printer().setCreator("KPlato 0.7");
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
@@ -529,14 +526,14 @@ void TreeViewBase::setReadWrite( bool rw )
 {
     m_readWrite = rw;
     if ( model() ) {
-        model()->setData( QModelIndex(), rw, Role::ReadWrite );
+        model()->setReadWrite( rw );
     }
 }
 
-void TreeViewBase::createItemDelegates( ItemModelBase *model )
+void TreeViewBase::createItemDelegates()
 {
-    for ( int c = 0; c < model->columnCount(); ++c ) {
-        QItemDelegate *delegate = model->createDelegate( c, this );
+    for ( int c = 0; c < model()->columnCount(); ++c ) {
+        QItemDelegate *delegate = model()->createDelegate( c, this );
         if ( delegate ) {
             setItemDelegateForColumn( c, delegate );
         }
@@ -979,6 +976,17 @@ void TreeViewBase::setSelectionModel( QItemSelectionModel *model )
     }
 }
 
+
+ItemModelBase *TreeViewBase::model() const
+{
+    QAbstractItemModel *m = QTreeView::model();
+    QAbstractProxyModel *p = qobject_cast<QAbstractProxyModel*>( m );
+    if ( p ) {
+        return static_cast<ItemModelBase*>( p->sourceModel() );
+    }
+    return static_cast<ItemModelBase*>( m );
+}
+
 void TreeViewBase::setStretchLastSection( bool mode )
 {
     header()->setStretchLastSection( mode );
@@ -1016,7 +1024,9 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
         //kDebug()<<"Invalid index:"<<event->isAccepted();
         return;
     }
-    emit dropAllowed( index, dropIndicatorPosition(), event );
+    if ( model()->dropAllowed( index, dropIndicatorPosition(), event->mimeData() ) ) {
+        event->accept();
+    }
     //kDebug()<<event->isAccepted();
 }
 
@@ -1116,10 +1126,9 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
 }
 
 //----------------------
-DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview, Project *project )
+DoubleTreeViewPrintingDialog::DoubleTreeViewPrintingDialog( ViewBase *view, DoubleTreeViewBase *treeview )
     : PrintingDialog( view ),
     m_tree( treeview ),
-    m_project( project ),
     m_firstRow( -1 )
 {
 }
@@ -1197,17 +1206,17 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
     QRect pageRect = printer().pageRect();
     QRect paperRect = printer().paperRect();
     
-    QAbstractItemModel *model = m_tree->model();
+    ItemModelBase *model = m_tree->model();
     Q_ASSERT( model != 0 );
+    Q_ASSERT( model->project() != 0 );
     kDebug()<<pageRect<<paperRect;
 
     painter.translate( pageRect.topLeft() );
 
     painter.setClipping( true );
     
-    if ( m_project ) {
-        paintHeaderFooter( painter, printingOptions(), page, *(m_project) );
-    }
+    paintHeaderFooter( painter, printingOptions(), page, *(model->project()) );
+    
     int gap = 8;
     int pageHeight = pageRect.height() - height;
     if ( hRect.isValid() ) {
@@ -1291,6 +1300,7 @@ void DoubleTreeViewPrintingDialog::printPage( int page, QPainter &painter )
 DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
     : QSplitter( parent ),
     m_rightview( 0 ),
+    m_model( 0 ),
     m_selectionmodel( 0 ),
     m_readWrite( false ),
     m_mode( false )
@@ -1301,6 +1311,7 @@ DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
 DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
     : QSplitter( parent ),
     m_rightview( 0 ),
+    m_model( 0 ),
     m_selectionmodel( 0 ),
     m_mode( false )
 {
@@ -1313,7 +1324,7 @@ DoubleTreeViewBase::~DoubleTreeViewBase()
 
 KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
 {
-    DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this, parent->project() );
+    DoubleTreeViewPrintingDialog *dia = new DoubleTreeViewPrintingDialog( parent, this );
     dia->printer().setCreator("KPlato 0.7");
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
@@ -1355,9 +1366,6 @@ void DoubleTreeViewBase::init()
     connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), m_leftview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
     
-    connect( m_leftview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
-    connect( m_rightview, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ), this, SIGNAL( dropAllowed( const QModelIndex&, int, QDragMoveEvent* ) ) );
-
     m_actionSplitView = new KAction(KIcon("view-split-left-right"), "", this);
     setViewSplitMode( true );
 }
@@ -1465,8 +1473,9 @@ void DoubleTreeViewBase::setReadWrite( bool rw )
     m_rightview->setReadWrite( rw );
 }
 
-void DoubleTreeViewBase::setModel( QAbstractItemModel *model )
+void DoubleTreeViewBase::setModel( ItemModelBase *model )
 {
+    m_model = model;
     m_leftview->setModel( model );
     m_rightview->setModel( model );
     if ( m_selectionmodel ) {
@@ -1484,9 +1493,9 @@ void DoubleTreeViewBase::setModel( QAbstractItemModel *model )
     setReadWrite( m_readWrite );
 }
 
-QAbstractItemModel *DoubleTreeViewBase::model() const
+ItemModelBase *DoubleTreeViewBase::model() const
 {
-    return m_leftview->model();
+    return m_model;
 }
 
 void DoubleTreeViewBase::slotSelectionChanged( const QItemSelection &sel, const QItemSelection & )
@@ -1518,10 +1527,10 @@ void DoubleTreeViewBase::setItemDelegateForColumn( int col, QAbstractItemDelegat
     m_rightview->setItemDelegateForColumn( col, delegate );
 }
 
-void DoubleTreeViewBase::createItemDelegates( ItemModelBase *model )
+void DoubleTreeViewBase::createItemDelegates()
 {
-    m_leftview->createItemDelegates( model );
-    m_rightview->createItemDelegates( model );
+    m_leftview->createItemDelegates();
+    m_rightview->createItemDelegates();
 }
 
 void DoubleTreeViewBase::setEditTriggers( QAbstractItemView::EditTriggers mode )
@@ -1691,14 +1700,6 @@ void DoubleTreeViewBase::setRootIsDecorated ( bool show )
     m_rightview->setRootIsDecorated( show );
 }
 
-QModelIndex DoubleTreeViewBase::indexAt( const QPoint &pos ) const
-{
-    QModelIndex idx = m_leftview->indexAt( pos );
-    if ( ! idx.isValid() ) {
-        idx = m_rightview->indexAt( pos );
-    }
-    return idx;
-}
 
 } // namespace KPlato
 
