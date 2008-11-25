@@ -1659,7 +1659,7 @@ void DependencyView::slotNodeRemoved( Node *node )
 void DependencyView::slotNodeChanged( Node *node )
 {
     DependencyNodeItem *item = findItem( node );
-    if ( item ) {
+    if ( item && item->isVisible() ) {
         item->setText();
         item->setSymbol();
     } else kDebug()<<"Node does not exist!";
@@ -1668,7 +1668,9 @@ void DependencyView::slotNodeChanged( Node *node )
 void DependencyView::slotWbsCodeChanged()
 {
     foreach( DependencyNodeItem *i, itemScene()->nodeItems() ) {
-        i->setText();
+        if ( i->isVisible() ) {
+            i->setText();
+        }
     }
 }
 
