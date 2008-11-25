@@ -83,8 +83,8 @@ bool Manager::lookup()
         QString partName = ptr->property("X-Kexi-TypeName", QVariant::String).toString();
         kDebug() << partName << partClass;
 //<TEMP>: disable some parts if needed
-        if (!Kexi::tempShowReports() && partName == "report")
-            continue;
+//        if (!Kexi::tempShowReports() && partName == "report")
+//            continue;
         if (!Kexi::tempShowMacros() && partName == "macro")
             continue;
         if (!Kexi::tempShowScripts() && partName == "script")
