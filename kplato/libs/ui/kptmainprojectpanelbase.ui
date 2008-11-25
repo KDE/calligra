@@ -10,9 +10,6 @@
     <height>335</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string/>
-  </property>
   <property name="locale" >
    <locale country="AnyCountry" language="C" />
   </property>
