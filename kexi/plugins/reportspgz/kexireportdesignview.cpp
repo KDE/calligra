@@ -76,6 +76,28 @@ void KexiReportDesignView::slotDesignerPropertySetChanged()
 }
 KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
+    KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
+    kexipluginsdbg << "new id:" << s->id();
+
+    if (!s || cancel) {
+        delete s;
+        return 0;
+    }
+    if (!storeData()) {
+        //failure: remove object's schema data to avoid garbage
+        KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+        conn->removeObject(s->id());
+        delete s;
+        return 0;
+    }
+    return s;
+    
+    
+    
+    
+    #if 0
+    
+    
     KexiDB::SchemaData *rpt = new KexiDB::SchemaData();
     *rpt = sdata;
     //sdata.setName ( name );
@@ -96,6 +118,7 @@ KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData&
         return 0;
     }
     return rpt;
+    #endif
 }
 
 tristate KexiReportDesignView::storeData(bool dontAsk)
