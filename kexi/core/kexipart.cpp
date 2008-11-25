@@ -39,6 +39,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kxmlguifactory.h>
+#include <kstandarddirs.h>
 
 namespace KexiPart
 {
@@ -524,9 +525,18 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
         part->info()->objectName()
         + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()));
 
-    if (!KexiMainWindowIface::global()->project()->data()->userMode())
-        setXMLFile(QString::fromLatin1("kexi") + part->info()->objectName()
-                   + "part" + (partInstanceClient ? "inst" : "") + "ui.rc");
+    if (!KexiMainWindowIface::global()->project()->data()->userMode()) {
+        const QString file( QString::fromLatin1("kexi") + part->info()->objectName()
+                     + "part" + (partInstanceClient ? "inst" : "") + "ui.rc" );
+        const QString filter = componentData().componentName() + '/' + file;
+        const QStringList allFiles = componentData().dirs()->findAllResources("data", filter) +
+                                     componentData().dirs()->findAllResources("data", file);
+        if (!allFiles.isEmpty()) {
+            QString doc;
+            if (!findMostRecentXMLFile(allFiles, doc).isEmpty())
+              setXMLFile(file);
+        }
+    }
 
 // new KAction(part->d->names["new"], part->info()->itemIcon(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());
