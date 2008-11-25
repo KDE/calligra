@@ -365,6 +365,9 @@ QVariant CalendarItemModel::data( const QModelIndex &index, int role ) const
 
 bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
@@ -828,7 +831,7 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
 
 bool CalendarDayItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
-    return false;
+    return ItemModelBase::setData( index, value, role );
 }
 
 QVariant CalendarDayItemModel::headerData( int section, Qt::Orientation orientation, int role ) const

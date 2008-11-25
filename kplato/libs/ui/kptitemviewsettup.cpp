@@ -58,7 +58,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
     
     stretchLastSection->setChecked( view->header()->stretchLastSection() );
     
-    ItemModelBase *model = view->model();
+    QAbstractItemModel *model = view->model();
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;
@@ -112,10 +112,10 @@ void ItemViewSettup::setDefault()
     kDebug();
     selector->availableListWidget()->clear();
     selector->selectedListWidget()->clear();
-    ItemModelBase *model = m_view->model();
+    QAbstractItemModel *model = m_view->model();
     int c = m_includeColumn0 ? 0 : 1;
     QList<int> def = m_view->defaultColumns();
-    for ( ; c < m_view->model()->columnCount(); ++c ) {
+    for ( ; c < model->columnCount(); ++c ) {
         if ( ! def.contains( c ) ) {
             Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
             item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );

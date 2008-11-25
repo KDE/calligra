@@ -2026,6 +2026,9 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
+    if ( parent.isValid() ) {
+        Q_ASSERT( parent.model() == this );
+    }
     //kDebug()<<parent<<row<<column;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
@@ -2561,6 +2564,9 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 
 bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
@@ -2906,7 +2912,7 @@ MilestoneItemModel::~MilestoneItemModel()
 QList<Node*> MilestoneItemModel::mileStones() const
 {
     QList<Node*> lst;
-    foreach( Node* n, m_mslist ) {
+    foreach( Node* n, m_nodemap.values() ) {
         if ( n->type() == Node::Type_Milestone ) {
             lst << n;
         }
@@ -2920,29 +2926,26 @@ void MilestoneItemModel::slotNodeToBeInserted( Node *parent, int row )
 
 void MilestoneItemModel::slotNodeInserted( Node *node )
 {
-    //kDebug()<<node->name();
-    if ( node ) {
-        m_mslist = m_project->allNodes();
-        int pos = m_mslist.indexOf( node );
-        beginInsertRows( QModelIndex(), pos, pos );
-        endInsertRows();
-        //kDebug()<<node->name()<<": "<<m_mslist.count();
-    }
+    resetModel();
 }
 
 void MilestoneItemModel::slotNodeToBeRemoved( Node *node )
 {
     //kDebug()<<node->name();
-    int row = m_mslist.indexOf( node );
+/*    int row = m_nodemap.values().indexOf( node );
     if ( row != -1 ) {
+        Q_ASSERT( m_nodemap.contains( node->wbsCode() ) );
+        Q_ASSERT( m_nodemap.keys().indexOf( node->wbsCode() ) == row );
         beginRemoveRows( QModelIndex(), row, row );
-        m_mslist.removeAt( row );
-    }
+        m_nodemap.remove( node->wbsCode() );
+        endRemoveRows();
+    }*/
 }
 
 void MilestoneItemModel::slotNodeRemoved( Node *node )
 {
-    endRemoveRows();
+    resetModel();
+    //endRemoveRows();
 }
 
 void MilestoneItemModel::slotLayoutChanged()
@@ -2957,13 +2960,13 @@ void MilestoneItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SIGNAL( slotNodeToBeInserted( Node *, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
 
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SIGNAL( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     m_project = project;
@@ -2972,13 +2975,13 @@ void MilestoneItemModel::setProject( Project *project )
     if ( project ) {
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SIGNAL( slotNodeToBeInserted( Node *, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SIGNAL( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     resetModel();
@@ -2992,15 +2995,24 @@ void MilestoneItemModel::setManager( ScheduleManager *sm )
     if ( sm ) {
     }
     //kDebug()<<sm;
-    reset();
+    resetModel();
 }
     
+bool MilestoneItemModel::resetData()
+{
+    int cnt = m_nodemap.count();
+    m_nodemap.clear();
+    if ( m_project != 0 ) {
+        foreach ( Node *n, m_project->allNodes() ) {
+            m_nodemap.insert( n->wbsCode(), n );
+        }
+    }
+    return cnt != m_nodemap.count();
+}
+
 void MilestoneItemModel::resetModel()
 {
-    m_mslist.clear();
-    if ( m_project != 0 ) {
-        m_mslist = m_project->allNodes();
-    }
+    resetData();
     reset();
 }
 
@@ -3072,16 +3084,16 @@ QModelIndex MilestoneItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug()<<parent<<row<<", "<<m_mslist.count();
+    //kDebug()<<parent<<row<<", "<<m_nodemap.count();
     if ( m_project == 0 || row < 0 || column < 0 ) {
         //kDebug()<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
-    if ( parent.isValid() || row >= m_mslist.count() ) {
+    if ( parent.isValid() || row >= m_nodemap.count() ) {
         //kDebug()<<"No index for"<<parent<<row<<","<<column;
         return QModelIndex();
     }
-    return createIndex( row, column, m_mslist[row] );
+    return createIndex( row, column, m_nodemap.values().at( row ) );
 }
 
 QModelIndex MilestoneItemModel::index( const Node *node ) const
@@ -3089,7 +3101,7 @@ QModelIndex MilestoneItemModel::index( const Node *node ) const
     if ( m_project == 0 || node == 0 ) {
         return QModelIndex();
     }
-    return createIndex( m_mslist.indexOf( const_cast<Node*>( node ) ), 0, const_cast<Node*>(node) );
+    return createIndex( m_nodemap.values().indexOf( const_cast<Node*>( node ) ), 0, const_cast<Node*>(node) );
 }
 
 bool MilestoneItemModel::setName( Node *node, const QVariant &value, int role )
@@ -3356,8 +3368,8 @@ int MilestoneItemModel::rowCount( const QModelIndex &parent ) const
     if ( parent.isValid() ) {
         return 0;
     }
-    //kDebug()<<m_mslist.count();
-    return m_mslist.count();
+    //kDebug()<<m_nodemap.count();
+    return m_nodemap.count();
 }
 
 Qt::DropActions MilestoneItemModel::supportedDropActions() const
@@ -3543,9 +3555,18 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
     if ( node == 0 ) {
         return;
     }
-    int row = m_mslist.indexOf( node );
+//    if ( ! m_nodemap.contains( node->wbsCode() ) || m_nodemap.value( node->wbsCode() ) != node ) {
+        emit layoutAboutToBeChanged();
+        if ( resetData() ) {
+            reset();
+        } else {
+            emit layoutChanged();
+        }
+        return;
+/*    }
+    int row = m_nodemap.values().indexOf( node );
     kDebug()<<node->name()<<": "<<node->typeToString()<<row;
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );*/
 }
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
@@ -3554,8 +3575,10 @@ void MilestoneItemModel::slotWbsDefinitionChanged()
     if ( m_project == 0 ) {
         return;
     }
-    if ( ! m_mslist.isEmpty() ) {
-        emit dataChanged( createIndex( 0, NodeModel::NodeWBSCode, m_mslist.first() ), createIndex( m_mslist.count() - 1, NodeModel::NodeWBSCode, m_mslist.last() ) );
+    if ( ! m_nodemap.isEmpty() ) {
+        emit layoutAboutToBeChanged();
+        resetData();
+        emit layoutChanged();
     }
 }
 
@@ -3573,6 +3596,11 @@ ItemModelBase *NodeSortFilterProxyModel::itemModel() const
     return static_cast<ItemModelBase *>( sourceModel() );
 }
 
+void NodeSortFilterProxyModel::setFilterUnscheduled( bool on ) {
+    m_filterUnscheduled = on;
+    invalidateFilter();
+}
+
 bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
 {
     kDebug()<<sourceModel()<<row<<parent;
@@ -3583,11 +3611,12 @@ bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & p
     if ( m_filterUnscheduled ) {
         QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
         if ( s == "true" ) {
+            kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
             return false;
         }
     }
     bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
-    kDebug()<<this<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
 }
 

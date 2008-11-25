@@ -47,7 +47,8 @@ namespace Role
         DurationScales,
         Maximum,
         Minimum,
-        EditorType
+        EditorType,
+        ReadWrite
     };
 } //namespace Role
 

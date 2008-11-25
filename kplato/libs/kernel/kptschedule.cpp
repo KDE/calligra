@@ -730,7 +730,7 @@ QStringList NodeSchedule::resourceNameList() const
 
 void NodeSchedule::logError( const QString &msg, int phase )
 {
-    Schedule::Log log( m_node, 2, msg, phase );
+    Schedule::Log log( m_node, Log::Type_Error, msg, phase );
     if ( m_parent ) {
         m_parent->addLog( log );
     } else {
@@ -740,7 +740,7 @@ void NodeSchedule::logError( const QString &msg, int phase )
 
 void NodeSchedule::logWarning( const QString &msg, int phase )
 {
-    Schedule::Log log( m_node, 1, msg, phase );
+    Schedule::Log log( m_node, Log::Type_Warning, msg, phase );
     if ( m_parent ) {
         m_parent->addLog( log );
     } else {
@@ -750,7 +750,17 @@ void NodeSchedule::logWarning( const QString &msg, int phase )
 
 void NodeSchedule::logInfo( const QString &msg, int phase )
 {
-    Schedule::Log log( m_node, 0, msg, phase );
+    Schedule::Log log( m_node, Log::Type_Info, msg, phase );
+    if ( m_parent ) {
+        m_parent->addLog( log );
+    } else {
+        addLog( log );
+    }
+}
+
+void NodeSchedule::logDebug( const QString &msg, int phase )
+{
+    Schedule::Log log( m_node, Log::Type_Debug, msg, phase );
     if ( m_parent ) {
         m_parent->addLog( log );
     } else {
@@ -933,7 +943,7 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
 void ResourceSchedule::logError( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, 2, msg, phase );
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Error, msg, phase );
         m_parent->addLog( log );
     }
 }
@@ -941,7 +951,7 @@ void ResourceSchedule::logError( const QString &msg, int phase )
 void ResourceSchedule::logWarning( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, 1, msg, phase );
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Warning, msg, phase );
         m_parent->addLog( log );
     }
 }
@@ -949,7 +959,15 @@ void ResourceSchedule::logWarning( const QString &msg, int phase )
 void ResourceSchedule::logInfo( const QString &msg, int phase )
 {
     if ( m_parent ) {
-        Schedule::Log log( m_nodeSchedule->node(), m_resource, 0, msg, phase );
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Info, msg, phase );
+        m_parent->addLog( log );
+    }
+}
+
+void ResourceSchedule::logDebug( const QString &msg, int phase )
+{
+    if ( m_parent ) {
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, Log::Type_Debug, msg, phase );
         m_parent->addLog( log );
     }
 }
@@ -1218,9 +1236,10 @@ void MainSchedule::addLog( Schedule::Log &log )
 QString MainSchedule::logSeverity( int severity )
 {
     switch ( severity ) {
-        case 0: return i18n( "Info" );
-        case 1: return i18n( "Warning" );
-        case 2: return i18n( "Error" );
+        case Log::Type_Debug: return "Debug";//FIXME i18n( "Debug" );
+        case Log::Type_Info: return i18n( "Info" );
+        case Log::Type_Warning: return i18n( "Warning" );
+        case Log::Type_Error: return i18n( "Error" );
         default: break;
     }
     return QString( "Severity %1" ).arg( severity );

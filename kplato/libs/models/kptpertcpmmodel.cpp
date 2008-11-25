@@ -747,11 +747,6 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
     return QVariant();
 }
 
-bool PertResultItemModel::setData( const QModelIndex &, const QVariant &, int )
-{
-    return false;
-}
-
 QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {

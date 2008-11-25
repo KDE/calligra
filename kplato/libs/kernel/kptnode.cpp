@@ -179,7 +179,7 @@ void Node::takeChildNode( Node *node) {
     }
     node->setParentNode(0);
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -193,7 +193,7 @@ void Node::takeChildNode( int number ) {
         }
     }
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -205,7 +205,7 @@ void Node::insertChildNode( int index, Node *node ) {
         m_nodes.insert(index,node);
     node->setParentNode( this );
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -216,14 +216,14 @@ void Node::addChildNode( Node *node, Node *after) {
         m_nodes.append(node);
         node->setParentNode( this );
         if ( t != type() ) {
-            changed();
+//        changed(); Note: handled by project
         }
         return;
     }
     m_nodes.insert(index+1, node);
     node->setParentNode(this);
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -1050,7 +1050,7 @@ int Node::level() const {
 }
 
 QString Node::generateWBSCode( QList<int> &indexes ) const {
-    //kDebug()<<m_name<<indexes;
+    kDebug()<<m_name<<indexes;
     if ( m_parent == 0 ) {
         return QString();
     }
@@ -1059,7 +1059,7 @@ QString Node::generateWBSCode( QList<int> &indexes ) const {
 }
 
 QString Node::wbsCode() const {
-    //kDebug()<<m_name;
+    kDebug()<<m_name;
     QList<int> indexes;
     return generateWBSCode( indexes );
 }

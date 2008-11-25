@@ -140,34 +140,21 @@ private:
 };
 
 //----------------------------------------
-class KPLATOMODELS_EXPORT ScheduleLogItemModel : public ItemModelBase
+class KPLATOMODELS_EXPORT ScheduleLogItemModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
     explicit ScheduleLogItemModel( QObject *parent = 0 );
     ~ScheduleLogItemModel();
 
-    virtual void setProject( Project *project );
+    void setProject( Project *project );
+    Project *project() const { return m_project; }
     void setManager( ScheduleManager *manager );
     ScheduleManager *manager() const { return m_manager; }
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
-
     void refresh();
-    
-    QStandardItemModel *standardModel() { return &m_standard; }
     
 protected slots:
     void slotManagerChanged( ScheduleManager *sch );
@@ -181,10 +168,9 @@ protected slots:
     void slotScheduleRemoved( const MainSchedule *schedule );
 
 private:
+    Project *m_project;
     ScheduleManager *m_manager;
     MainSchedule *m_schedule;
-    QStandardItemModel m_standard;
-    ScheduleModel m_model;
 
 };
 

@@ -1023,13 +1023,19 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     if ( emitSignal ) emit nodeToBeAdded( p, i );
     p->insertChildNode( i, task );
     connect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), task, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
-    if ( emitSignal ) emit nodeAdded( task );
-    if ( emitSignal ) emit changed();
+    if ( emitSignal ) {
+        emit nodeAdded( task );
+        emit changed();
+    }
+    if ( p != this && p->numChildren() == 1 ) {
+        emit nodeChanged( p );
+    }
     return true;
 }
 
 void Project::takeTask( Node *node, bool emitSignal )
 {
+    kDebug()<<node->name();
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
         kDebug() <<"Node must have a parent!";
@@ -1039,8 +1045,14 @@ void Project::takeTask( Node *node, bool emitSignal )
     if ( emitSignal ) emit nodeToBeRemoved( node );
     disconnect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), node, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
     parent->takeChildNode( node );
-    if ( emitSignal ) emit nodeRemoved( node );
-    if ( emitSignal ) emit changed();
+    if ( emitSignal ) {
+        emit nodeRemoved( node );
+        emit changed();
+    }
+    kDebug()<<node->name()<<"removed";
+    if ( parent != this && parent->type() != Node::Type_Summarytask ) {
+        emit nodeChanged( parent );
+    }
 }
 
 bool Project::canMoveTask( Node* node, Node *newParent )
@@ -1062,12 +1074,19 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
     if ( ! canMoveTask( node, newParent ) ) {
         return false;
     }
+    Node *oldParent = node->parentNode();
     const Node *before = newParent->childNode( newPos );
     emit nodeToBeMoved( node );
     takeTask( node, false );
     int i = before == 0 ? newParent->numChildren() : newPos;
     addSubTask( node, i, newParent, false );
     emit nodeMoved( node );
+    if ( oldParent != this && oldParent->numChildren() == 0 ) {
+        emit nodeChanged( oldParent );
+    }
+    if ( newParent != this && newParent->numChildren() == 1 ) {
+        emit nodeChanged( newParent );
+    }
     return true;
 }
 
@@ -1902,6 +1921,7 @@ QString Project::generateWBSCode( QList<int> &indexes ) const
         }
         ++level;
     }
+    kDebug()<<code;
     return code;
 }
 

@@ -76,6 +76,7 @@ public:
     PertEditor( KoDocument *part, QWidget *parent );
     virtual void updateReadWrite( bool readwrite );
     void setProject( Project *project );
+    Project *project() const { return m_project; }
     void draw( Project &project );
     void draw();
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);

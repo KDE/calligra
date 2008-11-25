@@ -516,6 +516,9 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
 
 bool TaskStatusItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     switch ( index.column() ) {
         case NodeModel::NodeCompleted:
             return setCompletion( node( index ), value, role );

@@ -887,6 +887,9 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
 
 bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }

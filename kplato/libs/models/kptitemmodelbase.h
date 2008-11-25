@@ -218,6 +218,8 @@ public:
     /// If default should be used, return 0.
     virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const { Q_UNUSED(column); Q_UNUSED(parent); return 0; }
 
+    bool setData( const QModelIndex &index, const QVariant &value, int role );
+
 signals:
     /// Connect to this signal if your model modifies data using undo commands.
     void executeCommand( QUndoCommand* );

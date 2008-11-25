@@ -28,11 +28,11 @@
 
 #include <KoXmlReaderForward.h>
 
+#include <QSortFilterProxyModel>
 
 class KoDocument;
 
 class QPoint;
-
 
 namespace KPlato
 {
@@ -75,6 +75,7 @@ public:
     ScheduleEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
     
@@ -145,7 +146,7 @@ public:
     Project *project() const { return logModel()->project(); }
     void setProject( Project *project ) { logModel()->setProject( project ); }
 
-    ScheduleLogItemModel *logModel() const { return m_model; }
+    ScheduleLogItemModel *logModel() const { return static_cast<ScheduleLogItemModel*>( m_model->sourceModel() ); }
     
     ScheduleManager *scheduleManager() const { return logModel()->manager(); }
     void setScheduleManager( ScheduleManager *manager ) { logModel()->setManager( manager ); }
@@ -164,7 +165,7 @@ protected slots:
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
 
 private:
-    ScheduleLogItemModel *m_model;
+    QSortFilterProxyModel *m_model;
 };
 
 //----------------------------------------------
@@ -176,9 +177,11 @@ public:
 
     void setupGui();
     virtual void setProject( Project *project );
+    Project *project() const { return m_view->project(); }
+    using ViewBase::draw;
     virtual void draw( Project &project );
 
-    ScheduleLogItemModel *model() const { return m_view->logModel(); }
+    ScheduleLogItemModel *baseModel() const { return m_view->logModel(); }
 
     virtual void updateReadWrite( bool readwrite );
 
@@ -215,6 +218,8 @@ class KPLATOUI_EXPORT ScheduleHandlerView : public SplitterView
 public:
     ScheduleHandlerView( KoDocument *part, QWidget *parent );
     
+    Project *project() const { return 0; }
+
     ScheduleEditor *scheduleEditor() const { return m_scheduleEditor; }
     /// Returns a list of actionlist names for all shown views
     QStringList actionListNames() const;

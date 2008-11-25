@@ -139,11 +139,6 @@ int RelationModel::propertyCount()
     return 4;
 }
 
-bool RelationModel::setData( Relation *r, int property, const QVariant & value, int role )
-{
-    return false;
-}
-
 QVariant RelationModel::headerData( int section, int role )
 {
     if ( role == Qt::DisplayRole ) {
@@ -385,6 +380,9 @@ QVariant RelationItemModel::data( const QModelIndex &index, int role ) const
 
 bool RelationItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( ( flags(index) & Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }

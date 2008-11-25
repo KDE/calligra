@@ -412,11 +412,12 @@ protected:
     bool setShutdownCost( Node *node, const QVariant &value, int role );
 
 protected:
+    bool resetData();
     void resetModel();
     
 private:
     NodeModel m_nodemodel;
-    QList<Node*> m_mslist;
+    QMap<QString, Node*> m_nodemap;
 };
 
 class KPLATOMODELS_EXPORT NodeSortFilterProxyModel : public QSortFilterProxyModel
@@ -426,6 +427,8 @@ public:
     NodeSortFilterProxyModel( ItemModelBase* model, QObject *parent, bool filterUnscheduled = true );
 
     ItemModelBase *itemModel() const;
+    void setFilterUnscheduled( bool on );
+    bool filterUnscheduled() const { return m_filterUnscheduled; }
 
 protected:
     bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
