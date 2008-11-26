@@ -43,12 +43,6 @@ public:
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
 
-    /// Returns if the stroke mode is active
-    bool strokeIsSelected() const;
-    
-    /// Sets the shape border and fill to display
-    void updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill );
-
 private slots:
     void fillSelected();
     void strokeSelected();
@@ -61,7 +55,9 @@ private slots:
     void updateFillRule( Qt::FillRule fillRule );
 private:
     void updateColor( const QColor &c, const QList<KoShape*> & selectedShapes );
-
+    /// Sets the shape border and fill to display
+    void updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill );
+    
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
     QStackedWidget * m_stack;

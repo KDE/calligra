@@ -121,7 +121,8 @@ void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
 
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
-
+    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+            this, SLOT(selectionChanged()));
     connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
              this, SLOT(resourceChanged(int, const QVariant&)));
 
@@ -152,11 +153,6 @@ void KarbonStyleDocker::selectionChanged()
         updateStyle( shape->border(), shape->background() );
     else
         updateStyle( 0, 0 );
-}
-
-bool KarbonStyleDocker::strokeIsSelected() const
-{
-    return m_preview->strokeIsSelected();
 }
 
 void KarbonStyleDocker::updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill )
