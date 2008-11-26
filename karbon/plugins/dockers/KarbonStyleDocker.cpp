@@ -159,7 +159,7 @@ bool KarbonStyleDocker::strokeIsSelected() const
     return m_preview->strokeIsSelected();
 }
 
-void KarbonStyleDocker::updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill )
+void KarbonStyleDocker::updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill )
 {
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
@@ -167,7 +167,7 @@ void KarbonStyleDocker::updateStyle( const KoShapeBorderModel * stroke, const Ko
     QColor qColor;
     if( activeStyle == Karbon::Foreground )
     {
-        const KoLineBorder * border = dynamic_cast<const KoLineBorder*>( stroke );
+        KoLineBorder * border = dynamic_cast<KoLineBorder*>( stroke );
         if( border )
             qColor = border->color();
         else
@@ -175,7 +175,7 @@ void KarbonStyleDocker::updateStyle( const KoShapeBorderModel * stroke, const Ko
     }
     else
     {
-        const KoColorBackground * background = dynamic_cast<const KoColorBackground*>( fill );
+        KoColorBackground * background = dynamic_cast<KoColorBackground*>( fill );
         if( background )
             qColor = background->color();
         else

@@ -46,8 +46,8 @@ public:
     /// Returns if the stroke mode is active
     bool strokeIsSelected() const;
     
-    /// Sets the shape border ans fill to display
-    void updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill );
+    /// Sets the shape border and fill to display
+    void updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill );
 
 private slots:
     void fillSelected();
