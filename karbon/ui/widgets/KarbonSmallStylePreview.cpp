@@ -57,9 +57,24 @@ public:
         setCursor( Qt::PointingHandCursor );
         setToolTip( i18n("Press to apply fill to selection" ) );
     }
-    void setFill( const KoShapeBackground * fill )
+    
+    virtual ~KarbonFillStyleWidget()
     {
-        m_fill = fill;
+        if( m_fill && ! m_fill->removeUser() )
+            delete m_fill;
+    }
+    
+    void setFill( KoShapeBackground * fill )
+    {
+        if( fill != m_fill )
+        {
+            if( m_fill && ! m_fill->removeUser() )
+                delete m_fill;
+            m_fill = fill;
+            if( m_fill )
+                m_fill->addUser();
+        }
+        
         update();
     }
 protected:
@@ -72,7 +87,7 @@ protected:
         {
             m_checkerPainter.paint( painter, rect() );
 
-            const KoGradientBackground * gradientFill = dynamic_cast<const KoGradientBackground*>( m_fill );
+            KoGradientBackground * gradientFill = dynamic_cast<KoGradientBackground*>( m_fill );
             if( gradientFill )
             {
                 const QGradient * gradient = gradientFill->gradient();
@@ -106,7 +121,7 @@ protected:
     }
     
 private:
-    const KoShapeBackground * m_fill; ///< the fill to preview
+    KoShapeBackground * m_fill; ///< the fill to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
@@ -119,9 +134,23 @@ public:
         setCursor( Qt::PointingHandCursor );
         setToolTip( i18n("Press to apply stroke to selection" ) );
     }
-    void setStroke( const KoShapeBorderModel * stroke )
+    
+    virtual ~KarbonStrokeStyleWidget()
     {
-        m_stroke = stroke;
+        if( m_stroke && ! m_stroke->removeUser() )
+            delete m_stroke;
+    }
+    
+    void setStroke( KoShapeBorderModel * stroke )
+    {
+        if( stroke != m_stroke )
+        {
+            if( m_stroke && ! m_stroke->removeUser() )
+                delete m_stroke;
+            m_stroke = stroke;
+            if( m_stroke )
+                m_stroke->addUser();
+        }
         update();
     }
 protected:
@@ -178,7 +207,7 @@ protected:
     }
 
 private:
-    const KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    KoShapeBorderModel * m_stroke; ///< the stroke to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 
