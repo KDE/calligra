@@ -57,7 +57,7 @@ ScriptingScheduleListView::ScriptingScheduleListView(Scripting::Module* module, 
     m_view->setItemsExpandable(false);
 //    m_view->setEditTriggers(QAbstractItemView::AllEditTriggers);
     QStandardItemModel *model = new QStandardItemModel(m_view);
-    model->setHorizontalHeaderLabels( QStringList() << "Schedule Name" );
+    model->setHorizontalHeaderLabels( QStringList() << i18n( "Schedule Name" ) );
     KPlato::Project *p = static_cast<Scripting::Project*>( m_module->project() )->kplatoProject();
     kDebug()<<p;
     foreach ( KPlato::ScheduleManager *sm, p->allScheduleManagers() ) {
