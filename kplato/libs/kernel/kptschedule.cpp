@@ -1042,6 +1042,7 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
         endTime = DateTime::fromString( s, status.projectSpec() );
     
     duration = Duration::fromString( sch.attribute( "duration" ) );
+    schedulingError = sch.attribute( "scheduling-conflict", "0" ).toInt();
 
     KoXmlNode n = sch.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1101,6 +1102,7 @@ void MainSchedule::saveXML( QDomElement &element ) const
     element.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
     element.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
     element.setAttribute( "duration", duration.toString() );
+    element.setAttribute( "scheduling-conflict", schedulingError );
     
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
