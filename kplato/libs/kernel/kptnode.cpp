@@ -665,6 +665,23 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earlyStart = time;
+    //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
+    switch ( m_constraint ) {
+        case FinishNotLater:
+        case MustFinishOn:
+            if ( m_constraintEndTime < time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        case MustStartOn:
+        case FixedInterval:
+            if ( m_constraintStartTime < time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        default:
+            break;
+    }
     //kDebug()<<m_name<<":"<<m_currentSchedule->earlyStart;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
@@ -676,6 +693,22 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->lateFinish = time;
+    switch ( m_constraint ) {
+        case StartNotEarlier:
+        case MustStartOn:
+            if ( m_constraintStartTime > time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        case MustFinishOn:
+        case FixedInterval:
+            if ( m_constraintEndTime > time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        default:
+            break;
+    }
     //kDebug()<<m_name<<":"<<m_currentSchedule->lateFinish;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
@@ -686,8 +719,10 @@ void Node::propagateLatestFinish(DateTime &time) {
 void Node::moveEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
-    if (m_currentSchedule->earlyStart < time)
+    if (m_currentSchedule->earlyStart < time) {
+        //m_currentSchedule->logDebug( "moveEarliestStart: " + m_currentSchedule->earlyStart.toString() + " -> " + time.toString() );
         m_currentSchedule->earlyStart = time;
+    }
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->moveEarliestStart(time);

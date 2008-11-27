@@ -277,24 +277,34 @@ void Project::calculate()
         } else {
             cs->setPhaseName( 0, "Init" );
             cs->logInfo( i18n( "Schedule project backward from: %1", m_constraintEndTime.toString() ), 0 );
-            cs->endTime = m_constraintEndTime;
-            cs->lateFinish = m_constraintEndTime;
             // Calculate from end time
-            propagateLatestFinish( cs->lateFinish );
+            propagateLatestFinish( m_constraintEndTime );
             cs->setPhaseName( 1, "Backward" );
             cs->logInfo( "Calculate early start", 1 );
             cs->earlyStart = calculateBackward( estType );
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, "Forward" );
             cs->logInfo( "Calculate late finish", 2 );
-            cs->calculateForward( estType );
+            cs->lateFinish = cs->calculateForward( estType );
             cs->setPhaseName( 3, "Schedule" );
             cs->logInfo( "Schedule tasks backward", 3 );
-            cs->startTime = scheduleBackward( cs->endTime, estType );
+            cs->startTime = scheduleBackward( cs->lateFinish, estType );
+            cs->endTime = cs->startTime;
+            foreach ( Node *n, allNodes() ) {
+                if ( n->type() == Type_Task || n->type() == Type_Milestone ) {
+                    DateTime e = n->endTime( cs->id() );
+                    if ( cs->endTime <  e ) {
+                        cs->endTime = e;
+                    }
+                }
+            }
+            if ( cs->endTime > m_constraintEndTime ) {
+                cs->logError( "Failed to finish project within target time", 3 );
+            }
             cs->duration = cs->endTime - cs->startTime;
             cs->logInfo( i18n( "Scheduled start: %1 (%2)", cs->startTime.toString(), m_constraintStartTime.toString() ), 3 );
             if ( cs->startTime < m_constraintStartTime ) {
-                cs->logWarning( i18n( "Must start project early in order to finish in time: %1", m_constraintStartTime.toString() ), 3 );
+                cs->logError( i18n( "Must start project early in order to finish in time: %1", m_constraintStartTime.toString() ), 3 );
             } else if ( cs->startTime == m_constraintStartTime ) {
                 cs->logWarning( i18n( "Start project exactly on time: %1", m_constraintStartTime.toString() ), 3 );
             } else {

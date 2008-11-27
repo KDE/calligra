@@ -346,11 +346,12 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     m_model = new QSortFilterProxyModel( this );
     m_model->setFilterRole( Qt::UserRole+1 );
     m_model->setFilterKeyColumn ( 2 ); // severity
-    m_model->setFilterWildcard( "[123]" ); // Filter out Debug
+    m_model->setFilterWildcard( "[^0]" ); // Filter out Debug
 
     m_model->setSourceModel( new ScheduleLogItemModel( this ) );
     setModel( m_model );
     
+    setRootIsDecorated( false );
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
