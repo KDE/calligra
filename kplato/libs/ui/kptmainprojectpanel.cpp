@@ -43,6 +43,10 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     : MainProjectPanelImpl(parent, name),
       project(p)
 {
+    QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
+    wbslabel->setWhatsThis( s );
+    wbs->setWhatsThis( s );
+
     namefield->setText(project.name());
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());

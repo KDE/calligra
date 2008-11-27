@@ -30,11 +30,6 @@
        <property name="toolTip" >
         <string>Work Breakdown Structure</string>
        </property>
-       <property name="whatsThis" >
-        <string>The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.
-
-The WBS code is auto-generated; simply choose Generate WBS Code from the Tools menu to generate the WBS code for the project.</string>
-       </property>
        <property name="text" >
         <string>WBS:</string>
        </property>
