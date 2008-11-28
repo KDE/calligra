@@ -421,6 +421,7 @@ void PertCpmView::slotOptions()
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
     bool enbl = sm && sm->isScheduled() && sm->usePert();
+    kDebug()<<sm<<(sm?sm->isScheduled():false)<<(sm?sm->usePert():false)<<enbl;
     widget.probabilityFrame->setVisible( enbl );
     current_schedule = sm;
     model()->setManager( sm );
@@ -478,13 +479,13 @@ void PertCpmView::draw( Project &project )
 void PertCpmView::draw()
 {
     widget.scheduleName->setText( i18n( "None" ) );
-    widget.probabilityFrame->setVisible( false );
+    bool enbl = m_project && current_schedule && current_schedule->isScheduled() && current_schedule->usePert();
+    widget.probabilityFrame->setVisible( enbl );
     if ( m_project && current_schedule && current_schedule->isScheduled() ) {
         long id = current_schedule->id();
         if ( id == -1 ) {
             return;
         }
-        widget.probabilityFrame->setVisible( true );
         widget.scheduleName->setText( current_schedule->name() );
         widget.finishTime->setDateTime( m_project->endTime( id ).dateTime() );
         bool ro = model()->variance( Qt::EditRole ).toDouble() == 0.0;
@@ -537,7 +538,7 @@ double PertCpmView::probability( double z ) const
 {
     double p = 1.0;
     int i = 1;
-    for ( ; i < 155; ++i ) {
+    for ( ; i < 151; ++i ) {
         if ( QABS( z ) <= dist[i][0] ) {
             break;
         }

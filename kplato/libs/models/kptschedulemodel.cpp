@@ -190,12 +190,12 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     if ( !index.isValid() )
         return flags;
-    if ( !m_readWrite ) {
+    if ( !m_readWrite  ) {
         return flags &= ~Qt::ItemIsEditable;
     }
     flags &= ~Qt::ItemIsEditable;
     ScheduleManager *sm = manager( index );
-    if ( sm ) {
+    if ( sm && ! sm->isBaselined() ) {
         switch ( index.column() ) {
             case ScheduleModel::ScheduleState: break;
             case ScheduleModel::ScheduleDirection:
@@ -209,7 +209,6 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
-    flags &= ~Qt::ItemIsSelectable;
     return flags;
 }
 
