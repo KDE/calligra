@@ -26,6 +26,7 @@
 #include <QtGui/QTextEdit>
 #include <QtGui/QToolButton>
 #include <QTimeEdit>
+#include <QComboBox>
 
 #include <KDebug>
 #include <KLocale>
@@ -43,7 +44,6 @@
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
-#include "ui/KPrTimeSlideWidget.h"
 
 KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )
