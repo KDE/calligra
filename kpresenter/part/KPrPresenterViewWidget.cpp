@@ -53,7 +53,7 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
     vLayout->setContentsMargins( 20, 20, 20, 0 );
 
     m_stackedLayout = new QStackedLayout;
-    m_mainWidget = new KPrPresenterViewInterface( pages, m_canvas );
+    m_mainWidget = new KPrPresenterViewInterface( pages, m_canvas, this );
     m_stackedLayout->addWidget( m_mainWidget );
 
     m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
@@ -153,6 +153,11 @@ void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
 void KPrPresenterViewWidget::updateSlideIndex(int index)
 {
     m_toolWidget->updateSlideIndex(index);
+}
+
+KPrPresenterViewToolWidget* KPrPresenterViewWidget::getToolWidget()
+{
+    return m_toolWidget;
 }
 
 #include "KPrPresenterViewWidget.moc"

@@ -20,6 +20,8 @@
 #ifndef KPRPRESENTERVIEWINTERFACE
 #define KPRPRESENTERVIEWINTERFACE
 
+#include <QtGui/QBoxLayout>
+
 #include "KPrPresenterViewBaseInterface.h"
 
 #include <QtGui/QFrame>
@@ -42,6 +44,7 @@ public:
     KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
 
     void setPreviewSize( const QSize &size );
+    void createSlideTime();
 
 public slots:
     /// reimplemented
@@ -54,6 +57,8 @@ private:
     QLabel *m_nextSlidePreview;
     QTextEdit *m_notesTextEdit;
     QSize m_previewSize;
+    QVBoxLayout *frameNextLayout;
+    QWidget *m_timeSlideWidget;
 };
 
 #endif

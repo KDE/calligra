@@ -45,6 +45,7 @@ public:
     void setActivePage( int pageIndex );
     void updateWidget( const QSize &widgetSize, const QSize &canvasSize );
     void updateSlideIndex(int index);
+    KPrPresenterViewToolWidget *getToolWidget();
 
 private slots:
     void showSlideThumbnails( bool show );

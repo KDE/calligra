@@ -79,12 +79,6 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     if ( hasAnimation() ) {
         startTimeLine( m_maxShapeDuration );
     }
-    
-    // KPresenter BE Team code -- begin //
-    m_currentSlideTime = new QTime();
-    m_finalTimeSlide.insert(m_pageIndex,0);
-    m_currentSlideTime->start();
-    // KPresenter BE Team code -- end //
 }
 
 KPrAnimationDirector::~KPrAnimationDirector()
@@ -278,12 +272,6 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 
 bool KPrAnimationDirector::changePage( Navigation navigation )
 {
-    // KPresenter BE Team code -- begin //
-    if(m_finalTimeSlide.contains(m_pageIndex))	{
-      m_finalTimeSlide.remove(m_pageIndex);
-    }
-    m_finalTimeSlide.insert(m_pageIndex,m_currentSlideTime->elapsed());
-    // KPresenter BE Team code -- end //
     switch ( navigation )
     {
         case FirstPage:
@@ -314,9 +302,6 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
             break;
     }
     m_stepIndex = 0;
-    // KPresenter BE Team code -- begin //
-    m_currentSlideTime->restart();
-    // KPresenter BE Team code -- end //
 
     updateActivePage( m_pages[m_pageIndex] );
     updateAnimations();

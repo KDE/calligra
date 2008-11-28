@@ -19,13 +19,13 @@
 
 #include "KPrPresenterViewInterface.h"
 
-#include <QtGui/QBoxLayout>
 #include <QtGui/QFrame>
 #include <QtGui/QLabel>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QTextEdit>
 #include <QtGui/QToolButton>
+#include <QTimeEdit>
 
 #include <KDebug>
 #include <KLocale>
@@ -43,6 +43,7 @@
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
+#include "ui/KPrTimeSlideWidget.h"
 
 KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )
@@ -63,13 +64,13 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     hLayout->addStretch();
 
     frame = new QFrame;
-    frameLayout = new QVBoxLayout;
+    frameNextLayout = new QVBoxLayout;
     m_nextSlideLabel = new QLabel( i18n( "Next Slide" ) );
     m_nextSlidePreview = new QLabel;
-    frameLayout->addWidget( m_nextSlideLabel, 0, Qt::AlignHCenter );
-    frameLayout->addWidget( m_nextSlidePreview );
-    frameLayout->addStretch();
-    frame->setLayout( frameLayout );
+    frameNextLayout->addWidget( m_nextSlideLabel, 0, Qt::AlignHCenter );
+    frameNextLayout->addWidget( m_nextSlidePreview );
+    frameNextLayout->addStretch();
+    frame->setLayout( frameNextLayout );
     hLayout->addWidget( frame );
 
     vLayout->addLayout( hLayout );
@@ -80,6 +81,8 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     vLayout->addWidget( m_notesTextEdit );
 
     setLayout( vLayout );
+    
+    m_timeSlideWidget = NULL;
 }
 
 void KPrPresenterViewInterface::setActivePage( int pageIndex )
@@ -96,11 +99,21 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
     if ( pageIndex != pageCount ) {
         nextPage = m_pages.at( pageIndex + 1 );
         m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
+	m_nextSlideLabel->setText(i18n( "Next Slide" ));
+	m_nextSlidePreview->setVisible(true);
+	if(m_timeSlideWidget != NULL)
+	  m_timeSlideWidget->setVisible(false);
     }
-    else { // End of presentation, just a black pixmap for the next slide preview
-        QPixmap pixmap( m_previewSize );
-        pixmap.fill( Qt::black );
-        m_nextSlidePreview->setPixmap( pixmap );
+    else { // End of presentation, show time for each slide
+	m_nextSlideLabel->setText(i18n( "Slides Time" ));
+	m_nextSlidePreview->setVisible(false);
+	if(m_timeSlideWidget == NULL)	{
+	    createSlideTime();
+	    frameNextLayout->insertWidget(1,m_timeSlideWidget);
+	    frameNextLayout->addStretch();
+	}
+	else
+	    m_timeSlideWidget->setVisible(true);
     }
 
     // update the label
@@ -134,6 +147,31 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
         nextPage = m_pages.at( m_activePage );
     }
     m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
+}
+
+void KPrPresenterViewInterface::createSlideTime()
+{
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(new QLabel(i18n( "Slide :")),0,0);
+    QComboBox *slideBox = new QComboBox();
+    QMap<int,int> *m_timeSlides = new QMap<int,int>();
+    m_timeSlides->insert(0,10);
+    m_timeSlides->insert(1,16);
+    for (int i = 0;i < m_timeSlides->size(); ++i)
+    {
+	slideBox->addItem("Slide "+QString::number(i+1));
+    }
+    layout->addWidget(slideBox,0,1);
+    
+    layout->addWidget(new QLabel(i18n( "Time :")));
+    QTimeEdit *timeEdit = new QTimeEdit();
+    timeEdit->setDisplayFormat ( "HH:mm:ss" );
+    QTime t = QTime(0,0,m_timeSlides->value(0));
+    timeEdit->setTime( t );
+    layout->addWidget(timeEdit);
+    
+    m_timeSlideWidget = new QWidget(this);
+    m_timeSlideWidget->setLayout(layout);
 }
 
 #include "KPrPresenterViewInterface.moc"
