@@ -27,7 +27,7 @@ class KComboBox;
 class QCheckBox;
 class QSpinBox;
 class QDoubleSpinBox;
-class QPushButton;
+class QToolButton;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -68,7 +68,6 @@ private slots:
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
-    void toggleDetails();
 
     void setUsePathEnabled( bool enabled );
 
@@ -134,16 +133,11 @@ private:
     QDoubleSpinBox  *massBox;
     QDoubleSpinBox  *dragBox;
 
-    QPushButton *detailsButton;
-    QPushButton *saveButton;
-    QPushButton *removeButton;
-
-    QWidget *details;
+    QToolButton *saveButton;
+    QToolButton *removeButton;
 
     // when true updateCurrentProfile() doesn't do anything
     bool changingProfile;
-
-    bool detailsShowed;
 };
 
 #endif // KARBONCALLIGRAPHYOPTIONWIDGET_H

@@ -25,14 +25,15 @@
 #include <KConfigGroup>
 #include <KDebug>
 #include <KMessageBox>
+#include <KIcon>
 
 #include <QtGui/QSpinBox>
 #include <QtGui/QCheckBox>
 #include <QtGui/QDoubleSpinBox>
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QLabel>
-#include <QtGui/QPushButton>
 #include <QtGui/QInputDialog>
+#include <QtGui/QGridLayout>
+#include <QtGui/QToolButton>
 
 /*
 Profiles are saved in karboncalligraphyrc
@@ -54,116 +55,101 @@ TODO: add a reset defaults option?
 const QString RCFILENAME = "karboncalligraphyrc";
 
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
-    : changingProfile(false), detailsShowed(true)
+    : changingProfile(false)
 {
-    QVBoxLayout *layout = new QVBoxLayout( this );
-
-    QLabel *profileLabel = new QLabel( i18n("Profile:"), this );
-    layout->addWidget( profileLabel );
+    QGridLayout *layout = new QGridLayout( this );
+    layout->setContentsMargins( 0, 0, 0, 0 );
+    
     comboBox = new KComboBox( this );
-    layout->addWidget( comboBox );
+    layout->addWidget( comboBox, 0, 0 );
 
-    QHBoxLayout *widthLayout = new QHBoxLayout();
+    saveButton = new QToolButton( this );
+    saveButton->setToolTip( i18n("Save profile as...") );
+    saveButton->setIcon( KIcon("document-save-as") );
+    layout->addWidget( saveButton, 0, 1 );
+    
+    removeButton = new QToolButton( this );
+    removeButton->setToolTip( i18n("Remove profile") );
+    removeButton->setIcon( KIcon("list-remove") );
+    layout->addWidget( removeButton, 0, 2 );
+
+    QGridLayout *detailsLayout = new QGridLayout();
+    detailsLayout->setContentsMargins( 0, 0, 0, 0 );
+    detailsLayout->setVerticalSpacing( 0 );
+    
+    usePath = new QCheckBox( i18n("&Follow selected path"), this );
+    detailsLayout->addWidget( usePath, 0, 0, 1, 4 );
+    
+    usePressure = new QCheckBox( i18n("Use tablet &pressure"), this );
+    detailsLayout->addWidget( usePressure, 1, 0, 1, 4 );
+    
     QLabel *widthLabel = new QLabel( i18n( "Width:" ), this );
     widthLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     widthBox = new QDoubleSpinBox;
-    widthBox->setRange( 0.0, 1000.0 );
-    widthLayout->addWidget( widthLabel );
-    widthLayout->addWidget( widthBox );
-    layout->addLayout( widthLayout );
+    widthBox->setRange( 0.0, 999.0 );
     widthLabel->setBuddy( widthBox );
+    detailsLayout->addWidget( widthLabel, 2, 2 );
+    detailsLayout->addWidget( widthBox, 2, 3 );
 
-    usePath = new QCheckBox( i18n("&Follow selected path"), this );
-    layout->addWidget( usePath );
-
-    detailsButton = new QPushButton( "", this );
-    layout->addWidget( detailsButton );
-
-    details = new QWidget( this );
-    QVBoxLayout *detailsLayout = new QVBoxLayout( details );
-
-    usePressure = new QCheckBox( i18n("Use tablet &pressure"), this );
-    detailsLayout->addWidget( usePressure );
-
-    QHBoxLayout *thinningLayout = new QHBoxLayout();
     QLabel *thinningLabel = new QLabel( i18n( "Thinning:" ), this );
     thinningLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     thinningBox = new QDoubleSpinBox;
     thinningBox->setRange( -1.0, 1.0 );
     thinningBox->setSingleStep( 0.1 );
-    thinningLayout->addWidget( thinningLabel );
-    thinningLayout->addWidget( thinningBox );
-    detailsLayout->addLayout( thinningLayout );
     thinningLabel->setBuddy( thinningBox );
+    detailsLayout->addWidget( thinningLabel, 2, 0 );
+    detailsLayout->addWidget( thinningBox, 2, 1 );
 
     useAngle = new QCheckBox( i18n("Use tablet &angle"), this );
-    detailsLayout->addWidget( useAngle );
+    detailsLayout->addWidget( useAngle, 3, 0, 1, 4 );
 
-    QHBoxLayout *angleLayout = new QHBoxLayout();
     QLabel *angleLabel = new QLabel( i18n( "Angle:" ), this );
     angleLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     angleBox = new QSpinBox;
     angleBox->setRange( 0, 179 );
     angleBox->setWrapping( true );
-    angleLayout->addWidget( angleLabel );
-    angleLayout->addWidget( angleBox );
-    detailsLayout->addLayout( angleLayout );
     angleLabel->setBuddy( angleBox );
+    detailsLayout->addWidget( angleLabel, 4, 0 );
+    detailsLayout->addWidget( angleBox, 4, 1 );
 
-    QHBoxLayout *fixationLayout = new QHBoxLayout();
     QLabel *fixationLabel = new QLabel( i18n( "Fixation:" ), this );
     fixationLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     fixationBox = new QDoubleSpinBox;
     fixationBox->setRange( 0.0, 1.0 );
     fixationBox->setSingleStep( 0.1 );
-    fixationLayout->addWidget( fixationLabel );
-    fixationLayout->addWidget( fixationBox );
-    detailsLayout->addLayout( fixationLayout );
     fixationLabel->setBuddy( fixationBox );
-
-    QHBoxLayout *capsLayout = new QHBoxLayout();
+    detailsLayout->addWidget( fixationLabel, 5, 0 );
+    detailsLayout->addWidget( fixationBox, 5, 1 );
+    
     QLabel *capsLabel = new QLabel( i18n( "Caps:" ), this );
     capsLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     capsBox = new QDoubleSpinBox;
     capsBox->setRange( 0.0, 2.0 );
     capsBox->setSingleStep( 0.03 );
-    capsLayout->addWidget( capsLabel );
-    capsLayout->addWidget( capsBox );
-    detailsLayout->addLayout( capsLayout );
     capsLabel->setBuddy( capsBox );
-
-    QHBoxLayout *massLayout = new QHBoxLayout();
+    detailsLayout->addWidget( capsLabel, 5, 2 );
+    detailsLayout->addWidget( capsBox, 5, 3 );
+    
     QLabel *massLabel = new QLabel( i18n( "Mass:" ), this );
     massLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     massBox = new QDoubleSpinBox;
     massBox->setRange( 0.0, 20.0 );
     massBox->setDecimals( 1 );
-    massLayout->addWidget( massLabel );
-    massLayout->addWidget( massBox );
-    detailsLayout->addLayout( massLayout );
     massLabel->setBuddy( massBox );
-
-    QHBoxLayout *dragLayout = new QHBoxLayout();
+    detailsLayout->addWidget( massLabel, 6, 0 );
+    detailsLayout->addWidget( massBox, 6, 1 );
+    
     QLabel *dragLabel = new QLabel( i18n( "Drag:" ), this );
     dragLabel->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     dragBox = new QDoubleSpinBox;
     dragBox->setRange( 0.0, 1.0 );
     dragBox->setSingleStep( 0.1 );
-    dragLayout->addWidget( dragLabel );
-    dragLayout->addWidget( dragBox );
-    detailsLayout->addLayout( dragLayout );
     dragLabel->setBuddy( dragBox );
-
-    saveButton = new QPushButton( i18n("Save profile as..."), this );
-    detailsLayout->addWidget( saveButton );
-
-    removeButton = new QPushButton( i18n("Remove profile"), this );
-    detailsLayout->addWidget( removeButton );
-
-    layout->addWidget( details );
-    layout->addStretch( 1 );
-
-    toggleDetails();
+    detailsLayout->addWidget( dragLabel, 6, 2 );
+    detailsLayout->addWidget( dragBox, 6, 3 );
+    
+    layout->addLayout( detailsLayout, 1, 0, 1, 3 );
+    //layout->setRowStretch( 2, 1 );
 
     createConnections();
     addDefaultProfiles(); // if they are already added does nothing
@@ -270,22 +256,6 @@ void KarbonCalligraphyOptionWidget::removeProfile()
     removeProfile( comboBox->currentText() );
 }
 
-void KarbonCalligraphyOptionWidget::toggleDetails()
-{
-    if ( detailsShowed )
-    {
-        details->hide();
-        detailsButton->setText( i18n("Show details >>") );
-    }
-    else
-    {
-        details->show();
-        detailsButton->setText( i18n("Hide details <<") );
-    }
-
-    detailsShowed = !detailsShowed;
-}
-
 void KarbonCalligraphyOptionWidget::toggleUseAngle( bool checked )
 {
     angleBox->setEnabled( ! checked );
@@ -389,7 +359,6 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect( removeButton, SIGNAL(clicked()), SLOT(removeProfile()) );
 
     // visualization
-    connect( detailsButton, SIGNAL(clicked()), SLOT(toggleDetails()) );
     connect( useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
 }
 
