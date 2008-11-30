@@ -1228,6 +1228,10 @@ void CellToolBase::selectionChanged(const Region& region)
     if (!d->locationComboBox) {
         return;
     }
+    // if we're in ref viewing mode, do nothing here
+    if (editor() && selection()->referenceSelection() && (!selection()->referenceSelectionMode()))
+      return;
+
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
     if (!cell) {
         return;
