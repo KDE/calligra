@@ -1409,7 +1409,7 @@ DependencyNodeItem *DependencyScene::nodeItem( int row ) const
     if ( row < 0 || m_visibleItems.isEmpty() ) {
         return 0;
     }
-    foreach ( DependencyNodeItem *i, m_visibleItems.values() ) {
+    foreach ( DependencyNodeItem *i, m_visibleItems ) {
         if ( i->row() == row ) {
             return i;
         }

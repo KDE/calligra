@@ -72,7 +72,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
             map.insert( view->section( c ), item );
         }
     }
-    foreach( Item *i, map.values() ) {
+    foreach( Item *i, map ) {
         selector->selectedListWidget()->addItem( i );
     }
 

@@ -215,14 +215,14 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
                     if ( cost_Y ) {
                         //kDebug()<<"Y-axis, Cost"<<idx;
                         double c = 0.0;
-                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                        foreach ( const EffortCost &v, m_bcwp.days() ) {
                             c += v.cost();
                             lst << c;
                         }
                     } else if ( effort_Y ) {
                         //kDebug()<<"Y-axis, Hours"<<idx;
                         double c = 0.0;
-                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                        foreach ( const EffortCost &v, m_bcwp.days() ) {
                             c += v.effort().toDouble( Duration::Unit_h );
                             lst << c;
                         }
@@ -243,12 +243,12 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
                     //kDebug()<<"Y-axis"<<idx<<axis;
                     if ( cost_Y ) {
                         //kDebug()<<"Y-axis, Cost"<<idx;
-                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                        foreach ( const EffortCost &v, m_bcwp.days() ) {
                             lst << v.bcwpCost();
                         }
                     } else if ( effort_Y ) {
                         //kDebug()<<"Y-axis, Hours"<<idx;
-                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                        foreach ( const EffortCost &v, m_bcwp.days() ) {
                             lst << v.bcwpEffort();
                         }
                     }
@@ -270,14 +270,14 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
                     if ( cost_Y ) {
                         //kDebug()<<"Y-axis, Cost"<<idx;
                         double c = 0.0;
-                        foreach ( const EffortCost &v, m_acwp.days().values() ) {
+                        foreach ( const EffortCost &v, m_acwp.days() ) {
                             c +=  v.cost();
                             lst << c;
                         }
                     } else if ( effort_Y ) {
                         //kDebug()<<"Y-axis, Hours"<<idx;
                         double c = 0.0;
-                        foreach ( const EffortCost &v, m_acwp.days().values() ) {
+                        foreach ( const EffortCost &v, m_acwp.days() ) {
                             c +=  v.effort().toDouble( Duration::Unit_h );
                             lst << c;
                         }

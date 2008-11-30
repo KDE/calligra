@@ -2912,7 +2912,7 @@ MilestoneItemModel::~MilestoneItemModel()
 QList<Node*> MilestoneItemModel::mileStones() const
 {
     QList<Node*> lst;
-    foreach( Node* n, m_nodemap.values() ) {
+    foreach( Node* n, m_nodemap ) {
         if ( n->type() == Node::Type_Milestone ) {
             lst << n;
         }

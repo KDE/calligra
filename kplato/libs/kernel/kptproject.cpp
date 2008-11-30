@@ -92,22 +92,22 @@ int Project::type() const { return Node::Type_Project; }
 
 void Project::generateUniqueIds()
 {
-    foreach ( Node *n, nodeIdDict.values() ) {
+    foreach ( Node *n, nodeIdDict ) {
         nodeIdDict.remove( n->id() );
         n->setId( uniqueNodeId() );
         nodeIdDict[ n->id() ] = n;
     }
-    foreach ( ResourceGroup *g, resourceGroupIdDict.values() ) {
+    foreach ( ResourceGroup *g, resourceGroupIdDict ) {
         resourceGroupIdDict.remove( g->id() );
         g->setId( uniqueResourceGroupId() );
         resourceGroupIdDict[ g->id() ] = g;
     }
-    foreach ( Resource *r, resourceIdDict.values() ) {
+    foreach ( Resource *r, resourceIdDict ) {
         resourceIdDict.remove( r->id() );
         r->setId( uniqueResourceId() );
         resourceIdDict[ r->id() ] = r;
     }
-    foreach ( Calendar *c, calendarIdDict.values() ) {
+    foreach ( Calendar *c, calendarIdDict ) {
         calendarIdDict.remove( c->id() );
         c->setId( uniqueCalendarId() );
         calendarIdDict[ c->id() ] = c;
@@ -178,7 +178,7 @@ void Project::calculate( ScheduleManager &sm )
 {
     m_progress = 0;
     int nodes = 0;
-    foreach ( Node *n, nodeIdDict.values() ) {
+    foreach ( Node *n, nodeIdDict ) {
         if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
             nodes++;
         }
@@ -821,7 +821,7 @@ void Project::save( QDomElement &element ) const
     m_accounts.save( me );
 
     // save calendars
-    foreach ( Calendar *c, calendarIdDict.values() ) {
+    foreach ( Calendar *c, calendarIdDict ) {
         c->save( me );
     }
     // save standard worktime
@@ -1425,7 +1425,7 @@ Resource *Project::resourceByName( const QString& name ) const
 QStringList Project::resourceNameList() const
 {
     QStringList lst;
-    foreach ( Resource *r, resourceIdDict.values() ) {
+    foreach ( Resource *r, resourceIdDict ) {
         lst << r->name();
     }
     return lst;
@@ -1748,7 +1748,7 @@ Calendar *Project::calendar( const QString& id ) const
 
 Calendar *Project::calendarByName( const QString& name ) const
 {
-    foreach( Calendar *c, calendarIdDict.values() ) {
+    foreach( Calendar *c, calendarIdDict ) {
         if ( c->name() == name ) {
             return c;
         }
@@ -1769,7 +1769,7 @@ QList<Calendar*> Project::allCalendars() const
 QStringList Project::calendarNames() const
 {
     QStringList lst;
-    foreach( Calendar *c, calendarIdDict.values() ) {
+    foreach( Calendar *c, calendarIdDict ) {
         lst << c->name();
     }
     return lst;
@@ -2268,7 +2268,7 @@ void Project::printCalendarDebug( const QByteArray& _indent )
 {
     QByteArray indent = _indent;
     kDebug() << indent <<"-------- Calendars debug printout --------";
-    foreach ( Calendar *c, calendarIdDict.values() ) {
+    foreach ( Calendar *c, calendarIdDict ) {
         c->printDebug( indent + "--" );
         kDebug();
     }

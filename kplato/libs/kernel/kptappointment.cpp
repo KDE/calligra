@@ -285,7 +285,7 @@ void AppointmentIntervalList::inSort(const AppointmentInterval &a)
 
 void AppointmentIntervalList::saveXML( QDomElement &element ) const
 {
-    foreach (const AppointmentInterval &i, values() ) {
+    foreach (const AppointmentInterval &i, *this ) {
         i.saveXML(element);
     }
 }

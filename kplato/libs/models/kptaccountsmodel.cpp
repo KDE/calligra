@@ -838,7 +838,7 @@ void CostBreakdownItemModel::setStartDate()
 {
     if ( m_startmode == StartMode_Project ) {
         m_start = m_project->startTime( id() ).date();
-        foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_plannedCostMap ) {
             if ( ! ec.startDate().isValid() ) {
                 continue;
             }
@@ -846,7 +846,7 @@ void CostBreakdownItemModel::setStartDate()
                 m_start = ec.startDate();
             }
         }
-        foreach ( const EffortCostMap &ec, m_actualCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_actualCostMap ) {
             if ( ! ec.startDate().isValid() ) {
                 continue;
             }
@@ -861,7 +861,7 @@ void CostBreakdownItemModel::setEndDate()
 {
     if ( m_endmode == EndMode_Project ) {
         m_end = m_project->endTime( id() ).date();
-        foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_plannedCostMap ) {
             if ( ! ec.endDate().isValid() ) {
                 continue;
             }
@@ -869,7 +869,7 @@ void CostBreakdownItemModel::setEndDate()
                 m_end = ec.endDate();
             }
         }
-        foreach ( const EffortCostMap &ec, m_actualCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_actualCostMap ) {
             if ( ! ec.endDate().isValid() ) {
                 continue;
             }

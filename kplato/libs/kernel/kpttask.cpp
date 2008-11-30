@@ -2838,7 +2838,7 @@ Duration Completion::actualEffort() const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach( UsedEffort *ue, m_usedEffort ) {
             foreach ( QDate d, ue->actualEffortMap().keys() ) {
                 eff += ue->actualEffortMap()[ d ]->effort();
             }
@@ -2853,7 +2853,7 @@ Duration Completion::actualEffort( const QDate &date ) const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach( UsedEffort *ue, m_usedEffort ) {
             if ( ue && ue->actualEffortMap().contains( date ) ) {
                 eff += ue->actualEffortMap().value( date )->effort();
             }
@@ -2872,7 +2872,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
     //kDebug()<<date;
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach( UsedEffort *ue, m_usedEffort ) {
             eff += ue->effortTo( date );
         }
     } else {
@@ -2987,7 +2987,7 @@ double Completion::actualCost( const Resource *resource ) const
     double c = 0.0;
     double nc = resource->normalRate();
     double oc = resource->overtimeRate();
-    foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap().values() ) {
+    foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap() ) {
         c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
         c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
     }
@@ -3248,7 +3248,7 @@ Duration Completion::UsedEffort::effortTo( const QDate &date ) const
 Duration Completion::UsedEffort::effort() const
 {
     Duration eff;
-    foreach ( ActualEffort *e, m_actual.values() ) {
+    foreach ( ActualEffort *e, m_actual ) {
         eff += e->effort();
     }
     return eff;

@@ -1008,8 +1008,7 @@ Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {
 }
 
 Schedule *Node::findSchedule(const QString name) {
-    QList<Schedule*> it = m_schedules.values();
-    foreach (Schedule *sch, it) {
+    foreach (Schedule *sch, m_schedules) {
         if (!sch->isDeleted() && sch->name() == name)
             return sch;
     }
@@ -1620,7 +1619,7 @@ void Node::printDebug(bool children, const QByteArray& _indent) {
     } else {
         kDebug()<<indent<<"  Current schedule: None";
     }
-    foreach (Schedule *sch, m_schedules.values()) {
+    foreach (Schedule *sch, m_schedules) {
         sch->printDebug(indent+"  ");
     }
     kDebug()<<indent<<"  Parent:"<<(m_parent ? m_parent->name() : QString("None"));
