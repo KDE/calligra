@@ -31,8 +31,8 @@ set(liboofilter_SRCS
 
 set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
 
-add_subdirectory( generic_wrapper )
-add_subdirectory( libkowmf )
+macro_optional_add_subdirectory( generic_wrapper )
+macro_optional_add_subdirectory( libkowmf )
 macro_optional_add_subdirectory(kchart)
 macro_optional_add_subdirectory(kword)
 if(SHOULD_BUILD_KPRESENTER)
@@ -55,6 +55,7 @@ if (SHOULD_BUILD_KRITA)
 endif(SHOULD_BUILD_KRITA)
 
 #macro_optional_add_subdirectory(kivio)
+
 if(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
 	add_subdirectory(xsltfilter)
 endif(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)	
