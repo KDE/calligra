@@ -90,7 +90,7 @@ DependencyManager::DependencyManager( const Map* map )
 
 DependencyManager::~DependencyManager ()
 {
-    qDeleteAll(d->consumers.values());
+    qDeleteAll(d->consumers);
     delete d;
 }
 

@@ -815,7 +815,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 CellToolBase::~CellToolBase()
 {
     delete d->popupListChoose;
-    qDeleteAll(d->popupMenuActions.values());
+    qDeleteAll(d->popupMenuActions);
     qDeleteAll(actions());
     delete d;
 }
