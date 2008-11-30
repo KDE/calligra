@@ -45,12 +45,12 @@ Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project
 Scripting::Project::~Project()
 {
     kDebug()<<this;
-    qDeleteAll( m_nodes.values() );
-    qDeleteAll( m_groups.values() );
-    qDeleteAll( m_resources.values() );
-    qDeleteAll( m_calendars.values() );
-    qDeleteAll( m_schedules.values() );
-    qDeleteAll( m_accounts.values() );
+    qDeleteAll( m_nodes );
+    qDeleteAll( m_groups );
+    qDeleteAll( m_resources );
+    qDeleteAll( m_calendars );
+    qDeleteAll( m_schedules );
+    qDeleteAll( m_accounts );
 }
 
 int Scripting::Project::scheduleCount() const
