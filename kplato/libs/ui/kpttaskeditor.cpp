@@ -500,6 +500,8 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new NodeTreeView( this );
+    NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view );
+    m_view->setModel( p );
     l->addWidget( m_view );
     setupGui();
 
