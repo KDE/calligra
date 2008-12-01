@@ -1,121 +1,88 @@
+<!DOCTYPE KrossScripting SYSTEM "kpartgui.dtd">
 <KrossScripting>
 
     <collection name="import" text="Import" comment="Import content">
-        <script
+        <script text="CSV File" comment="Import from a Comma-Separated-Value File"
             name="pycsvimport"
-            text="CSV File"
-            comment="Import from a Comma-Separated-Value File"
             interpreter="python"
             file="extensions/csvimport.py" />
-        <script
+        <script text="vCard File" comment="Import from a vCard File"
             name="pyvcardimport"
-            text="vCard File"
-            comment="Import from a vCard File"
             interpreter="python"
             file="extensions/vcardimport.py" />
-        <script
+        <script text="Kexi Database" comment="Import from a Kexi Project File"
             name="pykexidbimport"
-            text="Kexi Database"
-            comment="Import from a Kexi Project File"
             interpreter="python"
             file="extensions/kexidbimport.py" />
     </collection>
 
     <collection name="export" text="Export" comment="Export content">
-        <script
+        <script text="CSV File" comment="Export to a Comma-Separated-Value File"
             name="pycsvexport"
-            text="CSV File"
-            comment="Export to a Comma-Separated-Value File"
             interpreter="python"
             file="extensions/csvexport.py" />
-        <script
+        <script text="Kexi Database" comment="Export to a Kexi Project File"
             name="pykexidbexport"
-            text="Kexi Database"
-            comment="Export to a Kexi Project File"
             interpreter="python"
             file="extensions/kexidbexport.py" />
-        <script
+        <script text="HTML File" comment="Export to a HTML File"
             name="pyhtmlexport"
-            text="HTML File"
-            comment="Export to a HTML File"
             interpreter="python"
             file="extensions/htmlexport.py" />
-        <script
+        <script text="OdfPy File" comment="Export to an OpenDocument File"
             name="odfpyexport"
-            text="OdfPy File"
-            comment="Export to an OpenDocument File"
             interpreter="python"
             file="extensions/odfpyexport.py" />
     </collection>
 
     <collection name="functions" text="Functions" comment="Scripting formula functions">
-        <script
+        <script text="R-Project" comment="Functions for the R programming environment for data analysis and graphics"
             name="rpyfunctions"
-            text="R-Project"
-            comment="Functions for the R programming environment for data analysis and graphics"
             interpreter="python"
             file="functions/rpyfunctions.py" />
-        <script
+        <script text="YFinance" comment="Yahoo! Finance formula function"
             name="yfinance"
-            text="YFinance"
-            comment="Yahoo! Finance formula function"
             interpreter="python"
             file="functions/yfinance.py" />
-        <script
+        <script text="YWeather" comment="Yahoo! Weather formula function"
             name="yweather"
-            text="YWeather"
-            comment="Yahoo! Weather formula function"
             interpreter="python"
             file="functions/yweather.py" />
-        <script
+        <script text="PyTime" comment="Time formula function"
             name="pytime"
-            text="PyTime"
-            comment="Time formula function"
             enabled="false"
             interpreter="python"
             file="functions/pytime.py" />
-        <script
+        <script text="PyRegExp" comment="Regular Expression formula function"
             name="pyregexp"
-            text="PyRegExp"
-            comment="Regular Expression formula function"
             enabled="false"
             interpreter="python"
             file="functions/pyregexp.py" />
     </collection>
 
     <collection name="tools" text="Tools" comment="Miscellaneous scripts">
-        <script
+        <script text="XML Viewer" comment="Python script to view the OpenDocument XML representation of the current document"
            name="pyxmlviewer"
-           text="XML Viewer"
-           comment="Python script to view the OpenDocument XML representation of the current document"
            interpreter="python"
            file="extensions/xmlviewer.py" />
-        <script
+        <script text="Orca Speech" comment="Orca Screen Reader"
            name="pyOrcaScreenReader"
-           text="Orca Speech"
-           comment="Orca Screen Reader"
            interpreter="python"
            file="extensions/myorca.py" />
-        <script
+        <script text="Logger" comment="Log changes in cells to a file"
            name="pylogger"
-           text="Logger"
-           comment="Log changes in cells to a file"
            interpreter="python"
            file="extensions/logger.py" />
     </collection>
 
     <collection name="docker" text="Docker" comment="Scripting Docker Widgets" enabled="false">
-        <script
+        <script text="Python Console" comment="Interactive Python Console Docker"
            name="pyconsoledocker"
-           text="Python Console"
-           comment="Interactive Python Console Docker"
            enabled="true"
            interpreter="python"
            file="docker/consoledocker.py" />
-        <script
+        <script text="Ruby Snippets" comment="Ruby Snippets"
            name="rbsnippets"
-           text="Ruby Snippets"
-           comment="Ruby Snippets"
            enabled="true"
            interpreter="ruby"
            file="docker/snippetsdocker.rb" />
