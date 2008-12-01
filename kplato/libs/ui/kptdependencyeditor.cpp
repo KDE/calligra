@@ -24,6 +24,7 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptrelation.h"
+#include "kptschedule.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QItemSelectionModel>
@@ -1738,7 +1739,8 @@ void DependencyView::keyPressEvent(QKeyEvent *event)
 //-----------------------------------
 DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
-    m_currentnode( 0 )
+    m_currentnode( 0 ),
+    m_manager( 0 )
 {
     setupGui();
 
@@ -1872,6 +1874,11 @@ Relation *DependencyEditor::currentRelation() const {
     return m_currentrelation;
 }
 
+void DependencyEditor::setScheduleManager( ScheduleManager *sm )
+{
+    m_manager = sm;
+}
+
 void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoint& pos )
 {
     //kDebug()<<item<<","<<pos;
@@ -1886,18 +1893,19 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
                 //kDebug()<<"No node";
                 return;
             }
+            bool scheduled = m_manager != 0 && m_currentnode->isScheduled( m_manager->id() );
             switch ( m_currentnode->type() ) {
                 case Node::Type_Task:
-                    name = "task_popup";
+                    name = scheduled ? "task_popup" : "task_edit_popup";
                     break;
                 case Node::Type_Milestone:
-                    name = "taskeditor_milestone_popup";
+                    name = scheduled ? "taskeditor_milestone_popup" : "task_edit_popup";
                     break;
                 case Node::Type_Summarytask:
                     name = "summarytask_popup";
                     break;
                 default:
-                    name = "node_popup";
+                    break;
             }
             //kDebug()<<m_currentnode->name()<<" :"<<pos;
         } else if ( item->type() == DependencyLinkItem::Type ) {
@@ -1912,12 +1920,12 @@ void DependencyEditor::slotContextMenuRequested( QGraphicsItem *item, const QPoi
             KMenu menu;;
             foreach ( DependencyLinkItem *i, c->predecessorItems() ) {
                 items << i;
-                actions << menu.addAction( i->predItem->text() );
+                actions << menu.addAction( KIcon( "document-properties" ), i->predItem->text() );
             }
             menu.addSeparator();
             foreach ( DependencyLinkItem *i, c->successorItems() ) {
                 items << i;
-                actions << menu.addAction( i->succItem->text() );
+                actions << menu.addAction( KIcon( "document-properties" ), i->succItem->text() );
             }
             if ( ! actions.isEmpty() ) {
                 QAction *action = menu.exec( pos );

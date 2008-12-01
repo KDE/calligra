@@ -651,8 +651,11 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     connect( editor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
     connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), editor, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
     connect( editor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
     editor->updateReadWrite( m_readWrite );
+    editor->setScheduleManager( currentScheduleManager() );
     return editor;
 }
 
