@@ -43,11 +43,18 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     : MainProjectPanelImpl(parent, name),
       project(p)
 {
+    QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
+    wbslabel->setWhatsThis( s );
+    wbs->setWhatsThis( s );
+
     namefield->setText(project.name());
-    idfield->setText(project.id());
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
     wbs->setText(project.wbsCode());
+    if ( wbs->text().isEmpty() ) {
+        wbslabel->hide();
+        wbs->hide();
+    }
 
     DateTime st = project.constraintStartTime();
     DateTime et = project.constraintEndTime();
@@ -61,11 +68,6 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
 
 
 bool MainProjectPanel::ok() {
-    if (idfield->text() != project.id() && project.findNode(idfield->text())) {
-        KMessageBox::sorry(this, i18n("Project id must be unique"));
-        idfield->setFocus();
-        return false;
-    }
     return true;
 }
 
@@ -75,10 +77,6 @@ MacroCommand *MainProjectPanel::buildCommand() {
     if (project.name() != namefield->text()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new NodeModifyNameCmd(project, namefield->text()));
-    }
-    if (project.id() != idfield->text()) {
-        if (!m) m = new MacroCommand(c);
-        m->addCommand(new NodeModifyIdCmd(project, idfield->text()));
     }
     if (project.leader() != leaderfield->text()) {
         if (!m) m = new MacroCommand(c);
@@ -112,7 +110,6 @@ MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
     connect( startDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( startTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( namefield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( idfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( leaderfield, SIGNAL( textChanged(const QString&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
 }
@@ -120,7 +117,7 @@ MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
 void MainProjectPanelImpl::slotCheckAllFieldsFilled()
 {
     emit changed();
-    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty() && !leaderfield->text().isEmpty());
+    emit obligatedFieldsFilled(!namefield->text().isEmpty() && !leaderfield->text().isEmpty());
 }
 
 

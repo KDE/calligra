@@ -27,7 +27,7 @@ KPrPageLayoutDockerFactory::KPrPageLayoutDockerFactory()
 
 QString KPrPageLayoutDockerFactory::id() const
 {
-    return QString("Page layout");
+    return QString("Slide layout");
 }
 
 QDockWidget* KPrPageLayoutDockerFactory::createDockWidget()

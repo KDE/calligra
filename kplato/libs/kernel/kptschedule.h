@@ -193,6 +193,7 @@ public:
     
     class Log {
         public:
+            enum Type { Type_Debug = 0, Type_Info, Type_Warning, Type_Error };
             Log() 
                 : node( 0 ), resource( 0 ), severity( 0 ), phase( -1 )
             {}
@@ -213,6 +214,7 @@ public:
     virtual void logError( const QString &, int = -1 ) {}
     virtual void logWarning( const QString &, int = -1 ) {}
     virtual void logInfo( const QString &, int = -1 ) {}
+    virtual void logDebug( const QString &, int = -1 ) {}
     
     virtual void incProgress() { if ( m_parent ) m_parent->incProgress(); }
 
@@ -335,6 +337,7 @@ public:
     virtual void logError( const QString &msg, int phase = -1 );
     virtual void logWarning( const QString &msg, int phase = -1 );
     virtual void logInfo( const QString &msg, int phase = -1 );
+    virtual void logDebug( const QString &, int = -1 );
 
 protected:
     void init();
@@ -378,7 +381,8 @@ public:
     virtual void logError( const QString &msg, int phase = -1 );
     virtual void logWarning( const QString &msg, int phase = -1 );
     virtual void logInfo( const QString &msg, int phase = -1 );
-    
+    virtual void logDebug( const QString &, int = -1 );
+
     void setNodeSchedule( const Schedule *sch ) { m_nodeSchedule = sch; }
     
 private:

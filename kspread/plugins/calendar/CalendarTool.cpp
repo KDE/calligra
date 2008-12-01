@@ -24,6 +24,7 @@
 
 #include <Sheet.h>
 #include <commands/DataManipulators.h>
+#include <part/Doc.h>
 
 #include <KCalendarSystem>
 #include <KGenericFactory>
@@ -109,6 +110,8 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 
     Q_ASSERT(cs);
 
+    sheet->doc()->beginMacro(i18n("Insert Calendar"));
+
     int row = marker.y();
     int col = marker.x();
     int colstart = col; //this is where we get back after each week
@@ -177,11 +180,16 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         current.setYMD(next.year(),next.month(),next.day());
         col+=2;
     }
+    sheet->doc()->endMacro();
     kDebug() <<"inserting calendar completed";
 }
 
 QWidget* CalendarTool::createOptionWidget()
 {
+    // Create the main cell tool widget. It is not visible, but the CellTool makes heavy use
+    // of it, and it refuses to work correctly if it does not exist
+    CellTool::createOptionWidget ();
+
     CalendarToolWidget* widget =  new CalendarToolWidget(m_canvas->canvasWidget());
     connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
             this, SLOT(insertCalendar(const QDate&, const QDate&)));

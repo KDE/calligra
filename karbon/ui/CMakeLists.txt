@@ -26,7 +26,7 @@ set(karbonui_SRCS
     widgets/KarbonGradientWidget.cpp
     widgets/KarbonGradientChooser.cpp
     widgets/KarbonGradientItem.cpp
-    widgets/KarbonGradientTabWidget.cpp
+    widgets/KarbonGradientEditWidget.cpp
     widgets/KarbonStylePreview.cpp
     widgets/KarbonSmallStylePreview.cpp
     widgets/KarbonStyleButtonBox.cpp

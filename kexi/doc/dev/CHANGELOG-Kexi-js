@@ -17,9 +17,159 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+TODO
+ Form editor:
+ - FormManager::FormManager: register factory (port to koproperty2)
+ - port KFDPixmapEdit, PropertyFactory
+
+2008-11-21
+Core
+- make default value of X-Kexi-PropertyEditorAlwaysVisibleInDesignMode 
+  flag for kexi parts == true by default
+- remove crash on creation of a new part item that is first of its class 
+  within a given project; e.g. when the first query is created
+  (introduced after moving towards "part classes")
+
+2008-11-19
+Main Window
+- property editor pane now is displayed when user clicks "new table"
+  action (there's no property set yet, but we want to display the pane 
+  in advance)
+Table View
+- fixed crash on mouse move in "what's this mode" over the table view:
+  when "column under mouse" is -1
+- clicking vertical header changes current row
+- mouse move over vertival header updates table view row highlighting
+
+2008-11-18
+Table View
+- fixed the table view's vertical header paint routine;
+  moreover, the icons are now displayed using the current 
+  foreground color
+
+2008-11-16
+Widgets
+= vertical header: use brush instead of just color, 
+  and paint the background prior to using QStyle
+  (this still isn't proper fix)
+
+2008-11-15
+Kexi
+= ported uses of setPaletteBackgroundColor() 
+  and setPaletteForegroundColor() to Qt 4
+
+2008-11-14
+Tables
+- fixed bug in table removing code, introduced in r671303
+Core
+- in general: we're no longer using part IDs, we have switched 
+  to Java-like part class names e.g. org.kexi-project.table;
+  this allows for easier development of custom 3rdparty plugins
+- Plugins: removed X-Kexi-TypeMime property (of values like kexi/query)
+  and added X-Kexi-Class, e.g. org.kexi-project.query
+- KexiPart::Manager::partForMimeType() replaced 
+  by KexiPart::Manager::partForClass()
+- KexiPart::Manager::infoForMimeType() replaced
+  by to KexiPart::Manager::infoForClass()
+- KexiProject::itemsForMimeType() replaced
+  by KexiProject::itemsForClass()
+- KexiProject::getSortedItemsForMimeType() replaced 
+  by KexiProject::getSortedItemsForClass()
+- KexiProject::itemForMimeType() replaced 
+  by KexiProject::itemForClass()
+-  KexiProject::items(): retrieve info about all objects instead 
+  of running queries separately for each class
+Kexi
+= add {} to one-line foreach to avoid unreadable code by astyle
+
+2008-11-13
+Property Pane
+- fixed layout, refactored object info label as KexiPropertyPaneViewBase
+  for use in custom tabs: KexiPropertyEditorView, KexiDataSourcePage
+= remove some Qt3 dependencies
+= fix layout margins
+Widgets
+= further fixes for small toolbar button width on Windows
+Table View
+= fix layout margins of the editor
+- Use QToolTip for displaying tooltip with "Row: ..."
+  information for the vertical slider
+Utils
+- added KexiUtils::setStandardMarginsAndSpacing()
+
+2008-11-12
+KoProperty2
+- unset the current property set (that is about to be deleted) from the editor
+  (fixes possible crash)
+Main Window
+- display property editor after entering into the design view directly
+- tabbar: "Project" tab is active by default
+- fix placement of the statusbar
+Widgets
+- small tool button: fix width for the Windows style and substyles
+Project Navigator
+- add a popup menu to the group items, with "Create new" action 
+
+2008-11-09..11
+KoProperty2
+- do not display invisible properties (Property::isVisible()==false)
+- removed obsolete widget.{h|cpp}
+- added overloaded ctor of Set::Iterator accepting functor
+- removed unnecessary koproperty{warn|dbg} macros 
+  as we use own KDE_DEFAULT_DEBUG_AREA
+- added Set::PropertySelector for easy iterating over selected properties
+- Set is now based on QHash<QByteArray, Property*>
+- Set::Iterator is now based on QHash<QByteArray, Property*>::ConstIterator,
+  not on an ascii dict iterator from Qt3. 
+- optimized removing properties from the set and thus destructing sets
+
+2008-11-08
+Kexi
+- use KoProperty2 in Kexi (this breaks many functions now)
+KexiDB
+- MySQL driver: fixed problem with creating a new database 
+  when the name contains uppercase characters
+  (MySQL's "SHOW DATABASES LIKE .." does not work unless 
+  we convert the argument to lowecase.
+= make a few statements uppercase
+- use QString::arg() and escapeIdentifier() for building 
+  statements (security..)
+Predicate: ported
+
+2008-11-07
+KoProperty2
+= re-added GroupContainer (a dependency of kfd)
+= fixed painting pixmap delegate
+
+2008-11-06
+KoProperty2
+- pixmap editor ported
+
+2008-11-04
+KoProperty2
+- int spin box editor now handles uint type as well
+- rect and size types: width and height properties are now of type uint
+
+Widgets
+- KexiCustomPropertyFactory ported to KoProperty2
+
+2008-11-01..03
+KoProperty2
+- custom property API replaced with 'composed'; implementation of subproperties moved
+  to factory itself (size/rect/point types already ported to this API)
+- propertytest app: added '-property' option for testing of a single property type
+
+2008-10-30
+KoProperty2
+- drawing gray grid lines and altering style sheets for grids moved to a common routine
+- 3-state bool editor properly works and is painted
+- fixed painting recently implemented editors for composed types (rect, point, size)
+
 2008-10-26
 KoProperty2
-- editor widgets ported to the new API: point, int, double
+- editor widgets ported to the new API: point, int, double, cursor
+- combo editor: added possibility of displaying icons
+- cursor editor displays icons
 
 2008-10-25
 KoProperty2

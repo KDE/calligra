@@ -67,13 +67,13 @@ const QMetaEnum NodeModel::columnMap() const
 
 void NodeModel::setProject( Project *project )
 {
-    //kDebug()<<m_project<<"->"<<project;
+    kDebug()<<m_project<<"->"<<project;
     m_project = project;
 }
 
 void NodeModel::setManager( ScheduleManager *sm )
 {
-    //kDebug()<<m_manager<<"->"<<sm;
+    kDebug()<<m_manager<<"->"<<sm;
     m_manager = sm;
 }
 
@@ -1030,6 +1030,9 @@ QVariant NodeModel::status( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
             int st = t->state( id() );
+            if ( st & Node::State_NotScheduled ) {
+                return SchedulingState::notScheduled();
+            }
             if ( st & Node::State_Finished ) {
                 if ( st & Node::State_FinishedLate ) {
                     return i18n( "Finished late" );
@@ -1175,11 +1178,13 @@ QVariant NodeModel::plannedEffortTo( const Node *node, int role ) const
     KLocale *l = KGlobal::locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatNumber( node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 );
+            return node->plannedEffortTo( m_now, id() ).format();
         case Qt::ToolTipRole:
-            return i18n( "Planned effort until %1: %2", l->formatDate( m_now ), l->formatNumber( node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 ) );
+            return i18n( "Planned effort until %1: %2", l->formatDate( m_now ), node->plannedEffortTo( m_now, id() ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->plannedEffortTo( m_now, id() ).toDouble( Duration::Unit_h );
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1192,12 +1197,14 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
     KLocale *l = KGlobal::locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 );
+            return node->actualEffortTo( m_now ).format();
         case Qt::ToolTipRole:
             //kDebug()<<m_now<<node;
-            return i18n( "Actual effort used up to %1: %2", l->formatDate( m_now ), l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 ) );
+            return i18n( "Actual effort used up to %1: %2", l->formatDate( m_now ), node->actualEffortTo( m_now ).toString( Duration::Format_i18nHour ) );
         case Qt::EditRole:
             return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1211,14 +1218,14 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
         case Qt::DisplayRole: {
             const Task *t = dynamic_cast<const Task*>( node );
             if ( t ) {
-                return KGlobal::locale()->formatNumber( t->completion().remainingEffort().toDouble( Duration::Unit_h ), 1 );
+                return t->completion().remainingEffort().format();
             }
             break;
         }
         case Qt::ToolTipRole: {
             const Task *t = dynamic_cast<const Task*>( node );
             if ( t ) {
-                return i18n( "Remaining effort: %1", KGlobal::locale()->formatNumber( t->completion().remainingEffort().toDouble( Duration::Unit_h ), 1 ) );
+                return i18n( "Remaining effort: %1", t->completion().remainingEffort().toString( Duration::Format_i18nHour ) );
             }
             break;
         }
@@ -1226,6 +1233,8 @@ QVariant NodeModel::remainingEffort( const Node *node, int role ) const
             const Task *t = dynamic_cast<const Task*>( node );
             return t->completion().remainingEffort().toDouble( Duration::Unit_h );
         }
+        case Role::DurationUnit:
+            return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1346,7 +1355,8 @@ QVariant NodeModel::nodeIsNotScheduled( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
             return node->notScheduled( id() );
-            break;
+        case Qt::EditRole:
+            return node->notScheduled( id() );
         case Qt::ToolTipRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -1835,7 +1845,7 @@ void NodeItemModel::setProject( Project *project )
         //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
-    //kDebug()<<m_project<<"->"<<project;
+    kDebug()<<this<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
@@ -1860,7 +1870,7 @@ void NodeItemModel::setManager( ScheduleManager *sm )
     m_nodemodel.setManager( sm );
     if ( sm ) {
     }
-    //kDebug()<<sm;
+    kDebug()<<this<<sm;
     reset();
 }
     
@@ -1871,6 +1881,10 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
         if ( m_readWrite ) {
             flags |= Qt::ItemIsDropEnabled;
         }
+        return flags;
+    }
+    if ( isColumnReadOnly( index.column() ) ) {
+        //kDebug()<<"Column is readonly:"<<index.column();
         return flags;
     }
     Node *n = node( index );
@@ -1956,7 +1970,37 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodeDescription: // description
                 break;
             default: 
-                flags &= ~Qt::ItemIsEditable;
+                break;
+        }
+        Task *t = static_cast<Task*>( n );
+        if ( manager() && t->isScheduled( id() ) ) {
+            if ( ! t->completion().isStarted() ) {
+                switch ( index.column() ) {
+                    case NodeModel::NodeActualStart:
+                        flags |= Qt::ItemIsEditable;
+                        break;
+                    case NodeModel::NodeActualFinish:
+                        if ( t->type() == Node::Type_Milestone ) {
+                            flags |= Qt::ItemIsEditable;
+                        }
+                        break;
+                    default: break;
+                }
+            } else if ( ! t->completion().isFinished() ) {
+                switch ( index.column() ) {
+                    case NodeModel::NodeActualFinish:
+                    case NodeModel::NodeCompleted:
+                    case NodeModel::NodeRemainingEffort:
+                        flags |= Qt::ItemIsEditable;
+                        break;
+                    case NodeModel::NodeActualEffort:
+                        if ( t->completion().entrymode() == Completion::EnterEffortPerTask || t->completion().entrymode() == Completion::EnterEffortPerResource ) {
+                            flags |= Qt::ItemIsEditable;
+                        }
+                        break;
+                    default: break;
+                }
+            }
         }
     }
     return flags;
@@ -1982,6 +2026,9 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
+    if ( parent.isValid() ) {
+        Q_ASSERT( parent.model() == this );
+    }
     //kDebug()<<parent<<row<<column;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
@@ -2384,6 +2431,113 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
     return false;
 }
 
+bool NodeItemModel::setCompletion( Node *node, const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+        Completion &c = static_cast<Task*>( node )->completion();
+        QDate date = QDate::currentDate();
+        // xgettext: no-c-format
+        MacroCommand *m = new MacroCommand( i18n( "Modify % Completed" ) );
+        m->addCommand( new ModifyCompletionPercentFinishedCmd( c, date, value.toInt() ) );
+        emit executeCommand( m ); // also adds a new entry if necessary
+        if ( c.entrymode() == Completion::EnterCompleted ) {
+            Duration planned = static_cast<Task*>( node )->plannedEffort( m_nodemodel.id() );
+            Duration actual = ( planned * value.toInt() ) / 100;
+            kDebug()<<planned.toString()<<value.toInt()<<actual.toString();
+            NamedCommand *cmd = new ModifyCompletionActualEffortCmd( c, date, actual );
+            cmd->execute();
+            m->addCommand( cmd );
+            cmd = new ModifyCompletionRemainingEffortCmd( c, date, planned - actual  );
+            cmd->execute();
+            m->addCommand( cmd );
+        }
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::setRemainingEffort( Node *node, const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+        Task *t = static_cast<Task*>( node );
+        double d( value.toList()[0].toDouble() );
+        Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+        Duration dur( d, unit );
+        emit executeCommand( new ModifyCompletionRemainingEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Remainig Effort" ) ) );
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::setActualEffort( Node *node, const QVariant &value, int role )
+{
+    if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
+        Task *t = static_cast<Task*>( node );
+        double d( value.toList()[0].toDouble() );
+        Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+        Duration dur( d, unit );
+        emit executeCommand( new ModifyCompletionActualEffortCmd( t->completion(), QDate::currentDate(), dur, i18n( "Modify Actual Effort" ) ) );
+        return true;
+    }
+    return false;
+}
+
+bool NodeItemModel::setStartedTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            Task *t = qobject_cast<Task*>( node );
+            if ( t == 0 ) {
+                return false;
+            }
+            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualStart, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            if ( ! t->completion().isStarted() ) {
+                m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
+            }
+            m->addCommand( new ModifyCompletionStartTimeCmd( t->completion(), value.toDateTime() ) );
+            if ( t->type() == Node::Type_Milestone ) {
+                m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
+                m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
+                if ( t->completion().percentFinished() < 100 ) {
+                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                }
+            }
+            emit executeCommand( m );
+            return true;
+        }
+    }
+    return false;
+}
+
+bool NodeItemModel::setFinishedTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole: {
+            Task *t = qobject_cast<Task*>( node );
+            if ( t == 0 ) {
+                return false;
+            }
+            MacroCommand *m = new MacroCommand( headerData( NodeModel::NodeActualFinish, Qt::Horizontal, Qt::DisplayRole ).toString() ); //FIXME: proper description when string freeze is lifted
+            if ( ! t->completion().isFinished() ) {
+                m->addCommand( new ModifyCompletionFinishedCmd( t->completion(), true ) );
+                if ( t->completion().percentFinished() < 100 ) {
+                    Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
+                    m->addCommand( new AddCompletionEntryCmd( t->completion(), value.toDate(), e ) );
+                }
+            }
+            m->addCommand( new ModifyCompletionFinishTimeCmd( t->completion(), value.toDateTime() ) );
+            if ( t->type() == Node::Type_Milestone ) {
+                m->addCommand( new ModifyCompletionStartedCmd( t->completion(), true ) );
+                m->addCommand( new ModifyCompletionStartTimeCmd( t->completion(), value.toDateTime() ) );
+            }
+            emit executeCommand( m );
+            return true;
+        }
+    }
+    return false;
+}
+
 QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -2391,6 +2545,16 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     if ( n != 0 ) {
         result = m_nodemodel.data( n, index.column(), role );
         //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<result;
+    }
+    if ( role == Qt::EditRole ) {
+        switch ( index.column() ) {
+            case NodeModel::NodeActualStart:
+            case NodeModel::NodeActualFinish:
+                if ( ! result.isValid() ) {
+                    return QDateTime::currentDateTime();
+                }
+            break;
+        }
     }
     if ( role == Qt::DisplayRole && ! result.isValid() ) {
         result = " "; // HACK to show focus in empty cells
@@ -2400,6 +2564,9 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
 
 bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
@@ -2424,6 +2591,11 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         case NodeModel::NodeShutdownAccount: return setShutdownAccount( n, value, role );
         case NodeModel::NodeShutdownCost: return setShutdownCost( n, value, role );
         case NodeModel::NodeDescription: return setDescription( n, value, role );
+        case NodeModel::NodeCompleted: return setCompletion( n, value, role );
+        case NodeModel::NodeActualEffort: return setActualEffort( n, value, role );
+        case NodeModel::NodeRemainingEffort: return setRemainingEffort( n, value, role );
+        case NodeModel::NodeActualStart: return setStartedTime( n, value, role );
+        case NodeModel::NodeActualFinish: return setFinishedTime( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -2466,6 +2638,10 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
         case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
         case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
         case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
+
+        case NodeModel::NodeRemainingEffort: return new DurationSpinBoxDelegate( parent );
+        case NodeModel::NodeActualEffort: return new DurationSpinBoxDelegate( parent );
+
         default: return 0;
     }
     return 0;
@@ -2732,36 +2908,44 @@ MilestoneItemModel::MilestoneItemModel( QObject *parent )
 MilestoneItemModel::~MilestoneItemModel()
 {
 }
-    
+
+QList<Node*> MilestoneItemModel::mileStones() const
+{
+    QList<Node*> lst;
+    foreach( Node* n, m_nodemap.values() ) {
+        if ( n->type() == Node::Type_Milestone ) {
+            lst << n;
+        }
+    }
+    return lst;
+}
+
 void MilestoneItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
 }
 
 void MilestoneItemModel::slotNodeInserted( Node *node )
 {
-    //kDebug()<<node->name();
-    if ( node ) {
-        m_mslist = m_project->allNodes();
-        int pos = m_mslist.indexOf( node );
-        beginInsertRows( QModelIndex(), pos, pos );
-        endInsertRows();
-        //kDebug()<<node->name()<<": "<<m_mslist.count();
-    }
+    resetModel();
 }
 
 void MilestoneItemModel::slotNodeToBeRemoved( Node *node )
 {
     //kDebug()<<node->name();
-    int row = m_mslist.indexOf( node );
+/*    int row = m_nodemap.values().indexOf( node );
     if ( row != -1 ) {
+        Q_ASSERT( m_nodemap.contains( node->wbsCode() ) );
+        Q_ASSERT( m_nodemap.keys().indexOf( node->wbsCode() ) == row );
         beginRemoveRows( QModelIndex(), row, row );
-        m_mslist.removeAt( row );
-    }
+        m_nodemap.remove( node->wbsCode() );
+        endRemoveRows();
+    }*/
 }
 
 void MilestoneItemModel::slotNodeRemoved( Node *node )
 {
-    endRemoveRows();
+    resetModel();
+    //endRemoveRows();
 }
 
 void MilestoneItemModel::slotLayoutChanged()
@@ -2776,13 +2960,13 @@ void MilestoneItemModel::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SIGNAL( slotNodeToBeInserted( Node *, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
 
-        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SIGNAL( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     m_project = project;
@@ -2791,13 +2975,13 @@ void MilestoneItemModel::setProject( Project *project )
     if ( project ) {
         connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SIGNAL( slotNodeToBeInserted( Node *, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
 
         connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
-        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
 
-        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SIGNAL( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
     }
     resetModel();
@@ -2811,15 +2995,24 @@ void MilestoneItemModel::setManager( ScheduleManager *sm )
     if ( sm ) {
     }
     //kDebug()<<sm;
-    reset();
+    resetModel();
 }
     
+bool MilestoneItemModel::resetData()
+{
+    int cnt = m_nodemap.count();
+    m_nodemap.clear();
+    if ( m_project != 0 ) {
+        foreach ( Node *n, m_project->allNodes() ) {
+            m_nodemap.insert( n->wbsCode(), n );
+        }
+    }
+    return cnt != m_nodemap.count();
+}
+
 void MilestoneItemModel::resetModel()
 {
-    m_mslist.clear();
-    if ( m_project != 0 ) {
-        m_mslist = m_project->allNodes();
-    }
+    resetData();
     reset();
 }
 
@@ -2891,16 +3084,16 @@ QModelIndex MilestoneItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug()<<parent<<row<<", "<<m_mslist.count();
+    //kDebug()<<parent<<row<<", "<<m_nodemap.count();
     if ( m_project == 0 || row < 0 || column < 0 ) {
         //kDebug()<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
-    if ( parent.isValid() || row >= m_mslist.count() ) {
+    if ( parent.isValid() || row >= m_nodemap.count() ) {
         //kDebug()<<"No index for"<<parent<<row<<","<<column;
         return QModelIndex();
     }
-    return createIndex( row, column, m_mslist[row] );
+    return createIndex( row, column, m_nodemap.values().at( row ) );
 }
 
 QModelIndex MilestoneItemModel::index( const Node *node ) const
@@ -2908,7 +3101,7 @@ QModelIndex MilestoneItemModel::index( const Node *node ) const
     if ( m_project == 0 || node == 0 ) {
         return QModelIndex();
     }
-    return createIndex( m_mslist.indexOf( const_cast<Node*>( node ) ), 0, const_cast<Node*>(node) );
+    return createIndex( m_nodemap.values().indexOf( const_cast<Node*>( node ) ), 0, const_cast<Node*>(node) );
 }
 
 bool MilestoneItemModel::setName( Node *node, const QVariant &value, int role )
@@ -3175,8 +3368,8 @@ int MilestoneItemModel::rowCount( const QModelIndex &parent ) const
     if ( parent.isValid() ) {
         return 0;
     }
-    //kDebug()<<m_mslist.count();
-    return m_mslist.count();
+    //kDebug()<<m_nodemap.count();
+    return m_nodemap.count();
 }
 
 Qt::DropActions MilestoneItemModel::supportedDropActions() const
@@ -3362,9 +3555,18 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
     if ( node == 0 ) {
         return;
     }
-    int row = m_mslist.indexOf( node );
+//    if ( ! m_nodemap.contains( node->wbsCode() ) || m_nodemap.value( node->wbsCode() ) != node ) {
+        emit layoutAboutToBeChanged();
+        if ( resetData() ) {
+            reset();
+        } else {
+            emit layoutChanged();
+        }
+        return;
+/*    }
+    int row = m_nodemap.values().indexOf( node );
     kDebug()<<node->name()<<": "<<node->typeToString()<<row;
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount()-1, node ) );*/
 }
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
@@ -3373,11 +3575,50 @@ void MilestoneItemModel::slotWbsDefinitionChanged()
     if ( m_project == 0 ) {
         return;
     }
-    if ( ! m_mslist.isEmpty() ) {
-        emit dataChanged( createIndex( 0, NodeModel::NodeWBSCode, m_mslist.first() ), createIndex( m_mslist.count() - 1, NodeModel::NodeWBSCode, m_mslist.last() ) );
+    if ( ! m_nodemap.isEmpty() ) {
+        emit layoutAboutToBeChanged();
+        resetData();
+        emit layoutChanged();
     }
 }
 
+//--------------
+NodeSortFilterProxyModel::NodeSortFilterProxyModel( ItemModelBase* model, QObject *parent, bool filterUnscheduled )
+    : QSortFilterProxyModel( parent ),
+    m_filterUnscheduled( filterUnscheduled )
+{
+    setSourceModel( model );
+    setDynamicSortFilter( true );
+}
+
+ItemModelBase *NodeSortFilterProxyModel::itemModel() const
+{
+    return static_cast<ItemModelBase *>( sourceModel() );
+}
+
+void NodeSortFilterProxyModel::setFilterUnscheduled( bool on ) {
+    m_filterUnscheduled = on;
+    invalidateFilter();
+}
+
+bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
+{
+    kDebug()<<sourceModel()<<row<<parent;
+    if ( itemModel()->project() == 0 ) {
+        kDebug()<<itemModel()->project();
+        return false;
+    }
+    if ( m_filterUnscheduled ) {
+        QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
+        if ( s == "true" ) {
+            kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
+            return false;
+        }
+    }
+    bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
+    kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    return accepted;
+}
 
 } //namespace KPlato
 

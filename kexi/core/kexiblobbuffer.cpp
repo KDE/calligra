@@ -45,11 +45,13 @@ public:
             : maxId(0) {
     }
     ~Private() {
-        foreach(Item* item, inMemoryItems)
-        delete item;
+        foreach(Item* item, inMemoryItems) {
+            delete item;
+        }
         inMemoryItems.clear();
-        foreach(Item* item, storedItems)
-        delete item;
+        foreach(Item* item, storedItems) {
+            delete item;
+        }
         storedItems.clear();
     }
     Id_t maxId; //!< Used to compute maximal recently used identifier for unstored BLOB

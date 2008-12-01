@@ -1425,10 +1425,10 @@ Value func_mduration (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_mirr (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double inv = calc->conv()->asFloat (args[1]).asFloat();
-  double reInvRate = calc->conv()->asFloat (args[2]).asFloat();
+  long double inv = calc->conv()->asFloat (args[1]).asFloat();
+  long double reInvRate = calc->conv()->asFloat (args[2]).asFloat();
 
-  double npv_pos, npv_neg;
+  long double npv_pos, npv_neg;
   Value v;
   int n = args[0].count();
   int i;
@@ -1442,10 +1442,10 @@ Value func_mirr (valVector args, ValueCalc *calc, FuncExtra *)
       npv_neg += v.asFloat() / pow1p(inv, i);
   }
   
-  if (npv_neg == 0 || npv_pos == 0 || reInvRate <= -1.0)
+  if (npv_neg == 0 || npv_pos == 0 || reInvRate <= -1.0l)
     return Value::errorVALUE(); 
 
-  double res = pow (   (-npv_pos * pow1p(reInvRate, n)) / (npv_neg * (1 + reInvRate)), static_cast<long double>( (1.0 / (n - 1)) )   ) - 1.0;
+  long double res = powl ( (-npv_pos * pow1p(reInvRate, n)) / (npv_neg * (1 + reInvRate)), (1.0l / (n - 1)) ) - 1.0l;
 
   return Value(res);
 }

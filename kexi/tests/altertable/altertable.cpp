@@ -37,7 +37,6 @@
 #include <core/kexitabledesignerinterface.h>
 #include <core/kexiinternalpart.h>
 #include <kexiutils/utils.h>
-#include <koproperty/set.h>
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
 

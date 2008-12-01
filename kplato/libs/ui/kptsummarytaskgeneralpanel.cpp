@@ -44,6 +44,10 @@ SummaryTaskGeneralPanel::SummaryTaskGeneralPanel(Task &task, QWidget *p, const c
     setObjectName(n);
     setupUi(this);
     
+    QString s = i18n( "The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.\nThe WBS code is auto-generated.\nYou can define the WBS code pattern using the Define WBS Pattern command in the Tools menu." );
+    wbslabel->setWhatsThis( s );
+    wbsfield->setWhatsThis( s );
+
     setStartValues(task);
     
     connect(namefield, SIGNAL(textChanged(const QString&)), SLOT(slotObligatedFieldsFilled()));

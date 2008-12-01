@@ -51,7 +51,7 @@ target_link_libraries(
     kexidb
     kexicore
     kexiutils
-    koproperty
+    ${KOPROPERTY_LIBS}
     kexiextendedwidgets
     kexiguiutils
     ${KDE4_KNEWSTUFF_LIBS}

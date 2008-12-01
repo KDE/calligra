@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,13 +38,17 @@ public:
     KService::Ptr ptr;
     QString errorMessage;
     QString groupName;
-    QString mimeType;
+//    QString mimeType;
     QString itemIcon;
     QString objectName;
+    QString partClass;
+#if 0 //moved as internal to KexiProject
     int projectPartID;
-bool broken : 1;
-bool isVisibleInNavigator : 1;
-bool idStoredInPartDatabase : 1;
+#endif
+    bool broken : 1;
+    bool isVisibleInNavigator : 1;
+    bool idStoredInPartDatabase : 1;
+    bool isPropertyEditorAlwaysVisibleInDesignMode : 1;
 };
 }
 

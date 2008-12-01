@@ -204,11 +204,6 @@ QVariant WorkPackageModel::data( const QModelIndex &index, int role ) const
     return result;
 }
 
-bool WorkPackageModel::setData( const QModelIndex &index, const QVariant & value, int role )
-{
-    return false;
-}
-
 QVariant WorkPackageModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Vertical ) {

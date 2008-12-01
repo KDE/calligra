@@ -168,11 +168,13 @@ Format::Type ValueFormatter::determineFormatting (const Value &value,
       case Value::fmt_Boolean:
         fmtType = Format::Text;
       break;
-      case Value::fmt_Number:
-        if (value.asFloat() > 1e+10)
+      case Value::fmt_Number: {
+        Number val = fabs (value.asFloat());
+        if ((val > 1e+10) || (val < 1e-10))
           fmtType = Format::Scientific;
         else
           fmtType = Format::Number;
+      }
       break;
       case Value::fmt_Percent:
         fmtType = Format::Percentage;
@@ -267,13 +269,14 @@ QString ValueFormatter::createNumberFormat ( Number value, int precision,
   if (fmt == Format::Percentage)
     value *= 100;
 
-  // this will avoid displaying negative zero, i.e "-0.0000"
-  if( fabs( value ) < DBL_EPSILON ) value = 0.0;
-
   // round the number, based on desired precision if not scientific is chosen
   //(scientific has relative precision)
   if( fmt != Format::Scientific )
   {
+    // this will avoid displaying negative zero, i.e "-0.0000"
+    // TODO: is this really a good solution?
+    if (fabs( value ) < DBL_EPSILON) value = 0.0;
+
     double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
     double mm = (p > 10) ? ::pow(10.0,p) : m[p];
     bool neg = value < 0;

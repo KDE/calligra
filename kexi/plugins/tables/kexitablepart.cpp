@@ -54,7 +54,7 @@ public:
 };
 
 KexiTablePart::KexiTablePart(QObject *parent, const QStringList &l)
-        : KexiPart::Part((int)KexiPart::TableObjectType, parent, l)
+        : KexiPart::Part(parent, l)
         , d(new Private())
 {
     kDebug() << "KexiTablePart::KexiTablePart()";
@@ -126,11 +126,11 @@ KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window,
 
 bool KexiTablePart::remove(KexiPart::Item &item)
 {
-    if (KexiMainWindowIface::global()->project()
-            || !KexiMainWindowIface::global()->project()->dbConnection())
+    KexiProject *project = KexiMainWindowIface::global()->project();
+    if (!project || !project->dbConnection())
         return false;
 
-    KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    KexiDB::Connection *conn = project->dbConnection();
     KexiDB::TableSchema *sch = conn->tableSchema(item.identifier());
 
     if (sch) {
@@ -224,9 +224,9 @@ void KexiTablePart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     if (!d->lookupColumnPage) {
         d->lookupColumnPage = new KexiLookupColumnPage(0);
         connect(d->lookupColumnPage,
-                SIGNAL(jumpToObjectRequested(const Q3CString&, const Q3CString&)),
+                SIGNAL(jumpToObjectRequested(const QString&, const QString&)),
                 KexiMainWindowIface::global()->thisWidget(),
-                SLOT(highlightObject(const Q3CString&, const Q3CString&)));
+                SLOT(highlightObject(const QString&, const QString&)));
 
 //! @todo add "Table" tab
 

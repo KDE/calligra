@@ -30,6 +30,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QToolTip>
+#include <QtGui/QApplication>
 
 #include <KLocale>
 #include <KIconLoader>
@@ -339,23 +340,21 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
 
     d->set = set;
-/*not needed 
     if (d->set) {
+/*not needed 
         //receive property changes
         connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
-        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
+                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));*/
+//NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
-    }*/
+    }
 
 //    fill();
     delete d->model;
     d->model = d->set ? new EditorDataModel(*d->set, this) : 0;
-    if (d->model) {
-        setModel( d->model );
-    }
+    setModel( d->model );
 
     emit propertySetChanged(d->set);
 
@@ -377,6 +376,11 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 //   ensureItemVisible(item);
         }
     }
+}
+
+void EditorView::slotSetWillBeDeleted()
+{
+    changeSet(0, QByteArray());
 }
 
 void EditorView::setAutoSync(bool enable)
@@ -690,7 +694,7 @@ Editor::fill()
     d->topItem = new EditorDummyItem(this);
 
     const QList<QByteArray> groupNames = d->set->groupNames();
-// kopropertydbg << "Editor::fill(): group names = " << groupNames.count() << endl;
+// kDebug() << "Editor::fill(): group names = " << groupNames.count() << endl;
     if (groupNames.count() == 1) { // one group (default one), so don't show groups
         //add flat set of properties
         const QList<QByteArray>& propertyNames = d->set->propertyNamesForGroup(groupNames.first());
@@ -741,7 +745,7 @@ Editor::addItem(const QByteArray &name, EditorItem *parent)
 
     Property *property = &(d->set->property(name));
     if (!property || !property->isVisible()) {
-//  kopropertydbg << "Property is not visible: " << name << endl;
+//  kDebug() << "Property is not visible: " << name << endl;
         return;
     }
     Q3ListViewItem *last = parent ? parent->firstChild() : d->topItem->firstChild();
@@ -1381,10 +1385,10 @@ Editor::setFocus()
         }
     }
     if (d->currentWidget) {
-//  kopropertydbg << "d->currentWidget->setFocus()" << endl;
+//  kDebug() << "d->currentWidget->setFocus()" << endl;
         d->currentWidget->setFocus();
     } else {
-//  kopropertydbg << "K3ListView::setFocus()" << endl;
+//  kDebug() << "K3ListView::setFocus()" << endl;
         K3ListView::setFocus();
     }
 }

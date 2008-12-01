@@ -90,8 +90,8 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
         if ( n.localName() == "table-rows" || n.localName() == "table-header-rows" )
         {
             const bool isHeader = n.localName() == "table-header-rows";
-            int row = 0;
-            KoXmlElement _n;
+            int           row = 0;
+            KoXmlElement  _n;
             forEachElement ( _n, n )
             {
                 if ( _n.namespaceURI() != KoXmlNS::table )
@@ -104,18 +104,20 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
                     KoXmlElement __n;
                     forEachElement ( __n, _n )
                     {
-                        if ( __n.namespaceURI() != KoXmlNS::table )
-                            continue;
-                        if ( __n.localName() == "table-cell" )
-                        {
+			if ( __n.namespaceURI() != KoXmlNS::table )
+			    continue;
+
+                        if ( __n.localName() == "table-cell" ) {
                             if ( column >= columnCount() )
                                 setColumnCount( columnCount() + 1 );
                             const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
+
                             QString valueString;
                             const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
-                            if ( valueElement.isNull() || !valueElement.isElement() )
-                            {
+                            if ( valueElement.isNull() || !valueElement.isElement() ) {
                                 qWarning() << "TableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
+				// Even if it doesn't contain any value, it's still a cell.
+				column++;
                                 continue;
                             }
                             QVariant value;
@@ -126,6 +128,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
                                 value = (bool)valueString.toInt();
                             else // if ( valueType == "string" )
                                 value = valueString;
+
                             if ( isHeader )
                                 setHeaderData( column, Qt::Horizontal, value );
                             else

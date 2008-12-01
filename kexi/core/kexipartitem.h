@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,8 +33,8 @@ class Info;
  @short Information about a single object that can be instantiated using Kexi Part
 
  KexiPart::Item stores:
-  - identifier ident (low-level name, for example: table name)
-  - mime type name, eg. "kexi/table"
+  - identifier (low-level name, for example: table name)
+  - part class, eg. "org.kexi-project.table"
   - caption (visible, i18n'd hight level name, eg. table or query title)
 */
 class KEXICORE_EXPORT Item
@@ -50,11 +50,17 @@ public:
         m_id = id;
     }
 
-    QString mimeType() const {
+/*    QString mimeType() const {
         return m_mime;
     }
     void setMimeType(const QString &mime) {
         m_mime = mime;
+    }*/
+    QString partClass() const {
+        return m_class;
+    }
+    void setPartClass(const QString &_class) {
+        m_class = _class;
     }
 
     QString name() const {
@@ -103,7 +109,7 @@ public:
     }
 
 private:
-    QString m_mime;
+    QString m_class;
     QString m_name;
     QString m_caption;
     QString m_desc;

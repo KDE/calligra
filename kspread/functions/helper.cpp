@@ -365,19 +365,19 @@ long double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, con
 // pow1p calculate (1+x)^y accurately
 long double KSpread::pow1p ( const long double& x, const long double& y)
 {
-  if (fabsl(x) > 0.5)
-    return powl(1 + x, y);
+  if (fabs(x) > 0.5)
+    return pow(1 + x, y);
   else
-    return expl(y * log1pl (x));
+    return exp(y * log1p (x));
 }
 
 // pow1pm1 calculate ((1+x)^y)-1 accurately
 long double KSpread::pow1pm1 ( const long double& x, const long double& y)
 {
   if (x <= -1)
-    return powl(1 + x, y) - 1;
+    return pow(1 + x, y) - 1;
   else
-    return expm1l(y * log1pl (x));
+    return expm1(y * log1p (x));
 }
 
 long double KSpread::duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, 

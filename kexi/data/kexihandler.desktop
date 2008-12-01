@@ -55,10 +55,10 @@ Type=int
 [PropertyDef::X-Kexi-TypeName]
 Type=QString
 
-[PropertyDef::X-Kexi-ItemIcon]
+[PropertyDef::X-Kexi-Class]
 Type=QString
 
-[PropertyDef::X-Kexi-TypeMime]
+[PropertyDef::X-Kexi-ItemIcon]
 Type=QString
 
 [PropertyDef::X-Kexi-NoObject]
@@ -71,4 +71,7 @@ Type=bool
 Type=bool
 
 [PropertyDef::X-Kexi-SupportsPrinting]
+Type=bool
+
+[PropertyDef::X-Kexi-PropertyEditorAlwaysVisibleInDesignMode]
 Type=bool

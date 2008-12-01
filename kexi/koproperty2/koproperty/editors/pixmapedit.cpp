@@ -20,6 +20,7 @@
 */
 
 #include "pixmapedit.h"
+#include "utils.h"
 #include "koproperty/Property.h"
 #include "koproperty/EditorDataModel.h"
 
@@ -28,7 +29,6 @@
 #include <QLabel>
 #include <QCursor>
 #include <QFont>
-#include <QFontMetrics>
 #include <QImage>
 #include <q3filedialog.h>
 #include <QToolTip>
@@ -60,7 +60,6 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
         : QWidget(parent)
         , m_property(prop)
 {
-//    setHasBorders(false);
     setBackgroundRole(QPalette::Base);
 
     QHBoxLayout *lyr = new QHBoxLayout(this);
@@ -68,6 +67,7 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
 
     m_edit = new QLabel(this);
     lyr->addWidget(m_edit);
+    m_edit->setContentsMargins(0, 1, 0, 0);
     m_edit->setToolTip(i18n("Click to show image preview"));
     m_edit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 //    m_edit->setMinimumHeight(5);
@@ -78,11 +78,8 @@ PixmapEdit::PixmapEdit(Property *prop, QWidget *parent)
 
     m_button = new KPushButton(i18nc("Three dots for 'Insert image from file' button", "..."), this);
     lyr->addWidget(m_button);
-    m_button->setToolTip(i18n("Insert image from file"));
-    m_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    QFontMetrics fm(m_button->font());
-    m_button->setFixedWidth(fm.width(m_button->text() + ' '));
-    m_button->setFocusPolicy(Qt::NoFocus);
+    Utils::setupDotDotDotButton(m_button, i18n("Insert image from file"),
+        i18n("Inserts image from file"));
 
     m_popup = new QLabel(0, Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WX11BypassWM | Qt::WStyle_StaysOnTop);
     m_popup->setBackgroundRole(QPalette::Base);
@@ -113,14 +110,15 @@ void PixmapEdit::setValue(const QVariant &value)
         m_previewPixmap = m_pixmap;
     } else {
         QImage img(m_pixmap.toImage());
-        if (!QRect(QPoint(0, 0), m_edit->size()*3).contains(m_pixmap.rect())) {
-            img = img.scaled(m_edit->size() * 3, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        const QSize sz(size() - QSize(0,1));
+        if (!QRect(QPoint(0, 0), sz).contains(m_pixmap.rect())) {
+            img = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             m_previewPixmap = QPixmap::fromImage(img);//preview pixmap is a bit larger
-        } else
+        } else {
             m_previewPixmap = m_pixmap;
-
-        img = img.scaled(m_edit->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        QPixmap pm = QPixmap::fromImage(img);
+            img = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        }
+        const QPixmap pm( QPixmap::fromImage(img) );
         m_edit->setPixmap(pm);
     }
 //    if (emitChange)

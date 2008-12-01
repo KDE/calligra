@@ -270,26 +270,29 @@ QWidget * KarbonPencilTool::createOptionWidget()
 
     QStackedWidget * stackedWidget = new QStackedWidget( optionWidget );
 
-    QGroupBox * rawBox = new QGroupBox( i18n( "Properties" ), stackedWidget );
+    QWidget * rawBox = new QWidget( stackedWidget );
     QVBoxLayout * rawLayout = new QVBoxLayout( rawBox );
     QCheckBox * optimizeRaw = new QCheckBox( i18n( "Optimize" ), rawBox );
     rawLayout->addWidget( optimizeRaw );
-
-    QGroupBox * curveBox = new QGroupBox( i18n( "Properties" ), stackedWidget );
-    QVBoxLayout * curveLayout = new QVBoxLayout( curveBox );
+    rawLayout->setContentsMargins( 0, 0, 0, 0 );
+    
+    QWidget * curveBox = new QWidget( stackedWidget );
+    QHBoxLayout * curveLayout = new QHBoxLayout( curveBox );
     QCheckBox * optimizeCurve = new QCheckBox( i18n( "Optimize" ), curveBox );
     KDoubleNumInput * fittingError = new KDoubleNumInput( 0.0, 400.0, m_fittingError, curveBox, 0.50, 3 );
-    fittingError->setLabel( i18n( "Exactness:" ), Qt::AlignLeft|Qt::AlignVCenter );
+    fittingError->setToolTip( i18n( "Exactness:" ) );
     curveLayout->addWidget( optimizeCurve );
     curveLayout->addWidget( fittingError );
-
-    QGroupBox * straightBox = new QGroupBox( i18n( "Properties" ), stackedWidget );
+    curveLayout->setContentsMargins( 0, 0, 0, 0 );
+    
+    QWidget * straightBox = new QWidget( stackedWidget );
     QVBoxLayout * straightLayout = new QVBoxLayout( straightBox );
     KDoubleNumInput * combineAngle = new KDoubleNumInput( 0.0, 360.0, m_combineAngle, straightBox, 0.50, 3 );
     combineAngle->setSuffix( " deg" );
     combineAngle->setLabel( i18n( "Combine angle:" ), Qt::AlignLeft|Qt::AlignVCenter );
     straightLayout->addWidget( combineAngle );
-
+    straightLayout->setContentsMargins( 0, 0, 0, 0 );
+    
     stackedWidget->addWidget( rawBox );
     stackedWidget->addWidget( curveBox );
     stackedWidget->addWidget( straightBox );

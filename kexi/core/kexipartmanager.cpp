@@ -42,7 +42,7 @@ Manager::Manager(QObject *parent)
 {
     m_lookupDone = false;
     m_lookupResult = false;
-    m_nextTempProjectPartID = -1;
+//    m_nextTempProjectPartID = -1;
 }
 
 Manager::~Manager()
@@ -59,7 +59,7 @@ bool Manager::lookup()
     m_lookupDone = true;
     m_lookupResult = false;
     m_partlist.clear();
-    m_partsByMime.clear();
+    m_partsByClass.clear();
     m_parts.clear();
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
@@ -79,14 +79,15 @@ bool Manager::lookup()
 
     //compute order
     foreach(KService::Ptr ptr, tlist) {
-        QString mime = ptr->property("X-Kexi-TypeMime").toString();
-        kDebug() << "Manager::lookup(): " << mime;
+        QString partClass = ptr->property("X-Kexi-Class", QVariant::String).toString();
+        QString partName = ptr->property("X-Kexi-TypeName", QVariant::String).toString();
+        kDebug() << partName << partClass;
 //<TEMP>: disable some parts if needed
-        if (!Kexi::tempShowReports() && mime == "kexi/report")
+//        if (!Kexi::tempShowReports() && partName == "report")
+//            continue;
+        if (!Kexi::tempShowMacros() && partName == "macro")
             continue;
-        if (!Kexi::tempShowMacros() && mime == "kexi/macro")
-            continue;
-        if (!Kexi::tempShowScripts() && mime == "kexi/script")
+        if (!Kexi::tempShowScripts() && partName == "script")
             continue;
 //</TEMP>
         const int idx = sl_order.indexOf(ptr->library());
@@ -100,11 +101,11 @@ bool Manager::lookup()
         KService::Ptr ptr = ordered[i];
         if (ptr) {
             Info *info = new Info(ptr);
-            info->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
+//            info->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
             // to avoid duplicates
-            if (!info->mimeType().isEmpty()) {
-                m_partsByMime.insert(info->mimeType(), info);
-                kDebug() << "Manager::lookup(): inserting info to " << info->mimeType();
+            if (!info->partClass().isEmpty()) {
+                m_partsByClass.insert(info->partClass(), info);
+                kDebug() << "inserting info to" << info->partClass();
             }
             m_partlist.append(info);
         }
@@ -124,7 +125,7 @@ Part* Manager::part(Info *i)
         return 0;
     }
 
-    Part *p = m_parts.value(i->projectPartID());
+    Part *p = m_parts.value(i->partClass());
     if (!p) {
         int error = 0;
         p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
@@ -135,76 +136,58 @@ Part* Manager::part(Info *i)
             setError(i->errorMessage());
             return 0;
         }
+/*
         if (p->registeredPartID() > 0) {
             i->setProjectPartID(p->registeredPartID());
-        }
+        }*/
         p->setInfo(i);
         p->setObjectName(QString("%1 part").arg(i->objectName()));
-        m_parts.insert(i->projectPartID(), p);
+        m_parts.insert(i->partClass(), p);
         emit partLoaded(p);
     }
     return p;
 }
 
-Part* Manager::partForMimeType(const QString &mimeType)
+static QString realPartClass(const QString &className)
 {
-    return mimeType.isEmpty() ? 0 : part(m_partsByMime.value(mimeType));
+    if (className.contains(".")) {
+        return className;
+    }
+    else {
+        // not like "org.kexi-project.table" - construct
+        return QString::fromLatin1("org.kexi-project.")
+            + QString(className).replace("kexi/", QString());
+    }
 }
 
-Info* Manager::infoForMimeType(const QString &mimeType)
+Part* Manager::partForClass(const QString &className)
 {
-    Info *i = mimeType.isEmpty() ? 0 : m_partsByMime.value(mimeType);
+    const QString realClass = realPartClass(className);
+    Part *p = realClass.isEmpty() ? 0 : m_parts.value(realClass);
+    if (!p)
+        setError(i18n("No plugin for class \"%1\"", realClass));
+    return p;
+}
+
+Info* Manager::infoForClass(const QString &className)
+{
+    const QString realClass = realPartClass(className);
+    Info *i = realClass.isEmpty() ? 0 : m_partsByClass.value(realClass);
     if (i)
         return i;
-    setError(i18n("No plugin for mime type \"%1\"", mimeType));
+    setError(i18n("No plugin for class \"%1\"", realClass));
     return 0;
-}
-
-bool Manager::checkProject(KexiDB::Connection *conn)
-{
-    clearError();
-// QString errmsg = i18n("Invalid project contents.");
-
-//! @todo catch errors!
-    if (!conn->isDatabaseUsed()) {
-        setError(conn);
-        return false;
-    }
-
-    KexiDB::Cursor *cursor = conn->executeQuery("SELECT * FROM kexi__parts");
-    if (!cursor) {
-        setError(conn);
-        return false;
-    }
-
-    for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
-        Info *i = infoForMimeType(cursor->value(2).toString());
-        if (!i) {
-            Missing m;
-            m.name = cursor->value(1).toString();
-            m.mime = cursor->value(2).toString();
-            m.url = cursor->value(3).toString();
-
-            m_missing.append(m);
-        } else {
-            i->setProjectPartID(cursor->value(0).toInt());
-            i->setIdStoredInPartDatabase(true);
-        }
-    }
-
-    conn->deleteCursor(cursor);
-    return true;
 }
 
 void Manager::insertStaticPart(StaticPart* part)
 {
     if (!part)
         return;
-    part->info()->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
+//    part->info()->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on,
     m_partlist.append(part->info());
-    if (!part->info()->mimeType().isEmpty())
-        m_partsByMime.insert(part->info()->mimeType(), part->info());
-    m_parts.insert(part->info()->projectPartID(), part);
+    if (!part->info()->partClass().isEmpty())
+        m_partsByClass.insert(part->info()->partClass(), part->info());
+    m_parts.insert(part->info()->partClass(), part);
 }
 
 #include "kexipartmanager.moc"

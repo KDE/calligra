@@ -15,7 +15,7 @@ kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
 target_link_libraries(
     kexihandler_script
     kexiextendedwidgets
-    koproperty
+    ${KOPROPERTY_LIBS}
     kokross
     kexicore
     kexiutils

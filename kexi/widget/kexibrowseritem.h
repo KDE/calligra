@@ -43,7 +43,7 @@ public:
     KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
 
     //! Creates item for object \a item defined by part \a i, without parent
-    //! (used in a case when KexiBrowser::itemsMimeType() is not empty)
+    //! (used in a case when KexiBrowser::itemsPartClass() is not empty)
     KexiBrowserItem(K3ListView *parent, KexiPart::Info *i, KexiPart::Item *item);
 
     virtual ~KexiBrowserItem();

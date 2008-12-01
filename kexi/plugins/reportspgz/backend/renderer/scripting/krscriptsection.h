@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <krsectiondata.h>
+#include <kross/core/object.h>
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
@@ -56,9 +57,13 @@ public slots:
     QObject* objectByNumber(int);
     /**Returns an object in the section, by name*/
     QObject* objectByName(const QString&);
-
+    
+    void initialize(Kross::Object::Ptr);
+    void eventOnRender();
+    
 private:
     KRSectionData *_section;
+    Kross::Object::Ptr _scriptObject;
 };
 }
 #endif

@@ -20,6 +20,7 @@
 */
 
 #include "fontedit.h"
+#include "utils.h"
 
 #include <KFontRequester>
 #include <KLocale>
@@ -61,13 +62,8 @@ public:
         layout()->removeWidget(label());
         layout()->removeWidget(button());//->reparent(this, 0, QPoint(0,0));
         delete layout();*/
-        button()->setText(i18n("..."));
-        button()->setToolTip(i18n("Change font"));
-        button()->setWhatsThis(i18n("Changes font"));
-        button()->setFocusPolicy(Qt::NoFocus);
-        button()->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        QFontMetrics fm(button()->font());
-        button()->setFixedWidth(fm.width(button()->text() + "  "));
+        Utils::setupDotDotDotButton(button(), i18n("Change font"),
+            i18n("Changes font"));
     }
 /*    virtual void resizeEvent(QResizeEvent *e)
     {

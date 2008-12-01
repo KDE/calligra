@@ -57,11 +57,17 @@ public:
 protected slots:
     void slotButtonClicked(int button);
 
-private:
+protected:
     TaskGeneralPanel *m_generalTab;
     RequestResourcesPanel *m_resourcesTab;
     DocumentsPanel *m_documentsTab;
     TaskCostPanel *m_costTab;
+};
+
+class KPLATOUI_EXPORT TaskAddDialog : public TaskDialog {
+    Q_OBJECT
+public:
+    TaskAddDialog(Task &task, Accounts &accounts, QWidget *parent=0);
 };
 
 } //KPlato namespace

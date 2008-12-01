@@ -49,7 +49,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
     Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor DESIGNABLE true RESET unsetPalette)
     Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
     Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
     Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
@@ -74,12 +74,12 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourceMimeType() const {
-        return KexiFormDataItemInterface::dataSourceMimeType();
+    inline QString dataSourcePartClass() const {
+        return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual void setDataSource(const QString &ds);
-    virtual void setDataSourceMimeType(const QString &ds) {
-        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    virtual void setDataSourcePartClass(const QString &partClass) {
+        KexiFormDataItemInterface::setDataSourcePartClass(partClass);
     }
     virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 

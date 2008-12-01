@@ -60,8 +60,9 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
         ((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
 
     const QObjectList list(object->children());
-    foreach(QObject *obj, list)
-    installRecursiveEventFilter(obj, container);
+    foreach(QObject *obj, list) {
+        installRecursiveEventFilter(obj, container);
+    }
 }
 
 void
@@ -72,8 +73,9 @@ KFormDesigner::removeRecursiveEventFilter(QObject *object, QObject *container)
         return;
 
     const QObjectList list(object->children());
-    foreach(QObject *obj, list)
-    removeRecursiveEventFilter(obj, container);
+    foreach(QObject *obj, list) {
+        removeRecursiveEventFilter(obj, container);
+    }
 }
 
 void
@@ -89,8 +91,9 @@ KFormDesigner::setRecursiveCursor(QWidget *w, Form *form)
         w->setCursor(Qt::ArrowCursor);
 
     const QList<QWidget*> list(w->findChildren<QWidget*>());
-    foreach(QWidget *widget, list)
-    widget->setCursor(Qt::ArrowCursor);
+    foreach(QWidget *widget, list) {
+        widget->setCursor(Qt::ArrowCursor);
+    }
 }
 
 QSize

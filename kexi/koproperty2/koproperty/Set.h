@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,16 +24,14 @@
 
 #include "koproperty_global.h"
 #include <QtCore/QObject>
-#include <Qt3Support/Q3AsciiDict>
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>
-#include <QtCore/QMap>
+#include <QtCore/QHash>
 
 namespace KoProperty
 {
 
 class Property;
-class SetPrivate;
 
 /*! \brief Lists holding properties in groups
 
@@ -46,27 +44,38 @@ class KOPROPERTY_EXPORT Set : public QObject
     Q_OBJECT
 
 public:
-    /*! \brief A class to iterate over a Set.
-    It behaves like a QDictIterator. To use it:
-    \code  for(Set::Iterator it(set); it.current(); ++it) { .... }
-    \endcode
-      \author Cedric Pasteur <cedric.pasteur@free.fr>
-      \author Alexander Dymo <cloudtemple@mskat.net> */
+    //! An interface for functor selecting properties.
+    /*! Used in Iterator. */
+    class KOPROPERTY_EXPORT PropertySelector
+    {
+    public:
+        PropertySelector();
+        virtual ~PropertySelector();
+        virtual bool operator()(const Property& prop) const = 0;
+    };
+    //! A class to iterate over a Set.
+    /*! It behaves like a QHash::ConstIterator. To use it:
+     @code  for(Set::Iterator it(set); it.current(); ++it) { .... }
+     @endcode */
     class KOPROPERTY_EXPORT Iterator
     {
     public:
-        Iterator(const Set &set);
+        //! Creates iterator for @a set set of properties.
+        /*! @a selector functor can be provided to iterate only 
+            over specified properties. The iterator takes ownership
+            of the functor object. */
+        Iterator(const Set &set, PropertySelector *selector = 0);
         ~Iterator();
 
         void operator ++();
-        Property*  operator *() const;
+        Property* operator *() const;
+        Property* current() const;
 
-        QByteArray  currentKey() const;
-        Property*  current() const;
-
-    private:
-        Q3AsciiDictIterator<Property> *iterator;
         friend class Set;
+    private:
+        QHash<QByteArray, Property*>::ConstIterator m_iterator;
+        QHash<QByteArray, Property*>::ConstIterator m_end;
+        PropertySelector *m_selector;
     };
 
     explicit Set(QObject *parent = 0, const QString &typeName = QString::null);
@@ -155,13 +164,16 @@ public:
     /*! \return the icons name for \a group. */
     QString groupIcon(const QByteArray &group) const;
 
-    /*! \return a list of all group names. The order is the same as the order
-     of creation. */
-    const QList<QByteArray>& groupNames() const;
+    /*! \return a list of all group names. The order of items is undefined. */
+    const QList<QByteArray> groupNames() const;
 
-    /*! \return a list of all property names. The order is the same as the order
-     of creation. */
-    const QList<QByteArray>& propertyNamesForGroup(const QByteArray &group) const;
+    /*! \return a list of all property names for group @ group. 
+     The order of items is undefined. */
+    const QList<QByteArray> propertyNamesForGroup(const QByteArray &group) const;
+
+    /*! \return a list of all property names for group @ group. 
+     The order of items is undefined. */
+    const QHash<Property*, QByteArray> groupsNamesForProperties() const;
 
     /*! Used by property editor to preserve previous selection when this set
      is assigned again. */
@@ -184,6 +196,9 @@ protected:
     /*! Constructs a set which owns or does not own it's properties.*/
     Set(bool propertyOwner);
 
+    /*! @return group name for property @a property */
+    QByteArray groupForProperty(Property *property) const;
+
     /*! Adds property to a group.*/
     void addToGroup(const QByteArray &group, Property *property);
 
@@ -200,19 +215,22 @@ protected:
      that the set has been cleared (all properties are deleted) */
     void informAboutClearing(bool& cleared);
 
+    /*! Helper for Private class. */
+    void addRelatedProperty(Property *p1, Property *p2) const;
+
 signals:
     /*! Emitted when the value of the property is changed.*/
-    void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+    void propertyChanged(Set& set, Property& property);
 
     /*! @internal Exists to be sure that we emitted it before propertyChanged(),
      so Editor object can handle this. */
-    void propertyChangedInternal(KoProperty::Set& set, KoProperty::Property& property);
+    void propertyChangedInternal(Set& set, Property& property);
 
     /*! Emitted when the value of the property is reset.*/
-    void propertyReset(KoProperty::Set& set, KoProperty::Property& property);
+    void propertyReset(Set& set, Property& property);
 
     /*! Emitted when property is about to be deleted.*/
-    void aboutToDeleteProperty(KoProperty::Set& set, KoProperty::Property& property);
+    void aboutToDeleteProperty(Set& set, Property& property);
 
     /*! Emitted when property set object is about to be cleared (using clear()).
      This signal is also emmited from destructor before emitting aboutToBeDeleted(). */
@@ -222,7 +240,8 @@ signals:
     void aboutToBeDeleted();
 
 protected:
-    SetPrivate * const d;
+    class Private;
+    Private * const d;
 
     friend class Iterator;
     friend class Property;
@@ -241,18 +260,21 @@ class KOPROPERTY_EXPORT Buffer : public Set
 
 public:
     Buffer();
-    Buffer(const Set *set);
+    Buffer(const Set& set);
 
     /*! Intersects with other Set.*/
-    virtual void intersect(const Set *set);
+    virtual void intersect(const Set& set);
 
 protected slots:
-    void intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop);
-    void intersectedReset(KoProperty::Set& set, KoProperty::Property& prop);
+    void intersectedChanged(Set& set, Property& prop);
+    void intersectedReset(Set& set, Property& prop);
 
 private:
-    void initialSet(const Set *set);
+    void init(const Set& set);
 };
+
+//! @return property values for set @a set
+KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

@@ -20,6 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
+#include "mysqldriver_global.h"
 #include <QVariant>
 #include <QFile>
 #include <QRegExp>
@@ -115,11 +116,25 @@ bool MySqlConnection::drv_getDatabasesList(QStringList &list)
     return false;
 }
 
+bool MySqlConnection::drv_databaseExists(const QString &dbName, bool ignoreErrors)
+{
+    bool success;
+    bool exists = resultExists(
+      QString::fromLatin1("SHOW DATABASES LIKE %1")
+          .arg(driver()->escapeString(dbName.toLower()/* db names are lower case in mysql */)), success);
+    if (!exists || !success) {
+        if (!ignoreErrors)
+            setError(ERR_OBJECT_NOT_FOUND, i18n("The database \"%1\" does not exist.", dbName));
+        return false;
+    }
+    return true;
+}
+
 bool MySqlConnection::drv_createDatabase(const QString &dbName)
 {
     KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName;
     // mysql_create_db deprecated, use SQL here.
-    if (drv_executeSQL("CREATE DATABASE " + (dbName)))
+    if (drv_executeSQL(QString::fromLatin1("CREATE DATABASE %1").arg(escapeIdentifier(dbName))))
         return true;
     d->storeResult();
     return false;
@@ -143,7 +158,7 @@ bool MySqlConnection::drv_closeDatabase()
 bool MySqlConnection::drv_dropDatabase(const QString &dbName)
 {
 //TODO is here escaping needed
-    return drv_executeSQL("drop database " + dbName);
+    return drv_executeSQL(QString::fromLatin1("DROP DATABASE %1").arg(escapeIdentifier(dbName)));
 }
 
 bool MySqlConnection::drv_executeSQL(const QString& statement)

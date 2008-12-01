@@ -910,7 +910,7 @@ protected:
      needed checks.
 
      See databaseExists() description for details about ignoreErrors argument.
-     You should use this appropriately in your implementation.
+     You should use it properly in your implementation.
 
      Note: This method should also work if there is already database used (with useDatabase());
      in this situation no changes should be made in current database selection. */

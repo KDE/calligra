@@ -616,18 +616,19 @@ KDateTime::Spec Resource::timeSpec() const
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     if (!from.isValid() || !end.isValid()) {
-        m_currentSchedule->logWarning( "Invalid times" );
+        m_currentSchedule->logWarning( "Make appointments: Invalid time" );
         return;
     }
     Calendar *cal = calendar();
     if (cal == 0) {
+        m_currentSchedule->logWarning( "Resource has no calendar" );
         return;
     }
     DateTime time = from;
     while (time < end) {
         //kDebug()<<time<<" to"<<end;
         if (!time.isValid() || !end.isValid()) {
-            m_currentSchedule->logWarning( "Invalid time" );
+            m_currentSchedule->logWarning( "Make appointments: Invalid time" );
             return;
         }
         if (!cal->hasInterval(time, end, m_currentSchedule)) {
@@ -638,7 +639,7 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
         }
         DateTimeInterval i = cal->firstInterval(time, end, m_currentSchedule);
         if (!i.second.isValid()) {
-            m_currentSchedule->logWarning( "Invalid interval: " + time.toString() + ", " + end.toString() );
+            m_currentSchedule->logWarning( "Make appointments: Invalid interval " + time.toString() + ", " + end.toString() );
             return;
         }
         if (time == i.second)
@@ -656,11 +657,11 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 void Resource::makeAppointment(Schedule *node) {
     //kDebug()<<m_name<<": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<""<<node->startTime;
     if (!node->startTime.isValid()) {
-        m_currentSchedule->logWarning( "Node startTime invalid" );
+        m_currentSchedule->logWarning( "Make appointments: Node start time is not valid" );
         return;
     }
     if (!node->endTime.isValid()) {
-        m_currentSchedule->logWarning( "Node endTime invalid" );
+        m_currentSchedule->logWarning( "Make appointments: Node end time is not valid" );
         return;
     }
     node->resourceNotAvailable = false;
@@ -681,7 +682,7 @@ void Resource::makeAppointment(Schedule *node) {
         makeAppointment(node, from, end);
     }
     if (!cal) {
-        m_currentSchedule->logWarning( "No calendar defined" );
+        m_currentSchedule->logWarning( "Resource has no calendar" );
         return; 
     }
     //TODO: units and standard non-working days
@@ -689,13 +690,13 @@ void Resource::makeAppointment(Schedule *node) {
     DateTime end = node->endTime;
     time = availableAfter(time, end);
     if (!time.isValid()) {
-        m_currentSchedule->logWarning( "Resource not available after=" + node->startTime.toString() + ", " + end.toString() );
+        m_currentSchedule->logWarning( "Resource not available in interval: " + node->startTime.toString() + " to " + end.toString() );
         node->resourceNotAvailable = true;
         return;
     }
     end = availableBefore(end, time);
     if (!end.isValid()) {
-        m_currentSchedule->logWarning( "Resource not available  before=" + node->endTime.toString() + ", " + time.toString() + ')' );
+        m_currentSchedule->logWarning( "Resource not available in interval: " + time.toString() + " to " + node->endTime.toString() );
         node->resourceNotAvailable = true;
         return;
     }
@@ -714,12 +715,13 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     bool sts=false;
     Duration e;
     if (duration == 0) {
-        kWarning()<<"zero duration"<<endl;
+        kWarning()<<"zero duration";
         return e;
     }
     Calendar *cal = calendar();
     if (cal == 0) {
-        kWarning()<<m_name<<": No calendar defined"<<endl;
+        sch->logWarning( "Resource has no calendar" );
+        kWarning()<<m_name<<": No calendar defined";
         return e;
     }
     if (backward) {
@@ -730,10 +732,10 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         DateTime t = availableBefore(start, limit);
         if (t.isValid()) {
             sts = true;
-            if ( t < limit ) sch->logError( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
+            if ( t < limit ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
             e = (cal->effort(limit, t, sch) * m_units)/100;
         } else {
-            //sch->logInfo( "Not available (start=" + start.toString() + "," + limit.toString() + ")" );
+            //sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
         }
     } else {
         DateTime limit = start + duration;
@@ -743,10 +745,10 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         DateTime t = availableAfter(start, limit);
         if (t.isValid()) {
             sts = true;
-            if ( t > limit ) sch->logError( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
+            if ( t > limit ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
             e = (cal->effort(t, limit, sch) * m_units)/100;
         } else {
-            //sch->logInfo( "Not available (start=" + start.toString() + "," + limit.toString() + ")" );
+            //sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
         }
     }
     //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
@@ -781,6 +783,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
     }
     Calendar *cal = calendar();
     if (cal == 0) {
+        if ( sch ) sch->logWarning( "Resource has no calendar" );
         return t;
     }
     t = m_availableFrom > time ? m_availableFrom : time;
@@ -815,14 +818,14 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
         return t;
     }
     if (!m_availableUntil.isValid()) {
-        sch->logWarning( "availabelUntil is invalid" );
+        sch->logDebug( "availabelUntil is invalid" );
         t = time;
     } else {
         t = m_availableUntil < time ? m_availableUntil : time;
     }
-    if ( t < lmt ) sch->logError( "t < lmt: " + t.toString() + " < " + lmt.toString() );
+    if ( t < lmt ) sch->logDebug( "t < lmt: " + t.toString() + " < " + lmt.toString() );
     t = cal->firstAvailableBefore(t, lmt, sch );
-    if ( t.isValid() && t < lmt ) sch->logError( " t < lmt: t=" + t.toString() + " lmt=" + lmt.toString() );
+    if ( t.isValid() && t < lmt ) sch->logDebug( " t < lmt: t=" + t.toString() + " lmt=" + lmt.toString() );
     return t;
 }
 
@@ -1250,7 +1253,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
     }
     if ( ! match ) {
-        ns->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
+        ns->logDebug( "Days: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
         
         logtime = start;
         d = Duration(0, 1, 0); // 1 hour
@@ -1273,7 +1276,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        ns->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
+        ns->logDebug( "Hours: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
         
         logtime = start;
         d = Duration(0, 0, 1); // 1 minute
@@ -1296,7 +1299,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
     }
     if ( ! match ) {
-        ns->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
+        ns->logDebug( "Minutes: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
         
         logtime = start;
         d = Duration(0, 0, 0, 1); // 1 second
@@ -1318,7 +1321,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
     }
     if ( ! match ) {
-        ns->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ')' );
+        ns->logDebug( "Seconds: duration " + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + (_effort - e).toString() + ')' );
         
         d = Duration(0, 0, 0, 0, 1); // 1 millisecond
         for (int i=0; !match && i < 1000; ++i) {

@@ -864,6 +864,9 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
 
 bool ResourceAppointmentsItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }

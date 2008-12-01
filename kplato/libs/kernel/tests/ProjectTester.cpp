@@ -312,7 +312,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
     QCOMPARE( t->earlyFinish(), t->endTime() );
-    QCOMPARE( t->lateFinish(), m_project->endTime() );
+    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
     
     QCOMPARE( t->endTime(), DateTime( nextweek.addDays( -1 ), t2 ));
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 )  );

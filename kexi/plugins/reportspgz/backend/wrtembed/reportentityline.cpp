@@ -30,7 +30,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 #include <KoGlobal.h>
 #include "reportscene.h"
 

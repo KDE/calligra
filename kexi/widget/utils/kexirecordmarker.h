@@ -2,7 +2,7 @@
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Till Busch <till@bux.at>
    Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 
-class QImage;
+class QPixmap;
 
 //! \brief Record marker, usually displayed at the left side of a table view or a continuous form.
 class KEXIGUIUTILS_EXPORT KexiRecordMarker : public QWidget
@@ -40,8 +40,8 @@ public:
 
     int rows() const;
 
-    static QImage* penImage();
-    static QImage* plusImage();
+    static const QPixmap* penPixmap();
+    static const QPixmap* plusPixmap();
 
 public slots:
     void setOffset(int offset);
@@ -53,8 +53,8 @@ public slots:
     void setEditRow(int row);
     void showInsertRow(bool show);
 
-    QColor selectionBackgroundColor() const;
-    void setSelectionBackgroundColor(const QColor &color);
+    QBrush selectionBackgroundBrush() const;
+    void setSelectionBackgroundBrush(const QBrush &brush);
 
     void addLabel(bool upd = true);
     void removeLabel(bool upd = true);
@@ -64,8 +64,18 @@ public slots:
 
     void clear(bool upd = true);
 
+signals:
+    //! Used to allow row selecting by clicking on the section
+    void rowPressed(uint row);
+
+    //! Used to allow row highlighting by moving mouse over the section
+    void rowHighlighted(int row);
+
 protected:
     virtual void paintEvent(QPaintEvent *e);
+    virtual void mouseMoveEvent(QMouseEvent *e);
+    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void leaveEvent(QEvent *e);
 
     class Private;
     Private * const d;

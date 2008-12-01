@@ -80,11 +80,6 @@ kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
 target_link_libraries(kwordprivate ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} koguiutils kotext)
 
-if(KDE4_BUILD_TESTS)
-    # only with this definition will the KWORD_TEST_EXPORT macro do something
-    add_definitions(-DCOMPILING_TESTS)
-endif(KDE4_BUILD_TESTS)
-
 set_target_properties(kwordprivate
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
     ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kotext;koguiutils"
@@ -108,6 +103,8 @@ install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### KWord exe ###############
 
 set(kword_KDEINIT_SRCS main.cpp )
+
+kde4_add_app_icon(kword_KDEINIT_SRCS "${KDE4_ICON_DIR}/oxygen/app/*/kword.png")
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 

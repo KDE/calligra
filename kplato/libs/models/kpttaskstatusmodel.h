@@ -34,7 +34,7 @@ class Project;
 class Node;
 class Task;
 
-typedef QList<Node*> NodeList;
+typedef QMap<QString, Node*> NodeMap;
 
 class KPLATOMODELS_EXPORT TaskStatusItemModel : public ItemModelBase
 {
@@ -58,7 +58,7 @@ public:
     virtual QModelIndex parent( const QModelIndex & index ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( const Node *node ) const;
-    virtual QModelIndex index( const NodeList *lst ) const;
+    virtual QModelIndex index( const NodeMap *lst ) const;
     
     virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
     virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
@@ -74,12 +74,12 @@ public:
     virtual Qt::DropActions supportedDropActions() const;
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
-    NodeList *list( const QModelIndex &index ) const;
+    NodeMap *list( const QModelIndex &index ) const;
     Node *node( const QModelIndex &index ) const;
     QItemDelegate *createDelegate( int column, QWidget *parent ) const;
     
-    NodeList nodeList( QDataStream &stream );
-    static NodeList removeChildNodes( const NodeList nodes );
+    NodeMap nodeList( QDataStream &stream );
+    static NodeMap removeChildNodes( const NodeMap nodes );
     using ItemModelBase::dropAllowed;
     bool dropAllowed( Node *on, const QMimeData *data );
     
@@ -114,16 +114,18 @@ protected:
     bool setCompletion( Node *node, const QVariant &value, int role );
     bool setRemainingEffort( Node *node, const QVariant &value, int role );
     bool setActualEffort( Node *node, const QVariant &value, int role );
-    
+    bool setStartedTime( Node *node, const QVariant &value, int role );
+    bool setFinishedTime( Node *node, const QVariant &value, int role );
+
 private:
     NodeModel m_nodemodel;
     QStringList m_topNames;
     QStringList m_topTips;
-    QList<NodeList*> m_top;
-    NodeList m_notstarted;
-    NodeList m_running;
-    NodeList m_finished;
-    NodeList m_upcoming;
+    QList<NodeMap*> m_top;
+    NodeMap m_notstarted;
+    NodeMap m_running;
+    NodeMap m_finished;
+    NodeMap m_upcoming;
     
     long m_id; // schedule id
     int m_period; // days

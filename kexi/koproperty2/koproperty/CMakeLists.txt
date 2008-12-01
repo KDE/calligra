@@ -11,6 +11,7 @@ include_directories(
 
 
 set(libkopropertyeditors_SRCS
+  editors/utils.cpp
   editors/booledit.cpp
 #  editors/coloredit.cpp
   editors/combobox.cpp
@@ -42,6 +43,7 @@ set(koproperty_LIB_SRCS
    DefaultFactory.cpp
    EditorView.cpp
    EditorDataModel.cpp
+   Utils.cpp
    ${libkopropertyeditors_SRCS}
 )
 
@@ -73,6 +75,7 @@ install( FILES
 )
 
 install( FILES
+editors/utils.h
 editors/booledit.h
 editors/coloredit.h
 editors/combobox.h

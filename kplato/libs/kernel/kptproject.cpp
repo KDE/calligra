@@ -267,6 +267,7 @@ void Project::calculate()
             cs->duration = cs->endTime - cs->startTime;
             cs->logInfo( i18n( "Scheduled finish: %1", cs->endTime.toString() ), 3 );
             if ( cs->endTime > m_constraintEndTime ) {
+                cs->schedulingError = true;
                 cs->logError( i18n( "Could not finish project in time: %1", m_constraintEndTime.toString() ), 3 );
             } else if ( cs->endTime == m_constraintEndTime ) {
                 cs->logWarning( i18n( "Finished project exactly on time: %1", m_constraintEndTime.toString() ), 3 );
@@ -277,24 +278,36 @@ void Project::calculate()
         } else {
             cs->setPhaseName( 0, "Init" );
             cs->logInfo( i18n( "Schedule project backward from: %1", m_constraintEndTime.toString() ), 0 );
-            cs->endTime = m_constraintEndTime;
-            cs->lateFinish = m_constraintEndTime;
             // Calculate from end time
-            propagateLatestFinish( cs->lateFinish );
+            propagateLatestFinish( m_constraintEndTime );
             cs->setPhaseName( 1, "Backward" );
             cs->logInfo( "Calculate early start", 1 );
             cs->earlyStart = calculateBackward( estType );
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, "Forward" );
             cs->logInfo( "Calculate late finish", 2 );
-            cs->calculateForward( estType );
+            cs->lateFinish = cs->calculateForward( estType );
             cs->setPhaseName( 3, "Schedule" );
             cs->logInfo( "Schedule tasks backward", 3 );
-            cs->startTime = scheduleBackward( cs->endTime, estType );
+            cs->startTime = scheduleBackward( cs->lateFinish, estType );
+            cs->endTime = cs->startTime;
+            foreach ( Node *n, allNodes() ) {
+                if ( n->type() == Type_Task || n->type() == Type_Milestone ) {
+                    DateTime e = n->endTime( cs->id() );
+                    if ( cs->endTime <  e ) {
+                        cs->endTime = e;
+                    }
+                }
+            }
+            if ( cs->endTime > m_constraintEndTime ) {
+                cs->schedulingError = true;
+                cs->logError( "Failed to finish project within target time", 3 );
+            }
             cs->duration = cs->endTime - cs->startTime;
             cs->logInfo( i18n( "Scheduled start: %1 (%2)", cs->startTime.toString(), m_constraintStartTime.toString() ), 3 );
             if ( cs->startTime < m_constraintStartTime ) {
-                cs->logWarning( i18n( "Must start project early in order to finish in time: %1", m_constraintStartTime.toString() ), 3 );
+                cs->schedulingError = true;
+                cs->logError( i18n( "Must start project early in order to finish in time: %1", m_constraintStartTime.toString() ), 3 );
             } else if ( cs->startTime == m_constraintStartTime ) {
                 cs->logWarning( i18n( "Start project exactly on time: %1", m_constraintStartTime.toString() ), 3 );
             } else {
@@ -1023,13 +1036,19 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
     if ( emitSignal ) emit nodeToBeAdded( p, i );
     p->insertChildNode( i, task );
     connect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), task, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
-    if ( emitSignal ) emit nodeAdded( task );
-    if ( emitSignal ) emit changed();
+    if ( emitSignal ) {
+        emit nodeAdded( task );
+        emit changed();
+    }
+    if ( p != this && p->numChildren() == 1 ) {
+        emit nodeChanged( p );
+    }
     return true;
 }
 
 void Project::takeTask( Node *node, bool emitSignal )
 {
+    kDebug()<<node->name();
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
         kDebug() <<"Node must have a parent!";
@@ -1039,8 +1058,14 @@ void Project::takeTask( Node *node, bool emitSignal )
     if ( emitSignal ) emit nodeToBeRemoved( node );
     disconnect( this, SIGNAL( standardWorktimeChanged( StandardWorktime* ) ), node, SLOT( slotStandardWorktimeChanged( StandardWorktime* ) ) );
     parent->takeChildNode( node );
-    if ( emitSignal ) emit nodeRemoved( node );
-    if ( emitSignal ) emit changed();
+    if ( emitSignal ) {
+        emit nodeRemoved( node );
+        emit changed();
+    }
+    kDebug()<<node->name()<<"removed";
+    if ( parent != this && parent->type() != Node::Type_Summarytask ) {
+        emit nodeChanged( parent );
+    }
 }
 
 bool Project::canMoveTask( Node* node, Node *newParent )
@@ -1062,12 +1087,19 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
     if ( ! canMoveTask( node, newParent ) ) {
         return false;
     }
+    Node *oldParent = node->parentNode();
     const Node *before = newParent->childNode( newPos );
     emit nodeToBeMoved( node );
     takeTask( node, false );
     int i = before == 0 ? newParent->numChildren() : newPos;
     addSubTask( node, i, newParent, false );
     emit nodeMoved( node );
+    if ( oldParent != this && oldParent->numChildren() == 0 ) {
+        emit nodeChanged( oldParent );
+    }
+    if ( newParent != this && newParent->numChildren() == 1 ) {
+        emit nodeChanged( newParent );
+    }
     return true;
 }
 
@@ -1902,6 +1934,7 @@ QString Project::generateWBSCode( QList<int> &indexes ) const
         }
         ++level;
     }
+    kDebug()<<code;
     return code;
 }
 

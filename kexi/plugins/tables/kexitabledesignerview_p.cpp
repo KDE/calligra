@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <KActionCollection>
 
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 
 #include <kexi_global.h>
 #include <kexidb/cursor.h>

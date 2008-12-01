@@ -36,7 +36,10 @@
 Label::Label(const QString &text, QWidget *parent)
         : QLabel(text, parent)
 {
-    setPaletteBackgroundColor(Qt::white);
+//    setPaletteBackgroundColor(Qt::white);
+    QPalette pal(palette());
+    pal.setColor(backgroundRole(), pal.brush(QPalette::Base));
+    setPalette(pal);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -48,7 +51,10 @@ ReportLine::ReportLine(QWidget *parent, const char *name)
     m_lineWidth = 1;
     m_capStyle = (CapStyle)Qt::FlatCap;
     m_color = paletteForegroundColor();
-    setPaletteBackgroundColor(Qt::white);
+//    setPaletteBackgroundColor(Qt::white);
+    QPalette pal(palette());
+    pal.setColor(backgroundRole(), pal.brush(QPalette::Base));
+    setPalette(pal);
 }
 
 ReportLine::ReportLineStyle
@@ -123,7 +129,10 @@ PicLabel::PicLabel(const QPixmap &pix, QWidget *parent)
 {
     setPixmap(pix);
     setScaledContents(false);
-    setPaletteBackgroundColor(Qt::white);
+//    setPaletteBackgroundColor(Qt::white);
+    QPalette pal(palette());
+    pal.setColor(backgroundRole(), pal.brush(QPalette::Base));
+    setPalette(pal);
 }
 
 bool
@@ -140,7 +149,10 @@ KexiSubReport::KexiSubReport(QWidget *parent)
         : Q3ScrollView(parent), m_form(0), m_widget(0)
 {
     setFrameStyle(Q3Frame::Plain | Q3Frame::Box);
-    viewport()->setPaletteBackgroundColor(Qt::white);
+//    viewport()->setPaletteBackgroundColor(Qt::white);
+    QPalette pal(viewport()->palette());
+    pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Base));
+    viewport()->setPalette(pal);
 }
 
 void

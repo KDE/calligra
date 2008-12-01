@@ -143,7 +143,7 @@ class GanttViewBase : public KDGantt::View
 public:
     GanttViewBase( QWidget *parent );
     
-    QSortFilterProxyModel *sfModel() const;
+    NodeSortFilterProxyModel *sfModel() const;
     void setItemModel( ItemModelBase *model );
     ItemModelBase *model() const;
     void setProject( Project *project );
@@ -196,6 +196,7 @@ public:
 
     virtual void setZoom( double zoom );
     void setupGui();
+    Project *project() const { return m_gantt->project(); }
     virtual void setProject( Project *project );
     
     using ViewBase::draw;
@@ -271,6 +272,7 @@ public:
     virtual void setZoom( double zoom );
     void show();
     virtual void setProject( Project *project );
+    Project *project() const { return m_gantt->project(); }
     using ViewBase::draw;
     virtual void draw( Project &project );
     virtual void drawChanges( Project &project );

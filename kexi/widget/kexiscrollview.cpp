@@ -57,7 +57,9 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
     setObjectName("kexiscrollview");
     setAttribute(Qt::WA_StaticContents, true);
     setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-    viewport()->setPaletteBackgroundColor(colorGroup().mid());
+    QPalette pal(viewport()->palette());
+    pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
+    viewport()->setPalette(pal);
     QColor fc = palette().active().foreground(),
                 bc = viewport()->paletteBackgroundColor();
     m_helpColor = KexiUtils::blendedColors(fc, bc, 1, 2);

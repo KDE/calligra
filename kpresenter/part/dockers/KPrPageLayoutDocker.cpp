@@ -42,7 +42,7 @@ KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags
 , m_view( 0 )
 , m_previousItem( 0 )
 {
-    setWindowTitle( i18n( "Page Layouts" ) );
+    setWindowTitle( i18n( "Slide Layouts" ) );
 
     QWidget* base = new QWidget( this );
     m_layoutsView = new QListWidget( base );

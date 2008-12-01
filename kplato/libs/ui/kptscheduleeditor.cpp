@@ -61,7 +61,7 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    createItemDelegates();
+    createItemDelegates( m );
 }
 
 void ScheduleTreeView::slotActivated( const QModelIndex index )
@@ -343,14 +343,18 @@ ScheduleLogTreeView::ScheduleLogTreeView( QWidget *parent )
     header()->setStretchLastSection ( true );
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     
-    m_model = new ScheduleLogItemModel( this );
-    setModel( m_model->standardModel() );
+    m_model = new QSortFilterProxyModel( this );
+    m_model->setFilterRole( Qt::UserRole+1 );
+    m_model->setFilterKeyColumn ( 2 ); // severity
+    m_model->setFilterWildcard( "[^0]" ); // Filter out Debug
+
+    m_model->setSourceModel( new ScheduleLogItemModel( this ) );
+    setModel( m_model );
     
+    setRootIsDecorated( false );
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-//    createItemDelegates();
-
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
@@ -402,7 +406,7 @@ ScheduleLogView::ScheduleLogView( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
     
-    connect( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( updateActionsEnabled( const QModelIndex& ) ) );
+    connect( baseModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( updateActionsEnabled( const QModelIndex& ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
     
@@ -436,7 +440,7 @@ void ScheduleLogView::slotContextMenuRequested( QModelIndex index, const QPoint&
 
 void ScheduleLogView::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
-    model()->setManager( sm );
+    baseModel()->setManager( sm );
 }
 
 void ScheduleLogView::slotCurrentChanged(  const QModelIndex & )

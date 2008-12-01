@@ -776,8 +776,9 @@ void AlterTableHandler::setActions(const ActionList& actions)
 void AlterTableHandler::debug()
 {
     KexiDBDbg << "AlterTableHandler's actions:";
-    foreach(ActionBase* action, d->actions)
-    action->debug();
+    foreach(ActionBase* action, d->actions) {
+        action->debug();
+    }
 }
 
 TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArguments& args)

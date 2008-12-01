@@ -52,17 +52,18 @@ public:
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    NodeItemModel *model() const { return static_cast<NodeItemModel*>( DoubleTreeViewBase::model() ); }
-    
-    Project *project() const { return model()->project(); }
-    void setProject( Project *project ) { model()->setProject( project ); }
+    NodeItemModel *baseModel() const;
+    NodeSortFilterProxyModel *proxyModel() const { return qobject_cast<NodeSortFilterProxyModel*>( model() ); }
+
+    Project *project() const { return baseModel()->project(); }
+    void setProject( Project *project ) { baseModel()->setProject( project ); }
     
 signals:
     void currentColumnChanged( QModelIndex, QModelIndex );
     
 protected slots:
     void slotActivated( const QModelIndex index );
-    
+    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 
 class KPLATOUI_EXPORT TaskEditor : public ViewBase
@@ -72,6 +73,7 @@ public:
     TaskEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
 
@@ -81,7 +83,9 @@ public:
 
     virtual void updateReadWrite( bool readwrite );
 
-    NodeItemModel *model() const { return m_view->model(); }
+    NodeItemModel *baseModel() const { return m_view->baseModel(); }
+    NodeSortFilterProxyModel *proxyModel() const { return m_view->proxyModel(); }
+    QAbstractItemModel *model() const { return m_view->model(); }
 
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );
@@ -156,8 +160,11 @@ public:
     TaskView( KoDocument *part, QWidget *parent );
 
     void setupGui();
+    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
+
+    NodeSortFilterProxyModel *proxyModel() const { return m_view->proxyModel(); }
 
     virtual Node *currentNode() const;
     QList<Node*> selectedNodes() const ;

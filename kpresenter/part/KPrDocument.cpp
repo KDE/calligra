@@ -245,6 +245,11 @@ void KPrDocument::saveKPrConfig()
     configGroup.writeEntry( "PresenterViewEnabled", m_presenterViewEnabled );
 }
 
+KoPageApp::PageType KPrDocument::pageType() const
+{
+    return KoPageApp::Slide;
+}
+
 KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
 {
     KPrPageData * pageData = dynamic_cast<KPrPageData *>( page );

@@ -37,7 +37,7 @@
 #include <kexidb/field.h>
 #include <kexidb/queryschema.h>
 
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <QMotifStyle>
 #include <kdebug.h>
 

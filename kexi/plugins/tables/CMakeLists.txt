@@ -20,7 +20,7 @@ target_link_libraries(
     kexidb
     kexidatatable
     kexiextendedwidgets
-    koproperty
+    ${KOPROPERTY_LIBS}
     kexiutils
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}

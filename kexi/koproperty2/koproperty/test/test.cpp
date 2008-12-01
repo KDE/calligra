@@ -153,6 +153,10 @@ Test::Test()
     if (singleProperty.isEmpty() || singleProperty=="SizePolicy") {
         m_set->addProperty(new Property("SizePolicy", sizePolicy(), "Size Policy"), group);
     }
+    if (singleProperty.isEmpty() || singleProperty=="Invisible") {
+        m_set->addProperty(p = new Property("Invisible", "I am invisible", "Invisible"), group);
+        p->setVisible(false);
+    }
 
 // kDebug(30007) << m_set->groupNames();
     EditorView *editorView = new EditorView(this);

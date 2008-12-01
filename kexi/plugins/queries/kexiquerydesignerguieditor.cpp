@@ -55,8 +55,8 @@
 #include <widget/tableview/kexidataawarepropertyset.h>
 #include <widget/relations/KexiRelationsView.h>
 #include <widget/relations/KexiRelationsTableContainer.h>
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include "kexiquerypart.h"
 #include <KexiWindow.h>
 #include <KexiWindowData.h>
@@ -288,8 +288,9 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
     d->dataTable->dataAwareObject()->acceptRowEdit();
 
     QStringList sortedTableNames;
-    foreach(KexiRelationsTableContainer* cont, *d->relations->tables())
-    sortedTableNames += cont->schema()->name();
+    foreach(KexiRelationsTableContainer* cont, *d->relations->tables()) {
+        sortedTableNames += cont->schema()->name();
+    }
     qHeapSort(sortedTableNames);
 
     //several tables can be hidden now, so remove rows for these tables
@@ -877,8 +878,9 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     //     so in step 4. we will be able to add
     //     remaining invisible columns with criterias
     query->debug();
-    foreach(KexiDB::Field* field, *query->fields())
-    field->debug();
+    foreach(KexiDB::Field* field, *query->fields()) {
+        field->debug();
+    }
     foreach(KexiDB::Field* field, *query->fields()) {
         //append a new row
         QString tableName, fieldName, columnAlias, criteriaString;
@@ -992,7 +994,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
     //5. Show fields for unused criterias (with "Visible" column set to false)
     foreach(
         KexiDB::BaseExpr *criteriaArgument, // <-- contains field or table.field
-        criterias) {
+        criterias)
+    {
         if (usedCriterias.contains(criteriaArgument))
             continue;
         //unused: append a new row
@@ -1205,11 +1208,11 @@ void
 KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiDB::RecordData * /*record*/, int /*row*/,
         QDropEvent *ev, KexiDB::RecordData*& newRecord)
 {
-    QString sourceMimeType;
+    QString sourcePartClass;
     QString srcTable;
     QString srcField;
 
-    if (!KexiFieldDrag::decodeSingle(ev, sourceMimeType, srcTable, srcField))
+    if (!KexiFieldDrag::decodeSingle(ev, sourcePartClass, srcTable, srcField))
         return;
     //insert new row at specific place
     newRecord = createNewRow(srcTable, srcField, true /* visible*/);
@@ -1750,17 +1753,17 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
 
 void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item& item)
 {
-    d->relations->objectCreated(item.mimeType(), item.name());
+    d->relations->objectCreated(item.partClass(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)
 {
-    d->relations->objectDeleted(item.mimeType(), item.name());
+    d->relations->objectDeleted(item.partClass(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
-    d->relations->objectRenamed(item.mimeType(), oldName, item.name());
+    d->relations->objectRenamed(item.partClass(), oldName, item.name());
 }
 
 #include "kexiquerydesignerguieditor.moc"

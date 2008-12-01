@@ -46,7 +46,7 @@ public:
 };
 
 KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
-        : KexiPart::Part(9, parent, l)
+        : KexiPart::Part(parent, l)
         , d(new Private())
 {
     kDebug();
@@ -88,7 +88,7 @@ QString KexiReportPart::loadReport(const QString& name)
     }
     QString src, did;
     KexiDB::SchemaData sd;
-    if (win->project()->dbConnection()->loadObjectSchemaData(9, name, sd) != true) {
+    if (win->project()->dbConnection()->loadObjectSchemaData(100, name, sd) != true) {
         kDebug() << "failed to loafd schema data";
         return "";
     }

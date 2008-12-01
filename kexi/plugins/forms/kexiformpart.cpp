@@ -49,7 +49,7 @@
 #include <widgetpropertyset.h>
 #include <widgetlibrary.h>
 #include <objecttreeview.h>
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 
 #include "kexiformview.h"
 #include "widgets/kexidbform.h"
@@ -80,7 +80,7 @@ public:
 };
 
 KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
-        : KexiPart::Part((int)KexiPart::FormObjectType, parent, l)
+        : KexiPart::Part(parent, l)
         , d(new Private())
 {
     kexipluginsdbg << "KexiFormPart::KexiFormPart()";
@@ -523,9 +523,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
         d->dataSourcePage = new KexiDataSourcePage(0);
         d->dataSourcePage->setObjectName("dataSourcePage");
         connect(d->dataSourcePage,
-                SIGNAL(jumpToObjectRequested(const Q3CString&, const Q3CString&)),
+                SIGNAL(jumpToObjectRequested(const QString&, const QString&)),
                 KexiMainWindowIface::global()->thisWidget(),
-                SLOT(highlightObject(const Q3CString&, const Q3CString&)));
+                SLOT(highlightObject(const QString&, const QString&)));
         connect(d->dataSourcePage,
                 SIGNAL(formDataSourceChanged(const Q3CString&, const Q3CString&)),
                 KFormDesigner::FormManager::self(),

@@ -44,7 +44,10 @@ KexiTableEdit::KexiTableEdit(KexiTableViewColumn &column, QWidget* parent)
 // ,m_hasFocusableWidget(true)
 // ,m_acceptEditorAfterDeleteContents(false)
 {
-    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
+//    setPaletteBackgroundColor(palette().color(QPalette::Active, QColorGroup::Base));
+    QPalette pal(palette());
+    pal.setBrush(backgroundRole(), pal.brush(QPalette::Base));
+    setPalette(pal);
     installEventFilter(this);
 
     //margins

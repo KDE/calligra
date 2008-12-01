@@ -52,13 +52,14 @@ RelationTreeView::RelationTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setViewSplitMode( false );
-    setModel( new RelationItemModel( this ) );
+    RelationItemModel *m = new RelationItemModel( this );
+    setModel( m );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setArrowKeyNavigation( true );
     setRootIsDecorated ( false );
 
-    createItemDelegates();
+    createItemDelegates( m );
     
     //HACK to simulate SingleSelection *and* get indication of current item
     connect( selectionModel(), SIGNAL( currentChanged(const QModelIndex&, const QModelIndex& ) ), SLOT( slotCurrentChanged(const QModelIndex&, const QModelIndex& ) ) );

@@ -46,7 +46,6 @@ public:
     ~RelationModel() {}
     
     QVariant data( const Relation *relation, int property, int role = Qt::DisplayRole ) const; 
-    static bool setData( Relation *relation, int property, const QVariant & value, int role = Qt::EditRole );
     
     static QVariant headerData( int section, int role = Qt::DisplayRole );
 

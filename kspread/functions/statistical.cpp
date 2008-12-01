@@ -690,7 +690,7 @@ void awKurtosis (ValueCalc *c, Value &res, Value val,
 {
   Value avg = p.element (0, 0);
   Value stdev = p.element (1, 0);
-  //d = (val - avg ) / stdev
+  //d = (val - avg) / stdev
   Value d = c->div (c->sub (val, avg), stdev);
   // res += d^4
   res = c->add (res, c->pow (d, 4));
@@ -1827,24 +1827,22 @@ Value func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorVALUE();
 
   Value avg = calc->avg (args);
-  Value devsq;
-  calc->arrayWalk (args, devsq, calc->awFunc ("devsqa"), avg);
 
-  if (devsq.isZero ())
+  Value stdev = calc->stddev (args, false);
+  if (stdev.isZero ())
     return Value::errorDIV0();
 
   Value params( Value::Array );
   params.setElement (0, 0, avg);
-  params.setElement (1, 0, devsq);
+  params.setElement (1, 0, stdev);
   Value x4;
   calc->arrayWalk (args, x4, awKurtosis, params);
 
-  double den = (double) (count - 2) * (count - 3);
-  double nth = (double) count * (count + 1) / ((count - 1) * den);
-  double t = 3.0 * (count - 1) * (count - 1) / den;
-
-  // res = x4 * nth - t
-  return calc->sub (calc->mul (x4, nth), t);
+  // res = ( n*(n+1)*x4 - 3*(n-1)^3) / ( (n-3)*(n-2)*(n-1) )
+  int v1 = count * (count+1);
+  int v2 = 3 * (count-1)*(count-1)*(count-1);
+  int v3 = (count-3)*(count-2)*(count-1);
+  return calc->div (calc->sub (calc->mul (x4, v1), v2), v3);
 }
 
 //
@@ -1857,15 +1855,13 @@ Value func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorVALUE();
 
   Value avg = calc->avg (args);
-  Value devsq;
-  calc->arrayWalk (args, devsq, calc->awFunc ("devsqa"), avg);
-
-  if (devsq.isZero ())
+  Value stdev = calc->stddev (args, false);
+  if (stdev.isZero ())
     return Value::errorDIV0();
-
+  
   Value params( Value::Array );
   params.setElement (0, 0, avg);
-  params.setElement (1, 0, devsq);
+  params.setElement (1, 0, stdev);
   Value x4;
   calc->arrayWalk (args, x4, awKurtosis, params);
 

@@ -123,6 +123,13 @@ public:
     /// reimplemented
     virtual bool loadOdfDocumentStyles( KoPALoadingContext & context );
 
+    /**
+     * Get the page type used in the document
+     *
+     * The default page type KoPageApp::Page is returned
+     */
+    virtual KoPageApp::PageType pageType() const;
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );

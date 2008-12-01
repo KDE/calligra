@@ -86,6 +86,9 @@ public:
     QUndoCommand* replaceCommand;
     int findLeftColumn;
     int findRightColumn;
+    int findTopRow;
+    int findBottomRow;
+    QPoint findStart;
     QPoint findPos;
     QPoint findEnd;
 

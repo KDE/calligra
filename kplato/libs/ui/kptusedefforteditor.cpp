@@ -458,10 +458,7 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration::Unit unit = Duration::Unit_h;
-            double v = e->remainingEffort.toDouble( unit );
-            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-            return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
+            return e->remainingEffort.format();
         }
         case Qt::EditRole:
             return e->remainingEffort.toDouble( Duration::Unit_h );
@@ -497,15 +494,14 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration::Unit unit = Duration::Unit_h;
-            double v = -1.0;
+            Duration v;
             if ( m_completion->entrymode() == Completion::EnterEffortPerResource ) {
-                v = m_completion->actualEffortTo( date( row ).toDate() ).toDouble( unit );
+                v = m_completion->actualEffortTo( date( row ).toDate() );
             } else {
-                v = e->totalPerformed.toDouble( unit );
+                v = e->totalPerformed;
             }
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-            return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
+            return v.format();
         }
         case Qt::EditRole:
             return e->totalPerformed.toDouble( Duration::Unit_h );
@@ -540,10 +536,9 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration::Unit unit = Duration::Unit_h;
-            double v = m_node->plannedEffort( m_manager->id() ).toDouble( unit );
+            Duration v = m_node->plannedEffort( m_manager->id() );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit;
-            return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
+            return v.format();
         }
         case Qt::EditRole:
             return QVariant();
@@ -624,7 +619,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 e->percentFinished = value.toInt();
                 if ( m_completion->entrymode() == Completion::EnterCompleted && m_node ) {
                     // calculate used/remaining
-                    Duration est = m_node->estimate()->pertExpected();
+                    Duration est = m_node->plannedEffort( id() );
                     e->totalPerformed = est * e->percentFinished / 100;
                     e->remainingEffort = est - e->totalPerformed;
                 }
@@ -770,7 +765,7 @@ void CompletionEntryItemModel::addEntry( const QDate date )
     Completion::Entry *e = new Completion::Entry();
     if ( m_completion->entries().isEmpty() ) {
         if ( m_node ) {
-            e->remainingEffort = m_node->estimate()->pertExpected();
+            e->remainingEffort = m_node->plannedEffort( id() );
         }
     } else {
         e->percentFinished = m_completion->percentFinished();

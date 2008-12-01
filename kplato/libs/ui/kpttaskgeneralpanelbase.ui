@@ -10,9 +10,6 @@
     <height>504</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>TaskGeneralPanelBase</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout" >
    <property name="margin" >
     <number>0</number>
@@ -23,11 +20,6 @@
       <widget class="QLabel" name="wbslabel" >
        <property name="toolTip" >
         <string>Work Breakdown Structure</string>
-       </property>
-       <property name="whatsThis" >
-        <string>The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.
-
-The WBS code is auto-generated; simply choose Generate WBS Code from the Tools menu to generate the WBS code for the project.</string>
        </property>
        <property name="text" >
         <string>WBS:</string>
@@ -221,37 +213,25 @@ The estimation can be either effort based or duration based. If it is effort bas
            </item>
           </widget>
          </item>
-         <item row="0" column="2" >
-          <widget class="KDateWidget" name="scheduleStartDate" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="focusPolicy" >
-            <enum>Qt::WheelFocus</enum>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="3" >
           <widget class="QTimeEdit" name="scheduleStartTime" />
          </item>
-         <item row="1" column="2" >
-          <widget class="KDateWidget" name="scheduleEndDate" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="focusPolicy" >
-            <enum>Qt::WheelFocus</enum>
+         <item row="1" column="3" >
+          <widget class="QTimeEdit" name="scheduleEndTime" />
+         </item>
+         <item row="0" column="2" >
+          <widget class="QDateEdit" name="scheduleStartDate" >
+           <property name="calendarPopup" >
+            <bool>true</bool>
            </property>
           </widget>
          </item>
-         <item row="1" column="3" >
-          <widget class="QTimeEdit" name="scheduleEndTime" />
+         <item row="1" column="2" >
+          <widget class="QDateEdit" name="scheduleEndDate" >
+           <property name="calendarPopup" >
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -470,12 +450,6 @@ The estimation can be either effort based or duration based. If it is effort bas
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KDateWidget</class>
-   <extends>QWidget</extends>
-   <header>kdatewidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
@@ -498,9 +472,7 @@ The estimation can be either effort based or duration based. If it is effort bas
   <tabstop>leaderfield</tabstop>
   <tabstop>chooseLeader</tabstop>
   <tabstop>scheduleType</tabstop>
-  <tabstop>scheduleStartDate</tabstop>
   <tabstop>scheduleStartTime</tabstop>
-  <tabstop>scheduleEndDate</tabstop>
   <tabstop>scheduleEndTime</tabstop>
   <tabstop>estimate</tabstop>
   <tabstop>estimateType</tabstop>

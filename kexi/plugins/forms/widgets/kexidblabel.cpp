@@ -133,7 +133,7 @@ QImage KexiDBInternalLabel::makeShadow(const QImage& textImage,
     double realOpacity = SHADOW_OPACITY + qMin(50.0 / double(256.0 - qGray(bgColor.rgb())), 50.0);
     //int _h, _s, _v;
     //.getHsv( &_h, &_s, &_v );
-    if (colorGroup().background() == Qt::red)//_s>=250 && _v>=250) //for colors like cyan or red, make the result more white
+    if (palette().color(backgroundRole()) == Qt::red)//_s>=250 && _v>=250) //for colors like cyan or red, make the result more white
         realOpacity += 50.0;
     result.fill((int)realOpacity);
     //Qt4: ARGB32 already set in convertToFormat: result.setAlphaBuffer( true );
@@ -179,7 +179,7 @@ QPixmap KexiDBInternalLabel::getShadowPixmap()
     /*!
     * Backup the default color used to draw text.
     */
-    const QColor textColor = colorGroup().foreground();
+    const QColor textColor = palette().color(foregroundRole());
 
     /*!
     * Temporary storage for the generated shadow
@@ -197,7 +197,10 @@ QPixmap KexiDBInternalLabel::getShadowPixmap()
     /*!
     * The textcolor has to be white for creating shadows!
     */
-    setPaletteForegroundColor(Qt::white);
+//    setPaletteForegroundColor(Qt::white);
+    QPalette pal( palette() );
+    pal.setColor(foregroundRole(), Qt::white);
+    setPalette(pal);
 
     /*!
     Draw the label "as usual" in a pixmap
@@ -210,13 +213,16 @@ QPixmap KexiDBInternalLabel::getShadowPixmap()
 #pragma WARNING( Qt4 TODO drawContents( &painter ); )
 #endif
     painter.end();
-    setPaletteForegroundColor(textColor);
+//    setPaletteForegroundColor(textColor);
+    pal = palette();
+    pal.setColor(foregroundRole(), textColor);
+    setPalette(pal);
 
     /*!
     * Calculate the first bounding rect.
     * This will fit around the unmodified text.
     */
-    shadowImage = tempPixmap;
+    shadowImage = tempPixmap.toImage();
 
     /*!
     Get the first bounding rect.
@@ -237,7 +243,7 @@ QPixmap KexiDBInternalLabel::getShadowPixmap()
                                     qMin(m_shadowRect.y() + (m_shadowRect.height() * 3 / 2), shadowImage.height())));
 
     shadowImage = makeShadow(shadowImage,
-                             qGray(colorGroup().background().rgb()) < 127 ? Qt::white : Qt::black,
+                             qGray(palette().color(backgroundRole()).rgb()) < 127 ? Qt::white : Qt::black,
                              m_shadowRect);
     if (shadowImage.isNull())
         return QPixmap();
@@ -430,7 +436,7 @@ void KexiDBLabel::init()
     m_hasFocusableWidget = false;
     d->internalLabel = new KexiDBInternalLabel(this);
     d->internalLabel->hide();
-    d->frameColor = palette().active().foreground();
+    d->frameColor = palette().color(foregroundRole());
 
     setAlignment(d->internalLabel->alignment());
 }

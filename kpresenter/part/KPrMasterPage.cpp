@@ -26,3 +26,8 @@ KPrMasterPage::KPrMasterPage()
 KPrMasterPage::~KPrMasterPage()
 {
 }
+
+KoPageApp::PageType KPrMasterPage::pageType() const
+{
+    return KoPageApp::Slide;
+}

@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
     if (args->isSet("file")) {
-        if (!KexiWebForms::Model::initDatabase(args->getOption("file"))) {
+        if (!KexiWebForms::Model::DataProvider::instance()->initDatabase(args->getOption("file"))) {
             kError() << "Something went wrong while initializing database...";
             return 1;
         }
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
         kError() << "Default plug-ins directory does not exist!";
         return 1;
     } catch (pion::net::WebServer::ServiceNotFoundException&) {
-        kError() << "Could not find FileService, are you have the right plugins in " PION_PLUGINS_DIRECTORY;
+        kError() << "Could not find FileService, do you have the right plugins in " PION_PLUGINS_DIRECTORY "?";
         return 1;
     }
 

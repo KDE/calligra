@@ -85,7 +85,7 @@ public:
 
   unsigned style;
 
-  unsigned width;
+  float width;
 
   Color color;
 

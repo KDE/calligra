@@ -25,6 +25,8 @@
 		<Action name="zoom_in"/>
 		<Action name="zoom_out"/>
 		<Action name="view_zoom"/>
+        <Action name="view_zoom_selection"/>
+        <Action name="view_zoom_drawing"/>
         <Action name="view_mode"/>
 	<Separator/>
 	<Action name="view_tool_options"/>
@@ -110,10 +112,6 @@
 	<ToolBar name="view_toolbar" fullWidth="false">
 		<Text>View</Text>
 		<Action name="view_mode"/>
-		<Action name="view_zoom"/>
-        <Action name="view_zoom_selection"/>
-        <Action name="view_zoom_drawing"/>
-		<Action name="help_context"/>
 	</ToolBar>
 	<ToolBar name="object_toolbar" hidden="true" fullWidth="false">
 		<Text>Object</Text>

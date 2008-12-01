@@ -2,7 +2,7 @@
 
 add_subdirectory( factories )
 
-include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KOPROPERTY_INCLUDES} ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
@@ -26,15 +26,19 @@ set(kformdesigner_LIB_SRCS
    editlistviewdialog.cpp 
    utils.cpp 
    widgetpropertyset.cpp 
-   kfdpixmapedit.cpp
+#todo   kfdpixmapedit.cpp
    widgetwithsubpropertiesinterface.cpp
 )
 
 
 kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 
-target_link_libraries(kformdesigner koproperty kexiutils
- ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_KPARTS_LIBS} )
+target_link_libraries(kformdesigner
+  ${KOPROPERTY_LIBS}
+  kexiutils
+  ${KDE4_KDE3SUPPORT_LIBS}
+  ${KDE4_KPARTS_LIBS}
+)
 # todo: add kexiextendedwidgets kexiguiutils kexidatatable
 
 

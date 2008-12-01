@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,11 +21,10 @@
 #define KEXICUSTOMPROPFACTORY_H
 
 #include <kexi_export.h>
-#include <koproperty/property.h>
-#include <koproperty/factory.h>
+#include <koproperty/Factory.h>
 
 //! Kexi-specific custom property factory for KoProperty library
-class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KoProperty::CustomPropertyFactory
+class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KoProperty::Factory
 {
 public:
     enum PropertyType {
@@ -36,11 +35,10 @@ public:
     //! Called once to register all propert and editor types provided by this factory.
     static void init();
 
-    KexiCustomPropertyFactory(QObject* parent);
-    virtual ~KexiCustomPropertyFactory();
-
-    virtual KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *parent);
-    virtual KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
+    KexiCustomPropertyFactory();
+  
+//    virtual KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *parent);
+//    virtual KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
 };
 
 #endif

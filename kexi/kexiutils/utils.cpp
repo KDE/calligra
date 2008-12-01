@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@
 #include <QFocusEvent>
 #include <QFile>
 #include <QStyle>
+#include <QLayout>
 
 #include <KDebug>
 #include <KCursor>
@@ -38,6 +39,7 @@
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KAction>
+#include <KDialog>
 
 using namespace KexiUtils;
 
@@ -686,6 +688,25 @@ void KTextEditorFrame::changeEvent(QEvent *event)
         else
             setFrameStyle(QFrame::NoFrame);
     }
+}
+
+void KexiUtils::setStandardMarginsAndSpacing(QLayout *layout)
+{
+    layout->setContentsMargins(
+        KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint(), KDialog::marginHint());
+    layout->setSpacing( KDialog::spacingHint() );
+}
+
+QPixmap KexiUtils::replaceColors(const QPixmap& original, const QColor& color)
+{
+    QPixmap dest(original);
+    dest.fill(color);
+    {
+        QPainter p(&dest);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.drawPixmap(0, 0, original);
+    }
+    return dest;
 }
 
 #include "utils_p.moc"

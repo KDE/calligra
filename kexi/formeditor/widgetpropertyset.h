@@ -27,8 +27,8 @@
 #include <QMetaProperty>
 
 #include <kexi_export.h>
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 
 class QWidget;
 class QEvent;

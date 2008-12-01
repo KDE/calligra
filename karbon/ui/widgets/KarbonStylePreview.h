@@ -55,7 +55,7 @@ public:
      * @param stroke the stroke to preview
      * @param fill the fill to preview
      */
-    void update( const KoShapeBorderModel * stroke, const KoShapeBackground * fill );
+    void update( KoShapeBorderModel * stroke, KoShapeBackground * fill );
 
     virtual bool eventFilter( QObject* object, QEvent* event );
 
@@ -82,8 +82,8 @@ private:
     void drawStroke( QPainter & painter, const KoShapeBorderModel* );
 
     bool m_strokeWidget; ///< shows if stroke or fill is selected
-    const KoShapeBackground * m_background; ///< the fill to preview
-    const KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    KoShapeBackground * m_background; ///< the fill to preview
+    KoShapeBorderModel * m_stroke; ///< the stroke to preview
     QRectF m_strokeRect;
     QRectF m_fillRect;
     KoCheckerBoardPainter m_checkerPainter;

@@ -57,6 +57,10 @@ KarbonStylePreview::KarbonStylePreview( QWidget * parent )
 
 KarbonStylePreview::~KarbonStylePreview()
 {
+    if( m_background && ! m_background->removeUser() )
+        delete m_background;
+    if( m_stroke && ! m_stroke->removeUser() )
+        delete m_stroke;
 }
 
 void KarbonStylePreview::paintEvent( QPaintEvent* event )
@@ -139,10 +143,30 @@ bool KarbonStylePreview::eventFilter( QObject *, QEvent *event )
     return false;
 }
 
-void KarbonStylePreview::update( const KoShapeBorderModel * stroke, const KoShapeBackground * fill )
+void KarbonStylePreview::update( KoShapeBorderModel * stroke, KoShapeBackground * fill )
 {
-    m_background = fill;
-    m_stroke = stroke;
+    if( fill != m_background )
+    {
+        if( m_background && ! m_background->removeUser() )
+            delete m_background;
+        
+        m_background = fill;
+        
+        if( m_background )
+            m_background->addUser();
+    }
+    
+    if( stroke != m_stroke )
+    {
+        if( m_stroke && ! m_stroke->removeUser() )
+            delete m_stroke;
+        
+        m_stroke = stroke;
+        
+        if( m_stroke )
+            m_stroke->addUser();
+    }
+    
     QFrame::update();
 }
 

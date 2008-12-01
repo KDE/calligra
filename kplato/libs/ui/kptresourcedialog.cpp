@@ -151,13 +151,14 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     int cal = 0;
     dia->calendarList->addItem(i18n("None"));
     m_calendars.insert(0, 0);
-    QList<Calendar*> list = project.calendars();
+    QList<Calendar*> list = project.allCalendars();
     int i=1;
     foreach (Calendar *c, list) {
         dia->calendarList->insertItem(i, c->name());
         m_calendars.insert(i, c);
-        if (c == resource->calendar())
+        if (c == resource->calendar(true)) {
             cal = i;
+         }
         ++i;
     }
     dia->calendarList->setCurrentIndex(cal);

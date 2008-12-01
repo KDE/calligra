@@ -39,14 +39,17 @@ Before release of KOffice 2.0.0
 Item                                                                   Status
 ------------------------------------------------------------------------------
 
-* KChart, the application
-  + Make tools work                                                     DONE
-  + Make the chart always be selected and the tool always active        ----
-  + Import data (should this be in ChartShape?)                         ----
-  + Drag & drop a chart                                                 !!!!
-  + Export                                                              ----
-     - SVG                                                              --
-     - PNG and other bitmap formats                                     --
+* Show stopper bugs
+  + If there are several chartshapes, then the tool doesn't adapt	JOSI
+    when one shape is chosen and then another.
+
+* Smaller bugs
+  + When you double click on a chart, the tool option window adapts
+    to the data in the chart (e.g. the type, etc), but if the chart
+    is selected by the default tool and then the chart tool is 
+    activated, then this is not the case.  Note that if either the 
+    legend or plot area is selected by the default tool instead of 
+    the chart shape itself, it works again.
 
 * ChartShape
   + Handle all chart types                                              ----
@@ -62,6 +65,13 @@ Item                                                                   Status
      - bubble                                                           josi
      - gantt                                                            --
   + Commands so that undo/redo will work                                ----
+  + Make legend entries always update correctly                         ----
+  + repaint outside of chart when legend orientation changes back       ----
+  + show grid lines for x axis                                          ----
+  + show warning text for unsupported chart types                       ----
+  + remove "position and alignment" button in legend tab                ----
+  + Data Editor: Insert/Remove Row/Column                               ----
+  + fix (or remove?) "show frame" checkbox in legend tab                ----
 
 * OpenDocument 1.0 Support
 
@@ -69,24 +79,20 @@ Item                                                                   Status
   ----------------------------------------------------------------------------
   + Handle all chart types                                      DONE    DONE
      - Handle subtypes                                          --      done
-  + General                                                     ----    ----
-    - title                                                     --      --
-    - subtitle                                                  --      --
-    - footer                                                    --      --
+  + General (Title, subtitle, footer)				DONE	DONE
   + Plot area                                                   ----    ----
     - Data in rows / columns                                    --      done
     - First row / column as label                               done    done
     - Axes (see below)
-    - Background                                                --      --
-  + Legend                                                      ----    ----
-    - title                                                     done    done
-    - orientation                                               done    done
-    - font                                                      done    done
+    - Background                                                done    done
+  + Legend                                                      DONE	DONE
   + Axes                                                        ----    ----
-    - Axis labels                                               josi    done
+    - Axis labels                                               done    done
     - Axis scale                                                --      --
-  + Data Series                                                 ----    ----
-  + Data                                                        INGE    INGE
+    - Lin/Log                                                   --      --
+  + Data Series                                                 DONE    DONE
+  + Data Point (properties for individual points) 		----	----
+  + Data                                                        DONE    DONE
 
 * Configuration with tools
   + Types and subtypes                                                  ----
@@ -97,19 +103,14 @@ Item                                                                   Status
      - Pie chart (Circle)                                               done
      - Ring chart                                                       ----
      - Radar chart                                                      done
-  + General                                                             DONE
-     - Title                                                            done
-     - Subtitle                                                         done
-     - Footer                                                           done
+  + General (Title, Subtitle, Footer) 					DONE
   + Plot area                                                           DONE
-     - Axis                                                             done
-     - Grid                                                             done
   + Datasets                                                            DONE
      - Color                                                            done
   + Legend                                                              JOSI
      - Title                                                            done
      - Frame                                                            josi
-     - Orientation                                                      josi
+     - Orientation                                                      done
      - Position                                                         done
      - "Bind to chart" Option                                           ----
   + Data Editor                                                         INGE
@@ -117,10 +118,6 @@ Item                                                                   Status
      - Close button                                                     --
 
 * External programs and embedding
-  + KChart itself                                                       ----
-     - Edit the interface in koffice/interfaces                         --
-     - Document interface                                               --
-     - Function that tells the chart to use own data or external        done
   + KSpread                                                             ----
      - Make it possible to have > 1 chart and edit the selected one     --
      - Make it possible to delete a chart                               --
@@ -128,13 +125,12 @@ Item                                                                   Status
      - Save as embedded document                                        --
   + KWord                                                               ----
      - Set chartshape to use own data                                   done
-     - Save as embedded document                                        --
+     - Save as embedded document                                        done
+  + KPresenter 								----
 
 * KDChart
   + Lying bars                                                          DONE
   + Ring chart                                                          JOSI
-  + Bubble charts                                                       ----
-  + Stock charts                                                        ----
 
 
 Before release of KOffice 2.0.1
@@ -144,6 +140,16 @@ Before release of KOffice 2.0.1
 
 Before release of KOffice 2.1.0
 ===============================
+
+* The KChart application
+  + Make tools work                                                     DONE
+  + Make the chart always be selected and the tool always active        ----
+  + Import data (should this be in ChartShape?)                         ----
+  + Drag & drop a chart                                                 ----
+  + Export                                                              ----
+     - SVG                                                              --
+     - PNG and other bitmap formats                                     --
+
 
 * OpenDocument 1.1 support                                              ----
 
@@ -160,3 +166,7 @@ Before release of KOffice 2.1.0
   + Import                                                              ----
      - old kchart format                                                --
      - excel                                                            --
+
+* KDChart
+  + Bubble charts                                                       ----
+  + Stock charts                                                        ----

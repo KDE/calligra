@@ -190,12 +190,12 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );
     if ( !index.isValid() )
         return flags;
-    if ( !m_readWrite ) {
+    if ( !m_readWrite  ) {
         return flags &= ~Qt::ItemIsEditable;
     }
     flags &= ~Qt::ItemIsEditable;
     ScheduleManager *sm = manager( index );
-    if ( sm ) {
+    if ( sm && ! sm->isBaselined() ) {
         switch ( index.column() ) {
             case ScheduleModel::ScheduleState: break;
             case ScheduleModel::ScheduleDirection:
@@ -209,7 +209,6 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
-    flags &= ~Qt::ItemIsSelectable;
     return flags;
 }
 
@@ -574,6 +573,9 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 
 bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( ! index.isValid() ) {
+        return ItemModelBase::setData( index, value, role );
+    }
     if ( !index.isValid() || ( flags( index ) & Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
@@ -668,8 +670,10 @@ ScheduleManager *ScheduleItemModel::manager( const QModelIndex &index ) const
 //--------------------------------------
 
 ScheduleLogItemModel::ScheduleLogItemModel( QObject *parent )
-    : ItemModelBase( parent ),
-    m_manager( 0 )
+    : QStandardItemModel( parent ),
+    m_project( 0 ),
+    m_manager( 0 ),
+    m_schedule( 0 )
 {
 }
 
@@ -710,7 +714,7 @@ void ScheduleLogItemModel::slotScheduleToBeRemoved( const MainSchedule *sch )
     kDebug()<<m_schedule<<sch;
     if ( m_schedule == sch ) {
         m_schedule = 0;
-        m_standard.clear();
+        clear();
     }
 }
 
@@ -765,7 +769,7 @@ void ScheduleLogItemModel::setManager( ScheduleManager *manager )
     if ( manager != m_manager ) {
         m_manager = manager;
         m_schedule = 0;
-        m_standard.clear();
+        clear();
         if ( m_manager ) {
             m_schedule = m_manager->expected();
             refresh();
@@ -775,17 +779,18 @@ void ScheduleLogItemModel::setManager( ScheduleManager *manager )
 
 void ScheduleLogItemModel::refresh()
 {
-    m_standard.clear();
+    clear();
     QStringList lst;
+    //FIXME i18n
     lst << "Name" << "Phase" << "Severity" <<"Message";
-    m_standard.setHorizontalHeaderLabels( lst );
+    setHorizontalHeaderLabels( lst );
     
     if ( m_schedule == 0 ) {
         kDebug()<<"No main schedule";
         return;
     }
     kDebug()<<m_schedule<<m_schedule->logs().count();
-    QStandardItem *parentItem = m_standard.invisibleRootItem();
+    QStandardItem *parentItem = invisibleRootItem();
     QList<Schedule::Log>::ConstIterator it;
     for ( it = m_schedule->logs().constBegin(); it != m_schedule->logs().constEnd(); ++it ) {
         QList<QStandardItem*> lst;
@@ -795,10 +800,12 @@ void ScheduleLogItemModel::refresh()
             lst.append( new QStandardItem( (*it).node->name() ) );
         }
         lst.append( new QStandardItem( m_schedule->logPhase( (*it).phase ) ) );
-        lst.append( new QStandardItem( m_schedule->logSeverity( (*it).severity ) ) );
+        QStandardItem *item = new QStandardItem( m_schedule->logSeverity( (*it).severity ) );
+        item->setData( (*it).severity );
+        lst.append( item );
         lst.append( new QStandardItem( (*it).message ) );
         parentItem->appendRow( lst );
-        //kDebug()<<m_standard.rowCount()<<m_standard.columnCount()<<parentItem<<lst;
+        //kDebug()<<rowCount()<<columnCount()<<parentItem<<lst;
     }
 }
 
@@ -823,81 +830,7 @@ void ScheduleLogItemModel::slotScheduleChanged( MainSchedule *sch )
 
 Qt::ItemFlags ScheduleLogItemModel::flags( const QModelIndex &index ) const
 {
-    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
-    if ( !index.isValid() )
-        return flags;
-    if ( !m_readWrite ) {
-        return flags &= ~Qt::ItemIsEditable;
-    }
-    flags &= ~Qt::ItemIsEditable;
-    return flags;
-}
-
-
-QModelIndex ScheduleLogItemModel::parent( const QModelIndex &inx ) const
-{
-    return m_standard.parent( inx );
-}
-
-QModelIndex ScheduleLogItemModel::index( int row, int column, const QModelIndex &parent ) const
-{
-    QModelIndex ix;
-    if ( ! parent.isValid() )
-        ix = createIndex( row, column );// m_standard.index( row, column, parent );
-    kDebug()<<parent<<ix;
-    return ix;
-}
-
-
-int ScheduleLogItemModel::columnCount( const QModelIndex &parent ) const
-{
-    int col = 2;
-    if ( parent.isValid() ) {
-        //col = m_standard.columnCount( parent );
-    }
-    kDebug()<<parent<<col;
-    return col;
-}
-
-int ScheduleLogItemModel::rowCount( const QModelIndex &parent ) const
-{
-//    kDebug()<<parent<<m_standard.rowCount( parent );
-    if ( ! parent.isValid() )
-        return 2;
-    return 0;//m_standard.rowCount( parent );
-}
-
-QVariant ScheduleLogItemModel::data( const QModelIndex &index, int role ) const
-{
-    return QVariant();
-}
-
-QVariant ScheduleLogItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    if ( orientation == Qt::Horizontal ) {
-        if ( role == Qt::DisplayRole ) {
-            switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Message" );
-                default: return QVariant();
-            }
-        } else if ( role == Qt::TextAlignmentRole ) {
-            switch (section) {
-                default: return Qt::AlignCenter;
-            }
-        }
-    }
-    if ( role == Qt::ToolTipRole ) {
-        switch ( section ) {
-            default: return QVariant();
-        }
-    }
-    return ItemModelBase::headerData(section, orientation, role);
-}
-
-QItemDelegate *ScheduleLogItemModel::createDelegate( int column, QWidget *parent ) const
-{
-    return 0;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
 } // namespace KPlato

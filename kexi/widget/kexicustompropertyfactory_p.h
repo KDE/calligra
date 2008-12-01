@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +20,11 @@
 #ifndef KEXICUSTOMPROPFACTORY_P_H
 #define KEXICUSTOMPROPFACTORY_P_H
 
-#include <koproperty/editors/pixmapedit.h>
+//todo #include <koproperty/editors/pixmapedit.h>
 #include <koproperty/editors/stringedit.h>
 #include <kexiblobbuffer.h>
 
+#if 0 // todo
 //! Kexi-specific image editor for property editor's item
 class KexiImagePropertyEdit : public KoProperty::PixmapEdit
 {
@@ -45,6 +46,7 @@ public slots:
 protected:
     KexiBLOBBuffer::Id_t m_id;
 };
+#endif
 
 /*! Identifier editor based on ordinary string editor but always keeps a valid identifier
  or empty value. It's line edit has IdentifierValidator::IdentifierValidator set, so user
@@ -56,16 +58,17 @@ protected:
 class KexiIdentifierPropertyEdit : public KoProperty::StringEdit
 {
     Q_OBJECT
+    Q_PROPERTY(QString value READ value WRITE setValue USER true)
 
 public:
-    KexiIdentifierPropertyEdit(KoProperty::Property *property,
-                               QWidget *parent = 0);
+    KexiIdentifierPropertyEdit(QWidget *parent = 0);
     virtual ~KexiIdentifierPropertyEdit();
 
+public slots:
     /*! Reimplemented: sets \a value but it is converted to identifier
      using KexiUtils::string2Identifier().
-     If \a value is null or empty string, this method has no effect. */
-    virtual void setValue(const QVariant &value, bool emitChange = true);
+     If \a value is empty string, this method has no effect. */
+    virtual void setValue(const QString &value);
 };
 
 #endif

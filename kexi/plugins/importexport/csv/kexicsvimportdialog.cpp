@@ -143,8 +143,9 @@ void installRecursiveEventFilter(QObject *filter, QObject *object)
 {
     object->installEventFilter(filter);
     QList<QObject*> list(object->children());
-    foreach(QObject *obj, list)
-    installRecursiveEventFilter(filter, obj);
+    foreach(QObject *obj, list) {
+        installRecursiveEventFilter(filter, obj);
+    }
 }
 
 KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
@@ -1368,7 +1369,7 @@ void KexiCSVImportDialog::accept()
         msg.showErrorMessage(i18n("No database connection available."));
         return;
     }
-    KexiPart::Part *part = Kexi::partManager().partForMimeType("kexi/table");
+    KexiPart::Part *part = Kexi::partManager().partForClass("org.kexi-project.table");
     if (!part) {
         msg.showErrorMessage(&Kexi::partManager());
         return;

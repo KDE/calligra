@@ -101,16 +101,18 @@ bool KexiDBFieldList::setFields(QObject* fieldlist)
     if (! list) return false;
     list->clear();
     ::KexiDB::FieldList* fl = list->fieldlist();
-    foreach(::KexiDB::Field *field, *fl->fields())
-    m_fieldlist->addField(field);
+    foreach(::KexiDB::Field *field, *fl->fields()) {
+        m_fieldlist->addField(field);
+    }
     return true;
 }
 
 QObject* KexiDBFieldList::subList(QVariantList list)
 {
     QStringList sl;
-    foreach(QVariant v, list)
-    sl.append(v.toString());
+    foreach(const QVariant& v, list) {
+        sl.append(v.toString());
+    }
     ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
     return fl ? new KexiDBFieldList(this, fl, false) : 0;
 }

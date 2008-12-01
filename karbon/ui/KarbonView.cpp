@@ -49,7 +49,6 @@
 #include "KarbonConfigureDialog.h"
 
 // Dockers.
-#include "vdocumentdocker.h"
 #include "KarbonLayerDocker.h"
 
 // The rest.
@@ -129,8 +128,6 @@
 #include <QtGui/QLabel>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
-#include <Qt3Support/q3dragobject.h>
-#include <Qt3Support/q3popupmenu.h>
 #include <QtGui/QPrinter>
 
 
@@ -237,7 +234,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     zoomController->setPageSize( d->part->document().pageSize() );
     addStatusBarItem( zoomController->zoomAction()->createWidget( statusBar() ), 0 );
     zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
-
+    connect( zoomController, SIGNAL(zoomedToSelection()), this, SLOT(zoomSelection()));
+    connect( zoomController, SIGNAL(zoomedToAll()), this, SLOT(zoomDrawing()));
+    
     KarbonSmallStylePreview * smallPreview = new KarbonSmallStylePreview( statusBar() );
     connect( smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()) );
     connect( smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()) );
@@ -505,6 +504,7 @@ void KarbonView::selectionAlignHorizontalLeft()
 
     selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
 }
+
 void KarbonView::selectionAlignHorizontalCenter()
 {
     debugView("KarbonView::selectionAlignHorizontalCenter()");
@@ -927,47 +927,47 @@ void KarbonView::initActions()
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
 
-    KAction *actionBringToFront  = new KAction(KIcon("object-arrange-front"), i18n("Bring to &Front"), this);
+    KAction *actionBringToFront  = new KAction(KIcon("object-order-front"), i18n("Bring to &Front"), this);
     actionCollection()->addAction("object_move_totop", actionBringToFront );
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
     connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
 
-    KAction *actionRaise  = new KAction(KIcon("object-arrange-raise"), i18n("&Raise"), this);
+    KAction *actionRaise  = new KAction(KIcon("object-order-raise"), i18n("&Raise"), this);
     actionCollection()->addAction("object_move_up", actionRaise );
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction *actionLower  = new KAction(KIcon("object-arrange-lower"), i18nc("Lower selected shapes", "&Lower"), this);
+    KAction *actionLower  = new KAction(KIcon("object-order-lower"), i18nc("Lower selected shapes", "&Lower"), this);
     actionCollection()->addAction("object_move_down", actionLower );
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
 
-    KAction *actionSendToBack  = new KAction(KIcon("object-arrange-back"), i18n("Send to &Back"), this);
+    KAction *actionSendToBack  = new KAction(KIcon("object-order-back"), i18n("Send to &Back"), this);
     actionCollection()->addAction("object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
 
-    KAction *actionAlignLeft  = new KAction(KIcon("aoleft"), i18n("Align Left"), this);
+    KAction *actionAlignLeft  = new KAction(KIcon("object-align-horizontal-left"), i18n("Align Left"), this);
     actionCollection()->addAction("object_align_horizontal_left", actionAlignLeft );
     connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
 
-    KAction *actionAlignCenter  = new KAction(KIcon("aocenterh"), i18n("Align Center (Horizontal)"), this);
+    KAction *actionAlignCenter  = new KAction(KIcon("object-align-horizontal-center"), i18n("Align Center (Horizontal)"), this);
     actionCollection()->addAction("object_align_horizontal_center", actionAlignCenter );
     connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
 
-    KAction *actionAlignRight  = new KAction(KIcon("aoright"), i18n("Align Right"), this);
+    KAction *actionAlignRight  = new KAction(KIcon("object-align-horizontal-right"), i18n("Align Right"), this);
     actionCollection()->addAction("object_align_horizontal_right", actionAlignRight );
     connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
 
-    KAction *actionAlignTop  = new KAction(KIcon("aotop"), i18n("Align Top"), this);
+    KAction *actionAlignTop  = new KAction(KIcon("object-align-vertical-top"), i18n("Align Top"), this);
     actionCollection()->addAction("object_align_vertical_top", actionAlignTop );
     connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
 
-    KAction *actionAlignMiddle  = new KAction(KIcon("aocenterv"), i18n("Align Middle (Vertical)"), this);
+    KAction *actionAlignMiddle  = new KAction(KIcon("object-align-vertical-center"), i18n("Align Middle (Vertical)"), this);
     actionCollection()->addAction("object_align_vertical_center", actionAlignMiddle );
     connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
 
-    KAction *actionAlignBottom  = new KAction(KIcon("aobottom"), i18n("Align Bottom"), this);
+    KAction *actionAlignBottom  = new KAction(KIcon("object-align-vertical-bottom"), i18n("Align Bottom"), this);
     actionCollection()->addAction("object_align_vertical_bottom", actionAlignBottom );
     connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
@@ -1029,12 +1029,12 @@ void KarbonView::initActions()
     d->snapGridAction->setToolTip(i18n( "Snaps to grid"));
     connect(d->snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
 
-    d->groupObjects  = new KAction(KIcon("group"), i18n("&Group Objects"), this);
+    d->groupObjects  = new KAction(KIcon("object-group"), i18n("&Group Objects"), this);
     actionCollection()->addAction("selection_group", d->groupObjects );
     d->groupObjects->setShortcut(QKeySequence("Ctrl+G"));
     connect(d->groupObjects, SIGNAL(triggered()), this, SLOT(groupSelection()));
 
-    d->ungroupObjects  = new KAction(KIcon("ungroup"), i18n("&Ungroup Objects"), this);
+    d->ungroupObjects  = new KAction(KIcon("object-ungroup"), i18n("&Ungroup Objects"), this);
     actionCollection()->addAction("selection_ungroup", d->ungroupObjects );
     d->ungroupObjects->setShortcut(QKeySequence("Ctrl+Shift+G"));
     connect(d->ungroupObjects, SIGNAL(triggered()), this, SLOT(ungroupSelection()));
@@ -1201,24 +1201,6 @@ void KarbonView::snapToGrid()
     d->canvas->update();
 }
 
-void KarbonView::showSelectionPopupMenu( const QPoint &pos )
-{
-    debugView(QString("KarbonView::showSelectionPopupMenu(QPoint(%1, %2))").arg(pos.x()).arg(pos.y()));
-
-    QList<QAction*> actionList;
-    if( d->groupObjects->isEnabled() )
-        actionList.append( d->groupObjects );
-    else if( d->ungroupObjects->isEnabled() )
-        actionList.append( d->ungroupObjects );
-    if( d->closePath->isEnabled() )
-        actionList.append( d->closePath );
-    if( d->combinePath->isEnabled() )
-        actionList.append( d->combinePath );
-    plugActionList( "selection_type_action", actionList );
-    ((Q3PopupMenu *)factory()->container( "selection_popup", this ) )->exec( pos );
-    unplugActionList( "selection_type_action" );
-}
-
 void KarbonView::configure()
 {
     debugView("KarbonView::configure()");
@@ -1313,8 +1295,6 @@ void KarbonView::selectionChanged()
                 selection->setActiveLayer( layer );
         }
     }
-
-    emit selectionChange();
 }
 
 void KarbonView::setCursor( const QCursor &c )

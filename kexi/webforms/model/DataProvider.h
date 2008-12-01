@@ -21,7 +21,9 @@
 #ifndef KEXIWEBFORMS_DATAPROVIDER_H
 #define KEXIWEBFORMS_DATAPROVIDER_H
 
+#include <kexidb/driver.h>
 #include <kexidb/connection.h>
+#include <kexidb/drivermanager.h>
 
 class QString;
 
@@ -35,15 +37,33 @@ namespace Model {
  */
 extern KexiDB::Connection* gConnection;
 
-/*!
- * Essentially, initialize the KexiDB::Connection object
+/**
+ * @brief A class 'abstracting' the access to a database file
  *
- * @param const QString& Path to a KexiDB file, connection file
- * shortcut file
- *
- * @return boolean false when error occurs, true if everything went well
+ * DataProvider abstracts a bit the connection to a SQLite-based database
+ * It's a singleton, it's not thread-safe, and it's a huge work-around a bug
+ * I found at initialization time, when the Authenticator creates the tables
+ * required to manage user authentication. That said, enjoy!
  */
-bool initDatabase(const QString& fileName);
+class DataProvider {
+public:
+    static DataProvider* instance();
+
+    bool initDatabase(const QString& name);
+    bool reopenDatabase();
+    KexiDB::Connection* connection();
+protected:
+    DataProvider() {};
+private:
+    static DataProvider* m_instance;
+    KexiDB::Driver* m_driver;
+    KexiDB::Connection* m_connection;
+    KexiDB::DriverManager m_manager;
+    KexiDB::ConnectionData* m_connData;
+
+    QString m_dbName;
+    bool m_initialized;
+};
 
 }
 }

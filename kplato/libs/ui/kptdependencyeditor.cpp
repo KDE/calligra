@@ -494,11 +494,25 @@ void DependencyConnectorItem::paint(QPainter *painter, const QStyleOptionGraphic
                 cg = QPalette::Inactive;
     
             p.setStyle( Qt::NoPen );
-            b = opt.palette.brush(cg, QPalette::Highlight);
+            QColor col = option->palette.brush(cg, QPalette::Highlight).color();
+            QLinearGradient g( 0.0, rect().top(), 0.0, rect().bottom() );
+            g.setColorAt( 0.0, col.lighter( 125 ) );
+            g.setColorAt( 1.0, col.lighter( 60 ) );
+            b = QBrush( g );
         }
         if (opt.state & QStyle::State_HasFocus) {
+            QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+                    ? QPalette::Active : QPalette::Disabled;
+            if (cg == QPalette::Active && !(option->state & QStyle::State_Active))
+                cg = QPalette::Inactive;
+
+            p.setWidth( 2 );
             p.setStyle( Qt::DotLine );
-            p.setColor( Qt::white );
+            if ( option->state & QStyle::State_Selected ) {
+                p.setColor( option->palette.color( cg, QPalette::HighlightedText ) );
+            } else {
+                p.setColor( option->palette.color( cg, QPalette::Highlight ) );
+            }
         }
         painter->setPen( p );
         painter->setBrush( b );
@@ -538,7 +552,7 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     
     m_text = new QGraphicsTextItem( this );
     m_textFont = m_text->font();
-    m_textFont.setPointSize( 8 );
+    m_textFont.setPointSize( 10 );
     m_text->setFont( m_textFont );
     setText();
     
@@ -742,8 +756,15 @@ void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * )
 {
-    QBrush b = option->palette.brush( QPalette::Mid );
-    QPen p( option->palette.color( QPalette::Midlight ) );
+    QLinearGradient g( 0.0, rect().top(), 0.0, rect().bottom() );
+    g.setColorAt( 0.0, option->palette.color( QPalette::Midlight ) );
+    g.setColorAt( 1.0, option->palette.color( QPalette::Dark ) );
+    QBrush b( g );
+    painter->setBrush( b );
+    painter->setPen( QPen( Qt::NoPen ) );
+    painter->drawRect( rect() );
+
+    QRectF r = rect().adjusted( -m_start->rect().width(), 0.0, -m_finish->rect().width(), 0.0 );
     if (option->state & ( QStyle::State_Selected | QStyle::State_HasFocus ) ) {
         if (option->state & QStyle::State_Selected) {
             QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
@@ -751,25 +772,29 @@ void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsIte
             if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
                 cg = QPalette::Inactive;
     
-            b = option->palette.brush(cg, QPalette::Highlight);
-        }
+            QColor col = option->palette.brush(cg, QPalette::Highlight).color();
+            g.setColorAt( 0.0, col.lighter( 125 ) );
+            g.setColorAt( 1.0, col.lighter( 60 ) );
+            b = QBrush( g );
+        } else b = QBrush( Qt::NoBrush );
         if (option->state & QStyle::State_HasFocus) {
             QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
                     ? QPalette::Active : QPalette::Disabled;
             if (cg == QPalette::Active && !(option->state & QStyle::State_Active))
                 cg = QPalette::Inactive;
             
-            p.setStyle( Qt::DotLine );
+            QPen p( Qt::DotLine );
+            p.setWidth( 2 );
             if ( option->state & QStyle::State_Selected ) {
                 p.setColor( option->palette.color( cg, QPalette::HighlightedText ) );
             } else {
                 p.setColor( option->palette.color( cg, QPalette::Highlight ) );
             }
+            painter->setPen( p );
         }
+        painter->setBrush( b );
+        painter->drawRect( r );
     }
-    painter->setPen( p );
-    painter->setBrush( b );
-    painter->drawRect( rect() );
 }
 
 DependencyConnectorItem *DependencyNodeItem::connectorItem( ConnectorType ctype ) const
@@ -1557,6 +1582,8 @@ void DependencyView::setProject( Project *project )
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotNodeMoved( Node* ) ) );
+
+        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsCodeChanged() ) );
     }
     if ( itemScene() ) {
         itemScene()->setProject( project );
@@ -1616,6 +1643,7 @@ void DependencyView::slotNodeAdded( Node *node )
         itemScene()->setItemVisible( item, true );
     }
     ensureVisible( item );
+    slotWbsCodeChanged();
 }
 
 void DependencyView::slotNodeRemoved( Node *node )
@@ -1625,15 +1653,25 @@ void DependencyView::slotNodeRemoved( Node *node )
         //kDebug()<<node->name();
         itemScene()->setItemVisible( item, false );
     } else kDebug()<<"Node does not exist!";
+    slotWbsCodeChanged();
 }
 
 void DependencyView::slotNodeChanged( Node *node )
 {
     DependencyNodeItem *item = findItem( node );
-    if ( item ) {
+    if ( item && item->isVisible() ) {
         item->setText();
         item->setSymbol();
     } else kDebug()<<"Node does not exist!";
+}
+
+void DependencyView::slotWbsCodeChanged()
+{
+    foreach( DependencyNodeItem *i, itemScene()->nodeItems() ) {
+        if ( i->isVisible() ) {
+            i->setText();
+        }
+    }
 }
 
 void DependencyView::slotNodeMoved( Node *node )

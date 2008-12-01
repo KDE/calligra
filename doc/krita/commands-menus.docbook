@@ -926,17 +926,6 @@ embedded &krita; object.</action></para></listitem>
 <guimenu>Layer</guimenu>
 <guisubmenu>New</guisubmenu>
 <guisubmenu>Object Layer</guisubmenu>
-<guimenuitem>Report Template</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Creates a new layer for an embedded
-&kugar; Designer object.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>New</guisubmenu>
-<guisubmenu>Object Layer</guisubmenu>
 <guimenuitem>Chart</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Creates a new layer for an
@@ -952,17 +941,6 @@ embedded &kchart; object.</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Creates a new layer for an
 embedded &kformula; object.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>New</guisubmenu>
-<guisubmenu>Object Layer</guisubmenu>
-<guimenuitem>Report Generator</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Creates a new layer for an
-embedded &kugar; object.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>

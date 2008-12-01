@@ -25,8 +25,8 @@
 
 #include <KexiView.h>
 
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 
 // Forward declarations.
 class KexiScriptEditor;

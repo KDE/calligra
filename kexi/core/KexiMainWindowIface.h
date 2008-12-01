@@ -170,7 +170,7 @@ public:
                                    QString* errorMessage = 0) = 0;
 
     //! For convenience
-    virtual KexiWindow* openObject(const Q3CString& mime, const QString& name,
+    virtual KexiWindow* openObject(const QString& mime, const QString& name,
                                    Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs = 0) = 0;
 
     /*! Closes the object for \a item.
@@ -226,7 +226,7 @@ public:
     /*! Highlights object of mime \a mime and name \a name.
      This can be done in the Project Navigator or so.
      If a window for the object is opened (in any mode), it should be raised. */
-    virtual void highlightObject(const Q3CString& mime, const Q3CString& name) = 0;
+    virtual void highlightObject(const QString& mime, const QString& name) = 0;
 
     //! Shows "print" dialog for \a item.
     //! \return true on success.

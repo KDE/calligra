@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,7 @@
 
 class QColor;
 class QMetaProperty;
+class QLayout;
 class KAction;
 
 //! @short General Utils
@@ -230,6 +231,10 @@ KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
  on the list view or table view header, to avoid bloat, but still have the color compatible
  with accessibility settings. */
 KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
+
+/*! @return pixmap @a original colored using @a color color. Used for coloring bitmaps 
+ that have to reflect the foreground color. */
+KEXIUTILS_EXPORT QPixmap replaceColors(const QPixmap& original, const QColor& color);
 
 /*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
 KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
@@ -540,7 +545,10 @@ public:
 protected:
     virtual void changeEvent(QEvent *event);
 };
-}
+
+/*! Sets KDialog::marginHint() margins and KDialog::spacingHint() spacing 
+ for the layout @a layout. */
+KEXIUTILS_EXPORT void setStandardMarginsAndSpacing(QLayout *layout);
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.
@@ -549,5 +557,6 @@ protected:
     { Q3VBoxLayout *lyr = new Q3VBoxLayout(where); \
         lyr->addWidget(what); }
 
+} //namespace KexiUtils
 
 #endif //KEXIUTILS_UTILS_H

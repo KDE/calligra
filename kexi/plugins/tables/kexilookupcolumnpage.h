@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,18 +19,13 @@
 #ifndef KEXILOOKUPCOLUMNPAGE_H
 #define KEXILOOKUPCOLUMNPAGE_H
 
-#include <qwidget.h>
-//Added by qt3to4:
-#include <Q3Frame>
-#include <Q3CString>
-#include <QLabel>
+#include <widget/kexipropertyeditorview.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 
 class KexiProject;
 class QLabel;
-class Q3Frame;
 
 //! @short A page within table designer's property pane, providing lookup column editor.
 /*! It's data model is basically KexiDB::LookupFieldSchema class, but the page does
@@ -39,7 +34,7 @@ class Q3Frame;
 
  @todo not all features of KexiDB::LookupFieldSchema class are displayed on this page yet
  */
-class KexiLookupColumnPage : public QWidget
+class KexiLookupColumnPage : public KexiPropertyPaneViewBase
 {
     Q_OBJECT
 
@@ -58,7 +53,7 @@ public slots:
 
 signals:
     //! Signal emitted when helper button 'Go to selected row sourcesource' is clicked.
-    void jumpToObjectRequested(const Q3CString& mime, const Q3CString& name);
+    void jumpToObjectRequested(const QString& mime, const QString& name);
 
 //  /*! Signal emitted when current bound column has been changed. */
 //  void boundColumnChanged(const QString& string, const QString& caption,
@@ -75,7 +70,7 @@ protected:
     void updateBoundColumnWidgetsAvailability();
 
     //! Used instead of m_propertySet->changeProperty() to honor m_propertySetEnabled
-    void changeProperty(const Q3CString &property, const QVariant &value);
+    void changeProperty(const QByteArray &property, const QVariant &value);
 
 private:
     class Private;

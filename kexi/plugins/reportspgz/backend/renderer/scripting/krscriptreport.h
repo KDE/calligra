@@ -21,6 +21,8 @@
 #define SCRIPTINGKRSCRIPTREPORT_H
 
 #include <QObject>
+#include <kross/core/object.h>
+
 class KRReportData;
 class KRObjectData;
 namespace Scripting
@@ -43,8 +45,14 @@ public slots:
     QObject* objectByName(const QString &);
     QObject* sectionByName(const QString &);
 
+
+    void initialize(Kross::Object::Ptr);
+    void eventOnOpen();
+    void eventOnClose();
+
 private:
     KRReportData *_reportdata;
+    Kross::Object::Ptr _scriptObject;
 };
 
 }

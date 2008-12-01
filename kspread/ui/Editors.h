@@ -43,6 +43,7 @@ class KTextEdit;
 class QFont;
 class QAbstractButton;
 class QTextEdit;
+class QListWidgetItem;
 
 class KoViewConverter;
 
@@ -146,18 +147,19 @@ public:
     bool eventFilter( QObject *o, QEvent *e );
 
     /**
-    * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
-    */
-    void doneCompletion();
-
-    /**
     * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.
     * @param choices A list of possible function names which match the characters that the user has already entered.
     */
     void showCompletion( const QStringList &choices );
 
+public slots:
+    /**
+    * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
+    */
+    void doneCompletion();
+
 private slots:
-    void itemSelected( const QString& item );
+    void itemSelected( QListWidgetItem* item = 0 );
 
 signals:
     /**
@@ -202,8 +204,6 @@ public:
     int cursorPosition() const;
     void setCursorPosition(int pos);
 
-    void setText(const QString& text);
-
     /** wrapper to KTextEdit::text() */
     QString text() const;
 
@@ -228,10 +228,14 @@ Q_SIGNALS:
     void textChanged(const QString &text);
     void modificationChanged(bool changed);
 
+public slots:
+    void setText(const QString& text);
+
 private slots:
     void  slotTextChanged();
     void  slotCompletionModeChanged(KGlobalSettings::Completion _completion);
     void  slotCursorPositionChanged();
+    void  slotSelectionDestroyed();
 
 protected:
     void resizeEvent( QResizeEvent* );
@@ -311,6 +315,9 @@ public:
 
     void setCellTool(CellToolBase* cellTool);
 
+Q_SIGNALS:
+    void textChanged (const QString &text);
+
 public Q_SLOTS:
     void applyChanges();
     void discardChanges();
@@ -319,6 +326,9 @@ public Q_SLOTS:
 protected:
     void keyPressEvent(QKeyEvent *event);
     void focusOutEvent(QFocusEvent *event);
+
+private slots:
+    void slotTextChanged ();
 
 private:
     Q_DISABLE_COPY(ExternalEditor)

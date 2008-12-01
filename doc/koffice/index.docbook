@@ -57,7 +57,6 @@
 <listitem><para>&kivio; (a flowchart application)</para></listitem>
 <listitem><para>&karbon14; (a vector drawing application)</para></listitem>
 <listitem><para>&krita; (a pixel based drawing application)</para></listitem>
-<listitem><para>&kugar; (a tool for generating business quality reports)</para></listitem>
 <listitem><para>&kexi; (an integrated environment for managing data)</para></listitem>
 <listitem><para>&kchart; (a charts/graphs generation application)</para></listitem>
 <listitem><para>&kformula; (an editor for mathematical formulae)</para></listitem>
@@ -556,18 +555,6 @@ script &koffice;.
 TO BE WRITTEN.
 </para>
 </sect2>
-</sect1>
-
-<sect1 id="programmingreport">
-<title>Creating Reports with Kugar</title>
-<para>
-TO BE WRITTEN.
-
-Maybe this should go completely into the
-Kugar manual? So we just keep a reference to the kugar manual
-here.
-
-</para>
 </sect1>
 
 <sect1 id="programmingdatabase">

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Karbon PDF Import Filter
+Name[ca]=Filtre d'importació PDF per al Karbon
 Name[de]=Karbon PDF-Importfilter
 Name[el]=Φίλτρο εισαγωγής PDF του Karbon
 Name[et]=Karboni PDF-i impordifilter
@@ -12,11 +13,12 @@ Name[nb]=PDF-importfilter for Karbon
 Name[nds]=PDF-Importfilter för Karbon
 Name[nl]=PDF-importfilter voor Karbon
 Name[pt]=Filtro de Importação de PDF para o Karbon
-Name[pt_BR]=Filtro de Importação de PDF para o Karbon
+Name[pt_BR]=Filtro de Importação PDF para o Karbon
 Name[sv]=Karbon PDF-importfilter
 Name[tr]=Karbon PDF İçeriye Aktarma Filtresi
 Name[uk]=Фільтр імпорту PDF до Karbon
 Name[x-test]=xxKarbon PDF Import Filterxx
+Name[zh_CN]=Karbon PDF 导入过滤器
 Name[zh_TW]=Karbon PDF 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

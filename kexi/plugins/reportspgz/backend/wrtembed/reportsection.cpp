@@ -46,7 +46,7 @@
 #include <KoGlobal.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 
 #include <kdebug.h>
 
@@ -91,7 +91,6 @@ ReportSection::ReportSection(ReportDesigner * rptdes, const char * name)
     QObject::connect(scene, SIGNAL(clicked()), this, (SLOT(slotSceneClicked())));
     QObject::connect(scene, SIGNAL(lostFocus()), this, (SLOT(slotSceneLostFocus())));
 
-    QObject::connect(title, SIGNAL(doubleClicked()), this, (SLOT(slotTitleDoubleClicked())));
     glayout->addWidget(title, 0, 0, 1, 2);
     glayout->addWidget(sectionRuler, 1, 0);
     glayout->addWidget(sceneview , 1, 1);
@@ -243,11 +242,6 @@ void ReportSection::slotSceneClicked()
 void ReportSection::slotSceneLostFocus()
 {
     title->setFrameStyle(QFrame::Panel | QFrame::Raised);
-}
-
-void ReportSection::slotTitleDoubleClicked()
-{
-    _rd->showScriptEditor();
 }
 
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)

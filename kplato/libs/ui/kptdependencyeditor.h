@@ -296,7 +296,7 @@ public:
     QRectF symbolRect() const { return QRectF( 1.0, 1.0, 15.0, 15.0 ); }
     qreal connectorWidth() const { return 8.0; }
     
-    qreal totalItemWidth() const { return connectorWidth()*2 + itemWidth(); }
+    qreal totalItemWidth() const { return itemWidth(); }
     qreal columnWidth() const { return horizontalGap() + totalItemWidth(); }
     
     qreal gridHeight() const { return verticalGap() + itemHeight(); }
@@ -340,7 +340,8 @@ public:
     QList<DependencyNodeItem*> removeChildItems( DependencyNodeItem *item );
     
     DependencyNodeItem *nodeItem( int row ) const;
-    
+    const QList<DependencyNodeItem*> &nodeItems() const { return m_allItems; }
+
 signals:
     void connectorClicked( DependencyConnectorItem *item );
     void connectItems( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
@@ -413,6 +414,7 @@ protected slots:
     void slotRelationAdded( Relation* rel );
     void slotRelationRemoved( Relation* rel );
     void slotRelationModified( Relation* rel );
+    void slotWbsCodeChanged();
     
     void slotSelectedItems(); // HACK due to tt bug 160653
     void slotConnectorClicked( DependencyConnectorItem *item );
@@ -432,6 +434,7 @@ public:
     DependencyEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
 

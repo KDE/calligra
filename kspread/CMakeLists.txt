@@ -251,6 +251,8 @@ install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 SET (kspread_KDEINIT_SRCS part/Main.cpp )
 
+kde4_add_app_icon(kspread_KDEINIT_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/data/pics/hi*-app-kspread.png")
+
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kspread  ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} komain )

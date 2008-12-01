@@ -2,13 +2,14 @@
 Type=ServiceType
 X-KDE-ServiceType=KSpread/Plugin
 Comment=Plugin for KSpread
+Comment[ca]=Connector per al KSpread
 Comment[de]=Modul für KSpread
 Comment[el]=Πρόσθετο για το KSpread
 Comment[et]=KSpreadi plugin
 Comment[ga]=Breiseán KSpread
 Comment[gl]=Extensión par KSpread
 Comment[he]=תוסף של KSpread
-Comment[it]=Plugin per KSpread
+Comment[it]=Estensione per KSpread
 Comment[kk]=KSpread-ке арналған плагин
 Comment[nds]=Moduul för KSpred
 Comment[nl]=Plugin voor KSpread
@@ -18,6 +19,7 @@ Comment[sv]=Insticksprogram för Kspread
 Comment[tr]=KSpread için Eklenti
 Comment[uk]=Втулок для KSpread
 Comment[x-test]=xxPlugin for KSpreadxx
+Comment[zh_CN]=KSpread 插件
 Comment[zh_TW]=KSpread 外掛程式
 [PropertyDef::X-KSpread-Version]
 Type=int

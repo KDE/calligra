@@ -5,3 +5,4 @@ When a bug/regression disappears it means that it has been (hopefully) fixed
 - After opening a table for the first time, the kexi__users table is created and filled with two example
   accounts (root and guest) but none of them is usable
   WORK AROUND: restart kwebforms
+  POSSIBLE SOLUTION: create the two tables, close the connection and reopen it

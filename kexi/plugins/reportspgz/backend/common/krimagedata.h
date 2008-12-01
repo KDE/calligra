@@ -25,8 +25,8 @@
 #include <qdom.h>
 #include "krpos.h"
 #include "krsize.h"
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>

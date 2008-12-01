@@ -111,7 +111,7 @@ private:
     static KFormDesigner::WidgetLibrary* static_formsLibrary;
 //  KFormDesigner::FormManager  *m_manager;
     QWorkspace  *m_workspace;
-    QPointer<KoProperty::Editor> m_editor;
+    QPointer<KoProperty::EditorView> m_editor;
     int  m_count;
     bool m_uniqueFormMode;
     bool m_openingFile;

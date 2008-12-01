@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,11 +19,10 @@
 #ifndef KEXIDATASOURCEPAGE_H
 #define KEXIDATASOURCEPAGE_H
 
-#include <QWidget>
+#include <widget/kexipropertyeditorview.h>
 #include <kexidb/field.h>
 #include <kexidb/utils.h>
-#include <koproperty/set.h>
-#include <kexi_export.h>
+#include <koproperty/Set.h>
 
 class KexiObjectInfoLabel;
 class KexiDataSourceComboBox;
@@ -34,7 +33,7 @@ class QToolButton;
 class QLabel;
 
 //! A page within form designer's property tabbed pane, providing data source editor
-class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
+class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public KexiPropertyPaneViewBase
 {
     Q_OBJECT
 
@@ -45,9 +44,6 @@ public:
     KexiDataSourceComboBox* dataSourceCombo() const {
         return m_dataSourceCombo;
     }
-    KexiObjectInfoLabel* objectInfoLabel() const {
-        return m_objectInfoLabel;
-    }
 
 public slots:
     void setProject(KexiProject *prj);
@@ -56,7 +52,7 @@ public slots:
 
     //! Sets data source of a currently selected form.
     //! This is performed on form initialization and on activating.
-    void setDataSource(const QString& mimeType, const QString& name);
+    void setDataSource(const QString& partClass, const QString& name);
 
     //! Receives a pointer to a new property \a set (from KexiFormView::managerPropertyChanged())
     void assignPropertySet(KoProperty::Set* propertySet);
@@ -75,7 +71,7 @@ signals:
                                             KexiDB::Field::Type type);
 
     /*! Signal emitted when 'insert fields' button has been clicked */
-    void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+    void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields);
 
 protected slots:
@@ -85,14 +81,13 @@ protected slots:
     void slotGotoSelected();
     void slotInsertSelectedFields();
     void slotFieldListViewSelectionChanged();
-    void slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+    void slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
                                 const QString& fieldName);
 
 protected:
     void updateSourceFieldWidgetsAvailability();
 
     KexiFieldComboBox *m_sourceFieldCombo;
-    KexiObjectInfoLabel *m_objectInfoLabel;
     KexiDataSourceComboBox* m_dataSourceCombo;
     QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel,
     *m_widgetDSLabel, *m_availableFieldsLabel,

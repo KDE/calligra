@@ -33,19 +33,11 @@
 #include <kurlrequester.h>
 #include <ktextedit.h>
 
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <q3buttongroup.h>
-#include <q3widgetstack.h>
-#include <qlayout.h>
-#include <q3vbox.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
-#include <qthread.h>
-#include <qradiobutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QLabel>
+#include <QCheckBox>
+#include <QRadioButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 //! Templorary hides db list
 //! @todo reenable this when implemented
@@ -73,7 +65,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
     setObjectName("KexiConnSelectorWidget");
     iconLabel->setPixmap(DesktopIcon(KEXI_ICON_DATABASE_SERVER));
 
-    Q3VBoxLayout *driversComboLyr = new Q3VBoxLayout(frmEngine);
+    QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
     m_driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(),
             KexiDBDriverComboBox::ShowServerDrivers);
     //lblEngine->setFocusProxy( m_driversCombo );
@@ -87,10 +79,10 @@ KexiDBConnectionWidget::KexiDBConnectionWidget(QWidget* parent)
 #endif
     btnLoadDBList->setIcon(KIcon("view-refresh"));
     btnLoadDBList->setToolTip(i18n("Load database list from the server"));
-    Q3WhatsThis::add(btnLoadDBList,
-                     i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
+    btnLoadDBList->setWhatsThis(
+        i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
 
-    Q3HBoxLayout *hbox = new Q3HBoxLayout(frmBottom);
+    QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
     hbox->addStretch(2);
     d->btnSaveChanges = new KPushButton(
         KGuiItem(

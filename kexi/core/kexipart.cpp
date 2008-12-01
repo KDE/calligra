@@ -39,6 +39,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kxmlguifactory.h>
+#include <kstandarddirs.h>
 
 namespace KexiPart
 {
@@ -48,7 +49,7 @@ class Part::Private
 public:
     Private()
             : guiClient(0)
-            , registeredPartID(-1) //no registered ID by default
+//            , registeredPartID(-1) //no registered ID by default
             , newObjectsAreDirty(false)
             , instanceActionsInitialized(false) {
     }
@@ -89,11 +90,13 @@ public:
     QMap<int, GUIClient*> instanceGuiClients;
     Kexi::ObjectStatus status;
 
+#if 0 // unused now: we use class names
     /*! If you're implementing a new part, set this to value >0 in your ctor
     if you have well known (ie registered ID) for your part.
     So far, table, query, form, report and script part have defined their IDs
     (see KexiPart::ObjectTypes). */
     int registeredPartID;
+#endif
 
 bool newObjectsAreDirty : 1;
 
@@ -105,12 +108,12 @@ bool instanceActionsInitialized : 1;
 
 using namespace KexiPart;
 
-Part::Part(int partID, QObject *parent, const QStringList &)
+Part::Part(QObject *parent, const QStringList &)
         : QObject(parent)
         , d(new Private())
 {
     d->info = 0;
-    d->registeredPartID = partID;
+//    d->registeredPartID = partID;
     d->supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
     d->supportedUserViewModes = Kexi::DataViewMode;
 }
@@ -259,7 +262,8 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
     KexiWindow *window = new KexiWindow(parent,
                                         d->supportedViewModes, *this, item);
 
-    KexiDB::SchemaData sdata(d->info->projectPartID());
+    KexiProject *project = KexiMainWindowIface::global()->project();
+    KexiDB::SchemaData sdata(project->idForClass(d->info->partClass())); // d->info->projectPartID());
     sdata.setName(item.name());
     sdata.setCaption(item.caption());
     sdata.setDescription(item.description());
@@ -484,10 +488,11 @@ void Part::setInfo(Info *info)
     d->info = info;
 }
 
+/*
 int Part::registeredPartID() const
 {
     return d->registeredPartID;
-}
+}*/
 
 void Part::setSupportedViewModes(Kexi::ViewModes modes)
 {
@@ -520,9 +525,18 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
         part->info()->objectName()
         + (nameSuffix ? QString(":%1").arg(nameSuffix) : QString()));
 
-    if (!KexiMainWindowIface::global()->project()->data()->userMode())
-        setXMLFile(QString::fromLatin1("kexi") + part->info()->objectName()
-                   + "part" + (partInstanceClient ? "inst" : "") + "ui.rc");
+    if (!KexiMainWindowIface::global()->project()->data()->userMode()) {
+        const QString file( QString::fromLatin1("kexi") + part->info()->objectName()
+                     + "part" + (partInstanceClient ? "inst" : "") + "ui.rc" );
+        const QString filter = componentData().componentName() + '/' + file;
+        const QStringList allFiles = componentData().dirs()->findAllResources("data", filter) +
+                                     componentData().dirs()->findAllResources("data", file);
+        if (!allFiles.isEmpty()) {
+            QString doc;
+            if (!findMostRecentXMLFile(allFiles, doc).isEmpty())
+              setXMLFile(file);
+        }
+    }
 
 // new KAction(part->d->names["new"], part->info()->itemIcon(), 0, this,
 //  SLOT(create()), actionCollection(), (part->info()->objectName()+"part_create").toLatin1());

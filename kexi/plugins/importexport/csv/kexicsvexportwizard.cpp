@@ -123,8 +123,8 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     Q3GridLayout *exportOptionsLyr = new Q3GridLayout(m_exportOptionsPage, 6, 3,
             KDialog::marginHint(), KDialog::spacingHint(), "exportOptionsLyr");
     m_infoLblFrom = new KexiCSVInfoLabel(infoLblFromText, m_exportOptionsPage);
-    KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType(
-                                   m_tableOrQuery->table() ? "kexi/table" : "kexi/query");
+    KexiPart::Info *partInfo = Kexi::partManager().infoForClass(
+            QString("org.kexi-project.%1").arg(m_tableOrQuery->table() ? "table" : "query"));
     if (partInfo)
         m_infoLblFrom->setIcon(partInfo->itemIcon());
     m_infoLblFrom->separator()->hide();

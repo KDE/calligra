@@ -446,8 +446,7 @@ void KexiRecordNavigator::setEditingIndicatorEnabled(bool set)
         if (!d->editingIndicatorLabel) {
             d->editingIndicatorLabel = new QLabel(this);
             d->editingIndicatorLabel->setAlignment(Qt::AlignCenter);
-            QPixmap pix;
-            pix.fromImage(*KexiRecordMarker::penImage());
+            QPixmap pix( *KexiRecordMarker::penPixmap() );
             d->editingIndicatorLabel->setFixedWidth(pix.width() + 2*2);
             d->lyr->insertWidget(0, d->editingIndicatorLabel);
         }
@@ -466,8 +465,7 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
     if (!d->editingIndicatorEnabled)
         return;
     if (d->editingIndicatorVisible) {
-        QPixmap pix;
-        pix.fromImage(*KexiRecordMarker::penImage());
+        QPixmap pix( *KexiRecordMarker::penPixmap() );
         d->editingIndicatorLabel->setPixmap(pix);
         d->editingIndicatorLabel->setToolTip(i18n("Editing indicator"));
     } else {

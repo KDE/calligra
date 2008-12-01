@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "../../kexidb/drivers/mySQL/mysqldriver_global.h"
 #include "mysqlmigrate.h"
 
 #include <qstring.h>

@@ -107,6 +107,8 @@ public:
 
     void setStartValues(Task &task);
 
+    void hideWbs() { wbsfield->hide(); wbslabel->hide(); }
+
 public slots:
     virtual void estimationTypeChanged(int type);
     virtual void scheduleTypeChanged(int value);

@@ -25,30 +25,23 @@
 
 class KarbonStylePreview;
 class KarbonStyleButtonBox;
-class KarbonPatternChooser;
-class KarbonGradientChooser;
 class KoShapeBorderModel;
 class KoShapeBackground;
 class KoCanvasBase;
-class KoTriangleColorSelector;
-class KoColor;
-class KoColorSlider;
-class QBrush;
+class KoColorComboBox;
+class KoResource;
+class KoShape;
 class QStackedWidget;
-class QTableWidgetItem;
 
 class KarbonStyleDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
     explicit KarbonStyleDocker( QWidget * parent = 0L );
-    ~KarbonStyleDocker();
+    virtual ~KarbonStyleDocker();
 
     /// reimplemented from KoCanvasObserver
     virtual void setCanvas(KoCanvasBase *canvas);
-
-    bool strokeIsSelected() const;
-    void updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill );
 
 private slots:
     void fillSelected();
@@ -57,20 +50,19 @@ private slots:
     void resourceChanged( int key, const QVariant& );
     void styleButtonPressed( int buttonId );
     void updateColor( const QColor &c );
-    void updateGradient( QTableWidgetItem * item );
-    void updatePattern( QTableWidgetItem * item );
+    void updateGradient( KoResource * item );
+    void updatePattern( KoResource * item );
     void updateFillRule( Qt::FillRule fillRule );
-    void opacityChanged( int );
-    void colorChanged( const QColor &c );
 private:
+    void updateColor( const QColor &c, const QList<KoShape*> & selectedShapes );
+    /// Sets the shape border and fill to display
+    void updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill );
+    
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
     QStackedWidget * m_stack;
     KoCanvasBase * m_canvas;
-    KoTriangleColorSelector * m_colorChooser;
-    KarbonGradientChooser * m_gradientChooser;
-    KarbonPatternChooser * m_patternChooser;
-    KoColorSlider * m_opacitySlider;
+    KoColorComboBox * m_colorSelector;
 };
 
 #endif // KARBONSTYLEDOCKER_H

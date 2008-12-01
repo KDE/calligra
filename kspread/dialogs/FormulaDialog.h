@@ -83,6 +83,11 @@ private slots:
      */
     void slotSelected( const QString& function = QString() );
     /**
+     * Called if a function name was selected but not double clicked.
+     * This will just show the help page for the function.
+     */
+    void slotIndexSelected( const QModelIndex& index );
+    /**
      * Called if the user clicked on one of the "related function"
      * This will switch the active function and show help page
      * of the function as well.

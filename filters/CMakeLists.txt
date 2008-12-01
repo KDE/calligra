@@ -38,7 +38,7 @@ macro_optional_add_subdirectory(kword)
 if(SHOULD_BUILD_KPRESENTER)
     macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
-#macro_optional_add_subdirectory(kformula)
+macro_optional_add_subdirectory(kformula)
 
 if(SHOULD_BUILD_KSPREAD)
     macro_optional_add_subdirectory(kspread)

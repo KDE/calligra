@@ -97,7 +97,7 @@ void TablePageManager::preparePage(int page)
     KoShapeContainer* const textShape = dynamic_cast<KoShapeContainer*>(textShapes.value(masterIndex + page - 1));
     if (textShape) {
         TableShape* const shape = new TableShape(d->master->columns(), d->master->rows());
-        const TableShape* predecessor = d->pages[page - 2];
+        const TableShape* predecessor = d->pages[page - 1];
         shape->setPosition(predecessor->position() + QPointF(0.0, predecessor->size().height()));
         d->pages.append(shape);
         textShape->addChild(shape);

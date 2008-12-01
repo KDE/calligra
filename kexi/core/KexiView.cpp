@@ -22,7 +22,7 @@
 
 #include "KexiWindow.h"
 #include "kexiproject.h"
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -192,7 +192,7 @@ KexiView::KexiView(QWidget *parent)
 
     installEventFilter(this);
 
-    QLayout *l = layout();
+    // QLayout *l = layout(); -- FIXME: Not used?
     d->mainLyr = new QVBoxLayout(this);
     d->mainLyr->setContentsMargins(0, KDialog::marginHint() / 3, 0, 0);
 
@@ -532,16 +532,18 @@ void KexiView::updateActions(bool activated)
 {
     //do nothing here
     //do the same for children :)
-    foreach(KexiView* view, d->children)
-    view->updateActions(activated);
+    foreach(KexiView* view, d->children) {
+        view->updateActions(activated);
+    }
 }
 
 void KexiView::setViewActions(const QList<QAction*>& actions)
 {
     d->viewActions = actions;
     d->viewActionsHash.clear();
-    foreach(QAction* action, d->viewActions)
-    d->viewActionsHash.insert(action->objectName().toLatin1(), action);
+    foreach(QAction* action, d->viewActions) {
+        d->viewActionsHash.insert(action->objectName().toLatin1(), action);
+    }
 }
 
 QAction* KexiView::viewAction(const char* name) const

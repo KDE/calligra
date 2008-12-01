@@ -83,6 +83,7 @@ void BlobService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPC
             // Resolve the mime type for blobData
             KSharedPtr<KMimeType> mime = KMimeType::findByContent(blobData);
             if (mime) {
+                // FIXME: Find a way to retrieve the blob data type
                 /// @todo wrong assumption: blobs are not always image/png
                 writer->getResponse().setContentType("image/png");
                 writer->writeNoCopy(blobData.data(), blobData.size());

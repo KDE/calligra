@@ -183,7 +183,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
                 continue;
             }
         }
-#if 0 //sebsauer; don't just save them but we need to handle things more explicit
+#if 0 //sebsauer; use format=>make-inline to ALWAYS save frames with anchors.
         foreach(KWFrame *frame, fs->frames()) {
             //FIXME: Each text frame will save the entire document of the frameset.
             frame->saveOdf(context);

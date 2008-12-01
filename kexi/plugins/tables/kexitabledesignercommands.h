@@ -31,7 +31,7 @@
 
 #include <k3command.h>
 #include <kexidb/alter.h>
-#include <koproperty/set.h>
+#include <koproperty/Set.h>
 
 #include "kexitabledesignerview.h"
 

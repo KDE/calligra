@@ -67,7 +67,7 @@
 #include <kexidb/schemadata.h>
 #include <kexiutils/tristate.h>
 
-#include <koproperty/editor.h>
+#include <koproperty/EditorView.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
 #include <KoGlobal.h>
@@ -93,20 +93,7 @@ public:
     virtual ~ReportWriterSectionData() {
         selected_items_rw = 0;
     }
-/*
-    enum ItemType {
-        NoItem = 0,
-        LabelItem,
-        FieldItem,
-        TextItem,
-        LineItem,
-        BarcodeItem,
-        ImageItem,
-        ChartItem,
-        ShapeItem,
-        CheckItem
-    };
-*/
+
     enum MouseAction {
         MA_None = 0,
         MA_Insert = 1,
@@ -150,8 +137,6 @@ public:
     QVBoxLayout *vboxlayout;
     KexiSectionHeader *head;
     QPushButton *pageButton;
-    KexiEditor *editor;
-    KDialog *editorDialog;
 };
 
 ReportDesigner::ReportDesigner(QWidget * parent, KexiDB::Connection *cn)
@@ -165,8 +150,6 @@ void ReportDesigner::init()
     _modified = false;
     detail = 0;
     d->hruler = 0;
-    d->editorDialog = 0;
-    d->editor = 0;
 
     sectionData = new ReportWriterSectionData();
     createProperties();
@@ -212,7 +195,6 @@ void ReportDesigner::init()
 
     setLayout(d->grid);
 
-
     connect(d->pageButton, SIGNAL(pressed()), this, SLOT(slotPageButton_Pressed()));
     emit pagePropertyChanged(*set);
 
@@ -252,7 +234,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
             } else if (n == "datasource") {
                 setReportDataSource(it.firstChild().nodeValue());
             } else if (n == "script") {
-                _script = it.firstChild().nodeValue();
+                _interpreter->setValue(it.toElement().attribute("interpreter"));
             } else if (n == "grid") {
                 setGridOptions(it.toElement().attribute("visible").toInt() == 0 ? false : true, it.toElement().attribute("divisions").toInt());
             }
@@ -625,7 +607,6 @@ QDomDocument ReportDesigner::document()
     root.appendChild(rds);
 
     QDomElement scr = doc.createElement("script");
-    scr.appendChild(doc.createTextNode(_script));
     scr.setAttribute("interpreter", _interpreter->value().toString());
     root.appendChild(scr);
 
@@ -1357,33 +1338,6 @@ void ReportDesigner::setActiveScene(QGraphicsScene* a)
 KoZoomHandler* ReportDesigner::zoomHandler()
 {
     return d->zoom;
-}
-
-QString ReportDesigner::editorText(const QString& orig)
-{
-    QString old = orig;
-    if (!d->editorDialog) {
-        d->editorDialog = new KDialog(this);
-        d->editorDialog->setCaption(i18n("Script Editor"));
-        d->editorDialog->setButtons(KDialog::Ok | KDialog::Cancel);
-
-        d->editor = new KexiEditor(d->editorDialog);
-        d->editorDialog->setMainWidget(d->editor);
-        d->editorDialog->setMinimumSize(600, 500);
-
-    }
-    d->editor->setHighlightMode(_interpreter->value().toString());
-    d->editor->setText(orig);
-    if (d->editorDialog->exec()) {
-        setModified(true);
-        return d->editor->text();
-    }
-
-    return old;
-}
-void ReportDesigner::showScriptEditor()
-{
-    _script = editorText(_script);
 }
 
 QString ReportDesigner::suggestEntityName(const QString &n) const

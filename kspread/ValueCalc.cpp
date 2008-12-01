@@ -226,21 +226,11 @@ Value ValueCalc::add (const Value &a, const Value &b)
   if (a.isError()) return a;
   if (b.isError()) return b;
   Value res;
-  if ((a.isInteger() && b.isEmpty()) || (a.isEmpty() && b.isInteger())
-      || (a.isInteger() && b.isInteger()))
-  {
-    int aa, bb;
-    aa = converter->toInteger (a);
-    bb = converter->toInteger (b);
-    res = Value (aa + bb);
-  }
-  else
-  {
-    Number aa, bb;
-    aa = converter->toFloat (a);
-    bb = converter->toFloat (b);
-    res = Value (aa + bb);
-  }
+
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
+  res = Value (aa + bb);
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a, b));
@@ -414,7 +404,7 @@ Value ValueCalc::div (const Value &a, Number b)
 Value ValueCalc::pow (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (::powl (converter->toFloat(a), b));
+  Value res = Value (::pow (converter->toFloat(a), b));
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -425,7 +415,7 @@ Value ValueCalc::pow (const Value &a, Number b)
 Value ValueCalc::abs (const Value &a)
 {
   if (a.isError()) return a;
-  return Value (fabsl (converter->toFloat (a)));
+  return Value (fabs (converter->toFloat (a)));
 }
 
 bool ValueCalc::isZero (const Value &a)
@@ -723,7 +713,7 @@ Value ValueCalc::random (Value range)
 Value ValueCalc::fact (const Value &which)
 {
   // we can simply use integers - no one is going to compute factorial of
-  // anything bigger than 2^32
+  // anything bigger than 2^64
   return fact (converter->asInteger (which).asInteger());
 }
 
@@ -731,7 +721,7 @@ Value ValueCalc::fact (const Value &which,
     const Value &end)
 {
   // we can simply use integers - no one is going to compute factorial of
-  // anything bigger than 2^32
+  // anything bigger than 2^64
   return fact (converter->asInteger (which).asInteger(),
       converter->asInteger (end).asInteger ());
 }
@@ -741,11 +731,12 @@ Value ValueCalc::fact (int which, int end) {
     return Value (-1);
   if (which == 0)
     return Value (1);
-  // no multiplication if val==end
-  if (which == end)
-    return Value (1);
-
-  return (mul (fact (which-1, end), which));
+  Value res = Value(1);
+  while (which > end) {
+    res = mul (res, which);
+    which--;
+  }
+  return res;
 }
 
 Value ValueCalc::factDouble (int which)
@@ -755,7 +746,12 @@ Value ValueCalc::factDouble (int which)
   if ((which == 0) || (which == 1))
     return Value (1);
 
-  return (mul (factDouble (which-2), which));
+  Value res = Value(1);
+  while (which > 1) {
+    res = mul (res, which);
+    which -= 2;
+  }
+  return res;
 }
 
 Value ValueCalc::factDouble (Value which)
@@ -1561,7 +1557,7 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
  */
 
 static double ccmath_gaml(double x)
-{ double g,h;
+{ double g,h=0; /* NB must be called with 0<=x<29 */
   for(g=1.; x<30. ;g*=x,x+=1.) h=x*x;
   g=(x-.5)*log(x)-x+.918938533204672-log(g);
   g+=(1.-(1./6.-(1./3.-1./(4.*h))/(7.*h))/(5.*h))/(12.*x);
@@ -1689,34 +1685,41 @@ static double ccmath_nbes(double v,double x)
 
 /* ---------- end of CCMATH code ---------- */
 
+template <typename func_ptr>
+Value CalcBessel(
+  func_ptr       *func,
+  ValueConverter *converter, 
+  Value v, Value x)
+{
+  double vv = numToDouble (converter->toFloat (v));
+  double xx = numToDouble (converter->toFloat (x));
+  // vv must be a non-negative integer and <29 for implementation reasons
+  // xx must be non-negative
+  if(xx>=0 && vv>=0 && vv<29 && vv == floor(vv))
+    return Value (func (vv, xx));
+  return Value::errorVALUE();
+}
 
 Value ValueCalc::besseli (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_ibes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_ibes, converter, v, x);
 }
 
 Value ValueCalc::besselj (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_jbes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_jbes, converter, v, x);
 }
 
 Value ValueCalc::besselk (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_kbes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_kbes, converter, v, x);
 }
 
 Value ValueCalc::besseln (Value v, Value x)
 {
-  Number vv = converter->toFloat (v);
-  Number xx = converter->toFloat (x);
-  return Value (ccmath_nbes (numToDouble (vv), numToDouble (xx)));
+  return CalcBessel(ccmath_nbes, converter, v, x);
 }
+
 
 // ------------------------------------------------------
 

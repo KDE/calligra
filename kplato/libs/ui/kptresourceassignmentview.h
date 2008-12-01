@@ -102,6 +102,7 @@ class KPLATOUI_EXPORT ResourceAssignmentView : public ViewBase
 public:
     ResourceAssignmentView( KoDocument *part, QWidget *parent);
     using ViewBase::draw;
+    Project *project() const { return m_project; }
     void draw( Project &project );
     void drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group );
     void drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent);

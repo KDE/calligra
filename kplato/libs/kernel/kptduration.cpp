@@ -135,6 +135,16 @@ double Duration::operator/(const Duration &d) const {
     return (double)(m_ms) / (double)(d.m_ms);
 }
 
+QString Duration::format(Unit unit, int pres, const KLocale *locale) const
+{
+    if ( locale == 0 ) {
+        locale = KGlobal::locale();
+    }
+    /* FIXME if necessary
+    return i18nc( "<duration><unit>", "%1%2", locale->formatNumber(toDouble(unit), pres), unitToString(unit) );*/
+    return locale->formatNumber( toDouble( unit ), pres ) + unitToString( unit );
+}
+
 QString Duration::toString(Format format) const {
     qint64 ms;
     double days;

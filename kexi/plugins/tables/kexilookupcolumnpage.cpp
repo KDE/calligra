@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,13 +20,10 @@
 #include "kexilookupcolumnpage.h"
 
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qtooltip.h>
 #include <q3header.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3CString>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -40,27 +37,23 @@
 #include <kexidb/connection.h>
 #include <kexiproject.h>
 
-#include <koproperty/property.h>
-#include <koproperty/utils.h>
+#include <koproperty/Property.h>
+#include <koproperty/Utils.h>
 
-QString mimeTypeToType(const QString& mimeType)
+QString partClassToType(const QString& partClass)
 {
-    if (mimeType == "kexi/table")
+    if (partClass == "org.kexi-project.table")
         return "table";
-    else if (mimeType == "kexi/query")
+    else if (partClass == "org.kexi-project.query")
         return "query";
 //! @todo more types
-    return mimeType;
+    return partClass;
 }
 
-QString typeToMimeType(const QString& type)
+QString typeToPartClass(const QString& type)
 {
-    if (type == "table")
-        return "kexi/table";
-    else if (type == "query")
-        return "kexi/query";
+    return QString::fromLatin1("org.kexi-project.")+type;
 //! @todo more types
-    return type;
 }
 
 //----------------------------------------------
@@ -69,8 +62,9 @@ QString typeToMimeType(const QString& type)
 class KexiLookupColumnPage::Private
 {
 public:
-    Private()
-            : currentFieldUid(-1)
+    Private(KexiLookupColumnPage *that)
+            : q(that)
+            , currentFieldUid(-1)
             , insideClearRowSourceSelection(false)
             , propertySetEnabled(true) {
     }
@@ -85,24 +79,25 @@ public:
         propertySet = aPropertySet;
     }
 
-    QVariant propertyValue(const Q3CString& propertyName) const {
+    QVariant propertyValue(const QByteArray& propertyName) const {
         return propertySet ? propertySet->property(propertyName).value() : QVariant();
     }
 
-    void changeProperty(const Q3CString &property, const QVariant &value) {
+    void changeProperty(const QByteArray& propertyName, const QVariant &value) {
         if (!propertySetEnabled)
             return;
-        propertySet->changeProperty(property, value);
+        propertySet->changeProperty(propertyName, value);
     }
 
     void updateInfoLabelForPropertySet(const QString& textToDisplayForNullSet) {
-        KexiPropertyEditorView::updateInfoLabelForPropertySet(
-            objectInfoLabel, propertySet, textToDisplayForNullSet);
+        q->updateInfoLabelForPropertySet( propertySet, textToDisplayForNullSet);
     }
 
+    KexiLookupColumnPage *q;
     KexiDataSourceComboBox *rowSourceCombo;
     KexiFieldComboBox *boundColumnCombo, *visibleColumnCombo;
-    KexiObjectInfoLabel *objectInfoLabel;
+//moved to KexiPropertyPaneViewBase 
+//  KexiObjectInfoLabel *objectInfoLabel;
     QLabel *rowSourceLabel, *boundColumnLabel, *visibleColumnLabel;
     QToolButton *clearRowSourceButton, *gotoRowSourceButton, *clearBoundColumnButton,
     *clearVisibleColumnButton;
@@ -122,34 +117,39 @@ private:
 //----------------------------------------------
 
 KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
-        : QWidget(parent)
-        , d(new Private())
+        : KexiPropertyPaneViewBase(parent)
+        , d(new Private(this))
 {
     setObjectName("KexiLookupColumnPage");
 
+/*moved to KexiPropertyPaneViewBase
     Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
     d->objectInfoLabel = new KexiObjectInfoLabel(this);
     d->objectInfoLabel->setObjectName("KexiObjectInfoLabel");
-    vlyr->addWidget(d->objectInfoLabel);
+    vlyr->addWidget(d->objectInfoLabel);*/
 
 //todo d->noDataSourceAvailableSingleText = i18n("No data source could be assigned for this widget.");
 //todo d->noDataSourceAvailableMultiText = i18n("No data source could be assigned for multiple widgets.");
 
     //-Row Source
     QWidget *contents = new QWidget(this);
-    vlyr->addWidget(contents);
-    Q3VBoxLayout *contentsVlyr = new Q3VBoxLayout(contents);
+    layout()->addWidget(contents);
+    QVBoxLayout *contentsVlyr = new QVBoxLayout(contents);
+    contentsVlyr->setContentsMargins(0,0,0,0);
+    contentsVlyr->setSpacing(2);
 
-    Q3HBoxLayout *hlyr = new Q3HBoxLayout(contentsVlyr);
+    QHBoxLayout *hlyr = new QHBoxLayout();
+    hlyr->addStretch();
+    contentsVlyr->addLayout(hlyr);
     d->rowSourceLabel = new QLabel(i18n("Row source:"), contents);
     d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    d->rowSourceLabel->setMargin(2);
+//    d->rowSourceLabel->setMargin(2);
     d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->rowSourceLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(d->rowSourceLabel);
 
     d->gotoRowSourceButton = new KexiSmallToolButton(
-        KIcon("goto-page"), QString(), contents);
+        KIcon("go-jump"), QString(), contents);
     d->gotoRowSourceButton->setObjectName("gotoRowSourceButton");
     d->gotoRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
     d->gotoRowSourceButton->setToolTip(i18n("Go to selected row source"));
@@ -169,13 +169,14 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->rowSourceLabel->setBuddy(d->rowSourceCombo);
     contentsVlyr->addWidget(d->rowSourceCombo);
 
-    contentsVlyr->addSpacing(8);
+    contentsVlyr->addSpacing(4);
 
     //- Bound Column
-    hlyr = new Q3HBoxLayout(contentsVlyr);
+    hlyr = new QHBoxLayout();
+    contentsVlyr->addLayout(hlyr);
     d->boundColumnLabel = new QLabel(i18n("Bound column:"), contents);
     d->boundColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    d->boundColumnLabel->setMargin(2);
+//    d->boundColumnLabel->setMargin(2);
     d->boundColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->boundColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(d->boundColumnLabel);
@@ -193,13 +194,14 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->boundColumnLabel->setBuddy(d->boundColumnCombo);
     contentsVlyr->addWidget(d->boundColumnCombo);
 
-    contentsVlyr->addSpacing(8);
+    contentsVlyr->addSpacing(4);
 
     //- Visible Column
-    hlyr = new Q3HBoxLayout(contentsVlyr);
+    hlyr = new QHBoxLayout();
+    contentsVlyr->addLayout(hlyr);
     d->visibleColumnLabel = new QLabel(i18n("Visible column:"), contents);
     d->visibleColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    d->visibleColumnLabel->setMargin(2);
+//    d->visibleColumnLabel->setMargin(2);
     d->visibleColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small) + 4);
     d->visibleColumnLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
     hlyr->addWidget(d->visibleColumnLabel);
@@ -217,7 +219,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
     d->visibleColumnLabel->setBuddy(d->visibleColumnCombo);
     contentsVlyr->addWidget(d->visibleColumnCombo);
 
-    vlyr->addStretch(1);
+    static_cast<QBoxLayout*>(layout())->addStretch(1);
 
     connect(d->rowSourceCombo, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotRowSourceTextChanged(const QString &)));
@@ -259,7 +261,7 @@ void KexiLookupColumnPage::assignPropertySet(KoProperty::Set* propertySet)
 
     QString rowSource, rowSourceType;
     if (hasRowSource) {
-        rowSourceType = typeToMimeType(d->propertyValue("rowSourceType").toString());
+        rowSourceType = typeToPartClass(d->propertyValue("rowSourceType").toString());
         rowSource = d->propertyValue("rowSource").toString();
     }
     d->rowSourceCombo->setDataSource(rowSourceType, rowSource);
@@ -337,19 +339,19 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 {
     if (!d->rowSourceCombo->project())
         return;
-    QString mime(d->rowSourceCombo->selectedMimeType());
+    QString partClass(d->rowSourceCombo->selectedPartClass());
     bool rowSourceFound = false;
     QString name = d->rowSourceCombo->selectedName();
-    if ((mime == "kexi/table" || mime == "kexi/query") && d->rowSourceCombo->isSelectionValid()) {
+    if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") && d->rowSourceCombo->isSelectionValid()) {
         KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
-            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), mime == "kexi/table");
+            d->rowSourceCombo->project()->dbConnection(), name.toLatin1(), partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 //disabled   d->fieldListView->setSchema( tableOrQuery );
             /*tmp*/
             delete tableOrQuery;
             rowSourceFound = true;
-            d->boundColumnCombo->setTableOrQuery(name, mime == "kexi/table");
-            d->visibleColumnCombo->setTableOrQuery(name, mime == "kexi/table");
+            d->boundColumnCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
+            d->visibleColumnCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
         } else {
             delete tableOrQuery;
         }
@@ -372,11 +374,11 @@ void KexiLookupColumnPage::slotRowSourceChanged()
 
     //update property set
     if (d->hasPropertySet()) {
-        d->changeProperty("rowSourceType", mimeTypeToType(mime));
+        d->changeProperty("rowSourceType", partClassToType(partClass));
         d->changeProperty("rowSource", name);
     }
 
-//disabled emit formDataSourceChanged(mime, name);
+//disabled emit formDataSourceChanged(partClass, name);
 //! @todo update d->propertySet ^^
 }
 
@@ -405,10 +407,10 @@ void KexiLookupColumnPage::clearRowSourceSelection(bool alsoClearComboBox)
 
 void KexiLookupColumnPage::slotGotoSelectedRowSource()
 {
-    QString mime = d->rowSourceCombo->selectedMimeType();
-    if (mime == "kexi/table" || mime == "kexi/query") {
+    const QString partClass( d->rowSourceCombo->selectedPartClass() );
+    if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
         if (d->rowSourceCombo->isSelectionValid())
-            emit jumpToObjectRequested(mime.toLatin1(), d->rowSourceCombo->selectedName().toLatin1());
+            emit jumpToObjectRequested(partClass, d->rowSourceCombo->selectedName());
     }
 }
 

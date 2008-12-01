@@ -172,6 +172,7 @@ Token::Op KSpread::matchOperator( const QString& text )
   if( text.length() == 2 )
   {
     if( text == "<>" ) result = Token::NotEqual;
+    if( text == "!=" ) result = Token::NotEqual;
     if( text == "<=" ) result = Token::LessEqual;
     if( text == ">=" ) result = Token::GreaterEqual;
     if( text == "==" ) result = Token::Equal;
@@ -655,8 +656,8 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        // consume as long as alpha, dollar sign, underscore, or digit
        if( isIdentifier( ch )  || ch.isDigit() ) tokenText.append( ex[i++] );
 
-       // a '!' ? then this must be sheet name, e.g "Sheet4!"
-       else if( ch == '!' )
+       // a '!' ? then this must be sheet name, e.g "Sheet4!", unless the next character is '='
+       else if( ch == '!' && ex[i+1] != '=' )
        {
           tokenText.append( ex[i++] );
           state = InCell;

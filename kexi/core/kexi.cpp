@@ -37,7 +37,6 @@
 #include <kiconloader.h>
 #include <kiconeffect.h>
 #include <ksharedptr.h>
-#include <kmimetype.h>
 #include <kglobalsettings.h>
 
 using namespace Kexi;

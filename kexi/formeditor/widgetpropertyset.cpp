@@ -208,7 +208,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload, boo
     else {
         if (forceReload) {
             KFormDesigner::FormManager::self()->showPropertySet(0, true/*force*/);
-            prevProperty = d->set.prevSelection();
+            prevProperty = d->set.previousSelection();
         }
         clearSet(true); //clear but do not reload to avoid blinking
         d->widgets.append(QPointer<QWidget>(w));
@@ -243,9 +243,9 @@ WidgetPropertySet::addWidget(QWidget *w)
 // QWidget *subwidget = isSubproperty ? subpropIface->subwidget() : w;
 
     for (KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
-        kDebug() << it.currentKey();
-        if (!isPropertyVisible(it.currentKey(), isTopLevel, classname))
-            d->set[it.currentKey()].setVisible(false);
+        kDebug() << it.current();
+        if (!isPropertyVisible(it.current()->name(), isTopLevel, classname))
+            d->set[it.current()->name()].setVisible(false);
     }
 
     if (d->widgets.count() >= 2) {
@@ -289,8 +289,9 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     QList<QMetaProperty> propList(
         KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()));
     QList<Q3CString> propNames;
-    foreach(QMetaProperty mp, propList)
-    propNames.append(mp.name());
+    foreach(QMetaProperty mp, propList) {
+        propNames.append(mp.name());
+    }
 
     // add subproperties if available
     WidgetWithSubpropertiesInterface* subpropIface
@@ -384,7 +385,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     }
 
     (*this)["name"].setAutoSync(false); // name should be updated only when pressing Enter
-    (*this)["enabled"].setValue(QVariant(tree->isEnabled()));
+    (*this)["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
         form->library()->setPropertyOptions(*this, *winfo, w);
@@ -759,9 +760,9 @@ WidgetPropertySet::eventFilter(QObject *o, QEvent *ev)
             d->lastGeoCommand->setPos(static_cast<QMoveEvent*>(ev)->pos());
         else  {
             QStringList list;
-            foreach(const QPointer<QWidget>& widget, d->widgets)
-            list.append(widget->objectName());
-
+            foreach(const QPointer<QWidget>& widget, d->widgets) {
+                list.append(widget->objectName());
+            }
             d->lastGeoCommand = new GeometryPropertyCommand(this, list, static_cast<QMoveEvent*>(ev)->oldPos());
             if (KFormDesigner::FormManager::self()->activeForm())
                 KFormDesigner::FormManager::self()->activeForm()->addCommand(d->lastGeoCommand, false);

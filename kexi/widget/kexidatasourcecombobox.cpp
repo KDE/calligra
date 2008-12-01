@@ -131,7 +131,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
 
     if (d->showTables) {
         //tables
-        KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/table");
+        KexiPart::Info* partInfo = Kexi::partManager().infoForClass("org.kexi-project.table");
         if (!partInfo)
             return;
         KexiPart::ItemList list;
@@ -147,7 +147,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
 
     if (d->showQueries) {
         //queries
-        KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/query");
+        KexiPart::Info* partInfo = Kexi::partManager().infoForClass("org.kexi-project.query");
         if (!partInfo)
             return;
         KexiPart::ItemList list;
@@ -162,7 +162,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
     setCurrentIndex(0);
 }
 
-void KexiDataSourceComboBox::setDataSource(const QString& mimeType, const QString& name)
+void KexiDataSourceComboBox::setDataSource(const QString& partClass, const QString& name)
 {
     if (name.isEmpty()) {
         clearEditText();
@@ -172,13 +172,13 @@ void KexiDataSourceComboBox::setDataSource(const QString& mimeType, const QStrin
         return;
     }
 
-    QString mt(mimeType);
-    if (mimeType.isEmpty())
-        mt = "kexi/table";
-    int i = findItem(mt, name);
+    QString _partClass(partClass);
+    if (_partClass.isEmpty())
+        _partClass = "org.kexi-project.table";
+    int i = findItem(_partClass, name);
     if (i == -1) {
-        if (mimeType.isEmpty())
-            i = findItem("kexi/query", name);
+        if (partClass.isEmpty())
+            i = findItem("org.kexi-project.query", name);
         if (i == -1) {
             setCurrentIndex(0);
             return;
@@ -192,7 +192,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 {
     QString name(item.name());
     //insert a new item, maintaining sort order and splitting to tables and queries
-    if (item.mimeType() == "kexi/table") {
+    if (item.partClass() == "org.kexi-project.table") {
         int i = 1; /*skip empty row*/
 #ifdef ADD_DEFINEQUERY_ROW
         i++; /*skip 'define query' row*/
@@ -202,7 +202,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
         addItem(d->tableIcon, name, i);
         completionObject()->addItem(name);
         d->tablesCount++;
-    } else if (item.mimeType() == "kexi/query") {
+    } else if (item.partClass() == "org.kexi-project.query") {
         int i;
         for (i = d->firstQueryIndex(); i < count() && name >= itemText(i); i++)
             ;
@@ -211,16 +211,16 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
     }
 }
 
-int KexiDataSourceComboBox::findItem(const QString& mimeType, const QString& name)
+int KexiDataSourceComboBox::findItem(const QString& partClass, const QString& name)
 {
     int i, end;
-    if (mimeType == "kexi/table") {
+    if (partClass == "org.kexi-project.table") {
         i = 0;
 #ifdef ADD_DEFINEQUERY_ROW
         i++; //skip 'define query'
 #endif
         end = d->firstQueryIndex();
-    } else if (mimeType == "kexi/query") {
+    } else if (partClass == "org.kexi-project.query") {
         i = d->firstQueryIndex();
         end = count();
     } else
@@ -237,12 +237,12 @@ int KexiDataSourceComboBox::findItem(const QString& mimeType, const QString& nam
 
 void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 {
-    const int i = findItem(item.mimeType(), item.name());
+    const int i = findItem(item.partClass(), item.name());
     if (i == -1)
         return;
     removeItem(i);
     completionObject()->removeItem(item.name());
-    if (item.mimeType() == "kexi/table")
+    if (item.partClass() == "org.kexi-project.table")
         d->tablesCount--;
 #if 0 //disabled because even invalid data source can be set
     if (currentItem() == i) {
@@ -256,7 +256,7 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 
 void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
-    const int i = findItem(item.mimeType(), QString(oldName));
+    const int i = findItem(item.partClass(), QString(oldName));
     if (i == -1)
         return;
     setItemText(i, item.name());
@@ -273,7 +273,7 @@ void KexiDataSourceComboBox::slotActivated(int index)
     }
 }
 
-QString KexiDataSourceComboBox::selectedMimeType() const
+QString KexiDataSourceComboBox::selectedPartClass() const
 {
     if (selectedName().isEmpty())
         return "";

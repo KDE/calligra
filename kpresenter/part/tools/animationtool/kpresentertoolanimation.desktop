@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Animation Tool
+Name[ca]=Eina d'animació
 Name[de]=Animationswerkzeug
 Name[el]=Εργαλείο εφέ κίνησης
 Name[et]=Animatsioonitööriist
@@ -17,6 +18,7 @@ Name[sv]=Animeringsverktyg
 Name[tr]=Canlandırma Aracı
 Name[uk]=Засіб для анімації
 Name[x-test]=xxAnimation Toolxx
+Name[zh_CN]=动画工具
 Name[zh_TW]=動畫工具
 X-KDE-ServiceTypes=KOffice/Tool
 Type=Service

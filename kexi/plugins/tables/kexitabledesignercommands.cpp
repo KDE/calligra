@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include <kexi_global.h>
 
 #include "kexitabledesignercommands.h"

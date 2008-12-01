@@ -32,6 +32,7 @@ namespace Scripting
 Section::Section(KRSectionData* sec)
 {
     _section = sec;
+    _scriptObject = 0;
 }
 
 
@@ -105,4 +106,14 @@ QObject* Section::objectByName(const QString& n)
     return 0;
 }
 
+void Section::initialize(Kross::Object::Ptr p)
+{
+	_scriptObject = p;
+}
+
+void Section::eventOnRender()
+{
+    if (_scriptObject)
+	_scriptObject->callMethod("OnRender");
+}
 }

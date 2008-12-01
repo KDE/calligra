@@ -39,6 +39,19 @@ public:
 
 // -------------------
 
+//! A property selector offering functor selecting only visible properties.
+/*! Used e.g. in EditorDataModel::index(). */
+class VisiblePropertySelector : public Set::PropertySelector
+{
+public:
+    VisiblePropertySelector() {}
+    virtual bool operator()(const Property& prop) const {
+        return prop.isVisible();
+    }
+};
+
+// -------------------
+
 EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent)
         : QAbstractItemModel(parent)
         , d(new Private)
@@ -50,7 +63,8 @@ EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent)
 void EditorDataModel::collectIndices() const
 {
     int r = 0;
-    for (Set::Iterator it(*d->set); it.current(); r++, ++it) {
+    Set::Iterator it(*d->set, new VisiblePropertySelector());
+    for (; it.current(); r++, ++it) {
         d->indicesForNames.insert( it.current()->name(), createIndex(r, 0, it.current()) );
     }
 }
@@ -153,9 +167,9 @@ QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &paren
     Property *parentItem = propertyForItem(parent);
     Property *childItem;
     if (parentItem == &d->rootItem) { // special case: top level
-        int r = 0;
-        Set::Iterator it(*d->set);
-        for (; r < row && it.current(); r++, ++it)
+        int visibleRows = 0;
+        Set::Iterator it(*d->set, new VisiblePropertySelector());
+        for (; visibleRows < row && it.current(); visibleRows++, ++it)
             ;
         childItem = it.current();
     } else {
@@ -245,7 +259,7 @@ int EditorDataModel::rowCount(const QModelIndex &parent) const
         return 0;
     if (parentItem == &d->rootItem) { // top level
         int count = 0;
-        Set::Iterator it(*d->set);
+        Set::Iterator it(*d->set, new VisiblePropertySelector());
         for (; it.current(); count++, ++it)
             ;
         return count;

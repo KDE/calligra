@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>225</width>
-    <height>334</height>
+    <width>233</width>
+    <height>336</height>
    </rect>
-  </property>
-  <property name="windowTitle" >
-   <string>AccountsviewConfigurePanelBase</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" >
    <property name="margin" >
@@ -28,30 +25,6 @@
         <property name="text" >
          <string>Show:</string>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QComboBox" name="ui_showBox" >
-        <item>
-         <property name="text" >
-          <string>Actual cost</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Planned cost</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Actual and planned</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Deviation</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="1" column="0" >
@@ -90,9 +63,35 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="1" >
+       <widget class="QComboBox" name="ui_showBox" >
+        <item>
+         <property name="text" >
+          <string>Actual cost</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Planned cost</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Actual and planned</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Deviation</string>
+         </property>
+        </item>
+       </widget>
+      </item>
      </layout>
+     <zorder>label</zorder>
+     <zorder>textLabel1_2</zorder>
+     <zorder>ui_periodBox</zorder>
      <zorder>ui_cumulative</zorder>
-     <zorder>layoutWidget</zorder>
      <zorder>ui_showBox</zorder>
     </widget>
    </item>
@@ -117,7 +116,11 @@
        </widget>
       </item>
       <item row="1" column="1" >
-       <widget class="QDateEdit" name="ui_startdate" />
+       <widget class="QDateEdit" name="ui_startdate" >
+        <property name="calendarPopup" >
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -143,7 +146,11 @@
        </widget>
       </item>
       <item row="3" column="1" >
-       <widget class="QDateEdit" name="ui_enddate" />
+       <widget class="QDateEdit" name="ui_enddate" >
+        <property name="calendarPopup" >
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0" >
        <widget class="QRadioButton" name="ui_projectendBtn" >

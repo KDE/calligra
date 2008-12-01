@@ -100,7 +100,7 @@ public slots:
     virtual void show();
 
     /*! Inserts autofields onto the form at \a pos position.
-     \a sourceMimeType can be "kexi/table" or "kexi/query",
+     \a sourcePartClass can be "org.kexi-project.table" or "org.kexi-project.query",
      \a sourceName is a name of a table or query, \a fields is a list of fields to insert (one or more)
      Fields are inserted using standard KFormDesigner::InsertWidgetCommand framework,
      so undo/redo is available for this operation.
@@ -113,7 +113,7 @@ public slots:
      Called by:
      - slotHandleDropEvent() when field(s) are dropped from the data source pane onto the form
      - KexiFormManager is a used clicked "Insert fields" button on the data source pane. */
-    void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,
+    void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields, KFormDesigner::Container* targetContainerWidget,
                           const QPoint& pos = QPoint(-1, -1));
 

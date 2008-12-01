@@ -29,9 +29,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koproperty/editor.h>
-#include <koproperty/set.h>
-#include <koproperty/property.h>
+#include <koproperty/EditorView.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
 
 #include "editlistviewdialog.h"
 
@@ -113,13 +113,19 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
     Q3HBoxLayout *hbox = new Q3HBoxLayout(m_columnsPageItem->widget(), 0, 6);
 
     // The "item properties" field
-    m_editor = new KoProperty::Editor(m_columnsPageItem->widget(), "editcolumn_propeditor");
+    m_editor = new KoProperty::EditorView(m_columnsPageItem->widget());
+    m_editor->setObjectName("editcolumn_propeditor");
     m_propSet = new KoProperty::Set(this, "columns");
-    m_propSet->addProperty(new KoProperty::Property("caption", "Caption", i18n("Caption"), i18n("Caption")));
-    m_propSet->addProperty(new KoProperty::Property("width", 100, i18n("Width"), i18n("Width")));
-    m_propSet->addProperty(new KoProperty::Property("clickable", QVariant(true, 3), i18n("Clickable"), i18n("Clickable")));
-    m_propSet->addProperty(new KoProperty::Property("resizable", QVariant(true, 3), i18n("Resizable"), i18n("Resizable")));
-    m_propSet->addProperty(new KoProperty::Property("fullwidth", QVariant(false, 3), i18n("Full Width"), i18n("Full Width")));
+    m_propSet->addProperty(
+        new KoProperty::Property("caption", "Caption", i18n("Caption"), i18n("Caption")));
+    m_propSet->addProperty(
+        new KoProperty::Property("width", 100, i18n("Width"), i18n("Width")));
+    m_propSet->addProperty(
+        new KoProperty::Property("clickable", QVariant(true), i18n("Clickable"), i18n("Clickable")));
+    m_propSet->addProperty(
+        new KoProperty::Property("resizable", QVariant(true), i18n("Resizable"), i18n("Resizable")));
+    m_propSet->addProperty(
+        new KoProperty::Property("fullwidth", QVariant(false), i18n("Full Width"), i18n("Full Width")));
     m_editor->changeSet(m_propSet);
     connect(m_propSet, SIGNAL(propertyChanged(KoProperty::Set & KoProperty::Property&)),
             this, SLOT(changeProperty(KoProperty::Set & KoProperty::Property&)));

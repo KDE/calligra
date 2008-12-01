@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 
 #ifndef KPROPERTY_UTILS_H
 #define KPROPERTY_UTILS_H
+
+#include "koproperty_global.h"
 
 #include <QtCore/QMap>
 #include <QtGui/QWidget>
@@ -42,8 +44,6 @@ protected:
     class Private;
     Private * const d;
 };
-
-KOPROPERTY_EXPORT QHash<QByteArray, QVariant> propertyValues(const Set& set);
 
 }
 

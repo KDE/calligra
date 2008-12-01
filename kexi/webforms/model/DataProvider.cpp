@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
@@ -26,22 +27,32 @@
 
 #include <main/startup/KexiStartup.h>
 
-#include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 #include <kexidb/connection.h>
+#include <kexidb/drivermanager.h>
 
 namespace KexiWebForms {
 namespace Model {
 
+#warning "WARNING: Direct calls to gConnections are deprecated from now on!"
 KexiDB::Connection* gConnection;
 
-// FIXME: Move creation of ConnectionData outside this function
-bool initDatabase(const QString& fileName) {
-    bool status = false;
-    KexiDB::Driver* driver;
-    KexiDB::DriverManager manager;
-    KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
+DataProvider* DataProvider::m_instance = 0;
 
+DataProvider* DataProvider::instance() {
+    if (!m_instance)
+        m_instance = new DataProvider();
+    return m_instance;
+}
+
+KexiDB::Connection* DataProvider::connection() {
+    // FIXME: Ensure that the connection pointer exists!
+    return m_connection;
+}
+
+bool DataProvider::initDatabase(const QString& fileName) {
+    bool status = false;
+    m_connData = new KexiDB::ConnectionData();
 
     QString driverName;
     QString suggestedDriverName;
@@ -58,28 +69,31 @@ bool initDatabase(const QString& fileName) {
         } else {
             kDebug() << "This should be a file-based database... now loading it";
 
-            driver = manager.driver(driverName);
-            if (!driver || manager.error()) {
-                manager.debugError();
+            m_driver = m_manager.driver(driverName);
+            if (!m_driver || m_manager.error()) {
+                m_manager.debugError();
                 status = false;
             } else status = true;
 
-            connData->setFileName(fileName);
+            m_connData->setFileName(fileName);
 
-            gConnection = driver->createConnection(*connData);
+            m_connection = m_driver->createConnection(*m_connData);
 
-            if (!gConnection || driver->error()) {
-                driver->debugError();
+#warning "This is just for compatibility"
+            gConnection = m_connection; // FIXME: drop this and port all code
+
+            if (!m_connection || m_driver->error()) {
+                m_driver->debugError();
                 status = false;
             } else status = true;
 
-            if (!gConnection->connect()) {
-                gConnection->debugError();
+            if (!m_connection->connect()) {
+                m_connection->debugError();
                 status = false;
             } else status = true;
 
-            if (!gConnection->useDatabase(fileName)) {
-                kError() << gConnection->errorMsg();
+            if (!m_connection->useDatabase(fileName)) {
+                kError() << m_connection->errorMsg();
                 status = false;
             } else {
                 status = true;

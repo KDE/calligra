@@ -97,7 +97,6 @@
 #include <KoSelection.h>
 #include <KoStore.h>
 #include <KoTabBar.h>
-#include <KoToolBox.h>
 #include <KoToolBoxFactory.h>
 #include <KoToolDocker.h>
 #include <KoDockerManager.h>
@@ -758,7 +757,7 @@ void View::initView()
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
-    d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection(), false );
+    d->zoomController = new KoZoomController( d->canvasController, d->zoomHandler, actionCollection() );
     d->zoomController->zoomAction()->setZoomModes( KoZoomMode::ZOOM_CONSTANT );
     addStatusBarItem( d->zoomController->zoomAction()->createWidget( statusBar() ), 0, true );
     connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, qreal)),

@@ -243,7 +243,7 @@ void EString::setSize( unsigned s )
 }
 
 // FIXME use maxsize for sanity check
-EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* maxsize */ )
+EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* maxsize */, unsigned continuePosition )
 {
   const unsigned char* data = (const unsigned char*) p;
   UString str = UString::null;
@@ -254,8 +254,10 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
   offset++; // for flag (1 byte)
 
   bool unicode = flag & 0x01;
+  bool asianPhonetics = flag & 0x04;
   bool richText = flag & 0x08;
   unsigned formatRuns = 0;
+  unsigned asianPhoneticsSize = 0;
 
   if( richText )
   {
@@ -263,26 +265,35 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
     offset += 2;
   }
 
-  // find out total bytes used in this string
-  unsigned size = offset + len; // string data
-  if( unicode ) size += len; // because unicode takes 2-bytes char
-  if( richText ) size += (formatRuns*4);
-
-  if( !unicode )
+  if( asianPhonetics )
   {
-    char* buffer = new char[ len+1 ];
-    memcpy( buffer, data + offset, len );
-    buffer[ len ] = 0;
-    str = UString( buffer );
-    delete[] buffer;
+    asianPhoneticsSize = readU32( data + offset );
+    offset += 4;
   }
-  else
+  
+  // find out total bytes used in this string
+  unsigned size = offset;
+  if( richText ) size += (formatRuns*4);
+  if( asianPhonetics ) size += asianPhoneticsSize;
+  
+  str = UString();
+  for( unsigned k=0; k<len; k++ )
   {
-    str = UString();
-    for( unsigned k=0; k<len; k++ )
+    unsigned uchar;
+    if( unicode ) {
+      uchar = readU16( data + offset );
+      offset += 2;
+      size += 2;
+    } else {
+      uchar = data[offset++];
+      size++;
+    }
+    str.append( UString(UChar(uchar)) );
+    if( offset == continuePosition && k < len-1 )
     {
-      unsigned uchar = readU16( data + offset + k*2 );
-      str.append( UString(UChar(uchar)) );
+      unicode = data[offset] & 1;
+      size++;
+      offset++;
     }
   }
 
@@ -1488,7 +1499,7 @@ unsigned Record::position() const
   return stream_position;
 }
 
-void Record::setData( unsigned, const unsigned char* )
+void Record::setData( unsigned, const unsigned char*, const unsigned int* )
 {
 }
 
@@ -1529,7 +1540,7 @@ void BackupRecord::setBackup( bool b )
   d->backup = b;
 }
 
-void BackupRecord::setData( unsigned size, const unsigned char* data )
+void BackupRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 2 ) return;
 
@@ -1552,7 +1563,7 @@ BlankRecord::BlankRecord():
 {
 }
 
-void BlankRecord::setData( unsigned size, const unsigned char* data )
+void BlankRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -1605,7 +1616,7 @@ BOFRecord::~BOFRecord()
   delete d;
 }
 
-void BOFRecord::setData( unsigned size, const unsigned char* data )
+void BOFRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 4 ) return;
 
@@ -1713,7 +1724,7 @@ BoolErrRecord::~BoolErrRecord()
   delete d;
 }
 
-void BoolErrRecord::setData( unsigned size, const unsigned char* data )
+void BoolErrRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size != 8 ) return;
 
@@ -1782,7 +1793,7 @@ void BottomMarginRecord::setBottomMargin( double m )
   d->bottomMargin = m;
 }
 
-void BottomMarginRecord::setData( unsigned size, const unsigned char* data )
+void BottomMarginRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 8 ) return;
   setBottomMargin( readFloat64( data ) );
@@ -1890,7 +1901,7 @@ BoundSheetRecord::~BoundSheetRecord()
   delete d;
 }
 
-void BoundSheetRecord::setData( unsigned size, const unsigned char* data )
+void BoundSheetRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -1952,7 +1963,7 @@ void CalcModeRecord::setAutoCalc( bool b )
   d->autoCalc = b;
 }
 
-void CalcModeRecord::setData( unsigned size, const unsigned char* data )
+void CalcModeRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 2 ) return;
 
@@ -2047,7 +2058,7 @@ void ColInfoRecord::setOutlineLevel( unsigned l )
   d->outlineLevel = l;
 }
 
-void ColInfoRecord::setData( unsigned size, const unsigned char* data )
+void ColInfoRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 10 ) return;
 
@@ -2106,7 +2117,7 @@ void DateModeRecord::setBase1904( bool r )
   d->base1904 = r;
 }
 
-void DateModeRecord::setData( unsigned size, const unsigned char* data )
+void DateModeRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 2 ) return;
 
@@ -2189,7 +2200,7 @@ void DimensionRecord::setLastColumn( unsigned r )
   d->lastColumn = r;
 }
 
-void DimensionRecord::setData( unsigned size, const unsigned char* data )
+void DimensionRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 14 ) return;
 
@@ -2221,7 +2232,7 @@ EOFRecord::~EOFRecord()
 {
 }
 
-void EOFRecord::setData( unsigned,  const unsigned char* )
+void EOFRecord::setData( unsigned,  const unsigned char*, const unsigned int* )
 {
   // no data associated with EOF record
 }
@@ -2276,7 +2287,7 @@ UString ExternNameRecord::externName() const
   return d->externName;
 }
 
-void ExternNameRecord::setData( unsigned size, const unsigned char* data )
+void ExternNameRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -2312,7 +2323,7 @@ FilepassRecord::~FilepassRecord()
 {
 }
 
-void FilepassRecord::setData( unsigned,  const unsigned char* )
+void FilepassRecord::setData( unsigned,  const unsigned char*, const unsigned int* )
 {
   // TODO
 }
@@ -2483,7 +2494,7 @@ void FontRecord::setUnderline( unsigned u )
 }
 
 
-void FontRecord::setData( unsigned size, const unsigned char* data )
+void FontRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 14 ) return;
 
@@ -2559,7 +2570,7 @@ void FooterRecord::setFooter( const UString& footer )
   d->footer = footer;
 }
 
-void FooterRecord::setData( unsigned size, const unsigned char* data )
+void FooterRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 2 ) return;
 
@@ -2633,7 +2644,7 @@ void FormatRecord::setFormatString( const UString& fs )
   d->formatString = fs;
 }
 
-void FormatRecord::setData( unsigned size, const unsigned char* data )
+void FormatRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 3 ) return;
 
@@ -2690,7 +2701,7 @@ FormulaTokens FormulaRecord::tokens() const
   return d->tokens;
 }
 
-void FormulaRecord::setData( unsigned size, const unsigned char* data )
+void FormulaRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 20 ) return;
 
@@ -2806,7 +2817,7 @@ void LabelRecord::setLabel( const UString& l )
   d->label = l;
 }
 
-void LabelRecord::setData( unsigned size, const unsigned char* data )
+void LabelRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -2860,7 +2871,7 @@ void HeaderRecord::setHeader( const UString& header )
   d->header = header;
 }
 
-void HeaderRecord::setData( unsigned size, const unsigned char* data )
+void HeaderRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 2 ) return;
 
@@ -2903,7 +2914,7 @@ unsigned LabelSSTRecord::sstIndex() const
   return d->sstIndex;
 }
 
-void LabelSSTRecord::setData( unsigned size, const unsigned char* data )
+void LabelSSTRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 10 ) return;
 
@@ -2955,7 +2966,7 @@ void LeftMarginRecord::setLeftMargin( double m )
   d->leftMargin = m;
 }
 
-void LeftMarginRecord::setData( unsigned size, const unsigned char* data )
+void LeftMarginRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 8 ) return;
   setLeftMargin( readFloat64( data ) );
@@ -3027,7 +3038,7 @@ unsigned MergedCellsRecord::lastColumn( unsigned i ) const
   return info.lastColumn;
 }
 
-void MergedCellsRecord::setData( unsigned size, const unsigned char* data )
+void MergedCellsRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 2 ) return;
 
@@ -3083,7 +3094,7 @@ MulBlankRecord::~MulBlankRecord()
   delete d;
 }
 
-void MulBlankRecord::setData( unsigned size, const unsigned char* data )
+void MulBlankRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -3168,7 +3179,7 @@ unsigned MulRKRecord::encodedRK( unsigned i ) const
   return d->rkValues[ i ];
 }
 
-void MulRKRecord::setData( unsigned size, const unsigned char* data )
+void MulRKRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -3244,7 +3255,7 @@ UString NameRecord::definedName() const
   return d->definedName;
 }
 
-void NameRecord::setData( unsigned size, const unsigned char* data )
+void NameRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 14 ) return;
 
@@ -3309,7 +3320,7 @@ void NumberRecord::setNumber( double f )
 }
 
 // FIXME check that sizeof(double) is 64
-void NumberRecord::setData( unsigned size, const unsigned char* data )
+void NumberRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 14 ) return;
 
@@ -3359,7 +3370,7 @@ unsigned PaletteRecord::count() const
   return d->colors.size();
 }
 
-void PaletteRecord::setData( unsigned size, const unsigned char* data )
+void PaletteRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 14 ) return;
 
@@ -3421,7 +3432,7 @@ void RightMarginRecord::setRightMargin( double m )
   d->rightMargin = m;
 }
 
-void RightMarginRecord::setData( unsigned size, const unsigned char* data )
+void RightMarginRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 8 ) return;
   setRightMargin( readFloat64( data ) );
@@ -3508,7 +3519,7 @@ unsigned RKRecord::encodedRK() const
 
 // FIXME check sizeof(int) is 32
 // big vs little endian problem
-void RKRecord::setData( unsigned size, const unsigned char* data )
+void RKRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 10 ) return;
 
@@ -3602,7 +3613,7 @@ void RowRecord::setHidden( bool h )
   d->hidden = h;
 }
 
-void RowRecord::setData( unsigned size, const unsigned char* data )
+void RowRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 16 ) return;
 
@@ -3660,7 +3671,7 @@ void RStringRecord::setLabel( const UString& l )
 }
 
 // FIXME formatting runs ? in EString perhaps ?
-void RStringRecord::setData( unsigned size, const unsigned char* data )
+void RStringRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 6 ) return;
 
@@ -3719,7 +3730,7 @@ UString sstrecord_get_plain_string( const unsigned char* data, unsigned length )
   return str;
 }
 
-void SSTRecord::setData( unsigned size, const unsigned char* data )
+void SSTRecord::setData( unsigned size, const unsigned char* data, const unsigned int* continuePositions )
 {
   if( size < 8 ) return;
 
@@ -3727,8 +3738,10 @@ void SSTRecord::setData( unsigned size, const unsigned char* data )
   d->count = readU32( data+4 );
 
   unsigned offset = 8;
-  d->strings.clear();
+  unsigned int nextContinuePosIdx = 0;
+  unsigned int nextContinuePos = continuePositions[0];
 
+  d->strings.clear();
   for( unsigned i = 0; i < d->count; i++ )
   {
     // check against size
@@ -3737,9 +3750,10 @@ void SSTRecord::setData( unsigned size, const unsigned char* data )
       break;
     }
 
-    EString es = EString::fromUnicodeString( data+offset, true, size - offset );
+    EString es = EString::fromUnicodeString( data+offset, true, size - offset, nextContinuePos - offset );
     d->strings.push_back( es.str() );
     offset += es.size();
+    while( nextContinuePos < offset ) nextContinuePos = continuePositions[++nextContinuePosIdx];
   }
 
 
@@ -3794,7 +3808,7 @@ StringRecord::~StringRecord()
   delete d;
 }
 
-void StringRecord::setData( unsigned size, const unsigned char* data )
+void StringRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 3 ) return;
 
@@ -3853,7 +3867,7 @@ void TopMarginRecord::setTopMargin( double m )
   d->topMargin = m;
 }
 
-void TopMarginRecord::setData( unsigned size, const unsigned char* data )
+void TopMarginRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   if( size < 8 ) return;
   setTopMargin( readFloat64( data ) );
@@ -4277,7 +4291,7 @@ void XFRecord::setPatternBackColor( unsigned color )
   d->patternBackColor = color;
 }
 
-void XFRecord::setData( unsigned size, const unsigned char* data )
+void XFRecord::setData( unsigned size, const unsigned char* data, const unsigned int* )
 {
   unsigned recordSize = ( version() == Excel97 ) ? 20: 16;
   if( size < recordSize ) return;
@@ -4497,7 +4511,9 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   unsigned int buffer_size = 65536;		// current size of the buffer
   unsigned char *buffer = (unsigned char *) malloc(buffer_size);
   unsigned char small_buffer[128];	// small, fixed size buffer
-
+  unsigned int continuePositionsSize = 128; // size of array for continue positions
+  unsigned int *continuePositions = (unsigned int *) malloc(continuePositionsSize * sizeof(int));
+  
   workbook->clear();
   d->workbook = workbook;
 
@@ -4524,11 +4540,12 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 
     unsigned long type = readU16( buffer );
     unsigned long size = readU16( buffer + 2 );
+    unsigned int continuePositionsCount = 0;
 
     // verify buffer is large enough to hold the record data
     if (size > buffer_size) {
         buffer = (unsigned char *) realloc(buffer, size);
-	buffer_size = size;
+        buffer_size = size;
     }
 
     // load actual record data
@@ -4543,36 +4560,39 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
         saved_pos = stream->tell();
 
         bytes_read = stream->read( small_buffer, 4 );
-	if (bytes_read != 4) break;
+        if (bytes_read != 4) break;
 
-	next_type = readU16( small_buffer );
-	unsigned long next_size = readU16( small_buffer + 2 );
+        next_type = readU16( small_buffer );
+        unsigned long next_size = readU16( small_buffer + 2 );
 
-	if (next_type == 0x3C) {
-	    // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
+        if (next_type == 0x3C) {
+            // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
+            continuePositions[continuePositionsCount++] = size;
+            if (continuePositionsCount >= continuePositionsSize) {
+                continuePositionsSize *= 2;
+                continuePositions = (unsigned int *) realloc(continuePositions, continuePositionsSize * sizeof(int));
+            }
 
-	    // first verify the buffer is large enough to hold all the data
-	    if ( (size + next_size) > buffer_size) {
+            // first verify the buffer is large enough to hold all the data
+            if ( (size + next_size) > buffer_size) {
                 buffer = (unsigned char *) realloc(buffer, size + next_size);
-		buffer_size = size + next_size;
-	    }
+                buffer_size = size + next_size;
+            }
 
-	    // next read the data of the record
-	    bytes_read = stream->read( buffer + size, next_size );
-	    if (bytes_read != next_size) {
-		    std::cout << "ERROR!" << std::endl;
-		break;
-	    }
+            // next read the data of the record
+            bytes_read = stream->read( buffer + size, next_size );
+            if (bytes_read != next_size) {
+                std::cout << "ERROR!" << std::endl;
+                break;
+            }
 
-	    // if the first read byte is a zero, remove it (at least that is what the old excel97 filter did...)
-	    if (buffer[size] == 0) {
-                memmove( buffer + size, buffer + size + 1, --next_size );
-	    }
-
-	    // and finally update size
-	    size += next_size;
-	}
+            // and finally update size
+            size += next_size;
+        }
     } while (next_type == 0x3C);
+
+    // append total size as last continue position
+    continuePositions[continuePositionsCount] = size;
 
     // restore position in stream to the beginning of the next record
     stream->seek( saved_pos );
@@ -4587,7 +4607,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     {
       // setup the record and invoke handler
       record->setVersion( version );
-      record->setData( size, buffer );
+      record->setData( size, buffer, continuePositions );
       record->setPosition( pos );
 
       handleRecord( record );
@@ -5331,63 +5351,63 @@ static Pen convertBorderStyle( unsigned style )
     pen.style = Pen::NoLine;
     break;
   case XFRecord::Thin:
-    pen.width = 1;
+    pen.width = 0.5;
     pen.style = Pen::SolidLine;
     break;
   case XFRecord::Medium:
-    pen.width = 3;
+    pen.width = 1;
     pen.style = Pen::SolidLine;
     break;
   case XFRecord::Dashed:
-    pen.width = 1;
+    pen.width = 0.5;
     pen.style = Pen::DashLine;
     break;
   case XFRecord::Dotted:
-    pen.width = 1;
+    pen.width = 0.5;
     pen.style = Pen::DotLine;
     break;
   case XFRecord::Thick:
-    pen.width = 4;
+    pen.width = 2;
     pen.style = Pen::SolidLine;
     break;
   case XFRecord::Double:
     // FIXME no equivalent ?
-    pen.width = 4;
+    pen.width = 2;
     pen.style = Pen::SolidLine;
     break;
   case XFRecord::Hair:
     // FIXME no equivalent ?
-    pen.width = 1;
-    pen.style = Pen::DotLine;
+    pen.width = 0.1;
+    pen.style = Pen::SolidLine;
     break;
   case XFRecord::MediumDashed:
-    pen.width = 3;
+    pen.width = 1;
     pen.style = Pen::DashLine;
     break;
   case XFRecord::ThinDashDotted:
-    pen.width = 1;
+    pen.width = 0.5;
     pen.style = Pen::DashDotLine;
     break;
   case XFRecord::MediumDashDotted:
-    pen.width = 3;
+    pen.width = 1;
     pen.style = Pen::DashDotLine;
     break;
   case XFRecord::ThinDashDotDotted:
-    pen.width = 1;
+    pen.width = 0.5;
     pen.style = Pen::DashDotDotLine;
     break;
   case XFRecord::MediumDashDotDotted:
-    pen.width = 3;
+    pen.width = 1;
     pen.style = Pen::DashDotDotLine;
     break;
   case XFRecord::SlantedMediumDashDotted:
     // FIXME no equivalent ?
-    pen.width = 3;
+    pen.width = 1;
     pen.style = Pen::DashDotLine;
     break;
   default:
     // fallback, simple solid line
-    pen.width = 1;
+    pen.width = 0.5;
     pen.style = Pen::SolidLine;
     break;
   };

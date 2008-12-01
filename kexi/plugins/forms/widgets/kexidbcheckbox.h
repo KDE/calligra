@@ -31,7 +31,7 @@ class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDat
 {
     Q_OBJECT
     Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
     Q_OVERRIDE(Tristate tristate READ isTristate WRITE setTristate)
     Q_ENUMS(Tristate)
 
@@ -42,8 +42,8 @@ public:
     inline QString dataSource() const {
         return KexiFormDataItemInterface::dataSource();
     }
-    inline QString dataSourceMimeType() const {
-        return KexiFormDataItemInterface::dataSourceMimeType();
+    inline QString dataSourcePartClass() const {
+        return KexiFormDataItemInterface::dataSourcePartClass();
     }
     virtual QVariant value();
     virtual void setInvalidState(const QString& displayText);
@@ -80,8 +80,8 @@ public:
 
 public slots:
     void setDataSource(const QString &ds);
-    inline void setDataSourceMimeType(const QString &ds) {
-        KexiFormDataItemInterface::setDataSourceMimeType(ds);
+    inline void setDataSourcePartClass(const QString &ds) {
+        KexiFormDataItemInterface::setDataSourcePartClass(ds);
     }
     void slotStateChanged(int state);
 

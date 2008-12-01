@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
 */
 
 #include <cmath>
+#include <cfloat>
 
 //Qt includes
 #include <QByteArray>
@@ -58,6 +60,7 @@ Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 : KoFilter(parent)
 , m_currentPage( 1 )
 , m_objectIndex( 1 )
+, m_sticky( false )
 {
 }
 
@@ -278,9 +281,10 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
 
     //Go to the first background, there might be missing backgrounds
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
+    KoXmlElement masterBackground = backgrounds.namedItem( "MASTERPAGE" ).toElement();
     //Parse pages
     //create the master page style
-    const QString masterPageStyleName = createMasterPageStyle();
+    const QString masterPageStyleName = createMasterPageStyle( objects, masterBackground );
     //The pages are all stored inside PAGETITLES
     //and all notes in PAGENOTES
     KoXmlNode title = titles.firstChild();
@@ -383,6 +387,12 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 
         //Now define what kind of object is
         KoXmlElement objectElement = object.toElement();
+
+        bool sticky = objectElement.attribute( "sticky", "0" ).toInt() == 1;
+        if ( sticky != m_sticky ) {
+            continue;
+        }
+
         //Enum: ObjType
         switch( objectElement.attribute( "type" ).toInt() )
         {
@@ -478,58 +488,75 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     content->startElement( "draw:line" );
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
-    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
-    if ( !angle.isNull() )
-    {
-        content->addAttribute( "draw:transform", rotateValue( angle.attribute( "value" ).toDouble() ) );
-    }
-
-    //NOTE: we cannot use set2DGeometry because it's handled different
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
-    double x1 = orig.attribute( "x" ).toDouble();
-    double y1 = orig.attribute( "y" ).toDouble() - m_pageHeight * ( m_currentPage - 1 );
-    double x2 = size.attribute( "width" ).toDouble() + x1;
-    double y2 = size.attribute( "height" ).toDouble() + y1;
+
+    QRectF r( orig.attribute( "x" ).toDouble(),
+              orig.attribute( "y" ).toDouble() - m_pageHeight * ( m_currentPage - 1 ),
+              size.attribute( "width" ).toDouble(),
+              size.attribute( "height" ).toDouble() );
+
+    double x1 = 0.0;
+    double y1 = 0.0;
+    double x2 = 0.0;
+    double y2 = 0.0;
+    QPointF center( r.width() / 2, r.height() / 2 );
 
     KoXmlElement lineType = objectElement.namedItem( "LINETYPE" ).toElement();
     int type = 0;
-    if ( !lineType.isNull() )
-    {
+    if ( !lineType.isNull() ) {
         type = lineType.attribute( "value" ).toInt();
     }
 
-    content->addAttribute( "draw:id",  QString( "object%1" ).arg( m_objectIndex ) );
-    QString xpos1 = QString( "%1pt" ).arg( x1 );
-    QString xpos2 = QString( "%1pt" ).arg( x2 );
-
-    //Enum: LineType
-    switch( type )
-    {
-    case 0: //Horizontal
-    {
-        double y = ( y1 + y2 ) * 0.5;
-        content->addAttributePt( "svg:y1", y );
-        content->addAttributePt( "svg:y2", y );
-    }   break;
-    case 1: //Vertical
-        content->addAttributePt( "svg:y1", y1 );
-        content->addAttributePt( "svg:y2", y2 );
-        xpos1 = QString( "%1pt" ).arg( 0.5 * ( x1 + x2 ) );
-        xpos2 = xpos1;
-        break;
-    case 2: //Left Top to Right Bottom
-        content->addAttributePt( "svg:y1", y1 );
-        content->addAttributePt( "svg:y2", y2 );
-        break;
-    case 3: //Left Bottom to Right Top
-        content->addAttributePt( "svg:y1", y2 );
-        content->addAttributePt( "svg:y2", y1 );
-        break;
+    switch ( type ) {
+        case 0:
+            x1 = -center.x();
+            x2 = -x1;
+            break;
+        case 1:
+            y1 = -center.y();
+            y2 = -y1;
+            break;
+        case 2:
+            x1 = -center.x();
+            y1 = -center.y();
+            x2 = -x1;
+            y2 = -y1;
+            break;
+        case 3:
+            x1 = -center.x();
+            y1 = center.y();
+            x2 = -x1;
+            y2 = -y1;
+            break;
     }
 
-    content->addAttribute( "svg:x1", xpos1 );
-    content->addAttribute( "svg:x2", xpos2 );
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
+    if ( !angle.isNull() ) {
+        double angInRad = -angle.attribute( "value" ).toDouble() * M_PI / 180.0;
+        QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        double transX1 = 0.0;
+        double transY1 = 0.0;
+        double transX2 = 0.0;
+        double transY2 = 0.0;
+        m.map( x1, y1, &transX1, &transY1 );
+        m.map( x2, y2, &transX2, &transY2 );
+        x1 = transX1;
+        y1 = transY1;
+        x2 = transX2;
+        y2 = transY2;
+    }
+
+    x1 += r.x() + center.x();
+    y1 += r.y() + center.y();
+    x2 += r.x() + center.x();
+    y2 += r.y() + center.y();
+
+    //save all into pt
+    content->addAttributePt( "svg:x1", x1 );
+    content->addAttributePt( "svg:y1", y1 );
+    content->addAttributePt( "svg:x2", x2 );
+    content->addAttributePt( "svg:y2", y2 );
 
     KoXmlElement name = objectElement.namedItem( "OBJECTNAME").toElement();
     QString nameString = name.attribute( "objectName" );
@@ -545,7 +572,23 @@ void Filterkpr2odf::appendRectangle( KoXmlWriter* content, const KoXmlElement& o
     content->startElement( "draw:rect" );
 
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
     set2DGeometry( content, objectElement );
+
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    //<RNDS x="75" y="75"/>
+    const KoXmlElement rnds = objectElement.namedItem( "RNDS" ).toElement();
+    if ( !rnds.isNull() ) {
+        if ( rnds.hasAttribute( "x" ) && rnds.hasAttribute( "y" ) ) {
+            int x = rnds.attribute( "x" ).toInt();
+            int y = rnds.attribute( "y" ).toInt();
+            content->addAttribute( "svg:rx", x / 200.0 * width );
+            content->addAttribute( "svg:ry", y / 200.0 * height );
+        }
+    }
 
     content->endElement();//draw:rect
 }
@@ -1482,27 +1525,42 @@ void Filterkpr2odf::set2DGeometry( KoXmlWriter* content, const KoXmlElement& obj
         content->addAttribute( "draw:name", nameStr );
     }
 
-    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
-    if( !angle.isNull() )
-    {
-        QString returnAngle = rotateValue( angle.attribute( "value" ).toDouble() );
-        if( !returnAngle.isEmpty() )
-        {
-            content->addAttribute( "draw:transform", returnAngle );
-        }
-    }
-
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
 
     double y = orig.attribute( "y" ).toDouble();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
+    QPointF o( orig.attribute( "x" ).toDouble(), y );
+
     content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
-    content->addAttributePt( "svg:x", orig.attribute( "x" ).toDouble() );
-    content->addAttributePt( "svg:y",  y );
-    content->addAttributePt( "svg:width", size.attribute( "width" ).toDouble() );
-    content->addAttributePt( "svg:height", size.attribute( "height" ).toDouble() );
+
+    QSizeF s( size.attribute( "width" ).toDouble(), size.attribute(  "height" ).toDouble() );
+    content->addAttributePt( "svg:width", s.width() );
+    content->addAttributePt( "svg:height", s.height() );
+
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
+    if( !angle.isNull() ) {
+        double angInRad = -angle.attribute( "value" ).toDouble() * M_PI / 180.0;
+        QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        QPointF center( s.width() / 2, s.height() / 2 );
+        double rotX = 0.0;
+        double rotY = 0.0;
+        m.map( center.x(), center.y(), &rotX, &rotY );
+        QPointF rot( rotX, rotY );
+        QPointF trans( center - rot + o );
+
+        QString transX;
+        transX.setNum( trans.x(), 'g', DBL_DIG );
+        QString transY;
+        transY.setNum( trans.y(), 'g', DBL_DIG );
+        QString str = QString( "rotate(%1) translate(%2pt %3pt)" ).arg( angInRad ).arg( transX ).arg( transY );
+        content->addAttribute( "draw:transform", str );
+    }
+    else {
+        content->addAttributePt( "svg:x", o.x() );
+        content->addAttributePt( "svg:y", o.y() );
+    }
 }
 
 QString Filterkpr2odf::rotateValue( double val )

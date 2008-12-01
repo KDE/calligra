@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "mysqldriver_global.h"
 #include "mysqlcursor.h"
 #include "mysqlconnection.h"
 #include "mysqlconnection_p.h"
@@ -116,7 +117,7 @@ QVariant MySqlCursor::value(uint pos)
     if (!d->mysqlrow || pos >= m_fieldCount || d->mysqlrow[pos] == 0)
         return QVariant();
 
-    KexiDB::Field *f = (m_fieldsExpanded && pos < m_fieldsExpanded->count())
+    KexiDB::Field *f = (m_fieldsExpanded && pos < (uint)m_fieldsExpanded->count())
                        ? m_fieldsExpanded->at(pos)->field : 0;
 
 //! @todo js: use MYSQL_FIELD::type here!

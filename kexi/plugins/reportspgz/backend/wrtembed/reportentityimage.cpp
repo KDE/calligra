@@ -36,9 +36,9 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
-#include <koproperty/property.h>
-#include <koproperty/set.h>
-#include <koproperty/editor.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
+#include <koproperty/EditorView.h>
 //
 // ReportEntitiesImage
 //

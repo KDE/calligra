@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,81 +26,91 @@
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
     KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
-    KoXmlElement backMaster = page.namedItem( "BACKMASTER" ).toElement();
-    if( !backMaster.isNull() )
-    {
-        style.addProperty( "presentation:background-visible", backMaster.attribute( "presentation:displayBackground", "1" ) == "1" );
-        style.addProperty( "presentation:background-objects-visible", backMaster.attribute( "displayMasterPageObject", "1" ) == "1" );
+
+    bool useMasterBackground = false;
+    if ( page.nodeName() == "PAGE" ) {
+        KoXmlElement backMaster = page.namedItem( "BACKMASTER" ).toElement();
+        if( !backMaster.isNull() )
+        {
+            style.addProperty( "presentation:background-visible", backMaster.attribute( "displayBackground", "1" ) == "1" );
+            style.addProperty( "presentation:background-objects-visible", backMaster.attribute( "displayMasterPageObject", "1" ) == "1" );
+            useMasterBackground = backMaster.attribute( "useMasterBackground", "0" ) == "1";
+        }
+        else
+        {
+            //if BACKMASTER is not found we assume it's true
+            style.addProperty( "presentation:background-visible", true );
+            style.addProperty( "presentation:background-objects-visible", true );
+            style.addProperty( "draw:fill", "none" );
+        }
     }
-    else
-    {
-        //if BACKMASTER is not found we assume it's true
-        style.addProperty( "presentation:background-visible", true );
-        style.addProperty( "presentation:background-objects-visible", true );
-        style.addProperty( "draw:fill", "none" );
-    }
+
+    style.setAutoStyleInStylesDotXml( m_sticky );
+
     if( !page.hasChildNodes() ) //we check if this is an empty page
     {
         return m_styles.lookup( style, "dp" );
     }
 
-    //it is not an empty page let's keep loading
-    KoXmlElement backType = page.namedItem( "BACKTYPE" ).toElement();
-    if( backType.isNull() || backType.attribute( "value" ) == "0" )
-    {
-        //it's some form of color, plain or a gradient
-        KoXmlElement bcType = page.namedItem( "BCTYPE" ).toElement();
-        if( bcType.isNull() || bcType.attribute( "value" ) == "0" )
+    if ( !useMasterBackground ) {
+        //it is not an empty page let's keep loading
+        KoXmlElement backType = page.namedItem( "BACKTYPE" ).toElement();
+        if( backType.isNull() || backType.attribute( "value" ) == "0" )
         {
-            //background is a plain color
-            QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
-            //if the backcolor is not present it's implicitally white
-            //unless a draw:fill is found, in which case even though a
-            //draw:fill-color is not present it's black in KPresenter2.0
-            style.addProperty( "draw:fill", "solid" );
-            style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color", "#ffffff" ) );
+            //it's some form of color, plain or a gradient
+            KoXmlElement bcType = page.namedItem( "BCTYPE" ).toElement();
+            if( bcType.isNull() || bcType.attribute( "value" ) == "0" )
+            {
+                //background is a plain color
+                QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
+                //if the backcolor is not present it's implicitally white
+                //unless a draw:fill is found, in which case even though a
+                //draw:fill-color is not present it's black in KPresenter2.0
+                style.addProperty( "draw:fill", "solid" );
+                style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color", "#ffffff" ) );
+            }
+            else
+            {
+                //background is a gradient
+                style.addProperty( "draw:fill", "gradient" );
+                style.addProperty( "draw:fill-gradient-name", createGradientStyle( page ) );
+            }
         }
         else
         {
-            //background is a gradient
-            style.addProperty( "draw:fill", "gradient" );
-            style.addProperty( "draw:fill-gradient-name", createGradientStyle( page ) );
-        }
-    }
-    else
-    {
-        //it's a picture instead
-        QString pictureName = getPictureNameFromKey( page.namedItem( "BACKPICTUREKEY" ).toElement() );
-        KoXmlElement backView = page.namedItem( "BACKVIEW" ).toElement();
-        style.addProperty( "draw:fill", "bitmap" );
+            //it's a picture instead
+            QString pictureName = getPictureNameFromKey( page.namedItem( "BACKPICTUREKEY" ).toElement() );
+            KoXmlElement backView = page.namedItem( "BACKVIEW" ).toElement();
+            style.addProperty( "draw:fill", "bitmap" );
 
-        //The image is specified by a draw:fill-image style in draw:fill-image-name
-        KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
+            //The image is specified by a draw:fill-image style in draw:fill-image-name
+            KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
 
-        //default values
-        drawFillImage.addAttribute( "xlink:href", "Pictures/" + m_pictures[ pictureName ] );
-        drawFillImage.addAttribute( "xlink:type", "simple" );
-        drawFillImage.addAttribute( "xlink:show", "embed" );
-        drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
-        QString repeat;
-        if( backView.isNull() )
-        {
-            //the picture is just centered
-            repeat = "no-repeat";
-        }
-        else if( backView.attribute( "value" ) == "0"  )
-        {
-            //the picture is stretched
-            repeat = "stretch";
-        }
-        else if( backView.attribute( "value" ) == "2" )
-        {
-            //picture is in mosaic
-            repeat = "repeat";
-        }
-        style.addProperty( "style:repeat", repeat );
+            //default values
+            drawFillImage.addAttribute( "xlink:href", "Pictures/" + m_pictures[ pictureName ] );
+            drawFillImage.addAttribute( "xlink:type", "simple" );
+            drawFillImage.addAttribute( "xlink:show", "embed" );
+            drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
+            QString repeat;
+            if( backView.isNull() )
+            {
+                //the picture is just centered
+                repeat = "no-repeat";
+            }
+            else if( backView.attribute( "value" ) == "0"  )
+            {
+                //the picture is stretched
+                repeat = "stretch";
+            }
+            else if( backView.attribute( "value" ) == "2" )
+            {
+                //picture is in mosaic
+                repeat = "repeat";
+            }
+            style.addProperty( "style:repeat", repeat );
 
-        style.addProperty( "draw:fill-image-name", m_styles.lookup( drawFillImage, "picture" ) );
+            style.addProperty( "draw:fill-image-name", m_styles.lookup( drawFillImage, "picture" ) );
+        }
     }
 
     //Add the duration of the page effect
@@ -284,18 +295,22 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     style.addAttribute( "draw:border", "0%" );
     //Check whether the gradient belongs to a page or to an object
     int type = 1;//we default to 1
-    if( gradientElement.nodeName() == "PAGE" )
+    if( gradientElement.nodeName() == "PAGE" || gradientElement.nodeName() == "MASTERPAGE" )
     {
         KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
-        if( !backColor1.isNull() )
-        {
+        if( !backColor1.isNull() ) {
             style.addAttribute( "draw:start-color", backColor1.attribute( "color" ) );
+        }
+        else {
+            style.addAttribute( "draw:end-color", "#ffffff" );
         }
 
         KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
-        if( !backColor2.isNull() )
-        {
+        if( !backColor2.isNull() ) {
             style.addAttribute( "draw:end-color", backColor2.attribute( "color" ) );
+        }
+        else {
+            style.addAttribute( "draw:end-color", "#ffffff" );
         }
 
         KoXmlElement bcType = gradientElement.namedItem( "BCTYPE" ).toElement();
@@ -424,13 +439,29 @@ const QString Filterkpr2odf::createPageLayout()
     return m_styles.lookup( style, "pm" );
 }
 
-const QString Filterkpr2odf::createMasterPageStyle()
+const QString Filterkpr2odf::createMasterPageStyle( const KoXmlNode & objects, const KoXmlElement & masterBackground )
 {
-    KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
-    KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
+    //KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
+    //KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
+
+    // set that we work on master 
+    m_sticky = true;
 
     KoGenStyle style( KoGenStyle::StyleMaster, "" );
     style.addAttribute( "style:page-layout-name", createPageLayout() );
+
+    style.addAttribute( "draw:style-name", createPageStyle( masterBackground ) );
+
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter xmlWriter( &buffer );
+
+    convertObjects( &xmlWriter, objects );
+
+    m_sticky = false;
+
+    QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    style.addChildElement( "master", contentElement );
 
     return m_styles.lookup( style, "Default" );
 }
@@ -516,11 +547,18 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
 
     //We now define what's the object filled with, we "default" to a brush if both attributes are present
     KoXmlElement brush = element.namedItem( "BRUSH" ).toElement();
+    KoXmlElement fillType = element.namedItem( "FILLTYPE" ).toElement();
+
+    int fillTypeValue = 0;
+    if ( ! fillType.isNull() ) {
+        fillTypeValue = fillType.attribute( "value" ).toInt();
+    }
+
     KoXmlElement gradient = element.namedItem( "GRADIENT" ).toElement();
     KoXmlElement filename = element.namedItem( "FILENAME" ).toElement();
     bool isConnection = filename.attribute( "value" ).startsWith( "Connections" );
     QString fill;
-    if( !brush.isNull() && !isConnection )
+    if( !brush.isNull() && !isConnection && fillTypeValue == 0 )
     {
         QString fillColor( brush.attribute( "color" ) );
 
@@ -557,7 +595,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             style.addProperty( "draw:opacity", createOpacityGradientStyle( opacity ) );
         }
     }
-    else if( !gradient.isNull() )
+    else if( !gradient.isNull() && fillTypeValue == 1 )
     {
         fill = "gradient";
         style.addProperty( "draw:fill-gradient-name", createGradientStyle( gradient ) );
@@ -687,6 +725,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
     }
 
 //     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standard Graphic style
+    style.setAutoStyleInStylesDotXml( m_sticky );
 
     return m_styles.lookup( style, "gr" );
 }

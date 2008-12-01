@@ -38,7 +38,9 @@ KexiDBSubForm::KexiDBSubForm(KFormDesigner::Form *parentForm, QWidget *parent)
         : Q3ScrollView(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
     setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
-    viewport()->setPaletteBackgroundColor(colorGroup().mid());
+    QPalette pal(viewport()->palette());
+    pal.setBrush(viewport()->backgroundRole(), pal.brush(QPalette::Mid));
+    viewport()->setPalette(pal);
 }
 /*
 void

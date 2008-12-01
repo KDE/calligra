@@ -21,9 +21,9 @@
 
 #include "reportrectentity.h"
 #include "reportsceneview.h"
-#include <koproperty/set.h>
-#include <koproperty/property.h>
-#include <koproperty/editor.h>
+#include <koproperty/Set.h>
+#include <koproperty/Property.h>
+#include <koproperty/EditorView.h>
 #include <QGraphicsSceneMouseEvent>
 #include "reportdesigner.h"
 #include <KoGlobal.h>

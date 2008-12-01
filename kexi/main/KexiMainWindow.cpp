@@ -103,8 +103,8 @@
 #include <widget/kexibrowser.h>
 #include <widget/kexipropertyeditorview.h>
 #include <widget/utils/kexirecordnavigator.h>
-#include <koproperty/editor.h>
-#include <koproperty/set.h>
+#include <koproperty/EditorView.h>
+#include <koproperty/Set.h>
 
 #include "startup/KexiStartup.h"
 #include "startup/KexiNewProjectWizard.h"
@@ -284,7 +284,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
     }
 
     KexiMainWindow *win = new KexiMainWindow();
-    QApplication::setMainWidget(win);
+    QApplication::setMainWidget(win); // FIXME: Deprecated method
 #ifdef KEXI_DEBUG_GUI
     //if (debugWindow)
     //debugWindow->reparent(win, QPoint(1,1));
@@ -370,8 +370,6 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
     setupMainWidget();
 //2.0: unused  createShellGUI(true);
     //}
-
-    d->statusBar = new KexiStatusBar(d->mainWidget);
 
 // d->origAppCaption = windowTitle();
 
@@ -1668,8 +1666,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
     //ok, now open "autoopen: objects
     if (d->prj) {
         foreach(KexiProjectData::ObjectInfo* info, d->prj->data()->autoopenObjects) {
-            KexiPart::Info *i = Kexi::partManager().infoForMimeType(
-                                    Q3CString("kexi/") + info->value("type").toLower().toLatin1());
+            KexiPart::Info *i = Kexi::partManager().infoForClass(info->value("type"));
             if (!i) {
                 not_found_msg += "<li>";
                 if (!info->value("name").isEmpty())
@@ -1951,6 +1948,9 @@ void KexiMainWindow::setupMainWidget()
     d->mainWidget = new KexiMainWidget();
     vlyr->addWidget(d->mainWidget, 1);
     d->mainWidget->setParent(this);
+
+    d->statusBar = new KexiStatusBar(this);
+    vlyr->addWidget(d->statusBar);
 }
 
 void KexiMainWindow::setupProjectNavigator()
@@ -2018,7 +2018,7 @@ void KexiMainWindow::setupProjectNavigator()
     }
     if (d->prj->isConnected()) {
         QString partManagerErrorMessages;
-        d->nav->setProject(d->prj, QString()/*all mimetypes*/, &partManagerErrorMessages);
+        d->nav->setProject(d->prj, QString()/*all classes*/, &partManagerErrorMessages);
         if (!partManagerErrorMessages.isEmpty()) {
             showWarningContinueMessage(partManagerErrorMessages, QString(),
                                        "dontShowWarningsRelatedToPluginsLoading");
@@ -3103,7 +3103,7 @@ tristate KexiMainWindow::openProjectInExternalKexiInstance(const QString& aFileN
 //! @todo use KRun
     args << fileName;
     Q3Process proc(args, this, "process");
-    proc.setWorkingDirectory(QFileInfo(fileName).dir(true));
+    proc.setWorkingDirectory(QFileInfo(fileName).absoluteDir());
     const bool ok = proc.start();
     if (!ok) {
         d->showStartProcessMsg(args);
@@ -3477,7 +3477,7 @@ tristate KexiMainWindow::getNewObjectInfo(
         //check if that name already exists
         KexiDB::SchemaData tmp_sdata;
         tristate result = project()->dbConnection()->loadObjectSchemaData(
-                              info->projectPartID(),
+                              project()->idForClass(info->partClass()),
                               d->nameDialog->widget()->nameText(), tmp_sdata);
         if (!result)
             return false;
@@ -3592,7 +3592,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
         if (d->propEditor) {
             // ah, closing detached window - better switch off property buffer right now...
             d->propBuffer = 0;
-            d->propEditor->editor()->changeSet(0, false);
+            d->propEditor->editor()->changeSet(0);
         }
     }
 
@@ -3976,15 +3976,15 @@ bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMod
     //! @todo this can be more complex once we deliver ACLs...
     if (!d->userMode)
         return true;
-    KexiPart::Part * part = Kexi::partManager().partForMimeType(item->mimeType());
+    KexiPart::Part * part = Kexi::partManager().partForClass(item->partClass());
     return part && (part->supportedUserViewModes() & viewMode);
 }
 
 KexiWindow *
-KexiMainWindow::openObject(const Q3CString& mimeType, const QString& name,
+KexiMainWindow::openObject(const QString& partClass, const QString& name,
                            Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString, QVariant>* staticObjectArgs)
 {
-    KexiPart::Item *item = d->prj->itemForMimeType(mimeType, name);
+    KexiPart::Item *item = d->prj->itemForClass(partClass, name);
     if (!item)
         return 0;
     return openObject(item, viewMode, openingCancelled, staticObjectArgs);
@@ -4033,7 +4033,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         alreadyOpened = true;
     } else {
         d->updatePropEditorVisibility(viewMode);
-        KexiPart::Part *part = Kexi::partManager().partForMimeType(item->mimeType());
+        KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
         //update tabs before opening
         updateCustomPropertyPanelTabs(currentWindow() ? currentWindow()->part() : 0,
                                       currentWindow() ? currentWindow()->currentViewMode() : Kexi::NoViewMode,
@@ -4144,7 +4144,7 @@ KexiMainWindow::openObjectFromNavigator(KexiPart::Item* item, Kexi::ViewMode vie
         }
     }
     //if DataViewMode is not supported, try Design, then Text mode (currently useful for script part)
-    KexiPart::Part *part = Kexi::partManager().partForMimeType(item->mimeType());
+    KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
     if (!part)
         return 0;
     if (viewMode == Kexi::DataViewMode && !(part->supportedViewModes() & Kexi::DataViewMode)) {
@@ -4183,7 +4183,7 @@ bool KexiMainWindow::newObject(KexiPart::Info *info, bool& openingCancelled)
     openingCancelled = false;
     if (!d->prj || !info)
         return false;
-    KexiPart::Part *part = Kexi::partManager().partForMimeType(info->mimeType());
+    KexiPart::Part *part = Kexi::partManager().partForClass(info->partClass());
     if (!part)
         return false;
 
@@ -4209,7 +4209,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     if (!d->prj || !item)
         return false;
 
-    KexiPart::Part *part = Kexi::partManager().partForMimeType(item->mimeType());
+    KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
     if (!part)
         return false;
 
@@ -4225,7 +4225,7 @@ tristate KexiMainWindow::removeObject(KexiPart::Item *item, bool dontAsk)
     }
 
     //also close 'print setup' dialog for this item, if any
-    tristate res;
+    tristate res = true;
 // int printedObjectID = 0;
 // if (d->pageSetupWindowItemID2dataItemID_map.contains(item->identifier()))
 //  printedObjectID = d->pageSetupWindowItemID2dataItemID_map[ item->identifier() ];
@@ -4325,22 +4325,33 @@ void KexiMainWindow::acceptPropertySetEditing()
 void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         bool preservePrevSelection, const QByteArray& propertyToSelect)
 {
-    kDebug() << "KexiMainWindow::propertySetSwitched() currentWindow(): "
-    << (currentWindow() ? currentWindow()->caption() : QString("NULL")) << " window: " << (window ? window->caption() : QString("NULL"));
-    if (currentWindow() != window) {
+    KexiWindow* _currentWindow = currentWindow();
+    kDebug() << "currentWindow(): "
+    << (_currentWindow ? _currentWindow->windowTitle() : QString("NULL"))
+    << " window: " << (window ? window->windowTitle() : QString("NULL"));
+    if (_currentWindow && _currentWindow != window) {
         d->propBuffer = 0; //we'll need to move to another prop. set
         return;
     }
     if (d->propEditor) {
-        KoProperty::Set *newBuf = currentWindow() ? currentWindow()->propertySet() : 0;
+        KoProperty::Set *newBuf = _currentWindow ? _currentWindow->propertySet() : 0;
         if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
             d->propBuffer = newBuf;
             if (preservePrevSelection) {
-                if (propertyToSelect.isEmpty())
-                    d->propEditor->editor()->changeSet(d->propBuffer, preservePrevSelection);
-                else
+                if (propertyToSelect.isEmpty()) {
+                    d->propEditor->editor()->changeSet(d->propBuffer, 
+                        preservePrevSelection ? KoProperty::EditorView::PreservePreviousSelection
+                            : KoProperty::EditorView::SetOption(0));
+                }
+                else {
                     d->propEditor->editor()->changeSet(d->propBuffer, propertyToSelect);
+                }
             }
+        }
+        if (   (newBuf && _currentWindow->currentViewMode() == Kexi::DesignViewMode)
+            || (!newBuf && _currentWindow && _currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode()))
+        {
+            d->propEditorDockWidget->setVisible(true);
         }
     }
 }
@@ -4389,7 +4400,7 @@ void KexiMainWindow::slotStartFeedbackAgent()
     if (wizard->exec()) {
         KToolInvocation::invokeMailer("kexi-reports-dummy@kexi.org",
                                       QString(), QString(),
-                                      about->appName() + Q3CString(" [feedback]"),
+                                      about->appName() + QString::fromLatin1(" [feedback]"),
                                       wizard->feedbackDocument().toString(2).local8Bit());
     }
 
@@ -4516,7 +4527,7 @@ KexiMainWindow::setupUserMode(KexiProjectData *projectData)
     setStandardToolBarMenuEnabled(false);
     setHelpMenuEnabled(false);
 
-    KexiPart::Info *i = Kexi::partManager().infoForMimeType(startupPart.toLatin1());
+    KexiPart::Info *i = Kexi::partManager().infoForClass(startupPart);
     if (!i) {
         hide();
         showErrorMessage(err_msg, i18n("Specified plugin does not exist."));
@@ -4680,7 +4691,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
 
 tristate KexiMainWindow::executeItem(KexiPart::Item* item)
 {
-    KexiPart::Info *info = item ? Kexi::partManager().infoForMimeType(item->mimeType()) : 0;
+    KexiPart::Info *info = item ? Kexi::partManager().infoForClass(item->partClass()) : 0;
     if ((! info) || (! info->isExecuteSupported()))
         return false;
     KexiPart::Part *part = Kexi::partManager().part(info);
@@ -4823,7 +4834,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
 {
     if (!item)
         return false;
-    KexiPart::Info *info = Kexi::partManager().infoForMimeType(item->mimeType());
+    KexiPart::Info *info = Kexi::partManager().infoForClass(item->partClass());
     if (!info->isPrintingSupported())
         return false;
 
@@ -4896,7 +4907,7 @@ tristate KexiMainWindow::printActionForItem(KexiPart::Item* item, PrintActionTyp
             }
         }
     }
-    KexiPart::Part * printingPart = Kexi::partManager().partForMimeType("kexi/simpleprinting");
+    KexiPart::Part * printingPart = Kexi::partManager().partForClass("org.kexi-project.simpleprinting");
     if (!printingPart)
         printingPart = new KexiSimplePrintingPart(); //hardcoded as there're no .desktop file
     KexiPart::Item* printingPartItem = d->prj->createPartItem(
@@ -4976,7 +4987,7 @@ void KexiMainWindow::slotEditFind()
     d->findDialog()->setReplaceMode(false);
 
     d->findDialog()->show();
-    d->findDialog()->setActiveWindow();
+    d->findDialog()->activateWindow();
     d->findDialog()->raise();
 }
 
@@ -5012,7 +5023,7 @@ void KexiMainWindow::slotEditReplace()
     d->findDialog()->setReplaceMode(true);
 //! @todo slotEditReplace()
     d->findDialog()->show();
-    d->findDialog()->setActiveWindow();
+    d->findDialog()->activateWindow();
 }
 
 void KexiMainWindow::slotEditReplaceNext()
@@ -5070,12 +5081,12 @@ void KexiMainWindow::slotGetNewStuff()
 #endif
 }
 
-void KexiMainWindow::highlightObject(const Q3CString& mime, const Q3CString& name)
+void KexiMainWindow::highlightObject(const QString& partClass, const QString& name)
 {
     slotViewNavigator();
     if (!d->prj)
         return;
-    KexiPart::Item *item = d->prj->itemForMimeType(mime, name);
+    KexiPart::Item *item = d->prj->itemForClass(partClass, name);
     if (!item)
         return;
     if (d->nav) {

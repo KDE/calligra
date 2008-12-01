@@ -47,7 +47,8 @@ namespace Role
         DurationScales,
         Maximum,
         Minimum,
-        EditorType
+        EditorType,
+        ReadWrite
     };
 } //namespace Role
 
@@ -170,6 +171,18 @@ struct KPLATOKERNEL_EXPORT WhatsThis
     static QString  nodeFreeFloat();
     static QString  nodeStartFloat();
     static QString  nodeFinishFloat();
+
+}; //namespace WhatsThis
+
+struct KPLATOKERNEL_EXPORT SchedulingState
+{
+    static QString deleted();
+    static QString notScheduled();
+    static QString scheduled();
+    static QString resourceOverbooked();
+    static QString resourceNotAvailable();
+    static QString resourceNotAllocated();
+    static QString constraintsNotMet();
 
 }; //namespace WhatsThis
 

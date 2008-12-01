@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,11 +20,10 @@
 #include "kexidatasourcepage.h"
 
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qtooltip.h>
 #include <q3header.h>
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -39,33 +38,34 @@
 #include <kexiproject.h>
 
 #include <formeditor/commands.h>
-#include <koproperty/property.h>
-#include <koproperty/utils.h>
+#include <koproperty/Property.h>
+#include <koproperty/Utils.h>
 
 KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
-        : QWidget(parent)
+        : KexiPropertyPaneViewBase(parent)
         , m_insideClearDataSourceSelection(false)
 {
+/*moved
     Q3VBoxLayout *vlyr = new Q3VBoxLayout(this);
     m_objectInfoLabel = new KexiObjectInfoLabel(this);
     m_objectInfoLabel->setObjectName("KexiObjectInfoLabel");
-    vlyr->addWidget(m_objectInfoLabel);
+    vlyr->addWidget(m_objectInfoLabel);*/
 
     m_noDataSourceAvailableSingleText
     = i18n("No data source could be assigned for this widget.");
     m_noDataSourceAvailableMultiText
     = i18n("No data source could be assigned for multiple widgets.");
 
-    vlyr->addSpacing(8);
+//moved    vlyr->addSpacing(8);
 
     //Section 1: Form's/Widget's Data Source
     KoProperty::GroupContainer *container = new KoProperty::GroupContainer(
         i18n("Data Source"), this);
-    vlyr->addWidget(container);
+    layout()->addWidget(container);
 
     QWidget *contents = new QWidget(container);
     container->setContents(contents);
-    Q3VBoxLayout *contentsVlyr = new Q3VBoxLayout(contents);
+    QVBoxLayout *contentsVlyr = new QVBoxLayout(contents);
 
     m_noDataSourceAvailableLabel = new QLabel(m_noDataSourceAvailableSingleText, contents);
     m_noDataSourceAvailableLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -75,7 +75,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     contentsVlyr->addWidget(m_noDataSourceAvailableLabel);
 
     //-Widget's Data Source
-    Q3HBoxLayout *hlyr = new Q3HBoxLayout(contentsVlyr);
+    QHBoxLayout *hlyr = new QHBoxLayout();
+    contentsVlyr->addLayout(hlyr);
 #if 0
 //! @todo unhide this when expression work
 // m_widgetDSLabel = new QLabel(i18nc("Table Field, Query Field or Expression", "Source field or expression:"), this);
@@ -111,7 +112,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     contentsVlyr->addSpacing(8);
 
     //- Form's Data Source
-    hlyr = new Q3HBoxLayout(contentsVlyr);
+    hlyr = new QHBoxLayout();
+    contentsVlyr->addLayout(hlyr);
     m_dataSourceLabel = new QLabel(i18n("Form's data source:"), contents);
     m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_dataSourceLabel->setMargin(2);
@@ -120,7 +122,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     hlyr->addWidget(m_dataSourceLabel);
 
     m_gotoButton = new KexiSmallToolButton(
-        KIcon("goto-page"), QString(), contents);
+        KIcon("go-jump"), QString(), contents);
     m_gotoButton->setObjectName("gotoButton");
     m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
     m_gotoButton->setToolTip(i18n("Go to selected form's data source"));
@@ -144,9 +146,9 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
     m_availableFieldsLabel = 0;
     m_addField = 0;
 // m_fieldListView = 0;
-    vlyr->addStretch();
+    static_cast<QBoxLayout*>(layout())->addStretch();
 #else
-    vlyr->addSpacing(fontMetrics().height());
+    static_cast<QBoxLayout*>(layout())->addSpacing(fontMetrics().height());
     /* Q3Frame *separator = new QFrame(this);
       separator->setFrameShape(Q3Frame::HLine);
       separator->setFrameShadow(Q3Frame::Sunken);
@@ -160,14 +162,15 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
     //2. Inserting fields
     container = new KoProperty::GroupContainer(i18n("Inserting Fields"), this);
-    vlyr->addWidget(container, 1);
+    static_cast<QBoxLayout*>(layout())->addWidget(container, 1);
 
     //helper info
 //! @todo allow to hide such helpers by adding global option
     contents = new QWidget(container);
     container->setContents(contents);
-    contentsVlyr = new Q3VBoxLayout(contents);
-    hlyr = new Q3HBoxLayout(contentsVlyr);
+    contentsVlyr = new QVBoxLayout(contents);
+    hlyr = new QHBoxLayout();
+    contentsVlyr->addLayout(hlyr);
     m_mousePointerLabel = new QLabel(contents);
     hlyr->addWidget(m_mousePointerLabel);
     m_mousePointerLabel->setPixmap(SmallIcon("mouse_pointer"));
@@ -181,7 +184,8 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 
     //Available Fields
     contentsVlyr->addSpacing(4);
-    hlyr = new Q3HBoxLayout(contentsVlyr);
+    hlyr = new QHBoxLayout();
+    contentsVlyr->addLayout(hlyr);
     m_availableFieldsLabel = new QLabel(i18n("Available fields:"), contents);
     m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_availableFieldsLabel->setMargin(2);
@@ -211,7 +215,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
             this, SLOT(slotFieldDoubleClicked(const QString&, const QString&, const QString&)));
 #endif
 
-    vlyr->addStretch(1);
+    static_cast<QBoxLayout*>(layout())->addStretch(1);
 
     connect(m_dataSourceCombo, SIGNAL(textChanged(const QString &)),
             this, SLOT(slotDataSourceTextChanged(const QString &)));
@@ -266,10 +270,10 @@ void KexiDataSourcePage::clearWidgetDataSourceSelection()
 
 void KexiDataSourcePage::slotGotoSelected()
 {
-    const QString mime(m_dataSourceCombo->selectedMimeType());
-    if (mime == "kexi/table" || mime == "kexi/query") {
+    const QString partClass(m_dataSourceCombo->selectedPartClass());
+    if (partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") {
         if (m_dataSourceCombo->isSelectionValid())
-            emit jumpToObjectRequested(mime, m_dataSourceCombo->selectedName().toLatin1());
+            emit jumpToObjectRequested(partClass, m_dataSourceCombo->selectedName());
     }
 }
 
@@ -280,18 +284,19 @@ void KexiDataSourcePage::slotInsertSelectedFields()
     if (selectedFieldNames.isEmpty())
         return;
 
-    emit insertAutoFields(m_fieldListView->schema()->table() ? "kexi/table" : "kexi/query",
+    emit insertAutoFields(m_fieldListView->schema()->table()
+                            ? "org.kexi-project.table" : "org.kexi-project.query",
                           m_fieldListView->schema()->name(), selectedFieldNames);
 #endif
 }
 
-void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourceMimeType, const QString& sourceName,
+void KexiDataSourcePage::slotFieldDoubleClicked(const QString& sourcePartClass, const QString& sourceName,
         const QString& fieldName)
 {
 #ifndef KEXI_NO_AUTOFIELD_WIDGET
     QStringList selectedFields;
     selectedFields.append(fieldName);
-    emit insertAutoFields(sourceMimeType, sourceName, selectedFields);
+    emit insertAutoFields(sourcePartClass, sourceName, selectedFields);
 #endif
 }
 
@@ -314,12 +319,15 @@ void KexiDataSourcePage::slotDataSourceChanged()
 {
     if (!m_dataSourceCombo->project())
         return;
-    const QString mime(m_dataSourceCombo->selectedMimeType());
+    const QString partClass(m_dataSourceCombo->selectedPartClass());
     bool dataSourceFound = false;
     QString name(m_dataSourceCombo->selectedName());
-    if ((mime == "kexi/table" || mime == "kexi/query") && m_dataSourceCombo->isSelectionValid()) {
+    if ((partClass == "org.kexi-project.table" || partClass == "org.kexi-project.query") 
+        && m_dataSourceCombo->isSelectionValid())
+    {
         KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
-            m_dataSourceCombo->project()->dbConnection(), name.toLatin1(), mime == "kexi/table");
+            m_dataSourceCombo->project()->dbConnection(), name.toLatin1(), 
+            partClass == "org.kexi-project.table");
         if (tableOrQuery->table() || tableOrQuery->query()) {
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
             m_tableOrQuerySchema = tableOrQuery;
@@ -327,7 +335,7 @@ void KexiDataSourcePage::slotDataSourceChanged()
             m_fieldListView->setSchema(tableOrQuery);
 #endif
             dataSourceFound = true;
-            m_sourceFieldCombo->setTableOrQuery(name, mime == "kexi/table");
+            m_sourceFieldCombo->setTableOrQuery(name, partClass == "org.kexi-project.table");
         } else {
             delete tableOrQuery;
         }
@@ -347,7 +355,7 @@ void KexiDataSourcePage::slotDataSourceChanged()
 #endif
     }
     updateSourceFieldWidgetsAvailability();
-    emit formDataSourceChanged(mime, name);
+    emit formDataSourceChanged(partClass, name);
 }
 
 void KexiDataSourcePage::slotFieldSelected()
@@ -373,9 +381,9 @@ void KexiDataSourcePage::slotFieldSelected()
     );
 }
 
-void KexiDataSourcePage::setDataSource(const QString& mimeType, const QString& name)
+void KexiDataSourcePage::setDataSource(const QString& partClass, const QString& name)
 {
-    m_dataSourceCombo->setDataSource(mimeType, name);
+    m_dataSourceCombo->setDataSource(partClass, name);
 }
 
 void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
@@ -403,19 +411,18 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
         if (propertySet->contains("this:className"))
           objectClassName = (*propertySet)["this:className"].value().toCString();
       }*/
-    KexiPropertyEditorView::updateInfoLabelForPropertySet(
-        m_objectInfoLabel, propertySet);
+    updateInfoLabelForPropertySet(propertySet);
 
     const bool isForm = objectClassName == "KexiDBForm";
 // kDebug() << "objectClassName=" << objectClassName;
 // {
     /*  //this is top level form's surface: data source means table or query
-        QCString dataSourceMimeType, dataSource;
-        if (buffer->hasProperty("dataSourceMimeType"))
-          dataSourceMimeType = (*buffer)["dataSourceMimeType"].value().toCString();
+        QCString dataSourcePartClass, dataSource;
+        if (buffer->hasProperty("dataSourcePartClass"))
+          dataSourcePartClass = (*buffer)["dataSourcePartClass"].value().toCString();
         if (buffer->hasProperty("dataSource"))
           dataSource = (*buffer)["dataSource"].value().toCString();
-        m_dataSourceCombo->setDataSource(dataSourceMimeType, dataSource);*/
+        m_dataSourceCombo->setDataSource(dataSourcePartClass, dataSource);*/
 // }
 // else {
 

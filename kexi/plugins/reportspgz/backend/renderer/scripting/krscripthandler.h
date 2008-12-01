@@ -28,11 +28,14 @@
 class KRScriptFunctions;
 class KRScriptConstants;
 class KRScriptDebug;
-class QScriptEngine;
 class KRReportData;
 class OROPage;
 class KRScriptDraw;
 
+namespace Scripting{
+    class Report;
+    class Section;
+}
 class KRScriptHandler : public QObject
 {
     Q_OBJECT
@@ -57,8 +60,11 @@ private:
     KRScriptDebug *_debug;
     KRScriptDraw *_draw;
 
-    QString fieldFunctions();
+    Scripting::Report *_report;
 
+    QString fieldFunctions();
+    QString scriptCode();
+    
     KexiDB::Connection *_conn;
     const KexiDB::Cursor *_curs;
 
@@ -68,6 +74,7 @@ private:
     Kross::Action* _action;
 
     QMap<QString, QVariant> _groups;
+    QMap<KRSectionData*, Scripting::Section*> _sectionMap;
     QString where();
 };
 

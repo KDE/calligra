@@ -26,6 +26,7 @@
 #include <QDate>
 #include <QItemDelegate>
 #include <QMetaEnum>
+#include <QSortFilterProxyModel>
 
 class QMimeData;
 class QModelIndex;
@@ -244,7 +245,9 @@ public:
     
     virtual void setProject( Project *project );
     void setManager( ScheduleManager *sm );
-    
+    ScheduleManager *manager() const { return m_nodemodel.manager(); }
+    long id() const { return m_nodemodel.id(); }
+
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     
     virtual QModelIndex parent( const QModelIndex & index ) const;
@@ -311,7 +314,12 @@ protected:
     bool setStartupCost( Node *node, const QVariant &value, int role );
     bool setShutdownAccount( Node *node, const QVariant &value, int role );
     bool setShutdownCost( Node *node, const QVariant &value, int role );
-    
+    bool setCompletion( Node *node, const QVariant &value, int role );
+    bool setActualEffort( Node *node, const QVariant &value, int role );
+    bool setRemainingEffort( Node *node, const QVariant &value, int role );
+    bool setStartedTime( Node *node, const QVariant &value, int role );
+    bool setFinishedTime( Node *node, const QVariant &value, int role );
+
 private:
     Node *m_node; // for sanety check
     NodeModel m_nodemodel;
@@ -370,7 +378,7 @@ public:
 
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
 
-    const QList<Node*> &mileStones() const { return m_mslist; }
+    QList<Node*> mileStones() const;
     
 protected slots:
     void slotNodeChanged( Node* );
@@ -404,11 +412,30 @@ protected:
     bool setShutdownCost( Node *node, const QVariant &value, int role );
 
 protected:
+    bool resetData();
     void resetModel();
     
 private:
     NodeModel m_nodemodel;
-    QList<Node*> m_mslist;
+    QMap<QString, Node*> m_nodemap;
+};
+
+class KPLATOMODELS_EXPORT NodeSortFilterProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+    NodeSortFilterProxyModel( ItemModelBase* model, QObject *parent, bool filterUnscheduled = true );
+
+    ItemModelBase *itemModel() const;
+    void setFilterUnscheduled( bool on );
+    bool filterUnscheduled() const { return m_filterUnscheduled; }
+
+protected:
+    bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
+
+private:
+    NodeItemModel *m_model;
+    bool m_filterUnscheduled;
 };
 
 } //namespace KPlato

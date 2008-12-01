@@ -202,6 +202,9 @@ public:
     virtual void setProject( Project *project );
     virtual void setReadWrite( bool rw ) { m_readWrite = rw; }
     bool isReadWrite() { return m_readWrite; }
+    void setReadOnly( int column, bool ro ) { m_columnROMap[ column ] = ro; }
+    /// Returns true if @p column has been set to ReadOnly.
+    bool isColumnReadOnly( int column ) const { return m_columnROMap.contains( column ) && m_columnROMap[ column ]; }
 
     /**
      * Check if the @p data is allowed to be dropped on @p index,
@@ -215,6 +218,8 @@ public:
     /// If default should be used, return 0.
     virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const { Q_UNUSED(column); Q_UNUSED(parent); return 0; }
 
+    bool setData( const QModelIndex &index, const QVariant &value, int role );
+
 signals:
     /// Connect to this signal if your model modifies data using undo commands.
     void executeCommand( QUndoCommand* );
@@ -226,6 +231,7 @@ protected slots:
 protected:
     Project *m_project;
     bool m_readWrite;
+    QMap<int, bool> m_columnROMap;
 };
 
 

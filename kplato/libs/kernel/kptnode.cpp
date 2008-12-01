@@ -179,7 +179,7 @@ void Node::takeChildNode( Node *node) {
     }
     node->setParentNode(0);
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -193,7 +193,7 @@ void Node::takeChildNode( int number ) {
         }
     }
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -205,7 +205,7 @@ void Node::insertChildNode( int index, Node *node ) {
         m_nodes.insert(index,node);
     node->setParentNode( this );
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -216,14 +216,14 @@ void Node::addChildNode( Node *node, Node *after) {
         m_nodes.append(node);
         node->setParentNode( this );
         if ( t != type() ) {
-            changed();
+//        changed(); Note: handled by project
         }
         return;
     }
     m_nodes.insert(index+1, node);
     node->setParentNode(this);
     if ( t != type() ) {
-        changed();
+//        changed(); Note: handled by project
     }
 }
 
@@ -583,6 +583,15 @@ bool Node::schedulingError( long id ) const
 
 bool Node::notScheduled( long id ) const
 {
+    if ( type() == Type_Summarytask ) {
+        // i am scheduled if al least on child is scheduled
+        foreach ( Node *n, m_nodes ) {
+            if ( ! n->notScheduled( id ) ) {
+                return false;
+            }
+        }
+        return true;
+    }
     Schedule *s = schedule( id );
     return s == 0 || s->isDeleted() || s->notScheduled;
 }
@@ -656,6 +665,23 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earlyStart = time;
+    //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
+    switch ( m_constraint ) {
+        case FinishNotLater:
+        case MustFinishOn:
+            if ( m_constraintEndTime < time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        case MustStartOn:
+        case FixedInterval:
+            if ( m_constraintStartTime < time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        default:
+            break;
+    }
     //kDebug()<<m_name<<":"<<m_currentSchedule->earlyStart;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
@@ -667,6 +693,22 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->lateFinish = time;
+    switch ( m_constraint ) {
+        case StartNotEarlier:
+        case MustStartOn:
+            if ( m_constraintStartTime > time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        case MustFinishOn:
+        case FixedInterval:
+            if ( m_constraintEndTime > time ) {
+                m_currentSchedule->logWarning("Task constraint outside project constraint");
+            }
+            break;
+        default:
+            break;
+    }
     //kDebug()<<m_name<<":"<<m_currentSchedule->lateFinish;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
@@ -677,8 +719,10 @@ void Node::propagateLatestFinish(DateTime &time) {
 void Node::moveEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
-    if (m_currentSchedule->earlyStart < time)
+    if (m_currentSchedule->earlyStart < time) {
+        //m_currentSchedule->logDebug( "moveEarliestStart: " + m_currentSchedule->earlyStart.toString() + " -> " + time.toString() );
         m_currentSchedule->earlyStart = time;
+    }
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->moveEarliestStart(time);
@@ -1041,7 +1085,7 @@ int Node::level() const {
 }
 
 QString Node::generateWBSCode( QList<int> &indexes ) const {
-    //kDebug()<<m_name<<indexes;
+    kDebug()<<m_name<<indexes;
     if ( m_parent == 0 ) {
         return QString();
     }
@@ -1050,7 +1094,7 @@ QString Node::generateWBSCode( QList<int> &indexes ) const {
 }
 
 QString Node::wbsCode() const {
-    //kDebug()<<m_name;
+    kDebug()<<m_name;
     QList<int> indexes;
     return generateWBSCode( indexes );
 }

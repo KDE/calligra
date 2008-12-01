@@ -35,8 +35,8 @@
 
 class KRObjectData;
 
-#include <koproperty/property.h>
-#include <koproperty/set.h>
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include <QColor>
 
 namespace Scripting

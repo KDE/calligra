@@ -775,10 +775,10 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
         return QColor(r.text().toInt(), g.text().toInt(), b.text().toInt());
     } else if (type == "bool") {
         if (text == "true")
-            return QVariant(true);
+            return true;
         else if (text == "false")
-            return QVariant(false);
-        return QVariant(text.toInt() != 0);
+            return false;
+        return text.toInt() != 0;
     } else if (type == "number") {
         return text.toInt();
     } else if (type == "size") {

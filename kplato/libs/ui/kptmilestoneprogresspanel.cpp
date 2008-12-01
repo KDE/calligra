@@ -20,8 +20,8 @@
 #include "kptmilestoneprogresspanel.h"
 
 #include <QCheckBox>
+#include <QDateTime>
 
-#include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -58,10 +58,12 @@ MacroCommand *MilestoneProgressPanel::buildCommand() {
     if ( m_completion.isFinished() != finished->isChecked() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishedCmd( m_completion, finished->isChecked()) );
+        cmd->addCommand( new ModifyCompletionStartedCmd( m_completion, finished->isChecked()) );
     }
     if ( m_completion.finishTime().dateTime() != finishTime->dateTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
         cmd->addCommand( new ModifyCompletionFinishTimeCmd( m_completion, finishTime->dateTime() ) );
+        cmd->addCommand( new ModifyCompletionStartTimeCmd( m_completion, finishTime->dateTime() ) );
     }
     if ( finished->isChecked() && finishTime->dateTime().isValid() ) {
         Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
@@ -83,7 +85,7 @@ MilestoneProgressPanelImpl::MilestoneProgressPanelImpl(QWidget *parent, const ch
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
 
-    connect(finishTime, SIGNAL(valueChanged(const QDateTime &)), SLOT(slotChanged()));
+    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
     
 }
 
@@ -93,10 +95,8 @@ void MilestoneProgressPanelImpl::slotChanged() {
 
 void MilestoneProgressPanelImpl::slotFinishedChanged(bool state) {
     if (state) {
-        if (!finishTime->dateTime().isValid()) {
-            finishTime->setDateTime(QDateTime::currentDateTime());
-        }
-    }   
+        finishTime->setDateTime(QDateTime::currentDateTime());
+    }
     enableWidgets();
 }
 

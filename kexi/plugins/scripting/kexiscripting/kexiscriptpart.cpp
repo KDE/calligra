@@ -75,7 +75,7 @@ public:
 };
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
-        : KexiPart::Part((int)KexiPart::ScriptObjectType, parent, l)
+        : KexiPart::Part(parent, l)
         , d(new Private(this))
 {
     setInternalPropertyValue("instanceName",

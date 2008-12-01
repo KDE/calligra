@@ -120,7 +120,8 @@ public:
             return i18n("Row navigator");
 //    return QWhatsThis::textFor(m_tv->m_navPanel, QPoint( pos.x(), pos.y() - m_tv->height() + bottomMargin ));
         }
-        KexiDB::Field *f = m_tv->field(m_tv->columnAt(pos.x() - leftMargin));
+        const int col = m_tv->columnAt(pos.x() - leftMargin);
+        KexiDB::Field *f = col == -1 ? 0 : m_tv->field(col);
         if (!f)
             return QString();
         return f->description().isEmpty() ? f->captionOrName() : f->description();
@@ -271,10 +272,12 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 
     m_verticalHeader = new KexiRecordMarker(this);
     m_verticalHeader->setObjectName("m_verticalHeader");
-    m_verticalHeader->setSelectionBackgroundColor(palette().active().highlight());
+    m_verticalHeader->setSelectionBackgroundBrush(palette().brush(QPalette::Highlight));
     m_verticalHeader->setCellHeight(d->rowHeight);
 // m_verticalHeader->setFixedWidth(d->rowHeight);
     m_verticalHeader->setCurrentRow(-1);
+    connect(m_verticalHeader, SIGNAL(rowPressed(uint)), this, SLOT(moveToRecordRequested(uint)));
+    connect(m_verticalHeader, SIGNAL(rowHighlighted(int)), this, SLOT(setHighlightedRow(int)));
 
     setMargins(
         qMin(m_horizontalHeader->sizeHint().height(), d->rowHeight),
@@ -1274,7 +1277,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
     QWidget *w = focusWidget();
 // if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view() && w!=m_editor)) {
 // if (!w || w!=viewport() && w!=this && (!m_editor || w!=m_editor->view())) {
-    if (!w || w != viewport() && w != this && (!m_editor || !KexiUtils::hasParent(dynamic_cast<QObject*>(m_editor), w))) {
+    if (!w || (w != viewport() && w != this && (!m_editor || !KexiUtils::hasParent(dynamic_cast<QObject*>(m_editor), w)))) {
         //don't process stranger's events
         e->ignore();
         return;
@@ -1412,7 +1415,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
                 startEditOrToggleValue();
             } else {
                 kexidbg << "KexiTableView::KeyPressEvent(): default";
-                if (e->text().isEmpty() || !e->text().isEmpty() && !e->text()[0].isPrint()) {
+                if (e->text().isEmpty() || (!e->text().isEmpty() && !e->text()[0].isPrint())) {
                     kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16);
                     //    e->ignore();
                     Q3ScrollView::keyPressEvent(e);
@@ -2478,7 +2481,7 @@ void KexiTableView::paletteChange(const QPalette &oldPalette)
     Q_UNUSED(oldPalette);
     //update:
     if (m_verticalHeader)
-        m_verticalHeader->setSelectionBackgroundColor(palette().active().highlight());
+        m_verticalHeader->setSelectionBackgroundBrush(palette().brush(QPalette::Highlight));
     if (m_horizontalHeader)
         m_horizontalHeader->setSelectionBackgroundColor(palette().active().highlight());
 }

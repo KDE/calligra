@@ -57,7 +57,7 @@ public:
 
 protected slots:
     void slotActivated( const QModelIndex index );
-
+    void slotDropAllowed( const QModelIndex &index, int dropIndicatorPosition, QDragMoveEvent *event );
 };
 
 class KPLATOUI_EXPORT ResourceEditor : public ViewBase
@@ -67,6 +67,7 @@ public:
     ResourceEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    Project *project() const { return m_view->project(); }
     virtual void draw( Project &project );
     virtual void draw();
 

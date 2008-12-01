@@ -670,7 +670,7 @@ KexiDBAutoField::setFocusPolicy(Qt::FocusPolicy policy)
 void
 KexiDBAutoField::updateInformationAboutUnboundField()
 {
-    if ((d->autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
+    if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
             || (!d->autoCaption && d->caption.isEmpty())) {
         d->label->setText(QString::fromLatin1(name()) + " " + i18nc("Unbound Auto Field", " (unbound)"));
     }
@@ -681,7 +681,7 @@ KexiDBAutoField::paintEvent( QPaintEvent* pe )
 {
   QWidget::paintEvent( pe );
 
-  if (   (d->autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
+  if (   (d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
     || (!d->autoCaption && d->caption.isEmpty()) )
   {
     QPainter p(this);
@@ -735,7 +735,7 @@ const QColor & KexiDBAutoField::foregroundLabelColor() const
     if (d->widgetType == Boolean)
         return paletteForegroundColor();
 
-    return d->label->paletteForegroundColor();
+    return d->label->palette().color(d->label->foregroundRole());
 }
 
 void KexiDBAutoField::setForegroundLabelColor(const QColor & color)
@@ -743,8 +743,15 @@ void KexiDBAutoField::setForegroundLabelColor(const QColor & color)
     if (d->widgetType == Boolean)
         setPaletteForegroundColor(color);
     else {
-        d->label->setPaletteForegroundColor(color);
-        QWidget::setPaletteForegroundColor(color);
+//        d->label->setPaletteForegroundColor(color);
+        QPalette pal(d->label->palette());
+        pal.setColor(d->label->foregroundRole(), color);
+        d->label->setPalette(pal);
+
+//        QWidget::setPaletteForegroundColor(color);
+        pal = palette();
+        pal.setColor(foregroundRole(), color);
+        setPalette(pal);
     }
 }
 
@@ -761,8 +768,15 @@ void KexiDBAutoField::setBackgroundLabelColor(const QColor & color)
     if (d->widgetType == Boolean)
         setPaletteBackgroundColor(color);
     else {
-        d->label->setPaletteBackgroundColor(color);
-        QWidget::setPaletteBackgroundColor(color);
+//        d->label->setPaletteBackgroundColor(color);
+        QPalette pal(d->label->palette());
+        pal.setColor(d->label->backgroundRole(), color);
+        d->label->setPalette(pal);
+
+//        QWidget::setPaletteBackgroundColor(color);
+        pal = palette();
+        pal.setColor(backgroundRole(), color);
+        setPalette(pal);
     }
 
 // if (m_subwidget)

@@ -19,7 +19,7 @@
  */
 #ifndef KROBJECTDATA_H
 #define KROBJECTDATA_H
-#include <koproperty/property.h>
+#include <koproperty/Property.h>
 #include "krpos.h"
 
 class KRLineData;

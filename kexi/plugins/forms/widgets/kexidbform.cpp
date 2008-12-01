@@ -134,8 +134,9 @@ KexiDataAwareObjectInterface* KexiDBForm::dataAwareObject() const
 static void repaintAll(QWidget *w)
 {
     const QList<QWidget*> list(w->findChildren<QWidget*>());
-    foreach(QWidget *widget, list)
-    widget->repaint();
+    foreach(QWidget *widget, list) {
+        widget->repaint();
+    }
 }
 
 void

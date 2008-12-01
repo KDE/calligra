@@ -42,16 +42,20 @@ public:
     };
 
     KarbonStyleButtonBox( QWidget* parent = 0L );
+    virtual ~KarbonStyleButtonBox();
 
 public slots:
+    /// enables the winding buttons
     void setFill();
+    /// disables the winding buttons
     void setStroke();
 
 signals:
     void buttonPressed( int buttonId );
 
 private:
-    QButtonGroup * m_group;
+    class Private;
+    Private * const d;
 };
 
 #endif // KARBONSTYLEBUTTONBOX_H
