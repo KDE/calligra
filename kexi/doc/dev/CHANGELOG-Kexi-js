@@ -22,6 +22,13 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-01
+Core
+= KexiFieldDrag: encoding drag data in Qt 3.1 format no longer needed
+Table View
+- fixed drag&drop items as table rows for Qt 4 
+  (used e.g. in the Query Designer)
+
 2008-11-21
 Core
 - make default value of X-Kexi-PropertyEditorAlwaysVisibleInDesignMode 

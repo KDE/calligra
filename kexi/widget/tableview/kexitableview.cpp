@@ -2387,7 +2387,6 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
 {
     //don't allow to stole key my events by others:
 // kexidbg << "spontaneous " << e->spontaneous() << " type=" << e->type();
-
     if (e->type() == QEvent::KeyPress) {
         if (e->spontaneous() /*|| e->type()==QEvent::AccelOverride*/) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -2462,6 +2461,9 @@ bool KexiTableView::eventFilter(QObject *o, QEvent *e)
           }
         }
       }*/
+    else if (o == viewport() && e->type() == QEvent::DragEnter) {
+      e->accept();
+    }
     return Q3ScrollView::eventFilter(o, e);
 }
 
