@@ -425,7 +425,7 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
-    bool ok;
+    bool ok = true;
     m_xmlLoader.startLoad();
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {

@@ -25,9 +25,6 @@
     <height>0</height>
    </size>
   </property>
-  <property name="windowTitle" >
-   <string>RelationPanel</string>
-  </property>
   <layout class="QVBoxLayout" >
    <property name="leftMargin" >
     <number>0</number>

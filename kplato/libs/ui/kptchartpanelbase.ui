@@ -16,9 +16,6 @@
     <height>16777215</height>
    </size>
   </property>
-  <property name="windowTitle" >
-   <string>Project Chart Indicators</string>
-  </property>
   <property name="autoFillBackground" >
    <bool>false</bool>
   </property>

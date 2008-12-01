@@ -184,13 +184,7 @@ protected slots:
     void slotBaselineSchedule( Project *project, ScheduleManager *sm );
     void slotProgressChanged( int value );
 
-    void slotEditCalendar();
-    void slotEditCalendar( Calendar *calendar );
-
-    void slotProjectCalendar();
     void slotProjectWorktime();
-    void slotProjectAccounts();
-    void slotProjectResources();
 
     void slotOpenNode();
     void slotOpenNode( Node *node );
@@ -297,9 +291,6 @@ private:
     // ------ Project
     KAction *actionEditMainProject;
     KAction *actionEditStandardWorktime;
-    KAction *actionEditCalendarList;
-    KAction *actionEditAccounts;
-    KAction *actionEditResources;
 
     // ------ Tools
     KAction *actionDefineWBS;
@@ -318,7 +309,6 @@ private:
     KAction *actionMoveTaskDown;
 
     KAction *actionEditResource;
-    KAction *actionEditCalendar;
     KAction *actionEditRelation;
     KAction *actionDeleteRelation;
     
