@@ -3571,7 +3571,7 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
 {
-    kDebug();
+    //kDebug();
     if ( m_project == 0 ) {
         return;
     }
@@ -3603,20 +3603,20 @@ void NodeSortFilterProxyModel::setFilterUnscheduled( bool on ) {
 
 bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
 {
-    kDebug()<<sourceModel()<<row<<parent;
+    //kDebug()<<sourceModel()<<row<<parent;
     if ( itemModel()->project() == 0 ) {
-        kDebug()<<itemModel()->project();
+        //kDebug()<<itemModel()->project();
         return false;
     }
     if ( m_filterUnscheduled ) {
         QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
         if ( s == "true" ) {
-            kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
+            //kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
             return false;
         }
     }
     bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
-    kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    //kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
 }
 

@@ -931,6 +931,7 @@ void Task::initiateCalculationLists(MainSchedule &sch) {
 
 DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
     DateTime time;
+    // do them forward
     foreach (Relation *r, list) {
         if (r->parent()->type() == Type_Summarytask) {
             //kDebug()<<"Skip summarytask:"<<it.current()->parent()->name();
@@ -995,7 +996,7 @@ DateTime Task::calculateEarlyFinish(int use) {
         //kDebug()<<earliestStart.toString()<<" +"<<m_durationBackward.toString()<<""<<m_name<<" calculateForward() (visited)";
         return cs->earlyFinish;
     }
-    cs->logInfo( "Calculate early finish" );
+    cs->logInfo( "Calculate early finish " );
     //kDebug()<<"------>"<<m_name<<""<<cs->earlyStart;
     if (type() == Node::Type_Task) {
         m_durationForward = m_estimate->value(use, pert);
@@ -1139,7 +1140,10 @@ DateTime Task::calculateEarlyFinish(int use) {
     m_visitedForward = true;
     cs->insertForwardNode( this );
     cs->earlyFinish = cs->earlyStart + m_durationForward;
-    //kDebug()<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<cs->earlyFinish<<""<<m_name;
+    foreach ( Appointment *a, cs->appointments( Schedule::CalculateForward ) ) {
+        cs->logInfo( "'" + a->resource()->resource()->name() + "' booked: " + a->startTime().toString() + " to " + a->endTime().toString() );
+    }
+    cs->logInfo( "Early finish calculated: " + cs->earlyFinish.toString() );
     cs->incProgress();
     return cs->earlyFinish;
 }
@@ -1344,7 +1348,10 @@ DateTime Task::calculateLateStart(int use) {
     m_visitedBackward = true;
     cs->insertBackwardNode( this );
     cs->lateStart = cs->lateFinish - m_durationBackward;
-    //kDebug()<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<cs->lateStart<<" "<<m_name;
+    foreach ( Appointment *a, cs->appointments( Schedule::CalculateBackward ) ) {
+        cs->logInfo( "'" + a->resource()->resource()->name() + "' booked: " + a->startTime().toString() + " to " + a->endTime().toString() );
+    }
+    cs->logInfo( "Late start calculated: " + cs->lateStart.toString() );
     cs->incProgress();
     return cs->lateStart;
 }
@@ -1400,7 +1407,6 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     time = schedulePredeccessors(m_parentProxyRelations, use);
     if (time.isValid() && time > cs->startTime) {
         cs->startTime = time;
-        //kDebug()<<m_name<<" new startime="<<cs->startTime;
     }
     return scheduleFromStartTime( use );
 }
@@ -1690,6 +1696,15 @@ DateTime Task::scheduleFromStartTime(int use) {
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
         cs->logError("Failed to schedule within project target time" );
     }
+    foreach ( Appointment *a, cs->appointments() ) {
+        cs->logInfo( "'" + a->resource()->resource()->name() + "' booked: " + a->startTime().toString() + " to " + a->endTime().toString() );
+    }
+    if ( cs->startTime < cs->earlyStart ) {
+        cs->logWarning( " Starting earlier than early start " );
+    }
+    if ( cs->endTime > cs->lateFinish ) {
+        cs->logWarning( " Starting later than late finish " );
+    }
     cs->logInfo("Scheduled: " + cs->startTime.toString() + " to " + cs->endTime.toString() );
     m_visitedForward = true;
     cs->incProgress();
@@ -1977,10 +1992,12 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->endTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->endTime;
+                cs->logError( "ASAP: Failed to schedule after early start. Negative float=" + cs->negativeFloat.toString() );
                 cs->endTime = cs->earlyStart;
             } else {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
             }
+            //cs->endTime = cs->earlyStart; FIXME need to follow predeccessors. Defer scheduling?
             cs->startTime = cs->endTime;
             break;
         case Node::ALAP:
@@ -2054,7 +2071,16 @@ DateTime Task::scheduleFromEndTime(int use) {
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
         cs->logError("Failed to schedule within project target time" );
     }
-    cs->logInfo("Scheduled: " + cs->startTime.toString() + " to " + cs->endTime.toString() );
+    foreach ( Appointment *a, cs->appointments() ) {
+        cs->logInfo( "'" + a->resource()->resource()->name() + "' booked: " + a->startTime().toString() + " to " + a->endTime().toString() );
+    }
+    if ( cs->startTime < cs->earlyStart ) {
+        cs->logWarning( " Starting earlier than early start " );
+    }
+    if ( cs->endTime > cs->lateFinish ) {
+        cs->logWarning( " Starting later than late finish " );
+    }
+    cs->logInfo( "Scheduled: " + cs->startTime.toString() + " to " + cs->endTime.toString() );
     m_visitedBackward = true;
     cs->incProgress();
     return cs->startTime;

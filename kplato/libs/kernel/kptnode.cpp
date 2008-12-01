@@ -1084,7 +1084,7 @@ int Node::level() const {
 }
 
 QString Node::generateWBSCode( QList<int> &indexes ) const {
-    kDebug()<<m_name<<indexes;
+    //kDebug()<<m_name<<indexes;
     if ( m_parent == 0 ) {
         return QString();
     }
@@ -1093,7 +1093,7 @@ QString Node::generateWBSCode( QList<int> &indexes ) const {
 }
 
 QString Node::wbsCode() const {
-    kDebug()<<m_name;
+    //kDebug()<<m_name;
     QList<int> indexes;
     return generateWBSCode( indexes );
 }

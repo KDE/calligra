@@ -1934,7 +1934,7 @@ QString Project::generateWBSCode( QList<int> &indexes ) const
         }
         ++level;
     }
-    kDebug()<<code;
+    //kDebug()<<code;
     return code;
 }
 
