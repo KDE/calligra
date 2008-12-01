@@ -130,36 +130,36 @@ void Project::calculate( const DateTime &dt )
         kError() << "No current schedule to calculate" << endl;
         return ;
     }
+    KLocale *locale = KGlobal::locale();
     DateTime time = dt.isValid() ? dt : DateTime( KDateTime::currentLocalDateTime() );
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
-        cs->setPhaseName( 0, "Init" );
-        cs->logInfo( "Schedule project from: " + dt.toString(), 0 );
+        cs->setPhaseName( 0, i18n( "Init" ) );
+        cs->logInfo( i18n( "Schedule project from: %1", locale->formatDateTime( dt ) ), 0 );
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
-        kDebug()<<"Node="<<m_name<<" Start="<<time.toString();
         propagateEarliestStart( time );
         // Calculate lateFinish from time. If a task has started, remaingEffort is used.
-        cs->setPhaseName( 1, "Forward" );
-        cs->logInfo( "Calculate finish", 1 );
+        cs->setPhaseName( 1, i18n( "Forward" ) );
+        cs->logInfo( i18n( "Calculate finish" ), 1 );
         cs->lateFinish = calculateForward( estType );
         propagateLatestFinish( cs->lateFinish );
         // Calculate earlyFinish. If a task has started, remaingEffort is used.
-        cs->setPhaseName( 2, "Backward" );
-        cs->logInfo( "Calculate start", 2 );
+        cs->setPhaseName( 2, i18n( "Backward" ) );
+        cs->logInfo( i18n( "Calculate start" ), 2 );
         cs->calculateBackward( estType );
         // Schedule. If a task has started, remaingEffort is used and appointments are copied from parent
-        cs->setPhaseName( 3, "Schedule" );
-        cs->logInfo( "Schedule tasks forward", 3 );
+        cs->setPhaseName( 3, i18n( "Schedule" ) );
+        cs->logInfo( i18n( "Schedule tasks forward" ), 3 );
         cs->endTime = scheduleForward( cs->startTime, estType );
-        cs->logInfo( i18n( "Scheduled finish: %1", cs->endTime.toString() ), 3 );
+        cs->logInfo( i18n( "Scheduled finish: %1", locale->formatDateTime( cs->endTime ) ), 3 );
         if ( cs->endTime > m_constraintEndTime ) {
-            cs->logError( i18n( "Could not finish project in time: %1", m_constraintEndTime.toString() ), 3 );
+            cs->logError( i18n( "Could not finish project in time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
         } else if ( cs->endTime == m_constraintEndTime ) {
-            cs->logWarning( i18n( "Finished project exactly on time: %1", m_constraintEndTime.toString() ), 3 );
+            cs->logWarning( i18n( "Finished project exactly on time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
         } else {
-            cs->logInfo( i18n( "Finished project before time: %1", m_constraintEndTime.toString() ), 3 );
+            cs->logInfo( i18n( "Finished project before time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
         }
         calcCriticalPath( false );
         calcResourceOverbooked();
@@ -243,52 +243,53 @@ void Project::calculate()
     if ( cs->manager() ) {
         backwards = cs->manager()->schedulingDirection();
     }
+    KLocale *locale = KGlobal::locale();
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         if ( ! backwards ) {
-            cs->setPhaseName( 0, "Init" );
-            cs->logInfo( i18n( "Schedule project forward from: %1", m_constraintStartTime.toString() ), 0 );
+            cs->setPhaseName( 0, i18n( "Init" ) );
+            cs->logInfo( i18n( "Schedule project forward from: %1", locale->formatDateTime( m_constraintStartTime ) ), 0 );
             cs->startTime = m_constraintStartTime;
             cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
             propagateEarliestStart( cs->earlyStart );
-            cs->setPhaseName( 1, "Forward" );
-            cs->logInfo( "Calculate late finish", 1 );
+            cs->setPhaseName( 1, i18n( "Forward" ) );
+            cs->logInfo( i18n( "Calculate late finish" ), 1 );
             cs->lateFinish = calculateForward( estType );
             propagateLatestFinish( cs->lateFinish );
-            cs->setPhaseName( 2, "Backward" );
-            cs->logInfo( "Calculate early start", 2 );
+            cs->setPhaseName( 2, i18n( "Backward" ) );
+            cs->logInfo( i18n( "Calculate early start" ), 2 );
             cs->calculateBackward( estType );
-            cs->setPhaseName( 3, "Schedule" );
-            cs->logInfo( "Schedule tasks forward", 3 );
+            cs->setPhaseName( 3, i18n( "Schedule" ) );
+            cs->logInfo( i18n( "Schedule tasks forward" ), 3 );
             cs->endTime = scheduleForward( cs->startTime, estType );
             cs->duration = cs->endTime - cs->startTime;
-            cs->logInfo( i18n( "Scheduled finish: %1", cs->endTime.toString() ), 3 );
+            cs->logInfo( i18n( "Scheduled finish: %1", locale->formatDateTime( cs->endTime ) ), 3 );
             if ( cs->endTime > m_constraintEndTime ) {
                 cs->schedulingError = true;
-                cs->logError( i18n( "Could not finish project in time: %1", m_constraintEndTime.toString() ), 3 );
+                cs->logError( i18n( "Could not finish project in time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
             } else if ( cs->endTime == m_constraintEndTime ) {
-                cs->logWarning( i18n( "Finished project exactly on time: %1", m_constraintEndTime.toString() ), 3 );
+                cs->logWarning( i18n( "Finished project exactly on time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
             } else {
-                cs->logInfo( i18n( "Finished project before time: %1", m_constraintEndTime.toString() ), 3 );
+                cs->logInfo( i18n( "Finished project before time: %1", locale->formatDateTime( m_constraintEndTime ) ), 3 );
             }
             calcCriticalPath( false );
         } else {
-            cs->setPhaseName( 0, "Init" );
-            cs->logInfo( i18n( "Schedule project backward from: %1", m_constraintEndTime.toString() ), 0 );
+            cs->setPhaseName( 0, i18n( "Init" ) );
+            cs->logInfo( i18n( "Schedule project backward from: %1", locale->formatDateTime( m_constraintEndTime ) ), 0 );
             // Calculate from end time
             propagateLatestFinish( m_constraintEndTime );
-            cs->setPhaseName( 1, "Backward" );
-            cs->logInfo( "Calculate early start", 1 );
+            cs->setPhaseName( 1, i18n( "Backward" ) );
+            cs->logInfo( i18n( "Calculate early start" ), 1 );
             cs->earlyStart = calculateBackward( estType );
             propagateEarliestStart( cs->earlyStart );
-            cs->setPhaseName( 2, "Forward" );
-            cs->logInfo( "Calculate late finish", 2 );
+            cs->setPhaseName( 2, i18n( "Forward" ) );
+            cs->logInfo( i18n( "Calculate late finish" ), 2 );
             cs->lateFinish = cs->calculateForward( estType );
-            cs->setPhaseName( 3, "Schedule" );
-            cs->logInfo( "Schedule tasks backward", 3 );
+            cs->setPhaseName( 3, i18n( "Schedule" ) );
+            cs->logInfo( i18n( "Schedule tasks backward" ), 3 );
             cs->startTime = scheduleBackward( cs->lateFinish, estType );
             cs->endTime = cs->startTime;
             foreach ( Node *n, allNodes() ) {
@@ -301,17 +302,17 @@ void Project::calculate()
             }
             if ( cs->endTime > m_constraintEndTime ) {
                 cs->schedulingError = true;
-                cs->logError( "Failed to finish project within target time", 3 );
+                cs->logError( i18n( "Failed to finish project within target time" ), 3 );
             }
             cs->duration = cs->endTime - cs->startTime;
-            cs->logInfo( i18n( "Scheduled start: %1 (%2)", cs->startTime.toString(), m_constraintStartTime.toString() ), 3 );
+            cs->logInfo( i18n( "Scheduled start: %1, target time: %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( m_constraintStartTime) ), 3 );
             if ( cs->startTime < m_constraintStartTime ) {
                 cs->schedulingError = true;
-                cs->logError( i18n( "Must start project early in order to finish in time: %1", m_constraintStartTime.toString() ), 3 );
+                cs->logError( i18n( "Must start project early in order to finish in time: %1", locale->formatDateTime( m_constraintStartTime) ), 3 );
             } else if ( cs->startTime == m_constraintStartTime ) {
-                cs->logWarning( i18n( "Start project exactly on time: %1", m_constraintStartTime.toString() ), 3 );
+                cs->logWarning( i18n( "Start project exactly on time: %1", locale->formatDateTime( m_constraintStartTime ) ), 3 );
             } else {
-                cs->logInfo( i18n( "Can start project later than time: %1", m_constraintStartTime.toString() ), 3 );
+                cs->logInfo( i18n( "Can start project later than time: %1", locale->formatDateTime( m_constraintStartTime ) ), 3 );
             }
             calcCriticalPath( true );
         }

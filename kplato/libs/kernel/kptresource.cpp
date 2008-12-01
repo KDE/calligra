@@ -614,32 +614,33 @@ KDateTime::Spec Resource::timeSpec() const
 }
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
+    KLocale *locale = KGlobal::locale();
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     if (!from.isValid() || !end.isValid()) {
-        m_currentSchedule->logWarning( "Make appointments: Invalid time" );
+        m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
         return;
     }
     Calendar *cal = calendar();
     if (cal == 0) {
-        m_currentSchedule->logWarning( "Resource has no calendar" );
+        m_currentSchedule->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return;
     }
     DateTime time = from;
     while (time < end) {
         //kDebug()<<time<<" to"<<end;
         if (!time.isValid() || !end.isValid()) {
-            m_currentSchedule->logWarning( "Make appointments: Invalid time" );
+            m_currentSchedule->logWarning( i18n( "Make appointments: Invalid time" ) );
             return;
         }
         if (!cal->hasInterval(time, end, m_currentSchedule)) {
             //kDebug()<<time<<" to"<<end<<": No (more) interval(s)";
-            m_currentSchedule->logWarning( "Resource only partially available" );
+            m_currentSchedule->logWarning( i18n ( "Resource %1 only partially available", m_name ) );
             //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
         DateTimeInterval i = cal->firstInterval(time, end, m_currentSchedule);
         if (!i.second.isValid()) {
-            m_currentSchedule->logWarning( "Make appointments: Invalid interval " + time.toString() + ", " + end.toString() );
+            m_currentSchedule->logWarning( i18n( "Make appointments: Invalid interval %1 to %2", locale->formatDateTime( time ), locale->formatDateTime( end ) ) );
             return;
         }
         if (time == i.second)
@@ -656,12 +657,13 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 }
 void Resource::makeAppointment(Schedule *node) {
     //kDebug()<<m_name<<": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<""<<node->startTime;
+    KLocale *locale = KGlobal::locale();
     if (!node->startTime.isValid()) {
-        m_currentSchedule->logWarning( "Make appointments: Node start time is not valid" );
+        m_currentSchedule->logWarning( i18n( "Make appointments: Node start time is not valid" ) );
         return;
     }
     if (!node->endTime.isValid()) {
-        m_currentSchedule->logWarning( "Make appointments: Node end time is not valid" );
+        m_currentSchedule->logWarning( i18n( "Make appointments: Node end time is not valid" ) );
         return;
     }
     node->resourceNotAvailable = false;
@@ -682,7 +684,7 @@ void Resource::makeAppointment(Schedule *node) {
         makeAppointment(node, from, end);
     }
     if (!cal) {
-        m_currentSchedule->logWarning( "Resource has no calendar" );
+        m_currentSchedule->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return; 
     }
     //TODO: units and standard non-working days
@@ -690,13 +692,13 @@ void Resource::makeAppointment(Schedule *node) {
     DateTime end = node->endTime;
     time = availableAfter(time, end);
     if (!time.isValid()) {
-        m_currentSchedule->logWarning( "Resource not available in interval: " + node->startTime.toString() + " to " + end.toString() );
+        m_currentSchedule->logWarning( i18n( "Resource %1 not available in interval: %2 to %3", m_name, locale->formatDateTime( node->startTime ), locale->formatDateTime( end ) ) );
         node->resourceNotAvailable = true;
         return;
     }
     end = availableBefore(end, time);
     if (!end.isValid()) {
-        m_currentSchedule->logWarning( "Resource not available in interval: " + time.toString() + " to " + node->endTime.toString() );
+        m_currentSchedule->logWarning( i18n( "Resource %1 not available in interval: %2 to %3", m_name, locale->formatDateTime( time ), locale->formatDateTime( node->endTime ) ) );
         node->resourceNotAvailable = true;
         return;
     }
@@ -720,8 +722,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     }
     Calendar *cal = calendar();
     if (cal == 0) {
-        sch->logWarning( "Resource has no calendar" );
-        kWarning()<<m_name<<": No calendar defined";
+        sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return e;
     }
     if (backward) {
@@ -783,7 +784,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
     }
     Calendar *cal = calendar();
     if (cal == 0) {
-        if ( sch ) sch->logWarning( "Resource has no calendar" );
+        if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
         return t;
     }
     t = m_availableFrom > time ? m_availableFrom : time;
@@ -1223,6 +1224,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
 
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, Schedule *ns, bool backward) {
     //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_group->name()<<""<<time.toString()<<": effort:"<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")";
+    KLocale *locale = KGlobal::locale();
     Duration e;
     if (_effort == Duration::zeroDuration) {
         return e;
@@ -1341,10 +1343,10 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
     }
     if (!match) {
-        ns->logError( "Could not match effort. Want: " + _effort.toString(Duration::Format_Hour) + " got: " + e.toString(Duration::Format_Hour) );
+        ns->logError( i18n( "Could not match effort. Want: %1 got: %2", _effort.toString( Duration::Format_Hour ), e.toString( Duration::Format_Hour ) ) );
         foreach (ResourceRequest *r, m_resourceRequests) {
             Resource *res = r->resource();
-            ns->logInfo( res->name() + ": available " + res->availableFrom().toString() + " to " + res->availableUntil().toString() );
+            ns->logInfo( i18n( "Resource %1 available from %2 to %3", res->name(), locale->formatDateTime( res->availableFrom() ), locale->formatDateTime( res->availableUntil() ) ) );
         }
 
     }
