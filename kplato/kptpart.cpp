@@ -68,7 +68,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kplatokernel" );
         locale->insertCatalog( "kplatomodels" );
         locale->insertCatalog( "kplatoui" );
-        locale->insertCatalog( "krossmodulekplato" );
+        locale->insertCatalog( "kdgantt" );
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     m_config.load();
