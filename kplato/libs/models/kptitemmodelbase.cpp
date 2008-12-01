@@ -439,6 +439,7 @@ bool ItemModelBase::setData( const QModelIndex &index, const QVariant &value, in
         setReadWrite( value.toBool() );
         return true;
     }
+    return false;
 }
 
 } //namespace KPlato
