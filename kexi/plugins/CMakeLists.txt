@@ -4,10 +4,7 @@ add_subdirectory( forms )
 add_subdirectory( migration )
 add_subdirectory( importexport )
 add_subdirectory( relations )
-
-if(SHOULD_BUILD_KSPREAD)
-  macro_optional_add_subdirectory( reportspgz )
-endif(SHOULD_BUILD_KSPREAD)
+add_subdirectory( reportspgz )
 
 #if(DEFINED DKEXI_SCRIPTS_SUPPORT)
     add_subdirectory(scripting)
