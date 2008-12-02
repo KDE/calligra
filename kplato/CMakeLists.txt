@@ -15,6 +15,7 @@ set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
     ${KOGUIUTILS_INCLUDES}
+    ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
 add_subdirectory( libs )
