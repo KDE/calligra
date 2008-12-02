@@ -42,7 +42,7 @@
                name="pyxmlviewer"
                interpreter="python"
                file="extensions/xmlviewer.py" />
-        <script text="Document Tree" comment="QtRuby script that displays the document structur within a treeview"
+        <script text="Document Tree" comment="QtRuby script that displays the document structure within a treeview"
                name="rbdoctree"
                interpreter="ruby"
                file="extensions/doctree.rb" />
