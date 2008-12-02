@@ -190,7 +190,7 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
     QRect projectRect;
     QString projectName = project.name();
     QRect pageRect;
-    QString page = i18n( "%1 of %2", pageNumber, documentLastPage() );
+    QString page = i18nc( "1=page number, 2=last page number", "%1 (%2)", pageNumber, documentLastPage() );
     QRect managerRect;
     QString manager = project.leader();
     QRect dateRect;
