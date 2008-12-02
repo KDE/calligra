@@ -143,7 +143,7 @@ QRect PrintingDialog::headerRect() const
     if ( options.headerOptions.group == false ) {
         return QRect();
     }
-    int height = headerFooterHeight( options.footerOptions );
+    int height = headerFooterHeight( options.headerOptions );
     return QRect( 0, 0, const_cast<PrintingDialog*>( this )->printer().pageRect().width(), height );
 }
 
@@ -161,15 +161,12 @@ QRect PrintingDialog::footerRect() const
 int PrintingDialog::headerFooterHeight( const PrintingOptions::Data &options ) const
 {
     int height = 0;
-    if ( options.page == Qt::Checked || options.project == Qt::Checked )
-    {
+    if ( options.page == Qt::Checked || options.project == Qt::Checked || options.manager == Qt::Checked || options.date == Qt::Checked ) {
         height += painter().boundingRect( const_cast<PrintingDialog*>( this )->printer().pageRect(), Qt::AlignTop, "Aj" ).height();
         height *= 1.5;
     }
-    if ( options.manager == Qt::Checked || options.date == Qt::Checked ) {
-        int h = painter().boundingRect( const_cast<PrintingDialog*>( this )->printer().pageRect(), Qt::AlignTop, "Aj" ).height();
-        h *= 1.5;
-        height += h;
+    if (  options.project == Qt::Checked && options.manager == Qt::Checked && ( options.date == Qt::Checked || options.page == Qt::Checked ) ) {
+        height *= 2.0;
     }
     return height;
 }
@@ -191,64 +188,84 @@ void PrintingDialog::paint( QPainter &p, const PrintingOptions::Data &options, c
     p.setPen( Qt::black );
     p.drawRect( rect );
     QRect projectRect;
-    QString projectName;
+    QString projectName = project.name();
     QRect pageRect;
-    QString page;
+    QString page = i18n( "%1 of %2", pageNumber, documentLastPage() );
     QRect managerRect;
-    QString manager;
+    QString manager = project.leader();
     QRect dateRect;
-    QString date;
-    
+    QString date = KGlobal::locale()->formatDate( QDate::currentDate() );
+
     QRect rect_1 = rect;
     QRect rect_2 = rect;
-    if ( options.page == Qt::Checked || options.project == Qt::Checked ) {
+    if ( options.project == Qt::Checked ) {
         rect_2.setHeight( rect.height() / 2 );
         rect_2.translate( 0, rect_2.height() );
     }
-    if ( options.manager == Qt::Checked || options.date == Qt::Checked ) {
+    if ( ( options.project == Qt::Checked && options.manager == Qt::Checked ) && ( options.date == Qt::Checked || options.page == Qt::Checked ) ) {
         rect_1.setHeight( rect.height() / 2 );
+        p.drawLine( rect_1.bottomLeft(), rect_1.bottomRight() );
     }
 
     if ( options.page == Qt::Checked ) {
-        page = i18n( "%1 of %2", pageNumber, documentLastPage() );
         pageRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, page );
         pageRect.setHeight( rect_1.height() );
-    }
-    if ( options.project == Qt::Checked ) {
-        projectName = project.name();
-        projectRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, projectName );
-        projectRect.setRight( pageRect.isValid() ? pageRect.left() : rect.right() );
-        projectRect.setHeight( rect_1.height() );
+        rect_1.setRight( pageRect.left() - 2 );
+        if ( options.project == Qt::Checked || options.manager == Qt::Checked || options.date == Qt::Checked ) {
+            p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
+        }
     }
     if ( options.date == Qt::Checked ) {
-        date = KGlobal::locale()->formatDate( QDate::currentDate() );
-        dateRect = p.boundingRect( rect_2, Qt::AlignRight|Qt::AlignTop, date );
-        dateRect.setHeight( rect_2.height() );
+        if ( ( options.project == Qt::Checked && options.manager != Qt::Checked ) ||
+             ( options.project != Qt::Checked && options.manager == Qt::Checked ) )
+        {
+            dateRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, date );
+            dateRect.setHeight( rect_1.height() );
+            rect_1.setRight( dateRect.left() - 2 );
+            p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
+        } else if ( options.project == Qt::Checked && options.manager == Qt::Checked ) {
+            dateRect = p.boundingRect( rect_2, Qt::AlignRight|Qt::AlignTop, date );
+            dateRect.setHeight( rect_2.height() );
+            rect_2.setRight( dateRect.left() - 2 );
+            p.drawLine( rect_2.topRight(), rect_2.bottomRight() );
+        } else {
+            dateRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, date );
+            dateRect.setHeight( rect_2.height() );
+            rect_2.setRight( dateRect.left() - 2 );
+            if ( rect_2.left() != rect.left() ) {
+                p.drawLine( rect_2.topRight(), rect_2.bottomRight() );
+            }
+        }
     }
     if ( options.manager == Qt::Checked ) {
-        manager = project.leader();
-        managerRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, manager );
-        managerRect.setRight( dateRect.isValid() ? dateRect.left() : rect.right() );
-        managerRect.setHeight( rect_2.height() );
+        if ( options.project != Qt::Checked ) {
+            managerRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, manager );
+            managerRect.setHeight( rect_1.height() );
+        } else if ( options.date != Qt::Checked && options.page != Qt::Checked ) {
+            managerRect = p.boundingRect( rect_1, Qt::AlignRight|Qt::AlignTop, manager );
+            managerRect.setHeight( rect_1.height() );
+            rect_1.setRight( managerRect.left() - 2 );
+            p.drawLine( rect_1.topRight(), rect_1.bottomRight() );
+        } else {
+            managerRect = p.boundingRect( rect_2, Qt::AlignLeft|Qt::AlignTop, manager );
+            managerRect.setHeight( rect_2.height() );
+        }
+    }
+    if ( options.project == Qt::Checked ) {
+        projectRect = p.boundingRect( rect_1, Qt::AlignLeft|Qt::AlignTop, projectName );
+        projectRect.setHeight( rect_1.height() );
     }
     
-    p.drawRect( rect );
     if ( options.page == Qt::Checked ) {
-        p.drawLine( pageRect.topLeft(), pageRect.bottomLeft() );
-        p.drawLine( pageRect.bottomLeft(), pageRect.bottomRight() );
         p.drawText( pageRect, Qt::AlignHCenter|Qt::AlignBottom, page );
     }
     if ( options.project == Qt::Checked ) {
-        p.drawLine( projectRect.bottomLeft(), projectRect.bottomRight() );
         p.drawText( projectRect, Qt::AlignLeft|Qt::AlignBottom, projectName );
     }
     if ( options.date == Qt::Checked ) {
-        p.drawLine( dateRect.topLeft(), dateRect.bottomLeft() );
-        p.drawLine( dateRect.topLeft(), pageRect.bottomLeft() );
         p.drawText( dateRect, Qt::AlignHCenter|Qt::AlignBottom, date );
     }
     if ( options.manager == Qt::Checked ) {
-        p.drawLine( managerRect.topLeft(), managerRect.topRight() );
         p.drawText( managerRect, Qt::AlignLeft|Qt::AlignBottom, manager );
     }
     QFont f = p.font();
