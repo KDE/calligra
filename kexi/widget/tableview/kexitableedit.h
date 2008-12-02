@@ -222,7 +222,7 @@ protected:
     int m_leftMargin;
     int m_rightMargin, m_rightMarginWhenFocused;
     Q3ScrollView* m_scrollView; //!< may be 0 if the parent is not a scrollview
-bool m_usesSelectedTextColor : 1; //!< set in ctor, @see usesSelectedTextColor()
+    bool m_usesSelectedTextColor : 1; //!< set in ctor, @see usesSelectedTextColor()
 
 private:
     QWidget* m_view;

@@ -91,30 +91,30 @@ public:
 
     KexiTableView::ScrollDirection scrollDirection;
 
-bool editOnDoubleClick : 1;
+    bool editOnDoubleClick : 1;
 
-bool needAutoScroll : 1;
+    bool needAutoScroll : 1;
 
-bool disableDrawContents : 1;
+    bool disableDrawContents : 1;
 
     /*! true if the navigation panel is enabled (visible) for the view.
      True by default. */
-bool navigatorEnabled : 1;
+    bool navigatorEnabled : 1;
 
     /*! true if the context menu is enabled (visible) for the view.
      True by default. */
-bool contextMenuEnabled : 1;
+    bool contextMenuEnabled : 1;
 
     /*! used to force single skip keyPress event. */
-bool skipKeyPress : 1;
+    bool skipKeyPress : 1;
 
     /*! Needed because m_horizontalHeader->isVisible() is not always accurate. True by default.  */
-bool horizontalHeaderVisible : 1;
+    bool horizontalHeaderVisible : 1;
 
     /*! true if cursor should be moved on mouse release evenr rather than mouse press
      in handleContentsMousePressOrRelease().
      False by default. Used by KeixComboBoxPopup. */
-bool moveCursorOnMouseRelease : 1;
+    bool moveCursorOnMouseRelease : 1;
 
     KexiTableView::Appearance appearance;
 

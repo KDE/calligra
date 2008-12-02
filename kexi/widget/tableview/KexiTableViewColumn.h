@@ -232,12 +232,12 @@ protected:
     //! @see visibleLookupColumnInfo()
     KexiDB::QueryColumnInfo* m_visibleLookupColumnInfo;
 
-bool m_isDBAware : 1; //!< true if data is stored in DB, not only in memeory
-bool m_readOnly : 1;
-bool m_fieldOwned : 1;
-bool m_visible : 1;
-bool m_relatedDataEditable : 1;
-bool m_headerTextVisible : 1;
+    bool m_isDBAware : 1; //!< true if data is stored in DB, not only in memeory
+    bool m_readOnly : 1;
+    bool m_fieldOwned : 1;
+    bool m_visible : 1;
+    bool m_relatedDataEditable : 1;
+    bool m_headerTextVisible : 1;
 
     class Private;
     Private * const d;

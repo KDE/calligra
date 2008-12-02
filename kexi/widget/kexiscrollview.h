@@ -94,10 +94,10 @@ protected:
     QTimer m_delayedResize;
     //! for refreshContentsSizeLater()
     Q3ScrollView::ScrollBarMode m_vsmode, m_hsmode;
-bool m_snapToGrid : 1;
-bool m_preview : 1;
-bool m_smodeSet : 1;
-bool m_outerAreaVisible : 1;
+    bool m_snapToGrid : 1;
+    bool m_preview : 1;
+    bool m_smodeSet : 1;
+    bool m_outerAreaVisible : 1;
     KexiRecordNavigator* m_scrollViewNavPanel;
 };
 

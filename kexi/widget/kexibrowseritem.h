@@ -68,7 +68,7 @@ protected:
     KexiPart::Item *m_item;
 
     QString m_sortKey;
-bool m_fifoSorting : 1;
+    bool m_fifoSorting : 1;
 };
 
 #endif

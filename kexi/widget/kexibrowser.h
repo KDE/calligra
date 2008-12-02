@@ -180,8 +180,8 @@ protected:
     KToolBar *m_toolbar;
     KexiSmallToolButton /* *m_newObjectToolButton,*/ *m_deleteObjectToolButton;
     QString m_itemsPartClass;
-bool m_singleClick : 1;
-bool m_readOnly : 1;
+    bool m_singleClick : 1;
+    bool m_readOnly : 1;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KexiBrowser::Features)
