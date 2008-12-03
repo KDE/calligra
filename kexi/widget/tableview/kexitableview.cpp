@@ -1426,7 +1426,7 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
                 startEditOrToggleValue();
             } else {
                 kexidbg << "KexiTableView::KeyPressEvent(): default";
-                if (e->text().isEmpty() || (!e->text().isEmpty() && !e->text()[0].isPrint())) {
+                if (e->text().isEmpty() || !e->text()[0].isPrint()) {
                     kDebug(44021) << "NOT PRINTABLE: 0x0" << QString("%1").arg(k, 0, 16);
                     //    e->ignore();
                     Q3ScrollView::keyPressEvent(e);
