@@ -1849,7 +1849,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->startTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->startTime;
-                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%1", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
             } else {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
@@ -2009,7 +2009,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->endTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->endTime;
-                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%1", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->endTime = cs->earlyStart;
             } else {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
