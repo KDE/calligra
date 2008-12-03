@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,34 +17,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_TIFF_WRITER_VISITOR_H
-#define KIS_TIFF_WRITER_VISITOR_H
 
 #include <kis_node_visitor.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_filter_registry_model.h>
+#include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 
-#include <kis_iterators_pixel.h>
-
-#include <tiffio.h>
-
-class KisTIFFOptions;
-
-/**
-   @author Cyrille Berger <cberger@cberger.net>
-*/
-class KisTIFFWriterVisitor : public KisNodeVisitor
+class KisExifInfoVisitor : public KisNodeVisitor
 {
 public:
 
-    using KisNodeVisitor::visit;
-
-    KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
-    ~KisTIFFWriterVisitor();
-
+    KisExifInfoVisitor() :
+            m_exifInfo(0),
+            m_countPaintLayer(0) { }
 public:
 
-    bool visit(KisPaintLayer *layer);
-    bool visit(KisGroupLayer *layer);
-    bool visit(KisGeneratorLayer* );
 
     bool visit(KisNode*) { return true; }
     bool visit(KisCloneLayer*) { return true; }
@@ -53,16 +41,32 @@ public:
     bool visit(KisTransformationMask*) { return true; }
     bool visit(KisSelectionMask*) { return true; }
     bool visit(KisExternalLayer*) { return true; }
+    bool visit(KisGeneratorLayer*) { return true; }
     bool visit(KisAdjustmentLayer*) { return true; }
 
-private:
-    inline TIFF* image() { return m_image; }
-    inline bool saveAlpha();
-    bool copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
-    bool saveLayerProjection(KisLayer *);
-private:
-    TIFF* m_image;
-    KisTIFFOptions* m_options;
-};
+    bool visit(KisPaintLayer* layer) {
+        m_countPaintLayer++;
+        if (!layer->metaData()->empty()) {
+            m_exifInfo = layer->metaData();
+        }
+        return true;
+    }
 
-#endif
+
+    bool visit(KisGroupLayer* layer) {
+        dbgFile << "Visiting on grouplayer" << layer->name() << "";
+        return visitAll(layer, true);
+    }
+
+
+public:
+    inline uint countPaintLayer() {
+        return m_countPaintLayer;
+    }
+    inline KisMetaData::Store* exifInfo() {
+        return m_exifInfo;
+    }
+private:
+    KisMetaData::Store* m_exifInfo;
+    uint m_countPaintLayer;
+};
