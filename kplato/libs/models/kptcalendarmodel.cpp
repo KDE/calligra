@@ -900,7 +900,7 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         KLocale *l = KGlobal::locale();
         QStringList tip;
         foreach ( TimeInterval *i, day->workingIntervals() ) {
-                    tip <<  i18nc( "1=time 2=The number of hours of work duration", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
+                    tip <<  i18ncp( "1=time 2=The number of hours of work duration", "%1, %2 hour", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
         }
         return tip.join( "\n" );
     }
