@@ -2139,6 +2139,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 }
             }
             // Handle new requests
+            QMap<ResourceGroup*, ResourceGroupRequest*> groupmap;
             foreach ( QString s, alloc ) {
                 // if an allocation is not in req, it must be added
                 if ( req.indexOf( s ) == -1 ) {
@@ -2166,14 +2167,18 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     // add request
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
                     if ( g == 0 ) {
+                        g = groupmap.value( pargr );
+                    }
+                    if ( g == 0 ) {
                         // create a group request
                         if ( cmd == 0 ) cmd = new MacroCommand( c );
                         g = new ResourceGroupRequest( pargr );
                         cmd->addCommand( new AddResourceGroupRequestCmd( *task, g ) );
+                        groupmap.insert( pargr, g );
                         //kDebug()<<"add group request:"<<g;
                     }
                     if ( cmd == 0 ) cmd = new MacroCommand( c );
-                    cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, 100 ) ) );
+                    cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, r->units() ) ) );
                     //kDebug()<<"add request:"<<r->name()<<" group:"<<g;
                 }
             }
