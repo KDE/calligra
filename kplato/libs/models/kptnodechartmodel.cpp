@@ -313,16 +313,16 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &
         if ( m_dataShown.showCost && axis.number() == 0 ) {
             //kDebug()<<"cost"<<axis;
             switch ( idx.userData ) {
-                case BCWS: return i18n( "BCWS (Cost)" );
-                case BCWP: return i18n( "BCWP (Cost)" );
-                case ACWP: return i18n( "ACWP (Cost)" );
+                case BCWS: return i18nc( "Budgeted Cost of Work Scheduled", "BCWS (Cost)" );
+                case BCWP: return i18nc( "Budgeted Cost of Work Performed", "BCWP (Cost)" );
+                case ACWP: return i18nc( "Actual Cost of Work Performed", "ACWP (Cost)" );
             }
         } else {
             //kDebug()<<"effort"<<axis;
             switch ( idx.userData ) {
-                case BCWS: return i18n( "BCWS (Effort)" );
-                case BCWP: return i18n( "BCWP (Effort)" );
-                case ACWP: return i18n( "ACWP (Effort)" );
+                case BCWS: return i18nc( "Budgeted Cost of Work Scheduled", "BCWS (Effort)" );
+                case BCWP: return i18nc( "Budgeted Cost of Work Performed", "BCWP (Effort)" );
+                case ACWP: return i18nc( "Actual Cost of Work Performed", "ACWP (Effort)" );
             }
         }
         return QVariant();

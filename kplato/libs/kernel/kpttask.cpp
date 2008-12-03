@@ -1814,11 +1814,11 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( e > cs->lateFinish ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = e - cs->lateFinish;
-                cs->logError( i18n( "ASAP: Failed to schedule within late finish. Negative float=%1", cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->logDebug( "ASAP: late finish=" + cs->lateFinish.toString() + " end time=" + e.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
             } else if ( e > cs->endTime ) {
                 cs->schedulingError = true;
-                cs->logWarning( i18n( "ASAP: Failed to schedule within successors start time" ) );
+                cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to schedule within successors start time",  constraintToString() ) );
                 cs->logDebug( "ASAP: succ. start=" + cs->endTime.toString() + " end time=" + e.toString() );
             }
             if ( cs->negativeFloat == Duration::zeroDuration ) {
@@ -1849,7 +1849,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->startTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->startTime;
-                cs->logError( i18n( "ALAP: Failed to schedule after early start. Negative float=%1", cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%1", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
             } else {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
@@ -2009,7 +2009,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->endTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->endTime;
-                cs->logError( i18n( "ASAP: Failed to schedule after early start. Negative float=%1", cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%1", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->endTime = cs->earlyStart;
             } else {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;

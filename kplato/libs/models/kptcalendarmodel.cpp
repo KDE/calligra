@@ -277,7 +277,7 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                emit executeCommand( new CalendarModifyNameCmd( a, value.toString(), "Modify Calendar Name" ) );
+                emit executeCommand( new CalendarModifyNameCmd( a, value.toString(), i18n( "Modify Calendar Name" ) ) );
             }
             return true;
     }
@@ -330,7 +330,7 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
             if ( !tz.isValid() ) {
                 return false;
             }
-            emit executeCommand( new CalendarModifyTimeZoneCmd( a, tz, "Modify Calendar Timezone" ) );
+            emit executeCommand( new CalendarModifyTimeZoneCmd( a, tz, i18n( "Modify Calendar Timezone" ) ) );
             return true;
         }
     }
@@ -545,24 +545,6 @@ QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *pa
 
 void CalendarItemModel::removeCalendar( QList<Calendar *> /*lst*/ )
 {
-/*    MacroCommand *cmd = 0;
-    QString s = lst.count() > 1 ? i18n( "Delete Calendars" ) : i18n( "Delete Calendar" );
-    while ( ! lst.isEmpty() ) {
-        bool del = true;
-        Calendar *c = lst.takeFirst();
-        foreach ( Calendar *a, lst ) {
-            if ( c->hasParent( a ) ) {
-                del = false; // c will be deleted when a is deleted
-                break;
-            }
-        }
-        if ( del ) {
-            if ( cmd == 0 ) cmd = new MacroCommand( s );
-            cmd->addCommand( new CalendarRemoveCmd( m_project, c ) );
-        }
-    }
-    if ( cmd )
-        emit executeCommand( cmd );*/
 }
 
 void CalendarItemModel::removeCalendar( Calendar *calendar )
@@ -765,7 +747,7 @@ bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, i
     switch ( role ) {
         case Qt::EditRole:
             int v = value.toInt();
-            emit executeCommand( new CalendarModifyStateCmd( m_calendar, d, static_cast<CalendarDay::State>( v ), "Modify Calendar State" ) );
+            emit executeCommand( new CalendarModifyStateCmd( m_calendar, d, static_cast<CalendarDay::State>( v ), i18n( "Modify Calendar State" ) ) );
             return true;
     }
     return false;
@@ -786,7 +768,7 @@ QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) 
                 KLocale *l = KGlobal::locale();
                 QStringList tip;
                 foreach ( TimeInterval *i, day->workingIntervals() ) {
-                    tip << l->formatTime( i->startTime() ) + ", " + i18nc( "The number of hours of work duration", "%1 hours", l->formatNumber( i->hours() ) );
+                    tip <<  i18nc( "1=time 2=The number of hours of work duration", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
                 }
                 return tip.join( "\n" );
             }
@@ -918,7 +900,7 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         KLocale *l = KGlobal::locale();
         QStringList tip;
         foreach ( TimeInterval *i, day->workingIntervals() ) {
-            tip << l->formatTime( i->startTime() ) + ", " + i18nc( "The number of hours of work duration", "%1 hours", l->formatNumber( i->hours() ) );
+                    tip <<  i18nc( "1=time 2=The number of hours of work duration", "%1, %2 hours", l->formatTime( i->startTime() ), l->formatNumber( i->hours() ) );
         }
         return tip.join( "\n" );
     }

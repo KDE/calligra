@@ -22,12 +22,12 @@ add_subdirectory( libs )
 
 add_subdirectory( templates )
 add_subdirectory( pics )
-add_subdirectory( reports )
 add_subdirectory( toolbar )
 add_subdirectory( plugins )
 #add_subdirectory( tests )
 
-add_subdirectory( workpackage )
+## workpackage handler not part of koffice 2.0 release
+#add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
 

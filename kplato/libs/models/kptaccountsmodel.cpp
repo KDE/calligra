@@ -417,7 +417,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
 void AccountItemModel::removeAccounts( QList<Account*> lst )
 {
     MacroCommand *cmd = 0;
-    QString c = lst.count() > 1 ? i18n( "Delete Accounts" ) : i18n( "Delete Account" );
+    QString c = i18np( "Delete Account", "Delete %1 Accounts", lst.count() );
     while ( ! lst.isEmpty() ) {
         bool del = true;
         Account *acc = lst.takeFirst();
