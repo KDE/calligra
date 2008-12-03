@@ -12,10 +12,10 @@ set(kivioprivate_LIB_SRCS
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
 target_link_libraries(kivioprivate ${QT_QT3SUPPORT_LIBRARY} kopageapp ${KDE4_KPARTS_LIBS} ${KDE4_KDEUI_LIBS})
-target_link_libraries(kivioprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(kivioprivate PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kopageapp"
 )
 install(TARGETS kivioprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

@@ -7,18 +7,6 @@ macro_optional_find_package(JPEG)
 macro_optional_find_package(Poppler)
 macro_optional_find_package(Kdcraw)
 
-macro_optional_find_package(Exiv2)
-if(EXIV2_FOUND)
-    # query pkg-config asking for a Exiv2 >= 0.16
-    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.16 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
-    if(_return_VALUE STREQUAL "0")
-      message(STATUS "Found Exiv2 release >= 0.16")
-    else(_return_VALUE STREQUAL "0")
-      set(EXIV2_FOUND FALSE)
-      message(STATUS "Found Exiv2 release < 0.16")
-    endif(_return_VALUE STREQUAL "0")
-endif(EXIV2_FOUND)
-
 macro_optional_find_package(GraphicsMagick)
 # if(GRAPHICSMAGICK_FOUND)
 #    if(GRAPHICSMAGICK_MAJOR_VERSION GREATER 1 OR GRAPHICSMAGICK_MINOR_VERSION GREATER 1)
@@ -32,7 +20,6 @@ macro_optional_find_package(GraphicsMagick)
 # endif(GRAPHICSMAGICK_FOUND)
 
 macro_log_feature(JPEG_FOUND "jpeg" "The Krita JPEG filter will not be built" "http://www.ijg.org" FALSE "")
-macro_log_feature(EXIV2_FOUND "Exiv2" "The Krita JPEG and PNG filters will not be built" "http://www.exiv2.org" FALSE "0.16")
 macro_log_feature(TIFF_FOUND "tiff" "The Krita TIFF filter will not be built" "http://www.remotesensing.org/libtiff" FALSE "")
 macro_log_feature(PNG_FOUND "png" "The Krita PNG filter will not be built" "http://www.libpng.org/pub/png/libpng.html" FALSE "")
 macro_log_feature(OPENEXR_FOUND "OpenEXR" "The Krita OpenEXR filter will not be built" "http://www.openexr.com" FALSE "")
@@ -46,21 +33,17 @@ if(KDCRAW_FOUND)
     add_subdirectory( raw )
 endif(KDCRAW_FOUND)
 
-if(EXIV2_FOUND)
-    add_subdirectory(libkisexiv2)
-endif(EXIV2_FOUND)
-
-if(JPEG_FOUND AND EXIV2_FOUND)
+if(JPEG_FOUND)
 	add_subdirectory(jpeg)
-endif(JPEG_FOUND AND EXIV2_FOUND)
+endif(JPEG_FOUND)
 
 if(TIFF_FOUND)
 	add_subdirectory(tiff)
 endif(TIFF_FOUND )
 
-if(PNG_FOUND AND EXIV2_FOUND)
+if(PNG_FOUND)
     add_subdirectory(png)
-endif(PNG_FOUND AND EXIV2_FOUND)
+endif(PNG_FOUND)
 
 # OpenCTL is needed for having a RGB16/32f color space
 if(OPENEXR_FOUND AND OPENCTL_FOUND)

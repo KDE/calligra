@@ -16,7 +16,7 @@ kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
 
 
-target_link_libraries(kritajpegimport kritaui jpeg kisexiv2) # link against kisexiv2 to ensure the availability of reading/writing EXIF and IPTC tags
+target_link_libraries(kritajpegimport kritaui jpeg ) # link against kisexiv2 to ensure the availability of reading/writing EXIF and IPTC tags
 
 install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

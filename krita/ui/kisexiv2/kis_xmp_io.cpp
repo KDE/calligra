@@ -39,9 +39,24 @@ KisXMPIO::~KisXMPIO()
 
 bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType) const
 {
-    Q_UNUSED(store);
-    Q_UNUSED(ioDevice);
-    Q_UNUSED(headerType);
+    dbgFile << "Save XMP Data";
+    Exiv2::XmpData xmpData_;
+    
+    for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
+            it != store->end(); ++it)
+    {
+        const KisMetaData::Entry& entry = *it;
+//         xmpData_.add( Exiv2::XmpKey( entry.schema()->uri().ascii(), entry.name().ascii() ), kmdValueToExivValue( entry.value() ) );
+    }
+    // Serialize data
+    std::string xmpPacket_;
+    Exiv2::XmpParser::encode(xmpPacket_, xmpData_ );
+    // Save data into the IO device
+    ioDevice->open(QIODevice::WriteOnly);
+    if (headerType == KisMetaData::IOBackend::JpegHeader) {
+      xmpPacket_ = "http://ns.adobe.com/xap/1.0/\0" + xmpPacket_;
+    }
+    ioDevice->write( xmpPacket_.c_str(), xmpPacket_.length() );
     return false;
 }
 
