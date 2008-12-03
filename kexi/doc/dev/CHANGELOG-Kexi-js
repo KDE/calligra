@@ -22,6 +22,19 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-03
+Kexi
+= added more detailed debug areas for Kexi: 
+    44019        kexi (main)
+    44021        kexi (plugins)
+    44022        kexi (property)
+    44023        kexi (widgets)
+    44024        kexi (utils)
+
+2008-12-02
+Table View
+- use QRubberBand instead of painting with XOR in the drag indication
+
 2008-12-01
 Core
 = KexiFieldDrag: encoding drag data in Qt 3.1 format no longer needed

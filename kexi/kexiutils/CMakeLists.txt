@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44024)
+
 include_directories( 
   ${CMAKE_SOURCE_DIR}/kexi 
   ${KDE4_INCLUDES}

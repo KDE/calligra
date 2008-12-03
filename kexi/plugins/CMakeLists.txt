@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44021)
+
 add_subdirectory( tables )
 add_subdirectory( queries )
 add_subdirectory( forms )
