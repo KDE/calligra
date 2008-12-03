@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -56,6 +56,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <KAction>
 
 #ifndef KEXI_NO_PRINT
 #include <QtGui/QPrinter>
@@ -626,14 +627,24 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
             y_line = transly + d->rowHeight - 3; //draw at last line
         }
         if (m_dragIndicatorLine == r) {
-            y_line = transly + 1;
+            y_line = transly;
         }
         if (y_line >= 0) {
-            QPainter::CompositionMode oldCompositionMode = pb->compositionMode();
-            pb->setCompositionMode(QPainter::CompositionMode_Xor);
-            pb->setPen(QPen(Qt::white, 3));
-            pb->drawLine(0, y_line, maxwc, y_line);
-            pb->setCompositionMode(oldCompositionMode);
+            if (!d->dragIndicatorRubberBand) {
+                d->dragIndicatorRubberBand = new QRubberBand(QRubberBand::Line, viewport());
+            }
+            d->dragIndicatorRubberBand->setGeometry(0, y_line, maxwc, 3);
+            d->dragIndicatorRubberBand->show();
+        }
+        else {
+            if (d->dragIndicatorRubberBand) {
+                d->dragIndicatorRubberBand->hide();
+            }
+        }
+    }
+    else {
+        if (d->dragIndicatorRubberBand) {
+            d->dragIndicatorRubberBand->hide();
         }
     }
 }

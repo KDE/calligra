@@ -53,6 +53,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     moveCursorOnMouseRelease = false;
     horizontalHeaderVisible = true;
     recentCellWithToolTip = QPoint(-1, -1);
+    dragIndicatorRubberBand = 0;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
