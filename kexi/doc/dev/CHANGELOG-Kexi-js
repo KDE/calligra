@@ -22,6 +22,14 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-04
+Widgets
+- set "word wrap" by default in kexi editors (e.g. used in the SQL editor)
+
+TODO: any idea how to use KTextEditor::Document::setText() without touching 
+      the undo buffer? For now we're allowing user to execute "undo" action
+      what just clears the editor's contents.
+
 2008-12-03
 Kexi
 = added more detailed debug areas for Kexi: 
