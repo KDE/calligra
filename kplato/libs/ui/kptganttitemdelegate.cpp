@@ -129,15 +129,15 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
     switch ( opt.displayPosition ) {
         case KDGantt::StyleOptionGanttItem::Left:
             left -= tw;
-            width += tw;
+            width += tw + dw;
             break;
         case KDGantt::StyleOptionGanttItem::Right:
-            width += tw;
+            width += qMax( tw, dw );
             break;
         case KDGantt::StyleOptionGanttItem::Center:
+            width += dw;
             break;
     }
-    width += dw;
     return KDGantt::Span( left, width );
 }
 
