@@ -814,7 +814,7 @@ QVariant NodeModel::earlyStart( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyStart( id() ).date() );
         case Qt::EditRole:
-            t->earlyStart( id() ).dateTime();
+            return t->earlyStart( id() ).dateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -834,7 +834,7 @@ QVariant NodeModel::earlyFinish( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyFinish( id() ).date() );
         case Qt::EditRole:
-            t->earlyStart( id() ).dateTime();
+            return t->earlyFinish( id() ).dateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
