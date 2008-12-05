@@ -76,6 +76,7 @@ set( kpresenterprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.cpp
      ui/KPrConfigureSlideShowDialog.cpp
      ui/KPrConfigurePresenterViewDialog.cpp
+     ui/KPrPresentationToolWidget.cpp
 
      tools/KPrPlaceholderTool.cpp
      tools/KPrPlaceholderToolFactory.cpp
@@ -85,6 +86,7 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.ui
      ui/KPrConfigureSlideShow.ui
      ui/KPrConfigurePresenterView.ui
+     ui/KPrPresentationTool.ui
    )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})

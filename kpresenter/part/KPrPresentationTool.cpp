@@ -19,19 +19,28 @@
 
 #include "KPrPresentationTool.h"
 
+#include <QtGui/QWidget>
+
+#include <QtGui/QBoxLayout>
 #include <QKeyEvent>
+#include <QtGui/QStackedLayout>
+#include <QtGui/QLabel>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoEventAction.h>
 #include <KoPACanvas.h>
+
 #include "KPrViewModePresentation.h"
+
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
 {
+    presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
+    presentationToolWidget->show();
 }
 
 KPrPresentationTool::~KPrPresentationTool()

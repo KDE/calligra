@@ -20,8 +20,11 @@
 #define KPRPRESENTATIONTOOL_H
 
 #include <KoTool.h>
+#include <KDialog>
 
 #include <QList>
+
+#include "ui/KPrPresentationToolWidget.h"
 
 class KoEventAction;
 class KPrViewModePresentation;
@@ -54,6 +57,7 @@ private:
 
     KPrViewModePresentation & m_viewMode;
     QList<KoEventAction *> m_eventActions;
+    KPrPresentationToolWidget *presentationToolWidget;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */
