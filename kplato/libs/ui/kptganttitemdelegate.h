@@ -67,6 +67,9 @@ public:
     bool showAppointments;
     bool showNoInformation;
 
+protected:
+    void paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ );
+
 private:
     Q_DISABLE_COPY(GanttItemDelegate)
     QBrush m_criticalBrush;

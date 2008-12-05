@@ -63,6 +63,9 @@ QVariant GanttItemDelegate::data( const QModelIndex& idx, int column, int role )
 
 QString GanttItemDelegate::itemText( const QModelIndex& idx, int type ) const
 {
+    if ( idx.model()->data( idx, GanttItemModel::SpecialItemTypeRole ).toInt() > 0 ) {
+        return QString();
+    }
     QString txt;
     if ( showTaskName ) {
         txt = data( idx, NodeModel::NodeName, Qt::DisplayRole ).toString();
@@ -119,8 +122,9 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
     if ( showPositiveFloat ) {
         dw = itemFloatWidth( opt, idx );
     }
-
-    if (  typ == KDGantt::TypeEvent ) {
+    if ( idx.model()->data( idx, GanttItemModel::SpecialItemTypeRole ).toInt() > 0 ) {
+        itemRect = QRectF( itemRect.left()-itemRect.height()/4., itemRect.top(), itemRect.height()/2., itemRect.height() );
+    } else if (  typ == KDGantt::TypeEvent ) {
         itemRect = QRectF( itemRect.left()-itemRect.height()/2., itemRect.top(), itemRect.height(), itemRect.height() );
     }
 
@@ -147,6 +151,10 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
 {
     if ( !idx.isValid() ) return;
     
+    int specialtype = idx.model()->data( idx, GanttItemModel::SpecialItemTypeRole ).toInt();
+    if ( specialtype > 0 ) {
+        return paintSpecialItem( painter, opt, idx, specialtype );
+    }
     const KDGantt::ItemType typ = static_cast<KDGantt::ItemType>( idx.model()->data( idx, KDGantt::ItemTypeRole ).toInt() );
     
     QString txt = itemText( idx, typ );
@@ -299,6 +307,95 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
             case KDGantt::StyleOptionGanttItem::Center: ta = Qt::AlignCenter; break;
             }
             painter->drawText( textRect, ta | Qt::AlignVCenter, txt );
+        }
+        break;
+    default:
+        break;
+    }
+    painter->restore();
+}
+
+/*! Paints the gantt item \a idx using \a painter and \a opt
+ */
+void GanttItemDelegate::paintSpecialItem( QPainter* painter, const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx, int typ )
+{
+    QRectF itemRect = opt.itemRect;
+    QRectF boundingRect = opt.boundingRect;
+    boundingRect.setY( itemRect.y() );
+    boundingRect.setHeight( itemRect.height() );
+    
+    painter->save();
+
+    QPen pen = defaultPen( KDGantt::TypeEvent );
+    if ( opt.state & QStyle::State_Selected ) pen.setWidth( 2*pen.width() );
+    painter->setPen( pen );
+
+    qreal pw = painter->pen().width()/2.;
+    switch( typ ) {
+    case 1: // early start
+        if ( boundingRect.isValid() ) {
+            painter->setBrush( QBrush( "red" ) );
+            pw-=1;
+            QRectF r = boundingRect;
+            r.setHeight( r.height()/3. );
+            painter->setBrushOrigin( boundingRect.topLeft() );
+            painter->translate( 0.5, 0.5 );
+            QPainterPath p( r.topLeft() );
+            p.lineTo( r.topRight() );
+            p.lineTo( r.left() + ( r.width()/2.0 ), r.bottom() );
+            p.closeSubpath();
+            painter->fillPath( p, painter->brush() );
+            //painter->drawPath( p );
+        }
+        break;
+    case 2: // late finish
+        if ( boundingRect.isValid() ) {
+            painter->setBrush( QBrush( "blue" ) );
+            pw-=1;
+            QRectF r = boundingRect;
+            r.setTop( r.bottom() - r.height()/2.8 );
+            painter->setBrushOrigin( boundingRect.topLeft() );
+            painter->translate( 0.5, -0.5 );
+
+            QPainterPath p( r.bottomLeft() );
+            p.lineTo( r.bottomRight() );
+            p.lineTo( r.left() + ( r.width()/2.0 ), r.top() );
+            p.closeSubpath();
+            painter->fillPath( p, painter->brush() );
+            //painter->drawPath( p );
+        }
+        break;
+    case 3: // late start
+        if ( boundingRect.isValid() ) {
+            painter->setBrush( QBrush( "red" ) );
+            pw-=1;
+            QRectF r = boundingRect;
+            r.setTop( r.bottom() - r.height()/2.8 );
+            painter->setBrushOrigin( boundingRect.topLeft() );
+            painter->translate( 0.5, -0.5 );
+
+            QPainterPath p( r.bottomLeft() );
+            p.lineTo( r.bottomRight() );
+            p.lineTo( r.left() + ( r.width()/2.0 ), r.top() );
+            p.closeSubpath();
+            painter->fillPath( p, painter->brush() );
+            //painter->drawPath( p );
+        }
+        break;
+    case 4: // early finish
+        if ( boundingRect.isValid() ) {
+            painter->setBrush( QBrush( "blue" ) );
+            pw-=1;
+            QRectF r = boundingRect;
+            r.setHeight( r.height()/3. );
+            painter->setBrushOrigin( boundingRect.topLeft() );
+            painter->translate( 0.5, 0.5 );
+            QPainterPath p( r.topLeft() );
+            p.lineTo( r.topRight() );
+            p.lineTo( r.left() + ( r.width()/2.0 ), r.bottom() );
+            p.closeSubpath();
+            painter->fillPath( p, painter->brush() );
+            //painter->drawPath( p );
         }
         break;
     default:

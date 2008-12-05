@@ -330,9 +330,20 @@ class KPLATOMODELS_EXPORT GanttItemModel : public NodeItemModel
 {
     Q_OBJECT
 public:
+    enum GanttModelRoles { SpecialItemTypeRole = Qt::UserRole + 123 }; //FIXME
+
     GanttItemModel( QObject *parent = 0 );
+    ~GanttItemModel();
     
+    virtual int rowCount( const QModelIndex &parent ) const;
+    using NodeItemModel::index;
+    virtual QModelIndex index( int row, int column, const QModelIndex &parent ) const;
+    QModelIndex parent( const QModelIndex &idx ) const;
     virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const;
+
+private:
+    bool m_showSpecial;
+    QMap<Node*, void*> parentmap;
 };
 
 // TODO: Rename, this is now a flat node item model
