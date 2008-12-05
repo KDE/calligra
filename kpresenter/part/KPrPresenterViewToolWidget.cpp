@@ -112,9 +112,10 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     connect( m_clockTimer, SIGNAL( timeout() ), this, SLOT( updateClock() ) );
     m_clockTimer->start( 1000 );
     
+    m_finalTimeSlide = new QMap<int,int>();
     m_currentSlideTime = new QTime();
     indexCurrentPage = 0;
-    m_finalTimeSlide.insert(indexCurrentPage,0);
+    m_finalTimeSlide->insert(indexCurrentPage,0);
     m_currentSlideTime->start();
 }
 
@@ -156,10 +157,12 @@ void KPrPresenterViewToolWidget::updateClock()
 
 void KPrPresenterViewToolWidget::updateSlideIndex(int index)
 {
-    if(m_finalTimeSlide.contains(indexCurrentPage))	{
-      m_finalTimeSlide.remove(indexCurrentPage);
+    if(m_finalTimeSlide->contains(indexCurrentPage))	{
+      m_finalTimeSlide->remove(indexCurrentPage);
     }
-    m_finalTimeSlide.insert(indexCurrentPage,m_currentSlideTime->elapsed()/1000);
+    // save current slide time, exept for end slide 
+    if(indexCurrentPage != -1)
+	m_finalTimeSlide->insert(indexCurrentPage,m_currentSlideTime->elapsed()/1000);
     if(indexCurrentPage != index)	{
       indexCurrentPage = index;
       m_currentSlideTime->restart();
@@ -179,6 +182,11 @@ void KPrPresenterViewToolWidget::updateSlideIndex(int index)
     else
 	texte = "<font color=\"#00FF00\">"+texte+"</font>";
     m_timerSlideLabel->setText( texte );
+}
+
+QMap<int,int>* KPrPresenterViewToolWidget::getSlidesTime()
+{
+    return m_finalTimeSlide;
 }
 
 #include "KPrPresenterViewToolWidget.moc"

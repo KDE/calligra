@@ -40,6 +40,7 @@ public:
     KPrPresenterViewToolWidget( QWidget *parent = 0 );
     void toggleSlideThumbnails( bool toggle );
     void updateSlideIndex(int index);
+    QMap<int,int> *getSlidesTime();
 
 signals:
     void slideThumbnailsToggled( bool toggle );
@@ -59,7 +60,7 @@ private:
     QTimer *m_clockTimer;
     
     QTime *m_currentSlideTime;
-    QMap<int,int> m_finalTimeSlide;
+    QMap<int,int> *m_finalTimeSlide;
     int indexCurrentPage;
 };
 

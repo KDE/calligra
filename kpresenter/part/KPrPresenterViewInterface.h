@@ -21,6 +21,7 @@
 #define KPRPRESENTERVIEWINTERFACE
 
 #include <QtGui/QBoxLayout>
+#include <QMap>
 
 #include "KPrPresenterViewBaseInterface.h"
 
@@ -31,6 +32,8 @@ class QTextEdit;
 
 class KoPACanvas;
 class KoPAPageBase;
+class QComboBox;
+class QTimeEdit;
 
 /**
  * KPrPresenterViewInterface
@@ -45,10 +48,12 @@ public:
 
     void setPreviewSize( const QSize &size );
     void createSlideTime();
+    void setSlidesTime(QMap<int,int> *slides_time);
 
 public slots:
     /// reimplemented
     virtual void setActivePage( int pageIndex );
+    void currentIndexChanged(int index);
 
 private:
     KoPACanvas *m_canvas;
@@ -59,6 +64,9 @@ private:
     QSize m_previewSize;
     QVBoxLayout *frameNextLayout;
     QWidget *m_timeSlideWidget;
+    QMap<int,int> *m_slides_time;
+    QComboBox *slideBox;
+    QTimeEdit *timeEdit;
 };
 
 #endif

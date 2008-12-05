@@ -152,12 +152,12 @@ void KPrPresenterViewWidget::requestChangePage( int index, bool enableMainView )
 
 void KPrPresenterViewWidget::updateSlideIndex(int index)
 {
-    m_toolWidget->updateSlideIndex(index);
-}
-
-KPrPresenterViewToolWidget* KPrPresenterViewWidget::getToolWidget()
-{
-    return m_toolWidget;
+    // if it isn't the end slide
+    if(index < m_pages.count()-1)
+	m_toolWidget->updateSlideIndex(index);
+    else
+	m_toolWidget->updateSlideIndex(-1);
+    m_mainWidget->setSlidesTime(m_toolWidget->getSlidesTime());
 }
 
 #include "KPrPresenterViewWidget.moc"

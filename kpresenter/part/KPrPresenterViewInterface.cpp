@@ -83,6 +83,11 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     setLayout( vLayout );
     
     m_timeSlideWidget = NULL;
+    m_slides_time = NULL;
+    timeEdit = new QTimeEdit();
+    slideBox = new QComboBox();
+    connect( slideBox,SIGNAL(currentIndexChanged(int)),this,SLOT(currentIndexChanged(int)) );
+    
 }
 
 void KPrPresenterViewInterface::setActivePage( int pageIndex )
@@ -106,14 +111,15 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
     }
     else { // End of presentation, show time for each slide
 	m_nextSlideLabel->setText(i18n( "Slides Time" ));
-	m_nextSlidePreview->setVisible(false);
+	// first display of slides time
 	if(m_timeSlideWidget == NULL)	{
 	    createSlideTime();
-	    frameNextLayout->insertWidget(1,m_timeSlideWidget);
+	    frameNextLayout->insertWidget(1,m_timeSlideWidget,0,Qt::AlignLeft);
 	    frameNextLayout->addStretch();
 	}
 	else
 	    m_timeSlideWidget->setVisible(true);
+	m_nextSlidePreview->setVisible(false);
     }
 
     // update the label
@@ -153,25 +159,47 @@ void KPrPresenterViewInterface::createSlideTime()
 {
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(new QLabel(i18n( "Slide :")),0,0);
-    QComboBox *slideBox = new QComboBox();
-    QMap<int,int> *m_timeSlides = new QMap<int,int>();
-    m_timeSlides->insert(0,10);
-    m_timeSlides->insert(1,16);
-    for (int i = 0;i < m_timeSlides->size(); ++i)
-    {
-	slideBox->addItem("Slide "+QString::number(i+1));
-    }
+    
     layout->addWidget(slideBox,0,1);
     
     layout->addWidget(new QLabel(i18n( "Time :")));
-    QTimeEdit *timeEdit = new QTimeEdit();
+    
     timeEdit->setDisplayFormat ( "HH:mm:ss" );
-    QTime t = QTime(0,0,m_timeSlides->value(0));
+    int index = slideBox->currentIndex ();
+    QTime t = QTime(0,0,0);
+    t=t.addSecs(m_slides_time->value(index));
     timeEdit->setTime( t );
     layout->addWidget(timeEdit);
-    
+        
     m_timeSlideWidget = new QWidget(this);
     m_timeSlideWidget->setLayout(layout);
+}
+
+void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
+{
+    m_slides_time = slides_time;
+    QString chaine;
+    int index;
+    for (int j = 0;j < m_slides_time->size(); ++j)
+    {
+	chaine = QString("Slide "+QString::number(j+1));
+	index = slideBox->findText(chaine);
+	if(index == -1)
+	    slideBox->addItem(chaine);
+    }
+    
+    int i = slideBox->currentIndex ();    
+    QTime t = QTime(0,0,0);
+    t=t.addSecs(m_slides_time->value(i));
+    timeEdit->setTime( t );
+    kWarning() << "index : " +QString::number(i)+" time : "+t.toString();
+}
+
+void KPrPresenterViewInterface::currentIndexChanged(int index)
+{
+    QTime t = QTime(0,0,0);
+    t=t.addSecs(m_slides_time->value(index));
+    timeEdit->setTime( t );
 }
 
 #include "KPrPresenterViewInterface.moc"
