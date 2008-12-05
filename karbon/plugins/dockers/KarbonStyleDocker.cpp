@@ -97,12 +97,16 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     connect( m_colorSelector, SIGNAL( colorChanged( const QColor &) ), 
              this, SLOT( updateColor( const QColor &) ) );
     connect( m_colorSelector, SIGNAL( colorApplied( const QColor &) ), 
-            this, SLOT( updateColor( const QColor &) ) );
+             this, SLOT( updateColor( const QColor &) ) );
     connect( gradientSelector, SIGNAL(resourceSelected(KoResource*)),
+             this, SLOT(updateGradient(KoResource*)));
+    connect( gradientSelector, SIGNAL(resourceApplied(KoResource*)),
              this, SLOT(updateGradient(KoResource*)));
     connect( patternSelector, SIGNAL( resourceSelected( KoResource* ) ), 
              this, SLOT( updatePattern( KoResource*) ) );
-
+    connect( patternSelector, SIGNAL( resourceApplied( KoResource* ) ), 
+             this, SLOT( updatePattern( KoResource*) ) );
+                      
     setWidget( mainWidget );
 }
 
