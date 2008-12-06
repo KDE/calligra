@@ -32,7 +32,9 @@ namespace KChart
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
-    KCmdLineArgs::init( argc, argv, newKChartAboutData());
+    KAboutData * aboutData=newKChartAboutData();
+
+    KCmdLineArgs::init( argc, argv, aboutData);
 
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
@@ -42,6 +44,8 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
     if (!app.start())
 	return 1;
     app.exec();
+
+    delete (aboutData);
 
     return 0;
 }

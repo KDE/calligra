@@ -30,7 +30,9 @@ namespace KPlato
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
-    KCmdLineArgs::init( argc, argv, KPlato::newAboutData());
+    KAboutData * aboutData=KPlato::newAboutData();
+
+    KCmdLineArgs::init( argc, argv, aboutData);
     KCmdLineOptions options;
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
@@ -41,5 +43,8 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     if (!app.start())
 	return 1;
     app.exec();
+
+    delete (aboutData);
+
     return 0;
 }
