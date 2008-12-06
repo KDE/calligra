@@ -21,6 +21,7 @@
 
 #include <KoTool.h>
 #include <KDialog>
+#include <QtGui/QFrame>
 
 #include <QList>
 
@@ -47,6 +48,8 @@ public:
     void keyPressEvent( QKeyEvent *event );
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( KoPointerEvent * event );
+    
+    QFrame *m_frameToolPresentation();
 
 public slots:
     void activate( bool temporary = false );
@@ -58,6 +61,7 @@ private:
     KPrViewModePresentation & m_viewMode;
     QList<KoEventAction *> m_eventActions;
     KPrPresentationToolWidget *presentationToolWidget;
+    QFrame *m_frame;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */

@@ -153,6 +153,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
+    m_tool->m_frameToolPresentation()->setVisible(true);
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -204,7 +205,7 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
     m_view->updateActivePage( page );
-
+    m_tool->m_frameToolPresentation()->setVisible(false);
     // only delete after the new page has been set
     delete m_endOfSlideShowPage;
     m_endOfSlideShowPage = 0;

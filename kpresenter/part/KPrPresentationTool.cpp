@@ -22,6 +22,7 @@
 #include <QtGui/QWidget>
 
 #include <QtGui/QBoxLayout>
+#include <QtGui/QVBoxLayout>
 #include <QKeyEvent>
 #include <QtGui/QStackedLayout>
 #include <QtGui/QLabel>
@@ -38,9 +39,16 @@
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
-{
+{    
+    m_frame = new QFrame( m_viewMode.canvas() );
+    m_frame->resize( m_viewMode.canvas()->width(), m_viewMode.canvas()->height() );
+    QVBoxLayout *frameLayout = new QVBoxLayout();
     presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
-    presentationToolWidget->show();
+    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft );
+    frameLayout->addStretch();
+    m_frame->setLayout( frameLayout );
+    m_frame->show();
+    m_frame->setVisible(false);
 }
 
 KPrPresentationTool::~KPrPresentationTool()
@@ -154,4 +162,9 @@ void KPrPresentationTool::finishEventActions()
     }
 }
 
+// get the acces on m_frame
+QFrame *KPrPresentationTool::m_frameToolPresentation()
+{
+    return m_frame;
+}
 #include "KPrPresentationTool.moc"

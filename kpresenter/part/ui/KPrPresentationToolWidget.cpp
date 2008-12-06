@@ -28,14 +28,16 @@
 KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     : QWidget( parent )
 {
+    // This QWidget will be the setup User Interface
     ui.setupUi( this );
 
 }
 
 void KPrPresentationToolWidget::paintEvent(QPaintEvent *event)
 {
+    //For the transparent background...
     QPainter painter(this);
-    painter.fillRect(event->rect(), Qt::white);
+    painter.fillRect(event->rect(), Qt::transparent);
 }
 
 #include "KPrPresentationToolWidget.moc"

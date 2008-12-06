@@ -5,8 +5,8 @@
    <rect>
     <x>1</x>
     <y>1</y>
-    <width>165</width>
-    <height>55</height>
+    <width>1</width>
+    <height>1</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" >
@@ -15,21 +15,14 @@
      <item>
       <widget class="QToolButton" name="toolButton_2" >
        <property name="text" >
-        <string>...</string>
+        <string></string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QToolButton" name="toolButton" >
        <property name="text" >
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="toolButton_3" >
-       <property name="text" >
-        <string>...</string>
+        <string></string>
        </property>
       </widget>
      </item>
