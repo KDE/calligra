@@ -466,10 +466,10 @@ void KexiTableView::clearColumnsInternal(bool /*repaint*/)
 
 void KexiTableView::slotUpdate()
 {
-    kDebug() << m_navPanel;
-// QSize s(tableSize());
+//    kDebug() << m_navPanel;
+    QSize s(tableSize());
 // viewport()->setUpdatesEnabled(false);
-/// resizeContents(s.width(), s.height());
+    resizeContents(s.width(), s.height());
 // viewport()->setUpdatesEnabled(true);
 
     updateContents();
@@ -1806,9 +1806,9 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
 {
     QSize s(tableSize());
     int w = contentsWidth();
-    viewport()->setUpdatesEnabled(false);
+//    viewport()->setUpdatesEnabled(false);
     resizeContents(s.width(), s.height());
-    viewport()->setUpdatesEnabled(true);
+//    viewport()->setUpdatesEnabled(true);
     if (contentsWidth() < w) {
         updateContents(contentsX(), 0, viewport()->width(), contentsHeight());
 //  repaintContents( s.width(), 0, w - s.width() + 1, contentsHeight(), true );
@@ -1828,6 +1828,10 @@ void KexiTableView::slotColumnWidthChanged(int, int, int)
     updateScrollBars();
     if (m_navPanel)
         m_navPanel->updateGeometry(leftMargin());
+    if (d->firstTimeEnsureCellVisible) {
+        d->firstTimeEnsureCellVisible = false;
+        ensureCellVisible( currentRow(), currentColumn() );
+    }
 // updateNavPanelGeometry();
 }
 
@@ -1988,7 +1992,10 @@ void KexiTableView::ensureCellVisible(int row, int col/*=-1*/)
     }
 
     QPoint pcenter = r.center();
+    kDebug() << pcenter.x() << pcenter.y() << (r.width() / 2)  << (r.height() / 2);
     ensureVisible(pcenter.x(), pcenter.y(), r.width() / 2, r.height() / 2);
+//    ensureVisible(r.x(), r.y(), 0, 0);
+//    ensureVisible(r.bottomRight().x(), r.bottomRight().y(), 0, 0);
 // updateContents();
 // updateNavPanelGeometry();
 // slotUpdate();

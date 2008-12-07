@@ -54,6 +54,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
     horizontalHeaderVisible = true;
     recentCellWithToolTip = QPoint(-1, -1);
     dragIndicatorRubberBand = 0;
+    firstTimeEnsureCellVisible = true;
 }
 
 KexiTableViewPrivate::~KexiTableViewPrivate()

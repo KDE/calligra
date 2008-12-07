@@ -115,6 +115,8 @@ public:
      False by default. Used by KeixComboBoxPopup. */
     bool moveCursorOnMouseRelease : 1;
 
+    bool firstTimeEnsureCellVisible : 1;
+
     KexiTableView::Appearance appearance;
 
     //! brushes, fonts
