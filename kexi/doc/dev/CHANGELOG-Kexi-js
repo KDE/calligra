@@ -30,6 +30,11 @@ TODO: any idea how to use KTextEditor::Document::setText() without touching
       the undo buffer? For now we're allowing user to execute "undo" action
       what just clears the editor's contents.
 
+2008-12-07
+Table View
+- delay the 1st call to 'ensure cell visible' routine to avoid invalid 
+  vertical scroll position on table view creation
+
 2008-12-03
 Kexi
 = added more detailed debug areas for Kexi: 
