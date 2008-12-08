@@ -40,6 +40,7 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
+  <Action name="showStatusBar" />
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
@@ -190,7 +191,6 @@
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
-  <Action name="showStatusBar" group="settings_show" />
   <Separator group="settings_show"/>
   <Action name="configure_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
