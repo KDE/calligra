@@ -106,7 +106,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
         return false;
     }
 
-    /* kexidbg << "version=" << version
+    /* kDebug() << "version=" << version
         << " using group key=" << groupKey
         << " type=" << type
         << " caption=" << cg.readEntry("caption")
@@ -293,11 +293,11 @@ bool KexiDBConnSetShortcutFiles::loadConnectionDataSet(KexiDBConnectionSet& set)
 {
     set.clear();
 // QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-// kexidbg << dirs;
+// kDebug() << dirs;
     QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
 // //also try for capital file extension
 // files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-    kexidbg << files;
+    kDebug() << files;
 
     foreach(QStringList::ConstIterator, it, files) {
         KexiDB::ConnectionData *data = new KexiDB::ConnectionData();

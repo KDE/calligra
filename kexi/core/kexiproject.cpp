@@ -1144,14 +1144,14 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
     if (!ts)
         return false;
     KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-    kexidbg << "fieldlist: " << (fl ? fl->debugString() : QString());
+    kDebug() << "fieldlist: " << (fl ? fl->debugString() : QString());
     if (!fl)
         return false;
 
-    kexidbg << info.ptr()->untranslatedGenericName();
+    kDebug() << info.ptr()->untranslatedGenericName();
 //  QStringList sl = part()->info()->ptr()->propertyNames();
 //  for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
-//   kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString();
+//   kDebug() << *it << " " << part()->info()->ptr()->property(*it).toString();
     if (!d->connection->insertRecord(
                 *fl,
                 QVariant(p_id),
@@ -1162,11 +1162,11 @@ bool KexiProject::createIdForPart(const KexiPart::Info& info)
         return false;
     }
 
-    kexidbg << "insert success!";
+    kDebug() << "insert success!";
     d->saveClassId(info.partClass(), p_id);
 //    part()->info()->setProjectPartID(p_id);
     //(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
-    kexidbg << "new id is: " << p_id;
+    kDebug() << "new id is: " << p_id;
 
 //    part()->info()->setIdStoredInPartDatabase(true);
     return true;

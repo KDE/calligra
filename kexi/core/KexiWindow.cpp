@@ -586,7 +586,7 @@ tristate KexiWindow::switchToViewMode(
             return res;
     }
 
-    kexidbg;
+    kDebug();
     bool dontStore = false;
     KexiView *view = selectedView();
 
@@ -859,7 +859,7 @@ tristate KexiWindow::storeNewData()
         //this part's ID is not stored within kexi__parts:
         KexiDB::TableSchema *ts =
             project->dbConnection()->tableSchema("kexi__parts");
-        kexidbg << "schema: " << ts;
+        kDebug() << "schema: " << ts;
         if (!ts)
             return false;
 
@@ -884,15 +884,15 @@ tristate KexiWindow::storeNewData()
         }
 
         KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
-        kexidbg << "fieldlist: "
+        kDebug() << "fieldlist: "
         << (fl ? fl->debugString() : QString());
         if (!fl)
             return false;
 
-        kexidbg << part()->info()->ptr()->untranslatedGenericName();
+        kDebug() << part()->info()->ptr()->untranslatedGenericName();
 //  QStringList sl = part()->info()->ptr()->propertyNames();
 //  for (QStringList::ConstIterator it=sl.constBegin();it!=sl.constEnd();++it)
-//   kexidbg << *it << " " << part()->info()->ptr()->property(*it).toString();
+//   kDebug() << *it << " " << part()->info()->ptr()->property(*it).toString();
         if (!project->dbConnection()->insertRecord(
                     *fl,
                     QVariant(p_id),
@@ -901,10 +901,10 @@ tristate KexiWindow::storeNewData()
                     QVariant(part()->info()->partClass() /*always ok?*/)))
             return false;
 
-        kexidbg << "insert success!";
+        kDebug() << "insert success!";
         part()->info()->setProjectPartID(p_id);
         //(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
-        kexidbg << "new id is: " << part()->info()->projectPartID();
+        kDebug() << "new id is: " << part()->info()->projectPartID();
 
         part()->info()->setIdStoredInPartDatabase(true);
     }
@@ -961,7 +961,7 @@ tristate KexiWindow::storeData(bool dontAsk)
 void KexiWindow::activate()
 {
     KexiView *v = selectedView();
-    //kexidbg << "focusWidget(): " << focusWidget()->name();
+    //kDebug() << "focusWidget(): " << focusWidget()->name();
 #ifdef __GNUC__
 #warning TODO KexiWindow::activate() OK instead of focusedChildWidget()?
 #else
