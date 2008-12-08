@@ -207,7 +207,7 @@ KWPage KWPageManager::page(qreal y) const
 
 KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 {
-    if (pageNumber <= 0 || (!d->pages.isEmpty() && last().pageNumber() > pageNumber))
+    if (pageNumber <= 0 || d->pages.isEmpty() || pageNumber > last().pageNumber())
         return appendPage(pageStyle);
 
     KWPageManagerPrivate::Page newPage;
