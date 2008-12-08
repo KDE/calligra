@@ -37,7 +37,7 @@ class KPrPresenterViewToolWidget : public QFrame
 {
     Q_OBJECT
 public:
-    KPrPresenterViewToolWidget( QWidget *parent = 0 );
+    KPrPresenterViewToolWidget( QWidget *parent = 0, QMap<int,int> *timeSlide = 0 );
     void toggleSlideThumbnails( bool toggle );
     void updateSlideIndex(int index);
     QMap<int,int> *getSlidesTime();
@@ -62,6 +62,7 @@ private:
     QTime *m_currentSlideTime;
     QMap<int,int> *m_finalTimeSlide;
     int indexCurrentPage;
+    bool m_configurationMode;
 };
 
 #endif

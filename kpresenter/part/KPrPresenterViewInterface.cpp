@@ -61,7 +61,7 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     frame->setLayout( frameLayout );
 
     hLayout->addWidget( frame );
-    hLayout->addStretch();
+    //hLayout->addStretch();
 
     frame = new QFrame;
     frameNextLayout = new QVBoxLayout;
