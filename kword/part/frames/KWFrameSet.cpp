@@ -31,7 +31,7 @@ KWFrameSet::KWFrameSet()
 KWFrameSet::~KWFrameSet()
 {
     foreach(KWFrame *frame, frames())
-    delete frame->shape();
+        delete frame->shape();
 }
 
 void KWFrameSet::addFrame(KWFrame *frame)
