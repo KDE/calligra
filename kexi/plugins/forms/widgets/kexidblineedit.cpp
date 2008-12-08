@@ -91,23 +91,14 @@ void KexiDBLineEdit::setInvalidState(const QString& displayText)
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
     m_slotTextChanged_enabled = false;
-#ifdef __GNUC__
-#warning reenable when formatter is ported setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
-#else
-#pragma WARNING( reenable when formatter is ported setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) ); )
-#endif
+    setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
     setCursorPosition(0); //ok?
     m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
 {
-#ifdef __GNUC__
-#warning reenable when formatter is ported return m_textFormatter.textToValue( text() );
-#else
-#pragma WARNING( reenable when formatter is ported return m_textFormatter.textToValue( text() ); )
-#endif
-    return "";
+    return m_textFormatter.textToValue( text() );
 }
 
 void KexiDBLineEdit::slotTextChanged(const QString&)
@@ -124,22 +115,12 @@ bool KexiDBLineEdit::valueIsNull()
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
-#ifdef __GNUC__
-#warning reenable when formatter is ported return m_textFormatter.valueIsEmpty( text() );
-#else
-#pragma WARNING( reenable when formatter is ported return m_textFormatter.valueIsEmpty( text() ); )
-#endif
-    return true;
+    return m_textFormatter.valueIsEmpty( text() );
 }
 
 bool KexiDBLineEdit::valueIsValid()
 {
-#ifdef __GNUC__
-#warning reenable when formatter is ported return m_textFormatter.valueIsValid( text() );
-#else
-#pragma WARNING( reenable when formatter is ported return m_textFormatter.valueIsValid( text() ); )
-#endif
-    return true;
+    return m_textFormatter.valueIsValid( text() );
 }
 
 bool KexiDBLineEdit::isReadOnly() const
@@ -211,11 +192,7 @@ void KexiDBLineEdit::clear()
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
     KexiFormDataItemInterface::setColumnInfo(cinfo);
-#ifdef __GNUC__
-#warning reenable when formatter is ported m_textFormatter.setField( cinfo ? cinfo->field : 0 );
-#else
-#pragma WARNING( reenable when formatter is ported m_textFormatter.setField( cinfo ? cinfo->field : 0 ); )
-#endif
+    m_textFormatter.setField( cinfo ? cinfo->field : 0 );
 
     if (!cinfo)
         return;
@@ -223,13 +200,7 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 //! @todo handle input mask (via QLineEdit::setInputMask()) using a special KexiDB::FieldInputMask class
     setValidator(new KexiDB::FieldValidator(*cinfo->field, this));
 
-    const QString inputMask
-#ifdef __GNUC__
-#warning reenable when formatter is ported: (m_textFormatter.inputMask())
-#else
-#pragma WARNING( reenable when formatter is ported: (m_textFormatter.inputMask()) )
-#endif
-    ;
+    const QString inputMask(m_textFormatter.inputMask());
     if (!inputMask.isEmpty())
         setInputMask(inputMask);
 

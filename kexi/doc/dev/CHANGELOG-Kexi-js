@@ -22,6 +22,18 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+
+
+2008-12-08
+Widgets
+- ported Kexi*Formatter classes, reenabled their use in KexiTableView and forms;
+  this fixes entering of the first character in table view cells
+
+2008-12-07
+Table View
+- delay the 1st call to 'ensure cell visible' routine to avoid invalid 
+  vertical scroll position on table view creation
+
 2008-12-04
 Widgets
 - set "word wrap" by default in kexi editors (e.g. used in the SQL editor)
@@ -29,11 +41,6 @@ Widgets
 TODO: any idea how to use KTextEditor::Document::setText() without touching 
       the undo buffer? For now we're allowing user to execute "undo" action
       what just clears the editor's contents.
-
-2008-12-07
-Table View
-- delay the 1st call to 'ensure cell visible' routine to avoid invalid 
-  vertical scroll position on table view creation
 
 2008-12-03
 Kexi

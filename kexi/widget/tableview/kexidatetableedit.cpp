@@ -50,7 +50,7 @@
 KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
-    setName("KexiDateTableEdit");
+    setObjectName("KexiDateTableEdit");
 
 //! @todo add QValidator so date like "2006-59-67" cannot be even entered
 

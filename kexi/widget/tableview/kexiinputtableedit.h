@@ -28,11 +28,7 @@
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
-#ifdef __GNUC__
-#warning TODO reenable #include "kexitextformatter.h"
-#else
-#pragma WARNING( TODO reenable #include "kexitextformatter.h" )
-#endif
+#include "kexitextformatter.h"
 
 /*! @short General purpose cell editor using line edit widget.
 */
@@ -44,14 +40,6 @@ public:
     KexiInputTableEdit(KexiTableViewColumn &column, QWidget *parent = 0);
 
     virtual ~KexiInputTableEdit();
-
-#if 0
-//moved to KexiTextFormatter
-    /*! \return text for \a value and \a field.
-     \a add is a text that should be added to the value if possible.
-     Used in setValueInternal(), by form widgets and for reporting/printing. */
-    static QString valueToText(KexiDB::Field* field, const QVariant& value, const QString& add);
-#endif
 
     virtual bool valueChanged();
 
@@ -117,11 +105,7 @@ protected:
     void init();
     virtual void paintEvent(QPaintEvent *e);
 
-#ifdef __GNUC__
-#warning TODO reenable   KexiTextFormatter m_textFormatter;
-#else
-#pragma WARNING( TODO reenable   KexiTextFormatter m_textFormatter; )
-#endif
+    KexiTextFormatter m_textFormatter;
     bool m_calculatedCell;
     QString m_decsym; //! decimal symbol
     QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing

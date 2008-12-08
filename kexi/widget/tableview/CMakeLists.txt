@@ -22,13 +22,12 @@ set(kexidatatable_LIB_SRCS
    kexicomboboxtableedit.cpp 
    kexicomboboxpopup.cpp 
    kexidataawarepropertyset.cpp
+   kexidatetableedit.cpp 
+   kexitimetableedit.cpp 
+   kexidatetimetableedit.cpp 
+   kexitextformatter.cpp
 )
 
-# TODO: reenable when kexidatetimeformatter is ported
-#   kexidatetableedit.cpp 
-#   kexitimetableedit.cpp 
-#   kexidatetimetableedit.cpp 
-#   kexitextformatter.cpp
 
 kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
