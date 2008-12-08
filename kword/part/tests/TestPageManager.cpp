@@ -547,5 +547,37 @@ void TestPageManager::testPageSpreadLayout()
     QCOMPARE(manager.pageNumber(QPointF(10, 151)), 4);
 }
 
+void TestPageManager::testInsertPage()
+{
+    KWPageManager *pageManager = new KWPageManager();
+    QCOMPARE(pageManager->pageCount(), 0);
+
+    // inserting determines the position, not always the page number.
+    KWPage page3 = pageManager->insertPage(10);
+    QCOMPARE(page3.pageNumber(), 1);
+    KWPage page1 = pageManager->insertPage(1);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page3.pageNumber(), 2);
+    QCOMPARE(pageManager->pageCount(), 2);
+    QCOMPARE(pageManager->page(1), page1);
+    QCOMPARE(pageManager->page(2), page3);
+
+    KWPage page2 = pageManager->insertPage(2);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(pageManager->pageCount(), 3);
+    QCOMPARE(pageManager->page(1), page1);
+    QCOMPARE(pageManager->page(2), page2);
+    QCOMPARE(pageManager->page(3), page3);
+
+    KWPage page4 = pageManager->insertPage(4);
+    QCOMPARE(pageManager->pageCount(), 4);
+    QCOMPARE(pageManager->page(4), page4);
+
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page3.pageNumber(), 3);
+    QCOMPARE(page4.pageNumber(), 4);
+}
+
 QTEST_KDEMAIN(TestPageManager, GUI)
 #include "TestPageManager.moc"

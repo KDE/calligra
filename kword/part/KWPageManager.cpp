@@ -207,7 +207,7 @@ KWPage KWPageManager::page(qreal y) const
 
 KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
 {
-    if (pageNumber <= 0 || (!d->pages.isEmpty() && last().pageNumber() < pageNumber))
+    if (pageNumber <= 0 || (!d->pages.isEmpty() && last().pageNumber() > pageNumber))
         return appendPage(pageStyle);
 
     KWPageManagerPrivate::Page newPage;
@@ -219,9 +219,6 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
             pageNumber++; // don't insert in the middle of a pageSpread.
         if (! newPage.style.isValid())
             newPage.style = prevPage.pageStyle();
-    }
-    else {
-        // TODO create a new page style that starts with the wanted page number
     }
 
     if (! newPage.style.isValid())
