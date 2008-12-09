@@ -174,7 +174,7 @@ QVariant NodeModel::constraint( const Node *node, int role ) const
         case Role::EnumList: 
             return Node::constraintList( true );
         case Qt::EditRole: 
-            return node->constraintToString();
+            return node->constraint();
         case Role::EnumListValue: 
             return (int)node->constraint();
         case Qt::TextAlignmentRole:
