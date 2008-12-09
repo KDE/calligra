@@ -21,6 +21,7 @@
 #include <KWPage.h>
 #include <KWDocument.h>
 #include <commands/KWPageInsertCommand.h>
+#include <commands/KWPageRemoveCommand.h>
 #include <frames/KWTextFrame.h>
 #include <frames/KWTextFrameSet.h>
 #include <KoTextShapeData.h>
@@ -243,6 +244,155 @@ void TestPageCommands::testInsertPageCommand3() // restore all properties
 
     QCOMPARE(command2.page().pageStyle(), style);
     QCOMPARE(command2.page().width(), 400.);
+}
+
+void TestPageCommands::testRemovePageCommand() // move of frames
+{
+    KWDocument document;
+    KWPageInsertCommand insertCommand(&document, 0);
+    insertCommand.redo();
+
+    KWFrameSet *fs = new KWFrameSet();
+    MockShape *shape = new MockShape();
+    KWFrame *frame = new KWFrame(shape, fs);
+    Q_UNUSED(frame);
+    document.addFrameSet(fs);
+    KWPageInsertCommand insertCommand2(&document, 1);
+    insertCommand2.redo();
+    MockShape *shape2 = new MockShape();
+    QPointF pos = QPointF(20, insertCommand2.page().offsetInDocument() + 10);
+    shape2->setPosition(pos);
+    KWFrame *frame2 = new KWFrame(shape2, fs);
+    Q_UNUSED(frame2);
+    QCOMPARE(document.pageCount(), 2);
+    QCOMPARE(document.frameSetCount(), 1);
+    QCOMPARE(fs->frameCount(), 2);
+
+    // remove page2
+    KWPageRemoveCommand command1(&document, insertCommand2.page());
+    command1.redo();
+
+    QCOMPARE(insertCommand.page().pageNumber(), 1);
+    QCOMPARE(insertCommand2.page().isValid(), false);
+
+    QCOMPARE(document.pageCount(), 1);
+    QCOMPARE(document.frameSetCount(), 1);
+    QCOMPARE(fs->frameCount(), 1);
+
+    QCOMPARE(shape2->position(), pos); // shapes are not deleted, just removed from the document
+
+    command1.undo();
+    QCOMPARE(insertCommand.page().pageNumber(), 1);
+    QCOMPARE(document.pageCount(), 2);
+    QCOMPARE(document.frameSetCount(), 1);
+    QCOMPARE(fs->frameCount(), 2);
+
+    QCOMPARE(shape2->position(), pos); // not moved.
+
+    // remove page 1
+    KWPageRemoveCommand command2(&document, insertCommand.page());
+    command2.redo();
+
+    QCOMPARE(insertCommand.page().isValid(), false);
+    QCOMPARE(document.pageCount(), 1);
+    QCOMPARE(document.frameSetCount(), 1);
+    QCOMPARE(fs->frameCount(), 1);
+
+    QCOMPARE(shape->position(), QPointF(0,0));
+    QCOMPARE(shape2->position(), QPointF(20, 10)); // moved!
+
+    command2.undo();
+
+    QCOMPARE(document.pageCount(), 2);
+    QCOMPARE(document.frameSetCount(), 1);
+    QCOMPARE(fs->frameCount(), 2);
+    QCOMPARE(shape->position(), QPointF(0,0));
+    QCOMPARE(shape2->position(), pos); // moved back!
+}
+
+void TestPageCommands::testRemovePageCommand2() // auto remove of frames
+{
+    // In contrary to the insert command the remove command will remove and re-insert all frames of all types.
+    // lets make sure we it does that.
+    KWDocument document;
+    KWFrameSet *fs = new KWFrameSet();
+    document.addFrameSet(fs);
+    KWTextFrameSet *tfs = new KWTextFrameSet(&document, KWord::MainTextFrameSet);
+    document.addFrameSet(tfs);
+
+    KWPageInsertCommand insertCommand(&document, 0);
+    insertCommand.redo();
+
+    MockShape *shape1 = new MockShape();
+    new KWFrame(shape1, fs);
+
+    MockShape *shape2 = new MockShape();
+    shape2->setUserData(new KoTextShapeData());
+    new KWTextFrame(shape2, tfs);
+
+    KWPageRemoveCommand command(&document, insertCommand.page());
+    QCOMPARE(document.frameSetCount(), 2);
+    command.redo();
+
+    QCOMPARE(document.frameSetCount(), 1); // only the main frameset is left
+    QCOMPARE(document.frameSets().first(), tfs);
+    QCOMPARE(fs->frameCount(), 0);
+    QCOMPARE(tfs->frameCount(), 0);
+
+    command.undo();
+
+    QCOMPARE(document.frameSetCount(), 2);
+    QCOMPARE(fs->frameCount(), 1);
+    QCOMPARE(tfs->frameCount(), 0); // doesn't get auto-added
+}
+
+void TestPageCommands::testRemovePageCommand3()
+{
+    // TODO
+    // question; how do I make sure that upon removal I invalidate *all* following pages so their auto-generated frames are re-generated
+/*
+    KWDocument document;
+    KWPageInsertCommand command1(&document, 0);
+    command1.redo();
+
+    KWPage page = command1.page();
+    KWPageStyle style = page.pageStyle();
+    style.setMainTextFrame(false);
+    style.setFootnoteDistance(10);
+    KoPageLayout layout;
+    layout.width = 400;
+    layout.height = 300;
+    layout.left = 4;
+    layout.right = 6;
+    layout.top = 7;
+    layout.bottom = 5;
+    style.setPageLayout(layout);
+    page.setPageStyle(style);
+
+    KWPageInsertCommand command2(&document, 1); // append one page.
+    command2.redo();
+
+    QCOMPARE(command2.page().pageStyle(), style);
+    QCOMPARE(command2.page().width(), 400.);
+
+    // undo and redo, remember order is important
+    command2.undo();
+    command1.undo();
+    command1.redo();
+    command2.redo();
+
+    QVERIFY(command1.page() != page);
+    QCOMPARE(command1.page().pageNumber(), 1);
+    KWPageStyle style2 = command1.page().pageStyle();
+    QCOMPARE(style2, style);
+    QCOMPARE(style2.hasMainTextFrame(), false);
+    QCOMPARE(style2.footnoteDistance(), 10.);
+    KoPageLayout layout2 = style2.pageLayout();
+    QCOMPARE(layout2, layout);
+
+    QCOMPARE(command2.page().pageStyle(), style);
+    QCOMPARE(command2.page().width(), 400.);
+*/
 }
 
 QTEST_KDEMAIN(TestPageCommands, GUI)

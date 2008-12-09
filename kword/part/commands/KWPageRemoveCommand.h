@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2007-2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,15 +20,17 @@
 #ifndef KWPAGEREMOVECOMMAND_H
 #define KWPAGEREMOVECOMMAND_H
 
-#include <QUndoCommand>
+#include "kword_export.h"
+#include "KWPage.h"
 
-#include <KWPage.h>
+#include <QUndoCommand>
 
 class KWDocument;
 class KoShapeMoveCommand;
+class KWTextFrameSet;
 
 /// The undo / redo command for removing a page in a kword document.
-class KWPageRemoveCommand : public QUndoCommand
+class KWORD_TEST_EXPORT KWPageRemoveCommand : public QUndoCommand
 {
 public:
     /**
@@ -54,7 +55,12 @@ private:
     int m_pageNumber;
     QString m_masterPageName;
     KoText::Direction m_direction;
-    QList<QUndoCommand*> m_childcommands;
+
+    struct AutoGenFrameSet {
+        KWTextFrameSet *frameSet;
+        int deleteFromFrame;
+    };
+    QList<AutoGenFrameSet> m_autoGenFrameSets;
 };
 
 #endif

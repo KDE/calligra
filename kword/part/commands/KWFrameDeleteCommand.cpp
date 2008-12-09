@@ -41,7 +41,7 @@ void KWFrameDeleteCommand::redo()
 
 void KWFrameDeleteCommand::undo()
 {
-    QUndoCommand::undo();
     m_frameSet->addFrame(m_frame);
+    QUndoCommand::undo();
 }
 

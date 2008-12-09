@@ -32,6 +32,9 @@ private slots: // tests
     void testInsertPageCommand();
     void testInsertPageCommand2();
     void testInsertPageCommand3();
+    void testRemovePageCommand();
+    void testRemovePageCommand2();
+    void testRemovePageCommand3();
 };
 
 #endif
