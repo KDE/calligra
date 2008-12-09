@@ -22,7 +22,11 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
-
+2008-12-09
+Table View
+- fixed offset while painting after horizontal scrolling
+- fixed possible crash when scrolling vertically within a limited viewport
+TODO: fix painting the last columns or rows when scrolling back to x= or y=0 position
 
 2008-12-08
 Widgets

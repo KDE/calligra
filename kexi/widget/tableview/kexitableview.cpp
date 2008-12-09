@@ -612,13 +612,13 @@ inline void KexiTableView::paintRow(KexiDB::RecordData *record,
         if (colp == -1)
             continue; //invisible column?
         int colw = columnWidth(c);
-        int translx = colp - cx;
+        int translx = colp - cx + contentsX();
 
         // Translate painter and draw the cell
-        const QMatrix oldMx = pb->worldMatrix();
+        const QTransform oldTr( pb->worldTransform() );
         pb->translate(translx, transly);
         paintCell(pb, record, c, r, QRect(colp, rowp, colw, d->rowHeight));
-        pb->setWorldMatrix(oldMx);
+        pb->setWorldTransform(oldTr);
     }
 
     if (m_dragIndicatorLine >= 0) {
@@ -653,6 +653,7 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
 {
     if (d->disableDrawContents)
         return;
+    //kDebug() << "cx" << cx << "cy" << cy << "cw" << cw << "ch" << ch;
     int colfirst = columnAt(cx);
     int rowfirst = rowAt(cy);
     int collast = columnAt(cx + cw - 1);
@@ -720,16 +721,18 @@ void KexiTableView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
         r = rows();
         rowp = rowPos(r); // 'insert' row's position
     } else {
-        QList<KexiDB::RecordData*>::ConstIterator it(m_data->constBegin());
-        it += rowfirst;//move to 1st row
-        rowp = rowPos(rowfirst); // row position
-        for (r = rowfirst;r <= rowlast; r++, ++it, rowp += d->rowHeight) {
-//   (*it)->debug();
-            paintRow(*it, p, r, rowp, cx, cy, colfirst, collast, maxwc);
+        if (rowfirst >= 0) {
+            QList<KexiDB::RecordData*>::ConstIterator it(m_data->constBegin());
+            it += rowfirst;//move to 1st row
+            rowp = rowPos(rowfirst); // row position
+            for (r = rowfirst;r <= rowlast; r++, ++it, rowp += d->rowHeight) {
+    //   (*it)->debug();
+                paintRow(*it, p, r, rowp, cx, cy, colfirst, collast, maxwc);
+            }
         }
     }
 
-    if (plus1row) { //additional - 'insert' row
+    if (plus1row && rowfirst >= 0) { //additional - 'insert' row
         paintRow(m_insertItem, p, r, rowp, cx, cy, colfirst, collast, maxwc);
     }
 
@@ -1776,7 +1779,7 @@ void KexiTableView::viewportDragLeaveEvent(QDragLeaveEvent *e)
 
 void KexiTableView::updateCell(int row, int col)
 {
-// kDebug(44021) << "updateCell("<<row<<", "<<col<<")";
+//    kDebug() << row << col;
     updateContents(cellGeometry(row, col));
     /* QRect r = cellGeometry(row, col);
       r.setHeight(r.height()+6);
@@ -1791,7 +1794,7 @@ void KexiTableView::updateCurrentCell()
 
 void KexiTableView::updateRow(int row)
 {
-// kDebug(44021) << "updateRow("<<row<<")";
+//    kDebug()<<row << contentsX() << rowPos(row) << clipper()->width() << rowHeight();
     if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/))
         return;
     //int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
