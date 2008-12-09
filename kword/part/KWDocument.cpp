@@ -134,7 +134,7 @@ void KWDocument::removeShape(KoShape *shape)
         canvas->shapeManager()->remove(shape);
     }
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    if (frame) {
+    if (frame) { // not all shapes have to have a frame. Only top-level ones do.
         KWFrameSet *fs = frame->frameSet();
         Q_ASSERT(fs);
         if (fs->frameCount() == 1) // last frame on FrameSet
@@ -212,20 +212,16 @@ void KWDocument::firePageSetupChanged()
     emit pageSetupChanged();
 }
 
-
 void KWDocument::removeFrameSet(KWFrameSet *fs)
 {
     m_frameSets.removeAt(m_frameSets.indexOf(fs));
     setModified(true);
-    foreach(KWFrame *frame, fs->frames()) {
-        frame->shape()->update();
-        foreach(KoView *view, views()) {
-            KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-            canvas->shapeManager()->remove(frame->shape());
-            canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
-        }
+    foreach(KWFrame *frame, fs->frames())
+        removeFrame(frame);
+    foreach(KoView *view, views()) {
+        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
-    //emit frameSetRemoved(fs);
 }
 
 void KWDocument::relayout()
@@ -280,8 +276,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
-    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrameFromViews(KWFrame*)));
-    //emit frameSetAdded(fs);
+    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
 }
 
 void KWDocument::addFrame(KWFrame *frame)
@@ -300,9 +295,10 @@ void KWDocument::addFrame(KWFrame *frame)
 void KWDocument::removeFrame(KWFrame *frame)
 {
     if (frame->shape() == 0) return;
+    removeFrameFromViews(frame);
     KWPage page = pageManager()->page(frame->shape());
     if (!page.isValid()) return;
-    if (page.pageNumber() != pageManager()->pageCount() - 1)
+    if (page != pageManager()->last())
         return; // can only delete last page.
     foreach(KWFrameSet *fs, m_frameSets) {
         foreach(KWFrame *f, fs->frames()) {

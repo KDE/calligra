@@ -94,6 +94,10 @@ KWPageRemoveCommand::~KWPageRemoveCommand()
 
 void KWPageRemoveCommand::redo()
 {
+    KWPage page = m_document->pageManager()->page(m_pageNumber);
+    Q_ASSERT(page.isValid());
+    // remove the page in KWPageManager
+    m_document->pageManager()->removePage(page);
     QUndoCommand::redo();
 
     foreach (const AutoGenFrameSet &agf, m_autoGenFrameSets) {
@@ -102,11 +106,6 @@ void KWPageRemoveCommand::redo()
             delete tfs->frames().at(agf.deleteFromFrame)->shape();
         }
     }
-    // remove the page in KWPageManager
-    KWPage page = m_document->pageManager()->page(m_pageNumber);
-    Q_ASSERT(page.isValid());
-    // remove the page
-    m_document->pageManager()->removePage(page);
     // update changes
     m_document->firePageSetupChanged();
 
