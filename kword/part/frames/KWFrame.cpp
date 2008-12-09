@@ -48,7 +48,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
 
 KWFrame::~KWFrame()
 {
-    m_shape = 0; // no delete is needed as the shape deletes us.
     if (m_frameSet) {
         bool justMe = m_frameSet->frameCount() == 1;
         m_frameSet->removeFrame(this); // first remove me so we won't get double deleted.
@@ -57,6 +56,7 @@ KWFrame::~KWFrame()
         m_frameSet = 0;
     }
     delete m_outline;
+    m_shape = 0; // no delete is needed as the shape deletes us.
 }
 
 void KWFrame::setFrameSet(KWFrameSet *fs)
