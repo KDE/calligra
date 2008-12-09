@@ -20,6 +20,8 @@
 #include "kptganttitemdelegate.h"
 
 #include "kptnodeitemmodel.h"
+#include "kptnode.h"
+
 #include <kdebug.h>
 
 #include <QModelIndex>
@@ -45,9 +47,11 @@ GanttItemDelegate::GanttItemDelegate( QObject *parent )
     showTaskLinks( true ),
     showProgress( false ),
     showPositiveFloat( false ),
+    showNegativeFloat( false ), // NOTE: atm for test, activate when the ui can be changed
     showCriticalPath( false ),
     showCriticalTasks( false ),
-    showAppointments( false )
+    showAppointments( false ),
+    showTimeConstraint( false ) // NOTE: atm for test, activate when the ui can be changed
 {
     QLinearGradient b( 0., 0., 0., QApplication::fontMetrics().height() );
     b.setColorAt( 0., Qt::red );
@@ -103,6 +107,108 @@ int GanttItemDelegate::itemFloatWidth( const KDGantt::StyleOptionGanttItem& opt,
     return dw;
 }
 
+int GanttItemDelegate::itemNegativeFloatWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+{
+    double fl = data( idx, NodeModel::NodeNegativeFloat, Qt::EditRole ).toDouble();
+    if ( fl == 0.0 ) {
+        return 0;
+    }
+    int dw = 0;
+    if ( hasStartConstraint( idx ) ) {
+        QDateTime st = data( idx, NodeModel::NodeStartTime, Qt::EditRole ).toDateTime();
+        if ( ! st.isValid() ) {
+            return 0;
+        }
+        QDateTime dt = ( DateTime( KDateTime( st ) ) - Duration( fl, Duration::Unit_h ) ).dateTime();
+        if ( dt.isValid() ) {
+            qreal v1 = opt.grid->mapToChart( dt );
+            qreal v2 = opt.grid->mapToChart( st );
+            dw = (int)( v2 + opt.itemRect.right() - v1 ); // relative end
+        }
+    } else if ( hasEndConstraint( idx ) ) {
+        QDateTime et = data( idx, NodeModel::NodeEndTime, Qt::EditRole ).toDateTime();
+        if ( ! et.isValid() ) {
+            return 0;
+        }
+        QDateTime dt = ( DateTime( KDateTime( et ) ) - Duration( fl, Duration::Unit_h ) ).dateTime();
+        if ( dt.isValid() ) {
+            qreal v1 = opt.grid->mapToChart( dt );
+            qreal v2 = opt.grid->mapToChart( et );
+            dw = (int)( v2 - v1 ); // relative end
+        }
+    }
+    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeNegativeFloat  ).toString()<<dw;
+    return dw;
+}
+
+bool GanttItemDelegate::hasStartConstraint( const QModelIndex& idx ) const
+{
+    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+    switch ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() ) {
+        case Node::FixedInterval:
+        case Node::StartNotEarlier:
+        case Node::MustStartOn: return true;
+        default: break;
+    }
+    return false;
+}
+
+int GanttItemDelegate::itemStartConstraintWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+{
+    QDateTime dt;
+    if ( hasStartConstraint( idx ) ) {
+        dt = data( idx, NodeModel::NodeConstraintStart, Qt::EditRole ).toDateTime();
+    }
+    if ( ! dt.isValid() ) {
+        return 0;
+    }
+    QDateTime st = data( idx, NodeModel::NodeStartTime, Qt::EditRole ).toDateTime();
+    if ( ! st.isValid() ) {
+        return 0;
+    }
+
+    int dw = 0;
+    qreal sc = opt.grid->mapToChart( dt );
+    qreal pos = opt.grid->mapToChart( st );
+    dw = (int)( pos - sc ); // usually >= 0
+    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<dw;
+    return dw;
+}
+
+bool GanttItemDelegate::hasEndConstraint( const QModelIndex& idx ) const
+{
+    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt();
+    switch ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() ) {
+        case Node::FixedInterval:
+        case Node::FinishNotLater:
+        case Node::MustFinishOn: return true;
+        default: break;
+    }
+    return false;
+}
+
+int GanttItemDelegate::itemEndConstraintWidth( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
+{
+    QDateTime dt;
+    if ( hasEndConstraint( idx ) ) {
+        dt = data( idx, NodeModel::NodeConstraintEnd, Qt::EditRole ).toDateTime();
+    }
+    if ( ! dt.isValid() ) {
+        return 0;
+    }
+    QDateTime et = data( idx, NodeModel::NodeEndTime, Qt::EditRole ).toDateTime();
+    if ( ! et.isValid() ) {
+        return 0;
+    }
+
+    int dw = 0;
+    qreal ec = opt.grid->mapToChart( dt );
+    qreal pos = opt.grid->mapToChart( et );
+    dw = (int)( ec - pos ); // usually >= 0
+    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<dw;
+    return dw;
+}
+
 KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGanttItem& opt, const QModelIndex& idx ) const
 {
     //kDebug()<<opt<<idx;
@@ -122,6 +228,35 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
     if ( showPositiveFloat ) {
         dw = itemFloatWidth( opt, idx );
     }
+    int nfw = 0;
+    if ( showNegativeFloat ) {
+        nfw = itemNegativeFloatWidth( opt, idx ) - itemRect.width(); // relative start
+    }
+    int cwstart = 0;
+    int cwend = 0;
+    if ( showTimeConstraint ) {
+        if ( hasStartConstraint( idx ) ) {
+            cwstart = itemStartConstraintWidth( opt, idx );
+            if ( cwstart >= 0 ) {
+                cwstart += (int)(itemRect.height()/2.);
+            }
+        }
+        if ( hasEndConstraint( idx ) ) {
+            cwend = itemEndConstraintWidth( opt, idx );
+            if ( cwend >= 0 ) {
+                cwend += (int)(itemRect.height()/2.);
+            }
+        }
+        if ( cwend < 0 && cwstart < 0 ) {
+            int v = cwstart;
+            cwstart = -cwend;
+            cwend = - v;
+        } else if ( cwend < 0 ) {
+            cwstart = qMax( cwstart, -cwend - (int)(itemRect.right()) );
+        } else if ( cwstart < 0 ) {
+            cwend = qMax(  cwend, -cwstart - (int)(itemRect.right()) );
+        }
+    }
     if ( idx.model()->data( idx, GanttItemModel::SpecialItemTypeRole ).toInt() > 0 ) {
         itemRect = QRectF( itemRect.left()-itemRect.height()/4., itemRect.top(), itemRect.height()/2., itemRect.height() );
     } else if (  typ == KDGantt::TypeEvent ) {
@@ -132,14 +267,18 @@ KDGantt::Span GanttItemDelegate::itemBoundingSpan( const KDGantt::StyleOptionGan
     qreal width = itemRect.width();
     switch ( opt.displayPosition ) {
         case KDGantt::StyleOptionGanttItem::Left:
-            left -= tw;
-            width += tw + dw;
+            left -= qMax( tw, qMax( cwstart, nfw ) );
+            width += qMax( tw, qMax( cwstart, nfw ) ) + qMax( dw, cwend );
             break;
         case KDGantt::StyleOptionGanttItem::Right:
-            width += qMax( tw, dw );
+            left -= qMax( cwstart, nfw );
+            width += qMax( cwstart, nfw );
+            width += qMax( tw, qMax( dw, cwend ) );
             break;
         case KDGantt::StyleOptionGanttItem::Center:
-            width += dw;
+            left -= qMax( cwstart, nfw );
+            width += qMax( cwstart, nfw );
+            width += qMax( dw, cwend );
             break;
     }
     return KDGantt::Span( left, width );
@@ -202,6 +341,53 @@ void GanttItemDelegate::paintGanttItem( QPainter* painter, const KDGantt::StyleO
                     QRectF cr( r.right(), r.bottom(), dw, -h/4 );
                     painter->fillRect( cr, painter->pen().brush() );
                 }
+            }
+            if ( showNegativeFloat ) {
+                int dw = itemNegativeFloatWidth( opt, idx );
+                if ( dw > 0 ) {
+                    QRectF cr;
+                    qreal h = r.height()/4.;
+                    if ( hasStartConstraint( idx ) ) {
+                        cr = QRectF( r.left(), r.bottom(), - dw + r.width(), -h );
+                        painter->fillRect( cr, painter->pen().brush() );
+                    } else if ( hasEndConstraint( idx ) ) {
+                        cr = QRectF( r.left(), r.bottom(), -dw, -h );
+                        painter->fillRect( cr, painter->pen().brush() );
+                    }
+                    //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<cr<<r<<boundingRect;
+                }
+            }
+            if ( showTimeConstraint ) {
+                //kDebug()<<data( idx, NodeModel::NodeName ).toString()<<data( idx, NodeModel::NodeConstraint ).toString()<<r<<boundingRect;
+                painter->save();
+                painter->setBrush( QBrush( Qt::darkGray ) );
+                painter->setPen( Qt::black );
+                qreal h = r.height()/2.;
+                if ( hasStartConstraint( idx ) ) {
+                    int dw = itemStartConstraintWidth( opt, idx ) + h;
+                    QRectF cr( r.left()-dw, r.top() + h/2., h, h );
+                    QPainterPath p( cr.topLeft() );
+                    p.lineTo( cr.bottomLeft() );
+                    p.lineTo( cr.right(), cr.top() + cr.height()/2. );
+                    p.closeSubpath();
+                    painter->drawPath( p );
+                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::StartNotEarlier ) {
+                        painter->fillPath( p, QBrush( Qt::black ) );
+                    }
+                }
+                if ( hasEndConstraint( idx ) ) {
+                    int dw = itemEndConstraintWidth( opt, idx );
+                    QRectF cr( r.right()+dw, r.top() + h/2., h, h );
+                    QPainterPath p( cr.topRight() );
+                    p.lineTo( cr.bottomRight() );
+                    p.lineTo( cr.left(), cr.top() + cr.height()/2. );
+                    p.closeSubpath();
+                    painter->drawPath( p );
+                    if ( data( idx, NodeModel::NodeConstraint, Qt::EditRole ).toInt() != Node::FinishNotLater ) {
+                        painter->fillPath( p, QBrush( Qt::black ) );
+                    }
+                }
+                painter->restore();
             }
             bool critical = false;
             if ( showCriticalTasks ) {
