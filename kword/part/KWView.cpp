@@ -39,7 +39,6 @@
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
-#include "commands/KWPageRemoveCommand.h"
 #include "commands/KWCreateOutlineCommand.h"
 
 // koffice libs includes
