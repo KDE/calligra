@@ -65,7 +65,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
 
 void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
 {
-    kDebug() << "START saveHeaderFooter ############################################";
+    //kDebug()32001 << "START saveHeaderFooter ############################################";
     // first get all the framesets in a nice quick-to-access data structure
     // this avoids iterating till we drop
     QHash<KWPageStyle, QHash<int, KWTextFrameSet*> > data;
@@ -122,7 +122,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
     //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
     //    mainStyles.markStyleForStylesXml( s.name );
 
-    kDebug() << "END saveHeaderFooter ############################################";
+    //kDebug(32001) << "END saveHeaderFooter ############################################";
 }
 
 KWOdfWriter::KWOdfWriter(KWDocument *document)
@@ -138,7 +138,7 @@ KWOdfWriter::~KWOdfWriter()
 // 1.6: KWDocument::saveOasisHelper()
 bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver)
 {
-    kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
     KoStore * store = odfStore.store();
     KoXmlWriter * manifestWriter = odfStore.manifestWriter();
