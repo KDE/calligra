@@ -22,6 +22,11 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-10
+Main
+- do not display property editor for !design mode even
+  if part's X-Kexi-PropertyEditorAlwaysVisibleInDesignMode property is true
+
 2008-12-09
 Table View
 - fixed offset while painting after horizontal scrolling
