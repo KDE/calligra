@@ -25,7 +25,6 @@
 #define KWODFWRITER_H
 
 #include <QObject>
-#include <QPointer>
 
 class KWDocument;
 class KoOdfWriteStore;
@@ -63,7 +62,7 @@ private:
     void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles);
 
     /// The KWord document.
-    QPointer<KWDocument> m_document;
+    KWDocument *m_document;
 };
 
 #endif
