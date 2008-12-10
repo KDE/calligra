@@ -189,7 +189,7 @@ void KPrViewModePreviewPageEffect::updatePixmaps()
 
     QSize size = canvas()->size(); // TODO wrong this should be page/document size
 
-    m_newPage = m_page->thumbnail(size);
+    QPixmap m_newPage = m_page->thumbnail(size);
 
     if(m_newPage.isNull())
         return;

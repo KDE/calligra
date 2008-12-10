@@ -25,7 +25,9 @@
 #include <QtGui/QVBoxLayout>
 #include <QKeyEvent>
 #include <QtGui/QStackedLayout>
-#include <QtGui/QLabel>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QPixmap>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -40,15 +42,41 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
 {    
+    // tool box
     m_frame = new QFrame( m_viewMode.canvas() );
-    m_frame->resize( m_viewMode.canvas()->width(), m_viewMode.canvas()->height() );
+
     QVBoxLayout *frameLayout = new QVBoxLayout();
     presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
-    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft );
-    frameLayout->addStretch();
+    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom  );
+    //frameLayout->addStretch();
     m_frame->setLayout( frameLayout );
+    
+    // black of highlight
+    QSize size = m_viewMode.canvas()->size();
+    QPixmap newPage(size);
+
+    if(newPage.isNull())
+	return;
+    
+    newPage.fill(Qt::black);
+  
+    m_blackBackgroundframe = new QFrame( m_viewMode.canvas() );
+    QVBoxLayout *frameLayout2 = new QVBoxLayout();
+    m_blackBackgroundlabel = new QLabel();
+    m_blackBackgroundlabel->setPixmap(newPage);
+    frameLayout2->addWidget( m_blackBackgroundlabel, 0, Qt::AlignCenter );
+    m_blackBackgroundframe->setLayout(frameLayout2);
+    
+    m_blackBackgroundframe->show();
+    m_blackBackgroundframe->setVisible( false );
+    
     m_frame->show();
     m_frame->setVisible(false);
+
+	
+    // Connections of button clicked to slots
+    connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
+    connect( presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
 }
 
 KPrPresentationTool::~KPrPresentationTool()
@@ -160,6 +188,61 @@ void KPrPresentationTool::finishEventActions()
     foreach ( KoEventAction * eventAction, m_eventActions ) {
         eventAction->finish( this );
     }
+}
+
+// SLOTS
+void KPrPresentationTool::highLightPresentation()
+{
+    // create the high light
+   
+    QSize size = m_viewMode.canvas()->size();
+    /*
+    QPixmap newPage(size);
+
+    if(newPage.isNull())
+	return;
+    
+    newPage.fill(Qt::black);
+  
+    m_blackBackgroundframe= new QFrame( m_viewMode.canvas() );
+    QVBoxLayout *frameLayout2 = new QVBoxLayout();
+    QLabel *label = new QLabel();
+    label->setPixmap(newPage);
+    frameLayout2->addWidget( label, 0, Qt::AlignCenter );
+    m_blackBackgroundframe->setLayout(frameLayout2);
+
+    // create the tool Box again to show it 
+    m_frame = new QFrame( m_viewMode.canvas() );
+
+    QVBoxLayout *frameLayout = new QVBoxLayout();
+    presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
+    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
+    frameLayout->addStretch();
+    m_frame->setLayout( frameLayout );
+    m_frame->resize( m_viewMode.canvas()->size() );
+    m_frame->show();
+    */
+    
+    m_blackBackgroundframe->resize( size );
+    m_blackBackgroundlabel->resize( size );
+    m_frame->resize( size );
+    
+    // change the visibility
+    if ( m_blackBackgroundframe->isVisible() )
+    {
+	m_blackBackgroundframe->setVisible(false);
+    }
+    else
+    {
+	m_blackBackgroundframe->setVisible(true);
+    }
+    
+    m_frame->setFocus();
+}
+
+void KPrPresentationTool::drawOnPresentation()
+{
+    presentationToolWidget->presentationToolUi().penButton->setText("test...");
 }
 
 // get the acces on m_frame

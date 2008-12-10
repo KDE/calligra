@@ -47,7 +47,7 @@ public:
     void keyPressEvent( QKeyEvent *event );
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( QWheelEvent * event, const QPointF &point );
-
+    
     void activate( KoPAViewMode * previousViewMode );
     void deactivate();
 

@@ -22,22 +22,37 @@
 #include <KLocale>
 #include <KDebug>
 
+#include <QtGui/QIcon>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+
+#include <KIcon>
 
 KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     : QWidget( parent )
 {
     // This QWidget will be the setup User Interface
-    ui.setupUi( this );
-
+    m_uiWidget.setupUi( this );
+    
+    // Set the size of the icon
+    m_uiWidget.penButton->setIconSize( QSize( 22,22 ) );
+    m_uiWidget.highLightButton->setIconSize( QSize( 22,22 ) );
+    // Set the buttons Icon
+    m_uiWidget.penButton->setIcon(KIcon("pen.png"));
+    m_uiWidget.highLightButton->setIcon(KIcon("highlight.png"));
+    
 }
 
 void KPrPresentationToolWidget::paintEvent(QPaintEvent *event)
 {
     //For the transparent background...
     QPainter painter(this);
-    painter.fillRect(event->rect(), Qt::transparent);
+    painter.fillRect(event->rect(), Qt::transparent );
+}
+
+Ui::KPrPresentationTool KPrPresentationToolWidget::presentationToolUi()
+{
+    return m_uiWidget;
 }
 
 #include "KPrPresentationToolWidget.moc"

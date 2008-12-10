@@ -13,16 +13,16 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" >
      <item>
-      <widget class="QToolButton" name="toolButton_2" >
+      <widget class="QToolButton" name="penButton" >
        <property name="text" >
-        <string></string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="toolButton" >
+      <widget class="QToolButton" name="highLightButton" >
        <property name="text" >
-        <string></string>
+        <string/>
        </property>
       </widget>
      </item>

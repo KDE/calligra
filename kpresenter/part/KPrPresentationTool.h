@@ -22,9 +22,9 @@
 #include <KoTool.h>
 #include <KDialog>
 #include <QtGui/QFrame>
+#include <QtGui/QLabel>
 
 #include <QList>
-
 #include "ui/KPrPresentationToolWidget.h"
 
 class KoEventAction;
@@ -40,7 +40,7 @@ public:
     bool wantsAutoScroll();
 
     void paint( QPainter &painter, const KoViewConverter &converter );
-
+    
     void mousePressEvent( KoPointerEvent *event );
     void mouseDoubleClickEvent( KoPointerEvent *event );
     void mouseMoveEvent( KoPointerEvent *event );
@@ -48,12 +48,14 @@ public:
     void keyPressEvent( QKeyEvent *event );
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( KoPointerEvent * event );
-    
+        
     QFrame *m_frameToolPresentation();
 
 public slots:
     void activate( bool temporary = false );
     void deactivate();
+    void highLightPresentation();
+    void drawOnPresentation();
 
 private:
     void finishEventActions();
@@ -62,6 +64,8 @@ private:
     QList<KoEventAction *> m_eventActions;
     KPrPresentationToolWidget *presentationToolWidget;
     QFrame *m_frame;
+    QFrame *m_blackBackgroundframe;
+    QLabel *m_blackBackgroundlabel;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */

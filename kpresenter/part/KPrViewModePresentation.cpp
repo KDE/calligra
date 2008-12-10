@@ -153,12 +153,14 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
+    
+    m_tool->m_frameToolPresentation()->resize( presentationRect.size() );
     m_tool->m_frameToolPresentation()->setVisible(true);
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
     m_animationDirector = new KPrAnimationDirector( m_view, m_canvas, pages, m_view->activePage() );
-
+    
     if ( presenterViewEnabled ) {
         if ( desktop.numScreens() > 1 ) {
             int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
@@ -272,4 +274,3 @@ void KPrViewModePresentation::navigateToPage( int index )
         m_pvAnimationDirector->navigateToPage( index );
     }
 }
-
