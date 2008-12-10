@@ -297,19 +297,24 @@ void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & se
     // check which color to set foreground == border, background == fill
     if( activeStyle == Karbon::Foreground )
     {
-        // get the border of the first selected shape and check if it is a line border
-        KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selectedShapes.first() );
-        KoLineBorder * newBorder = 0;
-        if( oldBorder )
-        {
-            // preserve the properties of the old border if it is a line border
-            newBorder = new KoLineBorder( *oldBorder );
-            newBorder->setColor( c );
+        QList<KoShapeBorderModel*> borders;
+        QList<KoShape *>::const_iterator it( selectedShapes.begin() );
+        for ( ;it != selectedShapes.end(); ++it ) {
+            // get the border of the first selected shape and check if it is a line border
+            KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( ( *it )->border() );
+            KoLineBorder * newBorder = 0;
+            if( oldBorder ) {
+                // preserve the properties of the old border if it is a line border
+                newBorder = new KoLineBorder( *oldBorder );
+                newBorder->setColor( c );
+            }
+            else {
+                newBorder = new KoLineBorder( 1.0, c );
+            }
+            borders.append( newBorder );
         }
-        else
-            newBorder = new KoLineBorder( 1.0, c );
 
-        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selectedShapes, newBorder );
+        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selectedShapes, borders );
         m_canvas->addCommand( cmd );
         m_canvas->resourceProvider()->setForegroundColor( kocolor );
     }
