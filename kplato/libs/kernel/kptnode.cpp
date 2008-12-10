@@ -665,6 +665,9 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earlyStart = time;
+    if ( m_currentSchedule->lateStart.isValid() && m_currentSchedule->lateStart < time ) {
+        m_currentSchedule->lateStart = time;
+    }
     //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
     switch ( m_constraint ) {
         case FinishNotLater:
@@ -693,7 +696,9 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->lateFinish = time;
-    switch ( m_constraint ) {
+    if ( m_currentSchedule->earlyFinish.isValid() && m_currentSchedule->earlyFinish > time ) {
+        m_currentSchedule->earlyFinish = time;
+    }    switch ( m_constraint ) {
         case StartNotEarlier:
         case MustStartOn:
             if ( m_constraintStartTime > time ) {

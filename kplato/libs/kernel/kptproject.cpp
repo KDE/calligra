@@ -144,6 +144,7 @@ void Project::calculate( const DateTime &dt )
         cs->setPhaseName( 1, i18n( "Forward" ) );
         cs->logInfo( i18n( "Calculate finish" ), 1 );
         cs->lateFinish = calculateForward( estType );
+        cs->lateFinish = checkEndConstraints( cs->lateFinish );
         propagateLatestFinish( cs->lateFinish );
         // Calculate earlyFinish. If a task has started, remaingEffort is used.
         cs->setPhaseName( 2, i18n( "Backward" ) );
@@ -258,6 +259,7 @@ void Project::calculate()
             cs->setPhaseName( 1, i18n( "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 1 );
             cs->lateFinish = calculateForward( estType );
+            cs->lateFinish = checkEndConstraints( cs->lateFinish );
             propagateLatestFinish( cs->lateFinish );
             cs->setPhaseName( 2, i18n( "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 2 );
@@ -284,6 +286,7 @@ void Project::calculate()
             cs->setPhaseName( 1, i18n( "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 1 );
             cs->earlyStart = calculateBackward( estType );
+            cs->earlyStart = checkStartConstraints( cs->earlyStart );
             propagateEarliestStart( cs->earlyStart );
             cs->setPhaseName( 2, i18n( "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 2 );
@@ -441,6 +444,42 @@ Duration Project::duration( long id ) const
 Duration *Project::getRandomDuration()
 {
     return 0L;
+}
+
+DateTime Project::checkStartConstraints( const DateTime &dt ) const
+{
+    DateTime t = dt;
+    foreach ( Node *n, nodeIdDict.values() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            switch ( n->constraint() ) {
+                case Node::FixedInterval:
+                case Node::StartNotEarlier:
+                case Node::MustStartOn:
+                        t = qMin( t, qMax( n->constraintStartTime(), m_constraintStartTime ) );
+                        break;
+                default: break;
+            }
+        }
+    }
+    return t;
+}
+
+DateTime Project::checkEndConstraints( const DateTime &dt ) const
+{
+    DateTime t = dt;
+    foreach ( Node *n, nodeIdDict.values() ) {
+        if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+            switch ( n->constraint() ) {
+                case Node::FixedInterval:
+                case Node::FinishNotLater:
+                case Node::MustFinishOn:
+                        t = qMax( t, qMin( n->constraintEndTime(), m_constraintEndTime ) );
+                        break;
+                default: break;
+            }
+        }
+    }
+    return t;
 }
 
 DateTime Project::calculateForward( int use )

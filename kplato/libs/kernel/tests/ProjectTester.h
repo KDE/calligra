@@ -55,6 +55,8 @@ private slots:
     void scheduleFullday();
 
 private:
+    void printDebug( Project *p, Task *t ) const;
+
     Project *m_project;
     Task *m_task;
 };
