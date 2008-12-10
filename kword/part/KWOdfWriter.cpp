@@ -24,25 +24,16 @@
 #include "KWOdfWriter.h"
 #include "KWDocument.h"
 
-//#include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
-//#include "frames/KWFrameLayout.h"
-//#include "frames/KWTextDocumentLayout.h"
-//#include "frames/KWOutlineShape.h"
-
-#include <KoStore.h>
-#include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
-#include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 
 #include <QBuffer>
-#include <KTemporaryFile>
-#include <kdebug.h>
+#include <KDebug>
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
 {

@@ -24,9 +24,9 @@
 #include "KWOdfLoader.h"
 #include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"
+#include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
-#include "frames/KWFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -37,23 +37,14 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoTextShapeData.h>
-#include <KoTextAnchor.h>
-#include <KoShapeContainer.h>
-#include <KoTextDocumentLayout.h>
+#include <KoDataCenter.h>
 #include <KoShapeLoadingContext.h>
-#include <KoInlineTextObjectManager.h>
-//#include <KoTextFrameLoader.h>
-#include <KWPage.h>
-#include <KoProperties.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
-//#include <TextShape.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
-#include <klocale.h>
-#include <kdebug.h>
-#include <QTextBlock>
+#include <KDebug>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(),
