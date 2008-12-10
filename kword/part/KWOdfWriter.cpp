@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005 David Faure <faure@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2008 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007-2008 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
@@ -80,55 +80,64 @@ public:
     }
 
     void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles) {
-    // TODO rewrite this to properly find the framesets in the document
-#if 0
         kDebug() << "START saveHeaderFooter ############################################";
+        // first get all the framesets in a nice quick-to-access data structure
+        // this avoids iterating till we drop
+        QHash<KWPageStyle, QHash<int, KWTextFrameSet*> > data;
+        foreach (KWFrameSet *fs, document->frameSets()) {
+            KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+            if (! tfs)
+                continue;
+            if (tfs->textFrameSetType() != KWord::OddPagesHeaderTextFrameSet
+                    && tfs->textFrameSetType() != KWord::EvenPagesHeaderTextFrameSet
+                    && tfs->textFrameSetType() != KWord::OddPagesFooterTextFrameSet
+                    && tfs->textFrameSetType() != KWord::EvenPagesFooterTextFrameSet
+                    && tfs->textFrameSetType() != KWord::FootNoteTextFrameSet)
+                continue;
+            QHash<int, KWTextFrameSet*> set = data.value(tfs->pageStyle());
+            set.insert(tfs->textFrameSetType(), tfs);
+            data.insert(tfs->pageStyle(), set);
+        }
 
         // We need to flush them out ordered as defined in the specs.
         QList<KWord::TextFrameSetType> order;
-        order << KWord::OddPagesHeaderTextFrameSet << KWord::EvenPagesHeaderTextFrameSet
-        << KWord::OddPagesFooterTextFrameSet << KWord::EvenPagesFooterTextFrameSet;
+        order << KWord::OddPagesHeaderTextFrameSet
+              << KWord::EvenPagesHeaderTextFrameSet
+              << KWord::OddPagesFooterTextFrameSet
+              << KWord::EvenPagesFooterTextFrameSet;
 
-        // Iterate over all pagestyles and write them out.
-        QHash<QString, KWPageStyle *> pagestyles = document->pageManager()->pageStyles();
-        QHashIterator<QString, KWPageStyle *> it(pagestyles);
-
-        while (it.hasNext()) {
-            it.next();
-
+        foreach (KWPageStyle pageStyle, data.keys()) {
             KoGenStyle masterStyle(KoGenStyle::StyleMaster);
             //masterStyle.setAutoStyleInStylesDotXml(true);
-            KoGenStyle layoutStyle = it.value()->pageLayout().saveOasis();
+            KoGenStyle layoutStyle = pageStyle.pageLayout().saveOasis();
             layoutStyle.setAutoStyleInStylesDotXml(true);
             masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
 
-            for (int i = 0; i < order.count(); ++i) {
-                KWTextFrameSet *fs = it.value()->getFrameSet(order[i]);
-                if (! fs)
+            QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
+            int index = 0;
+            foreach (int type, order) {
+                if (! headersAndFooters.contains(type))
                     continue;
-
-                if (fs->frames().count() < 1) { //FIXME should not happen but it does :-/
-                    kWarning() << "Frameset with ZERO frames what should not happen!!!";
+                KWTextFrameSet *fs = headersAndFooters.value(type);
+                Q_ASSERT(fs);
+                if (fs->frameCount() == 0) // don't save empty framesets
                     continue;
-                }
 
                 QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
                 if (content.isNull())
                     continue;
 
-                masterStyle.addChildElement(QString::number(i), content);
+                masterStyle.addChildElement(QString::number(++index), content);
             }
-
             // append the headerfooter-style to the main-style
             if (! masterStyle.isEmpty())
-                mainStyles.lookup(masterStyle, it.key(), KoGenStyles::DontForceNumbering);
+                mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
         }
 
         //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
         //    mainStyles.markStyleForStylesXml( s.name );
 
         kDebug() << "END saveHeaderFooter ############################################";
-#endif
     }
 };
 
