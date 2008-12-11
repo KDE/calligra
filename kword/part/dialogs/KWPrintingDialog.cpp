@@ -37,7 +37,7 @@ KWPrintingDialog::KWPrintingDialog(KWView *view)
         m_clipToPage(false)
 {
     setShapeManager(view->kwcanvas()->shapeManager());
-    printer().setFromTo(0/*m_document->startPage()*/, m_document->pageManager()->pageCount() - 1);
+    printer().setFromTo(documentFirstPage(), documentLastPage());
     // TODO if the doc is not yet done layouting, the lastpage is not correct
 }
 
@@ -102,8 +102,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
 
 QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 {
-    Q_ASSERT(pageNumber >= 0);
-    Q_ASSERT(pageNumber < m_document->pageManager()->pageCount());
+    Q_ASSERT(pageNumber > 0);
     KWPage page = m_document->pageManager()->page(pageNumber);
     Q_ASSERT(page.isValid());
     return shapeManager()->shapesAt(page.rect());
@@ -122,12 +121,12 @@ QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
 
 int KWPrintingDialog::documentFirstPage() const
 {
-    return 0 /*m_document->startPage()*/;
+    return m_document->pageManager()->begin().pageNumber();
 }
 
 int KWPrintingDialog::documentLastPage() const
 {
-    return m_document->pageManager()->pageCount() - 1;
+    return m_document->pageManager()->last().pageNumber();
 }
 
 // options;
