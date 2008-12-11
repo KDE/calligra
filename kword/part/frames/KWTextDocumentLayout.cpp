@@ -35,6 +35,15 @@
 
 #include <QList>
 #include <QPainterPath>
+#include <QTextBlock>
+
+// #define DEBUG_TEXT
+
+#ifdef DEBUG_TEXT
+#define TDEBUG kDebug(32002)
+#else
+#define TDEBUG if(0) kDebug(32002)
+#endif
 
 // helper methods
 static qreal xAtY(const QLineF &line, qreal y)
@@ -306,7 +315,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KWTextDocumentLayout::layout()
 {
-//kDebug() <<"KWTextDocumentLayout::layout";
+    TDEBUG <<"KWTextDocumentLayout::layout";
     QList<Outline*> outlines;
     class End
     {
@@ -499,7 +508,8 @@ void KWTextDocumentLayout::layout()
 
                 return; // done!
             } else if (m_state->shape == 0) {
-                // encountered a 'end of page' break but we don't have any more pages(/shapes)
+                TDEBUG << "encountered an 'end of page' break, we need an extra page to honor that!";
+                // encountered an 'end of page' break but we don't have any more pages(/shapes)
                 m_state->clearTillEnd();
                 m_frameSet->requestMoreFrames(0); // new page, please.
                 currentShape->update();
@@ -516,13 +526,23 @@ void KWTextDocumentLayout::layout()
         newParagraph = false;
         line.setOutlines(outlines);
         line.tryFit();
+#ifdef DEBUG_TEXT
+        if (line.line.isValid()) {
+            QTextBlock b = document()->findBlock(m_state->cursorPosition());
+            if (b.isValid())
+                TDEBUG << "fitted line" << b.text().mid(b.position() + line.line.textStart(), b.position() + line.line.textLength());
+        }
+#endif
+
         bottomOfText = line.line.y() + line.line.height();
 
         while (m_state->addLine(line.line)) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
+                TDEBUG << "no more shape for our text; bottom is" << m_state->y();
                 line.line.setPosition(QPointF(0, m_state->y() + 20));
 
                 if (requestFrameResize) { // plenty more text, but first lets resize the shape.
+                    TDEBUG << "  we need more space; we require at least:" << m_dummyShape->size().height();
                     m_frameSet->requestMoreFrames(m_dummyShape->size().height());
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
@@ -557,6 +577,7 @@ void KWTextDocumentLayout::layout()
                 const qreal maxFrameLength = qMin(down.length(), down2.length());
                 if (maxFrameLength <= currentShape->size().height()) {
                     m_state->clearTillEnd();
+                    TDEBUG << "  we need another page";
                     m_frameSet->requestMoreFrames(0); // new page, please.
                     return;
                 }
@@ -572,6 +593,13 @@ void KWTextDocumentLayout::layout()
                 requestFrameResize = true;
             }
             line.tryFit();
+#ifdef DEBUG_TEXT
+            if (line.line.isValid()) {
+                QTextBlock b = document()->findBlock(m_state->cursorPosition());
+                if (b.isValid())
+                    TDEBUG << "fitted line" << b.text().mid(b.position() + line.line.textStart(), b.position() + line.line.textLength());
+            }
+#endif
         }
 
         QRectF repaintRect = line.line.rect();
@@ -580,6 +608,8 @@ void KWTextDocumentLayout::layout()
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->update(repaintRect);
     }
-    if (requestFrameResize)
+    if (requestFrameResize) {
+        TDEBUG << "  requestFrameResize" << m_dummyShape->size().height();
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());
+    }
 }
