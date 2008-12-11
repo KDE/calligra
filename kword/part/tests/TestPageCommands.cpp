@@ -346,16 +346,13 @@ void TestPageCommands::testRemovePageCommand2() // auto remove of frames
     QCOMPARE(tfs->frameCount(), 0); // doesn't get auto-added
 }
 
-void TestPageCommands::testRemovePageCommand3()
+void TestPageCommands::testRemovePageCommand3() // test restore all properties
 {
-    // TODO
-    // question; how do I make sure that upon removal I invalidate *all* following pages so their auto-generated frames are re-generated
-/*
     KWDocument document;
-    KWPageInsertCommand command1(&document, 0);
-    command1.redo();
+    KWPageInsertCommand insertCommand(&document, 0);
+    insertCommand.redo();
 
-    KWPage page = command1.page();
+    KWPage page = insertCommand.page();
     KWPageStyle style = page.pageStyle();
     style.setMainTextFrame(false);
     style.setFootnoteDistance(10);
@@ -369,31 +366,26 @@ void TestPageCommands::testRemovePageCommand3()
     style.setPageLayout(layout);
     page.setPageStyle(style);
 
-    KWPageInsertCommand command2(&document, 1); // append one page.
-    command2.redo();
+    KWPageRemoveCommand command(&document, page);
+    command.redo();
+    QVERIFY(!page.isValid());
+    command.undo();
+    page = document.pageManager()->begin();
+    QVERIFY(page.isValid());
 
-    QCOMPARE(command2.page().pageStyle(), style);
-    QCOMPARE(command2.page().width(), 400.);
-
-    // undo and redo, remember order is important
-    command2.undo();
-    command1.undo();
-    command1.redo();
-    command2.redo();
-
-    QVERIFY(command1.page() != page);
-    QCOMPARE(command1.page().pageNumber(), 1);
-    KWPageStyle style2 = command1.page().pageStyle();
+    QVERIFY(insertCommand.page() != page);
+    QCOMPARE(page.pageNumber(), 1);
+    KWPageStyle style2 = page.pageStyle();
     QCOMPARE(style2, style);
     QCOMPARE(style2.hasMainTextFrame(), false);
     QCOMPARE(style2.footnoteDistance(), 10.);
     KoPageLayout layout2 = style2.pageLayout();
     QCOMPARE(layout2, layout);
 
-    QCOMPARE(command2.page().pageStyle(), style);
-    QCOMPARE(command2.page().width(), 400.);
-*/
+    QCOMPARE(page.pageStyle(), style);
+    QCOMPARE(page.width(), 400.);
 }
+    // question; how do I make sure that upon removal I invalidate *all* following pages so their auto-generated frames are re-generated
 
 QTEST_KDEMAIN(TestPageCommands, GUI)
 #include "TestPageCommands.moc"
