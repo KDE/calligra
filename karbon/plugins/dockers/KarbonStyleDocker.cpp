@@ -306,6 +306,7 @@ void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & se
             if( oldBorder ) {
                 // preserve the properties of the old border if it is a line border
                 newBorder = new KoLineBorder( *oldBorder );
+                newBorder->setLineBrush( QBrush() );
                 newBorder->setColor( c );
             }
             else {
