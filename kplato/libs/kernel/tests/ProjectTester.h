@@ -54,8 +54,11 @@ private slots:
     void schedule();
     void scheduleFullday();
 
+    void scheduleWithExternalAppointments();
+
 private:
     void printDebug( Project *p, Task *t ) const;
+    void printSchedulingLog( const ScheduleManager &sm ) const;
 
     Project *m_project;
     Task *m_task;

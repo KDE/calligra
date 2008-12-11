@@ -35,7 +35,7 @@ Document::Document()
     m_url( KUrl() ),
     m_sendAs( SendAs_None )
 {
-    kDebug()<<this;
+    //kDebug()<<this;
 }
 
 Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
@@ -43,12 +43,12 @@ Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendA
     m_url( url ),
     m_sendAs( sendAs )
 {
-    kDebug()<<this;
+    //kDebug()<<this;
 }
 
 Document::~Document()
 {
-    kDebug()<<this;
+    //kDebug()<<this;
 }
 
 bool Document::operator==( const Document &doc ) const
@@ -112,12 +112,12 @@ void Document::save(QDomElement &element) const
 //----------------
 Documents::Documents()
 {
-    kDebug()<<this;
+    //kDebug()<<this;
 }
 
 Documents::Documents( const Documents &docs )
 {
-    kDebug()<<this;
+    //kDebug()<<this;
     foreach ( Document *doc, docs.documents() ) {
         m_docs.append( new Document( *doc ) );
     }
@@ -125,7 +125,7 @@ Documents::Documents( const Documents &docs )
 
 Documents::~Documents()
 {
-    kDebug()<<this;
+    //kDebug()<<this;
     deleteAll();
 }
 

@@ -1088,7 +1088,7 @@ bool Project::addSubTask( Node* task, int index, Node* parent, bool emitSignal )
 
 void Project::takeTask( Node *node, bool emitSignal )
 {
-    kDebug()<<node->name();
+    //kDebug()<<node->name();
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
         kDebug() <<"Node must have a parent!";
@@ -1102,7 +1102,7 @@ void Project::takeTask( Node *node, bool emitSignal )
         emit nodeRemoved( node );
         emit changed();
     }
-    kDebug()<<node->name()<<"removed";
+    //kDebug()<<node->name()<<"removed";
     if ( parent != this && parent->type() != Node::Type_Summarytask ) {
         emit nodeChanged( parent );
     }

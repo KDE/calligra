@@ -208,6 +208,8 @@ public:
             QString message;
             int severity;
             int phase;
+
+            QString formatMsg() const;
     };
     virtual void addLog( Log &log );
     virtual void clearLogs() {};
@@ -469,6 +471,8 @@ public:
     static QString logSeverity( int severity );
     
     virtual void incProgress();
+
+    QStringList logMessages() const;
 
 protected:
     virtual void changed( Schedule *sch );

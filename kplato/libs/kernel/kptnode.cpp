@@ -662,28 +662,33 @@ QStringList Node::constraintList( bool trans ) {
 }
 
 void Node::propagateEarliestStart(DateTime &time) {
-    if (m_currentSchedule == 0)
+    if (m_currentSchedule == 0) {
         return;
-    m_currentSchedule->earlyStart = time;
-    if ( m_currentSchedule->lateStart.isValid() && m_currentSchedule->lateStart < time ) {
-        m_currentSchedule->lateStart = time;
     }
-    //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
-    switch ( m_constraint ) {
-        case FinishNotLater:
-        case MustFinishOn:
-            if ( m_constraintEndTime < time ) {
-                m_currentSchedule->logWarning("Task constraint outside project constraint");
-            }
-            break;
-        case MustStartOn:
-        case FixedInterval:
-            if ( m_constraintStartTime < time ) {
-                m_currentSchedule->logWarning("Task constraint outside project constraint");
-            }
-            break;
-        default:
-            break;
+    if ( type() != Type_Project ) {
+        m_currentSchedule->earlyStart = time;
+        if ( m_currentSchedule->lateStart.isValid() && m_currentSchedule->lateStart < time ) {
+            m_currentSchedule->lateStart = time;
+        }
+        //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
+        switch ( m_constraint ) {
+            case FinishNotLater:
+            case MustFinishOn:
+                if ( m_constraintEndTime > time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            case MustStartOn:
+            case FixedInterval:
+                if ( m_constraintStartTime < time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            default:
+                break;
+        }
     }
     //kDebug()<<m_name<<":"<<m_currentSchedule->earlyStart;
     QListIterator<Node*> it = m_nodes;
@@ -693,26 +698,32 @@ void Node::propagateEarliestStart(DateTime &time) {
 }
 
 void Node::propagateLatestFinish(DateTime &time) {
-    if (m_currentSchedule == 0)
+    if (m_currentSchedule == 0) {
         return;
-    m_currentSchedule->lateFinish = time;
-    if ( m_currentSchedule->earlyFinish.isValid() && m_currentSchedule->earlyFinish > time ) {
-        m_currentSchedule->earlyFinish = time;
-    }    switch ( m_constraint ) {
-        case StartNotEarlier:
-        case MustStartOn:
-            if ( m_constraintStartTime > time ) {
-                m_currentSchedule->logWarning("Task constraint outside project constraint");
-            }
-            break;
-        case MustFinishOn:
-        case FixedInterval:
-            if ( m_constraintEndTime > time ) {
-                m_currentSchedule->logWarning("Task constraint outside project constraint");
-            }
-            break;
-        default:
-            break;
+    }
+    if ( type() != Type_Project ) {
+        m_currentSchedule->lateFinish = time;
+        if ( m_currentSchedule->earlyFinish.isValid() && m_currentSchedule->earlyFinish > time ) {
+            m_currentSchedule->earlyFinish = time;
+        }
+        switch ( m_constraint ) {
+            case StartNotEarlier:
+            case MustStartOn:
+                if ( m_constraintStartTime < time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            case MustFinishOn:
+            case FixedInterval:
+                if ( m_constraintEndTime > time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            default:
+                break;
+        }
     }
     //kDebug()<<m_name<<":"<<m_currentSchedule->lateFinish;
     QListIterator<Node*> it = m_nodes;
