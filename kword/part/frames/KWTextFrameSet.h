@@ -120,8 +120,9 @@ protected:
     friend class TestTextFrameSorting;
     void setupFrame(KWFrame *frame);
     /**
-     * Call this to make it know that the text we want to layout needs more space to be shown fully.
+     * Call this to make it known that the text we want to layout needs more space to be shown fully.
      * This will resize the frame, or emit a moreFramesNeeded signal based on the settings.
+     * @param textHeight the height of the text we could not fit.
      */
     void requestMoreFrames(qreal textHeight);
     /// called by the KWTextDocumentLayout to mark that the frame is bigger then the text in it.
