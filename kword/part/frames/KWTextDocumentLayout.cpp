@@ -520,7 +520,8 @@ void KWTextDocumentLayout::layout()
         }
         if (m_state->interrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
-            scheduleLayout();
+            TDEBUG << "schedule a next layout due to having done a layout of quite some space";
+            scheduleLayoutWithoutInterrupt();
             return;
         }
         newParagraph = false;
