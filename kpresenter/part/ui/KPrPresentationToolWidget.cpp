@@ -35,11 +35,11 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     m_uiWidget.setupUi( this );
     
     // Set the size of the icon
-    m_uiWidget.penButton->setIconSize( QSize( 22,22 ) );
-    m_uiWidget.highLightButton->setIconSize( QSize( 22,22 ) );
+    m_uiWidget.penButton->setIconSize( QSize( 30,30 ) );
+    m_uiWidget.highLightButton->setIconSize( QSize( 30,30 ) );
     // Set the buttons Icon
-    m_uiWidget.penButton->setIcon(KIcon("pen.png"));
-    m_uiWidget.highLightButton->setIcon(KIcon("highlight.png"));
+    m_uiWidget.penButton->setIcon(KIcon("pen"));
+    m_uiWidget.highLightButton->setIcon(KIcon("highlight"));
     
 }
 
