@@ -122,7 +122,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
     if (docker && docker->view() != this) docker->setView(this);
 
-    m_statusBar = statusBar() ? new KWStatusBar(statusBar(), this) : 0;
+    new KWStatusBar(statusBar(), this);
 }
 
 KWView::~KWView()
