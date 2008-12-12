@@ -42,7 +42,6 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     : QObject(view),
     m_statusbar(statusBar),
     m_view(view),
-    m_toolproxy(0),
     m_controller(0),
     m_currentPageNumber(0),
     m_zoomWidget(0)
@@ -63,8 +62,8 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     const QString s = i18nPage.subs("999").subs("999").toString();
     m_pageLabel->setMinimumWidth(QFontMetrics(m_pageLabel->font()).width(s));
     m_statusbar->addWidget(m_pageLabel);
-    slotPagesChanged();
-    connect(kwdoc, SIGNAL(pageSetupChanged()), this, SLOT(slotPagesChanged()));
+    updatePageCount();
+    connect(kwdoc, SIGNAL(pageSetupChanged()), this, SLOT(updatePageCount()));
 
     QAction* action = new KAction(i18n("Page: current/total"), this);
     action->setObjectName("pages_current_total");
@@ -79,8 +78,8 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     QFontMetrics fm(m_modifiedLabel->font());
     m_modifiedLabel->setMinimumWidth(qMax(fm.width(i18nModified), fm.width(i18nSaved)));
     m_statusbar->addWidget(m_modifiedLabel);
-    slotModifiedChanged(kwdoc->isModified());
-    connect(kwdoc, SIGNAL(modified(bool)), this, SLOT(slotModifiedChanged(bool)));
+    setModified(kwdoc->isModified());
+    connect(kwdoc, SIGNAL(modified(bool)), this, SLOT(setModified(bool)));
 
     action = new KAction(i18n("State: saved/modified"), this);
     action->setObjectName("doc_save_state");
@@ -103,18 +102,6 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     m_statusbar->addAction(action);
     connect(action, SIGNAL(toggled(bool)), m_mousePosLabel, SLOT(setVisible(bool)));
 
-    /*
-    m_toolproxy = canvas->toolProxy();
-    if( m_toolproxy ) {
-        m_selectionLabel = new QLabel(m_statusbar);
-        m_selectionLabel->setFrameShape(QFrame::Panel);
-        m_selectionLabel->setFrameShadow(QFrame::Sunken);
-        m_statusbar->addWidget(m_selectionLabel);
-        slotSelectionChanged(false);
-        connect(m_toolproxy, SIGNAL(selectionChanged(bool)), this, SLOT(slotSelectionChanged(bool)));
-    }
-    */
-
     m_statusLabel = new KSqueezedTextLabel(m_statusbar);
     m_statusbar->addWidget(m_statusLabel, 1);
     connect(m_statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
@@ -133,12 +120,12 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
         connect(action, SIGNAL(toggled(bool)), m_zoomWidget, SLOT(setVisible(bool)));
     }
 
-    slotChangedTool();
-    connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)), this, SLOT(slotChangedTool()));
+    updateCurrentTool();
+    connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*, int)), this, SLOT(updateCurrentTool()));
 
     KoCanvasResourceProvider* resourceprovider = canvas->resourceProvider();
     Q_ASSERT(resourceprovider);
-    connect(resourceprovider, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(slotResourceChanged(int, QVariant)));
+    connect(resourceprovider, SIGNAL(resourceChanged(int, QVariant)), this, SLOT(resourceChanged(int, QVariant)));
 }
 
 KWStatusBar::~KWStatusBar()
@@ -155,66 +142,41 @@ void KWStatusBar::setText(const QString& text)
     m_statusLabel->setText(text);
 }
 
-void KWStatusBar::slotModifiedChanged(bool modified)
+void KWStatusBar::setModified(bool modified)
 {
     m_modifiedLabel->setText(modified ? i18nModified : i18nSaved);
 }
 
-void KWStatusBar::slotPagesChanged()
+void KWStatusBar::updatePageCount()
 {
     KWDocument* kwdoc = m_view->kwdocument();
     Q_ASSERT(kwdoc);
     m_pageLabel->setText(i18nPage.subs(m_currentPageNumber + 1).subs(kwdoc->pageCount()).toString());
 }
 
-void KWStatusBar::slotResourceChanged(int key, const QVariant& value)
+void KWStatusBar::resourceChanged(int key, const QVariant& value)
 {
-    switch (key) {
-    case KWord::CurrentPage: {
-        m_currentPageNumber = value.toInt();
-        slotPagesChanged();
-    }
-    break;
-    default:
-        ;//kDebug(32003)<<"KWStatusBar::slotResourceChanged Unhandled key="<<key<<" value="<<value<<endl;
-        break;
-    }
+    if (key ==  KWord::CurrentPage)
+        updatePageCount();
 }
 
-/*
-void KWStatusBar::slotSelectionChanged(bool hasSelection)
+void KWStatusBar::updateCurrentTool()
 {
-    kDebug(32003)<<"===> KWStatusBar::slotSelectionChanged"<<endl;
-    QString pos = "0";
-    if( hasSelection ) {
-        KoToolSelection* selection = m_toolproxy->selection();
-        KoTextSelectionHandler* textselection = dynamic_cast<KoTextSelectionHandler*>(selection);
-        if( textselection ) {
-            QTextCursor cursor = textselection->caret();
-            pos = QString("%1").arg( textselection->selectedText().length() );
-        }
-    }
-    m_selectionLabel->setText(pos);
-}
-*/
-
-void KWStatusBar::slotChangedTool()
-{
-    kDebug(32003) << "KWStatusBar::slotChangedTool" << endl;
+    //kDebug(32003) << "KWStatusBar::updateCurrentTool" << endl;
     if (m_controller) {
-        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(slotMousePositionChanged(const QPoint&)));
+        disconnect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(updateMousePosition(const QPoint&)));
     }
     m_controller = KoToolManager::instance()->activeCanvasController();
     if (m_controller) {
-        connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(slotMousePositionChanged(const QPoint&)));
+        connect(m_controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(updateMousePosition(const QPoint&)));
     } else {
-        //slotMousePositionChanged(QPoint());
+        m_mousePosLabel->setText(QString());
     }
 }
 
-void KWStatusBar::slotMousePositionChanged(const QPoint& pos)
+void KWStatusBar::updateMousePosition(const QPoint& pos)
 {
-    //kDebug(32003)<<"KWStatusBar::slotMousePositionChanged"<<endl;
+    //kDebug(32003)<<"KWStatusBar::updateMousePosition"<<endl;
     m_mousePosLabel->setText(QString("%1:%2").arg(pos.x()).arg(pos.y()));
 }
 

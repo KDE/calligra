@@ -28,7 +28,6 @@ class KStatusBar;
 class KWView;
 class QLabel;
 class KSqueezedTextLabel;
-class KoToolProxy;
 class KoCanvasController;
 
 /**
@@ -58,16 +57,15 @@ public slots:
     void setText(const QString& text);
 
 private slots:
-    void slotModifiedChanged(bool modified);
-    void slotPagesChanged();
-    void slotMousePositionChanged(const QPoint&);
-    void slotResourceChanged(int, const QVariant&);
-    void slotChangedTool();
+    void setModified(bool modified);
+    void updatePageCount();
+    void updateMousePosition(const QPoint&);
+    void resourceChanged(int, const QVariant&);
+    void updateCurrentTool();
 
 private:
     KStatusBar * m_statusbar;
     KWView* m_view;
-    KoToolProxy *m_toolproxy;
     QPointer<KoCanvasController> m_controller;
     int m_currentPageNumber;
 
