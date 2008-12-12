@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,11 +21,15 @@
 #ifndef KWSTATUSBAR_H
 #define KWSTATUSBAR_H
 
-#include <QObject>
+#include <QPointer>
 
 class QPoint;
 class KStatusBar;
 class KWView;
+class QLabel;
+class KSqueezedTextLabel;
+class KoToolProxy;
+class KoCanvasController;
 
 /**
 * The KWStatusBar class implements an extended statusbar for KWord.
@@ -60,10 +65,17 @@ private slots:
     void slotChangedTool();
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    KStatusBar * m_statusbar;
+    KWView* m_view;
+    KoToolProxy *m_toolproxy;
+    QPointer<KoCanvasController> m_controller;
+    int m_currentPageNumber;
+
+    QLabel* m_modifiedLabel;
+    QLabel* m_pageLabel;
+    QLabel* m_mousePosLabel;
+    KSqueezedTextLabel* m_statusLabel;
+    QWidget* m_zoomWidget;
 };
 
 #endif
