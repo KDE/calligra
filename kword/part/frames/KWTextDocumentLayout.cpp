@@ -531,7 +531,8 @@ void KWTextDocumentLayout::layout()
         if (line.line.isValid()) {
             QTextBlock b = document()->findBlock(m_state->cursorPosition());
             if (b.isValid())
-                TDEBUG << "fitted line" << b.text().mid(b.position() + line.line.textStart(), b.position() + line.line.textLength());
+                TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
+                TDEBUG << "         @ " << line.line.position() << " from parag at pos " << b.position();
         }
 #endif
 
@@ -598,7 +599,8 @@ void KWTextDocumentLayout::layout()
             if (line.line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());
                 if (b.isValid())
-                    TDEBUG << "fitted line" << b.text().mid(b.position() + line.line.textStart(), b.position() + line.line.textLength());
+                    TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
+                    TDEBUG << "         @ " << line.line.position() << " from parag at pos " << b.position();
             }
 #endif
         }
