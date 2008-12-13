@@ -65,7 +65,7 @@ private:
     KPrPresentationToolWidget *presentationToolWidget;
     QFrame *m_frame;
     QFrame *m_blackBackgroundframe;
-    QLabel *m_blackBackgroundlabel;
+    bool m_blackBackgroundVisibility;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */
