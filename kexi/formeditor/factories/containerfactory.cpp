@@ -274,7 +274,7 @@ InsertPageCommand::execute()
 // QWidget *page = new ContainerWidget(parent, m_name.toLatin1());
 // new KFormDesigner::Container(container, page, parent);
 
-    Q3CString classname = parent->className();
+    Q3CString classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
         QString n = i18n("Page %1", tab->count() + 1);
@@ -304,7 +304,7 @@ InsertPageCommand::unexecute()
     list.append(page);
     K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
 
-    Q3CString classname = parent->className();
+    Q3CString classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(parent);
         tab->removePage(page);

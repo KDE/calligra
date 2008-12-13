@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jaros³aw Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <QMouseEvent>
+#include <QRubberBand>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -110,27 +112,99 @@ EventEater::~EventEater()
 class Container::Private
 {
 public:
-    Private() {}
+    Private(Container* toplevel, QWidget *container)
+      : m_toplevel(toplevel)
+      , m_widget(container)
+      , insertBegin(-1, -1)
+      , state(DoingNothing)
+      , selectionRubberBand(0)
+    {
+    }
+    ~Private() {
+    }
+
+    // for inserting/selection
+    void startSelectionOrInsertingRectangle(const QPoint& begin)
+    {
+        insertBegin = begin;
+    }
+    void stopSelectionRectangleOrInserting()
+    {
+        insertBegin = QPoint(-1, -1);
+        insertRect = QRect();
+        if (selectionRubberBand) {
+            selectionRubberBand->hide();
+        }
+    }
+    void updateSelectionOrInsertingRectangle(const QPoint& end)
+    {
+        if (!selectionOrInsertingStarted()) {
+            stopSelectionRectangleOrInserting();
+            return;
+        }
+        insertRect.setTopLeft( QPoint(
+            qMin(insertBegin.x(), end.x()),
+            qMin(insertBegin.y(), end.y()) ) );
+        insertRect.setBottomRight( QPoint(
+            qMax(insertBegin.x(), end.x()),
+            qMax(insertBegin.y(), end.y()) ) );
+        if (!selectionRubberBand) {
+            selectionRubberBand = new QRubberBand(QRubberBand::Line, m_widget);
+        }
+        selectionRubberBand->setGeometry(insertRect);
+        selectionRubberBand->show();
+    }
+    bool selectionOrInsertingStarted() const
+    {
+        return insertBegin != QPoint(-1, -1);
+    }
+    QRect selectionOrInsertingRectangle() const {
+        return insertRect;
+    }
+    QPoint selectionOrInsertingBegin() const {
+        return insertBegin;
+    }
+    Container* toplevel() {
+        return m_toplevel;
+    }
+    QWidget* widget() const
+    {
+        return m_widget;
+    }
+    void widgetDeleted() {
+        m_widget = 0;
+    }
     QPointer<Form> form;
+    enum State {
+      DoingNothing,
+      DrawingSelectionRect,
+      CopyingWidget,
+      MovingWidget,
+      InlineEditing
+    };
+    State state;
+private:
+    // the watched container and it's toplevel one...
+    QPointer<Container> m_toplevel;
+    QPointer<QWidget> m_widget;
+
+    QPoint insertBegin;
+    QRect insertRect;
+    QRubberBand *selectionRubberBand;
 };
 
 Container::Container(Container *toplevel, QWidget *container, QObject *parent)
         : QObject(parent)
-        , m_insertBegin(-1, -1)
         , m_mousePressEventReceived(false)
         , m_mouseReleaseEvent(QEvent::None, QPoint(), Qt::NoButton, Qt::NoButton, Qt::NoModifier)
-        , d(new Private())
+        , d(new Private(toplevel, container))
 {
-    m_container = container;
-    m_toplevel = toplevel;
-
     m_moving = 0;
     m_tree = 0;
     if (toplevel)
         d->form = toplevel->form();
     m_layout = 0;
     m_layType = NoLayout;
-    m_state = DoingNothing;
 
     Q3CString classname = container->metaObject()->className();
     if ((classname == "HBox") || (classname == "Grid") || (classname == "VBox") ||
@@ -169,6 +243,11 @@ Form* Container::form() const
     return d->form;
 }
 
+QWidget* Container::widget() const
+{
+    return d->widget();
+}
+
 void
 Container::setForm(Form *form)
 {
@@ -183,7 +262,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 // kDebug() << e->type();
     switch (e->type()) {
     case QEvent::MouseButtonPress: {
-        m_insertBegin = QPoint(-1, -1);
+        d->stopSelectionRectangleOrInserting();
         m_mousePressEventReceived = true;
 
         kDebug() << "QEvent::MouseButtonPress sender object = " << s->objectName()
@@ -207,7 +286,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                     unSelectWidget(m_moving);
                 else { // the widget is the only selected, so it means we want to copy it
                     //m_copyRect = m_moving->geometry();
-                    m_state = CopyingWidget;
+                    d->state = Private::CopyingWidget;
                     if (d->form->formWidget())
                         d->form->formWidget()->initBuffer();
                 }
@@ -221,9 +300,9 @@ Container::eventFilter(QObject *s, QEvent *e)
             setSelectedWidget(m_moving, false, (mev->button() == Qt::RightButton));
 
         // we are inserting a widget or drawing a selection rect in the form
-        if ((/*s == m_container &&*/ FormManager::self()->isInserting()) || ((s == m_container) && !m_toplevel)) {
+        if ((/*s == m_container &&*/ FormManager::self()->isInserting()) || ((s == widget()) && !d->toplevel())) {
             int tmpx, tmpy;
-            if (!FormManager::self()->snapWidgetsToGrid() || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier | Qt::AltModifier)) {
+            if (!FormManager::self()->snapWidgetsToGrid() || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
                 tmpx = mev->x();
                 tmpy = mev->y();
             } else {
@@ -235,12 +314,12 @@ Container::eventFilter(QObject *s, QEvent *e)
                 tmpy *= gridX;
             }
 
-            m_insertBegin = (static_cast<QWidget*>(s))->mapTo(m_container, QPoint(tmpx, tmpy));
+            d->startSelectionOrInsertingRectangle( (static_cast<QWidget*>(s))->mapTo(widget(), QPoint(tmpx, tmpy)) );
             if (d->form->formWidget())
                 d->form->formWidget()->initBuffer();
 
             if (!FormManager::self()->isInserting())
-                m_state = DrawingSelectionRect;
+                d->state = Private::DrawingSelectionRect;
         } else {
             if (s->inherits("QTabWidget")) // to allow changing page by clicking tab
                 return false;
@@ -268,11 +347,11 @@ Container::eventFilter(QObject *s, QEvent *e)
 
     case QEvent::MouseMove: {
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-        if (m_insertBegin != QPoint(-1, -1) && FormManager::self()->isInserting() && ((mev->buttons() == Qt::LeftButton) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) ||
-                (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier | Qt::AltModifier) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ShiftModifier)))
+        if (d->selectionOrInsertingStarted() && FormManager::self()->isInserting() && ((mev->buttons() == Qt::LeftButton) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) ||
+                (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ShiftModifier)))
             // draw the insert rect
         {
-            drawInsertRect(mev, s);
+//reimpl.            drawInsertRect(mev, s);
             return true;
         }
         // Creating a connection, we highlight sender and receiver, and we draw a link between them
@@ -283,54 +362,62 @@ Container::eventFilter(QObject *s, QEvent *e)
 
             if (d->form->formWidget() && (tree->widget() != s))
                 d->form->formWidget()->highlightWidgets(tree->widget(), static_cast<QWidget*>(s));
-        } else if (m_insertBegin != QPoint(-1, -1) && s == m_container && !m_toplevel && (mev->modifiers() != Qt::ControlModifier) && !FormManager::self()->isCreatingConnection()) { // draw the selection rect
-            if ((mev->buttons() != Qt::LeftButton) || /*m_inlineEditing*/ m_state == InlineEditing)
+        } else if (d->selectionOrInsertingStarted() 
+                   && s == widget()
+                   && !d->toplevel()
+                   && (mev->modifiers() != Qt::ControlModifier)
+                   && !FormManager::self()->isCreatingConnection())
+        { // draw the selection rect
+            if ((mev->buttons() != Qt::LeftButton) || /*m_inlineEditing*/ d->state == Private::InlineEditing)
                 return true;
+            d->updateSelectionOrInsertingRectangle(mev->pos());
+/* moved
             int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
             int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
             int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
             int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
             QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
-            m_insertRect = r;
+            m_insertRect = r; 
+*/
 
-            if (d->form->formWidget())
-                d->form->formWidget()->drawRect(r, 1);
+//! @todo?            if (d->form->formWidget())
+//! @todo?                d->form->formWidget()->drawRect(r, 1); 
 
-            m_state = DoingNothing;
+            d->state = Private::DoingNothing;
             return true;
         } else if (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) {
             // draw the insert rect for the copied widget
-            if (s == m_container)// || (d->form->selectedWidgets()->count() > 1))
+            if (s == widget())// || (d->form->selectedWidgets()->count() > 1))
                 return true;
-            drawCopiedWidgetRect(mev);
+ //moved..           drawCopiedWidgetRect(mev);
             return true;
         } else if (
-            (mev->buttons() == Qt::LeftButton || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier | Qt::AltModifier))
-            && !FormManager::self()->isInserting() && m_state != CopyingWidget) {
+            (mev->buttons() == Qt::LeftButton || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)))
+            && !FormManager::self()->isInserting() && d->state != Private::CopyingWidget) {
             // we are dragging the widget(s) to move it
-            if (!m_toplevel && m_moving == m_container) // no effect for form
+            if (!d->toplevel() && m_moving == widget()) // no effect for form
                 return false;
             if ((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
                 return true;
 
             moveSelectedWidgetsBy(mev->x() - m_grab.x(), mev->y() - m_grab.y());
-            m_state = MovingWidget;
+            d->state = Private::MovingWidget;
         }
 
         return true; // eat
     }
 
     case QEvent::Paint: { // Draw the dotted background
-        if (s != m_container)
+        if (s != widget())
             return false;
         int gridX = d->form->gridSize();
         int gridY = d->form->gridSize();
 
-        QPainter p(m_container);
+        QPainter p(widget());
         p.setPen(QPen(Qt::white, 2));
         p.setCompositionMode(QPainter::CompositionMode_Xor);
-        int cols = m_container->width() / gridX;
-        int rows = m_container->height() / gridY;
+        int cols = widget()->width() / gridX;
+        int rows = widget()->height() / gridY;
 
         for (int rowcursor = 1; rowcursor <= rows; ++rowcursor) {
             for (int colcursor = 1; colcursor <= cols; ++colcursor) {
@@ -343,7 +430,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
     case QEvent::Resize: { // we are resizing a widget, so we set m_move to true -> the layout will be reloaded when releasing mouse
         if (d->form->interactiveMode())
-            m_state = MovingWidget;
+            d->state = Private::MovingWidget;
         break;
     }
 
@@ -352,7 +439,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         QKeyEvent *kev = static_cast<QKeyEvent*>(e);
 
         if (kev->key() == Qt::Key_F2) { // pressing F2 == double-clicking
-            m_state = InlineEditing;
+            d->state = Private::InlineEditing;
             QWidget *w;
 
             // try to find the widget which was clicked last and should be edited
@@ -369,7 +456,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             else if (FormManager::self()->isInserting())
                 FormManager::self()->stopInsert();
             return true;
-        } else if ((kev->key() == Qt::Key_Control) && (m_state == MovingWidget)) {
+        } else if ((kev->key() == Qt::Key_Control) && (d->state == Private::MovingWidget)) {
             if (!m_moving)
                 return true;
             // we simulate a mouse move event to update screen
@@ -427,7 +514,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
     case QEvent::KeyRelease: {
         QKeyEvent *kev = static_cast<QKeyEvent*>(e);
-        if ((kev->key() == Qt::Key_Control) && (m_state == CopyingWidget)) {
+        if ((kev->key() == Qt::Key_Control) && (d->state == Private::CopyingWidget)) {
             // cancel copying
             //m_copyRect = QRect();
             if (d->form->formWidget())
@@ -443,7 +530,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             return false;
 
         //m_inlineEditing = true;
-        m_state = InlineEditing;
+        d->state = Private::InlineEditing;
         d->form->library()->startEditing(w->metaObject()->className(), w, this);
         return true;
     }
@@ -472,11 +559,11 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
             d->form->formWidget()->clearForm();
         K3Command *com = new InsertWidgetCommand(this/*, mev->pos()*/);
         d->form->addCommand(com, true);
-        m_insertBegin = QPoint(-1, -1);
-        m_insertRect = QRect();
+        d->stopSelectionRectangleOrInserting();
         return true;
-    } else if (s == m_container && !m_toplevel && (mev->button() != Qt::RightButton) && m_insertRect.isValid()) { // we are drawing a rect to select widgets
-        drawSelectionRect(mev);
+    } else if (s == widget() && !d->toplevel() && (mev->button() != Qt::RightButton) && d->selectionOrInsertingRectangle().isValid()) {
+        // we are still drawing a rect to select widgets
+//reimpl.        drawSelectionRect(mev);
         return true;
     }
     if (mev->button() == Qt::RightButton) { // Right-click -> context menu
@@ -486,7 +573,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 
         if (d->form->formWidget())
             d->form->formWidget()->clearForm();
-        if (s == m_container) // should have no effect on form
+        if (s == widget()) // should have no effect on form
             return true;
 
         // prevent accidental copying of widget (when moving mouse a little while selecting)
@@ -502,18 +589,19 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         if (d->form->selectedWidgets()->count() > 1)
             FormManager::self()->setInsertPoint(mev->pos());
         else
-            FormManager::self()->setInsertPoint(static_cast<QWidget*>(s)->mapTo(m_container, mev->pos() - m_grab));
+            FormManager::self()->setInsertPoint(static_cast<QWidget*>(s)->mapTo(widget(), mev->pos() - m_grab));
         FormManager::self()->pasteWidget();
         d->form->setInteractiveMode(true);
 
         //m_initialPos = QPoint();
-    } else if (m_state == MovingWidget) // one widget has been moved, so we need to update the layout
+    } else if (d->state == Private::MovingWidget) {
+        // one widget has been moved, so we need to update the layout
         reloadLayout();
+    }
 
     // cancel copying as user released Ctrl before releasing mouse button
-    m_insertBegin = QPoint(-1, -1);
-    m_insertRect = QRect();
-    m_state = DoingNothing;
+    d->stopSelectionRectangleOrInserting();
+    d->state = Private::DoingNothing;
     return true; // eat
 }
 
@@ -524,7 +612,7 @@ Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWill
         kDebug() << "slotSelectionChanged " << w->objectName();
 
     if (!w) {
-        d->form->setSelectedWidget(m_container);
+        d->form->setSelectedWidget(widget());
         return;
     }
 
@@ -543,8 +631,8 @@ Container::unSelectWidget(QWidget *w)
 Container*
 Container::toplevel()
 {
-    if (m_toplevel)
-        return m_toplevel;
+    if (d->toplevel())
+        return d->toplevel();
     else
         return this;
 }
@@ -557,13 +645,13 @@ Container::deleteWidget(QWidget *w)
 // kDebug() << "Deleting a widget: " << w->objectName();
     d->form->objectTree()->removeItem(w->objectName());
     FormManager::self()->deleteWidgetLater(w);
-    d->form->setSelectedWidget(m_container);
+    d->form->setSelectedWidget(widget());
 }
 
 void
 Container::widgetDeleted()
 {
-    m_container = 0;
+    d->widgetDeleted();
     deleteLater();
 }
 
@@ -581,12 +669,12 @@ Container::setLayout(LayoutType type)
 
     switch (type) {
     case HBox: {
-        m_layout = (QLayout*) new Q3HBoxLayout(m_container, m_margin, m_spacing);
+        m_layout = (QLayout*) new Q3HBoxLayout(widget(), m_margin, m_spacing);
         createBoxLayout(new HorWidgetList(d->form->toplevelContainer()->widget()));
         break;
     }
     case VBox: {
-        m_layout = (QLayout*) new Q3VBoxLayout(m_container, m_margin, m_spacing);
+        m_layout = (QLayout*) new Q3VBoxLayout(widget(), m_margin, m_spacing);
         createBoxLayout(new VerWidgetList(d->form->toplevelContainer()->widget()));
         break;
     }
@@ -596,7 +684,7 @@ Container::setLayout(LayoutType type)
     }
     case  HFlow: {
 #ifndef KEXI_NO_FLOWLAYOUT
-        KexiFlowLayout *flow = new KexiFlowLayout(m_container, m_margin, m_spacing);
+        KexiFlowLayout *flow = new KexiFlowLayout(widget(), m_margin, m_spacing);
         flow->setOrientation(Qt::Horizontal);
         m_layout = (QLayout*)flow;
         createFlowLayout();
@@ -605,7 +693,7 @@ Container::setLayout(LayoutType type)
     }
     case VFlow: {
 #ifndef KEXI_NO_FLOWLAYOUT
-        KexiFlowLayout *flow = new KexiFlowLayout(m_container, m_margin, m_spacing);
+        KexiFlowLayout *flow = new KexiFlowLayout(widget(), m_margin, m_spacing);
         flow->setOrientation(Qt::Vertical);
         m_layout = (QLayout*)flow;
         createFlowLayout();
@@ -617,7 +705,7 @@ Container::setLayout(LayoutType type)
         return;
     }
     }
-    m_container->setGeometry(m_container->geometry()); // just update layout
+    widget()->setGeometry(widget()->geometry()); // just update layout
     m_layout->activate();
 }
 
@@ -808,7 +896,7 @@ Container::createGridLayout(bool testOnly)
     // We create the layout ..
     Q3GridLayout *layout = 0;
     if (!testOnly) {
-        layout = new Q3GridLayout(m_container, rows.size(), cols.size(), m_margin, m_spacing);
+        layout = new Q3GridLayout(widget(), rows.size(), cols.size(), m_margin, m_spacing);
         layout->setObjectName("grid");
         m_layout = (QLayout*)layout;
     }
@@ -931,7 +1019,7 @@ Container::drawConnection(QMouseEvent *mev)
     if (FormManager::self()->createdConnection()->receiver().isNull()) {
         FormManager::self()->createdConnection()->setReceiver(m_moving->objectName());
         FormManager::self()->createSlotMenu(m_moving);
-        m_container->repaint();
+        widget()->repaint();
         return;
     }
     // the user clicked outside the menu, we cancel the connection
@@ -941,26 +1029,29 @@ Container::drawConnection(QMouseEvent *mev)
     }
 }
 
+#if 0 // reimplemented using QRubberBand 
 void
 Container::drawSelectionRect(QMouseEvent *mev)
 {
     //finish drawing unclipped selection rectangle: clear the surface
     if (d->form->formWidget())
         d->form->formWidget()->clearForm();
+    d->updateSelectionOrInsertingRectangle(mev->pos());
+/*moved
     int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
     int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
     int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
     int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
-    QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
+    QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));*/
 
-    setSelectedWidget(m_container, false);
+    setSelectedWidget(widget(), false);
     QWidget *widgetToSelect = 0;
     // We check which widgets are in the rect and select them
     for (ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next()) {
         QWidget *w = item->widget();
         if (!w)
             continue;
-        if (w->geometry().intersects(r) && w != m_container) {
+        if (w->geometry().intersects(r) && w != widget()) {
             if (widgetToSelect)
                 setSelectedWidget(widgetToSelect, true/*add*/, false/*raise*/, true/*moreWillBeSelected*/);
             widgetToSelect = w; //select later
@@ -970,15 +1061,15 @@ Container::drawSelectionRect(QMouseEvent *mev)
         setSelectedWidget(widgetToSelect, true/*add*/, false/*raise*/, false/*!moreWillBeSelected*/);
 
     m_insertRect = QRect();
-    m_state = DoingNothing;
-    m_container->repaint();
+    d->state = Private::DoingNothing;
+    widget()->repaint();
 }
 
 void
 Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 {
     int tmpx, tmpy;
-    QPoint pos = static_cast<QWidget*>(s)->mapTo(m_container, mev->pos());
+    QPoint pos = static_cast<QWidget*>(s)->mapTo(widget(), mev->pos());
     int gridX = d->form->gridSize();
     int gridY = d->form->gridSize();
     if (!FormManager::self()->snapWidgetsToGrid()
@@ -1020,14 +1111,14 @@ void
 Container::drawCopiedWidgetRect(QMouseEvent *mev)
 {
     // We've been dragging a widget, but Ctrl was hold, so we start copy
-    if (m_state == MovingWidget)  {
+    if (d->state == Private::MovingWidget)  {
         //FormManager::self()->undo(); // undo last moving
         //m_moving->move(m_initialPos);
         if (d->form->formWidget())  {
             m_container->repaint();
             d->form->formWidget()->initBuffer();
         }
-        m_state = CopyingWidget;
+        d->state = Private::CopyingWidget;
     }
 
     //m_copyRect.moveTopLeft(m_container->mapFromGlobal( mev->globalPos()) - m_grab);
@@ -1048,6 +1139,7 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
         d->form->formWidget()->drawRects(rectList, 2);
     }
 }
+#endif
 
 /// Other functions used by eventFilter
 void
@@ -1106,6 +1198,19 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
         if ((tmpx != w->x()) || (tmpy != w->y()))
             w->move(tmpx, tmpy);
     }
+}
+
+void Container::stopInlineEditing()
+{
+    d->state = Private::DoingNothing;
+}
+
+QRect Container::selectionOrInsertingRectangle() const {
+    return d->selectionOrInsertingRectangle();
+}
+
+QPoint Container::selectionOrInsertingBegin() const {
+    return d->selectionOrInsertingBegin();
 }
 
 ////////////

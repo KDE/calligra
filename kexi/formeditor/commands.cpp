@@ -637,8 +637,8 @@ InsertWidgetCommand::InsertWidgetCommand(Container *container)
     m_containername = container->widget()->objectName();
     m_form = container->form();
     m_class = FormManager::self()->selectedClass();
-    m_insertRect = container->m_insertRect;
-    m_point = container->m_insertBegin;
+    m_insertRect = container->selectionOrInsertingRectangle();
+    m_point = container->selectionOrInsertingBegin();
     m_name = container->form()->objectTree()->generateUniqueName(
                  container->form()->library()->namePrefix(m_class).toLatin1(),
                  /*!numberSuffixRequired*/false);
@@ -685,7 +685,7 @@ InsertWidgetCommand::execute()
         if (options & WidgetFactory::AnyOrientation) {
             options ^= WidgetFactory::AnyOrientation;
             options |= m_container->form()->library()->showOrientationSelectionPopup(
-                           m_class, m_container->m_container,
+                           m_class, m_container->widget(),
                            m_container->form()->widget()->mapToGlobal(m_point));
             if (options & WidgetFactory::AnyOrientation)
                 return; //cancelled
@@ -693,7 +693,7 @@ InsertWidgetCommand::execute()
     } else
         options |= WidgetFactory::AnyOrientation;
 
-    QWidget *w = m_container->form()->library()->createWidget(m_class, m_container->m_container, m_name,
+    QWidget *w = m_container->form()->library()->createWidget(m_class, m_container->widget(), m_name,
                  m_container, options);
 
     if (!w) {

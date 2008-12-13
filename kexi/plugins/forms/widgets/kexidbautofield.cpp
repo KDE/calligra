@@ -62,8 +62,8 @@ public:
     QString  caption;
     KexiDB::Field::Type fieldTypeInternal;
     QString fieldCaptionInternal;
-    QColor baseColor; //!< needed because for unbound mode editor==0
-    QColor textColor; //!< needed because for unbound mode editor==0
+    QBrush baseBrush; //!< needed because for unbound mode editor==0
+    QBrush textBrush; //!< needed because for unbound mode editor==0
 bool autoCaption : 1;
 bool focusPolicyChanged : 1;
 bool designMode : 1;
@@ -116,8 +116,8 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
     d->widgetType_property = (type == Auto ? Text : type); //to force "differ" to be true in setWidgetType()
     setLabelPosition(pos);
     setWidgetType(type);
-    d->baseColor = palette().active().base();
-    d->textColor = palette().active().text();
+    d->baseBrush = palette().base();
+    d->textBrush = palette().text();
 }
 
 void
@@ -207,11 +207,11 @@ void KexiDBAutoField::copyPropertiesToEditor()
 //  kDebug() << "KexiDBAutoField::copyPropertiesToEditor(): base col: " <<  d->baseColor.name() <<
 //   "; text col: " << d->textColor.name();
         QPalette p(m_subwidget->palette());
-        p.setColor(QPalette::Active, QColorGroup::Base, d->baseColor);
+        p.setBrush(QPalette::Base, d->baseBrush);
         if (d->widgetType == Boolean)
-            p.setColor(QPalette::Active, QColorGroup::Foreground, d->textColor);
+            p.setBrush(QPalette::Foreground, d->textBrush);
         else
-            p.setColor(QPalette::Active, QColorGroup::Text, d->textColor);
+            p.setBrush(QPalette::Text, d->textBrush);
         m_subwidget->setPalette(p);
         //m_subwidget->setPaletteBackgroundColor( d->baseColor );
     }
@@ -563,7 +563,7 @@ KexiDBAutoField::changeText(const QString &text, bool beautify)
     bool unbound = false;
     if (d->autoCaption && (d->widgetType == Auto || dataSource().isEmpty())) {
         if (d->designMode)
-            realText = QString::fromLatin1(name()) + " " + i18nc("Unbound Auto Field", "(unbound)");
+            realText = objectName() + " " + i18nc("Unbound Auto Field", "(unbound)");
         else
             realText.clear();
         unbound = true;
@@ -672,7 +672,7 @@ KexiDBAutoField::updateInformationAboutUnboundField()
 {
     if ((d->autoCaption && (dataSource().isEmpty() || dataSourcePartClass().isEmpty()))
             || (!d->autoCaption && d->caption.isEmpty())) {
-        d->label->setText(QString::fromLatin1(name()) + " " + i18nc("Unbound Auto Field", " (unbound)"));
+        d->label->setText(objectName() + " " + i18nc("Unbound Auto Field", " (unbound)"));
     }
 }
 
@@ -702,31 +702,34 @@ KexiDBAutoField::paletteChange(const QPalette& oldPal)
 
 void KexiDBAutoField::unsetPalette()
 {
-    QWidget::unsetPalette();
-
+    setPalette(QPalette());
 }
 
 // ===== methods below are just proxies for the internal editor or label =====
 
 const QColor & KexiDBAutoField::paletteForegroundColor() const
 {
-    return d->textColor;
+//! @todo how about brush?
+    return d->textBrush.color();
 }
 
 void KexiDBAutoField::setPaletteForegroundColor(const QColor & color)
 {
-    d->textColor = color;
+//! @todo how about brush?
+    d->textBrush.setColor(color);
     copyPropertiesToEditor();
 }
 
 const QColor & KexiDBAutoField::paletteBackgroundColor() const
 {
-    return d->baseColor;
+//! @todo how about brush?
+    return d->baseBrush.color();
 }
 
 void KexiDBAutoField::setPaletteBackgroundColor(const QColor & color)
 {
-    d->baseColor = color;
+//! @todo how about brush?
+    d->baseBrush.setColor(color);
     copyPropertiesToEditor();
 }
 

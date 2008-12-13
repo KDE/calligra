@@ -42,7 +42,7 @@ Spring::Spring(QWidget *parent)
 {
     m_edit = true;
     m_orient = Qt::Horizontal;
-    setSizeType((SizeType)QSizePolicy::Expanding);
+    setSizeType(QSizePolicy::Expanding);
 }
 
 Spring::~Spring()
@@ -52,28 +52,28 @@ Spring::~Spring()
 void
 Spring::setOrientation(Qt::Orientation orient)
 {
-    SizeType type = sizeType();
+    QSizePolicy::Policy policy = sizeType();
     m_orient = orient;
-    setSizeType(type);
+    setSizeType(policy);
     repaint();
 }
 
-Spring::SizeType
+QSizePolicy::Policy
 Spring::sizeType() const
 {
     if (m_orient == Qt::Vertical)
-        return (SizeType)sizePolicy().verData();
+        return sizePolicy().verticalPolicy();
     else
-        return (SizeType)sizePolicy().horData();
+        return sizePolicy().horizontalPolicy();
 }
 
 void
-Spring::setSizeType(SizeType size)
+Spring::setSizeType(QSizePolicy::Policy size)
 {
     if (m_orient == Qt::Vertical)
-        setSizePolicy(QSizePolicy::Minimum, (QSizePolicy::SizeType)size);
+        setSizePolicy(QSizePolicy::Minimum, size);
     else
-        setSizePolicy((QSizePolicy::SizeType)size, QSizePolicy::Minimum);
+        setSizePolicy(size, QSizePolicy::Minimum);
 }
 
 void

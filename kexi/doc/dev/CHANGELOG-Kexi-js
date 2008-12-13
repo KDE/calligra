@@ -22,6 +22,13 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-12
+Forms
+- use QRubberBand for displaying selection (and soon: insertion?) rectangles
+= name() --> objectName(), className() --> metaObject()->className()
+= some porting of QColor use
+= Spring: use QSizePolicy's enums
+
 2008-12-10
 Main
 - do not display property editor for !design mode even

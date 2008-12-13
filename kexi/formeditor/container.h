@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jaros³aw Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -86,6 +87,7 @@ public:
     Container(Container *toplevel, QWidget *container, QObject *parent = 0);
     virtual ~Container();
 
+
     //! \return a pointer to the toplevel Container, or 0 if this Container is toplevel
     Container* toplevel();
 
@@ -93,9 +95,7 @@ public:
     Form* form() const;
 
     //! \return The watched widget.
-    QWidget* widget() const {
-        return m_container;
-    }
+    QWidget* widget() const;
 
     //! \return The ObjectTreeItem associated with this Container's widget.
     ObjectTreeItem* objectTree() const {
@@ -154,9 +154,7 @@ public:
 
     /*! Stops the inline editing of the current widget (as when you click
      on another widget or press Esc). */
-    void stopInlineEditing() {
-        m_state = DoingNothing;
-    }
+    void stopInlineEditing();
 
     /*! This is the main function of Container, which filters the event sent
        to the watched widget.\n It takes care of drawing the background and
@@ -205,23 +203,19 @@ protected:
     void createGridLayout(bool testOnly = false);
 
     void drawConnection(QMouseEvent *mev);
-    void drawSelectionRect(QMouseEvent *mev);
-    void drawInsertRect(QMouseEvent *mev, QObject *s);
-    void drawCopiedWidgetRect(QMouseEvent *mev);
+//reimplemented using QRubberBand 
+    //void drawSelectionRect(QMouseEvent *mev);
+    //void drawInsertRect(QMouseEvent *mev, QObject *s);
+    //void drawCopiedWidgetRect(QMouseEvent *mev);
 
     void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev = 0);
 
 private:
     bool handleMouseReleaseEvent(QObject *s, QMouseEvent *mev);
 
-    // the watched container and it's toplevel one...
-    QPointer<QWidget> m_container;
-    QPointer<Container> m_toplevel;
+    QRect selectionOrInsertingRectangle() const;
 
-    int m_state;
-    enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget,
-           MovingWidget, InlineEditing
-         };
+    QPoint selectionOrInsertingBegin() const;
 
     // Layout
     QLayout *m_layout;
@@ -235,8 +229,6 @@ private:
     //QRect  m_copyRect;
 
     //inserting
-    QPoint m_insertBegin;
-    QRect m_insertRect;
     ObjectTreeItem *m_tree;
 
     bool m_mousePressEventReceived;
