@@ -6,6 +6,7 @@ include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${KDE4_INCLUDES}
+    ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
 ########### KPlato data models library ###############
