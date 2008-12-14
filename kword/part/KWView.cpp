@@ -1001,6 +1001,8 @@ void KWView::inlineFrame()
     foreach(KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
         if (shape->isLocked())
             continue;
+        if (shape->parent())
+            continue;
         targetShape = shape;
         break; // TODO group before...
     }
