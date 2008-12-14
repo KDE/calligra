@@ -156,5 +156,5 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
         newPath = matrix.map( m_shape );
     }
 
-    data.m_widget->update( newPath.boundingRect().toRect() );
+    data.m_widget->update( newPath.boundingRect().toRect().adjusted(-2, -2, 2, 2));
 }
