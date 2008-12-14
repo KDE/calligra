@@ -44,10 +44,11 @@
 
 KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
+, m_savedViewMode(0)
 , m_pageEffect(0)
 , m_pageEffectRunner(0)
 , m_page(0)
-, m_savedViewMode(0)
+, m_prevpage(0)
 {
     connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
     connect( &m_timeLine, SIGNAL( finished( ) ), this, SLOT( activateSavedViewMode() ) );
@@ -127,6 +128,8 @@ void KPrViewModePreviewPageEffect::activate( KoPAViewMode * previousViewMode )
 {
     m_savedViewMode = previousViewMode;               // store the previous view mode
 
+    // the update of the canvas is needed so that the old page gets drawn fully before the effect starts
+    canvas()->update();
     m_timeLine.setDuration( m_pageEffect->duration() );
     m_timeLine.setCurrentTime( 0 );
     m_timeLine.start();
