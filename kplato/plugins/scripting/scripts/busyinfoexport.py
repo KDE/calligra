@@ -14,33 +14,33 @@ class BusyinfoExporter:
         self.proj = KPlato.project()
         
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("Busy Information Export")
+        self.dialog = self.forms.createDialog(self.forms.tr("Busy Information Export"))
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        datapage = self.dialog.addPage("Schedules","Export Selected Schedule","document-export")
+        datapage = self.dialog.addPage(self.forms.tr("Schedules"),self.forms.tr("Export Selected Schedule"),"document-export")
         self.scheduleview = KPlato.createScheduleListView(datapage)
         
-        savepage = self.dialog.addPage("Save","Export Busy Info File","document-save")
+        savepage = self.dialog.addPage(self.forms.tr("Save"),self.forms.tr("Export Busy Info File"),"document-save")
         self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kplatobusyinfoexportsave")
         self.savewidget.setMode("Saving")
-        self.savewidget.setFilter("*.rbi|Resource Busy Information\n*|All Files")
+        self.savewidget.setFilter("*.rbi|%(1)s\n*|%(2)s" % { '1' : self.forms.tr("Resource Busy Information"), '2' : self.forms.tr("All Files") } )
 
         if self.dialog.exec_loop():
             try:
                 self.doExport( self.proj )
+            except Exception, inst:
+                self.forms.showMessageBox("Error", self.forms.tr("Error"), "%s" % inst)
             except:
-                self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
+                self.forms.showMessageBox("Error", self.forms.tr("Error"), "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
     def doExport( self, project ):
         filename = self.savewidget.selectedFile()
         if not filename:
-            raise "No file choosen"
-        if os.path.splitext(filename)[1] == '':
-            filename += '.rbi'
+            raise Exception, self.forms.tr("No file selected")
         schId = self.scheduleview.currentSchedule()
         if schId == -1:
-            raise "No schedule selected"
+            raise Exception, self.forms.tr("No schedule selected")
         file = open( filename, 'w' )
         p = []
         p.append( project.id() )
