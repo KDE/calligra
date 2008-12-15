@@ -34,7 +34,6 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <QMouseEvent>
-#include <QRubberBand>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -117,7 +116,6 @@ public:
       , m_widget(container)
       , insertBegin(-1, -1)
       , state(DoingNothing)
-      , selectionRubberBand(0)
     {
     }
     ~Private() {
@@ -132,9 +130,7 @@ public:
     {
         insertBegin = QPoint(-1, -1);
         insertRect = QRect();
-        if (selectionRubberBand) {
-            selectionRubberBand->hide();
-        }
+        m_widget->update();
     }
     void updateSelectionOrInsertingRectangle(const QPoint& end)
     {
@@ -148,11 +144,7 @@ public:
         insertRect.setBottomRight( QPoint(
             qMax(insertBegin.x(), end.x()),
             qMax(insertBegin.y(), end.y()) ) );
-        if (!selectionRubberBand) {
-            selectionRubberBand = new QRubberBand(QRubberBand::Line, m_widget);
-        }
-        selectionRubberBand->setGeometry(insertRect);
-        selectionRubberBand->show();
+        m_widget->update();
     }
     bool selectionOrInsertingStarted() const
     {
@@ -190,7 +182,6 @@ private:
 
     QPoint insertBegin;
     QRect insertRect;
-    QRubberBand *selectionRubberBand;
 };
 
 Container::Container(Container *toplevel, QWidget *container, QObject *parent)
@@ -410,21 +401,43 @@ Container::eventFilter(QObject *s, QEvent *e)
     case QEvent::Paint: { // Draw the dotted background
         if (s != widget())
             return false;
+//        QPaintEvent *pe = static_cast<QPaintEvent*>(e);
         int gridX = d->form->gridSize();
         int gridY = d->form->gridSize();
 
         QPainter p(widget());
-        p.setPen(QPen(Qt::white, 2));
-        p.setCompositionMode(QPainter::CompositionMode_Xor);
+        QColor c1(Qt::white);
+        c1.setAlpha(100);
+        QColor c2(Qt::black);
+        c2.setAlpha(100);
+        QPen pen1(c1, 1);
+        QPen pen2(c2, 1);
         int cols = widget()->width() / gridX;
         int rows = widget()->height() / gridY;
-
         for (int rowcursor = 1; rowcursor <= rows; ++rowcursor) {
             for (int colcursor = 1; colcursor <= cols; ++colcursor) {
-                p.drawPoint(-1 + colcursor *gridX, -1 + rowcursor *gridY);
+                const int x = -1 + colcursor *gridX;
+                const int y = -1 + rowcursor *gridY;
+                p.setPen(pen1);
+                p.drawPoint(x, y);
+                p.drawPoint(x, y+1);
+                p.setPen(pen2);
+                p.drawPoint(x+1, y);
+                p.drawPoint(x+1, y+1);
             }
         }
-
+        if (d->selectionOrInsertingRectangle().isValid()) {
+            QColor sc1(Qt::white);
+            sc1.setAlpha(220);
+            QColor sc2(Qt::black);
+            sc2.setAlpha(200);
+            QPen selPen1(sc2, 1.0);
+            QPen selPen2(sc1, 1.0, Qt::DotLine);
+            p.setPen(selPen1);
+            p.drawRect(d->selectionOrInsertingRectangle());
+            p.setPen(selPen2);
+            p.drawRect(d->selectionOrInsertingRectangle());
+        }
         return false;
     }
 
@@ -563,6 +576,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         return true;
     } else if (s == widget() && !d->toplevel() && (mev->button() != Qt::RightButton) && d->selectionOrInsertingRectangle().isValid()) {
         // we are still drawing a rect to select widgets
+        d->stopSelectionRectangleOrInserting();
 //reimpl.        drawSelectionRect(mev);
         return true;
     }
@@ -1187,7 +1201,7 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
         }
 
         int tmpx, tmpy;
-        if (!FormManager::self()->snapWidgetsToGrid() || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier | Qt::AltModifier)) {
+        if (!FormManager::self()->snapWidgetsToGrid() || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
             tmpx = w->x() + dx;
             tmpy = w->y() + dy;
         } else {
