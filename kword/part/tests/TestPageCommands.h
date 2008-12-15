@@ -35,6 +35,7 @@ private slots: // tests
     void testRemovePageCommand();
     void testRemovePageCommand2();
     void testRemovePageCommand3();
+    void testRemovePageCommand4();
 };
 
 #endif

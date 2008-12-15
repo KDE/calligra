@@ -312,7 +312,8 @@ void TestPageCommands::testRemovePageCommand() // move of frames
 
 void TestPageCommands::testRemovePageCommand2() // auto remove of frames
 {
-    // In contrary to the insert command the remove command will remove and re-insert all frames of all types.
+    // In contrary to the insert command the remove command will remove frames
+    // of all types and reinsert only non-auto-generated ones.
     // lets make sure we it does that.
     KWDocument document;
     KWFrameSet *fs = new KWFrameSet();
@@ -386,6 +387,48 @@ void TestPageCommands::testRemovePageCommand3() // test restore all properties
     QCOMPARE(page.width(), 400.);
 }
     // question; how do I make sure that upon removal I invalidate *all* following pages so their auto-generated frames are re-generated
+
+void TestPageCommands::testRemovePageCommand4() // auto remove of frames
+{
+    KWDocument document;
+    KWPageInsertCommand insertCommand(&document, 0);
+    insertCommand.redo();
+
+    KWFrameSet *fs = new KWFrameSet();
+    document.addFrameSet(fs);
+    MockShape *shape1 = new MockShape();
+    new KWFrame(shape1, fs);
+
+    KWTextFrameSet *tfs = new KWTextFrameSet(&document, KWord::MainTextFrameSet);
+    document.addFrameSet(tfs);
+    MockShape *shape2 = new MockShape();
+    shape2->setUserData(new KoTextShapeData());
+    new KWTextFrame(shape2, tfs);
+
+    KWTextFrameSet *header = new KWTextFrameSet(&document, KWord::EvenPagesHeaderTextFrameSet);
+    document.addFrameSet(header);
+    MockShape *shape3 = new MockShape();
+    shape3->setUserData(new KoTextShapeData());
+    new KWTextFrame(shape3, header);
+
+    KWPageRemoveCommand command(&document, insertCommand.page());
+    QCOMPARE(document.frameSetCount(), 3);
+    command.redo();
+
+    QCOMPARE(document.frameSetCount(), 2); // only the main&header framesets are left
+    QVERIFY(document.frameSets().contains(tfs));
+    QVERIFY(document.frameSets().contains(header));
+    QCOMPARE(fs->frameCount(), 0);
+    QCOMPARE(tfs->frameCount(), 0);
+    QCOMPARE(header->frameCount(), 0);
+
+    command.undo();
+
+    QCOMPARE(document.frameSetCount(), 3);
+    QCOMPARE(fs->frameCount(), 1);
+    QCOMPARE(tfs->frameCount(), 0); // doesn't get auto-added
+    QCOMPARE(header->frameCount(), 0); // doesn't get auto-added
+}
 
 QTEST_KDEMAIN(TestPageCommands, GUI)
 #include "TestPageCommands.moc"
