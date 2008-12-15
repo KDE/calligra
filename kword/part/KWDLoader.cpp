@@ -386,7 +386,7 @@ void KWDLoader::loadFrameSets(const KoXmlElement &framesets)
     }
 
     m_itemsLoaded = 0;
-    foreach(const KoXmlElement &elem, frameSetsList) {
+    foreach (const KoXmlElement &elem, frameSetsList) {
         loadFrameSet(elem);
     }
 }
@@ -478,7 +478,7 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                     case 2: behav = KWord::IgnoreContentFrameBehavior; break;
                     default: behav = KWord::AutoExtendFrameBehavior; break;
                     }
-                    foreach(KWFrame *frame, fs->frames())
+                    foreach (KWFrame *frame, fs->frames())
                         frame->setFrameBehavior(behav);
                 }
                 return fs;
@@ -1070,7 +1070,7 @@ void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement)
     key->filename = keyElement.attribute("name");
 
     if (key->filename.isEmpty()) {
-        foreach(const ImageKey &storedKey, m_images) {
+        foreach (const ImageKey &storedKey, m_images) {
             if (storedKey.year == key->year && storedKey.oldFilename == key->oldFilename &&
                     storedKey.month == key->month && storedKey.day == key->day &&
                     storedKey.hour == key->hour && storedKey.minute == key->minute &&
@@ -1129,7 +1129,7 @@ void KWDLoader::loadStyleTemplates(const KoXmlElement &stylesElem)
 
 void KWDLoader::insertAnchors()
 {
-    foreach(const AnchorData &anchor, m_anchors) {
+    foreach (const AnchorData &anchor, m_anchors) {
         KWFrameSet *fs = m_document->frameSetByName(anchor.frameSetName);
         if (fs == 0) {
             kWarning() << "Anchored frameset not found: '" << anchor.frameSetName << endl;

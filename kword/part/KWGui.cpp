@@ -159,7 +159,7 @@ void KWGui::shapeSelectionChanged()
 {
     QPointF start, end;
     bool first = true;
-    foreach(KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         QRectF rect = shape->boundingRect();
         if (first) {
             start = rect.topLeft();

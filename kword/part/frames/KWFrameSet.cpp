@@ -30,7 +30,7 @@ KWFrameSet::KWFrameSet()
 
 KWFrameSet::~KWFrameSet()
 {
-    foreach(KWFrame *frame, frames())
+    foreach (KWFrame *frame, frames())
         delete frame->shape();
 }
 
@@ -60,7 +60,7 @@ void KWFrameSet::removeFrame(KWFrame *frame)
 void KWFrameSet::printDebug()
 {
     int i = 1;
-    foreach(KWFrame *frame, frames()) {
+    foreach (KWFrame *frame, frames()) {
         kDebug(32001) << " +-- Frame" << i++ << " of" << frameCount() << "    (" << frame << ")" <<
         (frame->isCopy() ? "[copy]" : "") << endl;
         printDebug(frame);

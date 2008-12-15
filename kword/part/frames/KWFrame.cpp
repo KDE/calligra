@@ -113,7 +113,7 @@ void KWFrame::makeCopyFrame()
     if (isCopy())
         return;
     KWFrame *prev = 0;
-    foreach(KWFrame* frame, m_frameSet->frames()) {
+    foreach (KWFrame* frame, m_frameSet->frames()) {
         if (frame == this)
             break;
         prev = frame;

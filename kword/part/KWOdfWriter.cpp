@@ -119,7 +119,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
             mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
     }
 
-    //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
+    //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
     //    mainStyles.markStyleForStylesXml( s.name );
 
     //kDebug(32001) << "END saveHeaderFooter ############################################";
@@ -165,7 +165,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     KWTextFrameSet *mainTextFrame = 0;
 
-    foreach(KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
         // TODO loop over all non-autocreated frames and save them.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs) {
@@ -175,7 +175,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
             }
         }
 #if 0 //sebsauer; use format=>make-inline to ALWAYS save frames with anchors.
-        foreach(KWFrame *frame, fs->frames()) {
+        foreach (KWFrame *frame, fs->frames()) {
             //FIXME: Each text frame will save the entire document of the frameset.
             frame->saveOdf(context);
         }

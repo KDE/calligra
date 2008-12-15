@@ -64,7 +64,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
 #endif
     const qreal offsetInDocument = page.offsetInDocument();
     // find images
-    foreach(KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
         if (fs->frameCount() == 0) continue;
         KWFrame *frame = fs->frames().at(0);
         if (frame == 0) continue;
@@ -110,8 +110,8 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 
 void KWPrintingDialog::printingDone()
 {
-    foreach(KoImageData *image, m_originalImages.keys())
-    image->setImageQuality(m_originalImages[image]);
+    foreach (KoImageData *image, m_originalImages.keys())
+        image->setImageQuality(m_originalImages[image]);
 }
 
 QList<QWidget*> KWPrintingDialog::createOptionWidgets() const

@@ -143,7 +143,7 @@ public:
         QPolygonF poly = path.toFillPolygon();
 
         QPointF prev = *(poly.begin());
-        foreach(const QPointF &vtx, poly) { //initialized edges
+        foreach (const QPointF &vtx, poly) { //initialized edges
             if (vtx.x() == prev.x() && vtx.y() == prev.y())
                 continue;
             QLineF line;
@@ -258,7 +258,7 @@ KWTextDocumentLayout::~KWTextDocumentLayout()
 QList<KoShape*> KWTextDocumentLayout::shapes() const
 {
     QList<KoShape*> answer;
-    foreach(KWFrame *frame, m_frameSet->frames()) {
+    foreach (KWFrame *frame, m_frameSet->frames()) {
         if (frame->isCopy())
             continue;
         answer.append(frame->shape());
@@ -275,7 +275,7 @@ void KWTextDocumentLayout::relayout()
     QList<KWFrame*> dirtyFrames = frames;
     bool foundADirtyOne = false;
     KWFrame *firstDirtyFrame = 0;
-    foreach(KWFrame *frame, frames) {
+    foreach (KWFrame *frame, frames) {
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
         if (!firstDirtyFrame && data && data->isDirty())
             firstDirtyFrame = frame;
@@ -288,7 +288,7 @@ void KWTextDocumentLayout::relayout()
     if (foundADirtyOne) {
         // if the dirty frame has been resorted to no longer be the first one, then we should
         // mark dirty any frame that were previously later in the flow, but are now before it.
-        foreach(KWFrame *frame, frames) {
+        foreach (KWFrame *frame, frames) {
             if (frame == firstDirtyFrame)
                 break;
             if (dirtyFrames.contains(frame)) {
@@ -307,7 +307,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     KoTextDocumentLayout::positionInlineObject(item, position, f);
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
         if (strategy->anchor() == anchor) return;
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
@@ -384,7 +384,7 @@ void KWTextDocumentLayout::layout()
         private:
             QRectF limit(const QRectF &rect) {
                 QRectF answer = rect;
-                foreach(Outline *outline, *m_outlines)
+                foreach (Outline *outline, *m_outlines)
                 answer = outline->limit(answer);
                 return answer;
             }
@@ -400,11 +400,11 @@ void KWTextDocumentLayout::layout()
                 outlines.clear();
 
                 QRectF bounds = m_state->shape->boundingRect();
-                foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
+                foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
                     if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
                         continue;
-                    foreach(KWFrame *frame, fs->frames()) {
+                    foreach (KWFrame *frame, fs->frames()) {
                         if (frame->shape() == currentShape)
                             continue;
                         if (frame->textRunAround() == KWord::RunThrough)
@@ -443,7 +443,7 @@ void KWTextDocumentLayout::layout()
 
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
-        foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             if (strategy->checkState(m_state)) {
                 restartLine = true;
                 break;
@@ -456,7 +456,7 @@ void KWTextDocumentLayout::layout()
         if (restartLine)
             continue;
 
-        foreach(KWAnchorStrategy *strategy, m_newAnchors) {
+        foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             if (strategy->anchoredShape() != 0) {
                 QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
                 matrix = matrix * currentShape->absoluteTransformation(0).inverted();

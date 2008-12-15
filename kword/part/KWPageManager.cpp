@@ -341,7 +341,7 @@ QPointF KWPageManager::clipToDocument(const QPointF &point) const
 QList<KWPage> KWPageManager::pages() const
 {
     QList<KWPage> answer;
-    foreach(int key, d->pages.keys()) {
+    foreach (int key, d->pages.keys()) {
         answer << KWPage(d, key);
     }
     return answer;

@@ -53,7 +53,7 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames)
     KWord::RunAroundSide side = KWord::BiggestRunAroundSide;
     KWord::TextRunAround ra = KWord::RunAround;
     qreal distance = 10.0;
-    foreach(KWFrame *frame, frames) {
+    foreach (KWFrame *frame, frames) {
         if (layout == GuiHelper::Unset) {
             side = frame->runAroundSide();
             layout = GuiHelper::On;
@@ -99,7 +99,7 @@ void KWFrameRunaroundProperties::save()
         m_state->markFrameUsed();
         m_frames.append(frame);
     }
-    foreach(KWFrame *frame, m_frames) {
+    foreach (KWFrame *frame, m_frames) {
         if (m_runAround->checkedId() != -1)
             frame->setTextRunAround(static_cast<KWord::TextRunAround>(m_runAround->checkedId()));
         if (m_runAroundSide->checkedId() != -1)

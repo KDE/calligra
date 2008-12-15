@@ -104,7 +104,7 @@ void KWCanvas::updateCanvas(const QRectF& rc)
 {
     QRectF zoomedRect = m_viewMode->documentToView(rc);
     QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(zoomedRect.toRect());
-    foreach(KWViewMode::ViewMap vm, map) {
+    foreach (KWViewMode::ViewMap vm, map) {
         vm.clipRect.adjust(-2, -2, 2, 2); // grow for anti-aliasing
         QRect finalClip((int)(vm.clipRect.x() + vm.distance.x() - m_documentOffset.x()),
                         (int)(vm.clipRect.y() + vm.distance.y() - m_documentOffset.y()),
@@ -125,7 +125,7 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const
     const QPointF destination = absPos + move;
     qreal bottomOfPage = 0.0;
     KWPage page;
-    foreach(const KWPage &p, m_document->pageManager()->pages()) {
+    foreach (const KWPage &p, m_document->pageManager()->pages()) {
         bottomOfPage += p.height();
         if (bottomOfPage >= absPos.y())
             page = p;
@@ -265,7 +265,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
 
     if (m_viewMode->hasPages()) {
         QList<KWViewMode::ViewMap> map = m_viewMode->clipRectToDocument(ev->rect().translated(m_documentOffset));
-        foreach(KWViewMode::ViewMap vm, map) {
+        foreach (KWViewMode::ViewMap vm, map) {
             painter.save();
             painter.translate(vm.distance.x(), vm.distance.y());
             vm.clipRect = vm.clipRect.adjusted(-1, -1, 1, 1);

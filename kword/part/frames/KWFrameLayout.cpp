@@ -75,7 +75,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     }
 
     // delete headers/footer frames that are not needed on this page
-    foreach(KWFrame *frame, framesInPage(page.rect())) {
+    foreach (KWFrame *frame, framesInPage(page.rect())) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (tfs && allHFTypes.contains(tfs->textFrameSetType())) {
             tfs->removeFrame(frame);
@@ -118,7 +118,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             KWTextFrameSet *fs = getOrCreate(KWord::MainTextFrameSet, page);
             QRectF rect(QPointF(page.width(), page.offsetInDocument()),
                         QSizeF(page.width() / 2,  page.height()));
-            foreach(KWFrame *frame, framesInPage(rect)) {
+            foreach (KWFrame *frame, framesInPage(rect)) {
                 if (frame->frameSet() == fs) {
                     columns--;
                     if (columns < 0) {
@@ -142,7 +142,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                     QSizeF(page.width(), page.height()));
         if (page.pageSide() == KWPage::PageSpread)
             rect.setWidth(rect.width() / 2);
-        foreach(KWFrame *frame, framesInPage(rect)) {
+        foreach (KWFrame *frame, framesInPage(rect)) {
             if (frame->frameSet() == fs) {
                 columns--;
                 if (columns < 0) {
@@ -165,7 +165,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
         }
         KWPage prevPage = m_pageManager->page(i);
         QRectF pageRect = prevPage.rect(pageNumber);
-        foreach(KWFrame *frame, framesInPage(pageRect)) {
+        foreach (KWFrame *frame, framesInPage(pageRect)) {
             if (odd && !frame->frameOnBothSheets())
                 continue;
             if (!(frame->newFrameBehavior() == KWord::ReconnectNewFrame ||
@@ -252,7 +252,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     main = new KWTextFrame*[columnsCount];
     main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
-    foreach(KWFrame *frame, framesInPage(pageRect)) {
+    foreach (KWFrame *frame, framesInPage(pageRect)) {
         KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (textFrameSet == 0) continue;
         switch (textFrameSet->textFrameSetType()) {
@@ -403,8 +403,8 @@ QList<KWFrame *> KWFrameLayout::framesInPage(QRectF page)
 {
     // hopefully replaced with a tree
     QList<KWFrame*> answer;
-    foreach(KWFrameSet *fs, m_frameSets) {
-        foreach(KWFrame *frame, fs->frames()) {
+    foreach (KWFrameSet *fs, m_frameSets) {
+        foreach (KWFrame *frame, fs->frames()) {
             if (page.contains(frame->shape()->absolutePosition()))
                 answer.append(frame);
         }
@@ -465,7 +465,7 @@ void KWFrameLayout::setup()
 
     m_maintext = 0;
     m_pageStyles.clear();
-    foreach(KWFrameSet *fs, m_frameSets) {
+    foreach (KWFrameSet *fs, m_frameSets) {
         // add checks for out-of-area frames
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0)
@@ -511,7 +511,7 @@ bool KWFrameLayout::hasFrameOn(KWTextFrameSet *fs, int pageNumber)
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    foreach(KWFrame *frame, framesInPage(page.rect())) {
+    foreach (KWFrame *frame, framesInPage(page.rect())) {
         if (frame->frameSet() == fs)
             return true;
     }
@@ -548,7 +548,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
         return;
     if (fs->frameCount() == 0)
         return;
-    foreach(KWFrame *frame, fs->frames()) {
+    foreach (KWFrame *frame, fs->frames()) {
         fs->removeFrame(frame);
         delete(frame);
     }
@@ -589,7 +589,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
     Q_ASSERT(page.isValid());
     const qreal offsetInDocument = page.offsetInDocument();
     // now add them in the proper order.
-    foreach(KWTextFrame *f, framesToDuplicate) {
+    foreach (KWTextFrame *f, framesToDuplicate) {
         KWTextFrame *frame = new KWTextFrame(createTextShape(page), fs);
         const qreal y = f->shape()->position().y();
         qreal offsetFromPage = y - prevPage2;
