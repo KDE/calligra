@@ -243,7 +243,7 @@ kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
 
 
 
-target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} kspreadcommon )
+target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} kspreadcommon )
 
 install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
