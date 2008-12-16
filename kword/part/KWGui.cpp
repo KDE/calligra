@@ -61,6 +61,7 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
 
     m_canvas = new KWCanvas(viewMode, static_cast<KWDocument*>(m_view->koDocument()), m_view, this);
     m_canvasController = new KoCanvasController(this);
+    m_canvasController->setMargin(10);
     m_canvasController->setCanvas(m_canvas);
     m_canvasController->setCanvasMode(KoCanvasController::AlignTop);
     KoToolManager::instance()->addController(m_canvasController);
