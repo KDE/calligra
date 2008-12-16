@@ -115,7 +115,7 @@ kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
 
 
-target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} kpresenterprivate )
+target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} kpresenterprivate )
 
 install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
