@@ -51,7 +51,7 @@ set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
 
 kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kformulaprivate )
+target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kformulaprivate )
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
