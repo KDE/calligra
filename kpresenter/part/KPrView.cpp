@@ -38,6 +38,7 @@
 #include "KPrViewModeNotes.h"
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "commands/KPrAnimationCreateCommand.h"
+#include "commands/KPrSetCustomSlideShowsCommand.h"
 #include "dockers/KPrPageLayoutDockerFactory.h"
 #include "dockers/KPrPageLayoutDocker.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
@@ -206,14 +207,12 @@ void KPrView::showNotes()
 
 void KPrView::dialogCustomSlideShows()
 {
-    KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
-    Q_ASSERT( doc );
+    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
     KPrCustomSlideShows *finalSlideShows;
-
     KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), doc, finalSlideShows );
     dialog.setModal( true );
     if ( dialog.exec() == QDialog::Accepted ) {
-        doc->setCustomSlideShows( finalSlideShows );
+        m_canvas->addCommand( new KPrSetCustomSlideShowsCommand( doc, finalSlideShows ) );
     }
     else {
         delete finalSlideShows;

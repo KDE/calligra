@@ -264,7 +264,6 @@ KPrCustomSlideShows* KPrDocument::customSlideShows()
 
 void KPrDocument::setCustomSlideShows( KPrCustomSlideShows* replacement )
 {
-    delete m_customSlideShows;
     m_customSlideShows = replacement;
 }
 

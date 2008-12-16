@@ -49,6 +49,7 @@ set( kpresenterprivate_LIB_SRCS
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
+     commands/KPrSetCustomSlideShowsCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
