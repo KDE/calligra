@@ -50,6 +50,7 @@ public:
     void wheelEvent( KoPointerEvent * event );
         
     QFrame *m_frameToolPresentation();
+    QFrame *m_blackBackgroundPresentation();
 
 public slots:
     void activate( bool temporary = false );
