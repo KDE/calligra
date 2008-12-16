@@ -38,7 +38,7 @@ set(karbonpart_PART_SRCS karbon_factory_init.cc )
 
 kde4_add_plugin(karbonpart WITH_PREFIX ${karbonpart_PART_SRCS})
 
-target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} karboncommon karbonui )
+target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} karboncommon karbonui )
 
 install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
