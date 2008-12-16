@@ -39,6 +39,7 @@ target_link_libraries(
     kexidb
     kexicore
     kexiguiutils
+	kexidatatable
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY}
