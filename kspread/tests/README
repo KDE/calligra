@@ -62,7 +62,7 @@ TestTextFunctions::
     testUNICHAR()
     testUNICODE()
 
-Some tests are not intended only to check performance
+Some tests are intended only to check performance
   BenchmarkCluster
   BenchmarkRTree
   
