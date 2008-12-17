@@ -26,16 +26,10 @@ kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
 target_link_libraries(
     kformulaprivate
-    koguiutils
     kformulalib
-    komain
-    flake
-    kostore
-    ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QTCORE_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
