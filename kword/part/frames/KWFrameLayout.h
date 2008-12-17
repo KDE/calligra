@@ -71,7 +71,6 @@ public:
      * @param pageNumber the number of the page to re-layout.
      */
     void layoutFramesOnPage(int pageNumber);
-    void updateFramesAfterDelete(int deletedPage);
     //void relayoutFrames(old layout, new layout); // per page ? Or per doc?
     /**
      *  delete any unneeded header/footer frames (but not their contents) based on
@@ -102,6 +101,10 @@ signals:
      * Signal emitted when a frameset is created
      */
     void newFrameSet(KWFrameSet *fs);
+
+private slots:
+    // called when a frame from the main text is removed to check if we should clear the page of other auto-created frames
+    void mainframeRemoved(KWFrame *frame);
 
 private:
     friend class TestBasicLayout;
