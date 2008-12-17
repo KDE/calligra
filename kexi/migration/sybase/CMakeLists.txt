@@ -9,7 +9,7 @@ kde4_add_plugin(keximigrate_sybase ${keximigrate_sybase_PART_SRCS})
 
 
 target_link_libraries(keximigrate_sybase ${FreeTDS_LIBRARIES} ${KDE4_KDECORE_LIBS}
- ${KDE4_KPARTS_LIBS} keximigrate )
+ ${KDE4_KPARTS_LIBS} ${QT_QT3SUPPORT_LIBRARY} kexiutils kexidb keximigrate )
 
 install(TARGETS keximigrate_sybase  DESTINATION ${PLUGIN_INSTALL_DIR})
 
