@@ -80,10 +80,9 @@ set(kexi_SRCS main.cpp )
 kde4_add_app_icon(kexi_SRCS "${KDE4_ICON_DIR}/oxygen/*/apps/kexi.png")
 kde4_add_executable(kexi ${kexi_SRCS})
 target_link_libraries(kexi 
-  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} 
+  ${KDE4_KFILE_LIBS} ${QT_QT3SUPPORT_LIBRARY}
   kexidb
   keximain
-  
 )
 install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 
