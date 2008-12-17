@@ -11,7 +11,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 set(TestLoad_SRCS TestLoad.cpp)
 kde4_add_unit_test(TestLoad TESTNAME kformula-Load  ${TestLoad_SRCS})
-target_link_libraries(TestLoad kformulalib kostore ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestLoad kformulalib ${QT_QTTEST_LIBRARY})
 
 ########### Load and Save Test ###############
 

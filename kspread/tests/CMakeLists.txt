@@ -6,7 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} ${EIGEN2
 
 set(TestDependencies_SRCS TestDependencies.cpp)
 kde4_add_unit_test(TestDependencies TESTNAME kspread-Dependencies ${TestDependencies_SRCS})
-target_link_libraries(TestDependencies kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDependencies kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -20,7 +20,7 @@ target_link_libraries(TestFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 set(TestOpenFormula_SRCS TestOpenFormula.cpp ../functions/information.cpp ../functions/logic.cpp)
 kde4_add_unit_test(TestOpenFormula TESTNAME kspread-OpenFormula  ${TestOpenFormula_SRCS})
 macro_add_compile_flags(TestOpenFormula "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestOpenFormula kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestOpenFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -32,7 +32,7 @@ target_link_libraries(TestPointStorage kspreadcommon ${QT_QTTEST_LIBRARY})
 
 set(TestRegion_SRCS TestRegion.cpp)
 kde4_add_unit_test(TestRegion TESTNAME kspread-Region  ${TestRegion_SRCS})
-target_link_libraries(TestRegion kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestRegion kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -44,7 +44,7 @@ target_link_libraries(TestRTree ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 set(TestValue_SRCS TestValue.cpp)
 kde4_add_unit_test(TestValue TESTNAME kspread-Value  ${TestValue_SRCS})
-target_link_libraries(TestValue kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestValue kspreadcommon ${QT_QTTEST_LIBRARY})
 
 
 
@@ -60,7 +60,7 @@ target_link_libraries(TestBitopsFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp ../functions/database.cpp)
 kde4_add_unit_test(TestDatabaseFunctions TESTNAME kspread-DatabaseFunctions  ${TestDatabaseFunctions_SRCS})
 macro_add_compile_flags(TestDatabaseFunctions "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### target TestDatetimeFunctions ###############
 
@@ -88,35 +88,35 @@ target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 set(TestInformationFunctions_SRCS TestInformationFunctions.cpp ../functions/information.cpp ../functions/datetime.cpp ../functions/logic.cpp ../functions/math.cpp ../functions/reference.cpp ../functions/text.cpp)
 kde4_add_unit_test(TestInformationFunctions TESTNAME kspread-InformationFunctions  ${TestInformationFunctions_SRCS})
 macro_add_compile_flags(TestInformationFunctions "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestLogicFunctions_SRCS TestLogicFunctions.cpp ../functions/logic.cpp ../functions/information.cpp)
 kde4_add_unit_test(TestLogicFunctions TESTNAME kspread-LogicFunctions  ${TestLogicFunctions_SRCS})
 macro_add_compile_flags(TestLogicFunctions "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestMathFunctions_SRCS TestMathFunctions.cpp ../functions/math.cpp ../functions/engineering.cpp ../functions/logic.cpp ../functions/statistical.cpp ../functions/trig.cpp)
 kde4_add_unit_test(TestMathFunctions TESTNAME kspread-MathFunctions  ${TestMathFunctions_SRCS})
 macro_add_compile_flags(TestMathFunctions "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestMathFunctions kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestStatisticalFunctions_SRCS TestStatisticalFunctions.cpp ../functions/statistical.cpp ../functions/logic.cpp ../functions/math.cpp)
 kde4_add_unit_test(TestStatisticalFunctions TESTNAME kspread-StatisticalFunctions  ${TestStatisticalFunctions_SRCS})
 macro_add_compile_flags(TestStatisticalFunctions "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestTextFunctions_SRCS TestTextFunctions.cpp ../functions/text.cpp ../functions/logic.cpp ../functions/information.cpp)
 kde4_add_unit_test(TestTextFunctions TESTNAME kspread-TextFunctions  ${TestTextFunctions_SRCS})
 macro_add_compile_flags(TestTextFunctions "-DKSPREAD_UNIT_TEST")
-target_link_libraries(TestTextFunctions kspreadcommon ${QT_QT3SUPPORT_LIBRARY} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestTextFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
