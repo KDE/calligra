@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Timothee Lacroix <dakeyras.khan@gmail.com>
+   Copyright (C) 2008 Timothée Lacroix <dakeyras.khan@gmail.com>
    Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -18,24 +18,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRBARWIPEEFFECTFACTORY_H
-#define KPRBARWIPEEFFECTFACTORY_H
+#ifndef KPRBARWIPEFROMRIGHTSTRATEGY_H
+#define KPRBARWIPEFROMRIGHTSTRATEGY_H
 
-#include "pageeffects/KPrPageEffectFactory.h"
+#include "pageeffects/KPrPageEffectStrategy.h"
 
-class KPrBarWipeEffectFactory : public KPrPageEffectFactory
+class KPrBarWipeFromRightStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrBarWipeEffectFactory();
-    virtual ~KPrBarWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    KPrBarWipeFromRightStrategy();
+    virtual ~KPrBarWipeFromRightStrategy();
 
-    enum SubType {
-        FromLeft,
-        FromTop,
-        FromRight,
-        FromBottom
-    };
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+
+    virtual void next( const KPrPageEffect::Data &data );
 };
 
-#endif /* KPRBARWIPEEFFECTFACTORY_H */
+#endif // KPRBARWIPEFROMRIGHTSTRATEGY_H
