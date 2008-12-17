@@ -16,7 +16,7 @@ kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
 
 
-target_link_libraries(kritajpegimport kritaui jpeg komain )
+target_link_libraries(kritajpegimport kritaui jpeg )
 
 install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -33,7 +33,7 @@ kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
 
 
-target_link_libraries(kritajpegexport kritaui jpeg komain )
+target_link_libraries(kritajpegexport kritaui jpeg )
 
 install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
