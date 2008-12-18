@@ -384,21 +384,6 @@ void KarbonView::dropEvent( QDropEvent *e )
             d->canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), fill, 0 ) );
         }
     }
-/* TODO port to flake
-    else if( KarbonDrag::decode( e->mimeData(), selection, d->part->document() ) )
-    {
-        VObject *clipart = selection.first();
-        QPointF p( e->pos() );
-        p = d->canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
-        QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
-
-        VTransformCmd trafo( 0L, mat );
-        trafo.visit( *clipart );
-        VClipartCmd* cmd = new VClipartCmd( &d->part->document(), i18n( "Insert Clipart" ), clipart );
-
-        d->part->addCommand( cmd, true );
-    }
-*/
 }
 
 void KarbonView::fileImportGraphic()
