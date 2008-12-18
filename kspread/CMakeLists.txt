@@ -227,7 +227,7 @@ target_link_libraries(kspreadcommon
 	kutils flake
 	${KDE4_KDE3SUPPORT_LIBS} )
 
-target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES  koguiutils flake )
+target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES  koguiutils flake ${QT_QT3SUPPORT_LIBRARY} )
 
 set_target_properties(kspreadcommon PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
