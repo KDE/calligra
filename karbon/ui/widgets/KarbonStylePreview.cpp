@@ -104,13 +104,13 @@ QSizePolicy KarbonStylePreview::sizePolicy() const
 
 bool KarbonStylePreview::eventFilter( QObject *, QEvent *event )
 {
-    QMouseEvent* e = static_cast<QMouseEvent *>( event );
-
-    int ex = e->x() - int( ( width() - PANEL_SIZEX ) / 2 );
-    int ey = e->y() - int( ( height() - PANEL_SIZEY ) / 2 );
-
     if( event && event->type() == QEvent::MouseButtonPress )
     {
+        QMouseEvent* e = static_cast<QMouseEvent *>( event );
+    
+        int ex = e->x() - int( ( width() - PANEL_SIZEX ) / 2 );
+        int ey = e->y() - int( ( height() - PANEL_SIZEY ) / 2 );
+
         if ( m_strokeWidget )
         {
             if( m_strokeRect.contains( QPointF( ex, ey ) ) )
