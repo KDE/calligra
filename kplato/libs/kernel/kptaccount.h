@@ -196,7 +196,7 @@ public:
     ~Accounts();
     
     Account *defaultAccount() const { return m_defaultAccount; }
-    void setDefaultAccount(Account *account) { m_defaultAccount = account; }
+    void setDefaultAccount(Account *account);
     
     EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
     
@@ -237,7 +237,8 @@ signals:
     void accountRemoved( const Account * );
     void accountToBeRemoved( const Account * );
     void changed( Account *);
-    
+    void defaultAccountChanged();
+
 private:
     Project &m_project;
     AccountList m_accountList;
