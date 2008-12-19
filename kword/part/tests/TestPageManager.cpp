@@ -579,5 +579,41 @@ void TestPageManager::testInsertPage()
     QCOMPARE(page4.pageNumber(), 4);
 }
 
+void TestPageManager::testPadding()
+{
+    // padding is the 'dead space' between actual pages.  This allows us to print using bleed to PDF.
+
+    KWPageManager *pageManager = new KWPageManager();
+    KoInsets padding(6, 7, 9, 13);
+    pageManager->setPadding(padding);
+    KoInsets padding2 = pageManager->padding();
+    QCOMPARE(padding2.top, padding.top);
+    QCOMPARE(padding2.bottom, padding.bottom);
+    QCOMPARE(padding2.left, padding.left);
+    QCOMPARE(padding2.right, padding.right);
+
+    KoPageLayout lay;
+    lay.width = 100;
+    lay.height = 50;
+    KWPageStyle style("testStyle");
+    style.setPageLayout(lay);
+
+    KWPage page1 = pageManager->appendPage(style);
+    QVERIFY(page1.isValid());
+    QCOMPARE(page1.offsetInDocument(), 0.);
+    QCOMPARE(page1.rect(), QRectF(0, 0, 100, 50));
+    KWPage page2 = pageManager->appendPage(style);
+    QCOMPARE(page2.offsetInDocument(), 50. + 6. + 9.);
+    QCOMPARE(page2.rect(), QRectF(0, 65, 100, 50));
+    KWPage page3 = pageManager->appendPage(style);
+    QCOMPARE(page3.offsetInDocument(), 115 + 6. + 9.);
+    QCOMPARE(page3.rect(), QRectF(0, 130, 100, 50));
+
+    padding = KoInsets(1, 2, 3, 4);
+    pageManager->setPadding(padding);
+    QCOMPARE(page3.offsetInDocument(), 2 * (50. + 1. + 3.)); // they moved :)
+    QCOMPARE(page3.rect(), QRectF(0, 108, 100, 50));
+}
+
 QTEST_KDEMAIN(TestPageManager, GUI)
 #include "TestPageManager.moc"

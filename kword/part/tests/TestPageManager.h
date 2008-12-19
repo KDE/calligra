@@ -45,6 +45,7 @@ private slots: // tests
     void testPageCount();
     void testPageSpreadLayout();
     void testInsertPage();
+    void testPadding();
 };
 
 #endif
