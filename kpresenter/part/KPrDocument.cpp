@@ -30,6 +30,7 @@
 #include "KPrSoundCollection.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
+#include "commands/KPrSetCustomSlideShowsCommand.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
 #include <KoShapeManager.h>
@@ -222,6 +223,17 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
             // remove animations, don't remove from shape application data so that it can be reinserted on undo.
             removeAnimation( *it, false );
         }
+    }
+}
+
+void KPrDocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+{
+    // only normal pages can be part of a slide show
+    if ( dynamic_cast<KPrPage *>( page ) ) {
+        KPrCustomSlideShows * slideShows = new KPrCustomSlideShows( *customSlideShows() );
+        slideShows->removeSlideFromAll( page );
+        // maybe we should check if old and new are different and only than create the command
+        new KPrSetCustomSlideShowsCommand( this, slideShows, parent );
     }
 }
 
