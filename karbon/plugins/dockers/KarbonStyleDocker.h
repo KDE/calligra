@@ -20,13 +20,17 @@
 #ifndef KARBONSTYLEDOCKER_H
 #define KARBONSTYLEDOCKER_H
 
-#include <QDockWidget>
 #include <KoCanvasObserver.h>
+#include <QtGui/QDockWidget>
+#include <QtCore/QTime>
 
 class KarbonStylePreview;
 class KarbonStyleButtonBox;
 class KoShapeBorderModel;
+class KoShapeBorderCommand;
 class KoShapeBackground;
+class KoShapeBackgroundCommand;
+class KoColorBackground;
 class KoCanvasBase;
 class KoColorComboBox;
 class KoResource;
@@ -47,6 +51,7 @@ private slots:
     void fillSelected();
     void strokeSelected();
     void selectionChanged();
+    void selectionContentChanged();
     void resourceChanged( int key, const QVariant& );
     void styleButtonPressed( int buttonId );
     void updateColor( const QColor &c );
@@ -56,13 +61,23 @@ private slots:
 private:
     void updateColor( const QColor &c, const QList<KoShape*> & selectedShapes );
     /// Sets the shape border and fill to display
+    void updateStyle();
     void updateStyle( KoShapeBorderModel * stroke, KoShapeBackground * fill );
+    
+    /// Resets color related commands which are used to combine multiple color changes
+    void resetColorCommands();
     
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
     QStackedWidget * m_stack;
     KoCanvasBase * m_canvas;
     KoColorComboBox * m_colorSelector;
+    
+    QTime m_lastColorChange;
+    KoShapeBackgroundCommand * m_lastFillCommand;
+    KoShapeBorderCommand * m_lastStrokeCommand;
+    KoColorBackground * m_lastColorFill;
+    QList<KoShapeBorderModel*> m_lastColorStrokes;
 };
 
 #endif // KARBONSTYLEDOCKER_H
