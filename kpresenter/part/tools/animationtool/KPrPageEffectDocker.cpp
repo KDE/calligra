@@ -40,6 +40,11 @@
 #include "pageeffects/KPrPageEffectFactory.h"
 #include "commands/KPrPageEffectSetCommand.h"
 
+bool orderFactoryByName( const KPrPageEffectFactory * factory1, const KPrPageEffectFactory * factory2 )
+{
+    return factory1->name() < factory2->name();
+}
+
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
 : QWidget( parent, flags )
 , m_view( 0 )
@@ -50,6 +55,8 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     m_effectCombo->addItem( i18n( "No Effect" ), QString( "" ) );
 
     QList<KPrPageEffectFactory*> factories = KPrPageEffectRegistry::instance()->values();
+
+    qSort( factories.begin(), factories.end(), orderFactoryByName );
 
     foreach ( KPrPageEffectFactory * factory, factories )
     {
