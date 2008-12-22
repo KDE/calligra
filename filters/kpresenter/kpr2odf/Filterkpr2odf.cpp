@@ -311,7 +311,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->startElement( "draw:text-box" );
         QStringList noteTextList = note.toElement().attribute( "note" ).split("\n");
 
-        foreach( QString string, noteTextList )
+        foreach( const QString & string, noteTextList )
         {
             content->startElement( "text:p" );
             content->addTextNode( string );
@@ -1847,7 +1847,7 @@ void Filterkpr2odf::saveAnimations( KoXmlWriter* content )
         if( effectList.size() > 1 )//if it's just 1 effect we don't add the group tag
         {
             content->startElement( "presentation:animation-group" );
-            foreach( QString effect, effectList )
+            foreach( const QString & effect, effectList )
             {
                 content->addCompleteElement( effect.toLatin1().data() );
             }
