@@ -32,6 +32,7 @@ namespace KoProperty
 {
 
 class Property;
+class SetPrivate;
 
 /*! \brief Lists holding properties in groups
 
@@ -240,8 +241,8 @@ signals:
     void aboutToBeDeleted();
 
 protected:
-    class Private;
-    Private * const d;
+    friend class SetPrivate;
+    SetPrivate * const d;
 
     friend class Iterator;
     friend class Property;

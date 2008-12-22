@@ -445,6 +445,7 @@ protected:
     PropertyPrivate * const d;
 
     friend class Set;
+    friend class SetPrivate;
     friend class Buffer;
     friend class ComposedPropertyInterface;
 };

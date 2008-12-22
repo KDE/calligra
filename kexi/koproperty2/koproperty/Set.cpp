@@ -38,14 +38,14 @@ namespace KoProperty
 static Property Set_nonConstNull;
 
 //! @internal
-class Set::Private
+class SetPrivate
 {
 public:
-    Private(KoProperty::Set *set) :
+    SetPrivate(KoProperty::Set *set) :
             q(set),
             readOnly(false),
             informAboutClearing(0) {}
-    ~Private() {}
+    ~SetPrivate() {}
 
     Set *q;
 // PropertyList properties;
@@ -253,7 +253,7 @@ Set::Iterator::current() const
 
 Set::Set(QObject *parent, const QString &typeName)
         : QObject(parent)
-        , d(new Private(this))
+        , d(new SetPrivate(this))
 {
     setObjectName(typeName.toLatin1());
 
@@ -265,7 +265,7 @@ Set::Set(QObject *parent, const QString &typeName)
 
 Set::Set(const Set &set)
         : QObject(0 /* implicit sharing the parent is dangerous */)
-        , d(new Private(this))
+        , d(new SetPrivate(this))
 {
     setObjectName(set.objectName());
     *this = set;
@@ -273,7 +273,7 @@ Set::Set(const Set &set)
 
 Set::Set(bool propertyOwner)
         : QObject(0)
-        , d(new Private(this))
+        , d(new SetPrivate(this))
 {
     d->ownProperty = propertyOwner;
     d->groupDescriptions.insert("common", i18nc("General properties", "General"));
