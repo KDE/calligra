@@ -96,6 +96,12 @@ public:
      * Get the (i18n'ed) name of a given subtype.
      */
     virtual QString subTypeName(int subType) const = 0;
+
+    /**
+     * Get the subtypes sorted by name. This sorts by the i18n'ed name.
+     */
+    QMap<QString, int> subTypesByName() const;
+
 protected:
     /**
      * Add a strategy to the factory

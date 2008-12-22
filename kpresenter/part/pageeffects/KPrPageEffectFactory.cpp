@@ -147,6 +147,15 @@ QList<QPair<QString, bool> > KPrPageEffectFactory::tags() const
     return d->tags;
 }
 
+QMap<QString, int> KPrPageEffectFactory::subTypesByName() const
+{
+    QMap<QString, int> nameToType;
+    foreach( const int subType, d->subTypes ) {
+        nameToType.insertMulti( subTypeName( subType ), subType );
+    }
+    return nameToType;
+}
+
 void KPrPageEffectFactory::addStrategy( KPrPageEffectStrategy * strategy )
 {
     bool inserted = d->strategies.insert( strategy ).second;
