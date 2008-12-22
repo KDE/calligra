@@ -191,7 +191,7 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
         QString fullFilename = getPictureNameFromKey( key );
 
         //Get the name how will be saved in the file
-        QStringList filenameComponents = name.split( "/" );
+        QStringList filenameComponents = name.split( '/' );
         QString odfName = filenameComponents.at( filenameComponents.size()-1 );
 
         m_pictures[ fullFilename ] = odfName;
@@ -238,7 +238,7 @@ void Filterkpr2odf::createSoundList( KoStore* output, KoStore* input, KoXmlWrite
     {
         QString name( file.attribute( "name" ) );
         QString filename( file.attribute( "filename" ) );
-        QStringList filenameComponents( name.split( "/" ) );
+        QStringList filenameComponents( name.split( '/' ) );
         QString odfName( filenameComponents.at( filenameComponents.size()-1 ) );
 
         m_sounds[ filename ] = odfName;
@@ -309,7 +309,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->endElement();//draw:page-thumbnail
         content->startElement( "draw:frame" );//FIXME: add drawing attributes
         content->startElement( "draw:text-box" );
-        QStringList noteTextList = note.toElement().attribute( "note" ).split("\n");
+        QStringList noteTextList = note.toElement().attribute( "note" ).split('\n');
 
         foreach( const QString & string, noteTextList )
         {
@@ -667,7 +667,7 @@ void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& object
     bool whitespace = objectElement.attribute( "whitespace", "0" ) == "1";
     if( whitespace )
     {
-            textChain += " ";
+        textChain += ' ';
     }
 
     if ( lastSpan || ( ( !lastStyle.isEmpty() ) && ( lastStyle != styleName ) ) )
