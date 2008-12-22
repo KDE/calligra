@@ -31,5 +31,5 @@ install(TARGETS kexiutils  ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h kexiutils_global.h
   styleproxy.h longlongvalidator.h InternalPropertyMap.h 
   SmallToolButton.h FlowLayout.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils)
+  DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils COMPONENT Devel)
 
