@@ -34,6 +34,7 @@ class KoPACanvas;
 class KoPAPageBase;
 class QComboBox;
 class QTimeEdit;
+class QTableWidget;
 
 /**
  * KPrPresenterViewInterface
@@ -47,13 +48,11 @@ public:
     KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent = 0 );
 
     void setPreviewSize( const QSize &size );
-    void createSlideTime();
     void setSlidesTime(QMap<int,int> *slides_time);
 
 public slots:
     /// reimplemented
     virtual void setActivePage( int pageIndex );
-    void currentIndexChanged(int index);
 
 private:
     KoPACanvas *m_canvas;
@@ -62,11 +61,8 @@ private:
     QLabel *m_nextSlidePreview;
     QTextEdit *m_notesTextEdit;
     QSize m_previewSize;
-    QVBoxLayout *frameNextLayout;
-    QWidget *m_timeSlideWidget;
-    QMap<int,int> *m_slides_time;
-    QComboBox *slideBox;
-    QTimeEdit *timeEdit;
+    QTableWidget *slideTab;
+    QList<QTimeEdit *> timeEditList;
 };
 
 #endif
