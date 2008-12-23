@@ -293,23 +293,25 @@ void KarbonStyleDocker::updateColor( const QColor &c )
             QList<KoShape*> shapes;
             shapes.append( page );
             updateColor( c, shapes );
-            return;
         }
-
-        KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
-
-        KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
-        int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
-
-        if( activeStyle == Karbon::Foreground )
-            m_canvas->resourceProvider()->setForegroundColor( kocolor );
         else
-            m_canvas->resourceProvider()->setBackgroundColor( kocolor );
-        return;
-    }
+        {
+            KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
 
-    updateColor( c, selection->selectedShapes() );
-    updateStyle();
+            KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
+            int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
+
+            if( activeStyle == Karbon::Foreground )
+                m_canvas->resourceProvider()->setForegroundColor( kocolor );
+            else
+                m_canvas->resourceProvider()->setBackgroundColor( kocolor );
+        }
+    }
+    else
+    {
+        updateColor( c, selection->selectedShapes() );
+        updateStyle();
+    }
 }
 
 void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & selectedShapes )
