@@ -32,6 +32,8 @@
 #include <KoSelection.h>
 #include <KarbonCurveFit.h>
 #include <KoColorBackground.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoColor.h>
 
 #include <KAction>
 #include <KLocale>
@@ -98,6 +100,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
     m_isDrawing = true;
     m_pointCount = 0;
     m_shape = new KarbonCalligraphicShape( m_caps );
+    m_shape->setBackground( new KoColorBackground( m_canvas->resourceProvider()->backgroundColor().toQColor() ) );
     //addPoint( event );
 }
 
