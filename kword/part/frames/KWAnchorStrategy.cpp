@@ -116,11 +116,19 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         recalcFrom = block.position();
         break;
     case KoTextAnchor::HorizontalOffset: {
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-        Q_ASSERT(tl.isValid());
-        qreal x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
+        qreal x;
+        if (m_anchor->positionInDocument() == block.position()) {
+            // at first position of parag.
+            x = state->x();
+        }
+        else {
+            Q_ASSERT(layout->lineCount());
+            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            Q_ASSERT(tl.isValid());
+            x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
+            recalcFrom = 0; // TODO ???
+        }
         newPosition.setX(x + m_anchor->offset().x());
-        recalcFrom = 0; // TODO ???
         m_finished = true;
         break;
     }
@@ -164,11 +172,20 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         recalcFrom = qMax(recalcFrom, block.position()); // TODO move further back if shape is tall
         break;
     case KoTextAnchor::VerticalOffset: {
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-        Q_ASSERT(tl.isValid());
-        newPosition.setY(tl.y() + tl.ascent() + m_anchor->offset().y() - data->documentOffset() - boundingRect.height());
+        qreal y;
+        if (m_anchor->positionInDocument() == block.position()) {
+            // at first position of parag.
+            y = state->y();
+        }
+        else {
+            Q_ASSERT(layout->lineCount());
+            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            Q_ASSERT(tl.isValid());
+            y = tl.y() + tl.ascent();
+            recalcFrom = 0; // TODO ???
+        }
+        newPosition.setY(y + m_anchor->offset().y() - data->documentOffset() - boundingRect.height());
         // use frame runaround properties (runthrough/around and side) to give shape a nice position
-        recalcFrom = 0; // TODO ????
         m_finished = true;
         break;
     }
