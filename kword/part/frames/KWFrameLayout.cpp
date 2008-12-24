@@ -380,7 +380,8 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
     switch (header ? page.pageStyle().headerPolicy() : page.pageStyle().footerPolicy()) {
-    case KWord::HFTypeNone : break;
+    case KWord::HFTypeNone:
+        return false;
     case KWord::HFTypeEvenOdd:
         if (header)
             *origin = pageNumber % 2 == 0 ? KWord::EvenPagesHeaderTextFrameSet :
@@ -393,9 +394,7 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
         *origin = header ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet;
         break;
     }
-    if (header)
-        return page.pageStyle().headerPolicy() != KWord::HFTypeNone;
-    return page.pageStyle().footerPolicy() != KWord::HFTypeNone;
+    return true;
 }
 
 QList<KWFrame *> KWFrameLayout::framesInPage(QRectF page)
@@ -554,11 +553,11 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 {
     if (fs->frameCount() == 0)
         return;
-    if (pageNumber == 0/*m_pageManager->startPage()*/)
+    if (pageNumber == m_pageManager->begin().pageNumber())
         return;
     qreal prevPage, prevPage2;
     prevPage = m_pageManager->topOfPage(pageNumber - 1);
-    if (pageNumber - 2 >= 0/*m_pageManager->startPage()*/)
+    if (pageNumber - 2 >= m_pageManager->begin().pageNumber())
         prevPage2 = m_pageManager->topOfPage(pageNumber - 2);
     else
         prevPage2 = -1;
