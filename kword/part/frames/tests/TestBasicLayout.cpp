@@ -243,6 +243,127 @@ void TestBasicLayout::testFrameCreation()
     QVERIFY(frameSets.evenFooters == 0);
 }
 
+void TestBasicLayout::testCreateNewFrameForPage_data()
+{
+    // tests void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
+    QTest::addColumn<QStringList>("pages");
+    QTest::addColumn<int>("frameSetType");
+    QTest::addColumn<int>("pageNumber");
+    QTest::addColumn<int>("expectedFrameCount");
+
+    QTest::newRow("noFooter1") << (QStringList() << QString("style1") << QString("style2")) <<
+        (int) KWord::OddPagesFooterTextFrameSet << 1 << 0;
+    QTest::newRow("noFooter2") << (QStringList() << QString("style1") << QString("style2")) <<
+        (int) KWord::EvenPagesFooterTextFrameSet << 1 << 0;
+    QTest::newRow("noFooter3") << (QStringList() << QString("style1") << QString("style2")) <<
+        (int) KWord::EvenPagesFooterTextFrameSet << 2 << 0;
+
+    QTest::newRow("noHeader1") << (QStringList() << QString("style1") << QString("style2")) <<
+        (int) KWord::OddPagesHeaderTextFrameSet << 1 << 0;
+    QTest::newRow("noHeader2") << (QStringList() << QString("style1") << QString("style2")) <<
+        (int) KWord::OddPagesHeaderTextFrameSet << 2 << 0;
+    QTest::newRow("noHeader3") << (QStringList() << QString("style1") << QString("style2")) <<
+        (int) KWord::EvenPagesHeaderTextFrameSet << 1 << 0;
+
+    QTest::newRow("oddHeader1") << (QStringList() << QString("style2") << QString("style2")) <<
+        (int) KWord::OddPagesHeaderTextFrameSet << 1 << 1;
+    QTest::newRow("oddHeader2") << (QStringList() << QString("style2") << QString("style2")) <<
+        (int) KWord::OddPagesHeaderTextFrameSet << 2 << 0;
+    QTest::newRow("evenHeader1") << (QStringList() << QString("style2") << QString("style2")) <<
+        (int) KWord::EvenPagesHeaderTextFrameSet << 1 << 0;
+    QTest::newRow("evenHeader2") << (QStringList() << QString("style2") << QString("style2")) <<
+        (int) KWord::EvenPagesHeaderTextFrameSet << 2 << 1;
+
+    QTest::newRow("main1") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) <<
+        (int) KWord::MainTextFrameSet << 1 << 1;
+    QTest::newRow("main2") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) <<
+        (int) KWord::MainTextFrameSet << 2 << 0;
+    QTest::newRow("main3") << (QStringList() << QString("style1") << QString("style3") << QString("style4")) <<
+        (int) KWord::MainTextFrameSet << 3 << 2;
+    QTest::newRow("main4") << (QStringList() << QString("style5")) <<
+        (int) KWord::MainTextFrameSet << 1 << 0;
+
+    QTest::newRow("footer1") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
+        (int) KWord::EvenPagesFooterTextFrameSet << 1 << 0; // uniform goes to the odd
+    QTest::newRow("footer2") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
+        (int) KWord::EvenPagesFooterTextFrameSet << 2 << 0;
+    QTest::newRow("footer3") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
+        (int) KWord::EvenPagesFooterTextFrameSet << 3 << 0; // uniform goes to the odd
+
+    QTest::newRow("footer4") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
+        (int) KWord::OddPagesFooterTextFrameSet << 1 << 1;
+    QTest::newRow("footer5") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
+        (int) KWord::OddPagesFooterTextFrameSet << 2 << 0;
+    QTest::newRow("footer6") << (QStringList() << QString("style3") << QString("style5") << QString("style2")) <<
+        (int) KWord::OddPagesFooterTextFrameSet << 3 << 1;
+}
+
+void TestBasicLayout::testCreateNewFrameForPage()
+{
+    QFETCH(QStringList, pages);
+    QFETCH(int, frameSetType);
+    QFETCH(int, pageNumber);
+    QFETCH(int, expectedFrameCount);
+
+    QHash<QString, KWPageStyle> styles;
+    KWPageStyle style1("style1");
+    style1.setHeaderPolicy(KWord::HFTypeNone);
+    style1.setMainTextFrame(true);
+    style1.setFooterPolicy(KWord::HFTypeNone);
+    styles.insert(style1.name(), style1);
+
+    KWPageStyle style2("style2");
+    style2.setHeaderPolicy(KWord::HFTypeEvenOdd);
+    style2.setMainTextFrame(true);
+    style2.setFooterPolicy(KWord::HFTypeUniform);
+    styles.insert(style2.name(), style2);
+
+    KWPageStyle style3("style3"); // weird
+    style3.setHeaderPolicy(KWord::HFTypeEvenOdd);
+    style3.setMainTextFrame(false);
+    style3.setFooterPolicy(KWord::HFTypeUniform);
+    styles.insert(style3.name(), style3);
+
+    KWPageStyle style4("style4");
+    style4.setHeaderPolicy(KWord::HFTypeUniform);
+    style4.setMainTextFrame(true);
+    style4.setFooterPolicy(KWord::HFTypeEvenOdd);
+    KoColumns columns;
+    columns.columns = 2;
+    columns.columnSpacing = 4;
+    style4.setColumns(columns);
+    styles.insert(style4.name(), style4);
+
+    KWPageStyle style5("style5"); // blank
+    style5.setHeaderPolicy(KWord::HFTypeNone);
+    style5.setMainTextFrame(false);
+    style5.setFooterPolicy(KWord::HFTypeNone);
+    style5.setColumns(columns);
+    styles.insert(style5.name(), style5);
+
+    KWPageManager manager;
+    foreach (const QString &styleName, pages) {
+        QVERIFY(styles.contains(styleName));
+        manager.appendPage(styles[styleName]);
+    }
+
+    m_frames.clear();
+    KWTextFrameSet tfs(0, (KWord::TextFrameSetType) frameSetType);
+    m_frames << &tfs;
+    KWFrameLayout frameLayout(&manager, m_frames);
+    connect(&frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFS(KWFrameSet*)));
+
+    KWPage page = manager.page(pageNumber);
+    QVERIFY(page.isValid());
+    tfs.setPageStyle(page.pageStyle());
+
+    frameLayout.createNewFramesForPage(pageNumber);
+    QCOMPARE(tfs.frameCount(), expectedFrameCount);
+    foreach(KWFrame *frame, tfs.frames()) {
+        QVERIFY (page.rect().contains(frame->shape()->position()));
+    }
+}
+
 // helper method (slot)
 void TestBasicLayout::addFS(KWFrameSet*fs)
 {
