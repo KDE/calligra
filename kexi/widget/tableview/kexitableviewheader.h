@@ -73,7 +73,7 @@ protected:
     QColor m_selectionBackgroundColor;
     QPointer<QStyle> m_privateStyle;
     int m_selectedSection;
-bool m_styleChangeEnabled : 1;
+    bool m_styleChangeEnabled : 1;
 };
 
 #endif

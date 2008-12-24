@@ -42,7 +42,6 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 {
 }
 
-// pageNumber is a real page number, not a zero-based index
 void KWFrameLayout::createNewFramesForPage(int pageNumber)
 {
 //kDebug() <<"createNewFramesForPage" << pageNumber;
@@ -75,7 +74,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
     }
 
     // delete headers/footer frames that are not needed on this page
-    foreach(KWFrame *frame, framesInPage(page.rect())) {
+    foreach (KWFrame *frame, framesInPage(page.rect())) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (tfs && allHFTypes.contains(tfs->textFrameSetType())) {
             tfs->removeFrame(frame);
@@ -118,7 +117,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
             KWTextFrameSet *fs = getOrCreate(KWord::MainTextFrameSet, page);
             QRectF rect(QPointF(page.width(), page.offsetInDocument()),
                         QSizeF(page.width() / 2,  page.height()));
-            foreach(KWFrame *frame, framesInPage(rect)) {
+            foreach (KWFrame *frame, framesInPage(rect)) {
                 if (frame->frameSet() == fs) {
                     columns--;
                     if (columns < 0) {
@@ -142,7 +141,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
                     QSizeF(page.width(), page.height()));
         if (page.pageSide() == KWPage::PageSpread)
             rect.setWidth(rect.width() / 2);
-        foreach(KWFrame *frame, framesInPage(rect)) {
+        foreach (KWFrame *frame, framesInPage(rect)) {
             if (frame->frameSet() == fs) {
                 columns--;
                 if (columns < 0) {
@@ -165,7 +164,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
         }
         KWPage prevPage = m_pageManager->page(i);
         QRectF pageRect = prevPage.rect(pageNumber);
-        foreach(KWFrame *frame, framesInPage(pageRect)) {
+        foreach (KWFrame *frame, framesInPage(pageRect)) {
             if (odd && !frame->frameOnBothSheets())
                 continue;
             if (!(frame->newFrameBehavior() == KWord::ReconnectNewFrame ||
@@ -252,7 +251,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     main = new KWTextFrame*[columnsCount];
     main[0] = 0;
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
-    foreach(KWFrame *frame, framesInPage(pageRect)) {
+    foreach (KWFrame *frame, framesInPage(pageRect)) {
         KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (textFrameSet == 0) continue;
         switch (textFrameSet->textFrameSetType()) {
@@ -381,7 +380,8 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
     switch (header ? page.pageStyle().headerPolicy() : page.pageStyle().footerPolicy()) {
-    case KWord::HFTypeNone : break;
+    case KWord::HFTypeNone:
+        return false;
     case KWord::HFTypeEvenOdd:
         if (header)
             *origin = pageNumber % 2 == 0 ? KWord::EvenPagesHeaderTextFrameSet :
@@ -394,17 +394,15 @@ bool KWFrameLayout::shouldHaveHeaderOrFooter(int pageNumber, bool header, KWord:
         *origin = header ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet;
         break;
     }
-    if (header)
-        return page.pageStyle().headerPolicy() != KWord::HFTypeNone;
-    return page.pageStyle().footerPolicy() != KWord::HFTypeNone;
+    return true;
 }
 
 QList<KWFrame *> KWFrameLayout::framesInPage(QRectF page)
 {
     // hopefully replaced with a tree
     QList<KWFrame*> answer;
-    foreach(KWFrameSet *fs, m_frameSets) {
-        foreach(KWFrame *frame, fs->frames()) {
+    foreach (KWFrameSet *fs, m_frameSets) {
+        foreach (KWFrame *frame, fs->frames()) {
             if (page.contains(frame->shape()->absolutePosition()))
                 answer.append(frame);
         }
@@ -453,11 +451,6 @@ KWTextFrameSet *KWFrameLayout::getOrCreate(KWord::TextFrameSetType type, const K
     return *answer;
 }
 
-void KWFrameLayout::updateFramesAfterDelete(int deletedPage)
-{
-    // TODO
-}
-
 void KWFrameLayout::setup()
 {
     if (m_setup)
@@ -465,8 +458,7 @@ void KWFrameLayout::setup()
 
     m_maintext = 0;
     m_pageStyles.clear();
-    foreach(KWFrameSet *fs, m_frameSets) {
-        // add checks for out-of-area frames
+    foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0)
             continue;
@@ -486,6 +478,8 @@ void KWFrameLayout::setup()
             break;
         case KWord::MainTextFrameSet:
             m_maintext = tfs;
+            disconnect (tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
+            connect (tfs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(mainframeRemoved(KWFrame*)));
         default: ;// ignore
         }
         if (tfs->pageStyle().isValid())
@@ -511,7 +505,7 @@ bool KWFrameLayout::hasFrameOn(KWTextFrameSet *fs, int pageNumber)
 {
     KWPage page = m_pageManager->page(pageNumber);
     Q_ASSERT(page.isValid());
-    foreach(KWFrame *frame, framesInPage(page.rect())) {
+    foreach (KWFrame *frame, framesInPage(page.rect())) {
         if (frame->frameSet() == fs)
             return true;
     }
@@ -520,26 +514,69 @@ bool KWFrameLayout::hasFrameOn(KWTextFrameSet *fs, int pageNumber)
 
 void KWFrameLayout::cleanupHeadersFooters()
 {
+    QHash<KWPageStyle, FrameSets> pageStyles;
+    foreach (KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (tfs == 0)
+            continue;
+        FrameSets frameSets = pageStyles.value(tfs->pageStyle());
+        switch (tfs->textFrameSetType()) {
+        case KWord::OddPagesHeaderTextFrameSet:
+            if (frameSets.oddHeaders) {
+                emit removedFrameSet(frameSets.oddHeaders);
+                delete frameSets.oddHeaders;
+            }
+            frameSets.oddHeaders = tfs;
+            break;
+        case KWord::EvenPagesHeaderTextFrameSet:
+            if (frameSets.evenHeaders) {
+                emit removedFrameSet(frameSets.evenHeaders);
+                delete frameSets.evenHeaders;
+            }
+            frameSets.evenHeaders = tfs;
+            break;
+        case KWord::OddPagesFooterTextFrameSet:
+            if (frameSets.oddFooters) {
+                emit removedFrameSet(frameSets.oddFooters);
+                delete frameSets.oddFooters;
+            }
+            frameSets.oddFooters = tfs;
+            break;
+        case KWord::EvenPagesFooterTextFrameSet:
+            if (frameSets.evenFooters) {
+                emit removedFrameSet(frameSets.evenFooters);
+                delete frameSets.evenFooters;
+            }
+            frameSets.evenFooters = tfs;
+            break;
+        default: ;// ignore
+        }
+        if (tfs->pageStyle().isValid())
+            pageStyles.insert(tfs->pageStyle(), frameSets);
+    }
+
+    foreach (const KWPageStyle &style, pageStyles.keys()) {
+        FrameSets frameSets = pageStyles[style];
+        switch (style.headerPolicy()) {
+        case KWord::HFTypeEvenOdd:
+            break;
+        case KWord::HFTypeNone:
+            cleanFrameSet(frameSets.oddHeaders);
+            // fall through
+        case KWord::HFTypeUniform:
+            cleanFrameSet(frameSets.evenHeaders);
+        }
+        switch (style.footerPolicy()) {
+        case KWord::HFTypeEvenOdd:
+            break;
+        case KWord::HFTypeNone:
+            cleanFrameSet(frameSets.oddFooters);
+            // fall through
+        case KWord::HFTypeUniform:
+            cleanFrameSet(frameSets.evenFooters);
+        }
+    }
     m_setup = false;
-    setup();
-#if 0
-    if (/*m_pageStyle->firstHeader() != KWord::HFTypeEvenOdd &&*/
-        m_pageStyle->headers() != KWord::HFTypeEvenOdd) {
-        cleanFrameSet(m_oddHeaders);
-        cleanFrameSet(m_evenHeaders);
-    }
-    if (/*m_pageStyle->firstFooter() != KWord::HFTypeEvenOdd &&*/
-        m_pageStyle->footers() != KWord::HFTypeEvenOdd) {
-        cleanFrameSet(m_oddFooters);
-        cleanFrameSet(m_evenFooters);
-    }
-    /*if (m_pageStyle->firstHeader() == KWord::HFTypeNone)
-        cleanFrameSet(m_firstHeader);
-    if (m_pageStyle->firstFooter() == KWord::HFTypeNone)
-        cleanFrameSet(m_firstFooter);*/
-    if (! m_pageStyle->hasMainTextFrame())
-        cleanFrameSet(m_maintext);
-#endif
 }
 
 void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
@@ -548,9 +585,9 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
         return;
     if (fs->frameCount() == 0)
         return;
-    foreach(KWFrame *frame, fs->frames()) {
+    foreach (KWFrame *frame, fs->frames()) {
         fs->removeFrame(frame);
-        delete(frame);
+        delete(frame->shape());
     }
 }
 
@@ -558,11 +595,11 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
 {
     if (fs->frameCount() == 0)
         return;
-    if (pageNumber == 0/*m_pageManager->startPage()*/)
+    if (pageNumber == m_pageManager->begin().pageNumber())
         return;
     qreal prevPage, prevPage2;
     prevPage = m_pageManager->topOfPage(pageNumber - 1);
-    if (pageNumber - 2 >= 0/*m_pageManager->startPage()*/)
+    if (pageNumber - 2 >= m_pageManager->begin().pageNumber())
         prevPage2 = m_pageManager->topOfPage(pageNumber - 2);
     else
         prevPage2 = -1;
@@ -589,7 +626,7 @@ void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber)
     Q_ASSERT(page.isValid());
     const qreal offsetInDocument = page.offsetInDocument();
     // now add them in the proper order.
-    foreach(KWTextFrame *f, framesToDuplicate) {
+    foreach (KWTextFrame *f, framesToDuplicate) {
         KWTextFrame *frame = new KWTextFrame(createTextShape(page), fs);
         const qreal y = f->shape()->position().y();
         qreal offsetFromPage = y - prevPage2;
@@ -623,5 +660,40 @@ KWTextFrameSet *KWFrameLayout::mainFrameSet() const
 {
     const_cast<KWFrameLayout*>(this)->setup();
     return m_maintext;
+}
+
+void KWFrameLayout::mainframeRemoved(KWFrame *frame)
+{
+    // if a main-frame is removed we should remove all other auto-generated frames on that page to allow
+    // the page to be removed totally.  Besides; we don't want to have a header when there is no main-frame on a page :)
+
+    if (frame->shape() == 0) return;
+    KWPage page = m_pageManager->page(frame->shape());
+    if (!page.isValid()) return;
+
+    QList<KWFrame*> framesToDelete;
+    foreach (KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        if (!KWord::isAutoGenerated(tfs))
+            continue;
+        const bool isMainFs = fs == m_maintext;
+        foreach (KWFrame *f, fs->frames()) {
+            if (f == frame)
+                continue;
+            if (page == m_pageManager->page(f->shape())) {
+                if (isMainFs) // there is another frame of the main text frameset on this page.
+                    return;
+                framesToDelete << f;
+            }
+        }
+    }
+
+    // delete them!
+    foreach (KWFrame *frame, framesToDelete) {
+        // first remove if from the frameset to make sure the doc gets a signal and removes the page if needed
+        frame->frameSet()->removeFrame(frame);
+        // then actually delete the frame itself.
+        delete frame->shape();
+    }
 }
 

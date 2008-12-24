@@ -35,7 +35,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
 {
     QByteArray data;
     QDataStream stream1(&data, QIODevice::WriteOnly);
-    stream1.setVersion(QDataStream::Qt_3_1);
+//    stream1.setVersion(QDataStream::Qt_3_1);
     stream1 << sourceMimeType << sourceName << field;
     setEncodedData(data);
 }
@@ -46,7 +46,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
 {
     QByteArray data;
     QDataStream stream1(&data, QIODevice::WriteOnly);
-    stream1.setVersion(QDataStream::Qt_3_1);
+    //stream1.setVersion(QDataStream::Qt_3_1);
     if (fields.count() > 1)
         stream1 << sourceMimeType << sourceName << fields;
     else {
@@ -85,7 +85,7 @@ KexiFieldDrag::decodeSingle(QDropEvent* e, QString& sourceMimeType,
         return false;
     e->accept();
     QDataStream stream1(&payload, QIODevice::ReadOnly);
-    stream1.setVersion(QDataStream::Qt_3_1);
+//    stream1.setVersion(QDataStream::Qt_3_1);
     stream1 >> sourceMimeType;
     stream1 >> sourceName;
     stream1 >> field;
@@ -108,7 +108,7 @@ KexiFieldDrag::decodeMultiple(QDropEvent* e, QString& sourceMimeType,
     }
     e->accept();
     QDataStream stream1(&payload, QIODevice::ReadOnly);
-    stream1.setVersion(QDataStream::Qt_3_1);
+//    stream1.setVersion(QDataStream::Qt_3_1);
     stream1 >> sourceMimeType;
     stream1 >> sourceName;
     stream1 >> fields;
@@ -124,7 +124,7 @@ KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const 
 {
     QByteArray data;
     QDataStream stream1(&data, QIODevice::WriteOnly);
-    stream1.setVersion(QDataStream::Qt_3_1);
+//    stream1.setVersion(QDataStream::Qt_3_1);
     stream1 << sourceMimeType << sourceName;
     setEncodedData(data);
 }
@@ -144,7 +144,7 @@ KexiDataProviderDrag::decode(QDropEvent* e, QString& sourceMimeType, QString& so
     if (payload.size()) {
         e->accept();
         QDataStream stream1(&payload, QIODevice::ReadOnly);
-        stream1.setVersion(QDataStream::Qt_3_1);
+//        stream1.setVersion(QDataStream::Qt_3_1);
         stream1 >> sourceMimeType;
         stream1 >> sourceName;
 //  kDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceMimeType <<"/"<<sourceName;

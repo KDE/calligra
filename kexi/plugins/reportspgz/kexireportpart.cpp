@@ -81,6 +81,7 @@ KexiView* KexiReportPart::createView(QWidget *parent, KexiWindow* window,
 QString KexiReportPart::loadReport(const QString& name)
 {
     //_internal->_reportName = pReportName;
+    
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection()) {
         kDebug() << "failed sanity check";
@@ -88,14 +89,16 @@ QString KexiReportPart::loadReport(const QString& name)
     }
     QString src, did;
     KexiDB::SchemaData sd;
-    if (win->project()->dbConnection()->loadObjectSchemaData(100, name, sd) != true) {
-        kDebug() << "failed to loafd schema data";
+    
+    if (win->project()->dbConnection()->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true) {
+        kDebug() << "failed to load schema data";
         return "";
     }
 
     kDebug() << "***Object ID:" << sd.id();
+    
     if (win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true) {
-        return src;
+            return src;
     } else {
         kDebug() << "Unable to load document";
         return "";

@@ -142,7 +142,7 @@ void Odp2Odt::processPages( QDomElement& body )
                     textNodes.append( textElem );
                 }
                 // Now reparent them up (can't be done while iterating)
-                foreach( QDomElement e, textNodes ) {
+                foreach( const QDomElement & e, textNodes ) {
                     body.appendChild( e );
                 }
             }

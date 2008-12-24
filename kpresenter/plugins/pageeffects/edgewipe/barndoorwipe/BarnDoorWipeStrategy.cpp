@@ -70,6 +70,7 @@ QPainterPath BarnDoorWipeStrategy::clipPath( int step, const QRect &area )
         case BarnDoorWipeEffectFactory::Vertical:
         case BarnDoorWipeEffectFactory::VerticalReverse:
         {
+            stepx = static_cast<int>( width_2 * percent );
             QPoint top( width_2, 0 );
             QPoint bottom( width_2, area.height() );
             path.moveTo( top - QPoint( stepx, 0 ) );
@@ -81,6 +82,7 @@ QPainterPath BarnDoorWipeStrategy::clipPath( int step, const QRect &area )
         case BarnDoorWipeEffectFactory::Horizontal:
         case BarnDoorWipeEffectFactory::HorizontalReverse:
         {
+            stepy = static_cast<int>( height_2 * percent );
             QPoint left( 0, height_2 );
             QPoint right( area.width(), height_2 );
             path.moveTo( left + QPoint( 0, stepy ) );

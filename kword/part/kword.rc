@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="113">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="114">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -40,6 +40,7 @@
   <Separator/>
   <Action name="show_docstruct"/>
   <Action name="show_ruler"/>
+  <Action name="showStatusBar" />
   <Action name="view_grid"/>
   <Action name="view_snaptogrid"/>
   <Separator/>
@@ -190,7 +191,6 @@
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
-  <Action name="showStatusBar" group="settings_show" />
   <Separator group="settings_show"/>
   <Action name="configure_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
@@ -212,6 +212,7 @@
   <Separator/>
   <Action name="view_zoom"/>
 </ToolBar>
+<!--
 <ToolBar hidden="true" name="table_toolbar" position="top"><Text>Table</Text>
   <Action name="table_properties"/>
   <Separator/>
@@ -230,6 +231,7 @@
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
+-->
 <ToolBar hidden="true" name="paragraph_toolbar" position="top"><Text>Paragraph</Text>
   <Action name="format_style"/>
   <Separator/>
@@ -259,6 +261,7 @@
   <Action name="format_super"/>
   <Action name="format_sub"/>
 </ToolBar>
+<!--
 <ToolBar hidden="true" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="frame_style"/>
   <Action name="border_outline"/>
@@ -271,13 +274,11 @@
   <Action name="border_color"/>
   <Action name="border_backgroundcolor"/>
 </ToolBar>
-<!--
 <ToolBar hidden="true" name="mailmerge_toolbar" position="top"><Text>MailMerge</Text>
   <Action name="mailmerge_draglabel"/>
   <Action name="mailmerge_varchooser"/>
   <Action name="edit_sldatabase"/>
 </ToolBar>
--->
 <ToolBar hidden="true" name="formula_toolbar" position="bottom"><Text>Formula</Text>
   <Action name="formula_addtext"/>
   <Action name="formula_addroot"/>
@@ -311,7 +312,7 @@
   <Action name="formula_appendrow"/>
   <Action name="formula_removerow"/>
 </ToolBar>
-<StatusBar/>
+-->
 <Menu name="text_popup">
  <Action name="text_default"/>
  <Action name="format_font"/>

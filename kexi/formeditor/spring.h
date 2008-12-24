@@ -38,30 +38,33 @@ class ObjectTreeItem;
 class KFORMEDITOR_EXPORT Spring : public QWidget
 {
     Q_OBJECT
-    Q_ENUMS(SizeType)
+//    Q_ENUMS(SizeType)
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
-    Q_PROPERTY(SizeType sizeType READ sizeType WRITE setSizeType)
+    Q_PROPERTY(QSizePolicy::Policy sizeType READ sizeType WRITE setSizeType)
 
-private:
-    enum {HSize = 6, HMask = 0x3f, VMask = HMask << HSize, MayGrow = 1, ExpMask = 2, MayShrink = 4 };
+//private:
+//  QSizePolicy::PolicyFlag is used instead 
+//    enum {HSize = 6, HMask = 0x3f, VMask = HMask << HSize, MayGrow = 1, ExpMask = 2, MayShrink = 4 };
 public:
+/*QSizePolicy::Policy is used instead
     enum SizeType {Fixed = 0, Minimum = MayGrow, Maximum = MayShrink, Preferred = MayGrow | MayShrink , MinimumExpanding = Minimum | ExpMask,
                    Expanding = MinimumExpanding | MayShrink
-                  };
+                  };*/
 
 public:
     Spring(QWidget *parent);
     ~Spring();
 
     static bool isPropertyVisible(const Q3CString &name);
-    static void saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
+    static void saveSpring(KFormDesigner::ObjectTreeItem *item,
+        QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
 
     void setOrientation(Qt::Orientation orient);
     Qt::Orientation orientation() const {
         return m_orient;
     }
-    void setSizeType(SizeType size);
-    SizeType sizeType() const;
+    void setSizeType(QSizePolicy::Policy policy);
+    QSizePolicy::Policy sizeType() const;
 
     void  setPreviewMode() {
         m_edit = false;

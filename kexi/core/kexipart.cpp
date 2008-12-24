@@ -191,7 +191,7 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
 {
     GUIClient *instanceGuiClient = d->instanceGuiClients.value((int)mode);
     if (!instanceGuiClient) {
-        kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!";
+        kDebug() << "no gui client for mode " << mode << "!";
         return 0;
     }
     return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name,
@@ -224,7 +224,7 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
 {
   GUIClient *instanceGuiClient = d->instanceGuiClients[mode];
   if (!instanceGuiClient) {
-    kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!";
+    kDebug() << "no gui client for mode " << mode << "!";
     return 0;
   }
   return instanceGuiClient->actionCollection()->action(name, classname);
@@ -365,7 +365,7 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         window->selectedView()->setDirty(
             internalPropertyValue("newObjectsAreDirty", false).toBool() ? item.neverSaved() : false);
 
-    kexidbg << "Part::openInstance() window returned.";
+    kDebug() << "window returned.";
     return window;
 }
 

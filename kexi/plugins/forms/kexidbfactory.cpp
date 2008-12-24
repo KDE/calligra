@@ -463,22 +463,9 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
         ed->setLineWrapColumnOrWidth(textedit->lineWrapColumnOrWidth());
         ed->setWordWrapMode(textedit->wordWrapMode());
         ed->setTabStopWidth(textedit->tabStopWidth());
-#ifdef __GNUC__
-#warning TODO Qt4:  ed->setLinkUnderline(textedit->linkUnderline());
-#else
-#pragma WARNING( TODO Qt4:  ed->setLinkUnderline(textedit->linkUnderline()); )
-#endif
         ed->setTextFormat(textedit->textFormat());
-#ifdef __GNUC__
-#warning TODO Qt4:  ed->setHScrollBarMode(textedit->hScrollBarMode());
-#else
-#pragma WARNING( TODO Qt4:  ed->setHScrollBarMode(textedit->hScrollBarMode()); )
-#endif
-#ifdef __GNUC__
-#warning TODO Qt4:  ed->setVScrollBarMode(textedit->vScrollBarMode());
-#else
-#pragma WARNING( TODO Qt4:  ed->setVScrollBarMode(textedit->vScrollBarMode()); )
-#endif
+        ed->setHorizontalScrollBarPolicy(textedit->horizontalScrollBarPolicy());
+        ed->setVerticalScrollBarPolicy(textedit->verticalScrollBarPolicy());
         return true;
     } else if (classname == "KexiDBLabel") {
         KexiDBLabel *label = static_cast<KexiDBLabel*>(w);

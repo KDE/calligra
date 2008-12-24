@@ -12,7 +12,7 @@ set(kexidbtest_SRCS main.cpp )
 
 kde4_add_executable(kexidbtest NOGUI ${kexidbtest_SRCS})
 
-target_link_libraries(kexidbtest  ${KDE4_KDECORE_LIBS} kexidb kexiextendedwidgets kexidatatable )
+target_link_libraries(kexidbtest  ${KDE4_KDEUI_LIBS} kexidb kexiextendedwidgets kexidatatable )
 
 
 ########### install files ###############

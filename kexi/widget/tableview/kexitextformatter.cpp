@@ -82,28 +82,6 @@ QString KexiTextFormatter::valueToText(const QVariant& value, const QString& add
 //! @todo support 'g' format
         if (value.toDouble() == 0.0)
             return add.isEmpty() ? "0" : add; //eat 0
-#if 0 //moved to KexiDB::formatNumberForVisibleDecimalPlaces()
-        QString text(QString::number(value.toDouble(), 'f',
-                                     QMAX(d->field->visibleDecimalPlaces(), 10)));  //!<-- 10 is quite good maximum for fractional digits
-        //!< @todo add command line settings?
-//! @todo (js): get decimal places settings here...
-        QStringList sl = QStringList::split(".", text);
-        //nothing
-    } else if (sl.count() == 2) {
-//    kdDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1];
-        const QString sl1 = sl[1];
-        int pos = sl1.length() - 1;
-        if (pos >= 1) {
-            for (;pos >= 0 && sl1[pos] == '0';pos--)
-                ;
-            pos++;
-        }
-        if (pos > 0)
-            text = sl[0] + m_decsym + sl1.left(pos);
-        else
-            text = sl[0]; //no decimal point
-    }
-#endif
     return KexiDB::formatNumberForVisibleDecimalPlaces(
                value.toDouble(), d->field->visibleDecimalPlaces()) + add;
 }

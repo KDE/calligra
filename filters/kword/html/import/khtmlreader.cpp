@@ -455,7 +455,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
   }
 
   // process e.g. <style="color: #ffffff">
-  if ( s1.getPropertyValue("color").string() != QString() )
+  if ( ! s1.getPropertyValue("color").string().isEmpty() )
   {
     QColor c=parsecolor(s1.getPropertyValue("color").string());
     _writer->formatAttribute(state()->paragraph,"COLOR","red",QString::number(c.red()));
@@ -463,7 +463,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
     _writer->formatAttribute(state()->paragraph,"COLOR","blue",QString::number(c.blue()));
   } // done
   // process e.g. <style="font-size: 42">
-  if ( s1.getPropertyValue("font-size").string() != QString() )
+  if ( ! s1.getPropertyValue("font-size").string().isEmpty() )
   {
     QString size=s1.getPropertyValue("font-size").string();
     if (size.endsWith("pt"))
@@ -474,7 +474,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
   }
   // done
   // process e.g. <style="text-align: center">this is in the center</style>
-  if ( s1.getPropertyValue("text-align").string() != QString() )
+  if ( ! s1.getPropertyValue("text-align").string().isEmpty() )
   {
     state()->layout=_writer->setLayout(state()->paragraph,state()->layout);
     _writer->layoutAttribute(state()->paragraph, "FLOW","align",s1.getPropertyValue("text-align").string());

@@ -32,7 +32,9 @@ public:
 
     enum SubType {
         FromLeft,
-        FromTop
+        FromTop,
+        FromRight,
+        FromBottom
     };
 };
 

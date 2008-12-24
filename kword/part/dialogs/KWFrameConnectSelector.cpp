@@ -47,7 +47,7 @@ bool KWFrameConnectSelector::open(KWFrame *frame)
     if (widget.frameSetName->text().isEmpty())
         widget.frameSetName->setText(m_state->document()->uniqueFrameSetName(i18n("frameset")));
 
-    foreach(KWFrameSet *fs, m_state->document()->frameSets()) {
+    foreach (KWFrameSet *fs, m_state->document()->frameSets()) {
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*>(fs);
         if (textFs == 0 || textFs->textFrameSetType() != KWord::OtherTextFrameSet)
             continue;
@@ -90,9 +90,9 @@ void KWFrameConnectSelector::frameSetSelected()
 void KWFrameConnectSelector::nameChanged(const QString &text)
 {
     widget.newRadio->setChecked(true);
-    foreach(QTreeWidgetItem *item, widget.framesList->selectedItems())
-    widget.framesList->setItemSelected(item, false);
-    foreach(QTreeWidgetItem *item, m_items) {
+    foreach (QTreeWidgetItem *item, widget.framesList->selectedItems())
+        widget.framesList->setItemSelected(item, false);
+    foreach (QTreeWidgetItem *item, m_items) {
         if (item->text(0) == text) {
             widget.framesList->setCurrentItem(item);
             return;

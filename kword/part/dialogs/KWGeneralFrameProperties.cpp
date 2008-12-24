@@ -71,7 +71,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
     GuiHelper::State newFrame = GuiHelper::Unset, frameBehavior = GuiHelper::Unset;
     KWord::NewFrameBehavior nfb = KWord::ReconnectNewFrame;
     KWord::FrameBehavior fb = KWord::AutoExtendFrameBehavior;
-    foreach(KWFrame *frame, frames) {
+    foreach (KWFrame *frame, frames) {
         if (frameBehavior == GuiHelper::Unset) {
             fb = frame->frameBehavior();
             frameBehavior = GuiHelper::On;
@@ -134,7 +134,7 @@ void KWGeneralFrameProperties::save()
         m_state->markFrameUsed();
         m_frames.append(frame);
     }
-    foreach(KWFrame *frame, m_frames) {
+    foreach (KWFrame *frame, m_frames) {
         if (widget.keepAspectRatio->checkState() != Qt::PartiallyChecked)
             frame->shape()->setKeepAspectRatio(widget.keepAspectRatio->checkState() == Qt::Checked);
         if (m_textGroup->checkedId() != -1) {
@@ -154,7 +154,7 @@ void KWGeneralFrameProperties::save()
                     textFs->setProtectContent(widget.protectContent->checkState() == Qt::Checked);
             }
             if (widget.allFrames->isEnabled() && widget.allFrames->checkState() == Qt::Checked) {
-                foreach(KWFrame *otherFrame, frame->frameSet()->frames()) {
+                foreach (KWFrame *otherFrame, frame->frameSet()->frames()) {
                     if (m_frames.contains(otherFrame))
                         continue;
                     // TODO add on KWFrame: virtual void copySettings(const KWFrame *frame)

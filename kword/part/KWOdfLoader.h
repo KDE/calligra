@@ -23,8 +23,11 @@
 #ifndef KWODFLOADER_H
 #define KWODFLOADER_H
 
+#include "KWord.h"
+
 #include <KoStore.h>
 #include <KoTextLoader.h>
+#include <QPointer>
 
 class KWDocument;
 class KWPageManager;
@@ -80,11 +83,14 @@ private:
     void loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
     void loadFinished(KoOdfLoadingContext& context, QTextCursor& cursor);
 
+    /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
+    void loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType);
+
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    /// The KWord document.
+    QPointer<KWDocument> m_document;
+    /// Current KWFrameSet name.
+    KWTextFrame *m_currentFrame;
 };
 
 #endif

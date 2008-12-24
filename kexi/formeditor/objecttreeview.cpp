@@ -89,7 +89,7 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
         p->setFont(f);
         if (depth() == 0) { // for edit tab order dialog
             QString iconName
-            = ((ObjectTreeView*)listView())->iconNameForClass(m_item->widget()->className());
+            = ((ObjectTreeView*)listView())->iconNameForClass(m_item->widget()->metaObject()->className());
             p->drawPixmap(margin, (height() - IconSize(KIconLoader::Small)) / 2 , SmallIcon(iconName));
             p->drawText(
                 QRect(2*margin + IconSize(KIconLoader::Small), 0, width, height() - 1),
@@ -130,7 +130,7 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
         }
 
         QString iconName
-        = ((ObjectTreeView*)listView())->iconNameForClass(item->m_item->widget()->className());
+        = ((ObjectTreeView*)listView())->iconNameForClass(item->m_item->widget()->metaObject()->className());
         p->drawPixmap(
             (w - IconSize(KIconLoader::Small)) / 2, (item->height() - IconSize(KIconLoader::Small)) / 2 ,
             SmallIcon(iconName));
@@ -250,7 +250,7 @@ ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
         clearSelection();
 
 
-    Q3ListViewItem *item = (Q3ListViewItem*) findItem(w->name());
+    Q3ListViewItem *item = (Q3ListViewItem*) findItem(w->objectName());
     if (!add) {
         setCurrentItem(item);
         setSelectionAnchor(item);

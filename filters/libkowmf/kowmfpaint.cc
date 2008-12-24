@@ -268,7 +268,7 @@ void KoWmfPaint::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 
     // define clipping region
     QRegion region;
-    foreach ( QPolygon pa, listPa ) {
+    foreach ( const QPolygon & pa, listPa ) {
         region = region.xored( pa );
     }
     mPainter.setClipRegion( region );
@@ -282,7 +282,7 @@ void KoWmfPaint::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
     mPainter.setClipping( false );
     if ( mPainter.pen().style() != Qt::NoPen ) {
         mPainter.setBrush( Qt::NoBrush );
-        foreach ( QPolygon pa, listPa )
+        foreach ( const QPolygon & pa, listPa )
         {
             if( winding )
                 mPainter.drawPolygon( pa, Qt::WindingFill );

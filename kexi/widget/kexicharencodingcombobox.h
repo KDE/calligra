@@ -43,7 +43,7 @@ public:
 
 protected:
     QHash<QString, QString> m_encodingDescriptionForName;
-bool m_defaultEncodingAdded : 1;
+    bool m_defaultEncodingAdded : 1;
 };
 
 #endif

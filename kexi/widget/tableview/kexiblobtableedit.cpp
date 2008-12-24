@@ -66,8 +66,8 @@ public:
     KexiDropDownButton *button;
     QSize totalSize;
     KexiImageContextMenu *menu;
-bool readOnly : 1; //!< cached for slotUpdateActionsAvailabilityRequested()
-bool setValueInternalEnabled : 1; //!< used to disable KexiBlobTableEdit::setValueInternal()
+    bool readOnly : 1; //!< cached for slotUpdateActionsAvailabilityRequested()
+    bool setValueInternalEnabled : 1; //!< used to disable KexiBlobTableEdit::setValueInternal()
 };
 
 //======================================================

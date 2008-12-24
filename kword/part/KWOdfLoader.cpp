@@ -24,9 +24,9 @@
 #include "KWOdfLoader.h"
 #include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"
+#include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
-#include "frames/KWFrame.h"
 
 // koffice
 #include <KoOdfStylesReader.h>
@@ -37,70 +37,46 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoTextShapeData.h>
-#include <KoTextAnchor.h>
-#include <KoShapeContainer.h>
-#include <KoTextDocumentLayout.h>
+#include <KoDataCenter.h>
 #include <KoShapeLoadingContext.h>
-#include <KoInlineTextObjectManager.h>
-//#include <KoTextFrameLoader.h>
-#include <KWPage.h>
-#include <KoProperties.h>
 #include <KoStyleManager.h>
 #include <KoOdfLoadingContext.h>
-//#include <TextShape.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
-#include <klocale.h>
-#include <kdebug.h>
-#include <QTextBlock>
-
-/// \internal d-pointer class.
-class KWOdfLoader::Private
-{
-public:
-    /// The KWord document.
-    QPointer<KWDocument> document;
-    /// Current KWFrameSet name.
-    KWTextFrame *currentFrame;
-
-    /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-    void loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType);
-};
+#include <KDebug>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
-        : QObject()
-        , d(new Private())
+        : QObject(),
+        m_document(document),
+        m_currentFrame(0)
 {
-    d->document = document;
-    d->currentFrame = 0;
-    connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
+    connect(this, SIGNAL(sigProgress(int)), m_document, SIGNAL(sigProgress(int)));
 }
 
 KWOdfLoader::~KWOdfLoader()
 {
-    delete d;
 }
 
 KWDocument* KWOdfLoader::document() const
 {
-    return d->document;
+    return m_document;
 }
 
 KWPageManager* KWOdfLoader::pageManager()
 {
-    return & d->document->m_pageManager;
+    return & m_document->m_pageManager;
 }
 
-//QString KWOdfLoader::currentMasterPage() const { return d->currentMasterPage; }
+//QString KWOdfLoader::currentMasterPage() const { return m_currentMasterPage; }
 QString KWOdfLoader::currentFramesetName() const
 {
-    return d->currentFrame ? d->currentFrame->frameSet()->name() : QString();
+    return m_currentFrame ? m_currentFrame->frameSet()->name() : QString();
 }
 
 KWTextFrame* KWOdfLoader::currentFrame() const
 {
-    return d->currentFrame;
+    return m_currentFrame;
 }
 
 //1.6: KWDocument::loadOasis
@@ -113,7 +89,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
     if (realBody.isNull()) {
         kError(32001) << "No office:body found!" << endl;
-        d->document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
+        m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No office:body tag found."));
         return false;
     }
 
@@ -125,21 +101,21 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
         forEachElement(childElem, realBody)
         localName = childElem.localName();
         if (localName.isEmpty())
-            d->document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
+            m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
         else
-            d->document->setErrorMessage(i18n("This is not a word processing document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
+            m_document->setErrorMessage(i18n("This is not a word processing document, but %1. Please try opening it with the appropriate application.", KoDocument::tagNameToDocumentType(localName)));
         return false;
     }
 
     // TODO check versions and mimetypes etc.
 
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store());
-    KoShapeLoadingContext sc(odfContext, d->document->dataCenterMap());
+    KoShapeLoadingContext sc(odfContext, m_document->dataCenterMap());
 
     // Load all styles before the corresponding paragraphs try to use them!
     //KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     KWOdfSharedLoadingData * sharedData = new KWOdfSharedLoadingData(this);
-    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(d->document->dataCenterMap()["StyleManager"]);
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
     Q_ASSERT(styleManager);
     sharedData->loadOdfStyles(odfContext, styleManager);
     sc.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
@@ -151,7 +127,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 
     KoColumns columns;
     columns.columns = 1;
-    columns.columnSpacing = d->document->config().defaultColumnSpacing();
+    columns.columnSpacing = m_document->config().defaultColumnSpacing();
 
     loadMasterPageStyles(context);
 
@@ -193,12 +169,12 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 #else
     /*
     // We always needs at least one valid default paragraph style
-    KoParagraphStyle *defaultParagraphStyle = d->document->styleManager()->defaultParagraphStyle();
+    KoParagraphStyle *defaultParagraphStyle = m_document->styleManager()->defaultParagraphStyle();
     //const KoXmlElement* defaultParagraphStyle = context.stylesReader().defaultStyle("paragraph");
     //if( ! defaultParagraphStyle ) {
     KoParagraphStyle *parastyle = new KoParagraphStyle();
     parastyle->setName("Standard");
-    d->document->styleManager()->add(parastyle);
+    m_document->styleManager()->add(parastyle);
     context.styleStack().setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
     parastyle->loadOasis(context.styleStack()); // load the KoParagraphStyle from the stylestack
     KoCharacterStyle *charstyle = parastyle->characterStyle();
@@ -209,7 +185,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 #endif
 
     KWord::TextFrameSetType type = KWord::MainTextFrameSet;
-    KWTextFrameSet *fs = new KWTextFrameSet(d->document, type);
+    KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
     fs->setAllowLayout(false);
     fs->setName(i18n("Main Text Frameset"));
     //fs->loadOasisContent( body, context );
@@ -218,13 +194,13 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
     // Create a TextShape
-    KoShape *shape = factory->createDefaultShapeAndInit(d->document->dataCenterMap());
+    KoShape *shape = factory->createDefaultShapeAndInit(m_document->dataCenterMap());
     Q_ASSERT(shape);
     // The TextShape will be displayed within a KWTextFrame
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     Q_UNUSED(frame);
-    d->currentFrame = frame;
-    d->document->addFrameSet(fs);
+    m_currentFrame = frame;
+    m_document->addFrameSet(fs);
 
     // The KoTextShapeData does contain the data for our TextShape
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
@@ -264,16 +240,16 @@ void KWOdfLoader::loadSettings(const KoXmlDocument& settingsDoc)
     KoOasisSettings settings(settingsDoc);
     KoOasisSettings::Items viewSettings = settings.itemSet("view-settings");
     if (!viewSettings.isNull())
-        d->document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        m_document->setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
 
     //1.6: KWOasisLoader::loadOasisIgnoreList
     KoOasisSettings::Items configurationSettings = settings.itemSet("configuration-settings");
     if (!configurationSettings.isNull()) {
         const QString ignorelist = configurationSettings.parseConfigItemString("SpellCheckerIgnoreList");
         kDebug(32001) << "Ignorelist:" << ignorelist;
-        //1.6: d->document->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
+        //1.6: m_document->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
     }
-    //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
+    //1.6: m_document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
 void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
@@ -288,7 +264,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
     while (it.hasNext()) {
         it.next();
         Q_ASSERT(! it.key().isEmpty());
-        KWPageStyle masterPage = d->document->pageManager()->pageStyle(it.key());
+        KWPageStyle masterPage = m_document->pageManager()->pageStyle(it.key());
         bool alreadyExists = masterPage.isValid();
         if (!alreadyExists)
             masterPage = KWPageStyle(it.key());
@@ -302,14 +278,14 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, false); // Load footers
         }
         if (!alreadyExists)
-            d->document->pageManager()->addPageStyle(masterPage);
+            m_document->pageManager()->addPageStyle(masterPage);
     }
 }
 
 // helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
+void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
 {
-    KWTextFrameSet *fs = new KWTextFrameSet(document, fsType);
+    KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setAllowLayout(false);
     switch (fsType) {
     case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header %1", pageStyle.name())); break;
@@ -324,18 +300,18 @@ void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, c
     // Add the frameset and the shape for the header/footer to the document.
     KoShapeFactory *sf = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(sf);
-    KoShape *s = sf->createDefaultShapeAndInit(document->dataCenterMap());
+    KoShape *s = sf->createDefaultShapeAndInit(m_document->dataCenterMap());
     Q_ASSERT(s);
     KWTextFrame *f = new KWTextFrame(s, fs);
-    document->addFrameSet(fs);
+    m_document->addFrameSet(fs);
 
-    KWTextFrame *prevFrame = currentFrame;
-    currentFrame = f;
+    KWTextFrame *prevFrame = m_currentFrame;
+    m_currentFrame = f;
 
     // use auto-styles from styles.xml, not those from content.xml
     context.setUseStylesAutoStyles(true);
 
-    KoShapeLoadingContext ctxt(context, document->dataCenterMap());
+    KoShapeLoadingContext ctxt(context, m_document->dataCenterMap());
     KoTextLoader loader(ctxt);
     QTextCursor cursor(fs->document());
     loader.loadBody(elem, cursor);
@@ -343,7 +319,7 @@ void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, c
     // restore use of auto-styles from content.xml, not those from styles.xml
     context.setUseStylesAutoStyles(false);
 
-    currentFrame = prevFrame; // restore the previous current frame
+    m_currentFrame = prevFrame; // restore the previous current frame
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
@@ -358,11 +334,11 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pa
     KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeNone : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
 
     if (! leftElem.isNull()) {   // header-left and footer-left
-        d->loadHeaderFooterFrame(context, pageStyle, leftElem, hfType, isHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, leftElem, hfType, isHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
     }
 
     if (! elem.isNull()) {   // header and footer
-        d->loadHeaderFooterFrame(context, pageStyle, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
     }
 
     if (isHeader) {

@@ -110,6 +110,11 @@ KexiEditor::KexiEditor(QWidget *parent)
     if (!d->doc)
         return;
     d->view = d->doc->createView(fr);
+    // set word wrap by default
+    KTextEditor::ConfigInterface *configIface
+        =
+qobject_cast<KTextEditor::ConfigInterface*>( d->view );
+    configIface->setConfigValue("dynamic-word-wrap", true);
 
 #ifdef __GNUC__
 #warning TODO Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );

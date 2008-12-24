@@ -208,7 +208,8 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
     for ( KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
         KoXmlElement tabStop = it.toElement();
-        Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
+	Q_ASSERT( tabStop.prefix() == "style" );
+	Q_ASSERT( tabStop.tagName() == "tab-stop" );
         QString type = tabStop.attributeNS( ooNS::style, "type", QString() ); // left, right, center or char
 
         QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );

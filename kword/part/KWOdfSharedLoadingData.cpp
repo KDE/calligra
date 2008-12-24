@@ -49,7 +49,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
 {
-    kDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! text:anchor-type=" << shape->additionalAttribute("text:anchor-type");
+    //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! text:anchor-type=" << shape->additionalAttribute("text:anchor-type");
 
     KWFrameSet* fs = new KWFrameSet();
     fs->setName("My FrameSet");

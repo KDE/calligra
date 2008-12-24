@@ -9,6 +9,7 @@ include_directories( ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDE_DI
 
 set(kwordprivate_LIB_SRCS
     KWFactory.cpp
+    KWord.cpp
     KWApplicationConfig.cpp
     KWCanvas.cpp
     KWDocument.cpp
@@ -79,10 +80,10 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
 target_link_libraries(kwordprivate ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} koguiutils kotext)
+target_link_libraries(kwordprivate LINK_INTERFACE_LIBRARIES kotext koguiutils ${QT_QT3SUPPORT_LIBRARY})
 
 set_target_properties(kwordprivate
     PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kotext;koguiutils"
 )
 install(TARGETS kwordprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

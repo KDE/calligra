@@ -29,31 +29,40 @@
 class KisTIFFOptions;
 
 /**
-	@author Cyrille Berger <cberger@cberger.net>
+   @author Cyrille Berger <cberger@cberger.net>
 */
 class KisTIFFWriterVisitor : public KisNodeVisitor
 {
-    public:
+public:
 
-        using KisNodeVisitor::visit;
-    
-        KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
-        ~KisTIFFWriterVisitor();
-    public:
-        virtual bool visit(KisExternalLayer * layer) { Q_UNUSED(layer); return true; }
-        virtual bool visit(KisPaintLayer *layer);
-        virtual bool visit(KisGroupLayer *layer);
-        virtual bool visit(KisAdjustmentLayer* ) { return true; }
-        virtual bool visit(KisGeneratorLayer* );
-        
-    private:
-        inline TIFF* image() { return m_image; }
-        inline bool saveAlpha();
-        bool copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
-        bool saveLayerProjection(KisLayer *);
-    private:
-        TIFF* m_image;
-        KisTIFFOptions* m_options;
+    using KisNodeVisitor::visit;
+
+    KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
+    ~KisTIFFWriterVisitor();
+
+public:
+
+    bool visit(KisPaintLayer *layer);
+    bool visit(KisGroupLayer *layer);
+    bool visit(KisGeneratorLayer* );
+
+    bool visit(KisNode*) { return true; }
+    bool visit(KisCloneLayer*) { return true; }
+    bool visit(KisFilterMask*) { return true; }
+    bool visit(KisTransparencyMask*) { return true; }
+    bool visit(KisTransformationMask*) { return true; }
+    bool visit(KisSelectionMask*) { return true; }
+    bool visit(KisExternalLayer*) { return true; }
+    bool visit(KisAdjustmentLayer*) { return true; }
+
+private:
+    inline TIFF* image() { return m_image; }
+    inline bool saveAlpha();
+    bool copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
+    bool saveLayerProjection(KisLayer *);
+private:
+    TIFF* m_image;
+    KisTIFFOptions* m_options;
 };
 
 #endif

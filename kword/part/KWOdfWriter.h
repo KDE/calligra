@@ -29,6 +29,8 @@
 class KWDocument;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
+class KoGenStyles;
+class KWTextFrameSet;
 
 /**
  * Class that has a lot of the OpenDocument (ODF) saving code for KWord.
@@ -56,10 +58,11 @@ public:
     bool save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver);
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs);
+    void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles);
+
+    /// The KWord document.
+    KWDocument *m_document;
 };
 
 #endif

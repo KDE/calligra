@@ -386,12 +386,12 @@ void KWDLoader::loadFrameSets(const KoXmlElement &framesets)
     }
 
     m_itemsLoaded = 0;
-    foreach(const KoXmlElement &elem, frameSetsList) {
+    foreach (const KoXmlElement &elem, frameSetsList) {
         loadFrameSet(elem);
     }
 }
 
-KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote)
+void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote)
 {
     QString fsname = framesetElem.attribute("name");
 
@@ -419,10 +419,10 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                         // Load the cell
                         return table->loadCell( framesetElem );
              */
-            return 0; // TODO support backwards compatible tables
+            return; // TODO support backwards compatible tables
         } else {
             if (framesetElem.attribute("frameInfo").toInt() == 7) { // of type FOOTNOTE
-                return 0; // TODO support old footnote frameset
+                return; // TODO support old footnote frameset
                 /*
                                 if ( !loadFootnote )
                                     return 0;
@@ -441,6 +441,8 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                     m_foundMainFS = true;
                     break;
                 case 1: // first header
+                    if (! m_firstPageStyle.isValid())
+                        return; // we don't need this FS.
                     styleForFS = m_firstPageStyle;
                     type = KWord::OddPagesHeaderTextFrameSet; break;
                 case 2: // even header
@@ -450,6 +452,8 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                     styleForFS = m_pageStyle;
                     type = KWord::OddPagesHeaderTextFrameSet; break;
                 case 4: // first footer
+                    if (! m_firstPageStyle.isValid())
+                        return; // we don't need this FS.
                     styleForFS = m_firstPageStyle;
                     type = KWord::OddPagesFooterTextFrameSet; break;
                 case 5: // even footer
@@ -478,10 +482,10 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
                     case 2: behav = KWord::IgnoreContentFrameBehavior; break;
                     default: behav = KWord::AutoExtendFrameBehavior; break;
                     }
-                    foreach(KWFrame *frame, fs->frames())
+                    foreach (KWFrame *frame, fs->frames())
                         frame->setFrameBehavior(behav);
                 }
-                return fs;
+                return;
             }
         }
     }
@@ -492,21 +496,21 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
     case 2: { // FT_PICTURE
         KoXmlElement frame = framesetElem.namedItem("FRAME").toElement();
         if (frame.isNull())
-            return 0;
+            return;
         KoXmlElement image = framesetElem.namedItem("IMAGE").toElement();
         if (image.isNull())
             image = framesetElem.namedItem("PICTURE").toElement();
         if (image.isNull())
-            return 0;
+            return;
         KoXmlElement key = image.namedItem("KEY").toElement();
         if (key.isNull())
-            return 0;
+            return;
 
         ImageKey imageKey;
         fill(&imageKey, key);
         if (imageKey.filename.isEmpty()) {
             kWarning() << "could not find image in the store\n";
-            return 0;
+            return;
         }
 
         KWFrameSet *fs = new KWFrameSet();
@@ -526,32 +530,32 @@ KWFrameSet *KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadF
         KWFrame * f = new KWFrame( shape, fs );
         fill( f, frame );
         m_document->addFrameSet(fs);
-        return fs;
+        return;
     }
     case 4: { //FT_FORMULA
 #if 0
         KWFormulaFrameSet *fs = new KWFormulaFrameSet(this, fsname);
         fs->load(framesetElem, loadFrames);
         addFrameSet(fs, false);
-        return fs;
+        return;
 #endif
         // TODO support old formula frameset
-        return 0;
+        return;
     }
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
     // and FT_TABLE can't happen either.
     case 3: // FT_PART
         kWarning(32001) << "loadFrameSet: FT_PART: impossible case" << endl;
-        return 0;
+        return;
     case 10: // FT_TABLE
         kWarning(32001) << "loadFrameSet: FT_TABLE: impossible case" << endl;
-        return 0;
+        return;
     case 0: // FT_BASE
         kWarning(32001) << "loadFrameSet: FT_BASE !?!?" << endl;
-        return 0;
+        return;
     default: // other
         kWarning(32001) << "loadFrameSet error: unknown type, skipping" << endl;
-        return 0;
+        return;
     }
 }
 
@@ -1070,7 +1074,7 @@ void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement)
     key->filename = keyElement.attribute("name");
 
     if (key->filename.isEmpty()) {
-        foreach(const ImageKey &storedKey, m_images) {
+        foreach (const ImageKey &storedKey, m_images) {
             if (storedKey.year == key->year && storedKey.oldFilename == key->oldFilename &&
                     storedKey.month == key->month && storedKey.day == key->day &&
                     storedKey.hour == key->hour && storedKey.minute == key->minute &&
@@ -1129,7 +1133,7 @@ void KWDLoader::loadStyleTemplates(const KoXmlElement &stylesElem)
 
 void KWDLoader::insertAnchors()
 {
-    foreach(const AnchorData &anchor, m_anchors) {
+    foreach (const AnchorData &anchor, m_anchors) {
         KWFrameSet *fs = m_document->frameSetByName(anchor.frameSetName);
         if (fs == 0) {
             kWarning() << "Anchored frameset not found: '" << anchor.frameSetName << endl;

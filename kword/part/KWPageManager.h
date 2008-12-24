@@ -107,9 +107,7 @@ public:
     /**
      * Inserts a new page at the specified position in the document.
      * Shifts the page currently at that position (if any) and any subsequent pages after.
-     * if onlyAllowAppend is set to true the pagenumber will be ignored and the new page
-     * will always be appended.
-     * @param pageNumber page number of the new page
+     * @param pageNumber page number of the new page, or -1 to append
      * @param pageStyle the page style to use for the new page
      */
     KWPage insertPage(int pageNumber, const KWPageStyle &pageStyle = KWPageStyle());

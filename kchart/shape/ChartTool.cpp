@@ -192,7 +192,7 @@ void ChartTool::activate( bool )
 	// chart shape, but also plotarea or legend) into the tool
 	// option widget.
         if ( selectedShape ) {
-            foreach ( QWidget *w, optionWidgets().values() ) {
+            foreach ( QWidget *w, optionWidgets() ) {
                 KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
                 Q_ASSERT( widget );
                 if ( widget )
@@ -351,7 +351,7 @@ void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
     d->shape->update();
     d->shape->legend()->update();
     
-    foreach (QWidget *w, optionWidgets().values())
+    foreach (QWidget *w, optionWidgets())
         w->update();
 }
 
@@ -572,7 +572,7 @@ void ChartTool::setLegendFixedPosition( LegendPosition position )
     Q_ASSERT( d->shape->legend() );
     d->shape->legend()->setLegendPosition( position );
 
-    foreach (QWidget *w, optionWidgets().values()) {
+    foreach (QWidget *w, optionWidgets()) {
         ( ( ChartConfigWidget* ) w )->updateFixedPosition( position );
     }
 

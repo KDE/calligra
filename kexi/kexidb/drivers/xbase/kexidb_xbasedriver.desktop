@@ -9,6 +9,7 @@ Comment[et]=Kexi andmebaasidraiver xBase andmebaasifailide kasutamiseks
 Comment[ga]=Tiománaí bunachair sonraí Kexi lenar féidir comhaid bhunachar sonraí xBase a rochtain
 Comment[gl]=Controlador da base de datos de Kexi para o acceso a bases de batos xBase
 Comment[it]=Driver per banche dati Kexi per accedere ai file di banche dati xBase
+Comment[ja]=xBase データベースファイルにアクセスするための Kexi データベースドライバ
 Comment[kk]=Kexi деректер қорының xBase файлдарына қатынау драйвері
 Comment[nb]=Kexi databasedriver fpor tilgang til xBase-databasefiler
 Comment[nds]=Kexi-Datenbankdriever för den Togriep op xBase-Datenbankdateien

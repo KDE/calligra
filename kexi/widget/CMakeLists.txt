@@ -2,6 +2,8 @@ add_subdirectory( utils )
 add_subdirectory( tableview )
 add_subdirectory( relations )
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44023)
+
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
 
 

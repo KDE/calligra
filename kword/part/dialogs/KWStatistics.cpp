@@ -112,7 +112,7 @@ void KWStatistics::updateData()
 
     bool footEnd = m_showInDocker ? widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
 
-    foreach(KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0) continue;
         if (m_showInDocker && (!(footEnd ||

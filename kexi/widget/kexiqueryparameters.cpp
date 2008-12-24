@@ -27,11 +27,7 @@
 #include <kexidb/queryschemaparameter.h>
 #include <kexidb/utils.h>
 #include <kexi_global.h>
-#ifdef __GNUC__
-#warning TODO include "utils/kexidatetimeformatter.h"
-#else
-#pragma WARNING( TODO include "utils/kexidatetimeformatter.h" )
-#endif
+#include "utils/kexidatetimeformatter.h"
 
 //static
 QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
@@ -71,12 +67,6 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
             break;
         }
         case KexiDB::Field::Date: {
-#ifdef __GNUC__
-#warning TODO reenable when formatter is ported: case KexiDB::Field::Date:
-#else
-#pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::Date: )
-#endif
-#if 0
                 KexiDateFormatter df;
                 const QString result = KInputDialog::getText(
                                            caption, (*it).message, QString(), &ok, parent, 0/*name*/,
@@ -85,16 +75,9 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                 if (!ok)
                     return QList<QVariant>(); //cancelled
                 values.append(df.stringToDate(result));
-#endif
                 break;
             }
         case KexiDB::Field::DateTime: {
-#ifdef __GNUC__
-#warning TODO reenable when formatter is ported: case KexiDB::Field::DateTime:
-#else
-#pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::DateTime: )
-#endif
-#if 0
                 KexiDateFormatter df;
                 KexiTimeFormatter tf;
                 const QString result = KInputDialog::getText(
@@ -104,16 +87,9 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                 if (!ok)
                     return QList<QVariant>(); //cancelled
                 values.append(stringToDateTime(df, tf, result));
-#endif
                 break;
             }
         case KexiDB::Field::Time: {
-#ifdef __GNUC__
-#warning TODO reenable when formatter is ported: case KexiDB::Field::Time:
-#else
-#pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::Time: )
-#endif
-#if 0
                 KexiTimeFormatter tf;
                 const QString result = KInputDialog::getText(
                                            caption, (*it).message, QString(), &ok, parent, 0/*name*/,
@@ -122,7 +98,6 @@ QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
                 if (!ok)
                     return QList<QVariant>(); //cancelled
                 values.append(tf.stringToTime(result));
-#endif
                 break;
             }
         case KexiDB::Field::Float:

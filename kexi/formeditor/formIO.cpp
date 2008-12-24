@@ -964,7 +964,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
     // Save the buddy widget for a label
     if (item->widget()->inherits("QLabel") && ((QLabel*)item->widget())->buddy())
-        savePropertyElement(tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->name());
+        savePropertyElement(
+            tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->objectName());
 
     // We save every property in the modifProp list of the ObjectTreeItem
     QVariantMap *map = new QVariantMap(*(item->modifiedProperties()));
@@ -1181,7 +1182,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
         item =  new ObjectTreeItem(container->form()->library()->displayName(classname),
                                    wname, w, container);
         if (parent)  {
-            ObjectTreeItem *titem = container->form()->objectTree()->lookup(parent->name());
+            ObjectTreeItem *titem = container->form()->objectTree()->lookup(parent->objectName());
             if (titem)
                 container->form()->objectTree()->addItem(titem, item);
             else

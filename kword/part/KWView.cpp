@@ -39,7 +39,6 @@
 #include "dialogs/KWSelectBookmarkDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
-#include "commands/KWPageRemoveCommand.h"
 #include "commands/KWCreateOutlineCommand.h"
 
 // koffice libs includes
@@ -123,7 +122,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
     if (docker && docker->view() != this) docker->setView(this);
 
-    m_statusBar = statusBar() ? new KWStatusBar(statusBar(), this) : 0;
+    new KWStatusBar(statusBar(), this);
 }
 
 KWView::~KWView()
@@ -212,7 +211,7 @@ void KWView::setupActions()
     connect(m_actionSendBackward, SIGNAL(triggered()), this, SLOT(sendToBack()));
 
     KActionMenu *actionMenu = new KActionMenu(i18n("Variable"), this);
-    foreach(QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(kwcanvas()))
+    foreach (QAction *action, m_document->inlineTextObjectManager()->createInsertVariableActions(kwcanvas()))
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
@@ -791,7 +790,7 @@ void KWView::setupActions()
 QList<KWFrame*> KWView::selectedFrames() const
 {
     QList<KWFrame*> frames;
-    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
+    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         frames.append(frame);
@@ -932,7 +931,7 @@ void KWView::deleteBookmark(const QString &name)
 void KWView::editDeleteFrame()
 {
     QList<KoShape*> frames;
-    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         if (frame) {
             KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
@@ -999,8 +998,10 @@ void KWView::inlineFrame()
     KoSelection *selection = kwcanvas()->shapeManager()->selection();
 
     KoShape *targetShape = 0;
-    foreach(KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
         if (shape->isLocked())
+            continue;
+        if (shape->parent())
             continue;
         targetShape = shape;
         break; // TODO group before...
@@ -1017,7 +1018,7 @@ void KWView::inlineFrame()
     int area = 0;
     QRectF br = targetShape->boundingRect();
     // now find the frame that is closest to the frame we want to inline.
-    foreach(KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
+    foreach (KWFrame *frame, kwdocument()->mainFrameSet()->frames()) {
         QRectF intersection = br.intersected(frame->shape()->boundingRect());
         int intersectArea = qRound(intersection.width() * intersection.height());
         if (intersectArea > area) {
@@ -1068,7 +1069,7 @@ void KWView::createLinkedFrame()
     selection->deselectAll();
 
     QUndoCommand *cmd = new QUndoCommand(i18n("Create Linked Copy"));
-    foreach(KoShape *shape, oldSelection) {
+    foreach (KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
         KWCopyShape *copy = new KWCopyShape(frame->shape());
@@ -1117,8 +1118,8 @@ void KWView::setShowFormattingChars(bool on)
 void KWView::editSelectAllFrames()
 {
     KoSelection *selection = kwcanvas()->shapeManager()->selection();
-    foreach(KWFrameSet* fs, m_document->frameSets()) {
-        foreach(KWFrame *frame, fs->frames()) {
+    foreach (KWFrameSet* fs, m_document->frameSets()) {
+        foreach (KWFrame *frame, fs->frames()) {
             if (frame->shape()->isVisible())
                 selection->select(frame->shape());
         }
@@ -1145,7 +1146,7 @@ void KWView::createCustomOutline()
         return;
     }
     QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
-    foreach(KWFrame *frame, frames)
+    foreach (KWFrame *frame, frames)
         new KWCreateOutlineCommand(m_document, frame, cmd);
     m_document->addCommand(cmd);
 }
@@ -1192,7 +1193,7 @@ void KWView::selectionChanged()
     // actions need at least one shape selected
     actionCollection()->action("create_linked_frame")->setEnabled(shape);
 
-    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
         m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);

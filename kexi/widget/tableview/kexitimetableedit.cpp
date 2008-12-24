@@ -48,7 +48,7 @@
 KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QWidget *parent)
         : KexiInputTableEdit(column, parent)
 {
-    setName("KexiTimeTableEdit");
+    setObjectName("KexiTimeTableEdit");
 
 //! @todo add QValidator so time like "99:88:77" cannot be even entered
 

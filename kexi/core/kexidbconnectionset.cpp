@@ -149,11 +149,11 @@ void KexiDBConnectionSet::load()
 {
     clear();
 // QStringList dirs( KGlobal::dirs()->findDirs("data", "kexi/connections") );
-// kexidbg << dirs;
+// kDebug() << dirs;
     QStringList files(KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic"));
 // //also try for capital file extension
 // files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-// kexidbg << files;
+// kDebug() << files;
 
     foreach(const QString& file, files) {
         KexiDB::ConnectionData *data = new KexiDB::ConnectionData();

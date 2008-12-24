@@ -26,16 +26,10 @@ kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
 target_link_libraries(
     kformulaprivate
-    koguiutils
     kformulalib
-    komain
-    flake
-    kostore
-    ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KDE3SUPPORT_LIBS}
-    ${QT_QTCORE_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )
 
@@ -51,7 +45,7 @@ set(kformulapart_PART_SRCS KFormulaPartFactoryInit.cpp )
 
 kde4_add_plugin(kformulapart WITH_PREFIX ${kformulapart_PART_SRCS})
 
-target_link_libraries(kformulapart  ${KDE4_KDECORE_LIBS} kformulaprivate )
+target_link_libraries(kformulapart  ${KDE4_KPARTS_LIBS} kformulaprivate)
 
 install(TARGETS kformulapart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

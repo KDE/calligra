@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,8 +70,11 @@ protected:
     //! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
     QString m_inputMask;
 
+    //! Order of date's components (day, month, year)
+    enum Order { DMY, MDY, YMD, YDM };
+
     //! Order of date sections
-    QDateEdit::Order m_order;
+    Order m_order;
 
     //! 4 or 2 digits
     bool m_longYear;

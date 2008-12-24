@@ -3,7 +3,9 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES}
 set(kpr_pageeffect_barwipe_PART_SRCS Plugin.cpp
     KPrBarWipeEffectFactory.cpp
     KPrBarWipeFromLeftStrategy.cpp
+    KPrBarWipeFromRightStrategy.cpp
     KPrBarWipeFromTopStrategy.cpp
+    KPrBarWipeFromBottomStrategy.cpp
 )
 
 kde4_add_plugin(kpr_pageeffect_barwipe ${kpr_pageeffect_barwipe_PART_SRCS})

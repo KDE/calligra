@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2008 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,11 +21,14 @@
 #ifndef KWSTATUSBAR_H
 #define KWSTATUSBAR_H
 
-#include <QObject>
+#include <QPointer>
 
 class QPoint;
 class KStatusBar;
 class KWView;
+class QLabel;
+class KSqueezedTextLabel;
+class KoCanvasController;
 
 /**
 * The KWStatusBar class implements an extended statusbar for KWord.
@@ -53,17 +57,23 @@ public slots:
     void setText(const QString& text);
 
 private slots:
-    void slotModifiedChanged(bool modified);
-    void slotPagesChanged();
-    void slotMousePositionChanged(const QPoint&);
-    void slotResourceChanged(int, const QVariant&);
-    void slotChangedTool();
+    void setModified(bool modified);
+    void updatePageCount();
+    void updateMousePosition(const QPoint&);
+    void resourceChanged(int, const QVariant&);
+    void updateCurrentTool();
 
 private:
-    /// \internal d-pointer class.
-    class Private;
-    /// \internal d-pointer instance.
-    Private* const d;
+    KStatusBar * m_statusbar;
+    KWView* m_view;
+    QPointer<KoCanvasController> m_controller;
+    int m_currentPageNumber;
+
+    QLabel* m_modifiedLabel;
+    QLabel* m_pageLabel;
+    QLabel* m_mousePosLabel;
+    KSqueezedTextLabel* m_statusLabel;
+    QWidget* m_zoomWidget;
 };
 
 #endif

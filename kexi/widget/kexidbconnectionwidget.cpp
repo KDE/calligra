@@ -52,7 +52,7 @@ public:
     }
 
     KPushButton *btnSaveChanges, *btnTestConnection;
-bool connectionOnly : 1;
+    bool connectionOnly : 1;
 };
 
 //---------

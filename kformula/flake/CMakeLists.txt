@@ -40,7 +40,8 @@ set( kformulalib_PART_SRCS
 
 kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 
-target_link_libraries(kformulalib flake koodf kostore ${KDE4_KDEUI_LIBS} koguiutils)
+target_link_libraries(kformulalib ${KDE4_KDEUI_LIBS} koguiutils)
+target_link_libraries(kformulalib LINK_INTERFACE_LIBRARIES koguiutils)
 
 set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

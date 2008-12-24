@@ -79,11 +79,7 @@ void KexiInputTableEdit::init()
 // kDebug() << "KexiInputTableEdit: type== " << field()->typeName();
 // kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName();
 
-#ifdef __GNUC__
-#warning TODO reenable  m_textFormatter.setField( field() );
-#else
-#pragma WARNING( TODO reenable  m_textFormatter.setField( field() ); )
-#endif
+    m_textFormatter.setField( field() );
 
     //init settings
     m_decsym = KGlobal::locale()->decimalSymbol();
@@ -133,12 +129,7 @@ void KexiInputTableEdit::init()
 
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
-    QString text; //tmp
-#ifdef __GNUC__
-#warning TODO reenable  QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
-#else
-#pragma WARNING( TODO reenable  QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) ); )
-#endif
+    QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
     if (text.isEmpty()) {
         if (m_origValue.toString().isEmpty()) {
             //we have to set NULL initial value:
@@ -162,76 +153,6 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
         m_lineedit->setValidator(validator);
     }
 }
-
-#if 0
-//moved to KexiTextFormatter
-QString KexiInputTableEdit::valueToText(KexiDB::Field* field, const QVariant& value, const QString& add)
-{
-    QString text; //result
-
-    if (field->isFPNumericType()) {
-//! @todo precision!
-//! @todo support 'g' format
-        text = QString::number(value.toDouble(), 'f',
-                               qMax(field->visibleDecimalPlaces(), 10)); //<-- 10 is quite good maximum for fractional digits
-        //! @todo add command line settings?
-        if (value.toDouble() == 0.0) {
-            text = add.isEmpty() ? "0" : add; //eat 0
-        } else {
-//! @todo (js): get decimal places settings here...
-            QStringList sl = QStringList::split(".", text);
-            if (text.isEmpty()) {
-                //nothing
-            } else if (sl.count() == 2) {
-//    kDebug() << "sl.count()=="<<sl.count()<< " " <<sl[0] << " | " << sl[1];
-                const QString sl1 = sl[1];
-                int pos = sl1.length() - 1;
-                if (pos >= 1) {
-                    for (;pos >= 0 && sl1[pos] == '0';pos--)
-                        ;
-                    pos++;
-                }
-                if (pos > 0)
-                    text = sl[0] + m_decsym + sl1.left(pos);
-                else
-                    text = sl[0]; //no decimal point
-            }
-            text += add;
-        }
-        /*moved to KexiDB::FieldValidator
-            if (setValidator && !m_lineedit->validator()) {
-              QValidator *validator = new KDoubleValidator(m_lineedit);
-              m_lineedit->setValidator( validator );
-            }*/
-    } else {
-        text = value.toString();
-        if (field->isIntegerType()) {
-            if (value.toInt() == 0) {
-                text = add; //eat 0
-            } else {
-                text += add;
-            }
-            /*moved to KexiDB::FieldValidator
-            //! @todo implement ranges here!
-                  if (setValidator && !m_lineedit->validator()) {
-                    QValidator *validator;
-                    if (KexiDB::Field::BigInteger == field()->type()) {
-            //! @todo use field->isUnsigned() for KexiUtils::ULongLongValidator
-                      validator = new KexiUtils::LongLongValidator(m_lineedit);
-                    }
-                    else {
-                      validator = new KIntValidator(m_lineedit);
-                    }
-                    m_lineedit->setValidator( validator );
-                  }*/
-        } else {//default: text
-            text += add;
-        }
-    }
-
-    return text;
-}
-#endif
 
 void KexiInputTableEdit::paintEvent(QPaintEvent * /*e*/)
 {
@@ -350,11 +271,7 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
     Q_UNUSED(visibleValue);
 //! @todo handle rich text?
-#ifdef __GNUC__
-#warning TODO reenable qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) );
-#else
-#pragma WARNING( TODO reenable qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) ); )
-#endif
+    qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) );
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -380,17 +297,9 @@ void KexiInputTableEdit::handleAction(const QString& actionName)
 bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect& rect,
         const QFontMetrics& fm, bool focused)
 {
-    QString text; //tmp
-#ifdef __GNUC__
-#warning TODO reenable QString text( value.type()==QVariant::String ? value.toString()
-#else
-#pragma WARNING( TODO reenable QString text( value.type()==QVariant::String ? value.toString() )
-#endif
-#ifdef __GNUC__
-#warning TODO reenable  : m_textFormatter.valueToText(value, QString());
-#else
-#pragma WARNING( TODO reenable  : m_textFormatter.valueToText(value, QString()); )
-#endif
+    QString text( value.type()==QVariant::String 
+        ? value.toString() : m_textFormatter.valueToText(value, QString()) );
+
     QRect internalRect(rect);
     internalRect.setLeft(rect.x() + leftMargin());
     internalRect.setWidth(internalRect.width() - rightMargin(focused) - 2*3);

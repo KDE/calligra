@@ -21,6 +21,7 @@
 #include "KWTextDocumentLayout.h"
 #include "KWTextFrameSet.h"
 #include "KWTextFrame.h"
+#include "KWCopyShape.h"
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "KWPageTextInfo.h"
@@ -35,6 +36,15 @@
 
 #include <QList>
 #include <QPainterPath>
+#include <QTextBlock>
+
+// #define DEBUG_TEXT
+
+#ifdef DEBUG_TEXT
+#define TDEBUG kDebug(32002)
+#else
+#define TDEBUG if(0) kDebug(32002)
+#endif
 
 // helper methods
 static qreal xAtY(const QLineF &line, qreal y)
@@ -134,7 +144,7 @@ public:
         QPolygonF poly = path.toFillPolygon();
 
         QPointF prev = *(poly.begin());
-        foreach(const QPointF &vtx, poly) { //initialized edges
+        foreach (const QPointF &vtx, poly) { //initialized edges
             if (vtx.x() == prev.x() && vtx.y() == prev.y())
                 continue;
             QLineF line;
@@ -249,7 +259,7 @@ KWTextDocumentLayout::~KWTextDocumentLayout()
 QList<KoShape*> KWTextDocumentLayout::shapes() const
 {
     QList<KoShape*> answer;
-    foreach(KWFrame *frame, m_frameSet->frames()) {
+    foreach (KWFrame *frame, m_frameSet->frames()) {
         if (frame->isCopy())
             continue;
         answer.append(frame->shape());
@@ -266,7 +276,7 @@ void KWTextDocumentLayout::relayout()
     QList<KWFrame*> dirtyFrames = frames;
     bool foundADirtyOne = false;
     KWFrame *firstDirtyFrame = 0;
-    foreach(KWFrame *frame, frames) {
+    foreach (KWFrame *frame, frames) {
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
         if (!firstDirtyFrame && data && data->isDirty())
             firstDirtyFrame = frame;
@@ -279,7 +289,7 @@ void KWTextDocumentLayout::relayout()
     if (foundADirtyOne) {
         // if the dirty frame has been resorted to no longer be the first one, then we should
         // mark dirty any frame that were previously later in the flow, but are now before it.
-        foreach(KWFrame *frame, frames) {
+        foreach (KWFrame *frame, frames) {
             if (frame == firstDirtyFrame)
                 break;
             if (dirtyFrames.contains(frame)) {
@@ -298,7 +308,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     KoTextDocumentLayout::positionInlineObject(item, position, f);
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
         if (strategy->anchor() == anchor) return;
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
@@ -306,7 +316,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KWTextDocumentLayout::layout()
 {
-//kDebug() <<"KWTextDocumentLayout::layout";
+    TDEBUG <<"KWTextDocumentLayout::layout";
     QList<Outline*> outlines;
     class End
     {
@@ -375,7 +385,7 @@ void KWTextDocumentLayout::layout()
         private:
             QRectF limit(const QRectF &rect) {
                 QRectF answer = rect;
-                foreach(Outline *outline, *m_outlines)
+                foreach (Outline *outline, *m_outlines)
                 answer = outline->limit(answer);
                 return answer;
             }
@@ -391,11 +401,11 @@ void KWTextDocumentLayout::layout()
                 outlines.clear();
 
                 QRectF bounds = m_state->shape->boundingRect();
-                foreach(KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
+                foreach (KWFrameSet *fs, m_frameSet->kwordDocument()->frameSets()) {
                     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
                     if (tfs && tfs->textFrameSetType() == KWord::MainTextFrameSet)
                         continue;
-                    foreach(KWFrame *frame, fs->frames()) {
+                    foreach (KWFrame *frame, fs->frames()) {
                         if (frame->shape() == currentShape)
                             continue;
                         if (frame->textRunAround() == KWord::RunThrough)
@@ -434,7 +444,7 @@ void KWTextDocumentLayout::layout()
 
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
-        foreach(KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             if (strategy->checkState(m_state)) {
                 restartLine = true;
                 break;
@@ -447,7 +457,7 @@ void KWTextDocumentLayout::layout()
         if (restartLine)
             continue;
 
-        foreach(KWAnchorStrategy *strategy, m_newAnchors) {
+        foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             if (strategy->anchoredShape() != 0) {
                 QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
                 matrix = matrix * currentShape->absoluteTransformation(0).inverted();
@@ -499,7 +509,8 @@ void KWTextDocumentLayout::layout()
 
                 return; // done!
             } else if (m_state->shape == 0) {
-                // encountered a 'end of page' break but we don't have any more pages(/shapes)
+                TDEBUG << "encountered an 'end of page' break, we need an extra page to honor that!";
+                // encountered an 'end of page' break but we don't have any more pages(/shapes)
                 m_state->clearTillEnd();
                 m_frameSet->requestMoreFrames(0); // new page, please.
                 currentShape->update();
@@ -510,26 +521,40 @@ void KWTextDocumentLayout::layout()
         }
         if (m_state->interrupted() || (newParagraph && m_state->y() > endPos)) {
             // enough for now. Try again later.
-            scheduleLayout();
+            TDEBUG << "schedule a next layout due to having done a layout of quite some space";
+            scheduleLayoutWithoutInterrupt();
             return;
         }
         newParagraph = false;
         line.setOutlines(outlines);
         line.tryFit();
+#ifdef DEBUG_TEXT
+        if (line.line.isValid()) {
+            QTextBlock b = document()->findBlock(m_state->cursorPosition());
+            if (b.isValid())
+                TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
+                TDEBUG << "         @ " << line.line.position() << " from parag at pos " << b.position();
+        }
+#endif
+
         bottomOfText = line.line.y() + line.line.height();
 
         while (m_state->addLine(line.line)) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
+                TDEBUG << "no more shape for our text; bottom is" << m_state->y();
                 line.line.setPosition(QPointF(0, m_state->y() + 20));
 
                 if (requestFrameResize) { // plenty more text, but first lets resize the shape.
+                    TDEBUG << "  we need more space; we require at least:" << m_dummyShape->size().height();
                     m_frameSet->requestMoreFrames(m_dummyShape->size().height());
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
                 }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
-                if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior) {
+                if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior
+                        || KWord::isHeaderFooter(m_frameSet)
+                        || dynamic_cast<KWCopyShape*> (lastFrame)) {
                     m_state->clearTillEnd();
                     return; // done!
                 }
@@ -557,6 +582,7 @@ void KWTextDocumentLayout::layout()
                 const qreal maxFrameLength = qMin(down.length(), down2.length());
                 if (maxFrameLength <= currentShape->size().height()) {
                     m_state->clearTillEnd();
+                    TDEBUG << "  we need another page";
                     m_frameSet->requestMoreFrames(0); // new page, please.
                     return;
                 }
@@ -572,6 +598,14 @@ void KWTextDocumentLayout::layout()
                 requestFrameResize = true;
             }
             line.tryFit();
+#ifdef DEBUG_TEXT
+            if (line.line.isValid()) {
+                QTextBlock b = document()->findBlock(m_state->cursorPosition());
+                if (b.isValid())
+                    TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
+                    TDEBUG << "         @ " << line.line.position() << " from parag at pos " << b.position();
+            }
+#endif
         }
 
         QRectF repaintRect = line.line.rect();
@@ -580,6 +614,8 @@ void KWTextDocumentLayout::layout()
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
         m_state->shape->update(repaintRect);
     }
-    if (requestFrameResize)
+    if (requestFrameResize) {
+        TDEBUG << "  requestFrameResize" << m_dummyShape->size().height();
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());
+    }
 }

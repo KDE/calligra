@@ -24,6 +24,8 @@
 
 #include "KPrBarWipeFromTopStrategy.h"
 #include "KPrBarWipeFromLeftStrategy.h"
+#include "KPrBarWipeFromBottomStrategy.h"
+#include "KPrBarWipeFromRightStrategy.h"
 
 #define BarWipeEffectId "BarWipeEffect"
 
@@ -31,7 +33,9 @@ KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
 : KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar" ) )
 {
     addStrategy( new KPrBarWipeFromTopStrategy() );
+    addStrategy( new KPrBarWipeFromBottomStrategy() );
     addStrategy( new KPrBarWipeFromLeftStrategy() );
+    addStrategy( new KPrBarWipeFromRightStrategy() );
 }
 
 KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
@@ -40,7 +44,9 @@ KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
 
 static const char* s_subTypes[] = {
     I18N_NOOP( "From Left" ),
-    I18N_NOOP( "From Top" )
+    I18N_NOOP( "From Top" ),
+    I18N_NOOP( "From Right" ),
+    I18N_NOOP( "From Bottom" )
 };
 
 QString KPrBarWipeEffectFactory::subTypeName(int subType) const

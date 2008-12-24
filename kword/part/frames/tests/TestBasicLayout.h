@@ -21,6 +21,8 @@ private slots:
     void testShouldHaveHeaderOrFooter();
     void headerPerPage();
     void testFrameCreation();
+    void testCreateNewFrameForPage_data();
+    void testCreateNewFrameForPage();
 
     // helper
     void addFS(KWFrameSet*);

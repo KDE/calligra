@@ -810,16 +810,16 @@ void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Con
     if ( val.contains( "cell-content-is-between(" ) )
     {
         val = val.remove( "cell-content-is-between(" );
-        val = val.remove( ")" );
-        QStringList listVal = val.split( "," );
+        val = val.remove( ')' );
+        QStringList listVal = val.split( ',' );
         loadOasisValidationValue( listVal, newCondition );
         newCondition.cond = Conditional::Between;
     }
     if ( val.contains( "cell-content-is-not-between(" ) )
     {
         val = val.remove( "cell-content-is-not-between(" );
-        val = val.remove( ")" );
-        QStringList listVal = val.split( "," );
+        val = val.remove( ')' );
+        QStringList listVal = val.split( ',' );
         loadOasisValidationValue( listVal,newCondition );
         newCondition.cond = Conditional::Different;
     }
@@ -2449,8 +2449,8 @@ void OpenCalcImport::loadOasisValidation( Validity validity, const QString& vali
             validity.setCondition( Conditional::Between );
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kDebug(30518)<<" valExpression :"<<valExpression;
-            valExpression = valExpression.remove( ")" );
-            QStringList listVal = valExpression.split( "," );
+            valExpression = valExpression.remove( ')' );
+            QStringList listVal = valExpression.split( ',' );
             loadOasisValidationValue( validity, listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
@@ -2459,9 +2459,9 @@ void OpenCalcImport::loadOasisValidation( Validity validity, const QString& vali
             validity.setCondition( Conditional::Different );
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
             kDebug(30518)<<" valExpression :"<<valExpression;
-            valExpression = valExpression.remove( ")" );
+            valExpression = valExpression.remove( ')' );
             kDebug(30518)<<" valExpression :"<<valExpression;
-            QStringList listVal = valExpression.split( "," );
+            QStringList listVal = valExpression.split( ',' );
             loadOasisValidationValue( validity, listVal );
 
         }
@@ -2500,8 +2500,8 @@ void OpenCalcImport::loadOasisValidation( Validity validity, const QString& vali
             if ( valExpression.contains( "cell-content-is-between(" ) )
             {
                 valExpression = valExpression.remove( "cell-content-is-between(" );
-                valExpression = valExpression.remove( ")" );
-                QStringList listVal = valExpression.split( "," );
+                valExpression = valExpression.remove( ')' );
+                QStringList listVal = valExpression.split( ',' );
                 loadOasisValidationValue( validity, listVal );
 
                 validity.setCondition( Conditional::Between );
@@ -2509,8 +2509,8 @@ void OpenCalcImport::loadOasisValidation( Validity validity, const QString& vali
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
             {
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
-                valExpression = valExpression.remove( ")" );
-                QStringList listVal = valExpression.split( "," );
+                valExpression = valExpression.remove( ')' );
+                QStringList listVal = valExpression.split( ',' );
                 loadOasisValidationValue( validity, listVal );
                 validity.setCondition( Conditional::Different );
             }
@@ -2634,17 +2634,17 @@ void OpenCalcImport::loadOasisValidationCondition( Validity validity, QString &v
     }
     else if ( valExpression.contains( "<" ) )
     {
-        value = valExpression.remove( "<" );
+        value = valExpression.remove( '<' );
         validity.setCondition( Conditional::Inferior );
     }
     else if(valExpression.contains( ">" ) )
     {
-        value = valExpression.remove( ">" );
+        value = valExpression.remove( '>' );
         validity.setCondition( Conditional::Superior );
     }
     else if (valExpression.contains( "=" ) )
     {
-        value = valExpression.remove( "=" );
+        value = valExpression.remove( '=' );
         validity.setCondition( Conditional::Equal );
     }
     else

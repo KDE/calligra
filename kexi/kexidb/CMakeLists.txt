@@ -93,7 +93,7 @@ install( FILES  connection.h connectiondata.h cursor.h
  schemadata.h tableschema.h queryschema.h queryschemaparameter.h indexschema.h 
  relationship.h parser/parser.h parser/sqlparser.h transaction.h preparedstatement.h  
  RecordData.h utils.h
- kexidb_export.h kexidb_global.h DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb)
+ kexidb_export.h kexidb_global.h DESTINATION ${INCLUDE_INSTALL_DIR}/kexidb COMPONENT Devel)
 install( FILES  kexidb_driver.desktop  DESTINATION ${SERVICETYPES_INSTALL_DIR})
 
 

@@ -79,7 +79,7 @@ void KWViewModeNormal::updatePageCache()
     }
 
     m_pageSpreadMode = false;
-    foreach(const KWPage &page, m_pageManager->pages()) {
+    foreach (const KWPage &page, m_pageManager->pages()) {
         if (page.pageSide() == KWPage::PageSpread) {
             m_pageSpreadMode = true;
             break;
@@ -89,7 +89,7 @@ void KWViewModeNormal::updatePageCache()
     qreal width = 0.0, bottom = 0.0;
     if (m_pageSpreadMode) { // two pages next to each other per row
         qreal top = 0.0, last = 0.0, halfWidth = 0.0;
-        foreach(const KWPage &page, m_pageManager->pages()) {
+        foreach (const KWPage &page, m_pageManager->pages()) {
             switch (page.pageSide()) {
             case KWPage::PageSpread:
                 if (last > 0)
@@ -163,7 +163,7 @@ QPointF KWViewModeNormal::viewToDocument(const QPointF & point) const
     QPointF clippedPoint(qMax(qreal(0.0), point.x()), qMax(qreal(0.0), point.y()));
     QPointF translated = m_viewConverter->viewToDocument(clippedPoint);
     int pageNumber = 0;
-    foreach(qreal top, m_pageTops) {
+    foreach (qreal top, m_pageTops) {
         if (translated.y() < top)
             break;
         pageNumber++;

@@ -37,7 +37,7 @@ KWPrintingDialog::KWPrintingDialog(KWView *view)
         m_clipToPage(false)
 {
     setShapeManager(view->kwcanvas()->shapeManager());
-    printer().setFromTo(0/*m_document->startPage()*/, m_document->pageManager()->pageCount() - 1);
+    printer().setFromTo(documentFirstPage(), documentLastPage());
     // TODO if the doc is not yet done layouting, the lastpage is not correct
 }
 
@@ -64,7 +64,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
 #endif
     const qreal offsetInDocument = page.offsetInDocument();
     // find images
-    foreach(KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
         if (fs->frameCount() == 0) continue;
         KWFrame *frame = fs->frames().at(0);
         if (frame == 0) continue;
@@ -102,8 +102,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
 
 QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 {
-    Q_ASSERT(pageNumber >= 0);
-    Q_ASSERT(pageNumber < m_document->pageManager()->pageCount());
+    Q_ASSERT(pageNumber > 0);
     KWPage page = m_document->pageManager()->page(pageNumber);
     Q_ASSERT(page.isValid());
     return shapeManager()->shapesAt(page.rect());
@@ -111,8 +110,8 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)
 
 void KWPrintingDialog::printingDone()
 {
-    foreach(KoImageData *image, m_originalImages.keys())
-    image->setImageQuality(m_originalImages[image]);
+    foreach (KoImageData *image, m_originalImages.keys())
+        image->setImageQuality(m_originalImages[image]);
 }
 
 QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
@@ -122,12 +121,12 @@ QList<QWidget*> KWPrintingDialog::createOptionWidgets() const
 
 int KWPrintingDialog::documentFirstPage() const
 {
-    return 0 /*m_document->startPage()*/;
+    return m_document->pageManager()->begin().pageNumber();
 }
 
 int KWPrintingDialog::documentLastPage() const
 {
-    return m_document->pageManager()->pageCount() - 1;
+    return m_document->pageManager()->last().pageNumber();
 }
 
 // options;

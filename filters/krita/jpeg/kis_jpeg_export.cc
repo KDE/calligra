@@ -37,7 +37,7 @@
 
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_filter_registry_model.h>
-#include <kis_node_visitor.h>
+#include <kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
 #include "kis_jpeg_converter.h"
 
@@ -45,54 +45,6 @@
 #include "ui_kis_wdg_options_jpeg.h"
 
 class KisExternalLayer;
-
-class KisExifInfoVisitor : public KisNodeVisitor
-{
-public:
-    using KisNodeVisitor::visit;
-
-    KisExifInfoVisitor() :
-            m_exifInfo(0),
-            m_countPaintLayer(0) { }
-public:
-
-    virtual bool visit(KisExternalLayer*) {
-        return true;
-    }
-
-    virtual bool visit(KisGeneratorLayer*) {
-        return true;
-    }
-
-    virtual bool visit(KisPaintLayer* layer) {
-        m_countPaintLayer++;
-        if (!layer->metaData()->empty()) {
-            m_exifInfo = layer->metaData();
-        }
-        return true;
-    }
-
-
-    virtual bool visit(KisGroupLayer* layer) {
-        dbgFile << "Visiting on grouplayer" << layer->name() << "";
-        return visitAll(layer, true);
-    }
-
-    virtual bool visit(KisAdjustmentLayer*) {
-        return true;
-    }
-
-public:
-    inline uint countPaintLayer() {
-        return m_countPaintLayer;
-    }
-    inline KisMetaData::Store* exifInfo() {
-        return m_exifInfo;
-    }
-private:
-    KisMetaData::Store* m_exifInfo;
-    uint m_countPaintLayer;
-};
 
 
 typedef KGenericFactory<KisJPEGExport> KisJPEGExportFactory;
