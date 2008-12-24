@@ -85,7 +85,9 @@ void KWPageManagerPrivate::setPageNumberForId(int pageId, int newPageNumber)
         const int oldPageNumber = page.pageNumber; // debug only
         if (page.pageNumber >= from)
             page.pageNumber += diff;
+#ifdef DEBUG_PAGES
         kDebug(32001) << "adjusting page number from" << oldPageNumber << "to" << page.pageNumber << "side" << page.pageSide;
+#endif
         if (page.pageSide == KWPage::PageSpread) {
             if (page.pageNumber % 2 == 1) { // pagespreads can only be on even pageNumbers
                 page.pageNumber++;
@@ -227,7 +229,9 @@ KWPage KWPageManager::insertPage(int pageNumber, const KWPageStyle &pageStyle)
     newPage.pageSide = newPage.pageNumber % 2 == 0 ? KWPage::Left : KWPage::Right;
     d->insertPage(newPage);
 
+#ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << pageNumber << "pageCount=" << pageCount();
+#endif
 
     return KWPage(d, d->lastId);
 }
@@ -256,7 +260,9 @@ KWPage KWPageManager::appendPage(const KWPageStyle &pageStyle)
 
     d->pages.insert(++d->lastId, page);
     d->pageNumbers.insert(page.pageNumber, d->lastId);
+#ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << page.pageNumber << "pageCount=" << pageCount();
+#endif
 
     return KWPage(d, d->lastId);
 }
@@ -299,7 +305,9 @@ void KWPageManager::removePage(const KWPage &page)
         }
         ++iter;
     }
+#ifdef DEBUG_PAGES
     kDebug(32001) << "pageNumber=" << removedPageNumber << "pageCount=" << pageCount();
+#endif
 }
 
 QPointF KWPageManager::clipToDocument(const QPointF &point) const
