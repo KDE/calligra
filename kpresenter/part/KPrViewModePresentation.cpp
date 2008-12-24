@@ -130,6 +130,12 @@ void KPrViewModePresentation::wheelEvent( QWheelEvent * event, const QPointF &po
     m_tool->wheelEvent( &ev );
 }
 
+void KPrViewModePresentation::closeEvent( QCloseEvent * event )
+{
+    activateSavedViewMode();
+    event->ignore();
+}
+
 void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 {
     m_savedViewMode = previousViewMode;               // store the previous view mode

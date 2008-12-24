@@ -27,6 +27,7 @@
 #include "KPrDocument.h"
 #include "KPrCustomSlideShows.h"
 #include "KPrCustomSlideShowsDialog.h"
+#include "commands/KPrSetCustomSlideShowsCommand.h"
 
 KPrConfigureSlideShowDialog::KPrConfigureSlideShowDialog( KPrDocument *document, QWidget *parent )
     : KDialog( parent )
@@ -74,7 +75,7 @@ void KPrConfigureSlideShowDialog::editCustomSlideShow()
     KPrCustomSlideShowsDialog dialog( this, m_document->customSlideShows(), m_document, finalSlideShows );
     dialog.setModal( true );
     if ( dialog.exec() == QDialog::Accepted ) {
-        m_document->setCustomSlideShows( finalSlideShows );
+        m_document->addCommand( new KPrSetCustomSlideShowsCommand( m_document, finalSlideShows ) );
         QString activeSlideShow = ui.slidesComboBox->currentText();
         int index = ui.slidesComboBox->currentIndex();
 

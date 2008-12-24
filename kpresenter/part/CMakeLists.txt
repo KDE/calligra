@@ -50,6 +50,7 @@ set( kpresenterprivate_LIB_SRCS
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      commands/KPrPageLayoutCommand.cpp
+     commands/KPrSetCustomSlideShowsCommand.cpp
 
      dockers/KPrPreviewWidget.cpp
      dockers/KPrPageLayoutDockerFactory.cpp
@@ -94,18 +95,14 @@ kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
 target_link_libraries(
     kpresenterprivate
-    koguiutils
-    flake
-    kotext
     kopageapp
-    komain
-    kostore
-    ${KDE4_KDECORE_LIBS}
+    kotext
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_PHONON_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}
     )
+target_link_libraries(kpresenterprivate LINK_INTERFACE_LIBRARIES kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kpresenterprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -117,7 +114,7 @@ kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
 
 
-target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} kpresenterprivate )
+target_link_libraries(kpresenterpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} kpresenterprivate )
 
 install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -30,6 +30,7 @@
 #include "KPrSoundCollection.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "tools/KPrPlaceholderToolFactory.h"
+#include "commands/KPrSetCustomSlideShowsCommand.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
 #include <KoShapeManager.h>
@@ -225,6 +226,17 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     }
 }
 
+void KPrDocument::pageRemoved( KoPAPageBase * page, QUndoCommand * parent )
+{
+    // only normal pages can be part of a slide show
+    if ( dynamic_cast<KPrPage *>( page ) ) {
+        KPrCustomSlideShows * slideShows = new KPrCustomSlideShows( *customSlideShows() );
+        slideShows->removeSlideFromAll( page );
+        // maybe we should check if old and new are different and only than create the command
+        new KPrSetCustomSlideShowsCommand( this, slideShows, parent );
+    }
+}
+
 void KPrDocument::loadKPrConfig()
 {
     KSharedConfigPtr config = componentData().config();
@@ -264,7 +276,6 @@ KPrCustomSlideShows* KPrDocument::customSlideShows()
 
 void KPrDocument::setCustomSlideShows( KPrCustomSlideShows* replacement )
 {
-    delete m_customSlideShows;
     m_customSlideShows = replacement;
 }
 

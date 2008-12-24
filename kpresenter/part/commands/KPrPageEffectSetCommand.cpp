@@ -31,6 +31,7 @@ KPrPageEffectSetCommand::KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEf
 , m_oldPageEffect( KPrPage::pageData( m_page )->pageEffect() )
 , m_deleteNewPageEffect( true )
 {
+    // TODO 2.1 rename page to slide
     Q_ASSERT( m_newPageEffect != m_oldPageEffect );
     if ( m_newPageEffect ) {
         if ( ! m_oldPageEffect ) {
