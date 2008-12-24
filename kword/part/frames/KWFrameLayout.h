@@ -101,6 +101,10 @@ signals:
      * Signal emitted when a frameset is created
      */
     void newFrameSet(KWFrameSet *fs);
+    /**
+     * Signal emitted when a frameset is removed
+     */
+    void removedFrameSet(KWFrameSet *fs);
 
 private slots:
     // called when a frame from the main text is removed to check if we should clear the page of other auto-created frames

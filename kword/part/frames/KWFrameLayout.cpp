@@ -514,12 +514,49 @@ bool KWFrameLayout::hasFrameOn(KWTextFrameSet *fs, int pageNumber)
 
 void KWFrameLayout::cleanupHeadersFooters()
 {
-    m_setup = false;
-    setup();
+    QHash<KWPageStyle, FrameSets> pageStyles;
+    foreach (KWFrameSet *fs, m_frameSets) {
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (tfs == 0)
+            continue;
+        FrameSets frameSets = pageStyles.value(tfs->pageStyle());
+        switch (tfs->textFrameSetType()) {
+        case KWord::OddPagesHeaderTextFrameSet:
+            if (frameSets.oddHeaders) {
+                emit removedFrameSet(frameSets.oddHeaders);
+                delete frameSets.oddHeaders;
+            }
+            frameSets.oddHeaders = tfs;
+            break;
+        case KWord::EvenPagesHeaderTextFrameSet:
+            if (frameSets.evenHeaders) {
+                emit removedFrameSet(frameSets.evenHeaders);
+                delete frameSets.evenHeaders;
+            }
+            frameSets.evenHeaders = tfs;
+            break;
+        case KWord::OddPagesFooterTextFrameSet:
+            if (frameSets.oddFooters) {
+                emit removedFrameSet(frameSets.oddFooters);
+                delete frameSets.oddFooters;
+            }
+            frameSets.oddFooters = tfs;
+            break;
+        case KWord::EvenPagesFooterTextFrameSet:
+            if (frameSets.evenFooters) {
+                emit removedFrameSet(frameSets.evenFooters);
+                delete frameSets.evenFooters;
+            }
+            frameSets.evenFooters = tfs;
+            break;
+        default: ;// ignore
+        }
+        if (tfs->pageStyle().isValid())
+            pageStyles.insert(tfs->pageStyle(), frameSets);
+    }
 
-    bool mainFrameSetUsed = false;
-    foreach (const KWPageStyle &style, m_pageStyles.keys()) {
-        FrameSets frameSets = m_pageStyles[style];
+    foreach (const KWPageStyle &style, pageStyles.keys()) {
+        FrameSets frameSets = pageStyles[style];
         switch (style.headerPolicy()) {
         case KWord::HFTypeEvenOdd:
             break;
@@ -538,11 +575,7 @@ void KWFrameLayout::cleanupHeadersFooters()
         case KWord::HFTypeUniform:
             cleanFrameSet(frameSets.evenFooters);
         }
-        if (style.hasMainTextFrame())
-            mainFrameSetUsed = true;
     }
-    if (!mainFrameSetUsed)
-        cleanFrameSet(m_maintext);
     m_setup = false;
 }
 
