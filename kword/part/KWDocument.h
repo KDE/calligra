@@ -124,16 +124,6 @@ public:
      */
     void removePage(int pageNumber);
 
-    /**
-     * Remove frameset from the document stopping it from being saved or displayed.
-     * Note that the document is normally the one that deletes framesets when the
-     * document is closed, after removing it the
-     * caller will have the responsibility to delete it when its no longer of use.
-     * @param fs the frameset that should be removed from the doc
-     * \sa addFrameSet()
-     */
-    void removeFrameSet(KWFrameSet *fs);
-
     /// return the amount of framesets this document holds
     int frameSetCount() const {
         return m_frameSets.count();
@@ -178,6 +168,15 @@ public slots:
     void relayout();
     /// Register new frameset
     void addFrameSet(KWFrameSet *f);
+    /**
+     * Remove frameset from the document stopping it from being saved or displayed.
+     * Note that the document is normally the one that deletes framesets when the
+     * document is closed, after removing it the
+     * caller will have the responsibility to delete it when its no longer of use.
+     * @param fs the frameset that should be removed from the doc
+     * \sa addFrameSet()
+     */
+    void removeFrameSet(KWFrameSet *fs);
 
 signals:
     /// signal emitted when a page has been added
