@@ -459,7 +459,6 @@ void KWFrameLayout::setup()
     m_maintext = 0;
     m_pageStyles.clear();
     foreach (KWFrameSet *fs, m_frameSets) {
-        // add checks for out-of-area frames
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs == 0)
             continue;
@@ -517,24 +516,34 @@ void KWFrameLayout::cleanupHeadersFooters()
 {
     m_setup = false;
     setup();
-#if 0
-    if (/*m_pageStyle->firstHeader() != KWord::HFTypeEvenOdd &&*/
-        m_pageStyle->headers() != KWord::HFTypeEvenOdd) {
-        cleanFrameSet(m_oddHeaders);
-        cleanFrameSet(m_evenHeaders);
+
+    bool mainFrameSetUsed = false;
+    foreach (const KWPageStyle &style, m_pageStyles.keys()) {
+        FrameSets frameSets = m_pageStyles[style];
+        switch (style.headerPolicy()) {
+        case KWord::HFTypeEvenOdd:
+            break;
+        case KWord::HFTypeNone:
+            cleanFrameSet(frameSets.oddHeaders);
+            // fall through
+        case KWord::HFTypeUniform:
+            cleanFrameSet(frameSets.evenHeaders);
+        }
+        switch (style.footerPolicy()) {
+        case KWord::HFTypeEvenOdd:
+            break;
+        case KWord::HFTypeNone:
+            cleanFrameSet(frameSets.oddFooters);
+            // fall through
+        case KWord::HFTypeUniform:
+            cleanFrameSet(frameSets.evenFooters);
+        }
+        if (style.hasMainTextFrame())
+            mainFrameSetUsed = true;
     }
-    if (/*m_pageStyle->firstFooter() != KWord::HFTypeEvenOdd &&*/
-        m_pageStyle->footers() != KWord::HFTypeEvenOdd) {
-        cleanFrameSet(m_oddFooters);
-        cleanFrameSet(m_evenFooters);
-    }
-    /*if (m_pageStyle->firstHeader() == KWord::HFTypeNone)
-        cleanFrameSet(m_firstHeader);
-    if (m_pageStyle->firstFooter() == KWord::HFTypeNone)
-        cleanFrameSet(m_firstFooter);*/
-    if (! m_pageStyle->hasMainTextFrame())
+    if (!mainFrameSetUsed)
         cleanFrameSet(m_maintext);
-#endif
+    m_setup = false;
 }
 
 void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
@@ -545,7 +554,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs)
         return;
     foreach (KWFrame *frame, fs->frames()) {
         fs->removeFrame(frame);
-        delete(frame);
+        delete(frame->shape());
     }
 }
 
