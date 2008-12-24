@@ -21,6 +21,7 @@
 #include "KWTextDocumentLayout.h"
 #include "KWTextFrameSet.h"
 #include "KWTextFrame.h"
+#include "KWCopyShape.h"
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "KWPageTextInfo.h"
@@ -551,7 +552,9 @@ void KWTextDocumentLayout::layout()
                 }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
-                if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior) {
+                if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior
+                        || KWord::isHeaderFooter(m_frameSet)
+                        || dynamic_cast<KWCopyShape*> (lastFrame)) {
                     m_state->clearTillEnd();
                     return; // done!
                 }
