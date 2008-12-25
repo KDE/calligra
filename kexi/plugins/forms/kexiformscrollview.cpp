@@ -513,7 +513,7 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
         if (dynamic_cast<QWidget*>(dataItemIface)) {
             kexipluginsdbg << "KexiFormScrollView::updateAfterCancelRowEdit(): "
-            << dynamic_cast<QWidget*>(dataItemIface)->className() << " "
+            << dynamic_cast<QWidget*>(dataItemIface)->metaObject()->className() << " "
             << dynamic_cast<QWidget*>(dataItemIface)->objectName();
         }
         const bool displayDefaultValue = shouldDisplayDefaultValueForItem(dataItemIface);
