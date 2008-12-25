@@ -314,9 +314,8 @@ void KexiFormView::updateAutoFieldsDataSource()
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
-    for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-            it.current(); ++it) {
-        KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(it.current()->widget());
+    foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
+        KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(item->widget());
         if (afWidget) {
             KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo(afWidget->dataSource());
             if (colInfo) {
@@ -343,18 +342,17 @@ void KexiFormView::updateValuesForSubproperties()
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
-    for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-            it.current(); ++it) {
+    foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
         // (delayed) set values for subproperties
 //! @todo this could be at the KFD level, but KFD is going to be merged anyway with kexiforms, right?
         KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(it.current()->widget());
-        if (subpropIface && subpropIface->subwidget() && it.current()->subproperties()) {
+        = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(item->widget());
+        if (subpropIface && subpropIface->subwidget() && item->subproperties()) {
             QWidget *subwidget = subpropIface->subwidget();
-            QMap<QString, QVariant>* subprops = it.current()->subproperties();
+            QMap<QString, QVariant>* subprops = item->subproperties();
             for (QMap<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); subpropIt != subprops->constEnd(); ++subpropIt) {
                 kexipluginsdbg << "KexiFormView::loadForm(): delayed setting of the subproperty: widget="
-                << it.current()->widget()->objectName() << " prop=" << subpropIt.key() << " val="
+                << item->widget()->objectName() << " prop=" << subpropIt.key() << " val="
                 << subpropIt.value();
 
                 QMetaProperty meta = KexiUtils::findPropertyWithSuperclasses(
@@ -1154,9 +1152,9 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         group->addCommand(insertCmd, false/*don't exec twice*/);
 
         KFormDesigner::ObjectTreeItem *newWidgetItem
-        = form()->objectTree()->dict()->find(insertCmd->widgetName());
-        KexiDBAutoField* newWidget
-        = newWidgetItem ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
+            = form()->objectTree()->hash()->value(insertCmd->widgetName());
+        KexiDBAutoField* newWidget = newWidgetItem 
+            ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
         widgetsToSelect.append(newWidget);
 //#if 0
         KFormDesigner::CommandGroup *subGroup
