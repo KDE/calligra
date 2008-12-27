@@ -394,6 +394,7 @@ void KWTextDocumentLayout::layout()
         };
 
         if (m_state->shape != currentShape) { // next shape
+            TDEBUG << "New shape";
             currentShape = m_state->shape;
             if (m_frameSet->kwordDocument()) {
                 // refresh the outlines cache.
@@ -426,7 +427,9 @@ void KWTextDocumentLayout::layout()
                         }
                         if (isChild)
                             continue;
-                        QMatrix matrix = (frame->outlineShape() ? frame->outlineShape() : frame->shape())->absoluteTransformation(0);
+                        QMatrix matrix = (frame->outlineShape()
+                                ? frame->outlineShape()
+                                : frame->shape())->absoluteTransformation(0);
                         matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outlines.append(new Outline(frame, matrix));
@@ -531,9 +534,10 @@ void KWTextDocumentLayout::layout()
 #ifdef DEBUG_TEXT
         if (line.line.isValid()) {
             QTextBlock b = document()->findBlock(m_state->cursorPosition());
-            if (b.isValid())
+            if (b.isValid()) {
                 TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
-                TDEBUG << "         @ " << line.line.position() << " from parag at pos " << b.position();
+                TDEBUG << "       1 @ " << line.line.position() << " from parag at pos " << b.position();
+            }
         }
 #endif
 
@@ -601,9 +605,10 @@ void KWTextDocumentLayout::layout()
 #ifdef DEBUG_TEXT
             if (line.line.isValid()) {
                 QTextBlock b = document()->findBlock(m_state->cursorPosition());
-                if (b.isValid())
+                if (b.isValid()) {
                     TDEBUG << "fitted line" << b.text().mid(line.line.textStart(), line.line.textLength());
-                    TDEBUG << "         @ " << line.line.position() << " from parag at pos " << b.position();
+                    TDEBUG << "       2 @ " << line.line.position() << " from parag at pos " << b.position();
+                }
             }
 #endif
         }
