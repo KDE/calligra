@@ -275,8 +275,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
             color = QColor(random() % 255, random() % 255, random() % 255);
 #endif
             painter.fillRect(vm.clipRect, QBrush(color));
-            if (isAntialiased())
-                painter.setRenderHint(QPainter::Antialiasing);
+            painter.setRenderHint(QPainter::Antialiasing);
             m_shapeManager->paint(painter, *(viewConverter()), false);
             m_toolProxy->paint(painter, *(viewConverter()));
             painter.restore();
