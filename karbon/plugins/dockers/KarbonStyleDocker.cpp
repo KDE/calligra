@@ -125,7 +125,6 @@ void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
     m_canvas = canvas;
     if( ! m_canvas )
     {
-        updateStyle( 0, 0 );
         return;
     }
 
