@@ -43,6 +43,7 @@
 
 // koffice libs includes
 #include <KoCopyController.h>
+#include <KoCutController.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
@@ -246,9 +247,11 @@ void KWView::setupActions()
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
 
+    // -------------- Edit actions
+    action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    new KoCutController(kwcanvas(), action);
     action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(kwcanvas(), action);
-
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(kwcanvas(), action);
 
@@ -330,10 +333,6 @@ void KWView::setupActions()
         actionCollection(), "extra_template" );
         m_actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
         m_actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
-
-        // -------------- Edit actions
-        m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
-        m_actionSpellCheck = actionCollection()->addAction(KStandardAction::Spelling,  "extra_spellcheck", this, SLOT( slotSpellCheck() ));
 
         (void) new KAction( i18n( "Configure Mail Merge..." ), "configure",0,
         this, SLOT( editMailMergeDataBase() ),
