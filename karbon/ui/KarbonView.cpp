@@ -98,6 +98,9 @@
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoColorBackground.h>
+#include <KoCutController.h>
+#include <KoCopyController.h>
+#include <KoPasteController.h>
 
 // kde header
 #include <kaction.h>
@@ -421,25 +424,6 @@ void KarbonView::fileImportGraphic()
             unlink( QFile::encodeName( importedFile ) );
     }
     delete dialog;
-}
-
-void KarbonView::editCut()
-{
-    debugView("KarbonView::editCut()");
-    d->canvas->toolProxy()->cut();
-}
-
-void KarbonView::editCopy()
-{
-    debugView("KarbonView::editCopy()");
-    d->canvas->toolProxy()->copy();
-}
-
-void KarbonView::editPaste()
-{
-    debugView("KarbonView::editPaste()");
-    // TODO bring back copy offset
-    d->canvas->toolProxy()->paste();
 }
 
 void KarbonView::selectionDuplicate()
@@ -894,9 +878,12 @@ void KarbonView::initActions()
         return;
 
     // edit ----->
-    actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT(editCut()));
-    actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT(editCopy()));
-    actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT(editPaste()));
+    KAction *action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    new KoCutController(d->canvas, action);
+    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    new KoCopyController(d->canvas, action);
+    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
+    new KoPasteController(d->canvas, action);
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
