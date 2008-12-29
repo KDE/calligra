@@ -292,9 +292,14 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         KoToolBoxFactory toolBoxFactory(d->canvasController, i18n( "Tools" ) );
         createDockWidget( &toolBoxFactory );
 
-        KoDockerManager *dockerManager = new KoDockerManager(this);
-        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
-             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+        KoDockerManager *dockerMng = dockerManager();
+        if (!dockerMng) {
+            dockerMng = new KoDockerManager(this);
+            setDockerManager(dockerMng);
+        }
+
+        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
 

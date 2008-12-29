@@ -70,9 +70,13 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
     KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
     m_view->createDockWidget(&toolBoxFactory);
 
-    KoDockerManager *dockerManager = new KoDockerManager(m_view);
-    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-            dockerManager, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+    KoDockerManager *dockerMng = m_view->dockerManager();
+    if (!dockerMng) {
+        dockerMng = new KoDockerManager(m_view);
+        m_view->setDockerManager(dockerMng);
+    }
+    connect(m_canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *)),
+            dockerMng, SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *)));
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(m_horizontalRuler, 0, 1);
