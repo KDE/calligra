@@ -52,6 +52,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     lay = new QVBoxLayout(widget.columnsTab);
     m_columnsWidget = new KWDocumentColumns(widget.columnsTab, m_columns);
     m_columnsWidget->setUnit(m_unit);
+    m_columnsWidget->setShowPreview(false);
     lay->addWidget(m_columnsWidget);
     lay->setMargin(0);
 

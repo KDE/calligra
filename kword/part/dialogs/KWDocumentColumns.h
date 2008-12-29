@@ -38,6 +38,8 @@ public:
 
     KoColumns columns() const { return m_columns; }
 
+    void setShowPreview(bool on);
+
 signals:
     void columnsChanged(const KoColumns &columns);
 

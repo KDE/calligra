@@ -71,3 +71,7 @@ void KWDocumentColumns::optionsChanged()
     emit columnsChanged(m_columns);
 }
 
+void KWDocumentColumns::setShowPreview(bool on)
+{
+    widget.previewPane->setVisible(on);
+}
