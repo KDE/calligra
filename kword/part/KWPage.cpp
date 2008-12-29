@@ -36,7 +36,7 @@ bool KWPage::isValid() const
 int KWPage::pageNumber() const
 {
     if (! isValid())
-        return 0; // invalid
+        return -1; // invalid
     return priv->pages[n].pageNumber;
 }
 
