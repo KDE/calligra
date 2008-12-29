@@ -31,9 +31,10 @@
 #include <QPainter>
 #include <krscreenrender.h>
 
-KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r)
-        : QWidget(parent, name, Qt::WNoAutoErase)
+KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
+        : QWidget(parent)
 {
+    setAttribute(Qt::WA_NoBackground);
     kDebug() << "CREATED PAGE";
     rpt = r;
     page = 1;

@@ -226,7 +226,8 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         pageCount = doc->pages();
         pageSelector->setRecordCount(pageCount);
 
-        rptwid = new KexiReportPage(this, "Page", doc);
+        rptwid = new KexiReportPage(this, doc);
+        rptwid->setObjectName("KexiReportPage");
         scr->setWidget(rptwid);
 
         tempData()->reportSchemaChangedInPreviousView = false;

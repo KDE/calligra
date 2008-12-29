@@ -70,7 +70,7 @@ void ReportSectionDetail::buildXML(QDomDocument & doc, QDomElement & section)
         section.appendChild(spagebreak);
     }
 
-    for (unsigned int i = 0; i < groupList.count(); i++) {
+    for (uint i = 0; i < (uint)groupList.count(); i++) {
         ReportSectionDetailGroup * rsdg = groupList.at(i);
         QDomNode grp = doc.createElement("group");
 
@@ -210,7 +210,7 @@ int ReportSectionDetail::findSection(const QString & name)
 {
     // find the item by its name
     ReportSectionDetailGroup * rsd = 0;
-    for (unsigned int i = 0; i < groupList.count(); i++) {
+    for (uint i = 0; i < (uint)groupList.count(); i++) {
         rsd = groupList.at(i);
         if (name == rsd->column()) return i;
     }

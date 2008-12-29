@@ -88,7 +88,9 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     if (_chartWidget) {
         _chartWidget->setFixedSize(_size.toScene().toSize());
-        painter->drawImage(rect().left(), rect().top(), QPixmap::grabWidget(_chartWidget), 0, 0, rect().width(), rect().height());
+        painter->drawImage(rect().left(), rect().top(), 
+            QPixmap::grabWidget(_chartWidget).toImage(), 
+            0, 0, rect().width(), rect().height());
     }
     bg.setAlpha(255);
 
