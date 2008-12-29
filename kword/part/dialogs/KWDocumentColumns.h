@@ -21,10 +21,11 @@
 #define KWDOCUMENTCOLUMNS_H
 
 #include <ui_KWDocumentColumns.h>
-
 #include <KoPageLayout.h>
 
 #include <QWidget>
+
+class KoPagePreviewWidget;
 
 /**
  * This widget visually shows and alters the KoColumns data structure.
@@ -51,6 +52,7 @@ private slots:
 private:
     Ui::KWDocumentColumns widget;
     KoColumns m_columns;
+    KoPagePreviewWidget *m_preview;
 };
 
 #endif
