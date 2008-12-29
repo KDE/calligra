@@ -35,6 +35,8 @@ class KWDocumentColumns : public QWidget
 public:
     KWDocumentColumns(QWidget *parent, const KoColumns &columns);
 
+    KoColumns columns() const { return m_columns; }
+
 signals:
     void columnsChanged(const KoColumns &columns);
 

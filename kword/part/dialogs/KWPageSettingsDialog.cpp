@@ -18,9 +18,10 @@
  */
 
 #include "KWPageSettingsDialog.h"
+#include "KWDocumentColumns.h"
 
-#include "KWDocument.h"
-#include "commands/KWPagePropertiesCommand.h"
+#include <KWDocument.h>
+#include <commands/KWPagePropertiesCommand.h>
 
 #include <QTimer>
 
@@ -36,15 +37,19 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 
     setPageSpread(m_page.pageSide() == KWPage::PageSpread);
     setTextDirection(m_page.directionHint());
+
+    m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
+    addPage(m_columns, i18n("Columns:")); // TODO remove the colon after string freeze is lifted
 }
 
 void KWPageSettingsDialog::accept()
 {
-    if (applyToDocument()) {
+    if (applyToDocument()) { // rename to section
         // TODO
     } else {
         KoText::Direction newDir = textDirection();
-        KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, pageLayout(), newDir);
+        KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page,
+                pageLayout(), newDir, m_columns->columns());
         m_document->addCommand(cmd);
     }
 

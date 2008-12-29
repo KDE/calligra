@@ -31,12 +31,14 @@
 #include <KLocale>
 
 KWPagePropertiesCommand::KWPagePropertiesCommand(KWDocument *document, const KWPage &page,
-        const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent)
+        const KoPageLayout &newLayout, KoText::Direction direction, const KoColumns &columns, QUndoCommand *parent)
     : QUndoCommand(i18n("Page Properties"), parent),
     m_document(document),
     m_page(page),
     m_oldLayout(page.pageStyle().pageLayout()),
     m_newLayout(newLayout),
+    m_oldColumns(page.pageStyle().columns()),
+    m_newColumns(columns),
     m_oldDirection(page.directionHint()),
     m_newDirection(direction)
 {
@@ -84,6 +86,7 @@ void KWPagePropertiesCommand::redo()
 {
     QUndoCommand::redo();
     setLayout(m_newLayout);
+    m_page.pageStyle().setColumns(m_newColumns);
     m_page.setDirectionHint(m_newDirection);
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
@@ -92,8 +95,8 @@ void KWPagePropertiesCommand::redo()
 void KWPagePropertiesCommand::undo()
 {
     QUndoCommand::undo();
-    //setLayout(m_newLayout);
     setLayout(m_oldLayout);
+    m_page.pageStyle().setColumns(m_oldColumns);
     m_page.setDirectionHint(m_oldDirection);
     m_document->m_frameLayout.createNewFramesForPage(m_page.pageNumber());
     m_document->firePageSetupChanged();
