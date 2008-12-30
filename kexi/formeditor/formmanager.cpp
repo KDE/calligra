@@ -489,8 +489,7 @@ FormManager::snapWidgetsToGrid()
 void
 FormManager::windowChanged(QWidget *w)
 {
-    kDebug() << "FormManager::windowChanged("
-    << (w ? (QString(w->metaObject()->className()) + " " + w->objectName()) : QString("0")) << ")";
+    kDebug() << (w ? (QString(w->metaObject()->className()) + " " + w->objectName()) : QString("0"));
 
     if (!w) {
         m_active = 0;
@@ -512,8 +511,7 @@ FormManager::windowChanged(QWidget *w)
             //if(m_propSet)
             // m_propList->setCollection(form->pixmapCollection());
 
-            kDebug() << "FormManager::windowChanged() active form is "
-            << form->objectTree()->name();
+            kDebug() << "active form is" << form->objectTree()->name();
 
             if (m_collection) {
 #ifndef KFD_NO_STYLES
@@ -702,7 +700,7 @@ FormManager::isTopLevel(QWidget *w)
     if (!activeForm() || !activeForm()->objectTree())
         return false;
 
-// kDebug() << "FormManager::isTopLevel(): for: " << w->objectName() << " = "
+// kDebug() << "for: " << w->objectName() << " = "
 //  << activeForm()->objectTree()->lookup(w->name());
 
     ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->objectName());
@@ -1128,7 +1126,7 @@ FormManager::createLayout(int layoutType)
         if (w->parentWidget() != parent) {
             KMessageBox::sorry(m_active->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
                                "All selected widgets must have the same parent."));
-            kDebug() << "FormManager::createLayout() widgets don't have the same parent widget";
+            kDebug() << "widgets don't have the same parent widget";
             return;
         }
     }

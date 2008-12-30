@@ -770,7 +770,7 @@ InsertWidgetCommand::execute()
             w->metaObject()->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
     }
 //! @todo update widget's width for entered text's metrics
-    kDebug() << "Container::eventFilter(): widget added " << this;
+    kDebug() << "widget added " << this;
 }
 
 void
@@ -1060,8 +1060,8 @@ PasteWidgetCommand::execute()
     bool parsed = domDoc.setContent(m_data, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << "WidgetWatcher::load(): " << errMsg;
-        kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol;
+        kDebug() << errMsg;
+        kDebug() << "line: " << errLine << " col: " << errCol;
         return;
     }
 

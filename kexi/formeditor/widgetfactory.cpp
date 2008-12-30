@@ -423,7 +423,7 @@ WidgetFactory::resetEditor()
     if (m_widget) {
         ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->objectName()) : 0;
         if (!tree) {
-            kDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item ";
+            kDebug() << "error cannot found a tree item ";
             return;
         }
         tree->eventEater()->setContainer(m_container);

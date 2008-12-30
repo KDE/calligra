@@ -82,7 +82,7 @@ ObjectTreeItem::addModifiedProperty(const QByteArray &property, const QVariant &
 
     if (!m_props.contains(property)) {
         m_props.insert(property, oldValue);
-        kDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue;
+        kDebug() << "Added this property in the list: " << property << " oldValue: " << oldValue;
     }
 }
 
@@ -195,7 +195,7 @@ ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
     parent->addChild(c);
     m_container->form()->emitChildAdded(c);
 
-    kDebug() << "ObjectTree::addItem(): adding " << c->name() << " to " << parent->name();
+    kDebug() << "adding " << c->name() << " to " << parent->name();
 }
 
 void

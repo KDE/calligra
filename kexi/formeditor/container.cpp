@@ -253,7 +253,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         m_mousePressEventReceived = true;
 
         kDebug() << "QEvent::MouseButtonPress sender object = " << s->objectName()
-        << "of type " << s->metaObject()->className();
+            << "of type " << s->metaObject()->className();
         kDebug() << "QEvent::MouseButtonPress this          = " << this->objectName();
 
         m_moving = static_cast<QWidget*>(s);

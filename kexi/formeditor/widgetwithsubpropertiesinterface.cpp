@@ -51,9 +51,8 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
                         && !addedSubproperies.contains(property.name())) {
                     m_subproperies.insert(property.name());
                     addedSubproperies.insert(property.name());
-                    kDebug() << "WidgetWithSubpropertiesInterface::setSubwidget(): "
-                    "added subwidget's property that is not present in the parent: "
-                    << property.name();
+                    kDebug() << "added subwidget's property that is not present in the parent: "
+                        << property.name();
                 }
             }
         }
