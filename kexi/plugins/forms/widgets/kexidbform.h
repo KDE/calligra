@@ -24,7 +24,6 @@
 #include <qpixmap.h>
 #include <QDragMoveEvent>
 #include <QEvent>
-#include <Q3CString>
 #include <QDropEvent>
 
 #include <formeditor/form.h>

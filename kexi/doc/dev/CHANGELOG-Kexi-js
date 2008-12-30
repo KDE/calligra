@@ -22,6 +22,14 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-15..25
+Forms
+- removed most of Qt 3 deps
+
+2008-12-14
+Forms
+- paint grid and selection rectangle using alpha blending
+
 2008-12-12
 Forms
 - use QRubberBand for displaying selection (and soon: insertion?) rectangles

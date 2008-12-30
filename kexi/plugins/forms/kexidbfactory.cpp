@@ -22,10 +22,6 @@
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qstyle.h>
-//Added by qt3to4:
-#include <QLabel>
-#include <Q3ValueList>
-#include <Q3CString>
 
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -343,7 +339,7 @@ KexiDBFactory::~KexiDBFactory()
 }
 
 QWidget*
-KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
+KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                             KFormDesigner::Container *container, int options)
 {
     kexipluginsdbg << "KexiDBFactory::createWidget() " << this;
@@ -403,7 +399,7 @@ KexiDBFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 }
 
 bool
-KexiDBFactory::createMenuActions(const Q3CString &classname, QWidget *w, QMenu *menu,
+KexiDBFactory::createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,
                                  KFormDesigner::Container *)
 {
     if (classname == "QPushButton" || classname == "KPushButton" || classname == "KexiPushButton") {
@@ -440,7 +436,7 @@ KexiDBFactory::createCustomActions(KActionCollection* col)
 }
 
 bool
-KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigner::Container *container)
+KexiDBFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesigner::Container *container)
 {
     m_container = container;
     if (classname == "KexiDBLineEdit") {
@@ -526,13 +522,13 @@ KexiDBFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesigne
 }
 
 bool
-KexiDBFactory::previewWidget(const Q3CString &, QWidget *, KFormDesigner::Container *)
+KexiDBFactory::previewWidget(const QByteArray &, QWidget *, KFormDesigner::Container *)
 {
     return false;
 }
 
 bool
-KexiDBFactory::clearWidgetContent(const Q3CString & /*classname*/, QWidget *w)
+KexiDBFactory::clearWidgetContent(const QByteArray & /*classname*/, QWidget *w)
 {
 //! @todo this code should not be copied here but
 //! just inherited StdWidgetFactory::clearWidgetContent() should be called
@@ -542,10 +538,10 @@ KexiDBFactory::clearWidgetContent(const Q3CString & /*classname*/, QWidget *w)
     return true;
 }
 
-Q3ValueList<Q3CString>
-KexiDBFactory::autoSaveProperties(const Q3CString & /*classname*/)
+QList<QByteArray>
+KexiDBFactory::autoSaveProperties(const QByteArray& /*classname*/)
 {
-    Q3ValueList<Q3CString> lst;
+    QList<QByteArray> lst;
 // if(classname == "KexiDBSubForm")
     //lst << "formName";
 // if(classname == "KexiDBLineEdit")
@@ -556,8 +552,8 @@ KexiDBFactory::autoSaveProperties(const Q3CString & /*classname*/)
 }
 
 bool
-KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
-        const Q3CString& property, bool isTopLevel)
+KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w,
+        const QByteArray& property, bool isTopLevel)
 {
     //general
     if (property == "dataSource" || property == "dataSourcePartClass") {
@@ -630,8 +626,8 @@ KexiDBFactory::isPropertyVisibleInternal(const Q3CString& classname, QWidget *w,
 }
 
 bool
-KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname,
-        QWidget *w, const Q3CString& property)
+KexiDBFactory::propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname,
+        QWidget *w, const QByteArray& property)
 {
     Q_UNUSED(classname);
     Q_UNUSED(w);
@@ -648,7 +644,7 @@ KexiDBFactory::changeText(const QString &text)
         return false;
     if (!form->selectedWidget())
         return false;
-    Q3CString n(form->selectedWidget()->metaObject()->className());
+    QByteArray n(form->selectedWidget()->metaObject()->className());
 // QWidget *w = WidgetFactory::widget();
     if (n == "KexiDBAutoField") {
         changeProperty("caption", text, form);
@@ -659,7 +655,7 @@ KexiDBFactory::changeText(const QString &text)
 }
 
 void
-KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const Q3CString &classname)
+KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QByteArray &classname)
 {
     //QSize s = widget->size();
     //QPoint p = widget->pos();

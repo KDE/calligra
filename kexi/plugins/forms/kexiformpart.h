@@ -40,7 +40,6 @@ namespace KexiDB
 class FieldList;
 }
 
-class Q3CString;
 class KexiDataSourcePage;
 
 //! Kexi Form Plugin
@@ -96,7 +95,7 @@ protected:
 protected slots:
     void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
     void slotAssignAction();
-    void slotPropertyChanged(QWidget *widget, const Q3CString &name, const QVariant &value);
+    void slotPropertyChanged(QWidget *widget, const QByteArray &name, const QVariant &value);
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
 
 private:

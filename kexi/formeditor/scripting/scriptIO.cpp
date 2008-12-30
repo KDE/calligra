@@ -147,9 +147,9 @@ ScriptIO::saveEventList(EventList *list, QDomNode &parentNode)
     QDomElement events = domDoc.createElement("events");
     parentNode.appendChild(events);
 
-    Q3ValueListConstIterator<Event*> endIt = list->constEnd();
-    for (Q3ValueListConstIterator<Event*> it =  list->constBegin(); it != endIt; ++it)
-        saveEvent((*it), events);
+    foreach (Event* e, *list) {
+        saveEvent(e, events);
+    }
 }
 
 void

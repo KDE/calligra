@@ -114,8 +114,8 @@ KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
             this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
 
     connect(KFormDesigner::FormManager::self()->propertySet(),
-            SIGNAL(widgetPropertyChanged(QWidget *, const Q3CString &, const QVariant&)),
-            this, SLOT(slotPropertyChanged(QWidget *, const Q3CString &, const QVariant&)));
+            SIGNAL(widgetPropertyChanged(QWidget *, const QByteArray &, const QVariant&)),
+            this, SLOT(slotPropertyChanged(QWidget *, const QByteArray &, const QVariant&)));
     connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*, bool)),
             this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*, bool)));
 }
@@ -484,7 +484,7 @@ KLocalizedString KexiFormPart::i18nMessage(
 }
 
 void
-KexiFormPart::slotPropertyChanged(QWidget *w, const Q3CString &name, const QVariant &value)
+KexiFormPart::slotPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value)
 {
     Q_UNUSED(w);
 
@@ -527,9 +527,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 KexiMainWindowIface::global()->thisWidget(),
                 SLOT(highlightObject(const QString&, const QString&)));
         connect(d->dataSourcePage,
-                SIGNAL(formDataSourceChanged(const Q3CString&, const Q3CString&)),
+                SIGNAL(formDataSourceChanged(const QByteArray&, const QByteArray&)),
                 KFormDesigner::FormManager::self(),
-                SLOT(setFormDataSource(const Q3CString&, const Q3CString&)));
+                SLOT(setFormDataSource(const QByteArray&, const QByteArray&)));
         connect(d->dataSourcePage,
                 SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
                 KFormDesigner::FormManager::self(),

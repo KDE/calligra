@@ -22,7 +22,6 @@
 #define KFD_WIDGETPROPERTYSET_H
 
 #include <QObject>
-#include <Q3CString>
 #include <QStringList>
 #include <QMetaProperty>
 
@@ -52,17 +51,17 @@ public:
 
 //  FormManager* manager();
 
-    KoProperty::Property&  operator[](const Q3CString &name);
+    KoProperty::Property&  operator[](const QByteArray &name);
 
-    KoProperty::Property&  property(const Q3CString &name);
+    KoProperty::Property&  property(const QByteArray &name);
 
-    bool  contains(const Q3CString &property);
+    bool  contains(const QByteArray &property);
 
     /*! i18n function used by factories to add new property caption.
       Should be called on Factory creation. */
-    void  addPropertyCaption(const Q3CString &property, const QString &caption);
+    void  addPropertyCaption(const QByteArray &property, const QString &caption);
 
-    void  addValueCaption(const Q3CString &value, const QString &caption);
+    void  addValueCaption(const QByteArray &value, const QString &caption);
 
 public slots:
     /*! Sets the widget which properties are shown in the property editor.
@@ -90,21 +89,22 @@ public slots:
     /*! This slot is called when the watched widget is destroyed. Resets the buffer.*/
     void slotWidgetDestroyed();
 
-//  void setPropertyValueInDesignMode(QWidget* widget, const QMap<Q3CString, QVariant> &propValues,
-    void createPropertyCommandsInDesignMode(QWidget* widget, const QMap < Q3CString,
-                                            QVariant > &propValues, CommandGroup *group, bool addToActiveForm = true,
+//  void setPropertyValueInDesignMode(QWidget* widget, const QMap<QByteArray, QVariant> &propValues,
+    void createPropertyCommandsInDesignMode(QWidget* widget, 
+                                            const QHash<QByteArray, QVariant> &propValues,
+                                            CommandGroup *group, bool addToActiveForm = true,
                                             bool execFlagForSubCommands = false);
 
 signals:
     /*! This signal is emitted when a property was changed.
       \a widg is the widget concerned, \a property
       is the name of the modified property, and \a v is the new value of this property. */
-    void widgetPropertyChanged(QWidget *w, const Q3CString &property, const QVariant &v);
+    void widgetPropertyChanged(QWidget *w, const QByteArray &property, const QVariant &v);
 
     /*! This signal is emitted when the name of the widget is modified.
     \a oldname is the name of the widget before the
       change, \a newname is the name after renaming. */
-    void widgetNameChanged(const Q3CString &oldname, const Q3CString &newname);
+    void widgetNameChanged(const QByteArray &oldname, const QByteArray &newname);
 
 protected:
     /*! Adds the widget in d->widgets, and updates property visibilty. */
@@ -156,8 +156,8 @@ protected:
     /*! This function is used to filter the properties to be shown
        (ie not show "caption" if the widget isn't toplevel).
        \return true if the property should be shown. False otherwise.*/
-    bool isPropertyVisible(const Q3CString &property, bool isTopLevel,
-                           const Q3CString &classname = Q3CString());
+    bool isPropertyVisible(const QByteArray &property, bool isTopLevel,
+                           const QByteArray &classname = QByteArray());
 
     // Following functions are used to create special types of properties, different
     // from Q_PROPERTY
@@ -186,17 +186,17 @@ protected:
 
     /*! \return The i18n'ed name of the property whose name is \a name, that will be
     displayed in PropertyEditor. */
-    QString propertyCaption(const Q3CString &name);
+    QString propertyCaption(const QByteArray &name);
 
     /*! \return The i18n'ed name of the property's value whose name is \a name. */
-    QString valueCaption(const Q3CString &name);
+    QString valueCaption(const QByteArray &name);
 
     /*! \return The i18n'ed list of values, that will be shown by Property
     Editor (using descFromValue()).*/
     //QStringList captionForList(const QStringList &list);
 
     //! Helper
-    void emitWidgetPropertyChanged(QWidget *w, const Q3CString& property, const QVariant& value);
+    void emitWidgetPropertyChanged(QWidget *w, const QByteArray& property, const QVariant& value);
 
 private:
     WidgetPropertySetPrivate *d;

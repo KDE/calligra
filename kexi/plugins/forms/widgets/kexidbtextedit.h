@@ -25,8 +25,6 @@
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
 #include <ktextedit.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QPaintEvent>
 
 //! @short Multiline edit widget for Kexi forms

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2006-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,10 +27,6 @@
 #include "widgetfactory.h"
 #include "../utils.h"
 #include <QGroupBox>
-//Added by qt3to4:
-#include <Q3Frame>
-#include <Q3ValueList>
-#include <Q3CString>
 #include <QMenu>
 #include <QPaintEvent>
 
@@ -55,11 +51,10 @@ protected:
     QString  m_containername;
     QString  m_name;
     QString  m_parentname;
-    int      m_pageid;
 };
 
 //! Helper widget (used when using 'Lay out horizontally')
-class HBox : public Q3Frame
+class HBox : public QFrame
 {
     Q_OBJECT
 
@@ -76,7 +71,7 @@ protected:
 };
 
 //! Helper widget (used when using 'Lay out vertically')
-class VBox : public Q3Frame
+class VBox : public QFrame
 {
     Q_OBJECT
 
@@ -93,7 +88,7 @@ protected:
 };
 
 //! Helper widget (used when using 'Lay out in a grid')
-class Grid : public Q3Frame
+class Grid : public QFrame
 {
     Q_OBJECT
 
@@ -110,7 +105,7 @@ protected:
 };
 
 //! Helper widget (used when using 'Lay out with horizontal flow')
-class HFlow : public Q3Frame
+class HFlow : public QFrame
 {
     Q_OBJECT
 
@@ -127,7 +122,7 @@ protected:
 };
 
 //! Helper widget (used when using 'Lay out with horizontal flow')
-class VFlow : public Q3Frame
+class VFlow : public QFrame
 {
     Q_OBJECT
 
@@ -251,25 +246,26 @@ public:
     ContainerFactory(QObject *parent, const QStringList &args);
     virtual ~ContainerFactory();
 
-    virtual QWidget *createWidget(const Q3CString & classname, QWidget *parent, const char *name, KFormDesigner::Container *container,
+    virtual QWidget *createWidget(const QByteArray& classname, 
+                                  QWidget *parent, const char *name, KFormDesigner::Container *container,
                                   int options = DefaultOptions);
-    virtual bool createMenuActions(const Q3CString& classname, QWidget *w,
+    virtual bool createMenuActions(const QByteArray& classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startEditing(const Q3CString &classname, QWidget *w,
+    virtual bool startEditing(const QByteArray& classname, QWidget *w,
                               KFormDesigner::Container *container);
-    virtual bool previewWidget(const Q3CString &classname, QWidget *widget,
+    virtual bool previewWidget(const QByteArray& classname, QWidget *widget,
                                KFormDesigner::Container *container);
-    virtual bool saveSpecialProperty(const Q3CString &classname, const QString &name,
+    virtual bool saveSpecialProperty(const QByteArray& classname, const QString &name,
                                      const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-    virtual bool readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w,
+    virtual bool readSpecialProperty(const QByteArray& classname, QDomElement &node, QWidget *w,
                                      KFormDesigner::ObjectTreeItem *item);
-    virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
+    virtual QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
 protected:
-    virtual bool isPropertyVisibleInternal(const Q3CString &classname, QWidget *w,
-                                           const Q3CString &property, bool isTopLevel);
+    virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
+                                           const QByteArray &property, bool isTopLevel);
     virtual bool changeText(const QString &newText);
-    virtual void resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname);
+    virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
 
 public slots:
     void addTabPage();

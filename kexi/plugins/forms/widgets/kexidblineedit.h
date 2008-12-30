@@ -23,7 +23,6 @@
 
 #include <QValidator>
 #include <QEvent>
-#include <Q3CString>
 #include <QPaintEvent>
 #include <klineedit.h>
 #include <qvalidator.h>

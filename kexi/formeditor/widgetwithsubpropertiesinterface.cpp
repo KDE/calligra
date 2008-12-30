@@ -65,7 +65,7 @@ QWidget* WidgetWithSubpropertiesInterface::subwidget() const
     return m_subwidget;
 }
 
-QSet<Q3CString> WidgetWithSubpropertiesInterface::subproperies() const
+QSet<QByteArray> WidgetWithSubpropertiesInterface::subproperies() const
 {
     return m_subproperies;
 }

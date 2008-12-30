@@ -22,8 +22,7 @@
 
 #include "events.h"
 
-namespace KFormDesigner
-{
+using namespace KFormDesigner;
 
 Connection::Connection(const QString &sender, const QString &signal,
                        const QString &receiver, const QString &slot)
@@ -38,13 +37,13 @@ Connection::Connection(const QString &sender, const QString &signal,
 
 ConnectionBuffer::ConnectionBuffer()
 {
-    setAutoDelete(true);
+//Qt4    setAutoDelete(true);
 }
 
 void
 ConnectionBuffer::fixName(const QString &oldName, const QString &newName)
 {
-    for (Connection *c = first(); c; c = next()) {
+    foreach (Connection *c, *this) {
         if (c->sender() == oldName)
             c->setSender(newName);
         if (c->receiver() == oldName)
@@ -56,8 +55,8 @@ ConnectionBuffer*
 ConnectionBuffer::allConnectionsForWidget(const QString &widget)
 {
     ConnectionBuffer *list = new ConnectionBuffer();
-    list->setAutoDelete(false); // or it will delete all our connections
-    for (Connection *c = first(); c; c = next()) {
+//Qt4    list->setAutoDelete(false); // or it will delete all our connections
+    foreach (Connection *c, *this) {
         if ((c->sender() == widget) || (c->receiver() == widget))
             list->append(c);
     }
@@ -79,7 +78,7 @@ ConnectionBuffer::save(QDomNode &parentNode)
         connections = domDoc.createElement("connections");
     parentNode.appendChild(connections);
 
-    for (Connection *c = first(); c; c = next()) {
+    foreach (Connection *c, *this) {
         QDomElement connection = domDoc.createElement("connection");
         connection.setAttribute("language", "C++");
         connections.appendChild(connection);
@@ -130,12 +129,16 @@ ConnectionBuffer::load(QDomNode node)
 void
 ConnectionBuffer::removeAllConnectionsForWidget(const QString &widget)
 {
-    for (Connection *c = first(); c; c = next()) {
-        if ((c->sender() == widget) || (c->receiver() == widget))
-            removeRef(c);
+    ConnectionList toRemove;
+    foreach (Connection *c, *this) {
+        if ((c->sender() == widget) || (c->receiver() == widget)) {
+            toRemove.append(c);
+        }
     }
-}
-
+    foreach (Connection *c, toRemove) {
+        remove(c);
+    }
+    qDeleteAll(toRemove);
 }
 
 //#include "events.moc"

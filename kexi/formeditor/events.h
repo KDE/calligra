@@ -20,8 +20,8 @@
 #ifndef KFORMDESIGNEREVENTS_H
 #define KFORMDESIGNEREVENTS_H
 
-#include <q3ptrlist.h>
-#include <qstring.h>
+#include <QList>
+#include <QString>
 
 #include <kexi_export.h>
 
@@ -75,14 +75,13 @@ protected:
     QString m_slot;
 };
 
-typedef Q3PtrList<Connection> ConnectionList;
+typedef QList<Connection*> ConnectionList;
 
 class KFORMEDITOR_EXPORT ConnectionBuffer : public ConnectionList
 {
 public:
     ConnectionBuffer();
     ~ConnectionBuffer() {
-        ;
     }
 
     void save(QDomNode &parentNode);

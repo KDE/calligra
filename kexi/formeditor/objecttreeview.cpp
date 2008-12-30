@@ -17,13 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -194,7 +190,7 @@ ObjectTreeView::sizeHint() const
 }
 
 QString
-ObjectTreeView::iconNameForClass(const Q3CString &classname)
+ObjectTreeView::iconNameForClass(const QByteArray &classname)
 {
     return m_form->library()->iconName(classname);
 }
@@ -270,8 +266,9 @@ ObjectTreeView::slotSelectionChanged()
     foreach(Q3ListViewItem *item, list) {
         ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
         QWidget *w = it->objectTree()->widget();
-        if (w && (m_form->selectedWidgets()->findRef(w) == -1))
+        if (w && !m_form->selectedWidgets()->contains(w)) {
             m_form->setSelectedWidget(w, true, true);
+        }
     }
     if (hadFocus)
         setFocus(); //restore focus
@@ -299,7 +296,7 @@ ObjectTreeView::removeItem(ObjectTreeItem *item)
 }
 
 void
-ObjectTreeView::renameItem(const Q3CString &oldname, const Q3CString &newname)
+ObjectTreeView::renameItem(const QByteArray &oldname, const QByteArray &newname)
 {
     if (findItem(newname))
         return;
@@ -358,8 +355,9 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
     treeItem->moveItem(last);
 
     ObjectTreeList *list = item->children();
-    for (ObjectTreeItem *it = list->first(); it; it = list->next())
-        loadTree(it, treeItem);
+    foreach (ObjectTreeItem *titem, *list) {
+        loadTree(titem, treeItem);
+    }
 
     return treeItem;
 }

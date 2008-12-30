@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,11 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qwidget.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <QMap>
-#include <Q3CString>
+#include <QLabel>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -60,12 +56,12 @@ FormPrivate::FormPrivate()
     toplevel = 0;
     topTree = 0;
     widget = 0;
-    resizeHandles.setAutoDelete(true);
+//Qt4    resizeHandles.setAutoDelete(true);
     dirty = false;
     interactive = true;
     design = true;
     autoTabstops = false;
-    tabstops.setAutoDelete(false);
+//    tabstops.setAutoDelete(false);
     connBuffer = new ConnectionBuffer();
     formatVersion = KFormDesigner::version();
     originalFormatVersion = KFormDesigner::version();
@@ -77,7 +73,7 @@ FormPrivate::~FormPrivate()
     delete topTree;
     delete connBuffer;
     connBuffer = 0;
-    resizeHandles.setAutoDelete(false);
+//Qt4    resizeHandles.setAutoDelete(false);
     // otherwise, it tries to delete widgets which doesn't exist anymore
 }
 
@@ -133,10 +129,10 @@ Form::widget() const
 //////////////// Container -related functions ///////////////////////
 
 void
-Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString &)
+Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByteArray &)
 {
-    kDebug() << "Form::createToplevel() container= " << (container ? container->objectName() : "<NULL>")
-    << " formWidget=" << formWidget;
+    kDebug() << "container= " << (container ? container->objectName() : "<NULL>")
+        << " formWidget=" << formWidget;
 
     setFormWidget(formWidget);
     d->toplevel = new Container(0, container, this);
@@ -158,21 +154,21 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const Q3CString
 
     connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 
-    kDebug() << "Form::createToplevel(): d->toplevel=" << d->toplevel;
+    kDebug() << "d->toplevel=" << d->toplevel;
 }
 
 
 Container*
 Form::activeContainer()
 {
-    ObjectTreeItem *it;
-    if (d->selected.count() == 0)
+    if (d->selected.isEmpty())
         return d->toplevel;
 
+    ObjectTreeItem *it;
     if (d->selected.count() == 1)
         it = d->topTree->lookup(d->selected.last()->objectName());
     else
-        it = commonParentContainer(&(d->selected));
+        it = commonParentContainer(d->selected);
 
     if (!it)
         return 0;
@@ -183,26 +179,26 @@ Form::activeContainer()
 }
 
 ObjectTreeItem*
-Form::commonParentContainer(WidgetList *wlist)
+Form::commonParentContainer(const QWidgetList& wlist)
 {
-    ObjectTreeItem *item = 0;
-    WidgetList *list = new WidgetList();
-
-    // Creates a list of all widget parents
-    for (QWidget *w = wlist->first(); w; w = wlist->next()) {
-        if (list->findRef(w->parentWidget()) == -1)
-            list->append(w->parentWidget());
+    // create a list of all widget parents
+    QSet<QWidget*> parents;
+    foreach (QWidget *w, wlist) {
+        parents.insert(w->parentWidget());
     }
 
-    removeChildrenFromList(*list);
+    QWidgetList parentsList(parents.toList());
+    removeChildrenFromList(parentsList);
 
     // one widget remains == the container we are looking for
-    if (list->count() == 1)
-        item = d->topTree->lookup(list->first()->objectName());
-    else // we need to go one level up
-        item =  commonParentContainer(list);
-
-    delete list;
+    ObjectTreeItem *item;
+    if (parentsList.count() == 1) {
+        item = d->topTree->lookup(parentsList.first()->objectName());
+    }
+    else {
+        // we need to go one level up
+        item =  commonParentContainer(parentsList);
+    }
     return item;
 }
 
@@ -222,25 +218,26 @@ Form::parentContainer(QWidget *w)
         return it->parent()->parent()->container();
 }
 
-
-
 void
 Form::setDesignMode(bool design)
 {
     d->design = design;
-    if (!design) {
-        ObjectTreeDict *dict = new ObjectTreeDict(*(d->topTree->dict()));
-        ObjectTreeDictIterator it(*dict);
-        for (; it.current(); ++it)
-            m_lib->previewWidget(it.current()->widget()->metaObject()->className(), it.current()->widget(), d->toplevel);
-        delete dict;
+    if (design)
+        return;
 
-        d->widget = d->topTree->widget();
-        delete(d->topTree);
-        d->topTree = 0;
-        delete(d->toplevel);
-        d->toplevel = 0;
+    ObjectTreeHash hash(*(d->topTree->hash()));
+    foreach (ObjectTreeItem *item, hash) {
+        m_lib->previewWidget(
+            item->widget()->metaObject()->className(), 
+            item->widget(), d->toplevel
+        );
     }
+
+    d->widget = d->topTree->widget();
+    delete d->topTree;
+    d->topTree = 0;
+    delete d->toplevel;
+    d->toplevel = 0;
 }
 
 
@@ -261,8 +258,8 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSel
     QWidget *wtmp = w;
     while (!dontRaise && wtmp && wtmp->parentWidget() && (wtmp != widget())) {
         wtmp->raise();
-        if (d->resizeHandles[ wtmp->objectName()])
-            d->resizeHandles[ wtmp->objectName()]->raise();
+        if (d->resizeHandles.value( wtmp->objectName() ))
+            d->resizeHandles.value( wtmp->objectName() )->raise();
         wtmp = wtmp->parentWidget();
     }
 
@@ -271,6 +268,7 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSel
 
     if (!add) {
         d->selected.clear();
+        qDeleteAll(d->resizeHandles);
         d->resizeHandles.clear();
     }
     d->selected.append(w);
@@ -292,14 +290,15 @@ Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, bool moreWillBeSel
 ResizeHandleSet*
 Form::resizeHandlesForWidget(QWidget* w)
 {
-    return d->resizeHandles[w->objectName()];
+    return d->resizeHandles.value(w->objectName());
 }
 
 void
 Form::unSelectWidget(QWidget *w)
 {
-    d->selected.remove(w);
-    d->resizeHandles.remove(w->objectName());
+    d->selected.removeOne(w);
+    ResizeHandleSet *set = d->resizeHandles.take(w->objectName());
+    delete set;
 }
 
 void
@@ -312,6 +311,7 @@ void
 Form::clearSelection()
 {
     d->selected.clear();
+    qDeleteAll(d->resizeHandles);
     d->resizeHandles.clear();
     emit selectionChanged(0, false);
     emitActionSignals(false);
@@ -348,11 +348,14 @@ Form::emitActionSignals(bool withUndoAction)
 void
 Form::emitSelectionSignals()
 {
-    emit selectionChanged(selectedWidgets()->first(), false);
+    if (selectedWidgets()->first()) {
+        emit selectionChanged(selectedWidgets()->first(), false);
+    }
 // for(QWidget *w = selectedWidgets()->next(); w; w = selectedWidgets()->next())
 //  emit selectionChanged(selectedWidgets()->first(), true);
-    for (WidgetListIterator it(*selectedWidgets()); it.current(); ++it)
-        emit selectionChanged(it.current(), true);
+    foreach (QWidget *w, *selectedWidgets()) {
+        emit selectionChanged(w, true);
+    }
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
@@ -361,9 +364,9 @@ Form::formDeleted()
 {
 // clearSelection();
     d->selected.clear();
-    d->resizeHandles.setAutoDelete(false);
+//Qt4    d->resizeHandles.setAutoDelete(false);
     d->resizeHandles.clear();
-    d->resizeHandles.setAutoDelete(true);
+//Qt4    d->resizeHandles.setAutoDelete(true);
 // emit selectionChanged(0, false);
 // emitActionSignals(false);
 
@@ -373,7 +376,7 @@ Form::formDeleted()
 }
 
 void
-Form::changeName(const Q3CString &oldname, const Q3CString &newname)
+Form::changeName(const QByteArray &oldname, const QByteArray &newname)
 {
     if (oldname == newname)
         return;
@@ -385,7 +388,7 @@ Form::changeName(const Q3CString &oldname, const Q3CString &newname)
 //  KMessageBox::sorry(widget()->topLevelWidget(),
 //  i18n("A widget with this name already exists. "
 //   "Please choose another name or rename existing widget."));
-        kDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists";
+        kWarning() << "widget named " << newname << " already exists";
         FormManager::self()->propertySet()->property("name") = QVariant(oldname);
     } else {
         d->connBuffer->fixName(oldname, newname);
@@ -404,7 +407,7 @@ Form::emitChildAdded(ObjectTreeItem *item)
 void
 Form::emitChildRemoved(ObjectTreeItem *item)
 {
-    d->tabstops.remove(item);
+    d->tabstops.removeOne(item);
     if (d->connBuffer)
         d->connBuffer->removeAllConnectionsForWidget(item->name());
     emit childRemoved(item);
@@ -487,75 +490,79 @@ Form::addWidgetToTabStops(ObjectTreeItem *it)
 //   if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() != QWidget::NoFocus)) {
 //   if(obj->isWidgetType() && (((QWidget*)obj)->focusPolicy() & QWidget::TabFocus)) {
             if (obj->isWidgetType()) {//QWidget::TabFocus flag will be checked later!
-                if (d->tabstops.findRef(it) == -1) {
+                if (!d->tabstops.contains(it)) {
                     d->tabstops.append(it);
                     return;
                 }
             }
         }
-    } else if (d->tabstops.findRef(it) == -1) // not yet in the list
+    } else if (!d->tabstops.contains(it)) { // not yet in the list
         d->tabstops.append(it);
+    }
 }
 
 void
 Form::updateTabStopsOrder()
 {
-    for (ObjectTreeListIterator it(d->tabstops);it.current();) {
-        if (!(it.current()->widget()->focusPolicy() & Qt::TabFocus)) {
-            kexidbg << "Form::updateTabStopsOrder(): widget removed because has no TabFocus: " << it.current()->widget()->objectName();
-            d->tabstops.remove(it.current());
-        } else
-            ++it;
+    ObjectTreeList newList(d->tabstops);
+    foreach (ObjectTreeItem *item, d->tabstops) {
+        if (!(item->widget()->focusPolicy() & Qt::TabFocus)) {
+            kexidbg << "Widget removed because has no TabFocus: " 
+                << item->widget()->objectName();
+            newList.removeOne(item);
+        }
     }
+    d->tabstops = newList;
 }
 
 //! Collects all the containers reculsively. Used by Form::autoAssignTabStops().
-void collectContainers(ObjectTreeItem* item, QSet<Container*>& containers)
+static void collectContainers(ObjectTreeItem* item, QSet<Container*>& containers)
 {
     if (!item->container())
         return;
     if (!containers.contains(item->container())) {
-        kDebug() << "collectContainers() " << item->container()->objectTree()->className()
+        kDebug() << item->container()->objectTree()->className()
         << " " << item->container()->objectTree()->name();
         containers.insert(item->container());
     }
-    for (ObjectTreeListIterator it(*item->children()); it.current(); ++it)
-        collectContainers(it.current(), containers);
+    foreach (ObjectTreeItem *child, *item->children()) {
+        collectContainers(child, containers);
+    }
 }
 
 void
 Form::autoAssignTabStops()
 {
-    VerWidgetList list(toplevelContainer()->widget());
-    HorWidgetList hlist(toplevelContainer()->widget());
+    VerticalWidgetList list(toplevelContainer()->widget());
+    HorizontalWidgetList hlist(toplevelContainer()->widget());
 
     // 1. Collect all the containers, as we'll be sorting widgets groupped by containers
     QSet<Container*> containers;
 
     collectContainers(toplevelContainer()->objectTree(), containers);
 
-    foreach_list(ObjectTreeListIterator, it, d->tabstops) {
-        if (it.current()->widget()) {
-            kDebug() << "Form::autoAssignTabStops() widget to sort: " << it.current()->widget();
-            list.append(it.current()->widget());
+    foreach (ObjectTreeItem *item, d->tabstops) {
+        if (item->widget()) {
+            kDebug() << "Widget to sort: " << item->widget();
+            list.append(item->widget());
         }
     }
 
     list.sort();
-    foreach_list(Q3PtrListIterator<QWidget>, iter, list) {
-        kDebug() << iter.current()->metaObject()->className()
-            << " " << iter.current()->objectName();
+    foreach (QWidget *w, list) {
+        kDebug() << w->metaObject()->className()
+            << " " << w->objectName();
     }
     d->tabstops.clear();
 
     /// We automatically sort widget from the top-left to bottom-right corner
     //! \todo Handle RTL layout (ie from top-right to bottom-left)
-    foreach_list(WidgetListIterator, it, list) {
-        QWidget *w = it.current();
+    for (QWidgetList::ConstIterator it(list.constBegin()); it!=list.constEnd(); ++it) {
+        QWidget *w = *it;
         hlist.append(w);
 
         ++it;
-        QWidget *nextw = it.current();
+        QWidget *nextw = *it;
         QObject *page_w = 0;
         KFormDesigner::TabWidget *tab_w = KFormDesigner::findParent<KFormDesigner::TabWidget>(w, "KFormDesigner::TabWidget", page_w);
         while (nextw) {
@@ -573,14 +580,14 @@ Form::autoAssignTabStops()
             }
             hlist.append(nextw);
             ++it;
-            nextw = it.current();
+            nextw = *it;
         }
         hlist.sort();
 
-        for (WidgetListIterator it2(hlist); it2.current() != 0; ++it2) {
-            ObjectTreeItem *tree = d->topTree->lookup(it2.current()->objectName());
+        foreach (QWidget *w, hlist) {
+            ObjectTreeItem *tree = d->topTree->lookup(w->objectName());
             if (tree) {
-                kDebug() << "Form::autoAssignTabStops() adding " << tree->name();
+                kDebug() << "adding " << tree->name();
                 d->tabstops.append(tree);
             }
         }

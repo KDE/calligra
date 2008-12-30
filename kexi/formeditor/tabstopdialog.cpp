@@ -98,11 +98,13 @@ int TabStopDialog::exec(Form *form)
     if (form->autoTabStops())
         form->autoAssignTabStops();
     form->updateTabStopsOrder();
-    ObjectTreeListIterator it(form->tabStopsIterator());
-    it.toLast();
-    for (;it.current(); --it)
-        new ObjectTreeViewItem(m_treeview, it.current());
-
+    if (!form->tabStops()->isEmpty()) {
+        ObjectTreeList::ConstIterator it(form->tabStops()->constBegin());
+        it+=(form->tabStops()->count()-1);
+        for (;it!=form->tabStops()->constEnd(); --it) {
+            new ObjectTreeViewItem(m_treeview, *it);
+        }
+    }
     m_check->setChecked(form->autoTabStops());
 
     if (m_treeview->firstChild()) {

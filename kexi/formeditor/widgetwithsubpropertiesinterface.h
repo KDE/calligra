@@ -20,7 +20,6 @@
 #ifndef WIDGETWITHSUBPROPERTIESINTERFACE_H
 #define WIDGETWITHSUBPROPERTIESINTERFACE_H
 
-#include <q3cstring.h>
 #include <qwidget.h>
 #include <qpointer.h>
 #include <qvariant.h>
@@ -50,7 +49,7 @@ public:
     QWidget* subwidget() const;
 
     //! \return a set of subproperties available for this widget.
-    QSet<Q3CString> subproperies() const;
+    QSet<QByteArray> subproperies() const;
 
     //! \return a metaproperty for a widget's subproperty
     //! or invalid metaproperty if there is no such subproperty.
@@ -67,7 +66,7 @@ public:
 
 protected:
     QPointer<QWidget> m_subwidget;
-    QSet<Q3CString> m_subproperies;
+    QSet<QByteArray> m_subproperies;
 };
 }
 

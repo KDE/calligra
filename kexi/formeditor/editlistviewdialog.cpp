@@ -266,9 +266,9 @@ EditListViewDialog::updateItemProperties(Q3ListBoxItem *item)
         m_propSet->blockSignals(true); // we don't want changeProperty to be called
         (*m_propSet)["caption"].setValue(m_listview->columnText(id), false);
         (*m_propSet)["width"].setValue(m_listview->columnWidth(id), false);
-        (*m_propSet)["clickable"].setValue(QVariant(m_listview->header()->isClickEnabled(id), 4), false);
-        (*m_propSet)["resizable"].setValue(QVariant(m_listview->header()->isResizeEnabled(id), 4), false);
-        (*m_propSet)["fullwidth"].setValue(QVariant(m_listview->header()->isStretchEnabled(id), 4), false);
+        (*m_propSet)["clickable"].setValue(QVariant(m_listview->header()->isClickEnabled(id)), false);
+        (*m_propSet)["resizable"].setValue(QVariant(m_listview->header()->isResizeEnabled(id)), false);
+        (*m_propSet)["fullwidth"].setValue(QVariant(m_listview->header()->isStretchEnabled(id)), false);
         m_propSet->blockSignals(false);
         m_editor->changeSet(m_propSet);
     }
@@ -358,8 +358,9 @@ void
 EditListViewDialog::updateButtons(Q3ListViewItem *item)
 {
     if (!item) {
-        for (int i = BNewChild; i <= BRowDown; i++)
-            m_buttons[i]->setEnabled(false);
+        foreach (QToolButton *button, m_buttons) {
+            button->setEnabled(false);
+        }
         return;
     }
 

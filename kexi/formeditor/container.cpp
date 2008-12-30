@@ -23,16 +23,12 @@
 #include <qpixmap.h>
 #include <qrect.h>
 #include <qevent.h>
-#include <q3valuevector.h>
 #include <qlayout.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QKeyEvent>
-#include <Q3ValueList>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QMouseEvent>
 
 #include <kdebug.h>
@@ -197,7 +193,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent)
     m_layout = 0;
     m_layType = NoLayout;
 
-    Q3CString classname = container->metaObject()->className();
+    QByteArray classname = container->metaObject()->className();
     if ((classname == "HBox") || (classname == "Grid") || (classname == "VBox") ||
             (classname == "HFlow")  || (classname == "VFlow"))
         m_margin = 4; // those containers don't have frames, so little margin
@@ -272,7 +268,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
         if ((mev->modifiers() == Qt::ControlModifier || mev->modifiers() == Qt::ShiftModifier)
                 && !FormManager::self()->isInserting()) { // multiple selection mode
-            if (d->form->selectedWidgets()->findRef(m_moving) != -1) { // widget is already selected
+            if (d->form->selectedWidgets()->contains(m_moving)) { // widget is already selected
                 if (d->form->selectedWidgets()->count() > 1) // we remove it from selection
                     unSelectWidget(m_moving);
                 else { // the widget is the only selected, so it means we want to copy it
@@ -284,11 +280,14 @@ Container::eventFilter(QObject *s, QEvent *e)
             } else // the widget is not yet selected, we add it
                 setSelectedWidget(m_moving, true, (mev->button() == Qt::RightButton));
         } else if ((d->form->selectedWidgets()->count() > 1)) { //&& (!d->form->manager()->isInserting())) // more than one widget selected
-            if (d->form->selectedWidgets()->findRef(m_moving) == -1) // widget is not selected, it becomes the only selected widget
+            if (!d->form->selectedWidgets()->contains(m_moving)) {
+                // widget is not selected, it becomes the only selected widget
                 setSelectedWidget(m_moving, false, (mev->button() == Qt::RightButton));
+            }
             // If the widget is already selected, we do nothing (to ease widget moving, etc.)
-        } else// if(!d->form->manager()->isInserting())
+        } else {// if(!d->form->manager()->isInserting())
             setSelectedWidget(m_moving, false, (mev->button() == Qt::RightButton));
+        }
 
         // we are inserting a widget or drawing a selection rect in the form
         if ((/*s == m_container &&*/ FormManager::self()->isInserting()) || ((s == widget()) && !d->toplevel())) {
@@ -432,7 +431,10 @@ Container::eventFilter(QObject *s, QEvent *e)
             QColor sc2(Qt::black);
             sc2.setAlpha(200);
             QPen selPen1(sc2, 1.0);
-            QPen selPen2(sc1, 1.0, Qt::DotLine);
+            QPen selPen2(sc1, 1.0, Qt::CustomDashLine);
+            QVector<qreal> dashes;
+            dashes << 2 << 2;
+            selPen2.setDashPattern(dashes);
             p.setPen(selPen1);
             p.drawRect(d->selectionOrInsertingRectangle());
             p.setPen(selPen2);
@@ -458,7 +460,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             // try to find the widget which was clicked last and should be edited
             if (d->form->selectedWidgets()->count() == 1)
                 w = d->form->selectedWidgets()->first();
-            else if (d->form->selectedWidgets()->findRef(m_moving) != -1)
+            else if (d->form->selectedWidgets()->contains(m_moving))
                 w = m_moving;
             else
                 w = d->form->selectedWidgets()->last();
@@ -498,13 +500,15 @@ Container::eventFilter(QObject *s, QEvent *e)
             moveSelectedWidgetsBy(0, form()->gridSize());
             return true;
         } else if ((kev->key() == Qt::Key_Tab) || (kev->key() == Qt::Key_Backtab)) {
-            ObjectTreeItem *item = form()->objectTree()->lookup(form()->selectedWidgets()->first()->objectName());
+            ObjectTreeItem *item = form()->objectTree()->lookup(
+                form()->selectedWidgets()->first()->objectName()
+            );
             if (!item || !item->parent())
                 return true;
             ObjectTreeList *list = item->parent()->children();
             if (list->count() == 1)
                 return true;
-            int index = list->findRef(item);
+            int index = list->indexOf(item);
 
             if (kev->key() == Qt::Key_Backtab) {
                 if (index == 0) // go back to the last item
@@ -683,13 +687,17 @@ Container::setLayout(LayoutType type)
 
     switch (type) {
     case HBox: {
-        m_layout = (QLayout*) new Q3HBoxLayout(widget(), m_margin, m_spacing);
-        createBoxLayout(new HorWidgetList(d->form->toplevelContainer()->widget()));
+        m_layout = static_cast<QLayout*>( new QHBoxLayout(widget()) );
+        m_layout->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
+        m_layout->setSpacing(m_spacing);
+        createBoxLayout(new HorizontalWidgetList(d->form->toplevelContainer()->widget()));
         break;
     }
     case VBox: {
-        m_layout = (QLayout*) new Q3VBoxLayout(widget(), m_margin, m_spacing);
-        createBoxLayout(new VerWidgetList(d->form->toplevelContainer()->widget()));
+        m_layout = static_cast<QLayout*>( new QVBoxLayout(widget()) );
+        m_layout->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
+        m_layout->setSpacing(m_spacing);
+        createBoxLayout(new VerticalWidgetList(d->form->toplevelContainer()->widget()));
         break;
     }
     case Grid: {
@@ -698,7 +706,9 @@ Container::setLayout(LayoutType type)
     }
     case  HFlow: {
 #ifndef KEXI_NO_FLOWLAYOUT
-        KexiFlowLayout *flow = new KexiFlowLayout(widget(), m_margin, m_spacing);
+        KexiFlowLayout *flow = new KexiFlowLayout(widget());
+        flow->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
+        flow->setSpacing(m_spacing);
         flow->setOrientation(Qt::Horizontal);
         m_layout = (QLayout*)flow;
         createFlowLayout();
@@ -732,16 +742,18 @@ Container::reloadLayout()
 }
 
 void
-Container::createBoxLayout(WidgetList *list)
+Container::createBoxLayout(CustomSortableWidgetList* list)
 {
-    Q3BoxLayout *layout = static_cast<Q3BoxLayout*>(m_layout);
+    QBoxLayout *layout = static_cast<QBoxLayout*>(m_layout);
 
-    for (ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
-        list->append(tree->widget());
+    foreach (ObjectTreeItem *titem, *m_tree->children()) {
+        list->append(titem->widget());
+    }
     list->sort();
 
-    for (QWidget *obj = list->first(); obj; obj = list->next())
-        layout->addWidget(obj);
+    foreach (QWidget *w, *list) {
+        layout->addWidget(w);
+    }
     delete list;
 }
 
@@ -754,28 +766,30 @@ Container::createFlowLayout()
         return;
 
     const int offset = 15;
-    WidgetList *list = 0, *list2 = 0;
+    QWidgetList *list = 0, *list2 = 0;
     if (flow->orientation() == Qt::Horizontal) {
-        list = new VerWidgetList(d->form->toplevelContainer()->widget());
-        list2 = new HorWidgetList(d->form->toplevelContainer()->widget());
+        list = new VerticalWidgetList(d->form->toplevelContainer()->widget());
+        list2 = new HorizontalWidgetList(d->form->toplevelContainer()->widget());
     } else {
-        list = new HorWidgetList(d->form->toplevelContainer()->widget());
-        list2 = new VerWidgetList(d->form->toplevelContainer()->widget());
+        list = new HorizontalWidgetList(d->form->toplevelContainer()->widget());
+        list2 = new VerticalWidgetList(d->form->toplevelContainer()->widget());
     }
 
     // fill the list
-    for (ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
-        list->append(tree->widget());
+    foreach (ObjectTreeItem *titem, *m_tree->children()) {
+        list->append(titem->widget());
+    }
     list->sort();
 
     if (flow->orientation() == Qt::Horizontal) {
         int y = list->first()->y();
-        for (QWidget *w = list->first(); w; w = list->next()) {
+        foreach (QWidget *w, *list) {
             if ((w->y() > y + offset)) {
                 // start a new line
                 list2->sort();
-                for (QWidget *obj = list2->first(); obj; obj = list2->next())
-                    flow->add(obj);
+                foreach (QWidget *w2, *list2) {
+                    flow->add(w2);
+                }
                 list2->clear();
                 y = w->y();
             }
@@ -783,16 +797,18 @@ Container::createFlowLayout()
         }
 
         list2->sort(); // don't forget the last line
-        for (QWidget *obj = list2->first(); obj; obj = list2->next())
-            flow->add(obj);
+        foreach (QWidget *w, *list2) {
+            flow->add(w);
+        }
     } else {
         int x = list->first()->x();
-        for (QWidget *w = list->first(); w; w = list->next()) {
+        foreach (QWidget *w, *list) {
             if ((w->x() > x + offset)) {
                 // start a new column
                 list2->sort();
-                for (QWidget *obj = list2->first(); obj; obj = list2->next())
-                    flow->add(obj);
+                foreach (QWidget *w2, *list2) {
+                    flow->add(w2);
+                }
                 list2->clear();
                 x = w->x();
             }
@@ -800,8 +816,9 @@ Container::createFlowLayout()
         }
 
         list2->sort(); // don't forget the last column
-        for (QWidget *obj = list2->first(); obj; obj = list2->next())
-            flow->add(obj);
+        foreach (QWidget *w, *list2) {
+            flow->add(w);
+        }
     }
 
     delete list;
@@ -813,31 +830,31 @@ void
 Container::createGridLayout(bool testOnly)
 {
     //Those lists sort widgets by y and x
-    VerWidgetList *vlist = new VerWidgetList(d->form->toplevelContainer()->widget());
-    HorWidgetList *hlist = new HorWidgetList(d->form->toplevelContainer()->widget());
+    VerticalWidgetList *vlist = new VerticalWidgetList(d->form->toplevelContainer()->widget());
+    HorizontalWidgetList *hlist = new HorizontalWidgetList(d->form->toplevelContainer()->widget());
     // The vector are used to store the x (or y) beginning of each column (or row)
-    Q3ValueVector<int> cols;
-    Q3ValueVector<int> rows;
+    QVector<int> cols;
+    QVector<int> rows;
     int end = -1000;
     bool same = false;
 
-    for (ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
-        vlist->append(tree->widget());
+    foreach (ObjectTreeItem *titem, *m_tree->children()) {
+        vlist->append(titem->widget());
+    }
     vlist->sort();
 
-    for (ObjectTreeItem *tree = m_tree->children()->first(); tree; tree = m_tree->children()->next())
-        hlist->append(tree->widget());
+    foreach (ObjectTreeItem *titem, *m_tree->children()) {
+        hlist->append(titem->widget());
+    }
     hlist->sort();
 
     // First we need to make sure that two widgets won't be in the same row,
     // ie that no widget overlap another one
     if (!testOnly) {
-        for (WidgetListIterator it(*vlist); it.current() != 0; ++it) {
-            QWidget *w = it.current();
-            WidgetListIterator it2 = it;
-
-            for (; it2.current() != 0; ++it2) {
-                QWidget *nextw = it2.current();
+        for (QWidgetList::ConstIterator it(vlist->constBegin()); it!=vlist->constEnd(); ++it) {
+            QWidget *w = *it;
+            for (QWidgetList::ConstIterator it2(it); it2!=vlist->constEnd(); ++it2) {
+                QWidget *nextw = *it2;
                 if ((w->y() >= nextw->y()) || (nextw->y() >= w->geometry().bottom()))
                     break;
 
@@ -856,21 +873,21 @@ Container::createGridLayout(bool testOnly)
     }
 
     // Then we count the number of rows in the layout, and set their beginnings
-    for (WidgetListIterator it(*vlist); it.current() != 0; ++it) {
-        QWidget *w = it.current();
-        WidgetListIterator it2 = it;
+    for (QWidgetList::ConstIterator it(vlist->constBegin()); it!=vlist->constEnd(); ++it) {
+        QWidget *w = *it;
         if (!same) { // this widget will make a new row
             end = w->geometry().bottom();
             rows.append(w->y());
         }
+        QWidgetList::ConstIterator it2(it);
 
         // If same == true, it means we are in the same row as prev widget
         // (so no need to create a new column)
         ++it2;
-        if (!it2.current())
+        if (it2==vlist->constEnd())
             break;
 
-        QWidget *nextw = it2.current();
+        QWidget *nextw = *it2;
         if (nextw->y() >= end)
             same = false;
         else {
@@ -884,19 +901,19 @@ Container::createGridLayout(bool testOnly)
     end = -10000;
     same = false;
     // We do the same thing for the columns
-    for (WidgetListIterator it(*hlist); it.current() != 0; ++it) {
-        QWidget *w = it.current();
-        WidgetListIterator it2 = it;
+    for (QWidgetList::ConstIterator it(hlist->constBegin()); it!=hlist->constEnd(); ++it) {
+        QWidget *w = *it;
         if (!same) {
             end = w->geometry().right();
             cols.append(w->x());
         }
 
+        QWidgetList::ConstIterator it2(it);
         ++it2;
-        if (!it2.current())
+        if (it2==hlist->constEnd())
             break;
 
-        QWidget *nextw = it2.current();
+        QWidget *nextw = *it2;
         if (nextw->x() >= end)
             same = false;
         else {
@@ -908,17 +925,20 @@ Container::createGridLayout(bool testOnly)
     kDebug() << "the new grid will have n columns: n == " << cols.size();
 
     // We create the layout ..
-    Q3GridLayout *layout = 0;
+    QGridLayout *layout = 0;
     if (!testOnly) {
-        layout = new Q3GridLayout(widget(), rows.size(), cols.size(), m_margin, m_spacing);
+        layout = new QGridLayout(widget()); //, rows.size(), cols.size(), m_margin, m_spacing);
         layout->setObjectName("grid");
-        m_layout = (QLayout*)layout;
+//! @todo allow for individual margins and spacing
+        layout->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
+        layout->setSpacing(m_spacing);
+        m_layout = static_cast<QLayout*>(layout);
     }
 
     // .. and we fill it with widgets
-    for (WidgetListIterator it(*vlist); it.current() != 0; ++it) {
-        QWidget *w = it.current();
-        QRect r = w->geometry();
+    for (QWidgetList::ConstIterator it(vlist->constBegin()); it!=vlist->constEnd(); ++it) {
+        QWidget *w = *it;
+        QRect r( w->geometry() );
         uint wcol = 0, wrow = 0, endrow = 0, endcol = 0;
         uint i = 0;
 
@@ -973,10 +993,12 @@ Container::createGridLayout(bool testOnly)
                 layout->addWidget(w, wrow, wcol);
             item->setGridPos(wrow, wcol, 0, 0);
         } else {
-            if (!endcol)  endcol = wcol;
-            if (!endrow)  endrow = wrow;
+            if (!endcol)
+                endcol = wcol;
+            if (!endrow)
+                endrow = wrow;
             if (!testOnly)
-                layout->addMultiCellWidget(w, wrow, endrow, wcol, endcol);
+                layout->addWidget(w, wrow, wcol, endrow - wrow + 1, endcol - wcol + 1);
             item->setGridPos(wrow, wcol, endrow - wrow + 1, endcol - wcol + 1);
         }
     }
@@ -1061,8 +1083,8 @@ Container::drawSelectionRect(QMouseEvent *mev)
     setSelectedWidget(widget(), false);
     QWidget *widgetToSelect = 0;
     // We check which widgets are in the rect and select them
-    for (ObjectTreeItem *item = m_tree->children()->first(); item; item = m_tree->children()->next()) {
-        QWidget *w = item->widget();
+    foreach (ObjectTreeItem *titem, *m_tree->children()) {
+        QWidget *w = titem->widget();
         if (!w)
             continue;
         if (w->geometry().intersects(r) && w != widget()) {
@@ -1139,8 +1161,7 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
 
     if (d->form->formWidget())  {
         QList<QRect> rectList;
-        for (QWidget *w = d->form->selectedWidgets()->first();
-                w; w = d->form->selectedWidgets()->next()) {
+        foreach (QWidget *w, *d->form->selectedWidgets()) {
             QRect drawRect = w->geometry();
             QPoint p = mev->pos() - m_grab;
             drawRect.moveTo(drawRect.x() + p.x(), drawRect.y() + p.y());
@@ -1166,8 +1187,8 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
     const int gridY = d->form->gridSize();
     int dx = realdx, dy = realdy;
 
-    for (QWidget *w = d->form->selectedWidgets()->first(); w; w = d->form->selectedWidgets()->next()) {
-        if (!w || !w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+    foreach (QWidget *w, *d->form->selectedWidgets()) {
+        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
             continue;
 
         if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
@@ -1189,9 +1210,9 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             dy = qMin(w->parentWidget()->height() - gridY - w->y(), dy);
     }
 
-    for (QWidget *w = d->form->selectedWidgets()->first(); w; w = d->form->selectedWidgets()->next()) {
+    foreach (QWidget *w, *d->form->selectedWidgets()) {
         // Don't move tab widget pages (or widget stack pages)
-        if (!w || !w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
             continue;
 
         if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {

@@ -18,14 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qsizepolicy.h>
-#include <qpainter.h>
-#include <qdom.h>
-#include <qvariant.h>
-//Added by qt3to4:
-#include <Q3PointArray>
-#include <Q3CString>
-#include <QPaintEvent>
+#include <QSizePolicy>
+#include <QPainter>
+#include <QDom.h>
+#include <QPolygon>
+#include <QVariant>
 
 #include <kdebug.h>
 
@@ -85,9 +82,8 @@ Spring::paintEvent(QPaintEvent *ev)
     QPainter p(this);
     if (!ev->erased())
         p.eraseRect(0, 0, width(), height());
-    p.setPen(QPen(Qt::white, 1));
-    p.setCompositionMode(QPainter::CompositionMode_Xor);
-    Q3PointArray pa(4);
+//todo?    p.setPen(QPen(Qt::white, 1));
+//todo?    p.setCompositionMode(QPainter::CompositionMode_Xor);
     if (m_orient == Qt::Vertical) {
         uint part = (height() + 16) / 16;
         if (part < 3)
@@ -95,12 +91,18 @@ Spring::paintEvent(QPaintEvent *ev)
         uint w = width() - 1;
         uint offset = 0;
         for (uint i = 0; i < 4; i++, offset += (part * 4)) {
-            pa.putPoints(0, 4,
+            QPolygon poly1(4);
+            poly1.putPoints(0, 4,
                          w / 2, offset, w, offset + part, w, offset + part, w / 2, offset + part*2);
-            p.drawCubicBezier(pa, 0);
-            pa.putPoints(0, 4,
+            QPainterPath ppath1;
+            ppath1.addPolygon(poly1);
+            p.strokePath(ppath1, p.pen());
+            QPolygon poly2(4);
+            poly2.putPoints(0, 4,
                          w / 2, offset + part*2, 0, offset + part*3, 0, offset + part*3, w / 2, offset + part*4);
-            p.drawCubicBezier(pa, 0);
+            QPainterPath ppath2;
+            ppath2.addPolygon(poly2);
+            p.strokePath(ppath2, p.pen());
         }
     } else {
         uint part = (width() + 16) / 16;
@@ -109,18 +111,24 @@ Spring::paintEvent(QPaintEvent *ev)
         uint h = height() - 1;
         uint offset = 0;
         for (uint i = 0; i < 4; i++, offset += (part * 4)) {
-            pa.putPoints(0, 4,
+            QPolygon poly1(4);
+            poly1.putPoints(0, 4,
                          offset, h / 2, offset + part, 0, offset + part, 0, offset + part*2, h / 2);
-            p.drawCubicBezier(pa, 0);
-            pa.putPoints(0, 4,
+            QPainterPath ppath1;
+            ppath1.addPolygon(poly1);
+            p.strokePath(ppath1, p.pen());
+            QPolygon poly2(4);
+            poly2.putPoints(0, 4,
                          offset + part*2, h / 2, offset + part*3, h, offset + part*3, h, offset + part*4, h / 2);
-            p.drawCubicBezier(pa, 0);
+            QPainterPath ppath2;
+            ppath2.addPolygon(poly2);
+            p.strokePath(ppath2, p.pen());
         }
     }
 }
 
 bool
-Spring::isPropertyVisible(const Q3CString &name)
+Spring::isPropertyVisible(const QByteArray &name)
 {
     if ((name == "name") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
         return true;

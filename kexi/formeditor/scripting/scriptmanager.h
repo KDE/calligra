@@ -20,8 +20,8 @@
 #ifndef SCRIPTMANAGER_H
 #define SCRIPTMANAGER_H
 
-#include <qobject.h>
-#include <q3ptrdict.h>
+#include <QObject>
+#include <QHash>
 
 class FormScript;
 
@@ -68,7 +68,7 @@ public slots:
 private:
     Kross::Api::Manager  *m_manager;
     KFormDesigner::FormManager *m_formManager;
-    Q3PtrDict<FormScript>  m_dict;
+    QHash<Form*, FormScript*>  m_hash;
 };
 
 #endif

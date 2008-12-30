@@ -21,13 +21,10 @@
 #ifndef KFORMEDITOR_COMMANDS_H
 #define KFORMEDITOR_COMMANDS_H
 
-#include <qmap.h>
-#include <q3dict.h>
-#include <q3ptrlist.h>
-#include <q3ptrdict.h>
+#include <QHash>
 #include <qvariant.h>
 #include <qdom.h>
-#include <Q3CString>
+#include <QString>
 
 #include <k3command.h>
 #include "utils.h"
@@ -54,27 +51,27 @@ public:
     virtual void debug() = 0;
 };
 
-/*! This command is used when changing a property for one or more widgets. \a oldvalues is a QMap
+/*! This command is used when changing a property for one or more widgets. \a oldvalues is a QHash
  of the old values of the property for every widget, to allow reverting the change. \a value is
  the new value of the property. You can use the simpler constructor for a single widget.
  */
 class KFORMEDITOR_EXPORT PropertyCommand : public Command
 {
 public:
-    PropertyCommand(WidgetPropertySet *set, const Q3CString &wname, const QVariant &oldValue,
-                    const QVariant &value, const Q3CString &property);
-    PropertyCommand(WidgetPropertySet *set, const QMap<Q3CString, QVariant> &oldvalues,
-                    const QVariant &value, const Q3CString &property);
+    PropertyCommand(WidgetPropertySet *set, const QByteArray &wname, const QVariant &oldValue,
+                    const QVariant &value, const QByteArray &property);
+    PropertyCommand(WidgetPropertySet *set, const QHash<QByteArray, QVariant> &oldvalues,
+                    const QVariant &value, const QByteArray &property);
 
     virtual void execute();
     virtual void unexecute();
     virtual QString name() const;
-    Q3CString property() const {
+    QByteArray property() const {
         return m_property;
     }
 
     void  setValue(const QVariant &value);
-    const QMap<Q3CString, QVariant>& oldValues() const {
+    const QHash<QByteArray, QVariant>& oldValues() const {
         return m_oldvalues;
     }
     virtual void debug();
@@ -82,8 +79,8 @@ public:
 protected:
     WidgetPropertySet *m_propSet;
     QVariant m_value;
-    QMap<Q3CString, QVariant> m_oldvalues;
-    Q3CString m_property;
+    QHash<QByteArray, QVariant> m_oldvalues;
+    QByteArray m_property;
 };
 
 /*! This command is used when moving multiples widgets at the same time, while holding Ctrl or Shift.
@@ -115,7 +112,7 @@ class KFORMEDITOR_EXPORT AlignWidgetsCommand : public Command
 public:
     enum { AlignToGrid = 100, AlignToLeft, AlignToRight, AlignToTop, AlignToBottom };
 
-    AlignWidgetsCommand(int type, WidgetList &list, Form *form);
+    AlignWidgetsCommand(int type, QWidgetList &list, Form *form);
 
     virtual void execute();
     virtual void unexecute();
@@ -125,7 +122,7 @@ public:
 protected:
     Form *m_form;
     int m_type;
-    QMap<Q3CString, QPoint> m_pos;
+    QHash<QByteArray, QPoint> m_pos;
 };
 
 /*! This command is used when an item in 'Adjust Widgets Size' is selected. You just need
@@ -138,7 +135,7 @@ public:
            SizeToSmallHeight, SizeToBigHeight
          };
 
-    AdjustSizeCommand(int type, WidgetList &list, Form *form);
+    AdjustSizeCommand(int type, QWidgetList &list, Form *form);
 
     virtual void execute();
     virtual void unexecute();
@@ -151,8 +148,8 @@ protected:
 protected:
     Form *m_form;
     int m_type;
-    QMap<Q3CString, QPoint> m_pos;
-    QMap<Q3CString, QSize> m_sizes;
+    QHash<QByteArray, QPoint> m_pos;
+    QHash<QByteArray, QSize> m_sizes;
 };
 
 /*! This command is used when switching the layout of a Container. It remembers the old pos
@@ -160,7 +157,7 @@ protected:
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 public:
-    LayoutPropertyCommand(WidgetPropertySet *set, const Q3CString &wname,
+    LayoutPropertyCommand(WidgetPropertySet *set, const QByteArray &wname,
                           const QVariant &oldValue, const QVariant &value);
 
     virtual void execute();
@@ -170,7 +167,7 @@ public:
 
 protected:
     Form *m_form;
-    QMap<Q3CString, QRect>  m_geometries;
+    QHash<QByteArray, QRect>  m_geometries;
 };
 
 /*! This command is used when inserting a widger using toolbar or menu. You only need to give
@@ -188,8 +185,8 @@ public:
      otherwise, \a namePrefix is used to generate widget's name.
      This allows e.g. inserting a widgets having name constructed using
      */
-    InsertWidgetCommand(Container *container, const Q3CString& className,
-                        const QPoint& pos, const Q3CString& namePrefix = Q3CString());
+    InsertWidgetCommand(Container *container, const QByteArray& className,
+                        const QPoint& pos, const QByteArray& namePrefix = QByteArray());
 
     virtual void execute();
     virtual void unexecute();
@@ -197,7 +194,7 @@ public:
     virtual void debug();
 
     //! \return inserted widget's name
-    Q3CString widgetName() const {
+    QByteArray widgetName() const {
         return m_name;
     }
 
@@ -205,18 +202,18 @@ protected:
     Form *m_form;
     QString m_containername;
     QPoint m_point;
-    Q3CString m_name;
-    Q3CString m_class;
+    QByteArray m_name;
+    QByteArray m_class;
     QRect m_insertRect;
 };
 
 /*! This command is used when creating a layout from some widgets using "Lay out in..." menu item.
  It remembers the old pos of every widget, and takes care of updating ObjectTree too. You need
- to supply a WidgetList of the selected widgets. */
+ to supply a QWidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT CreateLayoutCommand : public Command
 {
 public:
-    CreateLayoutCommand(int layoutType, WidgetList &list, Form *form);
+    CreateLayoutCommand(int layoutType, QWidgetList &list, Form *form);
     CreateLayoutCommand() {
         ;
     } // for BreakLayoutCommand
@@ -230,7 +227,7 @@ protected:
     Form *m_form;
     QString m_containername;
     QString m_name;
-    QMap<Q3CString, QRect> m_pos;
+    QHash<QByteArray, QRect> m_pos;
     int m_type;
 };
 
@@ -286,11 +283,11 @@ protected:
 };
 
 /*! This command is used when deleting a widget using the "Delete" menu item.
-You need to give a WidgetList of the selected widgets. */
+You need to give a QWidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT DeleteWidgetCommand : public Command
 {
 public:
-    DeleteWidgetCommand(WidgetList &list, Form *form);
+    DeleteWidgetCommand(QWidgetList &list, Form *form);
 
     virtual void execute();
     virtual void unexecute();
@@ -300,8 +297,8 @@ public:
 protected:
     QDomDocument m_domDoc;
     Form *m_form;
-    QMap<Q3CString, Q3CString>  m_containers;
-    QMap<Q3CString, Q3CString>  m_parents;
+    QHash<QByteArray, QByteArray>  m_containers;
+    QHash<QByteArray, QByteArray>  m_parents;
 };
 
 /*! This command is used when cutting widgets. It is basically a DeleteWidgetCommand
@@ -309,7 +306,7 @@ which also updates the clipboard contents. */
 class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 public:
-    CutWidgetCommand(WidgetList &list, Form *form);
+    CutWidgetCommand(QWidgetList &list, Form *form);
 
     virtual void execute();
     virtual void unexecute();
@@ -380,7 +377,7 @@ protected:
     SubCommands *m_subCommands;
     //! Used to store pointers to subcommands that shouldn't be executed
     //! on CommandGroup::execute()
-    Q3PtrDict<char> m_commandsShouldntBeExecuted;
+    QSet<K3Command*> m_commandsShouldntBeExecuted;
     WidgetPropertySet *m_propSet;
 };
 

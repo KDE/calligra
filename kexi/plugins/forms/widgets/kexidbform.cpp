@@ -71,8 +71,8 @@ public:
             indicesForDataAwareWidgets.find(item));
         if (indicesForDataAwareWidgetsIt == indicesForDataAwareWidgets.constEnd())
             return -1;
-        kexipluginsdbg << "KexiDBForm: column # for item: "
-        << indicesForDataAwareWidgetsIt.value();
+        kexipluginsdbg << "column # for item: "
+            << indicesForDataAwareWidgetsIt.value();
         return indicesForDataAwareWidgetsIt.value();
     }
 
@@ -117,6 +117,7 @@ KexiDBForm::KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareO
     kexipluginsdbg << "KexiDBForm::KexiDBForm(): ";
     setCursor(QCursor(Qt::ArrowCursor)); //to avoid keeping Size cursor when moving from form's boundaries
     setAcceptDrops(true);
+    setAutoFillBackground(true);
 }
 
 KexiDBForm::~KexiDBForm()
@@ -324,37 +325,33 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
     uint numberOfDataAwareWidgets = 0;
 // if (d->orderedFocusWidgets.isEmpty()) {
     //generate a new list
-    for (KFormDesigner::ObjectTreeListIterator it(form->tabStopsIterator()); it.current(); ++it) {
-        if (it.current()->widget()->focusPolicy() & Qt::TabFocus) {
+    foreach (KFormDesigner::ObjectTreeItem* titem, *form->tabStops()) {
+        if (titem->widget()->focusPolicy() & Qt::TabFocus) {
             //this widget has tab focus:
-            it.current()->widget()->installEventFilter(this);
+            titem->widget()->installEventFilter(this);
             //also filter events for data-aware children of this widget (i.e. KexiDBAutoField's editors)
-            QList<QWidget*> children(it.current()->widget()->findChildren<QWidget*>());
+            QList<QWidget*> children(titem->widget()->findChildren<QWidget*>());
             foreach(QWidget* widget, children) {
-                //    if (dynamic_cast<KexiFormDataItemInterface*>(childrenIt.current())) {
-                kexipluginsdbg << "KexiDBForm::updateTabStopsOrder(): also adding '"
-                << widget->metaObject()->className()
-                << " " << widget->objectName()
-                << "' child to filtered widgets";
-                //it.current()->widget()->installEventFilter(static_cast<QWidget*>(childrenIt.current()));
+                kexipluginsdbg << "also adding '"
+                    << widget->metaObject()->className()
+                    << " " << widget->objectName()
+                    << "' child to filtered widgets";
                 widget->installEventFilter(this);
-                //   }
             }
             if (fromWidget) {
-                kexipluginsdbg << "KexiDBForm::updateTabStopsOrder() tab order: "
-                << fromWidget->objectName()
-                << " -> " << it.current()->widget()->objectName();
-                //    setTabOrder( fromWidget, it.current()->widget() );
+                kexipluginsdbg << "tab order: "
+                    << fromWidget->objectName()
+                    << " -> " << titem->widget()->objectName();
             }
-            fromWidget = it.current()->widget();
-            d->orderedFocusWidgets.append(it.current()->widget());
+            fromWidget = titem->widget();
+            d->orderedFocusWidgets.append(titem->widget());
         }
 
         KexiFormDataItemInterface* dataItem
-        = dynamic_cast<KexiFormDataItemInterface*>(it.current()->widget());
+            = dynamic_cast<KexiFormDataItemInterface*>(titem->widget());
         if (dataItem && !dataItem->dataSource().isEmpty()) {
             kexipluginsdbg << "#" << numberOfDataAwareWidgets << ": "
-            << dataItem->dataSource() << " (" << it.current()->widget()->objectName() << ")";
+                << dataItem->dataSource() << " (" << titem->widget()->objectName() << ")";
 
 // /*! @todo d->indicesForDataAwareWidgets SHOULD NOT BE UPDATED HERE BECAUSE
 // THERE CAN BE ALSO NON-TABSTOP DATA WIDGETS!
@@ -362,7 +359,7 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
             d->indicesForDataAwareWidgets.insert(dataItem, numberOfDataAwareWidgets);
             numberOfDataAwareWidgets++;
 
-            d->orderedDataAwareWidgets.append(it.current()->widget());
+            d->orderedDataAwareWidgets.append(titem->widget());
         }
     }//for
 // }

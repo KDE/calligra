@@ -21,8 +21,7 @@
 #include "kexidbdateedit.h"
 #include <qlayout.h>
 #include <qtoolbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>
 #include <kmenu.h>
@@ -68,7 +67,7 @@ KexiDBDateEdit::KexiDBDateEdit(const QDate &date, QWidget *parent)
     m_datePickerPopupMenu->insertItem(m_datePicker);
     btn->setPopup(m_datePickerPopupMenu);
 
-    Q3HBoxLayout* layout = new Q3HBoxLayout(this);
+    QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_edit, 1);
     layout->addWidget(btn, 0);
 

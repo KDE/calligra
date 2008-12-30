@@ -21,13 +21,10 @@
 #ifndef FORMMANAGER_H
 #define FORMMANAGER_H
 
-#include <qobject.h>
 #include <qdom.h>
-#include <q3ptrlist.h>
 #include <qtimer.h>
 #include <qpointer.h>
 #include <qstringlist.h>
-#include <Q3CString>
 #include <QActionGroup>
 
 #include "form.h"
@@ -61,7 +58,7 @@ class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
 class FormManager;
-typedef Q3PtrList<KAction> ActionList;
+typedef QList<KAction*> ActionList;
 
 //! @internal
 //static FormManager* FormManager_static = 0;
@@ -136,7 +133,7 @@ public:
 
     /*! \return The name of the class being inserted, corresponding
      to the menu item or the toolbar button clicked. */
-    Q3CString selectedClass() const {
+    QByteArray selectedClass() const {
         return m_selectedClass;
     }
 
@@ -325,7 +322,7 @@ public slots:
       or a "Widget" menu item. Prepares all Forms for
       creation of a new widget (ie changes cursor ...).
      */
-    void insertWidget(const Q3CString &classname);
+    void insertWidget(const QByteArray &classname);
 
     /*! Stops the current widget insertion (ie unset the cursor ...). */
     void stopInsert();
@@ -476,8 +473,8 @@ private:
     QPointer<KoProperty::EditorView>  m_editor;
     QPointer<ObjectTreeView>  m_treeview;
     // Forms
-    Q3PtrList<Form> m_forms;
-    Q3PtrList<Form> m_preview;
+    QList<Form*> m_forms;
+    QList<Form*> m_preview;
     QPointer<Form> m_active;
 
     // Copy/Paste
@@ -488,7 +485,7 @@ private:
 
     // Insertion
     bool m_inserting;
-    Q3CString m_selectedClass;
+    QByteArray m_selectedClass;
 
     // Connection stuff
     bool m_drawingSlot;
@@ -503,7 +500,7 @@ private:
 
     //! Used to delayed widgets deletion
     QTimer m_deleteWidgetLater_timer;
-    Q3PtrList<QWidget> m_deleteWidgetLater_list;
+    QWidgetList m_deleteWidgetLater_list;
 
 #ifdef KEXI_DEBUG_GUI
     KPageDialog *m_uiCodeDialog;

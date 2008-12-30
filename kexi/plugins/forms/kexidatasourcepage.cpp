@@ -398,19 +398,6 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
     QString objectClassName;
     if (propertySet && propertySet->contains("this:className"))
         objectClassName = (*propertySet)["this:className"].value().toString();
-    /*moved if (propertySet) {
-        Q3CString iconName;
-        QString objectClassString;
-        if (propertySet->contains("this:iconName"))
-          iconName = (*propertySet)["this:iconName"].value().toCString();
-        if (propertySet->contains("this:classString"))
-          objectClassString = (*propertySet)["this:classString"].value().toString();
-        m_objectInfoLabel->setObjectName(objectName);
-        m_objectInfoLabel->setObjectClassIcon(iconName);
-        m_objectInfoLabel->setObjectClassName(objectClassString);
-        if (propertySet->contains("this:className"))
-          objectClassName = (*propertySet)["this:className"].value().toCString();
-      }*/
     updateInfoLabelForPropertySet(propertySet);
 
     const bool isForm = objectClassName == "KexiDBForm";

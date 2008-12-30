@@ -20,16 +20,12 @@
 
 #include "kexiformview.h"
 
-#include <qobject.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QFileInfo>
 #include <QFocusEvent>
 #include <QDragMoveEvent>
 #include <QEvent>
+#include <QHBoxLayout>
 #include <QDropEvent>
-#include <Q3ValueList>
-#include <Q3HBoxLayout>
 #include <QResizeEvent>
 #include <QApplication>
 
@@ -314,9 +310,8 @@ void KexiFormView::updateAutoFieldsDataSource()
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
-    for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-            it.current(); ++it) {
-        KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(it.current()->widget());
+    foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
+        KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(item->widget());
         if (afWidget) {
             KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo(afWidget->dataSource());
             if (colInfo) {
@@ -343,19 +338,20 @@ void KexiFormView::updateValuesForSubproperties()
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
-    for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-            it.current(); ++it) {
+    foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
         // (delayed) set values for subproperties
 //! @todo this could be at the KFD level, but KFD is going to be merged anyway with kexiforms, right?
         KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(it.current()->widget());
-        if (subpropIface && subpropIface->subwidget() && it.current()->subproperties()) {
+            = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(item->widget());
+        if (subpropIface && subpropIface->subwidget() && item->subproperties()) {
             QWidget *subwidget = subpropIface->subwidget();
-            QMap<QString, QVariant>* subprops = it.current()->subproperties();
-            for (QMap<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); subpropIt != subprops->constEnd(); ++subpropIt) {
-                kexipluginsdbg << "KexiFormView::loadForm(): delayed setting of the subproperty: widget="
-                << it.current()->widget()->objectName() << " prop=" << subpropIt.key() << " val="
-                << subpropIt.value();
+            QHash<QString, QVariant>* subprops = item->subproperties();
+            for (QHash<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); 
+                subpropIt != subprops->constEnd(); ++subpropIt)
+            {
+                kexipluginsdbg << "delayed setting of the subproperty: widget="
+                    << item->widget()->objectName() << " prop=" << subpropIt.key() << " val="
+                    << subpropIt.value();
 
                 QMetaProperty meta = KexiUtils::findPropertyWithSuperclasses(
                                          subwidget, subpropIt.key().toLatin1().constData());
@@ -1052,7 +1048,7 @@ KexiFormView::updateDataSourcePage()
         if (set->contains("dataSourcePartClass"))
             dataSourcePartClass = (*set)["dataSourcePartClass"].value().toString();
         if (set->contains("dataSource"))
-            dataSource = (*set)["dataSource"].value().toCString();
+            dataSource = (*set)["dataSource"].value().toString();
 
         formPart()->dataSourcePage()->setDataSource(dataSourcePartClass, dataSource);
     }
@@ -1117,7 +1113,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 //! todo unnamed query colums are not supported
 
 //  KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
-    KFormDesigner::WidgetList widgetsToSelect;
+    QWidgetList widgetsToSelect;
     KFormDesigner::CommandGroup *group = new KFormDesigner::CommandGroup(
         fields.count() == 1
         ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets", fields.count()),
@@ -1154,14 +1150,14 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         group->addCommand(insertCmd, false/*don't exec twice*/);
 
         KFormDesigner::ObjectTreeItem *newWidgetItem
-        = form()->objectTree()->dict()->find(insertCmd->widgetName());
-        KexiDBAutoField* newWidget
-        = newWidgetItem ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
+            = form()->objectTree()->hash()->value(insertCmd->widgetName());
+        KexiDBAutoField* newWidget = newWidgetItem 
+            ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
         widgetsToSelect.append(newWidget);
 //#if 0
         KFormDesigner::CommandGroup *subGroup
-        = new KFormDesigner::CommandGroup("", KFormDesigner::FormManager::self()->propertySet());
-        QMap<Q3CString, QVariant> propValues;
+            = new KFormDesigner::CommandGroup("", KFormDesigner::FormManager::self()->propertySet());
+        QHash<QByteArray, QVariant> propValues;
         propValues.insert("dataSource", column->aliasOrName());
         propValues.insert("fieldTypeInternal", (int)column->field->type());
         propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
@@ -1180,7 +1176,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 //  newWidget->setFieldCaptionInternal(column->captionOrAliasOrName());
         //resize again because autofield's type changed what can lead to changed sizeHint()
 //  newWidget->resize(newWidget->sizeHint());
-        KFormDesigner::WidgetList list;
+        QWidgetList list;
         list.append(newWidget);
         KFormDesigner::AdjustSizeCommand *adjustCommand
         = new KFormDesigner::AdjustSizeCommand(KFormDesigner::AdjustSizeCommand::SizeToFit,
@@ -1232,8 +1228,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     //select all inserted widgets, if multiple
     if (widgetsToSelect.count() > 1) {
         form()->setSelectedWidget(0);
-        foreach_list(KFormDesigner::WidgetListIterator, it, widgetsToSelect) {
-            form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+        foreach (QWidget *w, widgetsToSelect) {
+            form()->setSelectedWidget(w, true/*add*/, true/*dontRaise*/);
         }
     }
 

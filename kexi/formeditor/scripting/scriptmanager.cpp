@@ -31,7 +31,7 @@ ScriptManager::ScriptManager(QObject *parent, const char *name)
         : QObject(parent, name)
 {
     m_manager = Kross::Api::Manager::scriptManager();
-    m_dict.setAutoDelete(true);
+//Qt4    m_hash.setAutoDelete(true);
 }
 
 ScriptManager::~ScriptManager()
@@ -42,14 +42,14 @@ FormScript*
 ScriptManager::newFormScript(Form *form)
 {
     FormScript *script = new FormScript(form, this);
-    m_dict.insert(form, script);
+    m_hash.insert(form, script);
     return script;
 }
 
 FormScript*
 ScriptManager::scriptForForm(Form *form)
 {
-    return m_dict[form];
+    return m_hash.value(form);
 }
 
 void
@@ -63,7 +63,8 @@ ScriptManager::setFormManager(FormManager *manager)
 void
 ScriptManager::slotFormDeleted(KFormDesigner::Form *form)
 {
-    m_dict.remove(form);
+    FormScript *fs = m_hash.take(form);
+    delete fs;
 }
 
 #include "scriptmanager.moc"

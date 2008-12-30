@@ -23,8 +23,6 @@
 #include <qvariant.h>
 #include <qdom.h>
 #include <qtextstream.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "form.h"
 #include "container.h"
@@ -77,7 +75,7 @@ ObjectTreeItem::removeChild(ObjectTreeItem *c)
 }
 
 void
-ObjectTreeItem::addModifiedProperty(const Q3CString &property, const QVariant &oldValue)
+ObjectTreeItem::addModifiedProperty(const QByteArray &property, const QVariant &oldValue)
 {
     if (property == "name")
         return;
@@ -89,10 +87,10 @@ ObjectTreeItem::addModifiedProperty(const Q3CString &property, const QVariant &o
 }
 
 void
-ObjectTreeItem::addSubproperty(const Q3CString &property, const QVariant& value)
+ObjectTreeItem::addSubproperty(const QByteArray &property, const QVariant& value)
 {
     if (!m_subprops)
-        m_subprops = new QMap<QString, QVariant>();
+        m_subprops = new QHash<QString, QVariant>();
     if (!m_props.contains(property))
         m_subprops->insert(property, value);
 }
@@ -107,17 +105,15 @@ ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 }
 
 void
-ObjectTreeItem::setPixmapName(const Q3CString &property, const QString &name)
+ObjectTreeItem::setPixmapName(const QByteArray &property, const QString &name)
 {
-    m_pixmapNames[property] = name;
+    m_pixmapNames.insert(property, name);
 }
 
 QString
-ObjectTreeItem::pixmapName(const Q3CString &property)
+ObjectTreeItem::pixmapName(const QByteArray &property)
 {
-    if (m_pixmapNames.contains(property))
-        return m_pixmapNames[property];
-    return QString();
+    return m_pixmapNames.value(property);
 }
 
 void
@@ -143,9 +139,7 @@ ObjectTree::ObjectTree(const QString &classn, const QString &name, QWidget *widg
 
 ObjectTree::~ObjectTree()
 {
-// for(ObjectTreeItem *it = children()->first(); it; it = children()->next())
-//  removeItem(it->name());
-    while (children()->first()) {
+    while (!children()->isEmpty()) {
         removeItem(children()->first());
     }
 }
@@ -163,8 +157,8 @@ ObjectTree::rename(const QString &oldname, const QString &newname)
         return false;
 
     it->rename(newname);
-    m_treeDict.remove(oldname);
-    m_treeDict.insert(newname, it);
+    m_treeHash.remove(oldname);
+    m_treeHash.insert(newname, it);
 
     return true;
 }
@@ -188,13 +182,13 @@ ObjectTree::lookup(const QString &name)
     if (name == this->name())
         return this;
     else
-        return m_treeDict[name];
+        return m_treeHash.value(name);
 }
 
 void
 ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
 {
-    m_treeDict.insert(c->name(), c);
+    m_treeHash.insert(c->name(), c);
 
     if (!parent)
         parent = this;
@@ -217,16 +211,17 @@ ObjectTree::removeItem(ObjectTreeItem *c)
     if (m_container && m_container->form())
         m_container->form()->emitChildRemoved(c);
 
-    for (ObjectTreeItem *it = c->children()->first(); it; it = c->children()->next())
-        removeItem(it->name());
+    foreach (ObjectTreeItem *titem, *c->children()) {
+        removeItem(titem->name());
+    }
 
-    m_treeDict.remove(c->name());
+    m_treeHash.remove(c->name());
     c->parent()->removeChild(c);
     delete c;
 }
 
-Q3CString
-ObjectTree::generateUniqueName(const Q3CString &prefix, bool numberSuffixRequired)
+QByteArray
+ObjectTree::generateUniqueName(const QByteArray &prefix, bool numberSuffixRequired)
 {
     /* old way of naming widgets
     int appendix = m_names[c] + 1;

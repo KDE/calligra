@@ -20,7 +20,7 @@
 #ifndef KFE_RESIZEHANDLER_H
 #define KFE_RESIZEHANDLER_H
 
-#include <q3dict.h>
+#include <QHash>
 #include <qpointer.h>
 #include <qwidget.h>
 
@@ -84,7 +84,7 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
     Q_OBJECT
 
 public:
-    typedef Q3Dict<ResizeHandleSet> Dict;
+    typedef QHash<QString, ResizeHandleSet*> Hash;
 
     ResizeHandleSet(QWidget *modify, Form *form, bool editing = false);
     ~ResizeHandleSet();

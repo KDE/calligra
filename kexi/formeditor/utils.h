@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,6 @@
 #ifndef FORMEDITORUTILS_H
 #define FORMEDITORUTILS_H
 
-#include <q3ptrlist.h>
 #include <qtabbar.h>
 #include <qtabwidget.h>
 #include <kexi_export.h>
@@ -64,37 +63,39 @@ public:
     }
 };
 
-//! @short A list of widget pointers.
-typedef Q3PtrList<QWidget> WidgetList;
-
-//! @short An iterator for WidgetList.
-typedef Q3PtrListIterator<QWidget> WidgetListIterator;
-
-//! @short A helper for sorting widgets horizontally
-class HorWidgetList : public WidgetList
+class CustomSortableWidgetList : public QWidgetList
 {
 public:
-    HorWidgetList(QWidget *topLevelWidget);
-    virtual ~HorWidgetList();
+    virtual void sort() {}
+};
+
+//! @short A helper for sorting widgets horizontally
+class HorizontalWidgetList : public CustomSortableWidgetList
+{
+public:
+    HorizontalWidgetList(QWidget *topLevelWidget);
+    virtual ~HorizontalWidgetList();
+    virtual void sort();
 protected:
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
-    QWidget *m_topLevelWidget;
+    class LessThan;
+    LessThan *m_lessThan;
 };
 
 //! @short A helper for sorting widgets vertically
-class VerWidgetList : public WidgetList
+class VerticalWidgetList : public CustomSortableWidgetList
 {
 public:
-    VerWidgetList(QWidget *topLevelWidget);
-    virtual ~VerWidgetList();
+    VerticalWidgetList(QWidget *topLevelWidget);
+    virtual ~VerticalWidgetList();
+    virtual void sort();
 protected:
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
-    QWidget *m_topLevelWidget;
+    class LessThan;
+    LessThan *m_lessThan;
 };
 
 /*! This function is used to remove all the child widgets from a list, and
   keep only the "toplevel" ones. */
-KFORMEDITOR_EXPORT void removeChildrenFromList(WidgetList &list);
+KFORMEDITOR_EXPORT void removeChildrenFromList(QWidgetList &list);
 
 /*! This helper function install an event filter on \a object and all of its
   children, directed to \a container.

@@ -21,7 +21,6 @@
 #define OBJECTTREEVIEW_H
 
 #include <k3listview.h>
-#include <Q3CString>
 
 #include <kexi_export.h>
 
@@ -87,7 +86,7 @@ public:
     void setForm(Form *form);
 
     //! \return the pixmap name for a given class, to be shown next to the widget name.
-    QString iconNameForClass(const Q3CString &classname);
+    QString iconNameForClass(const QByteArray &classname);
 
 public slots:
     /*! Sets the widget \a w as selected item, so it will be written bold.
@@ -101,7 +100,7 @@ public slots:
     void removeItem(ObjectTreeItem *item);
 
     /*! Just renames the list item from \a oldname to \a newname. */
-    void renameItem(const Q3CString &oldname, const Q3CString &newname);
+    void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
 protected slots:
     /*! This slot is called when the user right-click a list item.
