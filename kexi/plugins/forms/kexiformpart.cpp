@@ -83,7 +83,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
         : KexiPart::Part(parent, l)
         , d(new Private())
 {
-    kexipluginsdbg << "KexiFormPart::KexiFormPart()";
+    kDebug();
     setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                                    "Use '_' character instead of spaces. First character should be a..z character. "
@@ -136,7 +136,7 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 //this is automatic? -no
 //create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
 
-    kexipluginsdbg << "FormPart INIT ACTIONS***********************************************************************";
+    kDebug() << "FormPart INIT ACTIONS***********************************************************************";
     //TODO
 
     //guiClient()->setXMLFile("kexiformui.rc");
@@ -268,7 +268,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
-    kexipluginsdbg << "KexiFormPart::createView()";
+    kDebug();
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;

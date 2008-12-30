@@ -342,7 +342,7 @@ QWidget*
 KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
                             KFormDesigner::Container *container, int options)
 {
-    kexipluginsdbg << "KexiDBFactory::createWidget() " << this;
+    kDebug() << this;
 
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(n, c));

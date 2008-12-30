@@ -134,8 +134,8 @@ void KActionsListViewBase::init()
         //! @todo: store KAction* here?
         const int actionCategories = acat->actionCategories(action->objectName().toLatin1());
         if (actionCategories == -1) {
-            kexipluginswarn << "KActionsListViewBase(): no category declared for action \""
-            << action->objectName() << "\"! Fix this!";
+            kWarning() << "no category declared for action \""
+                << action->objectName() << "\"! Fix this!";
             continue;
         }
         if (!isActionVisible(action->objectName().toLatin1(), actionCategories))

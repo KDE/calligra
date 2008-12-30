@@ -353,7 +353,7 @@ void KexiFormView::updateValuesForSubproperties()
             for (QHash<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); 
                 subpropIt != subprops->constEnd(); ++subpropIt)
             {
-                kexipluginsdbg << "delayed setting of the subproperty: widget="
+                kDebug() << "delayed setting of the subproperty: widget="
                     << item->widget()->objectName() << " prop=" << subpropIt.key() << " val="
                     << subpropIt.value();
 
@@ -401,7 +401,7 @@ KexiFormView::loadForm()
 {
 //@todo also load m_resizeMode !
 
-    kexipluginsdbg << "KexiFormView::loadForm() Loading the form with id : " << window()->id();
+    kDebug() << "Loading the form with id : " << window()->id();
     // If we are previewing the Form, use the tempData instead of the form stored in the db
     if (viewMode() == Kexi::DataViewMode && !tempData()->tempForm.isNull()) {
         KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
@@ -547,7 +547,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
             foreach(widget, *orderedFocusWidgets) {
                 KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(widget);
                 if (iface)
-                    kexipluginsdbg << iface->dataSource();
+                    kDebug() << iface->dataSource();
                 if (iface && iface->columnInfo() && !iface->isReadOnly()
                         /*! @todo add option for skipping autoincremented fields */
                         /* also skip autoincremented fields:*/
@@ -645,9 +645,9 @@ void KexiFormView::initDataSource()
             //always add all fields from table's primary key
             // (don't worry about duplicates, unique list will be computed later)
             sources += pkey->names();
-            kexipluginsdbg << "KexiFormView::initDataSource(): pkey added to data sources: " << pkey->names();
+            kDebug() << "pkey added to data sources: " << pkey->names();
         }
-        kexipluginsdbg << "KexiFormView::initDataSource(): sources=" << sources;
+        kDebug() << "sources=" << sources;
 
         uint index = 0;
         for (QStringList::ConstIterator it = sources.constBegin();
@@ -666,8 +666,7 @@ void KexiFormView::initDataSource()
                 //remove this widget from the set of data widgets in the provider
                 /*! @todo fieldName is ok, but what about expressions? */
                 invalidSources.insert(fieldName);
-                kexipluginsdbg << "KexiFormView::initDataSource(): invalidSources+="
-                << index << " (" << (*it) << ")";
+                kDebug() << "invalidSources+=" << index << " (" << (*it) << ")";
                 continue;
             }
             if (tableSchema) {
@@ -731,7 +730,7 @@ KexiDB::SchemaData*
 KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
-    kexipluginsdbg << "KexiDBForm::storeNewData(): new id:" << s->id();
+    kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
@@ -751,8 +750,7 @@ tristate
 KexiFormView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk);
-    kexipluginsdbg << "KexiDBForm::storeData(): " << window()->partItem()->name()
-    << " [" << window()->id() << "]";
+    kDebug() << window()->partItem()->name() << " [" << window()->id() << "]";
 
     //-- first, store local BLOBs, so identifiers can be updated
 //! @todo remove unused data stored previously
@@ -782,10 +780,10 @@ KexiFormView::storeData(bool dontAsk)
                 = tempData()->unsavedLocalBLOBs.constBegin();
                 it != tempData()->unsavedLocalBLOBs.constEnd(); ++it) {
             if (!it.key()) {
-                kexipluginswarn << "KexiFormView::storeData(): it.key()==0 !";
+                kWarning() << "it.key()==0 !";
                 continue;
             }
-            kexipluginsdbg << "name=" << it.key()->objectName() << " dataID=" << it.value();
+            kDebug() << "name=" << it.key()->objectName() << " dataID=" << it.value();
             KexiBLOBBuffer::Handle h(blobBuf->objectForId(it.value(), /*!stored*/false));
             if (!h)
                 continue; //no BLOB assigned
@@ -800,7 +798,7 @@ KexiFormView::storeData(bool dontAsk)
                 << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
                 if (!st->execute()) {
                     delete blobsFieldsWithoutID;
-                    kexipluginsdbg << " execute error";
+                    kDebug() << "execute error";
                     return false;
                 }
             }
@@ -811,7 +809,7 @@ KexiFormView::storeData(bool dontAsk)
                 //! @todo show message?
                 return false;
             }
-            kexipluginsdbg << " storedDataID=" << storedBLOBID;
+            kDebug() << "storedDataID=" << storedBLOBID;
             h.setStoredWidthID((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID);
             //set widget's internal property so it can be saved...
             const QVariant oldStoredPixmapId(it.key()->property("storedPixmapId"));
@@ -822,7 +820,7 @@ KexiFormView::storeData(bool dontAsk)
             if (widgetItem)
                 widgetItem->addModifiedProperty("storedPixmapId", oldStoredPixmapId);
             else
-                kexipluginswarn << "KexiFormView::storeData(): no '" << widgetItem->name() << "' widget found within a form";
+                kWarning() << "no '" << widgetItem->name() << "' widget found within a form";
         }
     }
 
@@ -1098,8 +1096,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.toLatin1(),
                                             sourcePartClass == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query()) {
-        kexipluginswarn << "KexiFormView::insertAutoFields(): no such table/query \""
-        << sourceName << "\"";
+        kWarning() << "no such table/query \"" << sourceName << "\"";
         return;
     }
 
@@ -1130,8 +1127,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     foreach(const QString& field, fields) {
         KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(field);
         if (!column) {
-            kexipluginswarn << "KexiFormView::insertAutoFields(): no such field \""
-            << field << "\" in table/query \"" << sourceName << "\"";
+            kWarning() << "no such field \"" << field 
+                << "\" in table/query \"" << sourceName << "\"";
             continue;
         }
 //! todo add autolabel using field's caption or name

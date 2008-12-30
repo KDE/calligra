@@ -204,8 +204,8 @@ bool KexiTableDesignerViewPrivate::updatePropertiesVisibility(KexiDB::Field::Typ
     bool visible;
 
     prop = &set["subType"];
-    kexipluginsdbg << "subType=" << prop->value().toInt()
-    << " type=" << set["type"].value().toInt();
+    kDebug() << "subType=" << prop->value().toInt()
+        << " type=" << set["type"].value().toInt();
 
     //if there is no more than 1 subType name or it's a PK: hide the property
     visible =

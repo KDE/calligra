@@ -64,7 +64,7 @@ ChangeFieldPropertyCommand::ChangeFieldPropertyCommand(
         , m_oldListData(oldListData ? new KoProperty::Property::ListData(*oldListData) : 0)
         , m_listData(newListData ? new KoProperty::Property::ListData(*newListData) : 0)
 {
-    kexipluginsdbg << "ChangeFieldPropertyCommand: " << debugString();
+    kDebug() << debugString();
 }
 
 ChangeFieldPropertyCommand::~ChangeFieldPropertyCommand()
@@ -225,7 +225,7 @@ ChangePropertyVisibilityCommand::ChangePropertyVisibilityCommand(KexiTableDesign
 // , m_fieldUID(set["uid"].value().toInt())
         , m_oldVisibility(set.property(propertyName).isVisible())
 {
-    kexipluginsdbg << "ChangePropertyVisibilityCommand: " << debugString();
+    kDebug() << debugString();
 }
 
 ChangePropertyVisibilityCommand::~ChangePropertyVisibilityCommand()

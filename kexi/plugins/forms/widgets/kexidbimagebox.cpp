@@ -364,7 +364,7 @@ void KexiDBImageBox::handleAboutToSaveAsAction(
     QString& origFilename, QString& fileExtension, bool& dataIsEmpty)
 {
     if (data().isEmpty()) {
-        kWarning() << "KexiDBImageBox::handleAboutToSaveAs(): no pixmap!";
+        kWarning() << "no pixmap!";
         dataIsEmpty = false;
         return;
     }
@@ -480,7 +480,7 @@ void KexiDBImageBox::slotUpdateActionsAvailabilityRequested(bool& valueIsNull, b
 /*
 void KexiDBImageBox::slotAboutToHidePopupMenu()
 {
-// kexipluginsdbg << "##### slotAboutToHidePopupMenu() ";
+// kDebug() << "#####";
   m_clickTimer.start(50, true);
   if (m_chooser && m_chooser->isOn()) {
     m_chooser->toggle();
@@ -512,7 +512,7 @@ void KexiDBImageBox::slotToggled(bool on)
 {
   return;
 
-// kexipluginsdbg << "##### slotToggled() " << on;
+// kDebug()<< "#####" << on;
   if (m_clickTimer.isActive() || !on) {
     m_chooser->disableMousePress = true;
     return;
@@ -824,7 +824,7 @@ void KexiDBImageBox::setPalette(const QPalette &pal)
 
 void KexiDBImageBox::setPaletteBackgroundColor(const QColor & color)
 {
-    kexipluginsdbg << color.name();
+    kDebug() << color.name();
     m_paletteBackgroundColorChanged = true;
     //KexiFrame::setPaletteBackgroundColor(color);
     QPalette pal(palette());
