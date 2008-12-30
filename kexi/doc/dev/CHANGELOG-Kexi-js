@@ -22,6 +22,10 @@ TODO
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
+2008-12-30
+Forms
+= set default window color for the main db form widget
+
 2008-12-15..25
 Forms
 - removed most of Qt 3 deps

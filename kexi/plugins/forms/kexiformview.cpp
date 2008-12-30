@@ -88,6 +88,10 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 
     m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
     m_dbform->setObjectName("KexiDBForm");
+    QPalette pal(m_dbform->palette());
+    pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
+    m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                               // from m_scrollView->viewport()
 // m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
 // m_dbform->resize(QSize(400, 300));
     m_scrollView->setWidget(m_dbform);
@@ -498,7 +502,10 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
         delete m_dbform; // also deletes form()
         m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
         m_dbform->setObjectName("KexiDBForm");
-        m_scrollView->setWidget(m_dbform);
+        QPalette pal(m_dbform->palette());
+        pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
+        m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                                   // from m_scrollView->viewport()
 
         initForm();
 //moved to formmanager  slotNoFormSelected();
