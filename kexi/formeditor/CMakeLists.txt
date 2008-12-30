@@ -36,7 +36,8 @@ kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 target_link_libraries(kformdesigner
   ${KOPROPERTY_LIBS}
   kexiutils
-  kexiextendedwidgets
+  kexiextendedwidgets # for ConnectionDialog
+  kexidatatable       # for ConnectionDialog
   ${KDE4_KDE3SUPPORT_LIBS}
   ${KDE4_KPARTS_LIBS}
 )
