@@ -20,7 +20,8 @@
 
 #include <QSizePolicy>
 #include <QPainter>
-#include <QDom.h>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QPolygon>
 #include <QVariant>
 
