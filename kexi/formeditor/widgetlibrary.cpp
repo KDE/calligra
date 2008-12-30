@@ -198,7 +198,7 @@ WidgetLibrary::lookupFactories()
         kDebug() << "found factory: " << ptr->name();
 
         QByteArray groupName = ptr->property("X-KFormDesigner-FactoryGroup").toByteArray();
-        if (!groupName.isEmpty() && d->supportedFactoryGroups.contains(groupName.toLower())) {
+        if (!groupName.isEmpty() && !d->supportedFactoryGroups.contains(groupName.toLower())) {
             kDebug() << "factory group '" << groupName
             << "' is unsupported by this application (library=" << ptr->library() << ")";
             continue;
