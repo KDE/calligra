@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,7 +75,16 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
     Q_OBJECT
 
 public:
-    ObjectTreeView(QWidget *parent = 0, const char *name = 0, bool tabStop = false);
+    //! Options for the widget's behaviour or look
+    enum Option {
+        NoOptions = 0,
+        DisableSelection,  //!< disables item selection
+        DisableContextMenu //!< disables context menu
+    };
+    Q_DECLARE_FLAGS(Options, Option)
+
+    ObjectTreeView(QWidget *parent, Options options = NoOptions);
+
     virtual ~ObjectTreeView();
 
     virtual QSize sizeHint() const;
@@ -128,6 +138,8 @@ private:
 
     friend class TabStopDialog;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ObjectTreeView::Options)
 
 }
 

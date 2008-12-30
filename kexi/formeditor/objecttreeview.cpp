@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -146,30 +147,32 @@ ObjectTreeViewItem::setup()
 }
 
 void
-ObjectTreeViewItem::setOpen(bool o)
+ObjectTreeViewItem::setOpen(bool set)
 {
     //don't allow to collapse the node, user may be tricked because we're not displaying [+] marks
-    if (o)
-        K3ListViewItem::setOpen(o);
+    if (set)
+        K3ListViewItem::setOpen(set);
 }
 
 // ObjectTreeView itself ----------------
 
-ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
+ObjectTreeView::ObjectTreeView(QWidget *parent, Options options)
         : K3ListView(parent)
         , m_form(0)
 {
-    setObjectName(name);
-    addColumn(i18n("Name"), 130);
+    addColumn(i18n("Widget name"), 130);
     addColumn(i18nc("Widget's type", "Type"), 100);
 
     installEventFilter(this);
 
     connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
-    if (!tabStop) {
+    if (!(options & DisableSelection)) {
         setSelectionModeExt(Extended);
         connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-        connect(this, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
+    }
+    if (!(options & DisableContextMenu)) {
+        connect(this, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint&)),
+            this, SLOT(displayContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
     }
 
     setFullWidth(true);

@@ -53,7 +53,9 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     QFrame *frame = new QFrame(this);
     setMainWidget(frame);
     Q3GridLayout *l = new Q3GridLayout(frame, 2, 2, 0, 6);
-    m_treeview = new ObjectTreeView(frame, "tabstops_treeview", true);
+    m_treeview = new ObjectTreeView(frame, 
+        ObjectTreeView::DisableSelection | ObjectTreeView::DisableContextMenu);
+    m_treeview->setObjectName("tabstops_treeview");
     m_treeview->setItemsMovable(true);
     m_treeview->setDragEnabled(true);
     m_treeview->setDropVisualizer(true);
