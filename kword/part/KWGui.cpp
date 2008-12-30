@@ -34,7 +34,6 @@
 #include <KoDockerManager.h>
 #include <KoRuler.h>
 #include <KoToolBoxFactory.h>
-#include <KoToolDockerFactory.h>
 #include <KoRulerController.h>
 #include <KActionCollection>
 

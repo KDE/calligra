@@ -100,7 +100,6 @@
 #include <KoToolBoxFactory.h>
 #include <KoToolDocker.h>
 #include <KoDockerManager.h>
-#include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
