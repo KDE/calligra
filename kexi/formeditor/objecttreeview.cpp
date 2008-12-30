@@ -86,7 +86,7 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
         p->setFont(f);
         if (depth() == 0) { // for edit tab order dialog
             QString iconName
-            = ((ObjectTreeView*)listView())->iconNameForClass(m_item->widget()->metaObject()->className());
+            = static_cast<ObjectTreeView*>(listView())->iconNameForClass(m_item->widget()->metaObject()->className());
             p->drawPixmap(margin, (height() - IconSize(KIconLoader::Small)) / 2 , SmallIcon(iconName));
             p->drawText(
                 QRect(2*margin + IconSize(KIconLoader::Small), 0, width, height() - 1),
