@@ -87,7 +87,9 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 // m_scrollView->show();
 
     m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-    m_dbform->setObjectName("KexiDBForm");
+    m_dbform->setObjectName(
+        i18nc("Widget name. This string will be used to name widgets of this class. "
+              "It must _not_ contain white spaces and non latin1 characters.", "form"));
     QPalette pal(m_dbform->palette());
     pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
     m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
@@ -501,7 +503,9 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
         // The form may have been modified, so we must recreate the preview
         delete m_dbform; // also deletes form()
         m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-        m_dbform->setObjectName("KexiDBForm");
+        m_dbform->setObjectName(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "form"));
         QPalette pal(m_dbform->palette());
         pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
         m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
