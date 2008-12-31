@@ -158,6 +158,7 @@ KarbonGradientEditWidget::KarbonGradientEditWidget( QWidget* parent )
     , m_gradOpacity( 1.0 ), m_stopIndex(-1), m_checkerPainter( 4 )
     , m_type( QGradient::LinearGradient ), m_spread( QGradient::PadSpread )
 {
+    setObjectName("KarbonGradientEditWidget");
     // create a default gradient
     m_stops.append( QGradientStop( 0.0, Qt::white ) );
     m_stops.append( QGradientStop( 1.0, Qt::green ) );

@@ -30,6 +30,7 @@
 KarbonGradientChooser::KarbonGradientChooser( QWidget *parent )
     : KoResourceItemChooser( parent ), m_checkerPainter( 4 )
 {
+    setObjectName("KarbonGradientChooser");
     setIconSize( QSize(100, 20) );
     m_resourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer());
 
