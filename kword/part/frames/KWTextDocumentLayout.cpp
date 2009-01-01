@@ -454,6 +454,7 @@ void KWTextDocumentLayout::layout()
             }
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
                 m_activeAnchors.removeAll(strategy);
+                m_newAnchors.removeAll(strategy);
                 delete strategy;
             }
         }
