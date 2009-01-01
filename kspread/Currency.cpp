@@ -68,6 +68,7 @@ namespace Currency_LNS
         { "€", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "€" },
+        { "€", I18N_NOOP("San Marino"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Slovakia"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Slovenia"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "€" },
