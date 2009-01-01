@@ -396,7 +396,7 @@ protected slots:
 
     /*! This slot is called when a command is executed. The undo/redo signals
       are emitted to update actions. */
-    void slotCommandExecuted();
+    void slotCommandExecuted(K3Command *command);
 
     /*! This slot is called when form is restored, ie when the user has undone
       all actions. The form modified flag is updated, and

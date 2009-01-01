@@ -221,17 +221,17 @@ protected:
 
 signals:
     /*! Emitted when the value of the property is changed.*/
-    void propertyChanged(Set& set, Property& property);
+    void propertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
     /*! @internal Exists to be sure that we emitted it before propertyChanged(),
      so Editor object can handle this. */
-    void propertyChangedInternal(Set& set, Property& property);
+    void propertyChangedInternal(KoProperty::Set& set, KoProperty::Property& property);
 
     /*! Emitted when the value of the property is reset.*/
-    void propertyReset(Set& set, Property& property);
+    void propertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
     /*! Emitted when property is about to be deleted.*/
-    void aboutToDeleteProperty(Set& set, Property& property);
+    void aboutToDeleteProperty(KoProperty::Set& set, KoProperty::Property& property);
 
     /*! Emitted when property set object is about to be cleared (using clear()).
      This signal is also emmited from destructor before emitting aboutToBeDeleted(). */
@@ -261,17 +261,17 @@ class KOPROPERTY_EXPORT Buffer : public Set
 
 public:
     Buffer();
-    Buffer(const Set& set);
+    Buffer(const KoProperty::Set& set);
 
     /*! Intersects with other Set.*/
-    virtual void intersect(const Set& set);
+    virtual void intersect(const KoProperty::Set& set);
 
 protected slots:
-    void intersectedChanged(Set& set, Property& prop);
-    void intersectedReset(Set& set, Property& prop);
+    void intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop);
+    void intersectedReset(KoProperty::Set& set, KoProperty::Property& prop);
 
 private:
-    void init(const Set& set);
+    void init(const KoProperty::Set& set);
 };
 
 //! @return property values for set @a set

@@ -167,9 +167,9 @@ void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QSt
                                      formViewWidget->form()->activeContainer());
 }
 
-void KexiFormManager::slotHistoryCommandExecuted()
+void KexiFormManager::slotHistoryCommandExecuted(K3Command *command)
 {
-    const KFormDesigner::CommandGroup *group = dynamic_cast<const KFormDesigner::CommandGroup*>(sender());
+    const KFormDesigner::CommandGroup *group = dynamic_cast<const KFormDesigner::CommandGroup*>(command);
     if (group) {
         if (group->commands().count() == 2) {
             KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(activeForm()->widget());

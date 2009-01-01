@@ -527,9 +527,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 KexiMainWindowIface::global()->thisWidget(),
                 SLOT(highlightObject(const QString&, const QString&)));
         connect(d->dataSourcePage,
-                SIGNAL(formDataSourceChanged(const QByteArray&, const QByteArray&)),
+                SIGNAL(formDataSourceChanged(const QString&, const QString&)),
                 KFormDesigner::FormManager::self(),
-                SLOT(setFormDataSource(const QByteArray&, const QByteArray&)));
+                SLOT(setFormDataSource(const QString&, const QString&)));
         connect(d->dataSourcePage,
                 SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
                 KFormDesigner::FormManager::self(),

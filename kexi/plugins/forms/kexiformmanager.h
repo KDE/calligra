@@ -56,7 +56,7 @@ public slots:
                           const QStringList& fields);
 
 protected slots:
-    void slotHistoryCommandExecuted();
+    void slotHistoryCommandExecuted(K3Command *command);
 
 protected:
     inline QString translateName(const char* name) const;

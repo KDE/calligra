@@ -104,7 +104,7 @@ Form::Form(WidgetLibrary* library, bool designMode)
     // Init actions
     d->collection = new KActionCollection(this);
     d->history = new K3CommandHistory(d->collection, true);
-    connect(d->history, SIGNAL(commandExecuted()), this, SLOT(slotCommandExecuted()));
+    connect(d->history, SIGNAL(commandExecuted(K3Command*)), this, SLOT(slotCommandExecuted(K3Command*)));
     connect(d->history, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
 }
 
@@ -420,7 +420,7 @@ Form::addCommand(K3Command *command, bool execute)
     d->dirty = true;
     d->history->addCommand(command, execute);
     if (!execute) // simulate command to activate 'undo' menu
-        slotCommandExecuted();
+        slotCommandExecuted(command);
 }
 
 void
@@ -432,8 +432,9 @@ Form::clearCommandHistory()
 }
 
 void
-Form::slotCommandExecuted()
+Form::slotCommandExecuted(K3Command *command)
 {
+    Q_UNUSED(command)
     emit FormManager::self()->dirty(this, true);
     d->dirty = true;
     // because actions text is changed after the commandExecuted() signal is emitted
