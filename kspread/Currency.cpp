@@ -66,6 +66,7 @@ namespace Currency_LNS
         { "€", I18N_NOOP("Monaco"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Netherlands"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Portugal"), I18N_NOOP("Euro"), "€" },
+        { "€", I18N_NOOP("Slovakia"), I18N_NOOP("Euro"), "€" },
         { "€", I18N_NOOP("Spain"), I18N_NOOP("Euro"), "€" },
 
         { "£", I18N_NOOP("United Kingdom"), I18N_NOOP("Pound"), "£" },
@@ -287,6 +288,7 @@ namespace Currency_LNS
         { "SCR", I18N_NOOP("Seychelles"), I18N_NOOP("Seychelles Rupee"), I18N_NOOP("SCR") },
         { "SLL", I18N_NOOP("Sierra Leone"), I18N_NOOP("Leone"), I18N_NOOP("SLL") },
         { "SGD", I18N_NOOP("Singapore"), I18N_NOOP("Singapore Dollar"), I18N_NOOP("SGD") },
+        { "EUR", I18N_NOOP("Slovakia"), I18N_NOOP("Euro"), I18N_NOOP("EUR") },
         { "SKK", I18N_NOOP("Slovakia"), I18N_NOOP("Slovak Koruna"), I18N_NOOP("Sk") },
         { "SIT", I18N_NOOP("Slovenia"), I18N_NOOP("Tolar"), I18N_NOOP("SIT") },
         { "SBD", I18N_NOOP("Solomon Islands"), I18N_NOOP("Solomon Islands Dollar"), I18N_NOOP("SBD") },
