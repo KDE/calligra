@@ -62,7 +62,7 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     //newPage.fill(Qt::black);
   */
 	    //m_blackBackgroundframe = new QFrame( m_viewMode.canvas() );
-  	    m_blackBackgroundwidget = new QWidget( m_viewMode.canvas() );
+  	    m_blackBackgroundwidget = new KPrPresentationHighlightWidget(m_viewMode.canvas());
     /*QVBoxLayout *frameLayout2 = new QVBoxLayout();
     QLabel *blackBackgroundlabel = new QLabel();
     blackBackgroundlabel->setPixmap(newPage);
@@ -212,16 +212,17 @@ void KPrPresentationTool::highLightPresentation()
     painter.setOpacity( 0.25 );
     */
     
-    QColor c(Qt::black); c.setAlphaF(0.5); newPage.fill(c);
+    /*QColor c(Qt::black); c.setAlphaF(0.5); newPage.fill(c);
     
     m_blackBackgroundwidget = new QWidget(m_viewMode.canvas() );
     m_blackBackgroundwidget->resize(size);
     //m_blackBackgroundwidget->setAutoFillBackground(true);
     //m_blackBackgroundwidget->setWindowOpacity(0.8);
 
+    */
+    m_blackBackgroundwidget = new KPrPresentationHighlightWidget(m_viewMode.canvas());
 
-  
-    m_blackBackgroundframe= new QFrame(m_blackBackgroundwidget);
+    /*m_blackBackgroundframe= new QFrame(m_blackBackgroundwidget);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
     QLabel *label = new QLabel();
     
@@ -241,7 +242,7 @@ void KPrPresentationTool::highLightPresentation()
     {
 	m_blackBackgroundVisibility = true;
 	m_blackBackgroundwidget->setVisible( true );
-    }
+    }*/
     
     // tool box
     delete m_frame;

@@ -26,6 +26,7 @@
 
 #include <QList>
 #include "ui/KPrPresentationToolWidget.h"
+#include "KPrPresentationHighlightWidget.h"
 
 class KoEventAction;
 class KPrViewModePresentation;
@@ -66,7 +67,7 @@ private:
     KPrPresentationToolWidget *presentationToolWidget;
     QFrame *m_frame;
     QFrame *m_blackBackgroundframe;
-    QWidget * m_blackBackgroundwidget;
+    KPrPresentationHighlightWidget * m_blackBackgroundwidget;
     bool m_blackBackgroundVisibility;
 };
 
