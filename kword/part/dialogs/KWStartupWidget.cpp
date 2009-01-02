@@ -20,9 +20,14 @@
 #include "KWStartupWidget.h"
 
 #include "KWDocumentColumns.h"
-#include "KWPage.h"
+#include "../KWPage.h"
+#include "../KWDocument.h"
 
-#include <KWDocument.h>
+#include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
+#include <KoListStyle.h>
+#include <KoListLevelProperties.h>
+#include <KoCharacterStyle.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
 
@@ -108,6 +113,39 @@ void KWStartupWidget::buttonClicked()
     m_doc->setUnit(m_unit);
 
     m_doc->appendPage("Standard");
+
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_doc->dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
+    KoParagraphStyle *parag = new KoParagraphStyle();
+    parag->setName("Head 1"); // TODO i18n
+    KoCharacterStyle *character = parag->characterStyle();
+    character->setFontPointSize(20);
+    character->setFontWeight(QFont::Bold);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName("Head 2"); // TODO i18n
+    character = parag->characterStyle();
+    character->setFontPointSize(16);
+    character->setFontWeight(QFont::Bold);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName("Head 3"); // TODO i18n
+    character = parag->characterStyle();
+    character->setFontPointSize(12);
+    character->setFontWeight(QFont::Bold);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName("Bullet List"); // TODO i18n
+    KoListStyle * list = new KoListStyle(parag);
+    KoListLevelProperties llp = list->levelProperties(0);
+    llp.setStyle(KoListStyle::DiscItem);
+    list->setLevelProperties(llp);
+    parag->setListStyle(list);
+    styleManager->add(parag);
+
     emit documentSelected();
 }
 
