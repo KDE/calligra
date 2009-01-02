@@ -61,7 +61,8 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     
     //newPage.fill(Qt::black);
   */
-    m_blackBackgroundframe = new QFrame( m_viewMode.canvas() );
+	    //m_blackBackgroundframe = new QFrame( m_viewMode.canvas() );
+  	    m_blackBackgroundwidget = new QWidget( m_viewMode.canvas() );
     /*QVBoxLayout *frameLayout2 = new QVBoxLayout();
     QLabel *blackBackgroundlabel = new QLabel();
     blackBackgroundlabel->setPixmap(newPage);
@@ -196,7 +197,8 @@ void KPrPresentationTool::finishEventActions()
 void KPrPresentationTool::highLightPresentation()
 {
     // create the high light
-    delete m_blackBackgroundframe;
+    //delete m_blackBackgroundframe;
+    delete m_blackBackgroundwidget;
     QSize size = m_viewMode.canvas()->size();
     
     QPixmap newPage( size );
@@ -212,7 +214,14 @@ void KPrPresentationTool::highLightPresentation()
     
     QColor c(Qt::black); c.setAlphaF(0.5); newPage.fill(c);
     
-    m_blackBackgroundframe= new QFrame( m_viewMode.canvas() );
+    m_blackBackgroundwidget = new QWidget(m_viewMode.canvas() );
+    m_blackBackgroundwidget->resize(size);
+    //m_blackBackgroundwidget->setAutoFillBackground(true);
+    //m_blackBackgroundwidget->setWindowOpacity(0.8);
+
+
+  
+    m_blackBackgroundframe= new QFrame(m_blackBackgroundwidget);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
     QLabel *label = new QLabel();
     
@@ -226,12 +235,12 @@ void KPrPresentationTool::highLightPresentation()
     if ( m_blackBackgroundVisibility )
     {
 	m_blackBackgroundVisibility = false;
-	m_blackBackgroundframe->setVisible( false );
+	m_blackBackgroundwidget->setVisible( false );
     }
     else
     {
 	m_blackBackgroundVisibility = true;
-	m_blackBackgroundframe->setVisible( true );
+	m_blackBackgroundwidget->setVisible( true );
     }
     
     // tool box
@@ -263,9 +272,9 @@ QFrame *KPrPresentationTool::m_frameToolPresentation()
     return m_frame;
 }
 
-// get the acces on m_blackBackgroundframe
-QFrame *KPrPresentationTool::m_blackBackgroundPresentation()
+// get the acces on m_blackBackgroundwidget
+QWidget *KPrPresentationTool::m_blackBackgroundPresentation()
 {
-    return m_blackBackgroundframe;
+    return m_blackBackgroundwidget;
 }
 #include "KPrPresentationTool.moc"

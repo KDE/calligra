@@ -50,7 +50,7 @@ public:
     void wheelEvent( KoPointerEvent * event );
         
     QFrame *m_frameToolPresentation();
-    QFrame *m_blackBackgroundPresentation();
+    QWidget *m_blackBackgroundPresentation();
 
 public slots:
     void activate( bool temporary = false );
@@ -66,6 +66,7 @@ private:
     KPrPresentationToolWidget *presentationToolWidget;
     QFrame *m_frame;
     QFrame *m_blackBackgroundframe;
+    QWidget * m_blackBackgroundwidget;
     bool m_blackBackgroundVisibility;
 };
 
