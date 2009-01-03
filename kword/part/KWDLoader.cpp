@@ -69,11 +69,11 @@ bool KWDLoader::load(KoXmlElement &root)
 
     QString mime = root.attribute("mime");
     if (mime.isEmpty()) {
-        kError(32001) << "No mime type specified!" << endl;
+        kError(32001) << "No mime type specified!";
         m_document->setErrorMessage(i18n("Invalid document. No mimetype specified."));
         return false;
     } else if (mime != "application/x-kword" && mime != "application/vnd.kde.kword") {
-        kError(32001) << "Unknown mime type " << mime << endl;
+        kError(32001) << "Unknown mime type " << mime;
         m_document->setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kword or application/vnd.kde.kword, got %1" , mime));
         return false;
     }
@@ -196,9 +196,9 @@ bool KWDLoader::load(KoXmlElement &root)
             if (pgLayout.bottom == 0.0)
                 pgLayout.bottom = paperborders.attribute("bottom").toDouble();
         } else
-            kWarning() << "No <PAPERBORDERS> tag!" << endl;
+            kWarning() << "No <PAPERBORDERS> tag!";
     } else
-        kWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
+        kWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes...";
 
     m_pageManager->pageStyle("Standard").setPageLayout(pgLayout);
 
@@ -490,7 +490,7 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
         }
     }
     case 5: { // FT_CLIPART
-        kError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)" << endl;
+        kError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)";
         // Do not break!
     }
     case 2: { // FT_PICTURE
@@ -545,16 +545,16 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
     // and FT_TABLE can't happen either.
     case 3: // FT_PART
-        kWarning(32001) << "loadFrameSet: FT_PART: impossible case" << endl;
+        kWarning(32001) << "loadFrameSet: FT_PART: impossible case";
         return;
     case 10: // FT_TABLE
-        kWarning(32001) << "loadFrameSet: FT_TABLE: impossible case" << endl;
+        kWarning(32001) << "loadFrameSet: FT_TABLE: impossible case";
         return;
     case 0: // FT_BASE
-        kWarning(32001) << "loadFrameSet: FT_BASE !?!?" << endl;
+        kWarning(32001) << "loadFrameSet: FT_BASE !?!?";
         return;
     default: // other
-        kWarning(32001) << "loadFrameSet error: unknown type, skipping" << endl;
+        kWarning(32001) << "loadFrameSet error: unknown type, skipping";
         return;
     }
 }
@@ -1136,7 +1136,7 @@ void KWDLoader::insertAnchors()
     foreach (const AnchorData &anchor, m_anchors) {
         KWFrameSet *fs = m_document->frameSetByName(anchor.frameSetName);
         if (fs == 0) {
-            kWarning() << "Anchored frameset not found: '" << anchor.frameSetName << endl;
+            kWarning() << "Anchored frameset not found: '" << anchor.frameSetName;
             continue;
         }
         if (fs->frames().count() == 0)  continue;
