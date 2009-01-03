@@ -73,9 +73,9 @@ public:
     // used to update command's value when undoing
     PropertyCommand  *lastCommand;
     GeometryPropertyCommand  *lastGeoCommand;
-bool isUndoing : 1;
-bool slotPropertyChangedEnabled : 1;
-bool slotPropertyChanged_addCommandEnabled : 1;
+    bool isUndoing : 1;
+    bool slotPropertyChangedEnabled : 1;
+    bool slotPropertyChanged_addCommandEnabled : 1;
 
     // helper to change color palette when switching 'enabled' property
     QColorGroup* origActiveColors;

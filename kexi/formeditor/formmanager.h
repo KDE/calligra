@@ -458,7 +458,7 @@ protected:
 
     /*! True if emitSelectionSignals() updates property set so showPropertySet() will
      not be needed in windowChanged(). False by default. Set to true in KexiFormManager. */
-bool m_emitSelectionSignalsUpdatesPropertySet : 1;
+    bool m_emitSelectionSignalsUpdatesPropertySet : 1;
 
 private:
     static FormManager* _self;
@@ -513,7 +513,7 @@ private:
 
     void *m_objectBlockingPropertyEditorUpdating;
     QStyle *m_style;
-bool m_isRedoing : 1;
+    bool m_isRedoing : 1;
 
     friend class PropertyCommand;
     friend class GeometryPropertyCommand;
