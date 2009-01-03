@@ -168,7 +168,8 @@ void KWView::setupActions()
     m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in KWord.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
-    m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
+    if (m_currentPage.isValid())
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
@@ -176,7 +177,8 @@ void KWView::setupActions()
     m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in KWord. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
-    m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+    if (m_currentPage.isValid())
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
