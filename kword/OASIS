@@ -25,8 +25,7 @@ and the page-based DTP mode (page-sequence element).
 
 * Headers and footers
 OpenDocument supports odd/even headers and footers using "header" and "header-left".
-But for first page header/footer KWord should create a separate page layout,
-this is not done yet (it uses its own tag instead, as a temporary hack).
+But for first page header/footer KWord should create a separate page layout.
 Also OpenDocument doesn't allow a different style for header and header-left,
 so they must have the same min-size, border, margins...
 
