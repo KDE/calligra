@@ -60,9 +60,6 @@ class Connection;
 class FormManager;
 typedef QList<KAction*> ActionList;
 
-//! @internal
-//static FormManager* FormManager_static = 0;
-
 //! A class to manage (create/load/save) Forms
 /** This is Form Designer's main class, which is used by external APIs to access FormDesigner.
    This is the class you have to use to integrate FormDesigner into another program.
@@ -116,9 +113,6 @@ public:
     virtual QAction* action(const char* name) = 0;
 
     bool isPasteEnabled();
-
-//  //! \return A pointer to the WidgetLibrary owned by this Manager.
-//  WidgetLibrary* lib() const { return m_lib; }
 
     //! \return A pointer to the WidgetPropertySet owned by this Manager.
     WidgetPropertySet* propertySet() const {
@@ -434,15 +428,6 @@ protected:
         return m_widgetActionGroup;
     }
 
-#if 0
-    /*! Default implementation just calls FormIO::loadFormFromDom().
-     Change this if you need to handle, eg. custom UI XML tags, as in Kexi's Form Designer. */
-    virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
-
-    /*! Default implementation just calls FormIO::saveFormToString().
-     Change this if you need to handle, eg. custom UI XML tags, as in Kexi's Form Designer. */
-    virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
-#endif
     /*! Function called by the "Lay out in..." menu items. It creates a layout from the
       currently selected widgets (that must have the same parent).
       Calls \ref CreateLayoutCommand. */
@@ -469,7 +454,6 @@ private:
          };
 
     WidgetPropertySet *m_propSet;
-//  WidgetLibrary *m_lib;
     QPointer<KoProperty::EditorView>  m_editor;
     QPointer<ObjectTreeView>  m_treeview;
     // Forms

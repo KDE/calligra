@@ -75,8 +75,6 @@
 
 #include "formmanager.h"
 
-#define KFD_NO_STYLES //disables; styles support needs improvements
-
 #define KEXI_NO_PIXMAPCOLLECTION
 #ifdef __GNUC__
 #warning pixmapcollection
@@ -84,34 +82,6 @@
 #ifndef KEXI_NO_PIXMAPCOLLECTION
 #include "pixmapcollection.h"
 #endif
-
-namespace KFormDesigner
-{
-
-/*TODO
-
-//! @internal
-class PropertyFactory : public KoProperty::CustomPropertyFactory
-{
-public:
-    PropertyFactory(QObject *parent)
-            : KoProperty::CustomPropertyFactory(parent)
-//   m_manager(manager)
-    {
-    }
-    virtual ~PropertyFactory() {}
-
-    KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *) {
-        return 0;
-    }
-
-    KoProperty::Widget* createCustomWidget(KoProperty::Property *prop) {
-        return new KFDPixmapEdit(prop);
-    }
-};
-*/
-
-}
 
 using namespace KFormDesigner;
 
@@ -146,7 +116,6 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
     connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(slotSettingsChanged(int)));
     slotSettingsChanged(KGlobalSettings::SETTINGS_SHORTCUTS);
 
-//moved to createWidgetLibrary() m_lib = new WidgetLibrary(this, supportedFactoryGroups);
     m_propSet = new WidgetPropertySet(this);
 
     m_widgetActionGroup = new QActionGroup(this);
@@ -163,7 +132,6 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
     m_domDoc.appendChild(m_domDoc.createElement("UI"));
     m_menuNoBuddy = 0;
 
-//Qt4    m_deleteWidgetLater_list.setAutoDelete(true);
     connect(&m_deleteWidgetLater_timer, SIGNAL(timeout()), this, SLOT(deleteWidgetLaterTimeout()));
     connect(this, SIGNAL(connectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)),
             this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
@@ -192,7 +160,6 @@ FormManager::~FormManager()
     delete m_uiCodeDialog;
 #endif
     delete m_style;
-// delete m_propFactory;
 }
 
 
@@ -246,8 +213,6 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
         m_widgetActionGroup->addAction(m_dragConnection);
         connect(m_dragConnection, SIGNAL(triggered()),
                 this, SLOT(startCreatingConnection()));
-        //to be exclusive with any 'widget' action
-//kde4 not needed   m_dragConnection->setExclusiveGroup("LibActionWidgets");
         m_dragConnection->setChecked(false);
         actions.append(m_dragConnection);
     }
@@ -258,7 +223,6 @@ FormManager::createActions(WidgetLibrary *lib, KActionCollection* collection, KX
     m_widgetActionGroup->addAction(m_pointer);
     connect(m_pointer, SIGNAL(triggered()),
             this, SLOT(slotPointerClicked()));
-//kde4 not needed m_pointer->setExclusiveGroup("LibActionWidgets"); //to be exclusive with any 'widget' action
     m_pointer->setChecked(true);
     actions.append(m_pointer);
 
@@ -359,23 +323,13 @@ FormManager::stopInsert()
     if (!m_inserting)
         return;
 
-//#ifndef KEXI_NO_CURSOR_PROPERTY
     foreach (Form *form, m_forms) {
         form->widget()->unsetCursor();
         const QList<QWidget*> list(form->widget()->findChildren<QWidget*>());
         foreach (QWidget *w, list) {
             w->unsetCursor();
-#if 0
-            if (((QWidget*)o)->ownCursor()) {
-                QMap<QObject*, QCursor>::ConstIterator curIt(form->d->cursors.find(o));
-                if (curIt != form->d->cursors.constEnd())
-                    static_cast<QWidget*>(o)->setCursor(*curIt);
-//    ((QWidget*)o)->setCursor( (*(form->d->cursors))[o->name()] ) ;
-            }
-#endif
         }
     }
-//#endif
     m_inserting = false;
     m_pointer->setChecked(true);
 }
@@ -400,7 +354,6 @@ FormManager::startCreatingConnection()
 
     // We set a Pointing hand cursor while drawing the connection
     foreach (Form *form, m_forms) {
-//  form->d->cursors = new QMap<QString, QCursor>();
         form->d->mouseTrackers = new QStringList();
         if (form->toplevelContainer()) {
             form->widget()->setCursor(QCursor(Qt::PointingHandCursor));
@@ -410,7 +363,6 @@ FormManager::startCreatingConnection()
         foreach(QWidget *w, list) {
             if (w->testAttribute(Qt::WA_SetCursor)) {
                 form->d->cursors.insert(w, w->cursor());
-//    form->d->cursors->insert(w->name(), w->cursor());
                 w->setCursor(QCursor(Qt::PointingHandCursor));
             }
             if (w->hasMouseTracking())
@@ -513,25 +465,6 @@ FormManager::windowChanged(QWidget *w)
 
             kDebug() << "active form is" << form->objectTree()->name();
 
-            if (m_collection) {
-#ifndef KFD_NO_STYLES
-                // update the 'style' action
-                KSelectAction *style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
-                const QString currentStyle = form->widget()->style().name();
-                const QStringList styles = style->items();
-
-                int idx = 0;
-                QStringList::ConstIterator endIt = styles.constEnd();
-                for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx) {
-                    if ((*it).toLower() == currentStyle) {
-                        kDebug() << "Updating the style to " << currentStyle;
-                        style->setCurrentItem(idx);
-                        break;
-                    }
-                }
-#endif
-            }
-
             if ((form != previousActive) && isCreatingConnection())
                 resetCreatedConnection();
 
@@ -554,23 +487,6 @@ FormManager::windowChanged(QWidget *w)
             kDebug() << "Active preview form is " << form->widget()->objectName();
 
             if (m_collection) {
-#ifndef KFD_NO_STYLES
-                // update the 'style' action
-                KSelectAction *style = (KSelectAction*)m_collection->action("change_style", "KSelectAction");
-                const QString currentStyle = form->widget()->style().name();
-                const QStringList styles = style->items();
-
-                int idx = 0;
-                QStringList::ConstIterator endIt = styles.constEnd();
-                for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx) {
-                    if ((*it).toLower() == currentStyle) {
-                        kDebug() << "Updating the style to " << currentStyle;
-                        style->setCurrentItem(idx);
-                        break;
-                    }
-                }
-#endif
-
                 resetCreatedConnection();
                 m_active = form;
 
@@ -581,7 +497,6 @@ FormManager::windowChanged(QWidget *w)
             }
         }
     }
-    //m_active = 0;
 }
 
 Form*
@@ -680,19 +595,6 @@ FormManager::previewForm(Form *form, QWidget *container, Form *toForm)
     m_preview.append(myform);
     container->show();
 }
-
-/*
-bool
-FormManager::loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf)
-{
-  return FormIO::loadFormFromDom(myform, container, domDoc);
-}
-
-bool
-FormManager::saveFormToStringInternal(Form *form, QString &dest, int indent)
-{
-  return KFormDesigner::FormIO::saveFormToString(form, dest, indent);
-}*/
 
 bool
 FormManager::isTopLevel(QWidget *w)
@@ -825,8 +727,7 @@ FormManager::createSlotMenu(QWidget *w)
     const QList<QMetaMethod> list(
         KexiUtils::methodsForMetaObjectWithParents(w->metaObject(),
                 QMetaMethod::Slot, QMetaMethod::Public));
-//qt3: Q3StrList list = w->metaObject()->slotNames(true);
-    foreach(QMetaMethod method, list) {
+    foreach(const QMetaMethod& method, list) {
         QString slotArg(method.signature());
         slotArg = slotArg.remove(QRegExp(".*[(]|[)]"));
         if (!signalArg.startsWith(slotArg))
@@ -858,7 +759,6 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
     m_menuWidget = w;
     QString n = container->form()->library()->displayName(w->metaObject()->className());
-// QValueVector<int> menuIds();
 
     if (!m_popup) {
         m_popup = new KMenu();
@@ -938,12 +838,10 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
         QAction *subAction = m_popup->addMenu(sub);
         subAction->setText(i18n("Choose Buddy..."));
-//  menuIds->append(id);
         connect(sub, SIGNAL(triggered(QAction*)), this, SLOT(buddyChosen(QAction*)));
         separatorNeeded = true;
     }
 
-    //int sigid=0;
 #ifdef KEXI_DEBUG_GUI
     if (!multiple && !(m_options & HideEventsInPopupMenu)) {
         if (separatorNeeded)
@@ -951,7 +849,6 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 
         // We create the signals menu
         KMenu *sigMenu = new KMenu();
-//ported Q3StrList list = w->metaObject()->signalNames(true);
         QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));
@@ -960,7 +857,6 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
         }
         QAction *eventsSubMenuAction = m_popup->addMenu(sigMenu);
         eventsSubMenuAction->setText(i18n("Events"));
-//  menuIds->append(id);
         if (list.isEmpty())
             eventsSubMenuAction->setEnabled(false);
         connect(sigMenu, SIGNAL(triggered(QAction*)),
@@ -1003,10 +899,6 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
     m_insertPoint = container->widget()->mapFromGlobal(popupPos);
     m_popup->exec(popupPos);//QCursor::pos());
     m_insertPoint = QPoint();
-
-// QValueVector<int>::iterator it;
-// for(it = menuIds->begin(); it != menuIds->end(); ++it)
-//  m_popup->removeItem(*it);
 }
 
 void
@@ -1033,8 +925,6 @@ FormManager::menuSignalChosen(QAction* action)
     if (m_options & HideSignalSlotConnections)
         return;
 
-    //if(!m_menuWidget)
-    // return;
     if (m_drawingSlot && m_sigSlotMenu && action) {
         if (m_connection->receiver().isNull())
             m_connection->setSignal(action->text());
@@ -1728,8 +1618,9 @@ FormManager::changeFont()
             prevFont.setBold(font.bold());
             prevFont.setItalic(font.italic());
         }
-        if (diffFlags & KFontChooser::FontDiffSize)
+        if (diffFlags & KFontChooser::FontDiffSize) {
             prevFont.setPointSize(font.pointSize());
+        }
         /*! @todo this modification is not added to UNDO BUFFER:
                   do it when KoProperty::Set supports multiple selections */
         widget->setFont(prevFont);
