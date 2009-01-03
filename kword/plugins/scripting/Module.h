@@ -142,10 +142,6 @@ public slots:
         return findFrameSet(KWord::MainTextFrameSet);
     }
 
-    /** Return a \a FrameSet that holds a footnote */
-    QObject* footNoteFrameSet() {
-        return findFrameSet(KWord::FootNoteTextFrameSet);
-    }
     /** Return any other \a FrameSet not managed by the auto-frame layout */
     QObject* otherFrameSet() {
         return findFrameSet(KWord::OtherTextFrameSet);
