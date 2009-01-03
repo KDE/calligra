@@ -251,4 +251,9 @@ void KPrPresentationTool::setBlackBackgroundVisibility(bool b)
 {
     m_blackBackgroundVisibility = b;
 }
+
+bool KPrPresentationTool::getBlackBackgroundVisibility()
+{
+    return m_blackBackgroundVisibility;
+}
 #include "KPrPresentationTool.moc"

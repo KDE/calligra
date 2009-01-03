@@ -214,8 +214,11 @@ void KPrViewModePresentation::deactivate()
     m_canvas->show();
     m_view->updateActivePage( page );
     m_tool->m_frameToolPresentation()->setVisible(false);
-    delete m_tool->m_blackBackgroundPresentation();
-    m_tool->setBlackBackgroundVisibility( false );
+    if ( m_tool->getBlackBackgroundVisibility() )
+    {
+	delete m_tool->m_blackBackgroundPresentation();
+	m_tool->setBlackBackgroundVisibility( false );
+    }
     // only delete after the new page has been set
     delete m_endOfSlideShowPage;
     m_endOfSlideShowPage = 0;

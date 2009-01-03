@@ -53,7 +53,8 @@ public:
     QFrame *m_frameToolPresentation();
     QWidget *m_blackBackgroundPresentation();
     void setBlackBackgroundVisibility(bool b);
-
+    bool getBlackBackgroundVisibility();
+    
 public slots:
     void activate( bool temporary = false );
     void deactivate();
