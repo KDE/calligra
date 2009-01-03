@@ -42,17 +42,6 @@ KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canv
     m_blackBackgroundframe->setLayout( frameLayout2 );
     m_blackBackgroundframe->move( -4,-4 );
 
-    // change the visibility
-    if ( !m_blackBackgroundVisibility )
-    {
-	m_blackBackgroundVisibility = true;
-	setVisible(false);
-    }
-    else
-    {
-	m_blackBackgroundVisibility = false;
-	setVisible(true);
-    }
 }
 
 KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()

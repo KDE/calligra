@@ -45,38 +45,15 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 {    
     // tool box
     m_frame = new QFrame( m_viewMode.canvas() );
-
+    
     QVBoxLayout *frameLayout = new QVBoxLayout();
     presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
     frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom  );
-    //frameLayout->addStretch();
     m_frame->setLayout( frameLayout );
-    
-    // black of highlight
-    /*QSize size = m_viewMode.canvas()->size();
-    QPixmap newPage(size);
-
-    if(newPage.isNull())
-	return;
-    
-    //newPage.fill(Qt::black);
-  */
-	    //m_blackBackgroundframe = new QFrame( m_viewMode.canvas() );
-  	    m_blackBackgroundwidget = new KPrPresentationHighlightWidget(m_viewMode.canvas());
-    /*QVBoxLayout *frameLayout2 = new QVBoxLayout();
-    QLabel *blackBackgroundlabel = new QLabel();
-    blackBackgroundlabel->setPixmap(newPage);
-    frameLayout2->addWidget( blackBackgroundlabel, 0, Qt::AlignCenter );
-    m_blackBackgroundframe->setLayout(frameLayout2);
-    
-    m_blackBackgroundframe->show();
-    m_blackBackgroundframe->setVisible( false );
-    m_blackBackgroundVisibility = false;*/
     
     m_frame->show();
     m_frame->setVisible(false);
     
-	
     // Connections of button clicked to slots
     connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
     connect( presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
@@ -198,29 +175,20 @@ void KPrPresentationTool::highLightPresentation()
 {
     // create the high light
     //delete m_blackBackgroundframe;
-    delete m_blackBackgroundwidget;
+    //delete m_blackBackgroundwidget;
     QSize size = m_viewMode.canvas()->size();
-    
     QPixmap newPage( size );
-
     if(newPage.isNull())
 	return;
-    /*
-    newPage.fill( Qt::red );
-    QPainter painter( &newPage );
-    painter.fillRect( QRect( QPoint( 0,0 ),size ), QBrush( newPage ) );
-    painter.setOpacity( 0.25 );
-    */
-    
-    /*QColor c(Qt::black); c.setAlphaF(0.5); newPage.fill(c);
-    
-    m_blackBackgroundwidget = new QWidget(m_viewMode.canvas() );
-    m_blackBackgroundwidget->resize(size);
-    //m_blackBackgroundwidget->setAutoFillBackground(true);
-    //m_blackBackgroundwidget->setWindowOpacity(0.8);
-
-    */
-    m_blackBackgroundwidget = new KPrPresentationHighlightWidget(m_viewMode.canvas());
+	
+    if ( m_blackBackgroundVisibility ) {
+	m_blackBackgroundVisibility = false;
+	delete m_blackBackgroundwidget;
+    } else {
+	m_blackBackgroundVisibility = true;
+	m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
+	m_blackBackgroundwidget->show();
+    }
 
     /*m_blackBackgroundframe= new QFrame(m_blackBackgroundwidget);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
@@ -251,7 +219,6 @@ void KPrPresentationTool::highLightPresentation()
     QVBoxLayout *frameLayout = new QVBoxLayout();
     presentationToolWidget = new KPrPresentationToolWidget( m_viewMode.canvas() );
     frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom  );
-    //frameLayout->addStretch();
     m_frame->setLayout( frameLayout );
     m_frame->resize( size );
     m_frame->show();
@@ -276,6 +243,12 @@ QFrame *KPrPresentationTool::m_frameToolPresentation()
 // get the acces on m_blackBackgroundwidget
 QWidget *KPrPresentationTool::m_blackBackgroundPresentation()
 {
-    return m_blackBackgroundwidget;
+    if ( m_blackBackgroundwidget )
+	return m_blackBackgroundwidget;
+}
+
+void KPrPresentationTool::setBlackBackgroundVisibility(bool b)
+{
+    m_blackBackgroundVisibility = b;
 }
 #include "KPrPresentationTool.moc"
