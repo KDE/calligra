@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
@@ -163,6 +163,9 @@ public:
 
     void firePageSetupChanged();
 
+    // reimplemented slot from KoDocument
+    virtual void initEmpty();
+
 public slots:
     /// Relayout the pages
     void relayout();
@@ -200,14 +203,14 @@ private:
     friend class PageProcessingQueue;
     friend class KWDLoader;
     friend class KWOdfLoader;
-    friend class KWStartupWidget;
     friend class KWPagePropertiesCommand;
     QString renameFrameSet(const QString& prefix , const QString& base);
     /// post process loading after either oasis or oldxml loading finished
     void endOfLoading();
-    /** Called before loading
+    /**
+     * Called before loading
      * It's important to clear out anything that might be in the document already,
-     * for things like using DCOP to load multiple documents into the same KWDocument,
+     * for things like using DBUS to load multiple documents into the same KWDocument,
      * or "reload" when kword is embedded into konqueror.
      */
     void clear();

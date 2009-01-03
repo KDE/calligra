@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005, 2007-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,11 +23,6 @@
 #include "../KWPage.h"
 #include "../KWDocument.h"
 
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoListStyle.h>
-#include <KoListLevelProperties.h>
-#include <KoCharacterStyle.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
 
@@ -98,54 +93,18 @@ void KWStartupWidget::columnsUpdated(const KoColumns &columns)
 
 void KWStartupWidget::buttonClicked()
 {
-    m_doc->clear();
+    m_doc->initEmpty();
 
     if (m_layout.left < 0) {
         m_layout.width /= 2.0;
-        m_doc->m_pageManager.setPreferPageSpread(true);
+        m_doc->pageManager()->setPreferPageSpread(true);
     }
-    KWPageStyle style = m_doc->m_pageManager.defaultPageStyle();
+    KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);
     style.setMainTextFrame(widget.mainText->isChecked());
     style.setPageLayout(m_layout);
-
     m_doc->setUnit(m_unit);
-
-    m_doc->appendPage("Standard");
-
-    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_doc->dataCenterMap()["StyleManager"]);
-    Q_ASSERT(styleManager);
-    KoParagraphStyle *parag = new KoParagraphStyle();
-    parag->setName("Head 1"); // TODO i18n
-    KoCharacterStyle *character = parag->characterStyle();
-    character->setFontPointSize(20);
-    character->setFontWeight(QFont::Bold);
-    styleManager->add(parag);
-
-    parag = new KoParagraphStyle();
-    parag->setName("Head 2"); // TODO i18n
-    character = parag->characterStyle();
-    character->setFontPointSize(16);
-    character->setFontWeight(QFont::Bold);
-    styleManager->add(parag);
-
-    parag = new KoParagraphStyle();
-    parag->setName("Head 3"); // TODO i18n
-    character = parag->characterStyle();
-    character->setFontPointSize(12);
-    character->setFontWeight(QFont::Bold);
-    styleManager->add(parag);
-
-    parag = new KoParagraphStyle();
-    parag->setName("Bullet List"); // TODO i18n
-    KoListStyle * list = new KoListStyle(parag);
-    KoListLevelProperties llp = list->levelProperties(0);
-    llp.setStyle(KoListStyle::DiscItem);
-    list->setLevelProperties(llp);
-    parag->setListStyle(list);
-    styleManager->add(parag);
 
     emit documentSelected();
 }
-
