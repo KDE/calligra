@@ -47,9 +47,11 @@ KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags
     QWidget* base = new QWidget( this );
     m_layoutsView = new QListWidget( base );
     m_layoutsView->setIconSize( QSize( 80, 60 ) );
+    m_layoutsView->setGridSize( QSize( 80, 60 ) );
     m_layoutsView->setViewMode( QListView::IconMode );
-    m_layoutsView->setFlow( QListView::LeftToRight );
+    m_layoutsView->setResizeMode( QListView::Adjust );
     m_layoutsView->setMovement( QListView::Static );
+    m_layoutsView->setSelectionRectVisible(false);
 
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( m_layoutsView );
