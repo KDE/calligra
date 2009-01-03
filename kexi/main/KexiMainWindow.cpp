@@ -2259,9 +2259,9 @@ bool KexiMainWindow::queryExit()
 void KexiMainWindow::closeEvent(QCloseEvent *ev)
 {
     d->mainWidget->closeEvent(ev);
-    if (queryClose()) {
+/*    if (queryClose()) {
         ev->accept();
-    }
+    }*/
 }
 
 void
