@@ -163,9 +163,9 @@ void WidgetFactory::addClass(WidgetInfo *w)
     if (oldw == w)
         return;
     if (oldw) {
-        kWarning() << "WidgetFactory::addClass(): class with name '"
-        << w->className()
-        << "' already exists for factory '" << objectName() << "'";
+        kWarning() << "class with name '"
+            << w->className()
+            << "' already exists for factory '" << objectName() << "'";
         return;
     }
     m_classesByName.insert(w->className(), w);

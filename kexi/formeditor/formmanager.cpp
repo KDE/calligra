@@ -1109,7 +1109,7 @@ FormManager::createLayout(int layoutType)
     QWidgetList *list = m_active->selectedWidgets();
     // if only one widget is selected (a container), we modify its layout
     if (list->isEmpty()) {//sanity check
-        kWarning() << "FormManager::createLayout(): list is empty!";
+        kWarning() << "list is empty!";
         return;
     }
     if (list->count() == 1) {

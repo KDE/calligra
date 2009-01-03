@@ -202,7 +202,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add, bool forceReload, boo
 
     // don't add a widget twice
     if (!forceReload && d->widgets.contains(QPointer<QWidget>(w))) {
-        kWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected";
+        kWarning() << "Widget is already selected";
         return;
     }
     // if our list is empty,don't use add parameter value
@@ -273,7 +273,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     if (!KFormDesigner::FormManager::self()
             || !(form = KFormDesigner::FormManager::self()->activeForm())
             || !KFormDesigner::FormManager::self()->activeForm()->objectTree()) {
-        kWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!";
+        kWarning() << "no manager or active form!!!";
         return;
     }
     ObjectTreeItem *tree = form->objectTree()->lookup(w->objectName());
@@ -287,8 +287,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
     KoProperty::Property *newProp = 0;
     WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->metaObject()->className());
     if (!winfo) {
-        kWarning() << "WidgetPropertySet::createPropertiesForWidget() no widget info for class "
-        << w->metaObject()->className();
+        kWarning() << "no widget info for class" << w->metaObject()->className();
         return;
     }
 
@@ -628,7 +627,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 // CommandGroup *group = new CommandGroup(commandName);
     for (QHash<QByteArray, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it) {
         if (!d->set.contains(it.key())) {
-            kWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" << it.key() << "\" property not found";
+            kWarning() << "\"" << it.key() << "\" property not found";
             continue;
         }
         PropertyCommand *subCommand = new PropertyCommand(this, widget->objectName().toLatin1(),

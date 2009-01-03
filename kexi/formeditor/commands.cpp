@@ -704,7 +704,7 @@ InsertWidgetCommand::execute()
         WidgetInfo *winfo = m_container->form()->library()->widgetInfoForClassName(m_class);
         KMessageBox::sorry(FormManager::self()->activeForm() ? FormManager::self()->activeForm()->widget() : 0,
                            i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.", winfo ? winfo->name() : QString()));
-        kWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed";
+        kWarning() << "ERROR: widget creation failed";
         return;
     }
 //! @todo allow setting this for data view mode as well
