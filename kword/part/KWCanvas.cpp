@@ -279,3 +279,7 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
     painter.end();
 }
 
+void KWCanvas::focusOutEvent(QFocusEvent *event)
+{
+    m_view->sanityCheck();
+}

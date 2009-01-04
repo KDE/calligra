@@ -321,7 +321,6 @@ void KWView::setupActions()
     action = new KToggleAction(i18n("Status Bar"), this);
     action->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", action);
-    //action->setChecked(statusBar()->isVisible());
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     // -------------- Insert menu
@@ -1203,3 +1202,9 @@ void KWView::selectionChanged()
     }
 }
 
+void KWView::sanityCheck()
+{
+    KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
+    if (action)
+        action->setChecked(statusBar()->isVisible());
+}
