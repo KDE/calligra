@@ -223,7 +223,8 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 void TableShape::init(const QMap<QString, KoDataCenter*> & dataCenterMap)
 {
     Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
-    Q_CHECK_PTR(map);
+    if (map == 0)
+        return;
     Sheet* const sheet = map->addNewSheet();
     d->sheetView = new SheetView(sheet);
     KoShape::setUserData(sheet);
