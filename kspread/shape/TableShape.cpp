@@ -327,7 +327,7 @@ void TableShape::shapeChanged(ChangeType type)
         return;
     }
     // Not the changes, we want to react on?
-    if (!(type == PositionChanged || type == SizeChanged)) {
+    if (type != SizeChanged) {
         return;
     }
     d->pageManager->layoutPages();
