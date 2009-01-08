@@ -162,6 +162,11 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
     return a;
 }
 
+bool AppointmentInterval::operator ==(const AppointmentInterval &interval ) const
+{
+    return m_start == interval.m_start && m_end == interval.m_end && m_load == interval.m_load;
+}
+
 //-----------------------
 AppointmentIntervalList &AppointmentIntervalList::operator+=( const AppointmentIntervalList &lst )
 {
