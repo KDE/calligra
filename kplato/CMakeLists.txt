@@ -77,7 +77,7 @@ set(kplatopart_PART_SRCS kptfactoryinit.cpp )
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
-target_link_libraries(kplatopart kplatoprivate)
+target_link_libraries(kplatopart ${KDE4_KPARTS_LIBS} kplatoprivate)
 
 install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 
