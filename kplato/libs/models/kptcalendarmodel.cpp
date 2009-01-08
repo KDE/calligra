@@ -513,7 +513,7 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QList<Calendar*> lst = calendarList( stream );
     foreach ( Calendar *c, lst ) {
-        if ( flags( index( c ) ) & Qt::ItemIsDropEnabled == 0 ) {
+        if ( (flags( index( c ) ) & (int)Qt::ItemIsDropEnabled) == 0 ) {
             return false;
         }
         if ( on == c->parentCal() ) {
