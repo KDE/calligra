@@ -24,14 +24,15 @@
 #include <QtGui/QLabel>
 
 #include "KPrViewModePresentation.h"
-/*dans le destructeur tu pourras faire un set sur le booléen à False, et dans le constructeur un Set à true*/
 
 class KPrPresentationHighlightWidget : public QWidget {
-
+    Q_OBJECT
 public :
     KPrPresentationHighlightWidget(KoPACanvas * canvas);
     ~KPrPresentationHighlightWidget();
+    void MouseMoveEvent(QMouseEvent* e);
 public :
+    QSize m_size;
     bool m_blackBackgroundVisibility;
     QFrame *m_blackBackgroundframe;
 };
