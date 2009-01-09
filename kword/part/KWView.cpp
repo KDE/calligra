@@ -1196,8 +1196,11 @@ void KWView::selectionChanged()
     foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
-        m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
-        m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, frame->frameSet());
+        QVariant variant;
+        variant.setValue<void*>(frame);
+        m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, variant);
+        variant.setValue<void*>(frame->frameSet());
+        m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, variant);
         break;
     }
 }
