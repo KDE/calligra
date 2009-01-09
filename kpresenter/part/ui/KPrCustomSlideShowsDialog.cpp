@@ -238,7 +238,7 @@ void KPrCustomSlideShowsDialog::changedSelectedSlideshow(QListWidgetItem* curren
     {
         item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n( "Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
-        item->setData( SlideData, QVariant( page ) );
+        item->setData( SlideData, QVariant::fromValue<KoPAPageBase*>( page ) );
     }
 }
 
@@ -256,7 +256,7 @@ void KPrCustomSlideShowsDialog::addSlidesToCurrentSlideShow()
 
         item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n("Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
-        item->setData( SlideData, QVariant( page ) );
+        item->setData( SlideData, QVariant::fromValue<KoPAPageBase*>( page ) );
     }
     //update the SlideShow with the resulting list
     m_slideShows->update( m_selectedSlideShowName, selectedSlideShow );
