@@ -177,8 +177,4 @@ add_subdirectory( data )
 ############ install files ###############
 #
 #install( FILES  kpresenter.rc kpresenter_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
-#install( FILES  kpresenterpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-#install( FILES  kpresenter.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 #install(PROGRAMS kprconverter.pl DESTINATION ${BIN_INSTALL_DIR} )
-#
-#
