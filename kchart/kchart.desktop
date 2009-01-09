@@ -83,5 +83,6 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.kchart
 Categories=Qt;KDE;Office;X-KDE-More;
 X-DocPath=kchart/index.html

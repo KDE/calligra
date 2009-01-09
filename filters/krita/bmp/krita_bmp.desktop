@@ -12,4 +12,5 @@ Icon=krita
 Categories=Qt;KDE;Office;Graphics;
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.krita
 NoDisplay=true
