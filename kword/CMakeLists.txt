@@ -4,8 +4,3 @@ add_subdirectory( templates )
 add_subdirectory( pics )
 add_subdirectory( part )
 add_subdirectory( plugins )
-
-# ########### install files ###############
-#
-install( FILES  kwordpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kword.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
