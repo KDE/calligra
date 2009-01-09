@@ -52,6 +52,7 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
 , m_view( 0 )
 , m_soundCollection( 0 )
 {
+    setObjectName( "KPrClickActionDocker" );
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
     m_cbPlaySound = new QComboBox();

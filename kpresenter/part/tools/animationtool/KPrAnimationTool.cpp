@@ -85,6 +85,7 @@ QMap<QString, QWidget *> KPrAnimationTool::createOptionWidgets()
     widgets.insert(i18n("Click Actions"), clickActionWidget);
     QLabel *label =new QLabel(i18n("Not implemented in 2.0"));
     label->setMinimumWidth(180); //try to make it visible
+    label->setObjectName( "ShapeAnimationLabel" );
     widgets.insert(i18n("Shape Animation"), label);
     return widgets;
 }

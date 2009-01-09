@@ -50,6 +50,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
 , m_view( 0 )
 , m_previewMode(0)
 {
+    setObjectName( "KPrPageEffectDocker" );
     QGridLayout* optionLayout = new QGridLayout();
     m_effectCombo = new QComboBox( this );
     m_effectCombo->addItem( i18n( "No Effect" ), QString( "" ) );
