@@ -69,6 +69,15 @@ public:
 
     /// Used to display statusmessages.
     KTextBrowser* statusbrowser;
+    
+    /** The type of script
+     *  executable = regular script that can be executed by the user
+     *  module = a script which doesnt contain a 'main', only
+     *           functions that can be used by other scripts
+     *  object = a script which contains code to be loaded into another
+                 object such as a report or form
+     */
+    QString scriptType;
 };
 
 KexiScriptDesignView::KexiScriptDesignView(
@@ -250,7 +259,23 @@ void KexiScriptDesignView::updateProperties()
     if (info) {
         d->properties->clear();
 
+	QStringList types;
+	types << "executable" << "module" << "object";
+        KoProperty::Property::ListData* typelist = new KoProperty::Property::ListData(types, types);
+        KoProperty::Property* t = new KoProperty::Property(
+            "type", // name
+            typelist, // ListData
+            (d->scriptType.isEmpty() ? "execuable" : d->scriptType), // value
+            i18n("Script Type"), // caption
+            i18n("The type of script"), // description
+            KoProperty::List // type
+        );
+        d->properties->addProperty(t);
+	
         QStringList interpreters = manager->interpreters();
+	
+	kDebug() << interpreters;
+	
         KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
         KoProperty::Property* prop = new KoProperty::Property(
             "language", // name
@@ -302,6 +327,8 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         // names for the support languages...
         d->editor->setHighlightMode(language);
         updateProperties();
+    } else if (property.name() == "type") {
+	d->scriptType = property.value().toString();
     } else {
         bool ok = d->scriptaction->setOption(property.name(), property.value());
         if (! ok) {
@@ -362,6 +389,10 @@ bool KexiScriptDesignView::loadData()
         return false;
     }
 
+    d->scriptType = scriptelem.attribute("scripttype");
+    if (d->scriptType.isEmpty())
+	d->scriptType = "executable";
+    
     QString interpretername = scriptelem.attribute("language");
     Kross::Manager* manager = &Kross::Manager::self();
     Kross::InterpreterInfo* info = interpretername.isEmpty() ? 0 : manager->interpreterInfo(interpretername);
@@ -417,6 +448,8 @@ tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 
     QString language = d->scriptaction->interpreter();
     scriptelem.setAttribute("language", language);
+    //TODO move different types to their own part??
+    scriptelem.setAttribute("scripttype", d->scriptType);
 
     Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(language);
     if (info) {
