@@ -42,9 +42,6 @@ public:
 
     virtual KoViewConverter * viewConverter( KoPACanvas * canvas);
 
-public slots:
-    void updateActivePage(KoPAPageBase *page);
-
 protected:
     void initGUI();
     void initActions();

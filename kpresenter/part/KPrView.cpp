@@ -90,12 +90,6 @@ KoViewConverter * KPrView::viewConverter( KoPACanvas * canvas )
     return viewMode()->viewConverter( canvas );
 }
 
-void KPrView::updateActivePage(KoPAPageBase *page)
-{
-    viewMode()->updateActivePage( page );
-
-}
-
 void KPrView::initGUI()
 {
     // add page effect docker to the main window
@@ -153,9 +147,6 @@ this );
     action = new KAction( i18n( "Configure Presenter View..." ), this );
     actionCollection()->addAction( "slideshow_presenterview", action );
     connect( action, SIGNAL( activated() ), this, SLOT( configurePresenterView() ) );
- 
-    KoPADocumentStructureDocker *docStructureDocker = documentStructureDocker();
-    connect(docStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 }
 
 void KPrView::startPresentation()
