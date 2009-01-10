@@ -54,6 +54,7 @@ public:
     QWidget *m_blackBackgroundPresentation();
     void setBlackBackgroundVisibility(bool b);
     bool getBlackBackgroundVisibility();
+		static bool getDrawMode();
     
 public slots:
     void activate( bool temporary = false );
@@ -63,6 +64,7 @@ public slots:
 
 private:
     void finishEventActions();
+		static void switchDrawMode();
 
     KPrViewModePresentation & m_viewMode;
     QList<KoEventAction *> m_eventActions;
@@ -71,6 +73,8 @@ private:
     QFrame *m_blackBackgroundframe;
     KPrPresentationHighlightWidget * m_blackBackgroundwidget;
     bool m_blackBackgroundVisibility;
+		static bool drawMode;
+
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */

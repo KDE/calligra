@@ -19,6 +19,7 @@
  */
 
 #include "KPrViewModePresentation.h"
+#include "KPrPresentationTool.h"
 
 #include <QEvent>
 #include <QKeyEvent>
@@ -263,6 +264,7 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
+	if(!KPrPresentationTool::getDrawMode()){
     bool finished = m_animationDirector->navigate( navigation );
     
     //update current slide widget
@@ -276,6 +278,7 @@ void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigat
     if ( finished ) {
         activateSavedViewMode();
     }
+	}
 }
 
 void KPrViewModePresentation::navigateToPage( int index )
