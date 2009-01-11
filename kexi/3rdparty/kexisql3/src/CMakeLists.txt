@@ -50,9 +50,7 @@ ELSE() #unix (including Mac OSX)
    set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} os_unix.c)
 ENDIF()
 
-kde4_add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
-
-target_link_libraries(kexisql3  ${KDE4_KDECORE_LIBS} )
+add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
 
 set_target_properties(kexisql3 PROPERTIES VERSION 3.2.8 SOVERSION 3 )
 install(TARGETS kexisql3  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -63,9 +61,9 @@ install(TARGETS kexisql3  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(ksqlite_SRCS shell.c )
 
 
-kde4_add_executable(ksqlite ${ksqlite_SRCS})
+add_executable(ksqlite ${ksqlite_SRCS})
 
-target_link_libraries(ksqlite  ${KDE4_KDECORE_LIBS} kexisql3 )
+target_link_libraries(ksqlite kexisql3)
 
 install(TARGETS ksqlite  DESTINATION ${BIN_INSTALL_DIR})
 
