@@ -9,6 +9,7 @@ IF (MYSQL_FOUND)
    add_subdirectory( mySQL )
 ENDIF (MYSQL_FOUND)
 
+INCLUDE (FindPkgConfig)
 INCLUDE (FindPostgreSQL)
 INCLUDE (FindPqxx)
 pkg_check_modules (PQXX libpqxx)
