@@ -549,7 +549,7 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     *stream << "\"";
 
     *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
-    *stream << " stroke-width=\"" << line->lineWidth() << "\"";
+    *stream << " stroke-width=\"" << toUserSpace(line->lineWidth()) << "\"";
 
     if( line->capStyle() == Qt::FlatCap )
         *stream << " stroke-linecap=\"butt\"";
