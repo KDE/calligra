@@ -781,9 +781,10 @@ void ScheduleLogItemModel::refresh()
 {
     clear();
     QStringList lst;
-    //FIXME i18n
-    lst << "Name" << "Phase" << "Severity" <<"Message";
+
+    lst << i18n( "Name" ) << i18n( "Phase" ) << i18n( "Severity" ) << i18n( "Message" );
     setHorizontalHeaderLabels( lst );
+
     
     if ( m_schedule == 0 ) {
         kDebug()<<"No main schedule";

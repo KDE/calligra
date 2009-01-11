@@ -22,13 +22,12 @@
 #ifndef KFORMDESIGNEROBJECTTREE_H
 #define KFORMDESIGNEROBJECTTREE_H
 
-#include <q3ptrlist.h>
-#include <qmap.h>
-#include <q3dict.h>
-#include <qvariant.h>
-#include <qstring.h>
-#include <qpointer.h>
-#include <Q3CString>
+#include <QList>
+#include <QHash>
+#include <QVariant>
+#include <QString>
+#include <QPointer>
+#include <QByteArray>
 
 #include <kexi_export.h>
 
@@ -44,22 +43,10 @@ namespace KFormDesigner
 class ObjectTreeItem;
 
 //! @short An list of ObjectTreeItem pointers.
-typedef Q3PtrList<ObjectTreeItem> ObjectTreeList;
-
-//! @short An iterator for ObjectTreeList.
-typedef Q3PtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
+typedef QList<ObjectTreeItem*> ObjectTreeList;
 
 //! @short A QString-based disctionary of ObjectTreeItem pointers.
-typedef Q3Dict<ObjectTreeItem> ObjectTreeDict;
-
-//! @short An iterator for ObjectTreeDict.
-typedef Q3DictIterator<ObjectTreeItem> ObjectTreeDictIterator;
-
-//! @short A QString -> QVarinat map.
-typedef QMap<QString, QVariant> QVariantMap;
-
-//! @short A const iterator for QVariantMap.
-typedef QMap<QString, QVariant>::ConstIterator QVariantMapConstIterator;
+typedef QHash<QString, ObjectTreeItem*> ObjectTreeHash;
 
 /*!
  @short An item representing a widget
@@ -91,9 +78,9 @@ public:
         return &m_children;
     }
 
-    /*! \return a QMap<QString, QVariant> of all modified properties for this widget.
+    /*! \return a QHash<QString, QVariant> of all modified properties for this widget.
       The QVariant is the old value (ie first value) of the property whose name is the QString. */
-    const QVariantMap* modifiedProperties() const {
+    const QHash<QString, QVariant>* modifiedProperties() const {
         return &m_props;
     }
 
@@ -118,22 +105,22 @@ public:
     /*! Adds \a property in the list of the modified properties for this object.
         These modified properties are written in the .ui files when saving the form.
     */
-    void addModifiedProperty(const Q3CString &property, const QVariant &oldValue);
+    void addModifiedProperty(const QByteArray &property, const QVariant &oldValue);
     void storeUnknownProperty(QDomElement &el);
 
     /*! Adds subproperty \a property value \a value (a property of subwidget).
      Remembering it for delayed setting is needed because on loading
      the subwidget could be not created yet (true e.g. for KexiDBAutoField). */
-    void addSubproperty(const Q3CString &property, const QVariant& value);
+    void addSubproperty(const QByteArray &property, const QVariant& value);
 
     /*! \return subproperties for this item, added by addSubproperty()
      or 0 is there are no subproperties. */
-    QMap<QString, QVariant>* subproperties() const {
+    QHash<QString, QVariant>* subproperties() const {
         return m_subprops;
     }
 
-    void setPixmapName(const Q3CString &property, const QString &name);
-    QString pixmapName(const Q3CString &property);
+    void setPixmapName(const QByteArray &property, const QString &name);
+    QString pixmapName(const QByteArray &property);
 
     void setEnabled(bool enabled)  {
         m_enabled = enabled;
@@ -164,10 +151,10 @@ protected:
     QString m_name;
     ObjectTreeList m_children;
     QPointer<Container> m_container;
-    QMap<QString, QVariant> m_props;
-    QMap<QString, QVariant> *m_subprops;
+    QHash<QString, QVariant> m_props;
+    QHash<QString, QVariant> *m_subprops;
     QString  m_unknownProps;
-    QMap<Q3CString, QString> m_pixmapNames;
+    QHash<QByteArray, QString> m_pixmapNames;
     ObjectTreeItem* m_parent;
     QPointer<QWidget> m_widget;
     QPointer<EventEater> m_eater;
@@ -199,10 +186,9 @@ public:
     /*! \return the ObjectTreeItem named \a name, or 0 if doesn't exist. */
     ObjectTreeItem* lookup(const QString &name);
 
-    /*! \return a dict containing all ObjectTreeItem in this ObjectTree. If you want to iterate on
-    this dict, use ObjectTreeDictIterator. */
-    ObjectTreeDict* dict() {
-        return &m_treeDict;
+    /*! \return a hash containing all ObjectTreeItem in this ObjectTree. */
+    ObjectTreeHash* hash() {
+        return &m_treeHash;
     }
 
     void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);
@@ -216,10 +202,10 @@ public:
      If \a numberSuffixRequired is false and there's a widget prefix \a prefix,
      then \a prefix is returned (e.g. if \a prefix is "lineEdit", and "lineEdit" doesn't exist yet,
      "lineEdit" is returned). */
-    Q3CString generateUniqueName(const Q3CString &prefix, bool numberSuffixRequired = true);
+    QByteArray generateUniqueName(const QByteArray &prefix, bool numberSuffixRequired = true);
 
 private:
-    ObjectTreeDict m_treeDict;
+    ObjectTreeHash m_treeHash;
 };
 
 }

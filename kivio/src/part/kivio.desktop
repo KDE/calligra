@@ -61,4 +61,5 @@ Icon=kivio
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-DocPath=kivio/index.html
 X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.kivio
 Categories=Qt;KDE;Office;

@@ -603,6 +603,15 @@ NodeDeleteCmd::NodeDeleteCmd( Node *node, const QString& name )
     for ( int i = lst.count(); i > 0; --i ) {
         m_cmd->addCommand( new NodeDeleteCmd( lst[ i - 1 ] ) );
     }
+    if ( node->runningAccount() ) {
+        m_cmd->addCommand( new NodeModifyRunningAccountCmd( *node, node->runningAccount(), 0 ) );
+    }
+    if ( node->startupAccount() ) {
+        m_cmd->addCommand( new NodeModifyRunningAccountCmd( *node, node->startupAccount(), 0 ) );
+    }
+    if ( node->shutdownAccount() ) {
+        m_cmd->addCommand( new NodeModifyRunningAccountCmd( *node, node->shutdownAccount(), 0 ) );
+    }
 
 }
 NodeDeleteCmd::~NodeDeleteCmd()

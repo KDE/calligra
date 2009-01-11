@@ -21,14 +21,9 @@
 #ifndef FORMIO_H
 #define FORMIO_H
 
-#include <qobject.h>
-#include <q3dict.h>
-#include <qstring.h>
-#include <qwidget.h>
-#include <qmap.h>
+#include <QHash>
 #include <QPixmap>
 #include <QLabel>
-#include <Q3CString>
 #include <QPaintEvent>
 
 #include <kexi_export.h>
@@ -46,13 +41,13 @@ class KFORMEDITOR_EXPORT CustomWidget : public QWidget
     Q_OBJECT
 
 public:
-    CustomWidget(const Q3CString &className, QWidget *parent);
+    CustomWidget(const QByteArray &className, QWidget *parent);
     virtual ~CustomWidget();
 
     virtual void paintEvent(QPaintEvent *ev);
 
 private:
-    Q3CString m_className;
+    QByteArray m_className;
 };
 
 namespace KFormDesigner
@@ -214,8 +209,8 @@ protected:
     static void addIncludeFileName(const QString &include, QDomDocument &domDoc);
 
 private:
-    // This dict stores buddies associations until the Form is completely loaded.
-    static Q3Dict<QLabel>  *m_buddies;
+    // This hash stores buddies associations until the Form is completely loaded.
+    static QHash<QString, QLabel*> *m_buddies;
 
     /// Instead of having to pass these for every functions, we just store them in the class
     //static QWidgdet  *m_currentWidget;

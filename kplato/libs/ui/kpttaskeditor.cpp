@@ -235,10 +235,10 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
-            name = "task_popup";
+            name = node->isScheduled( baseModel()->id() ) ? "task_popup" : "task_edit_popup";
             break;
         case Node::Type_Milestone:
-            name = "taskeditor_milestone_popup";
+            name = node->isScheduled( baseModel()->id() ) ? "taskeditor_milestone_popup" : "task_edit_popup";
             break;
         case Node::Type_Summarytask:
             name = "summarytask_popup";
@@ -500,6 +500,8 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new NodeTreeView( this );
+    NodeSortFilterProxyModel *p = new NodeSortFilterProxyModel( m_view->baseModel(), m_view );
+    m_view->setModel( p );
     l->addWidget( m_view );
     setupGui();
 

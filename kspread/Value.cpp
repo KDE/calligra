@@ -444,7 +444,7 @@ QVariant Value::asVariant() const
             break;
         case Value::String:
         case Value::Error:
-            result = d->ps;
+            result = *d->ps;
             break;
         case Value::Array:
             // FIXME: not supported yet

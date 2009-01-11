@@ -21,7 +21,10 @@
 #include <KWPage.h>
 #include <KWDocument.h>
 #include <commands/KWPageInsertCommand.h>
+
 #include <commands/KWPageRemoveCommand.h>
+#include <commands/KWPagePropertiesCommand.h>
+
 #include <frames/KWTextFrame.h>
 #include <frames/KWTextFrameSet.h>
 #include <KoTextShapeData.h>
@@ -246,6 +249,7 @@ void TestPageCommands::testInsertPageCommand3() // restore all properties
     QCOMPARE(command2.page().width(), 400.);
 }
 
+
 void TestPageCommands::testRemovePageCommand() // move of frames
 {
     KWDocument document;
@@ -429,6 +433,84 @@ void TestPageCommands::testRemovePageCommand4() // auto remove of frames
     QCOMPARE(tfs->frameCount(), 0); // doesn't get auto-added
     QCOMPARE(header->frameCount(), 0); // doesn't get auto-added
 }
+
+void TestPageCommands::testPagePropertiesCommand() // basic properties change
+{
+    KWDocument document;
+    KWPageManager *manager = document.pageManager();
+
+    KWPageStyle style("pagestyle1");
+    KoPageLayout oldLayout = KoPageLayout::standardLayout();
+    oldLayout.format = KoPageFormat::IsoA4Size;
+    oldLayout.width = 101;
+    oldLayout.height = 102;
+    oldLayout.left = -1;
+    oldLayout.right = -1;
+    oldLayout.pageEdge = 7;
+    oldLayout.bindingSide = 13;
+    style.setPageLayout(oldLayout);
+
+    KoColumns oldColumns;
+    oldColumns.columns = 4;
+    oldColumns.columnSpacing = 21;
+    style.setColumns(oldColumns);
+    KWPage page1 = manager->appendPage(style);
+    page1.setDirectionHint(KoText::LeftRightTopBottom);
+
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.width(), 101.);
+    QCOMPARE(page1.height(), 102.);
+    QCOMPARE(page1.leftMargin(), 13.); // its a right-sided page
+    QCOMPARE(page1.pageEdgeMargin(), 7.);
+    QCOMPARE(page1.directionHint(), KoText::LeftRightTopBottom);
+    QCOMPARE(page1.pageStyle().columns().columns, 4);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+
+    // new ;)
+    KoPageLayout newLayout = KoPageLayout::standardLayout();
+    newLayout.width = 401;
+    newLayout.height = 405;
+    newLayout.left = 11;
+    newLayout.right = 18;
+    newLayout.pageEdge = -1;
+    newLayout.bindingSide = -1;
+    KoColumns newColumns;
+    newColumns.columns = 2;
+    newColumns.columnSpacing = 12;
+
+    KWPagePropertiesCommand command(&document, page1, newLayout, KoText::RightLeftTopBottom, newColumns);
+
+    // nothing changed before the redo
+    QCOMPARE(page1.width(), 101.);
+    QCOMPARE(page1.height(), 102.);
+    QCOMPARE(page1.leftMargin(), 13.); // its a right-sided page
+    QCOMPARE(page1.pageEdgeMargin(), 7.);
+    QCOMPARE(page1.directionHint(), KoText::LeftRightTopBottom);
+
+    command.redo();
+    QCOMPARE(page1.width(), 401.);
+    QCOMPARE(page1.height(), 405.);
+    QCOMPARE(page1.leftMargin(), 11.);
+    QCOMPARE(page1.pageEdgeMargin(), -1.); // its a right-sided page
+    QCOMPARE(page1.directionHint(), KoText::RightLeftTopBottom);
+    QCOMPARE(style.pageLayout().width, 401.); // style changed
+    QCOMPARE(page1.pageStyle().columns().columns, 2);
+    QCOMPARE(page1.pageNumber(), 1);
+    QCOMPARE(page1.pageSide(), KWPage::Right);
+
+    QCOMPARE(manager->pageCount(), 1);
+    QVERIFY(manager->page(1).isValid());
+    QVERIFY(!manager->page(2).isValid());
+
+    KWPage page2 = manager->appendPage(style);
+    QCOMPARE(manager->pageCount(), 2);
+    QVERIFY(manager->page(1).isValid());
+    QVERIFY(manager->page(2).isValid());
+    QVERIFY(!manager->page(3).isValid());
+    QCOMPARE(page2.pageNumber(), 2);
+    QCOMPARE(page2.pageSide(), KWPage::Left);
+}
+
 
 QTEST_KDEMAIN(TestPageCommands, GUI)
 #include "TestPageCommands.moc"

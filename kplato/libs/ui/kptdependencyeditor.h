@@ -48,6 +48,7 @@ namespace KPlato
 class Project;
 //class Node;
 class Relation;
+class ScheduleManager;
 
 class DependencyNodeSymbolItem;
 class DependencyConnectorItem;
@@ -467,6 +468,7 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
     void slotCreateRelation( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
+    void setScheduleManager( ScheduleManager *sm );
 
 protected:
     void updateActionsEnabled( bool on );
@@ -492,7 +494,8 @@ private:
     DependencyView *m_view;
     Node *m_currentnode;
     Relation *m_currentrelation;
-    
+    ScheduleManager *m_manager;
+
     KAction *actionAddTask;
     KAction *actionAddMilestone;
     KAction *actionAddSubtask;

@@ -94,6 +94,8 @@ public:
     /// show a popup on the view, adding to it a list of actions
     void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);
 
+    void sanityCheck();
+
 private:
     void setupActions();
     virtual KoPrintJob * createPrintJob();

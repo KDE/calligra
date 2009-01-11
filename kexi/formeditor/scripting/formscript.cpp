@@ -82,20 +82,19 @@ FormScript::connectEvents()
     if (!m_form || !m_form->objectTree())
         return;
     // first call addQObject for each widget in the Form
-    ObjectTreeDict *dict = m_form->objectTree()->dict();
-    ObjectTreeDictIterator it(*dict);
-    for (; it.current(); ++it)
-        m_script->addQObject(it.current()->widget());
+    ObjectTreeHash *hash = m_form->objectTree()->hash();
+    foreach (ObjectTreeItem *item, *hash) {
+        m_script->addQObject(item->widget());
+    }
     m_script->addQObject(m_form->widget());
 
     // Then we connect all signals
-    Q3ValueListConstIterator<Event*> endIt = m_list.constEnd();
-    for (Q3ValueListConstIterator<Event*> it = m_list.constBegin(); it != endIt; ++it) {
-        if ((*it)->type() == Event::Slot) {
-            connect((*it)->sender(), (*it)->signal(), (*it)->receiver(), (*it)->slot());
-        } else if ((*it)->type() == Event::UserFunction) {
-            m_script->connect((*it)->sender(), (*it)->signal(), (*it)->slot());
-        } else if ((*it)->type() == Event::Action) {
+    foreach (Event* e, m_list) {
+        if (e->type() == Event::Slot) {
+            connect(e->sender(), e->signal(), e->receiver(), e->slot());
+        } else if (e->type() == Event::UserFunction) {
+            m_script->connect(e->sender(), e->signal(), e->slot());
+        } else if (e->type() == Event::Action) {
             /// \todo connect signals with actions
         }
     }

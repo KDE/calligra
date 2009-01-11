@@ -22,12 +22,9 @@
 #ifndef FORMEDITORCONTAINER_H
 #define FORMEDITORCONTAINER_H
 
-#include <qobject.h>
-#include <qpointer.h>
-#include <q3ptrlist.h>
-#include <qwidget.h>
+#include <QPointer>
+#include <QWidget>
 #include <QMouseEvent>
-#include <QEvent>
 
 #include "utils.h"
 
@@ -191,9 +188,9 @@ protected slots:
 
 protected:
     /*! Internal function to create a HBoxLayout or VBoxLayout for this container.
-     \a list is a subclass of QObjectList that can sort widgets
-       following their position (such as HorWidgetList or VerWidgetList). */
-    void createBoxLayout(WidgetList *list);
+     \a list is a subclass of CustomSortableWidgetList that can sort widgets
+     depending on their orientation (i.e. HorizontalWidgetList or VerticalWidgetList). */
+    void createBoxLayout(CustomSortableWidgetList* list);
 
     /*! Internal function to create a KexiFlowLayout. */
     void createFlowLayout();

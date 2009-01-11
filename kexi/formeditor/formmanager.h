@@ -21,13 +21,10 @@
 #ifndef FORMMANAGER_H
 #define FORMMANAGER_H
 
-#include <qobject.h>
 #include <qdom.h>
-#include <q3ptrlist.h>
 #include <qtimer.h>
 #include <qpointer.h>
 #include <qstringlist.h>
-#include <Q3CString>
 #include <QActionGroup>
 
 #include "form.h"
@@ -61,10 +58,7 @@ class WidgetLibrary;
 class ObjectTreeView;
 class Connection;
 class FormManager;
-typedef Q3PtrList<KAction> ActionList;
-
-//! @internal
-//static FormManager* FormManager_static = 0;
+typedef QList<KAction*> ActionList;
 
 //! A class to manage (create/load/save) Forms
 /** This is Form Designer's main class, which is used by external APIs to access FormDesigner.
@@ -120,9 +114,6 @@ public:
 
     bool isPasteEnabled();
 
-//  //! \return A pointer to the WidgetLibrary owned by this Manager.
-//  WidgetLibrary* lib() const { return m_lib; }
-
     //! \return A pointer to the WidgetPropertySet owned by this Manager.
     WidgetPropertySet* propertySet() const {
         return m_propSet;
@@ -136,7 +127,7 @@ public:
 
     /*! \return The name of the class being inserted, corresponding
      to the menu item or the toolbar button clicked. */
-    Q3CString selectedClass() const {
+    QByteArray selectedClass() const {
         return m_selectedClass;
     }
 
@@ -325,7 +316,7 @@ public slots:
       or a "Widget" menu item. Prepares all Forms for
       creation of a new widget (ie changes cursor ...).
      */
-    void insertWidget(const Q3CString &classname);
+    void insertWidget(const QByteArray &classname);
 
     /*! Stops the current widget insertion (ie unset the cursor ...). */
     void stopInsert();
@@ -437,15 +428,6 @@ protected:
         return m_widgetActionGroup;
     }
 
-#if 0
-    /*! Default implementation just calls FormIO::loadFormFromDom().
-     Change this if you need to handle, eg. custom UI XML tags, as in Kexi's Form Designer. */
-    virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
-
-    /*! Default implementation just calls FormIO::saveFormToString().
-     Change this if you need to handle, eg. custom UI XML tags, as in Kexi's Form Designer. */
-    virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
-#endif
     /*! Function called by the "Lay out in..." menu items. It creates a layout from the
       currently selected widgets (that must have the same parent).
       Calls \ref CreateLayoutCommand. */
@@ -461,7 +443,7 @@ protected:
 
     /*! True if emitSelectionSignals() updates property set so showPropertySet() will
      not be needed in windowChanged(). False by default. Set to true in KexiFormManager. */
-bool m_emitSelectionSignalsUpdatesPropertySet : 1;
+    bool m_emitSelectionSignalsUpdatesPropertySet : 1;
 
 private:
     static FormManager* _self;
@@ -472,12 +454,13 @@ private:
          };
 
     WidgetPropertySet *m_propSet;
-//  WidgetLibrary *m_lib;
+
     QPointer<KoProperty::EditorView>  m_editor;
+
     QPointer<ObjectTreeView>  m_treeview;
     // Forms
-    Q3PtrList<Form> m_forms;
-    Q3PtrList<Form> m_preview;
+    QList<Form*> m_forms;
+    QList<Form*> m_preview;
     QPointer<Form> m_active;
 
     // Copy/Paste
@@ -488,7 +471,7 @@ private:
 
     // Insertion
     bool m_inserting;
-    Q3CString m_selectedClass;
+    QByteArray m_selectedClass;
 
     // Connection stuff
     bool m_drawingSlot;
@@ -503,7 +486,7 @@ private:
 
     //! Used to delayed widgets deletion
     QTimer m_deleteWidgetLater_timer;
-    Q3PtrList<QWidget> m_deleteWidgetLater_list;
+    QWidgetList m_deleteWidgetLater_list;
 
 #ifdef KEXI_DEBUG_GUI
     KPageDialog *m_uiCodeDialog;
@@ -516,7 +499,7 @@ private:
 
     void *m_objectBlockingPropertyEditorUpdating;
     QStyle *m_style;
-bool m_isRedoing : 1;
+    bool m_isRedoing : 1;
 
     friend class PropertyCommand;
     friend class GeometryPropertyCommand;

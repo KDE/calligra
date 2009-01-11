@@ -717,6 +717,21 @@ QString Accounts::uniqueId( const QString &seed ) const
     return n;
 }
 
+void Accounts::setDefaultAccount(Account *account)
+{
+    Account *a = m_defaultAccount;
+    m_defaultAccount = account;
+    if ( a ) {
+        emit changed( a );
+    }
+    if ( account ) {
+        emit changed( account );
+    }
+    if ( a != account ) {
+        emit defaultAccountChanged();
+    }
+}
+
 void Accounts::accountChanged( Account *account ) 
 {
     emit changed( account );

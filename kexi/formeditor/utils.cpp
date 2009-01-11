@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,20 +32,22 @@
 using namespace KFormDesigner;
 
 void
-KFormDesigner::removeChildrenFromList(WidgetList &list)
+KFormDesigner::removeChildrenFromList(QWidgetList &list)
 {
-    for (WidgetListIterator it(list); it.current() != 0; ++it)  {
-        QWidget *w = it.current();
-
+    QSet<QWidget*> toRemove;
+    foreach (QWidget *w, list) {
         // If any widget in the list is a child of this widget, we remove it from the list
-        for (WidgetListIterator it2(list); it2.current() != 0; ++it2) {
-            QWidget *widg = it2.current();
+        foreach (QWidget *widg, list) {
             if ((w != widg) && (w->findChild<QWidget*>(widg->objectName()))) {
-                kDebug() << "Removing the widget " << widg->objectName() << "which is a child of " << w->objectName();
-                list.remove(widg);
+                kDebug() << "Removing the widget " << widg->objectName()
+                    << "which is a child of " << w->objectName();
+                toRemove.insert(widg);
             }
         }
     }
+    QSet<QWidget*> all(list.toSet());
+    all.subtract(toRemove);
+    list = all.toList();
 }
 
 void
@@ -112,67 +114,94 @@ KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
 
 // -----------------
 
-HorWidgetList::HorWidgetList(QWidget *topLevelWidget)
-        : WidgetList()
-        , m_topLevelWidget(topLevelWidget)
+class HorizontalWidgetList::LessThan
+{
+public:
+    LessThan(QWidget *topLevelWidget)
+     : m_topLevelWidget(topLevelWidget)
+    {
+    }
+    bool operator()(QWidget *w1, QWidget *w2) {
+        return w1->mapTo(m_topLevelWidget, QPoint(0, 0)).x()
+             - w2->mapTo(m_topLevelWidget, QPoint(0, 0)).x();
+    }
+    QWidget *m_topLevelWidget;
+};
+
+HorizontalWidgetList::HorizontalWidgetList(QWidget *topLevelWidget)
+        : CustomSortableWidgetList()
+        , m_lessThan(new LessThan(topLevelWidget))
 {
 }
 
-HorWidgetList::~HorWidgetList()
+HorizontalWidgetList::~HorizontalWidgetList()
 {
+    delete m_lessThan;
 }
 
-int HorWidgetList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
+void HorizontalWidgetList::sort()
 {
-    QWidget *w1 = static_cast<QWidget*>(item1);
-    QWidget *w2 = static_cast<QWidget*>(item2);
-    return w1->mapTo(m_topLevelWidget, QPoint(0, 0)).x() - w2->mapTo(m_topLevelWidget, QPoint(0, 0)).x();
+    qSort(begin(), end(), *m_lessThan);
 }
 
 // -----------------
 
-VerWidgetList::VerWidgetList(QWidget *topLevelWidget)
-        : WidgetList()
-        , m_topLevelWidget(topLevelWidget)
+class VerticalWidgetList::LessThan
 {
-}
-
-VerWidgetList::~VerWidgetList()
-{
-}
-
-int VerWidgetList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
-{
-    QWidget *w1 = static_cast<QWidget*>(item1);
-    QWidget *w2 = static_cast<QWidget*>(item2);
-
-    int y1, y2;
-    QObject *page1 = 0;
-    TabWidget *tw1 = KFormDesigner::findParent<KFormDesigner::TabWidget>(w1, "KFormDesigner::TabWidget", page1);
-    if (tw1) // special case
-        y1 = w1->mapTo(m_topLevelWidget, QPoint(0, 0)).y() + tw1->tabBarHeight() - 2 - 2;
-    else
-        y1 = w1->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
-
-    QObject *page2 = 0;
-    TabWidget *tw2 = KFormDesigner::findParent<KFormDesigner::TabWidget>(w2, "KFormDesigner::TabWidget", page2);
-    if (tw1 && tw2 && tw1 == tw2 && page1 != page2) {
-        // this sorts widgets by tabs there're put in
-        return tw1->indexOf(static_cast<QWidget*>(page1)) - tw2->indexOf(static_cast<QWidget*>(page2));
+public:
+    LessThan(QWidget *topLevelWidget)
+     : m_topLevelWidget(topLevelWidget)
+    {
     }
+    bool operator()(QWidget *w1, QWidget *w2)
+    {
+        int y1, y2;
+        QObject *page1 = 0;
+        TabWidget *tw1 = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+            w1, "KFormDesigner::TabWidget", page1);
+        if (tw1) // special case
+            y1 = w1->mapTo(m_topLevelWidget, QPoint(0, 0)).y() + tw1->tabBarHeight() - 2 - 2;
+        else
+            y1 = w1->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
 
-    if (tw2) // special case
-        y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y() + tw2->tabBarHeight() - 2 - 2;
-    else
-        y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
+        QObject *page2 = 0;
+        TabWidget *tw2 = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+            w2, "KFormDesigner::TabWidget", page2);
+        if (tw1 && tw2 && tw1 == tw2 && page1 != page2) {
+            // this sorts widgets by tabs there're put in
+            return tw1->indexOf(static_cast<QWidget*>(page1)) < tw2->indexOf(static_cast<QWidget*>(page2));
+        }
 
-    kDebug() << w1->objectName() << ": " << y1 << " "
-    << " | " << w2->objectName() << ": " << y2;
+        if (tw2) // special case
+            y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y() + tw2->tabBarHeight() - 2 - 2;
+        else
+            y2 = w2->mapTo(m_topLevelWidget, QPoint(0, 0)).y();
+
+        kDebug() << w1->objectName() << ": " << y1 << " "
+            << " | " << w2->objectName() << ": " << y2;
 
 
-    //kDebug() << w1->name() << ": " << w1->mapTo(m_topLevelWidget, QPoint(0,0)) << " " << w1->y()
-    //<< " | " << w2->name() << ":" /*<< w2->mapFrom(m_topLevelWidget, QPoint(0,w2->y()))*/ << " " << w2->y();
-    return y1 - y2;
+        //kDebug() << w1->name() << ": " << w1->mapTo(m_topLevelWidget, QPoint(0,0)) << " " << w1->y()
+        //<< " | " << w2->name() << ":" /*<< w2->mapFrom(m_topLevelWidget, QPoint(0,w2->y()))*/ << " " << w2->y();
+        return y1 < y2;
+    }
+    QWidget *m_topLevelWidget;
+};
+
+VerticalWidgetList::VerticalWidgetList(QWidget *topLevelWidget)
+        : CustomSortableWidgetList()
+        , m_lessThan(new LessThan(topLevelWidget))
+{
+}
+
+VerticalWidgetList::~VerticalWidgetList()
+{
+    delete m_lessThan;
+}
+
+void VerticalWidgetList::sort()
+{
+    qSort(begin(), end(), *m_lessThan);
 }
 
 #include "utils.moc"

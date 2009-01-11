@@ -32,7 +32,7 @@ class KexiReportPage : public QWidget
 {
     Q_OBJECT
 public:
-    KexiReportPage(QWidget *parent, const char *name, ORODocument *r);
+    KexiReportPage(QWidget *parent, ORODocument *r);
 
     ~KexiReportPage();
 

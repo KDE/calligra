@@ -22,17 +22,13 @@
 #ifndef KFORMDESIGNERWIDGETLIBRARY_H
 #define KFORMDESIGNERWIDGETLIBRARY_H
 
-#include <qobject.h>
-#include <qmap.h>
-#include <q3dict.h>
-#include <Q3ValueList>
-#include <Q3CString>
-#include <Q3PtrList>
+#include <QObject>
+#include <QList>
 
 #include "widgetfactory.h"
 
-template<class type> class Q3PtrList;
-template<class type> class Q3ValueVector;
+template<class type> class QList;
+template<class type> class QVector;
 class KActionCollection;
 class KAction;
 class QMenu;
@@ -49,7 +45,7 @@ class ObjectTreeItem;
 class WidgetLibraryPrivate;
 class WidgetPropertySet;
 
-typedef Q3PtrList<KAction> ActionList;
+typedef QList<KAction*> ActionList;
 
 /**
  * This class searches for factories and provides KActions for widget creation.
@@ -69,7 +65,8 @@ public:
      By default (when supportedFactoryGroups is empty) only factories having empty
      "X-KFormDesigner-FactoryGroup" field will be loaded.
      Factory group names are case-insensitive. */
-    WidgetLibrary(QObject *parent = 0, const QStringList& supportedFactoryGroups = QStringList());
+    WidgetLibrary(QObject *parent = 0, 
+                  const QStringList& supportedFactoryGroups = QStringList());
 
     virtual ~WidgetLibrary();
 
@@ -90,10 +87,10 @@ public:
      * searches the right factory and creates a widget.
      * \return the widget or 0 if something falid
      */
-    QWidget *createWidget(const Q3CString &classname, QWidget *parent, const char *name, Container *c,
+    QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name, Container *c,
                           int options = WidgetFactory::DefaultOptions);
 
-    bool createMenuActions(const Q3CString &c, QWidget *w, QMenu *menu,
+    bool createMenuActions(const QByteArray &c, QWidget *w, QMenu *menu,
                            KFormDesigner::Container *container);
 
     /**
@@ -104,34 +101,34 @@ public:
      * - WidgetFactory::VerticalOrientation
      */
     WidgetFactory::CreateWidgetOptions showOrientationSelectionPopup(
-        const Q3CString &classname, QWidget* parent, const QPoint& pos);
+        const QByteArray &classname, QWidget* parent, const QPoint& pos);
 
-    QString internalProperty(const Q3CString& classname, const Q3CString& property);
+    QString internalProperty(const QByteArray& classname, const QByteArray& property);
 
-    QString displayName(const Q3CString &classname);
-    QString namePrefix(const Q3CString &classname);
-    QString textForWidgetName(const Q3CString &name, const Q3CString &className);
+    QString displayName(const QByteArray &classname);
+    QString namePrefix(const QByteArray &classname);
+    QString textForWidgetName(const QByteArray &name, const QByteArray &className);
 
     /*! Checks if the \a classname is an alternate classname,
      and returns the good classname.
      If \a classname is not alternate, \a classname is returned. */
-    Q3CString classNameForAlternate(const Q3CString &classname);
-    QString iconName(const Q3CString &classname);
-    QString includeFileName(const Q3CString &classname);
-    QString savingName(const Q3CString &classname);
+    QByteArray classNameForAlternate(const QByteArray &classname);
+    QString iconName(const QByteArray &classname);
+    QString includeFileName(const QByteArray &classname);
+    QString savingName(const QByteArray &classname);
 
-    bool startEditing(const Q3CString &classname, QWidget *w, Container *container);
-    bool previewWidget(const Q3CString &classname, QWidget *widget, Container *container);
-    bool clearWidgetContent(const Q3CString &classname, QWidget *w);
+    bool startEditing(const QByteArray &classname, QWidget *w, Container *container);
+    bool previewWidget(const QByteArray &classname, QWidget *widget, Container *container);
+    bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 
-    bool saveSpecialProperty(const Q3CString &classname, const QString &name,
+    bool saveSpecialProperty(const QByteArray &classname, const QString &name,
                              const QVariant &value, QWidget *w, QDomElement &parentNode, QDomDocument &parent);
-    bool readSpecialProperty(const Q3CString &classname, QDomElement &node, QWidget *w,
+    bool readSpecialProperty(const QByteArray &classname, QDomElement &node, QWidget *w,
                              ObjectTreeItem *item);
-    bool isPropertyVisible(const Q3CString &classname, QWidget *w,
-                           const Q3CString &property, bool multiple = false, bool isTopLevel = false);
+    bool isPropertyVisible(const QByteArray &classname, QWidget *w,
+                           const QByteArray &property, bool multiple = false, bool isTopLevel = false);
 
-    Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
+    QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
     WidgetInfo* widgetInfoForClassName(const char* classname);
 
@@ -156,7 +153,7 @@ public:
      is asked for returning description string.
      Eventually, if even this failed, empty string is returned.
      @see WidgetFactory::propertyDescForName() */
-    QString propertyDescForName(WidgetInfo *winfo, const Q3CString& propertyName);
+    QString propertyDescForName(WidgetInfo *winfo, const QByteArray& propertyName);
 
     /*! \return The i18n'ed name of the property's value whose name is \a name.
      Works in the same way as propertyDescForName(): if actual library
@@ -164,18 +161,18 @@ public:
      to return such description.
      Eventually, if even this failed, empty string is returned.
      @see WidgetFactory::propertyDescForValue() */
-    QString propertyDescForValue(WidgetInfo *winfo, const Q3CString& name);
+    QString propertyDescForValue(WidgetInfo *winfo, const QByteArray& name);
 
     /*! Used by WidgetPropertySet::setWidget() after creating properties. */
     void setPropertyOptions(WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w);
 
     /*! \return true if property sets should be reloaded for \a property property,
      \a classname class and widget \a w when a given property value changed. */
-    bool propertySetShouldBeReloadedAfterPropertyChange(const Q3CString& classname, QWidget *w,
-            const Q3CString& property);
+    bool propertySetShouldBeReloadedAfterPropertyChange(const QByteArray& classname, QWidget *w,
+            const QByteArray& property);
 
 signals:
-    void prepareInsert(const Q3CString &c);
+    void prepareInsert(const QByteArray &c);
 
     //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop
     //! connection for the new widget

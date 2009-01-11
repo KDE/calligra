@@ -268,10 +268,16 @@ public:
     void setLastEditorWithFocus(Editor type);
     Editor lastEditorWithFocus() const;
 
+    /** Start using a reference selection instead of normal one. */
     void startReferenceSelection(const Region& region = Region());
+    /** End using reference selection. */
     void endReferenceSelection();
+    /** Enable/disable reference choosing mode. */
     void setReferenceSelectionMode(bool enable);
+    /** Are we in reference choosing mode ? */
     bool referenceSelectionMode() const;
+    /** Are we currently using a reference selection ? */
+    bool referenceSelection() const;
 
     void emitAboutToModify();
     void emitModified();

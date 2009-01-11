@@ -10,9 +10,6 @@
     <height>139</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>StandardWorktime</string>
-  </property>
   <property name="whatsThis" >
    <string>These values are used when you estimate the effort needed to complete a task.</string>
   </property>

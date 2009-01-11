@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005, 2007-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,9 +20,9 @@
 #include "KWStartupWidget.h"
 
 #include "KWDocumentColumns.h"
-#include "KWPage.h"
+#include "../KWPage.h"
+#include "../KWDocument.h"
 
-#include <KWDocument.h>
 #include <KoPageLayoutWidget.h>
 #include <KoPagePreviewWidget.h>
 
@@ -46,12 +46,15 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     QVBoxLayout *lay = new QVBoxLayout(widget.sizeTab);
     m_sizeWidget = new KoPageLayoutWidget(widget.sizeTab, m_layout);
     m_sizeWidget->setUnit(m_unit);
+    // I'm very sad that I have to add the next line; but it takes too much time to get the pagespread working again
+    m_sizeWidget->showPageSpread(false);
     lay->addWidget(m_sizeWidget);
     lay->setMargin(0);
 
     lay = new QVBoxLayout(widget.columnsTab);
     m_columnsWidget = new KWDocumentColumns(widget.columnsTab, m_columns);
     m_columnsWidget->setUnit(m_unit);
+    m_columnsWidget->setShowPreview(false);
     lay->addWidget(m_columnsWidget);
     lay->setMargin(0);
 
@@ -90,21 +93,18 @@ void KWStartupWidget::columnsUpdated(const KoColumns &columns)
 
 void KWStartupWidget::buttonClicked()
 {
-    m_doc->clear();
+    m_doc->initEmpty();
 
     if (m_layout.left < 0) {
         m_layout.width /= 2.0;
-        m_doc->m_pageManager.setPreferPageSpread(true);
+        m_doc->pageManager()->setPreferPageSpread(true);
     }
-    KWPageStyle style = m_doc->m_pageManager.defaultPageStyle();
+    KWPageStyle style = m_doc->pageManager()->defaultPageStyle();
     Q_ASSERT(style.isValid());
     style.setColumns(m_columns);
     style.setMainTextFrame(widget.mainText->isChecked());
     style.setPageLayout(m_layout);
-
     m_doc->setUnit(m_unit);
 
-    m_doc->appendPage("Standard");
     emit documentSelected();
 }
-

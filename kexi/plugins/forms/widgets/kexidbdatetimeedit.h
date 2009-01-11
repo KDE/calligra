@@ -23,9 +23,6 @@
 
 #include "kexiformdataiteminterface.h"
 #include <q3datetimeedit.h>
-//Added by qt3to4:
-#include <QEvent>
-#include <Q3CString>
 
 class KDatePicker;
 class QDateTimeEditor;
@@ -109,9 +106,9 @@ private:
     Q3TimeEdit* m_timeEdit;
     QDateTimeEditor *m_dte_date, *m_dte_time;
     KMenu *m_datePickerPopupMenu;
-bool m_invalidState : 1;
-bool m_cleared : 1;
-bool m_readOnly : 1;
+    bool m_invalidState : 1;
+    bool m_cleared : 1;
+    bool m_readOnly : 1;
 };
 
 #endif

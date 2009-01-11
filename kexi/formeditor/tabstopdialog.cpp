@@ -53,7 +53,9 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     QFrame *frame = new QFrame(this);
     setMainWidget(frame);
     Q3GridLayout *l = new Q3GridLayout(frame, 2, 2, 0, 6);
-    m_treeview = new ObjectTreeView(frame, "tabstops_treeview", true);
+    m_treeview = new ObjectTreeView(frame, 
+        ObjectTreeView::DisableSelection | ObjectTreeView::DisableContextMenu);
+    m_treeview->setObjectName("tabstops_treeview");
     m_treeview->setItemsMovable(true);
     m_treeview->setDragEnabled(true);
     m_treeview->setDropVisualizer(true);
@@ -98,11 +100,13 @@ int TabStopDialog::exec(Form *form)
     if (form->autoTabStops())
         form->autoAssignTabStops();
     form->updateTabStopsOrder();
-    ObjectTreeListIterator it(form->tabStopsIterator());
-    it.toLast();
-    for (;it.current(); --it)
-        new ObjectTreeViewItem(m_treeview, it.current());
-
+    if (!form->tabStops()->isEmpty()) {
+        ObjectTreeList::ConstIterator it(form->tabStops()->constBegin());
+        it+=(form->tabStops()->count()-1);
+        for (;it!=form->tabStops()->constEnd(); --it) {
+            new ObjectTreeViewItem(m_treeview, *it);
+        }
+    }
     m_check->setChecked(form->autoTabStops());
 
     if (m_treeview->firstChild()) {

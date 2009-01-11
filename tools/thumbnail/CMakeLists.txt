@@ -8,7 +8,7 @@ kde4_add_plugin(clipartthumbnail ${clipartthumbnail_SRCS})
 
 
 
-target_link_libraries(clipartthumbnail komain )
+target_link_libraries(clipartthumbnail ${KDE4_KIO_LIBS} komain )
 
 install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 

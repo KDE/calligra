@@ -931,6 +931,7 @@ void Task::initiateCalculationLists(MainSchedule &sch) {
 
 DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
     DateTime time;
+    // do them forward
     foreach (Relation *r, list) {
         if (r->parent()->type() == Type_Summarytask) {
             //kDebug()<<"Skip summarytask:"<<it.current()->parent()->name();
@@ -995,7 +996,8 @@ DateTime Task::calculateEarlyFinish(int use) {
         //kDebug()<<earliestStart.toString()<<" +"<<m_durationBackward.toString()<<""<<m_name<<" calculateForward() (visited)";
         return cs->earlyFinish;
     }
-    cs->logInfo( "Calculate early finish" );
+    KLocale *locale = KGlobal::locale();
+    cs->logInfo( i18n( "Calculate early finish " ) );
     //kDebug()<<"------>"<<m_name<<""<<cs->earlyStart;
     if (type() == Node::Type_Task) {
         m_durationForward = m_estimate->value(use, pert);
@@ -1015,19 +1017,16 @@ DateTime Task::calculateEarlyFinish(int use) {
                 break;
             }
             case Node::MustFinishOn:
+            case Node::FinishNotLater:
             {
-                m_durationForward = duration(m_constraintEndTime, use, true);
-                if ( cs->earlyStart >  m_constraintEndTime - m_durationForward ) {
-                    m_durationForward = duration( cs->earlyStart, use, false );
-                    cs->earlyFinish = cs->earlyStart + m_durationForward;
-                } else {
-                    cs->earlyFinish = m_constraintEndTime;
-                    m_durationForward = m_constraintEndTime - cs->earlyStart;
-                }
+                m_durationForward = duration(cs->earlyStart, use, false);
+                cs->earlyFinish = cs->earlyStart + m_durationForward;
                 //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<cs->earlyStart<<cs->earlyFinish;
                 if (cs->earlyFinish > m_constraintEndTime) {
                     cs->schedulingError = true;
-                    cs->logWarning( "MustFinishOn: Failed to meet constraint");
+
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
+
                 }
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->earlyStart;
@@ -1036,60 +1035,39 @@ DateTime Task::calculateEarlyFinish(int use) {
                 }
                 break;
             }
-            case Node::FinishNotLater:
-                m_durationForward = duration(cs->earlyStart, use, false);
-                cs->earlyFinish = cs->earlyStart + m_durationForward;
-                //kDebug()<<"FinishNotLater:"<<m_constraintEndTime<<cs->earlyStart<<cs->earlyFinish<<workStartAfter( cs->earlyStart );
-                if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->earlyStart;
-                    cs->endTime = cs->earlyStart + m_durationForward;
-                    makeAppointments();
-                }
-                break;
             case Node::MustStartOn:
+            case Node::StartNotEarlier:
             {
                 //kDebug()<<"MustStartOn:"<<m_constraintStartTime<<cs->earlyStart;
                 m_earlyStart = workStartAfter( cs->earlyStart );
                 if ( cs->earlyStart > m_constraintStartTime ) {
                     cs->schedulingError = true;
                     m_durationForward = duration( cs->earlyStart, use, false );
-                    cs->startTime = cs->earlyStart;
-                    cs->endTime = cs->startTime + m_durationForward;
-                    cs->logWarning("MustStartOn: Failed to meet constraint");
-                } else {
-                    // Always use duration from earlyStart
-                    m_durationForward = duration( m_constraintStartTime, use, false );
-                    cs->startTime = m_constraintStartTime;
-                    cs->endTime = cs->startTime + m_durationForward;
-                    m_durationForward += m_constraintStartTime - cs->earlyStart;
+
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
+
                 }
+                cs->startTime = qMax( cs->earlyStart, m_constraintStartTime );
+                m_durationForward = duration( cs->startTime, use, false );
+                cs->endTime = cs->startTime + m_durationForward;
                 if ( !cs->allowOverbooking() ) {
                     makeAppointments();
                 }
+                m_durationForward = cs->endTime - cs->earlyStart;
                 break;
             }
-            case Node::StartNotEarlier:
-                //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->earlyStart;
-                if ( cs->earlyStart > m_constraintStartTime ) {
-                    m_durationForward = duration(cs->earlyStart, use, false);
-                } else {
-                    m_durationForward = duration(m_constraintStartTime, use, false);
-                    cs->earlyFinish = m_constraintStartTime + m_durationForward;
-                    m_durationForward = cs->earlyFinish - cs->earlyStart;
-                }
-                if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->earlyStart;
-                    cs->endTime = cs->earlyFinish;
-                    makeAppointments();
-                }
-                break;
             case Node::FixedInterval: {
                 if ( cs->earlyStart > m_constraintStartTime ) {
                     cs->schedulingError = true;
-                    cs->logWarning("FixedInterval: Failed to meet constraint");
+
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
+
                 }
                 //cs->earlyStart = m_constraintStartTime;
-                m_durationForward = m_constraintEndTime - cs->earlyStart;
+                m_durationForward = m_constraintEndTime - m_constraintStartTime;
+                if ( cs->earlyStart < m_constraintStartTime ) {
+                    m_durationForward = m_constraintEndTime - cs->earlyStart;
+                }
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = m_constraintStartTime;
                     cs->endTime = m_constraintEndTime;
@@ -1105,24 +1083,28 @@ DateTime Task::calculateEarlyFinish(int use) {
                 //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<cs->earlyStart;
                 if ( cs->earlyStart < m_constraintEndTime ) {
                     m_durationForward = m_constraintEndTime - cs->earlyStart;
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
                 }
                 break;
             case Node::FinishNotLater:
                 //kDebug()<<"FinishNotLater:"<<m_constraintEndTime<<cs->earlyStart;
                 if ( cs->earlyStart < m_constraintEndTime ) {
                     m_durationForward = m_constraintEndTime - cs->earlyStart;
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
                 }
                 break;
             case Node::MustStartOn:
                 //kDebug()<<"MustStartOn:"<<m_constraintStartTime<<cs->earlyStart;
                 if ( cs->earlyStart < m_constraintStartTime ) {
                     m_durationForward = m_constraintStartTime - cs->earlyStart;
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
                 }
                 break;
             case Node::StartNotEarlier:
                 //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->earlyStart;
                 if ( cs->earlyStart < m_constraintStartTime ) {
                     m_durationForward = m_constraintStartTime - cs->earlyStart;
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
                 }
                 break;
             case Node::FixedInterval:
@@ -1139,7 +1121,10 @@ DateTime Task::calculateEarlyFinish(int use) {
     m_visitedForward = true;
     cs->insertForwardNode( this );
     cs->earlyFinish = cs->earlyStart + m_durationForward;
-    //kDebug()<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<cs->earlyFinish<<""<<m_name;
+    foreach ( Appointment *a, cs->appointments( Schedule::CalculateForward ) ) {
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+    }
+    cs->logInfo( i18n( "Early finish calculated: %1", locale->formatDateTime( cs->earlyFinish ) ) );
     cs->incProgress();
     return cs->earlyFinish;
 }
@@ -1211,7 +1196,8 @@ DateTime Task::calculateLateStart(int use) {
         //kDebug()<<latestFinish.toString()<<" -"<<m_durationBackward.toString()<<""<<m_name<<" calculateBackward() (visited)";
         return cs->lateStart;
     }
-    cs->logInfo( "Calculate late start" );
+    KLocale *locale = KGlobal::locale();
+    cs->logInfo( i18n( "Calculate late start" ) );
     //kDebug()<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish;
     if (type() == Node::Type_Task) {
         m_durationBackward = m_estimate->value(use, pert);
@@ -1229,68 +1215,50 @@ DateTime Task::calculateLateStart(int use) {
                 }
                 break;
             case Node::MustStartOn:
+            case Node::StartNotEarlier:
             {
                 //kDebug()<<"MustStartOn:"<<m_constraintStartTime<<cs->lateFinish;
+                cs->lateFinish = workFinishBefore( cs->lateFinish );
                 m_durationBackward = duration(cs->lateFinish, use, true);
                 cs->lateStart = cs->lateFinish - m_durationBackward;
-                if ( cs->lateStart > m_constraintStartTime || cs->lateFinish < m_constraintStartTime) {
+                if ( cs->lateStart < m_constraintStartTime) {
                     cs->schedulingError = true;
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
+                } else {
+                    cs->lateStart = qMax( cs->earlyStart, m_constraintStartTime );
                 }
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->lateStart;
-                    cs->endTime = cs->lateFinish;
-                    makeAppointments();
-                }
-                break;
-            }
-            case Node::StartNotEarlier:
-            {
-                //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->lateFinish;
-                m_durationBackward = duration(cs->lateFinish, use, true);
-                if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->lateFinish - m_durationBackward;
                     cs->endTime = cs->lateFinish;
                     makeAppointments();
                 }
                 break;
             }
             case Node::MustFinishOn:
+            case Node::FinishNotLater:
                 //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<cs->lateFinish;
+                cs->lateFinish = workFinishBefore( cs->lateFinish );
+                cs->endTime = cs->lateFinish;
                 if ( cs->lateFinish < m_constraintEndTime ) {
                     cs->schedulingError = true;
-                    cs->logWarning( "MustFinishOn: Failed to meet constraint" );
-                    m_durationBackward = duration(cs->lateFinish, use, true);
-                    cs->endTime = cs->lateFinish;
+
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
+
                 } else {
-                    m_durationBackward = duration(m_constraintEndTime, use, true);
-                    cs->lateStart = m_constraintEndTime - m_durationBackward;
-                    m_durationBackward = cs->lateFinish - cs->lateStart;
-                    cs->endTime = m_constraintEndTime;
+                    cs->endTime = qMax( cs->earlyFinish, m_constraintEndTime );
                 }
+                m_durationBackward = duration(cs->endTime, use, true);
+                cs->startTime = cs->endTime - m_durationBackward;
                 if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->lateStart;
                     makeAppointments();
                 }
-                break;
-            case Node::FinishNotLater:
-                //kDebug()<<"FinishNotLater:"<<m_constraintEndTime<<cs->lateFinish;
-                if ( m_constraintEndTime < cs->lateFinish ) {
-                    m_durationBackward = duration(m_constraintEndTime, use, true);
-                    cs->lateStart = m_constraintEndTime - m_durationBackward;
-                    m_durationBackward = cs->lateFinish - cs->lateStart;
-                } else {
-                    m_durationBackward = duration(cs->lateFinish, use, true);
-                }
-                if ( !cs->allowOverbooking() ) {
-                    cs->startTime = cs->lateStart;
-                    cs->endTime = cs->lateFinish;
-                    makeAppointments();
-                }
+                m_durationBackward = cs->lateFinish - cs->startTime;
                 break;
             case Node::FixedInterval: {
                 //cs->lateFinish = m_constraintEndTime;
                 if ( cs->lateFinish < m_constraintEndTime ) {
                     cs->schedulingError = true;
+                    cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to meet constraint", constraintToString( true ) ) );
                 }
                 m_durationBackward = m_constraintEndTime - m_constraintStartTime;
                 if ( !cs->allowOverbooking() ) {
@@ -1298,7 +1266,6 @@ DateTime Task::calculateLateStart(int use) {
                     cs->endTime = m_constraintEndTime;
                     makeAppointments();
                 }
-                m_lateFinish = m_constraintEndTime;
                 break;
             }
         }
@@ -1334,7 +1301,6 @@ DateTime Task::calculateLateStart(int use) {
             default:
                 break;
         }
-        m_lateFinish = cs->lateFinish;
         //kDebug()<<m_name<<""<<cs->lateFinish;
     } else if (type() == Node::Type_Summarytask) {
         kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
@@ -1344,7 +1310,10 @@ DateTime Task::calculateLateStart(int use) {
     m_visitedBackward = true;
     cs->insertBackwardNode( this );
     cs->lateStart = cs->lateFinish - m_durationBackward;
-    //kDebug()<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<cs->lateStart<<" "<<m_name;
+    foreach ( Appointment *a, cs->appointments( Schedule::CalculateBackward ) ) {
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+    }
+    cs->logInfo( i18n( "Late start calculated: %1", locale->formatDateTime( cs->lateStart ) ) );
     cs->incProgress();
     return cs->lateStart;
 }
@@ -1400,7 +1369,6 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     time = schedulePredeccessors(m_parentProxyRelations, use);
     if (time.isValid() && time > cs->startTime) {
         cs->startTime = time;
-        //kDebug()<<m_name<<" new startime="<<cs->startTime;
     }
     return scheduleFromStartTime( use );
 }
@@ -1420,7 +1388,8 @@ DateTime Task::scheduleFromStartTime(int use) {
     if ( !cs->startTime.isValid() ) {
         cs->startTime = cs->earlyStart;
     }
-    cs->logInfo( "Schedule from start " + cs->startTime.toString() );
+    KLocale *locale = KGlobal::locale();
+    cs->logInfo( i18n( "Schedule from start %1", locale->formatDateTime( cs->startTime ) ) );
     //kDebug()<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
         if ( cs->recalculate() && completion().isFinished() ) {
@@ -1436,7 +1405,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
                 cs->startTime = workStartAfter( cs->startTime );
             }
-            cs->logInfo( "ASAP: " + cs->startTime.toString() + " earliest: " + cs->earlyStart.toString() );
+
+            cs->logDebug( "ASAP: " + cs->startTime.toString() + " earliest: " + cs->earlyStart.toString() );
+
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
@@ -1445,7 +1416,7 @@ DateTime Task::scheduleFromStartTime(int use) {
                 copyAppointments();
                 cs->duration = cs->endTime - cs->startTime;
             }
-            if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
+            if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
             } else {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
@@ -1461,7 +1432,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->startTime = cs->endTime - cs->duration;
             //kDebug()<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
             makeAppointments();
-            if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
+            if ( cs->lateFinish > cs->endTime ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
             } else {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
@@ -1473,127 +1444,141 @@ DateTime Task::scheduleFromStartTime(int use) {
         case Node::StartNotEarlier:
             // cs->startTime calculated above
             //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->startTime<<cs->lateStart;
+            cs->startTime = workStartAfter( cs->startTime );
             if ( cs->startTime < m_constraintStartTime ) {
-                cs->startTime = m_constraintStartTime;
-            }
-            if ( estimate()->type() != Estimate::Type_FixedDuration ) {
-                cs->startTime = workStartAfter( cs->startTime );
+                cs->startTime = workStartAfter( qMin( m_constraintStartTime, cs->lateStart ) );
             }
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
-            if (cs->endTime > cs->lateFinish) {
+            if (cs->startTime < m_constraintStartTime) {
                 cs->schedulingError = true;
-                cs->negativeFloat = cs->endTime - cs->lateFinish;
+                cs->negativeFloat = cs->startTime - m_constraintStartTime;
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->logError( "StartNotEarlier: Failed to meet constraint. Negative float=" + cs->lateFinish.toString() );
             }
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::FinishNotLater:
             // cs->startTime calculated above
             //kDebug()<<"FinishNotLater:"<<m_constraintEndTime<<cs->startTime;
-            if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
-                cs->startTime = workStartAfter( cs->startTime );
-            }
+            cs->startTime = workStartAfter( cs->startTime );
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             if (cs->endTime > m_constraintEndTime) {
                 //kWarning()<<"cs->endTime > m_constraintEndTime";
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->endTime - m_constraintEndTime;
-                cs->logError( "FinishNotLater: Failed to meet constraint. Negative float=" + cs->lateFinish.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::MustStartOn:
             // cs->startTime calculated above as predecessors endTime
-            if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
-                cs->startTime = workStartAfter( cs->startTime );
+            cs->startTime = workStartAfter( cs->startTime );
+            if (m_constraintStartTime > cs->startTime ) {
+                cs->startTime = qMin( m_constraintStartTime, cs->lateStart );
             }
             //kDebug()<<"MustStartOn="<<m_constraintStartTime<<"<"<<cs->startTime;
             if (m_constraintStartTime < cs->startTime ) {
                 cs->schedulingError = true;
-                cs->logError( "MustStartOn: Failed to meet constraint. Negative float=" + cs->lateFinish.toString() );
+
+                cs->negativeFloat = cs->startTime - m_constraintStartTime;
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
-            cs->startTime = m_constraintStartTime; //Hmmmm
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::MustFinishOn:
-            if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
-                cs->endTime = workFinishBefore( m_constraintEndTime );
-            }
-            if ( m_constraintEndTime != cs->endTime ) {
-                cs->schedulingError = true;
-                cs->logError( "MustFinishOn: Failed to meet constraint. Negative float=" + cs->lateFinish.toString() );
-            }
+            cs->endTime = workFinishBefore( qMin( m_constraintEndTime, cs->lateFinish ) );
             cs->duration = duration(cs->endTime, use, true);
-            if ( cs->startTime > cs->endTime - cs->duration ) {
-                cs->schedulingError = true;
-                cs->negativeFloat = cs->startTime - cs->endTime - cs->duration;
-                cs->startTime = workStartAfter( cs->startTime );
-                cs->duration = duration(cs->startTime, use, false );
-                cs->endTime = cs->startTime + cs->duration;
-            } else {
+            cs->startTime = workStartAfter( cs->startTime );
+            if ( cs->startTime <= cs->endTime - cs->duration ) {
                 cs->startTime = cs->endTime - cs->duration;
+            } else {
+                cs->duration = duration(cs->startTime, use, false);
+                cs->endTime = cs->startTime + cs->duration;
+            }
+            if ( cs->endTime != m_constraintEndTime  ) {
+                cs->schedulingError = true;
+
+                cs->negativeFloat = cs->endTime - m_constraintEndTime;
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<","<<cs->lateFinish<<":"<<cs->startTime<<cs->endTime;
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::FixedInterval: {
             // cs->startTime calculated above
             //kDebug()<<"FixedInterval="<<m_constraintStartTime<<""<<cs->startTime;
+            cs->duration = m_constraintEndTime - m_constraintStartTime;
+            if ( m_constraintStartTime >= cs->earlyStart ) {
+                cs->startTime = m_constraintStartTime;
+                cs->endTime = m_constraintEndTime;
+            } else {
+                cs->startTime = cs->earlyStart;
+                cs->endTime = cs->startTime + cs->duration;
+                cs->schedulingError = true;
+            }
             if ( m_constraintStartTime < cs->startTime ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->startTime - m_constraintStartTime;
-                cs->logError( "FixedInterval: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
-            cs->startTime = m_constraintStartTime;
-            cs->endTime = m_constraintEndTime;
-            cs->duration = cs->endTime - cs->startTime;
-            if ( cs->endTime > cs->lateFinish ) {
-                cs->schedulingError = true;
-                cs->negativeFloat = cs->endTime - cs->lateFinish;
-            }
-            cs->workStartTime = m_constraintStartTime;
-            cs->workEndTime = m_constraintEndTime;
-            //kDebug()<<"FixedInterval="<<cs->startTime<<","<<cs->endTime;
-            makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
             }
+            cs->workStartTime = m_constraintStartTime;
+            cs->workEndTime = m_constraintEndTime;
+            //kDebug()<<"FixedInterval="<<cs->startTime<<","<<cs->endTime;
+            makeAppointments();
+
             break;
         }
         default:
@@ -1625,7 +1610,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             if (m_constraintStartTime < cs->startTime ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->startTime - m_constraintStartTime;
-                m_constraint == Node::FixedInterval ? cs->logError("FixedInterval: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() ) : cs->logError("MustStartOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             } else if ( m_constraintStartTime > cs->lateFinish ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->lateFinish;
@@ -1641,7 +1628,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             if (m_constraintEndTime < cs->startTime ||
                 m_constraintEndTime > cs->lateFinish) {
                 cs->schedulingError = true;
-                cs->logError( "MustFinishOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             cs->startTime = m_constraintEndTime;
             cs->endTime = m_constraintEndTime;
@@ -1654,7 +1643,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             if ( cs->startTime < m_constraintStartTime ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime; //???
-                cs->logError("StartNotEarlier: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             cs->endTime = cs->startTime;
             if ( cs->negativeFloat == Duration::zeroDuration ) {
@@ -1668,7 +1659,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             }
             if (cs->startTime > m_constraintEndTime) {
                 cs->schedulingError = true;
-                cs->logError("FinishNotLater: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             cs->endTime = cs->startTime;
             if ( cs->negativeFloat == Duration::zeroDuration ) {
@@ -1687,10 +1680,21 @@ DateTime Task::scheduleFromStartTime(int use) {
         kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
     //kDebug()<<cs->startTime<<" :"<<cs->endTime<<""<<m_name<<" scheduleForward()";
+
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
         cs->logError("Failed to schedule within project target time" );
     }
-    cs->logInfo("Scheduled: " + cs->startTime.toString() + " to " + cs->endTime.toString() );
+    foreach ( Appointment *a, cs->appointments() ) {
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+    }
+    if ( cs->startTime < cs->earlyStart ) {
+        cs->logWarning( i18n( "Starting earlier than early start" ) );
+    }
+    if ( cs->endTime > cs->lateFinish ) {
+        cs->logWarning( i18n( "Finishing later than late finish" ) );
+    }
+    cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
+
     m_visitedForward = true;
     cs->incProgress();
     return cs->endTime;
@@ -1763,7 +1767,8 @@ DateTime Task::scheduleFromEndTime(int use) {
     if ( !cs->endTime.isValid() ) {
         cs->endTime = cs->lateFinish;
     }
-    //kDebug()<<"------>"<<m_name<<""<<cs->endTime;
+    KLocale *locale = KGlobal::locale();
+    cs->logInfo("Schedule from end time: " + cs->endTime.toString() );
     cs->logInfo("Schedule from end time: " + cs->endTime.toString() );
     if (type() == Node::Type_Task) {
         cs->duration = m_estimate->value(use, pert);
@@ -1779,15 +1784,18 @@ DateTime Task::scheduleFromEndTime(int use) {
             DateTime e = cs->startTime + cs->duration;
             if ( e > cs->lateFinish ) {
                 cs->schedulingError = true;
+
                 cs->negativeFloat = e - cs->lateFinish;
-                cs->logError( "ASAP: Failed to schedule within late finish. Negative float=" + cs->negativeFloat.toString() );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule within late finish. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->logDebug( "ASAP: late finish=" + cs->lateFinish.toString() + " end time=" + e.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
             } else if ( e > cs->endTime ) {
                 cs->schedulingError = true;
-                cs->logError( "ASAP: Failed to schedule within successors start time" );
+                cs->logWarning( i18nc( "1=type of constraint", "%1: Failed to schedule within successors start time",  constraintToString() ) );
                 cs->logDebug( "ASAP: succ. start=" + cs->endTime.toString() + " end time=" + e.toString() );
+
             }
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > e ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - e;
                     cs->logDebug( "ASAP (FixedDuration): positiveFloat=" + cs->positiveFloat.toString() );
@@ -1815,9 +1823,10 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->startTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->startTime;
-                cs->logError( "ALAP: Failed to schedule after early start. Negative float=" +  cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->logDebug( "ALAP: earlyStart=" + cs->earlyStart.toString() + " cs->startTime=" + cs->startTime.toString() + " negativeFloat=" +  cs->negativeFloat.toString() );
-            } else {
+            } else if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                     cs->logDebug( "ALAP (FixedDuration): positiveFloat=" + cs->positiveFloat.toString() );
@@ -1825,6 +1834,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                     cs->logDebug( "ALAP: positiveFloat=" + cs->positiveFloat.toString() );
                 }
+
             }
             //kDebug()<<m_name<<": lateStart="<<cs->startTime;
             makeAppointments();
@@ -1833,127 +1843,132 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::StartNotEarlier:
             // cs->endTime calculated above
             //kDebug()<<"StartNotEarlier:"<<m_constraintStartTime<<cs->endTime;
-            if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
-                cs->endTime = workFinishBefore( cs->endTime );
-            }
+            cs->endTime = workFinishBefore( cs->endTime );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             if ( m_constraintStartTime > cs->startTime ) {
                 //kWarning()<<"m_constraintStartTime > cs->lateStart";
                 cs->schedulingError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime;
-                cs->logError( "StartNotEarlier: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
-            }
-            if ( cs->startTime < cs->earlyStart || cs->startTime > cs->lateStart ) {
-                //kWarning()<<"startTime outside dependencies";
-                cs->schedulingError = true;
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::FinishNotLater:
             // cs->endTime calculated above
             //kDebug()<<"FinishNotLater:"<<m_constraintEndTime<<cs->endTime;
             if (cs->endTime > m_constraintEndTime) {
-                cs->endTime = m_constraintEndTime;
+                cs->endTime = qMax( qMin( m_constraintEndTime, cs->lateFinish ), cs->earlyFinish );
             }
-            if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
-                cs->endTime = workFinishBefore( cs->endTime );
-            }
-            if ( cs->endTime > cs->lateFinish ) {
-                cs->endTime = cs->lateFinish;
-            }
+            cs->endTime = workFinishBefore( cs->endTime );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
-            if ( cs->startTime < cs->earlyStart ) {
-                cs->negativeFloat = cs->earlyStart - cs->startTime;
+            if ( cs->endTime > m_constraintEndTime ) {
+                cs->negativeFloat = cs->endTime - m_constraintEndTime;
+                cs->schedulingError = true;
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->schedulingError = true;
                 cs->logError( "StartNotEarlier: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
             }
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::MustStartOn:
             // cs->endTime calculated above
             //kDebug()<<"MustStartOn="<<m_constraintStartTime.toString()<<""<<cs->startTime.toString();
-            if (m_constraintStartTime > cs->lateFinish - m_durationBackward) {
-                cs->schedulingError = true;
-                cs->startTime = cs->lateFinish - m_durationBackward;
-                cs->logError( "MustStartOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
-                if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
-                    cs->endTime = workFinishBefore(cs->endTime);
-                }
-            } else {
-                cs->startTime = m_constraintStartTime;
-                cs->duration = duration(cs->startTime, use, false);
-                if ( cs->endTime < cs->startTime + cs->duration ) {
-                    cs->schedulingError = true;
-                }
+
+            cs->startTime = workStartAfter( qMax( m_constraintStartTime, cs->earlyStart ) );
+            cs->duration = duration(cs->startTime, use, false);
+            if ( cs->endTime >= cs->startTime + cs->duration ) {
                 cs->endTime = cs->startTime + cs->duration;
+
+            } else {
+                cs->endTime = workFinishBefore( cs->endTime );
+                cs->duration = duration(cs->endTime, use, true);
+                cs->startTime = cs->endTime - cs->duration;
+            }
+            if (m_constraintStartTime != cs->startTime) {
+                cs->schedulingError = true;
+                cs->negativeFloat = m_constraintStartTime - cs->startTime;
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
             }
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::MustFinishOn:
             // cs->endTime calculated above
-            //kDebug()<<"MustFinishOn:"<<m_constraintEndTime<<cs->endTime<<cs->earlyFinish;
-            if (m_constraintEndTime > cs->endTime ) {
-                cs->negativeFloat = m_constraintEndTime - cs->endTime;
-                cs->schedulingError = true;
-                cs->logError( "MustFinishOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
-                //kWarning()<<"m_constraintEndTime > cs->endTime";
-            } else if (m_constraintEndTime < cs->earlyFinish) {
-                cs->schedulingError = true;
-                cs->negativeFloat = cs->earlyFinish - m_constraintEndTime;
-                cs->endTime = cs->earlyFinish;
-                cs->logError( "MustFinishOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
-                //kWarning()<<"m_constraintEndTime < cs->earlyFinish";
-            } else {
-                cs->endTime = m_constraintEndTime;
+            //kDebug()<<m_name<<"MustFinishOn:"<<m_constraintEndTime<<cs->endTime<<cs->earlyFinish;
+            if (cs->endTime > m_constraintEndTime) {
+                cs->endTime = qMax( qMin( m_constraintEndTime, cs->lateFinish ), cs->earlyFinish );
             }
+            cs->endTime = workFinishBefore( cs->endTime );
             cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
+            if (m_constraintEndTime != cs->endTime ) {
+                cs->negativeFloat = m_constraintEndTime - cs->endTime;
+                cs->schedulingError = true;
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
+                //kWarning()<<"m_constraintEndTime > cs->endTime";
+
+            }
             makeAppointments();
-            if ( cs->negativeFloat == Duration::zeroDuration ) {
+
+            if ( cs->lateFinish > cs->endTime ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                     cs->positiveFloat = cs->lateFinish - cs->endTime;
                 } else {
                     cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
                 }
+
             }
             break;
         case Node::FixedInterval: {
             // cs->endTime calculated above
-            //kDebug()<<"FixedInterval="<<m_constraintEndTime<<""<<cs->endTime;
-            if (m_constraintEndTime > cs->endTime) {
+            //kDebug()<<m_name<<"FixedInterval="<<m_constraintEndTime<<""<<cs->endTime;
+            cs->duration = m_constraintEndTime - m_constraintStartTime;
+            if ( cs->endTime > m_constraintEndTime ) {
+                cs->endTime == qMax( m_constraintEndTime, cs->earlyFinish );
+            }
+            cs->startTime = cs->endTime - cs->duration;
+            if (m_constraintEndTime != cs->endTime) {
+                cs->negativeFloat = m_constraintEndTime - cs->endTime;
                 cs->negativeFloat = m_constraintEndTime - cs->endTime;
                 cs->schedulingError = true;
-                cs->logError( "FixedInterval: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
-                //kDebug()<<"FixedInterval error:"<<m_constraintEndTime<<" >"<<cs->endTime;
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
-            cs->startTime = m_constraintStartTime;
-            cs->endTime = m_constraintEndTime;
-            cs->duration = cs->endTime - cs->startTime;
-            cs->workStartTime = m_constraintStartTime;
-            cs->workEndTime = m_constraintEndTime;
+            cs->workStartTime = workStartAfter( cs->startTime );
+            cs->workEndTime = workFinishBefore( cs->endTime );
             makeAppointments();
             if ( cs->negativeFloat == Duration::zeroDuration ) {
                 if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
@@ -1977,10 +1992,12 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->endTime < cs->earlyStart ) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->earlyStart - cs->endTime;
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to schedule after early start. Negative float=%2", constraintToString(), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
                 cs->endTime = cs->earlyStart;
             } else {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
             }
+            //cs->endTime = cs->earlyStart; FIXME need to follow predeccessors. Defer scheduling?
             cs->startTime = cs->endTime;
             break;
         case Node::ALAP:
@@ -1992,8 +2009,10 @@ DateTime Task::scheduleFromEndTime(int use) {
             if (m_constraintStartTime < cs->earlyStart ||
                 m_constraintStartTime > cs->endTime) {
                 cs->schedulingError = true;
+
                 cs->negativeFloat = cs->earlyStart - m_constraintStartTime;
-                m_constraint == Node::FixedInterval ? cs->logError("FixedInterval: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() ) : cs->logError("MustStartOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             cs->startTime = cs->earlyStart;
             cs->endTime = cs->earlyStart;
@@ -2005,7 +2024,9 @@ DateTime Task::scheduleFromEndTime(int use) {
             if (m_constraintEndTime < cs->earlyStart ||
                 m_constraintEndTime > cs->endTime) {
                 cs->schedulingError = true;
-                cs->logError( "MustFinishOn: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             cs->startTime = m_constraintEndTime;
             cs->endTime = m_constraintEndTime;
@@ -2021,7 +2042,9 @@ DateTime Task::scheduleFromEndTime(int use) {
             if (m_constraintStartTime > cs->startTime) {
                 cs->schedulingError = true;
                 cs->negativeFloat = m_constraintStartTime - cs->startTime;
-                cs->logError("StartNotEarlier: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             if ( cs->negativeFloat == Duration::zeroDuration ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
@@ -2034,7 +2057,9 @@ DateTime Task::scheduleFromEndTime(int use) {
             if (m_constraintEndTime < cs->endTime) {
                 cs->schedulingError = true;
                 cs->negativeFloat = cs->endTime - m_constraintEndTime;
-                cs->logError( "FinishNotLater: Failed to meet constraint. Negative float=" + cs->negativeFloat.toString() );
+
+                cs->logError( i18nc( "1=type of constraint", "%1: Failed to meet constraint. Negative float=%2", constraintToString( true ), cs->negativeFloat.toString( Duration::Format_i18nHour ) ) );
+
             }
             cs->startTime = cs->endTime;
             if ( cs->negativeFloat == Duration::zeroDuration ) {
@@ -2051,10 +2076,21 @@ DateTime Task::scheduleFromEndTime(int use) {
         cs->duration = cs->endTime - cs->startTime;
         kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
+
     if ( cs->startTime < projectNode()->constraintStartTime() || cs->endTime > projectNode()->constraintEndTime() ) {
-        cs->logError("Failed to schedule within project target time" );
+        cs->logError( i18n( "Failed to schedule within project target time" ) );
     }
-    cs->logInfo("Scheduled: " + cs->startTime.toString() + " to " + cs->endTime.toString() );
+    foreach ( Appointment *a, cs->appointments() ) {
+        cs->logInfo( i18n( "Resource %1 booked from %2 to %3", a->resource()->resource()->name(), locale->formatDateTime( a->startTime() ), locale->formatDateTime( a->endTime() ) ) );
+    }
+    if ( cs->startTime < cs->earlyStart ) {
+        cs->logWarning( i18n( "Starting earlier than early start" ) );
+    }
+    if ( cs->endTime > cs->lateFinish ) {
+        cs->logWarning( i18n( "Finishing later than late finish" ) );
+    }
+    cs->logInfo( i18n( "Scheduled: %1 to %2", locale->formatDateTime( cs->startTime ), locale->formatDateTime( cs->endTime ) ) );
+
     m_visitedBackward = true;
     cs->incProgress();
     return cs->startTime;
@@ -2144,8 +2180,10 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
         return l;
     }
     Calendar *cal = m_estimate->calendar();
+
     if ( cal == 0) {
-        m_currentSchedule->logError( "Estimate of type length has no calendar defined" );
+        m_currentSchedule->logError( i18n( "Estimate of type length has no calendar defined" ) );
+
         return l;
     }
     m_currentSchedule->logDebug( "Calculate length from: " + time.toString() );
@@ -2251,15 +2289,17 @@ Duration Task::length(const DateTime &time, const Duration &duration, bool backw
             } else if (l + l1 == duration) {
                 l += l1;
                 match = true;
+
             } else {
-                m_currentSchedule->logDebug( "Got more that asked for, should not happen! Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
+                m_currentSchedule->logDebug( "Got more than asked for, should not happen! Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
+
                 break;
             }
             //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<')';
         }
     }
     if (!match) {
-        m_currentSchedule->logError( "Could not match work duration. Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
+        m_currentSchedule->logError( i18n( "Could not match work duration. Want: %1 got: %2",  l.toString( Duration::Format_i18nHour ), duration.toString( Duration::Format_i18nHour ) ) );
     }
     DateTime t = end;
     if (l != Duration::zeroDuration) {
@@ -2838,7 +2878,7 @@ Duration Completion::actualEffort() const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach( UsedEffort *ue, m_usedEffort ) {
             foreach ( QDate d, ue->actualEffortMap().keys() ) {
                 eff += ue->actualEffortMap()[ d ]->effort();
             }
@@ -2853,7 +2893,7 @@ Duration Completion::actualEffort( const QDate &date ) const
 {
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach( UsedEffort *ue, m_usedEffort ) {
             if ( ue && ue->actualEffortMap().contains( date ) ) {
                 eff += ue->actualEffortMap().value( date )->effort();
             }
@@ -2872,7 +2912,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
     //kDebug()<<date;
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
-        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+        foreach( UsedEffort *ue, m_usedEffort ) {
             eff += ue->effortTo( date );
         }
     } else {
@@ -2987,7 +3027,7 @@ double Completion::actualCost( const Resource *resource ) const
     double c = 0.0;
     double nc = resource->normalRate();
     double oc = resource->overtimeRate();
-    foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap().values() ) {
+    foreach ( UsedEffort::ActualEffort *a, m_usedEffort.value( const_cast<Resource*>( resource )  )->actualEffortMap() ) {
         c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
         c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
     }
@@ -3248,7 +3288,7 @@ Duration Completion::UsedEffort::effortTo( const QDate &date ) const
 Duration Completion::UsedEffort::effort() const
 {
     Duration eff;
-    foreach ( ActualEffort *e, m_actual.values() ) {
+    foreach ( ActualEffort *e, m_actual ) {
         eff += e->effort();
     }
     return eff;

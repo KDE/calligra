@@ -23,8 +23,6 @@
 
 #include "kexiformdataiteminterface.h"
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 //! @short A db-aware check box
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface

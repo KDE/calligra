@@ -74,7 +74,7 @@ PowerPointImport::~PowerPointImport()
 
 KoFilter::ConversionStatus PowerPointImport::convert( const QByteArray& from, const QByteArray& to )
 {
-  if ( from != "application/mspowerpoint" )
+  if ( from != "application/vnd.ms-powerpoint" )
     return KoFilter::NotImplemented; 
 
   if ( to != "application/vnd.oasis.opendocument.presentation" )     

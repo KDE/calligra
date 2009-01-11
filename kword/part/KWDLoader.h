@@ -36,6 +36,7 @@ class KoCharacterStyle;
 class QColor;
 class KoShape;
 class KoStore;
+class KoInlineNote;
 
 /// KWDocument delegates to this class the loading of (old style) KWD documents
 class KWDLoader : public QObject
@@ -86,6 +87,7 @@ private:
     void fill(ImageKey *key, const KoXmlElement &keyElement);
 
     void insertAnchors();
+    void insertNotes();
 
     // load the document wide styles
     void loadStyleTemplates(const KoXmlElement &styles);
@@ -109,6 +111,12 @@ private:
         QString frameSetName;
     };
     QList<AnchorData> m_anchors;
+
+    struct NotesData {
+        KoInlineNote *note;
+        QString frameSetName;
+    };
+    QList<NotesData> m_notes;
 
     QList<ImageKey> m_images;
 };

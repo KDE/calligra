@@ -76,6 +76,8 @@ public:
     bool isValid() const;
     AppointmentInterval firstInterval(const AppointmentInterval &interval, const DateTime &from) const;
 
+    bool operator ==(const AppointmentInterval &interval ) const;
+
     //void inSort(AppointmentInterval *a);
     //bool operator<( AppointmentInterval &interval ) const;
 private:

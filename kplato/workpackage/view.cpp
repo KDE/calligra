@@ -339,7 +339,7 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
         // plug my own actionlists, they may be gone
         slotPlugScheduleActions();
         //Remove gui for all KParts
-        foreach ( KParts::Part *p, m_partsMap.values() ) {
+        foreach ( KParts::Part *p, m_partsMap ) {
             if ( p->factory() ) {
                 p->factory()->removeClient( p );
             }

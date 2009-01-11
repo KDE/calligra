@@ -945,7 +945,7 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
 
 void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &viewRect)
 {
-    if (q->selection()->referenceSelectionMode() || q->editor()) {
+    if (q->selection()->referenceSelection() || q->editor()) {
         return;
     }
 
@@ -1064,7 +1064,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
 void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRectF &viewRect)
 {
     Q_UNUSED(viewRect);
-    if (!q->selection()->referenceSelectionMode()) {
+    if (!q->selection()->referenceSelection()) {
         return;
     }
     // save painter state

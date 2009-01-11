@@ -23,9 +23,7 @@
 
 #include <qimage.h>
 #include <qlabel.h>
-//Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
 #include <QPaintEvent>
 #include <QShowEvent>
 #include <QResizeEvent>

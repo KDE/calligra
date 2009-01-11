@@ -588,6 +588,8 @@ protected:
     DateTime scheduleForward( const DateTime &earliest, int use );
     DateTime scheduleBackward( const DateTime &latest, int use );
     void adjustSummarytask();
+    DateTime checkStartConstraints( const DateTime &dt ) const;
+    DateTime checkEndConstraints( const DateTime &dt ) const;
 
     void initiateCalculation( MainSchedule &sch );
     void initiateCalculationLists( MainSchedule &sch );

@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/kplatomodels.pot
+$XGETTEXT *.cpp kcalendar/*.cpp -o $podir/kplatomodels.pot

@@ -17,10 +17,23 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+
 TODO
  Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
+
+2008-12-30
+Forms
+= set default window color for the main db form widget
+
+2008-12-15..25
+Forms
+- removed most of Qt 3 deps
+
+2008-12-14
+Forms
+- paint grid and selection rectangle using alpha blending
 
 2008-12-12
 Forms
@@ -220,6 +233,7 @@ KoProperty2
 - drawing gray grid lines and altering style sheets for grids moved to a common routine
 - 3-state bool editor properly works and is painted
 - fixed painting recently implemented editors for composed types (rect, point, size)
+
 
 2008-10-26
 KoProperty2

@@ -158,7 +158,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber)
 
     bool odd = false; // an odd number of pages back, so frameOnBothSheets matters
     for (int i = pageNumber - 2; i < pageNumber; i++) {
-        if (i < 0/*m_pageManager->startPage()*/) {
+        if (i < m_pageManager->begin().pageNumber()) {
             odd = true;
             continue;
         }

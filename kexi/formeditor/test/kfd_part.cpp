@@ -24,10 +24,6 @@
 #include <qpainter.h>
 #include <qevent.h>
 #include <qobject.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QCloseEvent>
-#include <Q3ValueList>
 
 #include <kdeversion.h>
 #include <kaction.h>

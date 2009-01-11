@@ -50,8 +50,12 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QStackedWidget>
 
+const int MsecsThresholdForMergingCommands = 2000;
+
 KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     : QDockWidget( parent ), m_canvas(0)
+    , m_lastFillCommand(0), m_lastStrokeCommand(0)
+    , m_lastColorFill(0)
 {
     setWindowTitle( i18n( "Styles" ) );
 
@@ -94,14 +98,20 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     connect( m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()) );
     connect( m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()) );
     connect( m_buttons, SIGNAL(buttonPressed(int)), this, SLOT(styleButtonPressed(int)));
+
     connect( m_colorSelector, SIGNAL( colorChanged( const QColor &) ), 
              this, SLOT( updateColor( const QColor &) ) );
     connect( m_colorSelector, SIGNAL( colorApplied( const QColor &) ), 
-            this, SLOT( updateColor( const QColor &) ) );
+             this, SLOT( updateColor( const QColor &) ) );
     connect( gradientSelector, SIGNAL(resourceSelected(KoResource*)),
+             this, SLOT(updateGradient(KoResource*)));
+    connect( gradientSelector, SIGNAL(resourceApplied(KoResource*)),
              this, SLOT(updateGradient(KoResource*)));
     connect( patternSelector, SIGNAL( resourceSelected( KoResource* ) ), 
              this, SLOT( updatePattern( KoResource*) ) );
+    connect( patternSelector, SIGNAL( resourceApplied( KoResource* ) ), 
+             this, SLOT( updatePattern( KoResource*) ) );
+                      
 
     setWidget( mainWidget );
 }
@@ -112,17 +122,20 @@ KarbonStyleDocker::~KarbonStyleDocker()
 
 void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
 {
+    resetColorCommands();
+    
     m_canvas = canvas;
     if( ! m_canvas )
     {
-        updateStyle( 0, 0 );
         return;
     }
 
     connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
+
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-            this, SLOT(selectionChanged()));
+            this, SLOT(selectionContentChanged()));
+
     connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
              this, SLOT(resourceChanged(int, const QVariant&)));
 
@@ -145,9 +158,28 @@ void KarbonStyleDocker::setCanvas( KoCanvasBase * canvas )
 
 void KarbonStyleDocker::selectionChanged()
 {
+    resetColorCommands();
+    updateStyle();
+}
+
+void KarbonStyleDocker::resetColorCommands()
+{
+    m_lastFillCommand = 0;
+    m_lastStrokeCommand = 0;
+    m_lastColorFill = 0;
+    m_lastColorStrokes.clear();
+}
+
+void KarbonStyleDocker::selectionContentChanged()
+{
+    updateStyle();
+}
+
+void KarbonStyleDocker::updateStyle()
+{
     if( ! m_canvas )
         return;
-
+    
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if( shape )
         updateStyle( shape->border(), shape->background() );
@@ -206,7 +238,7 @@ void KarbonStyleDocker::resourceChanged( int key, const QVariant& )
     {
         case KoCanvasResource::ForegroundColor:
         case KoCanvasResource::BackgroundColor:
-            selectionChanged();
+            updateStyle();
             break;
     }
 }
@@ -217,6 +249,8 @@ void KarbonStyleDocker::styleButtonPressed( int buttonId )
     {
         case KarbonStyleButtonBox::None:
         {
+            resetColorCommands();
+            
             KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
             KoSelection *selection = m_canvas->shapeManager()->selection();
             if( ! selection || ! selection->count() )
@@ -227,7 +261,7 @@ void KarbonStyleDocker::styleButtonPressed( int buttonId )
             else
                 m_canvas->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), 0 ) );
             m_stack->setCurrentIndex( 0 );
-            selectionChanged();
+            updateStyle();
             break;
         }
         case KarbonStyleButtonBox::Solid:
@@ -262,66 +296,108 @@ void KarbonStyleDocker::updateColor( const QColor &c )
             QList<KoShape*> shapes;
             shapes.append( page );
             updateColor( c, shapes );
-            return;
         }
-
-        KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
-
-        KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
-        int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
-
-        if( activeStyle == Karbon::Foreground )
-            m_canvas->resourceProvider()->setForegroundColor( kocolor );
         else
-            m_canvas->resourceProvider()->setBackgroundColor( kocolor );
-        return;
-    }
+        {
+            KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
 
-    updateColor( c, selection->selectedShapes() );
-    selectionChanged();
+            KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
+            int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
+
+            if( activeStyle == Karbon::Foreground )
+                m_canvas->resourceProvider()->setForegroundColor( kocolor );
+            else
+                m_canvas->resourceProvider()->setBackgroundColor( kocolor );
+        }
+    }
+    else
+    {
+        updateColor( c, selection->selectedShapes() );
+        updateStyle();
+    }
 }
+
 
 void KarbonStyleDocker::updateColor( const QColor &c, const QList<KoShape*> & selectedShapes )
 {
     Q_ASSERT( ! selectedShapes.isEmpty()  );
 
-    KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
-
-    KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
-    int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
-
     // check which color to set foreground == border, background == fill
-    if( activeStyle == Karbon::Foreground )
+    if( Karbon::ActiveStyle == Karbon::Foreground )
     {
-        // get the border of the first selected shape and check if it is a line border
-        KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selectedShapes.first() );
-        KoLineBorder * newBorder = 0;
-        if( oldBorder )
-        {
-            // preserve the properties of the old border if it is a line border
-            newBorder = new KoLineBorder( *oldBorder );
-            newBorder->setColor( c );
-        }
-        else
-            newBorder = new KoLineBorder( 1.0, c );
 
-        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selectedShapes, newBorder );
-        m_canvas->addCommand( cmd );
+        if (m_lastColorChange.msecsTo(QTime::currentTime()) > MsecsThresholdForMergingCommands) {
+            m_lastColorStrokes.clear();
+            m_lastStrokeCommand = 0;
+        }
+        if( m_lastColorStrokes.count() && m_lastStrokeCommand) {
+            foreach( KoShapeBorderModel * border, m_lastColorStrokes ) {
+                KoLineBorder * lineBorder = dynamic_cast<KoLineBorder*>( border );
+                if( lineBorder )
+                    lineBorder->setColor( c );
+            }
+            m_lastStrokeCommand->redo();
+        }
+        else {
+            m_lastColorStrokes.clear();
+            QList<KoShape *>::const_iterator it( selectedShapes.begin() );
+            for ( ;it != selectedShapes.end(); ++it ) {
+                // get the border of the first selected shape and check if it is a line border
+                KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( ( *it )->border() );
+                KoLineBorder * newBorder = 0;
+                if( oldBorder ) {
+                    // preserve the properties of the old border if it is a line border
+                    newBorder = new KoLineBorder( *oldBorder );
+                    newBorder->setLineBrush( QBrush() );
+                    newBorder->setColor( c );
+                }
+                else {
+                    newBorder = new KoLineBorder( 1.0, c );
+                }
+                m_lastColorStrokes.append( newBorder );
+            }
+
+
+
+            m_lastStrokeCommand = new KoShapeBorderCommand( selectedShapes, m_lastColorStrokes );
+            m_canvas->addCommand( m_lastStrokeCommand );
+
+        }
+
+        m_lastColorChange = QTime::currentTime();
+
         m_canvas->resourceProvider()->setForegroundColor( kocolor );
     }
     else
     {
-        KoShapeBackground * fill = new KoColorBackground( c );
-        KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selectedShapes, fill );
-        m_canvas->addCommand( cmd );
+
+        if (m_lastColorChange.msecsTo(QTime::currentTime()) > MsecsThresholdForMergingCommands) {
+            m_lastColorFill = 0;
+            m_lastFillCommand = 0;
+        }
+        if (m_lastColorFill && m_lastFillCommand) {
+            m_lastColorFill->setColor( c );
+            m_lastFillCommand->redo();
+        }
+        else {
+            m_lastColorFill = new KoColorBackground( c );
+            m_lastFillCommand = new KoShapeBackgroundCommand( selectedShapes, m_lastColorFill );
+            m_canvas->addCommand( m_lastFillCommand );
+        }
+        m_lastColorChange = QTime::currentTime();
+
         m_canvas->resourceProvider()->setBackgroundColor( kocolor );
     }
 }
 
 void KarbonStyleDocker::updateGradient( KoResource * item )
 {
+
+    resetColorCommands();
+    
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( item );
     if( ! gradient )
+
         return;
     
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
@@ -339,7 +415,7 @@ void KarbonStyleDocker::updateGradient( KoResource * item )
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
     
     // check which color to set foreground == border, background == fill
-    if( activeStyle == Karbon::Background )
+    if( Karbon::ActiveStyle == Karbon::Background )
     {
         QUndoCommand * firstCommand = 0;
         foreach( KoShape * shape, selectedShapes )
@@ -374,13 +450,17 @@ void KarbonStyleDocker::updateGradient( KoResource * item )
         }
         m_canvas->addCommand( new KoShapeBorderCommand( selectedShapes, newBorders ) );
     }
-    selectionChanged();
+    updateStyle();
 }
 
 void KarbonStyleDocker::updatePattern( KoResource * item )
 {
+
+    resetColorCommands();
+    
     KoPattern * pattern = dynamic_cast<KoPattern*>( item );
     if( ! pattern )
+
         return;
     
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
@@ -401,7 +481,7 @@ void KarbonStyleDocker::updatePattern( KoResource * item )
         KoPatternBackground * fill = new KoPatternBackground( imageCollection );
         fill->setPattern( pattern->img() );
         m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, fill  ) );
-        selectionChanged();
+        updateStyle();
     }
 }
 

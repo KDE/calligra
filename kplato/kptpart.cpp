@@ -68,7 +68,9 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         locale->insertCatalog( "kplatokernel" );
         locale->insertCatalog( "kplatomodels" );
         locale->insertCatalog( "kplatoui" );
-        locale->insertCatalog( "krossmodulekplato" );
+
+        locale->insertCatalog( "kdgantt" );
+
     }
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     m_config.load();
@@ -425,7 +427,7 @@ bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocumen
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
-    bool ok;
+    bool ok = true;
     m_xmlLoader.startLoad();
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {

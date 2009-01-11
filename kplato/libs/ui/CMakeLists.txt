@@ -8,6 +8,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
     ${KOGUIUTILS_INCLUDES}
+    ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
 #add_subdirectory( tests )
@@ -52,28 +53,18 @@ set(kplatoui_LIB_SRCS
     kpttaskcostpanel.cpp
     kptmilestoneprogresspanel.cpp
     kptmilestoneprogressdialog.cpp
-    kptaccountsdialog.cpp
-    kptaccountspanel.cpp
     kpttaskdialog.cpp
     kptmainprojectdialog.cpp
     kptmainprojectpanel.cpp
     kptganttview.cpp
-    kptresourcespanel.cpp
     kptrelationdialog.cpp
     kptrequestresourcespanel.cpp
     kptresourcedialog.cpp
-    kptcalendaredit.cpp
-    kptcalendarlistdialog.cpp
-    kptcalendarpanel.cpp
-    kptdatetable.cpp
-    kptcalendarlistdialogbase.cpp
-    kptcalendareditbase.cpp
     kptstandardworktimedialog.cpp
     kptintervaledit.cpp
     kpttaskgeneralpanel.cpp
     kpttaskprogresspanel.cpp
     kpttaskprogressdialog.cpp
-    kptresourcesdialog.cpp
     kptwbsdefinitiondialog.cpp
     kptwbsdefinitionpanel.cpp
     kptresourceassignmentview.cpp
@@ -101,8 +92,6 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptpertresult.ui
     standardworktimedialogbase.ui
     kptwbsdefinitionpanelbase.ui
-    kptaccountspanelbase.ui
-    resourcespanelbase.ui
     kptaccountsviewconfigurepanelbase.ui
     kptintervaleditbase.ui
     kpttaskresourcespanelbase.ui
@@ -112,7 +101,6 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptmilestoneprogresspanelbase.ui
     resourcedialogbase.ui
     kptmainprojectpanelbase.ui
-    kptcalendarlistpanel.ui
     relationpanel.ui
     kpttaskgeneralpanelbase.ui
     kpttaskprogresspanelbase.ui

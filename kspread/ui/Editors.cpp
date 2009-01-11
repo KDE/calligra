@@ -963,42 +963,50 @@ bool CellEditor::checkChoice()
   if ( text[0] != '=' )
   {
     selection()->setReferenceSelectionMode(false);
+//    d->checkChoice = true;
+    return true;
   }
-  else
+
+  // switch to reference selection mode if we haven't yet
+  selection()->startReferenceSelection();
+
+  // if we don't have focus, we show highlighting, but don't do the rest
+  if (!hasFocus()) {
+    selection()->setReferenceSelectionMode(false);
+//    d->checkChoice = true;
+    return true;
+  }
+
+  int cur = d->textEdit->textCursor().position();
+
+  Tokens tokens = d->highlighter->formulaTokens();
+
+  if (tokens.count())  // formula not empty?
   {
-    int cur = d->textEdit->textCursor().position();
-
-    Tokens tokens = d->highlighter->formulaTokens();
-
-    // switch to reference selection mode if we haven't yet
-    selection()->startReferenceSelection();
-    if (tokens.count())  // formula not empty?
+    Token token;
+    for (int i = 0; i < tokens.count(); ++i)
     {
-      Token token;
-      for (int i = 0; i < tokens.count(); ++i)
+      if (tokens[i].pos() >= cur - 1) // without '='
       {
-        if (tokens[i].pos() >= cur - 1) // without '='
-        {
-          break;
-        }
-        token = tokens[i];
-        d->currentToken = i;
+        break;
       }
+      token = tokens[i];
+      d->currentToken = i;
+    }
 
-      Token::Type type = token.type();
-      if (type == Token::Operator && token.asOperator() != Token::RightPar)
-      {
-        selection()->setReferenceSelectionMode(true);
-      }
-      else if (type == Token::Cell || type == Token::Range)
-      {
-        d->length_namecell = token.text().length();
-        selection()->setReferenceSelectionMode(true);
-      }
-      else
-      {
-        selection()->setReferenceSelectionMode(false);
-      }
+    Token::Type type = token.type();
+    if (type == Token::Operator && token.asOperator() != Token::RightPar)
+    {
+      selection()->setReferenceSelectionMode(true);
+    }
+    else if (type == Token::Cell || type == Token::Range)
+    {
+      d->length_namecell = token.text().length();
+      selection()->setReferenceSelectionMode(true);
+    }
+    else
+    {
+      selection()->setReferenceSelectionMode(false);
     }
   }
 
@@ -1145,17 +1153,21 @@ QString CellEditor::text() const
     return d->textEdit->toPlainText();
 }
 
-void CellEditor::setText(const QString& text)
+void CellEditor::setText(const QString& text, int cursorPos)
 {
-    setCheckChoice (false);
+
+    if (text == d->textEdit->toPlainText()) return;
+
+
     d->textEdit->setPlainText(text);
     //Usability : It is usually more convenient if the cursor is positioned at the end of the text so it can
     //be quickly deleted using the backspace key
 
     // This also ensures that the caret is sized correctly for the text
-    setCursorPosition( text.length() );
-    setCheckChoice (true);
-    kDebug() <<"text cursor positioned at the end";
+
+    if ((cursorPos < 0) || cursorPos > text.length()) cursorPos = text.length();
+    setCursorPosition (cursorPos);
+
 
     if (d->fontLength == 0)
     {
@@ -1513,10 +1525,13 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
         d->cellTool->createEditor(false /* keep content */, false /* no focus */);
     }
 
-    // the Enter key is handled by the embedded editor
-    if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter)) {
+
+    // the Enter and Esc key are handled by the embedded editor
+    if ((event->key() == Qt::Key_Return) || (event->key() == Qt::Key_Enter) ||
+        (event->key() == Qt::Key_Escape)) {
         d->cellTool->editor()->setFocus();
         QApplication::sendEvent (d->cellTool->editor(), event);
+
         event->accept();
         return;
     }
@@ -1524,8 +1539,20 @@ void ExternalEditor::keyPressEvent(QKeyEvent *event)
         // Switch the focus back to the embedded editor.
         d->cellTool->editor()->setFocus();
     }
+
     // call inherited handler
     KTextEdit::keyPressEvent (event);
+}
+
+void ExternalEditor::focusInEvent(QFocusEvent* event)
+{
+    Q_ASSERT(d->cellTool);
+    // when the external editor gets focus, create also the internal editor
+    // this in turn means that ranges will be instantly highlighted right
+    if (!d->cellTool->editor())
+        d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+    KTextEdit::focusInEvent(event);
+
 }
 
 void ExternalEditor::focusOutEvent(QFocusEvent* event)

@@ -15,18 +15,19 @@ set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
     ${KOGUIUTILS_INCLUDES}
+    ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
 add_subdirectory( libs )
 
 add_subdirectory( templates )
 add_subdirectory( pics )
-add_subdirectory( reports )
 add_subdirectory( toolbar )
 add_subdirectory( plugins )
 #add_subdirectory( tests )
 
-add_subdirectory( workpackage )
+## workpackage handler not part of koffice 2.0 release
+#add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
 
@@ -76,7 +77,7 @@ set(kplatopart_PART_SRCS kptfactoryinit.cpp )
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 
-target_link_libraries(kplatopart kplatoprivate)
+target_link_libraries(kplatopart ${KDE4_KPARTS_LIBS} kplatoprivate)
 
 install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 

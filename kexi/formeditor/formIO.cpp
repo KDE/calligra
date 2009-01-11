@@ -37,8 +37,6 @@
 #include <Q3VBoxLayout>
 #include <Q3StrList>
 #include <Q3GridLayout>
-#include <Q3CString>
-#include <Q3ValueList>
 #include <QPixmap>
 #include <Q3HBoxLayout>
 #include <QImageWriter>
@@ -77,7 +75,7 @@
 #endif
 
 /// A blank widget used when the class name is not supported
-CustomWidget::CustomWidget(const Q3CString &className, QWidget *parent)
+CustomWidget::CustomWidget(const QByteArray &className, QWidget *parent)
         : QWidget(parent), m_className(className)
 {
     setBackgroundRole(QPalette::Dark);
@@ -99,7 +97,7 @@ CustomWidget::paintEvent(QPaintEvent *)
 
 using namespace KFormDesigner;
 
-Q3Dict<QLabel> *FormIO::m_buddies = 0;
+QHash<QString, QLabel*> *FormIO::m_buddies = 0;
 ObjectTreeItem *FormIO::m_currentItem = 0;
 Form *FormIO::m_currentForm = 0;
 bool FormIO::m_savePixmapsInline = false;
@@ -188,8 +186,10 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     form->headerProperties()->insert("version", QString::number(form->formatVersion()));
     //custom properties
     QDomElement headerPropertiesEl = domDoc.createElement("kfd:customHeader");
-    QMap<Q3CString, QString>::ConstIterator itEnd = form->headerProperties()->constEnd();
-    for (QMap<Q3CString, QString>::ConstIterator it = form->headerProperties()->constBegin(); it != itEnd; ++it) {
+    QHash<QByteArray, QString>::ConstIterator itEnd = form->headerProperties()->constEnd();
+    for (QHash<QByteArray, QString>::ConstIterator it = form->headerProperties()->constBegin(); 
+        it != itEnd; ++it)
+    {
         headerPropertiesEl.setAttribute(it.key(), it.value());
     }
     uiElement.appendChild(headerPropertiesEl);
@@ -218,10 +218,10 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
         form->autoAssignTabStops();
     QDomElement tabStops = domDoc.createElement("tabstops");
     uiElement.appendChild(tabStops);
-    for (ObjectTreeListIterator it(form->tabStopsIterator()); it.current(); ++it) {
+    foreach (ObjectTreeItem *item, *form->tabStops()) {
         QDomElement tabstop = domDoc.createElement("tabstop");
         tabStops.appendChild(tabstop);
-        QDomText tabStopText = domDoc.createTextNode(it.current()->name());
+        QDomText tabStopText = domDoc.createTextNode(item->name());
         tabstop.appendChild(tabStopText);
     }
 
@@ -255,8 +255,8 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
     bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << "WidgetWatcher::load(): " << errMsg;
-        kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol;
+        kDebug() << errMsg;
+        kDebug() << "line:" << errLine << "col:" << errCol;
         return false;
     }
 
@@ -282,8 +282,8 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
     bool parsed = inBuf.setContent(src, false, &errMsg, &errLine, &errCol);
 
     if (!parsed) {
-        kDebug() << "WidgetWatcher::load(): " << errMsg;
-        kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol;
+        kDebug() << errMsg;
+        kDebug() << "line:" << errLine << "col: " << errCol;
         return false;
     }
 
@@ -319,9 +319,8 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     if (!doc.setContent(&file, false/* !namespaceProcessing*/,
                         &errMsg, &errLine, &errCol)) {
 //! @todo proved err msg to the user
-        kDebug() << "FormIO::loadFormFromFile(): " << errMsg;
-        kDebug() << "FormIO::loadFormFromFile(): line: " << errLine << " col: "
-        << errCol;
+        kDebug() << errMsg;
+        kDebug() << errLine << "col:" << errCol;
         return false;
     }
 
@@ -351,19 +350,19 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
         if (ok)
             ver = v;
     }
-    kDebug() << "FormIO::loadFormFromDom(): original format version: " << ver;
+    kDebug() << "original format version: " << ver;
     form->setOriginalFormatVersion(ver);
     if (ver < KFormDesigner::version()) {
 //! @todo We can either 1) convert from old format and later save in a new one or 2) keep old format.
 //!     To do this we may need to look at the original format version number.
-        kDebug() << "FormIO::loadFormFromDom(): original format is older than current: " << KFormDesigner::version();
+        kWarning() << "original format is older than current: " << KFormDesigner::version();
         form->setFormatVersion(KFormDesigner::version());
     } else
         form->setFormatVersion(ver);
 
     if (ver > KFormDesigner::version()) {
 //! @todo display information about too new format and that "some information will not be available".
-        kDebug() << "FormIO::loadFormFromDom(): original format is newer than current: " << KFormDesigner::version();
+        kWarning() << "original format is newer than current: " << KFormDesigner::version();
     }
 
     // Load the pixmap collection
@@ -389,14 +388,14 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
             QString name = n.toElement().text();
             ObjectTreeItem *item = form->objectTree()->lookup(name);
             if (!item) {
-                kDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem ";
+                kWarning() << "ERROR : no ObjectTreeItem ";
                 continue;
             }
-            const int index = form->tabStops()->findRef(item);
+            const int index = form->tabStops()->indexOf(item);
             /* Compute a real destination index: "a number of not found items so far". */
             const int realIndex = i - itemsNotFound;
             if ((index != -1) && (index != realIndex)) { // the widget is not in the same place, so we move it
-                form->tabStops()->remove(item);
+                form->tabStops()->removeOne(item);
                 form->tabStops()->insert(realIndex, item);
             }
             if (index == -1) {
@@ -424,7 +423,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
                           const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
     // Widget specific properties and attributes ///////////////
-// kDebug() << "FormIO::savePropertyValue()  Saving the property: " << name;
+// kDebug() << "Saving the property: " << name;
     WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
     QWidget *subwidget = w;
     bool addSubwidgetFlag = false;
@@ -436,7 +435,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
         addSubwidgetFlag = true;
     }
     if (propertyId == -1) {
-        kDebug() << "FormIO::savePropertyValue()  The object doesn't have this property. Let's try the WidgetLibrary.";
+        kDebug() << "The object doesn't have this property. Let's try the WidgetLibrary.";
         if (lib)
             lib->saveSpecialProperty(w->metaObject()->className(), name, value, w, parentNode, parent);
         return;
@@ -478,7 +477,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
     if (value.type() == QVariant::Pixmap) {
         QDomText valueE;
         QDomElement type = parent.createElement("pixmap");
-        Q3CString property = propertyE.attribute("name").toLatin1();
+        QByteArray property = propertyE.attribute("name").toLatin1();
 //todo  QCString pixmapName = m_currentItem->widget()->property("pixmapName").toCString();
         if (m_savePixmapsInline /* (js)too risky: || m_currentItem->pixmapName(property).isNull() */)
             valueE = parent.createTextNode(saveImage(parent, value.value<QPixmap>()));
@@ -968,23 +967,23 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
             tclass, domDoc, "property", "buddy", ((QLabel*)item->widget())->buddy()->objectName());
 
     // We save every property in the modifProp list of the ObjectTreeItem
-    QVariantMap *map = new QVariantMap(*(item->modifiedProperties()));
-    QMap<QString, QVariant>::ConstIterator endIt = map->constEnd();
-    for (QMap<QString, QVariant>::ConstIterator it = map->constBegin(); it != endIt; ++it) {
-        const Q3CString name(it.key().toLatin1());
+    QHash<QString, QVariant> hash(*(item->modifiedProperties()));
+    foreach (const QString& name, hash.keys()) {
         if (name == "hAlign" || name == "vAlign" || name == "wordbreak" || name == "alignment") {
             if (!savedAlignment) { // not to save it twice
-                savePropertyValue(tclass, domDoc, "alignment", item->widget()->property("alignment"), item->widget());
+                savePropertyValue(
+                    tclass, domDoc, "alignment", 
+                    item->widget()->property("alignment"), item->widget());
                 savedAlignment = true;
             }
         } else if (name == "name" || name == "geometry" || name == "layout") {
             // these have already been saved
         } else {
-            savePropertyValue(tclass, domDoc, it.key().toLatin1(), item->widget()->property(it.key().toLatin1()),
+            savePropertyValue(tclass, domDoc, name.toLatin1(), item->widget()->property(name.toLatin1()),
                               item->widget(), lib);
         }
     }
-    delete map;
+    hash.clear();
 
     if (KexiUtils::objectIsA(item->widget(), "CustomWidget")) {
         QDomDocument doc("TEMP");
@@ -1012,27 +1011,31 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     switch (layoutType) {
     case Container::Grid: { // grid layout
         layout.setTagName("grid");
-        for (ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
-            saveWidget(objIt, layout, domDoc, true);
+        foreach (ObjectTreeItem *titem, *item->children()) {
+            saveWidget(titem, layout, domDoc, true);
+        }
         break;
     }
     case Container::HBox: case Container::VBox: {
         // as we don't save geometry, we need to sort widgets in the right order, not creation order
-        WidgetList *list;
+        CustomSortableWidgetList *list;
         if (layout.tagName() == "hbox") {
-            list = new HorWidgetList(item->container()->form()->toplevelContainer()->widget());
+            list = new HorizontalWidgetList(item->container()->form()->toplevelContainer()->widget());
             layout.setTagName("hbox");
         } else {
-            list = new VerWidgetList(item->container()->form()->toplevelContainer()->widget());
+            list = new HorizontalWidgetList(item->container()->form()->toplevelContainer()->widget());
             layout.setTagName("vbox");
         }
 
-        for (ObjectTreeItem *objTree = item->children()->first(); objTree; objTree = item->children()->next())
-            list->append(objTree->widget());
+        foreach (ObjectTreeItem *titem, *item->children()) {
+            list->append(titem->widget());
+        }
         list->sort();
 
-        for (QWidget *obj = list->first(); obj; obj = list->next()) {
-            ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(obj->objectName());
+        foreach (QWidget *w, *list) {
+            ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(
+                w->objectName()
+            );
             if (item)
                 saveWidget(titem, layout, domDoc);
         }
@@ -1047,8 +1050,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 #else
         layout.setTagName("grid");
         KexiFlowLayout *flow = static_cast<KexiFlowLayout*>(item->container()->layout());
-        if (!flow)  break;
-        WidgetList *list = (WidgetList*)flow->widgetList();
+        if (!flow)
+            break;
+        QWidgetList *list = (QWidgetList*)flow->widgetList();
 
         // save some special properties
         savePropertyElement(layout, domDoc, "property", "customLayout", Container::layoutTypeToString(item->container()->layoutType()));
@@ -1056,8 +1060,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 
         // fill the widget's grid info, ie just simulate grid layout
         item->container()->createGridLayout(true);
-        for (QWidget *obj = list->first(); obj; obj = list->next()) {
-            ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(obj->name());
+        foreach (QWidget *w, *list) {
+            ObjectTreeItem *titem = item->container()->form()->objectTree()->lookup(
+                w->name()
+            );
             if (item)
                 saveWidget(titem, layout, domDoc, true); // save grid info for compatibility with QtDesigner
         }
@@ -1066,8 +1072,9 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
         break;
     }
     default: {
-        for (ObjectTreeItem *objIt = item->children()->first(); objIt; objIt = item->children()->next())
-            saveWidget(objIt, tclass, domDoc);
+        foreach (ObjectTreeItem *titem, *item->children()) {
+            saveWidget(titem, tclass, domDoc);
+        }
     }
     }
 
@@ -1111,7 +1118,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     }
 
     QWidget *w;
-    Q3CString classname, alternate;
+    QByteArray classname, alternate;
     // We translate some name (for compatibility)
     if (el.tagName() == "spacer")
         classname = "Spring";
@@ -1220,14 +1227,14 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
         item->container()->layout()->activate();
 
     // We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
-    Q3ValueList<Q3CString> list(container->form()->library()->autoSaveProperties(w->metaObject()->className()));
-    Q3ValueList<Q3CString>::ConstIterator endIt = list.constEnd();
+    const QList<QByteArray> list(container->form()->library()->autoSaveProperties(w->metaObject()->className()));
     KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface
     = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w);
     QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
-    for (Q3ValueList<Q3CString>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
-        if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, *it))
-            item->addModifiedProperty(*it, subwidget->property(*it));
+    foreach (const QByteArray &propName, list) {
+        if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, propName)) {
+            item->addModifiedProperty(propName, subwidget->property(propName));
+        }
     }
 
     if (resetCurrentForm)
@@ -1253,23 +1260,25 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
         form->objectTree()->rename(form->objectTree()->name(), wname);
     form->setInteractiveMode(false);
 
-    Q3Dict<QLabel>  *oldBuddies = 0;
+    QHash<QString, QLabel*> *oldBuddies = 0;
     if (m_buddies) // save old buddies (for subforms)
         oldBuddies = m_buddies;
-    m_buddies = new Q3Dict<QLabel>();
+    m_buddies = new QHash<QString, QLabel*>();
     m_currentItem = form->objectTree();
 
     readChildNodes(form->objectTree(), form->toplevelContainer(), el, container);
 
     // Now the Form is fully loaded, we can assign the buddies
-    Q3DictIterator<QLabel> it(*m_buddies);
-    for (; it.current(); ++it) {
-        ObjectTreeItem *item = form->objectTree()->lookup(it.currentKey());
+    for (QHash<QString, QLabel*>::ConstIterator it(m_buddies->constBegin());
+        it!=m_buddies->constEnd(); ++it)
+    {
+        ObjectTreeItem *item = form->objectTree()->lookup(it.key());
         if (!item || !item->widget()) {
-            kDebug() << "Cannot assign buddy for widget " << it.current()->objectName() << " to " << it.currentKey();
+            kDebug() << "Cannot assign buddy for widget "
+                << it.value()->objectName() << " to " << it.key();
             continue;
         }
-        it.current()->setBuddy(item->widget());
+        it.value()->setBuddy(item->widget());
     }
     delete m_buddies;
     m_buddies = oldBuddies; // and restore it

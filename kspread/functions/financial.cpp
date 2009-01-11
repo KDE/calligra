@@ -1445,7 +1445,9 @@ Value func_mirr (valVector args, ValueCalc *calc, FuncExtra *)
   if (npv_neg == 0 || npv_pos == 0 || reInvRate <= -1.0l)
     return Value::errorVALUE(); 
 
-  long double res = powl ( (-npv_pos * pow1p(reInvRate, n)) / (npv_neg * (1 + reInvRate)), (1.0l / (n - 1)) ) - 1.0l;
+
+  long double res = std::pow ( (-npv_pos * pow1p(reInvRate, n)) / (npv_neg * (1 + reInvRate)), (1.0l / (n - 1)) ) - 1.0l;
+
 
   return Value(res);
 }

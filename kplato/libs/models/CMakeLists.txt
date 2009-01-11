@@ -6,6 +6,7 @@ include_directories(
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${KDE4_INCLUDES}
+    ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
 ########### KPlato data models library ###############
@@ -34,7 +35,7 @@ set(kplatomodels_LIB_SRCS
 
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 
-target_link_libraries(kplatomodels kplatokernel ${KDE4_KABC_LIBS})
+target_link_libraries(kplatomodels kplatokernel ${KDE4_KDEUI_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KABC_LIBS})
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

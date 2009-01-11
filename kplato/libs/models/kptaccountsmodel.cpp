@@ -83,12 +83,17 @@ QVariant AccountModel::name( const Account *a, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
             return a->name();
-            break;
+        case Qt::ToolTipRole:
+/*FIXME:            if ( a->isDefaultAccount() ) {
+                return i18nc( "1=account name", "%1 (Default account)", a->name() );
+            }*/
+            return a->name();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+//FIXME:         case Qt::CheckStateRole:
+//             return a->isDefaultAccount() ? Qt::Checked : Qt::Unchecked;
     }
     return QVariant();
 }
@@ -213,15 +218,10 @@ Qt::ItemFlags AccountItemModel::flags( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return flags;
     }
-
-    if ( !index.isValid() )
-        return flags;
-    if ( !m_readWrite ) {
-        return flags &= ~Qt::ItemIsEditable;
-    }
     if ( account ( index ) ) {
         switch ( index.column() ) {
-            default: flags |= Qt::ItemIsEditable;
+            case AccountModel::Name: flags |= ( Qt::ItemIsEditable /*FIXME:| Qt::ItemIsUserCheckable*/ ); break;
+            default: flags |= Qt::ItemIsEditable; break;
         }
     }
     return flags;
@@ -314,6 +314,24 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
                 emit executeCommand( new RenameAccountCmd( a, value.toString(), "Modify account name" ) );
             }
             return true;
+        case Qt::CheckStateRole: {
+            switch ( value.toInt() ) {
+                case Qt::Unchecked:
+                    if ( a->isDefaultAccount() ) {
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), a, 0, ( "Modify default account" ) ) ); //FIXME i18n
+                        return true;
+                    }
+                    break;
+                case Qt::Checked:
+                    if ( ! a->isDefaultAccount() ) {
+                        emit executeCommand( new ModifyDefaultAccountCmd( m_project->accounts(), m_project->accounts().defaultAccount(), a, ( "Modify default account" ) ) ); //FIXME i18n
+                        return true;
+                    }
+                    break;
+                default: break;
+            }
+        }
+        default: break;
     }
     return false;
 }
@@ -349,13 +367,16 @@ QVariant AccountItemModel::data( const QModelIndex &index, int role ) const
 
 bool AccountItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+
     if ( ! index.isValid() ) {
         return ItemModelBase::setData( index, value, role );
     }
-    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+    if ( ( flags( index ) &Qt::ItemIsEditable ) == 0 ) {
+
         return false;
     }
     Account *a = account( index );
+    kDebug()<<a->name()<<value<<role;
     switch (index.column()) {
         case AccountModel::Name: return setName( a, value, role );
         case AccountModel::Description: return setDescription( a, value, role );
@@ -417,7 +438,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
 void AccountItemModel::removeAccounts( QList<Account*> lst )
 {
     MacroCommand *cmd = 0;
-    QString c = lst.count() > 1 ? i18n( "Delete Accounts" ) : i18n( "Delete Account" );
+    QString c = i18np( "Delete Account", "Delete %1 Accounts", lst.count() );
     while ( ! lst.isEmpty() ) {
         bool del = true;
         Account *acc = lst.takeFirst();
@@ -589,7 +610,7 @@ void CostBreakdownItemModel::fetchData()
 
 QModelIndex CostBreakdownItemModel::parent( const QModelIndex &index ) const
 {
-    if ( !index.isValid() || m_project == 0 || m_manager == 0 ) {
+    if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
     //kDebug()<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
@@ -631,7 +652,7 @@ QModelIndex CostBreakdownItemModel::index( int row, int column, const QModelInde
 QModelIndex CostBreakdownItemModel::index( const Account *account ) const
 {
     Account *a = const_cast<Account*>(account);
-    if ( m_project == 0 || m_manager == 0 || account == 0 ) {
+    if ( m_project == 0 || account == 0 ) {
         return QModelIndex();
     }
     int row = -1;
@@ -681,7 +702,7 @@ int CostBreakdownItemModel::columnCount( const QModelIndex & ) const
 
 int CostBreakdownItemModel::rowCount( const QModelIndex &parent ) const
 {
-    if ( m_project == 0 || m_manager == 0 ) {
+    if ( m_project == 0 ) {
         return 0;
     }
     Account *par = account( parent );
@@ -838,7 +859,7 @@ void CostBreakdownItemModel::setStartDate()
 {
     if ( m_startmode == StartMode_Project ) {
         m_start = m_project->startTime( id() ).date();
-        foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_plannedCostMap ) {
             if ( ! ec.startDate().isValid() ) {
                 continue;
             }
@@ -846,7 +867,7 @@ void CostBreakdownItemModel::setStartDate()
                 m_start = ec.startDate();
             }
         }
-        foreach ( const EffortCostMap &ec, m_actualCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_actualCostMap ) {
             if ( ! ec.startDate().isValid() ) {
                 continue;
             }
@@ -861,7 +882,7 @@ void CostBreakdownItemModel::setEndDate()
 {
     if ( m_endmode == EndMode_Project ) {
         m_end = m_project->endTime( id() ).date();
-        foreach ( const EffortCostMap &ec, m_plannedCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_plannedCostMap ) {
             if ( ! ec.endDate().isValid() ) {
                 continue;
             }
@@ -869,7 +890,7 @@ void CostBreakdownItemModel::setEndDate()
                 m_end = ec.endDate();
             }
         }
-        foreach ( const EffortCostMap &ec, m_actualCostMap.values() ) {
+        foreach ( const EffortCostMap &ec, m_actualCostMap ) {
             if ( ! ec.endDate().isValid() ) {
                 continue;
             }

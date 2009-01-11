@@ -28,6 +28,7 @@
 KarbonPatternChooser::KarbonPatternChooser( QWidget *parent )
     : KoResourceItemChooser( parent )
 {
+    setObjectName("KarbonPatternChooser");
     m_resourceAdapter = new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer());
 
     connect( m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)),

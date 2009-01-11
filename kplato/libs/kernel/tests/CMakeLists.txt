@@ -56,7 +56,7 @@ set(ProjectTester_SRCS ProjectTester.cpp )
  
 kde4_add_unit_test(ProjectTester TESTNAME KPlato-ProjectTester  ${ProjectTester_SRCS})
  
-target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(ProjectTester  ${KDE4_KDECORE_LIBS} kplatoprivate kplatokernel ${QT_QTTEST_LIBRARY})
  
 
 ########### next target ###############
@@ -66,7 +66,7 @@ set(AccountTester_SRCS AccountsTester.cpp )
  
 kde4_add_unit_test(AccountsTester TESTNAME KPlato-AccountsTester  ${AccountTester_SRCS})
  
-target_link_libraries(AccountsTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(AccountsTester  ${KDE4_KDECORE_LIBS} kplatoprivate kplatokernel ${QT_QTTEST_LIBRARY})
  
 
 ########### next target ###############

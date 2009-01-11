@@ -20,8 +20,8 @@
 #ifndef SPACER_H
 #define SPACER_H
 
-#include <qwidget.h>
-#include <Q3CString>
+#include <QWidget>
+#include <QByteArray>
 
 #include <kexi_export.h>
 
@@ -55,9 +55,11 @@ public:
     Spring(QWidget *parent);
     ~Spring();
 
-    static bool isPropertyVisible(const Q3CString &name);
+
+    static bool isPropertyVisible(const QByteArray &name);
     static void saveSpring(KFormDesigner::ObjectTreeItem *item,
         QDomElement &parent, QDomDocument &domDoc, bool insideGridLayout);
+
 
     void setOrientation(Qt::Orientation orient);
     Qt::Orientation orientation() const {

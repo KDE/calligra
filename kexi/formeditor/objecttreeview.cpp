@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,13 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
+#include <kdebug.h>
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -89,7 +86,9 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
         p->setFont(f);
         if (depth() == 0) { // for edit tab order dialog
             QString iconName
-            = ((ObjectTreeView*)listView())->iconNameForClass(m_item->widget()->metaObject()->className());
+
+            = static_cast<ObjectTreeView*>(listView())->iconNameForClass(m_item->widget()->metaObject()->className());
+
             p->drawPixmap(margin, (height() - IconSize(KIconLoader::Small)) / 2 , SmallIcon(iconName));
             p->drawText(
                 QRect(2*margin + IconSize(KIconLoader::Small), 0, width, height() - 1),
@@ -150,30 +149,32 @@ ObjectTreeViewItem::setup()
 }
 
 void
-ObjectTreeViewItem::setOpen(bool o)
+ObjectTreeViewItem::setOpen(bool set)
 {
     //don't allow to collapse the node, user may be tricked because we're not displaying [+] marks
-    if (o)
-        K3ListViewItem::setOpen(o);
+    if (set)
+        K3ListViewItem::setOpen(set);
 }
 
 // ObjectTreeView itself ----------------
 
-ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
+ObjectTreeView::ObjectTreeView(QWidget *parent, Options options)
         : K3ListView(parent)
         , m_form(0)
 {
-    setObjectName(name);
-    addColumn(i18n("Name"), 130);
+    addColumn(i18n("Widget name"), 130);
     addColumn(i18nc("Widget's type", "Type"), 100);
 
     installEventFilter(this);
 
     connect((QObject*)header(), SIGNAL(sectionHandleDoubleClicked(int)), this, SLOT(slotColumnSizeChanged(int)));
-    if (!tabStop) {
+    if (!(options & DisableSelection)) {
         setSelectionModeExt(Extended);
         connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-        connect(this, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
+    }
+    if (!(options & DisableContextMenu)) {
+        connect(this, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint&)),
+            this, SLOT(displayContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)));
     }
 
     setFullWidth(true);
@@ -194,7 +195,7 @@ ObjectTreeView::sizeHint() const
 }
 
 QString
-ObjectTreeView::iconNameForClass(const Q3CString &classname)
+ObjectTreeView::iconNameForClass(const QByteArray &classname)
 {
     return m_form->library()->iconName(classname);
 }
@@ -270,8 +271,9 @@ ObjectTreeView::slotSelectionChanged()
     foreach(Q3ListViewItem *item, list) {
         ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
         QWidget *w = it->objectTree()->widget();
-        if (w && (m_form->selectedWidgets()->findRef(w) == -1))
+        if (w && !m_form->selectedWidgets()->contains(w)) {
             m_form->setSelectedWidget(w, true, true);
+        }
     }
     if (hadFocus)
         setFocus(); //restore focus
@@ -299,7 +301,7 @@ ObjectTreeView::removeItem(ObjectTreeItem *item)
 }
 
 void
-ObjectTreeView::renameItem(const Q3CString &oldname, const Q3CString &newname)
+ObjectTreeView::renameItem(const QByteArray &oldname, const QByteArray &newname)
 {
     if (findItem(newname))
         return;
@@ -358,8 +360,9 @@ ObjectTreeView::loadTree(ObjectTreeItem *item, ObjectTreeViewItem *parent)
     treeItem->moveItem(last);
 
     ObjectTreeList *list = item->children();
-    for (ObjectTreeItem *it = list->first(); it; it = list->next())
-        loadTree(it, treeItem);
+    foreach (ObjectTreeItem *titem, *list) {
+        loadTree(titem, treeItem);
+    }
 
     return treeItem;
 }

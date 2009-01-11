@@ -4,20 +4,22 @@
     <!--
         The "Resource Busy Information" collection provides scripts to handle rbi content in KPlato.
         //-->
+
     <collection name="Resource Busy Information" text="Resource Busy Information" comment="Handle resource busy information">
-        <script text="Import Resource Busy Information" comment="Python script to import busy information from file"
-                name="pyimportbusyinfo"
-                interpreter="python"
-                file="extensions/busyinfoimport.py" />
         <script text="Export Resource Busy Information" comment="Python script to export busy information to file"
                name="pyexportbusyinfo"
                interpreter="python"
                file="extensions/busyinfoexport.py" />
+        <script text="Import Resource Busy Information" comment="Python script to import busy information from file"
+                name="pyimportbusyinfo"
+                interpreter="python"
+                file="extensions/busyinfoimport.py" />
         <script text="Clear Resource Busy Information" comment="Python script to clear the imported resource busy information"
                name="pyclearbusyinfo"
                interpreter="python"
                file="extensions/busyinfoclear.py" />
     </collection>
+
     <collection name="import" text="Import" comment="Import content">
         <script text="Resources from KPlato File" comment="Python script to import resources from project file"
                name="pyimportresources"

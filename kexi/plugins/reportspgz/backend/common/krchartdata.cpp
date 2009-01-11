@@ -161,13 +161,13 @@ void KRChartData::createProperties()
     strings << i18n("Default") << i18n("Rainbow") << i18n("Subdued");
     _colorScheme = new KoProperty::Property("ColorScheme", stringkeys, strings, "default", i18n("Color Scheme"));
 
-    _threeD = new KoProperty::Property("ThreeD", QVariant(false, 0), "3D", "3D");
-    _aa = new KoProperty::Property("Antialiased", QVariant(false, 0), "Antialiased", "Antialiased");
+    _threeD = new KoProperty::Property("ThreeD", false, "3D", "3D");
+    _aa = new KoProperty::Property("Antialiased", false, "Antialiased", "Antialiased");
 
     _xTitle = new KoProperty::Property("XTitle", "", "X Axis Title", "X Axis Title");
     _yTitle = new KoProperty::Property("YTitle", "", "Y Axis Title", "Y Axis Title");
 
-    _displayLegend = new KoProperty::Property("DisplayLegend", QVariant(true, 0), "Display Legend", "Display Legend");
+    _displayLegend = new KoProperty::Property("DisplayLegend", true, "Display Legend", "Display Legend");
 
     _bgColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
 
@@ -469,7 +469,7 @@ void KRChartData::setLegend(bool le)
             _chartWidget->addLegend(KDChart::Position::East);
             _chartWidget->legend()->setOrientation(Qt::Horizontal);
             _chartWidget->legend()->setTitleText("Legend");
-            for (unsigned int i = 1; i < fn.count(); ++i) {
+            for (uint i = 1; i < (uint)fn.count(); ++i) {
                 _chartWidget->legend()->setText(i - 1, fn[i]);
             }
 

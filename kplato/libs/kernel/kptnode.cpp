@@ -662,9 +662,34 @@ QStringList Node::constraintList( bool trans ) {
 }
 
 void Node::propagateEarliestStart(DateTime &time) {
-    if (m_currentSchedule == 0)
+    if (m_currentSchedule == 0) {
         return;
-    m_currentSchedule->earlyStart = time;
+    }
+    if ( type() != Type_Project ) {
+        m_currentSchedule->earlyStart = time;
+        if ( m_currentSchedule->lateStart.isValid() && m_currentSchedule->lateStart < time ) {
+            m_currentSchedule->lateStart = time;
+        }
+        //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
+        switch ( m_constraint ) {
+            case FinishNotLater:
+            case MustFinishOn:
+                if ( m_constraintEndTime > time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            case MustStartOn:
+            case FixedInterval:
+                if ( m_constraintStartTime < time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            default:
+                break;
+        }
+    }
     //m_currentSchedule->logDebug( "propagateEarliestStart: " + time.toString() );
     switch ( m_constraint ) {
         case FinishNotLater:
@@ -690,9 +715,33 @@ void Node::propagateEarliestStart(DateTime &time) {
 }
 
 void Node::propagateLatestFinish(DateTime &time) {
-    if (m_currentSchedule == 0)
+    if (m_currentSchedule == 0) {
         return;
-    m_currentSchedule->lateFinish = time;
+    }
+    if ( type() != Type_Project ) {
+        m_currentSchedule->lateFinish = time;
+        if ( m_currentSchedule->earlyFinish.isValid() && m_currentSchedule->earlyFinish > time ) {
+            m_currentSchedule->earlyFinish = time;
+        }
+        switch ( m_constraint ) {
+            case StartNotEarlier:
+            case MustStartOn:
+                if ( m_constraintStartTime < time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: start constraint %2 < %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            case MustFinishOn:
+            case FixedInterval:
+                if ( m_constraintEndTime > time ) {
+                    m_currentSchedule->logWarning("Task constraint outside project constraint");
+                    m_currentSchedule->logDebug( QString( "%1: end constraint %2 > %3" ).arg( constraintToString( true ) ).arg( m_constraintEndTime.toString() ).arg( time.toString() ) );
+                }
+                break;
+            default:
+                break;
+        }
+    }
     switch ( m_constraint ) {
         case StartNotEarlier:
         case MustStartOn:
@@ -1008,8 +1057,7 @@ Schedule *Node::findSchedule(const QString name, const Schedule::Type type) {
 }
 
 Schedule *Node::findSchedule(const QString name) {
-    QList<Schedule*> it = m_schedules.values();
-    foreach (Schedule *sch, it) {
+    foreach (Schedule *sch, m_schedules) {
         if (!sch->isDeleted() && sch->name() == name)
             return sch;
     }
@@ -1620,7 +1668,7 @@ void Node::printDebug(bool children, const QByteArray& _indent) {
     } else {
         kDebug()<<indent<<"  Current schedule: None";
     }
-    foreach (Schedule *sch, m_schedules.values()) {
+    foreach (Schedule *sch, m_schedules) {
         sch->printDebug(indent+"  ");
     }
     kDebug()<<indent<<"  Parent:"<<(m_parent ? m_parent->name() : QString("None"));

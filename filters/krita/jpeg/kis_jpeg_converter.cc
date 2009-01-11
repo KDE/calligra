@@ -54,6 +54,7 @@ extern "C"
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_io_backend.h>
 #include <kis_paint_device.h>
+#include <kis_transform_worker.h>
 
 #include <colorprofiles/KoIccColorProfile.h>
 
@@ -278,24 +279,24 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             if (entry.value().type() == KisMetaData::Value::Variant) {
                 switch (entry.value().asVariant().toInt()) {
                 case 2:
-                    layer->paintDevice()->mirrorY();
+                    KisTransformWorker::mirrorY(layer->paintDevice());
                     break;
                 case 3:
                     image()->rotate(M_PI, 0);
                     break;
                 case 4:
-                    layer->paintDevice()->mirrorX();
+                    KisTransformWorker::mirrorX(layer->paintDevice());
                     break;
                 case 5:
                     image()->rotate(M_PI / 2, 0);
-                    layer->paintDevice()->mirrorY();
+                    KisTransformWorker::mirrorY(layer->paintDevice());
                     break;
                 case 6:
                     image()->rotate(M_PI / 2, 0);
                     break;
                 case 7:
                     image()->rotate(M_PI / 2, 0);
-                    layer->paintDevice()->mirrorX();
+                    KisTransformWorker::mirrorX(layer->paintDevice());
                     break;
                 case 8:
                     image()->rotate(-M_PI / 2 + M_PI*2, 0);

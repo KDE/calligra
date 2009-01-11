@@ -22,7 +22,6 @@
 #define LIBACTIONWIDGET_H
 
 #include <ktoggleaction.h>
-#include <Q3CString>
 
 #include <kexi_export.h>
 
@@ -49,14 +48,14 @@ signals:
     /**
      * emits a signal containing the class name
      */
-    void prepareInsert(const Q3CString &className);
+    void prepareInsert(const QByteArray &className);
 
 protected slots:
     /** reimplemented from KToggleAction */
     virtual void slotToggled(bool checked);
 
 private:
-    Q3CString m_className;
+    QByteArray m_className;
 };
 
 }

@@ -43,6 +43,7 @@
 
 // koffice libs includes
 #include <KoCopyController.h>
+#include <KoCutController.h>
 #include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
@@ -167,7 +168,8 @@ void KWView::setupActions()
     m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
     m_actionViewHeader->setToolTip(i18n("Shows and hides header display"));
     m_actionViewHeader->setWhatsThis(i18n("Selecting this option toggles the display of headers in KWord.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information."));
-    m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
+    if (m_currentPage.isValid())
+        m_actionViewHeader->setChecked(m_currentPage.pageStyle().headerPolicy() != KWord::HFTypeNone);
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(toggleHeader()));
 
     m_actionViewFooter = new KToggleAction(i18n("Enable Document Footers"), this);
@@ -175,7 +177,8 @@ void KWView::setupActions()
     m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip(i18n("Shows and hides footer display"));
     m_actionViewFooter->setWhatsThis(i18n("Selecting this option toggles the display of footers in KWord. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information."));
-    m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
+    if (m_currentPage.isValid())
+        m_actionViewFooter->setChecked(m_currentPage.pageStyle().footerPolicy() != KWord::HFTypeNone);
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(toggleFooter()));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
@@ -246,9 +249,11 @@ void KWView::setupActions()
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT(inlineFrame()));
 
+    // -------------- Edit actions
+    action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    new KoCutController(kwcanvas(), action);
     action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(kwcanvas(), action);
-
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(kwcanvas(), action);
 
@@ -316,7 +321,6 @@ void KWView::setupActions()
     action = new KToggleAction(i18n("Status Bar"), this);
     action->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", action);
-    //action->setChecked(statusBar()->isVisible());
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
     // -------------- Insert menu
@@ -330,10 +334,6 @@ void KWView::setupActions()
         actionCollection(), "extra_template" );
         m_actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
         m_actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
-
-        // -------------- Edit actions
-        m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
-        m_actionSpellCheck = actionCollection()->addAction(KStandardAction::Spelling,  "extra_spellcheck", this, SLOT( slotSpellCheck() ));
 
         (void) new KAction( i18n( "Configure Mail Merge..." ), "configure",0,
         this, SLOT( editMailMergeDataBase() ),
@@ -1196,9 +1196,18 @@ void KWView::selectionChanged()
     foreach (KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = frameForShape(shape);
         Q_ASSERT(frame);
-        m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
-        m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, frame->frameSet());
+        QVariant variant;
+        variant.setValue<void*>(frame);
+        m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, variant);
+        variant.setValue<void*>(frame->frameSet());
+        m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, variant);
         break;
     }
 }
 
+void KWView::sanityCheck()
+{
+    KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
+    if (action)
+        action->setChecked(statusBar()->isVisible());
+}

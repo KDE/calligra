@@ -24,10 +24,6 @@
 #include <qpainter.h>
 #include <qevent.h>
 #include <qobject.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QCloseEvent>
-#include <Q3ValueList>
 
 #include <kdeversion.h>
 #include <kaction.h>
@@ -574,7 +570,7 @@ FormWidgetBase::drawRects(const QList<QRect> &list, int type)
 void
 FormWidgetBase::drawRect(const QRect& r, int type)
 {
-    Q3ValueList<QRect> l;
+    QList<QRect> l;
     l.append(r);
     drawRects(l, type);
 }

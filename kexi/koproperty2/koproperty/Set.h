@@ -261,17 +261,24 @@ class KOPROPERTY_EXPORT Buffer : public Set
 
 public:
     Buffer();
-    Buffer(const Set& set);
+
+    Buffer(const KoProperty::Set& set);
+
 
     /*! Intersects with other Set.*/
-    virtual void intersect(const Set& set);
+
+
+    virtual void intersect(const KoProperty::Set& set);
+
 
 protected slots:
     void intersectedChanged(Set& set, Property& prop);
     void intersectedReset(Set& set, Property& prop);
 
 private:
-    void init(const Set& set);
+
+    void init(const KoProperty::Set& set);
+
 };
 
 //! @return property values for set @a set

@@ -21,16 +21,6 @@
 
 #include "widgetfactory.h"
 
-#include <qcursor.h>
-#include <qobject.h>
-#include <q3dict.h>
-#include <qmetaobject.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QEvent>
-#include <QKeyEvent>
-#include <QFrame>
-
 #include <kdebug.h>
 #include <klocale.h>
 //#ifdef KEXI_KTEXTEDIT
@@ -72,7 +62,7 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
 
 WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
                        const char* inheritedClassName)
-        : m_parentFactoryName(Q3CString("kformdesigner_") + parentFactoryName)
+        : m_parentFactoryName(QByteArray("kformdesigner_") + parentFactoryName)
         , m_inheritedClassName(inheritedClassName)
         , m_inheritedClass(0)
         , m_overriddenAlternateNames(0)
@@ -90,22 +80,22 @@ WidgetInfo::~WidgetInfo()
     delete m_customTypesForProperty;
 }
 
-void WidgetInfo::addAlternateClassName(const Q3CString& alternateName, bool override)
+void WidgetInfo::addAlternateClassName(const QByteArray& alternateName, bool override)
 {
     m_alternateNames += alternateName;
     if (override) {
         if (!m_overriddenAlternateNames)
-            m_overriddenAlternateNames = new Q3AsciiDict<char>(101);
-        m_overriddenAlternateNames->insert(alternateName, (char*)1);
+            m_overriddenAlternateNames = new QSet<QByteArray>;
+        m_overriddenAlternateNames->insert(alternateName);
     } else {
         if (m_overriddenAlternateNames)
-            m_overriddenAlternateNames->take(alternateName);
+            m_overriddenAlternateNames->remove(alternateName);
     }
 }
 
-bool WidgetInfo::isOverriddenClassName(const Q3CString& alternateName) const
+bool WidgetInfo::isOverriddenClassName(const QByteArray& alternateName) const
 {
-    return m_overriddenAlternateNames && (m_overriddenAlternateNames->find(alternateName) != 0);
+    return m_overriddenAlternateNames && m_overriddenAlternateNames->contains(alternateName);
 }
 
 void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
@@ -113,22 +103,22 @@ void WidgetInfo::setAutoSyncForProperty(const char *propertyName, tristate flag)
     if (!m_propertiesWithDisabledAutoSync) {
         if (~flag)
             return;
-        m_propertiesWithDisabledAutoSync = new Q3AsciiDict<char>(101);
+        m_propertiesWithDisabledAutoSync = new QHash<QByteArray, tristate>;
     }
 
     if (~flag) {
         m_propertiesWithDisabledAutoSync->remove(propertyName);
     } else {
-        m_propertiesWithDisabledAutoSync->insert(propertyName, flag == true ? (char*)1 : (char*)2);
+        m_propertiesWithDisabledAutoSync->insert(propertyName, flag);
     }
 }
 
 tristate WidgetInfo::autoSyncForProperty(const char *propertyName) const
 {
-    char* flag = m_propertiesWithDisabledAutoSync ? m_propertiesWithDisabledAutoSync->find(propertyName) : 0;
-    if (!flag)
+    if (!m_propertiesWithDisabledAutoSync)
         return cancelled;
-    return flag == (char*)1 ? true : false;
+    tristate flag = m_propertiesWithDisabledAutoSync->value(propertyName);
+    return flag;
 }
 
 void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
@@ -136,7 +126,7 @@ void WidgetInfo::setCustomTypeForProperty(const char *propertyName, int type)
     if (!propertyName || type == (int)KoProperty::Auto)
         return;
     if (!m_customTypesForProperty) {
-        m_customTypesForProperty = new QMap<Q3CString, int>();
+        m_customTypesForProperty = new QHash<QByteArray, int>();
     }
     m_customTypesForProperty->remove(propertyName);
     m_customTypesForProperty->insert(propertyName, type);
@@ -146,7 +136,7 @@ int WidgetInfo::customTypeForProperty(const char *propertyName) const
 {
     if (!m_customTypesForProperty || !m_customTypesForProperty->contains(propertyName))
         return KoProperty::Auto;
-    return (*m_customTypesForProperty)[propertyName];
+    return m_customTypesForProperty->value(propertyName);
 }
 
 
@@ -157,25 +147,25 @@ WidgetFactory::WidgetFactory(QObject *parent, const char *name)
 {
     setObjectName(QString("kformdesigner_") + name);
     m_showAdvancedProperties = true;
-    m_classesByName.setAutoDelete(true);
     m_hiddenClasses = 0;
     m_guiClient = 0;
 }
 
 WidgetFactory::~WidgetFactory()
 {
+    qDeleteAll(m_classesByName);
     delete m_hiddenClasses;
 }
 
 void WidgetFactory::addClass(WidgetInfo *w)
 {
-    WidgetInfo *oldw = m_classesByName[w->className()];
+    WidgetInfo *oldw = m_classesByName.value(w->className());
     if (oldw == w)
         return;
     if (oldw) {
-        kWarning() << "WidgetFactory::addClass(): class with name '"
-        << w->className()
-        << "' already exists for factory '" << objectName() << "'";
+        kWarning() << "class with name '"
+            << w->className()
+            << "' already exists for factory '" << objectName() << "'";
         return;
     }
     m_classesByName.insert(w->className(), w);
@@ -184,12 +174,12 @@ void WidgetFactory::addClass(WidgetInfo *w)
 void WidgetFactory::hideClass(const char *classname)
 {
     if (!m_hiddenClasses)
-        m_hiddenClasses = new Q3AsciiDict<char>(101, false);
-    m_hiddenClasses->insert(classname, (char*)1);
+        m_hiddenClasses = new QSet<QByteArray>;
+    m_hiddenClasses->insert(QByteArray(classname).toLower());
 }
 
 void
-WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
+WidgetFactory::createEditor(const QByteArray &classname, const QString &text,
                             QWidget *w, Container *container, QRect geometry,
                             Qt::Alignment alignment, bool useFrame, bool multiLine, 
                             Qt::BackgroundMode background)
@@ -263,7 +253,9 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
                          ? subpropIface->subwidget() : w;
     if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(m_editor, "margin") &&
             -1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, "margin"))
+    {
         m_editor->setProperty("margin", subwidget->property("margin"));
+    }
 //#endif
 //js m_handles = new ResizeHandleSet(w, container->form(), true);
     m_handles = container->form()->resizeHandlesForWidget(w);
@@ -352,12 +344,15 @@ WidgetFactory::editRichText(QWidget *w, QString &text)
     return false;
 }
 
+#ifndef KEXI_FORMS_NO_LIST_WIDGET
 void
-WidgetFactory::editListView(Q3ListView *listview)
+WidgetFactory::editListWidget(QListWidget *listwidget)
 {
-    EditListViewDialog dlg(((QWidget*)listview)->topLevelWidget());
+    EditListViewDialog dlg(((QWidget*)listwidget)->topLevelWidget());
+//! @todo
     //dlg.exec(listview);
 }
+#endif
 
 bool
 WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
@@ -428,7 +423,7 @@ WidgetFactory::resetEditor()
     if (m_widget) {
         ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->objectName()) : 0;
         if (!tree) {
-            kDebug() << "WidgetFactory::resetEditor() : error cannot found a tree item ";
+            kDebug() << "error cannot found a tree item ";
             return;
         }
         tree->eventEater()->setContainer(m_container);
@@ -538,8 +533,8 @@ WidgetFactory::addValueDescription(Container *container, const char *value, cons
 }*/
 
 bool
-WidgetFactory::isPropertyVisible(const Q3CString &classname, QWidget *w,
-                                 const Q3CString &property, bool multiple, bool isTopLevel)
+WidgetFactory::isPropertyVisible(const QByteArray &classname, QWidget *w,
+                                 const QByteArray &property, bool multiple, bool isTopLevel)
 {
     if (multiple) {
         return property == "font" || property == "paletteBackgroundColor" || property == "enabled"
@@ -557,8 +552,8 @@ WidgetFactory::isPropertyVisible(const Q3CString &classname, QWidget *w,
 }
 
 bool
-WidgetFactory::isPropertyVisibleInternal(const Q3CString &, QWidget *w,
-        const Q3CString &property, bool isTopLevel)
+WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
+        const QByteArray &property, bool isTopLevel)
 {
     Q_UNUSED(w);
 
@@ -578,7 +573,7 @@ WidgetFactory::isPropertyVisibleInternal(const Q3CString &, QWidget *w,
 
 bool
 WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(
-    const Q3CString& classname, QWidget *w, const Q3CString& property)
+    const QByteArray& classname, QWidget *w, const QByteArray& property)
 {
     Q_UNUSED(classname);
     Q_UNUSED(w);
@@ -587,7 +582,7 @@ WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(
 }
 
 void
-WidgetFactory::resizeEditor(QWidget *, QWidget *, const Q3CString&)
+WidgetFactory::resizeEditor(QWidget *, QWidget *, const QByteArray&)
 {
 }
 
@@ -598,7 +593,7 @@ WidgetFactory::slotTextChanged()
 }
 
 bool
-WidgetFactory::clearWidgetContent(const Q3CString &, QWidget *)
+WidgetFactory::clearWidgetContent(const QByteArray &, QWidget *)
 {
     return false;
 }
@@ -610,7 +605,7 @@ WidgetFactory::changeTextInternal(const QString& text)
         return;
     //try in inherited
     if (!m_editedWidgetClass.isEmpty()) {
-        WidgetInfo *wi = m_classesByName[ m_editedWidgetClass ];
+        WidgetInfo *wi = m_classesByName.value( m_editedWidgetClass );
         if (wi && wi->inheritedClass()) {
 //   wi->inheritedClass()->factory()->m_container = m_container;
             wi->inheritedClass()->factory()->changeText(text);
@@ -626,21 +621,21 @@ WidgetFactory::changeText(const QString& text)
 }
 
 bool
-WidgetFactory::readSpecialProperty(const Q3CString &, QDomElement &, QWidget *, ObjectTreeItem *)
+WidgetFactory::readSpecialProperty(const QByteArray &, QDomElement &, QWidget *, ObjectTreeItem *)
 {
     return false;
 }
 
 bool
-WidgetFactory::saveSpecialProperty(const Q3CString &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
+WidgetFactory::saveSpecialProperty(const QByteArray &, const QString &, const QVariant&, QWidget *, QDomElement &,  QDomDocument &)
 {
     return false;
 }
 
 bool WidgetFactory::inheritsFactories()
 {
-    for (Q3AsciiDictIterator<WidgetInfo> it(m_classesByName); it.current(); ++it) {
-        if (!it.current()->parentFactoryName().isEmpty())
+    foreach (WidgetInfo *winfo, m_classesByName) {
+        if (!winfo->parentFactoryName().isEmpty())
             return true;
     }
     return false;
@@ -649,7 +644,8 @@ bool WidgetFactory::inheritsFactories()
 QString WidgetFactory::editorText() const
 {
     QWidget *ed = editor(m_widget);
-    return dynamic_cast<KTextEdit*>(ed) ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
+    return dynamic_cast<KTextEdit*>(ed)
+        ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
 }
 
 void WidgetFactory::setEditorText(const QString& text)
@@ -665,7 +661,7 @@ void WidgetFactory::setEditor(QWidget *widget, QWidget *editor)
 {
     if (!widget)
         return;
-    WidgetInfo *winfo = m_classesByName[widget->metaObject()->className()];
+    WidgetInfo *winfo = m_classesByName.value(widget->metaObject()->className());
     if (!winfo || winfo->parentFactoryName().isEmpty()) {
         m_editor = editor;
     } else {
@@ -680,7 +676,7 @@ QWidget *WidgetFactory::editor(QWidget *widget) const
 {
     if (!widget)
         return 0;
-    WidgetInfo *winfo = m_classesByName[widget->metaObject()->className()];
+    WidgetInfo *winfo = m_classesByName.value(widget->metaObject()->className());
     if (!winfo || winfo->parentFactoryName().isEmpty()) {
         return m_editor;
     } else {
@@ -695,7 +691,7 @@ QWidget *WidgetFactory::editor(QWidget *widget) const
 void WidgetFactory::setWidget(QWidget *widget, Container* container)
 {
     WidgetInfo *winfo = widget
-                        ? m_classesByName[widget->metaObject()->className()] : 0;
+        ? m_classesByName.value(widget->metaObject()->className()) : 0;
     if (winfo && !winfo->parentFactoryName().isEmpty()) {
         WidgetFactory *f = m_library->factory(winfo->parentFactoryName());
         if (f != this)
@@ -710,10 +706,10 @@ QWidget *WidgetFactory::widget() const
     return m_widget;
 }
 
-void WidgetFactory::setInternalProperty(const Q3CString& classname, const Q3CString& property,
+void WidgetFactory::setInternalProperty(const QByteArray& classname, const QByteArray& property,
                                         const QString& value)
 {
-    m_internalProp[classname+":"+property] = value;
+    m_internalProp.insert(classname+":"+property, value);
 }
 
 void WidgetFactory::setPropertyOptions(WidgetPropertySet& /*buf*/, const WidgetInfo& /*info*/, QWidget * /*w*/)

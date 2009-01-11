@@ -187,8 +187,6 @@ Map::~Map()
 
     delete d->defaultColumnFormat;
     delete d->defaultRowFormat;
-  qDeleteAll( d->lstSheets );
-  qDeleteAll( d->lstDeletedSheets );
   delete d;
 }
 

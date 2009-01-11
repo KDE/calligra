@@ -18,6 +18,9 @@
  */
 
 #include "KWDocumentColumns.h"
+#include <KoPagePreviewWidget.h>
+
+#include <KoPageLayout.h>
 
 KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
         : QWidget(parent)
@@ -27,8 +30,14 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     setColumns(columns);
     setUnit(KoUnit(KoUnit::Millimeter));
 
+    QGridLayout *layout = new QGridLayout(widget.previewPane);
+    widget.previewPane->setLayout(layout);
+    m_preview = new KoPagePreviewWidget(this);
+    layout->addWidget(m_preview);
+
     connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
     connect(widget.spacing, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
+    connect(this, SIGNAL(columnsChanged(const KoColumns&)), m_preview, SLOT(setColumns(const KoColumns&)));
 }
 
 void KWDocumentColumns::setColumns(const KoColumns &columns)
@@ -62,3 +71,7 @@ void KWDocumentColumns::optionsChanged()
     emit columnsChanged(m_columns);
 }
 
+void KWDocumentColumns::setShowPreview(bool on)
+{
+    widget.previewPane->setVisible(on);
+}

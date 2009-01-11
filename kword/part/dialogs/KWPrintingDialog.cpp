@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -59,9 +59,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
     QRectF pageRect = page.rect(pageNumber);
     pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
 
-#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
-#endif
     const qreal offsetInDocument = page.offsetInDocument();
     // find images
     foreach (KWFrameSet *fs, m_document->frameSets()) {
@@ -127,6 +125,14 @@ int KWPrintingDialog::documentFirstPage() const
 int KWPrintingDialog::documentLastPage() const
 {
     return m_document->pageManager()->last().pageNumber();
+}
+
+QAbstractPrintDialog::PrintDialogOptions KWPrintingDialog::printDialogOptions() const
+{
+    return QAbstractPrintDialog::PrintToFile |
+           QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCollateCopies |
+           QAbstractPrintDialog::DontUseSheet;
 }
 
 // options;

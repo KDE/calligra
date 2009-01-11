@@ -206,11 +206,11 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
     Q_UNUSED(removeOld);
 
     if (isReadOnly()) {
-        kexipluginsdbg << "KexiFormScrollView::createEditor(): DATA IS READ ONLY!";
+        kWarning() << "DATA IS READ ONLY!";
         return;
     }
     if (column(col)->isReadOnly()) {
-        kexipluginsdbg << "KexiFormScrollView::createEditor(): COL IS READ ONLY!";
+        kWarning() << "COL IS READ ONLY!";
         return;
     }
 
@@ -401,19 +401,19 @@ int KexiFormScrollView::columns() const
 
 bool KexiFormScrollView::columnEditable(int col)
 {
-    kexipluginsdbg << "KexiFormScrollView::columnEditable(" << col << ")";
+    kDebug() << "col=" << col;
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
-        kexipluginsdbg << (dynamic_cast<QWidget*>(dataItemIface)
-                           ? dynamic_cast<QWidget*>(dataItemIface)->objectName() : "")
-        << " " << dataItemIface->dataSource();
+        kDebug() << (dynamic_cast<QWidget*>(dataItemIface)
+                     ? dynamic_cast<QWidget*>(dataItemIface)->objectName() : "")
+            << " " << dataItemIface->dataSource();
     }
-    kexipluginsdbg << "-- focus widgets --";
+    kDebug() << "-- focus widgets --";
     foreach(QWidget* widget, *dbFormWidget()->orderedFocusWidgets()) {
-        kexipluginsdbg << widget->objectName();
+        kDebug() << widget->objectName();
     }
-    kexipluginsdbg << "-- data-aware widgets --";
+    kDebug() << "-- data-aware widgets --";
     foreach(QWidget *widget, *dbFormWidget()->orderedDataAwareWidgets()) {
-        kexipluginsdbg << widget->objectName();
+        kDebug() << widget->objectName();
     }
 
     //int index = dbFormWidget()->indexForDataItem( item );
@@ -434,13 +434,12 @@ void KexiFormScrollView::valueChanged(KexiDataItemInterface* item)
     if (!item)
         return;
     //only signal start editing when no row editing was started already
-    kexipluginsdbg << "** KexiFormScrollView::valueChanged(): editedItem="
-    << (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString())
-    << ", "
-    << (item ? item->value().toString() : QString())
-;
+    kDebug() << "** editedItem="
+        << (dbFormWidget()->editedItem ? dbFormWidget()->editedItem->value().toString() : QString())
+        << ", "
+        << (item ? item->value().toString() : QString());
     if (dbFormWidget()->editedItem != item) {
-        kexipluginsdbg << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
+        kDebug() << "**>>> dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item)";
         dbFormWidget()->editedItem = dynamic_cast<KexiFormDataItemInterface*>(item);
         startEditCurrentCell();
     }
@@ -512,9 +511,9 @@ void KexiFormScrollView::updateAfterCancelRowEdit()
 {
     foreach(KexiFormDataItemInterface *dataItemIface, m_dataItems) {
         if (dynamic_cast<QWidget*>(dataItemIface)) {
-            kexipluginsdbg << "KexiFormScrollView::updateAfterCancelRowEdit(): "
-            << dynamic_cast<QWidget*>(dataItemIface)->className() << " "
-            << dynamic_cast<QWidget*>(dataItemIface)->objectName();
+            kDebug()
+                << dynamic_cast<QWidget*>(dataItemIface)->metaObject()->className() << " "
+                << dynamic_cast<QWidget*>(dataItemIface)->objectName();
         }
         const bool displayDefaultValue = shouldDisplayDefaultValueForItem(dataItemIface);
         dataItemIface->undoChanges();

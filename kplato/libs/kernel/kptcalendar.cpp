@@ -396,17 +396,13 @@ CalendarWeekdays::CalendarWeekdays( const CalendarWeekdays *weekdays )
 }
 
 CalendarWeekdays::~CalendarWeekdays() {
-    foreach ( CalendarDay *d, m_weekdays.values() ) {
-        delete d;
-    }
+    qDeleteAll( m_weekdays );
     //kDebug();
 }
 
 const CalendarWeekdays &CalendarWeekdays::copy(const CalendarWeekdays &weekdays) {
     //kDebug();
-    foreach ( CalendarDay *d, m_weekdays.values() ) {
-        delete d;
-    }
+    qDeleteAll( m_weekdays );
     m_weekdays.clear();
     QMapIterator<int, CalendarDay*> i( weekdays.weekdayMap() );
     while ( i.hasNext() ) {
@@ -548,7 +544,7 @@ bool CalendarWeekdays::hasInterval(const QDate date, const QTime &start, int len
 bool CalendarWeekdays::hasInterval() const
 {
     //kDebug();
-    foreach ( CalendarDay *d, m_weekdays.values() ) {
+    foreach ( CalendarDay *d, m_weekdays ) {
         if (d->hasInterval())
             return true;
     }
@@ -561,7 +557,7 @@ CalendarDay *CalendarWeekdays::weekday( int day ) const {
 
 Duration CalendarWeekdays::duration() const {
     Duration dur;
-    foreach ( CalendarDay *d, m_weekdays.values() ) {
+    foreach ( CalendarDay *d, m_weekdays ) {
         dur += d->duration();
     }
     return dur;
@@ -1291,7 +1287,7 @@ void CalendarDay::printDebug(const QString& _indent) {
 void CalendarWeekdays::printDebug(const QString& indent) {
     kDebug()<<indent<<"Weekdays ------";
     int c=1;
-    foreach ( CalendarDay *d, m_weekdays.values() ) {
+    foreach ( CalendarDay *d, m_weekdays ) {
         d->printDebug(indent + "  Day " + c++ + ": ");
     }
 

@@ -433,13 +433,16 @@ bool ItemModelBase::dropAllowed( const QModelIndex &index, int, const QMimeData 
     return false;
 }
 
+
 bool ItemModelBase::setData( const QModelIndex &index, const QVariant &value, int role )
 {
     if ( role == Role::ReadWrite ) {
         setReadWrite( value.toBool() );
         return true;
     }
+    return false;
 }
+
 
 } //namespace KPlato
 

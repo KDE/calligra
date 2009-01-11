@@ -815,7 +815,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 CellToolBase::~CellToolBase()
 {
     delete d->popupListChoose;
-    qDeleteAll(d->popupMenuActions.values());
+    qDeleteAll(d->popupMenuActions);
     qDeleteAll(actions());
     delete d;
 }
@@ -1228,6 +1228,10 @@ void CellToolBase::selectionChanged(const Region& region)
     if (!d->locationComboBox) {
         return;
     }
+    // if we're in ref viewing mode, do nothing here
+    if (editor() && selection()->referenceSelection() && (!selection()->referenceSelectionMode()))
+      return;
+
     const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
     if (!cell) {
         return;

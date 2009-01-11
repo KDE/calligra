@@ -26,6 +26,7 @@
 
 // koffice
 #include <KoShapeRegistry.h>
+#include <KoInlineNote.h>
 #include <KoShapeFactory.h>
 #include <KoShapeContainer.h>
 #include <KoStyleManager.h>
@@ -69,11 +70,11 @@ bool KWDLoader::load(KoXmlElement &root)
 
     QString mime = root.attribute("mime");
     if (mime.isEmpty()) {
-        kError(32001) << "No mime type specified!" << endl;
+        kError(32001) << "No mime type specified!";
         m_document->setErrorMessage(i18n("Invalid document. No mimetype specified."));
         return false;
     } else if (mime != "application/x-kword" && mime != "application/vnd.kde.kword") {
-        kError(32001) << "Unknown mime type " << mime << endl;
+        kError(32001) << "Unknown mime type " << mime;
         m_document->setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kword or application/vnd.kde.kword, got %1" , mime));
         return false;
     }
@@ -196,9 +197,9 @@ bool KWDLoader::load(KoXmlElement &root)
             if (pgLayout.bottom == 0.0)
                 pgLayout.bottom = paperborders.attribute("bottom").toDouble();
         } else
-            kWarning() << "No <PAPERBORDERS> tag!" << endl;
+            kWarning() << "No <PAPERBORDERS> tag!";
     } else
-        kWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes..." << endl;
+        kWarning() << "No <PAPER> tag! This is a mandatory tag! Expect weird page sizes...";
 
     m_pageManager->pageStyle("Standard").setPageLayout(pgLayout);
 
@@ -348,6 +349,7 @@ bool KWDLoader::load(KoXmlElement &root)
     emit sigProgress(85);
 
     insertAnchors();
+    insertNotes();
 
 #if 0
 
@@ -421,76 +423,69 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
              */
             return; // TODO support backwards compatible tables
         } else {
-            if (framesetElem.attribute("frameInfo").toInt() == 7) { // of type FOOTNOTE
-                return; // TODO support old footnote frameset
-                /*
-                                if ( !loadFootnote )
-                                    return 0;
-                                // Footnote -> create a KWFootNoteFrameSet
-                                KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( this, fsname );
-                                fs->load( framesetElem, loadFrames );
-                                addFrameSet(fs, false);
-                                return fs; */
 
-            } else { // Normal text frame
-                KWord::TextFrameSetType type;
-                KWPageStyle styleForFS;
-                switch (framesetElem.attribute("frameInfo").toInt()) {
-                case 0: // body
-                    type = m_foundMainFS ? KWord::OtherTextFrameSet : KWord::MainTextFrameSet;
-                    m_foundMainFS = true;
-                    break;
-                case 1: // first header
-                    if (! m_firstPageStyle.isValid())
-                        return; // we don't need this FS.
-                    styleForFS = m_firstPageStyle;
-                    type = KWord::OddPagesHeaderTextFrameSet; break;
-                case 2: // even header
-                    styleForFS = m_pageStyle;
-                    type = KWord::EvenPagesHeaderTextFrameSet; break;
-                case 3: // odd header
-                    styleForFS = m_pageStyle;
-                    type = KWord::OddPagesHeaderTextFrameSet; break;
-                case 4: // first footer
-                    if (! m_firstPageStyle.isValid())
-                        return; // we don't need this FS.
-                    styleForFS = m_firstPageStyle;
-                    type = KWord::OddPagesFooterTextFrameSet; break;
-                case 5: // even footer
-                    styleForFS = m_pageStyle;
-                    type = KWord::EvenPagesFooterTextFrameSet; break;
-                case 6: // odd footer
-                    styleForFS = m_pageStyle;
-                    type = KWord::OddPagesFooterTextFrameSet; break;
-                case 7: // footnote
-                    type = KWord::FootNoteTextFrameSet; break;
-                default:
-                    type = KWord::OtherTextFrameSet; break;
-                }
-                KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
-                fs->setAllowLayout(false);
-                fs->setName(fsname);
-                fs->setPageStyle(styleForFS);
-                fill(fs, framesetElem);
-                m_document->addFrameSet(fs);
-
-                // Old file format had autoCreateNewFrame as a frameset attribute
-                if (framesetElem.hasAttribute("autoCreateNewFrame")) {
-                    KWord::FrameBehavior behav;
-                    switch (framesetElem.attribute("autoCreateNewFrame").toInt()) {
-                    case 1: behav = KWord::AutoCreateNewFrameBehavior; break;
-                    case 2: behav = KWord::IgnoreContentFrameBehavior; break;
-                    default: behav = KWord::AutoExtendFrameBehavior; break;
-                    }
-                    foreach (KWFrame *frame, fs->frames())
-                        frame->setFrameBehavior(behav);
-                }
-                return;
+            KWord::TextFrameSetType type;
+            KWPageStyle styleForFS;
+            switch (framesetElem.attribute("frameInfo").toInt()) {
+            case 0: // body
+                type = m_foundMainFS ? KWord::OtherTextFrameSet : KWord::MainTextFrameSet;
+                m_foundMainFS = true;
+                break;
+            case 1: // first header
+                if (! m_firstPageStyle.isValid())
+                    return; // we don't need this FS.
+                styleForFS = m_firstPageStyle;
+                type = KWord::OddPagesHeaderTextFrameSet; break;
+            case 2: // even header
+                styleForFS = m_pageStyle;
+                type = KWord::EvenPagesHeaderTextFrameSet; break;
+            case 3: // odd header
+                styleForFS = m_pageStyle;
+                type = KWord::OddPagesHeaderTextFrameSet; break;
+            case 4: // first footer
+                if (! m_firstPageStyle.isValid())
+                    return; // we don't need this FS.
+                styleForFS = m_firstPageStyle;
+                type = KWord::OddPagesFooterTextFrameSet; break;
+            case 5: // even footer
+                styleForFS = m_pageStyle;
+                type = KWord::EvenPagesFooterTextFrameSet; break;
+            case 6: // odd footer
+                styleForFS = m_pageStyle;
+                type = KWord::OddPagesFooterTextFrameSet; break;
+            case 7: // footnote
+                 // FS will be deleted soon...
+            default:
+                type = KWord::OtherTextFrameSet; break;
             }
+            KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
+            fs->setAllowLayout(false);
+            fs->setName(fsname);
+            fs->setPageStyle(styleForFS);
+            fill(fs, framesetElem);
+            m_document->addFrameSet(fs);
+
+
+
+            // Old file format had autoCreateNewFrame as a frameset attribute
+            if (framesetElem.hasAttribute("autoCreateNewFrame")) {
+                KWord::FrameBehavior behav;
+                switch (framesetElem.attribute("autoCreateNewFrame").toInt()) {
+                case 1: behav = KWord::AutoCreateNewFrameBehavior; break;
+                case 2: behav = KWord::IgnoreContentFrameBehavior; break;
+                default: behav = KWord::AutoExtendFrameBehavior; break;
+
+                }
+
+                foreach (KWFrame *frame, fs->frames())
+                    frame->setFrameBehavior(behav);
+
+            }
+            return;
         }
     }
     case 5: { // FT_CLIPART
-        kError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)" << endl;
+        kError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)";
         // Do not break!
     }
     case 2: { // FT_PICTURE
@@ -545,17 +540,25 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
     // and FT_TABLE can't happen either.
     case 3: // FT_PART
-        kWarning(32001) << "loadFrameSet: FT_PART: impossible case" << endl;
+
+        kWarning(32001) << "loadFrameSet: FT_PART: impossible case";
         return;
+
     case 10: // FT_TABLE
-        kWarning(32001) << "loadFrameSet: FT_TABLE: impossible case" << endl;
+
+        kWarning(32001) << "loadFrameSet: FT_TABLE: impossible case";
         return;
+
     case 0: // FT_BASE
-        kWarning(32001) << "loadFrameSet: FT_BASE !?!?" << endl;
+
+        kWarning(32001) << "loadFrameSet: FT_BASE !?!?";
         return;
+
     default: // other
-        kWarning(32001) << "loadFrameSet error: unknown type, skipping" << endl;
+
+        kWarning(32001) << "loadFrameSet error: unknown type, skipping";
         return;
+
     }
 }
 
@@ -695,7 +698,62 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                     } else if (id == "2") {
                         kWarning("File to old, image can not be recovered\n");
                     } else if (id == "4") {
-                        // load variable // TODO
+                        KoXmlElement variable = format.namedItem("VARIABLE").toElement();
+                        if (variable.isNull()) {
+                            kWarning() << "Missing VARIABLE tag\n";
+                            continue;
+                        }
+                        KoXmlElement type = variable.namedItem("TYPE").toElement();
+                        int typeId = type.attribute("type", "1").toInt();
+                        switch(typeId) {
+                        case 11: { // footnote
+                            KoXmlElement footnote = variable.namedItem("FOOTNOTE").toElement();
+                            KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+                            note->setLabel(footnote.attribute("value"));
+                            note->setAutoNumbering( footnote.attribute("numberingtype", "auto") == "auto" );
+                            note->setText("Unable to locate footnote text");
+                            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
+                                    fs->document()->documentLayout());
+                            Q_ASSERT(layout);
+                            Q_ASSERT(layout->inlineObjectTextManager());
+                            layout->inlineObjectTextManager()->insertInlineObject(formatCursor, note);
+                            NotesData notesData;
+                            notesData.note = note;
+                            notesData.frameSetName = footnote.attribute("frameset");
+                            m_notes.append(notesData);
+                            break;
+                        }
+                        case 10: { // note
+                            KoXmlElement footEndNote = variable.namedItem("NOTE").toElement();
+
+                            KoInlineNote::Type type = footEndNote.attribute("notetype") == "footnote"
+                                        ? KoInlineNote::Footnote : KoInlineNote::Endnote;
+                            KoInlineNote *note = new KoInlineNote(type);
+                            note->setLabel(footEndNote.attribute("value"));
+                            note->setAutoNumbering( footEndNote.attribute("numberingtype", "auto") == "auto" );
+                            note->setText("Unable to locate note-text");
+                            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
+                                    fs->document()->documentLayout());
+                            Q_ASSERT(layout);
+                            Q_ASSERT(layout->inlineObjectTextManager());
+                            layout->inlineObjectTextManager()->insertInlineObject(formatCursor, note);
+                            NotesData notesData;
+                            notesData.note = note;
+                            notesData.frameSetName = footEndNote.attribute("frameset");
+                            m_notes.append(notesData);
+                            break;
+                        }
+                        case 0: // date TODO
+                        case 2: // fixed time TODO
+                        case 4: // page number TODO
+                        case 8: // field TODO
+                        case 9: // link TODO
+                        case 12: // statistic TODO
+                        default: {
+                            QString replacementText = type.attribute("text");
+                            formatCursor.insertText(replacementText);
+                        }
+                        }
                     } else if (id == "5") {
                         kWarning("File to old, footnote can not be recovered\n");
                     } else if (id == "6") { // anchor for floating frame.
@@ -1136,7 +1194,7 @@ void KWDLoader::insertAnchors()
     foreach (const AnchorData &anchor, m_anchors) {
         KWFrameSet *fs = m_document->frameSetByName(anchor.frameSetName);
         if (fs == 0) {
-            kWarning() << "Anchored frameset not found: '" << anchor.frameSetName << endl;
+            kWarning() << "Anchored frameset not found: '" << anchor.frameSetName;
             continue;
         }
         if (fs->frames().count() == 0)  continue;
@@ -1158,3 +1216,21 @@ void KWDLoader::insertAnchors()
     m_anchors.clear();
 }
 
+void KWDLoader::insertNotes()
+{
+    foreach (const NotesData &note, m_notes) {
+        KWFrameSet *fs = m_document->frameSetByName(note.frameSetName);
+        if (fs == 0) {
+            kWarning() << "Frameset data for note not found: '" << note.frameSetName;
+            continue;
+        }
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        if (tfs && tfs->document()) {
+            note.note->setText(tfs->document()->toPlainText());
+kDebug() << "setting the text to" << note.note->text();
+        }
+        m_document->removeFrameSet(fs);
+        delete fs; // we don't want to keep it around.
+    }
+    m_notes.clear();
+}

@@ -70,5 +70,6 @@ Type=Application
 Icon=kformula
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.formula
 X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.koffice.kformula
 X-DocPath=kformula/index.html
 Categories=Qt;KDE;Office;X-KDE-More;

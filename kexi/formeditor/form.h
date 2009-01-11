@@ -22,10 +22,7 @@
 #ifndef KFORMDESIGNERFORM_H
 #define KFORMDESIGNERFORM_H
 
-#include <qobject.h>
-#include <q3ptrlist.h>
-#include <Q3ValueList>
-#include <Q3CString>
+#include <QList>
 
 #include "resizehandle.h"
 #include "utils.h"
@@ -93,8 +90,8 @@ public:
     ObjectTree  *topTree;
     QPointer<QWidget> widget;
 
-    WidgetList  selected;
-    ResizeHandleSet::Dict resizeHandles;
+    QWidgetList selected;
+    ResizeHandleSet::Hash resizeHandles;
 
     bool  dirty;
     bool  interactive;
@@ -111,7 +108,7 @@ public:
     PixmapCollection  *pixcollection;
 
     //! This map is used to store cursor shapes before inserting (so we can restore them later)
-    QMap<QObject*, QCursor> cursors;
+    QHash<QObject*, QCursor> cursors;
 
     //!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
     QStringList *mouseTrackers;
@@ -120,7 +117,7 @@ public:
 
     //! A set of head properties to be stored in a .ui file.
     //! This includes KFD format version.
-    QMap<Q3CString, QString> headerProperties;
+    QHash<QByteArray, QString> headerProperties;
 
     //! Format version, set by FormIO or on creating a new form.
     uint formatVersion;
@@ -156,7 +153,7 @@ public:
      form->createToplevel(toplevel); \endcode
      */
     void createToplevel(QWidget *container, FormWidget *formWidget = 0,
-                        const Q3CString &classname = "QWidget");
+                        const QByteArray &classname = "QWidget");
 
     /*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
        has not been called yet. */
@@ -194,10 +191,10 @@ public:
     /*! \return The \ref Container which is a parent of all widgets in \a wlist.
      Used by \ref activeContainer(), and to find where
      to paste widgets when multiple widgets are selected. */
-    ObjectTreeItem* commonParentContainer(WidgetList *wlist);
+    ObjectTreeItem* commonParentContainer(const QWidgetList &wlist);
 
     //! \return the list of currently selected widgets in this form
-    WidgetList* selectedWidgets() const {
+    QWidgetList* selectedWidgets() const {
         return &(d->selected);
     }
 
@@ -304,9 +301,9 @@ public:
         return &(d->tabstops);
     }
 
-    inline ObjectTreeListIterator tabStopsIterator() const {
+/*    inline ObjectTreeListIterator tabStopsIterator() const {
         return ObjectTreeListIterator(d->tabstops);
-    }
+    }*/
 
     /*! Called (e.g. by KexiDBForm) when certain widgets can have updated focusPolicy properties
      these having no TabFocus flags set are removed from tabStops() list. */
@@ -350,7 +347,7 @@ public:
 
     /*! A set of value/key pairs provided to be stored as attributes in
      <kfd:customHeader/> XML element (saved as a first child of \<UI> element). */
-    QMap<Q3CString, QString>* headerProperties() const {
+    QHash<QByteArray, QString>* headerProperties() const {
         return &d->headerProperties;
     }
 
@@ -368,7 +365,7 @@ public slots:
     /*! This slot is called when the name of a widget was changed in Property Editor.
     It renames the ObjectTreeItem associated to this widget.
      */
-    void changeName(const Q3CString &oldname, const Q3CString &newname);
+    void changeName(const QByteArray &oldname, const QByteArray &newname);
 
     /*! Sets \a selected to be the selected widget of this Form.
      If \a add is true, the formerly selected widget is still selected,
@@ -399,7 +396,7 @@ protected slots:
 
     /*! This slot is called when a command is executed. The undo/redo signals
       are emitted to update actions. */
-    void slotCommandExecuted();
+    void slotCommandExecuted(K3Command *command);
 
     /*! This slot is called when form is restored, ie when the user has undone
       all actions. The form modified flag is updated, and

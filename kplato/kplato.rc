@@ -84,6 +84,9 @@
         <Separator/>
         <ActionList name="calendareditor_day_list"/>
     </ToolBar>
+    <Menu name="task_edit_popup">
+        <Action name="node_properties"/>
+    </Menu>
     <Menu name="task_popup">
         <Action name="node_properties"/>
         <Action name="task_progress"/>

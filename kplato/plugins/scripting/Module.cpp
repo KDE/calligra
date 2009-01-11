@@ -69,7 +69,7 @@ Module::Module(QObject* parent)
 
 Module::~Module()
 {
-    qDeleteAll( d->modules.values() );
+    qDeleteAll( d->modules );
     delete d->project;
     delete d;
 }

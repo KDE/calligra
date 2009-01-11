@@ -854,7 +854,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             bool v = false;
 
-            str = str.lower();
+            str = str.toLower();
 
             kDebug() << "Check Value:" << str;
             if (str == "t" || str == "true" || str == "1")

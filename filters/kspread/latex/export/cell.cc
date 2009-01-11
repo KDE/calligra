@@ -58,7 +58,7 @@ void Cell::analyze(const QDomNode node)
 void Cell::analyzeText(const QDomNode node)
 {
 	setTextDataType( getAttr(getChild(node, "text"), "dataType"));	
-	setText(getData(node, "text"));
+	setText(getAttr(getChild(node, "text"), "outStr"));
 	kDebug(30522) <<"text(" << getTextDataType() <<"):" << getText();
 }
 
@@ -77,7 +77,7 @@ void Cell::generate(QTextStream& out, Table* table)
 	Format::generate(out, table->searchColumn(_col));
 	out << "}{" << endl;
 	
-	if(getTextDataType() == "Str")
+	if(getTextDataType() == "Str" || getTextDataType() == "Num")
 	{
 		generateTextFormat(out, getText());
 		//out << getText();

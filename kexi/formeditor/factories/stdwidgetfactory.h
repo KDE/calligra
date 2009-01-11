@@ -20,17 +20,17 @@
 #ifndef STDWIDGETFACTORY_H
 #define STDWIDGETFACTORY_H
 
-#include <Q3Frame>
+#include <QFrame>
 #include <QPixmap>
-#include <Q3CString>
 #include <QLabel>
-#include <Q3ValueList>
+#include <QList>
 #include <QMenu>
-#include <K3ListViewItem>
-#include <K3ListView>
 
 #include "widgetfactory.h"
 #include "container.h"
+
+class QTreeWidgetItem;
+class QTreeWidget;
 
 class KexiPictureLabel : public QLabel
 {
@@ -43,7 +43,7 @@ public:
     virtual bool setProperty(const char *name, const QVariant &value);
 };
 
-class Line : public Q3Frame
+class Line : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)
@@ -65,38 +65,42 @@ public:
     StdWidgetFactory(QObject *parent, const QStringList &args);
     ~StdWidgetFactory();
 
-    virtual QWidget *createWidget(const Q3CString &c, QWidget *p, const char *n,
+    virtual QWidget *createWidget(const QByteArray &c, QWidget *p, const char *n,
                                   KFormDesigner::Container *container, int options = DefaultOptions);
 
-    virtual bool createMenuActions(const Q3CString &classname, QWidget *w,
+    virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
-    virtual bool startEditing(const Q3CString &classname, QWidget *w,
+    virtual bool startEditing(const QByteArray &classname, QWidget *w,
                               KFormDesigner::Container *container);
-    virtual bool previewWidget(const Q3CString &classname, QWidget *widget,
+    virtual bool previewWidget(const QByteArray &classname, QWidget *widget,
                                KFormDesigner::Container *container);
-    virtual bool clearWidgetContent(const Q3CString &classname, QWidget *w);
+    virtual bool clearWidgetContent(const QByteArray &classname, QWidget *w);
 
-    virtual bool saveSpecialProperty(const Q3CString &classname,
+    virtual bool saveSpecialProperty(const QByteArray &classname,
                                      const QString &name, const QVariant &value, QWidget *w,
                                      QDomElement &parentNode, QDomDocument &parent);
-    virtual bool readSpecialProperty(const Q3CString &classname, QDomElement &node,
+    virtual bool readSpecialProperty(const QByteArray &classname, QDomElement &node,
                                      QWidget *w, KFormDesigner::ObjectTreeItem *item);
-    virtual Q3ValueList<Q3CString> autoSaveProperties(const Q3CString &classname);
+    virtual QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
     virtual void setPropertyOptions(KFormDesigner::WidgetPropertySet& buf,
                                     const KFormDesigner::WidgetInfo& info, QWidget *w);
 
 public slots:
     void  editText();
+#ifndef KEXI_FORMS_NO_LIST_WIDGET
     void  editListContents();
+#endif
 
 protected:
-    virtual bool isPropertyVisibleInternal(const Q3CString &classname, QWidget *w,
-                                           const Q3CString &property, bool isTopLevel);
+    virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
+                                           const QByteArray &property, bool isTopLevel);
     virtual bool changeText(const QString &newText);
-    virtual void resizeEditor(QWidget *editor, QWidget *widget, const Q3CString &classname);
-    void saveListItem(Q3ListViewItem *item, QDomNode &parentNode, QDomDocument &domDoc);
-    void readListItem(QDomElement &node, Q3ListViewItem *parent, K3ListView *listview);
+    virtual void resizeEditor(QWidget *editor, QWidget *widget, const QByteArray &classname);
+#ifndef KEXI_FORMS_NO_LIST_WIDGET
+    void saveTreeItem(QTreeWidgetItem *item, QDomNode &parentNode, QDomDocument &domDoc);
+    void readTreeItem(QDomElement &node, QTreeWidgetItem *parent, QTreeWidget *treewidget);
+#endif
 
 private:
 //  KFormDesigner::Container *m_container;

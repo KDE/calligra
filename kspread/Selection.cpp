@@ -952,6 +952,11 @@ bool Selection::referenceSelectionMode() const
     return d->referenceMode;
 }
 
+bool Selection::referenceSelection() const
+{
+  return (!d->formerSelection.isEmpty());
+}
+
 void Selection::emitAboutToModify()
 {
     emit aboutToModify(*this);

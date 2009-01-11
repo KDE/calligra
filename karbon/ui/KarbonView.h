@@ -88,9 +88,6 @@ public:
 
 public slots:
     // editing:
-    void editCut();
-    void editCopy();
-    void editPaste();
     void editSelectAll();
     void editDeselectAll();
     void editDeleteSelection();

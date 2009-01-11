@@ -228,8 +228,10 @@ Q_SIGNALS:
     void textChanged(const QString &text);
     void modificationChanged(bool changed);
 
+
 public slots:
-    void setText(const QString& text);
+    void setText(const QString& text, int cursorPos = -1);
+
 
 private slots:
     void  slotTextChanged();
@@ -325,6 +327,7 @@ public Q_SLOTS:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
 
 private slots:

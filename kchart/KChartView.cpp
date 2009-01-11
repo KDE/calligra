@@ -58,7 +58,6 @@
 #include <KoShapeCreateCommand.h>
 #include <KoTemplateCreateDia.h>
 #include <KoToolBoxFactory.h>
-#include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoViewAdaptor.h>
 #include <KoZoomAction.h>

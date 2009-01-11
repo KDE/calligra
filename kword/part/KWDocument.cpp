@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Sebastian Sauer <mail@dipe.org>
@@ -55,6 +55,8 @@
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
+#include <KoListStyle.h>
+#include <KoListLevelProperties.h>
 #include <KoDataCenter.h>
 #include <KoTextShapeData.h>
 
@@ -373,6 +375,49 @@ QString KWDocument::renameFrameSet(const QString &prefix, const QString& base)
 }
 
 // *** LOADING
+
+void KWDocument::initEmpty()
+{
+    clear();
+
+    appendPage("Standard");
+
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(dataCenterMap()["StyleManager"]);
+    Q_ASSERT(styleManager);
+    KoParagraphStyle *parag = new KoParagraphStyle();
+    parag->setName(i18n("Head 1"));
+    KoCharacterStyle *character = parag->characterStyle();
+    character->setFontPointSize(20);
+    character->setFontWeight(QFont::Bold);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Head 2"));
+    character = parag->characterStyle();
+    character->setFontPointSize(16);
+    character->setFontWeight(QFont::Bold);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Head 3"));
+    character = parag->characterStyle();
+    character->setFontPointSize(12);
+    character->setFontWeight(QFont::Bold);
+    styleManager->add(parag);
+
+    parag = new KoParagraphStyle();
+    parag->setName(i18n("Bullet List"));
+    KoListStyle * list = new KoListStyle(parag);
+    KoListLevelProperties llp = list->levelProperties(0);
+    llp.setStyle(KoListStyle::DiscItem);
+    list->setLevelProperties(llp);
+    parag->setListStyle(list);
+    styleManager->add(parag);
+
+    KoDocument::initEmpty();
+    clearUndoHistory();
+}
+
 void KWDocument::clear()
 {
     // document defaults
@@ -743,10 +788,18 @@ void PageProcessingQueue::addPage(KWPage page)
 
 void PageProcessingQueue::process()
 {
+
+    const bool docIsEmpty = m_document->isEmpty();
+    const bool docIsModified = m_document->isModified();
     foreach (const KWPage &page, m_pages) {
+
         emit m_document->pageSetupChanged();
         m_document->m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
+    if (docIsEmpty)
+        m_document->setEmpty();
+    if (!docIsModified)
+        m_document->setModified(false);
     m_pages.clear();
     deleteLater();
 }

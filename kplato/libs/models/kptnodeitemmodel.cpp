@@ -174,7 +174,7 @@ QVariant NodeModel::constraint( const Node *node, int role ) const
         case Role::EnumList: 
             return Node::constraintList( true );
         case Qt::EditRole: 
-            return node->constraintToString();
+            return node->constraint();
         case Role::EnumListValue: 
             return (int)node->constraint();
         case Qt::TextAlignmentRole:
@@ -814,7 +814,7 @@ QVariant NodeModel::earlyStart( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyStart( id() ).date() );
         case Qt::EditRole:
-            t->earlyStart( id() ).dateTime();
+            return t->earlyStart( id() ).dateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -834,7 +834,7 @@ QVariant NodeModel::earlyFinish( const Node *node, int role ) const
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( t->earlyFinish( id() ).date() );
         case Qt::EditRole:
-            t->earlyStart( id() ).dateTime();
+            return t->earlyFinish( id() ).dateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -2139,6 +2139,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 }
             }
             // Handle new requests
+            QMap<ResourceGroup*, ResourceGroupRequest*> groupmap;
             foreach ( QString s, alloc ) {
                 // if an allocation is not in req, it must be added
                 if ( req.indexOf( s ) == -1 ) {
@@ -2166,14 +2167,18 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     // add request
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
                     if ( g == 0 ) {
+                        g = groupmap.value( pargr );
+                    }
+                    if ( g == 0 ) {
                         // create a group request
                         if ( cmd == 0 ) cmd = new MacroCommand( c );
                         g = new ResourceGroupRequest( pargr );
                         cmd->addCommand( new AddResourceGroupRequestCmd( *task, g ) );
+                        groupmap.insert( pargr, g );
                         //kDebug()<<"add group request:"<<g;
                     }
                     if ( cmd == 0 ) cmd = new MacroCommand( c );
-                    cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, 100 ) ) );
+                    cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, r->units() ) ) );
                     //kDebug()<<"add request:"<<r->name()<<" group:"<<g;
                 }
             }
@@ -2882,21 +2887,157 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 
 //------------------------------------------------
 GanttItemModel::GanttItemModel( QObject *parent )
-    : NodeItemModel( parent )
+    : NodeItemModel( parent ),
+    m_showSpecial( false )
 {
+}
+
+GanttItemModel::~GanttItemModel()
+{
+    QList<void*> lst = parentmap.values();
+    while ( ! lst.isEmpty() )
+        delete (int*)(lst.takeFirst());
+}
+
+int GanttItemModel::rowCount( const QModelIndex &parent ) const
+{
+    if ( m_showSpecial ) {
+        if ( parentmap.values().contains( parent.internalPointer() ) ) {
+            return 0;
+        }
+        Node *n = node( parent );
+        if ( n && n->type() == Node::Type_Task ) {
+            return 5; // the task + early start + late finish ++
+        }
+    }
+    return NodeItemModel::rowCount( parent );
+}
+
+QModelIndex GanttItemModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( m_showSpecial && parent.isValid()  ) {
+        Node *p = node( parent );
+        if ( p->type() == Node::Type_Task ) {
+            void *v = 0;
+            foreach ( void *i, parentmap.values( p ) ) {
+                if ( *( (int*)( i ) ) == row ) {
+                    v = i;
+                    break;
+                }
+            }
+            if ( v == 0 ) {
+                v = new int( row );
+                const_cast<GanttItemModel*>( this )->parentmap.insertMulti( p, v );
+            }
+            return createIndex( row, column, v );
+        }
+    }
+    return NodeItemModel::index( row, column, parent );
+}
+
+QModelIndex GanttItemModel::parent( const QModelIndex &idx ) const
+{
+    if ( m_showSpecial ) {
+        QList<Node*> lst = parentmap.keys( idx.internalPointer() );
+        if ( ! lst.isEmpty() ) {
+            Q_ASSERT( lst.count() == 1 );
+            return index( lst.first() );
+        }
+    }
+    return NodeItemModel::parent( idx );
 }
 
 QVariant GanttItemModel::data( const QModelIndex &index, int role ) const
 {
-    if ( index.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
-        QVariant result = NodeItemModel::data( index, Qt::EditRole );
-        switch ( result.toInt() ) {
-            case Node::Type_Summarytask: return KDGantt::TypeSummary;
-            case Node::Type_Milestone: return KDGantt::TypeEvent;
-            default: return KDGantt::TypeTask;
+    if ( ! index.isValid() ) {
+        return QVariant();
+    }
+    QModelIndex idx = index;
+    QList<Node*> lst;
+    if ( m_showSpecial ) {
+        lst = parentmap.keys( idx.internalPointer() );
+    }
+    if ( ! lst.isEmpty() ) {
+        Q_ASSERT( lst.count() == 1 );
+        int row = *((int*)(idx.internalPointer()));
+        Node *n = lst.first();
+        if ( role == SpecialItemTypeRole ) {
+            return row; // 0=task, 1=early start, 2=late finish...
+        }
+        switch ( row ) {
+            case 0:  // the task
+                if ( idx.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+                    switch ( n->type() ) {
+                        case Node::Type_Task: return KDGantt::TypeTask;
+                        default: break;
+                    }
+                }
+                break;
+            case 1: { // early start
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                    return QVariant();
+                }
+                switch ( idx.column() ) {
+                    case NodeModel::NodeName: return "Early Start";
+                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeStartTime:
+                    case NodeModel::NodeEndTime: return n->earlyStart( id() ).dateTime();
+                    default: break;
+                }
+            }
+            case 2: { // late finish
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                    return QVariant();
+                }
+                switch ( idx.column() ) {
+                    case NodeModel::NodeName: return "Late Finish";
+                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeStartTime:
+                    case NodeModel::NodeEndTime: return n->lateFinish( id() ).dateTime();
+                    default: break;
+                }
+            }
+            case 3: { // late start
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                    return QVariant();
+                }
+                switch ( idx.column() ) {
+                    case NodeModel::NodeName: return "Late Start";
+                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeStartTime:
+                    case NodeModel::NodeEndTime: return n->lateStart( id() ).dateTime();
+                    default: break;
+                }
+            }
+            case 4: { // early finish
+                if ( role != Qt::DisplayRole && role != Qt::EditRole && role != KDGantt::ItemTypeRole ) {
+                    return QVariant();
+                }
+                switch ( idx.column() ) {
+                    case NodeModel::NodeName: return "Early Finish";
+                    case NodeModel::NodeType: return KDGantt::TypeEvent;
+                    case NodeModel::NodeStartTime:
+                    case NodeModel::NodeEndTime: return n->earlyFinish( id() ).dateTime();
+                    default: break;
+                }
+            }
+            default: return QVariant();
+        }
+        idx = createIndex( idx.row(), idx.column(), n );
+    } else {
+        if ( role == SpecialItemTypeRole ) {
+            return 0; // task of some type
+        }
+        if ( idx.column() == NodeModel::NodeType && role == KDGantt::ItemTypeRole ) {
+            QVariant result = NodeItemModel::data( idx, Qt::EditRole );
+            switch ( result.toInt() ) {
+                case Node::Type_Summarytask: return KDGantt::TypeSummary;
+                case Node::Type_Milestone: return KDGantt::TypeEvent;
+                default: return m_showSpecial ? KDGantt::TypeMulti : KDGantt::TypeTask;
+            }
         }
     }
-    return NodeItemModel::data( index, role );
+    return NodeItemModel::data( idx, role );
 }
 
 //----------------------------
@@ -2909,10 +3050,11 @@ MilestoneItemModel::~MilestoneItemModel()
 {
 }
 
+
 QList<Node*> MilestoneItemModel::mileStones() const
 {
     QList<Node*> lst;
-    foreach( Node* n, m_nodemap.values() ) {
+    foreach( Node* n, m_nodemap ) {
         if ( n->type() == Node::Type_Milestone ) {
             lst << n;
         }
@@ -3571,7 +3713,7 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
 
 void MilestoneItemModel::slotWbsDefinitionChanged()
 {
-    kDebug();
+    //kDebug();
     if ( m_project == 0 ) {
         return;
     }
@@ -3591,6 +3733,7 @@ NodeSortFilterProxyModel::NodeSortFilterProxyModel( ItemModelBase* model, QObjec
     setDynamicSortFilter( true );
 }
 
+
 ItemModelBase *NodeSortFilterProxyModel::itemModel() const
 {
     return static_cast<ItemModelBase *>( sourceModel() );
@@ -3603,22 +3746,23 @@ void NodeSortFilterProxyModel::setFilterUnscheduled( bool on ) {
 
 bool NodeSortFilterProxyModel::filterAcceptsRow ( int row, const QModelIndex & parent ) const
 {
-    kDebug()<<sourceModel()<<row<<parent;
+    //kDebug()<<sourceModel()<<row<<parent;
     if ( itemModel()->project() == 0 ) {
-        kDebug()<<itemModel()->project();
+        //kDebug()<<itemModel()->project();
         return false;
     }
     if ( m_filterUnscheduled ) {
         QString s = sourceModel()->data( sourceModel()->index( row, NodeModel::NodeNotScheduled, parent ), Qt::EditRole ).toString();
         if ( s == "true" ) {
-            kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
+            //kDebug()<<"Filtered unscheduled:"<<sourceModel()->index( row, 0, parent );
             return false;
         }
     }
     bool accepted = QSortFilterProxyModel::filterAcceptsRow( row, parent );
-    kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
+    //kDebug()<<this<<sourceModel()->index( row, 0, parent )<<"accepted ="<<accepted<<filterRegExp()<<filterRegExp().isEmpty()<<filterRegExp().capturedTexts();
     return accepted;
 }
+
 
 } //namespace KPlato
 

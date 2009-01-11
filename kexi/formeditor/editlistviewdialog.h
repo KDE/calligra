@@ -20,7 +20,7 @@
 #ifndef EDITLISTVIEW_DIALOG_H
 #define EDITLISTVIEW_DIALOG_H
 
-#include <q3intdict.h>
+#include <QHash>
 #include <qtoolbutton.h>
 #include <KPageDialog>
 
@@ -82,13 +82,15 @@ protected:
     void loadChildNodes(Q3ListView *listview, Q3ListViewItem *item, Q3ListViewItem *parent);
 
 protected:
-    enum { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
+
+    enum Buttons { BNewRow = 10, BNewChild, BRemRow, BRowUp, BRowDown , BColAdd = 20, BColRem, BColUp, BColDown };
     KoProperty::EditorView  *m_editor;
+
     KoProperty::Set  *m_propSet;
     KPageWidgetItem *m_columnsPageItem, *m_contentsPageItem;
     K3ListBox  *m_listbox;
     K3ListView  *m_listview;
-    Q3IntDict<QToolButton>  m_buttons;
+    QHash<Buttons, QToolButton*>  m_buttons;
 };
 
 }

@@ -33,6 +33,42 @@
 namespace KPlato
 {
 
+void ProjectTester::printDebug( Project *p, Task *t ) const {
+    qDebug()<<"Debug info -------------------------------------";
+    qDebug()<<"project target start:"<<p->constraintStartTime().toString();
+    qDebug()<<"project target end:"<<p->constraintEndTime().toString();
+    qDebug()<<"project start time:"<<p->startTime().toString();
+    qDebug()<<"project end time:"<<p->endTime().toString();
+
+    qDebug()<<"earlyStart:"<<t->earlyStart().toString();
+    qDebug()<<"lateStart:"<<t->lateStart().toString();
+    qDebug()<<"earlyFinish:"<<t->earlyFinish().toString();
+    qDebug()<<"lateFinish:"<<t->lateFinish().toString();
+    qDebug()<<"startTime:"<<t->startTime().toString();
+    qDebug()<<"endTime:"<<t->endTime().toString();
+    switch ( t->constraint() ) {
+        case Node::MustStartOn:
+        case Node::StartNotEarlier:
+            qDebug()<<"startConstraint:"<<t->constraintStartTime().toString();
+            break;
+        case Node::FixedInterval:
+            qDebug()<<"startConstraint:"<<t->constraintStartTime().toString();
+        case Node::MustFinishOn:
+        case Node::FinishNotLater:
+            qDebug()<<"endConstraint:"<<t->constraintEndTime().toString();
+            break;
+        default: break;
+    }
+}
+
+void ProjectTester::printSchedulingLog( const ScheduleManager &sm ) const
+{
+    qDebug()<<"Scheduling log ---------------------------------";
+    foreach ( const QString &s, sm.expected()->logMessages() ) {
+        qDebug()<<s;
+    }
+}
+
 void ProjectTester::initTestCase()
 {
     m_project = new Project();
@@ -244,6 +280,7 @@ void ProjectTester::schedule()
 
     // Calculate backword
     //kDebug()<<"Calculate backwards, Task: MustFinishOn -----------------------------------";
+    m_project->setConstraintStartTime( DateTime( today, QTime(0,0,0) ) );
     m_project->setConstraintEndTime( DateTime( nextweek.addDays( 1 ), QTime() ) );
     t->setConstraint( Node::MustFinishOn );
     t->setConstraintEndTime( DateTime( nextweek.addDays( -2 ), t2 ) );
@@ -309,12 +346,16 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    //printDebug( m_project, t );
+
+    QVERIFY( t->earlyStart() <= t->constraintStartTime() );
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
     QCOMPARE( t->earlyFinish(), t->endTime() );
-    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
+
+    QVERIFY( t->lateFinish() <= m_project->constraintEndTime() );
+
     
-    QCOMPARE( t->endTime(), DateTime( nextweek.addDays( -1 ), t2 ));
+    QVERIFY( t->endTime() <= t->lateFinish() );
     QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 )  );
     QVERIFY( t->schedulingError() == false );
 
@@ -330,12 +371,14 @@ void ProjectTester::schedule()
     m_project->calculate( *sm );
 
     QCOMPARE( t->earlyStart(), m_project->startTime() );
-    QCOMPARE( t->lateStart(),  t->startTime() );
+    QVERIFY( t->startTime() >= t->earlyStart() );
+    QVERIFY( t->startTime() <= t->lateStart() );
+    QVERIFY( t->startTime() >= m_project->startTime() );
+    QVERIFY( t->endTime() >= t->earlyFinish() );
+    QVERIFY( t->endTime() <= t->lateFinish() );
+    QVERIFY( t->endTime() <= m_project->endTime() );
     QVERIFY( t->earlyFinish() <= t->constraintEndTime() );
-    QCOMPARE( t->lateFinish(), m_project->endTime() );
-
-    QCOMPARE( t->startTime(), DateTime( today, t1 ));
-    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
+    QVERIFY( t->lateFinish() <= m_project->constraintEndTime() );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
@@ -349,12 +392,14 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
+    //printDebug( m_project, t );
+
     QCOMPARE( t->earlyStart(), m_project->startTime() );
     QCOMPARE( t->lateStart(),  t->startTime() );
     QCOMPARE( t->earlyFinish(), t->constraintEndTime() );
-    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
+    QVERIFY( t->lateFinish() <= m_project->constraintEndTime() );
 
-    QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
+    QCOMPARE( t->startTime(), m_project->startTime() );
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
     QVERIFY( t->schedulingError() == false );
 
@@ -369,6 +414,8 @@ void ProjectTester::schedule()
     sm->setSchedulingDirection( false );
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
+
+    //printDebug( m_project, t );
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
     QCOMPARE( t->lateStart(), t->constraintStartTime() );
@@ -796,6 +843,91 @@ void ProjectTester::scheduleFullday()
     QCOMPARE( t->startTime(), m_project->startTime() );
     QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 14 )) );
     
+
+}
+
+void ProjectTester::scheduleWithExternalAppointments()
+{
+    Project project;
+    project.setName( "P1" );
+    DateTime targetstart = DateTime( QDate::currentDate(), QTime(0,0,0) );
+    DateTime targetend = DateTime( targetstart.addDays( 3 ) );
+    project.setConstraintStartTime( targetstart );
+    project.setConstraintEndTime( targetend);
+
+    Calendar c("Test");
+    QTime t1(0,0,0);
+    int length = 24*60*60*1000;
+
+    for ( int i = 1; i <= 7; ++i ) {
+        CalendarDay *wd1 = c.weekday(i);
+        wd1->setState(CalendarDay::Working);
+        wd1->addInterval(TimeInterval(t1, length));
+    } 
+    ResourceGroup *g = new ResourceGroup();
+    g->setName( "G1" );
+    project.addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setName( "R1" );
+    r->setCalendar( &c );
+    project.addResource( g, r );
+
+    r->addExternalAppointment( "Ext-1", "External project 1", targetstart, targetstart.addDays( 1 ), 100 );
+    r->addExternalAppointment( "Ext-1", "External project 1", targetend.addDays( -1 ), targetend, 100 );
+
+    Task *t = project.createTask( m_project );
+    t->setName( "T1" );
+    project.addTask( t, &project );
+    t->estimate()->setUnit( Duration::Unit_h );
+    t->estimate()->setExpectedEstimate( 8.0 );
+    t->estimate()->setType( Estimate::Type_Effort );
+    
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    gr->addResourceRequest( new ResourceRequest( r ) );
+    t->addRequest( gr );
+
+    ScheduleManager *sm = project.createScheduleManager( "Test Plan" );
+    project.addScheduleManager( sm );
+    project.calculate( *sm );
+    
+    //printSchedulingLog( *sm );
+
+    QCOMPARE( t->startTime(), targetstart + Duration( 1, 0, 0 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    
+    sm->setAllowOverbooking( true );
+    project.calculate( *sm );
+
+    //printSchedulingLog( *sm );
+
+    QCOMPARE( t->startTime(), targetstart );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    sm->setAllowOverbooking( false );
+    sm->setSchedulingDirection( true ); // backwards
+    project.calculate( *sm );
+
+    //printSchedulingLog( *sm );
+
+    QCOMPARE( t->startTime(), targetend - Duration( 1, 8, 0 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+
+    sm->setAllowOverbooking( true );
+    project.calculate( *sm );
+
+    //printSchedulingLog( *sm );
+
+    QCOMPARE( t->startTime(), targetend - Duration( 0, 8, 0 ) );
+    QCOMPARE( t->endTime(), targetend  );
+
+    sm->setAllowOverbooking( false );
+    r->clearExternalAppointments();
+    project.calculate( *sm );
+
+    //printSchedulingLog( *sm );
+
+    QCOMPARE( t->endTime(), targetend );
+    QCOMPARE( t->startTime(),  t->endTime() - Duration( 0, 8, 0 )  );
 
 }
 

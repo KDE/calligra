@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2001-2002 Beno�t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Rob Buis <buis@kde.org>
@@ -29,7 +30,7 @@
 class KarbonGradientWidget;
 class KoSliderCombo;
 class KComboBox;
-class KColorButton;
+class KoColorComboBox;
 class QPushButton;
 
 /**
@@ -120,8 +121,7 @@ private:
     KComboBox        *m_gradientType;
     QPushButton      *m_addToPredefs;
     KoSliderCombo * m_opacity;
-    KColorButton * m_stopColor;
-    KoSliderCombo * m_stopOpacity;
+    KoColorComboBox * m_stopColor;
     qreal m_gradOpacity;    ///< the gradient opacity
     int m_stopIndex; ///< the index of the selected gradient stop
     KoCheckerBoardPainter m_checkerPainter;
@@ -131,3 +131,4 @@ private:
 };
 
 #endif // KARBONGRADIENTEDITWIDGET_H
+

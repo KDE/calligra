@@ -227,9 +227,10 @@ target_link_libraries(kspreadcommon
 	kutils flake
 	${KDE4_KDE3SUPPORT_LIBS} )
 
+target_link_libraries(kspreadcommon LINK_INTERFACE_LIBRARIES  koguiutils flake ${QT_QT3SUPPORT_LIBRARY} )
+
 set_target_properties(kspreadcommon PROPERTIES
     VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
-    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "koguiutils;flake"
 )
 install(TARGETS kspreadcommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -242,7 +243,7 @@ kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
 
 
 
-target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} kspreadcommon )
+target_link_libraries(kspreadpart  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBRARY} kspreadcommon )
 
 install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

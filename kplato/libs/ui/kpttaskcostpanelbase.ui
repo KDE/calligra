@@ -10,9 +10,6 @@
     <height>341</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>TaskCostPanelBase</string>
-  </property>
   <layout class="QVBoxLayout" >
    <property name="spacing" >
     <number>6</number>

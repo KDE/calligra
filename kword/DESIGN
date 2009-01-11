@@ -3,7 +3,7 @@ Overall design
 
 * The document (KWDocument) has a list of framesets (KWFrameSet)
 
-* Framesets include: text frameset, picture/clipart frameset, table frameset etc.
+* Framesets include: text frameset & generic framesets.
 
 * A frameset has a list of frames, KWFrame. A KWFrame is basically a thin wrapper
 around a KoShape.
@@ -30,15 +30,6 @@ it for logos and stuff). In such a case we don't copy anything, we simply
 paint the same contents in many pages.  This is done by having a frame with a
 KWCopyShape as its main Shape.  The KWCopyShape gets the original shape as argument.
 
-Editing
-=======
-
-Custom items
-============
-
-Painting
-========
-
-More low-level things
-=====================
+Technical details of frames, framesets and shape interaction are described 
+in kword/part/frames/DESIGN
 

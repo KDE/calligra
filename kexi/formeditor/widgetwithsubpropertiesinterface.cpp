@@ -51,9 +51,8 @@ void WidgetWithSubpropertiesInterface::setSubwidget(QWidget *widget)
                         && !addedSubproperies.contains(property.name())) {
                     m_subproperies.insert(property.name());
                     addedSubproperies.insert(property.name());
-                    kDebug() << "WidgetWithSubpropertiesInterface::setSubwidget(): "
-                    "added subwidget's property that is not present in the parent: "
-                    << property.name();
+                    kDebug() << "added subwidget's property that is not present in the parent: "
+                        << property.name();
                 }
             }
         }
@@ -65,7 +64,7 @@ QWidget* WidgetWithSubpropertiesInterface::subwidget() const
     return m_subwidget;
 }
 
-QSet<Q3CString> WidgetWithSubpropertiesInterface::subproperies() const
+QSet<QByteArray> WidgetWithSubpropertiesInterface::subproperies() const
 {
     return m_subproperies;
 }

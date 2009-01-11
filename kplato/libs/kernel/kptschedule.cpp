@@ -513,6 +513,15 @@ void Schedule::addLog( Schedule::Log &log )
     }
 }
 
+QString Schedule::Log::formatMsg() const
+ {
+    QString s;
+    s += node ? QString( "%1 " ).arg( node->name(), -8 ) : "";
+    s += resource ? QString( "%1 ").arg(resource->name(), -8 ) : "";
+    s += message;
+    return s;
+}
+
 //-------------------------------------------------
 NodeSchedule::NodeSchedule()
         : Schedule(),
@@ -1245,6 +1254,15 @@ QString MainSchedule::logSeverity( int severity )
         default: break;
     }
     return QString( "Severity %1" ).arg( severity );
+}
+
+QStringList MainSchedule::logMessages() const
+{
+    QStringList lst;
+    foreach ( Schedule::Log l, m_log ) {
+        lst << l.formatMsg();
+    }
+    return lst;
 }
 
 //-----------------------------------------

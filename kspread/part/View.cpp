@@ -100,7 +100,6 @@
 #include <KoToolBoxFactory.h>
 #include <KoToolDocker.h>
 #include <KoDockerManager.h>
-#include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
 #include <KoTemplateCreateDia.h>
@@ -515,11 +514,7 @@ void View::Private::initActions()
 
     ac->addAssociatedWidget(view->canvasWidget());
     foreach (QAction* action, ac->actions())
-#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
-        action->setShortcutContext(Qt::WidgetShortcut); // remove after Qt4.4 becomes mandatory
-#else
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-#endif
 }
 
 void View::Private::adjustActions( bool mode )
@@ -751,9 +746,13 @@ void View::initView()
     createDockWidget( &toolBoxFactory );
 
     // Setup the tool options dock widget manager.
-    KoDockerManager *dockerManager = new KoDockerManager(this);
-    connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
-             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+    KoDockerManager *dockerMng = dockerManager();
+    if (!dockerMng) {
+        dockerMng = new KoDockerManager(this);
+        setDockerManager(dockerMng);
+    }
+    connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();

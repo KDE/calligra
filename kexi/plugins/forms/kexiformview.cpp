@@ -20,16 +20,12 @@
 
 #include "kexiformview.h"
 
-#include <qobject.h>
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QFileInfo>
 #include <QFocusEvent>
 #include <QDragMoveEvent>
 #include <QEvent>
+#include <QHBoxLayout>
 #include <QDropEvent>
-#include <Q3ValueList>
-#include <Q3HBoxLayout>
 #include <QResizeEvent>
 #include <QApplication>
 
@@ -91,7 +87,13 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 // m_scrollView->show();
 
     m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-    m_dbform->setObjectName("KexiDBForm");
+    m_dbform->setObjectName(
+        i18nc("Widget name. This string will be used to name widgets of this class. "
+              "It must _not_ contain white spaces and non latin1 characters.", "form"));
+    QPalette pal(m_dbform->palette());
+    pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
+    m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                               // from m_scrollView->viewport()
 // m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
 // m_dbform->resize(QSize(400, 300));
     m_scrollView->setWidget(m_dbform);
@@ -239,8 +241,8 @@ KexiFormView::initForm()
 
     if (viewMode() == Kexi::DesignViewMode) {
         //we want to be informed about executed commands
-        connect(form()->commandHistory(), SIGNAL(commandExecuted()),
-                KFormDesigner::FormManager::self(), SLOT(slotHistoryCommandExecuted()));
+        connect(form()->commandHistory(), SIGNAL(commandExecuted(K3Command*)),
+                KFormDesigner::FormManager::self(), SLOT(slotHistoryCommandExecuted(K3Command*)));
     }
 
     const bool newForm = window()->id() < 0;
@@ -314,9 +316,8 @@ void KexiFormView::updateAutoFieldsDataSource()
         conn, dataSourceString.toLatin1(), dataSourcePartClassString == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
-    for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-            it.current(); ++it) {
-        KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(it.current()->widget());
+    foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
+        KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>(item->widget());
         if (afWidget) {
             KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo(afWidget->dataSource());
             if (colInfo) {
@@ -343,19 +344,20 @@ void KexiFormView::updateValuesForSubproperties()
     if (!tableOrQuery.table() && !tableOrQuery.query())
         return;
 
-    for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
-            it.current(); ++it) {
+    foreach (KFormDesigner::ObjectTreeItem *item, *form()->objectTree()->hash()) {
         // (delayed) set values for subproperties
 //! @todo this could be at the KFD level, but KFD is going to be merged anyway with kexiforms, right?
         KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface
-        = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(it.current()->widget());
-        if (subpropIface && subpropIface->subwidget() && it.current()->subproperties()) {
+            = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(item->widget());
+        if (subpropIface && subpropIface->subwidget() && item->subproperties()) {
             QWidget *subwidget = subpropIface->subwidget();
-            QMap<QString, QVariant>* subprops = it.current()->subproperties();
-            for (QMap<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); subpropIt != subprops->constEnd(); ++subpropIt) {
-                kexipluginsdbg << "KexiFormView::loadForm(): delayed setting of the subproperty: widget="
-                << it.current()->widget()->objectName() << " prop=" << subpropIt.key() << " val="
-                << subpropIt.value();
+            QHash<QString, QVariant>* subprops = item->subproperties();
+            for (QHash<QString, QVariant>::const_iterator subpropIt = subprops->constBegin(); 
+                subpropIt != subprops->constEnd(); ++subpropIt)
+            {
+                kDebug() << "delayed setting of the subproperty: widget="
+                    << item->widget()->objectName() << " prop=" << subpropIt.key() << " val="
+                    << subpropIt.value();
 
                 QMetaProperty meta = KexiUtils::findPropertyWithSuperclasses(
                                          subwidget, subpropIt.key().toLatin1().constData());
@@ -401,7 +403,7 @@ KexiFormView::loadForm()
 {
 //@todo also load m_resizeMode !
 
-    kexipluginsdbg << "KexiFormView::loadForm() Loading the form with id : " << window()->id();
+    kDebug() << "Loading the form with id : " << window()->id();
     // If we are previewing the Form, use the tempData instead of the form stored in the db
     if (viewMode() == Kexi::DataViewMode && !tempData()->tempForm.isNull()) {
         KFormDesigner::FormIO::loadFormFromString(form(), m_dbform, tempData()->tempForm);
@@ -501,8 +503,13 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
         // The form may have been modified, so we must recreate the preview
         delete m_dbform; // also deletes form()
         m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-        m_dbform->setObjectName("KexiDBForm");
-        m_scrollView->setWidget(m_dbform);
+        m_dbform->setObjectName(
+            i18nc("Widget name. This string will be used to name widgets of this class. "
+                  "It must _not_ contain white spaces and non latin1 characters.", "form"));
+        QPalette pal(m_dbform->palette());
+        pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
+        m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                                   // from m_scrollView->viewport()
 
         initForm();
 //moved to formmanager  slotNoFormSelected();
@@ -544,7 +551,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
             foreach(widget, *orderedFocusWidgets) {
                 KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(widget);
                 if (iface)
-                    kexipluginsdbg << iface->dataSource();
+                    kDebug() << iface->dataSource();
                 if (iface && iface->columnInfo() && !iface->isReadOnly()
                         /*! @todo add option for skipping autoincremented fields */
                         /* also skip autoincremented fields:*/
@@ -642,9 +649,9 @@ void KexiFormView::initDataSource()
             //always add all fields from table's primary key
             // (don't worry about duplicates, unique list will be computed later)
             sources += pkey->names();
-            kexipluginsdbg << "KexiFormView::initDataSource(): pkey added to data sources: " << pkey->names();
+            kDebug() << "pkey added to data sources: " << pkey->names();
         }
-        kexipluginsdbg << "KexiFormView::initDataSource(): sources=" << sources;
+        kDebug() << "sources=" << sources;
 
         uint index = 0;
         for (QStringList::ConstIterator it = sources.constBegin();
@@ -663,8 +670,7 @@ void KexiFormView::initDataSource()
                 //remove this widget from the set of data widgets in the provider
                 /*! @todo fieldName is ok, but what about expressions? */
                 invalidSources.insert(fieldName);
-                kexipluginsdbg << "KexiFormView::initDataSource(): invalidSources+="
-                << index << " (" << (*it) << ")";
+                kDebug() << "invalidSources+=" << index << " (" << (*it) << ")";
                 continue;
             }
             if (tableSchema) {
@@ -728,7 +734,7 @@ KexiDB::SchemaData*
 KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
     KexiDB::SchemaData *s = KexiView::storeNewData(sdata, cancel);
-    kexipluginsdbg << "KexiDBForm::storeNewData(): new id:" << s->id();
+    kDebug() << "new id:" << s->id();
 
     if (!s || cancel) {
         delete s;
@@ -748,8 +754,7 @@ tristate
 KexiFormView::storeData(bool dontAsk)
 {
     Q_UNUSED(dontAsk);
-    kexipluginsdbg << "KexiDBForm::storeData(): " << window()->partItem()->name()
-    << " [" << window()->id() << "]";
+    kDebug() << window()->partItem()->name() << " [" << window()->id() << "]";
 
     //-- first, store local BLOBs, so identifiers can be updated
 //! @todo remove unused data stored previously
@@ -779,10 +784,10 @@ KexiFormView::storeData(bool dontAsk)
                 = tempData()->unsavedLocalBLOBs.constBegin();
                 it != tempData()->unsavedLocalBLOBs.constEnd(); ++it) {
             if (!it.key()) {
-                kexipluginswarn << "KexiFormView::storeData(): it.key()==0 !";
+                kWarning() << "it.key()==0 !";
                 continue;
             }
-            kexipluginsdbg << "name=" << it.key()->objectName() << " dataID=" << it.value();
+            kDebug() << "name=" << it.key()->objectName() << " dataID=" << it.value();
             KexiBLOBBuffer::Handle h(blobBuf->objectForId(it.value(), /*!stored*/false));
             if (!h)
                 continue; //no BLOB assigned
@@ -797,7 +802,7 @@ KexiFormView::storeData(bool dontAsk)
                 << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
                 if (!st->execute()) {
                     delete blobsFieldsWithoutID;
-                    kexipluginsdbg << " execute error";
+                    kDebug() << "execute error";
                     return false;
                 }
             }
@@ -808,7 +813,7 @@ KexiFormView::storeData(bool dontAsk)
                 //! @todo show message?
                 return false;
             }
-            kexipluginsdbg << " storedDataID=" << storedBLOBID;
+            kDebug() << "storedDataID=" << storedBLOBID;
             h.setStoredWidthID((KexiBLOBBuffer::Id_t /*unsafe - will be fixed in Qt4*/)storedBLOBID);
             //set widget's internal property so it can be saved...
             const QVariant oldStoredPixmapId(it.key()->property("storedPixmapId"));
@@ -819,7 +824,7 @@ KexiFormView::storeData(bool dontAsk)
             if (widgetItem)
                 widgetItem->addModifiedProperty("storedPixmapId", oldStoredPixmapId);
             else
-                kexipluginswarn << "KexiFormView::storeData(): no '" << widgetItem->name() << "' widget found within a form";
+                kWarning() << "no '" << widgetItem->name() << "' widget found within a form";
         }
     }
 
@@ -1052,7 +1057,7 @@ KexiFormView::updateDataSourcePage()
         if (set->contains("dataSourcePartClass"))
             dataSourcePartClass = (*set)["dataSourcePartClass"].value().toString();
         if (set->contains("dataSource"))
-            dataSource = (*set)["dataSource"].value().toCString();
+            dataSource = (*set)["dataSource"].value().toString();
 
         formPart()->dataSourcePage()->setDataSource(dataSourcePartClass, dataSource);
     }
@@ -1095,8 +1100,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.toLatin1(),
                                             sourcePartClass == "org.kexi-project.table");
     if (!tableOrQuery.table() && !tableOrQuery.query()) {
-        kexipluginswarn << "KexiFormView::insertAutoFields(): no such table/query \""
-        << sourceName << "\"";
+        kWarning() << "no such table/query \"" << sourceName << "\"";
         return;
     }
 
@@ -1117,7 +1121,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 //! todo unnamed query colums are not supported
 
 //  KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
-    KFormDesigner::WidgetList widgetsToSelect;
+    QWidgetList widgetsToSelect;
     KFormDesigner::CommandGroup *group = new KFormDesigner::CommandGroup(
         fields.count() == 1
         ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets", fields.count()),
@@ -1127,8 +1131,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     foreach(const QString& field, fields) {
         KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(field);
         if (!column) {
-            kexipluginswarn << "KexiFormView::insertAutoFields(): no such field \""
-            << field << "\" in table/query \"" << sourceName << "\"";
+            kWarning() << "no such field \"" << field 
+                << "\" in table/query \"" << sourceName << "\"";
             continue;
         }
 //! todo add autolabel using field's caption or name
@@ -1154,14 +1158,14 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         group->addCommand(insertCmd, false/*don't exec twice*/);
 
         KFormDesigner::ObjectTreeItem *newWidgetItem
-        = form()->objectTree()->dict()->find(insertCmd->widgetName());
-        KexiDBAutoField* newWidget
-        = newWidgetItem ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
+            = form()->objectTree()->hash()->value(insertCmd->widgetName());
+        KexiDBAutoField* newWidget = newWidgetItem 
+            ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
         widgetsToSelect.append(newWidget);
 //#if 0
         KFormDesigner::CommandGroup *subGroup
-        = new KFormDesigner::CommandGroup("", KFormDesigner::FormManager::self()->propertySet());
-        QMap<Q3CString, QVariant> propValues;
+            = new KFormDesigner::CommandGroup("", KFormDesigner::FormManager::self()->propertySet());
+        QHash<QByteArray, QVariant> propValues;
         propValues.insert("dataSource", column->aliasOrName());
         propValues.insert("fieldTypeInternal", (int)column->field->type());
         propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
@@ -1180,7 +1184,7 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 //  newWidget->setFieldCaptionInternal(column->captionOrAliasOrName());
         //resize again because autofield's type changed what can lead to changed sizeHint()
 //  newWidget->resize(newWidget->sizeHint());
-        KFormDesigner::WidgetList list;
+        QWidgetList list;
         list.append(newWidget);
         KFormDesigner::AdjustSizeCommand *adjustCommand
         = new KFormDesigner::AdjustSizeCommand(KFormDesigner::AdjustSizeCommand::SizeToFit,
@@ -1232,9 +1236,11 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     //select all inserted widgets, if multiple
     if (widgetsToSelect.count() > 1) {
         form()->setSelectedWidget(0);
-        foreach_list(KFormDesigner::WidgetListIterator, it, widgetsToSelect) {
-            form()->setSelectedWidget(it.current(), true/*add*/, true/*dontRaise*/);
+
+        foreach (QWidget *w, widgetsToSelect) {
+            form()->setSelectedWidget(w, true/*add*/, true/*dontRaise*/);
         }
+
     }
 
     // eventually, update property pane

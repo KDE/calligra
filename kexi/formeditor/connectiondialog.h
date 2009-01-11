@@ -26,11 +26,6 @@
 
 #include <kexi_export.h>
 
-#ifdef __GNUC__
-#warning "Port Kexi Table View!"
-#endif
-#define KEXI_NO_TABLEVIEW
-
 namespace KexiDB
 {
 class ResultInfo;
@@ -111,15 +106,10 @@ protected slots:
 protected:
     Form *m_form;
     ConnectionBuffer *m_buffer;
-#ifdef __GNUC__
-#warning "Port Kexi Table View!"
-#endif
-#ifndef KEXI_NO_TABLEVIEW
     KexiTableView  *m_table;
     KexiTableViewData  *m_data;
     KexiTableViewData *m_widgetsColumnData,
     *m_slotsColumnData, *m_signalsColumnData;
-#endif
     QLabel  *m_pixmapLabel, *m_textLabel;
     KPushButton *m_addButton, *m_removeButton;
 };

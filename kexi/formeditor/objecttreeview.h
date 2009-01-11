@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +22,6 @@
 #define OBJECTTREEVIEW_H
 
 #include <k3listview.h>
-#include <Q3CString>
 
 #include <kexi_export.h>
 
@@ -75,7 +75,16 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
     Q_OBJECT
 
 public:
-    ObjectTreeView(QWidget *parent = 0, const char *name = 0, bool tabStop = false);
+    //! Options for the widget's behaviour or look
+    enum Option {
+        NoOptions = 0,
+        DisableSelection,  //!< disables item selection
+        DisableContextMenu //!< disables context menu
+    };
+    Q_DECLARE_FLAGS(Options, Option)
+
+    ObjectTreeView(QWidget *parent, Options options = NoOptions);
+
     virtual ~ObjectTreeView();
 
     virtual QSize sizeHint() const;
@@ -87,7 +96,7 @@ public:
     void setForm(Form *form);
 
     //! \return the pixmap name for a given class, to be shown next to the widget name.
-    QString iconNameForClass(const Q3CString &classname);
+    QString iconNameForClass(const QByteArray &classname);
 
 public slots:
     /*! Sets the widget \a w as selected item, so it will be written bold.
@@ -101,7 +110,7 @@ public slots:
     void removeItem(ObjectTreeItem *item);
 
     /*! Just renames the list item from \a oldname to \a newname. */
-    void renameItem(const Q3CString &oldname, const Q3CString &newname);
+    void renameItem(const QByteArray &oldname, const QByteArray &newname);
 
 protected slots:
     /*! This slot is called when the user right-click a list item.
@@ -129,6 +138,8 @@ private:
 
     friend class TabStopDialog;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(ObjectTreeView::Options)
 
 }
 

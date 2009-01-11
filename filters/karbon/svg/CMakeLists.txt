@@ -20,6 +20,7 @@ target_link_libraries(
     kostore
     komain
     ${KDE4_KDECORE_LIBS}
+    ${KDE4_KIO_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QT3SUPPORT_LIBRARY}

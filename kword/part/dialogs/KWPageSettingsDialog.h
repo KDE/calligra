@@ -19,13 +19,13 @@
 #ifndef KWPAGESETTINGSDIALOG_H
 #define KWPAGESETTINGSDIALOG_H
 
-#include "KWPage.h"
-
+#include <KWPage.h>
 #include <KoPageLayoutDialog.h>
 
 #include <KDialog>
 
 class KWDocument;
+class KWDocumentColumns;
 
 /// A dialog to show the settings for one page and apply them afterwards.
 class KWPageSettingsDialog : public KoPageLayoutDialog
@@ -34,13 +34,14 @@ class KWPageSettingsDialog : public KoPageLayoutDialog
 public:
     explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, const KWPage &page);
 
-private:
+protected:
     void accept();
     void reject();
 
 private:
     KWDocument *m_document;
     KWPage m_page;
+    KWDocumentColumns *m_columns;
 };
 
 #endif

@@ -83,7 +83,7 @@ KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
         : KexiPart::Part(parent, l)
         , d(new Private())
 {
-    kexipluginsdbg << "KexiFormPart::KexiFormPart()";
+    kDebug();
     setInternalPropertyValue("instanceName",
                              i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
                                    "Use '_' character instead of spaces. First character should be a..z character. "
@@ -114,8 +114,8 @@ KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
             this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
 
     connect(KFormDesigner::FormManager::self()->propertySet(),
-            SIGNAL(widgetPropertyChanged(QWidget *, const Q3CString &, const QVariant&)),
-            this, SLOT(slotPropertyChanged(QWidget *, const Q3CString &, const QVariant&)));
+            SIGNAL(widgetPropertyChanged(QWidget *, const QByteArray &, const QVariant&)),
+            this, SLOT(slotPropertyChanged(QWidget *, const QByteArray &, const QVariant&)));
     connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*, bool)),
             this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*, bool)));
 }
@@ -136,7 +136,7 @@ void KexiFormPart::initPartActions(KActionCollection *collection)
 //this is automatic? -no
 //create child guicilent: guiClient()->setXMLFile("kexidatatableui.rc");
 
-    kexipluginsdbg << "FormPart INIT ACTIONS***********************************************************************";
+    kDebug() << "FormPart INIT ACTIONS***********************************************************************";
     //TODO
 
     //guiClient()->setXMLFile("kexiformui.rc");
@@ -268,7 +268,7 @@ KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
     Q_UNUSED(window);
     Q_UNUSED(viewMode);
 
-    kexipluginsdbg << "KexiFormPart::createView()";
+    kDebug();
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection())
         return 0;
@@ -484,7 +484,7 @@ KLocalizedString KexiFormPart::i18nMessage(
 }
 
 void
-KexiFormPart::slotPropertyChanged(QWidget *w, const Q3CString &name, const QVariant &value)
+KexiFormPart::slotPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value)
 {
     Q_UNUSED(w);
 
@@ -527,9 +527,9 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 KexiMainWindowIface::global()->thisWidget(),
                 SLOT(highlightObject(const QString&, const QString&)));
         connect(d->dataSourcePage,
-                SIGNAL(formDataSourceChanged(const Q3CString&, const Q3CString&)),
+                SIGNAL(formDataSourceChanged(const QString&, const QString&)),
                 KFormDesigner::FormManager::self(),
-                SLOT(setFormDataSource(const Q3CString&, const Q3CString&)));
+                SLOT(setFormDataSource(const QString&, const QString&)));
         connect(d->dataSourcePage,
                 SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
                 KFormDesigner::FormManager::self(),

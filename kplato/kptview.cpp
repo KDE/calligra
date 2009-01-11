@@ -94,13 +94,10 @@
 #include "kptscheduleeditor.h"
 #include "kptresourcedialog.h"
 #include "kptresource.h"
-#include "kptresourcesdialog.h"
-#include "kptcalendarlistdialog.h"
 #include "kptstandardworktimedialog.h"
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
 #include "kptwpcontroldialog.h"
-#include "kptaccountsdialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
 #include "kptsplitterview.h"
@@ -197,15 +194,6 @@ View::View( Part* part, QWidget* parent )
     actionEditStandardWorktime  = new KAction(KIcon( "document-properties" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
-    actionEditCalendarList  = new KAction(KIcon( "preferences-system-time" ), i18n("Edit Calendar..."), this);
-    actionCollection()->addAction("project_calendar", actionEditCalendarList );
-    connect( actionEditCalendarList, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalendar() ) );
-    actionEditAccounts  = new KAction(KIcon( "system-users" ), i18n("Edit Accounts..."), this);
-    actionCollection()->addAction("project_accounts", actionEditAccounts );
-    connect( actionEditAccounts, SIGNAL( triggered( bool ) ), SLOT( slotProjectAccounts() ) );
-    actionEditResources  = new KAction(KIcon( "document-properties" ), i18n("Edit Resources..."), this);
-    actionCollection()->addAction("project_resources", actionEditResources );
-    connect( actionEditResources, SIGNAL( triggered( bool ) ), SLOT( slotProjectResources() ) );
 
 
     // ------ Tools
@@ -249,10 +237,6 @@ View::View( Part* part, QWidget* parent )
     actionEditResource  = new KAction(KIcon( "document-properties" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
-
-    actionEditCalendar  = new KAction(KIcon( "preferences-system-time" ), i18n("Edit Calendar..."), this);
-    actionCollection()->addAction("edit_calendar", actionEditCalendar );
-    connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotEditCalendar() ) );
 
     actionEditRelation  = new KAction(KIcon( "document-properties" ), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
@@ -667,8 +651,11 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     connect( editor, SIGNAL( addSubtask() ), SLOT( slotAddSubTask() ) );
     connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), editor, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
     connect( editor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
     editor->updateReadWrite( m_readWrite );
+    editor->setScheduleManager( currentScheduleManager() );
     return editor;
 }
 
@@ -920,53 +907,6 @@ void View::slotProjectEdit()
     delete dia;
 }
 
-void View::slotEditCalendar()
-{
-    slotEditCalendar( currentCalendar() );
-}
-
-void View::slotEditCalendar( Calendar *calendar )
-{
-    if ( calendar == 0 ) {
-        return;
-    }
-    CalendarEditDialog * dia = new CalendarEditDialog( getProject(), calendar );
-    if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd ) {
-            //kDebug()<<"Modifying calendar";
-            getPart() ->addCommand( cmd ); //also executes
-        }
-    }
-    delete dia;
-}
-
-void View::slotProjectCalendar()
-{
-    CalendarListDialog * dia = new CalendarListDialog( getProject() );
-    if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd ) {
-            //kDebug()<<"Modifying calendar(s)";
-            getPart() ->addCommand( cmd ); //also executes
-        }
-    }
-    delete dia;
-}
-
-void View::slotProjectAccounts()
-{
-    AccountsDialog * dia = new AccountsDialog( getProject(), getProject().accounts() );
-    if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd ) {
-            //kDebug()<<"Modifying account(s)";
-            getPart() ->addCommand( cmd ); //also executes
-        }
-    }
-    delete dia;
-}
-
 void View::slotProjectWorktime()
 {
     StandardWorktimeDialog * dia = new StandardWorktimeDialog( getProject() );
@@ -974,19 +914,6 @@ void View::slotProjectWorktime()
         QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar(s)";
-            getPart() ->addCommand( cmd ); //also executes
-        }
-    }
-    delete dia;
-}
-
-void View::slotProjectResources()
-{
-    ResourcesDialog * dia = new ResourcesDialog( getProject() );
-    if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand();
-        if ( cmd ) {
-            //kDebug()<<"Modifying resources";
             getPart() ->addCommand( cmd ); //also executes
         }
     }

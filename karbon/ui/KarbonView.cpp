@@ -72,7 +72,6 @@
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoToolDocker.h>
-#include <KoToolDockerFactory.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
@@ -98,6 +97,9 @@
 #include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoColorBackground.h>
+#include <KoCutController.h>
+#include <KoCopyController.h>
+#include <KoPasteController.h>
 
 // kde header
 #include <kaction.h>
@@ -292,9 +294,14 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         KoToolBoxFactory toolBoxFactory(d->canvasController, i18n( "Tools" ) );
         createDockWidget( &toolBoxFactory );
 
-        KoDockerManager *dockerManager = new KoDockerManager(this);
-        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
-             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
+        KoDockerManager *dockerMng = dockerManager();
+        if (!dockerMng) {
+            dockerMng = new KoDockerManager(this);
+            setDockerManager(dockerMng);
+        }
+
+        connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, KoView *) ),
+             dockerMng, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, KoView *) ) );
 
         KoToolManager::instance()->requestToolActivation( d->canvasController );
 
@@ -384,21 +391,6 @@ void KarbonView::dropEvent( QDropEvent *e )
             d->canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), fill, 0 ) );
         }
     }
-/* TODO port to flake
-    else if( KarbonDrag::decode( e->mimeData(), selection, d->part->document() ) )
-    {
-        VObject *clipart = selection.first();
-        QPointF p( e->pos() );
-        p = d->canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
-        QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
-
-        VTransformCmd trafo( 0L, mat );
-        trafo.visit( *clipart );
-        VClipartCmd* cmd = new VClipartCmd( &d->part->document(), i18n( "Insert Clipart" ), clipart );
-
-        d->part->addCommand( cmd, true );
-    }
-*/
 }
 
 void KarbonView::fileImportGraphic()
@@ -431,25 +423,6 @@ void KarbonView::fileImportGraphic()
             unlink( QFile::encodeName( importedFile ) );
     }
     delete dialog;
-}
-
-void KarbonView::editCut()
-{
-    debugView("KarbonView::editCut()");
-    d->canvas->toolProxy()->cut();
-}
-
-void KarbonView::editCopy()
-{
-    debugView("KarbonView::editCopy()");
-    d->canvas->toolProxy()->copy();
-}
-
-void KarbonView::editPaste()
-{
-    debugView("KarbonView::editPaste()");
-    // TODO bring back copy offset
-    d->canvas->toolProxy()->paste();
 }
 
 void KarbonView::selectionDuplicate()
@@ -904,9 +877,12 @@ void KarbonView::initActions()
         return;
 
     // edit ----->
-    actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT(editCut()));
-    actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT(editCopy()));
-    actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT(editPaste()));
+    KAction *action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
+    new KoCutController(d->canvas, action);
+    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
+    new KoCopyController(d->canvas, action);
+    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
+    new KoPasteController(d->canvas, action);
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 

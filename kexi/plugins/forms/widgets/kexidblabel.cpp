@@ -25,9 +25,7 @@
 #include <qdrawutil.h>
 #include <qapplication.h>
 #include <qtimer.h>
-//Added by qt3to4:
 #include <QPaintEvent>
-#include <Q3Frame>
 #include <QLabel>
 #include <QShowEvent>
 #include <QResizeEvent>
