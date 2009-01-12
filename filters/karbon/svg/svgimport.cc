@@ -1271,8 +1271,8 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
 
         if( !e.attribute( "x" ).isEmpty() && !e.attribute( "y" ).isEmpty() )
         {
-            double tx = e.attribute( "x" ).toDouble();
-            double ty = e.attribute( "y" ).toDouble();
+            double tx = parseUnit( e.attribute( "x" ));
+            double ty = parseUnit( e.attribute( "y" ));
 
             m_gc.top()->matrix.translate(tx,ty);
         }
