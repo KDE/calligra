@@ -106,6 +106,11 @@ qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, 
     }
     else { // fixed value
         tmp = KoUnit::parseValue( value ) / absolute;
+        // The following is done so that we get the same data as when we save/load the placeholder.
+        // This is needed that we don't get the same layout twice in the docker due to rounding
+        // differences of absolute and relative placeholders of the same layout
+        QString value = QString( "%1" ).arg( tmp * 100.0 );
+        tmp = value.toDouble() / 100;
     }
 
     return tmp;
