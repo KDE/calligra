@@ -953,7 +953,7 @@ QList<int> Connection::objectIds(int objType)
     if (objType == KexiDB::AnyObjectType)
         sql = "SELECT o_id, o_name FROM kexi__objects ORDER BY o_id";
     else
-        sql = QString::fromLatin1("SELECT o_id, o_name FROM kexi__objects WHERE o_type=%1 ORDER BY o_id").arg(objType));
+        sql = QString::fromLatin1("SELECT o_id, o_name FROM kexi__objects WHERE o_type=%1 ORDER BY o_id").arg(objType);
     
     Cursor *c = executeQuery(sql);
     if (!c)
