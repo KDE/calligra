@@ -240,7 +240,8 @@ void SvgExport::savePath( KoPathShape * path )
 
     getStyle( path, m_body );
 
-    *m_body << " d=\"" << path->toString( path->transformation() * m_userSpaceMatrix ) << "\" ";
+    *m_body << " d=\"" << path->toString( m_userSpaceMatrix ) << "\" ";
+    *m_body << getTransform( path->transformation(), " transform" );
 
     *m_body << " />" << endl;
 }
