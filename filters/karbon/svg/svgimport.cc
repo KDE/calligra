@@ -1282,8 +1282,27 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
             QDomElement a = m_defs[key];
             if(a.tagName() == "g" || a.tagName() == "a")
             {
-                QList<KoShape*> childShapes = parseGroup( a);
-                shapes += childShapes;
+                addGraphicContext();
+                setupTransform( a );
+                updateContext( a );
+
+                KoShapeGroup * group = new KoShapeGroup();
+                group->setZIndex( nextZIndex() );
+
+                parseStyle( group, a );
+                parseFont( a );
+
+                QList<KoShape*> childShapes = parseGroup( a );
+
+                // handle id
+                if( !a.attribute("id").isEmpty() )
+                    group->setName( a.attribute("id") );
+
+                addToGroup( childShapes, group );
+
+                shapes.append( group );
+
+                removeGraphicContext();
             }
             else
             {
