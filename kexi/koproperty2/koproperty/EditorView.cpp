@@ -319,7 +319,8 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         QModelIndex index = currentIndex();
         if (index.isValid()) {
             Property *property = d->model->propertyForItem(index);
-            d->set->setPreviousSelection(property->name());
+            //TODO This crashes when changing the interpreter type in the script plugin
+            //d->set->setPreviousSelection(property->name()); 
         }
         else {
             d->set->setPreviousSelection(QByteArray());
