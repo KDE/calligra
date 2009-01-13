@@ -565,7 +565,40 @@ QDomElement SvgImport::mergeStyles( const QDomElement &referencedBy, const QDomE
     if( !referencedBy.attribute( "opacity" ).isEmpty() )
         e.setAttribute( "opacity", referencedBy.attribute( "opacity" ) );
 
-    // TODO merge style attribute too.
+    // build map of style attributes from the element being referenced (original)
+    QString origStyle = e.attribute( "style" ).simplified();
+    QStringList origSubstyles = origStyle.split( ';', QString::SkipEmptyParts );
+    QMap<QString, QString> mergesStyles;
+    for( QStringList::Iterator it = origSubstyles.begin(); it != origSubstyles.end(); ++it )
+    {
+        QStringList origSubstyle = it->split( ':' );
+        QString command = origSubstyle[0].trimmed();
+        QString params  = origSubstyle[1].trimmed();
+        mergesStyles[command] = params;
+    }
+
+    // build map of style attributes from the referencing element and substitue the original style
+    QString refStyle = referencedBy.attribute( "style" ).simplified();
+    QStringList refSubstyles = refStyle.split( ';', QString::SkipEmptyParts );
+    for( QStringList::Iterator it = refSubstyles.begin(); it != refSubstyles.end(); ++it )
+    {
+        QStringList refSubstyle = it->split( ':' );
+        QString command = refSubstyle[0].trimmed();
+        // do not parse font attributes here, this is done in parseFont
+        if( m_fontAttributes.contains( command ) )
+            continue;
+
+        QString params  = refSubstyle[1].trimmed();
+        mergesStyles[command] = params;
+    }
+
+    // rebuild the style attribute from the merged styleElement
+    QString newStyleAttribute;
+    QMap<QString, QString>::const_iterator it = mergesStyles.constBegin();
+    for( ; it != mergesStyles.constEnd(); ++it )
+        newStyleAttribute += it.key() + ':' + it.value() + ';';
+
+    e.setAttribute( "style", newStyleAttribute );
 
     return e;
 }
