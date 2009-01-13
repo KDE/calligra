@@ -1279,7 +1279,7 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
 
         if(m_defs.contains(key))
         {
-            QDomElement a = m_defs[key];
+            QDomElement a = mergeStyles( e, m_defs[key] );
             if(a.tagName() == "g" || a.tagName() == "a")
             {
                 addGraphicContext();
@@ -1289,7 +1289,7 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
                 KoShapeGroup * group = new KoShapeGroup();
                 group->setZIndex( nextZIndex() );
 
-                parseStyle( group, a );
+                parseStyle( 0, a );
                 parseFont( a );
 
                 QList<KoShape*> childShapes = parseGroup( a );
