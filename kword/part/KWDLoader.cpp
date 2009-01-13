@@ -697,7 +697,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
                             note->setLabel(footnote.attribute("value"));
                             note->setAutoNumbering( footnote.attribute("numberingtype", "auto") == "auto" );
-                            note->setText("Unable to locate footnote text");
+                            note->setText(i18n("Unable to locate footnote text"));
                             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
@@ -717,7 +717,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoInlineNote *note = new KoInlineNote(type);
                             note->setLabel(footEndNote.attribute("value"));
                             note->setAutoNumbering( footEndNote.attribute("numberingtype", "auto") == "auto" );
-                            note->setText("Unable to locate note-text");
+                            note->setText(i18n("Unable to locate note-text"));
                             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
