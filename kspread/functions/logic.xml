@@ -172,7 +172,7 @@
 	<Type range="true">Boolean</Type>
       </Parameter>
       <Help>
-	<Text>The XOR() function returns True if the number of True values is even. Otherwise it returns False. It returns an error if any argument is an error.</Text>
+	<Text>The XOR() function returns False if the number of True values is even. Otherwise it returns False. It returns an error if any argument is an error.</Text>
 	<Syntax>XOR(value;value;...)</Syntax>
 	<Example>XOR(false;false;false) returns True</Example>
 	<Example>XOR(true;false) returns False</Example>

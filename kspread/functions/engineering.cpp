@@ -642,7 +642,6 @@ static bool kspread_convert_mass( const QString& fromUnit,
     massMap[ "pweight" ]  = 7.054792E-01;                    // Pennyweight
     massMap[ "hweight" ]  = 1.968413E-05;                    // Hundredweight
     massMap[ "shweight" ] = 2.204623E-05;                    // Shorthundredweight
-    massMap[ "brton" ]    = 9.842065E-07;                    // Gross Registered Ton
     massMap[ "uk_ton" ]   = 1.0/2240*2.2046229146913400E-03; // It's long ton or Imperial ton, 2240 lbm.
   }
 
@@ -932,7 +931,8 @@ static bool kspread_convert_volume( const QString& fromUnit,
 //TODO Pica3    
     volumeMap[ "pt" ]     = 2.11291666666667;       // pint
     volumeMap[ "qt" ]     = 1.05645833333333;       // quart
-//TODO GRT    
+    volumeMap[ "GRT" ]    = 2831.6846592;           // Gross Register Ton
+    volumeMap[ "regton" ] = volumeMap[ "GRT" ];
     volumeMap[ "tbs" ]    = 67.6133333333333;       // sheetspoon
     volumeMap[ "tsp" ]    = 202.84;                 // teaspoon
 //TODO tspm

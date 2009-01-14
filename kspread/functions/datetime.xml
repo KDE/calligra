@@ -720,7 +720,7 @@
 	    <Text>DATE2UNIX() function converts a date and time value to unix time.</Text>
             <Text>A unix time is the number of seconds after midnight January 1st, 1970.</Text>
             <Syntax>DATE2UNIX(date)</Syntax>
-	    <Example>DATE2UNIX("01/01/2000") returns 946,681,200</Example>
+	    <Example>DATE2UNIX("01/01/2000") returns 946,684,800</Example>
 	</Help>
     </Function>
 
