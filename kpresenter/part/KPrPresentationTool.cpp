@@ -30,6 +30,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPicture>
 #include <QCursor>
+#include <QString>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -241,17 +242,27 @@ void KPrPresentationTool::highLightPresentation()
 }
 
 bool KPrPresentationTool::getDrawMode(){
-	return KPrPresentationTool::drawMode;
+    return KPrPresentationTool::drawMode;
 }
 
 void KPrPresentationTool::switchDrawMode(){
     if(!KPrPresentationTool::drawMode){
-			KPrPresentationTool::drawMode = true;
-			QApplication::setOverrideCursor(QCursor(Qt::CrossCursor));
-		}else{
-			KPrPresentationTool::drawMode = false;
-			QApplication::restoreOverrideCursor();
-		}
+        KPrPresentationTool::drawMode = true;
+        QString str("kpresenter");
+        KIconLoader kicon(str);
+        str.clear();
+        str.append("pen.png");
+        QPixmap pix(kicon.loadIcon(str, kicon.Small));
+        float factor = 1.2;
+        pix = pix.scaledToHeight(pix.height()*factor);
+        pix = pix.scaledToWidth(pix.width()*factor);
+        QCursor cur = QCursor(pix);
+        QApplication::setOverrideCursor(cur);
+//        QApplication::setOverrideCursor(QCursor(Qt::CrossCursor));
+    }else{
+        KPrPresentationTool::drawMode = false;
+        QApplication::restoreOverrideCursor();
+    }
 }
 
 void KPrPresentationTool::switchHighlightMode(){
@@ -265,8 +276,8 @@ void KPrPresentationTool::switchHighlightMode(){
 void KPrPresentationTool::drawOnPresentation()
 {
     presentationToolWidget->presentationToolUi().penButton->setText("test...");
-		KPrPresentationTool::switchDrawMode();
-		presentationToolWidget->presentationToolUi().penButton->setDown(KPrPresentationTool::drawMode);
+    switchDrawMode();
+    presentationToolWidget->presentationToolUi().penButton->setDown(KPrPresentationTool::drawMode);
 }
 
 // get the acces on m_frame
@@ -274,12 +285,11 @@ QFrame *KPrPresentationTool::m_frameToolPresentation()
 {
     return m_frame;
 }
-
 // get the acces on m_blackBackgroundwidget
 QWidget *KPrPresentationTool::m_blackBackgroundPresentation()
 {
     if ( m_blackBackgroundwidget )
-	return m_blackBackgroundwidget;
+        return m_blackBackgroundwidget;
 }
 
 void KPrPresentationTool::setBlackBackgroundVisibility(bool b)

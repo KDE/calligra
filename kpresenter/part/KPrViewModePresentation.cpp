@@ -264,21 +264,21 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-	if(!KPrPresentationTool::getDrawMode()){
-    bool finished = m_animationDirector->navigate( navigation );
+    if(!KPrPresentationTool::getDrawMode()){
+        bool finished = m_animationDirector->navigate( navigation );
     
-    //update current slide widget
-    if(m_presenterViewWidget)
-	m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
+        //update current slide widget
+        if(m_presenterViewWidget)
+            m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
 	
-    if ( m_pvAnimationDirector ) {
-        finished = m_pvAnimationDirector->navigate( navigation ) && finished;
-    }
+        if ( m_pvAnimationDirector ) {
+            finished = m_pvAnimationDirector->navigate( navigation ) && finished;
+        }
 
-    if ( finished ) {
-        activateSavedViewMode();
+        if ( finished ) {
+            activateSavedViewMode();
+        }
     }
-	}
 }
 
 void KPrViewModePresentation::navigateToPage( int index )

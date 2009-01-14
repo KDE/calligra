@@ -64,7 +64,7 @@ public slots:
 
 private:
     void finishEventActions();
-		static void switchDrawMode();
+		void switchDrawMode();
     static void switchHighlightMode();
     KPrViewModePresentation & m_viewMode;
     QList<KoEventAction *> m_eventActions;
