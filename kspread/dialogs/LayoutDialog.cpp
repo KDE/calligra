@@ -1787,21 +1787,19 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
    if ( dlg->bTextFontFamily )
    {
         selFont.setFamily( dlg->fontFamily );
-//         kDebug(36001) <<"Family =" << dlg->fontFamily;
+        // kDebug(36001) <<"Family =" << dlg->fontFamily;
 
-        // NOTE Stefan: the code below crashes, so assert, that we have a family
-        Q_ASSERT( family_combo->findItem( dlg->fontFamily ) );
-/*        if ( !family_combo->findItem(dlg->fontFamily))
+        if ( !family_combo->findItem(dlg->fontFamily))
                 {
-                family_combo->insertItem(0,"");
+                family_combo->insertItem("",0);
                 family_combo->setCurrentItem(0);
                 }
-        else*/
+        else
                 family_combo->setCurrentItem(family_combo->index(family_combo->findItem(dlg->fontFamily)));
    }
    else
    {
-        family_combo->insertItem(0,"");
+        family_combo->insertItem("",0);
         family_combo->setCurrentItem(0);
    }
 
