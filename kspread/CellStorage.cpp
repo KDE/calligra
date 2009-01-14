@@ -411,6 +411,11 @@ void CellStorage::setValue( int column, int row, const Value& value )
             if ( !d->sheet->map()->recalcManager()->isActive() )
                 changes |= CellDamage::Value;
             d->sheet->map()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
+            // Also trigger a relayouting of the first non-empty cell to the left of this one
+            int prevCol;
+            Value v = d->valueStorage->prevInRow( column, row, &prevCol );
+            if ( !v.isEmpty() )
+                d->sheet->map()->addDamage( new CellDamage( Cell( d->sheet, prevCol, row ), CellDamage::Appearance ) );
         }
         // recording undo?
         if ( d->undoData )
