@@ -44,7 +44,6 @@ KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
     // Set the buttons Icon
     m_uiWidget.penButton->setIcon(KIcon("pen"));
     m_uiWidget.highLightButton->setIcon(KIcon("highlight"));
-    
 }
 
 void KPrPresentationToolWidget::paintEvent(QPaintEvent *event)

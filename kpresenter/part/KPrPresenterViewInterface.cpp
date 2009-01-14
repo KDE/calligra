@@ -83,14 +83,12 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 
     setLayout( vLayout );
             
-    slideTab = new QTableWidget(pages.size()+1,3);
+    slideTab = new QTableWidget(pages.size()-1,2);
     slideTab->setVisible(false);
-    slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem("Slide number"));
+    slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem("Planning time"));
     slideTab->setColumnWidth(0,125);
-    slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem("Planning time"));
+    slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem("Real time"));
     slideTab->setColumnWidth(1,125);
-    slideTab->setHorizontalHeaderItem(2,new QTableWidgetItem("Real time"));
-    slideTab->setColumnWidth(2,125);
     
     for(int i=0;i<pages.size()-1;i++)
     {
@@ -98,9 +96,9 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 	timeEdit1->setDisplayFormat ( "HH:mm:ss" );
 	QTimeEdit *timeEdit2 = new QTimeEdit();
 	timeEdit2->setDisplayFormat ( "HH:mm:ss" );
-	slideTab->setCellWidget(i,0,new QLabel("Slide "+QString::number(i+1)));
-	slideTab->setCellWidget(i,1,timeEdit1);
-	slideTab->setCellWidget(i,2,timeEdit2);
+	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem("Slide "+QString::number(i+1)));
+	slideTab->setCellWidget(i,0,timeEdit1);
+	slideTab->setCellWidget(i,1,timeEdit2);
 	timeEditList.append(timeEdit2);
     }
     frameNextLayout->insertWidget( 1, slideTab );

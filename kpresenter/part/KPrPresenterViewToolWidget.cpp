@@ -99,7 +99,10 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent, QMap<int
     iconLabel = new QLabel;
     iconLabel->setPixmap( KIcon( "chronometer" ).pixmap( iconSize ) );
     hLayout->addWidget(iconLabel);
-    m_timerSlideLabel = new QLabel( "<font color=\"#00FF00\">00:00:00</font>");
+    if(timeSlide == 0)
+	m_timerSlideLabel = new QLabel( "00:00:00");
+    else
+	m_timerSlideLabel = new QLabel( "<font color=\"#00FF00\">00:00:00</font>");
     m_timerSlideLabel->setStyleSheet("QLabel { font-size: 24px }");
     hLayout->addWidget( m_timerSlideLabel );
     mainLayout->addLayout(hLayout);
