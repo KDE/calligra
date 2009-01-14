@@ -312,7 +312,7 @@ Column::Column( Sheet* sheet, unsigned index )
   d = new Column::Private;
   d->sheet   = sheet;
   d->index   = index;
-  d->width   = 10;
+  d->width   = 2560 / 120;
   d->visible = true;
 }
 
