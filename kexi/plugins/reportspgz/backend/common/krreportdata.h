@@ -84,8 +84,13 @@ public:
     KRDetailSectionData* detail() {
         return detailsection;
     }
+    
+    void setName(const QString&n){_name = n;};
+    QString name(){return _name;};
+    
 protected:
     QString title;
+    QString _name;
     QString _query;
     QString _script;
     QString _interpreter;

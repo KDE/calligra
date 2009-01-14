@@ -66,6 +66,7 @@
 #include <kexidb/utils.h>
 #include <kexidb/schemadata.h>
 #include <kexiutils/tristate.h>
+#include <kexipart.h>
 
 #include <koproperty/EditorView.h>
 #include <KoRuler.h>
@@ -235,6 +236,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
                 setReportDataSource(it.firstChild().nodeValue());
             } else if (n == "script") {
                 _interpreter->setValue(it.toElement().attribute("interpreter"));
+                _script->setValue(it.firstChild().nodeValue());
             } else if (n == "grid") {
                 setGridOptions(it.toElement().attribute("visible").toInt() == 0 ? false : true, it.toElement().attribute("divisions").toInt());
             }
@@ -384,7 +386,8 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
             kDebug() << "Encountered a child node of root that is not an Element";
         }
     }
-
+    this->slotPageButton_Pressed();
+    
     setModified(false);
 }
 
@@ -608,6 +611,7 @@ QDomDocument ReportDesigner::document()
 
     QDomElement scr = doc.createElement("script");
     scr.setAttribute("interpreter", _interpreter->value().toString());
+    scr.appendChild(doc.createTextNode(_script->value().toString()));
     root.appendChild(scr);
 
     QDomElement grd = doc.createElement("grid");
@@ -776,9 +780,8 @@ bool ReportDesigner::isModified()
 }
 void ReportDesigner::setModified(bool mod)
 {
-    if (_modified != mod) {
-        _modified = mod;
-    }
+    _modified = mod;
+ 
     if (_modified) {
         emit(dirty());
 
@@ -835,6 +838,51 @@ QStringList ReportDesigner::fieldList()
     return qs;
 }
 
+QStringList ReportDesigner::scriptList()
+{
+    QList<int> scriptids = conn->objectIds(KexiPart::ScriptObjectType);
+    QStringList scripts;
+    QStringList scriptnames = conn->objectNames(KexiPart::ScriptObjectType);
+    QString script;
+    
+    int id, i;
+    id = i = 0;
+    
+    kDebug() << scriptids << scriptnames;
+    kDebug() << _interpreter->value().toString();
+    
+    //A blank entry
+    scripts << "";
+    
+    if (isConnected()) {
+        foreach (id, scriptids) {
+            kDebug() << "ID:" << id;
+            tristate res;
+            res = conn->loadDataBlock(id, script, QString());
+            if (res == true){
+                QDomDocument domdoc;
+                bool parsed = domdoc.setContent(script, false);
+
+                QDomElement scriptelem = domdoc.namedItem("script").toElement();
+                if (parsed && !scriptelem.isNull()) {
+                    if (_interpreter->value().toString() == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
+                        scripts << scriptnames[i];
+                    }
+                }
+                else {
+                    kDebug() << "Unable to parse script";
+                }
+            }
+            else{
+                kDebug() << "Unable to loadDataBlock";
+            }
+            ++i;
+        }
+    }
+    kDebug() << scripts;
+    return scripts;
+}
+
 void ReportDesigner::createProperties()
 {
     QStringList keys, strings;
@@ -875,6 +923,9 @@ void ReportDesigner::createProperties()
     keys = Kross::Manager::self().interpreters();
     _interpreter = new KoProperty::Property("Interpreter", keys, keys, keys[0], "Script Interpreter");
 
+    keys = scriptList();
+    _script = new KoProperty::Property("Script", keys, keys, "", "Object Script");
+    
     set->addProperty(_title);
     set->addProperty(_dataSource);
     set->addProperty(_pageSize);
@@ -888,7 +939,8 @@ void ReportDesigner::createProperties()
     set->addProperty(_topMargin);
     set->addProperty(_bottomMargin);
     set->addProperty(_interpreter);
-
+    set->addProperty(_script);
+    
     KoProperty::Property* _customHeight;
     KoProperty::Property* _customWidth;
 
@@ -896,6 +948,7 @@ void ReportDesigner::createProperties()
 
 void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
+    setModified(true);
     emit pagePropertyChanged(s);
 
     if (p.name() == "PageUnit") {
@@ -906,6 +959,9 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
 
 void ReportDesigner::slotPageButton_Pressed()
 {
+    QStringList sl = scriptList();
+    
+    _script->setListData(sl, sl);
     changeSet(set);
 }
 
@@ -1384,7 +1440,6 @@ QString ReportDesigner::suggestEntityName(const QString &n) const
 bool ReportDesigner::isEntityNameUnique(const QString &n, KRObjectData* ignore) const
 {
     ReportSection *sec;
-    int itemCount = 0;
     bool unique = true;
 
     //Check items in the main sections

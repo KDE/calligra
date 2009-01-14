@@ -90,6 +90,8 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/wrtembed/codeeanpaint.cpp
 	backend/wrtembed/code128paint.cpp
 	)
+qt4_wrap_cpp(pgzkexireportpart2_LIB_SRCS ../scripting/kexiscripting/kexiscriptadaptor.h)
+
 if (SHOULD_BUILD_KSPREAD)
   add_definitions(-DHAVE_KSPREAD)
   set(pgzkexireportpart2_LIB_SRCS ${pgzkexireportpart2_LIB_SRCS} backend/renderer/krkspreadrender.cpp)

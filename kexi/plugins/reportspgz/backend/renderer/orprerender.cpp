@@ -956,6 +956,11 @@ ORPreRender::~ORPreRender()
 {
 }
 
+void ORPreRender::setName(const QString &n)
+{
+    _internal->_reportData->setName(n);
+}
+
 ORODocument* ORPreRender::generate()
 {
     kDebug();

@@ -108,6 +108,11 @@ public:
     */
     QStringList fieldList();
 
+     /**
+    \return a list of object scripts in the database
+    */
+    QStringList scriptList();
+    
     /**
     \return the page width in pixels for the current paper size
     */
@@ -204,6 +209,7 @@ private:
     KoProperty::Property* _gridSnap;
     KoProperty::Property* _labelType;
     KoProperty::Property* _interpreter;
+    KoProperty::Property* _script;
 
     ReportWriterSectionData * sectionData;
     unsigned int selectionCount();

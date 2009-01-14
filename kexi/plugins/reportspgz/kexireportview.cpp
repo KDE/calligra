@@ -220,6 +220,7 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
         delete rpt;
 
         rpt = new ORPreRender(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
+	rpt->setName( tempData()->name );
         curPage = 1;
 
         doc = rpt->generate();
