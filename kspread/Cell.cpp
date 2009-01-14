@@ -1271,7 +1271,10 @@ void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
             value().asDate(sheet()->map()->calculationSettings()).toString( Qt::ISODate ) );
       } else if (isText()) {
         xmlWriter.addAttribute( "office:value-type", "string" );
-        xmlWriter.addAttribute( "office:string-value", value().asString() );
+        if (value().isInteger())
+          xmlWriter.addAttribute( "office:string-value", QString::number( value().asInteger() ) );
+        else
+          xmlWriter.addAttribute( "office:string-value", QString::number( numToDouble (value().asFloat()), 'g', DBL_DIG ) );
       } else {
         xmlWriter.addAttribute( "office:value-type", "float" );
         if (value().isInteger())
