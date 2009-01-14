@@ -860,6 +860,11 @@ bool Cell::isTime() const
     return (Format::isTime(t) || ((t == Format::Generic) && (value().format() == Value::fmt_Time)));
 }
 
+bool Cell::isText() const
+{
+    const Format::Type t = style().formatType();
+    return t == Format::Text;
+}
 
 // Return true if this cell is part of a merged cell, but not the
 // master cell.
@@ -1264,6 +1269,9 @@ void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
         xmlWriter.addAttribute( "office:value-type", "date" );
         xmlWriter.addAttribute( "office:date-value",
             value().asDate(sheet()->map()->calculationSettings()).toString( Qt::ISODate ) );
+      } else if (isText()) {
+        xmlWriter.addAttribute( "office:value-type", "string" );
+        xmlWriter.addAttribute( "office:string-value", value().asString() );
       } else {
         xmlWriter.addAttribute( "office:value-type", "float" );
         if (value().isInteger())

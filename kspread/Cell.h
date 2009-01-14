@@ -512,6 +512,8 @@ public:
     bool isDate() const;
     /** returns true, if cell format is of time type or content is a time */
     bool isTime() const;
+    /** returns true, if cell format is of text type */
+    bool isText() const;
 
     //
     //END Effective style attributes
