@@ -19,22 +19,27 @@
 
 #include <QtGui/QVBoxLayout>
 
+#include <QWidget>
+#include <QMouseEvent>
+
 #include <KoPACanvas.h>
 #include <QPoint>
 #include <kdebug.h>
- #include <QMouseEvent>
+
 #include "KPrPresentationHighlightWidget.h"
 
 KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canvas) : QWidget(canvas)
 {
+    setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     m_size = canvas->size();
-    
+
     QPixmap newPage( m_size );
 
     QColor c(Qt::black); c.setAlphaF(0.5); newPage.fill(c);
 
     resize(m_size);
+
     m_blackBackgroundframe = new QFrame(this);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
     QLabel *label = new QLabel();
@@ -54,13 +59,20 @@ KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
     delete m_blackBackgroundframe;  
 }
 
-void KPrPresentationHighlightWidget::MouseMoveEvent(QMouseEvent* e)
+void KPrPresentationHighlightWidget::mouseMoveEvent(QMouseEvent* e)
 {
     kDebug() << "youhou";
     QPoint center = e->pos();
 
+    delete m_blackBackgroundframe;
+
     QPixmap newPage( m_size );
     QColor c(Qt::red); c.setAlphaF(0.5); newPage.fill(c);
+
+    resize(m_size);
+
+    
+    m_blackBackgroundframe = new QFrame(this);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
     QLabel *label = new QLabel();
     

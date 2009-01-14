@@ -30,7 +30,8 @@ class KPrPresentationHighlightWidget : public QWidget {
 public :
     KPrPresentationHighlightWidget(KoPACanvas * canvas);
     ~KPrPresentationHighlightWidget();
-    void MouseMoveEvent(QMouseEvent* e);
+protected :
+    void mouseMoveEvent ( QMouseEvent * event );
 public :
     QSize m_size;
     bool m_blackBackgroundVisibility;

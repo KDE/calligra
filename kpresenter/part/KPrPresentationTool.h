@@ -65,15 +65,15 @@ public slots:
 private:
     void finishEventActions();
 		static void switchDrawMode();
-
+    static void switchHighlightMode();
     KPrViewModePresentation & m_viewMode;
     QList<KoEventAction *> m_eventActions;
     KPrPresentationToolWidget *presentationToolWidget;
     QFrame *m_frame;
     QFrame *m_blackBackgroundframe;
     KPrPresentationHighlightWidget * m_blackBackgroundwidget;
-    bool m_blackBackgroundVisibility;
-		static bool drawMode;
+    static bool highlightMode;
+    static bool drawMode;
 
 };
 

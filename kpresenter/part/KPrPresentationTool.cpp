@@ -41,11 +41,15 @@
 
 
 bool KPrPresentationTool::drawMode = false;
+bool KPrPresentationTool::highlightMode = false;
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
 {    
+    // init
+    KPrPresentationTool::highlightMode = false;
+
     // tool box
     m_frame = new QFrame( m_viewMode.canvas() );
     
@@ -188,11 +192,11 @@ void KPrPresentationTool::highLightPresentation()
     if(newPage.isNull())
 	return;
 	
-    if ( m_blackBackgroundVisibility ) {
-	m_blackBackgroundVisibility = false;
+    if ( KPrPresentationTool::highlightMode ) {
+	KPrPresentationTool::highlightMode = false;
 	delete m_blackBackgroundwidget;
     } else {
-	m_blackBackgroundVisibility = true;
+	KPrPresentationTool::highlightMode = true;
 	m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
 	m_blackBackgroundwidget->show();
     }
@@ -208,19 +212,19 @@ void KPrPresentationTool::highLightPresentation()
     m_blackBackgroundframe->move( -4,-4 );
 
     // change the visibility
-    if ( m_blackBackgroundVisibility )
+    if ( KPrPresentationTool::highlightMode )
     {
-	m_blackBackgroundVisibility = false;
+	KPrPresentationTool::highlightMode = false;
 	m_blackBackgroundwidget->setVisible( false );
     }
     else
     {
-	m_blackBackgroundVisibility = true;
+	KPrPresentationTool::highlightMode = true;
 	m_blackBackgroundwidget->setVisible( true );
     }*/
     
     // tool box
-    delete m_frame;
+    /*delete m_frame;
     m_frame = new QFrame( m_viewMode.canvas() );
 
     QVBoxLayout *frameLayout = new QVBoxLayout();
@@ -232,7 +236,7 @@ void KPrPresentationTool::highLightPresentation()
     
     // Connections of button clicked to slots
     connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
-    connect( presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
+    connect( presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );*/
 
 }
 
@@ -247,6 +251,14 @@ void KPrPresentationTool::switchDrawMode(){
 		}else{
 			KPrPresentationTool::drawMode = false;
 			QApplication::restoreOverrideCursor();
+		}
+}
+
+void KPrPresentationTool::switchHighlightMode(){
+    if(!KPrPresentationTool::highlightMode){
+			KPrPresentationTool::highlightMode = true;
+		}else{
+			KPrPresentationTool::highlightMode = false;
 		}
 }
 
@@ -272,11 +284,11 @@ QWidget *KPrPresentationTool::m_blackBackgroundPresentation()
 
 void KPrPresentationTool::setBlackBackgroundVisibility(bool b)
 {
-    m_blackBackgroundVisibility = b;
+    KPrPresentationTool::highlightMode = b;
 }
 
 bool KPrPresentationTool::getBlackBackgroundVisibility()
 {
-    return m_blackBackgroundVisibility;
+    return KPrPresentationTool::highlightMode;
 }
 #include "KPrPresentationTool.moc"
