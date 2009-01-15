@@ -3217,7 +3217,7 @@ inline void updateRowDataWithNewValues(QuerySchema &query, RecordData& data, Kex
     columnsOrderExpanded = query.columnsOrder(QuerySchema::ExpandedList);
     QHash<QueryColumnInfo*, int>::ConstIterator columnsOrderExpandedIt;
     for (KexiDB::RowEditBuffer::DBMap::ConstIterator it = b.constBegin();it != b.constEnd();++it) {
-        columnsOrderExpandedIt = columnsOrderExpanded.find(it.key());
+        columnsOrderExpandedIt = columnsOrderExpanded.constFind(it.key());
         if (columnsOrderExpandedIt == columnsOrderExpanded.constEnd()) {
             KexiDBWarn << "(Connection) updateRowDataWithNewValues(): \"now also assign new value in memory\" step "
             "- could not find item '" << it.key()->aliasOrName() << "'";
