@@ -206,7 +206,7 @@ const KWPage KWPage::previous() const
     if (! isValid())
         return KWPage();
     QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
-    if (iter == priv->pageNumbers.begin())
+    if (iter == priv->pageNumbers.constBegin())
         return KWPage();
     --iter;
     return KWPage(priv, iter.value());
@@ -218,7 +218,7 @@ const KWPage KWPage::next() const
         return KWPage();
     QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
     ++iter;
-    if (iter == priv->pageNumbers.end())
+    if (iter == priv->pageNumbers.constEnd())
         return KWPage();
     return KWPage(priv, iter.value());
 }
