@@ -991,7 +991,7 @@ void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter,
 {
     QList<KoGenStyles::NamedStyle>  styles = mainStyles.styles( KoGenStyle::StyleAuto );
     QList<KoGenStyles::NamedStyle>::const_iterator  it;
-    for ( it = styles.begin(); it != styles.end(); ++it ) {
+    for ( it = styles.constBegin(); it != styles.constEnd(); ++it ) {
         kDebug() << "Style: " << (*it).name;
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style",
                                  (*it).name, "style:chart-properties" );
