@@ -101,8 +101,8 @@ void KPrPageEffectDocker::updateSubTypes( const KPrPageEffectFactory * factory )
         m_subTypeCombo->setEnabled( true );
 
         const QMap<QString, int> subTypesByName( factory->subTypesByName() );
-        QMap<QString, int>::iterator it( subTypesByName.begin() );
-        for ( ;it != subTypesByName.end(); ++it ) {
+        QMap<QString, int>::ConstIterator it( subTypesByName.constBegin() );
+        for ( ;it != subTypesByName.constEnd(); ++it ) {
             m_subTypeCombo->addItem( it.key(), it.value() );
         }
     }

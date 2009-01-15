@@ -98,8 +98,8 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
         for ( ; it != layouts.end(); ++it ) {
             KPrPageLayout * pageLayout = new KPrPageLayout();
             if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
-                QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.find( KPrPageLayoutWrapper( pageLayout ) ) );
-                if ( it != m_pageLayouts.end() ) {
+                QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.constFind( KPrPageLayoutWrapper( pageLayout ) ) );
+                if ( it != m_pageLayouts.constEnd() ) {
                     delete pageLayout;
                 }
                 else {
@@ -126,8 +126,8 @@ KPrPageLayout * KPrPageLayouts::pageLayout( const QString & name, KoPALoadingCon
     if ( it != layouts.end() ) {
         pageLayout = new KPrPageLayout();
         if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
-            QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.find( KPrPageLayoutWrapper( pageLayout ) ) );
-            if ( it != m_pageLayouts.end() ) {
+            QMap<KPrPageLayoutWrapper, KPrPageLayout *>::const_iterator it( m_pageLayouts.constFind( KPrPageLayoutWrapper( pageLayout ) ) );
+            if ( it != m_pageLayouts.constEnd() ) {
                 delete pageLayout;
                 pageLayout = *it;
             }
