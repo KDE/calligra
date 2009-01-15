@@ -272,7 +272,7 @@
       <Help>
         <Text>Calculates the cumulative principal payment.</Text>
         <Syntax>CUMPRINC(rate, periods, value, start, end, type)</Syntax>
-        <Example>CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904,054201</Example>
+        <Example>CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 ) equals -11904.054201</Example>
         <Related>PPMT</Related>
         <Related>CUMIPMT</Related>
       </Help>
@@ -537,7 +537,7 @@
         <Type>String</Type>
       </Parameter>
       <Parameter>
-        <Comment>Targer currency</Comment>
+        <Comment>Target currency</Comment>
         <Type>String</Type>
       </Parameter>
       <Help>
