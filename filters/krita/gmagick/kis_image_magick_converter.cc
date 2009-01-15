@@ -633,7 +633,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                     return KisImageBuilder_RESULT_INTR;
                 }
             }
-            m_img->addLayer(layer.data(), m_img->rootLayer());
+            m_img->addNode(layer.data(), m_img->rootLayer());
             layer->paintDevice()->move(x_offset, y_offset);
             layer->setDirty();
         }
