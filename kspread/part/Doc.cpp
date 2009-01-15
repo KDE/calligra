@@ -318,8 +318,8 @@ QDomDocument Doc::saveXML()
         }
     }
 
-    SavedDocParts::const_iterator iter = d->savedDocParts.begin();
-    SavedDocParts::const_iterator end  = d->savedDocParts.end();
+    SavedDocParts::const_iterator iter = d->savedDocParts.constBegin();
+    SavedDocParts::const_iterator end  = d->savedDocParts.constEnd();
     while ( iter != end )
     {
       // save data we loaded in the beginning and which has no owner back to file

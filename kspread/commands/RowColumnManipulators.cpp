@@ -385,8 +385,8 @@ bool AdjustColumnRowManipulator::preProcessing()
     }
 //     createUndo();
 
-    ConstIterator endOfList(cells().end());
-    for (ConstIterator it = cells().begin(); it != endOfList; ++it)
+    ConstIterator endOfList(cells().constEnd());
+    for (ConstIterator it = cells().constBegin(); it != endOfList; ++it)
     {
       Element* element = *it;
       QRect range = element->rect();
