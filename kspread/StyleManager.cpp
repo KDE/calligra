@@ -60,8 +60,8 @@ void StyleManager::saveOdf( KoGenStyles &mainStyles )
 
     m_oasisStyles.clear();
 
-    CustomStyles::ConstIterator end = m_styles.end();
-    for ( CustomStyles::ConstIterator it( m_styles.begin() ); it != end; ++it )
+    CustomStyles::ConstIterator end = m_styles.constEnd();
+    for ( CustomStyles::ConstIterator it( m_styles.constBegin() ); it != end; ++it )
     {
         kDebug(36003) <<"StyleManager: Saving common cell style" << it.key();
         KoGenStyle customStyle = KoGenStyle( KoGenStyle::StyleTableCell, "table-cell" );
@@ -324,8 +324,8 @@ bool StyleManager::validateStyleName( QString const & name, CustomStyle * style 
   if ( m_defaultStyle->name() == name || name == "Default" )
     return false;
 
-  CustomStyles::const_iterator iter = m_styles.begin();
-  CustomStyles::const_iterator end  = m_styles.end();
+  CustomStyles::const_iterator iter = m_styles.constBegin();
+  CustomStyles::const_iterator end  = m_styles.constEnd();
 
   while ( iter != end )
   {
