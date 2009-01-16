@@ -41,15 +41,14 @@
 #include "KPrViewModePresentation.h"
 
 
-bool KPrPresentationTool::drawMode = false;
-bool KPrPresentationTool::highlightMode = false;
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
 {    
     // init
-    KPrPresentationTool::highlightMode = false;
+    m_drawMode = false;
+    m_highlightMode = false;
 
     // tool box
     m_frame = new QFrame( m_viewMode.canvas() );
@@ -126,10 +125,10 @@ void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
     switch ( event->key() )
     {
         case Qt::Key_Escape:
-	    if(KPrPresentationTool::drawMode)
-	    this->drawOnPresentation();
-	else
-            m_viewMode.activateSavedViewMode();
+	    if(m_drawMode)
+	      this->drawOnPresentation();
+	    else
+	      m_viewMode.activateSavedViewMode();
             break;
         case Qt::Key_Home:
             m_viewMode.navigate( KPrAnimationDirector::FirstPage );
@@ -198,13 +197,16 @@ void KPrPresentationTool::highLightPresentation()
     QSize size = m_viewMode.canvas()->size();
     QPixmap newPage( size );
     if(newPage.isNull())
-	return;
-	
-    if ( KPrPresentationTool::highlightMode ) {
-	KPrPresentationTool::highlightMode = false;
+      return;
+
+    if ( m_highlightMode )
+    {
+	m_highlightMode = false;
 	delete m_blackBackgroundwidget;
-    } else {
-	KPrPresentationTool::highlightMode = true;
+    } 
+    else 
+    {
+	m_highlightMode = true;
 	m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
 	m_blackBackgroundwidget->show();
     }
@@ -250,14 +252,14 @@ void KPrPresentationTool::highLightPresentation()
 
 bool KPrPresentationTool::getDrawMode()
 {
-    return KPrPresentationTool::drawMode;
+    return m_drawMode;
 }
 
 void KPrPresentationTool::switchDrawMode()
 {
-    if(!KPrPresentationTool::drawMode)
+    if(!m_drawMode)
     {
-        KPrPresentationTool::drawMode = true;
+        m_drawMode = true;
         QString str("kpresenter");
         KIconLoader kicon(str);
         str.clear();
@@ -272,19 +274,24 @@ void KPrPresentationTool::switchDrawMode()
     }
     else
     {
-        KPrPresentationTool::drawMode = false;
+        m_drawMode = false;
         QApplication::restoreOverrideCursor();
     }
 }
 
+bool KPrPresentationTool::getHighlightMode()
+{
+    return m_highlightMode;
+}
+
 void KPrPresentationTool::switchHighlightMode()
 {
-    if(!KPrPresentationTool::highlightMode){
-	KPrPresentationTool::highlightMode = true;
+    if(!m_highlightMode){
+	m_highlightMode = true;
     }
     else
     {
-	KPrPresentationTool::highlightMode = false;
+	m_highlightMode = false;
     }
 }
 
@@ -292,7 +299,7 @@ void KPrPresentationTool::drawOnPresentation()
 {
     presentationToolWidget->presentationToolUi().penButton->setText("test...");
     switchDrawMode();
-    presentationToolWidget->presentationToolUi().penButton->setDown(KPrPresentationTool::drawMode);
+    presentationToolWidget->presentationToolUi().penButton->setDown(m_drawMode);
 }
 
 // get the acces on m_frame
@@ -310,11 +317,11 @@ QWidget *KPrPresentationTool::m_blackBackgroundPresentation()
 
 void KPrPresentationTool::setBlackBackgroundVisibility(bool b)
 {
-    KPrPresentationTool::highlightMode = b;
+    m_highlightMode = b;
 }
 
 bool KPrPresentationTool::getBlackBackgroundVisibility()
 {
-    return KPrPresentationTool::highlightMode;
+    return m_highlightMode;
 }
 #include "KPrPresentationTool.moc"
