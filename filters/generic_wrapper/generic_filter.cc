@@ -52,7 +52,7 @@ KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const
         return KoFilter::NotImplemented;
 
 	KService::List::ConstIterator it;
-    for (it=offers.begin(); it!=offers.end(); ++it)
+    for (it=offers.constBegin(); it!=offers.constEnd(); ++it)
     {
         kDebug() <<"Got a filter script, exec:" << (*it)->exec() <<
             ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<

@@ -1108,7 +1108,7 @@ void ProcessDocTag ( QDomNode         myNode,
 
     kDebug(30508) <<"Unachored Framesets : START";
     QStringList::ConstIterator it;
-    for ( it = leader->m_unanchoredFramesets.begin(); it != leader->m_unanchoredFramesets.end(); ++it )
+    for ( it = leader->m_unanchoredFramesets.constBegin(); it != leader->m_unanchoredFramesets.constEnd(); ++it )
     {
         kDebug(30508) << (*it);
     }

@@ -303,9 +303,9 @@ bool AbiWordWorker::doCloseDocument(void)
         *m_streamOut << "<data>\n";
 
         QMap<QString,KoPictureKey>::ConstIterator it;
-		QMap<QString,KoPictureKey>::ConstIterator end(m_mapPictureData.end());
+		QMap<QString,KoPictureKey>::ConstIterator end(m_mapPictureData.constEnd());
         // all images first
-        for (it=m_mapPictureData.begin(); it!=end; ++it)
+        for (it=m_mapPictureData.constBegin(); it!=end; ++it)
         {
             // Warning: do not mix up KWord's key and the iterator's key!
             writePictureData(it.key(),it.value().filename());

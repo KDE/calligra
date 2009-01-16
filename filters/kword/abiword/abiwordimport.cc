@@ -322,7 +322,7 @@ bool StartElementP(StackItem* stackItem, StackItem* stackCurrent,
     {
         strStyle="Normal";
     }
-    StyleDataMap::ConstIterator it=styleDataMap.useOrCreateStyle(strStyle);
+    StyleDataMap::iterator it=styleDataMap.useOrCreateStyle(strStyle);
 
     QString strLevel=attributes.value("level");
     int level;
@@ -1111,7 +1111,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     stackItem->m_doubleArray[0] = 0.0;
     QStringList::ConstIterator it;
     uint i;
-    for ( i=0, it=widthList.begin(); i<columns; ++i, ++it )
+    for ( i=0, it=widthList.constBegin(); i<columns; ++i, ++it )
     {
         kDebug(30506) <<"Column width:" << (*it) <<" cooked" << ValueWithLengthUnit(*it);
         stackItem->m_doubleArray.at(i+1) = ValueWithLengthUnit(*it) + stackItem->m_doubleArray.at(i);
@@ -1578,8 +1578,8 @@ bool StructureParser::endDocument(void)
     StyleDataMap::ConstIterator it;
 
     // At first, we put the Normal style
-    it=styleDataMap.find("Normal");
-    if (it!=styleDataMap.end())
+    it=styleDataMap.constFind("Normal");
+    if (it!=styleDataMap.constEnd())
     {
         kDebug(30506) <<"\"" << it.key() <<"\" =>" << it.value().m_props;
         QDomElement styleElement=mainDocument.createElement("STYLE");
@@ -1589,7 +1589,7 @@ bool StructureParser::endDocument(void)
     else
         kWarning(30506) << "No 'Normal' style";
 
-    for (it=styleDataMap.begin();it!=styleDataMap.end();++it)
+    for (it=styleDataMap.constBegin();it!=styleDataMap.constEnd();++it)
     {
         if (it.key()=="Normal")
             continue;
