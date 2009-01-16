@@ -69,6 +69,13 @@ public:
      */
     bool operator<( const KPrPageLayout & other ) const;
 
+    /**
+     * @brief Compare layout by content
+     *
+     * The content is the same when the order of the placholder objects is the same
+     */
+    static bool compareByContent( const KPrPageLayout & pl1, const KPrPageLayout & pl2 );
+
 private:
     // The display name of the layout
     QString m_name;
