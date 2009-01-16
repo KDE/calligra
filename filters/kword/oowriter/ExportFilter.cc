@@ -354,8 +354,8 @@ void OOWriterWorker::writeStartOfFile(const QString& type)
 void OOWriterWorker::writeFontDeclaration(void)
 {
     zipWriteData( " <office:font-decls>\n");
-	QMap<QString,QString>::ConstIterator end(m_fontNames.end());
-    for (QMap<QString,QString>::ConstIterator it=m_fontNames.begin(); it!=end; ++it)
+	QMap<QString,QString>::ConstIterator end(m_fontNames.constEnd());
+    for (QMap<QString,QString>::ConstIterator it=m_fontNames.constBegin(); it!=end; ++it)
     {
         const bool space=(it.key().find(' ')>=0); // Does the font has at least a space in its name
         const QString fontName(escapeOOText(it.key()));
@@ -1050,8 +1050,8 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         const QString props ( cellToProperties( (*itCell), key ) );
 
         QString automaticCellStyle;
-        QMap<QString,QString>::ConstIterator it ( mapCellStyleKeys.find( key ) );
-        if ( it == mapCellStyleKeys.end() )
+        QMap<QString,QString>::ConstIterator it ( mapCellStyleKeys.constFind( key ) );
+        if ( it == mapCellStyleKeys.constEnd() )
         {
             automaticCellStyle = makeAutomaticStyleName( tableName + ".Cell", cellNumber );
             mapCellStyleKeys [ key ] = automaticCellStyle;
@@ -1492,11 +1492,11 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         QString styleKey;
         const QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) );
 
-        QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
+        QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.constFind(styleKey) );
         kDebug(30518) <<"Searching text key:" << styleKey;
 
         QString automaticStyle;
-        if (it==m_mapTextStyleKeys.end())
+        if (it==m_mapTextStyleKeys.constEnd())
         {
             // We have not any match, so we need a new automatic text style
             automaticStyle=makeAutomaticStyleName("T", m_automaticTextStyleNumber);
@@ -1986,12 +1986,12 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
     QString actualStyle(layout.styleName);
     if (!props.isEmpty())
     {
-        QMap<QString,QString>::ConstIterator it ( m_mapParaStyleKeys.find(styleKey) );
+        QMap<QString,QString>::ConstIterator it ( m_mapParaStyleKeys.constFind(styleKey) );
         kDebug(30518) <<"Searching paragraph key:" << styleKey;
 
         QString automaticStyle;
 
-        if (it==m_mapParaStyleKeys.end())
+        if (it==m_mapParaStyleKeys.constEnd())
         {
             // We have additional properties, so we need an automatic style for the paragraph
             automaticStyle = makeAutomaticStyleName("P", m_automaticParagraphStyleNumber);

@@ -793,8 +793,8 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 
     kDebug(30515) <<"RTF FILTER TIME:" << debugTime.elapsed();
 
-    for (QMap<QString,int>::ConstIterator it=debugUnknownKeywords.begin();
-        it!=debugUnknownKeywords.end();it++)
+    for (QMap<QString,int>::ConstIterator it=debugUnknownKeywords.constBegin();
+        it!=debugUnknownKeywords.constEnd();it++)
         kDebug(30515) <<"Unknown keyword:" << QString("%1" ).arg( it.data(), 4 )  <<" *" << it.key();
 
     return KoFilter::OK;

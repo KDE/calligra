@@ -55,16 +55,16 @@ void KWord13Document::xmldump( QIODevice* io )
     iostream << "<?xml encoding='UTF-8'?>\n";
     iostream << "<kworddocument>\n";
     
-    for ( QMap<QString,QString>::ConstIterator it = m_documentProperties.begin();
-        it != m_documentProperties.end();
+    for ( QMap<QString,QString>::ConstIterator it = m_documentProperties.constBegin();
+        it != m_documentProperties.constEnd();
         ++it)
     {
         iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.value() ) << "\"/>\n";
     }
     
     iostream << " <documentinfo>\n";
-    for ( QMap<QString,QString>::ConstIterator it11 = m_documentInfo.begin();
-        it11 != m_documentInfo.end();
+    for ( QMap<QString,QString>::ConstIterator it11 = m_documentInfo.constBegin();
+        it11 != m_documentInfo.constEnd();
         ++it11)
     {
         iostream << "  <param key=\"" << it11.key() << "\" data=\"" << EscapeXmlDump( it11.value() ) << "\"/>\n";
