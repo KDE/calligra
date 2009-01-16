@@ -386,8 +386,8 @@ QMatrix SvgImport::parseTransform( const QString &transform )
 
     // Split string for handling 1 transform statement at a time
     QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
-    QStringList::ConstIterator it = subtransforms.begin();
-    QStringList::ConstIterator end = subtransforms.end();
+    QStringList::ConstIterator it = subtransforms.constBegin();
+    QStringList::ConstIterator end = subtransforms.constEnd();
     for(; it != end; ++it)
     {
         QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
