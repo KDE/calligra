@@ -588,13 +588,16 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             QString str = QString::null;
 
             QString cs = f->_controlSource->value().toString();
-            if (cs.left(1) == "=") {
+            if (cs.left(1) == "=") { //Everything after = is treated as code
                 if (!cs.contains("PageTotal")) {
-                    str = _handler->evaluate(f->entityName()).toString();
+                    QVariant v = _handler->evaluate(f->entityName());
+                    str = v.toString();
                 } else {
                     str = cs.mid(1);
                     _postProcText.append(tb);
                 }
+            } else if (cs.left(1) == "$") { //Everything past $ is treated as a string
+                str = cs.mid(1);
             } else {
                 QString qry = "Data Source";
                 QString clm = f->_controlSource->value().toString();
