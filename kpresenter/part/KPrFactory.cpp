@@ -86,6 +86,7 @@ const KComponentData &KPrFactory::componentData()
 
         s_instance->dirs()->addResourceType("kpresenter_template", "data", "kpresenter/templates/");
         s_instance->dirs()->addResourceType("slideshow", "data", "kpresenter/slideshow/");
+        s_instance->dirs()->addResourceType("styles", "data", "kpresenter/styles/");
     }
     return *s_instance;
 }

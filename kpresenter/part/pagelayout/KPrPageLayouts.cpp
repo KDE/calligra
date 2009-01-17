@@ -84,6 +84,11 @@ bool KPrPageLayouts::saveOdf( KoPASavingContext & context )
     return true;
 }
 
+bool compareLayouts( const KPrPageLayout * p1, const KPrPageLayout * p2 )
+{
+    return KPrPageLayout::compareByContent( *p1,* p2 );
+}
+
 bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
 {
     QHash<QString, KoXmlElement*> layouts = context.odfLoadingContext().stylesReader().presentationPageLayouts();
@@ -93,7 +98,7 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
     // we should check which layouts are already loaded
     const QMap<QString, KoPAMasterPage *> & masterPages = context.masterPages();
     if ( ! masterPages.isEmpty() ) {
-        KoPageLayout & layout = masterPages.begin().value() ->pageLayout();
+        KoPageLayout & layout = masterPages.begin().value()->pageLayout();
         QRectF pageRect( 0, 0, layout.width, layout.height );
         for ( ; it != layouts.end(); ++it ) {
             KPrPageLayout * pageLayout = new KPrPageLayout();
@@ -108,8 +113,44 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
             }
             else {
                 delete pageLayout;
-                pageLayout = 0;
             }
+        }
+    }
+
+    // handel default styles
+    layouts = context.defaultStylesReader().presentationPageLayouts();
+    it = layouts.begin();
+    QList<KPrPageLayout *> defaultLayouts;
+    for ( ; it != layouts.end(); ++it ) {
+        KPrPageLayout * pageLayout = new KPrPageLayout();
+        // this is not used but needed
+        QRectF pageRect( 0, 0, 800, 600 );
+        if ( pageLayout->loadOdf( *( it.value() ), pageRect ) ) {
+            defaultLayouts.append( pageLayout );
+        }
+        else {
+            delete pageLayout;
+        }
+    }
+    QList<KPrPageLayout *> documentLayouts = m_pageLayouts.values();
+
+    qSort( documentLayouts.begin(), documentLayouts.end(), compareLayouts );
+    qSort( defaultLayouts.begin(), defaultLayouts.end(), compareLayouts );
+
+    QList<KPrPageLayout *>::const_iterator docIt = documentLayouts.begin();
+    QList<KPrPageLayout *>::const_iterator defaultIt = defaultLayouts.begin();
+    while ( defaultIt != defaultLayouts.end() ) {
+        if ( docIt == documentLayouts.end() || compareLayouts( *defaultIt, *docIt ) ) {
+            m_pageLayouts.insert( KPrPageLayoutWrapper( *defaultIt ), *defaultIt );
+            ++defaultIt;
+        }
+        else if ( compareLayouts( *docIt, *defaultIt ) ) {
+            ++docIt;
+        }
+        else {
+            // it already exist
+            ++docIt;
+            ++defaultIt;
         }
     }
 
