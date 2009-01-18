@@ -53,8 +53,8 @@ protected:
     /// The main entry point for the conversion
     void convert();
 
-    /// Parses a group element, returning a list of child shapes
-    QList<KoShape*> parseGroup( const QDomElement & );
+    /// Parses a container element, returning a list of child shapes
+    QList<KoShape*> parseContainer( const QDomElement & );
     /// Parses a use element, returning a list of child shapes
     QList<KoShape*> parseUse( const QDomElement & );
     /// Parses definitions for later use

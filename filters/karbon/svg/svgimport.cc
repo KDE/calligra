@@ -201,7 +201,7 @@ void SvgImport::convert()
     */
 
     m_gc.push( gc );
-    QList<KoShape*> shapes = parseGroup( docElem );
+    QList<KoShape*> shapes = parseContainer( docElem );
 
     buildDocument( shapes );
 }
@@ -1325,7 +1325,7 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
                 parseStyle( 0, a );
                 parseFont( a );
 
-                QList<KoShape*> childShapes = parseGroup( a );
+                QList<KoShape*> childShapes = parseContainer( a );
 
                 // handle id
                 if( !a.attribute("id").isEmpty() )
@@ -1365,14 +1365,40 @@ void SvgImport::addToGroup( QList<KoShape*> shapes, KoShapeGroup * group )
     cmd.redo();
 }
 
-QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
+QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
 {
     QList<KoShape*> shapes;
+
+    // are we parsing a switch container
+    bool isSwitch = e.tagName() == "switch";
 
     for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement b = n.toElement();
-        if( b.isNull() ) continue;
+        if( b.isNull() )
+            continue;
+
+        if( isSwitch )
+        {
+            // if we are parsing a switch check the requiredFeatures, requiredExtensions
+            // and systemLanguage attributes
+            if( b.hasAttribute("requiredFeatures") )
+            {
+                QString features = b.attribute("requiredFeatures");
+                if( features.isEmpty() || features.simplified().isEmpty() )
+                    continue;
+                // TODO: evaluate feature list
+            }
+            if( b.hasAttribute( "requiredExtensions" ) )
+            {
+                // we do not support any extensions
+                continue;
+            }
+            if( b.hasAttribute( "systemLanguage" ) )
+            {
+                // not implemeted yet
+            }
+        }
 
         // treat svg link <a> as group so we don't miss its child elements
         if( b.tagName() == "g" || b.tagName() == "a" )
@@ -1387,7 +1413,7 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             parseStyle( group, b );
             parseFont( b );
 
-            QList<KoShape*> childShapes = parseGroup( b );
+            QList<KoShape*> childShapes = parseContainer( b );
 
             // handle id
             if( !b.attribute("id").isEmpty() )
@@ -1398,24 +1424,25 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             shapes.append( group );
 
             removeGraphicContext();
-
-            continue;
         }
-        if( b.tagName() == "switch" )
+        else if( b.tagName() == "switch" )
         {
-            return parseGroup( b );
+            addGraphicContext();
+            setupTransform( b );
+            
+            shapes += parseContainer( b );
+            
+            removeGraphicContext();
         }
-        if( b.tagName() == "defs" )
+        else if( b.tagName() == "defs" )
         {
             parseDefs( b );
-            continue;
         }
         else if( b.tagName() == "linearGradient" || b.tagName() == "radialGradient" )
         {
             parseGradient( b );
-            continue;
         }
-        if( b.tagName() == "rect" ||
+        else if( b.tagName() == "rect" ||
             b.tagName() == "ellipse" ||
             b.tagName() == "circle" ||
             b.tagName() == "line" ||
@@ -1427,20 +1454,26 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             KoShape * shape = createObject( b );
             if( shape )
                 shapes.append( shape );
-            continue;
         }
         else if( b.tagName() == "text" )
         {
             KoShape * shape = createText( b, shapes );
             if( shape )
                 shapes.append( shape );
-            continue;
         }
         else if( b.tagName() == "use" )
         {
             shapes += parseUse( b );
+        }
+        else
+        {
+            // unsupported element
             continue;
         }
+
+        // if we are parsing a switch, stop after the first supported element
+        if( isSwitch )
+            break;
     }
 
     return shapes;
@@ -1461,7 +1494,6 @@ void SvgImport::parseDefs( const QDomElement &e )
         }
     }
 }
-
 
 // Creating functions
 // ---------------------------------------------------------------------------------------
