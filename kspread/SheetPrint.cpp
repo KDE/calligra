@@ -859,8 +859,7 @@ void SheetPrint::setHeadFootLine( const QString &_headl, const QString &_headm, 
     m_footLeft  = _footl;
     m_footRight = _footr;
     m_footMid   = _footm;
-
-    m_pDoc->setModified( true );
+    if (m_pDoc) m_pDoc->setModified( true );
 }
 
 void SheetPrint::setPaperOrientation( KoPageFormat::Orientation _orient )
@@ -1034,7 +1033,7 @@ void SheetPrint::setPrintRange( const QRect &_printRange )
     if ( oldTop != _printRange.top() )
         updateNewPageListY( qMin( oldTop, _printRange.top() ) );
 
-    m_pDoc->setModified( true );
+    if(m_pDoc) m_pDoc->setModified( true );
 
     emit sig_updateView( m_pSheet );
 
@@ -1247,7 +1246,7 @@ void SheetPrint::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     if ( m_pSheet->isShowPageBorders() )
         emit sig_updateView( m_pSheet );
 
-    m_pDoc->setModified( true );
+    if (m_pDoc) m_pDoc->setModified( true );
 }
 
 void SheetPrint::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
@@ -1277,7 +1276,7 @@ void SheetPrint::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
     if ( m_pSheet->isShowPageBorders() )
         emit sig_updateView( m_pSheet );
 
-    m_pDoc->setModified( true );
+    if (m_pDoc) m_pDoc->setModified( true );
 }
 
 void SheetPrint::insertColumn( int col, int nbCol )
@@ -1419,7 +1418,7 @@ void SheetPrint::setZoom( double _zoom, bool checkPageLimit )
         calculateZoomForPageLimitY();
     }
 
-    m_pDoc->setModified( true );
+    if (m_pDoc) m_pDoc->setModified( true );
 }
 
 double SheetPrint::zoom() const
