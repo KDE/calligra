@@ -861,20 +861,13 @@ void CellFormatDialog::slotApply()
 
   if ( isMerged != positionPage->getMergedCellState() )
   {
-    if ( positionPage->getMergedCellState() )
-    {
-      MergeCommand* command = new MergeCommand(macroCommand);
-      command->setSheet(m_sheet);
-      command->add(*m_selection);
-    }
-    else
-    {
+    MergeCommand* command = new MergeCommand(macroCommand);
+    command->setSheet(m_sheet);
+    command->setSelection(m_selection);
+    if (!positionPage->getMergedCellState())
       //dissociate cells
-      MergeCommand* command = new MergeCommand(macroCommand);
-      command->setSheet(m_sheet);
       command->setReverse(true);
-      command->add(*m_selection);
-    }
+    command->add(*m_selection);
   }
 
   StyleCommand* command = new StyleCommand(macroCommand);
