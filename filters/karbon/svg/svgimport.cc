@@ -1468,6 +1468,7 @@ QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
         else
         {
             // unsupported element
+            kDebug(30514) << "element" << b.tagName() << "is not supported";
             continue;
         }
 
