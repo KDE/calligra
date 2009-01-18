@@ -28,8 +28,9 @@
 class KPrPresentationHighlightWidget : public QWidget {
     Q_OBJECT
 public :
-    KPrPresentationHighlightWidget(KoPACanvas * canvas);
+    KPrPresentationHighlightWidget( KoPACanvas * canvas );
     ~KPrPresentationHighlightWidget();
+    void drawCircle( QPoint point );
 protected :
     void mouseMoveEvent ( QMouseEvent * event );
 public :

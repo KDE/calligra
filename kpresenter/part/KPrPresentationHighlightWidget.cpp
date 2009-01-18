@@ -30,15 +30,15 @@
 
 KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canvas) : QWidget(canvas)
 {
-    setFocusPolicy(Qt::StrongFocus);
-    setMouseTracking(true);
+    setFocusPolicy( Qt::StrongFocus );
+    setMouseTracking( true );
     m_size = canvas->size();
 
     QPixmap newPage( m_size );
 
-    QColor c(Qt::black); c.setAlphaF(0.5); newPage.fill(c);
+    QColor c( Qt::black ); c.setAlphaF( 0.5 ); newPage.fill( c );
 
-    resize(m_size);
+    resize( m_size );
 
     m_blackBackgroundframe = new QFrame(this);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
@@ -59,21 +59,31 @@ KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
     delete m_blackBackgroundframe;  
 }
 
-void KPrPresentationHighlightWidget::mouseMoveEvent(QMouseEvent* e)
+void KPrPresentationHighlightWidget::mouseMoveEvent( QMouseEvent* e )
 {
-    kDebug() << "mouseMoveEvent";
     QPoint center = e->pos();
+    
+    drawCircle( center );
+}
 
-    kDebug() << "delete";
+void KPrPresentationHighlightWidget::drawCircle( QPoint p )
+{
+    // QColor c( Qt::red ); c.setAlphaF( 0.5 ); newPage.fill( c );
+    
+    QImage image( m_size, QImage::Format_RGB32 );
+    kDebug() << qRgb( 255, 0, 0 );
+    for( int i = 0 ; i < m_size.rwidth () ; i++ )
+    {
+	for ( int j = 0 ; j < m_size.rheight (); j++ )
+	{
+	    if(  sqrt( (i*i) + (j*j) ) < 50 )
+		image.setPixel( i, j, qRgb( 255, 0, 0 ) );
+	    else
+		image.setPixel( i, j, qRgb( 255, 0, 0 ) );
+	}
+    }
+    
     QPixmap newPage( m_size );
-    QColor c( Qt::red ); c.setAlphaF( 0.5 ); newPage.fill( c );
-
-    resize(m_size);
-    
+    newPage.fromImage( image );
     m_label->setPixmap(newPage);
-    
-    //frameLayout2->addWidget( label, 0, Qt::AlignCenter );
-    //m_blackBackgroundframe->setLayout( frameLayout2 );
-    //m_blackBackgroundframe->move( -4,-4 );
-    kDebug() << "mouseMoveEvent done";
 }
