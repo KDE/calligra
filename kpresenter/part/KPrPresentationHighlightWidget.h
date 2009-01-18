@@ -36,6 +36,7 @@ public :
     QSize m_size;
     bool m_blackBackgroundVisibility;
     QFrame *m_blackBackgroundframe;
+    QLabel *m_label;
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTWIDGET_H */

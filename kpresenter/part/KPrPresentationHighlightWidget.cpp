@@ -42,11 +42,11 @@ KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canv
 
     m_blackBackgroundframe = new QFrame(this);
     QVBoxLayout *frameLayout2 = new QVBoxLayout();
-    QLabel *label = new QLabel();
+    m_label = new QLabel();
     
-    label->setPixmap(newPage);
+    m_label->setPixmap(newPage);
     
-    frameLayout2->addWidget( label, 0, Qt::AlignCenter );
+    frameLayout2->addWidget( m_label, 0, Qt::AlignCenter );
     m_blackBackgroundframe->setLayout( frameLayout2 );
     m_blackBackgroundframe->move( -4,-4 );
 
@@ -61,24 +61,19 @@ KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
 
 void KPrPresentationHighlightWidget::mouseMoveEvent(QMouseEvent* e)
 {
-    kDebug() << "youhou";
+    kDebug() << "mouseMoveEvent";
     QPoint center = e->pos();
 
-    delete m_blackBackgroundframe;
-
+    kDebug() << "delete";
     QPixmap newPage( m_size );
-    QColor c(Qt::red); c.setAlphaF(0.5); newPage.fill(c);
+    QColor c( Qt::red ); c.setAlphaF( 0.5 ); newPage.fill( c );
 
     resize(m_size);
-
     
-    m_blackBackgroundframe = new QFrame(this);
-    QVBoxLayout *frameLayout2 = new QVBoxLayout();
-    QLabel *label = new QLabel();
+    m_label->setPixmap(newPage);
     
-    label->setPixmap(newPage);
-    
-    frameLayout2->addWidget( label, 0, Qt::AlignCenter );
-    m_blackBackgroundframe->setLayout( frameLayout2 );
-    m_blackBackgroundframe->move( -4,-4 );
+    //frameLayout2->addWidget( label, 0, Qt::AlignCenter );
+    //m_blackBackgroundframe->setLayout( frameLayout2 );
+    //m_blackBackgroundframe->move( -4,-4 );
+    kDebug() << "mouseMoveEvent done";
 }
