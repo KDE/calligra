@@ -24,6 +24,8 @@
 
 #include <KoPACanvas.h>
 #include <QPoint>
+#include <QImage>
+#include <QColor>
 #include <kdebug.h>
 
 #include "KPrPresentationHighlightWidget.h"
@@ -70,16 +72,16 @@ void KPrPresentationHighlightWidget::drawCircle( QPoint p )
 {
     // QColor c( Qt::red ); c.setAlphaF( 0.5 ); newPage.fill( c );
     
-    QImage image( m_size, QImage::Format_RGB32 );
-    kDebug() << qRgb( 255, 0, 0 );
+    QImage image( m_size, QImage::Format_ARGB32 );
+
     for( int i = 0 ; i < m_size.rwidth () ; i++ )
     {
 	for ( int j = 0 ; j < m_size.rheight (); j++ )
 	{
-	    if(  sqrt( (i*i) + (j*j) ) < 50 )
-		image.setPixel( i, j, qRgb( 255, 0, 0 ) );
+	    if(  sqrt( (p.x()-i)*(p.x()-i) + (p.y()-j)+(p.y()-j) ) < 50 )
+		image.setPixel( i, j, qRgba(0,0,0,150) );
 	    else
-		image.setPixel( i, j, qRgb( 255, 0, 0 ) );
+		image.setPixel( i, j, qRgba(0,0,0,150) );
 	}
     }
     
