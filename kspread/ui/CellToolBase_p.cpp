@@ -78,13 +78,14 @@ using namespace KSpread;
 
 void CellToolBase::Private::updateEditor(const Cell& cell)
 {
-    const Style style = cell.style();
+    const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
+    const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
-        optionWidget.userInput->setPlainText(cell.displayText());
+        optionWidget.userInput->setPlainText(theCell.displayText());
     } else if (q->selection()->activeSheet()->isProtected() && style.hideAll()) {
         optionWidget.userInput->clear();
     } else {
-        optionWidget.userInput->setPlainText(cell.userInput());
+        optionWidget.userInput->setPlainText(theCell.userInput());
     }
 }
 
