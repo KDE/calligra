@@ -572,12 +572,19 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     // dash
     if(  line->lineStyle() > Qt::SolidLine )
     {
-        //*stream << " stroke-dashoffset=\"" << line->dashPattern().offset() << "\"";
+        qreal dashFactor = line->lineWidth();
+
+        if( line->dashOffset() != 0 )
+            *stream << " stroke-dashoffset=\"" << dashFactor * line->dashOffset() << "\"";
         *stream << " stroke-dasharray=\" ";
 
-        foreach( qreal dash, line->lineDashes() )
+        const QVector<qreal> dashes = line->lineDashes();
+        int dashCount = dashes.size();
+        for( int i = 0; i < dashCount; ++i )
         {
-            *stream << dash << " ";
+            if( i > 0 )
+                *stream << ",";
+            *stream << dashes[i] * dashFactor;
         }
         *stream << "\"";
     }
