@@ -129,6 +129,7 @@ private:
     QRectF                         m_outerRect;
     QDomDocument                   m_inpdoc;
     QStringList m_fontAttributes; ///< font related attributes
+    QStringList m_styleAttributes; ///< style related attributes
 };
 
 #endif

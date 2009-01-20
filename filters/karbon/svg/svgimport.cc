@@ -77,6 +77,11 @@ SvgImport::SvgImport(QObject*parent, const QVariantList&)
 {
     SETRGBCOLORS();
     m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
+    // the order of the style attributes is important, don't change without reason !!!
+    m_styleAttributes << "color" << "opacity" << "display";
+    m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
+    m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
+    m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit"; 
 }
 
 SvgImport::~SvgImport()
@@ -1165,37 +1170,16 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
     SvgGraphicsContext *gc = m_gc.top();
     if( !gc ) return;
 
-    // try normal PA
-    if( !e.attribute( "color" ).isEmpty() )
-        parsePA( obj, gc, "color", e.attribute( "color" ) );
-    if( !e.attribute( "fill" ).isEmpty() )
-        parsePA( obj, gc, "fill", e.attribute( "fill" ) );
-    if( !e.attribute( "fill-rule" ).isEmpty() )
-        parsePA( obj, gc, "fill-rule", e.attribute( "fill-rule" ) );
-    if( !e.attribute( "stroke" ).isEmpty() )
-        parsePA( obj, gc, "stroke", e.attribute( "stroke" ) );
-    if( !e.attribute( "stroke-width" ).isEmpty() )
-        parsePA( obj, gc, "stroke-width", e.attribute( "stroke-width" ) );
-    if( !e.attribute( "stroke-linejoin" ).isEmpty() )
-        parsePA( obj, gc, "stroke-linejoin", e.attribute( "stroke-linejoin" ) );
-    if( !e.attribute( "stroke-linecap" ).isEmpty() )
-        parsePA( obj, gc, "stroke-linecap", e.attribute( "stroke-linecap" ) );
-    if( !e.attribute( "stroke-dasharray" ).isEmpty() )
-        parsePA( obj, gc, "stroke-dasharray", e.attribute( "stroke-dasharray" ) );
-    if( !e.attribute( "stroke-dashoffset" ).isEmpty() )
-        parsePA( obj, gc, "stroke-dashoffset", e.attribute( "stroke-dashoffset" ) );
-    if( !e.attribute( "stroke-opacity" ).isEmpty() )
-        parsePA( obj, gc, "stroke-opacity", e.attribute( "stroke-opacity" ) );
-    if( !e.attribute( "stroke-miterlimit" ).isEmpty() )
-        parsePA( obj, gc, "stroke-miterlimit", e.attribute( "stroke-miterlimit" ) );
-    if( !e.attribute( "fill-opacity" ).isEmpty() )
-        parsePA( obj, gc, "fill-opacity", e.attribute( "fill-opacity" ) );
-    if( !e.attribute( "opacity" ).isEmpty() )
-        parsePA( obj, gc, "opacity", e.attribute( "opacity" ) );
-    if( !e.attribute( "display" ).isEmpty() )
-        parsePA( obj, gc, "display", e.attribute( "display" ) );
+    QMap<QString, QString> styleMap;
 
-    // try style attr
+    // first collect individual style attributes
+    foreach( const QString & command, m_styleAttributes )
+    {
+        if( e.hasAttribute( command ) )
+            styleMap[command] = e.attribute( command );
+    }
+
+    // now parse style attribute
     QString style = e.attribute( "style" ).simplified();
     QStringList substyles = style.split( ';', QString::SkipEmptyParts );
     for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
@@ -1203,9 +1187,18 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         QStringList substyle = it->split( ':' );
         QString command = substyle[0].trimmed();
         QString params  = substyle[1].trimmed();
-        // do not parse font attributes here, this is done in parseFont
-        if( ! m_fontAttributes.contains( command ) )
-            parsePA( obj, gc, command, params );
+        // only use style attributes
+        if( m_styleAttributes.contains( command ) )
+            styleMap[command] = params;
+    }
+
+    // make sure we parse the style attributes in the right order
+    foreach( const QString & command, m_styleAttributes )
+    {
+        QString params = styleMap.value( command );
+        if( params.isEmpty() )
+            continue;
+        parsePA( obj, gc, command, params );
     }
 
     if(!obj)
