@@ -33,87 +33,40 @@
 
 KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canvas) : QWidget(canvas)
 {
+    // The focus and the track for have the mouse position every time
     setFocusPolicy( Qt::StrongFocus );
     setMouseTracking( true );
+    // Size of the canvas is saved becouse it's used in the paintEvent
     m_size = canvas->size();
     resize( m_size );
-    
-    /*QPixmap newPage( m_size );
-
-    QColor c( Qt::black ); c.setAlphaF( 0.5 ); newPage.fill( c );
-
-    resize( m_size );
-
-    m_blackBackgroundframe = new QFrame(this);
-    QVBoxLayout *frameLayout2 = new QVBoxLayout();
-    m_label = new QLabel();
-    
-    m_label->setPixmap(newPage);
-    
-    frameLayout2->addWidget( m_label, 0, Qt::AlignCenter );
-    m_blackBackgroundframe->setLayout( frameLayout2 );
-    m_blackBackgroundframe->move( -4,-4 );
-*/
-    
-
 }
 
 KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
-{
-   // delete m_blackBackgroundframe;  
+{ 
 }
 
+/** paintEvent call with the update in the mouseMoveEvent */
 void KPrPresentationHighlightWidget::paintEvent ( QPaintEvent * event )
 {
-    QPainter *painter = new QPainter( this );
-    painter->setPen( Qt::black );
-    
-    for( int i = 0 ; i < m_size.rwidth () ; i++ )
-    {
-	for ( int j = 0 ; j < m_size.rheight (); j++ )
-	{
-	    if(  sqrt( (m_center.x()-i)*(m_center.x()-i) + (m_center.y()-j)*(m_center.y()-j) ) >= 100 )
-	    {
-		painter->drawPoint( i, j );
-	    }
-	    /*else
-	    {
-		painter->setPen( Qt::white );
-		painter->drawPoint( i, j );
-	    }*/
-	}
-    }
-    
-    //painter->setPen( Qt::red );
-    //painter->drawEllipse( m_center, 50, 50 );
+    QPainter painter( this );
+    QPen myPen;
+    QColor c( Qt::black ); c.setAlphaF( 0.5 );
+    // The circle we want
+    QPainterPath ellipse;
+    ellipse.addEllipse( m_center.x() - 75, m_center.y() - 75, 150, 150 );
+    // All the 'background'
+    QPainterPath myPath;
+    myPath.addRect( 0, 0, m_size.rwidth(), m_size.rheight() );
+    // We draw the difference
+    painter.setPen( myPen );
+    painter.fillPath( myPath.subtracted( ellipse ), c );
 }
 
+/** Take the mouse position every time the mouse is moving */
 void KPrPresentationHighlightWidget::mouseMoveEvent( QMouseEvent* e )
 {
-    m_center = e->pos();
-    
+    // Save the position of the mouse
+    m_center = e->pos();   
+    // Update the screen : move the circle with a paint event
     update();
 }
-/*
-void KPrPresentationHighlightWidget::drawCircle( QPoint p )
-{
-    // QColor c( Qt::red ); c.setAlphaF( 0.5 ); newPage.fill( c );
-    
-    QImage image( m_size, QImage::Format_ARGB32 );
-
-    for( int i = 0 ; i < m_size.rwidth () ; i++ )
-    {
-	for ( int j = 0 ; j < m_size.rheight (); j++ )
-	{
-	    if(  sqrt( (p.x()-i)*(p.x()-i) + (p.y()-j)+(p.y()-j) ) < 50 )
-		image.setPixel( i, j, qRgba(0,0,0,150) );
-	    else
-		image.setPixel( i, j, qRgba(0,0,0,150) );
-	}
-    }
-    
-    QPixmap newPage( m_size );
-    newPage.fromImage( image );
-    m_label->setPixmap(newPage);
-    update();
-}*/
