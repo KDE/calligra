@@ -27,6 +27,7 @@
 #include <QList>
 #include "ui/KPrPresentationToolWidget.h"
 #include "KPrPresentationHighlightWidget.h"
+#include "KPrPresentationDrawWidget.h"
 
 class KoEventAction;
 class KPrViewModePresentation;
@@ -41,7 +42,7 @@ public:
     bool wantsAutoScroll();
 
     void paint( QPainter &painter, const KoViewConverter &converter );
-    
+
     void mousePressEvent( KoPointerEvent *event );
     void mouseDoubleClickEvent( KoPointerEvent *event );
     void mouseMoveEvent( KoPointerEvent *event );
@@ -49,7 +50,7 @@ public:
     void keyPressEvent( QKeyEvent *event );
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( KoPointerEvent * event );
-        
+
     QFrame *m_frameToolPresentation();
     QWidget *m_blackBackgroundPresentation();
     void setBlackBackgroundVisibility(bool b);
@@ -73,6 +74,7 @@ private:
     QFrame *m_frame;
     QFrame *m_blackBackgroundframe;
     KPrPresentationHighlightWidget * m_blackBackgroundwidget;
+    KPrPresentationDrawWidget * m_drawWidget;
     bool m_highlightMode;
     bool m_drawMode;
 

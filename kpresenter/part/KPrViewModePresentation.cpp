@@ -160,7 +160,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
-    
+   
     m_tool->m_frameToolPresentation()->resize( presentationRect.size() );
     m_tool->m_frameToolPresentation()->setVisible(true);
 

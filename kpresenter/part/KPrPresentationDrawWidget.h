@@ -20,6 +20,8 @@
 #define KPRPRESENTATIONDRAWWIDGET_H
 
 #include <QWidget>
+#include <QtGui/QLabel>
+#include <QVarLengthArray>
 
 #include "KPrViewModePresentation.h"
 /*dans le destructeur tu pourras faire un set sur le booléen à False, et dans le constructeur un Set à true*/
@@ -29,6 +31,14 @@ class KPrPresentationDrawWidget : public QWidget {
 public :
     KPrPresentationDrawWidget(KoPACanvas * canvas);
     ~KPrPresentationDrawWidget();
+
+    void paintEvent(QPaintEvent * event);
+    void mouseMoveEvent( QMouseEvent* e );
+
+private :
+    int i ;
+    QSize m_size;
+    QPoint * point;
 };
 
 #endif /* KPRPRESENTATIONDRAWWIDGET_H */ 

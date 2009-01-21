@@ -41,7 +41,6 @@
 #include "KPrViewModePresentation.h"
 
 
-
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
@@ -80,6 +79,7 @@ void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &conve
 {
 }
 
+
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 {
     if ( event->button() & Qt::LeftButton ) {
@@ -103,6 +103,7 @@ void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
         finishEventActions();
         m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
     }
+   
 }
 
 void KPrPresentationTool::mouseDoubleClickEvent( KoPointerEvent *event )
@@ -271,10 +272,13 @@ void KPrPresentationTool::switchDrawMode()
         QCursor cur = QCursor(pix);
         QApplication::setOverrideCursor(cur);
 //        QApplication::setOverrideCursor(QCursor(Qt::CrossCursor));
+	m_drawWidget = new KPrPresentationDrawWidget(m_viewMode.canvas());
+	m_drawWidget->show();
     }
     else
     {
         m_drawMode = false;
+	delete m_drawWidget;
         QApplication::restoreOverrideCursor();
     }
 }

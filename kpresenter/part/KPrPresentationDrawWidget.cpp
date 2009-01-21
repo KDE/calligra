@@ -18,15 +18,57 @@
  */
 
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 
 #include <KoPACanvas.h>
+#include <KoPointerEvent.h>
+#include <kdebug.h>
 
 #include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWidget(canvas)
 {
+    setFocusPolicy( Qt::StrongFocus );
+    setMouseTracking( false );
+    m_size = canvas->size();
+
+    resize( m_size );
+    
+    i = 0;
 }
 
 KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
 {
+  
 } 
+void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
+{
+  QPainter * painter = new QPainter(this);
+  painter->setPen( Qt::black );
+  for(int j = 0; j<i; j++)
+  {
+    if(point[j].x()>0 && point[j].x()<m_size.rwidth() && point[j].y()>0 && point[j].y()<m_size.rwidth())
+    {
+    painter->drawPoint(point[j]);
+    painter->drawPoint((point[j].x())+1,(point[j].y())+1 );
+    painter->drawPoint(point[j].x(),point[j].y()+1 );
+    painter->drawPoint(point[j].x()-1,point[j].y()+1 );
+    painter->drawPoint(point[j].x()+1,point[j].y()-1 );
+    painter->drawPoint(point[j].x(),point[j].y()-1 );
+    painter->drawPoint(point[j].x()-1,point[j].y()-1 );
+    painter->drawPoint(point[j].x()+1,point[j].y() );
+    painter->drawPoint(point[j].x()-1,point[j].y() );
+    }
+  }
+  delete painter;
+}
+void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
+{
+kDebug() << "1";
+  point[i] = e->pos();
+  i++;
+  
+  this->update();
+  kDebug() << "2";
+}
