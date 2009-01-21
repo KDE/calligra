@@ -37,10 +37,8 @@ public :
     void mousePressEvent( QMouseEvent* e );
 
 private :
-    int m_nbPoints, m_nbPolyline ;
     QSize m_size;
-    QPainter * m_painter;
-    QList<QVector<QPointF> > m_point;
+    QList<QVector<QPointF> > m_pointVectors;
 };
 
 #endif /* KPRPRESENTATIONDRAWWIDGET_H */ 
