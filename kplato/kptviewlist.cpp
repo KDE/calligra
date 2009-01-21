@@ -508,10 +508,8 @@ ViewListItem *ViewListWidget::findItem(  const QWidget *view, QTreeWidgetItem *p
 
 void ViewListWidget::slotCreatePart()
 {
-    kDebug();
-    QString servName = sender()->objectName();
-    kDebug()<<servName;
-    KService::Ptr serv = KService::serviceByName( servName );
+    const QString entryPath = sender()->objectName();
+    KService::Ptr serv = KService::serviceByDesktopPath( entryPath );
     KoDocumentEntry entry = KoDocumentEntry( serv );
     emit createKofficeDocument( entry );
 }
@@ -642,7 +640,7 @@ void ViewListWidget::setupContextMenus()
             continue;
             }
             action = new QAction( KIcon(serv->icon()), serv->genericName().replace('&',"&&"), this );
-            action->setObjectName( serv->name().toLatin1() );
+            action->setObjectName( serv->entryPath() );
             connect(action, SIGNAL( triggered( bool ) ), this, SLOT( slotCreatePart() ) );
             m_adddocument.append( action );
     }
@@ -650,7 +648,7 @@ void ViewListWidget::setupContextMenus()
     // no item actions
     //action = new QAction( KIcon( "document-new" ), i18n( "New Category..." ), this );
     //m_noitem.append( action );
-    
+
     // view insert actions
     action = new QAction( KIcon( "list-add" ), i18n( "View..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
