@@ -1286,7 +1286,10 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
 
     Q_ASSERT( d->ui.dataSetChartTypeMenu->menu() );
 
-    if ( dataSet->chartType() != LastChartType ) {
+    if ( dataSet->chartType() == LastChartType ) {
+        d->ui.dataSetChartTypeMenu->setIcon( QIcon() );
+    }
+    else {
         switch ( dataSet->chartType() ) {
         case BarChartType:
             switch ( dataSet->chartSubType() ) {
@@ -1327,16 +1330,32 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
         case CircleChartType:
             d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_circle_normal" ) );
             break;
-        case RadarChartType:
-            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_radar_normal" ) );
+        case RingChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_ring_normal" ) );
             break;
         case ScatterChartType:
             d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_scatter_normal" ) );
             break;
+        case RadarChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_radar_normal" ) );
+            break;
+        case StockChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_stock_normal" ) );
+            break;
+        case BubbleChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_bubble_normal" ) );
+            break;
+        case SurfaceChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_surface_normal" ) );
+            break;
+        case GanttChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_gantt_normal" ) );
+            break;
+
+            // Fixes a warning that LastChartType isn't handled.
+        default:
+            break;
         }
-    }
-    else {
-        d->ui.dataSetChartTypeMenu->setIcon( QIcon() );
     }
     
     d->selectedDataSet = index;
