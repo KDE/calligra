@@ -170,18 +170,9 @@ public:
      */
     const QList<KoShape*> shapes() const;
 
-    QDomDocument saveXML() const;
     void saveOasis( KoShapeSavingContext & context ) const;
     bool saveOdf( KoDocument::SavingContext & documentContext );
-
-    bool loadXML( const KoXmlElement& doc );
-    virtual bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
-    virtual void save( QDomElement& element ) const;
-    virtual void load( const KoXmlElement& element );
-    void loadDocumentContent( const KoXmlElement& doc );
-
-    virtual KarbonDocument* clone() const;
-
+    bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
 
     /**
     * Adds an object to the document.

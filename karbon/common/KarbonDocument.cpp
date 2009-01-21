@@ -160,16 +160,6 @@ void KarbonDocument::remove( KoShape* shape )
     d->objects.removeAt( d->objects.indexOf( shape ) );
 }
 
-QDomDocument
-KarbonDocument::saveXML() const
-{
-    QDomDocument doc;
-    QDomElement me = doc.createElement( "DOC" );
-    doc.appendChild( me );
-    save( me );
-    return doc;
- }
-
 void KarbonDocument::saveOasis( KoShapeSavingContext & context ) const
 {
     context.xmlWriter().startElement( "draw:page" );
@@ -181,82 +171,6 @@ void KarbonDocument::saveOasis( KoShapeSavingContext & context ) const
         layer->saveOdf( context );
 
     context.xmlWriter().endElement(); // draw:page
-}
-
-void
-KarbonDocument::save( QDomElement& me ) const
-{
-    me.setAttribute( "mime", "application/x-karbon" ),
-    me.setAttribute( "version", "0.1" );
-    me.setAttribute( "editor", "Karbon14" );
-    me.setAttribute( "syntaxVersion", "0.1" );
-    if( d->pageSize.width() > 0.0 )
-        me.setAttribute( "width", d->pageSize.width() );
-    if( d->pageSize.height() > 0. )
-        me.setAttribute( "height", d->pageSize.height() );
-    me.setAttribute( "unit", KoUnit::unitName( d->unit ) );
-
-    // save objects:
-    /* TODO: porting to flake
-    VLayerListIterator itr( m_layers );
-
-    for ( ; itr.current(); ++itr )
-            itr.current()->save( me );
-    */
-}
-
-KarbonDocument*
-KarbonDocument::clone() const
-{
-    return new KarbonDocument( *this );
-}
-
-void
-KarbonDocument::load( const KoXmlElement& doc )
-{
-    loadXML( doc );
-}
-
-bool KarbonDocument::loadXML( const KoXmlElement& doc )
-{
-    if( doc.attribute( "mime" ) != "application/x-karbon" ||
-        doc.attribute( "syntaxVersion" ) != "0.1" )
-    {
-        return false;
-    }
-
-    qDeleteAll( d->layers );
-    d->layers.clear();
-    qDeleteAll( d->objects );
-    d->objects.clear();
-
-    d->pageSize.setWidth( doc.attribute( "width", "800.0" ).toDouble() );
-    d->pageSize.setHeight( doc.attribute( "height", "550.0" ).toDouble() );
-
-    d->unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( d->unit ) ) );
-
-    loadDocumentContent( doc );
-
-    if( d->layers.isEmpty() )
-        insertLayer( new KoShapeLayer() );
-
-    return true;
-}
-
-void
-KarbonDocument::loadDocumentContent( const KoXmlElement& doc )
-{
-    KoXmlElement e;
-    forEachElement(e, doc)
-    {
-        if( e.tagName() == "LAYER" )
-        {
-            KoShapeLayer* layer = new KoShapeLayer();
-            // TODO implement layer loading
-            //layer->load( e );
-            insertLayer( layer );
-        }
-    }
 }
 
 bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context )
