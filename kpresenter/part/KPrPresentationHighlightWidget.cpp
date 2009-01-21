@@ -26,6 +26,7 @@
 #include <QPoint>
 #include <QImage>
 #include <QColor>
+#include <QPainter>
 #include <kdebug.h>
 
 #include "KPrPresentationHighlightWidget.h"
@@ -35,8 +36,9 @@ KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canv
     setFocusPolicy( Qt::StrongFocus );
     setMouseTracking( true );
     m_size = canvas->size();
-
-    QPixmap newPage( m_size );
+    resize( m_size );
+    
+    /*QPixmap newPage( m_size );
 
     QColor c( Qt::black ); c.setAlphaF( 0.5 ); newPage.fill( c );
 
@@ -51,23 +53,48 @@ KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canv
     frameLayout2->addWidget( m_label, 0, Qt::AlignCenter );
     m_blackBackgroundframe->setLayout( frameLayout2 );
     m_blackBackgroundframe->move( -4,-4 );
-
+*/
     
 
 }
 
 KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
 {
-    delete m_blackBackgroundframe;  
+   // delete m_blackBackgroundframe;  
+}
+
+void KPrPresentationHighlightWidget::paintEvent ( QPaintEvent * event )
+{
+    QPainter *painter = new QPainter( this );
+    painter->setPen( Qt::black );
+    
+    for( int i = 0 ; i < m_size.rwidth () ; i++ )
+    {
+	for ( int j = 0 ; j < m_size.rheight (); j++ )
+	{
+	    if(  sqrt( (m_center.x()-i)*(m_center.x()-i) + (m_center.y()-j)*(m_center.y()-j) ) >= 100 )
+	    {
+		painter->drawPoint( i, j );
+	    }
+	    /*else
+	    {
+		painter->setPen( Qt::white );
+		painter->drawPoint( i, j );
+	    }*/
+	}
+    }
+    
+    //painter->setPen( Qt::red );
+    //painter->drawEllipse( m_center, 50, 50 );
 }
 
 void KPrPresentationHighlightWidget::mouseMoveEvent( QMouseEvent* e )
 {
-    QPoint center = e->pos();
+    m_center = e->pos();
     
-    drawCircle( center );
+    update();
 }
-
+/*
 void KPrPresentationHighlightWidget::drawCircle( QPoint p )
 {
     // QColor c( Qt::red ); c.setAlphaF( 0.5 ); newPage.fill( c );
@@ -88,4 +115,5 @@ void KPrPresentationHighlightWidget::drawCircle( QPoint p )
     QPixmap newPage( m_size );
     newPage.fromImage( image );
     m_label->setPixmap(newPage);
-}
+    update();
+}*/

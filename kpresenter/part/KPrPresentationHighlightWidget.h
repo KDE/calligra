@@ -30,14 +30,16 @@ class KPrPresentationHighlightWidget : public QWidget {
 public :
     KPrPresentationHighlightWidget( KoPACanvas * canvas );
     ~KPrPresentationHighlightWidget();
-    void drawCircle( QPoint point );
+    //void drawCircle( QPoint point );
 protected :
     void mouseMoveEvent ( QMouseEvent * event );
+    void paintEvent ( QPaintEvent * event );
 public :
     QSize m_size;
+    QPoint m_center;
     bool m_blackBackgroundVisibility;
-    QFrame *m_blackBackgroundframe;
-    QLabel *m_label;
+    //QFrame *m_blackBackgroundframe;
+    //QLabel *m_label;
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTWIDGET_H */
