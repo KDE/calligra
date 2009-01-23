@@ -264,7 +264,7 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-    if(!m_tool->getDrawMode()){
+    if(!m_tool->getDrawMode() && !m_tool->getHighlightMode()){
         bool finished = m_animationDirector->navigate( navigation );
     
         //update current slide widget

@@ -48,8 +48,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
     pen.setColor( Qt::black );
     painter.setPen( pen );
     for( int i=0; i < m_pointVectors.count(); i++ )
-	painter.drawPolyline( QPolygonF( m_pointVectors.at(i) ) );
-
+      painter.drawPolyline( QPolygonF( m_pointVectors.at(i) ) );
 }
 
 void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )

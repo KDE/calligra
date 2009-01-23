@@ -126,10 +126,12 @@ void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
     switch ( event->key() )
     {
         case Qt::Key_Escape:
-	    if(m_drawMode)
-	      this->drawOnPresentation();
-	    else
-	      m_viewMode.activateSavedViewMode();
+          if(m_drawMode)
+            drawOnPresentation();
+          else if(m_highlightMode)
+            highLightPresentation();
+          else
+            m_viewMode.activateSavedViewMode();
             break;
         case Qt::Key_Home:
             m_viewMode.navigate( KPrAnimationDirector::FirstPage );
@@ -281,6 +283,7 @@ void KPrPresentationTool::switchDrawMode()
 	delete m_drawWidget;
         QApplication::restoreOverrideCursor();
     }
+    presentationToolWidget->presentationToolUi().penButton->setDown(m_drawMode);
 }
 
 bool KPrPresentationTool::getHighlightMode()
@@ -303,7 +306,6 @@ void KPrPresentationTool::drawOnPresentation()
 {
     presentationToolWidget->presentationToolUi().penButton->setText("test...");
     switchDrawMode();
-    presentationToolWidget->presentationToolUi().penButton->setDown(m_drawMode);
 }
 
 // get the acces on m_frame
