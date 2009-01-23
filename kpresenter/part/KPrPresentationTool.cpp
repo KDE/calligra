@@ -59,7 +59,7 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     
     m_frame->show();
     m_frame->setVisible(false);
-presentationToolWidget->raise();
+    presentationToolWidget->raise();
     
     // Connections of button clicked to slots
     connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
@@ -194,9 +194,14 @@ void KPrPresentationTool::finishEventActions()
 // SLOTS
 void KPrPresentationTool::highLightPresentation()
 {
+    // destroy the drawMode if it's active
+    if ( m_drawMode )
+    {
+        m_drawMode = false;
+	delete m_drawWidget;
+        QApplication::restoreOverrideCursor();
+    }
     // create the high light
-    //delete m_blackBackgroundframe;
-    //delete m_blackBackgroundwidget;
     QSize size = m_viewMode.canvas()->size();
     QPixmap newPage( size );
     if(newPage.isNull())
@@ -213,44 +218,6 @@ void KPrPresentationTool::highLightPresentation()
 	m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
 	m_blackBackgroundwidget->show();
     }
-
-    /*m_blackBackgroundframe= new QFrame(m_blackBackgroundwidget);
-    QVBoxLayout *frameLayout2 = new QVBoxLayout();
-    QLabel *label = new QLabel();
-    
-    label->setPixmap( newPage );
-    
-    frameLayout2->addWidget( label, 0, Qt::AlignCenter );
-    m_blackBackgroundframe->setLayout( frameLayout2 );
-    m_blackBackgroundframe->move( -4,-4 );
-
-    // change the visibility
-    if ( KPrPresentationTool::highlightMode )
-    {
-	KPrPresentationTool::highlightMode = false;
-	m_blackBackgroundwidget->setVisible( false );
-    }
-    else
-    {
-	KPrPresentationTool::highlightMode = true;
-	m_blackBackgroundwidget->setVisible( true );
-    }*/
-    
-    // tool box
-    /*delete m_frame;
-    m_frame = new QFrame( m_viewMode.canvas() );
-
-    QVBoxLayout *frameLayout = new QVBoxLayout();
-    presentationToolWidget = new KPrPresentationToolWidget( m_viewMode.canvas() );
-    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom  );
-    m_frame->setLayout( frameLayout );
-    m_frame->resize( size );
-    m_frame->show();
-    
-    // Connections of button clicked to slots
-    connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
-    connect( presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );*/
-
 }
 
 bool KPrPresentationTool::getDrawMode()
@@ -260,7 +227,13 @@ bool KPrPresentationTool::getDrawMode()
 
 void KPrPresentationTool::switchDrawMode()
 {
-    if(!m_drawMode)
+    // destroy the highlightMode if it's active
+    if ( m_highlightMode ) {
+	m_highlightMode = false;
+	delete m_blackBackgroundwidget;
+    }
+    // create the drawMode
+    if ( !m_drawMode )
     {
         m_drawMode = true;
         QString str("kpresenter");
@@ -273,10 +246,10 @@ void KPrPresentationTool::switchDrawMode()
         pix = pix.scaledToWidth(pix.width()*factor);
         QCursor cur = QCursor(pix);
         QApplication::setOverrideCursor(cur);
-//        QApplication::setOverrideCursor(QCursor(Qt::CrossCursor));
 	m_drawWidget = new KPrPresentationDrawWidget(m_viewMode.canvas());
 	m_drawWidget->show();
     }
+    // destroy the drawMode if it's active
     else
     {
         m_drawMode = false;
