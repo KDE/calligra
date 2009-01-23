@@ -38,26 +38,27 @@ KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWid
 
 KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
 {
-} 
+}
+
 void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 {
-  QPainter painter(this);    
-  QBrush brush(Qt::SolidPattern);
-  QPen pen(brush, 10, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin);
-  pen.setColor(Qt::black);
-  painter.setPen(pen);
-  for(int i=0; i < m_pointVectors.count(); i++)
-    painter.drawPolyline(QPolygonF(m_pointVectors.at(i)));
+    QPainter painter( this );    
+    QBrush brush( Qt::SolidPattern );
+    QPen pen( brush, 10, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
+    pen.setColor( Qt::black );
+    painter.setPen( pen );
+    for( int i=0; i < m_pointVectors.count(); i++ )
+	painter.drawPolyline( QPolygonF( m_pointVectors.at(i) ) );
 
 }
 
 void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )
 {
-  m_pointVectors.append(QVector<QPointF>() << e->pos());
+    m_pointVectors.append( QVector<QPointF>() << e->pos() );
 }
 
 void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
 {
-  m_pointVectors.last() << e->pos();
-  update();
+    m_pointVectors.last() << e->pos();
+    update();
 }

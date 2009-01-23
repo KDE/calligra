@@ -29,10 +29,10 @@
 class KPrPresentationDrawWidget : public QWidget {
 
 public :
-    KPrPresentationDrawWidget(KoPACanvas * canvas);
+    KPrPresentationDrawWidget( KoPACanvas * canvas );
     ~KPrPresentationDrawWidget();
-
-    void paintEvent(QPaintEvent * event);
+    /** Draw on the Presentation */
+    void paintEvent( QPaintEvent * event );
     void mouseMoveEvent( QMouseEvent* e );
     void mousePressEvent( QMouseEvent* e );
 
