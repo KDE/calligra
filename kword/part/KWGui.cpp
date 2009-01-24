@@ -66,7 +66,7 @@ KWGui::KWGui(const QString& viewMode, KWView *parent)
     KoToolManager::instance()->addController(m_canvasController);
     KoToolManager::instance()->registerTools(m_view->actionCollection(), m_canvasController);
 
-    KoToolBoxFactory toolBoxFactory(m_canvasController, i18n("Tools"));
+    KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
     m_view->createDockWidget(&toolBoxFactory);
 
     KoDockerManager *dockerMng = m_view->dockerManager();
