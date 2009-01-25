@@ -22,8 +22,24 @@
 #include <KoShape.h>
 #include <KoLineBorder.h>
 
+class OutlineStroke : public KoLineBorder
+{
+public:
+    OutlineStroke()
+        : m_pen(Qt::black)
+    {
+    }
+    virtual void paintBorder(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+    {
+        KoShape::applyConversion(painter, converter);
+        painter.strokePath(shape->outline(), m_pen);
+    }
+private:
+    QPen m_pen;
+};
+
 KarbonOutlinePaintingStrategy::KarbonOutlinePaintingStrategy( KoShapeManager * shapeManager )
-    : KoShapeManagerPaintingStrategy( shapeManager ), m_border( new KoLineBorder(0.0) )
+    : KoShapeManagerPaintingStrategy( shapeManager ), m_border( new OutlineStroke() )
 {
     Q_ASSERT( shapeManager );
     shapeManager->setPaintingStrategy( this );
