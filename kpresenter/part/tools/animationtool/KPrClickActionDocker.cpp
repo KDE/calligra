@@ -84,9 +84,9 @@ void KPrClickActionDocker::selectionChanged()
             eventActionMap.insert( eventAction->id(), eventAction );
         }
 
-        QMap<QString, KoEventActionWidget *>::const_iterator it( m_eventActionWidgets.begin() );
+        QMap<QString, KoEventActionWidget *>::const_iterator it( m_eventActionWidgets.constBegin() );
 
-        for ( ; it != m_eventActionWidgets.end(); ++it )  {
+        for ( ; it != m_eventActionWidgets.constEnd(); ++it )  {
             // if it is not in the map a default value 0 pointer will be returned
             KPrEventActionData data( shape, eventActionMap.value( it.key() ), m_soundCollection );
             it.value()->setData( &data );

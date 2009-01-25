@@ -77,6 +77,11 @@ SvgImport::SvgImport(QObject*parent, const QVariantList&)
 {
     SETRGBCOLORS();
     m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
+    // the order of the style attributes is important, don't change without reason !!!
+    m_styleAttributes << "color" << "opacity" << "display";
+    m_styleAttributes << "fill" << "fill-rule" << "fill-opacity";
+    m_styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
+    m_styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit"; 
 }
 
 SvgImport::~SvgImport()
@@ -201,7 +206,7 @@ void SvgImport::convert()
     */
 
     m_gc.push( gc );
-    QList<KoShape*> shapes = parseGroup( docElem );
+    QList<KoShape*> shapes = parseContainer( docElem );
 
     buildDocument( shapes );
 }
@@ -386,8 +391,8 @@ QMatrix SvgImport::parseTransform( const QString &transform )
 
     // Split string for handling 1 transform statement at a time
     QStringList subtransforms = transform.split(')', QString::SkipEmptyParts);
-    QStringList::ConstIterator it = subtransforms.begin();
-    QStringList::ConstIterator end = subtransforms.end();
+    QStringList::ConstIterator it = subtransforms.constBegin();
+    QStringList::ConstIterator end = subtransforms.constEnd();
     for(; it != end; ++it)
     {
         QStringList subtransform = (*it).simplified().split('(', QString::SkipEmptyParts);
@@ -565,7 +570,40 @@ QDomElement SvgImport::mergeStyles( const QDomElement &referencedBy, const QDomE
     if( !referencedBy.attribute( "opacity" ).isEmpty() )
         e.setAttribute( "opacity", referencedBy.attribute( "opacity" ) );
 
-    // TODO merge style attribute too.
+    // build map of style attributes from the element being referenced (original)
+    QString origStyle = e.attribute( "style" ).simplified();
+    QStringList origSubstyles = origStyle.split( ';', QString::SkipEmptyParts );
+    QMap<QString, QString> mergesStyles;
+    for( QStringList::Iterator it = origSubstyles.begin(); it != origSubstyles.end(); ++it )
+    {
+        QStringList origSubstyle = it->split( ':' );
+        QString command = origSubstyle[0].trimmed();
+        QString params  = origSubstyle[1].trimmed();
+        mergesStyles[command] = params;
+    }
+
+    // build map of style attributes from the referencing element and substitue the original style
+    QString refStyle = referencedBy.attribute( "style" ).simplified();
+    QStringList refSubstyles = refStyle.split( ';', QString::SkipEmptyParts );
+    for( QStringList::Iterator it = refSubstyles.begin(); it != refSubstyles.end(); ++it )
+    {
+        QStringList refSubstyle = it->split( ':' );
+        QString command = refSubstyle[0].trimmed();
+        // do not parse font attributes here, this is done in parseFont
+        if( m_fontAttributes.contains( command ) )
+            continue;
+
+        QString params  = refSubstyle[1].trimmed();
+        mergesStyles[command] = params;
+    }
+
+    // rebuild the style attribute from the merged styleElement
+    QString newStyleAttribute;
+    QMap<QString, QString>::const_iterator it = mergesStyles.constBegin();
+    for( ; it != mergesStyles.constEnd(); ++it )
+        newStyleAttribute += it.key() + ':' + it.value() + ';';
+
+    e.setAttribute( "style", newStyleAttribute );
 
     return e;
 }
@@ -1132,37 +1170,16 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
     SvgGraphicsContext *gc = m_gc.top();
     if( !gc ) return;
 
-    // try normal PA
-    if( !e.attribute( "color" ).isEmpty() )
-        parsePA( obj, gc, "color", e.attribute( "color" ) );
-    if( !e.attribute( "fill" ).isEmpty() )
-        parsePA( obj, gc, "fill", e.attribute( "fill" ) );
-    if( !e.attribute( "fill-rule" ).isEmpty() )
-        parsePA( obj, gc, "fill-rule", e.attribute( "fill-rule" ) );
-    if( !e.attribute( "stroke" ).isEmpty() )
-        parsePA( obj, gc, "stroke", e.attribute( "stroke" ) );
-    if( !e.attribute( "stroke-width" ).isEmpty() )
-        parsePA( obj, gc, "stroke-width", e.attribute( "stroke-width" ) );
-    if( !e.attribute( "stroke-linejoin" ).isEmpty() )
-        parsePA( obj, gc, "stroke-linejoin", e.attribute( "stroke-linejoin" ) );
-    if( !e.attribute( "stroke-linecap" ).isEmpty() )
-        parsePA( obj, gc, "stroke-linecap", e.attribute( "stroke-linecap" ) );
-    if( !e.attribute( "stroke-dasharray" ).isEmpty() )
-        parsePA( obj, gc, "stroke-dasharray", e.attribute( "stroke-dasharray" ) );
-    if( !e.attribute( "stroke-dashoffset" ).isEmpty() )
-        parsePA( obj, gc, "stroke-dashoffset", e.attribute( "stroke-dashoffset" ) );
-    if( !e.attribute( "stroke-opacity" ).isEmpty() )
-        parsePA( obj, gc, "stroke-opacity", e.attribute( "stroke-opacity" ) );
-    if( !e.attribute( "stroke-miterlimit" ).isEmpty() )
-        parsePA( obj, gc, "stroke-miterlimit", e.attribute( "stroke-miterlimit" ) );
-    if( !e.attribute( "fill-opacity" ).isEmpty() )
-        parsePA( obj, gc, "fill-opacity", e.attribute( "fill-opacity" ) );
-    if( !e.attribute( "opacity" ).isEmpty() )
-        parsePA( obj, gc, "opacity", e.attribute( "opacity" ) );
-    if( !e.attribute( "display" ).isEmpty() )
-        parsePA( obj, gc, "display", e.attribute( "display" ) );
+    QMap<QString, QString> styleMap;
 
-    // try style attr
+    // first collect individual style attributes
+    foreach( const QString & command, m_styleAttributes )
+    {
+        if( e.hasAttribute( command ) )
+            styleMap[command] = e.attribute( command );
+    }
+
+    // now parse style attribute
     QString style = e.attribute( "style" ).simplified();
     QStringList substyles = style.split( ';', QString::SkipEmptyParts );
     for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
@@ -1170,9 +1187,18 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         QStringList substyle = it->split( ':' );
         QString command = substyle[0].trimmed();
         QString params  = substyle[1].trimmed();
-        // do not parse font attributes here, this is done in parseFont
-        if( ! m_fontAttributes.contains( command ) )
-            parsePA( obj, gc, command, params );
+        // only use style attributes
+        if( m_styleAttributes.contains( command ) )
+            styleMap[command] = params;
+    }
+
+    // make sure we parse the style attributes in the right order
+    foreach( const QString & command, m_styleAttributes )
+    {
+        QString params = styleMap.value( command );
+        if( params.isEmpty() )
+            continue;
+        parsePA( obj, gc, command, params );
     }
 
     if(!obj)
@@ -1271,19 +1297,38 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
 
         if( !e.attribute( "x" ).isEmpty() && !e.attribute( "y" ).isEmpty() )
         {
-            double tx = e.attribute( "x" ).toDouble();
-            double ty = e.attribute( "y" ).toDouble();
+            double tx = parseUnit( e.attribute( "x" ));
+            double ty = parseUnit( e.attribute( "y" ));
 
             m_gc.top()->matrix.translate(tx,ty);
         }
 
         if(m_defs.contains(key))
         {
-            QDomElement a = m_defs[key];
+            QDomElement a = mergeStyles( e, m_defs[key] );
             if(a.tagName() == "g" || a.tagName() == "a")
             {
-                QList<KoShape*> childShapes = parseGroup( a);
-                shapes += childShapes;
+                addGraphicContext();
+                setupTransform( a );
+                updateContext( a );
+
+                KoShapeGroup * group = new KoShapeGroup();
+                group->setZIndex( nextZIndex() );
+
+                parseStyle( 0, a );
+                parseFont( a );
+
+                QList<KoShape*> childShapes = parseContainer( a );
+
+                // handle id
+                if( !a.attribute("id").isEmpty() )
+                    group->setName( a.attribute("id") );
+
+                addToGroup( childShapes, group );
+
+                shapes.append( group );
+
+                removeGraphicContext();
             }
             else
             {
@@ -1313,14 +1358,40 @@ void SvgImport::addToGroup( QList<KoShape*> shapes, KoShapeGroup * group )
     cmd.redo();
 }
 
-QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
+QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
 {
     QList<KoShape*> shapes;
+
+    // are we parsing a switch container
+    bool isSwitch = e.tagName() == "switch";
 
     for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement b = n.toElement();
-        if( b.isNull() ) continue;
+        if( b.isNull() )
+            continue;
+
+        if( isSwitch )
+        {
+            // if we are parsing a switch check the requiredFeatures, requiredExtensions
+            // and systemLanguage attributes
+            if( b.hasAttribute("requiredFeatures") )
+            {
+                QString features = b.attribute("requiredFeatures");
+                if( features.isEmpty() || features.simplified().isEmpty() )
+                    continue;
+                // TODO: evaluate feature list
+            }
+            if( b.hasAttribute( "requiredExtensions" ) )
+            {
+                // we do not support any extensions
+                continue;
+            }
+            if( b.hasAttribute( "systemLanguage" ) )
+            {
+                // not implemeted yet
+            }
+        }
 
         // treat svg link <a> as group so we don't miss its child elements
         if( b.tagName() == "g" || b.tagName() == "a" )
@@ -1335,7 +1406,7 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             parseStyle( group, b );
             parseFont( b );
 
-            QList<KoShape*> childShapes = parseGroup( b );
+            QList<KoShape*> childShapes = parseContainer( b );
 
             // handle id
             if( !b.attribute("id").isEmpty() )
@@ -1346,24 +1417,25 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             shapes.append( group );
 
             removeGraphicContext();
-
-            continue;
         }
-        if( b.tagName() == "switch" )
+        else if( b.tagName() == "switch" )
         {
-            return parseGroup( b );
+            addGraphicContext();
+            setupTransform( b );
+            
+            shapes += parseContainer( b );
+            
+            removeGraphicContext();
         }
-        if( b.tagName() == "defs" )
+        else if( b.tagName() == "defs" )
         {
             parseDefs( b );
-            continue;
         }
         else if( b.tagName() == "linearGradient" || b.tagName() == "radialGradient" )
         {
             parseGradient( b );
-            continue;
         }
-        if( b.tagName() == "rect" ||
+        else if( b.tagName() == "rect" ||
             b.tagName() == "ellipse" ||
             b.tagName() == "circle" ||
             b.tagName() == "line" ||
@@ -1375,20 +1447,27 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             KoShape * shape = createObject( b );
             if( shape )
                 shapes.append( shape );
-            continue;
         }
         else if( b.tagName() == "text" )
         {
             KoShape * shape = createText( b, shapes );
             if( shape )
                 shapes.append( shape );
-            continue;
         }
         else if( b.tagName() == "use" )
         {
             shapes += parseUse( b );
+        }
+        else
+        {
+            // unsupported element
+            kDebug(30514) << "element" << b.tagName() << "is not supported";
             continue;
         }
+
+        // if we are parsing a switch, stop after the first supported element
+        if( isSwitch )
+            break;
     }
 
     return shapes;
@@ -1409,7 +1488,6 @@ void SvgImport::parseDefs( const QDomElement &e )
         }
     }
 }
-
 
 // Creating functions
 // ---------------------------------------------------------------------------------------

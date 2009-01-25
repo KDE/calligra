@@ -539,7 +539,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
   Tokens tokens;
 
   // parsing state
-  enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent,
+  enum { Start, Finish, InNumber, InDecimal, InExpIndicator, InExponent,
     InString, InIdentifier, InCell, InRange, InSheetOrAreaName, InError } state;
 
   // use locale settings if specified
@@ -548,6 +548,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
 
   // initialize variables
   state = Start;
+  bool parseError = false;
   int i = 0;
   QString ex = expr;
   QString tokenText;
@@ -564,7 +565,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
   ex.append( QChar() );
 
   // main loop
-  while( (state != Bad) && (state != Finish) && (i < ex.length()) )
+  while( (state != Finish) && (i < ex.length()) )
   {
     QChar ch = ex[i];
 
@@ -647,7 +648,13 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
            i += len;
            tokens.append( Token( Token::Operator, s.left( len ), tokenStart ) );
          }
-         else state = Bad;
+         else
+         {
+           // not matched an operator, add an Unknown token and remember whe had a parse error
+           parseError = true;
+           tokens.append( Token( Token::Unknown, s.left( 1 ), tokenStart ) );
+           i++;
+         }
         }
        break;
 
@@ -776,7 +783,12 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
              if ( isNamedArea( tokenText ) )
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
              else
-                 tokens.append (Token (Token::Identifier, tokenText, tokenStart));
+             {
+                 // for compatibility with oocalc (and the openformula spec), don't parse single-quoted
+                 // text as an identifier, instead add an Unknown token and remember we had an error
+                 parseError = true;
+                 tokens.append( Token( Token::Unknown, "'" + tokenText + "'", tokenStart ) );
+             }
              tokenStart = i;
              tokenText.clear();
              state = Start;
@@ -863,7 +875,14 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        else if( ch.isDigit() ) state = InExponent;
 
        // invalid thing here
-       else state = Bad;
+       else
+       {
+         parseError = true;
+         tokenText.append( ex[i++] );
+         tokens.append( Token( Token::Unknown, tokenText, tokenStart ) );
+         tokenText.clear();
+         state = Start;
+       }
 
        break;
 
@@ -909,13 +928,19 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        }
        break;
 
-    case Bad:
     default:
        break;
     };
   };
 
-  if( state == Bad )
+  // parse error if any text remains
+  if( state != Finish )
+  {
+    tokens.append( Token( Token::Unknown, ex.mid( tokenStart, ex.length() - tokenStart - 1 ), tokenStart ) );
+    parseError = true;
+  }
+
+  if( parseError )
     tokens.setValid( false );
 
   return tokens;

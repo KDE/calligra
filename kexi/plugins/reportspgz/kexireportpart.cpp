@@ -55,9 +55,6 @@ KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
     setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
     setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
     setInternalPropertyValue("newObjectsAreDirty", true);
-
-    //m_registeredPartID = 9; //Do not want to use the already registered report type just yet(int)KexiPart::ReportObjectType;
-
 }
 
 KexiReportPart::~KexiReportPart()

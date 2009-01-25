@@ -299,7 +299,7 @@ public:
             const QVector<int>::const_iterator cstart( m_cols.begin() + m_rows.value( row - 1 ) );
             const QVector<int>::const_iterator cend( ( row < m_rows.count() ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
             for ( QVector<int>::const_iterator cit = cstart; cit != cend; ++cit )
-                oldData.append( qMakePair( QPoint( *cit, row ), m_data.value( cit - m_cols.begin() ) ) );
+                oldData.append( qMakePair( QPoint( *cit, row ), m_data.value( cit - m_cols.constBegin() ) ) );
             dataCount += ( cend - cstart );
             ++rowCount;
         }
@@ -469,10 +469,10 @@ public:
                     else
                     {
                         // copy
-                        m_data[rowStart + col] = m_data.value( cit2 - m_cols.begin() );
+                        m_data[rowStart + col] = m_data.value( cit2 - m_cols.constBegin() );
                         // remove
-                        m_cols.remove( cit2 - m_cols.begin() );
-                        m_data.remove( cit2 - m_cols.begin() );
+                        m_cols.remove( cit2 - m_cols.constBegin() );
+                        m_data.remove( cit2 - m_cols.constBegin() );
                         // adjust the offsets of the following rows
                         for ( int r = row + rect.height(); r < m_rows.count(); ++r )
                             --m_rows[r];
@@ -493,8 +493,8 @@ public:
                     const QVector<int>::const_iterator cend( ( ( row < m_rows.count() ) ) ? ( m_cols.begin() + m_rows.value( row ) ) : m_cols.end() );
                     const QVector<int>::const_iterator cit = qUpperBound( cstart, cend, cols2.value( col ) );
                     // copy it to its new position
-                    m_data.insert( cit - m_cols.begin(), m_data.value( rowStart2 + col ) );
-                    m_cols.insert( cit - m_cols.begin(), m_cols.value( rowStart2 + col ) );
+                    m_data.insert( cit - m_cols.constBegin(), m_data.value( rowStart2 + col ) );
+                    m_cols.insert( cit - m_cols.constBegin(), m_cols.value( rowStart2 + col ) );
                     // remove it from its old position
                     m_data.remove( rowStart2 + col + 1 );
                     m_cols.remove( rowStart2 + col + 1 );

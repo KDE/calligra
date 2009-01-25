@@ -87,4 +87,3 @@ const Property::ListData& SizePolicyDelegate::listData()
     return *s_sizePolicyListData;
 }
 
-#include "sizepolicyedit.moc"

@@ -311,6 +311,10 @@ void KWordTableHandler::tableCellStart()
 	m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
 	m_colSpan = colSpan;
     }
+    else {
+        //if we don't set it to colSpan, we still need to (re)set it to a known value
+        m_colSpan = 1;
+    }
 }
 
 void KWordTableHandler::tableCellEnd()

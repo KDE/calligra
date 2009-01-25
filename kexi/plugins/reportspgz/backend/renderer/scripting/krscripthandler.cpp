@@ -26,6 +26,8 @@
 #include <kexipart.h>
 #include <kexiutils/tristate.h>
 
+#include "../../../scripting/kexiscripting/kexiscriptadaptor.h"
+
 #include "krscriptfunctions.h"
 #include <parsexmlutils.h>
 #include <krsectiondata.h>
@@ -59,6 +61,10 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 
     _action->setInterpreter(d->interpreter());
 
+    //Add a kexi object to provide kexidb and extra functionality
+    _kexi = new KexiScriptAdaptor();
+    _action->addObject( _kexi, "Kexi" );
+    
     //Add math functions to the script
     _functions = new KRScriptFunctions(_curs);
     _action->addObject(_functions, "field");
@@ -77,16 +83,18 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 
     //Add a general report object
     _report = new Scripting::Report(_data);
-    _action->addObject(_report, "report");
 
     //Add the sections
     QList<KRSectionData*> secs = _data->sections();
     foreach(KRSectionData *sec, secs) {
         _sectionMap[sec] = new Scripting::Section(sec);
-        _action->addObject(_sectionMap[sec], sec->name());
+	_sectionMap[sec]->setParent( _report );
+	_sectionMap[sec]->setObjectName(sec->name());
     }
+    
+    _action->addObject(_report, _data->name());
 
-    _action->setCode((_data->script() + "\n" + fieldFunctions()).toLocal8Bit() + scriptCode().toLocal8Bit());
+    _action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
 
     kDebug() << _action->code();
 
@@ -220,9 +228,11 @@ QString KRScriptHandler::where()
 QString KRScriptHandler::scriptCode()
 {
     QList<int> scriptids = KexiMainWindowIface::global()->project()->dbConnection()->objectIds(KexiPart::ScriptObjectType);
+    QStringList scriptnames = KexiMainWindowIface::global()->project()->dbConnection()->objectNames(KexiPart::ScriptObjectType);
     QString scripts;
     
     int id;
+    int i = 0;
     QString script;
    
     foreach (id, scriptids) {
@@ -246,9 +256,12 @@ QString KRScriptHandler::scriptCode()
 
             QString interpretername = scriptelem.attribute("language");
             kDebug() << interpretername;
-            if (_data->interpreter() == interpretername) {
-            scripts += '\n' + scriptelem.text().toUtf8();
+            kDebug() << scriptelem.attribute("scripttype");
+            
+            if (_data->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || _data->script() == scriptnames[i] )) {
+                scripts += '\n' + scriptelem.text().toUtf8();
             }
+            ++i;
         }
         else{
             kDebug() << "Unable to loadDataBlock";

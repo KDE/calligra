@@ -50,6 +50,11 @@ QString Report::title()
     return _reportdata->title;
 }
 
+QString Report::name()
+{
+    return _reportdata->name();
+}
+
 QString Report::recordSource()
 {
     return _reportdata->query();

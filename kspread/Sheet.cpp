@@ -3492,7 +3492,7 @@ void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
         {
           const ColumnFormat* nextColumn = d->columns.next(j);
           const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
-          const QMap<int, Style>::ConstIterator nextColumnDefaultStyle = tableContext.columnDefaultStyles.upperBound(j);
+          const QMap<int, Style>::iterator nextColumnDefaultStyle = tableContext.columnDefaultStyles.upperBound(j);
           const int nextStyleColumnIndex = nextColumnDefaultStyle == tableContext.columnDefaultStyles.end()
                                          ? 0 : nextColumnDefaultStyle.key();
           // j becomes the index of the adjacent column

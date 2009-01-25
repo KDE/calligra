@@ -1971,6 +1971,7 @@ void CellToolBase::mergeCells()
     }
     MergeCommand* const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
+    command->setSelection(selection());
     command->setHorizontalMerge(false);
     command->setVerticalMerge(false);
     command->add(*selection());
@@ -1990,6 +1991,7 @@ void CellToolBase::mergeCellsHorizontal()
     command->setSheet(selection()->activeSheet());
     command->setHorizontalMerge(true);
     command->setVerticalMerge(false);
+    command->setSelection(selection());
     command->add(*selection());
     command->execute(m_canvas);
 }
@@ -2007,6 +2009,7 @@ void CellToolBase::mergeCellsVertical()
     command->setSheet(selection()->activeSheet());
     command->setHorizontalMerge(false);
     command->setVerticalMerge(true);
+    command->setSelection(selection());
     command->add(*selection());
     command->execute(m_canvas);
 }
@@ -2023,6 +2026,7 @@ void CellToolBase::dissociateCells()
     MergeCommand* const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
+    command->setSelection(selection());
     command->add(*selection());
     command->execute(m_canvas);
 }

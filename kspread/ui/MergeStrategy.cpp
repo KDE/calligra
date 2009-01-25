@@ -50,6 +50,7 @@ QUndoCommand* MergeStrategy::createCommand()
     }
     MergeCommand* command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
+    command->setSelection(selection());
     command->add(*selection());
     return command;
 }

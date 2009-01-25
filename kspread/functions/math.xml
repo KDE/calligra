@@ -351,7 +351,7 @@
       <Help>
 	<Text>The COUNTIF() function returns the number of cells in the given range that meet the given criteria.</Text>
 	<Syntax>COUNTIF(range;criteria)</Syntax>
-	<Example>COUNTIF(A2:A3;"14") returns 1 if A1 is -4 and A2 is 14</Example>
+	<Example>COUNTIF(A2:A3;"14") returns 1 if A2 is -4 and A3 is 14</Example>
 	<Related>COUNT</Related>
         <Related>SUMIF</Related>
       </Help>

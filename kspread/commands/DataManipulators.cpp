@@ -66,6 +66,8 @@ bool AbstractDataManipulator::process (Element* element)
         val = newValue (element, col, row, &parse, &fmtType);
 
       Cell cell = Cell( m_sheet, col, row);
+      if (cell.isPartOfMerged()) cell = cell.masterCell();
+
       // we have the data - set it !
       if (parse) {
         if (fmtType != Format::None)

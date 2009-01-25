@@ -240,7 +240,8 @@ void SvgExport::savePath( KoPathShape * path )
 
     getStyle( path, m_body );
 
-    *m_body << " d=\"" << path->toString( path->transformation() * m_userSpaceMatrix ) << "\" ";
+    *m_body << " d=\"" << path->toString( m_userSpaceMatrix ) << "\" ";
+    *m_body << getTransform( path->transformation(), " transform" );
 
     *m_body << " />" << endl;
 }
@@ -549,7 +550,7 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     *stream << "\"";
 
     *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
-    *stream << " stroke-width=\"" << line->lineWidth() << "\"";
+    *stream << " stroke-width=\"" << toUserSpace(line->lineWidth()) << "\"";
 
     if( line->capStyle() == Qt::FlatCap )
         *stream << " stroke-linecap=\"butt\"";
@@ -571,12 +572,19 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     // dash
     if(  line->lineStyle() > Qt::SolidLine )
     {
-        //*stream << " stroke-dashoffset=\"" << line->dashPattern().offset() << "\"";
+        qreal dashFactor = line->lineWidth();
+
+        if( line->dashOffset() != 0 )
+            *stream << " stroke-dashoffset=\"" << dashFactor * line->dashOffset() << "\"";
         *stream << " stroke-dasharray=\" ";
 
-        foreach( qreal dash, line->lineDashes() )
+        const QVector<qreal> dashes = line->lineDashes();
+        int dashCount = dashes.size();
+        for( int i = 0; i < dashCount; ++i )
         {
-            *stream << dash << " ";
+            if( i > 0 )
+                *stream << ",";
+            *stream << dashes[i] * dashFactor;
         }
         *stream << "\"";
     }

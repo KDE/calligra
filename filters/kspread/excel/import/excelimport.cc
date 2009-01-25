@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QDate>
+#include <QBuffer>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -32,6 +33,9 @@
 
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
+#include <KoGenStyles.h>
+#include <KoGenStyle.h>
+#include <KoOdfNumberStyles.h>
 
 #include "swinder.h"
 #include <iostream>
@@ -57,6 +61,12 @@ public:
 
   Workbook *workbook;
 
+  KoGenStyles *styles;
+  QList<QString> cellStyles;
+  QList<QString> rowStyles;
+  QList<QString> colStyles;
+  QList<QString> sheetStyles;
+
   bool createStyles( KoOdfWriteStore* store );
   bool createContent( KoOdfWriteStore* store );
   bool createManifest( KoOdfWriteStore* store );
@@ -65,7 +75,6 @@ public:
   int columnFormatIndex;
   int rowFormatIndex;
   int cellFormatIndex;
-  int valueFormatIndex;
 
   void processWorkbookForBody( Workbook* workbook, KoXmlWriter* xmlWriter );
   void processWorkbookForStyle( Workbook* workbook, KoXmlWriter* xmlWriter );
@@ -77,8 +86,8 @@ public:
   void processRowForStyle( Row* row, int repeat, KoXmlWriter* xmlWriter );
   void processCellForBody( Cell* cell, KoXmlWriter* xmlWriter );
   void processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter );
-  void processFormat( Format* format, KoXmlWriter* xmlWriter );
-  void processValueFormat( const QString& valueFormat, const QString& refName, KoXmlWriter* xmlWriter );
+  void processFormat( Format* format, KoGenStyle& style );
+  QString processValueFormat( const QString& valueFormat );
 };
 
 
@@ -120,6 +129,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
     return KoFilter::PasswordProtected;
   }
 
+  d->styles = new KoGenStyles();
+
   // create output store
   KoStore* storeout;
   storeout = KoStore::createStore( d->outputFile, KoStore::Write,
@@ -137,11 +148,6 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
   KoOdfWriteStore oasisStore( storeout );
 
   // store document styles
-  d->sheetFormatIndex = 1;
-  d->columnFormatIndex = 1;
-  d->rowFormatIndex = 1;
-  d->cellFormatIndex = 1;
-  d->valueFormatIndex = 1;
   if ( !d->createStyles( &oasisStore ) )
   {
     kWarning() << "Couldn't open the file 'styles.xml'.";
@@ -151,11 +157,6 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
   }
 
   // store document content
-  d->sheetFormatIndex = 1;
-  d->columnFormatIndex = 1;
-  d->rowFormatIndex = 1;
-  d->cellFormatIndex = 1;
-  d->valueFormatIndex = 1;
   if ( !d->createContent( &oasisStore ) )
   {
     kWarning() << "Couldn't open the file 'content.xml'.";
@@ -175,10 +176,16 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
 
   // we are done!
   delete d->workbook;
+  delete d->styles;
   delete storeout;
   d->inputFile.clear();
   d->outputFile.clear();
   d->workbook = 0;
+  d->styles = 0;
+  d->cellStyles.clear();
+  d->rowStyles.clear();
+  d->colStyles.clear();
+  d->sheetStyles.clear();
 
   return KoFilter::OK;
 }
@@ -202,24 +209,15 @@ bool ExcelImport::Private::createContent( KoOdfWriteStore* store )
   contentWriter->endElement(); // style:font-face
   contentWriter->endElement(); // office:font-face-decls
 
-  // important: reset all indexes
-  sheetFormatIndex = 1;
-  columnFormatIndex = 1;
-  rowFormatIndex = 1;
-  cellFormatIndex = 1;
-  valueFormatIndex = 1;
-
   // office:automatic-styles
-  contentWriter->startElement( "office:automatic-styles" );
   processWorkbookForStyle( workbook, contentWriter );
-  contentWriter->endElement(); // office:automatic-style
+  styles->saveOdfAutomaticStyles( contentWriter, false );
 
   // important: reset all indexes
-  sheetFormatIndex = 1;
-  columnFormatIndex = 1;
-  rowFormatIndex = 1;
-  cellFormatIndex = 1;
-  valueFormatIndex = 1;
+  sheetFormatIndex = 0;
+  columnFormatIndex = 0;
+  rowFormatIndex = 0;
+  cellFormatIndex = 0;
 
   // office:body
   bodyWriter->startElement( "office:body" );
@@ -333,7 +331,7 @@ void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWr
   xmlWriter->addAttribute( "table:name", string( sheet->name() ) );
   xmlWriter->addAttribute( "table:print", "false" );
   xmlWriter->addAttribute( "table:protected", "false" );
-  xmlWriter->addAttribute( "table:style-name", QString("ta%1").arg(sheetFormatIndex));
+  xmlWriter->addAttribute( "table:style-name", sheetStyles[sheetFormatIndex]);
   sheetFormatIndex++;
 
   unsigned ci = 0;
@@ -379,18 +377,14 @@ void ExcelImport::Private::processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlW
   if( !sheet ) return;
   if( !xmlWriter ) return;
 
-  xmlWriter->startElement( "style:style" );
-  xmlWriter->addAttribute( "style:family", "table" );
-  xmlWriter->addAttribute( "style:master-page-name", "Default" );
-  xmlWriter->addAttribute( "style:name", QString("ta%1").arg(sheetFormatIndex) );
-  sheetFormatIndex++;
+  KoGenStyle style(KoGenStyle::StyleAutoTable, "table");
+  style.addAttribute( "style:master-page-name", "Default" );
 
-  xmlWriter->startElement( "style:table-properties" );
-  xmlWriter->addAttribute( "table:display", sheet->visible() ? "true" : "false" );
-  xmlWriter->addAttribute( "table:writing-mode", "lr-tb" );
-  xmlWriter->endElement();  // style:table-properties
+  style.addProperty( "table:display", sheet->visible() ? "true" : "false" );
+  style.addProperty( "table:writing-mode", "lr-tb" );
 
-  xmlWriter->endElement();  // style:style
+  QString styleName = styles->lookup(style, "ta");
+  sheetStyles.append(styleName);
 
   unsigned ci = 0;
   while( ci <= sheet->maxColumn() )
@@ -435,7 +429,7 @@ void ExcelImport::Private::processColumnForBody( Column* column, int repeat, KoX
   xmlWriter->addAttribute( "table:default-style-name", "Default" );
   xmlWriter->addAttribute( "table:visibility", column->visible() ? "visible" : "collapse" );
   if(repeat > 1) xmlWriter->addAttribute( "table:number-columns-repeated", repeat );
-  xmlWriter->addAttribute( "table:style-name", QString("co%1").arg(columnFormatIndex) );
+  xmlWriter->addAttribute( "table:style-name", colStyles[columnFormatIndex] );
   columnFormatIndex++;
 
   xmlWriter->endElement();  // table:table-column
@@ -446,17 +440,12 @@ void ExcelImport::Private::processColumnForStyle( Column* column, int /*repeat*/
   if( !column ) return;
   if( !xmlWriter ) return;
 
-  xmlWriter->startElement( "style:style" );
-  xmlWriter->addAttribute( "style:family", "table-column" );
-  xmlWriter->addAttribute( "style:name", QString("co%1").arg(columnFormatIndex) );
-  columnFormatIndex++;
+  KoGenStyle style(KoGenStyle::StyleAutoTableColumn, "table-column");
+  style.addProperty( "fo:break-before", "auto" );
+  style.addProperty( "style:column-width", QString("%1in").arg(column->width()/27) );
 
-  xmlWriter->startElement( "style:table-column-properties" );
-  xmlWriter->addAttribute( "fo:break-before", "auto" );
-  xmlWriter->addAttribute( "style:column-width", QString("%1in").arg(column->width()/27) );
-  xmlWriter->endElement();  // style:table-column-properties
-
-  xmlWriter->endElement();  // style:style
+  QString styleName = styles->lookup(style, "co");
+  colStyles.append(styleName);
 }
 
 void ExcelImport::Private::processRowForBody( Row* row, int /*repeat*/, KoXmlWriter* xmlWriter )
@@ -476,7 +465,7 @@ void ExcelImport::Private::processRowForBody( Row* row, int /*repeat*/, KoXmlWri
 
   xmlWriter->startElement( "table:table-row" );
   xmlWriter->addAttribute( "table:visibility", row->visible() ? "visible" : "collapse" );
-  xmlWriter->addAttribute( "table:style-name", QString("ro%1").arg(rowFormatIndex) );
+  xmlWriter->addAttribute( "table:style-name", rowStyles[rowFormatIndex] );
   rowFormatIndex++;
 
   for( int i = 0; i <= lastCol; i++ )
@@ -506,18 +495,14 @@ void ExcelImport::Private::processRowForStyle( Row* row, int repeat, KoXmlWriter
   for( unsigned i = 0; i <= row->sheet()->maxColumn(); i++ )
     if( row->sheet()->cell( i, row->index(), false ) ) lastCol = i;
 
-  xmlWriter->startElement( "style:style" );
-  xmlWriter->addAttribute( "style:family", "table-row" );
-  if(repeat > 1) xmlWriter->addAttribute( "table:number-rows-repeated", repeat );
-  xmlWriter->addAttribute( "style:name", QString("ro%1").arg(rowFormatIndex) );
-  rowFormatIndex++;
+  KoGenStyle style(KoGenStyle::StyleAutoTableRow, "table-row");
+  if(repeat > 1) style.addAttribute( "table:number-rows-repeated", repeat );
 
-  xmlWriter->startElement( "style:table-row-properties" );
-  xmlWriter->addAttribute( "fo:break-before", "auto" );
-  xmlWriter->addAttribute( "style:row-height", QString("%1pt").arg(row->height()) );
-  xmlWriter->endElement();  // style:table-row-properties
+  style.addProperty( "fo:break-before", "auto" );
+  style.addPropertyPt( "style:row-height", row->height() );
 
-  xmlWriter->endElement();  // style:style
+  QString styleName = styles->lookup( style, "ro" );
+  rowStyles.append(styleName);
 
   for( int i = 0; i <= lastCol; i++ )
   {
@@ -609,7 +594,7 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   if( !xmlWriter ) return;
 
   xmlWriter->startElement( "table:table-cell" );
-  xmlWriter->addAttribute( "table:style-name", QString("ce%1").arg(cellFormatIndex) );
+  xmlWriter->addAttribute( "table:style-name", cellStyles[cellFormatIndex] );
   cellFormatIndex++;
 
   QString formula = string( cell->formula() );
@@ -687,23 +672,17 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
   QString valueFormat = string( format.valueFormat() );
   if( valueFormat != QString("General") )
   {
-    refName = QString("N%1").arg(valueFormatIndex);
-    valueFormatIndex++;
-    processValueFormat( valueFormat, refName, xmlWriter );
+    refName = processValueFormat( valueFormat );
   }
 
+  KoGenStyle style(KoGenStyle::StyleAutoTableCell, "table-cell");
   // now the real table-cell
-  xmlWriter->startElement( "style:style" );
-  xmlWriter->addAttribute( "style:family", "table-cell" );
-  xmlWriter->addAttribute( "style:name", QString("ce%1").arg(cellFormatIndex) );
-  cellFormatIndex++;
   if( !refName.isEmpty() )
-    xmlWriter->addAttribute( "style:data-style-name", refName );
+    style.addAttribute( "style:data-style-name", refName );
 
-  processFormat( &format, xmlWriter );
-
-  xmlWriter->endElement();  // style:style
-
+  processFormat( &format, style );
+  QString styleName = styles->lookup( style, "ce" );
+  cellStyles.append(styleName);
 }
 
 QString convertColor( const Color& color )
@@ -732,10 +711,9 @@ QString convertBorder( const Pen& pen )
   return result + convertColor( pen.color );
 }
 
-void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processFormat( Format* format, KoGenStyle& style )
 {
   if( !format ) return;
-  if( !xmlWriter ) return;
 
   FormatFont font = format->font();
   FormatAlignment align = format->alignment();
@@ -744,60 +722,55 @@ void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter
 
   if( !font.isNull() )
   {
-    xmlWriter->startElement( "style:text-properties" );
-
     if( font.bold() )
-      xmlWriter->addAttribute( "fo:font-weight", "bold" );
+      style.addProperty("fo:font-weight", "bold", KoGenStyle::TextType);
 
     if( font.italic() )
-      xmlWriter->addAttribute( "fo:font-style", "italic" );
+      style.addProperty("fo:font-style", "italic", KoGenStyle::TextType);
 
     if( font.underline() )
     {
-      xmlWriter->addAttribute( "style:text-underline-style", "solid" );
-      xmlWriter->addAttribute( "style:text-underline-width", "auto" );
-      xmlWriter->addAttribute( "style:text-underline-color", "font-color" );
+      style.addProperty("style:text-underline-style", "solid", KoGenStyle::TextType);
+      style.addProperty("style:text-underline-width", "auto", KoGenStyle::TextType);
+      style.addProperty("style:text-underline-color", "font-color", KoGenStyle::TextType);
     }
 
     if( font.strikeout() )
-      xmlWriter->addAttribute( "style:text-line-through-style", "solid" );
+      style.addProperty("style:text-line-through-style", "solid", KoGenStyle::TextType);
 
     if( font.subscript() )
-      xmlWriter->addAttribute( "style:text-position", "sub" );
+      style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
 
     if( font.superscript() )
-      xmlWriter->addAttribute( "style:text-position", "super" );
+      style.addProperty("style:text-position", "super", KoGenStyle::TextType);
 
     if( !font.fontFamily().isEmpty() )
-      xmlWriter->addAttribute( "style:font-name", string(font.fontFamily()) );
+      style.addProperty("style:font-name", QString::fromRawData(reinterpret_cast<const QChar*>(font.fontFamily().data()), font.fontFamily().length()), KoGenStyle::TextType);
 
-    xmlWriter->addAttribute( "fo:font-size", QString("%1pt").arg(font.fontSize()) );
+    style.addPropertyPt("fo:font-size", font.fontSize(), KoGenStyle::TextType);
 
-    xmlWriter->addAttribute( "fo:color", convertColor( font.color() ) );
-
-    xmlWriter->endElement();  // style:text-properties
+    style.addProperty("fo:color", convertColor( font.color() ), KoGenStyle::TextType);
   }
 
-  xmlWriter->startElement( "style:table-cell-properties" );
   if( !align.isNull() )
   {
     switch( align.alignY() ) {
-      case Format::Top: xmlWriter->addAttribute( "style:vertical-align", "top" ); break;
-      case Format::Middle: xmlWriter->addAttribute( "style:vertical-align", "middle" ); break;
-      case Format::Bottom: xmlWriter->addAttribute( "style:vertical-align", "bottom" ); break;
+      case Format::Top: style.addProperty( "style:vertical-align", "top" ); break;
+      case Format::Middle: style.addProperty( "style:vertical-align", "middle" ); break;
+      case Format::Bottom: style.addProperty( "style:vertical-align", "bottom" ); break;
     }
 
-    xmlWriter->addAttribute( "fo:wrap-option", align.wrap() ? "wrap" : "no-wrap" );
+    style.addProperty( "fo:wrap-option", align.wrap() ? "wrap" : "no-wrap" );
     //TODO rotation
     //TODO stacked letters
   }
 
   if( !borders.isNull() )
   {
-    xmlWriter->addAttribute( "fo:border-left", convertBorder( borders.leftBorder() ) );
-    xmlWriter->addAttribute( "fo:border-right", convertBorder( borders.rightBorder() ) );
-    xmlWriter->addAttribute( "fo:border-top", convertBorder( borders.topBorder() ) );
-    xmlWriter->addAttribute( "fo:border-bottom", convertBorder( borders.bottomBorder() ) );
+    style.addProperty( "fo:border-left", convertBorder( borders.leftBorder() ) );
+    style.addProperty( "fo:border-right", convertBorder( borders.rightBorder() ) );
+    style.addProperty( "fo:border-top", convertBorder( borders.topBorder() ) );
+    style.addProperty( "fo:border-bottom", convertBorder( borders.bottomBorder() ) );
     //TODO diagonal 'borders'
   }
 
@@ -807,1305 +780,377 @@ void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter
     if( back.pattern() == FormatBackground::SolidPattern )
       backColor = back.foregroundColor();
 
-    xmlWriter->addAttribute( "fo:background-color", convertColor( backColor ) );
+    style.addProperty( "fo:background-color", convertColor( backColor ) );
 
     //TODO patterns
   }
-  xmlWriter->endElement(); // style:table-cell-properties
 
-  xmlWriter->startElement( "style:paragraph-properties" );
   if( !align.isNull() )
   {
     switch( align.alignX() ) {
-      case Format::Left: xmlWriter->addAttribute( "fo:text-align", "start" ); break;
-      case Format::Center: xmlWriter->addAttribute( "fo:text-align", "center" ); break;
-      case Format::Right: xmlWriter->addAttribute( "fo:text-align", "end" ); break;
+      case Format::Left: style.addProperty( "fo:text-align", "start", KoGenStyle::ParagraphType ); break;
+      case Format::Center: style.addProperty( "fo:text-align", "center", KoGenStyle::ParagraphType ); break;
+      case Format::Right: style.addProperty( "fo:text-align", "end", KoGenStyle::ParagraphType ); break;
     }
 
     if( align.indentLevel() != 0 )
-      xmlWriter->addAttribute( "fo:margin-left", QString::number( align.indentLevel() ) + "0pt" );
+      style.addProperty( "fo:margin-left", QString::number( align.indentLevel() ) + "0pt", KoGenStyle::ParagraphType );
   }
-  xmlWriter->endElement(); // style:paragraph-properties
 }
 
-void ExcelImport::Private::processValueFormat( const QString& valueFormat, const QString& refName,
-KoXmlWriter* xmlWriter )
+static void processDateFormatComponent( KoXmlWriter* xmlWriter, const QString& component )
 {
-  /*int decimalPlaces = 2;
-  int leadingZeroes = 1;
-  int exponentDigits = -1;
-  bool percentage = false;*/
-
-  // TODO: someday we need a real MS Excel to OpenDocument format paraser
-  // this just catches the most common format, not covers all possible cases
-
-  if( valueFormat == "0")
+  if( component[0] == 'd' )
   {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 0 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 1 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 2 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 3 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 4 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 5 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 6 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 7 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 8 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 9 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 10 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 11 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 12 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 13 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 14 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 15 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000000000000")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 16 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 0 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 1 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 2 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 3 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 4 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 5 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 6 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 7 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 8 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 9 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 10 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 11 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 12 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 13 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.00000000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 14 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.000000000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 16 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0.0000000000000000E+00")
-  {
-    xmlWriter->startElement( "number:number-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->startElement( "number:scientific-number" );
-    xmlWriter->addAttribute( "number:decimal-places", 17 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->addAttribute( "number:min-exponent-digits", 2 );
-    xmlWriter->endElement();  // number:scientific-number
-    xmlWriter->endElement();  // number:number-style
-  }
-  else if( valueFormat == "0%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 0 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.0%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 1 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.00%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 2 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 3 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.0000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 4 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.00000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 5 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 6 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.0000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 7 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.00000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 8 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 9 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.0000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 10 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.00000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 11 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.000000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 12 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.0000000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 13 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.00000000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 14 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.000000000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 15 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat == "0.0000000000000000%")
-  {
-    xmlWriter->startElement( "number:percentage-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->startElement( "number:number" );
-    xmlWriter->addAttribute( "number:decimal-places", 16 );
-    xmlWriter->addAttribute( "number:min-integer-digits", 1 );
-    xmlWriter->endElement();  // number:number
-    xmlWriter->startElement( "number:text" );
-    xmlWriter->addTextNode( "%" );
-    xmlWriter->endElement();  // number:text
-    xmlWriter->endElement();  // number:percentage-style
-  }
-  else if( valueFormat.toLower() == "m/d/yy")
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
     xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
+    xmlWriter->addAttribute( "number:style", component.length() == 1 ? "short" : "long" );
     xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
+  }
+  else if( component[0] == 'm' )
+  {
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", component.length() == 3 ? "true" : "false" );
+    xmlWriter->addAttribute( "number:style", component.length() == 2 ? "long" : "short" );
+    xmlWriter->endElement();  // number:month
+  }
+  else if( component[0] == 'y' )
+  {
     xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "short" );
+    xmlWriter->addAttribute( "number:style", component.length() == 2 ? "short" : "long" );
     xmlWriter->endElement();  // number:year
-
-    xmlWriter->endElement();  // number:date-style
   }
-  else if( valueFormat.toLower() == "m/d/yyyy")
+}
+
+static void processDateFormatSeparator( KoXmlWriter* xmlWriter, const QString& separator )
+{
+  xmlWriter->startElement( "number:text");
+  xmlWriter->addTextNode( separator[separator.length() - 1] );
+  xmlWriter->endElement();  // number:text
+}
+
+QString ExcelImport::Private::processValueFormat( const QString& valueFormat )
+{
+  QRegExp numberRegEx("(0+)(\\.0+)?(E\\+0+)?");
+  QRegExp percentageRegEx("(0+)(\\.0+)?%");
+  QRegExp dateRegEx("(m{1,3}|d{1,2}|yy|yyyy)(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy)(?:(/|-|\\\\-)(m{1,3}|d{1,2}|yy|yyyy))?");
+
+  if( numberRegEx.exactMatch(valueFormat) )
   {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->endElement();  // number:date-style
+    if( numberRegEx.cap(3).length() )
+      return KoOdfNumberStyles::saveOdfScientificStyle(*styles, valueFormat, "", "");
+    else
+      return KoOdfNumberStyles::saveOdfNumberStyle(*styles, valueFormat, "", "");
   }
-  else if( (valueFormat.toLower() == "d-mmm-yy") || (valueFormat.toLower() == "d\\-mmm\\-yy") )
+  else if( percentageRegEx.exactMatch(valueFormat) )
   {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "true" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->endElement();  // number:date-style
+    return KoOdfNumberStyles::saveOdfPercentageStyle(*styles, valueFormat, "", "");
   }
-  else if( (valueFormat.toLower() == "d-mmm-yyyy") || (valueFormat.toLower() == "d\\-mmm\\-yyyy") )
+  else if( dateRegEx.exactMatch(valueFormat) )
   {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericDate);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter elementWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
+    processDateFormatComponent( &elementWriter, dateRegEx.cap(1) );
+    processDateFormatSeparator( &elementWriter, dateRegEx.cap(2) );
+    processDateFormatComponent( &elementWriter, dateRegEx.cap(3) );
+    if( dateRegEx.cap(4).length() )
+    {
+      processDateFormatSeparator( &elementWriter, dateRegEx.cap(4) );
+      processDateFormatComponent( &elementWriter, dateRegEx.cap(5) );
+    }
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
 
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "true" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->endElement();  // number:date-style
+    return styles->lookup(style, "N");
   }
-  else if( (valueFormat.toLower() == "d-mmm") || (valueFormat.toLower() == "d\\-mmm") )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "true" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( (valueFormat.toLower() == "d-mm") || (valueFormat.toLower() == "d\\-mm") )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "mmm/d" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "true" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "mmm/dd" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "true" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "mm/d" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "mm/dd" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "mm/dd/yy" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "mm/dd/yyyy" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "yyyy/mm/dd" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( valueFormat.toLower() == "yyyy/mm/d" )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "/" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( (valueFormat.toLower() == "yyyy-mm-dd") || (valueFormat.toLower() == "yyyy\\-mm\\-dd") )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-  else if( (valueFormat.toLower() == "yyyy-mm-d") || (valueFormat.toLower() == "yyyy\\-mm\\-d") )
-  {
-    xmlWriter->startElement( "number:date-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-
-    xmlWriter->startElement( "number:year" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:year
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:month" );
-    xmlWriter->addAttribute( "number:textual", "false" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:month
-
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( "-" );
-    xmlWriter->endElement();  // number:text
-
-    xmlWriter->startElement( "number:day" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:day
-
-    xmlWriter->endElement();  // number:date-style
-  }
-
   else if( valueFormat == "h:mm AM/PM" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:hours" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:hour
+    xmlWriter.startElement( "number:hours" );
+    xmlWriter.addAttribute( "number:style", "short" );
+    xmlWriter.endElement();  // number:hour
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( " " );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( " " );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:am-pm" );
-    xmlWriter->endElement();  // number:am-pm
+    xmlWriter.startElement( "number:am-pm" );
+    xmlWriter.endElement();  // number:am-pm
 
-    xmlWriter->endElement();  // number:time-style
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "h:mm:ss AM/PM" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:hours" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:hour
+    xmlWriter.startElement( "number:hours" );
+    xmlWriter.addAttribute( "number:style", "short" );
+    xmlWriter.endElement();  // number:hour
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( " " );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( " " );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:am-pm" );
-    xmlWriter->endElement();  // number:am-pm
+    xmlWriter.startElement( "number:am-pm" );
+    xmlWriter.endElement();  // number:am-pm
 
-    xmlWriter->endElement();  // number:time-style
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "h:mm" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:hours" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:hour
+    xmlWriter.startElement( "number:hours" );
+    xmlWriter.addAttribute( "number:style", "short" );
+    xmlWriter.endElement();  // number:hour
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->endElement();  // number:time-style
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "h:mm:ss" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:hours" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:hour
+    xmlWriter.startElement( "number:hours" );
+    xmlWriter.addAttribute( "number:style", "short" );
+    xmlWriter.endElement();  // number:hour
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->endElement();  // number:time-style
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "[h]:mm" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:hours" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:hour
+    style.addAttribute( "number:truncate-on-overflow", "false" );
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:hours" );
+    xmlWriter.addAttribute( "number:style", "short" );
+    xmlWriter.endElement();  // number:hour
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->endElement();  // number:time-style
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
+
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "[h]:mm:ss" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:hours" );
-    xmlWriter->addAttribute( "number:style", "short" );
-    xmlWriter->endElement();  // number:hour
+    style.addAttribute( "number:truncate-on-overflow", "false" );
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:hours" );
+    xmlWriter.addAttribute( "number:style", "short" );
+    xmlWriter.endElement();  // number:hour
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->endElement();  // number:time-style
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
+
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "mm:ss" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->endElement();  // number:time-style
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "mm:ss.0" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:text
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
 
-    xmlWriter->endElement();  // number:minutes
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ".0" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.endElement();  // number:minutes
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ".0" );
+    xmlWriter.endElement();  // number:text
 
 
-    xmlWriter->endElement();  // number:time-style
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "[mm]:ss" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:minutes" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    style.addAttribute( "number:truncate-on-overflow", "false" );
 
-    xmlWriter->startElement( "number:text");
-    xmlWriter->addTextNode( ":" );
-    xmlWriter->endElement();  // number:text
+    xmlWriter.startElement( "number:minutes" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    xmlWriter.startElement( "number:text");
+    xmlWriter.addTextNode( ":" );
+    xmlWriter.endElement();  // number:textexactMatch
 
-    xmlWriter->endElement();  // number:time-style
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
+
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
   else if( valueFormat == "[ss]" )
   {
-    xmlWriter->startElement( "number:time-style" );
-    xmlWriter->addAttribute( "style:name", refName );
-    xmlWriter->addAttribute( "style:family", "data-style" );
-    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" );
+    KoGenStyle style(KoGenStyle::StyleNumericTime);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    KoXmlWriter xmlWriter(&buffer);    // TODO pass indentation level
 
-    xmlWriter->startElement( "number:seconds" );
-    xmlWriter->addAttribute( "number:style", "long" );
-    xmlWriter->endElement();  // number:minutes
+    style.addAttribute( "number:truncate-on-overflow", "false" );
 
-    xmlWriter->endElement();  // number:time-style
+    xmlWriter.startElement( "number:seconds" );
+    xmlWriter.addAttribute( "number:style", "long" );
+    xmlWriter.endElement();  // number:minutes
+
+    QString elementContents = QString::fromUtf8(buffer.buffer(), buffer.buffer().size());
+    style.addChildElement("number", elementContents);
+
+    return styles->lookup(style, "N");
   }
-
+  else
+  {
+    return "";
+  }
 }

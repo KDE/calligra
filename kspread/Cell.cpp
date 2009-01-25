@@ -860,6 +860,11 @@ bool Cell::isTime() const
     return (Format::isTime(t) || ((t == Format::Generic) && (value().format() == Value::fmt_Time)));
 }
 
+bool Cell::isText() const
+{
+    const Format::Type t = style().formatType();
+    return t == Format::Text;
+}
 
 // Return true if this cell is part of a merged cell, but not the
 // master cell.
@@ -1260,11 +1265,23 @@ void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
     }
     case Value::fmt_Number:
     {
-      xmlWriter.addAttribute( "office:value-type", "float" );
-      if (value().isInteger())
-        xmlWriter.addAttribute( "office:value", QString::number( value().asInteger() ) );
-      else
-        xmlWriter.addAttribute( "office:value", QString::number( numToDouble (value().asFloat()), 'g', DBL_DIG ) );
+      if (isDate()) {
+        xmlWriter.addAttribute( "office:value-type", "date" );
+        xmlWriter.addAttribute( "office:date-value",
+            value().asDate(sheet()->map()->calculationSettings()).toString( Qt::ISODate ) );
+      } else if (isText()) {
+        xmlWriter.addAttribute( "office:value-type", "string" );
+        if (value().isInteger())
+          xmlWriter.addAttribute( "office:string-value", QString::number( value().asInteger() ) );
+        else
+          xmlWriter.addAttribute( "office:string-value", QString::number( numToDouble (value().asFloat()), 'g', DBL_DIG ) );
+      } else {
+        xmlWriter.addAttribute( "office:value-type", "float" );
+        if (value().isInteger())
+          xmlWriter.addAttribute( "office:value", QString::number( value().asInteger() ) );
+        else
+          xmlWriter.addAttribute( "office:value", QString::number( numToDouble (value().asFloat()), 'g', DBL_DIG ) );
+      }
       break;
     }
     case Value::fmt_Percent:
@@ -1289,9 +1306,15 @@ void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
     case Value::fmt_DateTime: break;  //NOTHING HERE
     case Value::fmt_Date:
     {
-      xmlWriter.addAttribute( "office:value-type", "date" );
-      xmlWriter.addAttribute( "office:date-value",
-          value().asDate(sheet()->map()->calculationSettings()).toString( Qt::ISODate ) );
+      if (isTime()) {
+        xmlWriter.addAttribute( "office:value-type", "time" );
+        xmlWriter.addAttribute( "office:time-value",
+            value().asTime(sheet()->map()->calculationSettings()).toString( "PThhHmmMssS" ) );
+      } else {
+        xmlWriter.addAttribute( "office:value-type", "date" );
+        xmlWriter.addAttribute( "office:date-value",
+            value().asDate(sheet()->map()->calculationSettings()).toString( Qt::ISODate ) );
+      }
       break;
     }
     case Value::fmt_Time:

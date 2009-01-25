@@ -16,8 +16,8 @@ void KWord13Layout::xmldump( QTextStream& iostream )
     iostream << "    <layout name=\"" << EscapeXmlDump( m_name )
         << "\" outline=\"" << ( m_outline ? QString("true") : QString("false") ) << "\">\n";
     
-    for ( QMap<QString,QString>::ConstIterator it = m_layoutProperties.begin();
-        it != m_layoutProperties.end();
+    for ( QMap<QString,QString>::ConstIterator it = m_layoutProperties.constBegin();
+        it != m_layoutProperties.constEnd();
         ++it)
     {
         iostream << "     <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.data() ) << "\"/>\n";

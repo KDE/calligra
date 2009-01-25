@@ -52,6 +52,11 @@ public:
     KexiDB::Connection* database() const;
 
     bool setDom(const QString &);
+    
+    /**
+    @brief Set the name of the report so that it can be used internally by the script engine
+    */
+    void setName(const QString &);
 
     bool isValid() const;
 

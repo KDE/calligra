@@ -106,6 +106,11 @@ qreal KPrPlaceholder::percent( const KoXmlElement & element, const char * type, 
     }
     else { // fixed value
         tmp = KoUnit::parseValue( value ) / absolute;
+        // The following is done so that we get the same data as when we save/load the placeholder.
+        // This is needed that we don't get the same layout twice in the docker due to rounding
+        // differences of absolute and relative placeholders of the same layout
+        QString value = QString( "%1" ).arg( tmp * 100.0 );
+        tmp = value.toDouble() / 100;
     }
 
     return tmp;
@@ -119,16 +124,22 @@ bool KPrPlaceholder::operator==( const KPrPlaceholder & other ) const
 bool KPrPlaceholder::operator<( const KPrPlaceholder & other ) const
 {
     if ( m_presentationObject == other.m_presentationObject ) {
-        if ( m_relativeSize.x() == other.m_relativeSize.x() ) {
-            if ( m_relativeSize.y() == other.m_relativeSize.y() ) {
-                if ( m_relativeSize.width() == other.m_relativeSize.width() ) {
-                    return m_relativeSize.height() < other.m_relativeSize.height();
-                }
-                return m_relativeSize.width() < other.m_relativeSize.width();
-            }
-            return m_relativeSize.y() < other.m_relativeSize.y();
-        }
-        return m_relativeSize.x() < other.m_relativeSize.x();
+        return comparePosition( *this, other );
     }
     return m_presentationObject < other.m_presentationObject;
 }
+
+bool KPrPlaceholder::comparePosition( const KPrPlaceholder & p1, const KPrPlaceholder & p2 )
+{
+    if ( p1.m_relativeSize.x() == p2.m_relativeSize.x() ) {
+        if ( p1.m_relativeSize.y() == p2.m_relativeSize.y() ) {
+            if ( p1.m_relativeSize.width() == p2.m_relativeSize.width() ) {
+                return p1.m_relativeSize.height() < p2.m_relativeSize.height();
+            }
+            return p1.m_relativeSize.width() < p2.m_relativeSize.width();
+        }
+        return p1.m_relativeSize.y() < p2.m_relativeSize.y();
+    }
+    return p1.m_relativeSize.x() < p2.m_relativeSize.x();
+}
+

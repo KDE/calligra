@@ -31,6 +31,7 @@ class KRScriptDebug;
 class KRReportData;
 class OROPage;
 class KRScriptDraw;
+class KexiScriptAdaptor;
 
 namespace Scripting{
     class Report;
@@ -59,6 +60,8 @@ private:
     KRScriptConstants *_constants;
     KRScriptDebug *_debug;
     KRScriptDraw *_draw;
+    
+    KexiScriptAdaptor *_kexi;
 
     Scripting::Report *_report;
 

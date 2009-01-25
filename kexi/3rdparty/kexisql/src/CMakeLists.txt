@@ -40,9 +40,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 
-kde4_add_library(kexisql2 SHARED ${kexisql2_LIB_SRCS})
-
-target_link_libraries(kexisql2  ${KDE4_KDECORE_LIBS} )
+add_library(kexisql2 SHARED ${kexisql2_LIB_SRCS})
 
 set_target_properties(kexisql2 PROPERTIES VERSION 2.8.15 SOVERSION 2 )
 install(TARGETS kexisql2  ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -53,9 +51,9 @@ install(TARGETS kexisql2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(ksqlite2_SRCS shell.c )
 
 
-kde4_add_executable(ksqlite2 ${ksqlite2_SRCS})
+add_executable(ksqlite2 ${ksqlite2_SRCS})
 
-target_link_libraries(ksqlite2  ${KDE4_KDECORE_LIBS} kexisql2 )
+target_link_libraries(ksqlite2 kexisql2)
 
 install(TARGETS ksqlite2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

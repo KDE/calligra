@@ -165,65 +165,9 @@ void KarbonPart::openTemplate(const KUrl& url)
         setOutputMimeType( "application/vnd.oasis.opendocument.graphics" );
 }
 
-bool KarbonPart::loadXML( const KoXmlDocument& document, KoStore* )
+bool KarbonPart::loadXML( const KoXmlDocument&, KoStore* )
 {
-    bool success = false;
-
-    KoXmlElement doc = document.documentElement();
-
-    if( d->merge )
-    {
-        d->document.loadDocumentContent( doc );
-        return true;
-    }
-
-    success = d->document.loadXML( doc );
-
-    //m_pageLayout = KoPageLayout::standardLayout();
-
-    // <PAPER>
-    KoXmlElement paper = doc.namedItem( "PAPER" ).toElement();
-    if ( !paper.isNull() )
-    {
-        m_pageLayout.format = static_cast<KoPageFormat::Format>( d->getAttribute( paper, "format", 0 ) );
-        m_pageLayout.orientation = static_cast<KoPageFormat::Orientation>( d->getAttribute( paper, "orientation", 0 ) );
-
-        if( m_pageLayout.format == KoPageFormat::CustomSize )
-        {
-            m_pageLayout.width    = d->document.pageSize().width();
-            m_pageLayout.height    = d->document.pageSize().height();
-        }
-        else
-        {
-            m_pageLayout.width = d->getAttribute( paper, "width", qreal(0.0) );
-            m_pageLayout.height = d->getAttribute( paper, "height", qreal(0.0) );
-        }
-    }
-    else
-    {
-        m_pageLayout.width = d->getAttribute( doc, "width", qreal(595.277) );
-        m_pageLayout.height = d->getAttribute( doc, "height", qreal(841.891) );
-    }
-
-    kDebug(38000) <<" width=" << m_pageLayout.width;
-    kDebug(38000) <<" height=" << m_pageLayout.height;
-        KoXmlElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
-        if( !borders.isNull() )
-    {
-        if( borders.hasAttribute( "left" ) )
-            m_pageLayout.left = borders.attribute( "left" ).toDouble();
-        if( borders.hasAttribute( "top" ) )
-            m_pageLayout.top = borders.attribute( "top" ).toDouble();
-        if( borders.hasAttribute( "right" ) )
-            m_pageLayout.right = borders.attribute( "right" ).toDouble();
-        if( borders.hasAttribute( "bottom" ) )
-            m_pageLayout.bottom = borders.attribute( "bottom" ).toDouble();
-    }
-
-    setUnit( d->document.unit() );
-    setPageSize( d->document.pageSize() );
-
-    return success;
+    return false;
 }
 
 bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )

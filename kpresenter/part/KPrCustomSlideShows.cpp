@@ -55,14 +55,14 @@ void KPrCustomSlideShows::remove( const QString &name )
 
 void KPrCustomSlideShows::update( const QString &name, const QList<KoPAPageBase*> &slideShow )
 {
-    QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.find( name );
-    Q_ASSERT( it != m_customSlideShows.end() );
+    QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.constFind( name );
+    Q_ASSERT( it != m_customSlideShows.constEnd() );
     m_customSlideShows.insert( name, slideShow );
 }
 void KPrCustomSlideShows::rename( const QString &oldName, const QString &newName )
 {
-    QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.find( oldName );
-    Q_ASSERT( it !=  m_customSlideShows.end() );
+    QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.constFind( oldName );
+    Q_ASSERT( it !=  m_customSlideShows.constEnd() );
     QList<KoPAPageBase*> value( it.value() );
     remove( oldName );
     insert( newName, value );
@@ -88,7 +88,7 @@ void KPrCustomSlideShows::addSlideToAll( KoPAPageBase* page, unsigned int positi
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
     //FIXME: should we allow negative index?
     //if( position < 0 ) return;
-    while( it != m_customSlideShows.constEnd() ) {
+    while( it != m_customSlideShows.end() ) {
         uint size = it.value().size();
         it.value().insert( (position<=size)? position : size, page );
         ++it;
@@ -107,7 +107,7 @@ void KPrCustomSlideShows::addSlidesToAll( const QList<KoPAPageBase*> &slideShow,
 void KPrCustomSlideShows::removeSlideFromAll( KoPAPageBase* page )
 {
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
-    while( it != m_customSlideShows.constEnd() ) {
+    while( it != m_customSlideShows.end() ) {
         it.value().removeAll( page );
         ++it;
     }

@@ -931,9 +931,9 @@ void CellView::paintCommentIndicator( QPainter& painter,
             polygon << QPointF( coordinate.x(), coordinate.y() + 6.0 );
         }
         else {
-            polygon << QPointF( coordinate.x() + d->width - 5.0, coordinate.y() );
-            polygon << QPointF( coordinate.x() + d->width, coordinate.y() );
-            polygon << QPointF( coordinate.x() + d->width, coordinate.y() + 5.0 );
+            polygon << QPointF( coordinate.x() + cell.width() - 5.0, coordinate.y() );
+            polygon << QPointF( coordinate.x() + cell.width(), coordinate.y() );
+            polygon << QPointF( coordinate.x() + cell.width(), coordinate.y() + 5.0 );
         }
 
         // And draw it.

@@ -41,6 +41,7 @@ public:
 
 public slots:
     QString title();
+    QString name();
     QString recordSource();
     QObject* objectByName(const QString &);
     QObject* sectionByName(const QString &);

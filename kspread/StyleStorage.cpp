@@ -197,14 +197,14 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSav
 
 int StyleStorage::nextColumnStyleIndex( int column ) const
 {
-    const QMap<int, bool>::ConstIterator it = d->usedColumns.upperBound(column + 1);
-    return (it == d->usedColumns.constEnd()) ? 0 : it.key();
+    QMap<int, bool>::iterator it = d->usedColumns.upperBound(column + 1);
+    return (it == d->usedColumns.end()) ? 0 : it.key();
 }
 
 int StyleStorage::nextRowStyleIndex(int row) const
 {
-    const QMap<int, bool>::ConstIterator it = d->usedRows.upperBound(row + 1);
-    return (it == d->usedRows.constEnd()) ? 0 : it.key();
+    QMap<int, bool>::iterator it = d->usedRows.upperBound(row + 1);
+    return (it == d->usedRows.end()) ? 0 : it.key();
 }
 
 int StyleStorage::firstColumnIndexInRow(int row) const
@@ -306,14 +306,14 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertRows(int position, int
         d->usedArea += rects[i].adjusted(0, 1, 0, number + 1);
     // update the used rows
     QMap<int, bool> map;
-    const QMap<int, bool>::ConstIterator begin = d->usedRows.upperBound(position);
-    const QMap<int, bool>::ConstIterator end = d->usedRows.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedRows.upperBound(position);
+    QMap<int, bool>::iterator end = d->usedRows.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() + number <= KS_rowMax)
             map.insert(it.key() + number, true);
     }
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
         d->usedRows.remove(it.key());
     d->usedRows.unite(map);
     // process the tree
@@ -335,14 +335,14 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertColumns(int position, 
         d->usedArea += rects[i].adjusted(1, 0, number + 1, 0);
     // update the used columns
     QMap<int, bool> map;
-    const QMap<int, bool>::ConstIterator begin = d->usedColumns.upperBound(position);
-    const QMap<int, bool>::ConstIterator end = d->usedColumns.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedColumns.upperBound(position);
+    QMap<int, bool>::iterator end = d->usedColumns.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() + number <= KS_colMax)
             map.insert(it.key() + number, true);
     }
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
         d->usedColumns.remove(it.key());
     d->usedColumns.unite(map);
     // process the tree
@@ -361,14 +361,14 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeRows(int position, int
     d->usedArea += usedArea.translated(0, -number);
     // update the used rows
     QMap<int, bool> map;
-    const QMap<int, bool>::ConstIterator begin = d->usedRows.upperBound(position);
-    const QMap<int, bool>::ConstIterator end = d->usedRows.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedRows.upperBound(position);
+    QMap<int, bool>::iterator end = d->usedRows.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() - number >= position)
             map.insert(it.key() - number, true);
     }
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
         d->usedRows.remove(it.key());
     d->usedRows.unite(map);
     // process the tree
@@ -387,14 +387,14 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeColumns(int position, 
     d->usedArea += usedArea.translated(-number, 0);
     // update the used columns
     QMap<int, bool> map;
-    const QMap<int, bool>::ConstIterator begin = d->usedColumns.upperBound(position);
-    const QMap<int, bool>::ConstIterator end = d->usedColumns.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedColumns.upperBound(position);
+    QMap<int, bool>::iterator end = d->usedColumns.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() - number >= position)
             map.insert(it.key() - number, true);
     }
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
         d->usedColumns.remove(it.key());
     d->usedColumns.unite(map);
     // process the tree
@@ -415,9 +415,9 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertShiftRight( const QRec
     for (int i = 0; i < rects.count(); ++i)
         d->usedArea += rects[i].adjusted(1, 0, rect.width() + 1, 0);
     // update the used columns
-    const QMap<int, bool>::ConstIterator begin = d->usedColumns.upperBound(rect.left());
-    const QMap<int, bool>::ConstIterator end = d->usedColumns.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedColumns.upperBound(rect.left());
+    QMap<int, bool>::iterator end = d->usedColumns.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() + rect.width() <= KS_colMax)
             d->usedArea += QRect(it.key() + rect.width(), rect.top(), rect.width(), rect.height());
@@ -440,9 +440,9 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::insertShiftDown( const QRect
     for (int i = 0; i < rects.count(); ++i)
         d->usedArea += rects[i].adjusted(0, 1, 0, rect.height() + 1);
     // update the used rows
-    const QMap<int, bool>::ConstIterator begin = d->usedRows.upperBound(rect.top());
-    const QMap<int, bool>::ConstIterator end = d->usedRows.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedRows.upperBound(rect.top());
+    QMap<int, bool>::iterator end = d->usedRows.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() + rect.height() <= KS_rowMax)
             d->usedArea += QRect(rect.left(), it.key() + rect.height(), rect.width(), rect.height());
@@ -462,9 +462,9 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeShiftLeft( const QRect
     d->usedArea -= invalidRect;
     d->usedArea += usedArea.translated(-rect.width(), 0);
     // update the used columns
-    const QMap<int, bool>::ConstIterator begin = d->usedColumns.upperBound(rect.right() + 1);
-    const QMap<int, bool>::ConstIterator end = d->usedColumns.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedColumns.upperBound(rect.right() + 1);
+    QMap<int, bool>::iterator end = d->usedColumns.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() - rect.width() >= rect.left())
             d->usedArea += QRect(it.key() - rect.width(), rect.top(), rect.width(), rect.height());
@@ -482,9 +482,9 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeShiftUp( const QRect& 
     d->usedArea -= invalidRect;
     d->usedArea += usedArea.translated(0, -rect.height());
     // update the used rows
-    const QMap<int, bool>::ConstIterator begin = d->usedRows.upperBound(rect.bottom() + 1);
-    const QMap<int, bool>::ConstIterator end = d->usedRows.constEnd();
-    for (QMap<int, bool>::ConstIterator it = begin; it != end; ++it)
+    QMap<int, bool>::iterator begin = d->usedRows.upperBound(rect.bottom() + 1);
+    QMap<int, bool>::iterator end = d->usedRows.end();
+    for (QMap<int, bool>::iterator it = begin; it != end; ++it)
     {
         if (it.key() - rect.height() >= rect.top())
             d->usedArea += QRect(rect.left(), it.key() - rect.height(), rect.width(), rect.height());
@@ -574,7 +574,7 @@ void StyleStorage::garbageCollection()
     // check, if the current substyle is covered by others added after it
     bool found = false;
     QMap<int, SharedSubStylePair>::ConstIterator end = pairs.constEnd();
-    for (QMap<int, SharedSubStylePair>::ConstIterator it = pairs.find(currentZIndex); it != end; ++it)
+    for (QMap<int, SharedSubStylePair>::ConstIterator it = pairs.constFind(currentZIndex); it != end; ++it)
     {
         zIndex = it.key();
         pair = it.value();

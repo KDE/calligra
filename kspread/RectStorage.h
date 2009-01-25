@@ -530,7 +530,7 @@ void RectStorage<T>::garbageCollection()
 
     bool found = false;
     typename QMap<int, DataPair>::ConstIterator end = pairs.constEnd();
-    for (typename QMap<int, DataPair>::ConstIterator it = pairs.find(currentZIndex); it != end; ++it)
+    for (typename QMap<int, DataPair>::ConstIterator it = pairs.constFind(currentZIndex); it != end; ++it)
     {
         zIndex = it.key();
         pair = it.value();

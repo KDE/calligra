@@ -1950,8 +1950,8 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
     {
         QString dataStyleName = object.attributeNS( ooNS::style, "data-style-name", QString() );
         QString dateFormat = "locale";
-        DataFormatsMap::const_iterator it = m_dateTimeFormats.find( dataStyleName );
-        if ( it != m_dateTimeFormats.end() )
+        DataFormatsMap::const_iterator it = m_dateTimeFormats.constFind( dataStyleName );
+        if ( it != m_dateTimeFormats.constEnd() )
             dateFormat = (*it);
 
         if ( localName == "date" )

@@ -694,12 +694,18 @@ int DataSet::dimension() const
     case RadarChartType:
     case SurfaceChartType:
 	return 1;
+
     case ScatterChartType:
     case GanttChartType:
     case RingChartType:
 	return 2;
+
     case BubbleChartType:
 	return 3;
+
+    case StockChartType:
+        return 4;
+
 	// We can only determine the dimension if
 	// a chart type is set
     case LastChartType:

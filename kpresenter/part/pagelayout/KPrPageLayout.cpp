@@ -184,3 +184,32 @@ bool KPrPageLayout::operator<( const KPrPageLayout & other ) const
     kDebug(33001) << "KPrPageLayout::operator< 3" << ( m_placeholders.size() < other.m_placeholders.size() );
     return m_placeholders.size() < other.m_placeholders.size();
 }
+
+bool comparePlaceholderByPosition( const KPrPlaceholder * p1, const KPrPlaceholder * p2 )
+{
+    return KPrPlaceholder::comparePosition( *p1,* p2 );
+}
+
+bool KPrPageLayout::compareByContent( const KPrPageLayout & pl1, const KPrPageLayout & pl2 )
+{
+    if ( pl1.m_placeholders.size() == pl2.m_placeholders.size() ) {
+        QList<KPrPlaceholder *> placeholders( pl1.m_placeholders );
+        QList<KPrPlaceholder *> otherPlaceholders( pl2.m_placeholders );
+        qSort( placeholders.begin(), placeholders.end(), comparePlaceholderByPosition );
+        qSort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholderByPosition );
+
+        QList<KPrPlaceholder *>::iterator it( placeholders.begin() );
+        QList<KPrPlaceholder *>::iterator otherIt( otherPlaceholders.begin() );
+
+        for ( ; it != placeholders.end(); ++it, ++otherIt ) {
+            QString presentationObject1 = ( *it )->presentationObject();
+            QString presentationObject2 = ( *otherIt )->presentationObject();
+            if ( presentationObject1 == presentationObject2 ) {
+                continue;
+            }
+            return presentationObject1 < presentationObject2;
+        }
+        return false;
+    }
+    return pl1.m_placeholders.size() < pl2.m_placeholders.size();
+}

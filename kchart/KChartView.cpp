@@ -166,7 +166,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
              dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
-    KoToolBoxFactory toolBoxFactory( m_canvasController, "KChart" );
+    KoToolBoxFactory toolBoxFactory( m_canvasController, i18n("Tools") );
     createDockWidget( &toolBoxFactory );
 	
     // Disable some things if we can't change the data, e.g. because

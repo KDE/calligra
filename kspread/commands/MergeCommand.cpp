@@ -26,6 +26,7 @@
 #include "Cell.h"
 #include "Damages.h"
 #include "Map.h"
+#include "Selection.h"
 #include "Sheet.h"
 
 using namespace KSpread;
@@ -35,7 +36,8 @@ MergeCommand::MergeCommand(QUndoCommand* parent)
     m_merge(true),
     m_mergeHorizontal(false),
     m_mergeVertical(false),
-    m_unmerger(0)
+    m_unmerger(0),
+    m_selection(0)
 {
     m_checkLock = true;
 }
@@ -135,6 +137,10 @@ bool MergeCommand::process(Element* element)
     }
   }
 
+  // adjust selection
+  if (m_selection)
+    m_selection->isEmpty() ? m_selection->initialize(range, m_sheet) : m_selection->extend(range, m_sheet);
+
   return true;
 }
 
@@ -233,6 +239,10 @@ bool MergeCommand::preProcessing()
       }
     }
   }
+  // Clear the associated selection, if any. The merge/dissociate process will restore
+  // selections. This ensures that the selection isn't broken after merging.
+  if (m_selection) m_selection->clear ();
+
   return AbstractRegionCommand::preProcessing();
 }
 

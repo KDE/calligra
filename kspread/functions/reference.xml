@@ -248,7 +248,7 @@
         <Type>Boolean</Type>
      </Parameter>
      <Help>
-       <Text>Look for a matching value in the first column of the given table, and return the value of the indicated column.</Text>
+       <Text>Look for a matching value in the first column of the given table, and return the value of the indicated column.</Text>
        <Text>Looks up the 'lookup value' in the first column of the 'data source'. If a value matches, the value in the 'column' and the row, the value was found in, is returned. If 'sorted' is true (default), the first column is assumed to be sorted. The search will end, if the 'lookup value' is lower than the value, currently compared to.</Text>
        <Syntax>VLOOKUP(Lookup value; data source; Column; Sorted)</Syntax>
      </Help>

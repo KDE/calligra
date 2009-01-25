@@ -956,8 +956,8 @@ void RTFWorker::writeFontData(void)
     uint count;
     QFontDatabase fontDatabase;
     QStringList::ConstIterator it;
-    for (count=0, it=m_fontList.begin();
-        it!=m_fontList.end();
+    for (count=0, it=m_fontList.constBegin();
+        it!=m_fontList.constEnd();
         count++, it++)
     {
         const QString strLower( (*it).lower() );
@@ -1649,7 +1649,7 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
     QStringList::ConstIterator it;
 
     // search font table for this font
-    for( it = m_fontList.begin(); it != m_fontList.end(); counter++, ++it )
+    for( it = m_fontList.constBegin(); it != m_fontList.constEnd(); counter++, ++it )
     {
         if((*it) == cookedFontName)  // check for match
         {

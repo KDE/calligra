@@ -59,8 +59,8 @@ public:
     void setBottomBorderPen(const QPen& pen) { m_style->setBottomBorderPen( pen ); }
     void setLeftBorderPen(const QPen& pen) { m_style->setLeftBorderPen( pen ); }
     void setRightBorderPen(const QPen& pen) { m_style->setRightBorderPen( pen ); }
-    void setHorizontalPen(const QPen& pen) { m_horizontalPen = pen; }
-    void setVerticalPen(const QPen& pen) { m_verticalPen = pen; }
+    void setHorizontalPen(const QPen& pen) { m_horizontalPen = pen; m_horizontalPenChanged = true; }
+    void setVerticalPen(const QPen& pen) { m_verticalPen = pen; m_verticalPenChanged = true; }
     void setFallDiagonalPen(const QPen& pen) { m_style->setFallDiagonalPen( pen ); }
     void setGoUpDiagonalPen(const QPen& pen) { m_style->setGoUpDiagonalPen( pen ); }
     // SetSelectionAlignWorker
@@ -96,6 +96,8 @@ protected:
 private:
     QPen m_horizontalPen;
     QPen m_verticalPen;
+    bool m_horizontalPenChanged;
+    bool m_verticalPenChanged;
 
     Style* m_style;
     QList< QPair<QRectF,SharedSubStyle> > m_undoData;

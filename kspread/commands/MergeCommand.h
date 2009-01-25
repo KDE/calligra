@@ -25,6 +25,8 @@
 namespace KSpread
 {
 
+  class Selection;
+
 /**
  * \class MergeCommand
  * \brief Merges and splits the cells of a cell region.
@@ -41,6 +43,7 @@ public:
   void setHorizontalMerge(bool state) { m_mergeHorizontal = state; }
   void setVerticalMerge(bool state) { m_mergeVertical = state; }
 
+  void setSelection (Selection *selection) { m_selection = selection; }
 protected:
   virtual bool process(Element*);
 
@@ -53,6 +56,7 @@ private:
   bool m_mergeHorizontal : 1;
   bool m_mergeVertical   : 1;
   AbstractRegionCommand* m_unmerger; // to restore old merging
+  Selection *m_selection;
 };
 
 } // namespace KSpread

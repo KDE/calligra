@@ -38,6 +38,8 @@ StyleCommand::StyleCommand(QUndoCommand* parent)
     , m_horizontalPen( QPen(QColor(), 0, Qt::NoPen) )
     , m_verticalPen( QPen(QColor(), 0, Qt::NoPen) )
     , m_style( new Style() )
+    , m_horizontalPenChanged( false )
+    , m_verticalPenChanged( false )
 {
 }
 
@@ -68,6 +70,10 @@ bool StyleCommand::process(Element* element)
             }
         }
         // special handling for the border
+        bool hasLeftPen = m_style->hasAttribute( Style::LeftPen );
+        bool hasRightPen = m_style->hasAttribute( Style::RightPen );
+        bool hasTopPen = m_style->hasAttribute( Style::TopPen );
+        bool hasBottomPen = m_style->hasAttribute( Style::BottomPen );
         const QPen leftPen = m_style->leftBorderPen();
         const QPen rightPen = m_style->rightBorderPen();
         const QPen topPen = m_style->topBorderPen();
@@ -78,15 +84,17 @@ bool StyleCommand::process(Element* element)
         m_style->clearAttribute( Style::BottomPen );
 
         // use the horizontal/vertical pens
-        if ( m_horizontalPen.style() != Qt::NoPen )
+        if ( m_horizontalPenChanged )
         {
             m_style->setTopBorderPen( m_horizontalPen );
             m_style->setBottomBorderPen( m_horizontalPen );
+            hasTopPen = hasBottomPen = true;
         }
-        if ( m_verticalPen.style() != Qt::NoPen )
+        if ( m_verticalPenChanged )
         {
             m_style->setLeftBorderPen( m_verticalPen );
             m_style->setRightBorderPen( m_verticalPen );
+            hasLeftPen = hasRightPen = true;
         }
 
         // special handling for indentation: reset the indentation first
@@ -116,7 +124,7 @@ bool StyleCommand::process(Element* element)
 
         // set the outer border styles
         Style style;
-        if ( leftPen.style() != Qt::NoPen )
+        if ( hasLeftPen )
         {
             style.setLeftBorderPen( leftPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
@@ -131,7 +139,7 @@ bool StyleCommand::process(Element* element)
                 m_sheet->setRegionPaintDirty(region);
             }
         }
-        if ( rightPen.style() != Qt::NoPen )
+        if ( hasRightPen )
         {
             style.clear();
             style.setRightBorderPen( rightPen );
@@ -147,7 +155,7 @@ bool StyleCommand::process(Element* element)
                 m_sheet->setRegionPaintDirty(region);
             }
         }
-        if ( topPen.style() != Qt::NoPen )
+        if ( hasTopPen )
         {
             style.clear();
             style.setTopBorderPen( topPen );
@@ -163,7 +171,7 @@ bool StyleCommand::process(Element* element)
                 m_sheet->setRegionPaintDirty(region);
             }
         }
-        if ( bottomPen.style() != Qt::NoPen )
+        if ( hasBottomPen )
         {
             style.clear();
             style.setBottomBorderPen( bottomPen );

@@ -100,8 +100,8 @@ void StyleManagerDialog::fillComboBox()
     entries.clear();
     entries[m_styleManager->defaultStyle()] = new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
 
-    CustomStyles::const_iterator iter = m_styleManager->m_styles.begin();
-    CustomStyles::const_iterator end  = m_styleManager->m_styles.end();
+    CustomStyles::const_iterator iter = m_styleManager->m_styles.constBegin();
+    CustomStyles::const_iterator end  = m_styleManager->m_styles.constEnd();
 
     while (entries.count() != m_styleManager->m_styles.count() + 1)
     {
@@ -115,8 +115,8 @@ void StyleManagerDialog::fillComboBox()
                 CustomStyle* parentStyle = m_styleManager->style(iter.value()->parentName());
                 if (parentStyle)
                 {
-                    Map::const_iterator i = entries.find(parentStyle);
-                    if (i != entries.end())
+                    Map::const_iterator i = entries.constFind(parentStyle);
+                    if (i != entries.constEnd())
                         entries[iter.value()] = new QTreeWidgetItem(i.value(), QStringList(iter.value()->name()));
                 }
             }
@@ -124,7 +124,7 @@ void StyleManagerDialog::fillComboBox()
 
         ++iter;
         if (iter == end)
-            iter = m_styleManager->m_styles.begin();
+            iter = m_styleManager->m_styles.constBegin();
     }
     entries.clear();
 }

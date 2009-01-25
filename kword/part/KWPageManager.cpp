@@ -145,8 +145,8 @@ int KWPageManager::pageNumber(const QPointF &point) const
 {
     qreal startOfpage = 0.0;
     int answer = -1;
-    QMap<int, int>::const_iterator iter = d->pageNumbers.begin();
-    for (;iter != d->pageNumbers.end(); ++iter) {
+    QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
+    for (;iter != d->pageNumbers.constEnd(); ++iter) {
         const KWPageManagerPrivate::Page page = d->pages[iter.value()];
         if (page.pageSide == KWPage::PageSpread && iter.key()%2 == 1)
             continue;
@@ -316,8 +316,8 @@ QPointF KWPageManager::clipToDocument(const QPointF &point) const
 
     KWPage page;
     // decrease the pagenumbers of pages following the pageNumber
-    QMap<int, int>::const_iterator iter = d->pageNumbers.begin();
-    while(iter != d->pageNumbers.end()) {
+    QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
+    while(iter != d->pageNumbers.constEnd()) {
         const KWPageManagerPrivate::Page p = d->pages[iter.value()];
         startOfpage += p.style.pageLayout().height + d->padding.top + d->padding.bottom;
         if (startOfpage >= point.y()) {

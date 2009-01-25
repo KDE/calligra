@@ -421,7 +421,7 @@ const QVector<LookupFieldSchema*>& TableSchema::lookupFieldsList()
     d->lookupFieldsList.resize(d->lookupFields.count());
     uint i = 0;
     foreach(Field* f, m_fields) {
-        QHash<const Field*, LookupFieldSchema*>::ConstIterator itMap = d->lookupFields.find(f);
+        QHash<const Field*, LookupFieldSchema*>::ConstIterator itMap = d->lookupFields.constFind(f);
         if (itMap != d->lookupFields.constEnd()) {
             d->lookupFieldsList.insert(i, itMap.value());
             i++;

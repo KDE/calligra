@@ -96,8 +96,8 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
     }
 
     // add placeholder shapes for all available positions
-    QMap<QString, QList<QRectF> >::const_iterator itPlaceholder( placeholders.begin() );
-    for ( ; itPlaceholder != placeholders.end(); ++itPlaceholder ) {
+    QMap<QString, QList<QRectF> >::const_iterator itPlaceholder( placeholders.constBegin() );
+    for ( ; itPlaceholder != placeholders.constEnd(); ++itPlaceholder ) {
         const QList<QRectF> & list( itPlaceholder.value() );
         QList<QRectF>::const_iterator listIt( list.begin() );
         for ( ; listIt != list.end(); ++listIt ) {

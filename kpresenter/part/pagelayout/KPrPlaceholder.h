@@ -74,6 +74,11 @@ public:
 
     bool operator<( const KPrPlaceholder & other ) const;
 
+    /**
+     * Compare the position of the placeholder
+     */
+    static bool comparePosition( const KPrPlaceholder & p1, const KPrPlaceholder & p2 );
+
 private:
     qreal percent( const KoXmlElement & element, const char * type, qreal absolute );
 

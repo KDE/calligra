@@ -863,7 +863,7 @@ QStringList Connection::objectNames(int objType, bool* ok)
     if (objType == KexiDB::AnyObjectType)
         sql = "SELECT o_name FROM kexi__objects";
     else
-        sql = QString::fromLatin1("SELECT o_name FROM kexi__objects WHERE o_type=%1").arg(objType);
+        sql = QString::fromLatin1("SELECT o_name FROM kexi__objects WHERE o_type=%1 ORDER BY o_id").arg(objType);
 
     Cursor *c = executeQuery(sql);
     if (!c) {
@@ -949,8 +949,13 @@ QList<int> Connection::objectIds(int objType)
     if (!checkIsDatabaseUsed())
         return list;
 
-    Cursor *c = executeQuery(
-                    QString::fromLatin1("SELECT o_id, o_name FROM kexi__objects WHERE o_type=%1").arg(objType));
+    QString sql;
+    if (objType == KexiDB::AnyObjectType)
+        sql = "SELECT o_id, o_name FROM kexi__objects ORDER BY o_id";
+    else
+        sql = QString::fromLatin1("SELECT o_id, o_name FROM kexi__objects WHERE o_type=%1 ORDER BY o_id").arg(objType);
+    
+    Cursor *c = executeQuery(sql);
     if (!c)
         return list;
     for (c->moveFirst(); !c->eof(); c->moveNext()) {
@@ -3212,7 +3217,7 @@ inline void updateRowDataWithNewValues(QuerySchema &query, RecordData& data, Kex
     columnsOrderExpanded = query.columnsOrder(QuerySchema::ExpandedList);
     QHash<QueryColumnInfo*, int>::ConstIterator columnsOrderExpandedIt;
     for (KexiDB::RowEditBuffer::DBMap::ConstIterator it = b.constBegin();it != b.constEnd();++it) {
-        columnsOrderExpandedIt = columnsOrderExpanded.find(it.key());
+        columnsOrderExpandedIt = columnsOrderExpanded.constFind(it.key());
         if (columnsOrderExpandedIt == columnsOrderExpanded.constEnd()) {
             KexiDBWarn << "(Connection) updateRowDataWithNewValues(): \"now also assign new value in memory\" step "
             "- could not find item '" << it.key()->aliasOrName() << "'";

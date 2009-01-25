@@ -861,20 +861,13 @@ void CellFormatDialog::slotApply()
 
   if ( isMerged != positionPage->getMergedCellState() )
   {
-    if ( positionPage->getMergedCellState() )
-    {
-      MergeCommand* command = new MergeCommand(macroCommand);
-      command->setSheet(m_sheet);
-      command->add(*m_selection);
-    }
-    else
-    {
+    MergeCommand* command = new MergeCommand(macroCommand);
+    command->setSheet(m_sheet);
+    command->setSelection(m_selection);
+    if (!positionPage->getMergedCellState())
       //dissociate cells
-      MergeCommand* command = new MergeCommand(macroCommand);
-      command->setSheet(m_sheet);
       command->setReverse(true);
-      command->add(*m_selection);
-    }
+    command->add(*m_selection);
   }
 
   StyleCommand* command = new StyleCommand(macroCommand);
@@ -1787,21 +1780,19 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
    if ( dlg->bTextFontFamily )
    {
         selFont.setFamily( dlg->fontFamily );
-//         kDebug(36001) <<"Family =" << dlg->fontFamily;
+        // kDebug(36001) <<"Family =" << dlg->fontFamily;
 
-        // NOTE Stefan: the code below crashes, so assert, that we have a family
-        Q_ASSERT( family_combo->findItem( dlg->fontFamily ) );
-/*        if ( !family_combo->findItem(dlg->fontFamily))
+        if ( !family_combo->findItem(dlg->fontFamily))
                 {
-                family_combo->insertItem(0,"");
+                family_combo->insertItem("",0);
                 family_combo->setCurrentItem(0);
                 }
-        else*/
+        else
                 family_combo->setCurrentItem(family_combo->index(family_combo->findItem(dlg->fontFamily)));
    }
    else
    {
-        family_combo->insertItem(0,"");
+        family_combo->insertItem("",0);
         family_combo->setCurrentItem(0);
    }
 
