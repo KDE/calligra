@@ -471,65 +471,6 @@ void KarbonView::editDeleteSelection()
     d->canvas->toolProxy()->deleteSelection();
 }
 
-void KarbonView::selectionAlignHorizontalLeft()
-{
-    debugView("KarbonView::selectionAlignHorizontalLeft()");
-
-    selectionAlign(KoShapeAlignCommand::HorizontalLeftAlignment);
-}
-
-void KarbonView::selectionAlignHorizontalCenter()
-{
-    debugView("KarbonView::selectionAlignHorizontalCenter()");
-
-    selectionAlign(KoShapeAlignCommand::HorizontalCenterAlignment);
-}
-
-void KarbonView::selectionAlignHorizontalRight()
-{
-    debugView("KarbonView::selectionAlignHorizontalRight()");
-
-    selectionAlign(KoShapeAlignCommand::HorizontalRightAlignment);
-}
-
-void KarbonView::selectionAlignVerticalTop()
-{
-    debugView("KarbonView::selectionAlignVerticalTop()");
-
-    selectionAlign(KoShapeAlignCommand::VerticalTopAlignment);
-}
-
-void KarbonView::selectionAlignVerticalCenter()
-{
-    debugView("KarbonView::selectionAlignVerticalCenter()");
-
-    selectionAlign(KoShapeAlignCommand::VerticalCenterAlignment);
-}
-
-void KarbonView::selectionAlignVerticalBottom()
-{
-    debugView("KarbonView::selectionAlignVerticalBottom()");
-
-    selectionAlign(KoShapeAlignCommand::VerticalBottomAlignment);
-}
-
-void KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
-{
-    KoSelection* selection = d->canvas->shapeManager()->selection();
-    if( ! selection )
-        return;
-
-    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-    if( selectedShapes.count() < 1)
-        return;
-
-    QRectF bRect;
-    bRect= (selectedShapes.count() == 1) ? part()->document().boundingRect() : selection->boundingRect();
-    KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bRect);
-
-    d->canvas->addCommand( cmd );
-}
-
 void KarbonView::selectionDistributeHorizontalCenter()
 {
     debugView("KarbonView::selectionDistributeHorizontalCenter()");
@@ -922,30 +863,6 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_move_tobottom", actionSendToBack );
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
     connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
-
-    KAction *actionAlignLeft  = new KAction(KIcon("object-align-horizontal-left"), i18n("Align Left"), this);
-    actionCollection()->addAction("object_align_horizontal_left", actionAlignLeft );
-    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
-
-    KAction *actionAlignCenter  = new KAction(KIcon("object-align-horizontal-center"), i18n("Align Center (Horizontal)"), this);
-    actionCollection()->addAction("object_align_horizontal_center", actionAlignCenter );
-    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
-
-    KAction *actionAlignRight  = new KAction(KIcon("object-align-horizontal-right"), i18n("Align Right"), this);
-    actionCollection()->addAction("object_align_horizontal_right", actionAlignRight );
-    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
-
-    KAction *actionAlignTop  = new KAction(KIcon("object-align-vertical-top"), i18n("Align Top"), this);
-    actionCollection()->addAction("object_align_vertical_top", actionAlignTop );
-    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
-
-    KAction *actionAlignMiddle  = new KAction(KIcon("object-align-vertical-center"), i18n("Align Middle (Vertical)"), this);
-    actionCollection()->addAction("object_align_vertical_center", actionAlignMiddle );
-    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
-
-    KAction *actionAlignBottom  = new KAction(KIcon("object-align-vertical-bottom"), i18n("Align Bottom"), this);
-    actionCollection()->addAction("object_align_vertical_bottom", actionAlignBottom );
-    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
 
     KAction *actionDistributeHorizontalCenter  = new KAction(i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter );

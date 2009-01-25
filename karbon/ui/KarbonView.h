@@ -97,13 +97,6 @@ public slots:
     void selectionSendToBack();
     void selectionMoveUp();
     void selectionMoveDown();
-    void selectionAlignHorizontalLeft();
-    void selectionAlignHorizontalCenter();
-    void selectionAlignHorizontalRight();
-    void selectionAlignVerticalTop();
-    void selectionAlignVerticalCenter();
-    void selectionAlignVerticalBottom();
-
     void selectionDistributeHorizontalCenter();
     void selectionDistributeHorizontalGap();
     void selectionDistributeHorizontalLeft();
@@ -173,7 +166,6 @@ private:
     void initActions();
     void updateRuler();
 
-    void selectionAlign(KoShapeAlignCommand::Align align);
     void selectionDistribute(KoShapeDistributeCommand::Distribute distribute);
 
     void booleanOperation( KarbonBooleanCommand::BooleanOperation operation );
