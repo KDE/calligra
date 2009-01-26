@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -92,7 +92,7 @@ void KPrPlaceholderTool::activate( bool temporary )
 
         // replace placeholder by shape
         m_canvas->shapeController()->removeShape( shape, cmd );
-        m_canvas->shapeController()->addShape( newShape, cmd );
+        m_canvas->shapeController()->addShapeDirect( newShape, cmd );
         m_canvas->addCommand( cmd );
 
         // activate the correct tool for the shape
