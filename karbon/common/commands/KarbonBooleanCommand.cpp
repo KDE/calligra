@@ -96,10 +96,13 @@ void KarbonBooleanCommand::redo()
                 pr = pa.united( pb );
         }
 
+        QMatrix transformation = d->pathA->transformation();
+        pr = transformation.inverted().map( pr );
         d->resultingPath = KoPathShape::fromQPainterPath( pr );
         d->resultingPath->setBorder( d->pathA->border() );
         d->resultingPath->setBackground( d->pathA->background() );
         d->resultingPath->setShapeId( d->pathA->shapeId() );
+        d->resultingPath->setTransformation( transformation );
         
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( d->pathA->parent() );
         if( group )
