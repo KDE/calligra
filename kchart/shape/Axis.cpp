@@ -74,10 +74,16 @@ class Axis::Private
 public:
     Private();
     ~Private();
+
+    void adjustAllDiagrams();
     
     void registerKDChartModel( KDChartModel *model );
     void deregisterKDChartModel( KDChartModel *model );
     
+    KDChart::AbstractDiagram *createDiagramIfNeeded( ChartType chartType );
+    KDChart::AbstractDiagram *getDiagram( ChartType chartType );
+    void deleteDiagram( ChartType chartType );
+
     void createBarDiagram();
     void createLineDiagram();
     void createAreaDiagram();
@@ -130,10 +136,20 @@ public:
     ChartSubtype plotAreaChartSubType;
     
     QString categoryDataRegionString;
+
+    // If KDChart::LineDiagram::centerDataPoints() property is set to true,
+    // the data points drawn in a line (i.e., also an area) diagram start at
+    // an offset of 0.5, that is, in the middle of a column in the diagram.
+    // Set flag to true if at least one dataset is attached to this axis
+    // that belongs to a horizontal bar chart
+    bool centerDataPoints; 
 };
+
 
 Axis::Private::Private()
 {
+    centerDataPoints = false;
+
     useAutomaticMajorInterval = true;
     useAutomaticMinorInterval = true;
     
@@ -228,6 +244,126 @@ void Axis::Private::deregisterKDChartModel( KDChartModel *model )
                          model,                  SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
 }
 
+
+KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartType )
+{
+    KDChart::AbstractDiagram *diagram = 0;
+    KDChartModel *model = 0;
+
+    switch ( chartType ) {
+    case BarChartType:
+        if ( !kdBarDiagram )
+            createBarDiagram();
+        model = kdBarDiagramModel;
+        diagram = kdBarDiagram;
+        break;
+    case LineChartType:
+        if ( !kdLineDiagram )
+            createLineDiagram();
+        model = kdLineDiagramModel;
+        diagram = kdLineDiagram;
+        break;
+    case AreaChartType:
+        if ( !kdAreaDiagram )
+            createAreaDiagram();
+        model = kdAreaDiagramModel;
+        diagram = kdAreaDiagram;
+        break;
+    case CircleChartType:
+        if ( !kdCircleDiagram )
+            createCircleDiagram();
+        model = kdCircleDiagramModel;
+        diagram = kdCircleDiagram;
+        break;
+    case RadarChartType:
+        if ( !kdRadarDiagram )
+            createRadarDiagram();
+        model = kdRadarDiagramModel;
+        diagram = kdRadarDiagram;
+        break;
+    case ScatterChartType:
+        if ( !kdScatterDiagram )
+            createScatterDiagram();
+        model = kdScatterDiagramModel;
+        diagram = kdScatterDiagram;
+        break;
+    default:;
+        // FIXME: Implement more chart types
+    }
+
+    diagram->setModel( model );
+
+    adjustAllDiagrams();
+
+    return diagram;
+}
+
+/**
+ * Returns currently used internal KDChart diagram for the specified chart type
+ */
+KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
+{
+    KDChart::AbstractDiagram *diagram = 0;
+        switch ( chartType ) {
+        case BarChartType:
+            diagram = (KDChart::AbstractDiagram*)kdBarDiagram;
+            break;
+        case LineChartType:
+            diagram = (KDChart::AbstractDiagram*)kdLineDiagram;
+            break;
+        case AreaChartType:
+            diagram = (KDChart::AbstractDiagram*)kdAreaDiagram;
+            break;
+        case CircleChartType:
+            diagram = (KDChart::AbstractDiagram*)kdCircleDiagram;
+            break;
+        case RadarChartType:
+            diagram = (KDChart::AbstractDiagram*)kdRadarDiagram;
+            break;
+        case ScatterChartType:
+            diagram = (KDChart::AbstractDiagram*)kdScatterDiagram;
+            break;
+        default:;
+            // FIXME: Implement more chart types
+        }
+    return diagram;
+}
+
+
+void Axis::Private::deleteDiagram( ChartType chartType )
+{
+    KDChart::AbstractDiagram **diagram = 0;
+        switch ( chartType ) {
+        case BarChartType:
+            diagram = (KDChart::AbstractDiagram**)&kdBarDiagram;
+            break;
+        case LineChartType:
+            diagram = (KDChart::AbstractDiagram**)&kdLineDiagram;
+            break;
+        case AreaChartType:
+            diagram = (KDChart::AbstractDiagram**)&kdAreaDiagram;
+            break;
+        case CircleChartType:
+            diagram = (KDChart::AbstractDiagram**)&kdCircleDiagram;
+            break;
+        case RadarChartType:
+            diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
+            break;
+        case ScatterChartType:
+            diagram = (KDChart::AbstractDiagram**)&kdScatterDiagram;
+            break;
+        default:;
+            // FIXME: Implement more chart types
+        }
+
+    if ( diagram && *diagram )
+        delete *diagram;
+    *diagram = 0;
+
+    adjustAllDiagrams();
+}
+
+
 void Axis::Private::createBarDiagram()
 {
     if ( kdBarDiagramModel == 0 )
@@ -273,7 +409,6 @@ void Axis::Private::createLineDiagram()
     if ( kdLineDiagram == 0 )
     {
         kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
-        kdLineDiagram->setCenterDataPoints( true );
         kdLineDiagram->setModel( kdLineDiagramModel );
 
         if ( plotAreaChartSubType == StackedChartSubtype )
@@ -308,7 +443,6 @@ void Axis::Private::createAreaDiagram()
     if ( kdAreaDiagram == 0 )
     {
         kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
-        kdAreaDiagram->setCenterDataPoints( true );
         KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
         // Draw the area under the lines. This makes this diagram an area chart.
         attr.setDisplayArea( true );
@@ -407,6 +541,21 @@ void Axis::Private::createScatterDiagram()
 
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
     }
+}
+
+/**
+ * Automatically adjusts the diagram so that all currently displayed
+ * diagram types fit together.
+ */
+void Axis::Private::adjustAllDiagrams()
+{
+    // If at least one dataset is attached that belongs to a horizontal bar chart,
+    // set centerDataPoints to true.
+    centerDataPoints = kdBarDiagram != 0;
+    if ( kdLineDiagram )
+        kdLineDiagram->setCenterDataPoints( centerDataPoints );
+    if ( kdAreaDiagram )
+        kdAreaDiagram->setCenterDataPoints( centerDataPoints );
 }
 
 Axis::Axis( PlotArea *parent )
@@ -568,52 +717,10 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
         
-        KDChart::AbstractDiagram  *diagram = 0;
-        KDChartModel              *model   = 0;
-        
-        switch ( chartType ) {
-        case BarChartType:
-            if ( !d->kdBarDiagram )
-                d->createBarDiagram();
-            model = d->kdBarDiagramModel;
-            diagram = d->kdBarDiagram;
-            break;
-        case LineChartType:
-            if ( !d->kdLineDiagram )
-                d->createLineDiagram();
-            model = d->kdLineDiagramModel;
-            diagram = d->kdLineDiagram;
-            break;
-        case AreaChartType:
-            if ( !d->kdAreaDiagram )
-                d->createAreaDiagram();
-            model = d->kdAreaDiagramModel;
-            diagram = d->kdAreaDiagram;
-            break;
-        case CircleChartType:
-            if ( !d->kdCircleDiagram )
-                d->createCircleDiagram();
-            model = d->kdCircleDiagramModel;
-            diagram = d->kdCircleDiagram;
-            break;
-        case RadarChartType:
-            if ( !d->kdRadarDiagram )
-                d->createRadarDiagram();
-            model = d->kdRadarDiagramModel;
-            diagram = d->kdRadarDiagram;
-            break;
-        case ScatterChartType:
-            if ( !d->kdScatterDiagram )
-                d->createScatterDiagram();
-            model = d->kdScatterDiagramModel;
-            diagram = d->kdScatterDiagram;
-            break;
-        default:;
-            // FIXME: Implement more chart types
-        }
-        
-        Q_ASSERT( model );
+        KDChart::AbstractDiagram *diagram = d->createDiagramIfNeeded( chartType );
         Q_ASSERT( diagram );
+        KDChartModel *model = (KDChartModel*)diagram->model();
+        Q_ASSERT( model );
     
         dataSet->setKdDiagram( diagram );
         if ( model )
@@ -645,62 +752,32 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
         
-        KDChart::AbstractDiagram **oldDiagram = 0;
-        KDChartModel **oldModel = 0;
+        KDChart::AbstractDiagram *oldDiagram = d->getDiagram( chartType );
+        Q_ASSERT( oldDiagram );
+        KDChartModel *oldModel = (KDChartModel*)oldDiagram->model();
+        Q_ASSERT( oldModel );
         
-        switch ( chartType ) {
-        case BarChartType:
-            oldModel = &d->kdBarDiagramModel;
-            oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
-            break;
-        case LineChartType:
-            oldModel = &d->kdLineDiagramModel;
-            oldDiagram = (KDChart::AbstractDiagram**)&d->kdLineDiagram;
-            break;
-        case AreaChartType:
-            oldModel = &d->kdAreaDiagramModel;
-            oldDiagram = (KDChart::AbstractDiagram**)&d->kdAreaDiagram;
-            break;
-        case CircleChartType:
-            oldModel = &d->kdCircleDiagramModel;
-            oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
-            break;
-        case RadarChartType:
-            oldModel = &d->kdRadarDiagramModel;
-            oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
-            break;
-        case ScatterChartType:
-            oldModel = &d->kdScatterDiagramModel;
-            oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
-            break;
-        default:;
-            // FIXME: Implement more chart types
-        }
-        
-        if ( oldModel && *oldModel ) {
-            const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
-                                     ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
-            if ( dataSetCount == (*oldModel)->dataDimensions() ) {
+        if ( oldModel ) {
+            const int rowCount = oldModel->dataDirection() == Qt::Vertical
+                                     ? oldModel->columnCount() : oldModel->rowCount();
+            // If there's only as many rows as needed for *one* dataset, that means
+            // that the dataset  we're removing is the last one in the model --> delete model
+            if ( rowCount == oldModel->dataDimensions() ) {
                 Q_ASSERT( oldDiagram );
-                Q_ASSERT( *oldDiagram );
-                KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
+                KDChart::AbstractCoordinatePlane *plane = oldDiagram->coordinatePlane();
                 if ( plane ) {
-                    plane->takeDiagram( (*oldDiagram) );
+                    plane->takeDiagram( oldDiagram );
                     if ( plane->diagrams().size() == 0 ) {
                         d->plotArea->kdChart()->takeCoordinatePlane( plane );
                     }
                 }
                 if ( d->plotArea->parent()->legend()->kdLegend() ) {
-                    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+                    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
                 }
-                if ( *oldDiagram )
-                    delete *oldDiagram;
-                delete *oldModel;
-                *oldModel = 0;
-                *oldDiagram = 0;
+                d->deleteDiagram( chartType );
             }
             else
-                (*oldModel)->removeDataSet( dataSet, silent );
+                oldModel->removeDataSet( dataSet, silent );
         }
         
         dataSet->setKdDiagram( 0 );
