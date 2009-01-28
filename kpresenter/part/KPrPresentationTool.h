@@ -69,6 +69,8 @@ private:
     KPrViewModePresentation & m_viewMode;
     void switchDrawMode();
     void switchHighlightMode();
+    bool eventFilter(QObject *obj, QEvent *event);
+
     QList<KoEventAction *> m_eventActions;
     KPrPresentationToolWidget *presentationToolWidget;
     QFrame *m_frame;
@@ -77,6 +79,7 @@ private:
     KPrPresentationDrawWidget * m_drawWidget;
     bool m_highlightMode;
     bool m_drawMode;
+    QRect m_geometrie;
 
 };
 

@@ -30,10 +30,12 @@
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWidget(canvas)
 {
     setFocusPolicy( Qt::StrongFocus );
-    setMouseTracking( false );
+    setMouseTracking( true );
     m_size = canvas->size();
 
     resize( m_size );
+    
+    m_draw = false;
 }
 
 KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
@@ -54,10 +56,19 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )
 {
     m_pointVectors.append( QVector<QPointF>() << e->pos() );
+    switchDraw();
 }
 
 void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
 {
-    m_pointVectors.last() << e->pos();
-    update();
+    if(m_draw)
+    {
+	m_pointVectors.last() << e->pos();
+	update();
+    }
+}
+
+void KPrPresentationDrawWidget::switchDraw()
+{
+    m_draw = !m_draw;
 }

@@ -35,9 +35,11 @@ public :
     void paintEvent( QPaintEvent * event );
     void mouseMoveEvent( QMouseEvent* e );
     void mousePressEvent( QMouseEvent* e );
+    void switchDraw();
 
 private :
     QSize m_size;
+    bool m_draw;
     QList<QVector<QPointF> > m_pointVectors;
 };
 

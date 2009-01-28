@@ -81,6 +81,8 @@ public:
 
     void navigateToPage( int index );
 
+    KoPAViewMode * getViewMode();
+
 protected:
     KoPAViewMode * m_savedViewMode;
     QWidget * m_savedParent;

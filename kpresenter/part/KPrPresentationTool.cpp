@@ -57,9 +57,18 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom  );
     m_frame->setLayout( frameLayout );
     
+    //m_geometrie = presentationToolWidget->frameGeometry();
+    QPoint pos = presentationToolWidget->mapToGlobal(presentationToolWidget->pos());
+    m_geometrie = QRect(pos.x(),pos.y(),100,100);//(presentationToolWidget->width()),-(presentationToolWidget->height()));
+    
     m_frame->show();
     m_frame->setVisible(false);
-    presentationToolWidget->raise();
+
+    presentationToolWidget->raise();    
+
+    viewMode.canvas()->parentWidget()->setMouseTracking(true);
+    
+    presentationToolWidget->installEventFilter(this);
     
     // Connections of button clicked to slots
     connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
@@ -78,7 +87,6 @@ bool KPrPresentationTool::wantsAutoScroll()
 void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
 }
-
 
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 {
@@ -217,6 +225,8 @@ void KPrPresentationTool::highLightPresentation()
 	m_highlightMode = true;
 	m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
 	m_blackBackgroundwidget->show();
+
+	m_blackBackgroundwidget->installEventFilter(this);
     }
 }
 
@@ -248,6 +258,8 @@ void KPrPresentationTool::switchDrawMode()
         QApplication::setOverrideCursor(cur);
 	m_drawWidget = new KPrPresentationDrawWidget(m_viewMode.canvas());
 	m_drawWidget->show();
+	
+	m_drawWidget->installEventFilter(this);
     }
     // destroy the drawMode if it's active
     else
@@ -291,7 +303,7 @@ QWidget *KPrPresentationTool::m_blackBackgroundPresentation()
 {
     if ( m_blackBackgroundwidget )
         return m_blackBackgroundwidget;
-    else return NULL;
+    else return 0;
 }
 
 void KPrPresentationTool::setBlackBackgroundVisibility(bool b)
@@ -303,4 +315,29 @@ bool KPrPresentationTool::getBlackBackgroundVisibility()
 {
     return m_highlightMode;
 }
+
+bool KPrPresentationTool::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::MouseMove)
+    {
+	QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+	QWidget *source = static_cast<QWidget*>(obj);
+	QPoint pos = source->mapToGlobal(QPoint(mouseEvent->x(), mouseEvent->y())); 
+	kDebug() << "rectangle : x " + QString::number(m_geometrie.x()) + " , y " + QString::number(m_geometrie.y());
+	kDebug() << "rectangle : w " + QString::number(m_geometrie.width()) + " , h " + QString::number(m_geometrie.height());
+	//if(m_geometrie.contains(pos))
+	if(pos.x()<=1700 and pos.y()>=750)
+	{
+	    kDebug() << "on -> mouse : x " + QString::number(pos.x()) + " , y " + QString::number(pos.y());
+	    presentationToolWidget->setVisible(true);
+	}
+	else
+	{
+	    kDebug() << "not on -> mouse : x " + QString::number(pos.x()) + " , y " + QString::number(pos.y());
+	    presentationToolWidget->setVisible(false);
+	}
+    }
+    return false;
+}
+
 #include "KPrPresentationTool.moc"

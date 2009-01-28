@@ -85,9 +85,9 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
             
     slideTab = new QTableWidget(pages.size()-1,2);
     slideTab->setVisible(false);
-    slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem("Planning time"));
+    slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem(i18n("Planning time")));
     slideTab->setColumnWidth(0,125);
-    slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem("Real time"));
+    slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem(i18n("Real time")));
     slideTab->setColumnWidth(1,125);
     
     for(int i=0;i<pages.size()-1;i++)
@@ -96,7 +96,7 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 	timeEdit1->setDisplayFormat ( "HH:mm:ss" );
 	QTimeEdit *timeEdit2 = new QTimeEdit();
 	timeEdit2->setDisplayFormat ( "HH:mm:ss" );
-	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem("Slide "+QString::number(i+1)));
+	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem(i18n("Slide ")+QString::number(i+1)));
 	slideTab->setCellWidget(i,0,timeEdit1);
 	slideTab->setCellWidget(i,1,timeEdit2);
 	timeEditList.append(timeEdit2);
