@@ -1,5 +1,0 @@
-[Parts]
-Order=kexihandler_table,kexihandler_query,kexihandler_form,kexihandler_report,kexihandler_macro,kexihandler_script
-
-[MainWindow]
-HoverCloseButtonForTabs=false
