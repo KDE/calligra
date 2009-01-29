@@ -35,7 +35,7 @@ public :
     void paintEvent( QPaintEvent * event );
     void mouseMoveEvent( QMouseEvent* e );
     void mousePressEvent( QMouseEvent* e );
-    void switchDraw();
+    void mouseReleaseEvent( QMouseEvent* e );
 
 private :
     QSize m_size;

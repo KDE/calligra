@@ -56,7 +56,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )
 {
     m_pointVectors.append( QVector<QPointF>() << e->pos() );
-    switchDraw();
+    m_draw = true;
 }
 
 void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
@@ -68,7 +68,7 @@ void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
     }
 }
 
-void KPrPresentationDrawWidget::switchDraw()
+void KPrPresentationDrawWidget::mouseReleaseEvent( QMouseEvent* e )
 {
-    m_draw = !m_draw;
+    m_draw = false;
 }
