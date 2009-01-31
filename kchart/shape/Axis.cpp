@@ -657,10 +657,13 @@ void Axis::setDimension( AxisDimension dimension )
     // They are only kept to not lose them when saving a document
     // that previously had a z axis.
     if ( dimension == ZAxisDimension ) {
+        d->kdPolarPlane->setReferenceCoordinatePlane( 0 );
         d->kdPlane->setReferenceCoordinatePlane( 0 );
         d->title->setVisible( false );
-    } else
+    } else {
+        d->kdPolarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
         d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
+    }
     
     requestRepaint();
 }
@@ -1381,8 +1384,9 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
                 KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
                 if ( plane ) {
                     plane->takeDiagram( (*oldDiagram) );
-                            if ( plane->diagrams().size() == 0 )
-                                d->plotArea->kdChart()->takeCoordinatePlane( plane );
+                    if ( plane->diagrams().size() == 0 ) {
+                        d->plotArea->kdChart()->takeCoordinatePlane( plane );
+                    }
                 }
                 if ( d->plotArea->parent()->legend()->kdLegend() )
                     d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
