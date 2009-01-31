@@ -333,31 +333,44 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
 void Axis::Private::deleteDiagram( ChartType chartType )
 {
     KDChart::AbstractDiagram **diagram = 0;
-        switch ( chartType ) {
-        case BarChartType:
-            diagram = (KDChart::AbstractDiagram**)&kdBarDiagram;
-            break;
-        case LineChartType:
-            diagram = (KDChart::AbstractDiagram**)&kdLineDiagram;
-            break;
-        case AreaChartType:
-            diagram = (KDChart::AbstractDiagram**)&kdAreaDiagram;
-            break;
-        case CircleChartType:
-            diagram = (KDChart::AbstractDiagram**)&kdCircleDiagram;
-            break;
-        case RadarChartType:
-            diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
-            break;
-        case ScatterChartType:
-            diagram = (KDChart::AbstractDiagram**)&kdScatterDiagram;
-            break;
-        default:;
-            // FIXME: Implement more chart types
-        }
+    KDChartModel **model = 0;
 
+    switch ( chartType ) {
+    case BarChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdBarDiagram;
+        model = &kdBarDiagramModel;
+        break;
+    case LineChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdLineDiagram;
+        model = &kdLineDiagramModel;
+        break;
+    case AreaChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdAreaDiagram;
+        model = &kdAreaDiagramModel;
+        break;
+    case CircleChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdCircleDiagram;
+        model = &kdCircleDiagramModel;
+        break;
+    case RadarChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
+        model = &kdRadarDiagramModel;
+        break;
+    case ScatterChartType:
+        diagram = (KDChart::AbstractDiagram**)&kdScatterDiagram;
+        model = &kdScatterDiagramModel;
+        break;
+    default:;
+        // FIXME: Implement more chart types
+    }
+
+    // Also delete the model, as we don't need it anymore
+    if ( model && *model )
+        delete *model;
     if ( diagram && *diagram )
         delete *diagram;
+
+    *model = 0;
     *diagram = 0;
 
     adjustAllDiagrams();
