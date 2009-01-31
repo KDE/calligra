@@ -101,6 +101,10 @@ public:
     Ui::ChartConfigWidget  ui;
     bool sourceIsSpreadSheet;
     
+    QMenu *dataSetBarChartMenu;
+    QMenu *dataSetLineChartMenu;
+    QMenu *dataSetAreaChartMenu;
+    
     // chart type selection actions
     QAction  *normalBarChartAction;
     QAction  *stackedBarChartAction;
@@ -180,6 +184,9 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     sourceIsSpreadSheet = false;
     cellRegionStringValidator = 0;
     
+    dataSetBarChartMenu = 0;
+    dataSetLineChartMenu = 0;
+    dataSetAreaChartMenu = 0;
     dataSetNormalBarChartAction = 0;
     dataSetStackedBarChartAction = 0;
     dataSetPercentBarChartAction = 0;
@@ -240,22 +247,24 @@ ChartConfigWidget::ChartConfigWidget()
     
     // Data set chart type button
     QMenu *dataSetChartTypeMenu = new QMenu( this );
-    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    // Default chart type is a bar chart
+    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );       
+
     
-    QMenu *dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
-    d->dataSetNormalBarChartAction  = dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
-    d->dataSetStackedBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
-    d->dataSetPercentBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    d->dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
+    d->dataSetNormalBarChartAction  = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
+    d->dataSetStackedBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
+    d->dataSetPercentBarChartAction = d->dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
     
-    QMenu *dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
-    d->dataSetNormalLineChartAction  = dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
-    d->dataSetStackedLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
-    d->dataSetPercentLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    d->dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
+    d->dataSetNormalLineChartAction  = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
+    d->dataSetStackedLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
+    d->dataSetPercentLineChartAction = d->dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
     
-    QMenu *dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
-    d->dataSetNormalAreaChartAction  = dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
-    d->dataSetStackedAreaChartAction = dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
-    d->dataSetPercentAreaChartAction = dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    d->dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
+    d->dataSetNormalAreaChartAction  = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
+    d->dataSetStackedAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
+    d->dataSetPercentAreaChartAction = d->dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
     
     d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
     d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
@@ -496,10 +505,40 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = NoChartSubtype;
     }
     
+    // Make sure polar and cartesian plots can't conflict and
+    // don't allow the user to mix these two types
+    if ( isPolar( type ) ) {
+        setPolarChartTypesEnabled( true );
+        setCartesianChartTypesEnabled( false );
+    } else {
+        setPolarChartTypesEnabled( false );
+        setCartesianChartTypesEnabled( true );
+    }
+    
     emit chartTypeChanged( type );
     emit chartSubTypeChanged( subtype );
     
     update();
+}
+
+/**
+ * Enabled/Disabled menu actions to set a polar chart type
+ */
+void ChartConfigWidget::setPolarChartTypesEnabled( bool enabled )
+{
+    d->dataSetCircleChartAction->setEnabled( enabled );
+    d->dataSetRadarChartAction->setEnabled( enabled );
+}
+
+/**
+ * Enabled/Disabled menu actions to set a cartesian chart type
+ */
+void ChartConfigWidget::setCartesianChartTypesEnabled( bool enabled )
+{
+    d->dataSetBarChartMenu->setEnabled( enabled );
+    d->dataSetLineChartMenu->setEnabled( enabled );
+    d->dataSetAreaChartMenu->setEnabled( enabled );
+    d->dataSetScatterChartAction->setEnabled( enabled );
 }
 
 void ChartConfigWidget::ui_dataSetPieExplodeFactorChanged( int percent )
@@ -852,6 +891,16 @@ void ChartConfigWidget::update()
         default:
             break;
         }
+        
+        // Make sure we only allow legal chart type combinations
+        if ( isPolar( d->shape->chartType() ) ) {
+            setPolarChartTypesEnabled( true );
+            setCartesianChartTypesEnabled( false );
+        } else {
+            setPolarChartTypesEnabled( false );
+            setCartesianChartTypesEnabled( true );
+        }
+        
         d->type    = d->shape->chartType();
         d->subtype = d->shape->chartSubType();
     }
