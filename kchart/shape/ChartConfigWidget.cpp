@@ -1114,6 +1114,15 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index )
     
     Axis *axis = d->axes[ index ];
     
+    // Count how many axes there are of the same dimension
+    int numAxesOfSameDimension = 0;
+    foreach ( Axis *a, d->axes )
+        if ( axis->dimension() == a->dimension() )
+            numAxesOfSameDimension++;
+    
+    // Don't let the user remove the last axis of a particular dimension
+    d->ui.removeAxis->setEnabled( numAxesOfSameDimension > 1 );
+    
     d->ui.axisTitle->blockSignals( true );
     d->ui.axisTitle->setText( axis->titleText() );
     d->ui.axisTitle->blockSignals( false );
