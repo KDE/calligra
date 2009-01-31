@@ -350,6 +350,9 @@ bool PlotArea::removeAxis( Axis *axis )
             _axis->deregisterKdXAxis( axis->kdAxis() );
     }
     
+    // This also removes the axis' title, which is a shape as well
+    delete axis;
+    
     requestRepaint();
     
     return true;

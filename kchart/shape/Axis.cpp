@@ -641,6 +641,9 @@ Axis::~Axis()
 {
     Q_ASSERT( d->plotArea );
     d->plotArea->parent()->KoShapeContainer::removeChild( d->title );
+    Q_ASSERT( d->title );
+    if ( d->title )
+        delete d->title;
     delete d;
 }
 
