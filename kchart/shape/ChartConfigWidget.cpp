@@ -505,14 +505,17 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = NoChartSubtype;
     }
     
-    // Make sure polar and cartesian plots can't conflict and
+    // o Make sure polar and cartesian plots can't conflict and
     // don't allow the user to mix these two types
+    // o Hide axis configuration options for polar plots
     if ( isPolar( type ) ) {
         setPolarChartTypesEnabled( true );
         setCartesianChartTypesEnabled( false );
+        d->ui.axisConfiguration->setEnabled( false );
     } else {
         setPolarChartTypesEnabled( false );
         setCartesianChartTypesEnabled( true );
+        d->ui.axisConfiguration->setEnabled( true );
     }
     
     emit chartTypeChanged( type );
