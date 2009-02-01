@@ -32,7 +32,6 @@
 // KSpread
 #include "CellToolBase.h"
 #include "Editors.h"
-#include "ui_CellToolOptionWidget.h"
 
 // dialogs
 #include "dialogs/FindDialog.h"
@@ -46,6 +45,8 @@
 #include <QAction>
 #include <QHash>
 
+class QGridLayout;
+class QToolButton;
 class QUndoCommand;
 class KFind;
 class KReplace;
@@ -64,8 +65,11 @@ public:
     // Insert special character dialog
     KoCharSelectDia* specialCharDialog;
     // Option widget elements
-    ::Ui::CellToolOptionWidget optionWidget;
+    QGridLayout *widgetLayout;
+    ExternalEditor *userInput;
+    QToolButton *formulaButton, *applyButton, *cancelButton;
     LocationComboBox* locationComboBox;
+    bool hasWideLayout;
     // Actions with extended names for the popup menu
     QHash<QString, QAction*> popupMenuActions;
     // Initialization flag.
@@ -152,6 +156,8 @@ public:
     QList<QAction*> popupActionList() const;
     void createPopupMenuActions();
 
+    /** Relayout the tool option docker. */
+    void relayoutDocker (bool wide);
 private:
     CellToolBase* q;
 };

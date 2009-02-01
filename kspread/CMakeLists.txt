@@ -161,10 +161,6 @@ SET (ui_DIR_SRCS
 	ui/SheetView.cpp
 	)
 
-kde4_add_ui_files(ui_DIR_SRCS
-	ui/CellToolOptionWidget.ui
-	)
-
 SET (kspreadcommon_LIB_SRCS
 	ApplicationSettings.cpp
 	Binding.cpp

@@ -72,7 +72,10 @@
 #include <KFontSizeAction>
 
 // Qt
+#include <QApplication>
+#include <QGridLayout>
 #include <QPainter>
+#include <QToolButton>
 
 using namespace KSpread;
 
@@ -81,11 +84,11 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
     const Cell& theCell = cell.isPartOfMerged() ? cell.masterCell() : cell;
     const Style style = theCell.style();
     if (q->selection()->activeSheet()->isProtected() && style.hideFormula()) {
-        optionWidget.userInput->setPlainText(theCell.displayText());
+        userInput->setPlainText(theCell.displayText());
     } else if (q->selection()->activeSheet()->isProtected() && style.hideAll()) {
-        optionWidget.userInput->clear();
+        userInput->clear();
     } else {
-        optionWidget.userInput->setPlainText(theCell.userInput());
+        userInput->setPlainText(theCell.userInput());
     }
 }
 
@@ -197,8 +200,8 @@ void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
     const QList<KAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)
         actions[i]->setEnabled(enable);
-    optionWidget.formulaButton->setEnabled(enable);
-    optionWidget.userInput->setEnabled(enable);
+    formulaButton->setEnabled(enable);
+    userInput->setEnabled(enable);
 
     // These actions are always enabled.
     q->action("copy")->setEnabled(true);
@@ -474,11 +477,11 @@ void CellToolBase::Private::processDeleteKey(QKeyEvent* event)
 
 void CellToolBase::Private::processF2Key(QKeyEvent*  event)
 {
-    optionWidget.userInput->setFocus();
+    userInput->setFocus();
     if (q->editor()) {
-        QTextCursor textCursor = optionWidget.userInput->textCursor();
+        QTextCursor textCursor = userInput->textCursor();
         textCursor.setPosition(q->editor()->cursorPosition());
-        optionWidget.userInput->setTextCursor(textCursor);
+        userInput->setTextCursor(textCursor);
     }
     event->accept(); // QKeyEvent
 }
@@ -489,9 +492,9 @@ void CellToolBase::Private::processF4Key(QKeyEvent* event)
     */
     if (q->editor()) {
         q->editor()->handleKeyPressEvent(event);
-        QTextCursor textCursor = optionWidget.userInput->textCursor();
+        QTextCursor textCursor = userInput->textCursor();
         textCursor.setPosition(q->editor()->cursorPosition());
-        optionWidget.userInput->setTextCursor(textCursor);
+        userInput->setTextCursor(textCursor);
     }
 }
 
@@ -1309,3 +1312,13 @@ void CellToolBase::Private::createPopupMenuActions()
     connect(action, SIGNAL(triggered(bool)), q, SLOT(listChoosePopupMenu()));
     popupMenuActions.insert("listChoose", action);
 }
+
+void CellToolBase::Private::relayoutDocker (bool wide) {
+    // user input is moved accordingly to the "wide" param, the rest stays in one place
+    widgetLayout->removeWidget (userInput);
+    if (wide)
+      widgetLayout->addWidget (userInput, 0, 3, 2, 1);
+    else
+      widgetLayout->addWidget (userInput, 1, 0, 1, 5);
+}
+
