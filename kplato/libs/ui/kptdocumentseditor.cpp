@@ -220,7 +220,7 @@ void DocumentsEditor::setupGui()
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
     addAction( name, actionEditDocument );
     
-    actionViewDocument  = new KAction(KIcon( "document-preview" ), i18n("View..."), this);
+    actionViewDocument  = new KAction(KIcon( "document-preview" ), i18nc("@action View a document", "View..."), this);
     actionCollection()->addAction("view_documents", actionViewDocument );
 //    actionViewDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );

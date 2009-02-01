@@ -650,7 +650,7 @@ void ViewListWidget::setupContextMenus()
     //m_noitem.append( action );
 
     // view insert actions
-    action = new QAction( KIcon( "list-add" ), i18n( "View..." ), this );
+    action = new QAction( KIcon( "list-add" ), i18nc( "@action Add View", "View..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
     m_addview.append( action );
 

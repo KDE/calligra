@@ -114,7 +114,7 @@
      <item>
       <widget class="QPushButton" name="viewWP" >
        <property name="text" >
-        <string>View...</string>
+        <string comment="View Work Package">View...</string>
        </property>
       </widget>
      </item>
