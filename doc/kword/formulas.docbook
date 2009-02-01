@@ -39,7 +39,7 @@ format="PNG"/></imageobject></inlinemediaobject> on the toolbar.</para>
 <itemizedlist>
 <listitem><para><emphasis>All</emphasis> formula frames are inserted <glossterm linkend="definlineframe">inline</glossterm> by default.
 This frame can later be
-converted to a <emphasis>non-inline</emphasis> frame later.</para></listitem>
+converted to a <emphasis>non-inline</emphasis> frame.</para></listitem>
 <listitem><para>Formula frames expand and contract depending on the resulting size of the formula.</para></listitem>
 <listitem><para>Formula frames automatically determine where in the line they are lined up.</para></listitem>
 </itemizedlist>
@@ -48,7 +48,7 @@ converted to a <emphasis>non-inline</emphasis> frame later.</para></listitem>
 </sect2>
 
 <sect2 id="formula-move"><title>Moving a formula</title>
-<para>By default, formula frames are created as <glossterm linkend="definlineframe">inline</glossterm> frames by default.  The formula frame
+<para>By default, formula frames are created as <glossterm linkend="definlineframe">inline</glossterm> frames.  The formula frame
 will move with the text as any other inline frame would.</para>
 <para>If you want to have more control over where the formula is placed, you can convert it to a framed formula by clicking on the 
 frame surrounding the formula with the &RMB;.  A popup menu will appear.  Simply select <guilabel>Inline Frame</guilabel> and the formula will 
