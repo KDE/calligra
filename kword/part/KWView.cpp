@@ -1214,5 +1214,5 @@ void KWView::sanityCheck()
 {
     KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
     if (action)
-        action->setChecked(statusBar()->isVisible());
+        action->setChecked(! statusBar()->isHidden());
 }
