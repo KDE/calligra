@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2003,2005 Rob Buis <buis@kde.org>
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,28 +22,36 @@
 #define SVGGRAPHICCONTEXT_H
 
 #include <KoLineBorder.h>
-#include <QtGui/QBrush>
 
 class SvgGraphicsContext
 {
 public:
+    enum FillType { None, Solid, Gradient, Pattern };
+
     SvgGraphicsContext()
     {
         stroke.setLineStyle( Qt::NoPen, QVector<qreal>() ); // default is no stroke
         stroke.setLineWidth( 1.0 );
         stroke.setCapStyle( Qt::FlatCap );
         stroke.setJoinStyle( Qt::MiterJoin );
-        fill = QBrush( Qt::black ); // default is black fill as per svg spec
+        
+        fillType = Solid;
         fillRule = Qt::WindingFill;
-        color = Qt::black;
+        fillColor = QColor( Qt::black ); // default is black fill as per svg spec
+        
+        currentColor = Qt::black;
         hasStroke = false;
     }
-    QBrush       fill;
+
+    FillType     fillType;
     Qt::FillRule fillRule;
+    QColor       fillColor;
+    QString      fillId;
+
     KoLineBorder stroke;
     QMatrix      matrix;
     QFont        font;
-    QColor       color;
+    QColor       currentColor;
     QString      xmlBaseDir;
     bool         hasStroke;
 };

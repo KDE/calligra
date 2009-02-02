@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
  * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2005,2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2005,2007-2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,7 @@
 #define SVGIMPORT_H
 
 #include "SvgGradientHelper.h"
+#include "SvgPatternHelper.h"
 #include "svggraphiccontext.h"
 
 #include <KarbonDocument.h>
@@ -64,9 +65,11 @@ protected:
     /// Parses a single style attribute
     void parsePA( KoShape *, SvgGraphicsContext *, const QString &, const QString & );
     /// Parses a gradient element
-    void parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
+    bool parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses gradient color stops
     void parseColorStops( QGradient *, const QDomElement & );
+    /// Parses a pattern element
+    bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses a length attribute
     double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
     /// Parses a color attribute
@@ -75,6 +78,8 @@ protected:
     QColor stringToColor( const QString & );
     /// Parses a transform attribute
     QMatrix parseTransform( const QString &transform );
+    /// Parse a image
+    bool parseImage( const QString &imageAttribute, QImage &image );
 
     double toPercentage( QString );
     double fromPercentage( QString );
@@ -98,6 +103,8 @@ protected:
     KoShape * findObject( const QString &name, const QList<KoShape*> & shapes );
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
+    /// find pattern with given id in pattern map
+    SvgPatternHelper* findPattern( const QString &id, const QString &href = 0 );
 
     /// Determine scaling factor from given matrix
     double getScalingFromMatrix( QMatrix &matrix );
@@ -120,10 +127,17 @@ protected:
     /// Builds the document from the given shapes list
     void buildDocument( QList<KoShape*> shapes );
 
+    /// Applies the current fill style to the object
+    void applyFillStyle( KoShape * shape );
+
+    /// Applies the current stroke style to the object
+    void applyStrokeStyle( KoShape * shape );
+
 private:
     KarbonDocument * m_document;
     QStack<SvgGraphicsContext*>    m_gc;
     QMap<QString, SvgGradientHelper>  m_gradients;
+    QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, QDomElement>     m_defs;
     QHash<QByteArray, QColor>      m_rgbcolors;
     QRectF                         m_outerRect;
