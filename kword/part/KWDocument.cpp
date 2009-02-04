@@ -487,18 +487,17 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
         foreach (KWFrame *frame, fs->frames())
         maxBottom = qMax(maxBottom, frame->shape()->boundingRect().bottom());
     }
-    // My dear reader, please listen carefully
-    // Else your failure will be miserably
-    // Don't trust what your eyes see
-    // This while you should not see
-    // Only one page is created
-    // 'Cause layout is not finished
-    // My dear reader, please listen carefully
-    // Else your failure will be miserably
-    // Don't trust what your eyes see
-    // This while you should not see
-    // Only one page is created
-    // 'Cause layout is not finished
+    // The Document we loaded could have specified
+    //  1) a number of pages
+    //  2) a number of frames
+    // At the end of loading we then end up in one of 3 situations.
+    // a) we have exactly the amount of pages that the document needs.
+    // b) we have absolute frames positioned on pages that don't exist.
+    // c) we have so much text in any of our text-framesets that new pages
+    //    may have to be generated at some time after loading is completed.
+
+    // Here we look at point 'b'. We add pages so at least all frames have a page.
+    // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
     while (docHeight <= maxBottom) {
         kDebug(32001) << "KWDocument::endOfLoading appends a page";
         if (m_pageManager.pageCount() == 0) // apply the firstPageMasterName only on the first page
