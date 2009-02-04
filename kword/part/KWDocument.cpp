@@ -791,6 +791,8 @@ void PageProcessingQueue::process()
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     foreach (const KWPage &page, m_pages) {
+        if (! page.isValid())
+            continue;
         emit m_document->pageSetupChanged();
         m_document->m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
