@@ -123,6 +123,7 @@ public:
     virtual const KoViewConverter* viewConverter() const;
     /// reimplemented method from KoCanvasBase
     virtual QWidget* canvasWidget() { return this; }
+    virtual const QWidget* canvasWidget() const { return this; }
     /// reimplemented method from KoCanvasBase
     virtual KoUnit unit() const;
     /// reimplemented method from KoCanvasBase

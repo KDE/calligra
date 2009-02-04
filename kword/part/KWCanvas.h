@@ -79,6 +79,10 @@ public:
         return this;
     }
     /// reimplemented method from superclass
+    virtual const QWidget* canvasWidget() const {
+        return this;
+    }
+    /// reimplemented method from superclass
     virtual KoUnit unit() const {
         return document()->unit();
     }

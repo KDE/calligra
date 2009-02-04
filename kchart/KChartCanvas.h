@@ -70,6 +70,7 @@ public:
     QRect  viewToWidget( const QRect &rect );
 
     QWidget *canvasWidget() { return this; }
+    const QWidget *canvasWidget() const { return this; }
 
 public slots:
     void adjustOrigin();
