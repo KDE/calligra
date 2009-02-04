@@ -247,6 +247,7 @@ Comment[nl]=Onteleden van een formule in een cel is mislukt
 Comment[pt]=Falhou o processamento da fórmula de uma célula
 Comment[pt_BR]=O processamento da fórmula de uma célula falhou
 Comment[sv]=Tolkning av en cells formel misslyckades
+Comment[tr]=Hücrelerin formüllerinin ayrıştırılması başarılamadı
 Comment[uk]=Обробка формули комірки завершилась невдачею
 Comment[x-test]=xxParsing of a cell's formula failedxx
 Comment[zh_TW]=剖析儲存格中的公式失敗
