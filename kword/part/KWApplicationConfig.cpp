@@ -25,7 +25,7 @@
 #include <KConfigGroup>
 
 KWApplicationConfig::KWApplicationConfig()
-        : m_viewFrameBorders(false),
+        : m_viewFrameBorders(true),
         m_viewRulers(false),
         m_viewFormattingChars(false),
         m_viewFormattingBreak(false),
