@@ -54,20 +54,13 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     
     QVBoxLayout *frameLayout = new QVBoxLayout();
     presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
-    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom  );
+    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
     m_frame->setLayout( frameLayout );
-    
-    //m_geometrie = presentationToolWidget->frameGeometry();
-    QPoint pos = presentationToolWidget->mapToGlobal(presentationToolWidget->pos());
-    m_geometrie = QRect(pos.x(),pos.y(),100,100);//(presentationToolWidget->width()),-(presentationToolWidget->height()));
     
     m_frame->show();
     m_frame->setVisible(false);
 
-    presentationToolWidget->raise();    
-
-    viewMode.canvas()->parentWidget()->setMouseTracking(true);
-    
+    presentationToolWidget->raise();
     presentationToolWidget->installEventFilter(this);
     
     // Connections of button clicked to slots
@@ -322,18 +315,15 @@ bool KPrPresentationTool::eventFilter(QObject *obj, QEvent *event)
     {
 	QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 	QWidget *source = static_cast<QWidget*>(obj);
-	QPoint pos = source->mapToGlobal(QPoint(mouseEvent->x(), mouseEvent->y())); 
-	kDebug() << "rectangle : x " + QString::number(m_geometrie.x()) + " , y " + QString::number(m_geometrie.y());
-	kDebug() << "rectangle : w " + QString::number(m_geometrie.width()) + " , h " + QString::number(m_geometrie.height());
-	//if(m_geometrie.contains(pos))
-	if(pos.x()<=1700 and pos.y()>=750)
+	QPoint pos = source->mapFrom(m_viewMode.canvas(),mouseEvent->pos()); 
+	
+	QRect geometrie = QRect(0,m_frame->height()-100,100,100);
+	if(geometrie.contains(pos))
 	{
-	    kDebug() << "on -> mouse : x " + QString::number(pos.x()) + " , y " + QString::number(pos.y());
 	    presentationToolWidget->setVisible(true);
 	}
 	else
 	{
-	    kDebug() << "not on -> mouse : x " + QString::number(pos.x()) + " , y " + QString::number(pos.y());
 	    presentationToolWidget->setVisible(false);
 	}
     }

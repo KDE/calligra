@@ -79,7 +79,6 @@ private:
     KPrPresentationDrawWidget * m_drawWidget;
     bool m_highlightMode;
     bool m_drawMode;
-    QRect m_geometrie;
 
 };
 
