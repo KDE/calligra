@@ -998,12 +998,19 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
         pattern.setPatternContentUnits( SvgPatternHelper::ObjectBoundingBox );
     
     pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
+
+    // parse tile reference rectangle
     pattern.setPosition( QPointF( parseUnit( b.attribute( "x" ) ),
                                   parseUnit( b.attribute( "y" ) ) ) );
     pattern.setSize( QSizeF( parseUnit( b.attribute( "width" ) ),
                              parseUnit( b.attribute( "height" ) ) ) );
 
     addGraphicContext();
+
+    // the pattern establishes a new coordinate system with its
+    // origin at the patterns x and y attributes
+    m_gc.top()->matrix = QMatrix();
+
     setupTransform( b );
     updateContext( b );
 
@@ -1016,21 +1023,31 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
     {
         KoZoomHandler zoomHandler;
 
+        QSizeF patternSize = pattern.size();
         QSizeF tileSize = zoomHandler.documentToView( pattern.size() );
 
         QMatrix viewMatrix;
 
         if( b.hasAttribute( "viewBox" ) )
         {
-            // allow for viewbox def with ',' or whitespace
+            // the viewbox establishes a new coordinate system, the viewBox
+            // is then fitted into the tile reference rectangle
             QString viewbox = b.attribute( "viewBox" );
+            // allow for viewbox def with ',' or whitespace
             QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
             if( points.count() == 4 )
             {
+                qreal viewBoxPosX = fromUserSpace( points[0].toFloat() );
+                qreal viewBoxPosY = fromUserSpace( points[1].toFloat() );
                 qreal viewBoxWidth = fromUserSpace( points[2].toFloat() );
                 qreal viewBoxHeight = fromUserSpace( points[3].toFloat() );
-                viewMatrix.scale( tileSize.width() / viewBoxWidth, tileSize.height() / viewBoxHeight );
+                viewMatrix.translate( -viewBoxPosX, -viewBoxPosY );
+                viewMatrix.scale( patternSize.width() / viewBoxWidth, patternSize.height() / viewBoxHeight );
             }
+        }
+        else
+        {
+            //viewMatrix.translate( -pattern.position().x(), -pattern.position().y() );
         }
 
         // setup the tile image
@@ -1436,7 +1453,7 @@ void SvgImport::applyFillStyle( KoShape * shape )
 
                 if( pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox )
                 {
-                    // adjust to bounding box
+                    // TODO: adjust to bounding box
                     refPoint = pattern->position();
                 }
                 else 
@@ -1451,8 +1468,18 @@ void SvgImport::applyFillStyle( KoShape * shape )
                 // and relative to the topleft corner of the shape
                 qreal fx = refPoint.x() / tileSize.width();
                 qreal fy = refPoint.y() / tileSize.height();
-                fx = fx < 0.0 ? floor(fx) : ceil(fx);
-                fy = fy < 0.0 ? floor(fy) : ceil(fy);
+                if( fx < 0.0 )
+                    fx = floor(fx);
+                else if( fx > 1.0 )
+                    fx = ceil(fx);
+                else
+                    fx = 0.0;
+                if( fy < 0.0 )
+                    fy = floor(fy);
+                else if( fx > 1.0 )
+                    fy = ceil(fy);
+                else
+                    fy = 0.0;
                 qreal offsetX = 100.0 * (refPoint.x()-fx*tileSize.width()) / tileSize.width();
                 qreal offsetY = 100.0 * (refPoint.y()-fy*tileSize.height()) / tileSize.height();
                 bg->setReferencePointOffset( QPointF(offsetX, offsetY) );
@@ -2066,6 +2093,14 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
     }
     else if( b.tagName() == "image" )
     {
+        double x = b.hasAttribute( "x" ) ? parseUnit( b.attribute( "x" ) ) : 0;
+        double y = b.hasAttribute( "x" ) ? parseUnit( b.attribute( "y" ) ) : 0;
+        double w = b.hasAttribute( "width" ) ? parseUnit( b.attribute( "width" ) ) : 0;
+        double h = b.hasAttribute( "height" ) ? parseUnit( b.attribute( "height" ) ) : 0;
+
+        // zero width of height disables rendering this image (see svg spec)
+        if( w == 0.0 || h == 0.0 )
+            return 0;
         QString fname = b.attribute("xlink:href");
         QImage img;
         if( parseImage( fname, img ) )
@@ -2075,11 +2110,6 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             {
                 // TODO use it already for loading
                 KoImageData * data = m_document->imageCollection()->getImage(img);
-
-                double x = parseUnit( b.attribute( "x" ) );
-                double y = parseUnit( b.attribute( "y" ) );
-                double w = parseUnit( b.attribute( "width" ) );
-                double h = parseUnit( b.attribute( "height" ) );
 
                 picture->setUserData( data );
                 picture->setSize( QSizeF(w,h) );
