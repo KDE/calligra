@@ -153,7 +153,15 @@ open (FILE,">$rootdir/doc/api/index.html");
 if($rootdir=~/.*\/(.*)$/) {
     $project=$1;
 }
-print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%\"><frameset rows=\"30%,70%\"><frame src=\"packages.html\"><frame src=\"allClasses-light.html\"></frameset><frame src=\"sections.html\" name=\"main\"></frameset>\n</head></html>";
+print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%\">";
+if ($#sections > 1) { # remove 'packages' frameset when there is only one section
+    print FILE "<frameset rows=\"30%,70%\"><frame src=\"packages.html\">";
+}
+print FILE "<frame src=\"allClasses-light.html\">";
+if ($#sections > 1) { # remove 'packages' frameset when there is only one section
+    print FILE "</frameset>";
+}
+print FILE "<frame src=\"sections.html\" name=\"main\"></frameset>\n</head></html>";
 close (FILE);
 
 # generate sections.html
