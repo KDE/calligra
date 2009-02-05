@@ -141,13 +141,13 @@ void Project::calculate( const DateTime &dt )
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         propagateEarliestStart( time );
         // Calculate lateFinish from time. If a task has started, remaingEffort is used.
-        cs->setPhaseName( 1, i18n( "Forward" ) );
+        cs->setPhaseName( 1, i18nc( "Schedule project forward", "Forward" ) );
         cs->logInfo( i18n( "Calculate finish" ), 1 );
         cs->lateFinish = calculateForward( estType );
         cs->lateFinish = checkEndConstraints( cs->lateFinish );
         propagateLatestFinish( cs->lateFinish );
         // Calculate earlyFinish. If a task has started, remaingEffort is used.
-        cs->setPhaseName( 2, i18n( "Backward" ) );
+        cs->setPhaseName( 2, i18nc( "Schedule project backward","Backward" ) );
         cs->logInfo( i18n( "Calculate start" ), 2 );
         cs->calculateBackward( estType );
         // Schedule. If a task has started, remaingEffort is used and appointments are copied from parent
@@ -256,12 +256,12 @@ void Project::calculate()
             cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
             propagateEarliestStart( cs->earlyStart );
-            cs->setPhaseName( 1, i18n( "Forward" ) );
+            cs->setPhaseName( 1, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 1 );
             cs->lateFinish = calculateForward( estType );
             cs->lateFinish = checkEndConstraints( cs->lateFinish );
             propagateLatestFinish( cs->lateFinish );
-            cs->setPhaseName( 2, i18n( "Backward" ) );
+            cs->setPhaseName( 2, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 2 );
             cs->calculateBackward( estType );
             cs->setPhaseName( 3, i18n( "Schedule" ) );
@@ -283,12 +283,12 @@ void Project::calculate()
             cs->logInfo( i18n( "Schedule project backward from: %1", locale->formatDateTime( m_constraintEndTime ) ), 0 );
             // Calculate from end time
             propagateLatestFinish( m_constraintEndTime );
-            cs->setPhaseName( 1, i18n( "Backward" ) );
+            cs->setPhaseName( 1, i18nc( "Schedule project backward", "Backward" ) );
             cs->logInfo( i18n( "Calculate early start" ), 1 );
             cs->earlyStart = calculateBackward( estType );
             cs->earlyStart = checkStartConstraints( cs->earlyStart );
             propagateEarliestStart( cs->earlyStart );
-            cs->setPhaseName( 2, i18n( "Forward" ) );
+            cs->setPhaseName( 2, i18nc( "Schedule project forward", "Forward" ) );
             cs->logInfo( i18n( "Calculate late finish" ), 2 );
             cs->lateFinish = cs->calculateForward( estType );
             cs->setPhaseName( 3, i18n( "Schedule" ) );
