@@ -82,7 +82,7 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     vLayout->addWidget( m_notesTextEdit );
 
     setLayout( vLayout );
-            
+
     slideTab = new QTableWidget(pages.size()-1,2);
     slideTab->setVisible(false);
     slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem(i18n("Planning time")));
@@ -96,7 +96,10 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 	timeEdit1->setDisplayFormat ( "HH:mm:ss" );
 	QTimeEdit *timeEdit2 = new QTimeEdit();
 	timeEdit2->setDisplayFormat ( "HH:mm:ss" );
-	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem(i18n("Slide ")+QString::number(i+1)));
+	QString name = pages.value(i)->name();
+	if(name.isEmpty())
+	    name = i18n("Slide ")+QString::number(i+1);
+	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem(name));
 	slideTab->setCellWidget(i,0,timeEdit1);
 	slideTab->setCellWidget(i,1,timeEdit2);
 	timeEditList.append(timeEdit2);

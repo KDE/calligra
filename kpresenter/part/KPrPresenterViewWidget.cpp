@@ -49,7 +49,6 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
     , m_canvas( canvas )
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
-
     vLayout->setContentsMargins( 20, 20, 20, 0 );
 
     m_stackedLayout = new QStackedLayout;

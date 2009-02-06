@@ -202,7 +202,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
         }
     }
 
-    m_tool->activate( false );
+    //m_tool->activate( false );
 }
 
 void KPrViewModePresentation::deactivate()
