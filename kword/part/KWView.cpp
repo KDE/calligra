@@ -278,7 +278,7 @@ void KWView::setupActions()
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
 
     action = new KAction(i18n("Delete Page"), this);
-    actionCollection()->addAction("delete_page", action);
+    //actionCollection()->addAction("delete_page", action); // TODO reinstate this action when the command is able to delete something that is not the last page
     connect(action, SIGNAL(triggered()), this, SLOT(deletePage()));
     handleDeletePageAction(); //decide if we enable or disable this action
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(handleDeletePageAction()));
