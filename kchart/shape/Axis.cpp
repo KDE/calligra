@@ -1205,7 +1205,7 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     // Usually, there's not more than two axes of the same dimension.
     // But use a fallback name here nevertheless.
     else
-        name = QString::number( i ) + "-" + name;
+        name = QString::number( i ) + '-' + name;
     bodyWriter.addAttribute( "chart:name", name );
     
     bodyWriter.startElement( "chart:title" );
