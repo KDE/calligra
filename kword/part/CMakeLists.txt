@@ -33,7 +33,6 @@ set(kwordprivate_LIB_SRCS
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
     frames/KWTextFrame.cpp
-    frames/KWTableFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
     frames/KWAnchorStrategy.cpp
@@ -54,7 +53,6 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWCreateBookmarkDialog.cpp
     dialogs/KWSelectBookmarkDialog.cpp
     dockers/KWStatisticsDocker.cpp
-#    dockers/KWPagesDocker.cpp
 
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
