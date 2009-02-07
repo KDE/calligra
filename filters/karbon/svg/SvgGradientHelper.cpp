@@ -59,7 +59,6 @@ SvgGradientHelper::Units SvgGradientHelper::gradientUnits() const
     return m_gradientUnits;
 }
 
-
 QGradient * SvgGradientHelper::gradient()
 {
     return m_gradient;
@@ -74,44 +73,7 @@ void SvgGradientHelper::setGradient( QGradient * g )
 void SvgGradientHelper::copyGradient( QGradient * other )
 {
     delete m_gradient;
-    m_gradient = 0;
-    if( other )
-    {
-        switch( other->type() )
-        {
-        case QGradient::ConicalGradient:
-            {
-                QConicalGradient * o = static_cast<QConicalGradient*>( other );
-                QConicalGradient * g = new QConicalGradient();
-                g->setAngle( o->angle() );
-                g->setCenter( o->center() );
-                m_gradient = g;
-                break;
-            }
-        case QGradient::LinearGradient:
-            {
-                QLinearGradient * o = static_cast<QLinearGradient*>( other );
-                QLinearGradient * g = new QLinearGradient();
-                g->setStart( o->start() );
-                g->setFinalStop( o->finalStop() );
-                m_gradient = g;
-                break;
-            }
-        case QGradient::RadialGradient:
-            {
-                QRadialGradient * o = static_cast<QRadialGradient*>( other );
-                QRadialGradient * g = new QRadialGradient();
-                g->setCenter( o->center() );
-                g->setFocalPoint( o->focalPoint() );
-                g->setRadius( o->radius() );
-                m_gradient = g;
-                break;
-            }
-        default:
-            break;
-        }
-        m_gradient->setStops( other->stops() );
-    }
+    m_gradient = duplicateGradient( other, QMatrix() );
 }
 
 QBrush SvgGradientHelper::adjustedFill( const QRectF &bound )
@@ -143,40 +105,52 @@ QGradient * SvgGradientHelper::adjustedGradient( const QRectF &bound ) const
     QMatrix matrix;
     matrix.scale( 0.01 * bound.width(), 0.01 * bound.height() );
 
-    if( ! m_gradient )
+    return duplicateGradient( m_gradient, matrix );
+}
+
+QGradient * SvgGradientHelper::duplicateGradient( const QGradient * originalGradient, const QMatrix &transform ) const
+{
+    if( ! originalGradient )
         return 0;
 
-    switch( m_gradient->type() )
+    QGradient * duplicatedGradient = 0;
+
+    switch( originalGradient->type() )
     {
     case QGradient::ConicalGradient:
         {
-            QConicalGradient * o = static_cast<QConicalGradient*>( m_gradient );
+            const QConicalGradient * o = static_cast<const QConicalGradient*>( originalGradient );
             QConicalGradient * g = new QConicalGradient();
-            g->setStops( m_gradient->stops() );
             g->setAngle( o->angle() );
-            g->setCenter( matrix.map( o->center() ) );
-            return g;
+            g->setCenter( transform.map( o->center() ) );
+            duplicatedGradient = g;
         }
+        break;
     case QGradient::LinearGradient:
         {
-            QLinearGradient * o = static_cast<QLinearGradient*>( m_gradient );
+            const QLinearGradient * o = static_cast<const QLinearGradient*>( originalGradient );
             QLinearGradient * g = new QLinearGradient();
-            g->setStops( m_gradient->stops() );
-            g->setStart( matrix.map( o->start() ) );
-            g->setFinalStop( matrix.map( o->finalStop() ) );
-            return g;
+            g->setStart( transform.map( o->start() ) );
+            g->setFinalStop( transform.map( o->finalStop() ) );
+            duplicatedGradient = g;
         }
+        break;
     case QGradient::RadialGradient:
         {
-            QRadialGradient * o = static_cast<QRadialGradient*>( m_gradient );
+            const QRadialGradient * o = static_cast<const QRadialGradient*>( originalGradient );
             QRadialGradient * g = new QRadialGradient();
-            g->setStops( m_gradient->stops() );
-            g->setCenter( matrix.map( o->center() ) );
-            g->setFocalPoint( matrix.map( o->focalPoint() ) );
-            g->setRadius( matrix.map( QPointF(o->radius(),0.0) ).x() );
-            return g;
+            g->setCenter( transform.map( o->center() ) );
+            g->setFocalPoint( transform.map( o->focalPoint() ) );
+            g->setRadius( transform.map( QPointF(o->radius(),0.0) ).x() );
+            duplicatedGradient = g;
         }
+        break;
     default:
         return 0;
     }
+
+    duplicatedGradient->setStops( originalGradient->stops() );
+    duplicatedGradient->setSpread( originalGradient->spread() );
+
+    return duplicatedGradient;
 }
