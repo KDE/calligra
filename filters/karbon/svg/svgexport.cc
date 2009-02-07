@@ -51,7 +51,6 @@
 #include <plugins/pictureshape/PictureShape.h>
 #include <KoImageData.h>
 
-#include <KDebug>
 #include <KGenericFactory>
 #include <KMimeType>
 #include <KTemporaryFile>
@@ -366,29 +365,26 @@ void SvgExport::getColorStops( const QGradientStops & colorStops )
     m_indent2--;
 }
 
-void SvgExport::getGradient( const QBrush &brush )
+void SvgExport::getGradient( const QGradient * gradient, const QMatrix &gradientTransform )
 {
+    if( ! gradient )
+        return;
+
     const QString spreadMethod[3] = {
         QString("spreadMethod=\"pad\" "),
         QString("spreadMethod=\"reflect\" "),
         QString("spreadMethod=\"repeat\" ")
     };
 
-    const QGradient * grad = brush.gradient();
-    if( ! grad )
-        return;
-
-    QMatrix matrix = brush.matrix();
-
     QString uid = createUID();
-    if( grad->type() == QGradient::LinearGradient )
+    if( gradient->type() == QGradient::LinearGradient )
     {
-        const QLinearGradient * g = static_cast<const QLinearGradient*>( grad );
+        const QLinearGradient * g = static_cast<const QLinearGradient*>( gradient );
         // do linear grad
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<linearGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-        *m_defs << getTransform( matrix, "gradientTransform" ) << " ";
+        *m_defs << getTransform( gradientTransform, "gradientTransform" ) << " ";
         *m_defs << "x1=\"" << toUserSpace( g->start().x() ) << "\" ";
         *m_defs << "y1=\"" << toUserSpace( g->start().y() ) << "\" ";
         *m_defs << "x2=\"" << toUserSpace( g->finalStop().x() ) << "\" ";
@@ -397,20 +393,20 @@ void SvgExport::getGradient( const QBrush &brush )
         *m_defs << ">" << endl;
 
         // color stops
-        getColorStops( grad->stops() );
+        getColorStops( gradient->stops() );
 
         printIndentation( m_defs, m_indent2 );
         *m_defs << "</linearGradient>" << endl;
         *m_body << "url(#" << uid << ")";
     }
-    else if( grad->type() == QGradient::RadialGradient )
+    else if( gradient->type() == QGradient::RadialGradient )
     {
-        const QRadialGradient * g = static_cast<const QRadialGradient*>( grad );
+        const QRadialGradient * g = static_cast<const QRadialGradient*>( gradient );
         // do radial grad
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<radialGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-        *m_defs << getTransform( matrix, "gradientTransform" ) << " ";
+        *m_defs << getTransform( gradientTransform, "gradientTransform" ) << " ";
         *m_defs << "cx=\"" << toUserSpace( g->center().x() ) << "\" ";
         *m_defs << "cy=\"" << toUserSpace( g->center().y() ) << "\" ";
         *m_defs << "fx=\"" << toUserSpace( g->focalPoint().x() ) << "\" ";
@@ -420,15 +416,15 @@ void SvgExport::getGradient( const QBrush &brush )
         *m_defs << ">" << endl;
 
         // color stops
-        getColorStops( grad->stops() );
+        getColorStops( gradient->stops() );
 
         printIndentation( m_defs, m_indent2 );
         *m_defs << "</radialGradient>" << endl;
         *m_body << "url(#" << uid << ")";
     }
-    else if( grad->type() == QGradient::ConicalGradient )
+    else if( gradient->type() == QGradient::ConicalGradient )
     {
-        //const QConicalGradient * g = static_cast<const QConicalGradient*>( grad );
+        //const QConicalGradient * g = static_cast<const QConicalGradient*>( gradient );
         // fake conical grad as radial.
         // fugly but better than data loss.
         /*
@@ -445,7 +441,7 @@ void SvgExport::getGradient( const QBrush &brush )
         *m_defs << ">" << endl;
 
         // color stops
-        getColorStops( grad->stops() );
+        getColorStops( gradient->stops() );
 
         printIndentation( m_defs, m_indent2 );
         *m_defs << "</radialGradient>" << endl;
@@ -455,19 +451,86 @@ void SvgExport::getGradient( const QBrush &brush )
 }
 
 // better than nothing
-void SvgExport::getPattern( const QPixmap & )
+void SvgExport::getPattern( KoPatternBackground * pattern, KoShape * shape )
 {
     QString uid = createUID();
+
+    QSizeF shapeSize = shape->size();
+    QSizeF patternSize = pattern->patternDisplaySize();
+    QSize imageSize = pattern->pattern().size();
+
+    // calculate offset in point
+    QPointF offset = pattern->referencePointOffset();
+    offset.rx() = 0.01 * offset.x() * patternSize.width();
+    offset.ry() = 0.01 * offset.y() * patternSize.height();
+
+    // now take the reference point into account
+    switch( pattern->referencePoint() )
+    {
+    case KoPatternBackground::TopLeft:
+        break;
+    case KoPatternBackground::Top:
+        offset += QPointF(0.5 * shapeSize.width(), 0.0);
+        break;
+    case KoPatternBackground::TopRight:
+        offset += QPointF(shapeSize.width(), 0.0);
+        break;
+    case KoPatternBackground::Left:
+        offset += QPointF(0.0, 0.5 * shapeSize.height());
+        break;
+    case KoPatternBackground::Center:
+        offset += QPointF(0.5 * shapeSize.width(), 0.5 * shapeSize.height());
+        break;
+    case KoPatternBackground::Right:
+        offset += QPointF(shapeSize.width(), 0.5*shapeSize.height());
+        break;
+    case KoPatternBackground::BottomLeft:
+        offset += QPointF(0.0, shapeSize.height());
+        break;
+    case KoPatternBackground::Bottom:
+        offset += QPointF(0.5*shapeSize.width(), shapeSize.height());
+        break;
+    case KoPatternBackground::BottomRight:
+        offset += QPointF(shapeSize.width(), shapeSize.height());
+        break;
+    }
+
+    offset = shape->absoluteTransformation(0).map( offset );
+
     printIndentation( m_defs, m_indent2 );
-    *m_defs << "<pattern id=\"" << uid << "\" ";
-    *m_defs << "width=\"" << "\" ";
-    *m_defs << "height=\"" << "\" ";
-    *m_defs << "patternUnits=\"userSpaceOnUse\" ";
-    *m_defs << "patternContentUnits=\"userSpaceOnUse\" "; 
-    *m_defs << " />" << endl;
-    // TODO: insert hard work here ;)
-    printIndentation( m_defs, m_indent2 );
+    *m_defs << "<pattern id=\"" << uid << "\"";
+    *m_defs << " x=\"" << toUserSpace(offset.x()) << "\"";
+    *m_defs << " y=\"" << toUserSpace(offset.y()) << "\"";
+    *m_defs << " width=\"" << toUserSpace(patternSize.width()) << "\"";
+    *m_defs << " height=\"" << toUserSpace(patternSize.height()) << "\"";
+    *m_defs << " patternUnits=\"userSpaceOnUse\"";
+    *m_defs << " viewBox=\"0 0 " << imageSize.width() << " " << imageSize.height() << "\"";
+    //*m_defs << " patternContentUnits=\"userSpaceOnUse\""; 
+    *m_defs << ">" << endl;
+
+    printIndentation( m_defs, m_indent2++ );
+    
+    *m_defs << "<image";
+
+    *m_defs << " x=\"0\"";
+    *m_defs << " y=\"0\"";
+    *m_defs << " width=\"" << imageSize.width() << "px\"";
+    *m_defs << " height=\"" << imageSize.height() << "px\"";
+
+    QByteArray ba;
+    QBuffer buffer(&ba);
+    buffer.open(QIODevice::WriteOnly);
+    if( pattern->pattern().save( &buffer, "PNG" ) )
+    {
+        const QString mimeType( KMimeType::findByContent( ba )->name() );
+        *m_defs << " xlink:href=\"data:" << mimeType << ";base64," << ba.toBase64() <<  "\"";
+    }
+
+    *m_defs << "/>" << endl;
+
+    printIndentation( m_defs, --m_indent2 );
     *m_defs << "</pattern>" << endl;
+
     *m_body << "url(#" << uid << ")";
 }
 
@@ -481,51 +544,38 @@ void SvgExport::getStyle( KoShape * shape, QTextStream * stream )
 
 void SvgExport::getFill( KoShape * shape, QTextStream *stream )
 {
+
+    if( ! shape->background() )
+    {
+        *stream << " fill=\"none\"";
+    }
+
     QBrush fill( Qt::NoBrush );
     KoColorBackground * cbg = dynamic_cast<KoColorBackground*>( shape->background() );
     if( cbg )
-        fill = QBrush( cbg->color(), cbg->style() );
+    {
+        *stream << " fill=\"";
+        getHexColor( stream, cbg->color() );
+        *stream << "\"";
+        *stream << " fill-opacity=\"" << cbg->color().alphaF() << "\"";
+    }
     KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>( shape->background() );
     if( gbg )
     {
-        fill = QBrush( *gbg->gradient() );
-        fill.setMatrix( gbg->matrix() );
+        *stream << " fill=\"";
+        getGradient( gbg->gradient(), gbg->matrix() );
+        *stream << "\"";
     }
     KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>( shape->background() );
     if( pbg )
     {
-        fill.setTextureImage( pbg->pattern() );
-        fill.setMatrix( pbg->matrix() );
+        *stream << " fill=\"";
+        getPattern( pbg, shape );
+        *stream << "\"";
     }
-
-    *stream << " fill=\"";
-
-    switch( fill.style() )
-    {
-        case Qt::NoBrush:
-            *stream << "none";
-            break;
-        case Qt::LinearGradientPattern:
-        case Qt::RadialGradientPattern:
-        case Qt::ConicalGradientPattern:
-            getGradient( fill );
-            break;
-        case Qt::TexturePattern:
-            getPattern( fill.texture() );
-            break;
-        case Qt::SolidPattern:
-            getHexColor( stream, fill.color() );
-            break;
-        default:
-            break;
-    }
-
-    *stream << "\"";
-
-    *stream << " fill-opacity=\"" << fill.color().alphaF() << "\"";
 
     KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-    if( path )
+    if( path && shape->background() )
     {
         if( path->fillRule() == Qt::OddEvenFill )
             *stream << " fill-rule=\"evenodd\"";
@@ -544,7 +594,7 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     if( line->lineStyle() == Qt::NoPen )
         *stream << "none";
     else if( line->lineBrush().gradient() )
-        getGradient( line->lineBrush() );
+        getGradient( line->lineBrush().gradient(), line->lineBrush().matrix() );
     else
         getHexColor( stream, line->color() );
     *stream << "\"";

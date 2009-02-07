@@ -353,12 +353,14 @@ ChartShape::ChartShape()
     addChild( d->plotArea );
     d->plotArea->init();
     d->plotArea->setZIndex( 0 );
+    setClipping( d->plotArea, true );
     
     d->document = new ChartDocument( this );
     
     d->legend = new Legend( this );
     d->legend->setVisible( true );
     d->legend->setZIndex( 1 );
+    setClipping( d->legend, true );
     
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
@@ -387,6 +389,7 @@ ChartShape::ChartShape()
     d->title->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, 0.0 ) );
     d->title->setVisible( false );
     d->title->setZIndex( 2 );
+    setClipping( d->title, true );
 
     d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
     if ( !d->subTitle )
@@ -407,6 +410,7 @@ ChartShape::ChartShape()
     d->subTitle->setPosition( QPointF( size().width() / 2.0 - d->title->size().width() / 2.0, d->title->size().height() ) );
     d->subTitle->setVisible( false );
     d->subTitle->setZIndex( 3 );
+    setClipping( d->subTitle, true );
 
     d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( dataCenterMap );
     if ( !d->footer )
@@ -427,6 +431,7 @@ ChartShape::ChartShape()
     d->footer->setPosition( QPointF( size().width() / 2.0 - d->footer->size().width() / 2.0, size().height() - d->footer->size().height() ) );
     d->footer->setVisible( false );
     d->footer->setZIndex( 4 );
+    setClipping( d->footer, true );
     
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );

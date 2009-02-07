@@ -401,26 +401,6 @@ void KWDLoader::loadFrameSet(const KoXmlElement &framesetElem, bool loadFrames, 
     case 1: { // FT_TEXT
         QString tableName = framesetElem.attribute("grpMgr");
         if (!tableName.isEmpty()) {   // Text frameset belongs to a table -> find table by name
-            /*
-                        KWTableFrameSet *table = 0;
-                        Q3PtrListIterator<KWFrameSet> fit = framesetsIterator();
-                        for ( ; fit.current() ; ++fit ) {
-                            KWFrameSet *f = fit.current();
-                            if( f->type() == FT_TABLE &&
-                                f->isVisible() &&
-                                f->name() == tableName ) {
-                                table = static_cast<KWTableFrameSet *> (f);
-                                break;
-                            }
-                        }
-                        // No such table yet -> create
-                        if ( !table ) {
-                            table = new KWTableFrameSet( this, tableName );
-                            addFrameSet(table, false);
-                        }
-                        // Load the cell
-                        return table->loadCell( framesetElem );
-             */
             return; // TODO support backwards compatible tables
         } else {
 

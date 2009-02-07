@@ -28,7 +28,7 @@
      <item>
       <widget class="QLabel" name="textLabel1" >
        <property name="text" >
-        <string>From:</string>
+        <string comment="Start time">From:</string>
        </property>
        <property name="wordWrap" >
         <bool>false</bool>

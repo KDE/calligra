@@ -133,7 +133,11 @@ const KoViewConverter* KFormulaCanvas::viewConverter() const
     return m_view->viewConverter();
 }
     
-QWidget* KFormulaCanvas::canvasWidget()
+QWidget* KFormulaCanvas::canvasWidget() {
+    return this;
+}
+
+const QWidget* KFormulaCanvas::canvasWidget() const
 {
     return this;
 }

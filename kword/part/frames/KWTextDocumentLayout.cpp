@@ -101,9 +101,6 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line)
 
     return answer;
 }
-// TODO  can we replace the above?
-// Qt 4.3 has something like the above already.
-// QPolygonF is a QVector<QPointF>, it has a constructor that takes a QRectF and it has a QPolygonF intersected(const QPolygonF &) method
 
 // ----------------- Class that allows us with the runaround of QPainterPaths ----------------
 class Outline

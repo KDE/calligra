@@ -34,10 +34,10 @@ public:
     
     int dataSetIndex( DataSet *dataSet );
 
-    int dataDimensions;
+    int             dataDimensions;
     QList<DataSet*> dataSets;
-    QList<int> dataSetSizes;
-    int biggestDataSetIndex;
+    QList<int>      dataSetSizes;
+    int             biggestDataSetIndex;
     
     Qt::Orientation dataDirection;
 };
@@ -45,8 +45,8 @@ public:
 KDChartModel::Private::Private()
 {
     biggestDataSetIndex = -1;
-    dataDimensions = 1;
-    dataDirection = Qt::Vertical;
+    dataDimensions      = 1;
+    dataDirection       = Qt::Vertical;
 }
 
 KDChartModel::Private::~Private()

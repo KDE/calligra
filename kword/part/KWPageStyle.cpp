@@ -76,11 +76,9 @@ KWPageStyle::KWPageStyle(const QString& name)
 KWPageStyle::KWPageStyle(const KWPageStyle &ps)
     : d(ps.d)
 {
-    Q_ASSERT( d );
 }
 
 KWPageStyle::KWPageStyle()
-    : d (new KWPageStylePrivate())
 {
 }
 

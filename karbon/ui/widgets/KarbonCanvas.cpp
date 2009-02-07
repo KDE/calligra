@@ -128,6 +128,11 @@ QWidget * KarbonCanvas::canvasWidget()
     return this;
 }
 
+const QWidget * KarbonCanvas::canvasWidget() const
+{
+    return this;
+}
+
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
 {
     QPainter painter( this );

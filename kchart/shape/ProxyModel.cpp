@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
+   Copyright 2009 Inge Wallin    <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,7 +42,13 @@
 #include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 
+
 using namespace KChart;
+
+
+// ================================================================
+//                     Class ProxyModel::Private
+
 
 class ProxyModel::Private {
 public:
@@ -51,23 +58,29 @@ public:
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
-    int dataDimensions;
-    QMap<int, int> dataMap;
+    int              dataDimensions;
+    QMap<int, int>   dataMap;
     
-    QList<DataSet*> dataSets;
-    QList<DataSet*> removedDataSets;
+    QList<DataSet*>  dataSets;
+    QList<DataSet*>  removedDataSets;
     
-    QVector<QRect> selection;
+    QVector<QRect>   selection;
 };
+
 
 ProxyModel::Private::Private()
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
-    dataDimensions = 1;
+    dataDimensions     = 1;
 
-    dataDirection = Qt::Horizontal;
+    dataDirection      = Qt::Horizontal;
 }
+
+
+// ================================================================
+//                         Class ProxyModel
+
 
 ProxyModel::ProxyModel()
     : QAbstractProxyModel( 0 ),
@@ -79,11 +92,12 @@ ProxyModel::~ProxyModel()
 {
 }
 
+
 void ProxyModel::rebuildDataMap()
 {
     QVector<QRect> dataRegions;
-    if ( d->selection.isEmpty() )
-    {
+
+    if ( d->selection.isEmpty() ) {
         const QRect dataBoundingRect( QPoint( 1, 1 ), QSize( sourceModel()->columnCount(), sourceModel()->rowCount() ) );
         dataRegions.append( dataBoundingRect );
     }
@@ -91,14 +105,13 @@ void ProxyModel::rebuildDataMap()
         dataRegions = d->selection;
     
     int createdDataSetCount = 0;
-    if ( d->dataDirection == Qt::Horizontal )
-    {
-        QMap<int, QVector<QRect> > rows;
-        QMap<int, QVector<QRect> > sortedRows;
+    if ( d->dataDirection == Qt::Horizontal ) {
+        QMap<int, QVector<QRect> >  rows;
+        QMap<int, QVector<QRect> >  sortedRows;
+
         // Split up region in horizontal rectangles
         // that are sorted from top to bottom
-        foreach ( const QRect &rect, dataRegions )
-        {
+        foreach ( const QRect &rect, dataRegions ) {
             int x = rect.topLeft().x();
             for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ )
             {
@@ -109,17 +122,15 @@ void ProxyModel::rebuildDataMap()
             }
         }
         
-        // Sort rectangles in each row from left to right
-        QMapIterator<int, QVector<QRect> > i( rows );
-        while ( i.hasNext() )
-        {
+        // Sort rectangles in each row from left to right.
+        QMapIterator<int, QVector<QRect> >  i( rows );
+        while ( i.hasNext() ) {
             i.next();
-            int row = i.key();
-            QVector<QRect> unsortedRects = i.value();
-            QVector<QRect> sortedRects;
+            int             row = i.key();
+            QVector<QRect>  unsortedRects = i.value();
+            QVector<QRect>  sortedRects;
             
-            foreach ( const QRect &rect, unsortedRects )
-            {
+            foreach ( const QRect &rect, unsortedRects ) {
                 int index;
                 
                 for ( index = 0; index < sortedRects.size(); index++ )
@@ -136,8 +147,7 @@ void ProxyModel::rebuildDataMap()
         
         CellRegion categoryDataRegion;
         
-        if ( d->firstRowIsLabel && j.hasNext() )
-        {
+        if ( d->firstRowIsLabel && j.hasNext() ) {
             j.next();
             
             categoryDataRegion = CellRegion( j.value() );
@@ -145,17 +155,16 @@ void ProxyModel::rebuildDataMap()
                 categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
         }
         
-        while ( j.hasNext() )
-        {
+        while ( j.hasNext() ) {
             j.next();
             
             DataSet *dataSet;
-            if ( createdDataSetCount >= d->dataSets.size() )
-            {
+            if ( createdDataSetCount >= d->dataSets.size() ) {
                 if ( !d->removedDataSets.isEmpty() )
                     dataSet = d->removedDataSets.takeLast();
                 else
                     dataSet = new DataSet( this );
+
                 d->dataSets.append( dataSet );
             }
             else
@@ -169,8 +178,7 @@ void ProxyModel::rebuildDataMap()
             CellRegion labelDataRegion;
     
             //qDebug() << "Creating data set with region" << j.value();
-            if ( d->firstColumnIsLabel )
-            {
+            if ( d->firstColumnIsLabel ) {
                 QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
                 labelDataRegion = CellRegion( labelDataPoint );
                 
@@ -184,35 +192,36 @@ void ProxyModel::rebuildDataMap()
             dataSet->blockSignals( false );
         }
     }
-    else
-    {
-        QMap<int, QVector<QRect> > columns;
-        QMap<int, QVector<QRect> > sortedColumns;
+    else {
+        // d->dataDirection == Qt::Vertical here
+
+        QMap<int, QVector<QRect> >  columns;
+        QMap<int, QVector<QRect> >  sortedColumns;
+
         // Split up region in horizontal rectangles
         // that are sorted from top to bottom
-        foreach ( const QRect &rect, dataRegions )
-        {
+        foreach ( const QRect &rect, dataRegions ) {
             int y = rect.topLeft().y();
             for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ )
             {
                 QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
                 if ( !columns.contains( x ) )
                     columns.insert( x, QVector<QRect>() );
+
                 columns[x].append( dataRect );
             }
         }
         
         // Sort rectangles in each column from top to bottom
-        QMapIterator<int, QVector<QRect> > i( columns );
-        while ( i.hasNext() )
-        {
+        QMapIterator<int, QVector<QRect> >  i( columns );
+        while ( i.hasNext() ) {
             i.next();
-            int row = i.key();
-            QVector<QRect> unsortedRects = i.value();
-            QVector<QRect> sortedRects;
+
+            int             row = i.key();
+            QVector<QRect>  unsortedRects = i.value();
+            QVector<QRect>  sortedRects;
             
-            foreach ( const QRect &rect, unsortedRects )
-            {
+            foreach ( const QRect &rect, unsortedRects ) {
                 int index;
                 
                 for ( index = 0; index < sortedRects.size(); index++ )
@@ -229,8 +238,7 @@ void ProxyModel::rebuildDataMap()
         
         CellRegion categoryDataRegion;
         
-        if ( d->firstColumnIsLabel && j.hasNext() )
-        {
+        if ( d->firstColumnIsLabel && j.hasNext() ) {
             j.next();
             
             categoryDataRegion = CellRegion( j.value() );
@@ -238,13 +246,11 @@ void ProxyModel::rebuildDataMap()
                 categoryDataRegion.subtract( categoryDataRegion.pointAtIndex( 0 ) );
         }
         
-        while ( j.hasNext() )
-        {
+        while ( j.hasNext() ) {
             j.next();
             
             DataSet *dataSet;
-            if ( createdDataSetCount >= d->dataSets.size() )
-            {
+            if ( createdDataSetCount >= d->dataSets.size() ) {
                 if ( !d->removedDataSets.isEmpty() )
                     dataSet = d->removedDataSets.takeLast();
                 else
@@ -262,8 +268,7 @@ void ProxyModel::rebuildDataMap()
             CellRegion labelDataRegion;
     
             //qDebug() << "Creating data set with region " << j.value();
-            if ( d->firstRowIsLabel )
-            {
+            if ( d->firstRowIsLabel ) {
                 QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
                 labelDataRegion = CellRegion( labelDataPoint );
                 
@@ -278,18 +283,23 @@ void ProxyModel::rebuildDataMap()
         }
     }
     
-    while ( d->dataSets.size() > createdDataSetCount )
-    {
+    while ( d->dataSets.size() > createdDataSetCount ) {
     	DataSet *dataSet = d->dataSets.takeLast();
+
     	// TODO: Restore attached axis when dataset is re-inserted?
     	if ( dataSet->attachedAxis() )
     	    dataSet->attachedAxis()->detachDataSet( dataSet, true );
+
         d->removedDataSets.append( dataSet );
     }
 }
 
+
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 {
+    // FIXME: What if we already have a source model?  Don't we have
+    //        to disconnect that one before connecting the new one?
+
     connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
              this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
 
@@ -303,6 +313,9 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection )
 {
+    // FIXME: What if we already have a source model?  Don't we have
+    //        to disconnect that one before connecting the new one?
+
     connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
              this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
@@ -433,6 +446,7 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
     return true;
 }
 
+
 QVariant ProxyModel::data( const QModelIndex &index,
                            int role /* = Qt::DisplayRole */ ) const
 {
@@ -440,13 +454,13 @@ QVariant ProxyModel::data( const QModelIndex &index,
         return QVariant();
     
     QModelIndex sourceIndex = mapToSource( index );
-    if ( sourceIndex == QModelIndex() )
-    {
+    if ( sourceIndex == QModelIndex() ) {
         qWarning() << "ProxyModel::data(): Attempting to request data for invalid source index";
         qWarning() << "ProxyModel::data(): Mapping resulted in:";
         qWarning() << index << "-->" << sourceIndex;
         return QVariant();
     }
+
     QVariant value = sourceModel()->data( sourceIndex, role );
     return value;
 }
@@ -454,26 +468,29 @@ QVariant ProxyModel::data( const QModelIndex &index,
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
     QPoint topLeftPoint( topLeft.column() + 1, topLeft.row() + 1 );
-    // Excerpt from the Qt reference for QRect::bottomRight() which is used for calculating bottomRight
-    // Note that for historical reasons this function returns QPoint(left() + width() -1, top() + height() - 1).
+
+    // Excerpt from the Qt reference for QRect::bottomRight() which is
+    // used for calculating bottomRight.  Note that for historical
+    // reasons this function returns 
+    //   QPoint(left() + width() -1, top() + height() - 1).
     QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
-    QRect dataChangedRect = QRect( topLeftPoint, QSize( bottomRightPoint.x() - topLeftPoint.x() + 1, bottomRightPoint.y() - topLeftPoint.y() + 1 ) );
+    QRect dataChangedRect = QRect( topLeftPoint,
+                                   QSize( bottomRightPoint.x() - topLeftPoint.x() + 1,
+                                          bottomRightPoint.y() - topLeftPoint.y() + 1 ) );
     
-    foreach ( DataSet *dataSet, d->dataSets )
-    {
+    foreach ( DataSet *dataSet, d->dataSets ) {
         bool intersects = false;
         QRect changedRect;
-        foreach ( const QRect &rect, dataSet->yDataRegion().rects() )
-        {
-            if ( rect.intersects( dataChangedRect ) )
-            {
+        foreach ( const QRect &rect, dataSet->yDataRegion().rects() ) {
+            if ( rect.intersects( dataChangedRect ) ) {
                 changedRect |= rect.intersected( dataChangedRect );
                 intersects = true;
+
                 break;
             }
         }
-        if ( intersects )
-        {
+
+        if ( intersects ) {
             dataSet->yDataChanged( changedRect );
         }
     }
@@ -506,26 +523,32 @@ QVariant ProxyModel::headerData( int section,
             row++;
     }
     else {
-        if( !d->firstRowIsLabel )
+        // orientation == Qt::Vertical here
+
+        if ( !d->firstRowIsLabel )
             return QVariant();
 
-        // Return the section-th column in the first row
+        // Return the section-th column in the first row.
         column = section;
         if ( d->firstColumnIsLabel )
             column++;
-        // first source column is used for x values
+
+        // First source column is used for X values.
         if ( d->dataDimensions == 2 )
             column++;
     }
-    
-    if ( row >= sourceModel()->rowCount() )
-    {
+
+    // Check for overflow in rows.
+    if ( row >= sourceModel()->rowCount() ) {
         qWarning() << "ProxyModel::headerData(): Attempting to request header data for row >= rowCount";
+
         return QVariant();
     }
-    if ( column >= sourceModel()->columnCount() )
-    {
+
+    // Check for overflow in columns.
+    if ( column >= sourceModel()->columnCount() ) {
         qWarning() << "ProxyModel::headerData(): Attempting to request header data for column >= columnCount";
+
         return QVariant();
     }
 
@@ -538,6 +561,7 @@ QMap<int, QVariant> ProxyModel::itemData( const QModelIndex &index ) const
     return sourceModel()->itemData( mapToSource( index ) );
 }
 
+
 QModelIndex ProxyModel::index( int row,
                                int column,
                                const QModelIndex &parent /* = QModelIndex() */ ) const
@@ -546,6 +570,7 @@ QModelIndex ProxyModel::index( int row,
 
     return QAbstractItemModel::createIndex( row, column, 0 );
 }
+
 
 QModelIndex ProxyModel::parent( const QModelIndex &index ) const
 {
@@ -556,9 +581,11 @@ QModelIndex ProxyModel::parent( const QModelIndex &index ) const
 
 QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
 {
-    int row, column;
+    int  row;
+    int  column;
+
     if ( d->dataDirection == Qt::Horizontal ) {
-        row = sourceIndex.row();
+        row    = sourceIndex.row();
         column = sourceIndex.column();
 
         if ( d->firstRowIsLabel )
@@ -567,8 +594,7 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
             column--;
         
         // Find the first occurrence of row in the map
-        for ( int i = 0; i < d->dataMap.size(); i++ )
-        {
+        for ( int i = 0; i < d->dataMap.size(); i++ ) {
             if ( d->dataMap[i] == row ) {
                 row = i;
                 break;
@@ -576,7 +602,9 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
         }
     }
     else {
-        row = sourceIndex.column();
+        // d->dataDirection == Qt::Vertical here
+
+        row    = sourceIndex.column();
         column = sourceIndex.row();
 
         if ( d->firstRowIsLabel )
@@ -585,8 +613,7 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
             column--;
         
         // Find the first occurrence of column in the map
-        for ( int i = 0; i < d->dataMap.size(); i++ )
-        {
+        for ( int i = 0; i < d->dataMap.size(); i++ ) {
             if ( d->dataMap[i] == column ) {
                 column = i;
                 break;
@@ -599,13 +626,15 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
 
 QModelIndex ProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 {
-    int row, column;
+    int  row;
+    int  column;
+
     if ( d->dataDirection == Qt::Horizontal ) {
-        row = d->dataMap[ proxyIndex.row() ];
+        row    = d->dataMap[ proxyIndex.row() ];
         column = proxyIndex.column();
     }
     else {
-        row = proxyIndex.column();
+        row    = proxyIndex.column();
         column = d->dataMap[ proxyIndex.row() ];
     }
 
@@ -617,29 +646,35 @@ QModelIndex ProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
     return sourceModel()->index( row, column );
 }
 
+
 Qt::Orientation ProxyModel::mapFromSource( Qt::Orientation orientation ) const
 {
-    // In fact, this method does exactly the same thing as mapToSource( Qt::Orientation ),
-    // but replacing the code with a call to mapToSource() would just confuse at this point.
+    // In fact, this method does exactly the same thing as
+    // mapToSource( Qt::Orientation ), but replacing the code with a
+    // call to mapToSource() would just confuse at this point.
+
     if ( d->dataDirection == Qt::Horizontal )
         return orientation;
 
-    // orientation is Qt::Horizontal
+    // Orientation is Qt::Horizontal
     // Thus, we need to return the opposite of orientation.
     if ( orientation == Qt::Vertical )
         return Qt::Horizontal;
+
     return Qt::Vertical;
 }
+
 
 Qt::Orientation ProxyModel::mapToSource( Qt::Orientation orientation ) const
 {
     if ( d->dataDirection == Qt::Horizontal )
         return orientation;
 
-    // orientation is Qt::Horizontal
+    // Orientation is Qt::Horizontal.
     // Thus, we need to return the opposite of orientation.
     if ( orientation == Qt::Vertical )
         return Qt::Horizontal;
+
     return Qt::Vertical;
 }
 
@@ -653,6 +688,7 @@ int ProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) cons
         rowCount = sourceModel()->rowCount( parent );
     else
         rowCount = sourceModel()->columnCount( parent );
+
     // Even if the first row is a header - if the data table is empty,
     // we still have 0 rows, not -1
 
@@ -672,17 +708,18 @@ int ProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) cons
     return rowCount;
 }
 
+
 int ProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
     if ( sourceModel() == 0 )
         return 0;
     
-
     int columnCount;
     if ( d->dataDirection == Qt::Horizontal )
         columnCount = sourceModel()->columnCount( parent );
     else
         columnCount = sourceModel()->rowCount( parent );
+
     // Even if the first column is a header - if the data table is empty,
     // we still have 0 columns, not -1
 
@@ -734,8 +771,10 @@ void ProxyModel::setFirstRowIsLabel( bool b )
     }*/
 }
  
+
 void ProxyModel::setFirstColumnIsLabel( bool b )
 {
+    // FIXME: Why is this disabled when it's not for setFirstRowIsLabel? /iw
     /*if ( b == d->firstColumnIsLabel )
         return;
     
@@ -752,7 +791,7 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
     }*/
     
     d->firstColumnIsLabel = b;
-    
+
     if ( !sourceModel() )
         return;
     
@@ -779,14 +818,18 @@ Qt::Orientation ProxyModel::dataDirection()
 
 void ProxyModel::setDataDirection( Qt::Orientation orientation )
 {
+    // FIXME: Shouldn't we test if the orientation actually changes? /iw
     d->dataDirection = orientation;
+
     rebuildDataMap();
     reset();
 }
 
 void ProxyModel::setDataDimensions( int dimensions )
 {
+    // FIXME: Shouldn't we test if the dimenstions actually change? /iw
     d->dataDimensions = dimensions;
+
     rebuildDataMap();
     reset();
 }

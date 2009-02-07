@@ -405,7 +405,7 @@ static QString columnName( uint column )
 
     column--;
 
-    for( unsigned limit = 26; column >= limit + offset; limit *= 26, digits++ )
+    for( unsigned limit = 26; column >= limit + offset; limit *= 26, ++digits )
         offset += limit;
 
     for( unsigned col = column - offset; digits; --digits, col /= 26 )

@@ -79,20 +79,7 @@
        <string>Plot Area</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="8" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0" >
-          <size>
-           <width>61</width>
-           <height>71</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" colspan="5" >
+       <item row="1" column="0" colspan="3" >
         <layout class="QHBoxLayout" name="horizontalLayout" >
          <item>
           <widget class="QCheckBox" name="showTitle" >
@@ -135,48 +122,6 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0" colspan="5" >
-        <widget class="Line" name="line_2" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0" >
-        <widget class="QLabel" name="label_2" >
-         <property name="text" >
-          <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; font-weight:600;">Axes&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="3" >
-        <widget class="QComboBox" name="axes" />
-       </item>
-       <item row="7" column="0" colspan="5" >
-        <widget class="QPushButton" name="axisScalingButton" >
-         <property name="text" >
-          <string>Scaling...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3" >
-        <widget class="QToolButton" name="addAxis" >
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="4" >
-        <widget class="QToolButton" name="removeAxis" >
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0" >
         <widget class="QLabel" name="label_4" >
          <property name="text" >
@@ -188,22 +133,87 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="4" >
-        <widget class="QLineEdit" name="axisTitle" />
-       </item>
-       <item row="5" column="0" >
-        <widget class="QCheckBox" name="axisShowTitle" >
-         <property name="text" >
-          <string>Label</string>
-         </property>
+       <item row="2" column="0" colspan="3" >
+        <widget class="QWidget" native="1" name="axisConfiguration" >
+         <layout class="QGridLayout" name="gridLayout_3" >
+          <item row="0" column="0" colspan="3" >
+           <widget class="Line" name="line_2" >
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3" >
+           <widget class="QLabel" name="label_2" >
+            <property name="text" >
+             <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-size:8pt; font-weight:600;">Axes&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QComboBox" name="axes" />
+          </item>
+          <item row="2" column="1" >
+           <widget class="QToolButton" name="addAxis" >
+            <property name="text" >
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="QToolButton" name="removeAxis" >
+            <property name="text" >
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="3" >
+           <layout class="QHBoxLayout" name="horizontalLayout_5" >
+            <item>
+             <widget class="QCheckBox" name="axisShowTitle" >
+              <property name="text" >
+               <string>Label</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="axisTitle" />
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0" colspan="3" >
+           <widget class="QCheckBox" name="axisShowGridLines" >
+            <property name="text" >
+             <string>Show Grid Lines</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="3" >
+           <widget class="QPushButton" name="axisScalingButton" >
+            <property name="text" >
+             <string>Scaling...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="6" column="0" colspan="5" >
-        <widget class="QCheckBox" name="axisShowGridLines" >
-         <property name="text" >
-          <string>Show Grid Lines</string>
+       <item row="8" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>61</width>
+           <height>71</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

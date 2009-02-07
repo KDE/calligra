@@ -47,14 +47,14 @@ public:
     ~DataSet();
 
     // Getter methods
-    QString title() const;
-    ChartType chartType() const;
-    ChartSubtype chartSubType() const;
-    ChartType globalChartType() const;
-    ChartSubtype globalChartSubType() const;
-    Axis *attachedAxis() const;
+    QString       title() const;
+    ChartType     chartType() const;
+    ChartSubtype  chartSubType() const;
+    ChartType     globalChartType() const;
+    ChartSubtype  globalChartSubType() const;
+    Axis         *attachedAxis() const;
 
-    ProxyModel *model() const;
+    ProxyModel   *model() const;
 
     bool showValues() const;
     bool showLabels() const;

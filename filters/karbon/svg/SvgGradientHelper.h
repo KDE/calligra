@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,14 +30,17 @@
 class SvgGradientHelper
 {
 public:
+    enum Units { UserSpaceOnUse, ObjectBoundingBox };
+
     SvgGradientHelper();
     ~SvgGradientHelper();
     /// Copy constructor
     SvgGradientHelper( const SvgGradientHelper &other );
-    /// Enables using bounding box units
-    void setBoundboxUnits( bool on );
-    /// Returns state of bounding box units
-    bool boundboxUnits() const;
+    
+    /// Sets the gradient units type
+    void setGradientUnits( Units units );
+    /// Returns gradient units type
+    Units gradientUnits() const;
 
     /// Sets the gradient
     void setGradient( QGradient * g );
@@ -57,9 +60,13 @@ public:
 
     /// Assigment operator
     SvgGradientHelper & operator = ( const SvgGradientHelper & rhs );
+
+    QGradient * adjustedGradient( const QRectF &bound ) const;
+
 private:
+
     QGradient * m_gradient;
-    bool m_bbox;
+    Units m_gradientUnits;
     QMatrix m_gradientTransform;
 };
 

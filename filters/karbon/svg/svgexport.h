@@ -42,6 +42,7 @@ class ArtisticTextShape;
 class PictureShape;
 class KoEllipseShape;
 class KoRectangleShape;
+class KoPatternBackground;
 class QTextStream;
 class QPixmap;
 class QImage;
@@ -74,8 +75,8 @@ private:
     void getFill( KoShape * shape, QTextStream *stream );
     void getStroke( KoShape * shape, QTextStream *stream );
     void getColorStops( const QGradientStops & colorStops );
-    void getGradient( const QBrush & brush );
-    void getPattern( const QPixmap& patt );
+    void getGradient( const QGradient * gradient, const QMatrix &gradientTransform );
+    void getPattern( KoPatternBackground * pattern, KoShape * shape );
     void getHexColor( QTextStream *, const QColor & color  );
     QString getTransform( const QMatrix &matrix, const QString &attributeName );
 

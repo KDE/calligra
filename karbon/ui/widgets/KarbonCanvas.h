@@ -78,6 +78,8 @@ public:
     /// reimplemented from KoCanvasBase
     QWidget *canvasWidget();
     /// reimplemented from KoCanvasBase
+    const QWidget *canvasWidget() const;
+    /// reimplemented from KoCanvasBase
     void updateCanvas(const QRectF& rc);
     /// reimplemented from KoCanvasBase
     virtual void updateInputMethodInfo();

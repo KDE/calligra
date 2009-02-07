@@ -2,7 +2,7 @@
  * Copyright (C) 2002-2005,2007 Rob Buis <buis@kde.org>
  * Copyright (C) 2002-2004 Nicolas Goutte <nicolasg@snafu.de>
  * Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
- * Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2005-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2005,2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006-2007 Inge Wallin <inge@lysator.liu.se>
  * Copyright (C) 2007-2008 Thorsten Zachmann <t.zachmann@zagge.de>
@@ -56,6 +56,7 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
+#include <KoShapePainter.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -537,6 +538,46 @@ SvgGradientHelper* SvgImport::findGradient( const QString &id, const QString &hr
         return 0L;
 }
 
+SvgPatternHelper* SvgImport::findPattern( const QString &id, const QString &href )
+{
+    // check if pattern was already parsed, and return it
+    if( m_patterns.contains( id ) )
+        return &m_patterns[ id ];
+
+    // check if pattern was stored for later parsing
+    if( !m_defs.contains( id ) )
+        return 0L;
+
+    QDomElement e = m_defs[ id ];
+    if(e.childNodes().count() == 0)
+    {
+        QString mhref = e.attribute("xlink:href").mid(1);
+
+        if(m_defs.contains(mhref))
+            return findPattern(mhref, id);
+        else
+            return 0L;
+    }
+    else
+    {
+        // ok parse pattern now
+        if( ! parsePattern( m_defs[ id ], m_defs[ href ] ) )
+            return 0L;
+    }
+
+    // return successfully parsed pattern or NULL
+    QString n;
+    if(href.isEmpty())
+        n = id;
+    else
+        n = href;
+
+    if( m_patterns.contains( n ) )
+        return &m_patterns[ n ];
+    else
+        return 0L;
+}
+
 QDomElement SvgImport::mergeStyles( const QDomElement &referencedBy, const QDomElement &referencedElement )
 {
     // First use all the style attributes of the element being referenced.
@@ -710,7 +751,7 @@ void SvgImport::parseColor( QColor &color, const QString &s )
     else if( s == "currentColor" )
     {
         SvgGraphicsContext *gc = m_gc.top();
-        color = gc->color;
+        color = gc->currentColor;
     }
     else
     {
@@ -769,7 +810,7 @@ void SvgImport::parseColorStops( QGradient *gradient, const QDomElement &e )
         gradient->setStops( stops );
 }
 
-void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referencedBy)
+bool SvgImport::parseGradient( const QDomElement &e, const QDomElement &referencedBy)
 {
     // IMPROVEMENTS:
     // - Store the parsed colorstops in some sort of a cache so they don't need to be parsed again.
@@ -778,24 +819,25 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
     // - Gradients with one color stop have a solid color.
 
     SvgGraphicsContext *gc = m_gc.top();
-    if( !gc ) return;
+    if( !gc )
+        return false;
 
     SvgGradientHelper gradhelper;
 
-    if(e.childNodes().count() == 0)
+    if( e.hasAttribute("xlink:href") )
     {
         QString href = e.attribute("xlink:href").mid(1);
-        if(href.isEmpty())
-        {
-            //gc->fill.setType( VFill::none ); // <--- TODO Fill OR Stroke are none
-            return;
-        }
-        else 
+        if( ! href.isEmpty())
         {
             // copy the referenced gradient if found
             SvgGradientHelper * pGrad = findGradient( href );
             if( pGrad )
                 gradhelper = *pGrad;
+        }
+        else
+        {
+            gc->fillType = SvgGraphicsContext::None; // <--- TODO Fill OR Stroke are none
+            return false;
         }
     }
 
@@ -806,18 +848,21 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
     else
         b = e;
 
-    QString id = b.attribute("id");
-    if( !id.isEmpty() )
+    QString gradientId = b.attribute("id");
+
+    if( ! gradientId.isEmpty() )
     {
-        // Copy existing gradient if it exists
-        if( m_gradients.find( id ) != m_gradients.end() )
-            gradhelper.copyGradient( m_gradients[ id ].gradient() );
+        // check if we have this gradient already parsed
+        // copy existing gradient if it exists
+        if( m_gradients.find( gradientId ) != m_gradients.end() )
+            gradhelper.copyGradient( m_gradients[ gradientId ].gradient() );
     }
 
-    gradhelper.setBoundboxUnits( b.attribute( "gradientUnits" ) != "userSpaceOnUse" );
+    if( b.attribute( "gradientUnits" ) == "userSpaceOnUse" )
+        gradhelper.setGradientUnits( SvgGradientHelper::UserSpaceOnUse );
 
     // parse color prop
-    QColor c = m_gc.top()->color;
+    QColor c = m_gc.top()->currentColor;
 
     if( !b.attribute( "color" ).isEmpty() )
     {
@@ -837,12 +882,12 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
                 parseColor( c, params );
         }
     }
-    m_gc.top()->color = c;
+    m_gc.top()->currentColor = c;
 
     if( b.tagName() == "linearGradient" )
     {
         QLinearGradient * g = new QLinearGradient();
-        if( gradhelper.boundboxUnits() )
+        if( gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
         {
             g->setStart( QPointF( toPercentage( b.attribute( "x1", "0%" ) ), toPercentage( b.attribute( "y1", "0%" ) ) ) );
             g->setFinalStop( QPointF( toPercentage( b.attribute( "x2", "100%" ) ), toPercentage( b.attribute( "y2", "0%" ) ) ) );
@@ -859,10 +904,10 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
             g->setStops( gradhelper.gradient()->stops() );
         gradhelper.setGradient( g );
     }
-    else
+    else if( b.tagName() == "radialGradient" )
     {
         QRadialGradient * g = new QRadialGradient();
-        if( gradhelper.boundboxUnits() )
+        if( gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
         {
             g->setCenter( QPointF( toPercentage( b.attribute( "cx", "50%" ) ), toPercentage( b.attribute( "cy", "50%" ) ) ) );
             g->setRadius( toPercentage( b.attribute( "r", "50%" ) ) );
@@ -880,6 +925,10 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
         if( gradhelper.gradient() )
             g->setStops( gradhelper.gradient()->stops() );
         gradhelper.setGradient( g );
+    }
+    else
+    {
+        return false;
     }
 
     // handle spread method
@@ -901,12 +950,152 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
     parseColorStops( gradhelper.gradient(), e );
     //gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
     gradhelper.setTransform( parseTransform( b.attribute( "gradientTransform" ) ) );
-    m_gradients.insert( b.attribute( "id" ), gradhelper );
+    m_gradients.insert( gradientId, gradhelper );
+
+    return true;
+}
+
+bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &referencedBy )
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if( !gc )
+        return false;
+
+    SvgPatternHelper pattern;
+
+    // check if we are referencing another pattern
+    if( e.hasAttribute("xlink:href")  )
+    {
+        QString href = e.attribute("xlink:href").mid(1);
+        if( ! href.isEmpty() )
+        {
+            // copy the referenced pattern if found
+            SvgPatternHelper * refPattern = findPattern( href );
+            if( refPattern )
+                pattern = *refPattern;
+        }
+    }
+
+    // Use the pattern that is referencing, or if there isn't one, the original pattern
+    QDomElement b;
+    if( !referencedBy.isNull() )
+        b = referencedBy;
+    else
+        b = e;
+
+    // check if we have already parsed this pattern
+    QString id = b.attribute("id");
+    if( !id.isEmpty() )
+    {
+        // copy existing pattern image if it exists
+        if( m_patterns.find( id ) != m_patterns.end() )
+            pattern.setImage( m_patterns[ id ].image() );
+    }
+
+    if( b.attribute( "patternUnits" ) == "userSpaceOnUse" )
+        pattern.setPatternUnits( SvgPatternHelper::UserSpaceOnUse );
+    if( b.attribute( "patternContentUnits" ) == "objectBoundingBox" )
+        pattern.setPatternContentUnits( SvgPatternHelper::ObjectBoundingBox );
+    
+    pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
+
+    // parse tile reference rectangle
+    pattern.setPosition( QPointF( parseUnit( b.attribute( "x" ) ),
+                                  parseUnit( b.attribute( "y" ) ) ) );
+    pattern.setSize( QSizeF( parseUnit( b.attribute( "width" ) ),
+                             parseUnit( b.attribute( "height" ) ) ) );
+
+    addGraphicContext();
+
+    // the pattern establishes a new coordinate system with its
+    // origin at the patterns x and y attributes
+    m_gc.top()->matrix = QMatrix();
+
+    setupTransform( b );
+    updateContext( b );
+
+    parseStyle( 0, b );
+
+    // parse the pattern content
+    QList<KoShape*> patternContent = parseContainer( b );
+
+    if( patternContent.count() )
+    {
+        KoZoomHandler zoomHandler;
+
+        QSizeF patternSize = pattern.size();
+        QSizeF tileSize = zoomHandler.documentToView( pattern.size() );
+
+        QMatrix viewMatrix;
+
+        if( b.hasAttribute( "viewBox" ) )
+        {
+            // the viewbox establishes a new coordinate system, the viewBox
+            // is then fitted into the tile reference rectangle
+            QString viewbox = b.attribute( "viewBox" );
+            // allow for viewbox def with ',' or whitespace
+            QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
+            if( points.count() == 4 )
+            {
+                qreal viewBoxPosX = fromUserSpace( points[0].toFloat() );
+                qreal viewBoxPosY = fromUserSpace( points[1].toFloat() );
+                qreal viewBoxWidth = fromUserSpace( points[2].toFloat() );
+                qreal viewBoxHeight = fromUserSpace( points[3].toFloat() );
+                viewMatrix.translate( -viewBoxPosX, -viewBoxPosY );
+                viewMatrix.scale( patternSize.width() / viewBoxWidth, patternSize.height() / viewBoxHeight );
+            }
+        }
+        else
+        {
+            //viewMatrix.translate( -pattern.position().x(), -pattern.position().y() );
+        }
+
+        // setup the tile image
+        QImage tile( tileSize.toSize(), QImage::Format_ARGB32 );
+        tile.fill( QColor( Qt::transparent ).rgba() );
+        
+        // setup the painter to paint the tile content
+        QPainter tilePainter( &tile );
+        tilePainter.setClipRect( tile.rect() );
+        tilePainter.setWorldMatrix( viewMatrix );
+        //tilePainter.setRenderHint(QPainter::Antialiasing);
+
+        // paint the content into the tile image
+        KoShapePainter shapePainter;
+        shapePainter.setShapes( patternContent );
+        shapePainter.paintShapes( tilePainter, zoomHandler );
+
+        pattern.setImage( tile );
+    }
+
+    removeGraphicContext();
+
+    qDeleteAll( patternContent );
+
+    m_patterns.insert( b.attribute( "id" ), pattern );
+
+    return true;
+}
+
+bool SvgImport::parseImage( const QString &attribute, QImage &image )
+{
+    if( attribute.startsWith( "data:" ) )
+    {
+        int start = attribute.indexOf( "base64," );
+        if( start > 0 && image.loadFromData( QByteArray::fromBase64( attribute.mid( start + 7 ).toLatin1() ) ) )
+            return true;
+    }
+    else if( image.load( absoluteFilePath( attribute, m_gc.top()->xmlBaseDir ) ) )
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &command, const QString &params )
 {
-    QColor fillcolor = gc->fill.color();
+    QColor fillcolor = gc->fillColor;
     QColor strokecolor = gc->stroke.color();
 
     if( params == "inherit" ) 
@@ -915,35 +1104,45 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     if( command == "fill" )
     {
         if( params == "none" )
-            gc->fill.setStyle( Qt::NoBrush );
+        {
+            gc->fillType = SvgGraphicsContext::None;
+        }
         else if( params.startsWith( "url(" ) )
         {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.lastIndexOf(')');
             QString key = params.mid( start, end - start );
+            // try to find referenced gradient
             SvgGradientHelper * gradHelper = findGradient( key );
-            if( gradHelper && obj )
+            if( gradHelper )
             {
-                if( gradHelper->boundboxUnits() )
+                // great, we have a gradient fill
+                gc->fillType = SvgGraphicsContext::Gradient;
+                gc->fillId = key;
+            }
+            else 
+            {
+                // try to find referenced pattern
+                SvgPatternHelper * pattern = findPattern( key );
+                if( pattern )
                 {
-                    // adjust to bbox
-                    QRectF bbox = QRectF( QPoint(), obj->size() );
-                    gc->fill = gradHelper->adjustedFill( bbox );
-                    gc->fill.setMatrix( gradHelper->transform() );
+                    // great we have a pattern fill
+                    gc->fillType = SvgGraphicsContext::Pattern;
+                    gc->fillId = key;
                 }
                 else
                 {
-                    gc->fill = QBrush( *gradHelper->gradient() );
-                    gc->fill.setMatrix( gradHelper->transform() * gc->matrix * obj->transformation().inverted() );
+                    // no referenced fill found, reset fill
+                    gc->fillType = SvgGraphicsContext::None;
+                    gc->fillId.clear();
                 }
             }
-            else
-                gc->fill.setStyle( Qt::NoBrush );
         }
         else
         {
+            // great we have a solid fill
+            gc->fillType = SvgGraphicsContext::Solid;
             parseColor( fillcolor,  params );
-            gc->fill.setStyle( Qt::SolidPattern );
         }
     }
     else if( command == "fill-rule" )
@@ -966,7 +1165,7 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
             if( gradHelper && obj )
             {
                 QBrush brush;
-                if( gradHelper->boundboxUnits() )
+                if( gradHelper->gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
                 {
                     // adjust to bbox
                     QRectF bbox = QRectF( QPoint(), obj->size() );
@@ -1151,7 +1350,7 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     {
         QColor color;
         parseColor( color, params );
-        gc->color = color;
+        gc->currentColor = color;
     }
     else if( command == "display" )
     {
@@ -1159,10 +1358,8 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
             obj->setVisible( false );
     }
 
-    if( gc->fill.style() != Qt::NoBrush )
-        gc->fill.setColor( fillcolor );
-    //if( gc->stroke.type() == VStroke::solid )
-        gc->stroke.setColor( strokecolor );
+    gc->fillColor = fillcolor;
+    gc->stroke.setColor( strokecolor );
 }
 
 void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
@@ -1204,39 +1401,109 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
     if(!obj)
         return;
 
-    switch( gc->fill.style() )
+    applyFillStyle( obj );
+    applyStrokeStyle( obj );
+}
+
+void SvgImport::applyFillStyle( KoShape * shape )
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if( ! gc )
+        return;
+
+    switch( gc->fillType )
     {
-        case Qt::NoBrush:
-            obj->setBackground( 0 );
-            break;
-        case Qt::TexturePattern:
+    case SvgGraphicsContext::None:
+        shape->setBackground( 0 );
+        break;
+    case SvgGraphicsContext::Gradient:
         {
+            SvgGradientHelper * gradient = findGradient( gc->fillId );
+            if( gradient )
+            {
+                KoGradientBackground * bg = 0;
+                if( gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
+                {
+                    // adjust to bounding box
+                    QRectF bbox = QRectF( QPoint(), shape->size() );
+                    bg = new KoGradientBackground( gradient->adjustedGradient( bbox ) );
+                    bg->setMatrix( gradient->transform() );
+                }
+                else
+                {
+                    QMatrix invShapematrix = shape->transformation().inverted();
+                    bg = new KoGradientBackground( *gradient->gradient() );
+                    bg->setMatrix( gradient->transform() * gc->matrix * invShapematrix );
+                }
+            
+                shape->setBackground( bg );
+            }
+        }
+        break;
+    case SvgGraphicsContext::Pattern:
+        {
+            SvgPatternHelper * pattern = findPattern( gc->fillId );
             KoImageCollection * imageCollection = m_document->imageCollection();
-            if( imageCollection )
+            if( pattern && imageCollection )
             {
                 KoPatternBackground * bg = new KoPatternBackground( imageCollection );
-                bg->setPattern( gc->fill.textureImage() );
-                bg->setMatrix( gc->fill.matrix() );
-                obj->setBackground( bg );
+                bg->setPattern( pattern->image() );
+
+                QPointF refPoint;
+
+                if( pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox )
+                {
+                    // TODO: adjust to bounding box
+                    refPoint = pattern->position();
+                }
+                else 
+                {
+                    QMatrix invShapematrix = shape->transformation().inverted();
+                    bg->setMatrix( pattern->transform() * gc->matrix * invShapematrix );
+                    refPoint = shape->documentToShape( pattern->position() );
+                }
+                QSizeF tileSize = pattern->size();
+                bg->setPatternDisplaySize( tileSize );
+                // calculate pattern reference point offset in percent of tileSize
+                // and relative to the topleft corner of the shape
+                qreal fx = refPoint.x() / tileSize.width();
+                qreal fy = refPoint.y() / tileSize.height();
+                if( fx < 0.0 )
+                    fx = floor(fx);
+                else if( fx > 1.0 )
+                    fx = ceil(fx);
+                else
+                    fx = 0.0;
+                if( fy < 0.0 )
+                    fy = floor(fy);
+                else if( fx > 1.0 )
+                    fy = ceil(fy);
+                else
+                    fy = 0.0;
+                qreal offsetX = 100.0 * (refPoint.x()-fx*tileSize.width()) / tileSize.width();
+                qreal offsetY = 100.0 * (refPoint.y()-fy*tileSize.height()) / tileSize.height();
+                bg->setReferencePointOffset( QPointF(offsetX, offsetY) );
+                
+                shape->setBackground( bg );
             }
-            break;
         }
-        case Qt::LinearGradientPattern:
-        case Qt::RadialGradientPattern:
-        case Qt::ConicalGradientPattern:
-        {
-            KoGradientBackground * bg = new KoGradientBackground( *gc->fill.gradient() );
-            bg->setMatrix( gc->fill.matrix() );
-            obj->setBackground( bg );
-            break;
-        }
-        default:
-            obj->setBackground( new KoColorBackground( gc->fill.color(), gc->fill.style() ) );
+        break;
+    case SvgGraphicsContext::Solid:
+    default:
+        shape->setBackground( new KoColorBackground( gc->fillColor ) );
+        break;
     }
 
-    KoPathShape * path = dynamic_cast<KoPathShape*>( obj );
+    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
     if( path )
         path->setFillRule( gc->fillRule );
+}
+
+void SvgImport::applyStrokeStyle( KoShape * shape )
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if( ! gc )
+        return;
 
     double lineWidth = gc->stroke.lineWidth();
 
@@ -1251,9 +1518,9 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         gc->stroke.setDashOffset( dashOffset / lineWidth );
     }
     if( gc->hasStroke )
-        obj->setBorder( new KoLineBorder( gc->stroke ) );
+        shape->setBorder( new KoLineBorder( gc->stroke ) );
     else
-        obj->setBorder( 0 );
+        shape->setBorder( 0 );
 }
 
 void SvgImport::parseFont( const QDomElement &e )
@@ -1434,6 +1701,10 @@ QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
         else if( b.tagName() == "linearGradient" || b.tagName() == "radialGradient" )
         {
             parseGradient( b );
+        }
+        else if( b.tagName() == "pattern" )
+        {
+            parsePattern( b );
         }
         else if( b.tagName() == "rect" ||
             b.tagName() == "ellipse" ||
@@ -1822,30 +2093,23 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
     }
     else if( b.tagName() == "image" )
     {
+        double x = b.hasAttribute( "x" ) ? parseUnit( b.attribute( "x" ) ) : 0;
+        double y = b.hasAttribute( "x" ) ? parseUnit( b.attribute( "y" ) ) : 0;
+        double w = b.hasAttribute( "width" ) ? parseUnit( b.attribute( "width" ) ) : 0;
+        double h = b.hasAttribute( "height" ) ? parseUnit( b.attribute( "height" ) ) : 0;
+
+        // zero width of height disables rendering this image (see svg spec)
+        if( w == 0.0 || h == 0.0 )
+            return 0;
         QString fname = b.attribute("xlink:href");
         QImage img;
-        bool imageLoaded = false;
-        if( fname.startsWith( "data:" ) )
-        {
-            int start = fname.indexOf( "base64," );
-            if( start > 0 && img.loadFromData( QByteArray::fromBase64( fname.mid( start + 7 ).toLatin1() ) ) )
-                imageLoaded = true;
-        }
-        else if( img.load( absoluteFilePath( fname, m_gc.top()->xmlBaseDir ) ) )
-            imageLoaded = true;
-
-        if( imageLoaded )
+        if( parseImage( fname, img ) )
         {
             KoShape * picture = createShape( PICTURESHAPEID );
             if( picture )
             {
                 // TODO use it already for loading
                 KoImageData * data = m_document->imageCollection()->getImage(img);
-
-                double x = parseUnit( b.attribute( "x" ) );
-                double y = parseUnit( b.attribute( "y" ) );
-                double w = parseUnit( b.attribute( "width" ) );
-                double h = parseUnit( b.attribute( "height" ) );
 
                 picture->setUserData( data );
                 picture->setSize( QSizeF(w,h) );

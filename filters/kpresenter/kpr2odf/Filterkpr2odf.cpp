@@ -535,10 +535,10 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     if ( !angle.isNull() ) {
         double angInRad = -angle.attribute( "value" ).toDouble() * M_PI / 180.0;
         QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
-        double transX1 = 0.0;
-        double transY1 = 0.0;
-        double transX2 = 0.0;
-        double transY2 = 0.0;
+        qreal transX1 = 0.0;
+        qreal transY1 = 0.0;
+        qreal transX2 = 0.0;
+        qreal transY2 = 0.0;
         m.map( x1, y1, &transX1, &transY1 );
         m.map( x2, y2, &transX2, &transY2 );
         x1 = transX1;
@@ -1544,8 +1544,8 @@ void Filterkpr2odf::set2DGeometry( KoXmlWriter* content, const KoXmlElement& obj
         double angInRad = -angle.attribute( "value" ).toDouble() * M_PI / 180.0;
         QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
         QPointF center( s.width() / 2, s.height() / 2 );
-        double rotX = 0.0;
-        double rotY = 0.0;
+        qreal rotX = 0.0;
+        qreal rotY = 0.0;
         m.map( center.x(), center.y(), &rotX, &rotY );
         QPointF rot( rotX, rotY );
         QPointF trans( center - rot + o );

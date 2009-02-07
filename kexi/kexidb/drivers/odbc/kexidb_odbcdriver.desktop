@@ -50,6 +50,6 @@ X-KDE-Library=kexidb_odbcdriver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
-MimeType=text/plain;
 X-Kexi-DriverType=Network
 X-Kexi-DriverName=ODBC
+X-Kexi-KexiDBVersion=1.9

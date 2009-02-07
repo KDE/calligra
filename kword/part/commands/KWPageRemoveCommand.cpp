@@ -103,7 +103,9 @@ void KWPageRemoveCommand::redo()
     foreach (const AutoGenFrameSet &agf, m_autoGenFrameSets) {
         KWTextFrameSet *tfs = agf.frameSet;
         while (tfs->frameCount() > agf.deleteFromFrame) {
-            delete tfs->frames().at(agf.deleteFromFrame)->shape();
+            KWFrame *frame = tfs->frames().at(agf.deleteFromFrame);
+            tfs->removeFrame(frame);
+            delete frame->shape();
         }
     }
     // update changes

@@ -69,6 +69,8 @@ public:
     
     /// reimplemented method from superclass
     QWidget* canvasWidget();
+    /// reimplemented method from superclass
+    virtual const QWidget* canvasWidget() const;
 
     /// reimplemented method from superclass
     KoUnit unit() const;

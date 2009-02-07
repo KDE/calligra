@@ -107,12 +107,11 @@ void NormalLineDiagram::paint( PaintContext* ctx )
     maxFound = columnCount;
     // ^^^ temp
 
-    DataValueTextInfoList textInfoList;
-    LineAttributesInfoList lineList;
-
     LineAttributes::MissingValuesPolicy policy;
 
-    for( int column  = 0; column < columnCount; ++column ) {
+    for( int column = 0; column < columnCount; ++column ) {
+        DataValueTextInfoList textInfoList;
+        LineAttributesInfoList lineList;
         LineAttributes laPreviousCell;
         CartesianDiagramDataCompressor::DataPoint lastPoint;
 
@@ -177,7 +176,6 @@ void NormalLineDiagram::paint( PaintContext* ctx )
             laPreviousCell = laCell;
             lastPoint = point;
         }
+		paintElements( ctx, textInfoList, lineList, policy );
     }
-
-    paintElements( ctx, textInfoList, lineList, policy );
 }

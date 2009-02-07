@@ -167,6 +167,9 @@ signals:
 private:
     void setupDialogs();
     void createActions();
+    
+    void setPolarChartTypesEnabled( bool enabled );
+    void setCartesianChartTypesEnabled( bool enabled );
 
     class Private;
     Private * const d;

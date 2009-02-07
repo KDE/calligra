@@ -278,17 +278,19 @@ void KWView::setupActions()
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
 
     action = new KAction(i18n("Delete Page"), this);
-    actionCollection()->addAction("delete_page", action);
+    //actionCollection()->addAction("delete_page", action); // TODO reinstate this action when the command is able to delete something that is not the last page
     connect(action, SIGNAL(triggered()), this, SLOT(deletePage()));
     handleDeletePageAction(); //decide if we enable or disable this action
     connect(m_document, SIGNAL(pageSetupChanged()), this, SLOT(handleDeletePageAction()));
 
+if (false) { // TODO move this to the text tool as soon as  a) the string freeze is lifted.  b) Qt45 makes this possible
     action = new KAction(i18n("Formatting Characters"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_formattingchars", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
     action->setWhatsThis(i18n("Toggle the display of non-printing characters.<br/><br/>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters."));
+}
 
     action = new KAction(i18n("Select All Frames"), this);
 
@@ -1212,5 +1214,5 @@ void KWView::sanityCheck()
 {
     KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
     if (action)
-        action->setChecked(statusBar()->isVisible());
+        action->setChecked(! statusBar()->isHidden());
 }
