@@ -184,27 +184,13 @@ void SvgImport::convert()
     if( ! docElem.attribute( "height" ).isEmpty() )
         height = parseUnit( docElem.attribute( "height" ), false, true, viewBox );
     m_document->setPageSize( QSizeF( width, height ) );
-    m_outerRect = QRectF( QPointF(0,0), m_document->pageSize() );
-
+    gc->currentBoundbox = QRectF( QPointF(0,0), m_document->pageSize() );
     if( ! docElem.attribute( "viewBox" ).isEmpty() )
     {
         gc->matrix.scale( width / viewBox.width() , height / viewBox.height() );
-        m_outerRect.setWidth( m_outerRect.width() * ( viewBox.width() / width ) );
-        m_outerRect.setHeight( m_outerRect.height() * ( viewBox.height() / height ) );
+        gc->currentBoundbox.setWidth( gc->currentBoundbox.width() * ( viewBox.width() / width ) );
+        gc->currentBoundbox.setHeight( gc->currentBoundbox.height() * ( viewBox.height() / height ) );
     }
-
-    /*
-    if( ! docElem.attribute( "viewBox" ).isEmpty() )
-    {
-        // allow for viewbox def with ',' or whitespace
-        QString viewbox( docElem.attribute( "viewBox" ) );
-        QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
-
-        gc->matrix.scale( width / points[2].toFloat() , height / points[3].toFloat() );
-        m_outerRect.setWidth( m_outerRect.width() * ( points[2].toFloat() / width ) );
-        m_outerRect.setHeight( m_outerRect.height() * ( points[3].toFloat() / height ) );
-    }
-    */
 
     m_gc.push( gc );
     QList<KoShape*> shapes = parseContainer( docElem );
@@ -720,17 +706,43 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
 
 double SvgImport::parseUnitX( const QString &unit )
 {
-    return parseUnit( unit, true, false, m_outerRect );
+    SvgGraphicsContext * gc = m_gc.top();
+    if( gc->forcePercentage )
+    {
+        return fromPercentage( unit ) * gc->currentBoundbox.width();
+    }
+    else
+    {
+        return parseUnit( unit, true, false, gc->currentBoundbox );
+    }
 }
 
 double SvgImport::parseUnitY( const QString &unit )
 {
-    return parseUnit( unit, false, true, m_outerRect );
+    SvgGraphicsContext * gc = m_gc.top();
+    if( gc->forcePercentage )
+    {
+        return fromPercentage( unit ) * gc->currentBoundbox.height();
+    }
+    else
+    {
+        return parseUnit( unit, false, true, gc->currentBoundbox );
+    }
 }
 
 double SvgImport::parseUnitXY( const QString &unit )
 {
-    return parseUnit( unit, true, true, m_outerRect );
+    SvgGraphicsContext * gc = m_gc.top();
+    if( gc->forcePercentage )
+    {
+        qreal value = fromPercentage( unit );
+        value *=  sqrt( pow( gc->currentBoundbox.width(), 2 ) + pow( gc->currentBoundbox.height(), 2 ) ) / sqrt( 2.0 );
+        return value;
+    }
+    else
+    {
+        return parseUnit( unit, true, true, gc->currentBoundbox );
+    }
 }
 
 QColor SvgImport::stringToColor( const QString &rgbColor )
@@ -983,6 +995,13 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
 
     SvgPatternHelper pattern;
 
+    // Use the pattern that is referencing, or if there isn't one, the original pattern
+    QDomElement b;
+    if( !referencedBy.isNull() )
+        b = referencedBy;
+    else
+        b = e;
+
     // check if we are referencing another pattern
     if( e.hasAttribute("xlink:href")  )
     {
@@ -995,21 +1014,9 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
                 pattern = *refPattern;
         }
     }
-
-    // Use the pattern that is referencing, or if there isn't one, the original pattern
-    QDomElement b;
-    if( !referencedBy.isNull() )
-        b = referencedBy;
     else
-        b = e;
-
-    // check if we have already parsed this pattern
-    QString id = b.attribute("id");
-    if( !id.isEmpty() )
     {
-        // copy existing pattern image if it exists
-        if( m_patterns.find( id ) != m_patterns.end() )
-            pattern.setImage( m_patterns[ id ].image() );
+        pattern.setContent( b );
     }
 
     if( b.attribute( "patternUnits" ) == "userSpaceOnUse" )
@@ -1020,77 +1027,22 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
     pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
 
     // parse tile reference rectangle
-    pattern.setPosition( QPointF( parseUnitX( b.attribute( "x" ) ),
-                                  parseUnitY( b.attribute( "y" ) ) ) );
-    pattern.setSize( QSizeF( parseUnitX( b.attribute( "width" ) ),
-                             parseUnitY( b.attribute( "height" ) ) ) );
-
-    addGraphicContext();
-
-    // the pattern establishes a new coordinate system with its
-    // origin at the patterns x and y attributes
-    m_gc.top()->matrix = QMatrix();
-
-    setupTransform( b );
-    updateContext( b );
-
-    parseStyle( 0, b );
-
-    // parse the pattern content
-    QList<KoShape*> patternContent = parseContainer( b );
-
-    if( patternContent.count() )
+    if( pattern.patternUnits() == SvgPatternHelper::UserSpaceOnUse )
     {
-        KoZoomHandler zoomHandler;
-
-        QSizeF patternSize = pattern.size();
-        QSizeF tileSize = zoomHandler.documentToView( pattern.size() );
-
-        QMatrix viewMatrix;
-
-        if( b.hasAttribute( "viewBox" ) )
-        {
-            // the viewbox establishes a new coordinate system, the viewBox
-            // is then fitted into the tile reference rectangle
-            QString viewbox = b.attribute( "viewBox" );
-            // allow for viewbox def with ',' or whitespace
-            QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
-            if( points.count() == 4 )
-            {
-                qreal viewBoxPosX = fromUserSpace( points[0].toFloat() );
-                qreal viewBoxPosY = fromUserSpace( points[1].toFloat() );
-                qreal viewBoxWidth = fromUserSpace( points[2].toFloat() );
-                qreal viewBoxHeight = fromUserSpace( points[3].toFloat() );
-                viewMatrix.translate( -viewBoxPosX, -viewBoxPosY );
-                viewMatrix.scale( patternSize.width() / viewBoxWidth, patternSize.height() / viewBoxHeight );
-            }
-        }
-        else
-        {
-            //viewMatrix.translate( -pattern.position().x(), -pattern.position().y() );
-        }
-
-        // setup the tile image
-        QImage tile( tileSize.toSize(), QImage::Format_ARGB32 );
-        tile.fill( QColor( Qt::transparent ).rgba() );
-        
-        // setup the painter to paint the tile content
-        QPainter tilePainter( &tile );
-        tilePainter.setClipRect( tile.rect() );
-        tilePainter.setWorldMatrix( viewMatrix );
-        //tilePainter.setRenderHint(QPainter::Antialiasing);
-
-        // paint the content into the tile image
-        KoShapePainter shapePainter;
-        shapePainter.setShapes( patternContent );
-        shapePainter.paintShapes( tilePainter, zoomHandler );
-
-        pattern.setImage( tile );
+        pattern.setPosition( QPointF( parseUnitX( b.attribute( "x" ) ),
+                                      parseUnitY( b.attribute( "y" ) ) ) );
+        pattern.setSize( QSizeF( parseUnitX( b.attribute( "width" ) ),
+                                 parseUnitY( b.attribute( "height" ) ) ) );
     }
-
-    removeGraphicContext();
-
-    qDeleteAll( patternContent );
+    else
+    {
+        // x, y, width, height are in percentages of the object referencing the pattern
+        // so we just parse the percentages
+        pattern.setPosition( QPointF( fromPercentage( b.attribute( "x" ) ), 
+                                      fromPercentage( b.attribute( "y" ) ) ) );
+        pattern.setSize( QSizeF( fromPercentage( b.attribute( "width" ) ),
+                                 fromPercentage( b.attribute( "height" ) ) ) );
+    }
 
     m_patterns.insert( b.attribute( "id" ), pattern );
 
@@ -1466,24 +1418,50 @@ void SvgImport::applyFillStyle( KoShape * shape )
             KoImageCollection * imageCollection = m_document->imageCollection();
             if( pattern && imageCollection )
             {
+                QRectF objectBound = QRectF( QPoint(), shape->size() );
+                QRectF currentBoundbox = gc->currentBoundbox;
+
+                // properties from the object are not inherited
+                // so we are creating a new context without copying
+                m_gc.push( new SvgGraphicsContext() );
+
+                // the pattern establishes a new coordinate system with its
+                // origin at the patterns x and y attributes
+                m_gc.top()->matrix = QMatrix();
+                // object bounding box units are relative to the object the pattern is applied
+                if( pattern->patternContentUnits() == SvgPatternHelper::ObjectBoundingBox )
+                {
+                    m_gc.top()->currentBoundbox = objectBound;
+                    m_gc.top()->forcePercentage = true;
+                }
+                else
+                {
+                    // inherit the current bounding box
+                    m_gc.top()->currentBoundbox = currentBoundbox;
+                }
+
+                updateContext( pattern->content() );
+                parseStyle( 0, pattern->content() );
+
+                // parse the pattern content elements
+                QList<KoShape*> patternContent = parseContainer( pattern->content() );
+
+                // generate the pattern image from the shapes and the object bounding rect
+                QImage image = pattern->generateImage( objectBound, patternContent );
+                
+                removeGraphicContext();
+                
+                // delete the shapes created from the pattern content 
+                qDeleteAll( patternContent );
+
                 KoPatternBackground * bg = new KoPatternBackground( imageCollection );
-                bg->setPattern( pattern->image() );
+                bg->setPattern( image );
 
-                QPointF refPoint;
+                QPointF refPoint = shape->documentToShape( pattern->position( objectBound ) );
+                QSizeF tileSize = pattern->size( objectBound );
 
-                if( pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox )
-                {
-                    // TODO: adjust to bounding box
-                    refPoint = pattern->position();
-                }
-                else 
-                {
-                    QMatrix invShapematrix = shape->transformation().inverted();
-                    bg->setMatrix( pattern->transform() * gc->matrix * invShapematrix );
-                    refPoint = shape->documentToShape( pattern->position() );
-                }
-                QSizeF tileSize = pattern->size();
                 bg->setPatternDisplaySize( tileSize );
+                
                 // calculate pattern reference point offset in percent of tileSize
                 // and relative to the topleft corner of the shape
                 qreal fx = refPoint.x() / tileSize.width();

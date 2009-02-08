@@ -146,7 +146,6 @@ private:
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, QDomElement>     m_defs;
     QHash<QByteArray, QColor>      m_rgbcolors;
-    QRectF                         m_outerRect;
     QDomDocument                   m_inpdoc;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes

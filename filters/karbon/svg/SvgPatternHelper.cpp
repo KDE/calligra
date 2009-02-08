@@ -19,6 +19,12 @@
 
 #include "SvgPatternHelper.h"
 
+#include <KoZoomHandler.h>
+#include <KoShapePainter.h>
+#include <KoShape.h>
+
+#include <QtGui/QPainter>
+
 SvgPatternHelper::SvgPatternHelper()
 : m_patternUnits( ObjectBoundingBox ), m_patternContentUnits( UserSpaceOnUse )
 {
@@ -58,24 +64,23 @@ QMatrix SvgPatternHelper::transform() const
     return m_transform;
 }
 
-void SvgPatternHelper::setImage( const QImage &image )
-{
-    m_image = image;
-}
-
-QImage SvgPatternHelper::image() const
-{
-    return m_image;
-}
-
 void SvgPatternHelper::setPosition( const QPointF & position )
 {
     m_position = position;
 }
 
-QPointF SvgPatternHelper::position() const
+QPointF SvgPatternHelper::position( const QRectF & objectBound ) const
 {
-    return m_position;
+    if( m_patternUnits == UserSpaceOnUse )
+    {
+        return m_position;
+    }
+    else
+    {
+        qreal x = objectBound.left() + m_position.x() * objectBound.width(); 
+        qreal y = objectBound.top() + m_position.y() * objectBound.height(); 
+        return QPointF( x, y );
+    }
 }
 
 void SvgPatternHelper::setSize( const QSizeF & size )
@@ -83,7 +88,71 @@ void SvgPatternHelper::setSize( const QSizeF & size )
     m_size = size;
 }
 
-QSizeF SvgPatternHelper::size() const
+QSizeF SvgPatternHelper::size( const QRectF & objectBound ) const
 {
-    return m_size;
+    if( m_patternUnits == UserSpaceOnUse )
+    {
+        return m_size;
+    }
+    else
+    {
+        qreal w = m_size.width() * objectBound.width(); 
+        qreal h = m_size.height() * objectBound.height(); 
+        return QSizeF( w, h );
+    }
+}
+
+void SvgPatternHelper::setContent( const QDomElement &content )
+{
+    m_patternContent = content;
+}
+
+QDomElement SvgPatternHelper::content() const
+{
+    return m_patternContent;
+}
+
+void SvgPatternHelper::copyContent( const SvgPatternHelper &other )
+{
+    m_patternContent = other.m_patternContent;
+}
+
+void SvgPatternHelper::setPatternContentViewbox( const QRectF &viewBox )
+{
+    m_patternContentViewbox = viewBox;
+}
+
+QImage SvgPatternHelper::generateImage( const QRectF &objectBound, const QList<KoShape*> content )
+{
+    KoZoomHandler zoomHandler;
+    
+    QSizeF patternSize = size( objectBound );
+    QSizeF tileSize = zoomHandler.documentToView( patternSize );
+
+    QMatrix viewMatrix;
+
+    if( ! m_patternContentViewbox.isNull() )
+    {
+        viewMatrix.translate( -m_patternContentViewbox.x(), -m_patternContentViewbox.y() );
+        const qreal xScale = patternSize.width() / m_patternContentViewbox.width();
+        const qreal yScale = patternSize.height() / m_patternContentViewbox.height();
+        viewMatrix.scale( xScale, yScale );
+    }
+
+    // setup the tile image
+    QImage tile( tileSize.toSize(), QImage::Format_ARGB32 );
+    tile.fill( QColor( Qt::transparent ).rgba() );
+    
+    // setup the painter to paint the tile content
+    QPainter tilePainter( &tile );
+    tilePainter.setClipRect( tile.rect() );
+    tilePainter.setWorldMatrix( viewMatrix );
+    //tilePainter.setRenderHint(QPainter::Antialiasing);
+
+    // paint the content into the tile image
+    KoShapePainter shapePainter;
+    shapePainter.setShapes( content );
+    shapePainter.paintShapes( tilePainter, zoomHandler );
+
+    return tile;
 }

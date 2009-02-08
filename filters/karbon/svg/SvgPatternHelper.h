@@ -22,6 +22,9 @@
 
 #include <QtGui/QImage>
 #include <QtGui/QMatrix>
+#include <QtXml/QDomElement>
+
+class KoShape;
 
 class SvgPatternHelper
 {
@@ -31,31 +34,54 @@ public:
     SvgPatternHelper();
     ~SvgPatternHelper();
 
+    /// Set pattern units type (affects pattern x, y, width and height)
     void setPatternUnits( Units units );
+    /// Return pattern units type
     Units patternUnits() const;
 
+    /// Set pattern content units type (affects coordinates/length of pattern child shapes)
     void setPatternContentUnits( Units units );
+    /// Returns pattern content units type
     Units patternContentUnits() const;
 
+    /// Sets the pattern transformation found in attribute "patternTransform"
     void setTransform( const QMatrix &transform );
+    /// Returns the pattern transform
     QMatrix transform() const;
 
-    void setImage( const QImage &image );
-    QImage image() const;
-
+    /// Sets pattern tile position
     void setPosition( const QPointF & position );
-    QPointF position() const;
+    /// Returns pattern tile position (objectBound is used when patternUnits == ObjectBoundingBox)
+    QPointF position( const QRectF & objectBound ) const;
 
+    /// Sets pattern tile size
     void setSize( const QSizeF & size );
-    QSizeF size() const;
+    /// Returns pattern tile size (objectBound is used when patternUnits == ObjectBoundingBox)
+    QSizeF size( const QRectF & objectBound ) const;
+
+    /// Sets the dom element containing the pattern content
+    void setContent( const QDomElement &content );
+    /// Return the pattern content element
+    QDomElement content() const;
+
+    /// copies the content from the given pattern helper
+    void copyContent( const SvgPatternHelper &other );
+
+    /// Sets the pattern view box (the view box content is fitted into the pattern tile)
+    void setPatternContentViewbox( const QRectF &viewBox );
+
+    /// generates the pattern image from the given shapes and using the specified bounding box
+    QImage generateImage( const QRectF &objectBound, const QList<KoShape*> content );
 
 private:
+
     Units m_patternUnits;
     Units m_patternContentUnits;
     QMatrix m_transform;
-    QImage m_image;
     QPointF m_position;
     QSizeF m_size;
+    QDomElement m_patternContent;
+    QRectF m_patternContentViewbox;
 };
 
 #endif // SVGPATTERNHELPER_H
