@@ -382,8 +382,11 @@ void SvgImport::setupTransform( const QDomElement &e )
 {
     SvgGraphicsContext *gc = m_gc.top();
 
-    QMatrix mat = parseTransform( e.attribute( "transform" ) );
-    gc->matrix = mat * gc->matrix;
+    if( e.hasAttribute( "transform" ) )
+    {
+        QMatrix mat = parseTransform( e.attribute( "transform" ) );
+        gc->matrix = mat * gc->matrix;
+    }
 }
 
 QMatrix SvgImport::parseTransform( const QString &transform )
@@ -1670,7 +1673,7 @@ QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
             KoShapeGroup * group = new KoShapeGroup();
             group->setZIndex( nextZIndex() );
 
-            parseStyle( group, b );
+            parseStyle( 0, b );
             parseFont( b );
 
             QList<KoShape*> childShapes = parseContainer( b );
