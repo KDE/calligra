@@ -658,12 +658,14 @@ QDomElement SvgImport::mergeStyles( const QDomElement &referencedBy, const QDomE
 
 double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF bbox )
 {
+    if( unit.isEmpty() )
+        return 0.0;
     // TODO : percentage?
-    double value = 0;
     const char *start = unit.toLatin1();
     if(!start) {
-        return 0;
+        return 0.0;
     }
+    double value = 0.0;
     const char *end = getNumber( start, value );
 
     if( int( end - start ) < unit.length() )
@@ -714,6 +716,21 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
     //value *= 90.0 / DPI;
 
     return value;
+}
+
+double SvgImport::parseUnitX( const QString &unit )
+{
+    return parseUnit( unit, true, false, m_outerRect );
+}
+
+double SvgImport::parseUnitY( const QString &unit )
+{
+    return parseUnit( unit, false, true, m_outerRect );
+}
+
+double SvgImport::parseUnitXY( const QString &unit )
+{
+    return parseUnit( unit, true, true, m_outerRect );
 }
 
 QColor SvgImport::stringToColor( const QString &rgbColor )
@@ -1003,10 +1020,10 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
     pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
 
     // parse tile reference rectangle
-    pattern.setPosition( QPointF( parseUnit( b.attribute( "x" ) ),
-                                  parseUnit( b.attribute( "y" ) ) ) );
-    pattern.setSize( QSizeF( parseUnit( b.attribute( "width" ) ),
-                             parseUnit( b.attribute( "height" ) ) ) );
+    pattern.setPosition( QPointF( parseUnitX( b.attribute( "x" ) ),
+                                  parseUnitY( b.attribute( "y" ) ) ) );
+    pattern.setSize( QSizeF( parseUnitX( b.attribute( "width" ) ),
+                             parseUnitY( b.attribute( "height" ) ) ) );
 
     addGraphicContext();
 
@@ -1196,7 +1213,7 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     }
     else if( command == "stroke-width" )
     {
-        gc->stroke.setLineWidth( parseUnit( params, true, true, m_outerRect ) );
+        gc->stroke.setLineWidth( parseUnitXY( params ) );
     }
     else if( command == "stroke-linejoin" )
     {
@@ -1260,7 +1277,7 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     }
     else if( command == "font-size" )
     {
-        float pointSize = parseUnit( params );
+        float pointSize = parseUnitY( params );
         if( pointSize > 0.0f ) 
             gc->font.setPointSizeF( pointSize );
     }
@@ -1567,9 +1584,9 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
 
         if( !e.attribute( "x" ).isEmpty() && !e.attribute( "y" ).isEmpty() )
         {
-            double tx = parseUnit( e.attribute( "x" ));
-            double ty = parseUnit( e.attribute( "y" ));
-
+            double tx = parseUnitX( e.attribute( "x" ));
+            double ty = parseUnitY( e.attribute( "y" ));
+            // TODO: use width and height attributes too
             m_gc.top()->matrix.translate(tx,ty);
         }
 
@@ -1789,8 +1806,8 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     {
         if( textPosition.isNull() && ! b.attribute( "x" ).isEmpty() && ! b.attribute( "y" ).isEmpty() )
         {
-            textPosition.setX( parseUnit( b.attribute( "x" ) ) );
-            textPosition.setY( parseUnit( b.attribute( "y" ) ) );
+            textPosition.setX( parseUnitX( b.attribute( "x" ) ) );
+            textPosition.setY( parseUnitY( b.attribute( "y" ) ) );
         }
 
         text = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );
@@ -1861,8 +1878,8 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
                     QStringList posY = e.attribute( "y" ).split( ", " );
                     if( posX.count() && posY.count() )
                     {
-                        textPosition.setX( parseUnit( posX.first() ) );
-                        textPosition.setY( parseUnit( posY.first() ) );
+                        textPosition.setX( parseUnitX( posX.first() ) );
+                        textPosition.setY( parseUnitY( posY.first() ) );
                     }
                 }
                 styleElement = e;
@@ -1916,8 +1933,8 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     else
     {
         // a single text line
-        textPosition.setX( parseUnit( b.attribute( "x" ) ) );
-        textPosition.setY( parseUnit( b.attribute( "y" ) ) );
+        textPosition.setX( parseUnitX( b.attribute( "x" ) ) );
+        textPosition.setY( parseUnitY( b.attribute( "y" ) ) );
 
         text = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );
         if( ! text )
@@ -1970,14 +1987,14 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
 
     if( b.tagName() == "rect" )
     {
-        double x = parseUnit( b.attribute( "x" ), true, false, m_outerRect );
-        double y = parseUnit( b.attribute( "y" ), false, true, m_outerRect );
-        double w = parseUnit( b.attribute( "width" ), true, false, m_outerRect );
-        double h = parseUnit( b.attribute( "height" ), false, true, m_outerRect );
+        double x = parseUnitX( b.attribute( "x" ) );
+        double y = parseUnitY( b.attribute( "y" ) );
+        double w = parseUnitX( b.attribute( "width" ) );
+        double h = parseUnitY( b.attribute( "height" ) );
         bool hasRx = b.hasAttribute( "rx" );
         bool hasRy = b.hasAttribute( "ry" );
-        double rx = hasRx ? parseUnit( b.attribute( "rx" ) ) : 0.0;
-        double ry = hasRy ? parseUnit( b.attribute( "ry" ) ) : 0.0;
+        double rx = hasRx ? parseUnitX( b.attribute( "rx" ) ) : 0.0;
+        double ry = hasRy ? parseUnitY( b.attribute( "ry" ) ) : 0.0;
         if( hasRx && ! hasRy )
             ry = rx;
         if( ! hasRx && hasRy )
@@ -2001,10 +2018,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         obj = createShape( KoEllipseShapeId );
         if( obj )
         {
-            double rx   = parseUnit( b.attribute( "rx" ) );
-            double ry   = parseUnit( b.attribute( "ry" ) );
-            double cx = b.attribute( "cx" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cx" ) );
-            double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cy" ) );
+            double rx = parseUnitX( b.attribute( "rx" ) );
+            double ry = parseUnitY( b.attribute( "ry" ) );
+            double cx = b.attribute( "cx" ).isEmpty() ? 0.0 : parseUnitX( b.attribute( "cx" ) );
+            double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*rx, 2*ry) );
             obj->setPosition( QPointF(cx-rx,cy-ry) );
         }
@@ -2014,9 +2031,9 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         obj = createShape( KoEllipseShapeId );
         if( obj )
         {
-            double r    = parseUnit( b.attribute( "r" ) );
-            double cx = b.attribute( "cx" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cx" ) );
-            double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cy" ) );
+            double r  = parseUnitXY( b.attribute( "r" ) );
+            double cx = b.attribute( "cx" ).isEmpty() ? 0.0 : parseUnitX( b.attribute( "cx" ) );
+            double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*r, 2*r) );
             obj->setPosition( QPointF(cx-r,cy-r) );
         }
@@ -2026,10 +2043,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
         if( path )
         {
-            double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
-            double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
-            double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
-            double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
+            double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnitX( b.attribute( "x1" ) );
+            double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "y1" ) );
+            double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnitX( b.attribute( "x2" ) );
+            double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "y2" ) );
             path->clear();
             path->moveTo( QPointF( x1, y1 ) );
             path->lineTo( QPointF( x2, y2 ) );
@@ -2096,10 +2113,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
     }
     else if( b.tagName() == "image" )
     {
-        double x = b.hasAttribute( "x" ) ? parseUnit( b.attribute( "x" ) ) : 0;
-        double y = b.hasAttribute( "x" ) ? parseUnit( b.attribute( "y" ) ) : 0;
-        double w = b.hasAttribute( "width" ) ? parseUnit( b.attribute( "width" ) ) : 0;
-        double h = b.hasAttribute( "height" ) ? parseUnit( b.attribute( "height" ) ) : 0;
+        double x = b.hasAttribute( "x" ) ? parseUnitX( b.attribute( "x" ) ) : 0;
+        double y = b.hasAttribute( "x" ) ? parseUnitY( b.attribute( "y" ) ) : 0;
+        double w = b.hasAttribute( "width" ) ? parseUnitX( b.attribute( "width" ) ) : 0;
+        double h = b.hasAttribute( "height" ) ? parseUnitY( b.attribute( "height" ) ) : 0;
 
         // zero width of height disables rendering this image (see svg spec)
         if( w == 0.0 || h == 0.0 )

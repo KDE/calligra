@@ -72,6 +72,12 @@ protected:
     bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses a length attribute
     double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
+    /// parses a length attribute in x-direction
+    double parseUnitX( const QString &unit );
+    /// parses a length attribute in y-direction
+    double parseUnitY( const QString &unit );
+    /// parses a length attribute in xy-direction
+    double parseUnitXY( const QString &unit );
     /// Parses a color attribute
     void parseColor( QColor &, const QString & );
     /// Converts given string into a color
