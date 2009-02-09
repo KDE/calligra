@@ -874,7 +874,7 @@ sets the color saturation of the tiles.
 With this filter, you can apply a customized distortion effect to your image.
 The nine spinboxes at the top left determine the distortion. Each pixel is
 assigned a new value based on these values: the old color values of the pixel
-inself and the eight surrounding pixels are each multiplied by the values in
+itself and the eight surrounding pixels are each multiplied by the values in
 the respective spinboxes, these results are added, and the final result is the
 new color value for the pixel. Before being applied, this final result can be
 multiplied with a certain <guilabel>Factor</guilabel> or a certain

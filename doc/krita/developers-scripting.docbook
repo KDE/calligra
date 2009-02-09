@@ -196,7 +196,7 @@ associated with this filter.</para></listitem>
 
 <listitem><para>Function: <function>process</function></para><para>
 This function will apply the filter. It takes at least one argument: the
-source layer. You can also use these four aguments: <varname>x</varname>,
+source layer. You can also use these four arguments: <varname>x</varname>,
 <varname>y</varname>, <varname>width</varname>, <varname>height</varname>.
 (<varname>x</varname>,<varname>y</varname>,<varname>width</varname>,<varname>height</varname>)
 defines the rectangular area on which the filter

@@ -42,7 +42,7 @@ printing, cutting and pasting. 8, 16, and 32 bit colorspaces are available
 grayscale sliders or with a palette.</para></listitem>
 
 <listitem><para>Editing and viewing: Unlimited undo and redo are available.
-You can cut, copy and paste between lagers and images, with conversion through
+You can cut, copy and paste between layers and images, with conversion through
 icc profiles if this is necessary.  OpenGL is supported for display. The view
 can be made fullscreen and can be split. Rulers are available, the
 image can be zoomed, and for maximizing the workspace all palette windows can
@@ -141,7 +141,7 @@ documentation maintainer at <email>sanderkoning@kde.nl</email>.
 Hi! I'm Boudewijn Rempt &mdash; the current maintainer of &krita;. I was
 educated as a linguist, retrained as a database developer, work as a Java
 hacker, study theology and I have always liked to paint and sketch a little.
-Conspiciously absent in my life have been two important things for a developer
+Conspicuously absent in my life have been two important things for a developer
 of an image app: mathematics and experience with graphic design. That means that
 I am probably not the best person to explain the niceties of using an image
 editor or a paint application to you. If you catch me in an error, please don't
