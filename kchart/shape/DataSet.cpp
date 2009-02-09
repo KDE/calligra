@@ -182,7 +182,8 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     else {
         const QModelIndex &index = model->index( row, col );
         Q_ASSERT( index.isValid() );
-        data = model->data( index );
+        if ( index.isValid() )
+            data = model->data( index );
     }
     
     return data;
