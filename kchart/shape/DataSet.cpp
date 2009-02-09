@@ -145,6 +145,7 @@ bool DataSet::Private::isValidDataPoint( const QPoint &point ) const {
     // We can't point to horizontal and vertical header data at the same time
     if ( point.x() == 0 && point.y() == 0 )
         return false;
+    return true;
 }
 
 QVariant DataSet::Private::data( const CellRegion &region, int index ) const
