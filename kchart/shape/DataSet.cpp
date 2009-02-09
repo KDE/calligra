@@ -53,6 +53,7 @@ public:
     ~Private();
     
     void updateSize();
+    bool isValidDataPoint( const QPoint &point ) const;
     QVariant data( const CellRegion &region, int index ) const;
     
     DataSet *parent;
@@ -138,6 +139,14 @@ void DataSet::Private::updateSize()
     }
 }
 
+bool DataSet::Private::isValidDataPoint( const QPoint &point ) const {
+    if ( point.y() < 0 ) return false;
+    if ( point.x() < 0 ) return false;
+    // We can't point to horizontal and vertical header data at the same time
+    if ( point.x() == 0 && point.y() == 0 )
+        return false;
+}
+
 QVariant DataSet::Private::data( const CellRegion &region, int index ) const
 {
     if ( !region.isValid() )
@@ -147,19 +156,33 @@ QVariant DataSet::Private::data( const CellRegion &region, int index ) const
     if ( !model )
         return QVariant();
     
+    // The result
     QVariant data;
-        
+    
+    // Convert the given index in this dataset to a data point in the source model
     QPoint dataPoint = region.pointAtIndex( index );
-    if ( dataPoint.x() > 0 ) {
-        if ( dataPoint.y() > 0 )
-            data = model->data( model->index( dataPoint.y() - 1,
-					      dataPoint.x() - 1 ) );
-        else if ( dataPoint.y() == 0 )
-            data = model->headerData( dataPoint.x() - 1, Qt::Horizontal );
-    }
-    else if ( dataPoint.x() == 0 ) {
-        if ( dataPoint.y() > 0 )
-            data = model->headerData( dataPoint.y() - 1, Qt::Vertical );
+
+    const bool verticalHeaderData = dataPoint.x() == 0;
+    const bool horizontalHeaderData = dataPoint.y() == 0;
+
+    // Check if the data point is valid
+    const bool validDataPoint = isValidDataPoint( dataPoint );
+    Q_ASSERT( validDataPoint );
+    if ( !validDataPoint )
+        return QVariant();    
+
+    // The top-left point is (1,1). (0,y) or (x,0) refers to header data.
+    const int row = dataPoint.y() - 1;
+    const int col = dataPoint.x() - 1;
+
+    if ( verticalHeaderData )
+        data = model->headerData( row, Qt::Vertical );
+    else if ( horizontalHeaderData )
+        data = model->headerData( col, Qt::Horizontal );
+    else {
+        const QModelIndex &index = model->index( row, col );
+        Q_ASSERT( index.isValid() );
+        data = model->data( index );
     }
     
     return data;
