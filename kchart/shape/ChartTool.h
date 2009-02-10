@@ -120,8 +120,6 @@ private slots:
     void shapeSelectionChanged();
 
 private:
-    void updateActions();
-
     class Private;
     Private * const d;
 };

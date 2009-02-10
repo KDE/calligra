@@ -227,19 +227,6 @@ void ChartTool::deactivate()
 }
 
 
-void ChartTool::updateActions()
-{
-#if 0 // Taken from DivineProportion
-    switch(d->shape->orientation()) {
-        case ChartTypeShape::BottomRight: m_bottomRightOrientation->setChecked(true); break;
-        case ChartTypeShape::BottomLeft: m_bottomLeftOrientation->setChecked(true); break;
-        case ChartTypeShape::TopRight: m_topRightOrientation->setChecked(true); break;
-        case ChartTypeShape::TopLeft: m_topLeftOrientation->setChecked(true); break;
-    }
-#endif
-}
-
-
 QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
@@ -460,7 +447,6 @@ void ChartTool::setDataSetShowLabels( DataSet *dataSet, bool b )
 
 void ChartTool::setThreeDMode( bool threeD )
 {
-    qDebug() << "Activating three-d mode... tool: " << this;
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
