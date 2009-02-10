@@ -1503,7 +1503,7 @@ void SvgImport::applyStrokeStyle( KoShape * shape )
         break;
         case SvgGraphicsContext::Gradient:
         {
-            SvgGradientHelper * gradient = findGradient( gc->fillId );
+            SvgGradientHelper * gradient = findGradient( gc->strokeId );
             if( gradient )
             {
                 QBrush brush;
