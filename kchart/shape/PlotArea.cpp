@@ -670,11 +670,19 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle
 
 void PlotArea::setGapBetweenBars( int percent )
 {
+    // FIXME: Redundant data (dangerous!), but needed for getter method
+    // This information should instead by retrieved dynamically
+    d->gapBetweenBars = percent;
+
     emit gapBetweenBarsChanged( percent );
 }
 
 void PlotArea::setGapBetweenSets( int percent )
 {
+    // FIXME: Redundant data (dangerous!), but needed for getter method
+    // This information should instead by retrieved dynamically
+    d->gapBetweenSets = percent;
+
     emit gapBetweenSetsChanged( percent );
 }
 
