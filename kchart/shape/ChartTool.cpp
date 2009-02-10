@@ -100,11 +100,67 @@ ChartTool::ChartTool( KoCanvasBase *canvas )
     connect( m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)) );
 
 #endif
+    connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ),
+             this, SLOT( shapeSelectionChanged() ) );
 }
 
 ChartTool::~ChartTool()
 {
     delete d;
+}
+
+void ChartTool::shapeSelectionChanged()
+{
+    KoShape *selectedShape = 0;
+    
+    // Get the chart shape that the tool is working on. 
+    // Let d->shape point to it.
+    KoSelection  *selection = m_canvas->shapeManager()->selection();
+    foreach ( KoShape *shape, selection->selectedShapes() ) {
+        // Find out which type of shape that the user clicked on.
+        // We support several here, since the chart shape is comprised
+        // of several subshapes (plotarea, legend)
+        d->shape = dynamic_cast<ChartShape*>( shape );
+        if ( !d->shape ) {
+            PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
+            if ( plotArea ) {
+                selectedShape = plotArea;
+                d->shape = plotArea->parent();
+            }
+            else {
+                Legend *legend = dynamic_cast<Legend*>( shape );
+                if ( legend ) {
+                    selectedShape = legend;
+                    d->shape = dynamic_cast<ChartShape*>( legend->parent() );
+                }
+            }
+        // The selected shape is the chart
+        } else
+            selectedShape = shape;
+        
+        // Insert the values from the selected shape (note: not only
+        // chart shape, but also plotarea or legend) into the tool
+        // option widget.
+        if ( selectedShape ) {
+            foreach ( QWidget *w, optionWidgets() ) {
+                KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
+                Q_ASSERT( widget );
+                if ( widget )
+                    widget->open( selectedShape );
+            }
+
+        // We support only one selected chart at the time, so once
+        // we found one, we don't need to search for any more
+        // among the selected shapes.
+        break;
+        }
+    }
+
+    // If we couldn't determine a chart shape, then there is nothing to do.
+    if ( !d->shape ) { // none found
+        emit done();
+        return;
+    }
 }
 
 
@@ -162,61 +218,7 @@ void ChartTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void ChartTool::activate( bool )
 {
-    KoShape *selectedShape = 0;
-    
-    // Get the chart shape that the tool is working on. 
-    // Let d->shape point to it.
-    KoSelection  *selection = m_canvas->shapeManager()->selection();
-    foreach ( KoShape *shape, selection->selectedShapes() ) {
-
-	// Find out which type of shape that the user clicked on.
-	// We support several here, since the chart shape is comprised
-	// of several subshapes (plotarea, legend)
-        d->shape = dynamic_cast<ChartShape*>( shape );
-        if ( !d->shape ) {
-            PlotArea *plotArea = dynamic_cast<PlotArea*>( shape );
-            if ( plotArea ) {
-                selectedShape = plotArea;
-                d->shape = plotArea->parent();
-            }
-            else {
-                Legend *legend = dynamic_cast<Legend*>( shape );
-                if ( legend ) {
-                    selectedShape = legend;
-                    d->shape = dynamic_cast<ChartShape*>( legend->parent() );
-                }
-            }
-        // The selected shape is the chart
-        } else
-            selectedShape = shape;
-        
-	// Insert the values from the selected shape (note: not only
-	// chart shape, but also plotarea or legend) into the tool
-	// option widget.
-        if ( selectedShape ) {
-            foreach ( QWidget *w, optionWidgets() ) {
-                KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
-                Q_ASSERT( widget );
-                if ( widget )
-                    widget->open( selectedShape );
-            }
-
-	    // We support only one selected chart at the time, so once
-	    // we found one, we don't need to search for any more
-	    // among the selected shapes.
-            break;
-        }
-    }
-
-    // If we couldn't determine a chart shape, then there is nothing to do.
-    if ( !d->shape ) { // none found
-        emit done();
-        return;
-    }
-
     useCursor( Qt::ArrowCursor, true );
-
-    updateActions();
 }
 
 void ChartTool::deactivate()
