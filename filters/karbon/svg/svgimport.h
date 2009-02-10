@@ -54,6 +54,8 @@ protected:
     /// The main entry point for the conversion
     void convert();
 
+    /// Parses a svg fragment, returning the list of child shapes
+    QList<KoShape*> parseSvg( const QDomElement &e, QSizeF * fragmentSize = 0 );
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer( const QDomElement & );
     /// Parses a use element, returning a list of child shapes
@@ -63,7 +65,7 @@ protected:
     /// Parses style attributes, applying them to the given shape
     void parseStyle( KoShape *, const QDomElement & );
     /// Parses a single style attribute
-    void parsePA( KoShape *, SvgGraphicsContext *, const QString &, const QString & );
+    void parsePA( SvgGraphicsContext *, const QString &, const QString & );
     /// Parses a gradient element
     bool parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses gradient color stops
@@ -86,6 +88,8 @@ protected:
     QMatrix parseTransform( const QString &transform );
     /// Parse a image
     bool parseImage( const QString &imageAttribute, QImage &image );
+    /// Parses a viewbox attribute into an rectangle
+    QRectF parseViewBox( QString viewbox );
 
     double toPercentage( QString );
     double fromPercentage( QString );

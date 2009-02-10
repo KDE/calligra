@@ -41,14 +41,10 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoFilterChain.h>
-#include <KoStoreDevice.h>
-#include <KoOdfWriteStore.h>
-#include <KoGenStyles.h>
 #include <KoUnit.h>
 #include <KoGlobal.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
-#include <KoZoomHandler.h>
 #include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
@@ -56,10 +52,9 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoShapePainter.h>
 
 #include <kgenericfactory.h>
-#include <kdebug.h>
+#include <KDebug>
 #include <kfilterdev.h>
 
 #include <QtGui/QColor>
@@ -87,6 +82,8 @@ SvgImport::SvgImport(QObject*parent, const QVariantList&)
 
 SvgImport::~SvgImport()
 {
+    if( ! m_gc.isEmpty() )
+        kWarning() << "the context stack is not empty (current count" << m_gc.size() << ", expected 0)";
     qDeleteAll( m_gc );
     m_gc.clear();
 }
@@ -159,43 +156,17 @@ void SvgImport::convert()
 {
     if( ! m_document )
         return;
-
-    SvgGraphicsContext *gc = new SvgGraphicsContext;
+    
     QDomElement docElem = m_inpdoc.documentElement();
 
-    QRectF viewBox;
-
-    if( ! docElem.attribute( "viewBox" ).isEmpty() )
-    {
-        // allow for viewbox def with ',' or whitespace
-        QString viewbox = docElem.attribute( "viewBox" );
-        QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
-        if( points.count() == 4 )
-        {
-            viewBox.setWidth( fromUserSpace( points[2].toFloat() ) );
-            viewBox.setHeight( fromUserSpace( points[3].toFloat() ) );
-        }
-    }
-
-    double width = 550.0;
-    if( ! docElem.attribute( "width" ).isEmpty() )
-        width = parseUnit( docElem.attribute( "width" ), true, false, viewBox );
-    double height = 841.0;
-    if( ! docElem.attribute( "height" ).isEmpty() )
-        height = parseUnit( docElem.attribute( "height" ), false, true, viewBox );
-    m_document->setPageSize( QSizeF( width, height ) );
-    gc->currentBoundbox = QRectF( QPointF(0,0), m_document->pageSize() );
-    if( ! docElem.attribute( "viewBox" ).isEmpty() )
-    {
-        gc->matrix.scale( width / viewBox.width() , height / viewBox.height() );
-        gc->currentBoundbox.setWidth( gc->currentBoundbox.width() * ( viewBox.width() / width ) );
-        gc->currentBoundbox.setHeight( gc->currentBoundbox.height() * ( viewBox.height() / height ) );
-    }
-
-    m_gc.push( gc );
-    QList<KoShape*> shapes = parseContainer( docElem );
-
-    buildDocument( shapes );
+    // set default page size to A4
+    QSizeF pageSize( 550.0, 841.0 );
+    
+    // parse the root svg element
+    buildDocument( parseSvg( docElem, &pageSize ) );
+    
+    // set the page size
+    m_document->setPageSize( pageSize );
 }
 
 void SvgImport::buildDocument( QList<KoShape*> shapes )
@@ -347,7 +318,7 @@ void SvgImport::addGraphicContext()
 {
     SvgGraphicsContext *gc = new SvgGraphicsContext;
     // set as default
-    if( m_gc.top() )
+    if( ! m_gc.isEmpty() )
         *gc = *( m_gc.top() );
     m_gc.push( gc );
 }
@@ -511,7 +482,8 @@ SvgGradientHelper* SvgImport::findGradient( const QString &id, const QString &hr
     else
     {
         // ok parse gradient now
-        parseGradient( m_defs[ id ], m_defs[ href ] );
+        if( ! parseGradient( m_defs[ id ], m_defs[ href ] ) )
+            return 0L;
     }
 
     // return successfully parsed gradient or NULL
@@ -868,7 +840,7 @@ bool SvgImport::parseGradient( const QDomElement &e, const QDomElement &referenc
         }
         else
         {
-            gc->fillType = SvgGraphicsContext::None; // <--- TODO Fill OR Stroke are none
+            //gc->fillType = SvgGraphicsContext::None; // <--- TODO Fill OR Stroke are none
             return false;
         }
     }
@@ -1023,8 +995,11 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
         pattern.setPatternUnits( SvgPatternHelper::UserSpaceOnUse );
     if( b.attribute( "patternContentUnits" ) == "objectBoundingBox" )
         pattern.setPatternContentUnits( SvgPatternHelper::ObjectBoundingBox );
-    
-    pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
+    if( b.hasAttribute( "viewBox" ) )
+        pattern.setPatternContentViewbox( parseViewBox( b.attribute( "viewBox" ) ) );
+    if( b.hasAttribute( "patternTransform" ) )
+        pattern.setTransform( parseTransform( b.attribute( "patternTransform" ) ) );
+
 
     // parse tile reference rectangle
     if( pattern.patternUnits() == SvgPatternHelper::UserSpaceOnUse )
@@ -1065,7 +1040,7 @@ bool SvgImport::parseImage( const QString &attribute, QImage &image )
     return false;
 }
 
-void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &command, const QString &params )
+void SvgImport::parsePA( SvgGraphicsContext *gc, const QString &command, const QString &params )
 {
     QColor fillcolor = gc->fillColor;
     QColor strokecolor = gc->stroke.color();
@@ -1127,40 +1102,34 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     else if( command == "stroke" )
     {
         if( params == "none" )
-            gc->stroke.setLineStyle( Qt::NoPen, QVector<qreal>() );
+        {
+            gc->strokeType = SvgGraphicsContext::None;
+        }
         else if( params.startsWith( "url(" ) )
         {
             unsigned int start = params.indexOf('#') + 1;
             unsigned int end = params.lastIndexOf(')');
             QString key = params.mid( start, end - start );
+            // try to find referenced gradient
             SvgGradientHelper * gradHelper = findGradient( key );
-            if( gradHelper && obj )
+            if( gradHelper ) 
             {
-                QBrush brush;
-                if( gradHelper->gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
-                {
-                    // adjust to bbox
-                    QRectF bbox = QRectF( QPoint(), obj->size() );
-                    brush = gradHelper->adjustedFill( bbox );
-                    brush.setMatrix( gradHelper->transform() );
-                }
-                else
-                {
-                    brush = QBrush( *gradHelper->gradient() );
-                    brush.setMatrix( gradHelper->transform() * gc->matrix * obj->transformation().inverted() );
-                }
-                gc->stroke.setLineBrush( brush );
-                gc->stroke.setLineStyle( Qt::SolidLine, QVector<qreal>() );
+                // great, we have a gradient stroke
+                gc->strokeType = SvgGraphicsContext::Gradient;
+                gc->strokeId = key;
             }
             else
-                gc->stroke.setLineStyle( Qt::NoPen, QVector<qreal>() );
-            gc->hasStroke = true;
+            {
+                // no referenced stroke found, reset stroke
+                gc->strokeType = SvgGraphicsContext::None;
+                gc->strokeId.clear();
+            }
         }
         else
         {
+            // great we have a solid stroke
+            gc->strokeType = SvgGraphicsContext::Solid;
             parseColor( strokecolor, params );
-            gc->stroke.setLineStyle( Qt::SolidLine, QVector<qreal>() );
-            gc->hasStroke = true;
         }
     }
     else if( command == "stroke-width" )
@@ -1194,7 +1163,8 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
         QVector<qreal> array;
         if(params != "none")
         {
-            QStringList dashes = params.split( ',' );
+            QString dashString = params;
+            QStringList dashes = dashString.replace( ',', ' ').simplified().split( ' ' );
             for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
                 array.append( (*it).toFloat() );
         }
@@ -1327,7 +1297,7 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     else if( command == "display" )
     {
         if( params == "none" )
-            obj->setVisible( false );
+            gc->display = false;
     }
 
     gc->fillColor = fillcolor;
@@ -1367,7 +1337,7 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         QString params = styleMap.value( command );
         if( params.isEmpty() )
             continue;
-        parsePA( obj, gc, command, params );
+        parsePA( gc, command, params );
     }
 
     if(!obj)
@@ -1375,6 +1345,8 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
 
     applyFillStyle( obj );
     applyStrokeStyle( obj );
+
+    obj->setVisible( gc->display );
 }
 
 void SvgImport::applyFillStyle( KoShape * shape )
@@ -1503,22 +1475,62 @@ void SvgImport::applyStrokeStyle( KoShape * shape )
     if( ! gc )
         return;
 
-    double lineWidth = gc->stroke.lineWidth();
-
-    // apply line width to dashes and dash offset
-    if( gc->stroke.lineStyle() > Qt::SolidLine && lineWidth > 0.0 )
+    switch( gc->strokeType )
     {
-        QVector<qreal> dashes = gc->stroke.lineDashes();
-        for( int i = 0; i < dashes.count(); ++i )
-            dashes[i] /= lineWidth;
-        double dashOffset = gc->stroke.dashOffset();
-        gc->stroke.setLineStyle( Qt::CustomDashLine, dashes );
-        gc->stroke.setDashOffset( dashOffset / lineWidth );
+        case SvgGraphicsContext::Solid:
+        {
+            double lineWidth = gc->stroke.lineWidth();
+            QVector<qreal> dashes = gc->stroke.lineDashes();
+
+            KoLineBorder * border = new KoLineBorder( gc->stroke );
+
+            // apply line width to dashes and dash offset
+            if( dashes.count() && lineWidth > 0.0 )
+            {
+                QVector<qreal> dashes = border->lineDashes();
+                for( int i = 0; i < dashes.count(); ++i )
+                    dashes[i] /= lineWidth;
+                double dashOffset = border->dashOffset();
+                border->setLineStyle( Qt::CustomDashLine, dashes );
+                border->setDashOffset( dashOffset / lineWidth );
+            }
+            else
+            {
+                border->setLineStyle( Qt::SolidLine, QVector<qreal>() );
+            }
+            shape->setBorder( border );
+        }
+        break;
+        case SvgGraphicsContext::Gradient:
+        {
+            SvgGradientHelper * gradient = findGradient( gc->fillId );
+            if( gradient )
+            {
+                QBrush brush;
+                if( gradient->gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
+                {
+                    // adjust to bbox
+                    QRectF bbox = QRectF( QPoint(), shape->size() );
+                    brush = gradient->adjustedFill( bbox );
+                    brush.setMatrix( gradient->transform() );
+                }
+                else
+                {
+                    brush = QBrush( *gradient->gradient() );
+                    brush.setMatrix( gradient->transform() * gc->matrix * shape->transformation().inverted() );
+                }
+                KoLineBorder * border = new KoLineBorder( gc->stroke );
+                border->setLineBrush( brush );
+                border->setLineStyle( Qt::SolidLine, QVector<qreal>() );
+                shape->setBorder( border );
+            }
+        }
+        break;
+        case SvgGraphicsContext::None:
+        default:
+            shape->setBorder( 0 );
+        break;
     }
-    if( gc->hasStroke )
-        shape->setBorder( new KoLineBorder( gc->stroke ) );
-    else
-        shape->setBorder( 0 );
 }
 
 void SvgImport::parseFont( const QDomElement &e )
@@ -1529,7 +1541,7 @@ void SvgImport::parseFont( const QDomElement &e )
     foreach( const QString &attributeName, m_fontAttributes )
     {
         if( ! e.attribute( attributeName ).isEmpty() )
-            parsePA( 0L, gc, attributeName, e.attribute( attributeName ) );
+            parsePA( gc, attributeName, e.attribute( attributeName ) );
     }
 
     // now parse the style attribute for font specific parameters
@@ -1542,7 +1554,7 @@ void SvgImport::parseFont( const QDomElement &e )
         QString params  = substyle[1].trimmed();
         // only parse font related parameters here
         if( m_fontAttributes.contains( command ) )
-            parsePA( 0L, gc, command, params );
+            parsePA( gc, command, params );
     }
 }
 
@@ -1560,14 +1572,13 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
 
         QString key = id.mid( 1 );
 
-        if( !e.attribute( "x" ).isEmpty() && !e.attribute( "y" ).isEmpty() )
-        {
-            double tx = parseUnitX( e.attribute( "x" ));
-            double ty = parseUnitY( e.attribute( "y" ));
-            // TODO: use width and height attributes too
-            m_gc.top()->matrix.translate(tx,ty);
-        }
+        if( e.hasAttribute( "x" ) )
+            m_gc.top()->matrix.translate( parseUnitX( e.attribute( "x" ) ), 0.0 );
+        if( e.hasAttribute( "y" ) )
+            m_gc.top()->matrix.translate( 0.0, parseUnitX( e.attribute( "y" ) ) );
 
+        // TODO: use width and height attributes too
+        
         if(m_defs.contains(key))
         {
             QDomElement a = mergeStyles( e, m_defs[key] );
@@ -1623,6 +1634,68 @@ void SvgImport::addToGroup( QList<KoShape*> shapes, KoShapeGroup * group )
     cmd.redo();
 }
 
+QList<KoShape*> SvgImport::parseSvg( const QDomElement &e, QSizeF * fragmentSize )
+{
+    // check if we are the root svg element
+    bool isRootSvg = m_gc.isEmpty();
+
+    addGraphicContext();
+
+    SvgGraphicsContext *gc = m_gc.top();
+    // reset the whole svg context ?
+    //*gc = SvgGraphicsContext();
+    // establish a new coordinate system
+    gc->matrix = QMatrix();
+
+    parseStyle( 0, e );
+
+    bool hasViewBox = e.hasAttribute( "viewBox" );
+    QRectF viewBox;
+
+    if( hasViewBox )
+    {
+        viewBox = parseViewBox( e.attribute( "viewBox" ) );
+    }
+
+    double width = 550.0;
+    if( e.hasAttribute( "width" ) )
+        width = parseUnit( e.attribute( "width" ), true, false, viewBox );
+    double height = 841.0;
+    if( e.hasAttribute( "height" ) )
+        height = parseUnit( e.attribute( "height" ), false, true, viewBox );
+
+    QSizeF svgFragmentSize( QSizeF( width, height ) );
+
+    if( fragmentSize )
+        *fragmentSize = svgFragmentSize;
+
+    gc->currentBoundbox = QRectF( QPointF(0,0), svgFragmentSize );
+
+    if( ! isRootSvg )
+    {
+        // x and y attribute has no meaning for outermost svg elements
+        double x = e.hasAttribute( "x" ) ? parseUnit( e.attribute( "x" ) ) : 0.0;
+        double y = e.hasAttribute( "y" ) ? parseUnit( e.attribute( "y" ) ) : 0.0;
+        gc->matrix.translate( x, y );
+    }
+
+    if( hasViewBox )
+    {
+        QMatrix viewTransform;
+        viewTransform.translate( viewBox.x(), viewBox.y() );
+        viewTransform.scale( width / viewBox.width() , height / viewBox.height() );
+        gc->matrix = gc->matrix * viewTransform;
+        gc->currentBoundbox.setWidth( gc->currentBoundbox.width() * ( viewBox.width() / width ) );
+        gc->currentBoundbox.setHeight( gc->currentBoundbox.height() * ( viewBox.height() / height ) );
+    }
+
+    QList<KoShape*> shapes = parseContainer( e );
+
+    removeGraphicContext();
+
+    return shapes;
+}
+
 QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
 {
     QList<KoShape*> shapes;
@@ -1658,9 +1731,13 @@ QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
             }
         }
 
-        // treat svg link <a> as group so we don't miss its child elements
-        if( b.tagName() == "g" || b.tagName() == "a" )
+        if( b.tagName() == "svg" )
         {
+            shapes += parseSvg( b );
+        }
+        else if( b.tagName() == "g" || b.tagName() == "a" )
+        {
+            // treat svg link <a> as group so we don't miss its child elements
             addGraphicContext();
             setupTransform( b );
             updateContext( b );
@@ -1729,8 +1806,6 @@ QList<KoShape*> SvgImport::parseContainer( const QDomElement &e )
         }
         else
         {
-            // unsupported element
-            kDebug(30514) << "element" << b.tagName() << "is not supported";
             continue;
         }
 
@@ -1758,6 +1833,22 @@ void SvgImport::parseDefs( const QDomElement &e )
     }
 }
 
+QRectF SvgImport::parseViewBox( QString viewbox )
+{
+    QRectF viewboxRect;
+
+    QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
+    if( points.count() == 4 )
+    {
+        viewboxRect.setX( fromUserSpace( points[0].toFloat() ) );
+        viewboxRect.setY( fromUserSpace( points[1].toFloat() ) );
+        viewboxRect.setWidth( fromUserSpace( points[2].toFloat() ) );
+        viewboxRect.setHeight( fromUserSpace( points[3].toFloat() ) );
+    }
+
+    return viewboxRect;
+}
+
 // Creating functions
 // ---------------------------------------------------------------------------------------
 
@@ -1782,10 +1873,12 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
 
     if( b.hasChildNodes() )
     {
-        if( textPosition.isNull() && ! b.attribute( "x" ).isEmpty() && ! b.attribute( "y" ).isEmpty() )
+        if( textPosition.isNull() )
         {
-            textPosition.setX( parseUnitX( b.attribute( "x" ) ) );
-            textPosition.setY( parseUnitY( b.attribute( "y" ) ) );
+            if( b.hasAttribute( "x" ) ) 
+                textPosition.setX( parseUnitX( b.attribute( "x" ) ) );
+            if( b.hasAttribute( "y" ) )
+                textPosition.setY( parseUnitY( b.attribute( "y" ) ) );
         }
 
         text = static_cast<ArtisticTextShape*>( createShape( ArtisticTextShapeID ) );

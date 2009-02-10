@@ -26,15 +26,15 @@
 class SvgGraphicsContext
 {
 public:
-    enum FillType { None, Solid, Gradient, Pattern };
+    enum StyleType { None, Solid, Gradient, Pattern };
 
     SvgGraphicsContext()
     {
+        strokeType = None;
         stroke.setLineStyle( Qt::NoPen, QVector<qreal>() ); // default is no stroke
         stroke.setLineWidth( 1.0 );
         stroke.setCapStyle( Qt::FlatCap );
         stroke.setJoinStyle( Qt::MiterJoin );
-        hasStroke = false;
         
         fillType = Solid;
         fillRule = Qt::WindingFill;
@@ -42,15 +42,18 @@ public:
         
         currentColor = Qt::black;
         forcePercentage = false;
+
+        display = true;
     }
 
-    FillType     fillType;  ///< the current fill type
+    StyleType    fillType;  ///< the current fill type
     Qt::FillRule fillRule;  ///< the current fill rule
     QColor       fillColor; ///< the current fill color
     QString      fillId;    ///< the current fill id (used for gradient/pattern fills)
 
+    StyleType    strokeType;///< the current stroke type
+    QString      strokeId;  ///< the current stroke id (used for gradient strokes)
     KoLineBorder stroke;    ///< the current stroke
-    bool         hasStroke; ///< indicates if the stroke is valid
 
     QMatrix matrix;         ///< the current transformation matrix
     QFont   font;           ///< the current font
@@ -59,6 +62,8 @@ public:
 
     QRectF currentBoundbox; ///< the current bound box used for bounding box units                                   
     bool   forcePercentage; ///< force parsing coordinates/length as percentages of currentBoundbox
+
+    bool display;           ///< controls display of shape
 };
 
 #endif // SVGGRAPHICCONTEXT_H
