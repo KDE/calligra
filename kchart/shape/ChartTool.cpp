@@ -186,7 +186,9 @@ void ChartTool::activate( bool )
                     d->shape = dynamic_cast<ChartShape*>( legend->parent() );
                 }
             }
-        }
+        // The selected shape is the chart
+        } else
+            selectedShape = shape;
         
 	// Insert the values from the selected shape (note: not only
 	// chart shape, but also plotarea or legend) into the tool
