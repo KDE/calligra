@@ -1642,10 +1642,6 @@ QList<KoShape*> SvgImport::parseSvg( const QDomElement &e, QSizeF * fragmentSize
     addGraphicContext();
 
     SvgGraphicsContext *gc = m_gc.top();
-    // reset the whole svg context ?
-    //*gc = SvgGraphicsContext();
-    // establish a new coordinate system
-    gc->matrix = QMatrix();
 
     parseStyle( 0, e );
 
@@ -1673,10 +1669,12 @@ QList<KoShape*> SvgImport::parseSvg( const QDomElement &e, QSizeF * fragmentSize
 
     if( ! isRootSvg )
     {
+        QMatrix move;
         // x and y attribute has no meaning for outermost svg elements
         double x = e.hasAttribute( "x" ) ? parseUnit( e.attribute( "x" ) ) : 0.0;
         double y = e.hasAttribute( "y" ) ? parseUnit( e.attribute( "y" ) ) : 0.0;
-        gc->matrix.translate( x, y );
+        move.translate( x, y );
+        gc->matrix = move * gc->matrix;
     }
 
     if( hasViewBox )
@@ -1684,7 +1682,7 @@ QList<KoShape*> SvgImport::parseSvg( const QDomElement &e, QSizeF * fragmentSize
         QMatrix viewTransform;
         viewTransform.translate( viewBox.x(), viewBox.y() );
         viewTransform.scale( width / viewBox.width() , height / viewBox.height() );
-        gc->matrix = gc->matrix * viewTransform;
+        gc->matrix = viewTransform * gc->matrix;
         gc->currentBoundbox.setWidth( gc->currentBoundbox.width() * ( viewBox.width() / width ) );
         gc->currentBoundbox.setHeight( gc->currentBoundbox.height() * ( viewBox.height() / height ) );
     }
