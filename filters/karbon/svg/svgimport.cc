@@ -2096,7 +2096,6 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*rx, 2*ry) );
             obj->setPosition( QPointF(cx-rx,cy-ry) );
-            kDebug() << "rx =" << rx << "ry =" << ry;
             if( rx == 0.0 || ry == 0.0 )
                 obj->setVisible( false );
         }
