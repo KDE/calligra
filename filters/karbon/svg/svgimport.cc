@@ -1346,7 +1346,8 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
     applyFillStyle( obj );
     applyStrokeStyle( obj );
 
-    obj->setVisible( gc->display );
+    if( ! gc->display )
+        obj->setVisible( false );
 }
 
 void SvgImport::applyFillStyle( KoShape * shape )
@@ -2080,6 +2081,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             if( ry >= 0.0 )
                 rect->setCornerRadiusY( qMin( 100.0, ry / (0.5 * h) * 100.0 ) );
             obj = rect;
+            if( w == 0.0 || h == 0.0 )
+                obj->setVisible( false );
         }
     }
     else if( b.tagName() == "ellipse" )
@@ -2093,6 +2096,9 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*rx, 2*ry) );
             obj->setPosition( QPointF(cx-rx,cy-ry) );
+            kDebug() << "rx =" << rx << "ry =" << ry;
+            if( rx == 0.0 || ry == 0.0 )
+                obj->setVisible( false );
         }
     }
     else if( b.tagName() == "circle" )
@@ -2105,6 +2111,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnitY( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*r, 2*r) );
             obj->setPosition( QPointF(cx-r,cy-r) );
+            if( r == 0.0 )
+                obj->setVisible( false );
         }
     }
     else if( b.tagName() == "line" )
