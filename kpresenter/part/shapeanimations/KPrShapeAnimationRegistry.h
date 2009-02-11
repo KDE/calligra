@@ -22,7 +22,7 @@
 
 #include <KoGenericRegistry.h>
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KPrShapeAnimation;
 class KPrShapeAnimationFactory;
 

@@ -28,7 +28,7 @@
 //Forward declarations
 class KoXmlWriter;
 class KoPAPageBase;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoPASavingContext;
 class KoPALoadingContext;
 class KPrDocument;

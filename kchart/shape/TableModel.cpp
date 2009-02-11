@@ -78,7 +78,12 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
     setRowCount( 0 );
     setColumnCount( 0 );
     
+#ifndef KOXML_USE_QDOM
     const QDomNode &node = tableElement.asQDomNode( QDomDocument() );
+#else
+    const QDomNode node; // XXX!!!
+#endif
+
     QTextStream stream(stdout);
     stream << node;
     
@@ -110,10 +115,18 @@ void TableModel::loadOdf( const KoXmlElement &tableElement,
                         if ( __n.localName() == "table-cell" ) {
                             if ( column >= columnCount() )
                                 setColumnCount( columnCount() + 1 );
+#ifndef KOXML_USE_QDOM
                             const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
+#else
+                            const QString valueType; // XXX!!!
+#endif
 
                             QString valueString;
+#ifndef KOXML_USE_QDOM
                             const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
+#else
+                            const KoXmlElement valueElement; // XXX!!!
+#endif
                             if ( valueElement.isNull() || !valueElement.isElement() ) {
                                 qWarning() << "TableModel::loadOdf(): Cell contains no valid <text:p> element, cannnot load cell data.";
 				// Even if it doesn't contain any value, it's still a cell.

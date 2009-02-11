@@ -24,7 +24,7 @@
 
 #include "KPrPageEffectFactory.h"
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KPrPageEffect;
 
 class KPRESENTER_EXPORT KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>

@@ -36,8 +36,7 @@ class KWTextFrame;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
 class KoTextAnchor;
-class KoXmlDocument;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KWPageStyle;
 
 class QTextCursor;

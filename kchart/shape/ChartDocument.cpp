@@ -84,6 +84,7 @@ ChartDocument::~ChartDocument()
 
 bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
 {
+#ifndef KOXML_USE_QDOM
     KoXmlDocument doc = odfStore.contentDoc();
     KoXmlNode bodyNode = doc.documentElement().namedItemNS( KoXmlNS::office, "body" );
     if ( bodyNode.isNull() ) {
@@ -106,6 +107,9 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
     KoShapeLoadingContext context( odfLoadingContext, dataCenterMap );
 
     return d->parent->loadOdfEmbedded( chartElement, context );
+#else
+    return false; //XXX!!!
+#endif
 }
 
 bool ChartDocument::loadXML( const KoXmlDocument &doc, KoStore *)

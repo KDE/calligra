@@ -25,7 +25,7 @@
 #include <KoShapeFactory.h>
 
 class KoShape;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 
 class TableShapePlugin : public QObject
 {

@@ -49,7 +49,7 @@ class QFont;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoStore;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoXmlWriter;
 class KoGenStyles;
 class KoOdfStylesReader;
