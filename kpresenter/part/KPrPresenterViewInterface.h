@@ -22,6 +22,7 @@
 
 #include <QtGui/QBoxLayout>
 #include <QMap>
+#include <QPushButton>
 
 #include "KPrPresenterViewBaseInterface.h"
 
@@ -62,6 +63,7 @@ private:
     QTextEdit *m_notesTextEdit;
     QSize m_previewSize;
     QTableWidget *slideTab;
+    QPushButton *registerButton;
     QList<QTimeEdit *> timeEditList;
 };
 
