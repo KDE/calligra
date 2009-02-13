@@ -111,7 +111,10 @@ void PrintingDialog::setPrintingOptions( const PrintingOptions &opt )
 
 void PrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
-    PrintingOptions opt = m_widget->options();
+    PrintingOptions opt;
+    if ( m_widget ) {
+        opt = m_widget->options();
+    }
     setPrintingOptions( opt );
     KoPrintingDialog::startPrinting( removePolicy );
 }
