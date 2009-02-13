@@ -374,7 +374,10 @@ void FunctionCompletion::itemSelected( QListWidgetItem* listItem )
     if ( listItem ) {
         item = listItem->text();
     } else {
-        item = d->completionListBox->currentItem()->text();
+        listItem = d->completionListBox->currentItem();
+        if (listItem) {
+            item = listItem->text();
+        }
     }
 
     KSpread::FunctionDescription* desc;
