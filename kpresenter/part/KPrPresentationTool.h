@@ -72,7 +72,7 @@ private:
     bool eventFilter(QObject *obj, QEvent *event);
 
     QList<KoEventAction *> m_eventActions;
-    KPrPresentationToolWidget *presentationToolWidget;
+    KPrPresentationToolWidget *m_presentationToolWidget;
     QFrame *m_frame;
     QFrame *m_blackBackgroundframe;
     KPrPresentationHighlightWidget * m_blackBackgroundwidget;

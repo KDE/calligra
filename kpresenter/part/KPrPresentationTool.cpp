@@ -53,19 +53,19 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     m_frame = new QFrame( m_viewMode.canvas() );
     
     QVBoxLayout *frameLayout = new QVBoxLayout();
-    presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
-    frameLayout->addWidget( presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
+    m_presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
+    frameLayout->addWidget( m_presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
     m_frame->setLayout( frameLayout );
     
     m_frame->show();
     m_frame->setVisible(false);
 
-    presentationToolWidget->raise();
-    presentationToolWidget->installEventFilter(this);
+    m_presentationToolWidget->raise();
+    m_presentationToolWidget->installEventFilter(this);
     
     // Connections of button clicked to slots
-    connect( presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
-    connect( presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
+    connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
+    connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
 
 }
 
@@ -198,6 +198,9 @@ void KPrPresentationTool::highLightPresentation()
     // destroy the drawMode if it's active
     if ( m_drawMode )
     {
+        // We put buttons on the presentation before deleting the draw widget
+	m_presentationToolWidget->setParent( m_viewMode.canvas() );
+	
         m_drawMode = false;
 	delete m_drawWidget;
         QApplication::restoreOverrideCursor();
@@ -210,6 +213,9 @@ void KPrPresentationTool::highLightPresentation()
 
     if ( m_highlightMode )
     {
+	// We put buttons on the presentation before deleting the highlight widget
+	m_presentationToolWidget->setParent( m_viewMode.canvas() );
+	
 	m_highlightMode = false;
 	delete m_blackBackgroundwidget;
     } 
@@ -217,6 +223,7 @@ void KPrPresentationTool::highLightPresentation()
     {
 	m_highlightMode = true;
 	m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
+	m_presentationToolWidget->setParent( m_blackBackgroundwidget );
 	m_blackBackgroundwidget->show();
 
 	m_blackBackgroundwidget->installEventFilter(this);
@@ -232,6 +239,10 @@ void KPrPresentationTool::switchDrawMode()
 {
     // destroy the highlightMode if it's active
     if ( m_highlightMode ) {
+    
+	// We put buttons on the presentation before deleting the highlight widget
+	m_presentationToolWidget->setParent( m_viewMode.canvas() );
+	
 	m_highlightMode = false;
 	delete m_blackBackgroundwidget;
     }
@@ -250,6 +261,9 @@ void KPrPresentationTool::switchDrawMode()
         QCursor cur = QCursor(pix);
         QApplication::setOverrideCursor(cur);
 	m_drawWidget = new KPrPresentationDrawWidget(m_viewMode.canvas());
+	
+	m_presentationToolWidget->setParent( m_drawWidget );
+	
 	m_drawWidget->show();
 	
 	m_drawWidget->installEventFilter(this);
@@ -257,11 +271,14 @@ void KPrPresentationTool::switchDrawMode()
     // destroy the drawMode if it's active
     else
     {
+	// We put buttons on the presentation before deleting the draw widget
+	m_presentationToolWidget->setParent( m_viewMode.canvas() );
+	
         m_drawMode = false;
 	delete m_drawWidget;
         QApplication::restoreOverrideCursor();
     }
-    presentationToolWidget->presentationToolUi().penButton->setDown(m_drawMode);
+    m_presentationToolWidget->presentationToolUi().penButton->setDown(m_drawMode);
 }
 
 bool KPrPresentationTool::getHighlightMode()
@@ -282,7 +299,7 @@ void KPrPresentationTool::switchHighlightMode()
 
 void KPrPresentationTool::drawOnPresentation()
 {
-    presentationToolWidget->presentationToolUi().penButton->setText("test...");
+    m_presentationToolWidget->presentationToolUi().penButton->setText("test...");
     switchDrawMode();
 }
 
@@ -320,11 +337,11 @@ bool KPrPresentationTool::eventFilter(QObject *obj, QEvent *event)
 	QRect geometrie = QRect(0,m_frame->height()-100,100,100);
 	if(geometrie.contains(pos))
 	{
-	    presentationToolWidget->setVisible(true);
+	    m_presentationToolWidget->setVisible(true);
 	}
 	else
 	{
-	    presentationToolWidget->setVisible(false);
+	    m_presentationToolWidget->setVisible(false);
 	}
     }
     return false;
