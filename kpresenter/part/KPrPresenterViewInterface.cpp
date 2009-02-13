@@ -105,6 +105,10 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 	timeEditList.append(timeEdit2);
     }
     frameNextLayout->insertWidget( 1, slideTab );
+
+    registerButton = new QPushButton(i18n("Register slides data"), this);
+    registerButton->setVisible(false);
+    frameNextLayout->insertWidget( 2, registerButton );
 }
 
 void KPrPresenterViewInterface::setActivePage( int pageIndex )
@@ -124,10 +128,12 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
 	m_nextSlideLabel->setText(i18n( "Next Slide" ));
 	m_nextSlidePreview->setVisible(true);
 	slideTab->setVisible(false);
+	registerButton->setVisible(false);
     }
     else { // End of presentation, show time for each slide
 	m_nextSlideLabel->setText(i18n( "Slides Time" ));
 	slideTab->setVisible(true);
+	registerButton->setVisible(true);
 	m_nextSlidePreview->setVisible(false);
     }
 
