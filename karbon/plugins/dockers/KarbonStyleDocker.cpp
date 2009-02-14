@@ -43,12 +43,13 @@
 #include <KoResourceSelector.h>
 #include <KoResourceServerProvider.h>
 #include <KoResourceServerAdapter.h>
-#include <KoColorComboBox.h>
+#include <KoColorPopupAction.h>
 
 #include <klocale.h>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QStackedWidget>
+#include <QtGui/QToolButton>
 
 const int MsecsThresholdForMergingCommands = 2000;
 
@@ -78,7 +79,9 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     layout->setRowStretch( 2, 1 );
     layout->setContentsMargins( 0, 0, 0, 0 );
     
-    m_colorSelector = new KoColorComboBox( m_stack );
+    m_colorSelector = new QToolButton( m_stack );
+    m_actionColor = new KoColorPopupAction(m_stack);
+    m_colorSelector->setDefaultAction(m_actionColor);
 
     KoAbstractResourceServerAdapter * gradientResourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>(KoResourceServerProvider::instance()->gradientServer());
     KoResourceSelector * gradientSelector = new KoResourceSelector( gradientResourceAdapter, this );
@@ -98,10 +101,8 @@ KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     connect( m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()) );
     connect( m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()) );
     connect( m_buttons, SIGNAL(buttonPressed(int)), this, SLOT(styleButtonPressed(int)));
-    connect( m_colorSelector, SIGNAL( colorChanged( const QColor &) ), 
-             this, SLOT( updateColor( const QColor &) ) );
-    connect( m_colorSelector, SIGNAL( colorApplied( const QColor &) ), 
-             this, SLOT( updateColor( const QColor &) ) );
+    connect( m_actionColor, SIGNAL( colorChanged( const KoColor &) ), 
+             this, SLOT( updateColor( const KoColor &) ) );
     connect( gradientSelector, SIGNAL(resourceSelected(KoResource*)),
              this, SLOT(updateGradient(KoResource*)));
     connect( gradientSelector, SIGNAL(resourceApplied(KoResource*)),
@@ -205,7 +206,7 @@ void KarbonStyleDocker::updateStyle( KoShapeBorderModel * stroke, KoShapeBackgro
         else
             qColor = m_canvas->resourceProvider()->backgroundColor().toQColor();
     }
-    m_colorSelector->setColor( qColor );
+    m_actionColor->setCurrentColor( qColor );
 
     m_preview->update( stroke, fill );
 }
@@ -278,7 +279,7 @@ void KarbonStyleDocker::styleButtonPressed( int buttonId )
     }
 }
 
-void KarbonStyleDocker::updateColor( const QColor &c )
+void KarbonStyleDocker::updateColor( const KoColor &c )
 {
     if( ! m_canvas )
         return;
@@ -291,24 +292,22 @@ void KarbonStyleDocker::updateColor( const QColor &c )
         {
             QList<KoShape*> shapes;
             shapes.append( page );
-            updateColor( c, shapes );
+            updateColor( c.toQColor(), shapes );
         }
         else
         {
-            KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
-
             KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
             int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
             if( activeStyle == Karbon::Foreground )
-                m_canvas->resourceProvider()->setForegroundColor( kocolor );
+                m_canvas->resourceProvider()->setForegroundColor( c );
             else
-                m_canvas->resourceProvider()->setBackgroundColor( kocolor );
+                m_canvas->resourceProvider()->setBackgroundColor( c );
         }
     }
     else
     {
-        updateColor( c, selection->selectedShapes() );
+        updateColor( c.toQColor(), selection->selectedShapes() );
         updateStyle();
     }
 }

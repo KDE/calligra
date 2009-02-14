@@ -32,10 +32,12 @@ class KoShapeBackground;
 class KoShapeBackgroundCommand;
 class KoColorBackground;
 class KoCanvasBase;
-class KoColorComboBox;
 class KoResource;
 class KoShape;
+class KoColor;
+class QToolButton;
 class QStackedWidget;
+class KoColorPopupAction;
 
 class KarbonStyleDocker : public QDockWidget, public KoCanvasObserver
 {
@@ -54,7 +56,7 @@ private slots:
     void selectionContentChanged();
     void resourceChanged( int key, const QVariant& );
     void styleButtonPressed( int buttonId );
-    void updateColor( const QColor &c );
+    void updateColor( const KoColor &c );
     void updateGradient( KoResource * item );
     void updatePattern( KoResource * item );
     void updateFillRule( Qt::FillRule fillRule );
@@ -71,8 +73,9 @@ private:
     KarbonStyleButtonBox * m_buttons;
     QStackedWidget * m_stack;
     KoCanvasBase * m_canvas;
-    KoColorComboBox * m_colorSelector;
-    
+    QToolButton * m_colorSelector;
+    KoColorPopupAction *m_actionColor;
+
     QTime m_lastColorChange;
     KoShapeBackgroundCommand * m_lastFillCommand;
     KoShapeBorderCommand * m_lastStrokeCommand;
