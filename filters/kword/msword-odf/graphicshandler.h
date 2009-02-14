@@ -32,6 +32,8 @@
 #include <KoGenStyles.h>
 #include <KoStore.h>
 
+#include <vector>
+
 #ifndef IMAGE_IMPORT
 namespace wvWare
 {
@@ -53,6 +55,8 @@ public:
     virtual void bitmapData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void escherData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
             int type );
+    virtual void escherData( std::vector<wvWare::U8> data, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
+            int type );
     virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
     virtual void tiffData( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 #endif // IMAGE_IMPORT
@@ -64,6 +68,7 @@ private:
     KoStore* m_store;
     KoGenStyles* m_mainStyles;
 
+    void ODTProcessing( QString* picName, wvWare::SharedPtr<const wvWare::Word97::PICF> picf, int type );
     int m_pictureCount;
 
 };
