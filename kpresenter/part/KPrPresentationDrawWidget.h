@@ -33,9 +33,12 @@ public :
     ~KPrPresentationDrawWidget();
     /** Draw on the Presentation */
     void paintEvent( QPaintEvent * event );
+    /** Get all the mouse event needed to paint */
     void mouseMoveEvent( QMouseEvent* e );
     void mousePressEvent( QMouseEvent* e );
     void mouseReleaseEvent( QMouseEvent* e );
+    /** Popup menu for colors and sizes */
+    void contextMenuEvent(QContextMenuEvent* event);
 
 private :
     QSize m_size;

@@ -20,6 +20,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QMenu>
 
 #include <KoPACanvas.h>
 #include <KoPointerEvent.h>
@@ -71,4 +72,21 @@ void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
 void KPrPresentationDrawWidget::mouseReleaseEvent( QMouseEvent* e )
 {
     m_draw = false;
+}
+
+void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
+{
+    QMenu menu( this );
+    
+    QMenu *color = new QMenu( QString( "Color of the pen"), this );
+    QMenu *size = new QMenu( QString( "Size of the pen"), this );
+    
+    color->addAction( QString("void ...") );
+    size->addAction( QString("void ...") );
+    
+    // Not connected yet
+    menu.addMenu( color );
+    menu.addMenu( size );
+    
+    menu.exec(event->globalPos());
 }
