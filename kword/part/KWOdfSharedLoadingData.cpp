@@ -45,32 +45,31 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
     KoShapeLoadingContext::addAdditionalAttributeData(
         KoShapeLoadingContext::AdditionalAttributeData(
             KoXmlNS::text, "anchor-type", "text:anchor-type"));
+    KoShapeLoadingContext::addAdditionalAttributeData(
+        KoShapeLoadingContext::AdditionalAttributeData(
+            KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
 }
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
 {
-    //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! text:anchor-type=" << shape->additionalAttribute("text:anchor-type");
+    int pageNumber = -1;
+    if (shape->hasAdditionalAttribute("text:anchor-type")) {
+        QString anchorType = shape->additionalAttribute("text:anchor-type");
+        if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+            pageNumber = shape->additionalAttribute("text:anchor-page-number").toInt();
+            if (pageNumber <= 0) {
+                pageNumber = -1;
+            }
+        }
+    }
+
+    kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute( "text:anchor-page-number" ) << pageNumber;
+    shape->removeAdditionalAttribute("text:anchor-type");
 
     KWFrameSet* fs = new KWFrameSet();
     fs->setName("My FrameSet");
-    KWFrame *frame = new KWFrame(shape, fs);
+    new KWFrame(shape, fs, pageNumber);
     m_loader->document()->addFrameSet(fs);
-
-//TODO anchor->updatePosition()
-//shape->setSize(QSizeF(100,100));
-
-    //KoTextAnchor *anchor = new KoTextAnchor(shape);
-    //Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData())); //this asserts cause shapes don't inheritate/share there userdata
-    /*Q_ASSERT(m_loader->currentFrame());
-    KWTextFrameSet* docfs = dynamic_cast<KWTextFrameSet*>(m_loader->currentFrame()->frameSet());
-    Q_ASSERT(docfs);
-    QTextDocument* doc = docfs->document(); //m_loader->document()->mainFrameSet()->document();
-    Q_ASSERT(doc);
-    QTextCursor cursor(doc);
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineObjectTextManager());
-    layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);*/
 }
 
 #if 0

@@ -26,7 +26,7 @@
 
 #include <KoXmlWriter.h>
 
-KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
+KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber)
 // Initialize member vars here. This ensures they are all initialized, since it's
 // easier to compare this list with the member vars list (compiler ensures order).
         : m_shape(shape),
@@ -37,6 +37,7 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
         m_runAround(KWord::RunAround),
         m_runAroundDistance(1.0),
         m_anchor(0),
+        m_pageNumber(pageNumber),
         m_frameSet(parent),
         m_outline(0)
 {
