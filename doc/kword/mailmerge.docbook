@@ -24,7 +24,7 @@ SQL database for your data source.</para></listitem>
 </itemizedlist>
 
 <para>For answers to these questions, other documentation is available on the Internet that is specific to the software you have chosen.</para>
-<para>You can retreive your mail-merge data from a number of sources:  </para>
+<para>You can retrieve your mail-merge data from a number of sources:  </para>
 <itemizedlist>
 <listitem><para>If you want to use an outside SQL database, click <link linkend="mail-merge-sql">here</link> for instructions.</para></listitem>
 <listitem><para>If you want to use a &kspread; file for your data, click <link linkend="mail-merge-kspread">here</link>.</para></listitem>
@@ -40,7 +40,7 @@ SQL database for your data source.</para></listitem>
 <note><para>In order to access an outside database using SQL, your machine needs to have the appropriate database module compiled 
 into your copy of QT.</para>
 <para>For more information see the <link linkend="installation">installation section of this documentation</link>.</para></note>
-<para>The database can be located on the same machine as &kword;, or on any computer which is accessable through your computer 
+<para>The database can be located on the same machine as &kword;, or on any computer which is accessible through your computer 
 network or the Internet.</para>
 <para>In order to use the database, you must know the following information:</para>
 <itemizedlist>

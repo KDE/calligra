@@ -379,7 +379,7 @@ You can adjust the autosave from 1 minute to 60 minutes.</para>
 <varlistentry>
 <term><guilabel>Create backup file</guilabel></term>
 <listitem>
-<para>If there is a mark in this checkbox, &kword; will automatically create a backup file everytime you save your document.</para>
+<para>If there is a mark in this checkbox, &kword; will automatically create a backup file every time you save your document.</para>
 </listitem>
 </varlistentry>
 
@@ -496,7 +496,7 @@ should be ignored by the spelling program.</para>
 These Words</guilabel> and click the <guibutton>Add</guibutton> button.</para>
 </sect4>
 
-<sect4><title>Deleteing a word from the ignore list</title>
+<sect4><title>Deleting a word from the ignore list</title>
 <para>To remove a word, select the word in the listbox containing all the currently ignored words by clicking on it with 
 the &LMB;.  Now click the <guibutton>Remove</guibutton> button.</para>
 </sect4>

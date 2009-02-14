@@ -118,7 +118,7 @@ consists of a combo box and a spin box.</para>
 <varlistentry>
 <term>At least</term>
 <listitem>
-<para>This sets the minimum line spacing value.  This can be useful if you have paragraphs with widely differing font sizes.  Typically, &kword; calculates the distance between lines by looking at the tallest character in the line.  You can use this feature to overide close linespacing in small font paragraphs to make them even with large font paragraphs.  &kword; will not cause any fonts to overlap using this spacing technique.</para>
+<para>This sets the minimum line spacing value.  This can be useful if you have paragraphs with widely differing font sizes.  Typically, &kword; calculates the distance between lines by looking at the tallest character in the line.  You can use this feature to override close linespacing in small font paragraphs to make them even with large font paragraphs.  &kword; will not cause any fonts to overlap using this spacing technique.</para>
 </listitem>
 </varlistentry>
 

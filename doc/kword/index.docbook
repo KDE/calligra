@@ -1797,7 +1797,7 @@ align="center"/></imageobject></inlinemediaobject></para>
 <glossentry id="defurl">
 <glossterm>&URL;</glossterm>
 <glossdef>
-<para>&URL; is an abbreviation for Universal Resource Locater.  A universal resource locater is
+<para>&URL; is an abbreviation for Universal Resource Locator.  A universal resource locator is
 the technical term for what is commonly referred to as a websites address.</para>
 <para>Examples of &URL;s include <ulink url="http://www.koffice.org">http://www.koffice.org</ulink> and
 <ulink url="http://www.kde.org">http://www.kde.org</ulink></para>

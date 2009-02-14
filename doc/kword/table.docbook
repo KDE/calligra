@@ -423,7 +423,7 @@ that you need to preserve.</para></warning>
 that you need to preserve.</para></warning>
 <para>Placing a mark in the check box labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
 template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>
-<para>Click <guibutton>OK</guibutton> to make changes permenant, or click <guibutton>Cancel</guibutton> to abort all
+<para>Click <guibutton>OK</guibutton> to make changes permanent, or click <guibutton>Cancel</guibutton> to abort all
 changes.</para>
 
 </sect3>
@@ -497,7 +497,7 @@ by any of the other four options.</para></listitem>
 <para>Placing a mark in the check box labeled <guilabel>Reapply template to table</guilabel>, will cause &kword; to re-apply the
 template to the table <emphasis>after adding or deleting the specified number of rows and/or columns</emphasis>.</para>
 
-<para>Click <guibutton>OK</guibutton> to make changes permenant, or click <guibutton>Cancel</guibutton> to abort all
+<para>Click <guibutton>OK</guibutton> to make changes permanent, or click <guibutton>Cancel</guibutton> to abort all
 changes.</para>
 
 </sect3>
@@ -617,7 +617,7 @@ from the menubar. A dialog box will appear.</para>
 <para>The order the table styles are listed in the menu is determined by the order of the table styles in the list on the left.</para>
 <para>Select the table style you want to move from the list at the left by clicking once with the &LMB;.</para>
 <para>Now click on the <guiicon>Up Arrow</guiicon> and <guiicon>Down Arrow</guiicon> located at the bottom of the list of table styles.  
-This will move theselected table style up or down in the list of table styles.</para>
+This will move the selected table style up or down in the list of table styles.</para>
 <para>When you are satisfied with the order of the list, select <guibutton>OK</guibutton>.</para>
 </sect3>
 
