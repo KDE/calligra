@@ -63,7 +63,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* 
   : KDialog( parent )
 {
     setCaption( i18n("Function") );
-    setModal( true );
     setButtons( Ok|Cancel );
     //setWFlags( Qt::WDestructiveClose );
 
