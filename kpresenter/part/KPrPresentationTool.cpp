@@ -39,6 +39,7 @@
 #include <KoPACanvas.h>
 
 #include "KPrViewModePresentation.h"
+#include "KPrPresentationStrategy.h"
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
@@ -123,17 +124,19 @@ void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
 {
     finishEventActions();
     event->accept();
-
+    KPrPresentationStrategy * m_strategy = new KPrPresentationStrategy(this);
+  
     switch ( event->key() )
     {
-        case Qt::Key_Escape:
-          if(m_drawMode)
+        case Qt::Key_Escape:        
+	    m_strategy->handleEscape(); 
+	    /*if(m_drawMode)
             drawOnPresentation();
           else if(m_highlightMode)
             highLightPresentation();
           else
-            m_viewMode.activateSavedViewMode();
-            break;
+            m_viewMode.activateSavedViewMode();*/
+	    break;
         case Qt::Key_Home:
             m_viewMode.navigate( KPrAnimationDirector::FirstPage );
             break;

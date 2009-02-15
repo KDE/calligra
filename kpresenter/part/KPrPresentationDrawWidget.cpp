@@ -22,6 +22,9 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QMenu>
 
+#include <QMenu>
+
+#include <klocale.h>
 #include <KoPACanvas.h>
 #include <KoPointerEvent.h>
 #include <kdebug.h>
