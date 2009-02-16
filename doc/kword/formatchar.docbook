@@ -195,7 +195,7 @@ This will change the capitalization of the selected text.  Examples of each sche
 </mediaobject>
 </screenshot>
 
-<note><para>The changes to capilalization will only affect the selected text at the current moment.  This formatting is not enforced after closing the dialog box.</para></note>
+<note><para>The changes to capitalization will only affect the selected text at the current moment.  This formatting is not enforced after closing the dialog box.</para></note>
 
 <para>The third tab labeled <guilabel>Decoration</guilabel> allows you to change the color of the font, change the background color and create artificial shadows for your characters.  Click on the tab:</para>
 
@@ -209,7 +209,7 @@ This will change the capitalization of the selected text.  Examples of each sche
 <para>Using the buttons labeled <guilabel>Text color:</guilabel> and <guilabel>Background color:</guilabel> you can change the color of the text or the background behind the text.</para>
 
 <para>To create the illusion of a shadow behind your text, select the color you want your shadow by clicking the button labeled <guilabel>Shadow color:</guilabel>.  Then select the distance between the shadow and 
-the text using  the spin box labeld <guilabel>Shadow &amp; distance:</guilabel>.  Finally, select the direction of your shadow by 
+the text using  the spin box labeled <guilabel>Shadow &amp; distance:</guilabel>.  Finally, select the direction of your shadow by 
 selecting one of the eight red squares.  A preview of your shadow appears at the bottom of the dialog box.</para>
 
 <para>The fourth tab labeled <guilabel>Layout</guilabel> allows you to create superscripts and subscripts.  It also lets you select automatic hyphenation on a character by character basis.</para>
@@ -234,7 +234,7 @@ selecting one of the eight red squares.  A preview of your shadow appears at the
 
 <para>You can also use the spinbox labeled <guilabel>Relative size:</guilabel> to make the selected font larger or smaller.</para>
 
-<para>The checkbox labeld <guilabel>Auto hyphenation</guilabel> is used to toggle automatic hyphenation on or off for the selected text.</para>
+<para>The checkbox labeled <guilabel>Auto hyphenation</guilabel> is used to toggle automatic hyphenation on or off for the selected text.</para>
 
 <para>The fifth tab labeled <guilabel>Language</guilabel> allows you to change the language. Click on the tab:</para>
 

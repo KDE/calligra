@@ -741,7 +741,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     Calendar *cal = calendar();
     if (cal == 0) {
 
-        sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
+        if ( sch ) sch->logWarning( i18n( "Resource %1 has no calendar defined", m_name ) );
 
         return e;
     }
@@ -753,7 +753,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         DateTime t = availableBefore(start, limit);
         if (t.isValid()) {
             sts = true;
-            if ( t < limit ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
+            if ( t < limit && sch ) sch->logDebug( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
             e = (cal->effort(limit, t, sch) * m_units)/100;
         } else {
             //sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );
@@ -766,7 +766,7 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
         DateTime t = availableAfter(start, limit);
         if (t.isValid()) {
             sts = true;
-            if ( t > limit ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
+            if ( t > limit && sch ) sch->logDebug( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
             e = (cal->effort(t, limit, sch) * m_units)/100;
         } else {
             //sch->logDebug( "Resource not available in interval:" + start.toString() + "," + limit.toString() );

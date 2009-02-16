@@ -506,7 +506,7 @@ action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
 <para><action>Reverses the last action you performed.</action> Not all
 actions can be reversed.  If you are not able to Undo the last action,
 the <guimenuitem>Undo</guimenuitem> option will be displayed gray and is
-not accessible.  For a more thourough
+not accessible.  For a more thorough
 discussion of Undo/Redo, <link linkend="undo-redo">click
 here</link>.</para>
 
@@ -527,7 +527,7 @@ action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo></shor
 </term>
 <listitem>
 <para><action>Reverses the last Undo performed.</action> If the Redo
-option is unavailable, the Toolbar will display this items gray. For a more thourough discussion of Undo/Redo,
+option is unavailable, the Toolbar will display this items gray. For a more thorough discussion of Undo/Redo,
 <link linkend="undo-redo">click here</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo> 
@@ -1859,7 +1859,7 @@ Changing Font Case</link>.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Alphabetizes the selected paragraphs.  You will be given the option to sort in ascending or decending order</action>.</para>
+<para><action>Alphabetizes the selected paragraphs.  You will be given the option to sort in ascending or descending order</action>.</para>
 </listitem>
 </varlistentry>
 
@@ -1883,7 +1883,7 @@ refer to the section entitled <link linkend="expressions">Expressions</link>.</p
 </menuchoice>
 </term>
 <listitem>
-<para><action>Creates a new personal expression with the selected text.</action> For more information on personal expresions, 
+<para><action>Creates a new personal expression with the selected text.</action> For more information on personal expressions, 
 refer to the section entitled <link linkend="expressions">Expressions</link>.</para>
 </listitem>
 </varlistentry>
@@ -2543,7 +2543,7 @@ folders should be listed before files, or mixed within the files.</para>
 <varlistentry>
 <term><guimenuitem>Detailed View</guimenuitem></term>
 <listitem>
-<para>If this option is selected, the names, sizes, dates, permisions, file owners and group ownerships are shown.</para>
+<para>If this option is selected, the names, sizes, dates, permissions, file owners and group ownerships are shown.</para>
 <para>Compare this to short view.</para>
 </listitem>
 </varlistentry>
@@ -2558,8 +2558,8 @@ folders should be listed before files, or mixed within the files.</para>
 <varlistentry>
 <term><guimenuitem>Show/Hide Quick Access Navigation Panel</guimenuitem></term>
 <listitem>
-<para>The tall box along the left side of the dialog with a dark grey backround is the Quick Navigation Panel.  You can use this option to toggle whether it is visible or not.</para>
-<para>More detailed information about hte Quick Navigation Panel is avialable further down this page.</para>
+<para>The tall box along the left side of the dialog with a dark grey background is the Quick Navigation Panel.  You can use this option to toggle whether it is visible or not.</para>
+<para>More detailed information about hte Quick Navigation Panel is available further down this page.</para>
 </listitem>
 </varlistentry>
 

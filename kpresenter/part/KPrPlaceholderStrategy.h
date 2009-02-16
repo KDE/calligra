@@ -25,7 +25,7 @@
 class QString;
 class QRectF;
 class QPainter;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoShape;
 class KoDataCenter;
 class KoShapeControllerBase;

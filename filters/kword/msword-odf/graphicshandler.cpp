@@ -54,40 +54,97 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
 {
     kDebug(30513) << "Escher data found";
 
-    //set up filename
     QString picName("Pictures/");
-    picName.append(QString::number(m_pictureCount));
-    //the type coming in corresponds to MSOBLIPTYPE
-    //  see wv2/graphics.h
-    if(type == 5)
-        picName.append(".jpg");
-    else
-    {
-        kWarning() << "Unhandled file type - pictures won't be displayed.";
-        return;
-    }
+    ODTProcessing(&picName, picf, type);
 
     //write picture data to file
     m_store->open(picName);//open picture file
 #define IMG_BUF_SIZE 2048L
     Q_LONG len = reader.size();
     while ( len > 0 )  {
+        kDebug(30513) << "len = " << len;
         wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
         Q_LONG n1 = m_store->write( (const char*)buf, n );
-        kDebug(30513) << (int) buf;
-        Q_ASSERT( (size_t)n1 == n );
-        if ( (size_t)n1 != n )
-            return; // ouch
+        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (int) buf;
         len -= n;
         delete [] buf;
+        //error checking
+        if ( (n == 0 && len != 0) || //endless loop
+                (size_t)n1 != n ) //read/wrote different lengths
+        {
+            m_store->close(); //close picture file before returning
+            return; //ouch - we're in an endless loop!
+        }
+        //Q_ASSERT( (size_t)n1 == n );
     }
     Q_ASSERT( len == 0 );
     m_store->close(); //close picture file
+}
+
+//use this version when the data had to be decompressed
+//so we don't have to convert the data back to an OLEImageReader
+void KWordPictureHandler::escherData( std::vector<wvWare::U8> data, SharedPtr<const Word97::PICF> picf, int type )
+{
+    kDebug(30513) << "Escher data found";
+
+    QString picName("Pictures/");
+    ODTProcessing(&picName, picf, type);
+
+    //write picture data to file
+    m_store->open(picName);//open picture file
+#define IMG_BUF_SIZE 2048L
+    Q_LONG len = data.size();
+    int index = 0; //index for reading from vector
+    while ( len > 0 )  {
+        kDebug(30513) << "len = " << len;
+        wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
+        //instead of a read command, we'll copy that number of bytes
+        //from the vector into the buffer
+        int n = qMin( len, IMG_BUF_SIZE );
+        for(int i = 0; i < n; i++)
+        {
+            buf[i] = data[index];
+            index++;
+        }
+        //size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
+        Q_LONG n1 = m_store->write( (const char*)buf, n );
+        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (int) buf;
+        len -= n;
+        delete [] buf;
+        //error checking
+        if ( (n == 0 && len != 0) || //endless loop
+                (size_t)n1 != n ) //read/wrote different lengths
+        {
+            m_store->close(); //close picture file before returning
+            return; //ouch - we're in an endless loop!
+        }
+        //Q_ASSERT( (size_t)n1 == n );
+    }
+    Q_ASSERT( len == 0 );
+    m_store->close(); //close picture file
+}
+
+void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97::PICF> picf, int type)
+{
+
+    //set up filename
+    picName->append(QString::number(m_pictureCount));
+    //the type coming in corresponds to MSOBLIPTYPE
+    //  see wv2/graphics.h
+    if(type == 5)
+        picName->append(".jpg");
+    else if (type == 3)
+        picName->append(".wmf");
+    else
+    {
+        kWarning() << "Unhandled file type - pictures won't be displayed.";
+        return;
+    }
 
     //add entry in manifest file
-    QString mimetype(KMimeType::findByPath(picName, 0, true)->name());
-    m_manifestWriter->addManifestEntry(picName, mimetype);
+    QString mimetype(KMimeType::findByPath(*picName, 0, true)->name());
+    m_manifestWriter->addManifestEntry(*picName, mimetype);
 
     //create style
     QString styleName("fr");
@@ -108,7 +165,7 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
     m_bodyWriter->addAttributePt("svg:width", width);
     //start the actual image tag
     m_bodyWriter->startElement("draw:image");
-    m_bodyWriter->addAttribute("xlink:href", picName);
+    m_bodyWriter->addAttribute("xlink:href", *picName);
     m_bodyWriter->addAttribute("xlink:type", "simple");
     m_bodyWriter->addAttribute("xlink:show", "embed");
     m_bodyWriter->addAttribute("xlink:actuate", "onLoad");

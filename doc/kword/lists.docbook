@@ -146,7 +146,7 @@ your list will look.</para>
 numbering your list at the beginning.</para>
 </sect3>
 <sect3 id="lists-multiline"><title> Multiple paragraphs in one list element</title>
-<para>Each new paragraph represents a new list element.  Sometimes, however, it will be desireable to have multiple 
+<para>Each new paragraph represents a new list element.  Sometimes, however, it will be desirable to have multiple 
 paragraphs on a single list element.  This is accomplished by inserting a New Line character instead of a Paragraph Break.</para>
 
 <para>To insert a New Line, type <keycombo action="simul">&Shift;<keycap>Return</keycap></keycombo>.</para>

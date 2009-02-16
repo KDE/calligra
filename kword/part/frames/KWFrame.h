@@ -46,8 +46,9 @@ public:
      * Constructor
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
+     * @param pageNumber the page number is normally -1, only set when loading page anchored fames to the page where the frame should be shown
      */
-    KWFrame(KoShape *shape, KWFrameSet *parent);
+    KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber = -1);
     virtual ~KWFrame();
 
     /**
@@ -210,6 +211,10 @@ private:
     KWord::TextRunAround m_runAround;
     qreal m_runAroundDistance;
     KoTextAnchor *m_anchor;
+    // The page number is only used during loading.
+    // It is set to the page number if the frame contains a page anchored frame.
+    // In all other cases it is set to -1.
+    int m_pageNumber;
 
     KWFrameSet *m_frameSet;
     KWOutlineShape *m_outline;

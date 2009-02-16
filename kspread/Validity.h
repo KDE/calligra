@@ -47,7 +47,7 @@
 // KSpread
 #include "Condition.h"
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 
 namespace KSpread
 {

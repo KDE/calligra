@@ -26,7 +26,7 @@
 class QRectF;
 class QPixmap;
 class KPrPlaceholder;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoPALoadingContext;
 class KoPASavingContext;
 

@@ -136,6 +136,7 @@ GanttPrintingOptions::GanttPrintingOptions( QWidget *parent )
 GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
     : PrintingDialog( view ),
     m_gantt( gantt ),
+    m_options( 0 ),
     m_singlePage( true ),
     m_printRowLabels( true )
 {
@@ -160,8 +161,10 @@ GanttPrintingDialog::GanttPrintingDialog( ViewBase *view, KDGantt::View *gantt )
 
 void GanttPrintingDialog::startPrinting(RemovePolicy removePolicy )
 {
-    m_singlePage = m_options->singlePage();
-    //m_printRowLabels = m_options->printRowLabels();
+    if ( m_options ) {
+        m_singlePage = m_options->singlePage();
+        //m_printRowLabels = m_options->printRowLabels();
+    }
     KoPrintingDialog::startPrinting( removePolicy );
 }
 

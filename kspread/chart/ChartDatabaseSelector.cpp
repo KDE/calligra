@@ -74,11 +74,14 @@ void ChartDatabaseSelector::open(KoShape* shape)
 
 void ChartDatabaseSelector::save()
 {
-    const Region region(d->widget.m_cellRegion->text(), d->doc->map(), d->selection->activeSheet());
+    // This region contains the entire sheet
+    const Region region(1, 1, KS_colMax, KS_rowMax, d->selection->activeSheet());
+    // The region to be displayed in the chart
+    const Region selectedRegion(d->widget.m_cellRegion->text(), d->doc->map(), d->selection->activeSheet());
     if (!region.isValid() || !region.isContiguous())
         return;
     Binding binding(region);
-    d->shape->setModel(binding.model(), region.rects());
+    d->shape->setModel(binding.model(), selectedRegion.rects());
     d->shape->setFirstRowIsLabel( d->widget.m_firstRowAsLabel->isChecked() );
     d->shape->setFirstColumnIsLabel( d->widget.m_firstColumnAsLabel->isChecked() );
     d->shape->setDataDirection( d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical );

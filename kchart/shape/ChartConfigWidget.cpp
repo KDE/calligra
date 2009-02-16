@@ -392,7 +392,6 @@ void ChartConfigWidget::open( KoShape* shape )
     KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
     TableModel *tableModel = qobject_cast<TableModel*>( d->shape->model() );
     d->sourceIsSpreadSheet = ( spreadSheetModel != 0 && tableModel == 0 );
-    kDebug() << d->sourceIsSpreadSheet;
     
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
@@ -776,7 +775,7 @@ void ChartConfigWidget::update()
             d->ui.axisShowGridLines->setEnabled( true );
             d->ui.axisShowGridLines->setChecked( selectedAxis->showMajorGrid() || selectedAxis->showMinorGrid() );
             d->ui.axisShowTitle->setEnabled( true );
-            d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
+            d->ui.axisShowTitle->setChecked( selectedAxis->title()->isVisible() );
             d->ui.axisTitle->setEnabled( true );
             d->ui.axisTitle->setText( selectedAxis->titleText() );
         } else {
@@ -796,7 +795,16 @@ void ChartConfigWidget::update()
             d->ui.axisTitle->blockSignals( false );
         }
     }
+
+    // Update "Labels" section in "Plot Area" tab
+    d->ui.showTitle->setChecked( d->shape->title()->isVisible() );
+    d->ui.showSubTitle->setChecked( d->shape->subTitle()->isVisible() );
+    d->ui.showFooter->setChecked( d->shape->footer()->isVisible() );
     
+    // Update "Bar Properties" in "Data Sets" tab
+    d->ui.gapBetweenBars->setValue( d->shape->plotArea()->gapBetweenBars() );
+    d->ui.gapBetweenSets->setValue( d->shape->plotArea()->gapBetweenSets() );
+
     if (    d->type    != d->shape->chartType()
          || d->subtype != d->shape->chartSubType() )
     {

@@ -32,7 +32,7 @@
 #include <kio/job.h>
 #include <KoFilterManager.h>
 
-
+#include <kofficeversion.h>
 
 bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uOut, const QString & outputFormat, const bool batch )
 {
@@ -60,7 +60,7 @@ void ProgressObject::slotProgress(int /* progress */ )
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), "1.4",
+    KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), KOFFICE_VERSION_STRING,
                           ki18n("KOffice Document Converter"),
                           KAboutData::License_GPL,
                           ki18n("(c) 2001-2004 KOffice developers") );

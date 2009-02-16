@@ -63,7 +63,6 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* 
   : KDialog( parent )
 {
     setCaption( i18n("Function") );
-    setModal( true );
     setButtons( Ok|Cancel );
     //setWFlags( Qt::WDestructiveClose );
 
@@ -338,6 +337,10 @@ bool FormulaDialog::eventFilter( QObject* obj, QEvent* ev )
 
 void FormulaDialog::slotOk()
 {
+    // Pretend none of the text edits have focus; otherwise the next line will change the
+    // value of whatever parameter has focus to the name of the cell we're editing
+    m_focus = 0;
+
     m_selection->endReferenceSelection();
 
     // Revert the marker to its original position
@@ -350,7 +353,7 @@ void FormulaDialog::slotOk()
         Q_ASSERT( m_editor );
         QString tmp = result->text();
         if( tmp.at(0) != '=')
-	    tmp = '=' + tmp;
+            tmp = '=' + tmp;
         int pos = m_editor->cursorPosition()+ tmp.length();
         m_editor->setText( tmp );
         m_editor->setFocus();
@@ -397,10 +400,10 @@ void FormulaDialog::slotChangeText( const QString& )
 {
     // Test the lock
     if( !refresh_result )
-	return;
+        return;
 
     if ( m_focus == 0 )
-	return;
+        return;
 
     QString tmp = m_leftText+m_funcName+'(';
     tmp += createFormula();

@@ -116,9 +116,10 @@ private slots:
     void setLegendFrameColor( const QColor& color );
     void setLegendShowFrame( bool show );
 
-private:
-    void updateActions();
+    // Called upon shape manager's selectionChanged() signal
+    void shapeSelectionChanged();
 
+private:
     class Private;
     Private * const d;
 };

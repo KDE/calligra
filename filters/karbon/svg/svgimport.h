@@ -54,6 +54,8 @@ protected:
     /// The main entry point for the conversion
     void convert();
 
+    /// Parses a svg fragment, returning the list of child shapes
+    QList<KoShape*> parseSvg( const QDomElement &e, QSizeF * fragmentSize = 0 );
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer( const QDomElement & );
     /// Parses a use element, returning a list of child shapes
@@ -63,7 +65,7 @@ protected:
     /// Parses style attributes, applying them to the given shape
     void parseStyle( KoShape *, const QDomElement & );
     /// Parses a single style attribute
-    void parsePA( KoShape *, SvgGraphicsContext *, const QString &, const QString & );
+    void parsePA( SvgGraphicsContext *, const QString &, const QString & );
     /// Parses a gradient element
     bool parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses gradient color stops
@@ -72,6 +74,12 @@ protected:
     bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
     /// Parses a length attribute
     double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
+    /// parses a length attribute in x-direction
+    double parseUnitX( const QString &unit );
+    /// parses a length attribute in y-direction
+    double parseUnitY( const QString &unit );
+    /// parses a length attribute in xy-direction
+    double parseUnitXY( const QString &unit );
     /// Parses a color attribute
     void parseColor( QColor &, const QString & );
     /// Converts given string into a color
@@ -80,6 +88,8 @@ protected:
     QMatrix parseTransform( const QString &transform );
     /// Parse a image
     bool parseImage( const QString &imageAttribute, QImage &image );
+    /// Parses a viewbox attribute into an rectangle
+    QRectF parseViewBox( QString viewbox );
 
     double toPercentage( QString );
     double fromPercentage( QString );
@@ -140,7 +150,6 @@ private:
     QMap<QString, SvgPatternHelper> m_patterns;
     QMap<QString, QDomElement>     m_defs;
     QHash<QByteArray, QColor>      m_rgbcolors;
-    QRectF                         m_outerRect;
     QDomDocument                   m_inpdoc;
     QStringList m_fontAttributes; ///< font related attributes
     QStringList m_styleAttributes; ///< style related attributes

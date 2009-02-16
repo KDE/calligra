@@ -157,7 +157,7 @@ text style.</para>
 
 <para>This tab functions identically to the <link linkend="change-font-dialog">change font dialog</link> used to edit general text.
 Changes to this tab affect to
-all text formated with this text style.</para>
+all text formatted with this text style.</para>
 
 </sect4>
 
@@ -169,7 +169,7 @@ spacing between lines, and paragraph indentation.</para>
 
 <para>This tab functions identically to the same tab in the <link linkend="indents-and-spaces">Format Paragraph</link> dialog.
 Changes to this tab affect to
-all text formated with this text style.</para>
+all text formatted with this text style.</para>
 </sect4>
 
 <sect4 id="style-align">
@@ -182,7 +182,7 @@ this as <emphasis>Alignment</emphasis>, or
 
 <para>This tab functions identically to the same tab in the <link linkend="para-aligns">Format Paragraph</link> dialog.
 Changes to this tab affect to
-all text formated with this text style.</para>
+all text formatted with this text style.</para>
 
 </sect4>
 
@@ -194,7 +194,7 @@ around your paragraphs.</para>
 
 <para>This tab functions identically to the same tab in the <link linkend="para-borders">Format Paragraph</link> dialog.
 Changes to this tab affect to
-all text formated with this text style.</para>
+all text formatted with this text style.</para>
 
 </sect4>
 

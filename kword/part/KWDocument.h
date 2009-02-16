@@ -38,7 +38,6 @@
 #include <QRect>
 
 class KWView;
-class KWPageManager;
 class KWPage;
 class KWFrameSet;
 

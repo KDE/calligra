@@ -24,7 +24,7 @@
 #include <QString>
 #include <QRectF>
 
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoXmlWriter;
 
 class KPrPlaceholder

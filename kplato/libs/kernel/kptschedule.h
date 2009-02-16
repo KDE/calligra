@@ -31,7 +31,7 @@
 #include <QMap>
 #include <QString>
 
-//class KoXmlElement;
+//#include "KoXmlReaderForward.h"
 class QDomElement;
 class QStringList;
 

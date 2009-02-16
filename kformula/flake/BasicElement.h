@@ -33,7 +33,7 @@
 class QPainter;
 class QVariant;
 class KoXmlWriter;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class AttributeManager;
 class FormulaCursor;
 

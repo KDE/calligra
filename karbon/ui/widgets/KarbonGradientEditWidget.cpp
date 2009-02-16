@@ -29,7 +29,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 #include <KoSliderCombo.h>
-#include <KoColorComboBox.h>
+#include <KoColorPopupAction.h>
 
 #include <kcombobox.h>
 #include <klocale.h>
@@ -42,6 +42,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QLayout>
 #include <QtGui/QPushButton>
+#include <QtGui/QToolButton>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QGridLayout>
 #include <QtGui/QRadialGradient>
@@ -209,8 +210,11 @@ void KarbonGradientEditWidget::setupUI()
     editLayout->addWidget( m_opacity, row, 1 );
 
     editLayout->addWidget( new QLabel( i18n( "Stop color:" ), this ), ++row, 0 );
-    m_stopColor = new KoColorComboBox( this );
+    m_stopColor = new QToolButton( this );
     editLayout->addWidget( m_stopColor, row, 1 );
+    m_actionStopColor = new KoColorPopupAction(this);
+    m_actionStopColor ->setToolTip(i18n("Stop color:."));
+    m_stopColor->setDefaultAction(m_actionStopColor);
 
     m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), this );
     editLayout->addWidget( m_addToPredefs, ++row, 0, 1, 2 );
@@ -229,7 +233,7 @@ void KarbonGradientEditWidget::setupConnections()
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_opacity, SIGNAL( valueChanged( qreal, bool ) ), this, SLOT( opacityChanged( qreal, bool ) ) );
-    connect( m_stopColor, SIGNAL(colorChanged(const QColor&)), this, SLOT(stopChanged()) );
+    connect( m_actionStopColor, SIGNAL(colorChanged(const KoColor&)), this, SLOT(stopChanged()) );
 }
 
 void KarbonGradientEditWidget::blockChildSignals( bool block )
@@ -270,7 +274,7 @@ void KarbonGradientEditWidget::updateUI()
     if( m_stopIndex >= 0 && m_stopIndex < m_stops.count() )
     {
         QColor c = m_stops[m_stopIndex].second;
-        m_stopColor->setColor( c );
+        m_actionStopColor->setCurrentColor( c );
         m_stopColor->setEnabled( true );
     }
     else
@@ -429,7 +433,7 @@ void KarbonGradientEditWidget::stopChanged()
 {
     if( m_stopIndex >= 0 && m_stopIndex < m_stops.count() )
     {
-        m_stops[m_stopIndex].second = m_stopColor->color();
+        m_stops[m_stopIndex].second = m_actionStopColor->currentColor();
         emit changed();
     }
 }

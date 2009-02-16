@@ -65,6 +65,9 @@ public:
 
 private:
 
+    /// Duplicates the given gradient and applies the given transformation
+    QGradient * duplicateGradient( const QGradient * g, const QMatrix &transform ) const;
+
     QGradient * m_gradient;
     Units m_gradientUnits;
     QMatrix m_gradientTransform;

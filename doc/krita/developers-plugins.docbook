@@ -467,7 +467,7 @@ other.</para></listitem>
 <listitem><para>color: a <classname>QColor</classname> representation of this
 channel for user interface visualization, for instance in
 histograms.</para></listitem>
-<listitem><para>an abbreviaton for use in the GUI when there’s not much
+<listitem><para>an abbreviation for use in the GUI when there’s not much
 space</para></listitem>
 </itemizedlist>
 </sect3>
@@ -492,7 +492,7 @@ course.
 <title><classname>KisColorSpace</classname></title>
 
 <para>
-The methods in the <classname>KisColorSpace</classname> pure virtual classs
+The methods in the <classname>KisColorSpace</classname> pure virtual class
 can be divided into a number of groups: conversion, identification and
 manipulation.
 </para><para>
@@ -534,7 +534,7 @@ of tile edges and <quote>cobble</quote> tiles together: &krita; hides that
 implementation detail.
 </para>
 <note><para>Note that it is theoretically easy to replace the current tile
-image data storage backend with another backend, but that backens are not true
+image data storage backend with another backend, but that backends are not true
 plugins at the moment, for performance reasons.</para></note>
 <para>
 &krita; uses iterators to read and write pixel values. Alternatively, you can
@@ -1533,7 +1533,7 @@ file for us.</para></callout>
 prepared for import. Certain settings are initialized and undo is disabled.
 Otherwise you could undo the adding of layers performed by the import filter
 and that is weird behaviour.</para></callout>
-<callout arearefs="import6"><para>I have chosed to implement the actual
+<callout arearefs="import6"><para>I have chosen to implement the actual
 importing code in a separate class that I instantiate here. You can also put
 all your code right in this method, but that would be a bit
 messy.</para></callout>

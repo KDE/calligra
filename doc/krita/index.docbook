@@ -68,7 +68,7 @@
 </authorgroup>
 
 <copyright>
-<year>2005-2006</year>
+<year>2005-2009</year>
 <holder>Boudewijn Rempt</holder>
 <holder>Casper Boemann</holder>
 <holder>Cyrille Berger</holder>
@@ -90,7 +90,9 @@
 editing application, but above all, a paint application that will allow you to
 create original art on your computer as if you were working with paint and
 brushes, pencils, pen and ink &mdash; or, at least, it will one day. We are
-continually working on extending &krita; and making it better in every respect.
+continually working on extending &krita; and making it better in every
+respect. Please consider helping out with code, documentation or work
+on our website!
 </para>
 </abstract>
 
@@ -108,7 +110,7 @@ continually working on extending &krita; and making it better in every respect.
 &introduction;
 &tutorial;
 &images;
-&views;
+<!--&views; disabled for 2.0-->
 &layers;
 &selections;
 &filters;

@@ -328,6 +328,7 @@ bool SplitterView::loadContext( const KoXmlElement &context )
     if ( e.isNull() ) {
         return true;
     }
+#ifndef KOXML_USE_QDOM
     foreach ( QString s, e.attributeNames() ) {
         ViewBase *v = findChildren<ViewBase*>( s ).first();
         if ( v == 0 ) {
@@ -339,6 +340,7 @@ bool SplitterView::loadContext( const KoXmlElement &context )
         }
         v->loadContext( e1 );
     }
+#endif
     return true;
 }
 

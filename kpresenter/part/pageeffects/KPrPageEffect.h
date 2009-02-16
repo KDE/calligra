@@ -26,7 +26,7 @@
 #include "kpresenter_export.h"
 
 class QPainter;
-class KoXmlElement;
+#include "KoXmlReaderForward.h"
 class KoXmlWriter;
 class KoGenStyle;
 class KPrPageEffectStrategy;

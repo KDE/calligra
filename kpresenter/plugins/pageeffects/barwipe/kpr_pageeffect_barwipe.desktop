@@ -2,6 +2,7 @@
 Name=Bar Wipe
 Name[ca]=Esborrat de barra
 Name[el]=Σβήσιμο ράβδων
+Name[es]=Barrido de barras
 Name[et]=Lattsiire
 Name[gl]=Transición de Barras
 Name[hi]=बार वाइप
@@ -21,6 +22,7 @@ Name[zh_TW]=條狀掃描
 Comment=Bar Wipe Page Effect
 Comment[ca]=Efecte d'esborrat de barra de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο ράβδων
+Comment[es]=Efecto de página de barrido de barras
 Comment[et]=Lattsiirde lehekülje efekt
 Comment[gl]=Efecto de Transición de Páxina de Barras
 Comment[hi]=बार वाइप पृष्ठ प्रभाव

@@ -158,13 +158,20 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
     KoOdfStylesReader& stylesReader = loadingContext.odfLoadingContext().stylesReader();
     const KoXmlElement * styleElement = stylesReader.findContentAutoStyle( element.attributeNS( KoXmlNS::draw, "style-name" ), "drawing-page" );
     if ( styleElement ) {
+#ifndef KOXML_USE_QDOM
         KoXmlNode node = styleElement->namedItemNS( KoXmlNS::style, "drawing-page-properties" );
+#else
+	KoXmlNode node; // XXX!!!
+#endif
         if ( node.isElement() ) {
             data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( node.toElement() ) );
         }
     }
-
+#ifndef KOXML_USE_QDOM
     KoXmlNode node = element.namedItemNS(KoXmlNS::presentation, "notes");
+#else
+    KoXmlNode node; //XXX!!!
+#endif
     if ( node.isElement() ) {
         d->pageNotes->loadOdf(node.toElement(), loadingContext);
     }

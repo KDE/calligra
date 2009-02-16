@@ -51,7 +51,7 @@ the menubar.</para>
 <indexterm><primary>table of contents</primary><secondary>formatting</secondary></indexterm>
 
 <para>The look of the table of contents is also adjusted by using the paragraph styles in &kword;.</para>
-<para>The table of contents title is formated with the <guilabel>Contents Title</guilabel> paragraph style. 
+<para>The table of contents title is formatted with the <guilabel>Contents Title</guilabel> paragraph style. 
 All major subject headings (those marked with the <guilabel>Head 1</guilabel> style), are now formatted
 using <guilabel>Contents Head 1</guilabel> paragraph style.  All sub-headings (those marked with the 
 <guilabel>Head 2</guilabel> style), are now formatted

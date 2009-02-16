@@ -1,5 +1,5 @@
 SVG export
-- patterns
+- pattern strokes
 - text
 - for text on path: when on path shape 
     -> path data into defs
@@ -11,6 +11,7 @@ SVG import
 - embedded svg elements
 - visibility
 - text on path shape -> see above for export
-- patterns fills
+- pattern strokes
 - clipping, masking
 - filters
+- css styling

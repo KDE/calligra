@@ -189,7 +189,7 @@ the <guilabel>Contiguous Select</guilabel> tool) and use it on the layer.
 
 <para>
 Deselect with <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem></menuchoice>.
-You'll notice some artefacts of the feathering at the sides. You can select them easily with a rectangular selection and then cut them.
+You'll notice some artifacts of the feathering at the sides. You can select them easily with a rectangular selection and then cut them.
 </para>
 
 <screenshot>
