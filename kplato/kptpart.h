@@ -62,6 +62,13 @@ public:
     Project &getProject() { return *m_project; }
     const Project &getProject() const { return * m_project; }
 
+    /**
+     * Return the set of SupportedSpecialFormats that the kplato wants to
+     * offer in the "Save" file dialog.
+     * Note: SaveEncrypted is not supported.
+     */
+    virtual int supportedSpecialFormats() const { return SaveAsDirectoryStore; }
+
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML( const KoXmlDocument &document, KoStore *store );
     virtual QDomDocument saveXML();
