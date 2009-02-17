@@ -109,7 +109,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 
     // TODO check versions and mimetypes etc.
 
-    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store());
+    KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
     KoShapeLoadingContext sc(odfContext, m_document->dataCenterMap());
 
     // Load all styles before the corresponding paragraphs try to use them!
@@ -122,7 +122,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 
     KoTextLoader * loader = new KoTextLoader(sc);
     Q_UNUSED(loader);
-    KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
+    KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
 
 
     KoColumns columns;
