@@ -70,18 +70,18 @@ void KPrPlaceholders::setLayout( KPrPageLayout * layout, KoPADocument * document
                 placeholders.erase( itPlaceholder );
             }
             // replace the shape as given by the layout
-            QList<KoShape *> shapes;
-            QList<QSizeF> oldSizes;
-            QList<QSizeF> newSizes;
+            QList<KoShape *> modifiedShape;
+            QList<QSizeF> oldSize;
+            QList<QSizeF> newSize;
             QList<QPointF> oldPosition;
             QList<QPointF> newPosition;
-            shapes.append( it->shape );
-            oldSizes.append( it->shape->size() );
-            newSizes.append( rect.size() );
+            modifiedShape.append( it->shape );
+            oldSize.append( it->shape->size() );
+            newSize.append( rect.size() );
             oldPosition.append( it->shape->position() );
             newPosition.append( rect.topLeft() );
-            new KoShapeSizeCommand( shapes, oldSizes, newSizes, cmd );
-            new KoShapeMoveCommand( shapes, oldPosition, newPosition, cmd );
+            new KoShapeSizeCommand( modifiedShape, oldSize, newSize, cmd );
+            new KoShapeMoveCommand( modifiedShape, oldPosition, newPosition, cmd );
         }
         else {
             if ( it->isPlaceholder ) {
