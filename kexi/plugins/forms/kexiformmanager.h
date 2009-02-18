@@ -21,7 +21,7 @@
 #define KEXIFORMMANAGER_H
 
 #include <QObject>
-#include "KexiFormPart.h"
+#include "kexiformpart.h"
 
 class QActionGroup;
 
