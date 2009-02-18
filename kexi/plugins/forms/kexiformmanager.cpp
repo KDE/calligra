@@ -429,7 +429,7 @@ void KexiFormManager::slotAssignAction()
     KexiFormView* formView = activeFormViewWidget();
     KFormDesigner::Form *form = formView->form();
     KexiDBForm *dbform;
-    if (!form->mode() == KFormDesigner::Form::DesignMode
+    if (form->mode() != KFormDesigner::Form::DesignMode
         || !(dbform = dynamic_cast<KexiDBForm*>(form->formWidget())))
     {
         return;
