@@ -112,8 +112,8 @@ public:
     Private(Container* toplevel, QWidget *container)
       : m_toplevel(toplevel)
       , m_widget(container)
-      , insertBegin(-1, -1)
       , state(DoingNothing)
+      , insertBegin(-1, -1)
     {
     }
     ~Private() {
@@ -303,19 +303,21 @@ Container::eventFilter(QObject *s, QEvent *e)
         else if ((d->form->selectedWidgets()->count() > 1)) { //&& (!d->form->manager()->isInserting())) // more than one widget selected
             if (!d->form->selectedWidgets()->contains(m_moving)) {
                 // widget is not selected, it becomes the only selected widget
-                const Form::WidgetSelectionFlags flags
-                    = Form::ReplacePreviousSelection
-                      | Form::LastSelection
-                      | ((mev->button() == Qt::RightButton) ? Form::DontRaise : 0);
+                Form::WidgetSelectionFlags flags
+                    = Form::ReplacePreviousSelection | Form::LastSelection;
+                if (mev->button() == Qt::RightButton) {
+                    flags |= Form::DontRaise;
+                }
                 selectWidget(m_moving, flags);
             }
             // If the widget is already selected, we do nothing (to ease widget moving, etc.)
         }
         else {// if(!d->form->manager()->isInserting())
-            const Form::WidgetSelectionFlags flags
-                = Form::ReplacePreviousSelection
-                  | Form::LastSelection
-                  | ((mev->button() == Qt::RightButton) ? Form::DontRaise : 0);
+            Form::WidgetSelectionFlags flags
+                = Form::ReplacePreviousSelection | Form::LastSelection;
+            if (mev->button() == Qt::RightButton) {
+                flags |= Form::DontRaise;
+            }
             selectWidget(m_moving, flags);
         }
 
