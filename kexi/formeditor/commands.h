@@ -91,7 +91,7 @@ protected:
     Private * const d;
 };
 
-/*! Command used when moving multiples widgets at the same time, while holding Ctrl or Shift.
+//! Command used when moving multiples widgets at the same time, while holding Ctrl or Shift.
 /*! You need to supply a list of widget names, and the position of the cursor before moving. Use setPos()
   to tell the new cursor pos every time it changes.*/
 class KFORMEDITOR_EXPORT GeometryPropertyCommand : public Command
