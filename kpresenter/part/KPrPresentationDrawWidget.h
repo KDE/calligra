@@ -41,8 +41,10 @@ public :
     void contextMenuEvent(QContextMenuEvent* event);
 
 private :
+    QIcon buildIconColor(QColor);
     QSize m_size;
     bool m_draw;
+    int m_brushSize;
     QList<QVector<QPointF> > m_pointVectors;
 };
 

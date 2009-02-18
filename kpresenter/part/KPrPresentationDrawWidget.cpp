@@ -23,6 +23,7 @@
 #include <QtGui/QMenu>
 
 #include <QMenu>
+#include <QIcon>
 
 #include <klocale.h>
 #include <KoPACanvas.h>
@@ -40,6 +41,7 @@ KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWid
     resize( m_size );
     
     m_draw = false;
+    m_brushSize = 10;
 }
 
 KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
@@ -50,7 +52,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 {
     QPainter painter( this );    
     QBrush brush( Qt::SolidPattern );
-    QPen pen( brush, 10, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
+    QPen pen( brush, m_brushSize, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
     pen.setColor( Qt::black );
     painter.setPen( pen );
     for( int i=0; i < m_pointVectors.count(); i++ )
@@ -84,12 +86,40 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     QMenu *color = new QMenu( QString( "Color of the pen"), this );
     QMenu *size = new QMenu( QString( "Size of the pen"), this );
     
-    color->addAction( QString("void ...") );
-    size->addAction( QString("void ...") );
+
+    color->addAction ( buildIconColor ( Qt::green ) , QString("Green") );
+    color->addAction ( buildIconColor ( Qt::red ) , QString("Red") );
+    color->addAction ( buildIconColor ( Qt::blue ) , QString("Blue") );
+    color->addAction ( buildIconColor ( Qt::yellow ) , QString("Yellow") );
+
+    size->addAction( QString("9 px") );
+    size->addAction( QString("10 px") );
+    size->addAction( QString("12 px") );
+    size->addAction( QString("14 px") );
+    size->addAction( QString("16 px") );
+    size->addAction( QString("18 px") );
+    size->addAction( QString("20 px") );
+    size->addAction( QString("22 px") );
+    size->addAction( QString("24 px") );
     
     // Not connected yet
     menu.addMenu( color );
     menu.addMenu( size );
     
     menu.exec(event->globalPos());
+}
+
+QIcon KPrPresentationDrawWidget::buildIconColor ( QColor color )
+{
+
+    QPen thumbPen ( color, Qt::MiterJoin );
+    thumbPen.setWidth ( 3 );
+    QPixmap thumbPixmap ( QSize ( 24, 20 ) );
+    thumbPixmap.fill ( );
+    QPainter thumbPainter ( &thumbPixmap );
+    thumbPainter.setBackground ( QBrush( color ) );
+    thumbPainter.setPen ( thumbPen );
+    thumbPainter.drawRect ( 2, 2, 20, 16 );
+    QIcon thumbIcon ( thumbPixmap );
+    return thumbIcon;
 }
