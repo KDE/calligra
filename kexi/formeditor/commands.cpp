@@ -943,15 +943,16 @@ CreateLayoutCommand::CreateLayoutCommand(Form &form, Form::LayoutType layoutType
     std::auto_ptr<CustomSortableWidgetList> realList;
 
     switch (d->layoutType) {
+    case Form::NoLayout:
     case Form::HBox:
     case Form::Grid:
     case Form::HSplitter:
     case Form::HFlow:
-        realList = new HorizontalWidgetList(d->form->toplevelContainer()->widget()); break;
+        realList = std::auto_ptr<CustomSortableWidgetList>(new HorizontalWidgetList(d->form->toplevelContainer()->widget())); break;
     case Form::VBox:
     case Form::VSplitter:
     case Form::VFlow:
-        realList = new VerticalWidgetList(d->form->toplevelContainer()->widget()); break;
+        realList = std::auto_ptr<CustomSortableWidgetList>(new VerticalWidgetList(d->form->toplevelContainer()->widget())); break;
     }
     
     foreach (QWidget *w, list) {
