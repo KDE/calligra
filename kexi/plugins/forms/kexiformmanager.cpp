@@ -47,7 +47,11 @@
 
 class KexiFormManagerPrivate {
 public:
-    KexiFormManagerPrivate() : part(0), uiCodeDialog(0), q(this)
+    KexiFormManagerPrivate() : part(0)
+#ifdef KEXI_DEBUG_GUI
+        , uiCodeDialog(0)
+#endif
+        , q(this)
     {
         features = KFormDesigner::Form::NoFeatures;
         widgetActionGroup = new QActionGroup(&q);
@@ -58,17 +62,20 @@ public:
         collection = 0;
     }
     ~KexiFormManagerPrivate() {
+#ifdef KEXI_DEBUG_GUI
         delete uiCodeDialog;
+#endif
     }
     KexiFormPart* part;
     KFormDesigner::WidgetLibrary* lib;
     QActionGroup* widgetActionGroup;
     KFormDesigner::ObjectTreeView *treeView;
-   
+#ifdef KEXI_DEBUG_GUI
+    //! For debugging purposes
     KPageDialog *uiCodeDialog;
     KTextEdit *currentUICodeDialogEditor;
     KTextEdit *originalUICodeDialogEditor;
-    
+#endif
     KActionCollection  *collection;
     KFormDesigner::Form::Features features;
     KToggleAction *pointerAction;
