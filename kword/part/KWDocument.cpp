@@ -87,7 +87,7 @@ public:
     /// add the frame to be hidden
     void addFrame(KWFrame *frame);
     // reveal all the frames that were added before
-    void revealFramesForPage(int pageNumber);
+    void revealFramesForPage(int pageNumber, qreal moveFrames);
 
 private:
     QHash<int, QList<KWFrame*> > m_data;
@@ -102,12 +102,15 @@ void MagicCurtain::addFrame(KWFrame *frame)
     frame->shape()->setParent(this);
 }
 
-void MagicCurtain::revealFramesForPage(int pageNumber)
+void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
 {
+    QPointF offset(0, moveFrames);
     foreach (KWFrame *frame, m_data.value(pageNumber)) {
+        frame->shape()->setPosition(frame->shape()->position() + offset);
         frame->shape()->setParent(0);
         frame->clearLoadingData();
     }
+    m_data.remove(pageNumber);
 }
 
 
@@ -560,8 +563,9 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             lastpage = m_pageManager.appendPage();
         ppq->addPage(lastpage);
         docHeight += lastpage.height();
-        if (m_magicCurtain)
-            m_magicCurtain->revealFramesForPage(lastpage.pageNumber());
+        if (m_magicCurtain) {
+            m_magicCurtain->revealFramesForPage(lastpage.pageNumber(), lastpage.offsetInDocument());
+        }
     }
 
 #if 0
@@ -716,7 +720,7 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
     } else {
         KWPage newPage = appendPage(masterPageName);
         if (m_magicCurtain)
-            m_magicCurtain->revealFramesForPage(newPage.pageNumber());
+            m_magicCurtain->revealFramesForPage(newPage.pageNumber(), newPage.offsetInDocument());
     }
 }
 
