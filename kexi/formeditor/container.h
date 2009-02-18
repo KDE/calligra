@@ -162,11 +162,8 @@ public:
 
 public slots:
     /*! Sets \a selected to be the selected widget of this container
-      (and so of the Form). If \a add is true, the formerly selected widget
-      is still selected, and the new one is just added. If false, \a selected
-       replace the actually selected widget. If \a dontRaise is true, then
-      the widget \a selected (and its parent) won't be raised (eg when you
-       select widget in ObjectTreeView).
+      (and so of the Form). See Form::WidgetSelectionFlags description
+      for exmplanation of possible combination of @a flags flags.
       \sa Form::selectWidget() */
       void selectWidget(QWidget *w, Form::WidgetSelectionFlags flags = Form::DefaultWidgetSelectionFlags);
 //    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise = false,
