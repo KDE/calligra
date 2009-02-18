@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 #define KEXIFORMSCROLLVIEW_H
 
 #include "kexidataprovider.h"
-#include "kexiformeventhandler.h"
+#include <formeditor/kexiformeventhandler.h>
 #include "widgets/kexidbform.h"
 #include <widget/kexiscrollview.h>
 #include <widget/utils/kexirecordnavigator.h>

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -72,7 +72,7 @@ public:
         advancedProperties.insert("enableSqueezedText");
         advancedProperties.insert("sizeIncrement");
 /*! @todo: reenable */ advancedProperties.insert("palette");
-        advancedProperties.insert("backgroundOrigin");
+//2.0 obsolete        advancedProperties.insert("backgroundOrigin");
         advancedProperties.insert("backgroundMode");//this is rather useless
         advancedProperties.insert("layout");// too large risk to break things
         // by providing this in propeditor
@@ -306,12 +306,11 @@ WidgetLibrary::createXML()
   return doc.toString();
 }*/
 
-ActionList
-WidgetLibrary::createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
-                                   QObject *receiver, const char *slot)
+void WidgetLibrary::createWidgetActions(QActionGroup *group)
 {
     loadFactories();
 
+#if 0 // 2.0: we're removing XML gui client stuff
     // init XML gui clients (custom factories have their own .rc files)
     foreach (WidgetFactory *factory, d->factories) {
         if (factory->m_xmlGUIFileName.isEmpty()) { // probably a built-in factory, with GUI file like kexiformpartinstui.rc
@@ -320,21 +319,24 @@ WidgetLibrary::createWidgetActions(KXMLGUIClient* client, KActionCollection *par
             factory->m_guiClient = new XMLGUIClient(client, factory->m_xmlGUIFileName);
         }
     }
+#endif
 
-    ActionList actions;
+//2.0    ActionList actions;
     foreach (WidgetInfo *winfo, d->widgets) {
-        LibActionWidget *a = new LibActionWidget(winfo,
-                winfo->factory()->m_guiClient
-                ? winfo->factory()->m_guiClient->actionCollection() : parent);
-        connect(a, SIGNAL(prepareInsert(const QByteArray &)), receiver, slot);
-        actions.append(a);
+        LibActionWidget *a = new LibActionWidget(group, winfo);
+ //2.0               winfo->factory()->m_guiClient
+ //2.0               ? winfo->factory()->m_guiClient->actionCollection() : parent);
+        connect(a, SIGNAL(toggled(const QByteArray &)), this, SIGNAL(widgetActionToggled(const QByteArray &)));
+//2.0        actions.append(a);
     }
-    return actions;
+//2.0    return actions;
 }
 
 void
 WidgetLibrary::addCustomWidgetActions(KActionCollection *col)
 {
+    if (!col)
+        return;
     foreach (WidgetFactory *factory, d->factories) {
         factory->createCustomActions(
             factory->m_guiClient
@@ -344,7 +346,7 @@ WidgetLibrary::addCustomWidgetActions(KActionCollection *col)
 
 QWidget*
 WidgetLibrary::createWidget(const QByteArray &classname, QWidget *parent, const char *name, Container *c,
-                            int options)
+                            WidgetFactory::CreateWidgetOptions options)
 {
     loadFactories();
     WidgetInfo *wclass = d->widgets.value(classname);
@@ -660,17 +662,17 @@ QString WidgetLibrary::propertyDescForValue(WidgetInfo *winfo, const QByteArray&
     return parentFactory->propertyDescForValue(name);
 }
 
-void WidgetLibrary::setPropertyOptions(WidgetPropertySet& buf, const WidgetInfo& winfo, QWidget* w)
+void WidgetLibrary::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& winfo, QWidget* w)
 {
     if (!winfo.factory())
         return;
-    winfo.factory()->setPropertyOptions(buf, winfo, w);
+    winfo.factory()->setPropertyOptions(set, winfo, w);
     if (winfo.m_parentFactoryName.isEmpty())
         return;
     WidgetFactory *parentFactory = d->factories.value(winfo.m_parentFactoryName);
     if (!parentFactory)
         return;
-    parentFactory->setPropertyOptions(buf, winfo, w);
+    parentFactory->setPropertyOptions(set, winfo, w);
 }
 
 WidgetFactory* WidgetLibrary::factory(const char* factoryName) const
@@ -690,7 +692,7 @@ QString WidgetLibrary::internalProperty(const QByteArray& classname, const QByte
     return value;
 }
 
-WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
+WidgetFactory::CreateWidgetOption WidgetLibrary::showOrientationSelectionPopup(
     const QByteArray &classname, QWidget* parent, const QPoint& pos)
 {
     loadFactories();
@@ -724,23 +726,20 @@ WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
     if (textVertical.isEmpty()) //default
         textVertical = i18nc("Insert Vertical Widget", "Insert Vertical");
 
-    KMenu* popup = new KMenu(parent);
-    popup->setObjectName("orientationSelectionPopup");
-    popup->addTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1", wclass->name()));
-    QAction* horizAction = popup->addAction(iconHorizontal, textHorizontal);
-    QAction* vertAction = popup->addAction(iconVertical, textVertical);
-    popup->addSeparator();
-    popup->addAction(SmallIcon("dialog-cancel"), i18n("Cancel"));
-    WidgetFactory::CreateWidgetOptions result;
-    QAction *a = popup->exec(pos);
+    KMenu popup(parent);
+    popup.setObjectName("orientationSelectionPopup");
+    popup.addTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1", wclass->name()));
+    QAction* horizAction = popup.addAction(iconHorizontal, textHorizontal);
+    QAction* vertAction = popup.addAction(iconVertical, textVertical);
+    popup.addSeparator();
+    popup.addAction(SmallIcon("dialog-cancel"), i18n("Cancel"));
+    QAction *a = popup.exec(pos);
     if (a == horizAction)
-        result = WidgetFactory::HorizontalOrientation;
+        return WidgetFactory::HorizontalOrientation;
     else if (a == vertAction)
-        result = WidgetFactory::VerticalOrientation;
-    else
-        result = WidgetFactory::AnyOrientation; //means "cancelled"
-    delete popup;
-    return result;
+        return WidgetFactory::VerticalOrientation;
+
+    return WidgetFactory::AnyOrientation; //means "cancelled"
 }
 
 bool WidgetLibrary::propertySetShouldBeReloadedAfterPropertyChange(

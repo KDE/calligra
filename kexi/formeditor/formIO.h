@@ -179,7 +179,7 @@ public:
 
 protected:
     /*! Saves the QVariant \a value as text to be included in an xml file, with \a parentNode.*/
-    static void writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value);
+    static void writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVariant& value);
 
     /*! Creates a toplevel widget from the QDomElement \a element in the Form \a form,
      with \a parent as parent widget.
@@ -214,6 +214,12 @@ private:
 
     /// Instead of having to pass these for every functions, we just store them in the class
     //static QWidgdet  *m_currentWidget;
+//! @todo remove
+#ifdef __GNUC__
+#warning "remove m_currentItem and m_currentForm.."
+#else
+#pragma WARNING( remove m_currentItem and m_currentForm.. )
+#endif
     static ObjectTreeItem   *m_currentItem;
     static Form *m_currentForm;
     static bool m_savePixmapsInline;

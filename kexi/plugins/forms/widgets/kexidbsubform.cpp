@@ -21,7 +21,8 @@
 #include "kexidbsubform.h"
 
 #include "kexidbform.h"
-#include "../kexiformview.h"
+#include "kexiformmanager.h"
+#include "kexiformview.h"
 #include <kexidb/utils.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
@@ -29,7 +30,7 @@
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <formeditor/container.h>
-#include <formeditor/formmanager.h>
+//2.0 #include <formeditor/formmanager.h>
 //Added by qt3to4:
 #include <Q3Frame>
 #include <QSet>
@@ -109,10 +110,11 @@ KexiDBSubForm::setFormName(const QString &name)
 
     // we create the container widget
     delete m_widget;
-    m_widget = new KexiDBFormBase(viewport(), "KexiDBSubForm_widget");
+    m_widget = new KexiDBFormBase(viewport());
+    m_widget->setObjectName("KexiDBSubForm_widget");
     m_widget->show();
     addChild(m_widget);
-    m_form = new KFormDesigner::Form(KexiFormPart::library());
+    m_form = new KFormDesigner::Form(m_parentForm);
     m_form->setObjectName(QString("KFormDesigner::Form_") + objectName());
     m_form->createToplevel(m_widget);
 
@@ -128,7 +130,7 @@ KexiDBSubForm::setFormName(const QString &name)
         m_formName.clear();
         return;
     }
-    m_form->setDesignMode(false);
+    m_form->setMode(KFormDesigner::Form::DataMode);
 
     // Install event filters on the whole newly created form
     KFormDesigner::ObjectTreeItem *tree = m_parentForm->objectTree()->lookup(QObject::objectName());

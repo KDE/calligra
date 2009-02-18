@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,23 +20,40 @@
 #ifndef KEXIFORMMANAGER_H
 #define KEXIFORMMANAGER_H
 
-#include <formeditor/formmanager.h>
-#include <kexipart.h>
+#include <QObject>
+#include "KexiFormPart.h"
+
+class QActionGroup;
 
 class KexiFormView;
+class K3Command;
+class KActionCollection;
+class KexiFormManagerPrivate;
+
+namespace KFormDesigner {
+class WidgetLibrary;
+class ObjectTreeView;
+}
 
 //! @internal
-//! Used to customize KFormDesigner::FormManager behaviour.
-class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
+class KEXIFORMUTILS_EXPORT KexiFormManager : public QObject
 {
     Q_OBJECT
 
 public:
-    KexiFormManager(KexiPart::Part *parent, const char* name = 0);
-    virtual ~KexiFormManager();
+    static KexiFormManager* self();
+
+    //! Called by KexiFormPart()
+    void init(KexiFormPart *part, KFormDesigner::ObjectTreeView *treeView);
 
     virtual QAction* action(const char* name);
     virtual void enableAction(const char* name, bool enable);
+
+    KFormDesigner::WidgetLibrary* library() const;
+
+//moved from KFormDesigner::FormManager
+    /*! @return action group containing "insert widget" actions for each widget. */
+    QActionGroup* widgetActionGroup() const;
 
 public slots:
     //! Receives signal from KexiDataSourcePage about changed form's data source
@@ -55,20 +72,34 @@ public slots:
     void insertAutoFields(const QString& sourcePartClass, const QString& sourceName,
                           const QStringList& fields);
 
+// moved from FormManager
+    /*! For debugging purposes only:
+     shows a text window containing contents of .ui XML definition of the current form. */
+    void showFormUICode();
+
 protected slots:
     void slotHistoryCommandExecuted(K3Command *command);
+// 2.0 moved from KexiFormPart
+    void slotWidgetCreatedByFormsLibrary(QWidget* widget);
+    void slotAssignAction();
 
 protected:
     inline QString translateName(const char* name) const;
 
 private:
+    KexiFormManager(KexiFormManagerPrivate * p);
+    
+    virtual ~KexiFormManager();
+
     //! Helper: return active form's view widget or 0 if there's no active form having such widget
     KexiFormView* activeFormViewWidget() const;
 
-//  virtual bool loadFormFromDomInternal(Form *form, QWidget *container, QDomDocument &inBuf);
-//  virtual bool saveFormToStringInternal(Form *form, QString &dest, int indent = 0);
+//moved from KFormDesigner::FormManager
+    //! Called by init()
+    void createActions(KActionCollection* collection);
 
-    KexiPart::Part* m_part;
+    friend class KexiFormManagerPrivate;
+    KexiFormManagerPrivate * const d;
 };
 
 QString KexiFormManager::translateName(const char* name) const

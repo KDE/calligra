@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 by Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,13 +50,13 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
+
 #include "spring.h"
 #include "formIO.h"
 #include "form.h"
-#include "formmanager.h"
 #include "widgetlibrary.h"
-#include "widgetpropertyset.h"
-
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
@@ -389,7 +390,8 @@ StdWidgetFactory::~StdWidgetFactory()
 
 QWidget*
 StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
-                               KFormDesigner::Container *container, int options)
+                               KFormDesigner::Container *container,
+                               CreateWidgetOptions options)
 {
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(n, c));
@@ -930,14 +932,14 @@ StdWidgetFactory::editListContents()
 #endif
 
 void
-StdWidgetFactory::setPropertyOptions(KFormDesigner::WidgetPropertySet& buf, const KFormDesigner::WidgetInfo& info, QWidget *w)
+StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
 {
     Q_UNUSED(info);
     Q_UNUSED(w);
 
-    if (buf.contains("indent")) {
-        buf["indent"].setOption("min", -1);
-        buf["indent"].setOption("minValueText", i18nc("default indent value", "default"));
+    if (set.contains("indent")) {
+        set["indent"].setOption("min", -1);
+        set["indent"].setOption("minValueText", i18nc("default indent value", "default"));
     }
 }
 

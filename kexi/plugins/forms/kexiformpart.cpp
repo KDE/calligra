@@ -44,30 +44,30 @@
 #include <kexiutils/utils.h>
 
 #include <kexi_global.h>
-#include <form.h>
-#include <formIO.h>
-#include <widgetpropertyset.h>
-#include <widgetlibrary.h>
-#include <objecttreeview.h>
+#include <formeditor/form.h>
+#include <formeditor/formIO.h>
+//2.0 #include <formeditor/widgetpropertyset.h>
+#include <formeditor/objecttreeview.h>
+
 #include <koproperty/Property.h>
+#include <koproperty/Set.h>
 
 #include "kexiformview.h"
 #include "widgets/kexidbform.h"
 #include "kexiformscrollview.h"
-#include "kexiactionselectiondialog.h"
 #include "kexiformmanager.h"
 #include "kexiformpart.h"
 #include "kexidatasourcepage.h"
 
 //! @todo #define KEXI_SHOW_SPLITTER_WIDGET
 
-KFormDesigner::WidgetLibrary* KexiFormPart::static_formsLibrary = 0L;
-
 //! @internal
 class KexiFormPart::Private
 {
 public:
     Private() {
+        objectTreeView = new KFormDesigner::ObjectTreeView(0);
+        objectTreeView->setObjectName("KexiFormPart:ObjectTreeView");
     }
     ~Private() {
         delete static_cast<KFormDesigner::ObjectTreeView*>(objectTreeView);
@@ -97,38 +97,35 @@ KexiFormPart::KexiFormPart(QObject *parent, const QStringList &l)
 
     // Only create form manager if it's not yet created.
     // KexiReportPart could have created it already.
+
+/* 2.0 removed
     KFormDesigner::FormManager *formManager = KFormDesigner::FormManager::self();
-    if (!formManager) {
-        formManager = new KexiFormManager(this);
-        formManager->setObjectName("kexi_form_and_report_manager");
-    }
+    if (!formManager) {*/
+    KexiFormManager::self()->init(this, d->objectTreeView); // this should create KexiFormManager singleton
+//    }
 
-    // Create and store a handle to forms' library. Reports will have their own library too.
-    /* @todo add configuration for supported factory groups */
-    QStringList supportedFactoryGroups;
-    supportedFactoryGroups += "kexi";
-    static_formsLibrary = KFormDesigner::FormManager::createWidgetLibrary(
-                              formManager, supportedFactoryGroups);
-    static_formsLibrary->setAdvancedPropertiesVisible(false);
-    connect(static_formsLibrary, SIGNAL(widgetCreated(QWidget*)),
-            this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
-
+/* 2.0 slotPropertyChanged() code moved to Form so this connection can be removed
     connect(KFormDesigner::FormManager::self()->propertySet(),
             SIGNAL(widgetPropertyChanged(QWidget *, const QByteArray &, const QVariant&)),
-            this, SLOT(slotPropertyChanged(QWidget *, const QByteArray &, const QVariant&)));
-    connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*, bool)),
-            this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*, bool)));
+            this, SLOT(slotPropertyChanged(QWidget *, const QByteArray &, const QVariant&)));*/
+//2.0 not needed, the code from slot receiving this signal is moved to Form itself
+//    connect(KFormDesigner::FormManager::self(), SIGNAL(autoTabStopsSet(KFormDesigner::Form*, bool)),
+//            this, SLOT(slotAutoTabStopsSet(KFormDesigner::Form*, bool)));
 }
 
 KexiFormPart::~KexiFormPart()
 {
+//2.0    static_formsLibrary = 0;
     delete d;
 }
 
+/* moved to KexiFormManager
 KFormDesigner::WidgetLibrary* KexiFormPart::library()
 {
     return static_formsLibrary;
 }
+*/
+
 
 #if 0
 void KexiFormPart::initPartActions(KActionCollection *collection)
@@ -171,16 +168,17 @@ void KexiFormPart::initInstanceActions()
                        a = new KAction(KIcon("run-build-file"), i18n("Show Form UI Code"), this));
         a->setShortcut(Qt::CTRL + Qt::Key_U);
         connect(a, SIGNAL(triggered()),
-                KFormDesigner::FormManager::self(), SLOT(showFormUICode()));
+                KexiFormManager::self(), SLOT(showFormUICode()));
     }
 #endif
 
-    KFormDesigner::FormManager::self()->createActions(library(), col,
-            (KXMLGUIClient*)col->parentGUIClient());
+//moved to KexiFormManager::init()
+//KexiFormManager::self()->createActions(library(), col,
+//            (KXMLGUIClient*)col->parentGUIClient());
 
     //connect actions provided by widget factories
-    connect(col->action("widget_assign_action"), SIGNAL(activated()),
-            this, SLOT(slotAssignAction()));
+//2.0 moved   connect(col->action("widget_assign_action"), SIGNAL(activated()),
+//2.0 moved            this, SLOT(slotAssignAction()));
 
     createSharedAction(Kexi::DesignViewMode, i18n("Clear Widget Contents"),
                        "edit-clear", KShortcut(), "formpart_clear_contents");
@@ -422,54 +420,13 @@ KexiFormPart::generateForm(KexiDB::FieldList *list, QDomDocument &domDoc)
     uiElement.appendChild(baseWidget);
 }
 
-void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
+//2.0 not needed, the code from slot receiving this signal is moved to Form itself
+/*void KexiFormPart::slotAutoTabStopsSet(KFormDesigner::Form *form, bool set)
 {
-    Q_UNUSED(form);
-
-    KoProperty::Property &p
-    = (*KFormDesigner::FormManager::self()->propertySet())["autoTabStops"];
-    if (!p.isNull())
-        p.setValue(QVariant(set));
-}
-
-void KexiFormPart::slotAssignAction()
-{
-    KexiDBForm *dbform;
-    if (!KFormDesigner::FormManager::self()->activeForm()
-            || !KFormDesigner::FormManager::self()->activeForm()->designMode()
-            || !(dbform = dynamic_cast<KexiDBForm*>(KFormDesigner::FormManager::self()->activeForm()->formWidget())))
-        return;
-
-    KFormDesigner::WidgetPropertySet * propSet
-    = KFormDesigner::FormManager::self()->propertySet();
-
-    KexiFormEventAction::ActionData data;
-    KoProperty::Property &onClickActionProp = propSet->property("onClickAction");
-    if (! onClickActionProp.isNull())
-        data.string = onClickActionProp.value().toString();
-
-    KoProperty::Property &onClickActionOptionProp = propSet->property("onClickActionOption");
-    if (!onClickActionOptionProp.isNull())
-        data.option = onClickActionOptionProp.value().toString();
-
-    KexiFormScrollView *scrollViewWidget
-    = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
-    if (!scrollViewWidget)
-        return;
-    KexiFormView* formViewWidget = dynamic_cast<KexiFormView*>(scrollViewWidget->parent());
-    if (!formViewWidget)
-        return;
-
-    KexiActionSelectionDialog dlg(dbform, data,
-                                  propSet->property("name").value().toString());
-
-    if (dlg.exec() == QDialog::Accepted) {
-        data = dlg.currentAction();
-        //update property value
-        propSet->property("onClickAction").setValue(data.string);
-        propSet->property("onClickActionOption").setValue(data.option);
+    if (form->propertySet().contains("autoTabStops")) {
+        form->propertySet().changeProperty("autoTabStops", set);
     }
-}
+}*/
 
 KLocalizedString KexiFormPart::i18nMessage(
     const QString& englishMessage, KexiWindow* window) const
@@ -483,6 +440,7 @@ KLocalizedString KexiFormPart::i18nMessage(
     return Part::i18nMessage(englishMessage, window);
 }
 
+/*moved to Form 
 void
 KexiFormPart::slotPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value)
 {
@@ -501,7 +459,7 @@ KexiFormPart::slotPropertyChanged(QWidget *w, const QByteArray &name, const QVar
             KFormDesigner::FormManager::self()->propertySet()->property("sizeInternal").setValue(
                 value.toRect().size());
     }
-}
+}*/
 
 /*KFormDesigner::FormManager*
 KexiFormPart::manager() const
@@ -516,10 +474,7 @@ KexiDataSourcePage* KexiFormPart::dataSourcePage() const
 
 void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 {
-    if (!d->objectTreeView) {
-        d->objectTreeView = new KFormDesigner::ObjectTreeView(0);
-        d->objectTreeView->setObjectName("KexiFormPart:ObjectTreeView");
-        KFormDesigner::FormManager::self()->setObjectTreeView(d->objectTreeView); //important: assign to manager
+    if (!d->dataSourcePage) {
         d->dataSourcePage = new KexiDataSourcePage(0);
         d->dataSourcePage->setObjectName("dataSourcePage");
         connect(d->dataSourcePage,
@@ -528,15 +483,15 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
                 SLOT(highlightObject(const QString&, const QString&)));
         connect(d->dataSourcePage,
                 SIGNAL(formDataSourceChanged(const QString&, const QString&)),
-                KFormDesigner::FormManager::self(),
+                KexiFormManager::self(),
                 SLOT(setFormDataSource(const QString&, const QString&)));
         connect(d->dataSourcePage,
                 SIGNAL(dataSourceFieldOrExpressionChanged(const QString&, const QString&, KexiDB::Field::Type)),
-                KFormDesigner::FormManager::self(),
+                KexiFormManager::self(),
                 SLOT(setDataSourceFieldOrExpression(const QString&, const QString&, KexiDB::Field::Type)));
         connect(d->dataSourcePage,
                 SIGNAL(insertAutoFields(const QString&, const QString&, const QStringList&)),
-                KFormDesigner::FormManager::self(),
+                KexiFormManager::self(),
                 SLOT(insertAutoFields(const QString&, const QString&, const QStringList&)));
     }
 
@@ -548,34 +503,6 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
 
     tab->addTab(d->objectTreeView, KIcon("widgets"), "");
     tab->setTabToolTip(tab->indexOf(d->objectTreeView), i18n("Widgets"));
-}
-
-void KexiFormPart::slotWidgetCreatedByFormsLibrary(QWidget* widget)
-{
-    QList<QMetaMethod> _signals(KexiUtils::methodsForMetaObject(
-                                    widget->metaObject(), QMetaMethod::Signal));
-
-    if (!_signals.isEmpty()) {
-        const char *handleDragMoveEventSignal = "handleDragMoveEvent(QDragMoveEvent*)";
-        const char *handleDropEventSignal = "handleDropEvent(QDropEvent*)";
-        KexiFormView *formView = KexiUtils::findParent<KexiFormView*>(widget);
-
-        foreach(const QMetaMethod& method, _signals) {
-            if (0 == qstrcmp(method.signature(), handleDragMoveEventSignal)) {
-                kDebug() << method.signature();
-                if (formView) {
-                    connect(widget, SIGNAL(handleDragMoveEvent(QDragMoveEvent*)),
-                            formView, SLOT(slotHandleDragMoveEvent(QDragMoveEvent*)));
-                }
-            } else if (0 == qstrcmp(method.signature(), handleDropEventSignal)) {
-                kDebug() << method.signature();
-                if (formView) {
-                    connect(widget, SIGNAL(handleDropEvent(QDropEvent*)),
-                            formView, SLOT(slotHandleDropEvent(QDropEvent*)));
-                }
-            }
-        }
-    }
 }
 
 //----------------

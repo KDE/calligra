@@ -57,7 +57,8 @@
 //#endif
 
 #include "kexidbutils.h"
-#include "../kexiformpart.h"
+#include "kexiformpart.h"
+#include "kexiformmanager.h"
 
 //! @internal
 struct KexiDBImageBox_Static {
@@ -553,7 +554,7 @@ void KexiDBImageBox::updateActionStrings()
         //update title in data view mode, based on the data source
         if (columnInfo()) {
             KexiImageContextMenu::updateTitle(m_contextMenu, columnInfo()->captionOrAliasOrName(),
-                                              KexiFormPart::library()->iconName(metaObject()->className()));
+                                              KexiFormManager::self()->library()->iconName(metaObject()->className()));
         }
     }
 

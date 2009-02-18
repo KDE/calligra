@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,15 +36,16 @@
 #include "richtextdialog.h"
 #include "editlistviewdialog.h"
 #include "resizehandle.h"
-#include "formmanager.h"
+//#include "formmanager.h"
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
 #include "widgetlibrary.h"
 #include "utils.h"
-#include "widgetpropertyset.h"
+//removed #include "widgetpropertyset.h"
 #include "widgetwithsubpropertiesinterface.h"
 #include <koproperty/Property.h>
+#include <koproperty/Set.h>
 #include <kexiutils/utils.h>
 
 using namespace KFormDesigner;
@@ -302,6 +303,11 @@ WidgetFactory::disableFilter(QWidget *w, Container *container)
 
     // widget is disabled, so we re-enable it while editing
     if (!tree->isEnabled()) {
+#ifdef __GNUC__
+#warning TODO port to Qt 4 if needed
+#else
+#pragma WARNING( TODO port to Qt 4 if needed )
+#endif
         QPalette p = w->palette();
         QColorGroup cg = p.active();
         p.setActive(p.disabled());
@@ -391,7 +397,7 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
             return false;
 
         QKeyEvent *e = static_cast<QKeyEvent*>(ev);
-        if (((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->state() != Qt::AltModifier))
+        if (((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->modifiers() != Qt::AltModifier))
             resetEditor();
         if (e->key() == Qt::Key_Escape) {
             setEditorText(m_firstText);
@@ -437,6 +443,11 @@ WidgetFactory::resetEditor()
 
         // disable again the widget
         if (!ed && !tree->isEnabled()) {
+#ifdef __GNUC__
+#warning TODO port to Qt 4 if needed
+#else
+#pragma WARNING( TODO port to Qt 4 if needed )
+#endif
             QPalette p = m_widget->palette();
             QColorGroup cg = p.active();
             p.setActive(p.disabled());
@@ -505,15 +516,17 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *for
 {
 // if (!form->manager())
 //  return;
-    if (form->selectedWidgets()->count() > 1) { // If eg multiple labels are selected, we only want to change the text of one of them (the one the user cliked on)
-        if (m_widget)
+    if (!form->selectedWidgets()->isEmpty()) { // If eg multiple labels are selected, 
+                                               // we only want to change the text of one of them (the one the user cliked on)
+        if (m_widget) {
             m_widget->setProperty(name, value);
-        else
+        }
+        else {
             form->selectedWidgets()->first()->setProperty(name, value);
-    } else {
-        WidgetPropertySet *set = KFormDesigner::FormManager::self()->propertySet();
-        if (set->contains(name))
-            (*set)[name] = value;
+        }
+    }
+    else {
+        form->propertySet().changePropertyIfExists(name, value);
     }
 }
 
@@ -575,9 +588,9 @@ bool
 WidgetFactory::propertySetShouldBeReloadedAfterPropertyChange(
     const QByteArray& classname, QWidget *w, const QByteArray& property)
 {
-    Q_UNUSED(classname);
-    Q_UNUSED(w);
-    Q_UNUSED(property);
+    Q_UNUSED(classname)
+    Q_UNUSED(w)
+    Q_UNUSED(property)
     return false;
 }
 
@@ -712,8 +725,11 @@ void WidgetFactory::setInternalProperty(const QByteArray& classname, const QByte
     m_internalProp.insert(classname+":"+property, value);
 }
 
-void WidgetFactory::setPropertyOptions(WidgetPropertySet& /*buf*/, const WidgetInfo& /*info*/, QWidget * /*w*/)
+void WidgetFactory::setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w)
 {
+    Q_UNUSED(set)
+    Q_UNUSED(info)
+    Q_UNUSED(w)
     //nothing
 }
 

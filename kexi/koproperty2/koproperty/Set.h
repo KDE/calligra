@@ -146,9 +146,16 @@ public:
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     const Set& operator= (const Set &set);
 
-    /*! Change the value of property whose key is \a property to \a value.
-    By default, it only calls Property::setValue(). */
+    /*! Change the value of property whose key is \a property to \a value. */
     void changeProperty(const QByteArray &property, const QVariant &value);
+
+    /*! Change the value of property whose key is \a property to \a value
+     only if it exists in the set.
+     @see void changeProperty(const QByteArray &, const QVariant &) */
+    void changePropertyIfExists(const QByteArray &property, const QVariant &value) {
+        if (contains(property))
+            changeProperty(property, value);
+    }
 
     /*! Sets the i18n'ed string that will be shown in Editor to represent
      \a group. */

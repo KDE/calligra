@@ -27,6 +27,7 @@
 #include <formeditor/widgetlibrary.h>
 #include <kexiutils/utils.h>
 #include "../kexiformpart.h"
+#include "../kexiformmanager.h"
 #include <widget/utils/kexicontextmenuutils.h>
 
 
@@ -64,10 +65,10 @@ void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
     m_titleAction = kmenu->addTitle(QString(), m_contextMenu->actions().first());
 
     QString icon;
-    if (dynamic_cast<QWidget*>(m_iface))
-        icon = KexiFormPart::library()->iconName(
+    if (dynamic_cast<QWidget*>(m_iface)) {
+        icon = KexiFormManager::self()->library()->iconName(
                    dynamic_cast<QWidget*>(m_iface)->metaObject()->className());
-
+    }
     m_contextMenuHasTitle = m_iface->columnInfo() ?
                             KexiContextMenuUtils::updateTitle(kmenu,
                                                               m_iface->columnInfo()->captionOrAliasOrName(),

@@ -40,7 +40,8 @@ public:
     virtual ~KexiDBFactory();
 
     virtual QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name,
-                                  KFormDesigner::Container *container, int options = DefaultOptions);
+                                  KFormDesigner::Container *container,
+                                  CreateWidgetOptions options = DefaultOptions);
 
     virtual void createCustomActions(KActionCollection* col);
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w, QMenu *menu,

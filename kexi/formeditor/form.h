@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,108 +22,38 @@
 #ifndef KFORMDESIGNERFORM_H
 #define KFORMDESIGNERFORM_H
 
+#include <QMetaProperty>
 #include <QList>
-
-#include "resizehandle.h"
-#include "utils.h"
-#include "objecttree.h"
+#include <kexi_export.h>
+#include "widgetlibrary.h"
 
 class QWidget;
 class KActionCollection;
 class K3CommandHistory;
 class K3Command;
+
 class PixmapCollection;
+
+namespace KoProperty {
+class Property;
+class Set;
+}
 
 namespace KFormDesigner
 {
 
+class CommandGroup;
+#ifdef KFD_SIGSLOTS
+class ConnectionBuffer;
+#endif
 class Container;
-class WidgetLibrary;
-class FormManager;
+//unused class FormManager;
 class ObjectTree;
 class ObjectTreeItem;
-class ConnectionBuffer;
-
-//! Base (virtual) class for all form widgets
-/*! You need to inherit this class, and implement the drawing functions. This is necessary
- because you cannot inherit QWidget twice, and we want form widgets to be any widget.
- See FormWidgetBase in test/kfd_part.cpp and just copy functions there. */
-class KFORMEDITOR_EXPORT FormWidget
-{
-public:
-    FormWidget();
-    virtual ~FormWidget();
-
-    /*! This function draws the rects in the \a list  in the Form, above of all widgets,
-     using double-buffering. \a type can be 1 (selection rect)
-     or 2 (insert rect, dotted). */
-
-    virtual void drawRects(const QList<QRect> &list, int type) = 0;
-
-    virtual void drawRect(const QRect &r, int type) = 0;
-
-    /*! This function inits the buffer used for double-buffering. Called before drawing rect. */
-    virtual void initBuffer() = 0;
-
-    /*! Clears the form, ie pastes the whole buffer to repaint the Form. */
-    virtual void clearForm() = 0;
-
-    /*! This function highlights two widgets (to is optional), which are
-    sender and receiver, and draws a link between them. */
-    virtual void highlightWidgets(QWidget *from, QWidget *to) = 0;
-
-protected:
-    Form *m_form;
-
-    friend class Form;
-};
-
-//! @internal
-class FormPrivate
-{
-public:
-    FormPrivate();
-    ~FormPrivate();
-
-//  FormManager  *manager;
-    QPointer<Container>  toplevel;
-    ObjectTree  *topTree;
-    QPointer<QWidget> widget;
-
-    QWidgetList selected;
-    ResizeHandleSet::Hash resizeHandles;
-
-    bool  dirty;
-    bool  interactive;
-    bool  design;
-    QString  filename;
-
-    K3CommandHistory  *history;
-    KActionCollection  *collection;
-
-    ObjectTreeList  tabstops;
-    bool  autoTabstops;
-    ConnectionBuffer  *connBuffer;
-
-    PixmapCollection  *pixcollection;
-
-    //! This map is used to store cursor shapes before inserting (so we can restore them later)
-    QHash<QObject*, QCursor> cursors;
-
-    //!This string list is used to store the widgets which hasMouseTracking() == true (eg lineedits)
-    QStringList *mouseTrackers;
-
-    FormWidget  *formWidget;
-
-    //! A set of head properties to be stored in a .ui file.
-    //! This includes KFD format version.
-    QHash<QByteArray, QString> headerProperties;
-
-    //! Format version, set by FormIO or on creating a new form.
-    uint formatVersion;
-    //! Format version, set by FormIO's loader or on creating a new form.
-    uint originalFormatVersion;
-};
+typedef QList<ObjectTreeItem*> ObjectTreeList;
+class FormPrivate;
+class FormWidget;
+class ResizeHandleSet;
 
 /*!
   This class represents one form and holds the corresponding ObjectTree and Containers.
@@ -135,15 +65,71 @@ class KFORMEDITOR_EXPORT Form : public QObject
     Q_OBJECT
 
 public:
-    /*! Creates a simple Form, child of the FormManager \a manager.
-     */
-    Form(WidgetLibrary* library, bool designMode = true);
+    enum WidgetAlignment {
+        AlignToGrid,
+        AlignToLeft,
+        AlignToRight,
+        AlignToTop,
+        AlignToBottom
+    };
+
+    //! Form's mode: design or data.
+    enum Mode {
+        DataMode,
+        DesignMode
+    };
+
+    //! States like widget inserting. Used only in design mode.
+    enum State {
+        WidgetSelecting, //!< widget selecting
+        WidgetInserting //!< widget inserting
+#ifdef KFD_SIGSLOTS
+        , Connecting       //!< signal/slot connecting
+#endif
+    };
+
+    /*! Features used while creating Form objects. */
+    enum Feature {
+        NoFeatures = 0,
+        EnableEvents = 1,
+        EnableFileActions = 2
+#ifdef KFD_SIGSLOTS
+        , EnableConnections = 4
+#endif
+    };
+    Q_DECLARE_FLAGS(Features, Feature)
+
+    //! Types of layout
+    enum LayoutType {
+        NoLayout = 0,
+        HBox,
+        VBox,
+        Grid,
+        HFlow,
+        VFlow,
+        /* special types */
+        HSplitter,
+        VSplitter
+    };
+
+    /*! Creates Form object. */
+    Form(WidgetLibrary* library, Mode mode, KActionCollection &col);
+
+    /*! Creates Form object as a child of other form. */
+    Form(Form *parent);
+
     ~Form();
 
     //! \return A pointer to the WidgetLibrary supporting this form.
     WidgetLibrary* library() const {
         return m_lib;
     }
+
+    KoProperty::Set& propertySet();
+
+    void setFeatures(Features features);
+
+    Features features() const;
 
     /*!
      Creates a toplevel widget out of another widget.
@@ -155,27 +141,18 @@ public:
     void createToplevel(QWidget *container, FormWidget *formWidget = 0,
                         const QByteArray &classname = "QWidget");
 
-    /*! \return the toplevel Container or 0 if this is a preview Form or createToplevel()
+    /*! \return the toplevel Container or 0 if the form is in data mode or createToplevel()
        has not been called yet. */
-    Container* toplevelContainer() const {
-        return d->toplevel;
-    }
+    Container* toplevelContainer() const;
 
     //! \return the FormWidget that holds this Form
-    FormWidget* formWidget() const {
-        return d->formWidget;
-    }
+    FormWidget* formWidget() const;
 
     //! \return a pointer to this form's ObjectTree.
-    ObjectTree* objectTree() const {
-        return d->topTree;
-    }
+    ObjectTree* objectTree() const;
 
-    //! \return the form's toplevel widget, or 0 if designMode() == false.
+    //! \return the form's toplevel widget, or 0 if not in design mode.
     QWidget* widget() const;
-
-//  //! \return the FormManager parent of this form.
-//  FormManager* manager() const { return d->manager; }
 
     /*! \return A pointer to the currently active Container, ie the parent Container for a simple widget,
         and the widget's Container if it is itself a container.
@@ -186,7 +163,7 @@ public:
      It is the same as activeContainer() for a simple widget, but unlike this function
       it will also return the parent Container if the widget itself is a Container.
      */
-    Container* parentContainer(QWidget *w = 0);
+    Container* parentContainer(QWidget *w = 0) const;
 
     /*! \return The \ref Container which is a parent of all widgets in \a wlist.
      Used by \ref activeContainer(), and to find where
@@ -194,16 +171,12 @@ public:
     ObjectTreeItem* commonParentContainer(const QWidgetList &wlist);
 
     //! \return the list of currently selected widgets in this form
-    QWidgetList* selectedWidgets() const {
-        return &(d->selected);
-    }
+    QWidgetList* selectedWidgets() const;
 
     /*! \return currently selected widget in this form,
      or 0 if there is no widget selected or more than one widget selected.
      \see selectedWidgets() */
-    QWidget* selectedWidget() const {
-        return d->selected.count() == 1 ? d->selected.first() : 0;
-    }
+    QWidget* selectedWidget() const;
 
     /*! Emits the action signals, and optionaly the undo/redo related signals
      if \a withUndoAction == true. See \a FormManager for signals description. */
@@ -211,14 +184,12 @@ public:
 
     /*! Emits again all signal related to selection (ie Form::selectionChanged()).
       Called eg when the user has the focus again. */
-    void  emitSelectionSignals();
+    void emitSelectionSignals();
 
     /*! Sets the Form interactivity mode. Form is not interactive when
     pasting widgets, or loading a Form.
      */
-    void setInteractiveMode(bool interactive) {
-        d->interactive = interactive;
-    }
+    void setInteractiveMode(bool interactive);
 
     /*! \return true if the Form is being updated by the user, ie the created
     widget were drawn on the Form.
@@ -226,39 +197,27 @@ public:
          are created by FormIO, and so composed widgets
         should not be populated automatically (such as QTabWidget).
      */
-    bool interactiveMode() const {
-        return d->interactive;
-    }
+    bool interactiveMode() const;
 
-    /*! If \a design is true, the Form is in Design Mode (by default).
-    If \a design is false, then the Form is in Preview Mode, so
-      the ObjectTree and the Containers are removed. */
-    void setDesignMode(bool design);
+    /*! Sets form's mode to @a mode.
+     In data mode, information related to design mode (object tree and the containers..) is removed. */
+    void setMode(Mode mode);
 
-    //! \return The actual mode of the Form.
-    bool designMode() const {
-        return d->design;
-    }
+    //! @return The actual mode of the Form.
+    Mode mode() const;
 
-    bool isModified() {
-        return d->dirty;
-    }
+    //! @return true if the form modification flag is set.
+    bool isModified() const;
 
     //! \return the distance between two dots in the form background.
 //! @todo make gridSize configurable at global level
-    int gridSize() {
-        return 10;
-    }
+    int gridSize() const;
 
     //! \return the default margin for all the layout inside this Form.
-    int defaultMargin() {
-        return 11;
-    }
+    int defaultMargin() const;
 
     //! \return the default spacing for all the layout inside this Form.
-    int defaultSpacing() {
-        return 6;
-    }
+    int defaultSpacing() const;
 
     /*! This function is used by ObjectTree to emit childAdded() signal (as it is not a QObject). */
     void emitChildAdded(ObjectTreeItem *item);
@@ -268,24 +227,20 @@ public:
 
     /*! \return The filename of the UI file this Form was saved to,
     or empty string if the Form hasn't be saved yet. */
-    QString filename() const {
-        return d->filename;
-    }
+//! @todo move this field out of this class
+    QString filename() const;
 
     //! Sets the filename of this Form to \a filename.
-    void setFilename(const QString &file) {
-        d->filename = file;
-    }
+//! @todo move this field out of this class
+    void setFilename(const QString &file);
 
-    K3CommandHistory* commandHistory() const {
-        return d->history;
-    }
-    ConnectionBuffer* connectionBuffer() const {
-        return d->connBuffer;
-    }
-    PixmapCollection* pixmapCollection() const {
-        return d->pixcollection;
-    }
+    K3CommandHistory* commandHistory() const;
+
+#ifdef KFD_SIGSLOTS
+    ConnectionBuffer* connectionBuffer() const;
+#endif
+
+    PixmapCollection* pixmapCollection() const;
 
     /*! Adds a widget in the form's command history. Please use it instead
     of calling directly actionCollection()->addCommand(). */
@@ -294,12 +249,9 @@ public:
     /*! Clears form's command history. */
     void clearCommandHistory();
 
-    /*! \return A pointer to this Form tabstops list : it contains all the widget
-     that can have focus ( ie no labels, etc)
-     in the order of the tabs.*/
-    ObjectTreeList* tabStops() const {
-        return &(d->tabstops);
-    }
+    /*! \return tabstops list. It contains all the widgets that can have focus 
+     (i.e. no labels, etc.) in the order of the tabs.*/
+    ObjectTreeList* tabStops();
 
 /*    inline ObjectTreeListIterator tabStopsIterator() const {
         return ObjectTreeListIterator(d->tabstops);
@@ -313,18 +265,14 @@ public:
     void addWidgetToTabStops(ObjectTreeItem *it);
 
     /*! \return True if the Form automatically handles tab stops. */
-    bool autoTabStops() const {
-        return d->autoTabstops;
-    }
+    bool autoTabStops() const;
 
     /*! If \a autoTab is true, then the Form will automatically handle tab stops,
        and the "Edit Tab Order" dialog will be disabled.
        The tab widget will be set from the top-left to the bottom-right corner.\n
         If \ autoTab is false, then it's up to the user to change tab stops
         (which are by default in order of creation).*/
-    void setAutoTabStops(bool autoTab) {
-        d->autoTabstops = autoTab;
-    }
+    void setAutoTabStops(bool autoTab);
 
     /*! Tells the Form to reassign the tab stops because the widget layout has changed
      (called for example before saving or displaying the tab order dialog).
@@ -332,6 +280,17 @@ public:
      Widget can be grouped with containers. In particular, for tab widgets,
      child widgets should ordered by parent tab's order. */
     void autoAssignTabStops();
+
+    /*! This function creates and displays the context menu corresponding to the widget \a w.
+        The menu item are disabled if necessary, and
+        the widget specific part is added (menu from the factory and buddy selection). */
+    void createContextMenu(QWidget *w, Container *container, bool popupAtCursor = true);
+
+    //! @return true if snapping widgets to grid is enabled.
+    bool isSnapWidgetsToGridEnabled() const;
+
+    //! Sets snapping widgets to grid flag.
+    void setSnapWidgetsToGridEnabled(bool set);
 
 #ifdef KEXI_DEBUG_GUI
     //! For debugging purposes
@@ -347,9 +306,7 @@ public:
 
     /*! A set of value/key pairs provided to be stored as attributes in
      <kfd:customHeader/> XML element (saved as a first child of \<UI> element). */
-    QHash<QByteArray, QString>* headerProperties() const {
-        return &d->headerProperties;
-    }
+    QHash<QByteArray, QString>* headerProperties();
 
     //! \return format version number for this form.
     //! For new forms it is equal to KFormDesigner::version().
@@ -361,9 +318,80 @@ public:
     uint originalFormatVersion() const;
     void setOriginalFormatVersion(uint ver);
 
+#ifdef KFD_SIGSLOTS
+// moved from FormManager
+    /*! Related to signal/slots connections.
+     Resets recently selected signal/slot connection (when the user clicks
+     outside of signals/slots menu). We stay in "connection creation" mode,
+     but user can only start a new connection. */
+    void resetSelectedConnection();
+#endif
+
+    //! @return state ofthe Form, i.e. the current operation like inserting a widget or selecting.
+    State state() const;
+
+    //! selection flags used in methods like selectWidget()
+    enum WidgetSelectionFlag {
+        AddToPreviousSelection = 0,   //!< add to the previous selection, for clarity, 
+                                      //!< do not use with ReplacePreviousSelection
+// previously same as "!add" in setSelectedWidget()
+        ReplacePreviousSelection = 1, //!< replace the actually selected widget(s)
+// previously same as "!moreWillBeSelected" in setSelectedWidget()
+        MoreWillBeSelected = 0,       //!< indicates that more selections will be added
+                                      //!< do not use with LastSelection
+                                      //!< so the property editor can be updated (used without ReplacePreviousSelection)
+        LastSelection = 2,            //!< indicates that this selection is the last one
+                                      //!< so the property editor can be updated (used without ReplacePreviousSelection)
+        Raise = 0,                    //!< raise the widget(s) on selection
+                                      //!< do not use with DontRaise
+        DontRaise = 4,                //!< do not raise the widget(s) on selection
+        DefaultWidgetSelectionFlags = ReplacePreviousSelection | LastSelection | Raise
+    };
+    Q_DECLARE_FLAGS(WidgetSelectionFlags, WidgetSelectionFlag)
+
+    /*! \return The name of the class being inserted, corresponding
+     to the menu item or the toolbar button clicked. */
+    QByteArray selectedClass() const;
+
+    /*! Enables or disables actions \a name. */
+//removed, use action(name)->setEnabled(..)
+//    void enableAction(const char* name, bool enable);
+
+    //! @return action from related action collection
+//    QAction* action(const QString& name);
+
+    void createPropertyCommandsInDesignMode(QWidget* widget, 
+                                            const QHash<QByteArray, QVariant> &propValues,
+                                            CommandGroup *group, bool addToActiveForm = true,
+                                            bool execFlagForSubCommands = false);
+
 public slots:
-    /*! This slot is called when the name of a widget was changed in Property Editor.
-    It renames the ObjectTreeItem associated to this widget.
+// moved from FormManager::insertWidget()
+    /*! Called when the user presses a widget item of the toolbox. 
+      The form enters into "widget inserting" state.
+      Prepares all form's widgets for creation of a new widget 
+      (i.e. temporarily changes their cursor). */
+    void enterWidgetInsertingState(const QByteArray &classname);
+
+    //! Called when the user presses 'Pointer' icon. Switches to Default mode.
+    void enterWidgetSelectingState();
+
+// moved from FormManager
+    /*! Aborts the current widget inserting operation (i.e. unsets the cursor ...). */
+    void abortWidgetInserting();
+
+#ifdef KFD_SIGSLOTS
+// moved from FormManager
+     //! Enters the Connection creation state.
+     void enterConnectingState();
+
+// moved from FormManager
+    //! Leave the Connection creation mode.
+    void abortCreatingConnection();
+#endif
+
+    /*! Called when the name of a widget was changed in the Property Editor.
+     Renames the ObjectTreeItem associated to this widget.
      */
     void changeName(const QByteArray &oldname, const QByteArray &newname);
 
@@ -373,17 +401,127 @@ public slots:
      The form widget is always selected alone.
      \a moreWillBeSelected indicates whether more widgets will be selected soon
      (so for multiselection we should not update the property pane before the last widget is selected) */
-    void setSelectedWidget(QWidget *selected, bool add = false, bool dontRaise = false,
-                           bool moreWillBeSelected = false);
+    void selectWidget(QWidget *selected, WidgetSelectionFlags flags = DefaultWidgetSelectionFlags);
+//prev    void setSelectedWidget(QWidget *selected, bool add = false, bool dontRaise = false,
+//prev                           bool moreWillBeSelected = false);
 
-    /*! Unselects the widget \a w. Te widget is removed from the Cntainer 's list
-    and its resizeHandle is removed. */
-    void unSelectWidget(QWidget *w);
+    /*! Removes selection for widget \a w. 
+     The widget is removed from the Container's list
+     and its resize handle is removed as well. */
+    void deselectWidget(QWidget *w);
+//prev    void deSelectWidget(QWidget *w);
 
-    /*! Sets the form widget (it will be uniquely selected widget). */
+    /*! Sets the form widget selected. Deselects any previously selected widgets. */
     void selectFormWidget();
 
+    /*! Clears the current selection. */
     void clearSelection();
+
+    /*! Sets the point where the subsequently pasted widget should be moved to. */
+    void setInsertionPoint(const QPoint &p);
+
+    void undo();
+    void redo();
+
+//moved from WidgetPropertySet
+    /*! Changes undoing state of the list. Used by Undo command to
+     prevent recursion. */
+    void setUndoing(bool isUndoing);
+
+// moved from WidgetPropertySet
+    bool isUndoing() const;
+
+    bool isTopLevelWidget(QWidget *w) const;
+
+    /*! Deletes the selected widget in active Form and all of its children. */
+    void deleteWidget();
+
+    /*! Copies the slected widget and all its children of the active Form using an XML representation. */
+    void copyWidget();
+
+    /*! Cuts (ie Copies and deletes) the selected widget and all its children of
+     the active Form using an XML representation. */
+    void cutWidget();
+
+    /*! Pastes the XML representation of the copied or cut widget. The widget is
+      pasted when the user clicks the Form to
+      indicate the new position of the widget, or at the position of the contextual menu if there is one. */
+    void pasteWidget();
+
+    /*! Selects all toplevel widgets in trhe current form. */
+    void selectAll();
+
+    /*! Clears the contents of the selected widget(s) (eg for a line edit or a listview). */
+    void clearWidgetContent();
+
+    /*! Displays a dialog where the user can modify the tab order of the active Form,
+     by drag-n-drop or using up/down buttons. */
+    void editTabOrder();
+
+    /*! Adjusts the size of the selected widget, ie resize it to its size hint. */
+    void adjustWidgetSize();
+
+    /*! Creates a dialog to edit the \ref activeForm() PixmapCollection. */
+    void editFormPixmapCollection();
+
+    /*! Creates a dialog to edit the Connection of \ref activeForm(). */
+    void editConnections();
+
+    //! Lay out selected widgets using HBox layout (calls \ref CreateLayoutCommand).
+    void layoutHBox();
+    
+    //! Lay out selected widgets using VBox layout.
+    void layoutVBox();
+    
+    //! Lay out selected widgets using Grid layout.
+    void layoutGrid();
+    
+    //! Lay out selected widgets in an horizontal splitter
+    void  layoutHSplitter();
+    
+    //! Lay out selected widgets in a verticak splitter
+    void  layoutVSplitter();
+    
+    //! Lay out selected widgets using HFlow layout
+    void layoutHFlow();
+    
+    //! Lay out selected widgets using VFlow layout.
+    void layoutVFlow();
+
+    //! Breaks selected layout(calls \ref BreakLayoutCommand).
+    void breakLayout();
+
+    void alignWidgetsToLeft();
+    
+    void alignWidgetsToRight();
+    
+    void alignWidgetsToTop();
+    
+    void alignWidgetsToBottom();
+    
+    void alignWidgetsToGrid();
+
+    void adjustSizeToGrid();
+
+    //! Resize all selected widgets to the width of the narrowest widget.
+    void adjustWidthToSmall();
+
+    //! Resize all selected widgets to the width of the widest widget.
+    void adjustWidthToBig();
+
+    //! Resize all selected widgets to the height of the shortest widget.
+    void adjustHeightToSmall();
+
+    //! Resize all selected widgets to the height of the tallest widget.
+    void adjustHeightToBig();
+
+    void bringWidgetToFront();
+
+    void sendWidgetToBack();
+
+// moved from FormManager
+    /*! Executes font dialog and changes it for currently selected widget(s). */
+    void changeFont();
 
 protected slots:
     /*! This slot is called when the toplevel widget of this Form is deleted
@@ -400,43 +538,196 @@ protected slots:
 
     /*! This slot is called when form is restored, ie when the user has undone
       all actions. The form modified flag is updated, and
-    \ref FormManager::dirty() is called. */
+    \ref modified() is called. */
     void slotFormRestored();
 
+// moved from WidgetPropertySet
+    /*!  This function is called every time a property is modifed.  It also takes
+     care of saving set and enum properties. */
+    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+
+// moved from WidgetPropertySet
+    /*! This slot is called when a property is reset using the "reload" button in PropertyEditor. */
+    void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
+
+// moved from FormManager
+    /*! Slot called when a buddy is chosen in the buddy list. Sets the label buddy. */
+//2.0: moved    void buddyChosen(QAction *action);
+
 signals:
-    /*! This signal is emitted by setSelectedWidget() when user selects a new widget,
-     to update both Property Editor and ObjectTreeView.
+    /*! This signal is emitted by selectWidget() when user selects a new widget,
+     to update both the Property Editor and the Object Tree View.
      \a w is the newly selected widget.
       */
-    void selectionChanged(QWidget *w, bool add, bool moreWillBeSelected = false);
+    void selectionChanged(QWidget *w, KFormDesigner::Form::WidgetSelectionFlags flags);
+//prev    void selectionChanged(QWidget *w, bool add, bool moreWillBeSelected = false);
 
     /*! This signal is emitted when a new widget is created, to update ObjectTreeView.
      \a it is the ObjectTreeItem representing this new widget.
      */
-    void childAdded(ObjectTreeItem *it);
+    void childAdded(KFormDesigner::ObjectTreeItem *it);
 
     /*! This signal is emitted when a widget is deleted, to update ObjectTreeView.
      \a it is the ObjectTreeItem representing this deleted widget.
      */
-    void childRemoved(ObjectTreeItem *it);
+    void childRemoved(KFormDesigner::ObjectTreeItem *it);
 
     //! This signal emitted when Form is about to be destroyed
     void destroying();
 
+// moved from FormManager, with no args
+    /*! This signal is emitted when the property set has been switched. */
+    void propertySetSwitched();
+
+    /*! This signal is emitted when any change is made to the Form \a form,
+     so it will need to be saved. */
+    void modified();
+
+    /*! Signal emitted when a normal widget is selected inside of the form
+     (not the form's widget). If \a multiple is true, then more than one widget is selected. 
+     Use this to update actions state. */
+    void widgetSelected(bool multiple);
+
+    /*! Signal emitted when the form widget is selected inside of the form.
+     Use this to update actions state. */
+    void formWidgetSelected();
+
+    /*! Signal emitted when no form (or a preview form) is selected.
+     Use this to update actions state. */
+    void noFormSelected();
+
+#ifdef KFD_SIGSLOTS
+    /*! Signal emitted when the Connection creation by drag-and-drop ends.
+     \a connection is the created Connection. You should copy it,
+      because it is deleted just after the signal is emitted. */
+    void connectionCreated(KFormDesigner::Form *form, KFormDesigner::Connection &connection);
+
+    /*! Signal emitted when the Connection creation by drag-and-drop is aborted by user. */
+    void connectionAborted(KFormDesigner::Form *form);
+#endif
+
+//    /*! Emitted when a property was changed.
+//      @a w is the widget concerned, @a property
+//      is the name of the modified property, and @a value is the new value of this property. */
+//2.0 removed as handleWidgetPropertyChanged() is called directly
+    //void widgetPropertyChanged(QWidget *w, const QByteArray &property, const QVariant &v);
+
+    /*! Emitted when the name of the widget is modified.
+     @a oldname is the name of the widget before the
+     change, @a newname is the name after renaming. */
+    void widgetNameChanged(const QByteArray &oldname, const QByteArray &newname);
+
+//2.0 not needed, the code from slot receiving this signal is moved to Form itself
+//    /*! Emitted when "autoTabStops" is changed. */
+//    void autoTabStopsSet(KFormDesigner::Form *form, bool set);
+
 protected:
-    void setConnectionBuffer(ConnectionBuffer *b) {
-        d->connBuffer = b;
-    }
+    void emitSelectionChanged(QWidget *w, WidgetSelectionFlags flags);
+
+    void updatePropertiesForSelection(QWidget *w, WidgetSelectionFlags flags);
+
+#ifdef KFD_SIGSLOTS
+    //! Sets connection buffer to @a b, which will be owned by the form. 
+    //! The previous buffer will be deleted, if there is any.
+    void setConnectionBuffer(ConnectionBuffer *b);
+#endif
 
     void setFormWidget(FormWidget* w);
+
+// moved from FormManager
+    void emitFormWidgetSelected();
+// moved from FormManager
+    void emitWidgetSelected(bool multiple);
+// moved from FormManager
+    //! @internal
+    void emitNoFormSelected();
+
+// moved from FormManager
+    void enableFormActions();
+// moved from FormManager
+    void disableWidgetActions();
+
+// moved from WidgetPropertySet
+    /*! Checks if the name entered by user is valid, ie that it is
+     a valid identifier, and that there is no name conflict.  */
+    bool isNameValid(const QString &name);
+
+// moved from WidgetPropertySet
+    void addWidget(QWidget *w);
+
+// moved from WidgetPropertySet
+    /*! Fills the list with properties related to the widget \a w. Also updates
+    properties old value and changed state. */
+    void createPropertiesForWidget(QWidget *w);
+
+// moved from WidgetPropertySet
+    /*! Changes \a property old value and changed state, using the value
+    stored in \a tree. Optional \a meta can be specified if you need to handle enum values. */
+    void updatePropertyValue(ObjectTreeItem *tree, const char *property,
+                             const QMetaProperty &meta = QMetaProperty());
+
+    /*! Function called by all other alignWidgets*() function. */
+    void alignWidgets(WidgetAlignment alignment);
+
+    /*! This function is used to filter the properties to be shown
+       (ie not show "caption" if the widget isn't toplevel).
+       \return true if the property should be shown. False otherwise.*/
+    bool isPropertyVisible(const QByteArray &property, bool isTopLevel,
+                           const QByteArray &classname = QByteArray());
+
+    // Following methods are used to create special types of properties, different
+    // from Q_PROPERTY
+
+    /*! Creates the properties related to alignment (ie hAlign, vAlign and WordBreak) for
+     the QWidget \a widget. \a subwidget is the same as \a widget if the widget itself handles
+     the property and it's a child widget if the child handles the property.
+     For example, the second case is true for KexiDBAutoField.
+     \a meta  is the QMetaProperty for "alignment" property" of subwidget.  */
+    void createAlignProperty(const QMetaProperty &meta, QWidget *widget, QWidget *subwidget);
+
+    /*! Saves the properties related to alignment (ie hAlign, vAlign and WordBreak)
+     and modifies the "alignment" property of  the widget.*/
+    void saveAlignProperty(const QString &property);
+
+    /*! Creates the "layout" property, for the Container representing \a item. */
+    void createLayoutProperty(ObjectTreeItem *item);
+
+    /*! Saves the "layout" property and changes the Container 's layout,
+        using Container::setLayoutType().*/
+    void saveLayoutProperty(const QString &property, const QVariant &value);
+
+    /*! Saves 'enabled' property, and takes care of updating widget's palette. */
+//! @todo make it support undo
+    void saveEnabledProperty(bool value);
+
+    /*! Function called by the "Lay out in..." menu items. It creates a layout from the
+      currently selected widgets (that must have the same parent).
+      Calls \ref CreateLayoutCommand. */
+    void createLayout(LayoutType layoutType);
+
+    KActionCollection  *actionCollection() const;
+
+//moved from KexiFormPart::slotPropertyChanged()
+    /*! Called when a property has been changed.
+      @a w is the widget concerned, @a property
+      is the name of the modified property, and @a value is the new value of this property. */
+    void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
+
 private:
+    void init(WidgetLibrary* library, Mode mode, KActionCollection &col);
+
     WidgetLibrary *m_lib;
     FormPrivate *d;
 
-    friend class FormManager;
+//unused    friend class FormManager;
     friend class FormWidget;
+#ifdef KFD_SIGSLOTS
     friend class ConnectionDialog;
+#endif
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Form::Features)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Form::WidgetSelectionFlags)
 
 }
 

@@ -56,9 +56,7 @@ set(kexiformutils_LIB_SRCS
    kexidataawarewidgetinfo.cpp 
    kexidataprovider.cpp 
    kexiformscrollview.cpp 
-   kexiformeventhandler.cpp 
    kexidbtextwidgetinterface.cpp 
-   kexiactionselectiondialog.cpp 
    kexiformmanager.cpp 
    kexidatasourcepage.cpp 
    kexiformpart.cpp 

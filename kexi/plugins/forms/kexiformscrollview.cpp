@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
 //#include "kexiformview.h"
 
 #include <formeditor/form.h>
-#include <formeditor/formmanager.h>
+//2.0 #include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/commands.h>
 #include <widget/utils/kexirecordmarker.h>
@@ -84,8 +84,8 @@ KexiFormScrollView::show()
 void
 KexiFormScrollView::slotResizingStarted()
 {
-    if (m_form && KFormDesigner::FormManager::self())
-        setSnapToGrid(KFormDesigner::FormManager::self()->snapWidgetsToGrid(), m_form->gridSize());
+    if (m_form)
+        setSnapToGrid(m_form->isSnapWidgetsToGridEnabled(), m_form->gridSize());
     else
         setSnapToGrid(false);
 }

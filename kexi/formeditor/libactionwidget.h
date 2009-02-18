@@ -21,11 +21,11 @@
 #ifndef LIBACTIONWIDGET_H
 #define LIBACTIONWIDGET_H
 
-#include <ktoggleaction.h>
+#include <KToggleAction>
 
 #include <kexi_export.h>
 
-class KActionCollection;
+class QActionGroup;
 
 namespace KFormDesigner
 {
@@ -40,15 +40,16 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
     Q_OBJECT
 public:
     /** LibActionWidget object is initialized to be mutually
-      exclusive with all other LibActionWidget objects */
-    LibActionWidget(WidgetInfo *, KActionCollection *collection);
+      exclusive with all other LibActionWidget objects for group @a group. */
+    LibActionWidget(QActionGroup *group, WidgetInfo *w);
+
     virtual ~LibActionWidget();
 
 signals:
     /**
      * emits a signal containing the class name
      */
-    void prepareInsert(const QByteArray &className);
+    void toggled(const QByteArray &className);
 
 protected slots:
     /** reimplemented from KToggleAction */

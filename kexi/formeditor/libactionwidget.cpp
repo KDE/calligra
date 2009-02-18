@@ -24,15 +24,15 @@
 
 #include "libactionwidget.h"
 #include "widgetfactory.h"
-#include "formmanager.h"
+//unused #include "formmanager.h"
 
 using namespace KFormDesigner;
 
-LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
-        : KToggleAction(KIcon(w->pixmap()), w->name(), c)
+LibActionWidget::LibActionWidget(QActionGroup *group, WidgetInfo *w)
+        : KToggleAction(KIcon(w->pixmap()), w->name(), group)
 {
-    setObjectName(QString("library_widget_" + w->className()));
-    FormManager::self()->widgetActionGroup()->addAction(this);
+    setObjectName(QLatin1String("library_widget_") + w->className());
+    group->addAction(this);
 // kDebug() << QString("library_widget_" + w->className()).toLatin1();
     m_className = w->className();
 //kde4 not needed setExclusiveGroup("LibActionWidgets");
@@ -41,16 +41,16 @@ LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
 // connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
 }
 
+LibActionWidget::~LibActionWidget()
+{
+}
+
 void
 LibActionWidget::slotToggled(bool checked)
 {
     KToggleAction::slotToggled(checked);
     if (checked)
-        emit prepareInsert(m_className);
-}
-
-LibActionWidget::~LibActionWidget()
-{
+        emit toggled(m_className);
 }
 
 #include "libactionwidget.moc"

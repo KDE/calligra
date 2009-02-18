@@ -2,7 +2,7 @@
  Kexi Development CHANGELOG Document
  From jstaniek's Point of View
  
- Copyright (C) 2003-2008 Jaroslaw Staniek staniek at kde.org / OpenOffice Polska
+ Copyright (C) 2003-2009 Jaroslaw Staniek staniek at kde.org / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -21,6 +21,107 @@ TODO
  Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
+
+TODO:
+- crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
+  http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
+
+2009-01-12..2009-02-18
+Forms
+- Forms Refactoring
+-First phase of Kexi Forms Module refactoring. The main reason is to
+  simplify the codebase and prepare it to future enchancements like 
+  subforms, reports integration, and tabbed main window design.
+-Detailed reasons for refactoring:
+--The process of instantiating a form (the Form class) is very 
+   complicated now what makes it very hard to properly implement subforms
+--The code full of interdependencies and thus is fragile when adding new
+   functionality or fixing bugs
+--The FormManager class centralizes a number of operations that shall 
+   belong to Form itself
+--The naming of methods and classes can be improved, 
+   e.g. Form -> FormController
+--The ObjectTree* classes introduce redundancy as we already have 
+   QWidget hierarchy, and extensible property system; this complicates 
+   the code
+-Details:
+-Form and FormManager:
+--FormManager removed. Most facilities of FormManager merged into Form.
+   Thus we are no longer track 'active form' on switching between forms;
+   instead each Form object keeps necessary information.
+--void FormManager::insertWidget(const QByteArray &classname) moved
+--void FormManager::stopInsert() moved as abortWidgetInserting()
+--void FormManager::enterConnectingState() moved as enterConnectingState()
+--void FormManager::stopCreatingConnection() moved 
+   as abortCreatingConnection()
+--void FormManager::slotPointerClicked() moved
+   as enterWidgetSelectingState()
+--Form::State enum defined instead of multiple boolean attributes
+   of FormManager
+--FormManager::isInserting() and FormManager::isCreatingConnection()
+   removed, Form::state() is used instead
+--Design or View mode is expressed using Mode enum value, not boolean flag
+--Form::setSelectedWidget(QWidget *w, bool add, bool dontRaise, 
+   bool moreWillBeSelected) replaced with 
+   Form::selectWidget(QWidget *w, Form::WidgetSelectionFlags)
+--Form::deSelectWidget(QWidget*) replaced with 
+   Form::deselectWidget(QWidget*)
+--bool FormManager::isTopLevel(QWidget*) moved
+   to Form::isTopLevelWidget(QWidget*)
+--FormManager::selectedClass() removed
+--WidgetLibrary* FormManager::createWidgetLibrary(FormManager* m, const 
+   QStringList& supportedFactoryGroups) removed, WidgetLibrary 
+   is instantiated directly by KexiFormPart
+--FormManager::dirty(KFormDesigner::Form *form, bool isDirty = true) 
+   signal moved to Form::modified() signal
+--FormManager::showFormUICode() moved to KexiFormManager
+--FormManager::m_emitSelectionSignalsUpdatesPropertySet removed since 
+   we're not using windowChanged() (??)
+--void FormManager::setObjectTreeView(ObjectTreeView *treeview) 
+   moved to KexiFormManager::init()
+-WidgetPropertySet
+--removed, its code moved to Form
+--emitWidgetPropertyChanged() removed
+-Added #ifdef KFD_SIGSLOTS to disable code related to visual handling 
+  signal/slots connection
+-FormWidget
+--code moved to FormWidget.h and FormWidget.cpp
+--clearForm() removed (let's hopw QWidget update() is enough)
+-Commands:
+--Paste/Cut/Copy commands use QApplication::clipboard() now instead 
+  of FormManager::self()->m_domDoc, which has been removed
+-Container:
+--void setSelectedWidget(QWidget *selected, bool add, 
+   bool dontRaise = false, bool moreWillBeSelected = false) 
+   -> selectWidget(QWidget *w, Form::WidgetSelectionFlags flags 
+   = Form::DefaultWidgetSelectionFlags)
+--LayoutType enum moved to Form
+--setLayout() -> setLayoutType()
+-KexiFormPart
+--slotPropertyChanged() moved to Form::handleWidgetPropertyChanged(),
+   so Form::widgetPropertyChanged() signal can be now removed
+--slotAutoTabStopsSet()'s code moved to Form::editTabOrder() itself
+--KexiFormPart::static_formsLibrary moved to KexiFormManger
+--slotWidgetCreatedByFormsLibrary(QWidget*) moved to KexiFormManger
+--WidgetLibrary* KexiFormPart::library() moved to KexiFormManager
+--assignAction() moved to KexiFormManager
+-KexiFormManger
+--added static self()
+--is initialized by KexiFormPart
+-See Also:
+ http://wiki.koffice.org/index.php?title=Kexi/Porting#Forms_Refactoring
+
+2009-01-11
+KexiDB
+- Connection::objectIds() and Connection::objectNames() now return results 
+   sorted by IDs
+- Connection::objectIds() now works as expected for object 
+   type == KexiDB::AnyObjectType
+(ported to Predicate too)
+
+2009-01-03
+Main Window
+- do not query again about closing unsaved window when cancel was pressed
 
 2008-12-30
 Forms
@@ -50,7 +151,8 @@ Main
 Table View
 - fixed offset while painting after horizontal scrolling
 - fixed possible crash when scrolling vertically within a limited viewport
-TODO: fix painting the last columns or rows when scrolling back to x= or y=0 position
+TODO: fix painting the last columns or rows when scrolling back 
+       to x= or y=0 position
 
 2008-12-08
 Widgets

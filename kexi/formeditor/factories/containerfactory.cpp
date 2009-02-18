@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,9 +45,8 @@
 #include "formIO.h"
 #include "objecttree.h"
 #include "commands.h"
-#include "formmanager.h"
 #include "widgetlibrary.h"
-#include <formeditor/utils.h>
+#include "utils.h"
 
 #include <kexiutils/utils.h>
 
@@ -102,8 +101,8 @@ void GroupBox::dropEvent(QDropEvent *e)
 
 ////////////////////////
 
-KFDTabWidget::KFDTabWidget(QWidget *parent)
-        : KFormDesigner::TabWidget(parent)
+KFDTabWidget::KFDTabWidget(KFormDesigner::Container *container, QWidget *parent)
+        : KFormDesigner::TabWidget(parent), m_container(container)
 {
 }
 
@@ -291,7 +290,7 @@ InsertPageCommand::unexecute()
 
     QWidgetList list;
     list.append(page);
-    K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_form);
+    K3Command *com = new KFormDesigner::DeleteWidgetCommand(*m_form, list);
 
     QByteArray classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
@@ -324,8 +323,8 @@ InsertPageCommand::name() const
 
 /////// Sub forms ////////////////////////:
 
-SubForm::SubForm(QWidget *parent)
-        : Q3ScrollView(parent), m_form(0), m_widget(0)
+SubForm::SubForm(KFormDesigner::Form *parentForm, QWidget *parent)
+        : Q3ScrollView(parent), m_parentForm(parentForm), m_form(0), m_widget(0)
 {
     setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
     viewport()->setPaletteBackgroundColor(colorGroup().mid());
@@ -342,10 +341,10 @@ SubForm::setFormName(const QString &name)
         return;
 
     QFileInfo info(name);
-    if (!info.exists()
-            || (KFormDesigner::FormManager::self()->activeForm()
-                && (info.fileName() == KFormDesigner::FormManager::self()->activeForm()->filename())))
-        return; // we check if this is valid form
+    if (!info.exists() || (m_parentForm && info.fileName() == m_parentForm->filename())) {
+//! @todo ???
+        return; // we check if this form is valid
+    }
 
     // we create the container widget
     delete m_widget;
@@ -353,17 +352,15 @@ SubForm::setFormName(const QString &name)
     m_widget->setObjectName("subform_widget");
 // m_widget->show();
     addChild(m_widget);
-    m_form = new KFormDesigner::Form(
-        KFormDesigner::FormManager::self()->activeForm()->library());
+    m_form = new KFormDesigner::Form(m_parentForm);
     m_form->setObjectName(this->objectName());
     m_form->createToplevel(m_widget);
 
     // and load the sub form
     KFormDesigner::FormIO::loadFormFromFile(m_form, m_widget, name);
-    m_form->setDesignMode(false);
+    m_form->setMode(KFormDesigner::Form::DesignMode);
 
     m_formName = name;
-
 }
 
 /////   The factory /////////////////////////
@@ -518,9 +515,10 @@ ContainerFactory::ContainerFactory(QObject *parent, const QStringList &)
     m_propValDesc["Triangular"] = i18nc("for Tab Shape", "Triangular");
 }
 
-QWidget*
+QWidget* 
 ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
-                               KFormDesigner::Container *container, int options)
+                                  KFormDesigner::Container *container,
+                                  CreateWidgetOptions options)
 {
     QWidget *w = 0;
 #if 0 // needed?
@@ -533,7 +531,7 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
     } else
 #endif
     if (c == "KFDTabWidget") {
-        KFDTabWidget *tab = new KFDTabWidget(p);
+        KFDTabWidget *tab = new KFDTabWidget(container, p);
         w = tab;
         w->setObjectName(n);
 #if defined(USE_KTabWidget)
@@ -598,14 +596,15 @@ ContainerFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
         w = new VFlow(p);
         new KFormDesigner::Container(container, w, container);
     } else if (c == "SubForm") {
-        w = new SubForm(p);
+        w = new SubForm(container->form(), p);
     } else if (c == "QSplitter") {
         QSplitter *split = new QSplitter(p);
         w = split;
-        if (0 == (options & WidgetFactory::AnyOrientation))
+        if (0 == (options & WidgetFactory::AnyOrientation)) {
             split->setOrientation(
                 (options & WidgetFactory::VerticalOrientation) ? Qt::Vertical : Qt::Horizontal);
-        new KFormDesigner::Container(container, split, container);
+        }
+        (void)new KFormDesigner::Container(container, split, container);
     }
 
     if (w) {
@@ -811,7 +810,6 @@ ContainerFactory::resizeEditor(QWidget *editor, QWidget *widget, const QByteArra
 
 void ContainerFactory::addTabPage()
 {
-// if (!m_widget->inherits("QTabWidget"))
     if (!widget()->inherits("QTabWidget"))
         return;
     K3Command *com = new InsertPageCommand(m_container, widget());
@@ -831,7 +829,7 @@ void ContainerFactory::removeTabPage()
 
     QWidgetList list;
     list.append(w);
-    K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
+    K3Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
     tab->removePage(w);
     m_container->form()->addCommand(com, true);
 }
@@ -853,8 +851,8 @@ void ContainerFactory::renameTabPage()
 
 void ContainerFactory::reorderTabs(int oldpos, int newpos)
 {
-    KFormDesigner::ObjectTreeItem *tab
-        = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(sender()->objectName());
+    KFDTabWidget *tabWidget = qobject_cast<KFDTabWidget*>(sender());
+    KFormDesigner::ObjectTreeItem *tab = tabWidget->container()->form()->objectTree()->lookup(tabWidget->objectName());
     if (!tab)
         return;
 
@@ -888,7 +886,7 @@ void ContainerFactory::removeStackPage()
 
     QWidgetList list;
     list.append(page);
-    K3Command *com = new KFormDesigner::DeleteWidgetCommand(list, m_container->form());
+    K3Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
 
     // raise prev/next widget
     int index = stack->indexOf(page);

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2007-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,13 +21,17 @@
 #ifndef FORMEDITORUTILS_H
 #define FORMEDITORUTILS_H
 
-#include <qtabbar.h>
-#include <qtabwidget.h>
+#include <QHash>
+#include <QTabBar>
+#include <QTabWidget>
 #include <kexi_export.h>
 
 //! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
 #define TabWidgetBase QTabWidget
 //#define USE_KTabWidget //todo: uncomment
+
+class QMimeData;
+class QDomDocument;
 
 namespace KFormDesigner
 {
@@ -109,8 +113,27 @@ KFORMEDITOR_EXPORT void removeRecursiveEventFilter(QObject *object, QObject *con
 
 KFORMEDITOR_EXPORT void setRecursiveCursor(QWidget *w, Form *form);
 
-/*! \return the size of \a w children. This can be used eg to get widget's sizeHint. */
+//! \return the size of \a w children
+/*! This can be used eg to get widget's sizeHint. */
 KFORMEDITOR_EXPORT QSize getSizeFromChildren(QWidget *widget, const char *inheritClass = "QWidget");
+
+//! @return mimetype for the forms XML format
+inline QString mimeType() { return "application/x-kexi-form"; }
+
+//! @returns deep copy of the current clipboard contents (for all formats)
+KFORMEDITOR_EXPORT QMimeData *deepCopyOfClipboardData();
+
+//! Copies @a xml data to the clipboard both in the plain text format and forms XML format
+KFORMEDITOR_EXPORT void copyToClipboard(const QString& xml);
+
+//! Recursively saves widget list @a list and form @a form to @a doc XML document
+/*! @a containers hash is filled with containers found within the widget list,
+ and @a parents is filled with the parent widgets found within the widget list. 
+ USed in DeleteWidgetCommand ctor. */
+KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc, 
+    QHash<QByteArray, QByteArray>& containers,
+    QHash<QByteArray, QByteArray>& parents,
+    const Form& form, const QWidgetList &list);
 
 }
 
