@@ -23,11 +23,9 @@
 #include <qstringlist.h>
 #include <qtoolbutton.h>
 #include <qdom.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3Frame>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -152,7 +150,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
         : KDialog(parent, "loadicon_dialog", true, i18n("Load KDE Icon by Name"), Ok | Cancel, Ok, false)
 {
     QFrame *frame = makeMainWidget();
-    Q3GridLayout *l = new Q3GridLayout(frame, 2, 3, 0, 6);
+    QGridLayout *l = new QGridLayout(frame);
 
     // Name input
     QLabel *name = new QLabel(i18n("&Name:"), frame);
@@ -181,7 +179,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
     m_button = new KIconButton(frame);
     m_button->setIcon("kexi");
     m_button->setIconSize(KIconLoader::SizeMedium);
-    l->addMultiCellWidget(m_button, 0, 1, 2, 2);
+    l->addWidget(m_button, 0, 2, 2, 1);
     connect(m_button, SIGNAL(iconChanged(QString)), this, SLOT(updateIconName(QString)));
     connect(m_nameInput, SIGNAL(textChanged(const QString &)), this, SLOT(setIcon(const QString &)));
 }
@@ -233,11 +231,11 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 {
     m_collection = collection;
     QFrame *frame = makeMainWidget();
-    Q3HBoxLayout *l = new Q3HBoxLayout(frame, 0, 6);
+    QHBoxLayout *l = new QHBoxLayout(frame);
     setInitialSize(QSize(400, 200), true);
 
     //// Setup the icon toolbar /////////////////
-    Q3VBoxLayout *vlayout = new Q3VBoxLayout(l, 3);
+    QVBoxLayout *vlayout = new QVBoxLayout(l);
     QToolButton *newItemPath = new QToolButton(frame);
     newItemPath->setIconSet(KIcon("document-open"));
     newItemPath->setTextLabel(i18n("&Add File"), true);

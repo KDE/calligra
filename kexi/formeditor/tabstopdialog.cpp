@@ -17,13 +17,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include <qlayout.h>
+
 #include <qcheckbox.h>
 #include <qtooltip.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3GridLayout>
-#include <Q3Frame>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QFrame>
 
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -52,7 +51,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
     QFrame *frame = new QFrame(this);
     setMainWidget(frame);
-    Q3GridLayout *l = new Q3GridLayout(frame, 2, 2, 0, 6);
+    QGridLayout *l = new QGridLayout(frame);
     m_treeview = new ObjectTreeView(frame, 
         ObjectTreeView::DisableSelection | ObjectTreeView::DisableContextMenu);
     m_treeview->setObjectName("tabstops_treeview");
@@ -67,7 +66,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
     connect(m_treeview, SIGNAL(currentChanged(Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
     connect(m_treeview, SIGNAL(moved(Q3ListViewItem*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(updateButtons(Q3ListViewItem*)));
 
-    Q3VBoxLayout *vbox = new Q3VBoxLayout();
+    QVBoxLayout *vbox = new QVBoxLayout();
     l->addLayout(vbox, 0, 1);
     m_btnUp = new KPushButton(KIcon("arrow-up"), i18n("Move Up"), frame);
     m_btnUp->setToolTip(i18n("Move widget up"));
@@ -82,7 +81,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 
     m_check = new QCheckBox(i18n("Handle tab order automatically"), frame, "tabstops_check");
     connect(m_check, SIGNAL(toggled(bool)), this, SLOT(slotRadioClicked(bool)));
-    l->addMultiCellWidget(m_check, 1, 1, 0, 1);
+    l->addWidget(m_check, 1, 0, 1, 2);
 
     updateGeometry();
     setInitialSize(QSize(500 + m_btnUp->width(), qMax(400, m_treeview->height())));

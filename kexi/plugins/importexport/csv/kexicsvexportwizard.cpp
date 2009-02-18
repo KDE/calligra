@@ -33,12 +33,10 @@
 #include <qcheckbox.h>
 #include <q3groupbox.h>
 #include <qclipboard.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QTextStream>
-#include <Q3GridLayout>
+#include <QGridLayout>
 #include <QLabel>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QDesktopWidget>
 #include <kapplication.h>
 #include <klocale.h>
@@ -119,9 +117,10 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     }
 
     // 2. Export options
-    m_exportOptionsPage = new QWidget(this, "m_exportOptionsPage");
-    Q3GridLayout *exportOptionsLyr = new Q3GridLayout(m_exportOptionsPage, 6, 3,
-            KDialog::marginHint(), KDialog::spacingHint(), "exportOptionsLyr");
+    m_exportOptionsPage = new QWidget(this);
+    m_exportOptionsPage->setObjectName("m_exportOptionsPage");
+    QGridLayout *exportOptionsLyr = new QGridLayout(m_exportOptionsPage);
+    exportOptionsLyr->setObjectName("exportOptionsLyr");
     m_infoLblFrom = new KexiCSVInfoLabel(infoLblFromText, m_exportOptionsPage);
     KexiPart::Info *partInfo = Kexi::partManager().infoForClass(
             QString("org.kexi-project.%1").arg(m_tableOrQuery->table() ? "table" : "query"));
@@ -136,7 +135,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     );
     if (m_options.mode == KexiCSVExport::Clipboard)
         m_infoLblTo->setIcon("edit-paste");
-    exportOptionsLyr->addMultiCellWidget(m_infoLblTo, 1, 1, 0, 2);
+    exportOptionsLyr->addWidget(m_infoLblTo, 1, 0, 1, 3);
 
     m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"),
                                           m_exportOptionsPage);
@@ -152,8 +151,7 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     QWidget *exportOptionsSectionWidget
     = new QWidget(m_exportOptionsSection);
     exportOptionsSectionWidget->setObjectName("exportOptionsSectionWidget");
-    Q3GridLayout *exportOptionsSectionLyr = new Q3GridLayout(exportOptionsSectionWidget, 5, 2,
-            0, KDialog::spacingHint());
+    QGridLayout *exportOptionsSectionLyr = new QGridLayout(exportOptionsSectionWidget);
     exportOptionsLyr->setObjectName("exportOptionsLyr");
 
     // -delimiter
@@ -161,26 +159,28 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
             exportOptionsSectionWidget);
     m_delimiterWidget->setDelimiter(defaultDelimiter());
     exportOptionsSectionLyr->addWidget(m_delimiterWidget, 0, 1);
-    QLabel *delimiterLabel = new QLabel(m_delimiterWidget, i18n("Delimiter:"), exportOptionsSectionWidget);
+    QLabel *delimiterLabel = new QLabel(i18n("Delimiter:"), exportOptionsSectionWidget);
+    delimiterLabel->setBuddy(m_delimiterWidget);
     exportOptionsSectionLyr->addWidget(delimiterLabel, 0, 0);
 
     // -text quote
     QWidget *textQuoteWidget = new QWidget(exportOptionsSectionWidget);
-    Q3HBoxLayout *textQuoteLyr = new Q3HBoxLayout(textQuoteWidget);
+    QHBoxLayout *textQuoteLyr = new QHBoxLayout(textQuoteWidget);
     exportOptionsSectionLyr->addWidget(textQuoteWidget, 1, 1);
     m_textQuote = new KexiCSVTextQuoteComboBox(textQuoteWidget);
     m_textQuote->setTextQuote(defaultTextQuote());
     textQuoteLyr->addWidget(m_textQuote);
     textQuoteLyr->addStretch(0);
-    QLabel *textQuoteLabel = new QLabel(m_textQuote, i18n("Text quote:"), exportOptionsSectionWidget);
+    QLabel *textQuoteLabel = new QLabel(i18n("Text quote:"), exportOptionsSectionWidget);
+    textQuoteLabel->setBuddy(m_textQuote);
     exportOptionsSectionLyr->addWidget(textQuoteLabel, 1, 0);
 
     // - character encoding
     m_characterEncodingCombo = new KexiCharacterEncodingComboBox(exportOptionsSectionWidget);
     m_characterEncodingCombo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     exportOptionsSectionLyr->addWidget(m_characterEncodingCombo, 2, 1);
-    QLabel *characterEncodingLabel = new QLabel(m_characterEncodingCombo, i18n("Text encoding:"),
-            exportOptionsSectionWidget);
+    QLabel *characterEncodingLabel = new QLabel(i18n("Text encoding:"), exportOptionsSectionWidget);
+    characterEncodingLabel->setBuddy(m_characterEncodingCombo);
     exportOptionsSectionLyr->addWidget(characterEncodingLabel, 2, 0);
 
     // - checkboxes
@@ -198,8 +198,8 @@ KexiCSVExportWizard::KexiCSVExportWizard(const KexiCSVExport::Options& options,
     // -</options section>
 
 // exportOptionsLyr->setColumnStretch(3, 1);
-    exportOptionsLyr->addMultiCell(
-        new QSpacerItem(0, 0, QSizePolicy::Preferred, QSizePolicy::MinimumExpanding), 5, 5, 0, 1);
+    exportOptionsLyr->addItem(
+        new QSpacerItem(0, 0, QSizePolicy::Preferred, QSizePolicy::MinimumExpanding), 5, 0, 1, 2);
 
 // addPage(m_exportOptionsPage, i18n("Set Export Options"));
     addPage(m_exportOptionsPage,
@@ -357,10 +357,8 @@ void KexiCSVExportWizard::layOutButtonRow(QHBoxLayout * layout)
     Q3Wizard::layOutButtonRow(layout);
 
     //find the last sublayout
-    QLayout *l = 0;
-    for (QLayoutIterator lit(layout->iterator()); lit.current(); ++lit)
-        l = lit.current()->layout();
-    if (dynamic_cast<Q3BoxLayout*>(l)) {
+    QLayout *l = layout->itemAt(layout->count()-1)->layout();
+    if (dynamic_cast<QBoxLayout*>(l)) {
         if (!m_defaultsBtn) {
             m_defaultsBtn = new KPushButton(i18n("Defaults"), this);
             QWidget::setTabOrder(backButton(), m_defaultsBtn);
@@ -368,7 +366,7 @@ void KexiCSVExportWizard::layOutButtonRow(QHBoxLayout * layout)
         }
         if (!m_exportOptionsSection->isVisible())
             m_defaultsBtn->hide();
-        dynamic_cast<Q3BoxLayout*>(l)->insertWidget(0, m_defaultsBtn);
+        dynamic_cast<QBoxLayout*>(l)->insertWidget(0, m_defaultsBtn);
     }
 }
 
