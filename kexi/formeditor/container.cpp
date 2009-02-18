@@ -292,10 +292,11 @@ Container::eventFilter(QObject *s, QEvent *e)
             }
             else {
                 // the widget is not yet selected, we add it
-                const Form::WidgetSelectionFlags flags
-                    = Form::AddToPreviousSelection
-                      | Form::LastSelection
-                      | ((mev->button() == Qt::RightButton) ? Form::DontRaise : 0);
+                Form::WidgetSelectionFlags flags = Form::AddToPreviousSelection
+                    | Form::LastSelection;
+                if (mev->button() == Qt::RightButton) {
+                    flags |= Form::DontRaise;
+                }
                 selectWidget(m_moving, flags);
             }
         }
