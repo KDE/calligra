@@ -111,10 +111,6 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 	timeEditList.append(timeEdit2);
     }
     frameNextLayout->insertWidget( 1, slideTab );
-
-    registerButton = new QPushButton(i18n("Register slides data"), this);
-    registerButton->setVisible(false);
-    frameNextLayout->insertWidget( 2, registerButton );
 }
 
 void KPrPresenterViewInterface::setActivePage( int pageIndex )
@@ -134,12 +130,10 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
 	m_nextSlideLabel->setText(i18n( "Next Slide" ));
 	m_nextSlidePreview->setVisible(true);
 	slideTab->setVisible(false);
-	registerButton->setVisible(false);
     }
     else { // End of presentation, show time for each slide
 	m_nextSlideLabel->setText(i18n( "Slides Time" ));
 	slideTab->setVisible(true);
-	registerButton->setVisible(true);
 	m_nextSlidePreview->setVisible(false);
 	saveSlideTime();
     }
@@ -191,6 +185,7 @@ void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
 void KPrPresenterViewInterface::saveSlideTime()
 {
     KoXmlDocument m_doc;
+    // chemin absolu à modifier (et créer le fichier associé -> voir plus bas)
     QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
     QFile file( fileName );
     if(!file.exists())
@@ -210,7 +205,21 @@ void KPrPresenterViewInterface::saveSlideTime()
 	    kDebug() << time.attribute("name")+"\n";
 	}
     }
+    
+    /* fichier à créer : slideTimess.xml
+    
+    <?xml version="1.0" standalone="no"?>
+      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
+      "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+    <lineends>
+      <draw:marker draw:name="Slide 1" draw:time="10"/>
+      <draw:marker draw:name="Slide 2" draw:time="2"/>
+      <draw:marker draw:name="Slide 3" draw:time="30"/>
+      <draw:marker draw:name="Slide 4" draw:time="40"/>
+    </lineends> 
+
+    */
+    
 }
 
 #include "KPrPresenterViewInterface.moc"
-
