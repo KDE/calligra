@@ -948,11 +948,11 @@ CreateLayoutCommand::CreateLayoutCommand(Form &form, Form::LayoutType layoutType
     case Form::Grid:
     case Form::HSplitter:
     case Form::HFlow:
-        realList = std::auto_ptr<CustomSortableWidgetList>(new HorizontalWidgetList(d->form->toplevelContainer()->widget())); break;
+        realList = new HorizontalWidgetList(d->form->toplevelContainer()->widget()); break;
     case Form::VBox:
     case Form::VSplitter:
     case Form::VFlow:
-        realList = std::auto_ptr<CustomSortableWidgetList>(new VerticalWidgetList(d->form->toplevelContainer()->widget())); break;
+        realList = new VerticalWidgetList(d->form->toplevelContainer()->widget()); break;
     }
     
     foreach (QWidget *w, list) {
