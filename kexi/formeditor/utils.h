@@ -67,9 +67,12 @@ public:
     }
 };
 
+//! @short A common interface for HorizontalWidgetList and VerticalWidgetList
 class CustomSortableWidgetList : public QWidgetList
 {
 public:
+    CustomSortableWidgetList() : QWidgetList() {}
+    virtual ~CustomSortableWidgetList() {}
     virtual void sort() {}
 };
 
