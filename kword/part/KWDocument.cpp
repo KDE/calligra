@@ -72,9 +72,50 @@
 #include <QCoreApplication>
 #include <QTextBlock>
 
+/// \internal
+// this class will be added to all views and be hidden by default.
+// during loading any frames we find will be added here and only when they are positioned properly will
+// those frames be re-shown.
+class MagicCurtain : public KoShapeContainer
+{
+public:
+    // reimplemented pure virtual calls
+    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) { return false; }
+    void saveOdf(KoShapeSavingContext&) const { }
+    void paintComponent(QPainter&, const KoViewConverter&) { }
+
+    /// add the frame to be hidden
+    void addFrame(KWFrame *frame);
+    // reveal all the frames that were added before
+    void revealFramesForPage(int pageNumber);
+
+private:
+    QHash<int, QList<KWFrame*> > m_data;
+};
+
+void MagicCurtain::addFrame(KWFrame *frame)
+{
+    Q_ASSERT(frame->loadingPageNumber() > 0);
+    QList<KWFrame*> frames = m_data.value(frame->loadingPageNumber());
+    frames << frame;
+    m_data.insert(frame->loadingPageNumber(), frames);
+    frame->shape()->setParent(this);
+}
+
+void MagicCurtain::revealFramesForPage(int pageNumber)
+{
+    foreach (KWFrame *frame, m_data.value(pageNumber)) {
+        frame->shape()->setParent(0);
+        frame->clearLoadingData();
+    }
+}
+
+
+// KWDocument
 KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode),
-        m_frameLayout(&m_pageManager, m_frameSets)
+        m_frameLayout(&m_pageManager, m_frameSets),
+        m_magicCurtain(0)
 {
     m_frameLayout.setDocument(this);
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
@@ -107,6 +148,7 @@ KWDocument::~KWDocument()
     qDeleteAll(m_dataCenterMap);
     delete m_inlineTextObjectManager;
     m_inlineTextObjectManager = 0;
+    delete m_magicCurtain;
 }
 
 void KWDocument::addShape(KoShape *shape)
@@ -155,6 +197,8 @@ void KWDocument::paintContent(QPainter&, const QRect& rect)
 KoView* KWDocument::createViewInstance(QWidget* parent)
 {
     KWView *view = new KWView(m_viewMode, this, parent);
+    if (m_magicCurtain)
+        view->kwcanvas()->shapeManager()->add(m_magicCurtain);
     bool switchToolCalled = false;
     foreach (KWFrameSet *fs, m_frameSets) {
         if (fs->frameCount() == 0)
@@ -292,7 +336,17 @@ void KWDocument::addFrame(KWFrame *frame)
             canvas->shapeManager()->add(frame->shape());
         canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
-    frame->shape()->update();
+    if (frame->loadingPageNumber() > 0) {
+        if (m_magicCurtain == 0) {
+            m_magicCurtain = new MagicCurtain();
+            m_magicCurtain->setVisible(false);
+            foreach (KoView *view, views())
+                static_cast<KWView*>(view)->kwcanvas()->shapeManager()->add(m_magicCurtain);
+        }
+        m_magicCurtain->addFrame(frame);
+    }
+    else
+        frame->shape()->update();
 }
 
 void KWDocument::removeFrame(KWFrame *frame)
@@ -506,6 +560,8 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
             lastpage = m_pageManager.appendPage();
         ppq->addPage(lastpage);
         docHeight += lastpage.height();
+        if (m_magicCurtain)
+            m_magicCurtain->revealFramesForPage(lastpage.pageNumber());
     }
 
 #if 0
@@ -657,8 +713,11 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         // its enough to just create a new frame.
         m_frameLayout.createNewFrameForPage(fs, page.pageNumber() +
                                             (lastFrame->frameOnBothSheets() ? 1 : 2));
-    } else
-        appendPage(masterPageName);
+    } else {
+        KWPage newPage = appendPage(masterPageName);
+        if (m_magicCurtain)
+            m_magicCurtain->revealFramesForPage(newPage.pageNumber());
+    }
 }
 
 void KWDocument::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
