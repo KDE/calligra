@@ -50,6 +50,7 @@ public:
 
     void setPreviewSize( const QSize &size );
     void setSlidesTime(QMap<int,int> *slides_time);
+    void saveSlideTime();
 
 public slots:
     /// reimplemented

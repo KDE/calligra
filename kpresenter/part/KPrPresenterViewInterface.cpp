@@ -28,6 +28,10 @@
 #include <QTimeEdit>
 #include <QComboBox>
 #include <QTableWidget>
+#include <QFile>
+
+#include <KoOdfReadStore.h>
+#include <kstandarddirs.h>
 
 #include <KDebug>
 #include <KLocale>
@@ -45,6 +49,8 @@
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
+
+#include "kostore_export.h"
 
 KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )
@@ -135,6 +141,7 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
 	slideTab->setVisible(true);
 	registerButton->setVisible(true);
 	m_nextSlidePreview->setVisible(false);
+	saveSlideTime();
     }
 
     // update the label
@@ -181,4 +188,29 @@ void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
     }
 }
 
+void KPrPresenterViewInterface::saveSlideTime()
+{
+    KoXmlDocument m_doc;
+    QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
+    QFile file( fileName );
+    if(!file.exists())
+    {
+	file.open(QIODevice::WriteOnly);
+	/*KoXmlWriter *writer = new KoXmlWriter(&file);
+	writer->startDocument("nom");
+	writer->startElement("monElem");
+	writer->endDocument();*/
+    }
+    QString errorMessage;
+    if(KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ))
+    {
+	KoXmlElement time, slide(m_doc.namedItem("lineends").toElement());
+	forEachElement(time, slide)
+	{
+	    kDebug() << time.attribute("name")+"\n";
+	}
+    }
+}
+
 #include "KPrPresenterViewInterface.moc"
+
