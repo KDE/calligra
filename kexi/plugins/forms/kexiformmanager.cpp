@@ -64,12 +64,11 @@ public:
     KFormDesigner::WidgetLibrary* lib;
     QActionGroup* widgetActionGroup;
     KFormDesigner::ObjectTreeView *treeView;
-#ifdef KEXI_DEBUG_GUI
-    //! For debugging purposes
+   
     KPageDialog *uiCodeDialog;
     KTextEdit *currentUICodeDialogEditor;
     KTextEdit *originalUICodeDialogEditor;
-#endif
+    
     KActionCollection  *collection;
     KFormDesigner::Form::Features features;
     KToggleAction *pointerAction;
