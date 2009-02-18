@@ -32,13 +32,10 @@
 #include <qdatetime.h>
 #include <qlabel.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
-#include <Q3VBoxLayout>
-#include <Q3StrList>
-#include <Q3GridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QPixmap>
-#include <Q3HBoxLayout>
 #include <QImageWriter>
 
 #include <kfiledialog.h>
@@ -885,7 +882,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
         QObject *subobject = (subpropIface && subpropIface->subwidget())
                              ? subpropIface->subwidget() : obj;
         const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1().constData()));
-        if (meta.isValid())
+        if (meta.isValid()) {
             if (meta.isFlagType()) {
                 /*qt4   Q3StrList keys;
                       QStringList list = QStringList::split("|", text);
@@ -900,6 +897,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
                 // e.g. near KexiFormView::updateValuesForSubproperties()
                 return text.split("|");
             }
+        }
     }
     return QVariant();
 }
@@ -1228,16 +1226,21 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     m_currentItem = item;
     // if we are inside a Grid, we need to insert the widget in the good cell
     if (container->layoutType() == Form::Grid)  {
-        Q3GridLayout *layout = (Q3GridLayout*)container->layout();
+        QGridLayout *layout = (QGridLayout*)container->layout();
         if (el.hasAttribute("rowspan")) { // widget spans multiple cells
-            if (layout)
-                layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt() - 1,
-                                           el.attribute("column").toInt(),  el.attribute("column").toInt() + el.attribute("colspan").toInt() - 1);
+            if (layout) {
+                layout->addWidget(
+                    w, 
+                    el.attribute("row").toInt(), el.attribute("column").toInt(),
+                    el.attribute("rowspan").toInt(), el.attribute("colspan").toInt());
+//! @todo alignment attribute?
+            }
             item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), el.attribute("rowspan").toInt(),
                              el.attribute("colspan").toInt());
         } else  {
-            if (layout)
+            if (layout) {
                 layout->addWidget(w, el.attribute("row").toInt(), el.attribute("column").toInt());
+            }
             item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), 0, 0);
         }
     } else if (container->layout())
@@ -1441,18 +1444,18 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 #endif
             } else { // grid layout
                 item->container()->m_layType = Form::Grid;
-                Q3GridLayout *layout = new Q3GridLayout(item->widget(), 1, 1);
+                QGridLayout *layout = new QGridLayout(item->widget());
                 item->container()->m_layout = (QLayout*)layout;
             }
             readChildNodes(item, container, node, w);
         } else if (tag == "vbox")  {
             item->container()->m_layType = Form::VBox;
-            Q3VBoxLayout *layout = new Q3VBoxLayout(item->widget());
+            QVBoxLayout *layout = new QVBoxLayout(item->widget());
             item->container()->m_layout = (QLayout*)layout;
             readChildNodes(item, container, node, w);
         } else if (tag == "hbox") {
             item->container()->m_layType = Form::HBox;
-            Q3HBoxLayout *layout = new Q3HBoxLayout(item->widget());
+            QHBoxLayout *layout = new QHBoxLayout(item->widget());
             item->container()->m_layout = (QLayout*)layout;
             readChildNodes(item, container, node, w);
         } else {// unknown tag, we let the Factory handle it

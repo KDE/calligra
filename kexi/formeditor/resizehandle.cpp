@@ -72,7 +72,7 @@ void ResizeHandle::setEditingMode(bool editing)
 void ResizeHandle::updatePos()
 {
     switch (m_pos) {
-    case Qt::TopLeftCorner:
+    case TopLeftCorner:
         move(m_set->m_widget->x() - 3, m_set->m_widget->y() - 3);
         setCursor(QCursor(Qt::SizeFDiagCursor));
         break;
@@ -80,7 +80,7 @@ void ResizeHandle::updatePos()
         move(m_set->m_widget->x() + m_set->m_widget->width() / 2 - 3, m_set->m_widget->y() - 3);
         setCursor(QCursor(Qt::SizeVerCursor));
         break;
-    case Qt::TopRightCorner:
+    case TopRightCorner:
         move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() - 3);
         setCursor(QCursor(Qt::SizeBDiagCursor));
         break;
