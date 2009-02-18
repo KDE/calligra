@@ -940,7 +940,7 @@ CreateLayoutCommand::CreateLayoutCommand(Form &form, Form::LayoutType layoutType
 {
     d->form = &form;
     d->layoutType = layoutType;
-    std::auto_ptr<CustomSortableWidgetList> realList;
+    CustomSortableWidgetList *realList = 0;
 
     switch (d->layoutType) {
     case Form::NoLayout:
@@ -970,6 +970,7 @@ CreateLayoutCommand::CreateLayoutCommand(Form &form, Form::LayoutType layoutType
     if (item && item->parent()->container()) {
         d->containerName = item->parent()->name();
     }
+    delete realList;
 }
 
 CreateLayoutCommand::CreateLayoutCommand()
