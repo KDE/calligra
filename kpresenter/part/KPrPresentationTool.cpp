@@ -349,5 +349,9 @@ bool KPrPresentationTool::eventFilter(QObject *obj, QEvent *event)
     }
     return false;
 }
+KPrViewModePresentation & KPrPresentationTool::getViewMode()
+{
+    return m_viewMode;
+}
 
 #include "KPrPresentationTool.moc"

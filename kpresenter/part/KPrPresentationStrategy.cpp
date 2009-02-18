@@ -17,26 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KPrPresentationStrategy.h"
-#include "KPrPresentationHighlightStrategy.h"
 #include <kdebug.h>
-KPrPresentationStrategy::KPrPresentationStrategy(KPrPresentationTool * tool)
+KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
 {
-  m_tool = tool;
+    m_tool = tool;
 }
 KPrPresentationStrategy::~KPrPresentationStrategy()
 {
-  delete m_tool;
+    delete m_tool;
 }
 void KPrPresentationStrategy::handleEscape()
-{
-  KPrPresentationHighlightStrategy strategyH(m_tool);
-  kDebug() << "ffff";
-  if(m_tool->getDrawMode())
-  {
-    kDebug() << "ici";
-  }
-  else if(m_tool->getHighlightMode())
-  {
-    strategyH.handleEscape();
-  }
+{    
+    
+    
+    if( m_tool->getDrawMode() )
+    {
+	KPrPresentationDrawStrategy m_drawStrategy( m_tool );
+	m_drawStrategy.handleEscape();
+    }
+    else if( m_tool->getHighlightMode() )
+    {
+	KPrPresentationHighlightStrategy m_highlightStrategy( m_tool );
+	m_highlightStrategy.handleEscape();
+    }
+    else
+    {
+	KPrPresentationViewModeStrategy m_viewModeStrategy( m_tool );
+	m_viewModeStrategy.handleEscape();
+    }
 }

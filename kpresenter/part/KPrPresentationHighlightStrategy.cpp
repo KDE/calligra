@@ -18,7 +18,7 @@
  */
 #include "KPrPresentationHighlightStrategy.h"
 
-KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy(KPrPresentationTool * tool) : KPrPresentationStrategyInterface(tool)
+KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool ) : KPrPresentationStrategyInterface( tool )
 {
 }
 KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
@@ -26,5 +26,5 @@ KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
 }
 void KPrPresentationHighlightStrategy::handleEscape()
 {
-  m_tool->highLightPresentation();
+    m_tool->highLightPresentation();
 }

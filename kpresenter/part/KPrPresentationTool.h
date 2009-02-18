@@ -57,6 +57,7 @@ public:
     bool getBlackBackgroundVisibility();
     bool getDrawMode();
     bool getHighlightMode();
+    KPrViewModePresentation & getViewMode();
     
 public slots:
     void activate( bool temporary = false );

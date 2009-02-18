@@ -20,7 +20,7 @@
 #define KPRPRESENTATIONHIGHLIGHTSTRATEGY_H
 
 #include "KPrPresentationStrategyInterface.h"
-class KPrPresentationHighlightStrategy : public KPrPresentationStrategyInterface{
+class KPrPresentationHighlightStrategy : public KPrPresentationStrategyInterface {
 public :
     KPrPresentationHighlightStrategy( KPrPresentationTool * tool );
     ~KPrPresentationHighlightStrategy();
