@@ -28,3 +28,4 @@ void KPrPresentationViewModeStrategy::handleEscape()
 {
     m_tool->getViewMode().activateSavedViewMode();
 }
+
