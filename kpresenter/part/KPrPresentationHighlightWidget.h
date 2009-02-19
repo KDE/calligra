@@ -40,3 +40,4 @@ public :
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTWIDGET_H */
+
