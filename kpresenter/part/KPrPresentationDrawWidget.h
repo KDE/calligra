@@ -26,11 +26,22 @@
 #include "KPrViewModePresentation.h"
 /*dans le destructeur tu pourras faire un set sur le booléen à False, et dans le constructeur un Set à true*/
 
+#include <QObject>
+
+class QAction;
+
+struct Path {
+    QVector<QPointF> points;
+    QColor color;
+    int size;
+};
+
 class KPrPresentationDrawWidget : public QWidget {
+Q_OBJECT
 
 public :
     KPrPresentationDrawWidget( KoPACanvas * canvas );
-    ~KPrPresentationDrawWidget();
+//    ~KPrPresentationDrawWidget();
     /** Draw on the Presentation */
     void paintEvent( QPaintEvent * event );
     /** Get all the mouse event needed to paint */
@@ -40,12 +51,18 @@ public :
     /** Popup menu for colors and sizes */
     void contextMenuEvent(QContextMenuEvent* event);
 
+public slots:
+    void updateColor( QAction * );
+    void updateSize( QAction * );
+
 private :
     QIcon buildIconColor(QColor);
+    QAction* buildActionColor(QColor, QString);
     QSize m_size;
     bool m_draw;
-    int m_brushSize;
-    QList<QVector<QPointF> > m_pointVectors;
+    int m_penSize;
+    QColor m_penColor;
+    QList<struct Path> m_pointVectors;
 };
 
 #endif /* KPRPRESENTATIONDRAWWIDGET_H */ 
