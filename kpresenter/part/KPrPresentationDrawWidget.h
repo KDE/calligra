@@ -41,7 +41,7 @@ Q_OBJECT
 
 public :
     KPrPresentationDrawWidget( KoPACanvas * canvas );
-//    ~KPrPresentationDrawWidget();
+    ~KPrPresentationDrawWidget();
     /** Draw on the Presentation */
     void paintEvent( QPaintEvent * event );
     /** Get all the mouse event needed to paint */
@@ -56,13 +56,14 @@ public slots:
     void updateSize( QAction * );
 
 private :
-    QIcon buildIconColor(QColor);
-    QAction* buildActionColor(QColor, QString);
+    QIcon buildIconColor( QColor );
+    QAction* buildActionColor( QColor, QString );
+    QAction* buildActionSize( int );
     QSize m_size;
     bool m_draw;
     int m_penSize;
     QColor m_penColor;
-    QList<struct Path> m_pointVectors;
+    QList<Path> m_pointVectors;
 };
 
 #endif /* KPRPRESENTATIONDRAWWIDGET_H */ 

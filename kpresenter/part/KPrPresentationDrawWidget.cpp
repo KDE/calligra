@@ -30,6 +30,8 @@
 #include <KoPointerEvent.h>
 #include <kdebug.h>
 
+#include <QList>
+
 #include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWidget(canvas)
@@ -45,19 +47,17 @@ KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWid
     m_penColor = Qt::black;
 }
 
-//KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
-//{
-//}
+KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
+{
+}
 
 void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 {
-    struct Path path;
     QPainter painter( this );    
     QBrush brush( Qt::SolidPattern );
     QPen pen( brush, m_penSize, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
     painter.setPen( pen );
-    for( int i=0; i < m_pointVectors.count(); i++ ){
-        path = m_pointVectors.at(i);
+    foreach (const Path &path, m_pointVectors){
         pen.setColor( path.color );
         pen.setWidth( path.size );
         painter.setPen( pen );
@@ -105,18 +105,17 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     connect(color, SIGNAL(triggered(QAction*)), this, SLOT(updateColor(QAction*)));
 
 
-    size->addAction( QString("9 px") );
-    size->addAction( QString("10 px") );
-    size->addAction( QString("12 px") );
-    size->addAction( QString("14 px") );
-    size->addAction( QString("16 px") );
-    size->addAction( QString("18 px") );
-    size->addAction( QString("20 px") );
-    size->addAction( QString("22 px") );
-    size->addAction( QString("24 px") );
+    size->addAction( buildActionSize ( 9 ) );
+    size->addAction( buildActionSize ( 10 ) );
+    size->addAction( buildActionSize ( 12 ) );
+    size->addAction( buildActionSize ( 14 ) );
+    size->addAction( buildActionSize ( 16 ) );
+    size->addAction( buildActionSize ( 18 ) );
+    size->addAction( buildActionSize ( 20 ) );
+    size->addAction( buildActionSize ( 22 ) );
+
     connect(size, SIGNAL(triggered(QAction*)), this, SLOT(updateSize(QAction*)));
     
-    // Not connected yet
     menu.addMenu( color );
     menu.addMenu( size );
     
@@ -124,10 +123,17 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     m_draw = false;
 }
 
+QAction* KPrPresentationDrawWidget::buildActionSize ( int size ){
+    QAction *action = new QAction(QString::number(size)+"px", this);
+    action->setProperty("size", size);
+    return action;
+}
+
 QAction* KPrPresentationDrawWidget::buildActionColor ( QColor color, QString name )
 {
     QAction *action;
     action = new QAction( buildIconColor ( color ) , name, this );
+    action->setProperty("color", QVariant(color));
     return action;
 }
 
@@ -148,48 +154,13 @@ QIcon KPrPresentationDrawWidget::buildIconColor ( QColor color )
 
 void KPrPresentationDrawWidget::updateSize ( QAction *size )
 {
-    QString str(size->text());
-    str.replace("&", "");
-    str.replace(" px", "");
-
-    if(str == "9")
-            m_penSize = 9;
-    else if(str == "10")
-            m_penSize = 10;
-    else if(str == "12")
-            m_penSize = 12;
-    else if(str == "14")
-            m_penSize = 14;
-    else if(str == "16")
-            m_penSize = 16;
-    else if(str == "18")
-            m_penSize = 18;
-    else if(str == "20")
-            m_penSize = 20;
-    else if(str == "22")
-            m_penSize = 22;
-    else if(str == "24")
-            m_penSize = 24;
+    m_penSize = size->property("size").toInt();
     m_draw = false;
 }
 
 void KPrPresentationDrawWidget::updateColor ( QAction *color )
 {
-    QString str(color->text());
-    str.replace("&", "");
-
-    if(str == "Black")
-            m_penColor = Qt::black;
-    else if(str == "White")
-            m_penColor = Qt::white;
-    else if(str == "Green")
-            m_penColor = Qt::green;
-    else if(str == "Red")
-            m_penColor = Qt::red;
-    else if(str == "Yellow")
-            m_penColor = Qt::yellow;
-    else if(str == "Blue")
-            m_penColor = Qt::blue;
+    m_penColor = color->property("color").value<QColor>();
     m_draw = false;
 }
  
