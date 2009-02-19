@@ -84,3 +84,4 @@ private:
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */
+
