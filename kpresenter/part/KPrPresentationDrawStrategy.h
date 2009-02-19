@@ -28,3 +28,4 @@ public :
 };
 
 #endif /* KPRPRESENTATIONDRAWSTRATEGY_H */
+
