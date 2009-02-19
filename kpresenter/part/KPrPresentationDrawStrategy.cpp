@@ -28,3 +28,4 @@ void KPrPresentationDrawStrategy::handleEscape()
 {
     m_tool->drawOnPresentation();
 }
+
