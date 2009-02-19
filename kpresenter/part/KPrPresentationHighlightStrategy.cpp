@@ -28,3 +28,4 @@ void KPrPresentationHighlightStrategy::handleEscape()
 {
     m_tool->highLightPresentation();
 }
+
