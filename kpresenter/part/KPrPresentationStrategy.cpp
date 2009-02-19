@@ -46,3 +46,4 @@ void KPrPresentationStrategy::handleEscape()
 	m_viewModeStrategy.handleEscape();
     }
 }
+
