@@ -32,3 +32,4 @@ protected :
 };
 
 #endif /* KPRPRESENTATIONSTRATEGYINTERFACE_H */
+
