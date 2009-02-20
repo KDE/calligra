@@ -156,14 +156,8 @@ QIcon KPrPresentationDrawWidget::buildIconSize ( int size )
 QIcon KPrPresentationDrawWidget::buildIconColor ( QColor color )
 {
 
-    QPen thumbPen ( color, Qt::MiterJoin );
-    thumbPen.setWidth ( 50 );
     QPixmap thumbPixmap ( QSize ( 24, 20 ) );
-    thumbPixmap.fill ( );
-    QPainter thumbPainter ( &thumbPixmap );
-    thumbPainter.setBackground ( QBrush( color ) );
-    thumbPainter.setPen ( thumbPen );
-    thumbPainter.drawRect ( 2, 2, 20, 16 );
+    thumbPixmap.fill ( color );
     QIcon thumbIcon ( thumbPixmap );
     return thumbIcon;
 }
