@@ -233,8 +233,10 @@ FormPrivate::~FormPrivate()
 void FormPrivate::enableAction(const char *name, bool enable)
 {
     QAction *a = collection->action(QLatin1String(name));
-    Q_ASSERT(a);
-    a->setEnabled(enable);
+    //Q_ASSERT(a);
+    if (a) {
+        a->setEnabled(enable);
+    }
 }
 
 ////////////////////////////////////////// i18n related functions ////////
@@ -1267,8 +1269,10 @@ void Form::enterWidgetInsertingState(const QByteArray &classname)
 
     d->selectedClass = classname;
     QAction *pointer_action = d->collection->action(QLatin1String("edit_pointer"));
-    Q_ASSERT(pointer_action);
-    pointer_action->setChecked(false);
+    //Q_ASSERT(pointer_action);
+    if (pointer_action) {
+        pointer_action->setChecked(false);
+    }
 }
 
 QByteArray Form::selectedClass() const
@@ -1299,8 +1303,10 @@ void Form::abortWidgetInserting()
 #endif
     d->state = WidgetSelecting;
     QAction *pointer_action = d->collection->action(QLatin1String("edit_pointer"));
-    Q_ASSERT(pointer_action);
-    pointer_action->setChecked(true);
+//    Q_ASSERT(pointer_action);
+    if (pointer_action) {
+        pointer_action->setChecked(true);
+    }
 }
 
 // moved from FormManager
@@ -1416,8 +1422,10 @@ void Form::abortCreatingConnection()
     m_connection = 0;
     m_drawingSlot = false;
     QAction *pointer_action = d->collection->action(QLatin1String("edit_pointer"));
-    Q_ASSERT(pointer_action);
-    pointer_action->setChecked(true);
+//    Q_ASSERT(pointer_action);
+    if (pointer_action) {
+        pointer_action->setChecked(true);
+    }
 }
 #endif
 

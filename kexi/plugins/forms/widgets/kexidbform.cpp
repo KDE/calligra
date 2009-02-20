@@ -699,7 +699,7 @@ void KexiDBForm::setCursor(const QCursor & cursor)
     //js: empty, to avoid fscking problems with random cursors!
     //! @todo?
         
-    if (form()->state() == KFormDesigner::Form::WidgetInserting) { //exception
+    if (form() && form()->state() == KFormDesigner::Form::WidgetInserting) { //exception
         KexiDBFormBase::setCursor(cursor);
     }
 }
