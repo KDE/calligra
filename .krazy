@@ -1,2 +1,2 @@
 #do not run the following plugins (unless overridden later by the CHECK directive)
-EXCLUDE sigsandslots,dpointer,inline
+EXCLUDE sigsandslots,dpointer,inline,constref
