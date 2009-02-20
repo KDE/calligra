@@ -57,6 +57,7 @@ public slots:
 
 private :
     QIcon buildIconColor( QColor );
+    QIcon buildIconSize( int );
     QAction* buildActionColor( QColor, QString );
     QAction* buildActionSize( int );
     QSize m_size;

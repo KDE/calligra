@@ -124,8 +124,8 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
 }
 
 QAction* KPrPresentationDrawWidget::buildActionSize ( int size ){
-    QAction *action = new QAction(QString::number(size)+"px", this);
-    action->setProperty("size", size);
+    QAction *action = new QAction( buildIconSize( size ), QString::number(size)+"px", this );
+    action->setProperty( "size", size );
     return action;
 }
 
@@ -135,6 +135,22 @@ QAction* KPrPresentationDrawWidget::buildActionColor ( QColor color, QString nam
     action = new QAction( buildIconColor ( color ) , name, this );
     action->setProperty("color", QVariant(color));
     return action;
+}
+
+QIcon KPrPresentationDrawWidget::buildIconSize ( int size )
+{
+
+//        QPen pen( brush, m_penSize, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
+    QPen thumbPen ( Qt::black, Qt::MiterJoin );
+    thumbPen.setCapStyle( Qt::RoundCap );
+    thumbPen.setWidth ( size );
+    QPixmap thumbPixmap ( QSize ( 26, 26 ) );
+    thumbPixmap.fill ( );
+    QPainter thumbPainter ( &thumbPixmap );
+    thumbPainter.setPen ( thumbPen );
+    thumbPainter.drawPoint ( 13, 13 );
+    QIcon thumbIcon ( thumbPixmap );
+    return thumbIcon;
 }
 
 QIcon KPrPresentationDrawWidget::buildIconColor ( QColor color )
