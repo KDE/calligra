@@ -212,7 +212,7 @@ void KarbonGradientEditWidget::setupUI()
     m_stopColor = new QToolButton( this );
     editLayout->addWidget( m_stopColor, row, 1 );
     m_actionStopColor = new KoColorPopupAction(this);
-    m_actionStopColor ->setToolTip(i18n("Stop color:."));
+    m_actionStopColor ->setToolTip(i18n("Stop color."));
     m_stopColor->setDefaultAction(m_actionStopColor);
 
     m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), this );
