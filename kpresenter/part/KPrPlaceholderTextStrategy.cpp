@@ -104,11 +104,18 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
-    context.odfLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
+    const KoXmlElement * style = 0;
     if ( element.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) ) {
+        context.odfLoadingContext().fillStyleStack( element, KoXmlNS::presentation, "style-name", "presentation" );
         const QString styleName = element.attributeNS( KoXmlNS::draw, "text-style-name", QString() );
-        const KoXmlElement * style = context.odfLoadingContext().stylesReader().findStyle( styleName, "paragraph", context.odfLoadingContext().useStylesAutoStyles() );
-        Q_ASSERT( style );
+        style = context.odfLoadingContext().stylesReader().findStyle( styleName, "paragraph", context.odfLoadingContext().useStylesAutoStyles() );
+    }
+    else {
+        const QString styleName = element.attributeNS( KoXmlNS::presentation, "style-name", QString() );
+        style = context.odfLoadingContext().stylesReader().findStyle( styleName, "presentation", context.odfLoadingContext().useStylesAutoStyles() );
+    }
+
+    if ( style ) {
         KoParagraphStyle paragraphStyle;
         paragraphStyle.loadOdf( style, context.odfLoadingContext() );
 
