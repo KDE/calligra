@@ -33,6 +33,7 @@
 
 #include "KPrDocument.h"
 #include "KPrPageApplicationData.h"
+#include "KPrMasterPage.h"
 #include "KPrNotes.h"
 #include "KPrPlaceholderShape.h"
 #include "pagelayout/KPrPageLayout.h"
@@ -99,7 +100,11 @@ void KPrPage::shapeRemoved( KoShape * shape )
 void KPrPage::setLayout( KPrPageLayout * layout, KoPADocument * document )
 {
     QSizeF pageSize( pageLayout().width, pageLayout().height );
-    placeholders().setLayout( layout, document, iterator(), pageSize );
+    KPrMasterPage * master = dynamic_cast<KPrMasterPage *>( masterPage() );
+    Q_ASSERT( master );
+    placeholders().setLayout( layout, document, iterator(), pageSize, master ? master->placeholders().styles() : QMap<QString, KoTextShapeData*>() );
+    kDebug(33001) << "master placeholders";
+    master->placeholders().debug();
 }
 
 KPrPageLayout * KPrPage::layout() const

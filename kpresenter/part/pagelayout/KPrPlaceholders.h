@@ -28,11 +28,14 @@
 #include <boost/multi_index/sequenced_index.hpp>
 
 #include <QString>
+#include <QMap>
 
 class QSizeF;
 class KoShape;
 class KoPADocument;
 class KPrPageLayout;
+class KPrPlaceholderShape;
+class KoTextShapeData;
 
 struct Placeholder
 {
@@ -76,8 +79,11 @@ public:
      *        If 0 no layout will be used.
      * @param document The document where the shapes are located in
      * @param shapes list of first level shapes
+     * @param pageSize
+     * @param styles
      */
-    void setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes, const QSizeF & pageSize );
+    void setLayout( KPrPageLayout * layout, KoPADocument * document, const QList<KoShape *> & shapes, const QSizeF & pageSize,
+                    const QMap<QString, KoTextShapeData*> & styles );
 
     /**
      * This function should only be used during loading
@@ -93,12 +99,19 @@ public:
 
     void shapeRemoved( KoShape * shape );
 
+    void debug() const;
+
+    QMap<QString, KoTextShapeData *> styles() const;
+
 private:
     void add( const QList<KoShape *> & shapes );
 
     // set the new layout 
     // this gets called by the KPrPageLayoutCommand
     void setLayout( KPrPageLayout * layout );
+
+    // apply style to shape
+    void applyStyle( KPrPlaceholderShape * shape, const QString & presentationClass, const QMap<QString, KoTextShapeData*> & styles );
 
     KPrPageLayout * m_layout;
     // that is set to true when the m_placeholders is initialized

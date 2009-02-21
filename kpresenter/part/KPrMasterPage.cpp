@@ -19,6 +19,11 @@
 
 #include "KPrMasterPage.h"
 
+#include "pagelayout/KPrPageLayouts.h"
+#include <KoXmlNS.h>
+#include <KoPALoadingContext.h>
+#include <kdebug.h>
+
 KPrMasterPage::KPrMasterPage()
 {
 }
@@ -30,4 +35,21 @@ KPrMasterPage::~KPrMasterPage()
 KoPageApp::PageType KPrMasterPage::pageType() const
 {
     return KoPageApp::Slide;
+}
+
+void KPrMasterPage::loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext )
+{
+    // the layout needs to be loaded after the shapes are already loaded so the initialization of the data works
+    KPrPageLayout * layout = 0;
+    if ( element.hasAttributeNS( KoXmlNS::presentation, "presentation-page-layout-name" ) ) {
+        KPrPageLayouts * layouts = dynamic_cast<KPrPageLayouts *>( loadingContext.dataCenter( PageLayouts ) );
+        Q_ASSERT( layouts );
+        if ( layouts ) {
+            QString layoutName = element.attributeNS( KoXmlNS::presentation, "presentation-page-layout-name" );
+            QRectF pageRect( 0, 0, pageLayout().width, pageLayout().height );
+            layout = layouts->pageLayout( layoutName, loadingContext, pageRect );
+            kDebug(33001) << "page layout" << layoutName << layout;
+        }
+    }
+    placeholders().init( layout, iterator() );
 }

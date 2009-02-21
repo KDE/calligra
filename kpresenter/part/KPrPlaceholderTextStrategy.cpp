@@ -77,6 +77,7 @@ KoShape * KPrPlaceholderTextStrategy::createShape( const QMap<QString, KoDataCen
 void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect )
 {
     if ( m_textShape ) {
+        kDebug(33001) << "size" << rect.size();
         painter.save();
         m_textShape->setSize( rect.size() );
         m_textShape->paint( painter, converter );
@@ -115,13 +116,34 @@ bool KPrPlaceholderTextStrategy::loadOdf( const KoXmlElement & element, KoShapeL
         Q_ASSERT( factory );
         m_textShape = factory->createDefaultShapeAndInit( context.dataCenterMap() );
 
-        QTextDocument * document = qobject_cast<KoTextShapeData*>( m_textShape->userData() )->document();
+        KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
+        QTextDocument * document = shapeData->document();
         QTextCursor cursor( document );
         QTextBlock block = cursor.block();
         paragraphStyle.applyStyle( block, false );
         cursor.insertText( text() );
+        shapeData->foul();
     }
 
     styleStack.restore();
     return true;
+}
+
+void KPrPlaceholderTextStrategy::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
+{
+    KoShapeFactory *factory = KoShapeRegistry::instance()->value( "TextShapeID" );
+    Q_ASSERT( factory );
+    m_textShape = factory->createDefaultShapeAndInit( dataCenterMap );
+
+    KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>(  m_textShape->userData() );
+    QTextDocument * document = shapeData->document();
+    QTextCursor cursor( document );
+    cursor.insertText( text() );
+    shapeData->foul();
+    shapeData->fireResizeEvent();
+}
+
+KoShapeUserData * KPrPlaceholderTextStrategy::userData() const
+{
+    return m_textShape ? m_textShape->userData() : 0;
 }

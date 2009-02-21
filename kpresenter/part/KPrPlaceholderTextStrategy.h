@@ -37,6 +37,10 @@ public:
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
+    virtual void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
+
+    virtual KoShapeUserData * userData() const;
+
 protected:
     KPrPlaceholderTextStrategy( const QString & presentationClass );
 

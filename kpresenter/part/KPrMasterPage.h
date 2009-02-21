@@ -37,6 +37,10 @@ public:
      * @return KoPageApp::Slide
      */
     virtual KoPageApp::PageType pageType() const;
+
+protected:
+    /// reimplemented
+    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
 };
 
 #endif /* KPRMASTERPAGE_H */
