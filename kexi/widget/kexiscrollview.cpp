@@ -36,6 +36,9 @@
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 
+//disabled #define KEXI_SHOW_OUTERAREA_TEXT
+
+#ifdef KEXI_SHOW_OUTERAREA_TEXT
 //! @internal
 class KexiScrollViewData
 {
@@ -46,6 +49,7 @@ public:
 
 // @todo warning: not reentrant!
 K_GLOBAL_STATIC(KexiScrollViewData, KexiScrollView_data)
+#endif
 
 KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
         : Q3ScrollView(parent)
@@ -162,8 +166,13 @@ KexiScrollView::refreshContentsSize()
         // Ensure there is always space to resize Form
         int w = contentsWidth(), h = contentsHeight();
         bool change = false;
+#ifdef KEXI_SHOW_OUTERAREA_TEXT
         const int delta_x = qMax(KexiScrollView_data->verticalOuterAreaPixmapBuffer.width(), 300);
         const int delta_y = qMax(KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height(), 300);
+#else
+        const int delta_x = 300;
+        const int delta_y = 300;
+#endif
         if ((m_widget->width() + delta_x * 2 / 3) > w) {
             w = m_widget->width() + delta_x;
             change = true;
@@ -345,6 +354,7 @@ KexiScrollView::drawContents(QPainter * p, int clipx, int clipy, int clipw, int 
         p->drawLine(wx, wy + m_widget->height(), wx + m_widget->width(), wy + m_widget->height());
 //kDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height();
 
+#ifdef KEXI_SHOW_OUTERAREA_TEXT
         if (KexiScrollView_data->horizontalOuterAreaPixmapBuffer.isNull()) {
             //create flicker-less buffer
             setupPixmapBuffer(KexiScrollView_data->horizontalOuterAreaPixmapBuffer, i18n("Outer Area"), 1);
@@ -366,6 +376,7 @@ KexiScrollView::drawContents(QPainter * p, int clipx, int clipy, int clipw, int 
                 KexiScrollView_data->horizontalOuterAreaPixmapBuffer
             );
         }
+#endif
     }
 }
 
