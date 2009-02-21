@@ -415,7 +415,7 @@ void Map::saveOdfSettings( KoXmlWriter &settingsWriter )
 }
 
 
-bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
+bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver &embeddedSaver, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
 {
     // Saving the custom cell styles including the default cell style.
     d->styleManager->saveOdf(mainStyles);
@@ -450,7 +450,6 @@ bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *s
 
     KoXmlWriter bodyTmpWriter( &bodyTmpFile );
 
-    KoEmbeddedDocumentSaver embeddedSaver;
     KoShapeSavingContext savingContext( bodyTmpWriter, mainStyles, embeddedSaver );
     OdfSavingContext tableContext(savingContext);
 

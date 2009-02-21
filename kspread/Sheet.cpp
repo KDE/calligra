@@ -3391,7 +3391,7 @@ bool Sheet::saveOdf(OdfSavingContext& tableContext)
             const QPointF position = shape->position();
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);
-            tableContext.insertCellAnchoredShape(Cell(this, col, row), shape);
+            tableContext.insertCellAnchoredShape(this, row, col, shape);
         }
     }
 
@@ -3715,22 +3715,38 @@ void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int ro
     int i = 1;
     Cell cell( this, i, row );
     Cell nextCell = d->cellStorage->nextInRow( i, row );
+    // handle situations where the row contains shapes and nothing else
+    if (cell.isDefault() && nextCell.isNull()) {
+        int nextShape = tableContext.nextAnchoredShape (this, row, i);
+        if (nextShape)
+            nextCell = Cell (this, nextShape, row);
+    }
     // while
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(cell) || !nextCell.isNull())
+    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(this, cell.row(), cell.column()) || !nextCell.isNull())
     {
 //         kDebug(36003) <<"Sheet::saveOdfCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
+
         int repeated = 1;
-        cell.saveOdf(xmlWriter, mainStyles, row, i, repeated, tableContext);
+        int column = i;
+        cell.saveOdf(xmlWriter, mainStyles, row, column, repeated, tableContext);
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())
           break;
+        
         cell = Cell( this, i, row );
+        // if we have a shape anchored to an empty cell, ensure that the cell gets also processed
+        int nextShape = tableContext.nextAnchoredShape (this, row, column);
+        if (nextShape && ((nextShape < i) || cell.isDefault())) {
+          cell = Cell (this, nextShape, row);
+          i = nextShape;
+        }
+        
         nextCell = d->cellStorage->nextInRow( i, row );
     }
 

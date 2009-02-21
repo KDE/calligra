@@ -386,7 +386,7 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
     int partIndexObj = 0;
 
     // Saving the map.
-    map()->saveOdf( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
+    map()->saveOdf( contentTmpWriter, mainStyles, documentContext.embeddedSaver, store, manifestWriter, indexObj, partIndexObj );
 
     contentTmpWriter.endElement(); ////office:spreadsheet
     contentTmpWriter.endElement(); ////office:body

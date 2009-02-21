@@ -32,6 +32,7 @@
 
 class KoStore;
 class KoOdfLoadingContext;
+class KoEmbeddedDocumentSaver;
 
 class QDomElement;
 class QDomDocument;
@@ -192,6 +193,7 @@ public:
    * \ingroup OpenDocument
    */
   bool saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles,
+                  KoEmbeddedDocumentSaver &embeddedSaver,
                   KoStore *store, KoXmlWriter* manifestWriter,
                   int &_indexObj, int &_partIndexObj );
 

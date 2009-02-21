@@ -1135,7 +1135,7 @@ bool Cell::saveOdf( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     // group empty cells with the same style
     const QString comment = this->comment();
     if (isEmpty() && comment.isEmpty() && !isPartOfMerged() && !doesMergeCells() &&
-        !tableContext.cellHasAnchoredShapes(*this)) {
+        !tableContext.cellHasAnchoredShapes(sheet(), row, column)) {
       bool refCellIsDefault = isDefault();
       int j = column + 1;
       Cell nextCell = sheet()->cellStorage()->nextInRow( column, row );
@@ -1145,7 +1145,7 @@ bool Cell::saveOdf( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         //   the next cell is not the adjacent one
         // or
         //   the next cell is not empty
-        if (nextCell.column() != j || (!nextCell.isEmpty() || tableContext.cellHasAnchoredShapes(*this))) {
+        if (nextCell.column() != j || (!nextCell.isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, column))) {
           if ( refCellIsDefault )
           {
             // if the origin cell was a default cell,
@@ -1159,7 +1159,7 @@ bool Cell::saveOdf( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         }
 
         if ( nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
-             !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(*this) ||
+             !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet(), row, column) ||
              !(nextCell.style() == style() && nextCell.conditions() == conditions()) )
         {
           break;
@@ -1226,8 +1226,8 @@ bool Cell::saveOdf( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     // Save shapes that are anchored to this cell.
     // see: OpenDocument, 2.3.1 Text Documents
     // see: OpenDocument, 9.2 Drawing Shapes
-    if (tableContext.cellHasAnchoredShapes(*this)) {
-        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes(*this);
+    if (tableContext.cellHasAnchoredShapes(sheet(), row, column)) {
+        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes(sheet(), row, column);
         for (int i = 0; i < shapes.count(); ++i) {
             KoShape* const shape = shapes[i];
             const QPointF bottomRight = shape->boundingRect().bottomRight();
