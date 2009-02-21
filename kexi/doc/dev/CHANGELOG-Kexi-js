@@ -31,6 +31,7 @@ http://rafb.net/p/R4QIBR13.html
 2009-02-20
 Forms
 - now at least empty form appears again
+- context menu: avoid displaying it twice; fix crash
 
 2009-01-12..2009-02-18
 Forms

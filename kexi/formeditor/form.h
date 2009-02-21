@@ -284,7 +284,7 @@ public:
     /*! This function creates and displays the context menu corresponding to the widget \a w.
         The menu item are disabled if necessary, and
         the widget specific part is added (menu from the factory and buddy selection). */
-    void createContextMenu(QWidget *w, Container *container, bool popupAtCursor = true);
+    void createContextMenu(QWidget *w, Container *container, const QPoint& menuPos); //bool popupAtCursor = true);
 
     //! @return true if snapping widgets to grid is enabled.
     bool isSnapWidgetsToGridEnabled() const;

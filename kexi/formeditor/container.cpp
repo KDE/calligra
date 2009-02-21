@@ -612,7 +612,8 @@ Container::eventFilter(QObject *s, QEvent *e)
     }
 
     case QEvent::ContextMenu: {
-        d->form->createContextMenu(static_cast<QWidget*>(s), this, false);
+        QContextMenuEvent* cme = static_cast<QContextMenuEvent*>(e);
+        d->form->createContextMenu(static_cast<QWidget*>(s), this, cme->pos());//false);
         return true;
     }
     case QEvent::Enter:
@@ -647,8 +648,9 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 //reimpl.        drawSelectionRect(mev);
         return true;
     }
-    if (mev->button() == Qt::RightButton) { // Right-click -> context menu
-        d->form->createContextMenu(static_cast<QWidget*>(s), this);
+    if (mev->button() == Qt::RightButton) {
+        // Right-click -> context menu
+        // 2.0 unsed: d->form->createContextMenu(static_cast<QWidget*>(s), this);
     }
     else if (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) { // && (m_copyRect.isValid()))
         // copying a widget by Ctrl+dragging

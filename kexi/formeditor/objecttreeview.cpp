@@ -205,7 +205,7 @@ ObjectTreeView::slotColumnSizeChanged(int)
 }
 
 void
-ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &)
+ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint & pos)
 {
     if (list != this || !m_form || !item)
         return;
@@ -214,7 +214,7 @@ ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const
     if (!w)
         return;
 
-    m_form->createContextMenu(w, m_form->activeContainer());
+    m_form->createContextMenu(w, m_form->activeContainer(), pos);
 }
 
 ObjectTreeViewItem*

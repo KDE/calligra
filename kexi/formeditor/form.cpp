@@ -1950,7 +1950,7 @@ void Form::setSnapWidgetsToGridEnabled(bool set)
 }
 
 // moved from FormManager
-void Form::createContextMenu(QWidget *w, Container *container, bool popupAtCursor)
+void Form::createContextMenu(QWidget *w, Container *container, const QPoint& menuPos) //bool popupAtCursor)
 {
     if (!widget())
         return;
@@ -2017,10 +2017,12 @@ void Form::createContextMenu(QWidget *w, Container *container, bool popupAtCurso
     QList<QString> sortedItemNames;
     if (!multiple) {
         buddyLabelWidget = qobject_cast<QLabel*>(w);
-        if (!buddyLabelWidget->text().contains("&")
-            || buddyLabelWidget->textFormat() == Qt::RichText)
-        {
-            buddyLabelWidget = 0;
+        if (buddyLabelWidget) {
+            if (!buddyLabelWidget->text().contains("&")
+                || buddyLabelWidget->textFormat() == Qt::RichText)
+            {
+                buddyLabelWidget = 0;
+            }
         }
     }
     if (buddyLabelWidget) { // setup menu
@@ -2106,6 +2108,7 @@ void Form::createContextMenu(QWidget *w, Container *container, bool popupAtCurso
     }
 
     //show the menu at the selected widget
+    /*2.0
     QPoint menuPos;
     if (popupAtCursor) {
         menuPos = QCursor::pos();
@@ -2114,12 +2117,18 @@ void Form::createContextMenu(QWidget *w, Container *container, bool popupAtCurso
         QWidgetList *lst = container->form()->selectedWidgets();
         QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
         menuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
-    }
-    d->insertionPoint = container->widget()->mapFromGlobal(menuPos);
+    }*/
+//    QWidgetList *lst = container->form()->selectedWidgets();
+//    QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
+//    QPoint realMenuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
+    d->insertionPoint = container->widget()->mapToGlobal(menuPos);
 
-    QAction *result = menu.exec(menuPos);
+    QAction *result = menu.exec(d->insertionPoint);
     
-    if (noBuddyAction && buddyLabelWidget && result == noBuddyAction) {
+    if (!result) {
+        // nothing to do
+    }
+    else if (noBuddyAction && buddyLabelWidget && result == noBuddyAction) {
         buddyLabelWidget->setBuddy(0);
     }
     else if (sortedItemNames.contains(result->text())) {
