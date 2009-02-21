@@ -236,11 +236,6 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
-#ifdef KEXI_STANDALONE
-//! @todo remove...
-    KGlobal::locale()->removeCatalog("kexi");
-    KGlobal::locale()->insertCatalog("standalone_kexi");
-#endif
     KGlobal::locale()->insertCatalog("koffice");
     KGlobal::locale()->insertCatalog("koproperty");
 
