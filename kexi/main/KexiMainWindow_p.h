@@ -52,6 +52,8 @@ protected slots:
     void slotCurrentChanged(int index);
     void slotDelayedTabRaise();
     void slotSettingsChanged(int category);
+    //! Used for delayed loading of the "create" toolbar. Called only once.
+    void setupCreateWidgetToolbar();
 private:
     void addAction(KToolBar *tbar, const char* actionName);
     void addSeparatorAndAction(KToolBar *tbar, const char* actionName);
@@ -281,17 +283,22 @@ void KexiTabbedToolBar::slotCurrentChanged(int index)
 {
     if (index == d->createId && d->createId != -1) {
         if (d->createWidgetToolBar->actions().isEmpty()) {
+            QTimer::singleShot(10, this, SLOT(setupCreateWidgetToolbar()));
+        }
+    }
+}
+
+void KexiTabbedToolBar::setupCreateWidgetToolbar()
+{
 //! @todo separate core object types from custom....
-            KexiPart::PartInfoList *plist = Kexi::partManager().partInfoList(); //this list is properly sorted
-            foreach(KexiPart::Info *info, *plist) {
-                QAction* a = d->ac->action(
-                                 KexiPart::nameForCreateAction(*info));
-                if (a) {
-                    d->createWidgetToolBar->addAction(a);//->icon(), a->text());
-                } else {
-                    //! @todo err
-                }
-            }
+    KexiPart::PartInfoList *plist = Kexi::partManager().partInfoList(); //this list is properly sorted
+    foreach(KexiPart::Info *info, *plist) {
+        QAction* a = d->ac->action(
+                         KexiPart::nameForCreateAction(*info));
+        if (a) {
+            d->createWidgetToolBar->addAction(a);//->icon(), a->text());
+        } else {
+            //! @todo err
         }
     }
 }
