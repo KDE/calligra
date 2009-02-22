@@ -28,6 +28,14 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-02-21
+Main Window
+- delayed loading of the "create" toolbar
+- possibility of adding actions to toolbars e.g. by kexi parts
+Widgets
+= scroll view: remove confusing "Outer area" text, the visual hint based 
+  on border should be enough for users to recognize boundary of the form
+
 2009-02-20
 Forms
 - now at least empty form appears again

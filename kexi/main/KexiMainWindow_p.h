@@ -44,6 +44,13 @@ public:
 
     KToolBar *createWidgetToolBar() const;
 
+    KToolBar *toolBar(const QString& name) const;
+
+    void appendWidgetToToolbar(const QString& name, QWidget* widget);
+
+    void setWidgetVisibleInToolbar(QWidget* widget, bool visible);
+//    void removeWidgetFromToolbar(const QString& name);
+
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void leaveEvent(QEvent* event);
@@ -86,11 +93,23 @@ private:
 class KexiTabbedToolBar::Private
 {
 public:
-    Private()
-            : createId(-1), createWidgetToolBar(0), tabToRaise(-1) {
+    Private(KexiTabbedToolBar *t)
+            : q(t), createId(-1), createWidgetToolBar(0), tabToRaise(-1)
+    {
         tabRaiseTimer.setSingleShot(true);
         tabRaiseTimer.setInterval(300);
     }
+
+    KToolBar *createToolBar(const char *name, const QString& caption)
+    {
+        KToolBar *tbar = new KToolBar(q);
+        toolbarsForName.insert(name, tbar);
+        tbar->setObjectName(name);
+        q->addTab(tbar, caption);
+        return tbar;
+    }
+
+    KexiTabbedToolBar *q;
     KActionCollection *ac;
     int createId;
     KToolBar *createWidgetToolBar;
@@ -98,11 +117,14 @@ public:
     int tabToRaise;
     //! Used for delayed tab raising
     QTimer tabRaiseTimer;
+    //! Toolbars for name
+    QHash<QString, KToolBar*> toolbarsForName;
+    QHash<QWidget*, QAction*> extraActions;
 };
 
 KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
         : KTabWidget(parent)
-        , d(new Private())
+        , d(new Private(this))
 {
     setMouseTracking(true); // for mouseMoveEvent()
     setWhatsThis(i18n("Task-based tabbed toolbar groups commands for application using tabs."));
@@ -139,8 +161,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     helpLyr->addWidget(new KexiSmallToolButton(a, helpWidget));
     setCornerWidget(helpWidget, Qt::TopRightCorner);
 
-    tbar = new KToolBar(this);
-    addTab(tbar, i18nc("Application name as menu entry", "Kexi"));
+    tbar = d->createToolBar("kexi", i18nc("Application name as menu entry", "Kexi"));
     addAction(tbar, "options_configure");
     addAction(tbar, "options_configure_keybinding");
     addSeparatorAndAction(tbar, "help_about_app");
@@ -151,8 +172,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 #endif
     addSeparatorAndAction(tbar, "quit");
 
-    tbar = new KToolBar(this);
-    addTab(tbar, i18n("Project"));
+    tbar = d->createToolBar("project", i18n("Project"));
     setCurrentWidget(tbar); // the default
     addAction(tbar, "project_new");
     addAction(tbar, "project_open");
@@ -169,8 +189,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
         d->createId = addTab(d->createWidgetToolBar, i18n("Create"));
     }
 
-    tbar = new KToolBar(this);
-    addTab(tbar, i18n("Data"));
+    tbar = d->createToolBar("data", i18n("Data"));
     addAction(tbar, "edit_copy");
     addAction(tbar, "edit_copy_special_data_table");
     addAction(tbar, "edit_paste");
@@ -183,8 +202,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     tbar->addSeparator();
     addAction(tbar, "edit_find");
 
-    tbar = new KToolBar(this);
-    addTab(tbar, i18n("External Data"));
+    tbar = d->createToolBar("external", i18n("External Data"));
 
     /*   QGroupBox *gbox = new QGroupBox( i18n("Import"), tbar );
       gbox->setFlat(true);
@@ -211,8 +229,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     */
     addAction(tbar, "project_export_data_table");
 
-    tbar = new KToolBar(this);
-    addTab(tbar, i18n("Tools"));
+    tbar = d->createToolBar("tools", i18n("Tools"));
     addAction(tbar, "tools_import_project");
     addAction(tbar, "tools_compact_database");
 
@@ -315,6 +332,11 @@ void KexiTabbedToolBar::slotDelayedTabRaise()
     }
 }
 
+KToolBar *KexiTabbedToolBar::toolBar(const QString& name) const
+{
+    return d->toolbarsForName[name];
+}
+
 void KexiTabbedToolBar::addAction(KToolBar *tbar, const char* actionName)
 {
     QAction *a = d->ac->action(actionName);
@@ -329,6 +351,25 @@ void KexiTabbedToolBar::addSeparatorAndAction(KToolBar *tbar, const char* action
         tbar->addSeparator();
         tbar->addAction(a);
     }
+}
+
+void KexiTabbedToolBar::appendWidgetToToolbar(const QString& name, QWidget* widget)
+{
+    KToolBar *tbar = d->toolbarsForName[name];
+    if (!tbar) {
+        return;
+    }
+    QAction *action = tbar->addWidget(widget);
+    d->extraActions.insert(widget, action);
+}
+
+void KexiTabbedToolBar::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
+{
+    QAction *action = d->extraActions[widget];
+    if (!action) {
+        return;
+    }
+    action->setVisible(visible);
 }
 
 /*

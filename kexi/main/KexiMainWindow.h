@@ -180,6 +180,14 @@ public:
 //  virtual void saveProperties(KConfig *config);
 //  virtual void saveGlobalProperties( KConfig* sessionConfig );
 
+//! @todo temporary solution before the tabbed toolbar framework emerges
+    // see KexiMainWindowIface
+    virtual void appendWidgetToToolbar(const QString& name, QWidget* widget);
+
+//! @todo temporary solution before the tabbed toolbar framework emerges
+    // see KexiMainWindowIface
+    virtual void setWidgetVisibleInToolbar(QWidget* widget, bool visible);
+
 public slots:
     /*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
       Just calls closeWindow(). Use closeWindow() if you need, not this one. */

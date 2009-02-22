@@ -5095,4 +5095,14 @@ void KexiMainWindow::slotPartItemSelectedInNavigator(KexiPart::Item* item)
     Q_UNUSED(item);
 }
 
+void KexiMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)
+{
+    d->tabbedToolBar->appendWidgetToToolbar(name, widget);
+}
+
+void KexiMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
+{
+    d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
+}
+
 #include "KexiMainWindow.moc"

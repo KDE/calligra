@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -243,6 +243,15 @@ public:
     /*! Executes custom action for the main window, usually provided by a plugin.
      Also used by KexiFormEventAction. */
     virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
+
+//! @todo temporary solution before the tabbed toolbar framework emerges
+    /*! Appends widget @a widget to tabbed toolbar declared as @a name. 
+     @a widget will be reparented but the ownership is not taken. */
+    virtual void appendWidgetToToolbar(const QString& name, QWidget* widget) = 0;
+
+//! @todo temporary solution before the tabbed toolbar framework emerges
+    /*! Shows or hides widget in the tabbed toolbar. */
+    virtual void setWidgetVisibleInToolbar(QWidget* widget, bool visible) = 0;
 
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
