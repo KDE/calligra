@@ -192,8 +192,7 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  bool saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext, 
-                int &_indexObj, int &_partIndexObj );
+  bool saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext );
 
   /**
    * \ingroup OpenDocument

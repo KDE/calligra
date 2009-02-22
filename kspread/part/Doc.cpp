@@ -373,11 +373,8 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:spreadsheet" );
 
-    int indexObj = 1;
-    int partIndexObj = 0;
-
     // Saving the map.
-    map()->saveOdf( *contentWriter, savingContext, indexObj, partIndexObj );
+    map()->saveOdf( *contentWriter, savingContext );
 
     bodyWriter->endElement(); ////office:spreadsheet
     bodyWriter->endElement(); ////office:body
