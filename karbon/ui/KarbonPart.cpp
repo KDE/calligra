@@ -63,6 +63,7 @@
 #include <KoShapeRegistry.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoStoreDevice.h>
+#include <KoShapePainter.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -329,9 +330,11 @@ void KarbonPart::slotDocumentRestored()
     setModified( false );
 }
 
-void KarbonPart::paintContent( QPainter&, const QRect& )
+void KarbonPart::paintContent( QPainter &painter, const QRect& rect)
 {
-    kDebug(38000) <<"**** part->paintContent()";
+    KoShapePainter shapePainter;
+    shapePainter.setShapes( d->document.shapes() );
+    shapePainter.paintShapes( painter, rect, QRectF(QPointF(), d->document.pageSize()) );
 }
 
 KarbonDocument& KarbonPart::document()
