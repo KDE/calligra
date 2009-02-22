@@ -22,7 +22,7 @@
     </Menu>
 </MenuBar>
 <ToolBar name="view_toolbar" fullWidth="false">
-    <Text>View</Text>
+    <text>View</text>
     <Separator/>
     <Action name="view_mode"/>
     <Action name="view_zoom"/>
