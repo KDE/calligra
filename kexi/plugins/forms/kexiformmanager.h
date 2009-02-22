@@ -81,6 +81,7 @@ protected slots:
     void slotHistoryCommandExecuted(K3Command *command);
 // 2.0 moved from KexiFormPart
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
+    void slotWidgetActionToggled(const QByteArray& action);
     void slotAssignAction();
 
 protected:

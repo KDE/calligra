@@ -520,8 +520,10 @@ StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDes
         return true;
     } else if (classname == "KPushButton") {
         KPushButton *push = static_cast<KPushButton*>(w);
+        QStyleOption option;
+        option.initFrom(w);
         const QRect r(w->style()->subElementRect(
-                          QStyle::SE_PushButtonContents, 0, w));
+                          QStyle::SE_PushButtonContents, &option, w));
         const QRect editorRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
         //r.setX(r.x() + 5);
         //r.setY(r.y() + 5);
@@ -531,8 +533,10 @@ StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDes
         return true;
     } else if (classname == "QRadioButton") {
         QRadioButton *radio = static_cast<QRadioButton*>(w);
+        QStyleOption option;
+        option.initFrom(w);
         const QRect r(w->style()->subElementRect(
-                          QStyle::SE_RadioButtonContents, 0, w));
+                          QStyle::SE_RadioButtonContents, &option, w));
         const QRect editorRect(
             radio->x() + r.x(), radio->y() + r.y(), r.width(), r.height());
         createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignLeft);
@@ -541,8 +545,10 @@ StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDes
         QCheckBox *check = static_cast<QCheckBox*>(w);
         //QRect r(check->geometry());
         //r.setX(r.x() + 20);
+        QStyleOption option;
+        option.initFrom(w);
         const QRect r(w->style()->subElementRect(
-                          QStyle::SE_CheckBoxContents, 0, w));
+                          QStyle::SE_CheckBoxContents, &option, w));
         const QRect editorRect(
             check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
         createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
@@ -633,18 +639,24 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
     QRect r;
 
     if (classname == "QRadioButton") {
+        QStyleOption option;
+        option.initFrom(widget);
         r = widget->style()->subElementRect(
-                QStyle::SE_RadioButtonContents, 0, widget);
+                QStyle::SE_RadioButtonContents, &option, widget);
         p += r.topLeft();
         s.setWidth(r.width());
     } else if (classname == "QCheckBox") {
+        QStyleOption option;
+        option.initFrom(widget);
         r = widget->style()->subElementRect(
-                QStyle::SE_CheckBoxContents, 0, widget);
+                QStyle::SE_CheckBoxContents, &option, widget);
         p += r.topLeft();
         s.setWidth(r.width());
     } else if (classname == "KPushButton") {
+        QStyleOption option;
+        option.initFrom(widget);
         r = widget->style()->subElementRect(
-                QStyle::SE_PushButtonContents, 0, widget);
+                QStyle::SE_PushButtonContents, &option, widget);
         p += r.topLeft();
         s = r.size();
     }

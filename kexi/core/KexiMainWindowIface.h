@@ -253,6 +253,9 @@ public:
     /*! Shows or hides widget in the tabbed toolbar. */
     virtual void setWidgetVisibleInToolbar(QWidget* widget, bool visible) = 0;
 
+//! @todo replace with the final Actions API
+    virtual void addToolBarAction(const QString& toolBarName, QAction *action) = 0;
+
 protected: // slots:
     virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 

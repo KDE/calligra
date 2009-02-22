@@ -116,9 +116,11 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::ObjectTreeView *tr
 
     connect(d->lib, SIGNAL(widgetCreated(QWidget*)),
             this, SLOT(slotWidgetCreatedByFormsLibrary(QWidget*)));
+    connect(d->lib, SIGNAL(widgetActionToggled(const QByteArray&)),
+        this, SLOT(slotWidgetActionToggled(const QByteArray&)));
 
     d->part = part;
-    KActionCollection *col = d->part->actionCollectionForMode(Kexi::DesignViewMode);
+    KActionCollection *col = /*tmp*/ new KActionCollection(this); // 2.0 d->part->actionCollectionForMode(Kexi::DesignViewMode);
     if (col) {
         createActions( col );
 
@@ -180,7 +182,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
 
     d->pointerAction = new KToggleAction(
         KIcon("mouse_pointer"), i18n("Pointer"), d->collection);
-    d->pointerAction->setObjectName("pointer");
+    d->pointerAction->setObjectName("edit_pointer");
     d->widgetActionGroup->addAction(d->pointerAction);
     connect(d->pointerAction, SIGNAL(triggered()),
             this, SLOT(slotPointerClicked()));
@@ -220,6 +222,54 @@ void KexiFormManager::createActions(KActionCollection* collection)
 #endif
 
     d->lib->addCustomWidgetActions(d->collection);
+
+//! @todo move elsewhere
+    {
+        KexiMainWindowIface *win = KexiMainWindowIface::global();
+        QList<QAction*> actions( d->widgetActionGroup->actions() );
+        QHash<QString, QAction*> actionsByName;
+        foreach( QAction *a, actions ) {
+            actionsByName.insert(a->name(), a);
+        }
+
+        // (from obsolete kexiformpartinstui.rc)
+        QStringList formActions;
+        formActions
+            << "pointer"
+            << "" //sep
+            << "library_widget_KexiDBAutoField"
+            << "library_widget_KexiDBLabel"
+            << "library_widget_KexiPictureLabel"
+            << "library_widget_KexiDBImageBox"
+            << "library_widget_KexiDBLineEdit"
+            << "library_widget_KexiDBTextEdit"
+            << "library_widget_KPushButton"
+            << "library_widget_KexiDBComboBox"
+            << "library_widget_KexiDBCheckBox"
+            << "library_widget_Spacer"
+            << "library_widget_Line"
+            << "library_widget_KexiFrame"
+            << "library_widget_QGroupBox"
+            << "library_widget_KFDTabWidget"
+            << "library_widget_Spring"
+            << ""; //sep
+
+        foreach( const QString& actionName, formActions ) {
+            QAction *a;
+            if (actionName.isEmpty()) {
+                a = new QAction(this);
+                a->setSeparator(true);
+            }
+            else {
+                a = actionsByName[actionName];
+            }
+            win->addToolBarAction("form", a);
+        }
+        actions = d->collection->actions();
+        foreach( QAction *a, actions ) {
+            win->addToolBarAction("form", a);
+        }
+    }
 }
 
 // moved from KexiFormPart
@@ -248,6 +298,14 @@ void KexiFormManager::slotWidgetCreatedByFormsLibrary(QWidget* widget)
                 }
             }
         }
+    }
+}
+
+void KexiFormManager::slotWidgetActionToggled(const QByteArray& action)
+{
+    KexiFormView* fv = activeFormViewWidget();
+    if (fv) {
+        fv->form()->enterWidgetInsertingState(action);
     }
 }
 

@@ -508,9 +508,11 @@ KexiDBFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesign
     } else if (classname == "KexiDBCheckBox") {
         KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
         QRect r(cb->geometry());
+        QStyleOption option;
+        option.initFrom(w);
         r.setLeft(
             r.left() + 2
-            + cb->style()->subElementRect(QStyle::SE_CheckBoxIndicator, 0, cb).width());
+            + cb->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option, cb).width());
         createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
         return true;
     } else if (classname == "KexiDBImageBox") {

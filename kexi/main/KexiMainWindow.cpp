@@ -5105,4 +5105,9 @@ void KexiMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
     d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
 }
 
+void KexiMainWindow::addToolBarAction(const QString& toolBarName, QAction *action)
+{
+    d->tabbedToolBar->addAction(toolBarName, action);
+}
+
 #include "KexiMainWindow.moc"

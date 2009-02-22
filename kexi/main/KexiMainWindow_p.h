@@ -51,6 +51,9 @@ public:
     void setWidgetVisibleInToolbar(QWidget* widget, bool visible);
 //    void removeWidgetFromToolbar(const QString& name);
 
+//! @todo replace with the final Actions API
+    void addAction(const QString& toolBarName, QAction *action);
+
 protected:
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void leaveEvent(QEvent* event);
@@ -233,6 +236,9 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
     addAction(tbar, "tools_import_project");
     addAction(tbar, "tools_compact_database");
 
+//! @todo move to form plugin
+    tbar = d->createToolBar("form", i18n("Form Design"));
+
 // tbar = new KToolBar(this);
 // addTab( tbar, i18n("Settings") );
 //moved up addAction(tbar, "options_configure_keybinding");
@@ -342,6 +348,16 @@ void KexiTabbedToolBar::addAction(KToolBar *tbar, const char* actionName)
     QAction *a = d->ac->action(actionName);
     if (a)
         tbar->addAction(a);
+}
+
+void KexiTabbedToolBar::addAction(const QString& toolBarName, QAction *action)
+{
+    if (!action)
+        return;
+    KToolBar *tbar = d->toolbarsForName[toolBarName];
+    if (!tbar)
+        return;
+    tbar->addAction(action);
 }
 
 void KexiTabbedToolBar::addSeparatorAndAction(KToolBar *tbar, const char* actionName)

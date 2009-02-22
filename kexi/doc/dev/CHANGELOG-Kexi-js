@@ -28,6 +28,11 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-02-22
+Forms
+- added temporarily hardcoded "Form Design" tab in the main toolbar
+- inserting, selecting, moving andresizing form widets works
+
 2009-02-21
 Main Window
 - delayed loading of the "create" toolbar
