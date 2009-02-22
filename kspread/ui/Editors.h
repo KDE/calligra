@@ -328,6 +328,7 @@ protected:
     void focusInEvent(QFocusEvent *event);
     void focusOutEvent(QFocusEvent *event);
 
+    void adjustHeight ();
 private slots:
     void slotTextChanged ();
 

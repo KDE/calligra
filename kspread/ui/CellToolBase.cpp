@@ -1104,7 +1104,9 @@ QWidget* CellToolBase::createOptionWidget()
 {
     QWidget* widget = new QWidget(m_canvas->canvasWidget());
     d->widgetLayout = new QGridLayout (widget);
-    
+
+    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+
     d->userInput = new ExternalEditor;
     d->userInput->setCellTool (this);
 
