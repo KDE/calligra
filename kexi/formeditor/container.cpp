@@ -267,6 +267,13 @@ Container::eventFilter(QObject *s, QEvent *e)
         kDebug() << "this          = " << this->objectName();
 
         m_moving = static_cast<QWidget*>(s);
+        if (m_moving->parentWidget() && KexiUtils::objectIsA(m_moving->parentWidget(), "QStackedWidget")) {
+            m_moving = m_moving->parentWidget(); // widget is a stacked widget's page
+        }
+        if (m_moving->parentWidget() && m_moving->parentWidget()->inherits("QTabWidget")) {
+            m_moving = m_moving->parentWidget(); // widget is a tab widget page
+        }
+        
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
         m_grab = QPoint(mev->x(), mev->y());
 
@@ -404,7 +411,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
             int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
             int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
-            int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
+            int boty\ = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
             QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
             m_insertRect = r; 
 */
@@ -429,7 +436,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             // we are dragging the widget(s) to move it
             if (!d->toplevel() && m_moving == widget()) // no effect for form
                 return false;
-            if ((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
+            if ((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QStackedWidget")))
                 return true;
 
             moveSelectedWidgetsBy(mev->x() - m_grab.x(), mev->y() - m_grab.y());
@@ -442,11 +449,12 @@ Container::eventFilter(QObject *s, QEvent *e)
     case QEvent::Paint: { // Draw the dotted background
         if (s != widget())
             return false;
-//        QPaintEvent *pe = static_cast<QPaintEvent*>(e);
+        QPaintEvent* pe = static_cast<QPaintEvent*>(e);
+        QPainter p(widget());
+#if 1 // grid
         int gridX = d->form->gridSize();
         int gridY = d->form->gridSize();
 
-        QPainter p(widget());
         QColor c1(Qt::white);
         c1.setAlpha(100);
         QColor c2(Qt::black);
@@ -455,10 +463,21 @@ Container::eventFilter(QObject *s, QEvent *e)
         QPen pen2(c2, 1);
         int cols = widget()->width() / gridX;
         int rows = widget()->height() / gridY;
-        for (int rowcursor = 1; rowcursor <= rows; ++rowcursor) {
-            for (int colcursor = 1; colcursor <= cols; ++colcursor) {
-                const int x = -1 + colcursor *gridX;
-                const int y = -1 + rowcursor *gridY;
+        const QRect r( pe->rect() );
+// kDebug() << pe->rect();
+        // for optimization, compute the start/end row and column to paint
+        int startRow = r.top() / gridY;
+        startRow = qMax(startRow, 1);
+        int endRow = r.bottom() / gridY;
+        endRow = qMin(endRow, rows);
+        int startCol = r.left() / gridX;
+        startCol = qMax(startCol, 1);
+        int endCol = r.right() / gridX;
+        endCol = qMin(endCol, cols);
+        for (int rowcursor = startRow; rowcursor <= endRow; ++rowcursor) {
+            for (int colcursor = startCol; colcursor <= endCol; ++colcursor) {
+                const int x = colcursor * gridX - 1;
+                const int y = rowcursor * gridY - 1;
                 p.setPen(pen1);
                 p.drawPoint(x, y);
                 p.drawPoint(x, y+1);
@@ -467,6 +486,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 p.drawPoint(x+1, y+1);
             }
         }
+#endif
         if (d->selectionOrInsertingRectangle().isValid()) {
             QColor sc1(Qt::white);
             sc1.setAlpha(220);
@@ -1287,13 +1307,14 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
     int dx = realdx, dy = realdy;
 
     foreach (QWidget *w, *d->form->selectedWidgets()) {
-        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QStackedWidget"))
             continue;
 
-        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
-            w = w->parentWidget(); // widget is WidgetStack page
-            if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
-                w = w->parentWidget();
+        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")) {
+            w = w->parentWidget(); // widget is a stacked widget's page
+        }
+        if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) {
+            w = w->parentWidget(); // widget is a tab widget page
         }
 
         int tmpx = w->x() + realdx;
@@ -1311,12 +1332,12 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 
     foreach (QWidget *w, *d->form->selectedWidgets()) {
         // Don't move tab widget pages (or widget stack pages)
-        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QStackedWidget"))
             continue;
 
-        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
+        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")) {
             w = w->parentWidget(); // widget is WidgetStack page
-            if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
+            if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is a tab widget page
                 w = w->parentWidget();
         }
 

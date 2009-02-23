@@ -440,7 +440,7 @@ AdjustSizeCommand::AdjustSizeCommand(Form& form, Adjustment type, const QWidgetL
     d->form = &form;
     d->type = type;
     foreach (QWidget *w, list) {
-        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
+        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")) {
             w = w->parentWidget(); // widget is WidgetStack page
             if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
                 w = w->parentWidget();
