@@ -1006,14 +1006,17 @@ void KarbonView::mousePositionChanged( const QPoint &position )
 {
     QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
     QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
-    d->horizRuler->updateMouseCoordinate( viewPos.x() );
-    d->vertRuler->updateMouseCoordinate( viewPos.y() );
+    if( d->horizRuler->isVisible() )
+        d->horizRuler->updateMouseCoordinate( viewPos.x() );
+    if( d->vertRuler->isVisible() )
+        d->vertRuler->updateMouseCoordinate( viewPos.y() );
 
     QPointF documentPos = d->canvas->viewConverter()->viewToDocument( viewPos );
     qreal x = part()->unit().toUserValue(documentPos.x());
     qreal y = part()->unit().toUserValue(documentPos.y());
 
-    d->cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
+    if( statusBar()->isVisible() )
+        d->cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
 }
 
 void KarbonView::reorganizeGUI()
