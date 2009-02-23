@@ -236,11 +236,6 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //! @todo switch GUIenabled off when needed
     KApplication* app = new KApplication(GUIenabled);
 
-#ifdef KEXI_STANDALONE
-//! @todo remove...
-    KGlobal::locale()->removeCatalog("kexi");
-    KGlobal::locale()->insertCatalog("standalone_kexi");
-#endif
     KGlobal::locale()->insertCatalog("koffice");
     KGlobal::locale()->insertCatalog("koproperty");
 
@@ -5098,6 +5093,21 @@ void KexiMainWindow::highlightObject(const QString& partClass, const QString& na
 void KexiMainWindow::slotPartItemSelectedInNavigator(KexiPart::Item* item)
 {
     Q_UNUSED(item);
+}
+
+void KexiMainWindow::appendWidgetToToolbar(const QString& name, QWidget* widget)
+{
+    d->tabbedToolBar->appendWidgetToToolbar(name, widget);
+}
+
+void KexiMainWindow::setWidgetVisibleInToolbar(QWidget* widget, bool visible)
+{
+    d->tabbedToolBar->setWidgetVisibleInToolbar(widget, visible);
+}
+
+void KexiMainWindow::addToolBarAction(const QString& toolBarName, QAction *action)
+{
+    d->tabbedToolBar->addAction(toolBarName, action);
 }
 
 #include "KexiMainWindow.moc"

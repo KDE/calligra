@@ -104,11 +104,10 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
     QWidget *plainPage = new QWidget(this);
     setMainWidget(plainPage);
 
-    QGridLayout *lyr = new QGridLayout(plainPage, 4, 3,
-                                       0, KDialog::spacingHint());
+    QGridLayout *lyr = new QGridLayout(plainPage);
 
     QGroupBox* textEncodingGroupBox = new QGroupBox(i18n("Text encoding"), plainPage);
-    lyr->addMultiCellWidget(textEncodingGroupBox, 0, 0, 0, 1);
+    lyr->addWidget(textEncodingGroupBox, 0, 0, 1, 2);
     QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout(textEncodingGroupBox, KDialog::spacingHint(), KDialog::spacingHint());
     textEncodingGroupBoxLyr->addItem(new QSpacerItem(20, 15, QSizePolicy::Fixed, QSizePolicy::Fixed));
 
@@ -140,7 +139,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 
     m_chkStripWhiteSpaceInTextValues = new QCheckBox(
         i18n("Strip leading and trailing blanks off of text values"), plainPage);
-    lyr->addMultiCellWidget(m_chkStripWhiteSpaceInTextValues, 2, 2, 0, 1);
+    lyr->addWidget(m_chkStripWhiteSpaceInTextValues, 2, 0, 1, 2);
     lyr->addItem(new QSpacerItem(30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 0);
 
     //update widgets

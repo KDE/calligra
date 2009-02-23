@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 by Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,13 +50,13 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 
+#include <koproperty/Property.h>
+#include <koproperty/Set.h>
+
 #include "spring.h"
 #include "formIO.h"
 #include "form.h"
-#include "formmanager.h"
 #include "widgetlibrary.h"
-#include "widgetpropertyset.h"
-
 #include "stdwidgetfactory.h"
 
 // Some widgets subclass to allow event filtering and some other things
@@ -389,7 +390,8 @@ StdWidgetFactory::~StdWidgetFactory()
 
 QWidget*
 StdWidgetFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
-                               KFormDesigner::Container *container, int options)
+                               KFormDesigner::Container *container,
+                               CreateWidgetOptions options)
 {
     QWidget *w = 0;
     QString text(container->form()->library()->textForWidgetName(n, c));
@@ -518,8 +520,10 @@ StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDes
         return true;
     } else if (classname == "KPushButton") {
         KPushButton *push = static_cast<KPushButton*>(w);
+        QStyleOption option;
+        option.initFrom(w);
         const QRect r(w->style()->subElementRect(
-                          QStyle::SE_PushButtonContents, 0, w));
+                          QStyle::SE_PushButtonContents, &option, w));
         const QRect editorRect(push->x() + r.x(), push->y() + r.y(), r.width(), r.height());
         //r.setX(r.x() + 5);
         //r.setY(r.y() + 5);
@@ -529,8 +533,10 @@ StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDes
         return true;
     } else if (classname == "QRadioButton") {
         QRadioButton *radio = static_cast<QRadioButton*>(w);
+        QStyleOption option;
+        option.initFrom(w);
         const QRect r(w->style()->subElementRect(
-                          QStyle::SE_RadioButtonContents, 0, w));
+                          QStyle::SE_RadioButtonContents, &option, w));
         const QRect editorRect(
             radio->x() + r.x(), radio->y() + r.y(), r.width(), r.height());
         createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignLeft);
@@ -539,8 +545,10 @@ StdWidgetFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDes
         QCheckBox *check = static_cast<QCheckBox*>(w);
         //QRect r(check->geometry());
         //r.setX(r.x() + 20);
+        QStyleOption option;
+        option.initFrom(w);
         const QRect r(w->style()->subElementRect(
-                          QStyle::SE_CheckBoxContents, 0, w));
+                          QStyle::SE_CheckBoxContents, &option, w));
         const QRect editorRect(
             check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
         createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
@@ -631,18 +639,24 @@ StdWidgetFactory::resizeEditor(QWidget *editor, QWidget *widget,
     QRect r;
 
     if (classname == "QRadioButton") {
+        QStyleOption option;
+        option.initFrom(widget);
         r = widget->style()->subElementRect(
-                QStyle::SE_RadioButtonContents, 0, widget);
+                QStyle::SE_RadioButtonContents, &option, widget);
         p += r.topLeft();
         s.setWidth(r.width());
     } else if (classname == "QCheckBox") {
+        QStyleOption option;
+        option.initFrom(widget);
         r = widget->style()->subElementRect(
-                QStyle::SE_CheckBoxContents, 0, widget);
+                QStyle::SE_CheckBoxContents, &option, widget);
         p += r.topLeft();
         s.setWidth(r.width());
     } else if (classname == "KPushButton") {
+        QStyleOption option;
+        option.initFrom(widget);
         r = widget->style()->subElementRect(
-                QStyle::SE_PushButtonContents, 0, widget);
+                QStyle::SE_PushButtonContents, &option, widget);
         p += r.topLeft();
         s = r.size();
     }
@@ -930,14 +944,14 @@ StdWidgetFactory::editListContents()
 #endif
 
 void
-StdWidgetFactory::setPropertyOptions(KFormDesigner::WidgetPropertySet& buf, const KFormDesigner::WidgetInfo& info, QWidget *w)
+StdWidgetFactory::setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w)
 {
     Q_UNUSED(info);
     Q_UNUSED(w);
 
-    if (buf.contains("indent")) {
-        buf["indent"].setOption("min", -1);
-        buf["indent"].setOption("minValueText", i18nc("default indent value", "default"));
+    if (set.contains("indent")) {
+        set["indent"].setOption("min", -1);
+        set["indent"].setOption("minValueText", i18nc("default indent value", "default"));
     }
 }
 

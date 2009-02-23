@@ -31,6 +31,7 @@ class KoDataCenter;
 class KoShapeControllerBase;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+class KoShapeUserData;
 class KoViewConverter;
 class PlaceholderData;
 
@@ -53,6 +54,10 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context );
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+
+    virtual void init( const QMap<QString, KoDataCenter *> & dataCenterMap );
+
+    virtual KoShapeUserData * userData() const;
 
 protected:
     /**

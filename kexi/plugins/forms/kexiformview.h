@@ -28,10 +28,12 @@
 
 #include <widget/kexidataawareview.h>
 
-#include "kexiformpart.h"
 #include <core/KexiWindow.h>
 #include <core/KexiWindowData.h>
 #include <core/kexiblobbuffer.h>
+#include <formeditor/form.h>
+
+#include "kexiformpart.h"
 
 class KexiFormPart;
 class KexiDBForm;
@@ -79,7 +81,7 @@ public:
         return m_resizeMode;
     }
 
-    KFormDesigner::Form* form() const;
+    KFormDesigner::Form* form() const { return m_form; }
 
     /*! Assigns \a id local (static) BLOB's identifier for \a widget widget.
      Previously assigned BLOB will be usassigned.
@@ -118,10 +120,15 @@ public slots:
                           const QPoint& pos = QPoint(-1, -1));
 
 protected slots:
-    void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false,
-                                 const QByteArray& propertyToSelect = QByteArray());
-    void slotDirty(KFormDesigner::Form *f, bool isDirty);
+//2.0 changed    void slotPropertySetSwitched(KoProperty::Set *b, bool forceReload = false,
+//2.0 changed                                 const QByteArray& propertyToSelect = QByteArray());
+    void slotPropertySetSwitched();
+
+//2.0 changed    void slotDirty(KFormDesigner::Form *f, bool isDirty);
+    void slotModified();
+
     void slotFocus(bool in);
+
     void slotHandleDragMoveEvent(QDragMoveEvent* e);
 
     //! Handles field(s) dropping from the data source pane onto the form
@@ -139,7 +146,7 @@ protected:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
     virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
     virtual KoProperty::Set* propertySet() {
-        return m_propertySet;
+        return &m_form->propertySet(); // 2.0 m_propertySet;
     }
 
     virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
@@ -198,7 +205,7 @@ protected:
 
     KexiDBForm *m_dbform;
     KexiFormScrollView *m_scrollView;
-    KoProperty::Set *m_propertySet;
+//2.0     KoProperty::Set *m_propertySet;
 
     /*! Database cursor used for data retrieving.
      It is shared between subsequent Data view sessions (just reopened on switch),
@@ -231,6 +238,9 @@ protected:
      (the position is specified when a widget is inserted with mouse drag & dropping
      but not with clicking of 'Insert fields' button from Data Source pane) */
     QRect m_widgetGeometryForRecentInsertAutoFields;
+
+    //! Cached form pointer
+    QPointer<KFormDesigner::Form> m_form;
 };
 
 #endif

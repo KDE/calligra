@@ -19,10 +19,8 @@
 
 #include "kexinamewidget.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QLabel>
+#include <QGridLayout>
 
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -62,13 +60,14 @@ void KexiNameWidget::init(
     m_le_name_autofill = true;
     m_caption_required = false;
 
-    lyr = new Q3GridLayout(this, 1, 1, 0, 6, "lyr");
+    lyr = new QGridLayout(this);
+    lyr->setObjectName("lyr");
 
     lbl_message = new QLabel(this, "message");
     setMessageText(message);
     lbl_message->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     lbl_message->setAlignment(Qt::AlignTop | Qt::TextWordWrap);
-    lyr->addMultiCellWidget(lbl_message, 0, 0, 0, 1);
+    lyr->addWidget(lbl_message, 0, 0, 1, 2);
 
     lbl_caption = new QLabel(captionLabel.isEmpty() ? i18n("Caption:") : captionLabel,
                              this, "lbl_caption");

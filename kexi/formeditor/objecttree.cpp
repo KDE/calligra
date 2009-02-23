@@ -71,7 +71,7 @@ ObjectTreeItem::addChild(ObjectTreeItem *c)
 void
 ObjectTreeItem::removeChild(ObjectTreeItem *c)
 {
-    m_children.remove(c);
+    m_children.removeAt( m_children.indexOf(c) );
 }
 
 void

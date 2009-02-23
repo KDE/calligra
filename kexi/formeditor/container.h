@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008 Jaros≥aw Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jaros≈Çaw Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include <QMouseEvent>
 
 #include "utils.h"
+#include "form.h"
 
 class QEvent;
 class QWidget;
@@ -37,7 +38,6 @@ namespace KFormDesigner
 
 class Container;
 class ObjectTreeItem;
-class Form;
 
 /**
  * This class is used to filter the events from any widget (and all its subwidgets)
@@ -76,17 +76,18 @@ class KFORMEDITOR_EXPORT Container : public QObject
     Q_OBJECT
 
 public:
-    enum LayoutType { NoLayout = 0, HBox, VBox, Grid, HFlow, VFlow, /* special types */ HSplitter, VSplitter };
-
     /**
      * Creates a Container from the widget \a container, which have
      \a toplevel as parent Container. */
     Container(Container *toplevel, QWidget *container, QObject *parent = 0);
-    virtual ~Container();
 
+    virtual ~Container();
 
     //! \return a pointer to the toplevel Container, or 0 if this Container is toplevel
     Container* toplevel();
+
+    //! \return the same as toplevel()->widget()
+    QWidget* topLevelWidget() const;
 
     //! \return The form this Container belongs to.
     Form* form() const;
@@ -113,25 +114,25 @@ public:
         return m_layout;
     }
 
-    //! \return the type of the layout associated to this Container's widget (see LayoutType enum).
-    LayoutType layoutType() const {
+    //! \return the type of the layout associated to this Container's widget (see Form::LayoutType enum).
+    Form::LayoutType layoutType() const {
         return m_layType;
     }
 
     //! \return the margin of this Container.
-    int layoutMargin() {
+    int layoutMargin() const {
         return m_margin;
     }
 
     //! \return the spacing of this Container.
-    int layoutSpacing() {
+    int layoutSpacing() const {
         return m_spacing;
     }
 
     /*! Sets this Container to use \a type of layout. The widget are inserted
      automatically in the layout following their positions.
       \sa createBoxLayout(), createGridLayout() */
-    void setLayout(LayoutType type);
+    void setLayoutType(Form::LayoutType type);
 
     //! Sets the spacing of this Container.
     void setLayoutSpacing(int spacing) {
@@ -144,10 +145,10 @@ public:
     }
 
     //! \return the string representing the layoutType \a type.
-    static QString layoutTypeToString(int type);
+    static QString layoutTypeToString(Form::LayoutType type);
 
     //! \return the LayoutType (an int) for a given layout name.
-    static LayoutType stringToLayoutType(const QString &name);
+    static Form::LayoutType stringToLayoutType(const QString &name);
 
     /*! Stops the inline editing of the current widget (as when you click
      on another widget or press Esc). */
@@ -161,18 +162,16 @@ public:
 
 public slots:
     /*! Sets \a selected to be the selected widget of this container
-      (and so of the Form). If \a add is true, the formerly selected widget
-      is still selected, and the new one is just added. If false, \a selected
-       replace the actually selected widget. If \a dontRaise is true, then
-      the widget \a selected (and its parent) won't be raised (eg when you
-       select widget in ObjectTreeView).
-      \sa Form::setSelectedWidget() */
-    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise = false,
-                           bool moreWillBeSelected = false);
+      (and so of the Form). See Form::WidgetSelectionFlags description
+      for exmplanation of possible combination of @a flags flags.
+      \sa Form::selectWidget() */
+      void selectWidget(QWidget *w, Form::WidgetSelectionFlags flags = Form::DefaultWidgetSelectionFlags);
+//    void setSelectedWidget(QWidget *selected, bool add, bool dontRaise = false,
+//                           bool moreWillBeSelected = false);
 
-    /*! Unselects the widget \a w. The widget is removed from the Form's list
+    /*! Deselects the widget \a w. The widget is removed from the Form's list
      and its resizeHandles are removed. */
-    void unSelectWidget(QWidget *w);
+    void deselectWidget(QWidget *w);
 
     /*! Deletes the widget \a w. Removes it from ObjectTree, and sets selection
      to Container's widget. */
@@ -199,7 +198,10 @@ protected:
       is simulated, and only the widget's grid info aris filled. */
     void createGridLayout(bool testOnly = false);
 
+#ifdef KFD_SIGSLOTS
+    //! Drawing functions used by eventFilter
     void drawConnection(QMouseEvent *mev);
+#endif
 //reimplemented using QRubberBand 
     //void drawSelectionRect(QMouseEvent *mev);
     //void drawInsertRect(QMouseEvent *mev, QObject *s);
@@ -216,7 +218,7 @@ private:
 
     // Layout
     QLayout *m_layout;
-    LayoutType m_layType;
+    Form::LayoutType m_layType;
     int m_margin, m_spacing;
 
     // moving etc.

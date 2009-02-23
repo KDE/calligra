@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,13 +32,10 @@
 #include <qdatetime.h>
 #include <qlabel.h>
 #include <qpainter.h>
-//Added by qt3to4:
 #include <QPaintEvent>
-#include <Q3VBoxLayout>
-#include <Q3StrList>
-#include <Q3GridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QPixmap>
-#include <Q3HBoxLayout>
 #include <QImageWriter>
 
 #include <kfiledialog.h>
@@ -47,10 +44,11 @@
 #include <kacceleratormanager.h>
 
 #include <kexiutils/utils.h>
+#include "FormWidget.h"
 #include "form.h"
 #include "container.h"
 #include "objecttree.h"
-#include "formmanager.h"
+//unused #include "formmanager.h"
 #include "widgetlibrary.h"
 #include "spring.h"
 #include "events.h"
@@ -124,23 +122,27 @@ FormIO::~FormIO()
 bool
 FormIO::saveFormToFile(Form *form, const QString &filename)
 {
-    QString m_filename;
-    if (!form->filename().isNull() && filename.isNull())
-        m_filename = form->filename();
+    QString _filename;
+    if (!form->filename().isEmpty() && filename.isEmpty()) {
+        _filename = form->filename();
+    }
 
-    if (filename.isNull()) {
-        m_filename = KFileDialog::getSaveFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
-        if (m_filename.isNull())
+    if (filename.isEmpty()) {
+        _filename = KFileDialog::getSaveFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
+        if (_filename.isEmpty()) {
             return false;
-    } else
-        m_filename = filename;
-    form->setFilename(m_filename);
+        }
+    }
+    else {
+        _filename = filename;
+    }
+    form->setFilename(_filename);
 
     QDomDocument domDoc;
     if (!saveFormToDom(form, domDoc))
         return false;
 
-    QFile file(m_filename);
+    QFile file(_filename);
     if (!file.open(QIODevice::WriteOnly))
         return false;
 
@@ -232,8 +234,10 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     // Save the Form 's PixmapCollection
     form->pixmapCollection()->save(uiElement);
 #endif
+#ifdef KFD_SIGSLOTS
     // Save the Form connections
     form->connectionBuffer()->save(uiElement);
+#endif
 
     form->commandHistory()->documentSaved();
 
@@ -260,10 +264,12 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
         return false;
     }
 
-    if (!loadFormFromDom(form, container, inBuf))
+    if (!loadFormFromDom(form, container, inBuf)) {
         return false;
-    if (preview)
-        form->setDesignMode(false);
+    }
+    if (preview) {
+        form->setMode(Form::DataMode);
+    }
     return true;
 }
 
@@ -287,10 +293,12 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
         return false;
     }
 
-    if (!loadFormFromDom(form, container, inBuf))
+    if (!loadFormFromDom(form, container, inBuf)) {
         return false;
-    if (preview)
-        form->setDesignMode(false);
+    }
+    if (preview) {
+        form->setMode(Form::DataMode);
+    }
     return true;
 }
 
@@ -300,19 +308,22 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
     QString errMsg;
     int errLine;
     int errCol;
-    QString m_filename;
+    QString _filename;
 
-    if (filename.isNull()) {
-        m_filename = KFileDialog::getOpenFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
-        if (m_filename.isNull())
+    if (filename.isEmpty()) {
+        _filename = KFileDialog::getOpenFileName(KUrl(), i18n("*.ui|Qt Designer UI Files"));
+        if (_filename.isEmpty()) {
             return false;
-    } else
-        m_filename = filename;
+        }
+    }
+    else {
+        _filename = filename;
+    }
 
-    QFile file(m_filename);
+    QFile file(_filename);
     if (!file.open(QIODevice::ReadOnly)) {
 //! @todo proved err msg to the user
-        kDebug() << "Cannot open the file " << filename;
+        kDebug() << "Cannot open the file " << _filename;
         return false;
     }
     QDomDocument doc;
@@ -379,8 +390,6 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
     // Loading the tabstops
     QDomElement tabStops = ui.namedItem("tabstops").toElement();
-// if(tabStops.isNull())
-//  return 1;
     if (!tabStops.isNull()) {
         int i = 0;
         uint itemsNotFound = 0;
@@ -405,8 +414,10 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
         }
     }
 
+#ifdef KFD_SIGSLOTS
     // Load the form connections
     form->connectionBuffer()->load(ui.namedItem("connections"));
+#endif
 
     m_currentForm = 0;
     m_currentItem = 0;
@@ -495,7 +506,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 }
 
 void
-FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant value)
+FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, const QVariant& value)
 {
     QDomElement type;
     QDomText valueE;
@@ -737,7 +748,8 @@ FormIO::writeVariant(QDomDocument &parent, QDomElement &parentNode, QVariant val
 }
 
 void
-FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, const QString &property, const QVariant &value)
+FormIO::savePropertyElement(QDomElement &parentNode, QDomDocument &domDoc, const QString &tagName, 
+    const QString &property, const QVariant &value)
 {
     QDomElement propertyE = domDoc.createElement(tagName);
     propertyE.setAttribute("name", property);
@@ -859,16 +871,18 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
             return m_currentForm->pixmapCollection()->getPixmap(text);
         }
 #endif
-        return QVariant(QPixmap());
-    } else if (type == "enum")
+        return QPixmap();
+    }
+    else if (type == "enum") {
         return text;
+    }
     else if (type == "set") {
         WidgetWithSubpropertiesInterface* subpropIface
         = dynamic_cast<WidgetWithSubpropertiesInterface*>(obj);
         QObject *subobject = (subpropIface && subpropIface->subwidget())
                              ? subpropIface->subwidget() : obj;
         const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subobject, name.toLatin1().constData()));
-        if (meta.isValid())
+        if (meta.isValid()) {
             if (meta.isFlagType()) {
                 /*qt4   Q3StrList keys;
                       QStringList list = QStringList::split("|", text);
@@ -883,6 +897,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
                 // e.g. near KexiFormView::updateValuesForSubproperties()
                 return text.split("|");
             }
+        }
     }
     return QVariant();
 }
@@ -995,7 +1010,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     }
     // Saving container 's layout if there is one
     QDomElement layout;
-    if (item->container() && item->container()->layoutType() != Container::NoLayout) {
+    if (item->container() && item->container()->layoutType() != Form::NoLayout) {
         if (item->container()->layout()) { // there is a layout
             layout = domDoc.createElement("temp");
             savePropertyValue(layout, domDoc, "name", "unnamed", item->widget());
@@ -1007,16 +1022,17 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
         }
     }
 
-    int layoutType = item->container() ? item->container()->layoutType() : Container::NoLayout;
+    Form::LayoutType layoutType = item->container() ? item->container()->layoutType() : Form::NoLayout;
     switch (layoutType) {
-    case Container::Grid: { // grid layout
+    case Form::Grid: { // grid layout
         layout.setTagName("grid");
         foreach (ObjectTreeItem *titem, *item->children()) {
             saveWidget(titem, layout, domDoc, true);
         }
         break;
     }
-    case Container::HBox: case Container::VBox: {
+    case Form::HBox:
+    case Form::VBox: {
         // as we don't save geometry, we need to sort widgets in the right order, not creation order
         CustomSortableWidgetList *list;
         if (layout.tagName() == "hbox") {
@@ -1042,7 +1058,8 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
         delete list;
         break;
     }
-    case Container::HFlow: case Container::VFlow: {
+    case Form::HFlow:
+    case Form::VFlow: {
 #ifdef KEXI_NO_FLOWLAYOUT
 #ifdef __GNUC__
 #warning "Port Kexi flow layout!"
@@ -1055,8 +1072,10 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
         QWidgetList *list = (QWidgetList*)flow->widgetList();
 
         // save some special properties
-        savePropertyElement(layout, domDoc, "property", "customLayout", Container::layoutTypeToString(item->container()->layoutType()));
-        savePropertyElement(layout, domDoc, "property", "justify", QVariant(static_cast<KexiFlowLayout*>(item->container()->layout())->isJustified(), 3));
+        savePropertyElement(layout, domDoc, "property", "customLayout",
+            Container::layoutTypeToString(item->container()->layoutType()));
+        savePropertyElement(layout, domDoc, "property", "justify",
+            static_cast<KexiFlowLayout*>(item->container()->layout())->isJustified());
 
         // fill the widget's grid info, ie just simulate grid layout
         item->container()->createGridLayout(true);
@@ -1156,11 +1175,12 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
         w = new CustomWidget(classname, container->widget());
         w->setObjectName(wname);
     } else {
-        if (!alternate.isNull())
+        if (!alternate.isEmpty()) {
             classname = alternate;
+        }
 
-        int widgetOptions = WidgetFactory::DefaultOptions;
-        if (!container->form()->designMode()) {
+        WidgetFactory::CreateWidgetOptions widgetOptions = WidgetFactory::DefaultOptions;
+        if (container->form()->mode() != Form::DesignMode) {
             widgetOptions ^= WidgetFactory::DesignViewMode;
         }
 
@@ -1175,7 +1195,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     if (!w)
         return;
 //! @todo allow setting this for data view mode as well
-    if (m_currentForm->designMode()) {
+    if (m_currentForm->mode() == Form::DesignMode) {
         //don't generate accelerators for widgets in design mode
         KAcceleratorManager::setNoAccel(w);
     }
@@ -1199,23 +1219,28 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     }
     //assign item for its widget if it supports DesignTimeDynamicChildWidgetHandler interface
     //(e.g. KexiDBAutoField)
-    if (container->form()->designMode() && dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
+    if (container->form()->mode() == Form::DesignMode && dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)) {
         dynamic_cast<DesignTimeDynamicChildWidgetHandler*>(w)->assignItem(item);
     }
 
     m_currentItem = item;
     // if we are inside a Grid, we need to insert the widget in the good cell
-    if (container->layoutType() == Container::Grid)  {
-        Q3GridLayout *layout = (Q3GridLayout*)container->layout();
+    if (container->layoutType() == Form::Grid)  {
+        QGridLayout *layout = (QGridLayout*)container->layout();
         if (el.hasAttribute("rowspan")) { // widget spans multiple cells
-            if (layout)
-                layout->addMultiCellWidget(w, el.attribute("row").toInt(), el.attribute("row").toInt() + el.attribute("rowspan").toInt() - 1,
-                                           el.attribute("column").toInt(),  el.attribute("column").toInt() + el.attribute("colspan").toInt() - 1);
+            if (layout) {
+                layout->addWidget(
+                    w, 
+                    el.attribute("row").toInt(), el.attribute("column").toInt(),
+                    el.attribute("rowspan").toInt(), el.attribute("colspan").toInt());
+//! @todo alignment attribute?
+            }
             item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), el.attribute("rowspan").toInt(),
                              el.attribute("colspan").toInt());
         } else  {
-            if (layout)
+            if (layout) {
                 layout->addWidget(w, el.attribute("row").toInt(), el.attribute("column").toInt());
+            }
             item->setGridPos(el.attribute("row").toInt(),  el.attribute("column").toInt(), 0, 0);
         }
     } else if (container->layout())
@@ -1401,7 +1426,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 #warning "Port Kexi flow layout!"
 #endif
 #else
-                item->container()->m_layType = Container::HFlow;
+                item->container()->m_layType = Form::HFlow;
                 KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
                 layout->setOrientation(Qt::Horizontal);
                 item->container()->m_layout = (QLayout*)layout;
@@ -1412,25 +1437,25 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 #warning "Port Kexi flow layout!"
 #endif
 #else
-                item->container()->m_layType = Container::VFlow;
+                item->container()->m_layType = Form::VFlow;
                 KexiFlowLayout *layout = new KexiFlowLayout(item->widget());
                 layout->setOrientation(Qt::Vertical);
                 item->container()->m_layout = (QLayout*)layout;
 #endif
             } else { // grid layout
-                item->container()->m_layType = Container::Grid;
-                Q3GridLayout *layout = new Q3GridLayout(item->widget(), 1, 1);
+                item->container()->m_layType = Form::Grid;
+                QGridLayout *layout = new QGridLayout(item->widget());
                 item->container()->m_layout = (QLayout*)layout;
             }
             readChildNodes(item, container, node, w);
         } else if (tag == "vbox")  {
-            item->container()->m_layType = Container::VBox;
-            Q3VBoxLayout *layout = new Q3VBoxLayout(item->widget());
+            item->container()->m_layType = Form::VBox;
+            QVBoxLayout *layout = new QVBoxLayout(item->widget());
             item->container()->m_layout = (QLayout*)layout;
             readChildNodes(item, container, node, w);
         } else if (tag == "hbox") {
-            item->container()->m_layType = Container::HBox;
-            Q3HBoxLayout *layout = new Q3HBoxLayout(item->widget());
+            item->container()->m_layType = Form::HBox;
+            QHBoxLayout *layout = new QHBoxLayout(item->widget());
             item->container()->m_layout = (QLayout*)layout;
             readChildNodes(item, container, node, w);
         } else {// unknown tag, we let the Factory handle it

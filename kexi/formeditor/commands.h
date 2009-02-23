@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +22,13 @@
 #define KFORMEDITOR_COMMANDS_H
 
 #include <QHash>
-#include <qvariant.h>
+#include <QVariant>
 #include <qdom.h>
 #include <QString>
 
 #include <k3command.h>
 #include "utils.h"
+#include "form.h"
 
 class QRect;
 class QPoint;
@@ -36,7 +37,7 @@ class QStringList;
 namespace KFormDesigner
 {
 
-class WidgetPropertySet;
+//removed 2.0 class WidgetPropertySet;
 class ObjectTreeItem;
 class Container;
 class Form;
@@ -46,50 +47,59 @@ class KFORMEDITOR_EXPORT Command : public K3Command
 {
 public:
     Command();
+    
     virtual ~Command();
 
     virtual void debug() = 0;
 };
 
-/*! This command is used when changing a property for one or more widgets. \a oldvalues is a QHash
- of the old values of the property for every widget, to allow reverting the change. \a value is
- the new value of the property. You can use the simpler constructor for a single widget.
- */
+//! Command is used when changing a property for one or more widgets. 
 class KFORMEDITOR_EXPORT PropertyCommand : public Command
 {
 public:
-    PropertyCommand(WidgetPropertySet *set, const QByteArray &wname, const QVariant &oldValue,
-                    const QVariant &value, const QByteArray &property);
-    PropertyCommand(WidgetPropertySet *set, const QHash<QByteArray, QVariant> &oldvalues,
-                    const QVariant &value, const QByteArray &property);
+   /*! @a oldValue is the old property value for selected widget. 
+     This enables reverting the change. @a value is the new property value. */
+    PropertyCommand(Form& form, const QByteArray &wname, const QVariant &oldValue,
+                    const QVariant &value, const QByteArray &propertyName);
+
+   /*! @a oldValues is a QHash of the old property values for every widget, 
+     to allow reverting the change. @a value is the new property value.
+     You can use the simpler constructor for a single widget. */
+    PropertyCommand(Form& form, const QHash<QByteArray, QVariant> &oldValues,
+                    const QVariant &value, const QByteArray &propertyName);
+
+    virtual ~PropertyCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
-    QByteArray property() const {
-        return m_property;
-    }
 
-    void  setValue(const QVariant &value);
-    const QHash<QByteArray, QVariant>& oldValues() const {
-        return m_oldvalues;
-    }
+    QByteArray property() const;
+
+    QVariant value() const;
+
+    void setValue(const QVariant &value);
+    
+    const QHash<QByteArray, QVariant>& oldValues() const;
+    
     virtual void debug();
 
 protected:
-    WidgetPropertySet *m_propSet;
-    QVariant m_value;
-    QHash<QByteArray, QVariant> m_oldvalues;
-    QByteArray m_property;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when moving multiples widgets at the same time, while holding Ctrl or Shift.
- You need to supply a list of widget names, and the position of the cursor before moving. Use setPos()
+//! Command used when moving multiples widgets at the same time, while holding Ctrl or Shift.
+/*! You need to supply a list of widget names, and the position of the cursor before moving. Use setPos()
   to tell the new cursor pos every time it changes.*/
 class KFORMEDITOR_EXPORT GeometryPropertyCommand : public Command
 {
 public:
-    GeometryPropertyCommand(WidgetPropertySet *set, const QStringList &names, const QPoint& oldPos);
+    GeometryPropertyCommand(Form& form, const QStringList &names, const QPoint& oldPos);
+
+    virtual ~GeometryPropertyCommand();
 
     virtual void execute();
     virtual void unexecute();
@@ -98,85 +108,100 @@ public:
     virtual void debug();
 
 protected:
-    WidgetPropertySet *m_propSet;
-    QStringList m_names;
-    QPoint m_oldPos;
-    QPoint m_pos;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when an item in 'Align Widgets position' is selected. You just need
-to give the list of widget names (the selected ones), and the
+//! Command used when an "Align Widgets position" action is activated.
+/* You just need to give the list of widget names (the selected ones), and the
   type of alignment (see the enum for possible values). */
 class KFORMEDITOR_EXPORT AlignWidgetsCommand : public Command
 {
 public:
-    enum { AlignToGrid = 100, AlignToLeft, AlignToRight, AlignToTop, AlignToBottom };
+    AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment, const QWidgetList &list);
 
-    AlignWidgetsCommand(int type, QWidgetList &list, Form *form);
+    virtual ~AlignWidgetsCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    Form *m_form;
-    int m_type;
-    QHash<QByteArray, QPoint> m_pos;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when an item in 'Adjust Widgets Size' is selected. You just need
- to give the list of widget names (the selected ones), and the
-  type of size modification (see the enum for possible values). */
+//! Command used when an "Adjust Widgets Size" action is activated.
+/*! You just need to give the list of widget names (the selected ones), 
+    and the type of size modification (see the enum for possible values). */
 class KFORMEDITOR_EXPORT AdjustSizeCommand : public Command
 {
 public:
-    enum { SizeToGrid = 200, SizeToFit, SizeToSmallWidth, SizeToBigWidth,
-           SizeToSmallHeight, SizeToBigHeight
-         };
+    enum Adjustment {
+        SizeToGrid,
+        SizeToFit,
+        SizeToSmallWidth,
+        SizeToBigWidth,
+        SizeToSmallHeight,
+        SizeToBigHeight
+    };
 
-    AdjustSizeCommand(int type, QWidgetList &list, Form *form);
+    AdjustSizeCommand(Form& form, Adjustment type, const QWidgetList &list);
+
+    virtual ~AdjustSizeCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    QSize  getSizeFromChildren(ObjectTreeItem *item);
+    QSize getSizeFromChildren(ObjectTreeItem *item);
 
 protected:
-    Form *m_form;
-    int m_type;
-    QHash<QByteArray, QPoint> m_pos;
-    QHash<QByteArray, QSize> m_sizes;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when switching the layout of a Container. It remembers the old pos
- of every widget inside the Container. */
+//! Command used when switching the layout of a container.
+/*! It remembers the old pos of every widget inside the container. */
 class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 public:
-    LayoutPropertyCommand(WidgetPropertySet *set, const QByteArray &wname,
+    LayoutPropertyCommand(Form& form, const QByteArray &wname,
                           const QVariant &oldValue, const QVariant &value);
 
+    virtual ~LayoutPropertyCommand();
+
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    Form *m_form;
-    QHash<QByteArray, QRect>  m_geometries;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when inserting a widger using toolbar or menu. You only need to give
-the parent Container and the widget pos.
- The other information is taken from FormManager. */
+//! Command used when inserting a widget using toolbar or menu. 
+/*! You only have to give the parent Container and the widget pos.
+ The other information is taken from the form. */
 class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 {
 public:
-    InsertWidgetCommand(Container *container);
+    InsertWidgetCommand(const Container& container);
+
+    virtual ~InsertWidgetCommand();
 
     /*! This ctor allows to set explicit class name and position.
      Used for dropping widgets on the form surface.
@@ -185,87 +210,102 @@ public:
      otherwise, \a namePrefix is used to generate widget's name.
      This allows e.g. inserting a widgets having name constructed using
      */
-    InsertWidgetCommand(Container *container, const QByteArray& className,
+    InsertWidgetCommand(const Container& container, const QByteArray& className,
                         const QPoint& pos, const QByteArray& namePrefix = QByteArray());
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
     //! \return inserted widget's name
-    QByteArray widgetName() const {
-        return m_name;
-    }
+    QByteArray widgetName() const;
 
 protected:
-    Form *m_form;
-    QString m_containername;
-    QPoint m_point;
-    QByteArray m_name;
-    QByteArray m_class;
-    QRect m_insertRect;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when creating a layout from some widgets using "Lay out in..." menu item.
- It remembers the old pos of every widget, and takes care of updating ObjectTree too. You need
+//! Command used when creating a layout from some widgets using "Lay out in...".
+/*! It remembers the old pos of every widget, and takes care of updating ObjectTree too. You need
  to supply a QWidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT CreateLayoutCommand : public Command
 {
 public:
-    CreateLayoutCommand(int layoutType, QWidgetList &list, Form *form);
-    CreateLayoutCommand() {
-        ;
-    } // for BreakLayoutCommand
+    CreateLayoutCommand(Form &form, Form::LayoutType layoutType, const QWidgetList &list);
+
+    virtual ~CreateLayoutCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    Form *m_form;
-    QString m_containername;
-    QString m_name;
-    QHash<QByteArray, QRect> m_pos;
-    int m_type;
+    //! Used in BreakLayoutCommand ctor.
+    CreateLayoutCommand();
+
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when the 'Break Layout' menu item is selected. It does exactly the
- opposite of CreateLayoutCommand. */
+//! Command used when the 'Break Layout' menu item is selected. 
+/*! It does exactly the opposite of the CreateLayoutCommand. */
 class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
 {
 public:
-    BreakLayoutCommand(Container *container);
+    BreakLayoutCommand(const Container &container);
+
+    virtual ~BreakLayoutCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 };
 
-/*! This command is used when pasting widgets. You need to give the QDomDocument containing
-the widget(s) to paste, and optionnally the point where to paste widgets. */
+//! @todo add CopyWidgetCommand
+
+//! Command used when pasting widgets. 
+/*! You need to give the QDomDocument containing
+    the widget(s) to paste, and optionally the point where to paste widgets. */
 class KFORMEDITOR_EXPORT PasteWidgetCommand : public Command
 {
 public:
-    PasteWidgetCommand(QDomDocument &domDoc, Container *container, const QPoint& p = QPoint());
+    PasteWidgetCommand(const QDomDocument &domDoc, const Container& container, const QPoint& p = QPoint());
+
+    virtual ~PasteWidgetCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    /*! Internal function used to change the coordinates of a widget to \a newpos
+    /*! Internal function used to change the coordinates of a widget to \a newPos
      before pasting it (to paste it at the position of the contextual menu). It modifies
        the "geometry" property of the QDomElement representing the widget. */
-    void changePos(QDomElement &widg, const QPoint &newpos);
+    void changePos(QDomElement &el, const QPoint &newPos);
+
     /*! Internal function used to fix the coordinates of a widget before pasting it
        (to avoid having two widgets at the same position). It moves the widget by
        (10, 10) increment (several times if there are already pasted widgets at this position). */
     void fixPos(QDomElement &el, Container *container);
+    
     void moveWidgetBy(QDomElement &el, Container *container, const QPoint &p);
+    
     /*! Internal function used to fix the names of the widgets before pasting them.
       It prevents from pasting a widget with
       the same name as an actual widget. The child widgets are also fixed recursively.\n
@@ -275,50 +315,78 @@ protected:
     void fixNames(QDomElement &el);
 
 protected:
-    Form *m_form;
-    QString m_data;
-    QString m_containername;
-    QPoint m_point;
-    QStringList m_names;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when deleting a widget using the "Delete" menu item.
-You need to give a QWidgetList of the selected widgets. */
+//! Command used when deleting widgets using the "Delete" menu item.
+/*! You need to give a QWidgetList of the selected widgets. */
 class KFORMEDITOR_EXPORT DeleteWidgetCommand : public Command
 {
 public:
-    DeleteWidgetCommand(QWidgetList &list, Form *form);
+    DeleteWidgetCommand(Form& form, const QWidgetList &list);
+
+    virtual ~DeleteWidgetCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    QDomDocument m_domDoc;
-    Form *m_form;
-    QHash<QByteArray, QByteArray>  m_containers;
-    QHash<QByteArray, QByteArray>  m_parents;
+    class Private;
+    Private * const d;
 };
 
-/*! This command is used when cutting widgets. It is basically a DeleteWidgetCommand
-which also updates the clipboard contents. */
+//! Command used when duplicating widgets.
+/*! You need to give a QWidgetList of the selected widgets. */
+class KFORMEDITOR_EXPORT DuplicateWidgetCommand : public Command
+{
+public:
+    DuplicateWidgetCommand(const Container& container, const QWidgetList &list, const QPoint& copyToPoint);
+
+    virtual ~DuplicateWidgetCommand();
+
+    virtual void execute();
+    
+    virtual void unexecute();
+    
+    virtual QString name() const;
+    
+    virtual void debug();
+
+protected:
+    class Private;
+    Private * const d;
+};
+
+//! Command used when cutting widgets. 
+/*! It is basically a DeleteWidgetCommand which also updates the clipboard contents. */
 class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 public:
-    CutWidgetCommand(QWidgetList &list, Form *form);
+    CutWidgetCommand(Form &form, const QWidgetList &list);
+
+    virtual ~CutWidgetCommand();
 
     virtual void execute();
+    
     virtual void unexecute();
+    
     virtual QString name() const;
+    
     virtual void debug();
 
 protected:
-    QString m_data;
+    class Private;
+    Private * const d2;
 };
 
-/*! A Command Group is a command that holds several subcommands.
- It will appear as one to the user and in the command history,
+//! Command that holds several subcommands.
+/*! It appears as one to the user and in the command history,
  but it can use the implementation of multiple commands internally.
  It extends KMacroCommand by providing the list of commands executed.
  Selected subcommands can be marked as nonexecutable by adding them using
@@ -327,7 +395,8 @@ protected:
 class KFORMEDITOR_EXPORT CommandGroup : public Command
 {
 public:
-    CommandGroup(const QString & name, WidgetPropertySet *propSet);
+    CommandGroup(Form &form, const QString & name);
+
     virtual ~CommandGroup();
 
     /*! Like KMacroCommand::addCommand(KCommand*)
@@ -373,12 +442,8 @@ public:
     virtual void debug();
 
 protected:
-    class SubCommands;
-    SubCommands *m_subCommands;
-    //! Used to store pointers to subcommands that shouldn't be executed
-    //! on CommandGroup::execute()
-    QSet<K3Command*> m_commandsShouldntBeExecuted;
-    WidgetPropertySet *m_propSet;
+    class Private;
+    Private * const d;
 };
 
 }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@
 #include <formeditor/container.h>
 #include <formeditor/form.h>
 #include <formeditor/formIO.h>
-#include <formeditor/formmanager.h>
 #include <formeditor/objecttree.h>
 #include <formeditor/utils.h>
 #include <kexidb/utils.h>
@@ -340,7 +339,8 @@ KexiDBFactory::~KexiDBFactory()
 
 QWidget*
 KexiDBFactory::createWidget(const QByteArray &c, QWidget *p, const char *n,
-                            KFormDesigner::Container *container, int options)
+                            KFormDesigner::Container *container,
+                            CreateWidgetOptions options)
 {
     kDebug() << this;
 
@@ -508,9 +508,11 @@ KexiDBFactory::startEditing(const QByteArray &classname, QWidget *w, KFormDesign
     } else if (classname == "KexiDBCheckBox") {
         KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
         QRect r(cb->geometry());
+        QStyleOption option;
+        option.initFrom(w);
         r.setLeft(
             r.left() + 2
-            + cb->style()->subElementRect(QStyle::SE_CheckBoxIndicator, 0, cb).width());
+            + cb->style()->subElementRect(QStyle::SE_CheckBoxIndicator, &option, cb).width());
         createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
         return true;
     } else if (classname == "KexiDBImageBox") {
@@ -667,16 +669,10 @@ KexiDBFactory::resizeEditor(QWidget *editor, QWidget *w, const QByteArray &class
 void
 KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 {
-//old KexiFormView *formView = KexiUtils::findParent<KexiFormView>((QWidget*)m_widget, "KexiFormView");
-
-    // (js) heh, porting to KFormDesigner::FormManager::self() singleton took me entire day of work...
-    KFormDesigner::Form *form = KFormDesigner::FormManager::self()->activeForm();
-    KexiFormView *formView = form
-                             ? KexiUtils::findParent<KexiFormView*>((QWidget*)form->widget()) : 0;
+    KexiFormView *formView = KexiUtils::findParent<KexiFormView*>((QWidget*)sender());
     if (formView) {
-        changeProperty("pixmapId", (uint)/*! @todo unsafe */id, form);
-//old  formView->setUnsavedLocalBLOB(m_widget, id);
-        formView->setUnsavedLocalBLOB(form->selectedWidget(), id);
+        changeProperty("pixmapId", (uint)/*! @todo unsafe */id, formView->form());
+        formView->setUnsavedLocalBLOB(formView->form()->selectedWidget(), id);
     }
 }
 

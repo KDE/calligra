@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+   Copyright (C) 2003 by Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +33,11 @@
 
 class QTreeWidgetItem;
 class QTreeWidget;
+
+namespace KoProperty
+{
+class Set;
+}
 
 class KexiPictureLabel : public QLabel
 {
@@ -65,8 +72,9 @@ public:
     StdWidgetFactory(QObject *parent, const QStringList &args);
     ~StdWidgetFactory();
 
-    virtual QWidget *createWidget(const QByteArray &c, QWidget *p, const char *n,
-                                  KFormDesigner::Container *container, int options = DefaultOptions);
+    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+                                  KFormDesigner::Container *container,
+                                  CreateWidgetOptions options = DefaultOptions);
 
     virtual bool createMenuActions(const QByteArray &classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
@@ -83,8 +91,7 @@ public:
                                      QWidget *w, KFormDesigner::ObjectTreeItem *item);
     virtual QList<QByteArray> autoSaveProperties(const QByteArray &classname);
 
-    virtual void setPropertyOptions(KFormDesigner::WidgetPropertySet& buf,
-                                    const KFormDesigner::WidgetInfo& info, QWidget *w);
+    virtual void setPropertyOptions(KoProperty::Set& set, const KFormDesigner::WidgetInfo& info, QWidget *w);
 
 public slots:
     void  editText();

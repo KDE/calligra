@@ -433,7 +433,7 @@ KFormDesignerPart::slotWidgetSelected(Form *form, bool multiple)
     ENABLE_ACTION("layout_vsplitter", twoSelected);
 
     KFormDesigner::Container *container = KFormDesigner::FormManager::self()->activeForm()->activeContainer();
-    ENABLE_ACTION("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
+    ENABLE_ACTION("break_layout", (container->layoutType() != Form::NoLayout));
 }
 
 void
@@ -452,7 +452,7 @@ KFormDesignerPart::slotFormWidgetSelected(Form *form)
     ENABLE_ACTION("layout_grid", hasChildren);
     ENABLE_ACTION("layout_hsplitter", twoSelected);
     ENABLE_ACTION("layout_vsplitter", twoSelected);
-    ENABLE_ACTION("break_layout", (form->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
+    ENABLE_ACTION("break_layout", (form->toplevelContainer()->layoutType() != Form::NoLayout));
 }
 
 void

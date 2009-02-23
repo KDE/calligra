@@ -415,22 +415,22 @@ void Map::saveOdfSettings( KoXmlWriter &settingsWriter )
 }
 
 
-bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
+bool Map::saveOdf( KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext )
 {
     // Saving the custom cell styles including the default cell style.
-    d->styleManager->saveOdf(mainStyles);
+    d->styleManager->saveOdf(savingContext.mainStyles());
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
     defaultColumnStyle.addPropertyPt("style:column-width", d->defaultColumnFormat->width());
     defaultColumnStyle.setDefaultStyle(true);
-    mainStyles.lookup(defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering);
+    savingContext.mainStyles().lookup(defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering);
 
     // Saving the default row style
     KoGenStyle defaultRowStyle(KoGenStyle::StyleTableRow, "table-row");
     defaultRowStyle.addPropertyPt("style:row-height", d->defaultRowFormat->height());
     defaultRowStyle.setDefaultStyle(true);
-    mainStyles.lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
+    savingContext.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
 
     if ( !d->strPassword.isEmpty() )
     {
@@ -440,18 +440,6 @@ bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *s
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
 
-    KTemporaryFile bodyTmpFile;
-    //Check that creation of temp file was successful
-    if (!bodyTmpFile.open())
-    {
-	    qWarning("Creation of temporary file to store document body failed.");
-	    return false;
-    }
-
-    KoXmlWriter bodyTmpWriter( &bodyTmpFile );
-
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoShapeSavingContext savingContext( bodyTmpWriter, mainStyles, embeddedSaver );
     OdfSavingContext tableContext(savingContext);
 
     foreach ( Sheet* sheet, d->lstSheets )
@@ -460,9 +448,6 @@ bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *s
     }
 
     tableContext.valStyle.writeStyle(xmlWriter);
-
-    bodyTmpFile.close();
-    xmlWriter.addCompleteElement( &bodyTmpFile );
 
     d->namedAreaManager->saveOdf(xmlWriter);
     d->databaseManager->saveOdf(xmlWriter);

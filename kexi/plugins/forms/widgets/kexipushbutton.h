@@ -22,7 +22,7 @@
 #define KexiPushButton_H
 
 #include <kpushbutton.h>
-#include "../kexiformeventhandler.h"
+#include <formeditor/kexiformeventhandler.h>
 
 //! @short Push Button widget for Kexi forms
 class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton

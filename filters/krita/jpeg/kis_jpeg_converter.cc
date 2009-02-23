@@ -272,7 +272,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
         Q_ASSERT(exifIO);
         QByteArray byteArray((const char*)marker->data + 6, marker->data_length - 6);
-        exifIO->loadFrom(layer->metaData(), new QBuffer(&byteArray));
+	QBuffer buf(&byteArray);
+        exifIO->loadFrom(layer->metaData(), &buf);
         // Interpret orientation tag
         if (layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation")) {
             KisMetaData::Entry& entry = layer->metaData()->getEntry("http://ns.adobe.com/tiff/1.0/", "Orientation");

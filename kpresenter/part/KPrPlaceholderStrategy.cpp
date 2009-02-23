@@ -74,7 +74,8 @@ KPrPlaceholderStrategy * KPrPlaceholderStrategy::create( const QString & present
     if ( presentationClass == "graphic" ) {
         strategy = new KPrPlaceholderPictureStrategy();
     }
-    else if ( presentationClass == "outline" || presentationClass == "title" ) {
+    // TODO make nice
+    else if ( presentationClass == "outline" || presentationClass == "title" || presentationClass == "subtitle" ) {
         strategy = new KPrPlaceholderTextStrategy( presentationClass );
     }
     else {
@@ -139,4 +140,14 @@ bool KPrPlaceholderStrategy::loadOdf( const KoXmlElement & element, KoShapeLoadi
 QString KPrPlaceholderStrategy::text() const
 {
     return i18n( m_placeholderData->m_text );
+}
+
+void KPrPlaceholderStrategy::init( const QMap<QString, KoDataCenter *> & dataCenterMap )
+{
+    Q_UNUSED( dataCenterMap );
+}
+
+KoShapeUserData * KPrPlaceholderStrategy::userData() const
+{
+    return 0;
 }

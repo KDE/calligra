@@ -28,7 +28,7 @@
 #include <QPaintEvent>
 
 #include "form.h"
-#include "formmanager.h"
+//#include "formmanager.h"
 #include "resizehandle.h"
 #include "container.h"
 #include "widgetfactory.h"
@@ -72,7 +72,7 @@ void ResizeHandle::setEditingMode(bool editing)
 void ResizeHandle::updatePos()
 {
     switch (m_pos) {
-    case Qt::TopLeftCorner:
+    case TopLeftCorner:
         move(m_set->m_widget->x() - 3, m_set->m_widget->y() - 3);
         setCursor(QCursor(Qt::SizeFDiagCursor));
         break;
@@ -80,7 +80,7 @@ void ResizeHandle::updatePos()
         move(m_set->m_widget->x() + m_set->m_widget->width() / 2 - 3, m_set->m_widget->y() - 3);
         setCursor(QCursor(Qt::SizeVerCursor));
         break;
-    case Qt::TopRightCorner:
+    case TopRightCorner:
         move(m_set->m_widget->x() + m_set->m_widget->width() - 3, m_set->m_widget->y() - 3);
         setCursor(QCursor(Qt::SizeBDiagCursor));
         break;
@@ -162,7 +162,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     int dummyx = ev->x() - m_x;
     int dummyy = ev->y() - m_y;
 
-    if (FormManager::self()->snapWidgetsToGrid() && ev->buttons() != Qt::LeftButton && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
+    if (m_set->m_form->isSnapWidgetsToGridEnabled() && ev->buttons() != Qt::LeftButton && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
         dummyy = (int)(((float)dummyy) / ((float)gridY) + 0.5);
         dummyy *= gridY;
         dummyx = (int)(((float)dummyx) / ((float)gridX) + 0.5);

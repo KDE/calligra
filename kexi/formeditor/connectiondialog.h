@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,13 +51,11 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
     Q_OBJECT
 
 public:
-    ConnectionDialog(QWidget *parent);
-    ~ConnectionDialog() {
-        ;
-    }
+    ConnectionDialog(Form *form, QWidget *parent);
+    ~ConnectionDialog();
 
     /*! Displays as modal dialog, to edit connections in Form::connectionBuffer(). */
-    void exec(Form *form);
+    void exec();
 
 protected:
     /*! Used when connection is ok. Displays a message in details widget and changes icon in 'OK?' column. */

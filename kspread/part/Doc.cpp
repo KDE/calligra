@@ -70,6 +70,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
+#include <KoShapeSavingContext.h>
 
 #include "BindingManager.h"
 #include "CalculationSettings.h"
@@ -359,51 +360,30 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
       foreach ( KoView* view, views() )
         static_cast<View *>( view )->selection()->emitCloseEditor( true );
     }
-    if ( !store->open( "content.xml" ) )
-        return false;
 
     KoStoreDevice dev( store );
     KoGenStyles mainStyles;//for compile
 
-    KTemporaryFile contentTmpFile;
-    //Check that temp file was successfully created
-    if (!contentTmpFile.open())
-    {
-      qWarning("Creation of temporary file to store document content failed.");
-      return false;
-    }
+    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
 
-    KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &dev, "office:document-content" );
-    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
-
-
+    KoXmlWriter* bodyWriter = documentContext.odfStore.bodyWriter();
+    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, documentContext.embeddedSaver );
 
     //todo fixme just add a element for testing saving content.xml
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:spreadsheet" );
-
-    int indexObj = 1;
-    int partIndexObj = 0;
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:spreadsheet" );
 
     // Saving the map.
-    map()->saveOdf( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
+    map()->saveOdf( *contentWriter, savingContext );
 
-    contentTmpWriter.endElement(); ////office:spreadsheet
-    contentTmpWriter.endElement(); ////office:body
+    bodyWriter->endElement(); ////office:spreadsheet
+    bodyWriter->endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
-    // And now we can copy over the contents from the tempfile to the real one
-    contentTmpFile.close();
-    contentWriter->addCompleteElement( &contentTmpFile );
+    documentContext.odfStore.closeContentWriter();
 
-
-    contentWriter->endElement(); // root element
-    contentWriter->endDocument();
-    delete contentWriter;
-    if ( !store->close() )
-        return false;
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
 
@@ -434,6 +414,10 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
 
     if(!store->close())
         return false;
+
+    if (!savingContext.saveDataCenter(store, manifestWriter)) {
+        return false;
+    }
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 

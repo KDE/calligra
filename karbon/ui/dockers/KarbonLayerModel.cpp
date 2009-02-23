@@ -307,7 +307,12 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
     // draw the background of the thumbnail
     thumb.fill( QColor( Qt::white ).rgb() );
 
-    painter.paintShapes( thumb );
+    QRect imageRect = thumb.rect();
+    // use 2 pixel border around the content
+    imageRect.adjust( 2, 2, -2, -2 );
+
+    QPainter p( &thumb );
+    painter.paintShapes( p, imageRect, painter.contentRect() );
 
     return thumb;
 }

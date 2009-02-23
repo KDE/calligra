@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@
 
 #include "events.h"
 #include "form.h"
-#include "formmanager.h"
+//#include "formmanager.h"
 #include "objecttree.h"
 
 
@@ -45,9 +45,10 @@ using namespace KFormDesigner;
 /////////////////////////////////////////////////////////////////////////////////
 ///////////// The dialog to edit or add/remove connections //////////////////////
 /////////////////////////////////////////////////////////////////////////////////
-ConnectionDialog::ConnectionDialog(QWidget *parent)
+ConnectionDialog::ConnectionDialog(Form *form, QWidget *parent)
         : KDialog(parent)
         , m_buffer(0)
+        , m_form(form)
 {
     setObjectName("connections_dialog");
     setModal(true);
@@ -109,6 +110,10 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
     this->newItem();
 }
 
+ConnectionDialog::~ConnectionDialog()
+{
+}
+
 void
 ConnectionDialog::initTable()
 {
@@ -148,10 +153,8 @@ ConnectionDialog::initTable()
     connect(m_table, SIGNAL(itemSelected(KexiDB::RecordData*)), this, SLOT(checkConnection(KexiDB::RecordData*)));
 }
 
-void
-ConnectionDialog::exec(Form *form)
+void ConnectionDialog::exec()
 {
-    m_form = form;
     updateTableData();
     KDialog::exec();
 }
@@ -189,7 +192,6 @@ ConnectionDialog::slotOk()
     }
 
     // then me make it replace form's current one
-    delete m_form->connectionBuffer();
     m_form->setConnectionBuffer(m_buffer);
 
     QDialog::accept();
@@ -363,9 +365,11 @@ ConnectionDialog::newItem()
 void
 ConnectionDialog::newItemByDragnDrop()
 {
-    KFormDesigner::FormManager::self()->startCreatingConnection();
-    connect(KFormDesigner::FormManager::self(), SIGNAL(connectionAborted(KFormDesigner::Form*)), this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
-    connect(KFormDesigner::FormManager::self(), SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)), this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)));
+    m_form->enterConnectingState();
+    connect(m_form, SIGNAL(connectionAborted(KFormDesigner::Form*)), 
+        this, SLOT(slotConnectionAborted(KFormDesigner::Form*)));
+    connect(m_form, SIGNAL(connectionCreated(KFormDesigner::Form*, Connection&)), 
+        this, SLOT(slotConnectionCreated(KFormDesigner::Form*, Connection&)));
 
     hide();
 }

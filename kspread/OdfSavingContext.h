@@ -44,37 +44,40 @@ public:
     OdfSavingContext(KoShapeSavingContext& shapeContext)
         : shapeContext(shapeContext) {}
 
-    void insertCellAnchoredShape(const Cell& cell, KoShape* shape)
+    void insertCellAnchoredShape(const Sheet *sheet, int row, int column, KoShape* shape)
     {
-        m_cellAnchoredShapes[cell.sheet()][cell.row()].insert(cell.column(), shape);
+        m_cellAnchoredShapes[sheet][row].insert(column, shape);
     }
 
     bool rowHasCellAnchoredShapes(const Sheet* sheet, int row) const
     {
-        if (!m_cellAnchoredShapes.contains(sheet)) {
+        if (!m_cellAnchoredShapes.contains(sheet))
             return false;
-        }
         return m_cellAnchoredShapes[sheet].contains(row);
     }
 
-    bool cellHasAnchoredShapes(const Cell& cell) const
+    bool cellHasAnchoredShapes(const Sheet *sheet, int row, int column) const
     {
-        if (!m_cellAnchoredShapes.contains(cell.sheet())) {
-            return false;
-        } else if (!m_cellAnchoredShapes[cell.sheet()].contains(cell.row())) {
-            return false;
-        }
-        return m_cellAnchoredShapes[cell.sheet()][cell.row()].contains(cell.column());
+        if (!rowHasCellAnchoredShapes (sheet, row)) return false;
+        return m_cellAnchoredShapes[sheet][row].contains(column);
     }
 
-    QList<KoShape*> cellAnchoredShapes(const Cell& cell) const
+    int nextAnchoredShape (const Sheet *sheet, int row, int column) const
     {
-        if (!m_cellAnchoredShapes.contains(cell.sheet())) {
+        if (!rowHasCellAnchoredShapes (sheet, row)) return 0;
+        QMultiHash<int, KoShape*>::const_iterator it;
+        for (it = m_cellAnchoredShapes[sheet][row].constBegin(); it != m_cellAnchoredShapes[sheet][row].constEnd(); ++it)
+            if (it.key() > column) return it.key();  // found one
+        return 0;
+    }
+
+    QList<KoShape*> cellAnchoredShapes(const Sheet *sheet, int row, int column) const
+    {
+        if (!m_cellAnchoredShapes.contains(sheet))
             return QList<KoShape*>();
-        } else if (!m_cellAnchoredShapes[cell.sheet()].contains(cell.row())) {
+        if (!m_cellAnchoredShapes[sheet].contains(row))
             return QList<KoShape*>();
-        }
-        return m_cellAnchoredShapes[cell.sheet()][cell.row()].values(cell.column());
+        return m_cellAnchoredShapes[sheet][row].values(column);
     }
 
 public:

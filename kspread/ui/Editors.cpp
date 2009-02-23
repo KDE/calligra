@@ -1466,8 +1466,9 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     d->cellTool = 0;
     d->highlighter = 0;
     d->isArray = false;
-    setMinimumSize(100, 30);
+    setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect (this, SIGNAL (textChanged()), this, SLOT (slotTextChanged ()));
+    adjustHeight ();
 }
 
 ExternalEditor::~ExternalEditor()
@@ -1514,6 +1515,7 @@ void ExternalEditor::setText(const QString &text)
     QTextCursor textCursor = this->textCursor();
     textCursor.setPosition(d->cellTool->editor()->cursorPosition());
     setTextCursor(textCursor);
+    adjustHeight ();
 }
 
 void ExternalEditor::keyPressEvent(QKeyEvent *event)
@@ -1555,7 +1557,7 @@ void ExternalEditor::focusInEvent(QFocusEvent* event)
     if (!d->cellTool->editor())
         d->cellTool->createEditor(false /* keep content */, false /* no focus */);
     KTextEdit::focusInEvent(event);
-
+    adjustHeight ();
 }
 
 void ExternalEditor::focusOutEvent(QFocusEvent* event)
@@ -1563,12 +1565,32 @@ void ExternalEditor::focusOutEvent(QFocusEvent* event)
     Q_ASSERT(d->cellTool);
     d->cellTool->selection()->setLastEditorWithFocus(Selection::ExternalEditor);
     KTextEdit::focusOutEvent(event);
+    adjustHeight ();
 }
 
 void ExternalEditor::slotTextChanged ()
 {
   if (!hasFocus()) return;  // only report change if we have focus
+  adjustHeight ();
   emit textChanged (toPlainText());
+}
+
+// this adjusts the height of the editor - if it's not focused, it's fixed to one line, otherwise
+// it auto-adjusts its height based on how many lines it holds
+void ExternalEditor::adjustHeight ()
+{
+  int lines = 1;  // if we don't have focus, we are single-line
+  if (hasFocus()) {
+    lines = document()->firstBlock().layout()->lineCount();
+    if (lines < 1) lines = 1;
+    if (lines > 8) lines = 8;
+  }
+
+  QFontMetrics fm (currentFont());
+  // one pixel space between lines, also one pixel spaces at the top/bottom
+  int newheight = lines * (fm.height() + 1) + 2;
+  int frameheight = rect().height() - contentsRect().height();
+  setFixedHeight (frameheight + newheight + 1);
 }
 
 #if 0 // KSPREAD_DISCARD_FORMULA_BAR

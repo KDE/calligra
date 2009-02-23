@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2005 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -52,9 +52,6 @@ public:
     KexiFormPart(QObject *parent, const QStringList &);
     virtual ~KexiFormPart();
 
-    //! \return a pointer to Forms Widget Library.
-    static KFormDesigner::WidgetLibrary* library();
-
     KexiDataSourcePage* dataSourcePage() const;
 
     void generateForm(KexiDB::FieldList *list, QDomDocument &domDoc);
@@ -84,19 +81,19 @@ protected:
     virtual KexiWindowData* createWindowData(KexiWindow* window);
 
     virtual KexiView* createView(QWidget *parent, KexiWindow* window,
-                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString, QVariant>* staticObjectArgs = 0);
+                                 KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode, 
+                                 QMap<QString, QVariant>* staticObjectArgs = 0);
 
     virtual void initPartActions();
     virtual void initInstanceActions();
     virtual void setupCustomPropertyPanelTabs(KTabWidget *tab);
 
-    static KFormDesigner::WidgetLibrary* static_formsLibrary;
-
 protected slots:
-    void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
-    void slotAssignAction();
-    void slotPropertyChanged(QWidget *widget, const QByteArray &name, const QVariant &value);
-    void slotWidgetCreatedByFormsLibrary(QWidget* widget);
+//2.0 not needed, the code from slot receiving this signal is moved to Form itself
+//    void slotAutoTabStopsSet(KFormDesigner::Form *form, bool set);
+//2.0 moved to KexiFormManager    void slotAssignAction();
+//2.0 moved to Form    void slotPropertyChanged(QWidget *widget, const QByteArray &name, const QVariant &value);
+//2.0 moved to KexiFormManager    void slotWidgetCreatedByFormsLibrary(QWidget* widget);
 
 private:
     class Private;

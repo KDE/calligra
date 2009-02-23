@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #include "objecttree.h"
 #include "form.h"
 #include "container.h"
-#include "formmanager.h"
+//unused #include "formmanager.h"
 #include "widgetlibrary.h"
 
 #include "objecttreeview.h"
@@ -207,7 +207,7 @@ ObjectTreeView::slotColumnSizeChanged(int)
 }
 
 void
-ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint &)
+ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const QPoint & pos)
 {
     if (list != this || !m_form || !item)
         return;
@@ -216,7 +216,7 @@ ObjectTreeView::displayContextMenu(K3ListView *list, Q3ListViewItem *item, const
     if (!w)
         return;
 
-    FormManager::self()->createContextMenu(w, m_form->activeContainer());
+    m_form->createContextMenu(w, m_form->activeContainer(), pos);
 }
 
 ObjectTreeViewItem*
@@ -234,7 +234,7 @@ ObjectTreeView::findItem(const QString &name)
 }
 
 void
-ObjectTreeView::setSelectedWidget(QWidget *w, bool add)
+ObjectTreeView::selectWidget(QWidget *w, bool add)
 {
     blockSignals(true); // to avoid recursion
 
@@ -272,7 +272,7 @@ ObjectTreeView::slotSelectionChanged()
         ObjectTreeViewItem *it = static_cast<ObjectTreeViewItem*>(item);
         QWidget *w = it->objectTree()->widget();
         if (w && !m_form->selectedWidgets()->contains(w)) {
-            m_form->setSelectedWidget(w, true, true);
+            m_form->selectWidget(w, Form::AddToPreviousSelection | Form::DontRaise | Form::LastSelection);
         }
     }
     if (hadFocus)
@@ -334,9 +334,9 @@ ObjectTreeView::setForm(Form *form)
     loadTree(tree, m_topItem);
 
     if (!form->selectedWidgets()->isEmpty())
-        setSelectedWidget(form->selectedWidgets()->first());
+        selectWidget(form->selectedWidgets()->first());
     else
-        setSelectedWidget(form->widget());
+        selectWidget(form->widget());
 }
 
 void

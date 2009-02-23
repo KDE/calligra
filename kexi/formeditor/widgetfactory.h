@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2006 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,10 +22,9 @@
 #ifndef KFORMDESIGNERWIDGETFACTORY_H
 #define KFORMDESIGNERWIDGETFACTORY_H
 
-#include <qobject.h>
-#include <qpointer.h>
-#include <qpixmap.h>
-#include <qmenu.h>
+#include <QObject>
+#include <QPointer>
+#include <QPixmap>
 #include <QHash>
 
 #include <kexi_export.h>
@@ -37,6 +36,7 @@
 #define KEXI_FORMS_NO_LIST_WIDGET
 
 class QWidget;
+class QMenu;
 class QDomElement;
 class QDomDocument;
 class QVariant;
@@ -56,7 +56,7 @@ class WidgetLibrary;
 class Container;
 class ResizeHandleSet;
 class ObjectTreeItem;
-class WidgetPropertySet;
+// removed class WidgetPropertySet;
 class Form;
 
 /**
@@ -294,13 +294,15 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
     Q_OBJECT
 public:
     //! Options used in createWidget()
-    enum CreateWidgetOptions {
-        AnyOrientation = 1, //!< any orientation hint
-        HorizontalOrientation = 2,  //!< horizontal orientation hint
-        VerticalOrientation = 4, //!< vertical orientation hint
-        DesignViewMode = 8, //!< create widget in design view mode, otherwise preview mode
+    enum CreateWidgetOption {
+        NoCreateWidgetOptions = 0,
+        AnyOrientation = 1,        //!< any orientation hint
+        HorizontalOrientation = 2, //!< horizontal orientation hint
+        VerticalOrientation = 4,   //!< vertical orientation hint
+        DesignViewMode = 8,        //!< create widget in design view mode, otherwise preview mode
         DefaultOptions = AnyOrientation | DesignViewMode
     };
+    Q_DECLARE_FLAGS(CreateWidgetOptions, CreateWidgetOption)
 
     WidgetFactory(QObject *parent = 0, const char *name = 0);
     virtual ~WidgetFactory();
@@ -332,7 +334,7 @@ public:
      */
     virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
                                   KFormDesigner::Container *container,
-                                  int options = DefaultOptions) = 0;
+                                  CreateWidgetOptions options = DefaultOptions) = 0;
 
     /*! Creates custom actions. Reimplement this if you need to add some
      actions coming from the factory. */
@@ -399,11 +401,11 @@ public:
         return m_propValDesc[name];
     }
 
-    /*! This method is called after WidgetPropertySet was filled with properties
+    /*! This method is called after form's property set was filled with properties
      of a widget \a w, of class defined by \a info.
      Default implementation does nothing.
-     Implement this if you need to set options for properties within the set \a buf. */
-    virtual void setPropertyOptions(WidgetPropertySet& buf, const WidgetInfo& info, QWidget *w);
+     Implement this if you need to set options for properties within the set \a set. */
+    virtual void setPropertyOptions(KoProperty::Set& set, const WidgetInfo& info, QWidget *w);
 
     /*! \return internal property \a property for a class \a classname.
      Internal properties are not stored within objects, but can be just provided
@@ -554,6 +556,8 @@ protected:
 
     friend class WidgetLibrary;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(WidgetFactory::CreateWidgetOptions)
 
 //! macro to declare KFormDesigner-compatible widget factory as a KDE Component factory
 #define KFORMDESIGNER_WIDGET_FACTORY(factoryClassName, libraryName) \

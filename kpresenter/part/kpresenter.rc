@@ -20,8 +20,6 @@
             <Action name="edit_replace"/>
             <Separator/>
             <Action name="edit_customslideshows"/>
-            <Separator/>
-            <Action name="edit_createanimation"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>

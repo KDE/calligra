@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,7 +46,8 @@ public:
      * Constructor
      * @param shape the shape that displays the content, containing size/position
      * @param parent the parent frameset
-     * @param pageNumber the page number is normally -1, only set when loading page anchored fames to the page where the frame should be shown
+     * @param pageNumber the page number is normally -1, only set when loading page anchored frames to the
+     *      page where the frame should be positioned
      */
     KWFrame(KoShape *shape, KWFrameSet *parent, int pageNumber = -1);
     virtual ~KWFrame();
@@ -165,6 +166,13 @@ public:
      */
     virtual void setFrameSet(KWFrameSet *newFrameSet);
 
+    void clearLoadingData() {
+        m_anchoredPageNumber = -1;
+    }
+    int loadingPageNumber() const {
+        return m_anchoredPageNumber;
+    }
+
     /**
      * States if this frame is a copy of the previous one.
      * If this frame is a copy, then this frame is drawn with the same content as the
@@ -175,7 +183,7 @@ public:
 
     /**
      * Sets if this frame is a copy of the previous one.
-     * After this call this frame is drawn with the same content as the previous frame in this frameset.
+     * After this call this frame is drawn with the same content as the previous frame in the owning frameset.
      */
     void makeCopyFrame();
 
@@ -214,7 +222,7 @@ private:
     // The page number is only used during loading.
     // It is set to the page number if the frame contains a page anchored frame.
     // In all other cases it is set to -1.
-    int m_pageNumber;
+    int m_anchoredPageNumber;
 
     KWFrameSet *m_frameSet;
     KWOutlineShape *m_outline;

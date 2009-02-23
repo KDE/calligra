@@ -28,11 +28,7 @@
 static const char *description =
     I18N_NOOP("Database creation for everyone")
 #ifndef CUSTOM_VERSION
-#ifdef KEXI_STANDALONE
-    "\n\n" I18N_NOOP("This is standalone version of the application distributed outside of KOffice suite.")
-#else
-    "\n\n" I18N_NOOP("This application version is distributed with KOffice suite.")
-#endif
+    "\n\n" I18N_NOOP("This application is a part of the KOffice suite.")
 #endif
     ;
 

@@ -1315,10 +1315,12 @@ void CellToolBase::Private::createPopupMenuActions()
 
 void CellToolBase::Private::relayoutDocker (bool wide) {
     // user input is moved accordingly to the "wide" param, the rest stays in one place
+    if (userInput->hasFocus()) return;  // do nothing while the user input has focus
     widgetLayout->removeWidget (userInput);
     if (wide)
-      widgetLayout->addWidget (userInput, 0, 3, 2, 1);
+      widgetLayout->addWidget (userInput, 0, 3);
     else
       widgetLayout->addWidget (userInput, 1, 0, 1, 5);
+    hasWideLayout = wide;
 }
 

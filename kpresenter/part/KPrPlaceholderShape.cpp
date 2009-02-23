@@ -94,3 +94,17 @@ KoShape * KPrPlaceholderShape::createShape( const QMap<QString, KoDataCenter *> 
     }
     return shape;
 }
+
+void KPrPlaceholderShape::initStrategy( const QMap<QString, KoDataCenter *> & dataCenterMap )
+{
+    Q_ASSERT( m_strategy );
+    if ( m_strategy ) {
+        m_strategy->init( dataCenterMap );
+    }
+}
+
+KoShapeUserData * KPrPlaceholderShape::userData() const
+{
+    Q_ASSERT( m_strategy );
+    return m_strategy ? m_strategy->userData() : 0;
+}

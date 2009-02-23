@@ -40,6 +40,7 @@
 class KWView;
 class KWPage;
 class KWFrameSet;
+class MagicCurtain;
 
 class KoInlineTextObjectManager;
 
@@ -230,6 +231,8 @@ private:
     QMap<QString, KoDataCenter *>  m_dataCenterMap;
 
     KoInlineTextObjectManager *m_inlineTextObjectManager;
+
+    MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
 };
 
 /// \internal

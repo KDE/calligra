@@ -22,11 +22,9 @@
 
 #include <qdir.h>
 #include <qlabel.h>
-#include <qlayout.h>
 #include <qtextcodec.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <QGridLayout>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -51,8 +49,7 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
 
     QWidget *plainPage = new QWidget(this);
     setMainWidget(plainPage);
-    Q3GridLayout *lyr = new Q3GridLayout(plainPage, 4, 3, KDialog::marginHint(),
-                                         KDialog::spacingHint());
+    QGridLayout *lyr = new QGridLayout(plainPage);
 
     m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage, selectedEncoding);
     m_encodingComboBox->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -66,14 +63,14 @@ OptionsDialog::OptionsDialog(const QString& databaseFile, const QString& selecte
         plainPage);
     lbl->setAlignment(Qt::AlignLeft | Qt::TextWordWrap);
     lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    lyr->addMultiCellWidget(lbl, 0, 0, 0, 2);
+    lyr->addWidget(lbl, 0, 0, 1, 3);
 
     QLabel* lbl2 = new QLabel(m_encodingComboBox, i18n("Text encoding:"), plainPage);
     lyr->addWidget(lbl2, 1, 0);
 
     m_chkAlwaysUseThisEncoding = new QCheckBox(
         i18n("Always use this encoding in similar situations"), plainPage);
-    lyr->addMultiCellWidget(m_chkAlwaysUseThisEncoding, 2, 2, 1, 2);
+    lyr->addWidget(m_chkAlwaysUseThisEncoding, 2, 1, 1, 2);
 
     lyr->addItem(new QSpacerItem(20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding), 3, 1);
     lyr->addItem(new QSpacerItem(121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum), 1, 2);

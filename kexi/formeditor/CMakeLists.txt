@@ -1,5 +1,3 @@
-
-
 add_subdirectory( factories )
 
 include_directories( ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/widget/utils ${CMAKE_SOURCE_DIR}/kexi/widget/tableview ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${KDE4_INCLUDES}  )
@@ -15,36 +13,46 @@ set(kformdesigner_LIB_SRCS
    form.cpp 
    objecttree.cpp 
    formIO.cpp 
-   formmanager.cpp 
+   FormWidget.cpp
    objecttreeview.cpp 
    spring.cpp 
    commands.cpp 
    events.cpp 
-   connectiondialog.cpp 
    richtextdialog.cpp 
    tabstopdialog.cpp 
    editlistviewdialog.cpp 
    utils.cpp 
-   widgetpropertyset.cpp 
 #todo   kfdpixmapedit.cpp
    widgetwithsubpropertiesinterface.cpp
+#removed in 2.0 formmanager.cpp
+#removed in 2.0 widgetpropertyset.cpp 
+   kexiformeventhandler.cpp # from libkexiformutils
+   kexiactionselectiondialog.cpp # from libkexiformutils
 )
 
-
-kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
-
-
-target_link_libraries(kformdesigner
+set(kformdesigner_LIBS
   ${KOPROPERTY_LIBS}
   kexiutils
-  kexiextendedwidgets # for ConnectionDialog
-  kexidatatable       # for ConnectionDialog
+  kexicore
+  kexiextendedwidgets
   ${KDE4_KDE3SUPPORT_LIBS}
   ${KDE4_KPARTS_LIBS}
 )
 
-# todo: add kexiextendedwidgets kexiguiutils kexidatatable
+# enable to add signal/slot connections
+# set(KFD_SIGSLOTS true)
 
+if(KFD_SIGSLOTS)
+  ADD_DEFINITIONS( 
+    -DKFD_SIGSLOTS=1
+  )
+  list(APPEND kformdesigner_LIB_SRCS connectiondialog.cpp)
+  list(APPEND kformdesigner_LIBS kexiextendedwidgets kexidatatable)
+endif(KFD_SIGSLOTS)
+
+kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
+
+target_link_libraries(kformdesigner ${kformdesigner_LIBS})
 
 set_target_properties(kformdesigner PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kformdesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})

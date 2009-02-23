@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -78,8 +78,8 @@ public:
     //! Options for the widget's behaviour or look
     enum Option {
         NoOptions = 0,
-        DisableSelection,  //!< disables item selection
-        DisableContextMenu //!< disables context menu
+        DisableSelection = 1,  //!< disables item selection
+        DisableContextMenu = 2 //!< disables context menu
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -101,7 +101,7 @@ public:
 public slots:
     /*! Sets the widget \a w as selected item, so it will be written bold.
      It is added to current selection if \a add is true. */
-    void setSelectedWidget(QWidget *w, bool add = false);
+    void selectWidget(QWidget *w, bool add = false);
 
     /*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
     void addItem(ObjectTreeItem *item);

@@ -42,6 +42,8 @@ public:
 
     KoShape * createShape( const QMap<QString, KoDataCenter *> & dataCenterMap );
 
+    virtual void initStrategy( const QMap<QString, KoDataCenter *> & dataCenterMap );
+    KoShapeUserData * userData() const;
 private:
     KPrPlaceholderStrategy * m_strategy;
 };

@@ -403,7 +403,7 @@ KFormDesignerKDevPart::slotWidgetSelected(Form *form, bool multiple)
     ENABLE_ACTION("layout_grid", multiple);
 
     KFormDesigner::Container *container = KFormDesigner::FormManager::self()->activeForm()->activeContainer();
-    ENABLE_ACTION("break_layout", (container->layoutType() != KFormDesigner::Container::NoLayout));
+    ENABLE_ACTION("break_layout", (container->layoutType() != Form::NoLayout));
 }
 
 void
@@ -416,7 +416,7 @@ KFormDesignerKDevPart::slotFormWidgetSelected(Form *form)
     ENABLE_ACTION("layout_hbox", true);
     ENABLE_ACTION("layout_vbox", true);
     ENABLE_ACTION("layout_grid", true);
-    ENABLE_ACTION("break_layout", (form->toplevelContainer()->layoutType() != KFormDesigner::Container::NoLayout));
+    ENABLE_ACTION("break_layout", (form->toplevelContainer()->layoutType() != Form::NoLayout));
 }
 
 void

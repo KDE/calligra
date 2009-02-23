@@ -35,10 +35,11 @@
 
 #include "kexidbform.h"
 #include "kexiformpart.h"
+#include "kexiformmanager.h"
 #include "kexiformscrollview.h"
 
 #include <formeditor/objecttree.h>
-#include <formeditor/formmanager.h>
+//2.0 #include <formeditor/formmanager.h>
 #include <formeditor/widgetlibrary.h>
 #include <widget/tableview/kexidataawareobjectiface.h>
 #include <widget/kexiscrollview.h>
@@ -502,7 +503,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
 
             if (tab || backtab) {
                 //the watched widget can be a subwidget of a real widget, e.g. a drop down button of image box: find it
-                while (!KexiFormPart::library()->widgetInfoForClassName(
+                while (!KexiFormManager::self()->library()->widgetInfoForClassName(
                             realWidget->metaObject()->className())) {
                     realWidget = realWidget->parentWidget();
                 }
@@ -697,9 +698,10 @@ void KexiDBForm::setCursor(const QCursor & cursor)
 {
     //js: empty, to avoid fscking problems with random cursors!
     //! @todo?
-
-    if (KFormDesigner::FormManager::self()->isInserting()) //exception
+        
+    if (form() && form()->state() == KFormDesigner::Form::WidgetInserting) { //exception
         KexiDBFormBase::setCursor(cursor);
+    }
 }
 
 //! @todo: Qt4? XORed resize rectangles instead of black widgets

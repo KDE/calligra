@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2007-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2007-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,14 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcursor.h>
-#include <qobject.h>
-#include <qtabwidget.h>
-#include <qtabbar.h>
+#include <QApplication>
+#include <QClipboard>
+#include <QCursor>
+#include <QDomDocument>
+#include <QMimeData>
+#include <QTabWidget>
+#include <QTabBar>
+
 #include <kdebug.h>
 #include <kexiutils/utils.h>
 
 #include "form.h"
+#include "formIO.h"
 #include "objecttree.h"
 #include "utils.h"
 
@@ -202,6 +207,65 @@ VerticalWidgetList::~VerticalWidgetList()
 void VerticalWidgetList::sort()
 {
     qSort(begin(), end(), *m_lessThan);
+}
+
+// ----
+
+QMimeData *KFormDesigner::deepCopyOfClipboardData()
+{
+    QClipboard *cb = QApplication::clipboard();
+    QMimeData *data = new QMimeData();
+    foreach(const QString& format, data->formats()) {
+        data->setData(format, data->data(format));
+    }
+    return data;
+}
+
+void KFormDesigner::copyToClipboard(const QString& xml)
+{
+    QMimeData *data = new QMimeData();
+    data->setText(xml);
+    data->setData(KFormDesigner::mimeType(), xml.toUtf8());
+    QClipboard *cb = QApplication::clipboard();
+    cb->setMimeData(data);
+}
+
+void KFormDesigner::widgetsToXML(QDomDocument& doc, 
+    QHash<QByteArray, QByteArray>& containers,
+    QHash<QByteArray, QByteArray>& parents,
+    const Form& form, const QWidgetList &list)
+{
+    containers.clear();
+    parents.clear();
+    doc = QDomDocument("UI");
+    doc.appendChild(doc.createElement("UI"));
+    QDomElement parent = doc.namedItem("UI").toElement();
+
+    QWidgetList topLevelList(list);
+    KFormDesigner::removeChildrenFromList(topLevelList);
+
+    foreach (QWidget *w, topLevelList) {
+        ObjectTreeItem *item = form.objectTree()->lookup(w->objectName());
+        if (!item)
+            return;
+
+        // We need to store both parentContainer and parentWidget as they may be different (eg for TabWidget page)
+        containers.insert(
+            item->name().toLatin1(),
+            form.parentContainer(item->widget())->widget()->objectName().toLatin1().constData()
+        );
+        parents.insert(
+            item->name().toLatin1(),
+            item->parent()->name().toLatin1()
+        );
+        FormIO::saveWidget(item, parent, doc);
+#ifdef KFD_SIGSLOTS
+        form.connectionBuffer()->saveAllConnectionsForWidget(
+            item->widget()->objectName(), doc);
+#endif
+    }
+
+    FormIO::cleanClipboard(parent);
 }
 
 #include "utils.moc"

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2006-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2006-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@
 namespace KFormDesigner
 {
 class Form;
-class FormManager;
 class Container;
 }
 
@@ -172,7 +171,7 @@ class KFDTabWidget : public KFormDesigner::TabWidget
     Q_OBJECT
 
 public:
-    KFDTabWidget(QWidget *parent);
+    KFDTabWidget(KFormDesigner::Container *container, QWidget *parent);
     virtual ~KFDTabWidget();
 
     virtual QSize sizeHint() const;
@@ -183,12 +182,17 @@ public:
     //! Used to emit handleDropEvent() signal needed to control dropping on the container's surface
     virtual void dropEvent(QDropEvent *e);
 
+    KFormDesigner::Container *container() const { return m_container; }
+    
 signals:
     //! Needed to control dragging over the container's surface
     void handleDragMoveEvent(QDragMoveEvent *e);
 
     //! Needed to control dropping on the container's surface
     void handleDropEvent(QDropEvent *e);
+
+private:
+    KFormDesigner::Container *m_container;
 };
 
 //! A group box widget
@@ -221,7 +225,7 @@ class SubForm : public Q3ScrollView
     Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
 
 public:
-    SubForm(QWidget *parent);
+    SubForm(KFormDesigner::Form *parentForm, QWidget *parent);
     ~SubForm();
 
     //! \return the name of the subform inside the db
@@ -231,8 +235,8 @@ public:
     void      setFormName(const QString &name);
 
 private:
-//  KFormDesigner::FormManager *m_manager;
     KFormDesigner::Form   *m_form;
+    KFormDesigner::Form   *m_parentForm;
     QWidget  *m_widget;
     QString   m_formName;
 };
@@ -246,9 +250,9 @@ public:
     ContainerFactory(QObject *parent, const QStringList &args);
     virtual ~ContainerFactory();
 
-    virtual QWidget *createWidget(const QByteArray& classname, 
-                                  QWidget *parent, const char *name, KFormDesigner::Container *container,
-                                  int options = DefaultOptions);
+    virtual QWidget* createWidget(const QByteArray &classname, QWidget *parent, const char *name,
+                                  KFormDesigner::Container *container,
+                                  CreateWidgetOptions options = DefaultOptions);
     virtual bool createMenuActions(const QByteArray& classname, QWidget *w,
                                    QMenu *menu, KFormDesigner::Container *container);
     virtual bool startEditing(const QByteArray& classname, QWidget *w,
@@ -276,11 +280,6 @@ public slots:
     void prevStackPage();
     void nextStackPage();
     void reorderTabs(int oldpos, int newpos);
-
-private:
-//  QWidget *m_widget;
-//  KFormDesigner::Container *m_container;
-//  KFormDesigner::FormManager  *m_manager;
 };
 
 #endif

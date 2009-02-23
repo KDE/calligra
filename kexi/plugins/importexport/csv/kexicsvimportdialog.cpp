@@ -34,20 +34,16 @@
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <q3table.h>
-#include <qlayout.h>
 #include <q3filedialog.h>
 #include <qpainter.h>
 #include <qtextcodec.h>
 #include <qtimer.h>
 #include <qfontmetrics.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3Frame>
+#include <QVBoxLayout>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QTextStream>
-#include <Q3GridLayout>
-#include <Q3CString>
+#include <QGridLayout>
 #include <QPixmap>
 #include <QToolTip>
 
@@ -203,7 +199,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     QWidget *plainPage = new QWidget(this);
     setMainWidget(plainPage);
 
-    Q3VBoxLayout *lyr = new Q3VBoxLayout(plainPage, 0, KDialog::spacingHint());
+    QVBoxLayout *lyr = new QVBoxLayout(plainPage);
 
     m_infoLbl = new KexiCSVInfoLabel(
         m_mode == File ? i18n("Preview of data from file:")
@@ -213,18 +209,18 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     lyr->addWidget(m_infoLbl);
 
     QWidget* page = new QFrame(plainPage);
-    Q3GridLayout *glyr = new Q3GridLayout(page, 4, 5, 0, KDialog::spacingHint());
+    QGridLayout *glyr = new QGridLayout(page);
     lyr->addWidget(page);
 
     // Delimiter: comma, semicolon, tab, space, other
     m_delimiterWidget = new KexiCSVDelimiterWidget(true /*lineEditOnBottom*/, page);
     m_detectDelimiter = true;
-    glyr->addMultiCellWidget(m_delimiterWidget, 1, 2, 0, 0);
+    glyr->addWidget(m_delimiterWidget, 1, 0, 2, 1);
 
     QLabel *delimiterLabel = new QLabel(i18n("Delimiter:"), page);
     delimiterLabel->setBuddy(m_delimiterWidget);
     delimiterLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-    glyr->addMultiCellWidget(delimiterLabel, 0, 0, 0, 0);
+    glyr->addWidget(delimiterLabel, 0, 0, 1, 1);
 
     // Format: number, text...
 //! @todo Object and Currency types
@@ -246,7 +242,7 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     ADD_TYPE(typeName, Time);
     ADD_TYPE(typeName, DateTime);
 #undef ADD_TYPE
-    glyr->addMultiCellWidget(m_formatCombo, 1, 1, 1, 1);
+    glyr->addWidget(m_formatCombo, 1, 1, 1, 1);
 
     m_formatLabel = new QLabel(page);
     m_formatLabel->setBuddy(m_formatCombo);
@@ -289,12 +285,12 @@ KexiCSVImportDialog::KexiCSVImportDialog(Mode mode, QWidget * parent)
     m_ignoreDuplicates = new QCheckBox(page);
     m_ignoreDuplicates->setObjectName("m_ignoreDuplicates");
     m_ignoreDuplicates->setText(i18n("Ignore duplicated delimiters"));
-    glyr->addMultiCellWidget(m_ignoreDuplicates, 2, 2, 2, 4);
+    glyr->addWidget(m_ignoreDuplicates, 2, 2, 1, 3);
 
     m_1stRowForFieldNames = new QCheckBox(page);
     m_1stRowForFieldNames->setObjectName("m_1stRowForFieldNames");
     m_1stRowForFieldNames->setText(i18n("First row contains column names"));
-    glyr->addMultiCellWidget(m_1stRowForFieldNames, 3, 3, 2, 4);
+    glyr->addWidget(m_1stRowForFieldNames, 3, 2, 1, 3);
 
     m_table = new KexiCSVImportDialogTable(plainPage);
     m_table->setObjectName("m_table");

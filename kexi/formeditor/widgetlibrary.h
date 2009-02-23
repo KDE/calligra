@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@ class QWidget;
 class QVariant;
 class QDomDocument;
 class QDomElement;
+class QActionGroup;
 
 namespace KFormDesigner
 {
@@ -43,7 +44,7 @@ namespace KFormDesigner
 class Container;
 class ObjectTreeItem;
 class WidgetLibraryPrivate;
-class WidgetPropertySet;
+//removed class WidgetPropertySet;
 
 typedef QList<KAction*> ActionList;
 
@@ -73,8 +74,9 @@ public:
     /**
      * creates actions for widget creating
      */
-    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
-                                   QObject *receiver, const char *slot);
+    void createWidgetActions(QActionGroup *group);
+//prev    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
+//prev                                   QObject *receiver, const char *slot);
 
     void addCustomWidgetActions(KActionCollection *col);
 
@@ -88,7 +90,7 @@ public:
      * \return the widget or 0 if something falid
      */
     QWidget *createWidget(const QByteArray &classname, QWidget *parent, const char *name, Container *c,
-                          int options = WidgetFactory::DefaultOptions);
+                          WidgetFactory::CreateWidgetOptions options = WidgetFactory::DefaultOptions);
 
     bool createMenuActions(const QByteArray &c, QWidget *w, QMenu *menu,
                            KFormDesigner::Container *container);
@@ -100,7 +102,7 @@ public:
      * - WidgetFactory::HorizontalOrientation
      * - WidgetFactory::VerticalOrientation
      */
-    WidgetFactory::CreateWidgetOptions showOrientationSelectionPopup(
+    WidgetFactory::CreateWidgetOption showOrientationSelectionPopup(
         const QByteArray &classname, QWidget* parent, const QPoint& pos);
 
     QString internalProperty(const QByteArray& classname, const QByteArray& property);
@@ -163,8 +165,8 @@ public:
      @see WidgetFactory::propertyDescForValue() */
     QString propertyDescForValue(WidgetInfo *winfo, const QByteArray& name);
 
-    /*! Used by WidgetPropertySet::setWidget() after creating properties. */
-    void setPropertyOptions(WidgetPropertySet &list, const WidgetInfo& winfo, QWidget* w);
+    /*! Used by Form::createPropertiesForWidget() after creating properties. */
+    void setPropertyOptions(KoProperty::Set& set, const WidgetInfo& winfo, QWidget* w);
 
     /*! \return true if property sets should be reloaded for \a property property,
      \a classname class and widget \a w when a given property value changed. */
@@ -172,7 +174,7 @@ public:
             const QByteArray& property);
 
 signals:
-    void prepareInsert(const QByteArray &c);
+    void widgetActionToggled(const QByteArray& _class);
 
     //! Received by KexiFormPart::slotWidgetCreatedByFormsLibrary() so we can add drag/drop
     //! connection for the new widget
