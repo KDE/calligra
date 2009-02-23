@@ -235,7 +235,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
         // (from obsolete kexiformpartinstui.rc)
         QStringList formActions;
         formActions
-            << "pointer"
+            << "edit_pointer"
             << "" //sep
             << "library_widget_KexiDBAutoField"
             << "library_widget_KexiDBLabel"
