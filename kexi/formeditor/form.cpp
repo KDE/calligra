@@ -2121,9 +2121,9 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 //    QWidgetList *lst = container->form()->selectedWidgets();
 //    QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
 //    QPoint realMenuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
-    d->insertionPoint = container->widget()->mapToGlobal(menuPos);
+    d->insertionPoint = menuPos; //container->widget()->mapToGlobal(menuPos);
 
-    QAction *result = menu.exec(d->insertionPoint);
+    QAction *result = menu.exec( container->widget()->mapToGlobal(menuPos) );
     
     if (!result) {
         // nothing to do
@@ -2224,17 +2224,18 @@ void Form::pasteWidget()
     if (!objectTree()) {
         return;
     }
-    const QMimeData *mimedata = QApplication::clipboard()->mimeData();
-    if (!mimedata->hasFormat( KFormDesigner::mimeType() ) && !mimedata->hasText()) {
+    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    const bool mimeDataHasXmlUiFormat = mimeData->hasFormat( KFormDesigner::mimeType() );
+    if (!mimeDataHasXmlUiFormat && !mimeData->hasText()) {
         return;
     }
     QDomDocument doc;
-    if (!doc.setContent( mimedata->hasFormat(KFormDesigner::mimeType()) 
-        ? mimedata->data(KFormDesigner::mimeType()) : mimedata->text() ))
+    if (!doc.setContent( mimeDataHasXmlUiFormat 
+        ? QString::fromUtf8( mimeData->data(KFormDesigner::mimeType())) : mimeData->text() ))
     {
         return;
     }
-    if (!doc.namedItem("UI").hasChildNodes()) {
+    if (!doc.firstChildElement("UI").hasChildNodes()) {
         return;
     }
 

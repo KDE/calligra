@@ -223,6 +223,7 @@ QMimeData *KFormDesigner::deepCopyOfClipboardData()
 
 void KFormDesigner::copyToClipboard(const QString& xml)
 {
+    kDebug() << xml;
     QMimeData *data = new QMimeData();
     data->setText(xml);
     data->setData(KFormDesigner::mimeType(), xml.toUtf8());
@@ -239,7 +240,7 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
     parents.clear();
     doc = QDomDocument("UI");
     doc.appendChild(doc.createElement("UI"));
-    QDomElement parent = doc.namedItem("UI").toElement();
+    QDomElement parent = doc.firstChildElement("UI");
 
     QWidgetList topLevelList(list);
     KFormDesigner::removeChildrenFromList(topLevelList);

@@ -748,11 +748,11 @@ InsertWidgetCommand::InsertWidgetCommand(const Container& container)
 {
     d->form = container.form();
     d->containerName = container.widget()->objectName();
+    d->_class = d->form->selectedClass();
     d->pos = container.selectionOrInsertingBegin();
     d->widgetName = d->form->objectTree()->generateUniqueName(
                  d->form->library()->namePrefix(d->_class).toLatin1(),
                  /* !numberSuffixRequired */false);
-    d->_class = d->form->selectedClass();
     d->insertRect = container.selectionOrInsertingRectangle();
 }
 
@@ -1185,14 +1185,14 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
     d->containerName = container.widget()->objectName();
     d->pos = p;
 
-    if (domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget")
+    if (domDoc.firstChildElement("UI").firstChildElement("widget").isNull())
         return;
 
     QRect boundingRect;
-    for (QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) { // more than one widget
-        if (n.toElement().tagName() != "widget")
+    for (QDomNode n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) { // more than one widget
+        const QDomElement el = n.toElement();
+        if (el.tagName() != "widget")
             continue;
-        QDomElement el = n.toElement();
 
         QDomElement rect;
         for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -1200,20 +1200,20 @@ PasteWidgetCommand::PasteWidgetCommand(const QDomDocument &domDoc, const Contain
                 rect = n.firstChild().toElement();
         }
 
-        QDomElement x = rect.namedItem("x").toElement();
-        QDomElement y = rect.namedItem("y").toElement();
-        QDomElement wi = rect.namedItem("width").toElement();
-        QDomElement h = rect.namedItem("height").toElement();
+        QDomElement x = rect.firstChildElement("x");
+        QDomElement y = rect.firstChildElement("y");
+        QDomElement w = rect.firstChildElement("width");
+        QDomElement h = rect.firstChildElement("height");
 
         int rx = x.text().toInt();
         int ry = y.text().toInt();
-        int rw = wi.text().toInt();
+        int rw = w.text().toInt();
         int rh = h.text().toInt();
         QRect r(rx, ry, rw, rh);
         boundingRect = boundingRect.unite(r);
     }
 
-    d->pos -= boundingRect.topLeft();
+    //2.0 d->pos -= boundingRect.topLeft();
 }
 
 
@@ -1241,11 +1241,18 @@ void PasteWidgetCommand::execute()
     }
 
     kDebug() << domDoc.toString();
-    if (!domDoc.namedItem("UI").hasChildNodes()) // nothing in the doc
+    if (!domDoc.firstChildElement("UI").hasChildNodes()) // nothing in the doc
         return;
-    if (domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget") {
-        // only one widget, so we can paste it at cursor pos
-        QDomElement el = domDoc.namedItem("UI").firstChild().toElement();
+
+    QDomElement el = domDoc.firstChildElement("UI").firstChildElement("widget");
+    if (el.isNull())
+        return;
+    QDomNode n;
+    for (n = el.nextSibling(); !n.isNull() && n.toElement().tagName() != "widget"; n = n.nextSibling())
+        ;
+    if (n.isNull()) {
+        // only one "widget" child tag, so we can paste it at cursor pos
+        QDomElement el = domDoc.firstChildElement("UI").firstChildElement("widget").toElement();
         fixNames(el);
         if (d->pos.isNull())
             fixPos(el, container);
@@ -1257,8 +1264,8 @@ void PasteWidgetCommand::execute()
         d->form->setInteractiveMode(true);
     }
     else {
-        for (QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
-            // more than one widget
+        for (n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
+            // more than one "widget" child tag
             if (n.toElement().tagName() != "widget") {
                 continue;
             }
@@ -1280,11 +1287,11 @@ void PasteWidgetCommand::execute()
     //FormIO::setCurrentForm(0);
     d->names.clear();
     // We store the names of all the created widgets, to delete them later
-    for (QDomNode n = domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
+    for (n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
         if (n.toElement().tagName() != "widget") {
             continue;
         }
-        for (QDomNode m = n.firstChild(); !m.isNull(); n = m.nextSibling()) {
+        for (QDomNode m = n.firstChild(); !m.isNull(); m = m.nextSibling()) {
             if ((m.toElement().tagName() == "property") && (m.toElement().attribute("name") == "name")) {
                 d->names.append(m.toElement().text());
                 break;
@@ -1335,12 +1342,12 @@ void PasteWidgetCommand::changePos(QDomElement &el, const QPoint &newPos)
             rect = n.firstChild().toElement();
     }
 
-    QDomElement x = rect.namedItem("x").toElement();
+    QDomElement x = rect.firstChildElement("x");
     x.removeChild(x.firstChild());
     QDomText valueX = el.ownerDocument().createTextNode(QString::number(newPos.x()));
     x.appendChild(valueX);
 
-    QDomElement y = rect.namedItem("y").toElement();
+    QDomElement y = rect.firstChildElement("y");
     y.removeChild(y.firstChild());
     QDomText valueY = el.ownerDocument().createTextNode(QString::number(newPos.y()));
     y.appendChild(valueY);
@@ -1405,10 +1412,10 @@ void PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, con
             rect = n.firstChild().toElement();
     }
 
-    QDomElement x = rect.namedItem("x").toElement();
-    QDomElement y = rect.namedItem("y").toElement();
-    QDomElement wi = rect.namedItem("width").toElement();
-    QDomElement h = rect.namedItem("height").toElement();
+    QDomElement x = rect.firstChildElement("x");
+    QDomElement y = rect.firstChildElement("y");
+    QDomElement wi = rect.firstChildElement("width");
+    QDomElement h = rect.firstChildElement("height");
 
     int rx = x.text().toInt();
     int ry = y.text().toInt();
@@ -1565,7 +1572,7 @@ void DeleteWidgetCommand::unexecute()
 {
     QByteArray wname;
     d->form->setInteractiveMode(false);
-    for (QDomNode n = d->domDoc.namedItem("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
+    for (QDomNode n = d->domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
 #ifdef KFD_SIGSLOTS
         if (n.toElement().tagName() == "connections") // restore the widget connections
             d->form->connectionBuffer()->load(n);

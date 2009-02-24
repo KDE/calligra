@@ -49,8 +49,8 @@ ScriptIO::saveFormEvents(QDomNode &parentNode, FormScript *formScript)
 bool
 ScriptIO::loadFormEvents(QDomNode &parentNode, Form *form, ScriptManager *manager)
 {
-    QDomElement script = parentNode.namedItem("script").toElement();
-    QDomElement events = parentNode.namedItem("events").toElement();
+    QDomElement script = parentNode.firstChildElement("script");
+    QDomElement events = parentNode.firstChildElement("events");
 
     // Load script code
     FormScript *formScript = new FormScript(form, manager);
@@ -160,21 +160,21 @@ ScriptIO::loadEvent(QDomNode &node, EventList *list, Form *form)
 
     switch (type) {
     case Event::Slot: {
-        ObjectTreeItem *sender = form->objectTree()->lookup(node.namedItem("sender").toElement().text());
+        ObjectTreeItem *sender = form->objectTree()->lookup(node.firstChildElement("sender").text());
         event->setSender(sender ? sender->widget() : 0);
-        event->setSignal(node.namedItem("signal").toElement().text().local8Bit());
-        ObjectTreeItem *receiver = form->objectTree()->lookup(node.namedItem("receiver").toElement().text());
+        event->setSignal(node.firstChildElement("signal").text().toLocal8Bit());
+        ObjectTreeItem *receiver = form->objectTree()->lookup(node.firstChildElement("receiver").text());
         event->setReceiver(receiver ? receiver->widget() : 0);
-        event->setSlot(node.namedItem("slot").toElement().text().local8Bit());
+        event->setSlot(node.firstChildElement("slot").text().toLocal8Bit());
         event->setType(Event::Slot);
         break;
     }
 
     case Event::UserFunction: {
-        ObjectTreeItem *sender = form->objectTree()->lookup(node.namedItem("sender").toElement().text());
+        ObjectTreeItem *sender = form->objectTree()->lookup(node.firstChildElement("sender").text());
         event->setSender(sender ? sender->widget() : 0);
-        event->setSignal(node.namedItem("signal").toElement().text().local8Bit());
-        event->setSlot(node.namedItem("function").toElement().text().local8Bit());
+        event->setSignal(node.firstChildElement("signal").text().toLocal8Bit());
+        event->setSlot(node.firstChildElement("function").text().toLocal8Bit());
         event->setType(Event::UserFunction);
         break;
     }

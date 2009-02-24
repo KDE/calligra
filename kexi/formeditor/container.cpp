@@ -466,9 +466,9 @@ Container::eventFilter(QObject *s, QEvent *e)
         const QRect r( pe->rect() );
 // kDebug() << pe->rect();
         // for optimization, compute the start/end row and column to paint
-        int startRow = r.top() / gridY;
+        int startRow = (r.top()-1) / gridY;
         startRow = qMax(startRow, 1);
-        int endRow = r.bottom() / gridY;
+        int endRow = (r.bottom()+1) / gridY;
         endRow = qMin(endRow, rows);
         int startCol = r.left() / gridX;
         startCol = qMax(startCol, 1);
