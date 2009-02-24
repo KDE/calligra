@@ -259,6 +259,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->horizRuler->setShowMousePosition(true);
     d->horizRuler->setUnit(p->unit());
     d->horizRuler->setRightToLeft(false);
+    d->horizRuler->setVisible(false);
     new KoRulerController( d->horizRuler, d->canvas->resourceProvider() );
 
     layout->addWidget( d->horizRuler, 0, 1 );
@@ -267,6 +268,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->vertRuler = new KoRuler( this, Qt::Vertical, d->canvas->viewConverter() );
     d->vertRuler->setShowMousePosition(true);
     d->vertRuler->setUnit(p->unit());
+    d->vertRuler->setVisible(false);
     layout->addWidget( d->vertRuler, 1, 0 );
 
     connect( d->canvas, SIGNAL(documentOriginChanged( const QPoint &)), this, SLOT(pageOffsetChanged()));
@@ -1015,7 +1017,7 @@ void KarbonView::mousePositionChanged( const QPoint &position )
     qreal x = part()->unit().toUserValue(documentPos.x());
     qreal y = part()->unit().toUserValue(documentPos.y());
 
-    if( statusBar()->isVisible() )
+    if( statusBar() && statusBar()->isVisible() )
         d->cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
 }
 
