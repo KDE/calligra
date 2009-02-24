@@ -1,16 +1,19 @@
 -----------------------------------------------------------------------------
  Kexi Development CHANGELOG Document
- From jstaniek's Point of View
- 
- Copyright (C) 2003-2009 Jaroslaw Staniek staniek at kde.org / OpenOffice Polska
+ Proposed by jstaniek
+
+ Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
+ Copyright (C) 2008-2009 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
-For most important commits use: CCMAIL:kexi-devel@kde.org
-For interesting commits use: 
+TIP: For most important commits use: CCMAIL:kexi-devel@kde.org
+TIP: For interesting commits use
 FEATURE: <desctiption>
 CCMAIL:danny@commit-digest.org
-For bugfixes use CCMAIL:###-done@bugs.kde.org
+TIP: For bugfixes use CCMAIL:###-done@bugs.kde.org
+TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) to debug painting.
+
 Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
@@ -27,6 +30,24 @@ TODO:
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
+
+2009-02-24
+Forms
+- fixed copy/paste for widgets, including position of the duplicated widget
+- fixed painting of the grid when srolling vertically
+TODO: optimize scrolling
+= replaced usage of QDomNode::namedItem().toElement() with QDomNode::firstChildElement()
+
+2009-02-23
+Forms
+- optimized painting grid: only required rectangle is painted; 
+  this makes moving or resizing widgets smoother
+TODO: optimize more; there are 2 events when widget is moved
+[5496] kexi(5496)/kexi (general) bool __thiscall KFormDesigner::Container::eventFilter(class QObject *,class QEvent *): QRect(457,367 41x35)
+[5496] kexi(5496)/kexi (general) bool __thiscall KFormDesigner::Container::eventFilter(class QObject *,class QEvent *): QRect(0,0 35x19)
+                                                                                                                              ^^^^^^^^^
+- tab widgets can be dragged by clicking on the container
+- QStackedWidget replaces QWidgetStack in a few more places in the code
 
 2009-02-22
 Forms
