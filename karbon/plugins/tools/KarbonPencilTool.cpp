@@ -90,7 +90,7 @@ void KarbonPencilTool::mousePressEvent( KoPointerEvent *event )
     {
         m_shape = new KoPathShape();
         m_shape->setShapeId( KoPathShapeId );
-        m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
+        m_shape->setBorder( currentBorder() );
         m_points.clear();
         addPoint( event->point );
     }
@@ -234,7 +234,7 @@ void KarbonPencilTool::finish( bool closePath )
 
     // set the proper shape id
     path->setShapeId( KoPathShapeId );
-    path->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
+    path->setBorder( currentBorder() );
     path->normalize();
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( path );
@@ -331,6 +331,13 @@ void KarbonPencilTool::setDelta( double delta )
         m_fittingError = delta;
     else if( m_mode == ModeStraight )
         m_combineAngle = delta;
+}
+
+KoLineBorder * KarbonPencilTool::currentBorder()
+{
+    KoLineBorder * border = new KoLineBorder( m_canvas->resourceProvider()->activeBorder() );
+    border->setColor( m_canvas->resourceProvider()->foregroundColor().toQColor() ); 
+    return border;
 }
 
 #include "KarbonPencilTool.moc"
