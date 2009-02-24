@@ -149,7 +149,7 @@ void KPrViewModeNotes::deactivate()
 {
     m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, false);
     m_view->setActionEnabled( KoPAView::AllActions, true );
-    m_view->updateActivePage(m_view->activePage());
+    m_view->doUpdateActivePage(m_view->activePage());
 }
 
 void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
