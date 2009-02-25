@@ -79,7 +79,6 @@
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoView.h>
-#include <KoPartSelectDia.h>
 #include <KoFilterManager.h>
 
  

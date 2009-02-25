@@ -624,7 +624,6 @@ void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *pa
 void ViewListWidget::setupContextMenus()
 {
     // NOTE: can't use xml file as there may not be a factory()
-    // DF: Why not use KoPartSelectAction though?
     QAction *action;
     // document insert actions
     // Query for document types
