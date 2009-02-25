@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Service
-Name=PPT Import Filter for KPresenter
-X-KDE-Export=application/vnd.oasis.opendocument.presentation
-X-KDE-Import=application/vnd.ms-powerpoint
-X-KDE-Weight=1
-X-KDE-Library=liboopptimport
-X-KDE-ServiceTypes=KOfficeFilter
