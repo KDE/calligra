@@ -153,24 +153,11 @@ void KexiFormPart::initInstanceActions(int mode, KActionCollection *col)
 
 void KexiFormPart::initPartActions()
 {
-// new KAction(i18n("Show Form UI Code"), "show_form_ui", CTRL+Qt::Key_U, m_manager, SLOT(showFormUICode()),
-//  guiClient()->actionCollection(), "show_form_ui");
 }
 
 void KexiFormPart::initInstanceActions()
 {
-    KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
-#ifdef KEXI_DEBUG_GUI
-    KConfigGroup generalGroup(KGlobal::config()->group("General"));
-    if (generalGroup.readEntry("showInternalDebugger", false)) {
-        KAction *a;
-        col->addAction("show_form_ui",
-                       a = new KAction(KIcon("run-build-file"), i18n("Show Form UI Code"), this));
-        a->setShortcut(Qt::CTRL + Qt::Key_U);
-        connect(a, SIGNAL(triggered()),
-                KexiFormManager::self(), SLOT(showFormUICode()));
-    }
-#endif
+//    KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
 
 //moved to KexiFormManager::init()
 //KexiFormManager::self()->createActions(library(), col,

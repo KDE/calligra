@@ -31,10 +31,14 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-02-25
+Forms
+= reenabled form's debugger window
+
 2009-02-24
 Forms
 - fixed copy/paste for widgets, including position of the duplicated widget
-- fixed painting of the grid when srolling vertically
+- fixed painting of the grid when scrolling vertically
 TODO: optimize scrolling
 = replaced usage of QDomNode::namedItem().toElement() with QDomNode::firstChildElement()
 

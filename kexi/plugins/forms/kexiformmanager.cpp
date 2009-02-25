@@ -223,6 +223,16 @@ void KexiFormManager::createActions(KActionCollection* collection)
 
     d->lib->addCustomWidgetActions(d->collection);
 
+#ifdef KEXI_DEBUG_GUI
+    KConfigGroup generalGroup(KGlobal::config()->group("General"));
+    if (generalGroup.readEntry("ShowInternalDebugger", false)) {
+        KAction *a = new KAction(KIcon("run-build-file"), i18n("Show Form UI Code"), this);
+        d->collection->addAction("show_form_ui", a);
+        a->setShortcut(Qt::CTRL + Qt::Key_U);
+        connect(a, SIGNAL(triggered()), this, SLOT(showFormUICode()));
+    }
+#endif
+
 //! @todo move elsewhere
     {
         KexiMainWindowIface *win = KexiMainWindowIface::global();
@@ -252,8 +262,11 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "library_widget_QGroupBox"
             << "library_widget_KFDTabWidget"
             << "library_widget_Spring"
-            << ""; //sep
-
+            << "" //sep
+#ifdef KEXI_DEBUG_GUI
+            << "show_form_ui"
+#endif
+            ;
         foreach( const QString& actionName, formActions ) {
             QAction *a;
             if (actionName.isEmpty()) {
@@ -451,7 +464,7 @@ void KexiFormManager::showFormUICode()
     if (!formView)
         return;
     QString uiCode;
-    const int indent = 3;
+    const int indent = 2;
     if (!KFormDesigner::FormIO::saveFormToString(formView->form(), uiCode, indent)) {
         //! @todo show err?
         return;
@@ -464,7 +477,7 @@ void KexiFormManager::showFormUICode()
         d->uiCodeDialog->setModal(true);
         d->uiCodeDialog->setCaption(i18n("Form's UI Code"));
         d->uiCodeDialog->setButtons(KDialog::Close);
-//kde4: needed? d->uiCodeDialog->resize(700, 600);
+        d->uiCodeDialog->resize(700, 600);
 
         d->currentUICodeDialogEditor = new KTextEdit(d->uiCodeDialog);
         d->uiCodeDialog->addPage(d->currentUICodeDialogEditor, i18n("Current"));
