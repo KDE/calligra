@@ -32,7 +32,8 @@ if(WPD_FOUND)
 endif(WPD_FOUND)
 
 if(WV2_FOUND)
-	add_subdirectory(msword)
+# obsoleted by the msword-odf filter
+#	add_subdirectory(msword)
 	add_subdirectory(msword-odf)
 endif(WV2_FOUND)
 
