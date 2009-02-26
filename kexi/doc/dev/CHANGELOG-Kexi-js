@@ -31,6 +31,10 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-02-26
+Forms
+= fixed resizing widgets with taking grid into account
+
 2009-02-25
 Forms
 = reenabled form's debugger window
