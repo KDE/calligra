@@ -79,7 +79,8 @@ EventEater::eventFilter(QObject *, QEvent *ev)
     if (ev->type() == QEvent::MouseButtonRelease && m_widget->inherits("QTabWidget")) {
         QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
         if (mev->button() == Qt::LeftButton) {
-            QMouseEvent *myev = new QMouseEvent(QEvent::MouseButtonPress, mev->pos(), mev->button(), mev->buttons(), mev->modifiers());
+            QMouseEvent *myev = new QMouseEvent(QEvent::MouseButtonPress, mev->pos(), 
+                                                mev->button(), mev->buttons(), mev->modifiers());
             m_container->eventFilter(m_widget, myev);
             delete myev;
             //return true;
@@ -331,7 +332,10 @@ Container::eventFilter(QObject *s, QEvent *e)
         // we are inserting a widget or drawing a selection rect in the form
         if ((/*s == m_container &&*/ d->form->state() == Form::WidgetInserting) || ((s == widget()) && !d->toplevel())) {
             int tmpx, tmpy;
-            if (!d->form->isSnapWidgetsToGridEnabled() || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
+            if (    !d->form->isSnapWidgetsToGridEnabled()
+                 || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+               )
+            {
                 tmpx = mev->x();
                 tmpy = mev->y();
             }
@@ -379,17 +383,23 @@ Container::eventFilter(QObject *s, QEvent *e)
 
     case QEvent::MouseMove: {
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-        if (d->selectionOrInsertingStarted() && d->form->state() == Form::WidgetInserting && ((mev->buttons() == Qt::LeftButton) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) ||
-                (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ShiftModifier)))
-            // draw the insert rect
+        if (d->selectionOrInsertingStarted() && d->form->state() == Form::WidgetInserting
+            && (   (mev->buttons() == Qt::LeftButton)
+                || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier)
+                || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+                || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ShiftModifier)
+               )
+           )
         {
+            // draw the insert rect
 //reimpl.            drawInsertRect(mev, s);
             return true;
         }
 #ifdef KFD_SIGSLOTS
         // Creating a connection, we highlight sender and receiver, and we draw a link between them
         else if (connecting && !FormManager::self()->createdConnection()->sender().isNull()) {
-            ObjectTreeItem *tree = d->form->objectTree()->lookup(FormManager::self()->createdConnection()->sender());
+            ObjectTreeItem *tree = d->form->objectTree()->lookup(
+                FormManager::self()->createdConnection()->sender());
             if (!tree || !tree->widget())
                 return true;
 
@@ -430,9 +440,13 @@ Container::eventFilter(QObject *s, QEvent *e)
  //moved..           drawCopiedWidgetRect(mev);
             return true;
         }
-        else if (
-            (mev->buttons() == Qt::LeftButton || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)))
-            && d->form->state() != Form::WidgetInserting && d->state != Private::CopyingWidget) {
+        else if ( (   mev->buttons() == Qt::LeftButton 
+                   || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+                  )
+                  && d->form->state() != Form::WidgetInserting
+                  && d->state != Private::CopyingWidget
+                )
+        {
             // we are dragging the widget(s) to move it
             if (!d->toplevel() && m_moving == widget()) // no effect for form
                 return false;
@@ -505,7 +519,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         return false;
     }
 
-    case QEvent::Resize: { // we are resizing a widget, so we set m_move to true -> the layout will be reloaded when releasing mouse
+    case QEvent::Resize: { // we are resizing a widget, so we enter MovingWidget state -> the layout will be reloaded when releasing mouse
         if (d->form->interactiveMode())
             d->state = Private::MovingWidget;
         break;
@@ -545,8 +559,11 @@ Container::eventFilter(QObject *s, QEvent *e)
             if (!m_moving)
                 return true;
             // we simulate a mouse move event to update screen
-            QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, m_moving->mapFromGlobal(QCursor::pos()), Qt::NoButton,
-                                               Qt::LeftButton, Qt::ControlModifier);
+            QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, 
+                                               m_moving->mapFromGlobal(QCursor::pos()),
+                                               Qt::NoButton,
+                                               Qt::LeftButton,
+                                               Qt::ControlModifier);
             eventFilter(m_moving, mev);
             delete mev;
         }
@@ -662,12 +679,17 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         d->stopSelectionRectangleOrInserting();
         return true;
     }
-    else if (s == widget() && !d->toplevel() && (mev->button() != Qt::RightButton) && d->selectionOrInsertingRectangle().isValid()) {
+    else if (   s == widget()
+             && !d->toplevel()
+             && (mev->button() != Qt::RightButton)
+             && d->selectionOrInsertingRectangle().isValid() )
+    {
         // we are still drawing a rect to select widgets
         d->stopSelectionRectangleOrInserting();
 //reimpl.        drawSelectionRect(mev);
         return true;
     }
+
     if (mev->button() == Qt::RightButton) {
         // Right-click -> context menu
         // 2.0 unsed: d->form->createContextMenu(static_cast<QWidget*>(s), this);
@@ -681,8 +703,9 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
             return true;
 
         // prevent accidental copying of widget (when moving mouse a little while selecting)
-        if (((mev->pos().x() - m_grab.x()) < form()->gridSize() && (m_grab.x() - mev->pos().x()) < form()->gridSize()) &&
-                ((mev->pos().y() - m_grab.y()) < form()->gridSize() && (m_grab.y() - mev->pos().y()) < form()->gridSize())) {
+        if (    ((mev->pos().x() - m_grab.x()) < form()->gridSize() && (m_grab.x() - mev->pos().x()) < form()->gridSize())
+             && ((mev->pos().y() - m_grab.y()) < form()->gridSize() && (m_grab.y() - mev->pos().y()) < form()->gridSize()) )
+        {
             kDebug() << "The widget has not been moved. No copying.";
             return true;
         }
@@ -1226,8 +1249,9 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
     QPoint pos = static_cast<QWidget*>(s)->mapTo(widget(), mev->pos());
     int gridX = d->form->gridSize();
     int gridY = d->form->gridSize();
-    if (!d->form->isSnapWidgetsToGridEnabled()
-        || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
+    if (   !d->form->isSnapWidgetsToGridEnabled()
+        || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)))
+    {
         tmpx = pos.x();
         tmpy = pos.y();
     }
@@ -1342,7 +1366,10 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
         }
 
         int tmpx, tmpy;
-        if (!d->form->isSnapWidgetsToGridEnabled() || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
+        if (   !d->form->isSnapWidgetsToGridEnabled()
+            || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+           )
+        {
             tmpx = w->x() + dx;
             tmpy = w->y() + dy;
         }
