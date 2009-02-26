@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@
 #include "KPrMasterPage.h"
 #include "KPrNotes.h"
 #include "KPrPlaceholderShape.h"
+#include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "pagelayout/KPrPageLayout.h"
 #include "pagelayout/KPrPageLayouts.h"
 #include "pagelayout/KPrPageLayoutSharedSavingData.h"
@@ -208,4 +209,9 @@ bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const
 KoPageApp::PageType KPrPage::pageType() const
 {
     return KoPageApp::Slide;
+}
+
+KoShapeManagerPaintingStrategy * KPrPage::getPaintingStrategy() const
+{
+    return new KPrShapeManagerDisplayMasterStrategy(0);
 }
