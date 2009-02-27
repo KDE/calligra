@@ -132,6 +132,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
             tmpGlyph = new GlyphElement( this );
             m_rawString.append( QChar( QChar::ObjectReplacementCharacter ) );
             tmpGlyph->readMathML( node.toElement() );
+            m_glyphs.append(tmpGlyph);
         }
         else if( node.isElement() )
             return false;
@@ -151,11 +152,15 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
     for ( int i = 0; i < tmp.count(); i++ ) {
         if( m_rawString.startsWith( QChar( QChar::ObjectReplacementCharacter ) ) ) {
             m_glyphs[ i ]->writeMathML( writer );
-            writer->addTextNode( tmp[ i ] );
+            if (i + 1 < tmp.count()) {
+                writer->addTextNode( tmp[ i ] );
+            }
         }
         else {
-            writer->addTextNode( tmp[ i ] );       
-            m_glyphs[ i ]->writeMathML( writer );
+            writer->addTextNode( tmp[ i ] );
+            if (i + 1 < tmp.count()) {
+                m_glyphs[ i ]->writeMathML( writer );
+            }
         }
     }
 }
