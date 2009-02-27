@@ -39,6 +39,10 @@ KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canv
     // Size of the canvas is saved becouse it's used in the paintEvent
     m_size = canvas->size();
     resize( m_size );
+    
+    m_center = QCursor::pos();
+    update();
+    
 }
 
 KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
