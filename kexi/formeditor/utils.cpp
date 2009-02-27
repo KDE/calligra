@@ -269,4 +269,34 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
     FormIO::cleanClipboard(parent);
 }
 
+//-----------------------------
+
+class ActionGroup::Private {
+    public:
+        Private() {}
+        QHash<QString, QAction*> actions;
+};
+
+ActionGroup::ActionGroup( QObject * parent )
+    : QActionGroup(parent)
+    , d( new Private )
+{
+}
+
+ActionGroup::~ActionGroup()
+{
+    delete d;
+}
+
+void ActionGroup::addAction(QAction* action)
+{
+    QActionGroup::addAction(action);
+    d->actions.insert(action->objectName(), action);
+}
+
+QAction *ActionGroup::action(const QString& name) const
+{
+    return d->actions.value(name);
+}
+
 #include "utils.moc"

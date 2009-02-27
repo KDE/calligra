@@ -31,6 +31,12 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-02-27
+Forms
+= make the actions from widget-action-group accessible for the Form object
+- the above allows to switch back to the edit_pointer toggle action after 
+  inserting a new widget
+
 2009-02-26
 Forms
 = fixed resizing widgets with taking grid into account

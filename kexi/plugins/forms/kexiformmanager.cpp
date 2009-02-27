@@ -54,7 +54,7 @@ public:
         , q(this)
     {
         features = KFormDesigner::Form::NoFeatures;
-        widgetActionGroup = new QActionGroup(&q);
+        widgetActionGroup = new KFormDesigner::ActionGroup(&q);
 #ifdef KFD_SIGSLOTS
         dragConnectionAction = 0;
 #endif
@@ -68,7 +68,7 @@ public:
     }
     KexiFormPart* part;
     KFormDesigner::WidgetLibrary* lib;
-    QActionGroup* widgetActionGroup;
+    KFormDesigner::ActionGroup* widgetActionGroup;
     KFormDesigner::ObjectTreeView *treeView;
 #ifdef KEXI_DEBUG_GUI
     //! For debugging purposes
@@ -148,7 +148,8 @@ void KexiFormManager::init(KexiFormPart *part, KFormDesigner::ObjectTreeView *tr
 }
 
 //moved from KFormDesigner::FormManager
-QActionGroup* KexiFormManager::widgetActionGroup() const {
+KFormDesigner::ActionGroup* KexiFormManager::widgetActionGroup() const
+{
     return d->widgetActionGroup;
 }
 
@@ -235,13 +236,6 @@ void KexiFormManager::createActions(KActionCollection* collection)
 
 //! @todo move elsewhere
     {
-        KexiMainWindowIface *win = KexiMainWindowIface::global();
-        QList<QAction*> actions( d->widgetActionGroup->actions() );
-        QHash<QString, QAction*> actionsByName;
-        foreach( QAction *a, actions ) {
-            actionsByName.insert(a->name(), a);
-        }
-
         // (from obsolete kexiformpartinstui.rc)
         QStringList formActions;
         formActions
@@ -267,6 +261,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
             << "show_form_ui"
 #endif
             ;
+        KexiMainWindowIface *win = KexiMainWindowIface::global();
         foreach( const QString& actionName, formActions ) {
             QAction *a;
             if (actionName.isEmpty()) {
@@ -274,11 +269,11 @@ void KexiFormManager::createActions(KActionCollection* collection)
                 a->setSeparator(true);
             }
             else {
-                a = actionsByName[actionName];
+                a = d->widgetActionGroup->action(actionName);
             }
             win->addToolBarAction("form", a);
         }
-        actions = d->collection->actions();
+        const QList<QAction*> actions( d->collection->actions() );
         foreach( QAction *a, actions ) {
             win->addToolBarAction("form", a);
         }

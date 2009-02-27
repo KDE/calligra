@@ -266,8 +266,10 @@ void
 KexiFormView::initForm()
 {
     setForm(
-        new KFormDesigner::Form(KexiFormManager::self()->library(), KFormDesigner::Form::DesignMode,
-            *KexiMainWindowIface::global()->actionCollection())
+        new KFormDesigner::Form(
+            KexiFormManager::self()->library(), KFormDesigner::Form::DesignMode,
+            *KexiMainWindowIface::global()->actionCollection(), 
+            *KexiFormManager::self()->widgetActionGroup())
     );
 // if (viewMode()==Kexi::DataViewMode)
     //form()->setDesignMode(false);

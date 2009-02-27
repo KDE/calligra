@@ -23,8 +23,6 @@
 #include <QObject>
 #include "kexiformpart.h"
 
-class QActionGroup;
-
 class KexiFormView;
 class K3Command;
 class KActionCollection;
@@ -33,6 +31,7 @@ class KexiFormManagerPrivate;
 namespace KFormDesigner {
 class WidgetLibrary;
 class ObjectTreeView;
+class ActionGroup;
 }
 
 //! @internal
@@ -53,7 +52,7 @@ public:
 
 //moved from KFormDesigner::FormManager
     /*! @return action group containing "insert widget" actions for each widget. */
-    QActionGroup* widgetActionGroup() const;
+    KFormDesigner::ActionGroup* widgetActionGroup() const;
 
 public slots:
     //! Receives signal from KexiDataSourcePage about changed form's data source

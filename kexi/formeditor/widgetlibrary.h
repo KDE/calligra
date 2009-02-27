@@ -36,7 +36,6 @@ class QWidget;
 class QVariant;
 class QDomDocument;
 class QDomElement;
-class QActionGroup;
 
 namespace KFormDesigner
 {
@@ -44,6 +43,7 @@ namespace KFormDesigner
 class Container;
 class ObjectTreeItem;
 class WidgetLibraryPrivate;
+class ActionGroup;
 //removed class WidgetPropertySet;
 
 typedef QList<KAction*> ActionList;
@@ -74,7 +74,7 @@ public:
     /**
      * creates actions for widget creating
      */
-    void createWidgetActions(QActionGroup *group);
+    void createWidgetActions(ActionGroup *group);
 //prev    ActionList createWidgetActions(KXMLGUIClient* client, KActionCollection *parent,
 //prev                                   QObject *receiver, const char *slot);
 

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 
 #include <kexi_export.h>
 
-class QActionGroup;
+#include "utils.h"
 
 namespace KFormDesigner
 {
@@ -41,7 +41,7 @@ class KFORMEDITOR_EXPORT LibActionWidget : public KToggleAction
 public:
     /** LibActionWidget object is initialized to be mutually
       exclusive with all other LibActionWidget objects for group @a group. */
-    LibActionWidget(QActionGroup *group, WidgetInfo *w);
+    LibActionWidget(ActionGroup *group, WidgetInfo *w);
 
     virtual ~LibActionWidget();
 

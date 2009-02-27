@@ -113,7 +113,7 @@ public:
     };
 
     /*! Creates Form object. */
-    Form(WidgetLibrary* library, Mode mode, KActionCollection &col);
+    Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group);
 
     /*! Creates Form object as a child of other form. */
     Form(Form *parent);
@@ -707,6 +707,9 @@ protected:
 
     KActionCollection  *actionCollection() const;
 
+    //! @todo rm when the 2 libs are merged
+    KFormDesigner::ActionGroup* widgetActionGroup() const;
+
 //moved from KexiFormPart::slotPropertyChanged()
     /*! Called when a property has been changed.
       @a w is the widget concerned, @a property
@@ -714,7 +717,7 @@ protected:
     void handleWidgetPropertyChanged(QWidget *w, const QByteArray &name, const QVariant &value);
 
 private:
-    void init(WidgetLibrary* library, Mode mode, KActionCollection &col);
+    void init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group);
 
     WidgetLibrary *m_lib;
     FormPrivate *d;
