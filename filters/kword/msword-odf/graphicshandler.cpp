@@ -130,15 +130,18 @@ void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97
 
     //set up filename
     picName->append(QString::number(m_pictureCount));
+    m_pictureCount++;
     //the type coming in corresponds to MSOBLIPTYPE
     //  see wv2/graphics.h
     if(type == 5)
         picName->append(".jpg");
-    else if (type == 3)
+    else if (type == 6)
+        picName->append(".png");
+    else if (type == 3 || type == 2) //3 is for Windows metafile, 2 is for Windows enhanced metafile
         picName->append(".wmf");
     else
     {
-        kWarning() << "Unhandled file type - pictures won't be displayed.";
+        kWarning() << "Unhandled file type (" << type << ") - pictures won't be displayed.";
         return;
     }
 
@@ -172,7 +175,6 @@ void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97
     m_bodyWriter->endElement();//draw:image
     m_bodyWriter->endElement();//draw:frame
 
-    m_pictureCount++;
 }
 
 void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf )
