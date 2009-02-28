@@ -58,7 +58,7 @@ public:
     virtual void escherData( std::vector<wvWare::U8> data, wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
             int type );
     virtual void wmfData( wvWare::OLEImageReader& reader, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
-    virtual void tiffData( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
+    virtual void externalImage( const wvWare::UString& name, wvWare::SharedPtr<const wvWare::Word97::PICF> picf );
 #endif // IMAGE_IMPORT
 
 private:

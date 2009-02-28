@@ -209,9 +209,9 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
     m_store->close(); //close picture file
 }
 
-void KWordPictureHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
+void KWordPictureHandler::externalImage( const UString& name, SharedPtr<const Word97::PICF> picf )
 {
-    kDebug(30513) ;
+    kDebug(30513);
 }
 
 #endif // IMAGE_IMPORT
