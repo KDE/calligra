@@ -333,6 +333,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         if ((/*s == m_container &&*/ d->form->state() == Form::WidgetInserting) || ((s == widget()) && !d->toplevel())) {
             int tmpx, tmpy;
             if (    !d->form->isSnapWidgetsToGridEnabled()
+                 || d->form->state() != Form::WidgetInserting
                  || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
                )
             {
