@@ -146,12 +146,12 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
 
 KWDocument::~KWDocument()
 {
+    delete m_magicCurtain;
     saveConfig();
     qDeleteAll(m_frameSets);
     qDeleteAll(m_dataCenterMap);
     delete m_inlineTextObjectManager;
     m_inlineTextObjectManager = 0;
-    delete m_magicCurtain;
 }
 
 void KWDocument::addShape(KoShape *shape)
