@@ -179,33 +179,34 @@ void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97
 
 void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf )
 {
-    kDebug(30513) <<"wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size();
+    kDebug(30513) <<"WMF data found. Size=" << reader.size();
 
-    // We have two things to do here
-    // 1 - Create the frameset and its frame
-    // 2 - Store the picture in the store
-    // We combine those two things into one call to the document
-    QSizeF size( (double)picf->dxaGoal / 20.0, (double)picf->dyaGoal / 20.0 );
-    kDebug(30513) <<"size=" << size;
-    //fix this next line
-    KoStoreDevice* dev = m_doc->createPictureFrameSet( QString("") );
-    Q_ASSERT(dev);
-    if ( !dev )
-        return; // ouch
+    QString picName("Pictures/");
+    ODTProcessing(&picName, picf, 3); //pass 3 in for wmf image
 
+    //write picture data to file
+    m_store->open(picName);//open picture file
 #define IMG_BUF_SIZE 2048L
-    wvWare::U8 buf[IMG_BUF_SIZE];
     Q_LONG len = reader.size();
     while ( len > 0 )  {
+        kDebug(30513) << "len = " << len;
+        wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
-        Q_LONG n1 = dev->write( (const char*)buf, n );
-        Q_ASSERT( (size_t)n1 == n );
-        if ( (size_t)n1 != n )
-            return; // ouch
+        Q_LONG n1 = m_store->write( (const char*)buf, n );
+        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (int) buf;
         len -= n;
+        delete [] buf;
+        //error checking
+        if ( (n == 0 && len != 0) || //endless loop
+                (size_t)n1 != n ) //read/wrote different lengths
+        {
+            m_store->close(); //close picture file before returning
+            return; //ouch - we're in an endless loop!
+        }
+        //Q_ASSERT( (size_t)n1 == n );
     }
     Q_ASSERT( len == 0 );
-    dev->close();
+    m_store->close(); //close picture file
 }
 
 void KWordPictureHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )

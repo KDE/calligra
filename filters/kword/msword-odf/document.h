@@ -93,8 +93,6 @@ public:
         QString extraName;
     };
 
-    // Called by PictureHandler
-    KoStoreDevice* createPictureFrameSet(QString filename);
 
 public slots:
     // Connected to the KWordTextHandler only when parsing the body
