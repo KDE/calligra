@@ -42,8 +42,9 @@ public:
     void renderToPath( const QString& raw, QPainterPath& path );
 
 private:
-    virtual bool readMathMLAttributes( const KoXmlElement& element );
-    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    bool readMathMLAttributes( const KoXmlElement& element );
+    void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer ) const;
 
     QChar m_char;         // Char to be shown
     QString m_fontFamily; // Font family to use

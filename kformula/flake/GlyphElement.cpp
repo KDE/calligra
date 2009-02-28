@@ -91,3 +91,7 @@ void GlyphElement::writeMathMLAttributes( KoXmlWriter* writer ) const
     writer->addAttribute( "index", m_char.unicode() );
     writer->addAttribute( "alt", m_alt );
 }
+
+void GlyphElement::writeMathMLContent( KoXmlWriter* writer ) const
+{
+}
