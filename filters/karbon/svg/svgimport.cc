@@ -1434,6 +1434,11 @@ void SvgImport::applyFillStyle( KoShape * shape )
                 QSizeF tileSize = pattern->size( objectBound );
 
                 bg->setPatternDisplaySize( tileSize );
+                if( pattern->patternUnits() == SvgPatternHelper::ObjectBoundingBox )
+                {
+                    if( tileSize == objectBound.size() )
+                        bg->setRepeat( KoPatternBackground::Stretched );
+                }
                 
                 // calculate pattern reference point offset in percent of tileSize
                 // and relative to the topleft corner of the shape

@@ -501,9 +501,20 @@ void SvgExport::getPattern( KoPatternBackground * pattern, KoShape * shape )
     *m_defs << "<pattern id=\"" << uid << "\"";
     *m_defs << " x=\"" << toUserSpace(offset.x()) << "\"";
     *m_defs << " y=\"" << toUserSpace(offset.y()) << "\"";
-    *m_defs << " width=\"" << toUserSpace(patternSize.width()) << "\"";
-    *m_defs << " height=\"" << toUserSpace(patternSize.height()) << "\"";
-    *m_defs << " patternUnits=\"userSpaceOnUse\"";
+
+    if( pattern->repeat() == KoPatternBackground::Stretched )
+    {
+        *m_defs << " width=\"100%\"";
+        *m_defs << " height=\"100%\"";
+        *m_defs << " patternUnits=\"objectBoundingBox\"";
+    }
+    else
+    {
+        *m_defs << " width=\"" << toUserSpace(patternSize.width()) << "\"";
+        *m_defs << " height=\"" << toUserSpace(patternSize.height()) << "\"";
+        *m_defs << " patternUnits=\"userSpaceOnUse\"";
+    }
+
     *m_defs << " viewBox=\"0 0 " << imageSize.width() << " " << imageSize.height() << "\"";
     //*m_defs << " patternContentUnits=\"userSpaceOnUse\""; 
     *m_defs << ">" << endl;
