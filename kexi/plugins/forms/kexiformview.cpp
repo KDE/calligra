@@ -490,7 +490,9 @@ KexiFormView::slotPropertySetSwitched()
         , propertyToSelect);
     }
     else {*/
-        propertySetSwitched();
+//2.0: we're sharing the same Set object so use propertySetReloaded() instead
+//        propertySetSwitched();
+    propertySetReloaded();
 /*    }*/
     formPart()->dataSourcePage()->assignPropertySet(&form()->propertySet());
 }

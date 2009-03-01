@@ -30,6 +30,14 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-03-02
+Forms
+- show properties for form widgets (that was broken by mistake)
+- we are sharing the same KoProperty::Set object so use propertySetReloaded() 
+  instead of propertySetSwitched(), otherwise the property editor would 
+  not refresh
+TODO: use QObject's "objectName" property instead of nonexiting "name"
+
 2009-03-01
 Forms
 - context menu appears at proper position also when executed for child widgets

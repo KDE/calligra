@@ -1717,11 +1717,11 @@ void Form::createPropertiesForWidget(QWidget *w)
 
     // add subproperties if available
     WidgetWithSubpropertiesInterface* subpropIface
-    = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+        = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
 // QStrList tmpList; //used to allocate copy of names
     if (subpropIface) {
         const QSet<QByteArray> subproperies(subpropIface->subproperies());
-        foreach(QByteArray propName, subproperies) {
+        foreach(const QByteArray& propName, subproperies) {
 //   tmpList.append( *it );
             propNames.append(propName);
             kDebug() << "Added subproperty: " << propName;
@@ -1729,13 +1729,13 @@ void Form::createPropertiesForWidget(QWidget *w)
     }
 
     // iterate over the property list, and create Property objects
-    foreach(QByteArray propName, propNames) {
+    foreach(const QByteArray& propName, propNames) {
         //kDebug() << ">> " << it.current();
         const QMetaProperty subMeta = // special case - subproperty
             subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
         const QMetaProperty meta = subMeta.isValid() ? subMeta
                                    : KexiUtils::findPropertyWithSuperclasses(w, propName.constData());
-        if (meta.isValid()) {
+        if (!meta.isValid()) {
             continue;
         }
         const char* propertyName = meta.name();
