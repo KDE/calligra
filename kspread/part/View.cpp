@@ -1149,7 +1149,8 @@ void View::initialPosition()
     refreshView();
 
     // Activate the cell tool.
-    KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
+    if (shell()) 
+        KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 
 void View::activateFormulaEditor()
