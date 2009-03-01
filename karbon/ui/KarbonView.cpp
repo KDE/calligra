@@ -177,7 +177,6 @@ public:
 
     KToggleAction * viewAction;
     KToggleAction * showRulerAction;
-    KToggleAction * showGridAction;
     KToggleAction * snapGridAction;
     KToggleAction * showPageMargins;
     KToggleAction * showGuidesAction;
@@ -905,12 +904,12 @@ void KarbonView::initActions()
     d->showRulerAction->setChecked(false);
     connect( d->showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
 
-    d->showGridAction  = new KToggleAction(KIcon("grid"), i18n("Show Grid"), this);
-    actionCollection()->addAction("view_show_grid", d->showGridAction );
-    d->showGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
-    d->showGridAction->setToolTip(i18n("Shows or hides grid"));
-    d->showGridAction->setChecked( d->part->gridData().showGrid() );
-    connect(d->showGridAction, SIGNAL(triggered()), this, SLOT(showGrid()));
+    KToggleAction *gridAction = d->part->gridData().gridToggleAction(d->canvas);
+    // XXX remove the translated strings when the string freeze is lifted, the KoGridData should have those
+    gridAction->setText(i18n("Show Grid"));
+    gridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
+    gridAction->setToolTip(i18n("Shows or hides grid"));
+    actionCollection()->addAction("view_grid", gridAction);
 
     d->showGuidesAction  = new KToggleAction(KIcon("guides"), i18n("Show Guides"), this);
     actionCollection()->addAction("view_show_guides", d->showGuidesAction );
@@ -1073,14 +1072,6 @@ void KarbonView::updateRuler()
 {
     d->horizRuler->setRulerLength( part()->document().pageSize().width() );
     d->vertRuler->setRulerLength( part()->document().pageSize().height() );
-}
-
-void KarbonView::showGrid()
-{
-    debugView("KarbonView::showGrid()");
-
-    d->part->gridData().setShowGrid( d->showGridAction->isChecked() );
-    d->canvas->update();
 }
 
 void KarbonView::showGuides()

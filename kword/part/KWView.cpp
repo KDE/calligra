@@ -303,10 +303,10 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     connect(kwcanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
     actionCollection()->addAction("edit_delete", action );
 
-    action = new KAction(i18n("Show Grid"), this);
-    action->setCheckable(true);
+    action = m_document->gridData().gridToggleAction(m_canvas);
+    // XXX remove the translated string when the string freeze is lifted, the KoGridData should have those
+    action->setText(i18n("Show Grid"));
     actionCollection()->addAction("view_grid", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(viewGrid(bool)));
 
     // -------------- Frame menu
     action  = new KAction(i18n("Create Linked Copy"), this);
@@ -1134,11 +1134,6 @@ void KWView::editSelectAllFrames()
 void KWView::editDeleteSelection()
 {
     kwcanvas()->toolProxy()->deleteSelection();
-}
-
-void KWView::viewGrid(bool on)
-{
-    m_document->gridData().setShowGrid(on);
 }
 
 void KWView::createCustomOutline()

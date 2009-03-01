@@ -129,7 +129,6 @@ public slots:
 
     void togglePageMargins(bool);
     void showRuler();
-    void showGrid();
     void showGuides();
     void snapToGrid();
 
