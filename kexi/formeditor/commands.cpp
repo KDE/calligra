@@ -315,9 +315,8 @@ void AlignWidgetsCommand::execute()
     switch (d->alignment) {
     case Form::AlignToGrid: {
         foreach (QWidget *w, list) {
-            const int tmpx = int((float)w->x() / ((float)gridX) + 0.5) * gridX;
-            const int tmpy = int((float)w->y() / ((float)gridY) + 0.5) * gridY;
-
+            const int tmpx = alignValueToGrid(w->x(), gridX);
+            const int tmpy = alignValueToGrid(w->y(), gridY);
             if ((tmpx != w->x()) || (tmpy != w->y()))
                 w->move(tmpx, tmpy);
         }
@@ -479,11 +478,10 @@ void AdjustSizeCommand::execute()
         int tmpx = 0, tmpy = 0;
         // same as in 'Align to Grid' + for the size
         foreach (QWidget *w, list) {
-            tmpx = int((float)w->x() / ((float)gridX) + 0.5) * gridX;
-            tmpy = int((float)w->y() / ((float)gridY) + 0.5) * gridY;
-            tmpw = int((float)w->width() / ((float)gridX) + 0.5) * gridX;
-            tmph = int((float)w->height() / ((float)gridY) + 0.5) * gridY;
-
+            tmpx = alignValueToGrid(w->x(), gridX);
+            tmpy = alignValueToGrid(w->y(), gridY);
+            tmpw = alignValueToGrid(w->width(), gridX);
+            tmph = alignValueToGrid(w->height(), gridY);
             if ((tmpx != w->x()) || (tmpy != w->y()))
                 w->move(tmpx, tmpy);
             if ((tmpw != w->width()) || (tmph != w->height()))
@@ -827,6 +825,8 @@ void InsertWidgetCommand::execute()
         KAcceleratorManager::setNoAccel(w);
     }
 
+//    w->installEventFilter(container);
+
     // if the insertRect is invalid (ie only one point), we use widget' size hint
     if (((d->insertRect.width() < 21) && (d->insertRect.height() < 21))) {
         QSize s = w->sizeHint();
@@ -844,8 +844,17 @@ void InsertWidgetCommand::execute()
         d->insertRect = QRect(x, y, s.width() + 16/* add some space so more text can be entered*/,
                              s.height());
     }
+
+    // fix widget size is align-to-grid is enabled
+    if (d->form->isSnapWidgetsToGridEnabled()) {
+        const int grid = d->form->gridSize();
+        d->insertRect.setWidth( alignValueToGrid(d->insertRect.width(), grid) );
+        d->insertRect.setHeight( alignValueToGrid(d->insertRect.height(), grid) );
+    }
+
     w->move(d->insertRect.x(), d->insertRect.y());
-    w->resize(d->insertRect.width() - 1, d->insertRect.height() - 1); // -1 is not to hide dots
+//    w->resize(d->insertRect.width() - 1, d->insertRect.height() - 1); // -1 is not to hide dots
+    w->resize(d->insertRect.size());
     w->setStyle(container->widget()->style());
 //2.0 not needed    w->setBackgroundOrigin(QWidget::ParentOrigin);
     w->show();

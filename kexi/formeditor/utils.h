@@ -153,7 +153,9 @@ class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
         Private * const d;
 };
 
+//! @return @a value aligned to the nearest multiple of gridSize
+KFORMEDITOR_EXPORT int alignValueToGrid(int value, int gridSize);
+
 }
 
 #endif
-

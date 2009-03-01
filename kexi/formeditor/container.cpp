@@ -33,7 +33,6 @@
 
 #include <kdebug.h>
 #include <KLocale>
-#include <KMenu>
 #include <KGlobalSettings>
 
 #include <cstdlib> // for abs()
@@ -137,13 +136,19 @@ public:
             stopSelectionRectangleOrInserting();
             return;
         }
+        QRect oldInsertRect( insertRect );
         insertRect.setTopLeft( QPoint(
             qMin(insertBegin.x(), end.x()),
             qMin(insertBegin.y(), end.y()) ) );
         insertRect.setBottomRight( QPoint(
             qMax(insertBegin.x(), end.x()),
             qMax(insertBegin.y(), end.y()) ) );
-        m_widget->update();
+        QRegion region(oldInsertRect);
+        region.unite(insertRect);
+        QRect toUpdate( oldInsertRect.united(insertRect) );
+        toUpdate.setWidth(toUpdate.width()+1);
+        toUpdate.setHeight(toUpdate.height()+1);
+        m_widget->update(toUpdate);
     }
     bool selectionOrInsertingStarted() const
     {
@@ -341,12 +346,9 @@ Container::eventFilter(QObject *s, QEvent *e)
                 tmpy = mev->y();
             }
             else {
-                int gridX = d->form->gridSize();
-                int gridY = d->form->gridSize();
-                tmpx = int((float)mev->x() / ((float)gridX) + 0.5);   // snap to grid
-                tmpx *= gridX;
-                tmpy = int((float)mev->y() / ((float)gridY) + 0.5);
-                tmpy *= gridX;
+                int grid = d->form->gridSize();
+                tmpx = alignValueToGrid(mev->x(), grid);
+                tmpy = alignValueToGrid(mev->y(), grid);
             }
 
             d->startSelectionOrInsertingRectangle( (static_cast<QWidget*>(s))->mapTo(widget(), QPoint(tmpx, tmpy)) );
@@ -392,6 +394,18 @@ Container::eventFilter(QObject *s, QEvent *e)
                )
            )
         {
+            QPoint realPos;
+            if (d->form->isSnapWidgetsToGridEnabled()) {
+                const int gridX = d->form->gridSize();
+                const int gridY = d->form->gridSize();
+                realPos = QPoint(
+                    alignValueToGrid(mev->pos().x(), gridX), 
+                    alignValueToGrid(mev->pos().y(), gridY)); 
+            }
+            else {
+                realPos = mev->pos();
+            }
+            d->updateSelectionOrInsertingRectangle(realPos); //2.0
             // draw the insert rect
 //reimpl.            drawInsertRect(mev, s);
             return true;
@@ -1257,10 +1271,8 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
         tmpy = pos.y();
     }
     else {
-        tmpx = int((float) pos.x() / ((float)gridX) + 0.5);
-        tmpx *= gridX;
-        tmpy = int((float)pos.y() / ((float)gridY) + 0.5);
-        tmpy *= gridX;
+        tmpx = alignValueToGrid(pos.x(), gridX);
+        tmpy = alignValueToGrid(pos.y(), gridY);
     }
 
     int topx = (m_insertBegin.x() < tmpx) ? m_insertBegin.x() : tmpx;
@@ -1375,8 +1387,8 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             tmpy = w->y() + dy;
         }
         else {
-            tmpx = int(float(w->x() + dx) / float(gridX) + 0.5) * gridX;
-            tmpy = int(float(w->y() + dy) / float(gridY) + 0.5) * gridY;
+            tmpx = alignValueToGrid(w->x() + dx, gridX);
+            tmpy = alignValueToGrid(w->y() + dy, gridY);
         }
 
         if ((tmpx != w->x()) || (tmpy != w->y())) {

@@ -299,4 +299,11 @@ QAction *ActionGroup::action(const QString& name) const
     return d->actions.value(name);
 }
 
+//-----------------------------
+
+int KFormDesigner::alignValueToGrid(int value, int gridSize)
+{
+    return int((float)value / ((float)gridSize) + 0.5) * gridSize;
+}
+
 #include "utils.moc"

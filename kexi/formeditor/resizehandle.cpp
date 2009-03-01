@@ -40,18 +40,17 @@
 using namespace KFormDesigner;
 
 ResizeHandle::ResizeHandle(ResizeHandleSet *set, HandlePos pos, bool editing)
-        : QWidget(set->m_widget->parentWidget()), m_set(set)
+        : QWidget(set->m_widget->parentWidget()), m_set(set), m_pos(pos)
 {
 // setBackgroundMode(Qt::NoBackground);
     m_dragging = false;
     //m_editing = editing;
     setEditingMode(editing);
-    setFixedWidth(6);
-    setFixedHeight(6);
-    m_pos = pos;
+    setFixedSize(6, 6);
     //m_buddy = buddy;
     //buddy->installEventFilter(this);
     m_set->m_widget->installEventFilter(this);
+    setAutoFillBackground(true);
 //js installEventFilter(this);
 
     updatePos();
@@ -65,7 +64,7 @@ ResizeHandle::~ResizeHandle()
 void ResizeHandle::setEditingMode(bool editing)
 {
     QPalette pal(palette());
-    pal.setColor(backgroundRole(), editing ? Qt::blue : Qt::black);
+    pal.setBrush(backgroundRole(), editing ? QBrush(Qt::blue) : pal.text());
     setPalette(pal);
 }
 

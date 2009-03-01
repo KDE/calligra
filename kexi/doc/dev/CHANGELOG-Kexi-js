@@ -20,8 +20,7 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
-TODO
- Form editor:
+TODO Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
@@ -31,11 +30,30 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-03-01
+Forms
+- context menu appears at proper position also when executed for child widgets
+- resize handles are properly displayed again
+- widgets inserted with single click have size aligned to grid if necessary
+- fixed inserting widgets by specifying the geometry using mouse
+- fix drawing rectangle while inserting widgets by specifying the geometry 
+TODO: perhaps draw the rectangle differently
+- selection rectangle is now painted over widgets too
+- only minimal needed region is repainted when selection/insertion rectangle changes
+TODO: it is possible to optimize this even more by painting only areas near borders
+= code simplified:
+  added utility function alignValueToGrid() for use instead of copy/pasted code
+
+2009-02-28
+Forms
+- do not align selection rectangle to grid
+
 2009-02-27
 Forms
 = make the actions from widget-action-group accessible for the Form object
 - the above allows to switch back to the edit_pointer toggle action after 
   inserting a new widget
+TODO: remove usage of KFormDesigner::ActionGroup when the two libraries are merged
 
 2009-02-26
 Forms

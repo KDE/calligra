@@ -2130,7 +2130,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 //    QPoint realMenuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
     d->insertionPoint = menuPos; //container->widget()->mapToGlobal(menuPos);
 
-    QAction *result = menu.exec( container->widget()->mapToGlobal(menuPos) );
+    QAction *result = menu.exec( container->widget()->mapToGlobal(w->pos() + menuPos) );
     
     if (!result) {
         // nothing to do
