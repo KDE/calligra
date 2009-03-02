@@ -34,6 +34,9 @@ http://rafb.net/p/R4QIBR13.html
 Forms
 - disable resizing resize handles using anything but left mouse button
 - activating "edit_pointer" action aborts "widget inserting" mode
+- fix selecting multiple using rectangular areas
+- fix positions of multiple widgets pasted from clipboard position:
+  subtracting the original offset and adding the new one
 
 2009-03-02
 Forms
