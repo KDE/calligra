@@ -33,6 +33,7 @@ http://rafb.net/p/R4QIBR13.html
 2009-03-02
 Forms
 - disable resizing resize handles using anything but left mouse button
+- activating "edit_pointer" action aborts "widget inserting" mode
 
 2009-03-02
 Forms

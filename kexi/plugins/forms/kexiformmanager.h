@@ -82,6 +82,7 @@ protected slots:
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
     void slotWidgetActionToggled(const QByteArray& action);
     void slotAssignAction();
+    void slotPointerClicked();
 
 protected:
     inline QString translateName(const char* name) const;

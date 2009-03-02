@@ -538,4 +538,12 @@ void KexiFormManager::slotAssignAction()
     }
 }
 
+void KexiFormManager::slotPointerClicked()
+{
+    KexiFormView* formView = activeFormViewWidget();
+    if (!formView)
+        return;
+    formView->form()->enterWidgetSelectingState();
+}
+
 #include "kexiformmanager.moc"
