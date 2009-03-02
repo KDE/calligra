@@ -562,7 +562,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             }
 #ifdef KFD_SIGSLOTS
             else if (connecting) {
-                FormManager::self()->stopCreatingConnection();
+                d->form->abortCreatingConnection();
             }
 #endif
             else if (d->form->state() == Form::WidgetInserting) {
