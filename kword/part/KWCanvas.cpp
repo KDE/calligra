@@ -26,10 +26,11 @@
 #include "KWPage.h"
 
 // koffice libs includes
-#include "KoShapeManager.h"
-#include "KoPointerEvent.h"
-#include "KoToolManager.h"
-#include "KoToolProxy.h"
+#include <KoShapeManager.h>
+#include <KoPointerEvent.h>
+#include <KoToolManager.h>
+#include <KoToolProxy.h>
+#include <KoGridData.h>
 
 // KDE + Qt includes
 #include <KDebug>
