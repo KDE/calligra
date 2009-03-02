@@ -257,7 +257,7 @@ void SubtotalDialog::fillColumnBoxes()
     cell = Cell( m_pSheet, i, row );
     text = cell.displayText();
 
-    if ( text.length() > 0 )
+    //if ( text.length() > 0 )
     {
       text = i18n( "Column '%1' ", Cell::columnName( i ) );
     }
