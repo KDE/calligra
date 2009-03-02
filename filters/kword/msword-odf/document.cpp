@@ -717,42 +717,4 @@ void Document::processSubDocQueue()
     }
 }
 
-//get the subdocument
-//create the frame for it
-//create the picture element
-KoStoreDevice* Document::createPictureFrameSet(QString filename)
-{
-    kDebug(30513) ;
-
-    return m_chain->storageFile(filename, KoStore::Write);
-
-    // Grab data that was stored with the functor, that triggered this parsing
-    //SubDocument subdoc( m_subdocQueue.front() );
-
-    //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
-    //framesetElement.setAttribute( "frameType", 2 /*picture*/ );
-    //framesetElement.setAttribute( "frameInfo", 0 );
-    //framesetElement.setAttribute( "name", subdoc.name );
-    //m_framesetsElement.appendChild(framesetElement);
-
-    // The position doesn't matter as long as the picture is inline
-    // FIXME for non-inline pics ####
-    // To determine the size, look at OOo's filter (WW8PicDesc in ww8graf2.cxx, version 1.50, line 406)
-    // Hint: #i17200#, a bit of guesswork I'm afraid
-    //        if (aPic.dxaGoal == 1000 && aPic.mx == 1)  //100% hack ? (from ww8graf2.cxx)
-    //createInitialFrame( framesetElement, 0, size.width(), 0, size.height(), false, NoFollowup );
-
-    //QDomElement pictureElem = m_mainDocument.createElement("PICTURE");
-    //framesetElement.appendChild( pictureElem );
-
-    //QDomElement keyElem = m_mainDocument.createElement("KEY");
-    //pictureElem.appendChild( keyElem );
-    //keyElem.setAttribute( "filename", subdoc.extraName );
-    //m_pictureList.append( subdoc.extraName );
-
-    //kDebug(30513) <<"Preparing to write picture for '" << subdoc.name <<"' into" << subdoc.extraName;
-    //return m_chain->storageFile( subdoc.extraName, KoStore::Write );
-}
-
-
 #include "document.moc"

@@ -306,7 +306,7 @@ WidgetLibrary::createXML()
   return doc.toString();
 }*/
 
-void WidgetLibrary::createWidgetActions(QActionGroup *group)
+void WidgetLibrary::createWidgetActions(ActionGroup *group)
 {
     loadFactories();
 

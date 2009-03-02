@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2009 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,6 +40,17 @@ public:
 
     /// Process @p raw and render it to @p path
     void renderToPath( const QString& raw, QPainterPath& path );
+
+private:
+    bool readMathMLAttributes( const KoXmlElement& element );
+    void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer ) const;
+
+    QChar m_char;         // Char to be shown
+    QString m_fontFamily; // Font family to use
+    QString m_alt;        // Alternative text if font family not found
+    bool m_hasFont;       // Whether required font is available
+
 };
 
 #endif // GLYPHELEMENT_H

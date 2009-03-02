@@ -102,7 +102,7 @@ protected:
     bool readMathMLContent( const KoXmlElement& parent );
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer ) const;
+    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 
     /// @return The font to use
     QFont font() const;

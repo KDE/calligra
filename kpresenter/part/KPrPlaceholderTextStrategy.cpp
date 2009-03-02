@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,11 +33,10 @@
 #include <KoShapeRegistry.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocument.h>
+#include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-
-#include <kdebug.h>
 
 KPrPlaceholderTextStrategy::KPrPlaceholderTextStrategy( const QString & presentationClass )
 : KPrPlaceholderStrategy( presentationClass )
@@ -77,9 +76,15 @@ KoShape * KPrPlaceholderTextStrategy::createShape( const QMap<QString, KoDataCen
 void KPrPlaceholderTextStrategy::paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect )
 {
     if ( m_textShape ) {
-        kDebug(33001) << "size" << rect.size();
         painter.save();
         m_textShape->setSize( rect.size() );
+        // this code is needed to make sure the text of the textshape is layouted before it is painted
+        KoTextShapeData * shapeData = qobject_cast<KoTextShapeData*>( m_textShape->userData() );
+        QTextDocument * document = shapeData->document();
+        KoTextDocumentLayout * lay = dynamic_cast<KoTextDocumentLayout*>( document->documentLayout() );
+        if ( lay ) {
+            lay->layout();
+        }
         m_textShape->paint( painter, converter );
 
         KoShape::applyConversion( painter, converter );
@@ -146,8 +151,6 @@ void KPrPlaceholderTextStrategy::init( const QMap<QString, KoDataCenter *> & dat
     QTextDocument * document = shapeData->document();
     QTextCursor cursor( document );
     cursor.insertText( text() );
-    shapeData->foul();
-    shapeData->fireResizeEvent();
 }
 
 KoShapeUserData * KPrPlaceholderTextStrategy::userData() const

@@ -161,8 +161,6 @@ private slots:
     void editSelectAllFrames();
     /// calls delete on the active tool
     void editDeleteSelection();
-    /// show or hide the grid
-    void viewGrid(bool);
     /// create a KWOutlineShape for the selected frame(s).
     void createCustomOutline();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */

@@ -1,25 +1,26 @@
 -----------------------------------------------------------------------------
  Kexi Development CHANGELOG Document
- From jstaniek's Point of View
- 
- Copyright (C) 2003-2009 Jaroslaw Staniek staniek at kde.org / OpenOffice Polska
+ Proposed by jstaniek
+
+ Copyright (C) 2003-2007 Jaroslaw Staniek @ OpenOffice Polska
+ Copyright (C) 2008-2009 Jaroslaw Staniek (staniek at kde.org)
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
-For most important commits use: CCMAIL:kexi-devel@kde.org
-For interesting commits use: 
+TIP: For most important commits use: CCMAIL:kexi-devel@kde.org
+TIP: For interesting commits use
 FEATURE: <desctiption>
 CCMAIL:danny@commit-digest.org
-For bugfixes use CCMAIL:###-done@bugs.kde.org
+TIP: For bugfixes use CCMAIL:###-done@bugs.kde.org
+TIP: Use "QT_FLUSH_PAINT=10 kexi" (or "set QT_FLUSH_PAINT=10; kexi" on Windows) to debug painting.
+
 Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
 ===================== Kexi 2.0 Alpha =====================
 
-
-TODO
- Form editor:
+TODO Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
 
@@ -28,6 +29,65 @@ TODO:
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
+
+2009-03-02
+Forms
+- show properties for form widgets (that was broken by mistake)
+- we are sharing the same KoProperty::Set object so use propertySetReloaded() 
+  instead of propertySetSwitched(), otherwise the property editor would 
+  not refresh
+TODO: use QObject's "objectName" property instead of nonexiting "name"
+
+2009-03-01
+Forms
+- context menu appears at proper position also when executed for child widgets
+- resize handles are properly displayed again
+- widgets inserted with single click have size aligned to grid if necessary
+- fixed inserting widgets by specifying the geometry using mouse
+- fix drawing rectangle while inserting widgets by specifying the geometry 
+TODO: perhaps draw the rectangle differently
+- selection rectangle is now painted over widgets too
+- only minimal needed region is repainted when selection/insertion rectangle changes
+TODO: it is possible to optimize this even more by painting only areas near borders
+= code simplified:
+  added utility function alignValueToGrid() for use instead of copy/pasted code
+
+2009-02-28
+Forms
+- do not align selection rectangle to grid
+
+2009-02-27
+Forms
+= make the actions from widget-action-group accessible for the Form object
+- the above allows to switch back to the edit_pointer toggle action after 
+  inserting a new widget
+TODO: remove usage of KFormDesigner::ActionGroup when the two libraries are merged
+
+2009-02-26
+Forms
+= fixed resizing widgets with taking grid into account
+
+2009-02-25
+Forms
+= reenabled form's debugger window
+
+2009-02-24
+Forms
+- fixed copy/paste for widgets, including position of the duplicated widget
+- fixed painting of the grid when scrolling vertically
+TODO: optimize scrolling
+= replaced usage of QDomNode::namedItem().toElement() with QDomNode::firstChildElement()
+
+2009-02-23
+Forms
+- optimized painting grid: only required rectangle is painted; 
+  this makes moving or resizing widgets smoother
+TODO: optimize more; there are 2 events when widget is moved
+[5496] kexi(5496)/kexi (general) bool __thiscall KFormDesigner::Container::eventFilter(class QObject *,class QEvent *): QRect(457,367 41x35)
+[5496] kexi(5496)/kexi (general) bool __thiscall KFormDesigner::Container::eventFilter(class QObject *,class QEvent *): QRect(0,0 35x19)
+                                                                                                                              ^^^^^^^^^
+- tab widgets can be dragged by clicking on the container
+- QStackedWidget replaces QWidgetStack in a few more places in the code
 
 2009-02-22
 Forms

@@ -289,7 +289,8 @@ void Selection::initialize(const Region& region, Sheet* sheet)
 
   if (d->selectionMode == SingleCell)
   {
-    initialize(cells()[0]->rect().bottomRight(), sheet);
+      if(!cells().isEmpty())
+     	 initialize(cells()[0]->rect().bottomRight(), sheet);
     return;
   }
 

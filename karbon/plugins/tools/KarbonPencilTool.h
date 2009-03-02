@@ -23,6 +23,7 @@
 #include <KoTool.h>
 
 class KoPathShape;
+class KoLineBorder;
 
 class KarbonPencilTool : public KoTool
 {
@@ -54,7 +55,7 @@ private:
     qreal lineAngle( const QPointF &p1, const QPointF &p2 );
     void addPoint( const QPointF & point );
     void finish( bool closePath );
-
+    KoLineBorder * currentBorder();
     enum PencilMode { ModeRaw, ModeCurve, ModeStraight };
 
     PencilMode m_mode;

@@ -182,8 +182,8 @@ GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   connect( this, SIGNAL( rejected() ), this, SLOT( buttonCancelClicked() ) );
 
-  connect( m_selection, SIGNAL(changed(const Region&)),
-           this, SLOT(slotSelectionChanged()));
+  //connect( m_selection, SIGNAL(changed(const Region&)),
+  //         this, SLOT(slotSelectionChanged()));
 
   // tab order
   setTabOrder( m_selector1,  m_selector2 );

@@ -177,7 +177,6 @@ public:
 
     KToggleAction * viewAction;
     KToggleAction * showRulerAction;
-    KToggleAction * showGridAction;
     KToggleAction * snapGridAction;
     KToggleAction * showPageMargins;
     KToggleAction * showGuidesAction;
@@ -259,6 +258,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->horizRuler->setShowMousePosition(true);
     d->horizRuler->setUnit(p->unit());
     d->horizRuler->setRightToLeft(false);
+    d->horizRuler->setVisible(false);
     new KoRulerController( d->horizRuler, d->canvas->resourceProvider() );
 
     layout->addWidget( d->horizRuler, 0, 1 );
@@ -267,6 +267,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     d->vertRuler = new KoRuler( this, Qt::Vertical, d->canvas->viewConverter() );
     d->vertRuler->setShowMousePosition(true);
     d->vertRuler->setUnit(p->unit());
+    d->vertRuler->setVisible(false);
     layout->addWidget( d->vertRuler, 1, 0 );
 
     connect( d->canvas, SIGNAL(documentOriginChanged( const QPoint &)), this, SLOT(pageOffsetChanged()));
@@ -903,12 +904,12 @@ void KarbonView::initActions()
     d->showRulerAction->setChecked(false);
     connect( d->showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
 
-    d->showGridAction  = new KToggleAction(KIcon("grid"), i18n("Show Grid"), this);
-    actionCollection()->addAction("view_show_grid", d->showGridAction );
-    d->showGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
-    d->showGridAction->setToolTip(i18n("Shows or hides grid"));
-    d->showGridAction->setChecked( d->part->gridData().showGrid() );
-    connect(d->showGridAction, SIGNAL(triggered()), this, SLOT(showGrid()));
+    KToggleAction *gridAction = d->part->gridData().gridToggleAction(d->canvas);
+    // XXX remove the translated strings when the string freeze is lifted, the KoGridData should have those
+    gridAction->setText(i18n("Show Grid"));
+    gridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
+    gridAction->setToolTip(i18n("Shows or hides grid"));
+    actionCollection()->addAction("view_grid", gridAction);
 
     d->showGuidesAction  = new KToggleAction(KIcon("guides"), i18n("Show Guides"), this);
     actionCollection()->addAction("view_show_guides", d->showGuidesAction );
@@ -1006,14 +1007,17 @@ void KarbonView::mousePositionChanged( const QPoint &position )
 {
     QPoint canvasOffset( d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY() );
     QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
-    d->horizRuler->updateMouseCoordinate( viewPos.x() );
-    d->vertRuler->updateMouseCoordinate( viewPos.y() );
+    if( d->horizRuler->isVisible() )
+        d->horizRuler->updateMouseCoordinate( viewPos.x() );
+    if( d->vertRuler->isVisible() )
+        d->vertRuler->updateMouseCoordinate( viewPos.y() );
 
     QPointF documentPos = d->canvas->viewConverter()->viewToDocument( viewPos );
     qreal x = part()->unit().toUserValue(documentPos.x());
     qreal y = part()->unit().toUserValue(documentPos.y());
 
-    d->cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
+    if( statusBar() && statusBar()->isVisible() )
+        d->cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::locale()->formatNumber(x, 2)).arg(KGlobal::locale()->formatNumber(y, 2)) );
 }
 
 void KarbonView::reorganizeGUI()
@@ -1068,14 +1072,6 @@ void KarbonView::updateRuler()
 {
     d->horizRuler->setRulerLength( part()->document().pageSize().width() );
     d->vertRuler->setRulerLength( part()->document().pageSize().height() );
-}
-
-void KarbonView::showGrid()
-{
-    debugView("KarbonView::showGrid()");
-
-    d->part->gridData().setShowGrid( d->showGridAction->isChecked() );
-    d->canvas->update();
 }
 
 void KarbonView::showGuides()

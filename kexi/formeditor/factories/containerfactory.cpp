@@ -265,6 +265,8 @@ InsertPageCommand::execute()
 
     QWidget *page = container->form()->library()->createWidget(
         "QWidget", parent, m_name.toLatin1(), container);
+    page->setAutoFillBackground(true);
+//    page->setPaletteBackgroundColor(Qt::red);
     KFormDesigner::ObjectTreeItem *item = container->form()->objectTree()->lookup(m_name);
 
 

@@ -24,6 +24,7 @@
 #include <QHash>
 #include <QTabBar>
 #include <QTabWidget>
+#include <QActionGroup>
 #include <kexi_export.h>
 
 //! @todo replace QTabWidget by KTabWidget after the bug with & is fixed:
@@ -138,7 +139,23 @@ KFORMEDITOR_EXPORT void widgetsToXML(QDomDocument& doc,
     QHash<QByteArray, QByteArray>& parents,
     const Form& form, const QWidgetList &list);
 
+//! QActionGroup extended by action() method.
+class KFORMEDITOR_EXPORT ActionGroup : public QActionGroup
+{
+    public:
+        ActionGroup( QObject * parent );
+        ~ActionGroup();
+        //! Reimplemented.
+        void addAction(QAction* action);
+        QAction *action(const QString& name) const;
+    private:
+        class Private;
+        Private * const d;
+};
+
+//! @return @a value aligned to the nearest multiple of gridSize
+KFORMEDITOR_EXPORT int alignValueToGrid(int value, int gridSize);
+
 }
 
 #endif
-

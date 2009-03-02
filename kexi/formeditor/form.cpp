@@ -129,6 +129,7 @@ public:
 
     K3CommandHistory  *commandHistory;
     KActionCollection  *collection;
+    KFormDesigner::ActionGroup* widgetActionGroup;
 
     ObjectTreeList  tabstops;
     bool autoTabstops;
@@ -343,16 +344,16 @@ KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, 
 
 //--------------------------------------
 
-Form::Form(WidgetLibrary* library, Mode mode, KActionCollection &col)
+Form::Form(WidgetLibrary* library, Mode mode, KActionCollection &col, ActionGroup& group)
         : QObject(library)
 {
-    init(library, mode, col);
+    init(library, mode, col, group);
 }
 
 Form::Form(Form *parent)
         : QObject(parent->library())
 {
-    init(parent->library(), parent->mode(), *parent->actionCollection());
+    init(parent->library(), parent->mode(), *parent->actionCollection(), *parent->widgetActionGroup());
 }
 
 Form::~Form()
@@ -362,13 +363,14 @@ Form::~Form()
     d = 0;
 }
 
-void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col)
+void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KFormDesigner::ActionGroup &group)
 {
     m_lib = library;
     d = new FormPrivate(this);
 // d->manager = manager;
     d->mode = mode;
     d->features = 0;
+    d->widgetActionGroup = &group;
 
     connect(&d->propertySet, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
@@ -385,6 +387,11 @@ void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col)
 KActionCollection  *Form::actionCollection() const
 {
     return d->collection;
+}
+
+KFormDesigner::ActionGroup* Form::widgetActionGroup() const
+{
+    return d->widgetActionGroup;
 }
 
 void Form::setFeatures(Features features)
@@ -1304,7 +1311,7 @@ void Form::abortWidgetInserting()
     }
 #endif
     d->state = WidgetSelecting;
-    QAction *pointer_action = d->collection->action(QLatin1String("edit_pointer"));
+    QAction *pointer_action = d->widgetActionGroup->action(QLatin1String("edit_pointer"));
 //    Q_ASSERT(pointer_action);
     if (pointer_action) {
         pointer_action->setChecked(true);
@@ -1423,7 +1430,7 @@ void Form::abortCreatingConnection()
     delete m_connection;
     m_connection = 0;
     m_drawingSlot = false;
-    QAction *pointer_action = d->collection->action(QLatin1String("edit_pointer"));
+    QAction *pointer_action = d->widgetActionGroup->action(QLatin1String("edit_pointer"));
 //    Q_ASSERT(pointer_action);
     if (pointer_action) {
         pointer_action->setChecked(true);
@@ -1712,11 +1719,11 @@ void Form::createPropertiesForWidget(QWidget *w)
 
     // add subproperties if available
     WidgetWithSubpropertiesInterface* subpropIface
-    = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
+        = dynamic_cast<WidgetWithSubpropertiesInterface*>(w);
 // QStrList tmpList; //used to allocate copy of names
     if (subpropIface) {
         const QSet<QByteArray> subproperies(subpropIface->subproperies());
-        foreach(QByteArray propName, subproperies) {
+        foreach(const QByteArray& propName, subproperies) {
 //   tmpList.append( *it );
             propNames.append(propName);
             kDebug() << "Added subproperty: " << propName;
@@ -1724,13 +1731,13 @@ void Form::createPropertiesForWidget(QWidget *w)
     }
 
     // iterate over the property list, and create Property objects
-    foreach(QByteArray propName, propNames) {
+    foreach(const QByteArray& propName, propNames) {
         //kDebug() << ">> " << it.current();
         const QMetaProperty subMeta = // special case - subproperty
             subpropIface ? subpropIface->findMetaSubproperty(propName) : QMetaProperty();
         const QMetaProperty meta = subMeta.isValid() ? subMeta
                                    : KexiUtils::findPropertyWithSuperclasses(w, propName.constData());
-        if (meta.isValid()) {
+        if (!meta.isValid()) {
             continue;
         }
         const char* propertyName = meta.name();
@@ -2123,9 +2130,9 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
 //    QWidgetList *lst = container->form()->selectedWidgets();
 //    QWidget * sel_w = lst ? lst->first() : container->form()->selectedWidget();
 //    QPoint realMenuPos = sel_w ? sel_w->mapToGlobal(QPoint(sel_w->width() / 2, sel_w->height() / 2)) : QCursor::pos();
-    d->insertionPoint = container->widget()->mapToGlobal(menuPos);
+    d->insertionPoint = menuPos; //container->widget()->mapToGlobal(menuPos);
 
-    QAction *result = menu.exec(d->insertionPoint);
+    QAction *result = menu.exec( container->widget()->mapToGlobal(w->pos() + menuPos) );
     
     if (!result) {
         // nothing to do
@@ -2226,17 +2233,18 @@ void Form::pasteWidget()
     if (!objectTree()) {
         return;
     }
-    const QMimeData *mimedata = QApplication::clipboard()->mimeData();
-    if (!mimedata->hasFormat( KFormDesigner::mimeType() ) && !mimedata->hasText()) {
+    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
+    const bool mimeDataHasXmlUiFormat = mimeData->hasFormat( KFormDesigner::mimeType() );
+    if (!mimeDataHasXmlUiFormat && !mimeData->hasText()) {
         return;
     }
     QDomDocument doc;
-    if (!doc.setContent( mimedata->hasFormat(KFormDesigner::mimeType()) 
-        ? mimedata->data(KFormDesigner::mimeType()) : mimedata->text() ))
+    if (!doc.setContent( mimeDataHasXmlUiFormat 
+        ? QString::fromUtf8( mimeData->data(KFormDesigner::mimeType())) : mimeData->text() ))
     {
         return;
     }
-    if (!doc.namedItem("UI").hasChildNodes()) {
+    if (!doc.firstChildElement("UI").hasChildNodes()) {
         return;
     }
 

@@ -343,11 +343,11 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 {
     m_currentForm = form;
 
-    QDomElement ui = inBuf.namedItem("UI").toElement();
+    QDomElement ui = inBuf.firstChildElement("UI");
 
     //custom properties
     form->headerProperties()->clear();
-    QDomElement headerPropertiesEl = ui.namedItem("kfd:customHeader").toElement();
+    QDomElement headerPropertiesEl = ui.firstChildElement("kfd:customHeader");
     QDomAttr attr = headerPropertiesEl.firstChild().toAttr();
     while (!attr.isNull() && attr.isAttr()) {
         form->headerProperties()->insert(attr.name().toLatin1(), attr.value());
@@ -377,7 +377,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     }
 
     // Load the pixmap collection
-    m_savePixmapsInline = ((ui.namedItem("pixmapinproject").isNull()) || (!ui.namedItem("images").isNull()));
+    m_savePixmapsInline = ((ui.firstChildElement("pixmapinproject").isNull()) || (!ui.firstChildElement("images").isNull()));
 #ifdef __GNUC__
 #warning pixmapcollection
 #endif
@@ -385,11 +385,11 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
     form->pixmapCollection()->load(ui.namedItem("collection"));
 #endif
 
-    QDomElement element = ui.namedItem("widget").toElement();
+    QDomElement element = ui.firstChildElement("widget");
     createToplevelWidget(form, container, element);
 
     // Loading the tabstops
-    QDomElement tabStops = ui.namedItem("tabstops").toElement();
+    QDomElement tabStops = ui.firstChildElement("tabstops");
     if (!tabStops.isNull()) {
         int i = 0;
         uint itemsNotFound = 0;
@@ -439,21 +439,25 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
     QWidget *subwidget = w;
     bool addSubwidgetFlag = false;
     int propertyId = KexiUtils::indexOfPropertyWithSuperclasses(w, name);
-    if (propertyId == -1 && subpropIface && subpropIface->subwidget()) { // try property from subwidget
+    const bool propertyIsName = qstrcmp(name, "name") == 0;
+    if (!propertyIsName && propertyId == -1 && subpropIface && subpropIface->subwidget()) { // try property from subwidget
         subwidget = subpropIface->subwidget();
         propertyId = KexiUtils::indexOfPropertyWithSuperclasses(
                          subpropIface->subwidget(), name);
         addSubwidgetFlag = true;
     }
-    if (propertyId == -1) {
+    if (!propertyIsName && propertyId == -1) {
         kDebug() << "The object doesn't have this property. Let's try the WidgetLibrary.";
         if (lib)
             lib->saveSpecialProperty(w->metaObject()->className(), name, value, w, parentNode, parent);
         return;
     }
 
-    const QMetaProperty meta(KexiUtils::findPropertyWithSuperclasses(subwidget, propertyId));
-    if (!meta.isValid() || !meta.isStored(subwidget))   //not storable
+    QMetaProperty meta;
+    if (!propertyIsName) {
+        meta = KexiUtils::findPropertyWithSuperclasses(subwidget, propertyId);
+    }
+    if (!propertyIsName && (!meta.isValid() || !meta.isStored(subwidget)))   //not storable
         return;
     QDomElement propertyE = parent.createElement("property");
     propertyE.setAttribute("name", name);
@@ -767,10 +771,10 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
     if (type == "string" || type == "cstring")
         return text;
     else if (type == "rect") {
-        QDomElement x = node.namedItem("x").toElement();
-        QDomElement y = node.namedItem("y").toElement();
-        QDomElement w = node.namedItem("width").toElement();
-        QDomElement h = node.namedItem("height").toElement();
+        QDomElement x = node.firstChildElement("x");
+        QDomElement y = node.firstChildElement("y");
+        QDomElement w = node.firstChildElement("width");
+        QDomElement h = node.firstChildElement("height");
 
         int rx = x.text().toInt();
         int ry = y.text().toInt();
@@ -779,9 +783,9 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 
         return QRect(rx, ry, rw, rh);
     } else if (type == "color") {
-        const QDomElement r(node.namedItem("red").toElement());
-        const QDomElement g(node.namedItem("green").toElement());
-        const QDomElement b(node.namedItem("blue").toElement());
+        const QDomElement r(node.firstChildElement("red"));
+        const QDomElement g(node.firstChildElement("green"));
+        const QDomElement b(node.firstChildElement("blue"));
 
         return QColor(r.text().toInt(), g.text().toInt(), b.text().toInt());
     } else if (type == "bool") {
@@ -793,23 +797,23 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
     } else if (type == "number") {
         return text.toInt();
     } else if (type == "size") {
-        QDomElement w = node.namedItem("width").toElement();
-        QDomElement h = node.namedItem("height").toElement();
+        QDomElement w = node.firstChildElement("width");
+        QDomElement h = node.firstChildElement("height");
 
         return QSize(w.text().toInt(), h.text().toInt());
     } else if (type == "point") {
-        QDomElement x = node.namedItem("x").toElement();
-        QDomElement y = node.namedItem("y").toElement();
+        QDomElement x = node.firstChildElement("x");
+        QDomElement y = node.firstChildElement("y");
 
         return QPoint(x.text().toInt(), y.text().toInt());
     } else if (type == "font") {
-        QDomElement fa = node.namedItem("family").toElement();
-        QDomElement p = node.namedItem("pointsize").toElement();
-        QDomElement w = node.namedItem("weight").toElement();
-        QDomElement b = node.namedItem("bold").toElement();
-        QDomElement i = node.namedItem("italic").toElement();
-        QDomElement u = node.namedItem("underline").toElement();
-        QDomElement s = node.namedItem("strikeout").toElement();
+        QDomElement fa = node.firstChildElement("family");
+        QDomElement p = node.firstChildElement("pointsize");
+        QDomElement w = node.firstChildElement("weight");
+        QDomElement b = node.firstChildElement("bold");
+        QDomElement i = node.firstChildElement("italic");
+        QDomElement u = node.firstChildElement("underline");
+        QDomElement s = node.firstChildElement("strikeout");
 
         QFont f;
         f.setFamily(fa.text());
@@ -824,34 +828,34 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
     } else if (type == "cursor") {
         return QCursor((Qt::CursorShape) text.toInt());
     } else if (type == "time") {
-        QDomElement h = node.namedItem("hour").toElement();
-        QDomElement m = node.namedItem("minute").toElement();
-        QDomElement s = node.namedItem("second").toElement();
+        QDomElement h = node.firstChildElement("hour");
+        QDomElement m = node.firstChildElement("minute");
+        QDomElement s = node.firstChildElement("second");
 
         return QTime(h.text().toInt(), m.text().toInt(), s.text().toInt());
     } else if (type == "date") {
-        QDomElement y = node.namedItem("year").toElement();
-        QDomElement m = node.namedItem("month").toElement();
-        QDomElement d = node.namedItem("day").toElement();
+        QDomElement y = node.firstChildElement("year");
+        QDomElement m = node.firstChildElement("month");
+        QDomElement d = node.firstChildElement("day");
 
         return QDate(y.text().toInt(), m.text().toInt(), d.text().toInt());
     } else if (type == "datetime") {
-        QDomElement h = node.namedItem("hour").toElement();
-        QDomElement m = node.namedItem("minute").toElement();
-        QDomElement s = node.namedItem("second").toElement();
-        QDomElement y = node.namedItem("year").toElement();
-        QDomElement mo = node.namedItem("month").toElement();
-        QDomElement d = node.namedItem("day").toElement();
+        QDomElement h = node.firstChildElement("hour");
+        QDomElement m = node.firstChildElement("minute");
+        QDomElement s = node.firstChildElement("second");
+        QDomElement y = node.firstChildElement("year");
+        QDomElement mo = node.firstChildElement("month");
+        QDomElement d = node.firstChildElement("day");
 
         QTime t(h.text().toInt(), m.text().toInt(), s.text().toInt());
         QDate da(y.text().toInt(), mo.text().toInt(), d.text().toInt());
 
         return QDateTime(da, t);
     } else if (type == "sizepolicy") {
-        QDomElement h = node.namedItem("hsizetype").toElement();
-        QDomElement v = node.namedItem("vsizetype").toElement();
-        QDomElement hs = node.namedItem("horstretch").toElement();
-        QDomElement vs = node.namedItem("verstretch").toElement();
+        QDomElement h = node.firstChildElement("hsizetype");
+        QDomElement v = node.firstChildElement("vsizetype");
+        QDomElement hs = node.firstChildElement("horstretch");
+        QDomElement vs = node.firstChildElement("verstretch");
 
         QSizePolicy s;
         s.setHorizontalPolicy((QSizePolicy::SizeType)h.text().toInt());
@@ -956,7 +960,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     else // Normal widgets
         tclass.setAttribute("class", lib->savingName(item->widget()->metaObject()->className()));
 
-    savePropertyValue(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+    savePropertyValue(tclass, domDoc, "name", item->widget()->name(), item->widget());
 
     // Important: save dataSource property FIRST before properties like "alignment"
     // - needed when subproperties are defined after subwidget creation, and subwidget is created after setting "dataSource"
@@ -1109,13 +1113,13 @@ void
 FormIO::cleanClipboard(QDomElement &uiElement)
 {
     // remove includehints element not needed
-    if (!uiElement.namedItem("includehints").isNull())
-        uiElement.removeChild(uiElement.namedItem("includehints"));
+    if (!uiElement.firstChildElement("includehints").isNull())
+        uiElement.removeChild(uiElement.firstChildElement("includehints"));
     // and ensure images and connection are at the end
-    if (!uiElement.namedItem("connections").isNull())
-        uiElement.insertAfter(uiElement.namedItem("connections"), QDomNode());
-    if (!uiElement.namedItem("images").isNull())
-        uiElement.insertAfter(uiElement.namedItem("images"), QDomNode());
+    if (!uiElement.firstChildElement("connections").isNull())
+        uiElement.insertAfter(uiElement.firstChildElement("connections"), QDomNode());
+    if (!uiElement.firstChildElement("images").isNull())
+        uiElement.insertAfter(uiElement.firstChildElement("images"), QDomNode());
 }
 
 void
@@ -1254,7 +1258,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     // We add the autoSaveProperties in the modifProp list of the ObjectTreeItem, so that they are saved later
     const QList<QByteArray> list(container->form()->library()->autoSaveProperties(w->metaObject()->className()));
     KFormDesigner::WidgetWithSubpropertiesInterface* subpropIface
-    = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w);
+        = dynamic_cast<KFormDesigner::WidgetWithSubpropertiesInterface*>(w);
     QWidget *subwidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : w;
     foreach (const QByteArray &propName, list) {
         if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subwidget, propName)) {
@@ -1482,12 +1486,13 @@ FormIO::addIncludeFileName(const QString &include, QDomDocument &domDoc)
         return;
 
     QDomElement includes;
-    QDomElement uiEl = domDoc.namedItem("UI").toElement();
-    if (uiEl.namedItem("includehints").isNull()) {
+    QDomElement uiEl = domDoc.firstChildElement("UI");
+    if (uiEl.firstChildElement("includehints").isNull()) {
         includes = domDoc.createElement("includehints");
         uiEl.appendChild(includes);
-    } else
-        includes = uiEl.namedItem("includehints").toElement();
+    } else {
+        includes = uiEl.firstChildElement("includehints");
+    }
 
     // Check if this include has already been saved, and return if it is the case
     for (QDomNode n = includes.firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -1506,14 +1511,12 @@ FormIO::addIncludeFileName(const QString &include, QDomDocument &domDoc)
 QString
 FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 {
-    QDomNode node = domDoc.namedItem("images");
-    QDomElement images;
-    if (node.isNull()) {
+    QDomElement images = domDoc.firstChildElement("images");
+    if (images.isNull()) {
         images = domDoc.createElement("images");
-        QDomElement ui = domDoc.namedItem("UI").toElement();
+        QDomElement ui = domDoc.firstChildElement("UI");
         ui.appendChild(images);
-    } else
-        images = node.toElement();
+    }
 
     int count = images.childNodes().count();
     QDomElement image = domDoc.createElement("image");
@@ -1553,7 +1556,7 @@ FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 QPixmap
 FormIO::loadImage(QDomDocument domDoc, const QString& name)
 {
-    QDomElement images = domDoc.namedItem("UI").namedItem("images").toElement();
+    QDomElement images = domDoc.firstChildElement("UI").firstChildElement("images");
     if (images.isNull())
         return 0;
 
@@ -1566,7 +1569,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
     }
 
     QPixmap pix;
-    QString data(image.namedItem("data").toElement().text());
+    QString data(image.firstChildElement("data").text());
     const int lengthOffset = 4;
     int baSize = data.length() / 2 + lengthOffset;
     uchar *ba = new uchar[baSize];
@@ -1586,7 +1589,7 @@ FormIO::loadImage(QDomDocument domDoc, const QString& name)
         ba[i] = r;
     }
 
-    QString format = image.namedItem("data").toElement().attribute("format", "PNG");
+    QString format = image.firstChildElement("data").attribute("format", "PNG");
     if ((format == "XPM.GZ") || (format == "XBM.GZ")) {
         int len = image.attribute("length").toInt();
         if (len < data.length() * 5)

@@ -243,16 +243,16 @@ public:
     KToggleAction* showPageBorders;
 
     // recalculation
-    QAction * recalcWorksheet;
-    QAction * recalcWorkbook;
+    KAction * recalcWorksheet;
+    KAction * recalcWorkbook;
 
     // protection
     KToggleAction* protectSheet;
     KToggleAction* protectDoc;
 
     // navigation
-    QAction * nextSheet;
-    QAction * prevSheet;
+    KAction * nextSheet;
+    KAction * prevSheet;
     QAction * firstSheet;
     QAction * lastSheet;
 
@@ -1149,7 +1149,8 @@ void View::initialPosition()
     refreshView();
 
     // Activate the cell tool.
-    KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
+    if (shell()) 
+        KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 
 void View::activateFormulaEditor()

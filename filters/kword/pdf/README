@@ -1,5 +1,0 @@
-PDF Importer for KWord
-----------------------
-
-This filter uses xpdf and that code has proven to be of very low quality.
-Starting immediately this is deemed to be dead code that will never be shipped.

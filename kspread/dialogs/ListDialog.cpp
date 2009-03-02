@@ -135,8 +135,9 @@ void ListDialog::slotCurrentRowChanged(int row)
     //we can't remove the first built-in items
     const bool state = row >= numBuiltinLists;
     d->removeButton->setEnabled(state);
-    d->modifyButton->setEnabled(state);
     d->copyButton->setEnabled(row >= 0);
+    d->textEdit->setEnabled(false);
+    d->textEdit->clear();
 }
 
 void ListDialog::init()

@@ -1892,8 +1892,6 @@ void RegionSelector::switchDisplayMode( bool state )
     d->dialog->setMainWidget( widget );
     d->dialog->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     d->dialog->installEventFilter( this );
-    d->dialog->layout()->setMargin( 0 );
-    d->dialog->layout()->setSpacing( 0 );
     d->dialog->show();
     d->parentDialog->hide();
   }

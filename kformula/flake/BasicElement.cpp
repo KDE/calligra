@@ -132,7 +132,7 @@ bool BasicElement::readMathML( const KoXmlElement& element )
     return readMathMLContent( element );
 }
 
-void BasicElement::readMathMLAttributes( const KoXmlElement& element )
+bool BasicElement::readMathMLAttributes( const KoXmlElement& element )
 {
     QStringList attributeList = KoXml::attributeNames( element );
     foreach( QString attributeName, attributeList ) {

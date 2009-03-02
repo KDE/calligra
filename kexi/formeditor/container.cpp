@@ -33,7 +33,6 @@
 
 #include <kdebug.h>
 #include <KLocale>
-#include <KMenu>
 #include <KGlobalSettings>
 
 #include <cstdlib> // for abs()
@@ -79,7 +78,8 @@ EventEater::eventFilter(QObject *, QEvent *ev)
     if (ev->type() == QEvent::MouseButtonRelease && m_widget->inherits("QTabWidget")) {
         QMouseEvent *mev = static_cast<QMouseEvent*>(ev);
         if (mev->button() == Qt::LeftButton) {
-            QMouseEvent *myev = new QMouseEvent(QEvent::MouseButtonPress, mev->pos(), mev->button(), mev->buttons(), mev->modifiers());
+            QMouseEvent *myev = new QMouseEvent(QEvent::MouseButtonPress, mev->pos(), 
+                                                mev->button(), mev->buttons(), mev->modifiers());
             m_container->eventFilter(m_widget, myev);
             delete myev;
             //return true;
@@ -136,13 +136,19 @@ public:
             stopSelectionRectangleOrInserting();
             return;
         }
+        QRect oldInsertRect( insertRect );
         insertRect.setTopLeft( QPoint(
             qMin(insertBegin.x(), end.x()),
             qMin(insertBegin.y(), end.y()) ) );
         insertRect.setBottomRight( QPoint(
             qMax(insertBegin.x(), end.x()),
             qMax(insertBegin.y(), end.y()) ) );
-        m_widget->update();
+        QRegion region(oldInsertRect);
+        region.unite(insertRect);
+        QRect toUpdate( oldInsertRect.united(insertRect) );
+        toUpdate.setWidth(toUpdate.width()+1);
+        toUpdate.setHeight(toUpdate.height()+1);
+        m_widget->update(toUpdate);
     }
     bool selectionOrInsertingStarted() const
     {
@@ -267,6 +273,13 @@ Container::eventFilter(QObject *s, QEvent *e)
         kDebug() << "this          = " << this->objectName();
 
         m_moving = static_cast<QWidget*>(s);
+        if (m_moving->parentWidget() && KexiUtils::objectIsA(m_moving->parentWidget(), "QStackedWidget")) {
+            m_moving = m_moving->parentWidget(); // widget is a stacked widget's page
+        }
+        if (m_moving->parentWidget() && m_moving->parentWidget()->inherits("QTabWidget")) {
+            m_moving = m_moving->parentWidget(); // widget is a tab widget page
+        }
+        
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
         m_grab = QPoint(mev->x(), mev->y());
 
@@ -324,17 +337,18 @@ Container::eventFilter(QObject *s, QEvent *e)
         // we are inserting a widget or drawing a selection rect in the form
         if ((/*s == m_container &&*/ d->form->state() == Form::WidgetInserting) || ((s == widget()) && !d->toplevel())) {
             int tmpx, tmpy;
-            if (!d->form->isSnapWidgetsToGridEnabled() || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
+            if (    !d->form->isSnapWidgetsToGridEnabled()
+                 || d->form->state() != Form::WidgetInserting
+                 || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+               )
+            {
                 tmpx = mev->x();
                 tmpy = mev->y();
             }
             else {
-                int gridX = d->form->gridSize();
-                int gridY = d->form->gridSize();
-                tmpx = int((float)mev->x() / ((float)gridX) + 0.5);   // snap to grid
-                tmpx *= gridX;
-                tmpy = int((float)mev->y() / ((float)gridY) + 0.5);
-                tmpy *= gridX;
+                int grid = d->form->gridSize();
+                tmpx = alignValueToGrid(mev->x(), grid);
+                tmpy = alignValueToGrid(mev->y(), grid);
             }
 
             d->startSelectionOrInsertingRectangle( (static_cast<QWidget*>(s))->mapTo(widget(), QPoint(tmpx, tmpy)) );
@@ -372,17 +386,35 @@ Container::eventFilter(QObject *s, QEvent *e)
 
     case QEvent::MouseMove: {
         QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-        if (d->selectionOrInsertingStarted() && d->form->state() == Form::WidgetInserting && ((mev->buttons() == Qt::LeftButton) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) ||
-                (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ShiftModifier)))
-            // draw the insert rect
+        if (d->selectionOrInsertingStarted() && d->form->state() == Form::WidgetInserting
+            && (   (mev->buttons() == Qt::LeftButton)
+                || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier)
+                || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+                || (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ShiftModifier)
+               )
+           )
         {
+            QPoint realPos;
+            if (d->form->isSnapWidgetsToGridEnabled()) {
+                const int gridX = d->form->gridSize();
+                const int gridY = d->form->gridSize();
+                realPos = QPoint(
+                    alignValueToGrid(mev->pos().x(), gridX), 
+                    alignValueToGrid(mev->pos().y(), gridY)); 
+            }
+            else {
+                realPos = mev->pos();
+            }
+            d->updateSelectionOrInsertingRectangle(realPos); //2.0
+            // draw the insert rect
 //reimpl.            drawInsertRect(mev, s);
             return true;
         }
 #ifdef KFD_SIGSLOTS
         // Creating a connection, we highlight sender and receiver, and we draw a link between them
         else if (connecting && !FormManager::self()->createdConnection()->sender().isNull()) {
-            ObjectTreeItem *tree = d->form->objectTree()->lookup(FormManager::self()->createdConnection()->sender());
+            ObjectTreeItem *tree = d->form->objectTree()->lookup(
+                FormManager::self()->createdConnection()->sender());
             if (!tree || !tree->widget())
                 return true;
 
@@ -404,7 +436,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
             int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
             int botx = (m_insertBegin.x() > mev->x()) ? m_insertBegin.x() :  mev->x();
-            int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
+            int boty\ = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
             QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));
             m_insertRect = r; 
 */
@@ -423,13 +455,17 @@ Container::eventFilter(QObject *s, QEvent *e)
  //moved..           drawCopiedWidgetRect(mev);
             return true;
         }
-        else if (
-            (mev->buttons() == Qt::LeftButton || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)))
-            && d->form->state() != Form::WidgetInserting && d->state != Private::CopyingWidget) {
+        else if ( (   mev->buttons() == Qt::LeftButton 
+                   || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+                  )
+                  && d->form->state() != Form::WidgetInserting
+                  && d->state != Private::CopyingWidget
+                )
+        {
             // we are dragging the widget(s) to move it
             if (!d->toplevel() && m_moving == widget()) // no effect for form
                 return false;
-            if ((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QWidgetStack")))
+            if ((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QStackedWidget")))
                 return true;
 
             moveSelectedWidgetsBy(mev->x() - m_grab.x(), mev->y() - m_grab.y());
@@ -442,11 +478,12 @@ Container::eventFilter(QObject *s, QEvent *e)
     case QEvent::Paint: { // Draw the dotted background
         if (s != widget())
             return false;
-//        QPaintEvent *pe = static_cast<QPaintEvent*>(e);
+        QPaintEvent* pe = static_cast<QPaintEvent*>(e);
+        QPainter p(widget());
+#if 1 // grid
         int gridX = d->form->gridSize();
         int gridY = d->form->gridSize();
 
-        QPainter p(widget());
         QColor c1(Qt::white);
         c1.setAlpha(100);
         QColor c2(Qt::black);
@@ -455,10 +492,21 @@ Container::eventFilter(QObject *s, QEvent *e)
         QPen pen2(c2, 1);
         int cols = widget()->width() / gridX;
         int rows = widget()->height() / gridY;
-        for (int rowcursor = 1; rowcursor <= rows; ++rowcursor) {
-            for (int colcursor = 1; colcursor <= cols; ++colcursor) {
-                const int x = -1 + colcursor *gridX;
-                const int y = -1 + rowcursor *gridY;
+        const QRect r( pe->rect() );
+// kDebug() << pe->rect();
+        // for optimization, compute the start/end row and column to paint
+        int startRow = (r.top()-1) / gridY;
+        startRow = qMax(startRow, 1);
+        int endRow = (r.bottom()+1) / gridY;
+        endRow = qMin(endRow, rows);
+        int startCol = r.left() / gridX;
+        startCol = qMax(startCol, 1);
+        int endCol = r.right() / gridX;
+        endCol = qMin(endCol, cols);
+        for (int rowcursor = startRow; rowcursor <= endRow; ++rowcursor) {
+            for (int colcursor = startCol; colcursor <= endCol; ++colcursor) {
+                const int x = colcursor * gridX - 1;
+                const int y = rowcursor * gridY - 1;
                 p.setPen(pen1);
                 p.drawPoint(x, y);
                 p.drawPoint(x, y+1);
@@ -467,7 +515,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                 p.drawPoint(x+1, y+1);
             }
         }
-
+#endif
         if (d->selectionOrInsertingRectangle().isValid()) {
             QColor sc1(Qt::white);
             sc1.setAlpha(220);
@@ -486,7 +534,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         return false;
     }
 
-    case QEvent::Resize: { // we are resizing a widget, so we set m_move to true -> the layout will be reloaded when releasing mouse
+    case QEvent::Resize: { // we are resizing a widget, so we enter MovingWidget state -> the layout will be reloaded when releasing mouse
         if (d->form->interactiveMode())
             d->state = Private::MovingWidget;
         break;
@@ -526,8 +574,11 @@ Container::eventFilter(QObject *s, QEvent *e)
             if (!m_moving)
                 return true;
             // we simulate a mouse move event to update screen
-            QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, m_moving->mapFromGlobal(QCursor::pos()), Qt::NoButton,
-                                               Qt::LeftButton, Qt::ControlModifier);
+            QMouseEvent *mev = new QMouseEvent(QEvent::MouseMove, 
+                                               m_moving->mapFromGlobal(QCursor::pos()),
+                                               Qt::NoButton,
+                                               Qt::LeftButton,
+                                               Qt::ControlModifier);
             eventFilter(m_moving, mev);
             delete mev;
         }
@@ -643,12 +694,17 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         d->stopSelectionRectangleOrInserting();
         return true;
     }
-    else if (s == widget() && !d->toplevel() && (mev->button() != Qt::RightButton) && d->selectionOrInsertingRectangle().isValid()) {
+    else if (   s == widget()
+             && !d->toplevel()
+             && (mev->button() != Qt::RightButton)
+             && d->selectionOrInsertingRectangle().isValid() )
+    {
         // we are still drawing a rect to select widgets
         d->stopSelectionRectangleOrInserting();
 //reimpl.        drawSelectionRect(mev);
         return true;
     }
+
     if (mev->button() == Qt::RightButton) {
         // Right-click -> context menu
         // 2.0 unsed: d->form->createContextMenu(static_cast<QWidget*>(s), this);
@@ -662,8 +718,9 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
             return true;
 
         // prevent accidental copying of widget (when moving mouse a little while selecting)
-        if (((mev->pos().x() - m_grab.x()) < form()->gridSize() && (m_grab.x() - mev->pos().x()) < form()->gridSize()) &&
-                ((mev->pos().y() - m_grab.y()) < form()->gridSize() && (m_grab.y() - mev->pos().y()) < form()->gridSize())) {
+        if (    ((mev->pos().x() - m_grab.x()) < form()->gridSize() && (m_grab.x() - mev->pos().x()) < form()->gridSize())
+             && ((mev->pos().y() - m_grab.y()) < form()->gridSize() && (m_grab.y() - mev->pos().y()) < form()->gridSize()) )
+        {
             kDebug() << "The widget has not been moved. No copying.";
             return true;
         }
@@ -1215,16 +1272,15 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
     QPoint pos = static_cast<QWidget*>(s)->mapTo(widget(), mev->pos());
     int gridX = d->form->gridSize();
     int gridY = d->form->gridSize();
-    if (!d->form->isSnapWidgetsToGridEnabled()
-        || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
+    if (   !d->form->isSnapWidgetsToGridEnabled()
+        || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier)))
+    {
         tmpx = pos.x();
         tmpy = pos.y();
     }
     else {
-        tmpx = int((float) pos.x() / ((float)gridX) + 0.5);
-        tmpx *= gridX;
-        tmpy = int((float)pos.y() / ((float)gridY) + 0.5);
-        tmpy *= gridX;
+        tmpx = alignValueToGrid(pos.x(), gridX);
+        tmpy = alignValueToGrid(pos.y(), gridY);
     }
 
     int topx = (m_insertBegin.x() < tmpx) ? m_insertBegin.x() : tmpx;
@@ -1296,13 +1352,14 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
     int dx = realdx, dy = realdy;
 
     foreach (QWidget *w, *d->form->selectedWidgets()) {
-        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QStackedWidget"))
             continue;
 
-        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
-            w = w->parentWidget(); // widget is WidgetStack page
-            if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
-                w = w->parentWidget();
+        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")) {
+            w = w->parentWidget(); // widget is a stacked widget's page
+        }
+        if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) {
+            w = w->parentWidget(); // widget is a tab widget page
         }
 
         int tmpx = w->x() + realdx;
@@ -1320,23 +1377,26 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 
     foreach (QWidget *w, *d->form->selectedWidgets()) {
         // Don't move tab widget pages (or widget stack pages)
-        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QWidgetStack"))
+        if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QStackedWidget"))
             continue;
 
-        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QWidgetStack")) {
+        if (w->parentWidget() && KexiUtils::objectIsA(w->parentWidget(), "QStackedWidget")) {
             w = w->parentWidget(); // widget is WidgetStack page
-            if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is tabwidget page
+            if (w->parentWidget() && w->parentWidget()->inherits("QTabWidget")) // widget is a tab widget page
                 w = w->parentWidget();
         }
 
         int tmpx, tmpy;
-        if (!d->form->isSnapWidgetsToGridEnabled() || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))) {
+        if (   !d->form->isSnapWidgetsToGridEnabled()
+            || (mev && mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
+           )
+        {
             tmpx = w->x() + dx;
             tmpy = w->y() + dy;
         }
         else {
-            tmpx = int(float(w->x() + dx) / float(gridX) + 0.5) * gridX;
-            tmpy = int(float(w->y() + dy) / float(gridY) + 0.5) * gridY;
+            tmpx = alignValueToGrid(w->x() + dx, gridX);
+            tmpy = alignValueToGrid(w->y() + dy, gridY);
         }
 
         if ((tmpx != w->x()) || (tmpy != w->y())) {

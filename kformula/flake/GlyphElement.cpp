@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
+   Copyright (C) 2006-2009 Alfredo Beaumont Sainz <alfredo.beaumont@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,7 +19,13 @@
 
 #include "GlyphElement.h"
 #include "AttributeManager.h"
+
+#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
+
 #include <QFontDatabase>
+
+#include <kdebug.h>
 
 GlyphElement::GlyphElement( BasicElement* parent ) : TokenElement( parent )
 {}
@@ -46,4 +52,46 @@ void GlyphElement::renderToPath( const QString& raw, QPainterPath& path )
 ElementType GlyphElement::elementType() const
 {
     return Glyph;
+}
+
+bool GlyphElement::readMathMLAttributes( const KoXmlElement& element )
+{
+    // MathML Section 3.2.9.2
+    m_fontFamily = element.attribute( "fontfamily" );
+    if ( m_fontFamily.isNull() ) {
+        kWarning( DEBUGID ) << "Required attribute fontfamily not found in glyph element\n";
+        return false;
+    }
+    QString indexStr = element.attribute( "index" );
+    if ( indexStr.isNull() ) {
+        kWarning( DEBUGID ) << "Required attribute index not found in glyph element\n";
+        return false;
+    }
+    bool ok;
+    ushort index = indexStr.toUShort( &ok );
+    if ( ! ok ) {
+        kWarning( DEBUGID ) << "Invalid index value in glyph element\n";
+        return false;
+    }
+    m_char = QChar( index );
+
+    m_alt = element.attribute( "alt" );
+    if ( m_alt.isNull() ) {
+        kWarning( DEBUGID ) << "Required attribute alt not found in glyph element\n";
+        return false;
+    }
+
+    // TODO: Check whether we have needed fontfamily
+    return true;
+}
+
+void GlyphElement::writeMathMLAttributes( KoXmlWriter* writer ) const
+{
+    writer->addAttribute( "fontfamily", m_fontFamily );
+    writer->addAttribute( "index", m_char.unicode() );
+    writer->addAttribute( "alt", m_alt );
+}
+
+void GlyphElement::writeMathMLContent( KoXmlWriter* writer ) const
+{
 }

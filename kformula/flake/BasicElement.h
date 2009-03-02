@@ -185,13 +185,13 @@ public:
 
 protected:
     /// Read all attributes loaded and add them to the m_attributes map 
-    void readMathMLAttributes( const KoXmlElement& element );
+    virtual bool readMathMLAttributes( const KoXmlElement& element );
 
     /// Read all content from the node - reimplemented by child elements
     virtual bool readMathMLContent( const KoXmlElement& element );
 
     /// Write all attributes of m_attributes to @p writer
-    void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    virtual void writeMathMLAttributes( KoXmlWriter* writer ) const;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
     virtual void writeMathMLContent( KoXmlWriter* writer ) const;

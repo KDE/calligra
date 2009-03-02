@@ -21,9 +21,9 @@
 
 #include "KWPageManager.h"
 #include "KWPageStyle.h"
-#include "KoPageLayout.h"
 #include "kword_export.h"
 
+#include <KoPageLayout.h>
 #include <KoText.h>
 #include <QRectF>
 #include <QObject>

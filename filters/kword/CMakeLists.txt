@@ -22,8 +22,6 @@ message(STATUS "When latex is reactivated (if?) also port it to GraphicsMagick, 
 #add_subdirectory( latex )
 add_subdirectory( oowriter )
 add_subdirectory( palmdoc )
-# add_subdirectory( pdf )
-message(STATUS "kword pdf import filter is disabled and should be replaced with a poppler based one")
 add_subdirectory( rtf )
 add_subdirectory( wml )
 
@@ -32,7 +30,6 @@ if(WPD_FOUND)
 endif(WPD_FOUND)
 
 if(WV2_FOUND)
-	add_subdirectory(msword)
 	add_subdirectory(msword-odf)
 endif(WV2_FOUND)
 

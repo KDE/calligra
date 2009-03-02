@@ -223,6 +223,7 @@ QMimeData *KFormDesigner::deepCopyOfClipboardData()
 
 void KFormDesigner::copyToClipboard(const QString& xml)
 {
+    kDebug() << xml;
     QMimeData *data = new QMimeData();
     data->setText(xml);
     data->setData(KFormDesigner::mimeType(), xml.toUtf8());
@@ -239,7 +240,7 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
     parents.clear();
     doc = QDomDocument("UI");
     doc.appendChild(doc.createElement("UI"));
-    QDomElement parent = doc.namedItem("UI").toElement();
+    QDomElement parent = doc.firstChildElement("UI");
 
     QWidgetList topLevelList(list);
     KFormDesigner::removeChildrenFromList(topLevelList);
@@ -266,6 +267,43 @@ void KFormDesigner::widgetsToXML(QDomDocument& doc,
     }
 
     FormIO::cleanClipboard(parent);
+}
+
+//-----------------------------
+
+class ActionGroup::Private {
+    public:
+        Private() {}
+        QHash<QString, QAction*> actions;
+};
+
+ActionGroup::ActionGroup( QObject * parent )
+    : QActionGroup(parent)
+    , d( new Private )
+{
+}
+
+ActionGroup::~ActionGroup()
+{
+    delete d;
+}
+
+void ActionGroup::addAction(QAction* action)
+{
+    QActionGroup::addAction(action);
+    d->actions.insert(action->objectName(), action);
+}
+
+QAction *ActionGroup::action(const QString& name) const
+{
+    return d->actions.value(name);
+}
+
+//-----------------------------
+
+int KFormDesigner::alignValueToGrid(int value, int gridSize)
+{
+    return int((float)value / ((float)gridSize) + 0.5) * gridSize;
 }
 
 #include "utils.moc"

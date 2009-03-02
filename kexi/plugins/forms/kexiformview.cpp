@@ -266,8 +266,10 @@ void
 KexiFormView::initForm()
 {
     setForm(
-        new KFormDesigner::Form(KexiFormManager::self()->library(), KFormDesigner::Form::DesignMode,
-            *KexiMainWindowIface::global()->actionCollection())
+        new KFormDesigner::Form(
+            KexiFormManager::self()->library(), KFormDesigner::Form::DesignMode,
+            *KexiMainWindowIface::global()->actionCollection(), 
+            *KexiFormManager::self()->widgetActionGroup())
     );
 // if (viewMode()==Kexi::DataViewMode)
     //form()->setDesignMode(false);
@@ -488,7 +490,9 @@ KexiFormView::slotPropertySetSwitched()
         , propertyToSelect);
     }
     else {*/
-        propertySetSwitched();
+//2.0: we're sharing the same Set object so use propertySetReloaded() instead
+//        propertySetSwitched();
+    propertySetReloaded();
 /*    }*/
     formPart()->dataSourcePage()->assignPropertySet(&form()->propertySet());
 }

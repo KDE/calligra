@@ -72,8 +72,8 @@ ConnectionBuffer::save(QDomNode &parentNode)
 
     QDomDocument domDoc = parentNode.ownerDocument();
     QDomElement connections;
-    if (!parentNode.namedItem("connections").isNull())
-        connections = parentNode.namedItem("connections").toElement();
+    if (!parentNode.firstChildElement("connections").isNull())
+        connections = parentNode.firstChildElement("connections");
     else
         connections = domDoc.createElement("connections");
     parentNode.appendChild(connections);
@@ -118,10 +118,10 @@ ConnectionBuffer::load(QDomNode node)
 {
     for (QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
         Connection *conn = new Connection();
-        conn->setSender(n.namedItem("sender").toElement().text());
-        conn->setSignal(n.namedItem("signal").toElement().text());
-        conn->setReceiver(n.namedItem("receiver").toElement().text());
-        conn->setSlot(n.namedItem("slot").toElement().text());
+        conn->setSender(n.firstChildElement("sender").text());
+        conn->setSignal(n.firstChildElement("signal").text());
+        conn->setReceiver(n.firstChildElement("receiver").text());
+        conn->setSlot(n.firstChildElement("slot").text());
         append(conn);
     }
 }

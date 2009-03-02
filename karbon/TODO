@@ -25,7 +25,7 @@ Shapes/Tools:
 - an object snap tool:
     - define a snap point a the selected object(s) which can snap to features of the selection
     - move the selection which then snaps the defined snap point to other objects
-- when inserting path points, add them to the point selection so on can insert points multiple times
+- outline snapping strategy -> snap to path outline
 
 ODF support:
 ------------
@@ -50,6 +50,7 @@ Filters:
 Cleanup:
 --------
 - move cut, paste, copy, deleteSelection into KoToolSelection -> patch to Zagge
+- remove selection order actions and use the ones from the default tool
 
 General:
 --------
@@ -62,8 +63,6 @@ General:
 
 - for big drawings it might be cool to have the outline mode with the option
   of fully rendering only the current selection
-
-- fix z-index handling when loading (and close bug 130147 after that)
 
 - add crop marks generation/placement 
     - http://www.thevisualsense.com/bleedcropmarks.html
@@ -90,7 +89,15 @@ Bugs:
 
 - make layer view smaller
 - make gradient and pattern tool dockers smaller
+- fix curve fitting with huge amount of points
+- see http://techbase.kde.org/Contribute/Bugsquad/BugDays/KOfficeDay2/Karbon
+- implement pattern stretch other than tile in svg import/export
 
+Screencast:
+----------
+Snapping: 
+    - tesa strip for orthogonal snapping
+    
 
 All time favourites :)
 -----------------------

@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+Name=PPT Import Filter for KPresenter
+Name[ga]=Scagaire Iompórtála PPT le haghaidh KPresenter
+Name[it]=Filtro di importazione PPT per KPresenter
+Name[pt]=Filtro de Importação de PPT para o KPresenter
+Name[pt_BR]=Filtro de importação PPT para o KPresenter
+Name[sv]=PPT-importfilter för Kpresenter
+Name[uk]=Фільтр імпорту PPT для KPresenter
+Name[zh_TW]=KPresenter 的 PPT 匯入過濾程式
+X-KDE-Export=application/vnd.oasis.opendocument.presentation
+X-KDE-Import=application/vnd.ms-powerpoint
+X-KDE-Weight=1
+X-KDE-Library=liboopptimport
+X-KDE-ServiceTypes=KOfficeFilter
