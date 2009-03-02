@@ -97,7 +97,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     const KoColorSpace *cs = layer->paintDevice()->colorSpace();
 
-    if (cs->id() != "RGBAF16HALF") {
+    if (cs->id() != "RgbAF16") {
         // We could convert automatically, but the conversion wants to be done with
         // selectable profiles and rendering intent.
         KMessageBox::information(0, i18n("The image is using an unsupported color space. "
