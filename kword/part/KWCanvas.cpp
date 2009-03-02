@@ -269,6 +269,13 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
             painter.fillRect(vm.clipRect, QBrush(color));
             painter.setRenderHint(QPainter::Antialiasing);
             m_shapeManager->paint(painter, *(viewConverter()), false);
+
+            painter.save();
+            painter.translate(-vm.distance.x(), -vm.distance.y());
+            painter.setRenderHint(QPainter::Antialiasing, false);
+            document()->gridData().paintGrid(painter, *(viewConverter()), viewConverter()->viewToDocument(vm.clipRect));
+            painter.restore();
+
             m_toolProxy->paint(painter, *(viewConverter()));
             painter.restore();
         }
