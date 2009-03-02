@@ -67,7 +67,6 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
     connect(multiLine, SIGNAL(textChanged ()),this, SLOT(slotTextChanged()));
 
     slotTextChanged();
-
     resize( 400, height() );
 }
 
