@@ -46,6 +46,8 @@
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 
+#include <KoXmlWriter.h>
+
 #include "KPrEndOfSlideShowPage.h"
 #include "KPrNotes.h"
 #include "KPrPage.h"
@@ -96,6 +98,7 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem(i18n("Real time")));
     slideTab->setColumnWidth(1,125);
     
+    
     for(int i=0;i<pages.size()-1;i++)
     {
 	QTimeEdit *timeEdit1 = new QTimeEdit();
@@ -110,7 +113,13 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 	slideTab->setCellWidget(i,1,timeEdit2);
 	timeEditList.append(timeEdit2);
     }
+
+    registerButton = new QPushButton (i18n("Save slides time"));
+    connect(registerButton, SIGNAL(clicked()),this, SLOT(saveSlideTime()));
+    registerButton->setVisible(false);
+
     frameNextLayout->insertWidget( 1, slideTab );
+    frameNextLayout->insertWidget( 2, registerButton );
 }
 
 void KPrPresenterViewInterface::setActivePage( int pageIndex )
@@ -130,12 +139,14 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
 	m_nextSlideLabel->setText(i18n( "Next Slide" ));
 	m_nextSlidePreview->setVisible(true);
 	slideTab->setVisible(false);
+	registerButton->setVisible(false);
     }
     else { // End of presentation, show time for each slide
 	m_nextSlideLabel->setText(i18n( "Slides Time" ));
 	slideTab->setVisible(true);
+	registerButton->setVisible(true);
 	m_nextSlidePreview->setVisible(false);
-	saveSlideTime();
+	//saveSlideTime();
     }
 
     // update the label
@@ -184,41 +195,6 @@ void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
 
 void KPrPresenterViewInterface::saveSlideTime()
 {
-    KoXmlDocument m_doc;
-    // chemin absolu à modifier (et créer le fichier associé -> voir plus bas)
-    QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
-    QFile file( fileName );
-    if(!file.exists())
-    {
-	file.open(QIODevice::WriteOnly);
-	/*KoXmlWriter *writer = new KoXmlWriter(&file);
-	writer->startDocument("nom");
-	writer->startElement("monElem");
-	writer->endDocument();*/
-    }
-    QString errorMessage;
-    if(KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ))
-    {
-	KoXmlElement time, slide(m_doc.namedItem("lineends").toElement());
-	forEachElement(time, slide)
-	{
-	    kDebug() << time.attribute("name")+"\n";
-	}
-    }
-    
-    /* fichier à créer : slideTimess.xml
-    
-    <?xml version="1.0" standalone="no"?>
-      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
-      "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-    <lineends>
-      <draw:marker draw:name="Slide 1" draw:time="10"/>
-      <draw:marker draw:name="Slide 2" draw:time="2"/>
-      <draw:marker draw:name="Slide 3" draw:time="30"/>
-      <draw:marker draw:name="Slide 4" draw:time="40"/>
-    </lineends> 
-
-    */
     
 }
 
