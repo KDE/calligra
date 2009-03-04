@@ -506,6 +506,7 @@ void KexiDBLabel::paintEvent(QPaintEvent* e)
         }
     }
     KexiDBTextWidgetInterface::paint(this, &p, text().isEmpty(), alignment(), false);
+    p.end();
     QLabel::paintEvent(e);
 }
 
