@@ -50,11 +50,12 @@ public:
 
     void setPreviewSize( const QSize &size );
     void setSlidesTime(QMap<int,int> *slides_time);
-    void saveSlideTime();
+    void loadSlideTime();
 
 public slots:
     /// reimplemented
     virtual void setActivePage( int pageIndex );
+    void saveSlideTime();
 
 private:
     KoPACanvas *m_canvas;
@@ -66,6 +67,7 @@ private:
     QTableWidget *slideTab;
     QPushButton *registerButton;
     QList<QTimeEdit *> timeEditList;
+    QList<QLabel *> planningTime;
 };
 
 #endif

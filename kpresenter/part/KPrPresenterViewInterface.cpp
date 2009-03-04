@@ -52,7 +52,7 @@
 #include "KPrNotes.h"
 #include "KPrPage.h"
 
-#include "kostore_export.h"
+#include <KoXmlWriter.h>
 
 KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent )
     : KPrPresenterViewBaseInterface( pages, parent )
@@ -101,15 +101,16 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
     
     for(int i=0;i<pages.size()-1;i++)
     {
-	QTimeEdit *timeEdit1 = new QTimeEdit();
-	timeEdit1->setDisplayFormat ( "HH:mm:ss" );
+	//planningTime->setDisplayFormat ( "HH:mm:ss" );
+	QLabel *planTime = new QLabel(QTime(0,0,0).toString());
+	planningTime.append(planTime);
 	QTimeEdit *timeEdit2 = new QTimeEdit();
 	timeEdit2->setDisplayFormat ( "HH:mm:ss" );
 	QString name = pages.value(i)->name();
 	if(name.isEmpty())
 	    name = i18n("Slide ")+QString::number(i+1);
 	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem(name));
-	slideTab->setCellWidget(i,0,timeEdit1);
+	slideTab->setCellWidget(i,0,planningTime.value(i));
 	slideTab->setCellWidget(i,1,timeEdit2);
 	timeEditList.append(timeEdit2);
     }
@@ -146,7 +147,7 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
 	slideTab->setVisible(true);
 	registerButton->setVisible(true);
 	m_nextSlidePreview->setVisible(false);
-	//saveSlideTime();
+	loadSlideTime();
     }
 
     // update the label
@@ -195,7 +196,81 @@ void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
 
 void KPrPresenterViewInterface::saveSlideTime()
 {
+    KoXmlDocument m_doc;
+    // chemin absolu à modifier (et créer le fichier associé -> voir plus bas)
+    QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
+    QFile file( fileName );
     
+    file.open(QIODevice::WriteOnly);
+    KoXmlWriter *writer = new KoXmlWriter(&file);
+    writer->startDocument("nom");
+    writer->startElement("lineends");
+
+    QTime time;
+    int t;
+    for(int i=0;i<timeEditList.size();i++)
+    {
+	time = timeEditList.value(i)->time();
+	t = time.second() + time.minute()*60 + time.hour()*3600;
+	writer->startElement("draw:marker");
+	writer->addAttribute("draw:name","slide "+QString::number(i+1));
+	writer->addAttribute("draw:time",t);
+	writer->endElement();
+    }
+	
+    writer->endElement();
+    writer->endDocument();
 }
+    
+void KPrPresenterViewInterface::loadSlideTime()
+{
+    KoXmlDocument m_doc;
+    // chemin absolu à modifier (et créer le fichier associé -> voir plus bas)
+    QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
+    QFile file( fileName );
+    file.open(QIODevice::ReadOnly);
+
+    QTime time;
+    int i = 0;
+    int h,m,s,t;
+    QString errorMessage;
+    if(KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ))
+    {
+	KoXmlElement time, slide(m_doc.namedItem("lineends").toElement());
+	forEachElement(time, slide)
+	{
+	    t = time.attribute("time").toInt();
+	    if(t>=3600)
+	      h = t/3600;
+	    else
+	      h = 0;
+	    if(t>=60)
+	      m = t % 3600 / 60;
+	    else
+	      m = 0;
+	    s = t % 60;
+	      
+	    QTime t = QTime(h,m,s);
+	    t.addSecs(time.attribute("time").toInt());
+	    t.addSecs(10);
+	    planningTime.value(i)->setText(t.toString());
+	    kDebug() << t.toString();
+	    i++;
+	}
+    }
+}
+    /* fichier à créer : slideTimess.xml
+    
+    <?xml version="1.0" standalone="no"?>
+      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
+      "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+    <lineends>
+      <draw:marker draw:name="Slide 1" draw:time="10"/>
+      <draw:marker draw:name="Slide 2" draw:time="2"/>
+      <draw:marker draw:name="Slide 3" draw:time="30"/>
+      <draw:marker draw:name="Slide 4" draw:time="40"/>
+    </lineends> 
+
+    */
 
 #include "KPrPresenterViewInterface.moc"
