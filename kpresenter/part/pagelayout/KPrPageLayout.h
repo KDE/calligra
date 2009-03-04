@@ -33,6 +33,11 @@ class KoPASavingContext;
 class KPrPageLayout
 {
 public:
+    enum Type {
+        Page,
+        Handout
+    };
+
     KPrPageLayout();
     ~KPrPageLayout();
 
@@ -63,6 +68,11 @@ public:
     QPixmap thumbnail() const;
 
     /**
+     * Get the type of layout
+     */
+    Type type() const;
+
+    /**
      * @brief Check if the page layouts match
      *
      * The page layouts match if the placeholder are the same.
@@ -81,6 +91,9 @@ private:
     QString m_name;
     // placeholders used in the layout
     QList<KPrPlaceholder *> m_placeholders;
+    // the type of the layout.
+    // if one placeholder as a presentation:object="handout" then the layout is of tyle Handout
+    Type m_layoutType;
 };
 
 #endif /* KPRPAGELAYOUT_H */

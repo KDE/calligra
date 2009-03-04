@@ -38,6 +38,7 @@
 #include <ksvgrenderer.h>
 
 KPrPageLayout::KPrPageLayout()
+: m_layoutType( Page )
 {
 }
 
@@ -61,6 +62,9 @@ bool KPrPageLayout::loadOdf( const KoXmlElement &element, const QRectF & pageRec
             KPrPlaceholder * placeholder = new KPrPlaceholder;
             if ( placeholder->loadOdf( child, pageRect ) ) {
                 m_placeholders.append( placeholder );
+                if ( placeholder->presentationObject() == "handout" ) {
+                    m_layoutType = Handout;
+                }
             }
             else {
                 kWarning(33000) << "loading placeholder failed";
@@ -149,6 +153,11 @@ QPixmap KPrPageLayout::thumbnail() const
     }
 
     return pic;
+}
+
+KPrPageLayout::Type KPrPageLayout::type() const
+{
+    return m_layoutType;
 }
 
 bool comparePlaceholder( const KPrPlaceholder * p1, const KPrPlaceholder * p2 )
