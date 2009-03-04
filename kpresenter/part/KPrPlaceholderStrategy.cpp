@@ -117,7 +117,7 @@ void KPrPlaceholderStrategy::paint( QPainter & painter, const KoViewConverter &c
     painter.drawText( rect, text(), options );
 
     QPen pen( Qt::gray );
-    pen.setStyle( Qt::DashLine ); // endless loop
+    //pen.setStyle( Qt::DashLine ); // endless loop
     //pen.setStyle( Qt::DotLine ); // endless loop
     //pen.setStyle( Qt::DashDotLine ); // endless loop
     painter.setPen( pen );
