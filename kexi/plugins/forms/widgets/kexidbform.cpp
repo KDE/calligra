@@ -96,7 +96,7 @@ public:
     //! a subset of orderedFocusWidgets mapped to indices
     QHash<KexiDataItemInterface*, uint> indicesForDataAwareWidgets;
     QList<QWidget*>::iterator orderedFocusWidgetsIterator;
-    QPixmap buffer; //!< stores grabbed entire form's area for redraw
+//2.0    QPixmap buffer; //!< stores grabbed entire form's area for redraw
     QRect prev_rect; //!< previously selected rectangle
 bool autoTabStops : 1;
 bool popupFocused : 1; //!< used in KexiDBForm::eventFilter()
@@ -152,6 +152,7 @@ KexiDBForm::drawRect(const QRect& r, int type)
 void
 KexiDBForm::drawRects(const QList<QRect> &list, int type)
 {
+#if 0 // 2.0
     QPainter p;
     p.begin(this);
 #ifdef __GNUC__
@@ -186,20 +187,24 @@ KexiDBForm::drawRects(const QList<QRect> &list, int type)
     if (!unclipped)
         setAttribute(Qt::WA_PaintUnclipped, false);
     p.end();
+#endif
 }
 
 void
 KexiDBForm::initBuffer()
 {
+#if 0 //2.0
     repaintAll(this);
     //Qt4 d->buffer.resize( width(), height() );
     d->buffer = QPixmap::grabWindow(winId());
     d->prev_rect = QRect();
+#endif
 }
 
 void
 KexiDBForm::clearForm()
 {
+#if 0 //2.0
     QPainter p;
 #ifdef __GNUC__
 #warning ?? p.begin(this, true);
@@ -218,11 +223,13 @@ KexiDBForm::clearForm()
 
     p.end();
     repaintAll(this);
+#endif
 }
 
 void
 KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 {
+#if 0 //2.0
     QPoint fromPoint, toPoint;
     if (from && from->parentWidget() && (from != this))
         fromPoint = from->parentWidget()->mapTo(this, from->pos());
@@ -282,6 +289,7 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
         setAttribute(Qt::WA_PaintUnclipped, false);
 
     p.end();
+#endif
 }
 
 QSize

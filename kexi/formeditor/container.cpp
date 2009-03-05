@@ -128,7 +128,7 @@ public:
     {
         insertBegin = QPoint(-1, -1);
         insertRect = QRect();
-        m_widget->update();
+//2.0        m_widget->update();
     }
     void updateSelectionOrInsertingRectangle(const QPoint& end)
     {
@@ -481,6 +481,13 @@ Container::eventFilter(QObject *s, QEvent *e)
         QPaintEvent* pe = static_cast<QPaintEvent*>(e);
         QPainter p(widget());
 #if 1 // grid
+#define DEBUG_PAINTER
+#ifdef DEBUG_PAINTER
+    kDebug() << "would draw grid" << pe->rect();
+    QTime t;
+    t.start();
+    long points= 0;
+#endif
         int gridX = d->form->gridSize();
         int gridY = d->form->gridSize();
 
@@ -493,7 +500,6 @@ Container::eventFilter(QObject *s, QEvent *e)
         int cols = widget()->width() / gridX;
         int rows = widget()->height() / gridY;
         const QRect r( pe->rect() );
-// kDebug() << pe->rect();
         // for optimization, compute the start/end row and column to paint
         int startRow = (r.top()-1) / gridY;
         startRow = qMax(startRow, 1);
@@ -513,8 +519,14 @@ Container::eventFilter(QObject *s, QEvent *e)
                 p.setPen(pen2);
                 p.drawPoint(x+1, y);
                 p.drawPoint(x+1, y+1);
+#ifdef DEBUG_PAINTER
+    points++;
+#endif
             }
         }
+#ifdef DEBUG_PAINTER
+    kDebug() << "millisecs:" << t.elapsed() << "points:" << points;
+#endif
 #endif
         if (d->selectionOrInsertingRectangle().isValid()) {
             QColor sc1(Qt::white);

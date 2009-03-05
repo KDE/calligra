@@ -649,6 +649,9 @@ void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
         selectWidget(widget());
         return;
     }
+    if (d->selected.count() == 1 && d->selected.first() == w) {
+        return;
+    }
 
     if (d->selected.isEmpty() || w == widget() || (d->selected.first() == widget())) {
         flags |= ReplacePreviousSelection;

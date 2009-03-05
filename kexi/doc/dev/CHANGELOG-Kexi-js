@@ -30,6 +30,16 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-03-05
+Forms
+= disabled painting code in KexiDBForm
+TODO: port what's remaining
+
+2009-03-03
+Forms
+= fixed crash in label widget
+TODO: port shadows using Qt 4 facilities
+
 2009-03-02
 Forms
 - disable resizing resize handles using anything but left mouse button
