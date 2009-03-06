@@ -66,7 +66,7 @@ void KWordPictureHandler::escherData( OLEImageReader& reader, SharedPtr<const Wo
         wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
         Q_LONG n1 = m_store->write( (const char*)buf, n );
-        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (int) buf;
+        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (void*) buf;
         len -= n;
         delete [] buf;
         //error checking
@@ -109,7 +109,7 @@ void KWordPictureHandler::escherData( std::vector<wvWare::U8> data, SharedPtr<co
         }
         //size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
         Q_LONG n1 = m_store->write( (const char*)buf, n );
-        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (int) buf;
+        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (void*) buf;
         len -= n;
         delete [] buf;
         //error checking
@@ -193,7 +193,7 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
         wvWare::U8* buf = new wvWare::U8[IMG_BUF_SIZE];
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
         Q_LONG n1 = m_store->write( (const char*)buf, n );
-        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (int) buf;
+        kDebug(30513) << "n=" << n << ", n1=" << n1 << "; buf contains " << (void*) buf;
         len -= n;
         delete [] buf;
         //error checking
