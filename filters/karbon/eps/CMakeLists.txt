@@ -18,6 +18,8 @@ macro_optional_find_package(Pstoedit)
 
 if (PSTOEDIT_SVG_PLUGIN_FOUND)
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 set(karbonepsimport_PART_SRCS epsimport.cc pscommentlexer.cc )
 
 kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
