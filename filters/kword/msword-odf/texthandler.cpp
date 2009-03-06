@@ -1072,7 +1072,7 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
 				    //that will be provided for lines in the paragraph in twips
     {
 	// see sprmPDyaLine in generator_wword8.htm
-	double value = QABS((double)pap.lspd.dyaLine / 20.0); // twip -> pt
+	double value = qAbs((double)pap.lspd.dyaLine / 20.0); // twip -> pt
 	// lspd.dyaLine > 0 means "at least", < 0 means "exactly"
 	if ( pap.lspd.dyaLine > 0 )
 	    paragraphStyle->addPropertyPt( "fo:line-height-at-least", value, KoGenStyle::ParagraphType );
