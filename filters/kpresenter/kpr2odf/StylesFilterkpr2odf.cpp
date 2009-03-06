@@ -267,7 +267,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         {
             //As this is a "complex" tag we add it "manually"
             QBuffer buffer;
-            buffer.open( IO_WriteOnly );
+            buffer.open( QIODevice::WriteOnly );
             KoXmlWriter elementWriter( &buffer );
 //          FIXME:   elementWriter.startElement( "style:presentation-properties" );
             elementWriter.startElement( "presentation:sound" );
@@ -1223,7 +1223,7 @@ const QString Filterkpr2odf::createListStyle( const KoXmlElement& element )
     KoXmlElement counter = element.namedItem( "COUNTER" ).toElement();
 
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer, 3 );
 
     int type = counter.attribute( "type" ).toInt();

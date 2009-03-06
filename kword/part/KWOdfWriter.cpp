@@ -48,7 +48,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
 
     QByteArray content;
     QBuffer buffer(&content);
-    buffer.open(IO_WriteOnly);
+    buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer);
     KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
 

@@ -109,7 +109,7 @@ QString KPrPageLayout::saveOdf( KoPASavingContext & context ) const
     style.addAttribute( "style:display-name", m_name );
 
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );
 
     QList<KPrPlaceholder *>::const_iterator it( m_placeholders.begin() );
