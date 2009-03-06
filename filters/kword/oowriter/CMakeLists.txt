@@ -5,6 +5,7 @@ include_directories(${CMAKE_SOURCE_DIR}/filters/liboofilter/)
 set(libcommon_SRCS conversion.cc)
 
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 ########### next target ###############
 

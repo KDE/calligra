@@ -1,5 +1,7 @@
 project(kspread)
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 add_subdirectory( data )
 add_subdirectory( shape )
 add_subdirectory( dialogs )
@@ -15,7 +17,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${KOGUIUTILS_INCLUDES}
                      ${KOTEXT_INCLUDES}
                      ${EIGEN2_INCLUDE_DIR} )
-
 
 ########### next target ###############
 SET (chart_DIR_SRCS

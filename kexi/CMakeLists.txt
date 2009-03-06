@@ -29,6 +29,8 @@ include_directories(
   ${CMAKE_SOURCE_DIR}/libs
 )
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 #SET(KOPROPERTY_LIBS koproperty)
 #add_subdirectory( koproperty1/koproperty ) #todo: remove
 #include_directories( koproperty1 )
