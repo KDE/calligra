@@ -45,4 +45,4 @@ DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif (PSTOEDIT_SVG_PLUGIN_FOUND)
 
-macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit" "The Karbon eps import filter will not be built." "http://www.pstoedit.net/" FALSE "")
+macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit" "Translates PostScript and PDF graphics into other vector formats" "http://www.pstoedit.net/" FALSE "" "Required by the Karbon EPS import filter")
