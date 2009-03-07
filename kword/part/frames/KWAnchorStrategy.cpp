@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -172,19 +172,13 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         recalcFrom = qMax(recalcFrom, block.position()); // TODO move further back if shape is tall
         break;
     case KoTextAnchor::VerticalOffset: {
-        qreal y;
-        if (m_anchor->positionInDocument() == block.position()) {
-            // at first position of parag.
-            y = state->y();
-        }
-        else {
-            Q_ASSERT(layout->lineCount());
-            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-            Q_ASSERT(tl.isValid());
-            y = tl.y() + tl.ascent();
-            recalcFrom = 0; // TODO ???
-        }
-        newPosition.setY(y + m_anchor->offset().y() - data->documentOffset() - boundingRect.height());
+        Q_ASSERT(layout->lineCount());
+        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+        Q_ASSERT(tl.isValid());
+        qreal y = tl.y() + tl.ascent();
+        recalcFrom = 0; // TODO ???
+
+        newPosition.setY(y + m_anchor->offset().y() - data->documentOffset());
         // use frame runaround properties (runthrough/around and side) to give shape a nice position
         m_finished = true;
         break;
