@@ -305,8 +305,10 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     KoTextDocumentLayout::positionInlineObject(item, position, f);
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
-        if (strategy->anchor() == anchor) return;
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+            if (strategy->anchor() == anchor)
+                return;
+        }
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
