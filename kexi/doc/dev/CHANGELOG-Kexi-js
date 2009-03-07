@@ -30,8 +30,15 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-03-07
+Forms
+- highlighting icons on mouse-over or on focusing (e.g. for buttons in Oxygen style) 
+  has been disabled in design mode
+  (by adjusting QStyleOptions)
+
 2009-03-05
 Forms
+- don't select already selected widget again
 = disabled painting code in KexiDBForm
 TODO: port what's remaining
 
