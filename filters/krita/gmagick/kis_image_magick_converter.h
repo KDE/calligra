@@ -92,7 +92,7 @@ private:
     KisImageSP m_img;
     KisDoc2 *m_doc;
     KisUndoAdapter *m_adapter;
-    QVector<Q_UINT8> m_data;
+    QVector<quint8> m_data;
     KIO::TransferJob *m_job;
     KIO::filesize_t m_size;
     bool m_stop;
