@@ -35,6 +35,7 @@ Forms
 - highlighting icons on mouse-over or on focusing (e.g. for buttons in Oxygen style) 
   has been disabled in design mode
   (by adjusting QStyleOptions)
+- data view mode started to work
 
 2009-03-05
 Forms

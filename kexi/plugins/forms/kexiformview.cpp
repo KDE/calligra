@@ -267,7 +267,8 @@ KexiFormView::initForm()
 {
     setForm(
         new KFormDesigner::Form(
-            KexiFormManager::self()->library(), KFormDesigner::Form::DesignMode,
+            KexiFormManager::self()->library(), 
+            viewMode() == Kexi::DataViewMode ? KFormDesigner::Form::DataMode : KFormDesigner::Form::DesignMode,
             *KexiMainWindowIface::global()->actionCollection(), 
             *KexiFormManager::self()->widgetActionGroup())
     );
@@ -289,8 +290,8 @@ KexiFormView::initForm()
     if (newForm) {
         // Show the form wizard if this is a new Form
 #ifndef NO_DSWIZARD
-        KexiDataSourceWizard *w
-        = new KexiDataSourceWizard(KexiMainWindowIface::global()->thisWidget());
+        KexiDataSourceWizard *w = new KexiDataSourceWizard(
+            KexiMainWindowIface::global()->thisWidget());
         if (!w->exec())
             fields = 0;
         else
@@ -323,7 +324,34 @@ KexiFormView::initForm()
 #endif
 //! @todo port initForm()
 //  KFormDesigner::FormManager::self()->importForm(form(), viewMode() == Kexi::DataViewMode);
+    if (viewMode() == Kexi::DesignViewMode) {
+//2.0        initForm(form());
+        //from FormManager::initForm(Form *form)
+//2.0    m_forms.append(form);
+//2.0    if (m_treeview)
+//2.0       m_treeview->setForm(form);
+//2.0    m_active = form;
+//2.0    connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
+//2.0            m_propSet, SLOT(setSelectedWidgetWithoutReload(QWidget*, bool, bool)));
+/*2.0    if (m_treeview) {
+        connect(form, SIGNAL(selectionChanged(QWidget*, bool, bool)),
+                m_treeview, SLOT(setSelectedWidget(QWidget*, bool)));
+        connect(form, SIGNAL(childAdded(ObjectTreeItem*)), m_treeview, SLOT(addItem(ObjectTreeItem*)));
+        connect(form, SIGNAL(childRemoved(ObjectTreeItem*)), m_treeview, SLOT(removeItem(ObjectTreeItem*)));
+    }
+    connect(m_propSet, SIGNAL(widgetNameChanged(const QByteArray&, const QByteArray&)),
+            form, SLOT(changeName(const QByteArray&, const QByteArray&)));
+*/
+//2.0    form->setSelectedWidget(form->widget());
     form()->selectWidget(form()->widget()); //added in 2.0
+//2.0    windowChanged(form->widget());
+        //end of: from FormManager::initForm(Form *form)
+    }
+    else {
+//2.0 rm        m_preview.append(form);
+//2.0        form()->setDesignMode(false);
+        form()->setMode(KFormDesigner::Form::DataMode);
+    }
     m_scrollView->setForm(form());
 
 // m_dbform->updateTabStopsOrder(form());
@@ -831,8 +859,8 @@ KexiFormView::storeData(bool dontAsk)
         return false;
     }
     KexiBLOBBuffer *blobBuf = KexiBLOBBuffer::self();
-    KexiFormView *designFormView
-    = dynamic_cast<KexiFormView*>(window()->viewForMode(Kexi::DesignViewMode));
+    KexiFormView *designFormView = dynamic_cast<KexiFormView*>(
+        window()->viewForMode(Kexi::DesignViewMode));
     if (designFormView) {
         for (QHash<QWidget*, KexiBLOBBuffer::Id_t>::const_iterator it
                 = tempData()->unsavedLocalBLOBs.constBegin();
@@ -852,8 +880,8 @@ KexiFormView::storeData(bool dontAsk)
 
             if (st) {
                 *st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/
-                << h.data() << originalFileName << caption
-                << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
+                    << h.data() << originalFileName << caption
+                    << h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
                 if (!st->execute()) {
                     delete blobsFieldsWithoutID;
                     kDebug() << "execute error";
