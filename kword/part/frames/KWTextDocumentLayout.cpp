@@ -315,6 +315,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             if (strategy->anchor() == anchor)
                 return;
         }
+        TDEBUG << "new anchor";
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
@@ -459,6 +460,10 @@ void KWTextDocumentLayout::layout()
                 restartLine = true;
                 break;
             }
+        }
+        if (restartLine)
+            continue;
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
                 TDEBUG << "  is finished";
                 m_activeAnchors.removeAll(strategy);
@@ -466,8 +471,6 @@ void KWTextDocumentLayout::layout()
                 delete strategy;
             }
         }
-        if (restartLine)
-            continue;
 
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             if (strategy->anchoredShape() != 0) {

@@ -52,7 +52,7 @@ public:
      * The layout state is reverted to an earlier paragraph if needed to account for the newly
      * placed shape.
      * @param state the state of the layout.
-     * @return will return if the layout state has been changed.
+     * @return will return true if the layout state has been changed.
      */
     bool checkState(KoTextDocumentLayout::LayoutState *state);
 

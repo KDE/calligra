@@ -85,7 +85,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         m_finished = false;
         m_lastknownPosInDoc = m_anchor->positionInDocument();
     }
-    // kDebug() <<"KWAnchorStrategy::checkState [" << m_pass <<"] pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
+    // kDebug() << m_anchor->positionInDocument() << "pass:" << m_pass <<"pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
     if (m_finished || m_knowledgePoint > state->cursorPosition())
         return false;
 
