@@ -2,8 +2,6 @@ add_subdirectory(tests)
 
 include_directories(${KRITA_INCLUDES})
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(libkritatiffconverter_LIB_SRCS
     kis_tiff_converter.cc
     kis_tiff_writer_visitor.cpp
