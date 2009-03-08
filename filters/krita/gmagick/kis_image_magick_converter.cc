@@ -503,8 +503,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             Q_ASSERT(layer);
 
             // Layerlocation  (set by the photoshop import filter)
-            Q_INT32 x_offset = 0;
-            Q_INT32 y_offset = 0;
+            qint32 x_offset = 0;
+            qint32 y_offset = 0;
 
             attr = GetImageAttribute(image, "[layer-xpos]");
             if (attr != 0) {
@@ -744,7 +744,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
     image -> matte = true;
 #endif
 
-    Q_INT32 y, height, width;
+    qint32 y, height, width;
 
     height = img -> height();
     width = img -> width();

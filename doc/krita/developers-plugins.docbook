@@ -592,7 +592,7 @@ void KisFilterInvert::process(KisPaintDeviceSP src, KisPaintDeviceSP dst,
    setProgressTotalSteps(rect.width() * rect.height());
 
    KisColorSpace * cs = src->colorSpace();
-   Q_INT32 psize = cs->pixelSize();
+   qint32 psize = cs->pixelSize();
 
    while( ! srcIt.isDone() )
    {
@@ -1094,7 +1094,7 @@ plugins.
 KisPoint KisToolStar::starCoordinates(int N, double mx, double my, double x, double y)
 {
    double R=0, r=0;
-   Q_INT32 n=0;
+   qint32 n=0;
    double angle;
 
    vKisPoint starCoordinatesArray(2*N);
@@ -1272,7 +1272,7 @@ cursor.
    // Split the coordinates into integer plus fractional parts. The integer
    // is where the dab will be positioned and the fractional part determines
    // the sub-pixel positioning.
-   Q_INT32 x, y;
+   qint32 x, y;
    double xFraction, yFraction;
 
    splitCoordinate(pt.x(), &amp;x, &amp;xFraction);
