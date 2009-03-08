@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@ public:
      * @param anchor the anchor and affiliated shape this strategy will be operating on.
      */
     KWAnchorStrategy(KoTextAnchor *anchor);
-    virtual ~KWAnchorStrategy();
+    ~KWAnchorStrategy();
 
     /**
      * This method is the main work code.
@@ -80,6 +80,7 @@ private:
     bool m_finished;
     qreal m_currentLineY;
     int m_pass;
+    int m_lastknownPosInDoc;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,8 @@ KWAnchorStrategy::KWAnchorStrategy(KoTextAnchor *anchor)
         : m_anchor(anchor),
         m_finished(false),
         m_currentLineY(0),
-        m_pass(0)
+        m_pass(0),
+        m_lastknownPosInDoc(-1)
 {
     // figure out until what cursor position we need to layout to get all the info we need
     switch (m_anchor->horizontalAlignment()) {
@@ -80,7 +81,11 @@ KWAnchorStrategy::~KWAnchorStrategy()
 
 bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
 {
-//kDebug() <<"KWAnchorStrategy::checkState [" << m_pass <<"] pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
+    if (m_lastknownPosInDoc != m_anchor->positionInDocument()) { // different layout run
+        m_finished = false;
+        m_lastknownPosInDoc = m_anchor->positionInDocument();
+    }
+    // kDebug() <<"KWAnchorStrategy::checkState [" << m_pass <<"] pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
     if (m_finished || m_knowledgePoint > state->cursorPosition())
         return false;
 
@@ -128,7 +133,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
             x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
             recalcFrom = 0; // TODO ???
         }
-        newPosition.setX(x + m_anchor->offset().x());
+        newPosition.setX(x);
         m_finished = true;
         break;
     }
@@ -178,7 +183,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         qreal y = tl.y() + tl.ascent();
         recalcFrom = 0; // TODO ???
 
-        newPosition.setY(y + m_anchor->offset().y() - data->documentOffset());
+        newPosition.setY(y - data->documentOffset());
         // use frame runaround properties (runthrough/around and side) to give shape a nice position
         m_finished = true;
         break;
@@ -186,6 +191,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
     default:
         Q_ASSERT(false); // new enum added?
     }
+    newPosition = newPosition + m_anchor->offset();
     if (m_pass > 0) { // already been here
         // for the cases where we align with text; check if the text is within margin. If so; set finished to true.
         QPointF diff = newPosition - m_anchor->shape()->position();

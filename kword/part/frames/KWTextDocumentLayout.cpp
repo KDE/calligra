@@ -303,6 +303,12 @@ void KWTextDocumentLayout::relayout()
 void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &f)
 {
     KoTextDocumentLayout::positionInlineObject(item, position, f);
+#ifndef DEBUG
+    if (inlineObjectTextManager() == 0) {
+        kWarning(32002) << "Need to call setInlineObjectTextManager on the layout!!";
+        return;
+    }
+#endif
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
@@ -315,7 +321,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
 void KWTextDocumentLayout::layout()
 {
-    TDEBUG <<"KWTextDocumentLayout::layout";
+    TDEBUG << "starting layout pass";
     QList<Outline*> outlines;
     class End
     {
@@ -447,11 +453,14 @@ void KWTextDocumentLayout::layout()
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+            TDEBUG << "checking anchor";
             if (strategy->checkState(m_state)) {
+                TDEBUG << "  restarting line";
                 restartLine = true;
                 break;
             }
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
+                TDEBUG << "  is finished";
                 m_activeAnchors.removeAll(strategy);
                 m_newAnchors.removeAll(strategy);
                 delete strategy;
