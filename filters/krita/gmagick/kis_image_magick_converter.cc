@@ -517,7 +517,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             }
 
 
-            for (Q_UINT32 y = 0; y < image->rows; y ++) {
+            for (quint32 y = 0; y < image->rows; y ++) {
                 const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
 
                 if (!pp) {
@@ -702,7 +702,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
         return KisImageBuilder_RESULT_NOT_LOCAL;
 
 
-    Q_UINT32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
+    quint32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
     GetExceptionInfo(&ei);
 

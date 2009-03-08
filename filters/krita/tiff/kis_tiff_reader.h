@@ -174,7 +174,7 @@ class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
             
         }
     public:
-        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, KisBufferStreamBase* tiffstream) ;
+        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
 };
 
 class KisTIFFReaderTarget32bit : public KisTIFFReaderBase {
