@@ -53,7 +53,9 @@ public:
     Private()
             : dataAwareObject(0)
             , autoTabStops(false)
-            , popupFocused(false) {
+            , popupFocused(false)
+            , orderedFocusWidgetsIteratorInitialized(false)
+    {
     }
 
     ~Private() {
@@ -79,9 +81,14 @@ public:
 
     //! Sets orderedFocusWidgetsIterator member to a position pointing to \a widget
     void setOrderedFocusWidgetsIteratorTo(QWidget *widget) {
-        if (*orderedFocusWidgetsIterator == widget)
+        if (orderedFocusWidgetsIteratorInitialized && *orderedFocusWidgetsIterator == widget)
             return;
         orderedFocusWidgetsIterator = orderedFocusWidgets.begin();
+        orderedFocusWidgetsIteratorInitialized = true;
+        foreach (QWidget *w, orderedFocusWidgets) {
+            kDebug() << "orderedFocusWidget:" << w;
+        }
+        kDebug() << "widget to focus:" << widget;
         while (orderedFocusWidgetsIterator != orderedFocusWidgets.end()
                 && *orderedFocusWidgetsIterator != widget) {
             ++orderedFocusWidgetsIterator;
@@ -98,8 +105,9 @@ public:
     QList<QWidget*>::iterator orderedFocusWidgetsIterator;
 //2.0    QPixmap buffer; //!< stores grabbed entire form's area for redraw
     QRect prev_rect; //!< previously selected rectangle
-bool autoTabStops : 1;
-bool popupFocused : 1; //!< used in KexiDBForm::eventFilter()
+    bool autoTabStops : 1;
+    bool popupFocused : 1; //!< used in KexiDBForm::eventFilter()
+    bool orderedFocusWidgetsIteratorInitialized : 1;
 };
 
 //========================
@@ -389,7 +397,8 @@ void KexiDBForm::updateTabStopsOrder(KFormDesigner::Form* form)
 void KexiDBForm::updateTabStopsOrder()
 {
     for (QList<QWidget*>::iterator it(d->orderedFocusWidgets.begin());
-            it != d->orderedFocusWidgets.end();) {
+            it != d->orderedFocusWidgets.end();)
+    {
         if (!((*it)->focusPolicy() & Qt::TabFocus))
             it = d->orderedFocusWidgets.erase(it);
         else
@@ -414,6 +423,7 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
     //kDebug() << e->type();
     if (e->type() == QEvent::Resize && watched == this)
         kDebug() << "RESIZE";
+
     if (e->type() == QEvent::KeyPress) {
         if (preview()) {
             QKeyEvent *ke = static_cast<QKeyEvent*>(e);
@@ -538,26 +548,32 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                             wasAtFirstWidget = true;
                         } else if (realWidget == *d->orderedFocusWidgetsIterator) {
                             ++d->orderedFocusWidgetsIterator; //next
-                        } else
+                        } else {
                             return true; //ignore
+                        }
                     } else {//backtab
                         if (d->orderedFocusWidgets.last() && realWidget == d->orderedFocusWidgets.first()) {
                             d->orderedFocusWidgetsIterator
                             = d->orderedFocusWidgets.begin() + (d->orderedFocusWidgets.count() - 1);
                         } else if (realWidget == *d->orderedFocusWidgetsIterator) {
                             --d->orderedFocusWidgetsIterator; //prev
-                        } else
+                        } else {
                             return true; //ignore
+                        }
                     }
 
                     widgetToFocus = *d->orderedFocusWidgetsIterator;
 
                     QObject *pageFor_widgetToFocus = 0;
                     KFormDesigner::TabWidget *tabWidgetFor_widgetToFocus
-                    = KFormDesigner::findParent<KFormDesigner::TabWidget>(
-                          widgetToFocus, "KFormDesigner::TabWidget", pageFor_widgetToFocus);
+                        = KFormDesigner::findParent<KFormDesigner::TabWidget>(
+                            widgetToFocus,
+                            "KFormDesigner::TabWidget",
+                            pageFor_widgetToFocus
+                        );
                     if (tabWidgetFor_widgetToFocus
-                            && tabWidgetFor_widgetToFocus->currentWidget() != pageFor_widgetToFocus) {
+                            && tabWidgetFor_widgetToFocus->currentWidget() != pageFor_widgetToFocus)
+                    {
                         realWidget = widgetToFocus;
                         continue; // the new widget to focus is placed on invisible tab page:
                         // move to next widget
@@ -568,18 +584,22 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                 //set focus, but don't use just setFocus() because certain widgets
                 //behaves differently (e.g. QLineEdit calls selectAll()) when
                 //focus event's reason is Qt::TabFocusReason
-                if (widgetToFocus->focusProxy())
+                if (widgetToFocus->focusProxy()) {
                     widgetToFocus = widgetToFocus->focusProxy();
+                }
+
                 if (widgetToFocus && d->dataAwareObject->acceptEditor()) {
                     if (tab) {
                         //try to accept this will validate the current input (if any)
-                        KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::TabFocusReason);
-                        KexiUtils::setFocusWithReason(widgetToFocus, Qt::TabFocusReason);
+//2.0 didn't work                        KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::TabFocusReason);
+//2.0 didn't work                        KexiUtils::setFocusWithReason(widgetToFocus, Qt::TabFocusReason);
+                        widgetToFocus->setFocus();
                         kDebug() << "focusing " << widgetToFocus->objectName();
                     } else {//backtab
-                        KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::BacktabFocusReason);
+//2.0 didn't work                        KexiUtils::unsetFocusWithReason(widgetToUnfocus, Qt::BacktabFocusReason);
                         //set focus, see above note
-                        KexiUtils::setFocusWithReason(*d->orderedFocusWidgetsIterator, Qt::BacktabFocusReason);
+//2.0 didn't work                        KexiUtils::setFocusWithReason(*d->orderedFocusWidgetsIterator, Qt::BacktabFocusReason);
+                        (*d->orderedFocusWidgetsIterator)->setFocus();
                         kDebug() << "focusing "
                             << (*d->orderedFocusWidgetsIterator)->objectName();
                     }
@@ -605,10 +625,12 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
             if (d->dataAwareObject) {
                 QWidget *dataItem = dynamic_cast<QWidget*>(watched);
                 while (dataItem) {
-                    while (dataItem && !dynamic_cast<KexiDataItemInterface*>(dataItem))
+                    while (dataItem && !dynamic_cast<KexiDataItemInterface*>(dataItem)) {
                         dataItem = dataItem->parentWidget();
-                    if (!dataItem)
+                    }
+                    if (!dataItem) {
                         break;
+                    }
                     kDebug() << "FocusIn: FOUND "
                         << dataItem->metaObject()->className() << " " << dataItem->objectName();
 
@@ -620,8 +642,9 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
                             d->dataAwareObject->setCursorPosition(d->dataAwareObject->currentRow(), index /*column*/);
                         }
                         break;
-                    } else
+                    } else {
                         dataItem = dataItem->parentWidget();
+                    }
 
                     dataItem->update();
                 }
@@ -631,8 +654,9 @@ bool KexiDBForm::eventFilter(QObject * watched, QEvent * e)
         if (static_cast<QFocusEvent*>(e)->reason() == Qt::PopupFocusReason) {
             //d->widgetFocusedBeforePopup = (QWidget*)watched;
             d->popupFocused = true;
-        } else
+        } else {
             d->popupFocused = false;
+        }
 //   d->widgetFocusedBeforePopup = 0;
 //  kDebug() << "e->type()==QEvent::FocusOut " << watched->className() << " " <<watched->name();
 //  UNSET_FOCUS_USING_REASON(watched, static_cast<QFocusEvent*>(e)->reason());
