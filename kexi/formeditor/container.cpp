@@ -698,12 +698,17 @@ Container::eventFilter(QObject *s, QEvent *e)
 bool
 Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 {
-    if (d->form->state() == Form::WidgetInserting) { // we insert the widget at cursor pos
-        if (d->form->formWidget())
-            d->form->formWidget()->clearForm();
-        K3Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
-        d->form->addCommand(com, true);
-        d->stopSelectionRectangleOrInserting();
+    if (d->form->state() == Form::WidgetInserting) {
+        if (mev->button() == Qt::LeftButton) { // insert the widget at cursor pos
+            if (d->form->formWidget())
+                d->form->formWidget()->clearForm();
+            K3Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
+            d->form->addCommand(com, true);
+            d->stopSelectionRectangleOrInserting();
+        }
+        else { // right button, etc.
+            d->form->abortWidgetInserting();
+        }
         return true;
     }
     else if (   s == widget()
