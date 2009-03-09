@@ -674,18 +674,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     kDebug(32001) << "KWDocument::endOfLoading done";
 
-#if 0
-    // Connect to notifications from main text-frameset
-    if (frameset) {
-        connect(frameset->textObject(), SIGNAL(chapterParagraphFormatted(KoTextParag *)),
-                SLOT(slotChapterParagraphFormatted(KoTextParag *)));
-        connect(frameset, SIGNAL(mainTextHeightChanged()),
-                SIGNAL(mainTextHeightChanged()));
-    }
-#endif
-
     // Note that more stuff will happen in completeLoading
-
     firePageSetupChanged();
     setModified(false);
 }
