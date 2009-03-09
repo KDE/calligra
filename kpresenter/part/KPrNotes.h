@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,15 +21,15 @@
 #ifndef KPRNOTES_H
 #define KPRNOTES_H
 
-#include <KoShapeContainer.h>
 #include <KoPageLayout.h>
+#include <KoPAPageBase.h>
 
 class KoShape;
 class KoImageCollection;
 class KPrDocument;
 class KPrPage;
 
-class KPrNotes : public KoShapeContainer
+class KPrNotes : public KoPAPageBase
 {
 public:
     KPrNotes( KPrPage * page, KPrDocument * document );
@@ -48,10 +48,23 @@ public:
     virtual void paintComponent(QPainter& painter, const KoViewConverter& converter);
 
     /// Get the page layout for this presentation notes
-    KoPageLayout &pageLayout() { return m_pageLayout; }
+    virtual KoPageLayout &pageLayout();
+
+    virtual const KoPageLayout& pageLayout() const;
 
     /// update the page thumbnail to reflect current page
     void updatePageThumbnail();
+
+    /// reimplemented
+    virtual bool displayMasterShapes();
+    /// reimplemented
+    virtual void setDisplayMasterShapes( bool );
+    /// reimplemented
+    virtual bool displayMasterBackground();
+    /// reimplemented
+    virtual void setDisplayMasterBackground( bool );
+    /// reimplemented
+    virtual QPixmap generateThumbnail( const QSize& );
 
 private:
     QImage createPageThumbnail() const;
