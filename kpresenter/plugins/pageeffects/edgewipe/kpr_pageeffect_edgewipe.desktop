@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Edge wipe
 Name[ca]=Esborrat de vora
+Name[de]=Wischblende (Rand)
 Name[el]=Σβήσιμο άκρων
 Name[es]=Barrido del borde
 Name[et]=Servasiire
@@ -21,6 +22,7 @@ Name[x-test]=xxEdge wipexx
 Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
 Comment[ca]=Efectes d'esborrat de vora de la pàgina
+Comment[de]=Wischblenden-Seiteneffekte
 Comment[el]=Εφέ σελίδας σβήσιμο άκρων
 Comment[es]=Efectos de página de barrido del borde
 Comment[et]=Servasiirde lehekülje efektid
