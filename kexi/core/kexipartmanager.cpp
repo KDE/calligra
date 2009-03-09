@@ -64,7 +64,7 @@ bool Manager::lookup()
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
         kWarning() << "KexiPart::Manager::lookup(): No 'Kexi/Handler' service type installed! Aborting.";
-        setError(i18n("No \"%1\" service type installed! Check your Kexi installation. Aborting.",
+        setError(i18n("No \"%1\" service type installed. Check your Kexi installation. Aborting.",
                       QString("Kexi/Handler")));
         return false;
     }
