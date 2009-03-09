@@ -67,7 +67,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     shape->removeAdditionalAttribute("text:anchor-type");
 
     KWFrameSet* fs = new KWFrameSet();
-    fs->setName("My FrameSet");
+    fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
     new KWFrame(shape, fs, pageNumber);
     m_loader->document()->addFrameSet(fs);
 }

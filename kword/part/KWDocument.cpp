@@ -44,6 +44,8 @@
 
 // koffice libs includes
 #include <KoShapeManager.h>
+#include <KoTextDocument.h>
+#include <KoTextAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
@@ -86,6 +88,8 @@ public:
 
     /// add the frame to be hidden
     void addFrame(KWFrame *frame);
+    /// add the shape to be hidden
+    void addShape(KoShape *shape);
     // reveal all the frames that were added before
     void revealFramesForPage(int pageNumber, qreal moveFrames);
 
@@ -100,6 +104,11 @@ void MagicCurtain::addFrame(KWFrame *frame)
     frames << frame;
     m_data.insert(frame->loadingPageNumber(), frames);
     frame->shape()->setParent(this);
+}
+
+void MagicCurtain::addShape(KoShape *shape)
+{
+    shape->setParent(this);
 }
 
 void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
@@ -643,8 +652,22 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs)
-            tfs->setAllowLayout(true);
+        if (!tfs)
+            continue;
+        KoTextDocument textDoc(tfs->document());
+        foreach (KoInlineObject *inlineObject, textDoc.inlineTextObjectManager()->inlineTextObjects()) {
+            KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObject);
+            if (anchor) {
+                if (m_magicCurtain == 0) {
+                    m_magicCurtain = new MagicCurtain();
+                    m_magicCurtain->setVisible(false);
+                    foreach (KoView *view, views())
+                        static_cast<KWView*>(view)->kwcanvas()->shapeManager()->add(m_magicCurtain);
+                }
+                m_magicCurtain->addShape(anchor->shape());
+            }
+        }
+        tfs->setAllowLayout(true);
     }
 
     emit sigProgress(-1);
