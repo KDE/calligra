@@ -127,7 +127,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
       <item>
        <widget class="QRadioButton" name="substractionButton" >
         <property name="text" >
-         <string>Subtraction</string>
+         <string>Substraction</string>
         </property>
        </widget>
       </item>

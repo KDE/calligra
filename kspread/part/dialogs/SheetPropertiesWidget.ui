@@ -186,7 +186,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      <item row="0" column="1" >
       <widget class="QCheckBox" name="showGridCheckBox" >
        <property name="whatsThis" >
-        <string>If checked, the grid (the cell limits) will be shown. This is the default. If unchecked, the grid will be hidden.</string>
+        <string>If checked the grid (the cell limits) will be shown. This is default. If you uncheck it, the grid will be hidden.</string>
        </property>
        <property name="text" >
         <string>Show &amp;grid</string>

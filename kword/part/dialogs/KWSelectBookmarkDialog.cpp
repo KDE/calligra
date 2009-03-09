@@ -86,7 +86,7 @@ void KWSelectBookmark::slotBookmarkRename()
                 continue;
             QList<QListWidgetItem *> items = widget.bookmarkList->findItems(newName, Qt::MatchExactly);
             if (items.count() > 0) {
-                KMessageBox::error(parentWidget, i18n("A bookmark with the name \"%1\" already exists.", newName));
+                KMessageBox::error(parentWidget, i18n("There exist already a bookmark with the name \"%1\".", newName));
                 continue;
             }
             item->setText(newName);
