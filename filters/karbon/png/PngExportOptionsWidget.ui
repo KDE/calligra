@@ -13,7 +13,7 @@
    <item row="0" column="0" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
-      <string>Size in Pixels</string>
+      <string>Size in Pixel</string>
      </property>
      <property name="flat" >
       <bool>true</bool>
