@@ -90,7 +90,7 @@
           <Type>Float</Type>
         </Parameter>
         <Help>
-          <Text>The AMORDEGRC function Calculates the amortization value for the French accounting system using degressive depreciation.</Text>
+          <Text>The AMORDEGRC function calculates the amortization value for the French accounting system using degressive depreciation.</Text>
           <Syntax>AMORDEGRC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; basis)</Syntax>
           <Example>AMORDEGRC( 1000; "2006-02-01"; "2006-12-31"; 10; 0; 0.1; 1 ) returns 228</Example>
           <Related>AMORLINC</Related>
@@ -863,7 +863,7 @@
             <Text>The net present value (NPV) for a series of periodic cash flows.</Text>
             <Text>Computes the net present value for a series of periodic cash flows with the
                 discount rate Rate. Values should be positive if they are received as income, and
-                negative if the amounts are paid as outgo.</Text>
+                negative if the amounts are expenditure.</Text>
             <Syntax>NPV(Rate; Values)</Syntax>
             <Example>NPV(100%;4;5;7) = 4.125</Example>
             <Related>FV</Related>

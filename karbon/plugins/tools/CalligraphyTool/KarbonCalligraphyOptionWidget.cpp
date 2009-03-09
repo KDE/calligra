@@ -224,8 +224,8 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
         if ( name.isEmpty() || name == i18n("Current") )
         {
             KMessageBox::sorry( this,
-                        i18n("Sorry, the name you entered is invalid!"),
-                        i18nc("invalid profile name", "Invalid name!") );
+                        i18n("Sorry, the name you entered is invalid."),
+                        i18nc("invalid profile name", "Invalid name.") );
             // try again
             saveProfileAs();
             continue; // ask again
@@ -234,7 +234,7 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
         if ( profiles.contains(name) )
         {
             int ret = KMessageBox::warningYesNo( this,
-                        i18n("A profile with that name already exists!\n"
+                        i18n("A profile with that name already exists.\n"
                                 "Do you want to overwrite it?") );
 
             if ( ret == KMessageBox::Yes )

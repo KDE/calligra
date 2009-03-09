@@ -53,7 +53,7 @@
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>Coefficients a set of coefficients by which each sccessive power of the variable X is multiplied</Comment>
+        <Comment>Coefficients a set of coefficients by which each successive power of the variable X is multiplied</Comment>
         <Type range="true">FLOAT</Type>
       </Parameter>
       <Help>
