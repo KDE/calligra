@@ -676,8 +676,9 @@ void KexiDBImageBox::paintEvent(QPaintEvent *pe)
                     dataSource().isEmpty()
                     ? objectName() + "\n" + i18nc("Unbound Image Box", "(unbound)")
                     : dataSource());
+        //2.0 bitBlt(this, margins.left, margins.top, &pm);
+        p2.drawPixmap(margins.left, margins.top, pm);
         p2.end();
-        bitBlt(this, margins.left, margins.top, &pm);
     } else {
         QSize internalSize(size());
         if (m_chooser && m_dropDownButtonVisible && !dataSource().isEmpty())
