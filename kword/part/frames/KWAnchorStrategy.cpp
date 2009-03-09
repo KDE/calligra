@@ -177,15 +177,22 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         recalcFrom = qMax(recalcFrom, block.position()); // TODO move further back if shape is tall
         break;
     case KoTextAnchor::VerticalOffset: {
-        Q_ASSERT(layout->lineCount());
-        QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-        Q_ASSERT(tl.isValid());
-        qreal y = tl.y() + tl.ascent();
-        recalcFrom = 0; // TODO ???
-
+        qreal y;
+        if (layout->lineCount()) {
+            Q_ASSERT(layout->lineCount());
+            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            Q_ASSERT(tl.isValid());
+            y = tl.y() + tl.ascent();
+            recalcFrom = block.position();
+            m_finished = true;
+        }
+        else if (block.length() == 2) { // the anchor is the only thing in the block
+            y = state->y() - boundingRect.height();
+        } else {
+            return true; // lets go for a second round.
+        }
         newPosition.setY(y - data->documentOffset());
         // use frame runaround properties (runthrough/around and side) to give shape a nice position
-        m_finished = true;
         break;
     }
     default:

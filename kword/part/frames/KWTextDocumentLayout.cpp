@@ -415,6 +415,8 @@ void KWTextDocumentLayout::layout()
                     foreach (KWFrame *frame, fs->frames()) {
                         if (frame->shape() == currentShape)
                             continue;
+                        if (! frame->shape()->isVisible(true))
+                            continue;
                         if (frame->textRunAround() == KWord::RunThrough)
                             continue;
                         if (frame->outlineShape()) {
