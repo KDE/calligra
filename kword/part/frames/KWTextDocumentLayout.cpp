@@ -568,10 +568,14 @@ void KWTextDocumentLayout::layout()
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
                 }
+                if (KWord::isHeaderFooter(m_frameSet)) { // more text, lets resize the header/footer.
+                    TDEBUG << "  header/footer is too small resize:" << line.line.height();
+                    m_frameSet->requestMoreFrames(line.line.height());
+                    return; // done!
+                }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
                 if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior
-                        || KWord::isHeaderFooter(m_frameSet)
                         || dynamic_cast<KWCopyShape*> (lastFrame)) {
                     m_state->clearTillEnd();
                     return; // done!

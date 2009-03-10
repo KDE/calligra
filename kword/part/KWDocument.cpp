@@ -332,6 +332,10 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
                     this, SLOT(requestMoreSpace(KWTextFrameSet*)));
         }
+        else {
+            connect(tfs, SIGNAL(decorationFrameResize(KWTextFrameSet*)),
+                    this, SLOT(updateHeaderFooter(KWTextFrameSet*)));
+        }
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
@@ -700,7 +704,7 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 {
-    //kDebug(32002) <<"KWDocument::requestMoreSpace";
+    // kDebug(32002) << fs;
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -733,6 +737,21 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         KWPage newPage = appendPage(masterPageName);
         if (m_magicCurtain)
             m_magicCurtain->revealFramesForPage(newPage.pageNumber(), newPage.offsetInDocument());
+    }
+}
+
+void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
+{
+    // find all pages that have the page style set and re-layout them.
+    Q_ASSERT(tfs->pageStyle().isValid());
+    PageProcessingQueue *ppq = 0;
+    const KWPageStyle style = tfs->pageStyle();
+    foreach (KWPage page, pageManager()->pages()) {
+        if (page.pageStyle() == style) {
+            if (ppq == 0)
+                ppq = new PageProcessingQueue(this);
+            ppq->addPage(page);
+        }
     }
 }
 

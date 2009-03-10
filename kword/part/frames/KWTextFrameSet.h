@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -114,6 +114,8 @@ signals:
      * Signal will be emitted only when the policy of the last frame allows it.
      */
     void moreFramesNeeded(KWTextFrameSet *fs);
+    /// emitted when a decorating frame, like a header or a footer, wants to be resized.
+    void decorationFrameResize(KWTextFrameSet *fs);
 
 protected:
     friend class KWTextDocumentLayout;
