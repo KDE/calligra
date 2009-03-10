@@ -556,6 +556,10 @@ void KWTextDocumentLayout::layout()
 #endif
 
         bottomOfText = line.line.y() + line.line.height();
+        if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1) {
+            m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
+            return;
+        }
 
         while (m_state->addLine(line.line)) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
