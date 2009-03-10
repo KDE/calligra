@@ -1789,7 +1789,6 @@ void NodeItemModel::slotNodeInserted( Node *node )
     endInsertRows();
     m_node = 0;
     emit nodeInserted( node );
-    emit layoutChanged(); //HACK to make the right view react! Bug in qt?
 }
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )

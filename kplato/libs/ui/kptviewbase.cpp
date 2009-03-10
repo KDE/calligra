@@ -1040,6 +1040,18 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
     //kDebug()<<event->isAccepted();
 }
 
+QModelIndex TreeViewBase::firstVisibleIndex( const QModelIndex &idx ) const
+{
+    int count = model()->columnCount();
+    for ( int c = 0; c < count; ++c ) {
+        if ( ! isColumnHidden( c ) ) {
+            return model()->index( idx.row(), c, model()->parent( idx ) );
+        }
+    }
+    return QModelIndex();
+}
+
+
 bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
     //kDebug()<<objectName();
@@ -1337,6 +1349,23 @@ KoPrintJob *DoubleTreeViewBase::createPrintJob( ViewBase *parent )
     dia->printer().setCreator("KPlato 0.7");
 //    dia->printer().setFullPage(true); // ignore printer margins
     return dia;
+}
+
+void DoubleTreeViewBase::setParentsExpanded( const QModelIndex &idx, bool expanded )
+{
+    //kDebug()<<idx<<m_leftview->isExpanded( idx )<<m_rightview->isExpanded( idx );
+    QModelIndex p = model()->parent( idx );
+    QList<QModelIndex> lst;
+    while ( p.isValid() ) {
+        lst << p;
+        p = model()->parent( p );
+    }
+    while ( ! lst.isEmpty() ) {
+        p = lst.takeLast();
+        m_leftview->setExpanded( p, expanded );
+        m_rightview->setExpanded( m_rightview->firstVisibleIndex( p ), expanded ); //HACK: qt can't handle that column 0 is hidden!
+        //kDebug()<<p<<m_leftview->isExpanded( p )<<m_rightview->isExpanded( p );
+    }
 }
 
 void DoubleTreeViewBase::init()

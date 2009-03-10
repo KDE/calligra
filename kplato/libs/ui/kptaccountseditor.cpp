@@ -54,6 +54,7 @@ AccountTreeView::AccountTreeView( QWidget *parent )
     setModel( new AccountItemModel() );
     setSelectionModel( new QItemSelectionModel( model() ) );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
 
     setAcceptDrops( false );
     setDropIndicatorShown( false );
@@ -267,8 +268,11 @@ void AccountsEditor::insertAccount( Account *account, Account *parent )
         QModelIndex p = m_view->model()->parent( i );
         if (parent) kDebug()<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();
         kDebug()<<i.row()<<","<<i.column();
-        m_view->setExpanded( p, true );
-        m_view->setCurrentIndex( i );
+        if ( p.isValid() ) {
+            m_view->setExpanded( p, true );
+        }
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
 }

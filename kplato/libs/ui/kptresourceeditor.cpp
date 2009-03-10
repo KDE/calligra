@@ -320,6 +320,7 @@ void ResourceEditor::slotAddResource()
     Resource *r = new Resource();
     QModelIndex i = m_view->model()->insertResource( g, r );
     if ( i.isValid() ) {
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
@@ -332,6 +333,7 @@ void ResourceEditor::slotAddGroup()
     ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->model()->insertGroup( g );
     if ( i.isValid() ) {
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
@@ -343,6 +345,11 @@ void ResourceEditor::slotDeleteSelection()
     //kDebug()<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
+        QModelIndex i = m_view->selectionModel()->currentIndex();
+        if ( i.isValid() ) {
+            m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+            m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+        }
     }
 }
 
