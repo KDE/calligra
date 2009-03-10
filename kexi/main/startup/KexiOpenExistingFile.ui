@@ -119,8 +119,7 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
+    <tabstops>
     <tabstop>btn_advanced</tabstop>
   </tabstops>
 </ui>

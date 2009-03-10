@@ -378,8 +378,7 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <tabstops>
+  <tabstops>
   <tabstop>group</tabstop>
   <tabstop>nameEdit</tabstop>
   <tabstop>chooseBtn</tabstop>

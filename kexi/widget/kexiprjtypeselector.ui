@@ -132,8 +132,7 @@
     </layout>
   </widget>
   <layoutdefault spacing="6" margin="11" />
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <tabstops>
+    <tabstops>
     <tabstop>option_file</tabstop>
     <tabstop>option_server</tabstop>
   </tabstops>
