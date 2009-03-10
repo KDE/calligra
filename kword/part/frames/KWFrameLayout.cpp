@@ -259,7 +259,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::EvenPagesHeaderTextFrameSet: {
             header = static_cast<KWTextFrame *>(frame);
             minimumHeight[1] = 10;
-            requestedHeight[1] = header->minimumFrameHeight();
+            requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             minimumHeight[2] = page.pageStyle().headerDistance();
             break;
         }
@@ -267,7 +267,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
             minimumHeight[9] = 10;
-            requestedHeight[9] = footer->minimumFrameHeight();
+            requestedHeight[9] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             minimumHeight[8] = page.pageStyle().headerDistance();
             break;
         }
