@@ -286,6 +286,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
 void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
+    fs->setPageStyle(pageStyle);
     fs->setAllowLayout(false);
     switch (fsType) {
     case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header %1", pageStyle.name())); break;
