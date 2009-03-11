@@ -92,6 +92,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(viewMode, this);
     m_canvas = m_gui->canvas();
+    setFocusProxy(m_canvas);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
