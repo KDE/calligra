@@ -172,11 +172,6 @@ private:
     int m_maxShapeDuration;
     // true when there is an animtion in this step
     bool m_hasAnimation;
-
-    // KPresenter BE Team code -- begin //
-    QTime *m_currentSlideTime;
-    QMap<int,int> m_finalTimeSlide;
-    // KPresenter BE Team code -- end //
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */

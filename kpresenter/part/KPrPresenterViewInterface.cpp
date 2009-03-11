@@ -261,6 +261,9 @@ bool KPrPresenterViewInterface::loadSlideTime()
 	    i++;
 	}
     }
+    
+    //m_document->saveOdfSettings( KoStore * store );
+    
     return true;
 }
 
@@ -277,6 +280,11 @@ QMap<int,int>* KPrPresenterViewInterface::getSlidesTime()
 	planTime->insert(i,chaine.toInt());
     }
     return planTime;
+}
+
+void KPrPresenterViewInterface::setDocument(KPrDocument *document)
+{
+    m_document = document;
 }
 
 #include "KPrPresenterViewInterface.moc"

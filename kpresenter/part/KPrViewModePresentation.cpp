@@ -36,7 +36,6 @@
 #include <KoPAView.h>
 #include <KoZoomHandler.h>
 
-#include "KPrDocument.h"
 #include "KPrPresentationTool.h"
 #include "KPrPresenterViewWidget.h"
 #include "KPrEndOfSlideShowPage.h"
@@ -298,4 +297,10 @@ void KPrViewModePresentation::navigateToPage( int index )
 KoPAViewMode * KPrViewModePresentation::getViewMode()
 {
     return m_savedViewMode;
+}
+
+KPrDocument * KPrViewModePresentation::getDocument()
+{
+    KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
+    return document;
 }

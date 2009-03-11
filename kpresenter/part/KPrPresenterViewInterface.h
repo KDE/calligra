@@ -25,6 +25,7 @@
 #include <QPushButton>
 
 #include "KPrPresenterViewBaseInterface.h"
+#include "KPrDocument.h"
 
 #include <QtGui/QFrame>
 
@@ -52,6 +53,7 @@ public:
     void setSlidesTime(QMap<int,int> *slides_time);
     QMap<int,int>* getSlidesTime();
     bool loadSlideTime();
+    void setDocument(KPrDocument *document);
 
 public slots:
     /// reimplemented
@@ -68,7 +70,8 @@ private:
     QTableWidget *slideTab;
     QPushButton *registerButton;
     QList<QTimeEdit *> timeEditList;
-    QList<QLabel *> planningTime; 
+    QList<QLabel *> planningTime;
+    KPrDocument *m_document;
 };
 
 #endif

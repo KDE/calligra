@@ -22,6 +22,7 @@
 
 #include <KoPAViewMode.h>
 #include "KPrAnimationDirector.h"
+#include "KPrDocument.h"
 
 #include <QCloseEvent>
 
@@ -82,6 +83,8 @@ public:
     void navigateToPage( int index );
 
     KoPAViewMode * getViewMode();
+
+    KPrDocument * getDocument();
 
 protected:
     KoPAViewMode * m_savedViewMode;

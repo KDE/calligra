@@ -155,6 +155,12 @@ protected:
 
     /// save configuration specific to KPresenter
     void saveKPrConfig();
+    
+    /**
+     * Save specific settings
+     *
+     */
+    bool saveOdfSettings( KoXmlWriter * settingsWriter );
 
     /**
      * @brief get the animations of the page

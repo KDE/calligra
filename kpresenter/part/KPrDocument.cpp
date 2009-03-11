@@ -319,5 +319,15 @@ void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
     m_activeCustomSlideShow = customSlideShow;
 }
 
+bool KPrDocument::saveOdfSettings( KoXmlWriter * settingsWriter )
+{
+    settingsWriter->startElement("config:slide-time");
+    settingsWriter->addAttribute("config:name", "slide1");
+    settingsWriter->addAttribute("config:time",  "50");
+    settingsWriter->endElement();
+    //settingsWriter->addConfigItem("slideTime", unitName(_unit));
+    return true;
+}
+
 #include "KPrDocument.moc"
 

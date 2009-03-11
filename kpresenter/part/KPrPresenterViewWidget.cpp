@@ -53,6 +53,9 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     m_stackedLayout = new QStackedLayout;
     m_mainWidget = new KPrPresenterViewInterface( pages, m_canvas, this );
+    
+    m_mainWidget->setDocument(m_viewMode->getDocument());
+    
     m_stackedLayout->addWidget( m_mainWidget );
 
     m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
