@@ -67,6 +67,7 @@
 // KDE + Qt includes
 #include <QHBoxLayout>
 #include <QMenu>
+#include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
@@ -1208,9 +1209,15 @@ void KWView::selectionChanged()
     }
 }
 
-void KWView::sanityCheck()
+void KWView::showEvent(QShowEvent *e)
+{
+    KoView::showEvent(e);
+    QTimer::singleShot(0, this, SLOT(updateStatusBarAction()));
+}
+
+void KWView::updateStatusBarAction()
 {
     KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
-    if (action)
+    if (action && statusBar())
         action->setChecked(! statusBar()->isHidden());
 }

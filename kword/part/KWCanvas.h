@@ -143,8 +143,6 @@ protected:
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
     /// reimplemented method from superclass
     virtual void inputMethodEvent(QInputMethodEvent *event);
-    /// reimplemented method from superclass
-    virtual void focusOutEvent(QFocusEvent *event);
 
 private slots:
     /// Called whenever there was a page added/removed or simply resized.

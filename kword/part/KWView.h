@@ -94,7 +94,9 @@ public:
     /// show a popup on the view, adding to it a list of actions
     void popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions);
 
-    void sanityCheck();
+protected:
+    /// reimplemented method from superclass
+    virtual void showEvent(QShowEvent *event);
 
 private:
     void setupActions();
@@ -165,6 +167,8 @@ private slots:
     void createCustomOutline();
     /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
     void handleDeletePageAction();
+    /// set the status of the show-statusbar action to reflect the current setting.
+    void updateStatusBarAction();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
