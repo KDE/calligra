@@ -43,6 +43,22 @@ ReportScene::ReportScene(qreal w, qreal h, ReportDesigner *rd)
         : QGraphicsScene(0, 0, w, h)
 {
     _rd = rd;
+    
+    if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
+        u = _rd->pageUnit();
+        if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm") {
+            majorx = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
+            majory = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiY();
+    }
+    else if (KoUnit::unitName(u) == "pt") {
+        majorx = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
+        majory = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiY();
+    }
+    else {
+        majorx = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
+        majory = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiY();
+    }
+    }
 }
 ReportScene::~ReportScene()
 {
@@ -58,30 +74,41 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
     if (_rd->propertySet()->property("ShowGrid").value().toBool()) {
         if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
             u = _rd->pageUnit();
-            if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm")
-                major = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
-            else if (KoUnit::unitName(u) == "pt")
-                major = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
-            else
-                major = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
+            if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm") {
+                majorx = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
+                majory = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiY();
+            }
+            else if (KoUnit::unitName(u) == "pt") {
+                majorx = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
+                majory = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiY();
+            }
+            else {
+                majorx = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
+                majory = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiY();
+            }
 
         }
         minor = _rd->propertySet()->property("GridDivisions").value().toInt();
-        pixel_increment = (major / minor);
-
+        pixel_incrementx = (majorx / minor);
+        pixel_incrementy = (majory / minor);
+        
         QPen pen = painter->pen();
         painter->setPen(QColor(212, 212, 212));
 
-        if (pixel_increment > 2) { // do not bother painting points if increments are so small
-            int wpoints = qRound(sceneRect().width() / pixel_increment);
-            int hpoints = qRound(sceneRect().height() / pixel_increment);
+        kDebug() << "dpix" << KoGlobal::dpiX() << "dpiy" << KoGlobal::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
+        
+        if (pixel_incrementx > 2) { // do not bother painting points if increments are so small
+            int wpoints = qRound(sceneRect().width() / pixel_incrementx);
+            int hpoints = qRound(sceneRect().height() / pixel_incrementy);
             for (int i = 0; i < wpoints; ++i) {
                 for (int j = 0; j < hpoints; ++j) {
-                    if (i % minor == 0 && j % minor == 0) {
-                        painter->drawLine(QPointF(i * pixel_increment, j * pixel_increment), QPointF(i * pixel_increment, j * pixel_increment  + major));
-                        painter->drawLine(QPointF(i * pixel_increment, j * pixel_increment), QPointF(i * pixel_increment + major, j * pixel_increment));
-                    } else {
-                        painter->drawPoint(QPointF(i * pixel_increment, j * pixel_increment));
+                    if (clip.contains(i * pixel_incrementx, j * pixel_incrementy)){
+                        if (i % minor == 0 && j % minor == 0) {
+                            painter->drawLine(QPointF(i * pixel_incrementx, j * pixel_incrementy), QPointF(i * pixel_incrementx, j * pixel_incrementy  + majorx));
+                            painter->drawLine(QPointF(i * pixel_incrementx, j * pixel_incrementy), QPointF(i * pixel_incrementx + majory, j * pixel_incrementy));
+                        } else {
+                            painter->drawPoint(QPointF(i * pixel_incrementx, j * pixel_incrementy));
+                        }
                     }
                 }
             }
@@ -125,18 +152,18 @@ QPointF ReportScene::gridPoint(const QPointF& p)
     if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
         u = _rd->pageUnit();
         if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm")
-            major = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
+            majorx = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
         else if (KoUnit::unitName(u) == "pt")
-            major = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
+            majorx = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
         else
-            major = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
+            majorx = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
 
 
     }
     minor = _rd->propertySet()->property("GridDivisions").value().toInt();
-    pixel_increment = (major / minor);
+    pixel_incrementx = (majorx / minor);
 
-    return QPointF(qRound((p.x() / pixel_increment)) * pixel_increment, qRound((p.y() / pixel_increment)) * pixel_increment);
+    return QPointF(qRound((p.x() / pixel_incrementx)) * pixel_incrementx, qRound((p.y() / pixel_incrementx)) * pixel_incrementx);
 }
 
 void ReportScene::focusOutEvent(QFocusEvent * focusEvent)

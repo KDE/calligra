@@ -412,14 +412,15 @@ void TaskEditor::slotAddSubtask()
     Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), parent );
     QModelIndex idx = m_view->baseModel()->insertSubtask( t, parent );
     Q_ASSERT( idx.isValid() );
+    m_view->setParentsExpanded( idx, true ); // rightview is not automatically expanded
     edit( idx );
 }
 
 void TaskEditor::edit( QModelIndex i )
 {
     if ( i.isValid() ) {
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
         QModelIndex p = m_view->model()->parent( i );
-//        m_view->setExpanded( p );
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
     }
@@ -450,30 +451,60 @@ void TaskEditor::slotDeleteTask()
     }
     //foreach ( Node* n, lst ) { kDebug()<<n->name(); }
     emit deleteTaskList( lst );
+    QModelIndex i = m_view->selectionModel()->currentIndex();
+    if ( i.isValid() ) {
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+    }
 }
 
 void TaskEditor::slotIndentTask()
 {
     kDebug();
-    emit indentTask();
+    Node *n = selectedNode();
+    if ( n ) {
+        emit indentTask();
+        QModelIndex i = baseModel()->index( n );
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::Current | QItemSelectionModel::ClearAndSelect );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+        m_view->setParentsExpanded( i, true );
+    }
 }
 
 void TaskEditor::slotUnindentTask()
 {
     kDebug();
-    emit unindentTask();
+    Node *n = selectedNode();
+    if ( n ) {
+        emit unindentTask();
+        QModelIndex i = baseModel()->index( n );
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::Current | QItemSelectionModel::ClearAndSelect );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+    }
 }
 
 void TaskEditor::slotMoveTaskUp()
 {
     kDebug();
-    emit moveTaskUp();
+    Node *n = selectedNode();
+    if ( n ) {
+        emit moveTaskUp();
+        QModelIndex i = baseModel()->index( n );
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::Current | QItemSelectionModel::ClearAndSelect );
+        m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+    }
 }
 
 void TaskEditor::slotMoveTaskDown()
 {
     kDebug();
-    emit moveTaskDown();
+    Node *n = selectedNode();
+    if ( n ) {
+        emit moveTaskDown();
+        QModelIndex i = baseModel()->index( n );
+        m_view->selectionModel()->select( i, QItemSelectionModel::Rows | QItemSelectionModel::Current | QItemSelectionModel::ClearAndSelect );
+         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
+   }
 }
 
 bool TaskEditor::loadContext( const KoXmlElement &context )

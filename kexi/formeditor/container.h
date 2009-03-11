@@ -216,6 +216,8 @@ private:
 
     QPoint selectionOrInsertingBegin() const;
 
+    void selectionWidgetsForRectangle(const QPoint& secondPoint);
+
     // Layout
     QLayout *m_layout;
     Form::LayoutType m_layType;

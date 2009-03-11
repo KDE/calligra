@@ -128,7 +128,7 @@ public:
     {
         insertBegin = QPoint(-1, -1);
         insertRect = QRect();
-        m_widget->update();
+//2.0        m_widget->update();
     }
     void updateSelectionOrInsertingRectangle(const QPoint& end)
     {
@@ -481,6 +481,13 @@ Container::eventFilter(QObject *s, QEvent *e)
         QPaintEvent* pe = static_cast<QPaintEvent*>(e);
         QPainter p(widget());
 #if 1 // grid
+#define DEBUG_PAINTER
+#ifdef DEBUG_PAINTER
+    kDebug() << "would draw grid" << pe->rect();
+    QTime t;
+    t.start();
+    long points= 0;
+#endif
         int gridX = d->form->gridSize();
         int gridY = d->form->gridSize();
 
@@ -493,7 +500,6 @@ Container::eventFilter(QObject *s, QEvent *e)
         int cols = widget()->width() / gridX;
         int rows = widget()->height() / gridY;
         const QRect r( pe->rect() );
-// kDebug() << pe->rect();
         // for optimization, compute the start/end row and column to paint
         int startRow = (r.top()-1) / gridY;
         startRow = qMax(startRow, 1);
@@ -513,8 +519,14 @@ Container::eventFilter(QObject *s, QEvent *e)
                 p.setPen(pen2);
                 p.drawPoint(x+1, y);
                 p.drawPoint(x+1, y+1);
+#ifdef DEBUG_PAINTER
+    points++;
+#endif
             }
         }
+#ifdef DEBUG_PAINTER
+    kDebug() << "millisecs:" << t.elapsed() << "points:" << points;
+#endif
 #endif
         if (d->selectionOrInsertingRectangle().isValid()) {
             QColor sc1(Qt::white);
@@ -562,7 +574,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             }
 #ifdef KFD_SIGSLOTS
             else if (connecting) {
-                FormManager::self()->stopCreatingConnection();
+                d->form->abortCreatingConnection();
             }
 #endif
             else if (d->form->state() == Form::WidgetInserting) {
@@ -686,12 +698,17 @@ Container::eventFilter(QObject *s, QEvent *e)
 bool
 Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 {
-    if (d->form->state() == Form::WidgetInserting) { // we insert the widget at cursor pos
-        if (d->form->formWidget())
-            d->form->formWidget()->clearForm();
-        K3Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
-        d->form->addCommand(com, true);
-        d->stopSelectionRectangleOrInserting();
+    if (d->form->state() == Form::WidgetInserting) {
+        if (mev->button() == Qt::LeftButton) { // insert the widget at cursor pos
+            if (d->form->formWidget())
+                d->form->formWidget()->clearForm();
+            K3Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
+            d->form->addCommand(com, true);
+            d->stopSelectionRectangleOrInserting();
+        }
+        else { // right button, etc.
+            d->form->abortWidgetInserting();
+        }
         return true;
     }
     else if (   s == widget()
@@ -700,8 +717,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
              && d->selectionOrInsertingRectangle().isValid() )
     {
         // we are still drawing a rect to select widgets
-        d->stopSelectionRectangleOrInserting();
-//reimpl.        drawSelectionRect(mev);
+        selectionWidgetsForRectangle(mev->pos());
         return true;
     }
 
@@ -1224,14 +1240,12 @@ void Container::drawConnection(QMouseEvent *mev)
 }
 #endif
 
-#if 0 // reimplemented using QRubberBand 
-void
-Container::drawSelectionRect(QMouseEvent *mev)
+void Container::selectionWidgetsForRectangle(const QPoint& secondPoint)
 {
     //finish drawing unclipped selection rectangle: clear the surface
     if (d->form->formWidget())
         d->form->formWidget()->clearForm();
-    d->updateSelectionOrInsertingRectangle(mev->pos());
+    d->updateSelectionOrInsertingRectangle(secondPoint);
 /*moved
     int topx = (m_insertBegin.x() < mev->x()) ? m_insertBegin.x() :  mev->x();
     int topy = (m_insertBegin.y() < mev->y()) ? m_insertBegin.y() : mev->y();
@@ -1239,14 +1253,14 @@ Container::drawSelectionRect(QMouseEvent *mev)
     int boty = (m_insertBegin.y() > mev->y()) ? m_insertBegin.y() : mev->y();
     QRect r = QRect(QPoint(topx, topy), QPoint(botx, boty));*/
 
-    selectWidget(widget());
+    selectWidget(0);
     QWidget *widgetToSelect = 0;
     // We check which widgets are in the rect and select them
     foreach (ObjectTreeItem *titem, *m_tree->children()) {
         QWidget *w = titem->widget();
         if (!w)
             continue;
-        if (w->geometry().intersects(r) && w != widget()) {
+        if (w->geometry().intersects( d->selectionOrInsertingRectangle() ) && w != widget()) {
             if (widgetToSelect) {
                 selectWidget(widgetToSelect, 
                     Form::AddToPreviousSelection | Form::Raise | Form::MoreWillBeSelected);
@@ -1260,11 +1274,13 @@ Container::drawSelectionRect(QMouseEvent *mev)
             Form::AddToPreviousSelection | Form::Raise | Form::LastSelection);
     }
 
-    m_insertRect = QRect();
+//moved    m_insertRect = QRect();
     d->state = Private::DoingNothing;
-    widget()->repaint();
+    d->stopSelectionRectangleOrInserting();
+//?    widget()->repaint();
 }
 
+#if 0 //??
 void
 Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 {

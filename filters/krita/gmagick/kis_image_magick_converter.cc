@@ -503,8 +503,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             Q_ASSERT(layer);
 
             // Layerlocation  (set by the photoshop import filter)
-            Q_INT32 x_offset = 0;
-            Q_INT32 y_offset = 0;
+            qint32 x_offset = 0;
+            qint32 y_offset = 0;
 
             attr = GetImageAttribute(image, "[layer-xpos]");
             if (attr != 0) {
@@ -517,7 +517,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             }
 
 
-            for (Q_UINT32 y = 0; y < image->rows; y ++) {
+            for (quint32 y = 0; y < image->rows; y ++) {
                 const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
 
                 if (!pp) {
@@ -702,7 +702,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
         return KisImageBuilder_RESULT_NOT_LOCAL;
 
 
-    Q_UINT32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
+    quint32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
 
     GetExceptionInfo(&ei);
 
@@ -744,7 +744,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KUrl& uri, KisPa
     image -> matte = true;
 #endif
 
-    Q_INT32 y, height, width;
+    qint32 y, height, width;
 
     height = img -> height();
     width = img -> width();

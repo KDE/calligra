@@ -18,6 +18,8 @@ macro_optional_find_package(Pstoedit)
 
 if (PSTOEDIT_SVG_PLUGIN_FOUND)
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 set(karbonepsimport_PART_SRCS epsimport.cc pscommentlexer.cc )
 
 kde4_add_plugin(karbonepsimport WITH_PREFIX ${karbonepsimport_PART_SRCS})
@@ -43,4 +45,4 @@ DESTINATION ${SERVICES_INSTALL_DIR})
 
 endif (PSTOEDIT_SVG_PLUGIN_FOUND)
 
-macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit" "The Karbon eps import filter will not be built." "http://www.pstoedit.net/" FALSE "")
+macro_log_feature(PSTOEDIT_SVG_PLUGIN_FOUND "pstoedit" "Translates PostScript and PDF graphics into other vector formats" "http://www.pstoedit.net/" FALSE "" "Required by the Karbon EPS import filter")

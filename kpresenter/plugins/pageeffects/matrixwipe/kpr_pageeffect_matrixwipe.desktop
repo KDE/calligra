@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Matrix wipe
 Name[ca]=Esborrat de matriu
+Name[de]=Wischblende (Matrix)
 Name[el]=Σβήσιμο πίνακα
 Name[es]=Barrido matricial
 Name[et]=Maatrikssiire
@@ -21,6 +22,7 @@ Name[x-test]=xxMatrix wipexx
 Name[zh_TW]=矩陣掃描
 Comment=Matrix wipe Page Effects
 Comment[ca]=Efectes d'esborrat de matriu de la pàgina
+Comment[de]=Wischblenden-Seiteneffekte (Matrix)
 Comment[el]=Εφέ σελίδας σβήσιμο πίνακα
 Comment[es]=Efectos de página de barrido matricial
 Comment[et]=Maatrikssiirde lehekülje efektid

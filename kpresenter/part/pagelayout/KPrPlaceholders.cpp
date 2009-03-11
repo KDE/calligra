@@ -221,8 +221,11 @@ QMap<QString, KoTextShapeData *> KPrPlaceholders::styles() const
 
 void KPrPlaceholders::applyStyle( KPrPlaceholderShape * shape, const QString & presentationClass, const QMap<QString, KoTextShapeData*> & styles )
 {
-    // TODO use outline as fallback
+    // use outline as fallback
     KoTextShapeData * data = styles.value( presentationClass, 0 );
+    if ( ! data ) {
+        data = styles.value( "outline", 0 );
+    }
     KoTextShapeData * newData = qobject_cast<KoTextShapeData*>( shape->userData() );
     kDebug(33001) << "data" << data << "newData:" << newData << shape->userData();
     if ( data && newData ) {

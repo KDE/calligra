@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001 David Faure <faure@kde.org>
- * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1017,7 +1017,6 @@ void KWView::inlineFrame()
         return;
     }
 
-    KoTextAnchor *anchor = new KoTextAnchor(targetShape);
     selection->deselectAll();
     KWFrame *frameForAnchor = 0;
     int area = 0;
@@ -1035,7 +1034,7 @@ void KWView::inlineFrame()
     }
 
     if (frameForAnchor == 0) {/* can't happen later on... */
-        kDebug() << "splitting..."; return;
+        kDebug(32001) << "bailing out..."; return;
     }
 
     selection->select(frameForAnchor->shape());
@@ -1048,6 +1047,8 @@ void KWView::inlineFrame()
     KoToolManager::instance()->switchToolRequested(tool);
     KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
     Q_ASSERT(handler);
+    KoTextAnchor *anchor = new KoTextAnchor(targetShape);
+    anchor->setOffset(QPointF(0, -targetShape->size().height()));
     // TODO move caret
     handler->insertInlineObject(anchor);
 }

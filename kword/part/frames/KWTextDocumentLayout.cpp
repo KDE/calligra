@@ -303,17 +303,26 @@ void KWTextDocumentLayout::relayout()
 void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &f)
 {
     KoTextDocumentLayout::positionInlineObject(item, position, f);
+#ifndef DEBUG
+    if (inlineObjectTextManager() == 0) {
+        kWarning(32002) << "Need to call setInlineObjectTextManager on the layout!!";
+        return;
+    }
+#endif
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObjectTextManager()->inlineTextObject(f.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors)
-        if (strategy->anchor() == anchor) return;
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+            if (strategy->anchor() == anchor)
+                return;
+        }
+        TDEBUG << "new anchor";
         m_newAnchors.append(new KWAnchorStrategy(anchor));
     }
 }
 
 void KWTextDocumentLayout::layout()
 {
-    TDEBUG <<"KWTextDocumentLayout::layout";
+    TDEBUG << "starting layout pass";
     QList<Outline*> outlines;
     class End
     {
@@ -406,6 +415,8 @@ void KWTextDocumentLayout::layout()
                     foreach (KWFrame *frame, fs->frames()) {
                         if (frame->shape() == currentShape)
                             continue;
+                        if (! frame->shape()->isVisible(true))
+                            continue;
                         if (frame->textRunAround() == KWord::RunThrough)
                             continue;
                         if (frame->outlineShape()) {
@@ -445,18 +456,23 @@ void KWTextDocumentLayout::layout()
         // anchors might require us to do some layout again, give it the chance to 'do as it will'
         bool restartLine = false;
         foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
+            TDEBUG << "checking anchor";
             if (strategy->checkState(m_state)) {
+                TDEBUG << "  restarting line";
                 restartLine = true;
                 break;
             }
+        }
+        if (restartLine)
+            continue;
+        foreach (KWAnchorStrategy *strategy, m_activeAnchors + m_newAnchors) {
             if (strategy->isFinished() && strategy->anchor()->positionInDocument() < m_state->cursorPosition()) {
+                TDEBUG << "  is finished";
                 m_activeAnchors.removeAll(strategy);
                 m_newAnchors.removeAll(strategy);
                 delete strategy;
             }
         }
-        if (restartLine)
-            continue;
 
         foreach (KWAnchorStrategy *strategy, m_newAnchors) {
             if (strategy->anchoredShape() != 0) {
@@ -544,6 +560,10 @@ void KWTextDocumentLayout::layout()
 
 
         bottomOfText = line.line.y() + line.line.height();
+        if (bottomOfText > m_state->shape->size().height() && document()->blockCount() == 1) {
+            m_frameSet->requestMoreFrames(bottomOfText - m_state->shape->size().height());
+            return;
+        }
 
         while (m_state->addLine(line.line)) {
             if (m_state->shape == 0) { // no more shapes to put the text in!
@@ -556,10 +576,14 @@ void KWTextDocumentLayout::layout()
                     m_frameSet->requestMoreFrames(0);
                     return; // done!
                 }
+                if (KWord::isHeaderFooter(m_frameSet)) { // more text, lets resize the header/footer.
+                    TDEBUG << "  header/footer is too small resize:" << line.line.height();
+                    m_frameSet->requestMoreFrames(line.line.height());
+                    return; // done!
+                }
 
                 KWFrame *lastFrame = m_frameSet->frames().last();
                 if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior
-                        || KWord::isHeaderFooter(m_frameSet)
                         || dynamic_cast<KWCopyShape*> (lastFrame)) {
                     m_state->clearTillEnd();
                     return; // done!

@@ -165,7 +165,7 @@ void KWFrameGeometry::widthChanged(qreal value)
     if (! m_state->keepAspectRatio())  return;
     if (m_blockSignals) return;
     m_blockSignals = true;
-    widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * value);
+    widget.height->changeValue(m_originalSize.height() / m_originalSize.width() * value);
     m_blockSignals = false;
 }
 
@@ -203,6 +203,6 @@ void KWFrameGeometry::updateAspectRatio(bool keep)
 {
     m_state->setKeepAspectRatio(keep);
     if (keep)
-        widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * widget.width->value());
+        widget.height->changeValue(m_originalSize.height() / m_originalSize.width() * widget.width->value());
 }
 

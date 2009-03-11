@@ -88,7 +88,7 @@ void KoUnavailPart::setMimeType( const QByteArray& mime )
 void KoUnavailPart::paintContent( QPainter& painter, const QRect& rect)
 {
     painter.save();
-    painter.setPen( QApplication::palette().color( QPalette::Active, QColorGroup::Text ) );
+    painter.setPen( QApplication::palette().color( QPalette::Active, QPalette::Text ) );
     // Need to draw only the document rectangle described in the parameter rect.
     int left = rect.left() / 20;
     int right = rect.right() / 20 + 1;

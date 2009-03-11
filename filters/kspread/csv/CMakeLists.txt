@@ -1,5 +1,7 @@
 include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES})
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 ########### next target ###############
 
 set(csvimport_PART_SRCS csvimport.cc)

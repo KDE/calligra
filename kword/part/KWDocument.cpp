@@ -44,6 +44,8 @@
 
 // koffice libs includes
 #include <KoShapeManager.h>
+#include <KoTextDocument.h>
+#include <KoTextAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
 #include <KoToolManager.h>
@@ -86,6 +88,8 @@ public:
 
     /// add the frame to be hidden
     void addFrame(KWFrame *frame);
+    /// add the shape to be hidden
+    void addShape(KoShape *shape);
     // reveal all the frames that were added before
     void revealFramesForPage(int pageNumber, qreal moveFrames);
 
@@ -100,6 +104,11 @@ void MagicCurtain::addFrame(KWFrame *frame)
     frames << frame;
     m_data.insert(frame->loadingPageNumber(), frames);
     frame->shape()->setParent(this);
+}
+
+void MagicCurtain::addShape(KoShape *shape)
+{
+    shape->setParent(this);
 }
 
 void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
@@ -322,6 +331,10 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
                 tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
                     this, SLOT(requestMoreSpace(KWTextFrameSet*)));
+        }
+        else {
+            connect(tfs, SIGNAL(decorationFrameResize(KWTextFrameSet*)),
+                    this, SLOT(updateHeaderFooter(KWTextFrameSet*)));
         }
     }
 
@@ -643,26 +656,29 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     foreach (KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs)
-            tfs->setAllowLayout(true);
+        if (!tfs)
+            continue;
+        KoTextDocument textDoc(tfs->document());
+        foreach (KoInlineObject *inlineObject, textDoc.inlineTextObjectManager()->inlineTextObjects()) {
+            KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineObject);
+            if (anchor) {
+                if (m_magicCurtain == 0) {
+                    m_magicCurtain = new MagicCurtain();
+                    m_magicCurtain->setVisible(false);
+                    foreach (KoView *view, views())
+                        static_cast<KWView*>(view)->kwcanvas()->shapeManager()->add(m_magicCurtain);
+                }
+                m_magicCurtain->addShape(anchor->shape());
+            }
+        }
+        tfs->setAllowLayout(true);
     }
 
     emit sigProgress(-1);
 
     kDebug(32001) << "KWDocument::endOfLoading done";
 
-#if 0
-    // Connect to notifications from main text-frameset
-    if (frameset) {
-        connect(frameset->textObject(), SIGNAL(chapterParagraphFormatted(KoTextParag *)),
-                SLOT(slotChapterParagraphFormatted(KoTextParag *)));
-        connect(frameset, SIGNAL(mainTextHeightChanged()),
-                SIGNAL(mainTextHeightChanged()));
-    }
-#endif
-
     // Note that more stuff will happen in completeLoading
-
     firePageSetupChanged();
     setModified(false);
 }
@@ -688,7 +704,7 @@ bool KWDocument::saveOdf(SavingContext &documentContext)
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
 {
-    //kDebug(32002) <<"KWDocument::requestMoreSpace";
+    // kDebug(32002) << fs;
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -721,6 +737,21 @@ void KWDocument::requestMoreSpace(KWTextFrameSet *fs)
         KWPage newPage = appendPage(masterPageName);
         if (m_magicCurtain)
             m_magicCurtain->revealFramesForPage(newPage.pageNumber(), newPage.offsetInDocument());
+    }
+}
+
+void KWDocument::updateHeaderFooter(KWTextFrameSet *tfs)
+{
+    // find all pages that have the page style set and re-layout them.
+    Q_ASSERT(tfs->pageStyle().isValid());
+    PageProcessingQueue *ppq = 0;
+    const KWPageStyle style = tfs->pageStyle();
+    foreach (KWPage page, pageManager()->pages()) {
+        if (page.pageStyle() == style) {
+            if (ppq == 0)
+                ppq = new PageProcessingQueue(this);
+            ppq->addPage(page);
+        }
     }
 }
 

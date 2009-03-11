@@ -46,6 +46,9 @@ KPrEndOfSlideShowPage::KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocu
     pageLayout.top = 0;
     pageLayout.bottom = 0;
     pageLayout.orientation = screenRect.width() > screenRect.height() ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+    pageLayout.bindingSide = 0;
+    pageLayout.pageEdge = 0;
+    pageLayout.format = KoPageFormat::IsoA3Size; 
 
     masterPage()->setPageLayout( pageLayout );
     masterPage()->setBackground( new KoColorBackground( Qt::black ) );

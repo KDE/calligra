@@ -86,9 +86,9 @@ bool KisTIFFWriterVisitor::saveAlpha()
 bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
 {
     if (depth == 32) {
-        Q_UINT32 *dst = reinterpret_cast<Q_UINT32 *>(buff);
+        quint32 *dst = reinterpret_cast<quint32 *>(buff);
         while (!it.isDone()) {
-            const Q_UINT32 *d = reinterpret_cast<const Q_UINT32 *>(it.rawData());
+            const quint32 *d = reinterpret_cast<const quint32 *>(it.rawData());
             int i;
             for (i = 0; i < nbcolorssamples; i++) {
                 *(dst++) = d[poses[i]];

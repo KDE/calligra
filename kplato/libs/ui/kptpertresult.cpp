@@ -539,11 +539,11 @@ double PertCpmView::probability( double z ) const
     double p = 1.0;
     int i = 1;
     for ( ; i < 151; ++i ) {
-        if ( QABS( z ) <= dist[i][0] ) {
+        if ( qAbs( z ) <= dist[i][0] ) {
             break;
         }
     }
-    p = dist[i-1][1] + ( ( dist[i][1] - dist[i-1][1] ) * ( ( QABS(z) - dist[i-1][0] ) / (dist[i][0] - dist[i-1][0] ) ) );
+    p = dist[i-1][1] + ( ( dist[i][1] - dist[i-1][1] ) * ( ( qAbs(z) - dist[i-1][0] ) / (dist[i][0] - dist[i-1][0] ) ) );
     //kDebug()<<i<<":"<<z<<dist[i][0]<<dist[i][1]<<"="<<p;
     return z < 0 ? 1 - p : p;
 }

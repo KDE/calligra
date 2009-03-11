@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -133,6 +134,9 @@ bool ResizeHandle::eventFilter(QObject *o, QEvent *ev)
 
 void ResizeHandle::mousePressEvent(QMouseEvent *ev)
 {
+    if (ev->button() != Qt::LeftButton)
+        return;
+
     const bool startDragging = !m_dragging;
     m_dragging = true;
     m_x = ev->x();
@@ -150,8 +154,8 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     int gridX = m_set->m_form->gridSize();
     int gridY = m_set->m_form->gridSize();
 
-    if (!m_dragging) return;
-    //if(m_editing)  return;
+    if (!m_dragging)
+        return;
 
     int tmpx = m_set->m_widget->x();
     int tmpy = m_set->m_widget->y();
@@ -162,10 +166,8 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     int dummyy = ev->y() - m_y;
 
     if (m_set->m_form->isSnapWidgetsToGridEnabled() && ev->buttons() == Qt::LeftButton && ev->modifiers() != (Qt::ControlModifier | Qt::AltModifier)) {
-        dummyy = (int)(((float)dummyy) / ((float)gridY) + 0.5);
-        dummyy *= gridY;
-        dummyx = (int)(((float)dummyx) / ((float)gridX) + 0.5);
-        dummyx *= gridX;
+        dummyx = alignValueToGrid(dummyx, gridX);
+        dummyy = alignValueToGrid(dummyy, gridY);
     }
 
     switch (m_pos) {
@@ -220,20 +222,23 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     if (tmpx < 0) {
         tmpw += tmpx;
         tmpx = 0;
-    } else if (tmpx + tmpw > m_set->m_widget->parentWidget()->width())
+    } else if (tmpx + tmpw > m_set->m_widget->parentWidget()->width()) {
         tmpw = m_set->m_widget->parentWidget()->width() - tmpx;
+    }
 
     if (tmpy < 0) {
         tmph += tmpy;
         tmpy = 0;
-    } else if (tmpy + tmph > m_set->m_widget->parentWidget()->height())
+    } else if (tmpy + tmph > m_set->m_widget->parentWidget()->height()) {
         tmph = m_set->m_widget->parentWidget()->height() - tmpy;
+    }
 
     const bool shouldBeMoved = (tmpx != m_set->m_widget->x()) || (tmpy != m_set->m_widget->y());
     const bool shouldBeResized = (tmpw != m_set->m_widget->width()) || (tmph != m_set->m_widget->height());
 
-    if (shouldBeMoved && shouldBeResized)
+    if (shouldBeMoved && shouldBeResized) {
         m_set->m_widget->hide();
+    }
 
     // Resize it
     if (shouldBeResized) {
@@ -244,11 +249,13 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
     }
 
     // Move the widget if necessary
-    if (shouldBeMoved)
+    if (shouldBeMoved) {
         m_set->m_widget->move(tmpx, tmpy);
+    }
 
-    if (shouldBeMoved && shouldBeResized)
+    if (shouldBeMoved && shouldBeResized) {
         m_set->m_widget->show();
+    }
 }
 
 void ResizeHandle::mouseReleaseEvent(QMouseEvent *)

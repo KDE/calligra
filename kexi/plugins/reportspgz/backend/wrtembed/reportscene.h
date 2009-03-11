@@ -49,7 +49,7 @@ public:
     void lowerSelected();
     QGraphicsItemList itemsOrdered();
     qreal gridSize() {
-        return pixel_increment;
+        return pixel_incrementx;
     }
 
 protected:
@@ -70,9 +70,10 @@ private:
 
     KoUnit u;
     int minor;
-    qreal major;
-    qreal pixel_increment;
-
+    qreal majorx;
+    qreal majory;
+    qreal pixel_incrementx;
+    qreal pixel_incrementy;
 
 };
 

@@ -697,7 +697,7 @@ void DependencyNodeItem::setColumn()
     int col = m_parent == 0 ? 0 : m_parent->column() + 1;
     //kDebug()<<this<<text();
     foreach ( DependencyLinkItem *i, m_parentrelations ) {
-        col = QMAX( col, i->newChildColumn() );
+        col = qMax( col, i->newChildColumn() );
     }
     if ( col != column() ) {
         setColumn( col );

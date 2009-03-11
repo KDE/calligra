@@ -163,8 +163,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   </layout>
  </widget>
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
+  <customwidgets>
   <customwidget>
    <class>Q3ListView</class>
    <extends>Q3Frame</extends>

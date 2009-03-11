@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
- * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008-2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,9 +56,9 @@ public:
 };
 
 KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )
-    : KoShapeContainer()
-    , m_page( page )
-    , m_imageCollection( new KoImageCollection() )
+: KoPAPageBase()
+, m_page( page )
+, m_imageCollection( new KoImageCollection() )
 {
     // add default layer
     KoShapeLayer* layer = new KoShapeLayer;
@@ -162,6 +162,40 @@ void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converte
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+}
+
+KoPageLayout & KPrNotes::pageLayout()
+{
+    return m_pageLayout;
+}
+
+const KoPageLayout & KPrNotes::pageLayout() const
+{
+    return m_pageLayout;
+}
+
+bool KPrNotes::displayMasterShapes()
+{
+    return false;
+}
+
+void KPrNotes::setDisplayMasterShapes( bool )
+{
+}
+
+bool KPrNotes::displayMasterBackground()
+{
+    return false;
+}
+
+void KPrNotes::setDisplayMasterBackground( bool )
+{
+}
+
+QPixmap KPrNotes::generateThumbnail( const QSize& )
+{
+    Q_ASSERT( 0 );
+    return QPixmap();
 }
 
 void KPrNotes::updatePageThumbnail()

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Bar Wipe
 Name[ca]=Esborrat de barra
+Name[de]=Wischblende (Stange)
 Name[el]=Σβήσιμο ράβδων
 Name[es]=Barrido de barras
 Name[et]=Lattsiire
@@ -21,6 +22,7 @@ Name[x-test]=xxBar Wipexx
 Name[zh_TW]=條狀掃描
 Comment=Bar Wipe Page Effect
 Comment[ca]=Efecte d'esborrat de barra de la pàgina
+Comment[de]=Wischblenden-Seiteneffekt (Stange)
 Comment[el]=Εφέ σελίδας σβήσιμο ράβδων
 Comment[es]=Efecto de página de barrido de barras
 Comment[et]=Lattsiirde lehekülje efekt

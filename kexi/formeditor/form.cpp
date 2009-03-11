@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QTimer>
+#include <QStyleOption>
 
 #include <kdebug.h>
 #include <KLocale>
@@ -51,6 +52,7 @@
 #include "tabstopdialog.h"
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
+#include <kexiutils/styleproxy.h>
 #include <kexi_global.h>
 
 #include <koproperty/Set.h>
@@ -66,6 +68,136 @@
 
 namespace KFormDesigner
 {
+
+//! Used to alter the widget's style at design time
+class DesignModeStyle : public KexiUtils::StyleProxy
+{
+public:
+    DesignModeStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    {
+    }
+
+    //! Reimplemented to remove handling of the State_MouseOver state.
+    virtual void drawControl(ControlElement element, const QStyleOption *option,
+                             QPainter *p, const QWidget *w = 0) const
+    {
+        QStyleOption *so = alterOption(element, option);
+        KexiUtils::StyleProxy::drawControl(element, so ? so : option, p, w);
+        delete so;
+    }
+/*
+    virtual void drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt,
+                                    QPainter *p, const QWidget *widget = 0) const
+    {
+        QStyleOption so( alterOption(*opt) );
+        KexiUtils::StyleProxy::drawComplexControl(cc, &so, p, widget);
+    }
+*/
+/*    virtual void drawPrimitive(PrimitiveElement element,
+                               const QStyleOption * option, QPainter * painter,
+                               const QWidget * widget = 0) const
+    {
+        if (!option) {
+            KexiUtils::StyleProxy::drawPrimitive(element, option, painter, widget);
+            return;
+        }
+        QStyleOption *so = alterOption(*opt);
+        KexiUtils::StyleProxy::drawPrimitive(element, &so, painter, widget);
+    }*/
+private:
+    //! Used in alterOption()
+    template <class StyleOptionClass>
+    static StyleOptionClass *cloneStyleOption(const QStyleOption *option) {
+        return new StyleOptionClass( *qstyleoption_cast<const StyleOptionClass*>(option) );
+    }
+
+    QStyleOption* alterOption(ControlElement element, const QStyleOption *option) const
+    {
+        if (!option)
+            return 0;
+        QStyleOption* res = 0;
+        switch (option->type) {
+        case QStyleOption::SO_Button:
+            res = cloneStyleOption<QStyleOptionButton>(option);
+            break;
+        case QStyleOption::SO_ComboBox:
+            res = cloneStyleOption<QStyleOptionComboBox>(option);
+            break;
+        case QStyleOption::SO_Complex:
+            res = cloneStyleOption<QStyleOptionComplex>(option);
+            break;
+        case QStyleOption::SO_DockWidget:
+            res = cloneStyleOption<QStyleOptionDockWidget>(option);
+            break;
+        case QStyleOption::SO_FocusRect:
+            res = cloneStyleOption<QStyleOptionFocusRect>(option);
+            break;
+        case QStyleOption::SO_Frame:
+            res = cloneStyleOption<QStyleOptionFrame>(option);
+            break;
+        case QStyleOption::SO_GraphicsItem:
+            res = cloneStyleOption<QStyleOptionGraphicsItem>(option);
+            break;
+        case QStyleOption::SO_GroupBox:
+            res = cloneStyleOption<QStyleOptionGroupBox>(option);
+            break;
+        case QStyleOption::SO_Header:
+            res = cloneStyleOption<QStyleOptionHeader>(option);
+            break;
+        case QStyleOption::SO_MenuItem:
+            res = cloneStyleOption<QStyleOptionMenuItem>(option);
+            break;
+        case QStyleOption::SO_ProgressBar:
+            res = cloneStyleOption<QStyleOptionProgressBar>(option);
+            break;
+        case QStyleOption::SO_RubberBand:
+            res = cloneStyleOption<QStyleOptionRubberBand>(option);
+            break;
+        case QStyleOption::SO_SizeGrip:
+            res = cloneStyleOption<QStyleOptionSizeGrip>(option);
+            break;
+        case QStyleOption::SO_Slider:
+            res = cloneStyleOption<QStyleOptionSlider>(option);
+            break;
+        case QStyleOption::SO_SpinBox:
+            res = cloneStyleOption<QStyleOptionSpinBox>(option);
+            break;
+        case QStyleOption::SO_Tab:
+            res = cloneStyleOption<QStyleOptionTab>(option);
+            break;
+        case QStyleOption::SO_TabBarBase:
+            res = cloneStyleOption<QStyleOptionTabBarBase>(option);
+            break;
+        case QStyleOption::SO_TabWidgetFrame:
+            res = cloneStyleOption<QStyleOptionTabWidgetFrame>(option);
+            break;
+        case QStyleOption::SO_TitleBar:
+            res = cloneStyleOption<QStyleOptionTitleBar>(option);
+            break;
+        case QStyleOption::SO_ToolBar:
+            res = cloneStyleOption<QStyleOptionToolBar>(option);
+            break;
+        case QStyleOption::SO_ToolBox:
+            res = cloneStyleOption<QStyleOptionToolBox>(option);
+            break;
+        case QStyleOption::SO_ToolButton:
+            res = cloneStyleOption<QStyleOptionToolButton>(option);
+            break;
+        case QStyleOption::SO_ViewItem:
+            res = cloneStyleOption<QStyleOptionViewItem>(option);
+            break;
+        default:
+            return 0;
+        }
+
+        const QStyle::State statesToRemove( QStyle::State_MouseOver | State_HasFocus );
+        res->state |= statesToRemove;
+        res->state ^= statesToRemove;
+        return res;
+    }
+};
+
+//--------------
 
 //! @internal
 class FormPrivate
@@ -179,6 +311,8 @@ public:
     // helper to change color palette when switching 'enabled' property
     QColorGroup* origActiveColors;
 
+    QStyle *designModeStyle;
+
     Form *q;
 };
 }
@@ -217,6 +351,7 @@ FormPrivate::FormPrivate(Form *form)
     initPropertiesDescription();
     origActiveColors = 0;
 // end of moved from WidgetPropertySet
+    designModeStyle = 0;
 }
 
 FormPrivate::~FormPrivate()
@@ -227,6 +362,7 @@ FormPrivate::~FormPrivate()
     delete connBuffer;
     connBuffer = 0;
 #endif
+    delete designModeStyle;
 //Qt4    resizeHandles.setAutoDelete(false);
     // otherwise, it tries to delete widgets which doesn't exist anymore
 }
@@ -557,6 +693,14 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QByteArra
     connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 
     kDebug() << "d->toplevel=" << d->toplevel;
+
+    // alter the style
+    delete d->designModeStyle;
+    d->designModeStyle = 0;
+    if (d->mode == DesignMode) {
+        d->designModeStyle = new DesignModeStyle(d->topTree->widget()->style());
+        d->topTree->widget()->setStyle(d->designModeStyle);
+    }
 }
 
 Container*
@@ -638,6 +782,14 @@ void Form::setMode(Mode mode)
     d->topTree = 0;
     delete d->toplevel;
     d->toplevel = 0;
+
+    // alter the style
+    delete d->designModeStyle;
+    d->designModeStyle = 0;
+    if (d->mode == DesignMode) {
+        d->designModeStyle = new DesignModeStyle(d->widget->style());
+        d->widget->setStyle(d->designModeStyle);
+    }
 }
 
 
@@ -647,6 +799,9 @@ void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
 {
     if (!w) {
         selectWidget(widget());
+        return;
+    }
+    if (d->selected.count() == 1 && d->selected.first() == w) {
         return;
     }
 

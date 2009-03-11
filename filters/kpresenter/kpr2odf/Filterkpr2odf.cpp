@@ -1580,7 +1580,7 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
     if( !effects.isNull() )
     {
         QBuffer animationsBuffer;
-        animationsBuffer.open( IO_WriteOnly );
+        animationsBuffer.open( QIODevice::WriteOnly );
         KoXmlWriter animationsWriter( &animationsBuffer, indentLevel + 1 );
 
         animationsWriter.startElement( "presentation:show-shape" );
@@ -1711,7 +1711,7 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
     //in KPR the effect it's saved and not displayed unless doit is set to 1
     {
         QBuffer animationsBuffer;
-        animationsBuffer.open( IO_WriteOnly );
+        animationsBuffer.open( QIODevice::WriteOnly );
         KoXmlWriter animationsWriter( &animationsBuffer, indentLevel + 1 );
 
         animationsWriter.startElement( "presentation:hide-shape" );

@@ -534,6 +534,8 @@ void* KexiUtils::stringToPtrInternal(const QString& str, uint size)
 
 void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 {
+    if (!widget)
+        return;
     QFocusEvent fe(QEvent::FocusIn, reason);
     //QFocusEvent::setReason(reason);
     QCoreApplication::sendEvent(widget, &fe);
@@ -542,6 +544,8 @@ void KexiUtils::setFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 
 void KexiUtils::unsetFocusWithReason(QWidget* widget, Qt::FocusReason reason)
 {
+    if (!widget)
+        return;
     QFocusEvent fe(QEvent::FocusOut, reason);
     //QFocusEvent::setReason(reason);
     QCoreApplication::sendEvent(widget, &fe);

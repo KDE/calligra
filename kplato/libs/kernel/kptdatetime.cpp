@@ -68,7 +68,7 @@ Duration DateTime::duration(const DateTime &dt) const {
         } else if ( ms > 0 && s < 0 ) {
             s -= 1;
         }
-        dur = Duration( QABS( (s * 1000 ) + ms ) );
+        dur = Duration( qAbs( (s * 1000 ) + ms ) );
     }
     //kDebug()<<dur.milliseconds();
     return dur;

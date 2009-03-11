@@ -255,8 +255,7 @@
       </item>
     </layout>
   </widget>
-  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
-  <includes>
+    <includes>
     <include location="local" >kurlrequester.h</include>
     <include location="local" >klineedit.h</include>
     <include location="local" >kpushbutton.h</include>

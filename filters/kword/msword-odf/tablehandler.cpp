@@ -171,8 +171,8 @@ void KWordTableHandler::tableCellStart()
             const wvWare::Word97::TC* tcBelow = 0L;
             for ( int c = 0; !tcBelow && c < tapBelow->itcMac ; ++c )
             {
-                 if ( QABS( tapBelow->rgdxaCenter[ c ] - left ) <= 3
-                      && QABS( tapBelow->rgdxaCenter[ c + 1 ] - right ) <= 3 ) {
+                 if ( qAbs( tapBelow->rgdxaCenter[ c ] - left ) <= 3
+                      && qAbs( tapBelow->rgdxaCenter[ c + 1 ] - right ) <= 3 ) {
                      tcBelow = &tapBelow->rgtc[ c ];
                      //kDebug(30513) <<"found cell below, at (Word) column" << c <<" fVertMerge:" << tcBelow->fVertMerge;
                  }

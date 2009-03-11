@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -72,6 +72,9 @@ public:
     void allowToGrow();
     /// A layout option.  Asks the frame to shrink to a maximum of requestedHeight because there is no more text.
     void autoShrink(qreal requestedHeight);
+
+    void setMinimumFrameHeight(qreal minimumFrameHeight) { m_minimumFrameHeight = minimumFrameHeight; }
+    qreal minimumFrameHeight() const { return m_minimumFrameHeight; }
 
 private:
     /* TODO

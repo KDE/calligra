@@ -18,6 +18,8 @@ set( KPLATO_INCLUDES
     ${KDEPIMLIBS_INCLUDE_DIR}
 )
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 add_subdirectory( libs )
 
 add_subdirectory( templates )

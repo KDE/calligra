@@ -205,8 +205,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
   </layout>
  </widget>
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
+  <customwidgets>
   <customwidget>
    <class>Q3ListBox</class>
    <extends>Q3Frame</extends>

@@ -75,7 +75,9 @@ void KPrPageLayoutDocker::setView( KPrView* view )
     // TODO add empty layout
 
     foreach( KPrPageLayout * layout, layoutMap ) {
-        addLayout( layout );
+        if ( layout->type() == KPrPageLayout::Page ) {
+            addLayout( layout );
+        }
     }
 
     slotActivePageChanged();
@@ -94,7 +96,7 @@ void KPrPageLayoutDocker::slotActivePageChanged()
     if ( page ) {
         KPrPageLayout * layout = page->layout();
         QListWidgetItem * item = m_layout2item.value( layout, 0 );
-        if ( item == 0 && layout != 0 ) {
+        if ( item == 0 && layout != 0 && layout->type() == KPrPageLayout::Page ) {
             item = addLayout( layout );
         }
 

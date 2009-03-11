@@ -1,6 +1,7 @@
 
 
-add_definitions(${WV2_INCLUDE_DIR})
+add_definitions(${WV2_INCLUDE_DIR} -DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 
 
 ########### next target ###############

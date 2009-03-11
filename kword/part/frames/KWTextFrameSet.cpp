@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -145,7 +145,11 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*>(frames()[frameCount()-1]);
 
-    if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
+    if (lastFrame && KWord::isHeaderFooter(this)) {
+        KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
+        frame->setMinimumFrameHeight(frame->minimumFrameHeight() + textHeight);
+        emit decorationFrameResize(this);
+    } else if (textHeight == 0.0 || lastFrame->frameBehavior() == KWord::AutoCreateNewFrameBehavior) {
         if (lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame)
             emit moreFramesNeeded(this);
     } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior && lastFrame->canAutoGrow()) {
@@ -170,6 +174,12 @@ void KWTextFrameSet::spaceLeft(qreal excessHeight)
     Q_ASSERT(excessHeight >= 0);
     if (m_frames.count() == 0)
         return;
+    if (KWord::isHeaderFooter(this)) {
+        KWTextFrame *frame = static_cast<KWTextFrame*>(frames().first());
+        frame->setMinimumFrameHeight(frame->minimumFrameHeight() - excessHeight);
+        emit  decorationFrameResize(this);
+        return;
+    }
     QList<KWFrame*>::Iterator iter = --m_frames.end();
     do {
         KWTextFrame *tf = dynamic_cast<KWTextFrame*>(*(iter));

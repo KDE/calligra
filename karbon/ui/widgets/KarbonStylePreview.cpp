@@ -47,7 +47,7 @@ KarbonStylePreview::KarbonStylePreview( QWidget * parent )
 {
     setFocusPolicy( Qt::NoFocus );
 
-    setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
+    setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     setMaximumHeight( int( PANEL_SIZEY ) );
 
     installEventFilter( this );

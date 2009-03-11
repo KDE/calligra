@@ -485,7 +485,7 @@ void KexiFormPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
     KexiProject *prj = KexiMainWindowIface::global()->project();
     d->dataSourcePage->setProject(prj);
 
-    tab->addTab(d->dataSourcePage, KIcon("database"), "");
+    tab->addTab(d->dataSourcePage, KIcon("server-database"), "");
     tab->setTabToolTip(tab->indexOf(d->dataSourcePage), i18n("Data Source"));
 
     tab->addTab(d->objectTreeView, KIcon("widgets"), "");

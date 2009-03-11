@@ -159,12 +159,15 @@ bool Part::loadXML( const KoXmlDocument &document, KoStore* )
 #else
     int numNodes = plan.childNodesCount();
 #endif
+#if 0 
+This test does not work any longer. KoXml adds a couple of elements not present in the file!!
     if ( numNodes > 2 ) {
         //TODO: Make a proper bitching about this
         kDebug() <<"*** Error ***";
         kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
         return false;
     }
+#endif
     m_xmlLoader.startLoad();
     KoXmlNode n = plan.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {

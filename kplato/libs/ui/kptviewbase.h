@@ -331,6 +331,8 @@ public:
     
     KoPrintJob *createPrintJob( ViewBase *parent );
     
+    QModelIndex firstVisibleIndex( const QModelIndex &idx ) const;
+
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );
@@ -481,6 +483,8 @@ public:
     void setStretchFactors();
     
     QModelIndex indexAt( const QPoint &pos ) const;
+
+    void setParentsExpanded( const QModelIndex &idx, bool expanded );
 
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos

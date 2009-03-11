@@ -117,7 +117,7 @@ Duration Duration::operator/(int value) const {
 
 Duration Duration::operator*(const double value) const {
     Duration dur(*this);
-    dur.m_ms = QABS(m_ms * (qint64)value);
+    dur.m_ms = qAbs(m_ms * (qint64)value);
     return dur;
 }
 

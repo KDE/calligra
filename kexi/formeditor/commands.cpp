@@ -48,6 +48,7 @@
 #include "commands.h"
 
 #include <memory>
+#include <limits.h>
 
 using namespace KFormDesigner;
 
@@ -1273,6 +1274,30 @@ void PasteWidgetCommand::execute()
         d->form->setInteractiveMode(true);
     }
     else {
+        int minX = INT_MAX, minY = INT_MAX;
+        if (!d->pos.isNull()) {
+            // compute top-left point for the united rectangles
+            for (n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
+                // more than one "widget" child tag
+                if (n.toElement().tagName() != "widget") {
+                    continue;
+                }
+                QDomElement el = n.toElement();
+                QDomElement rectEl;
+                for (QDomNode n2 = el.firstChild(); !n2.isNull(); n2 = n2.nextSibling()) {
+                    if ((n2.toElement().tagName() == "property") && (n2.toElement().attribute("name") == "geometry")) {
+                        rectEl = n2.firstChild().toElement();
+                        break;
+                    }
+                }
+                int x = rectEl.firstChildElement("x").text().toInt();
+                if (x < minX)
+                    minX = x;
+                int y = rectEl.firstChildElement("y").text().toInt();
+                if (y < minY)
+                    minY = y;
+            }
+        }
         for (n = domDoc.firstChildElement("UI").firstChild(); !n.isNull(); n = n.nextSibling()) {
             // more than one "widget" child tag
             if (n.toElement().tagName() != "widget") {
@@ -1284,7 +1309,12 @@ void PasteWidgetCommand::execute()
                 fixPos(el, container);
             }
             else {
-                moveWidgetBy(el, container, d->pos);
+                //container->widget()->mapTo(
+                moveWidgetBy(
+                    el, container, 
+                    QPoint(-minX, -minY) + d->pos // fix position by subtracting the original 
+                                                  // offset and adding the new one
+                );
             }
 
             d->form->setInteractiveMode(false);
@@ -1347,8 +1377,10 @@ void PasteWidgetCommand::changePos(QDomElement &el, const QPoint &newPos)
     QDomElement rect;
     // Find the widget geometry if there is one
     for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry")) {
             rect = n.firstChild().toElement();
+            break;
+        }
     }
 
     QDomElement x = rect.firstChildElement("x");
@@ -1417,8 +1449,10 @@ void PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, con
 {
     QDomElement rect;
     for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry"))
+        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "geometry")) {
             rect = n.firstChild().toElement();
+            break;
+        }
     }
 
     QDomElement x = rect.firstChildElement("x");

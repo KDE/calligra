@@ -45,7 +45,6 @@ public:
 
     ~SheetPropertiesDialog();
 
-    virtual void slotDefault();
 
     Qt::LayoutDirection layoutDirection() const;
 
@@ -90,7 +89,8 @@ public:
     bool capitalizeFirstLetter() const;
 
     void setCapitalizeFirstLetter( bool b );
-
+public slots:
+	virtual void slotDefault();
 private:
     SheetPropertiesWidget* m_widget;
 };

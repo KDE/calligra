@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
@@ -259,7 +259,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::EvenPagesHeaderTextFrameSet: {
             header = static_cast<KWTextFrame *>(frame);
             minimumHeight[1] = 10;
-            requestedHeight[1] = header->shape()->size().height();
+            requestedHeight[1] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             minimumHeight[2] = page.pageStyle().headerDistance();
             break;
         }
@@ -267,7 +267,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         case KWord::EvenPagesFooterTextFrameSet: {
             footer = static_cast<KWTextFrame *>(frame);
             minimumHeight[9] = 10;
-            requestedHeight[9] = footer->shape()->size().height();
+            requestedHeight[9] = static_cast<KWTextFrame *>(textFrameSet->frames().first())->minimumFrameHeight();
             minimumHeight[8] = page.pageStyle().headerDistance();
             break;
         }
@@ -644,7 +644,9 @@ KWFrame* KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
     if (fs->frameCount() == 0) { // special case for the headers. Just return a new textframe.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
-        KWTextFrame *frame = new KWTextFrame(createTextShape(page), tfs);
+        KoShape *shape = createTextShape(page);
+        shape->setSize(QSize(20, 10));
+        KWTextFrame *frame = new KWTextFrame(shape, tfs);
 
         return frame;
     }

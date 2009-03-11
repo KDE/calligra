@@ -331,8 +331,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
   </layout>
  </widget>
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <tabstops>
+  <tabstops>
   <tabstop>standard</tabstop>
   <tabstop>left</tabstop>
   <tabstop>center</tabstop>

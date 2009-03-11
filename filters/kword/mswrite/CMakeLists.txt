@@ -1,6 +1,8 @@
 
 include_directories( ${KWMF_INCLUDES} )
 
+add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
+
 ########### next target ###############
 
 set(mswriteimport_PART_SRCS 
