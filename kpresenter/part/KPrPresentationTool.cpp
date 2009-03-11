@@ -54,6 +54,7 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     m_frame = new QFrame( m_viewMode.canvas() );
     
     QVBoxLayout *frameLayout = new QVBoxLayout();
+    
     m_presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
     frameLayout->addWidget( m_presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
     m_frame->setLayout( frameLayout );

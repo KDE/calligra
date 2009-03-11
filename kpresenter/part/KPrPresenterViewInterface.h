@@ -50,7 +50,8 @@ public:
 
     void setPreviewSize( const QSize &size );
     void setSlidesTime(QMap<int,int> *slides_time);
-    void loadSlideTime();
+    QMap<int,int>* getSlidesTime();
+    bool loadSlideTime();
 
 public slots:
     /// reimplemented
@@ -67,7 +68,7 @@ private:
     QTableWidget *slideTab;
     QPushButton *registerButton;
     QList<QTimeEdit *> timeEditList;
-    QList<QLabel *> planningTime;
+    QList<QLabel *> planningTime; 
 };
 
 #endif

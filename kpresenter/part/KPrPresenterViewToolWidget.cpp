@@ -28,11 +28,11 @@
 #include <KIcon>
 
 KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent, QMap<int,int> *timeSlide)
-    : QFrame(parent),m_finalTimeSlide(timeSlide)
+    : QFrame(parent), m_plannigTime(timeSlide)
 {
     QSize iconSize( 32, 32 );
     QHBoxLayout *mainLayout = new QHBoxLayout;
-
+  
     QHBoxLayout *hLayout = new QHBoxLayout;
     QToolButton *toolButton = new QToolButton;
     toolButton->setIcon( KIcon( "go-previous" ) );
@@ -99,7 +99,7 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent, QMap<int
     iconLabel = new QLabel;
     iconLabel->setPixmap( KIcon( "chronometer" ).pixmap( iconSize ) );
     hLayout->addWidget(iconLabel);
-    if(timeSlide == 0)
+    if(m_plannigTime == 0)
 	m_timerSlideLabel = new QLabel( "00:00:00");
     else
 	m_timerSlideLabel = new QLabel( "<font color=\"#00FF00\">00:00:00</font>");
@@ -115,11 +115,11 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent, QMap<int
     connect( m_clockTimer, SIGNAL( timeout() ), this, SLOT( updateClock() ) );
     m_clockTimer->start( 1000 );
     
-    if(m_finalTimeSlide == 0)	{
-      // create slides time
-      m_finalTimeSlide = new QMap<int,int>();
-      m_configurationMode = true;
-    }
+    // create slides time
+    m_finalTimeSlide = new QMap<int,int>();
+    
+    if(m_plannigTime == 0)
+	m_configurationMode = true;
     else
       // loading of an existing slides time configuration
       m_configurationMode = false;
@@ -159,9 +159,14 @@ void KPrPresenterViewToolWidget::updateClock()
     // display the timer, with 0 appended if only 1 digit
     QString texte = QString( "%1:%2:%3").arg( hour, 2, 10, QChar('0' ) ).
     arg( min, 2, 10, QChar( '0' ) ).arg( sec, 2, 10, QChar( '0' ));
-    if(m_configurationMode == false && sec > m_finalTimeSlide->value(indexCurrentPage))
+    
+    if(!m_finalTimeSlide->contains(indexCurrentPage))
+	m_finalTimeSlide->insert(indexCurrentPage,0);
+    
+    int s = m_currentSlideTime->elapsed()/1000;
+    if(!m_configurationMode && m_plannigTime->contains(indexCurrentPage) && s > m_plannigTime->value(indexCurrentPage))
 	texte = "<font color=\"#FF0000\">"+texte+"</font>";
-    else if(m_configurationMode == false)
+    else if(!m_configurationMode)
 	texte = "<font color=\"#00FF00\">"+texte+"</font>";
     else
 	texte = "<font color=\"#000000\">"+texte+"</font>";

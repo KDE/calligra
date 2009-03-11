@@ -64,7 +64,10 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addStretch();
-    m_toolWidget = new KPrPresenterViewToolWidget;
+    
+    QMap<int,int> *t = m_mainWidget->getSlidesTime();
+    m_toolWidget = new KPrPresenterViewToolWidget(0,t);
+    
     connect( m_toolWidget, SIGNAL( slideThumbnailsToggled( bool ) ), this, SLOT( showSlideThumbnails( bool ) ) );
     connect( m_toolWidget, SIGNAL( previousSlideClicked() ), this, SLOT( requestPreviousSlide() ) );
     connect( m_toolWidget, SIGNAL( nextSlideClicked() ), this, SLOT( requestNextSlide() ) );

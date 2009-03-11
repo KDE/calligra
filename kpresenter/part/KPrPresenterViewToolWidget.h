@@ -61,6 +61,7 @@ private:
     
     QTime *m_currentSlideTime;
     QMap<int,int> *m_finalTimeSlide;
+    QMap<int,int> *m_plannigTime;
     int indexCurrentPage;
     bool m_configurationMode;
 };

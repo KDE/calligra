@@ -186,11 +186,12 @@ void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
 void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
 {
     QTime t = QTime(0,0,0);
-    for (int j = 0;j < slides_time->size(); ++j)
+    for (int i = 0;i < slides_time->size(); ++i)
     {
 	t = QTime(0,0,0);
-	t=t.addSecs(slides_time->value(j));
-	timeEditList.at(j)->setTime(t);
+	t=t.addSecs(slides_time->value(i));
+	if(timeEditList.size() > i)
+	    timeEditList.at(i)->setTime(t);
     }
 }
 
@@ -222,12 +223,14 @@ void KPrPresenterViewInterface::saveSlideTime()
     writer->endDocument();
 }
     
-void KPrPresenterViewInterface::loadSlideTime()
+bool KPrPresenterViewInterface::loadSlideTime()
 {
     KoXmlDocument m_doc;
-    // chemin absolu à modifier (et créer le fichier associé -> voir plus bas)
+    // chemin absolu à modifier
     QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
     QFile file( fileName );
+    if(!file.exists())
+	return false;
     file.open(QIODevice::ReadOnly);
 
     QTime time;
@@ -253,24 +256,27 @@ void KPrPresenterViewInterface::loadSlideTime()
 	    QTime t = QTime(h,m,s);
 	    t.addSecs(time.attribute("time").toInt());
 	    t.addSecs(10);
-	    planningTime.value(i)->setText(t.toString());
-	    kDebug() << t.toString();
+	    if(i < planningTime.size())
+	      planningTime.value(i)->setText(t.toString());
 	    i++;
 	}
     }
+    return true;
 }
-    /* fichier à créer : slideTimess.xml
-    
-    <?xml version="1.0" standalone="no"?>
-      <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" 
-      "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-    <lineends>
-      <draw:marker draw:name="Slide 1" draw:time="10"/>
-      <draw:marker draw:name="Slide 2" draw:time="2"/>
-      <draw:marker draw:name="Slide 3" draw:time="30"/>
-      <draw:marker draw:name="Slide 4" draw:time="40"/>
-    </lineends> 
 
-    */
+QMap<int,int>* KPrPresenterViewInterface::getSlidesTime()
+{
+    if(!loadSlideTime())
+	return 0;
+    QMap<int,int> *planTime = new QMap<int,int>();
+    QString chaine;
+    for(int i=0;i<planningTime.size();i++)
+    {
+	chaine = planningTime.value(i)->text();
+	chaine.remove(":");
+	planTime->insert(i,chaine.toInt());
+    }
+    return planTime;
+}
 
 #include "KPrPresenterViewInterface.moc"
