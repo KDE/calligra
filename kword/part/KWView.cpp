@@ -976,6 +976,7 @@ void KWView::toggleSnapToGrid()
 
 void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction)
 {
+    // TODO we should not allow any shapes to fall behind the main text frame.
     QUndoCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
                         kwcanvas()->shapeManager(), direction);
     if (cmd)
