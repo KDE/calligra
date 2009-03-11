@@ -9,8 +9,6 @@ The current debug keys are:
 Alt-Ctrl-Shift-F : Frames debug. Outputs information about all existing frames.
 Ctrl-Shift-P : Paragraphs debug. Outputs information about all paragraphs of the current frameset.
 Alt-Ctrl-Shift-S : Styles debug. Prints all KoStyles.
-
-In previous versions of KWord we had this and we may reinstate them if needed;
 Alt-Ctrl-Shift-M : Mark the debug output. Just prints the current date/time.
 
-(The code is in koffice/kword/part/KWCanvas.cpp method keyReleaseEvent())
+(The code is in koffice/kword/part/KWCanvas.cpp method keyReleaseEvent() and in the textTool)
