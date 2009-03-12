@@ -44,6 +44,7 @@ public:
 
 public slots:
     void updateActivePage(KoPAPageBase *page);
+    void dialogCustomSlideShows();
 
 protected:
     void initGUI();
@@ -55,7 +56,6 @@ protected slots:
     void createAnimation();
     void showNormal();
     void showNotes();
-    void dialogCustomSlideShows();
     void configureSlideShow();
     void configurePresenterView();
 
