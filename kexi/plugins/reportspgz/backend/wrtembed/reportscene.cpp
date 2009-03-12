@@ -95,7 +95,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
         QPen pen = painter->pen();
         painter->setPen(QColor(212, 212, 212));
 
-        kDebug() << "dpix" << KoGlobal::dpiX() << "dpiy" << KoGlobal::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
+        //kDebug() << "dpix" << KoGlobal::dpiX() << "dpiy" << KoGlobal::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
         
         if (pixel_incrementx > 2) { // do not bother painting points if increments are so small
             int wpoints = qRound(sceneRect().width() / pixel_incrementx);
