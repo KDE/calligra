@@ -24,9 +24,9 @@
 #include <kexidb/connection.h>
 #include <krsectiondata.h>
 #include <kross/core/action.h>
+#include "krscriptconstants.h"
 
 class KRScriptFunctions;
-class KRScriptConstants;
 class KRScriptDebug;
 class KRReportData;
 class OROPage;
@@ -53,8 +53,8 @@ public slots:
     void slotEnteredGroup(const QString&, const QVariant&);
     void slotExitedGroup(const QString&, const QVariant&);
     void populateEngineParameters(KexiDB::Cursor *q);
-    void setPageNumber(int) {};
-    void setPageTotal(int) {};
+    void setPageNumber(int p) {_constants->setPageNumber(p);}
+    void setPageTotal(int t) {_constants->setPageTotal(t);}
 private:
     KRScriptFunctions *_functions;
     KRScriptConstants *_constants;

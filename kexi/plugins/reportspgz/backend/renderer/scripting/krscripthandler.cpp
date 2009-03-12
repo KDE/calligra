@@ -93,7 +93,8 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
     }
     
     _action->addObject(_report, _data->name());
-
+    kDebug() << "Report name is" << _data->name();
+    
     _action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
 
     kDebug() << _action->code();

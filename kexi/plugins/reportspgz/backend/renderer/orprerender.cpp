@@ -107,7 +107,7 @@ public:
     qreal renderSectionSize(const KRSectionData &);
 
     qreal getNearestSubTotalCheckPoint(const ORDataData &);
-
+    
     ///Scripting Stuff
     KRScriptHandler *_handler;
     void initEngine();
@@ -161,8 +161,7 @@ void ORPreRenderPrivate::createNewPage()
     if (_pageCounter > 0)
         finishCurPage();
 
-
-
+#if 0
     //TODO Totals
     // get the checkpoints for the page footers
     QMapIterator<ORDataData, qreal> it(_subtotPageCheckPoints);
@@ -175,6 +174,7 @@ void ORPreRenderPrivate::createNewPage()
 //   d = xqry->getFieldTotal ( data.column );
 //  _subtotPageCheckPoints.insert ( it.key(), d );
     }
+#endif
 
     _pageCounter++;
 
@@ -589,14 +589,14 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             QString cs = f->_controlSource->value().toString();
             if (cs.left(1) == "=") { //Everything after = is treated as code
-                if (!cs.contains("PageTotal")) {
+                if (!cs.contains("PageTotal()")) {
                     QVariant v = _handler->evaluate(f->entityName());
                     str = v.toString();
                 } else {
-                    str = cs.mid(1);
+                    str = f->entityName();
                     _postProcText.append(tb);
                 }
-            } else if (cs.left(1) == "$") { //Everything past $ is treated as a string
+            } else if (cs.left(1) == "$") { //Everything past $ is treated as a string 
                 str = cs.mid(1);
             } else {
                 QString qry = "Data Source";
@@ -937,8 +937,6 @@ void ORPreRenderPrivate::initEngine()
     connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), _handler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
 }
 
-
-
 //
 // ORPreRender
 //
@@ -1137,8 +1135,8 @@ ORODocument* ORPreRender::generate()
         OROTextBox * tb = _internal->_postProcText.at(i);
 
         _internal->_handler->setPageNumber(tb->page()->page() + 1);
-
-        //tb->setText(_internal->_scriptEngine->evaluate(tb->text()).toString());
+        
+        tb->setText( _internal->_handler->evaluate(tb->text()).toString());
     }
 
     _internal->_handler->displayErrors();

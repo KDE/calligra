@@ -34,10 +34,21 @@ public:
     KRScriptConstants(QObject *parent = 0);
 
     ~KRScriptConstants();
-
     Q_ENUMS(PenStyle)
-
+    
     enum PenStyle {QtNoPen = 0, QtSolidLine, QtDashLine, QtDotLine, QtDashDotLine, QtDashDotDotLine};
+    
+    void setPageNumber(int p){currentPage = p;}
+    void setPageTotal(int t){totalPages = t;};
+    public slots:
+        int PageNumber(){return currentPage;};
+        int PageTotal(){return totalPages;};
+    
+    private:
+        int currentPage;
+        int totalPages;
+        
+
 };
 
 #endif
