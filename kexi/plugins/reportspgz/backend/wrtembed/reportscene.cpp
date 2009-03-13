@@ -69,7 +69,7 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
 {
     //Draw the default background colour
     QGraphicsScene::drawBackground(painter, clip);
-    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setRenderHint(QPainter::Antialiasing, false);
 
     if (_rd->propertySet()->property("ShowGrid").value().toBool()) {
         if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
@@ -97,21 +97,29 @@ void ReportScene::drawBackground(QPainter* painter, const QRectF & clip)
 
         //kDebug() << "dpix" << KoGlobal::dpiX() << "dpiy" << KoGlobal::dpiY() << "mayorx:" << majorx << "majory" << majory << "pix:" << pixel_incrementx << "piy:" << pixel_incrementy;
         
+        QVector<QLine> lines;
+        QVector<QPoint> points;
+        
         if (pixel_incrementx > 2) { // do not bother painting points if increments are so small
             int wpoints = qRound(sceneRect().width() / pixel_incrementx);
             int hpoints = qRound(sceneRect().height() / pixel_incrementy);
             for (int i = 0; i < wpoints; ++i) {
                 for (int j = 0; j < hpoints; ++j) {
-                    if (clip.contains(i * pixel_incrementx, j * pixel_incrementy)){
+                    //if (clip.contains(i * pixel_incrementx, j * pixel_incrementy)){
                         if (i % minor == 0 && j % minor == 0) {
-                            painter->drawLine(QPointF(i * pixel_incrementx, j * pixel_incrementy), QPointF(i * pixel_incrementx, j * pixel_incrementy  + majorx));
-                            painter->drawLine(QPointF(i * pixel_incrementx, j * pixel_incrementy), QPointF(i * pixel_incrementx + majory, j * pixel_incrementy));
+                            lines << QLine(QPoint(i * pixel_incrementx, j * pixel_incrementy), QPoint(i * pixel_incrementx, j * pixel_incrementy  + majorx));
+                            //painter->drawLine();
+                            lines << QLine(QPoint(i * pixel_incrementx, j * pixel_incrementy), QPoint(i * pixel_incrementx + majory, j * pixel_incrementy));
+                            //painter->drawLine();
                         } else {
-                            painter->drawPoint(QPointF(i * pixel_incrementx, j * pixel_incrementy));
+                            points << QPoint(i * pixel_incrementx, j * pixel_incrementy);
+                            //painter->drawPoint();
                         }
-                    }
+                    //}
                 }
             }
+            painter->drawPoints(points);
+            painter->drawLines(lines);
 
         }
 
