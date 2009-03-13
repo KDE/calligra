@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -4318,7 +4318,7 @@ void KexiMainWindow::acceptPropertySetEditing()
 }
 
 void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
-        bool preservePrevSelection, const QByteArray& propertyToSelect)
+        bool preservePrevSelection, bool sortedProperties, const QByteArray& propertyToSelect)
 {
     KexiWindow* _currentWindow = currentWindow();
     kDebug() << "currentWindow(): "
@@ -4333,13 +4333,18 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
             d->propBuffer = newBuf;
             if (preservePrevSelection) {
+                KoProperty::EditorView::SetOptions options
+                    = preservePrevSelection ? KoProperty::EditorView::PreservePreviousSelection
+                        : KoProperty::EditorView::NoOptions;
+                if (sortedProperties) {
+                    options |= KoProperty::EditorView::AlphabeticalOrder;
+                }
+
                 if (propertyToSelect.isEmpty()) {
-                    d->propEditor->editor()->changeSet(d->propBuffer, 
-                        preservePrevSelection ? KoProperty::EditorView::PreservePreviousSelection
-                            : KoProperty::EditorView::SetOption(0));
+                    d->propEditor->editor()->changeSet(d->propBuffer, options);
                 }
                 else {
-                    d->propEditor->editor()->changeSet(d->propBuffer, propertyToSelect);
+                    d->propEditor->editor()->changeSet(d->propBuffer, propertyToSelect, options);
                 }
             }
         }
