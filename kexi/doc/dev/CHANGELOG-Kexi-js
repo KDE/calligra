@@ -30,9 +30,23 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-03-11..13
+KoProperty
+- properties are kept in order of insertion
+- made one or two methods const, and inline
+- added Set::Iterator::setOrder(Order order) so alphabetical order
+  is also available
+- 'sorting key' attribute removed from Property
+Core
+- added KexiView::setSortedProperties(bool)
+Forms
+- properties are sorted alphabetically, at least for now
+
 2009-03-09
 General
 - use global Oxygen icon: database -> server-database
+Forms
+- right-click cancels widget inserting mode
 
 2009-03-08
 Forms
