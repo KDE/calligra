@@ -77,6 +77,8 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 // , m_firstFocusWidget(0)
 {
     m_delayedFormContentsResizeOnShow = 0;
+//! @todo remove?
+    setSortedProperties(true);
 
     QHBoxLayout *l = new QHBoxLayout(this);
 //Qt3 l->setAutoAdd(true);
