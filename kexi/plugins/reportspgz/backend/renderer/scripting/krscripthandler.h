@@ -55,6 +55,8 @@ public slots:
     void populateEngineParameters(KexiDB::Cursor *q);
     void setPageNumber(int p) {_constants->setPageNumber(p);}
     void setPageTotal(int t) {_constants->setPageTotal(t);}
+    void newPage();
+    
 private:
     KRScriptFunctions *_functions;
     KRScriptConstants *_constants;

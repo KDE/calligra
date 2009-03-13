@@ -116,11 +116,16 @@ void Report::eventOnOpen()
 	_scriptObject->callMethod("OnOpen");
 }
 
-void Report::eventOnClose()
+void Report::eventOnComplete()
 {
     if (_scriptObject)
-	_scriptObject->callMethod("OnClose");
+	_scriptObject->callMethod("OnComplete");
 }
 
+void Report::eventOnNewPage()
+{
+    if (_scriptObject)
+        _scriptObject->callMethod("OnNewPage");
+}
 
 }

@@ -49,7 +49,8 @@ public slots:
 
     void initialize(Kross::Object::Ptr);
     void eventOnOpen();
-    void eventOnClose();
+    void eventOnComplete();
+    void eventOnNewPage();
 
 private:
     KRReportData *_reportdata;

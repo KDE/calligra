@@ -180,6 +180,7 @@ void ORPreRenderPrivate::createNewPage()
 
     //Update the page count script value
     _handler->setPageNumber(_pageCounter);
+    _handler->newPage();
 
     _page = new OROPage(0);
     _document->addPage(_page);

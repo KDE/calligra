@@ -120,6 +120,13 @@ KRScriptHandler::~KRScriptHandler()
     delete _action;
 }
 
+void KRScriptHandler::newPage()
+{
+    if (_report) {
+        _report->eventOnNewPage();
+    }
+}
+
 void KRScriptHandler::setSource(const QString &s)
 {
     _source = s;
