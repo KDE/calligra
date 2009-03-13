@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,16 +25,18 @@
 #include <QtCore/QHash>
 
 #include <KLocale>
+#include <kdebug.h>
 
 using namespace KoProperty;
 
 class EditorDataModel::Private
 {
 public:
-    Private() {}
+    Private() : order(Set::InsertionOrder) {}
     Set *set;
     Property rootItem;
     QHash<QByteArray, QModelIndex> indicesForNames;
+    Set::Order order; //!< order of properties
 };
 
 // -------------------
@@ -60,12 +62,22 @@ EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent)
     collectIndices();
 }
 
+typedef QPair<QByteArray, QString> NameAndCaption;
+
+bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAndCaption &n2)
+{
+    return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;
+}
+
 void EditorDataModel::collectIndices() const
 {
-    int r = 0;
     Set::Iterator it(*d->set, new VisiblePropertySelector());
-    for (; it.current(); r++, ++it) {
-        d->indicesForNames.insert( it.current()->name(), createIndex(r, 0, it.current()) );
+    if (d->order == Set::AlphabeticalOrder) {
+        it.setOrder(Set::AlphabeticalOrder);
+    }
+    int row = 0;
+    for (int row = 0; it.current(); row++, ++it) {
+        d->indicesForNames.insert( it.current()->name(), createIndex(row, 0, it.current()) );
     }
 }
 
@@ -169,6 +181,9 @@ QModelIndex EditorDataModel::index(int row, int column, const QModelIndex &paren
     if (parentItem == &d->rootItem) { // special case: top level
         int visibleRows = 0;
         Set::Iterator it(*d->set, new VisiblePropertySelector());
+        if (d->order == Set::AlphabeticalOrder) {
+            it.setOrder(Set::AlphabeticalOrder);
+        }
         for (; visibleRows < row && it.current(); visibleRows++, ++it)
             ;
         childItem = it.current();
@@ -360,6 +375,16 @@ void EditorDataModel::setupModelData(const QStringList &lines, Property *parent)
 Set& EditorDataModel::propertySet() const
 {
     return *d->set;
+}
+
+void EditorDataModel::setOrder(Set::Order order)
+{
+    d->order = order;
+}
+
+Set::Order EditorDataModel::order() const
+{
+    return d->order;
 }
 
 #include "EditorDataModel.moc"

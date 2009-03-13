@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@ namespace KoProperty
 class Property;
 class SetPrivate;
 
-/*! \brief Lists holding properties in groups
+/*! \brief Set of properties
 
    \author Cedric Pasteur <cedric.pasteur@free.fr>
    \author Alexander Dymo <cloudtemple@mskat.net>
@@ -45,6 +45,13 @@ class KOPROPERTY_EXPORT Set : public QObject
     Q_OBJECT
 
 public:
+    //! Ordering options for properties
+    /*! @see Set::Iterator::setOrder() */
+    enum Order {
+        InsertionOrder,    //!< insertion order
+        AlphabeticalOrder  //!< alphabetical order (case-insensitively by captions)
+    };
+
     //! An interface for functor selecting properties.
     /*! Used in Iterator. */
     class KOPROPERTY_EXPORT PropertySelector
@@ -54,9 +61,11 @@ public:
         virtual ~PropertySelector();
         virtual bool operator()(const Property& prop) const = 0;
     };
+
     //! A class to iterate over a Set.
-    /*! It behaves like a QHash::ConstIterator. To use it:
-     @code  for(Set::Iterator it(set); it.current(); ++it) { .... }
+    /*! It behaves like a QList::ConstIterator.
+     Usage:
+     @code  for (Set::Iterator it(set); it.current(); ++it) { .... }
      @endcode */
     class KOPROPERTY_EXPORT Iterator
     {
@@ -64,19 +73,35 @@ public:
         //! Creates iterator for @a set set of properties.
         /*! @a selector functor can be provided to iterate only 
             over specified properties. The iterator takes ownership
-            of the functor object. */
+            of the functor object. 
+            The properties are sorted by insertion order by default.
+            Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
         Iterator(const Set &set, PropertySelector *selector = 0);
+
         ~Iterator();
 
+        //! Sets order for properties. Restarts the iterator.
+        void setOrder(Set::Order order);
+
+        //! @return order for properties.
+        Set::Order order() const { return m_order; }
+
         void operator ++();
-        Property* operator *() const;
-        Property* current() const;
+        Property* operator *() const {
+            return current();
+        }
+        Property* current() const {
+            return m_iterator==m_end ? 0 : *m_iterator;
+        }
 
         friend class Set;
     private:
-        QHash<QByteArray, Property*>::ConstIterator m_iterator;
-        QHash<QByteArray, Property*>::ConstIterator m_end;
+        const Set *m_set;
+        QList<Property*>::ConstIterator m_iterator;
+        QList<Property*>::ConstIterator m_end;
         PropertySelector *m_selector;
+        Set::Order m_order;
+        QList<Property*> m_sorted; //!< for sorted order
     };
 
     explicit Set(QObject *parent = 0, const QString &typeName = QString::null);
@@ -198,7 +223,7 @@ public:
     QString typeName() const;
 
     /*! Prints debug output for this set. */
-    void debug();
+    void debug() const;
 
 protected:
     /*! Constructs a set which owns or does not own it's properties.*/
@@ -214,10 +239,9 @@ protected:
     void removeFromGroup(Property *property);
 
     /*! Adds the property to the set, in the group. You can use any group name, except "common"
-      (which is already used for basic group). If \a updateSortingKey is true, the sorting key
-      will be set automatically to count().
+      (which is already used for basic group). 
       @internal */
-    void addPropertyInternal(Property *property, QByteArray group, bool updateSortingKey);
+    void addPropertyInternal(Property *property, QByteArray group);
 
     /*! @internal used to declare that \a property wants to be informed
      that the set has been cleared (all properties are deleted) */

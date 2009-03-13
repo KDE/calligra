@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -74,8 +74,10 @@ public:
 
     //! Options for changeSet().
     enum SetOption {
-        PreservePreviousSelection = 1 //!< If used, previously selected editor item
-                                      //!< will be kept selected.
+        NoOptions = 0,
+        PreservePreviousSelection = 1, //!< If used, previously selected editor item
+                                       //!< will be kept selected.
+        AlphabeticalOrder = 2, //!< Alphabetical order of properies (the default is insert-order)
     };
     Q_DECLARE_FLAGS(SetOptions, SetOption)
 
@@ -91,13 +93,13 @@ public slots:
      See SetOption documentation for description of @a options options.
      If @a preservePreviousSelection is true, previously selected editor
      item will be kept selected, if present. */
-    void changeSet(Set *set, SetOptions options = 0);
+    void changeSet(Set *set, SetOptions options = NoOptions);
 
     /*! Populates the editor view with items for each property from the @ set set.
      Child items for composed properties are also created.
      If @a propertyToSelect is provided, item for this property name
      will be selected, if present. */
-    void changeSet(Set *set, const QByteArray& propertyToSelect);
+    void changeSet(Set *set, const QByteArray& propertyToSelect, SetOptions options = NoOptions);
 
     /*! If @a enable is true (the default), property values are automatically synced as
     soon as editor contents change (e.g. every time the user types a character)

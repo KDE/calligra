@@ -410,11 +410,13 @@ public:
     /*! Compares two properties.*/
     bool operator ==(const Property &prop) const;
 
+#if 0
     /*! \return a key used for sorting.
-     Usually its set by Set::addProperty() and Property::addChild() t oa unique value,
+     Usually its set by Set::addProperty() and Property::addChild() to a unique value,
      so that this property can be sorted in a property editor in original order.
      \see EditorItem::compare() */
     int sortingKey() const;
+#endif
 
 protected:
     /*! Adds \a prop as a child of this property.
@@ -424,8 +426,10 @@ protected:
     /*! Adds \a set to this property. */
     void addSet(Set *set);
 
+#if 0
     /*! Sets a key used for sorting. */
     void setSortingKey(int key);
+#endif
 
     /*! \return a list of related properties for this property. */
     const QList<Property*>* related() const;
@@ -439,7 +443,7 @@ protected:
     void emitPropertyChanged();
 
     /*! Outputs debug string for this property. */
-    void debug();
+    void debug() const;
 
     //! @internal
     PropertyPrivate * const d;
