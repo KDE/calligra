@@ -159,6 +159,7 @@ void KWordPictureHandler::ODTProcessing(QString* picName, SharedPtr<const Word97
     //start frame tag for the picture
     m_bodyWriter->startElement("draw:frame");
     m_bodyWriter->addAttribute("draw:style-name", styleName.toUtf8());
+    m_bodyWriter->addAttribute("text:anchor-type", "as-char");
     //mx, my = horizontal & vertical user scaling in .001 %
     double horiz_scale = picf->mx / 1000.0;
     double vert_scale = picf->my / 1000.0;
