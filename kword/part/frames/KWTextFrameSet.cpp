@@ -301,7 +301,7 @@ void KWTextFrameSet::printDebug(KWFrame *frame)
 
 void KWTextFrameSet::printDebug()
 {
-    static const char * type[] = { "OddPagesHeader", "EvenPagesHeader", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
+    static const char * type[] = { "OddPagesHeader", "EvenPagesHeader", "OddPagesFooter", "EvenPagesFooter", "Main", "Other", "ERROR" };
     kDebug(32001) << " | Is a KWTextFrameSet";
     kDebug(32001) << " | FS Type:" << type[m_textFrameSetType];
     if (m_pageStyle.isValid())

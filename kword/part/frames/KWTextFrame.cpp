@@ -25,8 +25,8 @@
 
 #include <kdebug.h>
 
-KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)
-        : KWFrame(shape, parent),
+KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent, int pageNumber)
+        : KWFrame(shape, parent, pageNumber),
         m_sortingId(-1),
         m_lastHeight(shape->size().height()),
         m_minimumFrameHeight(m_lastHeight),

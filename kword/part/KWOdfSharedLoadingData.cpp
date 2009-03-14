@@ -26,10 +26,10 @@
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
-#include "frames/KWFrame.h"
 
 #include <KoShape.h>
 #include <KoTextAnchor.h>
+#include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoShapeLoadingContext.h>
@@ -52,6 +52,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
 {
+kDebug();
     int pageNumber = -1;
     if (shape->hasAdditionalAttribute("text:anchor-type")) {
         QString anchorType = shape->additionalAttribute("text:anchor-type");
@@ -66,8 +67,17 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute( "text:anchor-page-number" ) << pageNumber;
     shape->removeAdditionalAttribute("text:anchor-type");
 
-    KWFrameSet* fs = new KWFrameSet();
-    fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
-    new KWFrame(shape, fs, pageNumber);
-    m_loader->document()->addFrameSet(fs);
+    KoTextShapeData *text = qobject_cast<KoTextShapeData*>(shape->userData());
+    if (text) {
+        KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
+        fs->setAllowLayout(false);
+        fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
+        new KWTextFrame(shape, fs, pageNumber);
+        m_loader->document()->addFrameSet(fs);
+    } else {
+        KWFrameSet* fs = new KWFrameSet();
+        fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
+        new KWFrame(shape, fs, pageNumber);
+        m_loader->document()->addFrameSet(fs);
+    }
 }
