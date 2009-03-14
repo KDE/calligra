@@ -99,9 +99,9 @@ GBool SvgOutputDev::interpretType3Chars()
 
 void SvgOutputDev::startPage(int pageNum, GfxState *state)
 {
-    kDebug() << "starting page" << pageNum;
+    kDebug(30516) << "starting page" << pageNum;
     d->pageSize = QSizeF( state->getPageWidth(), state->getPageHeight() );
-    kDebug() << "page size =" << d->pageSize;
+    kDebug(30516) << "page size =" << d->pageSize;
     if( pageNum == 1 )
         *d->body << "<g>" << endl;
     else
@@ -110,15 +110,15 @@ void SvgOutputDev::startPage(int pageNum, GfxState *state)
 
 void SvgOutputDev::endPage()
 {
-    kDebug() << "ending page";
+    kDebug(30516) << "ending page";
     *d->body << "</g>" << endl;
 }
 
 void SvgOutputDev::dumpContent()
 {
-    kDebug() << "dumping pages";
-    //kDebug() << "defs =" << d->defsData;
-    //kDebug() << "body =" << d->bodyData;
+    kDebug(30516) << "dumping pages";
+    //kDebug(30516) << "defs =" << d->defsData;
+    //kDebug(30516) << "body =" << d->bodyData;
 
     QTextStream stream( &d->svgFile );
 
@@ -144,7 +144,7 @@ void SvgOutputDev::dumpContent()
 
 void SvgOutputDev::stroke( GfxState * state )
 {
-    //kDebug() << "stroke path";
+    //kDebug(30516) << "stroke path";
 
     QString path = convertPath( state->getPath() );
     *d->body << "<path";
@@ -157,7 +157,7 @@ void SvgOutputDev::stroke( GfxState * state )
 
 void SvgOutputDev::fill( GfxState * state )
 {
-    //kDebug() << "fill path winding";
+    //kDebug(30516) << "fill path winding";
 
     QString path = convertPath( state->getPath() );
     *d->body << "<path";
@@ -170,7 +170,7 @@ void SvgOutputDev::fill( GfxState * state )
 
 void SvgOutputDev::eoFill( GfxState *state )
 {
-    //kDebug() << "fill path even-odd";
+    //kDebug(30516) << "fill path even-odd";
 
     QString path = convertPath( state->getPath() );
     *d->body << "<path";
@@ -238,7 +238,7 @@ QString SvgOutputDev::convertMatrix( double * matrix )
 
 void SvgOutputDev::updateAll(GfxState *state)
 {
-    kDebug() << "update complete";
+    kDebug(30516) << "update complete";
 
     //updateLineDash(state);
     updateLineJoin(state);
@@ -254,7 +254,7 @@ void SvgOutputDev::updateAll(GfxState *state)
 
 void SvgOutputDev::updateFillColor( GfxState *state )
 {
-    kDebug() << "update fill color";
+    kDebug(30516) << "update fill color";
     GfxRGB rgb;
     QColor brushColour = d->brush.color();
     state->getFillRGB(&rgb);
@@ -264,7 +264,7 @@ void SvgOutputDev::updateFillColor( GfxState *state )
 
 void SvgOutputDev::updateStrokeColor( GfxState *state )
 {
-    kDebug() << "update stroke color";
+    kDebug(30516) << "update stroke color";
     GfxRGB rgb;
     QColor penColour = d->pen.color();
     state->getStrokeRGB(&rgb);
@@ -274,7 +274,7 @@ void SvgOutputDev::updateStrokeColor( GfxState *state )
 
 void SvgOutputDev::updateFillOpacity( GfxState *state )
 {
-    kDebug() << "update fill opacity";
+    kDebug(30516) << "update fill opacity";
     QColor brushColour = d->brush.color();
     brushColour.setAlphaF(state->getFillOpacity());
     d->brush.setColor(brushColour);
@@ -282,7 +282,7 @@ void SvgOutputDev::updateFillOpacity( GfxState *state )
 
 void SvgOutputDev::updateStrokeOpacity( GfxState *state )
 {
-    kDebug() << "update stroke opacity";
+    kDebug(30516) << "update stroke opacity";
     QColor penColour = d->pen.color();
     penColour.setAlphaF(state->getStrokeOpacity());
     d->pen.setColor(penColour);
@@ -413,7 +413,7 @@ void SvgOutputDev::updateTextMat( GfxState * state )
 {
     double * tm = state->getTextMat();
     d->textMatrix.setMatrix( tm[0], tm[1], tm[2], tm[3], tm[4], tm[5] );
-    kDebug() << d->textMatrix;
+    kDebug(30516) << d->textMatrix;
 }
 
 void SvgOutputDev::drawString( GfxState * state, GooString * s )
@@ -427,11 +427,11 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
     if( s->getLength() == 0 )
         return;
 
-    //kDebug() << "text" << s->getCString() << " length =" << s->getLength() << "(" << strlen(s->getCString()) << ")";
+    //kDebug(30516) << "text" << s->getCString() << " length =" << s->getLength() << "(" << strlen(s->getCString()) << ")";
     //if( s->getLength() <= 1 )
     //    return;
 
-    kDebug() << "unicode ?" << s->hasUnicodeMarker();
+    kDebug(30516) << "unicode ?" << s->hasUnicodeMarker();
 
     GfxFont * font = state->getFont();
 
@@ -452,7 +452,7 @@ void SvgOutputDev::drawString( GfxState * state, GooString * s )
         str += QChar( *u );
     }
 
-    kDebug() << "text :" << str;
+    kDebug(30516) << "text :" << str;
 
     str = str.simplified();
     if( str.isEmpty() )
@@ -542,7 +542,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
 
     if( image == NULL || image->isNull() )
     {
-        kDebug() << "Null image";
+        kDebug(30516) << "Null image";
         delete imgStr;
         delete image;
         return;

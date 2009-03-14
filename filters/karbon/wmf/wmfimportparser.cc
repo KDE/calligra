@@ -105,10 +105,10 @@ bool WMFImportParser::begin() {
         mScaleY = mDoc->pageSize().height() / (double)bounding.height();
     }
 
-    kDebug() << "bounding rect =" << bounding;
-    kDebug() << "page size =" << mDoc->pageSize();
-    kDebug() << "scale x =" << mScaleX;
-    kDebug() << "scale y =" << mScaleY;
+    kDebug(30504) << "bounding rect =" << bounding;
+    kDebug(30504) << "page size =" << mDoc->pageSize();
+    kDebug(30504) << "scale x =" << mScaleX;
+    kDebug(30504) << "scale y =" << mScaleY;
 
     return true;
 }
@@ -174,8 +174,8 @@ void WMFImportParser::setWindowExt( int width, int height ) {
 
 
 void WMFImportParser::setMatrix( const QMatrix &matrix, bool combine ) {
-    kDebug() << "matrix =" << matrix;
-    kDebug() << "combine =" << combine;
+    kDebug(30504) << "matrix =" << matrix;
+    kDebug(30504) << "combine =" << combine;
 }
 
 
@@ -407,10 +407,10 @@ void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int 
         sh = image.height();
     pic->setSize( QSizeF(sw,sh) );
 
-    kDebug() << "image data size =" << data->pixmap().size();
-    kDebug() << "source image size =" << image.size();
-    kDebug() << "source position =" << QPointF( sx, sy );
-    kDebug() << "source size =" << QPointF( scaleW(sw), scaleH(sh) );
+    kDebug(30504) << "image data size =" << data->pixmap().size();
+    kDebug(30504) << "source image size =" << image.size();
+    kDebug(30504) << "source position =" << QPointF( sx, sy );
+    kDebug(30504) << "source size =" << QPointF( scaleW(sw), scaleH(sh) );
 
     mDoc->add( pic );
 }

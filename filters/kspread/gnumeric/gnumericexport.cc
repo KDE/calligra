@@ -497,7 +497,7 @@ QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,const Cell& 
 {
     QDomElement font_style;
     const Style style = cell.style();
-    kDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow;
+    kDebug(30521)<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow;
     font_style = gnumeric_doc.createElement("gmr:Font");
     font_style.appendChild(gnumeric_doc.createTextNode(style.fontFamily()));
 

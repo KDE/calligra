@@ -33,7 +33,7 @@ void IdentifierElement::renderToPath( const QString& raw, QPainterPath& path )
     if( raw.startsWith( '&' ) && raw.endsWith( ';' ) ) {
         Dictionary dict;
         QChar mappedEntity = dict.mapEntity( raw );
-        kDebug() << "mappenEntity: " << mappedEntity;
+        kDebug(39001) << "mappenEntity: " << mappedEntity;
         path.addText( path.currentPosition(), manager.font( this ), mappedEntity ); 
     }
     else

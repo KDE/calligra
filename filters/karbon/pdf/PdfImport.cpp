@@ -43,7 +43,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonpdfimport, PdfImportFactory( "kofficefilter
 PdfImport::PdfImport( QObject*parent, const QStringList& )
     : KoFilter(parent)
 {
-    kDebug() << "PDF Import Filter";
+    kDebug(30516) << "PDF Import Filter";
 }
 
 PdfImport::~PdfImport()
@@ -52,7 +52,7 @@ PdfImport::~PdfImport()
 
 KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QByteArray& to )
 {
-    kDebug() << "to:" << to << " from:" << from;
+    kDebug(30516) << "to:" << to << " from:" << from;
 
     if( from != "application/pdf" || to != "image/svg+xml" )
     {
@@ -85,7 +85,7 @@ KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QBy
     int firstPage = 1;
     int lastPage = pdfDoc->getNumPages();
 
-    kDebug() << "converting pages" << firstPage << "-" << lastPage;
+    kDebug(30516) << "converting pages" << firstPage << "-" << lastPage;
 
     /*
     QSvgGenerator svg;
@@ -112,7 +112,7 @@ KoFilter::ConversionStatus PdfImport::convert( const QByteArray& from, const QBy
         dev->dumpContent();
     }
 
-    kDebug() << "wrote file to" << m_chain->outputFile();
+    kDebug(30516) << "wrote file to" << m_chain->outputFile();
 
     delete dev;
     //delete pdfDoc;

@@ -1193,7 +1193,7 @@ void KWDLoader::insertNotes()
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         if (tfs && tfs->document()) {
             note.note->setText(tfs->document()->toPlainText());
-kDebug() << "setting the text to" << note.note->text();
+//kDebug(32001) << "setting the text to" << note.note->text();
         }
         m_document->removeFrameSet(fs);
         delete fs; // we don't want to keep it around.

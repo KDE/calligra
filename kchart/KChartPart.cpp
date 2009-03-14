@@ -227,7 +227,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
 #else
     // Paint the shape that is the real chart.
-    kDebug() << "################## Painting!";
+    kDebug(35001) << "################## Painting!";
     //KoZoomHandler  zoomHandler;
     //m_chartShape->paint( painter, zoomHandler );
     return;
@@ -711,7 +711,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
     const QString fillColor = styleStack.property( KoXmlNS::draw, "fill-color" );
-    kDebug() <<"fillColor=" << fillColor;
+    kDebug(35001) <<"fillColor=" << fillColor;
 
     styleStack.restore();
 #endif
@@ -992,7 +992,7 @@ void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter,
     QList<KoGenStyles::NamedStyle>  styles = mainStyles.styles( KoGenStyle::StyleAuto );
     QList<KoGenStyles::NamedStyle>::const_iterator  it;
     for ( it = styles.constBegin(); it != styles.constEnd(); ++it ) {
-        kDebug() << "Style: " << (*it).name;
+        kDebug(35001) << "Style: " << (*it).name;
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style",
                                  (*it).name, "style:chart-properties" );
     }

@@ -54,7 +54,7 @@ ChartTypeCommand::~ChartTypeCommand()
 
 void ChartTypeCommand::redo()
 {
-    kDebug() << m_newType;
+    //kDebug(35001) << m_newType;
  
    // save the old type
     m_oldType    = m_chart->chartType();
@@ -72,7 +72,7 @@ void ChartTypeCommand::undo()
     if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
         return;
 
-    kDebug() << m_oldType;
+    //kDebug(35001) << m_oldType;
     m_chart->setChartType( m_oldType );
     m_chart->setChartSubType( m_oldSubtype );
 }
