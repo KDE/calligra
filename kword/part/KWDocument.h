@@ -145,6 +145,7 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager() const {
         return m_inlineTextObjectManager;
     }
+    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
     /// reimplemented from super
     QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);

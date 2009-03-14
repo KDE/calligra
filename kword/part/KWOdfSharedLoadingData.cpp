@@ -29,6 +29,7 @@
 
 #include <KoShape.h>
 #include <KoTextAnchor.h>
+#include <KoTextDocument.h>
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
@@ -52,7 +53,6 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
 {
-kDebug();
     int pageNumber = -1;
     if (shape->hasAdditionalAttribute("text:anchor-type")) {
         QString anchorType = shape->additionalAttribute("text:anchor-type");
@@ -72,6 +72,9 @@ kDebug();
         KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
         fs->setAllowLayout(false);
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
+        if (m_loader->document()->inlineTextObjectManager() == 0)
+            m_loader->document()->setInlineTextObjectManager(
+                    KoTextDocument(text->document()).inlineTextObjectManager());
         new KWTextFrame(shape, fs, pageNumber);
         m_loader->document()->addFrameSet(fs);
     } else {
