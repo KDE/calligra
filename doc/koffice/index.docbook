@@ -156,7 +156,7 @@ desktop environment, thus allowing seamless workflows.
 </sect1>
 
 </chapter>
-<chapter>
+<chapter id="technology">
 <title>&koffice; Technology</title>
 
 <sect1 id="kparts">
