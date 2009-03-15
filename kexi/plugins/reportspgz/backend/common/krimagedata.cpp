@@ -122,16 +122,9 @@ void KRImageData::setInlineImageData(QByteArray dat, const QString &fn)
             _staticImage->setValue(blank);
         }
     } else {
-
-        QByteArray binaryStream;
-
-        binaryStream = KCodecs::base64Decode(dat);
-        QImage img(binaryStream);
-        QPixmap pix;
-        pix.convertFromImage(img, QPixmap::Color);
-
+        const QByteArray binaryStream(KCodecs::base64Decode(dat));
+        const QPixmap pix( QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly) );
         _staticImage->setValue(pix);
-
     }
 
 }
