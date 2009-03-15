@@ -159,19 +159,28 @@ QPointF ReportScene::gridPoint(const QPointF& p)
 
     if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
         u = _rd->pageUnit();
-        if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm")
-            majorx = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
-        else if (KoUnit::unitName(u) == "pt")
-            majorx = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
-        else
-            majorx = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
-
-
+        if (KoUnit::unitName(u) != KoUnit::unitName(_rd->pageUnit())) {
+            u = _rd->pageUnit();
+            if (KoUnit::unitName(u) == "cc" || KoUnit::unitName(u) == "pi" || KoUnit::unitName(u) == "mm") {
+                majorx = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiX();
+                majory = POINT_TO_INCH(u.fromUserValue(10)) * KoGlobal::dpiY();
+            }
+            else if (KoUnit::unitName(u) == "pt") {
+                majorx = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiX();
+                majory = POINT_TO_INCH(u.fromUserValue(100)) * KoGlobal::dpiY();
+            }
+            else {
+                majorx = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiX();
+                majory = POINT_TO_INCH(u.fromUserValue(1)) * KoGlobal::dpiY();
+            }
+            
+        }
     }
-    minor = _rd->propertySet()->property("GridDivisions").value().toInt();
-    pixel_incrementx = (majorx / minor);
+        minor = _rd->propertySet()->property("GridDivisions").value().toInt();
+        pixel_incrementx = (majorx / minor);
+        pixel_incrementy = (majory / minor);
 
-    return QPointF(qRound((p.x() / pixel_incrementx)) * pixel_incrementx, qRound((p.y() / pixel_incrementx)) * pixel_incrementx);
+    return QPointF(qRound((p.x() / pixel_incrementx)) * pixel_incrementx, qRound((p.y() / pixel_incrementy)) * pixel_incrementy);
 }
 
 void ReportScene::focusOutEvent(QFocusEvent * focusEvent)
