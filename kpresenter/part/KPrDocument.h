@@ -129,6 +129,10 @@ public:
      * The default page type KoPageApp::Page is returned
      */
     virtual KoPageApp::PageType pageType() const;
+    
+    void setSlideTime(QMap<int,int> *slideTime);
+    
+    QMap<int,int> * getSlideTime();
 
 protected:
     /// reimplemented
@@ -163,16 +167,23 @@ protected:
     bool saveOdfSettings( KoXmlWriter * settingsWriter );
 
     /**
+     * Load specific settings
+     *
+     */
+    void loadOdfSettings( const KoXmlDocument & settingsDoc );
+
+    /**
      * @brief get the animations of the page
      */
     KPrShapeAnimations & animationsByPage( KoPAPageBase * page );
     
     KPrCustomSlideShows *m_customSlideShows;
-
+    
 private:
     int m_presentationMonitor;
     bool m_presenterViewEnabled;
     QString m_activeCustomSlideShow;
+    QMap<int,int> *m_slideTime;
 };
 
 #endif /* KPRDOCUMENT_H */

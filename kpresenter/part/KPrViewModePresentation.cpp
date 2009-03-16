@@ -299,8 +299,14 @@ KoPAViewMode * KPrViewModePresentation::getViewMode()
     return m_savedViewMode;
 }
 
-KPrDocument * KPrViewModePresentation::getDocument()
+void KPrViewModePresentation::saveSlideTime(QMap<int,int> *slideTime)
 {
     KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
-    return document;
+    document->setSlideTime(slideTime);
+}
+
+QMap<int,int> * KPrViewModePresentation::getSlideTime()
+{
+    KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
+    return document->getSlideTime();
 }

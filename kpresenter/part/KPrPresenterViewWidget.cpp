@@ -53,8 +53,7 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     m_stackedLayout = new QStackedLayout;
     m_mainWidget = new KPrPresenterViewInterface( pages, m_canvas, this );
-    
-    m_mainWidget->setDocument(m_viewMode->getDocument());
+    m_mainWidget->setViewMode(m_viewMode);
     
     m_stackedLayout->addWidget( m_mainWidget );
 
@@ -68,7 +67,7 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addStretch();
     
-    QMap<int,int> *t = m_mainWidget->getSlidesTime();
+    QMap<int,int> *t = m_mainWidget->getPlanningTime();
     m_toolWidget = new KPrPresenterViewToolWidget(0,t);
     
     connect( m_toolWidget, SIGNAL( slideThumbnailsToggled( bool ) ), this, SLOT( showSlideThumbnails( bool ) ) );

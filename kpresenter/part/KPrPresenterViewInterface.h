@@ -26,6 +26,7 @@
 
 #include "KPrPresenterViewBaseInterface.h"
 #include "KPrDocument.h"
+#include "KPrViewModePresentation.h"
 
 #include <QtGui/QFrame>
 
@@ -51,9 +52,9 @@ public:
 
     void setPreviewSize( const QSize &size );
     void setSlidesTime(QMap<int,int> *slides_time);
-    QMap<int,int>* getSlidesTime();
+    QMap<int,int>* getPlanningTime();
     bool loadSlideTime();
-    void setDocument(KPrDocument *document);
+    void setViewMode(KPrViewModePresentation *viewMode);
 
 public slots:
     /// reimplemented
@@ -67,11 +68,11 @@ private:
     QLabel *m_nextSlidePreview;
     QTextEdit *m_notesTextEdit;
     QSize m_previewSize;
-    QTableWidget *slideTab;
-    QPushButton *registerButton;
-    QList<QTimeEdit *> timeEditList;
-    QList<QLabel *> planningTime;
-    KPrDocument *m_document;
+    QTableWidget *m_slideTab;
+    QPushButton *m_registerButton;
+    QList<QTimeEdit *> m_timeEditList;
+    QList<QLabel *> m_planningTime;
+    KPrViewModePresentation *m_viewMode;
 };
 
 #endif

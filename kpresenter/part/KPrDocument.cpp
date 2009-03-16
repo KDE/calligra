@@ -83,6 +83,8 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
     insertIntoDataCenterMap( PageLayouts, new KPrPageLayouts() );
 
     loadKPrConfig();
+    
+    m_slideTime = 0;
 }
 
 KPrDocument::~KPrDocument()
@@ -321,12 +323,46 @@ void KPrDocument::setActiveCustomSlideShow( const QString &customSlideShow )
 
 bool KPrDocument::saveOdfSettings( KoXmlWriter * settingsWriter )
 {
-    settingsWriter->startElement("config:slide-time");
-    settingsWriter->addAttribute("config:name", "slide1");
-    settingsWriter->addAttribute("config:time",  "50");
+    if(m_slideTime == 0)
+	return false;
+
+    QString name;
+    settingsWriter->startElement("config:slide-time-liste");
+    for(int i=0;i<m_slideTime->size();i++)
+    {
+	name = "Slide "+QString::number(i);
+	settingsWriter->startElement("config:slide-time");
+	settingsWriter->addAttribute("config:name", name);
+	settingsWriter->addAttribute("config:time", QString::number(m_slideTime->value(i)));
+	settingsWriter->endElement();
+    }
     settingsWriter->endElement();
-    //settingsWriter->addConfigItem("slideTime", unitName(_unit));
     return true;
+}
+
+void KPrDocument::loadOdfSettings( const KoXmlDocument & settingsDoc )
+{
+    KoPADocument::loadOdfSettings(settingsDoc);
+    KoXmlElement time, slide(settingsDoc.namedItem("config:slide-time").toElement());
+    int i = 0;
+    int t;
+    m_slideTime = new QMap<int,int>();
+    forEachElement(time, slide)
+    {
+	t = time.attribute("time").toInt();
+	m_slideTime->insert(i,t);
+	i++;
+    }
+}
+
+void KPrDocument::setSlideTime(QMap<int,int> *slideTime)
+{
+    m_slideTime = slideTime;
+}
+
+QMap<int,int> * KPrDocument::getSlideTime()
+{
+    return m_slideTime;
 }
 
 #include "KPrDocument.moc"

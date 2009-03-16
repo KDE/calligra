@@ -84,7 +84,9 @@ public:
 
     KoPAViewMode * getViewMode();
 
-    KPrDocument * getDocument();
+    void saveSlideTime(QMap<int,int> *slideTime);
+    
+    QMap<int,int> * getSlideTime();
 
 protected:
     KoPAViewMode * m_savedViewMode;

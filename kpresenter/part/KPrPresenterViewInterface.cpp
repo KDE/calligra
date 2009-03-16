@@ -91,36 +91,36 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( const QList<KoPAPageBase *
 
     setLayout( vLayout );
 
-    slideTab = new QTableWidget(pages.size()-1,2);
-    slideTab->setVisible(false);
-    slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem(i18n("Planning time")));
-    slideTab->setColumnWidth(0,125);
-    slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem(i18n("Real time")));
-    slideTab->setColumnWidth(1,125);
+    m_slideTab = new QTableWidget(pages.size()-1,2);
+    m_slideTab->setVisible(false);
+    m_slideTab->setHorizontalHeaderItem(0,new QTableWidgetItem(i18n("Planning time")));
+    m_slideTab->setColumnWidth(0,125);
+    m_slideTab->setHorizontalHeaderItem(1,new QTableWidgetItem(i18n("Real time")));
+    m_slideTab->setColumnWidth(1,125);
     
     
     for(int i=0;i<pages.size()-1;i++)
     {
-	//planningTime->setDisplayFormat ( "HH:mm:ss" );
+	//m_planningTime->setDisplayFormat ( "HH:mm:ss" );
 	QLabel *planTime = new QLabel(QTime(0,0,0).toString());
-	planningTime.append(planTime);
+	m_planningTime.append(planTime);
 	QTimeEdit *timeEdit2 = new QTimeEdit();
 	timeEdit2->setDisplayFormat ( "HH:mm:ss" );
 	QString name = pages.value(i)->name();
 	if(name.isEmpty())
 	    name = i18n("Slide ")+QString::number(i+1);
-	slideTab->setVerticalHeaderItem(i,new QTableWidgetItem(name));
-	slideTab->setCellWidget(i,0,planningTime.value(i));
-	slideTab->setCellWidget(i,1,timeEdit2);
-	timeEditList.append(timeEdit2);
+	m_slideTab->setVerticalHeaderItem(i,new QTableWidgetItem(name));
+	m_slideTab->setCellWidget(i,0,m_planningTime.value(i));
+	m_slideTab->setCellWidget(i,1,timeEdit2);
+	m_timeEditList.append(timeEdit2);
     }
 
-    registerButton = new QPushButton (i18n("Save slides time"));
-    connect(registerButton, SIGNAL(clicked()),this, SLOT(saveSlideTime()));
-    registerButton->setVisible(false);
+    m_registerButton = new QPushButton (i18n("Save slides time"));
+    connect(m_registerButton, SIGNAL(clicked()),this, SLOT(saveSlideTime()));
+    m_registerButton->setVisible(false);
 
-    frameNextLayout->insertWidget( 1, slideTab );
-    frameNextLayout->insertWidget( 2, registerButton );
+    frameNextLayout->insertWidget( 1, m_slideTab );
+    frameNextLayout->insertWidget( 2, m_registerButton );
 }
 
 void KPrPresenterViewInterface::setActivePage( int pageIndex )
@@ -139,15 +139,15 @@ void KPrPresenterViewInterface::setActivePage( int pageIndex )
         m_nextSlidePreview->setPixmap( nextPage->thumbnail( m_previewSize ) );
 	m_nextSlideLabel->setText(i18n( "Next Slide" ));
 	m_nextSlidePreview->setVisible(true);
-	slideTab->setVisible(false);
-	registerButton->setVisible(false);
+	m_slideTab->setVisible(false);
+	m_registerButton->setVisible(false);
     }
     else { // End of presentation, show time for each slide
-	m_nextSlideLabel->setText(i18n( "Slides Time" ));
-	slideTab->setVisible(true);
-	registerButton->setVisible(true);
-	m_nextSlidePreview->setVisible(false);
 	loadSlideTime();
+	m_nextSlideLabel->setText(i18n( "Slides Time" ));
+	m_slideTab->setVisible(true);
+	m_registerButton->setVisible(true);
+	m_nextSlidePreview->setVisible(false);
     }
 
     // update the label
@@ -190,101 +190,76 @@ void KPrPresenterViewInterface::setSlidesTime(QMap<int,int> *slides_time)
     {
 	t = QTime(0,0,0);
 	t=t.addSecs(slides_time->value(i));
-	if(timeEditList.size() > i)
-	    timeEditList.at(i)->setTime(t);
+	if(m_timeEditList.size() > i)
+	    m_timeEditList.at(i)->setTime(t);
     }
 }
 
 void KPrPresenterViewInterface::saveSlideTime()
-{
-    KoXmlDocument m_doc;
-    // chemin absolu à modifier (et créer le fichier associé -> voir plus bas)
-    QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
-    QFile file( fileName );
-    
-    file.open(QIODevice::WriteOnly);
-    KoXmlWriter *writer = new KoXmlWriter(&file);
-    writer->startDocument("nom");
-    writer->startElement("lineends");
-
-    QTime time;
+{   
+    QMap<int,int> *slideTime = new QMap<int,int>();
     int t;
-    for(int i=0;i<timeEditList.size();i++)
+    QTime time;
+    for(int i=0;i<m_timeEditList.size();i++)
     {
-	time = timeEditList.value(i)->time();
+	time = m_timeEditList.value(i)->time();
 	t = time.second() + time.minute()*60 + time.hour()*3600;
-	writer->startElement("draw:marker");
-	writer->addAttribute("draw:name","slide "+QString::number(i+1));
-	writer->addAttribute("draw:time",t);
-	writer->endElement();
+	slideTime->insert(i,t);
     }
-	
-    writer->endElement();
-    writer->endDocument();
+    
+    m_viewMode->saveSlideTime( slideTime );
 }
     
 bool KPrPresenterViewInterface::loadSlideTime()
-{
-    KoXmlDocument m_doc;
-    // chemin absolu à modifier
-    QString fileName( "/home/narac/Bureau/koffice/slideTimess.xml" );
-    QFile file( fileName );
-    if(!file.exists())
-	return false;
-    file.open(QIODevice::ReadOnly);
-
+{   
     QTime time;
-    int i = 0;
     int h,m,s,t;
-    QString errorMessage;
-    if(KoOdfReadStore::loadAndParse( &file, m_doc, errorMessage, fileName ))
+    QMap<int,int> *planTime = m_viewMode->getSlideTime();
+    
+    if(planTime == 0)
+	return false;
+	
+    for(int i=0;i<planTime->size();i++)
     {
-	KoXmlElement time, slide(m_doc.namedItem("lineends").toElement());
-	forEachElement(time, slide)
-	{
-	    t = time.attribute("time").toInt();
-	    if(t>=3600)
-	      h = t/3600;
-	    else
-	      h = 0;
-	    if(t>=60)
-	      m = t % 3600 / 60;
-	    else
-	      m = 0;
-	    s = t % 60;
-	      
-	    QTime t = QTime(h,m,s);
-	    t.addSecs(time.attribute("time").toInt());
-	    t.addSecs(10);
-	    if(i < planningTime.size())
-	      planningTime.value(i)->setText(t.toString());
-	    i++;
-	}
+	t = planTime->value(i);
+	if(t>=3600)
+	    h = t/3600;
+	else
+	    h = 0;
+	if(t>=60)
+	    m = t % 3600 / 60;
+	else
+	    m = 0;
+	s = t % 60;
+	
+	time = QTime(h,m,s);
+
+	if(i < m_planningTime.size())
+	    m_planningTime.value(i)->setText(time.toString());
     }
-    
-    //m_document->saveOdfSettings( KoStore * store );
-    
+
     return true;
 }
 
-QMap<int,int>* KPrPresenterViewInterface::getSlidesTime()
+QMap<int,int>* KPrPresenterViewInterface::getPlanningTime()
 {
     if(!loadSlideTime())
 	return 0;
+
     QMap<int,int> *planTime = new QMap<int,int>();
     QString chaine;
-    for(int i=0;i<planningTime.size();i++)
+    for(int i=0;i<m_planningTime.size();i++)
     {
-	chaine = planningTime.value(i)->text();
+	chaine = m_planningTime.value(i)->text();
 	chaine.remove(":");
 	planTime->insert(i,chaine.toInt());
     }
     return planTime;
 }
 
-void KPrPresenterViewInterface::setDocument(KPrDocument *document)
+void KPrPresenterViewInterface::setViewMode(KPrViewModePresentation *viewMode)
 {
-    m_document = document;
+    m_viewMode = viewMode;
 }
 
 #include "KPrPresenterViewInterface.moc"
