@@ -130,7 +130,6 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
         m_magicCurtain(0)
 {
     m_frameLayout.setDocument(this);
-    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
 
     connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
             inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
@@ -159,8 +158,6 @@ KWDocument::~KWDocument()
     saveConfig();
     qDeleteAll(m_frameSets);
     qDeleteAll(m_dataCenterMap);
-    delete m_inlineTextObjectManager;
-    m_inlineTextObjectManager = 0;
 }
 
 void KWDocument::addShape(KoShape *shape)
@@ -267,7 +264,7 @@ void KWDocument::removePage(int pageNumber)
 
 void KWDocument::firePageSetupChanged()
 {
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
     emit pageSetupChanged();
 }
 
@@ -399,6 +396,10 @@ KWTextFrameSet *KWDocument::mainFrameSet() const
     return m_frameLayout.mainFrameSet();
 }
 
+KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
+{
+    return dynamic_cast<KoInlineTextObjectManager*>(dataCenterMap()["InlineTextObjectManager"]);
+}
 
 QString KWDocument::uniqueFrameSetName(const QString& suggestion)
 {
@@ -442,13 +443,6 @@ QString KWDocument::renameFrameSet(const QString &prefix, const QString& base)
             return name;
         count++;
     }
-}
-
-void KWDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manager)
-{
-    m_inlineTextObjectManager = manager;
-    if (m_inlineTextObjectManager)
-        m_inlineTextObjectManager->setParent(0);
 }
 
 // *** LOADING
@@ -516,7 +510,7 @@ void KWDocument::clear()
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
 
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
@@ -526,12 +520,8 @@ bool KWDocument::loadOdf(KoOdfReadStore & odfStore)
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
     }
-    delete m_inlineTextObjectManager;
-    m_inlineTextObjectManager = 0;
     KWOdfLoader loader(this);
     bool rc = loader.load(odfStore);
-    if (m_inlineTextObjectManager == 0) // if there were no text shapes loaded at all.
-        m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
     if (rc)
         endOfLoading();
     return rc;

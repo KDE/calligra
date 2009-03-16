@@ -55,7 +55,7 @@ public:
 
     KoInlineTextObjectManager* inlineTextObjectManager() {
         KoTextDocumentLayout* layout = dynamic_cast< KoTextDocumentLayout* >(m_doc->documentLayout());
-        return layout ? layout->inlineObjectTextManager() : 0;
+        return layout ? layout->inlineTextObjectManager() : 0;
     }
 
     KoVariableManager* variableManager() {

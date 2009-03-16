@@ -72,10 +72,8 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
         KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
         fs->setAllowLayout(false);
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
-        if (m_loader->document()->inlineTextObjectManager() == 0)
-            m_loader->document()->setInlineTextObjectManager(
-                    KoTextDocument(text->document()).inlineTextObjectManager());
-        new KWTextFrame(shape, fs, pageNumber);
+        KWTextFrame *frame = new KWTextFrame(shape, fs, pageNumber);
+        frame->setFrameBehavior(KWord::IgnoreContentFrameBehavior);
         m_loader->document()->addFrameSet(fs);
     } else {
         KWFrameSet* fs = new KWFrameSet();
