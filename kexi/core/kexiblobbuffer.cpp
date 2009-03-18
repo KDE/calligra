@@ -207,7 +207,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
     if (item)
         return KexiBLOBBuffer::Handle(item);
 
-    QString fileName = url.isLocalFile() ? url.path() : url.prettyUrl();
+    QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
 //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);
     if (!f.open(QIODevice::ReadOnly)) {

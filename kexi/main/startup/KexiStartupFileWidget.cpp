@@ -342,11 +342,11 @@ bool KexiStartupFileWidget::checkSelectedFile()
     kDebug() << "KexiStartupFileWidget::checkURL() path: " << d->highlightedUrl;
 // kDebug() << "KexiStartupFileWidget::checkURL() fname: " << url.fileName();
 //todo if ( url.isLocalFile() ) {
-    QFileInfo fi(d->highlightedUrl.path());
+    QFileInfo fi(d->highlightedUrl.toLocalFile());
     if (mode() & KFile::ExistingOnly) {
         if (!fi.exists()) {
             KMessageBox::error(this, "<qt>" + i18n("The file \"%1\" does not exist.",
-                                                   QDir::convertSeparators(d->highlightedUrl.path())));
+                                                   QDir::convertSeparators(d->highlightedUrl.toLocalFile())));
             return false;
         } else if (mode() & KFile::File) {
             if (!fi.isFile()) {

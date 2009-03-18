@@ -130,7 +130,7 @@ void KexiImageContextMenu::insertFromFile()
     #else*/
     KUrl url(KFileDialog::getImageOpenUrl(
                  KUrl("kfiledialog:///LastVisitedImagePath"), this, i18n("Insert Image From File")));
-// QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
+// QString fileName = url.isLocalFile() ? url.toLocalFile() : url.prettyURL();
 
     //! @todo download the file if remote, then set fileName properly
 //#endif
