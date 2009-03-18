@@ -1887,7 +1887,7 @@ tristate KexiMainWindow::closeProject()
         return false;
 
     if (d->nav) {
-        d->navWasVisibleBeforeProjectClosing = d->propEditorDockWidget->isVisible();
+        d->navWasVisibleBeforeProjectClosing = d->navDockWidget->isVisible();
         d->navDockWidget->hide();
         d->nav->clear();
     }
@@ -4348,12 +4348,16 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
                 }
             }
         }
+/*moved to d->updatePropEditorVisibility()
         const bool inDesignMode = _currentWindow && _currentWindow->currentViewMode() == Kexi::DesignViewMode;
         if (   (newBuf && inDesignMode)
             || (!newBuf && inDesignMode && _currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode()))
         {
             d->propEditorDockWidget->setVisible(true);
         }
+        else if (!inDesignMode) {
+            d->propEditorDockWidget->setVisible(false);
+        }*/
     }
 }
 

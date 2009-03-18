@@ -762,8 +762,14 @@ public:
         Q_UNUSED(viewMode);
         if (propEditorDockWidget) {
             KexiWindow *currentWindow = wnd->currentWindow();
-            const bool visible = currentWindow && (currentWindow->propertySet() || currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode());
-            kDebug() << "updatePropEditorVisibility(): visible == " << visible;
+            bool visible = currentWindow && viewMode == Kexi::DesignViewMode;
+            if (    currentWindow
+                 && !currentWindow->propertySet()
+                 && !currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode() )
+            {
+                visible = false;
+            }
+            kDebug() << "visible == " << visible;
             propEditorDockWidget->setVisible(visible);
         }
 
