@@ -174,7 +174,7 @@ void KexiFormManager::createActions(KActionCollection* collection)
         d->dragConnectionAction = new KToggleAction(
             KIcon("signalslot"), i18n("Connect Signals/Slots"), d->collection);
         d->dragConnectionAction->setObjectName("drag_connection");
-        d->widgetActionGroup->addAction(d->dragConnectionAction);
+//        d->widgetActionGroup->addAction(d->dragConnectionAction);
         connect(d->dragConnectionAction, SIGNAL(triggered()),
                 this, SLOT(startCreatingConnection()));
         d->dragConnectionAction->setChecked(false);
@@ -192,8 +192,8 @@ void KexiFormManager::createActions(KActionCollection* collection)
     d->snapToGridAction = new KToggleAction(
         i18n("Snap to Grid"), d->collection);
     d->snapToGridAction->setObjectName("snap_to_grid");
-    d->widgetActionGroup->addAction(d->snapToGridAction);
-    d->snapToGridAction->setChecked(true);
+//    d->widgetActionGroup->addAction(d->snapToGridAction);
+//    d->snapToGridAction->setChecked(true);
 
 #if 0 // 2.0: todo
     // Create the Style selection action (with a combo box in toolbar and submenu items)

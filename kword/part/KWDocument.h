@@ -142,9 +142,7 @@ public:
     KWTextFrameSet *mainFrameSet() const;
 
     /// return the inlineTextObjectManager for this document.
-    KoInlineTextObjectManager *inlineTextObjectManager() const {
-        return m_inlineTextObjectManager;
-    }
+    KoInlineTextObjectManager *inlineTextObjectManager() const;
 
     /// reimplemented from super
     QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
@@ -230,8 +228,6 @@ private:
     KWApplicationConfig m_config;
 
     QMap<QString, KoDataCenter *>  m_dataCenterMap;
-
-    KoInlineTextObjectManager *m_inlineTextObjectManager;
 
     MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
 };

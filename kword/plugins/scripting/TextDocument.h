@@ -55,7 +55,7 @@ public:
 
     KoInlineTextObjectManager* inlineTextObjectManager() {
         KoTextDocumentLayout* layout = dynamic_cast< KoTextDocumentLayout* >(m_doc->documentLayout());
-        return layout ? layout->inlineObjectTextManager() : 0;
+        return layout ? layout->inlineTextObjectManager() : 0;
     }
 
     KoVariableManager* variableManager() {
@@ -155,18 +155,18 @@ public slots:
     bool addVariable(QObject* cursor, const QString& variablename) {
         TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
         if (! textcursor) {
-            kDebug() << "No cursor";
+            kDebug(32010) << "No cursor";
             return false;
         }
         KoInlineTextObjectManager* objmanager = inlineTextObjectManager();
         if (! objmanager) {
-            kDebug() << "No textobjectmanager";
+            kDebug(32010) << "No textobjectmanager";
             return false;
         }
         KoVariableManager* varmanager = variableManager();
         KoVariable* variable = varmanager ? varmanager->createVariable(variablename) : 0;
         if (! variable) {
-            kDebug() << (varmanager ? "No variable" : "No variablemanager");
+            kDebug(32010) << (varmanager ? "No variable" : "No variablemanager");
             return false;
         }
         objmanager->insertInlineObject(textcursor->cursor(), variable);

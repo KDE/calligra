@@ -1404,7 +1404,9 @@ void Form::setFormWidget(FormWidget* w)
 // moved from FormManager
 void Form::enterWidgetInsertingState(const QByteArray &classname)
 {
-    enterWidgetSelectingState();
+    if (d->state != WidgetInserting) {
+        enterWidgetSelectingState();
+    }
     d->state = WidgetInserting;
 
 /* prev 

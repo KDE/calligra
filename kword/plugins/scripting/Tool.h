@@ -118,7 +118,7 @@ public slots:
 
     /** Set the active/current \a TextCursor object. */
     bool setCursor(QObject* cursor) {
-        kDebug() << "Scripting::Selection::setCursor";
+        kDebug(32010) << "Scripting::Selection::setCursor";
         TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
         if (! textcursor) return false;
         KWView* v = dynamic_cast< KWView* >(m_module->view());

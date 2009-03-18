@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -280,9 +280,9 @@ void EditorView::changeSet(Set *set, SetOptions options)
     changeSetInternal(set, options, QByteArray());
 }
 
-void EditorView::changeSet(Set *set, const QByteArray& propertyToSelect)
+void EditorView::changeSet(Set *set, const QByteArray& propertyToSelect, SetOptions options)
 {
-    changeSetInternal(set, 0, propertyToSelect);
+    changeSetInternal(set, options, propertyToSelect);
 }
 
 void EditorView::changeSetInternal(Set *set, SetOptions options, 
@@ -355,6 +355,9 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 //    fill();
     delete d->model;
     d->model = d->set ? new EditorDataModel(*d->set, this) : 0;
+    if (d->model && (options & AlphabeticalOrder)) {
+        d->model->setOrder(Set::AlphabeticalOrder);
+    }
     setModel( d->model );
 
     emit propertySetChanged(d->set);

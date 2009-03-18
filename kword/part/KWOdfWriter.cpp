@@ -66,7 +66,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
 
 void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
 {
-    //kDebug()32001 << "START saveHeaderFooter ############################################";
+    //kDebug(32001 )<< "START saveHeaderFooter ############################################";
     // first get all the framesets in a nice quick-to-access data structure
     // this avoids iterating till we drop
     QHash<KWPageStyle, QHash<int, KWTextFrameSet*> > data;

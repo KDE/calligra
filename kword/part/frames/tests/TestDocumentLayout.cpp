@@ -142,7 +142,7 @@ void TestDocumentLayout::placeAnchoredFrame()
     QTextCursor cursor(doc);
 
     KoInlineTextObjectManager *manager = new KoInlineTextObjectManager();
-    layout->setInlineObjectTextManager(manager);
+    layout->setInlineTextObjectManager(manager);
     MockLayoutState *state = new MockLayoutState(doc);
     layout->setLayout(state);
     state->shape = shape1;

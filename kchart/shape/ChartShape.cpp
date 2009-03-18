@@ -561,7 +561,7 @@ void ChartShape::showFooter()
 void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )
 {
     Q_ASSERT( model );
-    kDebug() << "Setting" << model << "as chart model.";
+    kDebug(35001) << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model );
     if ( takeOwnershipOfModel )
         d->internalModel = model;
@@ -574,7 +574,7 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
 void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &selection )
 {
     Q_ASSERT( model );
-    kDebug() << "Setting" << model << "as chart model.";
+    kDebug(35001) << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model, selection );
     if ( d->internalModel ) {
         delete d->internalModel;
@@ -841,19 +841,19 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objec
         path += '/';
     
     const QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
-    //kDebug() << "path for manifest file=" << path << "mimeType=" << mimeType;
+    //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
-        //kDebug() << "Manifest doesn't have media-type for" << path;
+        //kDebug(35001) << "Manifest doesn't have media-type for" << path;
         return false;
     }
 
     const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
     if ( !oasis ) {
         tmpURL += "/maindoc.xml";
-        //kDebug() << "tmpURL adjusted to" << tmpURL;
+        //kDebug(35001) << "tmpURL adjusted to" << tmpURL;
     }
 
-    //kDebug() << "tmpURL=" << tmpURL;
+    //kDebug(35001) << "tmpURL=" << tmpURL;
     QString errorMsg;
     KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
     if ( e.isEmpty() ) {
@@ -963,7 +963,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
 
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
-        qDebug() << "Error: Embedded document has no chart:class attribute.";
+        kDebug(35001) << "Error: Embedded document has no chart:class attribute.";
         return false;
     }
 
@@ -977,7 +977,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadi
     bool  knownType = false;
     for ( int type = 0; type < (int)LastChartType; ++type ) {
         if ( chartClass == ODF_CHARTTYPES[ (ChartType)type ] ) {
-            qDebug() <<"found chart of type" << chartClass;
+            kDebug(35001) <<"found chart of type" << chartClass;
 
             d->plotArea->setChartType( (ChartType)type );
             knownType = true;

@@ -44,8 +44,8 @@ void SquareRootElement::layout( const AttributeManager* am )
 {
     RowElement::layout( am );
 
-    kDebug() << "Width: " << width();
-    kDebug() << "Height: " << height();
+    kDebug(39001) << "Width: " << width();
+    kDebug(39001) << "Height: " << height();
 
     double thinSpace = am->layoutSpacing( this );
     double linethickness = 1;

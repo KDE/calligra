@@ -67,6 +67,7 @@
 // KDE + Qt includes
 #include <QHBoxLayout>
 #include <QMenu>
+#include <QTimer>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
@@ -92,6 +93,7 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     m_snapToGrid = m_document->gridData().snapToGrid();
     m_gui = new KWGui(viewMode, this);
     m_canvas = m_gui->canvas();
+    setFocusProxy(m_canvas);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
@@ -114,7 +116,8 @@ KWView::KWView(const QString& viewMode, KWDocument* document, QWidget *parent)
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
     if (docker && docker->view() != this) docker->setView(this);
 
-    new KWStatusBar(statusBar(), this);
+    if (statusBar())
+        new KWStatusBar(statusBar(), this);
 
     // the zoom controller needs to be initialized after the status bar gets initialized as 
     // that resulted in bug 180759
@@ -975,6 +978,7 @@ void KWView::toggleSnapToGrid()
 
 void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction)
 {
+    // TODO we should not allow any shapes to fall behind the main text frame.
     QUndoCommand *cmd = KoShapeReorderCommand::createCommand(kwcanvas()->shapeManager()->selection()->selectedShapes(),
                         kwcanvas()->shapeManager(), direction);
     if (cmd)
@@ -1206,9 +1210,15 @@ void KWView::selectionChanged()
     }
 }
 
-void KWView::sanityCheck()
+void KWView::showEvent(QShowEvent *e)
+{
+    KoView::showEvent(e);
+    QTimer::singleShot(0, this, SLOT(updateStatusBarAction()));
+}
+
+void KWView::updateStatusBarAction()
 {
     KToggleAction *action = (KToggleAction*) actionCollection()->action("showStatusBar");
-    if (action)
+    if (action && statusBar())
         action->setChecked(! statusBar()->isHidden());
 }

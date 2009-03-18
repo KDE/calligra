@@ -40,7 +40,7 @@ public:
      *      This shape should be created using a KoShapeFactory from the textShape plugin
      * @param parent the frameSet this frame will be associated with.
      */
-    KWTextFrame(KoShape *shape, KWTextFrameSet *parent);
+    KWTextFrame(KoShape *shape, KWTextFrameSet *parent, int pageNumber = -1);
     ~KWTextFrame();
 
     /**

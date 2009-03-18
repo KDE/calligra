@@ -131,7 +131,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
             QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
             Q_ASSERT(tl.isValid());
             x = tl.cursorToX(m_anchor->positionInDocument() - block.position());
-            recalcFrom = 0; // TODO ???
+            recalcFrom = 0;
         }
         newPosition.setX(x);
         m_finished = true;
@@ -199,22 +199,25 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state)
         Q_ASSERT(false); // new enum added?
     }
     newPosition = newPosition + m_anchor->offset();
-    if (m_pass > 0) { // already been here
+    if (!m_finished && m_pass > 0) { // already been here
         // for the cases where we align with text; check if the text is within margin. If so; set finished to true.
         QPointF diff = newPosition - m_anchor->shape()->position();
         m_finished = qAbs(diff.x()) < 2.0 && qAbs(diff.y()) < 2.0;
     }
     m_pass++;
 
-    do { // move the layout class back a couple of paragraphs.
-        if (state->cursorPosition() <= recalcFrom)
-            break;
-    } while (state->previousParag());
-
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
+
+    if (m_finished && qAbs(m_anchor->offset().x()) < 0.1) // no second pass needed
+        return false;
+
+    do { // move the layout class back a couple of paragraphs.
+        if (state->cursorPosition() <= recalcFrom)
+            break;
+    } while (state->previousParag());
     return true;
 }
 

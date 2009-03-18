@@ -32,6 +32,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <limits.h>
 
 KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFrameSet*> &frameSets)
         : m_pageManager(pageManager),
@@ -220,6 +221,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
        +-----------------+ */
 
     // Create some data structures used for the layouting of the frames later
+    int minZIndex = INT_MAX;
     qreal requestedHeight[11], minimumHeight[11], resultingPositions[11];
     for (int i = 0; i < 11; i++) { // zero fill.
         requestedHeight[i] = 0;
@@ -253,6 +255,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     QRectF pageRect(left, page.offsetInDocument(), width, page.height());
     foreach (KWFrame *frame, framesInPage(pageRect)) {
         KWTextFrameSet *textFrameSet = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+        if (textFrameSet == 0 || textFrameSet->textFrameSetType() == KWord::OtherTextFrameSet)
+            minZIndex = qMin(minZIndex, frame->shape()->zIndex());
         if (textFrameSet == 0) continue;
         switch (textFrameSet->textFrameSetType()) {
         case KWord::OddPagesHeaderTextFrameSet:
@@ -284,6 +288,19 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
         // TODO end + foot note frameset
         default:;
         }
+    }
+    if (minZIndex < INT_MAX) {
+        --minZIndex;
+        for (int i=0; i < columns; ++i)
+            main[i]->shape()->setZIndex(minZIndex);
+        if (footer)
+            footer->shape()->setZIndex(minZIndex);
+        if (endnote)
+            endnote->shape()->setZIndex(minZIndex);
+        if (header)
+            header->shape()->setZIndex(minZIndex);
+        if (footnote)
+            footnote->shape()->setZIndex(minZIndex);
     }
 
     // spread space across items.

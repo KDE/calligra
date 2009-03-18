@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
-   Copyright (C) 2004-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,6 +77,8 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 // , m_firstFocusWidget(0)
 {
     m_delayedFormContentsResizeOnShow = 0;
+//! @todo remove?
+    setSortedProperties(true);
 
     QHBoxLayout *l = new QHBoxLayout(this);
 //Qt3 l->setAutoAdd(true);
@@ -84,35 +86,7 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
     m_scrollView = new KexiFormScrollView(this, viewMode() == Kexi::DataViewMode);
     l->addWidget(m_scrollView);
 
-//moved setViewWidget(m_scrollView);
-// m_scrollView->show();
-
-    m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
-    m_dbform->setObjectName(
-        i18nc("Widget name. This string will be used to name widgets of this class. "
-              "It must _not_ contain white spaces and non latin1 characters.", "form"));
-    QPalette pal(m_dbform->palette());
-    pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
-    m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
-                               // from m_scrollView->viewport()
-// m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
-// m_dbform->resize(QSize(400, 300));
-    m_scrollView->setWidget(m_dbform);
-    m_scrollView->setResizingEnabled(viewMode() != Kexi::DataViewMode);
-
-// initForm();
-
-    if (viewMode() == Kexi::DataViewMode) {
-        m_scrollView->recordNavigator()->setRecordHandler(m_scrollView);
-        //m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
-        QPalette pal(m_scrollView->viewport()->palette());
-        pal.setBrush(m_scrollView->viewport()->backgroundRole(), 
-            m_dbform->palette().brush(QPalette::Background));
-        m_scrollView->viewport()->setPalette(pal);
-//moved to formmanager  connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
-    }
-
-    initForm(); //2.0: moved
+    initForm();
 
     if (viewMode() == Kexi::DesignViewMode) {
 //        connect(KFormDesigner::FormManager::self(), SIGNAL(propertySetSwitched(KoProperty::Set*, bool, const QByteArray&)),
@@ -262,9 +236,35 @@ KexiFormView::setForm(KFormDesigner::Form *f)
     m_form = f;
 }
 
-void
-KexiFormView::initForm()
+void KexiFormView::initForm()
 {
+// <here moved from ctor>
+    m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
+    m_dbform->setObjectName(
+        i18nc("Widget name. This string will be used to name widgets of this class. "
+              "It must _not_ contain white spaces and non latin1 characters.", "form"));
+    QPalette pal(m_dbform->palette());
+    pal.setBrush(QPalette::Window, palette().brush(QPalette::Window));
+    m_dbform->setPalette(pal); // avoid inheriting QPalette::Window role
+                               // from m_scrollView->viewport()
+// m_dbform->resize( m_scrollView->viewport()->size() - QSize(20, 20) );
+// m_dbform->resize(QSize(400, 300));
+    m_scrollView->setWidget(m_dbform);
+    m_scrollView->setResizingEnabled(viewMode() != Kexi::DataViewMode);
+
+// initForm();
+
+    if (viewMode() == Kexi::DataViewMode) {
+        m_scrollView->recordNavigator()->setRecordHandler(m_scrollView);
+        //m_scrollView->viewport()->setPaletteBackgroundColor(m_dbform->palette().active().background());
+        QPalette pal(m_scrollView->viewport()->palette());
+        pal.setBrush(m_scrollView->viewport()->backgroundRole(), 
+            m_dbform->palette().brush(QPalette::Background));
+        m_scrollView->viewport()->setPalette(pal);
+//moved to formmanager  connect(formPart()->manager(), SIGNAL(noFormSelected()), SLOT(slotNoFormSelected()));
+    }
+// </here>
+
     setForm(
         new KFormDesigner::Form(
             KexiFormManager::self()->library(), 
@@ -586,6 +586,8 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
     if ((mode == Kexi::DesignViewMode) && viewMode() == Kexi::DataViewMode) {
         // The form may have been modified, so we must recreate the preview
         delete m_dbform; // also deletes form()
+        initForm();
+/* moved to initForm()
         m_dbform = new KexiDBForm(m_scrollView->viewport(), m_scrollView);
         m_dbform->setObjectName(
             i18nc("Widget name. This string will be used to name widgets of this class. "
@@ -596,6 +598,7 @@ tristate KexiFormView::afterSwitchFrom(Kexi::ViewMode mode)
                                    // from m_scrollView->viewport()
 
         initForm();
+        */
 //moved to formmanager  slotNoFormSelected();
 
         //reset position

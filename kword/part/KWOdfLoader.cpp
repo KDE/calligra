@@ -124,7 +124,6 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     Q_UNUSED(loader);
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
 
-
     KoColumns columns;
     columns.columns = 1;
     columns.columnSpacing = m_document->config().defaultColumnSpacing();
@@ -188,26 +187,12 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
     fs->setAllowLayout(false);
     fs->setName(i18n("Main Text Frameset"));
-    //fs->loadOasisContent( body, context );
-
-    // Get the factory for the TextShape
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
-    Q_ASSERT(factory);
-    // Create a TextShape
-    KoShape *shape = factory->createDefaultShapeAndInit(m_document->dataCenterMap());
-    Q_ASSERT(shape);
-    // The TextShape will be displayed within a KWTextFrame
-    KWTextFrame *frame = new KWTextFrame(shape, fs);
-    Q_UNUSED(frame);
-    m_currentFrame = frame;
     m_document->addFrameSet(fs);
 
-    // The KoTextShapeData does contain the data for our TextShape
-    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-    Q_ASSERT(textShapeData);
-    textShapeData->setDocument(fs->document(), false /*transferOwnership*/);
     // Let the TextShape handle loading the body element.
-    textShapeData->loadOdf(body, sc);
+    KoTextShapeData textShapeData;
+    textShapeData.setDocument(fs->document(), false);
+    textShapeData.loadOdf(body, sc);
 
     /*
     QTextCursor cursor( fs->document() );
@@ -282,7 +267,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
     }
 }
 
-// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
+// helper function to create a KWTextFrameSet for a header/footer.
 void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPageStyle &pageStyle, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
 {
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
@@ -295,19 +280,9 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPa
     case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer %1", pageStyle.name())); break;
     default: break;
     }
-
-    kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
-
-    // Add the frameset and the shape for the header/footer to the document.
-    KoShapeFactory *sf = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
-    Q_ASSERT(sf);
-    KoShape *s = sf->createDefaultShapeAndInit(m_document->dataCenterMap());
-    Q_ASSERT(s);
-    KWTextFrame *f = new KWTextFrame(s, fs);
     m_document->addFrameSet(fs);
 
-    KWTextFrame *prevFrame = m_currentFrame;
-    m_currentFrame = f;
+    kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
 
     // use auto-styles from styles.xml, not those from content.xml
     context.setUseStylesAutoStyles(true);
@@ -319,8 +294,6 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPa
 
     // restore use of auto-styles from content.xml, not those from styles.xml
     context.setUseStylesAutoStyles(false);
-
-    m_currentFrame = prevFrame; // restore the previous current frame
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter

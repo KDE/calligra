@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,17 +45,24 @@ public:
             : caption(0), listData(0), changed(false), storable(true),
             readOnly(false), visible(true),
             autosync(-1), composed(0), useComposedProperty(true),
-            sets(0), parent(0), children(0), relatedProperties(0),
-            sortingKey(0)
+            sets(0), parent(0), children(0), relatedProperties(0)
+//            sortingKey(0)
     {
     }
 
     inline void setCaptionForDisplaying(const QString& captionForDisplaying) {
         delete caption;
-        if (captionForDisplaying.simplified() != captionForDisplaying)
-            caption = new QString(captionForDisplaying.simplified());
-        else
+        if (captionForDisplaying.simplified() != captionForDisplaying) {
+            if (captionForDisplaying.isEmpty()) {
+                caption = 0;
+            }
+            else {
+               caption = new QString(captionForDisplaying.simplified());
+            }
+        }
+        else {
             caption = 0;
+        }
         this->captionForDisplaying = captionForDisplaying;
     }
 
@@ -103,7 +110,7 @@ public:
     //! list of properties with the same name (when intersecting buffers)
     QList<Property*>  *relatedProperties;
 
-    int sortingKey;
+//    int sortingKey;
 };
 }
 
@@ -626,7 +633,7 @@ Property::operator= (const Property & property)
     // update these later because they may have been changed when creating children
     d->oldValue = property.d->oldValue;
     d->changed = property.d->changed;
-    d->sortingKey = property.d->sortingKey;
+//    d->sortingKey = property.d->sortingKey;
 
     return *this;
 }
@@ -672,11 +679,11 @@ Property::addChild(Property *prop)
         if (!d->children)
             d->children = new QList<Property*>();
         d->children->append(prop);
-        prop->setSortingKey(d->children->count());
+//        prop->setSortingKey(d->children->count());
         prop->d->parent = this;
     } else {
         kWarning() << "property \"" << name()
-        << "\": child property \"" << prop->name() << "\" already added";
+                << "\": child property \"" << prop->name() << "\" already added";
         return;
     }
 }
@@ -736,6 +743,7 @@ Property::setComposedProperty(ComposedPropertyInterface *prop)
     d->composed = prop;
 }
 
+#if 0
 int Property::sortingKey() const
 {
     return d->sortingKey;
@@ -745,6 +753,7 @@ void Property::setSortingKey(int key)
 {
     d->sortingKey = key;
 }
+#endif
 
 void Property::emitPropertyChanged()
 {
@@ -770,7 +779,7 @@ void Property::emitPropertyChanged()
 /////////////////////////////////////////////////////////////////
 
 void
-Property::debug()
+Property::debug() const
 {
     QString dbg = "Property( name='" + QString(d->name) + "' desc='" + d->description
                   + "' val=" + (value().isValid() ? value().toString() : "<INVALID>");

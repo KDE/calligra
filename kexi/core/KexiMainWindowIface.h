@@ -189,7 +189,9 @@ public:
      set before call, previously selected item will be preselected
      in the editor (if found). */
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, const QByteArray& propertyToSelect = QByteArray()) = 0;
+                                     bool preservePrevSelection = true, 
+                                     bool sortedProperties = false,
+                                     const QByteArray& propertyToSelect = QByteArray()) = 0;
 
     /*! Saves window's \a window data. If window's data is never saved,
      user is asked for name and title, before saving (see getNewObjectInfo()).

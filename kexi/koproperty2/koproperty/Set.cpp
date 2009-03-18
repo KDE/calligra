@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2004-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -80,11 +80,7 @@ public:
         return Set_nonConstNull;
     }
 
-/*    inline void add(Property* property) {
-        return hash.insert(property->name().toLower(), property);
-    }*/
-
-    void addProperty(Property *property, QByteArray group, bool updateSortingKey)
+    void addProperty(Property *property, QByteArray group/*, bool updateSortingKey*/)
     {
         if (!property) {
             kWarning() << "property == 0";
@@ -101,13 +97,16 @@ public:
         if (p) {
             q->addRelatedProperty(p, property);
         } else {
+            list.append(property);
             hash.insert(property->name().toLower(), property);
             q->addToGroup(group, property);
         }
 
         property->addSet(q);
+#if 0
         if (updateSortingKey)
             property->setSortingKey(count());
+#endif
     }
 
     void removeProperty(Property *property)
@@ -115,6 +114,7 @@ public:
         if (!property)
             return;
 
+        list.removeOne(property);
         Property *p = hash.take(property->name());
         q->removeFromGroup(p);
         if (ownProperty) {
@@ -122,10 +122,6 @@ public:
             delete p;
         }
     }
-
-/*    inline void remove(Property* property) {
-        hash.remove(property->name().toLower());
-    }*/
 
     void clear() {
         if (informAboutClearing)
@@ -138,17 +134,14 @@ public:
         groupForProperties.clear();
         groupDescriptions.clear();
         groupIcons.clear();
-        qDeleteAll(hash);
+        qDeleteAll(list);
+        list.clear();
         hash.clear();
-        /* old, inefficient
-        Property::DictIterator it(d->dict);
-        while (it.current())
-            removeProperty(it.current());*/
     }
 
-    inline int count() const { return hash.count(); }
+    inline int count() const { return list.count(); }
 
-    inline bool isEmpty() const { return hash.isEmpty(); }
+    inline bool isEmpty() const { return list.isEmpty(); }
 
     inline QByteArray groupForProperty(Property *property) const {
         return groupForProperties.value(property);
@@ -162,29 +155,34 @@ public:
         groupForProperties.remove(property);
     }
 
-    // Copy all properties from the other hash
+    // Copy all properties from the other set
     void copyPropertiesFrom(
-        const QHash<QByteArray, Property*>::ConstIterator& constBegin,
-        const QHash<QByteArray, Property*>::ConstIterator& constEnd, const Set & set)
+        const QList<Property*>::ConstIterator& constBegin,
+        const QList<Property*>::ConstIterator& constEnd, const Set & set)
     {
-        for (QHash<QByteArray, Property*>::ConstIterator it(constBegin); it!=constEnd; ++it) {
-            Property *prop = new Property(*it.value());
-            addProperty(prop, set.groupForProperty( it.value() ),
+        for (QList<Property*>::ConstIterator it(constBegin); it!=constEnd; ++it) {
+            Property *prop = new Property(*(*it));
+            addProperty(prop, set.groupForProperty( *it )
+#if 0
+                        ,
                         false /* don't updateSortingKey, because the key is already 
                                  set in Property copy ctor.*/
+#endif
                        );
         }
     }
 
-    inline QHash<QByteArray, Property*>::ConstIterator hashConstIterator() const {
-        return QHash<QByteArray, Property*>::ConstIterator( hash.constBegin() );
+    inline QList<Property*>::ConstIterator listConstIterator() const {
+        return list.constBegin();
     }
 
-    inline QHash<QByteArray, Property*>::ConstIterator hashConstEnd() const {
-        return hash.constEnd();
+    inline QList<Property*>::ConstIterator listConstEnd() const {
+        return list.constEnd();
     }
 private:
-    // a hash of properties in form name -> property
+    //! a list of properties, preserving their order, owner of Property objects
+    QList<Property*> list;
+    //! a hash of properties in form name -> property
     QHash<QByteArray, Property*> hash;
     QHash<Property*, QByteArray> groupForProperties;
 };
@@ -205,11 +203,23 @@ Set::PropertySelector::~PropertySelector()
 
 //////////////////////////////////////////////
 
+typedef QPair<Property*, QString> Iterator_PropertyAndCaption;
+
+bool Iterator_propertyAndCaptionLessThan(
+    const Iterator_PropertyAndCaption &n1, const Iterator_PropertyAndCaption &n2)
+{
+    return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;
+}
+
+//////////////////////////////////////////////
+
 //Set::Iterator class
 Set::Iterator::Iterator(const Set &set, PropertySelector *selector)
-    : m_iterator( set.d->hashConstIterator() )
-    , m_end( set.d->hashConstEnd() )
+    : m_set(&set)
+    , m_iterator( set.d->listConstIterator() )
+    , m_end( set.d->listConstEnd() )
     , m_selector( selector )
+    , m_order(Set::InsertionOrder)
 {
     if (m_selector && current() && !(*m_selector)( *current() )) {
         // the first item is not acceptable by the selector
@@ -220,6 +230,40 @@ Set::Iterator::Iterator(const Set &set, PropertySelector *selector)
 Set::Iterator::~Iterator()
 {
     delete m_selector;
+}
+
+void Set::Iterator::setOrder(Set::Order order)
+{
+    if (m_order == order)
+        return;
+    m_order = order;
+    if (m_order == Set::AlphabeticalOrder) {
+        QList<Iterator_PropertyAndCaption> propertiesAndCaptions;
+        m_iterator = m_set->d->listConstIterator();
+        m_end = m_set->d->listConstEnd();
+        for (; m_iterator!=m_end; ++m_iterator) {
+            Property *prop = *m_iterator;
+            QString caption( prop->caption() );
+            if (caption.isEmpty())
+                caption = prop->name();
+            propertiesAndCaptions.append( qMakePair(prop, caption) );
+        }
+        qSort(propertiesAndCaptions.begin(), propertiesAndCaptions.end(), 
+            Iterator_propertyAndCaptionLessThan);
+        m_sorted.clear();
+        foreach (const Iterator_PropertyAndCaption& propertyAndCaption, propertiesAndCaptions) {
+            m_sorted.append(propertyAndCaption.first);
+        }
+        // restart the iterator
+        m_iterator = m_sorted.constBegin();
+        m_end = m_sorted.constEnd();
+    }
+    else {
+        m_sorted.clear();
+        // restart the iterator
+        m_iterator = m_set->d->listConstIterator();
+        m_end = m_set->d->listConstEnd();
+    }
 }
 
 void
@@ -235,18 +279,6 @@ Set::Iterator::operator ++()
         if ((*m_selector)( *current() ))
             return;
     }
-}
-
-Property*
-Set::Iterator::operator *() const
-{
-    return current();
-}
-
-Property*
-Set::Iterator::current() const
-{
-    return m_iterator==m_end ? 0 : m_iterator.value();
 }
 
 //////////////////////////////////////////////
@@ -292,7 +324,7 @@ Set::~Set()
 void
 Set::addProperty(Property *property, QByteArray group)
 {
-    d->addProperty(property, group, true);
+    d->addProperty(property, group);
 }
 
 void
@@ -466,7 +498,7 @@ Set::operator= (const Set & set)
     d->ownProperty = set.d->ownProperty;
     d->prevSelection = set.d->prevSelection;
     d->groupDescriptions = set.d->groupDescriptions;
-    d->copyPropertiesFrom(set.d->hashConstIterator(), set.d->hashConstEnd(), set);
+    d->copyPropertiesFrom(set.d->listConstIterator(), set.d->listConstEnd(), set);
     return *this;
 }
 
@@ -481,7 +513,7 @@ Set::changeProperty(const QByteArray &property, const QVariant &value)
 /////////////////////////////////////////////////////
 
 void
-Set::debug()
+Set::debug() const
 {
     //kDebug() << "List: typeName='" << m_typeName << "'";
     if (d->isEmpty()) {
@@ -490,8 +522,10 @@ Set::debug()
     }
     kDebug() << d->count() << " properties:";
 
-    for (QHash<QByteArray, Property*>::ConstIterator it(d->hashConstIterator()); it!=d->hashConstEnd(); ++it)
-        it.value()->debug();
+    const QList<Property*>::ConstIterator itEnd(d->listConstEnd());
+    for (QList<Property*>::ConstIterator it(d->listConstIterator()); it!=itEnd; ++it) {
+        (*it)->debug();
+    }
 }
 
 QByteArray
@@ -544,15 +578,16 @@ Buffer::Buffer(const Set& set)
 void Buffer::init(const Set& set)
 {
     //deep copy of set
-    for (QHash<QByteArray, Property*>::ConstIterator it(set.d->hashConstIterator()); 
-        it!=set.d->hashConstEnd(); ++it)
+    const QList<Property*>::ConstIterator itEnd(set.d->listConstEnd());
+    for (QList<Property*>::ConstIterator it(set.d->listConstIterator()); 
+        it!=itEnd; ++it)
     {
-        Property *prop = new Property(*it.value());
-        QByteArray group = set.groupForProperty(it.value());
+        Property *prop = new Property(*(*it));
+        QByteArray group = set.groupForProperty(*it);
         QString groupDesc = set.groupDescription( group );
         setGroupDescription(group, groupDesc);
         addProperty(prop, group);
-        prop->addRelatedProperty(it.value());
+        prop->addRelatedProperty(*it);
     }
 }
 
@@ -563,15 +598,16 @@ void Buffer::intersect(const Set& set)
         return;
     }
 
-    for (QHash<QByteArray, Property*>::ConstIterator it(set.d->hashConstIterator()); 
-        it!=set.d->hashConstEnd(); ++it)
+    const QList<Property*>::ConstIterator itEnd(set.d->listConstEnd());
+    for (QList<Property*>::ConstIterator it(set.d->listConstIterator()); 
+        it!=itEnd; ++it)
     {
-        const QByteArray key( it.value()->name() );
+        const QByteArray key( (*it)->name() );
         Property *property = set.d->property( key );
         if (property) {
             blockSignals(true);
-            it.value()->resetValue();
-            it.value()->addRelatedProperty(property);
+            (*it)->resetValue();
+            (*it)->addRelatedProperty(property);
             blockSignals(false);
         } else {
             removeProperty(key);

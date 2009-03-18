@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -602,7 +602,9 @@ protected slots:
     virtual void acceptPropertySetEditing();
 
     virtual void propertySetSwitched(KexiWindow *window, bool force = false,
-                                     bool preservePrevSelection = true, const QByteArray& propertyToSelect = QByteArray());
+                                     bool preservePrevSelection = true, 
+                                     bool sortedProperties = false,
+                                     const QByteArray& propertyToSelect = QByteArray());
 
     /*! Handles changes in 'dirty' flag for windows. */
     void slotDirtyFlagChanged(KexiWindow* window);

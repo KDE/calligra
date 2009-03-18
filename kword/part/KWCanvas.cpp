@@ -213,13 +213,6 @@ void KWCanvas::keyReleaseEvent(QKeyEvent *e)
             e->accept();
             return;
         }
-/*
-        if (e->key() == Qt::Key_S) {
-            m_doc->printStyleDebug();
-            e->accept();
-            return;
-        }
-*/
         if (e->key() == Qt::Key_M) {
             const QDateTime dtMark ( QDateTime::currentDateTime() );
             kDebug(32001) <<"Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
@@ -285,9 +278,4 @@ void KWCanvas::paintEvent(QPaintEvent * ev)
     }
 
     painter.end();
-}
-
-void KWCanvas::focusOutEvent(QFocusEvent *event)
-{
-    m_view->sanityCheck();
 }

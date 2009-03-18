@@ -35,6 +35,7 @@
 
 
 #include <libkdcraw/kdcraw.h>
+#include <libkdcraw/version.h>
 
 using namespace KDcrawIface;
 
@@ -60,13 +61,17 @@ KisRawImport::~KisRawImport()
 
 inline quint16 correctIndian(quint16 v)
 {
+#if KDCRAW_VERSION < 0x000400
     return ((v & 0x00FF) << 8) | ((v & 0xFF00 >> 8));
+#else
+    return v;
+#endif
 }
 
 KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const QByteArray& to)
 {
     dbgFile << from << " " << to;
-    if (from != "image/x-raw" || to != "application/x-krita") {
+    if (/*from != "image/x-raw" || */to != "application/x-krita") { // too many from to check, and I don't think it can happen an unsupported from
         return KoFilter::NotImplemented;
     }
 
@@ -128,9 +133,15 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             while (!it.isDone()) {
                 KoRgbU16Traits::Pixel* pixel = reinterpret_cast<KoRgbU16Traits::Pixel*>(it.rawData());
                 quint16* ptr = ((quint16*)imageData.data()) + (y * width + it.x()) * 3;
+#if KDCRAW_VERSION < 0x000400
+                pixel->red = correctIndian(ptr[2]);
+                pixel->green = correctIndian(ptr[1]);
+                pixel->blue = correctIndian(ptr[0]);
+#else
                 pixel->red = correctIndian(ptr[0]);
                 pixel->green = correctIndian(ptr[1]);
                 pixel->blue = correctIndian(ptr[2]);
+#endif
                 cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                 ++it;
             }
@@ -159,7 +170,11 @@ void KisRawImport::slotUpdatePreview()
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             quint16* ptr = ((quint16*)imageData.data()) + (y * width + x) * 3;
+#if KDCRAW_VERSION < 0x000400
             image.setPixel(x, y, qRgb(ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF));
+#else
+            image.setPixel(x, y, qRgb(ptr[0] / 0xFF, ptr[1] / 0xFF, ptr[2] / 0xFF));
+#endif
         }
     }
     m_rawWidget.preview->setPixmap(QPixmap::fromImage(image));

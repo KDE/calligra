@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006, 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -695,8 +695,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
-                            Q_ASSERT(layout->inlineObjectTextManager());
-                            layout->inlineObjectTextManager()->insertInlineObject(formatCursor, note);
+                            Q_ASSERT(layout->inlineTextObjectManager());
+                            layout->inlineTextObjectManager()->insertInlineObject(formatCursor, note);
                             NotesData notesData;
                             notesData.note = note;
                             notesData.frameSetName = footnote.attribute("frameset");
@@ -715,8 +715,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
                             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(
                                     fs->document()->documentLayout());
                             Q_ASSERT(layout);
-                            Q_ASSERT(layout->inlineObjectTextManager());
-                            layout->inlineObjectTextManager()->insertInlineObject(formatCursor, note);
+                            Q_ASSERT(layout->inlineTextObjectManager());
+                            layout->inlineTextObjectManager()->insertInlineObject(formatCursor, note);
                             NotesData notesData;
                             notesData.note = note;
                             notesData.frameSetName = footEndNote.attribute("frameset");
@@ -1190,8 +1190,8 @@ void KWDLoader::insertAnchors()
         cursor.setPosition(anchor.cursorPosition + 1, QTextCursor::KeepAnchor);
         KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
         Q_ASSERT(layout);
-        Q_ASSERT(layout->inlineObjectTextManager());
-        layout->inlineObjectTextManager()->insertInlineObject(cursor, textAnchor);
+        Q_ASSERT(layout->inlineTextObjectManager());
+        layout->inlineTextObjectManager()->insertInlineObject(cursor, textAnchor);
     }
     m_anchors.clear();
 }
@@ -1207,7 +1207,7 @@ void KWDLoader::insertNotes()
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         if (tfs && tfs->document()) {
             note.note->setText(tfs->document()->toPlainText());
-kDebug() << "setting the text to" << note.note->text();
+//kDebug(32001) << "setting the text to" << note.note->text();
         }
         m_document->removeFrameSet(fs);
         delete fs; // we don't want to keep it around.

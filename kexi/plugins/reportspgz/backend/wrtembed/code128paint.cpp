@@ -160,7 +160,7 @@ static const struct code128 _128codes[] = {
     { 0x1F,   0x7F,    95,    { 1, 1, 4, 1, 1, 3 }, false }, // US    DEL
     { FNC3,   FNC3,    96,    { 1, 1, 4, 3, 1, 1 }, false }, // FNC3  FNC3
     { FNC2,   FNC2,    97,    { 4, 1, 1, 1, 1, 3 }, false }, // FNC2  FNC2
-    { Qt::SHIFT,  Qt::SHIFT,   98,    { 4, 1, 1, 3, 1, 1 }, false }, // SHIFT SHIFT
+    { SHIFT,  SHIFT,   98,    { 4, 1, 1, 3, 1, 1 }, false }, // SHIFT SHIFT
     { CODEC,  CODEC,   99,    { 1, 1, 3, 1, 4, 1 }, false }, // CODEC CODEC
     { CODEB,  FNC4,   CODEB,  { 1, 1, 4, 1, 3, 1 }, false }, // CODEB FNC4  CODEB
     { FNC4,   CODEA,  CODEA,  { 3, 1, 1, 1, 4, 1 }, false }, // FNC4  CODEA CODEA

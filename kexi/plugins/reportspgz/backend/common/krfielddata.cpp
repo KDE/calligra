@@ -137,9 +137,9 @@ void KRFieldData::createProperties()
     _lnStyle = new KoProperty::Property("LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle);
 
     //TODO I do not think we need these
-    _trackTotal = new KoProperty::Property("TrackTotal", false, "Track Total", "Track Total");
-    _trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", false, "Track Builtin Format", "Track Builtin Format");
-    _useSubTotal = new KoProperty::Property("UseSubTotal", false, "Use Sub Total", "Use Sub Total");
+    _trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), "Track Total", "Track Total");
+    _trackBuiltinFormat = new KoProperty::Property("TrackBuiltinFormat", QVariant(false), "Track Builtin Format", "Track Builtin Format");
+    _useSubTotal = new KoProperty::Property("UseSubTotal", QVariant(false), "Use Sub Total", "Use Sub Total");
     _trackTotalFormat = new KoProperty::Property("TrackTotalFormat", QString(), "Track Total Format", "Track Total Format");
 
     _set->addProperty(_name);
@@ -209,6 +209,8 @@ void KRFieldData::setColumn(const QString& t)
     if (_controlSource->value() != t) {
         _controlSource->setValue(t);
     }
+    
+    kDebug() << "Field: " << entityName() << "is" << controlSource();
 }
 
 void KRFieldData::setTrackTotal(bool yes)

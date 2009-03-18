@@ -148,6 +148,7 @@ public:
 
 Axis::Private::Private()
 {
+    position = LeftAxisPosition;
     centerDataPoints = false;
 
     useAutomaticMajorInterval = true;

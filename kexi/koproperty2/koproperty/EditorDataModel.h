@@ -24,13 +24,12 @@
 #include <QModelIndex>
 #include <QVariant>
 
-#include "koproperty_export.h"
+#include "Set.h"
 
 namespace KoProperty
 {
 
 class Property;
-class Set;
 
 /*! @short A data model for using Set objects within the Qt's model/view API.
  @see EditorView
@@ -84,6 +83,12 @@ public:
     //! @return model index for property named @a propertyName
     //! or invalid index if such property could not be found.
     QModelIndex indexForPropertyName(const QByteArray& propertyName) const;
+
+    //! Sets order for properties. Restarts the iterator.
+    void setOrder(Set::Order order);
+
+    //! @return order for properties.
+    Set::Order order() const;
 private:
 //    void setupModelData(const QStringList &lines, TreeItem *parent);
     void collectIndices() const;

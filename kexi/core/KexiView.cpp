@@ -99,6 +99,7 @@ public:
             , viewMode(Kexi::NoViewMode) //unknown!
             , isDirty(false)
             , slotSwitchToViewModeInternalEnabled(true)
+            , sortedProperties(false)
             , recentResultOfSwitchToViewModeInternal(true) {
     }
 
@@ -160,9 +161,13 @@ public:
     QList<QAction*> viewActions;
     QHash<QByteArray, QAction*> viewActionsHash;
 
-bool isDirty : 1;
+    bool isDirty : 1;
+    
     //! Used in slotSwitchToViewModeInternal() to disabling it
-bool slotSwitchToViewModeInternalEnabled : 1;
+    bool slotSwitchToViewModeInternalEnabled : 1;
+    
+    bool sortedProperties : 1;
+
     //! Used in slotSwitchToViewModeInternal() to disabling d->window->switchToViewModeInternal(mode) call.
     //! Needed because there is another slotSwitchToViewModeInternal() calls if d->window->switchToViewModeInternal(mode)
     //! did not succeed, so for the second time we block this call.
@@ -316,8 +321,10 @@ KoProperty::Set *KexiView::propertySet()
 
 void KexiView::propertySetSwitched()
 {
-    if (window())
-        KexiMainWindowIface::global()->propertySetSwitched(window(), false);
+    if (window()) {
+        KexiMainWindowIface::global()->propertySetSwitched(window(), false/*force*/, 
+            true/*preservePrevSelection*/, d->sortedProperties);
+    }
 }
 
 void KexiView::propertySetReloaded(bool preservePrevSelection,
@@ -325,7 +332,7 @@ void KexiView::propertySetReloaded(bool preservePrevSelection,
 {
     if (window())
         KexiMainWindowIface::global()->propertySetSwitched(
-            window(), true, preservePrevSelection, propertyToSelect);
+            window(), true, preservePrevSelection, d->sortedProperties, propertyToSelect);
 }
 
 void KexiView::setDirty(bool set)
@@ -661,6 +668,11 @@ void KexiView::initViewActions()
             d->topBarLyr->addWidget(btn);
         }
     }
+}
+
+void KexiView::setSortedProperties(bool set)
+{
+    d->sortedProperties = set;
 }
 
 #include "KexiView.moc"

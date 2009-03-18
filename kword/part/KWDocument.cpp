@@ -130,7 +130,6 @@ KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMo
         m_magicCurtain(0)
 {
     m_frameLayout.setDocument(this);
-    m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
 
     connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
             inlineTextObjectManager(), SLOT(documentInformationUpdated(const QString &, const QString &)));
@@ -159,8 +158,6 @@ KWDocument::~KWDocument()
     saveConfig();
     qDeleteAll(m_frameSets);
     qDeleteAll(m_dataCenterMap);
-    delete m_inlineTextObjectManager;
-    m_inlineTextObjectManager = 0;
 }
 
 void KWDocument::addShape(KoShape *shape)
@@ -267,7 +264,7 @@ void KWDocument::removePage(int pageNumber)
 
 void KWDocument::firePageSetupChanged()
 {
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
     emit pageSetupChanged();
 }
 
@@ -399,6 +396,10 @@ KWTextFrameSet *KWDocument::mainFrameSet() const
     return m_frameLayout.mainFrameSet();
 }
 
+KoInlineTextObjectManager *KWDocument::inlineTextObjectManager() const
+{
+    return dynamic_cast<KoInlineTextObjectManager*>(dataCenterMap()["InlineTextObjectManager"]);
+}
 
 QString KWDocument::uniqueFrameSetName(const QString& suggestion)
 {
@@ -509,7 +510,7 @@ void KWDocument::clear()
     padding.right = MM_TO_POINT(3);
     m_pageManager.setPadding(padding);
 
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+    inlineTextObjectManager()->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
 bool KWDocument::loadOdf(KoOdfReadStore & odfStore)

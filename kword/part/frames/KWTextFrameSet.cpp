@@ -45,14 +45,14 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         m_pageManager(0),
         m_kwordDocument(doc)
 {
-    KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
+    m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     if (m_kwordDocument) {
-        layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+        KoTextDocument doc(m_document);
+        doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
         Q_ASSERT(styleManager);
-        KoTextDocument(m_document).setStyleManager(styleManager);
+        doc.setStyleManager(styleManager);
     }
-    m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
 }
 
@@ -65,14 +65,14 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         m_pageManager(0),
         m_kwordDocument(doc)
 {
-    KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
+    m_document->setDocumentLayout(new KWTextDocumentLayout(this));
     if (m_kwordDocument) {
-        layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+        KoTextDocument doc(m_document);
+        doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
         Q_ASSERT(styleManager);
-        KoTextDocument(m_document).setStyleManager(styleManager);
+        doc.setStyleManager(styleManager);
     }
-    m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
     switch (m_textFrameSetType) {
     case KWord::OddPagesHeaderTextFrameSet:
@@ -111,14 +111,14 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
     if (frameCount() == 1 && m_document->isEmpty()) { // just added first frame...
         delete m_document;
         m_document = data->document();
-        KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
+        m_document->setDocumentLayout(new KWTextDocumentLayout(this));
         if (m_kwordDocument) {
-            layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+            KoTextDocument doc(m_document);
             KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
             Q_ASSERT(styleManager);
-            KoTextDocument(m_document).setStyleManager(styleManager);
+            doc.setStyleManager(styleManager);
+            doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
         }
-        m_document->setDocumentLayout(layout);
         data->setDocument(m_document, false);
     } else {
         data->setDocument(m_document, false);
@@ -301,7 +301,7 @@ void KWTextFrameSet::printDebug(KWFrame *frame)
 
 void KWTextFrameSet::printDebug()
 {
-    static const char * type[] = { "OddPagesHeader", "EvenPagesHeader", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
+    static const char * type[] = { "OddPagesHeader", "EvenPagesHeader", "OddPagesFooter", "EvenPagesFooter", "Main", "Other", "ERROR" };
     kDebug(32001) << " | Is a KWTextFrameSet";
     kDebug(32001) << " | FS Type:" << type[m_textFrameSetType];
     if (m_pageStyle.isValid())
