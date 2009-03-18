@@ -139,6 +139,7 @@ bool BasicElement::readMathMLAttributes( const KoXmlElement& element )
         m_attributes.insert( attributeName.toLower(),
                              element.attribute( attributeName ).toLower() );
     }
+    return true;
 }
 
 bool BasicElement::readMathMLContent( const KoXmlElement& parent )
