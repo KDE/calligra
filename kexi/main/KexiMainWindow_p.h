@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2007 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2003-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -757,49 +757,19 @@ public:
         }
       }*/
 
-    void updatePropEditorVisibility(Kexi::ViewMode viewMode) {
-        /// @note Q_UNUSED(viewMode)
-        Q_UNUSED(viewMode);
-        if (propEditorDockWidget) {
-            KexiWindow *currentWindow = wnd->currentWindow();
-            bool visible = currentWindow && viewMode == Kexi::DesignViewMode;
-            if (    currentWindow
-                 && !currentWindow->propertySet()
-                 && !currentWindow->part()->info()->isPropertyEditorAlwaysVisibleInDesignMode() )
-            {
-                visible = false;
-            }
-            kDebug() << "visible == " << visible;
-            propEditorDockWidget->setVisible(visible);
+    //! Updates Property Editor Pane's visibility for the current window and the @a viewMode view mode.
+    /*! @a info can be provided to hadle cases when current window is not yet defined (in openObject()). */
+    void updatePropEditorVisibility(Kexi::ViewMode viewMode, KexiPart::Info *info = 0) {
+        if (!propEditorDockWidget)
+            return;
+        KexiWindow *currentWindow = wnd->currentWindow();
+        if (!info && currentWindow) {
+            info = currentWindow->part()->info();
         }
-
-#ifdef __GNUC__
-#warning TODO updatePropEditorVisibility
-#else
-#pragma WARNING( TODO updatePropEditorVisibility )
-#endif
-#if 0 //TODO reenable
-        if (propEditorToolWindow) {
-            if (viewMode == 0 || viewMode == Kexi::DataViewMode) {
-#ifdef PROPEDITOR_VISIBILITY_CHANGES
-                wnd->makeDockInvisible(wnd->manager()->findWidgetParentDock(propEditor));
-//    propEditorToolWindow->hide();
-#endif
-            } else {
-                //propEditorToolWindow->show();
-                QWidget *origFocusWidget = qApp->focusWidget();
-                wnd->makeWidgetDockVisible(propEditorTabWidget);
-                if (origFocusWidget)
-                    origFocusWidget->setFocus();
-                /*moved
-                #if defined(KDOCKWIDGET_P)
-                        KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
-                        KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-                        ds->setSeparatorPosInPercent(config->readEntry("RightDockPosition", 80));//%
-                #endif*/
-            }
-        }
-#endif
+        const bool visible = (viewMode == Kexi::DesignViewMode)
+            && ((currentWindow && currentWindow->propertySet()) || info->isPropertyEditorAlwaysVisibleInDesignMode());
+        kDebug() << "visible == " << visible;
+        propEditorDockWidget->setVisible(visible);
     }
 
 //2.0: unused

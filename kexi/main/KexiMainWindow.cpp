@@ -2743,7 +2743,7 @@ void KexiMainWindow::activeWindowChanged(KexiWindow *window, KexiWindow *prevWin
 //   d->propBuffer = currentWindow()->propertyBuffer();
 //   d->propEditor->editor()->setBuffer( d->propBuffer );
 //  }
-        if (currentWindow() && currentWindow()->currentViewMode() != 0) //on opening new dialog it can be 0; we don't want this
+        if (currentWindow() && currentWindow()->currentViewMode() != 0 && window) //on opening new dialog it can be 0; we don't want this
             d->updatePropEditorVisibility(currentWindow()->currentViewMode());
     }
 
@@ -4027,8 +4027,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
         needsUpdateViewGUIClient = false;
         alreadyOpened = true;
     } else {
-        d->updatePropEditorVisibility(viewMode);
         KexiPart::Part *part = Kexi::partManager().partForClass(item->partClass());
+        d->updatePropEditorVisibility(viewMode, part ? part->info() : 0);
         //update tabs before opening
         updateCustomPropertyPanelTabs(currentWindow() ? currentWindow()->part() : 0,
                                       currentWindow() ? currentWindow()->currentViewMode() : Kexi::NoViewMode,
