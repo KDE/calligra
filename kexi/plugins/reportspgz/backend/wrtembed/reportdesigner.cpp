@@ -269,14 +269,13 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
             } else if (n == "landscape") {
                 propertySet()->property("Orientation").setValue("Landscape");
             } else if (n == "topmargin") {
-
-                propertySet()->property("TopMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+                propertySet()->property("TopMargin").setValue(it.firstChild().nodeValue().toDouble());
             } else if (n == "bottommargin") {
-                propertySet()->property("BottomMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+                propertySet()->property("BottomMargin").setValue(it.firstChild().nodeValue().toDouble());
             } else if (n == "leftmargin") {
-                propertySet()->property("LeftMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+                propertySet()->property("LeftMargin").setValue(it.firstChild().nodeValue().toDouble());
             } else if (n == "rightmargin") {
-                propertySet()->property("RightMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+                propertySet()->property("RightMargin").setValue(it.firstChild().nodeValue().toDouble());
             } else if (n == "rpthead") {
                 if (getSection(KRSectionData::ReportHead) == 0) {
                     insertSection(KRSectionData::ReportHead);
@@ -645,16 +644,16 @@ QDomDocument ReportDesigner::document()
     // -- margins
     QDomElement margin;
     margin = doc.createElement("topmargin");
-    margin.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(_topMargin->value().toInt()))));
+    margin.appendChild(doc.createTextNode(QString::number(_topMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("bottommargin");
-    margin.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(_bottomMargin->value().toInt()))));
+    margin.appendChild(doc.createTextNode(QString::number(_bottomMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("rightmargin");
-    margin.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(_rightMargin->value().toInt()))));
+    margin.appendChild(doc.createTextNode(QString::number(_rightMargin->value().toInt())));
     root.appendChild(margin);
     margin = doc.createElement("leftmargin");
-    margin.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(_leftMargin->value().toInt()))));
+    margin.appendChild(doc.createTextNode(QString::number(_leftMargin->value().toDouble())));
     root.appendChild(margin);
 
     QDomElement section;
@@ -915,10 +914,14 @@ void ReportDesigner::createProperties()
     _gridSnap = new KoProperty::Property("GridSnap", true, "Grid Snap", "Grid Snap");
     _gridDivisions = new KoProperty::Property("GridDivisions", 4, "Grid Divisions", "Grid Divisions");
 
-    _leftMargin = new KoProperty::Property("LeftMargin", 1.0, "Left Margin", "Left Margin");
-    _rightMargin = new KoProperty::Property("RightMargin", 1.0, "Right Margin", "Right Margin");
-    _topMargin = new KoProperty::Property("TopMargin", 1.0, "Top Margin", "Top Margin");
-    _bottomMargin = new KoProperty::Property("BottomMargin", 1.0, "Bottom Margin", "Bottom Margin");
+    _leftMargin = new KoProperty::Property("LeftMargin", KoUnit::unit("cm").fromUserValue(1.0), "Left Margin", "Left Margin", KoProperty::Double);
+    _rightMargin = new KoProperty::Property("RightMargin", KoUnit::unit("cm").fromUserValue(1.0), "Right Margin", "Right Margin", KoProperty::Double);
+    _topMargin = new KoProperty::Property("TopMargin", KoUnit::unit("cm").fromUserValue(1.0), "Top Margin", "Top Margin", KoProperty::Double);
+    _bottomMargin = new KoProperty::Property("BottomMargin", KoUnit::unit("cm").fromUserValue(1.0), "Bottom Margin", "Bottom Margin", KoProperty::Double);
+    _leftMargin->setOption("unit", "cm");
+    _rightMargin->setOption("unit", "cm");
+    _topMargin->setOption("unit", "cm");
+    _bottomMargin->setOption("unit", "cm");
 
     keys = Kross::Manager::self().interpreters();
     _interpreter = new KoProperty::Property("Interpreter", keys, keys, keys[0], "Script Interpreter");
@@ -946,6 +949,9 @@ void ReportDesigner::createProperties()
 
 }
 
+/**
+@brief Handle property changes
+*/
 void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
     setModified(true);
@@ -953,10 +959,18 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
 
     if (p.name() == "PageUnit") {
         d->hruler->setUnit(pageUnit());
+        QString newstr = set->property("PageUnit").value().toString().mid(set->property("PageUnit").value().toString().indexOf("(") + 1, 2);
+        
+        set->property("LeftMargin").setOption("unit", newstr);
+        set->property("RightMargin").setOption("unit", newstr);
+        set->property("TopMargin").setOption("unit", newstr);
+        set->property("BottomMargin").setOption("unit", newstr);
     }
-
 }
 
+/**
+@brief When the 'page' button in the top left is pressed, change the property set to the reports properties.
+*/
 void ReportDesigner::slotPageButton_Pressed()
 {
     QStringList sl = scriptList();
@@ -965,6 +979,10 @@ void ReportDesigner::slotPageButton_Pressed()
     changeSet(set);
 }
 
+/**
+@brief Return a list of supported page formats
+@return A QStringList of page formats
+*/
 QStringList ReportDesigner::pageFormats()
 {
     QStringList lst;
@@ -1013,6 +1031,10 @@ QSize ReportDesigner::sizeHint() const
     return QSize(w, h);
 }
 
+/**
+@brief Calculate the width of the page in pixels given the paper size, orientation, dpi and margin
+@return integer value of width in pixels
+*/
 int ReportDesigner::pageWidthPx() const
 {
     int cw = 0;
@@ -1023,12 +1045,12 @@ int ReportDesigner::pageWidthPx() const
 
     cw = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::width(pf, KoPageFormat::Portrait))) * KoGlobal::dpiX();
 
-    ch = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::height(pf, KoPageFormat::Portrait))) * KoGlobal::dpiX();
+    ch = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::height(pf, KoPageFormat::Portrait))) * KoGlobal::dpiY();
 
     width = (set->property("Orientation").value().toString() == "Portrait" ? cw : ch);
 
-    width = width - POINT_TO_INCH(pageUnit().fromUserValue(set->property("LeftMargin").value().toDouble())) * KoGlobal::dpiX();
-    width = width - POINT_TO_INCH(pageUnit().fromUserValue(set->property("RightMargin").value().toDouble())) * KoGlobal::dpiX();
+    width = width - POINT_TO_INCH(set->property("LeftMargin").value().toDouble()) * KoGlobal::dpiX();
+    width = width - POINT_TO_INCH(set->property("RightMargin").value().toDouble()) * KoGlobal::dpiX();
 
     return width;
 }

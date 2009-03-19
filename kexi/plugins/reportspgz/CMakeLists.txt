@@ -5,6 +5,7 @@ include_directories( ${KOMAIN_INCLUDES}
 ${KOGUIUTILS_INCLUDES} 
 ${KOODF_INCLUDES} 
 ${CMAKE_SOURCE_DIR}/kexi
+${CMAKE_SOURCE_DIR}/kexi/koproperty2/
 ${CMAKE_SOURCE_DIR}/kexi/core
 ${CMAKE_SOURCE_DIR}/kexi/widget
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/common 
