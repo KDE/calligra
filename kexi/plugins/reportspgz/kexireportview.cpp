@@ -75,7 +75,7 @@ KexiReportView::KexiReportView(QWidget *parent)
     a->setToolTip(i18n("Open the report in KWord"));
     a->setWhatsThis(i18n("Opens the current report in KWord."));
     a->setEnabled(false);
-    connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKWord()));
+//! @todo connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKWord()));
 
 #ifdef HAVE_KSPREAD
     viewActions << (a = new KAction(KIcon("kspread"), i18n("Open in KSpread"), this));
