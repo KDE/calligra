@@ -101,17 +101,19 @@ public:
         return QDoubleSpinBox::lineEdit();
     }*/
 
-    virtual double value() const { return KDoubleNumInput::value(); }
+    virtual double value() const;
 
 signals:
     void commitData( QWidget * editor );
 
 public slots:
-    virtual void setValue(double value) { KDoubleNumInput::setValue(value); }
+    virtual void setValue(double value);
 
 protected:
     //! Used to fix height of the internal spin box
     virtual void resizeEvent( QResizeEvent * event );
+private:
+        const Property *_p;
 };
 
 /*

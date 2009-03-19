@@ -35,6 +35,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QLineEdit>
+#include <KoUnit.h>
 
 using namespace KoProperty;
 
@@ -235,6 +236,7 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent)
         : KDoubleNumInput(parent)
 {
+    _p = prop;
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     QLineEdit* le = 0;
     if (sb)
@@ -293,6 +295,25 @@ void DoubleSpinBox::resizeEvent( QResizeEvent * event )
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     sb->setFixedHeight(height()+1);
     KDoubleNumInput::resizeEvent(event);
+}
+
+void DoubleSpinBox::setValue(double v)
+{
+    if (_p->option("unit", "").toString().isEmpty()) {
+        KDoubleNumInput::setValue(v);
+    }else {
+        KDoubleNumInput::setValue(KoUnit::unit(_p->option("unit").toString()).toUserValue(v));
+    }
+}
+
+double DoubleSpinBox::value() const
+{
+    if (_p->option("unit", "").toString().isEmpty()) {
+        return KDoubleNumInput::value();
+    }
+    else {
+        return KoUnit::unit(_p->option("unit").toString()).fromUserValue(KDoubleNumInput::value());
+    }
 }
 
 /*
@@ -437,6 +458,8 @@ DoubleEdit::setReadOnlyInternal(bool readOnly)
 }
 */
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //-----------------------
 
 IntSpinBoxDelegate::IntSpinBoxDelegate()
@@ -483,12 +506,19 @@ QString DoubleSpinBoxDelegate::displayText( const Property* prop ) const
         if (!minValue.isNull() && !minValueText.isEmpty()
             && minValue.toDouble() == prop->value().toDouble())
         {
-            return minValueText;
+            return minValueText + " " + prop->option("unit").toString();
         }
     }
 //! @todo precision? 
 //! @todo rounding using KLocale::formatNumber(const QString &numStr, bool round = true,int precision = 2)?
-    return KGlobal::locale()->formatNumber(prop->value().toDouble());
+    QString display;
+    if (prop->option("unit", "").toString().isEmpty()) {
+        display = KGlobal::locale()->formatNumber(prop->value().toDouble());
+    }
+    else {
+        display = KGlobal::locale()->formatNumber(KoUnit::unit(prop->option("unit").toString()).toUserValue(prop->value().toDouble())) + " " + prop->option("unit").toString();
+    }
+    return display;
 }
 
 QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent, 
@@ -499,5 +529,5 @@ QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,
     Property *prop = editorModel->propertyForItem(index);
     return new DoubleSpinBox(prop, parent);
 }
-
+                                              
 #include "spinbox.moc"
