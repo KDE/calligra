@@ -209,7 +209,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     m_owner = true;                   //-this will be deleted if needed
 
     setResizePolicy(Manual);
-    viewport()->setBackgroundMode(Qt::NoBackground);
+//2.0    viewport()->setBackgroundMode(Qt::NoBackground);
 // viewport()->setFocusPolicy(StrongFocus);
     viewport()->setFocusPolicy(Qt::WheelFocus);
     setFocusPolicy(Qt::WheelFocus); //<--- !!!!! important (was NoFocus),
@@ -219,7 +219,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
     viewport()->installEventFilter(this);
 
     //setup colors defaults
-    setBackgroundMode(Qt::PaletteBackground);
+//2.0    setBackgroundMode(Qt::PaletteBackground);
 // setEmptyAreaColor(d->appearance.baseColor);//palette().active().color(QColorGroup::Base));
 
 // d->baseColor = colorGroup().base();

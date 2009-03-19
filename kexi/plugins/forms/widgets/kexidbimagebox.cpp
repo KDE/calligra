@@ -103,7 +103,7 @@ KexiDBImageBox::KexiDBImageBox(bool designMode, QWidget *parent)
 //  hlyr->addWidget(m_chooser);
     }
 
-    setBackgroundMode(Qt::NoBackground);
+//2.0    setBackgroundMode(Qt::NoBackground);
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Plain);
     setFrameColor(Qt::black);
