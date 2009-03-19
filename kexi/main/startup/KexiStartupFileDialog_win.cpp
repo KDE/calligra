@@ -153,7 +153,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
         // If local, check it exists. If not, go up until it exists.
         if ( d->url.isLocalFile() )
         {
-            if ( !QFile::exists( d->url.path() ) )
+            if ( !QFile::exists( d->url.toLocalFile() ) )
             {
                 d->url = d->url.upURL();
                 QDir dir( d->url.path() );

@@ -234,7 +234,7 @@ void Documents::saveToStore( KoStore *store ) const
         if ( doc->sendAs() == Document::SendAs_Copy ) {
             QString path = doc->url().url();
             if ( doc->url().isLocalFile() ) {
-                path = doc->url().path();
+                path = doc->url().toLocalFile();
             }
             kDebug()<<"Copy file to store: "<<path<<doc->url().fileName();
             store->addLocalFile( path, doc->url().fileName() );

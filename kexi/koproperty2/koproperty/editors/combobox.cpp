@@ -268,9 +268,9 @@ QString ComboBoxDelegate::displayText( const Property* property ) const
         return property->value().toString();
     if (property->value().isNull())
         return QString();
-    kDebug() << "property->value()==" << property->value();
+    //kDebug() << "property->value()==" << property->value();
     const int idx = listData->keys.indexOf( property->value() );
-    kDebug() << "idx==" << idx;
+    //kDebug() << "idx==" << idx;
     if (idx == -1)
         return QString();
     return property->listData()->names[ idx ];

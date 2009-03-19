@@ -236,7 +236,7 @@ void KexiBlobTableEdit::handleInsertFromFileAction(const KUrl& url)
     if (isReadOnly())
         return;
 
-    QString fileName(url.isLocalFile() ? url.path() : url.prettyUrl());
+    QString fileName(url.isLocalFile() ? url.toLocalFile() : url.prettyUrl());
 
     //! @todo download the file if remote, then set fileName properly
     QFile f(fileName);

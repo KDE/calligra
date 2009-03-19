@@ -189,8 +189,8 @@ bool KPlatoWork_Application::start()
                 // are we just trying to open a template?
                 if ( doTemplate ) {
                     QStringList paths;
-                    if ( args->url(i).isLocalFile() && QFile::exists(args->url(i).path()) ) {
-                        paths << QString(args->url(i).path());
+                    if ( args->url(i).isLocalFile() && QFile::exists(args->url(i).toLocalFile()) ) {
+                        paths << QString(args->url(i).toLocalFile());
                         kDebug() <<"using full path...";
                     } else {
                         QString desktopName(args->arg(i));

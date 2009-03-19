@@ -950,7 +950,7 @@ void PerformanceStatusViewSettingsPanel::setDefault()
     ui_bcwsCost->setCheckState( Qt::Checked );
     ui_bcwpCost->setCheckState( Qt::Checked );
     ui_acwpCost->setCheckState( Qt::Checked );
-    ui_cost->setChecked( Qt::Checked );
+    ui_cost->setChecked( true );
 
     ui_bcwsEffort->setCheckState( Qt::Checked );
     ui_bcwpEffort->setCheckState( Qt::Checked );
