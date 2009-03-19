@@ -30,6 +30,15 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-03-19
+Core
+= better sanity check: fix crash when more than one object
+  with Part ID == -1 is encountered in kexi__objects table
+= show error when no KexiWindowData is returned by the current plugin
+Reports
+= missing setInternalPropertyValue("instanceName",...) for reports
+- sanity check: avoid crash when details definition XML string is empty
+
 2009-03-18
 Main Window
 - properly hide the property editor pane when switching 
