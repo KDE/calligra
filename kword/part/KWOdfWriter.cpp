@@ -165,7 +165,12 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     KWTextFrameSet *mainTextFrame = 0;
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
-        // TODO loop over all non-autocreated frames and save them.
+        // For the purpose of saving to ODF we have 3 types of frames.
+        //  1) auto-generated frames.  This includes header/footers and the main text FS.
+        //  2) frames that are anchored to text.  They have a parent and their parent will save them.
+        //  3) frames that are not anchored but freely positioned somewhere on the page.
+        //     in ODF terms those frames are page-anchored.
+
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs) {
             if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
@@ -181,14 +186,16 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
             KoShape * shape = frame->shape();
             if (!shape->parent()) {
                 int pageNumber = m_document->pageManager()->pageNumber(shape);
-                qreal pagePos = m_document->pageManager()->topOfPage(pageNumber);
+                const qreal pagePos = m_document->pageManager()->topOfPage(pageNumber);
 
+                shape->setAdditionalAttribute("draw:z-index", QString::number(shape->zIndex()));
                 shape->setAdditionalAttribute("text:anchor-type", "page");
                 shape->setAdditionalAttribute("text:anchor-page-number", QString::number(pageNumber));
                 context.addShapeOffset(shape, QMatrix(1, 0, 0 , 1, 0, -pagePos ));
                 shape->saveOdf(context);
+                // TODO find some way to add our properties to the KoGenStyle for this shape...
                 context.removeShapeOffset(shape);
-                shape->removeAdditionalAttribute("text:anchot-page-number");
+                shape->removeAdditionalAttribute("text:anchor-page-number");
             }
         }
     }
