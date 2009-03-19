@@ -312,7 +312,7 @@ void SectionEditor::btnAdd_clicked()
 {
     if (_rsd) {
         // lets add a new section
-        QString name = "";
+        QString name;
         int i = 0;
         while (i < 100 && _rsd->findSection(name) != -1) {
             i++;

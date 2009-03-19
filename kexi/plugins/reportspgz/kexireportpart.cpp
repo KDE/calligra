@@ -87,14 +87,14 @@ QString KexiReportPart::loadReport(const QString& name)
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection()) {
         kDebug() << "failed sanity check";
-        return "";
+        return QString();
     }
     QString src, did;
     KexiDB::SchemaData sd;
     
     if (win->project()->dbConnection()->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true) {
         kWarning() << "failed to load schema data";
-        return "";
+        return QString();
     }
 
     kDebug() << "***Object ID:" << sd.id();
@@ -103,7 +103,7 @@ QString KexiReportPart::loadReport(const QString& name)
             return src;
     } else {
         kWarning() << "Unable to load document";
-        return "";
+        return QString();
     }
 }
 
@@ -124,7 +124,6 @@ KexiReportPart::TempData::TempData(QObject* parent)
         : KexiWindowData(parent)
         , reportSchemaChangedInPreviousView(true /*to force reloading on startup*/)
 {
-    document = "";
 }
 
 void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)
