@@ -515,7 +515,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, const DataOffset& 
                 Qt::AlignTop, m_fieldsExpanded[i]->captionOrAliasOrName()
                 + (m_settings->addTableBorders ? "" : ":"));
         }
-        text = QString::null;
+        text = QString();
 //! @todo optimize like in KexiCSVExport::exportData()
         //get real column and real index to get the visible value
         KexiDB::QueryColumnInfo* ci;

@@ -104,7 +104,7 @@ public:
         QList<Property*> m_sorted; //!< for sorted order
     };
 
-    explicit Set(QObject *parent = 0, const QString &typeName = QString::null);
+    explicit Set(QObject *parent = 0, const QString &typeName = QString());
 
     /*! Constructs a deep copy of \a set.
      The new object will not have a QObject parent even if \a set has such parent. */

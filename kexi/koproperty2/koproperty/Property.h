@@ -230,20 +230,20 @@ public:
      these with spaces. captionForDisplaying() is used to get original caption text usable
      (with newline, if any) for displaying within a property editor. */
     Property(const QByteArray &name, const QVariant &value = QVariant(),
-             const QString &caption = QString::null, const QString &description = QString::null,
+             const QString &caption = QString(), const QString &description = QString(),
              int type = Auto, Property* parent = 0);
 
     /*! Constructs property of \ref ValueFromList type. */
     Property(const QByteArray &name, const QStringList &keys, const QStringList &strings,
              const QVariant &value = QVariant(),
-             const QString &caption = QString::null, const QString &description = QString::null,
+             const QString &caption = QString(), const QString &description = QString(),
              int type = ValueFromList, Property* parent = 0);
 
     /*! Constructs property of \ref ValueFromList type.
      This is overload of the above ctor added for convenience. */
     Property(const QByteArray &name, ListData* listData,
              const QVariant &value = QVariant(),
-             const QString &caption = QString::null, const QString &description = QString::null,
+             const QString &caption = QString(), const QString &description = QString(),
              int type = ValueFromList, Property* parent = 0);
 
     /*! Constructs a deep copy of \a prop property. */

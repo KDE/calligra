@@ -432,7 +432,7 @@ int OracleConnection::serverResult()
 
 QString OracleConnection::serverResultName()
 {
-	return QString::null;
+	return QString();
 }
 
 void OracleConnection::drv_clearServerResult()

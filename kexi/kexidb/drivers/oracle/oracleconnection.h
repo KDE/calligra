@@ -35,7 +35,7 @@ class OracleConnection : public Connection
 		virtual ~OracleConnection();
 
 // TODO: Do we need this?
-		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
+		virtual Cursor* prepareQuery( const QString& statement = QString(), uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			FieldList& fields);
@@ -48,11 +48,11 @@ class OracleConnection : public Connection
 		virtual bool drv_disconnect();
 
 // TODO: Check these
-		virtual bool drv_createDatabase( const QString &dbName = QString::null );
-		virtual bool drv_useDatabase( const QString &dbName = QString::null, 
+		virtual bool drv_createDatabase( const QString &dbName = QString() );
+		virtual bool drv_useDatabase( const QString &dbName = QString(), 
             bool *cancelled = 0, MessageHandler* msgHandler = 0 );
 		virtual bool drv_closeDatabase();
-		virtual bool drv_dropDatabase( const QString &dbName = QString::null );
+		virtual bool drv_dropDatabase( const QString &dbName = QString() );
 // End check
 
 		virtual bool drv_executeSQL( const QString& statement );

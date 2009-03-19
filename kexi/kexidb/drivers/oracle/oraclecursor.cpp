@@ -301,7 +301,7 @@ int OracleCursor::serverResult()
 QString OracleCursor::serverResultName()
 {
   KexiDBDrvDbg;
-	return QString::null;
+	return QString();
 }
 
 void OracleCursor::drv_clearServerResult()

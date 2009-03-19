@@ -52,7 +52,7 @@ class OracleConnectionInternal : public KexiDB::ConnectionInternal
 		bool db_disconnect();
 
 		//! Selects a database that is about to be used
-		bool useDatabase(const QString &dbName = QString::null);
+		bool useDatabase(const QString &dbName = QString());
 		
 		//! Execute SQL statement on the database
 		bool executeSQL( const QString& statement );

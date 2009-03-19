@@ -44,7 +44,7 @@ public:
     // static function which stores error
     static void extractError(ODBCConnection* connection, SQLHANDLE handle, SQLSMALLINT type);
 
-    virtual Cursor* prepareQuery(const QString& statement = QString::null, uint cursor_options = 0);
+    virtual Cursor* prepareQuery(const QString& statement = QString(), uint cursor_options = 0);
     virtual QString escapeString(const QString& str) const;
     virtual QByteArray escapeString(const QByteArray& str) const;
     virtual Cursor* prepareQuery(QuerySchema& query, uint cursor_options);
