@@ -1117,7 +1117,9 @@ ORODocument* ORPreRender::generate()
         }
 
 
-        _internal->renderDetailSection(* (_internal->_reportData->detailsection));
+        if (_internal->_reportData->detailsection) {
+            _internal->renderDetailSection(* (_internal->_reportData->detailsection));
+        }
 
         if (_internal->_reportData->rptfoot != 0) {
             if (_internal->renderSectionSize(* (_internal->_reportData->rptfoot)) + _internal->finishCurPageSize(true) + _internal->_bottomMargin + _internal->_yOffset >= _internal->_maxHeight) {

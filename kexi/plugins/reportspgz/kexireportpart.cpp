@@ -93,7 +93,7 @@ QString KexiReportPart::loadReport(const QString& name)
     KexiDB::SchemaData sd;
     
     if (win->project()->dbConnection()->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true) {
-        kDebug() << "failed to load schema data";
+        kWarning() << "failed to load schema data";
         return "";
     }
 
@@ -102,7 +102,7 @@ QString KexiReportPart::loadReport(const QString& name)
     if (win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true) {
             return src;
     } else {
-        kDebug() << "Unable to load document";
+        kWarning() << "Unable to load document";
         return "";
     }
 }
@@ -110,8 +110,12 @@ QString KexiReportPart::loadReport(const QString& name)
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
     kDebug();
+    const QString document( loadReport(window->partItem()->name()) );
+    if (document.isEmpty())
+        return 0;
+
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
-    td->document = loadReport(window->partItem()->name());
+    td->document = document;
     td->name = window->partItem()->name();
     return td;
 }

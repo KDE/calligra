@@ -35,12 +35,14 @@ void KRReportData::init()
 }
 
 KRReportData::KRReportData()
+ : detailsection(0)
 {
     init();
     _valid = true;
 }
 
 KRReportData::KRReportData(const QDomElement & elemSource)
+ : detailsection(0)
 {
     _valid = false;
     init();
