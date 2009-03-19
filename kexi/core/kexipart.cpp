@@ -283,7 +283,14 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
         window->mdiParent()->setIcon(*window->icon());
 #endif
 // window->setWindowIcon( *window->icon() );
-    window->setData(createWindowData(window));
+    KexiWindowData *windowData = createWindowData(window);
+    if (!windowData) {
+        d->status = Kexi::ObjectStatus(KexiMainWindowIface::global()->project()->dbConnection(),
+                                       i18n("Could not create object's window."), i18n("The plugin or object definition may be corrupted."));
+        delete window;
+        return 0;
+    }
+    window->setData(windowData);
 
     if (!item.neverSaved()) {
         //we have to load schema data for this dialog
