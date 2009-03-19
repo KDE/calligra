@@ -25,7 +25,7 @@
 #include <KoGlobal.h>
 
 ReportPageOptions::ReportPageOptions()
-        : QObject(), _pagesize("Letter"), _labelType(QString::null)
+        : QObject(), _pagesize("Letter")
 {
     _marginTop = _marginBottom = 1.0;
     _marginLeft = _marginRight = 1.0;

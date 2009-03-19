@@ -58,8 +58,6 @@ class ORDataData
 {
 public:
     ORDataData() {
-        query = QString::null;
-        column = QString::null;
     }
     ORDataData(const QString & q, const QString & c) {
         query = q;

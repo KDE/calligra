@@ -586,7 +586,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             tb->setTextStyle(f->textStyle());
             tb->setLineStyle(f->lineStyle());
 
-            QString str = QString::null;
+            QString str;
 
             QString cs = f->_controlSource->value().toString();
             if (cs.left(1) == "=") { //Everything after = is treated as code
@@ -841,7 +841,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             chk->setForegroundColor(cd->_fgColor->value().value<QColor>());
             chk->setCheckType(cd->_checkStyle->value().toString());
 
-            QString str = QString::null;
+            QString str;
 
             QString cs = cd->controlSource();
             kDebug() << "EntityCheck CS:" << cs;

@@ -175,10 +175,10 @@ const _ext3of9map ext3of9map[] = {
 
 QString convertTo3of9P(QChar c)
 {
-    for (int i = 0; ext3of9map[i].conversion != QString::null; i++)
+    for (int i = 0; !ext3of9map[i].conversion.isEmpty(); i++)
         if (ext3of9map[i].code == c.toAscii())
             return ext3of9map[i].conversion;
-    return QString::null;
+    return QString();
 }
 
 

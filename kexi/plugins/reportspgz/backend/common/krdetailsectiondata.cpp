@@ -27,7 +27,6 @@
 
 KRDetailSectionData::KRDetailSectionData()
 {
-    name = QString::null;
     pagebreak = BreakNone;
     detail = 0;
 }

@@ -27,8 +27,6 @@
 
 void KRReportData::init()
 {
-    title = QString::null;
-
     pghead_first = pghead_odd = pghead_even = pghead_last = pghead_any = NULL;
     pgfoot_first = pgfoot_odd = pgfoot_even = pgfoot_last = pgfoot_any = NULL;
     rpthead = rptfoot = NULL;
@@ -143,7 +141,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                     pghead_even = sd;
                 else if (sd->extra() == "lastpage")
                     pghead_last = sd;
-                else if (sd->extra() == QString::null)
+                else if (sd->extra().isEmpty())
                     pghead_any = sd;
                 else {
                     //TODO qDebug("don't know which page this page header is for: %s",(const char*)sd->extra);
@@ -163,7 +161,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                     pgfoot_even = sd;
                 else if (sd->extra() == "lastpage")
                     pgfoot_last = sd;
-                else if (sd->extra() == QString::null)
+                else if (sd->extra().isEmpty())
                     pgfoot_any = sd;
                 else {
                     //TODO qDebug("don't know which page this page footer is for: %s",(const char*)sd->extra);
