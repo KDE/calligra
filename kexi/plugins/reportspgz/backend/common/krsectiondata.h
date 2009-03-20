@@ -70,11 +70,11 @@ public:
     KRSectionData(const QDomElement &);
     ~KRSectionData();
     KoProperty::Set* properties() {
-        return _set;
+        return m_set;
     }
 
     bool isValid() const {
-        return _valid;
+        return m_valid;
     }
 
     /**
@@ -83,50 +83,50 @@ public:
     or multiple group heads
     */
     void setExtra(const QString &e) {
-        _extra = e;
+        m_extra = e;
     }
 
     QString extra() const {
-        return _extra;
+        return m_extra;
     }
     qreal height() const {
-        return _height->value().toDouble();
+        return m_height->value().toDouble();
     }
     QList<KRObjectData*> objects() const {
-        return _objects;
+        return m_objects;
     };
     QString name() const;
     QColor bgColor() const {
-        return _bgColor->value().value<QColor>();
+        return m_backgroundColor->value().value<QColor>();
     }
     Section type() const {
-        return _type;
+        return m_type;
     }
 
 protected:
-    KoProperty::Set *_set;
-    KoProperty::Property *_height;
-    KoProperty::Property *_bgColor;
+    KoProperty::Set *m_set;
+    KoProperty::Property *m_height;
+    KoProperty::Property *m_backgroundColor;
 
 public slots:
     KoProperty::Set& propertySet() {
-        return *_set;
+        return *m_set;
     }
 
 private:
     void createProperties();
 
-    QList<KRObjectData*> _objects;
+    QList<KRObjectData*> m_objects;
     //QList<ORDataData> trackTotal;
 
-    QString _name;
-    QString _extra;
-    Section _type;
+    QString m_name;
+    QString m_extra;
+    Section m_type;
 
     static bool zLessThan(KRObjectData* s1, KRObjectData* s2);
     static bool xLessThan(KRObjectData* s1, KRObjectData* s2);
 
-    bool _valid;
+    bool m_valid;
 
     friend class Scripting::Section;
     friend class ReportSection;

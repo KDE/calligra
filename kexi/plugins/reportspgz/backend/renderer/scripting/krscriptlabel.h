@@ -74,7 +74,7 @@ public slots:
     void setSize(const QSizeF&);
 
 private:
-    KRLabelData *_label;
+    KRLabelData *m_label;
 };
 }
 

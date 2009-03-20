@@ -38,12 +38,12 @@ public:
     void setWhere(const QString&);
     void setSource(const QString&);
 private:
-    KexiDB::Connection *_conn;
-    const KexiDB::Cursor *_curs;
-    QString _source;
+    KexiDB::Connection *m_connection;
+    const KexiDB::Cursor *m_cursor;
+    QString m_source;
     qreal math(const QString &, const QString &);
 
-    QString _where;
+    QString m_where;
 public slots:
     qreal sum(const QString &);
     qreal avg(const QString &);

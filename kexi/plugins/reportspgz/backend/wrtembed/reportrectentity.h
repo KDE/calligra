@@ -42,10 +42,11 @@ public:
 
     virtual ~ReportRectEntity();
     void setUnit(KoUnit u);
+    
 protected:
     void init(KRPos*, KRSize*, KoProperty::Set*);
-    int dpiX;
-    int dpiY;
+    int m_dpiX;
+    int m_dpiY;
 
     void setSceneRect(QPointF, QSizeF);
     void setSceneRect(QRectF);
@@ -61,11 +62,11 @@ protected:
 
 private:
     int grabHandle(QPointF);
-    int _grabAction;
+    int m_grabAction;
 
-    KRPos* ppos;
-    KRSize* psize;
-    KoProperty::Set* pset;
+    KRPos* m_ppos;
+    KRSize* m_psize;
+    KoProperty::Set* m_pset;
 
 };
 

@@ -55,32 +55,32 @@ public:
     virtual ~ORODocument();
 
     QString title() const {
-        return _title;
+        return m_title;
     };
     void setTitle(const QString &);
 
     int pages() const {
-        return _pages.count();
+        return m_pages.count();
     };
     OROPage* page(int);
     void addPage(OROPage*);
 
     int sections() const {
-        return _sections.count();
+        return m_sections.count();
     };
     OROSection* section(int);
     void addSection(OROSection*);
 
     void setPageOptions(const ReportPageOptions &);
     ReportPageOptions pageOptions() const {
-        return _pageOptions;
+        return m_pageOptions;
     };
 
 protected:
-    QString _title;
-    QList<OROPage*> _pages;
-    QList<OROSection*> _sections;
-    ReportPageOptions _pageOptions;
+    QString m_title;
+    QList<OROPage*> m_pages;
+    QList<OROSection*> m_sections;
+    ReportPageOptions m_pageOptions;
 };
 
 //
@@ -99,19 +99,19 @@ public:
     virtual ~OROPage();
 
     ORODocument* document() const {
-        return _document;
+        return m_document;
     };
     int page() const; // returns this pages current page number
 
     int primitives() const {
-        return _primitives.count();
+        return m_primitives.count();
     };
     OROPrimitive* primitive(int);
     void addPrimitive(OROPrimitive*, bool = false);
 
 protected:
-    ORODocument * _document;
-    QList<OROPrimitive*> _primitives;
+    ORODocument * m_document;
+    QList<OROPrimitive*> m_primitives;
 };
 //
 // OROSection
@@ -140,34 +140,33 @@ public:
     QColor backgroundColor();
 
     ORODocument* document() const {
-        return _document;
+        return m_document;
     };
     long row() const; // returns this pages current page number
 
     void setType(KRSectionData::Section t) {
-        _type = t;
+        m_type = t;
     }
     KRSectionData::Section type() {
-        return _type;
+        return m_type;
     }
 
     int primitives() const {
-        return _primitives.count();
+        return m_primitives.count();
     };
     OROPrimitive* primitive(int);
     void addPrimitive(OROPrimitive*);
 
     void sortPrimatives(Sort);
 protected:
-    ORODocument * _document;
-    QList<OROPrimitive*> _primitives;
-    long _row;
-    int _height;
-    KRSectionData::Section _type;
-    QColor _backgroundColor;
+    ORODocument * m_document;
+    QList<OROPrimitive*> m_primitives;
+    long m_row;
+    int m_height;
+    KRSectionData::Section m_type;
+    QColor m_backgroundColor;
 
 private:
-
     static bool xLessThan(OROPrimitive* s1, OROPrimitive* s2);
 };
 
@@ -188,23 +187,23 @@ public:
     // Returns the type of the primitive which should be
     // set by the subclass
     int type() const {
-        return _type;
+        return m_type;
     };
     OROPage * page() const {
-        return _page;
+        return m_page;
     };
 
     QPointF position() const {
-        return _position;
+        return m_position;
     };
     void setPosition(const QPointF &);
     virtual OROPrimitive* clone() = 0;
 protected:
     OROPrimitive(int);
 
-    OROPage * _page;
-    int _type;
-    QPointF _position;
+    OROPage * m_page;
+    int m_type;
+    QPointF m_position;
 };
 
 //
@@ -220,29 +219,29 @@ public:
     virtual ~OROTextBox();
 
     QSizeF size() const {
-        return _size;
+        return m_size;
     };
     void setSize(const QSizeF &);
 
     QString text() const {
-        return _text;
+        return m_text;
     };
     void setText(const QString &);
 
     ORTextStyleData textStyle() const {
-        return _textStyle;
+        return m_textStyle;
     }
     void setTextStyle(const ORTextStyleData&);
 
     ORLineStyleData lineStyle() const {
-        return _lineStyle;
+        return m_lineStyle;
     }
     void setLineStyle(const ORLineStyleData&);
 
     void setFont(const QFont &);
 
     int flags() const {
-        return _flags;
+        return m_flags;
     };
     void setFlags(int);
 
@@ -251,12 +250,12 @@ public:
     virtual OROPrimitive* clone();
 
 protected:
-    QSizeF _size;
-    QString _text;
-    ORTextStyleData _textStyle;
-    ORLineStyleData _lineStyle;
-    Qt::Alignment _align;
-    int _flags; // Qt::AlignmentFlag and Qt::TextFlag OR'd
+    QSizeF m_size;
+    QString m_text;
+    ORTextStyleData m_textStyle;
+    ORLineStyleData m_lineStyle;
+    Qt::Alignment m_alignment;
+    int m_flags; // Qt::AlignmentFlag and Qt::TextFlag OR'd
 };
 
 //
@@ -275,20 +274,20 @@ public:
     void setStartPoint(const QPointF &);
 
     QPointF endPoint() const {
-        return _endPoint;
+        return m_endPoint;
     };
     void setEndPoint(const QPointF &);
 
     ORLineStyleData lineStyle() const {
-        return _ls;
+        return m_lineStyle;
     };
     void setLineStyle(const ORLineStyleData&);
 
     static const int Line;
     virtual OROPrimitive* clone();
 protected:
-    QPointF _endPoint;
-    ORLineStyleData _ls;
+    QPointF m_endPoint;
+    ORLineStyleData m_lineStyle;
 };
 
 //
@@ -302,27 +301,27 @@ public:
     virtual ~OROImage();
 
     QImage image() const {
-        return _image;
+        return m_image;
     };
     void setImage(const QImage &);
 
     QSizeF size() const {
-        return _size;
+        return m_size;
     };
     void setSize(const QSizeF &);
 
     bool scaled() const {
-        return _scaled;
+        return m_scaled;
     };
     void setScaled(bool);
 
     int transformationMode() const {
-        return _transformFlags;
+        return m_transformFlags;
     };
     void setTransformationMode(int);
 
     int aspectRatioMode() const {
-        return _aspectFlags;
+        return m_aspectFlags;
     };
     void setAspectRatioMode(int);
 
@@ -330,11 +329,11 @@ public:
     virtual OROPrimitive* clone();
 
 protected:
-    QImage _image;
-    QSizeF _size;
-    bool _scaled;
-    int _transformFlags;
-    int _aspectFlags;
+    QImage m_image;
+    QSizeF m_size;
+    bool m_scaled;
+    int m_transformFlags;
+    int m_aspectFlags;
 };
 
 class OROPicture: public OROPrimitive
@@ -344,22 +343,22 @@ public:
     virtual ~OROPicture();
 
     void setPicture(const QPicture& p) {
-        _picture = p;
+        m_picture = p;
     }
     QPicture* picture() {
-        return &_picture;
+        return &m_picture;
     };
 
     QSizeF size() const {
-        return _size;
+        return m_size;
     };
     void setSize(const QSizeF &);
 
     static const int Picture;
     virtual OROPrimitive* clone();
 protected:
-    QPicture _picture;
-    QSizeF _size;
+    QPicture m_picture;
+    QSizeF m_size;
 
 };
 //
@@ -373,31 +372,31 @@ public:
     virtual ~ORORect();
 
     QSizeF size() const {
-        return _size;
+        return m_size;
     }
     void setSize(const QSizeF &);
 
     QRectF rect() const {
-        return QRectF(_position, _size);
+        return QRectF(m_position, m_size);
     };
     void setRect(const QRectF &);
 
     QPen pen() const {
-        return _pen;
+        return m_pen;
     };
     void setPen(const QPen &);
 
     QBrush brush() const {
-        return _brush;
+        return m_brush;
     };
     void setBrush(const QBrush &);
 
     static const int Rect;
     virtual OROPrimitive* clone();
 protected:
-    QSizeF _size;
-    QPen _pen;
-    QBrush _brush;
+    QSizeF m_size;
+    QPen m_pen;
+    QBrush m_brush;
 };
 
 //
@@ -411,22 +410,22 @@ public:
     virtual ~OROEllipse();
 
     QSizeF size() const {
-        return _size;
+        return m_size;
     }
     void setSize(const QSizeF &);
 
     QRectF rect() const {
-        return QRectF(_position, _size);
+        return QRectF(m_position, m_size);
     };
     void setRect(const QRectF &);
 
     QPen pen() const {
-        return _pen;
+        return m_pen;
     };
     void setPen(const QPen &);
 
     QBrush brush() const {
-        return _brush;
+        return m_brush;
     };
     void setBrush(const QBrush &);
 
@@ -434,9 +433,9 @@ public:
     virtual OROPrimitive* clone();
 
 protected:
-    QSizeF _size;
-    QPen _pen;
-    QBrush _brush;
+    QSizeF m_size;
+    QPen m_pen;
+    QBrush m_brush;
 };
 
 class OROCheck : public OROPrimitive
@@ -449,49 +448,49 @@ public:
 
     void setCheckType(const QString& t){
         if (t == "Cross" || t == "Tick" || t == "Dot") {
-            _checkType = t;
+            m_checkType = t;
         }
         else {
-            _checkType = "Cross";
+            m_checkType = "Cross";
         }
     }
 
-    QString checkType(){return _checkType;};
+    QString checkType(){return m_checkType;};
 
     QSizeF size() const {
-        return _size;
+        return m_size;
     }
     void setSize(const QSizeF &s){
-        _size = s;
+        m_size = s;
     }
 
     void setValue(bool v){
-        _value = v;
+        m_value = v;
     }
     bool value(){
-        return _value;
+        return m_value;
     }
 
     void setLineStyle(const ORLineStyleData& ls){
-        _lineStyle = ls;
+        m_lineStyle = ls;
     }
 
     ORLineStyleData lineStyle(){
-        return _lineStyle;
+        return m_lineStyle;
     }
     void setForegroundColor(const QColor& fg){
-        _fgcolor = fg;
+        m_fgColor = fg;
     }
     QColor foregroundColor(){
-        return _fgcolor;
+        return m_fgColor;
     }
 
     protected:
-            QSizeF _size;
-            QString _checkType;
-            bool _value;
-            ORLineStyleData _lineStyle;
-            QColor _fgcolor;
+            QSizeF m_size;
+            QString m_checkType;
+            bool m_value;
+            ORLineStyleData m_lineStyle;
+            QColor m_fgColor;
 
 
 };

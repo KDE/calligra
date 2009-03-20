@@ -63,13 +63,12 @@ public:
     virtual ~ReportSection();
 
     void setTitle(const QString & s);
-
     void buildXML(QDomDocument & doc, QDomElement & section);
     void initFromXML(QDomNode & section);
     virtual QSize sizeHint() const;
 
     const QGraphicsItemList items() {
-        return scene->items();
+        return m_scene->items();
     };
 protected slots:
     void slotResizeBarDragged(int delta);
@@ -81,15 +80,15 @@ private slots:
     void slotSceneLostFocus();
 
 protected:
-    ReportSectionTitle * title;
-    ReportScene * scene;
-    ReportResizeBar * rb;
-    ReportSceneView * sceneview;
-    ReportDesigner* _rd;
-    KoRuler* sectionRuler;
+    ReportSectionTitle * m_title;
+    ReportScene * m_scene;
+    ReportResizeBar * m_resizeBar;
+    ReportSceneView * m_sceneView;
+    ReportDesigner* m_reportDesigner;
+    KoRuler* m_sectionRuler;
 
 private:
-    KRSectionData *_data;
+    KRSectionData *m_sectionData;
 
 };
 
@@ -103,6 +102,7 @@ signals:
     void barDragged(int delta);
     void barPress();
     void barRelease();
+    
 protected:
     void mouseMoveEvent(QMouseEvent * e);
 };

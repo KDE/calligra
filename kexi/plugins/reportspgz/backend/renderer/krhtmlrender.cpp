@@ -57,10 +57,10 @@ bool KRHtmlRender::render(ORODocument *document, const KUrl& toUrl, bool css)
     QFileInfo fi(tempHtmlFile);
 
     QString tempFileName = fi.absoluteFilePath();
-    tempDirName = tempFileName + dirSuffix;
-    actualDirName = toUrl.fileName() + dirSuffix;
+    m_tempDirName = tempFileName + dirSuffix;
+    m_actualDirName = toUrl.fileName() + dirSuffix;
 
-    if (!tempDir.mkpath(tempDirName))
+    if (!tempDir.mkpath(m_tempDirName))
         return false;
 
     if (css)
@@ -72,17 +72,17 @@ bool KRHtmlRender::render(ORODocument *document, const KUrl& toUrl, bool css)
     tempHtmlFile.close();
 
     bool status = false;
-    if (KIO::NetAccess::upload(tempFileName, toUrl, 0) && KIO::NetAccess::dircopy(KUrl(tempDirName),  KUrl(toUrl.url() + dirSuffix), 0)) {
+    if (KIO::NetAccess::upload(tempFileName, toUrl, 0) && KIO::NetAccess::dircopy(KUrl(m_tempDirName),  KUrl(toUrl.url() + dirSuffix), 0)) {
         status = true;
     }
 
     // cleanup the temporary directory
-    tempDir.setPath(tempDirName);
+    tempDir.setPath(m_tempDirName);
     QStringList fileList = tempDir.entryList();
     foreach(const QString& fileName, fileList) {
         tempDir.remove(fileName);
     }
-    tempDir.rmdir(tempDirName);
+    tempDir.rmdir(m_tempDirName);
 
     return status;
 }
@@ -99,7 +99,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 
     kDebug() << "4";
 
-    QDir d(tempDirName);
+    QDir d(m_tempDirName);
     // Render Each Section
     for (long s = 0; s < document->sections(); s++) {
         OROSection *section = document->section(s);
@@ -164,11 +164,11 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
                     styleindex = styles.indexOf(style);
 
                     body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
                     body += "</div>\n";
 
 
-                    im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                    im->image().save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
                     kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
@@ -181,13 +181,13 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
                     styleindex = styles.indexOf(style);
 
                     body += "<div class=\"style" + QString::number(styleindex) + "\">";
-                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
                     body += "</div>\n";
 
                     QImage image(im->size().toSize(), QImage::Format_RGB32);
                     QPainter painter(&image);
                     im->picture()->play(&painter);
-                    image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                    image.save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else {
                     kDebug() << "unrecognized primitive type" << prim->type();
                 }
@@ -222,7 +222,7 @@ QString KRHtmlRender::renderTable(ORODocument *document)
     bool renderedPageHead = false;
     bool renderedPageFoot = false;
 
-    QDir d(tempDirName);
+    QDir d(m_tempDirName);
 
     // Render Each Section
     body = "<table>\n";
@@ -258,20 +258,20 @@ QString KRHtmlRender::renderTable(ORODocument *document)
                     kDebug() << "Saving an image";
                     OROImage * im = (OROImage*) prim;
                     tr += "<td>";
-                    tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    tr += "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
                     tr += "</td>\n";
-                    im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                    im->image().save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else if (prim->type() == OROPicture::Picture) {
                     kDebug() << "Saving a picture";
                     OROPicture * im = (OROPicture*) prim;
 
                     tr += "<td>";
-                    tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+                    tr += "<img src=\"./" + m_actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
                     tr += "</td>\n";
                     QImage image(im->size().toSize(), QImage::Format_RGB32);
                     QPainter painter(&image);
                     im->picture()->play(&painter);
-                    image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
+                    image.save(m_tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
                 } else {
                     kDebug() << "unhandled primitive type";
                 }

@@ -260,7 +260,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 {
     kDebug();
 
-    if (detailData.detail != 0) {
+    if (detailData.m_detailSection != 0) {
         KexiDB::Cursor *curs = 0;
         _subtotContextDetail = &detailData;
 
@@ -285,9 +285,9 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
             kDebug() << "Record Count:" << _recordCount;
 
-            for (i = 0; i < (int) detailData.groupList.count(); i++) {
+            for (i = 0; i < (int) detailData.m_groupList.count(); i++) {
                 cnt++;
-                grp = detailData.groupList[i];
+                grp = detailData.m_groupList[i];
                 QMapIterator<ORDataData, qreal> it(grp->_subtotCheckPoints);
                 while (it.hasNext()) {
                     it.next();
@@ -315,7 +315,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
 
                 kDebug() << "At:" << l << "Y:" << _yOffset;
 
-                if (renderSectionSize(* (detailData.detail)) + finishCurPageSize((l + 1 == _recordCount)) + _bottomMargin + _yOffset >= _maxHeight) {
+                if (renderSectionSize(* (detailData.m_detailSection)) + finishCurPageSize((l + 1 == _recordCount)) + _bottomMargin + _yOffset >= _maxHeight) {
                     if (l > 0)
                         curs->movePrev();
                     createNewPage();
@@ -323,7 +323,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                         curs->moveNext();
                 }
 
-                renderSection(* (detailData.detail));
+                renderSection(* (detailData.m_detailSection));
 
                 status = curs->moveNext();
                 if (status == true && keys.count() > 0) {
@@ -349,7 +349,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                 if (do_break)
                                     createNewPage();
                                 do_break = false;
-                                grp = detailData.groupList[i];
+                                grp = detailData.m_groupList[i];
                                 _subtotContextMap = & (grp->_subtotCheckPoints);
                                 if (grp->foot) {
                                     if (renderSectionSize(* (grp->foot)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight)
@@ -379,7 +379,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                                 createNewPage();
                             if (status == true) {
                                 for (i = pos; i < cnt; i++) {
-                                    grp = detailData.groupList[i];
+                                    grp = detailData.m_groupList[i];
                                     _subtotContextMap = & (grp->_subtotCheckPoints);
                                     if (grp->head) {
                                         if (renderSectionSize(* (grp->head)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight) {
@@ -409,7 +409,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
                 // finish footers
                 // duplicated changes from above here
                 for (i = cnt - 1; i >= 0; i--) {
-                    grp = detailData.groupList[i];
+                    grp = detailData.m_groupList[i];
                     _subtotContextMap = & (grp->_subtotCheckPoints);
                     if (grp->foot) {
                         if (renderSectionSize(* (grp->foot)) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight)
@@ -434,7 +434,7 @@ void ORPreRenderPrivate::renderDetailSection(KRDetailSectionData & detailData)
             }
         }
         _subtotContextDetail = 0;
-        if (KRDetailSectionData::BreakAtEnd == detailData.pagebreak)
+        if (KRDetailSectionData::BreakAtEnd == detailData.m_pageBreak)
             createNewPage();
     }
 }
@@ -460,9 +460,9 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
             populateData(t->data(), dataThis);
 
             //dataThis.setQuery();
-            dataThis.setField(t->_controlSource->value().toString());
-            QPointF pos = t->_pos.toScene();
-            QSizeF size = t->_size.toScene();
+            dataThis.setField(t->m_controlSource->value().toString());
+            QPointF pos = t->m_pos.toScene();
+            QSizeF size = t->m_size.toScene();
             pos /= 100.0;
             pos += QPointF(_leftMargin, _yOffset);
             size /= 100.0;
@@ -473,7 +473,7 @@ qreal ORPreRenderPrivate::renderSectionSize(const KRSectionData & sectionData)
             qreal   intStretch      = trf.top() - _yOffset;
             qreal   intRectHeight   = trf.height();
 
-            QFont f = t->_font->value().value<QFont>();
+            QFont f = t->m_font->value().value<QFont>();
 
             qstrValue = dataThis.getValue();
             if (qstrValue.length()) {
@@ -552,14 +552,14 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
         elemThis = ob;
         if (elemThis->type() == KRObjectData::EntityLabel) {
             KRLabelData * l = elemThis->toLabel();
-            QPointF pos = l->_pos.toScene();
+            QPointF pos = l->m_pos.toScene();
             //QSizeF size = l->_size.toScene();
 
             pos += QPointF(_leftMargin, _yOffset);
 
             OROTextBox * tb = new OROTextBox();
             tb->setPosition(pos);
-            tb->setSize(l->_size.toScene());
+            tb->setSize(l->m_size.toScene());
             tb->setFont(l->font());
             tb->setText(l->text());
             tb->setFlags(l->textFlags());
@@ -568,14 +568,14 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             _page->addPrimitive(tb);
 
             OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-            tb2->setPosition(l->_pos.toPoint());
+            tb2->setPosition(l->m_pos.toPoint());
             sec->addPrimitive(tb2);
         } else if (elemThis->type() == KRObjectData::EntityField) {
             orData       dataThis;
             KRFieldData* f = elemThis->toField();
 
-            QPointF pos = f->_pos.toScene();
-            QSizeF size = f->_size.toScene();
+            QPointF pos = f->m_pos.toScene();
+            QSizeF size = f->m_size.toScene();
             pos += QPointF(_leftMargin, _yOffset);
 
             OROTextBox * tb = new OROTextBox();
@@ -588,7 +588,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             QString str;
 
-            QString cs = f->_controlSource->value().toString();
+            QString cs = f->m_controlSource->value().toString();
             if (cs.left(1) == "=") { //Everything after = is treated as code
                 if (!cs.contains("PageTotal()")) {
                     QVariant v = _handler->evaluate(f->entityName());
@@ -601,7 +601,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 str = cs.mid(1);
             } else {
                 QString qry = "Data Source";
-                QString clm = f->_controlSource->value().toString();
+                QString clm = f->m_controlSource->value().toString();
 
                 populateData(f->data(), dataThis);
                 str = dataThis.getValue();
@@ -610,7 +610,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             _page->addPrimitive(tb);
 
             OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-            tb2->setPosition(f->_pos.toPoint());
+            tb2->setPosition(f->m_pos.toPoint());
             sec->addPrimitive(tb2);
 
 
@@ -620,8 +620,8 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             populateData(t->data(), dataThis);
 
-            QPointF pos = t->_pos.toScene();
-            QSizeF size = t->_size.toScene();
+            QPointF pos = t->m_pos.toScene();
+            QSizeF size = t->m_size.toScene();
             pos += QPointF(_leftMargin, _yOffset);
 
             QRectF trf(pos, size);
@@ -676,7 +676,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                             _page->addPrimitive(tb);
 
                             OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-                            tb2->setPosition(t->_pos.toPoint());
+                            tb2->setPosition(t->m_pos.toPoint());
                             sec->addPrimitive(tb2);
 
                             intStretch += intRectHeight;
@@ -713,8 +713,8 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
         } else if (elemThis->type() == KRObjectData::EntityLine) {
             KRLineData * l = elemThis->toLine();
             OROLine * ln = new OROLine();
-            QPointF s = l->_start.toScene();
-            QPointF e = l->_end.toScene();
+            QPointF s = l->m_start.toScene();
+            QPointF e = l->m_end.toScene();
             QPointF offset(_leftMargin, _yOffset);
             s += offset;
             e += offset;
@@ -725,22 +725,22 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             _page->addPrimitive(ln);
 
             OROLine *l2 = dynamic_cast<OROLine*>(ln->clone());
-            l2->setStartPoint(l->_start.toPoint());
-            l2->setEndPoint(l->_end.toPoint());
+            l2->setStartPoint(l->m_start.toPoint());
+            l2->setEndPoint(l->m_end.toPoint());
             sec->addPrimitive(l2);
         } else if (elemThis->type() == KRObjectData::EntityBarcode) {
             KRBarcodeData * bc = elemThis->toBarcode();
             orData       dataThis;
 
-            QPointF pos = bc->_pos.toScene();
-            QSizeF size = bc->_size.toScene();
+            QPointF pos = bc->m_pos.toScene();
+            QSizeF size = bc->m_size.toScene();
             pos += QPointF(_leftMargin, _yOffset);
 
             QRectF rect = QRectF(pos, size);
 
             populateData(bc->data(), dataThis);
 
-            QString fmt = bc->_format->value().toString();
+            QString fmt = bc->m_format->value().toString();
             int align = bc->alignment();
             if (fmt == "3of9")
                 render3of9(_page, rect, dataThis.getValue(), align);
@@ -781,8 +781,8 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 id->setAspectRatioMode(Qt::KeepAspectRatio);
                 id->setTransformationMode(Qt::SmoothTransformation);
             }
-            QPointF pos = im->_pos.toScene();
-            QSizeF size = im->_size.toScene();
+            QPointF pos = im->m_pos.toScene();
+            QSizeF size = im->m_size.toScene();
 
             pos += QPointF(_leftMargin, _yOffset);
 
@@ -791,7 +791,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             _page->addPrimitive(id);
 
             OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
-            i2->setPosition(im->_pos.toPoint());
+            i2->setPosition(im->m_pos.toPoint());
             sec->addPrimitive(i2);
         } else if (elemThis->type() == KRObjectData::EntityChart) {
             KRChartData * ch = elemThis->toChart();
@@ -806,14 +806,14 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             ch->populateData();
             if (ch->widget()) {
                 OROPicture * id = new OROPicture();
-                ch->widget()->setFixedSize(ch->_size.toScene().toSize());
+                ch->widget()->setFixedSize(ch->m_size.toScene().toSize());
 
                 QPainter p(id->picture());
 
-                ch->widget()->diagram()->coordinatePlane()->parent()->paint(&p, QRect(QPoint(0, 0), ch->_size.toScene().toSize()));
+                ch->widget()->diagram()->coordinatePlane()->parent()->paint(&p, QRect(QPoint(0, 0), ch->m_size.toScene().toSize()));
 
-                QPointF pos = ch->_pos.toScene();
-                QSizeF size = ch->_size.toScene();
+                QPointF pos = ch->m_pos.toScene();
+                QSizeF size = ch->m_size.toScene();
 
                 pos += QPointF(_leftMargin, _yOffset);
 
@@ -822,7 +822,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 _page->addPrimitive(id);
 
                 OROPicture *p2 = dynamic_cast<OROPicture*>(id->clone());
-                p2->setPosition(ch->_pos.toPoint());
+                p2->setPosition(ch->m_pos.toPoint());
                 sec->addPrimitive(p2);
             }
         } else if (elemThis->type() == KRObjectData::EntityCheck) {
@@ -830,16 +830,16 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
             KRCheckData *cd = elemThis->toCheck();
             OROCheck *chk = new OROCheck();
 
-            QPointF pos = cd->_pos.toScene();
-            QSizeF size = cd->_size.toScene();
+            QPointF pos = cd->m_pos.toScene();
+            QSizeF size = cd->m_size.toScene();
             pos += QPointF(_leftMargin, _yOffset);
 
             chk->setPosition(pos);
             chk->setSize(size);
 
             chk->setLineStyle(cd->lineStyle());
-            chk->setForegroundColor(cd->_fgColor->value().value<QColor>());
-            chk->setCheckType(cd->_checkStyle->value().toString());
+            chk->setForegroundColor(cd->m_foregroundColor->value().value<QColor>());
+            chk->setCheckType(cd->m_checkStyle->value().toString());
 
             QString str;
 
@@ -850,7 +850,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
                 str = _handler->evaluate(cd->entityName()).toString();
             } else {
                 QString qry = "Data Source";
-                QString clm = cd->_controlSource->value().toString();
+                QString clm = cd->m_controlSource->value().toString();
 
                 populateData(cd->data(), dataThis);
                 str = dataThis.getValue();
@@ -868,7 +868,7 @@ qreal ORPreRenderPrivate::renderSection(const KRSectionData & sectionData)
 
             _page->addPrimitive(chk);
             OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
-            chk2->setPosition(cd->_pos.toPoint());
+            chk2->setPosition(cd->m_pos.toPoint());
             sec->addPrimitive(chk2);
         } else {
             kDebug() << "Encountered an unknown element while rendering a section.";
@@ -915,8 +915,8 @@ qreal ORPreRenderPrivate::getNearestSubTotalCheckPoint(const ORDataData & d)
 
         qreal dbl = 0.0;
         ORDetailGroupSectionData * grp = 0;
-        for (int i = 0; i < (int) _subtotContextDetail->groupList.count(); i++) {
-            grp = _subtotContextDetail->groupList[i];
+        for (int i = 0; i < (int) _subtotContextDetail->m_groupList.count(); i++) {
+            grp = _subtotContextDetail->m_groupList[i];
             if (grp->_subtotCheckPoints.contains(d))
                 dbl = grp->_subtotCheckPoints[d];
         }
@@ -943,13 +943,13 @@ void ORPreRenderPrivate::initEngine()
 //
 ORPreRender::ORPreRender(KexiDB::Connection *c)
 {
-    _internal = new ORPreRenderPrivate();
+    d = new ORPreRenderPrivate();
     setDatabase(c);
 }
 
 ORPreRender::ORPreRender(const QString & pDocument, KexiDB::Connection *c)
 {
-    _internal = new ORPreRenderPrivate();
+    d = new ORPreRenderPrivate();
     setDatabase(c);
     setDom(pDocument);
 }
@@ -960,85 +960,85 @@ ORPreRender::~ORPreRender()
 
 void ORPreRender::setName(const QString &n)
 {
-    _internal->_reportData->setName(n);
+    d->_reportData->setName(n);
 }
 
 ORODocument* ORPreRender::generate()
 {
     kDebug();
-    if (_internal == 0 || !_internal->_valid || _internal->_reportData == 0)
+    if (d == 0 || !d->_valid || d->_reportData == 0)
         return 0;
 
     // Do this check now so we don't have to undo a lot of work later if it fails
     LabelSizeInfo label;
-    if (_internal->_reportData->page.getPageSize() == "Labels") {
-        label = LabelSizeInfo::getByName(_internal->_reportData->page.getLabelType());
+    if (d->_reportData->page.getPageSize() == "Labels") {
+        label = LabelSizeInfo::getByName(d->_reportData->page.getLabelType());
         if (label.isNull())
             return 0;
     }
 
     kDebug() << "Creating Document";
-    _internal->_document = new ORODocument(_internal->_reportData->title);
+    d->_document = new ORODocument(d->_reportData->m_title);
 
-    _internal->_pageCounter  = 0;
-    _internal->_yOffset      = 0.0;
+    d->_pageCounter  = 0;
+    d->_yOffset      = 0.0;
 
     kDebug() << "Calculating Margins";
     if (!label.isNull()) {
-        if (_internal->_reportData->page.isPortrait()) {
-            _internal->_topMargin = (label.startY() / 100.0);
-            _internal->_bottomMargin = 0;
-            _internal->_rightMargin = 0;
-            _internal->_leftMargin = (label.startX() / 100.0);
+        if (d->_reportData->page.isPortrait()) {
+            d->_topMargin = (label.startY() / 100.0);
+            d->_bottomMargin = 0;
+            d->_rightMargin = 0;
+            d->_leftMargin = (label.startX() / 100.0);
         } else {
-            _internal->_topMargin = (label.startX() / 100.0);
-            _internal->_bottomMargin = 0;
-            _internal->_rightMargin = 0;
-            _internal->_leftMargin = (label.startY() / 100.0);
+            d->_topMargin = (label.startX() / 100.0);
+            d->_bottomMargin = 0;
+            d->_rightMargin = 0;
+            d->_leftMargin = (label.startY() / 100.0);
         }
     } else {
-        _internal->_topMargin    = _internal->_reportData->page.getMarginTop();
-        _internal->_bottomMargin = _internal->_reportData->page.getMarginBottom();
-        _internal->_rightMargin  = _internal->_reportData->page.getMarginRight();
-        _internal->_leftMargin   = _internal->_reportData->page.getMarginLeft();
-        kDebug() << "Margins:" << _internal->_topMargin << _internal->_bottomMargin << _internal->_rightMargin << _internal->_leftMargin;
+        d->_topMargin    = d->_reportData->page.getMarginTop();
+        d->_bottomMargin = d->_reportData->page.getMarginBottom();
+        d->_rightMargin  = d->_reportData->page.getMarginRight();
+        d->_leftMargin   = d->_reportData->page.getMarginLeft();
+        kDebug() << "Margins:" << d->_topMargin << d->_bottomMargin << d->_rightMargin << d->_leftMargin;
     }
 
     kDebug() << "Calculating Page Size";
-    ReportPageOptions rpo(_internal->_reportData->page);
+    ReportPageOptions rpo(d->_reportData->page);
     // This should reflect the information of the report page size
-    if (_internal->_reportData->page.getPageSize() == "Custom") {
-        _internal->_maxWidth = _internal->_reportData->page.getCustomWidth();
-        _internal->_maxHeight = _internal->_reportData->page.getCustomHeight();
+    if (d->_reportData->page.getPageSize() == "Custom") {
+        d->_maxWidth = d->_reportData->page.getCustomWidth();
+        d->_maxHeight = d->_reportData->page.getCustomHeight();
     } else {
         if (!label.isNull()) {
-            _internal->_maxWidth = label.width();
-            _internal->_maxHeight = label.height();
+            d->_maxWidth = label.width();
+            d->_maxHeight = label.height();
             rpo.setPageSize(label.paper());
         } else {
             // lookup the correct size information for the specified size paper
-            _internal->_maxWidth = KoPageFormat::width(KoPageFormat::formatFromString(_internal->_reportData->page.getPageSize()), KoPageFormat::Portrait);
-            _internal->_maxHeight = KoPageFormat::height(KoPageFormat::formatFromString(_internal->_reportData->page.getPageSize()), KoPageFormat::Portrait);
+            d->_maxWidth = KoPageFormat::width(KoPageFormat::formatFromString(d->_reportData->page.getPageSize()), KoPageFormat::Portrait);
+            d->_maxHeight = KoPageFormat::height(KoPageFormat::formatFromString(d->_reportData->page.getPageSize()), KoPageFormat::Portrait);
 
             KoUnit pageUnit(KoUnit::Millimeter);
-            _internal->_maxWidth = KoUnit::toInch(pageUnit.fromUserValue(_internal->_maxWidth)) * KoGlobal::dpiX();
-            _internal->_maxHeight = KoUnit::toInch(pageUnit.fromUserValue(_internal->_maxHeight)) * KoGlobal::dpiY();
+            d->_maxWidth = KoUnit::toInch(pageUnit.fromUserValue(d->_maxWidth)) * KoGlobal::dpiX();
+            d->_maxHeight = KoUnit::toInch(pageUnit.fromUserValue(d->_maxHeight)) * KoGlobal::dpiY();
         }
     }
 
-    if (!_internal->_reportData->page.isPortrait()) {
-        qreal tmp = _internal->_maxWidth;
-        _internal->_maxWidth = _internal->_maxHeight;
-        _internal->_maxHeight = tmp;
+    if (!d->_reportData->page.isPortrait()) {
+        qreal tmp = d->_maxWidth;
+        d->_maxWidth = d->_maxHeight;
+        d->_maxHeight = tmp;
     }
 
-    kDebug() << "Page Size:" << _internal->_maxWidth << _internal->_maxHeight;
+    kDebug() << "Page Size:" << d->_maxWidth << d->_maxHeight;
 
-    _internal->_document->setPageOptions(rpo);
+    d->_document->setPageOptions(rpo);
 
 // QuerySource * qs = 0;
 
-    _internal->_query = (new orQuery("Data Source", _internal->_reportData->query(), true, _internal->_conn));
+    d->_query = (new orQuery("Data Source", d->_reportData->query(), true, d->_conn));
 
 //TODO field totals
 // _internal->_subtotPageCheckPoints.clear();
@@ -1050,8 +1050,8 @@ ORODocument* ORPreRender::generate()
 //   xqry->trackFieldTotal ( _internal->_reportData->trackTotal[i].column );
 // }
 
-    _internal->initEngine();
-    _internal->createNewPage();
+    d->initEngine();
+    d->createNewPage();
     if (!label.isNull()) {
 // Label Print Run
         int row = 0;
@@ -1059,9 +1059,9 @@ ORODocument* ORPreRender::generate()
 
         // remember the initial margin setting as we will be modifying
         // the value and restoring it as we move around
-        qreal margin = _internal->_leftMargin;
+        qreal margin = d->_leftMargin;
 
-        _internal->_yOffset = _internal->_topMargin;
+        d->_yOffset = d->_topMargin;
 
         qreal w = (label.width() / 100.0);
         qreal wg = (label.xGap() / 100.0);
@@ -1072,7 +1072,7 @@ ORODocument* ORPreRender::generate()
         qreal tmp;
 
         // flip the value around if we are printing landscape
-        if (!_internal->_reportData->page.isPortrait()) {
+        if (!d->_reportData->page.isPortrait()) {
             w = (label.height() / 100.0);
             wg = (label.yGap() / 100.0);
             h = (label.width() / 100.0);
@@ -1081,29 +1081,29 @@ ORODocument* ORPreRender::generate()
             numRows = label.columns();
         }
 
-        KRDetailSectionData * detailData = _internal->_reportData->detailsection;
-        if (detailData->detail != 0) {
-            orQuery *orqThis = _internal->_query;
+        KRDetailSectionData * detailData = d->_reportData->detailsection;
+        if (detailData->m_detailSection != 0) {
+            orQuery *orqThis = d->_query;
             KexiDB::Cursor *query;
 
             if ((orqThis != 0) && !((query = orqThis->getQuery())->eof())) {
                 query->moveFirst();
                 do {
-                    tmp = _internal->_yOffset; // store the value as renderSection changes it
-                    _internal->renderSection(* (detailData->detail));
-                    _internal->_yOffset = tmp; // restore the value that renderSection modified
+                    tmp = d->_yOffset; // store the value as renderSection changes it
+                    d->renderSection(* (detailData->m_detailSection));
+                    d->_yOffset = tmp; // restore the value that renderSection modified
 
                     col ++;
-                    _internal->_leftMargin += w + wg;
+                    d->_leftMargin += w + wg;
                     if (col >= numCols) {
-                        _internal->_leftMargin = margin; // reset back to original value
+                        d->_leftMargin = margin; // reset back to original value
                         col = 0;
                         row ++;
-                        _internal->_yOffset += h + hg;
+                        d->_yOffset += h + hg;
                         if (row >= numRows) {
-                            _internal->_yOffset = _internal->_topMargin;
+                            d->_yOffset = d->_topMargin;
                             row = 0;
-                            _internal->createNewPage();
+                            d->createNewPage();
                         }
                     }
                 } while (query->moveNext());
@@ -1112,72 +1112,72 @@ ORODocument* ORPreRender::generate()
 
     } else {
 // Normal Print Run
-        if (_internal->_reportData->rpthead != 0) {
-            _internal->renderSection(* (_internal->_reportData->rpthead));
+        if (d->_reportData->rpthead != 0) {
+            d->renderSection(* (d->_reportData->rpthead));
         }
 
 
-        if (_internal->_reportData->detailsection) {
-            _internal->renderDetailSection(* (_internal->_reportData->detailsection));
+        if (d->_reportData->detailsection) {
+            d->renderDetailSection(* (d->_reportData->detailsection));
         }
 
-        if (_internal->_reportData->rptfoot != 0) {
-            if (_internal->renderSectionSize(* (_internal->_reportData->rptfoot)) + _internal->finishCurPageSize(true) + _internal->_bottomMargin + _internal->_yOffset >= _internal->_maxHeight) {
-                _internal->createNewPage();
+        if (d->_reportData->rptfoot != 0) {
+            if (d->renderSectionSize(* (d->_reportData->rptfoot)) + d->finishCurPageSize(true) + d->_bottomMargin + d->_yOffset >= d->_maxHeight) {
+                d->createNewPage();
             }
-            _internal->renderSection(* (_internal->_reportData->rptfoot));
+            d->renderSection(* (d->_reportData->rptfoot));
         }
     }
-    _internal->finishCurPage(true);
+    d->finishCurPage(true);
 
     // _postProcText contains those text boxes that need to be updated
     // with information that wasn't available at the time it was added to the document
-    _internal->_handler->setPageTotal(_internal->_document->pages());
+    d->_handler->setPageTotal(d->_document->pages());
 
-    for (int i = 0; i < _internal->_postProcText.size(); i++) {
-        OROTextBox * tb = _internal->_postProcText.at(i);
+    for (int i = 0; i < d->_postProcText.size(); i++) {
+        OROTextBox * tb = d->_postProcText.at(i);
 
-        _internal->_handler->setPageNumber(tb->page()->page() + 1);
+        d->_handler->setPageNumber(tb->page()->page() + 1);
         
-        tb->setText( _internal->_handler->evaluate(tb->text()).toString());
+        tb->setText( d->_handler->evaluate(tb->text()).toString());
     }
 
-    _internal->_handler->displayErrors();
+    d->_handler->displayErrors();
 
-    delete _internal->_handler;
-    delete _internal->_query;
-    _internal->_postProcText.clear();
+    delete d->_handler;
+    delete d->_query;
+    d->_postProcText.clear();
 
-    ORODocument * pDoc = _internal->_document;
-    _internal->_document = 0;
+    ORODocument * pDoc = d->_document;
+    d->_document = 0;
     return pDoc;
 }
 
 void ORPreRender::setDatabase(KexiDB::Connection *c)
 {
-    if (_internal != 0)
-        _internal->_conn = c;
+    if (d != 0)
+        d->_conn = c;
 }
 
 KexiDB::Connection* ORPreRender::database() const
 {
-    if (_internal != 0)
-        return _internal->_conn;
+    if (d != 0)
+        return d->_conn;
     return 0;
 }
 
 bool ORPreRender::setDom(const QString & docReport)
 {
     kDebug() << docReport;
-    if (_internal != 0) {
-        if (_internal->_reportData != 0)
-            delete _internal->_reportData;
-        _internal->_valid = false;
+    if (d != 0) {
+        if (d->_reportData != 0)
+            delete d->_reportData;
+        d->_valid = false;
 
-        _internal->_docReport.setContent(docReport);
-        _internal->_reportData = new KRReportData(_internal->_docReport.documentElement());
+        d->_docReport.setContent(docReport);
+        d->_reportData = new KRReportData(d->_docReport.documentElement());
         //TODO KRReportData->isValid()
-        _internal->_valid = true;
+        d->_valid = true;
 
     }
     return isValid();
@@ -1185,7 +1185,7 @@ bool ORPreRender::setDom(const QString & docReport)
 
 bool ORPreRender::isValid() const
 {
-    if (_internal != 0 && _internal->_valid)
+    if (d != 0 && d->_valid)
         return true;
     return false;
 }

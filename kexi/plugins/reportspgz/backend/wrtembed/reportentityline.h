@@ -44,19 +44,20 @@ public:
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget = 0);
     virtual ReportEntityLine* clone();
+    
 private:
-    ReportDesigner* _rd;
+    ReportDesigner* m_rd;
     void init(QGraphicsScene*, ReportDesigner *);
     int grabHandle(QPointF pos);
 
-    int _grabAction;
+    int m_grabAction;
 
 protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * event);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * event);
-
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    
 private slots:
     void propertyChanged(KoProperty::Set &, KoProperty::Property &);
 };

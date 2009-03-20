@@ -46,19 +46,19 @@
 KexiReportView::KexiReportView(QWidget *parent)
         : KexiView(parent)
 {
-    rpt = 0;
+    m_preRenderer = 0;
     setObjectName("KexiReportDesigner_DataView");
-    scr = new QScrollArea(this);
-    scr->setBackgroundRole(QPalette::Dark);
-    scr->viewport()->setAutoFillBackground(true);
+    m_scrollArea = new QScrollArea(this);
+    m_scrollArea->setBackgroundRole(QPalette::Dark);
+    m_scrollArea->viewport()->setAutoFillBackground(true);
 
-    pageSelector = new KexiRecordNavigator(this, 0);
-    layout()->addWidget(scr);
-    layout()->addWidget(pageSelector);
+    m_pageSelector = new KexiRecordNavigator(this, 0);
+    layout()->addWidget(m_scrollArea);
+    layout()->addWidget(m_pageSelector);
 
-    pageSelector->setRecordCount(0);
-    pageSelector->setInsertingButtonVisible(false);
-    pageSelector->setLabelText(i18n("Page"));
+    m_pageSelector->setRecordCount(0);
+    m_pageSelector->setInsertingButtonVisible(false);
+    m_pageSelector->setLabelText(i18n("Page"));
 
 
     // -- setup local actions
@@ -96,10 +96,10 @@ KexiReportView::KexiReportView(QWidget *parent)
     setViewActions(viewActions);
 
 
-    connect(pageSelector, SIGNAL(nextButtonClicked()), this, SLOT(nextPage()));
-    connect(pageSelector, SIGNAL(prevButtonClicked()), this, SLOT(prevPage()));
-    connect(pageSelector, SIGNAL(firstButtonClicked()), this, SLOT(firstPage()));
-    connect(pageSelector, SIGNAL(lastButtonClicked()), this, SLOT(lastPage()));
+    connect(m_pageSelector, SIGNAL(nextButtonClicked()), this, SLOT(nextPage()));
+    connect(m_pageSelector, SIGNAL(prevButtonClicked()), this, SLOT(prevPage()));
+    connect(m_pageSelector, SIGNAL(firstButtonClicked()), this, SLOT(firstPage()));
+    connect(m_pageSelector, SIGNAL(lastButtonClicked()), this, SLOT(lastPage()));
 
 }
 
@@ -109,37 +109,37 @@ KexiReportView::~KexiReportView()
 
 void KexiReportView::nextPage()
 {
-    if (curPage < pageCount) {
-        curPage++;
-        rptwid->renderPage(curPage);
-        pageSelector->setCurrentRecordNumber(curPage);
+    if (m_currentPpage < m_pageCount) {
+        m_currentPpage++;
+        m_reportWidget->renderPage(m_currentPpage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
     }
 }
 
 void KexiReportView::prevPage()
 {
-    if (curPage > 1) {
-        curPage--;
-        rptwid->renderPage(curPage);
-        pageSelector->setCurrentRecordNumber(curPage);
+    if (m_currentPpage > 1) {
+        m_currentPpage--;
+        m_reportWidget->renderPage(m_currentPpage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
     }
 }
 
 void KexiReportView::firstPage()
 {
-    if (curPage != 1) {
-        curPage = 1;
-        rptwid->renderPage(curPage);
-        pageSelector->setCurrentRecordNumber(curPage);
+    if (m_currentPpage != 1) {
+        m_currentPpage = 1;
+        m_reportWidget->renderPage(m_currentPpage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
     }
 }
 
 void KexiReportView::lastPage()
 {
-    if (curPage != pageCount) {
-        curPage = pageCount;
-        rptwid->renderPage(curPage);
-        pageSelector->setCurrentRecordNumber(curPage);
+    if (m_currentPpage != m_pageCount) {
+        m_currentPpage = m_pageCount;
+        m_reportWidget->renderPage(m_currentPpage);
+        m_pageSelector->setCurrentRecordNumber(m_currentPpage);
     }
 }
 
@@ -150,13 +150,13 @@ void KexiReportView::slotPrintReport()
 
     // do some printer initialization
     pr.setPrinter(&printer);
-    pr.setupPrinter(doc, &printer);
+    pr.setupPrinter(m_reportDocument, &printer);
 
     QPrintDialog *dialog = new QPrintDialog(&printer, this);
     if (dialog->exec() != QDialog::Accepted)
         return;
 
-    pr.render(doc);
+    pr.render(m_reportDocument);
 }
 
 void KexiReportView::slotRenderKSpread()
@@ -175,7 +175,7 @@ void KexiReportView::slotRenderKSpread()
             return;
         }
     }
-    if (!ks.render(doc, saveUrl)) {
+    if (!ks.render(m_reportDocument, saveUrl)) {
         KMessageBox::error(this, i18n("Failed to open %1 in KSpread", saveUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
     }
 #endif
@@ -198,7 +198,7 @@ void KexiReportView::slotExportHTML()
     bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 
     KRHtmlRender hr;
-    if (!hr.render(doc, saveUrl, css)) {
+    if (!hr.render(m_reportDocument, saveUrl, css)) {
         KMessageBox::error(this, i18n("Exporting report to %1 failed", saveUrl.prettyUrl()), i18n("Saving failed"));
     } else {
         KMessageBox::information(this, i18n("Report saved to %1", saveUrl.prettyUrl()) , i18n("Saved OK"));
@@ -217,19 +217,19 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 
     kDebug();
     if (tempData()->reportSchemaChangedInPreviousView) {
-        delete rpt;
+        delete m_preRenderer;
 
-        rpt = new ORPreRender(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
-        rpt->setName( tempData()->name );
-        curPage = 1;
+        m_preRenderer = new ORPreRender(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
+        m_preRenderer->setName( tempData()->name );
+        m_currentPpage = 1;
 
-        doc = rpt->generate();
-        pageCount = doc->pages();
-        pageSelector->setRecordCount(pageCount);
+        m_reportDocument = m_preRenderer->generate();
+        m_pageCount = m_reportDocument->pages();
+        m_pageSelector->setRecordCount(m_pageCount);
 
-        rptwid = new KexiReportPage(this, doc);
-        rptwid->setObjectName("KexiReportPage");
-        scr->setWidget(rptwid);
+        m_reportWidget = new KexiReportPage(this, m_reportDocument);
+        m_reportWidget->setObjectName("KexiReportPage");
+        m_scrollArea->setWidget(m_reportWidget);
 
         tempData()->reportSchemaChangedInPreviousView = false;
     }

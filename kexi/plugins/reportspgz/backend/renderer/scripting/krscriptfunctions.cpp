@@ -23,8 +23,8 @@
 
 KRScriptFunctions::KRScriptFunctions(const KexiDB::Cursor *c)
 {
-    _curs = c;
-    _conn = _curs->connection();;
+    m_cursor = c;
+    m_connection = m_cursor->connection();;
 }
 
 
@@ -34,12 +34,12 @@ KRScriptFunctions::~KRScriptFunctions()
 
 void KRScriptFunctions::setSource(const QString &s)
 {
-    _source = s;
+    m_source = s;
 }
 
 void KRScriptFunctions::setWhere(const QString&w)
 {
-    _where = w;
+    m_where = w;
 }
 
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
@@ -47,14 +47,14 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
     qreal ret;
     QString sql;
 
-    sql = "SELECT " + function + "(" + field + ") FROM " + _source;
+    sql = "SELECT " + function + "(" + field + ") FROM " + m_source;
 
-    if (!_where.isEmpty()) {
-        sql += " WHERE(" + _where + ")";
+    if (!m_where.isEmpty()) {
+        sql += " WHERE(" + m_where + ")";
     }
 
     kDebug() << sql;
-    KexiDB::Cursor *curs = _conn->executeQuery(sql);
+    KexiDB::Cursor *curs = m_connection->executeQuery(sql);
 
     if (curs) {
         ret = curs->value(0).toDouble();
@@ -93,17 +93,17 @@ qreal KRScriptFunctions::count(const QString &field)
 QVariant KRScriptFunctions::value(const QString &field)
 {
     QVariant val;
-    if (!_curs) {
+    if (!m_cursor) {
         kDebug() << "No cursor to get value of field " << field;
         return val;
     }
 
 
-    KexiDB::QueryColumnInfo::Vector flds = _curs->query()->fieldsExpanded();
+    KexiDB::QueryColumnInfo::Vector flds = m_cursor->query()->fieldsExpanded();
     for (int i = 0; i < flds.size() ; ++i) {
 
         if (flds[i]->aliasOrName().toLower() == field.toLower()) {
-            val = const_cast<KexiDB::Cursor*>(_curs)->value(i);
+            val = const_cast<KexiDB::Cursor*>(m_cursor)->value(i);
         }
     }
 

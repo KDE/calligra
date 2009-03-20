@@ -57,8 +57,9 @@ public slots:
     virtual void btnMoveUp_clicked();
     virtual void brnMoveDown_clicked();
 protected:
-    ReportDesigner * rw;
-    ReportSectionDetail * _rsd;
+    ReportDesigner * m_reportDesigner;
+    ReportSectionDetail * m_reportSectionDetail;
+    
 protected slots:
     virtual void languageChange();
 

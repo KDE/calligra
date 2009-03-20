@@ -73,27 +73,27 @@ public:
     KRSectionData* section(const QString&);
 
     QString query() {
-        return _query;
+        return m_query;
     }
     QString script() {
-        return _script;
+        return m_script;
     };
     QString interpreter() {
-        return _interpreter;
+        return m_interpreter;
     }
     KRDetailSectionData* detail() {
         return detailsection;
     }
     
-    void setName(const QString&n){_name = n;};
-    QString name(){return _name;};
+    void setName(const QString&n){m_name = n;};
+    QString name(){return m_name;};
     
 protected:
-    QString title;
-    QString _name;
-    QString _query;
-    QString _script;
-    QString _interpreter;
+    QString m_title;
+    QString m_name;
+    QString m_query;
+    QString m_script;
+    QString m_interpreter;
 
     ReportPageOptions page;
 
@@ -114,7 +114,7 @@ protected:
 
     KRDetailSectionData* detailsection;
 private:
-    bool _valid;
+    bool m_valid;
     void init();
 
     friend class ORPreRenderPrivate;

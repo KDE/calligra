@@ -24,7 +24,7 @@ namespace Scripting
 
 Text::Text(KRTextData* t)
 {
-    _text = t;
+    m_text = t;
 }
 
 
@@ -34,17 +34,17 @@ Text::~Text()
 
 QString Text::source()
 {
-    return _text->column();
+    return m_text->column();
 }
 
 void Text::setSource(const QString& s)
 {
-    _text->_controlSource->setValue(s);
+    m_text->m_controlSource->setValue(s);
 }
 
 int Text::horizontalAlignment()
 {
-    QString a = _text->_hAlignment->value().toString();
+    QString a = m_text->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "left") {
         return -1;
@@ -59,23 +59,23 @@ void Text::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _text->_hAlignment->setValue("Left");
+        m_text->m_horizontalAlignment->setValue("Left");
         break;
     case 0:
-        _text->_hAlignment->setValue("Center");
+        m_text->m_horizontalAlignment->setValue("Center");
         break;
     case 1:
-        _text->_hAlignment->setValue("Right");
+        m_text->m_horizontalAlignment->setValue("Right");
         break;
     default:
-        _text->_hAlignment->setValue("Left");
+        m_text->m_horizontalAlignment->setValue("Left");
         break;
     }
 }
 
 int Text::verticalAlignment()
 {
-    QString a = _text->_hAlignment->value().toString();
+    QString a = m_text->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "top") {
         return -1;
@@ -90,92 +90,92 @@ void Text::setVerticalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _text->_hAlignment->setValue("Top");
+        m_text->m_horizontalAlignment->setValue("Top");
         break;
     case 0:
-        _text->_hAlignment->setValue("Middle");
+        m_text->m_horizontalAlignment->setValue("Middle");
         break;
     case 1:
-        _text->_hAlignment->setValue("Bottom");
+        m_text->m_horizontalAlignment->setValue("Bottom");
         break;
     default:
-        _text->_hAlignment->setValue("Top");
+        m_text->m_horizontalAlignment->setValue("Top");
         break;
     }
 }
 
 QColor Text::backgroundColor()
 {
-    return _text->_bgColor->value().value<QColor>();
+    return m_text->m_backgroundColor->value().value<QColor>();
 }
 void Text::setBackgroundColor(const QColor& c)
 {
-    _text->_bgColor->setValue(QColor(c));
+    m_text->m_backgroundColor->setValue(QColor(c));
 }
 
 QColor Text::foregroundColor()
 {
-    return _text->_fgColor->value().value<QColor>();
+    return m_text->m_foregroundColor->value().value<QColor>();
 }
 void Text::setForegroundColor(const QColor& c)
 {
-    _text->_fgColor->setValue(QColor(c));
+    m_text->m_foregroundColor->setValue(QColor(c));
 }
 
 int Text::backgroundOpacity()
 {
-    return _text->_bgOpacity->value().toInt();
+    return m_text->m_backgroundOpacity->value().toInt();
 }
 void Text::setBackgroundOpacity(int o)
 {
-    _text->_bgOpacity->setValue(o);
+    m_text->m_backgroundOpacity->setValue(o);
 }
 
 QColor Text::lineColor()
 {
-    return _text->_lnColor->value().value<QColor>();
+    return m_text->m_lineColor->value().value<QColor>();
 }
 void Text::setLineColor(const QColor& c)
 {
-    _text->_lnColor->setValue(QColor(c));
+    m_text->m_lineColor->setValue(QColor(c));
 }
 
 int Text::lineWeight()
 {
-    return _text->_lnWeight->value().toInt();
+    return m_text->m_lineWeight->value().toInt();
 }
 void Text::setLineWeight(int w)
 {
-    _text->_lnWeight->setValue(w);
+    m_text->m_lineWeight->setValue(w);
 }
 
 int Text::lineStyle()
 {
-    return _text->_lnStyle->value().toInt();
+    return m_text->m_lineStyle->value().toInt();
 }
 void Text::setLineStyle(int s)
 {
     if (s < 0 || s > 5) {
         s = 1;
     }
-    _text->_lnStyle->setValue(s);
+    m_text->m_lineStyle->setValue(s);
 }
 
 QPointF Text::position()
 {
-    return _text->_pos.toPoint();
+    return m_text->m_pos.toPoint();
 }
 void Text::setPosition(const QPointF& p)
 {
-    _text->_pos.setPointPos(p);
+    m_text->m_pos.setPointPos(p);
 }
 
 QSizeF Text::size()
 {
-    return _text->_size.toPoint();
+    return m_text->m_size.toPoint();
 }
 void Text::setSize(const QSizeF& s)
 {
-    _text->_size.setPointSize(s);
+    m_text->m_size.setPointSize(s);
 }
 }

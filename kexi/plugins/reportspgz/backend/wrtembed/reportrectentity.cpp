@@ -34,20 +34,20 @@
 ReportRectEntity::ReportRectEntity(ReportDesigner *r)
         : QGraphicsRectItem(), ReportEntity(r)
 {
-    dpiX = KoGlobal::dpiX();
-    dpiY = KoGlobal::dpiY();
+    m_dpiX = KoGlobal::dpiX();
+    m_dpiY = KoGlobal::dpiY();
 
-    ppos = 0;
-    psize = 0;
+    m_ppos = 0;
+    m_psize = 0;
 
     setAcceptsHoverEvents(true);
 }
 
 void ReportRectEntity::init(KRPos* p, KRSize* s, KoProperty::Set* se)
 {
-    ppos = p;
-    psize = s;
-    pset = se;
+    m_ppos = p;
+    m_psize = s;
+    m_pset = se;
 }
 
 ReportRectEntity::~ReportRectEntity()
@@ -56,19 +56,19 @@ ReportRectEntity::~ReportRectEntity()
 
 void ReportRectEntity::setUnit(KoUnit u)
 {
-    ppos->setUnit(u);
-    psize->setUnit(u);
+    m_ppos->setUnit(u);
+    m_psize->setUnit(u);
 }
 
 QRectF ReportRectEntity::sceneRect()
 {
-    return QRectF(ppos->toScene(), psize->toScene());
+    return QRectF(m_ppos->toScene(), m_psize->toScene());
 }
 
 QRectF ReportRectEntity::pointRect()
 {
-    if (ppos && psize)
-        return QRectF(ppos->toPoint(), psize->toPoint());
+    if (m_ppos && m_psize)
+        return QRectF(m_ppos->toPoint(), m_psize->toPoint());
     else
         return QRectF(0, 0, 0, 0);
 }
@@ -82,16 +82,16 @@ void ReportRectEntity::setSceneRect(QRectF r)
 {
     QGraphicsRectItem::setPos(r.x(), r.y());
     setRect(0, 0, r.width(), r.height());
-    ppos->setScenePos(QPointF(r.x(), r.y()));
-    psize->setSceneSize(QSizeF(r.width(), r.height()));
+    m_ppos->setScenePos(QPointF(r.x(), r.y()));
+    m_psize->setSceneSize(QSizeF(r.width(), r.height()));
     update();
 }
 
 void ReportRectEntity::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
     //Update and show properties
-    ppos->setScenePos(QPointF(sceneRect().x(), sceneRect().y()));
-    _rd->changeSet(pset);
+    m_ppos->setScenePos(QPointF(sceneRect().x(), sceneRect().y()));
+    m_reportDesigner->changeSet(m_pset);
     setSelected(true);
     scene()->update();
 }
@@ -99,9 +99,9 @@ void ReportRectEntity::mousePressEvent(QGraphicsSceneMouseEvent * event)
 void ReportRectEntity::mouseReleaseEvent(QGraphicsSceneMouseEvent * event)
 {
     //Keep the size and position in sync
-    ppos->setScenePos(pos());
-    psize->setSceneSize(QSizeF(rect().width(), rect().height()));
-    _rd->changeSet(pset);
+    m_ppos->setScenePos(pos());
+    m_psize->setSceneSize(QSizeF(rect().width(), rect().height()));
+    m_reportDesigner->changeSet(m_pset);
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
@@ -115,7 +115,7 @@ void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
     //TODO use an enum for the directions
 
-    switch (_grabAction) {
+    switch (m_grabAction) {
     case 1:
         if (sceneRect().y() - p.y() + rect().height() > 0 && sceneRect().x() - p.x() + rect().width() > 0)
             setSceneRect(QPointF(p.x(), p.y()), QSizeF(sceneRect().x() - p.x() + rect().width(), sceneRect().y() - p.y() + rect().height()));
@@ -156,11 +156,11 @@ void ReportRectEntity::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
 
 void ReportRectEntity::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
-    _grabAction = 0;
+    m_grabAction = 0;
 
     if (isSelected()) {
-        _grabAction = grabHandle(event->pos());
-        switch (_grabAction) {
+        m_grabAction = grabHandle(event->pos());
+        switch (m_grabAction) {
         case 1:
             setCursor(Qt::SizeFDiagCursor);
             break;
@@ -277,8 +277,8 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
 
         return newPos;
     } else if (change == ItemPositionHasChanged && scene()) {
-        ppos->setScenePos(value.toPointF());
-    } else if (change == ItemSceneHasChanged && scene() && psize) {
+        m_ppos->setScenePos(value.toPointF());
+    } else if (change == ItemSceneHasChanged && scene() && m_psize) {
         QPointF newPos = pos();
 
         newPos = dynamic_cast<ReportScene*>(scene())->gridPoint(newPos);
@@ -292,7 +292,7 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
         else if (newPos.y() > (scene()->height() - rect().height()))
             newPos.setY(scene()->height() - rect().height());
 
-        setSceneRect(newPos, psize->toScene());
+        setSceneRect(newPos, m_psize->toScene());
     }
 
     return QGraphicsItem::itemChange(change, value);

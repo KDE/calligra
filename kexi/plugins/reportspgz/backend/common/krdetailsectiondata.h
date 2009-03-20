@@ -43,19 +43,19 @@ public:
         BreakAtEnd = 1
     };
 
-    QString name;
-    int pagebreak;
+    QString m_name;
+    int m_pageBreak;
 
-    KRSectionData * detail;
+    KRSectionData * m_detailSection;
 
-    QList<ORDetailGroupSectionData*> groupList;
+    QList<ORDetailGroupSectionData*> m_groupList;
     // QList<ORDataData> trackTotal;
     bool isValid() {
-        return _valid;
+        return m_valid;
     }
 
 private:
-    bool _valid;
+    bool m_valid;
 
 };
 

@@ -111,7 +111,7 @@ public slots:
 
 
 private:
-    KRBarcodeData *_barcode;
+    KRBarcodeData *m_barcode;
 };
 
 }

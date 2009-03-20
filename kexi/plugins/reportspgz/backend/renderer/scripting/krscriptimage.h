@@ -94,7 +94,7 @@ public slots:
      */
     void loadFromFile(const QVariant &);
 private:
-    KRImageData *_image;
+    KRImageData *m_image;
 
 };
 

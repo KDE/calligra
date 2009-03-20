@@ -63,7 +63,7 @@ public:
 protected:
 
 private:
-    ORPreRenderPrivate* _internal;
+    ORPreRenderPrivate* d;
 
 };
 

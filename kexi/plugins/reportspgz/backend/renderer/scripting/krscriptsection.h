@@ -62,8 +62,8 @@ public slots:
     void eventOnRender();
     
 private:
-    KRSectionData *_section;
-    Kross::Object::Ptr _scriptObject;
+    KRSectionData *m_section;
+    Kross::Object::Ptr m_scriptObject;
 };
 }
 #endif

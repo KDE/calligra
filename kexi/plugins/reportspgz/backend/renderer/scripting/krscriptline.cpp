@@ -25,7 +25,7 @@ namespace Scripting
 
 Line::Line(KRLineData* l)
 {
-    _line = l;
+    m_line = l;
 }
 
 Line::~Line()
@@ -35,53 +35,53 @@ Line::~Line()
 
 QColor Line::lineColor()
 {
-    return _line->_lnColor->value().value<QColor>();
+    return m_line->m_lineColor->value().value<QColor>();
 }
 
 void Line::setLineColor(const QColor& c)
 {
-    _line->_lnColor->setValue(c);
+    m_line->m_lineColor->setValue(c);
 }
 
 int Line::lineWeight()
 {
-    return _line->_lnWeight->value().toInt();
+    return m_line->m_lineWeight->value().toInt();
 }
 
 void Line::setLineWeight(int w)
 {
-    _line->_lnWeight->setValue(w);
+    m_line->m_lineWeight->setValue(w);
 }
 
 int Line::lineStyle()
 {
-    return _line->_lnStyle->value().toInt();
+    return m_line->m_lineStyle->value().toInt();
 }
 void Line::setLineStyle(int s)
 {
     if (s < 0 || s > 5) {
         s = 1;
     }
-    _line->_lnStyle->setValue(s);
+    m_line->m_lineStyle->setValue(s);
 }
 
 QPointF Line::startPosition()
 {
-    return _line->_start.toPoint();
+    return m_line->m_start.toPoint();
 }
 
 void Line::setStartPosition(const QPointF& p)
 {
-    _line->_start.setPointPos(p);
+    m_line->m_start.setPointPos(p);
 }
 
 QPointF Line::endPosition()
 {
-    return _line->_end.toPoint();
+    return m_line->m_end.toPoint();
 }
 
 void Line::setEndPosition(const QPointF& p)
 {
-    _line->_end.setPointPos(p);
+    m_line->m_end.setPointPos(p);
 }
 }

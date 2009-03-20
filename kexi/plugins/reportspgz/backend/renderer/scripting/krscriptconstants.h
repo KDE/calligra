@@ -38,15 +38,15 @@ public:
     
     enum PenStyle {QtNoPen = 0, QtSolidLine, QtDashLine, QtDotLine, QtDashDotLine, QtDashDotDotLine};
     
-    void setPageNumber(int p){currentPage = p;}
-    void setPageTotal(int t){totalPages = t;};
+    void setPageNumber(int p){m_currentPage = p;}
+    void setPageTotal(int t){m_totalPages = t;};
     public slots:
-        int PageNumber(){return currentPage;};
-        int PageTotal(){return totalPages;};
+        int PageNumber(){return m_currentPage;};
+        int PageTotal(){return m_totalPages;};
     
     private:
-        int currentPage;
-        int totalPages;
+        int m_currentPage;
+        int m_totalPages;
         
 
 };

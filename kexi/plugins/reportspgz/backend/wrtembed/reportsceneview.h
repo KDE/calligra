@@ -32,7 +32,7 @@ public:
     ReportSceneView(ReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0, const char * name = 0);
     virtual ~ReportSceneView();
 
-    ReportDesigner * document();
+    ReportDesigner * designer();
     virtual QSize sizeHint() const;
 public slots:
     void resizeContents(QSize);
@@ -41,7 +41,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent * e);
 
 private:
-    ReportDesigner* _rw;
+    ReportDesigner* m_reportDesigner;
 };
 
 #endif

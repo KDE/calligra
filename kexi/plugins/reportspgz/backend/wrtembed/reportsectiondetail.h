@@ -57,20 +57,20 @@ public:
     void insertSection(int idx, ReportSectionDetailGroup * rsd);
     int findSection(const QString & name);
     void removeSection(int idx, bool del = FALSE);
-
     virtual QSize sizeHint() const;
+    
 protected:
-    QString _query;
+    QString m_query;
 
-    QString _name;
-    ReportSection * _detail;
-    ReportDesigner * _rd;
+    QString m_name;
+    ReportSection * m_detail;
+    ReportDesigner * m_reportDesigner;
 
     QList<ReportSectionDetailGroup*> groupList;
 
-    QVBoxLayout * vboxlayout;
+    QVBoxLayout * m_vboxlayout;
 
-    int _pagebreak;
+    int m_pageBreak;
 };
 
 #endif

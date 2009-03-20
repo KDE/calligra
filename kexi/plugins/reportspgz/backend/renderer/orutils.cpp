@@ -27,8 +27,8 @@
 //
 orQuery::orQuery()
 {
-    qryQuery = 0;
-    _database = 0;
+    m_cursor = 0;
+    m_connection = 0;
 }
 
 orQuery::orQuery(const QString &qstrPName, const QString &qstrSQL,
@@ -39,14 +39,14 @@ orQuery::orQuery(const QString &qstrPName, const QString &qstrSQL,
     int     intParamNum;
     int     intStartIndex = 0;
 
-    qryQuery = 0;
-    _database = pDb;
-    _schema = 0;
+    m_cursor = 0;
+    m_connection = pDb;
+    m_schema = 0;
     //  Initialize some privates
-    qstrName  = qstrPName;
-    qstrQuery = qstrSQL;
+    m_qstrName  = qstrPName;
+    m_qstrQuery = qstrSQL;
 
-    kDebug() << qstrName << ":" << qstrQuery;
+    kDebug() << m_qstrName << ":" << m_qstrQuery;
 
     //For now, lets assume we only support simple tables or queries
     if (doexec) {
@@ -57,33 +57,33 @@ orQuery::orQuery(const QString &qstrPName, const QString &qstrSQL,
 
 orQuery::~orQuery()
 {
-    qryQuery->close();
-    delete qryQuery;
-    qryQuery = 0;
+    m_cursor->close();
+    delete m_cursor;
+    m_cursor = 0;
 }
 
 bool orQuery::execute()
 {
-    if (_database && qryQuery == 0) {
+    if (m_connection && m_cursor == 0) {
         //NOTE we can use the variation of executeQuery to pass in parameters
-        if (qstrQuery.isEmpty()) {
-            qryQuery = _database->executeQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
-        } else if (_database->tableSchema(qstrQuery)) {
-            kDebug() << qstrQuery <<  " is a table..";
-            qryQuery = _database->executeQuery(* (_database->tableSchema(qstrQuery)), 1);
-            _schema = new KexiDB::TableOrQuerySchema(_database->tableSchema(qstrQuery));
-        } else if (_database->querySchema(qstrQuery)) {
-            kDebug() << qstrQuery <<  " is a query..";
-            qryQuery = _database->executeQuery(* (_database->querySchema(qstrQuery)), 1);
+        if (m_qstrQuery.isEmpty()) {
+            m_cursor = m_connection->executeQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
+        } else if (m_connection->tableSchema(m_qstrQuery)) {
+            kDebug() << m_qstrQuery <<  " is a table..";
+            m_cursor = m_connection->executeQuery(* (m_connection->tableSchema(m_qstrQuery)), 1);
+            m_schema = new KexiDB::TableOrQuerySchema(m_connection->tableSchema(m_qstrQuery));
+        } else if (m_connection->querySchema(m_qstrQuery)) {
+            kDebug() << m_qstrQuery <<  " is a query..";
+            m_cursor = m_connection->executeQuery(* (m_connection->querySchema(m_qstrQuery)), 1);
             kDebug() << "...got test result";
-            _schema = new KexiDB::TableOrQuerySchema(_database->querySchema(qstrQuery));
+            m_schema = new KexiDB::TableOrQuerySchema(m_connection->querySchema(m_qstrQuery));
             kDebug() << "...got schema";
 
         }
 
-        if (qryQuery) {
+        if (m_cursor) {
             kDebug() << "Moving to first row..";
-            return qryQuery->moveFirst();
+            return m_cursor->moveFirst();
         } else
             return false;
     }
@@ -93,8 +93,8 @@ bool orQuery::execute()
 uint orQuery::fieldNumber(const QString &fld)
 {
     uint x = -1;
-    if (qryQuery->query()) {
-        KexiDB::QueryColumnInfo::Vector flds = qryQuery->query()->fieldsExpanded();
+    if (m_cursor->query()) {
+        KexiDB::QueryColumnInfo::Vector flds = m_cursor->query()->fieldsExpanded();
         for (int i = 0; i < flds.size() ; ++i) {
             if (fld.toLower() == flds[i]->aliasOrName()) {
                 x = i;
@@ -106,11 +106,11 @@ uint orQuery::fieldNumber(const QString &fld)
 
 KexiDB::TableOrQuerySchema &orQuery::schema()
 {
-    if (_schema)
-        return *_schema;
+    if (m_schema)
+        return *m_schema;
     else {
-        Q_ASSERT(_database);
-        KexiDB::TableOrQuerySchema *tq = new KexiDB::TableOrQuerySchema(_database, "");
+        Q_ASSERT(m_connection);
+        KexiDB::TableOrQuerySchema *tq = new KexiDB::TableOrQuerySchema(m_connection, "");
         return *tq;
     }
 }
@@ -120,38 +120,38 @@ KexiDB::TableOrQuerySchema &orQuery::schema()
 //
 orData::orData()
 {
-    _valid = false;
-    qryThis = 0;
+    m_valid = false;
+    m_query = 0;
 }
 
 void orData::setQuery(orQuery *qryPassed)
 {
-    qryThis = qryPassed;
-    _valid = (qryThis != 0 && qstrField.length());
+    m_query = qryPassed;
+    m_valid = (m_query != 0 && m_field.length());
 }
 
 void orData::setField(const QString &qstrPPassed)
 {
-    qstrField = qstrPPassed;
-    _valid = (qryThis != 0 && qstrField.length());
+    m_field = qstrPPassed;
+    m_valid = (m_query != 0 && m_field.length());
 }
 
 const QString &orData::getValue()
 {
-    if (_valid && qryThis->getQuery()) {
-        qstrValue = qryThis->getQuery()->value(qryThis->fieldNumber(qstrField)).toString();
+    if (m_valid && m_query->getQuery()) {
+        m_value = m_query->getQuery()->value(m_query->fieldNumber(m_field)).toString();
     } else {
         kDebug() << "Not Valid";
     }
-    return qstrValue;
+    return m_value;
 }
 
 const QByteArray &orData::getRawValue()
 {
-    if (_valid && qryThis->getQuery()) {
-        rawValue = qryThis->getQuery()->value(qryThis->fieldNumber(qstrField)).toByteArray();
+    if (m_valid && m_query->getQuery()) {
+        m_rawValue = m_query->getQuery()->value(m_query->fieldNumber(m_field)).toByteArray();
     }
 
-    return rawValue;
+    return m_rawValue;
 }
 

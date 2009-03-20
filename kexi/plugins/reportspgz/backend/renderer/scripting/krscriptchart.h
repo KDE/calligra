@@ -152,7 +152,7 @@ public slots:
     void setYAxisTitle(const QString &);
 
 private:
-    KRChartData* _chart;
+    KRChartData* m_chart;
 
 };
 

@@ -42,12 +42,12 @@ public:
     void setUnit(KoUnit);
 
     KoProperty::Property* property() {
-        return _property;
+        return m_property;
     }
 private:
-    QSizeF _pointSize;
-    KoUnit _unit;
-    KoProperty::Property* _property;
+    QSizeF m_pointSize;
+    KoUnit m_unit;
+    KoProperty::Property* m_property;
 };
 
 #endif

@@ -23,8 +23,8 @@
 KRObjectData::KRObjectData()
 {
     Z = 0;
-    _name = new KoProperty::Property("Name", "", "Name", "Object Name");
-    _name->setAutoSync(0);
+    m_name = new KoProperty::Property("Name", "", "Name", "Object Name");
+    m_name->setAutoSync(0);
 }
 
 KRObjectData::~KRObjectData() { }

@@ -22,15 +22,15 @@
 
 KRPos::KRPos(const KoUnit& unit)
 {
-    _unit = unit;
+    m_unit = unit;
     //TODO When KoProperty can handle QPointF
-    _property = new KoProperty::Property("Position", toScene().toPoint(), "Position", "Position");
+    m_property = new KoProperty::Property("Position", toScene().toPoint(), "Position", "Position");
 }
 
 void KRPos::setName(const QString& n)
 {
-    _property->setName(n.toLatin1());
-    _property->setCaption(n);
+    m_property->setName(n.toLatin1());
+    m_property->setCaption(n);
 }
 
 KRPos::~KRPos()
@@ -44,53 +44,53 @@ void KRPos::setScenePos(const QPointF& pos, bool update)
     x = INCH_TO_POINT(pos.x() / KoGlobal::dpiX());
     y = INCH_TO_POINT(pos.y() / KoGlobal::dpiY());
 
-    _pointPos.setX(x);
-    _pointPos.setY(y);
+    m_pointPos.setX(x);
+    m_pointPos.setY(y);
 
     if (update)
-        _property->setValue(toUnit());
+        m_property->setValue(toUnit());
 }
 
 void KRPos::setUnitPos(const QPointF& pos, bool update)
 {
     kDebug() << pos;
     qreal x, y;
-    x = _unit.fromUserValue(pos.x());
-    y = _unit.fromUserValue(pos.y());
+    x = m_unit.fromUserValue(pos.x());
+    y = m_unit.fromUserValue(pos.y());
 
-    _pointPos.setX(x);
-    _pointPos.setY(y);
+    m_pointPos.setX(x);
+    m_pointPos.setY(y);
 
     if (update)
-        _property->setValue(toUnit().toPoint());
+        m_property->setValue(toUnit().toPoint());
 }
 
 void KRPos::setPointPos(const QPointF& pos, bool update)
 {
-    _pointPos.setX(pos.x());
-    _pointPos.setY(pos.y());
+    m_pointPos.setX(pos.x());
+    m_pointPos.setY(pos.y());
 
     if (update)
-        _property->setValue(toUnit().toPoint());
+        m_property->setValue(toUnit().toPoint());
 
 }
 
 void KRPos::setUnit(KoUnit u)
 {
-    _unit = u;
-    _property->setValue(toUnit().toPoint());
+    m_unit = u;
+    m_property->setValue(toUnit().toPoint());
 }
 
 QPointF KRPos::toPoint()
 {
-    return _pointPos;
+    return m_pointPos;
 }
 
 QPointF KRPos::toScene()
 {
     qreal x, y;
-    x = POINT_TO_INCH(_pointPos.x()) * KoGlobal::dpiX();
-    y = POINT_TO_INCH(_pointPos.y()) * KoGlobal::dpiY();
+    x = POINT_TO_INCH(m_pointPos.x()) * KoGlobal::dpiX();
+    y = POINT_TO_INCH(m_pointPos.y()) * KoGlobal::dpiY();
 
     return QPointF(x, y);
 }
@@ -98,8 +98,8 @@ QPointF KRPos::toScene()
 QPointF KRPos::toUnit()
 {
     qreal x, y;
-    x = _unit.toUserValue(_pointPos.x());
-    y = _unit.toUserValue(_pointPos.y());
+    x = m_unit.toUserValue(m_pointPos.x());
+    y = m_unit.toUserValue(m_pointPos.y());
 
     return QPointF(x, y);
 }

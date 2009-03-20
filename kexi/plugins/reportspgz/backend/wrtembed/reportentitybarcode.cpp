@@ -46,10 +46,10 @@ void ReportEntityBarcode::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setMaxLength(5);
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 }
 // methods (constructors)
@@ -57,16 +57,16 @@ ReportEntityBarcode::ReportEntityBarcode(ReportDesigner * rw, QGraphicsScene* sc
         : ReportRectEntity(rw)
 {
     init(scene);
-    _size.setSceneSize(QSizeF(min_width_total*dpiX, min_height*dpiY));
-    setSceneRect(_pos.toScene(), _size.toScene());
+    m_size.setSceneSize(QSizeF(min_width_total*m_dpiX, min_height*m_dpiY));
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 
-    _name->setValue(_rd->suggestEntityName("Barcode"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Barcode"));
 }
 
 ReportEntityBarcode::ReportEntityBarcode(QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene) : ReportRectEntity(rw), KRBarcodeData(element)
 {
     init(scene);
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityBarcode* ReportEntityBarcode::clone()
@@ -86,7 +86,7 @@ ReportEntityBarcode::~ReportEntityBarcode()
 QRect ReportEntityBarcode::getTextRect()
 {
     QFont fnt = QFont();
-    return QFontMetrics(fnt).boundingRect(int (x()), int (y()), 0, 0, 0, _controlSource->value().toString() + QObject::tr(":") + QObject::tr(" barcode"));
+    return QFontMetrics(fnt).boundingRect(int (x()), int (y()), 0, 0, 0, m_controlSource->value().toString() + QObject::tr(":") + QObject::tr(" barcode"));
 }
 
 void ReportEntityBarcode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
@@ -103,23 +103,23 @@ void ReportEntityBarcode::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
     drawHandles(painter);
 
-    if (_format->value().toString() == "3of9")
+    if (m_format->value().toString() == "3of9")
         render3of9(rect().toRect(), "3of9", alignment(), painter);
-    else if (_format->value().toString() == "3of9+")
+    else if (m_format->value().toString() == "3of9+")
         renderExtended3of9(rect().toRect(), "3of9+", alignment(), painter);
-    else if (_format->value().toString() == "128")
+    else if (m_format->value().toString() == "128")
         renderCode128(rect().toRect(), "128", alignment(), painter);
-    else if (_format->value().toString() == "upc-a")
+    else if (m_format->value().toString() == "upc-a")
         renderCodeUPCA(rect().toRect(), "123456789012", alignment(), painter);
-    else if (_format->value().toString() == "upc-e")
+    else if (m_format->value().toString() == "upc-e")
         renderCodeUPCE(rect().toRect(), "12345678", alignment(), painter);
-    else if (_format->value().toString() == "ean13")
+    else if (m_format->value().toString() == "ean13")
         renderCodeEAN13(rect().toRect(), "123456789012", alignment(), painter);
-    else if (_format->value().toString() == "ean8")
+    else if (m_format->value().toString() == "ean8")
         renderCodeEAN8(rect().toRect(), "1234567", alignment(), painter);
 
     painter->setPen(Qt::black);
-    painter->drawText(rect(), 0, _controlSource->value().toString() + QObject::tr(":") + QObject::tr(" barcode"));
+    painter->drawText(rect(), 0, m_controlSource->value().toString() + QObject::tr(":") + QObject::tr(" barcode"));
 
     // restore an values before we started just in case
     painter->setPen(p);
@@ -145,20 +145,20 @@ void ReportEntityBarcode::buildXML(QDomDocument & doc, QDomElement & parent)
 
     // format
     QDomElement fmt = doc.createElement("format");
-    fmt.appendChild(doc.createTextNode(_format->value().toString()));
+    fmt.appendChild(doc.createTextNode(m_format->value().toString()));
     entity.appendChild(fmt);
 
     QDomElement maxl = doc.createElement("maxlength");
-    maxl.appendChild(doc.createTextNode(QString::number(_maxLength->value().toInt())));
+    maxl.appendChild(doc.createTextNode(QString::number(m_maxLength->value().toInt())));
     entity.appendChild(maxl);
 
     // alignment
-    entity.appendChild(doc.createElement(_hAlignment->value().toString()));
+    entity.appendChild(doc.createElement(m_horizontalAlignment->value().toString()));
 
     // the field data
     QDomElement data = doc.createElement("data");
     QDomElement dcolumn = doc.createElement("controlsource");
-    dcolumn.appendChild(doc.createTextNode(_controlSource->value().toString()));
+    dcolumn.appendChild(doc.createTextNode(m_controlSource->value().toString()));
     data.appendChild(dcolumn);
     entity.appendChild(data);
 
@@ -171,25 +171,25 @@ void ReportEntityBarcode::propertyChanged(KoProperty::Set &s, KoProperty::Proper
 
     //Handle Position
     if (p.name() == "Position") {
-        _pos.setUnitPos(p.value().value<QPointF>());
+        m_pos.setUnitPos(p.value().value<QPointF>());
     }
 
     if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
 
     if (scene()) scene()->update();
 }
 
 void ReportEntityBarcode::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
     ReportRectEntity::mousePressEvent(event);
 }

@@ -37,11 +37,9 @@ class ReportEntityText : public QObject, public KRTextData, public ReportRectEnt
 public:
     ReportEntityText(ReportDesigner *, QGraphicsScene * scene);
     ReportEntityText(QDomNode & element, ReportDesigner *, QGraphicsScene * scene);
-
     virtual ~ReportEntityText();
 
     virtual void buildXML(QDomDocument & doc, QDomElement & parent);
-
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
     virtual ReportEntityText* clone();
 

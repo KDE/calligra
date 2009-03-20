@@ -89,13 +89,13 @@ public:
     bool isModified();
 
     void setConn(KexiDB::Connection *c) {
-        conn = c;
+        m_conn = c;
     }
     KexiDB::Connection *theConn() {
-        return conn;
+        return m_conn;
     }
     bool isConnected() {
-        return conn &&  conn->isConnected();
+        return m_conn &&  m_conn->isConnected();
     }
 
     /**
@@ -121,7 +121,7 @@ public:
     QGraphicsScene* activeScene();
     void setActiveScene(QGraphicsScene* a);
     KoProperty::Set* propertySet() {
-        return set;
+        return m_set;
     }
 
     virtual QSize sizeHint() const;
@@ -135,7 +135,7 @@ public:
 
     void changeSet(KoProperty::Set *);
     KoProperty::Set* itemPropertySet() {
-        kDebug(); return _itmset;
+        kDebug(); return m_itmset;
     }
 
     void setModified(bool = true);
@@ -183,35 +183,35 @@ private:
     Private * const d;
 
     void init();
-    bool _modified; // true if this document has been modified, false otherwise
-    KexiDB::Connection *conn;
+    bool m_modified; // true if this document has been modified, false otherwise
+    KexiDB::Connection *m_conn;
     QStringList pageFormats();
 
     virtual void resizeEvent(QResizeEvent * event);
 
     //Properties
     void createProperties();
-    KoProperty::Set* set;
-    KoProperty::Set* _itmset;
-    KoProperty::Property* _title;
-    KoProperty::Property* _dataSource;
-    KoProperty::Property* _pageSize;
-    KoProperty::Property* _orientation;
-    KoProperty::Property* _unit;
-    KoProperty::Property* _customHeight;
-    KoProperty::Property* _customWidth;
-    KoProperty::Property* _leftMargin;
-    KoProperty::Property* _rightMargin;
-    KoProperty::Property* _topMargin;
-    KoProperty::Property* _bottomMargin;
-    KoProperty::Property* _showGrid;
-    KoProperty::Property* _gridDivisions;
-    KoProperty::Property* _gridSnap;
-    KoProperty::Property* _labelType;
-    KoProperty::Property* _interpreter;
-    KoProperty::Property* _script;
+    KoProperty::Set* m_set;
+    KoProperty::Set* m_itmset;
+    KoProperty::Property* m_title;
+    KoProperty::Property* m_dataSource;
+    KoProperty::Property* m_pageSize;
+    KoProperty::Property* m_orientation;
+    KoProperty::Property* m_unit;
+    KoProperty::Property* m_customHeight;
+    KoProperty::Property* m_customWidth;
+    KoProperty::Property* m_leftMargin;
+    KoProperty::Property* m_rightMargin;
+    KoProperty::Property* m_topMargin;
+    KoProperty::Property* m_bottomMargin;
+    KoProperty::Property* m_showGrid;
+    KoProperty::Property* m_gridDivisions;
+    KoProperty::Property* m_gridSnap;
+    KoProperty::Property* m_labelType;
+    KoProperty::Property* m_interpreter;
+    KoProperty::Property* m_script;
 
-    ReportWriterSectionData * sectionData;
+    ReportWriterSectionData * m_sectionData;
     unsigned int selectionCount();
 
 private slots:

@@ -31,34 +31,34 @@ ReportSectionDetail::ReportSectionDetail(ReportDesigner * rptdes, const char * n
         : QWidget(rptdes)
 {
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    _pagebreak = BreakNone;
-    vboxlayout = new QVBoxLayout(this);
-    vboxlayout->setSpacing(0);
-    vboxlayout->setMargin(0);
-    _rd = rptdes;
-    _detail = new ReportSection(rptdes /*, this*/);
-    vboxlayout->addWidget(_detail);
+    m_pageBreak = BreakNone;
+    m_vboxlayout = new QVBoxLayout(this);
+    m_vboxlayout->setSpacing(0);
+    m_vboxlayout->setMargin(0);
+    m_reportDesigner = rptdes;
+    m_detail = new ReportSection(rptdes /*, this*/);
+    m_vboxlayout->addWidget(m_detail);
 
-    this->setLayout(vboxlayout);
+    this->setLayout(m_vboxlayout);
 }
 ReportSectionDetail::~ReportSectionDetail()
 {
     // Qt should be handling everything for us
-    _rd = 0;
+    m_reportDesigner = 0;
 }
 
 int ReportSectionDetail::pageBreak() const
 {
-    return _pagebreak;
+    return m_pageBreak;
 }
 void ReportSectionDetail::setPageBreak(int pb)
 {
-    _pagebreak = pb;
+    m_pageBreak = pb;
 }
 
 ReportSection * ReportSectionDetail::getDetail()
 {
-    return _detail;
+    return m_detail;
 }
 
 void ReportSectionDetail::buildXML(QDomDocument & doc, QDomElement & section)
@@ -103,7 +103,7 @@ void ReportSectionDetail::buildXML(QDomDocument & doc, QDomElement & section)
 
     // detail section
     QDomElement gdetail = doc.createElement("detail");
-    _detail->buildXML(doc, gdetail);
+    m_detail->buildXML(doc, gdetail);
     section.appendChild(gdetail);
 }
 
@@ -153,7 +153,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
             rsdg->showGroupHead(show_head);
             rsdg->showGroupFoot(show_foot);
         } else if (n == "detail") {
-            _detail->initFromXML(node);
+            m_detail->initFromXML(node);
         } else {
             // unknown element
             kDebug() << "while parsing section encountered and unknown element: " <<  n;
@@ -164,7 +164,7 @@ void ReportSectionDetail::initFromXML(QDomNode & section)
 
 ReportDesigner * ReportSectionDetail::reportDesigner()
 {
-    return _rd;
+    return m_reportDesigner;
 }
 
 int ReportSectionDetail::groupSectionCount()
@@ -188,21 +188,21 @@ void ReportSectionDetail::insertSection(int idx, ReportSectionDetailGroup * rsd)
     int gi = 0;
     for (gi = 0; gi < (int) groupList.count(); gi++) {
         rsd = groupList.at(gi);
-        vboxlayout->removeWidget(rsd->getGroupHead());
-        vboxlayout->insertWidget(idx, rsd->getGroupHead());
+        m_vboxlayout->removeWidget(rsd->getGroupHead());
+        m_vboxlayout->insertWidget(idx, rsd->getGroupHead());
         idx++;
     }
-    vboxlayout->removeWidget(_detail);
-    vboxlayout->insertWidget(idx, _detail);
+    m_vboxlayout->removeWidget(m_detail);
+    m_vboxlayout->insertWidget(idx, m_detail);
     idx++;
     for (gi = ((int) groupList.count() - 1); gi >= 0; gi--) {
         rsd = groupList.at(gi);
-        vboxlayout->removeWidget(rsd->getGroupFoot());
-        vboxlayout->insertWidget(idx, rsd->getGroupFoot());
+        m_vboxlayout->removeWidget(rsd->getGroupFoot());
+        m_vboxlayout->insertWidget(idx, rsd->getGroupFoot());
         idx++;
     }
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     adjustSize();
 }
 
@@ -221,12 +221,12 @@ void ReportSectionDetail::removeSection(int idx, bool del)
 {
     ReportSectionDetailGroup * rsd = groupList.at(idx);
 
-    vboxlayout->removeWidget(rsd->getGroupHead());
-    vboxlayout->removeWidget(rsd->getGroupFoot());
+    m_vboxlayout->removeWidget(rsd->getGroupHead());
+    m_vboxlayout->removeWidget(rsd->getGroupFoot());
 
     groupList.removeAt(idx);
 
-    if (_rd) _rd->setModified(TRUE);
+    if (m_reportDesigner) m_reportDesigner->setModified(TRUE);
     if (del) delete rsd;
     adjustSize();
 }
@@ -240,5 +240,5 @@ QSize ReportSectionDetail::sizeHint() const
         if (rsdg->isGroupHeadShowing()) s += rsdg->getGroupHead()->size();
         if (rsdg->isGroupFootShowing()) s += rsdg->getGroupFoot()->size();
     }
-    return s += _detail->size();
+    return s += m_detail->size();
 }

@@ -43,13 +43,13 @@
 class orQuery
 {
 private:
-    QString         qstrName;
+    QString         m_qstrName;
 
-    QString         qstrQuery;
-    KexiDB::Cursor   *qryQuery;
+    QString         m_qstrQuery;
+    KexiDB::Cursor   *m_cursor;
 
-    KexiDB::Connection   *_database;
-    KexiDB::TableOrQuerySchema *_schema;
+    KexiDB::Connection   *m_connection;
+    KexiDB::TableOrQuerySchema *m_schema;
 
 public:
     orQuery();
@@ -58,18 +58,18 @@ public:
     virtual ~orQuery();
 
     inline bool queryExecuted() const {
-        return (qryQuery != 0);
+        return (m_cursor != 0);
     }
     bool execute();
 
     inline KexiDB::Cursor *getQuery() {
-        return qryQuery;
+        return m_cursor;
     }
     inline const QString &getSql() const {
-        return qstrQuery;
+        return m_qstrQuery;
     }
     inline const QString &getName() const {
-        return qstrName;
+        return m_qstrName;
     }
 
     uint fieldNumber(const QString &fld);
@@ -81,11 +81,11 @@ public:
 class orData
 {
 private:
-    orQuery *qryThis;
-    QString qstrField;
-    QString qstrValue;
-    bool    _valid;
-    QByteArray rawValue;
+    orQuery *m_query;
+    QString m_field;
+    QString m_value;
+    bool    m_valid;
+    QByteArray m_rawValue;
 
 public:
     orData();
@@ -94,7 +94,7 @@ public:
     void  setField(const QString &qstrPPassed);
 
     inline bool  isValid() const {
-        return _valid;
+        return m_valid;
     }
 
     const QString &getValue();

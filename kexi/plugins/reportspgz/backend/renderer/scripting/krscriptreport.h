@@ -53,8 +53,8 @@ public slots:
     void eventOnNewPage();
 
 private:
-    KRReportData *_reportdata;
-    Kross::Object::Ptr _scriptObject;
+    KRReportData *m_reportData;
+    Kross::Object::Ptr m_scriptObject;
 };
 
 }

@@ -46,112 +46,112 @@
 
 KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 {
-    _conn = cu->connection();
-    _data = d;
-    _curs = cu;
+    m_connection = cu->connection();
+    m_reportData = d;
+    m_cursor = cu;
 
-    _action = 0;
-    _functions = 0;
-    _constants = 0;
-    _debug = 0;
-    _draw = 0;
+    m_action = 0;
+    m_functions = 0;
+    m_constants = 0;
+    m_debug = 0;
+    m_draw = 0;
 
     // Create the Kross::Action instance .
-    _action = new Kross::Action(this, "ReportScript");
+    m_action = new Kross::Action(this, "ReportScript");
 
-    _action->setInterpreter(d->interpreter());
+    m_action->setInterpreter(d->interpreter());
 
     //Add a kexi object to provide kexidb and extra functionality
-    _kexi = new KexiScriptAdaptor();
-    _action->addObject( _kexi, "Kexi" );
+    m_kexi = new KexiScriptAdaptor();
+    m_action->addObject( m_kexi, "Kexi" );
     
     //Add math functions to the script
-    _functions = new KRScriptFunctions(_curs);
-    _action->addObject(_functions, "field");
+    m_functions = new KRScriptFunctions(m_cursor);
+    m_action->addObject(m_functions, "field");
 
     //Add constants object
-    _constants = new KRScriptConstants();
-    _action->addObject(_constants, "constants");
+    m_constants = new KRScriptConstants();
+    m_action->addObject(m_constants, "constants");
 
     //A simple debug function to allow printing from functions
-    _debug = new KRScriptDebug();
-    _action->addObject(_debug, "debug");
+    m_debug = new KRScriptDebug();
+    m_action->addObject(m_debug, "debug");
 
     //A simple drawing object
-    _draw = new KRScriptDraw();
-    _action->addObject(_draw, "draw");
+    m_draw = new KRScriptDraw();
+    m_action->addObject(m_draw, "draw");
 
     //Add a general report object
-    _report = new Scripting::Report(_data);
+    m_report = new Scripting::Report(m_reportData);
 
     //Add the sections
-    QList<KRSectionData*> secs = _data->sections();
+    QList<KRSectionData*> secs = m_reportData->sections();
     foreach(KRSectionData *sec, secs) {
-        _sectionMap[sec] = new Scripting::Section(sec);
-	_sectionMap[sec]->setParent( _report );
-	_sectionMap[sec]->setObjectName(sec->name());
+        m_sectionMap[sec] = new Scripting::Section(sec);
+	m_sectionMap[sec]->setParent( m_report );
+	m_sectionMap[sec]->setObjectName(sec->name());
     }
     
-    _action->addObject(_report, _data->name());
-    kDebug() << "Report name is" << _data->name();
+    m_action->addObject(m_report, m_reportData->name());
+    kDebug() << "Report name is" << m_reportData->name();
     
-    _action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
+    m_action->setCode( fieldFunctions().toLocal8Bit() + "\n" + scriptCode().toLocal8Bit());
 
-    kDebug() << _action->code();
+    kDebug() << m_action->code();
 
-    _action->trigger();
+    m_action->trigger();
 
-    if (_action->hadError()) {
-        KMessageBox::error(0, _action->errorMessage());
+    if (m_action->hadError()) {
+        KMessageBox::error(0, m_action->errorMessage());
     } else {
-        kDebug() << "Function Names:" << _action->functionNames();
+        kDebug() << "Function Names:" << m_action->functionNames();
     }
 
-    _report->eventOnOpen();
+    m_report->eventOnOpen();
 }
 
 KRScriptHandler::~KRScriptHandler()
 {
-    delete _report;
-    delete _functions;
-    delete _constants;
-    delete _debug;
-    delete _draw;
-    delete _action;
+    delete m_report;
+    delete m_functions;
+    delete m_constants;
+    delete m_debug;
+    delete m_draw;
+    delete m_action;
 }
 
 void KRScriptHandler::newPage()
 {
-    if (_report) {
-        _report->eventOnNewPage();
+    if (m_report) {
+        m_report->eventOnNewPage();
     }
 }
 
 void KRScriptHandler::setSource(const QString &s)
 {
-    _source = s;
-    _functions->setSource(_source);
+    m_source = s;
+    m_functions->setSource(m_source);
 }
 
 void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
 {
-    _groups[key] = value;
+    m_groups[key] = value;
 
-    _functions->setWhere(where());
+    m_functions->setWhere(where());
 }
 void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 {
-    _groups.remove(key);
-    _functions->setWhere(where());
+    m_groups.remove(key);
+    m_functions->setWhere(where());
 }
 
 void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QPointF off)
 {
     if (cp)
-        _draw->setPage(cp);
-    _draw->setOffset(off);
+        m_draw->setPage(cp);
+    m_draw->setOffset(off);
 
-    Scripting::Section *ss = _sectionMap[section];
+    Scripting::Section *ss = m_sectionMap[section];
     if (ss)
     {
 	ss->eventOnRender();
@@ -159,8 +159,8 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QP
     
     return;
     
-    if (!_action->hadError() && _action->functionNames().contains(section->name() + "_onrender")) {
-        QVariant result = _action->callFunction(section->name() + "_onrender");
+    if (!m_action->hadError() && m_action->functionNames().contains(section->name() + "_onrender")) {
+        QVariant result = m_action->callFunction(section->name() + "_onrender");
         displayErrors();
     }
 }
@@ -175,7 +175,7 @@ QString KRScriptHandler::fieldFunctions()
     QString funcs;
     QString func;
 
-    QList<KRObjectData *>obs = _data->objects();
+    QList<KRObjectData *>obs = m_reportData->objects();
     foreach(KRObjectData* o, obs) {
         //The field or check contains an expression
         //TODO this is a horrible hack, need to get a similar feature into kross
@@ -206,8 +206,8 @@ QVariant KRScriptHandler::evaluate(const QString &field)
 {
     QString func = field.toLower() + "_onrender_";
 
-    if (!_action->hadError() && _action->functionNames().contains(func)) {
-        return _action->callFunction(func);
+    if (!m_action->hadError() && m_action->functionNames().contains(func)) {
+        return m_action->callFunction(func);
     } else {
         return QVariant();
     }
@@ -215,16 +215,16 @@ QVariant KRScriptHandler::evaluate(const QString &field)
 
 void KRScriptHandler::displayErrors()
 {
-    if (_action->hadError()) {
-        KMessageBox::error(0, _action->errorMessage());
+    if (m_action->hadError()) {
+        KMessageBox::error(0, m_action->errorMessage());
     }
 }
 
 QString KRScriptHandler::where()
 {
     QString w;
-    QMap<QString, QVariant>::const_iterator i = _groups.constBegin();
-    while (i != _groups.constEnd()) {
+    QMap<QString, QVariant>::const_iterator i = m_groups.constBegin();
+    while (i != m_groups.constEnd()) {
         w += "(" + i.key() + " = " + i.value().toString() + ") AND ";
         ++i;
     }
@@ -266,7 +266,7 @@ QString KRScriptHandler::scriptCode()
             kDebug() << interpretername;
             kDebug() << scriptelem.attribute("scripttype");
             
-            if (_data->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || _data->script() == scriptnames[i] )) {
+            if (m_reportData->interpreter() == interpretername && (scriptelem.attribute("scripttype") == "module" || m_reportData->script() == scriptnames[i] )) {
                 scripts += '\n' + scriptelem.text().toUtf8();
             }
             ++i;

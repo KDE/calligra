@@ -77,7 +77,7 @@ public slots:
     void setSize(const QSizeF&);
 
 private:
-    KRTextData *_text;
+    KRTextData *m_text;
 };
 
 }

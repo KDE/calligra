@@ -36,8 +36,8 @@ KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
 {
     setAttribute(Qt::WA_NoBackground);
     kDebug() << "CREATED PAGE";
-    rpt = r;
-    page = 1;
+    m_reportDocument = r;
+    m_page = 1;
 
     QString pageSize = r->pageOptions().getPageSize();
     int pageWidth = 0;
@@ -56,8 +56,8 @@ KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
     setFixedSize(pageWidth, pageHeight);
 
     kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight;
-    _repaint = true;
-    _pm = new QPixmap(pageWidth, pageHeight);
+    m_repaint = true;
+    m_pixmap = new QPixmap(pageWidth, pageHeight);
     setAutoFillBackground(true);
     renderPage(1);
 }
@@ -65,19 +65,19 @@ KexiReportPage::KexiReportPage(QWidget *parent, ORODocument *r)
 void KexiReportPage::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
-    painter.drawPixmap(QPoint(0, 0), *_pm);
+    painter.drawPixmap(QPoint(0, 0), *m_pixmap);
 }
 
 void KexiReportPage::renderPage(int p)
 {
     kDebug() << "KexiReportPage::renderPage " << p;
-    page = p;
-    _pm->fill();
-    QPainter qp(_pm);
+    m_page = p;
+    m_pixmap->fill();
+    QPainter qp(m_pixmap);
     KRScreenRender sr;
     sr.setPainter(&qp);
-    sr.render(rpt, p - 1);
-    _repaint = true;
+    sr.render(m_reportDocument, p - 1);
+    m_repaint = true;
     repaint();
 }
 

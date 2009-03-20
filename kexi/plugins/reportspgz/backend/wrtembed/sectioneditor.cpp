@@ -86,11 +86,11 @@ void SectionEditor::languageChange()
 
 void SectionEditor::cbReportHeader_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::ReportHead);
+            m_reportDesigner->insertSection(KRSectionData::ReportHead);
         } else {
-            rw->removeSection(KRSectionData::ReportHead);
+            m_reportDesigner->removeSection(KRSectionData::ReportHead);
         }
     }
 
@@ -98,11 +98,11 @@ void SectionEditor::cbReportHeader_toggled(bool yes)
 
 void SectionEditor::cbReportFooter_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::ReportFoot);
+            m_reportDesigner->insertSection(KRSectionData::ReportFoot);
         } else {
-            rw->removeSection(KRSectionData::ReportFoot);
+            m_reportDesigner->removeSection(KRSectionData::ReportFoot);
         }
     }
 
@@ -110,11 +110,11 @@ void SectionEditor::cbReportFooter_toggled(bool yes)
 
 void SectionEditor::cbHeadFirst_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageHeadFirst);
+            m_reportDesigner->insertSection(KRSectionData::PageHeadFirst);
         } else {
-            rw->removeSection(KRSectionData::PageHeadFirst);
+            m_reportDesigner->removeSection(KRSectionData::PageHeadFirst);
         }
     }
 
@@ -122,11 +122,11 @@ void SectionEditor::cbHeadFirst_toggled(bool yes)
 
 void SectionEditor::cbHeadLast_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageHeadLast);
+            m_reportDesigner->insertSection(KRSectionData::PageHeadLast);
         } else {
-            rw->removeSection(KRSectionData::PageHeadLast);
+            m_reportDesigner->removeSection(KRSectionData::PageHeadLast);
         }
     }
 
@@ -134,11 +134,11 @@ void SectionEditor::cbHeadLast_toggled(bool yes)
 
 void SectionEditor::cbHeadEven_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageHeadEven);
+            m_reportDesigner->insertSection(KRSectionData::PageHeadEven);
         } else {
-            rw->removeSection(KRSectionData::PageHeadEven);
+            m_reportDesigner->removeSection(KRSectionData::PageHeadEven);
         }
     }
 
@@ -146,11 +146,11 @@ void SectionEditor::cbHeadEven_toggled(bool yes)
 
 void SectionEditor::cbHeadOdd_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageHeadOdd);
+            m_reportDesigner->insertSection(KRSectionData::PageHeadOdd);
         } else {
-            rw->removeSection(KRSectionData::PageHeadOdd);
+            m_reportDesigner->removeSection(KRSectionData::PageHeadOdd);
         }
     }
 
@@ -158,11 +158,11 @@ void SectionEditor::cbHeadOdd_toggled(bool yes)
 
 void SectionEditor::cbFootFirst_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageFootFirst);
+            m_reportDesigner->insertSection(KRSectionData::PageFootFirst);
         } else {
-            rw->removeSection(KRSectionData::PageFootFirst);
+            m_reportDesigner->removeSection(KRSectionData::PageFootFirst);
         }
     }
 
@@ -170,11 +170,11 @@ void SectionEditor::cbFootFirst_toggled(bool yes)
 
 void SectionEditor::cbFootLast_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageFootLast);
+            m_reportDesigner->insertSection(KRSectionData::PageFootLast);
         } else {
-            rw->removeSection(KRSectionData::PageFootLast);
+            m_reportDesigner->removeSection(KRSectionData::PageFootLast);
         }
     }
 
@@ -182,11 +182,11 @@ void SectionEditor::cbFootLast_toggled(bool yes)
 
 void SectionEditor::cbFootEven_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageFootEven);
+            m_reportDesigner->insertSection(KRSectionData::PageFootEven);
         } else {
-            rw->removeSection(KRSectionData::PageFootEven);
+            m_reportDesigner->removeSection(KRSectionData::PageFootEven);
         }
     }
 
@@ -194,11 +194,11 @@ void SectionEditor::cbFootEven_toggled(bool yes)
 
 void SectionEditor::cbFootOdd_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageFootOdd);
+            m_reportDesigner->insertSection(KRSectionData::PageFootOdd);
         } else {
-            rw->removeSection(KRSectionData::PageFootOdd);
+            m_reportDesigner->removeSection(KRSectionData::PageFootOdd);
         }
     }
 
@@ -207,7 +207,7 @@ void SectionEditor::cbFootOdd_toggled(bool yes)
 
 void SectionEditor::init(ReportDesigner * rw)
 {
-    this->rw = NULL;
+    this->m_reportDesigner = NULL;
     // set all the properties
 
     cbReportHeader->setChecked(rw->getSection(KRSectionData::ReportHead) != NULL);
@@ -226,48 +226,48 @@ void SectionEditor::init(ReportDesigner * rw)
     cbFootAny->setChecked(rw->getSection(KRSectionData::PageFootAny) != NULL);
 
     // now set the rw value
-    this->rw = rw;
-    _rsd = rw->detailSection();
+    this->m_reportDesigner = rw;
+    m_reportSectionDetail = rw->detailSection();
 
-    if (_rsd) {
-        for (int i = 0; i < _rsd->groupSectionCount(); i++) {
-            lbGroups->insertItem(_rsd->getSection(i)->column());
+    if (m_reportSectionDetail) {
+        for (int i = 0; i < m_reportSectionDetail->groupSectionCount(); i++) {
+            lbGroups->insertItem(m_reportSectionDetail->getSection(i)->column());
         }
     }
 }
 
 void SectionEditor::cbHeadAny_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageHeadAny);
+            m_reportDesigner->insertSection(KRSectionData::PageHeadAny);
         } else {
-            rw->removeSection(KRSectionData::PageHeadAny);
+            m_reportDesigner->removeSection(KRSectionData::PageHeadAny);
         }
     }
 }
 
 void SectionEditor::cbFootAny_toggled(bool yes)
 {
-    if (rw != NULL) {
+    if (m_reportDesigner != NULL) {
         if (yes) {
-            rw->insertSection(KRSectionData::PageFootAny);
+            m_reportDesigner->insertSection(KRSectionData::PageFootAny);
         } else {
-            rw->removeSection(KRSectionData::PageFootAny);
+            m_reportDesigner->removeSection(KRSectionData::PageFootAny);
         }
     }
 }
 
 void SectionEditor::btnEdit_clicked()
 {
-    if (_rsd) {
+    if (m_reportSectionDetail) {
         int idx = lbGroups->currentItem();
         if (idx < 0) return;
-        ReportSectionDetailGroup * rsdg = _rsd->getSection(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->getSection(idx);
         DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
 
         dgsd->cbColumn->clear();
-        dgsd->cbColumn->insertItems(0, rw->fieldList());
+        dgsd->cbColumn->insertItems(0, m_reportDesigner->fieldList());
         dgsd->cbColumn->setEditText(rsdg->column());
 
         dgsd->breakAfterFooter->setChecked(rsdg->pageBreak() == ReportSectionDetailGroup::BreakAfterGroupFooter);
@@ -282,7 +282,7 @@ void SectionEditor::btnEdit_clicked()
                 bool showgf = dgsd->cbFoot->isChecked();
                 bool breakafterfoot = dgsd->breakAfterFooter->isChecked();
 
-                if (column != rsdg->column() && _rsd->findSection(column) != -1) {
+                if (column != rsdg->column() && m_reportSectionDetail->findSection(column) != -1) {
                     QMessageBox::warning(this, i18n("Error Encountered"),
                                          i18n("Unable to add a new group because its name would not be unique"));
                 } else {
@@ -310,20 +310,20 @@ void SectionEditor::btnEdit_clicked()
 
 void SectionEditor::btnAdd_clicked()
 {
-    if (_rsd) {
+    if (m_reportSectionDetail) {
         // lets add a new section
         QString name;
         int i = 0;
-        while (i < 100 && _rsd->findSection(name) != -1) {
+        while (i < 100 && m_reportSectionDetail->findSection(name) != -1) {
             i++;
             name = QString().sprintf("unnamed%d", i);
         }
-        if (_rsd->findSection(name) != -1) {
+        if (m_reportSectionDetail->findSection(name) != -1) {
             QMessageBox::warning(this, i18n("Error Encountered"), i18n("Unable to add a new group because its name would not be unique"));
             return;
         }
-        ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup(name, _rsd, _rsd);
-        _rsd->insertSection(_rsd->groupSectionCount(), rsdg);
+        ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup(name, m_reportSectionDetail, m_reportSectionDetail);
+        m_reportSectionDetail->insertSection(m_reportSectionDetail->groupSectionCount(), rsdg);
         lbGroups->insertItem(name);
         lbGroups->setCurrentItem(lbGroups->count() - 1);
         btnEdit_clicked();
@@ -333,11 +333,11 @@ void SectionEditor::btnAdd_clicked()
 
 void SectionEditor::btnRemove_clicked()
 {
-    if (_rsd) {
+    if (m_reportSectionDetail) {
         int idx = lbGroups->currentItem();
         if (idx != -1) {
             lbGroups->removeItem(idx);
-            _rsd->removeSection(idx, true);
+            m_reportSectionDetail->removeSection(idx, true);
         }
     }
 }
@@ -345,17 +345,17 @@ void SectionEditor::btnRemove_clicked()
 
 void SectionEditor::btnMoveUp_clicked()
 {
-    if (_rsd) {
+    if (m_reportSectionDetail) {
         int idx = lbGroups->currentItem();
         if (idx <= 0) return;
         QString s = lbGroups->currentText();
         lbGroups->removeItem(idx);
         lbGroups->insertItem(s, idx - 1);
-        ReportSectionDetailGroup * rsdg = _rsd->getSection(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->getSection(idx);
         bool showgh = rsdg->isGroupHeadShowing();
         bool showgf = rsdg->isGroupFootShowing();
-        _rsd->removeSection(idx);
-        _rsd->insertSection(idx - 1, rsdg);
+        m_reportSectionDetail->removeSection(idx);
+        m_reportSectionDetail->insertSection(idx - 1, rsdg);
         rsdg->showGroupHead(showgh);
         rsdg->showGroupFoot(showgf);
     }
@@ -364,17 +364,17 @@ void SectionEditor::btnMoveUp_clicked()
 
 void SectionEditor::brnMoveDown_clicked()
 {
-    if (_rsd) {
+    if (m_reportSectionDetail) {
         int idx = lbGroups->currentItem();
         if (idx == (int)(lbGroups->count() - 1)) return;
         QString s = lbGroups->currentText();
         lbGroups->removeItem(idx);
         lbGroups->insertItem(s, idx + 1);
-        ReportSectionDetailGroup * rsdg = _rsd->getSection(idx);
+        ReportSectionDetailGroup * rsdg = m_reportSectionDetail->getSection(idx);
         bool showgh = rsdg->isGroupHeadShowing();
         bool showgf = rsdg->isGroupFootShowing();
-        _rsd->removeSection(idx);
-        _rsd->insertSection(idx + 1, rsdg);
+        m_reportSectionDetail->removeSection(idx);
+        m_reportSectionDetail->insertSection(idx + 1, rsdg);
         rsdg->showGroupHead(showgh);
         rsdg->showGroupFoot(showgf);
     }

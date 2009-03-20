@@ -27,20 +27,20 @@ class KRCheckData : public KRObjectData
         ORLineStyleData lineStyle();
 
         ORDataData data() {
-        return ORDataData("Data Source", _controlSource->value().toString());
+        return ORDataData("Data Source", m_controlSource->value().toString());
         }
         QString controlSource()const;
 
     protected:
     QRectF _rect();
 
-    KRSize _size;
-    KoProperty::Property * _controlSource;
-    KoProperty::Property* _checkStyle;
-    KoProperty::Property* _fgColor;
-    KoProperty::Property* _lnColor;
-    KoProperty::Property* _lnWeight;
-    KoProperty::Property* _lnStyle;
+    KRSize m_size;
+    KoProperty::Property * m_controlSource;
+    KoProperty::Property* m_checkStyle;
+    KoProperty::Property* m_foregroundColor;
+    KoProperty::Property* m_lineColor;
+    KoProperty::Property* m_lineWeight;
+    KoProperty::Property* m_lineStyle;
 
 private:
     virtual void createProperties();

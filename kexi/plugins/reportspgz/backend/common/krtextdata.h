@@ -48,10 +48,10 @@ public:
     void setTextFlags(Qt::Alignment);
     Qt::Alignment textFlags() const;
     QFont font() const {
-        return _font->value().value<QFont>();
+        return m_font->value().value<QFont>();
     }
     ORDataData data() {
-        return ORDataData("Data Source"/*_query->value().toString()*/, _controlSource->value().toString());
+        return ORDataData("Data Source"/*_query->value().toString()*/, m_controlSource->value().toString());
     }
 
     void setBottomPadding(qreal bp);
@@ -64,17 +64,17 @@ public:
 protected:
     QRect _rect();
 
-    KRSize _size;
-    KoProperty::Property * _controlSource;
-    KoProperty::Property* _hAlignment;
-    KoProperty::Property* _vAlignment;
-    KoProperty::Property* _font;
-    KoProperty::Property* _fgColor;
-    KoProperty::Property* _bgColor;
-    KoProperty::Property* _bgOpacity;
-    KoProperty::Property* _lnColor;
-    KoProperty::Property* _lnWeight;
-    KoProperty::Property* _lnStyle;
+    KRSize m_size;
+    KoProperty::Property * m_controlSource;
+    KoProperty::Property* m_horizontalAlignment;
+    KoProperty::Property* m_verticalAlignment;
+    KoProperty::Property* m_font;
+    KoProperty::Property* m_foregroundColor;
+    KoProperty::Property* m_backgroundColor;
+    KoProperty::Property* m_backgroundOpacity;
+    KoProperty::Property* m_lineColor;
+    KoProperty::Property* m_lineWeight;
+    KoProperty::Property* m_lineStyle;
 
     qreal bpad;
 

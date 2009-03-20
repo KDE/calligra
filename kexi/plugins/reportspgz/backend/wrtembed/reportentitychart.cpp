@@ -38,7 +38,7 @@
 
 void ReportEntityChart::init(QGraphicsScene* s, ReportDesigner *r)
 {
-    _rd = r;
+    m_reportDesigner = r;
     setPos(0, 0);
 
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -47,29 +47,29 @@ void ReportEntityChart::init(QGraphicsScene* s, ReportDesigner *r)
     if (s)
         s->addItem(this);
 
-    connect(_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 
-    setConnection(_rd->theConn());
+    setConnection(m_reportDesigner->theConn());
 }
 
 ReportEntityChart::ReportEntityChart(ReportDesigner * rd, QGraphicsScene* scene)
         : ReportRectEntity(rd)
 {
     init(scene, rd);
-    _size.setSceneSize(QSizeF(dpiX, dpiY));
-    setSceneRect(_pos.toScene(), _size.toScene());
+    m_size.setSceneSize(QSizeF(m_dpiX, m_dpiY));
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 
-    _name->setValue(_rd->suggestEntityName("Chart"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Chart"));
 }
 
 ReportEntityChart::ReportEntityChart(QDomNode & element, ReportDesigner * rd, QGraphicsScene* scene) : ReportRectEntity(rd), KRChartData(element)
 {
     init(scene, rd);
     populateData();
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 
 }
 
@@ -86,10 +86,10 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
 
-    if (_chartWidget) {
-        _chartWidget->setFixedSize(_size.toScene().toSize());
+    if (m_chartWidget) {
+        m_chartWidget->setFixedSize(m_size.toScene().toSize());
         painter->drawImage(rect().left(), rect().top(), 
-            QPixmap::grabWidget(_chartWidget).toImage(), 
+            QPixmap::grabWidget(m_chartWidget).toImage(), 
             0, 0, rect().width(), rect().height());
     }
     bg.setAlpha(255);
@@ -97,7 +97,7 @@ void ReportEntityChart::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setBackground(bg);
     painter->setPen(Qt::black);
 
-    painter->drawText(rect(), 0, _dataSource->value().toString() + QObject::tr(":") + QObject::tr("chart"));
+    painter->drawText(rect(), 0, m_dataSource->value().toString() + QObject::tr(":") + QObject::tr("chart"));
 
 
 // if ( ( Qt::PenStyle ) _lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0 )
@@ -150,62 +150,62 @@ void ReportEntityChart::buildXML(QDomDocument & doc, QDomElement & parent)
     //Data source
     QDomElement data = doc.createElement("data");
     QDomElement dcolumn = doc.createElement("datasource");
-    dcolumn.appendChild(doc.createTextNode(_dataSource->value().toString()));
+    dcolumn.appendChild(doc.createTextNode(m_dataSource->value().toString()));
     data.appendChild(dcolumn);
     entity.appendChild(data);
     //TODO Link child-master
 
     //type
     QDomElement type = doc.createElement("type");
-    type.appendChild(doc.createTextNode(_chartType->value().toString()));
+    type.appendChild(doc.createTextNode(m_chartType->value().toString()));
     entity.appendChild(type);
 
     //sub type
     QDomElement subtype = doc.createElement("subtype");
-    subtype.appendChild(doc.createTextNode(_chartSubType->value().toString()));
+    subtype.appendChild(doc.createTextNode(m_chartSubType->value().toString()));
     entity.appendChild(subtype);
 
     //3d
     QDomElement d3 = doc.createElement("threed");
-    d3.appendChild(doc.createTextNode(_threeD->value().toBool() ? "true" : "false"));
+    d3.appendChild(doc.createTextNode(m_threeD->value().toBool() ? "true" : "false"));
     entity.appendChild(d3);
 
     //color scheme
     QDomElement cs = doc.createElement("colorscheme");
-    cs.appendChild(doc.createTextNode(_colorScheme->value().toString()));
+    cs.appendChild(doc.createTextNode(m_colorScheme->value().toString()));
     entity.appendChild(cs);
 
     //aa
     QDomElement aa = doc.createElement("antialiased");
-    aa.appendChild(doc.createTextNode(_aa->value().toBool() ? "true" : "false"));
+    aa.appendChild(doc.createTextNode(m_aa->value().toBool() ? "true" : "false"));
     entity.appendChild(aa);
 
     //x-title
     QDomElement xt = doc.createElement("xtitle");
-    xt.appendChild(doc.createTextNode(_xTitle->value().toString()));
+    xt.appendChild(doc.createTextNode(m_xTitle->value().toString()));
     entity.appendChild(xt);
 
     //y-title
     QDomElement yt = doc.createElement("ytitle");
-    yt.appendChild(doc.createTextNode(_yTitle->value().toString()));
+    yt.appendChild(doc.createTextNode(m_yTitle->value().toString()));
     entity.appendChild(yt);
 
     //background color
     QDomElement bc = doc.createElement("backgroundcolor");
-    bc.appendChild(doc.createTextNode(_bgColor->value().value<QColor>().name()));
+    bc.appendChild(doc.createTextNode(m_backgroundColor->value().value<QColor>().name()));
     entity.appendChild(bc);
 
     //legend
     QDomElement dl = doc.createElement("displaylegend");
-    dl.appendChild(doc.createTextNode(_displayLegend->value().toBool() ? "true" : "false"));
+    dl.appendChild(doc.createTextNode(m_displayLegend->value().toBool() ? "true" : "false"));
     entity.appendChild(dl);
 
     //link master/child
     QDomElement lm = doc.createElement("linkmaster");
-    lm.appendChild(doc.createTextNode(_linkMaster->value().toString()));
+    lm.appendChild(doc.createTextNode(m_linkMaster->value().toString()));
     entity.appendChild(lm);
     QDomElement lc = doc.createElement("linkchild");
-    lc.appendChild(doc.createTextNode(_linkChild->value().toString()));
+    lc.appendChild(doc.createTextNode(m_linkChild->value().toString()));
     entity.appendChild(lc);
 
 
@@ -221,13 +221,13 @@ void ReportEntityChart::propertyChanged(KoProperty::Set &s, KoProperty::Property
 
     //Handle Position
     if (p.name() == "Position") {
-        _pos.setUnitPos(p.value().value<QPointF>());
+        m_pos.setUnitPos(p.value().value<QPointF>());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     } else if (p.name() == "ThreeD") {
         set3D(p.value().toBool());
@@ -238,23 +238,23 @@ void ReportEntityChart::propertyChanged(KoProperty::Set &s, KoProperty::Property
     } else if (p.name() == "DataSource") {
         populateData();
     } else if (p.name() == "XAxis" ||   p.name() == "YAxis") {
-        setAxis(_xTitle->value().toString(), _yTitle->value().toString());
+        setAxis(m_xTitle->value().toString(), m_yTitle->value().toString());
     } else if (p.name() == "BackgroundColor") {
         setBackgroundColor(p.value().value<QColor>());
     } else if (p.name() == "DisplayLegend") {
         setLegend(p.value().toBool());
     } else if (p.name() == "ChartType") {
-        if (_chartWidget) {
-            _chartWidget->setType((KDChart::Widget::ChartType) _chartType->value().toInt());
+        if (m_chartWidget) {
+            m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());
         }
     } else if (p.name() == "ChartSubType") {
-        if (_chartWidget) {
-            _chartWidget->setSubType((KDChart::Widget::SubType) _chartSubType->value().toInt());
+        if (m_chartWidget) {
+            m_chartWidget->setSubType((KDChart::Widget::SubType) m_chartSubType->value().toInt());
         }
     }
 
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
 
     if (scene()) scene()->update();
 
@@ -262,6 +262,6 @@ void ReportEntityChart::propertyChanged(KoProperty::Set &s, KoProperty::Property
 
 void ReportEntityChart::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    _dataSource->setListData(_rd->queryList(), _rd->queryList());
+    m_dataSource->setListData(m_reportDesigner->queryList(), m_reportDesigner->queryList());
     ReportRectEntity::mousePressEvent(event);
 }

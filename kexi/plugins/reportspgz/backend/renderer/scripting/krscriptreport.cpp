@@ -35,8 +35,8 @@ namespace Scripting
 
 Report::Report(KRReportData *r)
 {
-    _reportdata = r;
-    _scriptObject = 0;
+    m_reportData = r;
+    m_scriptObject = 0;
 }
 
 
@@ -47,22 +47,22 @@ Report::~Report()
 
 QString Report::title()
 {
-    return _reportdata->title;
+    return m_reportData->m_title;
 }
 
 QString Report::name()
 {
-    return _reportdata->name();
+    return m_reportData->name();
 }
 
 QString Report::recordSource()
 {
-    return _reportdata->query();
+    return m_reportData->query();
 }
 
 QObject* Report::objectByName(const QString &n)
 {
-    QList<KRObjectData *>obs = _reportdata->objects();
+    QList<KRObjectData *>obs = m_reportData->objects();
     foreach(KRObjectData *o, obs) {
         if (o->entityName() == n) {
             switch (o->type()) {
@@ -97,7 +97,7 @@ QObject* Report::objectByName(const QString &n)
 
 QObject* Report::sectionByName(const QString &n)
 {
-    KRSectionData *sec = _reportdata->section(n);
+    KRSectionData *sec = m_reportData->section(n);
     if (sec) {
         return new Scripting::Section(sec);
     } else {
@@ -107,25 +107,25 @@ QObject* Report::sectionByName(const QString &n)
 
 void Report::initialize(Kross::Object::Ptr ptr)
 {
-        _scriptObject = ptr;
+        m_scriptObject = ptr;
 }
 
 void Report::eventOnOpen()
 {
-    if (_scriptObject)
-	_scriptObject->callMethod("OnOpen");
+    if (m_scriptObject)
+	m_scriptObject->callMethod("OnOpen");
 }
 
 void Report::eventOnComplete()
 {
-    if (_scriptObject)
-	_scriptObject->callMethod("OnComplete");
+    if (m_scriptObject)
+	m_scriptObject->callMethod("OnComplete");
 }
 
 void Report::eventOnNewPage()
 {
-    if (_scriptObject)
-        _scriptObject->callMethod("OnNewPage");
+    if (m_scriptObject)
+        m_scriptObject->callMethod("OnNewPage");
 }
 
 }

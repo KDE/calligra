@@ -72,7 +72,7 @@ public slots:
     QSizeF size();
     void setSize(const QSizeF&);
 private:
-    KRFieldData *_field;
+    KRFieldData *m_field;
 
 };
 }

@@ -56,43 +56,11 @@
 //
 ReportEntity::ReportEntity(ReportDesigner* r)
 {
-    _rd = r;
+    m_reportDesigner = r;
 }
 
 void ReportEntity::buildXML(QGraphicsItem * item, QDomDocument & doc, QDomElement & parent)
 {
-    /*
-    ReportEntity * re = NULL;
-    switch (dynamic_cast<KRObjectData*>(item)->type()) {
-    case KRObjectData::EntityLabel:
-        re = (ReportEntityLabel*) item;
-        break;
-    case KRObjectData::EntityField:
-        re = (ReportEntityField*) item;
-        break;
-    case KRObjectData::EntityText:
-        re = (ReportEntityText*) item;
-        break;
-    case KRObjectData::EntityLine:
-        re = (ReportEntityLine*) item;
-        break;
-    case KRObjectData::EntityBarcode:
-        re = (ReportEntityBarcode*) item;
-        break;
-    case KRObjectData::EntityImage:
-        re = (ReportEntityImage*) item;
-        break;
-    case KRObjectData::EntityChart:
-        re = (ReportEntityChart*)item;
-        break;
-    default:
-        kDebug() << "ReportEntity::buildXML(): unrecognized rtti type" << item->type();
-    };
-
-    if (re != NULL) {
-        re->buildXML(doc, parent);
-    }
-    */
     ReportEntity *re = NULL;
     re = dynamic_cast<ReportEntity*>(item);
 

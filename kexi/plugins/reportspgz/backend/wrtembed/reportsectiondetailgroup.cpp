@@ -32,16 +32,16 @@
 ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, ReportSectionDetail * rsd, QWidget * parent, const char * name)
         : QObject(parent)
 {
-    _pagebreak = BreakNone;
+    m_pageBreak = BreakNone;
     ReportDesigner * rd = 0;
-    _rsd = rsd;
-    if (_rsd) {
+    m_reportSectionDetail = rsd;
+    if (m_reportSectionDetail) {
         rd = rsd->reportDesigner();
     } else {
         kDebug() << "Error RSD is null";
     }
-    _head = new ReportSection(rd /*, _rsd*/);
-    _foot = new ReportSection(rd /*, _rsd*/);
+    m_head = new ReportSection(rd /*, _rsd*/);
+    m_foot = new ReportSection(rd /*, _rsd*/);
     showGroupHead(false);
     showGroupFoot(false);
 
@@ -52,70 +52,70 @@ ReportSectionDetailGroup::~ReportSectionDetailGroup()
 {
     // I delete these here so that there are no widgets
     //left floating around
-    delete _head;
-    delete _foot;
+    delete m_head;
+    delete m_foot;
 }
 
 void ReportSectionDetailGroup::showGroupHead(bool yes)
 {
     if (isGroupHeadShowing() != yes) {
-        if (_rsd && _rsd->reportDesigner()) _rsd->reportDesigner()->setModified(true);
+        if (m_reportSectionDetail && m_reportSectionDetail->reportDesigner()) m_reportSectionDetail->reportDesigner()->setModified(true);
     }
-    if (yes) _head->show();
-    else _head->hide();
-    _rsd->adjustSize();
+    if (yes) m_head->show();
+    else m_head->hide();
+    m_reportSectionDetail->adjustSize();
 }
 
 void ReportSectionDetailGroup::showGroupFoot(bool yes)
 {
     if (isGroupFootShowing() != yes) {
-        if (_rsd && _rsd->reportDesigner()) _rsd->reportDesigner()->setModified(true);
+        if (m_reportSectionDetail && m_reportSectionDetail->reportDesigner()) m_reportSectionDetail->reportDesigner()->setModified(true);
     }
-    if (yes) _foot->show();
-    else _foot->hide();
-    _rsd->adjustSize();
+    if (yes) m_foot->show();
+    else m_foot->hide();
+    m_reportSectionDetail->adjustSize();
 }
 
 void ReportSectionDetailGroup::setPageBreak(int pb)
 {
-    _pagebreak = pb;
+    m_pageBreak = pb;
 }
 
 bool ReportSectionDetailGroup::isGroupHeadShowing()
 {
-    return _head->isVisible();
+    return m_head->isVisible();
 }
 bool ReportSectionDetailGroup::isGroupFootShowing()
 {
-    return _foot->isVisible();
+    return m_foot->isVisible();
 }
 int ReportSectionDetailGroup::pageBreak() const
 {
-    return _pagebreak;
+    return m_pageBreak;
 }
 
 QString ReportSectionDetailGroup::column()
 {
-    return _column;
+    return m_column;
 }
 void ReportSectionDetailGroup::setColumn(const QString & s)
 {
-    if (_column != s) {
-        _column = s;
-        if (_rsd && _rsd->reportDesigner()) _rsd->reportDesigner()->setModified(true);
+    if (m_column != s) {
+        m_column = s;
+        if (m_reportSectionDetail && m_reportSectionDetail->reportDesigner()) m_reportSectionDetail->reportDesigner()->setModified(true);
     }
 
-    _head->setTitle(_column + " Group Header");
-    _foot->setTitle(_column + " Group Footer");
+    m_head->setTitle(m_column + " Group Header");
+    m_foot->setTitle(m_column + " Group Footer");
 }
 
 ReportSection * ReportSectionDetailGroup::getGroupHead()
 {
-    return _head;
+    return m_head;
 }
 ReportSection * ReportSectionDetailGroup::getGroupFoot()
 {
-    return _foot;
+    return m_foot;
 }
 
 

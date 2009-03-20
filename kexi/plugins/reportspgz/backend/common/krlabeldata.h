@@ -48,7 +48,7 @@ public:
 
     QString text() const;
     QFont font() const {
-        return _font->value().value<QFont>();
+        return m_font->value().value<QFont>();
     }
     Qt::Alignment textFlags() const;
     void setTextFlags(Qt::Alignment);
@@ -59,17 +59,17 @@ public:
 protected:
     QRectF _rect();
 
-    KRSize _size;
-    KoProperty::Property *_text;
-    KoProperty::Property* _hAlignment;
-    KoProperty::Property* _vAlignment;
-    KoProperty::Property* _font;
-    KoProperty::Property* _fgColor;
-    KoProperty::Property* _bgColor;
-    KoProperty::Property* _bgOpacity;
-    KoProperty::Property* _lnColor;
-    KoProperty::Property* _lnWeight;
-    KoProperty::Property* _lnStyle;
+    KRSize m_size;
+    KoProperty::Property *m_text;
+    KoProperty::Property *m_horizontalAlignment;
+    KoProperty::Property *m_verticalAlignment;
+    KoProperty::Property *m_font;
+    KoProperty::Property *m_foregroundColor;
+    KoProperty::Property *m_backgroundColor;
+    KoProperty::Property *m_backgroundOpacity;
+    KoProperty::Property *m_lineColor;
+    KoProperty::Property *m_lineWeight;
+    KoProperty::Property *m_lineStyle;
 
 private:
     virtual void createProperties();
