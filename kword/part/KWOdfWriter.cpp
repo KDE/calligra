@@ -187,12 +187,14 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
         KWFrame *lastNonCopyFrame = 0;
         int counter = 1;
+        QSet<QString> uniqueNames;
         foreach (KWFrame *frame, fs->frames()) { // make sure all shapes have names.
             KoShape *shape = frame->shape();
             if (counter++ == 1)
                 shape->setName(fs->name());
-            else if (shape->name().isEmpty())
+            else if (shape->name().isEmpty() || uniqueNames.contains(shape->name()))
                 shape->setName(QString("%1-%2").arg(fs->name(), QString::number(counter)));
+            uniqueNames << shape->name();
         }
         const QList<KWFrame*> frames = fs->frames();
         for (int i = 0; i < frames.count(); ++i) {
@@ -262,12 +264,6 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
                 lastNonCopyFrame = frame;
             }
 
-            if (frames.count() > i + 1) { // there is a next frame, so save the chaining name.
-                KWFrame *next = frames.at(i+1);
-                if (!next->isCopy())
-                    shape->setAdditionalAttribute("draw:chain-next-name", next->shape()->name());
-            }
-
             // shape properties
             int pageNumber = m_document->pageManager()->pageNumber(shape);
             const qreal pagePos = m_document->pageManager()->topOfPage(pageNumber);
@@ -278,7 +274,6 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
             context.addShapeOffset(shape, QMatrix(1, 0, 0 , 1, 0, -pagePos ));
             shape->saveOdf(context);
             context.removeShapeOffset(shape);
-            shape->removeAdditionalAttribute("draw:chain-next-name");
             shape->removeAdditionalAttribute("draw:copy-of");
             shape->removeAdditionalAttribute("draw:z-index");
             shape->removeAdditionalAttribute("fo:min-height");
