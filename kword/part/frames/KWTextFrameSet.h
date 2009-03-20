@@ -56,15 +56,6 @@ public:
         return m_document;
     }
 
-    /// return true if the content of this frameset should not be allowed to be altered
-    bool protectContent() const {
-        return m_protectContent;
-    }
-    /// set wheater the content of this frameset should not be allowed to be altered
-    void setProtectContent(bool protect) {
-        m_protectContent = protect;
-    }
-
     /**
      * Sets the flag if this frameset is allowed to automaticall do layout of the textdata.
      * A text will do layouting of the text when the content changes, but also when frames
@@ -143,7 +134,7 @@ private slots:
 
 private:
     QTextDocument *m_document;
-    bool m_protectContent, m_layoutTriggered, m_allowLayoutRequests;
+    bool m_layoutTriggered, m_allowLayoutRequests;
     KWord::TextFrameSetType m_textFrameSetType;
     const KWPageManager *m_pageManager;
     const KWDocument *m_kwordDocument;

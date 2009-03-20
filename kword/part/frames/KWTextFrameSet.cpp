@@ -38,7 +38,6 @@
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         : m_document(new QTextDocument()),
-        m_protectContent(false),
         m_layoutTriggered(false),
         m_allowLayoutRequests(true),
         m_textFrameSetType(KWord::OtherTextFrameSet),
@@ -58,7 +57,6 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType type)
         : m_document(new QTextDocument()),
-        m_protectContent(false),
         m_layoutTriggered(false),
         m_allowLayoutRequests(true),
         m_textFrameSetType(type),
