@@ -47,7 +47,9 @@ namespace KWord
     enum RunAroundSide {
         BiggestRunAroundSide,   ///< Run other text around the side that has the most space
         LeftRunAroundSide,      ///< Run other text around the left side of the frame
-        RightRunAroundSide      ///< Run other text around the right side of the frame
+        RightRunAroundSide,     ///< Run other text around the right side of the frame
+        AutoRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
+        BothRunAroundSide       ///< Run other text around both sides of the shape
     };
 
     /**
