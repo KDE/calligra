@@ -1865,7 +1865,7 @@ only.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Emboss</guisubmenu>
-<guimenuitem>Emboss Laplascian</guimenuitem>
+<guimenuitem>Emboss Laplacian</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Embosses the image or selection using the Laplace
 technique.</action></para></listitem>
