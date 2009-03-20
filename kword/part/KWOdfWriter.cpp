@@ -171,6 +171,9 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         //  3) frames that are not anchored but freely positioned somewhere on the page.
         //     in ODF terms those frames are page-anchored.
 
+        if (fs->frameCount() == 1 && fs->frames().first()->shape()->parent())
+            continue; // is a frame that is anchored to text, don't save those here.
+
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (tfs) {
             if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
@@ -184,14 +187,17 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
         KWFrame *lastNonCopyFrame = 0;
         int counter = 1;
-        foreach (KWFrame *frame, fs->frames()) {
+        foreach (KWFrame *frame, fs->frames()) { // make sure all shapes have names.
+            KoShape *shape = frame->shape();
+            if (counter++ == 1)
+                shape->setName(fs->name());
+            else if (shape->name().isEmpty())
+                shape->setName(QString("%1-%2").arg(fs->name(), QString::number(counter)));
+        }
+        const QList<KWFrame*> frames = fs->frames();
+        for (int i = 0; i < frames.count(); ++i) {
+            KWFrame *frame = frames.at(i);
             KoShape * shape = frame->shape();
-            if (shape->parent()) // that means we are anchored to text.
-                continue;
-            bool updatedShapeName = shape->name().isEmpty();
-            if (updatedShapeName)
-                shape->setName(QString("%1-%2").arg(fs->name(), QString::number(counter++)));
-
             // frame properties first
             shape->setAdditionalStyleAttribute("fo:margin", QString::number(frame->runAroundDistance()) + "pt");
             shape->setAdditionalStyleAttribute("style:horizontal-pos", "from-left");
@@ -252,9 +258,14 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
             if (frame->isCopy()) {
                 Q_ASSERT(lastNonCopyFrame);
                 shape->setAdditionalAttribute("draw:copy-of", lastNonCopyFrame->shape()->name());
-            }
-            else {
+            } else {
                 lastNonCopyFrame = frame;
+            }
+
+            if (frames.count() > i + 1) { // there is a next frame, so save the chaining name.
+                KWFrame *next = frames.at(i+1);
+                if (!next->isCopy())
+                    shape->setAdditionalAttribute("draw:chain-next-name", next->shape()->name());
             }
 
             // shape properties
@@ -267,9 +278,14 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
             context.addShapeOffset(shape, QMatrix(1, 0, 0 , 1, 0, -pagePos ));
             shape->saveOdf(context);
             context.removeShapeOffset(shape);
+            shape->removeAdditionalAttribute("draw:chain-next-name");
+            shape->removeAdditionalAttribute("draw:copy-of");
+            shape->removeAdditionalAttribute("draw:z-index");
+            shape->removeAdditionalAttribute("fo:min-height");
+            shape->removeAdditionalAttribute("koffice:frame-copy-to-facing-pages");
             shape->removeAdditionalAttribute("text:anchor-page-number");
-            if (updatedShapeName)
-                shape->setName(QString());
+            shape->removeAdditionalAttribute("text:anchor-page-number");
+            shape->removeAdditionalAttribute("text:anchor-type");
         }
     }
 
