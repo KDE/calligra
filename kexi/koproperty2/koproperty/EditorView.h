@@ -77,7 +77,7 @@ public:
         NoOptions = 0,
         PreservePreviousSelection = 1, //!< If used, previously selected editor item
                                        //!< will be kept selected.
-        AlphabeticalOrder = 2, //!< Alphabetical order of properies (the default is insert-order)
+        AlphabeticalOrder = 2 //!< Alphabetical order of properies (the default is insert-order)
     };
     Q_DECLARE_FLAGS(SetOptions, SetOption)
 
