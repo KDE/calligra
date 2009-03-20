@@ -650,7 +650,7 @@ QDomDocument ReportDesigner::document()
     margin.appendChild(doc.createTextNode(QString::number(_bottomMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("rightmargin");
-    margin.appendChild(doc.createTextNode(QString::number(_rightMargin->value().toInt())));
+    margin.appendChild(doc.createTextNode(QString::number(_rightMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("leftmargin");
     margin.appendChild(doc.createTextNode(QString::number(_leftMargin->value().toDouble())));
