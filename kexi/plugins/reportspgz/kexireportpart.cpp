@@ -111,9 +111,6 @@ KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
     kDebug();
     const QString document( loadReport(window->partItem()->name()) );
-    if (document.isEmpty())
-        return 0;
-
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
     td->document = document;
     td->name = window->partItem()->name();
