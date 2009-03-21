@@ -124,7 +124,7 @@ public:
     void removeProperty(const QByteArray &name);
 
     /*! Removes all properties from the property set and destroys them. */
-    virtual void clear();
+    void clear();
 
     /*! \return the number of items in the set. */
     uint count() const;
