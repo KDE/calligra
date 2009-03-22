@@ -383,8 +383,10 @@ void FormPrivate::initPropertiesDescription()
 {
 //! \todo perhaps a few of them shouldn't be translated within KFD mode,
 //!       to be more Qt Designer friendly?
-    propCaption["name"] = i18n("Name");
+    propCaption["name"] = i18n("Name"); // for backward compatibility with Qt 3
+    propCaption["objectName"] = i18n("Name");
     propCaption["caption"] = i18n("Caption");
+    propCaption["windowTitle"] = i18n("Window title");
     propCaption["text"] = i18n("Text");
     propCaption["paletteBackgroundPixmap"] = i18n("Background Pixmap");
     propCaption["enabled"] = i18n("Enabled");
@@ -399,6 +401,12 @@ void FormPrivate::initPropertiesDescription()
     propCaption["focusPolicy"] = i18n("Focus Policy");
     propCaption["margin"] = i18n("Margin");
     propCaption["readOnly"] = i18n("Read Only");
+    propCaption["styleSheet"] = i18n("Style Sheet");
+    propCaption["toolTip"] = i18nc("Widget's Tooltip", "Tooltip");
+    propCaption["whatsThis"] = i18nc("Widget's Whats This", "Whats This");
+    propCaption["layoutDirection"] = i18n("Layout direction");
+    propCaption["iconSize"] = i18n("Icon Size");
+    
     //any QFrame
     propCaption["frame"] = i18n("Frame");
     propCaption["lineWidth"] = i18n("Frame Width");
@@ -454,6 +462,10 @@ void FormPrivate::initPropertiesDescription()
     //orientation
     propValCaption["Horizontal"] = i18n("Horizontal");
     propValCaption["Vertical"] = i18n("Vertical");
+
+    //layout direction
+    propValCaption["LeftToRight"] = i18n("Left to Right");
+    propValCaption["RightToLeft"] = i18n("Right to Left");
 }
 
 KoProperty::Property::ListData* FormPrivate::createValueList(WidgetInfo *winfo, const QStringList &list)
@@ -1165,7 +1177,7 @@ Form::changeName(const QByteArray &oldname, const QByteArray &newname)
 //  i18n("A widget with this name already exists. "
 //   "Please choose another name or rename existing widget."));
         kWarning() << "widget named " << newname << " already exists";
-        d->propertySet.changeProperty("name", oldname);
+        d->propertySet.changeProperty("objectName", oldname);
     }
     else {
 #ifdef KFD_SIGSLOTS
@@ -1323,8 +1335,7 @@ void Form::autoAssignTabStops()
 
     list.sort();
     foreach (QWidget *w, list) {
-        kDebug() << w->metaObject()->className()
-            << " " << w->objectName();
+        kDebug() << w->metaObject()->className() << w->objectName();
     }
     d->tabstops.clear();
 
@@ -1613,7 +1624,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     const QVariant value( p.value() );
 
     // check if the name is valid (ie is correct identifier) and there is no name conflict
-    if (property == "name") {
+    if (property == "objectName") {
         if (d->selected.count() != 1)
             return;
         if (!isNameValid(value.toString()))
@@ -1666,7 +1677,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
             }
         }
 
-        if (property == "name")
+        if (property == "objectName")
             emit widgetNameChanged(d->selected.first()->objectName().toLatin1(), p.value().toByteArray());
         d->selected.first()->setProperty(property, value);
         handleWidgetPropertyChanged(d->selected.first(), property, value);
@@ -1718,7 +1729,7 @@ void Form::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& propert
 }
 
 // moved from FormManager
-bool Form::isNameValid(const QString &name)
+bool Form::isNameValid(const QString &name) const
 {
     if (d->selected.isEmpty())
         return false;
@@ -1731,7 +1742,7 @@ bool Form::isNameValid(const QString &name)
                                 "\"%3\" is not a valid name (identifier) for a widget.\n",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
-        d->propertySet["name"].resetValue();
+        d->propertySet["objectName"].resetValue();
         d->slotPropertyChangedEnabled = true;
         return false;
     }
@@ -1742,7 +1753,7 @@ bool Form::isNameValid(const QString &name)
                                 "because a widget with the name \"%3\" already exists.\n",
                                 w->objectName(), name, name));
         d->slotPropertyChangedEnabled = false;
-        d->propertySet["name"].resetValue();
+        d->propertySet["objectName"].resetValue();
         d->slotPropertyChangedEnabled = true;
         return false;
     }
@@ -1784,7 +1795,7 @@ bool Form::isUndoing() const
 
 // moved from WidgetPropertySet
 bool Form::isPropertyVisible(const QByteArray &property, bool isTopLevel,
-                             const QByteArray &classname)
+                             const QByteArray &classname) const
 {
     const bool multiple = d->selected.count() >= 2;
     if (multiple && classname.isEmpty())
@@ -1838,13 +1849,15 @@ void Form::addWidget(QWidget *w)
             i18n("Multiple Widgets") + QString(" (%1)").arg(d->selected.count()));
         d->propertySet["this:iconName"].setValue("multiple_obj");
         //name doesn't make sense for now
-        d->propertySet["name"].setValue("");
+        d->propertySet["objectName"].setValue("");
     }
 }
 
 // moved from WidgetPropertySet
 void Form::createPropertiesForWidget(QWidget *w)
 {
+    d->propertySet.clear();
+
     if (!objectTree()) {
         kWarning() << "no object tree!";
         return;
@@ -1868,7 +1881,7 @@ void Form::createPropertiesForWidget(QWidget *w)
     QList<QMetaProperty> propList(
         KexiUtils::propertiesForMetaObjectWithInherited(w->metaObject()));
     QList<QByteArray> propNames;
-    foreach(QMetaProperty mp, propList) {
+    foreach(const QMetaProperty& mp, propList) {
         propNames.append(mp.name());
     }
 
@@ -1902,7 +1915,13 @@ void Form::createPropertiesForWidget(QWidget *w)
                                    subwidget->metaObject()->className());
 //  kDebug() << "$$$ " << subwidget->className();
 
-        if (subwinfo && meta.isDesignable(subwidget) && !d->propertySet.contains(propertyName)) {
+        if (   subwinfo
+            && meta.isDesignable(subwidget)
+            && meta.isWritable()
+            && meta.isReadable() && !d->propertySet.contains(propertyName)
+            && isPropertyVisible(propertyName, isTopLevel) // 2.0
+           )
+        {
             //! \todo add another list for property description
             QString desc(d->propCaption.value(meta.name()));
             //! \todo change i18n
@@ -1947,15 +1966,15 @@ void Form::createPropertiesForWidget(QWidget *w)
             }
 
             d->propertySet.addProperty(newProp);
-            if (!isPropertyVisible(propertyName, isTopLevel))
-                newProp->setVisible(false);
+//2.0            if (!isPropertyVisible(propertyName, isTopLevel))
+//2.0                newProp->setVisible(false);
             //! TMP
             if (newProp->type() == 0) // invalid type == null pixmap ?
                 newProp->setType(KoProperty::Pixmap);
         }
 
-//  if(0==qstrcmp(propertyName, "name"))
-//   (*this)["name"].setAutoSync(0); // name should be updated only when pressing Enter
+//  if(0==qstrcmp(propertyName, "objectName"))
+//   (*this)["objectName"].setAutoSync(0); // name should be updated only when pressing Enter
 
         // \todo js what does this mean? why do you use WidgetInfo and not WidgetLibrary
         //if (winfo) {
@@ -1968,7 +1987,7 @@ void Form::createPropertiesForWidget(QWidget *w)
         updatePropertyValue(tree, propertyName, meta);
     }
 
-    d->propertySet["name"].setAutoSync(false); // name should be updated only when pressing Enter
+    d->propertySet["objectName"].setAutoSync(false); // name should be updated only when pressing Enter
     d->propertySet["enabled"].setValue(tree->isEnabled());
 
     if (winfo) {
@@ -2144,7 +2163,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     else {
         icon = SmallIcon("multiple_obj");
-        titleText = i18n("Multiple Widgets") + QString(" (%1)").arg(widgetsCount);
+        titleText = i18n("Multiple Widgets (%1)").arg(widgetsCount);
     }
 
     KMenu menu;
@@ -2236,7 +2255,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
         QList<QMetaMethod> list(
             KexiUtils::methodsForMetaObjectWithParents(w->metaObject(), QMetaMethod::Signal,
                     QMetaMethod::Public));
-        foreach(QMetaMethod m, list) {
+        foreach(const QMetaMethod& m, list) {
             sigMenu->addAction(m.signature());
         }
         QAction *eventsSubMenuAction = menu.addMenu(sigMenu);
@@ -2699,7 +2718,9 @@ void Form::createLayout(Form::LayoutType layoutType)
 
     QWidget *parent = list->first()->parentWidget();
     foreach (QWidget *w, *list) {
-        kDebug() << "comparing widget " << w->objectName() << " whose parent is " << w->parentWidget()->objectName() << " insteaed of " << parent->objectName();
+        kDebug() << "comparing widget" << w->objectName() 
+            << "whose parent is" << w->parentWidget()->objectName()
+            << "insteaed of" << parent->objectName();
         if (w->parentWidget() != parent) {
             KMessageBox::sorry(widget()->topLevelWidget(), 
                 i18n("<b>Cannot create the layout.</b>\n"

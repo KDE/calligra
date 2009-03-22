@@ -32,16 +32,16 @@ class QDateTimeEditor;
 class KEXIFORMUTILS_EXPORT KexiDBDateEdit : public QWidget, public KexiFormDataItemInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     // properties copied from QDateEdit
     Q_ENUMS(Order)
-    Q_PROPERTY(Order order READ order WRITE setOrder DESIGNABLE true)
-    Q_PROPERTY(QDate date READ date WRITE setDate DESIGNABLE true)
-    Q_PROPERTY(bool autoAdvance READ autoAdvance WRITE setAutoAdvance DESIGNABLE true)
-    Q_PROPERTY(QDate maxValue READ maxValue WRITE setMaxValue DESIGNABLE true)
-    Q_PROPERTY(QDate minValue READ minValue WRITE setMinValue DESIGNABLE true)
-    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
+    Q_PROPERTY(Order order READ order WRITE setOrder)
+    Q_PROPERTY(QDate date READ date WRITE setDate)
+    Q_PROPERTY(bool autoAdvance READ autoAdvance WRITE setAutoAdvance)
+    Q_PROPERTY(QDate maxValue READ maxValue WRITE setMaxValue)
+    Q_PROPERTY(QDate minValue READ minValue WRITE setMinValue)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
     enum Order { DMY = Q3DateEdit::DMY, MDY = Q3DateEdit::MDY, YMD = Q3DateEdit::YMD,  YDM = Q3DateEdit::YDM };

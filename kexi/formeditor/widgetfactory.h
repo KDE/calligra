@@ -417,7 +417,7 @@ public:
 protected:
     /*! This function is called when we want to know whether the property should be visible.
      Implement it in the factory; don't forget to call implementation in the superclass.
-     Default implementation hides "caption", "icon", "sizeIncrement" and "iconText" properties. */
+     Default implementation hides "windowTitle", "windowIcon", "sizeIncrement" and "windowIconText" properties. */
     virtual bool isPropertyVisibleInternal(const QByteArray &classname, QWidget *w,
                                            const QByteArray &property, bool isTopLevel);
 

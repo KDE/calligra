@@ -41,21 +41,21 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
             public KFormDesigner::WidgetWithSubpropertiesInterface
 {
     Q_OBJECT
-//'caption' is uncovered now Q_PROPERTY(QString labelCaption READ caption WRITE setCaption DESIGNABLE true)
-    Q_OVERRIDE(QString caption READ caption WRITE setCaption DESIGNABLE true)
-    Q_OVERRIDE(QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor DESIGNABLE true RESET unsetPalette)
-    Q_OVERRIDE(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor DESIGNABLE true RESET unsetPalette)
-    Q_PROPERTY(QColor foregroundLabelColor READ foregroundLabelColor WRITE setForegroundLabelColor DESIGNABLE true RESET unsetPalette)
-    Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor DESIGNABLE true RESET unsetPalette)
-    Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
+//'caption' is uncovered now Q_PROPERTY(QString labelCaption READ caption WRITE setCaption)
+    Q_PROPERTY(QString caption READ caption WRITE setCaption)
+//2.0    Q_PROPERTY(QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor RESET unsetPalette)
+//2.0    Q_PROPERTY(QColor paletteBackgroundColor READ paletteBackgroundColor WRITE setPaletteBackgroundColor RESET unsetPalette)
+    Q_PROPERTY(QColor foregroundLabelColor READ foregroundLabelColor WRITE setForegroundLabelColor RESET unsetPalette)
+    Q_PROPERTY(QColor backgroundLabelColor READ backgroundLabelColor WRITE setBackgroundLabelColor RESET unsetPalette)
+    Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
-    Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
-    Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
+    Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition)
+    Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType)
     /*internal, for design time only*/
-    Q_PROPERTY(int fieldTypeInternal READ fieldTypeInternal WRITE setFieldTypeInternal DESIGNABLE true STORED false)
-    Q_PROPERTY(QString fieldCaptionInternal READ fieldCaptionInternal WRITE setFieldCaptionInternal DESIGNABLE true STORED false)
+    Q_PROPERTY(int fieldTypeInternal READ fieldTypeInternal WRITE setFieldTypeInternal STORED false)
+    Q_PROPERTY(QString fieldCaptionInternal READ fieldCaptionInternal WRITE setFieldCaptionInternal STORED false)
     Q_ENUMS(WidgetType LabelPosition)
 
 public:

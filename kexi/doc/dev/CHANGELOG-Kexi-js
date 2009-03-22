@@ -23,12 +23,42 @@ Legend:
 TODO Form editor:
  - FormManager::FormManager: register factory (port to koproperty2)
  - port KFDPixmapEdit, PropertyFactory
+ - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
+ - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
+- fix SizePolicy combined property display
 
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
+
+2009-03-21
+Main Window
+- fix forced property set reloading
+Forms
+- make some more methods const
+- Property Editor: do not show properties that are nonreadable or nonwritable
+- Property Editor: do not even create advanced properties
+- Property Editor: do not create top-level properties that are displayed 
+  as subproperties, e.g. "x" which is already available as "geometry.x"
+  (this is performed by skipping nonwritable properties)
+- "name" property replaced with compatible with Qt 4 "objectName"
+- "objectName" is still stored/loaded as "name" for backward compatibility
+- advanced properties renamed in Qt 4: "accel" -> "shortcut", "icon" -> "windowIcon"
+   "iconText" -> "windowIconText", "caption" -> "windowTitle"
+- new advanced properties in Qt 4: "accessibleDescription", "accessibleName", 
+   "autoFillBackground", "contextMenuPolicy", "locale", "statusTip", "windowModality",
+   "documentTitle"
+- line edit's "echoMode" property replaced with KDE's "passwordMode"
+- translations for new properties, e.g. "squeezedTextEnabled"
+- new properties of QWidgets: "styleSheet", "whatsThis", "toolTip", "layoutDirection", "iconSize"
+
+- widgets: replace Q_OVERRIDE with Q_PROPERTY, plus appropriate changes in signatures;
+           leave DESIGNABLE only if it is false bacuse DESIGNABLE is true by default
+KoProperty
+- added convenient method
+  QVariant Set::propertyValue(const QByteArray &name, const QVariant& defaultValue = QVariant())
 
 2009-03-19
 Core

@@ -28,9 +28,9 @@
 class KEXIFORMUTILS_EXPORT KexiDBCheckBox : public QCheckBox, public KexiFormDataItemInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
-    Q_OVERRIDE(Tristate tristate READ isTristate WRITE setTristate)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(Tristate tristate READ isTristate WRITE setTristate)
     Q_ENUMS(Tristate)
 
 public:
@@ -97,8 +97,8 @@ protected:
     void updateTristate();
 
 private:
-bool m_invalidState : 1;
-bool m_tristateChanged : 1; //!< used in setTristate()
+    bool m_invalidState : 1;
+    bool m_tristateChanged : 1; //!< used in setTristate()
     Tristate m_tristate; //!< used in isTristate() and setTristate()
 };
 

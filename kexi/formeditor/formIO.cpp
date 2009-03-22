@@ -439,7 +439,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
     QWidget *subwidget = w;
     bool addSubwidgetFlag = false;
     int propertyId = KexiUtils::indexOfPropertyWithSuperclasses(w, name);
-    const bool propertyIsName = qstrcmp(name, "name") == 0;
+    const bool propertyIsName = qstrcmp(name, "objectName") == 0 || qstrcmp(name, "name") == 0;
     if (!propertyIsName && propertyId == -1 && subpropIface && subpropIface->subwidget()) { // try property from subwidget
         subwidget = subpropIface->subwidget();
         propertyId = KexiUtils::indexOfPropertyWithSuperclasses(
@@ -460,7 +460,7 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
     if (!propertyIsName && (!meta.isValid() || !meta.isStored(subwidget)))   //not storable
         return;
     QDomElement propertyE = parent.createElement("property");
-    propertyE.setAttribute("name", name);
+    propertyE.setAttribute("name", propertyIsName ? "name" /* compat with 1.x */ : name);
     if (addSubwidgetFlag)
         propertyE.setAttribute("subwidget", "true");
 
@@ -960,7 +960,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     else // Normal widgets
         tclass.setAttribute("class", lib->savingName(item->widget()->metaObject()->className()));
 
-    savePropertyValue(tclass, domDoc, "name", item->widget()->name(), item->widget());
+    savePropertyValue(tclass, domDoc, "objectName", item->widget()->objectName(), item->widget());
 
     // Important: save dataSource property FIRST before properties like "alignment"
     // - needed when subproperties are defined after subwidget creation, and subwidget is created after setting "dataSource"
@@ -995,7 +995,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
                     item->widget()->property("alignment"), item->widget());
                 savedAlignment = true;
             }
-        } else if (name == "name" || name == "geometry" || name == "layout") {
+        } else if (name == "objectName" || name == "geometry" || name == "layout") {
             // these have already been saved
         } else {
             savePropertyValue(tclass, domDoc, name.toLatin1(), item->widget()->property(name.toLatin1()),
@@ -1017,7 +1017,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
     if (item->container() && item->container()->layoutType() != Form::NoLayout) {
         if (item->container()->layout()) { // there is a layout
             layout = domDoc.createElement("temp");
-            savePropertyValue(layout, domDoc, "name", "unnamed", item->widget());
+            savePropertyValue(layout, domDoc, "objectName", "unnamed", item->widget());
             if (item->modifiedProperties()->contains("layoutMargin"))
                 savePropertyElement(layout, domDoc, "property", "margin", item->container()->layoutMargin());
             if (item->modifiedProperties()->contains("layoutSpacing"))
@@ -1134,7 +1134,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
     // We first look for the widget's name
     QString wname;
     for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name")) {
+        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name" /* compat with 1.x */)) {
             wname = n.toElement().text();
             break;
         }
@@ -1277,7 +1277,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
     // We first look for the widget's name
     QString wname;
     for (QDomNode n = el.firstChild(); !n.isNull(); n = n.nextSibling()) {
-        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name")) {
+        if ((n.toElement().tagName() == "property") && (n.toElement().attribute("name") == "name" /* compat with 1.x */)) {
             wname = n.toElement().text();
             break;
         }
@@ -1333,9 +1333,13 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
             QString name = node.attribute("name");
             //if(name == "geometry")
             // hasGeometryProp = true;
-            if (((eltag == "grid") || (eltag == "hbox") || (eltag == "vbox")) &&
-                    (name == "name")) // we don't care about layout names
+            if (   (eltag == "grid" || eltag == "hbox" || eltag == "vbox")
+                && name == "name"
+               )
+            {
+                // we don't care about layout names
                 continue;
+            }
 
             if (node.attribute("subwidget") == "true") {
                 //this is property for subwidget: remember it for delayed setting

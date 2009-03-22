@@ -43,11 +43,11 @@ class KEXIGUIUTILS_EXPORT KexiGradientWidget : public QWidget
     typedef QList<QWidget*> WidgetList;
 
     Q_OBJECT
-    Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode DESIGNABLE true)
-    Q_PROPERTY(GradientType gradientType READ gradientType WRITE setGradientType DESIGNABLE true)
-    Q_PROPERTY(QColor gradientColor1 READ gradientColor1 WRITE setGradientColor1 DESIGNABLE true)
-    Q_PROPERTY(QColor gradientColor2 READ gradientColor2 WRITE setGradientColor2 DESIGNABLE true)
-    Q_PROPERTY(double blendOpacity READ blendOpacity WRITE setBlendOpacity DESIGNABLE true)
+    Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode)
+    Q_PROPERTY(GradientType gradientType READ gradientType WRITE setGradientType)
+    Q_PROPERTY(QColor gradientColor1 READ gradientColor1 WRITE setGradientColor1)
+    Q_PROPERTY(QColor gradientColor2 READ gradientColor2 WRITE setGradientColor2)
+    Q_PROPERTY(double blendOpacity READ blendOpacity WRITE setBlendOpacity)
     Q_ENUMS(DisplayMode GradientType)
 
 public:

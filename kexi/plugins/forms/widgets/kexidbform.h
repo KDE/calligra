@@ -47,11 +47,11 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
             public KexiFormDataItemInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
-    Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops DESIGNABLE true)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(bool autoTabStops READ autoTabStops WRITE setAutoTabStops)
     //original "size" property is not designable, so here's a custom (not storable) replacement
-    Q_PROPERTY(QSize sizeInternal READ sizeInternal WRITE resizeInternal DESIGNABLE true STORED false)
+    Q_PROPERTY(QSize sizeInternal READ sizeInternal WRITE resizeInternal STORED false)
 public:
     KexiDBForm(QWidget *parent, KexiDataAwareObjectInterface* dataAwareObject);
     virtual ~KexiDBForm();

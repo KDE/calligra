@@ -402,14 +402,11 @@ void KexiFormManager::setDataSourceFieldOrExpression(
 
     set["dataSource"].setValue(string);
 
-    if (set.contains("autoCaption") && set["autoCaption"].value().toBool()) {
-        if (set.contains("fieldCaptionInternal"))
-            set["fieldCaptionInternal"].setValue(caption);
+    if (set.propertyValue("autoCaption", false).toBool()) {
+        set.changePropertyIfExists("fieldCaptionInternal", caption);
     }
-    if (//type!=KexiDB::Field::InvalidType &&
-        set.contains("widgetType") && set["widgetType"].value().toString() == "Auto") {
-        if (set.contains("fieldTypeInternal"))
-            set["fieldTypeInternal"].setValue(type);
+    if (set.propertyValue("widgetType").toString() == "Auto") {
+        set.changePropertyIfExists("fieldTypeInternal", type);
     }
 }
 
@@ -528,7 +525,7 @@ void KexiFormManager::slotAssignAction()
         return;
 
     KexiActionSelectionDialog dlg(dbform, data,
-                                  set.property("name").value().toString());
+                                  set.property("objectName").value().toString());
 
     if (dlg.exec() == QDialog::Accepted) {
         data = dlg.currentAction();

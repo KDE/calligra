@@ -509,6 +509,8 @@ ContainerFactory::ContainerFactory(QObject *parent, const QStringList &)
     m_propDesc["tabPosition"] = i18n("Tab Position");
     m_propDesc["currentIndex"] = i18n("Current Page");
     m_propDesc["tabShape"] = i18n("Tab Shape");
+    m_propDesc["elideMode"] = i18nc("Tab Widget's Elide Mode", "Elide Mode");
+    m_propDesc["usesScrollButtons"] = i18nc("Tab Widget uses scroll buttons", "Scroll Buttons");
 
     m_propDesc["tabPosition"] = i18n("Tab Position");
     m_propDesc["tabPosition"] = i18n("Tab Position");
@@ -734,7 +736,7 @@ ContainerFactory::saveSpecialProperty(const QByteArray &, const QString &name, c
 bool
 ContainerFactory::readSpecialProperty(const QByteArray &, QDomElement &node, QWidget *w, KFormDesigner::ObjectTreeItem *item)
 {
-    QString name = node.attribute("name");
+    const QString name( node.attribute("name") );
     if ((name == "title") && (item->parent()->widget()->inherits("QTabWidget"))) {
         TabWidgetBase *tab = dynamic_cast<TabWidgetBase*>(w->parentWidget());
         tab->addTab(w, node.firstChild().toElement().text());
@@ -773,10 +775,12 @@ ContainerFactory::isPropertyVisibleInternal(const QByteArray &classname,
 {
     bool ok = true;
 
-    if ((classname == "HBox") || (classname == "VBox") || (classname == "Grid") ||
-            (classname == "HFlow") || (classname == "VFlow")) {
-        return property == "name" || property == "geometry";
-    } else if (classname == "QGroupBox") {
+    if (   classname == "HBox" || classname == "VBox" || classname == "Grid"
+        || classname == "HFlow" || classname == "VFlow")
+    {
+        return property == "objectName" || property == "geometry";
+    }
+    else if (classname == "QGroupBox") {
         ok =
 #ifdef KEXI_NO_UNFINISHED
             /*! @todo Hidden for now in Kexi. "checkable" and "checked" props need adding

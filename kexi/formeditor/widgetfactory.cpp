@@ -555,13 +555,7 @@ WidgetFactory::isPropertyVisible(const QByteArray &classname, QWidget *w,
                || property == "paletteBackgroundPixmap";
     }
 
-// if(d->properties.isEmpty() && !isTopLevel)
-//  d->properties << "caption" << "icon" << "sizeIncrement" << "iconText";
-// if(! (d->properties.grep(property)).isEmpty() )
-//  return false;
-
     return isPropertyVisibleInternal(classname, w, property, isTopLevel);
-// return !multiple && isPropertyVisibleInternal(classname, w, property);
 }
 
 bool
@@ -577,7 +571,7 @@ WidgetFactory::isPropertyVisibleInternal(const QByteArray &, QWidget *w,
 #endif
 
     if (!isTopLevel
-            && (property == "caption" || property == "icon" || property == "sizeIncrement" || property == "iconText")) {
+            && (property == "windowTitle" || property == "windowIcon" || property == "sizeIncrement" || property == "windowIconText")) {
         // don't show these properties for a non-toplevel widget
         return false;
     }

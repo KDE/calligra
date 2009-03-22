@@ -328,7 +328,10 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
     addClass(wDateTime);
 
     m_propDesc["toggleButton"] = i18n("Toggle");
+    m_propDesc["checkable"] = i18nc("Button is checkable", "Checkable");
     m_propDesc["autoRepeat"] = i18n("Auto Repeat");
+    m_propDesc["autoRepeatDelay"] = i18nc("Auto Repeat Button's Delay", "Auto Rep. Delay");
+    m_propDesc["autoRepeatInterval"] = i18nc("Auto Repeat Button's Interval", "Auto Rep. Interval");
     m_propDesc["autoDefault"] = i18n("Auto Default");
     m_propDesc["default"] = i18n("Default");
     m_propDesc["flat"] = i18n("Flat");
@@ -341,11 +344,6 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
     m_propDesc["checked"] = i18nc("Checked checkbox", "Checked");
     m_propDesc["tristate"] = i18nc("Tristate checkbox", "Tristate");
 
-    //for EchoMode
-    m_propValDesc["Normal"] = i18nc("For Echo Mode", "Normal");
-    m_propValDesc["NoEcho"] = i18nc("For Echo Mode", "No Echo");
-    m_propValDesc["Password"] = i18nc("For Echo Mode", "Password");
-
     //for spring
     m_propDesc["sizeType"] = i18n("Size Type");
 
@@ -355,7 +353,19 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
     m_propValDesc["RichText"] = i18nc("For Text Format", "Hypertext");
     m_propValDesc["AutoText"] = i18nc("For Text Format", "Auto");
     m_propValDesc["LogText"] = i18nc("For Text Format", "Log");
+    m_propDesc["openExternalLinks"] = i18nc("property: Can open external links in label", "Open Ext. Links");
 
+    //KLineEdit
+    m_propDesc["clickMessage"] = i18n("Property: \"Click Me\" message for line edit", "Click Message");
+    m_propDesc["showClearButton"] = i18n("Property: Show Clear Button", "Clear Button");
+    //for EchoMode
+/* obsolete
+    m_propValDesc["Normal"] = i18nc("For Echo Mode", "Normal");
+    m_propValDesc["NoEcho"] = i18nc("For Echo Mode", "No Echo");
+    m_propValDesc["Password"] = i18nc("For Echo Mode", "Password"); */
+    m_propDesc["passwordMode"] = i18nc("Password Mode for line edit", "Password Mode");
+    m_propDesc["squeezedTextEnabled"] = i18nc("Squeezed Text Mode for line edit", "Squeezed Text");
+    
     //KTextEdit
     m_propDesc["tabStopWidth"] = i18n("Tab Stop Width");
     m_propDesc["tabChangesFocus"] = i18n("Tab Changes Focus");
@@ -370,6 +380,14 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
     m_propValDesc["FixedPixelWidth"] = i18nc("For Word Wrap Position", "In Pixels");
     m_propValDesc["FixedColumnWidth"] = i18nc("For Word Wrap Position", "In Columns");
     m_propDesc["linkUnderline"] = i18n("Links Underlined");
+    m_propDesc["horizontalScrollBarPolicy"] = i18n("Horizontal Scroll Bar");
+    m_propDesc["verticalScrollBarPolicy"] = i18n("Vertical Scroll Bar");
+    //ScrollBarPolicy
+    m_propValDesc["ScrollBarAsNeeded"] = i18nc("Show Scroll Bar As Needed", "As Needed");
+    m_propValDesc["ScrollBarAlwaysOff"] = i18nc("Scroll Bar Always Off", "Always Off");
+    m_propValDesc["ScrollBarAlwaysOn"] = i18nc("Scroll Bar Always On", "Always On");
+    m_propDesc["acceptRichText"] = i18nc("Property: Text Edit accepts rich text", "Rich Text");
+    m_propDesc["HTML"] = i18nc("Property: HTML value of text edit", "HTML");
 
     //internal props
     setInternalProperty("Line", "orientationSelectionPopup", "1");
@@ -740,8 +758,8 @@ StdWidgetFactory::readSpecialProperty(const QByteArray &classname,
                                       QDomElement &node, QWidget *w, 
                                       KFormDesigner::ObjectTreeItem *)
 {
-    QString tag = node.tagName();
-    QString name = node.attribute("name");
+    const QString tag( node.tagName() );
+    const QString name( node.attribute("name") );
 
     if ((tag == "item") && (classname == "KComboBox")) {
         KComboBox *combo = dynamic_cast<KComboBox*>(w);
@@ -835,7 +853,7 @@ StdWidgetFactory::isPropertyVisibleInternal(const QByteArray &classname,
 {
     bool ok = true;
     if (classname == "FormWidgetBase") {
-        if (property == "iconText"
+        if (property == "windowIconText"
                 || property == "geometry" /*nonsense for toplevel widget*/)
             return false;
     } else if (classname == "CustomWidget") {
