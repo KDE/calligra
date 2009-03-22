@@ -20,9 +20,12 @@
  */
 
 #include "KWPageStyle.h"
-#include <kdebug.h>
 
+#include <KoXmlWriter.h>
+
+#include <kdebug.h>
 #include <QSharedData>
+#include <QBuffer>
 
 class KWPageStylePrivate : public QSharedData
 {
@@ -236,6 +239,46 @@ void KWPageStyle::clear()
 QString KWPageStyle::name() const
 {
     return d->name;
+}
+
+KoGenStyle KWPageStyle::saveOdf() const
+{
+    KoGenStyle pageLayout = d->pageLayout.saveOdf();
+    pageLayout.setAutoStyleInStylesDotXml(true);
+    pageLayout.addAttribute( "style:page-usage", "all" );
+
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter writer( &buffer );
+
+    if (d->columns.columns > 1) {
+        writer.startElement("style:columns");
+        writer.addAttribute("fo:column-count", d->columns.columns);
+        writer.addAttributePt("fo:column-gap", d->columns.columnSpacing);
+        writer.endElement();
+    }
+    //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
+    writer.startElement("style:footnote-sep");
+    // TODO
+    //writer.addAttribute("style:adjustment", )
+    //writer.addAttribute("style:width", )
+    //writer.addAttribute("style:rel-width", )
+    //writer.addAttribute("style:line-style", )
+    writer.endElement();
+
+    QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    pageLayout.addChildElement("columns", contentElement);
+
+    // TODO header/footer policy
+    // TODO see how we should save margins if we use the 'closest to binding' stuff.
+    // TODO what to do if there is no main-text-frame.
+
+    return pageLayout;
+}
+
+void KWPageStyle::loadOdf(const KoXmlElement &style)
+{
+    d->pageLayout.loadOdf(style);
 }
 
 bool KWPageStyle::operator==(const KWPageStyle &other) const

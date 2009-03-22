@@ -159,9 +159,18 @@ public:
     /// get the master page name for this page style.
     QString name() const;
 
+    /**
+     * Save this page style to ODF.
+     */
+    KoGenStyle saveOdf() const;
+
+    /**
+     * Load this page style from ODF
+     */
+    void loadOdf(const KoXmlElement &style);
+
     bool operator==(const KWPageStyle &other) const;
     inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }
-
     uint hash() const;
 
 private:

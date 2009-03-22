@@ -63,6 +63,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
     return content;
 }
 
+// rename to save pages ?
 void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
 {
     //kDebug(32001 )<< "START saveHeaderFooter ############################################";
@@ -83,6 +84,14 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
         data.insert(tfs->pageStyle(), set);
     }
 
+    // save page styles that don't have a header or footer which will be handled later
+    foreach (KWPageStyle pageStyle, m_document->pageManager()->pageStyles()) {
+        if (data.contains(pageStyle))
+            continue;
+
+        mainStyles.lookup(pageStyle.saveOdf(), "pm");
+    }
+
     // We need to flush them out ordered as defined in the specs.
     QList<KWord::TextFrameSetType> order;
     order << KWord::OddPagesHeaderTextFrameSet
@@ -93,8 +102,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
     foreach (KWPageStyle pageStyle, data.keys()) {
         KoGenStyle masterStyle(KoGenStyle::StyleMaster);
         //masterStyle.setAutoStyleInStylesDotXml(true);
-        KoGenStyle layoutStyle = pageStyle.pageLayout().saveOdf();
-        layoutStyle.setAutoStyleInStylesDotXml(true);
+        KoGenStyle layoutStyle = pageStyle.saveOdf();
         masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
 
         QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
