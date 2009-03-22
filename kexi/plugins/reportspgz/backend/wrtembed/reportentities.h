@@ -65,22 +65,20 @@ public:
 
     virtual ReportEntity* clone() = 0;
     ReportDesigner* designer() const {
-        return _rd;
+        return m_reportDesigner;
     }
     void setDesigner(ReportDesigner* rd) {
-        _rd = rd;
+        m_reportDesigner = rd;
     }
     virtual ~ReportEntity() {};
+
 protected:
     ReportEntity(ReportDesigner*);
-
-    ReportDesigner* _rd;
-
-
+    ReportDesigner* m_reportDesigner;
 
 private:
-    static bool _readDefaultFont;
-    static QFont _defaultFont;
+    static bool m_readDefaultFont;
+    static QFont m_defaultFont;
 };
 
 #endif

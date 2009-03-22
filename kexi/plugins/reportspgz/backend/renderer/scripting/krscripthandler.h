@@ -53,33 +53,33 @@ public slots:
     void slotEnteredGroup(const QString&, const QVariant&);
     void slotExitedGroup(const QString&, const QVariant&);
     void populateEngineParameters(KexiDB::Cursor *q);
-    void setPageNumber(int p) {_constants->setPageNumber(p);}
-    void setPageTotal(int t) {_constants->setPageTotal(t);}
+    void setPageNumber(int p) {m_constants->setPageNumber(p);}
+    void setPageTotal(int t) {m_constants->setPageTotal(t);}
     void newPage();
     
 private:
-    KRScriptFunctions *_functions;
-    KRScriptConstants *_constants;
-    KRScriptDebug *_debug;
-    KRScriptDraw *_draw;
+    KRScriptFunctions *m_functions;
+    KRScriptConstants *m_constants;
+    KRScriptDebug *m_debug;
+    KRScriptDraw *m_draw;
     
-    KexiScriptAdaptor *_kexi;
+    KexiScriptAdaptor *m_kexi;
 
-    Scripting::Report *_report;
+    Scripting::Report *m_report;
 
     QString fieldFunctions();
     QString scriptCode();
     
-    KexiDB::Connection *_conn;
-    const KexiDB::Cursor *_curs;
+    KexiDB::Connection *m_connection;
+    const KexiDB::Cursor *m_cursor;
 
-    QString _source;
-    KRReportData  *_data;
+    QString m_source;
+    KRReportData  *m_reportData;
 
-    Kross::Action* _action;
+    Kross::Action* m_action;
 
-    QMap<QString, QVariant> _groups;
-    QMap<KRSectionData*, Scripting::Section*> _sectionMap;
+    QMap<QString, QVariant> m_groups;
+    QMap<KRSectionData*, Scripting::Section*> m_sectionMap;
     QString where();
 };
 

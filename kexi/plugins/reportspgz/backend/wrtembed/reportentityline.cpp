@@ -39,7 +39,7 @@
 //
 void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
 {
-    _rd = r;
+    m_reportDesigner = r;
     setPos(0, 0);
 
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -49,7 +49,7 @@ void ReportEntityLine::init(QGraphicsScene* s, ReportDesigner *r)
     if (s)
         s->addItem(this);
 
-    connect(_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
     setZValue(Z);
 }
@@ -59,14 +59,14 @@ ReportEntityLine::ReportEntityLine(ReportDesigner * d, QGraphicsScene * scene)
 {
     init(scene, d);
 
-    _name->setValue(_rd->suggestEntityName("Line"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Line"));
 }
 
 ReportEntityLine::ReportEntityLine(QDomNode & entity, ReportDesigner * d, QGraphicsScene * scene)
         : ReportEntity(d), KRLineData(entity)
 {
     init(scene, d);
-    setLine(_start.toScene().x(), _start.toScene().y(), _end.toScene().x(), _end.toScene().y());
+    setLine(m_start.toScene().x(), m_start.toScene().y(), m_end.toScene().x(), m_end.toScene().y());
 }
 
 ReportEntityLine* ReportEntityLine::clone()
@@ -87,7 +87,7 @@ void ReportEntityLine::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     //Q3CanvasLine::drawShape(painter);
     painter->setRenderHint(QPainter::Antialiasing, true);
     QPen p = painter->pen();
-    painter->setPen(QPen(_lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt()));
+    painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     painter->drawLine(line());
     if (isSelected()) {
 
@@ -108,10 +108,10 @@ void ReportEntityLine::buildXML(QDomDocument & doc, QDomElement & parent)
 
     qreal sx, sy, ex, ey;
 
-    sx = _start.toPoint().x();
-    sy = _start.toPoint().y();
-    ex = _end.toPoint().x();
-    ey = _end.toPoint().y();
+    sx = m_start.toPoint().x();
+    sy = m_start.toPoint().y();
+    ex = m_end.toPoint().x();
+    ey = m_end.toPoint().y();
 
     QDomElement e;
 
@@ -155,19 +155,19 @@ void ReportEntityLine::propertyChanged(KoProperty::Set &s, KoProperty::Property 
         //setLine ( line().p2().x(), line().p2().y(),_end.toScene().x(), _end.toScene().y() );
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (scene()) scene()->update();
 }
 
 void ReportEntityLine::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    _rd->changeSet(_set);
+    m_reportDesigner->changeSet(m_set);
     setSelected(true);
 }
 
@@ -193,7 +193,7 @@ void ReportEntityLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
     //x = event->pos().x();
     //y = event->pos().y();
 
-    switch (_grabAction) {
+    switch (m_grabAction) {
     case 1:
         setLine(QLineF(x, y, line().x2(), line().y2()));
         break;
@@ -215,8 +215,8 @@ void ReportEntityLine::mouseMoveEvent(QGraphicsSceneMouseEvent * event)
         break;
     }
     //Update Properties
-    _start.setScenePos(mapToScene(line().p1()), true);
-    _end.setScenePos(mapToScene(line().p2()), true);
+    m_start.setScenePos(mapToScene(line().p1()), true);
+    m_end.setScenePos(mapToScene(line().p2()), true);
 
 }
 
@@ -240,10 +240,10 @@ int ReportEntityLine::grabHandle(QPointF pos)
 
 void ReportEntityLine::hoverMoveEvent(QGraphicsSceneHoverEvent * event)
 {
-    _grabAction = 0;
+    m_grabAction = 0;
     if (isSelected()) {
-        _grabAction = grabHandle(event->pos());
-        switch (_grabAction) {
+        m_grabAction = grabHandle(event->pos());
+        switch (m_grabAction) {
         case 1: //Point 1
             setCursor(Qt::SizeAllCursor);
             break;

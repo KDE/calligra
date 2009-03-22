@@ -24,7 +24,7 @@ namespace Scripting
 
 Barcode::Barcode(KRBarcodeData *b)
 {
-    _barcode = b;
+    m_barcode = b;
 }
 
 
@@ -34,25 +34,25 @@ Barcode::~Barcode()
 
 QPointF Barcode::position()
 {
-    return _barcode->_pos.toPoint();
+    return m_barcode->m_pos.toPoint();
 }
 void Barcode::setPosition(const QPointF& p)
 {
-    _barcode->_pos.setPointPos(p);
+    m_barcode->m_pos.setPointPos(p);
 }
 
 QSizeF Barcode::size()
 {
-    return _barcode->_size.toPoint();
+    return m_barcode->m_size.toPoint();
 }
 void Barcode::setSize(const QSizeF& s)
 {
-    _barcode->_size.setPointSize(s);
+    m_barcode->m_size.setPointSize(s);
 }
 
 int Barcode::horizontalAlignment()
 {
-    QString a = _barcode->_hAlignment->value().toString();
+    QString a = m_barcode->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "left") {
         return -1;
@@ -67,37 +67,37 @@ void Barcode::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _barcode->_hAlignment->setValue("Left");
+        m_barcode->m_horizontalAlignment->setValue("Left");
         break;
     case 0:
-        _barcode->_hAlignment->setValue("Center");
+        m_barcode->m_horizontalAlignment->setValue("Center");
         break;
     case 1:
-        _barcode->_hAlignment->setValue("Right");
+        m_barcode->m_horizontalAlignment->setValue("Right");
         break;
     default:
-        _barcode->_hAlignment->setValue("Left");
+        m_barcode->m_horizontalAlignment->setValue("Left");
         break;
     }
 }
 
 QString Barcode::source()
 {
-    return _barcode->_controlSource->value().toString();
+    return m_barcode->m_controlSource->value().toString();
 }
 
 void Barcode::setSource(const QString& s)
 {
-    _barcode->_controlSource->setValue(s);
+    m_barcode->m_controlSource->setValue(s);
 }
 
 QString Barcode::format()
 {
-    return _barcode->_format->value().toString();
+    return m_barcode->m_format->value().toString();
 }
 
 void Barcode::setFormat(const QString& s)
 {
-    _barcode->_format->setValue(s);
+    m_barcode->m_format->setValue(s);
 }
 }

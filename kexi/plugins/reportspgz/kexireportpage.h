@@ -42,10 +42,10 @@ public slots:
     virtual void paintEvent(QPaintEvent*);
 
 private:
-    ORODocument *rpt;
-    int page;
-    bool _repaint;
-    QPixmap *_pm;
+    ORODocument *m_reportDocument;
+    int m_page;
+    bool m_repaint;
+    QPixmap *m_pixmap;
 };
 
 #endif

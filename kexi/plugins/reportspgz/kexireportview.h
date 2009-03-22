@@ -25,6 +25,7 @@
 #include <kexidb/connection.h>
 #include <qdom.h>
 #include "kexireportpart.h"
+
 class ORPreRender;
 class ORODocument;
 class QScrollArea;
@@ -47,13 +48,13 @@ public:
     virtual tristate beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore);
 
 private:
-    ORPreRender *rpt;
-    ORODocument *doc;
-    QScrollArea *scr;
-    KexiReportPage *rptwid;
-    KexiRecordNavigator *pageSelector;
-    int curPage;
-    int pageCount;
+    ORPreRender *m_preRenderer;
+    ORODocument *m_reportDocument;
+    QScrollArea *m_scrollArea;
+    KexiReportPage *m_reportWidget;
+    KexiRecordNavigator *m_pageSelector;
+    int m_currentPpage;
+    int m_pageCount;
     KexiReportPart::TempData* tempData() const;
 
 private slots:
@@ -64,7 +65,6 @@ private slots:
     void slotPrintReport();
     void slotRenderKSpread();
     void slotExportHTML();
-
 };
 
 #endif

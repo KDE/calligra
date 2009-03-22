@@ -94,10 +94,9 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames)
         evenOdd.addState(frame->frameOnBothSheets() ? GuiHelper::On : GuiHelper::Off);
 
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(frame->frameSet());
-        if (textFs)
-            protectContent.addState(textFs->protectContent() ? GuiHelper::On : GuiHelper::Off);
-        else
+        if (textFs == 0)
             keepAspect.addState(frame->shape()->keepAspectRatio() ? GuiHelper::On : GuiHelper::Off);
+        protectContent.addState(frame->shape()->isContentProtected() ? GuiHelper::On : GuiHelper::Off);
     }
 
     // update the GUI
@@ -148,11 +147,8 @@ void KWGeneralFrameProperties::save()
         if (widget.evenOdd->checkState() != Qt::PartiallyChecked)
             frame->setFrameOnBothSheets(widget.evenOdd->checkState() != Qt::Checked);
         if (frame->frameSet()) {
-            if (widget.protectContent->checkState() != Qt::PartiallyChecked) {
-                KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *>(frame->frameSet());
-                if (textFs)
-                    textFs->setProtectContent(widget.protectContent->checkState() == Qt::Checked);
-            }
+            if (widget.protectContent->checkState() != Qt::PartiallyChecked)
+                frame->shape()->setContentProtected(widget.protectContent->checkState() == Qt::Checked);
             if (widget.allFrames->isEnabled() && widget.allFrames->checkState() == Qt::Checked) {
                 foreach (KWFrame *otherFrame, frame->frameSet()->frames()) {
                     if (m_frames.contains(otherFrame))

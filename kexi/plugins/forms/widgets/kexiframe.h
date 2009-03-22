@@ -28,9 +28,9 @@ class KEXIFORMUTILS_EXPORT KexiFrame : public QFrame
 {
     Q_OBJECT
 //todo Q_ENUMS( Shape Shadow )
-    Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true)
-//todo Q_OVERRIDE( Shape frameShape READ frameShape WRITE setFrameShape )
-//todo Q_OVERRIDE( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
+    Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor)
+//todo Q_PROPERTY( Shape frameShape READ frameShape WRITE setFrameShape )
+//todo Q_PROPERTY( Shadow frameShadow READ frameShadow WRITE setFrameShadow )
 
 public:
     KexiFrame(QWidget * parent, Qt::WindowFlags f = 0);

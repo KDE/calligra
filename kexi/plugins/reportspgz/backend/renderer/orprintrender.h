@@ -34,20 +34,20 @@ public:
 
     void setPrinter(QPrinter *);
     QPrinter * printer() {
-        return _printer;
+        return m_printer;
     }
 
     void setPainter(QPainter *);
     QPainter * painter() {
-        return _painter;
+        return m_painter;
     }
 
     bool setupPrinter(ORODocument *, QPrinter *);
     bool render(ORODocument *);
 
 protected:
-    QPrinter* _printer;
-    QPainter* _painter;
+    QPrinter* m_printer;
+    QPainter* m_painter;
 };
 
 #endif // __ORPRINTRENDER_H__

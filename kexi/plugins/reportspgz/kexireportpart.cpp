@@ -50,6 +50,11 @@ KexiReportPart::KexiReportPart(QObject *parent, const QStringList &l)
         , d(new Private())
 {
     kDebug();
+    setInternalPropertyValue("instanceName",
+                             i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+                                   "Use '_' character instead of spaces. First character should be a..z character. "
+                                   "If you cannot use latin characters in your language, use english word.",
+                                   "report"));
     setInternalPropertyValue("instanceCaption", i18n("Report"));
     setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new report"));
     setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new report."));
@@ -82,14 +87,14 @@ QString KexiReportPart::loadReport(const QString& name)
     KexiMainWindowIface *win = KexiMainWindowIface::global();
     if (!win || !win->project() || !win->project()->dbConnection()) {
         kDebug() << "failed sanity check";
-        return "";
+        return QString();
     }
     QString src, did;
     KexiDB::SchemaData sd;
     
     if (win->project()->dbConnection()->loadObjectSchemaData(win->project()->idForClass("uk.co.piggz.report"), name, sd) != true) {
-        kDebug() << "failed to load schema data";
-        return "";
+        kWarning() << "failed to load schema data";
+        return QString();
     }
 
     kDebug() << "***Object ID:" << sd.id();
@@ -97,16 +102,17 @@ QString KexiReportPart::loadReport(const QString& name)
     if (win->project()->dbConnection()->loadDataBlock(sd.id(), src, "pgzreport_layout") == true) {
             return src;
     } else {
-        kDebug() << "Unable to load document";
-        return "";
+        kWarning() << "Unable to load document";
+        return QString();
     }
 }
 
 KexiWindowData* KexiReportPart::createWindowData(KexiWindow* window)
 {
     kDebug();
+    const QString document( loadReport(window->partItem()->name()) );
     KexiReportPart::TempData *td = new KexiReportPart::TempData(window);
-    td->document = loadReport(window->partItem()->name());
+    td->document = document;
     td->name = window->partItem()->name();
     return td;
 }
@@ -115,7 +121,6 @@ KexiReportPart::TempData::TempData(QObject* parent)
         : KexiWindowData(parent)
         , reportSchemaChangedInPreviousView(true /*to force reloading on startup*/)
 {
-    document = "";
 }
 
 void KexiReportPart::setupCustomPropertyPanelTabs(KTabWidget *tab)

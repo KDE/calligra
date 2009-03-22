@@ -24,9 +24,9 @@
 
 KRSize::KRSize(const KoUnit& unit)
 {
-    _unit = unit;
+    m_unit = unit;
     //TODO When KoProperty can handle QSize
-    _property = new KoProperty::Property("Size", toScene().toSize(), "Size", "Size");
+    m_property = new KoProperty::Property("Size", toScene().toSize(), "Size", "Size");
 }
 
 
@@ -40,53 +40,53 @@ void KRSize::setSceneSize(const QSizeF& s)
 
     w = INCH_TO_POINT(s.width() / KoGlobal::dpiX());
     h = INCH_TO_POINT(s.height() / KoGlobal::dpiY());
-    _pointSize.setWidth(w);
-    _pointSize.setHeight(h);
-    _property->setValue(toUnit().toSize());
+    m_pointSize.setWidth(w);
+    m_pointSize.setHeight(h);
+    m_property->setValue(toUnit().toSize());
 }
 
 void KRSize::setUnitSize(const QSizeF& s)
 {
     qreal w, h;
-    w = _unit.fromUserValue(s.width());
-    h = _unit.fromUserValue(s.height());
-    _pointSize.setWidth(w);
-    _pointSize.setHeight(h);
-    _property->setValue(toUnit().toSize());
+    w = m_unit.fromUserValue(s.width());
+    h = m_unit.fromUserValue(s.height());
+    m_pointSize.setWidth(w);
+    m_pointSize.setHeight(h);
+    m_property->setValue(toUnit().toSize());
 }
 
 void KRSize::setPointSize(const QSizeF& s)
 {
-    _pointSize.setWidth(s.width());
-    _pointSize.setHeight(s.height());
-    _property->setValue(toUnit().toSize());
+    m_pointSize.setWidth(s.width());
+    m_pointSize.setHeight(s.height());
+    m_property->setValue(toUnit().toSize());
 
 }
 
 void KRSize::setUnit(KoUnit u)
 {
-    _unit = u;
-    _property->setValue(toUnit().toSize());
+    m_unit = u;
+    m_property->setValue(toUnit().toSize());
 }
 
 QSizeF KRSize::toPoint()
 {
-    return _pointSize;
+    return m_pointSize;
 }
 
 QSizeF KRSize::toScene()
 {
     qreal w, h;
-    w = POINT_TO_INCH(_pointSize.width()) * KoGlobal::dpiX();
-    h = POINT_TO_INCH(_pointSize.height()) * KoGlobal::dpiY();
+    w = POINT_TO_INCH(m_pointSize.width()) * KoGlobal::dpiX();
+    h = POINT_TO_INCH(m_pointSize.height()) * KoGlobal::dpiY();
     return QSizeF(w, h);
 }
 
 QSizeF KRSize::toUnit()
 {
     qreal w, h;
-    w = _unit.toUserValue(_pointSize.width());
-    h = _unit.toUserValue(_pointSize.height());
+    w = m_unit.toUserValue(m_pointSize.width());
+    h = m_unit.toUserValue(m_pointSize.height());
 
     return QSizeF(w, h);
 }

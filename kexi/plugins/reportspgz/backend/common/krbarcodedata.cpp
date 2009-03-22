@@ -42,13 +42,13 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
                 node = dnl.item(di);
                 n = node.nodeName();
                 if (n == "controlsource") {
-                    _controlSource->setValue(node.firstChild().nodeValue());
+                    m_controlSource->setValue(node.firstChild().nodeValue());
                 } else {
                     kDebug() << "while parsing field data encountered and unknown element: " << n;
                 }
             }
         } else if (n == "name") {
-            _name->setValue(node.firstChild().nodeValue());
+            m_name->setValue(node.firstChild().nodeValue());
         } else if (n == "string") {
             // ok -- this entity wasn't really part of the initial spec for work
             // and from what i understand the data should be puilled from the database
@@ -57,12 +57,12 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
         } else if (n == "zvalue") {
             Z = node.firstChild().nodeValue().toDouble();
         } else if (n == "format") {
-            _format->setValue(node.firstChild().nodeValue());
+            m_format->setValue(node.firstChild().nodeValue());
         } else if (n == "rect") {
             QRectF r;
             parseReportRect(node.toElement(), r);
-            _pos.setPointPos(r.topLeft());
-            _size.setPointSize(r.size());
+            m_pos.setPointPos(r.topLeft());
+            m_size.setPointSize(r.size());
         } else if (n == "maxlength") {
             // this is the maximum length of a barcode value so that we can determine reasonably
             // what the minimum height of the barcode will be
@@ -70,11 +70,11 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
             if (i < 1) i = 5;
             setMaxLength(i);
         } else if (n == "left") {
-            _hAlignment->setValue("Left");
+            m_horizontalAlignment->setValue("Left");
         } else if (n == "center") {
-            _hAlignment->setValue("Center");
+            m_horizontalAlignment->setValue("Center");
         } else if (n == "right") {
-            _hAlignment->setValue("Right");
+            m_horizontalAlignment->setValue("Right");
         } else {
             kDebug() << "while parsing barcode encountered unknow element: " << n;
         }
@@ -84,10 +84,10 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
 void KRBarcodeData::setMaxLength(int i)
 {
     if (i > 0) {
-        if (_maxLength->value().toInt() != i) {
-            _maxLength->setValue(i);
+        if (m_maxLength->value().toInt() != i) {
+            m_maxLength->setValue(i);
         }
-        if (_format->value().toString() == "3of9") {
+        if (m_format->value().toString() == "3of9") {
             int C = i; // number of characters
             int N = 2; // narrow mult for wide line
             int X = 1; // narrow line width
@@ -97,7 +97,7 @@ void KRBarcodeData::setMaxLength(int i)
             /*if(min_height < 0.25)*/ min_height = 0.25;
             min_width_total = min_width_data + 0.22; // added a little buffer to make sure we don't loose any
             // of our required quiet zone in conversions
-        } else if (_format->value().toString() == "3of9+") {
+        } else if (m_format->value().toString() == "3of9+") {
             int C = i * 2; // number of characters
             int N = 2; // narrow mult for wide line
             int X = 1; // 1px narrow line
@@ -107,7 +107,7 @@ void KRBarcodeData::setMaxLength(int i)
             /*if(min_height < 0.25)*/ min_height = 0.25;
             min_width_total = min_width_data + 0.22; // added a little buffer to make sure we don't loose any
             // of our required quiet zone in conversions
-        } else if (_format->value().toString() == "128") {
+        } else if (m_format->value().toString() == "128") {
             int C = i; // assuming 1:1 ratio of data passed in to data actually used in encoding
             int X = 1; // 1px wide
             min_width_data = (((11 * C) + 35) * X) / 100.0;       // assuming CODE A or CODE B
@@ -115,56 +115,56 @@ void KRBarcodeData::setMaxLength(int i)
             /*if(min_height < 0.25)*/ min_height = 0.25;
             min_width_total = min_width_data + 0.22; // added a little bugger to make sure we don't loose any
             // of our required quiet zone in conversions
-        } else if (_format->value().toString() == "upc-a") {
+        } else if (m_format->value().toString() == "upc-a") {
             min_width_data = 0.95;
             min_width_total = 1.15;
             min_height = 0.25;
-        } else if (_format->value().toString() == "upc-e") {
+        } else if (m_format->value().toString() == "upc-e") {
             min_width_data = 0.52;
             min_width_total = 0.70;
             min_height = 0.25;
-        } else if (_format->value().toString() == "ean13") {
+        } else if (m_format->value().toString() == "ean13") {
             min_width_data = 0.95;
             min_width_total = 1.15;
             min_height = 0.25;
-        } else if (_format->value().toString() == "ean8") {
+        } else if (m_format->value().toString() == "ean8") {
             min_width_data = 0.67;
             min_width_total = 0.90;
             min_height = 0.25;
         } else {
-            kDebug() << "Unknown format encountered: " << _format->value().toString();
+            kDebug() << "Unknown format encountered: " << m_format->value().toString();
         }
     }
 }
 
 void KRBarcodeData::createProperties()
 {
-    _set = new KoProperty::Set(0, "Barcode");
+    m_set = new KoProperty::Set(0, "Barcode");
 
     QStringList keys, strings;
 
     //_query = new KoProperty::Property ( "Query", QString(), "Query", "Query" );
-    _controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "Control Source");
+    m_controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "Control Source");
 
     keys << "Left" << "Center" << "Right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");
-    _hAlignment = new KoProperty::Property("HAlign", keys, strings, "Left", "Horizontal Alignment");
+    m_horizontalAlignment = new KoProperty::Property("HAlign", keys, strings, "Left", "Horizontal Alignment");
 
     keys.clear();
     strings.clear();
     keys << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
     strings << "3of9" << "3of9+" << "128" << "upc-a" << "upc-e" << "ean13" << "ean8";
-    _format = new KoProperty::Property("Format", keys, strings, "3of9", "Barcode Format");
+    m_format = new KoProperty::Property("Format", keys, strings, "3of9", "Barcode Format");
 
-    _maxLength = new KoProperty::Property("Max Length", 5, "Max Length", "Maximum Barode Length");
+    m_maxLength = new KoProperty::Property("Max Length", 5, "Max Length", "Maximum Barode Length");
 
-    _set->addProperty(_name);
-    _set->addProperty(_controlSource);
-    _set->addProperty(_format);
-    _set->addProperty(_hAlignment);
-    _set->addProperty(_pos.property());
-    _set->addProperty(_size.property());
-    _set->addProperty(_maxLength);
+    m_set->addProperty(m_name);
+    m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_format);
+    m_set->addProperty(m_horizontalAlignment);
+    m_set->addProperty(m_pos.property());
+    m_set->addProperty(m_size.property());
+    m_set->addProperty(m_maxLength);
 }
 
 KRBarcodeData::~KRBarcodeData()
@@ -173,7 +173,7 @@ KRBarcodeData::~KRBarcodeData()
 
 int KRBarcodeData::alignment()
 {
-    QString a = _hAlignment->value().toString();
+    QString a = m_horizontalAlignment->value().toString();
 
     if (a == "Left")
         return 0;
@@ -187,22 +187,22 @@ int KRBarcodeData::alignment()
 
 QString KRBarcodeData::column()
 {
-    return _controlSource->value().toString();
+    return m_controlSource->value().toString();
 }
 
 QString KRBarcodeData::format()
 {
-    return _format->value().toString();
+    return m_format->value().toString();
 }
 
 int KRBarcodeData::maxLength()
 {
-    return _maxLength->value().toInt();
+    return m_maxLength->value().toInt();
 }
 
 void KRBarcodeData::setFormat(const QString& f)
 {
-    _format->setValue(f);
+    m_format->setValue(f);
 }
 
 void KRBarcodeData::setAlignment(int)

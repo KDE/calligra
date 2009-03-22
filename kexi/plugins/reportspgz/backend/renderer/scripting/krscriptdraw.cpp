@@ -27,7 +27,7 @@
 KRScriptDraw::KRScriptDraw(QObject *parent)
         : QObject(parent)
 {
-    _curPage = 0;
+    m_curPage = 0;
 }
 
 
@@ -37,24 +37,24 @@ KRScriptDraw::~KRScriptDraw()
 
 void KRScriptDraw::setPage(OROPage *p)
 {
-    _curPage = p;
+    m_curPage = p;
 }
 
 void KRScriptDraw::setOffset(QPointF off)
 {
-    _curOffset = off;
+    m_curOffset = off;
 }
 
 void KRScriptDraw::rectangle(qreal x, qreal y, qreal w, qreal h, const QString& lc, const QString& fc, qreal lw, int a)
 {
-    if (_curPage) {
+    if (m_curPage) {
         ORORect *r = new ORORect();
         KRPos p;
         KRSize s;
 
         p.setPointPos(QPointF(x, y));
         s.setPointSize(QSizeF(w, h));
-        r->setRect(QRectF(p.toScene() + _curOffset, s.toScene()));
+        r->setRect(QRectF(p.toScene() + m_curOffset, s.toScene()));
 
         QPen pen(QColor(lc), lw);
         QColor c(fc);
@@ -63,20 +63,20 @@ void KRScriptDraw::rectangle(qreal x, qreal y, qreal w, qreal h, const QString& 
 
         r->setBrush(bru);
         r->setPen(pen);
-        _curPage->addPrimitive(r);
+        m_curPage->addPrimitive(r);
     }
 }
 
 void KRScriptDraw::ellipse(qreal x, qreal y, qreal w, qreal h, const QString& lc, const QString& fc, qreal lw, int a)
 {
-    if (_curPage) {
+    if (m_curPage) {
         OROEllipse *e = new OROEllipse();
         KRPos p;
         KRSize s;
 
         p.setPointPos(QPointF(x, y));
         s.setPointSize(QSizeF(w, h));
-        e->setRect(QRectF(p.toScene() + _curOffset, s.toScene()));
+        e->setRect(QRectF(p.toScene() + m_curOffset, s.toScene()));
 
         QPen pen(QColor(lc), lw);
         QColor c(fc);
@@ -85,13 +85,13 @@ void KRScriptDraw::ellipse(qreal x, qreal y, qreal w, qreal h, const QString& lc
 
         e->setBrush(bru);
         e->setPen(pen);
-        _curPage->addPrimitive(e);
+        m_curPage->addPrimitive(e);
     }
 }
 
 void KRScriptDraw::line(qreal x1, qreal y1, qreal x2, qreal y2, const QString& lc)
 {
-    if (_curPage) {
+    if (m_curPage) {
         OROLine *ln = new OROLine();
         KRPos s;
         KRPos e;
@@ -99,8 +99,8 @@ void KRScriptDraw::line(qreal x1, qreal y1, qreal x2, qreal y2, const QString& l
         s.setPointPos(QPointF(x1, y1));
         e.setPointPos(QPointF(x2, y2));
 
-        ln->setStartPoint(s.toScene() + _curOffset);
-        ln->setEndPoint(e.toScene() + _curOffset);
+        ln->setStartPoint(s.toScene() + m_curOffset);
+        ln->setEndPoint(e.toScene() + m_curOffset);
 
         ORLineStyleData ls;
         ls.lnColor = QColor(lc);
@@ -111,13 +111,13 @@ void KRScriptDraw::line(qreal x1, qreal y1, qreal x2, qreal y2, const QString& l
             ls.style = Qt::SolidLine;
 
         ln->setLineStyle(ls);
-        _curPage->addPrimitive(ln);
+        m_curPage->addPrimitive(ln);
     }
 }
 
 void KRScriptDraw::text(qreal x, qreal y, const QString &txt, const QString &fnt, int pt, const QString &fc, const QString&bc, const QString &lc, qreal lw, int o)
 {
-    if (_curPage) {
+    if (m_curPage) {
         QFont f(fnt, pt);
         QRectF r = QFontMetrics(f).boundingRect(txt);
 
@@ -137,14 +137,14 @@ void KRScriptDraw::text(qreal x, qreal y, const QString &txt, const QString &fnt
 
 
         OROTextBox *tb = new OROTextBox();
-        tb->setPosition(QPointF(x, y) + _curOffset);
+        tb->setPosition(QPointF(x, y) + m_curOffset);
         tb->setSize(r.size());
         tb->setTextStyle(ts);
         tb->setLineStyle(ls);
 
         tb->setText(txt);
 
-        _curPage->addPrimitive(tb);
+        m_curPage->addPrimitive(tb);
 
     }
 }

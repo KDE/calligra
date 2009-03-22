@@ -38,7 +38,7 @@ using KFormDesigner::Form;
 class KexiSubReport : public Q3ScrollView
 {
     Q_OBJECT
-    Q_PROPERTY(QString reportName READ reportName WRITE setReportName DESIGNABLE true);
+    Q_PROPERTY(QString reportName READ reportName WRITE setReportName);
 
 public:
     KexiSubReport(QWidget *parent);

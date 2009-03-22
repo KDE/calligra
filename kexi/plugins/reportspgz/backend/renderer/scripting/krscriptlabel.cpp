@@ -23,7 +23,7 @@ namespace Scripting
 {
 Label::Label(KRLabelData *l)
 {
-    _label = l;
+    m_label = l;
 }
 
 
@@ -33,17 +33,17 @@ Label::~Label()
 
 QString Label::caption()
 {
-    return _label->text();
+    return m_label->text();
 }
 
 void Label::setCaption(const QString& c)
 {
-    _label->setText(c);
+    m_label->setText(c);
 }
 
 int Label::horizontalAlignment()
 {
-    QString a = _label->_hAlignment->value().toString();
+    QString a = m_label->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "left") {
         return -1;
@@ -58,23 +58,23 @@ void Label::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _label->_hAlignment->setValue("Left");
+        m_label->m_horizontalAlignment->setValue("Left");
         break;
     case 0:
-        _label->_hAlignment->setValue("Center");
+        m_label->m_horizontalAlignment->setValue("Center");
         break;
     case 1:
-        _label->_hAlignment->setValue("Right");
+        m_label->m_horizontalAlignment->setValue("Right");
         break;
     default:
-        _label->_hAlignment->setValue("Left");
+        m_label->m_horizontalAlignment->setValue("Left");
         break;
     }
 }
 
 int Label::verticalAlignment()
 {
-    QString a = _label->_hAlignment->value().toString();
+    QString a = m_label->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "top") {
         return -1;
@@ -89,93 +89,93 @@ void Label::setVerticalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _label->_hAlignment->setValue("Top");
+        m_label->m_horizontalAlignment->setValue("Top");
         break;
     case 0:
-        _label->_hAlignment->setValue("Middle");
+        m_label->m_horizontalAlignment->setValue("Middle");
         break;
     case 1:
-        _label->_hAlignment->setValue("Bottom");
+        m_label->m_horizontalAlignment->setValue("Bottom");
         break;
     default:
-        _label->_hAlignment->setValue("Top");
+        m_label->m_horizontalAlignment->setValue("Top");
         break;
     }
 }
 
 QColor Label::backgroundColor()
 {
-    return _label->_bgColor->value().value<QColor>();
+    return m_label->m_backgroundColor->value().value<QColor>();
 }
 void Label::setBackgroundColor(const QColor& c)
 {
-    _label->_bgColor->setValue(c);
+    m_label->m_backgroundColor->setValue(c);
 }
 
 QColor Label::foregroundColor()
 {
-    return _label->_fgColor->value().value<QColor>();
+    return m_label->m_foregroundColor->value().value<QColor>();
 }
 void Label::setForegroundColor(const QColor& c)
 {
-    _label->_fgColor->setValue(c);
+    m_label->m_foregroundColor->setValue(c);
 }
 
 int Label::backgroundOpacity()
 {
-    return _label->_bgOpacity->value().toInt();
+    return m_label->m_backgroundOpacity->value().toInt();
 }
 void Label::setBackgroundOpacity(int o)
 {
-    _label->_bgOpacity->setValue(o);
+    m_label->m_backgroundOpacity->setValue(o);
 }
 
 QColor Label::lineColor()
 {
-    return _label->_lnColor->value().value<QColor>();
+    return m_label->m_lineColor->value().value<QColor>();
 }
 void Label::setLineColor(const QColor& c)
 {
-    _label->_lnColor->setValue(c);
+    m_label->m_lineColor->setValue(c);
 }
 
 int Label::lineWeight()
 {
-    return _label->_lnWeight->value().toInt();
+    return m_label->m_lineWeight->value().toInt();
 }
 void Label::setLineWeight(int w)
 {
-    _label->_lnWeight->setValue(w);
+    m_label->m_lineWeight->setValue(w);
 }
 
 int Label::lineStyle()
 {
-    return _label->_lnStyle->value().toInt();
+    return m_label->m_lineStyle->value().toInt();
 }
 void Label::setLineStyle(int s)
 {
     if (s < 0 || s > 5) {
         s = 1;
     }
-    _label->_lnStyle->setValue(s);
+    m_label->m_lineStyle->setValue(s);
 }
 
 QPointF Label::position()
 {
-    return _label->_pos.toPoint();
+    return m_label->m_pos.toPoint();
 }
 void Label::setPosition(const QPointF &p)
 {
-    _label->_pos.setPointPos(p);
+    m_label->m_pos.setPointPos(p);
 }
 
 QSizeF Label::size()
 {
-    return _label->_size.toPoint();
+    return m_label->m_size.toPoint();
 }
 void Label::setSize(const QSizeF &s)
 {
-    _label->_size.setPointSize(s);
+    m_label->m_size.setPointSize(s);
 }
 }
 

@@ -34,8 +34,8 @@ class KEXIFORMUTILS_EXPORT KexiDBTextEdit :
             public KexiFormDataItemInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
 
 public:
     KexiDBTextEdit(QWidget *parent);

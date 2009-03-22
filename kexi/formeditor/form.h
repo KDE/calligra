@@ -650,14 +650,14 @@ protected:
 // moved from WidgetPropertySet
     /*! Checks if the name entered by user is valid, ie that it is
      a valid identifier, and that there is no name conflict.  */
-    bool isNameValid(const QString &name);
+    bool isNameValid(const QString &name) const;
 
 // moved from WidgetPropertySet
     void addWidget(QWidget *w);
 
 // moved from WidgetPropertySet
-    /*! Fills the list with properties related to the widget \a w. Also updates
-    properties old value and changed state. */
+    /*! Clears the current property set and fills it with properties related to the widget @a w.
+     Also updates the newly created properties with previously set values. */
     void createPropertiesForWidget(QWidget *w);
 
 // moved from WidgetPropertySet
@@ -673,7 +673,7 @@ protected:
        (ie not show "caption" if the widget isn't toplevel).
        \return true if the property should be shown. False otherwise.*/
     bool isPropertyVisible(const QByteArray &property, bool isTopLevel,
-                           const QByteArray &classname = QByteArray());
+                           const QByteArray &classname = QByteArray()) const;
 
     // Following methods are used to create special types of properties, different
     // from Q_PROPERTY

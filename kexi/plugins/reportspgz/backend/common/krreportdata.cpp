@@ -27,22 +27,22 @@
 
 void KRReportData::init()
 {
-    title = QString::null;
-
     pghead_first = pghead_odd = pghead_even = pghead_last = pghead_any = NULL;
     pgfoot_first = pgfoot_odd = pgfoot_even = pgfoot_last = pgfoot_any = NULL;
     rpthead = rptfoot = NULL;
 }
 
 KRReportData::KRReportData()
+ : detailsection(0)
 {
     init();
-    _valid = true;
+    m_valid = true;
 }
 
 KRReportData::KRReportData(const QDomElement & elemSource)
+ : detailsection(0)
 {
-    _valid = false;
+    m_valid = false;
     init();
     bool valid; //used for local unit conversions
 
@@ -58,12 +58,12 @@ KRReportData::KRReportData(const QDomElement & elemSource)
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
         QDomElement elemThis = section.item(nodeCounter).toElement();
         if (elemThis.tagName() == "title")
-            title = elemThis.text();
+            m_title = elemThis.text();
         else if (elemThis.tagName() == "datasource")
-            _query = elemThis.text();
+            m_query = elemThis.text();
         else if (elemThis.tagName() == "script") {
-            _script = elemThis.text();
-            _interpreter = elemThis.attribute("interpreter");
+            m_script = elemThis.text();
+            m_interpreter = elemThis.attribute("interpreter");
         } else if (elemThis.tagName() == "size") {
             if (elemThis.firstChild().isText())
                 page.setPageSize(elemThis.firstChild().nodeValue());
@@ -90,7 +90,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
             page.setPortrait(false);
         else if (elemThis.tagName() == "topmargin") {
             d = elemThis.text().toDouble(&valid);
-            if (!_valid || d < 0.0) {
+            if (!m_valid || d < 0.0) {
                 //TODO qDebug("Error converting topmargin value: %s",(const char*)elemThis.text());
                 d = 50.0;
             }
@@ -141,7 +141,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                     pghead_even = sd;
                 else if (sd->extra() == "lastpage")
                     pghead_last = sd;
-                else if (sd->extra() == QString::null)
+                else if (sd->extra().isEmpty())
                     pghead_any = sd;
                 else {
                     //TODO qDebug("don't know which page this page header is for: %s",(const char*)sd->extra);
@@ -161,7 +161,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
                     pgfoot_even = sd;
                 else if (sd->extra() == "lastpage")
                     pgfoot_last = sd;
-                else if (sd->extra() == QString::null)
+                else if (sd->extra().isEmpty())
                     pgfoot_any = sd;
                 else {
                     //TODO qDebug("don't know which page this page footer is for: %s",(const char*)sd->extra);
@@ -185,7 +185,7 @@ KRReportData::KRReportData(const QDomElement & elemSource)
         //TODO qDebug("While parsing report encountered an unknown element: %s",(const char*)elemThis.tagName());
     }
 
-    _valid = true;
+    m_valid = true;
 }
 
 
@@ -206,8 +206,8 @@ QList<KRObjectData*> KRReportData::objects()
     }
 
     if (detailsection) {
-        kDebug() << "Number of groups: " << detailsection->groupList.count();
-        foreach(ORDetailGroupSectionData* g, detailsection->groupList) {
+        kDebug() << "Number of groups: " << detailsection->m_groupList.count();
+        foreach(ORDetailGroupSectionData* g, detailsection->m_groupList) {
             if (g->head) {
                 obs << g->head->objects();
             }
@@ -215,8 +215,8 @@ QList<KRObjectData*> KRReportData::objects()
                 obs << g->foot->objects();
             }
         }
-        if (detailsection->detail)
-            obs << detailsection->detail->objects();
+        if (detailsection->m_detailSection)
+            obs << detailsection->m_detailSection->objects();
     }
 
     kDebug() << "Object List:";
@@ -250,8 +250,8 @@ QList<KRSectionData*> KRReportData::sections()
     }
 
     if (detailsection) {
-        kDebug() << "Number of groups: " << detailsection->groupList.count();
-        foreach(ORDetailGroupSectionData* g, detailsection->groupList) {
+        kDebug() << "Number of groups: " << detailsection->m_groupList.count();
+        foreach(ORDetailGroupSectionData* g, detailsection->m_groupList) {
             if (g->head) {
                 secs << g->head;
             }
@@ -259,8 +259,8 @@ QList<KRSectionData*> KRReportData::sections()
                 secs << g->foot;
             }
         }
-        if (detailsection->detail)
-            secs << detailsection->detail;
+        if (detailsection->m_detailSection)
+            secs << detailsection->m_detailSection;
     }
 
     return secs;

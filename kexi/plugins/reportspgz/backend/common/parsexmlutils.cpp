@@ -35,7 +35,6 @@
 
 ORDetailGroupSectionData::ORDetailGroupSectionData()
 {
-    column = QString::null;
     pagebreak = BreakNone;
     _subtotCheckPoints.clear();
     head = 0;

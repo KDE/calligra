@@ -28,8 +28,8 @@
 class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 {
     Q_OBJECT
-    Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
-    Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption DESIGNABLE true)
+    Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction)
+    Q_PROPERTY(QString onClickActionOption READ onClickActionOption WRITE setOnClickActionOption)
 
 public:
     KexiPushButton(const QString & text, QWidget * parent);

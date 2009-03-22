@@ -42,12 +42,12 @@ public:
     void setUnit(KoUnit);
     void setName(const QString&);
     KoProperty::Property* property() {
-        return _property;
+        return m_property;
     }
 private:
-    QPointF _pointPos;
-    KoUnit _unit;
-    KoProperty::Property* _property;
+    QPointF m_pointPos;
+    KoUnit m_unit;
+    KoProperty::Property* m_property;
 };
 
 #endif

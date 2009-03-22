@@ -1212,7 +1212,7 @@ The factory also contains the <classname>KisID</classname> with the public and
 private name for the paintop &mdash; make sure your paintop’s private name
 does not clash with another paintop! &mdash; and may optionally return a
 pixmap. &krita; can then show the pixmap together with the name for visual
-identifcation of your paintop. For instance, a painter’s knife paintop would
+identification of your paintop. For instance, a painter’s knife paintop would
 have the image of such an implement.
 </para><para>
 The implementation of a paintop is very straightforward:

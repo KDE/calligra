@@ -143,16 +143,16 @@ public:
 ReportDesigner::ReportDesigner(QWidget * parent, KexiDB::Connection *cn)
         : QWidget(parent), d(new Private())
 {
-    conn = cn;
+    m_conn = cn;
     init();
 }
 void ReportDesigner::init()
 {
-    _modified = false;
+    m_modified = false;
     detail = 0;
     d->hruler = 0;
 
-    sectionData = new ReportWriterSectionData();
+    m_sectionData = new ReportWriterSectionData();
     createProperties();
 
     //setSizePolicy ( QSizePolicy::Expanding, QSizePolicy::Expanding );
@@ -197,11 +197,11 @@ void ReportDesigner::init()
     setLayout(d->grid);
 
     connect(d->pageButton, SIGNAL(pressed()), this, SLOT(slotPageButton_Pressed()));
-    emit pagePropertyChanged(*set);
+    emit pagePropertyChanged(*m_set);
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(slotPropertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
-    changeSet(set);
+    changeSet(m_set);
 }
 
 ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QString & d) : QWidget(parent), d(new Private())
@@ -210,7 +210,7 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
     kDebug() << d;
     kDebug() << "***********************************************************";
 
-    conn = cn;
+    m_conn = cn;
     init();
     QDomDocument doc;
     doc.setContent(d);
@@ -235,8 +235,8 @@ ReportDesigner::ReportDesigner(QWidget *parent, KexiDB::Connection *cn, const QS
             } else if (n == "datasource") {
                 setReportDataSource(it.firstChild().nodeValue());
             } else if (n == "script") {
-                _interpreter->setValue(it.toElement().attribute("interpreter"));
-                _script->setValue(it.firstChild().nodeValue());
+                m_interpreter->setValue(it.toElement().attribute("interpreter"));
+                m_script->setValue(it.firstChild().nodeValue());
             } else if (n == "grid") {
                 setGridOptions(it.toElement().attribute("visible").toInt() == 0 ? false : true, it.toElement().attribute("divisions").toInt());
             }
@@ -396,7 +396,7 @@ ReportDesigner::~ReportDesigner()
 
 void ReportDesigner::closeEvent(QCloseEvent * e)
 {
-    if (_modified != false) {
+    if (m_modified != false) {
         switch (QMessageBox::information(this, i18n("Report Writer"), i18n("The document '%1' contains unsaved changes.\nDo you want to save the changes before closing?" , windowTitle()), i18n("Save"), i18n("Discard"), i18n("Cancel"), 0, 2)) {
         case 0:
             // save the doc...
@@ -589,7 +589,7 @@ void ReportDesigner::insertSection(KRSectionData::Section s)
         rs->show();
         setModified(true);
         adjustSize();
-        emit pagePropertyChanged(*set);
+        emit pagePropertyChanged(*m_set);
     }
 }
 
@@ -609,51 +609,51 @@ QDomDocument ReportDesigner::document()
     root.appendChild(rds);
 
     QDomElement scr = doc.createElement("script");
-    scr.setAttribute("interpreter", _interpreter->value().toString());
-    scr.appendChild(doc.createTextNode(_script->value().toString()));
+    scr.setAttribute("interpreter", m_interpreter->value().toString());
+    scr.appendChild(doc.createTextNode(m_script->value().toString()));
     root.appendChild(scr);
 
     QDomElement grd = doc.createElement("grid");
-    grd.setAttribute("visible", _showGrid->value().toBool());
-    grd.setAttribute("divisions", _gridDivisions->value().toInt());
-    grd.setAttribute("snap", _gridSnap->value().toBool());
+    grd.setAttribute("visible", m_showGrid->value().toBool());
+    grd.setAttribute("divisions", m_gridDivisions->value().toInt());
+    grd.setAttribute("snap", m_gridSnap->value().toBool());
     root.appendChild(grd);
 
     // pageOptions
     // -- size
     QDomElement size = doc.createElement("size");
 
-    if (_pageSize->value().toString() == "Custom") {
+    if (m_pageSize->value().toString() == "Custom") {
         QDomElement page_width = doc.createElement("width");
-        page_width.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(_customWidth->value().toInt()))));
+        page_width.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(m_customWidth->value().toInt()))));
         size.appendChild(page_width);
         QDomElement page_height = doc.createElement("height");
-        page_height.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(_customWidth->value().toInt()))));
+        page_height.appendChild(doc.createTextNode(QString::number(pageUnit().fromUserValue(m_customWidth->value().toInt()))));
         size.appendChild(page_height);
-    } else if (_pageSize->value().toString() == "Labels") {
+    } else if (m_pageSize->value().toString() == "Labels") {
         size.appendChild(doc.createTextNode("Labels"));
         QDomElement labeltype = doc.createElement("labeltype");
-        labeltype.appendChild(doc.createTextNode(_labelType->value().toString()));
+        labeltype.appendChild(doc.createTextNode(m_labelType->value().toString()));
         root.appendChild(labeltype);
     } else {
-        size.appendChild(doc.createTextNode(_pageSize->value().toString()));
+        size.appendChild(doc.createTextNode(m_pageSize->value().toString()));
     }
     root.appendChild(size);
     // -- orientation
-    root.appendChild(doc.createElement(_orientation->value().toString().toLower()));
+    root.appendChild(doc.createElement(m_orientation->value().toString().toLower()));
     // -- margins
     QDomElement margin;
     margin = doc.createElement("topmargin");
-    margin.appendChild(doc.createTextNode(QString::number(_topMargin->value().toDouble())));
+    margin.appendChild(doc.createTextNode(QString::number(m_topMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("bottommargin");
-    margin.appendChild(doc.createTextNode(QString::number(_bottomMargin->value().toDouble())));
+    margin.appendChild(doc.createTextNode(QString::number(m_bottomMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("rightmargin");
-    margin.appendChild(doc.createTextNode(QString::number(_rightMargin->value().toInt())));
+    margin.appendChild(doc.createTextNode(QString::number(m_rightMargin->value().toDouble())));
     root.appendChild(margin);
     margin = doc.createElement("leftmargin");
-    margin.appendChild(doc.createTextNode(QString::number(_leftMargin->value().toDouble())));
+    margin.appendChild(doc.createTextNode(QString::number(m_leftMargin->value().toDouble())));
     root.appendChild(margin);
 
     QDomElement section;
@@ -752,36 +752,36 @@ QDomDocument ReportDesigner::document()
 void ReportDesigner::setReportTitle(const QString & str)
 {
     if (reportTitle() != str) {
-        _title->setValue(str);
+        m_title->setValue(str);
         setModified(true);
     }
 }
 QString ReportDesigner::reportTitle()
 {
-    return _title->value().toString();
+    return m_title->value().toString();
 }
 
 QString ReportDesigner::reportDataSource()
 {
-    return _dataSource->value().toString();
+    return m_dataSource->value().toString();
 }
 void ReportDesigner::setReportDataSource(const QString &q)
 {
-    if (_dataSource->value().toString() != q) {
-        _dataSource->setValue(q);
+    if (m_dataSource->value().toString() != q) {
+        m_dataSource->setValue(q);
         setModified(true);
     }
 }
 
 bool ReportDesigner::isModified()
 {
-    return _modified;
+    return m_modified;
 }
 void ReportDesigner::setModified(bool mod)
 {
-    _modified = mod;
+    m_modified = mod;
  
-    if (_modified) {
+    if (m_modified) {
         emit(dirty());
 
     }
@@ -792,21 +792,21 @@ QStringList ReportDesigner::queryList()
     //Get the list of queries in the database
     kDebug();
     QStringList qs;
-    if (conn && conn->isConnected()) {
-        QList<int> tids = conn->tableIds();
+    if (m_conn && m_conn->isConnected()) {
+        QList<int> tids = m_conn->tableIds();
         qs << "";
         for (int i = 0; i < tids.size(); ++i) {
-            KexiDB::TableSchema* tsc = conn->tableSchema(tids[i]);
+            KexiDB::TableSchema* tsc = m_conn->tableSchema(tids[i]);
             if (tsc)
                 qs << tsc->name();
             else
                 kDebug() << "Error retrieving table schema: " << tids[i];
         }
 
-        QList<int> qids = conn->queryIds();
+        QList<int> qids = m_conn->queryIds();
         qs << "";
         for (int i = 0; i < qids.size(); ++i) {
-            KexiDB::QuerySchema* qsc = conn->querySchema(qids[i]);
+            KexiDB::QuerySchema* qsc = m_conn->querySchema(qids[i]);
             if (qsc)
                 qs << qsc->name();
             else
@@ -824,7 +824,7 @@ QStringList ReportDesigner::fieldList()
 
     if (isConnected()) {
         //Get the list of fields in the selected query
-        KexiDB::TableOrQuerySchema *flds = new KexiDB::TableOrQuerySchema(conn, _dataSource->value().toString().toLocal8Bit());
+        KexiDB::TableOrQuerySchema *flds = new KexiDB::TableOrQuerySchema(m_conn, m_dataSource->value().toString().toLocal8Bit());
 
         KexiDB::QueryColumnInfo::Vector cs = flds->columns();
 
@@ -839,16 +839,16 @@ QStringList ReportDesigner::fieldList()
 
 QStringList ReportDesigner::scriptList()
 {
-    QList<int> scriptids = conn->objectIds(KexiPart::ScriptObjectType);
+    QList<int> scriptids = m_conn->objectIds(KexiPart::ScriptObjectType);
     QStringList scripts;
-    QStringList scriptnames = conn->objectNames(KexiPart::ScriptObjectType);
+    QStringList scriptnames = m_conn->objectNames(KexiPart::ScriptObjectType);
     QString script;
     
     int id, i;
     id = i = 0;
     
     kDebug() << scriptids << scriptnames;
-    kDebug() << _interpreter->value().toString();
+    kDebug() << m_interpreter->value().toString();
     
     //A blank entry
     scripts << "";
@@ -857,14 +857,14 @@ QStringList ReportDesigner::scriptList()
         foreach (id, scriptids) {
             kDebug() << "ID:" << id;
             tristate res;
-            res = conn->loadDataBlock(id, script, QString());
+            res = m_conn->loadDataBlock(id, script, QString());
             if (res == true){
                 QDomDocument domdoc;
                 bool parsed = domdoc.setContent(script, false);
 
                 QDomElement scriptelem = domdoc.namedItem("script").toElement();
                 if (parsed && !scriptelem.isNull()) {
-                    if (_interpreter->value().toString() == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
+                    if (m_interpreter->value().toString() == scriptelem.attribute("language") && scriptelem.attribute("scripttype") == "object") {
                         scripts << scriptnames[i];
                     }
                 }
@@ -885,64 +885,64 @@ QStringList ReportDesigner::scriptList()
 void ReportDesigner::createProperties()
 {
     QStringList keys, strings;
-    set = new KoProperty::Set(0, "Report");
+    m_set = new KoProperty::Set(0, "Report");
 
-    connect(set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
-    _title = new KoProperty::Property("Title", "Report", "Title", "Report Title");
+    m_title = new KoProperty::Property("Title", "Report", "Title", "Report Title");
 
     keys = queryList();
-    _dataSource = new KoProperty::Property("DataSource", keys, keys, "", "Data Source");
+    m_dataSource = new KoProperty::Property("DataSource", keys, keys, "", "Data Source");
 
     keys.clear();
     keys = pageFormats();
-    _pageSize = new KoProperty::Property("PageSize", keys, keys, "A4", "Page Size");
+    m_pageSize = new KoProperty::Property("PageSize", keys, keys, "A4", "Page Size");
 
     keys.clear();strings.clear();
     keys << "Portrait" << "Landscape";
     strings << i18n("Portrait") << i18n("Landscape");
-    _orientation = new KoProperty::Property("Orientation", keys, strings, "Portrait", "Page Orientation");
+    m_orientation = new KoProperty::Property("Orientation", keys, strings, "Portrait", "Page Orientation");
 
     keys.clear();strings.clear();
     keys = KoUnit::listOfUnitName();
     strings = KoUnit::listOfUnitName();
 
     KoUnit u(KoUnit::Centimeter);
-    _unit = new KoProperty::Property("PageUnit", keys, strings, KoUnit::unitDescription(u), "Page Unit");
+    m_unit = new KoProperty::Property("PageUnit", keys, strings, KoUnit::unitDescription(u), "Page Unit");
 
-    _showGrid = new KoProperty::Property("ShowGrid", true, "Show Grid", "Show Grid");
-    _gridSnap = new KoProperty::Property("GridSnap", true, "Grid Snap", "Grid Snap");
-    _gridDivisions = new KoProperty::Property("GridDivisions", 4, "Grid Divisions", "Grid Divisions");
+    m_showGrid = new KoProperty::Property("ShowGrid", true, "Show Grid", "Show Grid");
+    m_gridSnap = new KoProperty::Property("GridSnap", true, "Grid Snap", "Grid Snap");
+    m_gridDivisions = new KoProperty::Property("GridDivisions", 4, "Grid Divisions", "Grid Divisions");
 
-    _leftMargin = new KoProperty::Property("LeftMargin", KoUnit::unit("cm").fromUserValue(1.0), "Left Margin", "Left Margin", KoProperty::Double);
-    _rightMargin = new KoProperty::Property("RightMargin", KoUnit::unit("cm").fromUserValue(1.0), "Right Margin", "Right Margin", KoProperty::Double);
-    _topMargin = new KoProperty::Property("TopMargin", KoUnit::unit("cm").fromUserValue(1.0), "Top Margin", "Top Margin", KoProperty::Double);
-    _bottomMargin = new KoProperty::Property("BottomMargin", KoUnit::unit("cm").fromUserValue(1.0), "Bottom Margin", "Bottom Margin", KoProperty::Double);
-    _leftMargin->setOption("unit", "cm");
-    _rightMargin->setOption("unit", "cm");
-    _topMargin->setOption("unit", "cm");
-    _bottomMargin->setOption("unit", "cm");
+    m_leftMargin = new KoProperty::Property("LeftMargin", KoUnit::unit("cm").fromUserValue(1.0), "Left Margin", "Left Margin", KoProperty::Double);
+    m_rightMargin = new KoProperty::Property("RightMargin", KoUnit::unit("cm").fromUserValue(1.0), "Right Margin", "Right Margin", KoProperty::Double);
+    m_topMargin = new KoProperty::Property("TopMargin", KoUnit::unit("cm").fromUserValue(1.0), "Top Margin", "Top Margin", KoProperty::Double);
+    m_bottomMargin = new KoProperty::Property("BottomMargin", KoUnit::unit("cm").fromUserValue(1.0), "Bottom Margin", "Bottom Margin", KoProperty::Double);
+    m_leftMargin->setOption("unit", "cm");
+    m_rightMargin->setOption("unit", "cm");
+    m_topMargin->setOption("unit", "cm");
+    m_bottomMargin->setOption("unit", "cm");
 
     keys = Kross::Manager::self().interpreters();
-    _interpreter = new KoProperty::Property("Interpreter", keys, keys, keys[0], "Script Interpreter");
+    m_interpreter = new KoProperty::Property("Interpreter", keys, keys, keys[0], "Script Interpreter");
 
     keys = scriptList();
-    _script = new KoProperty::Property("Script", keys, keys, "", "Object Script");
+    m_script = new KoProperty::Property("Script", keys, keys, "", "Object Script");
     
-    set->addProperty(_title);
-    set->addProperty(_dataSource);
-    set->addProperty(_pageSize);
-    set->addProperty(_orientation);
-    set->addProperty(_unit);
-    set->addProperty(_gridSnap);
-    set->addProperty(_showGrid);
-    set->addProperty(_gridDivisions);
-    set->addProperty(_leftMargin);
-    set->addProperty(_rightMargin);
-    set->addProperty(_topMargin);
-    set->addProperty(_bottomMargin);
-    set->addProperty(_interpreter);
-    set->addProperty(_script);
+    m_set->addProperty(m_title);
+    m_set->addProperty(m_dataSource);
+    m_set->addProperty(m_pageSize);
+    m_set->addProperty(m_orientation);
+    m_set->addProperty(m_unit);
+    m_set->addProperty(m_gridSnap);
+    m_set->addProperty(m_showGrid);
+    m_set->addProperty(m_gridDivisions);
+    m_set->addProperty(m_leftMargin);
+    m_set->addProperty(m_rightMargin);
+    m_set->addProperty(m_topMargin);
+    m_set->addProperty(m_bottomMargin);
+    m_set->addProperty(m_interpreter);
+    m_set->addProperty(m_script);
     
     KoProperty::Property* _customHeight;
     KoProperty::Property* _customWidth;
@@ -959,12 +959,12 @@ void ReportDesigner::slotPropertyChanged(KoProperty::Set &s, KoProperty::Propert
 
     if (p.name() == "PageUnit") {
         d->hruler->setUnit(pageUnit());
-        QString newstr = set->property("PageUnit").value().toString().mid(set->property("PageUnit").value().toString().indexOf("(") + 1, 2);
+        QString newstr = m_set->property("PageUnit").value().toString().mid(m_set->property("PageUnit").value().toString().indexOf("(") + 1, 2);
         
-        set->property("LeftMargin").setOption("unit", newstr);
-        set->property("RightMargin").setOption("unit", newstr);
-        set->property("TopMargin").setOption("unit", newstr);
-        set->property("BottomMargin").setOption("unit", newstr);
+        m_set->property("LeftMargin").setOption("unit", newstr);
+        m_set->property("RightMargin").setOption("unit", newstr);
+        m_set->property("TopMargin").setOption("unit", newstr);
+        m_set->property("BottomMargin").setOption("unit", newstr);
     }
 }
 
@@ -975,8 +975,8 @@ void ReportDesigner::slotPageButton_Pressed()
 {
     QStringList sl = scriptList();
     
-    _script->setListData(sl, sl);
-    changeSet(set);
+    m_script->setListData(sl, sl);
+    changeSet(m_set);
 }
 
 /**
@@ -1041,16 +1041,16 @@ int ReportDesigner::pageWidthPx() const
     int ch = 0;
     int width = 0;
 
-    KoPageFormat::Format pf = KoPageFormat::formatFromString(set->property("PageSize").value().toString());
+    KoPageFormat::Format pf = KoPageFormat::formatFromString(m_set->property("PageSize").value().toString());
 
     cw = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::width(pf, KoPageFormat::Portrait))) * KoGlobal::dpiX();
 
     ch = POINT_TO_INCH(MM_TO_POINT(KoPageFormat::height(pf, KoPageFormat::Portrait))) * KoGlobal::dpiY();
 
-    width = (set->property("Orientation").value().toString() == "Portrait" ? cw : ch);
+    width = (m_set->property("Orientation").value().toString() == "Portrait" ? cw : ch);
 
-    width = width - POINT_TO_INCH(set->property("LeftMargin").value().toDouble()) * KoGlobal::dpiX();
-    width = width - POINT_TO_INCH(set->property("RightMargin").value().toDouble()) * KoGlobal::dpiX();
+    width = width - POINT_TO_INCH(m_set->property("LeftMargin").value().toDouble()) * KoGlobal::dpiX();
+    width = width - POINT_TO_INCH(m_set->property("RightMargin").value().toDouble()) * KoGlobal::dpiX();
 
     return width;
 }
@@ -1089,7 +1089,7 @@ KoUnit ReportDesigner::pageUnit() const
     QString u;
     bool found;
 
-    u = set->property("PageUnit").value().toString();
+    u = m_set->property("PageUnit").value().toString();
     u = u.mid(u.indexOf("(") + 1, 2);
 
     KoUnit unit = KoUnit::unit(u, &found);
@@ -1102,8 +1102,8 @@ KoUnit ReportDesigner::pageUnit() const
 
 void ReportDesigner::setGridOptions(bool vis, int div)
 {
-    _showGrid->setValue(QVariant(vis));
-    _gridDivisions->setValue(div);
+    m_showGrid->setValue(QVariant(vis));
+    m_gridDivisions->setValue(div);
 }
 
 //
@@ -1122,7 +1122,7 @@ void ReportDesigner::sectionContextMenuEvent(ReportScene * s, QGraphicsSceneCont
         popCut = pop.addAction(i18n("Cut"));
         popCopy = pop.addAction(i18n("Copy"));
     }
-    if (sectionData->copy_list.count() > 0)
+    if (m_sectionData->copy_list.count() > 0)
         popPaste = pop.addAction(i18n("Paste"));
 
     if (itemsSelected) {
@@ -1146,53 +1146,53 @@ void ReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent *
     e->accept();
     QGraphicsItem * item = 0;
     if (e->button() == Qt::LeftButton) {
-        switch (sectionData->mouseAction) {
+        switch (m_sectionData->mouseAction) {
         case ReportWriterSectionData::MA_Insert:
-            switch (sectionData->insertItem) {
+            switch (m_sectionData->insertItem) {
             case KRObjectData::EntityLabel :
-                item = new ReportEntityLabel(v->document(), v->scene());
+                item = new ReportEntityLabel(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityField :
-                item = new ReportEntityField(v->document(), v->scene());
+                item = new ReportEntityField(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityText :
-                item = new ReportEntityText(v->document(), v->scene());
+                item = new ReportEntityText(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityBarcode :
-                item = new ReportEntityBarcode(v->document(), v->scene());
+                item = new ReportEntityBarcode(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityImage :
-                item = new ReportEntityImage(v->document(), v->scene());
+                item = new ReportEntityImage(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityLine :
                 kDebug() << "Adding Line";
-                item = new ReportEntityLine(v->document(), v->scene());
+                item = new ReportEntityLine(v->designer(), v->scene());
                 //dynamic_cast<QGraphicsLineItem*>(item)->setLine ( e->x()-10, e->y(), e->x()+10, e->y() );
                 dynamic_cast<QGraphicsLineItem*>(item)->setLine(e->x(), e->y(), e->x() + 20, e->y());
                 break;
             case KRObjectData::EntityChart :
-                item = new ReportEntityChart(v->document(), v->scene());
+                item = new ReportEntityChart(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityShape :
-                item = new ReportEntityShape(v->document(), v->scene());
+                item = new ReportEntityShape(v->designer(), v->scene());
                 break;
             case KRObjectData::EntityCheck :
-                item = new ReportEntityCheck(v->document(), v->scene());
+                item = new ReportEntityCheck(v->designer(), v->scene());
                 break;
             default:
                 kDebug() << "attempted to insert an unknown item";;
             }
             if (item) {
-                if (sectionData->insertItem != KRObjectData::EntityLine)
+                if (m_sectionData->insertItem != KRObjectData::EntityLine)
                     item->setPos(e->x(), e->y());
 
                 item->setVisible(true);
-                if (v && v->document())
-                    v->document()->setModified(true);
+                if (v && v->designer())
+                    v->designer()->setModified(true);
             }
 
-            sectionData->mouseAction = ReportWriterSectionData::MA_None;
-            sectionData->insertItem = KRObjectData::EntityNone;
+            m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
+            m_sectionData->insertItem = KRObjectData::EntityNone;
             break;
         default:
             // what to do? Nothing
@@ -1210,13 +1210,13 @@ unsigned int ReportDesigner::selectionCount()
 
 void ReportDesigner::slotItem(KRObjectData::EntityTypes typ)
 {
-    sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-    sectionData->insertItem = typ;
+    m_sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
+    m_sectionData->insertItem = typ;
 }
 
 void ReportDesigner::changeSet(KoProperty::Set *s)
 {
-    _itmset = s;
+    m_itmset = s;
     emit(propertySetChanged());
 }
 
@@ -1235,19 +1235,19 @@ void ReportDesigner::slotEditDelete()
             QGraphicsScene * scene = item->scene();
             delete item;
             scene->update();
-            sectionData->mouseAction = ReportWriterSectionData::MA_None;
+            m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
         }
     }
     activeScene()->selectedItems().clear();
-    sectionData->selected_items_rw = 0;
+    m_sectionData->selected_items_rw = 0;
 
     //TODO temporary
     //clears cut and copy lists to make sure we do not crash
     //if weve deleted something in the list
     //should really check if an item is in the list first
     //and remove it.
-    sectionData->cut_list.clear();
-    sectionData->copy_list.clear();
+    m_sectionData->cut_list.clear();
+    m_sectionData->copy_list.clear();
 }
 
 void ReportDesigner::slotEditCut()
@@ -1255,27 +1255,27 @@ void ReportDesigner::slotEditCut()
     if (selectionCount() > 0) {
         //First delete any items that are curerntly in the list
         //so as not to leak memory
-        for (int i = 0; i < sectionData->cut_list.count(); i++) {
-            delete sectionData->cut_list[i];
+        for (int i = 0; i < m_sectionData->cut_list.count(); i++) {
+            delete m_sectionData->cut_list[i];
         }
-        sectionData->cut_list.clear();
+        m_sectionData->cut_list.clear();
 
         QGraphicsItem * item = activeScene()->selectedItems().first();
         if (item) {
             if (item->type() == KRObjectData::EntityLine) {
-                sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
-                sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
+                m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
+                m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
             } else {
-                sectionData->copy_x_pos = (int) item->x();
-                sectionData->copy_y_pos = (int) item->y();
+                m_sectionData->copy_x_pos = (int) item->x();
+                m_sectionData->copy_y_pos = (int) item->y();
             }
 
-            sectionData->copy_list.clear();
+            m_sectionData->copy_list.clear();
 
             for (int i = 0; i < activeScene()->selectedItems().count(); i++) {
                 QGraphicsItem *itm = activeScene()->selectedItems()[i];
-                sectionData->cut_list.append(dynamic_cast<ReportEntity*>(itm));
-                sectionData->copy_list.append(dynamic_cast<ReportEntity*>(itm));
+                m_sectionData->cut_list.append(dynamic_cast<ReportEntity*>(itm));
+                m_sectionData->copy_list.append(dynamic_cast<ReportEntity*>(itm));
             }
             int c = activeScene()->selectedItems().count();
             for (int i = 0; i < c; i++) {
@@ -1283,8 +1283,8 @@ void ReportDesigner::slotEditCut()
                 activeScene()->removeItem(itm);
                 activeScene()->update();
             }
-            sectionData->selected_x_offset = 10;
-            sectionData->selected_y_offset = 10;
+            m_sectionData->selected_x_offset = 10;
+            m_sectionData->selected_y_offset = 10;
         }
     }
 }
@@ -1296,20 +1296,20 @@ void ReportDesigner::slotEditCopy()
 
     QGraphicsItem * item = activeScene()->selectedItems().first();
     if (item) {
-        sectionData->copy_list.clear();
+        m_sectionData->copy_list.clear();
         if (item->type() == KRObjectData::EntityLine) {
-            sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
-            sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
+            m_sectionData->copy_x_pos = ((ReportEntityLine*) item)->line().p1().x();
+            m_sectionData->copy_y_pos = ((ReportEntityLine*) item)->line().p1().y();
         } else {
-            sectionData->copy_x_pos = (int) item->x();
-            sectionData->copy_y_pos = (int) item->y();
+            m_sectionData->copy_x_pos = (int) item->x();
+            m_sectionData->copy_y_pos = (int) item->y();
         }
 
         for (int i = 0; i < activeScene()->selectedItems().count(); i++) {
-            sectionData->copy_list.append(dynamic_cast<ReportEntity*>(activeScene()->selectedItems()[i]));
+            m_sectionData->copy_list.append(dynamic_cast<ReportEntity*>(activeScene()->selectedItems()[i]));
         }
-        sectionData->selected_x_offset = 10;
-        sectionData->selected_y_offset = 10;
+        m_sectionData->selected_x_offset = 10;
+        m_sectionData->selected_y_offset = 10;
     }
 }
 
@@ -1318,8 +1318,8 @@ void ReportDesigner::slotEditPaste()
     // call the editPaste function passing it a reportsection and point
     //  that make sense as defaults (same canvas / slightly offset pos of orig copy)
     QPoint p;
-    p.setX(sectionData->copy_x_pos + sectionData->selected_x_offset);
-    p.setY(sectionData->copy_y_pos + sectionData->selected_x_offset);
+    p.setX(m_sectionData->copy_x_pos + m_sectionData->selected_x_offset);
+    p.setY(m_sectionData->copy_y_pos + m_sectionData->selected_x_offset);
     slotEditPaste(activeScene(), p);
 }
 
@@ -1327,42 +1327,42 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
 {
     Q_UNUSED(pos);
     // paste a new item of the copy we have in the specified location
-    if (sectionData->copy_list.count() > 0) {
+    if (m_sectionData->copy_list.count() > 0) {
         QGraphicsItem * pasted_ent = 0;
         canvas->clearSelection();
-        sectionData->mouseAction = ReportWriterSectionData::MA_None;
+        m_sectionData->mouseAction = ReportWriterSectionData::MA_None;
 
-        for (int i = 0; i < sectionData->copy_list.count(); i++) {
+        for (int i = 0; i < m_sectionData->copy_list.count(); i++) {
             pasted_ent = 0;
-            int type = dynamic_cast<KRObjectData*>(sectionData->copy_list[i])->type();
+            int type = dynamic_cast<KRObjectData*>(m_sectionData->copy_list[i])->type();
             kDebug() << type;
-            QPointF o(sectionData->selected_x_offset, sectionData->selected_y_offset);
+            QPointF o(m_sectionData->selected_x_offset, m_sectionData->selected_y_offset);
             if (type == KRObjectData::EntityLabel) {
-                ReportEntityLabel * ent = dynamic_cast<ReportEntityLabel*>(sectionData->copy_list[i])->clone();
+                ReportEntityLabel * ent = dynamic_cast<ReportEntityLabel*>(m_sectionData->copy_list[i])->clone();
                 ent->setEntityName(suggestEntityName("Label"));
                 ent->setPos(ent->pos() + o);
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityField) {
-                ReportEntityField * ent = dynamic_cast<ReportEntityField*>(sectionData->copy_list[i])->clone();
+                ReportEntityField * ent = dynamic_cast<ReportEntityField*>(m_sectionData->copy_list[i])->clone();
                 ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("Field"));
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityText) {
-                ReportEntityText * ent = dynamic_cast<ReportEntityText*>(sectionData->copy_list[i])->clone();
+                ReportEntityText * ent = dynamic_cast<ReportEntityText*>(m_sectionData->copy_list[i])->clone();
                 ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("Text"));
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityLine) {
-                ReportEntityLine * ent = dynamic_cast<ReportEntityLine*>(sectionData->copy_list[i])->clone();
+                ReportEntityLine * ent = dynamic_cast<ReportEntityLine*>(m_sectionData->copy_list[i])->clone();
                 ent->setEntityName(suggestEntityName("Line"));
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityBarcode) {
-                ReportEntityBarcode * ent = dynamic_cast<ReportEntityBarcode*>(sectionData->copy_list[i])->clone();
+                ReportEntityBarcode * ent = dynamic_cast<ReportEntityBarcode*>(m_sectionData->copy_list[i])->clone();
                 ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("Barcode"));
                 pasted_ent = ent;
             } else if (type == KRObjectData::EntityImage) {
-                ReportEntityImage * ent = dynamic_cast<ReportEntityImage*>(sectionData->copy_list[i])->clone();
+                ReportEntityImage * ent = dynamic_cast<ReportEntityImage*>(m_sectionData->copy_list[i])->clone();
                 ent->setPos(ent->pos() + o);
                 ent->setEntityName(suggestEntityName("Image"));
                 pasted_ent = ent;
@@ -1383,12 +1383,12 @@ void ReportDesigner::slotEditPaste(QGraphicsScene * canvas, const QPointF & pos)
             if (pasted_ent) {
                 canvas->addItem(pasted_ent);
                 pasted_ent->show();
-                sectionData->mouseAction = ReportWriterSectionData::MA_Grab;
+                m_sectionData->mouseAction = ReportWriterSectionData::MA_Grab;
                 setModified(true);
             }
         }
-        sectionData->selected_x_offset += 10;
-        sectionData->selected_y_offset += 10;
+        m_sectionData->selected_x_offset += 10;
+        m_sectionData->selected_y_offset += 10;
     }
 }
 void ReportDesigner::slotRaiseSelected()

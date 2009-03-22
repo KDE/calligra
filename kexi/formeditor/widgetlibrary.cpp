@@ -61,29 +61,39 @@ public:
             : showAdvancedProperties(true)
             , factoriesLoaded(false)
     {
-        advancedProperties.insert("autoMask");
-        advancedProperties.insert("baseSize");
-        advancedProperties.insert("mouseTracking");
         advancedProperties.insert("acceptDrops");
-        advancedProperties.insert("cursorPosition");
+        advancedProperties.insert("accessibleDescription");
+        advancedProperties.insert("accessibleName");
+        advancedProperties.insert("autoMask");
+        advancedProperties.insert("autoFillBackground");
+        advancedProperties.insert("backgroundOrigin");
+        advancedProperties.insert("backgroundMode");//this is rather useless
+        advancedProperties.insert("baseSize");
         advancedProperties.insert("contextMenuEnabled");
-        advancedProperties.insert("trapEnterKeyEvent");
+        advancedProperties.insert("contextMenuPolicy");
+        advancedProperties.insert("cursorPosition");
         advancedProperties.insert("dragEnabled");
         advancedProperties.insert("enableSqueezedText");
-        advancedProperties.insert("sizeIncrement");
-/*! @todo: reenable */ advancedProperties.insert("palette");
-//2.0 obsolete        advancedProperties.insert("backgroundOrigin");
-        advancedProperties.insert("backgroundMode");//this is rather useless
         advancedProperties.insert("layout");// too large risk to break things
+        advancedProperties.insert("locale");
+        advancedProperties.insert("mouseTracking");
+/*! @todo: reenable */ advancedProperties.insert("palette");
+        advancedProperties.insert("sizeIncrement");
+        advancedProperties.insert("statusTip");
+        advancedProperties.insert("trapEnterKeyEvent");
+        advancedProperties.insert("windowModality");
+        advancedProperties.insert("autoExclusive");
         // by providing this in propeditor
         advancedProperties.insert("minimumSize");
         advancedProperties.insert("maximumSize");
 #ifdef KEXI_NO_UNFINISHED
 /*! @todo reenable */
-        advancedProperties.insert("paletteBackgroundPixmap");
-        advancedProperties.insert("icon");
-        advancedProperties.insert("pixmap");
         advancedProperties.insert("accel");
+        advancedProperties.insert("icon");
+        advancedProperties.insert("paletteBackgroundPixmap");
+        advancedProperties.insert("pixmap");
+        advancedProperties.insert("shortcut"); // renamed from "accel" in Qt 4
+        advancedProperties.insert("windowIcon"); // renamed from "icon" in Qt 4
 #endif
     }
     // dict which associates a class name with a Widget class

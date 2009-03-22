@@ -29,7 +29,7 @@
 
 ReportSceneView::ReportSceneView(ReportDesigner * rw, QGraphicsScene *scene, QWidget * parent, const char * name)
 {
-    _rw = rw;
+    m_reportDesigner = rw;
 
     viewport()->setMouseTracking(true);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -40,7 +40,7 @@ ReportSceneView::ReportSceneView(ReportDesigner * rw, QGraphicsScene *scene, QWi
     setDragMode(QGraphicsView::RubberBandDrag);
     setScene(scene);
     setFrameStyle(0);
-    _rw->setActiveScene(scene);
+    m_reportDesigner->setActiveScene(scene);
 
 }
 
@@ -56,14 +56,14 @@ void ReportSceneView::resizeContents(QSize s)
     setMaximumSize(s);
 }
 
-ReportDesigner * ReportSceneView::document()
+ReportDesigner * ReportSceneView::designer()
 {
-    return _rw;
+    return m_reportDesigner;
 }
 
 void ReportSceneView::mouseReleaseEvent(QMouseEvent * e)
 {
-    _rw->sectionMouseReleaseEvent(this, e);
+    m_reportDesigner->sectionMouseReleaseEvent(this, e);
     QGraphicsView::mouseReleaseEvent(e);
 }
 

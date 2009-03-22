@@ -22,11 +22,9 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include "koproperty_global.h"
 #include <QtCore/QObject>
-#include <QtCore/QByteArray>
-#include <QtCore/QStringList>
 #include <QtCore/QHash>
+#include "Property.h"
 
 namespace KoProperty
 {
@@ -104,7 +102,7 @@ public:
         QList<Property*> m_sorted; //!< for sorted order
     };
 
-    explicit Set(QObject *parent = 0, const QString &typeName = QString::null);
+    explicit Set(QObject *parent = 0, const QString &typeName = QString());
 
     /*! Constructs a deep copy of \a set.
      The new object will not have a QObject parent even if \a set has such parent. */
@@ -124,7 +122,7 @@ public:
     void removeProperty(const QByteArray &name);
 
     /*! Removes all properties from the property set and destroys them. */
-    virtual void clear();
+    void clear();
 
     /*! \return the number of items in the set. */
     uint count() const;
@@ -167,6 +165,13 @@ public:
     /endcode
     \return \ref Property with given name. */
     Property& operator[](const QByteArray &name) const;
+
+    /*! @return value for property named with @a name. 
+     If no such property is found, default value @a defaultValue is returned. */
+    QVariant propertyValue(const QByteArray &name, const QVariant& defaultValue = QVariant()) const {
+        const Property& p( property(name) );
+        return p.isNull() ? defaultValue : p.value();
+    }
 
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     const Set& operator= (const Set &set);

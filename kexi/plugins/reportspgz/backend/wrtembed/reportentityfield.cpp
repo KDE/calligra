@@ -41,9 +41,9 @@ void ReportEntityField::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
+    connect(m_set, SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
     setZValue(Z);
 }
 
@@ -54,14 +54,14 @@ ReportEntityField::ReportEntityField(ReportDesigner * rw, QGraphicsScene * scene
     init(scene);
     setSceneRect(getTextRect());
 
-    _name->setValue(_rd->suggestEntityName("Field"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Field"));
 }
 
 ReportEntityField::ReportEntityField(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
         : KRFieldData(element), ReportRectEntity(d)
 {
     init(s);
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityField* ReportEntityField::clone()
@@ -80,7 +80,7 @@ ReportEntityField::~ReportEntityField()
 
 QRect ReportEntityField::getTextRect()
 {
-    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), _controlSource->value().toString() + QObject::tr(":") + QObject::tr((_trackTotal->value().toBool() ? " field total" : " field")));
+    return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), m_controlSource->value().toString() + QObject::tr(": field")/* + QObject::tr((m_trackTotal->value().toBool() ? " field total" : " field"))*/);
 }
 
 
@@ -94,20 +94,20 @@ void ReportEntityField::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setFont(font());
     //painter->setBackgroundMode ( Qt::OpaqueMode );
 
-    QColor bg = _bgColor->value().value<QColor>();
-    bg.setAlpha(_bgOpacity->value().toInt());
+    QColor bg = m_backgroundColor->value().value<QColor>();
+    bg.setAlpha(m_backgroundOpacity->value().toInt());
 
     painter->setBackground(bg);
-    painter->setPen(_fgColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
-    painter->drawText(rect(), textFlags(), _controlSource->value().toString() + QObject::tr(":") + QObject::tr((_trackTotal->value().toBool() ? " field total" : " field")));
+    painter->drawText(rect(), textFlags(), m_controlSource->value().toString() + QObject::tr(":field")/* + QObject::tr((m_trackTotal->value().toBool() ? " field total" : " field"))*/);
 
 
-    if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0) {
+    if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
         painter->setPen(QPen(QColor(224, 224, 224)));
     } else {
-        painter->setPen(QPen(_lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt()));
+        painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
 
     painter->drawRect(rect());
@@ -174,15 +174,17 @@ void ReportEntityField::buildXML(QDomDocument & doc, QDomElement & parent)
     data.appendChild(dcolumn);
     entity.appendChild(data);
 
-    if (_trackTotal) {
+#if 0
+    if (m_trackTotal) {
         QDomElement tracktotal = doc.createElement("tracktotal");
-        if (_trackBuiltinFormat)
+        if (m_trackBuiltinFormat)
             tracktotal.setAttribute("builtin", "true");
         if (_useSubTotal)
             tracktotal.setAttribute("subtotal", "true");
         tracktotal.appendChild(doc.createTextNode(_trackTotalFormat->value().toString()));
         entity.appendChild(tracktotal);
     }
+#endif
 
     parent.appendChild(entity);
 }
@@ -198,14 +200,14 @@ void ReportEntityField::propertyChanged(KoProperty::Set &s, KoProperty::Property
 
     if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
 
     if (scene()) scene()->update();
 
@@ -213,6 +215,6 @@ void ReportEntityField::propertyChanged(KoProperty::Set &s, KoProperty::Property
 
 void ReportEntityField::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
     ReportRectEntity::mousePressEvent(event);
 }

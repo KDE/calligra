@@ -33,13 +33,13 @@ public:
 
     void setPainter(QPainter *);
     QPainter * painter() {
-        return _painter;
+        return m_painter;
     }
 
     bool render(ORODocument *, int);
 
 protected:
-    QPainter* _painter;
+    QPainter* m_painter;
 };
 
 #endif // __ORPRINTRENDER_H__

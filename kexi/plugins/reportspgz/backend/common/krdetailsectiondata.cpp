@@ -27,14 +27,13 @@
 
 KRDetailSectionData::KRDetailSectionData()
 {
-    name = QString::null;
-    pagebreak = BreakNone;
-    detail = 0;
+    m_pageBreak = BreakNone;
+    m_detailSection = 0;
 }
 
 KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 {
-    _valid = false;
+    m_valid = false;
     if (elemSource.tagName() != "section") {
         return;
     }
@@ -90,11 +89,11 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
                 //else
                 //TODO qDebug("While parsing group section encountered an unknown element: %s", node.nodeName().toLatin1());
             }
-            groupList.append(dgsd);
+            m_groupList.append(dgsd);
         } else if (elemThis.tagName() == "detail") {
             KRSectionData * sd = new KRSectionData(elemThis);
             if (sd->isValid()) {
-                detail = sd;
+                m_detailSection = sd;
                 //TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
                 have_detail = true;
             } else
@@ -103,7 +102,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
         kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName();
     }
 
-    _valid = true;
+    m_valid = true;
 }
 
 KRDetailSectionData::~KRDetailSectionData()

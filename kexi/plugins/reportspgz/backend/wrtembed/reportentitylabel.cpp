@@ -42,9 +42,8 @@ void ReportEntityLabel::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
     kDebug() << getTextRect();
-
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
@@ -58,15 +57,14 @@ ReportEntityLabel::ReportEntityLabel(ReportDesigner* d, QGraphicsScene * scene)
     init(scene);
     setSceneRect(getTextRect());
 
-    _name->setValue(_rd->suggestEntityName("Label"));
-
+    m_name->setValue(m_reportDesigner->suggestEntityName("Label"));
 }
 
 ReportEntityLabel::ReportEntityLabel(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
         : ReportRectEntity(d), KRLabelData(element)
 {
     init(s);
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityLabel* ReportEntityLabel::clone()
@@ -85,9 +83,8 @@ ReportEntityLabel::~ReportEntityLabel()
 
 QRectF ReportEntityLabel::getTextRect()
 {
-    return QFontMetrics(font()).boundingRect(x(), y(), 0, 0, textFlags(), _text->value().toString());
+    return QFontMetrics(font()).boundingRect(x(), y(), 0, 0, textFlags(), m_text->value().toString());
 }
-
 
 void ReportEntityLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
@@ -98,25 +95,25 @@ void ReportEntityLabel::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setFont(font());
     //painter->setBackgroundMode ( Qt::OpaqueMode );
 
-    QColor bg = _bgColor->value().value<QColor>();
-    bg.setAlpha(_bgOpacity->value().toInt());
+    QColor bg = m_backgroundColor->value().value<QColor>();
+    bg.setAlpha(m_backgroundOpacity->value().toInt());
 
     painter->setBackground(bg);
-    painter->setPen(_fgColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
 
     painter->fillRect(QGraphicsRectItem::rect(), bg);
     painter->drawText(rect(), textFlags(), text());
 
-    if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0) {
+    if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
         painter->setPen(QPen(QColor(224, 224, 224)));
     } else {
-        painter->setPen(QPen(_lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt()));
+        painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
 
     painter->drawRect(QGraphicsRectItem::rect());
 
     painter->setBackgroundMode(Qt::TransparentMode);
-    painter->setPen(_fgColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);
 
@@ -188,16 +185,16 @@ void ReportEntityLabel::propertyChanged(KoProperty::Set &s, KoProperty::Property
         //_size.setUnitSize(p.value().value<QSizeF>());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
 
     //setSceneRect(_pos.toScene(), _size.toScene());
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (scene()) scene()->update();
 }
 

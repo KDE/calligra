@@ -87,7 +87,7 @@ with the side effect that the palettes will take more space.
 <para>
 This section contains just one option. If your graphics card and driver have
 OpenGL support, you can enable it here to make drawing faster (the
-processor of yor graphics card will take over part of the calculations). Be
+processor of your graphics card will take over part of the calculations). Be
 warned, though: there are a few cases where enabling OpenGL is known to
 introduce erratic behavior.
 </para>

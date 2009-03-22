@@ -389,15 +389,15 @@ void KexiDataSourcePage::setDataSource(const QString& partClass, const QString& 
 void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 {
     QString objectName;
-    if (propertySet && propertySet->contains("name"))
-        objectName = (*propertySet)["name"].value().toString();
+    if (propertySet)
+        objectName = propertySet->propertyValue("objectName").toString();
     if (!objectName.isEmpty() && objectName == m_currentObjectName)
         return; //the same object
     m_currentObjectName = objectName;
 
     QString objectClassName;
-    if (propertySet && propertySet->contains("this:className"))
-        objectClassName = (*propertySet)["this:className"].value().toString();
+    if (propertySet)
+        objectClassName = propertySet->propertyValue("this:className").toString();
 
     updateInfoLabelForPropertySet(propertySet);
 

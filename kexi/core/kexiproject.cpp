@@ -601,10 +601,14 @@ bool KexiProject::retrieveItems()
     for (cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
         bool ok;
         int partId = cursor->value(3).toInt(&ok);
-        if (!ok)
+        if (!ok || partId <= 0)
             continue;
-        if (recentPartId != partId) {
-            // create next part items dict
+        if (recentPartId == partId) {
+            if (partClass.isEmpty()) // still the same unknown part id
+                continue;
+        }
+        else {
+            // new part id: create next part items dict if it's id for a known class
             recentPartId = partId;
             partClass = classForId( partId );
             if (partClass.isEmpty())

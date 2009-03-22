@@ -46,16 +46,16 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
     Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 // Q_PROPERTY( QPixmap pixmap READ pixmap WRITE setPixmap )
 // Q_PROPERTY( QByteArray pixmapData READ pixmapData WRITE setPixmapData )
-    Q_PROPERTY(uint pixmapId READ pixmapId WRITE setPixmapId DESIGNABLE true STORED false)
+    Q_PROPERTY(uint pixmapId READ pixmapId WRITE setPixmapId STORED false)
     Q_PROPERTY(uint storedPixmapId READ storedPixmapId WRITE setStoredPixmapId DESIGNABLE false STORED true)
     Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents)
     Q_PROPERTY(bool keepAspectRatio READ keepAspectRatio WRITE setKeepAspectRatio)
     Q_PROPERTY(Qt::Alignment alignment READ alignment WRITE setAlignment)
 // Q_PROPERTY( QString originalFileName READ originalFileName WRITE setOriginalFileName DESIGNABLE false )
-// Q_OVERRIDE( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
+// Q_PROPERTY( FocusPolicy focusPolicy READ focusPolicy WRITE setFocusPolicy )
     Q_PROPERTY(bool dropDownButtonVisible READ dropDownButtonVisible WRITE setDropDownButtonVisible)
-    Q_OVERRIDE(int lineWidth READ lineWidth WRITE setLineWidth)
-    Q_OVERRIDE(FocusPolicy focusPolicy READ focusPolicyInternal WRITE setFocusPolicy)
+    Q_PROPERTY(int lineWidth READ lineWidth WRITE setLineWidth)
+    Q_PROPERTY(Qt::FocusPolicy focusPolicy READ focusPolicyInternal WRITE setFocusPolicy)
 
 public:
     KexiDBImageBox(bool designMode, QWidget *parent);
@@ -277,17 +277,17 @@ protected:
 //  QTimer m_clickTimer;
     Qt::Alignment m_alignment;
     Qt::FocusPolicy m_focusPolicyInternal; //!< Used for focusPolicyInternal()
-bool m_designMode : 1;
-bool m_readOnly : 1;
-bool m_scaledContents : 1;
-bool m_keepAspectRatio : 1;
-bool m_insideSetData : 1;
-bool m_setFocusOnButtonAfterClosingPopup : 1;
-bool m_lineWidthChanged : 1;
-bool m_paletteBackgroundColorChanged : 1;
-bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
-bool m_dropDownButtonVisible : 1;
-bool m_insideSetPalette : 1;
+    bool m_designMode : 1;
+    bool m_readOnly : 1;
+    bool m_scaledContents : 1;
+    bool m_keepAspectRatio : 1;
+    bool m_insideSetData : 1;
+    bool m_setFocusOnButtonAfterClosingPopup : 1;
+    bool m_lineWidthChanged : 1;
+    bool m_paletteBackgroundColorChanged : 1;
+    bool m_paintEventEnabled : 1; //!< used to disable paintEvent()
+    bool m_dropDownButtonVisible : 1;
+    bool m_insideSetPalette : 1;
 };
 
 #endif

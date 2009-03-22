@@ -89,8 +89,8 @@ public slots:
     */
     void text(qreal, qreal, const QString &, const QString &fnt = "Helvetica", int pt = 12, const QString &fc = "#000000", const QString &bc = "#ffffff", const QString &lc = "#ffffff", qreal lw = 0, int o = 0);
 private:
-    OROPage *_curPage;
-    QPointF _curOffset;
+    OROPage *m_curPage;
+    QPointF m_curOffset;
 
 };
 

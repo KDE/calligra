@@ -77,7 +77,7 @@ ObjectTreeItem::removeChild(ObjectTreeItem *c)
 void
 ObjectTreeItem::addModifiedProperty(const QByteArray &property, const QVariant &oldValue)
 {
-    if (property == "name")
+    if (property == "objectName")
         return;
 
     if (!m_props.contains(property)) {

@@ -31,8 +31,8 @@ namespace Scripting
 {
 Section::Section(KRSectionData* sec)
 {
-    _section = sec;
-    _scriptObject = 0;
+    m_section = sec;
+    m_scriptObject = 0;
 }
 
 
@@ -42,53 +42,53 @@ Section::~Section()
 
 QColor Section::backgroundColor()
 {
-    return _section->_bgColor->value().value<QColor>();
+    return m_section->m_backgroundColor->value().value<QColor>();
 }
 
 void   Section::setBackgroundColor(const QColor &c)
 {
     kDebug() << c.name();
-    _section->_bgColor->setValue(c);
+    m_section->m_backgroundColor->setValue(c);
 }
 
 qreal Section::height()
 {
-    return _section->_height->value().toDouble();
+    return m_section->m_height->value().toDouble();
 }
 
 void Section::setHeight(qreal h)
 {
-    _section->_height->setValue(h);
+    m_section->m_height->setValue(h);
 }
 
 QString Section::name()
 {
-    return _section->_name;
+    return m_section->m_name;
 }
 
 QObject* Section::objectByNumber(int i)
 {
-    switch (_section->_objects[i]->type()) {
+    switch (m_section->m_objects[i]->type()) {
     case KRObjectData::EntityLabel:
-        return new Scripting::Label(_section->_objects[i]->toLabel());
+        return new Scripting::Label(m_section->m_objects[i]->toLabel());
         break;
     case KRObjectData::EntityField:
-        return new Scripting::Field(_section->_objects[i]->toField());
+        return new Scripting::Field(m_section->m_objects[i]->toField());
         break;
     case KRObjectData::EntityText:
-        return new Scripting::Field(_section->_objects[i]->toField());
+        return new Scripting::Field(m_section->m_objects[i]->toField());
         break;
     case KRObjectData::EntityBarcode:
-        return new Scripting::Barcode(_section->_objects[i]->toBarcode());
+        return new Scripting::Barcode(m_section->m_objects[i]->toBarcode());
         break;
     case KRObjectData::EntityLine:
-        return new Scripting::Line(_section->_objects[i]->toLine());
+        return new Scripting::Line(m_section->m_objects[i]->toLine());
         break;
     case KRObjectData::EntityChart:
-        return new Scripting::Chart(_section->_objects[i]->toChart());
+        return new Scripting::Chart(m_section->m_objects[i]->toChart());
         break;
     case KRObjectData::EntityImage:
-        return new Scripting::Image(_section->_objects[i]->toImage());
+        return new Scripting::Image(m_section->m_objects[i]->toImage());
         break;
     default:
         return new QObject();
@@ -98,8 +98,8 @@ QObject* Section::objectByNumber(int i)
 
 QObject* Section::objectByName(const QString& n)
 {
-    for (int i = 0; i < _section->objects().count(); ++i) {
-        if (_section->_objects[i]->entityName() == n) {
+    for (int i = 0; i < m_section->objects().count(); ++i) {
+        if (m_section->m_objects[i]->entityName() == n) {
             return objectByNumber(i);
         }
     }
@@ -108,12 +108,12 @@ QObject* Section::objectByName(const QString& n)
 
 void Section::initialize(Kross::Object::Ptr p)
 {
-	_scriptObject = p;
+	m_scriptObject = p;
 }
 
 void Section::eventOnRender()
 {
-    if (_scriptObject)
-	_scriptObject->callMethod("OnRender");
+    if (m_scriptObject)
+	m_scriptObject->callMethod("OnRender");
 }
 }

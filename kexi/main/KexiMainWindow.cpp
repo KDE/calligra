@@ -4332,7 +4332,7 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         KoProperty::Set *newBuf = _currentWindow ? _currentWindow->propertySet() : 0;
         if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
             d->propBuffer = newBuf;
-            if (preservePrevSelection) {
+            if (preservePrevSelection || force) {
                 KoProperty::EditorView::SetOptions options
                     = preservePrevSelection ? KoProperty::EditorView::PreservePreviousSelection
                         : KoProperty::EditorView::NoOptions;

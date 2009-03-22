@@ -40,7 +40,7 @@ KRLineData::KRLineData(QDomNode & element)
         n = node.nodeName();
 
         if (n == "name") {
-            _name->setValue(node.firstChild().nodeValue());
+            m_name->setValue(node.firstChild().nodeValue());
         } else if (n == "linestyle") {
             if (!parseReportLineStyleData(node.toElement(), ls)) {
                 ls.lnColor = Qt::black;
@@ -65,49 +65,49 @@ KRLineData::KRLineData(QDomNode & element)
             kDebug() << "While parsing line encountered unknown element: " << n;
         }
     }
-    _start.setPointPos(QPointF(sx, sy));
-    _end.setPointPos(QPointF(ex, ey));
-    _lnWeight->setValue(ls.weight);
-    _lnColor->setValue(ls.lnColor);
-    _lnStyle->setValue(ls.style);
+    m_start.setPointPos(QPointF(sx, sy));
+    m_end.setPointPos(QPointF(ex, ey));
+    m_lineWeight->setValue(ls.weight);
+    m_lineColor->setValue(ls.lnColor);
+    m_lineStyle->setValue(ls.style);
 
 }
 
 
 void KRLineData::createProperties()
 {
-    _set = new KoProperty::Set(0, "Line");
+    m_set = new KoProperty::Set(0, "Line");
 
-    _lnWeight = new KoProperty::Property("Weight", 1, "Line Weight", "Line Weight");
-    _lnColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
-    _lnStyle = new KoProperty::Property("LineStyle", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
-    _start.setName("Start");
-    _end.setName("End");
+    m_lineWeight = new KoProperty::Property("Weight", 1, "Line Weight", "Line Weight");
+    m_lineColor = new KoProperty::Property("LineColor", Qt::black, "Line Color", "Line Color");
+    m_lineStyle = new KoProperty::Property("LineStyle", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle);
+    m_start.setName("Start");
+    m_end.setName("End");
 
-    _set->addProperty(_name);
-    _set->addProperty(_start.property());
-    _set->addProperty(_end.property());
-    _set->addProperty(_lnWeight);
-    _set->addProperty(_lnColor);
-    _set->addProperty(_lnStyle);
+    m_set->addProperty(m_name);
+    m_set->addProperty(m_start.property());
+    m_set->addProperty(m_end.property());
+    m_set->addProperty(m_lineWeight);
+    m_set->addProperty(m_lineColor);
+    m_set->addProperty(m_lineStyle);
 }
 
 ORLineStyleData KRLineData::lineStyle()
 {
     ORLineStyleData ls;
-    ls.weight = _lnWeight->value().toInt();
-    ls.lnColor = _lnColor->value().value<QColor>();
-    ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
+    ls.weight = m_lineWeight->value().toInt();
+    ls.lnColor = m_lineColor->value().value<QColor>();
+    ls.style = (Qt::PenStyle)m_lineStyle->value().toInt();
     return ls;
 }
 
 unsigned int KRLineData::weight() const
 {
-    return _lnWeight->value().toInt();
+    return m_lineWeight->value().toInt();
 }
 void KRLineData::setWeight(int w)
 {
-    _lnWeight->setValue(w);
+    m_lineWeight->setValue(w);
 }
 
 int KRLineData::type() const

@@ -222,7 +222,7 @@ signals:
 class SubForm : public Q3ScrollView
 {
     Q_OBJECT
-    Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)
+    Q_PROPERTY(QString formName READ formName WRITE setFormName)
 
 public:
     SubForm(KFormDesigner::Form *parentForm, QWidget *parent);

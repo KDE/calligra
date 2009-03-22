@@ -54,7 +54,7 @@ QString dateFormatToString(KexiCSVImportOptions::DateFormat format)
     case KexiCSVImportOptions::MDY: return "MDY";
     default: break;
     }
-    return QString::null;
+    return QString();
 }
 
 KexiCSVImportOptions::KexiCSVImportOptions()

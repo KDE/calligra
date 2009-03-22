@@ -36,7 +36,7 @@ KRShapeData::KRShapeData(QDomNode & element)
         node = nl.item(i);
         n = node.nodeName();
         if (n == "name") {
-            _name->setValue(node.firstChild().nodeValue());
+            m_name->setValue(node.firstChild().nodeValue());
         } else {
             kDebug() << "while parsing label element encountered unknow element: " << n;
         }
@@ -45,21 +45,21 @@ KRShapeData::KRShapeData(QDomNode & element)
 
 void KRShapeData::createProperties()
 {
-    _set = new KoProperty::Set(0, "Shape");
+    m_set = new KoProperty::Set(0, "Shape");
 
     QStringList keys;
 
     keys << KoShapeRegistry::instance()->keys();
-    _shapeType = new KoProperty::Property("ShapeType", keys, keys, "KoStarShape", "Shape Type");
+    m_shapeType = new KoProperty::Property("ShapeType", keys, keys, "KoStarShape", "Shape Type");
 
-    _set->addProperty(_name);
-    _set->addProperty(_shapeType);
+    m_set->addProperty(m_name);
+    m_set->addProperty(m_shapeType);
 }
 
 QRectF KRShapeData::_rect()
 {
     QRectF r;
-    r.setRect(_pos.toScene().x(), _pos.toScene().y(), _size.toScene().width(), _size.toScene().height());
+    r.setRect(m_pos.toScene().x(), m_pos.toScene().y(), m_size.toScene().width(), m_size.toScene().height());
     return r;
 }
 

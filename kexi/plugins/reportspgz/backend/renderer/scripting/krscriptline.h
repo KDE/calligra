@@ -103,7 +103,7 @@ public slots:
     void setLineStyle(int);
 
 private:
-    KRLineData *_line;
+    KRLineData *m_line;
 
 };
 

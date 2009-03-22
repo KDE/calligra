@@ -570,12 +570,14 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "onClickAction" /*! @todo reenable */
              && property != "onClickActionOption" /*! @todo reenable */
              && property != "iconSet" /*! @todo reenable */
+             && property != "iconSize" /*! @todo reenable */
              && property != "stdItem" /*! @todo reenable stdItem */
 #endif
              ;
     } else if (classname == "KexiDBLineEdit")
         ok = property != "urlDropsEnabled"
              && property != "vAlign"
+             && property != "echoMode"
 #ifdef KEXI_NO_UNFINISHED
              && property != "inputMask"
              && property != "maxLength" //!< we may want to integrate this with db schema
@@ -594,6 +596,8 @@ KexiDBFactory::isPropertyVisibleInternal(const QByteArray& classname, QWidget *w
              && property != "overwriteMode" //always false!
              && property != "resizePolicy"
              && property != "autoFormatting" //too complex
+             && property != "documentTitle"
+             && property != "cursorWidth"
 #ifdef KEXI_NO_UNFINISHED
              && property != "paper"
 #endif

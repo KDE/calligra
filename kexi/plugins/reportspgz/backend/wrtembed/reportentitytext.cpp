@@ -46,9 +46,9 @@ void ReportEntityText::init(QGraphicsScene * scene)
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
 
-    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
     setZValue(Z);
 }
 
@@ -58,14 +58,14 @@ ReportEntityText::ReportEntityText(ReportDesigner * rw, QGraphicsScene * scene)
     init(scene);
     setSceneRect(getTextRect());
 
-    _name->setValue(_rd->suggestEntityName("Text"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Text"));
 }
 
 ReportEntityText::ReportEntityText(QDomNode & element, ReportDesigner * d, QGraphicsScene * s)
         : ReportRectEntity(d), KRTextData(element)
 {
     init(s);
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityText* ReportEntityText::clone()
@@ -86,8 +86,6 @@ QRect ReportEntityText::getTextRect()
     return QFontMetrics(font()).boundingRect(int (x()), int (y()), 0, 0, textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
 }
 
-
-
 void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     // store any values we plan on changing so we can restore them
@@ -96,20 +94,20 @@ void ReportEntityText::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 
     painter->setFont(font());
     painter->setBackgroundMode(Qt::OpaqueMode);
-    painter->setBackground(_bgColor->value().value<QColor>());
-    painter->setPen(_fgColor->value().value<QColor>());
-    painter->fillRect(rect(),  _bgColor->value().value<QColor>());
+    painter->setBackground(m_backgroundColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
+    painter->fillRect(rect(),  m_backgroundColor->value().value<QColor>());
     painter->drawText(rect(), textFlags(), column() + QObject::tr(":") + QObject::tr(" textarea"));
 
-    if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0) {
+    if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
         painter->setPen(QPen(QColor(224, 224, 224)));
     } else {
-        painter->setPen(QPen(_lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt()));
+        painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
     painter->drawRect(rect());
 
     painter->setBackgroundMode(Qt::TransparentMode);
-    painter->setPen(_fgColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
 
     drawHandles(painter);
 
@@ -178,7 +176,7 @@ void ReportEntityText::buildXML(QDomDocument & doc, QDomElement & parent)
 
 void ReportEntityText::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
     ReportRectEntity::mousePressEvent(event);
 }
 
@@ -193,15 +191,15 @@ void ReportEntityText::propertyChanged(KoProperty::Set &s, KoProperty::Property 
         //_size.setUnitSize(p.value().value<QSizeF>());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
 
     //setSceneRect(_pos.toScene(), _size.toScene());
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (scene()) scene()->update();
 }

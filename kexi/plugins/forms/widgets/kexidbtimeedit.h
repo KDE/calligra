@@ -31,9 +31,9 @@ class QDateTimeEditor;
 class KEXIFORMUTILS_EXPORT KexiDBTimeEdit : public Q3TimeEdit, public KexiFormDataItemInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
-    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
     KexiDBTimeEdit(const QTime &time, QWidget *parent);

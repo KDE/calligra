@@ -26,8 +26,8 @@
 
 ORPrintRender::ORPrintRender()
 {
-    _printer = 0;
-    _painter = 0;
+    m_printer = 0;
+    m_painter = 0;
 }
 
 ORPrintRender::~ORPrintRender()
@@ -36,12 +36,12 @@ ORPrintRender::~ORPrintRender()
 
 void ORPrintRender::setPrinter(QPrinter * pPrinter)
 {
-    _printer = pPrinter;
+    m_printer = pPrinter;
 }
 
 void ORPrintRender::setPainter(QPainter * pPainter)
 {
-    _painter = pPainter;
+    m_painter = pPainter;
 }
 
 bool ORPrintRender::setupPrinter(ORODocument * pDocument, QPrinter * pPrinter)
@@ -65,39 +65,39 @@ bool ORPrintRender::setupPrinter(ORODocument * pDocument, QPrinter * pPrinter)
 
 bool ORPrintRender::render(ORODocument * pDocument)
 {
-    if (pDocument == 0 || _printer == 0)
+    if (pDocument == 0 || m_printer == 0)
         return false;
 
-    _printer->setFullPage(true);
+    m_printer->setFullPage(true);
 
     bool deleteWhenComplete = false;
     bool endWhenComplete = false;
 
     QPainter localPainter;
-    if (_painter == 0) {
+    if (m_painter == 0) {
         deleteWhenComplete = true;
-        _painter = &localPainter;
+        m_painter = &localPainter;
     }
 
-    if (!_painter->isActive()) {
+    if (!m_painter->isActive()) {
         endWhenComplete = true;
-        if (!_painter->begin(_printer))
+        if (!m_painter->begin(m_printer))
             return false;
     }
 
-    int fromPage = _printer->fromPage();
+    int fromPage = m_printer->fromPage();
     if (fromPage > 0)
         fromPage -= 1;
-    int toPage = _printer->toPage();
+    int toPage = m_printer->toPage();
     if (toPage == 0 || toPage > pDocument->pages())
         toPage = pDocument->pages();
-    for (int copy = 0; copy < _printer->numCopies(); copy++) {
+    for (int copy = 0; copy < m_printer->numCopies(); copy++) {
         for (int page = fromPage; page < toPage; page++) {
             if (page > 0)
-                _printer->newPage();
+                m_printer->newPage();
 
             OROPage * p = pDocument->page(page);
-            if (_printer->pageOrder() == QPrinter::LastPageFirst)
+            if (m_printer->pageOrder() == QPrinter::LastPageFirst)
                 p = pDocument->page(toPage - 1 - page);
 
 
@@ -113,28 +113,28 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     QSizeF sz = tb->size();
                     QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-                    _painter->save();
+                    m_painter->save();
                     //Background
 
                     QColor bg = tb->textStyle().bgColor;
                     bg.setAlpha(tb->textStyle().bgOpacity);
 
                     //_painter->setBackgroundMode(Qt::OpaqueMode);
-                    _painter->setBackground(bg);
-                    _painter->fillRect(rc, bg);
+                    m_painter->setBackground(bg);
+                    m_painter->fillRect(rc, bg);
 
                     //Text
-                    _painter->setBackgroundMode(Qt::TransparentMode);
-                    _painter->setFont(tb->textStyle().font);
-                    _painter->setPen(tb->textStyle().fgColor);
-                    _painter->drawText(rc, tb->flags(), tb->text());
+                    m_painter->setBackgroundMode(Qt::TransparentMode);
+                    m_painter->setFont(tb->textStyle().font);
+                    m_painter->setPen(tb->textStyle().fgColor);
+                    m_painter->drawText(rc, tb->flags(), tb->text());
 
                     //outer line
-                    _painter->setPen(QPen(tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style));
-                    _painter->drawRect(rc);
+                    m_painter->setPen(QPen(tb->lineStyle().lnColor, tb->lineStyle().weight, tb->lineStyle().style));
+                    m_painter->drawRect(rc);
 
                     //Reset back to defaults for next element
-                    _painter->restore();
+                    m_painter->restore();
 
                 } else if (prim->type() == OROLine::Line) {
                     kDebug() << "Line";
@@ -144,12 +144,12 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     //QPen pen ( _painter->pen() );
                     QPen pen(ln->lineStyle().lnColor, ln->lineStyle().weight, ln->lineStyle().style);
 
-                    _painter->save();
-                    _painter->setRenderHint(QPainter::Antialiasing, true);
-                    _painter->setPen(pen);
-                    _painter->drawLine(QLineF(s.x(), s.y(), e.x(), e.y()));
-                    _painter->setRenderHint(QPainter::Antialiasing, false);
-                    _painter->restore();
+                    m_painter->save();
+                    m_painter->setRenderHint(QPainter::Antialiasing, true);
+                    m_painter->setPen(pen);
+                    m_painter->drawLine(QLineF(s.x(), s.y(), e.x(), e.y()));
+                    m_painter->setRenderHint(QPainter::Antialiasing, false);
+                    m_painter->restore();
                 } else if (prim->type() == OROImage::Image) {
                     kDebug() << "Image";
                     OROImage * im = (OROImage*) prim;
@@ -162,7 +162,7 @@ bool ORPrintRender::render(ORODocument * pDocument)
                         img = img.scaled(rc.size().toSize(), (Qt::AspectRatioMode) im->aspectRatioMode(), (Qt::TransformationMode) im->transformationMode());
 
                     QRectF sr = QRectF(QPointF(0.0, 0.0), rc.size().boundedTo(img.size()));
-                    _painter->drawImage(rc.topLeft(), img, sr);
+                    m_painter->drawImage(rc.topLeft(), img, sr);
                 } else if (prim->type() == ORORect::Rect) {
                     kDebug() << "Rect";
                     ORORect * re = (ORORect*) prim;
@@ -171,11 +171,11 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     QSizeF sz = re->size();
                     QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-                    _painter->save();
-                    _painter->setPen(re->pen());
-                    _painter->setBrush(re->brush());
-                    _painter->drawRect(rc);
-                    _painter->restore();
+                    m_painter->save();
+                    m_painter->setPen(re->pen());
+                    m_painter->setBrush(re->brush());
+                    m_painter->drawRect(rc);
+                    m_painter->restore();
                 } else if (prim->type() == OROEllipse::Ellipse) {
                     OROEllipse * re = (OROEllipse*) prim;
 
@@ -183,34 +183,34 @@ bool ORPrintRender::render(ORODocument * pDocument)
                     QSizeF sz = re->size();
                     QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-                    _painter->save();
-                    _painter->setPen(re->pen());
-                    _painter->setBrush(re->brush());
-                    _painter->drawEllipse(rc);
-                    _painter->restore();
+                    m_painter->save();
+                    m_painter->setPen(re->pen());
+                    m_painter->setBrush(re->brush());
+                    m_painter->drawEllipse(rc);
+                    m_painter->restore();
                 } else if (prim->type() == OROPicture::Picture) {
                     OROPicture * im = (OROPicture*) prim;
                     QPointF ps = im->position();
                     QSizeF sz = im->size();
                     QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
-                    _painter->drawPicture(rc.topLeft(), *(im->picture()));
+                    m_painter->drawPicture(rc.topLeft(), *(im->picture()));
                 } else if (prim->type() == OROCheck::Check) {
                     OROCheck * chk = (OROCheck*) prim;
                     QPointF ps = chk->position();
                     QSizeF sz = chk->size();
                     QRectF rc = QRectF(ps.x(), ps.y(), sz.width(), sz.height());
 
-                    _painter->save();
+                    m_painter->save();
 
-                    _painter->setBackgroundMode ( Qt::OpaqueMode );
-                    _painter->setRenderHint(QPainter::Antialiasing);
+                    m_painter->setBackgroundMode ( Qt::OpaqueMode );
+                    m_painter->setRenderHint(QPainter::Antialiasing);
 
-                    _painter->setPen(chk->foregroundColor());
+                    m_painter->setPen(chk->foregroundColor());
 
                     if (chk->lineStyle().style == Qt::NoPen || chk->lineStyle().weight <= 0) {
-                        _painter->setPen(QPen(QColor(224, 224, 224)));
+                        m_painter->setPen(QPen(QColor(224, 224, 224)));
                     } else {
-                        _painter->setPen(QPen(chk->lineStyle().lnColor, chk->lineStyle().weight, chk->lineStyle().style));
+                        m_painter->setPen(QPen(chk->lineStyle().lnColor, chk->lineStyle().weight, chk->lineStyle().style));
                     }
 
                     qreal ox = sz.width()/5;
@@ -218,43 +218,43 @@ bool ORPrintRender::render(ORODocument * pDocument)
 
                     //Checkbox Style
                     if (chk->checkType() == "Cross"){
-                        _painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
+                        m_painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
 
                         if (chk->value()) {
                             QPen lp;
                             lp.setColor(chk->foregroundColor());
                             lp.setWidth(ox > oy ? oy : ox);
-                            _painter->setPen(lp);
-                            _painter->drawLine(QPointF(ox,oy) + ps, QPointF(sz.width() - ox, sz.height() - oy) + ps);
-                            _painter->drawLine(QPointF(ox, sz.height() - oy) + ps, QPoint(sz.width() - ox, oy) + ps);
+                            m_painter->setPen(lp);
+                            m_painter->drawLine(QPointF(ox,oy) + ps, QPointF(sz.width() - ox, sz.height() - oy) + ps);
+                            m_painter->drawLine(QPointF(ox, sz.height() - oy) + ps, QPoint(sz.width() - ox, oy) + ps);
                         }
                     }
                     else if (chk->checkType() == "Dot"){
                     //Radio Style
-                        _painter->drawEllipse(rc);
+                        m_painter->drawEllipse(rc);
 
                         if (chk->value()) {
                             QBrush lb(chk->foregroundColor());
-                            _painter->setBrush(lb);
-                            _painter->setPen(Qt::NoPen);
-                            _painter->drawEllipse(rc.center(), sz.width()/2 - ox, sz.height()/2 - oy);
+                            m_painter->setBrush(lb);
+                            m_painter->setPen(Qt::NoPen);
+                            m_painter->drawEllipse(rc.center(), sz.width()/2 - ox, sz.height()/2 - oy);
                         }
                     }
                     else {
                     //Tickbox Style
-                        _painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
+                        m_painter->drawRoundedRect(rc, sz.width()/10 , sz.height()/10);
 
                         if (chk->value()) {
                             QPen lp;
                             lp.setColor(chk->foregroundColor());
                             lp.setWidth(ox > oy ? oy : ox);
-                            _painter->setPen(lp);
-                            _painter->drawLine(QPointF(ox,sz.height()/2) + ps, QPointF(sz.width() / 2, sz.height() - oy) + ps);
-                            _painter->drawLine(QPointF(sz.width() / 2, sz.height() - oy) + ps, QPointF(sz.width() - ox, oy) + ps);
+                            m_painter->setPen(lp);
+                            m_painter->drawLine(QPointF(ox,sz.height()/2) + ps, QPointF(sz.width() / 2, sz.height() - oy) + ps);
+                            m_painter->drawLine(QPointF(sz.width() / 2, sz.height() - oy) + ps, QPointF(sz.width() - ox, oy) + ps);
                         }
                     }
 
-                    _painter->restore();
+                    m_painter->restore();
 
                 } else {
                     qDebug("unrecognized primitive type");
@@ -264,10 +264,10 @@ bool ORPrintRender::render(ORODocument * pDocument)
     }
 
     if (endWhenComplete)
-        _painter->end();
+        m_painter->end();
 
     if (deleteWhenComplete)
-        _painter = 0;
+        m_painter = 0;
 
     return true;
 }

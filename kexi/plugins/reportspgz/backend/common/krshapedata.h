@@ -49,8 +49,8 @@ public:
 protected:
     QRectF _rect();
 
-    KRSize _size;
-    KoProperty::Property *_shapeType;
+    KRSize m_size;
+    KoProperty::Property *m_shapeType;
 
 private:
     virtual void createProperties();

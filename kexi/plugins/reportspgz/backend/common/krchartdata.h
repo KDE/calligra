@@ -48,14 +48,14 @@ class KRChartData : public KRObjectData
 {
 public:
     KRChartData() {
-        _conn = 0; createProperties();
+        m_connection = 0; createProperties();
     }
     KRChartData(QDomNode & element);
     ~KRChartData();
     virtual KRChartData * toChart();
     virtual int type() const;
     KDChart::Widget *widget() {
-        return _chartWidget;
+        return m_chartWidget;
     }
 
     /**
@@ -79,24 +79,24 @@ public:
     QStringList masterFields();
 
 protected:
-    KRSize _size;
-    KoProperty::Property * _dataSource;
-    KoProperty::Property * _font;
-    KoProperty::Property * _chartType;
-    KoProperty::Property * _chartSubType;
-    KoProperty::Property * _threeD;
-    KoProperty::Property * _colorScheme;
-    KoProperty::Property * _aa;
-    KoProperty::Property * _xTitle;
-    KoProperty::Property * _yTitle;
+    KRSize m_size;
+    KoProperty::Property * m_dataSource;
+    KoProperty::Property * m_font;
+    KoProperty::Property * m_chartType;
+    KoProperty::Property * m_chartSubType;
+    KoProperty::Property * m_threeD;
+    KoProperty::Property * m_colorScheme;
+    KoProperty::Property * m_aa;
+    KoProperty::Property * m_xTitle;
+    KoProperty::Property * m_yTitle;
 
-    KoProperty::Property *_bgColor;
-    KoProperty::Property* _displayLegend;
+    KoProperty::Property *m_backgroundColor;
+    KoProperty::Property *m_displayLegend;
 
-    KoProperty::Property* _linkMaster;
-    KoProperty::Property* _linkChild;
+    KoProperty::Property *m_linkMaster;
+    KoProperty::Property *m_linkChild;
 
-    KDChart::Widget *_chartWidget;
+    KDChart::Widget *m_chartWidget;
 
     void set3D(bool);
     void setAA(bool);
@@ -111,14 +111,14 @@ protected:
 private:
     virtual void createProperties();
     static int RTTI;
-    KexiDB::Connection* _conn;
+    KexiDB::Connection* m_connection;
 
     friend class ORPreRenderPrivate;
     friend class Scripting::Chart;
 
     KexiDB::Cursor *dataSet();
 
-    QMap<QString,QVariant> _links; //Map of field->value for child/master links
+    QMap<QString,QVariant> m_links; //Map of field->value for child/master links
 
 };
 

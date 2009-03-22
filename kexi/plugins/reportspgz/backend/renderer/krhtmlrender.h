@@ -50,10 +50,10 @@ private:
     QString renderTable(ORODocument*);
 
     //! This is the directory name that will go inside the HTML files
-    QString actualDirName;
+    QString m_actualDirName;
 
     //! This is the directory where the image and other files will be temporarily stored
-    QString tempDirName;
+    QString m_tempDirName;
 };
 
 

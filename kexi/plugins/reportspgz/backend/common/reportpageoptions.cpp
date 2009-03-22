@@ -25,161 +25,161 @@
 #include <KoGlobal.h>
 
 ReportPageOptions::ReportPageOptions()
-        : QObject(), _pagesize("Letter"), _labelType(QString::null)
+        : QObject(), m_pageSize("Letter")
 {
-    _marginTop = _marginBottom = 1.0;
-    _marginLeft = _marginRight = 1.0;
+    m_marginTop = m_marginBottom = 1.0;
+    m_marginLeft = m_marginRight = 1.0;
 
-    _orientation = Portrait;
+    m_orientation = Portrait;
 
-    _customWidth = 8.5;
-    _customHeight = 11.0;
+    m_customWidth = 8.5;
+    m_customHeight = 11.0;
 }
 
 ReportPageOptions::ReportPageOptions(const ReportPageOptions & rpo)
         : QObject()
 {
-    _marginTop = rpo._marginTop;
-    _marginBottom = rpo._marginBottom;
-    _marginLeft = rpo._marginLeft;
-    _marginRight = rpo._marginRight;
+    m_marginTop = rpo.m_marginTop;
+    m_marginBottom = rpo.m_marginBottom;
+    m_marginLeft = rpo.m_marginLeft;
+    m_marginRight = rpo.m_marginRight;
 
-    _pagesize = rpo._pagesize;
-    _customWidth = rpo._customWidth;
-    _customHeight = rpo._customHeight;
+    m_pageSize = rpo.m_pageSize;
+    m_customWidth = rpo.m_customWidth;
+    m_customHeight = rpo.m_customHeight;
 
-    _orientation = rpo._orientation;
+    m_orientation = rpo.m_orientation;
 
-    _labelType = rpo._labelType;
+    m_labelType = rpo.m_labelType;
 }
 
 ReportPageOptions & ReportPageOptions::operator=(const ReportPageOptions & rpo)
 {
-    _marginTop = rpo._marginTop;
-    _marginBottom = rpo._marginBottom;
-    _marginLeft = rpo._marginLeft;
-    _marginRight = rpo._marginRight;
+    m_marginTop = rpo.m_marginTop;
+    m_marginBottom = rpo.m_marginBottom;
+    m_marginLeft = rpo.m_marginLeft;
+    m_marginRight = rpo.m_marginRight;
 
-    _pagesize = rpo._pagesize;
-    _customWidth = rpo._customWidth;
-    _customHeight = rpo._customHeight;
+    m_pageSize = rpo.m_pageSize;
+    m_customWidth = rpo.m_customWidth;
+    m_customHeight = rpo.m_customHeight;
 
-    _orientation = rpo._orientation;
+    m_orientation = rpo.m_orientation;
 
-    _labelType = rpo._labelType;
+    m_labelType = rpo.m_labelType;
 
     return *this;
 }
 
 qreal ReportPageOptions::getMarginTop()
 {
-    return _marginTop;
+    return m_marginTop;
 }
 
 void ReportPageOptions::setMarginTop(qreal v)
 {
-    if (_marginTop == v)
+    if (m_marginTop == v)
         return;
 
-    _marginTop = v;
+    m_marginTop = v;
     emit pageOptionsChanged();
 }
 
 qreal ReportPageOptions::getMarginBottom()
 {
-    return _marginBottom;
+    return m_marginBottom;
 }
 
 void ReportPageOptions::setMarginBottom(qreal v)
 {
-    if (_marginBottom == v)
+    if (m_marginBottom == v)
         return;
 
-    _marginBottom = v;
+    m_marginBottom = v;
     emit pageOptionsChanged();
 }
 
 qreal ReportPageOptions::getMarginLeft()
 {
-    return _marginLeft;
+    return m_marginLeft;
 }
 
 void ReportPageOptions::setMarginLeft(qreal v)
 {
-    if (_marginLeft == v)
+    if (m_marginLeft == v)
         return;
 
-    _marginLeft = v;
+    m_marginLeft = v;
     emit pageOptionsChanged();
 }
 
 qreal ReportPageOptions::getMarginRight()
 {
-    return _marginRight;
+    return m_marginRight;
 }
 
 void ReportPageOptions::setMarginRight(qreal v)
 {
-    if (_marginRight == v)
+    if (m_marginRight == v)
         return;
 
-    _marginRight = v;
+    m_marginRight = v;
     emit pageOptionsChanged();
 }
 
 const QString & ReportPageOptions::getPageSize()
 {
-    return _pagesize;
+    return m_pageSize;
 }
 void ReportPageOptions::setPageSize(const QString & s)
 {
-    if (_pagesize == s)
+    if (m_pageSize == s)
         return;
 
-    _pagesize = s;
+    m_pageSize = s;
     emit pageOptionsChanged();
 }
 qreal ReportPageOptions::getCustomWidth()
 {
-    return _customWidth;
+    return m_customWidth;
 }
 void ReportPageOptions::setCustomWidth(qreal v)
 {
-    if (_customWidth == v)
+    if (m_customWidth == v)
         return;
 
-    _customWidth = v;
+    m_customWidth = v;
     emit pageOptionsChanged();
 }
 qreal ReportPageOptions::getCustomHeight()
 {
-    return _customHeight;
+    return m_customHeight;
 }
 void ReportPageOptions::setCustomHeight(qreal v)
 {
-    if (_customHeight == v)
+    if (m_customHeight == v)
         return;
 
-    _customHeight = v;
+    m_customHeight = v;
     emit pageOptionsChanged();
 }
 
 ReportPageOptions::PageOrientation ReportPageOptions::getOrientation()
 {
-    return _orientation;
+    return m_orientation;
 }
 
 bool ReportPageOptions::isPortrait()
 {
-    return (_orientation == Portrait);
+    return (m_orientation == Portrait);
 }
 
 void ReportPageOptions::setOrientation(PageOrientation o)
 {
-    if (_orientation == o)
+    if (m_orientation == o)
         return;
 
-    _orientation = o;
+    m_orientation = o;
     emit pageOptionsChanged();
 }
 void ReportPageOptions::setPortrait(bool yes)
@@ -189,14 +189,14 @@ void ReportPageOptions::setPortrait(bool yes)
 
 const QString & ReportPageOptions::getLabelType()
 {
-    return _labelType;
+    return m_labelType;
 }
 void ReportPageOptions::setLabelType(const QString & type)
 {
-    if (_labelType == type)
+    if (m_labelType == type)
         return;
 
-    _labelType = type;
+    m_labelType = type;
     emit pageOptionsChanged();
 }
 

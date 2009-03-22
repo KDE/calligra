@@ -71,27 +71,27 @@ public:
     virtual KRCheckData * toCheck();
 
     KoProperty::Set* properties() {
-        return _set;
+        return m_set;
     }
     virtual void createProperties() = 0;
 
     qreal Z;
     KRPos position() {
-        return _pos;
+        return m_pos;
     }
 
     void setEntityName(const QString& n) {
-        _name->setValue(n);
+        m_name->setValue(n);
     }
     QString entityName() {
-        return _name->value().toString();
+        return m_name->value().toString();
     }
 protected:
-    KoProperty::Set *_set;
-    KoProperty::Property *_name;
-    KRPos _pos;
+    KoProperty::Set *m_set;
+    KoProperty::Property *m_name;
+    KRPos m_pos;
 
-    QString _oldName;
+    QString m_oldName;
 
 };
 

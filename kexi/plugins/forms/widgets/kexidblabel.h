@@ -21,8 +21,7 @@
 #ifndef KEXIDBLABEL_H
 #define KEXIDBLABEL_H
 
-#include <qimage.h>
-#include <qlabel.h>
+#include <QLabel>
 #include <QPixmap>
 #include <QPaintEvent>
 #include <QShowEvent>
@@ -43,13 +42,12 @@ class QPainter;
 class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidgetInterface, public KexiFormDataItemInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
-    Q_PROPERTY(bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true)
-    Q_OVERRIDE(QPixmap pixmap DESIGNABLE false)
-    Q_OVERRIDE(bool scaledContents DESIGNABLE false)
-//  Q_OVERRIDE( QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor DESIGNABLE true )
-    Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled)
+    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap DESIGNABLE false)
+    Q_PROPERTY(bool scaledContents READ hasScaledContents WRITE setScaledContents DESIGNABLE false)
+    Q_PROPERTY(QColor frameColor READ frameColor WRITE setFrameColor)
 
 public:
     KexiDBLabel(QWidget *parent, Qt::WFlags f = 0);
@@ -93,6 +91,7 @@ public:
 
 //  const QColor & paletteForegroundColor() const;
 
+    const QPixmap *pixmap() const { return QLabel::pixmap(); }
 public slots:
     //! Sets the datasource to \a ds
     inline void setDataSource(const QString &ds) {

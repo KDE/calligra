@@ -56,14 +56,14 @@ public:
     ReportSection * getGroupFoot();
 
 protected:
-    QString _column;
+    QString m_column;
 
-    ReportSection * _head;
-    ReportSection * _foot;
+    ReportSection * m_head;
+    ReportSection * m_foot;
 
-    ReportSectionDetail * _rsd;
+    ReportSectionDetail * m_reportSectionDetail;
 
-    int _pagebreak;
+    int m_pageBreak;
 };
 
 

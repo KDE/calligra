@@ -70,18 +70,18 @@ signals:
     void pageOptionsChanged();
 
 private:
-    qreal _marginTop;
-    qreal _marginBottom;
-    qreal _marginLeft;
-    qreal _marginRight;
+    qreal m_marginTop;
+    qreal m_marginBottom;
+    qreal m_marginLeft;
+    qreal m_marginRight;
 
-    QString _pagesize;
-    qreal _customWidth;
-    qreal _customHeight;
+    QString m_pageSize;
+    qreal m_customWidth;
+    qreal m_customHeight;
 
-    PageOrientation _orientation;
+    PageOrientation m_orientation;
 
-    QString _labelType;
+    QString m_labelType;
 };
 
 #endif

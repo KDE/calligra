@@ -44,13 +44,13 @@ KRImageData::KRImageData(QDomNode & element)
                 node = dnl.item(di);
                 n = node.nodeName();
                 if (n == "controlsource") {
-                    _controlSource->setValue(node.firstChild().nodeValue());
+                    m_controlSource->setValue(node.firstChild().nodeValue());
                 } else {
                     kDebug() << "while parsing field data, encountered unknown element: " << n;
                 }
             }
         } else if (n == "name") {
-            _name->setValue(node.firstChild().nodeValue());
+            m_name->setValue(node.firstChild().nodeValue());
         } else if (n == "zvalue") {
             Z = node.firstChild().nodeValue().toDouble();
         } else if (n == "mode") {
@@ -82,8 +82,8 @@ KRImageData::KRImageData(QDomNode & element)
                     kDebug() << "While parsing rect encountered unknown element: " << n;
                 }
             }
-            _pos.setPointPos(QPointF(x, y));
-            _size.setPointSize(QSizeF(w, h));
+            m_pos.setPointPos(QPointF(x, y));
+            m_size.setPointSize(QSizeF(w, h));
         } else {
             kDebug() << "while parsing image element encountered unknown element: " << n;
         }
@@ -97,7 +97,7 @@ bool KRImageData::isInline()
 
 QString KRImageData::inlineImageData()
 {
-    QPixmap pixmap = _staticImage->value().value<QPixmap>();
+    QPixmap pixmap = m_staticImage->value().value<QPixmap>();
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(IO_ReadWrite);
@@ -115,61 +115,61 @@ void KRImageData::setInlineImageData(QByteArray dat, const QString &fn)
     if (!fn.isEmpty()) {
         QPixmap pix(fn);
         if (!pix.isNull())
-            _staticImage->setValue(pix);
+            m_staticImage->setValue(pix);
         else {
             QPixmap blank(1,1);
             blank.fill();
-            _staticImage->setValue(blank);
+            m_staticImage->setValue(blank);
         }
     } else {
         const QByteArray binaryStream(KCodecs::base64Decode(dat));
         const QPixmap pix( QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly) );
-        _staticImage->setValue(pix);
+        m_staticImage->setValue(pix);
     }
 
 }
 
 QString KRImageData::mode()
 {
-    return _resizeMode->value().toString();
+    return m_resizeMode->value().toString();
 }
 void KRImageData::setMode(QString m)
 {
     if (mode() != m) {
-        _resizeMode->setValue(m);
+        m_resizeMode->setValue(m);
     }
 }
 
 void KRImageData::createProperties()
 {
-    _set = new KoProperty::Set(0, "Image");
+    m_set = new KoProperty::Set(0, "Image");
 
-    _controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "", "Control Source");
+    m_controlSource = new KoProperty::Property("ControlSource", QStringList(), QStringList(), "", "Control Source");
 
     QStringList keys, strings;
     keys << "Clip" << "Stretch";
     strings << i18n("Clip") << i18n("Stretch");
-    _resizeMode = new KoProperty::Property("Mode", keys, strings, "Clip", "Resize Mode");
+    m_resizeMode = new KoProperty::Property("Mode", keys, strings, "Clip", "Resize Mode");
 
-    _staticImage = new KoProperty::Property("StaticImage", QPixmap(), "Static Image", "Static Image");
+    m_staticImage = new KoProperty::Property("StaticImage", QPixmap(), "Static Image", "Static Image");
 
-    _set->addProperty(_name);
-    _set->addProperty(_controlSource);
-    _set->addProperty(_resizeMode);
-    _set->addProperty(_pos.property());
-    _set->addProperty(_size.property());
-    _set->addProperty(_staticImage);
+    m_set->addProperty(m_name);
+    m_set->addProperty(m_controlSource);
+    m_set->addProperty(m_resizeMode);
+    m_set->addProperty(m_pos.property());
+    m_set->addProperty(m_size.property());
+    m_set->addProperty(m_staticImage);
 }
 
 
 void KRImageData::setColumn(QString c)
 {
-    _controlSource->setValue(c);
+    m_controlSource->setValue(c);
 }
 
 QString KRImageData::column()
 {
-    return _controlSource->value().toString();
+    return m_controlSource->value().toString();
 }
 
 int KRImageData::type() const

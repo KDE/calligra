@@ -23,7 +23,7 @@ namespace Scripting
 {
 Field::Field(KRFieldData *f)
 {
-    _field = f;
+    m_field = f;
 }
 
 
@@ -33,17 +33,17 @@ Field::~Field()
 
 QString Field::source()
 {
-    return _field->controlSource();
+    return m_field->controlSource();
 }
 
 void Field::setSource(const QString& s)
 {
-    _field->setColumn(s);
+    m_field->setColumn(s);
 }
 
 int Field::horizontalAlignment()
 {
-    QString a = _field->_hAlignment->value().toString();
+    QString a = m_field->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "left") {
         return -1;
@@ -58,23 +58,23 @@ void Field::setHorizonalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _field->_hAlignment->setValue("Left");
+        m_field->m_horizontalAlignment->setValue("Left");
         break;
     case 0:
-        _field->_hAlignment->setValue("Center");
+        m_field->m_horizontalAlignment->setValue("Center");
         break;
     case 1:
-        _field->_hAlignment->setValue("Right");
+        m_field->m_horizontalAlignment->setValue("Right");
         break;
     default:
-        _field->_hAlignment->setValue("Left");
+        m_field->m_horizontalAlignment->setValue("Left");
         break;
     }
 }
 
 int Field::verticalAlignment()
 {
-    QString a = _field->_hAlignment->value().toString();
+    QString a = m_field->m_horizontalAlignment->value().toString();
 
     if (a.toLower() == "top") {
         return -1;
@@ -89,92 +89,92 @@ void Field::setVerticalAlignment(int a)
 {
     switch (a) {
     case -1:
-        _field->_hAlignment->setValue("Top");
+        m_field->m_horizontalAlignment->setValue("Top");
         break;
     case 0:
-        _field->_hAlignment->setValue("Middle");
+        m_field->m_horizontalAlignment->setValue("Middle");
         break;
     case 1:
-        _field->_hAlignment->setValue("Bottom");
+        m_field->m_horizontalAlignment->setValue("Bottom");
         break;
     default:
-        _field->_hAlignment->setValue("Top");
+        m_field->m_horizontalAlignment->setValue("Top");
         break;
     }
 }
 
 QColor Field::backgroundColor()
 {
-    return _field->_bgColor->value().value<QColor>();
+    return m_field->m_backgroundColor->value().value<QColor>();
 }
 void Field::setBackgroundColor(const QColor& c)
 {
-    _field->_bgColor->setValue(c);
+    m_field->m_backgroundColor->setValue(c);
 }
 
 QColor Field::foregroundColor()
 {
-    return _field->_fgColor->value().value<QColor>();
+    return m_field->m_foregroundColor->value().value<QColor>();
 }
 void Field::setForegroundColor(const QColor& c)
 {
-    _field->_fgColor->setValue(c);
+    m_field->m_foregroundColor->setValue(c);
 }
 
 int Field::backgroundOpacity()
 {
-    return _field->_bgOpacity->value().toInt();
+    return m_field->m_backgroundOpacity->value().toInt();
 }
 void Field::setBackgroundOpacity(int o)
 {
-    _field->_bgOpacity->setValue(o);
+    m_field->m_backgroundOpacity->setValue(o);
 }
 
 QColor Field::lineColor()
 {
-    return _field->_lnColor->value().value<QColor>();
+    return m_field->m_lineColor->value().value<QColor>();
 }
 void Field::setLineColor(const QColor& c)
 {
-    _field->_lnColor->setValue(c);
+    m_field->m_lineColor->setValue(c);
 }
 
 int Field::lineWeight()
 {
-    return _field->_lnWeight->value().toInt();
+    return m_field->m_lineWeight->value().toInt();
 }
 void Field::setLineWeight(int w)
 {
-    _field->_lnWeight->setValue(w);
+    m_field->m_lineWeight->setValue(w);
 }
 
 int Field::lineStyle()
 {
-    return _field->_lnStyle->value().toInt();
+    return m_field->m_lineStyle->value().toInt();
 }
 void Field::setLineStyle(int s)
 {
     if (s < 0 || s > 5) {
         s = 1;
     }
-    _field->_lnStyle->setValue(s);
+    m_field->m_lineStyle->setValue(s);
 }
 
 QPointF Field::position()
 {
-    return _field->_pos.toPoint();
+    return m_field->m_pos.toPoint();
 }
 void Field::setPosition(const QPointF &p)
 {
-    _field->_pos.setPointPos(p);
+    m_field->m_pos.setPointPos(p);
 }
 
 QSizeF Field::size()
 {
-    return _field->_size.toPoint();
+    return m_field->m_size.toPoint();
 }
 void Field::setSize(const QSizeF &s)
 {
-    _field->_size.setPointSize(s);
+    m_field->m_size.setPointSize(s);
 }
 }

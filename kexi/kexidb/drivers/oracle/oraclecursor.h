@@ -29,7 +29,7 @@ class OracleCursorData;
 
 class OracleCursor: public Cursor {
 public:
-	OracleCursor(Connection* conn, const QString& statement = QString::null, uint cursor_options = NoOptions );
+	OracleCursor(Connection* conn, const QString& statement = QString(), uint cursor_options = NoOptions );
 	OracleCursor(Connection* conn, QuerySchema& query, uint options = NoOptions );
 	virtual ~OracleCursor();
 	virtual bool drv_open();

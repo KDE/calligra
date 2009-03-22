@@ -28,7 +28,7 @@ namespace Scripting
 
 Image::Image(KRImageData *i)
 {
-    _image = i;
+    m_image = i;
 }
 
 
@@ -38,39 +38,39 @@ Image::~Image()
 
 QPointF Image::position()
 {
-    return _image->_pos.toPoint();
+    return m_image->m_pos.toPoint();
 }
 void Image::setPosition(const QPointF& p)
 {
-    _image->_pos.setPointPos(p);
+    m_image->m_pos.setPointPos(p);
 }
 
 QSizeF Image::size()
 {
-    return _image->_size.toPoint();
+    return m_image->m_size.toPoint();
 }
 void Image::setSize(const QSizeF& s)
 {
-    _image->_size.setPointSize(s);
+    m_image->m_size.setPointSize(s);
 }
 
 QString Image::resizeMode()
 {
-    return _image->_resizeMode->value().toString();
+    return m_image->m_resizeMode->value().toString();
 }
 
 void Image::setResizeMode(const QString &rm)
 {
     if (rm == "Stretch") {
-        _image->_resizeMode->setValue("Stretch");
+        m_image->m_resizeMode->setValue("Stretch");
     } else {
-        _image->_resizeMode->setValue("Clip");
+        m_image->m_resizeMode->setValue("Clip");
     }
 }
 
 void Image::setInlineImage(const QByteArray &ba)
 {
-    _image->setInlineImageData(ba);
+    m_image->setInlineImageData(ba);
 }
 
 void Image::loadFromFile(const QVariant &pth)
@@ -78,6 +78,6 @@ void Image::loadFromFile(const QVariant &pth)
     QPixmap img;
 
     QString str = pth.toString();
-    _image->setInlineImageData(QByteArray(), str);
+    m_image->setInlineImageData(QByteArray(), str);
 }
 }

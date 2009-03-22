@@ -54,17 +54,17 @@ public:
     void setFormat(const QString&);
 
     ORDataData data() {
-        return ORDataData("Data Source", _controlSource->value().toString());
+        return ORDataData("Data Source", m_controlSource->value().toString());
     }
 
 protected:
     QRect _rect();
-    KRSize _size;
+    KRSize m_size;
 
-    KoProperty::Property * _controlSource;
-    KoProperty::Property * _hAlignment;
-    KoProperty::Property * _format;
-    KoProperty::Property * _maxLength;
+    KoProperty::Property * m_controlSource;
+    KoProperty::Property * m_horizontalAlignment;
+    KoProperty::Property * m_format;
+    KoProperty::Property * m_maxLength;
 
     // all these values are in inches and
     // are for internal use only

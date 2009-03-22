@@ -42,14 +42,14 @@ public:
     ReportScene(qreal w, qreal h, ReportDesigner*);
     virtual ~ReportScene();
     ReportDesigner* document() {
-        return _rd;
+        return m_rd;
     }
     QPointF gridPoint(const QPointF&);
     void raiseSelected();
     void lowerSelected();
     QGraphicsItemList itemsOrdered();
     qreal gridSize() {
-        return pixel_incrementx;
+        return m_pixelIncrementX;
     }
 
 protected:
@@ -66,14 +66,14 @@ private:
     qreal lowestZValue();
     qreal highestZValue();
 
-    ReportDesigner * _rd;
+    ReportDesigner * m_rd;
 
-    KoUnit u;
-    int minor;
-    qreal majorx;
-    qreal majory;
-    qreal pixel_incrementx;
-    qreal pixel_incrementy;
+    KoUnit m_unit;
+    int m_minorSteps;
+    qreal m_majorX;
+    qreal m_majorY;
+    qreal m_pixelIncrementX;
+    qreal m_pixelIncrementY;
 
 };
 

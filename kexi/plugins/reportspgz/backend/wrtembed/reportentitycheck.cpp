@@ -21,7 +21,7 @@ void ReportEntityCheck::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
@@ -35,7 +35,7 @@ ReportEntityCheck::ReportEntityCheck(ReportDesigner* d, QGraphicsScene * scene)
     init(scene);
     setSceneRect(QPointF(0,0),QSizeF(15,15)); //default size
 
-    _name->setValue(_rd->suggestEntityName("Check"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Check"));
 
 }
 
@@ -43,7 +43,7 @@ ReportEntityCheck::ReportEntityCheck(QDomNode & element, ReportDesigner * d, QGr
         : ReportRectEntity(d), KRCheckData(element)
 {
     init(s);
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityCheck* ReportEntityCheck::clone()
@@ -70,52 +70,52 @@ void ReportEntityCheck::paint(QPainter* painter, const QStyleOptionGraphicsItem*
     painter->setBackgroundMode ( Qt::OpaqueMode );
     painter->setRenderHint(QPainter::Antialiasing);
 
-    painter->setPen(_fgColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
 
-    if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0) {
+    if ((Qt::PenStyle)m_lineStyle->value().toInt() == Qt::NoPen || m_lineWeight->value().toInt() <= 0) {
         painter->setPen(QPen(QColor(224, 224, 224)));
     } else {
-        painter->setPen(QPen(_lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt()));
+        painter->setPen(QPen(m_lineColor->value().value<QColor>(), m_lineWeight->value().toInt(), (Qt::PenStyle)m_lineStyle->value().toInt()));
     }
 
-    qreal ox = _size.toScene().width()/5;
-    qreal oy = _size.toScene().height()/5;
+    qreal ox = m_size.toScene().width()/5;
+    qreal oy = m_size.toScene().height()/5;
 
     //Checkbox Style
-    if (_checkStyle->value().toString() == "Cross"){
-        painter->drawRoundedRect(QGraphicsRectItem::rect(), _size.toScene().width()/10 , _size.toScene().height()/10);
+    if (m_checkStyle->value().toString() == "Cross"){
+        painter->drawRoundedRect(QGraphicsRectItem::rect(), m_size.toScene().width()/10 , m_size.toScene().height()/10);
 
         QPen lp;
-        lp.setColor(_fgColor->value().value<QColor>());
+        lp.setColor(m_foregroundColor->value().value<QColor>());
         lp.setWidth(ox > oy ? oy : ox);
         painter->setPen(lp);
-        painter->drawLine(ox,oy, _size.toScene().width() - ox, _size.toScene().height() - oy);
-        painter->drawLine(ox, _size.toScene().height() - oy, _size.toScene().width() - ox, oy);
+        painter->drawLine(ox,oy, m_size.toScene().width() - ox, m_size.toScene().height() - oy);
+        painter->drawLine(ox, m_size.toScene().height() - oy, m_size.toScene().width() - ox, oy);
     }
-    else if (_checkStyle->value().toString() == "Dot"){
+    else if (m_checkStyle->value().toString() == "Dot"){
     //Radio Style
         painter->drawEllipse(QGraphicsRectItem::rect());
 
-        QBrush lb(_fgColor->value().value<QColor>());
+        QBrush lb(m_foregroundColor->value().value<QColor>());
         painter->setBrush(lb);
         painter->setPen(Qt::NoPen);
-        painter->drawEllipse(rect().center(), _size.toScene().width()/2 - ox, _size.toScene().height()/2 - oy);
+        painter->drawEllipse(rect().center(), m_size.toScene().width()/2 - ox, m_size.toScene().height()/2 - oy);
     }
     else {
     //Tickbox Style
-        painter->drawRoundedRect(QGraphicsRectItem::rect(), _size.toScene().width()/10 , _size.toScene().height()/10);
+        painter->drawRoundedRect(QGraphicsRectItem::rect(), m_size.toScene().width()/10 , m_size.toScene().height()/10);
 
         QPen lp;
-        lp.setColor(_fgColor->value().value<QColor>());
+        lp.setColor(m_foregroundColor->value().value<QColor>());
         lp.setWidth(ox > oy ? oy : ox);
         painter->setPen(lp);
-        painter->drawLine(ox,_size.toScene().height()/2, _size.toScene().width() / 2, _size.toScene().height() - oy);
-        painter->drawLine(_size.toScene().width() / 2, _size.toScene().height() - oy, _size.toScene().width() - ox, oy);
+        painter->drawLine(ox,m_size.toScene().height()/2, m_size.toScene().width() / 2, m_size.toScene().height() - oy);
+        painter->drawLine(m_size.toScene().width() / 2, m_size.toScene().height() - oy, m_size.toScene().width() - ox, oy);
 
     }
 
     painter->setBackgroundMode(Qt::TransparentMode);
-    painter->setPen(_fgColor->value().value<QColor>());
+    painter->setPen(m_foregroundColor->value().value<QColor>());
 
     // restore an values before we started just in case
     painter->setFont(f);
@@ -149,16 +149,16 @@ void ReportEntityCheck::buildXML(QDomDocument & doc, QDomElement & parent)
 
     //Color
     QDomElement fc = doc.createElement("fgcolor");
-    fc.appendChild(doc.createTextNode(_fgColor->value().value<QColor>().name()));
+    fc.appendChild(doc.createTextNode(m_foregroundColor->value().value<QColor>().name()));
     entity.appendChild(fc);
 
     QDomElement cs = doc.createElement("controlsource");
-    cs.appendChild(doc.createTextNode(_controlSource->value().toString()));
+    cs.appendChild(doc.createTextNode(m_controlSource->value().toString()));
     entity.appendChild(cs);
 
     // the check style
     QDomElement sty = doc.createElement("checkstyle");
-    sty.appendChild(doc.createTextNode(_checkStyle->value().toString()));
+    sty.appendChild(doc.createTextNode(m_checkStyle->value().toString()));
     entity.appendChild(sty);
 
     parent.appendChild(entity);
@@ -174,21 +174,21 @@ void ReportEntityCheck::propertyChanged(KoProperty::Set &s, KoProperty::Property
         //_size.setUnitSize(p.value().value<QSizeF>());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
 
     //setSceneRect(_pos.toScene(), _size.toScene());
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (scene()) scene()->update();
 }
 
 void ReportEntityCheck::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
-    _controlSource->setListData(_rd->fieldList(), _rd->fieldList());
+    m_controlSource->setListData(m_reportDesigner->fieldList(), m_reportDesigner->fieldList());
     ReportRectEntity::mousePressEvent(event);
 }

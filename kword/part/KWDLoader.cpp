@@ -571,8 +571,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem)
     switch (framesetElem.attribute("frameInfo").toInt()) {
     case 0: ;
     }
-    if (framesetElem.hasAttribute("protectContent"))
-        fs->setProtectContent((bool)framesetElem.attribute("protectContent").toInt());
+    if (framesetElem.hasAttribute("protectContent") && fs->frameCount())
+        fs->frames().first()->shape()->setContentProtected((bool)framesetElem.attribute("protectContent").toInt());
 
     QTextCursor cursor(fs->document());
     cursor.select(QTextCursor::Document);

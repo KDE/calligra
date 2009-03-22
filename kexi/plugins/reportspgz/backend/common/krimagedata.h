@@ -62,16 +62,14 @@ public:
     QString column();
 
     ORDataData data() {
-        return ORDataData("Data Source", _controlSource->value().toString());
+        return ORDataData("Data Source", m_controlSource->value().toString());
     }
 protected:
     QRect _rect();
-    KRSize _size;
-    KoProperty::Property * _controlSource;
-    KoProperty::Property* _resizeMode;
-    KoProperty::Property* _staticImage;
-
-    QString _format;
+    KRSize m_size;
+    KoProperty::Property * m_controlSource;
+    KoProperty::Property* m_resizeMode;
+    KoProperty::Property* m_staticImage;
 
 private:
     static int RTTI;

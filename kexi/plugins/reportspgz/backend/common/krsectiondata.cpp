@@ -44,41 +44,41 @@ KRSectionData::KRSectionData()
 KRSectionData::KRSectionData(const QDomElement & elemSource)
 {
     createProperties();
-    _name = elemSource.tagName();
-    setObjectName(_name);
+    m_name = elemSource.tagName();
+    setObjectName(m_name);
 
-    if (_name != "rpthead" && _name != "rptfoot" &&
-            _name != "pghead" && _name != "pgfoot" &&
-            _name != "grouphead" && _name != "groupfoot" &&
-            _name != "head" && _name != "foot" &&
-            _name != "detail") {
-        _valid = false;
+    if (m_name != "rpthead" && m_name != "rptfoot" &&
+            m_name != "pghead" && m_name != "pgfoot" &&
+            m_name != "grouphead" && m_name != "groupfoot" &&
+            m_name != "head" && m_name != "foot" &&
+            m_name != "detail") {
+        m_valid = false;
         return;
     }
-    _height->setValue(1);
+    m_height->setValue(1);
 
-    _type = None;
+    m_type = None;
 
-    if (_name == "rpthead")
-        _type = ReportHead;
+    if (m_name == "rpthead")
+        m_type = ReportHead;
 
-    if (_name == "rptfoot")
-        _type = ReportFoot;
+    if (m_name == "rptfoot")
+        m_type = ReportFoot;
 
-    if (_name == "pghead")
-        _type = PageHeadAny;
+    if (m_name == "pghead")
+        m_type = PageHeadAny;
 
-    if (_name == "pgfoot")
-        _type = PageFootAny;
+    if (m_name == "pgfoot")
+        m_type = PageFootAny;
 
-    if (_name == "grouphead")
-        _type = GroupHead;
+    if (m_name == "grouphead")
+        m_type = GroupHead;
 
-    if (_name == "groupfoot")
-        _type = GroupFoot;
+    if (m_name == "groupfoot")
+        m_type = GroupFoot;
 
-    if (_name == "detail")
-        _type = Detail;
+    if (m_name == "detail")
+        m_type = Detail;
 
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
@@ -87,51 +87,51 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
             bool valid;
             qreal height = elemThis.text().toDouble(&valid);
             if (valid)
-                _height->setValue(height);
+                m_height->setValue(height);
         } else if (elemThis.tagName() == "bgcolor") {
-            _bgColor->setValue(QColor(elemThis.text()));
+            m_backgroundColor->setValue(QColor(elemThis.text()));
         } else if (elemThis.tagName() == "firstpage") {
-            if (_name == "pghead" || _name == "pgfoot")
-                _extra = elemThis.tagName();
+            if (m_name == "pghead" || m_name == "pgfoot")
+                m_extra = elemThis.tagName();
 
-            if (_name == "pghead")
-                _type = PageHeadFirst;
-            if (_name == "pgfoot")
-                _type = PageFootFirst;
+            if (m_name == "pghead")
+                m_type = PageHeadFirst;
+            if (m_name == "pgfoot")
+                m_type = PageFootFirst;
         } else if (elemThis.tagName() == "odd") {
-            if (_name == "pghead" || _name == "pgfoot")
-                _extra = elemThis.tagName();
+            if (m_name == "pghead" || m_name == "pgfoot")
+                m_extra = elemThis.tagName();
 
-            if (_name == "pghead")
-                _type = PageHeadOdd;
-            if (_name == "pgfoot")
-                _type = PageFootOdd;
+            if (m_name == "pghead")
+                m_type = PageHeadOdd;
+            if (m_name == "pgfoot")
+                m_type = PageFootOdd;
         } else if (elemThis.tagName() == "even") {
-            if (_name == "pghead" || _name == "pgfoot")
-                _extra = elemThis.tagName();
+            if (m_name == "pghead" || m_name == "pgfoot")
+                m_extra = elemThis.tagName();
 
-            if (_name == "pghead")
-                _type = PageHeadEven;
-            if (_name == "pgfoot")
-                _type = PageFootEven;
+            if (m_name == "pghead")
+                m_type = PageHeadEven;
+            if (m_name == "pgfoot")
+                m_type = PageFootEven;
         } else if (elemThis.tagName() == "lastpage") {
-            if (_name == "pghead" || _name == "pgfoot")
-                _extra = elemThis.tagName();
+            if (m_name == "pghead" || m_name == "pgfoot")
+                m_extra = elemThis.tagName();
 
-            if (_name == "pghead")
-                _type = PageHeadLast;
-            if (_name == "pgfoot")
-                _type = PageFootLast;
+            if (m_name == "pghead")
+                m_type = PageHeadLast;
+            if (m_name == "pgfoot")
+                m_type = PageFootLast;
         } else if (elemThis.tagName() == "label") {
             KRLabelData * label = new KRLabelData(elemThis);
-            _objects.append(label);
+            m_objects.append(label);
             //else
             //  delete label;
         } else if (elemThis.tagName() == "field") {
             KRFieldData * field = new KRFieldData(elemThis);
             //if(parseReportField(elemThis, *field) == TRUE)
             //{
-            _objects.append(field);
+            m_objects.append(field);
             //TODO Totals
             //  if(field->trackTotal)
 //          sectionTarget.trackTotal.append(field->data);
@@ -140,29 +140,29 @@ KRSectionData::KRSectionData(const QDomElement & elemSource)
             //  delete field;
         } else if (elemThis.tagName() == "text") {
             KRTextData * text = new KRTextData(elemThis);
-            _objects.append(text);
+            m_objects.append(text);
         } else if (elemThis.tagName() == "line") {
             KRLineData * line = new KRLineData(elemThis);
-            _objects.append(line);
+            m_objects.append(line);
         } else if (elemThis.tagName() == "barcode") {
             KRBarcodeData * bc = new KRBarcodeData(elemThis);
-            _objects.append(bc);
+            m_objects.append(bc);
 
         } else if (elemThis.tagName() == "image") {
             KRImageData * img = new KRImageData(elemThis);
-            _objects.append(img);
+            m_objects.append(img);
         } else if (elemThis.tagName() == "chart") {
             KRChartData * chart = new KRChartData(elemThis);
-            _objects.append(chart);
+            m_objects.append(chart);
         } else if (elemThis.tagName() == "check") {
             KRCheckData * check = new KRCheckData(elemThis);
-            _objects.append(check);
+            m_objects.append(check);
 
         } else
             kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName();
     }
-    qSort(_objects.begin(), _objects.end(), zLessThan);
-    _valid = true;
+    qSort(m_objects.begin(), m_objects.end(), zLessThan);
+    m_valid = true;
 }
 
 KRSectionData::~KRSectionData()
@@ -182,16 +182,16 @@ bool KRSectionData::xLessThan(KRObjectData* s1, KRObjectData* s2)
 
 void KRSectionData::createProperties()
 {
-    _set = new KoProperty::Set(0, "Section");
+    m_set = new KoProperty::Set(0, "Section");
 
-    _height = new KoProperty::Property("Height", 1.0, "Height", "Height");
-    _bgColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
+    m_height = new KoProperty::Property("Height", 1.0, "Height", "Height");
+    m_backgroundColor = new KoProperty::Property("BackgroundColor", Qt::white, "Background Color", "Background Color");
 
-    _set->addProperty(_height);
-    _set->addProperty(_bgColor);
+    m_set->addProperty(m_height);
+    m_set->addProperty(m_backgroundColor);
 }
 
 QString KRSectionData::name() const
 {
-    return (_extra.isEmpty() ? _name : _name + "_" + _extra);
+    return (m_extra.isEmpty() ? m_name : m_name + "_" + m_extra);
 }

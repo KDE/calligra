@@ -50,11 +50,11 @@ public:
     void setWeight(int w);
 
 protected:
-    KRPos _start;
-    KRPos _end;
-    KoProperty::Property* _lnColor;
-    KoProperty::Property* _lnWeight;
-    KoProperty::Property* _lnStyle;
+    KRPos m_start;
+    KRPos m_end;
+    KoProperty::Property *m_lineColor;
+    KoProperty::Property *m_lineWeight;
+    KoProperty::Property *m_lineStyle;
     virtual void createProperties();
 private:
 

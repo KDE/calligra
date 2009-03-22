@@ -131,7 +131,7 @@ Spring::paintEvent(QPaintEvent *ev)
 bool
 Spring::isPropertyVisible(const QByteArray &name)
 {
-    if ((name == "name") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
+    if ((name == "objectName") || (name == "sizeType") || (name == "orientation") || (name == "geometry"))
         return true;
 
     return false;
@@ -153,7 +153,7 @@ Spring::saveSpring(KFormDesigner::ObjectTreeItem *item, QDomElement &parentNode,
         }
     }
 
-    KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "name", item->widget()->property("name"), item->widget());
+    KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "objectName", item->widget()->property("objectName"), item->widget());
 
     if (parentNode.tagName() == "widget")
         KFormDesigner::FormIO::savePropertyValue(tclass, domDoc, "geometry", item->widget()->property("geometry"), item->widget());

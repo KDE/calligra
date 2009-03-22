@@ -50,9 +50,9 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
             public KexiSubwidgetInterface
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
-    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass DESIGNABLE true)
-    Q_OVERRIDE(bool readOnly READ isReadOnly WRITE setReadOnly DESIGNABLE true)
+    Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource)
+    Q_PROPERTY(QString dataSourcePartClass READ dataSourcePartClass WRITE setDataSourcePartClass)
+    Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)
 
 public:
     KexiDBLineEdit(QWidget *parent);
@@ -158,10 +158,10 @@ protected:
 
     //! Used in isReadOnly, as sometimes we want to have the flag set tot true when KLineEdit::isReadOnly
     //! is still false.
-bool m_internalReadOnly : 1;
+    bool m_internalReadOnly : 1;
 
     //! Used in slotTextChanged()
-bool m_slotTextChanged_enabled : 1;
+    bool m_slotTextChanged_enabled : 1;
 };
 
 #endif

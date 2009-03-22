@@ -26,7 +26,7 @@ namespace Scripting
 
 Chart::Chart(KRChartData *c)
 {
-    _chart = c;
+    m_chart = c;
 }
 
 
@@ -36,89 +36,89 @@ Chart::~Chart()
 
 QPointF Chart::position()
 {
-    return _chart->_pos.toPoint();
+    return m_chart->m_pos.toPoint();
 }
 void Chart::setPosition(const QPointF& p)
 {
-    _chart->_pos.setPointPos(p);
+    m_chart->m_pos.setPointPos(p);
 }
 
 QSizeF Chart::size()
 {
-    return _chart->_size.toPoint();
+    return m_chart->m_size.toPoint();
 }
 void Chart::setSize(const QSizeF& s)
 {
-    _chart->_size.setPointSize(s);
+    m_chart->m_size.setPointSize(s);
 }
 
 QString Chart::dataSource()
 {
-    return _chart->_dataSource->value().toString();
+    return m_chart->m_dataSource->value().toString();
 }
 
 void Chart::setDataSource(const QString &ds)
 {
-    _chart->_dataSource->setValue(ds);
+    m_chart->m_dataSource->setValue(ds);
 }
 
 bool Chart::threeD()
 {
-    return _chart->_threeD->value().toBool();
+    return m_chart->m_threeD->value().toBool();
 }
 
 void Chart::setThreeD(bool td)
 {
-    _chart->_threeD->setValue(td);
+    m_chart->m_threeD->setValue(td);
 }
 
 bool Chart::legendVisible()
 {
-    return _chart->_displayLegend->value().toBool();
+    return m_chart->m_displayLegend->value().toBool();
 }
 
 void Chart::setLegendVisible(bool v)
 {
-    _chart->_displayLegend->setValue(v);
+    m_chart->m_displayLegend->setValue(v);
 }
 
 int Chart::colorScheme()
 {
-    return _chart->_colorScheme->value().toInt();
+    return m_chart->m_colorScheme->value().toInt();
 }
 
 void Chart::setColorScheme(int cs)
 {
-    _chart->_colorScheme->setValue(cs);
+    m_chart->m_colorScheme->setValue(cs);
 }
 
 QColor Chart::backgroundColor()
 {
-    return _chart->_bgColor->value().value<QColor>();
+    return m_chart->m_backgroundColor->value().value<QColor>();
 }
 
 void Chart::setBackgroundColor(const QColor &bc)
 {
-    _chart->_bgColor->setValue(bc);
+    m_chart->m_backgroundColor->setValue(bc);
 }
 
 QString Chart::xAxisTitle()
 {
-    return _chart->_xTitle->value().toString();
+    return m_chart->m_xTitle->value().toString();
 }
 
 void Chart::setXAxisTitle(const QString &t)
 {
-    _chart->_xTitle->setValue(t);
+    m_chart->m_xTitle->setValue(t);
 }
 
 QString Chart::yAxisTitle()
 {
-    return _chart->_yTitle->value().toString();
+    return m_chart->m_yTitle->value().toString();
 }
 
 void Chart::setYAxisTitle(const QString &t)
 {
-    _chart->_yTitle->setValue(t);
+    m_chart->m_yTitle->setValue(t);
 }
 }

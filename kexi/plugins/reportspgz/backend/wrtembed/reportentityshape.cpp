@@ -43,7 +43,7 @@ void ReportEntityShape::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    ReportRectEntity::init(&_pos, &_size, _set);
+    ReportRectEntity::init(&m_pos, &m_size, m_set);
 
     connect(properties(), SIGNAL(propertyChanged(KoProperty::Set &, KoProperty::Property &)), this, SLOT(propertyChanged(KoProperty::Set &, KoProperty::Property &)));
 
@@ -54,11 +54,9 @@ void ReportEntityShape::init(QGraphicsScene * scene)
 ReportEntityShape::ReportEntityShape(ReportDesigner* d, QGraphicsScene * scene)
         : ReportRectEntity(d)
 {
-
-
     init(scene);
     setSceneRect(QPointF(0, 0), QSizeF(100, 100));
-    _name->setValue(_rd->suggestEntityName("Shape"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("Shape"));
 
 }
 
@@ -66,7 +64,7 @@ ReportEntityShape::ReportEntityShape(QDomNode & element, ReportDesigner * d, QGr
         : ReportRectEntity(d), KRShapeData(element)
 {
     init(s);
-    setSceneRect(_pos.toScene(), _size.toScene());
+    setSceneRect(m_pos.toScene(), m_size.toScene());
 }
 
 ReportEntityShape* ReportEntityShape::clone()
@@ -90,13 +88,13 @@ void ReportEntityShape::paint(QPainter* painter, const QStyleOptionGraphicsItem*
 
     // TODO check if it is ok to pass an empty map. The image shape might not work
     QMap<QString, KoDataCenter *> dataCenterMap;
-    mShape = (KoShape*)(KoShapeRegistry::instance()->value(_shapeType->value().toString()))->createDefaultShapeAndInit(dataCenterMap);
-    mShape->setSize(_size.toScene());
-    shapes << mShape;
+    m_shape = (KoShape*)(KoShapeRegistry::instance()->value(m_shapeType->value().toString()))->createDefaultShapeAndInit(dataCenterMap);
+    m_shape->setSize(m_size.toScene());
+    shapes << m_shape;
 
-    sp.setShapes(shapes);
+    m_shapePainter.setShapes(shapes);
 
-    sp.paintShapes(*painter, z);
+    m_shapePainter.paintShapes(*painter, m_zoomHandle);
     //mShape->paint(*painter, z);
 
     drawHandles(painter);
@@ -134,14 +132,14 @@ void ReportEntityShape::propertyChanged(KoProperty::Set &s, KoProperty::Property
         //_size.setUnitSize(p.value().value<QSizeF>());
     } else if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
-        if (!_rd->isEntityNameUnique(p.value().toString(), this)) {
-            p.setValue(_oldName);
+        if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
+            p.setValue(m_oldName);
         } else {
-            _oldName = p.value().toString();
+            m_oldName = p.value().toString();
         }
     }
 
-    if (_rd) _rd->setModified(true);
+    if (m_reportDesigner) m_reportDesigner->setModified(true);
     if (scene()) scene()->update();
 }
 
