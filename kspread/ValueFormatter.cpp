@@ -170,7 +170,7 @@ Format::Type ValueFormatter::determineFormatting (const Value &value,
       break;
       case Value::fmt_Number: {
         Number val = fabs (value.asFloat());
-        if ((val > 1e+10) || (val < 1e-10))
+        if (((val > 1e+10) || (val < 1e-10)) && (val != 0.0))
           fmtType = Format::Scientific;
         else
           fmtType = Format::Number;
