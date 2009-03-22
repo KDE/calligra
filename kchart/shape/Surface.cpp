@@ -148,7 +148,7 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext
             QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
             if( stroke == "solid" || stroke == "dash" )
             {
-                QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+                QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
                 frameAttributes.setPen( pen );
             }
         }
@@ -159,13 +159,13 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement, KoShapeLoadingContext
             QBrush brush;
             QString fill = styleStack.property( KoXmlNS::draw, "fill" );
             if ( fill == "solid" || fill == "hatch" )
-                brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
+                brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
             else if ( fill == "gradient" )
             {
-                brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
+                brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
             }
             else if ( fill == "bitmap" )
-                brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
+                brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
             backgroundAttributes.setBrush( brush );
         }
         
@@ -189,8 +189,8 @@ void Surface::saveOdf( KoShapeSavingContext &context )
 
     QBrush backgroundBrush = d->kdPlane->backgroundAttributes().brush();
     QPen framePen = d->kdPlane->frameAttributes().pen();
-    KoOdfGraphicStyles::saveOasisFillStyle( style, mainStyles, backgroundBrush );
-    KoOdfGraphicStyles::saveOasisStrokeStyle( style, mainStyles, framePen );
+    KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, backgroundBrush );
+    KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, framePen );
 
     bodyWriter.addAttribute( "chart:style-name", mainStyles.lookup( style, "ch" ) );
 

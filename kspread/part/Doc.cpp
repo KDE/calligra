@@ -397,7 +397,7 @@ bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis(settingsWriter, unit());
+    KoUnit::saveOdf(settingsWriter, unit());
 
     saveOdfSettings( *settingsWriter );
 

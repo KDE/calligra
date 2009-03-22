@@ -956,7 +956,7 @@ bool KChartPart::saveOdf( SavingContext & documentContext )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis(settingsWriter, unit());
+    KoUnit::saveOdf(settingsWriter, unit());
 
     //saveOasisSettings( *settingsWriter );
 

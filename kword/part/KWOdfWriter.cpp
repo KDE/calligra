@@ -93,7 +93,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
     foreach (KWPageStyle pageStyle, data.keys()) {
         KoGenStyle masterStyle(KoGenStyle::StyleMaster);
         //masterStyle.setAutoStyleInStylesDotXml(true);
-        KoGenStyle layoutStyle = pageStyle.pageLayout().saveOasis();
+        KoGenStyle layoutStyle = pageStyle.pageLayout().saveOdf();
         layoutStyle.setAutoStyleInStylesDotXml(true);
         masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
 
