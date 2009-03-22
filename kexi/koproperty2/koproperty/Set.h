@@ -22,11 +22,9 @@
 #ifndef KPROPERTY_SET_H
 #define KPROPERTY_SET_H
 
-#include "koproperty_global.h"
 #include <QtCore/QObject>
-#include <QtCore/QByteArray>
-#include <QtCore/QStringList>
 #include <QtCore/QHash>
+#include "Property.h"
 
 namespace KoProperty
 {
@@ -167,6 +165,13 @@ public:
     /endcode
     \return \ref Property with given name. */
     Property& operator[](const QByteArray &name) const;
+
+    /*! @return value for property named with @a name. 
+     If no such property is found, default value @a defaultValue is returned. */
+    QVariant propertyValue(const QByteArray &name, const QVariant& defaultValue = QVariant()) const {
+        const Property& p( property(name) );
+        return p.isNull() ? defaultValue : p.value();
+    }
 
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     const Set& operator= (const Set &set);
