@@ -65,6 +65,8 @@ public:
     virtual void setDisplayMasterBackground( bool );
     /// reimplemented
     virtual QPixmap generateThumbnail( const QSize& );
+    /// reimplemented
+    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
 
 private:
     QImage createPageThumbnail() const;
