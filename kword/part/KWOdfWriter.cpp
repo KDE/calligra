@@ -52,7 +52,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
     KoXmlWriter writer(&buffer);
     KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
 
-    Q_ASSERT(fs->frames().count() > 0);
+    Q_ASSERT(!fs->frames().isEmpty());
     KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
     Q_ASSERT(shapedata);
 
@@ -159,6 +159,8 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     // Save the named styles
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
     styleManager->saveOdf(mainStyles);
+
+    // TODO get the pagestyle for the first page and store that as 'style:default-page-layout'
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.

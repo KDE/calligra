@@ -245,7 +245,8 @@ KoGenStyle KWPageStyle::saveOdf() const
 {
     KoGenStyle pageLayout = d->pageLayout.saveOdf();
     pageLayout.setAutoStyleInStylesDotXml(true);
-    pageLayout.addAttribute( "style:page-usage", "all" );
+    //pageLayout.addAttribute("style:name", name());
+    pageLayout.addAttribute("style:page-usage", "all");
 
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
@@ -257,19 +258,38 @@ KoGenStyle KWPageStyle::saveOdf() const
         writer.addAttributePt("fo:column-gap", d->columns.columnSpacing);
         writer.endElement();
     }
+
+    if (headerPolicy() != KWord::HFTypeNone) {
+        writer.startElement("style:header-style");
+        writer.startElement("style:header-footer-properties");
+        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:margin-bottom", headerDistance());
+        // TODO there are quite some more properties we want to at least preserve between load and save
+        writer.endElement();
+        writer.endElement();
+    }
+    if (footerPolicy() != KWord::HFTypeNone) {
+        writer.startElement("style:footer-style");
+        writer.startElement("style:header-footer-properties");
+        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:margin-top", footerDistance());
+        // TODO there are quite some more properties we want to at least preserve between load and save
+        writer.endElement();
+        writer.endElement();
+    }
+
     //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
-    writer.startElement("style:footnote-sep");
+    //writer.startElement("style:footnote-sep");
     // TODO
     //writer.addAttribute("style:adjustment", )
     //writer.addAttribute("style:width", )
     //writer.addAttribute("style:rel-width", )
     //writer.addAttribute("style:line-style", )
-    writer.endElement();
+    //writer.endElement();
 
     QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     pageLayout.addChildElement("columns", contentElement);
 
-    // TODO header/footer policy
     // TODO see how we should save margins if we use the 'closest to binding' stuff.
     // TODO what to do if there is no main-text-frame.
 
