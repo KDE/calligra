@@ -56,6 +56,11 @@ public:
      * \p masterPageName The name of this page style.
      */
     KWPageStyle(const QString& mastername);
+    /**
+     * copy constructor
+     *
+     * \p ps the orignal that will be copied
+     */
     KWPageStyle(const KWPageStyle &ps);
     KWPageStyle &operator=(const KWPageStyle &ps);
     /// destructor
