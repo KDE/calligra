@@ -23,6 +23,7 @@
 
 #include "KWOdfWriter.h"
 #include "KWDocument.h"
+#include "KWPage.h"
 
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
@@ -89,7 +90,11 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
         if (data.contains(pageStyle))
             continue;
 
-        mainStyles.lookup(pageStyle.saveOdf(), "pm");
+        KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+        KoGenStyle layoutStyle = pageStyle.saveOdf();
+        masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
+        QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+        masterPages.insert(pageStyle, name);
     }
 
     // We need to flush them out ordered as defined in the specs.
@@ -122,8 +127,10 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
             masterStyle.addChildElement(QString::number(++index), content);
         }
         // append the headerfooter-style to the main-style
-        if (! masterStyle.isEmpty())
-            mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+        if (! masterStyle.isEmpty()) {
+            QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+            masterPages.insert(pageStyle, name);
+        }
     }
 
     //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
@@ -294,13 +301,26 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         }
     }
 
+    bool savedText = false;
     if (mainTextFrame) {
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
                 shapeData->saveOdf(context);
+                savedText = true;
             }
         }
+    }
+
+    if (!savedText) { // then we write out our page sequence.
+        bodyWriter->startElement("text:page-sequence");
+        foreach (KWPage page, m_document->pageManager()->pages()) {
+            Q_ASSERT(masterPages.contains(page.pageStyle()));
+            bodyWriter->startElement("text:page");
+            bodyWriter->addAttribute("text:master-page-name", masterPages.value(page.pageStyle()));
+            bodyWriter->endElement(); // text:page
+        }
+        bodyWriter->endElement(); // text:page-sequence
     }
 
     bodyWriter->endElement(); // office:text

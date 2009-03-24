@@ -291,7 +291,6 @@ KoGenStyle KWPageStyle::saveOdf() const
     pageLayout.addChildElement("columns", contentElement);
 
     // TODO see how we should save margins if we use the 'closest to binding' stuff.
-    // TODO what to do if there is no main-text-frame.
 
     return pageLayout;
 }
