@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004-2005 Cedric Pasteur <cedric.pasteur@free.fr>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,30 +21,25 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <kxmlguiwindow.h>
+#include <QWidget>
 
 #include "koproperty/Set.h"
 
-namespace KoProperty
-{
-class Editor;
-}
-
 /*!
  * @internal
- * @short KoProperty test appliation main window
+ * @short KoProperty test application main window
  * @author Cedric Pasteur <cedric.pasteur@free.fr>
  * @version 0.1
  */
-class Test : public KXmlGuiWindow
+class TestWindow : public QWidget
 {
     Q_OBJECT
 public:
-    Test();
-    virtual ~Test();
+    TestWindow();
+    virtual ~TestWindow();
 
 private:
-    KoProperty::Set *m_set;
+    KoProperty::Set m_set;
 };
 
 #endif

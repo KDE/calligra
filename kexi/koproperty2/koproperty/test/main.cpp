@@ -40,17 +40,10 @@ int main(int argc, char **argv)
     options.add("property <name>", ki18n("Display only specified property\n(useful when we want to focus on testing a single property editor)"));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
-    Test *mainWin = 0;
 
-    if (app.isSessionRestored()) {
-        RESTORE(Test);
-    } else {
-        // no session.. just start up normally
-        mainWin = new Test();
-        mainWin->show();
-    }
+    TestWindow test;
+    test.show();
 
-    // mainWin has WDestructiveClose flag by default, so it will delete itself.
     return app.exec();
 }
 
