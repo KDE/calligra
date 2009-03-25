@@ -37,7 +37,35 @@
 #include <KIconEffect>
 #include <KDebug>
 
+#include <kexiutils/styleproxy.h>
+
 using namespace KoProperty;
+
+//! Used to alter the widget's style at design time
+class EditorViewStyle : public KexiUtils::StyleProxy
+{
+public:
+    EditorViewStyle(QStyle* parentStyle) : KexiUtils::StyleProxy(parentStyle)
+    {
+    }
+
+    virtual void drawPrimitive(PrimitiveElement elem, const QStyleOption* option, 
+        QPainter* painter, const QWidget* widget) const
+    {
+/*        if (elem == PE_PanelLineEdit) {
+            const QStyleOptionFrame *panel = qstyleoption_cast<const QStyleOptionFrame*>(option);
+            if (panel) {
+                QStyleOptionFrame alteredOption(*panel);
+                alteredOption.lineWidth = 0;
+                KexiUtils::StyleProxy::drawPrimitive(elem, &alteredOption, 
+                    painter, widget);
+                return;
+            }
+        }*/
+        KexiUtils::StyleProxy::drawPrimitive(elem, option, 
+            painter, widget);
+    }
+};
 
 static bool computeAutoSync(Property *property, bool defaultAutoSync)
 {
@@ -50,7 +78,7 @@ static bool computeAutoSync(Property *property, bool defaultAutoSync)
 class ItemDelegate : public QItemDelegate
 {
 public:
-    ItemDelegate(QObject *parent);
+    ItemDelegate(QWidget *parent);
     virtual ~ItemDelegate();
     virtual void paint(QPainter *painter, 
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -63,10 +91,9 @@ public:
 //    virtual bool editorEvent( QEvent * event, QAbstractItemModel * model,
 //        const QStyleOptionViewItem & option, const QModelIndex & index );
     mutable QPointer<QWidget> m_currentEditor;
-private:
 };
 
-ItemDelegate::ItemDelegate(QObject *parent)
+ItemDelegate::ItemDelegate(QWidget *parent)
 : QItemDelegate(parent)
 {
 //moved    setItemEditorFactory( new ItemEditorFactory() );
@@ -123,13 +150,9 @@ void ItemDelegate::paint(QPainter *painter,
 
     Property *property = editorModel->propertyForItem(index);
     const int t = typeForProperty( property ); //index.data(Qt::EditRole).userType();
-    bool useQItemDelegatePaint = index.column() == 0;
-/*    if (QVariant::Size == t) {
-      kDebug() << "!";
-    }*/
-    if (!useQItemDelegatePaint) {
-        if (!(alteredOption.state & QStyle::State_Selected) && !FactoryManager::self()->paint(t, painter, alteredOption, index))
-            useQItemDelegatePaint = true; // ValueDisplayInterface will be used
+    bool useQItemDelegatePaint = true; // ValueDisplayInterface is used by default
+    if (index.column() == 1 && FactoryManager::self()->paint(t, painter, alteredOption, index)) {
+        useQItemDelegatePaint = false;
     }
     if (useQItemDelegatePaint) {
         QItemDelegate::paint(painter, alteredOption, index);
@@ -266,7 +289,16 @@ EditorView::EditorView(QWidget* parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setAnimated(false);
     setAllColumnsShowFocus(true);
-    setEditTriggers(QAbstractItemView::AllEditTriggers);
+//    setEditTriggers(QAbstractItemView::AllEditTriggers);
+    
+    setEditTriggers(
+          QAbstractItemView::CurrentChanged
+        | QAbstractItemView::DoubleClicked
+        //|QAbstractItemView::SelectedClicked
+        | QAbstractItemView::EditKeyPressed
+        | QAbstractItemView::AnyKeyPressed
+        | QAbstractItemView::AllEditTriggers);
+
     setItemDelegate(d->itemDelegate = new ItemDelegate(this));
 }
 
@@ -438,10 +470,10 @@ QRect EditorView::revertButtonArea( const QModelIndex& index ) const
     int x2 = columnWidth(0);
     int x1 = x2 - iconSize - 2;
     QRect r(visualRect(index));
-    kDebug() << r;
+//    kDebug() << r;
     r.setLeft(x1);
     r.setRight(x2);
-    kDebug() << r;
+//    kDebug() << r;
     return r;
 }
 

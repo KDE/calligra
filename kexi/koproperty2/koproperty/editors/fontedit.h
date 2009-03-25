@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,24 +29,6 @@
 
 namespace KoProperty
 {
-
-/*
-class FontEdit : public KLineEdit
-{
-    Q_OBJECT
-    Q_PROPERTY(QString value READ value WRITE setValue USER true)
-public:
-    FontEdit(QWidget *parent = 0);
-    ~FontEdit();
-    QString value() const;
-    void setValue(const QString& value);
-signals:
-    void commitData( QWidget * editor );
-private slots:
-    void slotTextChanged( const QString & text );
-private:
-    bool m_slotTextChangedEnabled : 1;
-};*/
 
 class KOPROPERTY_EXPORT FontDelegate : public EditorCreatorInterface, 
                                        public ValuePainterInterface

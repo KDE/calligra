@@ -25,7 +25,7 @@
 namespace KoProperty
 {
 
-static const char *RECTEDIT_MASK = "%1, %2 %3 x %4";
+static const char *RECTEDIT_MASK = "%1, %2, %3 x %4";
 
 class KOPROPERTY_EXPORT RectComposedProperty : public ComposedPropertyInterface
 {

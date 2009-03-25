@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,19 +39,23 @@
 
 using namespace KoProperty;
 
-IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent)
+IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
         : KIntNumInput(parent)
         , m_unsigned( prop->type() == UInt )
 {
     QLineEdit* le = spinBox()->findChild<QLineEdit*>();
     if (le) {
         le->setAlignment(Qt::AlignLeft);
-        le->setContentsMargins(-2,0,0,0);
+        le->setContentsMargins(0,0,0,0);
     }
     spinBox()->setFrame(false);
-//    spinBox()->setStyleSheet("border-top: 1px solid #c0c0c0;border-bottom: 1px solid #c0c0c0;");
-    Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent);
-
+    Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent,
+        QString::fromLatin1(
+            "QSpinBox { border-left: 0; border-right: 0;  } "
+            "QSpinBox::down-button { height: %1px; } "
+            "QSpinBox::up-button { height: %2px; }"
+        ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
+    );
     
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
     QVariant maxVal(prop->option("max", INT_MAX));
@@ -74,6 +78,9 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent)
     QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
     if (spin)
         spin->installEventFilter(this);*/
+    QPalette p;
+    p.setBrush(QPalette::Base, QBrush(Qt::green));
+    spinBox()->setPalette(p);
 }
 
 IntSpinBox::~IntSpinBox()
@@ -233,21 +240,28 @@ IntEdit::setReadOnlyInternal(bool readOnly)
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent)
+DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeight)
         : KDoubleNumInput(parent)
 {
-    _p = prop;
+    m_property = prop;
     QDoubleSpinBox* sb = findChild<QDoubleSpinBox*>();
     QLineEdit* le = 0;
-    if (sb)
+    if (sb) {
         le = sb->findChild<QLineEdit*>();
+    }
     if (le) {
         le->setAlignment(Qt::AlignLeft);
-        le->setContentsMargins(-2,0,0,0);
+        le->setContentsMargins(0,0,0,0);
     }
     sb->setFrame(false);
-//    setStyleSheet(QString());
-    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent);
+    le->setFrame(false);
+    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
+        QString::fromLatin1(
+            "QDoubleSpinBox { border-left: 0; border-right: 0; } "
+            "QDoubleSpinBox::down-button { height: %1px; } "
+            "QDoubleSpinBox::up-button { height: %2px; }"
+        ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
+    );
 
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
@@ -299,20 +313,21 @@ void DoubleSpinBox::resizeEvent( QResizeEvent * event )
 
 void DoubleSpinBox::setValue(double v)
 {
-    if (_p->option("unit", "").toString().isEmpty()) {
+    if (m_property->option("unit", "").toString().isEmpty()) {
         KDoubleNumInput::setValue(v);
-    }else {
-        KDoubleNumInput::setValue(KoUnit::unit(_p->option("unit").toString()).toUserValue(v));
+    }
+    else {
+        KDoubleNumInput::setValue(KoUnit::unit(m_property->option("unit").toString()).toUserValue(v));
     }
 }
 
 double DoubleSpinBox::value() const
 {
-    if (_p->option("unit", "").toString().isEmpty()) {
+    if (m_property->option("unit", "").toString().isEmpty()) {
         return KDoubleNumInput::value();
     }
     else {
-        return KoUnit::unit(_p->option("unit").toString()).fromUserValue(KDoubleNumInput::value());
+        return KoUnit::unit(m_property->option("unit").toString()).fromUserValue(KDoubleNumInput::value());
     }
 }
 
@@ -487,7 +502,7 @@ QWidget* IntSpinBoxDelegate::createEditor( int type, QWidget *parent,
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *prop = editorModel->propertyForItem(index);
-    return new IntSpinBox(prop, parent);
+    return new IntSpinBox(prop, parent, option.rect.height() - 2);
 }
 
 //-----------------------
@@ -527,7 +542,7 @@ QWidget* DoubleSpinBoxDelegate::createEditor( int type, QWidget *parent,
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *prop = editorModel->propertyForItem(index);
-    return new DoubleSpinBox(prop, parent);
+    return new DoubleSpinBox(prop, parent, option.rect.height() - 2 - 1);
 }
                                               
 #include "spinbox.moc"

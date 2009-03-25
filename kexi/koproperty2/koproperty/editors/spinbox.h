@@ -38,7 +38,7 @@ class KOPROPERTY_EXPORT IntSpinBox : public KIntNumInput
     Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    IntSpinBox(const Property* prop, QWidget *parent = 0);
+    IntSpinBox(const Property* prop, QWidget *parent, int itemHeight);
     virtual ~IntSpinBox();
 
     virtual QVariant value() const;
@@ -93,7 +93,7 @@ class KOPROPERTY_EXPORT DoubleSpinBox : public KDoubleNumInput
 
 public:
 //! @todo Support setting precision limits, step, etc.
-    DoubleSpinBox(const Property* prop, QWidget *parent = 0);
+    DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeight);
     virtual ~DoubleSpinBox();
 
 //    virtual bool eventFilter(QObject *o, QEvent *e);
@@ -113,7 +113,7 @@ protected:
     //! Used to fix height of the internal spin box
     virtual void resizeEvent( QResizeEvent * event );
 private:
-        const Property *_p;
+        const Property *m_property;
 };
 
 /*

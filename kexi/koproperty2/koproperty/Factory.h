@@ -233,7 +233,8 @@ public:
     void addDisplay(int type, ValueDisplayInterface *display);
 
     static void paintTopGridLine(QWidget *widget);
-    static void setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent);
+    static void setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent,
+        const QString& extraStyleSheet = QString());
 
 protected:
     void addEditorInternal(int type, EditorCreatorInterface *editor, bool own = true);

@@ -39,15 +39,14 @@ QString RectDelegate::displayText( const QVariant& value ) const
 RectComposedProperty::RectComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
-    const QRect r( property->value().toRect() );
     (void)new Property("x",
-        r.x(), i18n("X"), i18n("X"), Int, property);
+        QVariant(), i18n("X"), i18n("X"), Int, property);
     (void)new Property("y",
-        r.y(), i18n("Y"), i18n("Y"), Int, property);
+        QVariant(), i18n("Y"), i18n("Y"), Int, property);
     (void)new Property("width",
-        r.width(), i18n("Width"), i18n("Width"), UInt, property);
+        QVariant(), i18n("Width"), i18n("Width"), UInt, property);
     (void)new Property("height",
-        r.height(), i18n("Height"), i18n("Height"), UInt, property);
+        QVariant(), i18n("Height"), i18n("Height"), UInt, property);
 }
 
 void RectComposedProperty::setValue(Property *property,

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004  Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2005-2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2005-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,9 +22,12 @@
 #include "fontedit.h"
 #include "utils.h"
 
-#include <KFontRequester>
+#include <KFontChooser>
+#include <KFontDialog>
 #include <KLocale>
 #include <KDebug>
+#include <KPushButton>
+#include <KDialog>
 
 #include <QLabel>
 #include <QPushButton>
@@ -33,57 +36,71 @@
 #include <QVariant>
 #include <QStyleOptionViewItem>
 #include <QFontDatabase>
+#include <QEvent>
+#include <QHBoxLayout>
+#include <QApplication>
 
 using namespace KoProperty;
 
 //! @internal
 //! reimplemented to better button and label's positioning
-class FontEditRequester : public KFontRequester
+class FontEditRequester : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(QFont value READ value WRITE setValue USER true)
 public:
     FontEditRequester(QWidget* parent)
-            : KFontRequester(parent)
+            : QWidget(parent)
+            , m_paletteChangedEnabled(true)
     {
-//        setContentsMargins(0,0,0,0);
-/*
-        QPalette pal = label()->palette();
-        pal.setColor(QPalette::Window, palette().color(QPalette::Active, QPalette::Base));
-        label()->setPalette(pal);
-        label()->setMinimumWidth(0);*/
-//        label()->setFrameShape(QFrame::Box);
-//        label()->setContentsMargins(0,0,0,0);
-        label()->setFrameShape(QFrame::NoFrame);
-        label()->setIndent(1);
-        label()->setFocusPolicy(Qt::ClickFocus);
-/*
-        KAcceleratorManager::setNoAccel(label());
-        layout()->removeWidget(label());
-        layout()->removeWidget(button());//->reparent(this, 0, QPoint(0,0));
-        delete layout();*/
-        Utils::setupDotDotDotButton(button(), i18n("Change font"),
-            i18n("Changes font"));
+        setBackgroundRole(QPalette::Base);
+        QHBoxLayout *lyr = new QHBoxLayout(this);
+        lyr->setContentsMargins(0,0,0,0);
+        lyr->setSpacing( 1 );
+        lyr->addStretch(1);
+        m_button = new KPushButton(this);
+        setFocusProxy(m_button);
+        Utils::setupDotDotDotButton(m_button,
+            i18n("Click to select a font"),
+            i18n("Selects font"));
+        connect( m_button, SIGNAL( clicked() ), SLOT( slotSelectFontClicked() ) );
+        lyr->addWidget(m_button);
+        setValue(qApp->font());
     }
-/*    virtual void resizeEvent(QResizeEvent *e)
-    {
-        KFontRequester::resizeEvent(e);
-        label()->move(0, 0);
-        label()->resize(e->size() - QSize(button()->width(), -1));
-        button()->move(label()->width(), 0);
-        button()->setFixedSize(button()->width(), height());
-    }*/
+
     QFont value() const
     {
-        return font();
+        return m_font;
     }
 
 public slots:
     void setValue(const QFont& value)
     {
-        kDebug() << QFontDatabase().families();
-        setFont( value );
+        //kDebug() << QFontDatabase().families();
+        m_font = value;
     }
+
+signals:
+    void commitData( QWidget * editor );
+
+protected slots:
+    void slotSelectFontClicked()
+    {
+        KFontChooser::DisplayFlags flags = KFontChooser::NoDisplayFlags;
+        if (KDialog::Accepted == KFontDialog::getFont( m_font, flags, this )) {
+            setValue(m_font);
+        }
+    }
+
+protected:
+    virtual bool event( QEvent * event )
+    {
+        return QWidget::event(event);
+    }
+
+    KPushButton *m_button;
+    QFont m_font;
+    bool m_paletteChangedEnabled : 1;
 };
 
 // -----------
@@ -98,110 +115,25 @@ void FontDelegate::paint( QPainter * painter,
     const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
     painter->save();
+    const QFont origFont( painter->font() );
     QFont f( index.data(Qt::EditRole).value<QFont>() );
+    int size = f.pointSize(); // will be needed later
+    if (size == -1) {
+        size = f.pixelSize();
+    }
+    f.setPointSize(option.font.pointSize());
     painter->setFont( f );
     QRect rect( option.rect );
     rect.setLeft( rect.left() + 1 );
+    const QString txt( i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
     painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, 
-        i18n("%1 %2", f.family(), f.pointSize()) );
+        i18nc("Font sample for property editor item, typically \"Abc\"", "Abc") );
+
+    rect.setLeft(rect.left() + 5 + painter->fontMetrics().width( txt ));
+    painter->setFont(origFont);
+    painter->drawText( rect, Qt::AlignLeft | Qt::AlignVCenter, 
+        i18nc("Font family and size, e.g. Arial, 2pt", "%1, %2pt", f.family(), size) );
     painter->restore();
 }
-
-/*
-FontEdit::FontEdit(QWidget *parent)
- : KLineEdit(parent)
- , m_slotTextChangedEnabled(true)
-{
-    setFrame(false);
-    setContentsMargins(0,0,0,0);
-    setClearButtonShown(true);
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
-}
-
-FontEdit::~FontEdit()
-{
-}
-
-QString FontEdit::value() const
-{
-    return text();
-}
-
-void FontEdit::setValue(const QString& value)
-{
-    m_slotTextChangedEnabled = false;
-    setText(value);
-    m_slotTextChangedEnabled = true;
-}
-
-void FontEdit::slotTextChanged( const QString & text )
-{
-    Q_UNUSED(text)
-    if (!m_slotTextChangedEnabled)
-        return;
-    emit commitData(this);
-}
-*/
-
-#if 0
-
-#include <QLayout>
-#include <QLineEdit>
-#include <QVariant>
-#include <QHBoxLayout>
-
-using namespace KoProperty;
-
-FontEdit::FontEdit(Property *property, QWidget *parent)
-        : Widget(property, parent)
-{
-    QHBoxLayout *l = new QHBoxLayout(this);
-    l->setMargin(0);
-    l->setSpacing(0);
-
-    m_edit = new QLineEdit(this);
-    m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-// m_edit->setMargin(1);
-    m_edit->setMinimumHeight(5);
-    setPlainWidgetStyle(m_edit);
-
-    l->addWidget(m_edit);
-    setFocusWidget(m_edit);
-
-    connect(m_edit, SIGNAL(textChanged(const QString&)), this, SLOT(slotValueChanged(const QString&)));
-}
-
-FontEdit::~FontEdit()
-{}
-
-QVariant
-FontEdit::value() const
-{
-    return m_edit->text();
-}
-
-void
-FontEdit::setValue(const QVariant &value, bool emitChange)
-{
-    m_edit->blockSignals(true);
-    m_edit->setText(value.toString());
-    m_edit->blockSignals(false);
-    if (emitChange)
-        emit valueChanged(this);
-}
-
-void
-FontEdit::slotValueChanged(const QString &)
-{
-    emit valueChanged(this);
-}
-
-void
-FontEdit::setReadOnlyInternal(bool readOnly)
-{
-    m_edit->setReadOnly(readOnly);
-}
-
-#endif
 
 #include "fontedit.moc"

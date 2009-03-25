@@ -258,14 +258,14 @@ void Factory::paintTopGridLine(QWidget *widget)
 }
 
 //static
-void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent)
+void Factory::setTopAndBottomBordersUsingStyleSheet(QWidget *widget, QWidget* parent, const QString& extraStyleSheet)
 {
     QColor gridLineColor( dynamic_cast<KoProperty::EditorView*>(parent) ? 
         dynamic_cast<KoProperty::EditorView*>(parent)->gridLineColor()
         : KoProperty::EditorView::defaultGridLineColor() );
     widget->setStyleSheet(
-        QString::fromLatin1("border-top: 1px solid %1;border-bottom: 1px solid %1;")
-        .arg(gridLineColor.name()));
+        QString::fromLatin1("%1 { border-top: 1px solid %2;border-bottom: 1px solid %2; } %3")
+        .arg(widget->metaObject()->className()).arg(gridLineColor.name()).arg(extraStyleSheet));
 }
 
 //------------
@@ -360,7 +360,14 @@ bool FactoryManager::paint( int type, QPainter * painter,
     const ValuePainterInterface *_painter = d->valuePainters.value(type);
     if (!_painter)
         return false;
-    _painter->paint(painter, option, index);
+    QStyleOptionViewItem realOption(option);
+    if (option.state & QStyle::State_Selected) {
+        // paint background because there may be editor widget with no autoFillBackground set
+        realOption.palette.setBrush(QPalette::Text, realOption.palette.highlightedText());
+        painter->fillRect(realOption.rect, realOption.palette.highlight());
+    }
+    painter->setPen(realOption.palette.text().color());
+    _painter->paint(painter, realOption, index);
     return true;
 }
 

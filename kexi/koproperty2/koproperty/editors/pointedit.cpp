@@ -39,11 +39,10 @@ QString PointDelegate::displayText( const QVariant& value ) const
 PointComposedProperty::PointComposedProperty(Property *property)
         : ComposedPropertyInterface(property)
 {
-    const QPoint p( property->value().toPoint() );
     (void)new Property("x",
-        p.x(), i18n("X"), i18n("X"), Int, property);
+        QVariant(), i18n("X"), i18n("X"), Int, property);
     (void)new Property("y",
-        p.y(), i18n("Y"), i18n("Y"), Int, property);
+        QVariant(), i18n("Y"), i18n("Y"), Int, property);
 }
 
 void PointComposedProperty::setValue(Property *property, 

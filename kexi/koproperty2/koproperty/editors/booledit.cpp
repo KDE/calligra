@@ -120,6 +120,9 @@ BoolEdit::BoolEdit(const Property *prop, QWidget *parent)
         "padding: 0 0px; }").arg(focus.name())); */
 
 //    setFocusWidget(m_toggle);
+//    setStyleSheet(
+//        QLatin1String(" QPushButton { border: none; padding:0;background-color: red; }") );
+    
     connect(this, SIGNAL(toggled(bool)), this, SLOT(slotValueChanged(bool)));
 }
 
