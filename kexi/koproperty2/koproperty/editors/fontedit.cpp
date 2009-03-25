@@ -121,7 +121,10 @@ void FontDelegate::paint( QPainter * painter,
     if (size == -1) {
         size = f.pixelSize();
     }
-    f.setPointSize(option.font.pointSize());
+    if (option.font.pointSize() > 0)
+        f.setPointSize(option.font.pointSize());
+    else if (option.font.pixelSize() > 0)
+        f.setPixelSize(option.font.pixelSize());
     painter->setFont( f );
     QRect rect( option.rect );
     rect.setLeft( rect.left() + 1 );
