@@ -32,8 +32,10 @@
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 
 #include <QBuffer>
+#include <QTextCursor>
 #include <KDebug>
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
@@ -301,27 +303,32 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         }
     }
 
-    bool savedText = false;
     if (mainTextFrame) {
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
+                KWPageManager *pm = m_document->pageManager();
+                if (pm->pageCount()) { // make the first page refer to our page master
+                    QTextCursor cursor(shapeData->document());
+                    QTextBlockFormat tbf;
+                    KWPageStyle style = pm->pages().first().pageStyle();
+                    tbf.setProperty(KoParagraphStyle::MasterPageName, masterPages.value(style));
+                    cursor.mergeBlockFormat(tbf);
+kDebug() << "set MasterPageName on block; " << masterPages.value(style);
+                }
                 shapeData->saveOdf(context);
-                savedText = true;
             }
         }
     }
 
-    if (!savedText) { // then we write out our page sequence.
-        bodyWriter->startElement("text:page-sequence");
-        foreach (KWPage page, m_document->pageManager()->pages()) {
-            Q_ASSERT(masterPages.contains(page.pageStyle()));
-            bodyWriter->startElement("text:page");
-            bodyWriter->addAttribute("text:master-page-name", masterPages.value(page.pageStyle()));
-            bodyWriter->endElement(); // text:page
-        }
-        bodyWriter->endElement(); // text:page-sequence
+    bodyWriter->startElement("text:page-sequence");
+    foreach (KWPage page, m_document->pageManager()->pages()) {
+        Q_ASSERT(masterPages.contains(page.pageStyle()));
+        bodyWriter->startElement("text:page");
+        bodyWriter->addAttribute("text:master-page-name", masterPages.value(page.pageStyle()));
+        bodyWriter->endElement(); // text:page
     }
+    bodyWriter->endElement(); // text:page-sequence
 
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
