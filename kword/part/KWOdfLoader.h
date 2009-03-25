@@ -24,6 +24,7 @@
 #define KWODFLOADER_H
 
 #include "KWord.h"
+#include "KoXmlReaderForward.h"
 
 #include <KoStore.h>
 #include <KoTextLoader.h>
@@ -36,7 +37,6 @@ class KWTextFrame;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
 class KoTextAnchor;
-#include "KoXmlReaderForward.h"
 class KWPageStyle;
 
 class QTextCursor;
@@ -79,7 +79,11 @@ protected:
     virtual void loadMasterPageStyles(KoOdfLoadingContext& context);
 
 private:
-    void loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
+    enum HFLoadType {
+        LoadHeader,
+        LoadFooter
+    };
+    void loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, HFLoadType headerFooter);
     void loadFinished(KoOdfLoadingContext& context, QTextCursor& cursor);
 
     /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
