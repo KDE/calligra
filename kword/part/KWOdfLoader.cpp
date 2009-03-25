@@ -257,8 +257,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
         if (masterPageStyle) {
             KoPageLayout pageLayout = KoPageLayout::standardLayout();
-            pageLayout.loadOdf(*masterPageStyle);
-            masterPage.setPageLayout(pageLayout);
+            masterPage.loadOdf(*masterPageStyle);
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadHeader);
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadFooter);
         }
