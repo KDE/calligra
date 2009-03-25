@@ -27,13 +27,32 @@ TODO Form editor:
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
 - fix SizePolicy combined property display
 
+TODO KoProperty:
+- mising border below the last item when its editor is visible
+- when started to change the editor's value:
+-- "revert" button should appear, and 
+-- if the property has parent, the item for the parent should be repainted
+
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
-2009-03-21
+2009-03-23..24
+KoProperty
+- paint background and alter pen color for selected items before 
+  ValuePainterInterface is used for painting
+- better handling of mouse clicks on items
+- font editor now displays font sample and font name
+- simpified code of font and pixmap editors
+- fix style of up/down buttons of spin boxes
+- added subproperties for QSizePolicy editor
+- no need to update subproperty values in *ComposedProperty ctors, 
+  because Property::setValue() is called in Property ctor anyway
+  what in turn calls ComposedProperty::setValue()
+
+2009-03-21..22
 Main Window
 - fix forced property set reloading
 Forms
