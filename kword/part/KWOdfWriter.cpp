@@ -23,6 +23,7 @@
 
 #include "KWOdfWriter.h"
 #include "KWDocument.h"
+#include "KWPage.h"
 
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
@@ -31,8 +32,10 @@
 #include <KoShapeSavingContext.h>
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
+#include <KoParagraphStyle.h>
 
 #include <QBuffer>
+#include <QTextCursor>
 #include <KDebug>
 
 QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
@@ -52,7 +55,7 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
     KoXmlWriter writer(&buffer);
     KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
 
-    Q_ASSERT(fs->frames().count() > 0);
+    Q_ASSERT(!fs->frames().isEmpty());
     KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
     Q_ASSERT(shapedata);
 
@@ -62,7 +65,6 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
 
     return content;
 }
-
 
 void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
 {
@@ -85,6 +87,18 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
 
     }
 
+    // save page styles that don't have a header or footer which will be handled later
+    foreach (KWPageStyle pageStyle, m_document->pageManager()->pageStyles()) {
+        if (data.contains(pageStyle))
+            continue;
+
+        KoGenStyle masterStyle(KoGenStyle::StyleMaster);
+        KoGenStyle layoutStyle = pageStyle.saveOdf();
+        masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
+        QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+        masterPages.insert(pageStyle, name);
+    }
+
     // We need to flush them out ordered as defined in the specs.
     QList<KWord::TextFrameSetType> order;
     order << KWord::OddPagesHeaderTextFrameSet
@@ -95,8 +109,7 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
     foreach (KWPageStyle pageStyle, data.keys()) {
         KoGenStyle masterStyle(KoGenStyle::StyleMaster);
         //masterStyle.setAutoStyleInStylesDotXml(true);
-        KoGenStyle layoutStyle = pageStyle.pageLayout().saveOasis();
-        layoutStyle.setAutoStyleInStylesDotXml(true);
+        KoGenStyle layoutStyle = pageStyle.saveOdf();
         masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
 
         QHash<int, KWTextFrameSet*> headersAndFooters = data.value(pageStyle);
@@ -116,8 +129,10 @@ void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGen
             masterStyle.addChildElement(QString::number(++index), content);
         }
         // append the headerfooter-style to the main-style
-        if (! masterStyle.isEmpty())
-            mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+        if (! masterStyle.isEmpty()) {
+            QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
+            masterPages.insert(pageStyle, name);
+        }
     }
 
     //foreach (KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
@@ -153,6 +168,8 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     // Save the named styles
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
     styleManager->saveOdf(mainStyles);
+
+    // TODO get the pagestyle for the first page and store that as 'style:default-page-layout'
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
@@ -290,10 +307,28 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
         if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first()) {
             KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>(mainTextFrame->frames().first()->shape()->userData());
             if (shapeData) {
+                KWPageManager *pm = m_document->pageManager();
+                if (pm->pageCount()) { // make the first page refer to our page master
+                    QTextCursor cursor(shapeData->document());
+                    QTextBlockFormat tbf;
+                    KWPageStyle style = pm->pages().first().pageStyle();
+                    tbf.setProperty(KoParagraphStyle::MasterPageName, masterPages.value(style));
+                    cursor.mergeBlockFormat(tbf);
+kDebug() << "set MasterPageName on block; " << masterPages.value(style);
+                }
                 shapeData->saveOdf(context);
             }
         }
     }
+
+    bodyWriter->startElement("text:page-sequence");
+    foreach (KWPage page, m_document->pageManager()->pages()) {
+        Q_ASSERT(masterPages.contains(page.pageStyle()));
+        bodyWriter->startElement("text:page");
+        bodyWriter->addAttribute("text:master-page-name", masterPages.value(page.pageStyle()));
+        bodyWriter->endElement(); // text:page
+    }
+    bodyWriter->endElement(); // text:page-sequence
 
     bodyWriter->endElement(); // office:text
     bodyWriter->endElement(); // office:body
@@ -312,7 +347,6 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     if (!context.saveDataCenter(store, manifestWriter)) {
         return false;
     }
-
     return true;
 }
 
