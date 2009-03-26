@@ -39,23 +39,46 @@
 
 using namespace KoProperty;
 
+//! @return font size expressed in points (pt)
+//! or if points are not available - in pixels (px) for @a font
+static QString fontSizeForCSS(const QFont& font)
+{
+    return font.pointSize() > 0
+        ? QString::fromLatin1("%1pt").arg(font.pointSize())
+        : QString::fromLatin1("%1px").arg(font.pixelSize());
+}
+
+static QString cssForSpinBox(const char *_class, const QFont& font, int itemHeight)
+{
+        return QString::fromLatin1(
+            "%5 { border-left: 0; border-right: 0; font-size: %3; } "
+            "%5::down-button { height: %1px; %4 } "
+            "%5::up-button { height: %2px; } "
+            "QLineEdit { border-width:0px;  } "
+        )
+        .arg(itemHeight/2 - 1).arg(itemHeight - itemHeight/2 - 1)
+        .arg(fontSizeForCSS(font))
+        .arg((itemHeight/2 <= 9) ? "bottom: 2px;" : "bottom: 0px;")
+        .arg(_class);
+}
+
 IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
         : KIntNumInput(parent)
         , m_unsigned( prop->type() == UInt )
 {
+//    kDebug() << "itemHeight:" << itemHeight;
     QLineEdit* le = spinBox()->findChild<QLineEdit*>();
+    spinBox()->setContentsMargins(0,0,0,0);
     if (le) {
+//        le->setFixedHeight(itemHeight);
         le->setAlignment(Qt::AlignLeft);
         le->setContentsMargins(0,0,0,0);
     }
-    spinBox()->setFrame(false);
-    Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent,
-        QString::fromLatin1(
-            "QSpinBox { border-left: 0; border-right: 0;  } "
-            "QSpinBox::down-button { height: %1px; } "
-            "QSpinBox::up-button { height: %2px; }"
-        ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
-    );
+//    kDebug() << parent->font().pointSize();
+    spinBox()->setFrame(true);
+    QString css = cssForSpinBox("QSpinBox", font(), itemHeight);
+    Factory::setTopAndBottomBordersUsingStyleSheet(spinBox(), parent, css);
+    setStyleSheet(css);
     
     QVariant minVal(prop->option("min", m_unsigned ? 0 : -INT_MAX));
     QVariant maxVal(prop->option("max", INT_MAX));
@@ -64,23 +87,6 @@ IntSpinBox::IntSpinBox(const Property* prop, QWidget *parent, int itemHeight)
     QString minValueText(prop->option("minValueText").toString());
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
-//todo?    installEventFilter(lineEdit());
-//todo?    installEventFilter(this);
-
-    // NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
-    // An empty string matches all object names.
-/*TODO    QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
-#ifndef Q_WS_WIN
-#ifdef __GNUC__
-#warning TODO: fix for Qt4
-#endif
-#endif
-    QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : spinwidgets.first();
-    if (spin)
-        spin->installEventFilter(this);*/
-    QPalette p;
-    p.setBrush(QPalette::Base, QBrush(Qt::green));
-    spinBox()->setPalette(p);
 }
 
 IntSpinBox::~IntSpinBox()
@@ -255,13 +261,16 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     }
     sb->setFrame(false);
     le->setFrame(false);
-    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
+/*    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent,
         QString::fromLatin1(
             "QDoubleSpinBox { border-left: 0; border-right: 0; } "
             "QDoubleSpinBox::down-button { height: %1px; } "
             "QDoubleSpinBox::up-button { height: %2px; }"
         ).arg(itemHeight/2).arg(itemHeight - itemHeight/2)
-    );
+    );*/
+    QString css = cssForSpinBox("QDoubleSpinBox", font(), itemHeight);
+    Factory::setTopAndBottomBordersUsingStyleSheet(sb, parent, css);
+    setStyleSheet(css);
 
     QVariant minVal(prop->option("min", 0.0));
     QVariant maxVal(prop->option("max", double(INT_MAX / 100)));
@@ -282,23 +291,7 @@ DoubleSpinBox::DoubleSpinBox(const Property* prop, QWidget *parent, int itemHeig
     QString minValueText(prop->option("minValueText").toString());
     if (!minValueText.isEmpty())
         setSpecialValueText(minValueText);
-    
-//    spinBox()->lineEdit()->setAlignment(Qt::AlignLeft);
-/*    installEventFilter(lineEdit());
-    installEventFilter(this);
-
-    // NOTE: If this code must be compiled with MSVC 6, replace findchildren with qFindChildren
-    // An empty string matches all object names.
-    QList<QAbstractSpinBox*> spinwidgets = findChildren<QAbstractSpinBox*>("");
-#ifndef Q_WS_WIN
-#ifdef __GNUC__
-#warning TODO: fix for Qt4
-#endif
-#endif
-    QAbstractSpinBox* spin = spinwidgets.isEmpty() ? 0 : static_cast<QAbstractSpinBox*>(spinwidgets.first());
-    if (spin)
-        spin->installEventFilter(this);*/
-}
+    }
 
 DoubleSpinBox::~DoubleSpinBox()
 {

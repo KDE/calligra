@@ -30,8 +30,9 @@ TODO Form editor:
 TODO KoProperty:
 - mising border below the last item when its editor is visible
 - when started to change the editor's value:
--- "revert" button should appear, and 
+-- "revert" button should appear
 -- if the property has parent, the item for the parent should be repainted
+- (??) fox or reimplement spin box widgets: look bad with oxygen and probably other styles
 
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
@@ -51,6 +52,10 @@ KoProperty
 - no need to update subproperty values in *ComposedProperty ctors, 
   because Property::setValue() is called in Property ctor anyway
   what in turn calls ComposedProperty::setValue()
+= test: added --font-size option
+- improved boolean editor's painting
+- improved position of spin box arrows and style
+- font face/size now follows the view's font in editors
 
 2009-03-21..22
 Main Window

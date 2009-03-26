@@ -157,7 +157,8 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
 {
 //    p->eraseRect(r);
     QRect r2(r);
-    r2.moveLeft(r2.left() + KIconLoader::SizeSmall + 6);
+    r2.setLeft(r2.left() + KIconLoader::SizeSmall + 6);
+//    r2.setTop(r2.top() + 1);
 
     if (!threeState && value.isNull()) {
         // 2 states but null value
@@ -180,9 +181,10 @@ void BoolEdit::draw(QPainter *p, const QRect &r, const QVariant &value,
             //draw text state for Three-State editor
             if (value.isNull() || !value.isValid())
                 text = overrideText;*/
+//        kDebug() << r2;
         p->drawPixmap(
             r.left() + 3,
-            r2.top() + (r2.height() - 1 - KIconLoader::SizeSmall) / 2,
+            r2.top() + (r2.height() - KIconLoader::SizeSmall) / 2,
             icon);
         p->drawText(
             r2,
@@ -347,7 +349,8 @@ void BoolDelegate::paint( QPainter * painter,
     const EditorDataModel *editorModel
         = dynamic_cast<const EditorDataModel*>(index.model());
     Property *prop = editorModel->propertyForItem(index);
-    QVariant value( index.data(Qt::EditRole) );
+    const QVariant value( index.data(Qt::EditRole) );
+    QRect rect(option.rect);
     if (prop->option("3State", false).toBool()) {
         int listIndex = valueToIndex(value);
 //        const QString stateNameString( stateName(listIndex, prop) );
@@ -358,16 +361,16 @@ void BoolDelegate::paint( QPainter * painter,
         r.setLeft(1+r.left()+2+iconSize);
         painter->drawText(r, Qt::AlignVCenter | Qt::AlignLeft, 
             threeStateListData.names[listIndex] ); */
-        BoolEdit::draw(painter, option.rect, value, stateName(listIndex, prop), true/*3state*/);
+        BoolEdit::draw(painter, rect, value, stateName(listIndex, prop), true/*3state*/);
     }
     else
     {
         if (value.isNull() && !prop->option("nullName", QString()).toString().isEmpty()) {
-            BoolEdit::draw(painter, option.rect, value, 
+            BoolEdit::draw(painter, rect, value, 
                 prop->option("nullName", QString()).toString(), false/*2state*/);
         }
         else {
-            BoolEdit::draw(painter, option.rect, value, stateName(value.toBool() ? 0 : 1, prop),
+            BoolEdit::draw(painter, rect, value, stateName(value.toBool() ? 0 : 1, prop),
                 false/*2state*/);
         }
     }

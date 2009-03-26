@@ -345,10 +345,13 @@ QWidget * FactoryManager::createEditor(
             QColor gridLineColor( dynamic_cast<EditorView*>(parent) ? 
                 dynamic_cast<EditorView*>(parent)->gridLineColor()
                 : EditorView::defaultGridLineColor() );
-            w->setStyleSheet(
-                QString::fromLatin1("%1 { border-top: 1px solid %2; }")
+            QString css =
+//                w->styleSheet() + " " + 
+                QString::fromLatin1("%1 { border-top: 1px solid %2; } ")
                 .arg(QString::fromLatin1(w->metaObject()->className()).replace("KoProperty::", QString()))
-                .arg(gridLineColor.name()));
+                .arg(gridLineColor.name());
+//            kDebug() << css;
+            w->setStyleSheet(css);
         }
     }
     return w;
