@@ -135,7 +135,7 @@ SheetPrint::~SheetPrint()
 
 QString SheetPrint::saveOdfSheetStyleLayout( KoGenStyles &mainStyles )
 {
-    KoGenStyle pageLayout = m_settings->pageLayout().saveOasis();
+    KoGenStyle pageLayout = m_settings->pageLayout().saveOdf();
     //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
     //necessary for print setup
     m_pSheet->saveOdfPrintStyleLayout( pageLayout );

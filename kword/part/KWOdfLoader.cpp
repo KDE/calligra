@@ -257,10 +257,9 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
         if (masterPageStyle) {
             KoPageLayout pageLayout = KoPageLayout::standardLayout();
-            pageLayout.loadOasis(*masterPageStyle);
-            masterPage.setPageLayout(pageLayout);
-            loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, true); // Load headers
-            loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, false); // Load footers
+            masterPage.loadOdf(*masterPageStyle);
+            loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadHeader);
+            loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadFooter);
         }
         if (!alreadyExists)
             m_document->pageManager()->addPageStyle(masterPage);
@@ -297,25 +296,25 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPa
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
+void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, KWPageStyle &pageStyle, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, HFLoadType headerFooter)
 {
     // The actual content of the header/footer.
-    KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style, isHeader ? "header" : "footer");
+    KoXmlElement elem = KoXml::namedItemNS(masterPage, KoXmlNS::style, headerFooter == LoadHeader ? "header" : "footer");
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
-    KoXmlElement leftElem = KoXml::namedItemNS(masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left");
+    KoXmlElement leftElem = KoXml::namedItemNS(masterPage, KoXmlNS::style, headerFooter == LoadHeader ? "header-left" : "footer-left");
     // Used in KWPageStyle to determine if, and what kind of header/footer to use.
     KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeNone : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
 
     if (! leftElem.isNull()) {   // header-left and footer-left
-        loadHeaderFooterFrame(context, pageStyle, leftElem, hfType, isHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, leftElem, hfType, headerFooter == LoadHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
     }
 
     if (! elem.isNull()) {   // header and footer
-        loadHeaderFooterFrame(context, pageStyle, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
+        loadHeaderFooterFrame(context, pageStyle, elem, hfType, headerFooter == LoadHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
     }
 
-    if (isHeader) {
+    if (headerFooter == LoadHeader) {
         pageStyle.setHeaderPolicy(hfType);
     } else {
         pageStyle.setFooterPolicy(hfType);

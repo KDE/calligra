@@ -120,7 +120,7 @@ void ComboBox::setValue(const QVariant &value)
     if (!m_setValueEnabled)
         return;
     int idx = m_listData.keys.indexOf(value.toString());
-    kDebug(30007) << "**********" << idx << "" << value.toString();
+//    kDebug(30007) << "**********" << idx << "" << value.toString();
     if (idx >= 0 && idx < count()) {
         setCurrentIndex(idx);
     } else {

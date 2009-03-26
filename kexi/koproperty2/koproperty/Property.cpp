@@ -789,5 +789,5 @@ Property::debug() const
     dbg += (d->visible ? " visible" : " hidden");
     dbg += " )";
 
-    kDebug() << dbg;
+    kDebug(30007) << dbg;
 }

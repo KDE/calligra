@@ -348,8 +348,8 @@ void ProxyModel::saveOdf( KoShapeSavingContext &context ) const
         if ( dataSet->chartType() != LastChartType )
             style.addProperty( "chart:family", ODF_CHARTTYPES[ dataSet->chartType() ] );
             
-        KoOdfGraphicStyles::saveOasisFillStyle( style, mainStyles, dataSet->brush() );
-        KoOdfGraphicStyles::saveOasisStrokeStyle( style, mainStyles, dataSet->pen() );
+        KoOdfGraphicStyles::saveOdfFillStyle( style, mainStyles, dataSet->brush() );
+        KoOdfGraphicStyles::saveOdfStrokeStyle( style, mainStyles, dataSet->pen() );
             
         // TODO: Save external data sources also
         const QString prefix( "local-table." );
@@ -398,7 +398,7 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
                     qDebug() << "HAS stroke";
                     QString stroke = styleStack.property( KoXmlNS::draw, "stroke" );
                     if( stroke == "solid" || stroke == "dash" ) {
-                        QPen pen = KoOdfGraphicStyles::loadOasisStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
+                        QPen pen = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, context.odfLoadingContext().stylesReader() );
                         dataSet->setPen( pen );
                     }
                 }
@@ -408,11 +408,11 @@ bool ProxyModel::loadOdf( const KoXmlElement &element, KoShapeLoadingContext &co
                     QString fill = styleStack.property( KoXmlNS::draw, "fill" );
                     QBrush brush;
                     if ( fill == "solid" || fill == "hatch" ) {
-                        brush = KoOdfGraphicStyles::loadOasisFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
+                        brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, context.odfLoadingContext().stylesReader() );
                     } else if ( fill == "gradient" ) {
-                        brush = KoOdfGraphicStyles::loadOasisGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
+                        brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, context.odfLoadingContext().stylesReader(), QSizeF( 5.0, 60.0 ) );
                     } else if ( fill == "bitmap" )
-                        brush = KoOdfGraphicStyles::loadOasisPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
+                        brush = KoOdfGraphicStyles::loadOdfPatternStyle( styleStack, context.odfLoadingContext(), QSizeF( 5.0, 60.0 ) );
                     dataSet->setBrush( brush );
                 } else {
                     dataSet->setColor( defaultDataSetColor( dataSet->number() ) );

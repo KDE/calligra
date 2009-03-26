@@ -37,9 +37,9 @@ StyleCommand::StyleCommand(QUndoCommand* parent)
     : AbstractRegionCommand(parent)
     , m_horizontalPen( QPen(QColor(), 0, Qt::NoPen) )
     , m_verticalPen( QPen(QColor(), 0, Qt::NoPen) )
-    , m_style( new Style() )
     , m_horizontalPenChanged( false )
     , m_verticalPenChanged( false )
+    , m_style( new Style() )
 {
 }
 

@@ -84,9 +84,17 @@ private:
     /// paints a midpoint handle
     void paintMidPoint( QPainter& p, int x );
 
-    QLinearGradient m_gradient; ///< the gradient with the stops to modify
-    int m_currentStop; ///< the stop to modify.
+    /// Returns index of color stop at given mouse position, -1 if non found
+    int colorStopFromPosition( const QPoint &mousePos );
 
+    /// Sorts color stops by position, retaining the index of the current stop
+    void sortStops();
+    
+    /// moves color stop with given index setting to new position, returning the new stop index
+    int moveColorStop( int index, qreal newPosition );
+    
+    QGradientStops m_stops; ///< the gradient color stops
+    int m_currentStop; ///< the stop to modify.
     QRect m_pntArea; ///< the area where the gradient is painted
 
     KoCheckerBoardPainter m_checkerPainter;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Jarosław Staniek <staniek@kde.org>
+   Copyright (C) 2008-2009 Jarosław Staniek <staniek@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,9 +25,22 @@
 namespace KoProperty
 {
 
-static const char *SIZEPOLICY_MASK = "%1, %2 %3, %4";
+static const char *SIZEPOLICY_MASK = "%1, %2, %3, %4";
 
-class KOPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator
+class KOPROPERTY_EXPORT SizePolicyComposedProperty : public ComposedPropertyInterface
+{
+public:
+    explicit SizePolicyComposedProperty(Property *parent);
+
+    virtual void setValue(Property *property, 
+        const QVariant &value, bool rememberOldValue);
+
+    virtual void childValueChanged(Property *child, 
+        const QVariant &value, bool rememberOldValue);
+};
+
+class KOPROPERTY_EXPORT SizePolicyDelegate : public LabelCreator,
+                                             public ComposedPropertyCreator<SizePolicyComposedProperty>
 {
 public:
     SizePolicyDelegate() {}

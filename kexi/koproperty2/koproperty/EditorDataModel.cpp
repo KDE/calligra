@@ -135,15 +135,16 @@ Qt::ItemFlags EditorDataModel::flags(const QModelIndex &index) const
 //    if (col == 0)
 //buddy...        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 
-    Qt::ItemFlags f = Qt::ItemIsEnabled;
+    Qt::ItemFlags f = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     Property *prop = propertyForItem(index);
     if (prop) {
 //        if (!prop->children()) {
+        if (col == 1) {
             f |= Qt::ItemIsEditable;
-//        }
-        if (col != 1 || !prop->children()) {
-            f |= Qt::ItemIsSelectable;
         }
+//        if (col != 1 || !prop->children()) {
+//            f |= Qt::ItemIsSelectable;
+//        }
     }
     return f;
 }
@@ -311,12 +312,12 @@ bool EditorDataModel::setHeaderData(int section, Qt::Orientation orientation,
         return rootItem->setData(section, value);*/
 }
 
-QModelIndex EditorDataModel::buddy( const QModelIndex & idx ) const
+/*QModelIndex EditorDataModel::buddy( const QModelIndex & idx ) const
 {
     if (idx.column() == 0)
         return index( idx.row(), 1, parent(idx));
     return idx;
-}
+}*/
 
 /*
 void EditorDataModel::setupModelData(const QStringList &lines, Property *parent)

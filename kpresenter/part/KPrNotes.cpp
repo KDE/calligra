@@ -204,3 +204,8 @@ void KPrNotes::updatePageThumbnail()
     m_thumbnailShape->setUserData( imageData );
 }
 
+void KPrNotes::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
+{
+    // TODO implement when printing page with notes
+    Q_ASSERT( 0 );
+}

@@ -28,7 +28,7 @@ StringEdit::StringEdit(QWidget *parent)
  , m_slotTextChangedEnabled(true)
 {
     setFrame(false);
-    setContentsMargins(0,0,0,0);
+    setContentsMargins(0,1,0,0);
     setClearButtonShown(true);
     connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }

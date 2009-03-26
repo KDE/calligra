@@ -149,8 +149,6 @@
   <Action name="edit_paste"/>
   <Separator/>
   <Action name="extra_spellcheck"/>
-  <Action name="edit_find"/>
-  <Separator/>
   <Action name="view_zoom"/>
 </ToolBar>
 <!--

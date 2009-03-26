@@ -106,7 +106,7 @@ void PixmapEdit::setValue(const QVariant &value)
 {
     m_pixmap = value.value<QPixmap>();
     if (m_pixmap.isNull() || (m_pixmap.height() <= height())) {
-        m_edit->setPixmap(m_pixmap);
+//        m_edit->setPixmap(m_pixmap);
         m_previewPixmap = m_pixmap;
     } else {
         QImage img(m_pixmap.toImage());
@@ -116,10 +116,10 @@ void PixmapEdit::setValue(const QVariant &value)
             m_previewPixmap = QPixmap::fromImage(img);//preview pixmap is a bit larger
         } else {
             m_previewPixmap = m_pixmap;
-            img = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//            img = img.scaled(sz, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
-        const QPixmap pm( QPixmap::fromImage(img) );
-        m_edit->setPixmap(pm);
+//        const QPixmap pm( QPixmap::fromImage(img) );
+//        m_edit->setPixmap(pm);
     }
 //    if (emitChange)
 //        emit valueChanged(this);

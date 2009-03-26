@@ -24,7 +24,7 @@
 #ifndef KWODFWRITER_H
 #define KWODFWRITER_H
 
-#include <QObject>
+#include "KWPageStyle.h"
 
 class KWDocument;
 class KoOdfWriteStore;
@@ -63,6 +63,7 @@ private:
 
     /// The KWord document.
     KWDocument *m_document;
+    QHash<KWPageStyle, QString> masterPages;
 };
 
 #endif

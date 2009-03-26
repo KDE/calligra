@@ -458,7 +458,7 @@ void Style::loadOdfTableCellProperties( KoOdfStylesReader& stylesReader, const K
                 if ( fill == "solid" || fill == "hatch" )
                 {
                     kDebug(36003)<<" Style ******************************************************";
-                    setBackgroundBrush( KoOdfGraphicStyles::loadOasisFillStyle( drawStyleStack, fill, stylesReader ) );
+                    setBackgroundBrush( KoOdfGraphicStyles::loadOdfFillStyle( drawStyleStack, fill, stylesReader ) );
 
                 }
                 else
@@ -1369,7 +1369,7 @@ void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 QString Style::saveOdfBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
 {
     KoGenStyle styleobjectauto = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
-    KoOdfGraphicStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
+    KoOdfGraphicStyles::saveOdfFillStyle( styleobjectauto, mainStyles, brush );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 

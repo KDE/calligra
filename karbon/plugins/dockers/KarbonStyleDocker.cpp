@@ -401,9 +401,16 @@ void KarbonStyleDocker::updateGradient( KoResource * item )
         return;
     
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
-    if( ! selectedShapes.count() )
-        return;
-    
+    if ( selectedShapes.isEmpty() ) {
+        KoShape* page = m_canvas->resourceProvider()->koShapeResource( KoPageApp::CurrentPage );
+        if (  page ) {
+            selectedShapes.append( page );
+        }
+        else {
+            return;
+        }
+    }
+
     QGradient * newGradient = gradient->toQGradient();
     if( ! newGradient )
         return;

@@ -217,7 +217,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     {
         const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
-        m_pageLayout.loadOasis( *style );
+        m_pageLayout.loadOdf( *style );
         setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
     }
     else
@@ -279,7 +279,7 @@ void KarbonPart::saveOasisSettings( KoStore * store )
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis( settingsWriter, unit() );
+    KoUnit::saveOdf( settingsWriter, unit() );
 
     settingsWriter->endElement(); // config:config-item-set
 

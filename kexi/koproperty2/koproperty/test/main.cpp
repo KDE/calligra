@@ -17,11 +17,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QFont>
+
+#include <KApplication>
+#include <KAboutData>
+#include <KCmdLineArgs>
+#include <KLocale>
+
 #include "test.h"
-#include <kapplication.h>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <klocale.h>
 
 static const char description[] = "A test application for the KoProperty library";
 
@@ -35,22 +38,33 @@ int main(int argc, char **argv)
     KCmdLineArgs::init(argc, argv, &about);
 
     KCmdLineOptions options;
-    options.add("flat", ki18n("Flat display: don't display groups\n(useful for testing)"));
-    options.add("ro", ki18n("Set all properties as read-only:\n(useful for testing read-only mode)"));
-    options.add("property <name>", ki18n("Display only specified property\n(useful when we want to focus on testing a single property editor)"));
+    options.add("flat",
+        ki18n("Flat display: don't display groups\n"
+              "(useful for testing)"));
+    options.add("font-size <size>",
+        ki18n("Set font size to <size> (in points)\n"
+              "(useful for testing whether editors keep the font settings)"));
+    options.add("property <name>",
+        ki18n("Display only specified property\n"
+              "(useful when we want to focus on testing a single\n"
+              "property editor)"));
+    options.add("ro",
+        ki18n("Set all properties as read-only:\n"
+              "(useful for testing read-only mode)"));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
-    Test *mainWin = 0;
 
-    if (app.isSessionRestored()) {
-        RESTORE(Test);
-    } else {
-        // no session.. just start up normally
-        mainWin = new Test();
-        mainWin->show();
+    TestWindow test;
+    bool ok;
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    const int fontSize = args->getOption("font-size").toInt(&ok);
+    if (fontSize > 0 && ok) {
+        QFont f(test.font());
+        f.setPointSize(fontSize);
+        test.setFont(f);
     }
+    test.show();
 
-    // mainWin has WDestructiveClose flag by default, so it will delete itself.
     return app.exec();
 }
 

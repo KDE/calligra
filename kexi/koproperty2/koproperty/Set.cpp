@@ -517,10 +517,10 @@ Set::debug() const
 {
     //kDebug() << "List: typeName='" << m_typeName << "'";
     if (d->isEmpty()) {
-        kDebug() << "<EMPTY>";
+        kDebug(30007) << "<EMPTY>";
         return;
     }
-    kDebug() << d->count() << " properties:";
+    kDebug(30007) << d->count() << " properties:";
 
     const QList<Property*>::ConstIterator itEnd(d->listConstEnd());
     for (QList<Property*>::ConstIterator it(d->listConstIterator()); it!=itEnd; ++it) {

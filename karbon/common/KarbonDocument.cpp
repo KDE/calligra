@@ -304,7 +304,7 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
     page.width = pageSize().width();
     page.height = pageSize().height();
 
-    KoGenStyle pageLayout = page.saveOasis();
+    KoGenStyle pageLayout = page.saveOdf();
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
     KoGenStyle masterPage( KoGenStyle::StyleMaster );
     masterPage.addAttribute( "style:page-layout-name", layoutName );

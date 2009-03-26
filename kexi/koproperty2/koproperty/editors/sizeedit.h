@@ -42,7 +42,7 @@ public:
 };
 
 class KOPROPERTY_EXPORT SizeDelegate : public LabelCreator, 
-                     public ComposedPropertyCreator<SizeComposedProperty>
+                                       public ComposedPropertyCreator<SizeComposedProperty>
 {
 public:
     SizeDelegate() {}

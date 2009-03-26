@@ -6,7 +6,7 @@
    Copyright (C) 2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
    Copyright (C) 2005 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007,2009 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
 
@@ -43,6 +43,7 @@
 #include <QRectF>
 #include <QPainter>
 
+#include <limits>
 
 #define midPoint_width 7
 #define midPoint_height 10
@@ -68,13 +69,11 @@ KarbonGradientWidget::KarbonGradientWidget( QWidget* parent )
 : QWidget( parent ), m_currentStop( -1 ), m_checkerPainter( 4 )
 {
     // initialize the gradient with some sane values
-    m_gradient.setColorAt( 0.0, Qt::white );
-    m_gradient.setColorAt( 1.0, Qt::green );
+    m_stops.append( QGradientStop(0.0, Qt::white));
+    m_stops.append( QGradientStop(1.0, Qt::green));
 
     QPalette p = palette();
     p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
-    // TODO: check if this is equivalent with the line underneath. It might need autoFillBackground = true
-    //setBackgroundMode( Qt::NoBackground );
 
     setMinimumSize( 105, 35 );
 }
@@ -85,13 +84,13 @@ KarbonGradientWidget::~KarbonGradientWidget()
 
 void KarbonGradientWidget::setStops( const QGradientStops & stops )
 {
-    m_gradient.setStops( stops );
+    m_stops = stops;
     update();
 }
 
 QGradientStops KarbonGradientWidget::stops() const
 {
-    return m_gradient.stops();
+    return m_stops;
 }
 
 void KarbonGradientWidget::paintColorStop( QPainter& p, int x, const QColor& color )
@@ -124,12 +123,14 @@ void KarbonGradientWidget::paintEvent( QPaintEvent* )
 
     QPainter painter( this );
 
-    m_gradient.setStart( QPointF( 2, 2 ) );
-    m_gradient.setFinalStop( QPointF( width()-2, 2 ) );
-
+    QLinearGradient gradient;
+    gradient.setStart( QPointF( 2, 2 ) );
+    gradient.setFinalStop( QPointF( width()-2, 2 ) );
+    gradient.setStops( m_stops );
+    
     m_checkerPainter.paint( painter, QRectF( 2, 2, w, gh ) );
 
-    painter.setBrush( QBrush( m_gradient ) );
+    painter.setBrush( QBrush( gradient ) );
     painter.drawRect( QRectF( 2, 2, w, gh ) );
 
     painter.setBrush( QBrush() );
@@ -164,37 +165,17 @@ void KarbonGradientWidget::paintEvent( QPaintEvent* )
     painter.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
     painter.translate( m_pntArea.x(), m_pntArea.y() );
 
-    QGradientStops colorStops = m_gradient.stops();
-    if( colorStops.count() > 1 )
+    if( m_stops.count() > 1 )
     {
-        foreach( const QGradientStop & stop, colorStops )
+        foreach( const QGradientStop & stop, m_stops )
             paintColorStop( painter, (int)( stop.first * m_pntArea.width() ), stop.second );
     }
 }
 
 void KarbonGradientWidget::mousePressEvent( QMouseEvent* e )
 {
-    if( ! m_pntArea.contains( e->x(), e->y() ) )
-        return;
-
-    QGradientStops colorStops = m_gradient.stops();
-
-    m_currentStop = -1;
-
-    int x = e->x() - m_pntArea.left();
-
-    for( int i = colorStops.count() - 1; i >= 0; i-- )
-    {
-        int r = int( colorStops[i].first * m_pntArea.width() );
-        if( ( x > r - 5 ) && ( x < r + 5 ) )
-        {
-            // found ramp point at position
-            m_currentStop = i;
-            if( e->button() == Qt::LeftButton )
-                setCursor( KarbonCursor::horzMove() );
-            return;
-        }
-    }
+    m_currentStop = colorStopFromPosition( QPoint(e->x(), e->y()) );
+    setCursor( m_currentStop == -1 ? QCursor( Qt::ArrowCursor ) : KarbonCursor::horzMove() );
 }
 
 void KarbonGradientWidget::mouseReleaseEvent( QMouseEvent* e )
@@ -203,14 +184,12 @@ void KarbonGradientWidget::mouseReleaseEvent( QMouseEvent* e )
     {
         if( m_pntArea.contains( e->x(), e->y() ) )
         {
-            QGradientStops colorStops = m_gradient.stops();
             int x = e->x() - m_pntArea.left();
             // check if we are still above the actual ramp point
-            int r = int( colorStops[ m_currentStop ].first * m_pntArea.width() );
+            int r = int( m_stops[ m_currentStop ].first * m_pntArea.width() );
             if( ( x > r - 5 ) && ( x < r + 5 ) )
             {
-                colorStops.remove( m_currentStop );
-                m_gradient.setStops( colorStops );
+                m_stops.remove( m_currentStop );
                 update();
                 emit changed();
             }
@@ -227,19 +206,16 @@ void KarbonGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
     if( e->button() != Qt::LeftButton )
         return;
 
-    QGradientStops colorStops = m_gradient.stops();
-
     if( m_currentStop >= 0 )
     {
         // ramp point hit -> change color
         KoColor oldColor;
-        oldColor.fromQColor( colorStops[m_currentStop].second );
+        oldColor.fromQColor( m_stops[m_currentStop].second );
 
         KoUniColorDialog * d = new KoUniColorDialog( oldColor, this->topLevelWidget() );
         if( d->exec() == QDialog::Accepted )
         {
-            colorStops[m_currentStop].second = d->color().toQColor();
-            m_gradient.setStops( colorStops );
+            m_stops[m_currentStop].second = d->color().toQColor();
             update();
             emit changed();
         }
@@ -248,13 +224,13 @@ void KarbonGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
     else if( m_currentStop == -1 )
     {
         KoColor newColor;
-        newColor.fromQColor( colorStops[0].second );
+        newColor.fromQColor( m_stops[0].second );
 
         // no point hit -> create new color stop
         KoUniColorDialog * d = new KoUniColorDialog( newColor, this->topLevelWidget() );
         if( d->exec() == QDialog::Accepted )
         {
-            m_gradient.setColorAt( (float)( e->x()-m_pntArea.left() ) / m_pntArea.width(), d->color().toQColor() );
+            m_stops.append( QGradientStop((qreal)( e->x()-m_pntArea.left() ) / m_pntArea.width(), d->color().toQColor()) );
             update();
             emit changed();
         }
@@ -267,24 +243,108 @@ void KarbonGradientWidget::mouseMoveEvent( QMouseEvent* e )
     if( e->buttons() & Qt::RightButton )
         return;
 
-    QGradientStops colorStops = m_gradient.stops();
+    // do we have a current color stop?
+    if ( m_currentStop >= 0 && m_currentStop < m_stops.count() ) {
+        int newPixelPos = e->x() - m_pntArea.left();
+        int oldPixelPos = static_cast<int>( m_stops[m_currentStop].first * m_pntArea.width() );
+        // check if we really have changed the pixel based position
+        if( newPixelPos == oldPixelPos )
+            return;
+        
+        qreal newPosition = static_cast<qreal>( newPixelPos ) / static_cast<qreal>(m_pntArea.width());
+        m_currentStop = moveColorStop( m_currentStop, newPosition );
+        
+        update();
+        emit changed();
+    }
+    else {
+        int colorStop = colorStopFromPosition( QPoint(e->x(), e->y()) );
+        setCursor( colorStop == -1 ? QCursor( Qt::ArrowCursor ) : KarbonCursor::horzMove() );
+    }
+}
 
-    if( m_currentStop < 0 || m_currentStop >= colorStops.count() )
-        return;
+int KarbonGradientWidget::moveColorStop( int stopIndex, qreal newPosition )
+{
+    // get old position of the color stop we want to move
+    const qreal oldPosition = m_stops[stopIndex].first;
+    
+    // clip new position to [0,1] interval
+    newPosition = qMin(1.0, qMax(0.0,newPosition));
+    
+    // initialize new stop index to the current index
+    int newStopIndex = stopIndex;
+    
+    // we move to the left, so we swap color stops as long as our new position 
+    // is smaller or equal to the previous color stop position
+    if( newPosition < oldPosition && m_currentStop > 0 ) {
+        for( int i = m_currentStop-1; i >= 0; i-- ) {
+            const qreal prevStopPos = m_stops[i].first;
+            if( newPosition <= prevStopPos && prevStopPos > 0.0 ) {
+                qSwap( m_stops[i], m_stops[newStopIndex] );
+                newStopIndex = i;
+            }
+            else
+                break;
+        }
+    }
+    // we move to the right, so we swap color stops as long as our new position 
+    // is greater or equal to the next color stop position
+    else if( newPosition > oldPosition && m_currentStop < m_stops.count()-1 ) { 
+        for( int i = m_currentStop+1; i < m_stops.count(); ++i ) {
+            const qreal nextStopPos = m_stops[i].first;
+            if( newPosition >= nextStopPos && nextStopPos < 1.0 ) {
+                qSwap( m_stops[i], m_stops[newStopIndex] );
+                newStopIndex = i;
+            }
+            else
+                break;
+        }
+    }
 
-    qreal x = (qreal)( e->x() - m_pntArea.left() ) / (qreal)m_pntArea.width();
+    // work around qt bug: make sure we do not have color stops with same position
+    if( newStopIndex < stopIndex && newPosition == m_stops[newStopIndex+1].first ) {
+        // if we have decreased the stop index and the new position is equal to the
+        // position of the next stop we move the new position a tiny bit to the left
+        newPosition -= std::numeric_limits<qreal>::epsilon();
+    }
+    else if( newStopIndex > stopIndex && newPosition == m_stops[newStopIndex-1].first ) {
+        // if we have increased the stop index and the new position is equal to the
+        // position of the previous stop we move the new position a tiny bit to the right
+        newPosition += std::numeric_limits<qreal>::epsilon();
+    }
+    else {
+        // we have not changed the stop index, but we have to check if we our new 
+        // stop position is not equal to the stop at 0.0 or 1.0 
+        if( newStopIndex == 1 && newPosition == 0.0 )
+            newPosition += std::numeric_limits<qreal>::epsilon();
+        if( newStopIndex == m_stops.count()-2 && newPosition == 1.0 )
+            newPosition -= std::numeric_limits<qreal>::epsilon();
+    }
 
-    // move ramp point
-    qreal minX = m_currentStop > 0 ? colorStops[m_currentStop-1].first : 0.0f;
-    qreal maxX = m_currentStop < colorStops.count()-1 ? colorStops[m_currentStop+1].first : 1.0f;
+    // finally set the new stop position
+    m_stops[newStopIndex].first = newPosition;
 
-    // Clip the color stop between to others.
-    x = qMin( x, maxX );
-    x = qMax( x, minX );
-    colorStops[m_currentStop].first = x;
-    m_gradient.setStops( colorStops );
-    update();
-    emit changed();
+    return newStopIndex;
+}
+
+int KarbonGradientWidget::colorStopFromPosition( const QPoint &mousePos )
+{
+    if( ! m_pntArea.contains( mousePos ) )
+        return -1;
+    
+    int x = mousePos.x() - m_pntArea.left();
+    
+    for( int i = m_stops.count() - 1; i >= 0; i-- )
+    {
+        int r = int( m_stops[i].first * m_pntArea.width() );
+        if( ( x > r - 5 ) && ( x < r + 5 ) )
+        {
+            // found color stop at position
+            return i;
+        }
+    }
+    
+    return -1;
 }
 
 #include "KarbonGradientWidget.moc"

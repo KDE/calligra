@@ -20,9 +20,14 @@
  */
 
 #include "KWPageStyle.h"
-#include <kdebug.h>
 
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoUnit.h>
+
+#include <kdebug.h>
 #include <QSharedData>
+#include <QBuffer>
 
 class KWPageStylePrivate : public QSharedData
 {
@@ -236,6 +241,98 @@ void KWPageStyle::clear()
 QString KWPageStyle::name() const
 {
     return d->name;
+}
+
+KoGenStyle KWPageStyle::saveOdf() const
+{
+    KoGenStyle pageLayout = d->pageLayout.saveOdf();
+    pageLayout.setAutoStyleInStylesDotXml(true);
+    pageLayout.addAttribute("style:page-usage", "all");
+
+    QBuffer buffer;
+    buffer.open( QIODevice::WriteOnly );
+    KoXmlWriter writer( &buffer );
+
+    if (d->columns.columns > 1) {
+        writer.startElement("style:columns");
+        writer.addAttribute("fo:column-count", d->columns.columns);
+        writer.addAttributePt("fo:column-gap", d->columns.columnSpacing);
+        writer.endElement();
+    }
+
+    //<style:footnote-sep style:adjustment="left" style:width="0.5pt" style:rel-width="20%" style:line-style="solid"/>
+    //writer.startElement("style:footnote-sep");
+    // TODO
+    //writer.addAttribute("style:adjustment", )
+    //writer.addAttribute("style:width", )
+    //writer.addAttribute("style:rel-width", )
+    //writer.addAttribute("style:line-style", )
+    //writer.endElement();
+
+    QString contentElement = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+    pageLayout.addChildElement("columnsEnzo", contentElement);
+
+// the header/footer-style should be saved as a child of the style:page-layout; but using the
+// addChildElement its instead saved as a child of style:page-layout-properties  I can't follow why...
+// so lets disable this until I figure out how to save this in the right position in the tree.
+#if 0
+    if (headerPolicy() != KWord::HFTypeNone) {
+        writer.startElement("style:header-style");
+        writer.startElement("style:header-footer-properties");
+        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:margin-bottom", headerDistance());
+        // TODO there are quite some more properties we want to at least preserve between load and save
+        writer.endElement();
+        writer.endElement();
+    }
+    if (footerPolicy() != KWord::HFTypeNone) {
+        writer.startElement("style:footer-style");
+        writer.startElement("style:header-footer-properties");
+        writer.addAttribute("fo:min-height", "0.01pt");
+        writer.addAttributePt("fo:margin-top", footerDistance());
+        // TODO there are quite some more properties we want to at least preserve between load and save
+        writer.endElement();
+        writer.endElement();
+    }
+#endif
+
+    // TODO see how we should save margins if we use the 'closest to binding' stuff.
+
+    return pageLayout;
+}
+
+void KWPageStyle::loadOdf(const KoXmlElement &style)
+{
+    d->pageLayout.loadOdf(style);
+    KoXmlElement props = KoXml::namedItemNS(style, KoXmlNS::style, "page-layout-properties");
+    if (props.isNull())
+        return;
+    KoXmlElement columns = KoXml::namedItemNS(props, KoXmlNS::style, "columns");
+    if (!columns.isNull()) {
+        d->columns.columns = columns.attributeNS(KoXmlNS::fo, "column-count", "15").toInt();
+        if (d->columns.columns < 1)
+            d->columns.columns = 1;
+        d->columns.columnSpacing = KoUnit::parseValue(columns.attributeNS(KoXmlNS::fo, "column-gap"));
+    } else {
+        d->columns.columns = 1;
+        d->columns.columnSpacing = 17; // ~ 6mm
+    }
+
+    KoXmlElement header = KoXml::namedItemNS(style, KoXmlNS::style, "header-style");
+    if (! header.isNull()) {
+        KoXmlElement hfprops = KoXml::namedItemNS(header, KoXmlNS::style, "header-footer-properties");
+        if (! hfprops.isNull())
+            d->headerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-bottom"));
+        // TODO there are quite some more properties we want to at least preserve between load and save
+    }
+
+    KoXmlElement footer = KoXml::namedItemNS(style, KoXmlNS::style, "footer-style");
+    if (! footer.isNull()) {
+        KoXmlElement hfprops = KoXml::namedItemNS(footer, KoXmlNS::style, "header-footer-properties");
+        if (! hfprops.isNull())
+            d->footerDistance = KoUnit::parseValue(hfprops.attributeNS(KoXmlNS::fo, "margin-top"));
+        // TODO there are quite some more properties we want to at least preserve between load and save
+    }
 }
 
 bool KWPageStyle::operator==(const KWPageStyle &other) const
