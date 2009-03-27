@@ -143,7 +143,7 @@ KWord::HeaderFooterType KWPageStyle::footerPolicy() const
     return d->footers;
 }
 
-void KWPageStyle::setMainTextFrame(bool on)
+void KWPageStyle::setHasMainTextFrame(bool on)
 {
     d->mainFrame = on;
 }

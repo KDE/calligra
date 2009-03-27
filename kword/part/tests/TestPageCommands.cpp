@@ -210,7 +210,7 @@ void TestPageCommands::testInsertPageCommand3() // restore all properties
 
     KWPage page = command1.page();
     KWPageStyle style = page.pageStyle();
-    style.setMainTextFrame(false);
+    style.setHasMainTextFrame(false);
     style.setFootnoteDistance(10);
     KoPageLayout layout;
     layout.width = 400;
@@ -356,7 +356,7 @@ void TestPageCommands::testRemovePageCommand3() // test restore all properties
 
     KWPage page = insertCommand.page();
     KWPageStyle style = page.pageStyle();
-    style.setMainTextFrame(false);
+    style.setHasMainTextFrame(false);
     style.setFootnoteDistance(10);
     KoPageLayout layout;
     layout.width = 400;

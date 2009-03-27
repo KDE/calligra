@@ -214,7 +214,7 @@ void TestBasicLayout::testFrameCreation()
 
     KWPageStyle style = helper.pageManager->defaultPageStyle();
     style.setHeaderPolicy(KWord::HFTypeUniform);
-    style.setMainTextFrame(true);
+    style.setHasMainTextFrame(true);
 
     bfl.createNewFramesForPage(1);
     QVERIFY(bfl.m_maintext != 0);
@@ -308,25 +308,25 @@ void TestBasicLayout::testCreateNewFrameForPage()
     QHash<QString, KWPageStyle> styles;
     KWPageStyle style1("style1");
     style1.setHeaderPolicy(KWord::HFTypeNone);
-    style1.setMainTextFrame(true);
+    style1.setHasMainTextFrame(true);
     style1.setFooterPolicy(KWord::HFTypeNone);
     styles.insert(style1.name(), style1);
 
     KWPageStyle style2("style2");
     style2.setHeaderPolicy(KWord::HFTypeEvenOdd);
-    style2.setMainTextFrame(true);
+    style2.setHasMainTextFrame(true);
     style2.setFooterPolicy(KWord::HFTypeUniform);
     styles.insert(style2.name(), style2);
 
     KWPageStyle style3("style3"); // weird
     style3.setHeaderPolicy(KWord::HFTypeEvenOdd);
-    style3.setMainTextFrame(false);
+    style3.setHasMainTextFrame(false);
     style3.setFooterPolicy(KWord::HFTypeUniform);
     styles.insert(style3.name(), style3);
 
     KWPageStyle style4("style4");
     style4.setHeaderPolicy(KWord::HFTypeUniform);
-    style4.setMainTextFrame(true);
+    style4.setHasMainTextFrame(true);
     style4.setFooterPolicy(KWord::HFTypeEvenOdd);
     KoColumns columns;
     columns.columns = 2;
@@ -336,7 +336,7 @@ void TestBasicLayout::testCreateNewFrameForPage()
 
     KWPageStyle style5("style5"); // blank
     style5.setHeaderPolicy(KWord::HFTypeNone);
-    style5.setMainTextFrame(false);
+    style5.setHasMainTextFrame(false);
     style5.setFooterPolicy(KWord::HFTypeNone);
     style5.setColumns(columns);
     styles.insert(style5.name(), style5);
