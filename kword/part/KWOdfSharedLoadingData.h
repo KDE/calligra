@@ -36,9 +36,15 @@ public:
     explicit KWOdfSharedLoadingData(KWOdfLoader* loader);
 
 protected:
-    virtual void shapeInserted(KoShape* shape, const KoXmlElement &element);
+    virtual void shapeInserted(KoShape* shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
+    /**
+     * Load all properties from style and apply them on the frame.
+     * @return returns false if the frame passed in has been deleted and replaced with a copy frame, true otherwise.
+     */
+    bool fillFrameProperties(KWFrame *frame, const KoXmlElement &style);
+
     KWOdfLoader* m_loader;
     QHash<QString, KWFrame*> m_nextFrames; // store the 'chain-next-name' property to the frame it was found on
 };
