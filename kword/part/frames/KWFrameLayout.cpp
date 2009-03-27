@@ -246,8 +246,8 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber)
     }
     qreal textWidth = width - layout.left - layout.right;
 
-    const int columns = page.pageStyle().columns().columns/* *
-        (page.pageSide() == KWPage::PageSpread ? 2: 1)*/;
+    KWPageStyle pageStyle = page.pageStyle();
+    const int columns = pageStyle.hasMainTextFrame() ? pageStyle.columns().columns * (page.pageSide() == KWPage::PageSpread ? 2: 1) : 0;
     int columnsCount = columns;
     KWTextFrame **main, *footer = 0, *endnote = 0, *header = 0, *footnote = 0;
     main = new KWTextFrame*[columnsCount];

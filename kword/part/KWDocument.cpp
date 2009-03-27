@@ -545,8 +545,11 @@ bool KWDocument::loadXML(const KoXmlDocument & doc, KoStore *store)
 void KWDocument::endOfLoading() // called by both oasis and oldxml
 {
     // Get the master page name of the first page.
-    QTextBlock block = mainFrameSet()->document()->firstBlock();
-    QString firstPageMasterName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
+    QString firstPageMasterName;
+    if (mainFrameSet()) {
+        QTextBlock block = mainFrameSet()->document()->firstBlock();
+        firstPageMasterName = block.blockFormat().stringProperty(KoParagraphStyle::MasterPageName);
+    }
 
     KWPage lastpage = pageManager()->last();
     qreal docHeight = lastpage.isValid() ? (lastpage.offsetInDocument() + lastpage.height()) : 0.0;

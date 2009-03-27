@@ -24,6 +24,7 @@
 #include "KWOdfLoader.h"
 #include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"
+#include "KWPage.h"
 #include "KWPageManager.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
@@ -49,7 +50,8 @@
 KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(),
         m_document(document),
-        m_currentFrame(0)
+        m_currentFrame(0),
+        m_hasMainText(false)
 {
     connect(this, SIGNAL(sigProgress(int)), m_document, SIGNAL(sigProgress(int)));
 }
@@ -61,11 +63,6 @@ KWOdfLoader::~KWOdfLoader()
 KWDocument* KWOdfLoader::document() const
 {
     return m_document;
-}
-
-KWPageManager* KWOdfLoader::pageManager()
-{
-    return & m_document->m_pageManager;
 }
 
 //QString KWOdfLoader::currentMasterPage() const { return m_currentMasterPage; }
@@ -83,7 +80,7 @@ KWTextFrame* KWOdfLoader::currentFrame() const
 bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 {
     emit sigProgress(0);
-    kDebug(32001) << "========================> KWOdfLoader::load START";
+    //kDebug(32001) << "========================> KWOdfLoader::load START";
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
@@ -99,7 +96,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
         KoXmlElement childElem;
         QString localName;
         forEachElement(childElem, realBody)
-        localName = childElem.localName();
+            localName = childElem.localName();
         if (localName.isEmpty())
             m_document->setErrorMessage(i18n("Invalid OASIS OpenDocument file. No tag found inside office:body."));
         else
@@ -109,11 +106,18 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 
     // TODO check versions and mimetypes etc.
 
+    KoXmlElement childElem;
+    forEachElement(childElem, body) {
+        if (childElem.localName() == "p") {
+            m_hasMainText = true;
+            break;
+        }
+    }
+
     KoOdfLoadingContext odfContext(odfStore.styles(), odfStore.store(), m_document->componentData());
     KoShapeLoadingContext sc(odfContext, m_document->dataCenterMap());
 
     // Load all styles before the corresponding paragraphs try to use them!
-    //KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
     KWOdfSharedLoadingData * sharedData = new KWOdfSharedLoadingData(this);
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
     Q_ASSERT(styleManager);
@@ -123,10 +127,6 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     KoTextLoader * loader = new KoTextLoader(sc);
     Q_UNUSED(loader);
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
-
-    KoColumns columns;
-    columns.columns = 1;
-    columns.columnSpacing = m_document->config().defaultColumnSpacing();
 
     loadMasterPageStyles(context);
 
@@ -153,7 +153,6 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 #endif
 
     // Load all styles before the corresponding paragraphs try to use them!
-
 #if 0 //1.6:
     if (m_frameStyleColl->loadOasisStyles(context) == 0) {
         // no styles loaded -> load default styles
@@ -165,7 +164,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     }
     static_cast<KWVariableSettings *>(m_varColl->variableSetting())->loadNoteConfiguration(styles.officeStyle());
     loadDefaultTableTemplates();
-#else
+//#else
     /*
     // We always needs at least one valid default paragraph style
     KoParagraphStyle *defaultParagraphStyle = m_document->styleManager()->defaultParagraphStyle();
@@ -183,35 +182,32 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     */
 #endif
 
-    KWord::TextFrameSetType type = KWord::MainTextFrameSet;
-    KWTextFrameSet *fs = new KWTextFrameSet(m_document, type);
-    fs->setAllowLayout(false);
-    fs->setName(i18n("Main Text Frameset"));
-    m_document->addFrameSet(fs);
+    // load text:page-sequence
+    KoXmlElement pageSequence = KoXml::namedItemNS(body, KoXmlNS::text, "page-sequence");
+    if (! pageSequence.isNull()) {
+        KWPageManager *pageManager = m_document->pageManager();
+        KoXmlElement page;
+        forEachElement(page, pageSequence) {
+            if (page.namespaceURI() == KoXmlNS::text && page.localName() == "page") {
+                QString master = page.attributeNS(KoXmlNS::text, "master-page-name", QString());
+                pageManager->insertPage(1, pageManager->pageStyle(master));
+            }
+        }
+    }
 
-    // Let the TextShape handle loading the body element.
     KoTextShapeData textShapeData;
-    textShapeData.setDocument(fs->document(), false);
+    if (m_hasMainText) {
+        KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
+        mainFs->setAllowLayout(false);
+        m_document->addFrameSet(mainFs);
+        textShapeData.setDocument(mainFs->document(), false);
+    }
+    // Let the TextShape handle loading the body element.
     textShapeData.loadOdf(body, sc);
-
-    /*
-    QTextCursor cursor( fs->document() );
-    Q_ASSERT(! d->frameLoader);
-    d->frameLoader = new KWOpenDocumentFrameLoader(this);
-    loadBody(context, body, cursor);
-    */
 
     loadSettings(odfStore.settingsDoc());
 
-#if 0 //1.6:
-    // This sets the columns and header/footer flags, and calls recalcFrames, so it must be done last.
-    setPageLayout(m_pageLayout, m_loadingInfo->columns, m_loadingInfo->hf, false);
-#endif
-
-    //delete d->frameLoader;
-    //d->frameLoader = 0;
-
-    kDebug(32001) << "========================> KWOdfLoader::load END";
+    //kDebug(32001) << "========================> KWOdfLoader::load END";
     emit sigProgress(100);
     return true;
 }
@@ -256,11 +252,11 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
         const KoXmlElement *masterNode = it.value();
         const KoXmlElement *masterPageStyle = masterNode ? styles.findStyle(masterNode->attributeNS(KoXmlNS::style, "page-layout-name", QString())) : 0;
         if (masterPageStyle) {
-            KoPageLayout pageLayout = KoPageLayout::standardLayout();
             masterPage.loadOdf(*masterPageStyle);
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadHeader);
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadFooter);
         }
+        masterPage.setHasMainTextFrame(m_hasMainText);
         if (!alreadyExists)
             m_document->pageManager()->addPageStyle(masterPage);
     }

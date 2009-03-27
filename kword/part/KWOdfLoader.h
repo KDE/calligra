@@ -56,7 +56,6 @@ public:
     virtual ~KWOdfLoader();
 
     KWDocument* document() const;
-    KWPageManager* pageManager();
     QString currentFramesetName() const;
     KWTextFrame* currentFrame() const;
 
@@ -93,7 +92,8 @@ private:
     /// The KWord document.
     QPointer<KWDocument> m_document;
     /// Current KWFrameSet name.
-    KWTextFrame *m_currentFrame;
+    KWTextFrame *m_currentFrame; // TODO unused
+    bool m_hasMainText;
 };
 
 #endif
