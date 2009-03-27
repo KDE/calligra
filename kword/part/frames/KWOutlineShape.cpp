@@ -44,6 +44,7 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
         }
     };
     KoShapeGroup *group = new MyGroup();
+    group->setSize(QSize(1, 1));
     group->setApplicationData(frame);
 
     KoShape *child = frame->shape();
@@ -58,7 +59,7 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
     lineTo(QPointF(s.width(), s.height()));
     lineTo(QPointF(0, s.height()));
     close();
-    setZIndex(child->zIndex() + 1);
+    group->setZIndex(child->zIndex());
 
     group->addChild(this);
     group->addChild(child);

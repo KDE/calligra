@@ -58,6 +58,7 @@ void KWCreateOutlineCommand::redo()
         m_container->addChild(child);
         m_container->setApplicationData(m_frame);
     }
+    m_frame->setOutlineShape(m_path);
     m_controller->addShape(m_container);
     m_deleteOnExit = false;
 }
