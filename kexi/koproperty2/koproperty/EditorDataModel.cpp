@@ -62,6 +62,11 @@ EditorDataModel::EditorDataModel(Set &propertySet, QObject *parent)
     collectIndices();
 }
 
+EditorDataModel::~EditorDataModel()
+{
+    delete d;
+}
+
 typedef QPair<QByteArray, QString> NameAndCaption;
 
 bool nameAndCaptionLessThan(const NameAndCaption &n1, const NameAndCaption &n2)
@@ -84,11 +89,6 @@ void EditorDataModel::collectIndices() const
 QModelIndex EditorDataModel::indexForPropertyName(const QByteArray& propertyName) const
 {
     return d->indicesForNames.value(propertyName);
-}
-
-EditorDataModel::~EditorDataModel()
-{
-    delete d;
 }
 
 int EditorDataModel::columnCount(const QModelIndex &parent) const
