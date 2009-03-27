@@ -314,7 +314,6 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
                     KWPageStyle style = pm->pages().first().pageStyle();
                     tbf.setProperty(KoParagraphStyle::MasterPageName, masterPages.value(style));
                     cursor.mergeBlockFormat(tbf);
-kDebug() << "set MasterPageName on block; " << masterPages.value(style);
                 }
                 shapeData->saveOdf(context);
             }

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005 David Faure <faure@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
@@ -25,16 +25,22 @@
 
 #include <KoTextSharedLoadingData.h>
 
+#include <QHash>
+
 class KWOdfLoader;
+class KWFrame;
 
 class KWOdfSharedLoadingData : public KoTextSharedLoadingData
 {
 public:
     explicit KWOdfSharedLoadingData(KWOdfLoader* loader);
+
 protected:
-    virtual void shapeInserted(KoShape* shape);
+    virtual void shapeInserted(KoShape* shape, const KoXmlElement &element);
+
 private:
     KWOdfLoader* m_loader;
+    QHash<QString, KWFrame*> m_nextFrames; // store the 'chain-next-name' property to the frame it was found on
 };
 
 #endif

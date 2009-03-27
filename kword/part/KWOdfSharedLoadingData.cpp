@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2005 David Faure <faure@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
@@ -51,7 +51,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
             KoXmlNS::text, "anchor-page-number", "text:anchor-page-number"));
 }
 
-void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
+void KWOdfSharedLoadingData::shapeInserted(KoShape* shape, const KoXmlElement &element)
 {
     int pageNumber = -1;
     if (shape->hasAdditionalAttribute("text:anchor-type")) {
@@ -64,17 +64,36 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
         }
     }
 
-    kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute( "text:anchor-page-number" ) << pageNumber;
+    //kDebug(32001) << "text:anchor-type =" << shape->additionalAttribute("text:anchor-type") << shape->additionalAttribute( "text:anchor-page-number" ) << pageNumber;
     shape->removeAdditionalAttribute("text:anchor-type");
 
     KoTextShapeData *text = qobject_cast<KoTextShapeData*>(shape->userData());
     if (text) {
-        KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
-        fs->setAllowLayout(false);
-        fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
+        KWTextFrameSet *fs = 0;
+
+        KWFrame *previous = m_nextFrames.value(shape->name());
+        if (previous)
+            fs = dynamic_cast<KWTextFrameSet*>(previous->frameSet());
+        if (fs == 0) {
+            fs = new KWTextFrameSet(m_loader->document());
+            fs->setAllowLayout(false);
+            fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
+            m_loader->document()->addFrameSet(fs);
+        }
+
         KWTextFrame *frame = new KWTextFrame(shape, fs, pageNumber);
+        // TODO find the graphics style and get properties from that.
         frame->setFrameBehavior(KWord::IgnoreContentFrameBehavior);
-        m_loader->document()->addFrameSet(fs);
+
+        KoXmlElement textBox(KoXml::namedItemNS(element, KoXmlNS::draw, "text-box"));
+        if (! textBox.isNull()) {
+            QString nextFrame = textBox.attributeNS(KoXmlNS::draw, "chain-next-name");
+#ifndef NDEBUG
+            if (m_nextFrames.contains(nextFrame))
+                kWarning(32001) << "Document has two frames with the same 'chain-next-name' value, strange things may happen";
+#endif
+            m_nextFrames.insert(nextFrame, frame);
+        }
     } else {
         KWFrameSet* fs = new KWFrameSet();
         fs->setName(m_loader->document()->uniqueFrameSetName(shape->name()));
