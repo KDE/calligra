@@ -48,10 +48,8 @@
 #include <KDebug>
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
-        : QObject(),
-        m_document(document),
-        m_currentFrame(0),
-        m_hasMainText(false)
+        : QObject(document),
+        m_document(document)
 {
     connect(this, SIGNAL(sigProgress(int)), m_document, SIGNAL(sigProgress(int)));
 }
@@ -63,17 +61,6 @@ KWOdfLoader::~KWOdfLoader()
 KWDocument* KWOdfLoader::document() const
 {
     return m_document;
-}
-
-//QString KWOdfLoader::currentMasterPage() const { return m_currentMasterPage; }
-QString KWOdfLoader::currentFramesetName() const
-{
-    return m_currentFrame ? m_currentFrame->frameSet()->name() : QString();
-}
-
-KWTextFrame* KWOdfLoader::currentFrame() const
-{
-    return m_currentFrame;
 }
 
 //1.6: KWDocument::loadOasis
@@ -106,10 +93,11 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
 
     // TODO check versions and mimetypes etc.
 
+    bool hasMainText = false;
     KoXmlElement childElem;
     forEachElement(childElem, body) {
         if (childElem.localName() == "p") {
-            m_hasMainText = true;
+            hasMainText = true;
             break;
         }
     }
@@ -128,7 +116,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     Q_UNUSED(loader);
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store(), m_document->componentData());
 
-    loadMasterPageStyles(context);
+    loadMasterPageStyles(context, hasMainText);
 
 #if 0 //1.6:
     KWOasisLoader oasisLoader(this);
@@ -196,7 +184,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     }
 
     KoTextShapeData textShapeData;
-    if (m_hasMainText) {
+    if (hasMainText) {
         KWTextFrameSet *mainFs = new KWTextFrameSet(m_document, KWord::MainTextFrameSet);
         mainFs->setAllowLayout(false);
         m_document->addFrameSet(mainFs);
@@ -233,7 +221,7 @@ void KWOdfLoader::loadSettings(const KoXmlDocument& settingsDoc)
     //1.6: m_document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
-void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
+void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context, bool hasMainText)
 {
     kDebug(32001) << " !!!!!!!!!!!!!! loadMasterPageStyles called !!!!!!!!!!!!!!";
     kDebug(32001) << "Number of items :" << context.stylesReader().masterPages().size();
@@ -256,7 +244,7 @@ void KWOdfLoader::loadMasterPageStyles(KoOdfLoadingContext& context)
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadHeader);
             loadHeaderFooter(context, masterPage, *masterNode, *masterPageStyle, LoadFooter);
         }
-        masterPage.setHasMainTextFrame(m_hasMainText);
+        masterPage.setHasMainTextFrame(hasMainText);
         if (!alreadyExists)
             m_document->pageManager()->addPageStyle(masterPage);
     }
