@@ -1677,23 +1677,25 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
             }
         }
 
-        if (property == "objectName")
+        if (property == "objectName") {
             emit widgetNameChanged(d->selected.first()->objectName().toLatin1(), p.value().toByteArray());
+        }
         d->selected.first()->setProperty(property, value);
         handleWidgetPropertyChanged(d->selected.first(), property, value);
     }
     else {
-        if (alterLastCommand && !d->isRedoing)
+        if (alterLastCommand && !d->isRedoing) {
             d->lastCommand->setValue(value);
+        }
         else {
             if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
                 // We store old values for each widget
-                QHash<QByteArray, QVariant> list;
+                QHash<QByteArray, QVariant> oldValues;
                 foreach(QWidget* widget, d->selected) {
-                    list.insert(widget->objectName().toLatin1(), widget->property(property));
+                    oldValues.insert(widget->objectName().toLatin1(), widget->property(property));
                 }
 
-                d->lastCommand = new PropertyCommand(*this, list, value, property);
+                d->lastCommand = new PropertyCommand(*this, oldValues, value, property);
                 addCommand(d->lastCommand, false);
             }
         }
@@ -2979,6 +2981,7 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     }
 }
 
+//! @todo make it support undo
 void Form::saveEnabledProperty(bool value)
 {
     foreach(QWidget* widget, d->selected) {

@@ -429,7 +429,7 @@ WidgetFactory::resetEditor()
     if (m_widget) {
         ObjectTreeItem *tree = m_container ? m_container->form()->objectTree()->lookup(m_widget->objectName()) : 0;
         if (!tree) {
-            kDebug() << "error cannot found a tree item ";
+            kWarning() << "error cannot find tree item for name" << m_widget->objectName();
             return;
         }
         tree->eventEater()->setContainer(m_container);
@@ -441,7 +441,7 @@ WidgetFactory::resetEditor()
             }
         }
 
-        // disable again the widget
+        // disable again the widget if needed
         if (!ed && !tree->isEnabled()) {
 #ifdef __GNUC__
 #warning TODO port to Qt 4 if needed

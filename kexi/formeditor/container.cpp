@@ -429,7 +429,7 @@ Container::eventFilter(QObject *s, QEvent *e)
                    && !connecting
             )
         { // draw the selection rect
-            if ((mev->buttons() != Qt::LeftButton) || /*m_inlineEditing*/ d->state == Private::InlineEditing)
+            if ((mev->buttons() != Qt::LeftButton) || d->state == Private::InlineEditing)
                 return true;
             d->updateSelectionOrInsertingRectangle(mev->pos());
 /* moved
@@ -480,6 +480,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             return false;
         QPaintEvent* pe = static_cast<QPaintEvent*>(e);
         QPainter p(widget());
+        p.setRenderHint(QPainter::Antialiasing, false);
 #if 1 // grid
 #define DEBUG_PAINTER
 #ifdef DEBUG_PAINTER
@@ -669,7 +670,6 @@ Container::eventFilter(QObject *s, QEvent *e)
         if (!w)
             return false;
 
-        //m_inlineEditing = true;
         d->state = Private::InlineEditing;
         d->form->library()->startEditing(w->metaObject()->className(), w, this);
         return true;
