@@ -63,6 +63,7 @@
 #include <KoZoomController.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
+#include <KoPathShape.h> // for KoPathShapeId
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -1148,12 +1149,22 @@ void KWView::createCustomOutline()
         return;
     if (frames.count() == 1) {
         m_document->addCommand(new KWCreateOutlineCommand(m_document, frames.at(0)));
-        return;
+    } else {
+        QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
+        foreach (KWFrame *frame, frames)
+            new KWCreateOutlineCommand(m_document, frame, cmd);
+        m_document->addCommand(cmd);
     }
-    QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
-    foreach (KWFrame *frame, frames)
-        new KWCreateOutlineCommand(m_document, frame, cmd);
-    m_document->addCommand(cmd);
+
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    selection->deselectAll();
+    foreach (KWFrame *frame, frames) {
+        KoShapeContainer *group = frame->shape()->parent();
+        if (group)
+            selection->select(group);
+    }
+
+    KoToolManager::instance()->switchToolRequested("PathToolFactoryId");
 }
 
 
