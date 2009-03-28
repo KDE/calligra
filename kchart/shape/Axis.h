@@ -50,6 +50,7 @@ public:
     Axis( PlotArea *parent );
     ~Axis();
 	
+    PlotArea *plotArea() const;
     AxisPosition position() const;
     KoShape *title() const;
     QString titleText() const;

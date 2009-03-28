@@ -53,6 +53,8 @@ public:
     ~Private();
     
     void updateSize();
+    void updateDiagram() const;
+    ChartType effectiveChartType() const;
     bool isValidDataPoint( const QPoint &point ) const;
     QVariant data( const CellRegion &region, int index ) const;
     
@@ -136,6 +138,34 @@ void DataSet::Private::updateSize()
     
     if ( newSize != size && !blockSignals && kdChartModel ) {
         kdChartModel->dataSetSizeChanged( parent, size );
+    }
+}
+
+/**
+ * Returns the effective chart type of this data set, i.e.
+ * returns the chart type of the diagram this data set is
+ * attached to if no chart type is set, or otherwise this data
+ * set's chart type.
+ */
+ChartType DataSet::Private::effectiveChartType() const
+{
+    if ( attachedAxis && chartType == LastChartType )
+        return attachedAxis->plotArea()->chartType();
+    return chartType;
+}
+
+void DataSet::Private::updateDiagram() const
+{
+    if ( kdDiagram && kdDataSetNumber >= 0 && size > 0 ) {
+	// FIXME: This should be done in a more proper way.
+	// The problem here is that line diagrams don't use the brush
+	// to paint their lines, but the pen. We on the other hand set
+	// the data set color on the brush, not the pen.
+        if ( effectiveChartType() == LineChartType )
+            kdDiagram->setPen( kdDataSetNumber, brush.color() );
+        else
+            kdDiagram->setPen( kdDataSetNumber, pen );
+        kdDiagram->setBrush( kdDataSetNumber, brush );
     }
 }
 
@@ -373,8 +403,7 @@ QBrush DataSet::brush() const
 void DataSet::setPen( const QPen &pen )
 {
     d->pen = pen;
-    if ( !d->blockSignals && d->kdDiagram && d->kdDataSetNumber >= 0 && size() > 0 )
-        d->kdDiagram->setPen( d->kdDataSetNumber, pen );
+    d->updateDiagram();
     if ( !d->blockSignals && d->attachedAxis )
         d->attachedAxis->update();
 }
@@ -382,8 +411,7 @@ void DataSet::setPen( const QPen &pen )
 void DataSet::setBrush( const QBrush &brush )
 {
     d->brush = brush;
-    if ( !d->blockSignals && d->kdDiagram && d->kdDataSetNumber >= 0 && size() > 0 )
-        d->kdDiagram->setBrush( d->kdDataSetNumber, brush );
+    d->updateDiagram();
     if ( !d->blockSignals && d->attachedAxis )
         d->attachedAxis->update();
 }
@@ -759,10 +787,7 @@ int DataSet::kdDataSetNumber() const
 void DataSet::setKdDataSetNumber( int number )
 {
     d->kdDataSetNumber = number;
-    if ( d->kdDiagram && d->kdDataSetNumber >= 0 && size() > 0 ) {
-        d->kdDiagram->setBrush( d->kdDataSetNumber, d->brush );
-        d->kdDiagram->setPen( d->kdDataSetNumber, d->pen );
-    }
+    d->updateDiagram();
 }
 
 void DataSet::setKdChartModel( KDChartModel *model )

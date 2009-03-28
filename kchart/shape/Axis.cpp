@@ -650,6 +650,11 @@ Axis::~Axis()
     delete d;
 }
 
+PlotArea* Axis::plotArea() const
+{
+    return d->plotArea;
+}
+
 AxisPosition Axis::position() const
 {
     return d->position;
