@@ -127,7 +127,8 @@ void MagicCurtain::revealFramesForPage(int pageNumber, qreal moveFrames)
 KWDocument::KWDocument(QWidget *parentWidget, QObject* parent, bool singleViewMode)
         : KoDocument(parentWidget, parent, singleViewMode),
         m_frameLayout(&m_pageManager, m_frameSets),
-        m_magicCurtain(0)
+        m_magicCurtain(0),
+        m_mainFramesetEverFinished(false)
 {
     m_frameLayout.setDocument(this);
 
@@ -328,6 +329,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
                 tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),
                     this, SLOT(requestMoreSpace(KWTextFrameSet*)));
+            connect(tfs, SIGNAL(layoutDone()), this, SLOT(mainTextFrameSetLayoutDone()));
         }
         else {
             connect(tfs, SIGNAL(decorationFrameResize(KWTextFrameSet*)),
@@ -380,6 +382,11 @@ void KWDocument::removeFrame(KWFrame *frame)
     KWPageRemoveCommand *cmd = new KWPageRemoveCommand(this, page);
     cmd->redo();
     delete cmd;
+}
+
+void KWDocument::mainTextFrameSetLayoutDone()
+{
+    m_mainFramesetEverFinished = true;
 }
 
 KWFrameSet *KWDocument::frameSetByName(const QString & name)

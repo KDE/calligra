@@ -164,6 +164,8 @@ public:
     // reimplemented slot from KoDocument
     virtual void initEmpty();
 
+    bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
+
 public slots:
     /// Relayout the pages
     void relayout();
@@ -193,6 +195,7 @@ private slots:
 
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
+    void mainTextFrameSetLayoutDone();
 
 protected:
     /// reimplemented from KoDocument
@@ -230,6 +233,7 @@ private:
     QMap<QString, KoDataCenter *>  m_dataCenterMap;
 
     MagicCurtain *m_magicCurtain; ///< all things we don't want to show are behind this one
+    bool m_mainFramesetEverFinished;
 };
 
 /// \internal

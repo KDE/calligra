@@ -524,6 +524,7 @@ void KWTextDocumentLayout::layout()
                     }
                 }
 
+                m_frameSet->layoutDone();
                 return; // done!
             } else if (m_state->shape == 0) {
                 TDEBUG << "encountered an 'end of page' break, we need an extra page to honor that!";
@@ -582,6 +583,7 @@ void KWTextDocumentLayout::layout()
                 if (lastFrame->frameBehavior() == KWord::IgnoreContentFrameBehavior
                         || dynamic_cast<KWCopyShape*> (lastFrame)) {
                     m_state->clearTillEnd();
+                    m_frameSet->layoutDone();
                     return; // done!
                 }
 
@@ -619,7 +621,8 @@ void KWTextDocumentLayout::layout()
                 m_dummyShape->textShapeData->setShapeMargins(data->shapeMargins());
                 if (! m_state->setFollowupShape(m_dummyShape)) { // if I can't render into a dummy shape
                     m_state->clearTillEnd();
-                    return;
+                    m_frameSet->layoutDone();
+                    return; // done!
                 }
                 requestFrameResize = true;
             }

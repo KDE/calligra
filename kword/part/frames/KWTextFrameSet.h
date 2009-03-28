@@ -107,6 +107,8 @@ signals:
     void moreFramesNeeded(KWTextFrameSet *fs);
     /// emitted when a decorating frame, like a header or a footer, wants to be resized.
     void decorationFrameResize(KWTextFrameSet *fs);
+    /// emitted when all the text is fully layouted
+    void layoutDone();
 
 protected:
     friend class KWTextDocumentLayout;

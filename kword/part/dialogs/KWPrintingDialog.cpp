@@ -30,6 +30,7 @@
 #include <KoInsets.h>
 #include <KoShapeManager.h>
 #include <kdeversion.h>
+#include <QApplication>
 
 KWPrintingDialog::KWPrintingDialog(KWView *view)
         : KoPrintingDialog(view),
@@ -37,8 +38,13 @@ KWPrintingDialog::KWPrintingDialog(KWView *view)
         m_clipToPage(false)
 {
     setShapeManager(view->kwcanvas()->shapeManager());
+
+    while (! m_document->layoutFinishedAtleastOnce()) {
+        QCoreApplication::processEvents();
+        if (! QCoreApplication::hasPendingEvents())
+            break;
+    }
     printer().setFromTo(documentFirstPage(), documentLastPage());
-    // TODO if the doc is not yet done layouting, the lastpage is not correct
 }
 
 KWPrintingDialog::~KWPrintingDialog()
