@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,8 +21,11 @@
 #include "KarbonPrintJob.h"
 #include "KarbonView.h"
 #include "KarbonCanvas.h"
+#include "KarbonPart.h"
 
 #include <KoShapeManager.h>
+
+#include <QtGui/QPainter>
 
 KarbonPrintJob::KarbonPrintJob(KarbonView *view)
     : KoPrintingDialog(view),
@@ -29,14 +33,34 @@ KarbonPrintJob::KarbonPrintJob(KarbonView *view)
 {
     setShapeManager( m_view->canvasWidget()->shapeManager() );
     printer().setFromTo(1, 1);
+
+    QSizeF pageSize = m_view->part()->document().pageSize();
+    if( pageSize.width() > pageSize.height() )
+        printer().setOrientation(QPrinter::Landscape);
+    else
+        printer().setOrientation(QPrinter::Portrait);
 }
 
 QRectF KarbonPrintJob::preparePage(int)
 {
     // if we have any custom tabs, here is where can can read them out and do our thing.
 
-    //TODO  clip to document
-    return QRectF();
+    const QSizeF contentSize = m_view->part()->document().pageSize();
+    const QRectF pageRectPt = printer().pageRect(QPrinter::Point);
+    const double scale = POINT_TO_INCH(printer().resolution());
+    
+    qreal zoom = 1.0;
+    // fit document page to printer page if it is bigger than the printing page rect
+    if( contentSize.width() > pageRectPt.width() || contentSize.height() > pageRectPt.height() ) {
+        qreal zoomX = pageRectPt.width() / contentSize.width();
+        qreal zoomY = pageRectPt.height() / contentSize.height();
+        zoom = qMin(zoomX, zoomY);
+    }
+    
+    painter().scale(zoom, zoom);
+    painter().setRenderHint(QPainter::Antialiasing);
+    
+    return QRectF(QPointF(), scale * contentSize );
 }
 
 QList<KoShape*> KarbonPrintJob::shapesOnPage(int)
