@@ -136,10 +136,9 @@ KarbonPart::~KarbonPart()
     delete d;
 }
 
-void KarbonPart::setPageLayout( const KoPageLayout& layout, const KoUnit & unit )
+void KarbonPart::setPageLayout( const KoPageLayout& layout )
 {
     m_pageLayout = layout;
-    d->document.setUnit( unit );
     setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 }
 
@@ -260,7 +259,7 @@ void KarbonPart::loadOasisSettings( const KoXmlDocument & settingsDoc )
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() )
     {
-        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        changeUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
     guidesData().loadOdfSettings( settingsDoc );
@@ -388,8 +387,7 @@ void KarbonPart::initConfig()
         if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
             defaultUnit = "in";
 
-        setUnit( KoUnit::unit( miscGroup.readEntry( "Units", defaultUnit ) ) );
-        d->document.setUnit( unit() );
+        changeUnit(KoUnit::unit( miscGroup.readEntry( "Units", defaultUnit ) ) );
     }
     if( config->hasGroup( "Grid" ) )
     {
@@ -488,6 +486,12 @@ void KarbonPart::setPageSize( const QSizeF &pageSize )
         KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
         canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
     }
+}
+
+void KarbonPart::changeUnit( const KoUnit &unit )
+{
+    setUnit(unit);
+    d->document.setUnit(unit);
 }
 
 #include "KarbonPart.moc"

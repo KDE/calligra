@@ -89,8 +89,8 @@ public:
     /// Returns maximum number of recent files
     uint maxRecentFiles() const;
 
-    /// Sets page layout and unit of the document
-    void setPageLayout( const KoPageLayout& layout, const KoUnit & unit );
+    /// Sets page layout of the document
+    void setPageLayout( const KoPageLayout& layout );
 
     bool mergeNativeFormat( const QString & file );
 
@@ -114,6 +114,9 @@ protected:
     /// Reads settings from config file
     void initConfig();
 
+    /// change the unit
+    void changeUnit( const KoUnit &unit );
+    
 protected slots:
     /// reimplemented from KoDocument
     virtual void openTemplate(const KUrl& url);

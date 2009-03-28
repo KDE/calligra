@@ -1109,7 +1109,7 @@ void KarbonView::pageLayout()
 
     if( dlg.exec() == QDialog::Accepted )
     {
-        part()->setPageLayout( dlg.pageLayout(), part()->unit() );
+        part()->setPageLayout( dlg.pageLayout() );
         emit pageLayoutChanged();
     }
 }
