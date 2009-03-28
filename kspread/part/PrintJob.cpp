@@ -196,12 +196,12 @@ void PrintJob::startPrinting(RemovePolicy removePolicy)
     KoPrintingDialog::startPrinting(removePolicy);
 }
 
-void PrintJob::preparePage(int pageNumber)
+QRectF PrintJob::preparePage(int pageNumber)
 {
     int sheetPageNumber = pageNumber;
     Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
     if (!sheet)
-        return;
+        return QRectF();
 
     // Move the painter offset according to the page layout.
     const double scale = POINT_TO_INCH(printer().resolution());
@@ -214,10 +214,8 @@ void PrintJob::preparePage(int pageNumber)
 
     // Prepare the page for shape printing.
     const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
-    const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
+    QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
     painter().translate(-pageRect.left() * scale, -pageRect.top() * scale);
-    painter().setClipRect(pageRect.left() * scale, pageRect.top() * scale,
-                          pageRect.width() * scale, pageRect.height() * scale);
 
     // Center the table on the page.
     if (sheet->printSettings()->centerHorizontally())
@@ -225,15 +223,17 @@ void PrintJob::preparePage(int pageNumber)
         const double printWidth = sheet->printSettings()->printWidth(); // FIXME respect repeated columns
         const double offset = 0.5 * (printWidth / zoom - pageRect.width());
         painter().translate(offset * scale, 0.0);
-        painter().setClipRegion(painter().clipRegion().translated(offset * scale, 0.0));
+        pageRect.moveLeft(offset); // scale will be applied below
     }
     if (sheet->printSettings()->centerVertically())
     {
         const double printHeight = sheet->printSettings()->printHeight(); // FIXME respect repeated rows
         const double offset = 0.5 * (printHeight / zoom - pageRect.height());
         painter().translate(0.0, offset * scale);
-        painter().setClipRegion(painter().clipRegion().translated(0.0, offset * scale));
+        pageRect.moveTop(offset); // scale will be applied below
     }
+    return QRectF(pageRect.left() * scale, pageRect.top() * scale,
+        pageRect.width() * scale, pageRect.height() * scale);
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)

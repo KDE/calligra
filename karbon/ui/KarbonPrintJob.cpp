@@ -31,11 +31,12 @@ KarbonPrintJob::KarbonPrintJob(KarbonView *view)
     printer().setFromTo(1, 1);
 }
 
-void KarbonPrintJob::preparePage(int)
+QRectF KarbonPrintJob::preparePage(int)
 {
     // if we have any custom tabs, here is where can can read them out and do our thing.
 
     //TODO  clip to document
+    return QRectF();
 }
 
 QList<KoShape*> KarbonPrintJob::shapesOnPage(int)

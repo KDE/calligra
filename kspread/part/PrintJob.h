@@ -42,7 +42,7 @@ public Q_SLOTS:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
-    virtual void preparePage(int pageNumber);
+    virtual QRectF preparePage(int pageNumber);
     virtual void printPage(int pageNumber, QPainter &painter);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
     virtual QList<QWidget*> createOptionWidgets() const;

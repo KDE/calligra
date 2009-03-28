@@ -43,7 +43,7 @@ public:
     virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
 protected:
-    virtual void preparePage(int pageNumber);
+    virtual QRectF preparePage(int pageNumber);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
     virtual void printingDone();
     virtual int documentFirstPage() const;
@@ -53,7 +53,6 @@ private:
     QMap <KoImageData*, KoImageData::ImageQuality> m_originalImages;
     KWDocument *m_document;
     bool m_clipToPage;
-    QRectF m_currentPage;
 };
 
 #endif

@@ -45,7 +45,7 @@ KWPrintingDialog::~KWPrintingDialog()
 {
 }
 
-void KWPrintingDialog::preparePage(int pageNumber)
+QRectF KWPrintingDialog::preparePage(int pageNumber)
 {
     const int resolution = printer().resolution();
     KoInsets bleed = m_document->pageManager()->padding();
@@ -55,7 +55,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
 
     KWPage page = m_document->pageManager()->page(pageNumber);
     if (! page.isValid())
-        return;
+        return QRectF();
     QRectF pageRect = page.rect(pageNumber);
     pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
 
@@ -94,8 +94,7 @@ void KWPrintingDialog::preparePage(int pageNumber)
         }
     }
 
-    m_currentPage = QRectF(offset, pageOffset, clipWidth + bleedWidth, clipHeight + bleedHeigt);
-    painter().setClipRect(m_currentPage);
+    return QRectF(offset, pageOffset, clipWidth + bleedWidth, clipHeight + bleedHeigt);
 }
 
 QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber)

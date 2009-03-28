@@ -29,7 +29,7 @@ public:
     KarbonPrintJob(KarbonView *view);
 
 protected:
-    virtual void preparePage(int pageNumber);
+    virtual QRectF preparePage(int pageNumber);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
     virtual QList<QWidget*> createOptionWidgets() const;
 
