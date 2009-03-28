@@ -356,8 +356,8 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const QStringList &)
     m_propDesc["openExternalLinks"] = i18nc("property: Can open external links in label", "Open Ext. Links");
 
     //KLineEdit
-    m_propDesc["clickMessage"] = i18n("Property: \"Click Me\" message for line edit", "Click Message");
-    m_propDesc["showClearButton"] = i18n("Property: Show Clear Button", "Clear Button");
+    m_propDesc["clickMessage"] = i18nc("Property: \"Click Me\" message for line edit", "Click Message");
+    m_propDesc["showClearButton"] = i18nc("Property: Show Clear Button", "Clear Button");
     //for EchoMode
 /* obsolete
     m_propValDesc["Normal"] = i18nc("For Echo Mode", "Normal");
