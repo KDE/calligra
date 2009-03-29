@@ -215,3 +215,47 @@ QGradient * KarbonGradientHelper::convertGradient( const QGradient * gradient, Q
 
     return newGradient;
 }
+
+QColor KarbonGradientHelper::colorAt( qreal position, const QGradientStops &stops )
+{
+    if( ! stops.count() )
+        return QColor();
+
+    if( stops.count() == 1 )
+        return stops.first().second;
+    
+    QGradientStop prevStop( -1.0, QColor() );
+    QGradientStop nextStop( 2.0, QColor() );
+    // find framing gradient stops
+    foreach( const QGradientStop & stop, stops )
+    {
+        if( stop.first > prevStop.first && stop.first < position )
+            prevStop = stop;
+        if( stop.first < nextStop.first && stop.first > position )
+            nextStop = stop;
+    }
+    
+    QColor theColor;
+    
+    if( prevStop.first < 0.0 )
+    {
+        // new stop is before the first stop
+        theColor = nextStop.second;
+    }
+    else if( nextStop.first > 1.0 )
+    {
+        // new stop is after the last stop
+        theColor = prevStop.second;
+    }
+    else
+    {
+        // linear interpolate colors between framing stops
+        QColor prevColor = prevStop.second, nextColor = nextStop.second;
+        qreal colorScale = (position - prevStop.first) / (nextStop.first - prevStop.first);
+        theColor.setRedF( prevColor.redF() + colorScale * (nextColor.redF()-prevColor.redF()) );
+        theColor.setGreenF( prevColor.greenF() + colorScale * (nextColor.greenF()-prevColor.greenF()) );
+        theColor.setBlueF( prevColor.blueF() + colorScale * (nextColor.blueF()-prevColor.blueF()) );
+        theColor.setAlphaF( prevColor.alphaF() + colorScale * (nextColor.alphaF()-prevColor.alphaF()) );
+    }
+    return theColor;
+}

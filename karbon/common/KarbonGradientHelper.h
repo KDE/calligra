@@ -42,6 +42,9 @@ public:
     static QGradient * defaultGradient( const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops );
     /// Converts gradient type, preserving as much data as possible
     static QGradient * convertGradient( const QGradient * gradient, QGradient::Type newType );
+    
+    /// Calculates color at given position from given gradient stops
+    static QColor colorAt( qreal position, const QGradientStops &stops );
 };
 
 #endif // KARBONGRADIENTHELPER_H

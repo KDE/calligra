@@ -28,20 +28,20 @@
 
 #include "KarbonGradientWidget.h"
 #include "KarbonCursor.h"
+#include "KarbonGradientHelper.h"
 
-#include <KoUniColorDialog.h>
+#include <KLocale>
+#include <KIconLoader>
+#include <KColorDialog>
 
-#include <klocale.h>
-#include <kiconloader.h>
-
-#include <QLabel>
-#include <QBitmap>
-#include <QPaintEvent>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QPointF>
-#include <QRectF>
-#include <QPainter>
+#include <QtGui/QLabel>
+#include <QtGui/QBitmap>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QPixmap>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtCore/QPointF>
+#include <QtCore/QRectF>
 
 #include <limits>
 
@@ -208,33 +208,24 @@ void KarbonGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 
     if( m_currentStop >= 0 )
     {
-        // ramp point hit -> change color
-        KoColor oldColor;
-        oldColor.fromQColor( m_stops[m_currentStop].second );
-
-        KoUniColorDialog * d = new KoUniColorDialog( oldColor, this->topLevelWidget() );
-        if( d->exec() == QDialog::Accepted )
-        {
-            m_stops[m_currentStop].second = d->color().toQColor();
+        // color stop hit -> change color
+        int result = KColorDialog::getColor( m_stops[m_currentStop].second, this );
+        if ( result == KColorDialog::Accepted ) {
             update();
             emit changed();
         }
-        delete d;
     }
     else if( m_currentStop == -1 )
     {
-        KoColor newColor;
-        newColor.fromQColor( m_stops[0].second );
-
-        // no point hit -> create new color stop
-        KoUniColorDialog * d = new KoUniColorDialog( newColor, this->topLevelWidget() );
-        if( d->exec() == QDialog::Accepted )
-        {
-            m_stops.append( QGradientStop((qreal)( e->x()-m_pntArea.left() ) / m_pntArea.width(), d->color().toQColor()) );
+        // no color stop hit -> new color stop
+        qreal newStopPosition = static_cast<qreal>( e->x()-m_pntArea.left() ) / m_pntArea.width();
+        QColor newStopColor = KarbonGradientHelper::colorAt( newStopPosition, m_stops );
+        int result = KColorDialog::getColor( newStopColor, this );
+        if ( result == KColorDialog::Accepted ) {
+            m_stops.append( QGradientStop(newStopPosition, newStopColor) );
             update();
             emit changed();
         }
-        delete d;
     }
 }
 
