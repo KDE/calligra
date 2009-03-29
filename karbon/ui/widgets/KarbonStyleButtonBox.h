@@ -32,23 +32,22 @@ class KARBONUI_EXPORT KarbonStyleButtonBox : public QWidget
     Q_OBJECT
 
 public:
-    enum ButtonType {
-        None     = 0,
-        Solid    = 1,
-        Gradient = 2,
-        Pattern  = 3,
-        EvenOdd  = 4,
-        Winding  = 5
+    enum StyleButton {
+        None     = 1,
+        Solid    = 2,
+        Gradient = 4,
+        Pattern  = 8,
+        EvenOdd  = 16,
+        Winding  = 32
     };
-
+    Q_DECLARE_FLAGS(StyleButtons, StyleButton)
+    
     KarbonStyleButtonBox( QWidget* parent = 0L );
     virtual ~KarbonStyleButtonBox();
 
 public slots:
-    /// enables the winding buttons
-    void setFill();
-    /// disables the winding buttons
-    void setStroke();
+    /// shows specified buttons
+    void showButtons(StyleButtons buttons);
 
 signals:
     void buttonPressed( int buttonId );
@@ -57,6 +56,8 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KarbonStyleButtonBox::StyleButtons)
 
 #endif // KARBONSTYLEBUTTONBOX_H
 

@@ -317,13 +317,13 @@ KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
     button->setToolTip( i18n( "Winding Fill" ) );
     d->group->addButton( button, Winding );
 
-    int index = 0;
+    int index = 1;
     for( int row = 0; row < d->rowCount; ++row )
     {
         for( int col = 0; col < d->columnCount; ++col )
         {
             layout->addWidget( d->group->button( index ), row, col );
-            index ++;
+            index = index<<1;
             if( index > Winding )
                 break;
         }
@@ -345,16 +345,11 @@ KarbonStyleButtonBox::~KarbonStyleButtonBox()
     delete d;
 }
 
-void KarbonStyleButtonBox::setStroke()
+void KarbonStyleButtonBox::showButtons(StyleButtons buttons)
 {
-    d->group->button( EvenOdd )->setEnabled( false );
-    d->group->button( Winding )->setEnabled( false );
-}
-
-void KarbonStyleButtonBox::setFill()
-{
-    d->group->button( EvenOdd )->setEnabled( true );
-    d->group->button( Winding )->setEnabled( true );
+    foreach( QAbstractButton * b, d->group->buttons() ) {
+        b->setVisible( buttons & d->group->id( b ) );
+    }
 }
 
 #include "KarbonStyleButtonBox.moc"

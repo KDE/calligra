@@ -53,6 +53,12 @@
 
 const int MsecsThresholdForMergingCommands = 2000;
 
+KarbonStyleButtonBox::StyleButtons StrokeButtons = KarbonStyleButtonBox::None|KarbonStyleButtonBox::Solid|KarbonStyleButtonBox::Gradient;
+
+KarbonStyleButtonBox::StyleButtons FillButtons = KarbonStyleButtonBox::None|KarbonStyleButtonBox::Solid|KarbonStyleButtonBox::Gradient|KarbonStyleButtonBox::Pattern;
+
+KarbonStyleButtonBox::StyleButtons FillRuleButtons = KarbonStyleButtonBox::EvenOdd|KarbonStyleButtonBox::Winding;
+
 KarbonStyleDocker::KarbonStyleDocker( QWidget * parent )
     : QDockWidget( parent ), m_canvas(0)
     , m_lastFillCommand(0), m_lastStrokeCommand(0)
@@ -207,7 +213,7 @@ void KarbonStyleDocker::updateStyle( KoShapeBorderModel * stroke, KoShapeBackgro
             qColor = m_canvas->resourceProvider()->backgroundColor().toQColor();
     }
     m_actionColor->setCurrentColor( qColor );
-
+    updateStyleButtons( activeStyle );
     m_preview->update( stroke, fill );
 }
 
@@ -217,7 +223,8 @@ void KarbonStyleDocker::fillSelected()
         return;
 
     m_canvas->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Background );
-    m_buttons->setFill();
+    updateStyleButtons( Karbon::Background );
+    
 }
 
 void KarbonStyleDocker::strokeSelected()
@@ -226,7 +233,7 @@ void KarbonStyleDocker::strokeSelected()
         return;
 
     m_canvas->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Foreground );
-    m_buttons->setStroke();
+    updateStyleButtons( Karbon::Foreground );
 }
 
 void KarbonStyleDocker::resourceChanged( int key, const QVariant& )
@@ -488,15 +495,51 @@ void KarbonStyleDocker::updateFillRule( Qt::FillRule fillRule )
     if( ! selection || ! selection->count() )
         return;
 
-    QList<KoPathShape*> shapes;
+    QList<KoPathShape*> selectedPaths = selectedPathShapes();
+    QList<KoPathShape*> pathsToChange;
+    foreach( KoPathShape * path, selectedPaths )
+    {
+        if( path->fillRule() != fillRule )
+            pathsToChange.append( path );
+    }
+    if( pathsToChange.count() )
+        m_canvas->addCommand( new KoPathFillRuleCommand( pathsToChange, fillRule ) );
+}
+
+QList<KoPathShape*> KarbonStyleDocker::selectedPathShapes()
+{
+    QList<KoPathShape*> pathShapes;
+
+    if( ! m_canvas )
+        return pathShapes;
+    
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+        return pathShapes;
+
     foreach( KoShape * shape, selection->selectedShapes() )
     {
         KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-        if( path && path->fillRule() != fillRule )
-            shapes.append( path );
+        if( path )
+            pathShapes.append( path );
     }
-    if( shapes.count() )
-        m_canvas->addCommand( new KoPathFillRuleCommand( shapes, fillRule ) );
+    
+    return pathShapes;
+}
+
+void KarbonStyleDocker::updateStyleButtons( int activeStyle )
+{
+    if( activeStyle == Karbon::Background ) {
+        if( selectedPathShapes().count() )
+            m_buttons->showButtons( FillButtons|FillRuleButtons );
+        else
+            m_buttons->showButtons( FillButtons );
+    }
+    else {
+        m_buttons->showButtons( StrokeButtons );
+        if( m_stack->currentIndex() == 2 )
+            m_stack->setCurrentIndex( 0 );
+    }
 }
 
 #include "KarbonStyleDocker.moc"

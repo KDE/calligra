@@ -38,6 +38,7 @@ class KoColor;
 class QToolButton;
 class QStackedWidget;
 class KoColorPopupAction;
+class KoPathShape;
 
 class KarbonStyleDocker : public QDockWidget, public KoCanvasObserver
 {
@@ -68,6 +69,11 @@ private:
     
     /// Resets color related commands which are used to combine multiple color changes
     void resetColorCommands();
+    
+    /// Returns list of selected path shapes
+    QList<KoPathShape*> selectedPathShapes();
+    
+    void updateStyleButtons( int activeStyle );
     
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
