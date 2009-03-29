@@ -165,11 +165,8 @@ void KarbonGradientWidget::paintEvent( QPaintEvent* )
     painter.setClipRect( m_pntArea.x(), m_pntArea.y(), m_pntArea.width(), m_pntArea.height() );
     painter.translate( m_pntArea.x(), m_pntArea.y() );
 
-    if( m_stops.count() > 1 )
-    {
-        foreach( const QGradientStop & stop, m_stops )
-            paintColorStop( painter, (int)( stop.first * m_pntArea.width() ), stop.second );
-    }
+    foreach( const QGradientStop & stop, m_stops )
+        paintColorStop( painter, (int)( stop.first * m_pntArea.width() ), stop.second );
 }
 
 void KarbonGradientWidget::mousePressEvent( QMouseEvent* e )
