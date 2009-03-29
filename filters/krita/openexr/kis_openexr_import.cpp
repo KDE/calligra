@@ -112,7 +112,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
     }
     image->lock();
     KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE, cs);
-    layer->setCompositeOp(cs->compositeOp(COMPOSITE_OVER));
+    layer->setCompositeOp(COMPOSITE_OVER);
 
     if (!layer) {
         return KoFilter::CreationError;
