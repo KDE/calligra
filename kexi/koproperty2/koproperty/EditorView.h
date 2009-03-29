@@ -31,6 +31,7 @@
 namespace KoProperty
 {
 
+class Property;
 class Set;
 
 //! @brief A widget for editing properties
@@ -133,6 +134,11 @@ protected slots:
 
     /*! Called when current property set is about to be destroyed. */
     void slotSetWillBeDeleted();
+
+    /*! Updates editor widget in the editor.*/
+    void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+
+    void slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property);
 
 private:
     /*! Used by changeSet(). */

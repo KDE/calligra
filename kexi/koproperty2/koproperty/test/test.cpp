@@ -165,6 +165,7 @@ TestWindow::TestWindow()
 //crashes.. why?: editorView->expandAll();
     resize(400, qApp->desktop()->height() - 200);
     editorView->setFocus();
+    kDebug() << m_set;
 }
 
 TestWindow::~TestWindow()

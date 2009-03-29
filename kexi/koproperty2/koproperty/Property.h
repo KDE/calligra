@@ -27,9 +27,6 @@
 #include <QtCore/QByteArray>
 #include "koproperty_global.h"
 
-template<class U> class Q3AsciiDict;
-template<class U> class Q3AsciiDictIterator;
-
 /*! \brief Namespace for a set of classes implementing generic properties framework.
 
  Main classes of this framework are:
@@ -445,6 +442,9 @@ protected:
     /*! Outputs debug string for this property. */
     void debug() const;
 
+    /*! For operator <<. */
+    const QMap<QByteArray, QVariant>& options() const;
+
     //! @internal
     PropertyPrivate * const d;
 
@@ -452,7 +452,11 @@ protected:
     friend class SetPrivate;
     friend class Buffer;
     friend class ComposedPropertyInterface;
+    friend KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 };
+
+//! kDebug() stream operator. Writes property @a p to the debug output in a nicely formatted way.
+KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Property &p);
 
 }
 

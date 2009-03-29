@@ -47,7 +47,8 @@ public:
     /*! @see Set::Iterator::setOrder() */
     enum Order {
         InsertionOrder,    //!< insertion order
-        AlphabeticalOrder  //!< alphabetical order (case-insensitively by captions)
+        AlphabeticalOrder, //!< alphabetical order (case-insensitively by captions)
+        AlphabeticalByName //!< alphabetical order (case-insensitively by name)
     };
 
     //! An interface for functor selecting properties.
@@ -102,6 +103,8 @@ public:
         QList<Property*> m_sorted; //!< for sorted order
     };
 
+    //! Constructs a new Set object.
+    //! @see typeName()
     explicit Set(QObject *parent = 0, const QString &typeName = QString());
 
     /*! Constructs a deep copy of \a set.
@@ -163,7 +166,10 @@ public:
     }
     set["myProperty"].setValue("My Value");
     /endcode
-    \return \ref Property with given name. */
+    @return \ref Property with given name. 
+    @see changeProperty(const QByteArray &, const QVariant &)
+    @see changePropertyIfExists(const QByteArray &, const QVariant &)
+    */
     Property& operator[](const QByteArray &name) const;
 
     /*! @return value for property named with @a name. 
@@ -176,7 +182,8 @@ public:
     /*! Creates a deep copy of \a set and assigns it to this property set. */
     const Set& operator= (const Set &set);
 
-    /*! Change the value of property whose key is \a property to \a value. */
+    /*! Change the value of property whose key is \a property to \a value. 
+    @see void changePropertyIfExists(const QByteArray &, const QVariant &) */
     void changeProperty(const QByteArray &property, const QVariant &value);
 
     /*! Change the value of property whose key is \a property to \a value
@@ -219,12 +226,11 @@ public:
 
     void setPreviousSelection(const QByteArray& prevSelection);
 
-    /*! A name of this property set type, that is usable when
+    /*! An optional name of this property set's type, that is usable when
      we want to know if two property set objects have the same type.
      This avoids e.g. reloading of all Editor's contents.
-     Also, this allows to know if two property set objects are compatible
-     by their property sets.
-     For comparing purposes, type names are case insensitive.*/
+     Also, informs whether two property set objects are compatible.
+     For comparing purposes, type names are lowercase for case insensitive comparisons.*/
     QString typeName() const;
 
     /*! Prints debug output for this set. */
@@ -284,6 +290,9 @@ protected:
     friend class Property;
     friend class Buffer;
 };
+
+//! kDebug() stream operator. Writes this set to the debug output in a nicely formatted way.
+KOPROPERTY_EXPORT QDebug operator<<(QDebug dbg, const Set &set);
 
 /*! \brief
   \todo find a better name to show it's a set that doesn't own property

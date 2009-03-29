@@ -203,10 +203,10 @@ Set::PropertySelector::~PropertySelector()
 
 //////////////////////////////////////////////
 
-typedef QPair<Property*, QString> Iterator_PropertyAndCaption;
+typedef QPair<Property*, QString> Iterator_PropertyAndString;
 
-bool Iterator_propertyAndCaptionLessThan(
-    const Iterator_PropertyAndCaption &n1, const Iterator_PropertyAndCaption &n2)
+bool Iterator_propertyAndStringLessThan(
+    const Iterator_PropertyAndString &n1, const Iterator_PropertyAndString &n2)
 {
     return QString::compare(n1.second, n2.second, Qt::CaseInsensitive) < 0;
 }
@@ -237,28 +237,36 @@ void Set::Iterator::setOrder(Set::Order order)
     if (m_order == order)
         return;
     m_order = order;
-    if (m_order == Set::AlphabeticalOrder) {
-        QList<Iterator_PropertyAndCaption> propertiesAndCaptions;
+    switch (m_order) {
+    case Set::AlphabeticalOrder:
+    case Set::AlphabeticalByName:
+    {
+        QList<Iterator_PropertyAndString> propertiesAndStrings;
         m_iterator = m_set->d->listConstIterator();
         m_end = m_set->d->listConstEnd();
         for (; m_iterator!=m_end; ++m_iterator) {
             Property *prop = *m_iterator;
-            QString caption( prop->caption() );
-            if (caption.isEmpty())
-                caption = prop->name();
-            propertiesAndCaptions.append( qMakePair(prop, caption) );
+            QString captionOrName;
+            if (m_order == Set::AlphabeticalOrder) {
+                captionOrName = prop->caption();
+            }
+            if (captionOrName.isEmpty()) {
+                captionOrName = prop->name();
+            }
+            propertiesAndStrings.append( qMakePair(prop, captionOrName) );
         }
-        qSort(propertiesAndCaptions.begin(), propertiesAndCaptions.end(), 
-            Iterator_propertyAndCaptionLessThan);
+        qSort(propertiesAndStrings.begin(), propertiesAndStrings.end(), 
+            Iterator_propertyAndStringLessThan);
         m_sorted.clear();
-        foreach (const Iterator_PropertyAndCaption& propertyAndCaption, propertiesAndCaptions) {
-            m_sorted.append(propertyAndCaption.first);
+        foreach (const Iterator_PropertyAndString& propertyAndString, propertiesAndStrings) {
+            m_sorted.append(propertyAndString.first);
         }
         // restart the iterator
         m_iterator = m_sorted.constBegin();
         m_end = m_sorted.constEnd();
+        break;
     }
-    else {
+    default:
         m_sorted.clear();
         // restart the iterator
         m_iterator = m_set->d->listConstIterator();
@@ -287,11 +295,11 @@ Set::Set(QObject *parent, const QString &typeName)
         : QObject(parent)
         , d(new SetPrivate(this))
 {
-    setObjectName(typeName.toLatin1());
+    setObjectName(typeName.toLower().toLatin1());
 
     d->ownProperty = true;
     d->groupDescriptions.insert("common", i18nc("General properties", "General"));
-    d->typeName = typeName;
+    d->typeName = typeName.toLower();
 }
 
 
@@ -512,20 +520,41 @@ Set::changeProperty(const QByteArray &property, const QVariant &value)
 
 /////////////////////////////////////////////////////
 
-void
-Set::debug() const
+void Set::debug() const
 {
-    //kDebug() << "List: typeName='" << m_typeName << "'";
-    if (d->isEmpty()) {
-        kDebug(30007) << "<EMPTY>";
-        return;
-    }
-    kDebug(30007) << d->count() << " properties:";
+    kDebug(30007) << *this;
+}
 
-    const QList<Property*>::ConstIterator itEnd(d->listConstEnd());
-    for (QList<Property*>::ConstIterator it(d->listConstIterator()); it!=itEnd; ++it) {
-        (*it)->debug();
+QDebug KoProperty::operator<<(QDebug dbg, const Set &set)
+{
+    dbg.nospace() << "KoProperty::Set(";
+    if (!set.typeName().isEmpty()) {
+        dbg.nospace() << "TYPENAME=" << set.typeName();
+        if (set.isEmpty()) {
+            dbg.space() << "<EMPTY>)";
+            return dbg.space();
+        }
     }
+    if (set.isEmpty()) {
+        dbg.space() << "<EMPTY>)";
+        return dbg.space();
+    }
+    dbg.nospace() << " PROPERTIES(" << set.count() << "):\n";
+
+    Set::Iterator it(set);
+    it.setOrder(Set::AlphabeticalByName);
+    bool first = true;
+    for ( ; it.current(); ++it) {
+        if (first) {
+            first = false;
+        }
+        else {
+            dbg.nospace() << "\n";
+        }
+        dbg.nospace() << *it.current();
+    }
+    dbg.nospace() << "\n)";
+    return dbg.space();
 }
 
 QByteArray

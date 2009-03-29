@@ -377,12 +377,11 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
 
     d->set = set;
     if (d->set) {
-/*not needed 
         //receive property changes
         connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
         connect(d->set, SIGNAL(propertyReset(KoProperty::Set&, KoProperty::Property&)),
-                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));*/
+                this, SLOT(slotPropertyReset(KoProperty::Set&, KoProperty::Property&)));
 //NEEDED?        connect(d->set, SIGNAL(aboutToBeCleared()), this, SLOT(slotSetWillBeCleared()));
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
@@ -547,6 +546,19 @@ QColor EditorView::gridLineColor() const
 void EditorView::setGridLineColor(const QColor& color)
 {
     d->gridLineColor = color;
+}
+
+void EditorView::slotPropertyChanged(Set& set, Property& property)
+{
+    const QModelIndex index( d->model->indexForPropertyName(property.name()) );
+    if (index.isValid())
+        update(index);
+}
+
+void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)
+{
+//! @todo OK?
+    slotPropertyChanged(set, property);
 }
 
 #if 0

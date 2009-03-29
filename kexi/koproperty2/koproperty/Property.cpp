@@ -26,9 +26,6 @@
 
 #include <kdebug.h>
 
-#include <QObject>
-#include <q3ptrdict.h>
-#include <q3asciidict.h>
 #include <QPointer>
 #include <QByteArray>
 #include <QStringList>
@@ -102,7 +99,7 @@ public:
     //! Used when a single set is assigned for the property
     QPointer<Set> set;
     //! Used when multiple sets are assigned for the property
-    Q3PtrDict< QPointer<Set> > *sets;
+    QList< QPointer<Set> > *sets;
 // QValueList<Set*>  sets;
 
     Property  *parent;
@@ -431,9 +428,9 @@ Property::resetValue()
         d->parent->d->changed = false;
 
     if (d->sets) {
-        for (Q3PtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
-            if (it.current()) //may be destroyed in the meantime
-                emit(*it.current())->propertyReset(**it.current(), *this);
+        foreach (QPointer<Set> set, *d->sets) {
+            if (!set.isNull()) //may be destroyed in the meantime
+                emit set->propertyReset(*set, *this);
         }
     } else if (d->set) {
         emit d->set->propertyReset(*d->set, *this);
@@ -698,21 +695,13 @@ Property::addSet(Set *set)
         d->set = set;
         return;
     }
-    if ((Set*)d->set == set)
-        return;
-    QPointer<Set> *pset = d->sets ? d->sets->find(set) : 0;
-    if (pset && (Set*)*pset == set)
+    if ((Set*)d->set == set || d->sets->contains(set))
         return;
     if (!d->sets) {
-        d->sets = new Q3PtrDict< QPointer<Set> >(101);
-        d->sets->setAutoDelete(true);
+        d->sets = new QList< QPointer<Set> >;
     }
 
-    d->sets->replace(set, new QPointer<Set>(set));
-
-// QValueList<Set*>::iterator it = qFind( d->sets.begin(), d->sets.end(), set);
-// if(it == d->sets.end()) // not in our list
-//  d->sets.append(set);
+    d->sets->append(QPointer<Set>(set));
 }
 
 const QList<Property*>*
@@ -758,10 +747,10 @@ void Property::setSortingKey(int key)
 void Property::emitPropertyChanged()
 {
     if (d->sets) {
-        for (Q3PtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
-            if (it.current()) {//may be destroyed in the meantime
-                emit(*it.current())->propertyChangedInternal(**it.current(), *this);
-                emit(*it.current())->propertyChanged(**it.current(), *this);
+        foreach (QPointer<Set> set, *d->sets) {
+            if (!set.isNull()) {//may be destroyed in the meantime
+                emit set->propertyChangedInternal(*set, *this);
+                emit set->propertyChanged(*set, *this);
             }
         }
     } else if (d->set) {
@@ -776,18 +765,64 @@ void Property::emitPropertyChanged()
     }
 }
 
+const QMap<QByteArray, QVariant>& Property::options() const
+{
+    return d->options;
+}
+
 /////////////////////////////////////////////////////////////////
 
-void
-Property::debug() const
+void Property::debug() const
 {
-    QString dbg = "Property( name='" + QString(d->name) + "' desc='" + d->description
-                  + "' val=" + (value().isValid() ? value().toString() : "<INVALID>");
-    if (!d->oldValue.isValid())
-        dbg += (", oldVal='" + d->oldValue.toString() + '\'');
-    dbg += (QString(d->changed ? " " : " un") + "changed");
-    dbg += (d->visible ? " visible" : " hidden");
-    dbg += " )";
+    kDebug(30007) << *this;
+}
 
-    kDebug(30007) << dbg;
+KOPROPERTY_EXPORT QDebug KoProperty::operator<<(QDebug dbg, const Property &p)
+{
+    dbg.nospace() << "KoProperty::Property("
+        << "NAME=" << p.name();
+    if (!p.caption().isEmpty()) {
+        dbg.nospace() << " CAPTION=" << p.caption();
+    }
+    if (!p.description().isEmpty()) {
+        dbg.nospace() << " DESC=" << p.description();
+    }
+    dbg.nospace() << " TYPE=" << p.type();
+    if (p.value().isValid()) {
+        dbg.nospace() << " VALUE=" << p.value();
+    }
+    else {
+        dbg.nospace() << " VALUE=<INVALID>";
+    }
+    if (p.oldValue().isValid()) {
+        dbg.nospace() << " OLDVALUE=" << p.oldValue();
+    }
+    if (p.isModified()) {
+        dbg.nospace() << " MODIFIED";
+    }
+    if (!p.isVisible()) {
+        dbg.nospace() << " HIDDEN";
+    }
+
+//! @todo children...
+
+    if (p.hasOptions()) {
+        dbg.nospace() << " OPTIONS(" << p.options().count() << "): [";
+        QList<QByteArray> optionKeys( p.options().keys() );
+        qSort(optionKeys);
+        bool first = true;
+        foreach (const QByteArray& key, optionKeys) {
+            if (first) {
+                first = false;
+            }
+            else {
+                dbg.space() << ",";
+            }
+            dbg.nospace() << key << ":" << p.option(key);
+        }
+        dbg.nospace() << "]";
+    }
+
+    dbg.nospace() << ")";
+    return dbg.space();
 }
