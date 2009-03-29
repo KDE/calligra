@@ -285,7 +285,7 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
 {
     if( m_selection == Line )
     {
-        // qreal click on gradient line inserts a new gradient stop
+        // double click on gradient line inserts a new gradient stop
 
         qreal scalar = projectToGradientLine( mouseLocation );
         // calculate distance to gradient line
@@ -293,46 +293,16 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
         QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
         QPointF diff = stopPoint - startPoint;
         QPointF diffToLine = startPoint + scalar * diff - mouseLocation;
-        if( diffToLine.x()*diffToLine.x() + diffToLine.y()*diffToLine.y() > m_handleRadius*m_handleRadius )
+        qreal distToLine = diffToLine.x()*diffToLine.x() + diffToLine.y()*diffToLine.y();
+        if( distToLine > m_handleRadius*m_handleRadius )
             return false;
 
-        QGradientStop prevStop( -1.0, QColor() );
-        QGradientStop nextStop( 2.0, QColor() );
-        // find framing gradient stops
-        foreach( const QGradientStop & stop, m_stops )
-        {
-            if( stop.first > prevStop.first && stop.first < scalar )
-                prevStop = stop;
-            if( stop.first < nextStop.first && stop.first > scalar )
-                nextStop = stop;
-        }
-        QColor newColor;
-
-        if( prevStop.first < 0.0 )
-        {
-            // new stop is before the first stop
-            newColor = nextStop.second;
-        }
-        else if( nextStop.first > 1.0 )
-        {
-            // new stop is after the last stop
-            newColor = prevStop.second;
-        }
-        else
-        {
-            // linear interpolate colors between framing stops
-            QColor prevColor = prevStop.second, nextColor = nextStop.second;
-            qreal colorScale = (scalar - prevStop.first) / (nextStop.first - prevStop.first);
-            newColor.setRedF( prevColor.redF() + colorScale * (nextColor.redF()-prevColor.redF()) );
-            newColor.setGreenF( prevColor.greenF() + colorScale * (nextColor.greenF()-prevColor.greenF()) );
-            newColor.setBlueF( prevColor.blueF() + colorScale * (nextColor.blueF()-prevColor.blueF()) );
-            newColor.setAlphaF( prevColor.alphaF() + colorScale * (nextColor.alphaF()-prevColor.alphaF()) );
-        }
+        QColor newColor = KarbonGradientHelper::colorAt( scalar, m_stops );
         m_stops.append( QGradientStop( scalar, newColor ) );
     }
     else if( m_selection == Stop )
     {
-        // qreal click on stop handle removes gradient stop
+        // double click on stop handle removes gradient stop
 
         // do not allow removing one of the last two stops
         if( m_stops.count() <= 2 )
