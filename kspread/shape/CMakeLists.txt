@@ -11,10 +11,16 @@ SET (tableshape_LIB_SRCS
     TablePageManager.cpp
     TableShape.cpp
     TableShapeFactory.cpp
-    TableTool.cpp
-    TableToolFactory.cpp
-    SheetsEditor.cpp
     )
+
+if (BUILD_EVERYTHING)
+   SET (tableshape_LIB_SRCS
+       ${tableshape_LIB_SRCS}
+       TableTool.cpp
+       TableToolFactory.cpp
+       SheetsEditor.cpp
+   )
+endif (BUILD_EVERYTHING)
 
 kde4_add_plugin(spreadsheetshape ${tableshape_LIB_SRCS})
 
