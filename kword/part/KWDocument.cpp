@@ -577,9 +577,10 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     // c) we have so much text in any of our text-framesets that new pages
     //    may have to be generated at some time after loading is completed.
 
-    // pages defined in the loaded-document
-    foreach (KWPage page, m_pageManager.pages())
-        m_magicCurtain->revealFramesForPage(page.pageNumber(), page.offsetInDocument());
+    if (m_magicCurtain) { // pages defined in the loaded-document
+        foreach (KWPage page, m_pageManager.pages())
+            m_magicCurtain->revealFramesForPage(page.pageNumber(), page.offsetInDocument());
+    }
 
     // Here we look at point 'b'. We add pages so at least all frames have a page.
     // btw. the observent reader might notice that cases b and c are not mutually exclusive ;)
