@@ -50,7 +50,8 @@
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
 #include <KoUnit.h>
-#include <KoShapeBackground.h>
+#include <KoColorBackground.h>
+#include <KoLineBorder.h>
 
 using namespace KChart;
 
@@ -78,10 +79,13 @@ public:
     bool pixmapRepaintRequested;
     QSizeF lastSize;
     QPointF lastZoomLevel;
+    
+    KoLineBorder *lineBorder;
 };
 
 Legend::Private::Private()
 {
+    lineBorder = new KoLineBorder( 0.5, Qt::black );
     showFrame = true;
     framePen = QPen();
     backgroundBrush = QBrush();
@@ -110,7 +114,7 @@ Legend::Legend( ChartShape *parent )
     setTitleFontSize( 10 );
     setTitle( QString() );
     setFontSize( 8 );
-    
+
     update();
     
     parent->addChild( this );
@@ -141,12 +145,7 @@ bool Legend::showFrame() const
 void Legend::setShowFrame( bool show )
 {
     d->showFrame = show;
-    
-    // KDChart
-    KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
-    attributes.setVisible( show );
-    d->kdLegend->setFrameAttributes( attributes );
-    d->pixmapRepaintRequested = true;
+    setBorder( show ? d->lineBorder : 0 );
 }
 
 QPen Legend::framePen() const
@@ -559,8 +558,11 @@ KDChart::Legend *Legend::kdLegend() const
 void Legend::update()
 {
     d->pixmapRepaintRequested = true;
+    // FIXME: Update legend properly by implementing all *DataChanged() slots
+    // in KDChartModel. Right now, only yDataChanged() is implemented.
+    d->kdLegend->forceRebuild();
     QSize size = d->kdLegend->sizeHint();
-    // Scale size from px to pt
+    // FIXME: Scale size from px to pt?
     setSize( QSizeF( size ) );
     KoShape::update();
 }
