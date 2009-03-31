@@ -25,6 +25,7 @@
 #include "Surface.h"
 #include "ThreeDScene.h"
 #include "ProxyModel.h"
+#include "Legend.h"
 
 // KOffice
 #include <KoXmlReader.h>
@@ -147,10 +148,16 @@ PlotArea::PlotArea( ChartShape *parent )
     
     connect( d->shape->proxyModel(), SIGNAL( modelReset() ),
              this, SLOT( dataSetCountChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( modelResetComplete() ),
+             this, SLOT( update() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsInserted( const QModelIndex, int, int ) ),
              this, SLOT( dataSetCountChanged() ) );
     connect( d->shape->proxyModel(), SIGNAL( rowsRemoved( const QModelIndex, int, int ) ),
              this, SLOT( dataSetCountChanged() ) );
+    connect( d->shape->proxyModel(), SIGNAL( columnsInserted( const QModelIndex, int, int ) ),
+             this, SLOT( update() ) );
+    connect( d->shape->proxyModel(), SIGNAL( columnsRemoved( const QModelIndex, int, int ) ),
+             this, SLOT( update() ) );
     connect( d->shape->proxyModel(), SIGNAL( dataChanged() ),
              this, SLOT( update() ) );
 }
@@ -727,6 +734,7 @@ bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
 
 void PlotArea::update() const
 {
+    parent()->legend()->update();
     requestRepaint();
     foreach( Axis* axis, d->axes )
         axis->update();

@@ -54,35 +54,13 @@
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
 #include "CellRegionDialog.h"
-#include "ChartTableView.h"
+#include "TableEditorDialog.h"
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include <interfaces/KoChartModel.h>
 #include "TableModel.h"
 
 using namespace KChart;
-
-
-// FIXME: What is this button for?
-//
-class Button : public QToolButton
-{
-public:
-    Button(QWidget* parent, const QString& text, const KIcon& icon)
-        : QToolButton(parent)
-    {
-        setCheckable(true);
-        setIcon(icon);
-        //setIconSize(QSize(48, 48));
-        setToolTip(text);
-        setText(text);
-        setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    }
-};
-
-
-// ================================================================
 
 
 class ChartConfigWidget::Private
@@ -142,9 +120,7 @@ public:
     QAction *dataSetRadarChartAction;
 
     // Table Editor
-    Ui::ChartTableEditor  tableEditor;
-    QDialog              *tableEditorDialog;
-    ChartTableView       *tableView;
+    TableEditorDialog    *tableEditorDialog;
 
     // Legend
     QButtonGroup         *positionButtonGroup;
@@ -277,26 +253,8 @@ ChartConfigWidget::ChartConfigWidget()
     
     connect( d->ui.dataSetHasChartType, SIGNAL( toggled( bool ) ),
              this,                      SLOT( ui_dataSetHasChartTypeChanged( bool ) ) );
-    
-    // Quick-access settings
-    d->tableEditorDialog = new QDialog( this );
-    d->tableEditor.setupUi( d->tableEditorDialog );
-    // FIXME: Why does the tableView belong to the tool option window
-    //        instead of the data editor dialog?  There is no reason
-    //        for it to even exist outside the data editor /iw
-    d->tableView = new ChartTableView;
-    d->tableEditor.tableViewContainer->addWidget( d->tableView );
-    d->tableEditorDialog->hide();
-    
-    connect( d->tableEditor.firstRowIsLabel,    SIGNAL( toggled( bool ) ),
-             this,                              SIGNAL( firstRowIsLabelChanged( bool ) ) );
-    connect( d->tableEditor.firstColumnIsLabel, SIGNAL( toggled( bool ) ),
-             this,                              SIGNAL( firstColumnIsLabelChanged( bool ) ) );
-
-    // We need only connect one of the data direction buttons, since
-    // they are mutually exclusive.
-    connect( d->tableEditor.dataSetsInRows, SIGNAL( toggled( bool ) ),
-             this,                          SLOT( ui_dataSetsInRowsChanged( bool ) ) );
+             
+    initTableEditorDialog();
     
     // "Plot Area" tab
     connect( d->ui.showTitle,    SIGNAL( toggled( bool ) ),
@@ -364,6 +322,13 @@ ChartConfigWidget::~ChartConfigWidget()
     delete d;
 }
 
+void ChartConfigWidget::initTableEditorDialog()
+{
+    // Quick-access settings
+    d->tableEditorDialog = new TableEditorDialog;
+    d->tableEditorDialog->hide();
+}
+
 void ChartConfigWidget::open( KoShape* shape )
 {
     // Find the selected shape and adapt the tool option window to
@@ -429,7 +394,7 @@ void ChartConfigWidget::open( KoShape* shape )
     else {
 	// This part is run when the data source is not external,
 	// i.e. the data is handled by the chart shape itself.
-        d->tableView->setModel( d->shape->model() );
+        d->tableEditorDialog->setProxyModel( d->shape->proxyModel() );
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
                  this,           SLOT( slotShowTableEditor( bool ) ) );
     }
@@ -727,11 +692,6 @@ void ChartConfigWidget::datasetColorSelected( const QColor& color )
     emit datasetColorChanged( d->dataSets[ d->selectedDataSet ], color );
 }
 
-void ChartConfigWidget::ui_dataSetsInRowsChanged( bool b )
-{
-    emit dataDirectionChanged( b ? Qt::Horizontal : Qt::Vertical );
-}
-
 void ChartConfigWidget::setThreeDMode( bool threeD )
 {
     d->threeDMode = threeD;
@@ -939,29 +899,6 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->blockSignals( false );
     }
     
-    
-    if ( d->shape->proxyModel()->dataDirection() == Qt::Horizontal )
-    {
-        d->tableEditor.dataSetsInRows->blockSignals( true );
-        d->tableEditor.dataSetsInRows->setChecked( true );
-        d->tableEditor.dataSetsInRows->blockSignals( false );
-    }
-    else
-    {
-        d->tableEditor.dataSetsInColumns->blockSignals( true );
-        d->tableEditor.dataSetsInColumns->setChecked( true );
-        d->tableEditor.dataSetsInColumns->blockSignals( false );
-    }
-
-    d->tableEditor.firstColumnIsLabel->blockSignals( true );
-    d->tableEditor.firstColumnIsLabel->blockSignals( true );
-    
-    d->tableEditor.firstRowIsLabel->setChecked( d->shape->proxyModel()->firstRowIsLabel() );
-    d->tableEditor.firstColumnIsLabel->setChecked( d->shape->proxyModel()->firstColumnIsLabel() );
-    
-    d->tableEditor.firstColumnIsLabel->blockSignals( false );
-    d->tableEditor.firstColumnIsLabel->blockSignals( false );
-    
     blockSignals( false );
 }
 
@@ -972,14 +909,6 @@ void ChartConfigWidget::slotShowTableEditor( bool show )
         d->tableEditorDialog->hide();
     else
         d->tableEditorDialog->show();
-}
-
-void ChartConfigWidget::setDataInRows( bool checked )
-{
-    if ( checked )
-        emit dataDirectionChanged( Qt::Horizontal );
-    else
-        emit dataDirectionChanged( Qt::Vertical );
 }
 
 
@@ -1101,40 +1030,6 @@ void ChartConfigWidget::setupDialogs()
 
 void ChartConfigWidget::createActions()
 {
-    QAction *cutRowsAction       = new QAction( KIcon( "edit-cut" ), i18n( "Cut Rows" ),    d->tableView );
-    QAction *cutColumnsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Columns" ), d->tableView );
-    QAction *cutCellsAction      = new QAction( KIcon( "edit-cut" ), i18n( "Cut Cells" ), d->tableView );
-    QAction *copyRowsAction      = new QAction( KIcon( "edit-copy" ), i18n( "Copy Rows" ), d->tableView );
-    QAction *copyColumnsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Columns" ), d->tableView );
-    QAction *copyCellsAction     = new QAction( KIcon( "edit-copy" ), i18n( "Copy Cells" ), d->tableView );
-    QAction *deleteRowsAction    = new QAction( KIcon( "edit-delete" ), i18n( "Delete Rows" ), d->tableView );
-    QAction *deleteColumnsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Columns" ), d->tableView );
-    QAction *deleteCellsAction   = new QAction( KIcon( "edit-delete" ), i18n( "Delete Cells" ), d->tableView );
-    QAction *insertRowsAction    = new QAction( KIcon( "edit-paste" ), i18n( "Insert Rows" ), d->tableView );
-    QAction *insertColumnsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Columns" ), d->tableView );
-    QAction *insertCellsAction   = new QAction( KIcon( "edit-paste" ), i18n( "Insert Cells" ), d->tableView );
-
-    QAction *separator1 = new QAction( d->tableView );
-    QAction *separator2 = new QAction( d->tableView );
-    separator1->setSeparator( true );
-    separator2->setSeparator( true );
-
-    d->tableView->addAction( copyRowsAction );
-    d->tableView->addAction( cutRowsAction );
-    d->tableView->addAction( deleteRowsAction );
-    d->tableView->addAction( insertRowsAction );
-    d->tableView->addAction( separator1 );
-    d->tableView->addAction( copyColumnsAction );
-    d->tableView->addAction( cutColumnsAction );
-    d->tableView->addAction( deleteColumnsAction );
-    d->tableView->addAction( insertColumnsAction );
-    d->tableView->addAction( separator2 );
-    d->tableView->addAction( copyCellsAction );
-    d->tableView->addAction( cutCellsAction );
-    d->tableView->addAction( deleteCellsAction );
-    d->tableView->addAction( insertCellsAction );
-
-    d->tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
 }
 
 void ChartConfigWidget::selectDataset( int dataset )

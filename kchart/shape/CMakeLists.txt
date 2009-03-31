@@ -22,12 +22,13 @@ SET (chartshape_LIB_SRCS
     Surface.cpp
     ThreeDScene.cpp
     ThreeDTransformation.cpp
-    ChartTableView.cpp
     ChartDocument.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
     ChartConfigWidget.cpp
+    ChartTableView.cpp
+    dialogs/TableEditorDialog.cpp
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     dialogs/CellRegionDialog.cpp
@@ -36,7 +37,7 @@ SET (chartshape_LIB_SRCS
 
 kde4_add_ui_files(chartshape_LIB_SRCS
     ChartConfigWidget.ui
-    ChartTableEditor.ui
+    dialogs/ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
     dialogs/CellRegionDialog.ui

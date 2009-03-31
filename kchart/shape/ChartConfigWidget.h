@@ -66,12 +66,10 @@ public slots:
     void setThreeDMode( bool threeD );
     void update();
 
-    void setDataInRows( bool checked );
     void slotShowTableEditor( bool show );
 
     void dataSetChartTypeSelected( QAction *action );
     void datasetColorSelected( const QColor& color );
-    void ui_dataSetsInRowsChanged( bool b );
     void ui_datasetShowValuesChanged( bool b );
     void ui_datasetShowLabelsChanged( bool b );
     void ui_dataSetSelectionChanged( int index );
@@ -136,10 +134,6 @@ signals:
     
     void showLegendChanged( bool b );
 
-    void dataDirectionChanged( Qt::Orientation );
-    void firstRowIsLabelChanged( bool b );
-    void firstColumnIsLabelChanged( bool b );
-
     void axisAdded( AxisPosition, const QString& title );    
     void axisRemoved( Axis *axis );
     void axisShowTitleChanged( Axis *axis, bool b );
@@ -165,6 +159,8 @@ signals:
     void legendShowFrameChanged( bool show );
 
 private:
+    void initTableEditorDialog();
+
     void setupDialogs();
     void createActions();
     

@@ -359,22 +359,22 @@ ChartShape::ChartShape()
     , d ( new Private( this ) )
 {
     setShapeId( ChartShapeId );
-    KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
-    
+
+    // Instanciate all children first
     d->model = new ProxyModel();
-    
+    d->plotArea = new PlotArea( this );
+    d->document = new ChartDocument( this );
+    d->legend = new Legend( this );
+
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer.
-    d->plotArea = new PlotArea( this );
     addChild( d->plotArea );
     d->plotArea->init();
     d->plotArea->setZIndex( 0 );
     setClipping( d->plotArea, true );
     
-    d->document = new ChartDocument( this );
     
     // Create the legend.
-    d->legend = new Legend( this );
     d->legend->setVisible( true );
     d->legend->setZIndex( 1 );
     setClipping( d->legend, true );
@@ -460,6 +460,8 @@ ChartShape::ChartShape()
     
     KoLineBorder *border = new KoLineBorder( 0, Qt::black );
     setBorder( border );
+    
+    KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
     
     requestRepaint();
 }

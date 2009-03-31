@@ -231,13 +231,6 @@ QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
     widget->open( d->shape );
-
-    connect( widget, SIGNAL( dataDirectionChanged( Qt::Orientation ) ),
-             this,   SLOT( setDataDirection( Qt::Orientation ) ) );
-    connect( widget, SIGNAL( firstRowIsLabelChanged( bool ) ),
-             this,   SLOT( setFirstRowIsLabel( bool ) ) );
-    connect( widget, SIGNAL( firstColumnIsLabelChanged( bool ) ),
-             this,   SLOT( setFirstColumnIsLabel( bool ) ) );
     
     connect( widget, SIGNAL( dataSetXDataRegionChanged( DataSet*, const QString& ) ),
 	     this,   SLOT( setDataSetXDataRegion( DataSet*, const QString& ) ) );
