@@ -297,11 +297,34 @@ void ProxyModel::rebuildDataMap()
 
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 {
-    // FIXME: What if we already have a source model?  Don't we have
-    //        to disconnect that one before connecting the new one?
+    if ( this->sourceModel() == sourceModel )
+        return;
 
-    connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    if ( this->sourceModel() ) {
+        disconnect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+                    this,                SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+        disconnect( this->sourceModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
+                    this,                SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                    this,                SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
+                    this,                SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
+                    this,                SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
+    }
+
+    if ( sourceModel ) {
+        connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+                 this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+        connect( sourceModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
+                 this,        SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
+        connect( sourceModel, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                 this,        SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        connect( sourceModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
+                 this,        SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
+        connect( sourceModel, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
+                 this,        SLOT( slotColumnsRemoved( const QModelIndex&, int, int ) ) );
+    }
 
     QAbstractProxyModel::setSourceModel( sourceModel );
     
@@ -848,5 +871,36 @@ QList<DataSet*> ProxyModel::dataSets() const
 {
     return d->dataSets;
 }
+
+void ProxyModel::slotRowsInserted( const QModelIndex &parent, int start, int end )
+{
+    rebuildDataMap();
+    reset();
+}
+
+void ProxyModel::slotColumnsInserted( const QModelIndex &parent, int start, int end )
+{
+    rebuildDataMap();
+    reset();
+}
+
+void ProxyModel::slotRowsRemoved( const QModelIndex &parent, int start, int end )
+{
+    rebuildDataMap();
+    reset();
+}
+
+void ProxyModel::slotColumnsRemoved( const QModelIndex &parent, int start, int end )
+{
+    rebuildDataMap();
+    reset();
+}
+
+void ProxyModel::reset()
+{
+    QAbstractProxyModel::reset();
+    emit modelResetComplete();
+}
+
 
 #include "ProxyModel.moc"
