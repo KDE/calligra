@@ -21,51 +21,21 @@
 // KChart
 #include "ChartTableView.h"
 
-// Qt
-#include <QAbstractItemModel>
-
-// KDE
-#include <KDebug>
-
 using namespace KChart;
 
-class ChartTableView::Private
-{
-public:
-    Private();
-    QAbstractItemModel *model;
-};
-
-ChartTableView::Private::Private()
-{
-    model = 0;
-}
-
 ChartTableView::ChartTableView( QWidget *parent /* = 0 */ )
-   : QTableView( parent ),
-     d( new Private )
+   : QTableView( parent )
 {
 }
 
 ChartTableView::~ChartTableView()
 {
-    delete d;
 }
 
-void ChartTableView::setModel( QAbstractItemModel *model )
+/**
+ * \reimpl
+ */
+void ChartTableView::currentChanged( const QModelIndex &current, const QModelIndex &previous )
 {
-    d->model = model;
-    QTableView::setModel( model );
+    emit currentIndexChanged( current );
 }
-
-QAbstractItemModel *ChartTableView::model()
-{
-    return d->model;
-}
-
-void ChartTableView::commitData( QWidget *editor )
-{
-    QTableView::commitData( editor );
-    //d->sourceModel->dataChanged();
-}
-

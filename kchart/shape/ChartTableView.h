@@ -27,17 +27,17 @@ namespace KChart {
 
 class ChartTableView : public QTableView
 {
+    Q_OBJECT
+
 public:
     ChartTableView( QWidget *parent = 0 );
     ~ChartTableView();
 
-   void setModel( QAbstractItemModel *model );
-   QAbstractItemModel *model();
+signals:
+    void currentIndexChanged( const QModelIndex &index );
 
-   virtual void commitData( QWidget *editor );
-
-   class Private;
-   Private * const d;
+protected slots:
+    void currentChanged( const QModelIndex &current, const QModelIndex &previous );
 };
 
 }
