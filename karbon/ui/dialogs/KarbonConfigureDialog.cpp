@@ -117,7 +117,7 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
 
     QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), this );
 
-    KConfigGroup emptyGroup = m_config->group( "" );
+    KConfigGroup emptyGroup = m_config->group( "GUI" );
     m_oldDockerFontSize = emptyGroup.readEntry( "palettefontsize", m_oldDockerFontSize );
 
     if( m_config->hasGroup( "Interface" ) )
@@ -193,14 +193,13 @@ void ConfigInterfacePage::apply()
 
     if( dockerFontSize != m_oldDockerFontSize )
     {
-        m_config->group( "" ).writeEntry( "palettefontsize", dockerFontSize );
+        m_config->group( "GUI" ).writeEntry( "palettefontsize", dockerFontSize );
         m_oldDockerFontSize = dockerFontSize;
         refreshGUI = true;
     }
 
     if( refreshGUI )
         part->reorganizeGUI();
-
 }
 
 void ConfigInterfacePage::slotDefault()
