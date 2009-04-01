@@ -210,7 +210,7 @@ author.</action></para>
 </menuchoice></term>
 <listitem><para><action>Put selected item(s) into the clipboard and remove
 them from the original location.</action> If you then 
-do a <guimenuitem>Paste</guimenuitem> the item(s) will be be inserted at
+do a <guimenuitem>Paste</guimenuitem> the item(s) will be inserted at
 the new location.
 </para></listitem>
 </varlistentry>

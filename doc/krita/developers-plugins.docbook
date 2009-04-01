@@ -704,7 +704,7 @@ filter.
 <classname>KisFilterConfiguration</classname> is a structure that is used to
 save filter settings to disk, for instance for adjustment layers. The
 scripting plugin uses the property map that’s at the back of
-<classname>KisFilterConfigaration</classname> to make it possible to script
+<classname>KisFilterConfiguration</classname> to make it possible to script
 filters. Filters can provide a custom widget that &krita; will show in the
 filters gallery, the filter preview dialog or the tool option tab of the
 paint-with-filters tool.
@@ -1174,8 +1174,8 @@ create a paintop that reads Corel Painter XML brush definitions and uses those
 to determine how painting is done.
 </para><para>
 Paint operations are instantiated when a paint tool receives a
-<literal>mouseDown</literal> event and are deleted when the mouseUp event is
-received by a paint tool. In between, the paintop can keep track of previous
+<literal>mouseDown</literal> event and are deleted when the <literal>mouseUp</literal> 
+event is received by a paint tool. In between, the paintop can keep track of previous
 positions and other data, such as pressure levels if the user uses a tablet.
 </para><para>
 The basic operation of a paint operation is to change pixels at the cursor
@@ -1235,7 +1235,7 @@ void KisSmearyOp::paintAt(const KisPoint &amp;pos, const KisPaintInformation&amp
 The <methodname>paintAt()</methodname> method really is where it’s at, with
 paintops. This method receives two parameters: the current position (which is
 in floats, not in whole pixels) and a
-<classname>KisPaintInformation</classname> object. which contains the
+<classname>KisPaintInformation</classname> object, which contains the
 pressure, x and y tilt, and movement vector, and may in the future be extended
 with other information.
 </para>
