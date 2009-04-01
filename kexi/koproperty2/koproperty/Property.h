@@ -334,9 +334,6 @@ public:
     /*! \return true if this property is null. Null properties have empty names. */
     bool isNull() const;
 
-    /*! Equivalent to !isNull() */
-    operator bool () const;
-
     //! \return true if this property value is changed.
     bool isModified() const;
 

@@ -479,7 +479,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
                         kexipluginswarn << "query designer: NO FIELD '" << fieldName << "'";
                         continue;
                     }
-                    if (!fieldVisible && criteriaStr.isEmpty() && (*set)["isExpression"]
+                    if (!fieldVisible && criteriaStr.isEmpty() && set->contains("isExpression")
                             && (*set)["sorting"].value().toString() != "nosorting") {
                         kexipluginsdbg << "invisible field with sorting: do not add it to the fields list";
                         continue;

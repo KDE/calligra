@@ -556,11 +556,6 @@ Property::hasOptions() const
 
 /////////////////////////////////////////////////////////////////
 
-Property::operator bool () const
-{
-    return !isNull();
-}
-
 const Property&
 Property::operator= (const QVariant & val)
 {
