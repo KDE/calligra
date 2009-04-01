@@ -256,13 +256,6 @@ void KWOdfLoader::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KWPa
     KWTextFrameSet *fs = new KWTextFrameSet(m_document, fsType);
     fs->setPageStyle(pageStyle);
     fs->setAllowLayout(false);
-    switch (fsType) {
-    case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header %1", pageStyle.name())); break;
-    case KWord::EvenPagesHeaderTextFrameSet: fs->setName(i18n("Even Pages Header %1", pageStyle.name())); break;
-    case KWord::OddPagesFooterTextFrameSet: fs->setName(i18n("Odd Pages Footer %1", pageStyle.name())); break;
-    case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer %1", pageStyle.name())); break;
-    default: break;
-    }
     m_document->addFrameSet(fs);
 
     kDebug(32001) << "KWOdfLoader::loadHeaderFooterFrame localName=" << elem.localName() << " type=" << fs->name();
