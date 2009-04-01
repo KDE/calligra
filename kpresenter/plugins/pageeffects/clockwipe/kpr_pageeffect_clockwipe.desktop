@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Clock wipe
 Name[ca]=Esborrat de rellotge
+Name[da]=Urvisker
 Name[de]=Wischblende (Uhr)
 Name[el]=Ωρολογιακό σβήσιμο
 Name[es]=Barrido en reloj
@@ -22,6 +23,7 @@ Name[x-test]=xxClock wipexx
 Name[zh_TW]=時鐘掃描
 Comment=Clock wipe Page Effects
 Comment[ca]=Efectes d'esborrat de rellotge de la pàgina
+Comment[da]=Urvisker-sideeffekter
 Comment[de]=Wischblenden-Seiteneffekt (Uhr)
 Comment[el]=Εφέ σελίδας ωρολογιακό σβήσιμο
 Comment[es]=Efectos de página de barrido en reloj

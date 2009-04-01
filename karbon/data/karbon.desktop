@@ -66,6 +66,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 Categories=Qt;KDE;Office;Graphics;
 Comment=Create scalable vector drawings
 Comment[ca]=Crea dibuixos de vectors escalables
+Comment[da]=Tegn skalerbare vektortegninger
 Comment[de]=Skalierbare Vektorzeichungen erstellen
 Comment[el]=Δημιουργία διανυσματικών γραφικών
 Comment[es]=Crear dibujos vectoriales escalables
