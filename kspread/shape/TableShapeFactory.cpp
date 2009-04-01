@@ -42,9 +42,7 @@ K_EXPORT_COMPONENT_FACTORY( spreadsheetshape, KGenericFactory<TableShapePlugin>(
 TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList& )
 {
     KoShapeRegistry::instance()->add( new TableShapeFactory( parent ) );
-#ifdef BUILD_EVERYTHING
     KoToolRegistry::instance()->add( new TableToolFactory( parent ) );
-#endif
 }
 
 
