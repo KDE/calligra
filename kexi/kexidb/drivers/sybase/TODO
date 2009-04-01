@@ -1,4 +1,0 @@
-== Sybase Driver TODO ==
-
-2007-12-11
-- (js) refactor ConnectionData to fit ConnectionData::serverName somewhere (special case)
