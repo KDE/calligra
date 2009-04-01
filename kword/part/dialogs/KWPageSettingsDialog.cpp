@@ -38,9 +38,6 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     setPageSpread(m_page.pageSide() == KWPage::PageSpread);
     setTextDirection(m_page.directionHint());
 
-    // I'm very sad that I have to add the next line; but it takes too much time to get the pagespread working again
-    showPageSpread(false);
-
     m_columns = new KWDocumentColumns(this, m_page.pageStyle().columns());
     addPage(m_columns, i18n("Columns:")); // TODO remove the colon after string freeze is lifted
 }

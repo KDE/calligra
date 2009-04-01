@@ -46,8 +46,6 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     QVBoxLayout *lay = new QVBoxLayout(widget.sizeTab);
     m_sizeWidget = new KoPageLayoutWidget(widget.sizeTab, m_layout);
     m_sizeWidget->setUnit(m_unit);
-    // I'm very sad that I have to add the next line; but it takes too much time to get the pagespread working again
-    m_sizeWidget->showPageSpread(false);
     lay->addWidget(m_sizeWidget);
     lay->setMargin(0);
 
