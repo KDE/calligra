@@ -30,7 +30,7 @@
 
 #include <QMenu>
 #include <QDockWidget>
-
+#include <QTimer>
 
 class QProgressBar;
 class QStackedWidget;
@@ -265,6 +265,7 @@ private:
     QLabel *m_estlabel;
     QProgressBar *m_progress;
     QLabel *m_text;
+    QTimer m_progressBarTimer;
 
     ViewAdaptor* m_dbus;
 

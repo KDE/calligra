@@ -277,6 +277,9 @@ View::View( Part* part, QWidget* parent )
         //addStatusBarItem( m_progress, 0, true );
         //m_progress->hide();
     }
+    m_progressBarTimer.setSingleShot( true );
+    connect( &m_progressBarTimer, SIGNAL( timeout() ), this, SLOT( removeProgressBarItems() ) );
+
     connect( &getProject(), SIGNAL( scheduleChanged( MainSchedule* ) ), SLOT( slotScheduleChanged( MainSchedule* ) ) );
 
     connect( &getProject(), SIGNAL( scheduleAdded( const MainSchedule* ) ), SLOT( slotScheduleAdded( const MainSchedule* ) ) );
@@ -1065,7 +1068,10 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     if ( project == 0 || sm == 0 ) {
         return;
     }
-    removeStatusBarItem( m_estlabel );
+    if ( m_progressBarTimer.isActive() ) {
+        m_progressBarTimer.stop();
+        removeProgressBarItems();
+    }
     m_text = new QLabel( i18n( "%1: Calculating...", sm->name() ) );
     addStatusBarItem( m_text, 0, true );
     m_progress = new QProgressBar();
@@ -1081,7 +1087,7 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     m_text->setText( i18n( "%1: Calculating done", sm->name() ) );
     disconnect( project, SIGNAL( sigProgress( int ) ), m_progress, SLOT(setValue( int ) ) );
     disconnect( project, SIGNAL( maxProgress( int ) ), m_progress, SLOT( setMaximum( int ) ) );
-    QTimer::singleShot( 2000, this, SLOT( removeProgressBarItems() ) );
+    m_progressBarTimer.start( 2000 );
 }
 
 void View::removeProgressBarItems()
@@ -1090,7 +1096,9 @@ void View::removeProgressBarItems()
     removeStatusBarItem( m_text );
     addStatusBarItem( m_estlabel, 0, true );
     delete m_progress;
+    m_progress = 0;
     delete m_text;
+    m_text = 0;
 }
 
 void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
