@@ -113,6 +113,7 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
     m_oldRecentFiles = 10;
     m_oldCopyOffset = 10;
     m_oldDockerFontSize = 8;
+    m_oldCanvasColor = QColor(Qt::white);
     bool oldShowStatusBar = true;
 
     QGroupBox* tmpQGroupBox = new QGroupBox( i18n( "Interface" ), this );
@@ -127,6 +128,7 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
         m_oldRecentFiles = interfaceGroup.readEntry("NbRecentFile", m_oldRecentFiles);
         oldShowStatusBar = interfaceGroup.readEntry("ShowStatusBar", true);
         m_oldCopyOffset = interfaceGroup.readEntry("CopyOffset", m_oldCopyOffset);
+        m_oldCanvasColor = interfaceGroup.readEntry("CanvasColor", m_oldCanvasColor);
     }
 
     QVBoxLayout *grpLayout = new QVBoxLayout( tmpQGroupBox );
@@ -152,6 +154,13 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
     m_dockerFontSize->setValue( m_oldDockerFontSize );
     m_dockerFontSize->setLabel( i18n( "Palette font size:" ) );
     grpLayout->addWidget( m_dockerFontSize );
+    
+    QLabel* canvasColorLbl = new QLabel( i18n( "Canvas color:" ), tmpQGroupBox);
+    m_canvasColor = new KColorButton( m_oldCanvasColor, tmpQGroupBox);
+    canvasColorLbl->setBuddy( m_canvasColor );
+    grpLayout->addWidget( canvasColorLbl );
+    grpLayout->addWidget( m_canvasColor );
+    
     grpLayout->addStretch();
 }
 
@@ -198,6 +207,13 @@ void ConfigInterfacePage::apply()
         refreshGUI = true;
     }
 
+    QColor canvasColor = m_canvasColor->color();
+    if( canvasColor != m_oldCanvasColor )
+    {
+        interfaceGroup.writeEntry( "CanvasColor", canvasColor );
+        refreshGUI = true;
+    }
+    
     if( refreshGUI )
         part->reorganizeGUI();
 }

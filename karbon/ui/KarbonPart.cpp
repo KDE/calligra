@@ -103,6 +103,19 @@ public:
         else
             return defaultValue;
     }
+    
+    QColor canvasColor( KarbonPart * part )
+    {
+        KSharedConfigPtr config = part->componentData().config();
+        
+        QColor color( Qt::white );
+        if( config->hasGroup( "Interface" ) )
+        {
+            color = config->group( "Interface" ).readEntry("CanvasColor", color);
+        }
+        
+        return color;
+    }
 
 
     KarbonDocument document;  ///< store non-visual doc info
@@ -145,6 +158,7 @@ void KarbonPart::setPageLayout( const KoPageLayout& layout )
 KoView* KarbonPart::createViewInstance( QWidget* parent )
 {
     KarbonView *result = new KarbonView( this, parent );
+    result->canvasWidget()->setBackgroundColor( d->canvasColor(this) );
     result->canvasWidget()->resourceProvider()->setResource( KoCanvasResource::PageSize, d->document.pageSize() );
     return result;
 }
@@ -358,8 +372,15 @@ uint KarbonPart::maxRecentFiles() const
 
 void KarbonPart::reorganizeGUI()
 {
-    foreach ( KoView* view, views() )
-        static_cast<KarbonView*>( view )->reorganizeGUI();
+    QColor canvasColor = d->canvasColor(this);
+    
+    foreach ( KoView* view, views() ) {
+        KarbonView * kv = qobject_cast<KarbonView*>( view );
+        if( kv ) {
+            kv->reorganizeGUI();
+            kv->canvasWidget()->setBackgroundColor(canvasColor);
+        }
+    }
 }
 
 void KarbonPart::initConfig()

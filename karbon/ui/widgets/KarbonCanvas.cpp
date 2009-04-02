@@ -407,6 +407,7 @@ void KarbonCanvas::setBackgroundColor( const QColor &color )
 {
     QPalette pal = palette();
     pal.setColor( QPalette::Normal, backgroundRole(), color );
+    pal.setColor( QPalette::Inactive, backgroundRole(), color );
     setPalette( pal );
 }
 

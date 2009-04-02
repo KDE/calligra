@@ -84,6 +84,9 @@ private:
 
     KIntNumInput* m_dockerFontSize;
     int m_oldDockerFontSize;
+    
+    KColorButton* m_canvasColor;
+    QColor m_oldCanvasColor;
 };
 
 
