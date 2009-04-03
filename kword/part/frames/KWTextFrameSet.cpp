@@ -116,6 +116,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
             Q_ASSERT(styleManager);
             doc.setStyleManager(styleManager);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
+            styleManager->add(m_document);
         }
         data->setDocument(m_document, false);
     } else {
