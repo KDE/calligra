@@ -811,8 +811,8 @@ void KWDocument::printDebug()
     kDebug(32001) << "# Framesets:" << frameSetCount();
     int i = 0;
     foreach (KWFrameSet *fs, m_frameSets) {
-        kDebug(32001) << "Frameset" << i++ << ": '" <<
-        fs->name() << "' (" << fs << ")" << endl;
+        kDebug(32001) << "Frameset" << i++ << ":" <<
+        fs->name() << '(' << fs << ')' << endl;
         fs->printDebug();
     }
 
