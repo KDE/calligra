@@ -40,7 +40,7 @@ Version=4
 [Event/DocumentLoaded]
 Name=Document loaded
 Name[ca]=Document carregat
-Name[da]=Indlæste dokument
+Name[da]=Dokument indlæst
 Name[de]=Dokument geladen
 Name[el]=Το έγγραφο φορτώθηκε
 Name[es]=Documento cargado
@@ -101,7 +101,7 @@ Action=None
 [Event/DocumentSaved]
 Name=Document saved
 Name[ca]=Document desat
-Name[da]=Gemte dokument
+Name[da]=Dokument gemt
 Name[de]=Dokument gespeichert
 Name[el]=Το έγγραφο αποθηκεύτηκε
 Name[es]=Documento guardado
@@ -162,7 +162,7 @@ Action=None
 [Event/LinkActivated]
 Name=Link activated
 Name[ca]=Enllaç activat
-Name[da]=Aktiverede link
+Name[da]=Link aktiveret
 Name[de]=Verknüpfung aktiviert
 Name[el]=Ο δεσμός ενεργοποιήθηκε
 Name[es]=Enlace activado
