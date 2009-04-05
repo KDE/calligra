@@ -26,11 +26,14 @@
 
 #include "KWPageStyle.h"
 
+#include <KoRTree.h>
+
 class KWDocument;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
 class KoGenStyles;
 class KWTextFrameSet;
+class KWPage;
 
 #ifdef CHANGETRK
 class KoGenChanges;
@@ -70,9 +73,16 @@ private:
     void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles);
 #endif
 
+    void calculateZindexOffsets();
+    void addShapeToTree(KoShape *shape);
+
     /// The KWord document.
     KWDocument *m_document;
     QHash<KWPageStyle, QString> m_masterPages;
+    /// Since ODF requires zindexes >= 0 and we can have negative ones we will calculate an offset per
+    /// page and store that here.
+    QHash<KWPage, int> m_zIndexOffsets;
+    KoRTree<KoShape *> m_shapeTree;
 };
 
 #endif
