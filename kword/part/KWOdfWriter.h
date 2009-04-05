@@ -72,7 +72,7 @@ private:
 
     /// The KWord document.
     KWDocument *m_document;
-    QHash<KWPageStyle, QString> masterPages;
+    QHash<KWPageStyle, QString> m_masterPages;
 };
 
 #endif

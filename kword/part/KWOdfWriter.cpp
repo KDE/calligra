@@ -119,7 +119,7 @@
         KoGenStyle layoutStyle = pageStyle.saveOdf();
         masterStyle.addProperty("style:page-layout-name", mainStyles.lookup(layoutStyle, "pm"));
         QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
-        masterPages.insert(pageStyle, name);
+        m_masterPages.insert(pageStyle, name);
     }
 
     // We need to flush them out ordered as defined in the specs.
@@ -157,7 +157,7 @@
         // append the headerfooter-style to the main-style
         if (! masterStyle.isEmpty()) {
             QString name = mainStyles.lookup(masterStyle, pageStyle.name(), KoGenStyles::DontForceNumbering);
-            masterPages.insert(pageStyle, name);
+            m_masterPages.insert(pageStyle, name);
         }
     }
 
@@ -355,7 +355,7 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
                     QTextCursor cursor(shapeData->document());
                     QTextBlockFormat tbf;
                     KWPageStyle style = pm->pages().first().pageStyle();
-                    tbf.setProperty(KoParagraphStyle::MasterPageName, masterPages.value(style));
+                    tbf.setProperty(KoParagraphStyle::MasterPageName, m_masterPages.value(style));
                     cursor.mergeBlockFormat(tbf);
                 }
                 shapeData->saveOdf(context);
@@ -365,9 +365,9 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     bodyWriter->startElement("text:page-sequence");
     foreach (KWPage page, m_document->pageManager()->pages()) {
-        Q_ASSERT(masterPages.contains(page.pageStyle()));
+        Q_ASSERT(m_masterPages.contains(page.pageStyle()));
         bodyWriter->startElement("text:page");
-        bodyWriter->addAttribute("text:master-page-name", masterPages.value(page.pageStyle()));
+        bodyWriter->addAttribute("text:master-page-name", m_masterPages.value(page.pageStyle()));
         bodyWriter->endElement(); // text:page
     }
     bodyWriter->endElement(); // text:page-sequence
