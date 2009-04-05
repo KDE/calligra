@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=PostgreSQL
 Name[hi]=पोस्टग्रे-एसक्यूएल
+Name[hne]=पोस्टग्रे-एसक्यूएल
 Name[ne]=पोस्टग्रे SQL
 Name[ta]=போஸ்ட்கிரெஸ்கியூஎல்
 Name[x-test]=xxPostgreSQLxx
@@ -15,6 +16,7 @@ Comment[fi]=Kexi-tietokanta-ajuri PostgreSQL-palvelinten käyttämiseksi
 Comment[fy]=Kexi databank stjoerprogramma foar tagong ta PostgreSQL-tsjinners
 Comment[gl]=Motoro da base de datos de Kexi para o acceso a servidores PostgreSQL
 Comment[hi]=पोस्टग्रेएसक्यूएल सर्वरों पर पहुँच के लिए केएक्साई डाटाबेस ड्राइवर
+Comment[hne]=पोस्टग्रेएसक्यूएल सर्वरों मं पहुंचे बर केएक्साई डाटाबेस ड्राइवर
 Comment[it]=Driver per banche dati Kexi per accedere ai server PostgreSQL
 Comment[ja]=PostgreSQL サーバにアクセスするための Kexi データベースドライバ
 Comment[kk]=Kexi деректер қорының PostgreSQL серверлерге қатынау драйвері

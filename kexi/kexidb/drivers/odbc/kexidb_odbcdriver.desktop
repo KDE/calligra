@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ODBC
 Name[hi]=ओडीबीसी
+Name[hne]=ओडीबीसी
 Name[ta]=ஓடிபிசி
 Name[x-test]=xxODBCxx
 Comment=Kexi Open Database Connectivity Driver
@@ -21,6 +22,7 @@ Comment[fy]=Kexi Open Database Connectivity-stjoerprogramma
 Comment[gl]=Controlador de ODBC de Kexi
 Comment[he]=מנהל התקן של Kexi לחיבור למסד נתונים פתוח (ODBC)
 Comment[hi]=केएक्साई ओपन डाटाबेस कनेक्टिविटी ड्राइवर
+Comment[hne]=केएक्साई ओपन डाटाबेस कनेक्टिविटी ड्राइवर
 Comment[hr]=Upravljački program za povezivanje s Kexi otvorenom bazom podataka
 Comment[hu]=Kexi ODBC-meghajtó
 Comment[is]=Kexi Open Database tengirekill

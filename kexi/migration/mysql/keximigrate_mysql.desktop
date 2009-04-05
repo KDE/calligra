@@ -2,6 +2,7 @@
 Name=MySQL
 Name[fy]=MySQl
 Name[hi]=माइएसक्यूएल
+Name[hne]=माइएसक्यूएल
 Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
 Comment=MySQL Migration Driver for Kexi
@@ -22,6 +23,7 @@ Comment[fy]=MySQL-Migraasjestjoerprogramma foar Kexi
 Comment[ga]=Tiománaí Ascnaimh MySQL le haghaidh Kexi
 Comment[gl]=Controlador de Migración de MySQL de Kexi
 Comment[hi]=केएक्जाई के लिए माइएसक्यूएल माइग्रेशन ड्राइवर
+Comment[hne]=केएक्जाई बर माइएसक्यूएल माइग्रेसन ड्राइवर
 Comment[hr]=MySQL upravljački program migracije podataka za Kexi
 Comment[hu]=Kexi MySQL-migrálási meghajtó
 Comment[is]=MySQL gagnaflutningsrekill fyrir Kexi

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=xBase
+Name[hne]=एक्सबेस
 Name[x-test]=xxxBasexx
 Comment=Kexi database driver for accessing xBase database files
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a fitxers de bases de dades xBase
@@ -10,6 +11,7 @@ Comment[es]=Controlador de bases de datos de Kexi para acceder a servidores xBas
 Comment[et]=Kexi andmebaasidraiver xBase andmebaasifailide kasutamiseks
 Comment[ga]=Tiománaí bunachair sonraí Kexi lenar féidir comhaid bhunachar sonraí xBase a rochtain
 Comment[gl]=Controlador da base de datos de Kexi para o acceso a bases de batos xBase
+Comment[hne]=एक्सबेस सर्वर मं पहुंचे बर केएक्जाई डाटाबेस ड्राइवर
 Comment[it]=Driver per banche dati Kexi per accedere ai file di banche dati xBase
 Comment[ja]=xBase データベースファイルにアクセスするための Kexi データベースドライバ
 Comment[kk]=Kexi деректер қорының xBase файлдарына қатынау драйвері

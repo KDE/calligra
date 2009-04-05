@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SQLite3
 Name[hi]=एसक्यूलाइट३
+Name[hne]=एसक्यूलाइट३
 Name[sv]=Sqlite 3
 Name[ta]=எஸ்கியூலைட்3
 Name[x-test]=xxSQLite3xx
@@ -22,6 +23,7 @@ Comment[ga]=Is é SQLite an t-inneall réamhshocraithe leabaithe SQL i Kexi
 Comment[gl]=SQLite é o motor embebido de SQL de Kexi
 Comment[he]=SQLite הוא מנוע ה־SQL המוטבע של Kexi המשמש כברירת מחדל
 Comment[hi]=केएक्जाई अंतर्निर्मित एसक्यूएल इंजिन है एसक्यूलाइट
+Comment[hne]=केएक्जाई भीतर मं बने एसक्यूएल इंजिन हे एसक्यूलाइट
 Comment[hr]=SQLite je zadani Kexi ugrađeni pogon SQL pogona
 Comment[hu]=Az SQLite a Kexi alapértelmezett, beépített SQL-motorja
 Comment[is]=SQLite er sjálfgefna Kexi SQL vélin

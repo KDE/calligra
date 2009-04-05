@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=xBase
+Name[hne]=एक्सबेस
 Name[x-test]=xxxBasexx
 Comment=xBase Migration Driver for Kexi
 Comment[ca]=Controlador de migració xBase per al Kexi
@@ -10,6 +11,7 @@ Comment[es]=Controlador de migración de xBase de Kexi
 Comment[et]=Kexi xBase'i migreerimisdraiver
 Comment[ga]=Tiománaí Ascnaimh xBase le haghaidh Kexi
 Comment[gl]=Motor de MIgración Sybase para Kexi
+Comment[hne]=केएक्जाई बर साइबेस माइग्रेसन ड्राइवर
 Comment[it]=Driver di migrazione xBase per Kexi
 Comment[ja]=Kexi のための xBase データ移行ドライバ
 Comment[kk]=xBase -ден Kexi-ге ауысу драйвері

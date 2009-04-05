@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=MS Access
+Name[hne]=एमएस एक्सेस
 Name[nds]=MS-Access
 Name[x-test]=xxMS Accessxx
 Comment=MS Access (MDB) Migration Driver for Kexi
@@ -11,6 +12,7 @@ Comment[es]=Controlador de migración de MS Access (MDB) de Kexi
 Comment[et]=Kexi MS Accessi (MDB) migreerimisdraiver
 Comment[ga]=Tiománaí Ascnaimh MS Access (MDB) le haghaidh Kexi
 Comment[gl]=Controlador de Migración de MS Access (MDB)  para Kexi
+Comment[hne]=केएक्जाई बर एमएस एक्सेस (एमडीबी) माइग्रेसन ड्राइवर
 Comment[it]=Driver di migrazione MS Access (MDB) per Kexi
 Comment[ja]=Kexi のための MS Access (MDB) データ移行ドライバ
 Comment[kk]=MS Access-тен (MDB) Kexi-ге ауысу драйвері

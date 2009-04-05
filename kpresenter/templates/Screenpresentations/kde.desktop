@@ -4,6 +4,7 @@ URL=.source/kde.kpt
 Name=KDE
 Name[af]=Kde
 Name[hi]=केडीई
+Name[hne]=केडीई
 Name[ne]=केडीई
 Name[sk]=KDEComment=Prezentácia 
 Name[ta]=கேபசூ
@@ -25,6 +26,7 @@ Comment[ga]=Láithreoireacht le téamaí nuachumtha KDE
 Comment[gl]=Unha presentación cun estilo orixinal para KDE
 Comment[he]=מצגת עם ערכת נושא מקורית של KDE
 Comment[hi]=मूल केडीई प्रसंग युक्त प्रस्तुतिकरण
+Comment[hne]=मूल केडीई प्रसंग सहित प्रस्तुतिकरन
 Comment[hu]=Bemutató eredeti, KDE-szerű stílusban
 Comment[is]=Kynning með upprunalegu KDE þema
 Comment[it]=Una presentazione con tema di KDE originale

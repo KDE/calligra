@@ -2,6 +2,7 @@
 Name=MySQL
 Name[fy]=MySQl
 Name[hi]=माइएसक्यूएल
+Name[hne]=माइएसक्यूएल
 Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
 Comment=Kexi database driver for accessing MySQL servers
@@ -15,6 +16,7 @@ Comment[fi]=Kexi-tietokanta-ajuri MySQL-palvelinten käyttämiseksi
 Comment[fy]=Kexi databank stjoerprogramma foar tagong ta MySQL-tsjinners
 Comment[gl]=Motoro da base de datos de Kexi para o acceso a servidores MySQL
 Comment[hi]=माईएसक्यूएल सर्वरों पर पहुंच के लिए केएक्साई डाटाबेस ड्राइवर
+Comment[hne]=माईएसक्यूएल सर्वरों मं पहुंच बर केएक्साई डाटाबेस ड्राइवर
 Comment[it]=Driver per banche dati Kexi per accedere ai server MySQL
 Comment[ja]=MySQL サーバにアクセスするための Kexi データベースドライバ
 Comment[kk]=Kexi деректер қорының MySQL серверлерге қатынау драйвері

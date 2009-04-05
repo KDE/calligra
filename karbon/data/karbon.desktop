@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Karbon14
 Name[hi]=कारबन14
+Name[hne]=कारबन14
 Name[ne]=कार्बन१४
 Name[ta]=கார்பன்14
 Name[x-test]=xxKarbon14xx
@@ -26,6 +27,7 @@ GenericName[ga]=Grafaic Inscálaithe
 GenericName[gl]=Imaxes Escalábeis
 GenericName[he]=גרפיקה מדורגת
 GenericName[hi]=स्केलेबल ग्राफिक्स
+GenericName[hne]=स्केलेबल ग्राफिक्स
 GenericName[hr]=Grafika u razmjeri
 GenericName[hu]=Vektoros rajzoló
 GenericName[it]=Grafica vettoriale
@@ -77,6 +79,7 @@ Comment[ga]=Cruthaigh líníochtaí veicteoireacha inscálaithe
 Comment[gl]=Crear debuxos vectorial escalable
 Comment[he]=יצירת גרפיקה מדורגת עם וקטורים
 Comment[hi]=स्केलेबल वेक्टर ड्राइंग बनाएँ
+Comment[hne]=स्केलेबल वेक्टर ड्राइंग बनाव
 Comment[it]=Crea grafica vettoriale riscalabile
 Comment[kk]=Масштабтауға болатын векторлы суретті салу
 Comment[lv]=Veido mērogojamus vektoru zīmējumus
