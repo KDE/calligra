@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 """
 KSpread python script to export an ISO OpenDocument spreadsheet file to
 a comma-separated-value file.

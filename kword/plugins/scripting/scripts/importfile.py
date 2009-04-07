@@ -1,4 +1,3 @@
-#!/usr/bin/env kross
 # -*- coding: utf-8 -*-
 
 import codecs, traceback, Kross, KWord

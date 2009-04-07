@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 """
 Python script to export an OpenDocument Spreadsheet File to
 an OpenDocument File using the ODFPY python module.

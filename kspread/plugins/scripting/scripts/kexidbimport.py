@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 """
 Python script to import content from a Kexi Project stored
 within a KexiDB into KSpread.
