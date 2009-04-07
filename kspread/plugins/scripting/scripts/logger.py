@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 import os, time, Kross, KSpread
 
 class Logger:

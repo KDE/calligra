@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 # import some python modules.
 import os, sys, traceback, tempfile, zipfile
 

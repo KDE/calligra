@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 import os, sys, re, types, string, datetime, urllib
 
 # import the reportlab module.

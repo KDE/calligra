@@ -1,5 +1,3 @@
-#!/usr/bin/env kross
-
 """
 Python script to export content from KSpread to a
 Kexi Project stored within a KexiDB.
