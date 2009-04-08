@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp -o $podir/kplatokernel.pot
+$XGETTEXT *.cpp *.h -o $podir/kplatokernel.pot
