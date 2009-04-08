@@ -19,6 +19,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/plugins/ )
 
 macro_optional_find_package(WPG)
+macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
 
 add_subdirectory( png )
 add_subdirectory( svg )

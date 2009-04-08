@@ -1,8 +1,11 @@
 include(CheckIncludeFiles)
 
-find_package(GraphicsMagick)
 macro_optional_find_package(LibXml2)
+macro_log_feature(LIBXML2_FOUND "LibXML2" "LibXml2 library" "http://xmlsoft.org/" FALSE "" "Required by the xlslt filter")
+
 macro_optional_find_package(LibXslt)
+macro_log_feature(LIBXSLT_FOUND "LibXslt" "LibXslt Library" "http://xmlsoft.org/XSLT/" FALSE "" "Required by the xslt filter")
+
 # for xsltfilter:
 check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(sys/stat.h HAVE_SYS_STAT_H)

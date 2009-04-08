@@ -12,8 +12,10 @@ ENDIF (MYSQL_FOUND)
 
 macro_optional_find_package(PostgreSQL)
 macro_log_feature(POSTGRESQL_FOUND "libpq" "C application programmer's interface to PostgreSQL" "http://www.postgresql.org" FALSE "" "Required by Kexi PostgreSQL Migration driver")
+
 macro_optional_find_package(Pqxx)
 macro_log_feature(PQXX_FOUND "libpqxx" "Official C++ client API for PostgreSQL" "http://pqxx.org/development/libpqxx/" FALSE "" "Required by Kexi PostgreSQL Migration driver")
+
 IF (POSTGRESQL_FOUND AND PQXX_FOUND)
   macro_optional_add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)

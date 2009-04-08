@@ -1,7 +1,10 @@
 
 
 macro_optional_find_package(WPD)
+macro_log_feature(WPD_FOUND "WPD" "WordPerfect Document Library" "http://libwpd.sourceforge.net/" FALSE "" "Required by the KWord WPD import filter")
+
 macro_optional_find_package(WV2)
+macro_log_feature(WV2_FOUND "wvWaver" "Microsoft Word .doc Library" "http://sourceforge.net/projects/wvware" FALSE "" "Required by the KWord .doc filter")
 
 include_directories(${CMAKE_SOURCE_DIR}/filters/kword/libexport ${KOMAIN_INCLUDES} )
 

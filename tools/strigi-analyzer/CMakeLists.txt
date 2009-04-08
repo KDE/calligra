@@ -1,4 +1,5 @@
 find_package(Strigi REQUIRED)
+macro_log_feature(STRIGI_FOUND "Strigi" "Library for analyzing the contents of files for the Strigi search engine" "http://www.kde.org" FALSE "" "Required by the Strigi Analyzer")
 
 add_subdirectory( koffice )
 
