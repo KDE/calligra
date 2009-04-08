@@ -25,7 +25,6 @@ TODO Form editor:
  - port KFDPixmapEdit, PropertyFactory
  - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
-- fix SizePolicy combined property display
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
@@ -39,6 +38,28 @@ TODO:
   http://websvn.kde.org/trunk/koffice/kexi/koproperty2/koproperty/EditorView.cpp?r1=883465&r2=910657&pathrev=910657
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
+
+
+2009-03-29..2009-04-08
+KoProperty
+- added kDebug() stream operators for Property and Set
+- added Set::AlphabeticalByName option for Set::Iterator::setOrder()
+- removed error-prone Property::operator bool() const
+= EditorDataModel: update index cache when order is changed
+- added ExpandChildItems option added to EditorView::SetOptions,
+  if true, child property items are expanded 
+- added Set::PropertySelector::clone() so PropertySelectors 
+  can be used via const reference
+- added uint Set::count(const PropertySelector& selector) const
+- added bool Set::hasVisibleProperties() const
+- added bool Set::hasProperties(const PropertySelector& selector) const
+Forms
+- widget resizing now creates undoable command
+- property values (x, y, w, h) are visually updated
+  on widget resizing using handles
+-- even if the properties are sorted alphabetically
+Main Window
+- make complex properties (e.g. QRect) expanded by default
 
 2009-03-23..24
 KoProperty
