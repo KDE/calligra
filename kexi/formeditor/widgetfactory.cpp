@@ -463,7 +463,7 @@ WidgetFactory::resetEditor()
 
     if (m_widget) {
         disconnect(m_widget, 0, this, 0);
-        m_widget->repaint();
+        m_widget->update();
     }
 
 //js delete m_handles;
@@ -510,12 +510,8 @@ WidgetFactory::editorDeleted()
 // m_container = 0;
 }
 
-void
-WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *form)
-//WidgetFactory::changeProperty(const char *name, const QVariant &value, Container *container)
+void WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *form)
 {
-// if (!form->manager())
-//  return;
     if (!form->selectedWidgets()->isEmpty()) { // If eg multiple labels are selected, 
                                                // we only want to change the text of one of them (the one the user cliked on)
         if (m_widget) {
@@ -525,7 +521,7 @@ WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *for
             form->selectedWidgets()->first()->setProperty(name, value);
         }
     }
-    else {
+    else { // single selection
         form->propertySet().changePropertyIfExists(name, value);
     }
 }

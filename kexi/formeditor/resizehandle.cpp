@@ -21,15 +21,12 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qpainter.h>
-#include <qcursor.h>
-//Added by qt3to4:
+#include <QPainter>
+#include <QCursor>
 #include <QMouseEvent>
-#include <QEvent>
 #include <QPaintEvent>
 
 #include "form.h"
-//#include "formmanager.h"
 #include "resizehandle.h"
 #include "container.h"
 #include "widgetfactory.h"
@@ -143,6 +140,7 @@ void ResizeHandle::mousePressEvent(QMouseEvent *ev)
     m_y = ev->y();
     if (startDragging) {
 // m_form->resizeHandleDraggingStarted(m_set->widget());
+        m_set->resizeStarted();
         WidgetFactory *wfactory = m_set->m_form->library()->factoryForClassName(m_set->widget()->metaObject()->className());
         if (wfactory)
             wfactory->resetEditor();
@@ -261,6 +259,7 @@ void ResizeHandle::mouseMoveEvent(QMouseEvent *ev)
 void ResizeHandle::mouseReleaseEvent(QMouseEvent *)
 {
     m_dragging = false;
+    m_set->resizeFinished();
 }
 
 void ResizeHandle::paintEvent(QPaintEvent *)
@@ -332,6 +331,20 @@ void ResizeHandleSet::setEditingMode(bool editing)
 {
     for (int i = 0; i < 8; i++)
         m_handles[i]->setEditingMode(editing);
+}
+
+void ResizeHandleSet::resizeStarted()
+{
+    m_origWidgetRect = m_widget->geometry();
+}
+
+void ResizeHandleSet::resizeFinished()
+{
+    if (m_widget) {
+        kDebug() << "old:" << m_origWidgetRect << "new:" << m_widget->geometry();
+        m_form->addPropertyCommand(m_widget->objectName().toLatin1(), m_origWidgetRect,
+                                   m_widget->geometry(), "geometry", true /*execute*/);
+    }
 }
 
 #include "resizehandle.moc"

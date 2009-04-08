@@ -455,7 +455,7 @@ Container::eventFilter(QObject *s, QEvent *e)
  //moved..           drawCopiedWidgetRect(mev);
             return true;
         }
-        else if ( (   mev->buttons() == Qt::LeftButton 
+        else if ( (   (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::NoModifier)
                    || (mev->buttons() == Qt::LeftButton && mev->modifiers() == (Qt::ControlModifier | Qt::AltModifier))
                   )
                   && d->form->state() != Form::WidgetInserting
@@ -465,7 +465,7 @@ Container::eventFilter(QObject *s, QEvent *e)
             // we are dragging the widget(s) to move it
             if (!d->toplevel() && m_moving == widget()) // no effect for form
                 return false;
-            if ((!m_moving) || (!m_moving->parentWidget()))// || (m_moving->parentWidget()->inherits("QStackedWidget")))
+            if (!m_moving || !m_moving->parentWidget())// || (m_moving->parentWidget()->inherits("QStackedWidget")))
                 return true;
 
             moveSelectedWidgetsBy(mev->x() - m_grab.x(), mev->y() - m_grab.y());

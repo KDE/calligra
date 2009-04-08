@@ -242,9 +242,20 @@ public:
 
     PixmapCollection* pixmapCollection() const;
 
+/*    enum AddCommandOption {
+        NoAddCommandOptions = 0,
+        ExecuteCommand = 1,
+    }*/
+
     /*! Adds a widget in the form's command history. Please use it instead
     of calling directly actionCollection()->addCommand(). */
     void addCommand(K3Command *command, bool execute);
+
+    void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
+                            const QVariant &value, const QByteArray &propertyName, bool execute);
+
+    void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
+                            const QVariant &value, const QByteArray &propertyName, bool execute);
 
     /*! Clears form's command history. */
     void clearCommandHistory();

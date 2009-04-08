@@ -74,10 +74,9 @@ public:
     {
     }
 
-    //KoProperty::Set *propertySet;
     Form *form;
     QVariant value;
-    QHash<QByteArray, QVariant> oldValues;
+    QHash<QByteArray, QVariant> oldValues; //!< (widget_name -> value) hash
     QByteArray propertyName;
 };
 }
@@ -120,13 +119,28 @@ void PropertyCommand::setValue(const QVariant &value)
 
 void PropertyCommand::execute()
 {
-    d->form->selectFormWidget();
+    QWidget *selected = d->form->selectedWidget();
+    bool reSelectWidgets = true;
+    if (selected
+        && d->oldValues.count() == 1
+        && d->oldValues.contains(selected->objectName().toLatin1()) )
+    {
+        // do not reselect widget; this e.g. avoids removing resize handles
+        reSelectWidgets = false;
+    }
+
+    if (reSelectWidgets) {
+        d->form->selectFormWidget();
+    }
+
     d->form->setUndoing(true);
 
-    foreach (const QByteArray& name, d->oldValues.keys()) {
-        ObjectTreeItem* item = d->form->objectTree()->lookup(name);
-        if (item) { //we're checking for item!=0 because the name could be of a form widget
-            d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection);
+    if (reSelectWidgets) {
+        foreach (const QByteArray& name, d->oldValues.keys()) {
+            ObjectTreeItem* item = d->form->objectTree()->lookup(name);
+            if (item) { //we're checking for item!=0 because the name could be of a form widget
+                d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection);
+            }
         }
     }
 

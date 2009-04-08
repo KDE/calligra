@@ -43,7 +43,7 @@ class KFORMEDITOR_EXPORT ResizeHandle : public QWidget
 
 public:
     enum HandlePos {
-        TopLeftCorner = 0,
+        TopLeftCorner = 1,
         TopCenter = 2,
         TopRightCorner = 4,
         LeftCenter = 8,
@@ -97,7 +97,11 @@ public:
     void raise();
     void setEditingMode(bool editing);
 
+protected:
+    void resizeStarted();
+    void resizeFinished();
 private:
+    QRect m_origWidgetRect;
     QPointer<ResizeHandle> m_handles[8];
     QPointer<QWidget> m_widget;
     QPointer<Form>   m_form;

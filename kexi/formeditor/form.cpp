@@ -302,6 +302,7 @@ public:
     GeometryPropertyCommand  *lastGeoCommand;
     bool slotPropertyChangedEnabled : 1;
     bool slotPropertyChanged_addCommandEnabled : 1;
+    bool insideAddPropertyCommand : 1;
 // end of moved from WidgetPropertySet
 
     // i18n stuff
@@ -348,6 +349,7 @@ FormPrivate::FormPrivate(Form *form)
     isUndoing = false;
     slotPropertyChangedEnabled = true;
     slotPropertyChanged_addCommandEnabled = true;
+    insideAddPropertyCommand = false;
     initPropertiesDescription();
     origActiveColors = 0;
 // end of moved from WidgetPropertySet
@@ -813,6 +815,12 @@ void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
         selectWidget(widget());
         return;
     }
+    kDebug() << "selected count=" << d->selected.count();
+    if (!d->selected.isEmpty()) {
+        kDebug() << "first=" << d->selected.first();
+    }
+    kDebug() << w;
+
     if (d->selected.count() == 1 && d->selected.first() == w) {
         return;
     }
@@ -1609,6 +1617,27 @@ Form::State Form::state() const
     return d->state;
 }
 
+void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
+                    const QVariant &value, const QByteArray &propertyName, bool execute)
+{
+    kDebug() << d->propertySet[propertyName];
+    kDebug() << "oldValue:" << oldValue << "value:" << value;
+    d->insideAddPropertyCommand = true;
+    d->lastCommand = new PropertyCommand(*this, wname, oldValue, value, propertyName);
+    addCommand(d->lastCommand, execute);
+    d->insideAddPropertyCommand = false;
+}
+
+void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
+                    const QVariant &value, const QByteArray &propertyName, bool execute)
+{
+    kDebug() << d->propertySet[propertyName];
+    d->insideAddPropertyCommand = true;
+    d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
+    addCommand(d->lastCommand, execute);
+    d->insideAddPropertyCommand = false;
+}
+
 // moved from FormManager
 void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
 {
@@ -1652,7 +1681,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     }
 
     // make sure we are not already undoing -> avoid recursion
-    if (d->isUndoing && !d->isRedoing)
+    if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
         return;
 
     const bool alterLastCommand = d->lastCommand && d->lastCommand->property() == property;
@@ -1665,9 +1694,8 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         }
         else  {
             if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
-                d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
-                                                     d->selected.first()->property(property), value, property);
-                addCommand(d->lastCommand, false);
+                addPropertyCommand(d->selected.first()->objectName().toLatin1(),
+                    d->selected.first()->property(property), value, property, false /* !exec*/);
             }
 
             // If the property is changed, we add it in ObjectTreeItem modifProp
@@ -1694,9 +1722,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
                 foreach(QWidget* widget, d->selected) {
                     oldValues.insert(widget->objectName().toLatin1(), widget->property(property));
                 }
-
-                d->lastCommand = new PropertyCommand(*this, oldValues, value, property);
-                addCommand(d->lastCommand, false);
+                addPropertyCommand(oldValues, value, property, false /* !exec*/);
             }
         }
 
@@ -1840,7 +1866,7 @@ void Form::addWidget(QWidget *w)
     for (KoProperty::Set::Iterator it(d->propertySet); it.current(); ++it) {
         kDebug() << it.current();
         if (!isPropertyVisible(it.current()->name(), isTopLevel, classname)) {
-            d->propertySet[it.current()->name()].setVisible(false);
+            it.current()->setVisible(false);
         }
     }
 
@@ -2025,13 +2051,15 @@ void Form::createPropertiesForWidget(QWidget *w)
 // moved from WidgetPropertySet
 void Form::updatePropertyValue(ObjectTreeItem *tree, const char *property, const QMetaProperty &meta)
 {
+    return; //????
+//! @todo ????
     const char *propertyName = meta.isValid() ? meta.name() : property;
     if (!d->propertySet.contains(propertyName))
         return;
-    KoProperty::Property p(d->propertySet[propertyName]);
+    KoProperty::Property &p = d->propertySet[propertyName];
 
 //! \todo what about set properties, and lists properties
-    QHash<QString, QVariant>::ConstIterator it(tree->modifiedProperties()->find(propertyName));
+    const QHash<QString, QVariant>::ConstIterator it(tree->modifiedProperties()->find(propertyName));
     if (it != tree->modifiedProperties()->constEnd()) {
         blockSignals(true);
         if (meta.isValid() && meta.isEnumType()) {
@@ -2990,17 +3018,22 @@ void Form::saveEnabledProperty(bool value)
             continue;
 
         QPalette p(widget->palette());
-        if (!d->origActiveColors)
+        p.setCurrentColorGroup(value ? QPalette::Normal : QPalette::Disabled);
+#if 0
+        QPalette p(widget->palette());
+        if (!d->origActiveColors) {
             d->origActiveColors = new QColorGroup(p.active());
+        }
         if (value) {
-            if (d->origActiveColors)
-                p.setActive(*d->origActiveColors);   //revert
-        } else {
+            p.setActive(*d->origActiveColors);   //revert
+        }
+        else {
             QColorGroup cg = p.disabled();
             //also make base color a bit disabled-like
             cg.setColor(QColorGroup::Base, cg.color(QColorGroup::Background));
             p.setActive(cg);
         }
+#endif
         widget->setPalette(p);
 
         tree->setEnabled(value);
