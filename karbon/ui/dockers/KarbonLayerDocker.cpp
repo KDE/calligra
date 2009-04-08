@@ -25,7 +25,6 @@
 #include <KarbonPart.h>
 #include <KarbonLayerReorderCommand.h>
 
-#include <KoDocumentSectionView.h>
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
 #include <KoShapeContainer.h>
@@ -46,10 +45,12 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <kparts/part.h>
+#include <KMenu>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QPushButton>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QToolButton>
 
 enum ButtonIds
 {
@@ -83,7 +84,7 @@ KarbonLayerDocker::KarbonLayerDocker()
 
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
-    layout->addWidget( m_layerView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 4 );
+    layout->addWidget( m_layerView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, 6 );
 
     QButtonGroup *buttonGroup = new QButtonGroup( mainWidget );
     buttonGroup->setExclusive( false );
@@ -112,6 +113,27 @@ KarbonLayerDocker::KarbonLayerDocker()
     buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 3 );
 
+    QToolButton * toolButton = new QToolButton( mainWidget );
+    KMenu * menu = new KMenu( this );
+    QActionGroup *group = new QActionGroup( this );
+    
+    m_viewModeActions.insert( KoDocumentSectionView::MinimalMode,
+                              menu->addAction( SmallIcon( "view-list-text" ), i18n( "Minimal View" ), this, SLOT( minimalView() ) ) );
+    m_viewModeActions.insert( KoDocumentSectionView::DetailedMode,
+                              menu->addAction( SmallIcon( "view-list-details" ), i18n( "Detailed View" ), this, SLOT( detailedView() ) ) );
+    m_viewModeActions.insert( KoDocumentSectionView::ThumbnailMode,
+                              menu->addAction( SmallIcon( "view-preview" ), i18n( "Thumbnail View" ), this, SLOT( thumbnailView() ) ) );
+                                                                                  
+    foreach (QAction* action, m_viewModeActions) {
+        action->setCheckable( true );
+        action->setActionGroup( group );
+    }
+                                                                                  
+    toolButton->setMenu(menu);
+    toolButton->setPopupMode(QToolButton::InstantPopup);
+    toolButton->setIcon(SmallIcon("view-choose"));
+    toolButton->setText(i18n("View mode"));
+    layout->addWidget(toolButton, 1, 5);
     layout->setSpacing( 0 );
     layout->setMargin( 3 );
 
@@ -132,6 +154,8 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_layerView->setDragDropMode( QAbstractItemView::InternalMove );
     m_layerView->setSortingEnabled(true);
 
+    setViewMode( KoDocumentSectionView::MinimalMode );
+    
     connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
     
     m_updateTimer.setSingleShot( true );
@@ -396,6 +420,32 @@ KoShape * KarbonLayerDocker::shapeFromIndex( const QModelIndex &index )
         return 0;
 
     return static_cast<KoShape*>( sourceIndex.internalPointer() );
+}
+
+void KarbonLayerDocker::minimalView()
+{
+    setViewMode(KoDocumentSectionView::MinimalMode);
+}
+
+void KarbonLayerDocker::detailedView()
+{
+    setViewMode(KoDocumentSectionView::DetailedMode);
+}
+
+void KarbonLayerDocker::thumbnailView()
+{
+    setViewMode(KoDocumentSectionView::ThumbnailMode);
+}
+
+void KarbonLayerDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
+{
+    bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
+        
+    m_layerView->setDisplayMode(mode);
+    m_layerView->setItemsExpandable(expandable);
+    m_layerView->setRootIsDecorated(expandable);
+
+    m_viewModeActions[mode]->setChecked (true);
 }
 
 #include "KarbonLayerDocker.moc"
