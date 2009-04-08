@@ -4333,9 +4333,10 @@ void KexiMainWindow::propertySetSwitched(KexiWindow *window, bool force,
         if (!newBuf || (force || static_cast<KoProperty::Set*>(d->propBuffer) != newBuf)) {
             d->propBuffer = newBuf;
             if (preservePrevSelection || force) {
-                KoProperty::EditorView::SetOptions options
-                    = preservePrevSelection ? KoProperty::EditorView::PreservePreviousSelection
-                        : KoProperty::EditorView::NoOptions;
+                KoProperty::EditorView::SetOptions options = KoProperty::EditorView::ExpandChildItems;
+                if (preservePrevSelection) {
+                    options |= KoProperty::EditorView::PreservePreviousSelection;
+                }
                 if (sortedProperties) {
                     options |= KoProperty::EditorView::AlphabeticalOrder;
                 }
