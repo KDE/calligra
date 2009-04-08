@@ -48,12 +48,6 @@ if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
-if (SHOULD_BUILD_KRITA)
-  if(NOT MSVC) # TODO reenable
-    macro_optional_add_subdirectory(krita)
-  endif(NOT MSVC)
-endif(SHOULD_BUILD_KRITA)
-
 #macro_optional_add_subdirectory(kivio)
 
 if(LIBXML2_FOUND AND LIBXSLT_FOUND AND NOT WIN32)
