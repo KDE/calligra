@@ -58,24 +58,37 @@ public:
     public:
         PropertySelector();
         virtual ~PropertySelector();
+        
+        //! An operator implementing the functor.
         virtual bool operator()(const Property& prop) const = 0;
+
+        //! Creates a deep copy of the selector. 
+        //! Required for proper usage of the selector.
+        virtual PropertySelector* clone() const = 0;
     };
 
     //! A class to iterate over a Set.
     /*! It behaves like a QList::ConstIterator.
      Usage:
      @code  for (Set::Iterator it(set); it.current(); ++it) { .... }
+     @endcode
+     Usage with selector:
+     @code  for (Set::Iterator it(set, MySelector()); it.current(); ++it) { .... }
      @endcode */
     class KOPROPERTY_EXPORT Iterator
     {
     public:
         //! Creates iterator for @a set set of properties.
-        /*! @a selector functor can be provided to iterate only 
-            over specified properties. The iterator takes ownership
-            of the functor object. 
+        /*!             The properties are sorted by insertion order by default.
+            Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
+        Iterator(const Set &set);
+
+        //! Creates iterator for @a set set of properties.
+        /*! @a selector functor is used to iterate only 
+            over specified properties. 
             The properties are sorted by insertion order by default.
             Use setOrder(Iterator::Alphabetical) to have alphabetical order. */
-        Iterator(const Set &set, PropertySelector *selector = 0);
+        Iterator(const Set &set, const PropertySelector& selector);
 
         ~Iterator();
 
@@ -127,11 +140,22 @@ public:
     /*! Removes all properties from the property set and destroys them. */
     void clear();
 
-    /*! \return the number of items in the set. */
+    /*! @return the number of top-level properties in the set. */
     uint count() const;
 
-    /*! \return true if the set is empty, i.e. count() == 0; otherwise returns false. */
+    /*! @return the number of top-level properties in the set 
+                matching criteria defined by @a selector. */
+    uint count(const PropertySelector& selector) const;
+
+    /*! @return true if the set is empty, i.e. count() is 0; otherwise returns false. */
     bool isEmpty() const;
+
+    /*! @return true if the set is contains visible properties. */
+    bool hasVisibleProperties() const;
+
+    /*! @return true if the set is contains properties
+                matching criteria defined by @a selector. */
+    bool hasProperties(const PropertySelector& selector) const;
 
     /*! \return true if the set is read-only.
      In read-only property set,

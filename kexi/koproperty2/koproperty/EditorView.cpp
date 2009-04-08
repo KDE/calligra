@@ -345,6 +345,7 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
     }
 #endif
 
+    const bool setChanged = d->set != set;
     if (d->set) {
         acceptInput();
         //store prev. selection for this prop set
@@ -360,7 +361,9 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         else {
             d->set->setPreviousSelection(QByteArray());
         }
-        d->set->disconnect(this);
+        if (setChanged) {
+            d->set->disconnect(this);
+        }
     }
 
     QByteArray selectedPropertyName1 = propertyToSelect;
@@ -375,8 +378,10 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
             selectedPropertyName2 = d->set->previousSelection();
     }
 
-    d->set = set;
-    if (d->set) {
+    if (setChanged) {
+        d->set = set;
+    }
+    if (d->set && setChanged) {
         //receive property changes
         connect(d->set, SIGNAL(propertyChangedInternal(KoProperty::Set&, KoProperty::Property&)),
                 this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
@@ -386,13 +391,19 @@ void EditorView::changeSetInternal(Set *set, SetOptions options,
         connect(d->set, SIGNAL(aboutToBeDeleted()), this, SLOT(slotSetWillBeDeleted()));
     }
 
-//    fill();
-    delete d->model;
-    d->model = d->set ? new EditorDataModel(*d->set, this) : 0;
-    if (d->model && (options & AlphabeticalOrder)) {
-        d->model->setOrder(Set::AlphabeticalOrder);
-    }
+    EditorDataModel *oldModel = d->model;
+    const Set::Order setOrder
+        = (options & AlphabeticalOrder) ? Set::AlphabeticalOrder : Set::InsertionOrder;
+    d->model = d->set ? new EditorDataModel(*d->set, this, setOrder) : 0;
     setModel( d->model );
+    delete oldModel;
+
+    if (d->model && d->set && !d->set->isEmpty() && (options & ExpandChildItems)) {
+        const int rowCount = d->model->rowCount();
+        for (int row = 0; row < rowCount; row++) {
+            expand( d->model->index(row, 0) );
+        }
+    }
 
     emit propertySetChanged(d->set);
 
@@ -548,11 +559,45 @@ void EditorView::setGridLineColor(const QColor& color)
     d->gridLineColor = color;
 }
 
+static QModelIndex findChildItem(const Property& property, const QModelIndex &parent)
+{
+    const EditorDataModel *editorModel = dynamic_cast<const EditorDataModel*>(parent.model());
+    if (editorModel->propertyForItem(parent) == &property) {
+        return parent;
+    }
+    int row = 0;
+    while (true) {
+        QModelIndex childItem = parent.child(row, 0);
+        if (childItem.isValid()) {
+            QModelIndex subchild = findChildItem(property, childItem);
+            if (subchild.isValid()) {
+                return subchild;
+            }
+        }
+        else {
+            return QModelIndex();
+        }
+        row++;
+    }
+}
+
 void EditorView::slotPropertyChanged(Set& set, Property& property)
 {
-    const QModelIndex index( d->model->indexForPropertyName(property.name()) );
-    if (index.isValid())
-        update(index);
+    Property *realProperty = &property;
+    while (realProperty->parent()) { // find top-level property
+        realProperty = realProperty->parent();
+    }
+    const QModelIndex parentIndex( d->model->indexForPropertyName(realProperty->name()) );
+    if (parentIndex.isValid()) {
+        QModelIndex index = findChildItem(property, parentIndex);
+        if (index.isValid()) {
+            update(index);
+        }
+        index = d->model->indexForColumn(index, 1);
+        if (index.isValid()) {
+            update(index);
+        }
+    }
 }
 
 void EditorView::slotPropertyReset(KoProperty::Set& set, KoProperty::Property& property)

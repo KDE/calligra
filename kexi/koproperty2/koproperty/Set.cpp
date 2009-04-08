@@ -44,6 +44,7 @@ public:
     SetPrivate(KoProperty::Set *set) :
             q(set),
             readOnly(false),
+            m_visiblePropertiesCount(0),
             informAboutClearing(0) {}
     ~SetPrivate() {}
 
@@ -66,6 +67,8 @@ public:
     //! Used in Set::informAboutClearing(Property*) to declare that the property wants
     //! to be informed that the set has been cleared (all properties are deleted)
     bool* informAboutClearing;
+
+    inline uint visiblePropertiesCount() const { return m_visiblePropertiesCount; }
 
     inline Property* property(const QByteArray &name) const {
         return hash.value(name.toLower());
@@ -96,9 +99,13 @@ public:
         Property *p = this->property(property->name());
         if (p) {
             q->addRelatedProperty(p, property);
-        } else {
+        }
+        else {
             list.append(property);
             hash.insert(property->name().toLower(), property);
+            if (property->isVisible()) {
+                m_visiblePropertiesCount++;
+            }
             q->addToGroup(group, property);
         }
 
@@ -114,9 +121,15 @@ public:
         if (!property)
             return;
 
-        list.removeOne(property);
+        if (!list.removeOne(property)) {
+            kDebug() << "Set does not contain property" << property;
+            return;
+        }
         Property *p = hash.take(property->name());
         q->removeFromGroup(p);
+        if (p->isVisible()) {
+            m_visiblePropertiesCount--;
+        }
         if (ownProperty) {
             emit q->aboutToDeleteProperty(*q, *p);
             delete p;
@@ -128,6 +141,7 @@ public:
             *informAboutClearing = true;
         informAboutClearing = 0;
         emit q->aboutToBeCleared();
+        m_visiblePropertiesCount = 0;
         qDeleteAll(propertiesOfGroup);
         propertiesOfGroup.clear();
         groupNames.clear();
@@ -153,6 +167,16 @@ public:
 
     inline void removePropertyFromGroup(Property *property) {
         groupForProperties.remove(property);
+    }
+
+    // Copy all attributes except complex ones
+    void copyAttributesFrom(const SetPrivate& other)
+    {
+        *this = other;
+        // do not copy too deeply
+        list.clear();
+        hash.clear();
+        groupForProperties.clear();
     }
 
     // Copy all properties from the other set
@@ -185,6 +209,8 @@ private:
     //! a hash of properties in form name -> property
     QHash<QByteArray, Property*> hash;
     QHash<Property*, QByteArray> groupForProperties;
+    uint m_visiblePropertiesCount; //! cache for optimization, 
+                                   //! used by @ref bool Set::hasVisibleProperties()
 };
 
 }
@@ -213,16 +239,24 @@ bool Iterator_propertyAndStringLessThan(
 
 //////////////////////////////////////////////
 
-//Set::Iterator class
-Set::Iterator::Iterator(const Set &set, PropertySelector *selector)
+Set::Iterator::Iterator(const Set &set)
     : m_set(&set)
     , m_iterator( set.d->listConstIterator() )
     , m_end( set.d->listConstEnd() )
-    , m_selector( selector )
+    , m_selector( 0 )
     , m_order(Set::InsertionOrder)
 {
-    if (m_selector && current() && !(*m_selector)( *current() )) {
-        // the first item is not acceptable by the selector
+}
+
+Set::Iterator::Iterator(const Set &set, const PropertySelector& selector)
+    : m_set(&set)
+    , m_iterator( set.d->listConstIterator() )
+    , m_end( set.d->listConstEnd() )
+    , m_selector( selector.clone() )
+    , m_order(Set::InsertionOrder)
+{
+    if (current() && !(*m_selector)( *current() )) {
+        // skip first items that are acceptable by the selector
         ++(*this);
     }
 }
@@ -459,10 +493,29 @@ Set::count() const
     return d->count();
 }
 
+uint Set::count(const PropertySelector& selector) const
+{
+    uint result = 0;
+    for (Set::Iterator it(*this, selector); it.current(); ++it, result++)
+        ;
+    return result;
+}
+
 bool
 Set::isEmpty() const
 {
     return d->isEmpty();
+}
+
+bool Set::hasVisibleProperties() const
+{
+    return d->visiblePropertiesCount() > 0;
+}
+
+bool Set::hasProperties(const PropertySelector& selector) const
+{
+    Set::Iterator it(*this, selector);
+    return it.current();
 }
 
 bool
@@ -503,9 +556,11 @@ Set::operator= (const Set & set)
 
     clear();
 
+    d->copyAttributesFrom(*set.d);
+/*moved
     d->ownProperty = set.d->ownProperty;
     d->prevSelection = set.d->prevSelection;
-    d->groupDescriptions = set.d->groupDescriptions;
+    d->groupDescriptions = set.d->groupDescriptions;*/
     d->copyPropertiesFrom(set.d->listConstIterator(), set.d->listConstEnd(), set);
     return *this;
 }
@@ -517,8 +572,6 @@ Set::changeProperty(const QByteArray &property, const QVariant &value)
     if (p)
         p->setValue(value);
 }
-
-/////////////////////////////////////////////////////
 
 void Set::debug() const
 {

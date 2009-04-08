@@ -741,22 +741,40 @@ void Property::setSortingKey(int key)
 
 void Property::emitPropertyChanged()
 {
+    QList< QPointer<Set> > *sets = 0;
     if (d->sets) {
-        foreach (QPointer<Set> set, *d->sets) {
-            if (!set.isNull()) {//may be destroyed in the meantime
-                emit set->propertyChangedInternal(*set, *this);
-                emit set->propertyChanged(*set, *this);
+        sets = d->sets;
+    }
+    else if (d->parent) {
+        sets = d->parent->d->sets;
+    }
+    if (sets) {
+        foreach (QPointer<Set> s, *sets) {
+            if (!s.isNull()) { //may be destroyed in the meantime
+                emit s->propertyChangedInternal(*s, *this);
+                emit s->propertyChanged(*s, *this);
             }
         }
-    } else if (d->set) {
-        //if the slot connect with that signal may call set->clear() - that's
-        //the case e.g. at kexi/plugins/{macros|scripting}/* -  this Property
-        //may got destroyed ( see Set::removeProperty(Property*) ) while we are
-        //still on it. So, if we try to access ourself/this once the signal
-        //got emitted we may end in a very hard to reproduce crash. So, the
-        //emit should happen as last step in this method!
-        //emit d->set->propertyChangedInternal(*d->set, *this);
-        emit d->set->propertyChanged(*d->set, *this);
+    }
+    else {
+        QPointer<Set> set;
+        set = d->set;
+        if (d->set) {
+            set = d->set;
+        }
+        else if (d->parent) {
+            set = d->parent->d->set;
+        }
+        if (!set.isNull()) {
+            //if the slot connect with that signal may call set->clear() - that's
+            //the case e.g. at kexi/plugins/{macros|scripting}/* -  this Property
+            //may got destroyed ( see Set::removeProperty(Property*) ) while we are
+            //still on it. So, if we try to access ourself/this once the signal
+            //got emitted we may end in a very hard to reproduce crash. So, the
+            //emit should happen as last step in this method!
+            emit set->propertyChangedInternal(*set, *this);
+            emit set->propertyChanged(*set, *this);
+        }
     }
 }
 

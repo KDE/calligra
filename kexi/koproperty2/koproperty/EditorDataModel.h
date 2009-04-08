@@ -39,7 +39,8 @@ class KOPROPERTY_EXPORT EditorDataModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
-    EditorDataModel(Set &propertySet, QObject *parent = 0);
+    EditorDataModel(Set &propertySet, QObject *parent = 0,
+                    Set::Order order = Set::InsertionOrder);
     ~EditorDataModel();
 
     enum Role {
@@ -84,11 +85,17 @@ public:
     //! or invalid index if such property could not be found.
     QModelIndex indexForPropertyName(const QByteArray& propertyName) const;
 
+    //! @return a sibling for model index @a index and columnd @a column
+    QModelIndex indexForColumn(const QModelIndex& index, int column) const;
+
     //! Sets order for properties. Restarts the iterator.
     void setOrder(Set::Order order);
 
     //! @return order for properties.
     Set::Order order() const;
+
+    //! Reimplemented for optimization.
+    bool hasChildren(const QModelIndex & parent = QModelIndex()) const;
 private:
 //    void setupModelData(const QStringList &lines, TreeItem *parent);
     void collectIndices() const;
