@@ -20,6 +20,7 @@
 #include "KarbonLayerDocker.h"
 #include "KarbonLayerModel.h"
 #include "KarbonLayerSortingModel.h"
+#include "KarbonFactory.h"
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -46,6 +47,7 @@
 #include <kmessagebox.h>
 #include <kparts/part.h>
 #include <KMenu>
+#include <KConfigGroup>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QPushButton>
@@ -154,7 +156,16 @@ KarbonLayerDocker::KarbonLayerDocker()
     m_layerView->setDragDropMode( QAbstractItemView::InternalMove );
     m_layerView->setSortingEnabled(true);
 
-    setViewMode( KoDocumentSectionView::MinimalMode );
+    KoDocumentSectionView::DisplayMode mode = KoDocumentSectionView::MinimalMode;
+    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    if( config->hasGroup( "Interface" ) ) {
+        QString modeStr = config->group( "Interface" ).readEntry("LayerDockerMode", "minimal" );
+        if( modeStr == "detailed" )
+            mode = KoDocumentSectionView::DetailedMode;
+        else if( modeStr == "thumbnail" )
+            mode = KoDocumentSectionView::ThumbnailMode;
+    }
+    setViewMode( mode );
     
     connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
     
@@ -165,6 +176,21 @@ KarbonLayerDocker::KarbonLayerDocker()
 
 KarbonLayerDocker::~KarbonLayerDocker()
 {
+    KSharedConfigPtr config = KarbonFactory::componentData().config();
+    QString modeStr;
+    switch( m_layerView->displayMode() )
+    {
+        case KoDocumentSectionView::MinimalMode:
+            modeStr = "minimal";
+            break;
+        case KoDocumentSectionView::DetailedMode:
+            modeStr = "detailed";
+            break;
+        case KoDocumentSectionView::ThumbnailMode:
+            modeStr = "thumbnail";
+            break;
+    }
+    config->group( "Interface" ).writeEntry("LayerDockerMode", modeStr );
 }
 
 void KarbonLayerDocker::updateView()
