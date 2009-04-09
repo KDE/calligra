@@ -32,7 +32,7 @@
 #endif
 
 #ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING "2.0 alpha-11"
+# define KEXI_VERSION_STRING "2.0 alpha-12"
 #endif
 
 #define KEXI_VERSION_MAJOR 1
