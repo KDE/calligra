@@ -1,5 +1,5 @@
 [Parts]
-Order=kexihandler_table,kexihandler_query,kexihandler_form,kexihandler_report,kexihandler_macro,kexihandler_script
+Order=org.kexi-project.table,org.kexi-project.query,org.kexi-project.form,org.kexi-project.report,org.kexi-project.macro,org.kexi-project.script
 
 [MainWindow]
 HoverCloseButtonForTabs=false

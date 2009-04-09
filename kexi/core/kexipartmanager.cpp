@@ -73,9 +73,8 @@ bool Manager::lookup()
 
     KConfigGroup cg(KGlobal::config()->group("Parts"));
     QStringList sl_order = cg.readEntry("Order").split(",");  //we'll set parts in defined order
-    const int size = qMax(tlist.count(), sl_order.count());
-    QList<KService::Ptr> ordered;
-    int offset = size; //we will insert not described parts from #offset
+    QVector<KService::Ptr> ordered(sl_order.count());
+    int offset = sl_order.count(); //we will insert not described parts from #offset
 
     //compute order
     foreach(KService::Ptr ptr, tlist) {
@@ -85,19 +84,29 @@ bool Manager::lookup()
 //<TEMP>: disable some parts if needed
 //        if (!Kexi::tempShowReports() && partName == "report")
 //            continue;
-        if (!Kexi::tempShowMacros() && partName == "macro")
+        if (   partClass.isEmpty()
+            || (!Kexi::tempShowMacros() && partClass == "org.kexi-project.macro")
+            || (!Kexi::tempShowScripts() && partClass == "org.kexi-project.script")
+           )
+        {
             continue;
-        if (!Kexi::tempShowScripts() && partName == "script")
-            continue;
+        }
 //</TEMP>
-        const int idx = sl_order.indexOf(ptr->library());
-        if (idx != -1)
-            ordered.insert(idx, ptr);
-        else //add to end
-            ordered.insert(offset++, ptr);
+//! @todo <TEMP>
+        if (partClass == "uk.co.piggz.report") {
+            partClass = "org.kexi-project.report";
+        }
+//        </TEMP>
+        const int idx = sl_order.indexOf(partClass);
+        if (idx != -1) {
+            ordered[idx] = ptr;
+        }
+        else {
+            ordered.append(ptr);
+        }
     }
     //fill final list using computed order
-    for (int i = 0; i < (int)ordered.size(); i++) {
+    for (int i = 0; i < ordered.size(); i++) {
         KService::Ptr ptr = ordered[i];
         if (ptr) {
             Info *info = new Info(ptr);
