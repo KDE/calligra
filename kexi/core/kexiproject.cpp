@@ -140,9 +140,9 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
     if (d->data->connectionData() == d->connection->data())
         d->connection = conn;
     else
-        kWarning() << "KexiProject::KexiProject(): passed connection's data ("
-        << conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
-        << d->data->connectionData()->serverInfoString() << ")";
+        kWarning() << "passed connection's data ("
+            << conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
+            << d->data->connectionData()->serverInfoString() << ")";
 }
 
 KexiProject::~KexiProject()

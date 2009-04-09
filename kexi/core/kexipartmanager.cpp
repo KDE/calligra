@@ -63,7 +63,7 @@ bool Manager::lookup()
     m_parts.clear();
 
     if (!KServiceType::serviceType("Kexi/Handler")) {
-        kWarning() << "KexiPart::Manager::lookup(): No 'Kexi/Handler' service type installed! Aborting.";
+        kWarning() << "No 'Kexi/Handler' service type installed! Aborting.";
         setError(i18n("No \"%1\" service type installed. Check your Kexi installation. Aborting.",
                       QString("Kexi/Handler")));
         return false;
@@ -139,7 +139,7 @@ Part* Manager::part(Info *i)
         int error = 0;
         p = KService::createInstance<Part>(i->ptr(), this, QStringList(), &error);
         if (!p) {
-            kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")";
+            kDebug() << "failed :( (ERROR #" << error << ")";
             kDebug() << "  " << KLibLoader::self()->lastErrorMessage();
             i->setBroken(true, i18n("Error while loading plugin \"%1\"", i->objectName()));
             setError(i->errorMessage());

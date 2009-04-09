@@ -132,7 +132,7 @@ KexiWindow* KexiInternalPart::createKexiWindowInstance(
 {
     KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
     if (!part) {
-        kDebug() << "KexiInternalPart::createWindowInstance() !part";
+        kWarning() << "!part";
         return 0; //fatal!
     }
     return part->findOrCreateKexiWindow(objName ? objName : partName);
@@ -145,7 +145,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 {
     KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
     if (!part) {
-        kDebug() << "KexiInternalPart::createDialogInstance() !part";
+        kWarning() << "!part";
         return 0; //fatal!
     }
     QWidget *w;
@@ -171,7 +171,7 @@ bool KexiInternalPart::executeCommand(const char* partName,
 {
     KexiInternalPart *part = internalPartManager.findPart(0, partName);
     if (!part) {
-        kDebug() << "KexiInternalPart::createWindowInstance() !part";
+        kWarning() << "!part";
         return 0; //fatal!
     }
     return part->executeCommand(commandName, args);

@@ -62,7 +62,7 @@ KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
             if (!dir.exists())
                 continue;
             if (!dir.isReadable()) {
-                kWarning() << "KexiTemplateLoader::loadListInfo() \"" << dir.absolutePath() << "\" not readable!";
+                kWarning() << "\"" << dir.absolutePath() << "\" not readable!";
                 continue;
             }
             const QStringList templateDirs(dir.entryList(QDir::Dirs, QDir::Name));
@@ -88,8 +88,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
 {
     QDir dir(directory);
     if (!dir.isReadable()) {
-        kWarning() << "KexiTemplateLoader::loadInfo() \""
-        << directory << "\" not readable!";
+        kWarning() << "\"" << directory << "\" not readable!";
         return KexiTemplateInfo();
     }
     if (!QFileInfo(directory + "/info.txt").isReadable())
@@ -100,7 +99,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     KexiTemplateInfo info;
     info.name = cg.readEntry("Name");
     if (info.name.isEmpty()) {
-        kWarning() << "KexiTemplateLoader::loadInfo() \"" << (directory + "/info.txt") << "\" contains no \"name\" field";
+        kWarning() << "\"" << (directory + "/info.txt") << "\" contains no \"name\" field";
         return KexiTemplateInfo();
     }
     QStringList templateFileNameFilters;
@@ -108,7 +107,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
     const QStringList templateFiles(
         dir.entryList(templateFileNameFilters, QDir::Files | QDir::Readable, QDir::Name));
     if (templateFiles.isEmpty()) {
-        kWarning() << "KexiTemplateLoader::loadInfo() no readable .kexi template file found in \"" << directory << "\"";
+        kWarning() << "no readable .kexi template file found in \"" << directory << "\"";
         return KexiTemplateInfo();
     }
     info.filename = directory + "/" + templateFiles.first();

@@ -429,9 +429,9 @@ bool KexiView::eventFilter(QObject *o, QEvent *e)
 //  //hp==true if currently focused widget is a child of this table view
 //  const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
         kDebug() << "this=[" << o->metaObject()->className()
-        << " " << objectName() << "] o=[" << o->metaObject()->className() << " " << o->objectName()
-        << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString()) << " "
-        << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
+            << objectName() << "] o=[" << o->metaObject()->className() << o->objectName()
+            << "] focusWidget=[" << (qApp->focusWidget() ? qApp->focusWidget()->metaObject()->className() : QString())
+            << (qApp->focusWidget() ? qApp->focusWidget()->objectName() : QString()) << "] ev.type=" << e->type();
         if (KexiUtils::hasParent(this, o)) {
             if (e->type() == QEvent::FocusOut && qApp->focusWidget()
                     && !KexiUtils::hasParent(this, qApp->focusWidget())) {

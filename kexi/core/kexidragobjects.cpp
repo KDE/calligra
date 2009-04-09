@@ -54,7 +54,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
         if (fields.count() == 1)
             field = fields.first();
         else
-            kDebug() << "KexiFieldDrag::KexiFieldDrag(): fields list is empty!";
+            kDebug() << "fields list is empty!";
         stream1 << sourceMimeType << sourceName << field;
     }
     setEncodedData(data);
@@ -89,7 +89,7 @@ KexiFieldDrag::decodeSingle(QDropEvent* e, QString& sourceMimeType,
     stream1 >> sourceMimeType;
     stream1 >> sourceName;
     stream1 >> field;
-// kDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<field;
+// kDebug() << sourceMimeType<<"/"<<sourceName<<"/"<<field;
     return true;
 }
 
@@ -112,7 +112,7 @@ KexiFieldDrag::decodeMultiple(QDropEvent* e, QString& sourceMimeType,
     stream1 >> sourceMimeType;
     stream1 >> sourceName;
     stream1 >> fields;
-// kDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
+// kDebug() << "decoded:" << sourceMimeType<<"/"<<sourceName<<"/"<<fields;
     return true;
 }
 
@@ -147,7 +147,7 @@ KexiDataProviderDrag::decode(QDropEvent* e, QString& sourceMimeType, QString& so
 //        stream1.setVersion(QDataStream::Qt_3_1);
         stream1 >> sourceMimeType;
         stream1 >> sourceName;
-//  kDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceMimeType <<"/"<<sourceName;
+//  kDebug() << "decoded:" << sourceMimeType <<"/"<<sourceName;
         return true;
     }
     return false;

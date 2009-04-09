@@ -103,8 +103,7 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
     if (!m_item)
         return;
     if (m_item->stored) {
-        kWarning() << "KexiBLOBBuffer::Handle::setStoredWidthID(): object for id=" << id
-        << " is aleady stored";
+        kWarning() << "object for id=" << id << " is aleady stored";
         return;
     }
 
@@ -307,8 +306,9 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
                            recordData);
         if (res != true || recordData.size() < 4) {
             //! @todo err msg
-            kWarning() << "KexiBLOBBuffer::objectForId(" << id << "," << stored
-            << "): res!=true || recordData.size()<4; res==" << res.toString() << " recordData.size()==" << recordData.size();
+            kWarning() << "id=" << id << "stored=" << stored
+                << ": res!=true || recordData.size()<4; res==" << res.toString() 
+                << "recordData.size()==" << recordData.size();
             return KexiBLOBBuffer::Handle();
         }
 
