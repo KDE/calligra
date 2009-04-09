@@ -159,7 +159,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
-    
+
     m_tool->m_frameToolPresentation()->resize( presentationRect.size() );
     m_tool->m_frameToolPresentation()->setVisible(true);
 
@@ -172,7 +172,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
     m_animationDirector = new KPrAnimationDirector( m_view, m_canvas, pages, m_view->activePage() );
-    
+
     if ( presenterViewEnabled ) {
         if ( desktop.numScreens() > 1 ) {
             int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
@@ -184,16 +184,17 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
             m_presenterViewWidget->setWindowState(
                     m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
             m_presenterViewWidget->move( pvRect.topLeft() );
-            m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() ); 
+            m_presenterViewWidget->updateWidget( pvRect.size(), presentationRect.size() );
             m_presenterViewWidget->show();
             m_presenterViewWidget->setFocus();                             // it shown full screen
 
             m_pvAnimationDirector = new KPrAnimationDirector( m_view,
                     m_presenterViewCanvas, pages, m_view->activePage() );
-	    
-	    //update current slide widget
-	    if(m_presenterViewWidget)
-		m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
+
+            //update current slide widget
+            if ( m_presenterViewWidget ) {
+                m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
+            }
         }
         else {
             kWarning() << "Presenter View is enabled but only found one monitor";
@@ -220,10 +221,9 @@ void KPrViewModePresentation::deactivate()
     m_canvas->show();
     m_view->updateActivePage( page );
     m_tool->m_frameToolPresentation()->setVisible(false);
-    if ( m_tool->getBlackBackgroundVisibility() )
-    {
-	delete m_tool->m_blackBackgroundPresentation();
-	m_tool->setBlackBackgroundVisibility( false );
+    if ( m_tool->getBlackBackgroundVisibility() ) {
+        delete m_tool->m_blackBackgroundPresentation();
+        m_tool->setBlackBackgroundVisibility( false );
     }
     // only delete after the new page has been set
     delete m_endOfSlideShowPage;
@@ -271,11 +271,12 @@ void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigat
 {
     if(!m_tool->getDrawMode() && !m_tool->getHighlightMode()){
         bool finished = m_animationDirector->navigate( navigation );
-    
+
         //update current slide widget
-        if(m_presenterViewWidget)
+        if ( m_presenterViewWidget ) {
             m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
-	
+        }
+
         if ( m_pvAnimationDirector ) {
             finished = m_pvAnimationDirector->navigate( navigation ) && finished;
         }

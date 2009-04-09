@@ -19,10 +19,6 @@
 
 #include "KPrPresentationToolWidget.h"
 
-#include <KLocale>
-#include <KDebug>
-
-#include <QtGui/QIcon>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QDesktopWidget>
@@ -30,27 +26,28 @@
 #include <KIcon>
 
 KPrPresentationToolWidget::KPrPresentationToolWidget( QWidget *parent )
-    : QWidget( parent )
+: QWidget( parent )
 {
     // This QWidget will be the setup User Interface
     m_uiWidget.setupUi( this );
-    
+
     // Set the size of the icon
     QDesktopWidget desktop;
-    QRect rect = desktop.screenGeometry(desktop.screenNumber(this));
-    QSize taille = QSize(rect.width()/40,rect.width()/40);
-    m_uiWidget.penButton->setIconSize(taille);
-    m_uiWidget.highLightButton->setIconSize(taille);
+    QRect rect = desktop.screenGeometry( desktop.screenNumber( this ) );
+    QSize size = QSize( rect.width() / 40, rect.width() / 40 );
+    m_uiWidget.penButton->setIconSize( size );
+    m_uiWidget.highLightButton->setIconSize( size );
     // Set the buttons Icon
-    m_uiWidget.penButton->setIcon(KIcon("pen"));
-    m_uiWidget.highLightButton->setIcon(KIcon("highlight"));
+    // TODO add tooltip
+    m_uiWidget.penButton->setIcon( KIcon( "pen" ) );
+    m_uiWidget.highLightButton->setIcon( KIcon( "highlight" ) );
 }
 
-void KPrPresentationToolWidget::paintEvent(QPaintEvent *event)
+void KPrPresentationToolWidget::paintEvent( QPaintEvent *event )
 {
     //For the transparent background...
-    QPainter painter(this);
-    painter.fillRect(event->rect(), Qt::transparent );
+    QPainter painter( this );
+    painter.fillRect( event->rect(), Qt::transparent );
 }
 
 Ui::KPrPresentationTool KPrPresentationToolWidget::presentationToolUi()
@@ -59,4 +56,3 @@ Ui::KPrPresentationTool KPrPresentationToolWidget::presentationToolUi()
 }
 
 #include "KPrPresentationToolWidget.moc"
-

@@ -16,14 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KPrPresentationViewModeStrategy.h"
 
-KPrPresentationViewModeStrategy::KPrPresentationViewModeStrategy( KPrPresentationTool * tool ) : KPrPresentationStrategyInterface( tool )
+#include "KPrViewModePresentation.h"
+#include "KPrPresentationTool.h"
+
+KPrPresentationViewModeStrategy::KPrPresentationViewModeStrategy( KPrPresentationTool * tool )
+: KPrPresentationStrategyInterface( tool )
 {
 }
+
 KPrPresentationViewModeStrategy::~KPrPresentationViewModeStrategy()
 {
 }
+
 void KPrPresentationViewModeStrategy::handleEscape()
 {
     m_tool->getViewMode().activateSavedViewMode();

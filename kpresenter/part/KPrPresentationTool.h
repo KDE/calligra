@@ -33,7 +33,8 @@ class KoEventAction;
 class KPrViewModePresentation;
 
 /// The tool used for presentations
-class KPrPresentationTool : public KoTool {
+class KPrPresentationTool : public KoTool
+{
     Q_OBJECT
 public:
     explicit KPrPresentationTool( KPrViewModePresentation & viewMode );
@@ -58,7 +59,7 @@ public:
     bool getDrawMode();
     bool getHighlightMode();
     KPrViewModePresentation & getViewMode();
-    
+
 public slots:
     void activate( bool temporary = false );
     void deactivate();

@@ -20,11 +20,14 @@
 #define KPRPRESENTATIONVIEWMODESTRATEGY_H
 
 #include "KPrPresentationStrategyInterface.h"
-class KPrPresentationViewModeStrategy : public KPrPresentationStrategyInterface {
+
+class KPrPresentationViewModeStrategy : public KPrPresentationStrategyInterface
+{
 public :
     KPrPresentationViewModeStrategy( KPrPresentationTool * tool );
-    ~KPrPresentationViewModeStrategy();
-    void handleEscape() ;
+    virtual ~KPrPresentationViewModeStrategy();
+
+    virtual void handleEscape();
 };
 
 #endif /* KPRPRESENTATIONVIEWSTRATEGY_H */

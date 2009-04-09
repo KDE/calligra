@@ -16,14 +16,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KPrPresentationHighlightStrategy.h"
 
-KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool ) : KPrPresentationStrategyInterface( tool )
+#include "KPrPresentationTool.h"
+
+KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool )
+: KPrPresentationStrategyInterface( tool )
 {
 }
+
 KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
 {
 }
+
 void KPrPresentationHighlightStrategy::handleEscape()
 {
     m_tool->highLightPresentation();

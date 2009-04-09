@@ -23,33 +23,33 @@
 #include <QtGui/QLabel>
 #include <QVarLengthArray>
 
-#include "KPrViewModePresentation.h"
-/*dans le destructeur tu pourras faire un set sur le booléen à False, et dans le constructeur un Set à true*/
-
-#include <QObject>
-
 class QAction;
 
-struct Path {
+struct Path
+{
     QVector<QPointF> points;
     QColor color;
     int size;
 };
 
-class KPrPresentationDrawWidget : public QWidget {
-Q_OBJECT
+class KPrPresentationDrawWidget : public QWidget
+{
+    Q_OBJECT
 
 public :
     KPrPresentationDrawWidget( KoPACanvas * canvas );
     ~KPrPresentationDrawWidget();
+
     /** Draw on the Presentation */
     void paintEvent( QPaintEvent * event );
+
     /** Get all the mouse event needed to paint */
-    void mouseMoveEvent( QMouseEvent* e );
-    void mousePressEvent( QMouseEvent* e );
-    void mouseReleaseEvent( QMouseEvent* e );
+    void mouseMoveEvent( QMouseEvent * e );
+    void mousePressEvent( QMouseEvent * e );
+    void mouseReleaseEvent( QMouseEvent * e );
+
     /** Popup menu for colors and sizes */
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent( QContextMenuEvent * event );
 
 public slots:
     void updateColor( QAction * );
@@ -60,6 +60,7 @@ private :
     QIcon buildIconSize( int );
     QAction* buildActionColor( QColor, QString );
     QAction* buildActionSize( int );
+
     QSize m_size;
     bool m_draw;
     int m_penSize;
@@ -67,4 +68,4 @@ private :
     QList<Path> m_pointVectors;
 };
 
-#endif /* KPRPRESENTATIONDRAWWIDGET_H */ 
+#endif /* KPRPRESENTATIONDRAWWIDGET_H */

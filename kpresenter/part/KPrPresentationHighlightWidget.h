@@ -20,20 +20,21 @@
 #define KPRPRESENTATIONHIGHLIGHTWIDGET_H
 
 #include <QWidget>
-#include <QtGui/QFrame>
-#include <QtGui/QLabel>
 
-#include "KPrViewModePresentation.h"
+class KoPACanvas;
 
-class KPrPresentationHighlightWidget : public QWidget {
+class KPrPresentationHighlightWidget : public QWidget
+{
     Q_OBJECT
-public :
+public:
     KPrPresentationHighlightWidget( KoPACanvas * canvas );
     ~KPrPresentationHighlightWidget();
-protected :
-    void mouseMoveEvent ( QMouseEvent * event );
-    void paintEvent ( QPaintEvent * event );
-public :
+
+protected:
+    void mouseMoveEvent( QMouseEvent * event );
+    void paintEvent( QPaintEvent * event );
+
+private:
     QSize m_size;
     QPoint m_center;
     bool m_blackBackgroundVisibility;

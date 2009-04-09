@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,46 +17,43 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QtGui/QVBoxLayout>
-
-#include <QWidget>
-#include <QMouseEvent>
-
-#include <KoPACanvas.h>
-#include <QPoint>
-#include <QImage>
-#include <QColor>
-#include <QPainter>
-#include <kdebug.h>
-
 #include "KPrPresentationHighlightWidget.h"
 
-KPrPresentationHighlightWidget::KPrPresentationHighlightWidget(KoPACanvas * canvas) : QWidget(canvas)
+#include <KoPACanvas.h>
+
+#include <QMouseEvent>
+#include <QColor>
+#include <QPainter>
+
+KPrPresentationHighlightWidget::KPrPresentationHighlightWidget( KoPACanvas * canvas )
+: QWidget( canvas )
+, m_size( canvas->size() )
 {
     // The focus and the track for have the mouse position every time
     setFocusPolicy( Qt::StrongFocus );
     setMouseTracking( true );
-    // Size of the canvas is saved becouse it's used in the paintEvent
-    m_size = canvas->size();
+    // Size of the canvas is saved because it's used in the paintEvent
     resize( m_size );
-    
+
     m_center = QCursor::pos();
     update();
-    
 }
 
 KPrPresentationHighlightWidget::~KPrPresentationHighlightWidget()
-{ 
+{
 }
 
 /** paintEvent call with the update in the mouseMoveEvent */
-void KPrPresentationHighlightWidget::paintEvent ( QPaintEvent * event )
+void KPrPresentationHighlightWidget::paintEvent( QPaintEvent * event )
 {
     QPainter painter( this );
     QPen myPen;
-    QColor c( Qt::black ); c.setAlphaF( 0.5 );
+    QColor c( Qt::black );
+    // TODO make alpha configurable
+    c.setAlphaF( 0.5 );
     // The circle we want
     QPainterPath ellipse;
+    // TODO make radius configurable
     ellipse.addEllipse( m_center.x() - 75, m_center.y() - 75, 150, 150 );
     // All the 'background'
     QPainterPath myPath;
@@ -70,7 +67,7 @@ void KPrPresentationHighlightWidget::paintEvent ( QPaintEvent * event )
 void KPrPresentationHighlightWidget::mouseMoveEvent( QMouseEvent* e )
 {
     // Save the position of the mouse
-    m_center = e->pos();   
+    m_center = e->pos();
     // Update the screen : move the circle with a paint event
     update();
 }

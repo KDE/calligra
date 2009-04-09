@@ -34,14 +34,15 @@
 
 #include "KPrPresentationDrawWidget.h"
 
-KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas) : QWidget(canvas)
+KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas)
+: QWidget(canvas)
 {
     setFocusPolicy( Qt::StrongFocus );
     setMouseTracking( true );
     m_size = canvas->size();
 
     resize( m_size );
-    
+
     m_draw = false;
     m_penSize = 10;
     m_penColor = Qt::black;
@@ -53,11 +54,11 @@ KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
 
 void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 {
-    QPainter painter( this );    
+    QPainter painter( this );
     QBrush brush( Qt::SolidPattern );
     QPen pen( brush, m_penSize, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
     painter.setPen( pen );
-    foreach (const Path &path, m_pointVectors){
+    foreach ( const Path &path, m_pointVectors ) {
         pen.setColor( path.color );
         pen.setWidth( path.size );
         painter.setPen( pen );
@@ -77,10 +78,9 @@ void KPrPresentationDrawWidget::mousePressEvent( QMouseEvent* e )
 
 void KPrPresentationDrawWidget::mouseMoveEvent( QMouseEvent* e )
 {
-    if(m_draw)
-    {
-	m_pointVectors.last().points << e->pos();
-	update();
+    if ( m_draw ) {
+        m_pointVectors.last().points << e->pos();
+        update();
     }
 }
 
@@ -92,17 +92,17 @@ void KPrPresentationDrawWidget::mouseReleaseEvent( QMouseEvent* e )
 void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu( this );
-    
+
     QMenu *color = new QMenu( QString( "Color of the pen"), this );
     QMenu *size = new QMenu( QString( "Size of the pen"), this );
 
-    color->addAction ( buildActionColor( Qt::black, "&Black" ) );
-    color->addAction ( buildActionColor( Qt::white, "&White" ) );
-    color->addAction ( buildActionColor( Qt::green, "&Green" ) );
-    color->addAction ( buildActionColor( Qt::red, "&Red" ) );
-    color->addAction ( buildActionColor( Qt::blue, "&Blue" ) );
-    color->addAction ( buildActionColor( Qt::yellow, "&Yellow" ) );
-    connect(color, SIGNAL(triggered(QAction*)), this, SLOT(updateColor(QAction*)));
+    color->addAction( buildActionColor( Qt::black, "&Black" ) );
+    color->addAction( buildActionColor( Qt::white, "&White" ) );
+    color->addAction( buildActionColor( Qt::green, "&Green" ) );
+    color->addAction( buildActionColor( Qt::red, "&Red" ) );
+    color->addAction( buildActionColor( Qt::blue, "&Blue" ) );
+    color->addAction( buildActionColor( Qt::yellow, "&Yellow" ) );
+    connect( color, SIGNAL( triggered( QAction* ) ), this, SLOT( updateColor( QAction* ) ) );
 
 
     size->addAction( buildActionSize ( 9 ) );
@@ -114,63 +114,60 @@ void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
     size->addAction( buildActionSize ( 20 ) );
     size->addAction( buildActionSize ( 22 ) );
 
-    connect(size, SIGNAL(triggered(QAction*)), this, SLOT(updateSize(QAction*)));
-    
+    connect( size, SIGNAL( triggered( QAction* ) ), this, SLOT( updateSize( QAction* ) ) );
+
     menu.addMenu( color );
     menu.addMenu( size );
-    
-    menu.exec(event->globalPos());
+
+    menu.exec( event->globalPos() );
     m_draw = false;
 }
 
-QAction* KPrPresentationDrawWidget::buildActionSize ( int size ){
+QAction* KPrPresentationDrawWidget::buildActionSize( int size )
+{
     QAction *action = new QAction( buildIconSize( size ), QString::number(size)+"px", this );
     action->setProperty( "size", size );
     return action;
 }
 
-QAction* KPrPresentationDrawWidget::buildActionColor ( QColor color, QString name )
+QAction* KPrPresentationDrawWidget::buildActionColor( QColor color, QString name )
 {
     QAction *action;
     action = new QAction( buildIconColor ( color ) , name, this );
-    action->setProperty("color", QVariant(color));
+    action->setProperty( "color", QVariant( color ) );
     return action;
 }
 
-QIcon KPrPresentationDrawWidget::buildIconSize ( int size )
+QIcon KPrPresentationDrawWidget::buildIconSize( int size )
 {
-
-//        QPen pen( brush, m_penSize, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
-    QPen thumbPen ( Qt::black, Qt::MiterJoin );
+    QPen thumbPen( Qt::black, Qt::MiterJoin );
     thumbPen.setCapStyle( Qt::RoundCap );
-    thumbPen.setWidth ( size );
-    QPixmap thumbPixmap ( QSize ( 26, 26 ) );
-    thumbPixmap.fill ( );
-    QPainter thumbPainter ( &thumbPixmap );
-    thumbPainter.setPen ( thumbPen );
-    thumbPainter.drawPoint ( 13, 13 );
-    QIcon thumbIcon ( thumbPixmap );
+    thumbPen.setWidth( size );
+    QPixmap thumbPixmap( QSize ( 26, 26 ) );
+    thumbPixmap.fill();
+    QPainter thumbPainter( &thumbPixmap );
+    thumbPainter.setPen( thumbPen );
+    thumbPainter.drawPoint( 13, 13 );
+    QIcon thumbIcon( thumbPixmap );
     return thumbIcon;
 }
 
-QIcon KPrPresentationDrawWidget::buildIconColor ( QColor color )
+QIcon KPrPresentationDrawWidget::buildIconColor( QColor color )
 {
-
-    QPixmap thumbPixmap ( QSize ( 24, 20 ) );
-    thumbPixmap.fill ( color );
-    QIcon thumbIcon ( thumbPixmap );
+    QPixmap thumbPixmap( QSize ( 24, 20 ) );
+    thumbPixmap.fill( color );
+    QIcon thumbIcon( thumbPixmap );
     return thumbIcon;
 }
 
-void KPrPresentationDrawWidget::updateSize ( QAction *size )
+void KPrPresentationDrawWidget::updateSize( QAction *size )
 {
-    m_penSize = size->property("size").toInt();
+    m_penSize = size->property( "size" ).toInt();
     m_draw = false;
 }
 
-void KPrPresentationDrawWidget::updateColor ( QAction *color )
+void KPrPresentationDrawWidget::updateColor( QAction *color )
 {
-    m_penColor = color->property("color").value<QColor>();
+    m_penColor = color->property( "color" ).value<QColor>();
     m_draw = false;
 }
- 

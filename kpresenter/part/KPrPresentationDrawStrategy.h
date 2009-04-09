@@ -20,11 +20,13 @@
 #define KPRPRESENTATIONDRAWSTRATEGY_H
 
 #include "KPrPresentationStrategyInterface.h"
-class KPrPresentationDrawStrategy : public KPrPresentationStrategyInterface {
+
+class KPrPresentationDrawStrategy : public KPrPresentationStrategyInterface
+{
 public :
     KPrPresentationDrawStrategy( KPrPresentationTool * tool );
-    ~KPrPresentationDrawStrategy();
-    void handleEscape() ;
+    virtual ~KPrPresentationDrawStrategy();
+    virtual void handleEscape();
 };
 
 #endif /* KPRPRESENTATIONDRAWSTRATEGY_H */

@@ -18,12 +18,17 @@
  */
 #include "KPrPresentationDrawStrategy.h"
 
-KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool ) : KPrPresentationStrategyInterface( tool )
+#include "KPrPresentationTool.h"
+
+KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool )
+: KPrPresentationStrategyInterface( tool )
 {
 }
+
 KPrPresentationDrawStrategy::~KPrPresentationDrawStrategy()
 {
 }
+
 void KPrPresentationDrawStrategy::handleEscape()
 {
     m_tool->drawOnPresentation();
