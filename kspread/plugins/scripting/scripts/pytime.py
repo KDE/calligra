@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 import time, Kross, KSpread
 
 func = KSpread.function("PYTIME")

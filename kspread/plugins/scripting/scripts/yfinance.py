@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 """
 KSpread python script that provides the Yahoo! Finance formula function.
 

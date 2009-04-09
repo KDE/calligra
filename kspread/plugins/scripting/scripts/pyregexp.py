@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 import re, Kross, KSpread
 
 func = KSpread.function("PYREGEXP")

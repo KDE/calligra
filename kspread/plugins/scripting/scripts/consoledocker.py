@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 """
 Interactive Python Console Docker for KSpread.
 
