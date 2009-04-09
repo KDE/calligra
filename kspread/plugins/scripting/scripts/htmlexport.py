@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 """
 Python script to export an OpenDocument Spreadsheet File to
 a HTML File.

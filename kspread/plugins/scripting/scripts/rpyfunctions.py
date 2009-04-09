@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 """
 KSpread python script that provides access to the R programming environment for
 data analysis and graphics ( http://www.r-project.org ) using the RPy python

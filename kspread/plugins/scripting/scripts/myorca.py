@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 import urllib, Kross, KSpread
 
 class MyConfig:

@@ -1,3 +1,5 @@
+#!/usr/bin/env kross
+
 """
 Python script that provides additional formula-functions
 to KSpread.
