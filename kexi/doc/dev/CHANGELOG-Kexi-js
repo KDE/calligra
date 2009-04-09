@@ -40,6 +40,13 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 
 
+2009-04-09
+Core
+- make predefined order of parts based on classes
+- make reportspgz temporarily jump in the place of "reports"
+
+~~~~~~~~~~~~~~~~ 2.0 alpha 12 ~~~~~~~~~~~~~~~~
+
 2009-03-29..2009-04-08
 KoProperty
 - added kDebug() stream operators for Property and Set
@@ -592,6 +599,7 @@ KoProperty, KoProperty2
 KoProperty2
 - koproperty2 improved
 
+~~~~~~~~~~~~~~~~ 2.0 alpha 11 ~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~ 2.0 alpha 10 ~~~~~~~~~~~~~~~~
 
 2008-07-12
