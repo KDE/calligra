@@ -221,20 +221,27 @@ void KWStatistics::updateDataUi()
 
     if (m_showInDocker) {
         int currentIndex = widgetDocker.statistics->currentIndex();
+        QString newText;
         if (currentIndex == 0)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_words, 0));
+            newText = KGlobal::locale()->formatNumber(m_words, 0);
         else if (currentIndex == 1)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_sentences, 0));
+            newText = KGlobal::locale()->formatNumber(m_sentences, 0);
         else if (currentIndex == 2)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_syllables, 0));
+            newText = KGlobal::locale()->formatNumber(m_syllables, 0);
         else if (currentIndex == 3)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_lines, 0));
+            newText = KGlobal::locale()->formatNumber(m_lines, 0);
         else if (currentIndex == 4)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_charsWithSpace, 0));
+            newText = KGlobal::locale()->formatNumber(m_charsWithSpace, 0);
         else if (currentIndex == 5)
-            widgetDocker.count->setText(KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0));
+            newText = KGlobal::locale()->formatNumber(m_charsWithoutSpace, 0);
         else if (currentIndex == 6)
-            widgetDocker.count->setText(flesch);
+            newText = flesch;
+
+        int top, bottom, left, right;
+        widgetDocker.count->getTextMargins(&left, &top, &right, &bottom);
+        const int minWidth = widgetDocker.count->fontMetrics().width(newText);
+        widgetDocker.count->setMinimumSize(10 + minWidth + left + right, widgetDocker.count->minimumSize().height());
+        widgetDocker.count->setText(newText);
     } else {
         // tab 1
         widget.pages->setText(
@@ -269,6 +276,8 @@ void KWStatistics::setAutoUpdate(int state)
         m_autoUpdate = false;
         disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
     }
+    if (m_showInDocker)
+        widgetDocker.refresh->setVisible(!m_autoUpdate);
 }
 
 void KWStatistics::selectionChanged()
