@@ -52,10 +52,7 @@ public:
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( KoPointerEvent * event );
 
-    QFrame *m_frameToolPresentation();
     QWidget *m_blackBackgroundPresentation();
-    void setBlackBackgroundVisibility(bool b);
-    bool getBlackBackgroundVisibility();
     bool getDrawMode();
     bool getHighlightMode();
     KPrViewModePresentation & getViewMode();

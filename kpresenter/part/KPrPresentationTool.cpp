@@ -181,11 +181,26 @@ void KPrPresentationTool::wheelEvent( KoPointerEvent * event )
 
 void KPrPresentationTool::activate( bool temporary )
 {
+    // TODO fixme
+    //m_frame->resize( presentationRect.size() );
+    // the canvas does not yet has the correct size
+    m_frame->resize( m_canvas->canvasWidget()->size() );
+    m_frame->setVisible( true );
+    // redirect event to tool widget
+    m_frame->installEventFilter( this );
+    // activate tracking for show/hide tool buttons
+    m_frame->setMouseTracking( true );
 }
 
 void KPrPresentationTool::deactivate()
 {
     finishEventActions();
+    m_frame->setVisible(false);
+
+    if ( m_highlightMode ) {
+        delete m_blackBackgroundwidget;
+        m_highlightMode = false;
+    }
 }
 
 void KPrPresentationTool::finishEventActions()
@@ -299,26 +314,10 @@ void KPrPresentationTool::drawOnPresentation()
     switchDrawMode();
 }
 
-// get the acces on m_frame
-QFrame * KPrPresentationTool::m_frameToolPresentation()
-{
-    return m_frame;
-}
-
 // get the acces on m_blackBackgroundwidget
 QWidget * KPrPresentationTool::m_blackBackgroundPresentation()
 {
     return m_blackBackgroundwidget ? m_blackBackgroundwidget : 0;
-}
-
-void KPrPresentationTool::setBlackBackgroundVisibility(bool b)
-{
-    m_highlightMode = b;
-}
-
-bool KPrPresentationTool::getBlackBackgroundVisibility()
-{
-    return m_highlightMode;
 }
 
 bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
@@ -329,7 +328,8 @@ bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
         QPoint pos = source->mapFrom( m_viewMode.canvas(), mouseEvent->pos() );
 
         // TODO don't use hardcoded values
-        QRect geometrie = QRect( 0, m_frame->height() - 100, 100, 100 );
+        QSize buttonSize = m_presentationToolWidget->size() + QSize( 20, 20 );
+        QRect geometrie = QRect( 0, m_frame->height() - buttonSize.height(), buttonSize.width(), buttonSize.height() );
         if ( geometrie.contains( pos ) ) {
             m_presentationToolWidget->setVisible( true );
         }

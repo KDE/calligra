@@ -155,19 +155,11 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );
 
-    m_canvas->move( presentationRect.topLeft() );
+    //m_canvas->move( presentationRect.topLeft() );
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
-
-    m_tool->m_frameToolPresentation()->resize( presentationRect.size() );
-    m_tool->m_frameToolPresentation()->setVisible(true);
-
-    // redirect event to tool widget
-    m_tool->m_frameToolPresentation()->installEventFilter(m_tool);
-    // activate tracking for show/hide tool buttons
-    m_tool->m_frameToolPresentation()->setMouseTracking(true);
-
+    m_canvas->resize( presentationRect.size() ); // resize now so it has the right size when we call activate on the tool.
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -202,7 +194,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
         }
     }
 
-    //m_tool->activate( false );
+    m_tool->activate( false );
 }
 
 void KPrViewModePresentation::deactivate()
@@ -220,11 +212,6 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
     m_view->updateActivePage( page );
-    m_tool->m_frameToolPresentation()->setVisible(false);
-    if ( m_tool->getBlackBackgroundVisibility() ) {
-        delete m_tool->m_blackBackgroundPresentation();
-        m_tool->setBlackBackgroundVisibility( false );
-    }
     // only delete after the new page has been set
     delete m_endOfSlideShowPage;
     m_endOfSlideShowPage = 0;
