@@ -110,7 +110,7 @@ void KWStatistics::updateData()
     add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
     << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
 
-    bool footEnd = m_showInDocker ? widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
+    bool footEnd = m_showInDocker ? !widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
 
     foreach (KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
