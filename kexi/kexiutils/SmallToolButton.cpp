@@ -88,7 +88,7 @@ KexiSmallToolButton::KexiSmallToolButton(QAction* action, QWidget* parent)
         setWhatsThis(d->action->whatsThis());
         setCheckable(d->action->isCheckable());
         if (d->action->menu()) {
-            setPopupMode(QToolButton::InstantPopup); //QToolButton::MenuButtonPopup);
+            setPopupMode(QToolButton::MenuButtonPopup);
             //setArrowType(Qt::DownArrow);
             //setToolButtonStyle(Qt::ToolButtonTextOnly);
             setMenu(d->action->menu());
