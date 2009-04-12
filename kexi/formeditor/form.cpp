@@ -532,6 +532,7 @@ void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KForm
     d->commandHistory = new K3CommandHistory(d->collection, true);
     connect(d->commandHistory, SIGNAL(commandExecuted(K3Command*)), this, SLOT(slotCommandExecuted(K3Command*)));
     connect(d->commandHistory, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
+// 2.0 not needed    connect(d->commandHistory, SIGNAL(commandHistoryChanged()), this, SLOT(slotCommandHistoryChanged()));
 }
 
 KActionCollection  *Form::actionCollection() const
@@ -629,10 +630,16 @@ void Form::setFilename(const QString &file)
     d->filename = file;
 }
 
+void Form::commandHistoryDocumentSaved()
+{
+    d->commandHistory->documentSaved();
+}
+
+/* 2.0 not needed
 K3CommandHistory* Form::commandHistory() const
 {
     return d->commandHistory;
-}
+}*/
 
 #ifdef KFD_SIGSLOTS
 ConnectionBuffer* Form::connectionBuffer() const
@@ -914,10 +921,10 @@ void Form::setInsertionPoint(const QPoint &p)
     d->insertionPoint = p;
 }
 
-/*KAction* Form::action(const QString& name)
+QAction* Form::action(const QString& name)
 {
-    return d->collection(name);
-}*/
+    return d->collection->action(name);
+}
 
 void Form::emitActionSignals(bool withUndoAction)
 {
@@ -1792,7 +1799,7 @@ bool Form::isNameValid(const QString &name) const
 // moved from FormManager
 void Form::undo()
 {
-    if (!objectTree())
+    if (!objectTree() || !d->commandHistory->isUndoAvailable())
         return;
 
     d->commandHistory->undo();
@@ -1801,7 +1808,7 @@ void Form::undo()
 // moved from FormManager
 void Form::redo()
 {
-    if (!objectTree())
+    if (!objectTree() || !d->commandHistory->isRedoAvailable())
         return;
 
     d->isRedoing = true;

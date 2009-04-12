@@ -665,6 +665,9 @@ void KexiView::initViewActions()
             btn->setText(action->text());
             btn->setToolTip(action->toolTip());
             btn->setWhatsThis(action->whatsThis());
+            if (action->dynamicPropertyNames().contains("iconOnly") && action->property("iconOnly").toBool() ) {
+                btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+            }
             d->topBarLyr->addWidget(btn);
         }
     }

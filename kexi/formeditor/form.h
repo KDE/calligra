@@ -234,7 +234,9 @@ public:
 //! @todo move this field out of this class
     void setFilename(const QString &file);
 
-    K3CommandHistory* commandHistory() const;
+// 2.0    K3CommandHistory* commandHistory() const;
+
+    void commandHistoryDocumentSaved();
 
 #ifdef KFD_SIGSLOTS
     ConnectionBuffer* connectionBuffer() const;
@@ -369,7 +371,7 @@ public:
 //    void enableAction(const char* name, bool enable);
 
     //! @return action from related action collection
-//    QAction* action(const QString& name);
+    QAction* action(const QString& name);
 
     void createPropertyCommandsInDesignMode(QWidget* widget, 
                                             const QHash<QByteArray, QVariant> &propValues,
@@ -564,6 +566,8 @@ protected slots:
 // moved from FormManager
     /*! Slot called when a buddy is chosen in the buddy list. Sets the label buddy. */
 //2.0: moved    void buddyChosen(QAction *action);
+
+//2.0    void slotFormCommandHistoryChanged();
 
 signals:
     /*! This signal is emitted by selectWidget() when user selects a new widget,

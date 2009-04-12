@@ -181,6 +181,17 @@ KexiFormView::KexiFormView(QWidget *parent, bool /*dbAware*/)
 
 //2.0        plugSharedAction("format_font", KFormDesigner::FormManager::self(), SLOT(changeFont()));
         plugSharedAction("format_font", form(), SLOT(changeFont()));
+
+        // - setup local actions
+        QList<QAction*> viewActions;
+        QAction* a;
+        a = form()->action("edit_undo");
+        a->setProperty("iconOnly", true);
+        viewActions << a;
+        a = form()->action("edit_redo");
+        a->setProperty("iconOnly", true);
+        viewActions << a;
+        setViewActions(viewActions);
     }
 
 //2.0: moved up     initForm();
@@ -278,8 +289,8 @@ void KexiFormView::initForm()
 
     if (viewMode() == Kexi::DesignViewMode) {
         //we want to be informed about executed commands
-        connect(form()->commandHistory(), SIGNAL(commandExecuted(K3Command*)),
-                form(), SLOT(slotCommandExecuted(K3Command*)));
+//2.0: moved to Form        connect(form()->commandHistory(), SIGNAL(commandExecuted(K3Command*)),
+//                              form(), SLOT(slotCommandExecuted(K3Command*)));
 //        connect(form(), SIGNAL(assignAction(KFormDesigner::Form*)),
 //                KexiFormManager::self(), SLOT(slotHistoryCommandExecuted(K3Command*)));
     }

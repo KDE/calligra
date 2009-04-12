@@ -25,6 +25,7 @@ TODO Form editor:
  - port KFDPixmapEdit, PropertyFactory
  - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
+ - move from K3CommandHistory to the QUndo framework
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
@@ -39,6 +40,9 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-04-12
+Forms
+- add undo and redo actions to the local toolbar
 
 2009-04-09
 Core
