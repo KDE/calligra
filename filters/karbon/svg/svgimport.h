@@ -22,22 +22,12 @@
 #ifndef SVGIMPORT_H
 #define SVGIMPORT_H
 
-#include "SvgGradientHelper.h"
-#include "SvgPatternHelper.h"
-#include "svggraphiccontext.h"
-
-#include <KarbonDocument.h>
-
 #include <KoFilter.h>
-
-#include <QtGui/QGradient>
-#include <QtCore/QMap>
-#include <QtCore/QStack>
 #include <QtCore/QVariant>
 
 class KoShape;
-class KoShapeContainer;
-class KoShapeGroup;
+class KarbonDocument;
+class QDomElement;
 
 class SvgImport : public KoFilter
 {
@@ -52,107 +42,13 @@ public:
 protected:
 
     /// The main entry point for the conversion
-    void convert();
-
-    /// Parses a svg fragment, returning the list of child shapes
-    QList<KoShape*> parseSvg( const QDomElement &e, QSizeF * fragmentSize = 0 );
-    /// Parses a container element, returning a list of child shapes
-    QList<KoShape*> parseContainer( const QDomElement & );
-    /// Parses a use element, returning a list of child shapes
-    QList<KoShape*> parseUse( const QDomElement & );
-    /// Parses definitions for later use
-    void parseDefs( const QDomElement & );
-    /// Parses style attributes, applying them to the given shape
-    void parseStyle( KoShape *, const QDomElement & );
-    /// Parses a single style attribute
-    void parsePA( SvgGraphicsContext *, const QString &, const QString & );
-    /// Parses a gradient element
-    bool parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
-    /// Parses gradient color stops
-    void parseColorStops( QGradient *, const QDomElement & );
-    /// Parses a pattern element
-    bool parsePattern( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
-    /// Parses a length attribute
-    double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
-    /// parses a length attribute in x-direction
-    double parseUnitX( const QString &unit );
-    /// parses a length attribute in y-direction
-    double parseUnitY( const QString &unit );
-    /// parses a length attribute in xy-direction
-    double parseUnitXY( const QString &unit );
-    /// Parses a color attribute
-    void parseColor( QColor &, const QString & );
-    /// Converts given string into a color
-    QColor stringToColor( const QString & );
-    /// Parses a transform attribute
-    QMatrix parseTransform( const QString &transform );
-    /// Parse a image
-    bool parseImage( const QString &imageAttribute, QImage &image );
-    /// Parses a viewbox attribute into an rectangle
-    QRectF parseViewBox( QString viewbox );
-
-    double toPercentage( QString );
-    double fromPercentage( QString );
-    double fromUserSpace( double value );
-
-    void setupTransform( const QDomElement & );
-    void updateContext( const QDomElement & );
-    void addGraphicContext();
-    void removeGraphicContext();
-
-    /// Creates an object from the given xml element
-    KoShape * createObject( const QDomElement &, const QDomElement &style = QDomElement() );
-    /// Create text object from the given xml element
-    KoShape * createText( const QDomElement &, const QList<KoShape*> & shapes );
-    void parseFont( const QDomElement & );
-    /// find object with given id in document
-    KoShape * findObject( const QString &name );
-    /// find object with given id in given group
-    KoShape * findObject( const QString &name, KoShapeContainer * );
-    /// find object with given if in given shape list
-    KoShape * findObject( const QString &name, const QList<KoShape*> & shapes );
-    /// find gradient with given id in gradient map
-    SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
-    /// find pattern with given id in pattern map
-    SvgPatternHelper* findPattern( const QString &id, const QString &href = 0 );
-
-    /// Determine scaling factor from given matrix
-    double getScalingFromMatrix( QMatrix &matrix );
-
-    /// Merges two style elements, returning the merged style
-    QDomElement mergeStyles( const QDomElement &, const QDomElement & );
-
-    /// Adds list of shapes to the given group shape
-    void addToGroup( QList<KoShape*> shapes, KoShapeGroup * group );
-
-    /// Returns the next z-index
-    int nextZIndex();
-
-    /// Constructs an absolute file path from the fiven href and base directory
-    QString absoluteFilePath( const QString &href, const QString &xmlBase );
-
-    /// creates a shape from the given shape id
-    KoShape * createShape( const QString &shapeID );
+    void convert( const QDomElement &rootElement );
 
     /// Builds the document from the given shapes list
-    void buildDocument( QList<KoShape*> shapes );
-
-    /// Applies the current fill style to the object
-    void applyFillStyle( KoShape * shape );
-
-    /// Applies the current stroke style to the object
-    void applyStrokeStyle( KoShape * shape );
+    void buildDocument( const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes );
 
 private:
     KarbonDocument * m_document;
-    QStack<SvgGraphicsContext*>    m_gc;
-    QMap<QString, SvgGradientHelper>  m_gradients;
-    QMap<QString, SvgPatternHelper> m_patterns;
-    QMap<QString, QDomElement>     m_defs;
-    QHash<QByteArray, QColor>      m_rgbcolors;
-    QDomDocument                   m_inpdoc;
-    QStringList m_fontAttributes; ///< font related attributes
-    QStringList m_styleAttributes; ///< style related attributes
 };
 
 #endif
