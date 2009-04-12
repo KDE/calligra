@@ -41,6 +41,9 @@ TODO:
 http://rafb.net/p/R4QIBR13.html
 
 2009-04-12
+Main Window
+= remove undo/redo actions from the global toolbar
+  (these will be placed on individual local toolbars)
 Forms
 - add undo and redo actions to the local toolbar
 
