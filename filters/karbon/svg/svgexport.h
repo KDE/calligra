@@ -83,8 +83,6 @@ private:
     QString getID( const KoShape *obj );
     QString createID( const KoShape * obj );
 
-    double toUserSpace( double value );
-
     /// Checks if the matrix only has translation set
     bool isTranslation( const QMatrix & );
 

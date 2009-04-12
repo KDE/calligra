@@ -25,6 +25,7 @@
 
 #include "svgimport.h"
 #include "color.h"
+#include "SvgUtil.h"
 
 #include <KarbonGlobal.h>
 #include <KarbonPart.h>
@@ -61,8 +62,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
-
-#define DPI 72.0
 
 K_PLUGIN_FACTORY( SvgImportFactory, registerPlugin<SvgImport>(); )
 K_EXPORT_PLUGIN( SvgImportFactory( "kofficefilters" ) )
@@ -226,27 +225,6 @@ void SvgImport::buildDocument( QList<KoShape*> shapes )
 // Helper functions
 // ---------------------------------------------------------------------------------------
 
-double SvgImport::toPercentage( QString s )
-{
-    if( s.endsWith( '%' ) )
-        return s.remove( '%' ).toDouble();
-    else
-        return s.toDouble() * 100.0;
-}
-
-double SvgImport::fromPercentage( QString s )
-{
-    if( s.endsWith( '%' ) )
-        return s.remove( '%' ).toDouble() / 100.0;
-    else
-        return s.toDouble();
-}
-
-double SvgImport::fromUserSpace( double value )
-{
-    return (value * DPI ) / 90.0;
-}
-
 double SvgImport::getScalingFromMatrix( QMatrix &matrix )
 {
     double xscale = matrix.m11() + matrix.m12();
@@ -385,9 +363,10 @@ QMatrix SvgImport::parseTransform( const QString &transform )
         else if(subtransform[0] == "translate")
         {
             if(params.count() == 2)
-                result.translate( fromUserSpace(params[0].toDouble()), fromUserSpace(params[1].toDouble()));
+                result.translate( SvgUtil::fromUserSpace(params[0].toDouble()),
+                                  SvgUtil::fromUserSpace(params[1].toDouble()));
             else    // Spec : if only one param given, assume 2nd param to be 0
-                result.translate( fromUserSpace(params[0].toDouble()) , 0);
+                result.translate( SvgUtil::fromUserSpace(params[0].toDouble()) , 0);
         }
         else if(subtransform[0] == "scale")
         {
@@ -403,7 +382,10 @@ QMatrix SvgImport::parseTransform( const QString &transform )
         else if(subtransform[0] == "matrix")
         {
             if(params.count() >= 6)
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), fromUserSpace(params[4].toDouble()), fromUserSpace(params[5].toDouble()));
+                result.setMatrix(params[0].toDouble(), params[1].toDouble(),
+                                 params[2].toDouble(), params[3].toDouble(), 
+                                 SvgUtil::fromUserSpace(params[4].toDouble()),
+                                 SvgUtil::fromUserSpace(params[5].toDouble()));
         }
     }
 
@@ -629,7 +611,7 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
     if( int( end - start ) < unit.length() )
     {
         if( unit.right( 2 ) == "px" )
-            value = fromUserSpace( value );
+            value = SvgUtil::fromUserSpace( value );
         else if( unit.right( 2 ) == "cm" )
             value = CM_TO_POINT( value );
         else if( unit.right( 2 ) == "pc" )
@@ -657,7 +639,7 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
     }
     else
     {
-        value = fromUserSpace( value );
+        value = SvgUtil::fromUserSpace( value );
     }
     /*else
     {
@@ -681,7 +663,7 @@ double SvgImport::parseUnitX( const QString &unit )
     SvgGraphicsContext * gc = m_gc.top();
     if( gc->forcePercentage )
     {
-        return fromPercentage( unit ) * gc->currentBoundbox.width();
+        return SvgUtil::fromPercentage( unit ) * gc->currentBoundbox.width();
     }
     else
     {
@@ -694,7 +676,7 @@ double SvgImport::parseUnitY( const QString &unit )
     SvgGraphicsContext * gc = m_gc.top();
     if( gc->forcePercentage )
     {
-        return fromPercentage( unit ) * gc->currentBoundbox.height();
+        return SvgUtil::fromPercentage( unit ) * gc->currentBoundbox.height();
     }
     else
     {
@@ -707,7 +689,7 @@ double SvgImport::parseUnitXY( const QString &unit )
     SvgGraphicsContext * gc = m_gc.top();
     if( gc->forcePercentage )
     {
-        qreal value = fromPercentage( unit );
+        qreal value = SvgUtil::fromPercentage( unit );
         value *=  sqrt( pow( gc->currentBoundbox.width(), 2 ) + pow( gc->currentBoundbox.height(), 2 ) ) / sqrt( 2.0 );
         return value;
     }
@@ -893,15 +875,17 @@ bool SvgImport::parseGradient( const QDomElement &e, const QDomElement &referenc
         QLinearGradient * g = new QLinearGradient();
         if( gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
         {
-            g->setStart( QPointF( toPercentage( b.attribute( "x1", "0%" ) ), toPercentage( b.attribute( "y1", "0%" ) ) ) );
-            g->setFinalStop( QPointF( toPercentage( b.attribute( "x2", "100%" ) ), toPercentage( b.attribute( "y2", "0%" ) ) ) );
+            g->setStart( QPointF( SvgUtil::toPercentage( b.attribute( "x1", "0%" ) ), 
+                                  SvgUtil::toPercentage( b.attribute( "y1", "0%" ) ) ) );
+            g->setFinalStop( QPointF( SvgUtil::toPercentage( b.attribute( "x2", "100%" ) ),
+                                      SvgUtil::toPercentage( b.attribute( "y2", "0%" ) ) ) );
         }
         else
         {
-            g->setStart( QPointF( fromUserSpace(b.attribute( "x1" ).toDouble()),
-                                  fromUserSpace( b.attribute( "y1" ).toDouble() ) ) );
-            g->setFinalStop( QPointF( fromUserSpace( b.attribute( "x2" ).toDouble() ), 
-                                      fromUserSpace( b.attribute( "y2" ).toDouble() ) ) );
+            g->setStart( QPointF( SvgUtil::fromUserSpace(b.attribute( "x1" ).toDouble()),
+                                  SvgUtil::fromUserSpace( b.attribute( "y1" ).toDouble() ) ) );
+            g->setFinalStop( QPointF( SvgUtil::fromUserSpace( b.attribute( "x2" ).toDouble() ), 
+                                      SvgUtil::fromUserSpace( b.attribute( "y2" ).toDouble() ) ) );
         }
         // preserve color stops
         if( gradhelper.gradient() )
@@ -913,17 +897,19 @@ bool SvgImport::parseGradient( const QDomElement &e, const QDomElement &referenc
         QRadialGradient * g = new QRadialGradient();
         if( gradhelper.gradientUnits() == SvgGradientHelper::ObjectBoundingBox )
         {
-            g->setCenter( QPointF( toPercentage( b.attribute( "cx", "50%" ) ), toPercentage( b.attribute( "cy", "50%" ) ) ) );
-            g->setRadius( toPercentage( b.attribute( "r", "50%" ) ) );
-            g->setFocalPoint( QPointF( toPercentage( b.attribute( "fx", "50%" ) ), toPercentage( b.attribute( "fy", "50%" ) ) ) );
+            g->setCenter( QPointF( SvgUtil::toPercentage( b.attribute( "cx", "50%" ) ), 
+                                   SvgUtil::toPercentage( b.attribute( "cy", "50%" ) ) ) );
+            g->setRadius( SvgUtil::toPercentage( b.attribute( "r", "50%" ) ) );
+            g->setFocalPoint( QPointF( SvgUtil::toPercentage( b.attribute( "fx", "50%" ) ),
+                                       SvgUtil::toPercentage( b.attribute( "fy", "50%" ) ) ) );
         }
         else
         {
-            g->setCenter( QPointF( fromUserSpace( b.attribute( "cx" ).toDouble() ), 
-                                   fromUserSpace( b.attribute( "cy" ).toDouble() ) ) );
-            g->setFocalPoint( QPointF( fromUserSpace( b.attribute( "fx" ).toDouble() ), 
-                                       fromUserSpace( b.attribute( "fy" ).toDouble() ) ) );
-            g->setRadius( fromUserSpace( b.attribute( "r" ).toDouble() ) );
+            g->setCenter( QPointF( SvgUtil::fromUserSpace( b.attribute( "cx" ).toDouble() ), 
+                                   SvgUtil::fromUserSpace( b.attribute( "cy" ).toDouble() ) ) );
+            g->setFocalPoint( QPointF( SvgUtil::fromUserSpace( b.attribute( "fx" ).toDouble() ), 
+                                       SvgUtil::fromUserSpace( b.attribute( "fy" ).toDouble() ) ) );
+            g->setRadius( SvgUtil::fromUserSpace( b.attribute( "r" ).toDouble() ) );
         }
         // preserve color stops
         if( gradhelper.gradient() )
@@ -1013,10 +999,10 @@ bool SvgImport::parsePattern( const QDomElement &e, const QDomElement &reference
     {
         // x, y, width, height are in percentages of the object referencing the pattern
         // so we just parse the percentages
-        pattern.setPosition( QPointF( fromPercentage( b.attribute( "x" ) ), 
-                                      fromPercentage( b.attribute( "y" ) ) ) );
-        pattern.setSize( QSizeF( fromPercentage( b.attribute( "width" ) ),
-                                 fromPercentage( b.attribute( "height" ) ) ) );
+        pattern.setPosition( QPointF( SvgUtil::fromPercentage( b.attribute( "x" ) ), 
+                                      SvgUtil::fromPercentage( b.attribute( "y" ) ) ) );
+        pattern.setSize( QSizeF( SvgUtil::fromPercentage( b.attribute( "width" ) ),
+                                 SvgUtil::fromPercentage( b.attribute( "height" ) ) ) );
     }
 
     m_patterns.insert( b.attribute( "id" ), pattern );
@@ -1176,10 +1162,10 @@ void SvgImport::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
     }
     // handle opacity
     else if( command == "stroke-opacity" )
-        strokecolor.setAlphaF( fromPercentage( params ) );
+        strokecolor.setAlphaF( SvgUtil::fromPercentage( params ) );
     else if( command == "fill-opacity" )
     {
-        float opacity = fromPercentage( params );
+        float opacity = SvgUtil::fromPercentage( params );
         if( opacity < 0.0 )
             opacity = 0.0;
         if( opacity > 1.0 )
@@ -1188,8 +1174,8 @@ void SvgImport::parsePA( SvgGraphicsContext *gc, const QString &command, const Q
     }
     else if( command == "opacity" )
     {
-        fillcolor.setAlphaF( fromPercentage( params ) );
-        strokecolor.setAlphaF( fromPercentage( params ) );
+        fillcolor.setAlphaF( SvgUtil::fromPercentage( params ) );
+        strokecolor.setAlphaF( SvgUtil::fromPercentage( params ) );
     }
     else if( command == "font-family" )
     {
@@ -1844,10 +1830,10 @@ QRectF SvgImport::parseViewBox( QString viewbox )
     QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
     if( points.count() == 4 )
     {
-        viewboxRect.setX( fromUserSpace( points[0].toFloat() ) );
-        viewboxRect.setY( fromUserSpace( points[1].toFloat() ) );
-        viewboxRect.setWidth( fromUserSpace( points[2].toFloat() ) );
-        viewboxRect.setHeight( fromUserSpace( points[3].toFloat() ) );
+        viewboxRect.setX( SvgUtil::fromUserSpace( points[0].toFloat() ) );
+        viewboxRect.setY( SvgUtil::fromUserSpace( points[1].toFloat() ) );
+        viewboxRect.setWidth( SvgUtil::fromUserSpace( points[2].toFloat() ) );
+        viewboxRect.setHeight( SvgUtil::fromUserSpace( points[3].toFloat() ) );
     }
 
     return viewboxRect;
@@ -2151,11 +2137,11 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it)
             {
                 QPointF point;
-                point.setX( fromUserSpace( (*it).toDouble() ) );
+                point.setX( SvgUtil::fromUserSpace( (*it).toDouble() ) );
                 ++it;
                 if( it == pointList.end() )
                     break;
-                point.setY( fromUserSpace( (*it).toDouble() ) );
+                point.setY( SvgUtil::fromUserSpace( (*it).toDouble() ) );
                 if( bFirst )
                 {
                     path->moveTo( point );
@@ -2183,8 +2169,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             loader.parseSvg( b.attribute( "d" ), true );
             path->setPosition( path->normalize() );
 
-            QPointF newPosition = QPointF( fromUserSpace( path->position().x() ), fromUserSpace( path->position().y() ) );
-            QSizeF newSize = QSizeF( fromUserSpace( path->size().width() ), fromUserSpace( path->size().height() ) );
+            QPointF newPosition = QPointF( SvgUtil::fromUserSpace( path->position().x() ),
+                                           SvgUtil::fromUserSpace( path->position().y() ) );
+            QSizeF newSize = QSizeF( SvgUtil::fromUserSpace( path->size().width() ), 
+                                     SvgUtil::fromUserSpace( path->size().height() ) );
 
             path->setSize( newSize );
             path->setPosition( newPosition );

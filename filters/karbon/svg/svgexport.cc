@@ -33,6 +33,7 @@
 */
 
 #include "svgexport.h"
+#include "SvgUtil.h"
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -65,8 +66,6 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
-const double ScaleToUserSpace = 90.0 / 72.0;
-
 static void printIndentation( QTextStream *stream, unsigned int indent )
 {
     static const QString INDENT("  ");
@@ -80,7 +79,8 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilter
 SvgExport::SvgExport( QObject*parent, const QStringList& )
     : KoFilter(parent), m_indent( 0 ), m_indent2( 0 )
 {
-    m_userSpaceMatrix.scale( ScaleToUserSpace, ScaleToUserSpace );
+    double scaleToUserSpace = SvgUtil::toUserSpace( 1.0 );
+    m_userSpaceMatrix.scale( scaleToUserSpace, scaleToUserSpace );
 }
 
 KoFilter::ConversionStatus SvgExport::convert( const QByteArray& from, const QByteArray& to )
@@ -332,15 +332,16 @@ QString SvgExport::getTransform( const QMatrix &matrix, const QString &attribute
     if( isTranslation( matrix ) )
     {
         transform += QString("translate(%1, %2)")
-                    .arg( toUserSpace(matrix.dx()) )
-                    .arg( toUserSpace(matrix.dy()) );
+                    .arg( SvgUtil::toUserSpace(matrix.dx()) )
+                    .arg( SvgUtil::toUserSpace(matrix.dy()) );
     }
     else
     {
         transform += QString( "matrix(%1 %2 %3 %4 %5 %6)" )
                     .arg( matrix.m11() ).arg( matrix.m12() )
                     .arg( matrix.m21() ).arg( matrix.m22() )
-                    .arg( toUserSpace(matrix.dx()) ) .arg( toUserSpace(matrix.dy()) );
+                    .arg( SvgUtil::toUserSpace(matrix.dx()) )
+                    .arg( SvgUtil::toUserSpace(matrix.dy()) );
     }
 
     return transform + "\"";
@@ -385,10 +386,10 @@ void SvgExport::getGradient( const QGradient * gradient, const QMatrix &gradient
         *m_defs << "<linearGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
         *m_defs << getTransform( gradientTransform, "gradientTransform" ) << " ";
-        *m_defs << "x1=\"" << toUserSpace( g->start().x() ) << "\" ";
-        *m_defs << "y1=\"" << toUserSpace( g->start().y() ) << "\" ";
-        *m_defs << "x2=\"" << toUserSpace( g->finalStop().x() ) << "\" ";
-        *m_defs << "y2=\"" << toUserSpace( g->finalStop().y() ) << "\" ";
+        *m_defs << "x1=\"" << SvgUtil::toUserSpace( g->start().x() ) << "\" ";
+        *m_defs << "y1=\"" << SvgUtil::toUserSpace( g->start().y() ) << "\" ";
+        *m_defs << "x2=\"" << SvgUtil::toUserSpace( g->finalStop().x() ) << "\" ";
+        *m_defs << "y2=\"" << SvgUtil::toUserSpace( g->finalStop().y() ) << "\" ";
         *m_defs << spreadMethod[g->spread()];
         *m_defs << ">" << endl;
 
@@ -407,11 +408,11 @@ void SvgExport::getGradient( const QGradient * gradient, const QMatrix &gradient
         *m_defs << "<radialGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
         *m_defs << getTransform( gradientTransform, "gradientTransform" ) << " ";
-        *m_defs << "cx=\"" << toUserSpace( g->center().x() ) << "\" ";
-        *m_defs << "cy=\"" << toUserSpace( g->center().y() ) << "\" ";
-        *m_defs << "fx=\"" << toUserSpace( g->focalPoint().x() ) << "\" ";
-        *m_defs << "fy=\"" << toUserSpace( g->focalPoint().y() ) << "\" ";
-        *m_defs << "r=\"" << QString().setNum( toUserSpace( g->radius() ) ) << "\" ";
+        *m_defs << "cx=\"" << SvgUtil::toUserSpace( g->center().x() ) << "\" ";
+        *m_defs << "cy=\"" << SvgUtil::toUserSpace( g->center().y() ) << "\" ";
+        *m_defs << "fx=\"" << SvgUtil::toUserSpace( g->focalPoint().x() ) << "\" ";
+        *m_defs << "fy=\"" << SvgUtil::toUserSpace( g->focalPoint().y() ) << "\" ";
+        *m_defs << "r=\"" << QString().setNum( SvgUtil::toUserSpace( g->radius() ) ) << "\" ";
         *m_defs << spreadMethod[g->spread()];
         *m_defs << ">" << endl;
 
@@ -499,8 +500,8 @@ void SvgExport::getPattern( KoPatternBackground * pattern, KoShape * shape )
 
     printIndentation( m_defs, m_indent2 );
     *m_defs << "<pattern id=\"" << uid << "\"";
-    *m_defs << " x=\"" << toUserSpace(offset.x()) << "\"";
-    *m_defs << " y=\"" << toUserSpace(offset.y()) << "\"";
+    *m_defs << " x=\"" << SvgUtil::toUserSpace(offset.x()) << "\"";
+    *m_defs << " y=\"" << SvgUtil::toUserSpace(offset.y()) << "\"";
 
     if( pattern->repeat() == KoPatternBackground::Stretched )
     {
@@ -510,8 +511,8 @@ void SvgExport::getPattern( KoPatternBackground * pattern, KoShape * shape )
     }
     else
     {
-        *m_defs << " width=\"" << toUserSpace(patternSize.width()) << "\"";
-        *m_defs << " height=\"" << toUserSpace(patternSize.height()) << "\"";
+        *m_defs << " width=\"" << SvgUtil::toUserSpace(patternSize.width()) << "\"";
+        *m_defs << " height=\"" << SvgUtil::toUserSpace(patternSize.height()) << "\"";
         *m_defs << " patternUnits=\"userSpaceOnUse\"";
     }
 
@@ -611,7 +612,7 @@ void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
     *stream << "\"";
 
     *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
-    *stream << " stroke-width=\"" << toUserSpace(line->lineWidth()) << "\"";
+    *stream << " stroke-width=\"" << SvgUtil::toUserSpace(line->lineWidth()) << "\"";
 
     if( line->capStyle() == Qt::FlatCap )
         *stream << " stroke-linecap=\"butt\"";
@@ -816,12 +817,6 @@ void SvgExport::saveImage( PictureShape * picture )
     }
     *m_body << " />" << endl;
 }
-
-double SvgExport::toUserSpace( double value )
-{
-    return value * ScaleToUserSpace;
-}
-
 
 #include "svgexport.moc"
 

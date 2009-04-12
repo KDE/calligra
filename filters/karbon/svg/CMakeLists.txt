@@ -6,6 +6,7 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${KOGUIUT
 
 set(karbonsvgexport_PART_SRCS 
     svgexport.cc
+    SvgUtil.cpp
     ${SHAPES_SOURCES} 
 )
 
@@ -32,6 +33,7 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonsvgimport_PART_SRCS 
     svgimport.cc
+    SvgUtil.cpp
     SvgGradientHelper.cpp
     SvgPatternHelper.cpp
     ${SHAPES_SOURCES} 
