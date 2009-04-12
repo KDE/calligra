@@ -20,9 +20,6 @@
 #define KPRPRESENTATIONSTRATEGY_H
 
 #include "KPrPresentationTool.h"
-#include "KPrPresentationHighlightStrategy.h"
-#include "KPrPresentationDrawStrategy.h"
-#include "KPrPresentationViewModeStrategy.h"
 class KPrPresentationStrategy{
 public :
     KPrPresentationStrategy( KPrPresentationTool * tool );

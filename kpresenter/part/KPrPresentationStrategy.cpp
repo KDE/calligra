@@ -16,34 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
 #include "KPrPresentationStrategy.h"
-#include <kdebug.h>
+
+#include "KPrPresentationHighlightStrategy.h"
+#include "KPrPresentationDrawStrategy.h"
+#include "KPrPresentationViewModeStrategy.h"
+
 KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
 {
     m_tool = tool;
 }
+
 KPrPresentationStrategy::~KPrPresentationStrategy()
 {
-    delete m_tool;
 }
+
 void KPrPresentationStrategy::handleEscape()
-{    
-    
-    
-    if( m_tool->getDrawMode() )
-    {
-	KPrPresentationDrawStrategy m_drawStrategy( m_tool );
-	m_drawStrategy.handleEscape();
+{
+    if ( m_tool->getDrawMode() ) {
+        KPrPresentationDrawStrategy m_drawStrategy( m_tool );
+        m_drawStrategy.handleEscape();
     }
-    else if( m_tool->getHighlightMode() )
-    {
-	KPrPresentationHighlightStrategy m_highlightStrategy( m_tool );
-	m_highlightStrategy.handleEscape();
+    else if ( m_tool->getHighlightMode() ) {
+        KPrPresentationHighlightStrategy m_highlightStrategy( m_tool );
+        m_highlightStrategy.handleEscape();
     }
-    else
-    {
-	KPrPresentationViewModeStrategy m_viewModeStrategy( m_tool );
-	m_viewModeStrategy.handleEscape();
+    else {
+        KPrPresentationViewModeStrategy m_viewModeStrategy( m_tool );
+        m_viewModeStrategy.handleEscape();
     }
 }
 
