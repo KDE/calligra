@@ -92,7 +92,8 @@ my %packages;
 chdir "$rootdir/doc/api";
 foreach $section (@sections) {
     $sect=$section;
-    $sect=~s/\//-/;
+    $sect=~s/\//-/g;
+    $sect=~s/-$//;
     # read from TAGS
     $tagfile="$section\_TAGS";
     $tagfile=~s/\//_/g;
@@ -128,7 +129,8 @@ open(FILE, ">$rootdir/doc/api/packages.html");
 print FILE "$browsingHtml";
 foreach $section (@sections) {
     $sect=$section;
-    $sect=~s/\//-/;
+    $sect=~s/\//-/g;
+    $sect=~s/-$//;
     $packages{$sect}= "<a href=\"$sect/annotated.html\" target=\"main\">$section</a><br>\n";
 }
 foreach $key (sort {uc($a) cmp uc($b)} keys %packages) {
@@ -169,7 +171,8 @@ open (FILE,">$rootdir/doc/api/sections.html");
 print FILE "<html><body><ul>\n";
 foreach $section (@sections) {
     $sect=$section;
-    $sect=~s/\//-/;
+    $sect=~s/\//-/g;
+    $sect=~s/-$//;
     # find out errorcount;
     &parseErrorLog("$rootdir/doc/api/$sect", "err.log", $section);
     print FILE "<li><a href=\"$sect/annotated.html\">$section</a>&nbsp;&nbsp;<font size=\"-2\">(<a href=\"$sect/annotated.html\" target=\"_top\">NoFrames</a>)  ";
@@ -357,6 +360,7 @@ sub createConf() {
         my $tagfile="$sect\_TAGS";
         my $section=$sect;
         $section=~s/\//-/g;
+        $section=~s/-$//;
         $tagfile=~s/\//_/g;
         if($sect ne $name) {
             print FILE "\"$basedir$section/$tagfile=../$section\" ";
