@@ -442,27 +442,28 @@ void KarbonGradientTool::initialize()
         if( ! fillExists )
         {
             KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( shape->background() );
-            if( ! fill )
-                continue;
-            GradientStrategy * fillStrategy = createStrategy( shape, fill->gradient(), GradientStrategy::Fill );
-            if( fillStrategy )
+            if( fill ) 
             {
-                m_strategies.insert( shape, fillStrategy );
-                fillStrategy->repaint();
+                GradientStrategy * fillStrategy = createStrategy( shape, fill->gradient(), GradientStrategy::Fill );
+                if( fillStrategy )
+                {
+                    m_strategies.insert( shape, fillStrategy );
+                    fillStrategy->repaint();
+                }
             }
         }
 
         if( ! strokeExists )
         {
             KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( shape->border() );
-            if( ! stroke )
-                continue;
-
-            GradientStrategy * strokeStrategy = createStrategy( shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke );
-            if( strokeStrategy )
+            if( stroke )
             {
-                m_strategies.insert( shape, strokeStrategy );
-                strokeStrategy->repaint();
+                GradientStrategy * strokeStrategy = createStrategy( shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke );
+                if( strokeStrategy )
+                {
+                    m_strategies.insert( shape, strokeStrategy );
+                    strokeStrategy->repaint();
+                }
             }
         }
     }
