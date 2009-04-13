@@ -320,7 +320,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     connect(action, SIGNAL(triggered()), this, SLOT(createLinkedFrame()));
 
     action = new KAction(i18n("Create custom outline"), this);
-    actionCollection()->addAction("create_custom_outline", action);
     action->setToolTip(i18n("Create a custom vector outline that text will run around"));
     action->setWhatsThis(i18n("Text normally runs around the content of a shape, when you want a custom outline that is independent of the content you can create one and alter it with the vector tools"));
     connect(action, SIGNAL(triggered()), this, SLOT(createCustomOutline()));
