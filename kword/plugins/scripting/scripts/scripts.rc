@@ -9,28 +9,10 @@
                name="pyimportfile"
                interpreter="python"
                file="extensions/importfile.py" />
-        <script text="Doxygen XML" comment="Python script to import content from a combined doxygen XML file"
-               name="pyimportdoxyxml"
-               interpreter="python"
-               file="extensions/importdoxyxml.py" />
         <script text="OpenOffice.org UNO" comment="Python script to import content using OpenOffice.org PyUNO"
                name="pyooimport"
                interpreter="python"
                file="extensions/ooimport.py" />
-    </collection>
-
-    <!--
-        The "export" collection provides scripts to export content from KWord.
-        //-->
-    <collection name="export" text="Export" comment="Export content">
-        <script text="Text or HTML File" comment="Python script to export content to a text or html file"
-               name="pyexportfile"
-               interpreter="python"
-               file="extensions/exportfile.py" />
-        <script text="ReportLab.org PDF" comment="Python script to export content to a PDF file using ReportLab.org"
-               name="kwreportlab"
-               interpreter="python"
-               file="extensions/kwreportlab.py" />
     </collection>
 
     <!--
@@ -46,83 +28,17 @@
                name="rbdoctree"
                interpreter="ruby"
                file="extensions/doctree.rb" />
-        <script text="Online Help" comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
-               name="pyonlinehelp"
-               interpreter="python"
-               file="extensions/onlinehelp.py" />
     </collection>
-
-    <!--
-        The "variables" collection provides scripting variables to KWord. Those
-        scripting variables are displayed in the Insert=>Variable menu and
-        they are able to map functions like to get the variable content or to
-        create an options widget for a variable from within scripts.
-    <collection name="variables" text="Variables" comment="Scripting variables for KWord" enabled="false">
-            This script reads the value of a variable from an external file.
-        <script text="Read From File..." comment="Python script to read a variable from a file"
-            name="pyvariablereadfile"
-            interpreter="python"
-            file="variables/variable_readfile.py">
-                This is the default value the variable has.
-            <property name="value">The Value</property>
-                Map a getValue-request to a scripting function.
-            <property name="getValue">callbackGetValue</property>
-                Map a createOptionsWidget-request to a scripting function.
-            <property name="createOptionsWidget">callbackCreateOptionsWidget</property>
-        </script>
-    </collection>
-    //-->
 
     <!--
         The "samples" collection provides misc example scripts to demonstrate
         parts of the KWord scripting functionality.
         //-->
     <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord" enabled="false">
-        <script text="Insert Shape..." comment="Python script to insert a shape"
-            name="pysampleinsertshape"
-            interpreter="python"
-            file="samples/sample_insertshape.py" />
-        <script text="Control Cursor..." comment="Ruby script that demonstrates how to control the cursor"
-            name="rbsamplecursor"
-            interpreter="ruby"
-            file="samples/sample_cursor.rb" />
-        <script text="Execute Action..." comment="Python script that demonstrates usage of actions"
-            name="pysampleactions"
-            interpreter="python"
-            file="samples/sample_actions.py" />
-        <script text="Tool Actions..." comment="Python script that demonstrates usage of tool actions"
-            name="pysampletoolactions"
-            interpreter="python"
-            file="samples/sample_toolactions.py" />
         <script text="Progressbar" comment="Python script that demonstrates how to use the progressbar"
             name="pysampleprogressbar"
             interpreter="python"
             file="samples/sample_progressbar.py" />
-        <script text="Text" comment="Python script that demonstrates usage of the text engine"
-            name="pysampletext"
-            interpreter="python"
-            file="samples/sample_text.py" />
-        <script text="Lists with HTML" comment="Python script that demonstrates how to create lists with HTML"
-            name="pysamplelisthtml"
-            text="Lists with HTML"
-            interpreter="python"
-            file="samples/sample_lists_html.py" />
-        <script text="Lists with Cursor" comment="Python script that demonstrates how to create lists with a cursor"
-            name="pysamplelistcursor"
-            interpreter="python"
-            file="samples/sample_lists_cursor.py" />
-        <script text="Tables" comment="Python script that demonstrates how to deal with tables"
-            name="pysampletables"
-            interpreter="python"
-            file="samples/sample_tables.py" />
-        <script text="Variables" comment="Python script that demonstrates how to handle variables"
-            name="pysamplevariables"
-            interpreter="python"
-            file="samples/sample_variables.py" />
-        <script text="All Shapes" comment="Python script adds all shapes"
-            name="pysampleallshapes"
-            interpreter="python"
-            file="samples/sample_allshapes.py" />
     </collection>
 
 </KrossScripting>
