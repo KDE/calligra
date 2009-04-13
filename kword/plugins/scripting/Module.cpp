@@ -25,16 +25,11 @@
 #include "Style.h"
 #include "Tool.h"
 
-// qt
-#include <QPointer>
-// kde
-#include <kdebug.h>
-// kword
 #include <KWDocument.h>
 #include <KWView.h>
 #include <KWPage.h>
-#include <KWFrameSet.h>
-#include <KWFrame.h>
+
+#include <QPointer>
 
 extern "C"
 {

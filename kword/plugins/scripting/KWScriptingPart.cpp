@@ -20,35 +20,11 @@
 
 #include "KWScriptingPart.h"
 #include "Module.h"
-#include "Variable.h"
 
-// qt
-// kde
-#include <klocale.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
-#include <kactioncollection.h>
-#include <kparts/partmanager.h>
-// kross
-#include <kross/core/manager.h>
-#include <kross/core/interpreter.h>
-#include <kross/core/action.h>
-#include <kross/core/actioncollection.h>
-#include <kross/ui/model.h>
-// koffice
-#include <KoDockRegistry.h>
-#include <KoMainWindow.h>
-#include <KoDocument.h>
-// kword
-#include <KWView.h>
 
-//#include <kactionmenu.h>
-// #include <kmenu.h>
-// #include <kmimetype.h>
-// #include <kmessagebox.h>
-// #include <kurl.h>
-
-typedef KGenericFactory< KWScriptingPart > KWordScriptingFactory;
+typedef KGenericFactory<KWScriptingPart> KWordScriptingFactory;
 K_EXPORT_COMPONENT_FACTORY(krossmodulekword, KWordScriptingFactory("krossmodulekword"))
 
 KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)

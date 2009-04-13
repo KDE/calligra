@@ -21,10 +21,6 @@
 #ifndef SCRIPTING_TOOL_H
 #define SCRIPTING_TOOL_H
 
-//#include <QString>
-//#include <QStringList>
-#include <QObject>
-#include <QAction>
 #include <QSignalMapper>
 #include <KAction>
 
@@ -32,7 +28,6 @@
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoTextSelectionHandler.h>
-//#include <KWord.h>
 #include <KWView.h>
 #include <KWCanvas.h>
 

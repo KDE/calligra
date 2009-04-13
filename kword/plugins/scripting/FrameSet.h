@@ -20,26 +20,17 @@
 #ifndef SCRIPTING_FRAMESET_H
 #define SCRIPTING_FRAMESET_H
 
-#include <QPointer>
 #include <QObject>
-#include <kdebug.h>
-
-#include <KoShapeRegistry.h>
-#include <KoShapeFactory.h>
-
-#include <KoStyleManager.h>
-//#include <KoParagraphStyle.h>
-//#include <KoCharacterStyle.h>
-//#include <KoListStyle.h>
-
-#include <KWFrame.h>
-#include <KWTextFrame.h>
-#include <KWFrameSet.h>
-#include <KWTextFrameSet.h>
-
 #include "Module.h"
 #include "TextDocument.h"
 #include "Frame.h"
+
+#include <KoShapeRegistry.h>
+#include <KoStyleManager.h>
+
+#include <KWTextFrame.h>
+#include <KWFrameSet.h>
+#include <KWTextFrameSet.h>
 
 namespace Scripting
 {

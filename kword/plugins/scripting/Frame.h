@@ -21,13 +21,7 @@
 #define SCRIPTING_FRAME_H
 
 #include <QObject>
-#include <QSizeF>
-#include <QPointF>
-
 #include <KWFrame.h>
-#include <KoShape.h>
-#include <KoTextShapeData.h>
-#include "TextCursor.h"
 #include <KoColorBackground.h>
 
 namespace Scripting

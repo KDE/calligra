@@ -21,8 +21,6 @@
 #define SCRIPTING_STYLE_H
 
 #include <QObject>
-//#include <QMetaObject>
-//#include <QMetaEnum>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 #include <KoListStyle.h>

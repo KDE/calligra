@@ -22,10 +22,6 @@
 #include "TextList.h"
 #include "TextTable.h"
 
-#include <QObject>
-#include <QTextCursor>
-#include <QTextTableFormat>
-#include <QTextListFormat>
 #include <QTextDocumentFragment>
 
 using namespace Scripting;

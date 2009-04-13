@@ -20,17 +20,14 @@
 #ifndef SCRIPTING_TEXTDOCUMENT_H
 #define SCRIPTING_TEXTDOCUMENT_H
 
-#include <QPointer>
 #include <QObject>
 #include <QTextDocument>
 #include <kdebug.h>
 #include <KoVariable.h>
-#include <KoVariableManager.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocumentLayout.h>
 
 #include "TextFrame.h"
-#include "TextTable.h"
 #include "TextCursor.h"
 
 namespace Scripting

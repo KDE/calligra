@@ -21,17 +21,10 @@
 #define SCRIPTING_TEXTLIST_H
 
 #include <QObject>
-#include <QPointer>
-#include <QTextList>
-#include <QTextBlock>
-#include <QTextCursor>
-#include <kdebug.h>
-
-#include <KoParagraphStyle.h>
-#include <KoListStyle.h>
-
 #include "TextCursor.h"
 #include "Style.h"
+
+#include <kdebug.h>
 
 namespace Scripting
 {

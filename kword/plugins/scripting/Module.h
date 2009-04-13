@@ -21,11 +21,8 @@
 #ifndef SCRIPTING_MODULE_H
 #define SCRIPTING_MODULE_H
 
-#include <QString>
-#include <QStringList>
-#include <QObject>
-
 #include <KoScriptingModule.h>
+
 #include <KWord.h>
 
 class KWDocument;

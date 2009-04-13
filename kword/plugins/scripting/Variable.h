@@ -20,8 +20,6 @@
 #ifndef SCRIPTING_VARIABLE_H
 #define SCRIPTING_VARIABLE_H
 
-// qt
-#include <QObject>
 //kde
 #include <kdebug.h>
 // koffice
