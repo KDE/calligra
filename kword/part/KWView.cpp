@@ -308,8 +308,6 @@ if (false) { // TODO move this to the text tool as soon as  a) the string freeze
     actionCollection()->addAction("edit_delete", action );
 
     action = m_document->gridData().gridToggleAction(m_canvas);
-    // XXX remove the translated string when the string freeze is lifted, the KoGridData should have those
-    action->setText(i18n("Show Grid"));
     actionCollection()->addAction("view_grid", action);
 
     // -------------- Frame menu

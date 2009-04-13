@@ -905,10 +905,6 @@ void KarbonView::initActions()
     connect( d->showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
 
     KToggleAction *gridAction = d->part->gridData().gridToggleAction(d->canvas);
-    // XXX remove the translated strings when the string freeze is lifted, the KoGridData should have those
-    gridAction->setText(i18n("Show Grid"));
-    gridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
-    gridAction->setToolTip(i18n("Shows or hides grid"));
     actionCollection()->addAction("view_grid", gridAction);
 
     d->showGuidesAction  = new KToggleAction(KIcon("guides"), i18n("Show Guides"), this);
