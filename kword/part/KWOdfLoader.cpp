@@ -96,7 +96,7 @@ bool KWOdfLoader::load(KoOdfReadStore & odfStore)
     bool hasMainText = false;
     KoXmlElement childElem;
     forEachElement(childElem, body) {
-        if (childElem.localName() == "p") {
+        if (childElem.namespaceURI() == KoXmlNS::text) {
             hasMainText = true;
             break;
         }
