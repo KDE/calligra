@@ -31,6 +31,8 @@
 #include <KoParagraphStyle.h>
 #include <KoTextDocument.h>
 
+#include <changetracker/KoChangeTracker.h>
+
 #include <klocale.h>
 #include <kdebug.h>
 #include <QTextDocument>
@@ -51,6 +53,9 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
         Q_ASSERT(styleManager);
         doc.setStyleManager(styleManager);
+        KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
+        Q_ASSERT(changeTracker);
+        doc.setChangeTracker(changeTracker);
     }
     m_document->setUseDesignMetrics(true);
 }
@@ -70,6 +75,9 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
         KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
         Q_ASSERT(styleManager);
         doc.setStyleManager(styleManager);
+        KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
+        Q_ASSERT(changeTracker);
+        doc.setChangeTracker(changeTracker);
     }
     m_document->setUseDesignMetrics(true);
     switch (m_textFrameSetType) {
@@ -115,6 +123,9 @@ void KWTextFrameSet::setupFrame(KWFrame *frame)
             KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_kwordDocument->dataCenterMap()["StyleManager"]);
             Q_ASSERT(styleManager);
             doc.setStyleManager(styleManager);
+            KoChangeTracker *changeTracker = dynamic_cast<KoChangeTracker *>(m_kwordDocument->dataCenterMap()["ChangeTracker"]);
+            Q_ASSERT(changeTracker);
+            doc.setChangeTracker(changeTracker);
             doc.setInlineTextObjectManager(m_kwordDocument->inlineTextObjectManager());
         }
         data->setDocument(m_document, false);

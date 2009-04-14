@@ -30,26 +30,22 @@
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
+
+#include <KoTextShapeSavingContext.h>
+
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
 
-#ifdef CHANGETRK
- #include <KoTextShapeSavingContext.h>
- #include <KoGenChanges.h>
-#endif
+#include <KoGenChanges.h>
 
 #include <QBuffer>
 #include <QTextCursor>
 #include <KDebug>
 
-#ifdef CHANGETRK
-    QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes, KWTextFrameSet* fs)
-#else
-    QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs)
-#endif
+QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes, KWTextFrameSet* fs)
 {
     QByteArray tag;
     switch (fs->textFrameSetType()) {
@@ -64,13 +60,8 @@
     QBuffer buffer(&content);
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer);
-#ifdef CHANGETRK
+
     KoTextShapeSavingContext context(writer, mainStyles, embeddedSaver, changes);
-#else
-    KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
-#endif
-
-
 
     Q_ASSERT(!fs->frames().isEmpty());
     KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
@@ -84,11 +75,7 @@
 }
 
 // rename to save pages ?
-#ifdef CHANGETRK
-    void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges& changes)
-#else
-    void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles)
-#endif
+void KWOdfWriter::saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges& changes)
 {
     //kDebug(32001 )<< "START saveHeaderFooter ############################################";
     // first get all the framesets in a nice quick-to-access data structure
@@ -142,11 +129,9 @@
             Q_ASSERT(fs);
             if (fs->frameCount() == 0) // don't save empty framesets
                 continue;
-#ifdef CHANGETRK
+
             QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, changes, fs);
-#else
-            QByteArray content = serializeHeaderFooter(embeddedSaver, mainStyles, fs);
-#endif
+
             if (content.isNull())
                 continue;
 
@@ -188,16 +173,14 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     if (!contentWriter)
         return false;
 
-#ifdef CHANGETRK
+
     KoXmlWriter* changeWriter = odfStore.changeWriter();
     if (!changeWriter)
-	return false;
-#endif
+        return false;
 
     KoGenStyles mainStyles;
-#ifdef CHANGETRK
+
     KoGenChanges changes;
-#endif
 
     // Save the named styles
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>(m_document->dataCenterMap()["StyleManager"]);
@@ -207,21 +190,12 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
-#ifdef CHANGETRK
+
     saveHeaderFooter(embeddedSaver, mainStyles, changes);
-#else
-    saveHeaderFooter(embeddedSaver, mainStyles);
-#endif
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-#ifdef CHANGETRK
-    KoTextShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver, changes);
-#else
-    KoShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver);
 
-    bodyWriter->startElement("office:body");
-    bodyWriter->startElement("office:text");
-#endif
+    KoTextShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver, changes);
 
     calculateZindexOffsets();
 
@@ -374,18 +348,13 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     }
     bodyWriter->endElement(); // text:page-sequence
 
-#ifdef CHANGETRK
+
 //    bodyWriter->endElement(); // office:text
 //    bodyWriter->endElement(); // office:body
-#else
-    bodyWriter->endElement(); // office:text
-    bodyWriter->endElement(); // office:body
-#endif
 
     mainStyles.saveOdfAutomaticStyles(contentWriter, false);
-#ifdef CHANGETRK
+
     changes.saveOdfChanges(changeWriter);
-#endif
 
     odfStore.closeContentWriter();
 

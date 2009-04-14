@@ -35,9 +35,7 @@ class KoGenStyles;
 class KWTextFrameSet;
 class KWPage;
 
-#ifdef CHANGETRK
 class KoGenChanges;
-#endif
 
 /**
  * Class that has a lot of the OpenDocument (ODF) saving code for KWord.
@@ -65,13 +63,8 @@ public:
     bool save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & embeddedSaver);
 
 private:
-#ifdef CHANGETRK
     QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes, KWTextFrameSet* fs);
     void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KoGenChanges & changes);
-#else
-    QByteArray serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles, KWTextFrameSet* fs);
-    void saveHeaderFooter(KoEmbeddedDocumentSaver& embeddedSaver, KoGenStyles& mainStyles);
-#endif
 
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);
