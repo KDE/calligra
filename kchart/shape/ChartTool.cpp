@@ -75,6 +75,7 @@ public:
 };
 
 ChartTool::Private::Private()
+    : shape(0)
 {
 }
 
