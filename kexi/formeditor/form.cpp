@@ -1881,7 +1881,7 @@ void Form::addWidget(QWidget *w)
         //second widget, update metainfo
         d->propertySet["this:className"].setValue("special:multiple");
         d->propertySet["this:classString"].setValue(
-            i18n("Multiple Widgets") + QString(" (%1)").arg(d->selected.count()));
+            i18n("Multiple Widgets (%1)", d->selected.count()));
         d->propertySet["this:iconName"].setValue("multiple_obj");
         //name doesn't make sense for now
         d->propertySet["objectName"].setValue("");
@@ -2200,7 +2200,7 @@ void Form::createContextMenu(QWidget *w, Container *container, const QPoint& men
     }
     else {
         icon = SmallIcon("multiple_obj");
-        titleText = i18n("Multiple Widgets (%1)").arg(widgetsCount);
+        titleText = i18n("Multiple Widgets (%1)", widgetsCount);
     }
 
     KMenu menu;
