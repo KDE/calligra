@@ -1232,14 +1232,13 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                 int i = 0;
                 int idIndex = 1; //means "id"
                 QString pkFieldName("id%1");
-                QString pkFieldCaption(I18N_NOOP2("Identifier%1", "Id%1"));
+                KLocalizedString pkFieldCaption(ki18nc("Identifier%1", "Id%1"));
                 while (i < (int)d->sets->size()) {
                     KoProperty::Set *set = d->sets->at(i);
                     if (set) {
-                        if ((*set)["name"].value().toString()
-                                == pkFieldName.arg(idIndex == 1 ? QString() : QString::number(idIndex))
-                                || (*set)["caption"].value().toString()
-                                == pkFieldCaption.arg(idIndex == 1 ? QString() : QString::number(idIndex))) {
+                        if (   (*set)["name"].value().toString() == pkFieldName.arg(idIndex == 1 ? QString() : QString::number(idIndex))
+                            || (*set)["caption"].value().toString() == pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString())
+                        {
                             //try next id index
                             i = 0;
                             idIndex++;
@@ -1249,12 +1248,12 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
                     i++;
                 }
                 pkFieldName = pkFieldName.arg(idIndex == 1 ? QString() : QString::number(idIndex));
-                pkFieldCaption = pkFieldCaption.arg(idIndex == 1 ? QString() : QString::number(idIndex));
                 //ok, add PK with such unique name
                 d->view->insertEmptyRow(0);
                 d->view->setCursorPosition(0, COLUMN_ID_CAPTION);
                 d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_CAPTION,
-                                                     QVariant(pkFieldCaption));
+                                                        pkFieldCaption.subs(idIndex == 1 ? QString() : QString::number(idIndex)).toString()
+                                                    );
                 d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
                                                      QVariant(KexiDB::Field::IntegerGroup - 1/*counting from 0*/));
                 if (!d->view->data()->saveRowChanges(*d->view->selectedItem(), true)) {
