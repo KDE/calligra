@@ -677,6 +677,8 @@ Container::eventFilter(QObject *s, QEvent *e)
 
     case QEvent::ContextMenu: {
         QContextMenuEvent* cme = static_cast<QContextMenuEvent*>(e);
+        m_moving = 0; // clear this otherwise mouse dragging outside
+                      // of the popup menu would drag the selected widget(s) randomly
         d->form->createContextMenu(static_cast<QWidget*>(s), this, cme->pos());//false);
         return true;
     }
