@@ -76,10 +76,10 @@
             <Action name="object_duplicate"/>
             <Menu name="object_order">
                 <text>&amp;Order</text>
-                <Action name="object_move_totop"/>
-                <Action name="object_move_up"/>
-                <Action name="object_move_down"/>
-                <Action name="object_move_tobottom"/>
+                <Action name="object_order_front"/>
+                <Action name="object_order_raise"/>
+                <Action name="object_order_lower"/>
+                <Action name="object_order_back"/>
             </Menu>
             <Menu name="object_align">
                 <text>&amp;Align</text>
@@ -141,10 +141,10 @@
     </ToolBar>
     <ToolBar name="object_toolbar" hidden="true" fullWidth="false">
         <text>Object</text>
-        <Action name="object_move_totop"/>
-        <Action name="object_move_up"/>
-        <Action name="object_move_down"/>
-        <Action name="object_move_tobottom"/>
+        <Action name="object_order_front"/>
+        <Action name="object_order_raise"/>
+        <Action name="object_order_lower"/>
+        <Action name="object_order_back"/>
         <Action name="selection_group"/>
         <Action name="selection_ungroup"/>
     </ToolBar>

@@ -542,38 +542,6 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
     d->canvas->addCommand( cmd );
 }
 
-void KarbonView::selectionBringToFront()
-{
-    debugView("KarbonView::selectionBringToFront()");
-
-    QList<KoShape*> selectedShapes = d->canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    d->canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, d->canvas->shapeManager(), KoShapeReorderCommand::BringToFront ) );
-}
-
-void KarbonView::selectionMoveUp()
-{
-    debugView("KarbonView::selectionMoveUp()");
-
-    QList<KoShape*> selectedShapes = d->canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    d->canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, d->canvas->shapeManager(), KoShapeReorderCommand::RaiseShape ) );
-}
-
-void KarbonView::selectionMoveDown()
-{
-    debugView("KarbonView::selectionMoveDown()");
-
-    QList<KoShape*> selectedShapes = d->canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    d->canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, d->canvas->shapeManager(), KoShapeReorderCommand::LowerShape ) );
-}
-
-void KarbonView::selectionSendToBack()
-{
-    debugView("KarbonView::selectionSendToBack()");
-
-    QList<KoShape*> selectedShapes = d->canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    d->canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, d->canvas->shapeManager(), KoShapeReorderCommand::SendToBack ) );
-}
-
 void KarbonView::groupSelection()
 {
     debugView("KarbonView::groupSelection()");
@@ -844,27 +812,7 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_duplicate", actionDuplicate );
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
-
-    KAction *actionBringToFront  = new KAction(KIcon("object-order-front"), i18n("Bring to &Front"), this);
-    actionCollection()->addAction("object_move_totop", actionBringToFront );
-    actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
-    connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
-
-    KAction *actionRaise  = new KAction(KIcon("object-order-raise"), i18n("&Raise"), this);
-    actionCollection()->addAction("object_move_up", actionRaise );
-    actionRaise->setShortcut(QKeySequence("Ctrl+]"));
-    connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
-
-    KAction *actionLower  = new KAction(KIcon("object-order-lower"), i18nc("Lower selected shapes", "&Lower"), this);
-    actionCollection()->addAction("object_move_down", actionLower );
-    actionLower->setShortcut(QKeySequence("Ctrl+["));
-    connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
-
-    KAction *actionSendToBack  = new KAction(KIcon("object-order-back"), i18n("Send to &Back"), this);
-    actionCollection()->addAction("object_move_tobottom", actionSendToBack );
-    actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
-    connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
-
+    
     KAction *actionDistributeHorizontalCenter  = new KAction(i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter );
     connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));

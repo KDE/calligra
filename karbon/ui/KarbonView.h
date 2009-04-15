@@ -93,10 +93,6 @@ public slots:
     void editDeleteSelection();
 
     void selectionDuplicate();
-    void selectionBringToFront();
-    void selectionSendToBack();
-    void selectionMoveUp();
-    void selectionMoveDown();
     void selectionDistributeHorizontalCenter();
     void selectionDistributeHorizontalGap();
     void selectionDistributeHorizontalLeft();
