@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -380,4 +380,9 @@ void KarbonOdfPatternEditStrategy::updateHandles( KoPatternBackground * fill )
     QRectF patternRect = fill->patternRectFromFillSize( shape()->size() );
     m_handles[origin] = patternRect.topLeft();
     m_handles[size] = patternRect.bottomRight();
+}
+
+void KarbonOdfPatternEditStrategy::updateHandles()
+{
+    updateHandles( dynamic_cast<KoPatternBackground*>( shape()->background() ) );
 }

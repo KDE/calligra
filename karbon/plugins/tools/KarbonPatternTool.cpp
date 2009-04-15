@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,8 +56,11 @@ void KarbonPatternTool::paint( QPainter &painter, const KoViewConverter &convert
     painter.setPen( Qt::blue ); //TODO make configurable
 
     // paint all the strategies
-    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
+        if( strategy == m_currentStrategy )
+            continue;
+        
         painter.save();
         strategy->paint( painter, converter );
         painter.restore();
@@ -73,15 +76,15 @@ void KarbonPatternTool::paint( QPainter &painter, const KoViewConverter &convert
 
 void KarbonPatternTool::repaintDecorations()
 {
-    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
         m_canvas->updateCanvas( strategy->boundingRect() );
 }
 
 void KarbonPatternTool::mousePressEvent( KoPointerEvent *event )
 {
-    m_currentStrategy = 0;
+    //m_currentStrategy = 0;
 
-    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
         if( strategy->selectHandle( event->point ) )
         {
@@ -110,7 +113,7 @@ void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
             return;
         }
     }
-    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
     {
         if( strategy->selectHandle( event->point ) )
         {
@@ -162,32 +165,63 @@ void KarbonPatternTool::initialize()
     if( m_currentStrategy && m_currentStrategy->isEditing() )
         return;
 
-    m_currentStrategy = 0;
-
-    uint strategyCount = m_patterns.count();
-    for( uint i = 0; i < strategyCount; ++i )
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+    
+    // remove all pattern strategies no longer applicable
+    foreach( KarbonPatternEditStrategyBase * strategy, m_strategies )
     {
-        KarbonPatternEditStrategyBase * s = m_patterns.takeFirst();
-        s->repaint();
-        delete s;
+        // is this gradient shape still selected ?
+        if( ! selectedShapes.contains( strategy->shape() ) )
+        {
+            m_strategies.remove( strategy->shape() );
+            delete strategy;
+            if( m_currentStrategy == strategy )
+                m_currentStrategy = 0;
+            continue;
+        }
+        
+        // does the shape has no fill pattern anymore ?
+        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( strategy->shape()->background() );
+        if( ! fill )
+        {
+            // delete the gradient
+            m_strategies.remove( strategy->shape() );
+            delete strategy;
+            if( m_currentStrategy == strategy )
+                m_currentStrategy = 0;
+            continue;
+        }
+        
+        strategy->updateHandles();
+        strategy->repaint();
     }
 
     KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
     KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
 
-    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
+    // now create new strategies if needed
+    foreach( KoShape *shape, selectedShapes )
     {
+        // do we already have a strategy for that shape?
+        if( m_strategies.contains(shape) )
+            continue;
+        
         if( dynamic_cast<KoPatternBackground*>( shape->background() ) )
         {
-            m_patterns.append( new KarbonOdfPatternEditStrategy( shape, imageCollection ) );
-            m_patterns.last()->repaint();
+            KarbonPatternEditStrategyBase * s = new KarbonOdfPatternEditStrategy( shape, imageCollection );
+            m_strategies.insert( shape, s );
+            s->repaint();
         }
     }
-    if( m_patterns.count() == 1 )
+    // automatically select strategy when editing single shape
+    if( m_strategies.count() == 1 || ! m_currentStrategy )
     {
-        m_currentStrategy = m_patterns.first();
+        m_currentStrategy = *m_strategies.begin();
         updateOptionsWidget();
     }
+    
+    if( m_currentStrategy )
+        m_currentStrategy->repaint();
 }
 
 void KarbonPatternTool::activate( bool temporary )
@@ -213,12 +247,12 @@ void KarbonPatternTool::deactivate()
     // we are not interested in selection content changes when not active
     disconnect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 
-    foreach( KarbonPatternEditStrategyBase * strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase * strategy, m_strategies )
     {
         strategy->repaint();
         delete strategy;
     }
-    m_patterns.clear();
+    m_strategies.clear();
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->update();
 }
@@ -228,12 +262,12 @@ void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
     switch( key )
     {
         case KoCanvasResource::HandleRadius:
-            foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
+            foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
                 strategy->repaint();
 
             KarbonPatternEditStrategyBase::setHandleRadius( res.toUInt() );
 
-            foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
+            foreach( KarbonPatternEditStrategyBase *strategy, m_strategies )
                 strategy->repaint();
         break;
         default:

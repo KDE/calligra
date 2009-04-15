@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,11 +21,13 @@
 #define _KARBONPATTERNTOOL_H_
 
 #include <KoTool.h>
+#include <QtCore/QMap>
 
 class QPainter;
 class QTableWidgetItem;
 class KarbonPatternEditStrategyBase;
 class KarbonPatternOptionsWidget;
+class KoShape;
 
 class KarbonPatternTool : public KoTool
 {
@@ -56,7 +58,7 @@ private slots:
     void updateOptionsWidget();
     void patternChanged();
 private:
-    QList<KarbonPatternEditStrategyBase*> m_patterns;  ///< the list of editing strategies, one for each shape
+    QMap<KoShape*, KarbonPatternEditStrategyBase*> m_strategies;  ///< the list of editing strategies, one for each shape
     KarbonPatternEditStrategyBase * m_currentStrategy; ///< the current editing strategy
     KarbonPatternOptionsWidget * m_optionsWidget;
 };

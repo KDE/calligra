@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2009 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,6 +76,8 @@ public:
     /// returns the actual handle radius
     static int handleRadius() { return m_handleRadius; }
 
+    virtual void updateHandles() {}
+    
 protected:
     /// Returns the image collectio used to create new pattern background
     KoImageCollection * imageCollection();
@@ -139,7 +141,7 @@ public:
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
     virtual QRectF boundingRect() const;
     virtual KoPatternBackground updatedBackground();
-
+    virtual void updateHandles();
 private:
 
     enum Handles { origin, size };
