@@ -254,7 +254,8 @@ public:
     void addCommand(K3Command *command, bool execute);
 
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
-                            const QVariant &value, const QByteArray &propertyName, bool execute);
+                            const QVariant &value, const QByteArray &propertyName, 
+                            bool execute, uint idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                             const QVariant &value, const QByteArray &propertyName, bool execute);

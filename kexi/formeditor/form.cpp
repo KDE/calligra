@@ -297,8 +297,9 @@ public:
 #endif
 
 // moved from WidgetPropertySet
-    // used to update command's value when undoing
+    //! used to update command's value when undoing
     PropertyCommand  *lastCommand;
+    uint idOfPropertyCommand;
     GeometryPropertyCommand  *lastGeoCommand;
     bool slotPropertyChangedEnabled : 1;
     bool slotPropertyChanged_addCommandEnabled : 1;
@@ -354,6 +355,7 @@ FormPrivate::FormPrivate(Form *form)
     origActiveColors = 0;
 // end of moved from WidgetPropertySet
     designModeStyle = 0;
+    idOfPropertyCommand = 0;
 }
 
 FormPrivate::~FormPrivate()
@@ -1625,13 +1627,27 @@ Form::State Form::state() const
 }
 
 void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
-                    const QVariant &value, const QByteArray &propertyName, bool execute)
+                              const QVariant &value, const QByteArray &propertyName,
+                              bool execute, uint idOfPropertyCommand)
 {
     kDebug() << d->propertySet[propertyName];
     kDebug() << "oldValue:" << oldValue << "value:" << value;
+    kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
     d->insideAddPropertyCommand = true;
-    d->lastCommand = new PropertyCommand(*this, wname, oldValue, value, propertyName);
-    addCommand(d->lastCommand, execute);
+    PropertyCommand *presentCommand = dynamic_cast<PropertyCommand*>( d->commandHistory->presentCommand() );
+    if (   presentCommand
+        && d->lastCommand == presentCommand
+        && idOfPropertyCommand > 0
+        && d->idOfPropertyCommand == idOfPropertyCommand)
+    {
+        d->lastCommand->setValue(value); // just change the value, 
+                                         // to avoid multiple PropertyCommands that only differ by value
+    }
+    else {
+        d->lastCommand = new PropertyCommand(*this, wname, oldValue, value, propertyName);
+        addCommand(d->lastCommand, execute);
+        d->idOfPropertyCommand = idOfPropertyCommand;
+    }
     d->insideAddPropertyCommand = false;
 }
 

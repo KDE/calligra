@@ -112,6 +112,7 @@ public:
     Private(Container* toplevel, QWidget *container)
       : m_toplevel(toplevel)
       , state(DoingNothing)
+      , idOfPropertyCommand(0)
       , m_widget(container)
       , insertBegin(-1, -1)
     {
@@ -180,6 +181,7 @@ public:
       InlineEditing
     };
     State state;
+    uint idOfPropertyCommand;
 private:
     // the watched container and it's toplevel one...
     QPointer<Container> m_toplevel;
@@ -273,6 +275,7 @@ Container::eventFilter(QObject *s, QEvent *e)
         kDebug() << "this          = " << this->objectName();
 
         m_moving = static_cast<QWidget*>(s);
+        d->idOfPropertyCommand++; // this will create another PropertyCommand
         if (m_moving->parentWidget() && KexiUtils::objectIsA(m_moving->parentWidget(), "QStackedWidget")) {
             m_moving = m_moving->parentWidget(); // widget is a stacked widget's page
         }
@@ -1415,7 +1418,8 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
                 QRect g(w->geometry());
                 g.moveTo(tmpx, tmpy);
                 d->form->addPropertyCommand(w->objectName().toLatin1(), w->geometry(),
-                                            g, "geometry", true /*execute*/);
+                                            g, "geometry", true /*execute*/,
+                                            d->idOfPropertyCommand);
                 w->move(tmpx, tmpy);
             }
             else {
