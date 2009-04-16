@@ -156,14 +156,18 @@ if($rootdir=~/.*\/(.*)$/) {
     $project=$1;
 }
 print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%\">";
-if ($#sections > 1) { # remove 'packages' frameset when there is only one section
+
+if ($#sections == 0) { # remove 'packages' frameset when there is only one section
+    print FILE "<frame src=\"allClasses-light.html\">";
+    print FILE "<frame src=\"$sections[0]/index.html\" name=\"main\">";
+} else {
     print FILE "<frameset rows=\"30%,70%\"><frame src=\"packages.html\">";
-}
-print FILE "<frame src=\"allClasses-light.html\">";
-if ($#sections > 1) { # remove 'packages' frameset when there is only one section
+    print FILE "<frame src=\"allClasses-light.html\">";
     print FILE "</frameset>";
+    print FILE "<frame src=\"sections.html\" name=\"main\">";
 }
-print FILE "<frame src=\"sections.html\" name=\"main\"></frameset>\n</head></html>";
+print FILE "</frameset>\n</head></html>";
+
 close (FILE);
 
 # generate sections.html
