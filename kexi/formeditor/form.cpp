@@ -2903,8 +2903,9 @@ void Form::saveAlignProperty(const QString &property)
         return;
     }
 
-    if (d->lastCommand && d->lastCommand->property() == "alignment")
+    if (d->lastCommand && d->lastCommand->property() == "alignment") {
         d->lastCommand->setValue(valueForKeys);
+    }
     else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
                                              subwidget->property("alignment"), valueForKeys, "alignment");
@@ -2967,8 +2968,9 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     if (prop == "layout") {
         LayoutType type = Container::stringToLayoutType(value.toString());
 
-        if (d->lastCommand && d->lastCommand->property() == "layout" && !d->isUndoing)
+        if (d->lastCommand && d->lastCommand->property() == "layout" && !d->isUndoing) {
             d->lastCommand->setValue(value);
+        }
         else if (!d->isUndoing)  {
             d->lastCommand = new LayoutPropertyCommand(*this, 
                 d->selected.first()->objectName().toLatin1(),
