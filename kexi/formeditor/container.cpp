@@ -1410,9 +1410,21 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
         }
 
         if ((tmpx != w->x()) || (tmpy != w->y())) {
-            w->move(tmpx, tmpy);
+            if (d->form->selectedWidget()) {
+                // single widget
+                QRect g(w->geometry());
+                g.moveTo(tmpx, tmpy);
+                d->form->addPropertyCommand(w->objectName().toLatin1(), w->geometry(),
+                                            g, "geometry", true /*execute*/);
+                w->move(tmpx, tmpy);
+            }
+            else {
+                //todo
+                w->move(tmpx, tmpy);
+            }
         }
     }
+
 }
 
 void Container::stopInlineEditing()
