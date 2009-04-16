@@ -79,7 +79,7 @@ void FileOutputHandler::characters(const std::string &sCharacters)
 {
 	if (mbIsTagOpened)
 	{
-		mContentStream << "/>";
+		mContentStream << ">";
 		mbIsTagOpened = false;
 	}
 	mContentStream << sCharacters.c_str();
