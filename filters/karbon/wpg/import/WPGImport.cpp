@@ -32,8 +32,8 @@
 
 #include <KoXmlWriter.h>
 
-#include <libwpg.h>
-#include <WPGStreamImplementation.h>
+#include <libwpg/libwpg.h>
+#include <libwpg/WPGStreamImplementation.h>
 
 #include "FileOutputHandler.hxx"
 #include "OdgExporter.hxx"

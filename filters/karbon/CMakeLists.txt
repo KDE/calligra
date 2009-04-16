@@ -18,14 +18,15 @@ include_directories(
         ${KDE4_INCLUDES}
         ${CMAKE_SOURCE_DIR}/plugins/ )
 
+macro_optional_find_package(WPD)
 macro_optional_find_package(WPG)
 macro_log_feature(LIBWPG_FOUND "WPG" "WordPerfect Graphics Library" "http://libwpg.sourceforge.net/" FALSE "" "Required by the Karbon WPG import filter")
 
 add_subdirectory( png )
 add_subdirectory( svg )
-if (LIBWPD AND LIBWPG_FOUND)
+if (WPD_FOUND AND LIBWPG_FOUND)
   add_subdirectory( wpg )
-endif (LIBWPD AND LIBWPG_FOUND)
+endif (WPD_FOUND AND LIBWPG_FOUND)
 add_subdirectory( wmf )
 add_subdirectory( karbon1.x )
 add_subdirectory( eps )
