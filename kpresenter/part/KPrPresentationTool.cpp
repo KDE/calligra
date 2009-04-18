@@ -40,16 +40,15 @@
 
 #include "KPrViewModePresentation.h"
 #include "KPrPresentationStrategy.h"
+#include "KPrPresentationHighlightStrategy.h"
+#include "KPrPresentationDrawStrategy.h"
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
+, m_strategy( new KPrPresentationStrategy( this ) )
 {
-    // init
-    m_drawMode = false;
-    m_highlightMode = false;
-
     // tool box
     m_frame = new QFrame( m_viewMode.canvas() );
 
@@ -58,27 +57,27 @@ KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
     m_presentationToolWidget = new KPrPresentationToolWidget(m_viewMode.canvas());
     frameLayout->addWidget( m_presentationToolWidget, 0, Qt::AlignLeft | Qt::AlignBottom );
     m_frame->setLayout( frameLayout );
-
     m_frame->show();
-    m_frame->setVisible(false);
 
     m_presentationToolWidget->raise();
+    m_presentationToolWidget->setVisible( false );
     m_presentationToolWidget->installEventFilter(this);
 
     // Connections of button clicked to slots
     connect( m_presentationToolWidget->presentationToolUi().penButton, SIGNAL( clicked() ), this, SLOT( drawOnPresentation() ) );
     connect( m_presentationToolWidget->presentationToolUi().highLightButton, SIGNAL( clicked() ), this, SLOT( highLightPresentation() ) );
-
 }
 
 KPrPresentationTool::~KPrPresentationTool()
 {
+    delete m_strategy;
 }
 
 bool KPrPresentationTool::wantsAutoScroll()
 {
     return false;
 }
+
 void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
 }
@@ -123,69 +122,63 @@ void KPrPresentationTool::mouseReleaseEvent( KoPointerEvent *event )
 void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
 {
     finishEventActions();
-    event->accept();
-    KPrPresentationStrategy * m_strategy = new KPrPresentationStrategy(this);
-
-    switch ( event->key() )
-    {
-        case Qt::Key_Escape:
-            m_strategy->handleEscape();
-            /*if(m_drawMode)
-              drawOnPresentation();
-              else if(m_highlightMode)
-              highLightPresentation();
-              else
-              m_viewMode.activateSavedViewMode();*/
-            break;
-        case Qt::Key_Home:
-            m_viewMode.navigate( KPrAnimationDirector::FirstPage );
-            break;
-        case Qt::Key_Up:
-        case Qt::Key_PageUp:
-            m_viewMode.navigate( KPrAnimationDirector::PreviousPage );
-            break;
-        case Qt::Key_Backspace:
-        case Qt::Key_Left:
-            m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
-            break;
-        case Qt::Key_Right:
-        case Qt::Key_Space:
-            m_viewMode.navigate( KPrAnimationDirector::NextStep );
-            break;
-        case Qt::Key_Down:
-        case Qt::Key_PageDown:
-            m_viewMode.navigate( KPrAnimationDirector::NextPage );
-            break;
-        case Qt::Key_End:
-            m_viewMode.navigate( KPrAnimationDirector::LastPage );
-            break;
-        case Qt::Key_P:
-            switchDrawMode();
-            break;
-        case Qt::Key_H:
-            highLightPresentation();
-            break;
-        default:
-            event->ignore();
-            break;
+    // first try to handle the event in the strategy if it is done there no need to use the default action
+    if ( ! m_strategy->keyPressEvent( event ) ) {
+        switch ( event->key() )
+        {
+            case Qt::Key_Escape:
+                m_viewMode.activateSavedViewMode();
+                break;
+            case Qt::Key_Home:
+                m_viewMode.navigate( KPrAnimationDirector::FirstPage );
+                break;
+            case Qt::Key_Up:
+            case Qt::Key_PageUp:
+                m_viewMode.navigate( KPrAnimationDirector::PreviousPage );
+                break;
+            case Qt::Key_Backspace:
+            case Qt::Key_Left:
+                m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
+                break;
+            case Qt::Key_Right:
+            case Qt::Key_Space:
+                m_viewMode.navigate( KPrAnimationDirector::NextStep );
+                break;
+            case Qt::Key_Down:
+            case Qt::Key_PageDown:
+                m_viewMode.navigate( KPrAnimationDirector::NextPage );
+                break;
+            case Qt::Key_End:
+                m_viewMode.navigate( KPrAnimationDirector::LastPage );
+                break;
+            case Qt::Key_P:
+                drawOnPresentation();
+                break;
+            case Qt::Key_H:
+                highLightPresentation();
+                break;
+            default:
+                event->ignore();
+                break;
+        }
     }
 }
 
 void KPrPresentationTool::keyReleaseEvent( QKeyEvent *event )
 {
+    Q_UNUSED( event );
 }
 
 void KPrPresentationTool::wheelEvent( KoPointerEvent * event )
 {
+    Q_UNUSED( event );
 }
 
 void KPrPresentationTool::activate( bool temporary )
 {
-    // TODO fixme
-    //m_frame->resize( presentationRect.size() );
-    // the canvas does not yet has the correct size
-    m_frame->resize( m_canvas->canvasWidget()->size() );
-    m_frame->setVisible( true );
+    Q_UNUSED( temporary );
+    m_frame->setGeometry( m_canvas->canvasWidget()->geometry() );
+    m_presentationToolWidget->setVisible( false );
     // redirect event to tool widget
     m_frame->installEventFilter( this );
     // activate tracking for show/hide tool buttons
@@ -195,12 +188,6 @@ void KPrPresentationTool::activate( bool temporary )
 void KPrPresentationTool::deactivate()
 {
     finishEventActions();
-    m_frame->setVisible(false);
-
-    if ( m_highlightMode ) {
-        delete m_blackBackgroundwidget;
-        m_highlightMode = false;
-    }
 }
 
 void KPrPresentationTool::finishEventActions()
@@ -210,114 +197,37 @@ void KPrPresentationTool::finishEventActions()
     }
 }
 
+void KPrPresentationTool::switchStrategy( KPrPresentationStrategyInterface * strategy )
+{
+    Q_ASSERT( strategy );
+    Q_ASSERT( m_strategy != strategy );
+    delete m_strategy;
+    m_strategy = strategy;
+}
+
 // SLOTS
 void KPrPresentationTool::highLightPresentation()
 {
-    // destroy the drawMode if it's active
-    if ( m_drawMode ) {
-        // We put buttons on the presentation before deleting the draw widget
-        m_presentationToolWidget->setParent( m_viewMode.canvas() );
-
-        m_drawMode = false;
-        delete m_drawWidget;
-        QApplication::restoreOverrideCursor();
-    }
-    // create the high light
-    QSize size = m_viewMode.canvas()->size();
-    QPixmap newPage( size );
-    if(newPage.isNull())
-        return;
-
-    if ( m_highlightMode ) {
-        // We put buttons on the presentation before deleting the highlight widget
-        m_presentationToolWidget->setParent( m_viewMode.canvas() );
-
-        m_highlightMode = false;
-        delete m_blackBackgroundwidget;
+    KPrPresentationStrategyInterface * strategy;
+    if ( dynamic_cast<KPrPresentationHighlightStrategy *>( m_strategy ) ) {
+        strategy = new KPrPresentationStrategy( this );
     }
     else {
-        m_highlightMode = true;
-        m_blackBackgroundwidget = new KPrPresentationHighlightWidget( m_viewMode.canvas() );
-        m_presentationToolWidget->setParent( m_blackBackgroundwidget );
-        m_blackBackgroundwidget->show();
-
-        m_blackBackgroundwidget->installEventFilter(this);
+        strategy = new KPrPresentationHighlightStrategy( this );
     }
-}
-
-bool KPrPresentationTool::getDrawMode()
-{
-    return m_drawMode;
-}
-
-void KPrPresentationTool::switchDrawMode()
-{
-    // destroy the highlightMode if it's active
-    if ( m_highlightMode ) {
-        // We put buttons on the presentation before deleting the highlight widget
-        m_presentationToolWidget->setParent( m_viewMode.canvas() );
-
-        m_highlightMode = false;
-        delete m_blackBackgroundwidget;
-    }
-    // create the drawMode
-    if ( !m_drawMode ) {
-        m_drawMode = true;
-        QString str("kpresenter");
-        KIconLoader kicon(str);
-        str.clear();
-        str.append("pen.png");
-        QPixmap pix(kicon.loadIcon(str, kicon.Small));
-        float factor = 1.2;
-        pix = pix.scaledToHeight(pix.height()*factor);
-        pix = pix.scaledToWidth(pix.width()*factor);
-        QCursor cur = QCursor(pix);
-        QApplication::setOverrideCursor(cur);
-        m_drawWidget = new KPrPresentationDrawWidget(m_viewMode.canvas());
-
-        m_presentationToolWidget->setParent( m_drawWidget );
-
-        m_drawWidget->show();
-
-        m_drawWidget->installEventFilter(this);
-    }
-    // destroy the drawMode if it's active
-    else {
-        // We put buttons on the presentation before deleting the draw widget
-        m_presentationToolWidget->setParent( m_viewMode.canvas() );
-
-        m_drawMode = false;
-        delete m_drawWidget;
-        QApplication::restoreOverrideCursor();
-    }
-    m_presentationToolWidget->presentationToolUi().penButton->setDown(m_drawMode);
-}
-
-bool KPrPresentationTool::getHighlightMode()
-{
-    return m_highlightMode;
-}
-
-void KPrPresentationTool::switchHighlightMode()
-{
-    if ( !m_highlightMode ) {
-        m_highlightMode = true;
-    }
-    else {
-        m_highlightMode = false;
-    }
+    switchStrategy( strategy );
 }
 
 void KPrPresentationTool::drawOnPresentation()
 {
-    m_presentationToolWidget->presentationToolUi().penButton->setText("test...");
-    switchDrawMode();
-}
-
-// get the acces on m_blackBackgroundwidget
-QWidget * KPrPresentationTool::m_blackBackgroundPresentation()
-{
-    return m_blackBackgroundwidget ? m_blackBackgroundwidget : 0;
+    KPrPresentationStrategyInterface * strategy;
+    if ( dynamic_cast<KPrPresentationDrawStrategy*>( m_strategy ) ) {
+        strategy = new KPrPresentationStrategy( this );
+    }
+    else {
+        strategy = new KPrPresentationDrawStrategy( this );
+    }
+    switchStrategy( strategy );
 }
 
 bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
@@ -327,10 +237,9 @@ bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
         QWidget *source = static_cast<QWidget*>( obj );
         QPoint pos = source->mapFrom( m_viewMode.canvas(), mouseEvent->pos() );
 
-        // TODO don't use hardcoded values
         QSize buttonSize = m_presentationToolWidget->size() + QSize( 20, 20 );
-        QRect geometrie = QRect( 0, m_frame->height() - buttonSize.height(), buttonSize.width(), buttonSize.height() );
-        if ( geometrie.contains( pos ) ) {
+        QRect geometry = QRect( 0, m_frame->height() - buttonSize.height(), buttonSize.width(), buttonSize.height() );
+        if ( geometry.contains( pos ) ) {
             m_presentationToolWidget->setVisible( true );
         }
         else {

@@ -18,19 +18,51 @@
  */
 #include "KPrPresentationDrawStrategy.h"
 
+#include <QKeyEvent>
+
+#include <KoPACanvas.h>
+
 #include "KPrPresentationTool.h"
 
 KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyInterface( tool )
+, m_drawWidget( new KPrPresentationDrawWidget( canvas() ) )
 {
+    // TODO
+    QString str("kpresenter");
+    KIconLoader kicon(str);
+    str.clear();
+    str.append("pen.png");
+    QPixmap pix(kicon.loadIcon(str, kicon.Small));
+    float factor = 1.2;
+    pix = pix.scaledToHeight(pix.height()*factor);
+    pix = pix.scaledToWidth(pix.width()*factor);
+    QCursor cur = QCursor(pix);
+    QApplication::setOverrideCursor(cur);
+
+    setToolWidgetParent( m_drawWidget );
+    m_drawWidget->show();
+    m_drawWidget->installEventFilter( m_tool );
 }
 
 KPrPresentationDrawStrategy::~KPrPresentationDrawStrategy()
 {
+    setToolWidgetParent( canvas() );
+    QApplication::restoreOverrideCursor();
+    delete m_drawWidget;
 }
 
-void KPrPresentationDrawStrategy::handleEscape()
+bool KPrPresentationDrawStrategy::keyPressEvent( QKeyEvent * event )
 {
-    m_tool->drawOnPresentation();
+    bool handled = true;
+    switch ( event->key() )
+    {
+        case Qt::Key_Escape:
+            activateDefaultStrategy();
+            break;
+        case Qt::Key_H:
+            handled = false;
+            break;
+    }
+    return handled;
 }
-

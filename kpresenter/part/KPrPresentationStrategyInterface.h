@@ -19,16 +19,28 @@
 #ifndef KPRPRESENTATIONSTRATEGYINTERFACE_H
 #define KPRPRESENTATIONSTRATEGYINTERFACE_H
 
+class QWidget;
+class QKeyEvent;
+class KoPACanvas;
 class KPrPresentationTool;
 
 class KPrPresentationStrategyInterface
 {
 public:
-    KPrPresentationStrategyInterface(KPrPresentationTool * tool);
+    KPrPresentationStrategyInterface( KPrPresentationTool * tool );
     virtual ~KPrPresentationStrategyInterface();
-    virtual void handleEscape() = 0;
+
+    /**
+     * If the event is handled or should be ignored by the tool return true. Otherwise 
+     * the event will be handled in the tool.
+     */
+    virtual bool keyPressEvent( QKeyEvent * event ) = 0;
 
 protected:
+    void setToolWidgetParent( QWidget * widget );
+    void activateDefaultStrategy();
+    KoPACanvas * canvas();
+
     KPrPresentationTool * m_tool;
 };
 

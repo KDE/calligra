@@ -21,13 +21,18 @@
 
 #include "KPrPresentationStrategyInterface.h"
 
+class KPrPresentationHighlightWidget;
+
 class KPrPresentationHighlightStrategy : public KPrPresentationStrategyInterface
 {
 public :
     KPrPresentationHighlightStrategy( KPrPresentationTool * tool );
     ~KPrPresentationHighlightStrategy();
 
-    void handleEscape() ;
+    bool keyPressEvent( QKeyEvent * event );
+
+private:
+    KPrPresentationHighlightWidget * m_highlightWidget;
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTSTRATEGY_H */

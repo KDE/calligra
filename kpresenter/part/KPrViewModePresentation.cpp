@@ -155,11 +155,12 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QRect presentationRect = desktop.screenGeometry( presentationscreen );
 
-    //m_canvas->move( presentationRect.topLeft() );
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
-    m_canvas->resize( presentationRect.size() ); // resize now so it has the right size when we call activate on the tool.
+    // move and resize now as otherwise it is not set when we call activate on the tool.
+    m_canvas->move( presentationRect.topLeft() );
+    m_canvas->resize( presentationRect.size() );
 
     // the main animation director needs to be created first since it will set the active page
     // of the presentation
@@ -256,21 +257,19 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-    if(!m_tool->getDrawMode() && !m_tool->getHighlightMode()){
-        bool finished = m_animationDirector->navigate( navigation );
+    bool finished = m_animationDirector->navigate( navigation );
 
-        //update current slide widget
-        if ( m_presenterViewWidget ) {
-            m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
-        }
+    //update current slide widget
+    if ( m_presenterViewWidget ) {
+        m_presenterViewWidget->updateSlideIndex(m_animationDirector->currentPage());
+    }
 
-        if ( m_pvAnimationDirector ) {
-            finished = m_pvAnimationDirector->navigate( navigation ) && finished;
-        }
+    if ( m_pvAnimationDirector ) {
+        finished = m_pvAnimationDirector->navigate( navigation ) && finished;
+    }
 
-        if ( finished ) {
-            activateSavedViewMode();
-        }
+    if ( finished ) {
+        activateSavedViewMode();
     }
 }
 

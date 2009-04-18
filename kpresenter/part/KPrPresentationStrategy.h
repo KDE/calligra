@@ -19,14 +19,15 @@
 #ifndef KPRPRESENTATIONSTRATEGY_H
 #define KPRPRESENTATIONSTRATEGY_H
 
-#include "KPrPresentationTool.h"
-class KPrPresentationStrategy{
-public :
+#include "KPrPresentationStrategyInterface.h"
+
+class KPrPresentationStrategy : public KPrPresentationStrategyInterface
+{
+public:
     KPrPresentationStrategy( KPrPresentationTool * tool );
     virtual ~KPrPresentationStrategy();
-    void handleEscape();
-protected :
-    KPrPresentationTool * m_tool;
+
+    virtual bool keyPressEvent( QKeyEvent * event );
 };
 
 #endif /* KPRPRESENTATIONSTRATEGY_H */

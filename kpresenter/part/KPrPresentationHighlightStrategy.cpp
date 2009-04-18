@@ -19,19 +19,39 @@
 
 #include "KPrPresentationHighlightStrategy.h"
 
+#include <QKeyEvent>
+
+#include <KoPACanvas.h>
+
+#include "KPrPresentationHighlightWidget.h"
 #include "KPrPresentationTool.h"
 
 KPrPresentationHighlightStrategy::KPrPresentationHighlightStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyInterface( tool )
+, m_highlightWidget( new KPrPresentationHighlightWidget( canvas() ) )
 {
+    setToolWidgetParent( m_highlightWidget );
+    m_highlightWidget->show();
+    m_highlightWidget->installEventFilter( m_tool );
 }
 
 KPrPresentationHighlightStrategy::~KPrPresentationHighlightStrategy()
 {
+    setToolWidgetParent( canvas() );
+    delete m_highlightWidget;
 }
 
-void KPrPresentationHighlightStrategy::handleEscape()
+bool KPrPresentationHighlightStrategy::keyPressEvent( QKeyEvent * event )
 {
-    m_tool->highLightPresentation();
+    bool handled = true;
+    switch ( event->key() )
+    {
+        case Qt::Key_Escape:
+            activateDefaultStrategy();
+            break;
+        case Qt::Key_P:
+            handled = false;
+            break;
+    }
+    return handled;
 }
-

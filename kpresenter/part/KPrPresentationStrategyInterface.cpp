@@ -17,10 +17,31 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KPrPresentationStrategyInterface.h"
-KPrPresentationStrategyInterface::KPrPresentationStrategyInterface(KPrPresentationTool * tool)
+
+#include "KPrPresentationTool.h"
+#include "KPrViewModePresentation.h"
+#include "KPrPresentationStrategy.h"
+
+KPrPresentationStrategyInterface::KPrPresentationStrategyInterface( KPrPresentationTool * tool )
+: m_tool( tool )
 {
-  m_tool = tool;
 }
+
 KPrPresentationStrategyInterface::~KPrPresentationStrategyInterface()
 {
+}
+
+void KPrPresentationStrategyInterface::setToolWidgetParent( QWidget * widget )
+{
+    return m_tool->m_presentationToolWidget->setParent( widget );
+}
+
+KoPACanvas * KPrPresentationStrategyInterface::canvas()
+{
+    return m_tool->m_viewMode.canvas();
+}
+
+void KPrPresentationStrategyInterface::activateDefaultStrategy()
+{
+    m_tool->switchStrategy( new KPrPresentationStrategy( m_tool ) );
 }

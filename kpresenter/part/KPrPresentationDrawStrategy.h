@@ -21,12 +21,18 @@
 
 #include "KPrPresentationStrategyInterface.h"
 
+class KPrPresentationDrawWidget;
+
 class KPrPresentationDrawStrategy : public KPrPresentationStrategyInterface
 {
-public :
+public:
     KPrPresentationDrawStrategy( KPrPresentationTool * tool );
     virtual ~KPrPresentationDrawStrategy();
-    virtual void handleEscape();
+
+    virtual bool keyPressEvent( QKeyEvent * event );
+
+private:
+    KPrPresentationDrawWidget * m_drawWidget;
 };
 
 #endif /* KPRPRESENTATIONDRAWSTRATEGY_H */

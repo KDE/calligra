@@ -23,28 +23,19 @@
 #include "KPrPresentationDrawStrategy.h"
 #include "KPrPresentationViewModeStrategy.h"
 
+#include "KPrPresentationTool.h"
+
 KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
+: KPrPresentationStrategyInterface( tool )
 {
-    m_tool = tool;
 }
 
 KPrPresentationStrategy::~KPrPresentationStrategy()
 {
 }
 
-void KPrPresentationStrategy::handleEscape()
+bool KPrPresentationStrategy::keyPressEvent( QKeyEvent * event )
 {
-    if ( m_tool->getDrawMode() ) {
-        KPrPresentationDrawStrategy m_drawStrategy( m_tool );
-        m_drawStrategy.handleEscape();
-    }
-    else if ( m_tool->getHighlightMode() ) {
-        KPrPresentationHighlightStrategy m_highlightStrategy( m_tool );
-        m_highlightStrategy.handleEscape();
-    }
-    else {
-        KPrPresentationViewModeStrategy m_viewModeStrategy( m_tool );
-        m_viewModeStrategy.handleEscape();
-    }
+    return false;
 }
 

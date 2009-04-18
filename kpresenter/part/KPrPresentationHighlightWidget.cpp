@@ -69,5 +69,6 @@ void KPrPresentationHighlightWidget::mouseMoveEvent( QMouseEvent* e )
     // Save the position of the mouse
     m_center = e->pos();
     // Update the screen : move the circle with a paint event
+    // TODO maybe only update what has changed
     update();
 }
