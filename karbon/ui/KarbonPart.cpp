@@ -373,7 +373,7 @@ uint KarbonPart::maxRecentFiles() const
 void KarbonPart::reorganizeGUI()
 {
     QColor canvasColor = d->canvasColor(this);
-    
+
     foreach ( KoView* view, views() ) {
         KarbonView * kv = qobject_cast<KarbonView*>( view );
         if( kv ) {
