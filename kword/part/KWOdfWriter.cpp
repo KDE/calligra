@@ -31,8 +31,6 @@
 #include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 
-#include <KoTextShapeSavingContext.h>
-
 #include <KoTextShapeData.h>
 #include <KoStyleManager.h>
 #include <KoParagraphStyle.h>
@@ -40,6 +38,7 @@
 #include <KoShapeLayer.h>
 
 #include <KoGenChanges.h>
+#include <KoTextSharedSavingData.h>
 
 #include <KoStoreDevice.h>
 
@@ -63,7 +62,11 @@ QByteArray KWOdfWriter::serializeHeaderFooter(KoEmbeddedDocumentSaver& embeddedS
     buffer.open(QIODevice::WriteOnly);
     KoXmlWriter writer(&buffer);
 
-    KoTextShapeSavingContext context(writer, mainStyles, embeddedSaver, changes);
+    KoShapeSavingContext context(writer, mainStyles, embeddedSaver);
+
+    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
+    sharedData->setGenChanges(changes);
+    context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
 
     Q_ASSERT(!fs->frames().isEmpty());
     KoTextShapeData *shapedata = dynamic_cast<KoTextShapeData *>(fs->frames().first()->shape()->userData());
@@ -209,7 +212,11 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
 
-    KoTextShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver, changes);
+    KoShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver);
+
+    KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
+    sharedData->setGenChanges(changes);
+    context.addSharedData(KOTEXT_SHARED_SAVING_ID, sharedData);
 
     calculateZindexOffsets();
 
