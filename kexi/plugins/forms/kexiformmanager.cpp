@@ -437,7 +437,7 @@ void KexiFormManager::slotHistoryCommandExecuted(K3Command *command)
             ++it;
             const KFormDesigner::PropertyCommand* pc2
                 = dynamic_cast<const KFormDesigner::PropertyCommand*>(*it);
-            if (pc1 && pc2 && pc1->property() == "dataSource" && pc2->property() == "dataSourcePartClass") {
+            if (pc1 && pc2 && pc1->propertyName() == "dataSource" && pc2->propertyName() == "dataSourcePartClass") {
                 const QHash<QByteArray, QVariant>::const_iterator it1(pc1->oldValues().constBegin());
                 const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
                 if (it1.key() == formWidget->objectName() && it2.key() == formWidget->objectName())

@@ -299,8 +299,9 @@ public:
 // moved from WidgetPropertySet
     //! used to update command's value when undoing
     PropertyCommand  *lastCommand;
+    CommandGroup  *lastCommandGroup;
     uint idOfPropertyCommand;
-    GeometryPropertyCommand  *lastGeoCommand;
+//    GeometryPropertyCommand  *lastGeoCommand;
     bool slotPropertyChangedEnabled : 1;
     bool slotPropertyChanged_addCommandEnabled : 1;
     bool insideAddPropertyCommand : 1;
@@ -325,6 +326,7 @@ FormPrivate::FormPrivate(Form *form)
  : state(Form::WidgetSelecting)
  , q(form)
 {
+    commandHistory = 0;
     toplevel = 0;
     topTree = 0;
     widget = 0;
@@ -346,7 +348,8 @@ FormPrivate::FormPrivate(Form *form)
 
 // moved from WidgetPropertySet
     lastCommand = 0;
-    lastGeoCommand = 0;
+    lastCommandGroup = 0;
+//    lastGeoCommand = 0;
     isUndoing = false;
     slotPropertyChangedEnabled = true;
     slotPropertyChanged_addCommandEnabled = true;
@@ -877,6 +880,38 @@ void Form::selectWidget(QWidget *w, WidgetSelectionFlags flags)
 
     if (w && w != widget())
         d->resizeHandles.insert(w->objectName(), new ResizeHandleSet(w, this));
+}
+
+void Form::selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags)
+{
+    int i = 0;
+    const int count = widgets.count();
+    foreach (QWidget* widget, widgets) {
+        if (i == 1) {
+            flags |= AddToPreviousSelection;
+        }
+        if (i == (count - 1)) {
+            flags = LastSelection;
+        }
+        selectWidget(widget, flags);
+    }
+}
+
+QList<QWidget*> Form::widgetsForNames(const QList<QByteArray>& names) const
+{
+    QList<QWidget*> widgets;
+    foreach (const QByteArray& name, names) {
+        ObjectTreeItem* item = objectTree()->lookup(name);
+        if (item) { //we're checking for item!=0 because the name could be of a form widget
+            widgets.append(item->widget());
+        }
+    }
+    return widgets;
+}
+
+void Form::selectWidgets(const QList<QByteArray>& names, WidgetSelectionFlags flags)
+{
+    selectWidgets(widgetsForNames(names), flags);
 }
 
 bool Form::isTopLevelWidget(QWidget *w) const
@@ -1630,6 +1665,10 @@ void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
                               const QVariant &value, const QByteArray &propertyName,
                               bool execute, uint idOfPropertyCommand)
 {
+    QHash<QByteArray, QVariant> oldValues;
+    oldValues.insert(wname, oldValue);
+    addPropertyCommand(oldValues, value, propertyName, execute, idOfPropertyCommand);
+#if 0 moved
     kDebug() << d->propertySet[propertyName];
     kDebug() << "oldValue:" << oldValue << "value:" << value;
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
@@ -1649,15 +1688,58 @@ void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
         d->idOfPropertyCommand = idOfPropertyCommand;
     }
     d->insideAddPropertyCommand = false;
+#endif
 }
 
 void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
-                    const QVariant &value, const QByteArray &propertyName, bool execute)
+                              const QVariant &value, const QByteArray &propertyName,
+                              bool execute, uint idOfPropertyCommand)
 {
     kDebug() << d->propertySet[propertyName];
+    kDebug() << "oldValue:" << oldValues << "value:" << value;
+    kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
     d->insideAddPropertyCommand = true;
-    d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
-    addCommand(d->lastCommand, execute);
+    PropertyCommand *presentCommand = dynamic_cast<PropertyCommand*>( d->commandHistory->presentCommand() );
+    if (   presentCommand
+        && d->lastCommand == presentCommand
+        && idOfPropertyCommand > 0
+        && d->idOfPropertyCommand == idOfPropertyCommand)
+    {
+        d->lastCommand->setValue(value); // just change the value, 
+                                         // to avoid multiple PropertyCommands that only differ by value
+    }
+    else {
+        d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
+        addCommand(d->lastCommand, execute);
+        d->idOfPropertyCommand = idOfPropertyCommand;
+    }
+    d->insideAddPropertyCommand = false;
+}
+
+void Form::addPropertyCommandGroup(CommandGroup *commandGroup,
+                                   bool execute, uint idOfPropertyCommand)
+{
+    if (!commandGroup || commandGroup->commands().isEmpty())
+        return;
+    kDebug() << "count:" << commandGroup->commands().count();
+    kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
+    d->insideAddPropertyCommand = true;
+    CommandGroup *presentCommand = dynamic_cast<CommandGroup*>( d->commandHistory->presentCommand() );
+    if (   presentCommand
+        && d->lastCommandGroup == presentCommand
+        && idOfPropertyCommand > 0
+        && d->idOfPropertyCommand == idOfPropertyCommand)
+    {
+        presentCommand->copyPropertyValuesFrom(*commandGroup); // just change the values, 
+                                                       // to avoid multiple CommandsGroups
+                                                       // that only differ by values
+        delete commandGroup;
+    }
+    else {
+        d->lastCommandGroup = commandGroup;
+        addCommand(d->lastCommandGroup, execute);
+        d->idOfPropertyCommand = idOfPropertyCommand;
+    }
     d->insideAddPropertyCommand = false;
 }
 
@@ -1707,7 +1789,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
     if (d->isUndoing && !d->isRedoing) // && !d->insideAddPropertyCommand)
         return;
 
-    const bool alterLastCommand = d->lastCommand && d->lastCommand->property() == property;
+    const bool alterLastCommand = d->lastCommand && d->lastCommand->propertyName() == property;
 
     if (d->selected.count() == 1) { // one widget selected
         // If the last command is the same, we just change its value
@@ -1872,7 +1954,8 @@ void Form::addWidget(QWidget *w)
 
     // Reset some stuff
     d->lastCommand = 0;
-    d->lastGeoCommand = 0;
+    d->lastCommandGroup = 0;
+    //d->lastGeoCommand = 0;
 //    d->properties.clear();
 
     QByteArray classname;
@@ -2919,7 +3002,7 @@ void Form::saveAlignProperty(const QString &property)
         return;
     }
 
-    if (d->lastCommand && d->lastCommand->property() == "alignment") {
+    if (d->lastCommand && d->lastCommand->propertyName() == "alignment") {
         d->lastCommand->setValue(valueForKeys);
     }
     else {
@@ -2984,7 +3067,7 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     if (prop == "layout") {
         LayoutType type = Container::stringToLayoutType(value.toString());
 
-        if (d->lastCommand && d->lastCommand->property() == "layout" && !d->isUndoing) {
+        if (d->lastCommand && d->lastCommand->propertyName() == "layout" && !d->isUndoing) {
             d->lastCommand->setValue(value);
         }
         else if (!d->isUndoing)  {
@@ -3022,7 +3105,7 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
     if (d->isUndoing)
         return;
 
-    if (d->lastCommand && (QString(d->lastCommand->property()) == prop)) {
+    if (d->lastCommand && (QString(d->lastCommand->propertyName()) == prop)) {
         d->lastCommand->setValue(value);
     }
     else  {
@@ -3104,6 +3187,7 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
         }
     }
     d->lastCommand = 0;
+    d->lastCommandGroup = 0;
     if (addToActiveForm) {
         addCommand(group, false/*no exec*/);
     }

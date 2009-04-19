@@ -253,12 +253,24 @@ public:
     of calling directly actionCollection()->addCommand(). */
     void addCommand(K3Command *command, bool execute);
 
+    //! Creates a new PropertyCommand object and adds it to the undo/redo stack.
+    /*! Takes care about the case when the same property of the same object is changed
+     one-after-one. In this case only value of the present command on stack is changed.  */
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
                             const QVariant &value, const QByteArray &propertyName, 
                             bool execute, uint idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
-                            const QVariant &value, const QByteArray &propertyName, bool execute);
+                            const QVariant &value, const QByteArray &propertyName,
+                            bool execute, uint idOfPropertyCommand = 0);
+
+    //! Adds @a commandGroup to the undo/redo stack.
+    /*! Assuming the @a commandGroup contains PropertyCommand objects, the method takes care
+     about the case when the same properties of the same list of objects is changed
+     one-after-one. In this case only values of the command in the present command group 
+     on the stack are changed and @a commandGroup is deleted.*/
+    void addPropertyCommandGroup(CommandGroup *commandGroup,
+                                 bool execute, uint idOfPropertyCommand = 0);
 
     /*! Clears form's command history. */
     void clearCommandHistory();
@@ -367,6 +379,9 @@ public:
      to the menu item or the toolbar button clicked. */
     QByteArray selectedClass() const;
 
+    /*! @return widgets list for names @a names. Form widget, if present is omitted. */
+    QList<QWidget*> widgetsForNames(const QList<QByteArray>& names) const;
+
     /*! Enables or disables actions \a name. */
 //removed, use action(name)->setEnabled(..)
 //    void enableAction(const char* name, bool enable);
@@ -409,15 +424,19 @@ public slots:
      */
     void changeName(const QByteArray &oldname, const QByteArray &newname);
 
-    /*! Sets \a selected to be the selected widget of this Form.
-     If \a add is true, the formerly selected widget is still selected,
-     and the new one is just added. If false, \a selected replace the actually selected widget.
-     The form widget is always selected alone.
-     \a moreWillBeSelected indicates whether more widgets will be selected soon
-     (so for multiselection we should not update the property pane before the last widget is selected) */
+    /*! Sets @a selected to be the selected widget of this Form.
+     The form widget is always selected alone. */
     void selectWidget(QWidget *selected, WidgetSelectionFlags flags = DefaultWidgetSelectionFlags);
 //prev    void setSelectedWidget(QWidget *selected, bool add = false, bool dontRaise = false,
 //prev                           bool moreWillBeSelected = false);
+
+    /*! Sets all widgets @a widgets to be the selected for this Form. 
+     Form widget, if present is omitted. */
+    void selectWidgets(const QList<QWidget*>& widgets, WidgetSelectionFlags flags);
+
+    /*! Sets all widgets with @a names to be the selected for this Form. 
+     Form widget, if present is omitted. */
+    void selectWidgets(const QList<QByteArray>& names, WidgetSelectionFlags flags);
 
     /*! Removes selection for widget \a w. 
      The widget is removed from the Container's list

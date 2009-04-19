@@ -63,6 +63,13 @@ Command::~Command()
 {
 }
 
+//! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const Command &c)
+{
+    dbg.nospace() << "Command";
+    return dbg.space();
+}
+
 // PropertyCommand
 
 namespace KFormDesigner
@@ -82,7 +89,8 @@ public:
 }
 
 PropertyCommand::PropertyCommand(Form& form, const QByteArray &wname,
-                                 const QVariant &oldValue, const QVariant &value, const QByteArray &propertyName)
+                                 const QVariant &oldValue, const QVariant &value,
+                                 const QByteArray &propertyName)
         : Command(), d( new Private )
 {
     d->form = &form;
@@ -136,13 +144,30 @@ void PropertyCommand::execute()
     d->form->setUndoing(true);
 
     if (reSelectWidgets) {
-        foreach (const QByteArray& name, d->oldValues.keys()) {
+        d->form->selectWidgets(d->oldValues.keys(), Form::ReplacePreviousSelection);
+/*        foreach (const QByteArray& name, d->oldValues.keys()) {
             ObjectTreeItem* item = d->form->objectTree()->lookup(name);
             if (item) { //we're checking for item!=0 because the name could be of a form widget
                 d->form->selectWidget(item->widget(), Form::AddToPreviousSelection | Form::LastSelection);
             }
-        }
+        }*/
     }
+
+//    if (d->oldValues.count() > 1) {
+        // set property for multiple widgets
+        for (QHash<QByteArray, QVariant>::ConstIterator oldValuesIt( d->oldValues.constBegin() );
+             oldValuesIt != d->oldValues.constEnd(); ++oldValuesIt)
+        {
+            ObjectTreeItem* item = d->form->objectTree()->lookup(oldValuesIt.key());
+            if (item) { //we're checking for item!=0 because the name could be of a form widget
+                QWidget *widget = item->widget();
+                WidgetWithSubpropertiesInterface* subpropIface = dynamic_cast<WidgetWithSubpropertiesInterface*>(widget);
+                QWidget *subWidget = (subpropIface && subpropIface->subwidget()) ? subpropIface->subwidget() : widget;
+                if (-1 != KexiUtils::indexOfPropertyWithSuperclasses(subWidget, d->propertyName))
+                  item->widget()->setProperty(d->propertyName, d->value);
+            }
+        }
+//    }
 
     d->form->propertySet().changeProperty(d->propertyName, d->value);
     d->form->setUndoing(false);
@@ -180,7 +205,7 @@ QString PropertyCommand::name() const
                     QString(d->propertyName), QString(d->oldValues.constBegin().key()));
 }
 
-QByteArray PropertyCommand::property() const
+QByteArray PropertyCommand::propertyName() const
 {
     return d->propertyName;
 }
@@ -190,10 +215,18 @@ const QHash<QByteArray, QVariant>& PropertyCommand::oldValues() const
     return d->oldValues;
 }
 
-void PropertyCommand::debug()
+QByteArray PropertyCommand::widgetName() const
 {
-    kDebug() << "name=\"" << name() << "\" widgets=" << d->oldValues.keys()
-        << " value=" << d->value << " oldValues=" << d->oldValues.values();
+    if (d->oldValues.count() != 1)
+        return QByteArray();
+    return d->oldValues.keys().first();
+}
+
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PropertyCommand &c)
+{
+    dbg.nospace() << "PropertyCommand name=\"" << c.name() << "\" widgets=" << c.oldValues().keys()
+        << " value=" << c.value() << " oldValues=" << c.oldValues().values();
+    return dbg.space();
 }
 
 // GeometryPropertyCommand (for multiple widgets)
@@ -262,10 +295,20 @@ void GeometryPropertyCommand::unexecute()
     d->form->setUndoing(false);
 }
 
+QPoint GeometryPropertyCommand::pos() const
+{
+    return d->pos;
+}
+
 void GeometryPropertyCommand::setPos(const QPoint& pos)
 {
     d->pos = pos;
 // moved    emit d->form->modified();
+}
+
+QPoint GeometryPropertyCommand::oldPos() const
+{
+    return d->oldPos;
 }
 
 QString GeometryPropertyCommand::name() const
@@ -273,10 +316,11 @@ QString GeometryPropertyCommand::name() const
     return i18n("Move multiple widgets");
 }
 
-void GeometryPropertyCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const GeometryPropertyCommand &c)
 {
-    kDebug() << "pos=" << d->pos << " oldPos=" << d->oldPos
-        << " widgets=" << d->names;
+    dbg.nospace() << "GeometryPropertyCommand pos=" << c.pos() << " oldPos=" << c.oldPos()
+        << " widgets=" << c.d->names;
+    return dbg.space();
 }
 
 /////////////////  AlignWidgetsCommand  ////////
@@ -424,10 +468,11 @@ QString AlignWidgetsCommand::name() const
     return QString();
 }
 
-void AlignWidgetsCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AlignWidgetsCommand &c)
 {
-    kDebug() << "name=\"" << name() << "\" form=" << d->form->widget()->objectName()
-        << " widgets=" << d->pos.keys();
+    dbg.nospace() << "AlignWidgetsCommand name=\"" << c.name() << "\" form=" << c.d->form->widget()->objectName()
+        << " widgets=" << c.d->pos.keys();
+    return dbg.space();
 }
 
 ///// AdjustSizeCommand ///////////
@@ -659,10 +704,11 @@ QString AdjustSizeCommand::name() const
     return QString();
 }
 
-void AdjustSizeCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const AdjustSizeCommand &c)
 {
-    kDebug() << "name=\"" << name() << "\" form="
-        << d->form->widget()->objectName() << " widgets=" << d->sizes.keys();
+    dbg.nospace() << "AdjustSizeCommand name=\"" << c.name() << "\" form="
+        << c.d->form->widget()->objectName() << " widgets=" << c.d->sizes.keys();
+    return dbg.space();
 }
 
 // LayoutPropertyCommand
@@ -730,10 +776,11 @@ QString LayoutPropertyCommand::name() const
     return i18n("Change layout of widget \"%1\"", QString(oldValues().constBegin().key()));
 }
 
-void LayoutPropertyCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const LayoutPropertyCommand &c)
 {
-    kDebug() << "name=\"" << name() << "\" oldValues=" << oldValues().keys()
-        << " value=" << value();
+    dbg.nospace() << "LayoutPropertyCommand name=\"" << c.name() << "\" oldValues=" << c.oldValues().keys()
+        << " value=" << c.value();
+    return dbg.space();
 }
 
 // InsertWidgetCommand
@@ -928,12 +975,13 @@ QString InsertWidgetCommand::name() const
         return i18n("Insert widget");
 }
 
-void InsertWidgetCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const InsertWidgetCommand &c)
 {
-    kDebug() << "name=\"" << name() << "\" generatedName=" << d->widgetName
-        << " container=" << d->containerName
-        << " form=" << d->form->widget()->objectName() << " class=" << d->_class
-        << " rect=" << d->insertRect << " pos=" << d->pos;
+    dbg.nospace() << "InsertWidgetCommand name=\"" << c.name() << "\" generatedName=" << c.d->widgetName
+        << " container=" << c.d->containerName
+        << " form=" << c.d->form->widget()->objectName() << " class=" << c.d->_class
+        << " rect=" << c.d->insertRect << " pos=" << c.d->pos;
+    return dbg.space();
 }
 
 QByteArray InsertWidgetCommand::widgetName() const {
@@ -1130,11 +1178,12 @@ QString CreateLayoutCommand::name() const
     }
 }
 
-void CreateLayoutCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CreateLayoutCommand &c)
 {
-    kDebug() << "name=\"" << name() << "\" generatedName=" << d->name
-        << " widgets=" << d->pos.keys() << " container=" << d->containerName
-        << " form=" << d->form->widget()->objectName();
+    dbg.nospace() << "CreateLayoutCommand name=\"" << c.name() << "\" generatedName=" << c.d->name
+        << " widgets=" << c.d->pos.keys() << " container=" << c.d->containerName
+        << " form=" << c.d->form->widget()->objectName();
+    return dbg.space();
 }
 
 /// BreakLayoutCommand ///////////////
@@ -1175,11 +1224,12 @@ QString BreakLayoutCommand::name() const
     return i18n("Break Layout: \"%1\"", d->name);
 }
 
-void BreakLayoutCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const BreakLayoutCommand &c)
 {
-    kDebug() << "name=\"" << name()
-        << " widgets=" << d->pos.keys() << " container=" << d->containerName
-        << " form=" << d->form->widget()->objectName();
+    dbg.nospace() << "BreakLayoutCommand name=\"" << c.name()
+        << " widgets=" << c.d->pos.keys() << " container=" << c.d->containerName
+        << " form=" << c.d->form->widget()->objectName();
+    return dbg.space();
 }
 
 // PasteWidgetCommand
@@ -1536,12 +1586,13 @@ PasteWidgetCommand::fixNames(QDomElement &el)
     }
 }
 
-void PasteWidgetCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const PasteWidgetCommand &c)
 {
-    kDebug() << "pos=" << d->pos
-        << " widgets=" << d->names << " container=" << d->containerName
-        << " form=" << d->form->widget()->objectName()
-        << " data=\"" << d->data.left(80) << "...\"";
+    dbg.nospace() << "PasteWidgetCommand pos=" << c.d->pos
+        << " widgets=" << c.d->names << " container=" << c.d->containerName
+        << " form=" << c.d->form->widget()->objectName()
+        << " data=\"" << c.d->data.left(80) << "...\"";
+    return dbg.space();
 }
 
 // DeleteWidgetCommand
@@ -1663,10 +1714,11 @@ QString DeleteWidgetCommand::name() const
     return i18n("Delete widget");
 }
 
-void DeleteWidgetCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DeleteWidgetCommand &c)
 {
-    kDebug() << "containers=" << d->containers.keys()
-        << " parents=" << d->parents.keys() << " form=" << d->form->widget()->objectName();
+    dbg.nospace() << "DeleteWidgetCommand containers=" << c.d->containers.keys()
+        << " parents=" << c.d->parents.keys() << " form=" << c.d->form->widget()->objectName();
+    return dbg.space();
 }
 
 // DuplicateWidgetCommand
@@ -1727,10 +1779,11 @@ QString DuplicateWidgetCommand::name() const
     return i18n("Duplicate widget");
 }
 
-void DuplicateWidgetCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const DuplicateWidgetCommand &c)
 {
-    kDebug() << "containers=" << d->containers.keys()
-        << " parents=" << d->parents.keys() << " form=" << d->form->widget()->objectName();
+    dbg.nospace() << "DuplicateWidgetCommand containers=" << c.d->containers.keys()
+        << " parents=" << c.d->parents.keys() << " form=" << c.d->form->widget()->objectName();
+    return dbg.space();
 }
 
 // CutWidgetCommand
@@ -1785,11 +1838,12 @@ QString CutWidgetCommand::name() const
     return i18n("Cut");
 }
 
-void CutWidgetCommand::debug()
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CutWidgetCommand &c)
 {
-    kDebug() << "containers=" << d->containers.keys()
-        << " parents=" << d->parents.keys() << " form=" << d->form->widget()->objectName()
-        << " data=\"" << d2->data->text().left(80) << "...\"";
+    dbg.nospace() << "CutWidgetCommand containers=" << c.d->containers.keys()
+        << " parents=" << c.d->parents.keys() << " form=" << c.d->form->widget()->objectName()
+        << " data=\"" << c.d2->data->text().left(80) + "...\"";
+    return dbg.space();
 }
 
 // CommandGroup
@@ -1883,23 +1937,106 @@ void CommandGroup::resetAllowExecuteFlags()
     d->commandsShouldntBeExecuted.clear();
 }
 
-void CommandGroup::debug()
+bool CommandGroup::copyPropertyValuesFrom(const CommandGroup &commandGroup)
 {
-    kDebug() << "name=\"" << name() << "\" #=" << d->subCommands.commands().count();
-    uint i = 0;
-    foreach(K3Command* command, d->subCommands.commands()) {
-        i++;
-        kDebug() << "#" << i << ":"
-            << (d->commandsShouldntBeExecuted.contains(command) ? "!" : "") << "allowExecute:";
-        if (dynamic_cast<Command*>(command)) {
-            dynamic_cast<Command*>(command)->debug();
+    const QList<K3Command*> theseCommands( commands() );
+    kDebug() << "Values to copy:" << theseCommands.count();
+    QList<K3Command*>::ConstIterator theseCommandsIt(theseCommands.constBegin());
+    const QList<K3Command*> otherCommands( commandGroup.commands() );
+    QList<K3Command*>::ConstIterator otherCommandsIt(otherCommands.constBegin());
+    // 1. check
+    for (;;++theseCommandsIt, ++otherCommandsIt) {
+        const bool theseCommandsEnd = theseCommandsIt == theseCommands.constEnd();
+        const bool otherCommandsEnd = otherCommandsIt == otherCommands.constEnd();
+        if (theseCommandsEnd != otherCommandsEnd) {
+            kWarning() << "Cannot copy properties: number of widgets differ\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
         }
-        else if (dynamic_cast<CommandGroup*>(command)) {
-            dynamic_cast<CommandGroup*>(command)->debug();
+        if (theseCommandsEnd == true)
+            break;
+        PropertyCommand *thisPropertyCommand = dynamic_cast<PropertyCommand*>( *theseCommandsIt );
+        if (!thisPropertyCommand) {
+            kWarning() << "This command is not of PropertyCommand class\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
         }
-        else {
-            kDebug() << "(other KCommand)";
+        const PropertyCommand *otherPropertyCommand = dynamic_cast<PropertyCommand*>( *otherCommandsIt );
+        if (!otherPropertyCommand) {
+            kWarning() << "Other command is not of PropertyCommand class\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
+        }
+        if (thisPropertyCommand->propertyName() != otherPropertyCommand->propertyName()) {
+            kWarning() << "Name of this and the other property does not match\n"
+                << "this command=" << *thisPropertyCommand << "\n"
+                << "other command=" << *otherPropertyCommand << "\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
+        }
+        if (thisPropertyCommand->widgetName().isEmpty()) {
+            kWarning() << "Single widget of this property command not found\n"
+                << "this command=" << *thisPropertyCommand << "\n"
+                << "other command=" << *otherPropertyCommand << "\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
+        }
+        if (otherPropertyCommand->widgetName().isEmpty()) {
+            kWarning() << "Single widget of other property command not found\n"
+                << "this command=" << *thisPropertyCommand << "\n"
+                << "other command=" << *otherPropertyCommand << "\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
+        }
+        if (thisPropertyCommand->widgetName() != otherPropertyCommand->widgetName()) {
+            kWarning() << "Name of the single widget of this property command differs "
+                          "from the name of the other property command\n"
+                << "this command=" << *thisPropertyCommand << "\n"
+                << "other command=" << *otherPropertyCommand << "\n"
+                << "this command group=" << *this << "\n"
+                << "other command group=" << commandGroup;
+            return false;
         }
     }
-    kDebug() << "End of CommandGroup";
+
+    // 2. copy
+    theseCommandsIt = theseCommands.constBegin();
+    otherCommandsIt = otherCommands.constBegin();
+    for (; theseCommandsIt!=theseCommands.constEnd(); ++theseCommandsIt, ++otherCommandsIt) {
+        PropertyCommand *thisPropertyCommand = dynamic_cast<PropertyCommand*>( *theseCommandsIt );
+        const PropertyCommand *otherPropertyCommand = dynamic_cast<PropertyCommand*>( *otherCommandsIt );
+        kDebug() << "Change value of property" << thisPropertyCommand->propertyName() << "(widget"
+            << thisPropertyCommand->widgetName() << ") from" << thisPropertyCommand->value()
+            << "to" << otherPropertyCommand->value();
+        thisPropertyCommand->setValue( otherPropertyCommand->value() );
+    }
+    return true;
+}
+
+KFORMEDITOR_EXPORT QDebug KFormDesigner::operator<<(QDebug dbg, const CommandGroup &c)
+{
+    dbg.nospace() << "CommandGroup: name=\"" << c.name() << "\" #=" << c.d->subCommands.commands().count();
+    uint i = 0;
+    foreach(K3Command* command, c.d->subCommands.commands()) {
+        i++;
+        dbg.nospace() << "\n#" << i << ":"
+            << (c.d->commandsShouldntBeExecuted.contains(command) ? "!" : "") << "allowExecute:";
+        if (dynamic_cast<Command*>(command)) {
+            dbg.nospace() << *dynamic_cast<Command*>(command);
+        }
+        else if (dynamic_cast<CommandGroup*>(command)) {
+            dbg.nospace() << *dynamic_cast<CommandGroup*>(command);
+        }
+        else {
+            dbg.nospace() << "(other KCommand)";
+        }
+    }
+    dbg.nospace() << "\nEnd of CommandGroup";
+    return dbg.space();
 }

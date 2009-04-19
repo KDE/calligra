@@ -1388,6 +1388,7 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             dy = qMin(w->parentWidget()->height() - gridY - w->y(), dy);
     }
 
+    CommandGroup *commandGroup = 0;
     foreach (QWidget *w, *d->form->selectedWidgets()) {
         // Don't move tab widget pages (or widget stack pages)
         if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QStackedWidget"))
@@ -1413,22 +1414,30 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
         }
 
         if ((tmpx != w->x()) || (tmpy != w->y())) {
+            QRect g(w->geometry());
+            g.moveTo(tmpx, tmpy);
             if (d->form->selectedWidget()) {
                 // single widget
-                QRect g(w->geometry());
-                g.moveTo(tmpx, tmpy);
                 d->form->addPropertyCommand(w->objectName().toLatin1(), w->geometry(),
                                             g, "geometry", true /*execute*/,
                                             d->idOfPropertyCommand);
                 w->move(tmpx, tmpy);
             }
             else {
-                //todo
+                // multiple widgets: group them
+                PropertyCommand *propCmd = new PropertyCommand(*d->form, w->objectName().toLatin1(), w->geometry(), g, "geometry");
+                if (!commandGroup) {
+                    commandGroup = new CommandGroup(*d->form, i18n("Move multiple widgets"));
+                }
+                commandGroup->addCommand(propCmd, true /*allowExecute*/);
                 w->move(tmpx, tmpy);
             }
         }
     }
 
+    if (commandGroup) {
+        d->form->addPropertyCommandGroup(commandGroup, false /* !execute */, d->idOfPropertyCommand);
+    }
 }
 
 void Container::stopInlineEditing()
