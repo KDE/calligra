@@ -40,6 +40,19 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+
+2009-04-16..19
+Forms
+- added undo/redo actions for moving widgets (one or more)
+- on moving widget: just change the value of "geometry" property, to avoid multiple PropertyCommands that only differ by value
+= PropertyCommand::property() -> PropertyCommand::propertyName()
+= added operator<< for kDebug() for *Command classes
+
+2009-04-15
+Forms
+- design mode: fix random dragging of the selected widget(s) when click+dragging
+  the mouse outside of the popup menu (at least on Windows)
+
 2009-04-12
 Main Window
 = remove undo/redo actions from the global toolbar
