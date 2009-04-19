@@ -46,7 +46,6 @@ public:
         connect(m_doc, SIGNAL(contentsChange(int, int, int)), this, SIGNAL(contentsChanged(int, int, int)));
         connect(m_doc, SIGNAL(cursorPositionChanged(const QTextCursor&)), this, SIGNAL(cursorPositionChanged()));
         connect(m_doc->documentLayout(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SIGNAL(documentSizeChanged()));
-        connect(m_doc->documentLayout(), SIGNAL(pageCountChanged(int)), this, SIGNAL(pageCountChanged()));
     }
     virtual ~TextDocument() {}
 
@@ -69,10 +68,6 @@ public slots:
     /** Return the height of the document in pt. */
     virtual qreal height() const {
         return m_doc->documentLayout()->documentSize().height();
-    }
-    /** Return the number of pages the document has. */
-    virtual int pageCount() const {
-        return m_doc->documentLayout()->pageCount();
     }
     /** Return true if the document was modified else false is returned. */
     bool isModified() const {
@@ -183,8 +178,6 @@ signals:
     void cursorPositionChanged();
     /** This signal is emitted if the size of the document changed. */
     void documentSizeChanged();
-    /** This signal is emitted if the number of pages changed. */
-    void pageCountChanged();
 
 private:
     QPointer<QTextDocument> m_doc;
