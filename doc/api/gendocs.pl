@@ -128,7 +128,7 @@ $browsingHtmlClose = "</font></td></tr></body></html>\n";
 open(FILE, ">$rootdir/doc/api/packages.html");
 print FILE "$browsingHtml";
 foreach $section (@sections) {
-    $sect=$section;
+    my $sect=$section;
     $sect=~s/\//-/g;
     $sect=~s/-$//;
     $packages{$sect}= "<a href=\"$sect/annotated.html\" target=\"main\">$section</a><br>\n";
@@ -159,7 +159,10 @@ print FILE "<html><head><title>$project API docs</title><frameset cols=\"20%,80%
 
 if ($#sections == 0) { # remove 'packages' frameset when there is only one section
     print FILE "<frame src=\"allClasses-light.html\">";
-    print FILE "<frame src=\"$sections[0]/index.html\" name=\"main\">";
+    my $section = $sections[0];
+    $section=~s/\//-/g;
+    $section=~s/-$//;
+    print FILE "<frame src=\"$section/index.html\" name=\"main\">";
 } else {
     print FILE "<frameset rows=\"30%,70%\"><frame src=\"packages.html\">";
     print FILE "<frame src=\"allClasses-light.html\">";
@@ -212,17 +215,6 @@ sub alterConf() {
 sub createConf() {
     my $name = shift(@_);
     open FILE, ">$doxygenconftmp";
-
-    # copy arguments from Mainpage.dox
-    open INPUT, "Mainpage.dox";
-    my $comment=0;
-    foreach $in (<INPUT>) {
-        if($in=~/\/\*/) { $comment=1; }
-        if($in=~/\*\//) {$comment=0; next; }
-        if($comment == 1) { next; }
-        $in=~s/^\/\/\s*//;
-        print FILE $in;
-    }
 
     print FILE "INPUT=";
     dirs: foreach $dir (@_) {
@@ -407,6 +399,18 @@ sub createConf() {
     #print FILE "GENERATE_LEGEND=YES\n";
     #print FILE "DOT_CLEANUP=YES\n";
     #print FILE "SEARCHENGINE=NO\n";
+
+    # copy arguments from Mainpage.dox
+    open INPUT, "Mainpage.dox";
+    my $comment=0;
+    foreach $in (<INPUT>) {
+        if($in=~/\/\*/) { $comment=1; }
+        if($in=~/\*\//) {$comment=0; next; }
+        if($comment == 1) { next; }
+        $in=~s/^\/\/\s*//;
+        print FILE $in;
+    }
+
     close FILE;
 }
 
