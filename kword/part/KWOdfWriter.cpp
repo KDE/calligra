@@ -36,6 +36,8 @@
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
 
+#include <KoStoreDevice.h>
+
 #include <QBuffer>
 #include <QTextCursor>
 #include <KDebug>
@@ -160,7 +162,19 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     //kDebug(32001) << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
     KoStore * store = odfStore.store();
+
+    if ( ! store->open( "settings.xml" ) ) {
+        return false;
+    }
+
+    saveOdfSettings( store );
+
+    if(!store->close())
+        return false;
+
     KoXmlWriter * manifestWriter = odfStore.manifestWriter();
+
+    manifestWriter->addManifestEntry( "settings.xml", "text/xml" );
 
     KoXmlWriter* contentWriter = odfStore.contentWriter();
     if (!contentWriter)
@@ -356,6 +370,45 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     return true;
 }
 
+bool KWOdfWriter::saveOdfSettings(KoStore *store)
+{
+    KoStoreDevice settingsDev( store );
+    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings" );
+
+    // add this so that OOo reads guides lines and grid data from ooo:view-settings
+    settingsWriter->addAttribute( "xmlns:ooo", "http://openoffice.org/2004/office" );
+
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
+
+    KoUnit::saveOdf( settingsWriter, m_document->unit() );
+
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:view-settings");
+    settingsWriter->startElement("config:config-item-map-indexed" );
+    settingsWriter->addAttribute("config:name", "Views" );
+    settingsWriter->startElement("config:config-item-map-entry" );
+
+    m_document->guidesData().saveOdfSettings( *settingsWriter );
+    m_document->gridData().saveOdfSettings( *settingsWriter );
+
+    settingsWriter->endElement(); // config:config-item-map-entry
+    settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // office:document-settings
+
+    settingsWriter->endDocument();
+
+    delete settingsWriter;
+
+    return true;
+}
+
 void KWOdfWriter::calculateZindexOffsets()
 {
     Q_ASSERT(m_zIndexOffsets.isEmpty()); // call this method only once, please.
@@ -387,5 +440,4 @@ void KWOdfWriter::addShapeToTree(KoShape *shape)
             addShapeToTree(containerShape);
         }
     }
-
 }

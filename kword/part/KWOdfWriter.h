@@ -67,6 +67,8 @@ private:
     void calculateZindexOffsets();
     void addShapeToTree(KoShape *shape);
 
+    bool saveOdfSettings(KoStore *store);
+
     /// The KWord document.
     KWDocument *m_document;
     QHash<KWPageStyle, QString> masterPages;
