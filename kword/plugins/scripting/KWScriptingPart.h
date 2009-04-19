@@ -26,6 +26,7 @@
 /**
 * The KWScriptingPart class implements a KPart component
 * to integrate scripting into KWord.
+* \internal
 */
 class KWScriptingPart : public KoScriptingPart
 {
