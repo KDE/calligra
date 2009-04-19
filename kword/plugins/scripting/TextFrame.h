@@ -31,6 +31,8 @@ namespace Scripting
 
 /**
 * The TextFrame class represents a frame within a \a TextDocument .
+* Note; this class is likely not very useful to script writers and is considered for
+* removal in a future release of KWord.
 */
 class TextFrame : public QObject
 {

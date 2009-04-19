@@ -1,5 +1,6 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,12 +25,14 @@
 #include <KWFrame.h>
 #include <KoColorBackground.h>
 
+/**
+* \brief This namespace holds all the KWord scripting API.
+*/
 namespace Scripting
 {
 
 /**
-* A frame holds a number of \a Frame (zero or more) objects where
-* each frame holds the content that is displayed on screen.
+* A frame is the container to show content on screen.
 *
 * The following python sample resizes the first frame of a
 * frameset named MyFrameSet to half of it's original size;
@@ -42,7 +45,7 @@ namespace Scripting
 *     raise "The FrameSet has no frames"
 * f = fs.frame(0)
 * f.setSize(f.width()/2.0, f.height()/2.0)
-* \code
+* \endcode
 *
 * The following python sample script does iterate over all frames
 * each frameset has and prints the shape-id;
@@ -59,16 +62,22 @@ class Frame : public QObject
     Q_OBJECT
     Q_ENUMS(TextRunAround)
     Q_ENUMS(FrameBehavior)
+
 public:
     Frame(QObject* parentFrameSet, KWFrame* frame) : QObject(parentFrameSet), m_frame(frame) {}
     virtual ~Frame() {}
 
+    /**
+     * This property specifies how text from a text frame behaves when a frame with
+     * one of these properties set on it intersects with it.
+     */
     enum TextRunAround {
         NoRunAround = KWord::NoRunAround, ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
         RunAround = KWord::RunAround, ///< The text will run around the outline of the frame
         RunThrough = KWord::RunThrough ///< The text will completely ignore the frame and layout as if it was not there
     };
 
+    /// what should happen when the frame is full (too small for its contents)
     enum FrameBehavior {
         AutoExtendFrameBehavior = KWord::AutoExtendFrameBehavior, ///< Make the frame bigger to fit the contents
         AutoCreateNewFrameBehavior = KWord::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page

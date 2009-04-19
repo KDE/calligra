@@ -1,4 +1,5 @@
-/** @mainpage
+/**
+* @mainpage
 *
 * The KWord scripting plugin offers flexible access to the
 * Kross scripting framework. Languages like Python, Ruby or
@@ -14,18 +15,13 @@
 *
 * \see http://techbase.kde.org/Development/Tutorials/KWord_Scripting
 */
-
-ABBREVIATE_BRIEF       = "The $name class" \
-                         "The $name widget" \
-                         "The $name file" \
-                         is \
-                         provides \
-                         specifies \
-                         contains \
-                         represents \
-                         a \
-                         an \
-                         the
-
-INLINE_INHERITED_MEMB  = NO
-
+DETAILS_AT_TOP = YES
+CLASS_DIAGRAMS = NO
+HIDE_UNDOC_MEMBERS = YES
+HIDE_FRIEND_COMPOUNDS  = YES
+HIDE_IN_BODY_DOCS = YES
+HIDE_SCOPE_NAMES = YES
+SHOW_INCLUDE_FILES = NO
+INLINE_INFO = NO
+SHOW_USED_FILES = NO
+EXCLUDE_PATTERNS = *.moc.cpp KW*.h Ko*.h *.py *.rb

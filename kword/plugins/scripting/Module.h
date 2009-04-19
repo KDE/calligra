@@ -33,6 +33,7 @@ namespace Scripting
 /**
 * The Module class enables access to the KWord functionality
 * from within the scripting backends.
+* It will be shown as 'KWord' entity in scripting code.
 *
 * KWord provides as top-level containers the \a FrameSet
 * objects. Each such frameset is then able to contain

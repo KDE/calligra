@@ -42,8 +42,6 @@ public:
     }
 public slots:
 
-    /***** Name *****/
-
     /** Return the user-visible name the character-style has. */
     QString name() const {
         return m_style->name();
@@ -209,7 +207,6 @@ class ParagraphStyle : public QObject
 {
     Q_OBJECT
     Q_ENUMS(Alignment)
-    //Q_ENUMS(BorderStyle)
     Q_ENUMS(ListStyle)
 public:
     ParagraphStyle(QObject* parent, KoParagraphStyle* style) : QObject(parent), m_style(style) {}
@@ -229,22 +226,6 @@ public:
         AlignCenter = Qt::AlignCenter
     };
 
-    /*
-    enum BorderStyle {
-        BorderNone = KoParagraphStyle::BorderNone,
-        BorderDotted = KoParagraphStyle::BorderDotted,
-        BorderDashed = KoParagraphStyle::BorderDashed,
-        BorderSolid = KoParagraphStyle::BorderSolid,
-        BorderDouble = KoParagraphStyle::BorderDouble,
-        BorderGroove = KoParagraphStyle::BorderGroove,
-        BorderRidge = KoParagraphStyle::BorderRidge,
-        BorderInset = KoParagraphStyle::BorderInset,
-        BorderOutset = KoParagraphStyle::BorderOutset,
-        BorderDashDotPattern = KoParagraphStyle::BorderDashDotPattern,
-        BorderDashDotDotPattern = KoParagraphStyle::BorderDashDotDotPattern
-    };
-    */
-
     enum ListStyle {
         None = KoListStyle::None,
         SquareItem = KoListStyle::SquareItem,
@@ -258,7 +239,7 @@ public:
         BoxItem = KoListStyle::BoxItem
     };
 
-public Q_SLOTS:
+public slots:
 
     /***** Name *****/
 
