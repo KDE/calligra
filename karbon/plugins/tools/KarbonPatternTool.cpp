@@ -287,8 +287,8 @@ QMap<QString, QWidget *> KarbonPatternTool::createOptionWidgets()
     connect( chooser, SIGNAL( itemDoubleClicked(QTableWidgetItem*)),
              this, SLOT(patternSelected(QTableWidgetItem*)));
 
-    widgets.insert( "Pattern Options", m_optionsWidget );
-    widgets.insert( "Patterns", chooser );
+    widgets.insert( i18n("Pattern Options"), m_optionsWidget );
+    widgets.insert( i18n("Patterns"), chooser );
 
     updateOptionsWidget();
 
