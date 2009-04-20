@@ -108,7 +108,7 @@ KWTextFrameSet::~KWTextFrameSet()
 void KWTextFrameSet::setupFrame(KWFrame *frame)
 {
     if (m_textFrameSetType != KWord::OtherTextFrameSet)
-        frame->shape()->setLocked(true);
+        frame->shape()->setGeometryProtected(true);
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*>(frame->shape()->userData());
     if (data == 0) {// probably a copy frame.
         Q_ASSERT(frameCount() > 1);
@@ -164,7 +164,7 @@ void KWTextFrameSet::requestMoreFrames(qreal textHeight)
     } else if (lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior && lastFrame->canAutoGrow()) {
         // enlarge last shape
         KoShape *shape = lastFrame->shape();
-        if (shape->isLocked()) { // don't alter a locked shape.
+        if (shape->isGeometryProtected()) { // don't alter a locked shape.
             requestMoreFrames(0);
             return;
         }

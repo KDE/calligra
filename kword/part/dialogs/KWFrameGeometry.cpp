@@ -85,7 +85,7 @@ void KWFrameGeometry::open(KoShape *shape)
     connect(widget.protectSize, SIGNAL(stateChanged(int)),
             this, SLOT(protectSizeChanged(int)));
 
-    if (shape->isLocked()) {
+    if (shape->isGeometryProtected()) {
         widget.protectSize->setCheckState(Qt::Checked);
         KWTextFrame *tf = dynamic_cast<KWTextFrame*>(shape->applicationData());
         if (tf && static_cast<KWTextFrameSet*>(tf->frameSet())->textFrameSetType() != KWord::OtherTextFrameSet)
@@ -124,7 +124,7 @@ void KWFrameGeometry::protectSizeChanged(int protectSizeState)
     }
     Q_ASSERT(frame);
     bool lock = (protectSizeState == Qt::Checked);
-    frame->shape()->setLocked(lock);
+    frame->shape()->setGeometryProtected(lock);
     widget.xPos->setDisabled(lock);
     widget.yPos->setDisabled(lock);
     widget.width->setDisabled(lock);

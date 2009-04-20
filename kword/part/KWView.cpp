@@ -1007,7 +1007,7 @@ void KWView::inlineFrame()
 
     KoShape *targetShape = 0;
     foreach (KoShape *shape, selection->selectedShapes(KoFlake::TopLevelSelection)) {
-        if (shape->isLocked())
+        if (shape->isGeometryProtected())
             continue;
         if (shape->parent())
             continue;
