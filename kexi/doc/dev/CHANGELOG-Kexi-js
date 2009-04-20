@@ -26,13 +26,14 @@ TODO Form editor:
  - add support for paletteForegroundColor and paletteBackgroundColor properties of Kexi 1.x
  - add translation and simplify "textInteractionFlags" for QTextEdit and QLabel
  - move from K3CommandHistory to the QUndo framework
+ - remove m_widget and m_container from WidgetLibrary, otherwise multiple form views won't work in parallel
 
 TODO KoProperty:
 - mising border below the last item when its editor is visible
 - when started to change the editor's value:
 -- "revert" button should appear
 -- if the property has parent, the item for the parent should be repainted
-- (??) fox or reimplement spin box widgets: look bad with oxygen and probably other styles
+- (??) fix or reimplement spin box widgets: look bad with oxygen and probably other styles
 
 TODO:
 - crash in keximainwindow...... create > script > select the interpreter property, and change it from python to qtscript
@@ -40,6 +41,9 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
+2009-04-20
+Forms
+- fixed undo/redo for inline widget's text editing
 
 2009-04-16..19
 Forms

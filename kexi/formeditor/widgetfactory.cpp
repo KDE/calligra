@@ -367,10 +367,12 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
         // resize widget using resize handles
         QWidget *ed = editor(m_widget);
         resizeEditor(ed, m_widget, m_widget->metaObject()->className());
-    } else if ((ev->type() == QEvent::Paint) && (obj == m_widget) && editor(m_widget)) {
+    }
+    else if ((ev->type() == QEvent::Paint) && (obj == m_widget) && editor(m_widget)) {
         // paint event for container edited (eg button group)
         return m_container->eventFilter(obj, ev);
-    } else if ((ev->type() == QEvent::MouseButtonPress) && (obj == m_widget) && editor(m_widget)) {
+    }
+    else if ((ev->type() == QEvent::MouseButtonPress) && (obj == m_widget) && editor(m_widget)) {
         // click outside editor --> cancel editing
         Container *cont = m_container;
         resetEditor();
@@ -385,11 +387,14 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
             return false;
 
         QWidget *focus = w->topLevelWidget()->focusWidget();
-        if (focus && w != focus
-                && !KexiUtils::findFirstChild<QWidget*>(w, focus->objectName().toLatin1(), focus->metaObject()->className())) {
+        if (   focus
+            && w != focus
+            && !KexiUtils::findFirstChild<QWidget*>(w, focus->objectName().toLatin1(), focus->metaObject()->className()))
+        {
             resetEditor();
         }
-    } else if (ev->type() == QEvent::KeyPress) {
+    }
+    else if (ev->type() == QEvent::KeyPress) {
         QWidget *w = editor(m_widget);
         if (!w)
             w = (QWidget *)m_widget;
@@ -397,14 +402,16 @@ WidgetFactory::eventFilter(QObject *obj, QEvent *ev)
             return false;
 
         QKeyEvent *e = static_cast<QKeyEvent*>(ev);
-        if (((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->modifiers() != Qt::AltModifier))
+        if (((e->key() == Qt::Key_Return) || (e->key() == Qt::Key_Enter)) && (e->modifiers() != Qt::AltModifier)) {
             resetEditor();
+        }
         if (e->key() == Qt::Key_Escape) {
             setEditorText(m_firstText);
             //changeText(m_firstText);
             resetEditor();
         }
-    } else if (ev->type() == QEvent::ContextMenu) {
+    }
+    else if (ev->type() == QEvent::ContextMenu) {
         QWidget *w = editor(m_widget);
         if (!w)
             w = (QWidget *)m_widget;
@@ -512,17 +519,18 @@ WidgetFactory::editorDeleted()
 
 void WidgetFactory::changeProperty(const char *name, const QVariant &value, Form *form)
 {
-    if (!form->selectedWidgets()->isEmpty()) { // If eg multiple labels are selected, 
-                                               // we only want to change the text of one of them (the one the user cliked on)
+    if (form->selectedWidget()) { // single selection
+        form->propertySet().changePropertyIfExists(name, value);
+    }
+    else {
+        // If eg multiple labels are selected, 
+        // we only want to change the text of one of them (the one the user cliked on)
         if (m_widget) {
             m_widget->setProperty(name, value);
         }
         else {
             form->selectedWidgets()->first()->setProperty(name, value);
         }
-    }
-    else { // single selection
-        form->propertySet().changePropertyIfExists(name, value);
     }
 }
 
