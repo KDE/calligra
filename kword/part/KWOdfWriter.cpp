@@ -25,6 +25,8 @@
 #include "KWDocument.h"
 #include "KWPage.h"
 
+#include <ktemporaryfile.h>
+
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
 #include <KoXmlWriter.h>
@@ -190,9 +192,16 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     if (!contentWriter)
         return false;
 
-
-    KoXmlWriter* changeWriter = odfStore.changeWriter();
+    KTemporaryFile tmpChangeFile;
+    tmpChangeFile.open();
+    KoXmlWriter *changeWriter = new KoXmlWriter(&tmpChangeFile,1);
     if (!changeWriter)
+        return false;
+
+    KTemporaryFile tmpTextBodyFile;
+    tmpTextBodyFile.open();
+    KoXmlWriter *tmpBodyWriter = new KoXmlWriter(&tmpTextBodyFile, 1);
+    if (!tmpBodyWriter)
         return false;
 
     KoGenStyles mainStyles;
@@ -211,8 +220,10 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     saveHeaderFooter(embeddedSaver, mainStyles, changes);
 
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
+    bodyWriter->startElement("office:body");
+    bodyWriter->startElement("office:text");
 
-    KoShapeSavingContext context(*bodyWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext context(*tmpBodyWriter, mainStyles, embeddedSaver);
 
     KoTextSharedSavingData *sharedData = new KoTextSharedSavingData;
     sharedData->setGenChanges(changes);
@@ -370,12 +381,25 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     bodyWriter->endElement(); // text:page-sequence
 
 
-//    bodyWriter->endElement(); // office:text
-//    bodyWriter->endElement(); // office:body
 
     mainStyles.saveOdfAutomaticStyles(contentWriter, false);
 
     changes.saveOdfChanges(changeWriter);
+
+    delete changeWriter;
+    changeWriter = 0;
+
+    tmpChangeFile.close();
+    bodyWriter->addCompleteElement(&tmpChangeFile);
+
+    delete tmpBodyWriter;
+    tmpBodyWriter = 0;
+
+    tmpTextBodyFile.close();
+    bodyWriter->addCompleteElement(&tmpTextBodyFile);
+
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
 
     odfStore.closeContentWriter();
 
