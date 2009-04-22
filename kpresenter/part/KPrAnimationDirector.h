@@ -25,7 +25,6 @@
 #include <QObject>
 #include <QPair>
 #include <QTimeLine>
-#include <QTime>
 
 #include <KoZoomHandler.h>
 
