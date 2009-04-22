@@ -381,7 +381,7 @@ void KarbonGradientTool::initialize()
     foreach( GradientStrategy * strategy, strategies )
     {
         // is this gradient shape still selected ?
-        if( ! selectedShapes.contains( strategy->shape() ) )
+        if( ! selectedShapes.contains( strategy->shape() ) || ! strategy->shape()->isEditable() )
         {
             m_strategies.remove( strategy->shape(), strategy );
             delete strategy;
@@ -422,6 +422,9 @@ void KarbonGradientTool::initialize()
     // now create new strategies if needed
     foreach( KoShape * shape, selectedShapes )
     {
+        if( ! shape->isEditable() )
+            continue;
+        
         bool strokeExists = false;
         bool fillExists = false;
         // check which gradient strategies exist for this shape
