@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Alexia Allanic <alexia_allanic@yahoo.fr>
+ * Copyright (C) 2009 Jérémy Lugagne <jejewindsurf@hotmail.com>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,10 +21,14 @@
 #include "KPrPresentationDrawStrategy.h"
 
 #include <QKeyEvent>
+#include <QApplication>
+
+#include <kiconloader.h>
 
 #include <KoPACanvas.h>
 
 #include "KPrPresentationTool.h"
+#include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawStrategy::KPrPresentationDrawStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyInterface( tool )

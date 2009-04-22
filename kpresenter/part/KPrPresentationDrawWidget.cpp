@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2009 Alexia Allanic <alexia_allanic@yahoo.fr>
+ * Copyright (C) 2009 Jérémy Lugagne <jejewindsurf@hotmail.com>
+ * Copyright (C) 2009 Johann Hingue <yoan1703@hotmail.fr>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,31 +25,28 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QMenu>
-
+#include <QList>
 #include <QMenu>
 #include <QIcon>
 
 #include <klocale.h>
-#include <KoPACanvas.h>
-#include <KoPointerEvent.h>
 #include <kdebug.h>
 
-#include <QList>
+#include <KoPACanvas.h>
+#include <KoPointerEvent.h>
 
 #include "KPrPresentationDrawWidget.h"
 
 KPrPresentationDrawWidget::KPrPresentationDrawWidget(KoPACanvas * canvas)
 : QWidget(canvas)
+, m_draw( false )
+, m_penSize( 10 )
+, m_penColor( Qt::black )
 {
     setFocusPolicy( Qt::StrongFocus );
     setMouseTracking( true );
-    m_size = canvas->size();
 
-    resize( m_size );
-
-    m_draw = false;
-    m_penSize = 10;
-    m_penColor = Qt::black;
+    resize( canvas->size() );
 }
 
 KPrPresentationDrawWidget::~KPrPresentationDrawWidget()
@@ -56,8 +57,7 @@ void KPrPresentationDrawWidget::paintEvent(QPaintEvent * event)
 {
     QPainter painter( this );
     QBrush brush( Qt::SolidPattern );
-    QPen pen( brush, m_penSize, Qt::CustomDashLine, Qt::RoundCap, Qt::RoundJoin );
-    painter.setPen( pen );
+    QPen pen( brush, m_penSize, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin );
     foreach ( const Path &path, m_pointVectors ) {
         pen.setColor( path.color );
         pen.setWidth( path.size );
@@ -91,6 +91,10 @@ void KPrPresentationDrawWidget::mouseReleaseEvent( QMouseEvent* e )
 
 void KPrPresentationDrawWidget::contextMenuEvent(QContextMenuEvent* event)
 {
+    // TODO rework to not recreate the menu all the time
+    // make strings translateable.
+    // maybe the options which are shown here should be configurable in the
+    // config file
     QMenu menu( this );
 
     QMenu *color = new QMenu( QString( "Color of the pen"), this );

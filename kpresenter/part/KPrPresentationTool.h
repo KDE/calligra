@@ -25,12 +25,10 @@
 #include <QtGui/QLabel>
 
 #include <QList>
-#include "ui/KPrPresentationToolWidget.h"
-#include "KPrPresentationHighlightWidget.h"
-#include "KPrPresentationDrawWidget.h"
 
 class KoEventAction;
 class KPrViewModePresentation;
+class KPrPresentationToolWidget;
 class KPrPresentationStrategyInterface;
 
 /// The tool used for presentations

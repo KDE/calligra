@@ -42,6 +42,7 @@
 #include "KPrPresentationStrategy.h"
 #include "KPrPresentationHighlightStrategy.h"
 #include "KPrPresentationDrawStrategy.h"
+#include "ui/KPrPresentationToolWidget.h"
 
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )

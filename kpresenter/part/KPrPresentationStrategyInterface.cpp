@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Alexia Allanic <alexia_allanic@yahoo.fr>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #include "KPrPresentationTool.h"
 #include "KPrViewModePresentation.h"
 #include "KPrPresentationStrategy.h"
+#include "ui/KPrPresentationToolWidget.h"
 
 KPrPresentationStrategyInterface::KPrPresentationStrategyInterface( KPrPresentationTool * tool )
 : m_tool( tool )

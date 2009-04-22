@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2009 Alexia Allanic <alexia_allanic@yahoo.fr>
+ * Copyright (C) 2009 Jérémy Lugagne <jejewindsurf@hotmail.com>
+ * Copyright (C) 2009 Johann Hingue <yoan1703@hotmail.fr>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -61,7 +65,6 @@ private :
     QAction* buildActionColor( QColor, QString );
     QAction* buildActionSize( int );
 
-    QSize m_size;
     bool m_draw;
     int m_penSize;
     QColor m_penColor;
