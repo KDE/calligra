@@ -51,10 +51,6 @@ public:
     void keyReleaseEvent( QKeyEvent *event );
     void wheelEvent( KoPointerEvent * event );
 
-    bool getDrawMode();
-    bool getHighlightMode();
-    KPrViewModePresentation & getViewMode();
-
 public slots:
     void activate( bool temporary = false );
     void deactivate();

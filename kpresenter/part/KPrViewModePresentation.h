@@ -82,10 +82,8 @@ public:
 
     void navigateToPage( int index );
 
-    KoPAViewMode * getViewMode();
-
     void saveSlideTime(QMap<int,int> *slideTime);
-    
+
     QMap<int,int> * getSlideTime();
 
 protected:

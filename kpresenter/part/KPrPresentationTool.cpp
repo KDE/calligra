@@ -21,16 +21,9 @@
 
 #include <QtGui/QWidget>
 
-#include <QtGui/QBoxLayout>
 #include <QtGui/QVBoxLayout>
 #include <QKeyEvent>
-#include <QtGui/QStackedLayout>
 #include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QPixmap>
-#include <QtGui/QPicture>
-#include <QCursor>
-#include <QString>
 
 #include <KoShape.h>
 #include <KoShapeManager.h>
@@ -248,11 +241,6 @@ bool KPrPresentationTool::eventFilter( QObject *obj, QEvent * event )
         }
     }
     return false;
-}
-
-KPrViewModePresentation & KPrPresentationTool::getViewMode()
-{
-    return m_viewMode;
 }
 
 #include "KPrPresentationTool.moc"

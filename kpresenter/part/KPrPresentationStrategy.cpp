@@ -21,12 +21,6 @@
 
 #include "KPrPresentationStrategy.h"
 
-#include "KPrPresentationHighlightStrategy.h"
-#include "KPrPresentationDrawStrategy.h"
-#include "KPrPresentationViewModeStrategy.h"
-
-#include "KPrPresentationTool.h"
-
 KPrPresentationStrategy::KPrPresentationStrategy( KPrPresentationTool * tool )
 : KPrPresentationStrategyInterface( tool )
 {
