@@ -281,9 +281,12 @@ void KarbonLayerModel::setProperties( KoShape* shape, const PropertyList &proper
 {
     bool oldVisibleState = shape->isVisible();
     bool oldLockedState = shape->isGeometryProtected();
-
-    shape->setVisible( properties.at( 0 ).state.toBool() );
-    shape->setGeometryProtected( properties.at( 1 ).state.toBool() );
+    bool newVisibleState = properties.at( 0 ).state.toBool();
+    bool newLockedState = properties.at( 1 ).state.toBool();
+    
+    shape->setVisible( newVisibleState );
+    shape->setGeometryProtected( newLockedState );
+    shape->setSelectable( !newLockedState );
 
     if( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isGeometryProtected() ) )
         shape->update();
