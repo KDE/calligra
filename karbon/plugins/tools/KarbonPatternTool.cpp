@@ -217,9 +217,9 @@ void KarbonPatternTool::initialize()
         }
     }
     // automatically select strategy when editing single shape
-    if( m_strategies.count() == 1 || ! m_currentStrategy )
+    if( m_strategies.count() == 1 && ! m_currentStrategy )
     {
-        m_currentStrategy = *m_strategies.begin();
+        m_currentStrategy = m_strategies.begin().value();
         updateOptionsWidget();
     }
     
@@ -258,6 +258,8 @@ void KarbonPatternTool::deactivate()
     m_strategies.clear();
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->update();
+    
+    m_currentStrategy = 0;
 }
 
 void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
