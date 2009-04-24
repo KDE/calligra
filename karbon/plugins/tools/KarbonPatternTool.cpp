@@ -174,9 +174,9 @@ void KarbonPatternTool::initialize()
         if( ! selectedShapes.contains( strategy->shape() ) || ! strategy->shape()->isEditable() )
         {
             m_strategies.remove( strategy->shape() );
-            delete strategy;
             if( m_currentStrategy == strategy )
                 m_currentStrategy = 0;
+            delete strategy;
             continue;
         }
         
@@ -186,9 +186,9 @@ void KarbonPatternTool::initialize()
         {
             // delete the gradient
             m_strategies.remove( strategy->shape() );
-            delete strategy;
             if( m_currentStrategy == strategy )
                 m_currentStrategy = 0;
+            delete strategy;
             continue;
         }
         
