@@ -36,6 +36,8 @@ KarbonPatternEditStrategyBase::KarbonPatternEditStrategyBase( KoShape * s, KoIma
     , m_shape( s ), m_imageCollection( imageCollection )
     , m_editing( false ), m_modified( false )
 {
+    Q_ASSERT(m_shape);
+    Q_ASSERT(imageCollection);
     // cache the shapes transformation matrix
     m_matrix = shape()->absoluteTransformation( 0 );
 }
