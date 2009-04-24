@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2008 Jim Courtiau <jeremy.courtiau@gmail.com>
+ * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
