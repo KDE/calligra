@@ -183,9 +183,10 @@ void KarbonPatternTool::initialize()
             m_patterns.last()->repaint();
         }
     }
-    if( m_patterns.count() == 1 )
+    // automatically select strategy when editing single shape
+    if( m_strategies.count() == 1 && ! m_currentStrategy )
     {
-        m_currentStrategy = m_patterns.first();
+        m_currentStrategy = m_strategies.begin().value();
         updateOptionsWidget();
     }
 }
@@ -221,6 +222,8 @@ void KarbonPatternTool::deactivate()
     m_patterns.clear();
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
         shape->update();
+    
+    m_currentStrategy = 0;
 }
 
 void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
