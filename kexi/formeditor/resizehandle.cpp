@@ -343,7 +343,7 @@ void ResizeHandleSet::resizeFinished()
     if (m_widget) {
         kDebug() << "old:" << m_origWidgetRect << "new:" << m_widget->geometry();
         m_form->addPropertyCommand(m_widget->objectName().toLatin1(), m_origWidgetRect,
-                                   m_widget->geometry(), "geometry", true /*execute*/);
+                                   m_widget->geometry(), "geometry", Form::DontExecuteCommand);
     }
 }
 

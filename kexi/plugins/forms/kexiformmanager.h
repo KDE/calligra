@@ -24,7 +24,6 @@
 #include "kexiformpart.h"
 
 class KexiFormView;
-class K3Command;
 class KActionCollection;
 class KexiFormManagerPrivate;
 
@@ -32,6 +31,7 @@ namespace KFormDesigner {
 class WidgetLibrary;
 class ObjectTreeView;
 class ActionGroup;
+class Command;
 }
 
 //! @internal
@@ -77,7 +77,7 @@ public slots:
     void showFormUICode();
 
 protected slots:
-    void slotHistoryCommandExecuted(K3Command *command);
+    void slotHistoryCommandExecuted(KFormDesigner::Command *command);
 // 2.0 moved from KexiFormPart
     void slotWidgetCreatedByFormsLibrary(QWidget* widget);
     void slotWidgetActionToggled(const QByteArray& action);

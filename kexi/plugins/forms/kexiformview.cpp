@@ -292,7 +292,7 @@ void KexiFormView::initForm()
 //2.0: moved to Form        connect(form()->commandHistory(), SIGNAL(commandExecuted(K3Command*)),
 //                              form(), SLOT(slotCommandExecuted(K3Command*)));
 //        connect(form(), SIGNAL(assignAction(KFormDesigner::Form*)),
-//                KexiFormManager::self(), SLOT(slotHistoryCommandExecuted(K3Command*)));
+//                KexiFormManager::self(), SLOT(slotHistoryCommandExecuted(Command*)));
     }
 
     const bool newForm = window()->id() < 0;
@@ -382,7 +382,7 @@ void KexiFormView::initForm()
     updateDataSourcePage();
 
     if (!newForm && viewMode() == Kexi::DesignViewMode) {
-        form()->clearCommandHistory();
+        form()->clearUndoStack();
     }
 }
 
@@ -1234,8 +1234,8 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 
 //  KFormDesigner::WidgetList* prevSelection = form()->selectedWidgets();
     QWidgetList widgetsToSelect;
-    KFormDesigner::CommandGroup *group = new KFormDesigner::CommandGroup(
-        *form(),
+    KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
+//        *form(),
         fields.count() == 1
         ? i18n("Insert AutoField widget") : i18n("Insert %1 AutoField widgets", fields.count())
     );
@@ -1264,10 +1264,11 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
 //! @todo this is hardcoded!
             "KexiDBAutoField",
 //! @todo this name can be invalid for expressions: if so, fall back to a default class' prefix!
-            pos, column->aliasOrName()
+            pos, column->aliasOrName(),
+            group
         );
-        insertCmd->execute();
-        group->addCommand(insertCmd, false/*don't exec twice*/);
+        insertCmd->redo();
+//2.0        group->addCommand(insertCmd, false/*don't exec twice*/);
 
         KFormDesigner::ObjectTreeItem *newWidgetItem
             = form()->objectTree()->hash()->value(insertCmd->widgetName());
@@ -1275,17 +1276,20 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
             ? dynamic_cast<KexiDBAutoField*>(newWidgetItem->widget()) : 0;
         widgetsToSelect.append(newWidget);
 //#if 0
-        KFormDesigner::CommandGroup *subGroup
-            = new KFormDesigner::CommandGroup(*form(), QString());
+        KFormDesigner::PropertyCommandGroup *subGroup
+            = new KFormDesigner::PropertyCommandGroup(
+//2.0                *form(),
+                QString(),
+                group);
         QHash<QByteArray, QVariant> propValues;
         propValues.insert("dataSource", column->aliasOrName());
         propValues.insert("fieldTypeInternal", (int)column->field->type());
         propValues.insert("fieldCaptionInternal", column->captionOrAliasOrName());
         form()->createPropertyCommandsInDesignMode(
-            newWidget, propValues, subGroup, false/*!addToActiveForm*/,
-            true /*!execFlagForSubCommands*/);
-        subGroup->execute();
-        group->addCommand(subGroup, false/*will not be executed on CommandGroup::execute()*/);
+            newWidget, propValues, subGroup, false/*!addToActiveForm*/);
+//2.0            true /*!execFlagForSubCommands*/);
+        subGroup->redo();
+//2.0        group->addCommand(subGroup, false/*will not be executed on CommandGroup::execute()*/);
 
 //#endif
         //set data source and caption
@@ -1301,11 +1305,12 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
         KFormDesigner::AdjustSizeCommand *adjustCommand
             = new KFormDesigner::AdjustSizeCommand(
                 *form(), KFormDesigner::AdjustSizeCommand::SizeToFit,
-                list);
-        adjustCommand->execute();
-        group->addCommand(adjustCommand,
-                          false/*will not be executed on CommandGroup::execute()*/
-                         );
+                list,
+                group);
+        adjustCommand->redo();
+//2.0        group->addCommand(adjustCommand,
+//2.0                          false/*will not be executed on CommandGroup::execute()*/
+//2.0                         );
 
         if (newWidget) {//move position down for next widget
             pos.setY(pos.y() + newWidget->height() + form()->gridSize());
@@ -1322,8 +1327,9 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
             m_dbform->setGeometry(newFormRect);
             //2. store information about resize
             KFormDesigner::PropertyCommand *resizeFormCommand = new KFormDesigner::PropertyCommand(
-                *form(), m_dbform->objectName().toLatin1(), oldFormRect, newFormRect, "geometry");
-            group->addCommand(resizeFormCommand, true/*will be executed on CommandGroup::execute()*/);
+                *form(), m_dbform->objectName().toLatin1(), oldFormRect, newFormRect, "geometry",
+                group);
+//2.0            group->addCommand(resizeFormCommand, true/*will be executed on CommandGroup::execute()*/);
         }
 
         //remember geometry of the last inserted widget
@@ -1331,12 +1337,12 @@ KexiFormView::insertAutoFields(const QString& sourcePartClass, const QString& so
     }
 
     //eventually, add entire command group to active form
-    form()->addCommand(group, true/*exec*/);
+    form()->addCommand(group); //2.0 , true/*exec*/);
 
 // group->debug();
 
     //enable proper REDO usage
-    group->resetAllowExecuteFlags();
+//2.0    group->resetAllowExecuteFlags();
 
     m_scrollView->repaint();
     m_scrollView->viewport()->repaint();

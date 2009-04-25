@@ -381,8 +381,8 @@ void KexiFormManager::setFormDataSource(const QString& partClass, const QString&
         QHash<QByteArray, QVariant> propValues;
         propValues.insert("dataSource", name);
         propValues.insert("dataSourcePartClass", partClass);
-        KFormDesigner::CommandGroup *group = new KFormDesigner::CommandGroup(
-            *formViewWidget->form(),
+        KFormDesigner::PropertyCommandGroup *group = new KFormDesigner::PropertyCommandGroup(
+//            *formViewWidget->form(),
             i18n("Set Form's Data Source to \"%1\"", name));
         formViewWidget->form()->createPropertyCommandsInDesignMode(
             formWidget, propValues, group, true /*addToActiveForm*/);
@@ -420,30 +420,26 @@ void KexiFormManager::insertAutoFields(const QString& sourcePartClass, const QSt
                                      formViewWidget->form()->activeContainer());
 }
 
-void KexiFormManager::slotHistoryCommandExecuted(K3Command *command)
+void KexiFormManager::slotHistoryCommandExecuted(KFormDesigner::Command *command)
 {
-    const KFormDesigner::CommandGroup *group = dynamic_cast<const KFormDesigner::CommandGroup*>(command);
-    if (group) {
-        if (group->commands().count() == 2) {
-            KexiFormView* formViewWidget = activeFormViewWidget();
-            if (!formViewWidget)
-                return;
-            KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(formViewWidget->form()->widget());
-            if (!formWidget)
-                return;
-            QList<K3Command*>::const_iterator it(group->commands().constBegin());
-            const KFormDesigner::PropertyCommand* pc1
-                = dynamic_cast<const KFormDesigner::PropertyCommand*>(*it);
-            ++it;
-            const KFormDesigner::PropertyCommand* pc2
-                = dynamic_cast<const KFormDesigner::PropertyCommand*>(*it);
-            if (pc1 && pc2 && pc1->propertyName() == "dataSource" && pc2->propertyName() == "dataSourcePartClass") {
-                const QHash<QByteArray, QVariant>::const_iterator it1(pc1->oldValues().constBegin());
-                const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
-                if (it1.key() == formWidget->objectName() && it2.key() == formWidget->objectName())
-                    d->part->dataSourcePage()->setDataSource(
-                        formWidget->dataSourcePartClass(), formWidget->dataSource());
-            }
+//    const KFormDesigner::CommandGroup *group = dynamic_cast<const KFormDesigner::CommandGroup*>(command);
+    if (command->childCount() == 2) {
+        KexiFormView* formViewWidget = activeFormViewWidget();
+        if (!formViewWidget)
+            return;
+        KexiDBForm* formWidget = dynamic_cast<KexiDBForm*>(formViewWidget->form()->widget());
+        if (!formWidget)
+            return;
+        const KFormDesigner::PropertyCommand* pc1
+            = dynamic_cast<const KFormDesigner::PropertyCommand*>(command->child(0));
+        const KFormDesigner::PropertyCommand* pc2
+            = dynamic_cast<const KFormDesigner::PropertyCommand*>(command->child(1));
+        if (pc1 && pc2 && pc1->propertyName() == "dataSource" && pc2->propertyName() == "dataSourcePartClass") {
+            const QHash<QByteArray, QVariant>::const_iterator it1(pc1->oldValues().constBegin());
+            const QHash<QByteArray, QVariant>::const_iterator it2(pc2->oldValues().constBegin());
+            if (it1.key() == formWidget->objectName() && it2.key() == formWidget->objectName())
+                d->part->dataSourcePage()->setDataSource(
+                    formWidget->dataSourcePartClass(), formWidget->dataSource());
         }
     }
 }

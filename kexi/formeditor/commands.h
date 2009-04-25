@@ -23,10 +23,8 @@
 
 #include <QHash>
 #include <QVariant>
-#include <qdom.h>
-#include <QString>
+#include <QUndoCommand>
 
-#include <k3command.h>
 #include <KDebug>
 #include "utils.h"
 #include "form.h"
@@ -34,6 +32,7 @@
 class QRect;
 class QPoint;
 class QStringList;
+class QDomElement;
 
 namespace KFormDesigner
 {
@@ -44,16 +43,30 @@ class Container;
 class Form;
 
 //! Base class for KFormDesigner's commands
-class KFORMEDITOR_EXPORT Command : public K3Command
+class KFORMEDITOR_EXPORT Command : public QUndoCommand
 {
 public:
-    Command();
-    
+    explicit Command(Command *parent = 0);
+
+    explicit Command(const QString &text, Command *parent = 0);
+
     virtual ~Command();
+
+    //! Reimplemented to support effect of blockRedoOnce().
+    virtual void redo();
+
+    //! Implement instead of redo().
+    virtual void execute() = 0;
 
     virtual void debug() const { kDebug() << *this; }
 
     friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const Command &c); 
+protected:
+    //! Used to block execution of redo() once, on ading the command to the stack.
+    void blockRedoOnce();
+
+    friend class Form;
+    bool m_blockRedoOnce : 1; //!< Used to block redo() once
 };
 
 //! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
@@ -66,21 +79,25 @@ public:
    /*! @a oldValue is the old property value for selected widget. 
      This enables reverting the change. @a value is the new property value. */
     PropertyCommand(Form& form, const QByteArray &wname, const QVariant &oldValue,
-                    const QVariant &value, const QByteArray &propertyName);
+                    const QVariant &value, const QByteArray &propertyName, Command *parent = 0);
 
    /*! @a oldValues is a QHash of the old property values for every widget, 
      to allow reverting the change. @a value is the new property value.
      You can use the simpler constructor for a single widget. */
     PropertyCommand(Form& form, const QHash<QByteArray, QVariant> &oldValues,
-                    const QVariant &value, const QByteArray &propertyName);
+                    const QVariant &value, const QByteArray &propertyName, Command *parent = 0);
 
     virtual ~PropertyCommand();
 
+    virtual int id() const { return 1; }
+
+    void setUniqueId(int id);
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
+
+    bool mergeWith(const QUndoCommand * command);
 
     QByteArray propertyName() const;
 
@@ -99,6 +116,7 @@ public:
 
     friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c); 
 protected:
+    void init();
     class Private;
     Private * const d;
 };
@@ -112,15 +130,21 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommand &c);
 class KFORMEDITOR_EXPORT GeometryPropertyCommand : public Command
 {
 public:
-    GeometryPropertyCommand(Form& form, const QStringList &names, const QPoint& oldPos);
+    GeometryPropertyCommand(Form& form, const QStringList &names, 
+                            const QPoint& oldPos, Command *parent = 0);
 
     virtual ~GeometryPropertyCommand();
 
+    virtual int id() const { return 2; }
+
     virtual void execute();
-    virtual void unexecute();
-    virtual QString name() const;
+
+    virtual void undo();
+    
     void setPos(const QPoint& pos);
+    
     QPoint pos() const;
+    
     QPoint oldPos() const;
 
     virtual void debug() const { kDebug() << *this; }
@@ -140,15 +164,16 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const GeometryPropertyCommand &
 class KFORMEDITOR_EXPORT AlignWidgetsCommand : public Command
 {
 public:
-    AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment, const QWidgetList &list);
+    AlignWidgetsCommand(Form &form, Form::WidgetAlignment alignment, const QWidgetList &list,
+                        Command *parent = 0);
 
     virtual ~AlignWidgetsCommand();
 
+    virtual int id() const { return 3; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -176,15 +201,15 @@ public:
         SizeToBigHeight
     };
 
-    AdjustSizeCommand(Form& form, Adjustment type, const QWidgetList &list);
+    AdjustSizeCommand(Form& form, Adjustment type, const QWidgetList &list, Command *parent = 0);
 
     virtual ~AdjustSizeCommand();
 
+    virtual int id() const { return 4; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -206,15 +231,16 @@ class KFORMEDITOR_EXPORT LayoutPropertyCommand : public PropertyCommand
 {
 public:
     LayoutPropertyCommand(Form& form, const QByteArray &wname,
-                          const QVariant &oldValue, const QVariant &value);
+                          const QVariant &oldValue, const QVariant &value,
+                          Command *parent = 0);
 
     virtual ~LayoutPropertyCommand();
 
+    virtual int id() const { return 5; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -233,9 +259,7 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const LayoutPropertyCommand &c)
 class KFORMEDITOR_EXPORT InsertWidgetCommand : public Command
 {
 public:
-    InsertWidgetCommand(const Container& container);
-
-    virtual ~InsertWidgetCommand();
+    explicit InsertWidgetCommand(const Container& container, Command *parent = 0);
 
     /*! This ctor allows to set explicit class name and position.
      Used for dropping widgets on the form surface.
@@ -245,13 +269,16 @@ public:
      This allows e.g. inserting a widgets having name constructed using
      */
     InsertWidgetCommand(const Container& container, const QByteArray& className,
-                        const QPoint& pos, const QByteArray& namePrefix = QByteArray());
+                        const QPoint& pos, const QByteArray& namePrefix = QByteArray(),
+                        Command *parent = 0);
+
+    virtual ~InsertWidgetCommand();
+
+    virtual int id() const { return 6; }
 
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     //! @return inserted widget's name
     QByteArray widgetName() const;
@@ -260,6 +287,8 @@ public:
 
     friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertWidgetCommand &c); 
 protected:
+    void init();
+
     class Private;
     Private * const d;
 };
@@ -273,22 +302,25 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const InsertWidgetCommand &c);
 class KFORMEDITOR_EXPORT CreateLayoutCommand : public Command
 {
 public:
-    CreateLayoutCommand(Form &form, Form::LayoutType layoutType, const QWidgetList &list);
+    CreateLayoutCommand(Form &form, Form::LayoutType layoutType, const QWidgetList &list,
+                        Command *parent = 0);
 
     virtual ~CreateLayoutCommand();
 
+    virtual int id() const { return 7; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
     friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CreateLayoutCommand &c); 
 protected:
     //! Used in BreakLayoutCommand ctor.
-    CreateLayoutCommand();
+    explicit CreateLayoutCommand(Command *parent = 0);
+
+    void init();
 
     class Private;
     Private * const d;
@@ -302,15 +334,15 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CreateLayoutCommand &c);
 class KFORMEDITOR_EXPORT BreakLayoutCommand : public CreateLayoutCommand
 {
 public:
-    BreakLayoutCommand(const Container &container);
+    explicit BreakLayoutCommand(const Container &container, Command *parent = 0);
 
     virtual ~BreakLayoutCommand();
 
+    virtual int id() const { return 8; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -328,15 +360,16 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const BreakLayoutCommand &c);
 class KFORMEDITOR_EXPORT PasteWidgetCommand : public Command
 {
 public:
-    PasteWidgetCommand(const QDomDocument &domDoc, const Container& container, const QPoint& p = QPoint());
+    explicit PasteWidgetCommand(const QDomDocument &domDoc, const Container& container, 
+                                const QPoint& p = QPoint(), Command *parent = 0);
 
     virtual ~PasteWidgetCommand();
 
+    virtual int id() const { return 9; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -375,15 +408,15 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PasteWidgetCommand &c);
 class KFORMEDITOR_EXPORT DeleteWidgetCommand : public Command
 {
 public:
-    DeleteWidgetCommand(Form& form, const QWidgetList &list);
+    DeleteWidgetCommand(Form& form, const QWidgetList &list, Command *parent = 0);
 
     virtual ~DeleteWidgetCommand();
 
+    virtual int id() const { return 10; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -401,15 +434,16 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DeleteWidgetCommand &c);
 class KFORMEDITOR_EXPORT DuplicateWidgetCommand : public Command
 {
 public:
-    DuplicateWidgetCommand(const Container& container, const QWidgetList &list, const QPoint& copyToPoint);
+    DuplicateWidgetCommand(const Container& container, const QWidgetList &list, 
+                           const QPoint& copyToPoint, Command *parent = 0);
 
     virtual ~DuplicateWidgetCommand();
 
+    virtual int id() const { return 11; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -427,15 +461,15 @@ KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const DuplicateWidgetCommand &c
 class KFORMEDITOR_EXPORT CutWidgetCommand : public DeleteWidgetCommand
 {
 public:
-    CutWidgetCommand(Form &form, const QWidgetList &list);
+    CutWidgetCommand(Form &form, const QWidgetList &list, Command *parent = 0);
 
     virtual ~CutWidgetCommand();
 
+    virtual int id() const { return 12; }
+
     virtual void execute();
     
-    virtual void unexecute();
-    
-    virtual QString name() const;
+    virtual void undo();
     
     virtual void debug() const { kDebug() << *this; }
 
@@ -448,20 +482,18 @@ protected:
 //! kDebug() stream operator. Writes command @a c to the debug output in a nicely formatted way.
 KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CutWidgetCommand &c);
 
-//! Command that holds several subcommands.
-/*! It appears as one to the user and in the command history,
- but it can use the implementation of multiple commands internally.
- It extends KMacroCommand by providing the list of commands executed.
- Selected subcommands can be marked as nonexecutable by adding them using
- addCommand(KCommand *command, bool allowExecute) special method.
-*/
-class KFORMEDITOR_EXPORT CommandGroup : public Command
+//! Command that holds several PropertyCommand subcommands.
+/*! It appears as one to the user and in the command history. */
+class KFORMEDITOR_EXPORT PropertyCommandGroup : public Command
 {
 public:
-    CommandGroup(Form &form, const QString & name);
+    explicit PropertyCommandGroup(const QString &text, Command *parent = 0);
 
-    virtual ~CommandGroup();
+    virtual ~PropertyCommandGroup();
 
+    virtual int id() const { return 13; }
+
+#if 0
     /*! Like KMacroCommand::addCommand(KCommand*)
      but if \a allowExecute is false, \a command will not be executed
      as a subcommand when CommandGroup::execute() is called.
@@ -488,7 +520,7 @@ public:
 
     /*! Unexecutes all subcommands added to this group,
      (in reversed order). */
-    virtual void unexecute();
+    virtual void undo();
 
     virtual QString name() const;
 
@@ -502,22 +534,25 @@ public:
      in the future, when REDO is be executed, all subcommands will be executed. */
     void resetAllowExecuteFlags();
 
-    /*! Copies property values from property commands stored in @a commandGroup
-     to this group. 
+    /*! merges property values from property commands stored in @a command
+     with this group. 
      @return true if number, order and names of the commands match.
      Otherwise no value is copied. */
-    bool copyPropertyValuesFrom(const CommandGroup &commandGroup);
+    virtual bool mergeWith(const QUndoCommand * command);
+#endif
+
+    virtual void execute();
 
     virtual void debug() const { kDebug() << *this; }
 
-    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CommandGroup &c); 
+    friend KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommandGroup &c); 
 protected:
     class Private;
     Private * const d;
 };
 
 //! kDebug() stream operator. Writes command group @a c to the debug output in a nicely formatted way.
-KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const CommandGroup &c); 
+KFORMEDITOR_EXPORT QDebug operator<<(QDebug dbg, const PropertyCommandGroup &c); 
 
 }
 

@@ -239,7 +239,7 @@ FormIO::saveFormToDom(Form *form, QDomDocument &domDoc)
     form->connectionBuffer()->save(uiElement);
 #endif
 
-    form->commandHistoryDocumentSaved();
+    form->setUndoStackClean();
 
     m_currentForm = 0;
     m_currentItem = 0;

@@ -41,9 +41,23 @@ TODO:
 - (the same?) Create a database -> enter the table schema editor -> add a field -> try to change the field type -> crash
 http://rafb.net/p/R4QIBR13.html
 
-2009-04-20
+
+2009-04-20..24
 Forms
 - fixed undo/redo for inline widget's text editing
+
+- moved from K3Command to QUndo framework
+-- CommandGroup removed, Command can be used as a command group
+-- PropertyCommandGroup added as a group for PropertyCommand objects,
+   CommandGroup::copyPropertyValuesFrom() code is now in PropertyCommandGroup::mergeWith()
+-- Form::commandHistoryDocumentSaved() renamed to Form::setUndoStackClean()
+-- Form::clearCommandHistory() renamed to Form::clearUndoStack(), what clears the undo/redo stack
+-- Form::slotCommandExecuted() removed
+
+TODO: port undo/redo for moving multiple widgets
+TODO: look if KexiFormManager::slotHistoryCommandExecuted() is now called properly
+TODO: inline editing should merge multiple commands of character entering into a single command
+TODO: when e.g. changing widget's width using the 'width' property item in the propeditor, first a PropertyCommand for geometry property is added and then another for the width property; the latter should not be created
 
 2009-04-16..19
 Forms

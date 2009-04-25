@@ -547,7 +547,7 @@ void KexiFormScrollView::refreshContentsSize()
     //only clear cmd history when KexiScrollView::refreshContentsSizeLater() has been called
     if (!m_preview && sender() == &m_delayedResize) {
         if (m_form)
-            m_form->clearCommandHistory();
+            m_form->clearUndoStack();
     }
 }
 

@@ -38,13 +38,13 @@
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kinputdialog.h>
+#include <KIcon>
 
 #include "containerfactory.h"
 #include "container.h"
 #include "form.h"
 #include "formIO.h"
 #include "objecttree.h"
-#include "commands.h"
 #include "widgetlibrary.h"
 #include "utils.h"
 
@@ -242,14 +242,15 @@ VFlow::sizeHint() const
         return QSize(700, 50); // default
 }
 
-///////  Tab related KCommand (to allow tab creation/deletion undoing)
+///////  Tab related command (to allow tab creation/deletion undoing)
 
 InsertPageCommand::InsertPageCommand(KFormDesigner::Container *container, QWidget *parent)
-        : K3Command()
+        : KFormDesigner::Command()
 {
     m_containername = container->widget()->objectName();
     m_form = container->form();
     m_parentname = parent->objectName();
+    setText( i18n("Add Page") );
 }
 
 void
@@ -284,15 +285,14 @@ InsertPageCommand::execute()
     }
 }
 
-void
-InsertPageCommand::unexecute()
+void InsertPageCommand::undo()
 {
     QWidget *page = m_form->objectTree()->lookup(m_name)->widget();
     QWidget *parent = m_form->objectTree()->lookup(m_parentname)->widget();
 
     QWidgetList list;
     list.append(page);
-    K3Command *com = new KFormDesigner::DeleteWidgetCommand(*m_form, list);
+    KFormDesigner::Command *com = new KFormDesigner::DeleteWidgetCommand(*m_form, list);
 
     QByteArray classname = parent->metaObject()->className();
     if (classname == "KFDTabWidget") {
@@ -315,12 +315,6 @@ InsertPageCommand::unexecute()
 
     com->execute();
     delete com;
-}
-
-QString
-InsertPageCommand::name() const
-{
-    return i18n("Add Page");
 }
 
 /////// Sub forms ////////////////////////:
@@ -667,8 +661,10 @@ ContainerFactory::createMenuActions(const QByteArray &classname, QWidget *w,
         if (dynamic_cast<TabWidgetBase*>(widget())->count() == 1)
             a->setEnabled(false);
         return true;
-    } else if ((KexiUtils::objectIsA(pw, "QStackedWidget") || /* compat */ KexiUtils::objectIsA(pw, "QWidgetStack"))
-        && !pw->parentWidget()->inherits("QTabWidget"))
+    }
+    else if (    (KexiUtils::objectIsA(pw, "QStackedWidget") || /* compat */ KexiUtils::objectIsA(pw, "QWidgetStack"))
+              && !pw->parentWidget()->inherits("QTabWidget")
+            )
     {
         QStackedWidget *stack = dynamic_cast<QStackedWidget*>(pw);
         setWidget(
@@ -818,12 +814,14 @@ void ContainerFactory::addTabPage()
 {
     if (!widget()->inherits("QTabWidget"))
         return;
-    K3Command *com = new InsertPageCommand(m_container, widget());
+    KFormDesigner::Command *com = new InsertPageCommand(m_container, widget());
     if (dynamic_cast<TabWidgetBase*>(widget())->count() == 0) {
         com->execute();
         delete com;
-    } else
-        m_container->form()->addCommand(com, true);
+    }
+    else {
+        m_container->form()->addCommand(com);
+    }
 }
 
 void ContainerFactory::removeTabPage()
@@ -835,9 +833,9 @@ void ContainerFactory::removeTabPage()
 
     QWidgetList list;
     list.append(w);
-    K3Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
+    KFormDesigner::Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
     tab->removePage(w);
-    m_container->form()->addCommand(com, true);
+    m_container->form()->addCommand(com);
 }
 
 void ContainerFactory::renameTabPage()
@@ -872,12 +870,14 @@ void ContainerFactory::addStackPage()
     {
         return;
     }
-    K3Command *com = new InsertPageCommand(m_container, widget());
+    KFormDesigner::Command *com = new InsertPageCommand(m_container, widget());
     if (!dynamic_cast<QStackedWidget*>(widget())->currentWidget()) {
         com->execute();
         delete com;
-    } else
-        m_container->form()->addCommand(com, true);
+    }
+    else {
+        m_container->form()->addCommand(com);
+    }
 }
 
 void ContainerFactory::removeStackPage()
@@ -892,21 +892,24 @@ void ContainerFactory::removeStackPage()
 
     QWidgetList list;
     list.append(page);
-    K3Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
+    KFormDesigner::Command *com = new KFormDesigner::DeleteWidgetCommand(*m_container->form(), list);
 
     // raise prev/next widget
     int index = stack->indexOf(page);
-    if (index > 0)
+    if (index > 0) {
         index--;
-    else if (index < (stack->count()-1))
+    }
+    else if (index < (stack->count()-1)) {
         index++;
-    else
+    }
+    else {
         index = -1;
-    if (index >= 0)
+    }
+    if (index >= 0) {
         stack->setCurrentIndex(index);
-
+    }
     stack->removeWidget(page);
-    m_container->form()->addCommand(com, true);
+    m_container->form()->addCommand(com);
 }
 
 void ContainerFactory::prevStackPage()

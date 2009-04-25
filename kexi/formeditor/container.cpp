@@ -707,8 +707,8 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         if (mev->button() == Qt::LeftButton) { // insert the widget at cursor pos
             if (d->form->formWidget())
                 d->form->formWidget()->clearForm();
-            K3Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
-            d->form->addCommand(com, true);
+            Command *com = new InsertWidgetCommand(*this/*, mev->pos()*/);
+            d->form->addCommand(com);
             d->stopSelectionRectangleOrInserting();
         }
         else { // right button, etc.
@@ -730,7 +730,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
         // Right-click -> context menu
         // 2.0 unsed: d->form->createContextMenu(static_cast<QWidget*>(s), this);
     }
-    else if (mev->buttons() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) { // && (m_copyRect.isValid()))
+    else if (mev->button() == Qt::LeftButton && mev->modifiers() == Qt::ControlModifier) { // && (m_copyRect.isValid()))
         // copying a widget by Ctrl+dragging
 
         if (d->form->formWidget())
@@ -766,11 +766,16 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
             copyToPoint = static_cast<QWidget*>(s)->mapTo(widget(), mev->pos() - m_grab);
         }
 
-        K3Command *com = new DuplicateWidgetCommand(*d->form->activeContainer(), *d->form->selectedWidgets(), copyToPoint);
-        d->form->addCommand(com, true);
+        Command *com = new DuplicateWidgetCommand(*d->form->activeContainer(), *d->form->selectedWidgets(), copyToPoint);
+        d->form->addCommand(com);
 // \eof 2.x
     }
-    else if (d->state == Private::MovingWidget) {
+    else if (mev->button() == Qt::LeftButton && !(mev->buttons() & Qt::LeftButton) && d->state == Private::MovingWidget) {
+#if 0
+        if (m_moving) {
+            moveSelectedWidgetsBy(mev->x() - m_grab.x(), mev->y() - m_grab.y(), mev, true /*addCommand*/);
+        }
+#endif
         // one widget has been moved, so we need to update the layout
         reloadLayout();
     }
@@ -1353,9 +1358,8 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
 }
 #endif
 
-/// Other functions used by eventFilter
-void
-Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
+// Other functions used by eventFilter
+void Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 {
     if (d->form->selectedWidget() == d->form->widget())
         return; //do not move top-level widget
@@ -1388,7 +1392,9 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             dy = qMin(w->parentWidget()->height() - gridY - w->y(), dy);
     }
 
+#if 0
     CommandGroup *commandGroup = 0;
+#endif
     foreach (QWidget *w, *d->form->selectedWidgets()) {
         // Don't move tab widget pages (or widget stack pages)
         if (!w->parent() || w->parent()->inherits("QTabWidget") || w->parent()->inherits("QStackedWidget"))
@@ -1413,31 +1419,35 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
             tmpy = alignValueToGrid(w->y() + dy, gridY);
         }
 
-        if ((tmpx != w->x()) || (tmpy != w->y())) {
+        if (tmpx != w->x() || tmpy != w->y()) {
             QRect g(w->geometry());
             g.moveTo(tmpx, tmpy);
             if (d->form->selectedWidget()) {
                 // single widget
                 d->form->addPropertyCommand(w->objectName().toLatin1(), w->geometry(),
-                                            g, "geometry", true /*execute*/,
+                                            g, "geometry", Form::ExecuteCommand,
                                             d->idOfPropertyCommand);
                 w->move(tmpx, tmpy);
             }
             else {
                 // multiple widgets: group them
+#if 0
                 PropertyCommand *propCmd = new PropertyCommand(*d->form, w->objectName().toLatin1(), w->geometry(), g, "geometry");
                 if (!commandGroup) {
                     commandGroup = new CommandGroup(*d->form, i18n("Move multiple widgets"));
                 }
-                commandGroup->addCommand(propCmd, true /*allowExecute*/);
+                commandGroup->addCommand(propCmd);
+#endif
                 w->move(tmpx, tmpy);
             }
         }
     }
 
+#if 0
     if (commandGroup) {
         d->form->addPropertyCommandGroup(commandGroup, false /* !execute */, d->idOfPropertyCommand);
     }
+#endif
 }
 
 void Container::stopInlineEditing()

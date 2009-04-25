@@ -25,10 +25,11 @@
 #include <QLayout>
 #include <QTimer>
 #include <QStyleOption>
+#include <QDomDocument>
+#include <KUndoStack>
 
 #include <kdebug.h>
 #include <KLocale>
-#include <k3command.h>
 #include <KAction>
 #include <KMessageBox>
 #include <KActionCollection>
@@ -259,8 +260,10 @@ public:
 //removed, mode is used now:    bool  design;
     QString  filename;
 
-    K3CommandHistory  *commandHistory;
-    KActionCollection  *collection;
+//2.0    K3CommandHistory  *commandHistory;
+    KUndoStack undoStack;
+    KActionCollection internalCollection;
+    KActionCollection *collection;
     KFormDesigner::ActionGroup* widgetActionGroup;
 
     ObjectTreeList  tabstops;
@@ -299,7 +302,7 @@ public:
 // moved from WidgetPropertySet
     //! used to update command's value when undoing
     PropertyCommand  *lastCommand;
-    CommandGroup  *lastCommandGroup;
+    PropertyCommandGroup  *lastCommandGroup;
     uint idOfPropertyCommand;
 //    GeometryPropertyCommand  *lastGeoCommand;
     bool slotPropertyChangedEnabled : 1;
@@ -324,9 +327,10 @@ using namespace KFormDesigner;
 
 FormPrivate::FormPrivate(Form *form)
  : state(Form::WidgetSelecting)
+ , internalCollection(static_cast<QObject*>(0))
  , q(form)
 {
-    commandHistory = 0;
+//2.0    commandHistory = 0;
     toplevel = 0;
     topTree = 0;
     widget = 0;
@@ -363,7 +367,7 @@ FormPrivate::FormPrivate(Form *form)
 
 FormPrivate::~FormPrivate()
 {
-    delete commandHistory;
+//2.0    delete commandHistory;
     delete topTree;
 #ifdef KFD_SIGSLOTS
     delete connBuffer;
@@ -534,10 +538,10 @@ void Form::init(WidgetLibrary* library, Mode mode, KActionCollection &col, KForm
 
     // Init actions
     d->collection = &col; //new KActionCollection(this);
-    d->commandHistory = new K3CommandHistory(d->collection, true);
+/*2.0    d->commandHistory = new K3CommandHistory(d->collection, true);
     connect(d->commandHistory, SIGNAL(commandExecuted(K3Command*)), this, SLOT(slotCommandExecuted(K3Command*)));
     connect(d->commandHistory, SIGNAL(documentRestored()), this, SLOT(slotFormRestored()));
-// 2.0 not needed    connect(d->commandHistory, SIGNAL(commandHistoryChanged()), this, SLOT(slotCommandHistoryChanged()));
+    */
 }
 
 KActionCollection  *Form::actionCollection() const
@@ -635,16 +639,17 @@ void Form::setFilename(const QString &file)
     d->filename = file;
 }
 
-void Form::commandHistoryDocumentSaved()
+void Form::clearUndoStack()
 {
-    d->commandHistory->documentSaved();
+    d->undoStack.clear();
+//2.0    d->commandHistory->clear();
 }
 
-/* 2.0 not needed
-K3CommandHistory* Form::commandHistory() const
+void Form::setUndoStackClean()
 {
-    return d->commandHistory;
-}*/
+//2.0    d->commandHistory->documentSaved();
+    d->undoStack.setClean();
+}
 
 #ifdef KFD_SIGSLOTS
 ConnectionBuffer* Form::connectionBuffer() const
@@ -960,6 +965,20 @@ void Form::setInsertionPoint(const QPoint &p)
 
 QAction* Form::action(const QString& name)
 {
+    if (name == KStandardAction::name(KStandardAction::Undo)) {
+        QAction *a = d->internalCollection.action( name );
+        if (!a) {
+            a = d->undoStack.createUndoAction(&d->internalCollection);
+        }
+        return a;
+    }
+    else if (name == KStandardAction::name(KStandardAction::Redo)) {
+        QAction *a = d->internalCollection.action( name );
+        if (!a) {
+            a = d->undoStack.createRedoAction(&d->internalCollection);
+        }
+        return a;
+    }
     return d->collection->action(name);
 }
 
@@ -1256,22 +1275,26 @@ void Form::emitChildRemoved(ObjectTreeItem *item)
     emit childRemoved(item);
 }
 
-void Form::addCommand(K3Command *command, bool execute)
+bool Form::addCommand(Command *command, AddCommandOption option)
 {
     d->modified = true;
     emit modified();
-    d->commandHistory->addCommand(command, execute);
-    if (!execute) // simulate command to activate 'undo' menu
+    if (option == DontExecuteCommand) {
+        command->blockRedoOnce();
+    }
+    const int count = d->undoStack.count();
+    d->undoStack.push(command);
+    if ((count + 1) == d->undoStack.count()) {
+        return false;
+    }
+    kDebug() << "ADDED:" << command;
+/*    if (option == DontExecuteCommand) { // simulate command to activate 'undo' menu
         slotCommandExecuted(command);
+    }*/
+    return true;
 }
 
-void Form::clearCommandHistory()
-{
-    d->commandHistory->clear();
-//2.0 todo...    FormManager::self()->emitUndoEnabled(false, QString());
-//2.0 todo...    FormManager::self()->emitRedoEnabled(false, QString());
-}
-
+#if 0
 void Form::slotCommandExecuted(K3Command *command)
 {
     Q_UNUSED(command)
@@ -1281,6 +1304,7 @@ void Form::slotCommandExecuted(K3Command *command)
     QTimer::singleShot(10, this, SLOT(emitUndoEnabled()));
     QTimer::singleShot(10, this, SLOT(emitRedoEnabled()));
 }
+#endif
 
 void Form::emitUndoEnabled()
 {
@@ -1663,12 +1687,12 @@ Form::State Form::state() const
 
 void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
                               const QVariant &value, const QByteArray &propertyName,
-                              bool execute, uint idOfPropertyCommand)
+                              AddCommandOption addOption, uint idOfPropertyCommand)
 {
     QHash<QByteArray, QVariant> oldValues;
     oldValues.insert(wname, oldValue);
-    addPropertyCommand(oldValues, value, propertyName, execute, idOfPropertyCommand);
-#if 0 moved
+    addPropertyCommand(oldValues, value, propertyName, addOption, idOfPropertyCommand);
+#if 0 //moved
     kDebug() << d->propertySet[propertyName];
     kDebug() << "oldValue:" << oldValue << "value:" << value;
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
@@ -1684,7 +1708,9 @@ void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
     }
     else {
         d->lastCommand = new PropertyCommand(*this, wname, oldValue, value, propertyName);
-        addCommand(d->lastCommand, execute);
+        if (!addCommand(d->lastCommand, execute)) {
+            d->lastCommand = 0;
+        }
         d->idOfPropertyCommand = idOfPropertyCommand;
     }
     d->insideAddPropertyCommand = false;
@@ -1693,8 +1719,9 @@ void Form::addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
 
 void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                               const QVariant &value, const QByteArray &propertyName,
-                              bool execute, uint idOfPropertyCommand)
+                              AddCommandOption addOption, uint idOfPropertyCommand)
 {
+#if 0 // todo add to merge in PropertyCommand...
     kDebug() << d->propertySet[propertyName];
     kDebug() << "oldValue:" << oldValues << "value:" << value;
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
@@ -1710,21 +1737,32 @@ void Form::addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
     }
     else {
         d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
-        addCommand(d->lastCommand, execute);
+        if (!addCommand(d->lastCommand, execute)) {
+            d->lastCommand = 0;
+        }
         d->idOfPropertyCommand = idOfPropertyCommand;
+    }
+    d->insideAddPropertyCommand = false;
+#endif
+    d->insideAddPropertyCommand = true;
+    d->lastCommand = new PropertyCommand(*this, oldValues, value, propertyName);
+    d->lastCommand->setUniqueId(idOfPropertyCommand);
+    if (!addCommand(d->lastCommand, addOption)) {
+        d->lastCommand = 0;
     }
     d->insideAddPropertyCommand = false;
 }
 
-void Form::addPropertyCommandGroup(CommandGroup *commandGroup,
-                                   bool execute, uint idOfPropertyCommand)
+void Form::addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
+                                   AddCommandOption addOption, uint idOfPropertyCommand)
 {
+#if 0 // todo add to merge in PropertyCommand...?
     if (!commandGroup || commandGroup->commands().isEmpty())
         return;
     kDebug() << "count:" << commandGroup->commands().count();
     kDebug() << "idOfPropertyCommand:" << idOfPropertyCommand;
     d->insideAddPropertyCommand = true;
-    CommandGroup *presentCommand = dynamic_cast<CommandGroup*>( d->commandHistory->presentCommand() );
+    PropertyCommandGroup *presentCommand = dynamic_cast<PropertyCommandGroup*>( d->commandHistory->presentCommand() );
     if (   presentCommand
         && d->lastCommandGroup == presentCommand
         && idOfPropertyCommand > 0
@@ -1740,6 +1778,13 @@ void Form::addPropertyCommandGroup(CommandGroup *commandGroup,
         addCommand(d->lastCommandGroup, execute);
         d->idOfPropertyCommand = idOfPropertyCommand;
     }
+#endif
+    d->insideAddPropertyCommand = true;
+    d->lastCommandGroup = commandGroup;
+    if (!addCommand(d->lastCommandGroup, addOption)) {
+        d->lastCommandGroup = 0;
+    }
+    d->idOfPropertyCommand = idOfPropertyCommand;
     d->insideAddPropertyCommand = false;
 }
 
@@ -1800,7 +1845,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
         else  {
             if (d->slotPropertyChanged_addCommandEnabled && !d->isRedoing) {
                 addPropertyCommand(d->selected.first()->objectName().toLatin1(),
-                    d->selected.first()->property(property), value, property, false /* !exec*/);
+                    d->selected.first()->property(property), value, property, DontExecuteCommand);
             }
 
             // If the property is changed, we add it in ObjectTreeItem modifProp
@@ -1827,7 +1872,7 @@ void Form::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& p)
                 foreach(QWidget* widget, d->selected) {
                     oldValues.insert(widget->objectName().toLatin1(), widget->property(property));
                 }
-                addPropertyCommand(oldValues, value, property, false /* !exec*/);
+                addPropertyCommand(oldValues, value, property, DontExecuteCommand);
             }
         }
 
@@ -1897,20 +1942,20 @@ bool Form::isNameValid(const QString &name) const
 // moved from FormManager
 void Form::undo()
 {
-    if (!objectTree() || !d->commandHistory->isUndoAvailable())
+    if (!objectTree())
         return;
 
-    d->commandHistory->undo();
+    d->undoStack.undo();
 }
 
 // moved from FormManager
 void Form::redo()
 {
-    if (!objectTree() || !d->commandHistory->isRedoAvailable())
+    if (!objectTree())
         return;
 
     d->isRedoing = true;
-    d->commandHistory->redo();
+    d->undoStack.redo();
     d->isRedoing = false;
 }
 
@@ -2476,8 +2521,8 @@ void Form::deleteWidget()
         return;
     }
 
-    K3Command *com = new DeleteWidgetCommand(*this, *list);
-    addCommand(com, true);
+    Command *com = new DeleteWidgetCommand(*this, *list);
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2533,8 +2578,8 @@ void Form::cutWidget()
         return;
     }
 
-    K3Command *com = new CutWidgetCommand(*this, *list);
-    addCommand(com, true);
+    Command *com = new CutWidgetCommand(*this, *list);
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2558,8 +2603,8 @@ void Form::pasteWidget()
         return;
     }
 
-    K3Command *com = new PasteWidgetCommand(doc, *activeContainer(), d->insertionPoint);
-    addCommand(com, true);
+    Command *com = new PasteWidgetCommand(doc, *activeContainer(), d->insertionPoint);
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2633,8 +2678,8 @@ void Form::alignWidgets(WidgetAlignment alignment)
         }
     }
 
-    K3Command *com = new AlignWidgetsCommand(*this, alignment, *selected);
-    addCommand(com, true);
+    Command *com = new AlignWidgetsCommand(*this, alignment, *selected);
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2668,8 +2713,8 @@ void Form::adjustWidgetSize()
         return;
     }
 
-    K3Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToFit, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToFit, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2679,8 +2724,8 @@ void Form::alignWidgetsToGrid()
         return;
     }
 
-    K3Command *com = new AlignWidgetsCommand(*this, AlignToGrid, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AlignWidgetsCommand(*this, AlignToGrid, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2690,8 +2735,8 @@ void Form::adjustSizeToGrid()
         return;
     }
 
-    K3Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToGrid, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToGrid, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2701,8 +2746,8 @@ void Form::adjustWidthToSmall()
         return;
     }
 
-    K3Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToSmallWidth, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToSmallWidth, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2712,8 +2757,8 @@ void Form::adjustWidthToBig()
         return;
     }
 
-    K3Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToBigWidth, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToBigWidth, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2723,8 +2768,8 @@ void Form::adjustHeightToSmall()
         return;
     }
 
-    K3Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToSmallHeight, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToSmallHeight, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2734,8 +2779,8 @@ void Form::adjustHeightToBig()
         return;
     }
 
-    K3Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToBigHeight, *selectedWidgets());
-    addCommand(com, true);
+    Command *com = new AdjustSizeCommand(*this, AdjustSizeCommand::SizeToBigHeight, *selectedWidgets());
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2866,8 +2911,8 @@ void Form::createLayout(Form::LayoutType layoutType)
         }
     }
 
-    K3Command *com = new CreateLayoutCommand(*this, layoutType, *list);
-    addCommand(com, true);
+    Command *com = new CreateLayoutCommand(*this, layoutType, *list);
+    addCommand(com);
 }
 
 // moved from FormManager
@@ -2881,8 +2926,8 @@ void Form::breakLayout()
     QByteArray c(container->widget()->metaObject()->className());
 
     if ((c == "Grid") || (c == "VBox") || (c == "HBox") || (c == "HFlow") || (c == "VFlow")) {
-        K3Command *com = new BreakLayoutCommand(*container);
-        addCommand(com, true);
+        Command *com = new BreakLayoutCommand(*container);
+        addCommand(com);
     }
     else { // normal container
         if (selectedWidgets()->count() == 1)
@@ -3008,7 +3053,9 @@ void Form::saveAlignProperty(const QString &property)
     else {
         d->lastCommand = new PropertyCommand(*this, d->selected.first()->objectName().toLatin1(),
                                              subwidget->property("alignment"), valueForKeys, "alignment");
-        addCommand(d->lastCommand, false);
+        if (!addCommand(d->lastCommand, DontExecuteCommand)) {
+            d->lastCommand = 0;
+        }
     }
 }
 
@@ -3074,7 +3121,9 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
             d->lastCommand = new LayoutPropertyCommand(*this, 
                 d->selected.first()->objectName().toLatin1(),
                 d->propertySet["layout"].oldValue(), value);
-            addCommand(d->lastCommand, false);
+            if (!addCommand(d->lastCommand, DontExecuteCommand)) {
+                d->lastCommand = 0;
+            }
         }
 
         container->setLayoutType(type);
@@ -3113,7 +3162,9 @@ void Form::saveLayoutProperty(const QString &prop, const QVariant &value)
             d->selected.first()->objectName().toLatin1(),
             d->propertySet[ prop.toLatin1()].oldValue(), value, prop.toLatin1()
         );
-        addCommand(d->lastCommand, false);
+        if (!addCommand(d->lastCommand, DontExecuteCommand)) {
+            d->lastCommand = 0;
+        }
     }
 }
 
@@ -3150,8 +3201,7 @@ void Form::saveEnabledProperty(bool value)
 }
 
 void Form::createPropertyCommandsInDesignMode(QWidget* widget,
-        const QHash<QByteArray, QVariant> &propValues, CommandGroup *group, bool addToActiveForm,
-        bool execFlagForSubCommands)
+        const QHash<QByteArray, QVariant> &propValues, Command *parentCommand, bool addToActiveForm)
 {
     if (!widget || propValues.isEmpty())
         return;
@@ -3168,8 +3218,8 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
             continue;
         }
         PropertyCommand *subCommand = new PropertyCommand(*this, widget->objectName().toLatin1(),
-                widget->property(it.key()), it.value(), it.key());
-        group->addCommand(subCommand, execFlagForSubCommands);
+                widget->property(it.key()), it.value(), it.key(), parentCommand);
+        //2.0 group->addCommand(subCommand, execFlagForSubCommands);
         if (widgetIsSelected) {
             d->propertySet[it.key()].setValue(it.value());
         } else {
@@ -3189,7 +3239,7 @@ void Form::createPropertyCommandsInDesignMode(QWidget* widget,
     d->lastCommand = 0;
     d->lastCommandGroup = 0;
     if (addToActiveForm) {
-        addCommand(group, false/*no exec*/);
+        addCommand(parentCommand, DontExecuteCommand);
     }
     d->slotPropertyChanged_addCommandEnabled = true;
 // }

@@ -22,10 +22,9 @@
 #ifndef CONTAINERFACTORY_H
 #define CONTAINERFACTORY_H
 
-#include <k3command.h>
-
+#include "commands.h"
 #include "widgetfactory.h"
-#include "../utils.h"
+#include "utils.h"
 #include <QGroupBox>
 #include <QMenu>
 #include <QPaintEvent>
@@ -36,14 +35,13 @@ class Form;
 class Container;
 }
 
-class InsertPageCommand : public K3Command
+class InsertPageCommand : public KFormDesigner::Command
 {
 public:
     InsertPageCommand(KFormDesigner::Container *container, QWidget *widget);
 
     virtual void execute();
-    virtual void unexecute();
-    virtual QString name() const;
+    virtual void undo();
 
 protected:
     KFormDesigner::Form *m_form;

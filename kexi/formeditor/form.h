@@ -29,8 +29,6 @@
 
 class QWidget;
 class KActionCollection;
-class K3CommandHistory;
-class K3Command;
 
 class PixmapCollection;
 
@@ -42,7 +40,8 @@ class Set;
 namespace KFormDesigner
 {
 
-class CommandGroup;
+class Command;
+class PropertyCommandGroup;
 #ifdef KFD_SIGSLOTS
 class ConnectionBuffer;
 #endif
@@ -236,7 +235,11 @@ public:
 
 // 2.0    K3CommandHistory* commandHistory() const;
 
-    void commandHistoryDocumentSaved();
+    /*! Clears form's undo/redo stack. */
+    void clearUndoStack();
+
+    /*! Sets undo/redo stack in a clean state, used when the document is saved. */
+    void setUndoStackClean();
 
 #ifdef KFD_SIGSLOTS
     ConnectionBuffer* connectionBuffer() const;
@@ -244,36 +247,34 @@ public:
 
     PixmapCollection* pixmapCollection() const;
 
-/*    enum AddCommandOption {
-        NoAddCommandOptions = 0,
-        ExecuteCommand = 1,
-    }*/
+    //! Options for addCommand() method.
+    enum AddCommandOption {
+        DontExecuteCommand = 0, //!< command is not executed in addCommand()
+        ExecuteCommand = 1      //!< command is executed in addCommand()
+    };
 
-    /*! Adds a widget in the form's command history. Please use it instead
-    of calling directly actionCollection()->addCommand(). */
-    void addCommand(K3Command *command, bool execute);
+    /*! Adds a command @a command in the form's undo/redo stack and returns true. 
+     If @a command is merged with the existing command and deleted, false is returned. */
+    bool addCommand(Command *command, AddCommandOption option = ExecuteCommand);
 
     //! Creates a new PropertyCommand object and adds it to the undo/redo stack.
     /*! Takes care about the case when the same property of the same object is changed
      one-after-one. In this case only value of the present command on stack is changed.  */
     void addPropertyCommand(const QByteArray &wname, const QVariant &oldValue,
                             const QVariant &value, const QByteArray &propertyName, 
-                            bool execute, uint idOfPropertyCommand = 0);
+                            AddCommandOption addOption, uint idOfPropertyCommand = 0);
 
     void addPropertyCommand(const QHash<QByteArray, QVariant> &oldValues,
                             const QVariant &value, const QByteArray &propertyName,
-                            bool execute, uint idOfPropertyCommand = 0);
+                            AddCommandOption addOption, uint idOfPropertyCommand = 0);
 
     //! Adds @a commandGroup to the undo/redo stack.
     /*! Assuming the @a commandGroup contains PropertyCommand objects, the method takes care
      about the case when the same properties of the same list of objects is changed
      one-after-one. In this case only values of the command in the present command group 
      on the stack are changed and @a commandGroup is deleted.*/
-    void addPropertyCommandGroup(CommandGroup *commandGroup,
-                                 bool execute, uint idOfPropertyCommand = 0);
-
-    /*! Clears form's command history. */
-    void clearCommandHistory();
+    void addPropertyCommandGroup(PropertyCommandGroup *commandGroup,
+                                 AddCommandOption addOption, uint idOfPropertyCommand = 0);
 
     /*! \return tabstops list. It contains all the widgets that can have focus 
      (i.e. no labels, etc.) in the order of the tabs.*/
@@ -391,8 +392,7 @@ public:
 
     void createPropertyCommandsInDesignMode(QWidget* widget, 
                                             const QHash<QByteArray, QVariant> &propValues,
-                                            CommandGroup *group, bool addToActiveForm = true,
-                                            bool execFlagForSubCommands = false);
+                                            Command *parentCommand, bool addToActiveForm = true);
 
 public slots:
 // moved from FormManager::insertWidget()
@@ -565,9 +565,11 @@ protected slots:
     void emitUndoEnabled();
     void emitRedoEnabled();
 
+#if 0 //unused?
     /*! This slot is called when a command is executed. The undo/redo signals
       are emitted to update actions. */
     void slotCommandExecuted(K3Command *command);
+#endif
 
     /*! This slot is called when form is restored, ie when the user has undone
       all actions. The form modified flag is updated, and
