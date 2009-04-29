@@ -34,11 +34,13 @@ KWViewModeNormal::KWViewModeNormal()
 
 QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const
 {
+qDebug() << "clipRectToDocument";
     QList<ViewMap> answer;
-    const int pageOffset = m_pageManager->begin().pageNumber();
+    KWPage page  = m_pageManager->begin();
     qreal offsetX = 0.0;
-    foreach (const KWPage &page, m_pageManager->pages()) {
-#ifdef DEBUG
+    const int pageOffset = page.pageNumber();
+    while (page.isValid()) {
+#ifndef NDEBUG
         if (page.pageNumber() - pageOffset >= m_pageTops.count()) {
             kWarning(32003) << "KWViewModeNormal ERROR; pagemanager has more pages than viewmode ("
             << m_pageManager->pageCount() << ">" << m_pageTops.count()
@@ -46,14 +48,15 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             break;
         }
 #endif
-
-        QRectF zoomedPage = m_viewConverter->documentToView(page.rect());
+        const QRectF pageRect = page.rect();
+        const QRectF zoomedPage = m_viewConverter->documentToView(pageRect);
         ViewMap vm;
         //kDebug(32003) <<"page[" << page.pageNumber() <<"] uses pagetops:" << m_pageTops[page.pageNumber()];
-        vm.distance = m_viewConverter->documentToView(
-                          QPointF(offsetX, m_pageTops[page.pageNumber() - pageOffset] - page.offsetInDocument()));
+        const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
+        vm.distance = m_viewConverter->documentToView(QPointF(offsetX, offsetY));
 
-        QRectF targetPage = QRectF(zoomedPage.topLeft() + vm.distance, zoomedPage.size());
+        const QRectF targetPage(zoomedPage.x() + vm.distance.x(), zoomedPage.y() + vm.distance.y(),
+                zoomedPage.width() , zoomedPage.height());
         QRectF intersection = targetPage.intersect(viewRect);
         if (! intersection.isEmpty()) {
             intersection.moveTopLeft(intersection.topLeft() - vm.distance);
@@ -66,6 +69,7 @@ QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &vie
             else
                 offsetX = 0.0;
         }
+        page = page.next();
     }
 
     return answer;
