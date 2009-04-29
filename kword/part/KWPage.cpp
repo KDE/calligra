@@ -218,6 +218,8 @@ const KWPage KWPage::next() const
         return KWPage();
     QMap<int,int>::const_iterator iter = priv->pageNumbers.constFind(pageNumber());
     ++iter;
+    if (priv->pages[n].pageSide == PageSpread) // one more
+        ++iter;
     if (iter == priv->pageNumbers.constEnd())
         return KWPage();
     return KWPage(priv, iter.value());
