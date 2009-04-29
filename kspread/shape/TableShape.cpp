@@ -144,9 +144,11 @@ void TableShape::setRows( int rows )
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+#ifndef NDEBUG
     if (KoShape::parent()) {
-        kDebug() << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
+        kDebug(36001) << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
     }
+#endif
     const QRectF paintRect = QRectF( QPointF( 0.0, 0.0 ), size() );
 
     applyConversion( painter, converter );
@@ -160,7 +162,7 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 
 bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    kDebug() << "LOADING TABLE SHAPE";
+    //kDebug() << "LOADING TABLE SHAPE";
     if (element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
         // pre-load auto styles
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
