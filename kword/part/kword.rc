@@ -118,6 +118,7 @@
     <Action name="apply_autocorrection"/>
   </Menu>
   <Separator/>
+  <Action name="edit_record_changes"/>
   <Action name="change_case"/>
   <Action name="sort_text"/>
   <Action name="personal_expr"/>
