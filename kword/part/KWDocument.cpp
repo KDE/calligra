@@ -208,13 +208,14 @@ KoView* KWDocument::createViewInstance(QWidget* parent)
 {
     KWView *view = new KWView(m_viewMode, this, parent);
     if (m_magicCurtain)
-        view->kwcanvas()->shapeManager()->add(m_magicCurtain);
+        view->kwcanvas()->shapeManager()->add(m_magicCurtain, false);
+
     bool switchToolCalled = false;
     foreach (KWFrameSet *fs, m_frameSets) {
         if (fs->frameCount() == 0)
             continue;
         foreach (KWFrame *frame, fs->frames())
-            view->kwcanvas()->shapeManager()->add(frame->shape());
+            view->kwcanvas()->shapeManager()->add(frame->shape(), false);
         if (switchToolCalled)
             continue;
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
