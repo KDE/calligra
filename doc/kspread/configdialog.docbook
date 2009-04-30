@@ -180,7 +180,7 @@ calculation performed by the <link linkend="statusbarsum">Statusbar Summary
 <guimenuitem>Increase Indent</guimenuitem> option in the <guimenu>Format
 </guimenu> menu.
 </para>
-<para>The unit taken here is the one you fixe in the Configure
+<para>The unit taken here is the one you fixed in the Configure
 &kspread; dialog, in the Page Layout tab in the <guilabel>Default page
 unit:</guilabel> setting. </para></listitem>
 </varlistentry>
@@ -220,7 +220,7 @@ color of the sheet grid. If you do not want the grid to appear at all, uncheck t
 the <menuchoice><guimenu>Format</guimenu><guisubmenu>Sheet</guisubmenu><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
 
 <para>This page also lets you select the color of the lines used to indicate 
-the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 
+the printed page borders when the <guimenuitem>Page Borders</guimenuitem> 
 box in the <guimenu>View</guimenu> menu is checked.</para>
 <para>Click on the current color to display the standard KDE <guilabel>Select Color</guilabel> dialog.</para>
 
@@ -258,7 +258,7 @@ box in the <guimenu>View</guimenu> menu is checked.</para>
 default page size, orientation and units used by the printer and by the 
 <guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
 <guimenuitem>Page Layout...</guimenuitem> from the <guimenu>Format
-</guimenu> menu.</para>
+</guimenu> menu.)</para>
 
 <para><variablelist>
 

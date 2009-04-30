@@ -62,7 +62,7 @@
 <variablelist>
 <varlistentry>
 <term><guilabel>Convert first letter of a sentence automatically to uppercase</guilabel></term>
-<listitem><para>When selected, &kpresenter; will automatically capitalize the first letter after a period. You can tell &kpresenter; when not to alter capitalization in certain instances (ie “Sr.” or “Jr.”). For more details, see the section entitled  <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
+<listitem><para>When selected, &kpresenter; will automatically capitalize the first letter after a period. You can tell &kpresenter; when not to alter capitalization in certain instances (&ie; “Sr.” or “Jr.”). For more details, see the section entitled  <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -141,7 +141,7 @@
 <para>When selected, this option will replace the standard keyboard double
 quotes, with typographical quotation marks.  If you want to change the
 quotation character, click on one of the buttons. Clicking on
-<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+<guibutton>Default</guibutton>, restores the default quotation marks.</para>
 </listitem>
 </varlistentry>
 
@@ -151,7 +151,7 @@ quotation character, click on one of the buttons. Clicking on
 <para>When selected, this option will replace the standard keyboard single
 quotes, with typographical quotation marks.  If you want to change the
 quotation character, click on one of the buttons. Clicking on
-<guibutton>Default</guibutton>, restores the default paragraph marks.</para>
+<guibutton>Default</guibutton>, restores the default quotation marks.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -573,7 +573,7 @@ using this new list for autocompletion, click this button.</para>
 <varlistentry>
 <term><guilabel>Show rulers</guilabel></term>
 <listitem><para>This is checked by default and both a vertical and horizontal
-ruler are shown on &kpresenter;slides. When unchecked, the rulers are not shown
+ruler are shown on &kpresenter; slides. When unchecked, the rulers are not shown
 anymore on any slide.</para></listitem>
 </varlistentry>
 

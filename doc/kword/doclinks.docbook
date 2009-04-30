@@ -54,7 +54,7 @@ that file type.</para>
 <para>The link address has now been inserted into the clipboard.  You can paste your clipboard entry into any other application.</para>
 </sect2>
 <sect2 id="links-edit"><title>Changing a document link</title>
-<para>To change the details of a document link Simply click 
+<para>To change the details of a document link simply click 
 once on the document link with the &RMB;.  A popup menu will appear.  Select <guilabel>Change Link...</guilabel>.</para>
 <para>The <guilabel>Insert Link</guilabel> dialog box will appear, with the current settings of the link displayed.</para>
 <screenshot>
