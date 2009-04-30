@@ -23,6 +23,7 @@
 
 // kword includes
 #include "KWDocument.h"
+#include "KWDocument_p.h"
 #include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
@@ -895,12 +896,12 @@ void PageProcessingQueue::addPage(KWPage page)
 
 void PageProcessingQueue::process()
 {
+    m_triggered = false;
     const bool docIsEmpty = m_document->isEmpty();
     const bool docIsModified = m_document->isModified();
     foreach (const KWPage &page, m_pages) {
         if (! page.isValid())
             continue;
-        emit m_document->pageSetupChanged();
         m_document->m_frameLayout.createNewFramesForPage(page.pageNumber());
     }
     if (docIsEmpty)
@@ -909,4 +910,5 @@ void PageProcessingQueue::process()
         m_document->setModified(false);
     m_pages.clear();
     deleteLater();
+    emit m_document->pageSetupChanged();
 }

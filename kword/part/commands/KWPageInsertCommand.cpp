@@ -21,6 +21,7 @@
 
 #include "KWPageInsertCommand.h"
 #include "KWDocument.h"
+#include "KWDocument_p.h"
 #include "KWPage.h"
 #include "KWPageManager_p.h"
 #include "frames/KWFrameSet.h"
