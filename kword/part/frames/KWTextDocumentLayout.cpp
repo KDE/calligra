@@ -281,7 +281,8 @@ void KWTextDocumentLayout::relayout()
             dirtyFrames.removeAll(frame);
     }
 
-    qSort(m_frameSet->m_frames.begin(), m_frameSet->m_frames.end(), KWTextFrameSet::sortTextFrames); // make sure the ordering is proper
+    if (m_frameSet->textFrameSetType() == KWord::OtherTextFrameSet)
+        qSort(m_frameSet->m_frames.begin(), m_frameSet->m_frames.end(), KWTextFrameSet::sortTextFrames); // make sure the ordering is proper
 
     if (foundADirtyOne) {
         // if the dirty frame has been resorted to no longer be the first one, then we should
