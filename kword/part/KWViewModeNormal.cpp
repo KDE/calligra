@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2009 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,11 +34,37 @@ KWViewModeNormal::KWViewModeNormal()
 
 QList<KWViewMode::ViewMap> KWViewModeNormal::clipRectToDocument(const QRect &viewRect) const
 {
-qDebug() << "clipRectToDocument";
     QList<ViewMap> answer;
+    if (m_pageTops.isEmpty())
+        return answer;
     KWPage page  = m_pageManager->begin();
     qreal offsetX = 0.0;
     const int pageOffset = page.pageNumber();
+
+    int begin = 0;
+    int end = m_pageTops.count()-1;
+    int index = 0;
+    const qreal value = m_viewConverter->viewToDocument(viewRect.topLeft()).y();
+    if (m_pageTops.value(end) <= value) { // check extremes. Only end is needed since begin is zero.
+        begin = end;
+        index = end;
+    }
+    while (end - begin > 1) { // binary search for page-index using our m_pageTops cache.
+        index = begin + (end - begin) / 2;
+        qreal diff = m_pageTops.value(index) - value;
+        if (diff < 0)
+            begin = index;
+        else if (diff > 0)
+            end = index;
+        else
+            break;
+    }
+    while (index > 1) { // 1 since we might hit a pagespread in the binary search, so start one page early
+        page = page.next();
+        --index;
+    }
+
+    int emptyPages = 0;
     while (page.isValid()) {
 #ifndef NDEBUG
         if (page.pageNumber() - pageOffset >= m_pageTops.count()) {
@@ -51,7 +77,7 @@ qDebug() << "clipRectToDocument";
         const QRectF pageRect = page.rect();
         const QRectF zoomedPage = m_viewConverter->documentToView(pageRect);
         ViewMap vm;
-        //kDebug(32003) <<"page[" << page.pageNumber() <<"] uses pagetops:" << m_pageTops[page.pageNumber()];
+        //kDebug(32003) <<"page" << page.pageNumber();
         const qreal offsetY = m_pageTops[page.pageNumber() - pageOffset] - pageRect.top();
         vm.distance = m_viewConverter->documentToView(QPointF(offsetX, offsetY));
 
@@ -62,7 +88,12 @@ qDebug() << "clipRectToDocument";
             intersection.moveTopLeft(intersection.topLeft() - vm.distance);
             vm.clipRect = intersection.toRect();
             answer.append(vm);
+            emptyPages = 0;
+        } else {
+            emptyPages++;
         }
+        if (emptyPages > 2) // Since we show at max 2 pages side by side this is an easy rule
+            break;
         if (m_pageSpreadMode) {
             if (page.pageSide() == KWPage::Left)
                 offsetX = page.width() + GAP;
