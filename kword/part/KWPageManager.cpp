@@ -20,6 +20,7 @@
  */
 #include "KWPageManager.h"
 #include "KWPageManager_p.h"
+#include "KWPageStyle_p.h"
 #include "KWPage.h"
 #include "KWDocument.h"
 
@@ -42,10 +43,11 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
 {
     Q_ASSERT(pageNum >= 0);
     qreal offset = 0.0;
+    const qreal totalPadding = padding.top + padding.bottom;
 
-    QMap<int, int>::const_iterator iter = pageNumbers.begin();
-    for (;iter != pageNumbers.end(); ++iter) {
-        const KWPageManagerPrivate::Page page = pages[iter.value()];
+    QMap<int, int>::const_iterator iter = pageNumbers.constBegin();
+    for (;iter != pageNumbers.constEnd(); ++iter) {
+        const KWPageManagerPrivate::Page page = pages.value(iter.value());
         if (page.pageSide == KWPage::PageSpread && iter.key()%2 == 1)
             continue;
         if (iter.key() == pageNum) {
@@ -53,7 +55,7 @@ qreal KWPageManagerPrivate::pageOffset(int pageNum, bool bottom) const
                 offset += page.style.pageLayout().height;
             break;
         }
-        offset += page.style.pageLayout().height + padding.top + padding.bottom;
+        offset += page.style.priv()->pageLayout.height + totalPadding;
     }
     return offset;
 }

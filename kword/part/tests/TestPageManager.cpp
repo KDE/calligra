@@ -615,5 +615,29 @@ void TestPageManager::testPadding()
     QCOMPARE(page3.rect(), QRectF(0, 108, 100, 50));
 }
 
+void TestPageManager::testPageOffset()
+{
+    KWPageManager *pageManager = new KWPageManager();
+    for (int i=0; i < 500; ++i) {
+        KWPage page = pageManager->appendPage();
+    }
+
+    KWPage page = pageManager->page(1);
+    QVERIFY(page.isValid());
+    QCOMPARE(page.pageNumber(), 1);
+    QCOMPARE(page.offsetInDocument(), 0.);
+    const qreal pageHeight = page.pageStyle().pageLayout().height;
+
+    page = pageManager->page(50);
+    QVERIFY(page.isValid());
+    QCOMPARE(page.pageNumber(), 50);
+    QCOMPARE(page.offsetInDocument(), pageHeight * 49);
+
+    KoPageLayout layout = page.pageStyle().pageLayout();
+    layout.height = 400;
+    page.pageStyle().setPageLayout(layout);
+    QCOMPARE(page.offsetInDocument(), (qreal) 400 * 49);
+}
+
 QTEST_KDEMAIN(TestPageManager, GUI)
 #include "TestPageManager.moc"

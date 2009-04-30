@@ -178,6 +178,8 @@ public:
     inline bool operator!=(const KWPageStyle &other) const { return ! operator==(other); }
     uint hash() const;
 
+    const KWPageStylePrivate *priv() const;
+
 private:
     QExplicitlySharedDataPointer<KWPageStylePrivate> d;
 };

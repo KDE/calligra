@@ -20,36 +20,14 @@
  */
 
 #include "KWPageStyle.h"
+#include "KWPageStyle_p.h"
 
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>
 
 #include <kdebug.h>
-#include <QSharedData>
 #include <QBuffer>
-
-class KWPageStylePrivate : public QSharedData
-{
-public:
-    KWPageStylePrivate() { clear(); }
-
-    void clear();
-
-    KoColumns columns;
-    KoPageLayout pageLayout;
-    QString name;
-    bool mainFrame;
-    qreal headerDistance, footerDistance, footNoteDistance, endNoteDistance;
-    KWord::HeaderFooterType headers, footers;
-
-    qreal footNoteSeparatorLineWidth; ///< width of line; so more like 'thickness'
-    int footNoteSeparatorLineLength; ///< It's a percentage of page.
-    Qt::PenStyle footNoteSeparatorLineType; ///< foot note separate type
-    KWord::FootNoteSeparatorLinePos footNoteSeparatorLinePos; ///< alignment in page
-
-    // See parag 16.2 for all the ODF features.
-};
 
 void KWPageStylePrivate::clear()
 {
@@ -338,6 +316,11 @@ void KWPageStyle::loadOdf(const KoXmlElement &style)
 bool KWPageStyle::operator==(const KWPageStyle &other) const
 {
     return d == other.d;
+}
+
+const KWPageStylePrivate *KWPageStyle::priv() const
+{
+    return d.data();
 }
 
 uint KWPageStyle::hash() const
