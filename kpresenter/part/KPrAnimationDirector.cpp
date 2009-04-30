@@ -236,7 +236,7 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
     }
     else {
         QList<KoShape*> shapes = page->iterator();
-        m_canvas->shapeManager()->setShapes( shapes, false );
+        m_canvas->shapeManager()->setShapes(shapes, KoShapeManager::AddWithoutRepaint);
         //Make the top most layer active
         if ( !shapes.isEmpty() ) {
             KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
@@ -249,7 +249,7 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
         Q_ASSERT( paPage );
         KoPAMasterPage * masterPage = paPage->masterPage();
         QList<KoShape*> masterShapes = masterPage->iterator();
-        m_canvas->masterShapeManager()->setShapes( masterShapes, false );
+        m_canvas->masterShapeManager()->setShapes(masterShapes, KoShapeManager::AddWithoutRepaint);
         // Make the top most layer active
         if ( !masterShapes.isEmpty() ) {
             KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
